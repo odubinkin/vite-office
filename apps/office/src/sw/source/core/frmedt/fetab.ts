@@ -9,10 +9,146 @@ import {
 } from "../table/swtable";
 import { SwTableBoxStartNode } from "../docnode/node";
 import { CheckSplitCells } from "./tblsel";
+import type { SwTextNode } from "../txtnode/ndtxt";
 import { SwUndoAttrTable } from "../undo/untbl";
+import { SwTab, type SwTableMousePoint } from "../../../inc/fesh";
+import type { SwTabFrame, SwTableMouseCell, SwTableMouseRect } from "../layout/tabfrm";
+
+/** Native mouse hit over actual measured frame and box owners. */
+interface SwTableMouseHit {
+  readonly frame: SwTabFrame;
+  readonly cell: SwTableMouseCell;
+  readonly row: boolean;
+  readonly column: boolean;
+}
+
+/** Checks the physical frame rectangle. @param rect - Device bounds. @param point - Device position. @param fuzzy - Frame search tolerance. @returns Whether contained. */
+function contains(rect: SwTableMouseRect, point: SwTableMousePoint, fuzzy = 0): boolean {
+  return (
+    rect.left - fuzzy <= point.x &&
+    point.x <= rect.right + fuzzy &&
+    rect.top - fuzzy <= point.y &&
+    point.y <= rect.bottom + fuzzy
+  );
+}
 
 /** Native frame-editing shell inherits the existing editing shell without an operation adapter. */
 export abstract class SwFEShell extends SwEditShell {
+  private tableMouseFrames: readonly SwTabFrame[] = [];
+  private tableMouseEnd: SwTableBox | undefined;
+
+  /** Supplies current device frames without replacing document ownership. @param frames - Master and follow frames. @returns Nothing. */
+  public SetTableMouseFrames(frames: readonly SwTabFrame[]): void {
+    this.tableMouseFrames = frames;
+  }
+
+  /** Finds the native table-edge box, giving resize geometry its source priority. @param point - Device position. @param selection - Enhanced selection rather than border movement. @returns Actual hit or undefined. */
+  private GetBox(point: SwTableMousePoint, selection: boolean): SwTableMouseHit | undefined {
+    for (const frame of this.tableMouseFrames) {
+      if (!this.GetDoc().GetTables().includes(frame.GetTable())) continue;
+      const geometry = frame.mouseGeometry;
+      if (geometry === undefined) continue;
+      const rect = geometry.rect;
+      let row = false,
+        column = false,
+        target = point;
+      if (selection) {
+        const dx = rect.left - point.x,
+          dy = rect.top - point.y;
+        row = dx >= 0 && dx < 10;
+        column = dy >= 0 && dy < 10;
+        if (
+          column &&
+          2 * dy > 10 &&
+          geometry.previous !== undefined &&
+          contains(geometry.previous, point)
+        )
+          column = false;
+        if (!row && !column) continue;
+        target = { x: row ? rect.left : point.x, y: column ? rect.top : point.y };
+      }
+      for (const cell of geometry.cells) {
+        if (
+          !frame
+            .GetTable()
+            .GetTabLines()
+            .some(
+              /** Rejects detached box measurements. @param line - Current native row. @returns Whether the original box remains connected. */
+              (line) => line.GetTabBoxes().includes(cell.box),
+            ) ||
+          !contains(cell.rect, target, selection ? 1 / 15 : 3)
+        )
+          continue;
+        if (!selection) {
+          // IsSame uses the drawing device's COLFUZZY/4 hit tolerance in a live view.
+          if (Math.abs(rect.top - point.y) <= 5) continue;
+          const nearColumn =
+            Math.abs(cell.rect.left - point.x) <= 5 || Math.abs(cell.rect.right - point.x) <= 5;
+          const nearRow =
+            Math.abs(cell.rect.top - point.y) <= 5 || Math.abs(cell.rect.bottom - point.y) <= 5;
+          if (!nearColumn && !nearRow) continue;
+          row = !nearColumn && nearRow;
+        }
+        return { frame, cell, row, column };
+      }
+    }
+    return undefined;
+  }
+
+  /** Classifies represented horizontal LTR table mouse geometry. @param point - Physical position. @returns Native mouse kind. */
+  public WhichMouseTabCol(point: SwTableMousePoint): SwTab {
+    const move = this.GetBox(point, false);
+    if (move !== undefined) return move.row ? SwTab.ROW_HORI : SwTab.COL_HORI;
+    const hit = this.GetBox(point, true);
+    return hit === undefined
+      ? SwTab.COL_NONE
+      : hit.row && hit.column
+        ? SwTab.SEL_HORI
+        : hit.row
+          ? SwTab.ROWSEL_HORI
+          : SwTab.COLSEL_HORI;
+  }
+
+  /** Selects actual boxes from native edge geometry, projecting drag onto the closest original master/follow. @param start - Captured initial point. @param end - Current drag point. @param rowDrag - Project onto the row edge. @returns Whether admitted. */
+  public SelTableRowCol(
+    start: SwTableMousePoint,
+    end?: SwTableMousePoint,
+    rowDrag = false,
+  ): boolean {
+    const hit = this.GetBox(start, true);
+    if (hit === undefined || hit.cell.repeatedHeadline === true) return false;
+    let last = hit;
+    if (end !== undefined) {
+      let closest: SwTableMousePoint | undefined,
+        distance = Infinity;
+      for (const frame of this.tableMouseFrames) {
+        if (frame.GetTable() !== hit.frame.GetTable() || frame.mouseGeometry === undefined)
+          continue;
+        const rect = frame.mouseGeometry.rect;
+        const point = rowDrag
+          ? { x: rect.left, y: Math.max(rect.top, Math.min(rect.bottom, end.y)) }
+          : { x: Math.max(rect.left, Math.min(rect.right, end.x)), y: rect.top };
+        const d = (point.x - end.x) ** 2 + (point.y - end.y) ** 2;
+        if (d < distance) {
+          closest = point;
+          distance = d;
+        }
+      }
+      const target = this.GetBox(closest as SwTableMousePoint, true);
+      if (target === undefined || target.cell.repeatedHeadline === true) return false;
+      last = target;
+      if (last.cell.box === this.tableMouseEnd) return true;
+    }
+    this.tableMouseEnd = last.cell.box;
+    this.cursor.GetPoint().Assign(hit.cell.box.GetParagraphs()[0] as SwTextNode, 0);
+    this.ClearTableCursor();
+    this.cursor.DeleteMark();
+    if (end !== undefined) {
+      this.cursor.SetMark();
+      this.cursor.GetPoint().Assign(last.cell.box.GetParagraphs()[0] as SwTextNode, 0);
+    }
+    return hit.row && hit.column ? this.SelTable() : this.SelTableRowOrCol(hit.row, true);
+  }
   /** Recognizes native whole-table mode from the first and last selected section boundaries. @returns Whether table edges are selected. */
   public HasWholeTabSelection(): boolean {
     if (!this.HasBoxSelection()) return false;

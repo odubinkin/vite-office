@@ -11,6 +11,8 @@ import { WriterTransferError } from "../../source/uibase/dochdl/swdtflvr";
 import { BrowserWriterPointerSelectionController } from "./writer-geometry";
 import { BrowserWriterSelectionMapper } from "./writer-selection";
 import type { WriterCursorSelection } from "./writer-selection-types";
+import { SwTab } from "../../inc/fesh";
+import { SwTabFrame, type SwTableMouseCell } from "../../source/core/layout/tabfrm";
 
 /** Mounted paragraph lookup retained by the browser edit window. */
 export type BrowserWriterParagraphResolver = (
@@ -34,6 +36,8 @@ export class BrowserWriterEditWindow {
   private readonly selectionMapper: BrowserWriterSelectionMapper;
   private readonly pointerSelection: BrowserWriterPointerSelectionController;
   private suppressNextCommittedInput = false;
+  private root: HTMLElement | undefined;
+  private tableCapture = false;
 
   /** Creates a browser edit window. @param editWindow - Writer-owned operation boundary. @param environment - Browser selection surface. @param resolveParagraph - Mounted projection lookup. @returns Nothing. */
   public constructor(
@@ -62,11 +66,29 @@ export class BrowserWriterEditWindow {
 
   /** Installs native event subscriptions not represented faithfully by React synthetic events. @param root - Editing host. @returns Cleanup callback. */
   public Subscribe(root: HTMLElement): () => void {
+    this.root = root;
     const handleBeforeInput =
       /** Routes one cancelable pre-mutation input event. @param event - Native input event. @returns Nothing. */ (
         event: Event,
       ): void => this.HandleBeforeInput(event as InputEvent);
     root.addEventListener("beforeinput", handleBeforeInput);
+    const move =
+      /** Delivers captured table drags outside the editing host. @param event - Device event. @returns Nothing. */
+      (event: MouseEvent): void => {
+        if (!this.tableCapture) return;
+        this.MeasureTableFrames();
+        this.editWindow.MouseMove({ x: event.clientX, y: event.clientY });
+        event.preventDefault();
+      };
+    const up =
+      /** Releases platform and Writer capture together. @returns Nothing. */
+      (): void => {
+        this.tableCapture = false;
+        this.editWindow.MouseButtonUp();
+      };
+    this.environment.document.addEventListener("mousemove", move);
+    this.environment.document.addEventListener("mouseup", up);
+    this.environment.document.defaultView?.addEventListener("blur", up);
     const unsubscribeSelection = this.selectionMapper.Subscribe(
       /** Publishes one native selection to SwEditWin. @param selection - DOM selection projection. @returns Nothing. */ (
         selection,
@@ -74,6 +96,12 @@ export class BrowserWriterEditWindow {
     );
     return /** Removes native edit-window subscriptions. @returns Nothing. */ () => {
       root.removeEventListener("beforeinput", handleBeforeInput);
+      this.environment.document.removeEventListener("mousemove", move);
+      this.environment.document.removeEventListener("mouseup", up);
+      this.environment.document.defaultView?.removeEventListener("blur", up);
+      up();
+      this.root = undefined;
+      this.editWindow.SetTableMouseFrames([]);
       unsubscribeSelection();
     };
   }
@@ -210,29 +238,134 @@ export class BrowserWriterEditWindow {
         event.preventDefault();
     };
 
-  /* c8 ignore start -- Pointer geometry is covered by its isolated adapter and Chromium E2E. */
   public readonly HandlePointerDown =
     /** Starts pointer selection stabilization. @param event - React mouse event. @returns Nothing. */ (
       event: React.MouseEvent<HTMLElement>,
     ): void => {
+      this.MeasureTableFrames();
+      this.pointerSelection.End();
+      this.tableCapture = false;
+      if (
+        this.editWindow.MouseButtonDown(
+          { x: event.clientX, y: event.clientY },
+          event.button,
+          event.detail || 1,
+        )
+      ) {
+        this.tableCapture =
+          this.editWindow.WhichMouseTabCol({ x: event.clientX, y: event.clientY }) !==
+          SwTab.SEL_HORI;
+        event.preventDefault();
+        return;
+      }
+      /* c8 ignore start -- Native text caret geometry retains its isolated adapter and Chromium checks. */
       if (this.pointerSelection.Start(event.button, event.clientX, event.clientY))
         this.SynchronizeSelection();
+      /* c8 ignore stop */
     };
 
   public readonly HandlePointerMove =
     /** Extends pointer selection stabilization. @param event - React mouse event. @returns Nothing. */ (
       event: React.MouseEvent<HTMLElement>,
     ): void => {
+      if (this.tableCapture) return;
+      this.MeasureTableFrames();
+      const kind = this.editWindow.WhichMouseTabCol({ x: event.clientX, y: event.clientY });
+      event.currentTarget.style.cursor =
+        kind === SwTab.ROWSEL_HORI
+          ? "e-resize"
+          : kind === SwTab.COLSEL_HORI
+            ? "s-resize"
+            : kind === SwTab.SEL_HORI
+              ? "se-resize"
+              : "";
+      /* c8 ignore start -- Text caret extension is covered by isolated geometry and Chromium. */
       if (this.pointerSelection.Move(event.clientX, event.clientY)) event.preventDefault();
+      /* c8 ignore stop */
     };
 
   public readonly HandlePointerUp =
     /** Completes pointer selection stabilization. @param event - React mouse event. @returns Nothing. */ (
       event: React.MouseEvent<HTMLElement>,
     ): void => {
+      if (this.tableCapture) event.preventDefault();
+      /* c8 ignore start -- Text pointer completion retains isolated geometry and Chromium coverage. */
       if (this.pointerSelection.End()) event.preventDefault();
+      /* c8 ignore stop */
     };
-  /* c8 ignore stop */
+
+  /** Measures live table frames over canonical model boxes; the browser owns only device rectangles. @returns Nothing. */
+  private MeasureTableFrames(): void {
+    const frames: SwTabFrame[] = [];
+    if (this.root !== undefined)
+      for (const element of this.root.querySelectorAll<HTMLTableElement>("table")) {
+        const table = this.editWindow
+          .GetDoc()
+          .GetTables()
+          .find(
+            /** Resolves the existing mounted owner. @param owner - Canonical table. @returns Whether named by the frame. */
+            (owner) => owner.GetName() === element.getAttribute("aria-label"),
+          );
+        if (table === undefined) continue;
+        const rect = element.getBoundingClientRect();
+        if (rect.width <= 0 || rect.height <= 0) continue;
+        const boxes = table.GetTabLines().flatMap(
+            /** Reads original box owners. @param row - Native table row. @returns Native cells. */
+            (row) => row.GetTabBoxes(),
+          ),
+          cells: SwTableMouseCell[] = [];
+        for (const cell of element.querySelectorAll<HTMLElement>("[data-writer-table-box]")) {
+          const box = boxes.find(
+            /** Resolves current section identity. @param owner - Actual box. @returns Whether mounted here. */
+            (owner) => owner.GetStartNode().GetIndex() === Number(cell.dataset.writerTableBox),
+          );
+          if (box !== undefined)
+            cells.push({
+              box,
+              rect: cell.getBoundingClientRect(),
+              repeatedHeadline: cell.closest("[data-writer-repeated-headline]") !== null,
+            });
+        }
+        if (cells.length === 0) continue;
+        const printArea = {
+          left: Math.min(
+            ...cells.map(
+              /** Reads physical cell-frame left edges. @param cell - Actual measured frame. @returns Device edge. */
+              (cell) => cell.rect.left,
+            ),
+          ),
+          right: Math.max(
+            ...cells.map(
+              /** Reads physical cell-frame right edges. @param cell - Actual measured frame. @returns Device edge. */
+              (cell) => cell.rect.right,
+            ),
+          ),
+          top: Math.min(
+            ...cells.map(
+              /** Reads physical cell-frame top edges. @param cell - Actual measured frame. @returns Device edge. */
+              (cell) => cell.rect.top,
+            ),
+          ),
+          bottom: Math.max(
+            ...cells.map(
+              /** Reads physical cell-frame bottom edges. @param cell - Actual measured frame. @returns Device edge. */
+              (cell) => cell.rect.bottom,
+            ),
+          ),
+        };
+        const previous = element.parentElement?.previousElementSibling;
+        frames.push(
+          new SwTabFrame(table, {
+            rect: printArea,
+            cells,
+            ...(previous === null || previous === undefined
+              ? {}
+              : { previous: previous.getBoundingClientRect() }),
+          }),
+        );
+      }
+    this.editWindow.SetTableMouseFrames(frames);
+  }
 
   /** Routes one native input intent before browser DOM mutation. @param input - Native input event. @returns Nothing. */
   private HandleBeforeInput(input: InputEvent): void {

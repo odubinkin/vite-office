@@ -12,6 +12,8 @@ import type { SwWrtShell } from "../wrtsh/wrtsh1";
 import { SwTextNode as SwTextNodeClass } from "../../core/txtnode/ndtxt";
 import { SwTableBoxStartNode } from "../../core/docnode/node";
 import * as numfunc from "../../core/doc/number";
+import { SwTab, type SwTableMousePoint } from "../../../inc/fesh";
+import type { SwTabFrame } from "../../core/layout/tabfrm";
 
 /** Performs no invalidation for detached/test edit windows. @returns Nothing. */
 function ignoreEditWindowInvalidation(): void {}
@@ -38,6 +40,49 @@ export interface SwEditWindowSelection {
  */
 export class SwEditWin {
   private readonly invalidateBindings: () => void;
+  private tableMouseStart: SwTableMousePoint | undefined;
+  private tableRowDrag = false;
+
+  /** Replaces device frame measurements before native mouse classification. @param frames - Live master/follow frames. @returns Nothing. */
+  public SetTableMouseFrames(frames: readonly SwTabFrame[]): void {
+    this.wrtShell.SetTableMouseFrames(frames);
+  }
+
+  /** Reports native cursor geometry without changing the selection. @param point - Device position. @returns Native table cursor kind. */
+  public WhichMouseTabCol(point: SwTableMousePoint): SwTab {
+    return this.wrtShell.WhichMouseTabCol(point);
+  }
+
+  /** Starts native single-left-click table edge selection and optional capture. @param point - Device position. @param button - Platform button. @param clicks - Native click count. @returns Whether handled. */
+  public MouseButtonDown(point: SwTableMousePoint, button = 0, clicks = 1): boolean {
+    this.tableMouseStart = undefined;
+    if (button !== 0 || clicks !== 1) return false;
+    const kind = this.WhichMouseTabCol(point);
+    if (kind !== SwTab.SEL_HORI && kind !== SwTab.ROWSEL_HORI && kind !== SwTab.COLSEL_HORI)
+      return false;
+    this.wrtShell.EnterStdMode();
+    const selected = this.wrtShell.SelectTableRowCol(point);
+    if (selected && kind !== SwTab.SEL_HORI) {
+      this.tableMouseStart = point;
+      this.tableRowDrag = kind === SwTab.ROWSEL_HORI;
+    }
+    return this.Complete(selected);
+  }
+
+  /** Extends an active native table mouse capture. @param point - Device position. @returns Whether handled. */
+  public MouseMove(point: SwTableMousePoint): boolean {
+    return (
+      this.tableMouseStart !== undefined &&
+      this.Complete(this.wrtShell.SelectTableRowCol(this.tableMouseStart, point, this.tableRowDrag))
+    );
+  }
+
+  /** Releases native table capture on mouse up or window teardown. @returns Whether capture was active. */
+  public MouseButtonUp(): boolean {
+    const captured = this.tableMouseStart !== undefined;
+    this.tableMouseStart = undefined;
+    return captured;
+  }
 
   /** Creates one edit-window owner for an attached Writer shell. @param wrtShell - Persistent edit shell. @param invalidateBindings - Final operation-state invalidation. @returns Nothing. */
   public constructor(
@@ -96,19 +141,6 @@ export class SwEditWin {
     return this.Complete(
       start ? this.wrtShell.StartOfSection(select) : this.wrtShell.EndOfSection(select),
     );
-  }
-  /** Converts a browser row hit into native text/cursor coordinates and shell selection. @param nodeIndex - Hit row's actual text node. @returns Whether accepted. */
-  public SelectTableRow(nodeIndex: number): boolean {
-    const node = this.ResolveTextNode(nodeIndex);
-    if (node === undefined || !(node.StartOfSectionNode() instanceof SwTableBoxStartNode))
-      return false;
-    const point = new SwPosition(node, 0);
-    try {
-      this.wrtShell.SetCursor(point);
-      return this.Complete(this.wrtShell.SelectTableRow());
-    } finally {
-      point.Dispose();
-    }
   }
 
   /** Handles represented paragraph Tab with native numbering, cell and ordinary text priority. @param shift - Promote, previous-cell or consumed body no-op direction. @returns Whether Writer owns the key, including supported boundary no-ops. */

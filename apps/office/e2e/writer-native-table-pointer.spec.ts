@@ -1,4 +1,5 @@
 /** @fileoverview Checks real table interior pointer placement and explicit row gutter selection. */
+import { selectBrowserTableRow } from "../test-support/table-mouse-e2e";
 import { expect, test } from "@playwright/test";
 import { SwDoc } from "../src/sw/source/core/doc/doc";
 import { SwPosition } from "../src/sw/source/core/crsr/pam";
@@ -57,20 +58,17 @@ for (const width of [1280, 390])
     });
     await expect(page.getByRole("dialog", { name: "Open", exact: true })).toBeHidden();
     const displayed = page.getByRole("table", { name: "Pointer" }),
-      selector = page.getByRole("button", { name: "Select row 1 in Pointer" }),
       targetCell = displayed.locator("td").nth(1),
       emptyCell = displayed.locator("td").nth(2),
       firstEditor = page.getByLabel("Row 1 column 1 paragraph 1", { exact: true }),
       upperEditor = page.getByLabel("Row 1 column 2 paragraph 1", { exact: true }),
       lowerEditor = page.getByLabel("Row 1 column 2 paragraph 2", { exact: true }),
       emptyEditor = page.getByLabel("Row 1 column 3 paragraph 1", { exact: true });
-    await selector.scrollIntoViewIfNeeded();
-    const tableBounds = await displayed.boundingBox(),
-      selectorBounds = await selector.boundingBox();
-    if (tableBounds === null || selectorBounds === null) throw new Error("Missing gutter geometry");
-    expect(selectorBounds.x + selectorBounds.width).toBeLessThanOrEqual(tableBounds.x + 1);
-    expect(selectorBounds.y).toBeGreaterThanOrEqual(tableBounds.y - 1);
-    await selector.click();
+    await displayed.scrollIntoViewIfNeeded();
+    const tableBounds = await displayed.boundingBox();
+    if (tableBounds === null) throw new Error("Missing table frame geometry");
+    await expect(page.getByRole("button", { name: "Select row 1 in Pointer" })).toHaveCount(0);
+    await selectBrowserTableRow(page, "Pointer", 1);
     await expect(displayed.locator('[data-writer-editor-selected="true"]')).toHaveCount(3);
     const targetBounds = await targetCell.boundingBox();
     if (targetBounds === null) throw new Error("Missing padded cell");
@@ -82,14 +80,14 @@ for (const width of [1280, 390])
     await expect(firstEditor).toHaveText("Keep");
     await page.keyboard.press("Control+z");
     await expect(lowerEditor).toHaveText("Lower");
-    await selector.click();
+    await selectBrowserTableRow(page, "Pointer", 1);
     await emptyCell.click({ position: { x: 3, y: 25 } });
     await expect(displayed.locator('[data-writer-editor-selected="true"]')).toHaveCount(0);
     await page.keyboard.insertText("E");
     await expect(emptyEditor).toHaveText("E");
     await page.keyboard.press("Control+z");
     await expect(emptyEditor).toHaveText("");
-    await selector.click();
+    await selectBrowserTableRow(page, "Pointer", 1);
     await displayed.locator("[data-writer-list-marker]").click();
     await expect(displayed.locator('[data-writer-editor-selected="true"]')).toHaveCount(0);
     // Native labels start ruler indent dragging; text-caret placement is not asserted here.

@@ -1,4 +1,5 @@
 /** @fileoverview Verifies native single-paragraph clipboard reads over actual selected table ranges. */
+import { selectTableRow } from "../../../../../test-support/table-mouse";
 import { expect, it } from "vitest";
 import { SwDoc } from "../../core/doc/doc";
 import { SwPaM, SwPosition } from "../../core/crsr/pam";
@@ -56,7 +57,7 @@ function fixture(reverse: boolean, empty: boolean) {
   const shell = new SwWrtShell(
     new SwDocShell(doc, createDocument({ id: "table-paste", suiteId: "writer", title: "Paste" })),
   );
-  new SwEditWin(shell).SelectTableRow(required(nodes[1]).GetIndex());
+  selectTableRow(new SwEditWin(shell), required(nodes[1]).GetIndex());
   const display = shell.getShellCursor() as SwTableCursor;
   display
     .GetPoint()

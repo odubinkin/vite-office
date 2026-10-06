@@ -1,0 +1,44 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "command": "npm exec -- tsx scripts/generate-writer-ui-resources.ts --check",
+      "exit": 0,
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:source-tree",
+      "exit": 0,
+      "bytes": 162,
+      "sha256": "6c5bd2e3c84892b8cc26b8b1b5f06a950891f9d5988a8ef1f1496f0c252cd33e",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "exit": 0,
+      "bytes": 205,
+      "sha256": "665f191cebc495e3468777b75a5da8f8dc5bfa744672db9dfff1a58db0b8ea89",
+      "diagnostics": [
+        "Source provenance check passed for 272 runtime modules (188 mapped, 68 browser adaptations, 16 local infrastructure)."
+      ]
+    },
+    {
+      "command": "npm run inventory:invariants",
+      "exit": 0,
+      "bytes": 136,
+      "sha256": "8d0f3757af43331b4c62ffa7ccf5497bcce67449a871937b94a526bde8e7fdbe",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run inventory:parity",
+      "exit": 0,
+      "bytes": 1636261,
+      "sha256": "104f9705b3d22bd94f53b03000396561c116fc6b7adf0aa26453b2b82a3330e8",
+      "diagnostics": [
+        "Runtime inventory parity audit passed; prior semantic states/defaults/classes and registered I/O/recovery exceptions retained."
+      ]
+    }
+  ]
+}

@@ -169,6 +169,14 @@ export class SwWrtShell extends SwFEShell {
   public SelectTableRow(): boolean {
     return this.SelTableRow();
   }
+  /** Routes native table mouse selection to the frame shell. @param start - Captured device point. @param end - Optional drag point. @param rowDrag - Row-edge projection. @returns Whether admitted. */
+  public SelectTableRowCol(
+    start: import("../../../inc/fesh").SwTableMousePoint,
+    end?: import("../../../inc/fesh").SwTableMousePoint,
+    rowDrag = false,
+  ): boolean {
+    return this.SelTableRowCol(start, end, rowDrag);
+  }
   /** Selects columns through the native core cursor owner. @returns Whether selected. */
   public SelectTableCol(): boolean {
     return this.SelTableCol();

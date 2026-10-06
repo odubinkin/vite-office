@@ -1,4 +1,5 @@
 /** @fileoverview Checks actual native table editing cursor rings and formatting history. */
+import { selectTableRow } from "../../../../../test-support/table-mouse";
 import { it, expect, describe } from "vitest";
 import { SwDoc } from "../../core/doc/doc";
 import { SwPosition, getWriterSelectedTextRanges } from "../../core/crsr/pam";
@@ -50,7 +51,7 @@ function fixture() {
 }
 /** Selects the real middle column without selecting neighboring columns. @param f - Owners. @returns Displayed table owner. */
 function column(f: ReturnType<typeof fixture>) {
-  f.edit.SelectTableRow(required(f.nodes[1]).GetIndex());
+  selectTableRow(f.edit, required(f.nodes[1]).GetIndex());
   const display = f.shell.getShellCursor() as SwTableCursor;
   display.GetPoint().Assign(required(f.nodes[1]), 0);
   display.GetMark().Assign(f.empty, 0);

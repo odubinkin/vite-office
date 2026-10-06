@@ -1,4 +1,5 @@
 /** @fileoverview Verifies actual selected table-row list commands use all native boxes and atomic history. */
+import { selectBrowserTableRow } from "../test-support/table-mouse-e2e";
 import { expect, test } from "@playwright/test";
 for (const kind of ["Ordered List", "Unordered List"] as const) {
   test(
@@ -23,7 +24,7 @@ for (const kind of ["Ordered List", "Unordered List"] as const) {
       await first.fill("First");
       await second.fill("Second");
       await neighbor.fill("Neighbor");
-      await page.getByRole("button", { name: "Select row 1 in Table1" }).click();
+      await selectBrowserTableRow(page, "Table1", 1);
       await page.getByRole("button", { name: "Format", exact: true }).click();
       await page.getByRole("menuitem", { name: "Lists", exact: true }).click();
       await page.getByRole("menuitemradio", { name: kind, exact: true }).click();

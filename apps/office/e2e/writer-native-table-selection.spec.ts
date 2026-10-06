@@ -1,4 +1,5 @@
 /** @fileoverview Checks real Chromium table row selection and cursor-owned context. */
+import { selectBrowserTableRow } from "../test-support/table-mouse-e2e";
 import { test, expect } from "@playwright/test";
 /** Inserts the existing default grid through its UI. @param page - Browser. @returns Completion. */
 async function insert(page: import("@playwright/test").Page) {
@@ -27,7 +28,7 @@ test("Writer row selection paints core boxes and typing after caret kill preserv
   await page.keyboard.type("Keep");
   await page.keyboard.press("Tab");
   await page.keyboard.type("Cell");
-  await page.getByRole("button", { name: "Select row 1 in Table1" }).click();
+  await selectBrowserTableRow(page, "Table1", 1);
   const table = page.getByRole("table", { name: "Table1" });
   await expect(table.locator('[data-writer-editor-selected="true"]')).toHaveCount(2);
   await expect(table.locator("tr").first()).toHaveAttribute("aria-selected", "true");

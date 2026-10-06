@@ -1,4 +1,5 @@
 /** @fileoverview Verifies actual flat table selection owners without upstream execution. */
+import { selectTableRow } from "../../../../../test-support/table-mouse";
 import { describe, it, expect, vi } from "vitest";
 import { SwDoc } from "../../core/doc/doc";
 import { SwPosition } from "../../core/crsr/pam";
@@ -162,7 +163,7 @@ describe("native table selection", /** Checks actual table selection behavior.  
     const f = fixture(),
       ordinary = f.shell.getShellCursor();
     expect(
-      f.edit.SelectTableRow(required(required(f.boxes[4]).GetParagraphs()[0]).GetIndex()),
+      selectTableRow(f.edit, required(required(f.boxes[4]).GetParagraphs()[0]).GetIndex()),
     ).toBe(true);
     const c = f.shell.getShellCursor();
     expect(c).toBeInstanceOf(SwTableCursor);
@@ -183,13 +184,13 @@ describe("native table selection", /** Checks actual table selection behavior.  
     expect(f.shell.HasBoxSelection()).toBe(false);
     expect(f.shell.IsCursorInTable()).toBeUndefined();
     expect(f.shell.SelectTableRow()).toBe(false);
-    expect(f.edit.SelectTableRow(f.body.GetIndex())).toBe(false);
-    expect(f.edit.SelectTableRow(f.table.GetTableNode().GetIndex())).toBe(false);
+    expect(selectTableRow(f.edit, f.body.GetIndex())).toBe(false);
+    expect(selectTableRow(f.edit, f.table.GetTableNode().GetIndex())).toBe(false);
     f.shell.Close();
   });
   it("updates native selected boxes when table endpoints move", /** Checks actual table selection behavior.  @returns Operation result. */ () => {
     const f = fixture();
-    f.edit.SelectTableRow(required(required(f.boxes[3]).GetParagraphs()[0]).GetIndex());
+    selectTableRow(f.edit, required(required(f.boxes[3]).GetParagraphs()[0]).GetIndex());
     const c = f.shell.getShellCursor() as SwTableCursor;
     expect(f.shell.StartOfSection(true)).toBe(true);
     expect(c.GetSelectedBoxes()).toEqual(f.boxes.slice(0, 6));
@@ -214,7 +215,7 @@ describe("native table selection", /** Checks actual table selection behavior.  
 
 it("rejects a row request when retained selected boxes have no endpoint in their table", /** Checks real connected cursor movement before selection actualization. @returns Nothing. */ () => {
   const f = fixture();
-  f.edit.SelectTableRow(required(required(f.boxes[0]).GetParagraphs()[0]).GetIndex());
+  selectTableRow(f.edit, required(required(f.boxes[0]).GetParagraphs()[0]).GetIndex());
   const other = f.doc.nodes.MakeTableNode("Other"),
     row = f.doc.nodes.AppendTableRow(other, 1),
     node = required(required(row.GetTabBoxes()[0]).GetParagraphs()[0]),

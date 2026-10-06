@@ -158,7 +158,12 @@ describe("native repeated table headline UI", /** Registers actual shared-node d
     expect(
       f.mounted.container.querySelectorAll('[data-writer-repeated-headline="true"]'),
     ).toHaveLength(2);
-    expect(screen.getAllByRole("button", { name: "Select row 1 in Headlines" })).toHaveLength(1);
+    expect(
+      document.querySelectorAll(
+        'table[aria-label="Headlines"] tr[data-writer-table-row="0"]:not([data-writer-repeated-headline])',
+      ),
+    ).toHaveLength(1);
+    expect(screen.queryAllByRole("button", { name: "Select row 1 in Headlines" })).toHaveLength(0);
     expect(f.table.GetTabLines()).toHaveLength(4);
     expect(
       f.doc.nodes

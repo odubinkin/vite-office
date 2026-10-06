@@ -1,4 +1,5 @@
 /** @fileoverview Verifies native ring numbering ownership, table selections and exact SwPamRanges without upstream access. */
+import { selectTableRow } from "../../../../../test-support/table-mouse";
 import { afterEach, expect, it } from "vitest";
 import { SwDoc } from "../doc/doc";
 import { SwEditShell, SwPamRanges } from "./ednumber";
@@ -81,7 +82,7 @@ function fixture() {
 }
 /** Selects real row or middle column and materializes native editing rings. @param owner - Owners. @param kind - Selection shape. @returns Selected native nodes. */
 function selected(owner: ReturnType<typeof fixture>, kind: "row" | "column"): SwTextNode[] {
-  owner.edit.SelectTableRow(required(owner.nodes[4]).GetIndex());
+  selectTableRow(owner.edit, required(owner.nodes[4]).GetIndex());
   if (kind === "column") {
     const display = owner.shell.getShellCursor() as SwTableCursor;
     display.GetPoint().Assign(required(owner.nodes[1]), 0);

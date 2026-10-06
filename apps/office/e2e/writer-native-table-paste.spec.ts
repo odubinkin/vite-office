@@ -1,4 +1,5 @@
 /** @fileoverview Checks actual Chromium clipboard insertion into native selected table cell rings. */
+import { selectBrowserTableRow } from "../test-support/table-mouse-e2e";
 import { test, expect } from "@playwright/test";
 test("Writer selected row paste appends in every cell and retains native Undo selection", /** Exercises native clipboard ownership and history. @param root0 - Native test input. @param root0.page - Native test input. @returns Test result. */ async ({
   page,
@@ -25,7 +26,7 @@ test("Writer selected row paste appends in every cell and retains native Undo se
   await page.keyboard.type("Second");
   await page.keyboard.press("Tab");
   await page.keyboard.type("Keep");
-  await page.getByRole("button", { name: "Select row 1 in Table1" }).click();
+  await selectBrowserTableRow(page, "Table1", 1);
   const table = page.getByRole("table", { name: "Table1" });
   await expect(table.locator('[data-writer-editor-selected="true"]')).toHaveCount(2);
   await first.evaluate(

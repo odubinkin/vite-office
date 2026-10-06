@@ -1,0 +1,46 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "app",
+      "exit": 0,
+      "command": "npm exec -- vitest run src/sw/browser/editor/WriterPlainTextEditor.empty.test.tsx src/sw/browser/editor/native-headline-selection.test.tsx src/sw/browser/presentation/WriterPageLayout.test.tsx -t ^(?:empty Writer page renders the initial physical page without an editable paragraph|empty Writer page drops a pending browser measurement when the page unmounts|paints only original selected headline boxes from the existing row gutter|reduces a live native row cursor when the actual moving view hit enters a repeated headline|Writer imported formatting controls shows only participating paragraphs in continuous line numbering|Writer physical page browser UI keeps screen measurements while print media is active|Writer physical page browser UI places table row fragments on physical pages without a scroll container|Writer physical page browser UI docks page rulers at the canvas edge and keeps their page-relative origins through scrolling|Writer physical page browser UI renders a measured long paragraph as two fragments with source-node caret offsets)$ --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/WFPZ8W.app-closure1-results.json",
+      "bytes": 652,
+      "sha256": "4b6b6a89d4b97b13091e0b5787c19e9086050091cd5d2c1b320a10452e370d47",
+      "counts": {
+        "passed": 9,
+        "failed": 0,
+        "skipped": 17,
+        "total": 26
+      },
+      "totals": [
+        " Test Files  3 passed (3)",
+        "      Tests  9 passed | 17 skipped (26)"
+      ],
+      "errors": []
+    },
+    {
+      "kind": "chromium",
+      "exit": 1,
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts apps/office/e2e/writer-native-table-mouse.spec.ts --grep ^Writer native table mouse edge and drag width=1280$ --reporter=list,json",
+      "bytes": 354,
+      "sha256": "2fd6a6205d268de8d56afd2099a6ccc7cead0a125d6e3e865ecbdfa7bb26787c",
+      "counts": {
+        "startTime": "2026-10-06T13:42:52.373Z",
+        "duration": 539.654,
+        "expected": 0,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "totals": [],
+      "errors": [
+        {
+          "message": "Error: No tests found.\nMake sure that arguments are regular expressions matching test files.\nYou may need to escape symbols like \"$\" or \"*\" and quote the arguments.",
+          "stack": "Error: No tests found.\nMake sure that arguments are regular expressions matching test files.\nYou may need to escape symbols like \"$\" or \"*\" and quote the arguments."
+        }
+      ],
+      "failedCases": []
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "app",
+      "exit": 0,
+      "command": "npm exec -- vitest run src/sw/browser/editor/native-table-mouse.test.tsx -t ^uses native cell-frame print edges when collapsed HTML borders offset the outer table bounds$ --coverage --coverage.include=src/sw/browser/editor/browser-writer-edit-window.ts --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0 --coverage.reporter=json --coverage.reporter=json-summary --coverage.reportOnFailure --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/WFPZ8W.app-closure4-results.json",
+      "bytes": 613,
+      "sha256": "3e3643ec66b2b0c4bb57ce6ccccf1d7797ee2e4320ca5c4ca398edae66337b36",
+      "counts": {
+        "passed": 1,
+        "failed": 0,
+        "skipped": 6,
+        "total": 7
+      },
+      "totals": [
+        " Test Files  1 passed (1)",
+        "      Tests  1 passed | 6 skipped (7)"
+      ],
+      "errors": []
+    }
+  ]
+}

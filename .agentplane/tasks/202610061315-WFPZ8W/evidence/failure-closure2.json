@@ -1,0 +1,37 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "chromium",
+      "exit": 1,
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts writer-native-table-mouse.spec.ts --grep Writer native table mouse edge and drag width=1280$ --reporter=list,json",
+      "bytes": 4856,
+      "sha256": "d9293587386819c918cfbc5b8b43c5ff129c7f3dc39e4b71e77bdfeb1424e522",
+      "counts": {
+        "startTime": "2026-10-06T13:43:27.241Z",
+        "duration": 7139.518999999999,
+        "expected": 0,
+        "skipped": 0,
+        "unexpected": 1,
+        "flaky": 0
+      },
+      "totals": [
+        "  1 failed"
+      ],
+      "errors": [],
+      "failedCases": [
+        {
+          "file": "writer-native-table-mouse.spec.ts",
+          "title": "Writer native table mouse edge and drag width=1280",
+          "errors": [
+            [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed",
+              "Expected: \u001b[32m3\u001b[39m",
+              "Received: \u001b[31m0\u001b[39m"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

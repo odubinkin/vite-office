@@ -1,0 +1,20 @@
+{
+  "baselineTag": "libreoffice-26.8.0.2",
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceSHA256": {
+    "sw/source/core/frmedt/fetab.cxx": "e7b7c7164f76d7e67eddcf863128d41c3c2ea2946362b8509bab0bc2cdc9f016",
+    "sw/source/uibase/wrtsh/select.cxx": "e52314599cd686635085927f18a311cf742424076e052a2770d0a8b46eff67d0",
+    "sw/source/uibase/docvw/edtwin.cxx": "f679baf21d41f78d6494bead35aebf6333eed298a6e24892452a4bb4623b7eb3",
+    "sw/inc/fesh.hxx": "1eba45926daa128a0d127b509ea94584dd6e9dce7d156f9c2c54249344d710fc",
+    "include/svtools/ruler.hxx": "fe0d39a80344d230670b1efbf7f0aecbc769d8aa754b025d396f19bec4ac2526"
+  },
+  "reviewer": "Same current agent; local pinned source reads only; no upstream execution",
+  "contracts": [
+    "GetBox/WhichMouseTabCol give represented resize classification priority before enhanced selection. Enhanced selection fuzzy10pixels; frame resize search3pixels; live drawing-device IsSame tolerance COLFUZZY/4=5pixels. Horizontal LTR left selects rows,top selects columns,corner whole table. Top border is excluded from resizing.",
+    "GetBox projects the physical point onto native table print edges and resolves actual cell frames; browser measures original cell-frame bounds because collapsed HTML outer borders do not equal the native print area. Previous-frame overlap disallows the outer half of the top selection zone.",
+    "SelTableRowCol projects a captured drag onto the nearest edge of original master/follows, retains the actual original table and chooses native simple row/column model selection. Actual table cursor/rings continue to own formatting/list/clipboard/edit/history. Same endpoint section admits unchanged selection.",
+    "SwEditWin MouseButtonDown only admits single left click outside other native modes, enters standard mode,selects via persistent shell,captures row/column start and extends on mouse move. Native desktop modes absent from existing browser runtime remain unverified; no synthetic widget or node-index row adapter retained.",
+    "DOM supplies device rectangles/events only. Global capture and teardown are platform seams. Browser-only fixed ruler/canvas scrolling is exercised by real E2E gestures; no core injection.",
+    "RTL/vertical/nested/merged/rowspan/protected/native resize operations and full native frame hierarchy are not silently promoted. Full core/UI parity remains unverified; historical classifications/defaults and conscious I/O/recovery exceptions retained."
+  ]
+}

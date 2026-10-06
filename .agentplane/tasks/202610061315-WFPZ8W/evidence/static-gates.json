@@ -1,0 +1,82 @@
+{
+  "records": [
+    {
+      "command": "npm run format:check",
+      "exit": 0,
+      "bytes": 122,
+      "sha256": "ac1729f86eee878f5f4d6c948c510d2cc91bb5568f6dd088f70f3885e137d116",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run lint",
+      "exit": 1,
+      "bytes": 2158,
+      "sha256": "75e0dd96a575d4eefa1f9605871c90dac5b74bd449120fe86c197b76f46a0905",
+      "diagnostics": [
+        "> eslint . --max-warnings 0",
+        "  11:14  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "  18:9   error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "   24:41  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "   59:16  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "  142:3   error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "  3:43  error  'vi' is defined but never used  @typescript-eslint/no-unused-vars",
+        "  142:35  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "  147:37  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "   21:12  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "   31:21  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "  160:16  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion"
+      ]
+    },
+    {
+      "command": "npm run typecheck",
+      "exit": 2,
+      "bytes": 809,
+      "sha256": "ea02443fa191b1227e11ed01892fdb62d9533ba179dd0768512b26562ab6331a",
+      "diagnostics": [
+        "src/sw/browser/editor/native-table-print-area.test.tsx(3,43): error TS6133: 'vi' is declared but its value is never read.",
+        "src/sw/browser/presentation/WriterTableDialog.test.tsx(211,12): error TS2552: Cannot find name 'select'. Did you mean 'onselect'?",
+        "npm error Lifecycle script `typecheck` failed with error:",
+        "npm error code 2",
+        "npm error path /Users/odubinkin/Projects/vite-office/apps/office",
+        "npm error workspace @vite-office/office@0.1.0",
+        "npm error location /Users/odubinkin/Projects/vite-office/apps/office",
+        "npm error command failed",
+        "npm error command sh -c tsc --noEmit"
+      ]
+    },
+    {
+      "command": "npm run check:dependencies",
+      "exit": 0,
+      "bytes": 189,
+      "sha256": "f8395fdbc56ac49bf3e7fb86afa2a27c5062db9b04d59a4761a98e6e9cf5b8e5",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:docs",
+      "exit": 1,
+      "bytes": 4144,
+      "sha256": "8cf3bcddd7fbfde42753b9a810793b11bd3e1fb02350dcde05f1cc168148b1e4",
+      "diagnostics": [
+        "    throw new Error(`JSDoc validation failed:\\n${errors.join(\"\\n\")}`);",
+        "Error: JSDoc validation failed:",
+        "apps/office/e2e/writer-imported-table-lists.spec.ts:1 file is missing an opening @fileoverview JSDoc block",
+        "apps/office/e2e/writer-native-table-cursor-rings.spec.ts:1 file is missing an opening @fileoverview JSDoc block",
+        "apps/office/e2e/writer-native-table-delete.spec.ts:1 file is missing an opening @fileoverview JSDoc block",
+        "apps/office/e2e/writer-native-table-paste.spec.ts:1 file is missing an opening @fileoverview JSDoc block",
+        "apps/office/e2e/writer-native-table-plain-paste.spec.ts:1 file is missing an opening @fileoverview JSDoc block",
+        "apps/office/e2e/writer-native-table-pointer.spec.ts:1 file is missing an opening @fileoverview JSDoc block",
+        "apps/office/e2e/writer-native-table-selection.spec.ts:1 file is missing an opening @fileoverview JSDoc block",
+        "apps/office/e2e/writer-table-alignment.spec.ts:1 file is missing an opening @fileoverview JSDoc block",
+        "apps/office/e2e/writer-table-properties-history.spec.ts:1 file is missing an opening @fileoverview JSDoc block",
+        "apps/office/e2e/writer-table-ring-continue.spec.ts:1 file is missing an opening @fileoverview JSDoc block"
+      ]
+    },
+    {
+      "command": "npm run check:file-size",
+      "exit": 0,
+      "bytes": 3464,
+      "sha256": "884f1d38f747d1e9f7e089c59b9f2d35ea0441dabfb2c73f4b307260c0a9f153",
+      "diagnostics": []
+    }
+  ]
+}

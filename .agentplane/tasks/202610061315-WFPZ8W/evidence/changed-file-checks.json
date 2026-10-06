@@ -1,0 +1,77 @@
+{
+  "records": [
+    {
+      "command": "Unchanged JSDoc validator on all changed code/acceptance/helper paths; actual physical-line count",
+      "exit": 0,
+      "errors": [],
+      "physicalLines": {
+        "apps/office/src/sw/inc/fesh.ts": 23,
+        "apps/office/src/sw/source/core/layout/tabfrm.ts": 79,
+        "apps/office/src/sw/source/core/frmedt/fetab.ts": 351,
+        "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts": 954,
+        "apps/office/src/sw/source/uibase/docvw/edtwin.ts": 311,
+        "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts": 494,
+        "apps/office/src/sw/browser/editor/WriterEditableTable.tsx": 190,
+        "apps/office/src/sw/browser/editor/WriterPlainTextEditor.tsx": 569,
+        "apps/office/src/sw/browser/editor/native-table-cursor-rings.test.tsx": 72,
+        "apps/office/src/sw/browser/editor/native-table-pointer.test.tsx": 156,
+        "apps/office/src/sw/browser/editor/cell-paragraph-rendering.test.tsx": 252,
+        "apps/office/src/sw/browser/editor/native-table-paste.test.tsx": 79,
+        "apps/office/src/sw/browser/editor/native-table-plain-paste.test.tsx": 130,
+        "apps/office/src/sw/browser/presentation/native-table-properties.test.tsx": 105,
+        "apps/office/src/sw/browser/editor/native-table-print-area.test.tsx": 171,
+        "apps/office/src/sw/browser/editor/native-headline-selection.test.tsx": 277,
+        "apps/office/src/sw/browser/presentation/writer-view.test.tsx": 953,
+        "apps/office/src/sw/browser/editor/native-table-delete.test.tsx": 93,
+        "apps/office/src/sw/browser/editor/native-table-headlines.test.tsx": 282,
+        "apps/office/src/sw/browser/editor/native-table-selection.test.tsx": 211,
+        "apps/office/src/sw/browser/presentation/native-table-alignment.test.tsx": 89,
+        "apps/office/src/sw/browser/presentation/WriterTableDialog.test.tsx": 265,
+        "apps/office/e2e/writer-table-headlines.spec.ts": 196,
+        "apps/office/e2e/writer-table-row-lists.spec.ts": 79,
+        "apps/office/e2e/writer-native-table-selection.spec.ts": 68,
+        "apps/office/e2e/writer-native-table-delete.spec.ts": 67,
+        "apps/office/e2e/writer-table-alignment.spec.ts": 127,
+        "apps/office/e2e/writer-table-ring-continue.spec.ts": 183,
+        "apps/office/e2e/writer-native-table-plain-paste.spec.ts": 82,
+        "apps/office/e2e/writer-native-table-cursor-rings.spec.ts": 45,
+        "apps/office/e2e/writer-native-table-pointer.spec.ts": 99,
+        "apps/office/e2e/writer-native-table-paste.spec.ts": 58,
+        "apps/office/e2e/writer-table-properties-history.spec.ts": 98,
+        "apps/office/e2e/writer-imported-table-lists.spec.ts": 170,
+        "apps/office/src/sw/source/uibase/wrtsh/native-table-selection.test.ts": 231,
+        "apps/office/src/sw/source/core/txtnode/native-split-attributes.test.ts": 386,
+        "apps/office/src/sw/source/uibase/wrtsh/native-table-paste.test.ts": 260,
+        "apps/office/src/sw/source/uibase/wrtsh/native-table-delete.test.ts": 543,
+        "apps/office/src/sw/source/uibase/wrtsh/native-table-cursor-rings.test.ts": 290,
+        "apps/office/src/sw/source/uibase/wrtsh/native-table-plain-paste.test.ts": 585,
+        "apps/office/src/sw/source/core/edit/native-list-ring.test.ts": 661,
+        "apps/office/src/sw/source/core/edit/native-list-continuation-ring.test.ts": 591,
+        "apps/office/src/sw/source/core/frmedt/native-table-mouse.test.ts": 242,
+        "apps/office/src/sw/browser/editor/native-table-mouse.test.tsx": 269,
+        "apps/office/e2e/writer-native-table-mouse.spec.ts": 89,
+        "apps/office/test-support/table-mouse.ts": 50,
+        "apps/office/test-support/table-mouse-dom.ts": 70,
+        "apps/office/test-support/table-mouse-e2e.ts": 47,
+        "apps/office/src/sw/browser/editor/WriterPlainTextEditor.empty.test.tsx": 70,
+        "apps/office/src/sw/browser/presentation/WriterPageLayout.test.tsx": 807
+      }
+    },
+    {
+      "command": "npm exec -- prettier --check apps/office/src/sw/inc/fesh.ts apps/office/src/sw/source/core/layout/tabfrm.ts apps/office/src/sw/source/core/frmedt/fetab.ts apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts apps/office/src/sw/source/uibase/docvw/edtwin.ts apps/office/src/sw/browser/editor/browser-writer-edit-window.ts apps/office/src/sw/browser/editor/WriterEditableTable.tsx apps/office/src/sw/browser/editor/WriterPlainTextEditor.tsx apps/office/src/sw/browser/editor/native-table-cursor-rings.test.tsx apps/office/src/sw/browser/editor/native-table-pointer.test.tsx apps/office/src/sw/browser/editor/cell-paragraph-rendering.test.tsx apps/office/src/sw/browser/editor/native-table-paste.test.tsx apps/office/src/sw/browser/editor/native-table-plain-paste.test.tsx apps/office/src/sw/browser/presentation/native-table-properties.test.tsx apps/office/src/sw/browser/editor/native-table-print-area.test.tsx apps/office/src/sw/browser/editor/native-headline-selection.test.tsx apps/office/src/sw/browser/presentation/writer-view.test.tsx apps/office/src/sw/browser/editor/native-table-delete.test.tsx apps/office/src/sw/browser/editor/native-table-headlines.test.tsx apps/office/src/sw/browser/editor/native-table-selection.test.tsx apps/office/src/sw/browser/presentation/native-table-alignment.test.tsx apps/office/src/sw/browser/presentation/WriterTableDialog.test.tsx apps/office/e2e/writer-table-headlines.spec.ts apps/office/e2e/writer-table-row-lists.spec.ts apps/office/e2e/writer-native-table-selection.spec.ts apps/office/e2e/writer-native-table-delete.spec.ts apps/office/e2e/writer-table-alignment.spec.ts apps/office/e2e/writer-table-ring-continue.spec.ts apps/office/e2e/writer-native-table-plain-paste.spec.ts apps/office/e2e/writer-native-table-cursor-rings.spec.ts apps/office/e2e/writer-native-table-pointer.spec.ts apps/office/e2e/writer-native-table-paste.spec.ts apps/office/e2e/writer-table-properties-history.spec.ts apps/office/e2e/writer-imported-table-lists.spec.ts apps/office/src/sw/source/uibase/wrtsh/native-table-selection.test.ts apps/office/src/sw/source/core/txtnode/native-split-attributes.test.ts apps/office/src/sw/source/uibase/wrtsh/native-table-paste.test.ts apps/office/src/sw/source/uibase/wrtsh/native-table-delete.test.ts apps/office/src/sw/source/uibase/wrtsh/native-table-cursor-rings.test.ts apps/office/src/sw/source/uibase/wrtsh/native-table-plain-paste.test.ts apps/office/src/sw/source/core/edit/native-list-ring.test.ts apps/office/src/sw/source/core/edit/native-list-continuation-ring.test.ts apps/office/src/sw/source/core/frmedt/native-table-mouse.test.ts apps/office/src/sw/browser/editor/native-table-mouse.test.tsx apps/office/e2e/writer-native-table-mouse.spec.ts apps/office/test-support/table-mouse.ts apps/office/test-support/table-mouse-dom.ts apps/office/test-support/table-mouse-e2e.ts apps/office/src/sw/browser/editor/WriterPlainTextEditor.empty.test.tsx apps/office/src/sw/browser/presentation/WriterPageLayout.test.tsx",
+      "exit": 0,
+      "bytes": 176,
+      "sha256": "56985ee048927803ecf0f9e7d667690470cf7323dc9e13465dc10ef97ea6d034",
+      "diagnostics": [
+        "Original final warning only native-table-mouse.test.tsx; exact file formatted and checked PASS; other scoped paths had already passed."
+      ]
+    },
+    {
+      "command": "npm exec -- eslint apps/office/src/sw/inc/fesh.ts apps/office/src/sw/source/core/layout/tabfrm.ts apps/office/src/sw/source/core/frmedt/fetab.ts apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts apps/office/src/sw/source/uibase/docvw/edtwin.ts apps/office/src/sw/browser/editor/browser-writer-edit-window.ts apps/office/src/sw/browser/editor/WriterEditableTable.tsx apps/office/src/sw/browser/editor/WriterPlainTextEditor.tsx apps/office/src/sw/browser/editor/native-table-cursor-rings.test.tsx apps/office/src/sw/browser/editor/native-table-pointer.test.tsx apps/office/src/sw/browser/editor/cell-paragraph-rendering.test.tsx apps/office/src/sw/browser/editor/native-table-paste.test.tsx apps/office/src/sw/browser/editor/native-table-plain-paste.test.tsx apps/office/src/sw/browser/presentation/native-table-properties.test.tsx apps/office/src/sw/browser/editor/native-table-print-area.test.tsx apps/office/src/sw/browser/editor/native-headline-selection.test.tsx apps/office/src/sw/browser/presentation/writer-view.test.tsx apps/office/src/sw/browser/editor/native-table-delete.test.tsx apps/office/src/sw/browser/editor/native-table-headlines.test.tsx apps/office/src/sw/browser/editor/native-table-selection.test.tsx apps/office/src/sw/browser/presentation/native-table-alignment.test.tsx apps/office/src/sw/browser/presentation/WriterTableDialog.test.tsx apps/office/e2e/writer-table-headlines.spec.ts apps/office/e2e/writer-table-row-lists.spec.ts apps/office/e2e/writer-native-table-selection.spec.ts apps/office/e2e/writer-native-table-delete.spec.ts apps/office/e2e/writer-table-alignment.spec.ts apps/office/e2e/writer-table-ring-continue.spec.ts apps/office/e2e/writer-native-table-plain-paste.spec.ts apps/office/e2e/writer-native-table-cursor-rings.spec.ts apps/office/e2e/writer-native-table-pointer.spec.ts apps/office/e2e/writer-native-table-paste.spec.ts apps/office/e2e/writer-table-properties-history.spec.ts apps/office/e2e/writer-imported-table-lists.spec.ts apps/office/src/sw/source/uibase/wrtsh/native-table-selection.test.ts apps/office/src/sw/source/core/txtnode/native-split-attributes.test.ts apps/office/src/sw/source/uibase/wrtsh/native-table-paste.test.ts apps/office/src/sw/source/uibase/wrtsh/native-table-delete.test.ts apps/office/src/sw/source/uibase/wrtsh/native-table-cursor-rings.test.ts apps/office/src/sw/source/uibase/wrtsh/native-table-plain-paste.test.ts apps/office/src/sw/source/core/edit/native-list-ring.test.ts apps/office/src/sw/source/core/edit/native-list-continuation-ring.test.ts apps/office/src/sw/source/core/frmedt/native-table-mouse.test.ts apps/office/src/sw/browser/editor/native-table-mouse.test.tsx apps/office/e2e/writer-native-table-mouse.spec.ts apps/office/test-support/table-mouse.ts apps/office/test-support/table-mouse-dom.ts apps/office/test-support/table-mouse-e2e.ts apps/office/src/sw/browser/editor/WriterPlainTextEditor.empty.test.tsx apps/office/src/sw/browser/presentation/WriterPageLayout.test.tsx --max-warnings 0",
+      "exit": 0,
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnostics": []
+    }
+  ]
+}

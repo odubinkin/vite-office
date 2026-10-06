@@ -1,0 +1,43 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "app",
+      "exit": 0,
+      "command": "npm exec -- vitest run src/sw/browser/editor/native-table-mouse.test.tsx -t ^a detached mouse frame refresh cannot resurrect native table capture after its view subscription closes$ --coverage --coverage.include=src/sw/browser/editor/browser-writer-edit-window.ts --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0 --coverage.reporter=json --coverage.reporter=json-summary --coverage.reportOnFailure --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/WFPZ8W.app-closure7-results.json",
+      "bytes": 624,
+      "sha256": "1bf6c85556508f06e2ce32c50d7a149224efb10bb79e5ac712d19614a7d09200",
+      "counts": {
+        "passed": 1,
+        "failed": 0,
+        "skipped": 7,
+        "total": 8
+      },
+      "totals": [
+        " Test Files  1 passed (1)",
+        "      Tests  1 passed | 7 skipped (8)"
+      ],
+      "errors": []
+    },
+    {
+      "kind": "chromium",
+      "exit": 0,
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts writer-native-table-pointer.spec.ts --grep Writer native table interior and gutter pointer width=390$ --reporter=list,json",
+      "bytes": 538,
+      "sha256": "faed3a43a753298d3b6e4182afda23f8425fdc673b435baa9b6c6ece3f584824",
+      "counts": {
+        "startTime": "2026-10-06T13:56:31.912Z",
+        "duration": 2815.6510000000003,
+        "expected": 1,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "totals": [
+        "  1 passed (2.8s)"
+      ],
+      "errors": [],
+      "failedCases": []
+    }
+  ]
+}

@@ -1,4 +1,5 @@
 /** @fileoverview Checks real native selected-cell deletion, structural history and section boundaries. */
+import { selectTableRow } from "../../../../../test-support/table-mouse";
 import { it, expect } from "vitest";
 import { SwDoc } from "../../core/doc/doc";
 import { SwTableCursor } from "../../core/crsr/swcrsr";
@@ -231,7 +232,7 @@ function fixture(extras = true, lists = true) {
 }
 /** Selects only actual middle-column boxes. @param f - Native owners. @param reverse - Display point in the final selected cell. @returns Display owner. */
 function column(f: ReturnType<typeof fixture>, reverse = false) {
-  f.edit.SelectTableRow(required(f.nodes[1]).GetIndex());
+  selectTableRow(f.edit, required(f.nodes[1]).GetIndex());
   const display = f.shell.getShellCursor() as SwTableCursor;
   display
     .GetPoint()

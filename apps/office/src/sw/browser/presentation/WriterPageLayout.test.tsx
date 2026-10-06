@@ -40,6 +40,8 @@ function layoutEditWindow(paragraphs: readonly WriterParagraphProjection[]): SwE
   );
   return {
     FocusNode: vi.fn(),
+    MouseButtonUp: vi.fn(),
+    SetTableMouseFrames: vi.fn(),
     SetSelection: vi.fn(),
     GetDoc: /** Resolves the detached editor document. @returns Canonical document. */ () =>
       document,
@@ -335,6 +337,8 @@ describe("Writer physical page browser UI", /** Registers page-layout UI cases. 
     ];
     const editWindow = {
       FocusNode: vi.fn(),
+      MouseButtonUp: vi.fn(),
+      SetTableMouseFrames: vi.fn(),
       SetSelection: vi.fn(),
       GetDoc: /** GetDoc handles this value. @returns The result. */ () => document,
     } as unknown as SwEditWin;

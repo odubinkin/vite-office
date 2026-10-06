@@ -1,4 +1,5 @@
 /** @fileoverview Verifies the actual React workbench delegates accepted table properties to native owners and history. */
+import { selectMountedTableRow } from "../../../../test-support/table-mouse-dom";
 import { render, cleanup, screen, fireEvent, act } from "@testing-library/react";
 import { afterEach, it, expect, vi } from "vitest";
 import { createWriterDocumentSession } from "../composition/writer-module";
@@ -40,7 +41,7 @@ function fixture() {
 it("accepts native properties as one history action and retains real selected cell owners", /** Checks actual UI application and repeated history. @returns Nothing. */ () => {
   const f = fixture(),
     setter = vi.spyOn(f.shell, "SetTableAttr");
-  fireEvent.click(screen.getByRole("button", { name: "Select row 1 in Grid" }));
+  selectMountedTableRow("Grid", 1);
   fireEvent.click(screen.getByRole("button", { name: "Table Properties" }));
   fireEvent.change(screen.getByRole("spinbutton", { name: "Table width (cm)" }), {
     target: { value: "8" },
@@ -91,7 +92,7 @@ it("accepts native properties as one history action and retains real selected ce
 it("cancels property drafts without native mutation or history", /** Checks canceled real dialog. @returns Nothing. */ () => {
   const f = fixture(),
     setter = vi.spyOn(f.shell, "SetTableAttr");
-  fireEvent.click(screen.getByRole("button", { name: "Select row 1 in Grid" }));
+  selectMountedTableRow("Grid", 1);
   fireEvent.click(screen.getByRole("button", { name: "Table Properties" }));
   fireEvent.change(screen.getByRole("spinbutton", { name: "Table width (cm)" }), {
     target: { value: "8" },

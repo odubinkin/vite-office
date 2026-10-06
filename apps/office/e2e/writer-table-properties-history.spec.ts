@@ -1,4 +1,5 @@
 /** @fileoverview Verifies real browser table properties, selected-cell scope and one native Undo/Redo without upstream execution. */
+import { selectBrowserTableRow } from "../test-support/table-mouse-e2e";
 import { expect, test } from "@playwright/test";
 import { SwDoc } from "../src/sw/source/core/doc/doc";
 import { writeOdtDocument } from "../src/sw/source/filter/xml/wrtxml";
@@ -53,7 +54,7 @@ for (const viewport of [1280, 390])
           table,
         ) => table.getBoundingClientRect().width,
       );
-    await page.getByRole("button", { name: "Select row 1 in Properties" }).click();
+    await selectBrowserTableRow(page, "Properties", 1);
     await page.getByRole("button", { name: "Table Properties", exact: true }).click();
     await page.getByRole("spinbutton", { name: "Table width (cm)" }).fill("8");
     await page.getByRole("button", { name: "Cancel", exact: true }).click();

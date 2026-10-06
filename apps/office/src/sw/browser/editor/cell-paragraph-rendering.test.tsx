@@ -232,7 +232,6 @@ describe("shared native cell paragraph display", /** Registers actual node-to-di
       revision = owner.doc.GetDocumentStateManager().GetModelRevision();
     render(
       <WriterEditableTable
-        onSelectRow={vi.fn()}
         table={owner.table}
         paragraphs={paragraphs}
         activeParagraphId={snapshot.activeParagraph.id}
@@ -246,9 +245,7 @@ describe("shared native cell paragraph display", /** Registers actual node-to-di
     const owner = fixture();
     expect(
       /** Attempts a table with absent text projections. @returns Render result. */ () =>
-        render(
-          <WriterEditableTable onSelectRow={vi.fn()} table={owner.table} paragraphs={new Map()} />,
-        ),
+        render(<WriterEditableTable table={owner.table} paragraphs={new Map()} />),
     ).toThrow("no connected paragraph projection");
   });
 });

@@ -162,7 +162,9 @@ for (const width of [1280, 390])
     }
     await expect(page.locator('[data-writer-repeated-headline="true"]')).toHaveCount(2);
     await expect(
-      page.getByRole("button", { name: "Select row 1 in Headlines", exact: true }),
+      page.locator(
+        'table[aria-label="Headlines"] tr[data-writer-table-row="0"]:not([data-writer-repeated-headline])',
+      ),
     ).toHaveCount(1);
     const current = copies.nth(1);
     await current.click();

@@ -1,4 +1,5 @@
 /** @fileoverview Checks real Chromium selected-row plain multiline paste and native document undo. */
+import { selectBrowserTableRow } from "../test-support/table-mouse-e2e";
 import { test, expect } from "@playwright/test";
 for (const text of ["X", "A\nB\n"]) {
   test(
@@ -34,7 +35,7 @@ for (const text of ["X", "A\nB\n"]) {
       await page.keyboard.type("Keep");
       await expect(second).toHaveText("Second");
       await expect(keep).toHaveText("Keep");
-      await page.getByRole("button", { name: "Select row 1 in Table1" }).click();
+      await selectBrowserTableRow(page, "Table1", 1);
       const table = page.getByRole("table", { name: "Table1" });
       await first.evaluate(
         /** Coordinates native ASCII insertion and retained history. @param element - Native operation input. @param value - Native operation input. @returns Operation result. */ (

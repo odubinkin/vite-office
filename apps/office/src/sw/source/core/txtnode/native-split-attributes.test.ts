@@ -1,4 +1,5 @@
 /** @fileoverview Verifies native full-span hint movement and split/read history without pinned upstream access. */
+import { selectTableRow } from "../../../../../test-support/table-mouse";
 import { expect, it, vi } from "vitest";
 import { SwDoc } from "../doc/doc";
 import { SwPaM, SwPosition } from "../crsr/pam";
@@ -364,7 +365,7 @@ it("native selected table plain paste retains both cells character formatting th
     ),
   );
   try {
-    new SwEditWin(shell).SelectTableRow(first.GetIndex());
+    selectTableRow(new SwEditWin(shell), first.GetIndex());
     expect(shell.PastePlainTextAtCursor("X\nY")).toBe(true);
     const boxes = row.GetTabBoxes();
     for (let cycle = 0; cycle < 3; cycle++) {

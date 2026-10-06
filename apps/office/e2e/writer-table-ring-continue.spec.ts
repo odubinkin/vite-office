@@ -1,4 +1,5 @@
 /** @fileoverview Verifies Add to List over a real selected table row, all labels and atomic restart history. */
+import { selectBrowserTableRow } from "../test-support/table-mouse-e2e";
 import { expect, test } from "@playwright/test";
 import { SwDoc } from "../src/sw/source/core/doc/doc";
 import { applyWriterParagraphList } from "../src/sw/source/core/doc/list";
@@ -39,7 +40,7 @@ for (const kind of ["Ordered List", "Unordered List"] as const)
         await first.fill("First");
         await second.fill("Second");
         if (initial === "different") {
-          await page.getByRole("button", { name: "Select row 2 in Table1" }).click();
+          await selectBrowserTableRow(page, "Table1", 2);
           await page.getByRole("button", { name: "Format", exact: true }).click();
           await page.getByRole("menuitem", { name: "Lists", exact: true }).click();
           await page
@@ -49,7 +50,7 @@ for (const kind of ["Ordered List", "Unordered List"] as const)
             })
             .click();
         }
-        await page.getByRole("button", { name: "Select row 2 in Table1" }).click();
+        await selectBrowserTableRow(page, "Table1", 2);
         const table = page.getByRole("table", { name: "Table1" });
         await expect(table.locator('[data-writer-editor-selected="true"]')).toHaveCount(2);
         await page.getByRole("button", { name: "Format", exact: true }).click();
@@ -146,13 +147,13 @@ test("Writer table row Add to List continues an imported restarted body list", /
     secondMarker = page.locator('[data-writer-list-marker="' + secondId + '"]'),
     rendered = page.getByRole("table", { name: "RestartRow" });
   await first.click();
-  await page.getByRole("button", { name: "Select row 2 in RestartRow" }).click();
+  await selectBrowserTableRow(page, "RestartRow", 2);
   await page.getByRole("button", { name: "Format", exact: true }).click();
   await page.getByRole("menuitem", { name: "Lists", exact: true }).click();
   await page.getByRole("menuitemradio", { name: "Unordered List", exact: true }).click();
   await expect(firstMarker).toHaveText("•");
   await expect(secondMarker).toHaveText("•");
-  await page.getByRole("button", { name: "Select row 2 in RestartRow" }).click();
+  await selectBrowserTableRow(page, "RestartRow", 2);
   await expect(rendered.locator('[data-writer-editor-selected="true"]')).toHaveCount(2);
   await page.getByRole("button", { name: "Format", exact: true }).click();
   await page.getByRole("menuitem", { name: "Lists", exact: true }).click();

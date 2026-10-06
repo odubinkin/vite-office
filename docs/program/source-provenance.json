@@ -3179,6 +3179,18 @@
           {
             "path": "apps/office/src/sw/source/core/layout/native-table-print-area.test.ts",
             "marker": "native table print area"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/frmedt/native-table-mouse.test.ts",
+            "marker": "classifies native physical mouse point"
+          },
+          {
+            "path": "apps/office/src/sw/browser/editor/native-table-mouse.test.tsx",
+            "marker": "mounted source edge"
+          },
+          {
+            "path": "apps/office/e2e/writer-native-table-mouse.spec.ts",
+            "marker": "Writer native table mouse edge and drag"
           }
         ],
         "upstream": [
@@ -3246,7 +3258,11 @@
         "Iteration170 removes blanket row click inference so table interior padding uses the existing BrowserWriterPointerSelectionController/selection mapper/SwEditWin/native cursor rather than selecting a whole row. Removing the row handler also removes synthetic row inference from list-marker hits. Native number labels instead invoke RulerMarginDrag/StartDocDrag(Indent); that label/ruler behavior remains unverified. The mounted injected marker caret test proves browser geometry only. Initial real-browser MKeep expectations were source-confirmed incorrect and are excluded; marker checks retain no synthetic row selection and unchanged text. The existing explicit row selector is placed in an absolute left gutter with hover/focus arrow, outside cell text and measurement flow. Actual element hit and native caret range are authoritative within the hit cell; otherwise bounded nearest paragraph and clipped native hit resolution reuse existing text-caret helper for empty/formatted boundary fallback. Browser geometry remains an explicit DOM adaptation, not full VCL layout. Existing helper is exported directly for reuse without a duplicate walker, manager, model, DTO or compatibility wrapper. New owned geometry/mounted DOM/Chromium cases verify the represented flat LTR table pointer, actual native box/caret/history and neighbor behavior. RTL/vertical/nested/merged/protected/column/resizing/full layout/portion/core/UI/list/table remain unverified; prior states/defaults/classes/IO exceptions and evidence prefixes are retained.",
         "Iteration173 restores existing repeated table headline functionality through native SwTable count/unsigned/capped ownership and original-row follow-frame state. Existing row-only formatter accounts measured repeated height, keeps master headlines with first nonsplittable body row, disables ordinary oversized headers to prevent loops, and retains unchanged frame identity. Browser reuses actual original cell/text projections and one edit window/history,distinct DOM descriptions,frame-local registration/current occurrence resolution; repeated headline row-selection gutter omitted as native table-mode restriction. Full nested/merged/rowspan/row splitting,cross-box repeated table selection,vertical/RTL/fly/multicolumn/protection/native frame/core/UI parity remains unverified; prior semantic states/defaults/classes/IO exceptions and registered save/open/recovery deviations preserved.",
         "Iteration174 restores represented flat same-table cross-cell cursor admission and repeated headline restrictions through existing owners. Native moving/fixed endpoints, selected boxes and ordinary cell history are preserved; selected original boxes do not paint on repeated headline copies. Actual native, mounted and Chromium cases cover bounded behavior. Full nested/merged/rowspan/split rows/cross-table/vertical/RTL/protection/frame/core/UI parity remains unverified; states/defaults/classes/IO exceptions and prior evidence preserved.",
-        "Iteration175 native represented horizontal table print geometry: SwTabFrame Format owns twip LR/wished-width orientation spacing and minimum23 guard;root supplies actual page upper print width for each master/follow fragment. Browser consumes immutable native print bounds and scales original column reference proportions;hidden measurement uses same owner. Signed left/right margins import/export reuse current table SAX/graph owners. No model clone,TextRuns translation or new adapter. Relative-width,fly/outer-border offsets,multicolumn,vertical/RTL,nested/merged/rowspan/split-row/full layout lifecycle and complete parity remain unverified;registered IO deviations unchanged."
+        "Iteration175 native represented horizontal table print geometry: SwTabFrame Format owns twip LR/wished-width orientation spacing and minimum23 guard;root supplies actual page upper print width for each master/follow fragment. Browser consumes immutable native print bounds and scales original column reference proportions;hidden measurement uses same owner. Signed left/right margins import/export reuse current table SAX/graph owners. No model clone,TextRuns translation or new adapter. Relative-width,fly/outer-border offsets,multicolumn,vertical/RTL,nested/merged/rowspan/split-row/full layout lifecycle and complete parity remain unverified;registered IO deviations unchanged.",
+        "Iteration188: source-shaped horizontal LTR native edge selection and master/follow drag ownership; wider unsupported layout/protection/resize remains unverified."
+      ],
+      "browserResponsibilities": [
+        "Iteration188: device rectangles and mouse events are supplied by the browser; actual table/box/cursor selection belongs to native shell owners."
       ]
     },
     {
@@ -3340,6 +3356,18 @@
           {
             "path": "apps/office/src/sw/source/core/layout/native-table-print-area.test.ts",
             "marker": "native table print area"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/frmedt/native-table-mouse.test.ts",
+            "marker": "classifies native physical mouse point"
+          },
+          {
+            "path": "apps/office/src/sw/browser/editor/native-table-mouse.test.tsx",
+            "marker": "mounted source edge"
+          },
+          {
+            "path": "apps/office/e2e/writer-native-table-mouse.spec.ts",
+            "marker": "Writer native table mouse edge and drag"
           }
         ],
         "upstream": [
@@ -3372,7 +3400,13 @@
         "kind": "browser-adaptation",
         "rationale": "React and DOM event binding replace the native VCL window boundary."
       },
-      "status": "local-only"
+      "status": "local-only",
+      "browserResponsibilities": [
+        "Iteration188: device rectangles and mouse events are supplied by the browser; actual table/box/cursor selection belongs to native shell owners."
+      ],
+      "preservedResponsibilities": [
+        "Iteration188: source-shaped horizontal LTR native edge selection and master/follow drag ownership; wider unsupported layout/protection/resize remains unverified."
+      ]
     },
     {
       "classification": "browser-adaptation",
@@ -3477,6 +3511,18 @@
           {
             "path": "apps/office/e2e/writer-headline-selection.spec.ts",
             "marker": "Writer native table range"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/frmedt/native-table-mouse.test.ts",
+            "marker": "classifies native physical mouse point"
+          },
+          {
+            "path": "apps/office/src/sw/browser/editor/native-table-mouse.test.tsx",
+            "marker": "mounted source edge"
+          },
+          {
+            "path": "apps/office/e2e/writer-native-table-mouse.spec.ts",
+            "marker": "Writer native table mouse edge and drag"
           }
         ],
         "upstream": [
@@ -3541,7 +3587,11 @@
         "Iteration166 unifies represented ordinary body/list/table Tab in SwEditWin.HandleTab instead of browser table-only routing. Native numfunc::NumDownChangesIndent now belongs to number.ts and reads actual shell cursor/rule/current and next formats/NUMBER_NONE/indent/max-level decision. Paragraph-start list priority uses native NumUpDown/history, equal NONE indent inserts literal tab; cells retain native traversal; ordinary body Tab inserts literal text and ShiftTab consumes End no-op. Browser translates actual DOM selections/unmodified noncomposing keys through the same owner with no compatibility wrapper. Eligible assigned-outline-at-start operations remain explicitly unsupported pending native OutlineUpDown, not substituted by text insertion. Typed nonnull text cursors only; native null/nontext fallback, forms/input/contentcontrols/graphics/read-only/WebView/modified Tab/config/autocorrect/NumDown counter and full KeyInput remain unverified. Real core/DOM/production Chromium cases prove bounded behavior;253 existing semantic states/defaults/classes/IOexceptions/evidence and424 prior testfiles preserved,2 prior tests source-confirmed obsolete body refusal/method-name corrections only. No full-module or broad parity promotion; conscious save/open/recovery deviations unchanged.",
         "Iteration170 removes blanket row click inference so table interior padding uses the existing BrowserWriterPointerSelectionController/selection mapper/SwEditWin/native cursor rather than selecting a whole row. Removing the row handler also removes synthetic row inference from list-marker hits. Native number labels instead invoke RulerMarginDrag/StartDocDrag(Indent); that label/ruler behavior remains unverified. The mounted injected marker caret test proves browser geometry only. Initial real-browser MKeep expectations were source-confirmed incorrect and are excluded; marker checks retain no synthetic row selection and unchanged text. The existing explicit row selector is placed in an absolute left gutter with hover/focus arrow, outside cell text and measurement flow. Actual element hit and native caret range are authoritative within the hit cell; otherwise bounded nearest paragraph and clipped native hit resolution reuse existing text-caret helper for empty/formatted boundary fallback. Browser geometry remains an explicit DOM adaptation, not full VCL layout. Existing helper is exported directly for reuse without a duplicate walker, manager, model, DTO or compatibility wrapper. New owned geometry/mounted DOM/Chromium cases verify the represented flat LTR table pointer, actual native box/caret/history and neighbor behavior. RTL/vertical/nested/merged/protected/column/resizing/full layout/portion/core/UI/list/table remain unverified; prior states/defaults/classes/IO exceptions and evidence prefixes are retained.",
         "Iteration174 restores represented flat same-table cross-cell cursor admission and repeated headline restrictions through existing owners. Native moving/fixed endpoints, selected boxes and ordinary cell history are preserved; selected original boxes do not paint on repeated headline copies. Actual native, mounted and Chromium cases cover bounded behavior. Full nested/merged/rowspan/split rows/cross-table/vertical/RTL/protection/frame/core/UI parity remains unverified; states/defaults/classes/IO exceptions and prior evidence preserved.",
-        "Iteration185 implements contextual Select All from actual native range state: current cell text, full table box selection, then parent text. Core owns common text, real table exit and extended structural boundaries; frame shell admits whole tables by first/last section edges; writer shell coordinates selection; browser synchronizes current DOM point/mark and restores actual ordinary/table owners. Literal core/mounted/Chromium acceptance exercises collapsed/partial/reversed/full/empty cells, repeated/native table mode, leading/trailing tables, imported table-only exit failure, native extras default, subsequent cell edit/history and unchanged neighbors/history. Prior270 semantic states/defaults/classes/full evidence and registered I/O deviations remain unchanged. Full hidden/nested/protected/layout/footnote lifecycle/native mode flags, document prepare-selection-all and structural deletion of extended boundary nodes, complete UI/core parity remain unverified."
+        "Iteration185 implements contextual Select All from actual native range state: current cell text, full table box selection, then parent text. Core owns common text, real table exit and extended structural boundaries; frame shell admits whole tables by first/last section edges; writer shell coordinates selection; browser synchronizes current DOM point/mark and restores actual ordinary/table owners. Literal core/mounted/Chromium acceptance exercises collapsed/partial/reversed/full/empty cells, repeated/native table mode, leading/trailing tables, imported table-only exit failure, native extras default, subsequent cell edit/history and unchanged neighbors/history. Prior270 semantic states/defaults/classes/full evidence and registered I/O deviations remain unchanged. Full hidden/nested/protected/layout/footnote lifecycle/native mode flags, document prepare-selection-all and structural deletion of extended boundary nodes, complete UI/core parity remain unverified.",
+        "Iteration188: source-shaped horizontal LTR native edge selection and master/follow drag ownership; wider unsupported layout/protection/resize remains unverified."
+      ],
+      "browserResponsibilities": [
+        "Iteration188: device rectangles and mouse events are supplied by the browser; actual table/box/cursor selection belongs to native shell owners."
       ]
     },
     {
@@ -5768,6 +5818,42 @@
         "SwModify::SwClientNotify",
         "SwModify::RemoveAllWriterListeners",
         "void sw::ClientBase<T>::StartListeningToSameModifyAs"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "path": "apps/office/src/sw/inc/fesh.ts",
+            "marker": "SwTab"
+          }
+        ],
+        "upstream": [
+          {
+            "path": "vendor/libreoffice-reference/sw/inc/fesh.hxx",
+            "marker": "enum class SwTab"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/inc/fesh.ts",
+      "localSymbols": [
+        "SwTab",
+        "SwTableMousePoint"
+      ],
+      "omittedResponsibilities": [
+        "Wider native frame shell contract, vertical/RTL/protection/resizing remain unverified."
+      ],
+      "preservedResponsibilities": [
+        "Declares source-native table mouse kinds in the matching declaration owner."
+      ],
+      "browserResponsibilities": [
+        "Device coordinates are measured by the browser over actual native owners."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/inc/fesh.hxx",
+      "upstreamSymbols": [
+        "SwTab"
       ]
     },
     {
@@ -10584,7 +10670,8 @@
         "Iteration181 routes counted flat InsertRowsBefore/After through contextual SwTableShell, inherited SwFEShell, SwDoc document history and SwTable selected-edge insertion. Original selection is preserved; numeric table and insertion coordinates support mixed/recreated-table history. Complex merged/nested tables, row spans, redline/layout/formula/protection/repeated-headline state, full native undo section reconstruction and complete UI/core parity remain unverified. All prior269 semantic states/defaults/classes/evidence and registered I/O deviations remain unchanged.",
         "Iteration182 ports native counted flat InsertCol/NewInsertCol and cumulative AdjustWidths rounding, expands column search across actual rows and represents CheckSplitCells MINLAY using table/page print geometry. Native table shell exposes InsertColumnsBefore/After; shared document-owned SwUndoTableNdsChg retains actual box sections, numeric insertion coordinates and width attributes, preserving selection through mixed and recreated-table history. Prior269 semantic states/defaults/classes/evidence and registered I/O deviations preserved. Full merged/nested/rowspan/RTL/redline/per-edge-border/formula/protection/repeated-headline/frame/undo reconstruction and complete UI/core parity remain unverified.",
         "Iteration183 removes redundant abstract cursor ownership declarations after native GetCursor and table storage move into SwCursorShell. Expanded GetTableSel reads the actual displayed point/mark as native tblsel.cxx does, preserving ordinary marked row/column ranges. Prior270 states/defaults/classes/evidence and I/O deviations preserved; full native layout/protection/mode/complex-table contracts remain unverified.",
-        "Iteration185 implements contextual Select All from actual native range state: current cell text, full table box selection, then parent text. Core owns common text, real table exit and extended structural boundaries; frame shell admits whole tables by first/last section edges; writer shell coordinates selection; browser synchronizes current DOM point/mark and restores actual ordinary/table owners. Literal core/mounted/Chromium acceptance exercises collapsed/partial/reversed/full/empty cells, repeated/native table mode, leading/trailing tables, imported table-only exit failure, native extras default, subsequent cell edit/history and unchanged neighbors/history. Prior270 semantic states/defaults/classes/full evidence and registered I/O deviations remain unchanged. Full hidden/nested/protected/layout/footnote lifecycle/native mode flags, document prepare-selection-all and structural deletion of extended boundary nodes, complete UI/core parity remain unverified."
+        "Iteration185 implements contextual Select All from actual native range state: current cell text, full table box selection, then parent text. Core owns common text, real table exit and extended structural boundaries; frame shell admits whole tables by first/last section edges; writer shell coordinates selection; browser synchronizes current DOM point/mark and restores actual ordinary/table owners. Literal core/mounted/Chromium acceptance exercises collapsed/partial/reversed/full/empty cells, repeated/native table mode, leading/trailing tables, imported table-only exit failure, native extras default, subsequent cell edit/history and unchanged neighbors/history. Prior270 semantic states/defaults/classes/full evidence and registered I/O deviations remain unchanged. Full hidden/nested/protected/layout/footnote lifecycle/native mode flags, document prepare-selection-all and structural deletion of extended boundary nodes, complete UI/core parity remain unverified.",
+        "Iteration188: source-shaped horizontal LTR native edge selection and master/follow drag ownership; wider unsupported layout/protection/resize remains unverified."
       ],
       "omittedResponsibilities": [
         "Full native item-format,complex-table,frame-cache and UI lifecycle parity remains unverified."
@@ -10598,6 +10685,18 @@
           {
             "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-properties.test.ts",
             "marker": "native table property application"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/frmedt/native-table-mouse.test.ts",
+            "marker": "classifies native physical mouse point"
+          },
+          {
+            "path": "apps/office/src/sw/browser/editor/native-table-mouse.test.tsx",
+            "marker": "mounted source edge"
+          },
+          {
+            "path": "apps/office/e2e/writer-native-table-mouse.spec.ts",
+            "marker": "Writer native table mouse edge and drag"
           }
         ],
         "upstream": [
@@ -10610,7 +10709,10 @@
             "marker": "SwFEShell::HasWholeTabSelection"
           }
         ]
-      }
+      },
+      "browserResponsibilities": [
+        "Iteration188: device rectangles and mouse events are supplied by the browser; actual table/box/cursor selection belongs to native shell owners."
+      ]
     },
     {
       "classification": "upstream-mechanism",
@@ -10864,7 +10966,8 @@
       ],
       "preservedResponsibilities": [
         "Iteration175 native represented horizontal table print geometry: SwTabFrame Format owns twip LR/wished-width orientation spacing and minimum23 guard;root supplies actual page upper print width for each master/follow fragment. Browser consumes immutable native print bounds and scales original column reference proportions;hidden measurement uses same owner. Signed left/right margins import/export reuse current table SAX/graph owners. No model clone,TextRuns translation or new adapter. Relative-width,fly/outer-border offsets,multicolumn,vertical/RTL,nested/merged/rowspan/split-row/full layout lifecycle and complete parity remain unverified;registered IO deviations unchanged.",
-        "Iteration177 represents native absolute table formatting through SwFormatTablePage and SwTableRep, six numeric orientations, linked metric fields, sensitivity, automatic-width restoration and visible-column reconciliation. React displays the native draft and the existing shell group applies accepted frame attributes. Worker retains orientation and ODF projects native alignment and conditional LR margins. Full native item/relative-width/complex-table/RTL/fly/cache/protection and UI/core parity remain unverified. All prior261 semantic statuses/defaults/classes and registered IO deviations are preserved."
+        "Iteration177 represents native absolute table formatting through SwFormatTablePage and SwTableRep, six numeric orientations, linked metric fields, sensitivity, automatic-width restoration and visible-column reconciliation. React displays the native draft and the existing shell group applies accepted frame attributes. Worker retains orientation and ODF projects native alignment and conditional LR margins. Full native item/relative-width/complex-table/RTL/fly/cache/protection and UI/core parity remain unverified. All prior261 semantic statuses/defaults/classes and registered IO deviations are preserved.",
+        "Iteration188: source-shaped horizontal LTR native edge selection and master/follow drag ownership; wider unsupported layout/protection/resize remains unverified."
       ],
       "omittedResponsibilities": [
         "Complete native layout frame construction,fly/border offsets,vertical/RTL/merged/nested/rowspan/split-row and relative-width semantics remain unverified."
@@ -10878,6 +10981,18 @@
           {
             "path": "apps/office/src/sw/source/core/layout/native-table-print-area.test.ts",
             "marker": "native table print area"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/frmedt/native-table-mouse.test.ts",
+            "marker": "classifies native physical mouse point"
+          },
+          {
+            "path": "apps/office/src/sw/browser/editor/native-table-mouse.test.tsx",
+            "marker": "mounted source edge"
+          },
+          {
+            "path": "apps/office/e2e/writer-native-table-mouse.spec.ts",
+            "marker": "Writer native table mouse edge and drag"
           }
         ],
         "upstream": [
@@ -10886,7 +11001,10 @@
             "marker": "SwTabFrame::Format"
           }
         ]
-      }
+      },
+      "browserResponsibilities": [
+        "Iteration188: device rectangles and mouse events are supplied by the browser; actual table/box/cursor selection belongs to native shell owners."
+      ]
     },
     {
       "classification": "upstream-mechanism",
@@ -15721,6 +15839,18 @@
           {
             "path": "apps/office/e2e/writer-headline-selection.spec.ts",
             "marker": "Writer native table range"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/frmedt/native-table-mouse.test.ts",
+            "marker": "classifies native physical mouse point"
+          },
+          {
+            "path": "apps/office/src/sw/browser/editor/native-table-mouse.test.tsx",
+            "marker": "mounted source edge"
+          },
+          {
+            "path": "apps/office/e2e/writer-native-table-mouse.spec.ts",
+            "marker": "Writer native table mouse edge and drag"
           }
         ],
         "upstream": [
@@ -15888,7 +16018,8 @@
         "Iteration148 ports actual SwPaM circular range owners/traversal/disposal, SwCursor.Create and SwTableCursor change/movement state plus full-cell MakeBoxSels reconciliation. Native default GetCursor(makeTableCursor=true) returns ordinary editing ring; getShellCursor owns displayed table endpoints. Shared selected-text traversal reads each actual PaM so represented Bold/Italic/font family/size/color/highlight cover entire selected cells and all nonempty cell paragraphs, excluding unselected columns. Native history state retains table endpoint mode and rebuilds selected boxes/rings through formatting Undo/Redo. Existing display/navigation tests only switch owner API calls and keep assertion values; no projected text editing. Full ring insertion/deletion/paste/list/paragraph operations, native shellcursor geometry/protection/redlines/complex cells remain unverified. Existing246semanticstates/defaults/classifications and conscious I/O/recovery exceptions preserved; broad goalactive.",
         "Iteration166 unifies represented ordinary body/list/table Tab in SwEditWin.HandleTab instead of browser table-only routing. Native numfunc::NumDownChangesIndent now belongs to number.ts and reads actual shell cursor/rule/current and next formats/NUMBER_NONE/indent/max-level decision. Paragraph-start list priority uses native NumUpDown/history, equal NONE indent inserts literal tab; cells retain native traversal; ordinary body Tab inserts literal text and ShiftTab consumes End no-op. Browser translates actual DOM selections/unmodified noncomposing keys through the same owner with no compatibility wrapper. Eligible assigned-outline-at-start operations remain explicitly unsupported pending native OutlineUpDown, not substituted by text insertion. Typed nonnull text cursors only; native null/nontext fallback, forms/input/contentcontrols/graphics/read-only/WebView/modified Tab/config/autocorrect/NumDown counter and full KeyInput remain unverified. Real core/DOM/production Chromium cases prove bounded behavior;253 existing semantic states/defaults/classes/IOexceptions/evidence and424 prior testfiles preserved,2 prior tests source-confirmed obsolete body refusal/method-name corrections only. No full-module or broad parity promotion; conscious save/open/recovery deviations unchanged.",
         "Iteration167 implements the represented nonmerged native docnum outline move-table using actual sorted outline index/predecessor range, creation-order assigned styles, lazy adjacent pool styles, occupied-level signed steps, whole-range rejection and actual collection/direct-outline mutation. Matching unoutl SwUndoOutlineLeftRight retains numeric range and signed offset, reuses the same primitive inversely for Undo and identically for Redo. SwEditShell retains native normalized ring order and short-circuit after failure with grouped successful delta history; default displacement one. SwEditWin eligible heading-at-start Tab/ShiftTab calls this native operation and owns the key, replacing unsupported fallback while retaining numbering/table priority and text/limit cases. Core primitive and portable shell history registration remain separated as existing runtime architecture; no snapshot/model/preparation/no-op callback/browser heuristic. Actual core/mounted DOM/production Chromium tests prove bounded behavior. Direct document auto-history, framework Repeat, failed-operation dirty flag, native StartAllAction layout batching, merged para props and conditional collections remain unrepresented/unverified. Full KeyInput/core/UI/list/table parity unverified.253 prior semantic states/defaults/classes/IO exceptions/evidence preserved;2 new partial owners stay unverified,255 modules.429 prior tests428 byte-identical with only exact old unsupported outline-case source-confirmed expectations corrected. Conscious save/open/recovery deviations unchanged.",
-        "Iteration174 restores represented flat same-table cross-cell cursor admission and repeated headline restrictions through existing owners. Native moving/fixed endpoints, selected boxes and ordinary cell history are preserved; selected original boxes do not paint on repeated headline copies. Actual native, mounted and Chromium cases cover bounded behavior. Full nested/merged/rowspan/split rows/cross-table/vertical/RTL/protection/frame/core/UI parity remains unverified; states/defaults/classes/IO exceptions and prior evidence preserved."
+        "Iteration174 restores represented flat same-table cross-cell cursor admission and repeated headline restrictions through existing owners. Native moving/fixed endpoints, selected boxes and ordinary cell history are preserved; selected original boxes do not paint on repeated headline copies. Actual native, mounted and Chromium cases cover bounded behavior. Full nested/merged/rowspan/split rows/cross-table/vertical/RTL/protection/frame/core/UI parity remains unverified; states/defaults/classes/IO exceptions and prior evidence preserved.",
+        "Iteration188: source-shaped horizontal LTR native edge selection and master/follow drag ownership; wider unsupported layout/protection/resize remains unverified."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/uibase/docvw/edtwin.cxx",
@@ -15896,6 +16027,9 @@
         "SwEditWin::KeyInput",
         "SwEditWin::Command",
         "SwEditWin::MouseButtonDown"
+      ],
+      "browserResponsibilities": [
+        "Iteration188: device rectangles and mouse events are supplied by the browser; actual table/box/cursor selection belongs to native shell owners."
       ]
     },
     {
@@ -17109,6 +17243,18 @@
           {
             "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-properties.test.ts",
             "marker": "native table property application"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/frmedt/native-table-mouse.test.ts",
+            "marker": "classifies native physical mouse point"
+          },
+          {
+            "path": "apps/office/src/sw/browser/editor/native-table-mouse.test.tsx",
+            "marker": "mounted source edge"
+          },
+          {
+            "path": "apps/office/e2e/writer-native-table-mouse.spec.ts",
+            "marker": "Writer native table mouse edge and drag"
           }
         ],
         "upstream": [
@@ -17352,7 +17498,8 @@
         "Iteration180 gives next/previous cell ownership to inherited SwCursorShell from trvltbl.cxx. Existing final-row default append calls SwDoc.InsertRow, which connects native nodes before document-owned SwUndoTableNdsChg publication; shell traversal follows mutation and no SwWrtShell ApplyAction replay or row construction remains. SaveNewBoxes captures connected cursor coordinates. Actual native/mounted/Chromium tests cover retained row identities, pending attributes, native boundaries and repeated history. Default flat append is represented; non-default row modes, DDE/protection/layout/rowspan/merged/nested, full native SwCursorShell and undo/save content contracts remain unverified. Native parameter order is retained with optional browser cursor state for pending attributes. Prior268 semantic statuses/defaults/classifications/evidence and registered I/O/recovery exceptions are preserved.",
         "Iteration183 moves actual ordinary/table cursor storage, editing-ring materialization/cleanup and flat row/column/cell/table selection from SwWrtShell into inherited source-owned SwCursorShell. Thin native writer entry points and standard-mode reset feed native EntireCell/EntireRow/EntireColumn/SelectTable contextual slots; React paints existing actual selected boxes without independent selection state or TextRuns conversion. Core and mounted/Chromium acceptance cover content endpoints, multi-paragraph cells, no selection history/dirty mutation, downstream formatting/paste/insertion and undo. Prior270 semantic states/defaults/classes/evidence and registered I/O deviations preserved. Full protected/layout union/old-model/enhanced-drag/repeated-headline/native mode-flag and UI/core parity remain unverified.",
         "Iteration184 removes SwWrtShellEditingPort/SwWrtShellEditingOperations and WriterPasteOperations callback layers. Split shell algorithms accept the actual SwWrtShell identity via erased type-only imports and invoke native cursor/document/history/notification methods directly. Transfer insertion and imported list history call the same actual shell directly; no synthetic editing object, callback port, runtime cycle or new DTO projection. The shell alone supplies its native undo context for sequential initial operations. Existing482 test files and represented algorithm ordering/admission/grouping/attributes/table sections/composition and registered I/O deviations are preserved. No native clipboard/layout/mode/default or semantic-status promotion.",
-        "Iteration185 implements contextual Select All from actual native range state: current cell text, full table box selection, then parent text. Core owns common text, real table exit and extended structural boundaries; frame shell admits whole tables by first/last section edges; writer shell coordinates selection; browser synchronizes current DOM point/mark and restores actual ordinary/table owners. Literal core/mounted/Chromium acceptance exercises collapsed/partial/reversed/full/empty cells, repeated/native table mode, leading/trailing tables, imported table-only exit failure, native extras default, subsequent cell edit/history and unchanged neighbors/history. Prior270 semantic states/defaults/classes/full evidence and registered I/O deviations remain unchanged. Full hidden/nested/protected/layout/footnote lifecycle/native mode flags, document prepare-selection-all and structural deletion of extended boundary nodes, complete UI/core parity remain unverified."
+        "Iteration185 implements contextual Select All from actual native range state: current cell text, full table box selection, then parent text. Core owns common text, real table exit and extended structural boundaries; frame shell admits whole tables by first/last section edges; writer shell coordinates selection; browser synchronizes current DOM point/mark and restores actual ordinary/table owners. Literal core/mounted/Chromium acceptance exercises collapsed/partial/reversed/full/empty cells, repeated/native table mode, leading/trailing tables, imported table-only exit failure, native extras default, subsequent cell edit/history and unchanged neighbors/history. Prior270 semantic states/defaults/classes/full evidence and registered I/O deviations remain unchanged. Full hidden/nested/protected/layout/footnote lifecycle/native mode flags, document prepare-selection-all and structural deletion of extended boundary nodes, complete UI/core parity remain unverified.",
+        "Iteration188: source-shaped horizontal LTR native edge selection and master/follow drag ownership; wider unsupported layout/protection/resize remains unverified."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/uibase/wrtsh/wrtsh1.cxx",
@@ -17365,6 +17512,9 @@
       "responsibilities": [
         "Iteration91 refactors the existing raw-index MoveRulerTabStop transition to clone the current item, remove its selected index and insert the moved copied stop, matching inspected SvxRuler ApplyTabs and SvxTabStopItem Insert ordering. A destination collision retains the selected stop's adjustment, decimal and leader instead of the later neighbour's metadata. Item default distance, unrelated default/explicit stops, invalid-input rejection, existing nonpositive removal and shell-owned single undo/redo are preserved. Actual Writer tests cover these bounded transitions; native geometric drag limits/deletion/modifiers and complete SwWrtShell behavior/contracts/defaults remain unverified. No native status promotion or registered I/O/recovery change.",
         "Iteration92 makes existing ruler insertion clone the stored tab item and Insert a freshly constructed Left tab, matching inspected SvxRuler Click and SvxTabStopItem Insert collision replacement. The new stop resets adjustment, decimal and leader to constructor defaults while preserving every unrelated stored stop and item default distance. Only the selected new positive integer position is validated; general paragraph position-list editing still retains matching metadata. Owned actual-session, immutable projection, cancellation, Undo/Redo and Chromium widths1280/390 cover this bounded insertion contract. All prior tests remain byte-identical. Native selector types/glyphs, signed geometry, RTL, modifiers/snapping/capture, complete ruler/SwWrtShell parity and parent goal remain unverified; no native promotion or registered save/open/recovery change."
+      ],
+      "browserResponsibilities": [
+        "Iteration188: device rectangles and mouse events are supplied by the browser; actual table/box/cursor selection belongs to native shell owners."
       ]
     },
     {

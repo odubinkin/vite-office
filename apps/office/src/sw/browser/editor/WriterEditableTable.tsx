@@ -11,7 +11,6 @@ import { WriterEditableParagraph } from "./WriterEditableParagraph";
   printArea,
   availableWidth,
   selectedBoxes,
-  onSelectRow,
   firstRow = 0,
   lastRow = table.GetTabLines().length - 1,
   repeatedHeaderRows = 0,
@@ -24,7 +23,6 @@ import { WriterEditableParagraph } from "./WriterEditableParagraph";
   printArea?: SwTablePrintArea;
   availableWidth?: number;
   selectedBoxes?: readonly number[] | undefined;
-  onSelectRow: (row: number) => void;
   firstRow?: number;
   lastRow?: number;
   repeatedHeaderRows?: number;
@@ -148,32 +146,6 @@ import { WriterEditableParagraph } from "./WriterEditableParagraph";
                             verticalAlign: cellFormat.verticalAlign ?? "top",
                           }}
                         >
-                          {cellIndex === 0 && !isRepeatedHeadline ? (
-                            <button
-                              aria-label={`Select row ${rowIndex + 1} in ${table.GetName()}`}
-                              className="absolute -left-5 top-0 flex h-full w-5 cursor-e-resize items-center justify-center text-indigo-700 opacity-0 hover:opacity-100 focus:opacity-100"
-                              contentEditable={false}
-                              onMouseDown={
-                                /** Keeps browser focus at the document while a native row gesture runs. @param event - Pointer down. @returns Nothing. */ (
-                                  event,
-                                ) => {
-                                  event.preventDefault();
-                                  event.stopPropagation();
-                                }
-                              }
-                              onClick={
-                                /** Selects the native row without bubbling a second row gesture. @param event - Browser click. @returns Nothing. */ (
-                                  event,
-                                ) => {
-                                  event.stopPropagation();
-                                  onSelectRow(rowIndex);
-                                }
-                              }
-                              type="button"
-                            >
-                              →
-                            </button>
-                          ) : null}
                           {cell.GetParagraphs().map(
                             /** Handles the browser table interaction. @param argument1 - Callback input. @param argument2 - Callback input. @returns Callback result. */ (
                               paragraph,

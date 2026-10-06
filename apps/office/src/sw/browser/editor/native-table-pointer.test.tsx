@@ -1,4 +1,5 @@
 /** @fileoverview Checks mounted table pointer hits use actual native caret and row owners. */
+import { selectMountedTableRow } from "../../../../test-support/table-mouse-dom";
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, expect, it } from "vitest";
 import { createWriterDocumentSession } from "../composition/writer-module";
@@ -106,7 +107,7 @@ it.each([false, true])(
     empty,
   ) => {
     const f = fixture(empty);
-    fireEvent.click(screen.getByRole("button", { name: "Select row 1 in Pointer" }));
+    selectMountedTableRow("Pointer", 1);
     expect(f.session.view.GetWrtShell().HasBoxSelection()).toBe(true);
     click(f.cell);
     expect(f.session.view.GetWrtShell().HasBoxSelection()).toBe(false);
@@ -140,13 +141,9 @@ it("list marker click inside a cell never becomes row selection", /** Checks lis
 });
 
 it("explicit row gutter retains native boxes while cell and row surfaces never infer a row operation", /** Checks accessible row gesture remains outside text flow. @returns Nothing. */ () => {
-  const f = fixture(),
-    selector = screen.getByRole("button", { name: "Select row 1 in Pointer" });
-  expect(selector).toHaveClass("absolute", "-left-5");
-  expect(selector).toHaveAttribute("contenteditable", "false");
-  expect(selector).not.toHaveTextContent("⋮");
-  expect(fireEvent.mouseDown(selector)).toBe(false);
-  fireEvent.click(selector);
+  const f = fixture();
+  expect(screen.queryByRole("button", { name: "Select row 1 in Pointer" })).toBeNull();
+  expect(selectMountedTableRow("Pointer", 1)).toBe(true);
   expect(f.session.view.GetWrtShell().HasBoxSelection()).toBe(true);
   expect(f.tableElement.querySelectorAll('[data-writer-editor-selected="true"]')).toHaveLength(2);
   click(f.cell);

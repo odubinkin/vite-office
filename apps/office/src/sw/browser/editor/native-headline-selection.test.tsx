@@ -1,4 +1,5 @@
 /** @fileoverview Checks actual DOM ranges retain native table selection and repeated headline view context. */
+import { selectMountedTableRow } from "../../../../test-support/table-mouse-dom";
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, expect, it } from "vitest";
 import { createWriterDocumentSession } from "../composition/writer-module";
@@ -119,7 +120,7 @@ it.each(["point", "mark"] as const)(
 );
 it("paints only original selected headline boxes from the existing row gutter", /** Checks native FillRects split-cell traversal does not include repeated rows. @returns Nothing. */ () => {
   const f = fixture();
-  fireEvent.click(screen.getByRole("button", { name: "Select row 1 in Select" }));
+  selectMountedTableRow("Select", 1);
   expect((f.shell.getShellCursor() as SwTableCursor).GetSelectedBoxes()).toEqual(
     required(f.table.GetTabLines()[0]).GetTabBoxes(),
   );
@@ -202,7 +203,7 @@ it("reads ordinary table-frame geometry and formats the actual selected original
 });
 it("reduces a live native row cursor when the actual moving view hit enters a repeated headline", /** Checks final frame-aware existing-table branch preserves fixed native mark cell. @returns Nothing. */ () => {
   const f = fixture();
-  fireEvent.click(screen.getByRole("button", { name: "Select row 3 in Select" }));
+  selectMountedTableRow("Select", 3);
   const fixed = f.shell.getShellCursor().GetMark().GetNode(),
     offset = f.shell.getShellCursor().GetMark().GetContentIndex();
   select(cell(3, 2), cell(1, 1, 1));

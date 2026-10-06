@@ -1,0 +1,569 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/sw/inc/fesh.ts": "123d44744721d0acb704d1f16534a21e7e60b7e09d24b99fd49d8e8db4d84bcd",
+    "apps/office/src/sw/source/core/layout/tabfrm.ts": "eaf2429781be40b7633e1cad188884ac92467388d2fa3deb648f8aa7fd52f761",
+    "apps/office/src/sw/source/core/frmedt/fetab.ts": "b1384299859b3bac7e2c142d4fa3d951b09391fce8e938e8c4d749a0d8239539",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts": "8d2f1ffd110a26f1a1842a03a0d507ed10727ce7a6dac7f506d8883046da3060",
+    "apps/office/src/sw/source/uibase/docvw/edtwin.ts": "ed33da28e2a391e5facc6b8bdb220d0f0818bf98ff2899a6f9e23bb8354328c6",
+    "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts": "951043e58e1c401eb4cb7aeafac4a1ccfee066c7b70cf40759ca2c3ca2a2f55a",
+    "apps/office/src/sw/browser/editor/WriterEditableTable.tsx": "9d2564c007f52b9e58eb0277a32ec03b9bfc1f8129587f681899804d5494c203",
+    "apps/office/src/sw/browser/editor/WriterPlainTextEditor.tsx": "53d8d54363ad531c760afb4eaa73f2e6187d5b7556b8bd538ba242a5d0adc30c"
+  },
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1103,
+      "sha256": "408ff84578cfa518ac1e335ba9f65010b474717c81938525f6fb30d8cccc5307",
+      "totals": [],
+      "failedCases": []
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/WFPZ8W.app-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 135838,
+      "sha256": "06960aea863bd8abbdd391d96964c9edacbca60d0edde5efd30dccbcfe995ac8",
+      "totals": [
+        "Test Files  3 failed | 365 passed (368)",
+        "Tests  9 failed | 12923 passed (12932)"
+      ],
+      "failedCases": [
+        {
+          "name": "apps/office/src/sw/browser/editor/WriterPlainTextEditor.empty.test.tsx > empty Writer page renders the initial physical page without an editable paragraph",
+          "assertion": [
+            "TypeError: this.editWindow.MouseButtonUp is not a function"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/browser/editor/WriterPlainTextEditor.empty.test.tsx > empty Writer page drops a pending browser measurement when the page unmounts",
+          "assertion": [
+            "TypeError: this.editWindow.MouseButtonUp is not a function"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/browser/editor/native-headline-selection.test.tsx > paints only original selected headline boxes from the existing row gutter",
+          "assertion": [
+            "TestingLibraryElementError: Found multiple elements with the role \"table\" and name \"Select\""
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/browser/editor/native-headline-selection.test.tsx > reduces a live native row cursor when the actual moving view hit enters a repeated headline",
+          "assertion": [
+            "TestingLibraryElementError: Found multiple elements with the role \"table\" and name \"Select\""
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/browser/presentation/WriterPageLayout.test.tsx > Writer imported formatting controls shows only participating paragraphs in continuous line numbering",
+          "assertion": [
+            "TypeError: this.editWindow.MouseButtonUp is not a function"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/browser/presentation/WriterPageLayout.test.tsx > Writer physical page browser UI keeps screen measurements while print media is active",
+          "assertion": [
+            "TypeError: this.editWindow.MouseButtonUp is not a function"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/browser/presentation/WriterPageLayout.test.tsx > Writer physical page browser UI places table row fragments on physical pages without a scroll container",
+          "assertion": [
+            "TypeError: this.editWindow.MouseButtonUp is not a function"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/browser/presentation/WriterPageLayout.test.tsx > Writer physical page browser UI docks page rulers at the canvas edge and keeps their page-relative origins through scrolling",
+          "assertion": [
+            "TypeError: this.editWindow.MouseButtonUp is not a function"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/browser/presentation/WriterPageLayout.test.tsx > Writer physical page browser UI renders a measured long paragraph as two fragments with source-node caret offsets",
+          "assertion": [
+            "TypeError: this.editWindow.MouseButtonUp is not a function"
+          ]
+        }
+      ],
+      "caseCounts": {
+        "passed": 12923,
+        "failed": 9,
+        "skipped": 0,
+        "total": 12932
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 14059,
+          "covered": 14059,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 15416,
+          "covered": 15416,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3634,
+          "covered": 3634,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 11516,
+          "covered": 11516,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100
+      },
+      "incompleteFileCount": 0,
+      "coverageMapSHA256": "c9da98d7bdb270f1b8958414fa1bf4b57d883b0e987dd4e733dd94933ad33ba3"
+    },
+    {
+      "kind": "inventory",
+      "command": "npm run test:inventory:coverage -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/WFPZ8W.inventory-results.json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 40597,
+      "sha256": "24e9323f329a6fca71d104f446077207cd65e49d9c06785c556e6d7697515639",
+      "totals": [
+        "Test Files  36 passed (36)",
+        "Tests  109 passed (109)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "passed": 109,
+        "failed": 0,
+        "skipped": 0,
+        "total": 109
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 1464,
+          "covered": 1464,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 1523,
+          "covered": 1523,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 384,
+          "covered": 384,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 1080,
+          "covered": 1080,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100
+      },
+      "incompleteFileCount": 0,
+      "coverageMapSHA256": "e82c5df16847b7873e9a29924973aaac07eeed8e13a1ef8897303f9d0abfd53d"
+    },
+    {
+      "kind": "scripts",
+      "command": "npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 218,
+      "sha256": "01a74f8d76bdeaba9ae137f56ded384fc5bff326285954722a18764cb4f9a4d5",
+      "totals": [
+        "Test Files  2 passed (2)",
+        "Tests  5 passed (5)"
+      ],
+      "failedCases": []
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 130736,
+      "sha256": "541ce621b220285ce1909105b37ca7dad6a14cf6a794edc4ca8a6f69984a5cd8",
+      "totals": [
+        "35 failed",
+        "177 passed (8.6m)"
+      ],
+      "failedCases": [
+        {
+          "name": "writer-imported-table-lists.spec.ts > Writer imported restarted table row Add to List preserves both starts and atomic selection",
+          "errors": [
+            [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed",
+              "Expected: \u001b[32m2\u001b[39m",
+              "Received: \u001b[31m0\u001b[39m"
+            ]
+          ]
+        },
+        {
+          "name": "writer-native-table-cursor-rings.spec.ts > Writer selected row character formatting covers full cells and survives Undo Redo",
+          "errors": [
+            [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed",
+              "Expected: \u001b[32m\"\u001b[7mtru\u001b[27me\"\u001b[39m",
+              "Received: \u001b[31m\"\u001b[7mfals\u001b[27me\"\u001b[39m"
+            ]
+          ]
+        },
+        {
+          "name": "writer-native-table-delete.spec.ts > Writer native table deletion > Writer selected row Delete preserves table cells and native Undo Redo",
+          "errors": [
+            [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed",
+              "Expected: \u001b[32m2\u001b[39m",
+              "Received: \u001b[31m0\u001b[39m"
+            ]
+          ]
+        },
+        {
+          "name": "writer-native-table-delete.spec.ts > Writer native table deletion > Writer selected row Backspace preserves table cells and native Undo Redo",
+          "errors": [
+            [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed",
+              "Expected: \u001b[32m2\u001b[39m",
+              "Received: \u001b[31m0\u001b[39m"
+            ]
+          ]
+        },
+        {
+          "name": "writer-native-table-mouse.spec.ts > Writer native table mouse edge and drag width=1280",
+          "errors": [
+            [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed",
+              "Expected: \u001b[32m3\u001b[39m",
+              "Received: \u001b[31m0\u001b[39m"
+            ]
+          ]
+        },
+        {
+          "name": "writer-native-table-mouse.spec.ts > Writer native table mouse edge and drag width=390",
+          "errors": [
+            [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed",
+              "Expected: \u001b[32m3\u001b[39m",
+              "Received: \u001b[31m0\u001b[39m"
+            ]
+          ]
+        },
+        {
+          "name": "writer-native-table-paste.spec.ts > Writer selected row paste appends in every cell and retains native Undo selection",
+          "errors": [
+            [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed",
+              "Expected: \u001b[32m2\u001b[39m",
+              "Received: \u001b[31m0\u001b[39m"
+            ]
+          ]
+        },
+        {
+          "name": "writer-native-table-plain-paste.spec.ts > Writer native plain table clipboard \"X\" preserves cells and inherited bold history",
+          "errors": [
+            [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed",
+              "Expected: \u001b[32m\"Second\u001b[7mX\u001b[27m\"\u001b[39m",
+              "Received: \u001b[31m\"Second\"\u001b[39m"
+            ]
+          ]
+        },
+        {
+          "name": "writer-native-table-plain-paste.spec.ts > Writer native plain table clipboard \"A\\nB\\n\" preserves cells and inherited bold history",
+          "errors": [
+            [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed",
+              "Expected: \u001b[32m\"Second\u001b[7mA\u001b[27m\"\u001b[39m",
+              "Received: \u001b[31m\"Second\"\u001b[39m"
+            ]
+          ]
+        },
+        {
+          "name": "writer-native-table-pointer.spec.ts > Writer native table interior and gutter pointer width=1280",
+          "errors": [
+            [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed",
+              "Expected: \u001b[32m3\u001b[39m",
+              "Received: \u001b[31m0\u001b[39m"
+            ]
+          ]
+        },
+        {
+          "name": "writer-native-table-pointer.spec.ts > Writer native table interior and gutter pointer width=390",
+          "errors": [
+            [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed",
+              "Expected: \u001b[32m3\u001b[39m",
+              "Received: \u001b[31m0\u001b[39m"
+            ]
+          ]
+        },
+        {
+          "name": "writer-native-table-selection.spec.ts > Writer row selection paints core boxes and typing after caret kill preserves neighbors",
+          "errors": [
+            [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed",
+              "Expected: \u001b[32m2\u001b[39m",
+              "Received: \u001b[31m0\u001b[39m"
+            ]
+          ]
+        },
+        {
+          "name": "writer-table-alignment.spec.ts > native automatic restores edited width viewport=1280",
+          "errors": [
+            [],
+            [
+              "Error: locator.click: Test timeout of 30000ms exceeded."
+            ]
+          ]
+        },
+        {
+          "name": "writer-table-alignment.spec.ts > native automatic restores edited width viewport=390",
+          "errors": [
+            [],
+            [
+              "Error: locator.click: Test timeout of 30000ms exceeded."
+            ]
+          ]
+        },
+        {
+          "name": "writer-table-alignment.spec.ts > native table Automatic viewport=1280",
+          "errors": [
+            [],
+            [
+              "Error: locator.click: Test timeout of 30000ms exceeded."
+            ]
+          ]
+        },
+        {
+          "name": "writer-table-alignment.spec.ts > native table Left viewport=1280",
+          "errors": [
+            [],
+            [
+              "Error: locator.click: Test timeout of 30000ms exceeded."
+            ]
+          ]
+        },
+        {
+          "name": "writer-table-alignment.spec.ts > native table From left viewport=1280",
+          "errors": [
+            [],
+            [
+              "Error: locator.click: Test timeout of 30000ms exceeded."
+            ]
+          ]
+        },
+        {
+          "name": "writer-table-alignment.spec.ts > native table Right viewport=1280",
+          "errors": [
+            [],
+            [
+              "Error: locator.click: Test timeout of 30000ms exceeded."
+            ]
+          ]
+        },
+        {
+          "name": "writer-table-alignment.spec.ts > native table Center viewport=1280",
+          "errors": [
+            [],
+            [
+              "Error: locator.click: Test timeout of 30000ms exceeded."
+            ]
+          ]
+        },
+        {
+          "name": "writer-table-alignment.spec.ts > native table Manual viewport=1280",
+          "errors": [
+            [],
+            [
+              "Error: locator.click: Test timeout of 30000ms exceeded."
+            ]
+          ]
+        },
+        {
+          "name": "writer-table-alignment.spec.ts > native table Automatic viewport=390",
+          "errors": [
+            [],
+            [
+              "Error: locator.click: Test timeout of 30000ms exceeded."
+            ]
+          ]
+        },
+        {
+          "name": "writer-table-alignment.spec.ts > native table Left viewport=390",
+          "errors": [
+            [],
+            [
+              "Error: locator.click: Test timeout of 30000ms exceeded."
+            ]
+          ]
+        },
+        {
+          "name": "writer-table-alignment.spec.ts > native table From left viewport=390",
+          "errors": [
+            [],
+            [
+              "Error: locator.click: Test timeout of 30000ms exceeded."
+            ]
+          ]
+        },
+        {
+          "name": "writer-table-alignment.spec.ts > native table Right viewport=390",
+          "errors": [
+            [],
+            [
+              "Error: locator.click: Test timeout of 30000ms exceeded."
+            ]
+          ]
+        },
+        {
+          "name": "writer-table-alignment.spec.ts > native table Center viewport=390",
+          "errors": [
+            [],
+            [
+              "Error: locator.click: Test timeout of 30000ms exceeded."
+            ]
+          ]
+        },
+        {
+          "name": "writer-table-alignment.spec.ts > native table Manual viewport=390",
+          "errors": [
+            [],
+            [
+              "Error: locator.click: Test timeout of 30000ms exceeded."
+            ]
+          ]
+        },
+        {
+          "name": "writer-table-properties-history.spec.ts > Writer table properties native history width=1280",
+          "errors": [
+            [],
+            [
+              "Error: locator.click: Test timeout of 30000ms exceeded."
+            ]
+          ]
+        },
+        {
+          "name": "writer-table-properties-history.spec.ts > Writer table properties native history width=390",
+          "errors": [
+            [],
+            [
+              "Error: locator.click: Test timeout of 30000ms exceeded."
+            ]
+          ]
+        },
+        {
+          "name": "writer-table-ring-continue.spec.ts > Writer table row Add to List Ordered List/plain",
+          "errors": [
+            [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed",
+              "Expected: \u001b[32m2\u001b[39m",
+              "Received: \u001b[31m0\u001b[39m"
+            ]
+          ]
+        },
+        {
+          "name": "writer-table-ring-continue.spec.ts > Writer table row Add to List Ordered List/different",
+          "errors": [
+            [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed",
+              "Expected: \u001b[32m2\u001b[39m",
+              "Received: \u001b[31m0\u001b[39m"
+            ]
+          ]
+        },
+        {
+          "name": "writer-table-ring-continue.spec.ts > Writer table row Add to List Unordered List/plain",
+          "errors": [
+            [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed",
+              "Expected: \u001b[32m2\u001b[39m",
+              "Received: \u001b[31m0\u001b[39m"
+            ]
+          ]
+        },
+        {
+          "name": "writer-table-ring-continue.spec.ts > Writer table row Add to List Unordered List/different",
+          "errors": [
+            [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed",
+              "Expected: \u001b[32m2\u001b[39m",
+              "Received: \u001b[31m0\u001b[39m"
+            ]
+          ]
+        },
+        {
+          "name": "writer-table-ring-continue.spec.ts > Writer table row Add to List continues an imported restarted body list",
+          "errors": [
+            [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed",
+              "Expected: \u001b[32m\"•\"\u001b[39m",
+              "Error: element(s) not found"
+            ]
+          ]
+        },
+        {
+          "name": "writer-table-row-lists.spec.ts > Writer table row native list commands Ordered List",
+          "errors": [
+            [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed",
+              "Expected: \u001b[32m\"n\u001b[7mumbered\u001b[27m\"\u001b[39m",
+              "Received: \u001b[31m\"n\u001b[7mone\u001b[27m\"\u001b[39m"
+            ]
+          ]
+        },
+        {
+          "name": "writer-table-row-lists.spec.ts > Writer table row native list commands Unordered List",
+          "errors": [
+            [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed",
+              "Expected: \u001b[32m\"bullet\"\u001b[39m",
+              "Received: \u001b[31m\"none\"\u001b[39m"
+            ]
+          ]
+        }
+      ],
+      "caseCounts": {
+        "startTime": "2026-10-06T13:30:49.712Z",
+        "duration": 513452.66000000003,
+        "expected": 177,
+        "skipped": 0,
+        "unexpected": 35,
+        "flaky": 0
+      }
+    }
+  ]
+}

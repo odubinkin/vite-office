@@ -1,4 +1,5 @@
 /** @fileoverview Checks actual mounted table paste intents retain native cell selection. */
+import { selectMountedTableRow } from "../../../../test-support/table-mouse-dom";
 import { render, cleanup, screen, fireEvent, act, within } from "@testing-library/react";
 import { it, expect, afterEach } from "vitest";
 import { createWriterDocumentSession } from "../composition/writer-module";
@@ -37,7 +38,7 @@ it.each(["plain", "inline-html"])(
     const tail = doc.nodes.AppendTableCellParagraph(required(row.GetTabBoxes()[0]));
     tail.SetText("Tail");
     render(<WriterWorkbench isActive view={session.view} />);
-    fireEvent.click(screen.getByRole("button", { name: "Select row 1 in Grid" }));
+    selectMountedTableRow("Grid", 1);
     const element = screen.getByRole("table", { name: "Grid" }),
       target = within(element).getByLabelText("Row 1 column 1 paragraph 1");
     expect(

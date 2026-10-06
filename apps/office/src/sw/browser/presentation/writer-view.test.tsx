@@ -1,4 +1,5 @@
 /** @fileoverview Coverage for the Writer browser presentation. */
+import { selectMountedTableRow } from "../../../../test-support/table-mouse-dom";
 /* eslint-disable @typescript-eslint/no-non-null-assertion -- Local test fixtures keep setup and assertions concise. */
 
 import { describe, expect, it, vi } from "vitest";
@@ -196,7 +197,7 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
     expect(table?.GetTabLines()).toHaveLength(2);
     expect(table?.GetTabLines()[0]?.GetTabBoxes()).toHaveLength(3);
     expect(screen.getByRole("table", { name: "Table1" })).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Select row 2 in Table1" }));
+    selectMountedTableRow("Table1", 2);
     fireEvent.click(screen.getByRole("button", { name: "Table Properties" }));
     dialog = screen.getByRole("dialog", { name: "Table Properties" });
     fireEvent.click(within(dialog).getByRole("tab", { name: "Columns" }));

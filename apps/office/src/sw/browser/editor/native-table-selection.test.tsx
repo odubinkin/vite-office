@@ -1,4 +1,5 @@
 /** @fileoverview Verifies UI paints native selected boxes and never owns selected row state. */
+import { selectMountedTableRow } from "../../../../test-support/table-mouse-dom";
 import { cleanup, render, screen, fireEvent, act, within } from "@testing-library/react";
 import { afterEach, it, expect } from "vitest";
 import { createWriterDocumentSession } from "../composition/writer-module";
@@ -64,10 +65,8 @@ function painted(table: string) {
 }
 it("row gesture paints actual selected boxes and body cursor removes stale row and properties", /** Checks actual table selection behavior.  @returns Operation result. */ () => {
   const f = fixture();
-  const button = screen.getByRole("button", { name: "Select row 2 in First" });
-  expect(button).toHaveAttribute("contenteditable", "false");
-  expect(fireEvent.mouseDown(button)).toBe(false);
-  fireEvent.click(button);
+  expect(screen.queryByRole("button", { name: "Select row 2 in First" })).toBeNull();
+  expect(selectMountedTableRow("First", 2)).toBe(true);
   const c = f.shell.getShellCursor() as SwTableCursor;
   expect(c).toBeInstanceOf(SwTableCursor);
   expect(c.GetSelectedBoxes()).toEqual(f.boxes.slice(2));
@@ -155,7 +154,7 @@ it("keyboard escalation paints only native rectangle and ordinary caret clears i
 });
 it("table properties use native selected rows and preserve other row geometry", /** Checks actual table selection behavior.  @returns Operation result. */ () => {
   const f = fixture();
-  fireEvent.click(screen.getByRole("button", { name: "Select row 2 in First" }));
+  selectMountedTableRow("First", 2);
   fireEvent.click(screen.getByRole("button", { name: "Table Properties" }));
   const dialog = screen.getByRole("dialog", { name: "Table Properties" });
   fireEvent.click(within(dialog).getByRole("tab", { name: "Text Flow" }));
@@ -170,9 +169,8 @@ it("table properties use native selected rows and preserve other row geometry", 
 });
 
 it("row surface delegates to native selection and caret properties apply to its current row", /** Checks the row hit path and unselected native context. @returns Nothing. */ () => {
-  const f = fixture(),
-    rowSelector = screen.getByRole("button", { name: "Select row 2 in First" });
-  fireEvent.click(rowSelector);
+  const f = fixture();
+  selectMountedTableRow("First", 2);
   expect(painted("First")).toHaveLength(2);
   const node = required(required(f.boxes[0]).GetParagraphs()[0]);
   act(

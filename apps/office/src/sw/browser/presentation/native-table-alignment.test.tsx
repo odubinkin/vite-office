@@ -1,4 +1,5 @@
 /** @fileoverview Mounted native alignment, geometry and history acceptance without upstream invocation. */
+import { selectMountedTableRow } from "../../../../test-support/table-mouse-dom";
 import { it, expect, afterEach } from "vitest";
 import { render, screen, fireEvent, cleanup, act } from "@testing-library/react";
 import { createWriterDocumentSession } from "../composition/writer-module";
@@ -38,7 +39,7 @@ for (const [label, orient, width, left, right] of [
     first.SetText("Original");
     const original = table.GetFormat();
     render(<WriterWorkbench isActive view={session.view} />);
-    fireEvent.click(screen.getByRole("button", { name: "Select row 1 in Geometry" }));
+    selectMountedTableRow("Geometry", 1);
     fireEvent.click(screen.getByRole("button", { name: "Table Properties" }));
     fireEvent.click(screen.getByRole("radio", { name: new RegExp(`^${label}$`) }));
     if (label === "From left" || label === "Manual")

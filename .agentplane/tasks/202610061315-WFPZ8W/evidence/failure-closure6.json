@@ -1,0 +1,36 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "chromium",
+      "exit": 1,
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts writer-native-table-mouse.spec.ts writer-native-table-pointer.spec.ts writer-table-properties-history.spec.ts --grep (?:Writer native table mouse edge and drag width=390|Writer native table interior and gutter pointer width=390|Writer table properties native history width=390)$ --reporter=list,json",
+      "bytes": 3797,
+      "sha256": "db0022e1749f6449950a1985639329f8e838f49a36c43ae70411c391bc6009cd",
+      "counts": {
+        "startTime": "2026-10-06T13:53:01.585Z",
+        "duration": 4233.262000000001,
+        "expected": 2,
+        "skipped": 0,
+        "unexpected": 1,
+        "flaky": 0
+      },
+      "totals": [
+        "  1 failed",
+        "  2 passed (4.2s)"
+      ],
+      "errors": [],
+      "failedCases": [
+        {
+          "file": "writer-native-table-pointer.spec.ts",
+          "title": "Writer native table interior and gutter pointer width=390",
+          "errors": [
+            [
+              "Error: Native table edge remains covered by the fixed ruler"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

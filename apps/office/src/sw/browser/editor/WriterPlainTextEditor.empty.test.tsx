@@ -21,6 +21,8 @@ describe("empty Writer page", /** Groups empty Writer page. @returns Test callba
         editWindow={
           {
             FocusNode: vi.fn(),
+            MouseButtonUp: vi.fn(),
+            SetTableMouseFrames: vi.fn(),
             GetDoc: /** Resolves the empty-page document. @returns Canonical document. */ () =>
               createWriterDocument(),
           } as unknown as SwEditWin
@@ -51,6 +53,8 @@ describe("empty Writer page", /** Groups empty Writer page. @returns Test callba
         editWindow={
           {
             FocusNode: vi.fn(),
+            MouseButtonUp: vi.fn(),
+            SetTableMouseFrames: vi.fn(),
             GetDoc: /** Resolves the measurement document. @returns Canonical document. */ () =>
               document,
           } as unknown as SwEditWin

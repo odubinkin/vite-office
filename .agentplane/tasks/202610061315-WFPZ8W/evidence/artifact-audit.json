@@ -1,0 +1,9 @@
+{
+  "scope": "Current leaf subtree only; earlier AP cleanup and historical app QA screenshot unchanged",
+  "filesAudited": 18,
+  "forbiddenArtifacts": [],
+  "vendorRestored": true,
+  "rawDataDestination": "ignored apps/office/node_modules/.cache/parity-coverage",
+  "upstreamSourceInArtifacts": false,
+  "executableHelperInArtifacts": false
+}

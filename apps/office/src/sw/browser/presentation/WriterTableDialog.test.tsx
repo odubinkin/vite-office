@@ -196,11 +196,9 @@ describe("Writer browser table controls", /** Verifies the bounded table scenari
     const node = row.GetTabBoxes()[0]?.GetParagraphs()[0];
     if (node === undefined) throw new Error("Writer test cell is missing.");
     node.SetText("start");
-    const select = vi.fn(),
-      retain = vi.fn();
+    const retain = vi.fn();
     const { rerender } = render(
       <WriterEditableTable
-        onSelectRow={select}
         table={table}
         paragraphs={paragraphMap(document, "actual-cell")}
         retainParagraphElement={retain}
@@ -208,20 +206,17 @@ describe("Writer browser table controls", /** Verifies the bounded table scenari
     );
     const rendered = screen.getByRole("table", { name: "Table1" });
     expect(within(rendered).getByRole("cell")).toHaveStyle({ padding: "5.333333333333333px" });
-    fireEvent.click(screen.getByRole("button", { name: "Select row 1 in Table1" }));
-    expect(select).toHaveBeenCalledWith(0);
+    expect(screen.queryByRole("button", { name: "Select row 1 in Table1" })).toBeNull();
     const editor = screen.getByLabelText("Row 1 column 1 paragraph 1");
     expect(editor).toHaveTextContent("start");
     expect(editor).toHaveAttribute("data-writer-paragraph-id", "actual-cell");
     expect(editor).toHaveAttribute("data-writer-node-index", String(node.GetIndex()));
     expect(retain).toHaveBeenCalledWith("actual-cell", editor);
-    const selectionsBeforeCellClick = select.mock.calls.length;
     fireEvent.click(editor);
-    expect(select).toHaveBeenCalledTimes(selectionsBeforeCellClick);
+    expect(rendered.querySelector("tr")).toHaveAttribute("aria-selected", "false");
     node.SetText("canonical");
     rerender(
       <WriterEditableTable
-        onSelectRow={select}
         table={table}
         paragraphs={paragraphMap(document, "actual-cell")}
         retainParagraphElement={retain}
@@ -236,13 +231,7 @@ describe("Writer browser table controls", /** Verifies the bounded table scenari
     const table = document.nodes.MakeTableNode("Unsized");
     table.AddColumnWidth(1800);
     document.nodes.AppendTableRow(table, 1);
-    render(
-      <WriterEditableTable
-        onSelectRow={vi.fn()}
-        table={table}
-        paragraphs={paragraphMap(document)}
-      />,
-    );
+    render(<WriterEditableTable table={table} paragraphs={paragraphMap(document)} />);
     expect(screen.getByRole("table", { name: "Unsized" })).toHaveStyle({ width: "120px" });
   });
 
@@ -260,7 +249,6 @@ describe("Writer browser table controls", /** Verifies the bounded table scenari
       <WriterEditableTable
         firstRow={1}
         lastRow={1}
-        onSelectRow={vi.fn()}
         table={table}
         paragraphs={paragraphMap(document)}
       />,

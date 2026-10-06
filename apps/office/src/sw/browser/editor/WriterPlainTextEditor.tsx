@@ -1,6 +1,4 @@
 /** @fileoverview Projects Writer paragraphs through one browser implementation of SwEditWin. */
-import type { SwTableLine, SwTableBox } from "../../source/core/table/swtable";
-import type { SwTextNode } from "../../source/core/txtnode/ndtxt";
 
 import { Fragment, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import type { ReactNode, RefObject } from "react";
@@ -179,18 +177,6 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
         lastRow={frame.lastRow}
         repeatedHeaderRows={frame.repeatedHeaderRows ?? 0}
         selectedBoxes={props.selectedTableBoxes}
-        onSelectRow={
-          /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ (
-            row,
-          ) =>
-            props.editWindow.SelectTableRow(
-              (
-                (
-                  (frame.table.GetTabLines()[row] as SwTableLine).GetTabBoxes()[0] as SwTableBox
-                ).GetParagraphs()[0] as SwTextNode
-              ).GetIndex(),
-            )
-        }
       />
     );
 
@@ -427,10 +413,6 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
                         props.pageDescriptor.rightMargin
                       }
                       paragraphs={paragraphByNodeIndex}
-                      /* v8 ignore next -- Hidden measurement tables are never interactive. */
-                      onSelectRow={
-                        /** callback handles this value. @returns The result. */ () => undefined
-                      }
                       retainElement={
                         /** callback handles this value. @param element - Input 1. @returns The result. */ (
                           element,

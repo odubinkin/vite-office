@@ -1,4 +1,5 @@
 /** @fileoverview Checks real Chromium selected-row formatting and native ring history. */
+import { selectBrowserTableRow } from "../test-support/table-mouse-e2e";
 import { test, expect } from "@playwright/test";
 test("Writer selected row character formatting covers full cells and survives Undo Redo", /** Checks actual table selection behavior. @param root0 - Current owner. @param root0.page - Browser owner. @returns Operation result. */ async ({
   page,
@@ -23,7 +24,7 @@ test("Writer selected row character formatting covers full cells and survives Un
   await page.keyboard.type("Tail");
   await page.keyboard.press("Tab");
   await page.keyboard.type("Second");
-  await page.getByRole("button", { name: "Select row 1 in Table1" }).click();
+  await selectBrowserTableRow(page, "Table1", 1);
   const table = page.getByRole("table", { name: "Table1" }),
     bold = page.getByRole("button", { name: "Bold", exact: true });
   await bold.click();

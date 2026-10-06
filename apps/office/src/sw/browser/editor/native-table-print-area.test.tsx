@@ -1,6 +1,6 @@
 /** @fileoverview Checks browser tables consume native horizontal print areas without replacing model owners. */
 import { act, cleanup, render, screen } from "@testing-library/react";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it } from "vitest";
 import { createWriterDocumentSession } from "../composition/writer-module";
 import { WriterWorkbench } from "../presentation/writer-view";
 import { WriterEditableTable } from "./WriterEditableTable";
@@ -156,7 +156,6 @@ describe("browser native table print area", /** Registers direct native geometry
             ),
           )
         }
-        onSelectRow={vi.fn()}
       />,
     );
     const table = screen.getByRole("table", { name: "Zero" });

@@ -1,4 +1,5 @@
 /** @fileoverview Verifies mounted native row formatting covers first and last cell text and retains history. */
+import { selectMountedTableRow } from "../../../../test-support/table-mouse-dom";
 import { render, cleanup, screen, fireEvent, act, within } from "@testing-library/react";
 import { afterEach, it, expect } from "vitest";
 import { createWriterDocumentSession } from "../composition/writer-module";
@@ -40,7 +41,7 @@ it.each(["Bold", "Italic"] as const)(
     name,
   ) => {
     const f = fixture();
-    fireEvent.click(screen.getByRole("button", { name: "Select row 1 in Grid" }));
+    selectMountedTableRow("Grid", 1);
     const table = screen.getByRole("table", { name: "Grid" });
     expect(table.querySelectorAll('[data-writer-editor-selected="true"]')).toHaveLength(2);
     fireEvent.click(screen.getByRole("button", { name }));

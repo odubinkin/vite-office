@@ -1,4 +1,5 @@
 /** @fileoverview Verifies mounted selected-row deletion through native browser intents and history. */
+import { selectMountedTableRow } from "../../../../test-support/table-mouse-dom";
 import { render, cleanup, screen, fireEvent, act, within } from "@testing-library/react";
 import { afterEach, it, expect } from "vitest";
 import { createWriterDocumentSession } from "../composition/writer-module";
@@ -52,7 +53,7 @@ it.each(["Delete", "Backspace"] as const)(
     key,
   ) => {
     const f = fixture();
-    fireEvent.click(screen.getByRole("button", { name: "Select row 1 in Grid" }));
+    selectMountedTableRow("Grid", 1);
     const table = screen.getByRole("table", { name: "Grid" }),
       first = within(table).getByLabelText("Row 1 column 1 paragraph 1");
     expect(table.querySelectorAll('[data-writer-editor-selected="true"]')).toHaveLength(2);

@@ -1,0 +1,59 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "chromium",
+      "exit": 1,
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts writer-imported-table-lists.spec.ts writer-native-table-cursor-rings.spec.ts writer-native-table-delete.spec.ts writer-native-table-mouse.spec.ts writer-native-table-paste.spec.ts writer-native-table-plain-paste.spec.ts writer-native-table-pointer.spec.ts writer-native-table-selection.spec.ts writer-table-alignment.spec.ts writer-table-properties-history.spec.ts writer-table-ring-continue.spec.ts writer-table-row-lists.spec.ts --grep (?:Writer imported restarted table row Add to List preserves both starts and atomic selection|Writer selected row character formatting covers full cells and survives Undo Redo|Writer selected row Delete preserves table cells and native Undo Redo|Writer selected row Backspace preserves table cells and native Undo Redo|Writer native table mouse edge and drag width=390|Writer selected row paste appends in every cell and retains native Undo selection|Writer native plain table clipboard \"X\" preserves cells and inherited bold history|Writer native plain table clipboard \"A\\\\nB\\\\n\" preserves cells and inherited bold history|Writer native table interior and gutter pointer width=1280|Writer native table interior and gutter pointer width=390|Writer row selection paints core boxes and typing after caret kill preserves neighbors|native automatic restores edited width viewport=1280|native automatic restores edited width viewport=390|native table Automatic viewport=1280|native table Left viewport=1280|native table From left viewport=1280|native table Right viewport=1280|native table Center viewport=1280|native table Manual viewport=1280|native table Automatic viewport=390|native table Left viewport=390|native table From left viewport=390|native table Right viewport=390|native table Center viewport=390|native table Manual viewport=390|Writer table properties native history width=1280|Writer table properties native history width=390|Writer table row Add to List Ordered List/plain|Writer table row Add to List Ordered List/different|Writer table row Add to List Unordered List/plain|Writer table row Add to List Unordered List/different|Writer table row Add to List continues an imported restarted body list|Writer table row native list commands Ordered List|Writer table row native list commands Unordered List)$ --reporter=list,json",
+      "bytes": 13749,
+      "sha256": "358e92fb5d6a91baa0e3c7b887a8b41d7d24cdae6a317aa6c3915c427ad8a916",
+      "counts": {
+        "startTime": "2026-10-06T13:49:06.363Z",
+        "duration": 38419.587999999996,
+        "expected": 31,
+        "skipped": 0,
+        "unexpected": 3,
+        "flaky": 0
+      },
+      "totals": [
+        "  3 failed",
+        "  31 passed (38.4s)"
+      ],
+      "errors": [],
+      "failedCases": [
+        {
+          "file": "writer-native-table-mouse.spec.ts",
+          "title": "Writer native table mouse edge and drag width=390",
+          "errors": [
+            [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed",
+              "Expected: \u001b[32m3\u001b[39m",
+              "Received: \u001b[31m0\u001b[39m"
+            ]
+          ]
+        },
+        {
+          "file": "writer-native-table-pointer.spec.ts",
+          "title": "Writer native table interior and gutter pointer width=390",
+          "errors": [
+            [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed",
+              "Expected: \u001b[32m3\u001b[39m",
+              "Received: \u001b[31m0\u001b[39m"
+            ]
+          ]
+        },
+        {
+          "file": "writer-table-properties-history.spec.ts",
+          "title": "Writer table properties native history width=390",
+          "errors": [
+            [],
+            [
+              "Error: locator.click: Test timeout of 30000ms exceeded."
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

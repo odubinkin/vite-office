@@ -1,4 +1,5 @@
 /** @fileoverview Checks native ASCII cell-ring import, retained inserted nodes and SwUndoInsDoc history. */
+import { selectTableRow } from "../../../../../test-support/table-mouse";
 import { expect, it, afterEach } from "vitest";
 import { SwDoc } from "../../core/doc/doc";
 import { SwPaM, SwPosition } from "../../core/crsr/pam";
@@ -175,7 +176,7 @@ function fixture(reverse = false, lists = true) {
     new SwDocShell(doc, createDocument({ id: "table-ascii", suiteId: "writer", title: "ASCII" })),
   );
   shells.push(shell);
-  new SwEditWin(shell).SelectTableRow(required(nodes[1]).GetIndex());
+  selectTableRow(new SwEditWin(shell), required(nodes[1]).GetIndex());
   const display = shell.getShellCursor() as SwTableCursor;
   display.GetPoint().Assign(reverse ? required(tails[2]) : required(nodes[1]), reverse ? 5 : 0);
   display.GetMark().Assign(reverse ? required(nodes[1]) : required(tails[2]), 0);
@@ -534,7 +535,7 @@ it("native blank plain paragraphs retain minimal history in default empty cells"
     new SwDocShell(doc, createDocument({ id: "blank-ascii", suiteId: "writer", title: "Blank" })),
   );
   shells.push(shell);
-  new SwEditWin(shell).SelectTableRow(first.GetIndex());
+  selectTableRow(new SwEditWin(shell), first.GetIndex());
   expect(shell.PastePlainTextAtCursor("\n\n")).toBe(true);
   expect(
     row

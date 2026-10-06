@@ -1,4 +1,5 @@
 /** @fileoverview Real Chromium native table alignment, linked metrics and history at desktop and narrow widths. */
+import { selectBrowserTableRow } from "../test-support/table-mouse-e2e";
 import { expect, test } from "@playwright/test";
 import { SwDoc } from "../src/sw/source/core/doc/doc";
 import { writeOdtDocument } from "../src/sw/source/filter/xml/wrtxml";
@@ -21,7 +22,7 @@ for (const viewport of [1280, 390])
       mimeType: "application/vnd.oasis.opendocument.text",
       name: "restore.odt",
     });
-    await page.getByRole("button", { name: "Select row 1 in Restore" }).click();
+    await selectBrowserTableRow(page, "Restore", 1);
     await page.getByRole("button", { name: "Table Properties", exact: true }).click();
     const width = page.getByRole("spinbutton", { name: "Table width (cm)" });
     await width.fill("4");
@@ -77,7 +78,7 @@ for (const viewport of [1280, 390])
       });
       const rendered = page.getByRole("table", { name: "Geometry" });
       await expect(rendered).toHaveCount(1);
-      await page.getByRole("button", { name: "Select row 1 in Geometry" }).click();
+      await selectBrowserTableRow(page, "Geometry", 1);
       await page.getByRole("button", { name: "Table Properties", exact: true }).click();
       await expect(page.getByRole("radio")).toHaveCount(6);
       await page.getByRole("radio", { name: label, exact: true }).check();
