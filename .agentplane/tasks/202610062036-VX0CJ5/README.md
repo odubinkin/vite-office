@@ -1,10 +1,11 @@
 ---
 id: "202610062036-VX0CJ5"
 title: "Honor native table layout split in page flow"
-status: "DOING"
+result_summary: "Native table layout split now drives physical page flow and survives ODT; original owners/history/input retained. ONE upstream-absent profile verified, source/static/scope/governance complete, parent/goal active."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
   findings:
     - "ONE upstream-absent build and runtime profile:13140app109inventory5scripts239Chromium PASS,0skip/flaky. Actual100 coverage with verified entire byte-identical editing-host source/maps previous counters only; no runtime replay."
     - "11approved paths,523historical acceptance files byte-identical+4new527;276prior semantic records and entire prefixes/defaults/classifications/registered exceptions preserved. Native graph/history/ODT/input/physical row owners validated; no added adapter."
-commit: null
+commit:
+  hash: "4812286e9dd78bfce6dab293e569f28dab6aa834"
+  message: "🚧 VX0CJ5 code: honor native table split in page flow and ODT"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved native layoutSplit whole-table flow and exact ODT mapper contracts under standing iterative authorization; one leaf, existing owners and conscious exceptions preserved."
+  -
+    author: "CODER"
+    body: "Verified: native table split page flow and ODT on implementation4812286e9dd78bfce6dab293e569f28dab6aa834;13140app109inventory5scripts239Chromium PASS actual100 coverage, unchanged523historical acceptance/276prior metadata full prefixes/exceptions. Same current-agent EVALUATOR explicitly not independent; full parity unverified."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified implementation4812286e9dd78bfce6dab293e569f28dab6aa834: native table split page flow and ODT;13140app109inventory5scripts239Chromium PASS0skip/flaky, actual100 coverage with verified whole identical source/maps counters; source/static/changed/scope/governance gates PASS after original failed closures only,523prior acceptance byte-identical,276prior full metadata prefixes/exceptions retained. Same current-agent exact-SHA EVALUATOR explicitly not independent; no upstream runtime invocation or AP source artifacts. Whole parity remains unverified; parent/goal active."
+  -
+    type: "status"
+    at: "2026-10-06T21:01:42.854Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native table split page flow and ODT on implementation4812286e9dd78bfce6dab293e569f28dab6aa834;13140app109inventory5scripts239Chromium PASS actual100 coverage, unchanged523historical acceptance/276prior metadata full prefixes/exceptions. Same current-agent EVALUATOR explicitly not independent; full parity unverified."
 doc_version: 3
-doc_updated_at: "2026-10-06T21:01:24.520Z"
+doc_updated_at: "2026-10-06T21:01:42.856Z"
 doc_updated_by: "CODER"
 description: "Iteration198 of active parent202609240501-C9TN6M under standing iterative user authorization. Existing canonical layoutSplit flag is written by native table insertion but ignored by page layout and lost by table ODT styles. Port source whole-table movement/empty-page oversize split escape and exact style:may-break-between-rows item mapping, original graph/history/editability intact; one leaf, no UI control/saving workflow/conscious exception changes. Same current-agent EVALUATOR phase explicitly not independent; no subagents/network/outside access or upstream sources/helpers/raw artifacts in AP."
 sections:
