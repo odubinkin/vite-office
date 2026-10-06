@@ -1,10 +1,11 @@
 ---
 id: "202610061930-TVEFME"
 title: "Wire native current-page table properties reset"
-status: "DOING"
+result_summary: "Wired source current-page Reset in existing Writer Table Properties, preserving native shared drafts, other-page edits and canonical graph/history. All516 prior acceptance files and276 metadata contracts/prefixes retained."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
   findings:
     - "13102app109inventory5scripts233Chromium current cases pass; one upstream-absent full profile plus two original failed browser cases only; actual100 coverage with complete identical source/maps and real counters."
     - "Six approved paths,516historical acceptance files identical,3new519total;276prior contracts/full prefixes and registered exceptions retained; active-page/native Reset ownership and canonical history/ODT/input evidenced."
-commit: null
+commit:
+  hash: "a269e0e73cc2553f86a85aa73a904d219b771b7e"
+  message: "🚧 TVEFME code: wire native current-page table properties reset"
 comments:
   -
     author: "CODER"
     body: "Start: wire source current-page Reset over native shared drafts, preserve prior acceptance/contracts and canonical graph/history, one upstream-absent profile."
+  -
+    author: "CODER"
+    body: "Verified: native current-page Reset at a269e0e73cc2553f86a85aa73a904d219b771b7e;13102app109inventory5scripts233Chromium pass, actual100 identical-source/map coverage, scoped gates and21files0forbidden. Same-agent quality phase explicitly not independent; parent/goal active."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified current-page Reset at a269e0e73cc2553f86a85aa73a904d219b771b7e:13102app109inventory5scripts233Chromium current cases pass, actual100 source/map coverage; static/source/scope/governance and21file artifact census pass. One full absent profile plus only2failed browser cases; same-agent EVALUATOR explicitly not independent. Parent/goal active."
+  -
+    type: "status"
+    at: "2026-10-06T19:54:11.042Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native current-page Reset at a269e0e73cc2553f86a85aa73a904d219b771b7e;13102app109inventory5scripts233Chromium pass, actual100 identical-source/map coverage, scoped gates and21files0forbidden. Same-agent quality phase explicitly not independent; parent/goal active."
 doc_version: 3
-doc_updated_at: "2026-10-06T19:53:45.875Z"
+doc_updated_at: "2026-10-06T19:54:11.044Z"
 doc_updated_by: "CODER"
 description: "Restore the upstream Reset action for existing Writer Table Properties pages using original native format/column Reset owners and page-local initial text-flow/border values. Preserve canonical document/history isolation and registered deviations."
 sections:
