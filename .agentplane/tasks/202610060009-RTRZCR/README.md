@@ -1,10 +1,11 @@
 ---
 id: "202610060009-RTRZCR"
 title: "Align table cell pointer hits and row selector ownership with native UI"
-status: "DOING"
+result_summary: "Removed blanket row click inference, resolved padded/empty/multiparagraph cell carets through existing browser/native owners, moved explicit row selector outside text flow.12605app109inventory5scripts149distinctChromium passed without upstream; one full profile then original2failed-only source-correct browser recovery, actual100%coverage. Native label indent dragging and broader table/UI parity remain unverified; IO deviations unchanged."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -42,11 +43,16 @@ quality_review:
     - ".agentplane/tasks/202610060009-RTRZCR/evidence/browser-closure-profile.json"
   findings:
     - "Exact10 semantic paths;438 prior tests437 byte-identical with one source-confirmed row fixture migration;258 semantic states/defaults/IOexceptions preserved. One full upstream-absent profile and only two original failed browser cases recovered after native-source marker oracle correction. Native label indent drag remains unverified; no workaround or full parity claim."
-commit: null
+commit:
+  hash: "d667fff5485f3b221e9b888796c6f9ea94884645"
+  message: "🧩 RTRZCR task: record table pointer verification"
 comments:
   -
     author: "CODER"
     body: "Start: correct table interior pointer ownership and explicit row gutter selection through existing browser/native boundaries."
+  -
+    author: "CODER"
+    body: "Verified: table interior hits use actual native caret owners and explicit outside row gutter; bounded scope and source-confirmed label oracle correction validated."
 events:
   -
     type: "status"
@@ -61,8 +67,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified bounded table pointer/gutter scope on implementation ce67593eb276b41faf574365f3f4d59e72ea15fa. Six statics, one full upstream-absent profile12605app109inventory5scripts and147browser pass with2initial invalid marker-oracle failures; exact2failed-only browser recovery passed after native-source oracle correction.149distinctbrowser0flaky; actual app/inventory100%L/S/F/B via source/map identity, no passing/full replay/rebuild/counter transfer. Five restored source audits, exact scope/prior-test/metadata preservation, AP hygiene/governance and same-agent exact-SHA EVALUATOR pass. Native label indent drag/full table/core/UI unverified; conscious IO deviations unchanged."
+  -
+    type: "status"
+    at: "2026-10-06T00:28:10.973Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: table interior hits use actual native caret owners and explicit outside row gutter; bounded scope and source-confirmed label oracle correction validated."
 doc_version: 3
-doc_updated_at: "2026-10-06T00:27:54.330Z"
+doc_updated_at: "2026-10-06T00:28:10.975Z"
 doc_updated_by: "CODER"
 description: "Fix ordinary cell padding clicks being interpreted as whole-row selection; use existing browser pointer geometry and native selection owners, with explicit row selection in the table gutter."
 sections:
@@ -124,6 +137,10 @@ sections:
     Iteration170 verified bounded flat LTR table pointer/row-selector correction at base ef4f6805b717cf3883b36c84ba91b8d597079e26. Removed blanket tr click row inference: cell padding and empty cells resolve actual hit cell/nearest projected paragraph through browser Range, clipped coordinates and shared existing text-caret helper. Existing helper exported directly; no duplicate walker, new manager/model/DTO/TextRuns conversion or compatibility wrapper. Explicit row selector retained native SwEditWin/core box ownership, moved outside cell text/measurement flow to an absolute left hover/focus arrow gutter. Four existing production browser owners,2metadata,1exact old synthetic tr-click fixture migration,3new testfiles:10semanticpaths.438prior tests437byte-identical; all258runtime states/defaults/classes/IOexceptions/old evidence prefixes preserved, no blanket module promotion.8newappcases4geometry4mounted DOM and2Chromium verify hit-cell containment, clipped/nearest paragraph, unavailable APIs/boundaries/empty/formatted fallback, selected-row clearing, native caret/input/history and neighbor preservation, explicit gutter geometry/native boxes. Mounted marker caret case only covers injected browser geometry, not native label/ruler equivalence.
     Six initial statics passed after failed format gate only repaired/rerun. ONE full upstream-absent profile:build pass12605app109inventory5scripts147Chromium pass,2newChromium failures0flaky. Both failures were the initial MKeep oracle after clicking a numbered label. Source confirmation edtwin.cxx IsNumLabel -> edtwin3.cxx RulerMarginDrag -> StartDocDrag(Indent) disproves a guaranteed text-caret expectation. Plan/verification refined under standing scope authorization; retain every padding/gutter/input/Undo/neighbor assertion and marker no-synthetic-row/no-text-mutation assertions; remove only incorrect marker typing oracle. No guessed caret/preventDefault workaround or production change/rebuild. Only original2failedChromium repeated upstream-absent:2pass0failed0flaky;147passingbrowser and allpassingapp/inventory/scripts not replayed. Final distinct12605app109inventory5scripts149Chromium. Native list-label indent drag/ruler binding/cursor semantics remain identified and unverified for next leaf.
     Actual app100%12927L14175S3432F10526B;inventory100%1464L1523S384F1080B. Exact unchanged postinitial production source/map hashes, no counter transfer or app replay. Vendor restored finally before audits. Changed final browser-file Prettier/ESLint/JSDoc/TypeScript/1000-line checks passed; five restored source audits passed semanticviolations0; scope/APignored-inclusive4465files0forbidden/doctor0errors2knownwarnings/routing/diffcheck passed. Scope proof initially compared full original failed case names with filename prefixes against bare closure titles; corrected explicit observed prefix normalization, no tests replayed or production changes. Earlier bounded read-only missing-path searches returned nonzero and routes recomputed. Initial metadata assembly TypeError occurred before writes and was corrected; no raw source/diagnostics saved in AP. Raw maps/results/local initial production snapshots only ignored appcache. AP only bounded English prose/counts/hashes/outcomes, no upstream sources/helpers/Python/probes/binaries/sourceframes. No network/outside/global/subagents. Current agent EVALUATOR will verify exact semantic SHA, no independent reviewer claimed. Full label/ruler, RTL/vertical/nested/merged/protected/column/resizing/native layout/portion/core/UI/list/table remain unverified; conscious save/open/recovery deviations unchanged, parent DOING and goal ACTIVE.
+extensions:
+  implementation_commit:
+    hash: "ce67593eb276b41faf574365f3f4d59e72ea15fa"
+    message: "🧩 RTRZCR code: resolve table cell hits through native cursor owners"
 id_source: "generated"
 ---
 ## Summary
