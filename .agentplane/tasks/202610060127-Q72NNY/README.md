@@ -1,10 +1,11 @@
 ---
 id: "202610060127-Q72NNY"
 title: "Restore native repeated table headlines across page fragments"
-status: "DOING"
+result_summary: "Restored source-shaped repeated table headlines and original-node editing and UndoRedo without model cloning or extra adapters; 21 new app cases and 3 Chromium cases, 446 prior test files unchanged, actual 100 percent coverage, conscious IO exceptions preserved."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -39,11 +40,16 @@ quality_review:
     - ".agentplane/tasks/202610060127-Q72NNY/evidence/evaluator-proof.json"
   findings:
     - "Ten intentional semantic paths,446 prior tests byte-identical and258states/defaults/classes/IO exceptions preserved. Native count/whole-row height/group/fallback and original-node repeated painting/editing/cursor/UndoRedo verified. One full absent profile,original failed/new-only closure and failed-only fixtures; final12665app109inventory5scripts154Chromium,actual100percent coverage. Counter proof recomputed using entire contiguous unchanged spans and actual changed counters; same semantic source hashes,all statics/source/scope/AP/governance evidence passed. No independent reviewer or full parity claim."
-commit: null
+commit:
+  hash: "1086cb90e606363b1f0dbb8c8cdd1ef42de7bf63"
+  message: "🧩 Q72NNY task: record verified repeated table headlines"
 comments:
   -
     author: "CODER"
     body: "Start: Restore source-shaped repeated table headlines in existing native model,page formatter and browser owners under standing approved convergence scope; preserve old tests and IO exceptions."
+  -
+    author: "CODER"
+    body: "Verified: Native represented repeated table headline count and follow height now paint and edit original nodes through existing UI and history; source-offset reflow is preserved. Declared absent tests, static, source, scope and hygiene gates passed; full table, core and UI parity remains unverified."
 events:
   -
     type: "status"
@@ -58,8 +64,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified native repeated headline count and bounded whole-row follow height/group/fallback,original-node UI painting/editing/cursor and UndoRedo. One full absent profile plus original-failed/new-only and failed-only closure; final12665app109inventory5scripts154Chrome,actual100percent coverage,446prior files unchanged258semantic records preserved. Statics/five restored source audits/scope/AP/governance passed. Same current agent EVALUATOR exact semanticdbd5b849d87364ab88da2775456737db655d52a6 pass. Full native frame/table/core/UI parity unverified,IO deviations unchanged."
+  -
+    type: "status"
+    at: "2026-10-06T01:58:50.928Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Native represented repeated table headline count and follow height now paint and edit original nodes through existing UI and history; source-offset reflow is preserved. Declared absent tests, static, source, scope and hygiene gates passed; full table, core and UI parity remains unverified."
 doc_version: 3
-doc_updated_at: "2026-10-06T01:56:14.709Z"
+doc_updated_at: "2026-10-06T01:58:50.929Z"
 doc_updated_by: "CODER"
 description: "Iteration173: source-confirmed existing repeatHeaderRows is ignored by core page flow and browser fragments. Restore native repeated headline count, follow-frame geometry, shared-node painting/editing and source-shaped no repeated row gutter; preserve all previous tests and registered IO exceptions."
 sections:
@@ -122,6 +135,10 @@ sections:
     Six initial statics eventually passed,failed-gate-only recovery: initial newE2E formatting,three invalid testing-library exact-option TypeScript errors and one missing fixture JSDoc parameter. Changed-file checks recovered newE2E formatting and one nestedcallback JSDoc; final fixture-only checks pass. First upstream prose-metadata append assumed an absent upstream evidence array and threw before write; corrected empty-array initialization. Bounded missing-path/no-match reads,ESM/CommonJS scanner invocation error and scope audit title-only identity undercount were corrected after route recomputation. The old docst test legitimately has two identical displayed titles; final case union includes each actual per-file identical-title occurrence ordinal,12665 actual passed cases. Some composed independent calls continued after a read/helper failure or before pending AP staging; routes/staging subsequently recomputed,with no semantic scope/approval/test bypass.
     ONE full upstream-absent build12661app pass1old failed of12662,109inventory5scripts153Chromium pass0flaky. Old split-page caret oracle found an actual new focused-occurrence regression: source offset8 was clamped to focused first fragment end6. Corrected production preference to require source offset within focused frame; preserved old oracle. Only original failed1 plus3 genuinely new all-headline occupied/ordinary oversized-first/reverse source-offset cases then ran absent:3pass1new fixture fail31skipped35total. Actual production change required one rebuild; only one genuinely new browser font-reflow case ran and initially failed while reading pre-import empty content. Recovered only new failed app1/browser1 after waiting for actual asynchronous measurements/imported text and supplying four lines that honor native orphan/widow policy:app1pass6skip7total,Chrome1pass. No further production change/rebuild or passing/full replay. Final distinct12665app109inventory5scripts154Chromium; new21app3Chrome. Vendor restored in every finally before5source audits,semantic violations0.
     Actual final100percentapp13091L14352S3454F10702B andinventory1464L1523S384F1080B. Four production sources exact unchanged from fullprofile; only WriterPlainTextEditor changed1line to4. Counter self-review rejected endpoint-only span mapping; final proof requires entire source range within exact101line prefix or476line suffix,delta3. Transferred actual140S45F74B only for those unchanged locations,including2 independent unchanged branch ranges; discarded3S3F1B use actual changed closure/failed-only counters. Native newfrm closure counters merged after exact maps identity; all other full counters retained. Final maps/rawresults/local initialsource snapshots only ignored appcache. Scope/nativehash/metadata/prior-test audits,APignored-inclusive4519files0forbidden,doctor0errors2knownwarnings,routing/diff allpass. AP contains bounded English prose/counts/hashes/outcomes only,no upstream/local sources/helpers/Python/probes/rawdiagnostics. No network,outside/global-file access or subagents; live repository test process inspection only. Same current agent exact semantic evaluation required before meaningful finish,parentDOINGgoalACTIVE.
+extensions:
+  implementation_commit:
+    hash: "dbd5b849d87364ab88da2775456737db655d52a6"
+    message: "🧩 Q72NNY code: restore native repeated table headlines"
 id_source: "generated"
 ---
 ## Summary
