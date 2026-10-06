@@ -1,0 +1,96 @@
+---
+id: "202610062106-NHEGKZ"
+title: "Port native table and row split controls"
+status: "DOING"
+priority: "med"
+owner: "CODER"
+revision: 11
+origin:
+  system: "manual"
+depends_on: []
+tags:
+  - "code"
+verify: []
+plan_approval:
+  state: "approved"
+  updated_at: "2026-10-06T21:07:18.327Z"
+  updated_by: "ORCHESTRATOR"
+  note: null
+verification:
+  state: "pending"
+  updated_at: null
+  updated_by: null
+  note: null
+  attempts: 0
+commit: null
+comments:
+  -
+    author: "CODER"
+    body: "Start: implement approved native table/row split controls, changed items and document-owned selected row state; standing iterative authorization, one leaf, native graph/insert/storage exceptions retained."
+events:
+  -
+    type: "status"
+    at: "2026-10-06T21:07:24.938Z"
+    author: "CODER"
+    from: "TODO"
+    to: "DOING"
+    note: "Start: implement approved native table/row split controls, changed items and document-owned selected row state; standing iterative authorization, one leaf, native graph/insert/storage exceptions retained."
+doc_version: 3
+doc_updated_at: "2026-10-06T21:07:24.938Z"
+doc_updated_by: "CODER"
+description: "Iteration199 under standing user authorization: remove conflated dontSplit properties adapter; native Text Flow changed-item table/row controls, true default/mixed row state/sensitivity/Reset, native document selection aggregation and independent shell publication. Preserve insertion/storage exceptions and historical acceptance except explicit contract migrations; parent goal active."
+sections:
+  Summary: "Port existing native table/row split Text Flow controls and remove conflated properties dontSplit/React row-state adapter. Source separate changed RES_LAYOUT_SPLIT and RES_ROW_SPLIT publication, native defaulttrue/mixed selected row state, child sensitivity/reset retained. Single iteration199 executable leaf under standing iterative authorization; previous198 completed progress, full parent/goal active."
+  Scope: "Approved21semantic paths: apps/office/src/sw/source/core/docnode/ndtbl1.ts, apps/office/src/sw/source/core/doc/doc.ts, apps/office/src/sw/source/core/frmedt/fetab.ts, apps/office/src/sw/source/ui/table/tabledlg.ts, apps/office/src/sw/source/uibase/shells/tabsh.ts, apps/office/src/sw/browser/presentation/WriterTableDialog.tsx, apps/office/src/sw/browser/presentation/writer-view.tsx, apps/office/src/sw/source/ui/table/native-table-text-flow-headline.test.ts, apps/office/src/sw/browser/presentation/WriterTableDialog.test.tsx, apps/office/src/sw/browser/presentation/native-table-properties-reset.test.tsx, apps/office/src/sw/source/uibase/wrtsh/native-table-properties.test.ts, apps/office/src/sw/source/uibase/wrtsh/native-table-text-flow-headline-history.test.ts, apps/office/src/sw/source/uibase/wrtsh/native-table-format-lifecycle-history.test.ts, apps/office/src/sw/source/uibase/wrtsh/native-table-properties-reset-history.test.ts, apps/office/src/sw/source/uibase/wrtsh/native-table-column-page-history.test.ts, apps/office/src/sw/source/ui/table/native-table-text-flow-split.test.ts, apps/office/src/sw/browser/presentation/native-table-text-flow-split.test.tsx, apps/office/src/sw/source/uibase/wrtsh/native-table-text-flow-split-history.test.ts, apps/office/e2e/writer-native-table-text-flow-split.spec.ts, docs/program/source-provenance.json, docs/program/parity/runtime-inventory.json. Seven production paths including native ndtbl1 module,8explicit old contract/control migrations,4new acceptance,2metadata.527prior acceptance519byte-identical+8known migrations;4new531total.276old metadata full prefixes/contracts/defaults/statuses/classifications/registered filename/I/O/save/open/recovery exceptions retained+1new native partial ndtbl1 owner277, semantic states unverified. Parent515592characters SHA59bfd89a7f9df46a45d5a286e8d554499995ad06109dda6d38bbc1a9937895c3 retained. Insertion dontSplit stays solely insertion presentation field; no inserted table semantics or storage exception changes."
+  Plan: |-
+    1.CODER add source-shaped ndtbl1 row split aggregation over canonical boxes/lines, SwDoc.GetRowSplit native cursor admission and SwFEShell.GetRowSplit forwarding. Preserve existing setters/history/source represented flat selection boundaries; standalone dialog unselected input reads all rows and selected mode reads original boxes, no projection or retained DTO.
+    2.CODER extend existing SwTextFlowPage with captured layoutSplit and mixed rowSplit originals, Reset/saved values, SplitHdl_Impl sensitivity without clearing child, native changed-only FillItemSet attributes record (headline included). UI exact upstream two controls, actual HTML mixed state, source handlers, existing Reset/Cancel/OK, direct selected box inputs, remove React dontSplit state and properties inverse flag. ItemSetToTableParam only publishes explicit split items to separate native setters/table attribute; insertion field stays WriterTableDialogValue optional boundary.
+    3.CODER migrate only8known old contracts: scalar headline FillItemSet expectations become exact equivalent item record; properties label/table flag expectation corrected, reset obsolete unconditional dontSplit publication removed; typed history fixtures dontSplit boolean=>rowSplit inverse preserves every original graph/history/storage expectation. All other acceptance bytes/literal tokens preserved. Add independent native/mounted/history/ODT/Chromium1280/390 changed-only/selection/mixed/sensitivity/no clearing/Reset/Cancel/all tabs/physical table movement/original graph/list/cursor/grouped3UndoRedo/continued input.
+    4.CODER six static gates once, unchanged JSDoc/actual physical lines on19code/test paths<1000, ONEfull upstream-absent build/app/inventory/scripts/Chromium profile restored finally, no test invokes upstream/no source/scope/AP audits live. Actual100 coverage from whole identical source/maps or complete contiguous identical source/full function/branch/locations with genuine counters only; prior verified unchanged whole map permitted, no passing/full replay, only original failed/new closures.
+    5.Same current-agent EVALUATOR exact implementation-SHA explicitly not independent, source5gates/scope/proof/doctor/routing/diff/current quality artifact census0forbidden. Final Findings/Verification before canonical verify, finish actual implementationSHA, append complete parent prefix and clean tracked state. No subagents/network/global/outside writes; raw only ignored app cache. Full row-content splitting/merged/nested/fly/columns/protection/full SfxItemSet/widget suite/full kernel/browser parity unverified. Stop for material scope/risk/verification drift; parent/goal active.
+  Verify Steps: |-
+    1.Six initial static gates format/lint/typecheck/dependencies/docs/file-size ONCE, unchanged JSDoc and actual untrimmed split physical lines<1000 on19changed code/test paths. Failed/genuinely changed closures only.
+    2.ONEfull upstream-absent build/app/inventory/scripts/Chromium profile, vendor renamed inside repo/restored finally. No tests invoke upstream; no source/scope/AP audits while any absence profile live and await audits before profiles. Actual100 app/inventory coverage verified full identical source/maps or complete contiguous source/full function declaration/body/branch/location regions with actual counters, prior verified whole identical map permitted. Only original failed/genuinely new cases afterward, no historical passing/full replay, skips stay skips.
+    3.Source true table default, original false; row true/false/mixed and current/selected native cursor admission, empty/foreign/outside cases; saved-value-only table and row publication, child disabled retains flag, repeated toggles/Reset/Cancel/all tabs source headline record compatibility; independent native table vs row mutations, absent item preserves mixed/default flag and original graph/list/cursor/root snapshot, one grouped3UndoRedo/ODT/input, Chromium1280/390 source controls and actual physical table pages. Full row-content splitting not claimed.
+    4.Five source gates generation --check/source-tree/provenance/invariants/parity after restoration.21paths,527prior acceptance519byte-identical+8explicit limited migrations and all other literal assertions retained;4new531total.276old metadata full prefixes/contracts/defaults/statuses/classifications/registered exceptions preserved+1new native partial277; full parent515592characters SHA59bfd89a7f9df46a45d5a286e8d554499995ad06109dda6d38bbc1a9937895c3 intact. Source hashes and original stash retained.
+    5.Doctor/routing/diff/current leaf/generated quality0forbidden; exact implementation-SHA same current-agent EVALUATOR explicitly not independent. Final prose before canonical verify; actual implementationSHA finish, clean tracked state. Whole row splitting/nested/merged/fly/columns/protection/SfxItemSet/native item classes/full parity unverified; parent/goal active.
+  Verification: "Pending approved implementation and evidence; previous198 DONE progress, full goal not achieved."
+  Rollback Plan: "Revert eventual implementation commit only through a new approved task; no reset/destructive stash operations, preservec85f4a0e453dfd06d6e199554784f2c286737472. Vendor always restored finally; raw only ignored app cache, no AP source/helpers/Python/raw maps/results/images/logs."
+  Findings: "Read-only clean main11c5f0d48574a323d5da2081711574739d30faf8; only active parent. Pinned tabledlg Reset defaulttrue, mixed row TRISTATE_INDET absent item, SplitHdl_Impl only child sensitivity, FillItemSet distinct changed-only native flags. UI exact tabletextflowpage split/splitrow labels and child indentation; native ItemSetToTableParam copies RES_LAYOUT_SPLIT to table while explicit row item dispatches SetRowSplit with temporary whole table selection when unselected. SwDoc::GetRowSplit ndtbl1 collects selected/current boxes to original row owners, returns no item for empty/mixed, default row true. Existing property dontSplit reads first-row keepTogether and unconditional SetRowSplit inverse while never setting table item; confirms real architectural/behavior bug. Existing InsertTable flag remains valid and separate. Harmless read-only no matching ndtbl1/TriState/GetTableBox and guessed crsrsh path lookups failed; route refreshed and actual swcrsr/trvltbl/native source collection inventoried. No source/helpers/artifacts saved, no network/outside/global access."
+id_source: "generated"
+---
+## Summary
+
+Port existing native table/row split Text Flow controls and remove conflated properties dontSplit/React row-state adapter. Source separate changed RES_LAYOUT_SPLIT and RES_ROW_SPLIT publication, native defaulttrue/mixed selected row state, child sensitivity/reset retained. Single iteration199 executable leaf under standing iterative authorization; previous198 completed progress, full parent/goal active.
+
+## Scope
+
+Approved21semantic paths: apps/office/src/sw/source/core/docnode/ndtbl1.ts, apps/office/src/sw/source/core/doc/doc.ts, apps/office/src/sw/source/core/frmedt/fetab.ts, apps/office/src/sw/source/ui/table/tabledlg.ts, apps/office/src/sw/source/uibase/shells/tabsh.ts, apps/office/src/sw/browser/presentation/WriterTableDialog.tsx, apps/office/src/sw/browser/presentation/writer-view.tsx, apps/office/src/sw/source/ui/table/native-table-text-flow-headline.test.ts, apps/office/src/sw/browser/presentation/WriterTableDialog.test.tsx, apps/office/src/sw/browser/presentation/native-table-properties-reset.test.tsx, apps/office/src/sw/source/uibase/wrtsh/native-table-properties.test.ts, apps/office/src/sw/source/uibase/wrtsh/native-table-text-flow-headline-history.test.ts, apps/office/src/sw/source/uibase/wrtsh/native-table-format-lifecycle-history.test.ts, apps/office/src/sw/source/uibase/wrtsh/native-table-properties-reset-history.test.ts, apps/office/src/sw/source/uibase/wrtsh/native-table-column-page-history.test.ts, apps/office/src/sw/source/ui/table/native-table-text-flow-split.test.ts, apps/office/src/sw/browser/presentation/native-table-text-flow-split.test.tsx, apps/office/src/sw/source/uibase/wrtsh/native-table-text-flow-split-history.test.ts, apps/office/e2e/writer-native-table-text-flow-split.spec.ts, docs/program/source-provenance.json, docs/program/parity/runtime-inventory.json. Seven production paths including native ndtbl1 module,8explicit old contract/control migrations,4new acceptance,2metadata.527prior acceptance519byte-identical+8known migrations;4new531total.276old metadata full prefixes/contracts/defaults/statuses/classifications/registered filename/I/O/save/open/recovery exceptions retained+1new native partial ndtbl1 owner277, semantic states unverified. Parent515592characters SHA59bfd89a7f9df46a45d5a286e8d554499995ad06109dda6d38bbc1a9937895c3 retained. Insertion dontSplit stays solely insertion presentation field; no inserted table semantics or storage exception changes.
+
+## Plan
+
+1.CODER add source-shaped ndtbl1 row split aggregation over canonical boxes/lines, SwDoc.GetRowSplit native cursor admission and SwFEShell.GetRowSplit forwarding. Preserve existing setters/history/source represented flat selection boundaries; standalone dialog unselected input reads all rows and selected mode reads original boxes, no projection or retained DTO.
+2.CODER extend existing SwTextFlowPage with captured layoutSplit and mixed rowSplit originals, Reset/saved values, SplitHdl_Impl sensitivity without clearing child, native changed-only FillItemSet attributes record (headline included). UI exact upstream two controls, actual HTML mixed state, source handlers, existing Reset/Cancel/OK, direct selected box inputs, remove React dontSplit state and properties inverse flag. ItemSetToTableParam only publishes explicit split items to separate native setters/table attribute; insertion field stays WriterTableDialogValue optional boundary.
+3.CODER migrate only8known old contracts: scalar headline FillItemSet expectations become exact equivalent item record; properties label/table flag expectation corrected, reset obsolete unconditional dontSplit publication removed; typed history fixtures dontSplit boolean=>rowSplit inverse preserves every original graph/history/storage expectation. All other acceptance bytes/literal tokens preserved. Add independent native/mounted/history/ODT/Chromium1280/390 changed-only/selection/mixed/sensitivity/no clearing/Reset/Cancel/all tabs/physical table movement/original graph/list/cursor/grouped3UndoRedo/continued input.
+4.CODER six static gates once, unchanged JSDoc/actual physical lines on19code/test paths<1000, ONEfull upstream-absent build/app/inventory/scripts/Chromium profile restored finally, no test invokes upstream/no source/scope/AP audits live. Actual100 coverage from whole identical source/maps or complete contiguous identical source/full function/branch/locations with genuine counters only; prior verified unchanged whole map permitted, no passing/full replay, only original failed/new closures.
+5.Same current-agent EVALUATOR exact implementation-SHA explicitly not independent, source5gates/scope/proof/doctor/routing/diff/current quality artifact census0forbidden. Final Findings/Verification before canonical verify, finish actual implementationSHA, append complete parent prefix and clean tracked state. No subagents/network/global/outside writes; raw only ignored app cache. Full row-content splitting/merged/nested/fly/columns/protection/full SfxItemSet/widget suite/full kernel/browser parity unverified. Stop for material scope/risk/verification drift; parent/goal active.
+
+## Verify Steps
+
+1.Six initial static gates format/lint/typecheck/dependencies/docs/file-size ONCE, unchanged JSDoc and actual untrimmed split physical lines<1000 on19changed code/test paths. Failed/genuinely changed closures only.
+2.ONEfull upstream-absent build/app/inventory/scripts/Chromium profile, vendor renamed inside repo/restored finally. No tests invoke upstream; no source/scope/AP audits while any absence profile live and await audits before profiles. Actual100 app/inventory coverage verified full identical source/maps or complete contiguous source/full function declaration/body/branch/location regions with actual counters, prior verified whole identical map permitted. Only original failed/genuinely new cases afterward, no historical passing/full replay, skips stay skips.
+3.Source true table default, original false; row true/false/mixed and current/selected native cursor admission, empty/foreign/outside cases; saved-value-only table and row publication, child disabled retains flag, repeated toggles/Reset/Cancel/all tabs source headline record compatibility; independent native table vs row mutations, absent item preserves mixed/default flag and original graph/list/cursor/root snapshot, one grouped3UndoRedo/ODT/input, Chromium1280/390 source controls and actual physical table pages. Full row-content splitting not claimed.
+4.Five source gates generation --check/source-tree/provenance/invariants/parity after restoration.21paths,527prior acceptance519byte-identical+8explicit limited migrations and all other literal assertions retained;4new531total.276old metadata full prefixes/contracts/defaults/statuses/classifications/registered exceptions preserved+1new native partial277; full parent515592characters SHA59bfd89a7f9df46a45d5a286e8d554499995ad06109dda6d38bbc1a9937895c3 intact. Source hashes and original stash retained.
+5.Doctor/routing/diff/current leaf/generated quality0forbidden; exact implementation-SHA same current-agent EVALUATOR explicitly not independent. Final prose before canonical verify; actual implementationSHA finish, clean tracked state. Whole row splitting/nested/merged/fly/columns/protection/SfxItemSet/native item classes/full parity unverified; parent/goal active.
+
+## Verification
+
+Pending approved implementation and evidence; previous198 DONE progress, full goal not achieved.
+
+## Rollback Plan
+
+Revert eventual implementation commit only through a new approved task; no reset/destructive stash operations, preservec85f4a0e453dfd06d6e199554784f2c286737472. Vendor always restored finally; raw only ignored app cache, no AP source/helpers/Python/raw maps/results/images/logs.
+
+## Findings
+
+Read-only clean main11c5f0d48574a323d5da2081711574739d30faf8; only active parent. Pinned tabledlg Reset defaulttrue, mixed row TRISTATE_INDET absent item, SplitHdl_Impl only child sensitivity, FillItemSet distinct changed-only native flags. UI exact tabletextflowpage split/splitrow labels and child indentation; native ItemSetToTableParam copies RES_LAYOUT_SPLIT to table while explicit row item dispatches SetRowSplit with temporary whole table selection when unselected. SwDoc::GetRowSplit ndtbl1 collects selected/current boxes to original row owners, returns no item for empty/mixed, default row true. Existing property dontSplit reads first-row keepTogether and unconditional SetRowSplit inverse while never setting table item; confirms real architectural/behavior bug. Existing InsertTable flag remains valid and separate. Harmless read-only no matching ndtbl1/TriState/GetTableBox and guessed crsrsh path lookups failed; route refreshed and actual swcrsr/trvltbl/native source collection inventoried. No source/helpers/artifacts saved, no network/outside/global access.
