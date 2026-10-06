@@ -1,0 +1,188 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/sw/source/ui/table/tabledlg.ts": "11b2f86aac8f8fd35578ee2ee47bad21109fdb78d620ac01950110e243b2c20e",
+    "apps/office/src/sw/source/uibase/table/swtablerep.ts": "c379bb175797e1c94c75a48165e0f77acde792a70f4afb5ae129e27473bc901a",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx": "71be278c7b1dee1219066c4a43140e94fb9a2f2d940ed96039f1a2db2aeb9aa2",
+    "apps/office/src/sw/browser/presentation/writer-view.tsx": "89676f449427967939afcf0e4979bcb5e1bd941ad22de5d45dca4f67d5fd116c",
+    "apps/office/src/sw/source/ui/table/native-table-column-page.test.ts": "9776dadf96e55a10585cabead5e9ed473897815790fc0a22dda9bd97270e00e2",
+    "apps/office/src/sw/browser/presentation/native-table-column-page.test.tsx": "45c04065cef1d1e87b2d3e7119657d21a88acb433938d5a07e723e4076d5350f",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-column-page-history.test.ts": "e1a88f76c94ddbb084740abe7fee630fb1446e9ed2c891f4c4105c71aa032ac0",
+    "apps/office/e2e/writer-native-table-column-page.spec.ts": "0c8a59544b7933daa7ade500a7e790dcbac2e7046ad0b97383aea102aca79e3c",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.test.tsx": "f754b992f7cd2915635b5f7db38185e51e79c3b81c64124e8bebc04d37008bce",
+    "docs/program/source-provenance.json": "f6ac092c1f9483b7ca771a4637e4fe8609a2077ab83ab77dab6d0f0badd20383",
+    "docs/program/parity/runtime-inventory.json": "84c4560661ef4f67fee4be7a218b8716a8c4c2e2cc1cb5252cb64f44b4dc902c"
+  },
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1443,
+      "sha256": "56915d884a87175d67b831e75ac40f7101b1fec7da62f41bd7106c87a4d28cc4",
+      "totals": [],
+      "failedCases": []
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/THKZ38.app-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 209431,
+      "sha256": "9287e7c59291f26d5f0dc2787a9ae13f5e3a16b666eb85c70d075f9d9deb4f38",
+      "totals": [
+        "Test Files  1 failed | 381 passed (382)",
+        "Tests  1 failed | 13076 passed (13077)"
+      ],
+      "failedCases": [
+        {
+          "name": "apps/office/src/sw/browser/presentation/native-table-column-page.test.tsx > mounted workbench passes actual row versus whole-table selection to native columns",
+          "assertion": [
+            "TestingLibraryElementError: Unable to find an accessible element with the role \"button\" and name \"Table Properties\""
+          ]
+        }
+      ],
+      "caseCounts": {
+        "passed": 13076,
+        "failed": 1,
+        "skipped": 0,
+        "total": 13077
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 14724,
+          "covered": 14722,
+          "skipped": 0,
+          "pct": 99.98
+        },
+        "statements": {
+          "total": 16155,
+          "covered": 16153,
+          "skipped": 0,
+          "pct": 99.98
+        },
+        "functions": {
+          "total": 3744,
+          "covered": 3744,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 12002,
+          "covered": 11998,
+          "skipped": 0,
+          "pct": 99.96
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverage": {
+        "lines": 99.98,
+        "statements": 99.98,
+        "functions": 100,
+        "branches": 99.96
+      },
+      "incompleteFileCount": 3,
+      "coverageMapSHA256": "82ae00ed992ed5f7f6b5cce36abcab38c951291521c03b626c07c463ce086f89"
+    },
+    {
+      "kind": "inventory",
+      "command": "npm run test:inventory:coverage -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/THKZ38.inventory-results.json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 40604,
+      "sha256": "cedeb300d309a90ce8d54497b4c3e0960a9d3e2498e728f1612f1d28b6fd540a",
+      "totals": [
+        "Test Files  36 passed (36)",
+        "Tests  109 passed (109)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "passed": 109,
+        "failed": 0,
+        "skipped": 0,
+        "total": 109
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 1464,
+          "covered": 1464,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 1523,
+          "covered": 1523,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 384,
+          "covered": 384,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 1080,
+          "covered": 1080,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100
+      },
+      "incompleteFileCount": 0,
+      "coverageMapSHA256": "84f1283005df1e077b05b9637d95303c188cdb4bd709c870f0b5ef4e843bb0dc"
+    },
+    {
+      "kind": "scripts",
+      "command": "npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 220,
+      "sha256": "c9872f235107b346808178fdd3aadac144272fb43a1ac048917b69d4b3ba4c1e",
+      "totals": [
+        "Test Files  2 passed (2)",
+        "Tests  5 passed (5)"
+      ],
+      "failedCases": []
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 31132,
+      "sha256": "24395095ff52fa88dca48715976b7a780be1c0fa30c5d9e4ab210b107f8b8025",
+      "totals": [
+        "227 passed (3.7m)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "startTime": "2026-10-06T18:26:21.183Z",
+        "duration": 221297.52300000002,
+        "expected": 227,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    }
+  ]
+}
