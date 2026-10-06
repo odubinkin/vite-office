@@ -4,7 +4,7 @@ title: "Restore native cross-cell selection and repeated headline admission"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -18,10 +18,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-06T02:30:20.198Z"
+  updated_by: "CODER"
+  note: "Verified represented native table-frame UI admission, source point/mark direction, original-only selected-box paint and shared history on semantic da99108222f1c0169580e3e87ce2dbf2e493be73. ONE absent fullprofile plus failure/new-only closures:12691app109inventory5scripts157Chromium distinct passed,26newapp3Chrome,449prior tests unchanged. Actual100percent app/inventory counters and contiguous source proof,required statics,five restored source audits,scope,AP hygiene,doctor/routing/diff passed. Latest same-agent quality20261006-022954902-recovery-context; full table/core/UI parity remains unverified."
   attempts: 0
 quality_review:
   state: "pass"
@@ -55,8 +55,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: Implement approved native flat-table selection admission and original-only painting through existing shell and DOM owners; preserve old tests and deliberate IO exceptions."
+  -
+    type: "verify"
+    at: "2026-10-06T02:30:20.198Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified represented native table-frame UI admission, source point/mark direction, original-only selected-box paint and shared history on semantic da99108222f1c0169580e3e87ce2dbf2e493be73. ONE absent fullprofile plus failure/new-only closures:12691app109inventory5scripts157Chromium distinct passed,26newapp3Chrome,449prior tests unchanged. Actual100percent app/inventory counters and contiguous source proof,required statics,five restored source audits,scope,AP hygiene,doctor/routing/diff passed. Latest same-agent quality20261006-022954902-recovery-context; full table/core/UI parity remains unverified."
 doc_version: 3
-doc_updated_at: "2026-10-06T02:30:09.310Z"
+doc_updated_at: "2026-10-06T02:30:20.255Z"
 doc_updated_by: "CODER"
 description: "Align actual browser cross-cell gestures with native table cursor ownership and repeated headline restrictions; paint selected original boxes without selecting repeated headline copies. Preserve registered IO deviations and prior tests."
 sections:
@@ -83,6 +89,36 @@ sections:
     5. Vendor restored before five source audits npm exec -- tsx scripts/generate-writer-ui-resources.ts --check; npm run check:source-tree; npm run check:source-provenance; npm run inventory:invariants; npm run inventory:parity. Same-agent EVALUATOR exactsemanticSHA,recordverification,meaningfulfinish,whole parentcheckpoint,parentDOINGgoalACTIVE.
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-06T02:30:20.198Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified represented native table-frame UI admission, source point/mark direction, original-only selected-box paint and shared history on semantic da99108222f1c0169580e3e87ce2dbf2e493be73. ONE absent fullprofile plus failure/new-only closures:12691app109inventory5scripts157Chromium distinct passed,26newapp3Chrome,449prior tests unchanged. Actual100percent app/inventory counters and contiguous source proof,required statics,five restored source audits,scope,AP hygiene,doctor/routing/diff passed. Latest same-agent quality20261006-022954902-recovery-context; full table/core/UI parity remains unverified.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-06T02:30:09.310Z, excerpt_hash=sha256:d42306d154c555c3ce5da27f962e845c3727f589cded9be62d51e24590546c8a
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610060201-7FT9N6/blueprint/resolved-snapshot.json
+    - old_digest: cee33caca9e2a70afe1958fe12ad07d0bbf5a2b5c35f747a2f055578e9b3663f
+    - current_digest: cee33caca9e2a70afe1958fe12ad07d0bbf5a2b5c35f747a2f055578e9b3663f
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610060201-7FT9N6
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610060201-7FT9N6
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only the semantic implementation commit; preserve immutable task evidence and registered IO deviations."
   Findings: |-
@@ -139,6 +175,36 @@ Iteration174 under standing approved iterative upstream convergence goal. One at
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-06T02:30:20.198Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified represented native table-frame UI admission, source point/mark direction, original-only selected-box paint and shared history on semantic da99108222f1c0169580e3e87ce2dbf2e493be73. ONE absent fullprofile plus failure/new-only closures:12691app109inventory5scripts157Chromium distinct passed,26newapp3Chrome,449prior tests unchanged. Actual100percent app/inventory counters and contiguous source proof,required statics,five restored source audits,scope,AP hygiene,doctor/routing/diff passed. Latest same-agent quality20261006-022954902-recovery-context; full table/core/UI parity remains unverified.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-06T02:30:09.310Z, excerpt_hash=sha256:d42306d154c555c3ce5da27f962e845c3727f589cded9be62d51e24590546c8a
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610060201-7FT9N6/blueprint/resolved-snapshot.json
+- old_digest: cee33caca9e2a70afe1958fe12ad07d0bbf5a2b5c35f747a2f055578e9b3663f
+- current_digest: cee33caca9e2a70afe1958fe12ad07d0bbf5a2b5c35f747a2f055578e9b3663f
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610060201-7FT9N6
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610060201-7FT9N6
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
