@@ -1,10 +1,11 @@
 ---
 id: "202610061433-T25B96"
 title: "Move table mouse pointer policy into the native edit window"
-status: "DOING"
+result_summary: "Removed browser table pointer policy; restored native edit-window decisions and table-mode guard with exact table selection cursor pixels and hotspots."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -39,11 +40,16 @@ quality_review:
     - ".agentplane/tasks/202610061433-T25B96/evidence/source-review.json"
   findings:
     - "Native edit-window policy replaces browser pointer switch; actual table-mode guard, exact native IDs, five X11 masks/hotspots and platform projection verified.12954app109inventory5scripts212Chromium aggregate PASS, actual100 app/inventory coverage; only original1inventory and2Chrome failures replayed,2focused skips retained.16semantic paths,491 old acceptance files byte-identical,495total;272 old semantic fields/full prefixes preserved plus2 explicitly unverified owners274. No upstream source/helper artifacts in AP; registered I/O/recovery exceptions unchanged."
-commit: null
+commit:
+  hash: "da4164f194218a31f1dc43d682ecb8ea2ab42227"
+  message: "🚧 T25B96 code: restore native table mouse pointers"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved native edit-window table pointer ownership and exact platform glyph projection under standing iterative user authorization."
+  -
+    author: "CODER"
+    body: "Verified: native SwEditWin owns table hover pointer policy, actual table mode guards resize pointers, and VCL browser drawing preserves five native X11 glyphs and hotspots.12954app109inventory5scripts212Chromium aggregatePASS with one absent profile and original failures only; actual100 coverage. Same-agent exact-SHA reviewPASS, not independent; complete parity remains unverified."
 events:
   -
     type: "status"
@@ -58,8 +64,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native table pointer ownership and source glyph behavior verified at da4164f194218a31f1dc43d682ecb8ea2ab42227;12954app109inventory5scripts212Chromium aggregate PASS, actual100 coverage. One absent full profile and original failed cases only,2focused skips retained. Same-agent exact-SHA quality PASS, not independent review; full parity unverified."
+  -
+    type: "status"
+    at: "2026-10-06T14:53:29.691Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native SwEditWin owns table hover pointer policy, actual table mode guards resize pointers, and VCL browser drawing preserves five native X11 glyphs and hotspots.12954app109inventory5scripts212Chromium aggregatePASS with one absent profile and original failures only; actual100 coverage. Same-agent exact-SHA reviewPASS, not independent; complete parity remains unverified."
 doc_version: 3
-doc_updated_at: "2026-10-06T14:52:44.698Z"
+doc_updated_at: "2026-10-06T14:53:29.693Z"
 doc_updated_by: "CODER"
 description: "Iteration189 under C9TN6M: remove browser-owned SwTab pointer policy, restore native IsTableMode/changeMousePointer decisions, and render native table selection cursor masks/hotspots. Resize drag itself, object hit arbitration, and vertical/RTL layout remain unverified. Standing user iterative UI/core/refactor authorization applies."
 sections:
