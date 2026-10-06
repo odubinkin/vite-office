@@ -1,10 +1,11 @@
 ---
 id: "202610060236-R6NKEQ"
 title: "Restore native horizontal table print geometry"
-status: "DOING"
+result_summary: "Restored represented native horizontal table print-area ownership and browser consumption for left/center/right/margins/default FULL,per-page original/follow bounds,signed LR and proportional columns; editing/history verified. Distinct12722app109inventory5scripts165Chromium pass without upstream. Complete table/core/UI parity remains unverified; parentDOING goalACTIVE."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
     - ".agentplane/tasks/202610060236-R6NKEQ/evidence/failed-chromium-profile.json"
   findings:
     - "Core SwTabFrame owns source-shaped orientation, wished width and signed LR geometry; root uses actual master/follow page bounds; existing browser tables consume native bounds and proportional columns.31newapp8newChromium cases;452prior testfiles byte-identical,258semantic states/defaults/classes/IOexceptions preserved. One full upstream-absent profile then failed-only fixture/metadata recovery,exact unchanged source/maps with real100percent counters independently recomputed. No production change/rebuild/passing replay after initial profile. Initial failures retained candidly. Newmodule and whole core/UI parity remain unverified; registered IO deviations unchanged."
-commit: null
+commit:
+  hash: "7f1eb0ee8be8dabc22cb9972a295786d1bd03ff1"
+  message: "🧩 R6NKEQ task: record verified native table geometry"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved native horizontal table print geometry under standing iterative user authorization."
+  -
+    author: "CODER"
+    body: "Verified: native horizontal table print geometry,actual page bounds,proportional columns and signed LR ODF ownership at 1fe8f0a2e730.31newapp8newChromium,all452prior tests unchanged; actual100percent app/inventory,one absent fullprofile and failed-only closure,same-agent exactSHA quality. Registered IO deviations unchanged,broad parity unverified."
 events:
   -
     type: "status"
@@ -63,8 +69,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: native horizontal table print geometry at 1fe8f0a2e73080f22c11e79d61b07fd1d0699979.31newapp8newChromium,452prior testfiles byte-identical; distinct12722app109inventory5scripts165Chromium allpass without upstream. Actual app/inventory100percent exact unchanged source/maps and real counters,one full profile then failed-only recovery,no production change or passing replay. Five restored audits,static/changed checks,scope/AP/governance pass. Same-agent exactSHA quality20261006-025741645-recovery-context;whole parity unverified."
+  -
+    type: "status"
+    at: "2026-10-06T02:58:20.073Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native horizontal table print geometry,actual page bounds,proportional columns and signed LR ODF ownership at 1fe8f0a2e730.31newapp8newChromium,all452prior tests unchanged; actual100percent app/inventory,one absent fullprofile and failed-only closure,same-agent exactSHA quality. Registered IO deviations unchanged,broad parity unverified."
 doc_version: 3
-doc_updated_at: "2026-10-06T02:57:59.370Z"
+doc_updated_at: "2026-10-06T02:58:20.074Z"
 doc_updated_by: "CODER"
 description: "Iteration175: move represented horizontal table geometry into native SwTabFrame Format ownership; honor imported left/center/right/margins and default full-width modes, actual page print width, right margin, proportional columns, repeated fragments, live editing and history. Preserve deliberate IO exceptions and prior tests; bounded geometry only, broader table/frame parity unverified."
 sections:
@@ -131,6 +144,10 @@ sections:
     Initial six gates eventually pass: format second-pass newE2E normalization,13missing authored callback JSDocs added,baseline wrtsh1 actual physical1000line failure fixed by removing one blank line only (now999including trailing newline). Scope expanded by this required normalization under standing user authorization and plan reapproved sequentially; initial prior-test estimate453 corrected by actual baseline452. One earlier route recomputation surfaced unstaged evidence; staged exact active AP artifacts and recomputed direct route. ONE full absent profile terminal/vendor restored:12721appPASS1new root fixtureFAIL of12722,appactual100percent;108inventoryPASS1metadata-orderFAIL of109,incompletecoverage;5scriptsPASS;157oldChromePASS8newgeometryfixtureFAIL0flaky. Exact failures/counts/hashes recorded before assertions. Core failing fixture passed no body measurements,so actual table could not be placed after body; supply actual body line measurement without changing oracle. New Chrome fixture long text wraps in narrow25percent column and collapsed border changes inner widths; zero native cell padding/border provides intended border-free horizontal geometry fixture,retaining literal3fragment and exact proportion/edit/history oracles. Metadatanewmodule inserted in raw lexical order. No production changes after initial profile,so no rebuild; no passing replay. Full nested/merged/relative/fly/outer-border/vertical/RTL/multicolumn/row splitting and actual follow-page remeasurement at changed print width remain unverified.
 
     Final failed-only closure:1newappPASS19skipped,1inventoryPASS2skipped. Coverage subset commands exit1 solely unchanged global100percent threshold,exactcases allPASS; combined realmaps verify100percent. Chrome initial closure2marginsPASS6narrowFAIL at typing because End means visual line end; retained passing margins input path and used explicit actual DOM end-caret only for six failed narrow fixtures. Final six-only ChromePASS0flaky,5.131931s. No production changes/rebuilds after initial profile,no passing replay. Final distinct12722app109inventory5scripts165Chromium,31newapp8newChrome. Appactual100percent13140L14404S3461F10773B,inventory1464L1523S384F1080B. Exact identical source and statement/function/branch maps for256app/38inventory files; actual counters merged with standard Istanbul coverage map,no source-span transfer required. Finalmap app0a94f56cf814220a74a0a9d5eb836da931bc2facf5bc5aecb4c4674b50231762,inventory32f2cfa464313247513bd562cbe9f343955f3b366fb55d7f233e2e33dd37f42b. Five restored source audits pass,semanticviolations0. Scopeaudit14paths8productionowners,452prior testfiles byte-identical,258prior semantics/defaults/classifications/IOexceptions/evidence/responsibility prefixes preserved;new SwTabFrame module unverified. Native source hashes and current source hashes recorded. AP4562ignored-inclusivefiles0forbidden,doctor0errors2knownwarnings,routing/diff pass. Full relative-width/fly/outer-border/multicolumn/vertical/RTL/nested/merged/rowspan/split-row/protection/native frame lifecycle,follow-width row remeasurement,table properties alignment controls and broader core/UI parity remain UNVERIFIED. Registered save/open/recovery deviations unchanged. Same-agent exactSHA evaluation required;no independent reviewer claim,parentDOINGgoalACTIVE.
+extensions:
+  implementation_commit:
+    hash: "1fe8f0a2e73080f22c11e79d61b07fd1d0699979"
+    message: "🧩 R6NKEQ code: restore native table print geometry"
 id_source: "generated"
 ---
 ## Summary
