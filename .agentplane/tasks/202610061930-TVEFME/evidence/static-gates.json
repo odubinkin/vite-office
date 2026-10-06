@@ -1,0 +1,59 @@
+{
+  "records": [
+    {
+      "command": "npm run format:check",
+      "exit": 0,
+      "bytes": 122,
+      "sha256": "ac1729f86eee878f5f4d6c948c510d2cc91bb5568f6dd088f70f3885e137d116",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run lint",
+      "exit": 0,
+      "bytes": 55,
+      "sha256": "a6172cb57fa696e705408fdc605fba1ae07b852fdf0614d7c2b623349e285b6e",
+      "diagnostics": [
+        "> eslint . --max-warnings 0"
+      ]
+    },
+    {
+      "command": "npm run typecheck",
+      "exit": 2,
+      "bytes": 1130,
+      "sha256": "588144b5b997f7e861d4c0efc7ad824978d5459ebaf9f39ba52601741071dfa3",
+      "diagnostics": [
+        "src/sw/browser/presentation/native-table-properties-reset.test.tsx(118,57): error TS2769: No overload matches this call.",
+        "  Overload 1 of 2, '(role: ByRoleMatcher, options?: ByRoleOptions | undefined): HTMLElement', gave the following error.",
+        "  Overload 2 of 2, '(role: ByRoleMatcher, options?: ByRoleOptions | undefined): HTMLElement', gave the following error.",
+        "npm error Lifecycle script `typecheck` failed with error:",
+        "npm error code 2",
+        "npm error path /Users/odubinkin/Projects/vite-office/apps/office",
+        "npm error workspace @vite-office/office@0.1.0",
+        "npm error location /Users/odubinkin/Projects/vite-office/apps/office",
+        "npm error command failed",
+        "npm error command sh -c tsc --noEmit"
+      ]
+    },
+    {
+      "command": "npm run check:dependencies",
+      "exit": 0,
+      "bytes": 189,
+      "sha256": "da1ddcc0e68dac8602916c5b19b7be766eda4f859bbd6ef7ee3e74cb78870ddc",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:docs",
+      "exit": 0,
+      "bytes": 119,
+      "sha256": "9b3b600c4d3ad81efd2dd6dafd59b29c3cc322f9ee7f0ebcd77ad20e1cef6cb5",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:file-size",
+      "exit": 0,
+      "bytes": 3731,
+      "sha256": "4fc47a48cc21a3c44ae7a1aaee0e31a1c6d9d4d7149de9dcf0b5b5a72a239438",
+      "diagnostics": []
+    }
+  ]
+}
