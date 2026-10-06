@@ -1,10 +1,11 @@
 ---
 id: "202610060905-WBC1TW"
 title: "Implement native flat row insertion before and after selection across core and UI"
-status: "DOING"
+result_summary: "Implemented counted flat row insertion at actual selected edge through SwTableShell, inherited SwFEShell, document-owned SwDoc history and SwTable graph. Upstream menu count and native list/text/table context order match represented behavior; original selection and one undo action survive repeat and recreated-table history. One full absent profile with only two original-case closures; all static/source/scope/quality checks pass. Prior269 semantic statuses/defaults/classes/evidence and conscious I/O deviations preserved; merged/nested/rowspan/redline/layout/formula/protection/repeated-headline and full UI/core parity remain unverified. Parent and whole goal remain ACTIVE."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -39,11 +40,16 @@ quality_review:
   findings:
     - "Actual native box/row/table ownership and one undo action preserve selection across before/after counts, mixed text history and recreated tables; all12823app109inventory5scripts191Chrome cases pass with100% actual-counter coverage."
     - "One full absent profile, original-case-only closures and exact identical maps; all269 semantic statuses/defaults/classes/evidence and conscious I/O deviations preserved."
-commit: null
+commit:
+  hash: "fc664e2c9dc868cabac07854de739e4f3d50d0cd"
+  message: "🧩 WBC1TW code: route counted table rows through native context shells"
 comments:
   -
     author: "CODER"
     body: "Start: authorized iteration181 native counted flat rows and contextual table UI slots with one absent verification profile."
+  -
+    author: "CODER"
+    body: "Verified: native counted flat rows and before/after menu routing, original selection and mixed/recreated table undo;12823app109inventory5scripts191Chrome passed,100% app/inventory coverage."
 events:
   -
     type: "status"
@@ -58,8 +64,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified native counted row insertion before/after actual selected boxes, contextual SwTableShell slots and native list/text/table stack; one document-owned undo with stable selection and recreated-table redo. All12823app109inventory5scripts191Chrome distinct cases pass;100% app/inventory actual-counter coverage. Six static and restored source/scope/governance checks pass; same-agent exact-SHA quality pass at fc664e2c9dc868cabac07854de739e4f3d50d0cd. One full absent profile plus only two original failed case closures; skipped remain skipped. Registered I/O deviations preserved; parent/goal ACTIVE, full parity UNVERIFIED."
+  -
+    type: "status"
+    at: "2026-10-06T09:33:27.015Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native counted flat rows and before/after menu routing, original selection and mixed/recreated table undo;12823app109inventory5scripts191Chrome passed,100% app/inventory coverage."
 doc_version: 3
-doc_updated_at: "2026-10-06T09:32:53.336Z"
+doc_updated_at: "2026-10-06T09:33:27.017Z"
 doc_updated_by: "CODER"
 description: "Iteration181: remove final-row/count-one restrictions in existing SwDoc.InsertRow; native SwTable selects boundary row and inserts counted flat rows before or after actual boxes, document owns one undo action. Connect upstream InsertRowsBefore/After menu slots through SwTableShell and SwFEShell, preserving actual selection and history and all registered I/O deviations."
 sections:
