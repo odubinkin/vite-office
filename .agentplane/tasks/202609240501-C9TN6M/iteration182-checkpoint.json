@@ -1,0 +1,158 @@
+{
+  "iteration": 182,
+  "leaf": "202610060937-TR4M9D",
+  "leafState": "DONE",
+  "implementation": "2c76be1460f59495b7ab618efa8babf2e7870c3d",
+  "quality": "7c99c1a23dcd",
+  "verificationTail": "25e0a9d5b680",
+  "close": "84ba5907dc9e60495d7c30515518f60d205735e4",
+  "parentState": "DOING",
+  "wholeGoal": "ACTIVE",
+  "fullParity": "UNVERIFIED",
+  "priorFindings": {
+    "characters": 459593,
+    "sha256": "b981e6dee586751f78120e71f738d16e491dfd644fe4f9ff304979edbdb9b824"
+  },
+  "updatedFindings": {
+    "characters": 461895,
+    "sha256": "16d1504c6a7d43e6c9be2edf9148f42d4aca396533a58d7c2c91f2b05a48f235",
+    "entirePriorPrefixPreserved": true
+  },
+  "profile": {
+    "count": 1,
+    "upstreamAbsent": true,
+    "vendorRestored": true,
+    "distinctCases": {
+      "application": 12833,
+      "inventory": 109,
+      "scripts": 5,
+      "chromium": 193
+    },
+    "testClosures": 0,
+    "testReplays": 0,
+    "coverageTransfers": 0,
+    "failures": [],
+    "runtimeErrors": 0,
+    "flaky": 0,
+    "skipped": 0
+  },
+  "coverage": {
+    "source": "Single upstream-absent full profile; actual raw Istanbul counters, no merge, no transfer and no replay",
+    "failures": [],
+    "app": {
+      "coverage": {
+        "lines": {
+          "total": 13729,
+          "covered": 13729,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 15044,
+          "covered": 15044,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3603,
+          "covered": 3603,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 11221,
+          "covered": 11221,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "mapSHA256": "e3b1548f8e831f2002c733c259df9dc94c25d52bda2a06c194d2f77418080a01",
+      "files": 267,
+      "byteIdenticalRawMap": true
+    },
+    "inventory": {
+      "coverage": {
+        "lines": {
+          "total": 1464,
+          "covered": 1464,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 1523,
+          "covered": 1523,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 384,
+          "covered": 384,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 1080,
+          "covered": 1080,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "mapSHA256": "b728939e97bd47d98e04ec57c7b9ca633ea9f9389fa9930162afe4869405dbf3",
+      "files": 38,
+      "byteIdenticalRawMap": true
+    }
+  },
+  "scope": {
+    "base": "52e82f832bd37a819bd809eb5861635a00d50ae6",
+    "oldTestFiles": 476,
+    "byteIdenticalOldTestFiles": 475,
+    "changedOldTests": [
+      "scripts/libreoffice-inventory/parity-mapping-cli.test.ts"
+    ],
+    "newAcceptanceFiles": [
+      "apps/office/src/sw/source/core/table/native-column-insertion.test.ts",
+      "apps/office/src/sw/browser/editor/native-table-column-commands.test.tsx",
+      "apps/office/e2e/writer-native-column-commands.spec.ts"
+    ],
+    "priorSemanticModules": 269,
+    "currentSemanticModules": 270,
+    "priorStatesDefaultsClassificationsAndEvidencePreserved": true,
+    "semanticPaths": [
+      "apps/office/src/sw/source/core/table/swtable.ts",
+      "apps/office/src/sw/source/core/docnode/nodes.ts",
+      "apps/office/src/sw/source/core/doc/doc.ts",
+      "apps/office/src/sw/source/core/undo/untbl.ts",
+      "apps/office/src/sw/source/core/frmedt/fetab.ts",
+      "apps/office/src/sw/source/core/frmedt/tblsel.ts",
+      "apps/office/src/sw/source/uibase/shells/tabsh.ts",
+      "scripts/generate-writer-ui-resources.ts",
+      "apps/office/src/sw/uiconfig/swriter/writer-ui.generated.json",
+      "docs/program/source-provenance.json",
+      "docs/program/parity/runtime-inventory.json",
+      "apps/office/src/sw/source/core/table/native-column-insertion.test.ts",
+      "apps/office/src/sw/browser/editor/native-table-column-commands.test.tsx",
+      "apps/office/e2e/writer-native-column-commands.spec.ts",
+      "scripts/libreoffice-inventory/parity-mapping-cli.test.ts"
+    ],
+    "failures": []
+  },
+  "closeoutArtifactAudit": {
+    "scope": "Only new quality/exact-review/closeout current leaf artifacts; prior census not repeated",
+    "fileCount": 5,
+    "forbidden": []
+  },
+  "constraints": "Conscious I/O/recovery deviations preserved; no upstream source/helper/Python/raw dumps in AP; no network/subagent/outside access",
+  "remaining": "Flat shared-column geometry only. Full frame unions/follow-page/vertical/RTL/fly/merged/nested/rowspan/protection/formula/redline/repeated-headline and complete native undo reconstruction remain unverified."
+}
