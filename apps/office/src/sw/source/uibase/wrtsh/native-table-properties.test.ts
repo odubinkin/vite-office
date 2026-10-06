@@ -66,7 +66,7 @@ function fixture() {
     verticalAlign: "bottom",
     headerRows: 0,
     repeatHeaderRows: false,
-    dontSplit: true,
+    rowSplit: false,
   };
   return { doc, body, table, boxes, nodes, docShell, shell, edit, invalidate, value };
 }

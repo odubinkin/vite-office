@@ -1,0 +1,47 @@
+{
+  "records": [
+    {
+      "command": "Unchanged JSDoc validator on approved changed code/acceptance paths; actual physical-line count",
+      "exit": 0,
+      "errors": [],
+      "physicalLines": {
+        "apps/office/src/sw/source/core/docnode/ndtbl1.ts": 21,
+        "apps/office/src/sw/source/core/doc/doc.ts": 923,
+        "apps/office/src/sw/source/core/frmedt/fetab.ts": 472,
+        "apps/office/src/sw/source/ui/table/tabledlg.ts": 558,
+        "apps/office/src/sw/source/uibase/shells/tabsh.ts": 164,
+        "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx": 611,
+        "apps/office/src/sw/browser/presentation/writer-view.tsx": 795,
+        "apps/office/src/sw/source/ui/table/native-table-text-flow-headline.test.ts": 91,
+        "apps/office/src/sw/browser/presentation/WriterTableDialog.test.tsx": 266,
+        "apps/office/src/sw/browser/presentation/native-table-properties-reset.test.tsx": 167,
+        "apps/office/src/sw/source/uibase/wrtsh/native-table-properties.test.ts": 222,
+        "apps/office/src/sw/source/uibase/wrtsh/native-table-text-flow-headline-history.test.ts": 109,
+        "apps/office/src/sw/source/uibase/wrtsh/native-table-format-lifecycle-history.test.ts": 149,
+        "apps/office/src/sw/source/uibase/wrtsh/native-table-properties-reset-history.test.ts": 132,
+        "apps/office/src/sw/source/uibase/wrtsh/native-table-column-page-history.test.ts": 148,
+        "apps/office/src/sw/source/ui/table/native-table-text-flow-split.test.ts": 93,
+        "apps/office/src/sw/browser/presentation/native-table-text-flow-split.test.tsx": 87,
+        "apps/office/src/sw/source/uibase/wrtsh/native-table-text-flow-split-history.test.ts": 184,
+        "apps/office/e2e/writer-native-table-text-flow-split.spec.ts": 141
+      }
+    },
+    {
+      "command": "npm exec -- prettier --check apps/office/src/sw/source/core/docnode/ndtbl1.ts apps/office/src/sw/source/core/doc/doc.ts apps/office/src/sw/source/core/frmedt/fetab.ts apps/office/src/sw/source/ui/table/tabledlg.ts apps/office/src/sw/source/uibase/shells/tabsh.ts apps/office/src/sw/browser/presentation/WriterTableDialog.tsx apps/office/src/sw/browser/presentation/writer-view.tsx apps/office/src/sw/source/ui/table/native-table-text-flow-headline.test.ts apps/office/src/sw/browser/presentation/WriterTableDialog.test.tsx apps/office/src/sw/browser/presentation/native-table-properties-reset.test.tsx apps/office/src/sw/source/uibase/wrtsh/native-table-properties.test.ts apps/office/src/sw/source/uibase/wrtsh/native-table-text-flow-headline-history.test.ts apps/office/src/sw/source/uibase/wrtsh/native-table-format-lifecycle-history.test.ts apps/office/src/sw/source/uibase/wrtsh/native-table-properties-reset-history.test.ts apps/office/src/sw/source/uibase/wrtsh/native-table-column-page-history.test.ts apps/office/src/sw/source/ui/table/native-table-text-flow-split.test.ts apps/office/src/sw/browser/presentation/native-table-text-flow-split.test.tsx apps/office/src/sw/source/uibase/wrtsh/native-table-text-flow-split-history.test.ts apps/office/e2e/writer-native-table-text-flow-split.spec.ts",
+      "exit": 1,
+      "bytes": 174,
+      "sha256": "c3ac36c72d46feb10fa34c75b175433782191edde6943a3b0e3d86fb9bcf0999",
+      "diagnostics": [
+        "[warn] apps/office/e2e/writer-native-table-text-flow-split.spec.ts",
+        "[warn] Code style issues found in the above file. Run Prettier with --write to fix."
+      ]
+    },
+    {
+      "command": "npm exec -- eslint apps/office/src/sw/source/core/docnode/ndtbl1.ts apps/office/src/sw/source/core/doc/doc.ts apps/office/src/sw/source/core/frmedt/fetab.ts apps/office/src/sw/source/ui/table/tabledlg.ts apps/office/src/sw/source/uibase/shells/tabsh.ts apps/office/src/sw/browser/presentation/WriterTableDialog.tsx apps/office/src/sw/browser/presentation/writer-view.tsx apps/office/src/sw/source/ui/table/native-table-text-flow-headline.test.ts apps/office/src/sw/browser/presentation/WriterTableDialog.test.tsx apps/office/src/sw/browser/presentation/native-table-properties-reset.test.tsx apps/office/src/sw/source/uibase/wrtsh/native-table-properties.test.ts apps/office/src/sw/source/uibase/wrtsh/native-table-text-flow-headline-history.test.ts apps/office/src/sw/source/uibase/wrtsh/native-table-format-lifecycle-history.test.ts apps/office/src/sw/source/uibase/wrtsh/native-table-properties-reset-history.test.ts apps/office/src/sw/source/uibase/wrtsh/native-table-column-page-history.test.ts apps/office/src/sw/source/ui/table/native-table-text-flow-split.test.ts apps/office/src/sw/browser/presentation/native-table-text-flow-split.test.tsx apps/office/src/sw/source/uibase/wrtsh/native-table-text-flow-split-history.test.ts apps/office/e2e/writer-native-table-text-flow-split.spec.ts --max-warnings 0",
+      "exit": 0,
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnostics": []
+    }
+  ]
+}

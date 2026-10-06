@@ -23,7 +23,8 @@ export interface SwTableProperties {
   readonly verticalAlign: "top" | "middle" | "bottom";
   readonly headerRows: number;
   readonly repeatHeaderRows: boolean;
-  readonly dontSplit: boolean;
+  readonly layoutSplit?: boolean;
+  readonly rowSplit?: boolean;
 }
 
 /** Applies one accepted dialog as one native history and notification group. @param shell - Actual frame-editing shell. @param value - Accepted attributes. @returns Whether a table was targeted. */
@@ -45,7 +46,7 @@ export function ItemSetToTableParam(shell: SwFEShell, value: SwTableProperties):
       undo.StartUndo("Table Properties");
       try {
         shell.SetTabBorders({ padding: value.padding, border: value.border });
-        shell.SetRowSplit(!value.dontSplit);
+        if (value.rowSplit !== undefined) shell.SetRowSplit(value.rowSplit);
         shell.SetRowsToRepeat(value.headerRows, value.repeatHeaderRows);
         shell.SetRowHeight(value.minRowHeight);
         shell.SetBoxAlign(value.verticalAlign);
@@ -59,6 +60,7 @@ export function ItemSetToTableParam(shell: SwFEShell, value: SwTableProperties):
         shell.SetTabCols(columns, singleRow);
         shell.SetTableAttr({
           width: value.width,
+          ...(value.layoutSplit === undefined ? {} : { layoutSplit: value.layoutSplit }),
           ...(value.horiOrient === undefined
             ? {}
             : {

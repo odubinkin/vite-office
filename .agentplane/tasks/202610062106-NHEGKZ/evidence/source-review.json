@@ -1,0 +1,20 @@
+{
+  "baselineTag": "libreoffice-26.8.0.2",
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "reviewer": "Same current agent; pinned sources read-only, no upstream execution",
+  "sourceSHA256": {
+    "sw/source/core/docnode/ndtbl1.cxx": "c94a3a78edc61fc2b2a0419371f70cffc5466ceca3d0b8f29160cceff0b37663",
+    "sw/source/core/frmedt/fetab.cxx": "e7b7c7164f76d7e67eddcf863128d41c3c2ea2946362b8509bab0bc2cdc9f016",
+    "sw/inc/fmtrowsplt.hxx": "de22a6a2d12fa16ac6810341aff01b61700cd33fe8028b9e3b3fca54a6c1c5e0",
+    "sw/inc/fmtlsplt.hxx": "f1bad8d61cd26e6d8f950139bfe3d2c4c8ddab2f4f66982bc83352e686a10f18",
+    "sw/source/ui/table/tabledlg.cxx": "8784376ef8a6517596379155caa49027b70d4c801c0866c9991b9998e1781a5a",
+    "sw/source/uibase/shells/tabsh.cxx": "ac075f90575663fac974e2804e7111b1df3f596eb5bb400fb9fc2f4be0058163",
+    "sw/uiconfig/swriter/ui/tabletextflowpage.ui": "429beb8d9aa3d5664ec4486bce67debc55737505307dd2ffa946b1cebce280f5",
+    "include/vcl/weld/CheckButton.hxx": "5b8a034d7ed8e7ced4e1d3cd67eabc796dd747f1fef0aa94fb614cb57b30ae07"
+  },
+  "contracts": [
+    "Native separate table/row split controls, defaulttrue table and mixed row when no item; saved-value changed-only FillItemSet and SplitHdl_Impl child sensitivity retains row value. Source CheckButton get_active only TRISTATE_TRUE. Exact labels/child indentation and selected native boxes feed current properties page.",
+    "Source SwDoc.GetRowSplit ndtbl1 aggregates actual selected lines, no item for empty/mixed, SwFEShell getter forwards current native cursor. Unselected properties input/row publication uses whole table, native table attribute independent of row split. Existing insertion-only flag preserved.",
+    "21approved paths,527old acceptance519byte-identical+8explicit contract migrations only,4new531;276old metadata full prefixes/contracts/defaults/statuses/classifications/registered exceptions preserved+1new partial ndtbl1 owner277 unverified. Same current-agent EVALUATOR explicitly not independent. Full row-content splitting/nested/merged/fly/columns/protection/full SfxItemSet/item classes/widget suite/full parity unverified; parent/goal active."
+  ]
+}

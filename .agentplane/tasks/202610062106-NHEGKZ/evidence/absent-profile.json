@@ -1,0 +1,198 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/sw/source/core/docnode/ndtbl1.ts": "0e0857fea29742f9316c7d2fd751db2237bbe9497a9cc4084dffa24e9cf1e904",
+    "apps/office/src/sw/source/core/doc/doc.ts": "8aae8c41414abe7262830ee7ca812fa0453bbd3944eb6558f1b5e244617b2060",
+    "apps/office/src/sw/source/core/frmedt/fetab.ts": "39a8eeea0c0fff31cfd8127804a358dcd9b4a955bc6c2ae92eac9eecfd94ea50",
+    "apps/office/src/sw/source/ui/table/tabledlg.ts": "81e03c4e4182ed875b5534089e0bd671d37e6b188ec082cc7f8a88e31e5dd6fa",
+    "apps/office/src/sw/source/uibase/shells/tabsh.ts": "8eb02eea022e62ede2ccb92c9e426a3a2f116b083b4ca05117b6d2051be710aa",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx": "58303840d60eac4da68c377c282356460e6842803181ec707f05b1d32918f5d9",
+    "apps/office/src/sw/browser/presentation/writer-view.tsx": "177fee2fe443e5959dff8a156806db3d5af874b17d3cd8879b3e9f3dadfa3a61",
+    "apps/office/src/sw/source/ui/table/native-table-text-flow-headline.test.ts": "f4413e2be36fed8beaedeb51c36b8e08edf92093fa2c3de990c0a4ae5641419d",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.test.tsx": "8bf324c3126b64460015aafe30ced37d906ce5c5c40aa3c808f6284974d8ab95",
+    "apps/office/src/sw/browser/presentation/native-table-properties-reset.test.tsx": "058073cae9fab172810f6257464ffb6cfde9951e24c690242752ed1b2c2844c6",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-properties.test.ts": "6a10a652dd66096d012192dad3f0ab1a6db5aaaf8eb810a745bcb293bf040b24",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-text-flow-headline-history.test.ts": "098f512b4044cf201b230443a821e31695183c3967ca560719fc8f3350ee670f",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-format-lifecycle-history.test.ts": "514b4f6f395d0781a0a31e5262491e7a36285e58b5e7c2096a50c508a5ffaf43",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-properties-reset-history.test.ts": "bde3ac4f893b3094ce0d51b35a863060971a44a0aa45543f4a38132f7a1b9258",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-column-page-history.test.ts": "55662dcf5d713c4c41ca4c07e18efc71d9cb9cb154b617a815926215580801a8",
+    "apps/office/src/sw/source/ui/table/native-table-text-flow-split.test.ts": "ff00259ceb49659228e32867897dee3b7b6c6b4279ca26cfb4a877af7f800c5b",
+    "apps/office/src/sw/browser/presentation/native-table-text-flow-split.test.tsx": "1780515bee14cf440f99bc4ec9820bf6b8773ab9bfe339633bdeab60eb65eccd",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-text-flow-split-history.test.ts": "fe4d014c93f15a2991095df1ed5779d80a13f1eb7d76385d1bb67b29ef1e93a9",
+    "apps/office/e2e/writer-native-table-text-flow-split.spec.ts": "415f3a1cea862bf32627cedbfe2917118bcb79b9d55b8c8676fe524f6379a96b",
+    "docs/program/source-provenance.json": "fb052e43f0d1032a84e343bee5e3ca0c1987774c5b7ff300cbfba7540bf4898c",
+    "docs/program/parity/runtime-inventory.json": "560c257274f5fc66d479bde17cedee61412a787e31f51b417f5a4008298deab6"
+  },
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1443,
+      "sha256": "ec3f14970c02f361675b194dbf69151559590fdf4d596b3e1bb65c6fb932f21b",
+      "totals": [],
+      "failedCases": []
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/NHEGKZ.app-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 75545,
+      "sha256": "bb3950a21f9511a20885bd84eda36eac2661658264e6b94dca60b27b1c0961fd",
+      "totals": [
+        "Test Files  396 passed (396)",
+        "Tests  13157 passed (13157)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "passed": 13157,
+        "failed": 0,
+        "skipped": 0,
+        "total": 13157
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 14838,
+          "covered": 14838,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 16279,
+          "covered": 16279,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3781,
+          "covered": 3781,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 12077,
+          "covered": 12076,
+          "skipped": 0,
+          "pct": 99.99
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 99.99
+      },
+      "incompleteFileCount": 1,
+      "coverageMapSHA256": "2fc058a0002d62e34f84c9c70db122f42c5c35fa8b9768c4e7868e01e6a329e1"
+    },
+    {
+      "kind": "inventory",
+      "command": "npm run test:inventory:coverage -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/NHEGKZ.inventory-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 42204,
+      "sha256": "3678c5a535c356afb3986fbe7fc916b8f6606979e8ba66adc0dfa30a0ba3d9ab",
+      "totals": [
+        "Test Files  1 failed | 35 passed (36)",
+        "Tests  1 failed | 108 passed (109)"
+      ],
+      "failedCases": [
+        {
+          "name": "scripts/libreoffice-inventory/parity-mapping-cli.test.ts > parity mapping CLI composes the Writer mapping report with owned upstream marker evidence",
+          "assertion": [
+            "Error: Runtime module paths must be unique and lexicographically ordered."
+          ]
+        }
+      ],
+      "caseCounts": {
+        "passed": 108,
+        "failed": 1,
+        "skipped": 0,
+        "total": 109
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 1464,
+          "covered": 1460,
+          "skipped": 0,
+          "pct": 99.72
+        },
+        "statements": {
+          "total": 1523,
+          "covered": 1519,
+          "skipped": 0,
+          "pct": 99.73
+        },
+        "functions": {
+          "total": 384,
+          "covered": 381,
+          "skipped": 0,
+          "pct": 99.21
+        },
+        "branches": {
+          "total": 1080,
+          "covered": 1080,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "coverage": {
+        "lines": 99.72,
+        "statements": 99.73,
+        "functions": 99.21,
+        "branches": 100
+      },
+      "incompleteFileCount": 1,
+      "coverageMapSHA256": "ce7f1c8048e4134506ab060e4dfd11a4e87647890cf15050732eaef7e703703b"
+    },
+    {
+      "kind": "scripts",
+      "command": "npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 220,
+      "sha256": "fd1f7b066adf8cf424e98f23fd66d21d5f5e705b0c187c360e67af00f65941cc",
+      "totals": [
+        "Test Files  2 passed (2)",
+        "Tests  5 passed (5)"
+      ],
+      "failedCases": []
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 33391,
+      "sha256": "53614fa909152016b8e2df71621b7dea90d9aaac088ebc17a444f25d0efe752e",
+      "totals": [
+        "241 passed (4.2m)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "startTime": "2026-10-06T21:21:20.393Z",
+        "duration": 250061.391,
+        "expected": 241,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    }
+  ]
+}

@@ -381,6 +381,11 @@ export abstract class SwFEShell extends SwEditShell {
     return this.SetRowAttr({ keepTogether: !split }, true);
   }
 
+  /** Reads the common item over native current or selected rows. @returns Common split value or no item for mixed/non-table input. */
+  public GetRowSplit(): boolean | undefined {
+    return SwDoc.GetRowSplit(this.getShellCursor());
+  }
+
   /** Applies borders to selected boxes or the whole unselected table. @param value - Border and padding attributes. @returns Whether admitted. */
   public SetTabBorders(value: Pick<SwTableBoxFormat, "padding" | "border">): boolean {
     return this.SetBoxAttr(value, true);

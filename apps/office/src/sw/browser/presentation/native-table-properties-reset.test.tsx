@@ -110,7 +110,9 @@ it("Text Flow and Borders Reset each restore their initial controls and preserve
     target: { value: "2" },
   });
   metric("Minimum row height (cm)", "1");
-  fireEvent.click(screen.getByRole("checkbox", { name: "Don’t split table over pages" }));
+  fireEvent.click(
+    screen.getByRole("checkbox", { name: "Allow table to split across pages and columns" }),
+  );
   fireEvent.change(screen.getByRole("combobox", { name: "Cell vertical alignment" }), {
     target: { value: "top" },
   });
@@ -119,7 +121,9 @@ it("Text Flow and Borders Reset each restore their initial controls and preserve
   expect(screen.getByRole("checkbox", { name: "Repeat header" })).not.toBeChecked();
   expect(screen.getByRole("spinbutton", { name: "Header rows" })).toHaveValue(1);
   expect(screen.getByRole("spinbutton", { name: "Minimum row height (cm)" })).toHaveValue(0.53);
-  expect(screen.getByRole("checkbox", { name: "Don’t split table over pages" })).toBeChecked();
+  expect(
+    screen.getByRole("checkbox", { name: "Allow table to split across pages and columns" }),
+  ).toBeChecked();
   expect(screen.getByRole("combobox", { name: "Cell vertical alignment" })).toHaveValue("bottom");
   metric("Minimum row height (cm)", "2");
   tab("Borders");
@@ -135,7 +139,6 @@ it("Text Flow and Borders Reset each restore their initial controls and preserve
       border: "1pt solid #000000",
       headerRows: 0,
       repeatHeaderRows: false,
-      dontSplit: true,
       verticalAlign: "bottom",
     }),
   );

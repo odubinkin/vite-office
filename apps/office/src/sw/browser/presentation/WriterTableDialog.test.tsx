@@ -151,7 +151,7 @@ describe("Writer browser table controls", /** Verifies the bounded table scenari
       target: { value: "1" },
     });
     fireEvent.click(screen.getByLabelText("Repeat header"));
-    fireEvent.click(screen.getByLabelText("Don’t split table over pages"));
+    fireEvent.click(screen.getByLabelText("Allow table to split across pages and columns"));
     fireEvent.change(screen.getByRole("spinbutton", { name: "Minimum row height (cm)" }), {
       target: { value: "1" },
     });
@@ -175,7 +175,7 @@ describe("Writer browser table controls", /** Verifies the bounded table scenari
         border: "0.5pt solid #666666",
         verticalAlign: "bottom",
         repeatHeaderRows: false,
-        dontSplit: true,
+        layoutSplit: false,
       }),
     );
     submit.mockClear();

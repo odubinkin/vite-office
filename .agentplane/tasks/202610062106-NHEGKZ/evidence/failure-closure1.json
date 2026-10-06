@@ -1,0 +1,89 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/sw/source/core/docnode/ndtbl1.ts": "0e0857fea29742f9316c7d2fd751db2237bbe9497a9cc4084dffa24e9cf1e904",
+    "apps/office/src/sw/source/core/doc/doc.ts": "8aae8c41414abe7262830ee7ca812fa0453bbd3944eb6558f1b5e244617b2060",
+    "apps/office/src/sw/source/core/frmedt/fetab.ts": "39a8eeea0c0fff31cfd8127804a358dcd9b4a955bc6c2ae92eac9eecfd94ea50",
+    "apps/office/src/sw/source/ui/table/tabledlg.ts": "81e03c4e4182ed875b5534089e0bd671d37e6b188ec082cc7f8a88e31e5dd6fa",
+    "apps/office/src/sw/source/uibase/shells/tabsh.ts": "8eb02eea022e62ede2ccb92c9e426a3a2f116b083b4ca05117b6d2051be710aa",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx": "58303840d60eac4da68c377c282356460e6842803181ec707f05b1d32918f5d9",
+    "apps/office/src/sw/browser/presentation/writer-view.tsx": "177fee2fe443e5959dff8a156806db3d5af874b17d3cd8879b3e9f3dadfa3a61",
+    "apps/office/src/sw/source/ui/table/native-table-text-flow-headline.test.ts": "f4413e2be36fed8beaedeb51c36b8e08edf92093fa2c3de990c0a4ae5641419d",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.test.tsx": "8bf324c3126b64460015aafe30ced37d906ce5c5c40aa3c808f6284974d8ab95",
+    "apps/office/src/sw/browser/presentation/native-table-properties-reset.test.tsx": "058073cae9fab172810f6257464ffb6cfde9951e24c690242752ed1b2c2844c6",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-properties.test.ts": "6a10a652dd66096d012192dad3f0ab1a6db5aaaf8eb810a745bcb293bf040b24",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-text-flow-headline-history.test.ts": "098f512b4044cf201b230443a821e31695183c3967ca560719fc8f3350ee670f",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-format-lifecycle-history.test.ts": "514b4f6f395d0781a0a31e5262491e7a36285e58b5e7c2096a50c508a5ffaf43",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-properties-reset-history.test.ts": "bde3ac4f893b3094ce0d51b35a863060971a44a0aa45543f4a38132f7a1b9258",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-column-page-history.test.ts": "55662dcf5d713c4c41ca4c07e18efc71d9cb9cb154b617a815926215580801a8",
+    "apps/office/src/sw/source/ui/table/native-table-text-flow-split.test.ts": "ff00259ceb49659228e32867897dee3b7b6c6b4279ca26cfb4a877af7f800c5b",
+    "apps/office/src/sw/browser/presentation/native-table-text-flow-split.test.tsx": "1780515bee14cf440f99bc4ec9820bf6b8773ab9bfe339633bdeab60eb65eccd",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-text-flow-split-history.test.ts": "fe4d014c93f15a2991095df1ed5779d80a13f1eb7d76385d1bb67b29ef1e93a9",
+    "apps/office/e2e/writer-native-table-text-flow-split.spec.ts": "415f3a1cea862bf32627cedbfe2917118bcb79b9d55b8c8676fe524f6379a96b",
+    "docs/program/source-provenance.json": "fb052e43f0d1032a84e343bee5e3ca0c1987774c5b7ff300cbfba7540bf4898c",
+    "docs/program/parity/runtime-inventory.json": "0f1fdcd7323b72a6b48f873a1982e9bcfdaa719cf893a28e7b7a7387fb1f1419"
+  },
+  "records": [
+    {
+      "kind": "inventory",
+      "command": "npm run test:inventory:coverage -- scripts/libreoffice-inventory/parity-mapping-cli.test.ts -t composes the Writer mapping report with owned upstream marker evidence --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/NHEGKZ.inventory-closure1-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 5248,
+      "sha256": "965fc8a0d82d9e7549d66a5fa123c26752c3a37fc8f10b0854e29ce3ba5fb5db",
+      "totals": [
+        "Test Files  1 passed (1)",
+        "Tests  1 passed | 2 skipped (3)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "passed": 1,
+        "failed": 0,
+        "skipped": 2,
+        "total": 3
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 1464,
+          "covered": 433,
+          "skipped": 0,
+          "pct": 29.57
+        },
+        "statements": {
+          "total": 1523,
+          "covered": 439,
+          "skipped": 0,
+          "pct": 28.82
+        },
+        "functions": {
+          "total": 384,
+          "covered": 120,
+          "skipped": 0,
+          "pct": 31.25
+        },
+        "branches": {
+          "total": 1080,
+          "covered": 401,
+          "skipped": 0,
+          "pct": 37.12
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "coverage": {
+        "lines": 29.57,
+        "statements": 28.82,
+        "functions": 31.25,
+        "branches": 37.12
+      },
+      "incompleteFileCount": 38,
+      "coverageMapSHA256": "9833d177acc987e538922b7a9ac58444e14932015db94355da5e5ff1aba437e3"
+    }
+  ],
+  "scope": "Only one originally failed inventory path-order case; metadata-only new record ordering correction, no production/build/app/browser/full/historical passing replay"
+}

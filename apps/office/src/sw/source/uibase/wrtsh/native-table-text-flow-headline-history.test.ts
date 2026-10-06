@@ -75,7 +75,7 @@ for (const original of [0, 2]) {
         verticalAlign: "top",
         headerRows: accepted,
         repeatHeaderRows: accepted > 0,
-        dontSplit: false,
+        rowSplit: true,
       }),
     ).toBe(true);
     expect(doc.GetUndoManager().GetUndoActionCount()).toBe(1);

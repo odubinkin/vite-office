@@ -1,28 +1,46 @@
 /** @fileoverview Native absolute Writer format/column and represented Text Flow headline page state from pinned tabledlg.cxx. */
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
-import type { SwTable } from "../../core/table/swtable";
+import type { SwTable, SwTableBox } from "../../core/table/swtable";
+import { GetSwRowSplit } from "../../core/docnode/ndtbl1";
 import { SwTableRep } from "../../uibase/table/swtablerep";
 
 /** Native table-manager automatic width sentinel, INVALID_TWIPS/LONG_MAX. */
 const lAutoWidth = Number(0x7fffffffffffffffn);
 
-/** Owns the represented native Text Flow headline widgets and original FN_PARAM_TABLE_HEADLINE input. */
+/** Changed represented native Text Flow items from the original dialog input. */
+export interface SwTextFlowItems {
+  readonly headerRows?: number;
+  readonly layoutSplit?: boolean;
+  readonly rowSplit?: boolean;
+}
+
+/** Owns represented native Text Flow widgets and saved original items. */
 export class SwTextFlowPage {
   private readonly originalHeadline: number;
   private headline = false;
   private headerRows = 1;
   private savedHeadline = false;
   private savedHeaderRows = 1;
+  private readonly originalSplit: boolean;
+  private readonly originalRowSplit: boolean | undefined;
+  private split = true;
+  private savedSplit = true;
+  private rowSplit: boolean | undefined;
+  private savedRowSplit: boolean | undefined;
 
-  /** Captures the canonical initial headline item. @param table - Original table owner. @returns Nothing. */
-  public constructor(table: SwTable) {
+  /** Captures canonical initial items. @param table - Original table owner. @param selectedBoxes - Original selected cells or whole table input. @returns Nothing. */
+  public constructor(table: SwTable, selectedBoxes?: readonly SwTableBox[]) {
     this.originalHeadline = table.GetRowsToRepeat();
+    this.originalSplit = table.GetFormat().layoutSplit ?? true;
+    this.originalRowSplit = GetSwRowSplit(table, selectedBoxes);
     this.Reset();
   }
   /** Restores source checkbox/count widgets and their saved values. @returns Nothing. */
   public Reset(): void {
     this.headline = this.savedHeadline = this.originalHeadline > 0;
     this.headerRows = this.savedHeaderRows = Math.max(1, Math.min(100, this.originalHeadline));
+    this.split = this.savedSplit = this.originalSplit;
+    this.rowSplit = this.savedRowSplit = this.originalRowSplit;
   }
   /** Reads the native Repeat header checkbox. @returns Checked state. */
   public IsHeadline(): boolean {
@@ -44,15 +62,39 @@ export class SwTextFlowPage {
   public ValueChangedHdl(value: number): void {
     this.headerRows = Math.max(1, Math.min(100, Math.round(value)));
   }
-  /** Emits FN_PARAM_TABLE_HEADLINE only when its saved widgets changed. @returns Changed native item or no publication. */
-  public FillItemSet(): number | undefined {
-    if (this.headline === this.savedHeadline && this.headerRows === this.savedHeaderRows)
-      return undefined;
-    return this.headline ? this.headerRows : 0;
+  /** Emits native headline/table/row items only when saved widget values changed. @returns Changed represented native items. */
+  public FillItemSet(): SwTextFlowItems {
+    return {
+      ...(this.headline === this.savedHeadline && this.headerRows === this.savedHeaderRows
+        ? {}
+        : { headerRows: this.headline ? this.headerRows : 0 }),
+      ...(this.split === this.savedSplit ? {} : { layoutSplit: this.split }),
+      ...(this.rowSplit === this.savedRowSplit ? {} : { rowSplit: this.rowSplit === true }),
+    };
   }
   /** Resolves the current item over the original native input set. @returns Accepted headline count. */
   public GetRowsToRepeat(): number {
-    return this.FillItemSet() ?? this.originalHeadline;
+    return this.FillItemSet().headerRows ?? this.originalHeadline;
+  }
+  /** Reads the native table split checkbox. @returns Checked value. */
+  public IsSplit(): boolean {
+    return this.split;
+  }
+  /** Reads native row tristate without coercing mixed input. @returns True/false or indeterminate. */
+  public GetRowSplitState(): boolean | undefined {
+    return this.rowSplit;
+  }
+  /** Reads the source child sensitivity. @returns Whether row splitting is editable. */
+  public IsRowSplitSensitive(): boolean {
+    return this.split;
+  }
+  /** Dispatches native parent toggling without clearing the child. @param checked - Table split value. @returns Nothing. */
+  public SplitHdl_Impl(checked: boolean): void {
+    this.split = checked;
+  }
+  /** Admits an explicit native row checkbox value. @param checked - Row split value. @returns Nothing. */
+  public SetRowSplitState(checked: boolean): void {
+    this.rowSplit = checked;
   }
 }
 

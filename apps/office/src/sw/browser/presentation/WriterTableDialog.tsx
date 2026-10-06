@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { WriterInsertTableDialog } from "./WriterInsertTableDialog";
-import type { SwTable } from "../../source/core/table/swtable";
+import type { SwTable, SwTableBox } from "../../source/core/table/swtable";
 import type { SwTableProperties } from "../../source/uibase/shells/tabsh";
 import {
   SwFormatTablePage,
@@ -16,12 +16,15 @@ export interface WriterTableDialogValue extends SwTableProperties {
   readonly name: string;
   readonly rows: number;
   readonly columns: number;
+  /** Native insertion-only option, independent of properties changed-item flags. */
+  readonly dontSplit?: boolean;
 }
 
 /** Selects insertion or properties presentation without sharing their native drafts. @param props - Dialog selection. @returns Selected dialog. */
 export function WriterTableDialog(
   props: Readonly<{
     table?: SwTable;
+    selectedBoxes?: readonly SwTableBox[];
     lineSelected?: boolean;
     suggestedName?: string;
     occupiedNames?: readonly string[];
@@ -40,12 +43,14 @@ export function WriterTableDialog(
 /** Presents native table properties. @param props - Original table and handlers. @returns Properties dialog. */
 function WriterTablePropertiesDialog({
   table,
+  selectedBoxes,
   availableWidth,
   lineSelected = false,
   onCancel,
   onSubmit,
 }: Readonly<{
   table: SwTable;
+  selectedBoxes?: readonly SwTableBox[];
   lineSelected?: boolean;
   availableWidth: number;
   onCancel: () => void;
@@ -67,7 +72,7 @@ function WriterTablePropertiesDialog({
   );
   const [textFlowPage] = useState(
     /** Captures the native initial headline item once per dialog. @returns Native Text Flow headline owner. */
-    () => new SwTextFlowPage(table),
+    () => new SwTextFlowPage(table, selectedBoxes),
   );
   const [, refreshPage] = useState(0);
   const width = formatPage.GetFieldValue("width");
@@ -79,7 +84,6 @@ function WriterTablePropertiesDialog({
       padding: rows[0]?.GetTabBoxes()[0]?.GetFormat().padding ?? 100,
       border: rows[0]?.GetTabBoxes()[0]?.GetFormat().border ?? "0.5pt solid #666666",
       verticalAlign: rows[0]?.GetTabBoxes()[0]?.GetFormat().verticalAlign ?? "top",
-      dontSplit: rows[0]?.GetFormat().keepTogether ?? false,
     }),
   );
   const [minRowHeight, setMinRowHeight] = useState(initial.minRowHeight);
@@ -92,7 +96,6 @@ function WriterTablePropertiesDialog({
   const [activeTab, setActiveTab] = useState<"table" | "columns" | "text-flow" | "borders">(
     "table",
   );
-  const [dontSplit, setDontSplit] = useState(initial.dontSplit);
   const toCm =
     /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ (
       twips: number,
@@ -187,7 +190,7 @@ function WriterTablePropertiesDialog({
               verticalAlign,
               headerRows: textFlowPage.GetRowsToRepeat(),
               repeatHeaderRows: textFlowPage.GetRowsToRepeat() > 0,
-              dontSplit,
+              ...textFlowPage.FillItemSet(),
             });
           }
         }
@@ -470,15 +473,55 @@ function WriterTablePropertiesDialog({
                 {field("Minimum row height (cm)", minRowHeight, setMinRowHeight)}
                 <label className="flex items-center gap-2 text-sm">
                   <input
-                    checked={dontSplit}
+                    checked={textFlowPage.IsSplit()}
                     onChange={
-                      /** Toggles table splitting. @param event - Checkbox event. @returns Nothing. */ (
+                      /** Dispatches native table split and child sensitivity. @param event - Checkbox event. @returns Nothing. */ (
                         event,
-                      ) => setDontSplit(event.target.checked)
+                      ) => {
+                        textFlowPage.SplitHdl_Impl(event.target.checked);
+                        refreshPage(
+                          /** Renders native widget state. @param version - Current version. @returns Next version. */ (
+                            version,
+                          ) => version + 1,
+                        );
+                      }
                     }
                     type="checkbox"
                   />
-                  Don’t split table over pages
+                  Allow table to split across pages and columns
+                </label>
+                <label className="ml-4 flex items-center gap-2 text-sm">
+                  <input
+                    checked={textFlowPage.GetRowSplitState() === true}
+                    aria-checked={
+                      textFlowPage.GetRowSplitState() === undefined
+                        ? "mixed"
+                        : textFlowPage.GetRowSplitState()
+                    }
+                    disabled={!textFlowPage.IsRowSplitSensitive()}
+                    ref={
+                      /** Presents the native mixed state on the browser checkbox. @param element - Mounted native widget. @returns Nothing. */ (
+                        element,
+                      ) => {
+                        if (element !== null)
+                          element.indeterminate = textFlowPage.GetRowSplitState() === undefined;
+                      }
+                    }
+                    onChange={
+                      /** Dispatches an explicit native row item. @param event - Checkbox event. @returns Nothing. */ (
+                        event,
+                      ) => {
+                        textFlowPage.SetRowSplitState(event.target.checked);
+                        refreshPage(
+                          /** Renders the changed native row widget. @param version - Current version. @returns Next version. */ (
+                            version,
+                          ) => version + 1,
+                        );
+                      }
+                    }
+                    type="checkbox"
+                  />
+                  Allow row to break across pages and columns
                 </label>
                 <label className="grid gap-1 text-sm">
                   Vertical alignment
@@ -538,7 +581,6 @@ function WriterTablePropertiesDialog({
                 else if (activeTab === "columns") columnPage.Reset();
                 else if (activeTab === "text-flow") {
                   textFlowPage.Reset();
-                  setDontSplit(initial.dontSplit);
                   setMinRowHeight(initial.minRowHeight);
                   setVerticalAlign(initial.verticalAlign);
                 } else {

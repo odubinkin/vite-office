@@ -87,7 +87,7 @@ it.each(["cursor", "row", "table"])(
         verticalAlign: "top",
         headerRows: 0,
         repeatHeaderRows: false,
-        dontSplit: false,
+        rowSplit: true,
       }),
     ).toBe(true);
     expect(f.table.GetColumnWidths()).toEqual([2500, 1500, 2000]);
@@ -136,7 +136,7 @@ it("native adapt/proportional page width applies one history without rebuilding 
     verticalAlign: "top",
     headerRows: 0,
     repeatHeaderRows: false,
-    dontSplit: false,
+    rowSplit: true,
   });
   expect(f.table.GetFormat().width).toBe(7000);
   expect(f.table.GetColumnWidths()).toEqual([3000, 2000, 2000]);

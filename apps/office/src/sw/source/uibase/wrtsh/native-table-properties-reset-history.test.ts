@@ -71,7 +71,7 @@ function accept(f: ReturnType<typeof fixture>): boolean {
     verticalAlign: "top",
     headerRows: 0,
     repeatHeaderRows: false,
-    dontSplit: false,
+    rowSplit: true,
   });
 }
 for (const page of ["table", "columns"] as const) {

@@ -25,7 +25,7 @@ it.each([
     expect(f.page.IsHeadline()).toBe(false);
     expect(f.page.IsSensitive()).toBe(false);
     expect(f.page.GetHeaderRows()).toBe(1);
-    expect(f.page.FillItemSet()).toBeUndefined();
+    expect(f.page.FillItemSet()).toEqual({});
     expect(f.page.GetRowsToRepeat()).toBe(0);
     expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(0);
   },
@@ -34,25 +34,25 @@ it("native headline checkbox/count retain widgets while source Fill publishes ze
   const f = fixture({ headerRows: 2, repeatHeaderRows: true });
   expect(f.page.IsHeadline()).toBe(true);
   expect(f.page.GetHeaderRows()).toBe(2);
-  expect(f.page.FillItemSet()).toBeUndefined();
+  expect(f.page.FillItemSet()).toEqual({});
   f.page.HeadLineCBClickHdl(false);
   expect(f.page.IsSensitive()).toBe(false);
-  expect(f.page.FillItemSet()).toBe(0);
+  expect(f.page.FillItemSet()).toEqual({ headerRows: 0 });
   expect(f.page.GetHeaderRows()).toBe(2);
   f.page.HeadLineCBClickHdl(true);
-  expect(f.page.FillItemSet()).toBeUndefined();
+  expect(f.page.FillItemSet()).toEqual({});
   f.page.ValueChangedHdl(3);
-  expect(f.page.FillItemSet()).toBe(3);
+  expect(f.page.FillItemSet()).toEqual({ headerRows: 3 });
   expect(f.table.GetRowsToRepeat()).toBe(2);
   f.page.HeadLineCBClickHdl(false);
-  expect(f.page.FillItemSet()).toBe(0);
+  expect(f.page.FillItemSet()).toEqual({ headerRows: 0 });
   f.page.Reset();
   expect([f.page.IsHeadline(), f.page.GetHeaderRows(), f.page.GetRowsToRepeat()]).toEqual([
     true,
     2,
     2,
   ]);
-  expect(f.page.FillItemSet()).toBeUndefined();
+  expect(f.page.FillItemSet()).toEqual({});
 });
 it("native headline field has source integer1..100 range independent of physical rows", /** Checks source .ui bounds without browser table-count validation. @returns Nothing. */ () => {
   const f = fixture();
@@ -66,7 +66,7 @@ it("native headline field has source integer1..100 range independent of physical
   ] as const) {
     f.page.ValueChangedHdl(value);
     expect(f.page.GetHeaderRows()).toBe(expected);
-    expect(f.page.FillItemSet()).toBe(expected);
+    expect(f.page.FillItemSet()).toEqual({ headerRows: expected });
   }
   f.page.HeadLineCBClickHdl(false);
   expect(f.page.GetRowsToRepeat()).toBe(0);
@@ -76,15 +76,15 @@ it("native headline field has source integer1..100 range independent of physical
     1,
     0,
   ]);
-  expect(f.page.FillItemSet()).toBeUndefined();
+  expect(f.page.FillItemSet()).toEqual({});
 });
 it("native unchanged bounded headline widgets preserve the original inherited item", /** Checks no accidental source count publication on Reset. @returns Nothing. */ () => {
   const f = fixture({ headerRows: 120, repeatHeaderRows: true }, 150);
   expect(f.page.GetHeaderRows()).toBe(100);
-  expect(f.page.FillItemSet()).toBeUndefined();
+  expect(f.page.FillItemSet()).toEqual({});
   expect(f.page.GetRowsToRepeat()).toBe(120);
   f.page.ValueChangedHdl(99);
-  expect(f.page.FillItemSet()).toBe(99);
+  expect(f.page.FillItemSet()).toEqual({ headerRows: 99 });
   f.page.Reset();
   expect(f.page.GetRowsToRepeat()).toBe(120);
 });

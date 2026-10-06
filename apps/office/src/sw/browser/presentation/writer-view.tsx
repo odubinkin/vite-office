@@ -575,6 +575,9 @@ export function WriterWorkbench({
           {...(tableDialog === "properties" && currentTable !== undefined
             ? { table: currentTable }
             : {})}
+          {...(view.GetWrtShell().IsTableMode()
+            ? { selectedBoxes: view.GetWrtShell().GetTableSel() }
+            : {})}
           lineSelected={
             view.GetWrtShell().IsTableMode() && !view.GetWrtShell().HasWholeTabSelection()
           }
