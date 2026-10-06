@@ -58,6 +58,8 @@ export interface XMLListLevelImportProperties {
 export interface XMLListLevelImport {
   readonly level: number;
   readonly kind: OdfListLevelKind;
+  /** Native sal_Int16 UNO NumberingType, independent of editeng format ownership. */
+  readonly numberingType?: number;
   readonly bulletChar?: string;
   readonly prefix: string;
   readonly suffix: string;

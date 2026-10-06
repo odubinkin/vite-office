@@ -335,6 +335,34 @@ export class SvxNumberFormat extends SvxNumberType {
   public SetPositionAndSpaceMode(mode: SvxNumPositionAndSpaceMode): void {
     this.position = { ...this.position, positionAndSpaceMode: mode };
   }
+  /** Stores the native absLSpace field independently of the active mode. @param value - Native field value. @returns Nothing. */
+  public SetAbsLSpace(value: number): void {
+    this.position = { ...this.position, absLSpace: value | 0 };
+  }
+  /** Stores the native firstLineOffset field independently of the active mode. @param value - Native field value. @returns Nothing. */
+  public SetFirstLineOffset(value: number): void {
+    this.position = { ...this.position, firstLineOffset: value | 0 };
+  }
+  /** Stores the native charTextDistance field independently of the active mode. @param value - Native field value. @returns Nothing. */
+  public SetCharTextDistance(value: number): void {
+    this.position = { ...this.position, charTextDistance: (value << 16) >> 16 };
+  }
+  /** Stores the native firstLineIndent field independently of the active mode. @param value - Native field value. @returns Nothing. */
+  public SetFirstLineIndent(value: number): void {
+    this.position = { ...this.position, firstLineIndent: value };
+  }
+  /** Stores the native indentAt field independently of the active mode. @param value - Native field value. @returns Nothing. */
+  public SetIndentAt(value: number): void {
+    this.position = { ...this.position, indentAt: value };
+  }
+  /** Stores the native labelFollowedBy field independently of the active mode. @param value - Native field value. @returns Nothing. */
+  public SetLabelFollowedBy(value: "listtab" | "nothing" | "space"): void {
+    this.position = { ...this.position, labelFollowedBy: value };
+  }
+  /** Stores the native listTabPosition field independently of the active mode. @param value - Native field value. @returns Nothing. */
+  public SetListtabPos(value: number): void {
+    this.position = { ...this.position, listTabPosition: value };
+  }
   /** Copies raw fields for Writer copy construction and the browser snapshot port, including inactive geometry. @returns Independent property record. */
   public GetPositionProperties(): Required<NumberingPositionProperties> {
     return { ...this.position };

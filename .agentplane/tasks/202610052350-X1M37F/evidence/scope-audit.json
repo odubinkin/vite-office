@@ -1,0 +1,65 @@
+{
+  "base": "ef1edfefc24a8dae63a214875936b87c53760677",
+  "changedSemanticPaths": 14,
+  "productionOwners": 8,
+  "priorTestFiles": 435,
+  "priorTestFilesByteIdentical": 434,
+  "sourceConfirmedExpectedPropertyMigration": [
+    "apps/office/src/xmloff/source/style/xmlnumi.test.ts"
+  ],
+  "existingSemanticRecordsPreserved": 258,
+  "totalSemanticRecords": 258,
+  "allStatesDefaultsClassificationsIOExceptionsPreserved": true,
+  "priorEvidencePreserved": true,
+  "sourceProof": {
+    "apps/office/src/editeng/source/items/numitem.ts": "0804a417a76f62ca53b5d85131e537f1a9121a38c392f352bf6567eb0957d489",
+    "apps/office/src/xmloff/source/core/xmluconv.ts": "4c86cdb46eb6dcf00238c4a6339352858c8520db69ba7c06eb8b012b86f3cdc6",
+    "apps/office/src/xmloff/source/style/xmlnume.ts": "be29228ead655e54a38b2eab482048b9524bcf9a0b3f6b8ae0e5df2244a68bb1",
+    "apps/office/src/xmloff/source/style/xmlnumi.ts": "83a4195fa368016654679d4d52e7df632dea8e43aba0eb67512ba3c4374b2769",
+    "apps/office/src/xmloff/source/text/txtparai.ts": "975905bc6abbed00b813aa565bd65ccf1237605ac81f2a0e9a7ef66e95f5dd83",
+    "apps/office/src/sw/source/core/unocore/unosett.ts": "bc35ebbfc54f066602ed984f19a975a183521a16cbdef990b1620951193fa4c8",
+    "apps/office/src/sw/source/filter/xml/xmlexp.ts": "930e2ee6f517ffaca3f52c0b31f427fcac47513bc57d3387e2687605d926ebac",
+    "apps/office/src/sw/source/filter/xml/xmlimp.ts": "75b0a12ec4d5e3aca237dce6b9c0b655e8f485e6827979a980f6582950a01d99"
+  },
+  "fullProfileCount": 1,
+  "passingTestReplays": 0,
+  "newAppCases": 9,
+  "newChromiumCases": 2,
+  "finalDistinctPassed": {
+    "app": 12597,
+    "inventory": 109,
+    "scripts": 5,
+    "chromium": 147
+  },
+  "nativeSourceHashes": [
+    {
+      "path": "include/editeng/numitem.hxx",
+      "sha256": "bc546dc90e29f28a22093dc567904afa216bf6db644ad83e5e90555434071db3"
+    },
+    {
+      "path": "editeng/source/items/numitem.cxx",
+      "sha256": "7dea30c848259921151ebc59802156e51a695416f60f3d2b013ea44f84b8edb5"
+    },
+    {
+      "path": "offapi/com/sun/star/style/NumberingType.idl",
+      "sha256": "d6700269e1e6d8c3007743b5ec2d5b9f83b4295b561c4cd85c39472426a43dd9"
+    },
+    {
+      "path": "xmloff/source/core/xmluconv.cxx",
+      "sha256": "3320f4d4b986a489171c18eba624590b8b9f2a5999e5e5859ffd6359e3ca5f3b"
+    },
+    {
+      "path": "xmloff/source/style/xmlnume.cxx",
+      "sha256": "8606376ea6a2e4378a69122f886719632c6c391bc26c98b477b2cdc35e5f286c"
+    },
+    {
+      "path": "xmloff/source/style/xmlnumi.cxx",
+      "sha256": "0d3dc7ad575d5686ca47be2004bb8db553a233863f5f2c84561258adba6fa7e1"
+    },
+    {
+      "path": "sw/source/core/unocore/unosett.cxx",
+      "sha256": "a94596e54298e0c9d1191791cb4e98d30996d3c61ec547b677d25ed03ef2134b"
+    }
+  ],
+  "validationLimit": "Represented numeric NONE XML/UNO native ownership, copy/setter application, ODT reopening, list context and history only. Letters/Roman/custom/bitmap/full native UNO/XML/framework/layout/core/UI/list/table parity remains unverified. Conscious IO deviations unchanged;parent DOING and goal ACTIVE."
+}

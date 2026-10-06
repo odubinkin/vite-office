@@ -394,7 +394,7 @@ class SwXMLImport
         const previous = existing.Get(level),
           applied = imported.Get(level);
         if (
-          getWriterNumFormatKind(previous) !== getWriterNumFormatKind(applied) ||
+          previous.GetNumberingType() !== applied.GetNumberingType() ||
           JSON.stringify(previous.GetMarkerProperties()) !==
             JSON.stringify(applied.GetMarkerProperties()) ||
           (getWriterNumFormatKind(applied) === "bullet" &&

@@ -1,0 +1,43 @@
+[
+  {
+    "command": "npm exec -- prettier --check apps/office/src/editeng/source/items/numitem.ts apps/office/src/xmloff/source/core/xmluconv.ts apps/office/src/xmloff/source/style/xmlnume.ts apps/office/src/xmloff/source/style/xmlnumi.ts apps/office/src/xmloff/source/text/txtparai.ts apps/office/src/sw/source/core/unocore/unosett.ts apps/office/src/sw/source/filter/xml/xmlexp.ts apps/office/src/sw/source/filter/xml/xmlimp.ts apps/office/src/xmloff/source/style/xmlnumi.test.ts apps/office/src/sw/source/filter/xml/native-none-numbering.test.ts apps/office/src/sw/browser/editor/native-none-numbering.test.tsx apps/office/e2e/writer-native-none-numbering.spec.ts",
+    "exit": 0,
+    "bytes": 66,
+    "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+  },
+  {
+    "command": "npm exec -- eslint apps/office/src/editeng/source/items/numitem.ts apps/office/src/xmloff/source/core/xmluconv.ts apps/office/src/xmloff/source/style/xmlnume.ts apps/office/src/xmloff/source/style/xmlnumi.ts apps/office/src/xmloff/source/text/txtparai.ts apps/office/src/sw/source/core/unocore/unosett.ts apps/office/src/sw/source/filter/xml/xmlexp.ts apps/office/src/sw/source/filter/xml/xmlimp.ts apps/office/src/xmloff/source/style/xmlnumi.test.ts apps/office/src/sw/source/filter/xml/native-none-numbering.test.ts apps/office/src/sw/browser/editor/native-none-numbering.test.tsx apps/office/e2e/writer-native-none-numbering.spec.ts --max-warnings=0",
+    "exit": 0,
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "command": "inline repository JSDoc validator over changed files",
+    "exit": 0,
+    "errorCount": 0
+  },
+  {
+    "command": "inline TypeScript diagnostics over changed files using actual app tsconfig",
+    "exit": 0,
+    "errorCount": 0,
+    "codes": []
+  },
+  {
+    "command": "changed-file unchanged1000-line source limit",
+    "exit": 0,
+    "counts": {
+      "apps/office/src/editeng/source/items/numitem.ts": 373,
+      "apps/office/src/xmloff/source/core/xmluconv.ts": 51,
+      "apps/office/src/xmloff/source/style/xmlnume.ts": 76,
+      "apps/office/src/xmloff/source/style/xmlnumi.ts": 270,
+      "apps/office/src/xmloff/source/text/txtparai.ts": 601,
+      "apps/office/src/sw/source/core/unocore/unosett.ts": 123,
+      "apps/office/src/sw/source/filter/xml/xmlexp.ts": 728,
+      "apps/office/src/sw/source/filter/xml/xmlimp.ts": 921,
+      "apps/office/src/xmloff/source/style/xmlnumi.test.ts": 254,
+      "apps/office/src/sw/source/filter/xml/native-none-numbering.test.ts": 248,
+      "apps/office/src/sw/browser/editor/native-none-numbering.test.tsx": 134,
+      "apps/office/e2e/writer-native-none-numbering.spec.ts": 97
+    }
+  }
+]

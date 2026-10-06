@@ -414,6 +414,7 @@ function projectNumberingRule(rule: SwNumRule): XMLTextListRuleSource {
         return {
           ...numberingPositionToMM100(format.GetPositionProperties()),
           kind: getWriterNumFormatKind(format),
+          numberingType: format.GetNumberingType(),
           bulletChar: getWriterNumFormatBullet(format),
           prefix: format.GetPrefix(),
           suffix: format.GetSuffix(),

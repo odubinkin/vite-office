@@ -5,6 +5,8 @@ import { SvXMLUnitConverter } from "../core/xmluconv";
 /** Native-style UNO properties for one supported numbering level at the XML export boundary. */
 export interface XMLListLevelExport extends OdfListLevelLayout {
   readonly kind: "bullet" | "numbered";
+  /** Native sal_Int16 UNO NumberingType: ARABIC=4, NUMBER_NONE=5, CHAR_SPECIAL=6. */
+  readonly numberingType?: number;
   readonly bulletChar?: string;
   readonly prefix?: string;
   readonly suffix?: string;
@@ -19,24 +21,24 @@ export class SvxXMLNumRuleExport {
   /** Exports one native numbering property sequence. @param level - Zero-based level. @param properties - Level properties. @returns Standard ODF 1.3 XML. */
   public exportLevelStyle(level: number, properties: XMLListLevelExport): string {
     const attributes = [`text:level="${level + 1}"`];
+    const type = properties.numberingType ?? (properties.kind === "bullet" ? 6 : 4);
     if (properties.prefix)
       attributes.push(`style:num-prefix="${this.escapeValue(properties.prefix)}"`);
     if (properties.suffix)
       attributes.push(`style:num-suffix="${this.escapeValue(properties.suffix)}"`);
-    const element =
-      properties.kind === "bullet"
-        ? "text:list-level-style-bullet"
-        : "text:list-level-style-number";
-    if (properties.kind === "bullet") {
+    const element = type === 6 ? "text:list-level-style-bullet" : "text:list-level-style-number";
+    if (type === 6) {
       let bullet = properties.bulletChar ?? "\uF095";
       if (bullet.length !== 0 && (bullet.codePointAt(0) as number) < 32) bullet = "\uF095";
       attributes.push(`text:bullet-char="${this.escapeValue(bullet)}"`);
     } else {
-      attributes.push('style:num-format="1"');
+      attributes.push(
+        `style:num-format="${new SvXMLUnitConverter("mm100").convertNumFormat(type)}"`,
+      );
       const start = properties.startWith ?? 1;
       if (start !== 1) attributes.push(`text:start-value="${start}"`);
       const display = Math.min(properties.parentNumbering ?? 1, level + 1);
-      if (display > 1) attributes.push(`text:display-levels="${display}"`);
+      if (display > 1 && type !== 5) attributes.push(`text:display-levels="${display}"`);
     }
     return `<${element} ${attributes.join(" ")}>${exportListLevelLayout(properties)}</${element}>`;
   }

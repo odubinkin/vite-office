@@ -126,8 +126,11 @@ export class SvxXMLListLevelStyleContext_Impl extends SvXMLImportContext {
   }
   /** Assembles the supported native property sequence only when the owning rule reads it. @returns Declaration and both MM100 geometry groups. */
   public GetProperties(): XMLListLevelImport {
-    if (this.kind === "numbered" && this.format !== "1")
-      throw new Error(`Unsupported ODF numbering format: ${this.format}`);
+    const type = {
+      value: this.kind === "bullet" ? 6 : 4,
+    };
+    if (this.kind === "numbered")
+      new SvXMLUnitConverter("mm100").convertNumFormat(type, this.format, true);
     if (this.listFormat === undefined) {
       this.listFormat = this.prefix;
       const display = Math.min(this.parentNumbering, this.level + 1);
@@ -141,6 +144,7 @@ export class SvxXMLListLevelStyleContext_Impl extends SvXMLImportContext {
     return {
       level: this.level,
       kind: this.kind,
+      numberingType: type.value,
       ...(this.kind === "bullet" ? { bulletChar: this.bulletChar } : {}),
       prefix: this.prefix,
       suffix: this.suffix,

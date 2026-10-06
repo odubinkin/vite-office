@@ -7,6 +7,29 @@ export class SvXMLUnitConverter {
   /** Captures the owning import's core measurement unit. @param coreUnit - Core unit. @returns Nothing. */
   public constructor(private readonly coreUnit: CoreMeasureUnit) {}
 
+  /** Exports a represented native numbering type. @param type - Native type. @returns XML format. */
+  public convertNumFormat(type: number): string;
+  /** Imports a represented XML numbering format with native NONE permission. @param type - Output native type. @param format - XML format. @param numberNone - Permit NUMBER_NONE. @returns Conversion success. */
+  public convertNumFormat(type: { value: number }, format: string, numberNone?: boolean): boolean;
+  /** Converts the represented ARABIC/NONE subset without inventing unsupported families. @param type - Native type or output reference. @param format - Import format. @param numberNone - Permit empty import. @returns Format or conversion success. */
+  public convertNumFormat(
+    type: number | { value: number },
+    format?: string,
+    numberNone = false,
+  ): string | boolean {
+    if (typeof type === "number") {
+      if (type === 4) return "1";
+      if (type === 5) return "";
+      throw new Error(`Unsupported ODF numbering type: ${type}`);
+    }
+    if (format === "") {
+      if (!numberNone) return false;
+      type.value = 5;
+    } else if (format === "1") type.value = 4;
+    else throw new Error(`Unsupported ODF numbering format: ${format}`);
+    return true;
+  }
+
   /** Serializes through the configured native core unit to the supported CM XML unit. @param value - Core integer. @returns XML centimetre measure. */
   public convertMeasureToXML(value: number): string {
     return Converter.convertMeasureToXML(value, this.coreUnit);

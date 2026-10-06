@@ -1,5 +1,5 @@
 /** @fileoverview Owns supported numbering position property conversion from pinned SwXNumberingRules in unosett.cxx. */
-import { createWriterNumFormat, getWriterNumFormatBullet, type SwNumRule } from "../doc/number";
+import { SwNumFormat, SvxNumType, type SwNumRule } from "../doc/number";
 
 import type { NumberingPositionProperties } from "../../../../editeng/source/items/numitem";
 
@@ -60,6 +60,7 @@ export class NumberingRulePropertyError extends Error {}
 /** Supported UNO numbering property sequence in native MM100. */
 export interface WriterNumberingRuleProperties extends NumberingPositionProperties {
   readonly kind: "bullet" | "numbered";
+  readonly numberingType?: SvxNumType;
   readonly bulletChar?: string;
   readonly suffix: string;
   readonly prefix?: string;
@@ -84,22 +85,29 @@ export class SwXNumberingRules {
     properties: WriterNumberingRuleProperties,
     level: number,
   ): void {
-    const previous = rule.Get(level).clone();
+    const applied = new SwNumFormat(rule.Get(level));
     const converted = numberingPositionToTwips(properties);
-    if ((properties.charTextDistance ?? 0) < 0 || (converted.listTabPosition ?? 0) < 0)
-      throw new NumberingRulePropertyError("Invalid numbering position property.");
-    const applied = createWriterNumFormat(
-      properties.kind,
-      properties.bulletChar ?? getWriterNumFormatBullet(previous),
-      {
-        ...previous.GetPositionProperties(),
-        ...converted,
-        bulletFont: previous.GetBulletFont()?.GetFamilyName() ?? "",
-        ...previous.GetMarkerProperties(),
-      },
-    );
-    applied.SetBulletFont(previous.GetBulletFont());
-    applied.SetShowSymbol(previous.IsShowSymbol());
+    const type =
+      properties.numberingType ??
+      (properties.kind === "bullet" ? SvxNumType.SVX_NUM_CHAR_SPECIAL : SvxNumType.SVX_NUM_ARABIC);
+    if ((properties.charTextDistance ?? 0) < 0 || (converted.listTabPosition ?? 0) < 0 || type < 0)
+      throw new NumberingRulePropertyError("Invalid numbering property.");
+    applied.SetNumberingType(type);
+    if (properties.bulletChar !== undefined)
+      applied.SetBulletChar(properties.bulletChar.codePointAt(0) ?? 0);
+    if (converted.absLSpace !== undefined) applied.SetAbsLSpace(converted.absLSpace);
+    if (converted.firstLineOffset !== undefined)
+      applied.SetFirstLineOffset(converted.firstLineOffset);
+    if (converted.charTextDistance !== undefined)
+      applied.SetCharTextDistance(converted.charTextDistance);
+    if (converted.firstLineIndent !== undefined)
+      applied.SetFirstLineIndent(converted.firstLineIndent);
+    if (converted.indentAt !== undefined) applied.SetIndentAt(converted.indentAt);
+    if (converted.labelFollowedBy !== undefined)
+      applied.SetLabelFollowedBy(converted.labelFollowedBy);
+    if (converted.listTabPosition !== undefined) applied.SetListtabPos(converted.listTabPosition);
+    if (converted.positionAndSpaceMode !== undefined)
+      applied.SetPositionAndSpaceMode(converted.positionAndSpaceMode);
     if (properties.prefix !== undefined) applied.SetPrefix(properties.prefix);
     applied.SetSuffix(properties.suffix);
     if (properties.startWith !== undefined) applied.SetStart(properties.startWith);

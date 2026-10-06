@@ -207,6 +207,7 @@ it("owns source-created leaf references and reads them only at list publication"
       {
         level: 0,
         kind: "numbered",
+        numberingType: 4,
         prefix: "",
         suffix: "",
         startWith: 1,
@@ -229,6 +230,7 @@ it("owns source-created leaf references and reads them only at list publication"
       {
         level: 0,
         kind: "bullet",
+        numberingType: 6,
         bulletChar: "",
         prefix: "",
         suffix: "",
