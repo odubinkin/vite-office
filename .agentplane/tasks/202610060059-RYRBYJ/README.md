@@ -4,7 +4,7 @@ title: "Restore document label ruler drag admission and native cursor ownership"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -23,6 +23,22 @@ verification:
   updated_by: null
   note: null
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-06T01:23:27.665Z"
+  updated_by: "EVALUATOR"
+  note: "Same current agent evaluated exact semantic SHA 1874805e7d9d25af14487df1ee398a60af5adacf; approved bounded native document-label ruler admission and cursor ownership are verified."
+  evaluated_sha: "1874805e7d9d25af14487df1ee398a60af5adacf"
+  blueprint_digest: "b4d6ef3e82866a1989ed1ab96338cd8f27e603fc43e76b386ba96b6a596c9c4d"
+  evidence_refs:
+    - ".agentplane/tasks/202610060059-RYRBYJ/README.md"
+    - ".agentplane/tasks/202610060059-RYRBYJ/quality/20261006-012327665-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610060059-RYRBYJ/quality/20261006-012327665-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610060059-RYRBYJ/quality/20261006-012327665-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610060059-RYRBYJ/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610060059-RYRBYJ/evidence/evaluator-proof.json"
+  findings:
+    - "Exact nine semantic paths, source and counter-map identity, 443 unchanged prior tests and 258 preserved semantic records verified. One full absent profile plus only two original failures and three new cases; final 12644 app,109 inventory,5 scripts,151 Chromium passed, actual 100 percent coverage. All declared static/source/scope/hygiene gates passed. Immediate native label-node clear correctly applies copied items to current paragraph; real cancellation and history verified. No independent reviewer claim or full parity promotion."
 commit: null
 comments:
   -
