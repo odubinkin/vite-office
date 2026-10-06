@@ -1,0 +1,167 @@
+{
+  "iteration": 183,
+  "leaf": "202610061008-88CGE1",
+  "leafState": "DONE",
+  "implementation": "0264126bc5f57c16b0a94884a4722408af1e2d05",
+  "quality": "5ed30a342893",
+  "verificationTail": "adb2fbf27c80",
+  "close": "6514541a866570ca3dd8ed54d3c914581534fcae",
+  "parentState": "DOING",
+  "wholeGoal": "ACTIVE",
+  "fullParity": "UNVERIFIED",
+  "priorFindings": {
+    "characters": 461895,
+    "sha256": "16d1504c6a7d43e6c9be2edf9148f42d4aca396533a58d7c2c91f2b05a48f235"
+  },
+  "updatedFindings": {
+    "characters": 464606,
+    "sha256": "956cac25b9694e871ca210d57ea817f4cab379ef429f475863a486d68f21f5f3",
+    "entirePriorPrefixPreserved": true
+  },
+  "profile": {
+    "fullCount": 1,
+    "upstreamAbsent": true,
+    "vendorRestored": true,
+    "distinctCases": {
+      "application": 12841,
+      "inventory": 109,
+      "scripts": 5,
+      "chromium": 195
+    },
+    "initialFailures": {
+      "application": 3,
+      "chromium": 2
+    },
+    "closedOriginalCases": {
+      "application": 3,
+      "chromium": 2
+    },
+    "partialAppSkips": 2,
+    "partialAppExitReason": "Only global coverage thresholds,0failed cases/runtime errors; partial skips retained",
+    "fullOrPassingReplays": 0,
+    "rebuildsAfterProfile": 0,
+    "coverageTransfers": 0,
+    "coverageMerges": 0,
+    "remainingFailures": [],
+    "runtimeErrors": 0,
+    "flaky": 0
+  },
+  "coverage": {
+    "proof": "Actual initial full-profile maps preserved byte-for-byte. No merge, counter transfer, full/passing replay, or rebuild. Only original failed fixture assertions changed after the profile.",
+    "productionUnchanged": true,
+    "vendorRestored": true,
+    "app": {
+      "coverage": {
+        "lines": {
+          "total": 13785,
+          "covered": 13785,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 15109,
+          "covered": 15109,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3616,
+          "covered": 3616,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 11248,
+          "covered": 11248,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "mapSHA256": "264e7dd8270eb5053b3608f99e57e8a06822ceddb02a5813ee5ea0dee56b0eb3",
+      "rawMaps": 267
+    },
+    "inventory": {
+      "coverage": {
+        "lines": {
+          "total": 1464,
+          "covered": 1464,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 1523,
+          "covered": 1523,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 384,
+          "covered": 384,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 1080,
+          "covered": 1080,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "mapSHA256": "8e6fae6a004c2eb8593e0015a8d25470b9708a1eb914139154c3ffc219cd0def",
+      "rawMaps": 38
+    }
+  },
+  "scope": {
+    "base": "184aeff391048b252dc4a4734f86c479bb8018c7",
+    "oldTestFiles": 479,
+    "byteIdenticalOldTestFiles": 477,
+    "changedOldTests": [
+      "apps/office/src/sw/source/core/undo/native-list-rule-range.test.ts",
+      "scripts/libreoffice-inventory/parity-mapping-cli.test.ts"
+    ],
+    "newAcceptanceFiles": [
+      "apps/office/src/sw/source/core/crsr/native-table-selection-ownership.test.ts",
+      "apps/office/src/sw/browser/editor/native-table-selection-commands.test.tsx",
+      "apps/office/e2e/writer-native-table-selection-commands.spec.ts"
+    ],
+    "priorSemanticModules": 270,
+    "currentSemanticModules": 270,
+    "priorStatesDefaultsClassificationsAndEvidencePreserved": true,
+    "semanticPaths": [
+      "apps/office/src/sw/source/core/crsr/trvltbl.ts",
+      "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+      "apps/office/src/sw/source/uibase/shells/tabsh.ts",
+      "apps/office/src/sw/source/core/frmedt/fetab.ts",
+      "apps/office/src/sw/source/core/edit/ednumber.ts",
+      "scripts/generate-writer-ui-resources.ts",
+      "apps/office/src/sw/uiconfig/swriter/writer-ui.generated.json",
+      "docs/program/source-provenance.json",
+      "docs/program/parity/runtime-inventory.json",
+      "apps/office/src/sw/source/core/crsr/native-table-selection-ownership.test.ts",
+      "apps/office/src/sw/browser/editor/native-table-selection-commands.test.tsx",
+      "apps/office/e2e/writer-native-table-selection-commands.spec.ts",
+      "scripts/libreoffice-inventory/parity-mapping-cli.test.ts",
+      "apps/office/src/sw/source/core/undo/native-list-rule-range.test.ts"
+    ],
+    "failures": []
+  },
+  "closeoutArtifactAudit": {
+    "scope": "Only current leaf quality/exact-review/closeout, no historical census replay",
+    "files": 5,
+    "forbidden": []
+  },
+  "constraints": "Conscious I/O/recovery deviations preserved; no upstream source/helper/Python/raw dumps in AP; no network/subagent/outside access",
+  "remaining": "Complex frame/layout unions, protection, enhanced old-model drag, vertical/RTL/fly/merged/nested/rowspan tables, selection-mode and row-simple state, formulas/redlines/repeated headlines and complete upstream parity remain unverified."
+}
