@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "task_id": "202610060703-VZAQBS",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-06T07:38:18.813Z",
+  "verdict": "pass",
+  "summary": "Corrected same-agent exact-SHA review of a1bd6450c57473ca18aa64ea5a7cffce345d3f98 passes after occurrence-based case census; supersedes the premature prior pass record. Full parity remains unverified.",
+  "evaluated_sha": "a1bd6450c57473ca18aa64ea5a7cffce345d3f98",
+  "blueprint_digest": "22e2748209db6abde87270747e2d34886976a271fe04771cd4c8081c4fa96437",
+  "findings": [
+    "Actual manifests verify12790 app case identities by file/title/occurrence, preserving two old parameterized title collisions;109inventory,5scripts and183Chromium cases passed. No test replay was needed for this counting recovery.",
+    "Native input ownership/source behavior,100%real-counter exact-map coverage, protected264prior semantic records and registered IO deviations satisfy the approved scope."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610060703-VZAQBS/README.md",
+    ".agentplane/tasks/202610060703-VZAQBS/evidence/exact-sha-review.json",
+    ".agentplane/tasks/202610060703-VZAQBS/evidence/final-coverage.json",
+    ".agentplane/tasks/202610060703-VZAQBS/evidence/scope-audit.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Same-agent review is not independent; full autoformat,HTML/LOK,localized/noncanonical naming,selection conversion,insertion command/core/history and complete UI/core parity remain unverified."
+  ]
+}

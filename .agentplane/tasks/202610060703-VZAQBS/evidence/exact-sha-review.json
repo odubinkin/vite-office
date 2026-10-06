@@ -1,0 +1,34 @@
+{
+  "evaluatedSHA": "a1bd6450c57473ca18aa64ea5a7cffce345d3f98",
+  "reviewer": "same current agent in EVALUATOR role; not an independent reviewer",
+  "result": "pass",
+  "distinctCases": {
+    "application": 12790,
+    "inventory": 109,
+    "scripts": 5,
+    "chromium": 183
+  },
+  "countsDerivedFromActualResults": true,
+  "caseIdentity": "file+fullName+occurrence; repeated parameterized titles remain separate real cases",
+  "initialAuditRecovery": {
+    "titleOnlyCount": 12788,
+    "expectedCaseCount": 12790,
+    "twoLegacyTitleCollisions": true,
+    "firstPassReviewSuperseded": "recorded before title-collision audit recovery; latest review uses corrected occurrence identities"
+  },
+  "unchangedProductionSourceHashes": true,
+  "completeExactCoverageMaps": 264,
+  "pinnedSourceHashesChecked": 7,
+  "scopeAndRegisteredDeviationsPreserved": true,
+  "profileRunners": "terminal; upstream restored",
+  "wholeGoal": "ACTIVE",
+  "fullParity": "UNVERIFIED",
+  "findings": [
+    "Native Insert Table owner and represented controls satisfy the approved input contract.",
+    "Source statuses/evidence prefixes remain preserved and new owners are unverified.",
+    "Only original failed Chromium or genuinely new app case was rerun; skipped5remain skipped.",
+    "Corrected only new selector/header-tag assertions, retaining33-cell literals.",
+    "Full native insertion, autoformat, HTML/LOK, localized/noncanonical naming and complete UI/core parity remain unverified."
+  ],
+  "failures": []
+}

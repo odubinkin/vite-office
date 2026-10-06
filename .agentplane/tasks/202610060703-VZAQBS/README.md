@@ -4,7 +4,7 @@ title: "Restore native Insert Table dialog ownership and input behavior"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -25,6 +25,25 @@ verification:
   updated_by: null
   note: null
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-06T07:38:18.813Z"
+  updated_by: "EVALUATOR"
+  note: "Corrected same-agent exact-SHA review of a1bd6450c57473ca18aa64ea5a7cffce345d3f98 passes after occurrence-based case census; supersedes the premature prior pass record. Full parity remains unverified."
+  evaluated_sha: "a1bd6450c57473ca18aa64ea5a7cffce345d3f98"
+  blueprint_digest: "22e2748209db6abde87270747e2d34886976a271fe04771cd4c8081c4fa96437"
+  evidence_refs:
+    - ".agentplane/tasks/202610060703-VZAQBS/README.md"
+    - ".agentplane/tasks/202610060703-VZAQBS/quality/20261006-073818813-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610060703-VZAQBS/quality/20261006-073818813-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610060703-VZAQBS/quality/20261006-073818813-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610060703-VZAQBS/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610060703-VZAQBS/evidence/exact-sha-review.json"
+    - ".agentplane/tasks/202610060703-VZAQBS/evidence/final-coverage.json"
+    - ".agentplane/tasks/202610060703-VZAQBS/evidence/scope-audit.json"
+  findings:
+    - "Actual manifests verify12790 app case identities by file/title/occurrence, preserving two old parameterized title collisions;109inventory,5scripts and183Chromium cases passed. No test replay was needed for this counting recovery."
+    - "Native input ownership/source behavior,100%real-counter exact-map coverage, protected264prior semantic records and registered IO deviations satisfy the approved scope."
 commit: null
 comments:
   -
@@ -39,7 +58,7 @@ events:
     to: "DOING"
     note: "Start: Implement the approved native Insert Table dialog leaf under standing iterative UI parity authorization; preserve registered IO deviations and run exactly one full upstream-absent profile."
 doc_version: 3
-doc_updated_at: "2026-10-06T07:35:05.649Z"
+doc_updated_at: "2026-10-06T07:38:53.715Z"
 doc_updated_by: "CODER"
 description: "Iteration178 under active parent 202609240501-C9TN6M: replace duplicated React insert-dialog state with source-owned SwInsTableDlg and SwInsertTableOptions. Match pinned input limits, large-table warning, name filter/collision sensitivity, header/repeat defaults and linked repeated-row restoration. Preserve table properties, represented styles and registered IO/recovery exceptions; insertion command/history remains a following leaf."
 sections:
@@ -69,7 +88,7 @@ sections:
 
     Restored source-tree/provenance/invariants/parity/resource-generation audits passed. Provenance reports267owners:183mapped68browser16infrastructure. Scope has11semantic paths, three new acceptance files,462of463old test files byte-identical. The only old file adds two explicit Header clicks, retaining all original literal option assertions. All264 prior protected semantic classifications/statuses/defaults/evidence prefixes and other inventory sections are preserved; three new owners remain explicitly unverified. Conscious save/open/recovery deviations are unchanged. Doctor reports zero errors and two previously known warnings; routing and diff whitespace checks pass. The first filename census overclassified one old tracked browser QA screenshot as a forbidden executable; visual inspection confirmed actual browser UI. Corrected census records the false positive and leaves its completed owner unchanged. No forbidden source/helper/probe/executable artifacts exist in agentplane; canonical framework validators and that existing non-source QA evidence are explicitly identified. Inline helper preparation/map syntax recoveries caused no semantic changes; map merge was accepted only after complete exact-map assertions succeeded.
 
-    Exact-SHA same-agent evaluation and final clean checkout are the remaining closure steps. Full project parity is unverified and the parent/goal remain active. Next coherent leaf should route the grid and dialog insertion through native command/core/undo ownership, removing remaining WriterWorkbench graph writes.
+    Latest exact-SHA same-agent quality review passes implementation a1bd6450c57473ca18aa64ea5a7cffce345d3f98. The first auxiliary case census incorrectly deduplicated two legacy parameterized title collisions and reported12788 instead of12790; the premature first pass record is explicitly superseded. Corrected identities use file/title/occurrence and verify all12790 actual passing cases without a test rerun. The correction and latest quality report preserve the initial counting failure. Final clean checkout is confirmed before quality persistence and required again after closure. Full project parity is unverified and the parent/goal remain active. Next coherent leaf should route the grid and dialog insertion through native command/core/undo ownership, removing remaining WriterWorkbench graph writes.
 id_source: "generated"
 ---
 ## Summary
@@ -116,4 +135,4 @@ Application final coverage:13422lines14711statements3535functions10940branches, 
 
 Restored source-tree/provenance/invariants/parity/resource-generation audits passed. Provenance reports267owners:183mapped68browser16infrastructure. Scope has11semantic paths, three new acceptance files,462of463old test files byte-identical. The only old file adds two explicit Header clicks, retaining all original literal option assertions. All264 prior protected semantic classifications/statuses/defaults/evidence prefixes and other inventory sections are preserved; three new owners remain explicitly unverified. Conscious save/open/recovery deviations are unchanged. Doctor reports zero errors and two previously known warnings; routing and diff whitespace checks pass. The first filename census overclassified one old tracked browser QA screenshot as a forbidden executable; visual inspection confirmed actual browser UI. Corrected census records the false positive and leaves its completed owner unchanged. No forbidden source/helper/probe/executable artifacts exist in agentplane; canonical framework validators and that existing non-source QA evidence are explicitly identified. Inline helper preparation/map syntax recoveries caused no semantic changes; map merge was accepted only after complete exact-map assertions succeeded.
 
-Exact-SHA same-agent evaluation and final clean checkout are the remaining closure steps. Full project parity is unverified and the parent/goal remain active. Next coherent leaf should route the grid and dialog insertion through native command/core/undo ownership, removing remaining WriterWorkbench graph writes.
+Latest exact-SHA same-agent quality review passes implementation a1bd6450c57473ca18aa64ea5a7cffce345d3f98. The first auxiliary case census incorrectly deduplicated two legacy parameterized title collisions and reported12788 instead of12790; the premature first pass record is explicitly superseded. Corrected identities use file/title/occurrence and verify all12790 actual passing cases without a test rerun. The correction and latest quality report preserve the initial counting failure. Final clean checkout is confirmed before quality persistence and required again after closure. Full project parity is unverified and the parent/goal remain active. Next coherent leaf should route the grid and dialog insertion through native command/core/undo ownership, removing remaining WriterWorkbench graph writes.
