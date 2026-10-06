@@ -1,0 +1,31 @@
+{
+  "records": [
+    {
+      "command": "ap doctor",
+      "exit": 0,
+      "sha256": "99c42507d7d15884de9f831959cf22c9b93614e5a18889ce16e1da97c07d7840",
+      "bytes": 1616,
+      "summary": [
+        "warning: doctor findings: errors=0 warnings=2 info=2",
+        "- [WARN] State: managed AgentPlane hook shim is missing current readiness or fallback branches",
+        "- [WARN] DONE task is missing implementation commit hash: 202610031635-2Z3962 (finish with --commit <hash>)."
+      ]
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "exit": 0,
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9",
+      "bytes": 18,
+      "summary": [
+        "policy routing OK"
+      ]
+    },
+    {
+      "command": "git diff --check",
+      "exit": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "summary": []
+    }
+  ]
+}

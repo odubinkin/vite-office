@@ -45,7 +45,11 @@ for (const [align, left, right, width, sensitive] of [
       marginTop: 40,
       marginBottom: 50,
     });
-    expect([f.page.data.left, f.page.data.right, f.page.data.width]).toEqual([left, right, width]);
+    expect([
+      f.page.GetFieldValue("left"),
+      f.page.GetFieldValue("right"),
+      f.page.GetFieldValue("width"),
+    ]).toEqual([left, right, width]);
     expect([
       f.page.IsSensitive("width"),
       f.page.IsSensitive("left"),
@@ -62,21 +66,49 @@ for (const [align, left, right, width, sensitive] of [
 it("restores saved absolute width after automatic and preserves native center transitions", /** Checks actual toggle and spacing handlers. @returns Nothing. */ () => {
   const { page } = fixture();
   page.AutoClickHdl(H.FULL);
-  expect([page.data.width, page.data.left, page.data.right]).toEqual([8000, 0, 0]);
+  expect([
+    page.GetFieldValue("width"),
+    page.GetFieldValue("left"),
+    page.GetFieldValue("right"),
+  ]).toEqual([8000, 0, 0]);
   page.AutoClickHdl(H.RIGHT);
-  expect([page.data.width, page.data.left, page.data.right]).toEqual([3000, 5000, 0]);
+  expect([
+    page.GetFieldValue("width"),
+    page.GetFieldValue("left"),
+    page.GetFieldValue("right"),
+  ]).toEqual([3000, 5000, 0]);
   page.AutoClickHdl(H.LEFT);
-  expect([page.data.width, page.data.left, page.data.right]).toEqual([3000, 0, 5000]);
+  expect([
+    page.GetFieldValue("width"),
+    page.GetFieldValue("left"),
+    page.GetFieldValue("right"),
+  ]).toEqual([3000, 0, 5000]);
   page.AutoClickHdl(H.CENTER);
-  expect([page.data.width, page.data.left, page.data.right]).toEqual([3000, 2500, 2500]);
+  expect([
+    page.GetFieldValue("width"),
+    page.GetFieldValue("left"),
+    page.GetFieldValue("right"),
+  ]).toEqual([3000, 2500, 2500]);
   page.ValueChangedHdl("left", 3000);
-  expect([page.data.width, page.data.left, page.data.right]).toEqual([2000, 3000, 3000]);
+  expect([
+    page.GetFieldValue("width"),
+    page.GetFieldValue("left"),
+    page.GetFieldValue("right"),
+  ]).toEqual([2000, 3000, 3000]);
   page.ValueChangedHdl("width", 3000);
-  expect([page.data.width, page.data.left, page.data.right]).toEqual([3000, 2500, 2500]);
+  expect([
+    page.GetFieldValue("width"),
+    page.GetFieldValue("left"),
+    page.GetFieldValue("right"),
+  ]).toEqual([3000, 2500, 2500]);
   page.AutoClickHdl(H.NONE);
   page.ValueChangedHdl("right", 1000);
   page.ValueChangedHdl("width", 4000);
-  expect([page.data.width, page.data.left, page.data.right]).toEqual([4000, 2750, 1250]);
+  expect([
+    page.GetFieldValue("width"),
+    page.GetFieldValue("left"),
+    page.GetFieldValue("right"),
+  ]).toEqual([4000, 2750, 1250]);
   page.ValueChangedHdl("above", -1);
   page.ValueChangedHdl("below", 80);
   expect([page.above, page.below]).toEqual([0, 80]);
@@ -84,36 +116,68 @@ it("restores saved absolute width after automatic and preserves native center tr
 it("keeps native from-left priorities, one width correction and signed spacing", /** Checks oversize and field limits. @returns Nothing. */ () => {
   const { page } = fixture({ width: 3000, horiOrient: H.LEFT_AND_WIDTH, marginLeft: 300 });
   page.ValueChangedHdl("left", 700);
-  expect([page.data.width, page.data.left, page.data.right]).toEqual([3000, 700, 4300]);
+  expect([
+    page.GetFieldValue("width"),
+    page.GetFieldValue("left"),
+    page.GetFieldValue("right"),
+  ]).toEqual([3000, 700, 4300]);
   page.ValueChangedHdl("width", 7700);
-  expect([page.data.width, page.data.left, page.data.right]).toEqual([7700, 300, 0]);
+  expect([
+    page.GetFieldValue("width"),
+    page.GetFieldValue("left"),
+    page.GetFieldValue("right"),
+  ]).toEqual([7700, 300, 0]);
   page.ValueChangedHdl("width", 9000);
-  expect([page.data.width, page.data.left, page.data.right]).toEqual([8000, 0, 0]);
+  expect([
+    page.GetFieldValue("width"),
+    page.GetFieldValue("left"),
+    page.GetFieldValue("right"),
+  ]).toEqual([8000, 0, 0]);
   page.AutoClickHdl(H.LEFT_AND_WIDTH);
   page.ValueChangedHdl("left", -100);
-  expect([page.data.width, page.data.left, page.data.right]).toEqual([8000, -100, 100]);
+  expect([
+    page.GetFieldValue("width"),
+    page.GetFieldValue("left"),
+    page.GetFieldValue("right"),
+  ]).toEqual([8000, -100, 100]);
   page.AutoClickHdl(H.LEFT);
   page.ValueChangedHdl("right", 9000);
-  expect([page.data.width, page.data.left, page.data.right]).toEqual([23, 0, 7977]);
+  expect([
+    page.GetFieldValue("width"),
+    page.GetFieldValue("left"),
+    page.GetFieldValue("right"),
+  ]).toEqual([23, 0, 7977]);
   page.ValueChangedHdl("width", 0);
-  expect(page.data.width).toBe(46);
+  expect(page.GetFieldValue("width")).toBe(46);
   page.ValueChangedHdl("right", -1000000);
-  expect(page.data.right).toBe(-999999);
+  expect(page.GetFieldValue("right")).toBe(-999999);
   page.ValueChangedHdl("width", 90000);
-  expect([page.data.width, page.data.left, page.data.right]).toEqual([16000, 0, -8000]);
+  expect([
+    page.GetFieldValue("width"),
+    page.GetFieldValue("left"),
+    page.GetFieldValue("right"),
+  ]).toEqual([16000, 0, -8000]);
 });
 it("clamps centered and manual side edits at the native minimum", /** Checks native left-field constraints. @returns Nothing. */ () => {
   const { page } = fixture({ width: 3000, horiOrient: H.CENTER });
   page.ValueChangedHdl("left", 8000);
-  expect([page.data.width, page.data.left, page.data.right]).toEqual([24, 3988, 3988]);
+  expect([
+    page.GetFieldValue("width"),
+    page.GetFieldValue("left"),
+    page.GetFieldValue("right"),
+  ]).toEqual([24, 3988, 3988]);
   page.AutoClickHdl(H.NONE);
   page.ValueChangedHdl("left", 8000);
-  expect([page.data.width, page.data.left, page.data.right]).toEqual([23, 3989, 3988]);
+  expect([
+    page.GetFieldValue("width"),
+    page.GetFieldValue("left"),
+    page.GetFieldValue("right"),
+  ]).toEqual([23, 3989, 3988]);
 });
 it("corrects a sub-minimum initial width once and clamps vertical spacing", /** Checks the MINLAY correction branch. @returns Nothing. */ () => {
   const { page } = fixture({ width: 1, horiOrient: H.LEFT });
   page.ValueChangedHdl("width", 0);
-  expect([page.data.width, page.data.right]).toEqual([23, 7977]);
+  expect([page.GetFieldValue("width"), page.GetFieldValue("right")]).toEqual([23, 7977]);
   page.ValueChangedHdl("above", 90);
   page.ValueChangedHdl("below", -1);
   expect([page.above, page.below]).toEqual([90, 0]);
@@ -143,15 +207,19 @@ it("retains the Reset minimum through automatic width excursions", /** Checks th
     page.AutoClickHdl(H.FULL);
     page.AutoClickHdl(H.LEFT);
     page.ValueChangedHdl("width", 0);
-    expect(page.data.width).toBe(minimum);
+    expect(page.GetFieldValue("width")).toBe(minimum);
     page.AutoClickHdl(H.NONE);
     page.ValueChangedHdl("right", 600);
     page.ValueChangedHdl("left", 300);
     page.ValueChangedHdl("above", 100);
     page.ValueChangedHdl("below", 200);
-    expect([page.data.width, page.data.left, page.data.right, page.above, page.below]).toEqual([
-      7100, 300, 600, 100, 200,
-    ]);
+    expect([
+      page.GetFieldValue("width"),
+      page.GetFieldValue("left"),
+      page.GetFieldValue("right"),
+      page.above,
+      page.below,
+    ]).toEqual([7100, 300, 600, 100, 200]);
   }
 });
 it("formats explicit native orientation with absent side-spacing items", /** Checks native item defaults independently of ODF spelling. @returns Nothing. */ () => {

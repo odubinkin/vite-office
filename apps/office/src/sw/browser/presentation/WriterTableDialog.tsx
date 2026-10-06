@@ -54,9 +54,7 @@ function WriterTablePropertiesDialog({
   const [formatPage] = useState(
     /** Creates the native draft once per mounted dialog. @returns Format page or insert mode. */
     () => {
-      const page = new SwFormatTablePage(table, availableWidth);
-      page.data.SetLineSelected(lineSelected);
-      return page;
+      return new SwFormatTablePage(table, availableWidth, lineSelected);
     },
   );
   const [columnPage] = useState(
@@ -64,7 +62,7 @@ function WriterTablePropertiesDialog({
     () => new SwTableColumnPage(formatPage.data),
   );
   const [, refreshPage] = useState(0);
-  const width = formatPage.data.width;
+  const width = formatPage.GetFieldValue("width");
   const columnWidths = formatPage.data.columns;
   const [minRowHeight, setMinRowHeight] = useState(rows?.[0]?.GetFormat().minHeight ?? 0);
   const [padding, setPadding] = useState(rows?.[0]?.GetTabBoxes()[0]?.GetFormat().padding ?? 100);
@@ -93,17 +91,19 @@ function WriterTablePropertiesDialog({
       cm: number,
     ): number => Math.round((cm * 1440) / 2.54);
   const field =
-    /** Renders a metric field. @param label - Accessible label. @param twips - Current value. @param change - Owner handler. @param disabled - Sensitivity. @param signed - Allows negative spacing. @returns Input. */ (
+    /** Renders a metric field. @param label - Accessible label. @param twips - Current value. @param change - Owner handler. @param disabled - Sensitivity. @param signed - Allows negative spacing. @param formatField - Native format metric identity. @returns Input. */ (
       label: string,
       twips: number,
       change: (value: number) => void,
       disabled = false,
       signed = false,
+      formatField?: Parameters<SwFormatTablePage["DeactivatePage"]>[0],
     ): React.JSX.Element => (
       <label className="grid gap-1 text-sm font-medium text-slate-700" key={label}>
         {label}
         <input
           aria-label={label}
+          data-writer-table-format-field={formatField}
           className="rounded border border-slate-300 px-2 py-1"
           disabled={disabled}
           min={signed ? "-999999" : "0"}
@@ -134,7 +134,12 @@ function WriterTablePropertiesDialog({
             event,
           ) => {
             event.preventDefault();
-            if (activeTab === "table") formatPage.DeactivatePage();
+            if (activeTab === "table") {
+              const focused = event.currentTarget.ownerDocument.activeElement?.getAttribute(
+                "data-writer-table-format-field",
+              ) as Parameters<SwFormatTablePage["DeactivatePage"]>[0] | null;
+              formatPage.DeactivatePage(focused ?? undefined);
+            }
             if (activeTab === "columns") columnPage.DeactivatePage();
             if (
               !Number.isInteger(rowCount) ||
@@ -205,6 +210,7 @@ function WriterTablePropertiesDialog({
                       if (activeTab === "table") formatPage.DeactivatePage();
                       if (activeTab === "columns") columnPage.DeactivatePage();
                       if (id === "columns") columnPage.ActivatePage();
+                      if (id === "table") formatPage.ActivatePage();
                       setActiveTab(id);
                       refreshPage(
                         /** Presents accepted shared geometry. @param version - Display version. @returns Next version. */
@@ -241,7 +247,7 @@ function WriterTablePropertiesDialog({
                         <input
                           type="radio"
                           name="table-alignment"
-                          checked={formatPage.data.align === align}
+                          checked={formatPage.GetAlign() === align}
                           onChange={
                             /** Dispatches the native radio transition. @returns Nothing. */ () => {
                               formatPage.AutoClickHdl(align);
@@ -270,6 +276,8 @@ function WriterTablePropertiesDialog({
                     );
                   },
                   !formatPage.IsSensitive("width"),
+                  false,
+                  "width",
                 )}
                 <fieldset className="grid grid-cols-2 gap-2 rounded border p-3">
                   <legend className="text-sm font-bold">Spacing</legend>
@@ -278,9 +286,7 @@ function WriterTablePropertiesDialog({
                     (metric) =>
                       field(
                         `${metric.charAt(0).toUpperCase()}${metric.slice(1)} (cm)`,
-                        metric === "above" || metric === "below"
-                          ? formatPage[metric]
-                          : formatPage.data[metric],
+                        formatPage.GetFieldValue(metric),
                         /** Dispatches spacing editing. @param value - Twips. @returns Nothing. */ (
                           value,
                         ) => {
@@ -293,6 +299,7 @@ function WriterTablePropertiesDialog({
                         (metric === "left" || metric === "right") &&
                           !formatPage.IsSensitive(metric),
                         metric === "left" || metric === "right",
+                        metric,
                       ),
                   )}
                 </fieldset>

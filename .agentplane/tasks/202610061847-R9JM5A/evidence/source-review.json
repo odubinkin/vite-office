@@ -1,0 +1,19 @@
+{
+  "baselineTag": "libreoffice-26.8.0.2",
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "reviewer": "Same current agent; pinned sources read-only, no upstream execution",
+  "sourceSHA256": {
+    "sw/source/ui/table/tabledlg.cxx": "8784376ef8a6517596379155caa49027b70d4c801c0866c9991b9998e1781a5a",
+    "sw/source/uibase/inc/tablemgr.hxx": "7aac7cd8a3eaeea9be0370aa753df89d8739959acbc892988a8a34132b60ce22",
+    "sw/inc/swtypes.hxx": "51bf121cc074709d17314ffbba2d3676eae976a17dd2f4ee0e69d357fec3b361",
+    "sw/source/uibase/table/swtablerep.cxx": "c68f5e0baaf04f92c1c473c7ccaec1616cd318c8827003ba4c4da7067895a17a"
+  },
+  "contracts": [
+    "SwFormatTablePage stores existing absolute metric/radio values locally, preserves independent original SwTableRep and vertical-spacing snapshots, source saved values and native Reset shared pointer/vector/selection ownership. Existing represented arithmetic and every historical literal geometry expectation preserved.",
+    "Source FillItemSet admits still-focused metric correction and reports native modified state, including top/bottom edits. ActivatePage refreshes absolute width and saved LR values only if the source current width differs from the existing widget width; equal-width updates retain widget-local spacing. Source automatic saved-width excursions retained.",
+    "DeactivatePage publishes native saved-spacing and orientation flags, absolute width and source column minimum/remainder correction. Automatic width uses native tablemgr lAutoWidth=INVALID_TWIPS=LONG_MAX sentinel contract; existing represented zero-column admission remains bounded. Native percentage/name/text-direction/full SfxItemSet/widget-range behavior not promoted.",
+    "React reads native field/radio values and dispatches native page activation on Table entry; field focus identifies the native metric for Enter/form acceptance. Existing canonical shell property application remains the sole document mutation/history path; original table/row/box/text/list/cursor owners retained through grouped UndoRedo and ODT.",
+    "ONE full upstream-absent profile and failed/new-only closures recorded in absent-profile/failure-closure evidence. Actual100 coverage uses complete source/maps or complete contiguous matching ranges with full functions/branches, actual counters only; previously verified entire identical editing-host map reuse avoids passing replay. Focused skips remain skips; raw sources/maps/cases/proofs only ignored app cache.",
+    "Approved9 paths;512 old acceptance files511 byte-identical plus one field-state accessor migration preserving complete historical literal assertion surface;4new516 total. All276 previous metadata states/defaults/classifications/full prefixes and registered filename/I/O/recovery deviations preserved. Same current-agent EVALUATOR phase explicitly not independent review. Parent and goal active; whole parity unverified."
+  ]
+}

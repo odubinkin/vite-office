@@ -4865,6 +4865,26 @@
           {
             "path": "apps/office/e2e/writer-native-table-column-page.spec.ts",
             "marker": "native column page modes"
+          },
+          {
+            "path": "apps/office/src/sw/source/ui/table/tabledlg.ts",
+            "marker": "public ActivatePage"
+          },
+          {
+            "path": "apps/office/src/sw/source/ui/table/native-table-format-lifecycle.test.ts",
+            "marker": "native format metrics remain local"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/native-table-format-lifecycle.test.tsx",
+            "marker": "mounted native format reactivation"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-format-lifecycle-history.test.ts",
+            "marker": "native format publication"
+          },
+          {
+            "path": "apps/office/e2e/writer-native-table-format-lifecycle.spec.ts",
+            "marker": "native format page local metrics"
           }
         ],
         "upstream": [
@@ -4895,11 +4915,35 @@
           {
             "path": "vendor/libreoffice-reference/sw/uiconfig/swriter/ui/tablecolumnpage.ui",
             "marker": "Adapt table _width"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx",
+            "marker": "SwFormatTablePage::Reset"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx",
+            "marker": "SwFormatTablePage::ActivatePage"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx",
+            "marker": "SwFormatTablePage::FillItemSet"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx",
+            "marker": "SwFormatTablePage::DeactivatePage"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/uibase/inc/tablemgr.hxx",
+            "marker": "lAutoWidth"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/inc/swtypes.hxx",
+            "marker": "INVALID_TWIPS"
           }
         ]
       },
       "localPath": "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx",
-      "rationale": "Presents bounded Insert Table and Table Properties controls over the canonical Writer table graph. Resumed iteration191 after user-priority192/193/194 ports existing absolute column editing through source-owned SwTableColumnPage and shared native SwTableRep. Native Reset retains shared draft/vector identity and independent original copies; five field slots and one-column navigation, source inherited MINLAY23/min/max, constant-width neighbor compensation/wrap/tiny-table loop bound, adapt-table width cap, proportional integer rounding and checkbox coupling/activation sensitivity, selected-row versus whole-table modes and native LR deactivation are represented. Browser page events call native handlers instead of replacing width-array entries; actual canonical graph remains read-only until existing ItemSetToTableParam acceptance and grouped native history. Native percentages, hidden/per-row graph, full SfxItemSet/frame-format notifications and adaptive preferred-width SizeHdl remain unverified, as do complete module/UI/core/parent parity. Registered filename/save/open/recovery exceptions unchanged.",
+      "rationale": "Presents bounded Insert Table and Table Properties controls over the canonical Writer table graph. Resumed iteration191 after user-priority192/193/194 ports existing absolute column editing through source-owned SwTableColumnPage and shared native SwTableRep. Native Reset retains shared draft/vector identity and independent original copies; five field slots and one-column navigation, source inherited MINLAY23/min/max, constant-width neighbor compensation/wrap/tiny-table loop bound, adapt-table width cap, proportional integer rounding and checkbox coupling/activation sensitivity, selected-row versus whole-table modes and native LR deactivation are represented. Browser page events call native handlers instead of replacing width-array entries; actual canonical graph remains read-only until existing ItemSetToTableParam acceptance and grouped native history. Native percentages, hidden/per-row graph, full SfxItemSet/frame-format notifications and adaptive preferred-width SizeHdl remain unverified, as do complete module/UI/core/parent parity. Registered filename/save/open/recovery exceptions unchanged. Iteration195 ports the native absolute SwFormatTablePage lifecycle: metric/radio values are page-local until DeactivatePage publishes the shared SwTableRep; Reset retains original independent data, shared pointer/vector and selection, saved metric state and vertical spacing; ActivatePage refreshes width/LR and saved values only when source absolute width differs; FillItemSet admits a still-focused metric; source saved-spacing/orientation/automatic-width flags and existing native column redistribution are retained. React reads native fields/radio state and activates Table on tab entry. Historical literal geometry expectations are preserved through a field-state accessor migration; original model graph/history remains canonical. Native percentages, hidden/per-row graphs, full SfxItemSet/frame-format notifications, adaptive preferred-width SizeHdl, complete name/text-direction/Reset UI and full native widget unit/range semantics remain unverified, as does whole module/UI/core/parent parity. Registered exceptions unchanged.",
       "responsibilities": [
         "Presents bounded Insert Table and Table Properties controls over the canonical Writer table graph.",
         "Iteration176 removes React table-property writes through inherited SwFEShell and native ItemSetToTableParam. Existing document history groups seven attribute operations into one Table Properties Undo; SwUndoAttrTable swaps attribute-only table/column/row/box payload at the numeric table index while retaining original graph/text/cursor owners. Borders/row-split without selection apply to the whole table; selected-cell alignment and current/selected-row height use native cursor rings. New native owners remain unverified. Native Sfx frame-format item model,change-only dialog items,distinct native per-format undo classes,layout-cache lifetime,merged/nested/protected selection,full alignment/spacing/relative-width controls,insertion and complete UI/core parity remain unverified. Prior259semantic states/defaults/classes/IOexceptions/evidence preserved;conscious save/open/recovery deviations unchanged.",
@@ -15909,11 +15953,16 @@
         "SwTableColumnPage::UpdateCols",
         "SwTableColumnPage::Reset",
         "SwTableColumnPage::ActivatePage",
-        "SwTableColumnPage::DeactivatePage"
+        "SwTableColumnPage::DeactivatePage",
+        "SwFormatTablePage::Reset",
+        "SwFormatTablePage::ActivatePage",
+        "SwFormatTablePage::FillItemSet",
+        "SwFormatTablePage::DeactivatePage"
       ],
       "preservedResponsibilities": [
         "Iteration177 represents native absolute table formatting through SwFormatTablePage and SwTableRep, six numeric orientations, linked metric fields, sensitivity, automatic-width restoration and visible-column reconciliation. React displays the native draft and the existing shell group applies accepted frame attributes. Worker retains orientation and ODF projects native alignment and conditional LR margins. Full native item/relative-width/complex-table/RTL/fly/cache/protection and UI/core parity remain unverified. All prior261 semantic statuses/defaults/classes and registered IO deviations are preserved.",
-        "Resumed iteration191 after user-priority192/193/194 ports existing absolute column editing through source-owned SwTableColumnPage and shared native SwTableRep. Native Reset retains shared draft/vector identity and independent original copies; five field slots and one-column navigation, source inherited MINLAY23/min/max, constant-width neighbor compensation/wrap/tiny-table loop bound, adapt-table width cap, proportional integer rounding and checkbox coupling/activation sensitivity, selected-row versus whole-table modes and native LR deactivation are represented. Browser page events call native handlers instead of replacing width-array entries; actual canonical graph remains read-only until existing ItemSetToTableParam acceptance and grouped native history. Native percentages, hidden/per-row graph, full SfxItemSet/frame-format notifications and adaptive preferred-width SizeHdl remain unverified, as do complete module/UI/core/parent parity. Registered filename/save/open/recovery exceptions unchanged."
+        "Resumed iteration191 after user-priority192/193/194 ports existing absolute column editing through source-owned SwTableColumnPage and shared native SwTableRep. Native Reset retains shared draft/vector identity and independent original copies; five field slots and one-column navigation, source inherited MINLAY23/min/max, constant-width neighbor compensation/wrap/tiny-table loop bound, adapt-table width cap, proportional integer rounding and checkbox coupling/activation sensitivity, selected-row versus whole-table modes and native LR deactivation are represented. Browser page events call native handlers instead of replacing width-array entries; actual canonical graph remains read-only until existing ItemSetToTableParam acceptance and grouped native history. Native percentages, hidden/per-row graph, full SfxItemSet/frame-format notifications and adaptive preferred-width SizeHdl remain unverified, as do complete module/UI/core/parent parity. Registered filename/save/open/recovery exceptions unchanged.",
+        "Iteration195 ports the native absolute SwFormatTablePage lifecycle: metric/radio values are page-local until DeactivatePage publishes the shared SwTableRep; Reset retains original independent data, shared pointer/vector and selection, saved metric state and vertical spacing; ActivatePage refreshes width/LR and saved values only when source absolute width differs; FillItemSet admits a still-focused metric; source saved-spacing/orientation/automatic-width flags and existing native column redistribution are retained. React reads native fields/radio state and activates Table on tab entry. Historical literal geometry expectations are preserved through a field-state accessor migration; original model graph/history remains canonical. Native percentages, hidden/per-row graphs, full SfxItemSet/frame-format notifications, adaptive preferred-width SizeHdl, complete name/text-direction/Reset UI and full native widget unit/range semantics remain unverified, as does whole module/UI/core/parent parity. Registered exceptions unchanged."
       ],
       "omittedResponsibilities": [
         "Full native contracts remain unverified."
@@ -15947,6 +15996,26 @@
           {
             "path": "apps/office/e2e/writer-native-table-column-page.spec.ts",
             "marker": "native column page modes"
+          },
+          {
+            "path": "apps/office/src/sw/source/ui/table/tabledlg.ts",
+            "marker": "public ActivatePage"
+          },
+          {
+            "path": "apps/office/src/sw/source/ui/table/native-table-format-lifecycle.test.ts",
+            "marker": "native format metrics remain local"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/native-table-format-lifecycle.test.tsx",
+            "marker": "mounted native format reactivation"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-format-lifecycle-history.test.ts",
+            "marker": "native format publication"
+          },
+          {
+            "path": "apps/office/e2e/writer-native-table-format-lifecycle.spec.ts",
+            "marker": "native format page local metrics"
           }
         ],
         "upstream": [
@@ -15981,6 +16050,30 @@
           {
             "path": "vendor/libreoffice-reference/sw/uiconfig/swriter/ui/tablecolumnpage.ui",
             "marker": "Adapt table _width"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx",
+            "marker": "SwFormatTablePage::Reset"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx",
+            "marker": "SwFormatTablePage::ActivatePage"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx",
+            "marker": "SwFormatTablePage::FillItemSet"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx",
+            "marker": "SwFormatTablePage::DeactivatePage"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/uibase/inc/tablemgr.hxx",
+            "marker": "lAutoWidth"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/inc/swtypes.hxx",
+            "marker": "INVALID_TWIPS"
           }
         ]
       }
