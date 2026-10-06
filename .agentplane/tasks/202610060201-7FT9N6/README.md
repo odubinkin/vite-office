@@ -1,10 +1,11 @@
 ---
 id: "202610060201-7FT9N6"
 title: "Restore native cross-cell selection and repeated headline admission"
-status: "DOING"
+result_summary: "Restored native represented table selection admission and original-only selected-box painting through existing shell and DOM owners;26newapp3Chromium,449prior tests unchanged,actual100percent coverage,registered IO deviations preserved."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -42,11 +43,16 @@ quality_review:
     - ".agentplane/tasks/202610060201-7FT9N6/evidence/restored-source-audits.json"
   findings:
     - "Actual evaluator-proof now exists and all counter/source hashes, entire contiguous unchanged ranges,449prior tests,258states/defaults/classes/IOexception/evidence prefixes,declared static/source/scope/hygiene checks verified. Same current agent EVALUATOR,no independent reviewer claim. Preliminary report ran after a duplicate inline identifier parse error; one unbounded assertion diagnostic was stopped only after identifying this task live process, then bounded hash comparisons and task-local quality artifact status checks passed. No tests or production changes during evaluation; broad parity unverified."
-commit: null
+commit:
+  hash: "417a6f7baffceac4f592cd4e3bf4952a28812817"
+  message: "🧩 7FT9N6 task: record native table selection verification"
 comments:
   -
     author: "CODER"
     body: "Start: Implement approved native flat-table selection admission and original-only painting through existing shell and DOM owners; preserve old tests and deliberate IO exceptions."
+  -
+    author: "CODER"
+    body: "Verified: Actual UI cell-frame ranges activate native table cursor and preserve source point and mark direction; repeated headline admission limits selection, original boxes alone paint and shared editing/history remain native. All declared tests and gates verified without upstream test calls; broad table/core/UI parity remains unverified."
 events:
   -
     type: "status"
@@ -61,8 +67,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified represented native table-frame UI admission, source point/mark direction, original-only selected-box paint and shared history on semantic da99108222f1c0169580e3e87ce2dbf2e493be73. ONE absent fullprofile plus failure/new-only closures:12691app109inventory5scripts157Chromium distinct passed,26newapp3Chrome,449prior tests unchanged. Actual100percent app/inventory counters and contiguous source proof,required statics,five restored source audits,scope,AP hygiene,doctor/routing/diff passed. Latest same-agent quality20261006-022954902-recovery-context; full table/core/UI parity remains unverified."
+  -
+    type: "status"
+    at: "2026-10-06T02:30:39.761Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Actual UI cell-frame ranges activate native table cursor and preserve source point and mark direction; repeated headline admission limits selection, original boxes alone paint and shared editing/history remain native. All declared tests and gates verified without upstream test calls; broad table/core/UI parity remains unverified."
 doc_version: 3
-doc_updated_at: "2026-10-06T02:30:20.255Z"
+doc_updated_at: "2026-10-06T02:30:39.762Z"
 doc_updated_by: "CODER"
 description: "Align actual browser cross-cell gestures with native table cursor ownership and repeated headline restrictions; paint selected original boxes without selecting repeated headline copies. Preserve registered IO deviations and prior tests."
 sections:
@@ -139,6 +152,10 @@ sections:
     - Observation: Implementation commit is da99108222f1c0169580e3e87ce2dbf2e493be73. Earlier cdecf4f60c199845027883914b5cc8935b317de5 contained only already-staged AP evidence despite code message; source paths were then explicitly staged and committed. Preliminary quality report superseded by20261006-022954902-recovery-context after successful actual bounded read-only proof.
       Impact: Exact source/coverage identity must refer to actual implementation commit; initial evaluator inline name collision, unbounded whole-map assertion diagnostics and expected dirty task README prevented first recomputation.
       Resolution: Confirmed task-local live diagnostic PID by semantic SHA and evaluator-proof marker before stopping it; replaced whole-map assertion with exact recomputed serialized hashes and allowed only current task quality artifacts in status. Successful same-agent actual counter/source proof at semanticSHA,latest quality pass,no independent reviewer claim. No production changes or test/source-audit replay during evaluation. Final status and AP hygiene checked at close.
+extensions:
+  implementation_commit:
+    hash: "da99108222f1c0169580e3e87ce2dbf2e493be73"
+    message: "🧩 7FT9N6 code: restore native table selection admission"
 id_source: "generated"
 ---
 ## Summary
