@@ -1,0 +1,28 @@
+{
+  "iteration": 181,
+  "leaf": "202610060905-WBC1TW",
+  "leafState": "DONE",
+  "implementation": "fc664e2c9dc868cabac07854de739e4f3d50d0cd",
+  "close": "e8411519e906ce5dd3881de847e87348c9096d97",
+  "priorFindingsChars": 457241,
+  "priorFindingsSHA256": "9ac23d430c24642491199efaacacbc4863144fc178d8a9eb39ff19f2186f2935",
+  "prefixPreserved": true,
+  "updatedFindingsChars": 459593,
+  "updatedFindingsSHA256": "b981e6dee586751f78120e71f738d16e491dfd644fe4f9ff304979edbdb9b824",
+  "preCheckpointStatus": "clean",
+  "parentState": "DOING",
+  "wholeGoal": "ACTIVE",
+  "fullParity": "UNVERIFIED",
+  "cases": {
+    "application": 12823,
+    "inventory": 109,
+    "scripts": 5,
+    "chromium": 191
+  },
+  "coverage": "100% app/inventory allmetrics; complete identical real-counter maps266/38",
+  "priorSemanticModules": 269,
+  "oldTestFilesByteIdentical": 470,
+  "totalPriorTestFiles": 473,
+  "sourceHelperArtifactsStored": false,
+  "vendorRestored": true
+}
