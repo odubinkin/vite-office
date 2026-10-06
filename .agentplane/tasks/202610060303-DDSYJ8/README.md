@@ -1,10 +1,11 @@
 ---
 id: "202610060303-DDSYJ8"
 title: "Route table properties through native editing and history owners"
-status: "DOING"
+result_summary: "Removed React table-property mutations; native selection-scoped editing and one Undo/Redo now own accepted properties. Full table/UI/core parity remains unverified."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
     - ".agentplane/tasks/202610060303-DDSYJ8/evidence/final-coverage.json"
   findings:
     - "Actual12731app109inventory5scripts167Chrome PASS; only original2app/2Chrome closure, unchanged six production hashes and258exact maps, actual100coverage; native selection scopes/graph/cursor/lifecycle retained;456prior testfiles259semantic contracts and registeredIOexceptions preserved."
-commit: null
+commit:
+  hash: "1d8cceb04c1d43f4ca9913e68437c2cd8039cf17"
+  message: "✅ DDSYJ8 parity: record native table property verification"
 comments:
   -
     author: "CODER"
     body: "Start: implement native table-property ownership under standing iterative approval."
+  -
+    author: "CODER"
+    body: "Verified: React Table Properties now uses native inherited SwFEShell and ItemSetToTableParam; grouped attribute-only history retains original table/cell/text/cursor and native selection scopes. Actual12731app109inventory5scripts167Chrome PASS;100coverage;456prior testfiles259semantic contracts/IOexceptions preserved;ONE absentfullprofile and only originalfailure closure;vendorrestored/no APsources/helpers. Same-agent exactSHA quality PASS;fullgoalACTIVE and completecore/UI/tableparityUNVERIFIED."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "PASS bounded native table-property handoff,selection scopes and grouped attribute history at implementation 2513804194e3fd2fe3055acae26d795712d4b729; sameagent quality 20261006-044923325-recovery-context. Actual12731app109inventory5scripts167Chrome PASS,actual100coverage,456prior testfiles259semantic contracts preserved. ONE full absentprofile;only2app2Chrome originalfailure closure;no upstream execution/APsources/helpers/no passingreplay/vendorrestored. CompletecoreUI/tableparityUNVERIFIED,goalACTIVE,parentDOING."
+  -
+    type: "status"
+    at: "2026-10-06T05:51:12.879Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: React Table Properties now uses native inherited SwFEShell and ItemSetToTableParam; grouped attribute-only history retains original table/cell/text/cursor and native selection scopes. Actual12731app109inventory5scripts167Chrome PASS;100coverage;456prior testfiles259semantic contracts/IOexceptions preserved;ONE absentfullprofile and only originalfailure closure;vendorrestored/no APsources/helpers. Same-agent exactSHA quality PASS;fullgoalACTIVE and completecore/UI/tableparityUNVERIFIED."
 doc_version: 3
-doc_updated_at: "2026-10-06T05:50:35.326Z"
+doc_updated_at: "2026-10-06T05:51:12.881Z"
 doc_updated_by: "CODER"
 description: "Iteration176: remove React table-property mutations through source-shaped SwFEShell and ItemSetToTableParam; grouped native attribute history and correct selection ownership. Full alignment controls remain a subsequent atomic task."
 sections:
@@ -150,6 +163,10 @@ sections:
     - Observation: Semantic commit rejected by commit-msg: scope table is not one of task intents code/parity/task/close/integrate.
       Impact: All tests and direct governance checks remain verified; no commit created or production changes.
       Resolution: Recomputed route, use parity intent in semantic commit and retain exact source/counter evidence; no tests or passing gates replayed.
+extensions:
+  implementation_commit:
+    hash: "2513804194e3fd2fe3055acae26d795712d4b729"
+    message: "🔧 DDSYJ8 parity: route table properties through native editing history"
 id_source: "generated"
 ---
 ## Summary
