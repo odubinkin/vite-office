@@ -1,0 +1,79 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/sw/source/core/docnode/ndtbl1.ts": "dd303599bf7d0926bbf39f2f60fc4b1ffe57b1cecba3cd1bc85240512af2f5cb",
+    "apps/office/src/sw/source/core/doc/doc.ts": "775ada86ae17a52b6c9103578205a92391f72fdebdbd54362ec091619800e261",
+    "apps/office/src/sw/source/core/frmedt/fetab.ts": "3bd3be67ed54f8e86e31b4e2b8679988ac292edda8007aa07da43ae102e445b7",
+    "apps/office/src/sw/source/core/crsr/trvltbl.ts": "fb66498e413464e601e13d35e39da7f5bd3bf206619622fbc0f95c934fa23a04",
+    "apps/office/src/sw/source/uibase/shells/tabsh.ts": "1cac9aaceff530600482563cd5eda61111d9f63c93fd2f28643dba0025eac626",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts": "a8c3ef975189936b11143ff381ebf6d7879da7a7bec5e7bf9fcb7052c3d94e8c",
+    "apps/office/src/sw/source/core/docnode/native-row-split-owner.test.ts": "1253cc31d5afd42522d3f148f4eb45f8e54cb75d7b88142d5e31c7dd61e0408f",
+    "apps/office/src/sw/source/core/crsr/native-table-cursor-stack.test.ts": "145c6c6207e377d8c3777a0c436914417465ebac1a247e8d023d69317bdde018",
+    "apps/office/src/sw/source/uibase/wrtsh/native-row-split-owner-history.test.ts": "be93706d5e6fda58078355937269697eeca6a3c5764947032ce906662eeec671",
+    "docs/program/source-provenance.json": "e883024963e55b69e729416ae4119f726a200bfd4c5f3ed9db3c95e6b3f409a5",
+    "docs/program/parity/runtime-inventory.json": "8b41879455781305e70ecc7a7e7c777f2c7a484e3abd842f7450e9c9f897c7fa"
+  },
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/source/core/docnode/native-row-split-owner.test.ts src/sw/source/core/crsr/native-table-cursor-stack.test.ts -t disconnected native table cursor|nested saved selections --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/B4YMFA.app-closure2-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 29354,
+      "sha256": "7325766caad54c4bd2980e2d827e702ca8748865f0a7cb0b8a539b16c8afadf9",
+      "totals": [
+        "Test Files  2 passed (2)",
+        "Tests  2 passed | 5 skipped (7)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "passed": 2,
+        "failed": 0,
+        "skipped": 5,
+        "total": 7
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 14888,
+          "covered": 2181,
+          "skipped": 0,
+          "pct": 14.64
+        },
+        "statements": {
+          "total": 16336,
+          "covered": 2251,
+          "skipped": 0,
+          "pct": 13.77
+        },
+        "functions": {
+          "total": 3794,
+          "covered": 577,
+          "skipped": 0,
+          "pct": 15.2
+        },
+        "branches": {
+          "total": 12112,
+          "covered": 874,
+          "skipped": 0,
+          "pct": 7.21
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverage": {
+        "lines": 14.64,
+        "statements": 13.77,
+        "functions": 15.2,
+        "branches": 7.21
+      },
+      "incompleteFileCount": 257,
+      "coverageMapSHA256": "b7487458f72fa61d92d6f0f6566f960f92156a9812b306fab0ff5c24be1956bb"
+    }
+  ],
+  "scope": "Only originally failed disconnected table fixture case and one genuinely new native nested marked/table cursor restoration case; no production/build/full/passing/browser replay"
+}

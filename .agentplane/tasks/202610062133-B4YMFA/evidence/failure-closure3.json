@@ -1,0 +1,89 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/sw/source/core/docnode/ndtbl1.ts": "dd303599bf7d0926bbf39f2f60fc4b1ffe57b1cecba3cd1bc85240512af2f5cb",
+    "apps/office/src/sw/source/core/doc/doc.ts": "775ada86ae17a52b6c9103578205a92391f72fdebdbd54362ec091619800e261",
+    "apps/office/src/sw/source/core/frmedt/fetab.ts": "3bd3be67ed54f8e86e31b4e2b8679988ac292edda8007aa07da43ae102e445b7",
+    "apps/office/src/sw/source/core/crsr/trvltbl.ts": "52f9ff49d50f843faff94a6340759e6da3025f9c2313fe0f89a9d5a902a32ac5",
+    "apps/office/src/sw/source/uibase/shells/tabsh.ts": "1cac9aaceff530600482563cd5eda61111d9f63c93fd2f28643dba0025eac626",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts": "a8c3ef975189936b11143ff381ebf6d7879da7a7bec5e7bf9fcb7052c3d94e8c",
+    "apps/office/src/sw/source/core/docnode/native-row-split-owner.test.ts": "1253cc31d5afd42522d3f148f4eb45f8e54cb75d7b88142d5e31c7dd61e0408f",
+    "apps/office/src/sw/source/core/crsr/native-table-cursor-stack.test.ts": "b28db06c7a86852665dfbb499e9fad3705e577ef8bf91e3013e634694a265a67",
+    "apps/office/src/sw/source/uibase/wrtsh/native-row-split-owner-history.test.ts": "be93706d5e6fda58078355937269697eeca6a3c5764947032ce906662eeec671",
+    "docs/program/source-provenance.json": "e883024963e55b69e729416ae4119f726a200bfd4c5f3ed9db3c95e6b3f409a5",
+    "docs/program/parity/runtime-inventory.json": "8b41879455781305e70ecc7a7e7c777f2c7a484e3abd842f7450e9c9f897c7fa"
+  },
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1443,
+      "sha256": "bba2cacb73772617442b0ff5cb0355410845df8a678e1cd010997d2d84f49e0e",
+      "totals": [],
+      "failedCases": []
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/source/core/docnode/native-row-split-owner.test.ts src/sw/source/core/crsr/native-table-cursor-stack.test.ts src/sw/source/uibase/wrtsh/native-row-split-owner-history.test.ts -t native Pop exits temporary table mode --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/B4YMFA.app-closure3-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 29386,
+      "sha256": "4e581e17be34c7b7f717bd44852560119bdfd097925b46d0cc58962f2ea32f9a",
+      "totals": [
+        "Test Files  1 passed | 2 skipped (3)",
+        "Tests  1 passed | 11 skipped (12)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "passed": 1,
+        "failed": 0,
+        "skipped": 11,
+        "total": 12
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 14890,
+          "covered": 1751,
+          "skipped": 0,
+          "pct": 11.75
+        },
+        "statements": {
+          "total": 16338,
+          "covered": 1794,
+          "skipped": 0,
+          "pct": 10.98
+        },
+        "functions": {
+          "total": 3794,
+          "covered": 429,
+          "skipped": 0,
+          "pct": 11.3
+        },
+        "branches": {
+          "total": 12112,
+          "covered": 642,
+          "skipped": 0,
+          "pct": 5.3
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverage": {
+        "lines": 11.75,
+        "statements": 10.98,
+        "functions": 11.3,
+        "branches": 5.3
+      },
+      "incompleteFileCount": 256,
+      "coverageMapSHA256": "04e6747ee8cb8976b21625d6fa0b06b85a3370749e79003232ed6ea28560319b"
+    }
+  ],
+  "scope": "Only genuinely new native Pop mode transition case on final production code; rebuild changed production code, no full/passing/browser replay"
+}

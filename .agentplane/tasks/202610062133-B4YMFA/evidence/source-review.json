@@ -1,0 +1,17 @@
+{
+  "baselineTag": "libreoffice-26.8.0.2",
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "reviewer": "Same current agent; pinned sources read-only, no upstream execution",
+  "sourceSHA256": {
+    "sw/source/core/docnode/ndtbl1.cxx": "c94a3a78edc61fc2b2a0419371f70cffc5466ceca3d0b8f29160cceff0b37663",
+    "sw/source/core/frmedt/fetab.cxx": "e7b7c7164f76d7e67eddcf863128d41c3c2ea2946362b8509bab0bc2cdc9f016",
+    "sw/source/uibase/shells/tabsh.cxx": "ac075f90575663fac974e2804e7111b1df3f596eb5bb400fb9fc2f4be0058163",
+    "sw/source/core/crsr/crsrsh.cxx": "22a10693b0097a1788df0b2b63153790a37a4ce0f79ddaa4da8ec2c30c3c4f3a",
+    "sw/inc/crsrsh.hxx": "d5b15bac7672883e45c63022c5f3b188d210373651dcf2895115b1a019af0503"
+  },
+  "contracts": [
+    "Native document SetRowSplit collects current or selected actual row owners and records table attribute history; ordinary cursor mark/ring not expanded. Shell forwards document-owned mutation inside notification transaction.",
+    "Properties native caller Push/temporary whole table selection only when unselected/ClearMark/Pop DeleteCurrent; represented cursor stack uses registered original point/mark and both native modes, Close releases remaining positions.",
+    "11approvedpaths;531old tests byte-identical+3new534,277prior metadata full prefixes/defaults/statuses/classifications/registered exceptions preserved. Same current-agent evaluator explicitly not independent; full row-content splitting/nested/merged/protection/fly/columns/SfxItemSet/widget suite/full parity unverified, parent/goal active."
+  ]
+}

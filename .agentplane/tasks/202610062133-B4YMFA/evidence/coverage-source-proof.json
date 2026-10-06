@@ -1,0 +1,15 @@
+{
+  "app": {
+    "files": 274,
+    "wholeIdenticalFiles": 271,
+    "completeRegionFiles": 3,
+    "proofSHA256": "40bcfffc0c477ef9a76737c269f22f04be9d2fc01bc11eeb3e90af5f66e1cc8f"
+  },
+  "inventory": {
+    "files": 38,
+    "wholeIdenticalFiles": 38,
+    "proofSHA256": "bba763d4d7885fd8e6c808012fa5076f978483a51ef15926e7e324b1ca130222"
+  },
+  "counterRule": "Complete identical source/maps or full contiguous byte-identical regions, full function declaration/body and full enclosing branch/locations only. Raw counters only; source digests checked. Focused skips remain skips.",
+  "failures": []
+}

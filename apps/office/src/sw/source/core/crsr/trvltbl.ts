@@ -11,10 +11,61 @@ import type { SwTableLine } from "../table/swtable";
 /** Native extended range retains the first structural node and trailing table owners. */
 export type ExtendedSelection = readonly [SwNode, readonly SwTableNode[]];
 
+/** Native cursor stack deletion modes from crsrsh.hxx. */
+export enum PopMode {
+  DeleteCurrent,
+  DeleteStack,
+}
+
 /** Core cursor shell precedes editing/frame shells and owns actual table movement. */
 export abstract class SwCursorShell extends SwModify {
   protected cursor!: SwCursor;
   protected tableCursor: SwTableCursor | undefined;
+  private stackCursor: SwCursor | undefined;
+  /** Returns the actual saved native cursor head. @returns Registered stack cursor or no saved cursor. */
+  protected GetStackCursor(): SwCursor | undefined {
+    return this.stackCursor;
+  }
+  /** Saves actual displayed endpoints on a registered native cursor ring. @returns Nothing. */
+  public Push(): void {
+    const current = this.getShellCursor();
+    this.stackCursor = new SwCursor(
+      current.GetPoint(),
+      current.HasMark() ? current.GetMark() : undefined,
+      this.stackCursor,
+    );
+  }
+  /** Deletes the top saved cursor or restores its endpoints into the persistent current owner. @param mode - Native deletion mode. @returns Whether a saved cursor existed. */
+  public Pop(mode: PopMode): boolean {
+    const saved = this.stackCursor;
+    if (saved === undefined) return false;
+    this.stackCursor = saved.IsMultiSelection() ? (saved.GetNext() as SwCursor) : undefined;
+    if (mode === PopMode.DeleteCurrent) {
+      this.cursor.Assign(saved.GetPoint(), saved.HasMark() ? saved.GetMark() : undefined);
+      if (this.tableCursor !== undefined) {
+        if (saved.HasMark()) {
+          this.tableCursor.Assign(saved.GetPoint(), saved.GetMark());
+          this.tableCursor.NewTableSelection();
+        } else this.ClearTableCursor();
+      }
+    }
+    saved.Dispose();
+    if (mode === PopMode.DeleteCurrent) this.UpdateTableCursor(true);
+    return true;
+  }
+  /** Clears native table-cell rings and marks while retaining the displayed point. @returns Nothing. */
+  public ClearMark(): void {
+    if (this.tableCursor !== undefined)
+      this.cursor
+        .GetPoint()
+        .Assign(
+          this.tableCursor.GetPoint().GetNode(),
+          this.tableCursor.GetPoint().GetContentIndex(),
+        );
+    this.ClearTableCursor();
+    this.cursor.DeleteMark();
+    this.UpdateTableCursor();
+  }
   /** Resolves the current table context from actual cursor owners. @returns Native table node. */
   public abstract IsCursorInTable(): SwTableNode | undefined;
   /** Expands actual selected boxes by native row or column search. @param search - Native selection search. @returns Original boxes. */
@@ -23,8 +74,8 @@ export abstract class SwCursorShell extends SwModify {
   public abstract GetDoc(): SwDoc;
   /** Captures pending attributes with the actual current cursor. @returns Command boundary. */
   public abstract CaptureCursorState(): SwUndoCursorState;
-  /** Reconciles shell input and bindings after native movement. @returns Nothing. */
-  protected abstract UpdateTableCursor(): void;
+  /** Reconciles shell input and bindings after native movement or saved-position restoration. @param restored - Preserve caret input after a temporary selection. @returns Nothing. */
+  protected abstract UpdateTableCursor(restored?: boolean): void;
 
   /** Finds the common represented XText owner, retaining cells and skipping table sections. @returns Containing text section. */
   private FindParentText(): SwStartNode {

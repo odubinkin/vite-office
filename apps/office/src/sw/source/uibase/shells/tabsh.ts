@@ -7,6 +7,7 @@ import type { SwFEShell } from "../../core/frmedt/fetab";
 import type { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { SwTabCols } from "../../core/bastyp/tabcol";
 import { SwTableRep } from "../table/swtablerep";
+import { PopMode } from "../../core/crsr/trvltbl";
 
 /** Represented table-property inputs in native twips; original model owners remain in the shell. */
 export interface SwTableProperties {
@@ -46,7 +47,17 @@ export function ItemSetToTableParam(shell: SwFEShell, value: SwTableProperties):
       undo.StartUndo("Table Properties");
       try {
         shell.SetTabBorders({ padding: value.padding, border: value.border });
-        if (value.rowSplit !== undefined) shell.SetRowSplit(value.rowSplit);
+        if (value.rowSplit !== undefined) {
+          const selected = shell.IsTableMode();
+          shell.Push();
+          try {
+            if (!selected) shell.SelTable();
+            shell.SetRowSplit(value.rowSplit);
+          } finally {
+            if (!selected) shell.ClearMark();
+            shell.Pop(PopMode.DeleteCurrent);
+          }
+        }
         shell.SetRowsToRepeat(value.headerRows, value.repeatHeaderRows);
         shell.SetRowHeight(value.minRowHeight);
         shell.SetBoxAlign(value.verticalAlign);

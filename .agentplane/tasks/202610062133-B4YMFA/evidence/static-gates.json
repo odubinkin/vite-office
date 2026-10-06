@@ -1,0 +1,68 @@
+{
+  "records": [
+    {
+      "command": "npm run format:check",
+      "exit": 0,
+      "bytes": 122,
+      "sha256": "ac1729f86eee878f5f4d6c948c510d2cc91bb5568f6dd088f70f3885e137d116",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run lint",
+      "exit": 1,
+      "bytes": 2694,
+      "sha256": "a2b429048c12c727f5017f975821cb03266a31a7bdf6d277e62f617e47543e74",
+      "diagnostics": [
+        "> eslint . --max-warnings 0",
+        "  18:9   error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "  18:9   error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "  24:19  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "  17:12  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "  17:12  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "  17:12  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "  26:27  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "  26:27  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "  26:27  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "  30:26  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "  30:26  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion"
+      ]
+    },
+    {
+      "command": "npm run typecheck",
+      "exit": 2,
+      "bytes": 738,
+      "sha256": "ed78c8c0d1dc9c896c4c157d1ba0790ca66eff9088591760dc4fd36c9ad5610d",
+      "diagnostics": [
+        "src/sw/source/uibase/wrtsh/native-row-split-owner-history.test.ts(25,8): error TS2551: Property 'SetNumRuleName' does not exist on type 'SwTextNode'. Did you mean 'GetNumRuleName'?",
+        "npm error Lifecycle script `typecheck` failed with error:",
+        "npm error code 2",
+        "npm error path /Users/odubinkin/Projects/vite-office/apps/office",
+        "npm error workspace @vite-office/office@0.1.0",
+        "npm error location /Users/odubinkin/Projects/vite-office/apps/office",
+        "npm error command failed",
+        "npm error command sh -c tsc --noEmit"
+      ]
+    },
+    {
+      "command": "npm run check:dependencies",
+      "exit": 0,
+      "bytes": 189,
+      "sha256": "3ff1fce635878a1626a1986601f79c983f954e2ecf7272ee82007973a46582ee",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:docs",
+      "exit": 0,
+      "bytes": 119,
+      "sha256": "126977af8a95d23fcefd32bed6aeb7f1be2bb2f07a4bd742b43cef342ba1e485",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:file-size",
+      "exit": 0,
+      "bytes": 3789,
+      "sha256": "820dd65b7a240a2d994a5b96e0500f73c810a0739af520bf9877632707269691",
+      "diagnostics": []
+    }
+  ]
+}

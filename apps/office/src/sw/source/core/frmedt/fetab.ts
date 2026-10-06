@@ -373,12 +373,15 @@ export abstract class SwFEShell extends SwEditShell {
 
   /** Applies row height to current or selected rows. @param height - Minimum height in twips. @returns Whether admitted. */
   public SetRowHeight(height: number): boolean {
-    return this.SetRowAttr({ minHeight: height }, false);
+    return this.SetRowAttr({ minHeight: height });
   }
 
-  /** Applies native row split policy, expanding unselected table properties to the whole table. @param split - Whether rows may split. @returns Whether admitted. */
+  /** Applies native row splitting through document-owned current or selected rows. @param split - Whether rows may split. @returns Whether admitted. */
   public SetRowSplit(split: boolean): boolean {
-    return this.SetRowAttr({ keepTogether: !split }, true);
+    return this.RunNotificationTransaction(
+      /** Forwards actual native selection and pending history attributes. @returns Whether admitted. */
+      () => this.GetDoc().SetRowSplit(this.getShellCursor(), split, this.CaptureCursorState()),
+    );
   }
 
   /** Reads the common item over native current or selected rows. @returns Common split value or no item for mixed/non-table input. */
@@ -417,11 +420,11 @@ export abstract class SwFEShell extends SwEditShell {
     );
   }
 
-  /** Changes actual selected row formats. @param value - Row attributes. @param whole - Expand an unselected table. @returns Whether admitted. */
-  private SetRowAttr(value: SwTableLineFormat, whole: boolean): boolean {
+  /** Changes actual selected row-height formats. @param value - Row attributes. @returns Whether admitted. */
+  private SetRowAttr(value: SwTableLineFormat): boolean {
     const table = this.IsCursorInTable()?.GetTable();
     if (table === undefined) return false;
-    const boxes = this.GetTableBoxes(table, whole);
+    const boxes = this.GetTableBoxes(table, false);
     return this.ChangeTable(
       table,
       /** Updates selected native rows. @returns Nothing. */ () => {

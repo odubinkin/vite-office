@@ -8334,7 +8334,8 @@
         "Iteration180 gives next/previous cell ownership to inherited SwCursorShell from trvltbl.cxx. Existing final-row default append calls SwDoc.InsertRow, which connects native nodes before document-owned SwUndoTableNdsChg publication; shell traversal follows mutation and no SwWrtShell ApplyAction replay or row construction remains. SaveNewBoxes captures connected cursor coordinates. Actual native/mounted/Chromium tests cover retained row identities, pending attributes, native boundaries and repeated history. Default flat append is represented; non-default row modes, DDE/protection/layout/rowspan/merged/nested, full native SwCursorShell and undo/save content contracts remain unverified. Native parameter order is retained with optional browser cursor state for pending attributes. Prior268 semantic statuses/defaults/classifications/evidence and registered I/O/recovery exceptions are preserved.",
         "Iteration183 moves actual ordinary/table cursor storage, editing-ring materialization/cleanup and flat row/column/cell/table selection from SwWrtShell into inherited source-owned SwCursorShell. Thin native writer entry points and standard-mode reset feed native EntireCell/EntireRow/EntireColumn/SelectTable contextual slots; React paints existing actual selected boxes without independent selection state or TextRuns conversion. Core and mounted/Chromium acceptance cover content endpoints, multi-paragraph cells, no selection history/dirty mutation, downstream formatting/paste/insertion and undo. Prior270 semantic states/defaults/classes/evidence and registered I/O deviations preserved. Full protected/layout union/old-model/enhanced-drag/repeated-headline/native mode-flag and UI/core parity remain unverified.",
         "Iteration185 implements contextual Select All from actual native range state: current cell text, full table box selection, then parent text. Core owns common text, real table exit and extended structural boundaries; frame shell admits whole tables by first/last section edges; writer shell coordinates selection; browser synchronizes current DOM point/mark and restores actual ordinary/table owners. Literal core/mounted/Chromium acceptance exercises collapsed/partial/reversed/full/empty cells, repeated/native table mode, leading/trailing tables, imported table-only exit failure, native extras default, subsequent cell edit/history and unchanged neighbors/history. Prior270 semantic states/defaults/classes/full evidence and registered I/O deviations remain unchanged. Full hidden/nested/protected/layout/footnote lifecycle/native mode flags, document prepare-selection-all and structural deletion of extended boundary nodes, complete UI/core parity remain unverified.",
-        "Iteration189 moves table pointer policy to native SwEditWin::changeMousePointer/GetPointer and actual SwCursorShell::IsTableMode instead of a browser SwTab switch. Resize hints are HSizeBar/VSizeBar with native table-mode suppression; enhanced selection retains five native TabSelect glyphs. VCL browser projection owns CSS only and static16x16 X11 source/mask pixels with native hotspots. Literal native enum/switch/owner/asset tests, mounted pointer and real Chromium1280/390 cover represented behavior. Object-selectable arbitration, LibreOfficeKit, remaining pointer families, physical RTL/vertical layout, actual resize drag and complete native window contracts remain unverified; no semantic promotion or registered save/open/recovery changes."
+        "Iteration189 moves table pointer policy to native SwEditWin::changeMousePointer/GetPointer and actual SwCursorShell::IsTableMode instead of a browser SwTab switch. Resize hints are HSizeBar/VSizeBar with native table-mode suppression; enhanced selection retains five native TabSelect glyphs. VCL browser projection owns CSS only and static16x16 X11 source/mask pixels with native hotspots. Literal native enum/switch/owner/asset tests, mounted pointer and real Chromium1280/390 cover represented behavior. Object-selectable arbitration, LibreOfficeKit, remaining pointer families, physical RTL/vertical layout, actual resize drag and complete native window contracts remain unverified; no semantic promotion or registered save/open/recovery changes.",
+        "Iteration200 ports native current-or-table-selected row split mutation to SwDoc/ndtbl1, original line collection, document-owned SwUndoAttrTable/history/notification and same-value requests. SwFEShell brackets and forwards; obsolete whole=true split SetRowAttr adapter removed. Properties caller uses source Push/temporary select-all/ClearMark/finally Pop; native registered cursor stack DeleteCurrent/DeleteStack retains original displayed endpoints and releases on shell Close. Existing selected scope, original graph/list/pending/cursor, grouped3UndoRedo/ODT/continued input and all prior browser controls retained. Full nested/merged/fly/columns/protection/row-content splitting/full crsrsh selection/widget/SfxItemSet/full parity remains unverified; prior contracts/classifications/registered exceptions retained."
       ],
       "omittedResponsibilities": [
         "Full native cursor-shell and table contracts remain unverified."
@@ -8344,6 +8345,30 @@
           {
             "path": "apps/office/src/sw/source/core/crsr/trvltbl.ts",
             "marker": "SwCursorShell"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/docnode/ndtbl1.ts",
+            "marker": "SetSwRowSplit"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/doc.ts",
+            "marker": "SetRowSplit"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/frmedt/fetab.ts",
+            "marker": "this.GetDoc().SetRowSplit"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/crsr/trvltbl.ts",
+            "marker": "public Push"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/shells/tabsh.ts",
+            "marker": "shell.Push"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+            "marker": "PopMode.DeleteStack"
           }
         ],
         "upstream": [
@@ -8362,6 +8387,38 @@
           {
             "path": "vendor/libreoffice-reference/sw/source/core/crsr/crsrsh.cxx",
             "marker": "SwCursorShell::MoveStartText"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl1.cxx",
+            "marker": "SwDoc::SetRowSplit"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl1.cxx",
+            "marker": "lcl_CollectLines"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/frmedt/fetab.cxx",
+            "marker": "SwFEShell::SetRowSplit"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/uibase/shells/tabsh.cxx",
+            "marker": "rSh.Push()"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/crsr/crsrsh.cxx",
+            "marker": "SwCursorShell::Push"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/crsr/crsrsh.cxx",
+            "marker": "SwCursorShell::Pop"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/crsr/crsrsh.cxx",
+            "marker": "SwCursorShell::ClearMark"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/inc/crsrsh.hxx",
+            "marker": "enum class PopMode"
           }
         ]
       }
@@ -9140,6 +9197,30 @@
           {
             "path": "apps/office/src/sw/browser/presentation/writer-view.tsx",
             "marker": "selectedBoxes:"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/docnode/ndtbl1.ts",
+            "marker": "SetSwRowSplit"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/doc.ts",
+            "marker": "SetRowSplit"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/frmedt/fetab.ts",
+            "marker": "this.GetDoc().SetRowSplit"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/crsr/trvltbl.ts",
+            "marker": "public Push"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/shells/tabsh.ts",
+            "marker": "shell.Push"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+            "marker": "PopMode.DeleteStack"
           }
         ],
         "upstream": [
@@ -9326,6 +9407,38 @@
           {
             "path": "vendor/libreoffice-reference/include/vcl/weld/CheckButton.hxx",
             "marker": "TRISTATE_TRUE"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl1.cxx",
+            "marker": "SwDoc::SetRowSplit"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl1.cxx",
+            "marker": "lcl_CollectLines"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/frmedt/fetab.cxx",
+            "marker": "SwFEShell::SetRowSplit"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/uibase/shells/tabsh.cxx",
+            "marker": "rSh.Push()"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/crsr/crsrsh.cxx",
+            "marker": "SwCursorShell::Push"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/crsr/crsrsh.cxx",
+            "marker": "SwCursorShell::Pop"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/crsr/crsrsh.cxx",
+            "marker": "SwCursorShell::ClearMark"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/inc/crsrsh.hxx",
+            "marker": "enum class PopMode"
           }
         ]
       },
@@ -9358,7 +9471,8 @@
         "Iteration182 ports native counted flat InsertCol/NewInsertCol and cumulative AdjustWidths rounding, expands column search across actual rows and represents CheckSplitCells MINLAY using table/page print geometry. Native table shell exposes InsertColumnsBefore/After; shared document-owned SwUndoTableNdsChg retains actual box sections, numeric insertion coordinates and width attributes, preserving selection through mixed and recreated-table history. Prior269 semantic states/defaults/classes/evidence and registered I/O deviations preserved. Full merged/nested/rowspan/RTL/redline/per-edge-border/formula/protection/repeated-headline/frame/undo reconstruction and complete UI/core parity remain unverified.",
         "Iteration190 replaces shell width-array mutation with native SwTabCols: shell GetTabCols, SwTableRep FillTabCols, document SetTabCols and native flat SwTable separator adjustment. Document normalizes frame print width with existing AdjustWidths before attribute Undo, as ndtbl.cxx, retains actual table/row/box/text owners and publishes model changes. Source integer scaling, COLFUZZY20, edge orientation and visible draft rounding are represented. Shared flat horizontal widths only; independent row writes reject without mutation. Hidden/nested/span graphs, shadow/protection/RTL/vertical frames, complete native notifications, wide native Long precision, ruler border drag and full table behavior remain unverified. No parity promotion or registered save/open/recovery deviation changes.",
         "Iteration194 ports horizontal native GetTabRows fuzzy25twip boundaries and SetTabRows interval-height deltas over connected original cell/row owners. The shared edit-window axis capture shifts subsequent row borders and the table bottom, previews without content/history, and records one SwUndoAttrTable on acceptance. Browser device capture protects editable text selection/drag and preserves cursor/list ownership through cancellation, Enter and Undo/Redo. Flat horizontal LTR and whole-row master/follow measurements are represented; native modifiers/proportional/vertical/RTL/merged/nested/protected/split-row layout and full module/parent parity remain unverified. Registered save/open/recovery deviations unchanged.",
-        "Iteration199 ports native Text Flow table/row split controls and removes conflated properties dontSplit and React first-row state. Native ndtbl1 aggregate reads original selected boxes/lines, true row default and no item for empty/mixed. SwDoc.GetRowSplit and SwFEShell.GetRowSplit retain source cursor/document ownership. SwTextFlowPage Reset saves original split/headline values; table child sensitivity does not clear row tristate; FillItemSet publishes only changed headline/table/row items. Browser source labels and mixed HTML checkbox use actual selected boxes, native page handlers/Reset/Cancel/OK, independent table and row setters. Insertion-only dontSplit remains separate. Original graph/list/cursor/grouped3UndoRedo/ODT/continued input and Chromium1280/390 covered. Full row-content splitting/nested/merged/fly/columns/protection/full item classes/SfxItemSet/widget suite and whole parity remain unverified; old contracts/classifications/registered exceptions retained."
+        "Iteration199 ports native Text Flow table/row split controls and removes conflated properties dontSplit and React first-row state. Native ndtbl1 aggregate reads original selected boxes/lines, true row default and no item for empty/mixed. SwDoc.GetRowSplit and SwFEShell.GetRowSplit retain source cursor/document ownership. SwTextFlowPage Reset saves original split/headline values; table child sensitivity does not clear row tristate; FillItemSet publishes only changed headline/table/row items. Browser source labels and mixed HTML checkbox use actual selected boxes, native page handlers/Reset/Cancel/OK, independent table and row setters. Insertion-only dontSplit remains separate. Original graph/list/cursor/grouped3UndoRedo/ODT/continued input and Chromium1280/390 covered. Full row-content splitting/nested/merged/fly/columns/protection/full item classes/SfxItemSet/widget suite and whole parity remain unverified; old contracts/classifications/registered exceptions retained.",
+        "Iteration200 ports native current-or-table-selected row split mutation to SwDoc/ndtbl1, original line collection, document-owned SwUndoAttrTable/history/notification and same-value requests. SwFEShell brackets and forwards; obsolete whole=true split SetRowAttr adapter removed. Properties caller uses source Push/temporary select-all/ClearMark/finally Pop; native registered cursor stack DeleteCurrent/DeleteStack retains original displayed endpoints and releases on shell Close. Existing selected scope, original graph/list/pending/cursor, grouped3UndoRedo/ODT/continued input and all prior browser controls retained. Full nested/merged/fly/columns/protection/row-content splitting/full crsrsh selection/widget/SfxItemSet/full parity remains unverified; prior contracts/classifications/registered exceptions retained."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/doc/doc.cxx",
@@ -11353,7 +11467,8 @@
         "Iteration188: source-shaped horizontal LTR native edge selection and master/follow drag ownership; wider unsupported layout/protection/resize remains unverified.",
         "Iteration190 replaces shell width-array mutation with native SwTabCols: shell GetTabCols, SwTableRep FillTabCols, document SetTabCols and native flat SwTable separator adjustment. Document normalizes frame print width with existing AdjustWidths before attribute Undo, as ndtbl.cxx, retains actual table/row/box/text owners and publishes model changes. Source integer scaling, COLFUZZY20, edge orientation and visible draft rounding are represented. Shared flat horizontal widths only; independent row writes reject without mutation. Hidden/nested/span graphs, shadow/protection/RTL/vertical frames, complete native notifications, wide native Long precision, ruler border drag and full table behavior remain unverified. No parity promotion or registered save/open/recovery deviation changes.",
         "Iteration194 ports horizontal native GetTabRows fuzzy25twip boundaries and SetTabRows interval-height deltas over connected original cell/row owners. The shared edit-window axis capture shifts subsequent row borders and the table bottom, previews without content/history, and records one SwUndoAttrTable on acceptance. Browser device capture protects editable text selection/drag and preserves cursor/list ownership through cancellation, Enter and Undo/Redo. Flat horizontal LTR and whole-row master/follow measurements are represented; native modifiers/proportional/vertical/RTL/merged/nested/protected/split-row layout and full module/parent parity remain unverified. Registered save/open/recovery deviations unchanged.",
-        "Iteration199 ports native Text Flow table/row split controls and removes conflated properties dontSplit and React first-row state. Native ndtbl1 aggregate reads original selected boxes/lines, true row default and no item for empty/mixed. SwDoc.GetRowSplit and SwFEShell.GetRowSplit retain source cursor/document ownership. SwTextFlowPage Reset saves original split/headline values; table child sensitivity does not clear row tristate; FillItemSet publishes only changed headline/table/row items. Browser source labels and mixed HTML checkbox use actual selected boxes, native page handlers/Reset/Cancel/OK, independent table and row setters. Insertion-only dontSplit remains separate. Original graph/list/cursor/grouped3UndoRedo/ODT/continued input and Chromium1280/390 covered. Full row-content splitting/nested/merged/fly/columns/protection/full item classes/SfxItemSet/widget suite and whole parity remain unverified; old contracts/classifications/registered exceptions retained."
+        "Iteration199 ports native Text Flow table/row split controls and removes conflated properties dontSplit and React first-row state. Native ndtbl1 aggregate reads original selected boxes/lines, true row default and no item for empty/mixed. SwDoc.GetRowSplit and SwFEShell.GetRowSplit retain source cursor/document ownership. SwTextFlowPage Reset saves original split/headline values; table child sensitivity does not clear row tristate; FillItemSet publishes only changed headline/table/row items. Browser source labels and mixed HTML checkbox use actual selected boxes, native page handlers/Reset/Cancel/OK, independent table and row setters. Insertion-only dontSplit remains separate. Original graph/list/cursor/grouped3UndoRedo/ODT/continued input and Chromium1280/390 covered. Full row-content splitting/nested/merged/fly/columns/protection/full item classes/SfxItemSet/widget suite and whole parity remain unverified; old contracts/classifications/registered exceptions retained.",
+        "Iteration200 ports native current-or-table-selected row split mutation to SwDoc/ndtbl1, original line collection, document-owned SwUndoAttrTable/history/notification and same-value requests. SwFEShell brackets and forwards; obsolete whole=true split SetRowAttr adapter removed. Properties caller uses source Push/temporary select-all/ClearMark/finally Pop; native registered cursor stack DeleteCurrent/DeleteStack retains original displayed endpoints and releases on shell Close. Existing selected scope, original graph/list/pending/cursor, grouped3UndoRedo/ODT/continued input and all prior browser controls retained. Full nested/merged/fly/columns/protection/row-content splitting/full crsrsh selection/widget/SfxItemSet/full parity remains unverified; prior contracts/classifications/registered exceptions retained."
       ],
       "omittedResponsibilities": [
         "Full native item-format,complex-table,frame-cache and UI lifecycle parity remains unverified."
@@ -11435,6 +11550,30 @@
           {
             "path": "apps/office/src/sw/browser/presentation/writer-view.tsx",
             "marker": "selectedBoxes:"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/docnode/ndtbl1.ts",
+            "marker": "SetSwRowSplit"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/doc.ts",
+            "marker": "SetRowSplit"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/frmedt/fetab.ts",
+            "marker": "this.GetDoc().SetRowSplit"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/crsr/trvltbl.ts",
+            "marker": "public Push"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/shells/tabsh.ts",
+            "marker": "shell.Push"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+            "marker": "PopMode.DeleteStack"
           }
         ],
         "upstream": [
@@ -11501,6 +11640,38 @@
           {
             "path": "vendor/libreoffice-reference/include/vcl/weld/CheckButton.hxx",
             "marker": "TRISTATE_TRUE"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl1.cxx",
+            "marker": "SwDoc::SetRowSplit"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl1.cxx",
+            "marker": "lcl_CollectLines"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/frmedt/fetab.cxx",
+            "marker": "SwFEShell::SetRowSplit"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/uibase/shells/tabsh.cxx",
+            "marker": "rSh.Push()"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/crsr/crsrsh.cxx",
+            "marker": "SwCursorShell::Push"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/crsr/crsrsh.cxx",
+            "marker": "SwCursorShell::Pop"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/crsr/crsrsh.cxx",
+            "marker": "SwCursorShell::ClearMark"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/inc/crsrsh.hxx",
+            "marker": "enum class PopMode"
           }
         ]
       },
@@ -17449,7 +17620,8 @@
         "Iteration183 moves actual ordinary/table cursor storage, editing-ring materialization/cleanup and flat row/column/cell/table selection from SwWrtShell into inherited source-owned SwCursorShell. Thin native writer entry points and standard-mode reset feed native EntireCell/EntireRow/EntireColumn/SelectTable contextual slots; React paints existing actual selected boxes without independent selection state or TextRuns conversion. Core and mounted/Chromium acceptance cover content endpoints, multi-paragraph cells, no selection history/dirty mutation, downstream formatting/paste/insertion and undo. Prior270 semantic states/defaults/classes/evidence and registered I/O deviations preserved. Full protected/layout union/old-model/enhanced-drag/repeated-headline/native mode-flag and UI/core parity remain unverified.",
         "Iteration190 replaces shell width-array mutation with native SwTabCols: shell GetTabCols, SwTableRep FillTabCols, document SetTabCols and native flat SwTable separator adjustment. Document normalizes frame print width with existing AdjustWidths before attribute Undo, as ndtbl.cxx, retains actual table/row/box/text owners and publishes model changes. Source integer scaling, COLFUZZY20, edge orientation and visible draft rounding are represented. Shared flat horizontal widths only; independent row writes reject without mutation. Hidden/nested/span graphs, shadow/protection/RTL/vertical frames, complete native notifications, wide native Long precision, ruler border drag and full table behavior remain unverified. No parity promotion or registered save/open/recovery deviation changes.",
         "Iteration190 corrective closure constructs connected SwTableRep column widths from SwTabCols actual frame separators, preserving read-only empty/unattached draft fallback. Relative65535 table widths become physical dialog widths without changing original model at Reset; document normalizes model print size before native separator Undo. Existing mounted column editing/ODT case stays byte-identical, new Chromium1280/390 checks physical relative-column input and three grouped Undo/Redo cycles. Two existing core-property expectations migrate from legacy align-only geometry to native HoriOrientation and LR spacing, retaining all previous owner/content/cursor/width/history assertions. Native column-page automatic adjacent-column adjustment, complete frame-format width notifications and all layout/row/hidden/protected/RTL/vertical/ruler-drag behavior remain unverified.",
-        "Iteration199 ports native Text Flow table/row split controls and removes conflated properties dontSplit and React first-row state. Native ndtbl1 aggregate reads original selected boxes/lines, true row default and no item for empty/mixed. SwDoc.GetRowSplit and SwFEShell.GetRowSplit retain source cursor/document ownership. SwTextFlowPage Reset saves original split/headline values; table child sensitivity does not clear row tristate; FillItemSet publishes only changed headline/table/row items. Browser source labels and mixed HTML checkbox use actual selected boxes, native page handlers/Reset/Cancel/OK, independent table and row setters. Insertion-only dontSplit remains separate. Original graph/list/cursor/grouped3UndoRedo/ODT/continued input and Chromium1280/390 covered. Full row-content splitting/nested/merged/fly/columns/protection/full item classes/SfxItemSet/widget suite and whole parity remain unverified; old contracts/classifications/registered exceptions retained."
+        "Iteration199 ports native Text Flow table/row split controls and removes conflated properties dontSplit and React first-row state. Native ndtbl1 aggregate reads original selected boxes/lines, true row default and no item for empty/mixed. SwDoc.GetRowSplit and SwFEShell.GetRowSplit retain source cursor/document ownership. SwTextFlowPage Reset saves original split/headline values; table child sensitivity does not clear row tristate; FillItemSet publishes only changed headline/table/row items. Browser source labels and mixed HTML checkbox use actual selected boxes, native page handlers/Reset/Cancel/OK, independent table and row setters. Insertion-only dontSplit remains separate. Original graph/list/cursor/grouped3UndoRedo/ODT/continued input and Chromium1280/390 covered. Full row-content splitting/nested/merged/fly/columns/protection/full item classes/SfxItemSet/widget suite and whole parity remain unverified; old contracts/classifications/registered exceptions retained.",
+        "Iteration200 ports native current-or-table-selected row split mutation to SwDoc/ndtbl1, original line collection, document-owned SwUndoAttrTable/history/notification and same-value requests. SwFEShell brackets and forwards; obsolete whole=true split SetRowAttr adapter removed. Properties caller uses source Push/temporary select-all/ClearMark/finally Pop; native registered cursor stack DeleteCurrent/DeleteStack retains original displayed endpoints and releases on shell Close. Existing selected scope, original graph/list/pending/cursor, grouped3UndoRedo/ODT/continued input and all prior browser controls retained. Full nested/merged/fly/columns/protection/row-content splitting/full crsrsh selection/widget/SfxItemSet/full parity remains unverified; prior contracts/classifications/registered exceptions retained."
       ],
       "omittedResponsibilities": [
         "Full native item-format,complex-table,frame-cache and UI lifecycle parity remains unverified."
@@ -17495,6 +17667,30 @@
           {
             "path": "apps/office/src/sw/browser/presentation/writer-view.tsx",
             "marker": "selectedBoxes:"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/docnode/ndtbl1.ts",
+            "marker": "SetSwRowSplit"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/doc.ts",
+            "marker": "SetRowSplit"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/frmedt/fetab.ts",
+            "marker": "this.GetDoc().SetRowSplit"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/crsr/trvltbl.ts",
+            "marker": "public Push"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/shells/tabsh.ts",
+            "marker": "shell.Push"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+            "marker": "PopMode.DeleteStack"
           }
         ],
         "upstream": [
@@ -17541,6 +17737,38 @@
           {
             "path": "vendor/libreoffice-reference/include/vcl/weld/CheckButton.hxx",
             "marker": "TRISTATE_TRUE"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl1.cxx",
+            "marker": "SwDoc::SetRowSplit"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl1.cxx",
+            "marker": "lcl_CollectLines"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/frmedt/fetab.cxx",
+            "marker": "SwFEShell::SetRowSplit"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/uibase/shells/tabsh.cxx",
+            "marker": "rSh.Push()"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/crsr/crsrsh.cxx",
+            "marker": "SwCursorShell::Push"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/crsr/crsrsh.cxx",
+            "marker": "SwCursorShell::Pop"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/crsr/crsrsh.cxx",
+            "marker": "SwCursorShell::ClearMark"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/inc/crsrsh.hxx",
+            "marker": "enum class PopMode"
           }
         ]
       }
@@ -18593,6 +18821,30 @@
           {
             "path": "apps/office/e2e/writer-native-table-mouse.spec.ts",
             "marker": "Writer native table mouse edge and drag"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/docnode/ndtbl1.ts",
+            "marker": "SetSwRowSplit"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/doc.ts",
+            "marker": "SetRowSplit"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/frmedt/fetab.ts",
+            "marker": "this.GetDoc().SetRowSplit"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/crsr/trvltbl.ts",
+            "marker": "public Push"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/shells/tabsh.ts",
+            "marker": "shell.Push"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+            "marker": "PopMode.DeleteStack"
           }
         ],
         "upstream": [
@@ -18799,6 +19051,38 @@
           {
             "path": "vendor/libreoffice-reference/sw/source/uibase/wrtsh/select.cxx",
             "marker": "SwWrtShell::SelAll"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl1.cxx",
+            "marker": "SwDoc::SetRowSplit"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl1.cxx",
+            "marker": "lcl_CollectLines"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/frmedt/fetab.cxx",
+            "marker": "SwFEShell::SetRowSplit"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/uibase/shells/tabsh.cxx",
+            "marker": "rSh.Push()"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/crsr/crsrsh.cxx",
+            "marker": "SwCursorShell::Push"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/crsr/crsrsh.cxx",
+            "marker": "SwCursorShell::Pop"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/crsr/crsrsh.cxx",
+            "marker": "SwCursorShell::ClearMark"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/inc/crsrsh.hxx",
+            "marker": "enum class PopMode"
           }
         ]
       },
@@ -18837,7 +19121,8 @@
         "Iteration183 moves actual ordinary/table cursor storage, editing-ring materialization/cleanup and flat row/column/cell/table selection from SwWrtShell into inherited source-owned SwCursorShell. Thin native writer entry points and standard-mode reset feed native EntireCell/EntireRow/EntireColumn/SelectTable contextual slots; React paints existing actual selected boxes without independent selection state or TextRuns conversion. Core and mounted/Chromium acceptance cover content endpoints, multi-paragraph cells, no selection history/dirty mutation, downstream formatting/paste/insertion and undo. Prior270 semantic states/defaults/classes/evidence and registered I/O deviations preserved. Full protected/layout union/old-model/enhanced-drag/repeated-headline/native mode-flag and UI/core parity remain unverified.",
         "Iteration184 removes SwWrtShellEditingPort/SwWrtShellEditingOperations and WriterPasteOperations callback layers. Split shell algorithms accept the actual SwWrtShell identity via erased type-only imports and invoke native cursor/document/history/notification methods directly. Transfer insertion and imported list history call the same actual shell directly; no synthetic editing object, callback port, runtime cycle or new DTO projection. The shell alone supplies its native undo context for sequential initial operations. Existing482 test files and represented algorithm ordering/admission/grouping/attributes/table sections/composition and registered I/O deviations are preserved. No native clipboard/layout/mode/default or semantic-status promotion.",
         "Iteration185 implements contextual Select All from actual native range state: current cell text, full table box selection, then parent text. Core owns common text, real table exit and extended structural boundaries; frame shell admits whole tables by first/last section edges; writer shell coordinates selection; browser synchronizes current DOM point/mark and restores actual ordinary/table owners. Literal core/mounted/Chromium acceptance exercises collapsed/partial/reversed/full/empty cells, repeated/native table mode, leading/trailing tables, imported table-only exit failure, native extras default, subsequent cell edit/history and unchanged neighbors/history. Prior270 semantic states/defaults/classes/full evidence and registered I/O deviations remain unchanged. Full hidden/nested/protected/layout/footnote lifecycle/native mode flags, document prepare-selection-all and structural deletion of extended boundary nodes, complete UI/core parity remain unverified.",
-        "Iteration188: source-shaped horizontal LTR native edge selection and master/follow drag ownership; wider unsupported layout/protection/resize remains unverified."
+        "Iteration188: source-shaped horizontal LTR native edge selection and master/follow drag ownership; wider unsupported layout/protection/resize remains unverified.",
+        "Iteration200 ports native current-or-table-selected row split mutation to SwDoc/ndtbl1, original line collection, document-owned SwUndoAttrTable/history/notification and same-value requests. SwFEShell brackets and forwards; obsolete whole=true split SetRowAttr adapter removed. Properties caller uses source Push/temporary select-all/ClearMark/finally Pop; native registered cursor stack DeleteCurrent/DeleteStack retains original displayed endpoints and releases on shell Close. Existing selected scope, original graph/list/pending/cursor, grouped3UndoRedo/ODT/continued input and all prior browser controls retained. Full nested/merged/fly/columns/protection/row-content splitting/full crsrsh selection/widget/SfxItemSet/full parity remains unverified; prior contracts/classifications/registered exceptions retained."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/uibase/wrtsh/wrtsh1.cxx",
@@ -21877,6 +22162,30 @@
           {
             "path": "apps/office/src/sw/browser/presentation/writer-view.tsx",
             "marker": "selectedBoxes:"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/docnode/ndtbl1.ts",
+            "marker": "SetSwRowSplit"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/doc.ts",
+            "marker": "SetRowSplit"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/frmedt/fetab.ts",
+            "marker": "this.GetDoc().SetRowSplit"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/crsr/trvltbl.ts",
+            "marker": "public Push"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/shells/tabsh.ts",
+            "marker": "shell.Push"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+            "marker": "PopMode.DeleteStack"
           }
         ],
         "upstream": [
@@ -21915,6 +22224,38 @@
           {
             "path": "vendor/libreoffice-reference/include/vcl/weld/CheckButton.hxx",
             "marker": "TRISTATE_TRUE"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl1.cxx",
+            "marker": "SwDoc::SetRowSplit"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl1.cxx",
+            "marker": "lcl_CollectLines"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/frmedt/fetab.cxx",
+            "marker": "SwFEShell::SetRowSplit"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/uibase/shells/tabsh.cxx",
+            "marker": "rSh.Push()"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/crsr/crsrsh.cxx",
+            "marker": "SwCursorShell::Push"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/crsr/crsrsh.cxx",
+            "marker": "SwCursorShell::Pop"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/crsr/crsrsh.cxx",
+            "marker": "SwCursorShell::ClearMark"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/inc/crsrsh.hxx",
+            "marker": "enum class PopMode"
           }
         ]
       },
@@ -21926,7 +22267,8 @@
         "Full native ndtbl1 mutations/row sizing/background/redlines/nested/merged and full parity unverified."
       ],
       "preservedResponsibilities": [
-        "Iteration199 ports native Text Flow table/row split controls and removes conflated properties dontSplit and React first-row state. Native ndtbl1 aggregate reads original selected boxes/lines, true row default and no item for empty/mixed. SwDoc.GetRowSplit and SwFEShell.GetRowSplit retain source cursor/document ownership. SwTextFlowPage Reset saves original split/headline values; table child sensitivity does not clear row tristate; FillItemSet publishes only changed headline/table/row items. Browser source labels and mixed HTML checkbox use actual selected boxes, native page handlers/Reset/Cancel/OK, independent table and row setters. Insertion-only dontSplit remains separate. Original graph/list/cursor/grouped3UndoRedo/ODT/continued input and Chromium1280/390 covered. Full row-content splitting/nested/merged/fly/columns/protection/full item classes/SfxItemSet/widget suite and whole parity remain unverified; old contracts/classifications/registered exceptions retained."
+        "Iteration199 ports native Text Flow table/row split controls and removes conflated properties dontSplit and React first-row state. Native ndtbl1 aggregate reads original selected boxes/lines, true row default and no item for empty/mixed. SwDoc.GetRowSplit and SwFEShell.GetRowSplit retain source cursor/document ownership. SwTextFlowPage Reset saves original split/headline values; table child sensitivity does not clear row tristate; FillItemSet publishes only changed headline/table/row items. Browser source labels and mixed HTML checkbox use actual selected boxes, native page handlers/Reset/Cancel/OK, independent table and row setters. Insertion-only dontSplit remains separate. Original graph/list/cursor/grouped3UndoRedo/ODT/continued input and Chromium1280/390 covered. Full row-content splitting/nested/merged/fly/columns/protection/full item classes/SfxItemSet/widget suite and whole parity remain unverified; old contracts/classifications/registered exceptions retained.",
+        "Iteration200 ports native current-or-table-selected row split mutation to SwDoc/ndtbl1, original line collection, document-owned SwUndoAttrTable/history/notification and same-value requests. SwFEShell brackets and forwards; obsolete whole=true split SetRowAttr adapter removed. Properties caller uses source Push/temporary select-all/ClearMark/finally Pop; native registered cursor stack DeleteCurrent/DeleteStack retains original displayed endpoints and releases on shell Close. Existing selected scope, original graph/list/pending/cursor, grouped3UndoRedo/ODT/continued input and all prior browser controls retained. Full nested/merged/fly/columns/protection/row-content splitting/full crsrsh selection/widget/SfxItemSet/full parity remains unverified; prior contracts/classifications/registered exceptions retained."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/docnode/ndtbl1.cxx",

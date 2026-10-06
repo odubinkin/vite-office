@@ -1,0 +1,96 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/sw/source/core/docnode/ndtbl1.ts": "dd303599bf7d0926bbf39f2f60fc4b1ffe57b1cecba3cd1bc85240512af2f5cb",
+    "apps/office/src/sw/source/core/doc/doc.ts": "775ada86ae17a52b6c9103578205a92391f72fdebdbd54362ec091619800e261",
+    "apps/office/src/sw/source/core/frmedt/fetab.ts": "3bd3be67ed54f8e86e31b4e2b8679988ac292edda8007aa07da43ae102e445b7",
+    "apps/office/src/sw/source/core/crsr/trvltbl.ts": "fb66498e413464e601e13d35e39da7f5bd3bf206619622fbc0f95c934fa23a04",
+    "apps/office/src/sw/source/uibase/shells/tabsh.ts": "1cac9aaceff530600482563cd5eda61111d9f63c93fd2f28643dba0025eac626",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts": "a8c3ef975189936b11143ff381ebf6d7879da7a7bec5e7bf9fcb7052c3d94e8c",
+    "apps/office/src/sw/source/core/docnode/native-row-split-owner.test.ts": "b7421cddc20c9087bb0274c43a0443c334d8bb7d4c9d1fdf1a7ebd1b7d3c1c05",
+    "apps/office/src/sw/source/core/crsr/native-table-cursor-stack.test.ts": "e98bf3c488833ffcb283c1270527e508e61eacca3768d66f499b1136e32a7b6d",
+    "apps/office/src/sw/source/uibase/wrtsh/native-row-split-owner-history.test.ts": "be93706d5e6fda58078355937269697eeca6a3c5764947032ce906662eeec671",
+    "docs/program/source-provenance.json": "e883024963e55b69e729416ae4119f726a200bfd4c5f3ed9db3c95e6b3f409a5",
+    "docs/program/parity/runtime-inventory.json": "8b41879455781305e70ecc7a7e7c777f2c7a484e3abd842f7450e9c9f897c7fa"
+  },
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1443,
+      "sha256": "bf4eac4401d6eee43edc17490b3c896a4e39b90af14a19de313a388ac3a4b1fd",
+      "totals": [],
+      "failedCases": []
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/source/core/docnode/native-row-split-owner.test.ts src/sw/source/core/crsr/native-table-cursor-stack.test.ts src/sw/source/uibase/wrtsh/native-row-split-owner-history.test.ts -t native row split ownership and grouped history mode=properties|restoring a collapsed native cursor|disconnected native table cursor --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/B4YMFA.app-closure1-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 30680,
+      "sha256": "3fa3af85f933eb7211304b6e15a2eeac54688dfb72c527bf7347dc0b5c090044",
+      "totals": [
+        "Test Files  1 failed | 2 passed (3)",
+        "Tests  1 failed | 2 passed | 7 skipped (10)"
+      ],
+      "failedCases": [
+        {
+          "name": "apps/office/src/sw/source/core/docnode/native-row-split-owner.test.ts > disconnected native table cursor is rejected before attribute history",
+          "assertion": [
+            "Error: Writer inserted table needs following text."
+          ]
+        }
+      ],
+      "caseCounts": {
+        "passed": 2,
+        "failed": 1,
+        "skipped": 7,
+        "total": 10
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 14888,
+          "covered": 4559,
+          "skipped": 0,
+          "pct": 30.62
+        },
+        "statements": {
+          "total": 16336,
+          "covered": 4736,
+          "skipped": 0,
+          "pct": 28.99
+        },
+        "functions": {
+          "total": 3794,
+          "covered": 1148,
+          "skipped": 0,
+          "pct": 30.25
+        },
+        "branches": {
+          "total": 12112,
+          "covered": 2497,
+          "skipped": 0,
+          "pct": 20.61
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverage": {
+        "lines": 30.62,
+        "statements": 28.99,
+        "functions": 30.25,
+        "branches": 20.61
+      },
+      "incompleteFileCount": 256,
+      "coverageMapSHA256": "c220be5dbc7c2e713ebb2a1bc48527a2fc8df3214943606cdce7550d1f96c5c3"
+    }
+  ],
+  "scope": "Only original failed Properties pending input case and two genuinely new native cursor/ownership cases; rebuild changed production code, no full/passing/browser replay"
+}

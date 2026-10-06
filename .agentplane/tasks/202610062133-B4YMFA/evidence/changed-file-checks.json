@@ -1,0 +1,49 @@
+{
+  "records": [
+    {
+      "command": "Unchanged JSDoc validator on approved changed code/acceptance paths; actual physical-line count",
+      "exit": 0,
+      "errors": [],
+      "physicalLines": {
+        "apps/office/src/sw/source/core/docnode/ndtbl1.ts": 97,
+        "apps/office/src/sw/source/core/doc/doc.ts": 913,
+        "apps/office/src/sw/source/core/frmedt/fetab.ts": 475,
+        "apps/office/src/sw/source/core/crsr/trvltbl.ts": 339,
+        "apps/office/src/sw/source/uibase/shells/tabsh.ts": 175,
+        "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts": 958,
+        "apps/office/src/sw/source/core/docnode/native-row-split-owner.test.ts": 90,
+        "apps/office/src/sw/source/core/crsr/native-table-cursor-stack.test.ts": 89,
+        "apps/office/src/sw/source/uibase/wrtsh/native-row-split-owner-history.test.ts": 139
+      }
+    },
+    {
+      "command": "npm exec -- prettier --check apps/office/src/sw/source/core/docnode/ndtbl1.ts apps/office/src/sw/source/core/doc/doc.ts apps/office/src/sw/source/core/frmedt/fetab.ts apps/office/src/sw/source/core/crsr/trvltbl.ts apps/office/src/sw/source/uibase/shells/tabsh.ts apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts apps/office/src/sw/source/core/docnode/native-row-split-owner.test.ts apps/office/src/sw/source/core/crsr/native-table-cursor-stack.test.ts apps/office/src/sw/source/uibase/wrtsh/native-row-split-owner-history.test.ts",
+      "exit": 0,
+      "bytes": 66,
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+      "diagnostics": [
+        "All matched files use Prettier code style!"
+      ]
+    },
+    {
+      "command": "npm exec -- eslint apps/office/src/sw/source/core/docnode/ndtbl1.ts apps/office/src/sw/source/core/doc/doc.ts apps/office/src/sw/source/core/frmedt/fetab.ts apps/office/src/sw/source/core/crsr/trvltbl.ts apps/office/src/sw/source/uibase/shells/tabsh.ts apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts apps/office/src/sw/source/core/docnode/native-row-split-owner.test.ts apps/office/src/sw/source/core/crsr/native-table-cursor-stack.test.ts apps/office/src/sw/source/uibase/wrtsh/native-row-split-owner-history.test.ts --max-warnings 0",
+      "exit": 1,
+      "bytes": 2639,
+      "sha256": "2fd7396fd530f474b8cb180391c957922b074e8910ca79f6a8c01dbad3096d71",
+      "diagnostics": [
+        "  18:9   error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "  18:9   error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "  24:19  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "  17:12  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "  17:12  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "  17:12  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "  26:27  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "  26:27  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "  26:27  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "  30:26  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "  30:26  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "  30:26  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion"
+      ]
+    }
+  ]
+}

@@ -7,6 +7,7 @@ import { subscribeToSwModify } from "../../../inc/calbck";
 import type { SwModelHint } from "../../../inc/hints";
 import { SwPosition, type WriterTextRange } from "../../core/crsr/pam";
 import { SwCursor, SwTableCursor } from "../../core/crsr/swcrsr";
+import { PopMode } from "../../core/crsr/trvltbl";
 import { SwTableBoxStartNode, SwTableNode } from "../../core/docnode/node";
 import type { SwDoc as WriterDocument } from "../../core/doc/doc";
 import type { SwLineNumberInfo } from "../../../inc/lineinfo";
@@ -241,11 +242,12 @@ export class SwWrtShell extends SwFEShell {
     );
   }
 
-  /** Refreshes shell-owned input/bindings after core cell traversal. @returns Nothing. */
-  protected override UpdateTableCursor(): void {
-    this.pendingCharacterItems = this.GetActiveParagraph().GetCharacterItemsAt(
-      this.getShellCursor().GetPoint().GetContentIndex(),
-    );
+  /** Refreshes shell-owned input/bindings after traversal, retaining input during saved temporary selections. @param restored - Native saved-position restoration. @returns Nothing. */
+  protected override UpdateTableCursor(restored = false): void {
+    if (!restored && this.GetStackCursor() === undefined)
+      this.pendingCharacterItems = this.GetActiveParagraph().GetCharacterItemsAt(
+        this.getShellCursor().GetPoint().GetContentIndex(),
+      );
     this.docShell.GetUndoManager().BreakUndoGrouping();
     this.NotifySelection();
   }
@@ -334,6 +336,9 @@ export class SwWrtShell extends SwFEShell {
   /** Releases the persistent PaM and broadcaster registrations. @returns Nothing. */
   public Close(): void {
     this.docShellSubscription();
+    while (this.Pop(PopMode.DeleteStack)) {
+      /* Release registered native stack positions. */
+    }
     this.ClearTableCursor();
     this.cursor.Dispose();
     this.DisposeModify();

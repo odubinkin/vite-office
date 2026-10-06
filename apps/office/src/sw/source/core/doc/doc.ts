@@ -4,15 +4,15 @@ import { SwAttrPool } from "../attr/swatrset";
 import type { SwFormat } from "../attr/format";
 import { SwLineNumberInfo } from "../../../inc/lineinfo";
 import { SwNodes } from "../docnode/nodes";
-import { SwTableNode, SwTableBoxStartNode, type SwNode } from "../docnode/node";
+import { SwTableNode, type SwNode } from "../docnode/node";
 import { SwTextNode } from "../txtnode/ndtxt";
 import type { SwTable, SwTableBox, SwTableBoxFormat } from "../table/swtable";
 import { SwUndoAttrTable, SwUndoTableNdsChg } from "../undo/untbl";
 import type { SwTabCols } from "../bastyp/tabcol";
 import type { SwTabFrame } from "../layout/tabfrm";
 import { GetSwTabRows, SetSwTabRows } from "../docnode/ndtbl";
-import { GetSwRowSplit } from "../docnode/ndtbl1";
-import { SwTableCursor, type SwCursor } from "../crsr/swcrsr";
+import { GetSwCursorRowSplit, SetSwRowSplit } from "../docnode/ndtbl1";
+import type { SwCursor } from "../crsr/swcrsr";
 import { createWriterCollapsedCursorState, type SwUndoCursorState } from "../undo/undobj";
 import { SwInsertTableFlags, type SwInsertTableOptions } from "../../../inc/itabenum";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
@@ -90,21 +90,11 @@ export class SwDoc {
 
   /** Reads native row split from current or selected canonical boxes. @param cursor - Original shell cursor. @returns Common row item or no item. */
   public static GetRowSplit(cursor: SwCursor): boolean | undefined {
-    const section = cursor.GetPoint().GetNode().StartOfSectionNode();
-    if (!(section instanceof SwTableBoxStartNode)) return undefined;
-    const table = (section.StartOfSectionNode() as SwTableNode).GetTable();
-    const boxes =
-      cursor instanceof SwTableCursor
-        ? cursor.GetSelectedBoxes()
-        : table.GetTabLines().flatMap(
-            /** Collects the original current cell without projected coordinates. @param row - Original line. @returns Current boxes. */
-            (row) =>
-              row.GetTabBoxes().filter(
-                /** Matches the canonical node section. @param box - Original box. @returns Whether current. */
-                (box) => box.GetStartNode() === section,
-              ),
-          );
-    return GetSwRowSplit(table, boxes);
+    return GetSwCursorRowSplit(cursor);
+  }
+  /** Publishes native row split attributes through document-owned history. @param cursor - Actual current or selected cursor. @param split - New row item. @param cursorState - Optional shell cursor attributes. @returns Whether admitted. */
+  public SetRowSplit(cursor: SwCursor, split: boolean, cursorState?: SwUndoCursorState): boolean {
+    return SetSwRowSplit(this, cursor, split, cursorState);
   }
   /** Applies native row-height deltas through the source ndtbl owner split. @param next - Requested rows. @param currentColumnOnly - Original hit cell only. @param frame - Physical frame. @param start - Actual cell. @param cursorState - Retained native cursor. @returns Whether changed. */
   public SetTabRows(

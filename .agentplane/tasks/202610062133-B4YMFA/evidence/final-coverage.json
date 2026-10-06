@@ -1,0 +1,115 @@
+{
+  "app": {
+    "coverage": {
+      "lines": {
+        "total": 14890,
+        "covered": 14890,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 16338,
+        "covered": 16338,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 3794,
+        "covered": 3794,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 12112,
+        "covered": 12112,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "mapSHA256": "2d00e8c62f0a809c8c74b0369f869420f2cfaf699a7010d1be4a50707f46ce02",
+    "files": 274
+  },
+  "inventory": {
+    "coverage": {
+      "lines": {
+        "total": 1464,
+        "covered": 1464,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 1523,
+        "covered": 1523,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 384,
+        "covered": 384,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 1080,
+        "covered": 1080,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "mapSHA256": "1bd4ffaed535e1fd277791d65b1cae19adb9da04066621ba0b3c7fa9543ec72f",
+    "files": 38
+  },
+  "proof": "Actual initial counters transferred only over full identical maps/source or complete contiguous identical source ranges with full mapped locations; current changed ranges use focused raw counters. Skipped cases retained as skipped. No counts fabricated.",
+  "transfers": [
+    {
+      "path": "apps/office/src/sw/source/core/crsr/trvltbl.ts",
+      "kind": "entire contiguous byte-identical regions; full decl/body function and full enclosing branch/location maps; actual counters only",
+      "initialSourceSHA256": "fde0fb2477e63674d7aff32665a6bbd630d37da506d5fb0916d74570a72cb932",
+      "currentSourceSHA256": "52f9ff49d50f843faff94a6340759e6da3025f9c2313fe0f89a9d5a902a32ac5",
+      "regionCount": 5,
+      "transferredActualCounters": {
+        "statements": 200,
+        "functions": 26,
+        "branches": 54
+      }
+    },
+    {
+      "path": "apps/office/src/sw/source/core/docnode/ndtbl1.ts",
+      "kind": "entire contiguous byte-identical regions; full decl/body function and full enclosing branch/location maps; actual counters only",
+      "initialSourceSHA256": "6e7c943034258a17b080ebd3205baebac2bde3726f4568de2fdf2637fbe6d282",
+      "currentSourceSHA256": "dd303599bf7d0926bbf39f2f60fc4b1ffe57b1cecba3cd1bc85240512af2f5cb",
+      "regionCount": 2,
+      "transferredActualCounters": {
+        "statements": 38,
+        "functions": 10,
+        "branches": 11
+      }
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+      "kind": "entire contiguous byte-identical regions; full decl/body function and full enclosing branch/location maps; actual counters only",
+      "initialSourceSHA256": "6f01a65b8adcc7804e15cbd03b016d1c13c7853311b6bbc148721d150a397f6b",
+      "currentSourceSHA256": "a8c3ef975189936b11143ff381ebf6d7879da7a7bec5e7bf9fcb7052c3d94e8c",
+      "regionCount": 2,
+      "transferredActualCounters": {
+        "statements": 321,
+        "functions": 105,
+        "branches": 92
+      }
+    }
+  ],
+  "wholeIdenticalFileCount": 271,
+  "gaps": []
+}
