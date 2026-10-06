@@ -1,0 +1,87 @@
+{
+  "sourceIdentityVerified": true,
+  "proof": "exact unchanged source and per-file statement/function/branch maps; actual initial and failed-only counters",
+  "totals": {
+    "app": {
+      "lines": {
+        "total": 13140,
+        "covered": 13140,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 14404,
+        "covered": 14404,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 3461,
+        "covered": 3461,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 10773,
+        "covered": 10773,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "inventory": {
+      "lines": {
+        "total": 1464,
+        "covered": 1464,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 1523,
+        "covered": 1523,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 384,
+        "covered": 384,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 1080,
+        "covered": 1080,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    }
+  },
+  "mapSHA256": {
+    "app": "0a94f56cf814220a74a0a9d5eb836da931bc2facf5bc5aecb4c4674b50231762",
+    "inventory": "32f2cfa464313247513bd562cbe9f343955f3b366fb55d7f233e2e33dd37f42b"
+  },
+  "mapIdentities": [
+    {
+      "kind": "app",
+      "files": 256,
+      "allStatementFunctionBranchMapsExact": true
+    },
+    {
+      "kind": "inventory",
+      "files": 38,
+      "allStatementFunctionBranchMapsExact": true
+    }
+  ],
+  "missing": []
+}

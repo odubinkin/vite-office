@@ -164,6 +164,7 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
       <WriterEditableTable
         key={`${frame.table.GetName()}:${frame.firstRow}`}
         table={frame.table}
+        printArea={frame.printArea}
         paragraphs={paragraphByNodeIndex}
         activeParagraphId={props.activeParagraphId}
         retainParagraphElement={
@@ -420,6 +421,11 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
                     <WriterEditableTable
                       key={`measure-${table.GetName()}`}
                       table={table}
+                      availableWidth={
+                        props.pageDescriptor.width -
+                        props.pageDescriptor.leftMargin -
+                        props.pageDescriptor.rightMargin
+                      }
                       paragraphs={paragraphByNodeIndex}
                       /* v8 ignore next -- Hidden measurement tables are never interactive. */
                       onSelectRow={

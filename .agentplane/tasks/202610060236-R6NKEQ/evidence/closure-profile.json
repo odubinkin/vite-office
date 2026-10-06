@@ -1,0 +1,64 @@
+{
+  "vendorRestored": true,
+  "failedOnly": true,
+  "noRebuildProductionUnchanged": true,
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- /Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/layout/native-table-print-area.test.ts --testNamePattern=native table print area retains unchanged frames and invalidates native left then right geometry --coverage.reportOnFailure --coverage.reporter=json-summary --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/R6NKEQ.closure-app-results.json",
+      "exit": 1,
+      "bytes": 2160,
+      "sha256": "497cd52b7864c2e661e0e434831c9645049a5d75b40600c6a887f44016d9d69a",
+      "caseCounts": {
+        "passed": 1,
+        "failed": 0,
+        "skipped": 19,
+        "total": 20
+      },
+      "failedCases": [],
+      "errors": [],
+      "mapSHA256": "11d5d3f41842d03a53f2e82533d9a8e09083bc9d956aa42fcd57e321a4c800f9",
+      "summarySHA256": "ec79e89034f8f1b9b3957daf2bc7c79d6cd7ffaa407152ecaed4675c0e7c25a8"
+    },
+    {
+      "kind": "inventory",
+      "command": "npm run test:inventory:coverage -- /Users/odubinkin/Projects/vite-office/scripts/libreoffice-inventory/parity-mapping-cli.test.ts --testNamePattern=parity mapping CLI composes the Writer mapping report with owned upstream marker evidence --coverage.reportOnFailure --coverage.reporter=json-summary --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/R6NKEQ.closure-inventory-results.json",
+      "exit": 1,
+      "bytes": 1481,
+      "sha256": "f85c91249b263eeb06eab1731ac498bc0edcb7bd2a45f1bcffba5a5bfbd3729e",
+      "caseCounts": {
+        "passed": 1,
+        "failed": 0,
+        "skipped": 2,
+        "total": 3
+      },
+      "failedCases": [],
+      "errors": [],
+      "mapSHA256": "02d780bf67c2d779900ce73f16abf54b46876d977e0e8252bc309c263ff41143",
+      "summarySHA256": "1ce6b53ef573407d34449f6677ae922e3d36ee7a93916e1dd3acc75f56cd00e6"
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts writer-table-print-area.spec.ts --reporter=list,json",
+      "exit": 1,
+      "bytes": 21663,
+      "sha256": "e8f0eb238de191fa84d4d1b8c52cee8d078fd1f8082605837b4972f224bdee8f",
+      "caseCounts": {
+        "startTime": "2026-10-06T02:52:17.921Z",
+        "duration": 39628.735,
+        "expected": 2,
+        "skipped": 0,
+        "unexpected": 6,
+        "flaky": 0
+      },
+      "failedCases": [
+        "writer-table-print-area.spec.ts > Writer native table print geometry left width=1280",
+        "writer-table-print-area.spec.ts > Writer native table print geometry center width=1280",
+        "writer-table-print-area.spec.ts > Writer native table print geometry right width=1280",
+        "writer-table-print-area.spec.ts > Writer native table print geometry left width=390",
+        "writer-table-print-area.spec.ts > Writer native table print geometry center width=390",
+        "writer-table-print-area.spec.ts > Writer native table print geometry right width=390"
+      ]
+    }
+  ]
+}

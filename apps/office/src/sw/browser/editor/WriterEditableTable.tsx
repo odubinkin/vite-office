@@ -1,12 +1,15 @@
 /** @fileoverview Browser table frame over canonical SwTable rows and SwTextNode cell paragraphs. */
 
 import type { SwTable } from "../../source/core/table/swtable";
+import { SwTabFrame, type SwTablePrintArea } from "../../source/core/layout/tabfrm";
 import type { WriterParagraphProjection } from "../presentation/writer-view-projection";
 import { WriterEditableParagraph } from "./WriterEditableParagraph";
 
 /** Renders one visible, editable Writer table with row selection. */
 /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ export function WriterEditableTable({
   table,
+  printArea,
+  availableWidth,
   selectedBoxes,
   onSelectRow,
   firstRow = 0,
@@ -18,6 +21,8 @@ import { WriterEditableParagraph } from "./WriterEditableParagraph";
   retainParagraphElement,
 }: Readonly<{
   table: SwTable;
+  printArea?: SwTablePrintArea;
+  availableWidth?: number;
   selectedBoxes?: readonly number[] | undefined;
   onSelectRow: (row: number) => void;
   firstRow?: number;
@@ -29,6 +34,13 @@ import { WriterEditableParagraph } from "./WriterEditableParagraph";
   retainParagraphElement?: (id: string, element: HTMLParagraphElement | null) => void;
 }>): React.JSX.Element {
   const format = table.GetFormat();
+  const columnWidth = table.GetColumnWidths().reduce(
+    /** Adds native column reference widths. @param sum - Previous extent. @param width - Column width. @returns Total. */
+    (sum, width) => sum + width,
+    0,
+  );
+  const area =
+    printArea ?? new SwTabFrame(table).Format(availableWidth ?? format.width ?? columnWidth);
   return (
     <div className="max-w-full" data-writer-table={table.GetName()}>
       <table
@@ -36,18 +48,11 @@ import { WriterEditableParagraph } from "./WriterEditableParagraph";
         className="table-fixed border-collapse"
         ref={retainElement}
         style={{
-          width:
-            (format.width ??
-              table
-                .GetColumnWidths()
-                .reduce(
-                  /** Handles the browser table interaction. @param argument1 - Callback input. @param argument2 - Callback input. @returns Callback result. */ (
-                    sum,
-                    width,
-                  ) => sum + width,
-                  0,
-                )) / 15,
-          marginLeft: (format.marginLeft ?? 0) / 15,
+          tableLayout: "fixed",
+          borderCollapse: "collapse",
+          width: area.width / 15,
+          marginLeft: area.left / 15,
+          marginRight: area.right / 15,
           marginTop: firstRow === 0 ? (format.marginTop ?? 0) / 15 : 0,
           marginBottom:
             lastRow === table.GetTabLines().length - 1 ? (format.marginBottom ?? 0) / 15 : 0,
@@ -59,7 +64,12 @@ import { WriterEditableParagraph } from "./WriterEditableParagraph";
               width,
               index,
             ) => (
-              <col key={index} style={{ width: width / 15 }} />
+              <col
+                key={index}
+                style={{
+                  width: `${columnWidth === 0 ? 100 / table.GetColumnWidths().length : (width * 100) / columnWidth}%`,
+                }}
+              />
             ),
           )}
         </colgroup>

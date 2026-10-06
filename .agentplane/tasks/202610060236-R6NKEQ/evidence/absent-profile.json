@@ -1,0 +1,220 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/sw/source/core/table/swtable.ts": "b3d7642abae9cb294b2ade7550a8923075c0e92f78def7ccc4f3c3ae5cf2e7a6",
+    "apps/office/src/sw/source/core/layout/newfrm.ts": "abdc1e2962444b89f0ace7f6991b1630e70cc284367e5024c5d3751050af918f",
+    "apps/office/src/sw/source/core/layout/tabfrm.ts": "373a80c4067a79d1e39f0b15115f6147fdde207e8d61aad7457fd13506dde47d",
+    "apps/office/src/xmloff/source/table/XMLTableImport.ts": "94425746d857be8ccd6e851a06c4a2695129002c5111848bc3eefddf9add4acd",
+    "apps/office/src/xmloff/source/table/XMLTableExport.ts": "75dcbebcb8aea3d2400982b08fbdc923355fdae5105c5551967fc06287b626c9",
+    "apps/office/src/sw/browser/editor/WriterEditableTable.tsx": "882c384d49dd2c5500634df69c91115f575aa3a6a3e97e730e45b645d4501e7e",
+    "apps/office/src/sw/browser/editor/WriterPlainTextEditor.tsx": "0347d583589ff6526dc1a12122fee9bc4852dee77a08d69b68d85f4da22415b0",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts": "621a44ebe60d7d352490ddf6573d9cb9b8cbe4c0d448d4b7a294d034ce11a01e"
+  },
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1103,
+      "sha256": "f9145da038ca5ecd755193d28da767eb3dae0ebcbe0ba55a8ca1206a2213e967",
+      "totals": [],
+      "failedCases": []
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/R6NKEQ.app-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 59918,
+      "sha256": "2fa25383dfdde737ad23a7b31c7a5f387890be573725176ec4fc3a43e39f2e4c",
+      "totals": [
+        "Test Files  1 failed | 343 passed (344)",
+        "Tests  1 failed | 12721 passed (12722)",
+        "⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯"
+      ],
+      "failedCases": [
+        "apps/office/src/sw/source/core/layout/native-table-print-area.test.ts > native table print area retains unchanged frames and invalidates native left then right geometry"
+      ],
+      "errors": [],
+      "caseCounts": {
+        "passed": 12721,
+        "failed": 1,
+        "skipped": 0,
+        "total": 12722
+      },
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100
+      },
+      "coverageCounts": {
+        "lines": {
+          "total": 13140,
+          "covered": 13140,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 14404,
+          "covered": 14404,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3461,
+          "covered": 3461,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 10773,
+          "covered": 10773,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverageMapSHA256": "43507e623fd578b6f7f8a9ffaf582feff994c1bd7ad9d16b4e0c1815d26f0783",
+      "incompleteFiles": {}
+    },
+    {
+      "kind": "inventory",
+      "command": "npm run test:inventory:coverage -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/R6NKEQ.inventory-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 42194,
+      "sha256": "5395848e84f8e7ff59e52400b9e7b6875978e2c52398593d9ef7deabc7d1079a",
+      "totals": [
+        "Test Files  1 failed | 35 passed (36)",
+        "Tests  1 failed | 108 passed (109)",
+        "⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯"
+      ],
+      "failedCases": [
+        "scripts/libreoffice-inventory/parity-mapping-cli.test.ts > parity mapping CLI composes the Writer mapping report with owned upstream marker evidence"
+      ],
+      "errors": [],
+      "caseCounts": {
+        "passed": 108,
+        "failed": 1,
+        "skipped": 0,
+        "total": 109
+      },
+      "coverage": {
+        "lines": 99.72,
+        "statements": 99.73,
+        "functions": 99.21,
+        "branches": 100
+      },
+      "coverageCounts": {
+        "lines": {
+          "total": 1464,
+          "covered": 1460,
+          "skipped": 0,
+          "pct": 99.72
+        },
+        "statements": {
+          "total": 1523,
+          "covered": 1519,
+          "skipped": 0,
+          "pct": 99.73
+        },
+        "functions": {
+          "total": 384,
+          "covered": 381,
+          "skipped": 0,
+          "pct": 99.21
+        },
+        "branches": {
+          "total": 1080,
+          "covered": 1080,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "coverageMapSHA256": "f3073524841122022b9a73bb7e96142a944e9d62d1ee5baf97e96b731fba1ff5",
+      "incompleteFiles": {
+        "/Users/odubinkin/Projects/vite-office/scripts/libreoffice-inventory/parity-mapping-cli.ts": {
+          "lines": {
+            "total": 31,
+            "covered": 27,
+            "skipped": 0,
+            "pct": 87.09
+          },
+          "functions": {
+            "total": 6,
+            "covered": 3,
+            "skipped": 0,
+            "pct": 50
+          },
+          "statements": {
+            "total": 33,
+            "covered": 29,
+            "skipped": 0,
+            "pct": 87.87
+          },
+          "branches": {
+            "total": 24,
+            "covered": 24,
+            "skipped": 0,
+            "pct": 100
+          }
+        }
+      }
+    },
+    {
+      "kind": "scripts",
+      "command": "npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 218,
+      "sha256": "a117503aa1410701d277458f812204fad7805e61d2c203eef537aa22f4de40ba",
+      "totals": [
+        "Test Files  2 passed (2)",
+        "Tests  5 passed (5)"
+      ],
+      "failedCases": []
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 46169,
+      "sha256": "e7c9206bdab3bce6e97239d9a57523e4b63fe173cf668accb97d1aa38a6c756a",
+      "totals": [
+        "157 passed (1.6m)"
+      ],
+      "failedCases": [
+        "writer-table-print-area.spec.ts > Writer native table print geometry left width=1280",
+        "writer-table-print-area.spec.ts > Writer native table print geometry center width=1280",
+        "writer-table-print-area.spec.ts > Writer native table print geometry right width=1280",
+        "writer-table-print-area.spec.ts > Writer native table print geometry margins width=1280",
+        "writer-table-print-area.spec.ts > Writer native table print geometry left width=390",
+        "writer-table-print-area.spec.ts > Writer native table print geometry center width=390",
+        "writer-table-print-area.spec.ts > Writer native table print geometry right width=390",
+        "writer-table-print-area.spec.ts > Writer native table print geometry margins width=390"
+      ],
+      "caseCounts": {
+        "startTime": "2026-10-06T02:48:11.648Z",
+        "duration": 94022.30900000001,
+        "expected": 157,
+        "skipped": 0,
+        "unexpected": 8,
+        "flaky": 0
+      }
+    }
+  ]
+}

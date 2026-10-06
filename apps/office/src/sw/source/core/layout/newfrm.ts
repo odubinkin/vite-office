@@ -10,6 +10,7 @@ import {
 import type { SwDoc } from "../doc/doc";
 import { SwTableNode } from "../docnode/node";
 import type { SwTable } from "../table/swtable";
+import { SwTabFrame, type SwTablePrintArea } from "./tabfrm";
 import {
   createSwTextFrameInputs,
   getSwTextFrameGap,
@@ -35,6 +36,7 @@ export interface SwPageFrame {
 /** One table fragment placed in document flow on a physical page. */
 export interface SwTableFrame {
   readonly table: SwTable;
+  readonly printArea: SwTablePrintArea;
   readonly firstRow: number;
   readonly lastRow: number;
   readonly afterParagraphIndex: number;
@@ -472,6 +474,8 @@ function tableFramesEqual(left: readonly SwTableFrame[], right: readonly SwTable
         index,
       ) =>
         frame.table === right[index]?.table &&
+        frame.printArea.left === right[index]?.printArea.left &&
+        frame.printArea.right === right[index]?.printArea.right &&
         frame.firstRow === right[index]?.firstRow &&
         frame.lastRow === right[index]?.lastRow &&
         frame.repeatedHeaderRows === right[index]?.repeatedHeaderRows &&
@@ -594,6 +598,11 @@ export function createSwPageFrames(
         else
           frames.push({
             table: input.table,
+            printArea: new SwTabFrame(input.table).Format(
+              activeDescriptor.value.width -
+                activeDescriptor.value.leftMargin -
+                activeDescriptor.value.rightMargin,
+            ),
             firstRow: row,
             lastRow: row,
             afterParagraphIndex,

@@ -14,6 +14,7 @@ export interface XMLTableExportSource {
     width?: number | undefined;
     align?: string | undefined;
     marginLeft?: number | undefined;
+    marginRight?: number | undefined;
     marginTop?: number | undefined;
     marginBottom?: number | undefined;
     borderModel?: string | undefined;
@@ -66,6 +67,9 @@ export interface XMLTableExportSource {
       table.format.marginLeft === undefined
         ? ""
         : ` fo:margin-left="${exportOdfLength(table.format.marginLeft)}"`,
+      table.format.marginRight === undefined
+        ? ""
+        : ` fo:margin-right="${exportOdfLength(table.format.marginRight)}"`,
       table.format.marginTop === undefined
         ? ""
         : ` fo:margin-top="${exportOdfLength(table.format.marginTop)}"`,

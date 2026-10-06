@@ -1,0 +1,18 @@
+{
+  "command": "npm exec -- playwright test --config apps/office/playwright.config.ts writer-table-print-area.spec.ts --grep Writer native table print geometry (left|center|right) width= --reporter=list,json",
+  "exit": 0,
+  "bytes": 1157,
+  "sha256": "95c87c3308c95b7793f77bff907f8344713e8ced7cb516682cf1c5d2e7b4087e",
+  "failedOnly": true,
+  "noRebuildProductionUnchanged": true,
+  "caseCounts": {
+    "startTime": "2026-10-06T02:53:49.692Z",
+    "duration": 5131.931,
+    "expected": 6,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "failedCases": [],
+  "vendorRestored": true
+}

@@ -3117,6 +3117,10 @@
           {
             "path": "apps/office/e2e/writer-headline-selection.spec.ts",
             "marker": "Writer native table range"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/layout/native-table-print-area.test.ts",
+            "marker": "native table print area"
           }
         ],
         "upstream": [
@@ -3183,7 +3187,8 @@
         "Iteration147 removes React selectedTable/selectedTableRow and editor selected-row props. Native SwTableCursor owns a sorted deduplicated actual SwTableBox set, reconciles identity differences and NewTableSelection from actual point/mark sections. SwTable::CreateSelection supports represented flat shared-column rectangle and row expansion. Shell SelectTableRow uses last content endpoints (point first box,mark last), clears ordinary mark and creates no content history; table context follows selected boxes or actual point. SwEditWin converts a row hit to native node coordinates. Immutable selected-box start indices paint cells/whole rows; insert focuses first cell and properties use native cursor context. New actual native,mounted and Chromium assertions cover the bounded flow. Native rings,per-box edit cursor ranges,merged/nested/protected/hidden/unequal-row geometry,drag selection/column selection and full layout/history remain unverified. Existing246semantic statuses/classifications/defaults and registered I/O/recovery deviations preserved; no whole-module/goal promotion.",
         "Iteration170 removes blanket row click inference so table interior padding uses the existing BrowserWriterPointerSelectionController/selection mapper/SwEditWin/native cursor rather than selecting a whole row. Removing the row handler also removes synthetic row inference from list-marker hits. Native number labels instead invoke RulerMarginDrag/StartDocDrag(Indent); that label/ruler behavior remains unverified. The mounted injected marker caret test proves browser geometry only. Initial real-browser MKeep expectations were source-confirmed incorrect and are excluded; marker checks retain no synthetic row selection and unchanged text. The existing explicit row selector is placed in an absolute left gutter with hover/focus arrow, outside cell text and measurement flow. Actual element hit and native caret range are authoritative within the hit cell; otherwise bounded nearest paragraph and clipped native hit resolution reuse existing text-caret helper for empty/formatted boundary fallback. Browser geometry remains an explicit DOM adaptation, not full VCL layout. Existing helper is exported directly for reuse without a duplicate walker, manager, model, DTO or compatibility wrapper. New owned geometry/mounted DOM/Chromium cases verify the represented flat LTR table pointer, actual native box/caret/history and neighbor behavior. RTL/vertical/nested/merged/protected/column/resizing/full layout/portion/core/UI/list/table remain unverified; prior states/defaults/classes/IO exceptions and evidence prefixes are retained.",
         "Iteration173 restores existing repeated table headline functionality through native SwTable count/unsigned/capped ownership and original-row follow-frame state. Existing row-only formatter accounts measured repeated height, keeps master headlines with first nonsplittable body row, disables ordinary oversized headers to prevent loops, and retains unchanged frame identity. Browser reuses actual original cell/text projections and one edit window/history,distinct DOM descriptions,frame-local registration/current occurrence resolution; repeated headline row-selection gutter omitted as native table-mode restriction. Full nested/merged/rowspan/row splitting,cross-box repeated table selection,vertical/RTL/fly/multicolumn/protection/native frame/core/UI parity remains unverified; prior semantic states/defaults/classes/IO exceptions and registered save/open/recovery deviations preserved.",
-        "Iteration174 restores represented flat same-table cross-cell cursor admission and repeated headline restrictions through existing owners. Native moving/fixed endpoints, selected boxes and ordinary cell history are preserved; selected original boxes do not paint on repeated headline copies. Actual native, mounted and Chromium cases cover bounded behavior. Full nested/merged/rowspan/split rows/cross-table/vertical/RTL/protection/frame/core/UI parity remains unverified; states/defaults/classes/IO exceptions and prior evidence preserved."
+        "Iteration174 restores represented flat same-table cross-cell cursor admission and repeated headline restrictions through existing owners. Native moving/fixed endpoints, selected boxes and ordinary cell history are preserved; selected original boxes do not paint on repeated headline copies. Actual native, mounted and Chromium cases cover bounded behavior. Full nested/merged/rowspan/split rows/cross-table/vertical/RTL/protection/frame/core/UI parity remains unverified; states/defaults/classes/IO exceptions and prior evidence preserved.",
+        "Iteration175 native represented horizontal table print geometry: SwTabFrame Format owns twip LR/wished-width orientation spacing and minimum23 guard;root supplies actual page upper print width for each master/follow fragment. Browser consumes immutable native print bounds and scales original column reference proportions;hidden measurement uses same owner. Signed left/right margins import/export reuse current table SAX/graph owners. No model clone,TextRuns translation or new adapter. Relative-width,fly/outer-border offsets,multicolumn,vertical/RTL,nested/merged/rowspan/split-row/full layout lifecycle and complete parity remain unverified;registered IO deviations unchanged."
       ]
     },
     {
@@ -3273,6 +3278,10 @@
           {
             "path": "apps/office/e2e/writer-table-headlines.spec.ts",
             "marker": "Writer repeated table headlines edit the original native header"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/layout/native-table-print-area.test.ts",
+            "marker": "native table print area"
           }
         ],
         "upstream": [
@@ -3298,7 +3307,8 @@
         "Iteration138 removes the table-cell post-DOM diff/direct text mutation, imperative innerHTML synchronization and event isolation. Cell paragraphs use shared DOM selection identities and BrowserWriterEditWindow -> SwEditWin -> actual SwWrtShell input/history. Connected cell text is admitted by SwNodes ownership; active/all-text identities come from native nodes while body layout stays separate. SwTableBox derives text from its start/end section instead of a duplicate paragraph array; boundary joins require adjacent text in the same section. Real-owner core, mounted DOM and Chromium tests cover this bounded path. React text-run display, body ordinal sidebar context, table-wide selection/navigation, nested or merged cells, native table layout/text portions and list UI remain unverified. All existing semantic states/defaults/exceptions and registered I/O/recovery deviations remain unchanged; no whole-module or goal promotion.",
         "Iteration139 removes the partial table-cell font/spacing/text-run assembler and synthetic node-index identity fallback. Visible cells and closed-shadow measurement use the common WriterEditableParagraph over the same actual native text-node projections,including effective alignment,style,font,color,indent and native GetListLabel/list-layout inputs. One actual-node map is built at the editor boundary;only cell position,editable island and cell block spacing are platform context. Stable paragraph IDs make accessibility descriptions unique and native identities key DOM reuse. Independent owned core-value/DOM/Chromium cases cover the bounded display/history/ODT path. Full native table frame pagination,spacing collapse,Home/navigation,wide selection,nested/merged cells,portion engine and list structural operations remain unverified;all244existing semantic states/defaults/exceptions and registered I/O/recovery deviations remain unchanged,no promotion.",
         "Iteration172 restores native document-origin list-label ruler admission through the existing browser ruler tracking owner. Actual label identity resolves an actual SwTextNode only while copying StateTabWin geometry; pinned edtwin clears this borrowed node immediately after StartDocDrag. Signed-short offset and native SetLeft negative-first adjustment feed bottom-indent document hit testing with explicit tab precedence and right-before-left order. Accepted changed copied geometry applies to current paragraph selection through existing SetParagraphRulerIndents and real item UndoRedo, not a retained label rule update. Native mouse admission preserves cursor and label rule/list ownership; cancellation, zero movement, hide/inactive/unmount/document replacement discard preview and history. No synthetic handle event, text-run conversion, new DTO/model or competing gesture owner. Prior contracts/evidence and conscious IO exceptions retained. Full native RTL/vertical/table-column/protection/style-autoupdate/modifier-clipping/platform/framework/ruler/list/table/core/UI behavior remains unverified.",
-        "Iteration173 restores existing repeated table headline functionality through native SwTable count/unsigned/capped ownership and original-row follow-frame state. Existing row-only formatter accounts measured repeated height, keeps master headlines with first nonsplittable body row, disables ordinary oversized headers to prevent loops, and retains unchanged frame identity. Browser reuses actual original cell/text projections and one edit window/history,distinct DOM descriptions,frame-local registration/current occurrence resolution; repeated headline row-selection gutter omitted as native table-mode restriction. Full nested/merged/rowspan/row splitting,cross-box repeated table selection,vertical/RTL/fly/multicolumn/protection/native frame/core/UI parity remains unverified; prior semantic states/defaults/classes/IO exceptions and registered save/open/recovery deviations preserved."
+        "Iteration173 restores existing repeated table headline functionality through native SwTable count/unsigned/capped ownership and original-row follow-frame state. Existing row-only formatter accounts measured repeated height, keeps master headlines with first nonsplittable body row, disables ordinary oversized headers to prevent loops, and retains unchanged frame identity. Browser reuses actual original cell/text projections and one edit window/history,distinct DOM descriptions,frame-local registration/current occurrence resolution; repeated headline row-selection gutter omitted as native table-mode restriction. Full nested/merged/rowspan/row splitting,cross-box repeated table selection,vertical/RTL/fly/multicolumn/protection/native frame/core/UI parity remains unverified; prior semantic states/defaults/classes/IO exceptions and registered save/open/recovery deviations preserved.",
+        "Iteration175 native represented horizontal table print geometry: SwTabFrame Format owns twip LR/wished-width orientation spacing and minimum23 guard;root supplies actual page upper print width for each master/follow fragment. Browser consumes immutable native print bounds and scales original column reference proportions;hidden measurement uses same owner. Signed left/right margins import/export reuse current table SAX/graph owners. No model clone,TextRuns translation or new adapter. Relative-width,fly/outer-border offsets,multicolumn,vertical/RTL,nested/merged/rowspan/split-row/full layout lifecycle and complete parity remain unverified;registered IO deviations unchanged."
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",
@@ -10384,6 +10394,10 @@
           {
             "path": "apps/office/e2e/writer-table-headlines.spec.ts",
             "marker": "Writer repeated table headlines edit the original native header"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/layout/native-table-print-area.test.ts",
+            "marker": "native table print area"
           }
         ],
         "upstream": [
@@ -10480,7 +10494,8 @@
         "Declared levels retain independent native legacy and alignment geometry with zero defaults; only exact label-alignment selects modern mode. SvxNumberFormat in editeng owns positional state, signed widths and mode-dependent getters; Writer inherits and copies all fields. xmlnumi owns level/property contexts and MM100 legacy parsing/assembly. Writer conversion precedes core application, and xmlnume emits the selected group with native signs and omission predicates. Thirteen literal common/automatic ODT cases verify mode spellings/absence, child presence, independent state, signed/bounded/partial/invalid legacy fields, exact XML and reopen. Clone and browser snapshots preserve inactive fields; primitive browser geometry selects the active group. Full line layout, numbering families, omitted-level construction, native UNO replacement failures (including signed SymbolTextDistance narrowing), extensions and wider contracts/defaults remain separately unverified. No whole-module promotion.",
         "Iteration143 retains native text-left for uncounted bound list nodes independently of marker visibility. Core resolver reuses independent alignment-axis ownership;legacy relative spacing adds paragraph text-left and absolute spacing subtracts ResolveLeft including hanging first-line contribution. Native uncounted first-line offset is zero. Immutable projection feeds shared body/cell rendering without marker/tab spacer or listGeometryWins heuristics;print bounds consume the same native primitive. Actual count UndoRedo,body/cell geometry,zero/negative/direct/style and legacy/follow cases provide bounded evidence. Counted marker/tab layout,RTL/font-relative/large-indent cell clamping,fullnativeframes/navigation/history/UI and broad parity remainunverified;all244existingstates/defaults/deviations unchanged.",
         "Iteration144 projects native independent list text-left and first-line axes into shared body/cell presentation and print bounds. Counted alignment uses existing live mask;legacy firstline includes authored offset unless numbering compatibility ignores it,with native signed-short wrap;uncounted offset0 and ordinary paragraph fallback retain prior ownership. Renderer removes paragraphIndentWins and no longer gives legacy listGeometryWins metadata behavioral authority. Existing immutable listLayout receives resolved native axes;persisted/imported flag remains metadata only. Actual body/cell literal and Chromium paragraph/history marker measurements cover represented axes. Full label/tab/space/nothing follower widths,legacy minimum gap,wrapping,RTL/fontrelative/cellclamping and fullframes/UI remainunverified;all244existingstates/defaults/deviations unchanged.",
-        "Iteration173 restores existing repeated table headline functionality through native SwTable count/unsigned/capped ownership and original-row follow-frame state. Existing row-only formatter accounts measured repeated height, keeps master headlines with first nonsplittable body row, disables ordinary oversized headers to prevent loops, and retains unchanged frame identity. Browser reuses actual original cell/text projections and one edit window/history,distinct DOM descriptions,frame-local registration/current occurrence resolution; repeated headline row-selection gutter omitted as native table-mode restriction. Full nested/merged/rowspan/row splitting,cross-box repeated table selection,vertical/RTL/fly/multicolumn/protection/native frame/core/UI parity remains unverified; prior semantic states/defaults/classes/IO exceptions and registered save/open/recovery deviations preserved."
+        "Iteration173 restores existing repeated table headline functionality through native SwTable count/unsigned/capped ownership and original-row follow-frame state. Existing row-only formatter accounts measured repeated height, keeps master headlines with first nonsplittable body row, disables ordinary oversized headers to prevent loops, and retains unchanged frame identity. Browser reuses actual original cell/text projections and one edit window/history,distinct DOM descriptions,frame-local registration/current occurrence resolution; repeated headline row-selection gutter omitted as native table-mode restriction. Full nested/merged/rowspan/row splitting,cross-box repeated table selection,vertical/RTL/fly/multicolumn/protection/native frame/core/UI parity remains unverified; prior semantic states/defaults/classes/IO exceptions and registered save/open/recovery deviations preserved.",
+        "Iteration175 native represented horizontal table print geometry: SwTabFrame Format owns twip LR/wished-width orientation spacing and minimum23 guard;root supplies actual page upper print width for each master/follow fragment. Browser consumes immutable native print bounds and scales original column reference proportions;hidden measurement uses same owner. Signed left/right margins import/export reuse current table SAX/graph owners. No model clone,TextRuns translation or new adapter. Relative-width,fly/outer-border offsets,multicolumn,vertical/RTL,nested/merged/rowspan/split-row/full layout lifecycle and complete parity remain unverified;registered IO deviations unchanged."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/layout/newfrm.cxx",
@@ -10521,6 +10536,43 @@
       "upstreamSymbols": [
         "SwPageDesc::SwPageDesc"
       ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "localPath": "apps/office/src/sw/source/core/layout/tabfrm.ts",
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/layout/tabfrm.cxx",
+      "localSymbols": [
+        "SwTablePrintArea",
+        "SwTabFrame"
+      ],
+      "upstreamSymbols": [
+        "SwTabFrame::Format"
+      ],
+      "preservedResponsibilities": [
+        "Iteration175 native represented horizontal table print geometry: SwTabFrame Format owns twip LR/wished-width orientation spacing and minimum23 guard;root supplies actual page upper print width for each master/follow fragment. Browser consumes immutable native print bounds and scales original column reference proportions;hidden measurement uses same owner. Signed left/right margins import/export reuse current table SAX/graph owners. No model clone,TextRuns translation or new adapter. Relative-width,fly/outer-border offsets,multicolumn,vertical/RTL,nested/merged/rowspan/split-row/full layout lifecycle and complete parity remain unverified;registered IO deviations unchanged."
+      ],
+      "omittedResponsibilities": [
+        "Complete native layout frame construction,fly/border offsets,vertical/RTL/merged/nested/rowspan/split-row and relative-width semantics remain unverified."
+      ],
+      "evidence": {
+        "local": [
+          {
+            "path": "apps/office/src/sw/source/core/layout/tabfrm.ts",
+            "marker": "SwTabFrame"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/layout/native-table-print-area.test.ts",
+            "marker": "native table print area"
+          }
+        ],
+        "upstream": [
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/layout/tabfrm.cxx",
+            "marker": "SwTabFrame::Format"
+          }
+        ]
+      }
     },
     {
       "classification": "upstream-mechanism",
@@ -10641,6 +10693,10 @@
           {
             "path": "apps/office/e2e/writer-table-headlines.spec.ts",
             "marker": "Writer repeated table headlines edit the original native header"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/layout/native-table-print-area.test.ts",
+            "marker": "native table print area"
           }
         ],
         "upstream": [
@@ -10720,7 +10776,8 @@
         "Iteration138 removes the table-cell post-DOM diff/direct text mutation, imperative innerHTML synchronization and event isolation. Cell paragraphs use shared DOM selection identities and BrowserWriterEditWindow -> SwEditWin -> actual SwWrtShell input/history. Connected cell text is admitted by SwNodes ownership; active/all-text identities come from native nodes while body layout stays separate. SwTableBox derives text from its start/end section instead of a duplicate paragraph array; boundary joins require adjacent text in the same section. Real-owner core, mounted DOM and Chromium tests cover this bounded path. React text-run display, body ordinal sidebar context, table-wide selection/navigation, nested or merged cells, native table layout/text portions and list UI remain unverified. All existing semantic states/defaults/exceptions and registered I/O/recovery deviations remain unchanged; no whole-module or goal promotion.",
         "Iteration145 routes unmodified table Tab/ShiftTab through SwEditWin and a persistent SwCursor. Core traverses actual flat SwNodes cell sections and selects first paragraph offset0 while retaining native mark;no DOM sibling/body ordinal/navigation DTO. Shell refreshes active/pending/history grouping after movement;unmarked last-cell Tab prepares an empty source-formatted row and records SwUndoTableNdsChg retaining actual row/cell/node identities. Undo disconnects sections and retargets live indices;Redo reconnects them. List-at-start priority compares represented native numbering types/indent before level change or literal Tab insertion. Owned native,mounted and Chromium evidence covers represented behavior. Full native SwCursorShell/Doc InsertRow,merged/nested/protected/form/formula/autoformat/redline/border/autocorrect,HomeEnd/fulllayout/history/UI remainunverified;existing244semantic states/defaults/classifications and registered I/O/recovery deviations retained.",
         "Iteration147 removes React selectedTable/selectedTableRow and editor selected-row props. Native SwTableCursor owns a sorted deduplicated actual SwTableBox set, reconciles identity differences and NewTableSelection from actual point/mark sections. SwTable::CreateSelection supports represented flat shared-column rectangle and row expansion. Shell SelectTableRow uses last content endpoints (point first box,mark last), clears ordinary mark and creates no content history; table context follows selected boxes or actual point. SwEditWin converts a row hit to native node coordinates. Immutable selected-box start indices paint cells/whole rows; insert focuses first cell and properties use native cursor context. New actual native,mounted and Chromium assertions cover the bounded flow. Native rings,per-box edit cursor ranges,merged/nested/protected/hidden/unequal-row geometry,drag selection/column selection and full layout/history remain unverified. Existing246semantic statuses/classifications/defaults and registered I/O/recovery deviations preserved; no whole-module/goal promotion.",
-        "Iteration173 restores existing repeated table headline functionality through native SwTable count/unsigned/capped ownership and original-row follow-frame state. Existing row-only formatter accounts measured repeated height, keeps master headlines with first nonsplittable body row, disables ordinary oversized headers to prevent loops, and retains unchanged frame identity. Browser reuses actual original cell/text projections and one edit window/history,distinct DOM descriptions,frame-local registration/current occurrence resolution; repeated headline row-selection gutter omitted as native table-mode restriction. Full nested/merged/rowspan/row splitting,cross-box repeated table selection,vertical/RTL/fly/multicolumn/protection/native frame/core/UI parity remains unverified; prior semantic states/defaults/classes/IO exceptions and registered save/open/recovery deviations preserved."
+        "Iteration173 restores existing repeated table headline functionality through native SwTable count/unsigned/capped ownership and original-row follow-frame state. Existing row-only formatter accounts measured repeated height, keeps master headlines with first nonsplittable body row, disables ordinary oversized headers to prevent loops, and retains unchanged frame identity. Browser reuses actual original cell/text projections and one edit window/history,distinct DOM descriptions,frame-local registration/current occurrence resolution; repeated headline row-selection gutter omitted as native table-mode restriction. Full nested/merged/rowspan/row splitting,cross-box repeated table selection,vertical/RTL/fly/multicolumn/protection/native frame/core/UI parity remains unverified; prior semantic states/defaults/classes/IO exceptions and registered save/open/recovery deviations preserved.",
+        "Iteration175 native represented horizontal table print geometry: SwTabFrame Format owns twip LR/wished-width orientation spacing and minimum23 guard;root supplies actual page upper print width for each master/follow fragment. Browser consumes immutable native print bounds and scales original column reference proportions;hidden measurement uses same owner. Signed left/right margins import/export reuse current table SAX/graph owners. No model clone,TextRuns translation or new adapter. Relative-width,fly/outer-border offsets,multicolumn,vertical/RTL,nested/merged/rowspan/split-row/full layout lifecycle and complete parity remain unverified;registered IO deviations unchanged."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/table/swtable.cxx",
@@ -18223,6 +18280,10 @@
           {
             "marker": "XMLTableExportSource",
             "path": "apps/office/src/xmloff/source/table/XMLTableExport.ts"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/layout/native-table-print-area.test.ts",
+            "marker": "native table print area"
           }
         ],
         "upstream": [
@@ -18241,7 +18302,8 @@
         "Full LibreOffice table features outside the bounded certification table slice remain pending."
       ],
       "preservedResponsibilities": [
-        "Emits bounded table automatic styles and ordered table body XML from canonical Writer blocks."
+        "Emits bounded table automatic styles and ordered table body XML from canonical Writer blocks.",
+        "Iteration175 native represented horizontal table print geometry: SwTabFrame Format owns twip LR/wished-width orientation spacing and minimum23 guard;root supplies actual page upper print width for each master/follow fragment. Browser consumes immutable native print bounds and scales original column reference proportions;hidden measurement uses same owner. Signed left/right margins import/export reuse current table SAX/graph owners. No model clone,TextRuns translation or new adapter. Relative-width,fly/outer-border offsets,multicolumn,vertical/RTL,nested/merged/rowspan/split-row/full layout lifecycle and complete parity remain unverified;registered IO deviations unchanged."
       ],
       "status": "mapped",
       "upstreamPath": "xmloff/source/table/XMLTableExport.cxx",
@@ -18264,6 +18326,10 @@
           {
             "path": "apps/office/e2e/writer-imported-table-lists.spec.ts",
             "marker": "Writer imported restarted table row Add to List"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/layout/native-table-print-area.test.ts",
+            "marker": "native table print area"
           }
         ],
         "upstream": [
@@ -18292,7 +18358,8 @@
       ],
       "preservedResponsibilities": [
         "Imports bounded ODF table style, column, row, cell and paragraph SAX contexts.",
-        "Iteration164 replaces duplicated body/cell paragraph dispatch and unsupported cell-list rejection with one source-shaped XMLTextImportHelper in native txtimp.ts. Existing XMLParaContext/list block/item and SwXMLImport actual cell owner are reused; one stream-wide processed-root catalogue crosses body/cells. Existing export list identity/used-ID catalogues now span the full XMLTextParagraphExport pass rather than each cell paragraph run, preventing duplicate XML IDs and lost continuation without changing local open-item stacks. Literal common/automatic numbered/bullet nested/header/direct restart/plain tails and explicit/implicit body-cell-cell-body continuations assert native graph/sections/default IDs/labels,owned rule/item copies,Worker16 and three export/reopen cycles. Real Chromium imported restarted-row Add to List and Enter history verify UI execution.419of420prior testfiles unchanged;one obsolete cell-list rejection correction only.250existingstates/defaults/classes/consciousIOexceptions preserved;new helper partial/unverified,no broad paritypromotion. Full native dispatcher/types/numberedparagraph/sections/nestedtable/UNO/list identity suppression/random/last-continuation/style/cursor/layout contracts remainunverified."
+        "Iteration164 replaces duplicated body/cell paragraph dispatch and unsupported cell-list rejection with one source-shaped XMLTextImportHelper in native txtimp.ts. Existing XMLParaContext/list block/item and SwXMLImport actual cell owner are reused; one stream-wide processed-root catalogue crosses body/cells. Existing export list identity/used-ID catalogues now span the full XMLTextParagraphExport pass rather than each cell paragraph run, preventing duplicate XML IDs and lost continuation without changing local open-item stacks. Literal common/automatic numbered/bullet nested/header/direct restart/plain tails and explicit/implicit body-cell-cell-body continuations assert native graph/sections/default IDs/labels,owned rule/item copies,Worker16 and three export/reopen cycles. Real Chromium imported restarted-row Add to List and Enter history verify UI execution.419of420prior testfiles unchanged;one obsolete cell-list rejection correction only.250existingstates/defaults/classes/consciousIOexceptions preserved;new helper partial/unverified,no broad paritypromotion. Full native dispatcher/types/numberedparagraph/sections/nestedtable/UNO/list identity suppression/random/last-continuation/style/cursor/layout contracts remainunverified.",
+        "Iteration175 native represented horizontal table print geometry: SwTabFrame Format owns twip LR/wished-width orientation spacing and minimum23 guard;root supplies actual page upper print width for each master/follow fragment. Browser consumes immutable native print bounds and scales original column reference proportions;hidden measurement uses same owner. Signed left/right margins import/export reuse current table SAX/graph owners. No model clone,TextRuns translation or new adapter. Relative-width,fly/outer-border offsets,multicolumn,vertical/RTL,nested/merged/rowspan/split-row/full layout lifecycle and complete parity remain unverified;registered IO deviations unchanged."
       ],
       "status": "mapped",
       "upstreamPath": "xmloff/source/table/XMLTableImport.cxx",

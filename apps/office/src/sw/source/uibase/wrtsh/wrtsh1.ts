@@ -79,7 +79,6 @@ interface WriterCompositionState {
   /** Latest browser composition text, not yet written into SwDoc. */
   text: string;
 }
-
 /** Persistent Writer editing shell over one document shell and one direction-preserving PaM. */
 export class SwWrtShell extends SwEditShell {
   private readonly textShell: SwTextShell;

@@ -13,6 +13,7 @@ export type OdfTableStyle =
       readonly width?: number | undefined;
       readonly align?: "left" | "center" | "right" | "margins" | undefined;
       readonly marginLeft?: number | undefined;
+      readonly marginRight?: number | undefined;
       readonly marginTop?: number | undefined;
       readonly marginBottom?: number | undefined;
       readonly borderModel?: "collapsing" | "separating" | undefined;
@@ -99,6 +100,7 @@ export class XMLTableStyleContext extends SvXMLImportContext {
           XMLToken.STYLE_WIDTH,
           XMLToken.STYLE_REL_WIDTH,
           XMLToken.FO_MARGIN_LEFT,
+          XMLToken.FO_MARGIN_RIGHT,
           XMLToken.FO_MARGIN_TOP,
           XMLToken.FO_MARGIN_BOTTOM,
           XMLToken.TABLE_ALIGN,
@@ -121,7 +123,22 @@ export class XMLTableStyleContext extends SvXMLImportContext {
       this.style = {
         family: "table",
         width: length(XMLToken.STYLE_WIDTH, "table width"),
-        marginLeft: length(XMLToken.FO_MARGIN_LEFT, "table margin"),
+        marginLeft:
+          attributes.get(XMLToken.FO_MARGIN_LEFT) === null
+            ? undefined
+            : importOdfLength(
+                attributes.get(XMLToken.FO_MARGIN_LEFT) as string,
+                true,
+                "table margin",
+              ),
+        marginRight:
+          attributes.get(XMLToken.FO_MARGIN_RIGHT) === null
+            ? undefined
+            : importOdfLength(
+                attributes.get(XMLToken.FO_MARGIN_RIGHT) as string,
+                true,
+                "table margin",
+              ),
         marginTop: length(XMLToken.FO_MARGIN_TOP, "table margin"),
         marginBottom: length(XMLToken.FO_MARGIN_BOTTOM, "table margin"),
         align,

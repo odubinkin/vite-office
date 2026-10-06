@@ -10,6 +10,7 @@ export interface SwTableFormat {
   readonly width?: number | undefined;
   readonly align?: "left" | "center" | "right" | "margins" | undefined;
   readonly marginLeft?: number | undefined;
+  readonly marginRight?: number | undefined;
   readonly marginTop?: number | undefined;
   readonly marginBottom?: number | undefined;
   readonly borderModel?: "collapsing" | "separating" | undefined;

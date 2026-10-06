@@ -1,0 +1,61 @@
+{
+  "semanticPaths": [
+    "apps/office/e2e/writer-table-print-area.spec.ts",
+    "apps/office/src/sw/browser/editor/WriterEditableTable.tsx",
+    "apps/office/src/sw/browser/editor/WriterPlainTextEditor.tsx",
+    "apps/office/src/sw/browser/editor/native-table-print-area.test.tsx",
+    "apps/office/src/sw/source/core/layout/native-table-print-area.test.ts",
+    "apps/office/src/sw/source/core/layout/newfrm.ts",
+    "apps/office/src/sw/source/core/layout/tabfrm.ts",
+    "apps/office/src/sw/source/core/table/swtable.ts",
+    "apps/office/src/sw/source/filter/xml/odt-table-print-area.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+    "apps/office/src/xmloff/source/table/XMLTableExport.ts",
+    "apps/office/src/xmloff/source/table/XMLTableImport.ts",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/source-provenance.json"
+  ],
+  "productionOwners": [
+    "apps/office/src/sw/source/core/table/swtable.ts",
+    "apps/office/src/sw/source/core/layout/newfrm.ts",
+    "apps/office/src/sw/source/core/layout/tabfrm.ts",
+    "apps/office/src/xmloff/source/table/XMLTableImport.ts",
+    "apps/office/src/xmloff/source/table/XMLTableExport.ts",
+    "apps/office/src/sw/browser/editor/WriterEditableTable.tsx",
+    "apps/office/src/sw/browser/editor/WriterPlainTextEditor.tsx",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts"
+  ],
+  "oldTestsByteIdentical": 452,
+  "semanticStatesDefaultsClassificationsIOExceptionsAndEvidencePrefixesPreserved": 258,
+  "newModuleUnverified": true,
+  "oneWhitespaceOnlyRequiredNormalization": true,
+  "sourceHashes": {
+    "apps/office/src/sw/source/core/table/swtable.ts": "b3d7642abae9cb294b2ade7550a8923075c0e92f78def7ccc4f3c3ae5cf2e7a6",
+    "apps/office/src/sw/source/core/layout/newfrm.ts": "abdc1e2962444b89f0ace7f6991b1630e70cc284367e5024c5d3751050af918f",
+    "apps/office/src/sw/source/core/layout/tabfrm.ts": "373a80c4067a79d1e39f0b15115f6147fdde207e8d61aad7457fd13506dde47d",
+    "apps/office/src/xmloff/source/table/XMLTableImport.ts": "94425746d857be8ccd6e851a06c4a2695129002c5111848bc3eefddf9add4acd",
+    "apps/office/src/xmloff/source/table/XMLTableExport.ts": "75dcbebcb8aea3d2400982b08fbdc923355fdae5105c5551967fc06287b626c9",
+    "apps/office/src/sw/browser/editor/WriterEditableTable.tsx": "882c384d49dd2c5500634df69c91115f575aa3a6a3e97e730e45b645d4501e7e",
+    "apps/office/src/sw/browser/editor/WriterPlainTextEditor.tsx": "0347d583589ff6526dc1a12122fee9bc4852dee77a08d69b68d85f4da22415b0",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts": "621a44ebe60d7d352490ddf6573d9cb9b8cbe4c0d448d4b7a294d034ce11a01e"
+  },
+  "upstreamHashes": {
+    "vendor/libreoffice-reference/sw/source/core/layout/tabfrm.cxx": "d1d616197c6aeac1b1ba075995892b34cfdbea60838e88136f9bf4a52e90970f",
+    "vendor/libreoffice-reference/sw/source/filter/xml/xmltbli.cxx": "eb46a2cbffc3700ed24c9099ec86e888bbdfa3a7b3a920de1356e4a98f264fab",
+    "vendor/libreoffice-reference/sw/source/filter/xml/xmlithlp.cxx": "d45906f59ee38eb229f1d9fce656c710a24911bc5d58d38f2c2ad0c755fa1496",
+    "vendor/libreoffice-reference/sw/inc/swtypes.hxx": "51bf121cc074709d17314ffbba2d3676eae976a17dd2f4ee0e69d357fec3b361"
+  },
+  "distinctCases": {
+    "app": 12722,
+    "inventory": 109,
+    "chromium": 165
+  },
+  "newAppCases": 31,
+  "newChromiumCases": 8,
+  "scriptsPassed": 5,
+  "fullAbsentProfileCount": 1,
+  "passingReplayCount": 0,
+  "noProductionChangeAfterInitialProfile": true,
+  "vendorRestored": true,
+  "coverageActual100": true
+}
