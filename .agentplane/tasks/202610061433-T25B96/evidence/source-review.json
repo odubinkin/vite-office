@@ -1,0 +1,21 @@
+{
+  "baselineTag": "libreoffice-26.8.0.2",
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceSHA256": {
+    "sw/source/uibase/docvw/edtwin.cxx": "f679baf21d41f78d6494bead35aebf6333eed298a6e24892452a4bb4623b7eb3",
+    "sw/inc/crsrsh.hxx": "d5b15bac7672883e45c63022c5f3b188d210373651dcf2895115b1a019af0503",
+    "include/vcl/ptrstyle.hxx": "9fdbbc78763cae705b4d79523986e7c9aee08e67fbc5b01ebc655a80fed59c5a",
+    "offapi/com/sun/star/awt/SystemPointer.idl": "a83f2f7792503e1130cb900cbbd73552d4a0bded1cf78a1d8672036ab83596f4",
+    "vcl/unx/gtk3/gtkdata.cxx": "1f8f0899c686dcd901094d313556d7fc3efd7cecf52b8701b84fa93870e9a7d9",
+    "vcl/unx/generic/app/saldisp.cxx": "19ba81545f3e580bab7771d12e769d953fe74e784d1d3c40391ed5dd08933143"
+  },
+  "reviewer": "Same current agent; pinned read-only sources, no upstream execution",
+  "contracts": [
+    "edtwin.cxx4097-4155 selects native pointer kinds; resize requires absence of table mode while enhanced selection remains available. IsTableMode crsrsh.hxx708 is actual table-cursor presence. Native names and all12 non-NONE switch decisions preserve source grouping.",
+    "Represented PointerStyle exact numeric IDs1,25,26,85..89 follow SystemPointer CHAIN_NOTALLOWED71 and ptrstyle automatic declaration sequence. Other pointer IDs unrepresented.",
+    "gtkdata.cxx191-192 supplies col-resize/row-resize equivalents. X11 saldisp.cxx1732-1747 maps five TabSelect kinds to original cursor/mask pixels; runtime SVGs retain every16x16 black/white/transparent pixel and source hotspots. Cursor-source evidence records ten header hashes and five literal RGBA digests. Platform-specific GTK themed/high-DPI appearance remains unverified.",
+    "Browser no longer decides SwTab pointer policy. It supplies measured geometry and renders native pointer state through the VCL browser CSS boundary. Active capture preserves pointer. Unhandled table hits clear this bounded pointer override to existing browser auto behavior; complete native UpdatePointer/text/list/object/LOK arbitration remains unverified.",
+    "Initial two Chromium failures were an incorrect new assertion about computed CSS on the outer non-editable container (text versus actual auto); existing caret behavior was untouched. New assertion corrected to existing CSS fallback, preserving all historical selection/content/history assertions. Real native enhanced/resize and table-mode hover pass at1280/390.",
+    "Full resize dragging, object hit arbitration, remaining pointer families and physical RTL/vertical/nested/merged/rowspan/protected/frame hierarchy remain unverified. All272 old semantic fields and entire prefixes preserved; two explicitly unverified owners added. No registered save/open/recovery change."
+  ]
+}

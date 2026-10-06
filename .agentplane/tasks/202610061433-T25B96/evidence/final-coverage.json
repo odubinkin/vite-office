@@ -1,0 +1,79 @@
+{
+  "proof": "App entire source unchanged since initial profile. Inventory entire source and complete statement/function/branch maps byte-identical; only actual focused counters added. No synthesized coverage or passing replay; focused2skips remain skipped.",
+  "app": {
+    "files": 271,
+    "mapSHA256": "476ff9006130f78b6cf20fb70fd6878cf6e2ea916770d7c42f53c5b806b8e75b",
+    "coverage": {
+      "lines": {
+        "total": 14110,
+        "covered": 14110,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 15469,
+        "covered": 15469,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 3643,
+        "covered": 3643,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 11538,
+        "covered": 11538,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    }
+  },
+  "inventory": {
+    "files": 38,
+    "mapSHA256": "ec335e880c41fac2f2f0594de0bf4960b18d292e0c4317dd6dbcc1f7637b3480",
+    "coverage": {
+      "lines": {
+        "total": 1464,
+        "covered": 1464,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 1523,
+        "covered": 1523,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 384,
+        "covered": 384,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 1080,
+        "covered": 1080,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    }
+  },
+  "wholeSourceProof": {
+    "files": 309,
+    "sha256": "cff410c70beadcc15bf4cc4c7b69d7720efdc4bcf49bbb9ec57503c5eeb3bad2"
+  }
+}

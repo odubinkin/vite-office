@@ -1,0 +1,6 @@
+{
+  "command": "npm exec -- prettier --check apps/office/e2e/writer-native-table-mouse.spec.ts",
+  "exit": 0,
+  "observedOutput": "Checking formatting...\nAll matched files use Prettier code style!\n",
+  "reason": "Final changed test-only fallback literal; passing full gates not replayed"
+}

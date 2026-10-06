@@ -1,0 +1,210 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/sw/source/core/crsr/trvltbl.ts": "912146a89c7dc95f174510fd83de60bab81e89619d2c5afa7ae98ae6bc4aa2bd",
+    "apps/office/src/sw/source/uibase/docvw/edtwin.ts": "028def3cd75df19afd295bcabd48ed9245593ac711c6de02a0fd8c9cdfa20b58",
+    "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts": "3f3334072668603831c314ef2b6cc22b47487128bcbade0a950b1109b76adf26",
+    "apps/office/src/vcl/ptrstyle.ts": "4b26d3e387d4a672b6cfad53c4526fc7748cbd2b0ce21da47ab5f854f6554a1e",
+    "apps/office/src/vcl/browser/pointer.ts": "bd239f8ed5a570c34941f915878c29bd9a4e6fa13cdafa8bf17ee7624024b6e2",
+    "apps/office/src/vcl/browser/cursors/tblsels.svg": "169d2df87bcd0dad9987e947f61fa9a3c7e0dfd6b32948b7ad9ebdd6e5a5c4cd",
+    "apps/office/src/vcl/browser/cursors/tblsele.svg": "d505f01ca6d31b9c0afc6edb4f51690cb391a639741bff9f022a6bd702639407",
+    "apps/office/src/vcl/browser/cursors/tblselse.svg": "feb022a0c74eb20d1ebc23b79efad89e92c3eb1263975e7ed3af879429c5fc95",
+    "apps/office/src/vcl/browser/cursors/tblselw.svg": "54f9b26c25096e2a4326b49d3fb29e21e71e21462f9f795067d71d6477b207e1",
+    "apps/office/src/vcl/browser/cursors/tblselsw.svg": "7a75a74b350f05cd8091b74724317b6856e27e03447cf537ff91f2ba329c960c",
+    "apps/office/e2e/writer-native-table-mouse.spec.ts": "fc6a7736abd3dd36b27d11ca094214b2e79f838f25a0b5b9a1b775c94603ca98"
+  },
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1443,
+      "sha256": "1e3fa123aee4209a34b5400b1d7523f54ab552779641eabf54ba6577f6b12013",
+      "totals": [],
+      "failedCases": []
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/T25B96.app-results.json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 60685,
+      "sha256": "3da80b1ff24b5cdb318a99ba7b9750e1528a5b2d8a6257900d909fefd6aa7c4c",
+      "totals": [
+        "Test Files  370 passed (370)",
+        "Tests  12954 passed (12954)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "passed": 12954,
+        "failed": 0,
+        "skipped": 0,
+        "total": 12954
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 14110,
+          "covered": 14110,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 15469,
+          "covered": 15469,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3643,
+          "covered": 3643,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 11538,
+          "covered": 11538,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100
+      },
+      "incompleteFileCount": 0,
+      "coverageMapSHA256": "070cd1501eae5d7a3e6eca405bc5ebe23b83152c4dabc8ba64f054ced48a0219"
+    },
+    {
+      "kind": "inventory",
+      "command": "npm run test:inventory:coverage -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/T25B96.inventory-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 42194,
+      "sha256": "de5cbee862db04d7fd8aaa2223cc0350cb8beae8cc65bd4e948c9881db3f1adb",
+      "totals": [
+        "Test Files  1 failed | 35 passed (36)",
+        "Tests  1 failed | 108 passed (109)"
+      ],
+      "failedCases": [
+        {
+          "name": "scripts/libreoffice-inventory/parity-mapping-cli.test.ts > parity mapping CLI composes the Writer mapping report with owned upstream marker evidence",
+          "assertion": [
+            "Error: Runtime module paths must be unique and lexicographically ordered."
+          ]
+        }
+      ],
+      "caseCounts": {
+        "passed": 108,
+        "failed": 1,
+        "skipped": 0,
+        "total": 109
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 1464,
+          "covered": 1460,
+          "skipped": 0,
+          "pct": 99.72
+        },
+        "statements": {
+          "total": 1523,
+          "covered": 1519,
+          "skipped": 0,
+          "pct": 99.73
+        },
+        "functions": {
+          "total": 384,
+          "covered": 381,
+          "skipped": 0,
+          "pct": 99.21
+        },
+        "branches": {
+          "total": 1080,
+          "covered": 1080,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "coverage": {
+        "lines": 99.72,
+        "statements": 99.73,
+        "functions": 99.21,
+        "branches": 100
+      },
+      "incompleteFileCount": 1,
+      "coverageMapSHA256": "014dba517e10e499e83fb4f4091fc529393689d615f3d00285fdeff92c868eeb"
+    },
+    {
+      "kind": "scripts",
+      "command": "npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 218,
+      "sha256": "84b448c24e372b8a338b47c2ce513beafeac72b96bf9ab2f82c73682a0e22891",
+      "totals": [
+        "Test Files  2 passed (2)",
+        "Tests  5 passed (5)"
+      ],
+      "failedCases": []
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 35056,
+      "sha256": "ded4a12cc0b46255b138b5b161ee92738a7d00e0ea595dfb451e00f00369d354",
+      "totals": [
+        "2 failed",
+        "210 passed (1.6m)"
+      ],
+      "failedCases": [
+        {
+          "name": "writer-native-table-mouse.spec.ts > Writer native table mouse edge and drag width=1280",
+          "errors": [
+            [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCSS\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed",
+              "Expected: \u001b[32m\"text\"\u001b[39m",
+              "Received: \u001b[31m\"auto\"\u001b[39m"
+            ]
+          ]
+        },
+        {
+          "name": "writer-native-table-mouse.spec.ts > Writer native table mouse edge and drag width=390",
+          "errors": [
+            [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCSS\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed",
+              "Expected: \u001b[32m\"text\"\u001b[39m",
+              "Received: \u001b[31m\"auto\"\u001b[39m"
+            ]
+          ]
+        }
+      ],
+      "caseCounts": {
+        "startTime": "2026-10-06T14:42:52.467Z",
+        "duration": 94542.66900000001,
+        "expected": 210,
+        "skipped": 0,
+        "unexpected": 2,
+        "flaky": 0
+      }
+    }
+  ]
+}

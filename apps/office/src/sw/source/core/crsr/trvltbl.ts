@@ -165,6 +165,10 @@ export abstract class SwCursorShell extends SwModify {
   public HasBoxSelection(): boolean {
     return this.tableCursor !== undefined;
   }
+  /** Reports native table mode from the actual table cursor. @returns Whether a table cursor exists. */
+  public IsTableMode(): boolean {
+    return this.tableCursor !== undefined;
+  }
   /** Releases the table cursor without changing the persistent ordinary cursor. @returns Nothing. */
   protected ClearTableCursor(): void {
     while (this.cursor.IsMultiSelection()) this.cursor.GetNext().Dispose();

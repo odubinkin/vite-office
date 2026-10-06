@@ -12,6 +12,7 @@ import { BrowserWriterPointerSelectionController } from "./writer-geometry";
 import { BrowserWriterSelectionMapper } from "./writer-selection";
 import type { WriterCursorSelection } from "./writer-selection-types";
 import { SwTab } from "../../inc/fesh";
+import { browserPointerStyle } from "../../../vcl/browser/pointer";
 import { SwTabFrame, type SwTableMouseCell } from "../../source/core/layout/tabfrm";
 
 /** Mounted paragraph lookup retained by the browser edit window. */
@@ -270,15 +271,8 @@ export class BrowserWriterEditWindow {
     ): void => {
       if (this.tableCapture) return;
       this.MeasureTableFrames();
-      const kind = this.editWindow.WhichMouseTabCol({ x: event.clientX, y: event.clientY });
-      event.currentTarget.style.cursor =
-        kind === SwTab.ROWSEL_HORI
-          ? "e-resize"
-          : kind === SwTab.COLSEL_HORI
-            ? "s-resize"
-            : kind === SwTab.SEL_HORI
-              ? "se-resize"
-              : "";
+      this.editWindow.changeMousePointer({ x: event.clientX, y: event.clientY });
+      event.currentTarget.style.cursor = browserPointerStyle(this.editWindow.GetPointer());
       /* c8 ignore start -- Text caret extension is covered by isolated geometry and Chromium. */
       if (this.pointerSelection.Move(event.clientX, event.clientY)) event.preventDefault();
       /* c8 ignore stop */

@@ -4,6 +4,8 @@ import { afterEach, expect, it, vi } from "vitest";
 import { createWriterDocumentSession } from "../composition/writer-module";
 import { WriterWorkbench } from "../presentation/writer-view";
 import { BrowserWriterEditWindow } from "./browser-writer-edit-window";
+import { PointerStyle } from "../../../vcl/ptrstyle";
+import { browserPointerStyle } from "../../../vcl/browser/pointer";
 import { SwTableCursor } from "../../source/core/crsr/swcrsr";
 /** Requires a real fixture owner. @param value - Optional connected owner. @returns Actual owner. */
 function required<T>(value: T | null | undefined): T {
@@ -119,9 +121,11 @@ it("captures row drag outside the React root and shrinks/reverses native selecti
 it("uses native row, column and corner pointer kinds and rejects right/double click admission" /** Checks hover classification and mouse admission without changing history. @returns Nothing. */, () => {
   const f = fixture();
   for (const [x, y, cursor] of [
-    [93, 125, "e-resize"],
-    [250, 93, "s-resize"],
-    [93, 93, "se-resize"],
+    [93, 125, browserPointerStyle(PointerStyle.TabSelectE)],
+    [250, 93, browserPointerStyle(PointerStyle.TabSelectS)],
+    [93, 93, browserPointerStyle(PointerStyle.TabSelectSE)],
+    [200, 125, "col-resize"],
+    [250, 150, "row-resize"],
     [250, 125, ""],
   ] as const) {
     fireEvent.mouseMove(f.host, { clientX: x, clientY: y });
@@ -263,5 +267,24 @@ it("a detached mouse frame refresh cannot resurrect native table capture after i
   expect(f.host.style.cursor).toBe("");
   expect(f.shell.getShellCursor()).toBe(cursor);
   expect(f.session.view.GetEditWin().MouseMove({ x: 93, y: 225 })).toBe(false);
+  expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(0);
+});
+
+it("retains native pointer during capture and suppresses resize changes in table mode", /** Checks actual mounted cursor policy and cleanup. @returns Nothing. */ () => {
+  const f = fixture();
+  fireEvent.mouseMove(f.host, { clientX: 93, clientY: 125 });
+  const east = browserPointerStyle(PointerStyle.TabSelectE);
+  expect(f.host.style.cursor).toBe(east);
+  fireEvent.mouseDown(f.host, { button: 0, detail: 1, clientX: 93, clientY: 125 });
+  fireEvent.mouseMove(f.host, { clientX: 200, clientY: 175 });
+  expect(f.host.style.cursor).toBe(east);
+  fireEvent.mouseUp(document);
+  expect(f.shell.IsTableMode()).toBe(true);
+  fireEvent.mouseMove(f.host, { clientX: 200, clientY: 175 });
+  expect(f.host.style.cursor).toBe(east);
+  fireEvent.mouseMove(f.host, { clientX: 250, clientY: 93 });
+  expect(f.host.style.cursor).toBe(browserPointerStyle(PointerStyle.TabSelectS));
+  fireEvent.mouseMove(f.host, { clientX: 250, clientY: 125 });
+  expect(f.host.style.cursor).toBe("");
   expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(0);
 });

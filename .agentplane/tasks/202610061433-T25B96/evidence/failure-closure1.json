@@ -1,0 +1,36 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "inventory",
+      "command": "npm run test:inventory:coverage -- scripts/libreoffice-inventory/parity-mapping-cli.test.ts -t ^parity mapping CLI composes the Writer mapping report with owned upstream marker evidence$ --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0 --coverage.reporter=json --coverage.reporter=json-summary --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/T25B96.inventory-closure1-results.json",
+      "exit": 0,
+      "bytes": 770,
+      "sha256": "147f70743ed38c6dd6f3cf7bb1059844a57a93558ff91777e2067e0a9cf47148",
+      "failedCases": [],
+      "caseCounts": {
+        "passed": 1,
+        "failed": 0,
+        "skipped": 2,
+        "total": 3
+      },
+      "coverageMapSHA256": "544d00c783c45fb39efc97a65041b87f390b28c79adb56bed5eb4638e1084e1d"
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts writer-native-table-mouse.spec.ts --grep Writer native table mouse edge and drag width= --reporter=list,json",
+      "exit": 0,
+      "bytes": 656,
+      "sha256": "882628d14e54cfa58dbd878856d0211d749ae52d5da6f10635edc73882ece599",
+      "failedCases": [],
+      "caseCounts": {
+        "startTime": "2026-10-06T14:46:00.841Z",
+        "duration": 3324.852,
+        "expected": 2,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    }
+  ]
+}

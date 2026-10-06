@@ -14,6 +14,7 @@ import { SwTableBoxStartNode } from "../../core/docnode/node";
 import * as numfunc from "../../core/doc/number";
 import { SwTab, type SwTableMousePoint } from "../../../inc/fesh";
 import type { SwTabFrame } from "../../core/layout/tabfrm";
+import { PointerStyle } from "../../../../vcl/ptrstyle";
 
 /** Performs no invalidation for detached/test edit windows. @returns Nothing. */
 function ignoreEditWindowInvalidation(): void {}
@@ -42,6 +43,55 @@ export class SwEditWin {
   private readonly invalidateBindings: () => void;
   private tableMouseStart: SwTableMousePoint | undefined;
   private tableRowDrag = false;
+  private pointer = PointerStyle.Null;
+
+  /** Returns the native window pointer selected by mouse policy. @returns Current pointer style. */
+  public GetPointer(): PointerStyle {
+    return this.pointer;
+  }
+
+  /** Applies native table hover policy; table mode suppresses resize changes but permits enhanced selection. @param point - Device position. @returns Whether native table geometry handled the point. */
+  public changeMousePointer(point: SwTableMousePoint): boolean {
+    const kind = this.WhichMouseTabCol(point);
+    if (kind === SwTab.COL_NONE) {
+      this.pointer = PointerStyle.Null;
+      return false;
+    }
+    let pointer: PointerStyle;
+    let checkTableSelection = false;
+    switch (kind) {
+      case SwTab.COL_VERT:
+      case SwTab.ROW_HORI:
+        pointer = PointerStyle.VSizeBar;
+        checkTableSelection = true;
+        break;
+      case SwTab.ROW_VERT:
+      case SwTab.COL_HORI:
+        pointer = PointerStyle.HSizeBar;
+        checkTableSelection = true;
+        break;
+      case SwTab.SEL_HORI:
+        pointer = PointerStyle.TabSelectSE;
+        break;
+      case SwTab.SEL_HORI_RTL:
+      case SwTab.SEL_VERT:
+        pointer = PointerStyle.TabSelectSW;
+        break;
+      case SwTab.COLSEL_HORI:
+      case SwTab.ROWSEL_VERT:
+        pointer = PointerStyle.TabSelectS;
+        break;
+      case SwTab.ROWSEL_HORI:
+        pointer = PointerStyle.TabSelectE;
+        break;
+      case SwTab.ROWSEL_HORI_RTL:
+      case SwTab.COLSEL_VERT:
+        pointer = PointerStyle.TabSelectW;
+        break;
+    }
+    if (!checkTableSelection || !this.wrtShell.IsTableMode()) this.pointer = pointer;
+    return true;
+  }
 
   /** Replaces device frame measurements before native mouse classification. @param frames - Live master/follow frames. @returns Nothing. */
   public SetTableMouseFrames(frames: readonly SwTabFrame[]): void {

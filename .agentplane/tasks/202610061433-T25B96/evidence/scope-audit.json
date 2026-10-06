@@ -1,0 +1,55 @@
+{
+  "approvedPaths": [
+    "apps/office/src/sw/source/core/crsr/trvltbl.ts",
+    "apps/office/src/sw/source/uibase/docvw/edtwin.ts",
+    "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts",
+    "apps/office/src/vcl/ptrstyle.ts",
+    "apps/office/src/vcl/browser/pointer.ts",
+    "apps/office/src/vcl/browser/cursors/tblsels.svg",
+    "apps/office/src/vcl/browser/cursors/tblsele.svg",
+    "apps/office/src/vcl/browser/cursors/tblselse.svg",
+    "apps/office/src/vcl/browser/cursors/tblselw.svg",
+    "apps/office/src/vcl/browser/cursors/tblselsw.svg",
+    "apps/office/src/sw/source/uibase/docvw/native-table-pointer.test.ts",
+    "apps/office/src/vcl/browser/pointer.test.ts",
+    "apps/office/src/sw/browser/editor/native-table-mouse.test.tsx",
+    "apps/office/e2e/writer-native-table-mouse.spec.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "actualSemanticPaths": [
+    "apps/office/e2e/writer-native-table-mouse.spec.ts",
+    "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts",
+    "apps/office/src/sw/browser/editor/native-table-mouse.test.tsx",
+    "apps/office/src/sw/source/core/crsr/trvltbl.ts",
+    "apps/office/src/sw/source/uibase/docvw/edtwin.ts",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/source-provenance.json",
+    "apps/office/src/sw/source/uibase/docvw/native-table-pointer.test.ts",
+    "apps/office/src/vcl/browser/cursors/tblsele.svg",
+    "apps/office/src/vcl/browser/cursors/tblsels.svg",
+    "apps/office/src/vcl/browser/cursors/tblselse.svg",
+    "apps/office/src/vcl/browser/cursors/tblselsw.svg",
+    "apps/office/src/vcl/browser/cursors/tblselw.svg",
+    "apps/office/src/vcl/browser/pointer.test.ts",
+    "apps/office/src/vcl/browser/pointer.ts",
+    "apps/office/src/vcl/ptrstyle.ts"
+  ],
+  "oldAcceptanceFiles": 493,
+  "oldAcceptanceChanged": [
+    "apps/office/e2e/writer-native-table-mouse.spec.ts",
+    "apps/office/src/sw/browser/editor/native-table-mouse.test.tsx"
+  ],
+  "oldAcceptanceByteIdentical": 491,
+  "newTests": [
+    "apps/office/src/sw/source/uibase/docvw/native-table-pointer.test.ts",
+    "apps/office/src/vcl/browser/pointer.test.ts"
+  ],
+  "totalAcceptanceFiles": 495,
+  "priorSemanticRecords": 272,
+  "semanticRecords": 274,
+  "entirePriorPrefixesPreserved": true,
+  "parentPrefixCharacters": 478980,
+  "parentPrefixSHA256": "e5f2aaf634a89e6734ed9fae3e06d35245b64c43f7ab4312c4ee812696e0bff7",
+  "failures": []
+}

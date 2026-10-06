@@ -49,10 +49,27 @@ for (const width of [1280, 390])
       h = bounds.height / 3,
       w = bounds.width / 3;
     await expect(page.getByRole("button", { name: "Select row 1 in Mouse" })).toHaveCount(0);
+    const host = page.locator("[data-writer-editing-host]");
+    await page.mouse.move(x - 7, y + h / 2);
+    await expect(host).toHaveCSS("cursor", /url\(.+\) 14 8, default/);
+    await page.mouse.move(x + w, y + h / 2);
+    await expect(host).toHaveCSS("cursor", "col-resize");
+    await page.mouse.move(x + w / 2, y + h);
+    await expect(host).toHaveCSS("cursor", "row-resize");
+    await page.mouse.move(x + w / 2, y + h / 2);
+    await expect(host).toHaveCSS("cursor", "auto");
+    await page.mouse.move(x - 7, y - 7);
+    await expect(host).toHaveCSS("cursor", /url\(.+\) 14 14, default/);
     await page.mouse.click(x - 10, y + h / 2);
     await expect(selected).toHaveCount(0);
     await page.mouse.click(x - 7, y + h / 2);
     await expect(selected).toHaveCount(3);
+    await page.mouse.move(x - 7, y + h / 2);
+    await expect(host).toHaveCSS("cursor", /url\(.+\) 14 8, default/);
+    await page.mouse.move(x + w, y + h / 2);
+    await expect(host).toHaveCSS("cursor", /url\(.+\) 14 8, default/);
+    await page.mouse.move(x + w / 2, y - 7);
+    await expect(host).toHaveCSS("cursor", /url\(.+\) 7 14, default/);
     await page.mouse.move(x - 7, y + h / 2);
     await page.mouse.down();
     await page.mouse.move(x + 2 * w, y + 2.5 * h);
