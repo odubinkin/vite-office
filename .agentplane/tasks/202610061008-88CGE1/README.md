@@ -4,7 +4,7 @@ title: "Move native table selection ownership into cursor shell and expose upstr
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 20
+revision: 21
 origin:
   system: "manual"
 depends_on: []
@@ -17,10 +17,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-06T10:40:19.828Z"
+  updated_by: "CODER"
+  note: "Verified source-owned native table selections at0264126bc5f57c16b0a94884a4722408af1e2d05:12841app109inventory5scripts195Chrome distinct PASS, actual app/inventory100% coverage, all declared gates/scope/source/quality pass. One full absent profile; only original failed fixtures rerun, production unchanged; vendor restored. Whole parity unverified."
   attempts: 0
 quality_review:
   state: "pass"
@@ -55,8 +55,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: iteration183 source-owned cursor selection and upstream menu parity with one absent profile; whole parity unverified."
+  -
+    type: "verify"
+    at: "2026-10-06T10:40:19.828Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified source-owned native table selections at0264126bc5f57c16b0a94884a4722408af1e2d05:12841app109inventory5scripts195Chrome distinct PASS, actual app/inventory100% coverage, all declared gates/scope/source/quality pass. One full absent profile; only original failed fixtures rerun, production unchanged; vendor restored. Whole parity unverified."
 doc_version: 3
-doc_updated_at: "2026-10-06T10:40:11.035Z"
+doc_updated_at: "2026-10-06T10:40:19.912Z"
 doc_updated_by: "CODER"
 description: "Iteration183: refactor actual ordinary/table cursor ownership and row selection from SwWrtShell into source-owned SwCursorShell; native row/column/cell/table selection through upstream contextual slots with no React selection state, TextRuns conversion or document mutation; one absent verification profile."
 sections:
@@ -68,7 +74,41 @@ sections:
     2. ONE full profile while vendor renamed inside repository and restored in finally: npm run test:static; full app/inventory coverage --coverage.reportOnFailure and JSON cases; scripts acceptance; all Chromium against dist. Persist exact failures/counts/errors/hashes before assertions. No passing/full/source replay; only original failures or genuinely new cases.
     3. Actual core/mounted/browser acceptance proves core cursor owner inheritance, actual row/column/cell/table native selected boxes and endpoint offsets, multi-paragraph cells, ordinary mark clearing and existing table cursor reuse, no document/history/dirty mutation, ring disposal and body cleanup, contextual command enablement/order and standard reset, formatting/paste/insertion after selection, undo restoration.100%actual-counter app/inventory coverage; map transfer only exact unchanged maps or entire byte-identical ranges with counters.
     4. After restoration run generator --check/source-tree/provenance/invariants/parity once; preserved prior semantic/test prefix and scoped AP source/helper prohibition audit; doctor/routing/diff and same-agent exact-SHA review. Explicit scoped implementation, evidence, verification tail and clean direct close; parent/goal active full parity unverified.
-  Verification: "Command: declared static/scoped checks, one full upstream-absent profile, original failed-case closures, once-restored source audits and same-agent exact-SHA review. Result: PASS at implementation0264126bc5f57c16b0a94884a4722408af1e2d05. Evidence:12841app109inventory5scripts195Chromium distinct PASS; no failures/runtime errors/flaky; partial closure3appPASS2SKIPPED, only global coverage threshold exit. Actual initial app/inventory maps100% with byte-identical final maps and unchanged production hashes. No rebuild/merge/transfer/full passing replay. Scope270semantic records preserved,477/479oldtests identical,3newfiles482total. Source/quality/AP audit PASS, doctor0errors2knownwarnings, vendor restored. Same current agent EVALUATOR role, no independent reviewer claim. Full parity UNVERIFIED; parent/whole goal ACTIVE."
+  Verification: |-
+    Command: declared static/scoped checks, one full upstream-absent profile, original failed-case closures, once-restored source audits and same-agent exact-SHA review. Result: PASS at implementation0264126bc5f57c16b0a94884a4722408af1e2d05. Evidence:12841app109inventory5scripts195Chromium distinct PASS; no failures/runtime errors/flaky; partial closure3appPASS2SKIPPED, only global coverage threshold exit. Actual initial app/inventory maps100% with byte-identical final maps and unchanged production hashes. No rebuild/merge/transfer/full passing replay. Scope270semantic records preserved,477/479oldtests identical,3newfiles482total. Source/quality/AP audit PASS, doctor0errors2knownwarnings, vendor restored. Same current agent EVALUATOR role, no independent reviewer claim. Full parity UNVERIFIED; parent/whole goal ACTIVE.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-06T10:40:19.828Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified source-owned native table selections at0264126bc5f57c16b0a94884a4722408af1e2d05:12841app109inventory5scripts195Chrome distinct PASS, actual app/inventory100% coverage, all declared gates/scope/source/quality pass. One full absent profile; only original failed fixtures rerun, production unchanged; vendor restored. Whole parity unverified.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-06T10:40:11.035Z, excerpt_hash=sha256:41c6490b53f445bea27f4524a46abc6504f9f96015416a23a5a1fb87172afdea
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610061008-88CGE1/blueprint/resolved-snapshot.json
+    - old_digest: 305b743dcc6fa466ac94cfe8658139ca447eeb1f14e63aaa1b4354bc46170d03
+    - current_digest: 305b743dcc6fa466ac94cfe8658139ca447eeb1f14e63aaa1b4354bc46170d03
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610061008-88CGE1
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610061008-88CGE1
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert scoped implementation through a separate leaf if actual selection owners/endpoints/rings or contextual commands regress. Preserve immutable DONE evidence and conscious I/O deviations."
   Findings: |-
     Previous iteration182 DONE: implementation2c76be1460f59495b7ab618efa8babf2e7870c3d, checkpoint184aeff391048b252dc4a4734f86c479bb8018c7. Native table selection responsibilities belonged locally to SwWrtShell, while pinned trvltbl.cxx and crsrsh.hxx assign cursor storage/materialization and SelTableRowOrCol/SelTable/SelTableBox to SwCursorShell. This iteration moves those actual owners, removes duplicated high-level row selection, adds thin SwWrtShell entry points and four argument-free native table selection slots. GetTableSel expands displayed point/mark instead of projected editing-ring extremes. EntireCell skips standard reset; row/column/table commands enter standard mode as pinned tabsh.cxx does. React reads original selected boxes and cursor endpoints; no new selection adapter, UI state or TextRuns conversion.
@@ -112,6 +152,39 @@ Standing iterative UI/refactor authorization applies. Core SwCursorShell owns ac
 ## Verification
 
 Command: declared static/scoped checks, one full upstream-absent profile, original failed-case closures, once-restored source audits and same-agent exact-SHA review. Result: PASS at implementation0264126bc5f57c16b0a94884a4722408af1e2d05. Evidence:12841app109inventory5scripts195Chromium distinct PASS; no failures/runtime errors/flaky; partial closure3appPASS2SKIPPED, only global coverage threshold exit. Actual initial app/inventory maps100% with byte-identical final maps and unchanged production hashes. No rebuild/merge/transfer/full passing replay. Scope270semantic records preserved,477/479oldtests identical,3newfiles482total. Source/quality/AP audit PASS, doctor0errors2knownwarnings, vendor restored. Same current agent EVALUATOR role, no independent reviewer claim. Full parity UNVERIFIED; parent/whole goal ACTIVE.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-06T10:40:19.828Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified source-owned native table selections at0264126bc5f57c16b0a94884a4722408af1e2d05:12841app109inventory5scripts195Chrome distinct PASS, actual app/inventory100% coverage, all declared gates/scope/source/quality pass. One full absent profile; only original failed fixtures rerun, production unchanged; vendor restored. Whole parity unverified.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-06T10:40:11.035Z, excerpt_hash=sha256:41c6490b53f445bea27f4524a46abc6504f9f96015416a23a5a1fb87172afdea
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610061008-88CGE1/blueprint/resolved-snapshot.json
+- old_digest: 305b743dcc6fa466ac94cfe8658139ca447eeb1f14e63aaa1b4354bc46170d03
+- current_digest: 305b743dcc6fa466ac94cfe8658139ca447eeb1f14e63aaa1b4354bc46170d03
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610061008-88CGE1
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610061008-88CGE1
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
