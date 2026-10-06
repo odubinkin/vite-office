@@ -1,0 +1,126 @@
+{
+  "evaluatedSHA": "a269e0e73cc2553f86a85aa73a904d219b771b7e",
+  "reviewer": "Same current agent EVALUATOR phase; explicitly not independent review",
+  "implementationSHA256": {
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx": "920969952a9e36f947ae3667bda8d306924dc45477eb874890c36545d2b7ca2d",
+    "docs/program/parity/runtime-inventory.json": "13f0d40442836017041a6473c0b29b70f7cc1e1a0b9904f70bd7924015ab573d",
+    "docs/program/source-provenance.json": "0fee985df05a70b52d4b82a656a21308c916e0c4e9b52b660fb0c94e00437fac",
+    "apps/office/e2e/writer-native-table-properties-reset.spec.ts": "e5c6c1200ffedf03c5544952053bb70dbc7dbfb8ff480e8f60bdadd579665f11",
+    "apps/office/src/sw/browser/presentation/native-table-properties-reset.test.tsx": "f79aa311f8ffb174ae7e24f1b62aa28b8addebc409b6de316f66027f521555e3",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-properties-reset-history.test.ts": "9d7e8a8d8782ddfee50e6e75c1cd95a7766b85bebd640778df842aec610e1416"
+  },
+  "acceptance": {
+    "application": 13102,
+    "inventory": 109,
+    "scripts": 5,
+    "chromium": 233,
+    "oldAcceptanceFilesByteIdentical": 516,
+    "knownNativeFieldAccessorMigration": 0,
+    "newAcceptanceFiles": 3,
+    "totalAcceptanceFiles": 519,
+    "focusedNewCases": 0,
+    "focusedSkippedCasesNotPromoted": 0,
+    "noHistoricalPassingReplay": true
+  },
+  "coverage": {
+    "app": {
+      "coverage": {
+        "lines": {
+          "total": 14782,
+          "covered": 14782,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 16217,
+          "covered": 16217,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3752,
+          "covered": 3752,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 12031,
+          "covered": 12031,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "mapSHA256": "40b276c7992d3128e5e583c8938fc75af85ff88a9050b1f8c56bb27cfb756f8e",
+      "files": 273
+    },
+    "inventory": {
+      "coverage": {
+        "lines": {
+          "total": 1464,
+          "covered": 1464,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 1523,
+          "covered": 1523,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 384,
+          "covered": 384,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 1080,
+          "covered": 1080,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "mapSHA256": "0afa98322959e8cddc7c86260c3455dd509d0c6b82a25d8ce431555f27679754",
+      "files": 38
+    },
+    "proof": "Actual initial counters transferred only over full identical maps/source or complete contiguous identical source ranges with full mapped locations; current changed ranges use focused raw counters. Skipped cases retained as skipped. No counts fabricated.",
+    "transfers": [],
+    "wholeIdenticalFileCount": 273,
+    "gaps": []
+  },
+  "proof": {
+    "app": {
+      "files": 273,
+      "wholeIdenticalFiles": 273,
+      "completeRegionFiles": 0,
+      "proofSHA256": "0d298bd87126f3461dde8423390f1b59fd3574abd80618fd19fe14da121e9920"
+    },
+    "inventory": {
+      "files": 38,
+      "wholeIdenticalFiles": 38,
+      "proofSHA256": "bba763d4d7885fd8e6c808012fa5076f978483a51ef15926e7e324b1ca130222"
+    },
+    "counterRule": "Complete identical source/maps or full contiguous byte-identical regions, full function declaration/body and full enclosing branch/locations only. Raw counters only; source digests checked. Focused skips remain skips.",
+    "failures": []
+  },
+  "semanticRecords": 276,
+  "priorRecordsAndPrefixesPreserved": 276,
+  "parentPrefixCharacters": 504171,
+  "parentPrefixSHA256": "19caaf1a09d82585530dd681368bd0695f7e0358cdce2ffd914951074580bdcb",
+  "registeredFilenameAndIOExceptionsUnchanged": true,
+  "deferredStashPreserved": true,
+  "sourceContractsReviewed": true,
+  "failures": []
+}

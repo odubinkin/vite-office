@@ -4,7 +4,7 @@ title: "Wire native current-page table properties reset"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,30 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-06T19:53:45.798Z"
+  updated_by: "CODER"
+  note: "Verified current-page Reset at a269e0e73cc2553f86a85aa73a904d219b771b7e:13102app109inventory5scripts233Chromium current cases pass, actual100 source/map coverage; static/source/scope/governance and21file artifact census pass. One full absent profile plus only2failed browser cases; same-agent EVALUATOR explicitly not independent. Parent/goal active."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-06T19:53:04.971Z"
+  updated_by: "EVALUATOR"
+  note: "Current-page Reset meets approved scope at a269e0e73cc2553f86a85aa73a904d219b771b7e; same current-agent EVALUATOR phase, explicitly not independent review."
+  evaluated_sha: "a269e0e73cc2553f86a85aa73a904d219b771b7e"
+  blueprint_digest: "5181b675f23833cbd3859a1b91d7527499c66d77988c855140725d899700fd73"
+  evidence_refs:
+    - ".agentplane/tasks/202610061930-TVEFME/README.md"
+    - ".agentplane/tasks/202610061930-TVEFME/quality/20261006-195304971-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610061930-TVEFME/quality/20261006-195304971-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610061930-TVEFME/quality/20261006-195304971-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610061930-TVEFME/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610061930-TVEFME/evidence/exact-sha-review.json"
+    - ".agentplane/tasks/202610061930-TVEFME/evidence/source-review.json"
+    - ".agentplane/tasks/202610061930-TVEFME/evidence/coverage-source-proof.json"
+  findings:
+    - "13102app109inventory5scripts233Chromium current cases pass; one upstream-absent full profile plus two original failed browser cases only; actual100 coverage with complete identical source/maps and real counters."
+    - "Six approved paths,516historical acceptance files identical,3new519total;276prior contracts/full prefixes and registered exceptions retained; active-page/native Reset ownership and canonical history/ODT/input evidenced."
 commit: null
 comments:
   -
@@ -35,8 +54,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: wire source current-page Reset over native shared drafts, preserve prior acceptance/contracts and canonical graph/history, one upstream-absent profile."
+  -
+    type: "verify"
+    at: "2026-10-06T19:53:45.798Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified current-page Reset at a269e0e73cc2553f86a85aa73a904d219b771b7e:13102app109inventory5scripts233Chromium current cases pass, actual100 source/map coverage; static/source/scope/governance and21file artifact census pass. One full absent profile plus only2failed browser cases; same-agent EVALUATOR explicitly not independent. Parent/goal active."
 doc_version: 3
-doc_updated_at: "2026-10-06T19:52:10.211Z"
+doc_updated_at: "2026-10-06T19:53:45.875Z"
 doc_updated_by: "CODER"
 description: "Restore the upstream Reset action for existing Writer Table Properties pages using original native format/column Reset owners and page-local initial text-flow/border values. Preserve canonical document/history isolation and registered deviations."
 sections:
@@ -69,6 +94,39 @@ sections:
     Result: exact SHA evidence recorded after implementation commit; explicitly not independent review.
     Evidence: exact-sha-review.json; generated quality report.
     Scope: approved leaf only; parent/goal ACTIVE and whole parity UNVERIFIED.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-06T19:53:45.798Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified current-page Reset at a269e0e73cc2553f86a85aa73a904d219b771b7e:13102app109inventory5scripts233Chromium current cases pass, actual100 source/map coverage; static/source/scope/governance and21file artifact census pass. One full absent profile plus only2failed browser cases; same-agent EVALUATOR explicitly not independent. Parent/goal active.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-06T19:53:45.210Z, excerpt_hash=sha256:dff16a1f886edcc4ac8194faa644005eb25c064946119d4ee2a99563dd37d7bb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610061930-TVEFME/blueprint/resolved-snapshot.json
+    - old_digest: 5181b675f23833cbd3859a1b91d7527499c66d77988c855140725d899700fd73
+    - current_digest: 5181b675f23833cbd3859a1b91d7527499c66d77988c855140725d899700fd73
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610061930-TVEFME
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610061930-TVEFME -m 🧩 TVEFME task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only the active task implementation commit and task-local lifecycle records; preserve prior commits, registered deviations, original deferred stash and entire parent history."
   Findings: |-
     Pinned source comparison identifies missing Reset in existing browser Table Properties: tableproperties.ui includes the action; SfxTabDialogController::ResetHdl dispatches only the active page using original input values. Implementation adds this action while retaining active tab and other page drafts. Table/Columns invoke existing native Reset owners and preserve shared SwTableRep/vector/native state; represented Text Flow/Borders controls capture original values once at mount and reset only their own fields. Existing canonical shell acceptance remains sole document/history mutation.
@@ -84,6 +142,8 @@ sections:
     Read-only discovery mistakenly included nonexistent tablemgr.ts/xmltble.ts and unmatched metric/padding searches; route recomputed and actual paths inventoried. No mutation from failed reads, no scope/criteria drift. Standing iterative authorization covers this leaf; previous completed195 was authoritative progress.
 
     Same current-agent exact implementation-SHA EVALUATOR phase explicitly not independent review. Complete SfxItemSet item-range resets, native percentages/name/text direction/full widget bounds/Background UI and full module/UI/core parity remain UNVERIFIED. Existing Header default/import semantics were not promoted by reset restoration. Parent/goal ACTIVE; whole implemented-runtime parity UNVERIFIED.
+
+    Exact implementation a269e0e73cc2553f86a85aa73a904d219b771b7e review PASS, generated .agentplane/tasks/202610061930-TVEFME/quality/20261006-195304971-recovery-context/quality-report.json; same current-agent EVALUATOR explicitly not independent. Post-quality current leaf/generated quality census21files0forbidden; vendor restored. All required current evidence passed; canonical verification follows, parent/goal remain active.
 id_source: "generated"
 ---
 ## Summary
@@ -128,6 +188,39 @@ Result: exact SHA evidence recorded after implementation commit; explicitly not 
 Evidence: exact-sha-review.json; generated quality report.
 Scope: approved leaf only; parent/goal ACTIVE and whole parity UNVERIFIED.
 
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-06T19:53:45.798Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified current-page Reset at a269e0e73cc2553f86a85aa73a904d219b771b7e:13102app109inventory5scripts233Chromium current cases pass, actual100 source/map coverage; static/source/scope/governance and21file artifact census pass. One full absent profile plus only2failed browser cases; same-agent EVALUATOR explicitly not independent. Parent/goal active.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-06T19:53:45.210Z, excerpt_hash=sha256:dff16a1f886edcc4ac8194faa644005eb25c064946119d4ee2a99563dd37d7bb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610061930-TVEFME/blueprint/resolved-snapshot.json
+- old_digest: 5181b675f23833cbd3859a1b91d7527499c66d77988c855140725d899700fd73
+- current_digest: 5181b675f23833cbd3859a1b91d7527499c66d77988c855140725d899700fd73
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610061930-TVEFME
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610061930-TVEFME -m 🧩 TVEFME task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
+
 ## Rollback Plan
 
 Revert only the active task implementation commit and task-local lifecycle records; preserve prior commits, registered deviations, original deferred stash and entire parent history.
@@ -147,3 +240,5 @@ Five restored source gates pass; scope6 approved semantic paths,276 prior metada
 Read-only discovery mistakenly included nonexistent tablemgr.ts/xmltble.ts and unmatched metric/padding searches; route recomputed and actual paths inventoried. No mutation from failed reads, no scope/criteria drift. Standing iterative authorization covers this leaf; previous completed195 was authoritative progress.
 
 Same current-agent exact implementation-SHA EVALUATOR phase explicitly not independent review. Complete SfxItemSet item-range resets, native percentages/name/text direction/full widget bounds/Background UI and full module/UI/core parity remain UNVERIFIED. Existing Header default/import semantics were not promoted by reset restoration. Parent/goal ACTIVE; whole implemented-runtime parity UNVERIFIED.
+
+Exact implementation a269e0e73cc2553f86a85aa73a904d219b771b7e review PASS, generated .agentplane/tasks/202610061930-TVEFME/quality/20261006-195304971-recovery-context/quality-report.json; same current-agent EVALUATOR explicitly not independent. Post-quality current leaf/generated quality census21files0forbidden; vendor restored. All required current evidence passed; canonical verification follows, parent/goal remain active.

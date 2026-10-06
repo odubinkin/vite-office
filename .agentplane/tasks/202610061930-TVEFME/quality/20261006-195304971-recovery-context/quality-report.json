@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "task_id": "202610061930-TVEFME",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-06T19:53:04.971Z",
+  "verdict": "pass",
+  "summary": "Current-page Reset meets approved scope at a269e0e73cc2553f86a85aa73a904d219b771b7e; same current-agent EVALUATOR phase, explicitly not independent review.",
+  "evaluated_sha": "a269e0e73cc2553f86a85aa73a904d219b771b7e",
+  "blueprint_digest": "5181b675f23833cbd3859a1b91d7527499c66d77988c855140725d899700fd73",
+  "findings": [
+    "13102app109inventory5scripts233Chromium current cases pass; one upstream-absent full profile plus two original failed browser cases only; actual100 coverage with complete identical source/maps and real counters.",
+    "Six approved paths,516historical acceptance files identical,3new519total;276prior contracts/full prefixes and registered exceptions retained; active-page/native Reset ownership and canonical history/ODT/input evidenced."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610061930-TVEFME/README.md",
+    ".agentplane/tasks/202610061930-TVEFME/evidence/exact-sha-review.json",
+    ".agentplane/tasks/202610061930-TVEFME/evidence/source-review.json",
+    ".agentplane/tasks/202610061930-TVEFME/evidence/coverage-source-proof.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Full SfxItemSet ranges, native percentages/name/text direction/widget bounds/Background and existing Header import/default semantics remain unverified; parent/goal active and whole parity unverified."
+  ]
+}
