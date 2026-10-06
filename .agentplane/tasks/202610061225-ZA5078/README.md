@@ -4,7 +4,7 @@ title: "Replace heuristic ASCII clipboard lists with native Writer range ownersh
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 20
 origin:
   system: "manual"
 depends_on: []
@@ -18,11 +18,27 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-06T12:59:50.783Z"
+  updated_by: "CODER"
+  note: "Verified implementation7dbbb320d95a12873c6cfbe13b39ea899203f411: native ASCII PaM/list ownership;12903app109inventory5scripts210Chrome;actual100coverage;one full absent profile and original inventory failure only;source/scope/governance/same-agent exact-SHA quality PASS. Whole parity unverified."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-06T12:59:02.366Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent exact implementation SHA7dbbb320d95a12873c6cfbe13b39ea899203f411 quality PASS: native ASCII range ownership;12903app109inventory5scripts210Chrome;actual100coverage;preserved scope and exceptions."
+  evaluated_sha: "7dbbb320d95a12873c6cfbe13b39ea899203f411"
+  blueprint_digest: "3bac7ef347a2e889620a37f3b8c184ef4a5f80fc2ee44028cb0ff675c5134c66"
+  evidence_refs:
+    - ".agentplane/tasks/202610061225-ZA5078/README.md"
+    - ".agentplane/tasks/202610061225-ZA5078/quality/20261006-125902366-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610061225-ZA5078/quality/20261006-125902366-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610061225-ZA5078/quality/20261006-125902366-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610061225-ZA5078/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610061225-ZA5078/evidence/exact-sha-quality.json"
+  findings:
+    - "One full absent profile;only original failed inventory case repeated;all prior270states/defaults/classes/prefixes retained plus one unverified owner;485prior acceptance files unchanged;no AP sources/helpers;full core/UI parity unverified."
 commit: null
 comments:
   -
@@ -36,8 +52,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: Replace existing heuristic plain-text list transfer with native ASCII range ownership under standing iterative core/UI/refactor authorization."
+  -
+    type: "verify"
+    at: "2026-10-06T12:59:50.783Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified implementation7dbbb320d95a12873c6cfbe13b39ea899203f411: native ASCII PaM/list ownership;12903app109inventory5scripts210Chrome;actual100coverage;one full absent profile and original inventory failure only;source/scope/governance/same-agent exact-SHA quality PASS. Whole parity unverified."
 doc_version: 3
-doc_updated_at: "2026-10-06T12:56:54.688Z"
+doc_updated_at: "2026-10-06T12:59:50.835Z"
 doc_updated_by: "CODER"
 description: "Iteration187: remove complete-list-item counting and invented fallback markers from existing plain-text copy. Native ASCII owner reads actual PaM and live text-node numbering/indent contracts; preserve conscious save/open/recovery deviations. One source-backed leaf under standing iterative core/UI authorization."
 sections:
@@ -49,7 +71,41 @@ sections:
     2. ONE full upstream-absent build/app/inventory/scripts/Chromium profile with raw coverage.reportOnFailure/maps/case JSON only ignored app cache; vendor rename/restore finally. Exact failures/counts/errors/hashes persisted before assertion, no source/scope/AP audits while live. Afterwards only original failed cases/genuine new cases; no full/passing replay. Coverage requires actual counters with entire identical maps/source or complete contiguous byte-identical ranges/full function+branch locations; skips remain skipped. Preserve actual100 app/inventory coverage.
     3. Actual native PaM/core/mounted/Chromium clipboard literal cases: ordinary/single-node list suppressed; one list plus normal paragraph exports marker; partial last list still exports, partial first starts later suppresses; forward/reverse/body/cell; numbered formatted prefix/suffix/nested vectors and no invented1 fallback; default bullet levels/custom glyph distinction; counted/uncounted/no-label/outline/zero-margin headings; export-numbering default true/false and existing clipboard paragraph breaks/empty/foreign/collapsed handling; copy preserves node/rule/cursor/history and subsequent edit/UndoRedo. Prior HTML/list layout/history assertions retained. Two old files corrected/rebuilt around actual native owners only for obsolete serializer/fallback/source contradictions, other485 old files byte-identical, three new files (490total).
     4. Once restored resource generation --check/source-tree/provenance/invariants/parity; scope270 prior states/defaults/classes/full prefixes preserved plus one explicitly unverified native owner; source-backed removed/new symbol anchor metadata allowed. AP no sources/helpers/raw maps; doctor/routing/diff; exact implementation-SHA same-agent evaluator; clean traceable close and parent entire472479-character prefix SHAfa9ea1d367c851eca6998cc9df08d761fb4e0cf2ecb701c9b03e738d6072df6d preserved. Full clipboard ASCII attributes/fields/redlines/table topology/rings/configuration/native compatibility and broad core/UI parity remain UNVERIFIED.
-  Verification: "Checks and evidence: static-gates.json retains initial fivePASS/sizeFAIL; static-closure.json and changed-file-checks.json record bounded size/import corrections and finalPASS. absent-profile.json is the sole full upstream-absent run (12903app,108inventoryPASS1FAIL,5scripts,210Chrome). closure1/2/3.json retain exact original inventory-case failures and successful focused closure,2skips each. final-coverage.json records268app/38inventory all100 actual counters. source-gates.json fivePASS; scope-audit.json14paths/485unchanged prior test files/490total/270preserved states plus newunverifiedowner271. source-review.json8hashes/prose; governance/artifact auditsPASS with2known doctor warnings. All vendor-restored flags true. Exact implementation-SHA quality is pending until the source commit exists; no independent-review claim or whole-parity promotion."
+  Verification: |-
+    PASS for the approved bounded native ASCII leaf at implementationSHA 7dbbb320d95a12873c6cfbe13b39ea899203f411. Sole full upstream-absent profile12903app109inventory aggregate5scripts210Chromium; inventory original1failure closed only by same-case focused attempts,2filter skips each retained. Actual268app/38inventory100L/S/F/B coverage with complete identical source/maps, no fabricated counters or passing/full replay. Source/resource5 gates, final static/scoped checks, scope485old acceptance files byte-identical/2declared corrections/3new490total,270prior semantic records and entire prefixes plus one unverified nativeowner271, three source-map marker migrations, governance and exact-SHA same-agent quality PASS. Eight upstream source hashes/prose only; vendor restored, deliberate I/O/recovery deviations unchanged; AP leaf/quality 19files0forbidden, raw data only ignored app cache. Doctor2knownwarnings. Complete core/UI parity remains UNVERIFIED; parent/goal ACTIVE. See evidence/static-gates.json,static-closure.json,changed-file-checks.json,absent-profile.json,closure1/2/3.json,final-coverage.json,source-gates.json,scope-audit.json,source-review.json,governance.json,artifact-audit.json,exact-sha-quality.json and quality report.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-06T12:59:50.783Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified implementation7dbbb320d95a12873c6cfbe13b39ea899203f411: native ASCII PaM/list ownership;12903app109inventory5scripts210Chrome;actual100coverage;one full absent profile and original inventory failure only;source/scope/governance/same-agent exact-SHA quality PASS. Whole parity unverified.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-06T12:59:50.375Z, excerpt_hash=sha256:af89257c83a1ba4e9dd57707f9df20fbc7da83410a76f0030600dc4bc8946dd1
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610061225-ZA5078/blueprint/resolved-snapshot.json
+    - old_digest: 3bac7ef347a2e889620a37f3b8c184ef4a5f80fc2ee44028cb0ff675c5134c66
+    - current_digest: 3bac7ef347a2e889620a37f3b8c184ef4a5f80fc2ee44028cb0ff675c5134c66
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610061225-ZA5078
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610061225-ZA5078 -m 🧩 ZA5078 task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Use a separate scoped leaf to revert native ASCII range ownership if source-backed copy/selection/history regress; preserve DONE evidence and conscious I/O/recovery deviations."
   Findings: |-
     Previous goal turn186 made verified progress: implementation0258f8f37a5bed79fd39c15c34a6b789e44181f4, close93fadc9ca74d46d4b5f40d52b0697ec2d67add00, checkpoint7a55a68cf25bb56f3611b36318094281208c9b64; current main tracked clean. Pinned26.8.0.2 baseline9bc445578031fecf56086729d8e4940c77e14d65. Source asc atr OutASC_SwTextNode248/263 uses same-node/start-offset/export-numbering conditions; Writer ctor103 default true; native final-node clipboard condition373. Native GetNumString3351, margins3381/3544, visible-numbering4455; defaults bullet config1490 and clamp1425. Existing local ASCII counts complete list items and invents fallback1/bullet from flattened transfer DTO, suppressing one-list-plus-body and partial-end labels. Current DocumentSettingManager lacks native NO_NUMBERING_SHOW_FOLLOWBY (source default false); wider unsupported compatibility not silently implemented/persisted. Read-only discovery had one speculative missing writer.cxx path, one empty marker search, one invalid escaped bullet regex; route recomputed before task mutations, actual paths then used. No implementation mutation yet, no sources/helpers saved in AP. Whole parity remains unverified.
@@ -61,6 +117,8 @@ sections:
     Five once-restored source/resource gates PASS;487old acceptance files485byte-identical,2declared native/source-contradicting corrections,3newfiles490total.270prior runtime states/defaults/classes/full evidence/responsibility/justification prefixes preserved; one new native SwASCWriter explicitlyunverified gives271records. Only three corresponding Writer mapping marker fields changed. Doctor0errors2pre-existing warnings (hook shim and historic missing implementation SHA); routing/diff PASS. Eight pinned source byte hashes/prose only. Current leaf artifact census0forbidden, raw cases/maps/source-byte snapshots only ignored app cache. One harmless extra poll raced a pending completed read and returned Unknown process id; consumed the original wait result, no restart/replay. Exact-SHA same-agent quality review follows the implementation commit, not independent review.
 
     Residual: full ASCII attributes/fields/redlines/copied table topology/rings/WriteAll/file options/native compatibility flag beyond default false/desktop environment overrides and broad core/UI parity remainUNVERIFIED. Conscious save/open/recovery deviations unchanged. No overall goal or parent completion.
+
+    Same-agent EVALUATOR exact implementationSHA 7dbbb320d95a12873c6cfbe13b39ea899203f411 PASS; case identities include file/full name/project/occurrence, zero passing replay verified; complete app original map/source bytes and inventory whole-map actual counter composition independently rechecked within the same agent phase. Quality generated report/prompt/opinion included in leaf artifact census 19files0forbidden; no independent review claim. Implementation semantic14paths match committed bytes; final verification recorded next.
 id_source: "generated"
 ---
 ## Summary
@@ -84,7 +142,40 @@ Standing iterative core/UI/refactor authorization applies. New native SwASCWrite
 
 ## Verification
 
-Checks and evidence: static-gates.json retains initial fivePASS/sizeFAIL; static-closure.json and changed-file-checks.json record bounded size/import corrections and finalPASS. absent-profile.json is the sole full upstream-absent run (12903app,108inventoryPASS1FAIL,5scripts,210Chrome). closure1/2/3.json retain exact original inventory-case failures and successful focused closure,2skips each. final-coverage.json records268app/38inventory all100 actual counters. source-gates.json fivePASS; scope-audit.json14paths/485unchanged prior test files/490total/270preserved states plus newunverifiedowner271. source-review.json8hashes/prose; governance/artifact auditsPASS with2known doctor warnings. All vendor-restored flags true. Exact implementation-SHA quality is pending until the source commit exists; no independent-review claim or whole-parity promotion.
+PASS for the approved bounded native ASCII leaf at implementationSHA 7dbbb320d95a12873c6cfbe13b39ea899203f411. Sole full upstream-absent profile12903app109inventory aggregate5scripts210Chromium; inventory original1failure closed only by same-case focused attempts,2filter skips each retained. Actual268app/38inventory100L/S/F/B coverage with complete identical source/maps, no fabricated counters or passing/full replay. Source/resource5 gates, final static/scoped checks, scope485old acceptance files byte-identical/2declared corrections/3new490total,270prior semantic records and entire prefixes plus one unverified nativeowner271, three source-map marker migrations, governance and exact-SHA same-agent quality PASS. Eight upstream source hashes/prose only; vendor restored, deliberate I/O/recovery deviations unchanged; AP leaf/quality 19files0forbidden, raw data only ignored app cache. Doctor2knownwarnings. Complete core/UI parity remains UNVERIFIED; parent/goal ACTIVE. See evidence/static-gates.json,static-closure.json,changed-file-checks.json,absent-profile.json,closure1/2/3.json,final-coverage.json,source-gates.json,scope-audit.json,source-review.json,governance.json,artifact-audit.json,exact-sha-quality.json and quality report.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-06T12:59:50.783Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified implementation7dbbb320d95a12873c6cfbe13b39ea899203f411: native ASCII PaM/list ownership;12903app109inventory5scripts210Chrome;actual100coverage;one full absent profile and original inventory failure only;source/scope/governance/same-agent exact-SHA quality PASS. Whole parity unverified.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-06T12:59:50.375Z, excerpt_hash=sha256:af89257c83a1ba4e9dd57707f9df20fbc7da83410a76f0030600dc4bc8946dd1
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610061225-ZA5078/blueprint/resolved-snapshot.json
+- old_digest: 3bac7ef347a2e889620a37f3b8c184ef4a5f80fc2ee44028cb0ff675c5134c66
+- current_digest: 3bac7ef347a2e889620a37f3b8c184ef4a5f80fc2ee44028cb0ff675c5134c66
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610061225-ZA5078
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610061225-ZA5078 -m 🧩 ZA5078 task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
@@ -101,3 +192,5 @@ Verification: initial format/lint/typecheck/dependencies/docs PASS; size FAIL103
 Five once-restored source/resource gates PASS;487old acceptance files485byte-identical,2declared native/source-contradicting corrections,3newfiles490total.270prior runtime states/defaults/classes/full evidence/responsibility/justification prefixes preserved; one new native SwASCWriter explicitlyunverified gives271records. Only three corresponding Writer mapping marker fields changed. Doctor0errors2pre-existing warnings (hook shim and historic missing implementation SHA); routing/diff PASS. Eight pinned source byte hashes/prose only. Current leaf artifact census0forbidden, raw cases/maps/source-byte snapshots only ignored app cache. One harmless extra poll raced a pending completed read and returned Unknown process id; consumed the original wait result, no restart/replay. Exact-SHA same-agent quality review follows the implementation commit, not independent review.
 
 Residual: full ASCII attributes/fields/redlines/copied table topology/rings/WriteAll/file options/native compatibility flag beyond default false/desktop environment overrides and broad core/UI parity remainUNVERIFIED. Conscious save/open/recovery deviations unchanged. No overall goal or parent completion.
+
+Same-agent EVALUATOR exact implementationSHA 7dbbb320d95a12873c6cfbe13b39ea899203f411 PASS; case identities include file/full name/project/occurrence, zero passing replay verified; complete app original map/source bytes and inventory whole-map actual counter composition independently rechecked within the same agent phase. Quality generated report/prompt/opinion included in leaf artifact census 19files0forbidden; no independent review claim. Implementation semantic14paths match committed bytes; final verification recorded next.

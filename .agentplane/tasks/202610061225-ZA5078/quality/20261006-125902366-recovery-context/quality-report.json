@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202610061225-ZA5078",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-06T12:59:02.366Z",
+  "verdict": "pass",
+  "summary": "Same-agent exact implementation SHA7dbbb320d95a12873c6cfbe13b39ea899203f411 quality PASS: native ASCII range ownership;12903app109inventory5scripts210Chrome;actual100coverage;preserved scope and exceptions.",
+  "evaluated_sha": "7dbbb320d95a12873c6cfbe13b39ea899203f411",
+  "blueprint_digest": "3bac7ef347a2e889620a37f3b8c184ef4a5f80fc2ee44028cb0ff675c5134c66",
+  "findings": [
+    "One full absent profile;only original failed inventory case repeated;all prior270states/defaults/classes/prefixes retained plus one unverified owner;485prior acceptance files unchanged;no AP sources/helpers;full core/UI parity unverified."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610061225-ZA5078/README.md",
+    ".agentplane/tasks/202610061225-ZA5078/evidence/exact-sha-quality.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}

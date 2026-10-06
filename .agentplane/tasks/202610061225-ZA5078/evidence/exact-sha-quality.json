@@ -1,0 +1,152 @@
+{
+  "implementationCommit": "7dbbb320d95a12873c6cfbe13b39ea899203f411",
+  "reviewer": "Same current agent in EVALUATOR phase; not independent review",
+  "verdict": "pass",
+  "counts": {
+    "application": 12903,
+    "inventory": 109,
+    "scripts": 5,
+    "chromium": 210
+  },
+  "originalInventoryFailures": 1,
+  "focusedClosures": [
+    {
+      "kind": "inventory-closure1",
+      "actualCompletedCases": 1,
+      "filterSkips": 2,
+      "passed": 0,
+      "failed": 1
+    },
+    {
+      "kind": "inventory-closure2",
+      "actualCompletedCases": 1,
+      "filterSkips": 2,
+      "passed": 0,
+      "failed": 1
+    },
+    {
+      "kind": "inventory-closure3",
+      "actualCompletedCases": 1,
+      "filterSkips": 2,
+      "passed": 1,
+      "failed": 0
+    }
+  ],
+  "coverage": {
+    "app": {
+      "coverage": {
+        "lines": {
+          "total": 13922,
+          "covered": 13922,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 15264,
+          "covered": 15264,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3615,
+          "covered": 3615,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 11388,
+          "covered": 11388,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "mapSHA256": "3928f7c8177bedd896e2dbcc51b429f58e374c2718bf0f456caed81f045c47fb",
+      "files": 268
+    },
+    "inventory": {
+      "coverage": {
+        "lines": {
+          "total": 1464,
+          "covered": 1464,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 1523,
+          "covered": 1523,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 384,
+          "covered": 384,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 1080,
+          "covered": 1080,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "mapSHA256": "816ccca70c6c89eb8b82f955dfb5e95256d8acfa725d7de25e35c34fbd27eae0",
+      "files": 38
+    },
+    "proof": "App original full profile100 map kept byte-identical; all app source bytes checked against initial production snapshots or unchanged base. Inventory counters added only over entire identical source/maps from the original failed case. No fabricated counts, no full/passing replay; focused filter skips retained.",
+    "wholeIdenticalAppFileCount": 268,
+    "wholeIdenticalInventoryFileCount": 38,
+    "gaps": []
+  },
+  "implementationSHA256": {
+    "apps/office/src/sw/source/filter/ascii/ascatr.ts": "32aa1e5351307f11fe1f5225be23a6121173b71cf3ff1ca623f3cc00eca3f5fc",
+    "apps/office/src/sw/source/filter/ascii/wrtasc.ts": "95ded406df4d55597da9ebed36ff6e69c2948380cde0c6811f3e4f2741984014",
+    "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts": "cb849bf0ea19e9602747049c5df86d0fcced9577bbe951afcdd1b26e066979c1",
+    "apps/office/src/sw/source/core/txtnode/ndtxt.ts": "8aeec88ce9fe3189b37f5fbb26d7cfa2428c90ccb52d4c4e4f082dde87612c68",
+    "apps/office/src/sw/source/core/txtnode/ndtxt-list-indent.ts": "026326adcbde29ab3c740be799289e7236c6a8d645ef33dc36e06e5211167be2",
+    "apps/office/src/sw/source/core/doc/number.ts": "bb868731ee1885cc052b1da69271e04478fa5e9a9a963e854a30384282c6c08f",
+    "apps/office/src/sw/source/filter/ascii/ascatr.test.ts": "1141b091661c55b4bd498005eab52eec1bc02fcea729c05bcf5bd0765e103d2d",
+    "apps/office/src/sw/browser/editor/native-paragraph-text-surface.test.tsx": "ff098b2e43cd370ed14d167711dbef2a8d3c54b5329a4297a977296a4b5e9be7",
+    "apps/office/src/sw/source/filter/ascii/native-ascii-range.test.ts": "11381d60901ca982f16b1ad4a14bea2a1f4fab5567931eef4485d8220dc111da",
+    "apps/office/src/sw/browser/editor/native-clipboard-lists.test.tsx": "b578cd25abfa5b4d04bc553a71fc5acd71628ff72580b861dc8200c16baa7583",
+    "apps/office/e2e/writer-native-clipboard-lists.spec.ts": "51782c62985ba91f36437f9ee05d129f82cbc522fd77ce49103e8e73060791ff",
+    "docs/program/source-provenance.json": "e7d0c440a71a6913a3415c4ac6168e35b427fa5697603dbc3356475d9ca5d8e1",
+    "docs/program/parity/runtime-inventory.json": "7fb2d4a3373ff1585bc2e414ddbb182fcaaeba0068fcfb483edd2cb05e1e521b",
+    "docs/program/parity/writer-command-slice.json": "f334c8c54c73af8fa349545972ef01fc1f208dab11b1925b4960aee033c5cf7c"
+  },
+  "sourceSHA256": {
+    "sw/source/filter/ascii/ascatr.cxx": "0417b547fc622a363704bfe879084d0e5c1de91fa20c109532e379be37e4c9b9",
+    "sw/source/filter/ascii/wrtasc.cxx": "837ff84e70881837893d896f8376533aed9e81afa55b2e08e587f44807909efb",
+    "sw/source/filter/ascii/wrtasc.hxx": "6c5650a5e5000baca40386852f9028cefcb3c2003f0325fc15bad46daf22698f",
+    "sw/source/filter/writer/writer.cxx": "e0c57e38fb6e3c5062fbc064582bbe7cfc0bdf3ef505f4da49f8979ac7e34579",
+    "sw/source/uibase/dochdl/swdtflvr.cxx": "78895e81d445a0c60a1793e91a90598718072d4c41d43fc6c7287fdd464059ee",
+    "sw/source/core/txtnode/ndtxt.cxx": "8cf38bae998b54451bbcbbc15fd69600d0f24490cf86c33c7cd54f72c63871f1",
+    "sw/source/core/doc/number.cxx": "516d41e83678d2a7ff06015464c7b18605e0d5a812809c54d9612550f1474129",
+    "sw/source/core/doc/DocumentSettingManager.cxx": "a737a8cdb6e967bd81389cc45f5e563bb9624fbf74deb52ca78f9bfd68d2b1ba"
+  },
+  "priorSemanticStatesDefaultsClassificationsAndEntirePrefixesPreserved": true,
+  "oldAcceptanceByteIdentical": 485,
+  "totalAcceptanceFiles": 490,
+  "semanticRecords": 271,
+  "parentPrefixLength": 472479,
+  "parentPrefixSHA256": "fa9ea1d367c851eca6998cc9df08d761fb4e0cf2ecb701c9b03e738d6072df6d",
+  "leafArtifactFilesAudited": 15,
+  "forbiddenArtifacts": [],
+  "initialFullProfileCount": 1,
+  "passingCaseReplay": false,
+  "vendorRestored": true,
+  "fullParity": "unverified",
+  "failures": []
+}
