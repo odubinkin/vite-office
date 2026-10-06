@@ -1,0 +1,113 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/sw/inc/itabenum.ts": "b0034e9124bead2e946207665540c0d7cfd5a419b58954b1d074a22aad5fe679",
+    "apps/office/src/sw/source/ui/table/instable.ts": "a6723df1f4eb5eb9d8db48dda08144b6c3024edd838a6e1981c1cc3aace5c1b0",
+    "apps/office/src/sw/browser/presentation/WriterInsertTableDialog.tsx": "ee0f0ff42197fc7c49977f547d95fb2167c8b56e7ea54e2ca0da4cdaa30c524e",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx": "1f2877866c317a899bc82313a0870879557c87a0b72b1c2e017264d39208cfcb",
+    "apps/office/src/sw/browser/presentation/writer-view.tsx": "cc034d28e1c2315eec7dd6f9fbaf26b07dde4f0f72e98268a5bad6b757edd7e7"
+  },
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/browser/presentation/native-insert-table-dialog.test.tsx -t accepts an empty name --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/VZAQBS-closure.app-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 27577,
+      "sha256": "7500d8db46c6e67dcede80df58e5c9401a04d8e4afda0ed6fa451815e989ee4b",
+      "totals": [
+        "Test Files  1 passed (1)",
+        "Tests  1 passed | 5 skipped (6)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "passed": 1,
+        "failed": 0,
+        "skipped": 5,
+        "total": 6
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 13422,
+          "covered": 3050,
+          "skipped": 0,
+          "pct": 22.72
+        },
+        "statements": {
+          "total": 14711,
+          "covered": 3160,
+          "skipped": 0,
+          "pct": 21.48
+        },
+        "functions": {
+          "total": 3535,
+          "covered": 938,
+          "skipped": 0,
+          "pct": 26.53
+        },
+        "branches": {
+          "total": 10940,
+          "covered": 1464,
+          "skipped": 0,
+          "pct": 13.38
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverage": {
+        "lines": 22.72,
+        "statements": 21.48,
+        "functions": 26.53,
+        "branches": 13.38
+      },
+      "incompleteFileCount": 238,
+      "coverageMapSHA256": "59cab6dd0b35b676d0d33c4d019c6fc4ae190c38d29901c2506392288fc3401a"
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts writer-insert-table-dialog.spec.ts --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 5653,
+      "sha256": "d45191d0fee2d63eab35564e525577a6df16560c5419bda9b2e4711edba18fd1",
+      "totals": [
+        "2 failed"
+      ],
+      "failedCases": [
+        {
+          "name": "writer-insert-table-dialog.spec.ts > native Insert Table inputs width=1280",
+          "errors": [
+            [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed",
+              "Expected: \u001b[32m33\u001b[39m",
+              "Received: \u001b[31m0\u001b[39m"
+            ]
+          ]
+        },
+        {
+          "name": "writer-insert-table-dialog.spec.ts > native Insert Table inputs width=390",
+          "errors": [
+            [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed",
+              "Expected: \u001b[32m33\u001b[39m",
+              "Received: \u001b[31m0\u001b[39m"
+            ]
+          ]
+        }
+      ],
+      "caseCounts": {
+        "startTime": "2026-10-06T07:26:25.895Z",
+        "duration": 20184.695,
+        "expected": 0,
+        "skipped": 0,
+        "unexpected": 2,
+        "flaky": 0
+      }
+    }
+  ]
+}
