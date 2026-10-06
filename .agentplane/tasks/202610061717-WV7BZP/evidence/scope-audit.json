@@ -1,0 +1,46 @@
+{
+  "approvedPaths": [
+    "apps/office/src/sw/source/core/doc/doc.ts",
+    "apps/office/src/sw/source/core/docnode/ndtbl.ts",
+    "apps/office/src/sw/source/core/layout/tabfrm.ts",
+    "apps/office/src/sw/source/core/frmedt/fetab.ts",
+    "apps/office/src/sw/source/uibase/docvw/edtwin.ts",
+    "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts",
+    "apps/office/src/sw/source/core/docnode/native-tabrows.test.ts",
+    "apps/office/src/sw/source/uibase/docvw/native-table-row-drag.test.ts",
+    "apps/office/src/sw/browser/editor/native-table-row-drag.test.tsx",
+    "apps/office/e2e/writer-native-table-row-drag.spec.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "actualSemanticPaths": [
+    "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts",
+    "apps/office/src/sw/source/core/doc/doc.ts",
+    "apps/office/src/sw/source/core/frmedt/fetab.ts",
+    "apps/office/src/sw/source/core/layout/tabfrm.ts",
+    "apps/office/src/sw/source/uibase/docvw/edtwin.ts",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/source-provenance.json",
+    "apps/office/e2e/writer-native-table-row-drag.spec.ts",
+    "apps/office/src/sw/browser/editor/native-table-row-drag.test.tsx",
+    "apps/office/src/sw/source/core/docnode/native-tabrows.test.ts",
+    "apps/office/src/sw/source/core/docnode/ndtbl.ts",
+    "apps/office/src/sw/source/uibase/docvw/native-table-row-drag.test.ts"
+  ],
+  "oldAcceptanceFiles": 504,
+  "oldAcceptanceChanged": [],
+  "oldAcceptanceByteIdentical": 504,
+  "newTests": [
+    "apps/office/e2e/writer-native-table-row-drag.spec.ts",
+    "apps/office/src/sw/browser/editor/native-table-row-drag.test.tsx",
+    "apps/office/src/sw/source/core/docnode/native-tabrows.test.ts",
+    "apps/office/src/sw/source/uibase/docvw/native-table-row-drag.test.ts"
+  ],
+  "totalAcceptanceFiles": 508,
+  "priorSemanticRecords": 275,
+  "semanticRecords": 276,
+  "entirePriorPrefixesPreserved": true,
+  "parentPrefixCharacters": 494113,
+  "parentPrefixSHA256": "88a9ab5e7e83b4cb66990c05fb2fefea4bb86893f7f71a664a2f3f0b2abef932",
+  "failures": []
+}
