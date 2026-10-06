@@ -1,10 +1,11 @@
 ---
 id: "202610061225-ZA5078"
 title: "Replace heuristic ASCII clipboard lists with native Writer range ownership"
-status: "DOING"
+result_summary: "Native Writer ASCII range/list ownership replaces synthetic complete-list and marker fallback adapters;bounded behavior verified,full core/UI parity unverified."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 20
+revision: 21
 origin:
   system: "manual"
 depends_on: []
@@ -39,11 +40,16 @@ quality_review:
     - ".agentplane/tasks/202610061225-ZA5078/evidence/exact-sha-quality.json"
   findings:
     - "One full absent profile;only original failed inventory case repeated;all prior270states/defaults/classes/prefixes retained plus one unverified owner;485prior acceptance files unchanged;no AP sources/helpers;full core/UI parity unverified."
-commit: null
+commit:
+  hash: "7dbbb320d95a12873c6cfbe13b39ea899203f411"
+  message: "🛠 ZA5078 code: native Writer ASCII range and list ownership"
 comments:
   -
     author: "CODER"
     body: "Start: Replace existing heuristic plain-text list transfer with native ASCII range ownership under standing iterative core/UI/refactor authorization."
+  -
+    author: "CODER"
+    body: "Verified: native ASCII owner reads original PaM and real numbering;12903app109inventory5scripts210Chrome;actual100coverage;source/scope/governance/exact-SHA same-agent quality PASS;prior states and conscious exceptions retained."
 events:
   -
     type: "status"
@@ -58,8 +64,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified implementation7dbbb320d95a12873c6cfbe13b39ea899203f411: native ASCII PaM/list ownership;12903app109inventory5scripts210Chrome;actual100coverage;one full absent profile and original inventory failure only;source/scope/governance/same-agent exact-SHA quality PASS. Whole parity unverified."
+  -
+    type: "status"
+    at: "2026-10-06T13:00:23.143Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native ASCII owner reads original PaM and real numbering;12903app109inventory5scripts210Chrome;actual100coverage;source/scope/governance/exact-SHA same-agent quality PASS;prior states and conscious exceptions retained."
 doc_version: 3
-doc_updated_at: "2026-10-06T12:59:50.835Z"
+doc_updated_at: "2026-10-06T13:00:23.144Z"
 doc_updated_by: "CODER"
 description: "Iteration187: remove complete-list-item counting and invented fallback markers from existing plain-text copy. Native ASCII owner reads actual PaM and live text-node numbering/indent contracts; preserve conscious save/open/recovery deviations. One source-backed leaf under standing iterative core/UI authorization."
 sections:
