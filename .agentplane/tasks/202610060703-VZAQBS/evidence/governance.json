@@ -1,0 +1,28 @@
+{
+  "doctor": {
+    "exit": 0,
+    "errors": 0,
+    "warnings": 2,
+    "knownWarnings": [
+      "old managed hook shim",
+      "completed 202610031635-2Z3962 lacks implementation hash"
+    ]
+  },
+  "routing": {
+    "exit": 0
+  },
+  "diffCheck": {
+    "exit": 0
+  },
+  "changedAcceptanceFiles": {
+    "prettier": "pass",
+    "eslint": "pass",
+    "jsdoc": "pass using unchanged scoped declaration validator",
+    "typecheck": "pass: application typecheck after new Workbench case",
+    "physicalLines": {
+      "nativeInsertUITest": 149,
+      "insertChromiumSpec": 70
+    }
+  },
+  "profileRunners": "all terminal; vendor restored in finally"
+}

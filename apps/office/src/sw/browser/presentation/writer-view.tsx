@@ -106,6 +106,13 @@ export function WriterWorkbench({
     presentationStore.GetSnapshot,
   );
   const activeDocument = view.GetDocShell().GetDoc();
+  const occupiedTableNames = activeDocument.GetTables().map(
+    /** Reads native table names for insertion. @param table - Existing table. @returns Name. */
+    (table) => table.GetName(),
+  );
+  let nextTableNumber = 1;
+  while (occupiedTableNames.includes("Table" + nextTableNumber)) nextTableNumber += 1;
+  const suggestedTableName = "Table" + nextTableNumber;
   const [tableDialog, setTableDialog] = useState<"insert" | "properties">();
   const [lineNumberingDialog, setLineNumberingDialog] = useState(false);
   const currentTable = view.GetWrtShell().IsCursorInTable()?.GetTable();
@@ -150,7 +157,7 @@ export function WriterWorkbench({
   /** Inserts a table from the upstream size grid with Writer's default table geometry. @param columns - Selected columns. @param rows - Selected rows. @returns Nothing. */
   function insertTableFromGrid(columns: number, rows: number): void {
     const table = activeDocument.nodes.MakeTableNode(
-      `Table${activeDocument.GetTables().length + 1}`,
+      suggestedTableName,
       { width: availableTableWidth, align: "left", headerRows: 1, repeatHeaderRows: true },
       view.GetWrtShell().GetActiveParagraph(),
     );
@@ -176,7 +183,7 @@ export function WriterWorkbench({
     ): void => {
       if (tableDialog === "insert") {
         const table = activeDocument.nodes.MakeTableNode(
-          value.name,
+          value.name || suggestedTableName,
           {
             width: value.width,
             align: "left",
@@ -601,7 +608,8 @@ export function WriterWorkbench({
       </WriterWorkspaceChrome>
       {tableDialog === undefined ? null : (
         <WriterTableDialog
-          suggestedName={`Table${activeDocument.GetTables().length + 1}`}
+          occupiedNames={occupiedTableNames}
+          suggestedName={suggestedTableName}
           {...(tableDialog === "properties" && currentTable !== undefined
             ? { table: currentTable }
             : {})}

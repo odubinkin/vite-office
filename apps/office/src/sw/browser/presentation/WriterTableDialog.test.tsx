@@ -44,6 +44,7 @@ describe("Writer browser table controls", /** Verifies the bounded table scenari
   it("offers upstream Insert Table Options and Styles with model-backed values", /** Checks table options and styles. @returns Nothing. */ () => {
     const submit = vi.fn();
     render(<WriterTableDialog availableWidth={6000} onCancel={vi.fn()} onSubmit={submit} />);
+    fireEvent.click(screen.getByLabelText("Header"));
     expect(screen.getByText("Options")).toBeVisible();
     expect(screen.getByText("Styles")).toBeVisible();
     fireEvent.change(screen.getByRole("spinbutton", { name: "Rows" }), { target: { value: "3" } });
@@ -73,6 +74,7 @@ describe("Writer browser table controls", /** Verifies the bounded table scenari
     const submit = vi.fn();
     const cancel = vi.fn();
     render(<WriterTableDialog availableWidth={6000} onCancel={cancel} onSubmit={submit} />);
+    fireEvent.click(screen.getByLabelText("Header"));
     const dimensionFields = screen.getAllByRole("spinbutton");
     expect(dimensionFields[0]).toHaveAccessibleName("Columns");
     expect(dimensionFields[1]).toHaveAccessibleName("Rows");

@@ -1,0 +1,27 @@
+{
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceSHA256": {
+    "sw/source/ui/table/instable.cxx": "0f3fc7deadb637642b8796239d9480b9108f0b664f8c1fa06fdc387d7b4763e0",
+    "sw/inc/itabenum.hxx": "c6a19df97975a734dfced93d076c5cfa3f96694188e21a3d9141c64b35aac5ff",
+    "sw/uiconfig/swriter/ui/inserttable.ui": "2d1bbed1a8db49f4d4889abd11cd3d8ff3377763433bafdd885fb99ff518b8fa",
+    "officecfg/registry/schema/org/openoffice/Office/Writer.xcs": "9d289f00edb8eb657121f3aaec42ed9bb48049037fb08dbae79405a752eebbd5",
+    "officecfg/registry/data/org/openoffice/Office/Writer.xcu": "c4dc2632b4dda9623524a84c970a8610e79bc97aeed724c7568510f96acfa378",
+    "sw/source/uibase/shells/basesh.cxx": "d7d8a38f7edcaccca958f81822304f494a8191d240b6d8cc527486b818d8b9ef",
+    "sw/source/core/docnode/ndtbl.cxx": "d3220445657cd54a44fc741bebf5d514b4d62f5607fcfb5e0f7ef30700075d8d"
+  },
+  "requirements": [
+    "Writer Header=false, RepeatHeader=true and Split=true configuration",
+    "SwInsTableDlg constructor/ModifyRowCol/GetValues/linked sensitivity and entered-repeat restoration",
+    "native UI2million bounds and nonblocking rows>255/columns>63 warning",
+    "native forbidden characters and duplicate-name sensitivity",
+    "zero sal_uInt16 dimensions rejected by native insertion caller",
+    "ordinary canonical table names use first unused Table suffix"
+  ],
+  "omissions": [
+    "full autoformat",
+    "HTML/LOK",
+    "localized and noncanonical names and native format-pool naming/lifetime",
+    "selection conversion and actual insertion command/history",
+    "complete UI/core parity"
+  ]
+}
