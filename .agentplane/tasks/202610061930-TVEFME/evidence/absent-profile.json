@@ -1,0 +1,198 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx": "920969952a9e36f947ae3667bda8d306924dc45477eb874890c36545d2b7ca2d",
+    "apps/office/src/sw/browser/presentation/native-table-properties-reset.test.tsx": "f79aa311f8ffb174ae7e24f1b62aa28b8addebc409b6de316f66027f521555e3",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-properties-reset-history.test.ts": "9d7e8a8d8782ddfee50e6e75c1cd95a7766b85bebd640778df842aec610e1416",
+    "apps/office/e2e/writer-native-table-properties-reset.spec.ts": "15cbc09048159053f767432d7088bade35d5487ae8a7b24b2cf7c765a058d349",
+    "docs/program/source-provenance.json": "0fee985df05a70b52d4b82a656a21308c916e0c4e9b52b660fb0c94e00437fac",
+    "docs/program/parity/runtime-inventory.json": "13f0d40442836017041a6473c0b29b70f7cc1e1a0b9904f70bd7924015ab573d"
+  },
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1443,
+      "sha256": "6b2f8afea2933c0dc197150fccb4b3eddc68b2e8866a819624286396623c5833",
+      "totals": [],
+      "failedCases": []
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/TVEFME.app-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 75438,
+      "sha256": "8c63d13300d24fc925212bac8ba430ed748a5e16b567e75360ec9125ddbaaa3d",
+      "totals": [
+        "Test Files  387 passed (387)",
+        "Tests  13102 passed (13102)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "passed": 13102,
+        "failed": 0,
+        "skipped": 0,
+        "total": 13102
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 14782,
+          "covered": 14782,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 16217,
+          "covered": 16217,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3752,
+          "covered": 3752,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 12031,
+          "covered": 12030,
+          "skipped": 0,
+          "pct": 99.99
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 99.99
+      },
+      "incompleteFileCount": 1,
+      "coverageMapSHA256": "71120884e592ab96b41377db2b660fe6ab8cc9c95e53d69892153d26f888b3a7"
+    },
+    {
+      "kind": "inventory",
+      "command": "npm run test:inventory:coverage -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/TVEFME.inventory-results.json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 40605,
+      "sha256": "ae707fe2f859f59197be567e4bde297717ada172b19e87281d6e595b3dc96678",
+      "totals": [
+        "Test Files  36 passed (36)",
+        "Tests  109 passed (109)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "passed": 109,
+        "failed": 0,
+        "skipped": 0,
+        "total": 109
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 1464,
+          "covered": 1464,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 1523,
+          "covered": 1523,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 384,
+          "covered": 384,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 1080,
+          "covered": 1080,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100
+      },
+      "incompleteFileCount": 0,
+      "coverageMapSHA256": "128d22cd1b37425cbfaa1b70d6526e0e2488e1278135e01b0c970ece2ff22fbd"
+    },
+    {
+      "kind": "scripts",
+      "command": "npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 221,
+      "sha256": "84d66dce6a31191c5b504080ec3e67828af19dc954f8ac6aa588d3b23a56c68d",
+      "totals": [
+        "Test Files  2 passed (2)",
+        "Tests  5 passed (5)"
+      ],
+      "failedCases": []
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 38317,
+      "sha256": "19502fa230ca9285aee1ba266e7e276f9075ac2ece798ea53e84ae691b5a33df",
+      "totals": [
+        "2 failed",
+        "231 passed (3.7m)"
+      ],
+      "failedCases": [
+        {
+          "name": "writer-native-table-properties-reset.spec.ts > native current-page table Reset preserves other pages and canonical history width=1280",
+          "errors": [
+            [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).not.\u001b[22mtoBeChecked\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed",
+              "Expected: not checked",
+              "Received: checked"
+            ]
+          ]
+        },
+        {
+          "name": "writer-native-table-properties-reset.spec.ts > native current-page table Reset preserves other pages and canonical history width=390",
+          "errors": [
+            [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).not.\u001b[22mtoBeChecked\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed",
+              "Expected: not checked",
+              "Received: checked"
+            ]
+          ]
+        }
+      ],
+      "caseCounts": {
+        "startTime": "2026-10-06T19:44:01.385Z",
+        "duration": 222564.208,
+        "expected": 231,
+        "skipped": 0,
+        "unexpected": 2,
+        "flaky": 0
+      }
+    }
+  ]
+}
