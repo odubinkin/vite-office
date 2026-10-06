@@ -1,10 +1,11 @@
 ---
 id: "202610061618-REBSTT"
 title: "Restore native Writer mouse column-border tracking"
-status: "DOING"
+result_summary: "Restored native inner/outer column resize capture with cancellation and deferred document history;13002app109inventory5scripts217ChromiumPASS, actual100 coverage;499historical test files and275metadata records preserved. Full parity unverified."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on:
@@ -41,11 +42,16 @@ quality_review:
     - ".agentplane/tasks/202610061618-REBSTT/evidence/scope-audit.json"
   findings:
     - "Native actual-frame GetMouseTabCols/SetMouseTabCols and deferred SwTabCols tracking restore inner/outer border capture, preview/cancel/Enter/release with original cursor/history. ONE full absent profile plus only original failure/new-case closures gives13002app109inventory5scripts217ChromiumPASS; actual100 app/inventory complete source/map counter proof.499 historical test files byte-identical,275 complete metadata prefixes and registered I/O deviations preserved. Row-height mouse resizing and complete native ruler machinery remain unverified; THKZ38 draft retained in its local Git stash."
-commit: null
+commit:
+  hash: "951af363f422df0b485a0ab61491c317cf532652"
+  message: "🚧 REBSTT code: restore native mouse column-border tracking"
 comments:
   -
     author: "CODER"
     body: "Start: restore the user-reported mouse column-border gesture with native position-based separator ownership, capture and deferred history; preserve THKZ38 stash and every historical acceptance case."
+  -
+    author: "CODER"
+    body: "Verified: native mouse column-border tracking now blocks text drag/selection, previews and commits once through SwTabCols, preserves cursor/history, and passes the complete bounded evidence contract; row-height resizing remains next."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Exact951af363f422 native mouse column tracking verified:13002app109inventory5scripts217ChromiumPASS; actual100 app/inventory via complete source/map actual counter proof.499historic tests byte-identical,275metadata preserved. Same-agent EVALUATOR pass is not independent review. Rows/full ruler/full parity remain unverified."
+  -
+    type: "status"
+    at: "2026-10-06T16:43:34.817Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native mouse column-border tracking now blocks text drag/selection, previews and commits once through SwTabCols, preserves cursor/history, and passes the complete bounded evidence contract; row-height resizing remains next."
 doc_version: 3
-doc_updated_at: "2026-10-06T16:43:14.893Z"
+doc_updated_at: "2026-10-06T16:43:34.818Z"
 doc_updated_by: "CODER"
 description: "Fix the reported column-resize gesture falling through to browser text drag or selection. Preserve unfinished THKZ38 in its recorded stash; implement this higher-priority isolated leaf using native GetMouseTabCols/SetMouseTabCols, deferred release history, cancellation and device capture."
 sections:
