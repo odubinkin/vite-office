@@ -1,0 +1,200 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/sw/source/uibase/docvw/edtwin.ts": "22d0b8df8fda940703a017eaaf22d586969fc6a90c423a20cce1ace96703b488",
+    "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts": "060a06dd9a77e530de1756b2f4c4384e6b2ddd1ee20c68fb175daab2eeb99ee7",
+    "apps/office/src/sw/source/uibase/docvw/native-table-linear-drag.test.ts": "c81202f3fa0948d79e07f70debf61a600c9ab7bcb9b4cbd6f909fd8dd7b74c13",
+    "apps/office/src/sw/browser/editor/native-table-linear-drag.test.tsx": "9cee11497e3766ca28cad1d609afae2e305d88e0cf067450f89c7fbd11f44239",
+    "apps/office/e2e/writer-native-table-linear-drag.spec.ts": "a51e8ff728dc5b8f47bad8fff259d0dc4acbd55a3453837590d81c3ec236ad94",
+    "docs/program/source-provenance.json": "1b03d7533de1c9067c39551263b6ac33d879ae53b154cbca0500fe3d793ac4c6",
+    "docs/program/parity/runtime-inventory.json": "c87bb59ccfc23b9175d5bbb964927088737eaf04e9ec134b0a7c613ee3a4571c"
+  },
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1443,
+      "sha256": "917fab89f785b6a320ba95b2670cc042853801897dd3f57cfcf349ad86b7b235",
+      "totals": [],
+      "failedCases": [],
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/YQ77NP.app-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 71522,
+      "sha256": "00e4f16f595f232d1ec2a6e1a9935cec1377cffdc5c35c681d27826536612039",
+      "totals": [
+        "Test Files  451 passed (451)",
+        "Tests  13623 passed (13623)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "passed": 13623,
+        "failed": 0,
+        "skipped": 0,
+        "total": 13623
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 16605,
+          "covered": 16605,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 18231,
+          "covered": 18231,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 4235,
+          "covered": 4235,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 13765,
+          "covered": 13763,
+          "skipped": 0,
+          "pct": 99.98
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 99.98
+      },
+      "incompleteFileCount": 2,
+      "coverageMapSHA256": "6bae9b5f77578350afb8948d1367876225c1765c8d66f4e81ef4e723e6f2f7ef",
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "inventory",
+      "command": "npm run test:inventory:coverage -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/YQ77NP.inventory-results.json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 40595,
+      "sha256": "f230a9c3046252daec141ebf461c7fc59148f562aa31a680e6aa3ec0cf5cce3a",
+      "totals": [
+        "Test Files  36 passed (36)",
+        "Tests  110 passed (110)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "passed": 110,
+        "failed": 0,
+        "skipped": 0,
+        "total": 110
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 1464,
+          "covered": 1464,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 1523,
+          "covered": 1523,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 384,
+          "covered": 384,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 1081,
+          "covered": 1081,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100
+      },
+      "incompleteFileCount": 0,
+      "coverageMapSHA256": "80089dedabc2bb6f2608b05a549835115bc2af7ab5ceee17e80f964117e27bb1",
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "scripts",
+      "command": "npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts scripts/check-module-boundaries.test.ts scripts/check-legacy-font-boundary.test.ts",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 223,
+      "sha256": "85dcf7f19e0d6674841202c99fc337522b2345609110fcc3176a301968e5e990",
+      "totals": [
+        "Test Files  4 passed (4)",
+        "Tests  15 passed (15)"
+      ],
+      "failedCases": [],
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 44825,
+      "sha256": "1f790784a988d95135642616cb7b8291a72a9503fc9f27dbf99f0fea18422883",
+      "totals": [
+        "2 failed",
+        "288 passed (2.5m)"
+      ],
+      "failedCases": [
+        {
+          "name": "writer-native-table-linear-drag.spec.ts > Writer solitary Shift translates following column borders width=1280",
+          "errors": [
+            [
+              "Error: Missing measured columns"
+            ]
+          ]
+        },
+        {
+          "name": "writer-native-table-linear-drag.spec.ts > Writer solitary Shift translates following column borders width=390",
+          "errors": [
+            [
+              "Error: Missing measured columns"
+            ]
+          ]
+        }
+      ],
+      "caseCounts": {
+        "startTime": "2026-10-07T19:32:56.057Z",
+        "duration": 149820.207,
+        "expected": 288,
+        "skipped": 0,
+        "unexpected": 2,
+        "flaky": 0
+      },
+      "unhandledErrorCount": 0
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "base": "a7bef94832f20fae2ba35f07d206a0c0f8fb7e83",
+  "semanticPaths": [
+    "apps/office/e2e/writer-native-table-linear-drag.spec.ts",
+    "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts",
+    "apps/office/src/sw/browser/editor/native-table-linear-drag.test.tsx",
+    "apps/office/src/sw/source/uibase/docvw/edtwin.ts",
+    "apps/office/src/sw/source/uibase/docvw/native-table-linear-drag.test.ts",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/source-provenance.json"
+  ],
+  "scopeCount": 7,
+  "priorAcceptanceFiles": 603,
+  "byteIdenticalAcceptanceFiles": 603,
+  "exactSourceBackedMigrations": [],
+  "newAcceptanceFiles": [
+    "apps/office/src/sw/source/uibase/docvw/native-table-linear-drag.test.ts",
+    "apps/office/src/sw/browser/editor/native-table-linear-drag.test.tsx",
+    "apps/office/e2e/writer-native-table-linear-drag.spec.ts"
+  ],
+  "metadata": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "oldRecords": 302,
+      "currentRecords": 302,
+      "allPriorFieldsPrefixesAndStatusesPreserved": true
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "oldRecords": 302,
+      "currentRecords": 302,
+      "allPriorFieldsPrefixesAndStatusesPreserved": true
+    }
+  ],
+  "failures": []
+}

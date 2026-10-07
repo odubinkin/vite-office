@@ -15,6 +15,7 @@ import { SwTab } from "../../inc/fesh";
 import { browserPointerStyle } from "../../../vcl/browser/pointer";
 import { SwTabFrame, type SwTableMouseCell } from "../../source/core/layout/tabfrm";
 import { measureWriterCursorTextLines } from "./writer-line-measurement";
+import { KEY_SHIFT, KEY_MOD1, KEY_MOD2, KEY_MOD3 } from "../../../vcl/keycodes";
 
 /** Mounted paragraph lookup retained by the browser edit window. */
 export type BrowserWriterParagraphResolver = (
@@ -322,6 +323,10 @@ export class BrowserWriterEditWindow {
           { x: event.clientX, y: event.clientY },
           event.button,
           event.detail || 1,
+          (event.shiftKey ? KEY_SHIFT : 0) |
+            (event.ctrlKey ? KEY_MOD1 : 0) |
+            (event.altKey ? KEY_MOD2 : 0) |
+            (event.metaKey ? KEY_MOD3 : 0),
         )
       ) {
         this.tableCapture =

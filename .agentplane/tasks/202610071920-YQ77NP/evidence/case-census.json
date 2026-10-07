@@ -1,0 +1,89 @@
+{
+  "app": {
+    "original": 13623,
+    "current": 13623,
+    "newCases": 0,
+    "resolved": 0,
+    "passed": 13623,
+    "unresolvedCount": 0,
+    "skippedObservationsRetained": 0,
+    "passingReplay": 0,
+    "originalUncaughtErrorCases": 0,
+    "finalUncaughtErrorCases": 0,
+    "inputs": [
+      {
+        "file": "YQ77NP.app-results.json",
+        "sha256": "e3092db8615b14dfa5d285b826f50915e93591693fc3ed3fd7101891f2efef15",
+        "passed": 13623,
+        "failed": 0,
+        "skipped": 0
+      }
+    ]
+  },
+  "inventory": {
+    "original": 110,
+    "current": 110,
+    "newCases": 0,
+    "resolved": 0,
+    "passed": 110,
+    "unresolvedCount": 0,
+    "skippedObservationsRetained": 0,
+    "passingReplay": 0,
+    "originalUncaughtErrorCases": 0,
+    "finalUncaughtErrorCases": 0,
+    "inputs": [
+      {
+        "file": "YQ77NP.inventory-results.json",
+        "sha256": "92641ebd64293e7f611aef1f59108db3d2a8cbf11602a52b4ad0473a057d2661",
+        "passed": 110,
+        "failed": 0,
+        "skipped": 0
+      }
+    ]
+  },
+  "chromium": {
+    "current": 290,
+    "passed": 290,
+    "unresolvedCount": 0,
+    "passingReplay": 0,
+    "inputs": [
+      {
+        "file": "YQ77NP.chromium-results.json",
+        "sha256": "b426209797d21694f4f12ec1ff23ca0b4a5fa3dc073872643d892a847c17492d",
+        "counts": {
+          "startTime": "2026-10-07T19:32:56.057Z",
+          "duration": 149820.207,
+          "expected": 288,
+          "skipped": 0,
+          "unexpected": 2,
+          "flaky": 0
+        }
+      },
+      {
+        "file": "YQ77NP.closure1.chromium-results.json",
+        "sha256": "333dc5e5732c2e96b49097a2ff49d52dd32d81b31dd7b1f2e3da2e29525bf1c4",
+        "counts": {
+          "startTime": "2026-10-07T19:36:47.130Z",
+          "duration": 15041.921,
+          "expected": 0,
+          "skipped": 0,
+          "unexpected": 2,
+          "flaky": 0
+        }
+      },
+      {
+        "file": "YQ77NP.closure2.chromium-results.json",
+        "sha256": "f59e3ae0923407bf4fd8310d9821b02a2cfad961d09911a3c55ff21192d926f5",
+        "counts": {
+          "startTime": "2026-10-07T19:38:37.449Z",
+          "duration": 3373.1059999999998,
+          "expected": 2,
+          "skipped": 0,
+          "unexpected": 0,
+          "flaky": 0
+        }
+      }
+    ]
+  },
+  "failures": []
+}

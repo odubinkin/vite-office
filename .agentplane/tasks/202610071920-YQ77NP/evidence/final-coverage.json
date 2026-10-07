@@ -1,0 +1,253 @@
+{
+  "proof": "Actual counters with complete identical source/maps or complete contiguous declaration/body/enclosing branch/location proofs; focused skips retained as skipped.",
+  "previousVerified": {
+    "app": {
+      "map": "JJ976X.app-final.json",
+      "proof": "JJ976X.app-proof.json",
+      "mapHash": "f712b51da25d3940dda50b797d798fc086120ce69c41d6fd7246e017e3f2e7de",
+      "proofHash": "6d96df38679501b7bd943e23a0548253884016f410021a9d4d004e5e9e34543f"
+    },
+    "inventory": {
+      "map": "JJ976X.inventory-final.json",
+      "proof": "JJ976X.inventory-proof.json",
+      "mapHash": "305cd42887041af80507a4819f7ecf727ec43e7234e47d1318007da2c7da51f3",
+      "proofHash": "5c43a8f01265876178c73869204175bfde82507529383d6eac361ff12ce0b0b8"
+    }
+  },
+  "app": {
+    "coverage": {
+      "lines": {
+        "total": 16605,
+        "covered": 16605,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 18231,
+        "covered": 18231,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 4235,
+        "covered": 4235,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 13765,
+        "covered": 13765,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "mapSHA256": "2461114eb262f7b98edcabaa8be80b1cacb495a827cf7cfb4282277f1cafb1f7",
+    "proofSHA256": "801f5a41ec8fcb3e72ef26e2f7add25c2ca77533446144ff6bf584213e80d224",
+    "files": 299,
+    "invalidWholeFallbacks": [
+      {
+        "path": "apps/office/src/sw/source/core/layout/paintfrm.ts",
+        "reason": "V8 raw inferred else counter is negative; use entire prior verified current-byte-identical source and entire maps/counters, never sanitize individual counts",
+        "priorMap": "JJ976X.app-final.json",
+        "priorMapSHA256": "f712b51da25d3940dda50b797d798fc086120ce69c41d6fd7246e017e3f2e7de",
+        "discardedInvalidAggregateSHA256": "0cce6af0c2bbbc8222c1fef8369a9f72241ce18d3181dd6336db689d390660f4",
+        "negativeCounts": [
+          -36
+        ]
+      }
+    ],
+    "priorRegionTransfers": [
+      {
+        "path": "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts",
+        "priorSourceSHA256": "d013e4798dd1642f59e72531ed1317a02a6653cd80a81f33b0e5317819d5d910",
+        "currentSourceSHA256": "060a06dd9a77e530de1756b2f4c4384e6b2ddd1ee20c68fb175daab2eeb99ee7",
+        "priorMap": "JJ976X.app-final.json",
+        "priorMapSHA256": "f712b51da25d3940dda50b797d798fc086120ce69c41d6fd7246e017e3f2e7de",
+        "regions": [
+          {
+            "oldStart": 1,
+            "oldEnd": 17,
+            "newStart": 1,
+            "newEnd": 17,
+            "byteLength": 896,
+            "sha256": "dd5fca2589d893b6bf02bbebfa03c511c0804fcec827e2d3a5b397d68a1fa355"
+          },
+          {
+            "oldStart": 18,
+            "oldEnd": 324,
+            "newStart": 19,
+            "newEnd": 325,
+            "byteLength": 13451,
+            "sha256": "69086517ab7dc4facf1d6ae0cd89e5da84a6aee8066f2d230f14b487f9595993"
+          },
+          {
+            "oldStart": 325,
+            "oldEnd": 615,
+            "newStart": 330,
+            "newEnd": 620,
+            "byteLength": 12164,
+            "sha256": "4b05a6569ade19931e426e8b5468fa223f9dd9719a12c7f5ed3f907d68db3359"
+          }
+        ],
+        "counts": {
+          "statements": 255,
+          "functions": 42,
+          "branches": 80
+        }
+      },
+      {
+        "path": "apps/office/src/sw/source/uibase/docvw/edtwin.ts",
+        "priorSourceSHA256": "5d850de03eb597c61935c7db193cec0f6593012769bdbe4dc61dcae2ca840f57",
+        "currentSourceSHA256": "22d0b8df8fda940703a017eaaf22d586969fc6a90c423a20cce1ace96703b488",
+        "priorMap": "JJ976X.app-final.json",
+        "priorMapSHA256": "f712b51da25d3940dda50b797d798fc086120ce69c41d6fd7246e017e3f2e7de",
+        "regions": [
+          {
+            "oldStart": 1,
+            "oldEnd": 19,
+            "newStart": 1,
+            "newEnd": 19,
+            "byteLength": 1014,
+            "sha256": "3e52fadeff574ef827ed55a1cb48ef1b70f194a790c8dd73fa7ccc8c9f075c97"
+          },
+          {
+            "oldStart": 20,
+            "oldEnd": 62,
+            "newStart": 21,
+            "newEnd": 63,
+            "byteLength": 1643,
+            "sha256": "a41959e72ae47bfa03da7631b81c0af50fb7cfb61a2b5c13c125bba6c99aa560"
+          },
+          {
+            "oldStart": 63,
+            "oldEnd": 124,
+            "newStart": 65,
+            "newEnd": 126,
+            "byteLength": 2177,
+            "sha256": "1569a119e828eebdc37e084761be9af3ca49ba7a897ee545acae8d31ab500aea"
+          },
+          {
+            "oldStart": 127,
+            "oldEnd": 131,
+            "newStart": 129,
+            "newEnd": 133,
+            "byteLength": 214,
+            "sha256": "7885a6d48a3b0c2046132e5860987e2b972eb8860e1f06a3ba865a800d31af64"
+          },
+          {
+            "oldStart": 133,
+            "oldEnd": 145,
+            "newStart": 135,
+            "newEnd": 147,
+            "byteLength": 465,
+            "sha256": "68f00017eed3e678417701c0e5af8d23b3aae0e78807361f1916993fdc4404bb"
+          },
+          {
+            "oldStart": 148,
+            "oldEnd": 168,
+            "newStart": 150,
+            "newEnd": 170,
+            "byteLength": 939,
+            "sha256": "484328f29e79ce1ddbf647e8b3642dd28a0ee5fbb24b3113f68cf8873cfd48f8"
+          },
+          {
+            "oldStart": 169,
+            "oldEnd": 183,
+            "newStart": 174,
+            "newEnd": 188,
+            "byteLength": 460,
+            "sha256": "6de4a7d815b5d6b03bc1048879b14e2bf3d803ee89073560993af9a10eefdd55"
+          },
+          {
+            "oldStart": 185,
+            "oldEnd": 201,
+            "newStart": 199,
+            "newEnd": 215,
+            "byteLength": 505,
+            "sha256": "fe696cf76938f515c678400bc58fa6fee8890d1cc53b22bbb2328c8e271ed7a4"
+          },
+          {
+            "oldStart": 202,
+            "oldEnd": 246,
+            "newStart": 217,
+            "newEnd": 261,
+            "byteLength": 1684,
+            "sha256": "1c8e9acc7ce6f51afefce95b47c74ecf962638dde3fef545fda75b02af135a46"
+          },
+          {
+            "oldStart": 247,
+            "oldEnd": 290,
+            "newStart": 263,
+            "newEnd": 306,
+            "byteLength": 1879,
+            "sha256": "15ef1ebaa7cb4246a75126a2f9a16dff670e78534ae91d07204dec1cffb2f188"
+          },
+          {
+            "oldStart": 291,
+            "oldEnd": 569,
+            "newStart": 318,
+            "newEnd": 596,
+            "byteLength": 12808,
+            "sha256": "0487f270b13bdca2d4a8626582cbb82aba40065227ff6551a62fb7ef2c721218"
+          }
+        ],
+        "counts": {
+          "statements": 137,
+          "functions": 40,
+          "branches": 89
+        }
+      }
+    ],
+    "wholeFiles": 299,
+    "transfers": [],
+    "gaps": []
+  },
+  "inventory": {
+    "coverage": {
+      "lines": {
+        "total": 1464,
+        "covered": 1464,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 1523,
+        "covered": 1523,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 384,
+        "covered": 384,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 1081,
+        "covered": 1081,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "mapSHA256": "eb6ddd6c913c1fe3d45867b7d1e0ea3d72f1431eaba0dc49d55c1ed55dbe45fa",
+    "proofSHA256": "5c43a8f01265876178c73869204175bfde82507529383d6eac361ff12ce0b0b8",
+    "files": 38,
+    "invalidWholeFallbacks": [],
+    "priorRegionTransfers": [],
+    "wholeFiles": 38,
+    "transfers": [],
+    "gaps": []
+  }
+}

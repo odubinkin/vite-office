@@ -1,0 +1,23 @@
+{
+  "kind": "chromium",
+  "profile": "upstream-absent",
+  "command": "npm exec -- playwright test --config apps/office/playwright.config.ts apps/office/e2e/writer-native-table-linear-drag.spec.ts --reporter=list,json",
+  "originalFailedNames": [
+    "Writer solitary Shift translates following column borders width=1280",
+    "Writer solitary Shift translates following column borders width=390"
+  ],
+  "passingReplay": 0,
+  "vendorRestored": true,
+  "exit": 0,
+  "outputSHA256": "cef06302c6882c529663d44cecceae38f371ac15813b459fe2c00ad20ccd0894",
+  "bytes": 704,
+  "caseCounts": {
+    "startTime": "2026-10-07T19:38:37.449Z",
+    "duration": 3373.1059999999998,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "failedCases": []
+}

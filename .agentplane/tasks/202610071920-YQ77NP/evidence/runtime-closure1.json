@@ -1,0 +1,44 @@
+{
+  "kind": "chromium",
+  "profile": "upstream-absent",
+  "command": "npm exec -- playwright test --config apps/office/playwright.config.ts apps/office/e2e/writer-native-table-linear-drag.spec.ts --reporter=list,json",
+  "originalFailedNames": [
+    "Writer solitary Shift translates following column borders width=1280",
+    "Writer solitary Shift translates following column borders width=390"
+  ],
+  "passingReplay": 0,
+  "vendorRestored": true,
+  "exit": 1,
+  "outputSHA256": "ddb7bc199f646f2cffe8d1b3490d760cbfa674b638d2d8a3d05b62087e20ae67",
+  "bytes": 6995,
+  "caseCounts": {
+    "startTime": "2026-10-07T19:36:47.130Z",
+    "duration": 15041.921,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  },
+  "failedCases": [
+    {
+      "name": "Writer solitary Shift translates following column borders width=1280",
+      "errors": [
+        [
+          "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed",
+          "Expected: \u001b[32m\"CellX\"\u001b[39m",
+          "Received: \u001b[31m\"\u001b[7mCell\u001b[27mCellX\"\u001b[39m"
+        ]
+      ]
+    },
+    {
+      "name": "Writer solitary Shift translates following column borders width=390",
+      "errors": [
+        [
+          "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed",
+          "Expected: \u001b[32m\"CellX\"\u001b[39m",
+          "Received: \u001b[31m\"\u001b[7mCell\u001b[27mCellX\"\u001b[39m"
+        ]
+      ]
+    }
+  ]
+}

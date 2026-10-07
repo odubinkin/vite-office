@@ -1,0 +1,38 @@
+{
+  "records": [
+    {
+      "command": "npm exec -- prettier --check apps/office/src/sw/source/uibase/docvw/edtwin.ts apps/office/e2e/writer-native-table-linear-drag.spec.ts",
+      "exit": 0,
+      "bytes": 66,
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+      "diagnostics": []
+    },
+    {
+      "command": "npm exec -- eslint apps/office/src/sw/source/uibase/docvw/edtwin.ts --max-warnings 0",
+      "exit": 0,
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run typecheck",
+      "exit": 2,
+      "bytes": 1037,
+      "sha256": "817d638cf8c1681b162c98bc4d7d5c1ca8fa1eb7d09f88aed96b757dcc18dd91",
+      "diagnostics": [
+        "e2e/writer-native-table-linear-drag.spec.ts(93,44): error TS18048: 'a' is possibly 'undefined'.",
+        "e2e/writer-native-table-linear-drag.spec.ts(94,44): error TS18048: 'b' is possibly 'undefined'.",
+        "e2e/writer-native-table-linear-drag.spec.ts(95,44): error TS18048: 'b' is possibly 'undefined'.",
+        "e2e/writer-native-table-linear-drag.spec.ts(96,44): error TS18048: 'c' is possibly 'undefined'.",
+        "e2e/writer-native-table-linear-drag.spec.ts(97,44): error TS18048: 'c' is possibly 'undefined'.",
+        "npm error Lifecycle script `typecheck` failed with error:",
+        "npm error code 2",
+        "npm error path /Users/odubinkin/Projects/vite-office/apps/office",
+        "npm error workspace @vite-office/office@0.1.0",
+        "npm error location /Users/odubinkin/Projects/vite-office/apps/office",
+        "npm error command failed",
+        "npm error command sh -c tsc --noEmit"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "records": [
+    {
+      "command": "npm run format:check",
+      "exit": 1,
+      "bytes": 226,
+      "sha256": "ec1316b96265ac3681da963a0de89504cc01eacb4c227a1b7027dfc715da31f3",
+      "diagnostics": [
+        "[warn] apps/office/e2e/writer-native-table-linear-drag.spec.ts",
+        "[warn] Code style issues found in the above file. Run Prettier with --write to fix."
+      ]
+    },
+    {
+      "command": "npm run lint",
+      "exit": 0,
+      "bytes": 55,
+      "sha256": "a6172cb57fa696e705408fdc605fba1ae07b852fdf0614d7c2b623349e285b6e",
+      "diagnostics": [
+        "> eslint . --max-warnings 0"
+      ]
+    },
+    {
+      "command": "npm run typecheck",
+      "exit": 2,
+      "bytes": 307,
+      "sha256": "561204c1d43eeefe1d6cd7732123158d8fdcb21fa96cda1083f35165b46755c1",
+      "diagnostics": [
+        "apps/office/src/sw/source/uibase/docvw/edtwin.ts(193,18): error TS6133: 'unused' is declared but its value is never read."
+      ]
+    },
+    {
+      "command": "npm run check:dependencies",
+      "exit": 0,
+      "bytes": 189,
+      "sha256": "b5c166fb4498dc03dcf7bc3b24fa43e966612fd7ae71132015b2c1a487d3c76e",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:docs",
+      "exit": 0,
+      "bytes": 119,
+      "sha256": "5de686ccfac2a628f87b5a7ee59c552a7a19ed3bd5ac75fedad61df6e4ff80f8",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:file-size",
+      "exit": 0,
+      "bytes": 3996,
+      "sha256": "c9f4dfc0f86987b62324f6585a7e657f9382ad83420b7fb237e04f00539da445",
+      "diagnostics": []
+    }
+  ]
+}

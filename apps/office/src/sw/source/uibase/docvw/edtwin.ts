@@ -17,6 +17,7 @@ import type { SwTabFrame } from "../../core/layout/tabfrm";
 import { SwTabCols } from "../../core/bastyp/tabcol";
 import { PointerStyle } from "../../../../vcl/ptrstyle";
 import type { SwTextLine } from "../../core/text/txtfrm";
+import { KEY_SHIFT } from "../../../../vcl/keycodes";
 
 /** Performs no invalidation for detached/test edit windows. @returns Nothing. */
 function ignoreEditWindowInvalidation(): void {}
@@ -60,6 +61,7 @@ export class SwEditWin {
         readonly scale: number;
         readonly minimum: number;
         readonly maximum: number;
+        readonly linear: boolean;
         position: number;
       }
     | undefined;
@@ -122,14 +124,14 @@ export class SwEditWin {
     return this.wrtShell.WhichMouseTabCol(point);
   }
 
-  /** Starts native single-left-click table edge selection and optional capture. @param point - Device position. @param button - Platform button. @param clicks - Native click count. @returns Whether handled. */
-  public MouseButtonDown(point: SwTableMousePoint, button = 0, clicks = 1): boolean {
+  /** Starts native single-left-click table edge selection and optional capture. @param point - Device position. @param button - Platform button. @param clicks - Native click count. @param modifier - Native key mask captured at drag admission. @returns Whether handled. */
+  public MouseButtonDown(point: SwTableMousePoint, button = 0, clicks = 1, modifier = 0): boolean {
     this.tableMouseStart = undefined;
     this.tableBorderDrag = undefined;
     if (button !== 0 || clicks !== 1) return false;
     const kind = this.WhichMouseTabCol(point);
     if (!this.wrtShell.IsTableMode()) {
-      if (kind === SwTab.COL_HORI) return this.RulerColumnDrag(point);
+      if (kind === SwTab.COL_HORI) return this.RulerColumnDrag(point, modifier);
       if (kind === SwTab.ROW_HORI) return this.RulerRowDrag(point);
     }
     if (kind !== SwTab.SEL_HORI && kind !== SwTab.ROWSEL_HORI && kind !== SwTab.COLSEL_HORI)
@@ -143,8 +145,8 @@ export class SwEditWin {
     return this.Complete(selected);
   }
 
-  /** Starts represented source ruler Border/Margin tracking over native columns with5px hit tolerance. @param point - Actual document border hit. @returns Whether tracking was admitted. */
-  public RulerColumnDrag(point: SwTableMousePoint): boolean {
+  /** Starts represented source ruler Border/Margin tracking over native columns with5px hit tolerance. @param point - Actual document border hit. @param modifier - Native drag modifier mask. @returns Whether tracking was admitted. */
+  public RulerColumnDrag(point: SwTableMousePoint, modifier = 0): boolean {
     const hit = this.wrtShell.GetBox(point),
       original = new SwTabCols();
     if (hit === undefined || hit.row || !this.wrtShell.GetMouseTabCols(original, point))
@@ -166,6 +168,9 @@ export class SwEditWin {
       else if (Math.abs(rect.right - point.x) <= 5) index = original.Count();
       else return false;
     }
+    // SvxRuler::EvalModifier selects linear movement only for solitary Shift.
+    // Margin modifier tracking and the other native modes remain unrepresented.
+    const linear = modifier === KEY_SHIFT && index >= 0 && index < original.Count();
     const minimum =
       index === -1
         ? 0
@@ -181,7 +186,16 @@ export class SwEditWin {
           : original.GetEntry(0).nPos
         : index === original.Count()
           ? original.GetRightMax()
-          : original.GetEntry(index).nMax;
+          : linear
+            ? original.GetRight() -
+              (Array.from({ length: original.Count() - index - 1 }).filter(
+                /** Counts source CalcPropMaxRight visible following separators. @param _unused - Empty value. @param offset - Following separator offset. @returns Whether visible. */
+                (_unused, offset) => !original.IsHidden(index + offset + 1),
+              ).length +
+                1) *
+                5 *
+                scale
+            : original.GetEntry(index).nMax;
     const position =
       index === -1
         ? original.GetLeft()
@@ -199,6 +213,7 @@ export class SwEditWin {
       scale,
       minimum: minimum + (index === -1 ? 0 : 5 * scale),
       maximum: maximum - (index === original.Count() ? 0 : 5 * scale),
+      linear,
       position,
     };
     return true;
@@ -244,6 +259,7 @@ export class SwEditWin {
       scale,
       minimum: minimum + 5 * scale,
       maximum: original.GetRightMax(),
+      linear: false,
       position,
     };
     return true;
@@ -288,6 +304,17 @@ export class SwEditWin {
         drag.next.Assign(drag.original);
         for (let i = drag.index; i < drag.next.Count(); i++) drag.next.GetEntry(i).nPos += delta;
         drag.next.SetRight(drag.original.GetRight() + delta);
+      } else if (drag.linear) {
+        // SvxRuler::DragBorders OBJECT_SIZE_LINEAR visits following borders
+        // from right to left, preserving five device pixels between them.
+        const delta = drag.position - drag.initialPosition;
+        drag.next.Assign(drag.original);
+        let right = drag.original.GetRight() - 5 * drag.scale;
+        for (let i = drag.next.Count() - 1; i >= drag.index; i--) {
+          const entry = drag.next.GetEntry(i);
+          entry.nPos = Math.min(entry.nPos + delta, right);
+          right = entry.nPos - 5 * drag.scale;
+        }
       } else if (drag.index === -1) drag.next.SetLeft(drag.position);
       else if (drag.index === drag.next.Count()) drag.next.SetRight(drag.position);
       else drag.next.GetEntry(drag.index).nPos = drag.position;
