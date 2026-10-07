@@ -2,6 +2,7 @@
 
 import type { SwTableBoxStartNode, SwTableNode } from "../docnode/node";
 import type { SwDoc } from "../doc/doc";
+import { SwFrameFormat } from "../layout/atrfrm";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { SwTextNode } from "../txtnode/ndtxt";
 import { SwTabCols } from "../bastyp/tabcol";
@@ -153,6 +154,7 @@ export class SwTableLine {
 
 /** Owns ordered rows, columns and a node-array section like upstream SwTable. */
 export class SwTable {
+  private readonly frameFormat: SwFrameFormat;
   public static readonly SEARCH_NONE = 0;
   public static readonly SEARCH_ROW = 1;
   public static readonly SEARCH_COL = 2;
@@ -163,9 +165,16 @@ export class SwTable {
   /** Creates one table graph at its owning start node. @param tableNode - Node-array owner. @param name - ODF table name. @param format - Physical table geometry. @returns Nothing. */
   public constructor(
     private readonly tableNode: SwTableNode,
-    private readonly name: string,
+    name: string,
     private format: SwTableFormat = {},
-  ) {}
+  ) {
+    this.frameFormat = new SwFrameFormat(tableNode.GetDoc().GetAttrPool(), name);
+  }
+
+  /** Returns the native frame-format identity. @returns Original frame owner. */
+  public GetFrameFormat(): SwFrameFormat {
+    return this.frameFormat;
+  }
 
   /** Returns the owning start node. @returns Table node. */
   public GetTableNode(): SwTableNode {
@@ -174,7 +183,7 @@ export class SwTable {
 
   /** Returns the stable table name. @returns Name. */
   public GetName(): string {
-    return this.name;
+    return this.frameFormat.GetName();
   }
 
   /** Returns table geometry. @returns Immutable values. */

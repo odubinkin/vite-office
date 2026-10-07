@@ -165,7 +165,7 @@ describe("Writer live style selector", /** Defines actual document contracts. @r
     expect(untouched.GetParagraphStyle()).toBe("default");
     act(
       /** Renames the actual active owner. @returns Nothing. */ () => {
-        required(document.FindTextFormatColl("custom-id")).SetFormatName("Renamed: & 字");
+        required(document.FindTextFormatColl("custom-id")).SetFormatName("Renamed: & 字", true);
       },
     );
     expect(select).toHaveValue("custom-id");

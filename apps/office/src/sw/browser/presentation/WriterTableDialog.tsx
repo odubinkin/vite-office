@@ -1,7 +1,7 @@
 /** @fileoverview Browser Table and Table Properties tabs modeled on pinned Writer table dialogs. */
 import { VertOrientation } from "../../../offapi/com/sun/star/text/VertOrientation";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { WriterInsertTableDialog } from "./WriterInsertTableDialog";
 import type { SwTable, SwTableBox } from "../../source/core/table/swtable";
 import { SvxBorderTabPage } from "../../../cui/source/tabpages/border";
@@ -21,7 +21,6 @@ import { HoriOrientation } from "../../../offapi/com/sun/star/text/HoriOrientati
 
 /** Editable table geometry expressed in Writer twips. */
 export interface WriterTableDialogValue extends SwTableProperties {
-  readonly name: string;
   readonly rows: number;
   readonly columns: number;
   /** Native insertion-only option, independent of properties changed-item flags. */
@@ -71,7 +70,7 @@ function WriterTablePropertiesDialog({
   onSubmit: (value: WriterTableDialogValue) => void;
 }>): React.JSX.Element {
   const rows = table.GetTabLines();
-  const name = table.GetName();
+  const nameInput = useRef<HTMLInputElement>(null);
   const rowCount = rows.length;
   const columnCount = table.GetColumnWidths().length;
   const [formatPage] = useState(
@@ -200,7 +199,11 @@ function WriterTablePropertiesDialog({
               const focused = event.currentTarget.ownerDocument.activeElement?.getAttribute(
                 "data-writer-table-format-field",
               ) as Parameters<SwFormatTablePage["DeactivatePage"]>[0] | null;
-              formatPage.DeactivatePage(focused ?? undefined);
+              if (!formatPage.DeactivatePage(focused ?? undefined)) {
+                setError("The name of the table must not contain spaces.");
+                nameInput.current?.focus();
+                return;
+              }
             }
             if (activeTab === "columns") columnPage.DeactivatePage();
             if (
@@ -208,7 +211,6 @@ function WriterTablePropertiesDialog({
               !Number.isInteger(columnCount) ||
               rowCount < 1 ||
               columnCount < 1 ||
-              name.trim().length === 0 ||
               formatPage.data.width <= 0 ||
               columnWidths.some(
                 /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ (
@@ -229,7 +231,9 @@ function WriterTablePropertiesDialog({
             );
             const hasChangedBorders = borderPage.FillItemSet(changedBorders);
             onSubmit({
-              name: name.trim(),
+              ...(formatPage.GetNameItem() === undefined
+                ? {}
+                : { name: formatPage.GetNameItem() as string }),
               rows: rowCount,
               columns: columnCount,
               width: formatPage.data.width,
@@ -273,7 +277,11 @@ function WriterTablePropertiesDialog({
                   key={id}
                   onClick={
                     /** Deactivates and activates the shared native pages. @returns Nothing. */ () => {
-                      if (activeTab === "table") formatPage.DeactivatePage();
+                      if (activeTab === "table" && !formatPage.DeactivatePage()) {
+                        setError("The name of the table must not contain spaces.");
+                        nameInput.current?.focus();
+                        return;
+                      }
                       if (activeTab === "columns") columnPage.DeactivatePage();
                       if (id === "columns") columnPage.ActivatePage();
                       if (id === "table") formatPage.ActivatePage();
@@ -295,6 +303,25 @@ function WriterTablePropertiesDialog({
           <div className="grid min-w-0 flex-1 content-start gap-3" role="tabpanel">
             {activeTab === "table" ? (
               <>
+                <label className="grid gap-1 text-sm font-medium text-slate-700">
+                  Name
+                  <input
+                    aria-label="Name"
+                    ref={nameInput}
+                    value={formatPage.GetName()}
+                    className="rounded border border-slate-300 px-2 py-1"
+                    onChange={
+                      /** Changes the native name widget. @param event - Field event. @returns Nothing. */
+                      (event) => {
+                        formatPage.SetName(event.target.value);
+                        refreshPage(
+                          /** Presents the current draft name. @param version - Prior revision. @returns Next revision. */
+                          (version) => version + 1,
+                        );
+                      }
+                    }
+                  />
+                </label>
                 <fieldset className="grid grid-cols-2 gap-2 rounded border p-3">
                   <legend className="text-sm font-bold">Alignment</legend>
                   {(

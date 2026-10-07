@@ -21,6 +21,7 @@ import { importBoxProperties } from "../../../../xmloff/source/style/bordrhdl";
 
 /** Represented table-property inputs in native twips; original model owners remain in the shell. */
 export interface SwTableProperties {
+  readonly name?: string;
   readonly width: number;
   readonly horiOrient?: HoriOrientation;
   readonly marginLeft?: number;
@@ -163,6 +164,7 @@ export function ItemSetToTableParam(shell: SwFEShell, value: SwTableProperties):
           }
         }
         shell.SetRowsToRepeat(value.headerRows, value.repeatHeaderRows);
+        if (value.name !== undefined) shell.SetTableName(table.GetFrameFormat(), value.name);
         if (value.verticalAlign !== undefined) shell.SetBoxAlign(value.verticalAlign);
         const columns = new SwTabCols();
         shell.GetTabCols(columns);

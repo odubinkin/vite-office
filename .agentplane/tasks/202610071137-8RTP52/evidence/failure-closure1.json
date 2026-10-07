@@ -1,0 +1,103 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/sw/source/core/attr/format.ts": "12a7229855aec66383796c090c77fea1c1a1eea8a4b11019c1a5d222ad33798f",
+    "apps/office/src/sw/source/core/layout/atrfrm.ts": "5a3d116e7769c9e83ffe3d82be6d98c2461005c2465776eb98a8ef5ca8680968",
+    "apps/office/src/sw/source/core/table/swtable.ts": "1bd3bc3237506bfba2ec947ee574f34a0cd61fb3dcfb18a95f676359fac83a9d",
+    "apps/office/src/sw/source/core/doc/doc.ts": "c446e518a9119e87d2f1e6878bf3648b9fabf8ea4a4c5fd07ba017f50f41cd47",
+    "apps/office/src/sw/source/core/doc/docchart.ts": "f359ee996e78ca09c6dd0744e2d581b81c3b6c05f2cc8162dfbf04823791b020",
+    "apps/office/src/sw/source/core/edit/edtab.ts": "3fad68bee1088857eac961c23d5c9d29cb943fbf97e4cc9bc9949dbd2af966b3",
+    "apps/office/src/sw/source/core/undo/docundo.ts": "e5d743821bfb04d8d639b105e8ba0ad9aa1e40197e469543de98fbdb4aed128e",
+    "apps/office/src/sw/source/core/undo/undobj.ts": "13d9a58e9a1fec2e3242778c58670e89e350601e51492b29f966d03c2f0b8ce6",
+    "apps/office/src/sw/source/core/undo/untbl.ts": "7af1d830c2876eb94c4ff032f89802f468de4ff2a7d4caba951b1a3e283b8e53",
+    "apps/office/src/sw/source/uibase/shells/tabsh.ts": "b5ee8e7241563c78cb9d158ccea21acc3d6ec1fe5211198775da8d4a88408526",
+    "apps/office/src/sw/source/ui/table/tabledlg.ts": "8d9f1b4d3170c7f4f9b04763ffc1d05cce664b4caaa213ac0d36065869b75cda",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx": "c928d78e99653b986270421afbb9755b50bc7572bed958616e497e6cdafa2415",
+    "apps/office/src/sw/source/core/doc/writer-attributes.test.ts": "eba99cfc0c31eecedaffd84102cb936eaf42994a8d6d4c4ad1ac9a83d76753a6",
+    "apps/office/src/sw/browser/presentation/native-table-properties-reset.test.tsx": "b414a0bee3091c89615eab043764edfbe8f788586eaadca24d187b3d9ef1bc1a",
+    "apps/office/src/sw/browser/presentation/native-table-column-page.test.tsx": "3cbcd2fc4c7ef0dd2ec621953229543781fb8629e200bea95614d05bd479c9b0",
+    "apps/office/src/sw/browser/presentation/writer-style-selector.test.tsx": "58c49145574e37f9aa4967985943306eaad61bca8fe79fb20bb52df84c1dab6a",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-name-history.test.ts": "a473b004cc6ce94618df1c8e0c3d998f222b0343540ac08fe6d0ab0e4639eff5",
+    "apps/office/src/sw/browser/presentation/native-table-name-page.test.tsx": "7da2bc87dcb0882ed5b4f7ae483ae010251ccfed4f3974936b1d5027f299607e",
+    "apps/office/e2e/native-table-name.spec.ts": "6f4d8dc28272325afa9b85b89ae7adad08e4da9b792f158a48982978e64a9817",
+    "docs/program/source-provenance.json": "ee6096b571e7b5a18f1bb1891b96b9f769fb47b1b64ca4255afb800d9654c6c2",
+    "docs/program/parity/runtime-inventory.json": "0b122fd6807cc80c10dc2383b8c3b7469af756e354a373ff846c96c92d3a7d8b"
+  },
+  "originalFailures": [
+    {
+      "file": "src/framework/browser/app/desktop.test.tsx",
+      "name": "App opens an ODT through the computer tab and exports a parseable package"
+    },
+    {
+      "file": "src/sw/browser/presentation/writer-style-selector.test.tsx",
+      "name": "Writer live style selector shows custom names, dispatches their native identity, and records native repeat history"
+    }
+  ],
+  "genuinelyNewCases": [
+    {
+      "file": "src/sw/browser/presentation/native-table-name-page.test.tsx",
+      "name": "Name rejects invalid table geometry without publishing a rename"
+    }
+  ],
+  "originalChromiumFailures": [
+    {
+      "file": "native-table-name.spec.ts",
+      "title": "native table name validation unique allocation and history width=1280"
+    },
+    {
+      "file": "native-table-name.spec.ts",
+      "title": "native table name validation unique allocation and history width=390"
+    }
+  ],
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/framework/browser/app/desktop.test.tsx src/sw/browser/presentation/writer-style-selector.test.tsx src/sw/browser/presentation/native-table-name-page.test.tsx -t ^(App opens an ODT through the computer tab and exports a parseable package|Writer live style selector shows custom names, dispatches their native identity, and records native repeat history|Name rejects invalid table geometry without publishing a rename)$ --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/8RTP52.app-closure1-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 30569,
+      "sha256": "55e2199ee6dd5b42685ed5cd339a75c85cce310cb502f2139373dd2917bb089a",
+      "failedCases": [],
+      "caseCounts": {
+        "passed": 3,
+        "failed": 0,
+        "skipped": 18,
+        "total": 21
+      },
+      "coverageMapSHA256": "22c5f524869ca4e251b55a5547334c7071491d08ef24ef2de37ab651d9d84495"
+    },
+    {
+      "kind": "inventory",
+      "command": "npm run test:inventory:coverage -- scripts/libreoffice-inventory/parity-mapping-cli.test.ts -t ^(parity mapping CLI composes the Writer mapping report with owned upstream marker evidence)$ --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/8RTP52.inventory-closure1-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 5271,
+      "sha256": "1f800bc01de1ed6bbf8ba905460de1592cd2dcc626380cf2a4e467d43df11b47",
+      "failedCases": [],
+      "caseCounts": {
+        "passed": 1,
+        "failed": 0,
+        "skipped": 2,
+        "total": 3
+      },
+      "coverageMapSHA256": "ed7b34aab33ab95a5c93fb7171e6a9fde8d8d86fe5147893479bd3e4e25e6f26"
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts native-table-name.spec.ts --grep (native table name validation unique allocation and history width=1280|native table name validation unique allocation and history width=390)$ --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 675,
+      "sha256": "a3f9cb8763608c4e9b2e60a4a89e4f33f7d8eb13bd853944acdc6fd4435c92ec",
+      "failedCases": [],
+      "caseCounts": {
+        "startTime": "2026-10-07T12:16:19.810Z",
+        "duration": 5835.241,
+        "expected": 2,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    }
+  ]
+}

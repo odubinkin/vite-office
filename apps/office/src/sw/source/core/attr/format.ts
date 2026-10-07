@@ -28,11 +28,10 @@ export class SwFormat {
     return this.formatName;
   }
 
-  /** Changes the UI format name. @param name - New non-empty name. @returns Nothing. */
-  public SetFormatName(name: string): void {
-    if (name.trim().length === 0) throw new Error("SwFormat name must not be blank.");
+  /** Changes the UI format name. @param name - Raw name. @param broadcast - Whether to notify clients. @returns Nothing. */
+  public SetFormatName(name: string, broadcast = false): void {
     this.formatName = name;
-    this.NotifyFormatInheritance();
+    if (broadcast) this.NotifyFormatInheritance();
   }
 
   /** Returns the owned attribute set. @returns Format attributes. */

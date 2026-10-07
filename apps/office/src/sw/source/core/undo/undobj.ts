@@ -213,30 +213,32 @@ export interface SwUndoRedoContext {
 
 /** Writer action base that brackets its model payload with complete cursor states. */
 export abstract class SwUndo extends SfxUndoAction<SwUndoRedoContext> {
-  private readonly before: SwUndoCursorRange;
-  private after: SwUndoCursorRange;
+  private readonly before: SwUndoCursorRange | undefined;
+  private after: SwUndoCursorRange | undefined;
 
   /** Creates a Writer undo action. @param comment - User-visible label. @param before - Cursor state before execution. @param after - Cursor state after execution. @returns Nothing. */
   protected constructor(
     private readonly comment: string,
-    before: SwUndoCursorState,
-    after: SwUndoCursorState,
+    before?: SwUndoCursorState,
+    after?: SwUndoCursorState,
   ) {
     super();
-    this.before = captureCursorRange(before);
-    this.after = captureCursorRange(after);
+    this.before = before === undefined ? undefined : captureCursorRange(before);
+    this.after = after === undefined ? undefined : captureCursorRange(after);
   }
 
   /** Reverts the model payload and restores the pre-command cursor. @param context - Active Writer undo context. @returns Nothing. */
   public finalUndo(context: SwUndoRedoContext): void {
     this.UndoImpl(context);
-    context.RestoreCursor(restoreCursorRange(context.GetDoc(), this.before));
+    if (this.before !== undefined)
+      context.RestoreCursor(restoreCursorRange(context.GetDoc(), this.before));
   }
 
   /** Reapplies the model payload and restores the post-command cursor. @param context - Active Writer redo context. @returns Nothing. */
   public finalRedo(context: SwUndoRedoContext): void {
     this.RedoImpl(context);
-    context.RestoreCursor(restoreCursorRange(context.GetDoc(), this.after));
+    if (this.after !== undefined)
+      context.RestoreCursor(restoreCursorRange(context.GetDoc(), this.after));
   }
 
   /** Implements the SfxUndoAction undo entry point. @param context - Active Writer context. @returns Nothing. */
@@ -263,8 +265,9 @@ export abstract class SwUndo extends SfxUndoAction<SwUndoRedoContext> {
   protected SetAfterCursorPosition(position: SwPosition): void {
     const pam = new SwPaM(position);
     try {
-      this.after.range.SetValues(pam);
-      this.after = { ...this.after, pointIsStart: true, activeNode: position.GetNodeIndex() };
+      const after = this.after as SwUndoCursorRange;
+      after.range.SetValues(pam);
+      this.after = { ...after, pointIsStart: true, activeNode: position.GetNodeIndex() };
     } finally {
       pam.Dispose();
     }
@@ -272,7 +275,7 @@ export abstract class SwUndo extends SfxUndoAction<SwUndoRedoContext> {
 
   /** Reconstructs the post-command cursor for compatible grouping against current nodes. @param document - Current native document. @returns Independent endpoint state. */
   protected GetAfterCursorState(document: SwDoc): SwUndoCursorState {
-    return restoreCursorRange(document, this.after);
+    return restoreCursorRange(document, this.after as SwUndoCursorRange);
   }
 
   /** Reverts only the domain payload. @param context - Active Writer context. @returns Nothing. */

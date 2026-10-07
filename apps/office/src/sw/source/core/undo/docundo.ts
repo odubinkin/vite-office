@@ -62,6 +62,16 @@ export class UndoManager extends SfxUndoManager<SwUndoRedoContext> {
   private readonly undoNodes = new SwUndoNodes();
   private historyPositionChanged: ((isSavePosition: boolean) => void) | undefined;
   private groupUndo = true;
+  private undoEnabled = true;
+
+  /** Enables native undo recording. @param enabled - Recording flag. @returns Nothing. */
+  public DoUndo(enabled: boolean): void {
+    this.undoEnabled = enabled;
+  }
+  /** Reads native recording state. @returns Whether enabled. */
+  public DoesUndo(): boolean {
+    return this.undoEnabled;
+  }
 
   /** Creates the manager for one canonical Writer document. @param document - Owning SwDoc. @returns Nothing. */
   public constructor(private readonly document: SwDoc) {
@@ -106,6 +116,10 @@ export class UndoManager extends SfxUndoManager<SwUndoRedoContext> {
     action: Parameters<SfxUndoManager<SwUndoRedoContext>["AddUndoAction"]>[0],
     tryMerge = false,
   ): void {
+    if (!this.undoEnabled) {
+      action.Dispose();
+      return;
+    }
     super.AddUndoAction(action, this.groupUndo && tryMerge);
   }
 
@@ -113,14 +127,26 @@ export class UndoManager extends SfxUndoManager<SwUndoRedoContext> {
   public override Undo(context: SwUndoRedoContext): boolean {
     if (context.GetDoc() !== this.document)
       throw new Error("Writer undo context belongs to another document.");
-    return super.Undo(context);
+    const enabled = this.undoEnabled;
+    this.DoUndo(false);
+    try {
+      return super.Undo(context);
+    } finally {
+      this.DoUndo(enabled);
+    }
   }
 
   /** Reapplies one Writer action and reconciles document modified state. @param context - Active shell context. @returns Whether history moved. */
   public override Redo(context: SwUndoRedoContext): boolean {
     if (context.GetDoc() !== this.document)
       throw new Error("Writer redo context belongs to another document.");
-    return super.Redo(context);
+    const enabled = this.undoEnabled;
+    this.DoUndo(false);
+    try {
+      return super.Redo(context);
+    } finally {
+      this.DoUndo(enabled);
+    }
   }
 
   /** Reconciles shell state after the model notification transaction has completed. @returns Nothing. */

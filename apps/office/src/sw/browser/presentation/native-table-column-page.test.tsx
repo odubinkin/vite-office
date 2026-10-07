@@ -159,17 +159,18 @@ it("mounted workbench passes actual row versus whole-table selection to native c
   expect(screen.getByRole("checkbox", { name: "Adapt table width" })).toBeEnabled();
 });
 it("mounted native column draft validates remaining table properties before acceptance", /** Checks retained dialog rejection without publishing canonical widths. @returns Nothing. */ () => {
-  const f = fixture(3, false, "");
+  const f = fixture(3, false);
   fireEvent.change(screen.getByRole("spinbutton", { name: "Column 1 width (cm)" }), {
     target: { value: "5" },
   });
   fireEvent.click(screen.getByRole("tab", { name: "Table" }));
+  fireEvent.change(screen.getByRole("textbox", { name: "Name" }), {
+    target: { value: "Bad Name" },
+  });
   const form = screen.getByRole("button", { name: "OK" }).closest("form");
   if (form === null) throw new Error("Missing native column-page form");
   fireEvent.submit(form);
-  expect(
-    screen.getByText("Enter valid table dimensions and positive column widths."),
-  ).toBeVisible();
+  expect(screen.getByText("The name of the table must not contain spaces.")).toBeVisible();
   expect(f.submit).not.toHaveBeenCalled();
   expect(f.table.GetColumnWidths()).toEqual([2000, 2000, 2000]);
   fireEvent.click(screen.getByRole("button", { name: "Cancel" }));

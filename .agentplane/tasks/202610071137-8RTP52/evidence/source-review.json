@@ -1,0 +1,37 @@
+{
+  "baselineTag": "libreoffice-26.8.0.2",
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceSHA256": {
+    "sw/source/core/doc/docchart.cxx": "19da55a524152a0f12caeec7ec066b759eabaad39d35ad64bf0ff8f2757b4e9b",
+    "sw/source/core/undo/untbl.cxx": "147e1b9f9870416bc83d2b918a0621e810003594b9a95ede372518925b2c245b",
+    "sw/source/core/docnode/ndtbl.cxx": "d3220445657cd54a44fc741bebf5d514b4d62f5607fcfb5e0f7ef30700075d8d",
+    "sw/source/core/edit/editsh.cxx": "73025af65692efee4e3d59d565c1597958092657bd751077afaf168c7f751f08",
+    "sw/source/core/attr/format.cxx": "69f8fcbb4cf0375c74703fc88e53c98e6d11016320513923f4f3a71ff98c281a",
+    "sw/source/core/layout/atrfrm.cxx": "61410fa07c330f5a0be094ac3e484bca0dbf439c0d8662460494a27952b1b82c",
+    "sw/source/ui/table/tabledlg.cxx": "8784376ef8a6517596379155caa49027b70d4c801c0866c9991b9998e1781a5a",
+    "sw/source/uibase/shells/tabsh.cxx": "ac075f90575663fac974e2804e7111b1df3f596eb5bb400fb9fc2f4be0058163"
+  },
+  "productionSHA256": {
+    "apps/office/src/sw/source/core/attr/format.ts": "12a7229855aec66383796c090c77fea1c1a1eea8a4b11019c1a5d222ad33798f",
+    "apps/office/src/sw/source/core/layout/atrfrm.ts": "5a3d116e7769c9e83ffe3d82be6d98c2461005c2465776eb98a8ef5ca8680968",
+    "apps/office/src/sw/source/core/table/swtable.ts": "1bd3bc3237506bfba2ec947ee574f34a0cd61fb3dcfb18a95f676359fac83a9d",
+    "apps/office/src/sw/source/core/doc/doc.ts": "c446e518a9119e87d2f1e6878bf3648b9fabf8ea4a4c5fd07ba017f50f41cd47",
+    "apps/office/src/sw/source/core/doc/docchart.ts": "f359ee996e78ca09c6dd0744e2d581b81c3b6c05f2cc8162dfbf04823791b020",
+    "apps/office/src/sw/source/core/edit/edtab.ts": "3fad68bee1088857eac961c23d5c9d29cb943fbf97e4cc9bc9949dbd2af966b3",
+    "apps/office/src/sw/source/core/undo/docundo.ts": "e5d743821bfb04d8d639b105e8ba0ad9aa1e40197e469543de98fbdb4aed128e",
+    "apps/office/src/sw/source/core/undo/undobj.ts": "13d9a58e9a1fec2e3242778c58670e89e350601e51492b29f966d03c2f0b8ce6",
+    "apps/office/src/sw/source/core/undo/untbl.ts": "7af1d830c2876eb94c4ff032f89802f468de4ff2a7d4caba951b1a3e283b8e53",
+    "apps/office/src/sw/source/uibase/shells/tabsh.ts": "b5ee8e7241563c78cb9d158ccea21acc3d6ec1fe5211198775da8d4a88408526",
+    "apps/office/src/sw/source/ui/table/tabledlg.ts": "8d9f1b4d3170c7f4f9b04763ffc1d05cce664b4caaa213ac0d36065869b75cda",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx": "c928d78e99653b986270421afbb9755b50bc7572bed958616e497e6cdafa2415"
+  },
+  "contracts": {
+    "nameOwner": "SwFrameFormat name is inherited from SwFormat, with native broadcast=false default. SwTable delegates name to its original frame owner; represented geometry remains separate and full frame attributes unverified.",
+    "rename": "docchart.cxx154-214 no-op for identical raw name, empty/used collision uses unique name; SetFormatName(true), DoesUndo-controlled name history and native model notification. Direct API does not trim or reject spaces.",
+    "undo": "untbl.cxx3253-3272 resolves current frame by new/old name, skips absent formats and retains only names, no cursor/graph. Local optional SwUndo cursor endpoints preserve all existing cursor-owning actions. Writer manager replay disables recording and restores original flag.",
+    "shell": "editsh.cxx delegates SetTableName to SwDoc; ItemSetToTableParam applies only present name in the existing native Properties group.",
+    "page": "tabledlg.cxx419-423 changed-from-saved Name item; Reset468-472 owns original/saved field. DeactivatePage620-632 rejects only ASCII space, focuses Name and keeps page; empty permitted. React displays native draft, changed-only item and Reset/Cancel without document mutation."
+  },
+  "reviewer": "Current CODER source comparison; same-agent EVALUATOR explicitly not independent.",
+  "residual": "Formulas/OLE/chart references, mail merge, default/unused/all frame collections, full frame attribute ownership/fly frames/widget units/modal infrastructure and whole kernel/browser parity remain unverified. Existing registered save/open/recovery deviations preserved. Numeric suffix allocator parity and native NameChanged hint granularity remain unverified. Browser End did not set an end caret in the new name fixture; established explicit DOM end caret setup resolves the name acceptance test, while actual Home/End remains a separate audit. Name validation currently uses the existing inline React error presentation; complete native informational-message modal composition and dismissal remain unverified."
+}

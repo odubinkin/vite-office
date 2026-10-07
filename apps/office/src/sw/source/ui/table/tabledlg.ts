@@ -100,6 +100,21 @@ export class SwTextFlowPage {
 
 /** Owns source widget-local metric/radio state and the shared committed native table representation. */
 export class SwFormatTablePage {
+  private readonly originalName: string;
+  private name = "";
+  private savedName = "";
+  /** Reads the Name widget. @returns Raw name. */
+  public GetName(): string {
+    return this.name;
+  }
+  /** Changes only the widget. @param name - Draft name. @returns Nothing. */
+  public SetName(name: string): void {
+    this.name = name;
+  }
+  /** Emits only a changed native item. @returns Changed raw name or absent. */
+  public GetNameItem(): string | undefined {
+    return this.name === this.savedName ? undefined : this.name;
+  }
   public readonly data: SwTableRep;
   public above = 0;
   public below = 0;
@@ -118,6 +133,7 @@ export class SwFormatTablePage {
 
   /** Binds original table parameters before reserving the native reset snapshot. @param table - Original model. @param space - Upper print width. @param lineSelected - Source shell selection flag. @returns Nothing. */
   public constructor(table: SwTable, space: number, lineSelected = false) {
+    this.originalName = table.GetName();
     this.data = new SwTableRep(table, space);
     this.data.SetLineSelected(lineSelected);
     this.original = new SwTableRep(this.data);
@@ -129,6 +145,7 @@ export class SwFormatTablePage {
   /** Restores original native representation and metric saved values without replacing shared owners. @returns Nothing. */
   public Reset(): void {
     this.data.Assign(this.original);
+    this.name = this.savedName = this.originalName;
     this.metrics.width = this.savedWidth = this.data.width;
     this.metrics.left = this.savedLeft = this.data.left;
     this.metrics.right = this.savedRight = this.data.right;
@@ -278,12 +295,13 @@ export class SwFormatTablePage {
   /** Applies native still-focused metric correction and reports source modified state. @param focusedField - Optional actual focused metric. @returns Whether the page was modified. */
   public FillItemSet(focusedField?: "width" | "left" | "right" | "above" | "below"): boolean {
     if (focusedField !== undefined) this.ModifyHdl(focusedField);
-    return this.modified;
+    return this.modified || this.GetNameItem() !== undefined;
   }
 
   /** Publishes native metric/radio values, saved-spacing flags and column correction to the shared representation. @param focusedField - Optional actual focused metric. @returns Nothing. */
-  public DeactivatePage(focusedField?: "width" | "left" | "right" | "above" | "below"): void {
-    if (!this.FillItemSet(focusedField)) return;
+  public DeactivatePage(focusedField?: "width" | "left" | "right" | "above" | "below"): boolean {
+    if (this.name.includes(" ")) return false;
+    if (!this.FillItemSet(focusedField)) return true;
     const data = this.data,
       count = data.columns.length;
     if (this.metrics.left !== this.savedLeft || this.metrics.right !== this.savedRight) {
@@ -322,6 +340,7 @@ export class SwFormatTablePage {
       data.SetWidthChanged();
       data.width = data.space;
     }
+    return true;
   }
 }
 

@@ -1,0 +1,64 @@
+{
+  "records": [
+    {
+      "command": "npm run format:check",
+      "exit": 1,
+      "bytes": 212,
+      "sha256": "4070dfb6672fcc609b62173c0d1555e091c6664cf0bc6c6bcf5e35547c465bd6",
+      "diagnostics": [
+        "[warn] apps/office/e2e/native-table-name.spec.ts",
+        "[warn] Code style issues found in the above file. Run Prettier with --write to fix."
+      ]
+    },
+    {
+      "command": "npm run lint",
+      "exit": 0,
+      "bytes": 55,
+      "sha256": "a6172cb57fa696e705408fdc605fba1ae07b852fdf0614d7c2b623349e285b6e",
+      "diagnostics": [
+        "> eslint . --max-warnings 0"
+      ]
+    },
+    {
+      "command": "npm run typecheck",
+      "exit": 2,
+      "bytes": 1971,
+      "sha256": "77204361a9c22ccfaa7bdf3f608e438ed5a8503d286215e998aa03fd261a5910",
+      "diagnostics": [
+        "src/sw/source/uibase/wrtsh/native-table-name-history.test.ts(44,26): error TS2339: Property 'GetModelRevision' does not exist on type 'SwDoc'.",
+        "src/sw/source/uibase/wrtsh/native-table-name-history.test.ts(46,18): error TS2339: Property 'GetModelRevision' does not exist on type 'SwDoc'.",
+        "src/sw/source/uibase/wrtsh/native-table-name-history.test.ts(49,18): error TS2339: Property 'GetModelRevision' does not exist on type 'SwDoc'.",
+        "src/sw/source/uibase/wrtsh/native-table-name-history.test.ts(53,22): error TS2339: Property 'GetModelRevision' does not exist on type 'SwDoc'.",
+        "src/sw/source/uibase/wrtsh/native-table-name-history.test.ts(56,18): error TS2339: Property 'GetModelRevision' does not exist on type 'SwDoc'.",
+        "src/sw/source/uibase/wrtsh/native-table-name-history.test.ts(86,13): error TS2339: Property 'Dispose' does not exist on type 'SwWrtShell'.",
+        "src/sw/source/uibase/wrtsh/native-table-name-history.test.ts(107,13): error TS2339: Property 'Dispose' does not exist on type 'SwWrtShell'.",
+        "src/sw/source/uibase/wrtsh/native-table-name-history.test.ts(134,13): error TS2339: Property 'Dispose' does not exist on type 'SwWrtShell'.",
+        "src/sw/source/uibase/wrtsh/native-table-name-history.test.ts(170,13): error TS2339: Property 'Dispose' does not exist on type 'SwWrtShell'.",
+        "src/sw/source/uibase/wrtsh/native-table-name-history.test.ts(196,13): error TS2339: Property 'Dispose' does not exist on type 'SwWrtShell'.",
+        "npm error Lifecycle script `typecheck` failed with error:",
+        "npm error code 2"
+      ]
+    },
+    {
+      "command": "npm run check:dependencies",
+      "exit": 0,
+      "bytes": 189,
+      "sha256": "6e7483f3cc7aad5bf1dc0e76cdc020e45887ba0c0b6213f821d1ce169f0d1738",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:docs",
+      "exit": 0,
+      "bytes": 119,
+      "sha256": "dbc79adab659819c1a2cc2bc9c7c83db9ec5ded2abd3fe7d2bf8a80756868ff2",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:file-size",
+      "exit": 0,
+      "bytes": 3925,
+      "sha256": "88a4b6ddd6f948317760e8aa3ab308653dc62606a08b282175e66d9951a95059",
+      "diagnostics": []
+    }
+  ]
+}

@@ -1,0 +1,232 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/sw/source/core/attr/format.ts": "12a7229855aec66383796c090c77fea1c1a1eea8a4b11019c1a5d222ad33798f",
+    "apps/office/src/sw/source/core/layout/atrfrm.ts": "5a3d116e7769c9e83ffe3d82be6d98c2461005c2465776eb98a8ef5ca8680968",
+    "apps/office/src/sw/source/core/table/swtable.ts": "1bd3bc3237506bfba2ec947ee574f34a0cd61fb3dcfb18a95f676359fac83a9d",
+    "apps/office/src/sw/source/core/doc/doc.ts": "c446e518a9119e87d2f1e6878bf3648b9fabf8ea4a4c5fd07ba017f50f41cd47",
+    "apps/office/src/sw/source/core/doc/docchart.ts": "f359ee996e78ca09c6dd0744e2d581b81c3b6c05f2cc8162dfbf04823791b020",
+    "apps/office/src/sw/source/core/edit/edtab.ts": "3fad68bee1088857eac961c23d5c9d29cb943fbf97e4cc9bc9949dbd2af966b3",
+    "apps/office/src/sw/source/core/undo/docundo.ts": "e5d743821bfb04d8d639b105e8ba0ad9aa1e40197e469543de98fbdb4aed128e",
+    "apps/office/src/sw/source/core/undo/undobj.ts": "13d9a58e9a1fec2e3242778c58670e89e350601e51492b29f966d03c2f0b8ce6",
+    "apps/office/src/sw/source/core/undo/untbl.ts": "7af1d830c2876eb94c4ff032f89802f468de4ff2a7d4caba951b1a3e283b8e53",
+    "apps/office/src/sw/source/uibase/shells/tabsh.ts": "b5ee8e7241563c78cb9d158ccea21acc3d6ec1fe5211198775da8d4a88408526",
+    "apps/office/src/sw/source/ui/table/tabledlg.ts": "8d9f1b4d3170c7f4f9b04763ffc1d05cce664b4caaa213ac0d36065869b75cda",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx": "c928d78e99653b986270421afbb9755b50bc7572bed958616e497e6cdafa2415",
+    "apps/office/src/sw/source/core/doc/writer-attributes.test.ts": "eba99cfc0c31eecedaffd84102cb936eaf42994a8d6d4c4ad1ac9a83d76753a6",
+    "apps/office/src/sw/browser/presentation/native-table-properties-reset.test.tsx": "b414a0bee3091c89615eab043764edfbe8f788586eaadca24d187b3d9ef1bc1a",
+    "apps/office/src/sw/browser/presentation/native-table-column-page.test.tsx": "3cbcd2fc4c7ef0dd2ec621953229543781fb8629e200bea95614d05bd479c9b0",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-name-history.test.ts": "a473b004cc6ce94618df1c8e0c3d998f222b0343540ac08fe6d0ab0e4639eff5",
+    "apps/office/src/sw/browser/presentation/native-table-name-page.test.tsx": "5a7a4f1821bfade0adfdba1d81a2ceab17cd93b5fb61a5fb5dc3dee4135ed4ad",
+    "apps/office/e2e/native-table-name.spec.ts": "e10fa440031e8384c570dfc80a367a4060e1a27c380e8ea5a59470837228ebf6",
+    "docs/program/source-provenance.json": "d64364941ff0c480ce279a31fa52aaba1995ee774d4f831a7502099bb3aa047b",
+    "docs/program/parity/runtime-inventory.json": "ce892fa831aae8e432320ca10bc8ce86db1b8d424e3807e78b383f554d4a8036"
+  },
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1443,
+      "sha256": "706e11a6e76f85424e24e61936f001a10727b508edea7a31469f325455b5c9b7",
+      "totals": [],
+      "failedCases": []
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/8RTP52.app-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 189482,
+      "sha256": "59a4c7e43a02f5466119e9b305a7c72f132b73e183fd0052890e67f221b1c130",
+      "totals": [
+        "Test Files  2 failed | 432 passed (434)",
+        "Tests  2 failed | 13506 passed (13508)"
+      ],
+      "failedCases": [
+        {
+          "name": "apps/office/src/framework/browser/app/desktop.test.tsx > App opens an ODT through the computer tab and exports a parseable package",
+          "assertion": [
+            "Error: Unable to find role=\"button\" and name \"Imported package\""
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/browser/presentation/writer-style-selector.test.tsx > Writer live style selector shows custom names, dispatches their native identity, and records native repeat history",
+          "assertion": [
+            "TestingLibraryElementError: Unable to find an accessible element with the role \"option\" and name \"Renamed: & 字\""
+          ]
+        }
+      ],
+      "caseCounts": {
+        "passed": 13506,
+        "failed": 2,
+        "skipped": 0,
+        "total": 13508
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 16314,
+          "covered": 16306,
+          "skipped": 0,
+          "pct": 99.95
+        },
+        "statements": {
+          "total": 17905,
+          "covered": 17897,
+          "skipped": 0,
+          "pct": 99.95
+        },
+        "functions": {
+          "total": 4158,
+          "covered": 4153,
+          "skipped": 0,
+          "pct": 99.87
+        },
+        "branches": {
+          "total": 13375,
+          "covered": 13371,
+          "skipped": 0,
+          "pct": 99.97
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverage": {
+        "lines": 99.95,
+        "statements": 99.95,
+        "functions": 99.87,
+        "branches": 99.97
+      },
+      "incompleteFileCount": 7,
+      "coverageMapSHA256": "4745f58e6e3dd681562c5157f0eec02337f01598e88fbd7d358fa5d09e187fe3"
+    },
+    {
+      "kind": "inventory",
+      "command": "npm run test:inventory:coverage -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/8RTP52.inventory-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 42371,
+      "sha256": "9ac928431cc3aab9b78cbb51d87d0111c9f5e5af0a1d2e106ffe005b61b70106",
+      "totals": [
+        "Test Files  1 failed | 35 passed (36)",
+        "Tests  1 failed | 109 passed (110)"
+      ],
+      "failedCases": [
+        {
+          "name": "scripts/libreoffice-inventory/parity-mapping-cli.test.ts > parity mapping CLI composes the Writer mapping report with owned upstream marker evidence",
+          "assertion": [
+            "Error: Runtime module paths must be unique and lexicographically ordered."
+          ]
+        }
+      ],
+      "caseCounts": {
+        "passed": 109,
+        "failed": 1,
+        "skipped": 0,
+        "total": 110
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 1464,
+          "covered": 1460,
+          "skipped": 0,
+          "pct": 99.72
+        },
+        "statements": {
+          "total": 1523,
+          "covered": 1519,
+          "skipped": 0,
+          "pct": 99.73
+        },
+        "functions": {
+          "total": 384,
+          "covered": 381,
+          "skipped": 0,
+          "pct": 99.21
+        },
+        "branches": {
+          "total": 1081,
+          "covered": 1081,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "coverage": {
+        "lines": 99.72,
+        "statements": 99.73,
+        "functions": 99.21,
+        "branches": 100
+      },
+      "incompleteFileCount": 1,
+      "coverageMapSHA256": "5022932166137e4a43faaf1c3e7eed49d1ebc46135863736b593c6bd63b12901"
+    },
+    {
+      "kind": "scripts",
+      "command": "npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts scripts/check-module-boundaries.test.ts",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 223,
+      "sha256": "d5c703da3b0ae0e9cd59d1601d372a37969c632ac60907a5b8159594c1546ef5",
+      "totals": [
+        "Test Files  3 passed (3)",
+        "Tests  14 passed (14)"
+      ],
+      "failedCases": []
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 44122,
+      "sha256": "b817eab03521168abf11491104cca8ccd732de2c5be19ddc983fce2777ec8202",
+      "totals": [
+        "2 failed",
+        "272 passed (5.6m)"
+      ],
+      "failedCases": [
+        {
+          "name": "native-table-name.spec.ts > native table name validation unique allocation and history width=1280",
+          "errors": [
+            [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed",
+              "Expected: \u001b[32m\"Cell\u001b[7mX\u001b[27m\"\u001b[39m",
+              "Received: \u001b[31m\"\u001b[7mX\u001b[27mCell\"\u001b[39m"
+            ]
+          ]
+        },
+        {
+          "name": "native-table-name.spec.ts > native table name validation unique allocation and history width=390",
+          "errors": [
+            [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed",
+              "Expected: \u001b[32m\"Cell\u001b[7mX\u001b[27m\"\u001b[39m",
+              "Received: \u001b[31m\"\u001b[7mX\u001b[27mCell\"\u001b[39m"
+            ]
+          ]
+        }
+      ],
+      "caseCounts": {
+        "startTime": "2026-10-07T12:06:33.127Z",
+        "duration": 335820.505,
+        "expected": 272,
+        "skipped": 0,
+        "unexpected": 2,
+        "flaky": 0
+      }
+    }
+  ]
+}

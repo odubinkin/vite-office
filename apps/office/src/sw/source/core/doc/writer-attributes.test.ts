@@ -221,7 +221,8 @@ describe("Writer attribute ownership" /** Groups SwAttrPool, SwAttrSet, and form
       throwing(
         /** Gives a format a blank name. @returns Nothing. */ () => format.SetFormatName(" "),
       ),
-    ).toThrow("must not be blank");
+    ).not.toThrow();
+    expect(format.GetName()).toBe(" ");
     expect(
       throwing(
         /** Derives a format from itself. @returns Nothing. */ () => format.SetDerivedFrom(format),

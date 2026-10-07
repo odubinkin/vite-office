@@ -1,0 +1,79 @@
+{
+  "base": "b8ebc2ad1bde7829dd63de7130ddb8bd2773b89e",
+  "semanticPaths": [
+    "apps/office/e2e/native-table-name.spec.ts",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx",
+    "apps/office/src/sw/browser/presentation/native-table-column-page.test.tsx",
+    "apps/office/src/sw/browser/presentation/native-table-name-page.test.tsx",
+    "apps/office/src/sw/browser/presentation/native-table-properties-reset.test.tsx",
+    "apps/office/src/sw/browser/presentation/writer-style-selector.test.tsx",
+    "apps/office/src/sw/source/core/attr/format.ts",
+    "apps/office/src/sw/source/core/doc/doc.ts",
+    "apps/office/src/sw/source/core/doc/docchart.ts",
+    "apps/office/src/sw/source/core/doc/writer-attributes.test.ts",
+    "apps/office/src/sw/source/core/edit/edtab.ts",
+    "apps/office/src/sw/source/core/layout/atrfrm.ts",
+    "apps/office/src/sw/source/core/table/swtable.ts",
+    "apps/office/src/sw/source/core/undo/docundo.ts",
+    "apps/office/src/sw/source/core/undo/undobj.ts",
+    "apps/office/src/sw/source/core/undo/untbl.ts",
+    "apps/office/src/sw/source/ui/table/tabledlg.ts",
+    "apps/office/src/sw/source/uibase/shells/tabsh.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-name-history.test.ts",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/source-provenance.json"
+  ],
+  "scopeCount": 21,
+  "priorAcceptanceFiles": 577,
+  "byteIdenticalAcceptanceFiles": 573,
+  "exactSourceBackedMigrations": [
+    {
+      "path": "apps/office/src/sw/source/core/doc/writer-attributes.test.ts",
+      "beforeSHA256": "1c7775fe5fcc1fd1a2462a87fe25377e5652ef7cca2fda693520ca7b73470ac7",
+      "expectedSHA256": "eba99cfc0c31eecedaffd84102cb936eaf42994a8d6d4c4ad1ac9a83d76753a6",
+      "currentSHA256": "eba99cfc0c31eecedaffd84102cb936eaf42994a8d6d4c4ad1ac9a83d76753a6",
+      "exact": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/native-table-properties-reset.test.tsx",
+      "beforeSHA256": "58ebf1104e638bbb61eb72d30e743f67d44f76f594696f4b48424a3893bf9d7d",
+      "expectedSHA256": "b414a0bee3091c89615eab043764edfbe8f788586eaadca24d187b3d9ef1bc1a",
+      "currentSHA256": "b414a0bee3091c89615eab043764edfbe8f788586eaadca24d187b3d9ef1bc1a",
+      "exact": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/native-table-column-page.test.tsx",
+      "beforeSHA256": "092276bc045bacdda7ad104d9fdc03613a874e81d8b66ec079da3d682e187f80",
+      "expectedSHA256": "3cbcd2fc4c7ef0dd2ec621953229543781fb8629e200bea95614d05bd479c9b0",
+      "currentSHA256": "3cbcd2fc4c7ef0dd2ec621953229543781fb8629e200bea95614d05bd479c9b0",
+      "exact": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/writer-style-selector.test.tsx",
+      "beforeSHA256": "8ff24e051d0d712af8557e0246abe93f4a8c025b6c2dcc684190b3456158576d",
+      "expectedSHA256": "58c49145574e37f9aa4967985943306eaad61bca8fe79fb20bb52df84c1dab6a",
+      "currentSHA256": "58c49145574e37f9aa4967985943306eaad61bca8fe79fb20bb52df84c1dab6a",
+      "exact": true
+    }
+  ],
+  "newAcceptanceFiles": [
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-name-history.test.ts",
+    "apps/office/src/sw/browser/presentation/native-table-name-page.test.tsx",
+    "apps/office/e2e/native-table-name.spec.ts"
+  ],
+  "metadata": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "oldRecords": 293,
+      "currentRecords": 295,
+      "allPriorFieldsPrefixesAndStatusesPreserved": true
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "oldRecords": 293,
+      "currentRecords": 295,
+      "allPriorFieldsPrefixesAndStatusesPreserved": true
+    }
+  ],
+  "failures": []
+}

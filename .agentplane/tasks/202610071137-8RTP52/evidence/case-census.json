@@ -1,0 +1,87 @@
+{
+  "app": {
+    "original": 13508,
+    "current": 13509,
+    "newCases": 1,
+    "resolved": 2,
+    "passed": 13509,
+    "unresolvedCount": 0,
+    "skippedObservationsRetained": 18,
+    "passingReplay": 0,
+    "inputs": [
+      {
+        "file": "8RTP52.app-results.json",
+        "sha256": "46a2bbab3f458eb5d21e29a8f1e1181be784d155e60c903d13174af165b1f5f1",
+        "passed": 13506,
+        "failed": 2,
+        "skipped": 0
+      },
+      {
+        "file": "8RTP52.app-closure1-results.json",
+        "sha256": "1b1e9fd8481de59ad67212424f04c926609a05c0d846d96a9d83e1f6842536e9",
+        "passed": 3,
+        "failed": 0,
+        "skipped": 18
+      }
+    ]
+  },
+  "inventory": {
+    "original": 110,
+    "current": 110,
+    "newCases": 0,
+    "resolved": 1,
+    "passed": 110,
+    "unresolvedCount": 0,
+    "skippedObservationsRetained": 2,
+    "passingReplay": 0,
+    "inputs": [
+      {
+        "file": "8RTP52.inventory-results.json",
+        "sha256": "a5cfe9037c84c8b634d528577ea71c77e4a890bd685b281b15f55ec99c8aef4d",
+        "passed": 109,
+        "failed": 1,
+        "skipped": 0
+      },
+      {
+        "file": "8RTP52.inventory-closure1-results.json",
+        "sha256": "e33ad3be7360da326b99d475ff658d7a8cea40077b713b9a023087ae99bc037b",
+        "passed": 1,
+        "failed": 0,
+        "skipped": 2
+      }
+    ]
+  },
+  "chromium": {
+    "current": 274,
+    "passed": 274,
+    "unresolvedCount": 0,
+    "passingReplay": 0,
+    "inputs": [
+      {
+        "file": "8RTP52.chromium-results.json",
+        "sha256": "f483f64924d182805b720ed5473f88fc7a8457f72d0a633ea9814c17d4ad1968",
+        "counts": {
+          "startTime": "2026-10-07T12:06:33.127Z",
+          "duration": 335820.505,
+          "expected": 272,
+          "skipped": 0,
+          "unexpected": 2,
+          "flaky": 0
+        }
+      },
+      {
+        "file": "8RTP52.chromium-closure1-results.json",
+        "sha256": "5d39f48ee6b36554236fa5d9f938f781659c8bdff659992bb64bd7e54ce6b04f",
+        "counts": {
+          "startTime": "2026-10-07T12:16:19.810Z",
+          "duration": 5835.241,
+          "expected": 2,
+          "skipped": 0,
+          "unexpected": 0,
+          "flaky": 0
+        }
+      }
+    ]
+  },
+  "failures": []
+}

@@ -167,18 +167,18 @@ it("Text Flow and Borders Reset each restore their initial controls and preserve
   expect(f.submit.mock.calls[0]?.[0]?.borderItems?.GetItemIfSet(RES_BOX)).toBeUndefined();
 });
 it("Reset after invalid page data clears validation and Cancel keeps original owners", /** Checks no accidental submit/history or whole-document mutation. @returns Nothing. */ () => {
-  const f = fixture("");
-  tab("Columns");
-  const input = screen.getByRole("spinbutton", { name: "Column 1 width (cm)" }),
+  const f = fixture();
+  fireEvent.change(screen.getByRole("textbox", { name: "Name" }), {
+    target: { value: "Bad Name" },
+  });
+  const input = screen.getByRole("textbox", { name: "Name" }),
     form = input.closest("form");
   if (form === null) throw new Error("Missing reset form");
   fireEvent.submit(form);
-  expect(
-    screen.getByText("Enter valid table dimensions and positive column widths."),
-  ).toBeInTheDocument();
+  expect(screen.getByText("The name of the table must not contain spaces.")).toBeInTheDocument();
   expect(f.submit).not.toHaveBeenCalled();
   reset();
-  expect(screen.queryByText("Enter valid table dimensions and positive column widths.")).toBeNull();
+  expect(screen.queryByText("The name of the table must not contain spaces.")).toBeNull();
   fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
   expect(f.cancel).toHaveBeenCalledOnce();
   expect(f.submit).not.toHaveBeenCalled();

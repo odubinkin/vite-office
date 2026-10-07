@@ -1,0 +1,41 @@
+{
+  "records": [
+    {
+      "command": "npm exec -- prettier --check docs/program/source-provenance.json docs/program/parity/runtime-inventory.json",
+      "exit": 0,
+      "bytes": 66,
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "exit": 0,
+      "bytes": 205,
+      "sha256": "2abf4f2d58b6396b1661cbae6456ad5cfc36bc06b4d912c73c322baccad1d7b0",
+      "diagnostics": [
+        "Source provenance check passed for 295 runtime modules (208 mapped, 71 browser adaptations, 16 local infrastructure)."
+      ]
+    },
+    {
+      "command": "npm run inventory:invariants",
+      "exit": 0,
+      "bytes": 136,
+      "sha256": "8d0f3757af43331b4c62ffa7ccf5497bcce67449a871937b94a526bde8e7fdbe",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run inventory:parity",
+      "exit": 0,
+      "bytes": 1961396,
+      "sha256": "271c41e21dc7959ba939ed90c8952084f7df9dddd3c53bee9ab57d71ad752486",
+      "diagnostics": [
+        "          \"justification\": \"Iteration206 draft: scalar kernel cell border/padding storage is replaced by owned SvxBoxItem plus the existing vertical item. Represented lines retain native color/style/width/component arithmetic, signed16 dist",
+        "          \"justification\": \"These four existing margin, indent and spacing classes now reside with their pinned frmitems.cxx owner. Existing assertions cover signed margin values, cloning, equality, browser item-codec round trips, automatic",
+        "          \"justification\": \"Iteration206 draft: scalar kernel cell border/padding storage is replaced by owned SvxBoxItem plus the existing vertical item. Represented lines retain native color/style/width/component arithmetic, signed16 dist",
+        "            \"apps/office/src/xmloff/source/style/xmlnumi.test.ts#uses native MM100 grammar, failed-value retention and SHRT field bounds\",",
+        "          \"justification\": \"Existing Properties deck close/reopen follows inspected sfx2 SidebarController RequestCloseDeck/RequestOpenDeck/OpenThenToggleDeck, TabBar activation and FocusManager Escape: close retains mounted content and an ",
+        "          \"justification\": \"Managed traversal of the implemented deck toolbox, single Properties activation button and visible titled panels follows inspected FocusManager Tab/arrows/FocusPanel and SidebarController ShowPanel: forward title"
+      ]
+    }
+  ]
+}

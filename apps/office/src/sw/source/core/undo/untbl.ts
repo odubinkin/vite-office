@@ -13,6 +13,33 @@ import {
   type SwUndoRedoContext,
 } from "./undobj";
 
+/** Native rename history retains only names and resolves the live frame on replay. */
+export class SwUndoRenameTable extends SwUndo {
+  /** Captures names without a cursor or graph. @param oldName - Original name. @param newName - Accepted name. @returns Nothing. */
+  public constructor(
+    private readonly oldName: string,
+    private readonly newName: string,
+  ) {
+    super("Rename Table");
+  }
+  /** Resolves the renamed owner. @param context - Native context. @returns Nothing. */
+  protected override UndoImpl(context: SwUndoRedoContext): void {
+    const doc = context.GetDoc(),
+      format = doc.FindTableFormatByName(this.newName);
+    if (format !== undefined) doc.SetTableName(format, this.oldName);
+  }
+  /** Resolves the original owner. @param context - Native context. @returns Nothing. */
+  protected override RedoImpl(context: SwUndoRedoContext): void {
+    const doc = context.GetDoc(),
+      format = doc.FindTableFormatByName(this.oldName);
+    if (format !== undefined) doc.SetTableName(format, this.newName);
+  }
+  /** Counts retained strings. @returns Payload units. */
+  public override GetPayloadSize(): number {
+    return this.oldName.length + this.newName.length;
+  }
+}
+
 /** Native insertion history keeps numeric coordinates and construction attributes, recreating sections on Redo. */
 export class SwUndoInsTable extends SwUndo {
   private readonly m_nSttNode: number;

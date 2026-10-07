@@ -1,6 +1,8 @@
 /** @fileoverview Implements the Writer SwDoc aggregate from pinned LibreOffice `sw/inc/doc.hxx` and `sw/source/core/doc/docnew.cxx`. */
 
 import { SwAttrPool } from "../attr/swatrset";
+import type { SwFrameFormat } from "../layout/atrfrm";
+import { SetTableName } from "./docchart";
 import type { SwFormat } from "../attr/format";
 import { SwLineNumberInfo } from "../../../inc/lineinfo";
 import { SwNodes } from "../docnode/nodes";
@@ -101,6 +103,20 @@ export interface WriterEmbeddedFont {
 
 /** Final Writer document aggregate; notification and domain policies are composed managers. */
 export class SwDoc {
+  /** Renames a table through its native frame owner. @param format - Table frame. @param name - Requested name. @returns Nothing. */
+  public SetTableName(format: SwFrameFormat, name: string): void {
+    SetTableName(this, format, name);
+  }
+  /** Finds a used table frame by its current name. @param name - Raw name. @returns Live frame, when present. */
+  public FindTableFormatByName(name: string): SwFrameFormat | undefined {
+    return this.GetTables()
+      .find(
+        /** Matches native used table identity. @param table - Live owner. @returns Whether named. */ (
+          table,
+        ) => table.GetName() === name,
+      )
+      ?.GetFrameFormat();
+  }
   /** Applies represented border attributes over native point/mark cell endpoints. @param cursor - Original shell cursor. @param value - Supplied border and distance attributes. @param cursorState - Optional original displayed cursor state. @returns Whether admitted. */
   public SetTabBorders(
     cursor: SwCursor,

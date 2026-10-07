@@ -4,9 +4,14 @@ import { SwUndoInsTable } from "../undo/untbl";
 import { SwTextNode } from "../txtnode/ndtxt";
 import type { SwTable, SwTableBoxFormat } from "../table/swtable";
 import type { SwInsertTableOptions } from "../../../inc/itabenum";
+import type { SwFrameFormat } from "../layout/atrfrm";
 
 /** Source-owned table operations extend the existing editing shell's native numbering methods. */
 export abstract class SwEditShell extends SwNumberingEditShell {
+  /** Delegates native table rename to the document. @param format - Frame owner. @param name - Requested name. @returns Nothing. */
+  public SetTableName(format: SwFrameFormat, name: string): void {
+    this.GetDoc().SetTableName(format, name);
+  }
   /** Uses the existing native paragraph split history. @returns Whether split. */
   public abstract SplitNode(): boolean;
   /** Inserts before the current body node, splitting nonzero content positions and grouping history. @param options - Native insertion flags. @param rows - Unsigned row count. @param columns - Unsigned column count. @param name - Requested table name. @param boxFormat - Represented browser autoformat attributes. @returns Created table or absent for unsupported context. */
