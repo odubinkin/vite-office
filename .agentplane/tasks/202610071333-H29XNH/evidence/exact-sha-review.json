@@ -1,0 +1,117 @@
+{
+  "evaluatedImplementationSHA": "e10492db5e7d9c7fcecedd0b330a4e53f5754fc3",
+  "evaluator": "Same current agent EVALUATOR phase; explicitly not independent",
+  "verdict": "pass",
+  "cases": {
+    "app": 13545,
+    "inventory": 110,
+    "infrastructure": 14,
+    "chromium": 278
+  },
+  "actualCurrentSourceCoverage": {
+    "app": {
+      "lines": {
+        "total": 16438,
+        "covered": 16438,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 18045,
+        "covered": 18045,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 4191,
+        "covered": 4191,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 13563,
+        "covered": 13563,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "inventory": {
+      "lines": {
+        "total": 1464,
+        "covered": 1464,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 1523,
+        "covered": 1523,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 384,
+        "covered": 384,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 1081,
+        "covered": 1081,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    }
+  },
+  "wholeCurrentSourceFiles": {
+    "app": 293,
+    "inventory": 38
+  },
+  "completeCurrentChangedRegionProofs": 2,
+  "completePriorAppRegionCertificates": 9,
+  "approvedSemanticPaths": 15,
+  "priorAcceptanceFiles": 583,
+  "priorByteIdenticalAcceptanceFiles": 582,
+  "exactSourceBackedMigrations": 1,
+  "currentAcceptanceFiles": 586,
+  "metadataRecords": 298,
+  "allPriorMetadataFieldsAndExceptionsPreserved": true,
+  "oneFullUpstreamAbsentProfile": true,
+  "allProfilesTerminalVendorRestored": true,
+  "passingReplay": 0,
+  "skippedObservationsRetained": 26,
+  "unresolvedUncaught": 0,
+  "priorityBullet": [
+    {
+      "title": "Writer native label width prevents overlap width=1280 cell=false",
+      "passed": true
+    },
+    {
+      "title": "Writer native label width prevents overlap width=1280 cell=true",
+      "passed": true
+    },
+    {
+      "title": "Writer native label width prevents overlap width=390 cell=false",
+      "passed": true
+    },
+    {
+      "title": "Writer native label width prevents overlap width=390 cell=true",
+      "passed": true
+    }
+  ],
+  "auditReconstruction": "Coverage, cases and scope reconstructed byte-identically at implementation HEAD; complete source-region and map/counter bindings verified.",
+  "accidentalRedundantBuild": "closure3 repeated an unchanged build while only test diagnostics changed; no runtime passing test case replay and no second full profile. Other post-full builds closure1,5,9 correspond to production input changes.",
+  "residual": "Native marked-list-level shading and list-level/ruler mechanics, label attributes/full geometry/RTL/bidi/frame lifecycle, broader keyboard/IME/overwrite/Replace label policies remain unverified. Existing intentional save/open/recovery deviations retained, whole parity ACTIVE. Same current-agent evaluator explicitly not independent.",
+  "failures": []
+}
