@@ -4,7 +4,7 @@ title: "Preserve native proportional Ctrl table column dragging"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -20,10 +20,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-07T20:16:20.642Z"
+  updated_by: "CODER"
+  note: "Verified actual implementation 0ed044246af68df2633c27acb97d7f565747b967 with PASS reconstruction and same-current-agent EVALUATOR .agentplane/tasks/202610071950-5X11GC/quality/20261007-201525979-recovery-context/quality-report.json. Final Verification persisted before this record. Unique13641app110inventory15infrastructure292ChromePASS; ONE full upstream-absent profile plus only original mounted pure-Ctrl failure resolution,16 skipped observations retained, zero passing replay. Source-bound all4app/inventory100; static/source/scope/physical/JSDoc/artifact/governancePASS. One exact source-backed vector migration,605other old files and302metadata contracts retained; source ownership and remaining modes partial, goalACTIVE."
   attempts: 0
 quality_review:
   state: "pass"
@@ -54,8 +54,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement approved source proportional primary-modifier internal table column drag with native ruler arithmetic; preserve old inputs and only source-backed mask2 expectation migration after original failure."
+  -
+    type: "verify"
+    at: "2026-10-07T20:16:20.642Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified actual implementation 0ed044246af68df2633c27acb97d7f565747b967 with PASS reconstruction and same-current-agent EVALUATOR .agentplane/tasks/202610071950-5X11GC/quality/20261007-201525979-recovery-context/quality-report.json. Final Verification persisted before this record. Unique13641app110inventory15infrastructure292ChromePASS; ONE full upstream-absent profile plus only original mounted pure-Ctrl failure resolution,16 skipped observations retained, zero passing replay. Source-bound all4app/inventory100; static/source/scope/physical/JSDoc/artifact/governancePASS. One exact source-backed vector migration,605other old files and302metadata contracts retained; source ownership and remaining modes partial, goalACTIVE."
 doc_version: 3
-doc_updated_at: "2026-10-07T20:15:45.831Z"
+doc_updated_at: "2026-10-07T20:16:20.707Z"
 doc_updated_by: "CODER"
 description: "Iteration226: solitary native primary modifier on existing internal column borders must proportionally resize following columns with source permille and integer ruler arithmetic, preserving ordinary/Shift/margin/row tracking and native history. Standing user goal authorizes safe local parity work."
 sections:
@@ -78,6 +84,39 @@ sections:
     Result: final unique13641app110inventory15infrastructure292ChromePASS,0unresolved/flaky/uncaught/passing replay;16 focused skipped observations retained without promotion. Actual source-bound all4app/inventory100; build/static/source gatesPASS. One original mounted Ctrl expected vector migrated after actual failure;605other prior files byte-identical, all302metadata contracts retained, exact6semantic paths,2new608current acceptance files. No source/Python/raw maps/results in AP; ignored cache only.
     Evidence: evidence/static-gates.json, static-closure1.json, absent-profile.json, runtime-closure1.json, final-coverage.json, case-census.json, scope-final.json, source-review.json, source-gates.json, changed-file-checks.json, artifact-census.json, governance.json; raw5X11GC.* ignored cache. Nonzero full/focused coverage thresholds and original expectation failure explicitly retained in Findings. Exact implementation 0ed044246af68df2633c27acb97d7f565747b967 reconstruction reviewPASS and same-current-agent EVALUATOR PASS (explicitly not independent) recorded at .agentplane/tasks/202610071950-5X11GC/quality/20261007-201525979-recovery-context/quality-report.json. Final Verification is persisted before canonical verification; its checkpoint precedes finish of the actual implementation SHA.
     Scope: source solitary KEY_MOD1 proportional internal-column branch, integer/permille/float constraints, actual original table/cursor/list/history and browser geometry/cancel/Enter/continued typing/3UndoRedo/ODT. Exhaustive goalACTIVE; registered IO exceptions preserved.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-07T20:16:20.642Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified actual implementation 0ed044246af68df2633c27acb97d7f565747b967 with PASS reconstruction and same-current-agent EVALUATOR .agentplane/tasks/202610071950-5X11GC/quality/20261007-201525979-recovery-context/quality-report.json. Final Verification persisted before this record. Unique13641app110inventory15infrastructure292ChromePASS; ONE full upstream-absent profile plus only original mounted pure-Ctrl failure resolution,16 skipped observations retained, zero passing replay. Source-bound all4app/inventory100; static/source/scope/physical/JSDoc/artifact/governancePASS. One exact source-backed vector migration,605other old files and302metadata contracts retained; source ownership and remaining modes partial, goalACTIVE.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-07T20:15:45.831Z, excerpt_hash=sha256:85e5bd460721b03a55b48a163795d36000326a79628a4b9c5d75ffeff19cc0e9
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610071950-5X11GC/blueprint/resolved-snapshot.json
+    - old_digest: 4701470adf09f107bca5562e1f730087043f825112b18729d46973c45340b568
+    - current_digest: 4701470adf09f107bca5562e1f730087043f825112b18729d46973c45340b568
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610071950-5X11GC
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610071950-5X11GC
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only the actual task implementation commit; retain prior DONE artifacts, parent full historical Findings and deferred stash."
   Findings: |-
     Implemented exact solitary KEY_MOD1 on the existing horizontal LTR internal table-column Border drag. Native SvxRuler EvalModifier selects proportional mode; PrepareProportional_Impl captures unsigned per-thousand cumulative following-width shares, DragBorders divides integer device-pixel products, and CalcPropMaxRight retains its float minimum-space reserve plus five-pixel final guard. Every preview derives from original SwTabCols, defers document/history writes until acceptance and preserves original cursor, rows, boxes, nodes and lists. Existing ordinary/solitary Shift/row/margin branches retained; no additional adapter or fake source-only implementation.
@@ -118,6 +157,39 @@ Command: six initial static gates once and changed-test-only static-closure1; ON
 Result: final unique13641app110inventory15infrastructure292ChromePASS,0unresolved/flaky/uncaught/passing replay;16 focused skipped observations retained without promotion. Actual source-bound all4app/inventory100; build/static/source gatesPASS. One original mounted Ctrl expected vector migrated after actual failure;605other prior files byte-identical, all302metadata contracts retained, exact6semantic paths,2new608current acceptance files. No source/Python/raw maps/results in AP; ignored cache only.
 Evidence: evidence/static-gates.json, static-closure1.json, absent-profile.json, runtime-closure1.json, final-coverage.json, case-census.json, scope-final.json, source-review.json, source-gates.json, changed-file-checks.json, artifact-census.json, governance.json; raw5X11GC.* ignored cache. Nonzero full/focused coverage thresholds and original expectation failure explicitly retained in Findings. Exact implementation 0ed044246af68df2633c27acb97d7f565747b967 reconstruction reviewPASS and same-current-agent EVALUATOR PASS (explicitly not independent) recorded at .agentplane/tasks/202610071950-5X11GC/quality/20261007-201525979-recovery-context/quality-report.json. Final Verification is persisted before canonical verification; its checkpoint precedes finish of the actual implementation SHA.
 Scope: source solitary KEY_MOD1 proportional internal-column branch, integer/permille/float constraints, actual original table/cursor/list/history and browser geometry/cancel/Enter/continued typing/3UndoRedo/ODT. Exhaustive goalACTIVE; registered IO exceptions preserved.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-07T20:16:20.642Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified actual implementation 0ed044246af68df2633c27acb97d7f565747b967 with PASS reconstruction and same-current-agent EVALUATOR .agentplane/tasks/202610071950-5X11GC/quality/20261007-201525979-recovery-context/quality-report.json. Final Verification persisted before this record. Unique13641app110inventory15infrastructure292ChromePASS; ONE full upstream-absent profile plus only original mounted pure-Ctrl failure resolution,16 skipped observations retained, zero passing replay. Source-bound all4app/inventory100; static/source/scope/physical/JSDoc/artifact/governancePASS. One exact source-backed vector migration,605other old files and302metadata contracts retained; source ownership and remaining modes partial, goalACTIVE.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-07T20:15:45.831Z, excerpt_hash=sha256:85e5bd460721b03a55b48a163795d36000326a79628a4b9c5d75ffeff19cc0e9
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610071950-5X11GC/blueprint/resolved-snapshot.json
+- old_digest: 4701470adf09f107bca5562e1f730087043f825112b18729d46973c45340b568
+- current_digest: 4701470adf09f107bca5562e1f730087043f825112b18729d46973c45340b568
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610071950-5X11GC
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610071950-5X11GC
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
