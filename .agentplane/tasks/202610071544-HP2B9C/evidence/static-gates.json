@@ -1,0 +1,60 @@
+{
+  "records": [
+    {
+      "command": "npm run format:check",
+      "exit": 1,
+      "bytes": 219,
+      "sha256": "5fe04938a8bcf0984dabe6accd42f95226be8c6d77bf4a8b69f97a8cb52a4bd8",
+      "diagnostics": [
+        "[warn] apps/office/e2e/native-marked-list-paint.spec.ts",
+        "[warn] Code style issues found in the above file. Run Prettier with --write to fix."
+      ]
+    },
+    {
+      "command": "npm run lint",
+      "exit": 0,
+      "bytes": 55,
+      "sha256": "a6172cb57fa696e705408fdc605fba1ae07b852fdf0614d7c2b623349e285b6e",
+      "diagnostics": [
+        "> eslint . --max-warnings 0"
+      ]
+    },
+    {
+      "command": "npm run typecheck",
+      "exit": 2,
+      "bytes": 714,
+      "sha256": "c32da8a1385a52b794a6c58e43755b6cc9ad5e1252b16ee65dba599d5b98e289",
+      "diagnostics": [
+        "src/sw/browser/editor/native-marked-list-paint.test.tsx(80,22): error TS2341: Property 'GetDispatcher' is private and only accessible within class 'SwView'.",
+        "npm error Lifecycle script `typecheck` failed with error:",
+        "npm error code 2",
+        "npm error path /Users/odubinkin/Projects/vite-office/apps/office",
+        "npm error workspace @vite-office/office@0.1.0",
+        "npm error location /Users/odubinkin/Projects/vite-office/apps/office",
+        "npm error command failed",
+        "npm error command sh -c tsc --noEmit"
+      ]
+    },
+    {
+      "command": "npm run check:dependencies",
+      "exit": 0,
+      "bytes": 189,
+      "sha256": "b73624b89b544b529ec1080ea4692ada99f1325af606f2d64376b5a9047c65eb",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:docs",
+      "exit": 0,
+      "bytes": 119,
+      "sha256": "771667a3468476d2547f5c859970b45fbbc68d289eacb30acdcbe36dc82197e3",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:file-size",
+      "exit": 0,
+      "bytes": 3996,
+      "sha256": "a5fb8adcdc3711ccf5371ceefb7dcb0e4841525cd3c24cb994917c3aa10a2752",
+      "diagnostics": []
+    }
+  ]
+}

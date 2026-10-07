@@ -1,0 +1,39 @@
+{
+  "base": "7a55a17ce25646aedf58a9a625a9c98e7a472d60",
+  "semanticPaths": [
+    "apps/office/e2e/native-marked-list-paint.spec.ts",
+    "apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx",
+    "apps/office/src/sw/browser/editor/native-marked-list-paint.test.tsx",
+    "apps/office/src/sw/browser/presentation/writer-view-projection.ts",
+    "apps/office/src/sw/inc/viewopt.ts",
+    "apps/office/src/sw/source/core/text/inftxt.ts",
+    "apps/office/src/sw/source/core/text/native-marked-list-paint.test.ts",
+    "apps/office/src/vcl/browser/styles.css",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/source-provenance.json"
+  ],
+  "scopeCount": 10,
+  "priorAcceptanceFiles": 588,
+  "byteIdenticalAcceptanceFiles": 588,
+  "exactSourceBackedMigrations": [],
+  "newAcceptanceFiles": [
+    "apps/office/src/sw/source/core/text/native-marked-list-paint.test.ts",
+    "apps/office/src/sw/browser/editor/native-marked-list-paint.test.tsx",
+    "apps/office/e2e/native-marked-list-paint.spec.ts"
+  ],
+  "metadata": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "oldRecords": 298,
+      "currentRecords": 299,
+      "allPriorFieldsPrefixesAndStatusesPreserved": true
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "oldRecords": 298,
+      "currentRecords": 299,
+      "allPriorFieldsPrefixesAndStatusesPreserved": true
+    }
+  ],
+  "failures": []
+}

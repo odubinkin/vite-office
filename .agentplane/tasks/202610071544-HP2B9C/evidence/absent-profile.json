@@ -1,0 +1,217 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/sw/inc/viewopt.ts": "ad2df6dadd6a048283c4c220db592c1d3ea4d9d205ec5c4069f6e37c853a25d4",
+    "apps/office/src/sw/source/core/text/inftxt.ts": "39c17cdd5788e559053732a84a3231eefa34d4485092210881d307bdab340595",
+    "apps/office/src/sw/browser/presentation/writer-view-projection.ts": "1bf9b71d0135f80316037f24dd98208c857b441b5ae8bfb36111e707fb0e463b",
+    "apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx": "55dea5f3745aad1022b59c92d21f6632b02078af044e2b3c1980c15b6f47d0d4",
+    "apps/office/src/vcl/browser/styles.css": "f092b64b97c55dd05ddefba64c67dfd9d26da47fadbca0a7388d3eacf2e45e74",
+    "apps/office/src/sw/source/core/text/native-marked-list-paint.test.ts": "01c3d907f223d4db980ea2d4b6cf88c3fdc56217a2cadb517e85faf15e1f1176",
+    "apps/office/src/sw/browser/editor/native-marked-list-paint.test.tsx": "b40e05b76f37a15fa7b83b65fd274f7abf2a29d4609ae6b1631e0087b059a733",
+    "apps/office/e2e/native-marked-list-paint.spec.ts": "26abdc76b7c481e5e639c5e4f05c3ba6b75efe0b2daabdcdd79d099396732933",
+    "docs/program/source-provenance.json": "1b0fcecfc82a91ade95f5c78010008ddcf42edfef9b4d759b2472b2b49635da2",
+    "docs/program/parity/runtime-inventory.json": "434c1e1f8cfc47fb5c1eaf7feb8e70f92a5796ab9ce2567c2938bb889eabf1a8"
+  },
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1443,
+      "sha256": "ee0247e2af293ada5c37be520bfd7c3f1d7ebf8693c82982287547cb16e201dd",
+      "totals": [],
+      "failedCases": [],
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/HP2B9C.app-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 75540,
+      "sha256": "6c2a51239c97c337fcc3032e5a6fa5c3346fc836cc19cc1fa911a18fc8a35800",
+      "totals": [
+        "Test Files  1 failed | 441 passed (442)",
+        "Tests  4 failed | 13562 passed (13566)"
+      ],
+      "failedCases": [
+        {
+          "name": "apps/office/src/sw/browser/editor/native-marked-list-paint.test.tsx > native marked label paint follows all same-level members cell=false kind=bullet",
+          "assertion": [
+            "AssertionError: expected true to be false // Object.is equality"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/browser/editor/native-marked-list-paint.test.tsx > native marked label paint follows all same-level members cell=false kind=numbered",
+          "assertion": [
+            "AssertionError: expected true to be false // Object.is equality"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/browser/editor/native-marked-list-paint.test.tsx > native marked label paint follows all same-level members cell=true kind=bullet",
+          "assertion": [
+            "AssertionError: expected true to be false // Object.is equality"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/browser/editor/native-marked-list-paint.test.tsx > native marked label paint follows all same-level members cell=true kind=numbered",
+          "assertion": [
+            "AssertionError: expected true to be false // Object.is equality"
+          ]
+        }
+      ],
+      "caseCounts": {
+        "passed": 13562,
+        "failed": 4,
+        "skipped": 0,
+        "total": 13566
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 16516,
+          "covered": 16516,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 18135,
+          "covered": 18135,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 4219,
+          "covered": 4219,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 13632,
+          "covered": 13630,
+          "skipped": 0,
+          "pct": 99.98
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 99.98
+      },
+      "incompleteFileCount": 2,
+      "coverageMapSHA256": "3192708fdfe4565ba6f8db1a20d7dcbdd694905cdad7da6a1d69b1f92acda956",
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "inventory",
+      "command": "npm run test:inventory:coverage -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/HP2B9C.inventory-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 42196,
+      "sha256": "b42c9fac2568c3ef423fd8f8496c04b4e9302eb876b9911a6e4841a40100a371",
+      "totals": [
+        "Test Files  1 failed | 35 passed (36)",
+        "Tests  1 failed | 109 passed (110)"
+      ],
+      "failedCases": [
+        {
+          "name": "scripts/libreoffice-inventory/parity-mapping-cli.test.ts > parity mapping CLI composes the Writer mapping report with owned upstream marker evidence",
+          "assertion": [
+            "Error: Runtime module paths must be unique and lexicographically ordered."
+          ]
+        }
+      ],
+      "caseCounts": {
+        "passed": 109,
+        "failed": 1,
+        "skipped": 0,
+        "total": 110
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 1464,
+          "covered": 1460,
+          "skipped": 0,
+          "pct": 99.72
+        },
+        "statements": {
+          "total": 1523,
+          "covered": 1519,
+          "skipped": 0,
+          "pct": 99.73
+        },
+        "functions": {
+          "total": 384,
+          "covered": 381,
+          "skipped": 0,
+          "pct": 99.21
+        },
+        "branches": {
+          "total": 1081,
+          "covered": 1081,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "coverage": {
+        "lines": 99.72,
+        "statements": 99.73,
+        "functions": 99.21,
+        "branches": 100
+      },
+      "incompleteFileCount": 1,
+      "coverageMapSHA256": "94967d0e2f055abe38b874107dc4efc4f20890ef1d6e9c5d48db913e1b88a4dc",
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "scripts",
+      "command": "npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts scripts/check-module-boundaries.test.ts",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 223,
+      "sha256": "559bab0808ed9735f1434ba23e63c87382794fd6836ea706d4216943f2e3a343",
+      "totals": [
+        "Test Files  3 passed (3)",
+        "Tests  14 passed (14)"
+      ],
+      "failedCases": [],
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 38808,
+      "sha256": "138415eb3f049441eb8cf430aaf7ba96d6dd0b17a1f21b181716dafdd6fd7a7a",
+      "totals": [
+        "280 passed (3.0m)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "startTime": "2026-10-07T15:55:48.786Z",
+        "duration": 177963.956,
+        "expected": 280,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "unhandledErrorCount": 0
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "records": [
+    {
+      "command": "Unchanged JSDoc validator on approved changed code/acceptance paths; actual physical-line count",
+      "exit": 0,
+      "errors": [],
+      "physicalLines": {
+        "apps/office/src/sw/inc/viewopt.ts": 132,
+        "apps/office/src/sw/source/core/text/inftxt.ts": 18,
+        "apps/office/src/sw/browser/presentation/writer-view-projection.ts": 621,
+        "apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx": 301,
+        "apps/office/src/sw/source/core/text/native-marked-list-paint.test.ts": 103,
+        "apps/office/src/sw/browser/editor/native-marked-list-paint.test.tsx": 214,
+        "apps/office/e2e/native-marked-list-paint.spec.ts": 109
+      }
+    }
+  ]
+}

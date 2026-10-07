@@ -63,6 +63,8 @@ import {
 import { WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL } from "../../inc/poolfmt";
 import type { WriterPageDescriptorValue } from "../../source/core/layout/pagedesc";
 import { projectWriterLineHeightItem } from "../../source/core/text/itrform2";
+import { resolveSwNumberPortionBackground } from "../../source/core/text/inftxt";
+import type { SwViewOption } from "../../inc/viewopt";
 
 /** Detached document style selector metadata. */
 export type WriterParagraphStyleOption = StyleToolboxEntry;
@@ -73,6 +75,8 @@ export interface WriterParagraphProjection {
   readonly inFrontOfLabel?: boolean;
   /** Minimum occupied label gap, separate from authored list indentation. */
   readonly listMarkerMinimumDistancePt?: number;
+  /** Window-device decoration derived from the native marked list level and view options. */
+  readonly listMarkerBackgroundColor?: string;
   readonly alignment: WriterParagraphAlignment;
   readonly bulletChar?: string;
   readonly computedStyle: WriterParagraphComputedStyle;
@@ -198,12 +202,13 @@ export class WriterViewProjection {
     return id;
   }
 
-  /** Projects the current model revision without retaining mutable nodes. @param document - Canonical graph. @param activeParagraph - Shell target. @param cursorSelection - Browser cursor DTO. @param documentState - Shell state. @returns Immutable value graph. */
+  /** Projects the current model revision without retaining mutable nodes. @param document - Canonical graph. @param activeParagraph - Shell target. @param cursor - Native cursor. @param documentState - Shell state. @param viewOptions - Actual shell view options, absent for detached callers. @returns Immutable value graph. */
   public Project(
     document: SwDoc,
     activeParagraph: SwTextNode,
     cursor: SwPaM,
     documentState: SfxObjectShellState,
+    viewOptions?: SwViewOption,
   ): WriterPresentationProjection {
     const inFrontOfLabel = !cursor.HasMark() && cursor.IsInFrontOfLabel();
     const defaultTabs = document
@@ -228,6 +233,10 @@ export class WriterViewProjection {
             ? getWriterNumFormatBullet(node.GetNumRule()?.Get(list.level))
             : undefined;
         const listMarker = node.GetListLabel();
+        const listMarkerBackgroundColor =
+          viewOptions === undefined
+            ? undefined
+            : resolveSwNumberPortionBackground(node, viewOptions);
         const uncountedTextLeft = node.IsCountedInList()
           ? undefined
           : resolveSwListTextLeftMargin(node);
@@ -331,6 +340,7 @@ export class WriterViewProjection {
             ? { inFrontOfLabel: true }
             : {}),
           ...(listMarker === undefined ? {} : { listMarker }),
+          ...(listMarkerBackgroundColor === undefined ? {} : { listMarkerBackgroundColor }),
           numRuleName: node.GetNumRuleName(),
           nodeIndex: node.GetIndex(),
           runs: projectTextPortions(node),
@@ -516,6 +526,7 @@ export class WriterViewStore {
         wrtShell.GetActiveParagraph(),
         wrtShell.getShellCursor(),
         this.view.GetDocShell().GetDocumentState(),
+        wrtShell.GetViewOptions(),
       );
       this.cachedSnapshot = Object.freeze({
         ...projected,

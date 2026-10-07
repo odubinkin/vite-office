@@ -1,0 +1,97 @@
+{
+  "records": [
+    {
+      "phase": "absent-profile",
+      "kind": "build",
+      "exit": 0,
+      "uncaughtErrorCount": 0,
+      "outputSHA256": "ee0247e2af293ada5c37be520bfd7c3f1d7ebf8693c82982287547cb16e201dd",
+      "assertionFailures": 0
+    },
+    {
+      "phase": "absent-profile",
+      "kind": "app",
+      "exit": 1,
+      "uncaughtErrorCount": 0,
+      "outputSHA256": "6c2a51239c97c337fcc3032e5a6fa5c3346fc836cc19cc1fa911a18fc8a35800",
+      "assertionFailures": 4
+    },
+    {
+      "phase": "absent-profile",
+      "kind": "inventory",
+      "exit": 1,
+      "uncaughtErrorCount": 0,
+      "outputSHA256": "b42c9fac2568c3ef423fd8f8496c04b4e9302eb876b9911a6e4841a40100a371",
+      "assertionFailures": 1
+    },
+    {
+      "phase": "absent-profile",
+      "kind": "scripts",
+      "exit": 0,
+      "uncaughtErrorCount": 0,
+      "outputSHA256": "559bab0808ed9735f1434ba23e63c87382794fd6836ea706d4216943f2e3a343",
+      "assertionFailures": 0
+    },
+    {
+      "phase": "absent-profile",
+      "kind": "chromium",
+      "exit": 0,
+      "uncaughtErrorCount": 0,
+      "outputSHA256": "138415eb3f049441eb8cf430aaf7ba96d6dd0b17a1f21b181716dafdd6fd7a7a",
+      "assertionFailures": 0
+    },
+    {
+      "phase": "closure1",
+      "kind": "app",
+      "exit": 1,
+      "uncaughtErrorCount": 0,
+      "outputSHA256": "651335f1d56993172ae436d379f2c03ce0a11d69a0652a3c7a6fad80ff3a6f22",
+      "assertionFailures": 0
+    },
+    {
+      "phase": "closure1",
+      "kind": "inventory",
+      "exit": 1,
+      "uncaughtErrorCount": 0,
+      "outputSHA256": "a1ee80e2f0dd8fefb50966e271df501dd6ca001b8a2e9ccd8d4a8fff57ae3cdb",
+      "assertionFailures": 0
+    }
+  ],
+  "unresolvedUncaught": 0,
+  "staticFailure": "Initial formatting found fresh e2e formatting, and typecheck caught use of private SwView.GetDispatcher in fresh acceptance. Formatted the new cases and used the actual public frame dispatcher; failed/changed-input scoped closure passed. Existing production paths and588 prior acceptance unchanged.",
+  "runtimeFailures": [
+    {
+      "name": "apps/office/src/sw/browser/editor/native-marked-list-paint.test.tsx > native marked label paint follows all same-level members cell=false kind=bullet",
+      "assertion": [
+        "AssertionError: expected true to be false // Object.is equality"
+      ]
+    },
+    {
+      "name": "apps/office/src/sw/browser/editor/native-marked-list-paint.test.tsx > native marked label paint follows all same-level members cell=false kind=numbered",
+      "assertion": [
+        "AssertionError: expected true to be false // Object.is equality"
+      ]
+    },
+    {
+      "name": "apps/office/src/sw/browser/editor/native-marked-list-paint.test.tsx > native marked label paint follows all same-level members cell=true kind=bullet",
+      "assertion": [
+        "AssertionError: expected true to be false // Object.is equality"
+      ]
+    },
+    {
+      "name": "apps/office/src/sw/browser/editor/native-marked-list-paint.test.tsx > native marked label paint follows all same-level members cell=true kind=numbered",
+      "assertion": [
+        "AssertionError: expected true to be false // Object.is equality"
+      ]
+    },
+    {
+      "name": "scripts/libreoffice-inventory/parity-mapping-cli.test.ts > parity mapping CLI composes the Writer mapping report with owned upstream marker evidence",
+      "assertion": [
+        "Error: Runtime module paths must be unique and lexicographically ordered."
+      ]
+    }
+  ],
+  "passingReplay": 0,
+  "runtimeResolution": "All4 original fresh-app failures and1 original inventory failure pass in closure1 after correcting fixture baseline and canonical record ordering; focused exits1 are solely full-graph coverage thresholds on filtered runs. Complete actual current-source coverage reconstruction remains all4 metrics100 without exclusions/clamps/skipped promotion.",
+  "processObservation": "Scoped static closure2 ledger completed while focused runtime closure1 was live; no semantic source/test/metadata or task README mutation overlapped. Pre/post scoped hashes prove no runtime input drift. All later audits/docs wait for terminal handles; no restart or passing replay."
+}

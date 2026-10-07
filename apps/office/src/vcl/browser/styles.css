@@ -131,6 +131,14 @@ body:has([aria-label="Writer workspace"]) {
     border: 0 !important;
   }
 
+  [data-writer-list-marker] {
+    background-color: transparent !important;
+  }
+
+  [data-writer-label-caret] {
+    display: none !important;
+  }
+
   [data-writer-page] :focus,
   [data-writer-page] :focus-visible {
     outline: none !important;

@@ -1,0 +1,52 @@
+{
+  "vendorRestored": true,
+  "sourceSnapshot": "HP2B9C.closure1.source",
+  "preProfileSHA256": {
+    "apps/office/src/sw/inc/viewopt.ts": "ad2df6dadd6a048283c4c220db592c1d3ea4d9d205ec5c4069f6e37c853a25d4",
+    "apps/office/src/sw/source/core/text/inftxt.ts": "39c17cdd5788e559053732a84a3231eefa34d4485092210881d307bdab340595",
+    "apps/office/src/sw/browser/presentation/writer-view-projection.ts": "1bf9b71d0135f80316037f24dd98208c857b441b5ae8bfb36111e707fb0e463b",
+    "apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx": "55dea5f3745aad1022b59c92d21f6632b02078af044e2b3c1980c15b6f47d0d4",
+    "apps/office/src/vcl/browser/styles.css": "f092b64b97c55dd05ddefba64c67dfd9d26da47fadbca0a7388d3eacf2e45e74",
+    "apps/office/src/sw/source/core/text/native-marked-list-paint.test.ts": "01c3d907f223d4db980ea2d4b6cf88c3fdc56217a2cadb517e85faf15e1f1176",
+    "apps/office/src/sw/browser/editor/native-marked-list-paint.test.tsx": "1cad441a7e6ec3c93f5110a5cfbb201ae8ffe58d9e5c9e98ad7fad2029d67cc1",
+    "apps/office/e2e/native-marked-list-paint.spec.ts": "26abdc76b7c481e5e639c5e4f05c3ba6b75efe0b2daabdcdd79d099396732933",
+    "docs/program/source-provenance.json": "470debeb44b83d28ad8cb0ad4d1dd5f08692327a3328b5fabe15e4d3d80ceb35",
+    "docs/program/parity/runtime-inventory.json": "34f0f0117557c58d76d3e940c093a3b68a2ef7a36fc58df18d6db95c8e62527b"
+  },
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/browser/editor/native-marked-list-paint.test.tsx -t native marked label paint follows --coverage.reportOnFailure --coverage.reporter=json --coverage.reporter=json-summary --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/HP2B9C.closure1.app-results.json",
+      "exit": 1,
+      "bytes": 2285,
+      "sha256": "651335f1d56993172ae436d379f2c03ce0a11d69a0652a3c7a6fad80ff3a6f22",
+      "caseCounts": {
+        "passed": 4,
+        "failed": 0,
+        "skipped": 1,
+        "total": 5
+      },
+      "failures": [],
+      "unhandledErrorCount": 0,
+      "coverageMapSHA256": "460cb635757a62f6ec5f10246545f7d0267d083a329c85f8d784d30445ad4689",
+      "profile": "upstream-absent"
+    },
+    {
+      "kind": "inventory",
+      "command": "npm run test:inventory:coverage -- scripts/libreoffice-inventory/parity-mapping-cli.test.ts -t parity mapping CLI composes the Writer mapping report with owned upstream marker evidence --coverage.reportOnFailure --coverage.reporter=json --coverage.reporter=json-summary --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/HP2B9C.closure1.inventory-results.json",
+      "exit": 1,
+      "bytes": 1430,
+      "sha256": "a1ee80e2f0dd8fefb50966e271df501dd6ca001b8a2e9ccd8d4a8fff57ae3cdb",
+      "caseCounts": {
+        "passed": 1,
+        "failed": 0,
+        "skipped": 2,
+        "total": 3
+      },
+      "failures": [],
+      "unhandledErrorCount": 0,
+      "coverageMapSHA256": "3c00aff440cf1705e9380f7eaa4d6a89fabcc7ca074069a1aea278f3b0157aa1",
+      "profile": "upstream-absent"
+    }
+  ]
+}

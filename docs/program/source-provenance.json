@@ -3570,7 +3570,8 @@
         "Iteration139 removes the partial table-cell font/spacing/text-run assembler and synthetic node-index identity fallback. Visible cells and closed-shadow measurement use the common WriterEditableParagraph over the same actual native text-node projections,including effective alignment,style,font,color,indent and native GetListLabel/list-layout inputs. One actual-node map is built at the editor boundary;only cell position,editable island and cell block spacing are platform context. Stable paragraph IDs make accessibility descriptions unique and native identities key DOM reuse. Independent owned core-value/DOM/Chromium cases cover the bounded display/history/ODT path. Full native table frame pagination,spacing collapse,Home/navigation,wide selection,nested/merged cells,portion engine and list structural operations remain unverified;all244existing semantic states/defaults/exceptions and registered I/O/recovery deviations remain unchanged,no promotion.",
         "Iteration143 retains native text-left for uncounted bound list nodes independently of marker visibility. Core resolver reuses independent alignment-axis ownership;legacy relative spacing adds paragraph text-left and absolute spacing subtracts ResolveLeft including hanging first-line contribution. Native uncounted first-line offset is zero. Immutable projection feeds shared body/cell rendering without marker/tab spacer or listGeometryWins heuristics;print bounds consume the same native primitive. Actual count UndoRedo,body/cell geometry,zero/negative/direct/style and legacy/follow cases provide bounded evidence. Counted marker/tab layout,RTL/font-relative/large-indent cell clamping,fullnativeframes/navigation/history/UI and broad parity remainunverified;all244existingstates/defaults/deviations unchanged.",
         "Iteration144 projects native independent list text-left and first-line axes into shared body/cell presentation and print bounds. Counted alignment uses existing live mask;legacy firstline includes authored offset unless numbering compatibility ignores it,with native signed-short wrap;uncounted offset0 and ordinary paragraph fallback retain prior ownership. Renderer removes paragraphIndentWins and no longer gives legacy listGeometryWins metadata behavioral authority. Existing immutable listLayout receives resolved native axes;persisted/imported flag remains metadata only. Actual body/cell literal and Chromium paragraph/history marker measurements cover represented axes. Full label/tab/space/nothing follower widths,legacy minimum gap,wrapping,RTL/fontrelative/cellclamping and fullframes/UI remainunverified;all244existingstates/defaults/deviations unchanged.",
-        "Iteration165 removes filter WriterTextRun/projectWriterTextRuns dependency from UI display. Native SwAttrIter/SwAttrHandler owners traverse actual unmerged node start/end maps and borrow per-item automatic priority stacks/defaults. Browser primitive display portions are projected directly from native pooled items and existing INET query,retaining physical/generic font metadata,stable IDs and shared body/cell/measurement rendering. Literal overlapping different-Which/priority/equal-start/backward/zero/ignore/end/default cases and actual body/cell DOM,editing/history/Worker/production Chromium prove the bounded slice. No broad native status promotion;full SwFont/device/scripts/redline/fields/merged paragraphs/INET styles/visited-color/paragraph-mark effects and broad list/table/UI parity remain unverified.251prior states/defaults/classes/IOexceptions/evidence and423prior testfiles preserved;2new partial native owners stayunverified;conscioussave/open/recovery deviations unchanged."
+        "Iteration165 removes filter WriterTextRun/projectWriterTextRuns dependency from UI display. Native SwAttrIter/SwAttrHandler owners traverse actual unmerged node start/end maps and borrow per-item automatic priority stacks/defaults. Browser primitive display portions are projected directly from native pooled items and existing INET query,retaining physical/generic font metadata,stable IDs and shared body/cell/measurement rendering. Literal overlapping different-Which/priority/equal-start/backward/zero/ignore/end/default cases and actual body/cell DOM,editing/history/Worker/production Chromium prove the bounded slice. No broad native status promotion;full SwFont/device/scripts/redline/fields/merged paragraphs/INET styles/visited-color/paragraph-mark effects and broad list/table/UI parity remain unverified.251prior states/defaults/classes/IOexceptions/evidence and423prior testfiles preserved;2new partial native owners stayunverified;conscioussave/open/recovery deviations unchanged.",
+        "Iteration219 bounded marked-number painting: native SwViewColors owns represented color/appearance members with raw NONE/lightgray defaults, stable copy/borrow and copied initial values; configured desktop25 bits retained. Source Number DrawViewOpt guards and DrawBackground color admission use original HasMarkedLabel, actual shell view options and shared master marker painting, including sibling levels and print suppression. Full native color/config/theme/LOKit pipeline and VCL frame/portion/clip/bidi geometry remain unverified; all prior statuses/defaults/registered I/O/recovery exceptions retained."
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",
@@ -6552,7 +6553,8 @@
         "Iteration144 projects native independent list text-left and first-line axes into shared body/cell presentation and print bounds. Counted alignment uses existing live mask;legacy firstline includes authored offset unless numbering compatibility ignores it,with native signed-short wrap;uncounted offset0 and ordinary paragraph fallback retain prior ownership. Renderer removes paragraphIndentWins and no longer gives legacy listGeometryWins metadata behavioral authority. Existing immutable listLayout receives resolved native axes;persisted/imported flag remains metadata only. Actual body/cell literal and Chromium paragraph/history marker measurements cover represented axes. Full label/tab/space/nothing follower widths,legacy minimum gap,wrapping,RTL/fontrelative/cellclamping and fullframes/UI remainunverified;all244existingstates/defaults/deviations unchanged.",
         "Iteration165 removes filter WriterTextRun/projectWriterTextRuns dependency from UI display. Native SwAttrIter/SwAttrHandler owners traverse actual unmerged node start/end maps and borrow per-item automatic priority stacks/defaults. Browser primitive display portions are projected directly from native pooled items and existing INET query,retaining physical/generic font metadata,stable IDs and shared body/cell/measurement rendering. Literal overlapping different-Which/priority/equal-start/backward/zero/ignore/end/default cases and actual body/cell DOM,editing/history/Worker/production Chromium prove the bounded slice. No broad native status promotion;full SwFont/device/scripts/redline/fields/merged paragraphs/INET styles/visited-color/paragraph-mark effects and broad list/table/UI parity remain unverified.251prior states/defaults/classes/IOexceptions/evidence and423prior testfiles preserved;2new partial native owners stayunverified;conscioussave/open/recovery deviations unchanged.",
         "Iteration216 pending: native before-label affinity is distinct from text offset0 through SwEditWin and shell publication, browser DOM Selection before marker and caret painting. Seven changed boundaries under verification; marked-list-level shading, ruler/RTL/bidi/full geometry and whole parity remain unverified. Existing statuses/defaults/registered save/open/recovery exceptions retained.",
-        "Iteration216 verified bounded label-affinity roundtrip: native SwPaM owns defaultfalse state, shell SetPaM/UpdateCursor distinguish label from identical text0 and publish final owners; ordinary Insert clears affinity as Insert2. Browser restores stable editable DOM boundary after the noneditable decoration with distinct native BEFORE-label affinity, keeps marker glyphs out of model offsets and paints caret at label edge; pointer label admission and native history covered. Whole marked-list-level shading/ruler/RTL/bidi/layout and kernel/browser parity remain individually unverified; prior states/defaults/registered exceptions unchanged."
+        "Iteration216 verified bounded label-affinity roundtrip: native SwPaM owns defaultfalse state, shell SetPaM/UpdateCursor distinguish label from identical text0 and publish final owners; ordinary Insert clears affinity as Insert2. Browser restores stable editable DOM boundary after the noneditable decoration with distinct native BEFORE-label affinity, keeps marker glyphs out of model offsets and paints caret at label edge; pointer label admission and native history covered. Whole marked-list-level shading/ruler/RTL/bidi/layout and kernel/browser parity remain individually unverified; prior states/defaults/registered exceptions unchanged.",
+        "Iteration219 bounded marked-number painting: native SwViewColors owns represented color/appearance members with raw NONE/lightgray defaults, stable copy/borrow and copied initial values; configured desktop25 bits retained. Source Number DrawViewOpt guards and DrawBackground color admission use original HasMarkedLabel, actual shell view options and shared master marker painting, including sibling levels and print suppression. Full native color/config/theme/LOKit pipeline and VCL frame/portion/clip/bidi geometry remain unverified; all prior statuses/defaults/registered I/O/recovery exceptions retained."
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",
@@ -7812,18 +7814,27 @@
           {
             "marker": "export class SwViewOption",
             "path": "apps/office/src/sw/inc/viewopt.ts"
+          },
+          {
+            "path": "apps/office/src/sw/inc/viewopt.ts",
+            "marker": "export class SwViewColors"
           }
         ],
         "upstream": [
           {
             "marker": "class SwViewOption",
             "path": "vendor/libreoffice-reference/sw/inc/viewopt.hxx"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/uibase/config/viewopt.cxx",
+            "marker": "SwViewColors::SwViewColors()"
           }
         ]
       },
       "localPath": "apps/office/src/sw/inc/viewopt.ts",
       "localSymbols": [
-        "SwViewOption"
+        "SwViewOption",
+        "SwViewColors"
       ],
       "omittedResponsibilities": [
         "Layout, zoom, field shading, formatting marks, browse mode, and native window flags remain outside the bounded browser view-visibility slice."
@@ -7831,12 +7842,14 @@
       "preservedResponsibilities": [
         "Owns per-view visibility flags and publishes changes without storing them in browser workflow DTOs.",
         "Iteration218 native cursor marked-list integration pending verification: cursor ID/depth bookkeeping, source field-shading gate, counted-rule query and forced label-to-label refresh; existing actual view options shared without duplicate presentation state. Marker painting/ruler/config persistence and hidden-redline tree variants remain unverified; no prior status/default/exception promotion.",
-        "Iteration218 verified native cursor-mark ownership: empty list ID/level0 defaults, exact pair noop, field-shading-gated former clear/new mark with bookkeeping retained while disabled; original counted-rule/membership query and nontext early return; SetInFrontOfLabel update plus forced refresh on label-to-label admission. Existing actual view-option identity shared through cursor-shell ancestor; native appearance bits and configured desktop defaults retained, setters do not implicitly redraw. SwCallLink-shaped SetPaM transaction publishes repaint and final cursor state together; original587 acceptance untouched. Full color/config persistence, marker painting/ruler and hidden-redline property/tree variants remain unverified. All prior states/defaults/exceptions preserved."
+        "Iteration218 verified native cursor-mark ownership: empty list ID/level0 defaults, exact pair noop, field-shading-gated former clear/new mark with bookkeeping retained while disabled; original counted-rule/membership query and nontext early return; SetInFrontOfLabel update plus forced refresh on label-to-label admission. Existing actual view-option identity shared through cursor-shell ancestor; native appearance bits and configured desktop defaults retained, setters do not implicitly redraw. SwCallLink-shaped SetPaM transaction publishes repaint and final cursor state together; original587 acceptance untouched. Full color/config persistence, marker painting/ruler and hidden-redline property/tree variants remain unverified. All prior states/defaults/exceptions preserved.",
+        "Iteration219 bounded marked-number painting: native SwViewColors owns represented color/appearance members with raw NONE/lightgray defaults, stable copy/borrow and copied initial values; configured desktop25 bits retained. Source Number DrawViewOpt guards and DrawBackground color admission use original HasMarkedLabel, actual shell view options and shared master marker painting, including sibling levels and print suppression. Full native color/config/theme/LOKit pipeline and VCL frame/portion/clip/bidi geometry remain unverified; all prior statuses/defaults/registered I/O/recovery exceptions retained."
       ],
       "status": "mapped",
       "upstreamPath": "sw/inc/viewopt.hxx",
       "upstreamSymbols": [
-        "SwViewOption"
+        "SwViewOption",
+        "SwViewColors"
       ]
     },
     {
@@ -14641,6 +14654,47 @@
       "upstreamSymbols": [
         "SwTextFrame::LeftMargin",
         "SwTextFrame::RightMargin"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "path": "apps/office/src/sw/source/core/text/inftxt.ts",
+            "marker": "resolveSwNumberPortionBackground"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/text/native-marked-list-paint.test.ts",
+            "marker": "native Number shading"
+          }
+        ],
+        "upstream": [
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/text/inftxt.cxx",
+            "marker": "SwTextPaintInfo::DrawViewOpt"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/text/porfld.cxx",
+            "marker": "SwNumberPortion::Paint"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/text/inftxt.ts",
+      "localSymbols": [
+        "resolveSwNumberPortionBackground"
+      ],
+      "omittedResponsibilities": [
+        "Full SwTextPaintInfo frame/portion constructors, all non-Number DrawViewOpt branches, native VCL rectangle/line-height/clip/RTL/bidi/redline/device geometry remain unrepresented. The browser measures and paints the existing marker slot; no full native painter claim."
+      ],
+      "preservedResponsibilities": [
+        "Iteration219 bounded marked-number painting: native SwViewColors owns represented color/appearance members with raw NONE/lightgray defaults, stable copy/borrow and copied initial values; configured desktop25 bits retained. Source Number DrawViewOpt guards and DrawBackground color admission use original HasMarkedLabel, actual shell view options and shared master marker painting, including sibling levels and print suppression. Full native color/config/theme/LOKit pipeline and VCL frame/portion/clip/bidi geometry remain unverified; all prior statuses/defaults/registered I/O/recovery exceptions retained."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/text/inftxt.cxx",
+      "upstreamSymbols": [
+        "SwTextPaintInfo::DrawViewOpt",
+        "SwTextPaintInfo::DrawBackground"
       ]
     },
     {
