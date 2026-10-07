@@ -4,7 +4,7 @@ title: "Preserve Shift linear table column border dragging"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 13
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -25,6 +25,22 @@ verification:
   updated_by: null
   note: null
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-07T19:43:32.637Z"
+  updated_by: "EVALUATOR"
+  note: "Exact implementation SHA review passed for solitary Shift column drag; all declared final checks and original-failure-only closures resolved."
+  evaluated_sha: "1faf5d9fb924eba5c939ffacd8bdd7d5a69b0d32"
+  blueprint_digest: "f700a1150a8e2ba51a955e6c16a56e9876d9dabb154abebc1bade22cea8b97fd"
+  evidence_refs:
+    - ".agentplane/tasks/202610071920-YQ77NP/README.md"
+    - ".agentplane/tasks/202610071920-YQ77NP/quality/20261007-194332637-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610071920-YQ77NP/quality/20261007-194332637-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610071920-YQ77NP/quality/20261007-194332637-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610071920-YQ77NP/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610071920-YQ77NP/evidence/exact-sha-review.json"
+  findings:
+    - "Same current agent EVALUATOR review is explicitly not independent. Full ruler and exhaustive core/UI parity remain partial; registered IO deviations preserved."
 commit: null
 comments:
   -
@@ -39,7 +55,7 @@ events:
     to: "DOING"
     note: "Start: implement approved native solitary Shift column border translation under standing user parity authorization, preserving old acceptance and upstream-absent single profile."
 doc_version: 3
-doc_updated_at: "2026-10-07T19:42:46.837Z"
+doc_updated_at: "2026-10-07T19:43:46.959Z"
 doc_updated_by: "CODER"
 description: "Iteration225: browser loses native drag modifier; source SvxRuler EvalModifier Shift linear DragBorders must translate following separators with native five-device-pixel constraints, preserve deferred original table history and ordinary row drag. Standing user parity goal authorizes safe local implementation; registered IO deviations unchanged."
 sections:
@@ -61,7 +77,7 @@ sections:
   Verification: |-
     Command: initial six static gates, scoped static-closure1..4; ONE upstream-absent full build/app/inventory/infrastructure/Chrome profile then original-failed-only Chrome closures1..2; five restored source gates; source review, complete source-bound coverage proof/census, exact scope/acceptance/metadata/physical lines and AP artifact census; doctor/routing/diff.
     Result: final13623app110inventory15infrastructure290ChromePASS, zero unresolved/skipped/flaky/passing replay; all4 source-bound app/inventory100. Source/resource and final static gates PASS. All603oldacceptance and302metadata contracts retained;7intentional semantic files, no AP source/Python/raw results.
-    Evidence: evidence/absent-profile.json, runtime-closure1.json, runtime-closure2.json, static-gates.json, static-closure1..4.json, final-coverage.json, case-census.json, scope-final.json, source-review.json, source-gates.json, changed-file-checks.json, artifact-census.json, governance.json; raw ignored cache YQ77NP.*. Initial failures and bounded corrections retained in Findings. Exact implementation SHA review and same-current-agent EVALUATOR explicitly not independent pending; record them before canonical verify/finish.
+    Evidence: evidence/absent-profile.json, runtime-closure1.json, runtime-closure2.json, static-gates.json, static-closure1..4.json, final-coverage.json, case-census.json, scope-final.json, source-review.json, source-gates.json, changed-file-checks.json, artifact-census.json, governance.json; raw ignored cache YQ77NP.*. Initial failures and bounded corrections retained in Findings. Exact implementation SHA 1faf5d9fb924eba5c939ffacd8bdd7d5a69b0d32 reviewPASS and same-current-agent EVALUATOR PASS (explicitly not independent) at .agentplane/tasks/202610071920-YQ77NP/quality/20261007-194332637-recovery-context/quality-report.json. All semantic bytes match the sole profile; failed Chrome fixture-only closures preserve zero passing replay. Canonical verify and persisted checkpoint before finish reference this actual implementation SHA.
     Scope: solitary Shift existing internal-column border behavior and modifier ingress; source row Shift ignore, owned table/cursor/list/history, real1280/390 geometry/cancel/Enter/UndoRedo/typing/ODT. Exhaustive goal not complete; registered IO exceptions preserved.
   Rollback Plan: "Revert only the actual task implementation commit; preserve previously closed tasks, parent historical Findings and the deferred stash."
   Findings: |-
@@ -72,7 +88,7 @@ sections:
     Observation: initial two new Chrome cases used a nonexistent data-writer-table-name attribute. Corrected to actual data-writer-table. First original-failure-only closure proved all drag/history geometry but failed its synthetic fill replacement assumption after preserved source cursor. Replaced that fixture action with ordinary pointer admission, explicit actual browser caret and keyboard typing; retained exact text/Undo and geometry criteria. Second closure passed only those same two originally failed cases. Production bytes remained identical after the sole full profile; no app/inventory/build/old Chrome replay and no scope expansion.
     Result: final unique13623app110inventory15infrastructure290ChromePASS, zero unresolved/skipped/flaky/passing replay. Literal core/mounted cases cover17+17 actual contracts, positive/negative/repeated/clamped/hidden separator tracking, exact masks, row ignore, margins unchanged, cancellation, one accepted history,3UndoRedo and native ODT reopen; real Chromium1280/390 has editing/selection capture and continued typing.
     Result: five restored source/resource/provenance/invariant/parity gates PASS; actual pinned edtwin3.cxx and svxruler.cxx anchors/hashes verified. All603 previous acceptance byte-identical;3new files606current. All302 metadata fields/status/default/exception/history prefixes retained. Exact7semantic paths, all changed physical lines153..620<1000. AP census5574files0forbidden source/Python/raw snapshots; doctor0errors2oldwarnings only, routing/diffPASS.
-    Residuals: only solitary Shift internal-border behavior is newly represented. Full SvxRuler ownership, proportional/current-line/snapping/margin modifiers/vertical/RTL/merged/nested/protected and exhaustive core/UI parity remain partial or unverified. Registered save/open/recovery deviations unchanged. Goal ACTIVE. Same-current-agent exact implementation review/EVALUATOR is explicitly not independent; its result will be recorded before canonical verify and actual implementation-SHA finish. Parent full632848character prefixSHA8c916cb56e5de1a80d5ad239c84501dd9f69954233e498119dd50924c6504d79 and deferred stashc85f4a0e453dfd06d6e199554784f2c286737472 retained.
+    Residuals: only solitary Shift internal-border behavior is newly represented. Full SvxRuler ownership, proportional/current-line/snapping/margin modifiers/vertical/RTL/merged/nested/protected and exhaustive core/UI parity remain partial or unverified. Registered save/open/recovery deviations unchanged. Goal ACTIVE. Exact implementation 1faf5d9fb924eba5c939ffacd8bdd7d5a69b0d32 reviewPASS and EVALUATOR PASS recorded at .agentplane/tasks/202610071920-YQ77NP/quality/20261007-194332637-recovery-context/quality-report.json; same current agent explicitly not independent. Canonical verification and actual implementation-SHA finish follow the persisted checkpoint. Parent full632848character prefixSHA8c916cb56e5de1a80d5ad239c84501dd9f69954233e498119dd50924c6504d79 and deferred stashc85f4a0e453dfd06d6e199554784f2c286737472 retained.
 id_source: "generated"
 ---
 ## Summary
@@ -104,7 +120,7 @@ Repair the existing horizontal LTR internal table column border Shift gesture: r
 
 Command: initial six static gates, scoped static-closure1..4; ONE upstream-absent full build/app/inventory/infrastructure/Chrome profile then original-failed-only Chrome closures1..2; five restored source gates; source review, complete source-bound coverage proof/census, exact scope/acceptance/metadata/physical lines and AP artifact census; doctor/routing/diff.
 Result: final13623app110inventory15infrastructure290ChromePASS, zero unresolved/skipped/flaky/passing replay; all4 source-bound app/inventory100. Source/resource and final static gates PASS. All603oldacceptance and302metadata contracts retained;7intentional semantic files, no AP source/Python/raw results.
-Evidence: evidence/absent-profile.json, runtime-closure1.json, runtime-closure2.json, static-gates.json, static-closure1..4.json, final-coverage.json, case-census.json, scope-final.json, source-review.json, source-gates.json, changed-file-checks.json, artifact-census.json, governance.json; raw ignored cache YQ77NP.*. Initial failures and bounded corrections retained in Findings. Exact implementation SHA review and same-current-agent EVALUATOR explicitly not independent pending; record them before canonical verify/finish.
+Evidence: evidence/absent-profile.json, runtime-closure1.json, runtime-closure2.json, static-gates.json, static-closure1..4.json, final-coverage.json, case-census.json, scope-final.json, source-review.json, source-gates.json, changed-file-checks.json, artifact-census.json, governance.json; raw ignored cache YQ77NP.*. Initial failures and bounded corrections retained in Findings. Exact implementation SHA 1faf5d9fb924eba5c939ffacd8bdd7d5a69b0d32 reviewPASS and same-current-agent EVALUATOR PASS (explicitly not independent) at .agentplane/tasks/202610071920-YQ77NP/quality/20261007-194332637-recovery-context/quality-report.json. All semantic bytes match the sole profile; failed Chrome fixture-only closures preserve zero passing replay. Canonical verify and persisted checkpoint before finish reference this actual implementation SHA.
 Scope: solitary Shift existing internal-column border behavior and modifier ingress; source row Shift ignore, owned table/cursor/list/history, real1280/390 geometry/cancel/Enter/UndoRedo/typing/ODT. Exhaustive goal not complete; registered IO exceptions preserved.
 
 ## Rollback Plan
@@ -120,4 +136,4 @@ Observation: initial static format failure from new E2E formatter non-fixed-poin
 Observation: initial two new Chrome cases used a nonexistent data-writer-table-name attribute. Corrected to actual data-writer-table. First original-failure-only closure proved all drag/history geometry but failed its synthetic fill replacement assumption after preserved source cursor. Replaced that fixture action with ordinary pointer admission, explicit actual browser caret and keyboard typing; retained exact text/Undo and geometry criteria. Second closure passed only those same two originally failed cases. Production bytes remained identical after the sole full profile; no app/inventory/build/old Chrome replay and no scope expansion.
 Result: final unique13623app110inventory15infrastructure290ChromePASS, zero unresolved/skipped/flaky/passing replay. Literal core/mounted cases cover17+17 actual contracts, positive/negative/repeated/clamped/hidden separator tracking, exact masks, row ignore, margins unchanged, cancellation, one accepted history,3UndoRedo and native ODT reopen; real Chromium1280/390 has editing/selection capture and continued typing.
 Result: five restored source/resource/provenance/invariant/parity gates PASS; actual pinned edtwin3.cxx and svxruler.cxx anchors/hashes verified. All603 previous acceptance byte-identical;3new files606current. All302 metadata fields/status/default/exception/history prefixes retained. Exact7semantic paths, all changed physical lines153..620<1000. AP census5574files0forbidden source/Python/raw snapshots; doctor0errors2oldwarnings only, routing/diffPASS.
-Residuals: only solitary Shift internal-border behavior is newly represented. Full SvxRuler ownership, proportional/current-line/snapping/margin modifiers/vertical/RTL/merged/nested/protected and exhaustive core/UI parity remain partial or unverified. Registered save/open/recovery deviations unchanged. Goal ACTIVE. Same-current-agent exact implementation review/EVALUATOR is explicitly not independent; its result will be recorded before canonical verify and actual implementation-SHA finish. Parent full632848character prefixSHA8c916cb56e5de1a80d5ad239c84501dd9f69954233e498119dd50924c6504d79 and deferred stashc85f4a0e453dfd06d6e199554784f2c286737472 retained.
+Residuals: only solitary Shift internal-border behavior is newly represented. Full SvxRuler ownership, proportional/current-line/snapping/margin modifiers/vertical/RTL/merged/nested/protected and exhaustive core/UI parity remain partial or unverified. Registered save/open/recovery deviations unchanged. Goal ACTIVE. Exact implementation 1faf5d9fb924eba5c939ffacd8bdd7d5a69b0d32 reviewPASS and EVALUATOR PASS recorded at .agentplane/tasks/202610071920-YQ77NP/quality/20261007-194332637-recovery-context/quality-report.json; same current agent explicitly not independent. Canonical verification and actual implementation-SHA finish follow the persisted checkpoint. Parent full632848character prefixSHA8c916cb56e5de1a80d5ad239c84501dd9f69954233e498119dd50924c6504d79 and deferred stashc85f4a0e453dfd06d6e199554784f2c286737472 retained.

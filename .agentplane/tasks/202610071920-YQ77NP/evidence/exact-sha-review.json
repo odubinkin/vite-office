@@ -1,0 +1,94 @@
+{
+  "implementationSHA": "1faf5d9fb924eba5c939ffacd8bdd7d5a69b0d32",
+  "verdict": "pass",
+  "sameCurrentAgentReviewExplicitlyNotIndependent": true,
+  "caseCounts": {
+    "app": 13623,
+    "inventory": 110,
+    "infrastructure": 15,
+    "chromium": 290
+  },
+  "passingReplay": 0,
+  "fullProfileCount": 1,
+  "onlyOriginalChromeFailureClosureCases": 2,
+  "skippedObservationsRetained": 0,
+  "sourceBoundCoverage": {
+    "app": {
+      "lines": {
+        "total": 16605,
+        "covered": 16605,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 18231,
+        "covered": 18231,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 4235,
+        "covered": 4235,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 13765,
+        "covered": 13765,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "inventory": {
+      "lines": {
+        "total": 1464,
+        "covered": 1464,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 1523,
+        "covered": 1523,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 384,
+        "covered": 384,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 1081,
+        "covered": 1081,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    }
+  },
+  "scopeCount": 7,
+  "priorAcceptance": 603,
+  "priorMetadata": 302,
+  "nativeSourceOwners": 2,
+  "parentPrefixPreserved": true,
+  "deferredStashPreserved": true,
+  "residuals": [
+    "Native proportional/current-line/snapping/margin modifier/vertical/RTL/merged/nested/protected and full SvxRuler ownership remain partial or unverified; whole core/UI parity is not proven.",
+    "Represented browser device geometry and native original SwTabCols/document/history retained; no fake source-only application or standalone detached adapter.",
+    "Registered save/open/recovery deviations unchanged; exhaustive persistent goal ACTIVE."
+  ],
+  "exhaustiveGoal": "ACTIVE, not achieved",
+  "failures": []
+}

@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202610071920-YQ77NP",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-07T19:43:32.637Z",
+  "verdict": "pass",
+  "summary": "Exact implementation SHA review passed for solitary Shift column drag; all declared final checks and original-failure-only closures resolved.",
+  "evaluated_sha": "1faf5d9fb924eba5c939ffacd8bdd7d5a69b0d32",
+  "blueprint_digest": "f700a1150a8e2ba51a955e6c16a56e9876d9dabb154abebc1bade22cea8b97fd",
+  "findings": [
+    "Same current agent EVALUATOR review is explicitly not independent. Full ruler and exhaustive core/UI parity remain partial; registered IO deviations preserved."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610071920-YQ77NP/README.md",
+    ".agentplane/tasks/202610071920-YQ77NP/evidence/exact-sha-review.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
