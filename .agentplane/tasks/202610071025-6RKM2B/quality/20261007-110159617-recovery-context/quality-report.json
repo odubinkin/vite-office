@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202610071025-6RKM2B",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-07T11:01:59.617Z",
+  "verdict": "pass",
+  "summary": "Exact implementation c6c4eb13 source-bound native row height dialog checks pass; same current-agent EVALUATOR, not independent.",
+  "evaluated_sha": "c6c4eb13d4d8ef76e817f097c4900253d196de64",
+  "blueprint_digest": "74b2f94ef27959e32cf27ed60433337679acc841c6909741cbfea93b41c1cebc",
+  "findings": [
+    "13495 app, 110 inventory, 14 infrastructure and 272 Chromium cases resolved without passing replay; actual current-source app and inventory coverage 100 percent; 21 approved semantic paths and original metadata preserved. Scope audit reconstruction normalized path order only."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610071025-6RKM2B/README.md",
+    ".agentplane/tasks/202610071025-6RKM2B/evidence/exact-sha-review.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}

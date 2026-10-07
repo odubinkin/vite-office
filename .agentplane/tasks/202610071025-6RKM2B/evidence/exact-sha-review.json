@@ -1,0 +1,137 @@
+{
+  "auditReconstruction": "Initial order-sensitive comparison rejected equivalent path-array ordering after commit. Reconstructed semantic audit normalized only path ordering and separately counted one new review artifact; committed scope report restored byte-identically. No code or tests changed and no runtime replay.",
+  "evaluatedImplementationSHA": "c6c4eb13d4d8ef76e817f097c4900253d196de64",
+  "evaluator": "Same current coding agent EVALUATOR phase; explicitly not independent",
+  "verdict": "pass",
+  "cases": {
+    "app": 13495,
+    "inventory": 110,
+    "infrastructure": 14,
+    "chromium": 272
+  },
+  "actualCurrentSourceCoverage": {
+    "app": {
+      "lines": {
+        "total": 16257,
+        "covered": 16257,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 17843,
+        "covered": 17843,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 4138,
+        "covered": 4138,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 13341,
+        "covered": 13341,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "inventory": {
+      "lines": {
+        "total": 1464,
+        "covered": 1464,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 1523,
+        "covered": 1523,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 384,
+        "covered": 384,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 1081,
+        "covered": 1081,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    }
+  },
+  "sourceBoundTransfers": [
+    {
+      "path": "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts",
+      "initialSourceSHA256": "31f0716ba99faec45d08f966387308e32a41c2cceb1bcd0ec4ac8416b2492454",
+      "currentSourceSHA256": "249cf8a3a79346bbb45a369887f3aacf58ac39819893345b61483280744fe21e",
+      "regionCount": 3,
+      "counts": {
+        "statements": 254,
+        "functions": 42,
+        "branches": 67
+      }
+    }
+  ],
+  "wholeCounterFallback": [
+    {
+      "path": "apps/office/src/sw/source/core/layout/paintfrm.ts",
+      "reason": "V8 raw inferred else counter is negative; use entire prior verified current-byte-identical source and entire maps/counters, never sanitize individual counts",
+      "priorMap": "1HYVRE.app-final.json",
+      "priorMapSHA256": "26837afaa441f720a3832b59b5be3e2f91078efb4435bc12cdafd171564db11b",
+      "discardedInvalidAggregateSHA256": "0cce6af0c2bbbc8222c1fef8369a9f72241ce18d3181dd6336db689d390660f4",
+      "negativeCounts": [
+        -36
+      ]
+    }
+  ],
+  "approvedSemanticPaths": 21,
+  "priorAcceptanceByteIdentical": 564,
+  "exactSourceBackedMigrations": 9,
+  "currentAcceptanceFiles": 576,
+  "prior291MetadataFieldsPreserved": true,
+  "allProfilesTerminalVendorRestored": true,
+  "oneFullProfile": true,
+  "passingReplay": 0,
+  "skipObservationsRetained": {
+    "app": 35,
+    "inventory": 4
+  },
+  "priorityBullet": [
+    {
+      "title": "Writer native label width prevents overlap width=1280 cell=false",
+      "passed": true
+    },
+    {
+      "title": "Writer native label width prevents overlap width=1280 cell=true",
+      "passed": true
+    },
+    {
+      "title": "Writer native label width prevents overlap width=390 cell=false",
+      "passed": true
+    },
+    {
+      "title": "Writer native label width prevents overlap width=390 cell=true",
+      "passed": true
+    }
+  ],
+  "completeParentPrefixPreserved": true,
+  "noForbiddenArtifacts": true,
+  "residual": "Full Help/unit preferences/modal lifecycle/other size slots and direct minRowHeight compatibility remain unverified next work, not deliberate exceptions; whole parity ACTIVE.",
+  "failures": []
+}
