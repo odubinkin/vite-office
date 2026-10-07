@@ -1,10 +1,11 @@
 ---
 id: "202610071950-5X11GC"
 title: "Preserve native proportional Ctrl table column dragging"
-status: "DOING"
+result_summary: "Source-derived proportional Ctrl internal table-column drag implemented; final unique13641app110inventory15infrastructure292ChromePASS, all4source-bound coverage100, one original failed expectation resolved with zero passing replay. Full native ownership and other modes remain partial; persistent goal ACTIVE."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
     - ".agentplane/tasks/202610071950-5X11GC/evidence/exact-sha-review.json"
   findings:
     - "Same current agent review explicitly not independent. One original mounted pure-Ctrl source-backed expected vector migrated after actual failure; one focused PASS and sixteen skipped observations, zero passing replay. Full SvxRuler ownership and remaining native modes remain partial; persistent goal ACTIVE."
-commit: null
+commit:
+  hash: "0ed044246af68df2633c27acb97d7f565747b967"
+  message: "🧩 5X11GC parity: preserve proportional Ctrl table column dragging"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved source proportional primary-modifier internal table column drag with native ruler arithmetic; preserve old inputs and only source-backed mask2 expectation migration after original failure."
+  -
+    author: "CODER"
+    body: "Verified: existing table internal-column Ctrl drag now follows native proportional per-thousand and integer ruler geometry with original document, list and history ownership."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified actual implementation 0ed044246af68df2633c27acb97d7f565747b967 with PASS reconstruction and same-current-agent EVALUATOR .agentplane/tasks/202610071950-5X11GC/quality/20261007-201525979-recovery-context/quality-report.json. Final Verification persisted before this record. Unique13641app110inventory15infrastructure292ChromePASS; ONE full upstream-absent profile plus only original mounted pure-Ctrl failure resolution,16 skipped observations retained, zero passing replay. Source-bound all4app/inventory100; static/source/scope/physical/JSDoc/artifact/governancePASS. One exact source-backed vector migration,605other old files and302metadata contracts retained; source ownership and remaining modes partial, goalACTIVE."
+  -
+    type: "status"
+    at: "2026-10-07T20:16:56.542Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: existing table internal-column Ctrl drag now follows native proportional per-thousand and integer ruler geometry with original document, list and history ownership."
 doc_version: 3
-doc_updated_at: "2026-10-07T20:16:20.707Z"
+doc_updated_at: "2026-10-07T20:16:56.544Z"
 doc_updated_by: "CODER"
 description: "Iteration226: solitary native primary modifier on existing internal column borders must proportionally resize following columns with source permille and integer ruler arithmetic, preserving ordinary/Shift/margin/row tracking and native history. Standing user goal authorizes safe local parity work."
 sections:
