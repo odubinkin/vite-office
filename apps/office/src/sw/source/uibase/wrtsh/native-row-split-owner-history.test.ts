@@ -1,4 +1,6 @@
 /** @fileoverview Verifies native current versus Properties-selected row split ownership, original history and continued editing. */
+import { VertOrientation } from "./../../../../offapi/com/sun/star/text/VertOrientation";
+
 import { expect, it, vi } from "vitest";
 import { SwDoc } from "../../core/doc/doc";
 import { SwDocShell } from "../app/docsh";
@@ -40,7 +42,7 @@ const properties = {
   minRowHeight: 0,
   padding: 0,
   border: "none",
-  verticalAlign: "top" as const,
+  verticalAlign: VertOrientation.NONE,
   headerRows: 0,
   repeatHeaderRows: false,
   rowSplit: false,

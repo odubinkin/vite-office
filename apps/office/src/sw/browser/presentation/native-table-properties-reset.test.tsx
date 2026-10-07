@@ -1,4 +1,7 @@
 /** @fileoverview Verifies upstream current-page Reset over original native table drafts and independent properties pages. */
+import { VertOrientation } from "./../../../offapi/com/sun/star/text/VertOrientation";
+import { SwFormatVertOrient } from "./../../inc/fmtornt";
+
 import { SwFormatFrameSize, SwFrameSize } from "../../inc/fmtfsize";
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, expect, it, vi } from "vitest";
@@ -30,7 +33,7 @@ function fixture() {
     ...box.GetFormat(),
     padding: 80,
     border: "1pt solid #000000",
-    verticalAlign: "bottom",
+    vertOrient: new SwFormatVertOrient(0, VertOrientation.BOTTOM),
   });
   const submit = vi.fn(),
     cancel = vi.fn();
@@ -38,6 +41,7 @@ function fixture() {
     <WriterTableDialog
       table={table}
       rowHeight={row.GetFrameSize()}
+      boxAlign={box.GetVertOrient().GetVertOrient()}
       availableWidth={9000}
       onCancel={cancel}
       onSubmit={submit}
@@ -125,7 +129,7 @@ it("Text Flow and Borders Reset each restore their initial controls and preserve
     screen.getByRole("checkbox", { name: "Allow table to split across pages and columns" }),
   );
   fireEvent.change(screen.getByRole("combobox", { name: "Cell vertical alignment" }), {
-    target: { value: "top" },
+    target: { value: "0" },
   });
   reset();
   expect(screen.queryByRole("checkbox", { name: "Header" })).not.toBeInTheDocument();
@@ -135,7 +139,7 @@ it("Text Flow and Borders Reset each restore their initial controls and preserve
   expect(
     screen.getByRole("checkbox", { name: "Allow table to split across pages and columns" }),
   ).toBeChecked();
-  expect(screen.getByRole("combobox", { name: "Cell vertical alignment" })).toHaveValue("bottom");
+  expect(screen.getByRole("combobox", { name: "Cell vertical alignment" })).toHaveValue("3");
   metric("Minimum row height (cm)", "2");
   tab("Borders");
   reset();
@@ -150,9 +154,9 @@ it("Text Flow and Borders Reset each restore their initial controls and preserve
       border: "1pt solid #000000",
       headerRows: 0,
       repeatHeaderRows: false,
-      verticalAlign: "bottom",
     }),
   );
+  expect(f.submit.mock.calls[0]?.[0]).not.toHaveProperty("verticalAlign");
 });
 it("Reset after invalid page data clears validation and Cancel keeps original owners", /** Checks no accidental submit/history or whole-document mutation. @returns Nothing. */ () => {
   const f = fixture();

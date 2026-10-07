@@ -1,0 +1,20 @@
+{
+  "records": [
+    {
+      "command": "npm exec -- prettier --write apps/office/e2e/writer-native-cell-alignment.spec.ts",
+      "exit": 0,
+      "bytes": 58,
+      "sha256": "bb3466730cf62d7fe9d1d9cb6d8bcbb9b093599780e1e874cd0fda0108caeab0",
+      "diagnostics": []
+    },
+    {
+      "command": "npm exec -- prettier --check apps/office/e2e/writer-native-cell-alignment.spec.ts",
+      "exit": 0,
+      "bytes": 66,
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+      "diagnostics": [
+        "All matched files use Prettier code style!"
+      ]
+    }
+  ]
+}

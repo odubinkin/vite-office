@@ -1,0 +1,64 @@
+{
+  "records": [
+    {
+      "command": "npm run format:check",
+      "exit": 1,
+      "bytes": 223,
+      "sha256": "b9eabdab45be7e8aa2323ddda38593842eae1fb4b3bbc83d78faec3825ad67fd",
+      "diagnostics": [
+        "[warn] apps/office/e2e/writer-native-cell-alignment.spec.ts",
+        "[warn] Code style issues found in the above file. Run Prettier with --write to fix."
+      ]
+    },
+    {
+      "command": "npm run lint",
+      "exit": 0,
+      "bytes": 55,
+      "sha256": "a6172cb57fa696e705408fdc605fba1ae07b852fdf0614d7c2b623349e285b6e",
+      "diagnostics": [
+        "> eslint . --max-warnings 0"
+      ]
+    },
+    {
+      "command": "npm run typecheck",
+      "exit": 0,
+      "bytes": 240,
+      "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:dependencies",
+      "exit": 0,
+      "bytes": 189,
+      "sha256": "69c3c95384bc7ce69ac714a34818475fa93f51014c06b8fc45e6879255ecf7dd",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:docs",
+      "exit": 1,
+      "bytes": 3418,
+      "sha256": "6a3ddb416bae14e7f0de8f3756c9d5002491fd6aee0104383b604a0577f4622d",
+      "diagnostics": [
+        "    throw new Error(`JSDoc validation failed:\\n${errors.join(\"\\n\")}`);",
+        "Error: JSDoc validation failed:",
+        "apps/office/e2e/writer-table-properties-history.spec.ts:1 file is missing an opening @fileoverview JSDoc block",
+        "apps/office/src/sw/browser/editor/WriterEditableTable.tsx:1 file is missing an opening @fileoverview JSDoc block",
+        "apps/office/src/sw/browser/filter/xml/writer-document-codec.ts:1 file is missing an opening @fileoverview JSDoc block",
+        "apps/office/src/sw/browser/presentation/WriterInsertTableDialog.tsx:1 file is missing an opening @fileoverview JSDoc block",
+        "apps/office/src/sw/browser/presentation/WriterTableDialog.test.tsx:1 file is missing an opening @fileoverview JSDoc block",
+        "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx:1 file is missing an opening @fileoverview JSDoc block",
+        "apps/office/src/sw/browser/presentation/native-cell-alignment-state.test.tsx:1 file is missing an opening @fileoverview JSDoc block",
+        "apps/office/src/sw/browser/presentation/native-table-properties-reset.test.tsx:1 file is missing an opening @fileoverview JSDoc block",
+        "apps/office/src/sw/browser/presentation/writer-view.test.tsx:1 file is missing an opening @fileoverview JSDoc block",
+        "apps/office/src/sw/browser/presentation/writer-view.tsx:1 file is missing an opening @fileoverview JSDoc block"
+      ]
+    },
+    {
+      "command": "npm run check:file-size",
+      "exit": 0,
+      "bytes": 3865,
+      "sha256": "45cf343b1b76f8107f1886da8921c98a5133dc62134d8f00dbac48ecc9a3107c",
+      "diagnostics": []
+    }
+  ]
+}

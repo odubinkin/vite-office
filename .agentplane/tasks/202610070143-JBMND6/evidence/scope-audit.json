@@ -1,0 +1,30 @@
+{
+  "base": "55dd376db551f7aa7544cf9c56153b4d7fe59d3e",
+  "exactScopeCount": 39,
+  "priorAcceptance": 541,
+  "byteIdenticalAcceptance": 526,
+  "explicitNativeMigration": 15,
+  "newAcceptance": 5,
+  "currentAcceptance": 546,
+  "priorSemanticRecords": 278,
+  "currentSemanticRecords": 281,
+  "parentPrefixSHA256": "821259733ed508898bfa6400b9fd77d1bd963b52ffc6c96e5c0f0f67b4310b92",
+  "migrationProof": "Virtual complete baseline acceptance transformed only by exact declared native item/enum ingress and upstream changed-item reset expectation; complete bytes match after unchanged formatter; no case deletions or old body changes outside these transformations",
+  "failures": [
+    "Unapproved acceptance body change apps/office/e2e/writer-table-properties-history.spec.ts",
+    "Unapproved acceptance body change apps/office/src/sw/browser/presentation/WriterTableDialog.test.tsx",
+    "Unapproved acceptance body change apps/office/src/sw/browser/presentation/native-table-properties-reset.test.tsx",
+    "Unapproved acceptance body change apps/office/src/sw/browser/presentation/writer-view.test.tsx",
+    "Unapproved acceptance body change apps/office/src/sw/source/core/undo/native-insert-table-history.test.ts",
+    "Unapproved acceptance body change apps/office/src/sw/source/filter/xml/odt-table-roundtrip.test.ts",
+    "Unapproved acceptance body change apps/office/src/sw/source/uibase/wrtsh/native-row-height-owner-history.test.ts",
+    "Unapproved acceptance body change apps/office/src/sw/source/uibase/wrtsh/native-row-split-owner-history.test.ts",
+    "Unapproved acceptance body change apps/office/src/sw/source/uibase/wrtsh/native-table-column-page-history.test.ts",
+    "Unapproved acceptance body change apps/office/src/sw/source/uibase/wrtsh/native-table-format-lifecycle-history.test.ts",
+    "Unapproved acceptance body change apps/office/src/sw/source/uibase/wrtsh/native-table-properties-reset-history.test.ts",
+    "Unapproved acceptance body change apps/office/src/sw/source/uibase/wrtsh/native-table-properties.test.ts",
+    "Unapproved acceptance body change apps/office/src/sw/source/uibase/wrtsh/native-table-text-flow-headline-history.test.ts",
+    "Unapproved acceptance body change apps/office/src/sw/source/uibase/wrtsh/native-table-text-flow-split-history.test.ts",
+    "Unapproved acceptance body change apps/office/src/sw/source/uibase/wrtsh/native-table-traversal.test.ts"
+  ]
+}

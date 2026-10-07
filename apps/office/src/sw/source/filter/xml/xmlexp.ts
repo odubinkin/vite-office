@@ -1,6 +1,8 @@
 /**
  * @fileoverview Reimplements the bounded Writer ODF XML export bridge from pinned LibreOffice `sw/source/filter/xml/xmlexp.cxx`.
  */
+import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
+
 import { getWriterNumFormatKind, getWriterNumFormatBullet } from "../../core/doc/number";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { SwFrameSize } from "../../../inc/fmtfsize";
@@ -312,7 +314,18 @@ function exportWriterText(
                     /** Projects one canonical Writer table value. @param argument1 - Callback input. @returns Callback result. */ (
                       cell,
                     ) => ({
-                      format: cell.GetFormat(),
+                      format: {
+                        padding: cell.GetFormat().padding,
+                        border: cell.GetFormat().border,
+                        verticalAlign:
+                          cell.GetFormat().vertOrient === undefined
+                            ? undefined
+                            : cell.GetVertOrient().GetVertOrient() === VertOrientation.CENTER
+                              ? "middle"
+                              : cell.GetVertOrient().GetVertOrient() === VertOrientation.BOTTOM
+                                ? "bottom"
+                                : "top",
+                      },
                       paragraphs: cell.GetParagraphs().map(projectParagraph),
                     }),
                   ),

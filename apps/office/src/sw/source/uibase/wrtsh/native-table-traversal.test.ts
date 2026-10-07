@@ -1,4 +1,7 @@
 /** @fileoverview Verifies native table cursor traversal and actual retained row history without upstream execution. */
+import { VertOrientation } from "./../../../../offapi/com/sun/star/text/VertOrientation";
+import { SwFormatVertOrient } from "./../../../inc/fmtornt";
+
 import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
 import { describe, expect, it, vi } from "vitest";
 import { SwDoc } from "../../core/doc/doc";
@@ -33,7 +36,7 @@ function fixture() {
       table,
       2,
       { frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 480), keepTogether: true },
-      [{ padding: 120 }, { verticalAlign: "bottom" }],
+      [{ padding: 120 }, { vertOrient: new SwFormatVertOrient(0, VertOrientation.BOTTOM) }],
     );
   const boxes = [...firstRow.GetTabBoxes(), ...lastRow.GetTabBoxes()],
     cells = boxes.map(
@@ -221,7 +224,9 @@ describe("native table traversal", /** Registers actual cursor/row/history contr
       keepTogether: true,
     });
     expect(row.GetTabBoxes()[0]?.GetFormat()).toEqual({ padding: 120 });
-    expect(row.GetTabBoxes()[1]?.GetFormat()).toEqual({ verticalAlign: "bottom" });
+    expect(row.GetTabBoxes()[1]?.GetFormat()).toEqual({
+      vertOrient: new SwFormatVertOrient(0, VertOrientation.BOTTOM),
+    });
     expect(fresh.GetText()).toBe("");
     expect(second.GetText()).toBe("");
     expect(fresh.GetpSwpHints()).toBeUndefined();

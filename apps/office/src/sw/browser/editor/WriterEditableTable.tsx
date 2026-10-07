@@ -1,4 +1,6 @@
 /** @fileoverview Browser table frame over canonical SwTable rows and SwTextNode cell paragraphs. */
+import { VertOrientation } from "../../../offapi/com/sun/star/text/VertOrientation";
+
 import { SwRowFrame } from "../../source/core/layout/tabfrm";
 
 import type { SwTable } from "../../source/core/table/swtable";
@@ -174,7 +176,12 @@ import { WriterEditableParagraph } from "./WriterEditableParagraph";
                                 ? "1px dashed #cbd5e1"
                                 : (cellFormat.border ?? "1px solid #94a3b8"),
                             padding: nativeRow.HasFixSize() ? 0 : (cellFormat.padding ?? 100) / 15,
-                            verticalAlign: cellFormat.verticalAlign ?? "top",
+                            verticalAlign:
+                              cell.GetVertOrient().GetVertOrient() === VertOrientation.CENTER
+                                ? "middle"
+                                : cell.GetVertOrient().GetVertOrient() === VertOrientation.BOTTOM
+                                  ? "bottom"
+                                  : "top",
                           }}
                         >
                           {nativeRow.HasFixSize() ? (
@@ -188,6 +195,15 @@ import { WriterEditableParagraph } from "./WriterEditableParagraph";
                                 height: row.GetFrameSize().GetHeight() / 15,
                                 boxSizing: "border-box",
                                 overflow: "hidden",
+                                display: "flex",
+                                flexDirection: "column",
+                                justifyContent:
+                                  cell.GetVertOrient().GetVertOrient() === VertOrientation.CENTER
+                                    ? "safe center"
+                                    : cell.GetVertOrient().GetVertOrient() ===
+                                        VertOrientation.BOTTOM
+                                      ? "safe flex-end"
+                                      : "flex-start",
                                 border:
                                   cellFormat.border === "none"
                                     ? "1px dashed #cbd5e1"

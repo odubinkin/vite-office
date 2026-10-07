@@ -1,0 +1,18 @@
+{
+  "records": [
+    {
+      "command": "npm run format:check",
+      "exit": 0,
+      "bytes": 122,
+      "sha256": "ac1729f86eee878f5f4d6c948c510d2cc91bb5568f6dd088f70f3885e137d116",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:docs",
+      "exit": 0,
+      "bytes": 119,
+      "sha256": "c9edd8bc236e4a6a5a3e56df4107d40bd255d969b3f8693e350a377183b9dbca",
+      "diagnostics": []
+    }
+  ]
+}

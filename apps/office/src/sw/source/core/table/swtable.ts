@@ -6,6 +6,7 @@ import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrient
 import { SwTextNode } from "../txtnode/ndtxt";
 import { SwTabCols } from "../bastyp/tabcol";
 import { SwFormatFrameSize } from "../../../inc/fmtfsize";
+import { SwFormatVertOrient } from "../../../inc/fmtornt";
 
 /** Physical table geometry imported from Writer table style properties, in twips. */
 export interface SwTableFormat {
@@ -32,7 +33,7 @@ export interface SwTableLineFormat {
 export interface SwTableBoxFormat {
   readonly padding?: number | undefined;
   readonly border?: string | undefined;
-  readonly verticalAlign?: "top" | "middle" | "bottom" | undefined;
+  readonly vertOrient?: SwFormatVertOrient | undefined;
 }
 
 /** Owns one cell section and its ordered paragraphs. */
@@ -41,7 +42,9 @@ export class SwTableBox {
   /** Projects one canonical Writer table value. @param argument1 - Callback input. @param argument2 - Callback input. @returns Callback result. */ public constructor(
     private readonly startNode: SwTableBoxStartNode,
     private format: SwTableBoxFormat = {},
-  ) {}
+  ) {
+    this.SetFormat(format);
+  }
 
   /** Returns the cell's node-array section. @returns Cell start node. */
   public GetStartNode(): SwTableBoxStartNode {
@@ -50,12 +53,25 @@ export class SwTableBox {
 
   /** Returns cell geometry. @returns Immutable values. */
   public GetFormat(): SwTableBoxFormat {
-    return { ...this.format };
+    return {
+      ...this.format,
+      ...(this.format.vertOrient === undefined
+        ? {}
+        : { vertOrient: this.format.vertOrient.Clone() }),
+    };
   }
 
   /** Replaces cell geometry. @param value - New values. @returns Nothing. */
   public SetFormat(value: SwTableBoxFormat): void {
-    this.format = { ...value };
+    this.format = {
+      ...value,
+      ...(value.vertOrient === undefined ? {} : { vertOrient: value.vertOrient.Clone() }),
+    };
+  }
+
+  /** Reads an independent effective native vertical orientation item. @returns Complete item including pool defaults. */
+  public GetVertOrient(): SwFormatVertOrient {
+    return this.format.vertOrient?.Clone() ?? new SwFormatVertOrient();
   }
 
   /** Reads the cell's current native node-array section, including split/join history changes. @returns Text nodes in document order. */

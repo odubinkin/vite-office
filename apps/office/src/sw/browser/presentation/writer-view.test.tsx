@@ -1,4 +1,6 @@
 /** @fileoverview Coverage for the Writer browser presentation. */
+import { VertOrientation } from "./../../../offapi/com/sun/star/text/VertOrientation";
+
 import { selectMountedTableRow } from "../../../../test-support/table-mouse-dom";
 /* eslint-disable @typescript-eslint/no-non-null-assertion -- Local test fixtures keep setup and assertions concise. */
 
@@ -209,12 +211,14 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
       target: { value: "1" },
     });
     fireEvent.change(within(dialog).getByRole("combobox", { name: "Cell vertical alignment" }), {
-      target: { value: "bottom" },
+      target: { value: "3" },
     });
     fireEvent.click(within(dialog).getByRole("button", { name: "OK" }));
     expect(table?.GetColumnWidths()[0]).toBe(2268);
     expect(table?.GetTabLines()[1]?.GetFormat().frameSize?.GetHeight()).toBe(567);
-    expect(table?.GetTabLines()[1]?.GetTabBoxes()[0]?.GetFormat().verticalAlign).toBe("bottom");
+    expect(table?.GetTabLines()[1]?.GetTabBoxes()[0]?.GetVertOrient().GetVertOrient()).toBe(
+      VertOrientation.BOTTOM,
+    );
     const cell = screen.getByLabelText("Row 2 column 1 paragraph 1");
     cell.focus();
     const selection = window.getSelection();

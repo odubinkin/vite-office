@@ -1,4 +1,6 @@
 /** @fileoverview Verifies actual native column-page property application, retained graph/list/cursor and ODT history. */
+import { VertOrientation } from "./../../../../offapi/com/sun/star/text/VertOrientation";
+
 import { afterEach, expect, it } from "vitest";
 import { SwDoc } from "../../core/doc/doc";
 import { SwDocShell } from "../app/docsh";
@@ -84,7 +86,7 @@ it.each(["cursor", "row", "table"])(
         minRowHeight: 0,
         padding: 0,
         border: "none",
-        verticalAlign: "top",
+        verticalAlign: VertOrientation.NONE,
         headerRows: 0,
         repeatHeaderRows: false,
         rowSplit: true,
@@ -133,7 +135,7 @@ it("native adapt/proportional page width applies one history without rebuilding 
     minRowHeight: 0,
     padding: 0,
     border: "none",
-    verticalAlign: "top",
+    verticalAlign: VertOrientation.NONE,
     headerRows: 0,
     repeatHeaderRows: false,
     rowSplit: true,

@@ -1,4 +1,6 @@
 /** @fileoverview Verifies the Writer table controls and editable cell boundary. */
+import { VertOrientation } from "./../../../offapi/com/sun/star/text/VertOrientation";
+import { SwFormatVertOrient } from "./../../inc/fmtornt";
 
 import { SwFormatFrameSize, SwFrameSize } from "../../inc/fmtfsize";
 import { fireEvent, render, screen, within } from "@testing-library/react";
@@ -109,7 +111,7 @@ describe("Writer browser table controls", /** Verifies the bounded table scenari
         minRowHeight: 0,
         padding: 100,
         border: "0.5pt solid #666666",
-        verticalAlign: "top",
+        verticalAlign: VertOrientation.NONE,
         headerRows: 0,
         repeatHeaderRows: false,
       }),
@@ -128,7 +130,14 @@ describe("Writer browser table controls", /** Verifies the bounded table scenari
       table,
       2,
       { frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 200) },
-      [{ padding: 50, border: "none", verticalAlign: "middle" }, {}],
+      [
+        {
+          padding: 50,
+          border: "none",
+          vertOrient: new SwFormatVertOrient(0, VertOrientation.CENTER),
+        },
+        {},
+      ],
     );
     const submit = vi.fn();
     render(
@@ -138,6 +147,7 @@ describe("Writer browser table controls", /** Verifies the bounded table scenari
         onSubmit={submit}
         table={table}
         rowHeight={new SwFormatFrameSize(SwFrameSize.Minimum, 0, 200)}
+        boxAlign={VertOrientation.CENTER}
       />,
     );
     expect(screen.getByRole("dialog", { name: "Table Properties" })).toBeInTheDocument();
@@ -160,7 +170,7 @@ describe("Writer browser table controls", /** Verifies the bounded table scenari
       target: { value: "1" },
     });
     fireEvent.change(screen.getByRole("combobox", { name: "Cell vertical alignment" }), {
-      target: { value: "bottom" },
+      target: { value: "3" },
     });
     fireEvent.click(screen.getByRole("tab", { name: "Borders" }));
     fireEvent.change(screen.getByRole("spinbutton", { name: "Cell padding (cm)" }), {
@@ -177,7 +187,7 @@ describe("Writer browser table controls", /** Verifies the bounded table scenari
         minRowHeight: 567,
         padding: 113,
         border: "0.5pt solid #666666",
-        verticalAlign: "bottom",
+        verticalAlign: VertOrientation.BOTTOM,
         repeatHeaderRows: false,
         layoutSplit: false,
       }),

@@ -399,12 +399,28 @@ export abstract class SwFEShell extends SwEditShell {
 
   /** Applies borders to selected boxes or the whole unselected table. @param value - Border and padding attributes. @returns Whether admitted. */
   public SetTabBorders(value: Pick<SwTableBoxFormat, "padding" | "border">): boolean {
-    return this.SetBoxAttr(value, true);
+    const table = this.IsCursorInTable()?.GetTable();
+    if (table === undefined) return false;
+    const boxes = this.GetTableBoxes(table, true);
+    return this.ChangeTable(
+      table,
+      /** Updates represented border attributes only. @returns Nothing. */ () => {
+        for (const box of boxes) box.SetFormat({ ...box.GetFormat(), ...value });
+      },
+    );
   }
 
   /** Applies vertical alignment to selected boxes or the current box only. @param align - Content alignment. @returns Whether admitted. */
-  public SetBoxAlign(align: SwTableBoxFormat["verticalAlign"]): boolean {
-    return this.SetBoxAttr({ verticalAlign: align }, false);
+  public SetBoxAlign(align: number): boolean {
+    return this.RunNotificationTransaction(
+      /** Forwards native selection and live history attributes. @returns Whether admitted. */
+      () => this.GetDoc().SetBoxAlign(this.getShellCursor(), align, this.CaptureCursorState()),
+    );
+  }
+
+  /** Reads common alignment through the native document getter. @returns Native orientation or mixed/absent65535. */
+  public GetBoxAlign(): number {
+    return SwDoc.GetBoxAlign(this.getShellCursor());
   }
 
   /** Resolves original boxes from native selected-cell rings. @param table - Connected table. @param whole - Expand an unselected table. @returns Actual boxes. */
@@ -425,19 +441,6 @@ export abstract class SwFEShell extends SwEditShell {
       /** Selects canonical box owners. @param box - Original box. @returns Whether selected. */ (
         box,
       ) => sections.includes(box.GetStartNode()),
-    );
-  }
-
-  /** Changes actual selected box formats. @param value - Box attributes. @param whole - Expand an unselected table. @returns Whether admitted. */
-  private SetBoxAttr(value: SwTableBoxFormat, whole: boolean): boolean {
-    const table = this.IsCursorInTable()?.GetTable();
-    if (table === undefined) return false;
-    const boxes = this.GetTableBoxes(table, whole);
-    return this.ChangeTable(
-      table,
-      /** Updates selected native boxes. @returns Nothing. */ () => {
-        for (const box of boxes) box.SetFormat({ ...box.GetFormat(), ...value });
-      },
     );
   }
 

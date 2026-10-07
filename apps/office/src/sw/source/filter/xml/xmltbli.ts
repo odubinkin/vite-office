@@ -1,4 +1,6 @@
 /** @fileoverview Adapts xmloff table SAX callbacks to canonical Writer SwTable sections, following pinned xmltbli.cxx. */
+import { SwFormatVertOrient } from "../../../inc/fmtornt";
+import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
 
 import type { OdfTableStyle } from "../../../../xmloff/source/table/XMLTableImport";
 import type { SwDoc } from "../../core/doc/doc";
@@ -124,7 +126,22 @@ export class SwXMLTableImport {
     if (cell === undefined)
       throw new Error("ODF table row contains more cells than declared columns.");
     const style = this.resolveTableStyle(styleName, "table-cell");
-    cell.SetFormat(tableStyleValues(style) as SwTableBoxFormat);
+    const { verticalAlign, ...format } = tableStyleValues(style);
+    cell.SetFormat({
+      ...format,
+      ...(verticalAlign === undefined
+        ? {}
+        : {
+            vertOrient: new SwFormatVertOrient(
+              0,
+              verticalAlign === "middle"
+                ? VertOrientation.CENTER
+                : verticalAlign === "bottom"
+                  ? VertOrientation.BOTTOM
+                  : VertOrientation.NONE,
+            ),
+          }),
+    } as SwTableBoxFormat);
     this.activeCell = cell;
     this.cellParagraphCount = 0;
     this.rowCellIndex += 1;

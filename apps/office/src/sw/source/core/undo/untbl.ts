@@ -30,7 +30,15 @@ export class SwUndoInsTable extends SwUndo {
     super("Insert Table", cursor, cursor);
     this.m_nSttNode = cursor.point.node.GetIndex();
     this.options = { ...options };
-    this.boxFormat = boxFormat === undefined ? undefined : { ...boxFormat };
+    this.boxFormat =
+      boxFormat === undefined
+        ? undefined
+        : {
+            ...boxFormat,
+            ...(boxFormat.vertOrient === undefined
+              ? {}
+              : { vertOrient: boxFormat.vertOrient.Clone() }),
+          };
   }
   /** Resolves the current recreated native owner. @param document - Actual document. @returns Connected table. */
   public GetTable(document: SwDoc): SwTable {

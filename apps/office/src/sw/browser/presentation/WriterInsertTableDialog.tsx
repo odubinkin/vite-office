@@ -1,4 +1,6 @@
 /** @fileoverview React presentation of the native SwInsTableDlg input owner. */
+import { VertOrientation } from "../../../offapi/com/sun/star/text/VertOrientation";
+
 import { useState } from "react";
 import { SwInsTableDlg } from "../../source/ui/table/instable";
 import { SwInsertTableFlags } from "../../inc/itabenum";
@@ -63,7 +65,7 @@ export function WriterInsertTableDialog({
               minRowHeight: 0,
               padding: 100,
               border,
-              verticalAlign: "top",
+              verticalAlign: VertOrientation.NONE,
               headerRows:
                 value.options.mnInsMode & SwInsertTableFlags.Headline
                   ? Math.max(1, value.options.mnRowsToRepeat)

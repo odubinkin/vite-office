@@ -1,4 +1,7 @@
 /** @fileoverview Verifies native table-property owners, selection, attribute-only history and lifecycle without upstream execution. */
+import { VertOrientation } from "./../../../../offapi/com/sun/star/text/VertOrientation";
+import { SwFormatVertOrient } from "./../../../inc/fmtornt";
+
 import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
 import { describe, it, expect, vi } from "vitest";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
@@ -35,8 +38,16 @@ function fixture() {
       2,
       { frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 100), keepTogether: false },
       [
-        { padding: 50, border: "none", verticalAlign: "top" },
-        { padding: 50, border: "none", verticalAlign: "top" },
+        {
+          padding: 50,
+          border: "none",
+          vertOrient: new SwFormatVertOrient(0, VertOrientation.NONE),
+        },
+        {
+          padding: 50,
+          border: "none",
+          vertOrient: new SwFormatVertOrient(0, VertOrientation.NONE),
+        },
       ],
     );
   const boxes = table
@@ -69,7 +80,7 @@ function fixture() {
     minRowHeight: 300,
     padding: 200,
     border: "0.5pt solid #666666",
-    verticalAlign: "bottom",
+    verticalAlign: VertOrientation.BOTTOM,
     headerRows: 0,
     repeatHeaderRows: false,
     rowSplit: false,
@@ -144,16 +155,40 @@ describe("native table property application", /** Registers actual-owner contrac
       ).toEqual(
         selected
           ? [
-              { padding: 200, border: f.value.border, verticalAlign: "bottom" },
-              { padding: 200, border: f.value.border, verticalAlign: "bottom" },
+              {
+                padding: 200,
+                border: f.value.border,
+                vertOrient: new SwFormatVertOrient(0, VertOrientation.BOTTOM),
+              },
+              {
+                padding: 200,
+                border: f.value.border,
+                vertOrient: new SwFormatVertOrient(0, VertOrientation.BOTTOM),
+              },
               formats[2],
               formats[3],
             ]
           : [
-              { padding: 200, border: f.value.border, verticalAlign: "bottom" },
-              { padding: 200, border: f.value.border, verticalAlign: "top" },
-              { padding: 200, border: f.value.border, verticalAlign: "top" },
-              { padding: 200, border: f.value.border, verticalAlign: "top" },
+              {
+                padding: 200,
+                border: f.value.border,
+                vertOrient: new SwFormatVertOrient(0, VertOrientation.BOTTOM),
+              },
+              {
+                padding: 200,
+                border: f.value.border,
+                vertOrient: new SwFormatVertOrient(0, VertOrientation.NONE),
+              },
+              {
+                padding: 200,
+                border: f.value.border,
+                vertOrient: new SwFormatVertOrient(0, VertOrientation.NONE),
+              },
+              {
+                padding: 200,
+                border: f.value.border,
+                vertOrient: new SwFormatVertOrient(0, VertOrientation.NONE),
+              },
             ],
       );
       for (let cycle = 0; cycle < 2; cycle++) {
@@ -196,7 +231,7 @@ describe("native table property application", /** Registers actual-owner contrac
     expect(f.shell.SetTableAttr({ width: 4000 })).toBe(false);
     expect(f.shell.SetTabCols(new SwTabCols(), false)).toBe(false);
     expect(f.shell.SetRowHeight(new SwFormatFrameSize(SwFrameSize.Minimum, 0, 20))).toBe(false);
-    expect(f.shell.SetBoxAlign("middle")).toBe(false);
+    expect(f.shell.SetBoxAlign(VertOrientation.CENTER)).toBe(false);
     expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(0);
     expect(f.table.GetFormat().width).toBe(6000);
     f.shell.Close();

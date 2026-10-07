@@ -22,7 +22,7 @@ export interface SwTableProperties {
   readonly minRowHeight: number;
   readonly padding: number;
   readonly border: string;
-  readonly verticalAlign: "top" | "middle" | "bottom";
+  readonly verticalAlign?: number | undefined;
   readonly headerRows: number;
   readonly repeatHeaderRows: boolean;
   readonly layoutSplit?: boolean;
@@ -61,7 +61,7 @@ export function ItemSetToTableParam(shell: SwFEShell, value: SwTableProperties):
         }
         shell.SetRowsToRepeat(value.headerRows, value.repeatHeaderRows);
         shell.SetRowHeight(new SwFormatFrameSize(SwFrameSize.Minimum, 0, value.minRowHeight));
-        shell.SetBoxAlign(value.verticalAlign);
+        if (value.verticalAlign !== undefined) shell.SetBoxAlign(value.verticalAlign);
         const columns = new SwTabCols();
         shell.GetTabCols(columns);
         const representation = new SwTableRep(table, columns.GetRightMax());

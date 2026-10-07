@@ -7,6 +7,79 @@ import { SwUndoAttrTable } from "../undo/untbl";
 import { createWriterCollapsedCursorState, type SwUndoCursorState } from "../undo/undobj";
 import type { SwTextNode } from "../txtnode/ndtxt";
 import type { SwFormatFrameSize } from "../../../inc/fmtfsize";
+import { SwFormatVertOrient } from "../../../inc/fmtornt";
+
+/** Resolves canonical table boxes as native lcl_GetBoxSel: ordinary getters use the current point, setters use all ring points. @param cursor - Original cursor. @param allCursors - Expand ordinary ring points. @returns Original box identities. */
+function GetBoxSelection(cursor: SwCursor, allCursors = false): readonly SwTableBox[] {
+  if (cursor instanceof SwTableCursor) return cursor.GetSelectedBoxes();
+  const result = new Set<SwTableBox>();
+  for (const member of allCursors ? cursor.GetRingContainer() : [cursor]) {
+    const section = member.GetPoint().GetNode().StartOfSectionNode();
+    if (!(section instanceof SwTableBoxStartNode)) continue;
+    const table = (section.StartOfSectionNode() as SwTableNode).GetTable();
+    for (const row of table.GetTabLines())
+      for (const box of row.GetTabBoxes()) if (box.GetStartNode() === section) result.add(box);
+  }
+  return [...result];
+}
+
+/** Reads the complete common vertical item over native getter selection. @param cursor - Actual cursor. @returns Cloned common item or absent for mixed/empty input. */
+export function GetSwBoxAttr(cursor: SwCursor): SwFormatVertOrient | undefined {
+  const boxes = GetBoxSelection(cursor),
+    first = boxes[0];
+  if (first === undefined) return undefined;
+  const item = first.GetVertOrient();
+  for (const box of boxes) if (!item.equals(box.GetVertOrient())) return undefined;
+  return item;
+}
+
+/** Reads common native orientation only, retaining the ushort mixed/absent sentinel. @param cursor - Actual cursor. @returns Native ID or 65535. */
+export function GetSwBoxAlign(cursor: SwCursor): number {
+  let align = 0xffff;
+  for (const box of GetBoxSelection(cursor)) {
+    const orientation = box.GetVertOrient().GetVertOrient();
+    if (align === 0xffff) align = orientation & 0xffff;
+    else if (orientation !== align) return 0xffff;
+  }
+  return align;
+}
+
+/** Applies a complete native box item with document-owned attribute history. @param doc - Owning document. @param cursor - Actual cursor. @param value - Complete vertical item. @param cursorState - Optional shell history state. @returns Whether admitted. */
+export function SetSwBoxAttr(
+  doc: SwDoc,
+  cursor: SwCursor,
+  value: SwFormatVertOrient,
+  cursorState?: SwUndoCursorState,
+): boolean {
+  const node = cursor.GetPoint().GetNode() as SwTextNode;
+  if (node.GetNodes() !== doc.nodes) return false;
+  const section = node.StartOfSectionNode();
+  if (!(section instanceof SwTableBoxStartNode)) return false;
+  const table = (section.StartOfSectionNode() as SwTableNode).GetTable();
+  if (!doc.GetTables().includes(table)) return false;
+  const boxes = GetBoxSelection(cursor, true);
+  if (boxes.length === 0) return false;
+  return doc.RunModelTransaction(
+    /** Records native attributes before applying the item, including same-value requests. @returns Whether admitted. */
+    () => {
+      const before =
+        cursorState ??
+        createWriterCollapsedCursorState(
+          node,
+          cursor.GetPoint().GetContentIndex(),
+          node.GetCharacterItemsAt(cursor.GetPoint().GetContentIndex()),
+        );
+      const action = new SwUndoAttrTable(table, before);
+      for (const box of boxes) box.SetFormat({ ...box.GetFormat(), vertOrient: value });
+      doc.GetUndoManager().AddUndoAction(action);
+      doc.NotifyModelChange({
+        kind: "node-content-changed",
+        nodeIndex: table.GetTableNode().GetIndex(),
+      });
+      return true;
+    },
+  );
+}
 
 /** Collects represented original lines without removing row-split ancestors. @param table - Native table. @param boxes - Actual selected boxes or whole dialog input. @returns Original lines. */
 function CollectLines(table: SwTable, boxes?: readonly SwTableBox[]): readonly SwTableLine[] {

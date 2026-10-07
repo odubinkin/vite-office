@@ -1,4 +1,7 @@
 /** @fileoverview Verifies body table insertion through actual native shell, nodes and grouped history without upstream access. */
+import { VertOrientation } from "./../../../../offapi/com/sun/star/text/VertOrientation";
+import { SwFormatVertOrient } from "./../../../inc/fmtornt";
+
 import { expect, it } from "vitest";
 import { SwDoc } from "../doc/doc";
 import { SwTextNode } from "../txtnode/ndtxt";
@@ -173,7 +176,11 @@ it("uses first free native names on collisions and owns dialog construction valu
   const o = fixture(),
     original = o.doc.nodes.MakeTableNode("Table1");
   const occupied = o.doc.nodes.MakeTableNode("Table3"),
-    box = { padding: 123, border: "none", verticalAlign: "bottom" as const },
+    box = {
+      padding: 123,
+      border: "none",
+      vertOrient: new SwFormatVertOrient(0, VertOrientation.BOTTOM),
+    },
     flags = { mnInsMode: SwInsertTableFlags.Headline, mnRowsToRepeat: 0 };
   try {
     const table = required(o.shell.InsertTable(flags, 2, 1, "Table1", box));
@@ -192,7 +199,7 @@ it("uses first free native names on collisions and owns dialog construction valu
     expect(required(required(recreated.GetTabLines()[0]).GetTabBoxes()[0]).GetFormat()).toEqual({
       padding: 123,
       border: "none",
-      verticalAlign: "bottom",
+      vertOrient: new SwFormatVertOrient(0, VertOrientation.BOTTOM),
     });
     expect(o.doc.GetTables()).toContain(original);
     expect(o.doc.GetTables()).toContain(occupied);

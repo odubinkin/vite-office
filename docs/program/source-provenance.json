@@ -1157,6 +1157,74 @@
       "evidence": {
         "local": [
           {
+            "path": "apps/office/src/offapi/com/sun/star/text/RelOrientation.ts",
+            "marker": "RelOrientation"
+          }
+        ],
+        "upstream": [
+          {
+            "path": "vendor/libreoffice-reference/offapi/com/sun/star/text/RelOrientation.idl",
+            "marker": "RelOrientation"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/offapi/com/sun/star/text/RelOrientation.ts",
+      "localSymbols": [
+        "RelOrientation",
+        "PRINT_AREA"
+      ],
+      "omittedResponsibilities": [
+        "Complete fly layout/pooling/shared-format lifetime remain unverified."
+      ],
+      "preservedResponsibilities": [
+        "Iteration203 replaces scalar cell vertical alignment with complete SwFormatVertOrient Which109 position0/NONE/PRINT_AREA defaults, native numeric enum values and three-field clone/equality/represented UNO member query/update. Original boxes and insertion undo own independent copied items. SwDoc SetBoxAttr owns native selection/history/notifications; setters traverse ordinary ring points while getters use current point or native table selected boxes. Common full-item getter and orientation-only getter retain mixed/no-item state. Shell delegates; properties reads common shell state and emits only a changed alignment item, native mixed widget fallback top. CSS handles native alignments and safe fixed-row content; ODT maps NONE/CENTER/BOTTOM, process/storage codec restores full primitive items, old scalar only storage ingress. Full pooling/shared frame formats/direct-formatting/HTML resizing/fly/nested/merged/protection/vertical writing and overall parity remain unverified; prior classifications/defaults/contracts/evidence/exceptions retained."
+      ],
+      "status": "mapped",
+      "upstreamPath": "offapi/com/sun/star/text/RelOrientation.idl",
+      "upstreamSymbols": [
+        "RelOrientation",
+        "PRINT_AREA"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "path": "apps/office/src/offapi/com/sun/star/text/VertOrientation.ts",
+            "marker": "VertOrientation"
+          }
+        ],
+        "upstream": [
+          {
+            "path": "vendor/libreoffice-reference/offapi/com/sun/star/text/VertOrientation.idl",
+            "marker": "VertOrientation"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/offapi/com/sun/star/text/VertOrientation.ts",
+      "localSymbols": [
+        "VertOrientation",
+        "CENTER"
+      ],
+      "omittedResponsibilities": [
+        "Complete fly layout/pooling/shared-format lifetime remain unverified."
+      ],
+      "preservedResponsibilities": [
+        "Iteration203 replaces scalar cell vertical alignment with complete SwFormatVertOrient Which109 position0/NONE/PRINT_AREA defaults, native numeric enum values and three-field clone/equality/represented UNO member query/update. Original boxes and insertion undo own independent copied items. SwDoc SetBoxAttr owns native selection/history/notifications; setters traverse ordinary ring points while getters use current point or native table selected boxes. Common full-item getter and orientation-only getter retain mixed/no-item state. Shell delegates; properties reads common shell state and emits only a changed alignment item, native mixed widget fallback top. CSS handles native alignments and safe fixed-row content; ODT maps NONE/CENTER/BOTTOM, process/storage codec restores full primitive items, old scalar only storage ingress. Full pooling/shared frame formats/direct-formatting/HTML resizing/fly/nested/merged/protection/vertical writing and overall parity remain unverified; prior classifications/defaults/contracts/evidence/exceptions retained."
+      ],
+      "status": "mapped",
+      "upstreamPath": "offapi/com/sun/star/text/VertOrientation.idl",
+      "upstreamSymbols": [
+        "VertOrientation",
+        "CENTER"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
             "marker": "ODT_MIMETYPE",
             "path": "apps/office/src/package/source/manifest/ManifestExport.ts"
           }
@@ -3260,6 +3328,22 @@
           {
             "path": "apps/office/src/sw/source/core/layout/tabfrm.ts",
             "marker": "SwRowFrame"
+          },
+          {
+            "path": "apps/office/src/sw/inc/fmtornt.ts",
+            "marker": "SwFormatVertOrient"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/docnode/ndtbl1.ts",
+            "marker": "GetBoxSelection"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/doc.ts",
+            "marker": "SetBoxAlign"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx",
+            "marker": "boxAlign"
           }
         ],
         "upstream": [
@@ -3322,6 +3406,22 @@
           {
             "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmlimpit.cxx",
             "marker": "MINLAY"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/inc/fmtornt.hxx",
+            "marker": "SwFormatVertOrient"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/layout/atrfrm.cxx",
+            "marker": "SwFormatVertOrient::operator=="
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl1.cxx",
+            "marker": "lcl_GetBoxSel"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx",
+            "marker": "get_value_changed_from_saved"
           }
         ]
       },
@@ -3346,7 +3446,8 @@
         "Iteration175 native represented horizontal table print geometry: SwTabFrame Format owns twip LR/wished-width orientation spacing and minimum23 guard;root supplies actual page upper print width for each master/follow fragment. Browser consumes immutable native print bounds and scales original column reference proportions;hidden measurement uses same owner. Signed left/right margins import/export reuse current table SAX/graph owners. No model clone,TextRuns translation or new adapter. Relative-width,fly/outer-border offsets,multicolumn,vertical/RTL,nested/merged/rowspan/split-row/full layout lifecycle and complete parity remain unverified;registered IO deviations unchanged.",
         "Iteration188: source-shaped horizontal LTR native edge selection and master/follow drag ownership; wider unsupported layout/protection/resize remains unverified.",
         "Iteration202 removes scalar row minHeight storage and numeric kernel height contracts. Native SvxSizeItem/SwFormatFrameSize owns both dimensions, both sizing types, both percentages and both relations with native defaults, Which90, full equality, clone and supported default size query. Original rows retain copied items, document getter compares complete items and returns clone; resize uses native document setter with copied full size, preserving Fixed/Minimum and promoting only Variable. Flat layout and mounted cells use native Variable/Minimum/Fixed semantics, fixed content clipped, properties metric from shell common getter. ODT row-height Fixed/min-row-height Minimum/Variable omission and native height clamp1..65535; attributes apply in order. Full percentage/fly/vertical/nested/merged/protection/UNO member IDs/PutValue/pooling/widget/SfxItemSet/full parity remains unverified; all prior contracts/classifications/statuses/exceptions retained.",
-        "Fixed cell content is positioned within the original fixed row frame so HTML intrinsic content and adjacent collapsed border halves cannot enlarge authored native height. Authored row bounds remain independent of clipping/guide content; natural Minimum and Variable rows retain ordinary flow. Full native border and frame layout remains unverified."
+        "Fixed cell content is positioned within the original fixed row frame so HTML intrinsic content and adjacent collapsed border halves cannot enlarge authored native height. Authored row bounds remain independent of clipping/guide content; natural Minimum and Variable rows retain ordinary flow. Full native border and frame layout remains unverified.",
+        "Iteration203 replaces scalar cell vertical alignment with complete SwFormatVertOrient Which109 position0/NONE/PRINT_AREA defaults, native numeric enum values and three-field clone/equality/represented UNO member query/update. Original boxes and insertion undo own independent copied items. SwDoc SetBoxAttr owns native selection/history/notifications; setters traverse ordinary ring points while getters use current point or native table selected boxes. Common full-item getter and orientation-only getter retain mixed/no-item state. Shell delegates; properties reads common shell state and emits only a changed alignment item, native mixed widget fallback top. CSS handles native alignments and safe fixed-row content; ODT maps NONE/CENTER/BOTTOM, process/storage codec restores full primitive items, old scalar only storage ingress. Full pooling/shared frame formats/direct-formatting/HTML resizing/fly/nested/merged/protection/vertical writing and overall parity remain unverified; prior classifications/defaults/contracts/evidence/exceptions retained."
       ],
       "browserResponsibilities": [
         "Iteration188: device rectangles and mouse events are supplied by the browser; actual table/box/cursor selection belongs to native shell owners."
@@ -4205,11 +4306,45 @@
           {
             "path": "apps/office/src/sw/browser/filter/xml/writer-document-codec.ts",
             "marker": "decodeRowFormat"
+          },
+          {
+            "path": "apps/office/src/sw/inc/fmtornt.ts",
+            "marker": "SwFormatVertOrient"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/docnode/ndtbl1.ts",
+            "marker": "GetBoxSelection"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/doc.ts",
+            "marker": "SetBoxAlign"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx",
+            "marker": "boxAlign"
+          }
+        ],
+        "upstream": [
+          {
+            "path": "vendor/libreoffice-reference/sw/inc/fmtornt.hxx",
+            "marker": "SwFormatVertOrient"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/layout/atrfrm.cxx",
+            "marker": "SwFormatVertOrient::operator=="
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl1.cxx",
+            "marker": "lcl_GetBoxSel"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx",
+            "marker": "get_value_changed_from_saved"
           }
         ]
       },
       "localPath": "apps/office/src/sw/browser/filter/xml/writer-document-codec.ts",
-      "rationale": "Defines a browser Worker graph transfer representation; ODT filter and SwDocShell retain canonical SwDoc contracts. Iteration102 materializes document-owned named paragraph collections instead of flattening common styles into direct node items. Supported own paragraph/character/list fields, raw names, parent/follow links and automatic deltas survive graph16, ODT cycles and actual history. Native name lookup and bounded custom CopyTextColl preserve destination ownership and manual rule handling; the prior builtin copy adapter remains unchanged. Literal zero/per-axis list masks and the project tdf114287 fixture distinguish inherited margins from hard rule overrides. Writer export retains original named parents and emits actual direct numbering items; generic legacy export remains compatible. Default paragraph items are retained on the existing Standard root adapter only. All303other prior tests remain unchanged; one inherited common-style XML assertion moves to styles.xml and one existing project fixture now asserts its actual custom owner/parent, with numeric literals unchanged. Native list display-name resolution, invalid/cyclic parent detachment, direct empty rule suppression and supported composite item subfield inheritance are retained. Full native global default pools, conditional styles, pool/help IDs, creation undo, complete UNO/style UI, collisions and geometry consumers remain separately unverified. No existing status/default/exception or registered I/O/recovery promotion. Iteration202 native row frame sizes cross Worker/storage boundary as eight public native values, restored as SwFormatFrameSize before document ownership; class prototypes never transferred. Existing v16 scalar minimum-height ingress migrates only at this process/storage boundary with no scalar kernel alias. Structured clone/JSON native item semantics and original row flags independently covered; registered save/open/recovery settings and UI unchanged. Entire prior contracts/classifications/statuses retained; full parity remains unverified.",
+      "rationale": "Defines a browser Worker graph transfer representation; ODT filter and SwDocShell retain canonical SwDoc contracts. Iteration102 materializes document-owned named paragraph collections instead of flattening common styles into direct node items. Supported own paragraph/character/list fields, raw names, parent/follow links and automatic deltas survive graph16, ODT cycles and actual history. Native name lookup and bounded custom CopyTextColl preserve destination ownership and manual rule handling; the prior builtin copy adapter remains unchanged. Literal zero/per-axis list masks and the project tdf114287 fixture distinguish inherited margins from hard rule overrides. Writer export retains original named parents and emits actual direct numbering items; generic legacy export remains compatible. Default paragraph items are retained on the existing Standard root adapter only. All303other prior tests remain unchanged; one inherited common-style XML assertion moves to styles.xml and one existing project fixture now asserts its actual custom owner/parent, with numeric literals unchanged. Native list display-name resolution, invalid/cyclic parent detachment, direct empty rule suppression and supported composite item subfield inheritance are retained. Full native global default pools, conditional styles, pool/help IDs, creation undo, complete UNO/style UI, collisions and geometry consumers remain separately unverified. No existing status/default/exception or registered I/O/recovery promotion. Iteration202 native row frame sizes cross Worker/storage boundary as eight public native values, restored as SwFormatFrameSize before document ownership; class prototypes never transferred. Existing v16 scalar minimum-height ingress migrates only at this process/storage boundary with no scalar kernel alias. Structured clone/JSON native item semantics and original row flags independently covered; registered save/open/recovery settings and UI unchanged. Entire prior contracts/classifications/statuses retained; full parity remains unverified. Iteration203 replaces scalar cell vertical alignment with complete SwFormatVertOrient Which109 position0/NONE/PRINT_AREA defaults, native numeric enum values and three-field clone/equality/represented UNO member query/update. Original boxes and insertion undo own independent copied items. SwDoc SetBoxAttr owns native selection/history/notifications; setters traverse ordinary ring points while getters use current point or native table selected boxes. Common full-item getter and orientation-only getter retain mixed/no-item state. Shell delegates; properties reads common shell state and emits only a changed alignment item, native mixed widget fallback top. CSS handles native alignments and safe fixed-row content; ODT maps NONE/CENTER/BOTTOM, process/storage codec restores full primitive items, old scalar only storage ingress. Full pooling/shared frame formats/direct-formatting/HTML resizing/fly/nested/merged/protection/vertical writing and overall parity remain unverified; prior classifications/defaults/contracts/evidence/exceptions retained.",
       "responsibilities": [
         "Encodes and decodes the Writer graph for the ODT Worker message boundary.",
         "Declared levels retain independent native legacy and alignment geometry with zero defaults; only exact label-alignment selects modern mode. SvxNumberFormat in editeng owns positional state, signed widths and mode-dependent getters; Writer inherits and copies all fields. xmlnumi owns level/property contexts and MM100 legacy parsing/assembly. Writer conversion precedes core application, and xmlnume emits the selected group with native signs and omission predicates. Thirteen literal common/automatic ODT cases verify mode spellings/absence, child presence, independent state, signed/bounded/partial/invalid legacy fields, exact XML and reopen. Clone and browser snapshots preserve inactive fields; primitive browser geometry selects the active group. Full line layout, numbering families, omitted-level construction, native UNO replacement failures (including signed SymbolTextDistance narrowing), extensions and wider contracts/defaults remain separately unverified. No whole-module promotion.",
@@ -4449,7 +4584,7 @@
       "classification": "browser-adaptation",
       "localPath": "apps/office/src/sw/browser/presentation/WriterInsertTableDialog.tsx",
       "status": "local-only",
-      "rationale": "Iteration178 moves represented Insert Table defaults, filtered/collision-sensitive names, native spin limits/nonblocking warning, header/repeat sensitivity and manual repeat-row restoration into SwInsTableDlg. React renders one native input owner and properties has a separate draft. Full autoformat,HTML/LOK,selection conversion,insertion kernel/history and complete UI/core parity remain unverified. All prior264 protected semantic fields and evidence prefixes and registered IO/recovery deviations are preserved.",
+      "rationale": "Iteration178 moves represented Insert Table defaults, filtered/collision-sensitive names, native spin limits/nonblocking warning, header/repeat sensitivity and manual repeat-row restoration into SwInsTableDlg. React renders one native input owner and properties has a separate draft. Full autoformat,HTML/LOK,selection conversion,insertion kernel/history and complete UI/core parity remain unverified. All prior264 protected semantic fields and evidence prefixes and registered IO/recovery deviations are preserved. Iteration203 replaces scalar cell vertical alignment with complete SwFormatVertOrient Which109 position0/NONE/PRINT_AREA defaults, native numeric enum values and three-field clone/equality/represented UNO member query/update. Original boxes and insertion undo own independent copied items. SwDoc SetBoxAttr owns native selection/history/notifications; setters traverse ordinary ring points while getters use current point or native table selected boxes. Common full-item getter and orientation-only getter retain mixed/no-item state. Shell delegates; properties reads common shell state and emits only a changed alignment item, native mixed widget fallback top. CSS handles native alignments and safe fixed-row content; ODT maps NONE/CENTER/BOTTOM, process/storage codec restores full primitive items, old scalar only storage ingress. Full pooling/shared frame formats/direct-formatting/HTML resizing/fly/nested/merged/protection/vertical writing and overall parity remain unverified; prior classifications/defaults/contracts/evidence/exceptions retained.",
       "responsibilities": [
         "Iteration178 moves represented Insert Table defaults, filtered/collision-sensitive names, native spin limits/nonblocking warning, header/repeat sensitivity and manual repeat-row restoration into SwInsTableDlg. React renders one native input owner and properties has a separate draft. Full autoformat,HTML/LOK,selection conversion,insertion kernel/history and complete UI/core parity remain unverified. All prior264 protected semantic fields and evidence prefixes and registered IO/recovery deviations are preserved."
       ],
@@ -4462,6 +4597,40 @@
           {
             "path": "apps/office/src/sw/browser/presentation/WriterInsertTableDialog.tsx",
             "marker": "WriterInsertTableDialog"
+          },
+          {
+            "path": "apps/office/src/sw/inc/fmtornt.ts",
+            "marker": "SwFormatVertOrient"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/docnode/ndtbl1.ts",
+            "marker": "GetBoxSelection"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/doc.ts",
+            "marker": "SetBoxAlign"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx",
+            "marker": "boxAlign"
+          }
+        ],
+        "upstream": [
+          {
+            "path": "vendor/libreoffice-reference/sw/inc/fmtornt.hxx",
+            "marker": "SwFormatVertOrient"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/layout/atrfrm.cxx",
+            "marker": "SwFormatVertOrient::operator=="
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl1.cxx",
+            "marker": "lcl_GetBoxSel"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx",
+            "marker": "get_value_changed_from_saved"
           }
         ]
       }
@@ -5044,6 +5213,22 @@
           {
             "path": "apps/office/src/sw/source/core/layout/tabfrm.ts",
             "marker": "SwRowFrame"
+          },
+          {
+            "path": "apps/office/src/sw/inc/fmtornt.ts",
+            "marker": "SwFormatVertOrient"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/docnode/ndtbl1.ts",
+            "marker": "GetBoxSelection"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/doc.ts",
+            "marker": "SetBoxAlign"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx",
+            "marker": "boxAlign"
           }
         ],
         "upstream": [
@@ -5194,11 +5379,27 @@
           {
             "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmlimpit.cxx",
             "marker": "MINLAY"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/inc/fmtornt.hxx",
+            "marker": "SwFormatVertOrient"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/layout/atrfrm.cxx",
+            "marker": "SwFormatVertOrient::operator=="
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl1.cxx",
+            "marker": "lcl_GetBoxSel"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx",
+            "marker": "get_value_changed_from_saved"
           }
         ]
       },
       "localPath": "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx",
-      "rationale": "Presents bounded Insert Table and Table Properties controls over the canonical Writer table graph. Resumed iteration191 after user-priority192/193/194 ports existing absolute column editing through source-owned SwTableColumnPage and shared native SwTableRep. Native Reset retains shared draft/vector identity and independent original copies; five field slots and one-column navigation, source inherited MINLAY23/min/max, constant-width neighbor compensation/wrap/tiny-table loop bound, adapt-table width cap, proportional integer rounding and checkbox coupling/activation sensitivity, selected-row versus whole-table modes and native LR deactivation are represented. Browser page events call native handlers instead of replacing width-array entries; actual canonical graph remains read-only until existing ItemSetToTableParam acceptance and grouped native history. Native percentages, hidden/per-row graph, full SfxItemSet/frame-format notifications and adaptive preferred-width SizeHdl remain unverified, as do complete module/UI/core/parent parity. Registered filename/save/open/recovery exceptions unchanged. Iteration195 ports the native absolute SwFormatTablePage lifecycle: metric/radio values are page-local until DeactivatePage publishes the shared SwTableRep; Reset retains original independent data, shared pointer/vector and selection, saved metric state and vertical spacing; ActivatePage refreshes width/LR and saved values only when source absolute width differs; FillItemSet admits a still-focused metric; source saved-spacing/orientation/automatic-width flags and existing native column redistribution are retained. React reads native fields/radio state and activates Table on tab entry. Historical literal geometry expectations are preserved through a field-state accessor migration; original model graph/history remains canonical. Native percentages, hidden/per-row graphs, full SfxItemSet/frame-format notifications, adaptive preferred-width SizeHdl, complete name/text-direction/Reset UI and full native widget unit/range semantics remain unverified, as does whole module/UI/core/parent parity. Registered exceptions unchanged. Iteration196 adds the source current-page Reset action in existing Writer Table Properties. SfxTabDialogController::ResetHdl dispatches Reset only to the active page with original input values; Table and Columns reuse existing native Reset owners/shared representation, Text Flow and Borders restore captured original represented page controls while retaining other drafts. Reset never submits or mutates canonical document/history; active page remains selected, repeat reset/cancel/OK/UndoRedo/input and ODT covered. Unsupported full SfxItemSet ranges, native name/text direction/percentage/widget bounds/Background UI and whole parity remain unverified; existing classifications and registered exceptions unchanged. Iteration197 ports the represented SwTextFlowPage headline subset: Reset reads canonical GetRowsToRepeat, saves checkbox/count values, clamps displayed count to source range1..100 independent of physical row count, and numeric sensitivity follows one Repeat header checkbox. FillItemSet emits only changed headline widgets; disabled publication is0 and unchanged bounded fields retain inherited original count. Properties removes the artificial Header control and raw-format fallback1/true; Insert Table remains unchanged. Original graph/list/cursor, grouped3UndoRedo, ODT and production Chromium1280/390 covered. Full Text Flow break/split/keep/text-direction, full SfxItemSet notification/ranges, other widget bounds and whole parity remain unverified; existing storage contracts/classifications/registered exceptions preserved. Iteration199 ports native Text Flow table/row split controls and removes conflated properties dontSplit and React first-row state. Native ndtbl1 aggregate reads original selected boxes/lines, true row default and no item for empty/mixed. SwDoc.GetRowSplit and SwFEShell.GetRowSplit retain source cursor/document ownership. SwTextFlowPage Reset saves original split/headline values; table child sensitivity does not clear row tristate; FillItemSet publishes only changed headline/table/row items. Browser source labels and mixed HTML checkbox use actual selected boxes, native page handlers/Reset/Cancel/OK, independent table and row setters. Insertion-only dontSplit remains separate. Original graph/list/cursor/grouped3UndoRedo/ODT/continued input and Chromium1280/390 covered. Full row-content splitting/nested/merged/fly/columns/protection/full item classes/SfxItemSet/widget suite and whole parity remain unverified; old contracts/classifications/registered exceptions retained. Iteration202 removes scalar row minHeight storage and numeric kernel height contracts. Native SvxSizeItem/SwFormatFrameSize owns both dimensions, both sizing types, both percentages and both relations with native defaults, Which90, full equality, clone and supported default size query. Original rows retain copied items, document getter compares complete items and returns clone; resize uses native document setter with copied full size, preserving Fixed/Minimum and promoting only Variable. Flat layout and mounted cells use native Variable/Minimum/Fixed semantics, fixed content clipped, properties metric from shell common getter. ODT row-height Fixed/min-row-height Minimum/Variable omission and native height clamp1..65535; attributes apply in order. Full percentage/fly/vertical/nested/merged/protection/UNO member IDs/PutValue/pooling/widget/SfxItemSet/full parity remains unverified; all prior contracts/classifications/statuses/exceptions retained.",
+      "rationale": "Presents bounded Insert Table and Table Properties controls over the canonical Writer table graph. Resumed iteration191 after user-priority192/193/194 ports existing absolute column editing through source-owned SwTableColumnPage and shared native SwTableRep. Native Reset retains shared draft/vector identity and independent original copies; five field slots and one-column navigation, source inherited MINLAY23/min/max, constant-width neighbor compensation/wrap/tiny-table loop bound, adapt-table width cap, proportional integer rounding and checkbox coupling/activation sensitivity, selected-row versus whole-table modes and native LR deactivation are represented. Browser page events call native handlers instead of replacing width-array entries; actual canonical graph remains read-only until existing ItemSetToTableParam acceptance and grouped native history. Native percentages, hidden/per-row graph, full SfxItemSet/frame-format notifications and adaptive preferred-width SizeHdl remain unverified, as do complete module/UI/core/parent parity. Registered filename/save/open/recovery exceptions unchanged. Iteration195 ports the native absolute SwFormatTablePage lifecycle: metric/radio values are page-local until DeactivatePage publishes the shared SwTableRep; Reset retains original independent data, shared pointer/vector and selection, saved metric state and vertical spacing; ActivatePage refreshes width/LR and saved values only when source absolute width differs; FillItemSet admits a still-focused metric; source saved-spacing/orientation/automatic-width flags and existing native column redistribution are retained. React reads native fields/radio state and activates Table on tab entry. Historical literal geometry expectations are preserved through a field-state accessor migration; original model graph/history remains canonical. Native percentages, hidden/per-row graphs, full SfxItemSet/frame-format notifications, adaptive preferred-width SizeHdl, complete name/text-direction/Reset UI and full native widget unit/range semantics remain unverified, as does whole module/UI/core/parent parity. Registered exceptions unchanged. Iteration196 adds the source current-page Reset action in existing Writer Table Properties. SfxTabDialogController::ResetHdl dispatches Reset only to the active page with original input values; Table and Columns reuse existing native Reset owners/shared representation, Text Flow and Borders restore captured original represented page controls while retaining other drafts. Reset never submits or mutates canonical document/history; active page remains selected, repeat reset/cancel/OK/UndoRedo/input and ODT covered. Unsupported full SfxItemSet ranges, native name/text direction/percentage/widget bounds/Background UI and whole parity remain unverified; existing classifications and registered exceptions unchanged. Iteration197 ports the represented SwTextFlowPage headline subset: Reset reads canonical GetRowsToRepeat, saves checkbox/count values, clamps displayed count to source range1..100 independent of physical row count, and numeric sensitivity follows one Repeat header checkbox. FillItemSet emits only changed headline widgets; disabled publication is0 and unchanged bounded fields retain inherited original count. Properties removes the artificial Header control and raw-format fallback1/true; Insert Table remains unchanged. Original graph/list/cursor, grouped3UndoRedo, ODT and production Chromium1280/390 covered. Full Text Flow break/split/keep/text-direction, full SfxItemSet notification/ranges, other widget bounds and whole parity remain unverified; existing storage contracts/classifications/registered exceptions preserved. Iteration199 ports native Text Flow table/row split controls and removes conflated properties dontSplit and React first-row state. Native ndtbl1 aggregate reads original selected boxes/lines, true row default and no item for empty/mixed. SwDoc.GetRowSplit and SwFEShell.GetRowSplit retain source cursor/document ownership. SwTextFlowPage Reset saves original split/headline values; table child sensitivity does not clear row tristate; FillItemSet publishes only changed headline/table/row items. Browser source labels and mixed HTML checkbox use actual selected boxes, native page handlers/Reset/Cancel/OK, independent table and row setters. Insertion-only dontSplit remains separate. Original graph/list/cursor/grouped3UndoRedo/ODT/continued input and Chromium1280/390 covered. Full row-content splitting/nested/merged/fly/columns/protection/full item classes/SfxItemSet/widget suite and whole parity remain unverified; old contracts/classifications/registered exceptions retained. Iteration202 removes scalar row minHeight storage and numeric kernel height contracts. Native SvxSizeItem/SwFormatFrameSize owns both dimensions, both sizing types, both percentages and both relations with native defaults, Which90, full equality, clone and supported default size query. Original rows retain copied items, document getter compares complete items and returns clone; resize uses native document setter with copied full size, preserving Fixed/Minimum and promoting only Variable. Flat layout and mounted cells use native Variable/Minimum/Fixed semantics, fixed content clipped, properties metric from shell common getter. ODT row-height Fixed/min-row-height Minimum/Variable omission and native height clamp1..65535; attributes apply in order. Full percentage/fly/vertical/nested/merged/protection/UNO member IDs/PutValue/pooling/widget/SfxItemSet/full parity remains unverified; all prior contracts/classifications/statuses/exceptions retained. Iteration203 replaces scalar cell vertical alignment with complete SwFormatVertOrient Which109 position0/NONE/PRINT_AREA defaults, native numeric enum values and three-field clone/equality/represented UNO member query/update. Original boxes and insertion undo own independent copied items. SwDoc SetBoxAttr owns native selection/history/notifications; setters traverse ordinary ring points while getters use current point or native table selected boxes. Common full-item getter and orientation-only getter retain mixed/no-item state. Shell delegates; properties reads common shell state and emits only a changed alignment item, native mixed widget fallback top. CSS handles native alignments and safe fixed-row content; ODT maps NONE/CENTER/BOTTOM, process/storage codec restores full primitive items, old scalar only storage ingress. Full pooling/shared frame formats/direct-formatting/HTML resizing/fly/nested/merged/protection/vertical writing and overall parity remain unverified; prior classifications/defaults/contracts/evidence/exceptions retained.",
       "responsibilities": [
         "Presents bounded Insert Table and Table Properties controls over the canonical Writer table graph.",
         "Iteration176 removes React table-property writes through inherited SwFEShell and native ItemSetToTableParam. Existing document history groups seven attribute operations into one Table Properties Undo; SwUndoAttrTable swaps attribute-only table/column/row/box payload at the numeric table index while retaining original graph/text/cursor owners. Borders/row-split without selection apply to the whole table; selected-cell alignment and current/selected-row height use native cursor rings. New native owners remain unverified. Native Sfx frame-format item model,change-only dialog items,distinct native per-format undo classes,layout-cache lifetime,merged/nested/protected selection,full alignment/spacing/relative-width controls,insertion and complete UI/core parity remain unverified. Prior259semantic states/defaults/classes/IOexceptions/evidence preserved;conscious save/open/recovery deviations unchanged.",
@@ -6021,6 +6222,22 @@
           {
             "path": "apps/office/src/sw/source/core/layout/tabfrm.ts",
             "marker": "SwRowFrame"
+          },
+          {
+            "path": "apps/office/src/sw/inc/fmtornt.ts",
+            "marker": "SwFormatVertOrient"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/docnode/ndtbl1.ts",
+            "marker": "GetBoxSelection"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/doc.ts",
+            "marker": "SetBoxAlign"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx",
+            "marker": "boxAlign"
           }
         ],
         "upstream": [
@@ -6103,6 +6320,22 @@
           {
             "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmlimpit.cxx",
             "marker": "MINLAY"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/inc/fmtornt.hxx",
+            "marker": "SwFormatVertOrient"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/layout/atrfrm.cxx",
+            "marker": "SwFormatVertOrient::operator=="
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl1.cxx",
+            "marker": "lcl_GetBoxSel"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx",
+            "marker": "get_value_changed_from_saved"
           }
         ]
       },
@@ -6129,7 +6362,8 @@
         "Iteration179 removes direct React grid/dialog table graph mutation. The inherited table editing shell groups the existing paragraph split and numeric SwUndoInsTable; native sections insert before body cursor and Redo reconstructs a new graph. SwDoc owns naming, FULL65535 reference geometry and represented flags/styles, preserving header styling independently of repetition. Actual core/mounted/Chromium acceptance covers collapsed direct-body0/middle/end and history. Single-inheritance source-unit split adds native table operations to existing numbering shell without forwarding. Browser border choices remain a bounded autoformat argument; native full frame/item formats, per-edge border objects, context font propagation, table split layout/ODT persistence, selection-to-table,nested tables,redlines,frames,Repeat and complete core/UI parity remain unverified. Prior267 semantic states/defaults/classifications/evidence and registered I/O/recovery exceptions preserved.",
         "Resumed iteration191 after user-priority192/193/194 ports existing absolute column editing through source-owned SwTableColumnPage and shared native SwTableRep. Native Reset retains shared draft/vector identity and independent original copies; five field slots and one-column navigation, source inherited MINLAY23/min/max, constant-width neighbor compensation/wrap/tiny-table loop bound, adapt-table width cap, proportional integer rounding and checkbox coupling/activation sensitivity, selected-row versus whole-table modes and native LR deactivation are represented. Browser page events call native handlers instead of replacing width-array entries; actual canonical graph remains read-only until existing ItemSetToTableParam acceptance and grouped native history. Native percentages, hidden/per-row graph, full SfxItemSet/frame-format notifications and adaptive preferred-width SizeHdl remain unverified, as do complete module/UI/core/parent parity. Registered filename/save/open/recovery exceptions unchanged.",
         "Iteration199 ports native Text Flow table/row split controls and removes conflated properties dontSplit and React first-row state. Native ndtbl1 aggregate reads original selected boxes/lines, true row default and no item for empty/mixed. SwDoc.GetRowSplit and SwFEShell.GetRowSplit retain source cursor/document ownership. SwTextFlowPage Reset saves original split/headline values; table child sensitivity does not clear row tristate; FillItemSet publishes only changed headline/table/row items. Browser source labels and mixed HTML checkbox use actual selected boxes, native page handlers/Reset/Cancel/OK, independent table and row setters. Insertion-only dontSplit remains separate. Original graph/list/cursor/grouped3UndoRedo/ODT/continued input and Chromium1280/390 covered. Full row-content splitting/nested/merged/fly/columns/protection/full item classes/SfxItemSet/widget suite and whole parity remain unverified; old contracts/classifications/registered exceptions retained.",
-        "Iteration202 removes scalar row minHeight storage and numeric kernel height contracts. Native SvxSizeItem/SwFormatFrameSize owns both dimensions, both sizing types, both percentages and both relations with native defaults, Which90, full equality, clone and supported default size query. Original rows retain copied items, document getter compares complete items and returns clone; resize uses native document setter with copied full size, preserving Fixed/Minimum and promoting only Variable. Flat layout and mounted cells use native Variable/Minimum/Fixed semantics, fixed content clipped, properties metric from shell common getter. ODT row-height Fixed/min-row-height Minimum/Variable omission and native height clamp1..65535; attributes apply in order. Full percentage/fly/vertical/nested/merged/protection/UNO member IDs/PutValue/pooling/widget/SfxItemSet/full parity remains unverified; all prior contracts/classifications/statuses/exceptions retained."
+        "Iteration202 removes scalar row minHeight storage and numeric kernel height contracts. Native SvxSizeItem/SwFormatFrameSize owns both dimensions, both sizing types, both percentages and both relations with native defaults, Which90, full equality, clone and supported default size query. Original rows retain copied items, document getter compares complete items and returns clone; resize uses native document setter with copied full size, preserving Fixed/Minimum and promoting only Variable. Flat layout and mounted cells use native Variable/Minimum/Fixed semantics, fixed content clipped, properties metric from shell common getter. ODT row-height Fixed/min-row-height Minimum/Variable omission and native height clamp1..65535; attributes apply in order. Full percentage/fly/vertical/nested/merged/protection/UNO member IDs/PutValue/pooling/widget/SfxItemSet/full parity remains unverified; all prior contracts/classifications/statuses/exceptions retained.",
+        "Iteration203 replaces scalar cell vertical alignment with complete SwFormatVertOrient Which109 position0/NONE/PRINT_AREA defaults, native numeric enum values and three-field clone/equality/represented UNO member query/update. Original boxes and insertion undo own independent copied items. SwDoc SetBoxAttr owns native selection/history/notifications; setters traverse ordinary ring points while getters use current point or native table selected boxes. Common full-item getter and orientation-only getter retain mixed/no-item state. Shell delegates; properties reads common shell state and emits only a changed alignment item, native mixed widget fallback top. CSS handles native alignments and safe fixed-row content; ODT maps NONE/CENTER/BOTTOM, process/storage codec restores full primitive items, old scalar only storage ingress. Full pooling/shared frame formats/direct-formatting/HTML resizing/fly/nested/merged/protection/vertical writing and overall parity remain unverified; prior classifications/defaults/contracts/evidence/exceptions retained."
       ]
     },
     {
@@ -6457,6 +6691,78 @@
       "evidence": {
         "local": [
           {
+            "path": "apps/office/src/sw/inc/fmtfsize.ts",
+            "marker": "SwFormatFrameSize"
+          }
+        ],
+        "upstream": [
+          {
+            "path": "vendor/libreoffice-reference/sw/inc/fmtfsize.hxx",
+            "marker": "SwFormatFrameSize"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/layout/atrfrm.cxx",
+            "marker": "SwFormatFrameSize::operator=="
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/inc/fmtfsize.ts",
+      "localSymbols": [
+        "SwFrameSize",
+        "SwFormatFrameSize"
+      ],
+      "omittedResponsibilities": [
+        "Full native UNO member IDs/PutValue/percent sizing/layout/pool lifecycle remain unverified."
+      ],
+      "preservedResponsibilities": [
+        "Iteration202 removes scalar row minHeight storage and numeric kernel height contracts. Native SvxSizeItem/SwFormatFrameSize owns both dimensions, both sizing types, both percentages and both relations with native defaults, Which90, full equality, clone and supported default size query. Original rows retain copied items, document getter compares complete items and returns clone; resize uses native document setter with copied full size, preserving Fixed/Minimum and promoting only Variable. Flat layout and mounted cells use native Variable/Minimum/Fixed semantics, fixed content clipped, properties metric from shell common getter. ODT row-height Fixed/min-row-height Minimum/Variable omission and native height clamp1..65535; attributes apply in order. Full percentage/fly/vertical/nested/merged/protection/UNO member IDs/PutValue/pooling/widget/SfxItemSet/full parity remains unverified; all prior contracts/classifications/statuses/exceptions retained."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/inc/fmtfsize.hxx",
+      "upstreamSymbols": [
+        "SwFrameSize",
+        "SwFormatFrameSize"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "path": "apps/office/src/sw/inc/fmtornt.ts",
+            "marker": "SwFormatVertOrient"
+          }
+        ],
+        "upstream": [
+          {
+            "path": "vendor/libreoffice-reference/sw/inc/fmtornt.hxx",
+            "marker": "SwFormatVertOrient"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/inc/fmtornt.ts",
+      "localSymbols": [
+        "SwFormatVertOrient",
+        "GetRelationOrient"
+      ],
+      "omittedResponsibilities": [
+        "Complete fly layout/pooling/shared-format lifetime remain unverified."
+      ],
+      "preservedResponsibilities": [
+        "Iteration203 replaces scalar cell vertical alignment with complete SwFormatVertOrient Which109 position0/NONE/PRINT_AREA defaults, native numeric enum values and three-field clone/equality/represented UNO member query/update. Original boxes and insertion undo own independent copied items. SwDoc SetBoxAttr owns native selection/history/notifications; setters traverse ordinary ring points while getters use current point or native table selected boxes. Common full-item getter and orientation-only getter retain mixed/no-item state. Shell delegates; properties reads common shell state and emits only a changed alignment item, native mixed widget fallback top. CSS handles native alignments and safe fixed-row content; ODT maps NONE/CENTER/BOTTOM, process/storage codec restores full primitive items, old scalar only storage ingress. Full pooling/shared frame formats/direct-formatting/HTML resizing/fly/nested/merged/protection/vertical writing and overall parity remain unverified; prior classifications/defaults/contracts/evidence/exceptions retained."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/inc/fmtornt.hxx",
+      "upstreamSymbols": [
+        "SwFormatVertOrient",
+        "GetRelationOrient"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
             "marker": "RES_CHRATR_BEGIN",
             "path": "apps/office/src/sw/inc/hintids.ts"
           },
@@ -6475,6 +6781,22 @@
           {
             "path": "apps/office/src/sw/source/core/layout/tabfrm.ts",
             "marker": "SwRowFrame"
+          },
+          {
+            "path": "apps/office/src/sw/inc/fmtornt.ts",
+            "marker": "SwFormatVertOrient"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/docnode/ndtbl1.ts",
+            "marker": "GetBoxSelection"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/doc.ts",
+            "marker": "SetBoxAlign"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx",
+            "marker": "boxAlign"
           }
         ],
         "upstream": [
@@ -6497,6 +6819,22 @@
           {
             "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmlimpit.cxx",
             "marker": "MINLAY"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/inc/fmtornt.hxx",
+            "marker": "SwFormatVertOrient"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/layout/atrfrm.cxx",
+            "marker": "SwFormatVertOrient::operator=="
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl1.cxx",
+            "marker": "lcl_GetBoxSel"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx",
+            "marker": "get_value_changed_from_saved"
           }
         ]
       },
@@ -6516,7 +6854,8 @@
       "preservedResponsibilities": [
         "Declares the bounded Writer WhichIds used by the TypeScript core, matching pinned `sw/inc/hintids.hxx` numeric identities.",
         "Iteration37 ports the anonymous-namespace collection numbering transition helpers. Initial inherited attachment,retained record rebinding,five-attribute removal reset,Outline exclusion/assignment and synthesized empty-rule return match16 unchanged extracted native definitions over277 sequences/10394 actual states. Native footnotes,conditional/inline styles,outline index,platform flags/cache,live format callbacks and full history/attribute lifetime remain separate unverified obligations.",
-        "Iteration202 removes scalar row minHeight storage and numeric kernel height contracts. Native SvxSizeItem/SwFormatFrameSize owns both dimensions, both sizing types, both percentages and both relations with native defaults, Which90, full equality, clone and supported default size query. Original rows retain copied items, document getter compares complete items and returns clone; resize uses native document setter with copied full size, preserving Fixed/Minimum and promoting only Variable. Flat layout and mounted cells use native Variable/Minimum/Fixed semantics, fixed content clipped, properties metric from shell common getter. ODT row-height Fixed/min-row-height Minimum/Variable omission and native height clamp1..65535; attributes apply in order. Full percentage/fly/vertical/nested/merged/protection/UNO member IDs/PutValue/pooling/widget/SfxItemSet/full parity remains unverified; all prior contracts/classifications/statuses/exceptions retained."
+        "Iteration202 removes scalar row minHeight storage and numeric kernel height contracts. Native SvxSizeItem/SwFormatFrameSize owns both dimensions, both sizing types, both percentages and both relations with native defaults, Which90, full equality, clone and supported default size query. Original rows retain copied items, document getter compares complete items and returns clone; resize uses native document setter with copied full size, preserving Fixed/Minimum and promoting only Variable. Flat layout and mounted cells use native Variable/Minimum/Fixed semantics, fixed content clipped, properties metric from shell common getter. ODT row-height Fixed/min-row-height Minimum/Variable omission and native height clamp1..65535; attributes apply in order. Full percentage/fly/vertical/nested/merged/protection/UNO member IDs/PutValue/pooling/widget/SfxItemSet/full parity remains unverified; all prior contracts/classifications/statuses/exceptions retained.",
+        "Iteration203 replaces scalar cell vertical alignment with complete SwFormatVertOrient Which109 position0/NONE/PRINT_AREA defaults, native numeric enum values and three-field clone/equality/represented UNO member query/update. Original boxes and insertion undo own independent copied items. SwDoc SetBoxAttr owns native selection/history/notifications; setters traverse ordinary ring points while getters use current point or native table selected boxes. Common full-item getter and orientation-only getter retain mixed/no-item state. Shell delegates; properties reads common shell state and emits only a changed alignment item, native mixed widget fallback top. CSS handles native alignments and safe fixed-row content; ODT maps NONE/CENTER/BOTTOM, process/storage codec restores full primitive items, old scalar only storage ingress. Full pooling/shared frame formats/direct-formatting/HTML resizing/fly/nested/merged/protection/vertical writing and overall parity remain unverified; prior classifications/defaults/contracts/evidence/exceptions retained."
       ],
       "status": "mapped",
       "upstreamPath": "sw/inc/hintids.hxx",
@@ -9422,6 +9761,22 @@
           {
             "path": "apps/office/src/sw/source/core/layout/tabfrm.ts",
             "marker": "SwRowFrame"
+          },
+          {
+            "path": "apps/office/src/sw/inc/fmtornt.ts",
+            "marker": "SwFormatVertOrient"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/docnode/ndtbl1.ts",
+            "marker": "GetBoxSelection"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/doc.ts",
+            "marker": "SetBoxAlign"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx",
+            "marker": "boxAlign"
           }
         ],
         "upstream": [
@@ -9668,6 +10023,22 @@
           {
             "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmlimpit.cxx",
             "marker": "MINLAY"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/inc/fmtornt.hxx",
+            "marker": "SwFormatVertOrient"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/layout/atrfrm.cxx",
+            "marker": "SwFormatVertOrient::operator=="
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl1.cxx",
+            "marker": "lcl_GetBoxSel"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx",
+            "marker": "get_value_changed_from_saved"
           }
         ]
       },
@@ -9703,7 +10074,8 @@
         "Iteration199 ports native Text Flow table/row split controls and removes conflated properties dontSplit and React first-row state. Native ndtbl1 aggregate reads original selected boxes/lines, true row default and no item for empty/mixed. SwDoc.GetRowSplit and SwFEShell.GetRowSplit retain source cursor/document ownership. SwTextFlowPage Reset saves original split/headline values; table child sensitivity does not clear row tristate; FillItemSet publishes only changed headline/table/row items. Browser source labels and mixed HTML checkbox use actual selected boxes, native page handlers/Reset/Cancel/OK, independent table and row setters. Insertion-only dontSplit remains separate. Original graph/list/cursor/grouped3UndoRedo/ODT/continued input and Chromium1280/390 covered. Full row-content splitting/nested/merged/fly/columns/protection/full item classes/SfxItemSet/widget suite and whole parity remain unverified; old contracts/classifications/registered exceptions retained.",
         "Iteration200 ports native current-or-table-selected row split mutation to SwDoc/ndtbl1, original line collection, document-owned SwUndoAttrTable/history/notification and same-value requests. SwFEShell brackets and forwards; obsolete whole=true split SetRowAttr adapter removed. Properties caller uses source Push/temporary select-all/ClearMark/finally Pop; native registered cursor stack DeleteCurrent/DeleteStack retains original displayed endpoints and releases on shell Close. Existing selected scope, original graph/list/pending/cursor, grouped3UndoRedo/ODT/continued input and all prior browser controls retained. Full nested/merged/fly/columns/protection/row-content splitting/full crsrsh selection/widget/SfxItemSet/full parity remains unverified; prior contracts/classifications/registered exceptions retained.",
         "Iteration201 moves represented minimum-row-height selection, mutation and history into native SwDoc/ndtbl1 shared original row attributes. Ordinary current cursor ignores mark/ring; actual table-selected boxes select original flat rows once. Shell brackets and forwards; obsolete shell SetRowAttr removed. Common represented numeric height getter keeps default0/mixed-or-empty no item. Same-value history, unrelated row items, original graph/list/pending/cursor, grouped3UndoRedo/ODT/continued input retained. Full SwFormatFrameSize/fixed/relative/nested proportional heights/layout/full parity remain unverified; prior contracts/classifications/registered exceptions retained.",
-        "Iteration202 removes scalar row minHeight storage and numeric kernel height contracts. Native SvxSizeItem/SwFormatFrameSize owns both dimensions, both sizing types, both percentages and both relations with native defaults, Which90, full equality, clone and supported default size query. Original rows retain copied items, document getter compares complete items and returns clone; resize uses native document setter with copied full size, preserving Fixed/Minimum and promoting only Variable. Flat layout and mounted cells use native Variable/Minimum/Fixed semantics, fixed content clipped, properties metric from shell common getter. ODT row-height Fixed/min-row-height Minimum/Variable omission and native height clamp1..65535; attributes apply in order. Full percentage/fly/vertical/nested/merged/protection/UNO member IDs/PutValue/pooling/widget/SfxItemSet/full parity remains unverified; all prior contracts/classifications/statuses/exceptions retained."
+        "Iteration202 removes scalar row minHeight storage and numeric kernel height contracts. Native SvxSizeItem/SwFormatFrameSize owns both dimensions, both sizing types, both percentages and both relations with native defaults, Which90, full equality, clone and supported default size query. Original rows retain copied items, document getter compares complete items and returns clone; resize uses native document setter with copied full size, preserving Fixed/Minimum and promoting only Variable. Flat layout and mounted cells use native Variable/Minimum/Fixed semantics, fixed content clipped, properties metric from shell common getter. ODT row-height Fixed/min-row-height Minimum/Variable omission and native height clamp1..65535; attributes apply in order. Full percentage/fly/vertical/nested/merged/protection/UNO member IDs/PutValue/pooling/widget/SfxItemSet/full parity remains unverified; all prior contracts/classifications/statuses/exceptions retained.",
+        "Iteration203 replaces scalar cell vertical alignment with complete SwFormatVertOrient Which109 position0/NONE/PRINT_AREA defaults, native numeric enum values and three-field clone/equality/represented UNO member query/update. Original boxes and insertion undo own independent copied items. SwDoc SetBoxAttr owns native selection/history/notifications; setters traverse ordinary ring points while getters use current point or native table selected boxes. Common full-item getter and orientation-only getter retain mixed/no-item state. Shell delegates; properties reads common shell state and emits only a changed alignment item, native mixed widget fallback top. CSS handles native alignments and safe fixed-row content; ODT maps NONE/CENTER/BOTTOM, process/storage codec restores full primitive items, old scalar only storage ingress. Full pooling/shared frame formats/direct-formatting/HTML resizing/fly/nested/merged/protection/vertical writing and overall parity remain unverified; prior classifications/defaults/contracts/evidence/exceptions retained."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/doc/doc.cxx",
@@ -10953,6 +11325,242 @@
       "evidence": {
         "local": [
           {
+            "path": "apps/office/src/sw/source/core/docnode/ndtbl1.ts",
+            "marker": "GetSwRowSplit"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/doc.ts",
+            "marker": "GetRowSplit"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/frmedt/fetab.ts",
+            "marker": "GetRowSplit"
+          },
+          {
+            "path": "apps/office/src/sw/source/ui/table/tabledlg.ts",
+            "marker": "SplitHdl_Impl"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/shells/tabsh.ts",
+            "marker": "value.rowSplit"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx",
+            "marker": "Allow row to break across pages and columns"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/writer-view.tsx",
+            "marker": "selectedBoxes:"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/docnode/ndtbl1.ts",
+            "marker": "SetSwRowSplit"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/doc.ts",
+            "marker": "SetRowSplit"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/frmedt/fetab.ts",
+            "marker": "this.GetDoc().SetRowSplit"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/crsr/trvltbl.ts",
+            "marker": "public Push"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/shells/tabsh.ts",
+            "marker": "shell.Push"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+            "marker": "PopMode.DeleteStack"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/docnode/ndtbl1.ts",
+            "marker": "SetSwRowHeight"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/doc.ts",
+            "marker": "SetRowHeight"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/frmedt/fetab.ts",
+            "marker": "this.GetDoc().SetRowHeight"
+          },
+          {
+            "path": "apps/office/src/sw/inc/fmtfsize.ts",
+            "marker": "SwFormatFrameSize"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/docnode/ndtbl1.ts",
+            "marker": "GetSwRowHeight"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/docnode/ndtbl.ts",
+            "marker": "doc.SetRowHeight"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/layout/tabfrm.ts",
+            "marker": "SwRowFrame"
+          },
+          {
+            "path": "apps/office/src/sw/inc/fmtornt.ts",
+            "marker": "SwFormatVertOrient"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/docnode/ndtbl1.ts",
+            "marker": "GetBoxSelection"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/doc.ts",
+            "marker": "SetBoxAlign"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx",
+            "marker": "boxAlign"
+          }
+        ],
+        "upstream": [
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl1.cxx",
+            "marker": "SwDoc::GetRowSplit"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/frmedt/fetab.cxx",
+            "marker": "SwFEShell::GetRowSplit"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx",
+            "marker": "SwTextFlowPage::Reset"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx",
+            "marker": "SwTextFlowPage::FillItemSet"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx",
+            "marker": "SwTextFlowPage, SplitHdl_Impl"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/uibase/shells/tabsh.cxx",
+            "marker": "RES_LAYOUT_SPLIT"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/uiconfig/swriter/ui/tabletextflowpage.ui",
+            "marker": "id=\"splitrow\""
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/inc/fmtrowsplt.hxx",
+            "marker": "SwFormatRowSplit"
+          },
+          {
+            "path": "vendor/libreoffice-reference/include/vcl/weld/CheckButton.hxx",
+            "marker": "TRISTATE_TRUE"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl1.cxx",
+            "marker": "SwDoc::SetRowSplit"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl1.cxx",
+            "marker": "lcl_CollectLines"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/frmedt/fetab.cxx",
+            "marker": "SwFEShell::SetRowSplit"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/uibase/shells/tabsh.cxx",
+            "marker": "rSh.Push()"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/crsr/crsrsh.cxx",
+            "marker": "SwCursorShell::Push"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/crsr/crsrsh.cxx",
+            "marker": "SwCursorShell::Pop"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/crsr/crsrsh.cxx",
+            "marker": "SwCursorShell::ClearMark"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/inc/crsrsh.hxx",
+            "marker": "enum class PopMode"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl1.cxx",
+            "marker": "SwDoc::SetRowHeight"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl1.cxx",
+            "marker": "SwDoc::GetRowHeight"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/frmedt/fetab.cxx",
+            "marker": "SwFEShell::SetRowHeight"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/inc/fmtfsize.hxx",
+            "marker": "SwFormatFrameSize"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/layout/atrfrm.cxx",
+            "marker": "SwFormatFrameSize::operator=="
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl.cxx",
+            "marker": "SetHeightSizeType"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmlimpit.cxx",
+            "marker": "MINLAY"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/inc/fmtornt.hxx",
+            "marker": "SwFormatVertOrient"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/layout/atrfrm.cxx",
+            "marker": "SwFormatVertOrient::operator=="
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl1.cxx",
+            "marker": "lcl_GetBoxSel"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx",
+            "marker": "get_value_changed_from_saved"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/docnode/ndtbl1.ts",
+      "localSymbols": [
+        "GetSwRowSplit"
+      ],
+      "omittedResponsibilities": [
+        "Full native ndtbl1 mutations/row sizing/background/redlines/nested/merged and full parity unverified."
+      ],
+      "preservedResponsibilities": [
+        "Iteration199 ports native Text Flow table/row split controls and removes conflated properties dontSplit and React first-row state. Native ndtbl1 aggregate reads original selected boxes/lines, true row default and no item for empty/mixed. SwDoc.GetRowSplit and SwFEShell.GetRowSplit retain source cursor/document ownership. SwTextFlowPage Reset saves original split/headline values; table child sensitivity does not clear row tristate; FillItemSet publishes only changed headline/table/row items. Browser source labels and mixed HTML checkbox use actual selected boxes, native page handlers/Reset/Cancel/OK, independent table and row setters. Insertion-only dontSplit remains separate. Original graph/list/cursor/grouped3UndoRedo/ODT/continued input and Chromium1280/390 covered. Full row-content splitting/nested/merged/fly/columns/protection/full item classes/SfxItemSet/widget suite and whole parity remain unverified; old contracts/classifications/registered exceptions retained.",
+        "Iteration200 ports native current-or-table-selected row split mutation to SwDoc/ndtbl1, original line collection, document-owned SwUndoAttrTable/history/notification and same-value requests. SwFEShell brackets and forwards; obsolete whole=true split SetRowAttr adapter removed. Properties caller uses source Push/temporary select-all/ClearMark/finally Pop; native registered cursor stack DeleteCurrent/DeleteStack retains original displayed endpoints and releases on shell Close. Existing selected scope, original graph/list/pending/cursor, grouped3UndoRedo/ODT/continued input and all prior browser controls retained. Full nested/merged/fly/columns/protection/row-content splitting/full crsrsh selection/widget/SfxItemSet/full parity remains unverified; prior contracts/classifications/registered exceptions retained.",
+        "Iteration201 moves represented minimum-row-height selection, mutation and history into native SwDoc/ndtbl1 shared original row attributes. Ordinary current cursor ignores mark/ring; actual table-selected boxes select original flat rows once. Shell brackets and forwards; obsolete shell SetRowAttr removed. Common represented numeric height getter keeps default0/mixed-or-empty no item. Same-value history, unrelated row items, original graph/list/pending/cursor, grouped3UndoRedo/ODT/continued input retained. Full SwFormatFrameSize/fixed/relative/nested proportional heights/layout/full parity remain unverified; prior contracts/classifications/registered exceptions retained.",
+        "Iteration202 removes scalar row minHeight storage and numeric kernel height contracts. Native SvxSizeItem/SwFormatFrameSize owns both dimensions, both sizing types, both percentages and both relations with native defaults, Which90, full equality, clone and supported default size query. Original rows retain copied items, document getter compares complete items and returns clone; resize uses native document setter with copied full size, preserving Fixed/Minimum and promoting only Variable. Flat layout and mounted cells use native Variable/Minimum/Fixed semantics, fixed content clipped, properties metric from shell common getter. ODT row-height Fixed/min-row-height Minimum/Variable omission and native height clamp1..65535; attributes apply in order. Full percentage/fly/vertical/nested/merged/protection/UNO member IDs/PutValue/pooling/widget/SfxItemSet/full parity remains unverified; all prior contracts/classifications/statuses/exceptions retained.",
+        "Iteration203 replaces scalar cell vertical alignment with complete SwFormatVertOrient Which109 position0/NONE/PRINT_AREA defaults, native numeric enum values and three-field clone/equality/represented UNO member query/update. Original boxes and insertion undo own independent copied items. SwDoc SetBoxAttr owns native selection/history/notifications; setters traverse ordinary ring points while getters use current point or native table selected boxes. Common full-item getter and orientation-only getter retain mixed/no-item state. Shell delegates; properties reads common shell state and emits only a changed alignment item, native mixed widget fallback top. CSS handles native alignments and safe fixed-row content; ODT maps NONE/CENTER/BOTTOM, process/storage codec restores full primitive items, old scalar only storage ingress. Full pooling/shared frame formats/direct-formatting/HTML resizing/fly/nested/merged/protection/vertical writing and overall parity remain unverified; prior classifications/defaults/contracts/evidence/exceptions retained."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/docnode/ndtbl1.cxx",
+      "upstreamSymbols": [
+        "SwDoc::GetRowSplit"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
             "marker": "AttrSetHandleHelper",
             "path": "apps/office/src/sw/source/core/docnode/node-attribute-handle.ts"
           }
@@ -11734,7 +12342,8 @@
         "Iteration199 ports native Text Flow table/row split controls and removes conflated properties dontSplit and React first-row state. Native ndtbl1 aggregate reads original selected boxes/lines, true row default and no item for empty/mixed. SwDoc.GetRowSplit and SwFEShell.GetRowSplit retain source cursor/document ownership. SwTextFlowPage Reset saves original split/headline values; table child sensitivity does not clear row tristate; FillItemSet publishes only changed headline/table/row items. Browser source labels and mixed HTML checkbox use actual selected boxes, native page handlers/Reset/Cancel/OK, independent table and row setters. Insertion-only dontSplit remains separate. Original graph/list/cursor/grouped3UndoRedo/ODT/continued input and Chromium1280/390 covered. Full row-content splitting/nested/merged/fly/columns/protection/full item classes/SfxItemSet/widget suite and whole parity remain unverified; old contracts/classifications/registered exceptions retained.",
         "Iteration200 ports native current-or-table-selected row split mutation to SwDoc/ndtbl1, original line collection, document-owned SwUndoAttrTable/history/notification and same-value requests. SwFEShell brackets and forwards; obsolete whole=true split SetRowAttr adapter removed. Properties caller uses source Push/temporary select-all/ClearMark/finally Pop; native registered cursor stack DeleteCurrent/DeleteStack retains original displayed endpoints and releases on shell Close. Existing selected scope, original graph/list/pending/cursor, grouped3UndoRedo/ODT/continued input and all prior browser controls retained. Full nested/merged/fly/columns/protection/row-content splitting/full crsrsh selection/widget/SfxItemSet/full parity remains unverified; prior contracts/classifications/registered exceptions retained.",
         "Iteration201 moves represented minimum-row-height selection, mutation and history into native SwDoc/ndtbl1 shared original row attributes. Ordinary current cursor ignores mark/ring; actual table-selected boxes select original flat rows once. Shell brackets and forwards; obsolete shell SetRowAttr removed. Common represented numeric height getter keeps default0/mixed-or-empty no item. Same-value history, unrelated row items, original graph/list/pending/cursor, grouped3UndoRedo/ODT/continued input retained. Full SwFormatFrameSize/fixed/relative/nested proportional heights/layout/full parity remain unverified; prior contracts/classifications/registered exceptions retained.",
-        "Iteration202 removes scalar row minHeight storage and numeric kernel height contracts. Native SvxSizeItem/SwFormatFrameSize owns both dimensions, both sizing types, both percentages and both relations with native defaults, Which90, full equality, clone and supported default size query. Original rows retain copied items, document getter compares complete items and returns clone; resize uses native document setter with copied full size, preserving Fixed/Minimum and promoting only Variable. Flat layout and mounted cells use native Variable/Minimum/Fixed semantics, fixed content clipped, properties metric from shell common getter. ODT row-height Fixed/min-row-height Minimum/Variable omission and native height clamp1..65535; attributes apply in order. Full percentage/fly/vertical/nested/merged/protection/UNO member IDs/PutValue/pooling/widget/SfxItemSet/full parity remains unverified; all prior contracts/classifications/statuses/exceptions retained."
+        "Iteration202 removes scalar row minHeight storage and numeric kernel height contracts. Native SvxSizeItem/SwFormatFrameSize owns both dimensions, both sizing types, both percentages and both relations with native defaults, Which90, full equality, clone and supported default size query. Original rows retain copied items, document getter compares complete items and returns clone; resize uses native document setter with copied full size, preserving Fixed/Minimum and promoting only Variable. Flat layout and mounted cells use native Variable/Minimum/Fixed semantics, fixed content clipped, properties metric from shell common getter. ODT row-height Fixed/min-row-height Minimum/Variable omission and native height clamp1..65535; attributes apply in order. Full percentage/fly/vertical/nested/merged/protection/UNO member IDs/PutValue/pooling/widget/SfxItemSet/full parity remains unverified; all prior contracts/classifications/statuses/exceptions retained.",
+        "Iteration203 replaces scalar cell vertical alignment with complete SwFormatVertOrient Which109 position0/NONE/PRINT_AREA defaults, native numeric enum values and three-field clone/equality/represented UNO member query/update. Original boxes and insertion undo own independent copied items. SwDoc SetBoxAttr owns native selection/history/notifications; setters traverse ordinary ring points while getters use current point or native table selected boxes. Common full-item getter and orientation-only getter retain mixed/no-item state. Shell delegates; properties reads common shell state and emits only a changed alignment item, native mixed widget fallback top. CSS handles native alignments and safe fixed-row content; ODT maps NONE/CENTER/BOTTOM, process/storage codec restores full primitive items, old scalar only storage ingress. Full pooling/shared frame formats/direct-formatting/HTML resizing/fly/nested/merged/protection/vertical writing and overall parity remain unverified; prior classifications/defaults/contracts/evidence/exceptions retained."
       ],
       "omittedResponsibilities": [
         "Full native item-format,complex-table,frame-cache and UI lifecycle parity remains unverified."
@@ -11868,6 +12477,22 @@
           {
             "path": "apps/office/src/sw/source/core/layout/tabfrm.ts",
             "marker": "SwRowFrame"
+          },
+          {
+            "path": "apps/office/src/sw/inc/fmtornt.ts",
+            "marker": "SwFormatVertOrient"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/docnode/ndtbl1.ts",
+            "marker": "GetBoxSelection"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/doc.ts",
+            "marker": "SetBoxAlign"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx",
+            "marker": "boxAlign"
           }
         ],
         "upstream": [
@@ -11994,6 +12619,22 @@
           {
             "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmlimpit.cxx",
             "marker": "MINLAY"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/inc/fmtornt.hxx",
+            "marker": "SwFormatVertOrient"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/layout/atrfrm.cxx",
+            "marker": "SwFormatVertOrient::operator=="
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl1.cxx",
+            "marker": "lcl_GetBoxSel"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx",
+            "marker": "get_value_changed_from_saved"
           }
         ]
       },
@@ -12630,6 +13271,22 @@
           {
             "path": "apps/office/src/sw/source/core/layout/tabfrm.ts",
             "marker": "SwRowFrame"
+          },
+          {
+            "path": "apps/office/src/sw/inc/fmtornt.ts",
+            "marker": "SwFormatVertOrient"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/docnode/ndtbl1.ts",
+            "marker": "GetBoxSelection"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/doc.ts",
+            "marker": "SetBoxAlign"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx",
+            "marker": "boxAlign"
           }
         ],
         "upstream": [
@@ -12708,6 +13365,22 @@
           {
             "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmlimpit.cxx",
             "marker": "MINLAY"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/inc/fmtornt.hxx",
+            "marker": "SwFormatVertOrient"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/layout/atrfrm.cxx",
+            "marker": "SwFormatVertOrient::operator=="
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl1.cxx",
+            "marker": "lcl_GetBoxSel"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx",
+            "marker": "get_value_changed_from_saved"
           }
         ]
       },
@@ -12732,7 +13405,8 @@
         "Iteration181 routes counted flat InsertRowsBefore/After through contextual SwTableShell, inherited SwFEShell, SwDoc document history and SwTable selected-edge insertion. Original selection is preserved; numeric table and insertion coordinates support mixed/recreated-table history. Complex merged/nested tables, row spans, redline/layout/formula/protection/repeated-headline state, full native undo section reconstruction and complete UI/core parity remain unverified. All prior269 semantic states/defaults/classes/evidence and registered I/O deviations remain unchanged.",
         "Iteration182 ports native counted flat InsertCol/NewInsertCol and cumulative AdjustWidths rounding, expands column search across actual rows and represents CheckSplitCells MINLAY using table/page print geometry. Native table shell exposes InsertColumnsBefore/After; shared document-owned SwUndoTableNdsChg retains actual box sections, numeric insertion coordinates and width attributes, preserving selection through mixed and recreated-table history. Prior269 semantic states/defaults/classes/evidence and registered I/O deviations preserved. Full merged/nested/rowspan/RTL/redline/per-edge-border/formula/protection/repeated-headline/frame/undo reconstruction and complete UI/core parity remain unverified.",
         "Iteration190 replaces shell width-array mutation with native SwTabCols: shell GetTabCols, SwTableRep FillTabCols, document SetTabCols and native flat SwTable separator adjustment. Document normalizes frame print width with existing AdjustWidths before attribute Undo, as ndtbl.cxx, retains actual table/row/box/text owners and publishes model changes. Source integer scaling, COLFUZZY20, edge orientation and visible draft rounding are represented. Shared flat horizontal widths only; independent row writes reject without mutation. Hidden/nested/span graphs, shadow/protection/RTL/vertical frames, complete native notifications, wide native Long precision, ruler border drag and full table behavior remain unverified. No parity promotion or registered save/open/recovery deviation changes.",
-        "Iteration202 removes scalar row minHeight storage and numeric kernel height contracts. Native SvxSizeItem/SwFormatFrameSize owns both dimensions, both sizing types, both percentages and both relations with native defaults, Which90, full equality, clone and supported default size query. Original rows retain copied items, document getter compares complete items and returns clone; resize uses native document setter with copied full size, preserving Fixed/Minimum and promoting only Variable. Flat layout and mounted cells use native Variable/Minimum/Fixed semantics, fixed content clipped, properties metric from shell common getter. ODT row-height Fixed/min-row-height Minimum/Variable omission and native height clamp1..65535; attributes apply in order. Full percentage/fly/vertical/nested/merged/protection/UNO member IDs/PutValue/pooling/widget/SfxItemSet/full parity remains unverified; all prior contracts/classifications/statuses/exceptions retained."
+        "Iteration202 removes scalar row minHeight storage and numeric kernel height contracts. Native SvxSizeItem/SwFormatFrameSize owns both dimensions, both sizing types, both percentages and both relations with native defaults, Which90, full equality, clone and supported default size query. Original rows retain copied items, document getter compares complete items and returns clone; resize uses native document setter with copied full size, preserving Fixed/Minimum and promoting only Variable. Flat layout and mounted cells use native Variable/Minimum/Fixed semantics, fixed content clipped, properties metric from shell common getter. ODT row-height Fixed/min-row-height Minimum/Variable omission and native height clamp1..65535; attributes apply in order. Full percentage/fly/vertical/nested/merged/protection/UNO member IDs/PutValue/pooling/widget/SfxItemSet/full parity remains unverified; all prior contracts/classifications/statuses/exceptions retained.",
+        "Iteration203 replaces scalar cell vertical alignment with complete SwFormatVertOrient Which109 position0/NONE/PRINT_AREA defaults, native numeric enum values and three-field clone/equality/represented UNO member query/update. Original boxes and insertion undo own independent copied items. SwDoc SetBoxAttr owns native selection/history/notifications; setters traverse ordinary ring points while getters use current point or native table selected boxes. Common full-item getter and orientation-only getter retain mixed/no-item state. Shell delegates; properties reads common shell state and emits only a changed alignment item, native mixed widget fallback top. CSS handles native alignments and safe fixed-row content; ODT maps NONE/CENTER/BOTTOM, process/storage codec restores full primitive items, old scalar only storage ingress. Full pooling/shared frame formats/direct-formatting/HTML resizing/fly/nested/merged/protection/vertical writing and overall parity remain unverified; prior classifications/defaults/contracts/evidence/exceptions retained."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/table/swtable.cxx",
@@ -15455,6 +16129,22 @@
           {
             "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-properties.test.ts",
             "marker": "native table property application"
+          },
+          {
+            "path": "apps/office/src/sw/inc/fmtornt.ts",
+            "marker": "SwFormatVertOrient"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/docnode/ndtbl1.ts",
+            "marker": "GetBoxSelection"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/doc.ts",
+            "marker": "SetBoxAlign"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx",
+            "marker": "boxAlign"
           }
         ],
         "upstream": [
@@ -15473,6 +16163,22 @@
           {
             "path": "vendor/libreoffice-reference/sw/source/core/undo/untbl.cxx",
             "marker": "SwUndoTableNdsChg::RedoImpl"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/inc/fmtornt.hxx",
+            "marker": "SwFormatVertOrient"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/layout/atrfrm.cxx",
+            "marker": "SwFormatVertOrient::operator=="
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl1.cxx",
+            "marker": "lcl_GetBoxSel"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx",
+            "marker": "get_value_changed_from_saved"
           }
         ]
       },
@@ -15491,7 +16197,8 @@
         "Iteration179 interoperability closure replaces the stale table object target in SwUndoTableNdsChg with native m_nSttNode lookup. Ordinary detached row sections retain established identities; after table-section reconstruction Redo creates an empty row from the current last row's actual formats, allowing later numeric cell text history to replay. The complete table/row/text stack is exercised repeatedly. Full native row reconstruction,SaveTable and merged/nested/protected lifetimes remain unverified.",
         "Iteration180 gives next/previous cell ownership to inherited SwCursorShell from trvltbl.cxx. Existing final-row default append calls SwDoc.InsertRow, which connects native nodes before document-owned SwUndoTableNdsChg publication; shell traversal follows mutation and no SwWrtShell ApplyAction replay or row construction remains. SaveNewBoxes captures connected cursor coordinates. Actual native/mounted/Chromium tests cover retained row identities, pending attributes, native boundaries and repeated history. Default flat append is represented; non-default row modes, DDE/protection/layout/rowspan/merged/nested, full native SwCursorShell and undo/save content contracts remain unverified. Native parameter order is retained with optional browser cursor state for pending attributes. Prior268 semantic statuses/defaults/classifications/evidence and registered I/O/recovery exceptions are preserved.",
         "Iteration181 routes counted flat InsertRowsBefore/After through contextual SwTableShell, inherited SwFEShell, SwDoc document history and SwTable selected-edge insertion. Original selection is preserved; numeric table and insertion coordinates support mixed/recreated-table history. Complex merged/nested tables, row spans, redline/layout/formula/protection/repeated-headline state, full native undo section reconstruction and complete UI/core parity remain unverified. All prior269 semantic states/defaults/classes/evidence and registered I/O deviations remain unchanged.",
-        "Iteration182 ports native counted flat InsertCol/NewInsertCol and cumulative AdjustWidths rounding, expands column search across actual rows and represents CheckSplitCells MINLAY using table/page print geometry. Native table shell exposes InsertColumnsBefore/After; shared document-owned SwUndoTableNdsChg retains actual box sections, numeric insertion coordinates and width attributes, preserving selection through mixed and recreated-table history. Prior269 semantic states/defaults/classes/evidence and registered I/O deviations preserved. Full merged/nested/rowspan/RTL/redline/per-edge-border/formula/protection/repeated-headline/frame/undo reconstruction and complete UI/core parity remain unverified."
+        "Iteration182 ports native counted flat InsertCol/NewInsertCol and cumulative AdjustWidths rounding, expands column search across actual rows and represents CheckSplitCells MINLAY using table/page print geometry. Native table shell exposes InsertColumnsBefore/After; shared document-owned SwUndoTableNdsChg retains actual box sections, numeric insertion coordinates and width attributes, preserving selection through mixed and recreated-table history. Prior269 semantic states/defaults/classes/evidence and registered I/O deviations preserved. Full merged/nested/rowspan/RTL/redline/per-edge-border/formula/protection/repeated-headline/frame/undo reconstruction and complete UI/core parity remain unverified.",
+        "Iteration203 replaces scalar cell vertical alignment with complete SwFormatVertOrient Which109 position0/NONE/PRINT_AREA defaults, native numeric enum values and three-field clone/equality/represented UNO member query/update. Original boxes and insertion undo own independent copied items. SwDoc SetBoxAttr owns native selection/history/notifications; setters traverse ordinary ring points while getters use current point or native table selected boxes. Common full-item getter and orientation-only getter retain mixed/no-item state. Shell delegates; properties reads common shell state and emits only a changed alignment item, native mixed widget fallback top. CSS handles native alignments and safe fixed-row content; ODT maps NONE/CENTER/BOTTOM, process/storage codec restores full primitive items, old scalar only storage ingress. Full pooling/shared frame formats/direct-formatting/HTML resizing/fly/nested/merged/protection/vertical writing and overall parity remain unverified; prior classifications/defaults/contracts/evidence/exceptions retained."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/undo/untbl.cxx",
@@ -16286,6 +16993,22 @@
           {
             "path": "apps/office/src/sw/source/core/layout/tabfrm.ts",
             "marker": "SwRowFrame"
+          },
+          {
+            "path": "apps/office/src/sw/inc/fmtornt.ts",
+            "marker": "SwFormatVertOrient"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/docnode/ndtbl1.ts",
+            "marker": "GetBoxSelection"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/doc.ts",
+            "marker": "SetBoxAlign"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx",
+            "marker": "boxAlign"
           }
         ],
         "upstream": [
@@ -16424,6 +17147,22 @@
           {
             "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmlimpit.cxx",
             "marker": "MINLAY"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/inc/fmtornt.hxx",
+            "marker": "SwFormatVertOrient"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/layout/atrfrm.cxx",
+            "marker": "SwFormatVertOrient::operator=="
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl1.cxx",
+            "marker": "lcl_GetBoxSel"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx",
+            "marker": "get_value_changed_from_saved"
           }
         ]
       },
@@ -16448,7 +17187,8 @@
         "Iteration102 materializes document-owned named paragraph collections instead of flattening common styles into direct node items. Supported own paragraph/character/list fields, raw names, parent/follow links and automatic deltas survive graph16, ODT cycles and actual history. Native name lookup and bounded custom CopyTextColl preserve destination ownership and manual rule handling; the prior builtin copy adapter remains unchanged. Literal zero/per-axis list masks and the project tdf114287 fixture distinguish inherited margins from hard rule overrides. Writer export retains original named parents and emits actual direct numbering items; generic legacy export remains compatible. Default paragraph items are retained on the existing Standard root adapter only. All303other prior tests remain unchanged; one inherited common-style XML assertion moves to styles.xml and one existing project fixture now asserts its actual custom owner/parent, with numeric literals unchanged. Native list display-name resolution, invalid/cyclic parent detachment, direct empty rule suppression and supported composite item subfield inheritance are retained. Full native global default pools, conditional styles, pool/help IDs, creation undo, complete UNO/style UI, collisions and geometry consumers remain separately unverified. No existing status/default/exception or registered I/O/recovery promotion.",
         "Iteration169 preserves native NumberingType NONE through represented XML conversion and numeric property propagation into UNO/core and fresh ODT reopening. Empty num-format imports NUMBER_NONE with native permission; absent format retains ARABIC. Actual native export writes empty NONE format and suppresses display-levels while preserving independent start/affixes. SwXNumberingRules now copy constructs SwNumFormat and applies supported native setters, removing raw-field/factory reconstruction and preserving inactive geometry, font/glyph/symbol/client fields with invalid-property atomicity. Existing kind input remains an optional bounded caller boundary; actual XML uses numeric type. Native mounted DOM and ordinary Chromium Open/typing/history cases verify this slice. Unrepresented letters/Roman/custom/bitmap types, full native UNO/XML families and full core/UI/list/table remain unverified; prior semantic/default/classification/IO deviations/evidence are preserved.",
         "Iteration177 represents native absolute table formatting through SwFormatTablePage and SwTableRep, six numeric orientations, linked metric fields, sensitivity, automatic-width restoration and visible-column reconciliation. React displays the native draft and the existing shell group applies accepted frame attributes. Worker retains orientation and ODF projects native alignment and conditional LR margins. Full native item/relative-width/complex-table/RTL/fly/cache/protection and UI/core parity remain unverified. All prior261 semantic statuses/defaults/classes and registered IO deviations are preserved.",
-        "Iteration202 removes scalar row minHeight storage and numeric kernel height contracts. Native SvxSizeItem/SwFormatFrameSize owns both dimensions, both sizing types, both percentages and both relations with native defaults, Which90, full equality, clone and supported default size query. Original rows retain copied items, document getter compares complete items and returns clone; resize uses native document setter with copied full size, preserving Fixed/Minimum and promoting only Variable. Flat layout and mounted cells use native Variable/Minimum/Fixed semantics, fixed content clipped, properties metric from shell common getter. ODT row-height Fixed/min-row-height Minimum/Variable omission and native height clamp1..65535; attributes apply in order. Full percentage/fly/vertical/nested/merged/protection/UNO member IDs/PutValue/pooling/widget/SfxItemSet/full parity remains unverified; all prior contracts/classifications/statuses/exceptions retained."
+        "Iteration202 removes scalar row minHeight storage and numeric kernel height contracts. Native SvxSizeItem/SwFormatFrameSize owns both dimensions, both sizing types, both percentages and both relations with native defaults, Which90, full equality, clone and supported default size query. Original rows retain copied items, document getter compares complete items and returns clone; resize uses native document setter with copied full size, preserving Fixed/Minimum and promoting only Variable. Flat layout and mounted cells use native Variable/Minimum/Fixed semantics, fixed content clipped, properties metric from shell common getter. ODT row-height Fixed/min-row-height Minimum/Variable omission and native height clamp1..65535; attributes apply in order. Full percentage/fly/vertical/nested/merged/protection/UNO member IDs/PutValue/pooling/widget/SfxItemSet/full parity remains unverified; all prior contracts/classifications/statuses/exceptions retained.",
+        "Iteration203 replaces scalar cell vertical alignment with complete SwFormatVertOrient Which109 position0/NONE/PRINT_AREA defaults, native numeric enum values and three-field clone/equality/represented UNO member query/update. Original boxes and insertion undo own independent copied items. SwDoc SetBoxAttr owns native selection/history/notifications; setters traverse ordinary ring points while getters use current point or native table selected boxes. Common full-item getter and orientation-only getter retain mixed/no-item state. Shell delegates; properties reads common shell state and emits only a changed alignment item, native mixed widget fallback top. CSS handles native alignments and safe fixed-row content; ODT maps NONE/CENTER/BOTTOM, process/storage codec restores full primitive items, old scalar only storage ingress. Full pooling/shared frame formats/direct-formatting/HTML resizing/fly/nested/merged/protection/vertical writing and overall parity remain unverified; prior classifications/defaults/contracts/evidence/exceptions retained."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/filter/xml/xmlexp.cxx",
@@ -16957,6 +17697,22 @@
           {
             "path": "apps/office/src/sw/source/core/layout/tabfrm.ts",
             "marker": "SwRowFrame"
+          },
+          {
+            "path": "apps/office/src/sw/inc/fmtornt.ts",
+            "marker": "SwFormatVertOrient"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/docnode/ndtbl1.ts",
+            "marker": "GetBoxSelection"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/doc.ts",
+            "marker": "SetBoxAlign"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx",
+            "marker": "boxAlign"
           }
         ],
         "upstream": [
@@ -16979,6 +17735,22 @@
           {
             "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmlimpit.cxx",
             "marker": "MINLAY"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/inc/fmtornt.hxx",
+            "marker": "SwFormatVertOrient"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/layout/atrfrm.cxx",
+            "marker": "SwFormatVertOrient::operator=="
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl1.cxx",
+            "marker": "lcl_GetBoxSel"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx",
+            "marker": "get_value_changed_from_saved"
           }
         ]
       },
@@ -16991,7 +17763,8 @@
       ],
       "preservedResponsibilities": [
         "Coordinates bounded table SAX events into canonical SwTable sections.",
-        "Iteration202 removes scalar row minHeight storage and numeric kernel height contracts. Native SvxSizeItem/SwFormatFrameSize owns both dimensions, both sizing types, both percentages and both relations with native defaults, Which90, full equality, clone and supported default size query. Original rows retain copied items, document getter compares complete items and returns clone; resize uses native document setter with copied full size, preserving Fixed/Minimum and promoting only Variable. Flat layout and mounted cells use native Variable/Minimum/Fixed semantics, fixed content clipped, properties metric from shell common getter. ODT row-height Fixed/min-row-height Minimum/Variable omission and native height clamp1..65535; attributes apply in order. Full percentage/fly/vertical/nested/merged/protection/UNO member IDs/PutValue/pooling/widget/SfxItemSet/full parity remains unverified; all prior contracts/classifications/statuses/exceptions retained."
+        "Iteration202 removes scalar row minHeight storage and numeric kernel height contracts. Native SvxSizeItem/SwFormatFrameSize owns both dimensions, both sizing types, both percentages and both relations with native defaults, Which90, full equality, clone and supported default size query. Original rows retain copied items, document getter compares complete items and returns clone; resize uses native document setter with copied full size, preserving Fixed/Minimum and promoting only Variable. Flat layout and mounted cells use native Variable/Minimum/Fixed semantics, fixed content clipped, properties metric from shell common getter. ODT row-height Fixed/min-row-height Minimum/Variable omission and native height clamp1..65535; attributes apply in order. Full percentage/fly/vertical/nested/merged/protection/UNO member IDs/PutValue/pooling/widget/SfxItemSet/full parity remains unverified; all prior contracts/classifications/statuses/exceptions retained.",
+        "Iteration203 replaces scalar cell vertical alignment with complete SwFormatVertOrient Which109 position0/NONE/PRINT_AREA defaults, native numeric enum values and three-field clone/equality/represented UNO member query/update. Original boxes and insertion undo own independent copied items. SwDoc SetBoxAttr owns native selection/history/notifications; setters traverse ordinary ring points while getters use current point or native table selected boxes. Common full-item getter and orientation-only getter retain mixed/no-item state. Shell delegates; properties reads common shell state and emits only a changed alignment item, native mixed widget fallback top. CSS handles native alignments and safe fixed-row content; ODT maps NONE/CENTER/BOTTOM, process/storage codec restores full primitive items, old scalar only storage ingress. Full pooling/shared frame formats/direct-formatting/HTML resizing/fly/nested/merged/protection/vertical writing and overall parity remain unverified; prior classifications/defaults/contracts/evidence/exceptions retained."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/filter/xml/xmltbli.cxx",
@@ -18109,7 +18882,8 @@
         "Iteration190 corrective closure constructs connected SwTableRep column widths from SwTabCols actual frame separators, preserving read-only empty/unattached draft fallback. Relative65535 table widths become physical dialog widths without changing original model at Reset; document normalizes model print size before native separator Undo. Existing mounted column editing/ODT case stays byte-identical, new Chromium1280/390 checks physical relative-column input and three grouped Undo/Redo cycles. Two existing core-property expectations migrate from legacy align-only geometry to native HoriOrientation and LR spacing, retaining all previous owner/content/cursor/width/history assertions. Native column-page automatic adjacent-column adjustment, complete frame-format width notifications and all layout/row/hidden/protected/RTL/vertical/ruler-drag behavior remain unverified.",
         "Iteration199 ports native Text Flow table/row split controls and removes conflated properties dontSplit and React first-row state. Native ndtbl1 aggregate reads original selected boxes/lines, true row default and no item for empty/mixed. SwDoc.GetRowSplit and SwFEShell.GetRowSplit retain source cursor/document ownership. SwTextFlowPage Reset saves original split/headline values; table child sensitivity does not clear row tristate; FillItemSet publishes only changed headline/table/row items. Browser source labels and mixed HTML checkbox use actual selected boxes, native page handlers/Reset/Cancel/OK, independent table and row setters. Insertion-only dontSplit remains separate. Original graph/list/cursor/grouped3UndoRedo/ODT/continued input and Chromium1280/390 covered. Full row-content splitting/nested/merged/fly/columns/protection/full item classes/SfxItemSet/widget suite and whole parity remain unverified; old contracts/classifications/registered exceptions retained.",
         "Iteration200 ports native current-or-table-selected row split mutation to SwDoc/ndtbl1, original line collection, document-owned SwUndoAttrTable/history/notification and same-value requests. SwFEShell brackets and forwards; obsolete whole=true split SetRowAttr adapter removed. Properties caller uses source Push/temporary select-all/ClearMark/finally Pop; native registered cursor stack DeleteCurrent/DeleteStack retains original displayed endpoints and releases on shell Close. Existing selected scope, original graph/list/pending/cursor, grouped3UndoRedo/ODT/continued input and all prior browser controls retained. Full nested/merged/fly/columns/protection/row-content splitting/full crsrsh selection/widget/SfxItemSet/full parity remains unverified; prior contracts/classifications/registered exceptions retained.",
-        "Iteration202 removes scalar row minHeight storage and numeric kernel height contracts. Native SvxSizeItem/SwFormatFrameSize owns both dimensions, both sizing types, both percentages and both relations with native defaults, Which90, full equality, clone and supported default size query. Original rows retain copied items, document getter compares complete items and returns clone; resize uses native document setter with copied full size, preserving Fixed/Minimum and promoting only Variable. Flat layout and mounted cells use native Variable/Minimum/Fixed semantics, fixed content clipped, properties metric from shell common getter. ODT row-height Fixed/min-row-height Minimum/Variable omission and native height clamp1..65535; attributes apply in order. Full percentage/fly/vertical/nested/merged/protection/UNO member IDs/PutValue/pooling/widget/SfxItemSet/full parity remains unverified; all prior contracts/classifications/statuses/exceptions retained."
+        "Iteration202 removes scalar row minHeight storage and numeric kernel height contracts. Native SvxSizeItem/SwFormatFrameSize owns both dimensions, both sizing types, both percentages and both relations with native defaults, Which90, full equality, clone and supported default size query. Original rows retain copied items, document getter compares complete items and returns clone; resize uses native document setter with copied full size, preserving Fixed/Minimum and promoting only Variable. Flat layout and mounted cells use native Variable/Minimum/Fixed semantics, fixed content clipped, properties metric from shell common getter. ODT row-height Fixed/min-row-height Minimum/Variable omission and native height clamp1..65535; attributes apply in order. Full percentage/fly/vertical/nested/merged/protection/UNO member IDs/PutValue/pooling/widget/SfxItemSet/full parity remains unverified; all prior contracts/classifications/statuses/exceptions retained.",
+        "Iteration203 replaces scalar cell vertical alignment with complete SwFormatVertOrient Which109 position0/NONE/PRINT_AREA defaults, native numeric enum values and three-field clone/equality/represented UNO member query/update. Original boxes and insertion undo own independent copied items. SwDoc SetBoxAttr owns native selection/history/notifications; setters traverse ordinary ring points while getters use current point or native table selected boxes. Common full-item getter and orientation-only getter retain mixed/no-item state. Shell delegates; properties reads common shell state and emits only a changed alignment item, native mixed widget fallback top. CSS handles native alignments and safe fixed-row content; ODT maps NONE/CENTER/BOTTOM, process/storage codec restores full primitive items, old scalar only storage ingress. Full pooling/shared frame formats/direct-formatting/HTML resizing/fly/nested/merged/protection/vertical writing and overall parity remain unverified; prior classifications/defaults/contracts/evidence/exceptions retained."
       ],
       "omittedResponsibilities": [
         "Full native item-format,complex-table,frame-cache and UI lifecycle parity remains unverified."
@@ -18195,6 +18969,22 @@
           {
             "path": "apps/office/src/sw/source/core/layout/tabfrm.ts",
             "marker": "SwRowFrame"
+          },
+          {
+            "path": "apps/office/src/sw/inc/fmtornt.ts",
+            "marker": "SwFormatVertOrient"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/docnode/ndtbl1.ts",
+            "marker": "GetBoxSelection"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/doc.ts",
+            "marker": "SetBoxAlign"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx",
+            "marker": "boxAlign"
           }
         ],
         "upstream": [
@@ -18289,6 +19079,22 @@
           {
             "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmlimpit.cxx",
             "marker": "MINLAY"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/inc/fmtornt.hxx",
+            "marker": "SwFormatVertOrient"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/layout/atrfrm.cxx",
+            "marker": "SwFormatVertOrient::operator=="
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl1.cxx",
+            "marker": "lcl_GetBoxSel"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx",
+            "marker": "get_value_changed_from_saved"
           }
         ]
       }
@@ -22748,247 +23554,6 @@
         "XMLImpSpanContext_Impl::XMLImpSpanContext_Impl",
         "XMLImpSpanContext_Impl::characters",
         "XMLImpSpanContext_Impl::createFastChildContext"
-      ]
-    },
-    {
-      "classification": "upstream-mechanism",
-      "evidence": {
-        "local": [
-          {
-            "path": "apps/office/src/sw/source/core/docnode/ndtbl1.ts",
-            "marker": "GetSwRowSplit"
-          },
-          {
-            "path": "apps/office/src/sw/source/core/doc/doc.ts",
-            "marker": "GetRowSplit"
-          },
-          {
-            "path": "apps/office/src/sw/source/core/frmedt/fetab.ts",
-            "marker": "GetRowSplit"
-          },
-          {
-            "path": "apps/office/src/sw/source/ui/table/tabledlg.ts",
-            "marker": "SplitHdl_Impl"
-          },
-          {
-            "path": "apps/office/src/sw/source/uibase/shells/tabsh.ts",
-            "marker": "value.rowSplit"
-          },
-          {
-            "path": "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx",
-            "marker": "Allow row to break across pages and columns"
-          },
-          {
-            "path": "apps/office/src/sw/browser/presentation/writer-view.tsx",
-            "marker": "selectedBoxes:"
-          },
-          {
-            "path": "apps/office/src/sw/source/core/docnode/ndtbl1.ts",
-            "marker": "SetSwRowSplit"
-          },
-          {
-            "path": "apps/office/src/sw/source/core/doc/doc.ts",
-            "marker": "SetRowSplit"
-          },
-          {
-            "path": "apps/office/src/sw/source/core/frmedt/fetab.ts",
-            "marker": "this.GetDoc().SetRowSplit"
-          },
-          {
-            "path": "apps/office/src/sw/source/core/crsr/trvltbl.ts",
-            "marker": "public Push"
-          },
-          {
-            "path": "apps/office/src/sw/source/uibase/shells/tabsh.ts",
-            "marker": "shell.Push"
-          },
-          {
-            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
-            "marker": "PopMode.DeleteStack"
-          },
-          {
-            "path": "apps/office/src/sw/source/core/docnode/ndtbl1.ts",
-            "marker": "SetSwRowHeight"
-          },
-          {
-            "path": "apps/office/src/sw/source/core/doc/doc.ts",
-            "marker": "SetRowHeight"
-          },
-          {
-            "path": "apps/office/src/sw/source/core/frmedt/fetab.ts",
-            "marker": "this.GetDoc().SetRowHeight"
-          },
-          {
-            "path": "apps/office/src/sw/inc/fmtfsize.ts",
-            "marker": "SwFormatFrameSize"
-          },
-          {
-            "path": "apps/office/src/sw/source/core/docnode/ndtbl1.ts",
-            "marker": "GetSwRowHeight"
-          },
-          {
-            "path": "apps/office/src/sw/source/core/docnode/ndtbl.ts",
-            "marker": "doc.SetRowHeight"
-          },
-          {
-            "path": "apps/office/src/sw/source/core/layout/tabfrm.ts",
-            "marker": "SwRowFrame"
-          }
-        ],
-        "upstream": [
-          {
-            "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl1.cxx",
-            "marker": "SwDoc::GetRowSplit"
-          },
-          {
-            "path": "vendor/libreoffice-reference/sw/source/core/frmedt/fetab.cxx",
-            "marker": "SwFEShell::GetRowSplit"
-          },
-          {
-            "path": "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx",
-            "marker": "SwTextFlowPage::Reset"
-          },
-          {
-            "path": "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx",
-            "marker": "SwTextFlowPage::FillItemSet"
-          },
-          {
-            "path": "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx",
-            "marker": "SwTextFlowPage, SplitHdl_Impl"
-          },
-          {
-            "path": "vendor/libreoffice-reference/sw/source/uibase/shells/tabsh.cxx",
-            "marker": "RES_LAYOUT_SPLIT"
-          },
-          {
-            "path": "vendor/libreoffice-reference/sw/uiconfig/swriter/ui/tabletextflowpage.ui",
-            "marker": "id=\"splitrow\""
-          },
-          {
-            "path": "vendor/libreoffice-reference/sw/inc/fmtrowsplt.hxx",
-            "marker": "SwFormatRowSplit"
-          },
-          {
-            "path": "vendor/libreoffice-reference/include/vcl/weld/CheckButton.hxx",
-            "marker": "TRISTATE_TRUE"
-          },
-          {
-            "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl1.cxx",
-            "marker": "SwDoc::SetRowSplit"
-          },
-          {
-            "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl1.cxx",
-            "marker": "lcl_CollectLines"
-          },
-          {
-            "path": "vendor/libreoffice-reference/sw/source/core/frmedt/fetab.cxx",
-            "marker": "SwFEShell::SetRowSplit"
-          },
-          {
-            "path": "vendor/libreoffice-reference/sw/source/uibase/shells/tabsh.cxx",
-            "marker": "rSh.Push()"
-          },
-          {
-            "path": "vendor/libreoffice-reference/sw/source/core/crsr/crsrsh.cxx",
-            "marker": "SwCursorShell::Push"
-          },
-          {
-            "path": "vendor/libreoffice-reference/sw/source/core/crsr/crsrsh.cxx",
-            "marker": "SwCursorShell::Pop"
-          },
-          {
-            "path": "vendor/libreoffice-reference/sw/source/core/crsr/crsrsh.cxx",
-            "marker": "SwCursorShell::ClearMark"
-          },
-          {
-            "path": "vendor/libreoffice-reference/sw/inc/crsrsh.hxx",
-            "marker": "enum class PopMode"
-          },
-          {
-            "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl1.cxx",
-            "marker": "SwDoc::SetRowHeight"
-          },
-          {
-            "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl1.cxx",
-            "marker": "SwDoc::GetRowHeight"
-          },
-          {
-            "path": "vendor/libreoffice-reference/sw/source/core/frmedt/fetab.cxx",
-            "marker": "SwFEShell::SetRowHeight"
-          },
-          {
-            "path": "vendor/libreoffice-reference/sw/inc/fmtfsize.hxx",
-            "marker": "SwFormatFrameSize"
-          },
-          {
-            "path": "vendor/libreoffice-reference/sw/source/core/layout/atrfrm.cxx",
-            "marker": "SwFormatFrameSize::operator=="
-          },
-          {
-            "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl.cxx",
-            "marker": "SetHeightSizeType"
-          },
-          {
-            "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmlimpit.cxx",
-            "marker": "MINLAY"
-          }
-        ]
-      },
-      "localPath": "apps/office/src/sw/source/core/docnode/ndtbl1.ts",
-      "localSymbols": [
-        "GetSwRowSplit"
-      ],
-      "omittedResponsibilities": [
-        "Full native ndtbl1 mutations/row sizing/background/redlines/nested/merged and full parity unverified."
-      ],
-      "preservedResponsibilities": [
-        "Iteration199 ports native Text Flow table/row split controls and removes conflated properties dontSplit and React first-row state. Native ndtbl1 aggregate reads original selected boxes/lines, true row default and no item for empty/mixed. SwDoc.GetRowSplit and SwFEShell.GetRowSplit retain source cursor/document ownership. SwTextFlowPage Reset saves original split/headline values; table child sensitivity does not clear row tristate; FillItemSet publishes only changed headline/table/row items. Browser source labels and mixed HTML checkbox use actual selected boxes, native page handlers/Reset/Cancel/OK, independent table and row setters. Insertion-only dontSplit remains separate. Original graph/list/cursor/grouped3UndoRedo/ODT/continued input and Chromium1280/390 covered. Full row-content splitting/nested/merged/fly/columns/protection/full item classes/SfxItemSet/widget suite and whole parity remain unverified; old contracts/classifications/registered exceptions retained.",
-        "Iteration200 ports native current-or-table-selected row split mutation to SwDoc/ndtbl1, original line collection, document-owned SwUndoAttrTable/history/notification and same-value requests. SwFEShell brackets and forwards; obsolete whole=true split SetRowAttr adapter removed. Properties caller uses source Push/temporary select-all/ClearMark/finally Pop; native registered cursor stack DeleteCurrent/DeleteStack retains original displayed endpoints and releases on shell Close. Existing selected scope, original graph/list/pending/cursor, grouped3UndoRedo/ODT/continued input and all prior browser controls retained. Full nested/merged/fly/columns/protection/row-content splitting/full crsrsh selection/widget/SfxItemSet/full parity remains unverified; prior contracts/classifications/registered exceptions retained.",
-        "Iteration201 moves represented minimum-row-height selection, mutation and history into native SwDoc/ndtbl1 shared original row attributes. Ordinary current cursor ignores mark/ring; actual table-selected boxes select original flat rows once. Shell brackets and forwards; obsolete shell SetRowAttr removed. Common represented numeric height getter keeps default0/mixed-or-empty no item. Same-value history, unrelated row items, original graph/list/pending/cursor, grouped3UndoRedo/ODT/continued input retained. Full SwFormatFrameSize/fixed/relative/nested proportional heights/layout/full parity remain unverified; prior contracts/classifications/registered exceptions retained.",
-        "Iteration202 removes scalar row minHeight storage and numeric kernel height contracts. Native SvxSizeItem/SwFormatFrameSize owns both dimensions, both sizing types, both percentages and both relations with native defaults, Which90, full equality, clone and supported default size query. Original rows retain copied items, document getter compares complete items and returns clone; resize uses native document setter with copied full size, preserving Fixed/Minimum and promoting only Variable. Flat layout and mounted cells use native Variable/Minimum/Fixed semantics, fixed content clipped, properties metric from shell common getter. ODT row-height Fixed/min-row-height Minimum/Variable omission and native height clamp1..65535; attributes apply in order. Full percentage/fly/vertical/nested/merged/protection/UNO member IDs/PutValue/pooling/widget/SfxItemSet/full parity remains unverified; all prior contracts/classifications/statuses/exceptions retained."
-      ],
-      "status": "mapped",
-      "upstreamPath": "sw/source/core/docnode/ndtbl1.cxx",
-      "upstreamSymbols": [
-        "SwDoc::GetRowSplit"
-      ]
-    },
-    {
-      "classification": "upstream-mechanism",
-      "evidence": {
-        "local": [
-          {
-            "path": "apps/office/src/sw/inc/fmtfsize.ts",
-            "marker": "SwFormatFrameSize"
-          }
-        ],
-        "upstream": [
-          {
-            "path": "vendor/libreoffice-reference/sw/inc/fmtfsize.hxx",
-            "marker": "SwFormatFrameSize"
-          },
-          {
-            "path": "vendor/libreoffice-reference/sw/source/core/layout/atrfrm.cxx",
-            "marker": "SwFormatFrameSize::operator=="
-          }
-        ]
-      },
-      "localPath": "apps/office/src/sw/inc/fmtfsize.ts",
-      "localSymbols": [
-        "SwFrameSize",
-        "SwFormatFrameSize"
-      ],
-      "omittedResponsibilities": [
-        "Full native UNO member IDs/PutValue/percent sizing/layout/pool lifecycle remain unverified."
-      ],
-      "preservedResponsibilities": [
-        "Iteration202 removes scalar row minHeight storage and numeric kernel height contracts. Native SvxSizeItem/SwFormatFrameSize owns both dimensions, both sizing types, both percentages and both relations with native defaults, Which90, full equality, clone and supported default size query. Original rows retain copied items, document getter compares complete items and returns clone; resize uses native document setter with copied full size, preserving Fixed/Minimum and promoting only Variable. Flat layout and mounted cells use native Variable/Minimum/Fixed semantics, fixed content clipped, properties metric from shell common getter. ODT row-height Fixed/min-row-height Minimum/Variable omission and native height clamp1..65535; attributes apply in order. Full percentage/fly/vertical/nested/merged/protection/UNO member IDs/PutValue/pooling/widget/SfxItemSet/full parity remains unverified; all prior contracts/classifications/statuses/exceptions retained."
-      ],
-      "status": "mapped",
-      "upstreamPath": "sw/inc/fmtfsize.hxx",
-      "upstreamSymbols": [
-        "SwFrameSize",
-        "SwFormatFrameSize"
       ]
     }
   ]

@@ -1,4 +1,6 @@
 /** @fileoverview Internal canonical Writer graph codec used behind boundary-specific envelopes. */
+import { SwFormatVertOrient } from "../../../inc/fmtornt";
+import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
 
 import {
   SvxNumType,
@@ -130,10 +132,75 @@ interface WriterTableRecord {
   readonly rows: readonly Readonly<{
     format: WriterRowFormatRecord;
     cells: readonly Readonly<{
-      format: SwTableBoxFormat;
+      format: WriterBoxFormatRecord;
       paragraphs: readonly WriterTextNodeRecord[];
     }>[];
   }>[];
+}
+
+/** Primitive complete box item; legacy scalar alignment is accepted only at storage ingress. */
+type WriterBoxFormatRecord = Omit<SwTableBoxFormat, "vertOrient"> & {
+  readonly vertOrient?:
+    Readonly<{ position: number; orientation: number; relation: number }> | undefined;
+  readonly verticalAlign?: "top" | "middle" | "bottom" | undefined;
+};
+/** Encodes complete public native fields without transporting a class. @param value - Original box format. @returns Primitive format. */
+function encodeBoxFormat(value: SwTableBoxFormat): WriterBoxFormatRecord {
+  const { vertOrient, ...format } = value;
+  return {
+    ...format,
+    vertOrient:
+      vertOrient === undefined
+        ? undefined
+        : {
+            position: vertOrient.GetPos(),
+            orientation: vertOrient.GetVertOrient(),
+            relation: vertOrient.GetRelationOrient(),
+          },
+  };
+}
+/** Restores native item ownership from primitive or prior scalar storage. @param value - Primitive box record. @returns Native box format. */
+function decodeBoxFormat(value: WriterBoxFormatRecord): SwTableBoxFormat {
+  const { vertOrient, verticalAlign, ...format } = value;
+  if (vertOrient === undefined)
+    return {
+      ...format,
+      ...(verticalAlign === undefined
+        ? {}
+        : {
+            vertOrient: new SwFormatVertOrient(
+              0,
+              verticalAlign === "middle"
+                ? VertOrientation.CENTER
+                : verticalAlign === "bottom"
+                  ? VertOrientation.BOTTOM
+                  : VertOrientation.NONE,
+            ),
+          }),
+    };
+  if (
+    !isRecord(vertOrient) ||
+    [vertOrient.position, vertOrient.orientation, vertOrient.relation].some(
+      /** Rejects malformed native fields at the untrusted graph boundary. @param field - Primitive value. @returns Whether invalid. */
+      (field) => typeof field !== "number" || !Number.isFinite(field),
+    ) ||
+    !Number.isSafeInteger(vertOrient.position) ||
+    !Number.isInteger(vertOrient.orientation) ||
+    vertOrient.orientation < -32768 ||
+    vertOrient.orientation > 32767 ||
+    !Number.isInteger(vertOrient.relation) ||
+    vertOrient.relation < -32768 ||
+    vertOrient.relation > 32767
+  )
+    throw new Error("Stored Writer box orientation is invalid.");
+  return {
+    ...format,
+    vertOrient: new SwFormatVertOrient(
+      vertOrient.position,
+      vertOrient.orientation,
+      vertOrient.relation,
+    ),
+  };
 }
 
 /** Primitive complete frame item for process and storage boundaries. */
@@ -380,7 +447,7 @@ export function encodeWriterDocument(document: SwDoc): WriterDocumentRecord {
               /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ (
                 cell,
               ) => ({
-                format: cell.GetFormat(),
+                format: encodeBoxFormat(cell.GetFormat()),
                 paragraphs: cell
                   .GetParagraphs()
                   .map(
@@ -693,7 +760,7 @@ export function decodeWriterDocument(
         rowRecord.cells.map(
           /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ (
             cell,
-          ) => cell.format,
+          ) => decodeBoxFormat(cell.format),
         ),
       );
       for (const [cellIndex, cellRecord] of rowRecord.cells.entries()) {

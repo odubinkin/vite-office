@@ -1,0 +1,39 @@
+{
+  "records": [
+    {
+      "command": "Unchanged JSDoc validator on approved changed code/acceptance paths; actual physical-line count",
+      "exit": 0,
+      "errors": [],
+      "physicalLines": {
+        "apps/office/src/sw/inc/fmtornt.ts": 92,
+        "apps/office/src/sw/browser/filter/xml/writer-document-codec.ts": 874,
+        "apps/office/src/sw/browser/presentation/writer-view.test.tsx": 957,
+        "apps/office/src/sw/browser/presentation/native-table-properties-reset.test.tsx": 182,
+        "apps/office/src/sw/inc/fmtornt.test.ts": 114,
+        "apps/office/src/sw/source/core/docnode/native-cell-alignment-owner.test.ts": 155,
+        "apps/office/src/sw/source/filter/xml/native-cell-alignment-roundtrip.test.ts": 111,
+        "apps/office/e2e/writer-native-cell-alignment.spec.ts": 153
+      }
+    },
+    {
+      "command": "npm exec -- prettier --check apps/office/src/sw/inc/fmtornt.ts apps/office/src/sw/browser/filter/xml/writer-document-codec.ts apps/office/src/sw/browser/presentation/writer-view.test.tsx apps/office/src/sw/browser/presentation/native-table-properties-reset.test.tsx apps/office/src/sw/inc/fmtornt.test.ts apps/office/src/sw/source/core/docnode/native-cell-alignment-owner.test.ts apps/office/src/sw/source/filter/xml/native-cell-alignment-roundtrip.test.ts apps/office/e2e/writer-native-cell-alignment.spec.ts",
+      "exit": 1,
+      "bytes": 167,
+      "sha256": "5449154ec1c6b17c424be4126a4f220f9b97be20a2aab22f910aa80074f5d455",
+      "diagnostics": [
+        "[warn] apps/office/e2e/writer-native-cell-alignment.spec.ts",
+        "[warn] Code style issues found in the above file. Run Prettier with --write to fix."
+      ]
+    },
+    {
+      "command": "npm exec -- eslint apps/office/src/sw/inc/fmtornt.ts apps/office/src/sw/browser/filter/xml/writer-document-codec.ts apps/office/src/sw/browser/presentation/writer-view.test.tsx apps/office/src/sw/browser/presentation/native-table-properties-reset.test.tsx apps/office/src/sw/inc/fmtornt.test.ts apps/office/src/sw/source/core/docnode/native-cell-alignment-owner.test.ts apps/office/src/sw/source/filter/xml/native-cell-alignment-roundtrip.test.ts apps/office/e2e/writer-native-cell-alignment.spec.ts --max-warnings 0",
+      "exit": 1,
+      "bytes": 193,
+      "sha256": "9abda7d5948f28960dda63eb5fb959cc371df3266a26c5524349cbdbd8d9d864",
+      "diagnostics": [
+        "  80:9  error  Unexpected lexical declaration in case block  no-case-declarations",
+        "✖ 1 problem (1 error, 0 warnings)"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "baselineTag": "libreoffice-26.8.0.2",
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "reviewer": "Same current agent, pinned source read-only, no upstream invocation",
+  "contracts": [
+    "Iteration203 replaces scalar cell vertical alignment with complete SwFormatVertOrient Which109 position0/NONE/PRINT_AREA defaults, native numeric enum values and three-field clone/equality/represented UNO member query/update. Original boxes and insertion undo own independent copied items. SwDoc SetBoxAttr owns native selection/history/notifications; setters traverse ordinary ring points while getters use current point or native table selected boxes. Common full-item getter and orientation-only getter retain mixed/no-item state. Shell delegates; properties reads common shell state and emits only a changed alignment item, native mixed widget fallback top. CSS handles native alignments and safe fixed-row content; ODT maps NONE/CENTER/BOTTOM, process/storage codec restores full primitive items, old scalar only storage ingress. Full pooling/shared frame formats/direct-formatting/HTML resizing/fly/nested/merged/protection/vertical writing and overall parity remain unverified; prior classifications/defaults/contracts/evidence/exceptions retained.",
+    "Native tabledlg Reset maps unrecognized/mixed65535 to widget Top; FillItemSet emits alignment only after valid changed selection. SetBoxAttr ordinary ring selection versus current-point getters follows lcl_GetBoxSel, ordinary marks do not expand selection. SwCellFrame alignment only adds nonnegative remaining-space offsets, represented with safe flex alignment for authored fixed rows. Borders and table frame shell ownership remain separate unverified future leaves. Full goal remains unproven.",
+    "Native integer UNO extraction honors unsigned-short orientation conversion to signed storage, signed-short relation and signed-long position defaults. Query position conversion rounds negative ties away from zero as tools/UnitConversion.hxx and o3tl::detail::MulDiv. Native codec rejects fractional/out-of-range item scalars; old scalar remains only legacy storage ingress. Initial full Chromium245 passed; only original2 app failures/new independent cases follow, no passing/full replay."
+  ],
+  "sourceSHA256": {
+    "sw/inc/fmtornt.hxx": "a52876d19edf9941269d40d2dcb7bbced8325942b4fbeb5402d60d37e984b053",
+    "sw/inc/hintids.hxx": "c69353d16f8f15575a82843880cc016c6033e2f86e91905f999a0cfec8cf398f",
+    "sw/inc/unomid.h": "60f92c4d421026bced199fea889dd83fb0db4454221730ab613f89a45f488d9a",
+    "sw/source/core/layout/atrfrm.cxx": "61410fa07c330f5a0be094ac3e484bca0dbf439c0d8662460494a27952b1b82c",
+    "sw/source/core/layout/tabfrm.cxx": "d1d616197c6aeac1b1ba075995892b34cfdbea60838e88136f9bf4a52e90970f",
+    "sw/source/core/docnode/ndtbl1.cxx": "c94a3a78edc61fc2b2a0419371f70cffc5466ceca3d0b8f29160cceff0b37663",
+    "sw/source/core/frmedt/fetab.cxx": "e7b7c7164f76d7e67eddcf863128d41c3c2ea2946362b8509bab0bc2cdc9f016",
+    "sw/source/uibase/shells/tabsh.cxx": "ac075f90575663fac974e2804e7111b1df3f596eb5bb400fb9fc2f4be0058163",
+    "sw/source/ui/table/tabledlg.cxx": "8784376ef8a6517596379155caa49027b70d4c801c0866c9991b9998e1781a5a",
+    "offapi/com/sun/star/text/VertOrientation.idl": "e6d730500d030430155b03f1024339eddcf71f19811f821428d04271a0d3722d",
+    "offapi/com/sun/star/text/RelOrientation.idl": "d10dc0a29d3f6f30d69f831c7ba922cc3381f816088e74f20b59c7fb9b602b76",
+    "include/tools/UnitConversion.hxx": "340ffbe0df6026439ab4aaa9ca424cd144ab18863a75f7a9b374f6c4b3b454cf",
+    "include/o3tl/unit_conversion.hxx": "8d60b600da7e679b41db0452e126863feb6b9b283c579e1c8c3431f3a0e5a19b"
+  },
+  "parentFindingsCharacters": 536977,
+  "parentFindingsSHA256": "2bb082e29f12548a1d2c55fb78d9954a1f9f287bcaebc5480a9177486420a848"
+}

@@ -1,4 +1,6 @@
 /** @fileoverview Verifies independent native split item publication through selection, history, ODT and original cursor owners. */
+import { VertOrientation } from "./../../../../offapi/com/sun/star/text/VertOrientation";
+
 import { afterEach, expect, it } from "vitest";
 import { SwDoc } from "../../core/doc/doc";
 import { SwDocShell } from "../app/docsh";
@@ -81,7 +83,7 @@ for (const selected of [false, true])
           minRowHeight: 0,
           padding: 0,
           border: "none",
-          verticalAlign: "top",
+          verticalAlign: VertOrientation.NONE,
           headerRows: 0,
           repeatHeaderRows: false,
           ...page.FillItemSet(),
@@ -165,7 +167,7 @@ it("native unchanged mixed and default dialog items preserve row attributes", /*
     minRowHeight: 0,
     padding: 0,
     border: "none",
-    verticalAlign: "top",
+    verticalAlign: VertOrientation.NONE,
     headerRows: 0,
     repeatHeaderRows: false,
     ...page.FillItemSet(),

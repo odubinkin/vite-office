@@ -1,4 +1,6 @@
 /** @fileoverview Verifies source-backed and synthetic canonical Writer table round trips. */
+import { VertOrientation } from "./../../../../offapi/com/sun/star/text/VertOrientation";
+import { SwFormatVertOrient } from "./../../../inc/fmtornt";
 
 import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
 import { readFileSync } from "node:fs";
@@ -151,8 +153,16 @@ describe("Writer canonical ODF tables", /** Verifies the bounded table scenario.
       2,
       { frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 500), keepTogether: false },
       [
-        { padding: 100, border: "none", verticalAlign: "top" },
-        { padding: 120, border: "1pt solid #000000", verticalAlign: "middle" },
+        {
+          padding: 100,
+          border: "none",
+          vertOrient: new SwFormatVertOrient(0, VertOrientation.NONE),
+        },
+        {
+          padding: 120,
+          border: "1pt solid #000000",
+          vertOrient: new SwFormatVertOrient(0, VertOrientation.CENTER),
+        },
       ],
     );
     first.GetTabBoxes()[0]?.GetParagraphs()[0]?.SetText("one");

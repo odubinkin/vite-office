@@ -1,0 +1,21 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "command": "npm run check:source-tree",
+      "exit": 0,
+      "bytes": 162,
+      "sha256": "6c5bd2e3c84892b8cc26b8b1b5f06a950891f9d5988a8ef1f1496f0c252cd33e",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "exit": 0,
+      "bytes": 205,
+      "sha256": "a0c96f11bb8a80d42eb8513787c8a25654c80c6762248f683f10b3fd01076d82",
+      "diagnostics": [
+        "Source provenance check passed for 281 runtime modules (196 mapped, 69 browser adaptations, 16 local infrastructure)."
+      ]
+    }
+  ]
+}

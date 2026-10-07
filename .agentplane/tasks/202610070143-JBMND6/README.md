@@ -4,7 +4,7 @@ title: "Move cell vertical alignment into native document ownership and common s
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 10
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -13,7 +13,7 @@ tags:
 verify: []
 plan_approval:
   state: "approved"
-  updated_at: "2026-10-07T01:44:20.433Z"
+  updated_at: "2026-10-07T01:47:40.349Z"
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: implement native document-owned complete cell vertical alignment under standing iterative authorization; no upstream-executing tests or raw AP artifacts."
 doc_version: 3
-doc_updated_at: "2026-10-07T01:44:25.607Z"
+doc_updated_at: "2026-10-07T01:47:39.984Z"
 doc_updated_by: "CODER"
 description: "Iteration203: replace scalar kernel cell alignment and shell-owned mutation with full SwFormatVertOrient, native SwDoc SetBoxAttr/SetBoxAlign/GetBoxAlign selection and history; use common native dialog state and changed-item submission, preserving registered document I/O deviations."
 sections:
@@ -59,7 +59,8 @@ sections:
     apps/office/src/sw/browser/presentation/WriterTableDialog.tsx
     apps/office/src/sw/browser/presentation/WriterInsertTableDialog.tsx
     apps/office/src/sw/browser/presentation/writer-view.tsx
-    Approved existing acceptance paths (only native item/enum fixture and assertion migrations or explicit changed-item submission corrections, no deleted cases or weakened semantic intent):
+    apps/office/src/sw/source/core/undo/untbl.ts
+    Approved existing acceptance paths, explicit native item/enum fixture/assertion migrations and upstream changed-item correction only:
     apps/office/src/sw/browser/presentation/writer-view.test.tsx
     apps/office/src/sw/source/filter/xml/odt-table-roundtrip.test.ts
     apps/office/src/sw/browser/presentation/WriterTableDialog.test.tsx
@@ -81,7 +82,7 @@ sections:
     apps/office/src/sw/source/filter/xml/native-cell-alignment-roundtrip.test.ts
     apps/office/src/sw/browser/presentation/native-cell-alignment-state.test.tsx
     apps/office/e2e/writer-native-cell-alignment.spec.ts
-    Metadata: docs/program/source-provenance.json and docs/program/parity/runtime-inventory.json, current leaf AP docs/bounded evidence and immutable-prefix parent append. No network/outside/global access, upstream invocation, upstream sources/Python/helper scripts/raw results/source maps in AP. Raw data only ignored application cache.
+    Metadata: docs/program/source-provenance.json, docs/program/parity/runtime-inventory.json. Current leaf AP bounded evidence and immutable-prefix parent append. Native insertion undo payload must clone the new complete item; this is necessary original approved full-item history, one exact production path refinement under standing iterative authorization. No network/outside/global access, raw data or source/scripts in AP. Raw only ignored application cache.
   Plan: |-
     1. Native VertOrientation/RelOrientation and complete SwFormatVertOrient item; cloned original box storage; document SetBoxAttr/SetBoxAlign/GetBoxAlign and thin shell delegates. Keep unrelated border/table paths scoped for future work.
     2. Native numeric property boundary, common shell dialog state and native changed-item submission, browser CSS enum rendering, ODT conversion and full primitive codec ingress/egress. Explicit acceptance migrations preserve intended old behavior except documented upstream changed-item correction.
@@ -119,7 +120,8 @@ apps/office/src/sw/browser/editor/WriterEditableTable.tsx
 apps/office/src/sw/browser/presentation/WriterTableDialog.tsx
 apps/office/src/sw/browser/presentation/WriterInsertTableDialog.tsx
 apps/office/src/sw/browser/presentation/writer-view.tsx
-Approved existing acceptance paths (only native item/enum fixture and assertion migrations or explicit changed-item submission corrections, no deleted cases or weakened semantic intent):
+apps/office/src/sw/source/core/undo/untbl.ts
+Approved existing acceptance paths, explicit native item/enum fixture/assertion migrations and upstream changed-item correction only:
 apps/office/src/sw/browser/presentation/writer-view.test.tsx
 apps/office/src/sw/source/filter/xml/odt-table-roundtrip.test.ts
 apps/office/src/sw/browser/presentation/WriterTableDialog.test.tsx
@@ -141,7 +143,7 @@ apps/office/src/sw/source/core/docnode/native-cell-alignment-owner.test.ts
 apps/office/src/sw/source/filter/xml/native-cell-alignment-roundtrip.test.ts
 apps/office/src/sw/browser/presentation/native-cell-alignment-state.test.tsx
 apps/office/e2e/writer-native-cell-alignment.spec.ts
-Metadata: docs/program/source-provenance.json and docs/program/parity/runtime-inventory.json, current leaf AP docs/bounded evidence and immutable-prefix parent append. No network/outside/global access, upstream invocation, upstream sources/Python/helper scripts/raw results/source maps in AP. Raw data only ignored application cache.
+Metadata: docs/program/source-provenance.json, docs/program/parity/runtime-inventory.json. Current leaf AP bounded evidence and immutable-prefix parent append. Native insertion undo payload must clone the new complete item; this is necessary original approved full-item history, one exact production path refinement under standing iterative authorization. No network/outside/global access, raw data or source/scripts in AP. Raw only ignored application cache.
 
 ## Plan
 

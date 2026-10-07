@@ -1,4 +1,6 @@
 /** @fileoverview Verifies row-height shell forwarding, selected dialog history and original native graph. */
+import { VertOrientation } from "./../../../../offapi/com/sun/star/text/VertOrientation";
+
 import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
 import { expect, it, vi } from "vitest";
 import { SwDoc } from "../../core/doc/doc";
@@ -58,7 +60,7 @@ for (const mode of ["direct", "selected", "properties"] as const)
         minRowHeight: 900,
         padding: 0,
         border: "none",
-        verticalAlign: "top" as const,
+        verticalAlign: VertOrientation.NONE,
         headerRows: 0,
         repeatHeaderRows: false,
       };

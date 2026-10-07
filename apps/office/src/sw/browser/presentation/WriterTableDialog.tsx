@@ -1,4 +1,5 @@
 /** @fileoverview Browser Table and Table Properties tabs modeled on pinned Writer table dialogs. */
+import { VertOrientation } from "../../../offapi/com/sun/star/text/VertOrientation";
 
 import { useState } from "react";
 import { WriterInsertTableDialog } from "./WriterInsertTableDialog";
@@ -27,6 +28,7 @@ export function WriterTableDialog(
     table?: SwTable;
     selectedBoxes?: readonly SwTableBox[];
     rowHeight?: SwFormatFrameSize | undefined;
+    boxAlign?: number | undefined;
     lineSelected?: boolean;
     suggestedName?: string;
     occupiedNames?: readonly string[];
@@ -47,6 +49,7 @@ function WriterTablePropertiesDialog({
   table,
   selectedBoxes,
   rowHeight,
+  boxAlign,
   availableWidth,
   lineSelected = false,
   onCancel,
@@ -55,6 +58,7 @@ function WriterTablePropertiesDialog({
   table: SwTable;
   selectedBoxes?: readonly SwTableBox[];
   rowHeight?: SwFormatFrameSize | undefined;
+  boxAlign?: number | undefined;
   lineSelected?: boolean;
   availableWidth: number;
   onCancel: () => void;
@@ -87,7 +91,10 @@ function WriterTablePropertiesDialog({
       minRowHeight: rowHeight?.GetHeight() ?? 0,
       padding: rows[0]?.GetTabBoxes()[0]?.GetFormat().padding ?? 100,
       border: rows[0]?.GetTabBoxes()[0]?.GetFormat().border ?? "0.5pt solid #666666",
-      verticalAlign: rows[0]?.GetTabBoxes()[0]?.GetFormat().verticalAlign ?? "top",
+      verticalAlign:
+        boxAlign === VertOrientation.CENTER || boxAlign === VertOrientation.BOTTOM
+          ? boxAlign
+          : VertOrientation.NONE,
     }),
   );
   const [minRowHeight, setMinRowHeight] = useState(initial.minRowHeight);
@@ -191,7 +198,7 @@ function WriterTablePropertiesDialog({
               minRowHeight,
               padding,
               border,
-              verticalAlign,
+              ...(verticalAlign === initial.verticalAlign ? {} : { verticalAlign }),
               headerRows: textFlowPage.GetRowsToRepeat(),
               repeatHeaderRows: textFlowPage.GetRowsToRepeat() > 0,
               ...textFlowPage.FillItemSet(),
@@ -535,16 +542,13 @@ function WriterTablePropertiesDialog({
                     onChange={
                       /** Sets cell vertical alignment. @param event - Selection event. @returns Nothing. */ (
                         event,
-                      ) =>
-                        setVerticalAlign(
-                          event.target.value as WriterTableDialogValue["verticalAlign"],
-                        )
+                      ) => setVerticalAlign(Number(event.target.value))
                     }
                     value={verticalAlign}
                   >
-                    <option value="top">Top</option>
-                    <option value="middle">Middle</option>
-                    <option value="bottom">Bottom</option>
+                    <option value={VertOrientation.NONE}>Top</option>
+                    <option value={VertOrientation.CENTER}>Middle</option>
+                    <option value={VertOrientation.BOTTOM}>Bottom</option>
                   </select>
                 </label>
               </fieldset>

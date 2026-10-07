@@ -101,6 +101,9 @@ export const RES_PARATR_LIST_ISCOUNTED = 87 as const;
 /** Native frame-size item, RES_FRMATR_BEGIN + 1. */
 export const RES_FRM_SIZE = 90 as const;
 
+/** Vertical frame orientation, RES_FRMATR_BEGIN + 20. */
+export const RES_VERT_ORIENT = 109 as const;
+
 /** Direct paragraph text-left margin, matching `RES_MARGIN_TEXTLEFT`. */
 export const RES_MARGIN_TEXTLEFT = 93 as const;
 

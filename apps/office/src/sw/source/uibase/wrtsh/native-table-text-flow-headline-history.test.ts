@@ -1,4 +1,6 @@
 /** @fileoverview Verifies native headline draft acceptance through original table graph, history and ODT. */
+import { VertOrientation } from "./../../../../offapi/com/sun/star/text/VertOrientation";
+
 import { afterEach, expect, it } from "vitest";
 import { SwDoc } from "../../core/doc/doc";
 import { SwDocShell } from "../app/docsh";
@@ -72,7 +74,7 @@ for (const original of [0, 2]) {
         minRowHeight: 0,
         padding: 0,
         border: "none",
-        verticalAlign: "top",
+        verticalAlign: VertOrientation.NONE,
         headerRows: accepted,
         repeatHeaderRows: accepted > 0,
         rowSplit: true,

@@ -1,4 +1,6 @@
 /** @fileoverview Projects a persistent SwView through browser-only command and editor adapters. */
+import { SwFormatVertOrient } from "../../inc/fmtornt";
+
 import { SwInsertTableFlags } from "../../inc/itabenum";
 /* eslint-disable react-refresh/only-export-components -- Pure presentation helpers are exported for focused behavior verification. */
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
@@ -176,7 +178,11 @@ export function WriterWorkbench({
           value.rows,
           value.columns,
           value.name,
-          { padding: value.padding, border: value.border, verticalAlign: value.verticalAlign },
+          {
+            padding: value.padding,
+            border: value.border,
+            vertOrient: new SwFormatVertOrient(0, value.verticalAlign),
+          },
         );
       } else if (currentTable !== undefined) {
         ItemSetToTableParam(view.GetWrtShell(), value);
@@ -571,6 +577,7 @@ export function WriterWorkbench({
       {tableDialog === undefined ? null : (
         <WriterTableDialog
           rowHeight={view.GetWrtShell().GetRowHeight()}
+          boxAlign={view.GetWrtShell().GetBoxAlign()}
           occupiedNames={occupiedTableNames}
           suggestedName={suggestedTableName}
           {...(tableDialog === "properties" && currentTable !== undefined

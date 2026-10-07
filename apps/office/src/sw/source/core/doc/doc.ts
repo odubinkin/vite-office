@@ -16,9 +16,13 @@ import {
   SetSwRowSplit,
   GetSwRowHeight,
   SetSwRowHeight,
+  GetSwBoxAttr,
+  GetSwBoxAlign,
+  SetSwBoxAttr,
 } from "../docnode/ndtbl1";
 import type { SwCursor } from "../crsr/swcrsr";
 import type { SwFormatFrameSize } from "../../../inc/fmtfsize";
+import { SwFormatVertOrient } from "../../../inc/fmtornt";
 import { createWriterCollapsedCursorState, type SwUndoCursorState } from "../undo/undobj";
 import { SwInsertTableFlags, type SwInsertTableOptions } from "../../../inc/itabenum";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
@@ -711,6 +715,27 @@ export class SwDoc {
         ) => (node instanceof SwTableNode ? [node.GetTable()] : []),
       );
   }
+  /** Applies a complete native vertical box item. @param cursor - Actual cursor. @param value - Full item. @param cursorState - Optional live shell history state. @returns Whether admitted. */
+  public SetBoxAttr(
+    cursor: SwCursor,
+    value: SwFormatVertOrient,
+    cursorState?: SwUndoCursorState,
+  ): boolean {
+    return SetSwBoxAttr(this, cursor, value, cursorState);
+  }
+  /** Reads a cloned complete common box item. @param cursor - Actual cursor. @returns Common item or no item. */
+  public static GetBoxAttr(cursor: SwCursor): SwFormatVertOrient | undefined {
+    return GetSwBoxAttr(cursor);
+  }
+  /** Applies native cell alignment with position0 and PRINT_AREA relation. @param cursor - Actual cursor. @param align - Native orientation. @param cursorState - Optional live history state. @returns Whether admitted. */
+  public SetBoxAlign(cursor: SwCursor, align: number, cursorState?: SwUndoCursorState): boolean {
+    return this.SetBoxAttr(cursor, new SwFormatVertOrient(0, align), cursorState);
+  }
+  /** Reads common native cell alignment. @param cursor - Actual cursor. @returns Orientation or native mixed/absent65535. */
+  public static GetBoxAlign(cursor: SwCursor): number {
+    return GetSwBoxAlign(cursor);
+  }
+
   /** Applies native table separators and publishes document-owned attribute history. @param table - Actual table. @param next - Requested separator geometry. @param previous - Original geometry. @param start - Actual current box. @param currentRowOnly - Independent row graph request. @param cursorState - Optional shell cursor attributes. @returns Whether admitted. */
   public SetTabCols(
     table: SwTable,

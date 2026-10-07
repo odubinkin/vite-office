@@ -1,4 +1,6 @@
 /** @fileoverview Verifies native format-page publication through original table graph, grouped history and ODT owners. */
+import { VertOrientation } from "./../../../../offapi/com/sun/star/text/VertOrientation";
+
 import { afterEach, expect, it } from "vitest";
 import { SwDoc } from "../../core/doc/doc";
 import { SwDocShell } from "../app/docsh";
@@ -68,7 +70,7 @@ function accept(f: ReturnType<typeof fixture>): boolean {
     minRowHeight: 0,
     padding: 0,
     border: "none",
-    verticalAlign: "top",
+    verticalAlign: VertOrientation.NONE,
     headerRows: 0,
     repeatHeaderRows: false,
     rowSplit: true,

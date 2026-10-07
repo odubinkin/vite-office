@@ -1,0 +1,64 @@
+{
+  "records": [
+    {
+      "command": "Unchanged JSDoc validator on approved changed code/acceptance paths; actual physical-line count",
+      "exit": 0,
+      "errors": [],
+      "physicalLines": {
+        "apps/office/src/offapi/com/sun/star/text/VertOrientation.ts": 15,
+        "apps/office/src/offapi/com/sun/star/text/RelOrientation.ts": 17,
+        "apps/office/src/sw/inc/fmtornt.ts": 87,
+        "apps/office/src/sw/inc/hintids.ts": 200,
+        "apps/office/src/sw/source/core/table/swtable.ts": 642,
+        "apps/office/src/sw/source/core/docnode/ndtbl1.ts": 199,
+        "apps/office/src/sw/source/core/doc/doc.ts": 956,
+        "apps/office/src/sw/source/core/frmedt/fetab.ts": 463,
+        "apps/office/src/sw/source/uibase/shells/tabsh.ts": 176,
+        "apps/office/src/sw/source/filter/xml/xmltbli.ts": 201,
+        "apps/office/src/sw/source/filter/xml/xmlexp.ts": 771,
+        "apps/office/src/sw/browser/filter/xml/writer-document-codec.ts": 867,
+        "apps/office/src/sw/browser/editor/WriterEditableTable.tsx": 232,
+        "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx": 619,
+        "apps/office/src/sw/browser/presentation/WriterInsertTableDialog.tsx": 240,
+        "apps/office/src/sw/browser/presentation/writer-view.tsx": 803,
+        "apps/office/src/sw/source/core/undo/untbl.ts": 399,
+        "apps/office/src/sw/browser/presentation/writer-view.test.tsx": 957,
+        "apps/office/src/sw/source/filter/xml/odt-table-roundtrip.test.ts": 514,
+        "apps/office/src/sw/browser/presentation/WriterTableDialog.test.tsx": 280,
+        "apps/office/src/sw/browser/presentation/native-table-properties-reset.test.tsx": 182,
+        "apps/office/src/sw/source/uibase/wrtsh/native-row-split-owner-history.test.ts": 147,
+        "apps/office/src/sw/source/uibase/wrtsh/native-table-properties.test.ts": 269,
+        "apps/office/src/sw/source/uibase/wrtsh/native-row-height-owner-history.test.ts": 136,
+        "apps/office/src/sw/source/uibase/wrtsh/native-table-column-page-history.test.ts": 150,
+        "apps/office/src/sw/source/uibase/wrtsh/native-table-text-flow-split-history.test.ts": 186,
+        "apps/office/src/sw/source/uibase/wrtsh/native-table-text-flow-headline-history.test.ts": 111,
+        "apps/office/src/sw/source/uibase/wrtsh/native-table-format-lifecycle-history.test.ts": 151,
+        "apps/office/src/sw/source/uibase/wrtsh/native-table-traversal.test.ts": 411,
+        "apps/office/src/sw/source/uibase/wrtsh/native-table-properties-reset-history.test.ts": 134,
+        "apps/office/src/sw/source/core/undo/native-insert-table-history.test.ts": 285,
+        "apps/office/e2e/writer-table-properties-history.spec.ts": 109,
+        "apps/office/src/sw/inc/fmtornt.test.ts": 75,
+        "apps/office/src/sw/source/core/docnode/native-cell-alignment-owner.test.ts": 128,
+        "apps/office/src/sw/source/filter/xml/native-cell-alignment-roundtrip.test.ts": 77,
+        "apps/office/src/sw/browser/presentation/native-cell-alignment-state.test.tsx": 96,
+        "apps/office/e2e/writer-native-cell-alignment.spec.ts": 105
+      }
+    },
+    {
+      "command": "npm exec -- prettier --check apps/office/src/offapi/com/sun/star/text/VertOrientation.ts apps/office/src/offapi/com/sun/star/text/RelOrientation.ts apps/office/src/sw/inc/fmtornt.ts apps/office/src/sw/inc/hintids.ts apps/office/src/sw/source/core/table/swtable.ts apps/office/src/sw/source/core/docnode/ndtbl1.ts apps/office/src/sw/source/core/doc/doc.ts apps/office/src/sw/source/core/frmedt/fetab.ts apps/office/src/sw/source/uibase/shells/tabsh.ts apps/office/src/sw/source/filter/xml/xmltbli.ts apps/office/src/sw/source/filter/xml/xmlexp.ts apps/office/src/sw/browser/filter/xml/writer-document-codec.ts apps/office/src/sw/browser/editor/WriterEditableTable.tsx apps/office/src/sw/browser/presentation/WriterTableDialog.tsx apps/office/src/sw/browser/presentation/WriterInsertTableDialog.tsx apps/office/src/sw/browser/presentation/writer-view.tsx apps/office/src/sw/source/core/undo/untbl.ts apps/office/src/sw/browser/presentation/writer-view.test.tsx apps/office/src/sw/source/filter/xml/odt-table-roundtrip.test.ts apps/office/src/sw/browser/presentation/WriterTableDialog.test.tsx apps/office/src/sw/browser/presentation/native-table-properties-reset.test.tsx apps/office/src/sw/source/uibase/wrtsh/native-row-split-owner-history.test.ts apps/office/src/sw/source/uibase/wrtsh/native-table-properties.test.ts apps/office/src/sw/source/uibase/wrtsh/native-row-height-owner-history.test.ts apps/office/src/sw/source/uibase/wrtsh/native-table-column-page-history.test.ts apps/office/src/sw/source/uibase/wrtsh/native-table-text-flow-split-history.test.ts apps/office/src/sw/source/uibase/wrtsh/native-table-text-flow-headline-history.test.ts apps/office/src/sw/source/uibase/wrtsh/native-table-format-lifecycle-history.test.ts apps/office/src/sw/source/uibase/wrtsh/native-table-traversal.test.ts apps/office/src/sw/source/uibase/wrtsh/native-table-properties-reset-history.test.ts apps/office/src/sw/source/core/undo/native-insert-table-history.test.ts apps/office/e2e/writer-table-properties-history.spec.ts apps/office/src/sw/inc/fmtornt.test.ts apps/office/src/sw/source/core/docnode/native-cell-alignment-owner.test.ts apps/office/src/sw/source/filter/xml/native-cell-alignment-roundtrip.test.ts apps/office/src/sw/browser/presentation/native-cell-alignment-state.test.tsx apps/office/e2e/writer-native-cell-alignment.spec.ts",
+      "exit": 0,
+      "bytes": 66,
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+      "diagnostics": [
+        "All matched files use Prettier code style!"
+      ]
+    },
+    {
+      "command": "npm exec -- eslint apps/office/src/offapi/com/sun/star/text/VertOrientation.ts apps/office/src/offapi/com/sun/star/text/RelOrientation.ts apps/office/src/sw/inc/fmtornt.ts apps/office/src/sw/inc/hintids.ts apps/office/src/sw/source/core/table/swtable.ts apps/office/src/sw/source/core/docnode/ndtbl1.ts apps/office/src/sw/source/core/doc/doc.ts apps/office/src/sw/source/core/frmedt/fetab.ts apps/office/src/sw/source/uibase/shells/tabsh.ts apps/office/src/sw/source/filter/xml/xmltbli.ts apps/office/src/sw/source/filter/xml/xmlexp.ts apps/office/src/sw/browser/filter/xml/writer-document-codec.ts apps/office/src/sw/browser/editor/WriterEditableTable.tsx apps/office/src/sw/browser/presentation/WriterTableDialog.tsx apps/office/src/sw/browser/presentation/WriterInsertTableDialog.tsx apps/office/src/sw/browser/presentation/writer-view.tsx apps/office/src/sw/source/core/undo/untbl.ts apps/office/src/sw/browser/presentation/writer-view.test.tsx apps/office/src/sw/source/filter/xml/odt-table-roundtrip.test.ts apps/office/src/sw/browser/presentation/WriterTableDialog.test.tsx apps/office/src/sw/browser/presentation/native-table-properties-reset.test.tsx apps/office/src/sw/source/uibase/wrtsh/native-row-split-owner-history.test.ts apps/office/src/sw/source/uibase/wrtsh/native-table-properties.test.ts apps/office/src/sw/source/uibase/wrtsh/native-row-height-owner-history.test.ts apps/office/src/sw/source/uibase/wrtsh/native-table-column-page-history.test.ts apps/office/src/sw/source/uibase/wrtsh/native-table-text-flow-split-history.test.ts apps/office/src/sw/source/uibase/wrtsh/native-table-text-flow-headline-history.test.ts apps/office/src/sw/source/uibase/wrtsh/native-table-format-lifecycle-history.test.ts apps/office/src/sw/source/uibase/wrtsh/native-table-traversal.test.ts apps/office/src/sw/source/uibase/wrtsh/native-table-properties-reset-history.test.ts apps/office/src/sw/source/core/undo/native-insert-table-history.test.ts apps/office/e2e/writer-table-properties-history.spec.ts apps/office/src/sw/inc/fmtornt.test.ts apps/office/src/sw/source/core/docnode/native-cell-alignment-owner.test.ts apps/office/src/sw/source/filter/xml/native-cell-alignment-roundtrip.test.ts apps/office/src/sw/browser/presentation/native-cell-alignment-state.test.tsx apps/office/e2e/writer-native-cell-alignment.spec.ts --max-warnings 0",
+      "exit": 0,
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnostics": []
+    }
+  ]
+}

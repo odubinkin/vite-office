@@ -1,4 +1,7 @@
 /** @fileoverview Verifies real browser table properties, selected-cell scope and one native Undo/Redo without upstream execution. */
+import { VertOrientation } from "./../src/offapi/com/sun/star/text/VertOrientation";
+import { SwFormatVertOrient } from "./../src/sw/inc/fmtornt";
+
 import { selectBrowserTableRow } from "../test-support/table-mouse-e2e";
 import { expect, test } from "@playwright/test";
 import { SwDoc } from "../src/sw/source/core/doc/doc";
@@ -23,8 +26,16 @@ for (const viewport of [1280, 390])
     for (let row = 0; row < 2; row++)
       for (const [column, box] of doc.nodes
         .AppendTableRow(table, 2, {}, [
-          { padding: 50, border: "none", verticalAlign: "top" },
-          { padding: 50, border: "none", verticalAlign: "top" },
+          {
+            padding: 50,
+            border: "none",
+            vertOrient: new SwFormatVertOrient(0, VertOrientation.NONE),
+          },
+          {
+            padding: 50,
+            border: "none",
+            vertOrient: new SwFormatVertOrient(0, VertOrientation.NONE),
+          },
         ])
         .GetTabBoxes()
         .entries()) {
@@ -70,7 +81,7 @@ for (const viewport of [1280, 390])
     await page.getByRole("tab", { name: "Borders", exact: true }).click();
     await page.getByRole("spinbutton", { name: "Cell padding (cm)" }).fill("0.2");
     await page.getByRole("tab", { name: "Text Flow", exact: true }).click();
-    await page.getByRole("combobox", { name: "Cell vertical alignment" }).selectOption("bottom");
+    await page.getByRole("combobox", { name: "Cell vertical alignment" }).selectOption("3");
     await page.getByRole("button", { name: "OK", exact: true }).click();
     await expect(rendered).toHaveCSS("width", "302.328px");
     await expect(cells.nth(0)).toHaveCSS("padding-left", "7.53333px");
