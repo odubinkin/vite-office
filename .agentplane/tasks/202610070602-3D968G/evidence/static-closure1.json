@@ -1,0 +1,29 @@
+{
+  "records": [
+    {
+      "command": "npm run format:check",
+      "exit": 0,
+      "bytes": 122,
+      "sha256": "ac1729f86eee878f5f4d6c948c510d2cc91bb5568f6dd088f70f3885e137d116",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run lint",
+      "exit": 1,
+      "bytes": 266,
+      "sha256": "b38728c2cbd054f705211b3e54cdf9de3e2d9a0d7c6a128111a217e6dfec58ca",
+      "diagnostics": [
+        "> eslint . --max-warnings 0",
+        "  288:20  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "✖ 1 problem (1 error, 0 warnings)"
+      ]
+    },
+    {
+      "command": "npm run typecheck",
+      "exit": 0,
+      "bytes": 240,
+      "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed",
+      "diagnostics": []
+    }
+  ]
+}

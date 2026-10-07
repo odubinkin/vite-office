@@ -1,0 +1,120 @@
+{
+  "proof": "Actual counters with complete identical source/maps or complete contiguous declaration/body/enclosing branch/location proofs; focused skips retained as skipped.",
+  "previousVerified": {
+    "app": {
+      "map": "GCAPDR.app-final.json",
+      "proof": "GCAPDR.app-proof.json",
+      "mapHash": "9a3a0c534d344a407b39f2ca425cb0cc8a46bb854dd882c64a5010415c59bcf8",
+      "proofHash": "acc7ef518c0fd55f60b9d0619c868c91a23976e328bcac509f18b6889db4bb4a"
+    },
+    "inventory": {
+      "map": "GCAPDR.inventory-final.json",
+      "proof": "GCAPDR.inventory-proof.json",
+      "mapHash": "3fd67c4c8d9de0f7c95d2c60451e5259ac0fa617e57013f1df35348a4391fa80",
+      "proofHash": "de56f0a0caf190d67cbe9fc6601b4830dc4c10ab60975312d4edd5538929fcd6"
+    }
+  },
+  "app": {
+    "coverage": {
+      "lines": {
+        "total": 16049,
+        "covered": 16049,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 17620,
+        "covered": 17620,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 4091,
+        "covered": 4091,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 13207,
+        "covered": 13207,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "mapSHA256": "21d09911e56aad7a99d125f91f85f4e395ca248df581cc31de8fc77db9499096",
+    "proofSHA256": "61ed067187880c78aa79cc3745fe09e2c033fc0941c4f165dab7bf5067af84bb",
+    "files": 286,
+    "wholeFiles": 284,
+    "transfers": [
+      {
+        "path": "apps/office/src/svx/source/dialog/frmsel.ts",
+        "initialSourceSHA256": "36f84b7d43e400db09e7cfe56783795c701fe45f6d77b0d95163fe37fb891f78",
+        "currentSourceSHA256": "214e6862b6a189f03fc0d3990117958cb81620a12167d752c5307e0b25de338e",
+        "regionCount": 4,
+        "counts": {
+          "statements": 116,
+          "functions": 33,
+          "branches": 30
+        }
+      },
+      {
+        "path": "apps/office/src/sw/browser/presentation/WriterBorderPage.tsx",
+        "initialSourceSHA256": "54d6a1239d2ab3deccd0b0cfe3ac18c0379074e6b67c504702a0b756cba18a84",
+        "currentSourceSHA256": "3138c66480723ff9cf550d1dc61f2b63f30aa1f2ebe157252ddd1e97bc910ad9",
+        "regionCount": 6,
+        "counts": {
+          "statements": 38,
+          "functions": 14,
+          "branches": 13
+        }
+      }
+    ],
+    "gaps": []
+  },
+  "inventory": {
+    "coverage": {
+      "lines": {
+        "total": 1464,
+        "covered": 1464,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 1523,
+        "covered": 1523,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 384,
+        "covered": 384,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 1081,
+        "covered": 1081,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "mapSHA256": "4d28303359a40d81f6561b021418d1a053cc09033832ea09913dd8fc3d61d33d",
+    "proofSHA256": "e4a57c478310d6bacc7a9b7d4d3d11b0a37bc5c7872abb8e69eae124af3b57c6",
+    "files": 38,
+    "wholeFiles": 38,
+    "transfers": [],
+    "gaps": []
+  }
+}

@@ -50,23 +50,34 @@ for (const width of [1280, 390])
       await page.getByRole("textbox", { name: "Row 1 column 1 paragraph 1", exact: true }).click();
       await page.getByRole("button", { name: "Table Properties", exact: true }).click();
       await page.getByRole("tab", { name: "Borders", exact: true }).click();
-      await expect(page.getByRole("spinbutton", { name: "Cell padding (cm)" })).toHaveValue("0");
-      await expect(page.getByRole("combobox", { name: "Cell border" })).toHaveValue("mixed");
-      await page.getByRole("spinbutton", { name: "Cell padding (cm)" }).fill("1");
-      await page.getByRole("combobox", { name: "Cell border" }).selectOption("none");
+      await expect(page.getByRole("spinbutton", { name: "Top padding (cm)" })).toHaveValue("0");
+      await expect(page.getByRole("button", { name: "Top border", exact: true })).toHaveAttribute(
+        "data-writer-border-state",
+        "2",
+      );
+      await page.getByRole("spinbutton", { name: "Top padding (cm)" }).fill("1");
+      await page.getByRole("button", { name: "No Borders", exact: true }).click();
       await page.getByRole("button", { name: "Reset", exact: true }).click();
-      await expect(page.getByRole("spinbutton", { name: "Cell padding (cm)" })).toHaveValue("0");
-      await expect(page.getByRole("combobox", { name: "Cell border" })).toHaveValue("mixed");
+      await expect(page.getByRole("spinbutton", { name: "Top padding (cm)" })).toHaveValue("0");
+      await expect(page.getByRole("button", { name: "Top border", exact: true })).toHaveAttribute(
+        "data-writer-border-state",
+        "2",
+      );
       await page.getByRole("button", { name: "Cancel", exact: true }).click();
       await expect(cells.nth(0)).toHaveCSS("padding-top", "6.66667px");
       await selectBrowserTableRow(page, "CommonBrowser", 2);
       await page.getByRole("button", { name: "Table Properties", exact: true }).click();
       await page.getByRole("tab", { name: "Borders", exact: true }).click();
-      await expect(page.getByRole("spinbutton", { name: "Cell padding (cm)" })).toHaveValue("0.35");
-      await expect(page.getByRole("combobox", { name: "Cell border" })).toHaveValue(
-        "2pt solid #654321",
+      await expect(page.getByRole("spinbutton", { name: "Top padding (cm)" })).toHaveValue("0.35");
+      await expect(page.getByRole("button", { name: "Top border", exact: true })).toHaveAttribute(
+        "data-writer-border-state",
+        "0",
       );
-      await page.getByRole("combobox", { name: "Cell border" }).selectOption("none");
+      await expect(
+        page.getByRole("spinbutton", { name: "Border thickness (pt)", exact: true }),
+      ).toHaveValue("2");
+      await expect(page.getByLabel("Border line color", { exact: true })).toHaveValue("#654321");
+      await page.getByRole("button", { name: "No Borders", exact: true }).click();
       await page.getByRole("button", { name: "OK", exact: true }).click();
       for (const index of [2, 3]) {
         await expect(cells.nth(index)).toHaveCSS("padding-top", "13.3333px");

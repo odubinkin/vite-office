@@ -97,7 +97,7 @@ describe("Writer browser table controls", /** Verifies the bounded table scenari
     expect(
       screen.queryByRole("spinbutton", { name: "Minimum row height (cm)" }),
     ).not.toBeInTheDocument();
-    expect(screen.queryByRole("spinbutton", { name: "Cell padding (cm)" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("spinbutton", { name: "Top padding (cm)" })).not.toBeInTheDocument();
     expect(screen.queryByRole("combobox", { name: "Cell border" })).not.toBeInTheDocument();
     expect(
       screen.queryByRole("combobox", { name: "Cell vertical alignment" }),
@@ -176,12 +176,17 @@ describe("Writer browser table controls", /** Verifies the bounded table scenari
       target: { value: "3" },
     });
     fireEvent.click(screen.getByRole("tab", { name: "Borders" }));
-    fireEvent.change(screen.getByRole("spinbutton", { name: "Cell padding (cm)" }), {
+    fireEvent.change(screen.getByRole("spinbutton", { name: "Top padding (cm)" }), {
       target: { value: "0.2" },
     });
-    fireEvent.change(screen.getByRole("combobox", { name: "Cell border" }), {
-      target: { value: "0.5pt solid #666666" },
+    fireEvent.click(screen.getByRole("button", { name: /All (Inner Lines|Four Borders)$/u }));
+    fireEvent.change(screen.getByRole("combobox", { name: "Border line style" }), {
+      target: { value: "0" },
     });
+    fireEvent.change(screen.getByRole("combobox", { name: "Border thickness" }), {
+      target: { value: "50" },
+    });
+    fireEvent.change(screen.getByLabelText("Border line color"), { target: { value: "#666666" } });
     fireEvent.click(screen.getByRole("tab", { name: "Columns" }));
     fireEvent.click(screen.getByRole("button", { name: "OK" }));
     expect(submit).toHaveBeenCalledWith(

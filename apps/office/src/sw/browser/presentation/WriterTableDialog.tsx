@@ -4,12 +4,9 @@ import { VertOrientation } from "../../../offapi/com/sun/star/text/VertOrientati
 import { useState } from "react";
 import { WriterInsertTableDialog } from "./WriterInsertTableDialog";
 import type { SwTable, SwTableBox } from "../../source/core/table/swtable";
-import { exportBorderShorthand, importBoxProperties } from "../../../xmloff/source/style/bordrhdl";
-import {
-  SvxBoxItem,
-  SvxBoxInfoItem,
-  SvxBoxInfoItemValidFlags,
-} from "../../../editeng/source/items/frmitems";
+import { SvxBorderTabPage } from "../../../cui/source/tabpages/border";
+import { WriterBorderPage } from "./WriterBorderPage";
+import { SvxBoxInfoItem } from "../../../editeng/source/items/frmitems";
 import { SfxItemSet } from "../../../svl/source/items/itemset";
 import { RES_BOX } from "../../inc/hintids";
 import { SID_ATTR_BORDER_INNER } from "../../../svx/inc/svxids";
@@ -94,31 +91,36 @@ function WriterTablePropertiesDialog({
     /** Captures the native initial headline item once per dialog. @returns Native Text Flow headline owner. */
     () => new SwTextFlowPage(table, selectedBoxes),
   );
+  const [borderPage] = useState(
+    /** Captures the native border page input once. @returns Native border owner. */ () => {
+      const input =
+        borderItems?.Clone() ??
+        new SfxItemSet(table.GetTableNode().GetDoc().GetAttrPool(), [
+          [RES_BOX, RES_BOX],
+          [SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER],
+        ]);
+      if (borderItems === undefined) {
+        input.Put(input.GetPool().GetUserOrPoolDefaultItem(RES_BOX));
+      }
+      if (input.GetItemIfSet(SID_ATTR_BORDER_INNER) === undefined) {
+        const info = new SvxBoxInfoItem(SID_ATTR_BORDER_INNER);
+        info.SetTable(true);
+        info.SetDist(true);
+        info.SetMinDist(true);
+        info.SetDefDist(28);
+        input.Put(info);
+      }
+      return new SvxBorderTabPage(input, RES_BOX);
+    },
+  );
   const [, refreshPage] = useState(0);
   const width = formatPage.GetFieldValue("width");
   const columnWidths = formatPage.data.columns;
   const [initial] = useState(
     /** Retains initial input values for the represented Text Flow and Borders pages. @returns Original page values. */
     () => {
-      const box = (
-        (borderItems?.Get(RES_BOX) ??
-          table
-            .GetTableNode()
-            .GetDoc()
-            .GetAttrPool()
-            .GetUserOrPoolDefaultItem(RES_BOX)) as SvxBoxItem
-      ).Clone();
-      const item = borderItems?.GetItemIfSet(SID_ATTR_BORDER_INNER);
-      const info =
-        item instanceof SvxBoxInfoItem ? item.Clone() : new SvxBoxInfoItem(SID_ATTR_BORDER_INNER);
       return {
         minRowHeight: rowHeight?.GetHeight() ?? 0,
-        padding: box.GetDistance(0),
-        border: info.IsValid(SvxBoxInfoItemValidFlags.TOP)
-          ? exportBorderShorthand(box.GetTop())
-          : undefined,
-        box,
-        info,
         verticalAlign:
           boxAlign === VertOrientation.CENTER || boxAlign === VertOrientation.BOTTOM
             ? boxAlign
@@ -127,8 +129,6 @@ function WriterTablePropertiesDialog({
     },
   );
   const [minRowHeight, setMinRowHeight] = useState(initial.minRowHeight);
-  const [padding, setPadding] = useState(initial.padding);
-  const [border, setBorder] = useState(initial.border);
   const [verticalAlign, setVerticalAlign] = useState<WriterTableDialogValue["verticalAlign"]>(
     initial.verticalAlign,
   );
@@ -207,36 +207,19 @@ function WriterTablePropertiesDialog({
                   value,
                 ) => value <= 0,
               ) ||
-              minRowHeight < 0 ||
-              padding < 0
+              minRowHeight < 0
             ) {
               setError("Enter valid table dimensions and positive column widths.");
               return;
             }
-            let changedBorders: SfxItemSet | undefined;
-            if (padding !== initial.padding || border !== initial.border) {
-              const box = initial.box.Clone(),
-                info = initial.info.Clone();
-              if (padding !== initial.padding) box.SetAllDistances(padding);
-              if (border !== initial.border && border !== undefined) {
-                const next = importBoxProperties({ border }, RES_BOX) as SvxBoxItem;
-                for (const edge of [0, 1, 2, 3]) box.SetLine(next.GetLine(edge), edge);
-                info.SetLine(next.GetTop(), 0);
-                info.SetLine(next.GetLeft(), 1);
-                info.SetValid(SvxBoxInfoItemValidFlags.ALL);
-              }
-              info.SetDist(true);
-              info.SetValid(SvxBoxInfoItemValidFlags.DISTANCE);
-              changedBorders = new SfxItemSet(
-                borderItems?.GetPool() ?? table.GetTableNode().GetDoc().GetAttrPool(),
-                [
-                  [RES_BOX, RES_BOX],
-                  [SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER],
-                ],
-              );
-              changedBorders.Put(box);
-              changedBorders.Put(info);
-            }
+            const changedBorders = new SfxItemSet(
+              borderItems?.GetPool() ?? table.GetTableNode().GetDoc().GetAttrPool(),
+              [
+                [RES_BOX, RES_BOX],
+                [SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER],
+              ],
+            );
+            const hasChangedBorders = borderPage.FillItemSet(changedBorders);
             onSubmit({
               name: name.trim(),
               rows: rowCount,
@@ -249,7 +232,7 @@ function WriterTablePropertiesDialog({
               marginBottom: formatPage.below,
               columnWidths,
               minRowHeight,
-              ...(changedBorders === undefined ? {} : { borderItems: changedBorders }),
+              ...(hasChangedBorders ? { borderItems: changedBorders } : {}),
               ...(verticalAlign === initial.verticalAlign ? {} : { verticalAlign }),
               headerRows: textFlowPage.GetRowsToRepeat(),
               repeatHeaderRows: textFlowPage.GetRowsToRepeat() > 0,
@@ -606,34 +589,18 @@ function WriterTablePropertiesDialog({
               </fieldset>
             ) : null}
             {activeTab === "borders" ? (
-              <fieldset className="grid gap-2 rounded border p-3">
-                <legend className="text-sm font-bold">Borders</legend>
-                {field("Cell padding (cm)", padding, setPadding)}
-                <label className="grid gap-1 text-sm">
-                  Border
-                  <select
-                    aria-label="Cell border"
-                    className="rounded border px-2 py-1"
-                    onChange={
-                      /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ (
-                        event,
-                      ) =>
-                        setBorder(event.target.value === "mixed" ? undefined : event.target.value)
-                    }
-                    value={border ?? "mixed"}
-                  >
-                    {initial.border === undefined ? <option value="mixed">Mixed</option> : null}
-                    {border === undefined ||
-                    ["none", "0.5pt solid #666666", "1pt solid #000000"].includes(border) ? null : (
-                      <option value={border}>Current border</option>
-                    )}
-                    <option value="none">None</option>
-                    <option value="0.5pt solid #666666">Thin solid</option>
-                    <option value="1pt solid #000000">Solid</option>
-                  </select>
-                </label>
-              </fieldset>
-            ) : null}
+              <WriterBorderPage
+                page={borderPage}
+                onChange={
+                  /** Presents accepted native border widgets. @returns Nothing. */ () =>
+                    refreshPage(
+                      /** Advances the display revision. @param version - Current display version. @returns Next version. */ (
+                        version,
+                      ) => version + 1,
+                    )
+                }
+              />
+            ) : null}{" "}
           </div>
         </div>
         {error === undefined ? null : <p className="text-sm text-red-700">{error}</p>}
@@ -650,8 +617,7 @@ function WriterTablePropertiesDialog({
                   setMinRowHeight(initial.minRowHeight);
                   setVerticalAlign(initial.verticalAlign);
                 } else {
-                  setPadding(initial.padding);
-                  setBorder(initial.border);
+                  borderPage.Reset();
                 }
                 setError(undefined);
                 refreshPage(

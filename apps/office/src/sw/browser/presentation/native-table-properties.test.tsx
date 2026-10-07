@@ -48,7 +48,7 @@ it("accepts native properties as one history action and retains real selected ce
     target: { value: "8" },
   });
   fireEvent.click(screen.getByRole("tab", { name: "Borders" }));
-  fireEvent.change(screen.getByRole("spinbutton", { name: "Cell padding (cm)" }), {
+  fireEvent.change(screen.getByRole("spinbutton", { name: "Top padding (cm)" }), {
     target: { value: "0.2" },
   });
   fireEvent.click(screen.getByRole("button", { name: "OK" }));

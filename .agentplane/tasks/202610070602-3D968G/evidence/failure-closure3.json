@@ -1,0 +1,50 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/svx/source/dialog/frmsel.ts": "214e6862b6a189f03fc0d3990117958cb81620a12167d752c5307e0b25de338e",
+    "apps/office/src/cui/source/tabpages/border.ts": "ce354b9d490d911d9806fa83b8850e5ec9cb9e4f14fb96cbe419012b1e4fc089",
+    "apps/office/src/sw/browser/presentation/WriterBorderPage.tsx": "3138c66480723ff9cf550d1dc61f2b63f30aa1f2ebe157252ddd1e97bc910ad9",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx": "3d674b1af468a83a46028ddbcaae45e3540fb778d483f9991b179815959d7cad",
+    "scripts/check-module-boundaries.mjs": "396e50fcc13f19a509d4f570e231958d2b83c3b8e697b8d9ddc0e700f528807c",
+    "scripts/check-module-boundaries.test.ts": "57652be1eaf23b98a795e994b609648c2ee2df3983695b1dd0e803db8d386743",
+    "apps/office/e2e/writer-table-properties-history.spec.ts": "af1892a91bc7dde7627315648e77025a77f82562ae914e2a1773498511b2c2df",
+    "apps/office/e2e/writer-native-table-properties-reset.spec.ts": "5b6b23841e655fed6782099ba347bfda89c02d43d423255d59903f017585a1f1",
+    "apps/office/e2e/writer-table-border-changed-items.spec.ts": "3c0df65ae46bb9895120daced8ea7d27093fab4c6449e74262d8bd58c1160b55",
+    "apps/office/e2e/writer-table-border-common-state.spec.ts": "13c7e4aa318b89543c06ba039ea9cc3e66d87f20aad8cbcee1cc480785c604d7",
+    "apps/office/src/sw/browser/presentation/native-table-border-changed-items.test.tsx": "fb429554d790af27a4b318b5b37ddbbb6e37f7e054f028a7018e7960e6c911b4",
+    "apps/office/src/sw/browser/editor/native-cell-box-render.test.tsx": "ec00a1c0fab40bdde5698fc34783a7cbd6332f2dc9ffdabba8e1bd58465baf44",
+    "apps/office/src/sw/browser/presentation/native-table-column-page.test.tsx": "4e566b1df82db1e317d19594f3356289758eb204a9264c932c173da478269708",
+    "apps/office/src/sw/browser/presentation/native-table-properties-reset.test.tsx": "bd8e4a0723cc927c23189f28b247a4ddd5ed17f56c30f184c2c0c4c7dcef19c1",
+    "apps/office/src/sw/browser/presentation/native-table-border-common-state.test.tsx": "01519c558be2fb7b26c94bbae1050f5ea464b508e7e340fcce30626d1b7c6965",
+    "apps/office/src/sw/browser/presentation/native-table-properties.test.tsx": "f4fcaa57e21786769c0198ae66bb4b2ccc1d1fa6dd0c54d51c60e46cf5fdfb33",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.test.tsx": "a8fc7ce3e1e13b920a742c8bd35ce776d82d6feb1c2bbd2d8ee829f9aacfb9ed",
+    "apps/office/src/svx/source/dialog/native-frame-selector.test.ts": "00b86e97a4f788e47a223661736459a1555b22d4f99f65cac184c5d187d9e751",
+    "apps/office/src/cui/source/tabpages/native-border-page.test.ts": "9ed3d572636ae63b781d596472db24c3dfb2c5ad07af42d2861a76e2fdab560d",
+    "apps/office/src/sw/browser/presentation/native-border-page.test.tsx": "f0fbebfa9661246dd3308531d3615d26e3d0846c27a0ac60d133deca1dfbf55b",
+    "apps/office/e2e/writer-native-border-page.spec.ts": "76042f112d6c3b333f42e07147a703b616fc8d06f9f7dbecfe67056c9585547e",
+    "docs/program/source-provenance.json": "90d19c6ebe345047733a996d8b4369bae111dd36079d21fc58606e9ee0baf024",
+    "docs/program/parity/runtime-inventory.json": "9cbee0f25a4e2247f84c1bfb2395ad00b45c1491c6dc6f7f79bc43172728f17b"
+  },
+  "records": [
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts writer-native-border-page.spec.ts --grep=native empty-hit focus and keyboard selection width=(1280|390)$ --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 665,
+      "sha256": "6059afd2153cbcc88e7bade71e718eec92e63a1af1d77aa7e605bb81e9aeac3c",
+      "totals": [
+        "2 passed (5.6s)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "startTime": "2026-10-07T06:56:43.845Z",
+        "duration": 5587.12,
+        "expected": 2,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    }
+  ]
+}

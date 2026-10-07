@@ -1,0 +1,76 @@
+{
+  "records": [
+    {
+      "command": "npm run format:check",
+      "exit": 1,
+      "bytes": 288,
+      "sha256": "76f760dbecfb5249efe402bacd8b71d3bee65866bcdf9da07163ae1aeb2b6b04",
+      "diagnostics": [
+        "[warn] apps/office/e2e/writer-native-border-page.spec.ts",
+        "[warn] apps/office/src/sw/browser/presentation/native-border-page.test.tsx",
+        "[warn] Code style issues found in 2 files. Run Prettier with --write to fix."
+      ]
+    },
+    {
+      "command": "npm run lint",
+      "exit": 1,
+      "bytes": 2234,
+      "sha256": "0a1b64c05c3ba336699918308f253cc8cdbc3483b8bf3627aa89bce75786cb08",
+      "diagnostics": [
+        "> eslint . --max-warnings 0",
+        "  23:11  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "  201:40  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "  285:20  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "  358:55  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "  118:26  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "  120:36  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "   80:12  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "   84:18  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "   89:20  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "  147:12  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "  151:5   error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion"
+      ]
+    },
+    {
+      "command": "npm run typecheck",
+      "exit": 2,
+      "bytes": 1754,
+      "sha256": "f7672c831356133bfaec415a3ef1c07de80c5966db94b6a3dc48c471469b9d39",
+      "diagnostics": [
+        "src/cui/source/tabpages/border.ts(113,90): error TS2345: Argument of type '0 | 1 | 2 | 3' is not assignable to parameter of type 'SvxBoxInfoItemLine'.",
+        "src/cui/source/tabpages/border.ts(333,31): error TS2345: Argument of type '0 | 1 | 2 | 3' is not assignable to parameter of type 'SvxBoxInfoItemLine'.",
+        "src/sw/browser/presentation/native-border-page.test.tsx(206,15): error TS2339: Property 'commandSource' does not exist on type 'WriterDocumentSession'.",
+        "src/sw/browser/presentation/native-border-page.test.tsx(208,15): error TS2339: Property 'commandSource' does not exist on type 'WriterDocumentSession'.",
+        "src/sw/browser/presentation/native-table-border-common-state.test.tsx(197,11): error TS2367: This comparison appears to be unintentional because the types '\"mixed\" | \"absent\" | \"box-only\"' and '\"pool-default\"' have no overlap.",
+        "src/sw/browser/presentation/native-table-properties.test.tsx(109,10): error TS2552: Cannot find name 'input'. Did you mean 'oninput'?",
+        "src/sw/browser/presentation/native-table-properties.test.tsx(109,42): error TS2304: Cannot find name 'RES_BOX'.",
+        "npm error Lifecycle script `typecheck` failed with error:",
+        "npm error code 2",
+        "npm error path /Users/odubinkin/Projects/vite-office/apps/office",
+        "npm error workspace @vite-office/office@0.1.0",
+        "npm error location /Users/odubinkin/Projects/vite-office/apps/office"
+      ]
+    },
+    {
+      "command": "npm run check:dependencies",
+      "exit": 0,
+      "bytes": 189,
+      "sha256": "b4ba6bd210860639c055f2869c81cf8a3e72d338eaef91d868f4e103ec47f7fe",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:docs",
+      "exit": 0,
+      "bytes": 119,
+      "sha256": "d122d0ad7d6f38bffc77e838c7c9d77095df98c5f7f5bff579c97f7b1313b775",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:file-size",
+      "exit": 0,
+      "bytes": 3925,
+      "sha256": "598e1a5d9960146b93572c48f9c32d951925b07d3b3957a970ecaae5474cdcd8",
+      "diagnostics": []
+    }
+  ]
+}

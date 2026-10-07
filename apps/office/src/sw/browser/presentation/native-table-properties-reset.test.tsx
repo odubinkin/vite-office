@@ -73,7 +73,7 @@ function reset() {
 it("Table Reset restores shared native geometry while retaining Borders draft and original graph", /** Checks reset after another page publishes widths. @returns Nothing. */ () => {
   const f = fixture();
   tab("Borders");
-  metric("Cell padding (cm)", "1");
+  metric("Top padding (cm)", "1");
   tab("Columns");
   fireEvent.click(screen.getByRole("checkbox", { name: "Adapt table width" }));
   metric("Column 1 width (cm)", "5");
@@ -88,7 +88,7 @@ it("Table Reset restores shared native geometry while retaining Borders draft an
   tab("Columns");
   expect(screen.getByRole("spinbutton", { name: "Column 1 width (cm)" })).toHaveValue(3.53);
   tab("Borders");
-  expect(screen.getByRole("spinbutton", { name: "Cell padding (cm)" })).toHaveValue(1);
+  expect(screen.getByRole("spinbutton", { name: "Top padding (cm)" })).toHaveValue(1);
   fireEvent.click(screen.getByRole("button", { name: "OK" }));
   expect(f.submit).toHaveBeenCalledWith(
     expect.objectContaining({
@@ -125,10 +125,8 @@ it("Text Flow and Borders Reset each restore their initial controls and preserve
   const f = fixture();
   metric("Table width (cm)", "5");
   tab("Borders");
-  metric("Cell padding (cm)", "1");
-  fireEvent.change(screen.getByRole("combobox", { name: "Cell border" }), {
-    target: { value: "none" },
-  });
+  metric("Top padding (cm)", "1");
+  fireEvent.click(screen.getByRole("button", { name: "No Borders" }));
   tab("Text Flow");
   fireEvent.click(screen.getByRole("checkbox", { name: "Repeat header" }));
   fireEvent.change(screen.getByRole("spinbutton", { name: "Header rows" }), {
@@ -153,8 +151,11 @@ it("Text Flow and Borders Reset each restore their initial controls and preserve
   metric("Minimum row height (cm)", "2");
   tab("Borders");
   reset();
-  expect(screen.getByRole("spinbutton", { name: "Cell padding (cm)" })).toHaveValue(0);
-  expect(screen.getByRole("combobox", { name: "Cell border" })).toHaveValue("mixed");
+  expect(screen.getByRole("spinbutton", { name: "Top padding (cm)" })).toHaveValue(0);
+  expect(screen.getByRole("button", { name: "Top border" })).toHaveAttribute(
+    "data-writer-border-state",
+    "2",
+  );
   fireEvent.click(screen.getByRole("button", { name: "OK" }));
   expect(f.submit).toHaveBeenCalledWith(
     expect.objectContaining({
@@ -167,13 +168,13 @@ it("Text Flow and Borders Reset each restore their initial controls and preserve
   expect(f.submit.mock.calls[0]?.[0]).not.toHaveProperty("verticalAlign");
   expect(f.submit.mock.calls[0]?.[0]).not.toHaveProperty("padding");
   expect(f.submit.mock.calls[0]?.[0]).not.toHaveProperty("border");
-  expect(f.submit.mock.calls[0]?.[0]).not.toHaveProperty("borderItems");
+  expect(f.submit.mock.calls[0]?.[0]?.borderItems?.GetItemIfSet(RES_BOX)).toBeUndefined();
 });
 it("Reset after invalid page data clears validation and Cancel keeps original owners", /** Checks no accidental submit/history or whole-document mutation. @returns Nothing. */ () => {
   const f = fixture();
-  tab("Borders");
-  metric("Cell padding (cm)", "-1");
-  const input = screen.getByRole("spinbutton", { name: "Cell padding (cm)" }),
+  tab("Text Flow");
+  metric("Minimum row height (cm)", "-1");
+  const input = screen.getByRole("spinbutton", { name: "Minimum row height (cm)" }),
     form = input.closest("form");
   if (form === null) throw new Error("Missing reset form");
   fireEvent.submit(form);

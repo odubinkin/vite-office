@@ -42,7 +42,7 @@ for (const viewport of [1280, 390]) {
     const rendered = await open(page);
     await page.getByRole("button", { name: "Table Properties", exact: true }).click();
     await page.getByRole("tab", { name: "Borders", exact: true }).click();
-    await page.getByRole("spinbutton", { name: "Cell padding (cm)", exact: true }).fill("1");
+    await page.getByRole("spinbutton", { name: "Top padding (cm)", exact: true }).fill("1");
     await page.getByRole("tab", { name: "Columns", exact: true }).click();
     await page.getByRole("checkbox", { name: "Adapt table width", exact: true }).check();
     await page.getByRole("spinbutton", { name: "Column 1 width (cm)", exact: true }).fill("5");
@@ -84,11 +84,11 @@ for (const viewport of [1280, 390]) {
     ).toHaveValue("0");
     await page.getByRole("tab", { name: "Borders", exact: true }).click();
     await expect(
-      page.getByRole("spinbutton", { name: "Cell padding (cm)", exact: true }),
+      page.getByRole("spinbutton", { name: "Top padding (cm)", exact: true }),
     ).toHaveValue("1");
     await page.getByRole("button", { name: "Reset", exact: true }).click();
     await expect(
-      page.getByRole("spinbutton", { name: "Cell padding (cm)", exact: true }),
+      page.getByRole("spinbutton", { name: "Top padding (cm)", exact: true }),
     ).toHaveValue("0.14");
     await page.getByRole("button", { name: "OK", exact: true }).click();
     await expect

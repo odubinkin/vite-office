@@ -1,0 +1,48 @@
+{
+  "reason": "Only changed metadata input after verified closure prose append; resources/tree/invariant inputs unchanged.",
+  "records": [
+    {
+      "command": "npm exec -- prettier --check apps/office/src/svx/source/dialog/frmsel.ts apps/office/src/cui/source/tabpages/border.ts apps/office/src/sw/browser/presentation/WriterBorderPage.tsx apps/office/src/sw/browser/presentation/WriterTableDialog.tsx scripts/check-module-boundaries.mjs scripts/check-module-boundaries.test.ts apps/office/e2e/writer-table-properties-history.spec.ts apps/office/e2e/writer-native-table-properties-reset.spec.ts apps/office/e2e/writer-table-border-changed-items.spec.ts apps/office/e2e/writer-table-border-common-state.spec.ts apps/office/src/sw/browser/presentation/native-table-border-changed-items.test.tsx apps/office/src/sw/browser/editor/native-cell-box-render.test.tsx apps/office/src/sw/browser/presentation/native-table-column-page.test.tsx apps/office/src/sw/browser/presentation/native-table-properties-reset.test.tsx apps/office/src/sw/browser/presentation/native-table-border-common-state.test.tsx apps/office/src/sw/browser/presentation/native-table-properties.test.tsx apps/office/src/sw/browser/presentation/WriterTableDialog.test.tsx apps/office/src/svx/source/dialog/native-frame-selector.test.ts apps/office/src/cui/source/tabpages/native-border-page.test.ts apps/office/src/sw/browser/presentation/native-border-page.test.tsx apps/office/e2e/writer-native-border-page.spec.ts docs/program/source-provenance.json docs/program/parity/runtime-inventory.json",
+      "exit": 1,
+      "bytes": 164,
+      "sha256": "e5c579a13eca04da65fda932ece9092b035ad5cfc36c5641d4226e6361098fe1",
+      "diagnostics": [
+        "[warn] Code style issues found in the above file. Run Prettier with --write to fix."
+      ]
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "exit": 0,
+      "bytes": 205,
+      "sha256": "3a583dd41aadb6a17098747acc6af714736ca753cb2ab0cfe545cab0ddb4c6c6",
+      "diagnostics": [
+        "Source provenance check passed for 289 runtime modules (203 mapped, 70 browser adaptations, 16 local infrastructure)."
+      ]
+    },
+    {
+      "command": "npm run inventory:parity",
+      "exit": 0,
+      "bytes": 1881759,
+      "sha256": "24a3688d96846dc87897d4009b08c4fa64900599ad8131bbbd5e26890c650917",
+      "diagnostics": [
+        "          \"justification\": \"Iteration208 represents source-owned six-line FrameSelector and SvxBorderTabPage: native tri-state/selection/cache/mouse/modifier/keyboard adjacency, presets and enabled inner lines; Reset owns original box/info and saved four distances, Synchronize and automatic defaults [bounded; complete output is digest-bound in ignored cache]",
+        "          \"justification\": \"Iteration206 draft: scalar kernel cell border/padding storage is replaced by owned SvxBoxItem plus the existing vertical item. Represented lines retain native color/style/width/component arithmetic, signed16 distances/default0, cloning, metrics and supported UNO values; S [bounded; complete output is digest-bound in ignored cache]",
+        "          \"justification\": \"These four existing margin, indent and spacing classes now reside with their pinned frmitems.cxx owner. Existing assertions cover signed margin values, cloning, equality, browser item-codec round trips, automatic first-line mode and contextual spacing. Broader native item [bounded; complete output is digest-bound in ignored cache]",
+        "          \"justification\": \"Iteration206 draft: scalar kernel cell border/padding storage is replaced by owned SvxBoxItem plus the existing vertical item. Represented lines retain native color/style/width/component arithmetic, signed16 distances/default0, cloning, metrics and supported UNO values; S [bounded; complete output is digest-bound in ignored cache]",
+        "          \"justification\": \"Iteration206 draft: scalar kernel cell border/padding storage is replaced by owned SvxBoxItem plus the existing vertical item. Represented lines retain native color/style/width/component arithmetic, signed16 distances/default0, cloning, metrics and supported UNO values; S [bounded; complete output is digest-bound in ignored cache]",
+        "          \"justification\": \"Iteration206 draft: scalar kernel cell border/padding storage is replaced by owned SvxBoxItem plus the existing vertical item. Represented lines retain native color/style/width/component arithmetic, signed16 distances/default0, cloning, metrics and supported UNO values; S [bounded; complete output is digest-bound in ignored cache]",
+        "          \"justification\": \"Iteration208 represents source-owned six-line FrameSelector and SvxBorderTabPage: native tri-state/selection/cache/mouse/modifier/keyboard adjacency, presets and enabled inner lines; Reset owns original box/info and saved four distances, Synchronize and automatic defaults [bounded; complete output is digest-bound in ignored cache]",
+        "          \"justification\": \"Projects canonical SwTable rows and editable SwTextNode cell paragraphs into the browser page. Iteration138 removes the table-cell post-DOM diff/direct text mutation, imperative innerHTML synchronization and event isolation. Cell paragraphs use shared DOM selection identi [bounded; complete output is digest-bound in ignored cache]"
+      ]
+    },
+    {
+      "command": "npm run check:dependencies",
+      "exit": 0,
+      "bytes": 189,
+      "sha256": "b4ba6bd210860639c055f2869c81cf8a3e72d338eaef91d868f4e103ec47f7fe",
+      "diagnostics": [
+        "Module boundary check passed: 288 runtime sources, 1351 relative imports, 24 allowed cross-module edges."
+      ]
+    }
+  ]
+}

@@ -11,6 +11,26 @@ import {
 } from "./check-module-boundaries.mjs";
 
 describe("runtime ownership boundaries", /** Registers runtime ownership boundary cases. @returns Nothing. */ function defineRuntimeBoundaryTests(): void {
+  it("admits source-owned cui border pages and svx line selection with no reverse or browser edges", /** Checks the native dialog owner graph. @returns Nothing. */ () => {
+    expect(isForbiddenModuleEdge("sw", "cui")).toBe(false);
+    for (const module of ["editeng", "svl", "svx"])
+      expect(isForbiddenModuleEdge("cui", module)).toBe(false);
+    expect(isForbiddenModuleEdge("svx", "editeng")).toBe(false);
+    for (const module of ["sw", "framework"])
+      expect(isForbiddenModuleEdge("cui", module)).toBe(true);
+    expect(isForbiddenModuleEdge("editeng", "svx")).toBe(true);
+    expect(getRuntimeOwnershipLayer("cui/source/tabpages/border.ts")).toBe("upstream-mechanism");
+    expect(getRuntimeOwnershipViolation("cui/source/tabpages/border.ts", "", "react")).toMatch(
+      /browser presentation package/u,
+    );
+    expect(
+      getRuntimeOwnershipViolation(
+        "svx/source/dialog/frmsel.ts",
+        "sw/browser/presentation/page",
+        "../../sw/browser/presentation/page",
+      ),
+    ).toMatch(/browser adapters/u);
+  });
   it("admits native border value dependencies while rejecting reverse browser edges", /** Checks source-owned box dependencies and browser isolation. @returns Nothing. */ () => {
     expect(isForbiddenModuleEdge("editeng", "offapi")).toBe(false);
     expect(isForbiddenModuleEdge("editeng", "svtools")).toBe(false);

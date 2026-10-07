@@ -1,0 +1,17 @@
+{
+  "reason": "Only remaining lint failure; no behavioral source change",
+  "records": [
+    {
+      "command": "npm exec -- prettier --write apps/office/src/cui/source/tabpages/border.ts",
+      "exit": 0,
+      "sha256": "11f8ee97f2a173825be5e252a059bf18982b969c5ffcdc64fbae0f64b1ffed5c",
+      "diagnostics": []
+    },
+    {
+      "command": "npm exec -- eslint apps/office/src/cui/source/tabpages/border.ts --max-warnings 0",
+      "exit": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnostics": []
+    }
+  ]
+}

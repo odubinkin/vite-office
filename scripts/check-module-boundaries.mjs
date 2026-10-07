@@ -9,6 +9,7 @@ import ts from "typescript";
 
 const sourceRoot = path.resolve("apps/office/src");
 const moduleNames = [
+  "cui",
   "editeng",
   "framework",
   "o3tl",
@@ -25,6 +26,7 @@ const moduleNames = [
 ];
 const knownModules = new Set(moduleNames);
 const allowedEdges = new Map([
+  ["cui", new Set(["editeng", "svl", "svx"])],
   ["editeng", new Set(["offapi", "svl", "svtools", "vcl"])],
   ["framework", new Set(["sfx2", "svl"])],
   ["o3tl", new Set()],
@@ -34,10 +36,11 @@ const allowedEdges = new Map([
   ["sfx2", new Set(["svl"])],
   ["svl", new Set()],
   ["svtools", new Set()],
-  ["svx", new Set()],
+  ["svx", new Set(["editeng"])],
   [
     "sw",
     new Set([
+      "cui",
       "editeng",
       "framework",
       "o3tl",

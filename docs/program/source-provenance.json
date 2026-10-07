@@ -5510,6 +5510,18 @@
           {
             "path": "apps/office/e2e/writer-table-border-common-state.spec.ts",
             "marker": "native"
+          },
+          {
+            "path": "apps/office/src/svx/source/dialog/frmsel.ts",
+            "marker": "FrameSelector"
+          },
+          {
+            "path": "apps/office/src/cui/source/tabpages/border.ts",
+            "marker": "SvxBorderTabPage"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/WriterBorderPage.tsx",
+            "marker": "WriterBorderPage"
           }
         ],
         "upstream": [
@@ -5704,6 +5716,10 @@
           {
             "path": "sw/inc/swtypes.hxx",
             "marker": "MIN_BORDER_DIST"
+          },
+          {
+            "path": "vendor/libreoffice-reference/cui/source/tabpages/border.cxx",
+            "marker": "SvxBorderTabPage::FillItemSet"
           }
         ]
       },
@@ -5717,7 +5733,9 @@
         "Iteration206 draft: scalar kernel cell border/padding storage is replaced by owned SvxBoxItem plus the existing vertical item. Represented lines retain native color/style/width/component arithmetic, signed16 distances/default0, cloning, metrics and supported UNO values; SvxBoxInfoItem retains native validity127. SetTabBorders consumes SfxItemSet and distributes flat union outer/inner lines using source validity rules. Insertion defaults55twips/black10twip lines and0/no-border are preserved. Process/storage uses complete primitive native state with legacy scalar ingress only; ODF and browser paint carry four independent sides. Initial static and upstream-absent runtime verification are pending. Complete native color shading/theme/Word/macros/fly/vertical/RTL/follow/shared-format behavior, per-edge/common-state border widgets and full parity remain unverified. All existing statuses/defaults/evidence/registered I/O/recovery exceptions are preserved.",
         "Iteration206 verified closure: the earlier draft pending statement is historical. Native box/info/line ownership, supported values/defaults/metrics, flat source-defined border distribution, original graph and history, complete primitive transport and four-edge ODF/browser paint passed one full upstream-absent profile with failed/new-case-only closures. Current app and inventory actual counters each reach100% lines/statements/functions/branches under complete identical-source/maps or complete contiguous mapped-region proof. All550 prior acceptance contracts are preserved by522 byte-identical files and28 exact native-representation AST migrations; six new acceptance files and two new infrastructure cases are added. Full per-edge/common-state widgets, native themes/shading/Word and RTL/vertical/follow/shared-format completeness remain unverified; no semantic status or registered I/O/recovery exception is promoted.",
         "Iteration207 ports represented native common table-border input: SwDoc.GetTabBorders compares original point/mark flat-union outer and inner native lines, first-set/equality/absence/mixed component flags, all four distances jointly, source ResetFlags127 and cloned caller policies. Shell TableParamToItemSet captures current selected or temporary whole-table input with min/default distance28 and restores original native cursors without document/history changes. React reads owned SfxItemSet input and emits cloned native box/info items only for changed represented border widgets; no first-cell scalar reconstruction in the properties path. Mixed distance input uses native zero values; unknown lines and four distances survive untouched or border-only edits. Initial static/runtime verification is pending. Full six-edge/distance/style/color arrangement widgets, RTL/vertical/follow/shared-format unions and whole parity remain unverified. Every previous semantic status, contract/default/evidence prefix and registered I/O/recovery exception is retained.",
-        "Iteration207 verified closure: the earlier pending statement is historical. Native common flat-union border reads, cloned caller policies and default28, selected/temporary whole-table command input, original cursor/document/history preservation and owned native changed-border output passed one full upstream-absent profile plus failed/new-case-only closure. Sidebar and menu execute the same registered native dialog slot. Current actual acceptance union13376 app110inventory13infrastructure254Chromium; actual100 app/inventory counters under complete identical-source/maps or complete contiguous mapped-range proof. All556 prior acceptance files are preserved by546 byte-identical files and10 exact source-backed fixture/item-output/common-state/guide migrations; three new acceptance files are added. Every old metadata field/prefix/status/default/registered I/O/recovery exception is preserved without promotion. Full six-edge/distance/style/color widgets and native SvxBorderTabPage info-only FillItemSet, RTL/vertical/follow/shared-format unions and whole parity remain unverified."
+        "Iteration207 verified closure: the earlier pending statement is historical. Native common flat-union border reads, cloned caller policies and default28, selected/temporary whole-table command input, original cursor/document/history preservation and owned native changed-border output passed one full upstream-absent profile plus failed/new-case-only closure. Sidebar and menu execute the same registered native dialog slot. Current actual acceptance union13376 app110inventory13infrastructure254Chromium; actual100 app/inventory counters under complete identical-source/maps or complete contiguous mapped-range proof. All556 prior acceptance files are preserved by546 byte-identical files and10 exact source-backed fixture/item-output/common-state/guide migrations; three new acceptance files are added. Every old metadata field/prefix/status/default/registered I/O/recovery exception is preserved without promotion. Full six-edge/distance/style/color widgets and native SvxBorderTabPage info-only FillItemSet, RTL/vertical/follow/shared-format unions and whole parity remain unverified.",
+        "Iteration208 represents source-owned six-line FrameSelector and SvxBorderTabPage: native tri-state/selection/cache/mouse/modifier/keyboard adjacency, presets and enabled inner lines; Reset owns original box/info and saved four distances, Synchronize and automatic defaults; native style/color/predefined/custom thickness transitions; fresh FillItemSet publishes separate box/info deltas including source info-only changes. React displays this owner and removes aggregate border/padding draft controls. Initial static/runtime verification is pending. Full SfxTabPage infrastructure, shadow/merge/diagonal/theme controls, exact device hit regions, full widget units, RTL/vertical/follow/shared-format and whole parity remain unverified. Existing semantic statuses/defaults/contracts/evidence prefixes and registered save/open/recovery exceptions remain unchanged.",
+        "Iteration208 verified closure: earlier pending prose is historical. Native six-line selection/cache/tri-state/mouse/modifier/keyboard behavior, separate four metrics and Synchronize, presets/style/color/thickness/custom transitions and native fresh separate box/info FillItemSet passed one full upstream-absent profile plus original-failure and genuinely-new-case-only closures. Browser device dispatches all overlapping hit regions and suppresses mouse focus auto-selection like SilentGrabFocus; empty selectors leave arrows unhandled. Current actual union13451 app110inventory14infrastructure258Chromium, no passing runtime replay, actual100 app/inventory counters bound to whole identical source/maps or complete contiguous declaration/body/enclosing branch/all-location proofs. All559 prior acceptance files preserve547 byte-identical bodies,11 exact source-backed native control/delta/metric migrations and one infrastructure file with one genuinely new case; four new acceptance files. Every286 prior metadata record and registered save/open/recovery exception is retained without semantic promotion. Exact VCL pixel/arrow/diagonal geometry, shadow/merge/theme controls, full SfxTabPage/SfxItemSet infrastructure/widget units and RTL/vertical/follow/shared-format/full kernel/browser parity remain unverified."
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",
@@ -24424,6 +24442,121 @@
         "XMLImpSpanContext_Impl::characters",
         "XMLImpSpanContext_Impl::createFastChildContext"
       ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "localPath": "apps/office/src/svx/source/dialog/frmsel.ts",
+      "status": "mapped",
+      "upstreamPath": "svx/source/dialog/frmsel.cxx",
+      "localSymbols": [
+        "FrameSelector",
+        "FrameBorderType",
+        "FrameBorderState",
+        "FrameSelFlags"
+      ],
+      "upstreamSymbols": [
+        "FrameSelector::MouseButtonDown",
+        "FrameSelector::KeyInput",
+        "FrameSelector::SetStyleToSelection",
+        "FrameSelector::SetColorToSelection"
+      ],
+      "preservedResponsibilities": [
+        "Iteration208 represents source-owned six-line FrameSelector and SvxBorderTabPage: native tri-state/selection/cache/mouse/modifier/keyboard adjacency, presets and enabled inner lines; Reset owns original box/info and saved four distances, Synchronize and automatic defaults; native style/color/predefined/custom thickness transitions; fresh FillItemSet publishes separate box/info deltas including source info-only changes. React displays this owner and removes aggregate border/padding draft controls. Initial static/runtime verification is pending. Full SfxTabPage infrastructure, shadow/merge/diagonal/theme controls, exact device hit regions, full widget units, RTL/vertical/follow/shared-format and whole parity remain unverified. Existing semantic statuses/defaults/contracts/evidence prefixes and registered save/open/recovery exceptions remain unchanged.",
+        "Iteration208 verified closure: earlier pending prose is historical. Native six-line selection/cache/tri-state/mouse/modifier/keyboard behavior, separate four metrics and Synchronize, presets/style/color/thickness/custom transitions and native fresh separate box/info FillItemSet passed one full upstream-absent profile plus original-failure and genuinely-new-case-only closures. Browser device dispatches all overlapping hit regions and suppresses mouse focus auto-selection like SilentGrabFocus; empty selectors leave arrows unhandled. Current actual union13451 app110inventory14infrastructure258Chromium, no passing runtime replay, actual100 app/inventory counters bound to whole identical source/maps or complete contiguous declaration/body/enclosing branch/all-location proofs. All559 prior acceptance files preserve547 byte-identical bodies,11 exact source-backed native control/delta/metric migrations and one infrastructure file with one genuinely new case; four new acceptance files. Every286 prior metadata record and registered save/open/recovery exception is retained without semantic promotion. Exact VCL pixel/arrow/diagonal geometry, shadow/merge/theme controls, full SfxTabPage/SfxItemSet infrastructure/widget units and RTL/vertical/follow/shared-format/full kernel/browser parity remain unverified."
+      ],
+      "omittedResponsibilities": [
+        "Full native contracts remain unverified."
+      ],
+      "evidence": {
+        "local": [
+          {
+            "path": "apps/office/src/svx/source/dialog/frmsel.ts",
+            "marker": "FrameSelector"
+          },
+          {
+            "path": "apps/office/src/svx/source/dialog/native-frame-selector.test.ts",
+            "marker": "native"
+          }
+        ],
+        "upstream": [
+          {
+            "path": "vendor/libreoffice-reference/svx/source/dialog/frmsel.cxx",
+            "marker": "FrameSelector::MouseButtonDown"
+          }
+        ]
+      }
+    },
+    {
+      "classification": "upstream-mechanism",
+      "localPath": "apps/office/src/cui/source/tabpages/border.ts",
+      "status": "mapped",
+      "upstreamPath": "cui/source/tabpages/border.cxx",
+      "localSymbols": [
+        "SvxBorderTabPage"
+      ],
+      "upstreamSymbols": [
+        "SvxBorderTabPage::Reset",
+        "SvxBorderTabPage::FillItemSet",
+        "SvxBorderTabPage, SelPreHdl_Impl",
+        "SvxBorderTabPage, SelStyleHdl_Impl"
+      ],
+      "preservedResponsibilities": [
+        "Iteration208 represents source-owned six-line FrameSelector and SvxBorderTabPage: native tri-state/selection/cache/mouse/modifier/keyboard adjacency, presets and enabled inner lines; Reset owns original box/info and saved four distances, Synchronize and automatic defaults; native style/color/predefined/custom thickness transitions; fresh FillItemSet publishes separate box/info deltas including source info-only changes. React displays this owner and removes aggregate border/padding draft controls. Initial static/runtime verification is pending. Full SfxTabPage infrastructure, shadow/merge/diagonal/theme controls, exact device hit regions, full widget units, RTL/vertical/follow/shared-format and whole parity remain unverified. Existing semantic statuses/defaults/contracts/evidence prefixes and registered save/open/recovery exceptions remain unchanged.",
+        "Iteration208 verified closure: earlier pending prose is historical. Native six-line selection/cache/tri-state/mouse/modifier/keyboard behavior, separate four metrics and Synchronize, presets/style/color/thickness/custom transitions and native fresh separate box/info FillItemSet passed one full upstream-absent profile plus original-failure and genuinely-new-case-only closures. Browser device dispatches all overlapping hit regions and suppresses mouse focus auto-selection like SilentGrabFocus; empty selectors leave arrows unhandled. Current actual union13451 app110inventory14infrastructure258Chromium, no passing runtime replay, actual100 app/inventory counters bound to whole identical source/maps or complete contiguous declaration/body/enclosing branch/all-location proofs. All559 prior acceptance files preserve547 byte-identical bodies,11 exact source-backed native control/delta/metric migrations and one infrastructure file with one genuinely new case; four new acceptance files. Every286 prior metadata record and registered save/open/recovery exception is retained without semantic promotion. Exact VCL pixel/arrow/diagonal geometry, shadow/merge/theme controls, full SfxTabPage/SfxItemSet infrastructure/widget units and RTL/vertical/follow/shared-format/full kernel/browser parity remain unverified."
+      ],
+      "omittedResponsibilities": [
+        "Full native contracts remain unverified."
+      ],
+      "evidence": {
+        "local": [
+          {
+            "path": "apps/office/src/cui/source/tabpages/border.ts",
+            "marker": "SvxBorderTabPage"
+          },
+          {
+            "path": "apps/office/src/cui/source/tabpages/native-border-page.test.ts",
+            "marker": "native"
+          }
+        ],
+        "upstream": [
+          {
+            "path": "vendor/libreoffice-reference/cui/source/tabpages/border.cxx",
+            "marker": "SvxBorderTabPage::Reset"
+          }
+        ]
+      }
+    },
+    {
+      "classification": "browser-adaptation",
+      "localPath": "apps/office/src/sw/browser/presentation/WriterBorderPage.tsx",
+      "status": "local-only",
+      "rationale": "Iteration208 represents source-owned six-line FrameSelector and SvxBorderTabPage: native tri-state/selection/cache/mouse/modifier/keyboard adjacency, presets and enabled inner lines; Reset owns original box/info and saved four distances, Synchronize and automatic defaults; native style/color/predefined/custom thickness transitions; fresh FillItemSet publishes separate box/info deltas including source info-only changes. React displays this owner and removes aggregate border/padding draft controls. Initial static/runtime verification is pending. Full SfxTabPage infrastructure, shadow/merge/diagonal/theme controls, exact device hit regions, full widget units, RTL/vertical/follow/shared-format and whole parity remain unverified. Existing semantic statuses/defaults/contracts/evidence prefixes and registered save/open/recovery exceptions remain unchanged.",
+      "responsibilities": [
+        "Iteration208 represents source-owned six-line FrameSelector and SvxBorderTabPage: native tri-state/selection/cache/mouse/modifier/keyboard adjacency, presets and enabled inner lines; Reset owns original box/info and saved four distances, Synchronize and automatic defaults; native style/color/predefined/custom thickness transitions; fresh FillItemSet publishes separate box/info deltas including source info-only changes. React displays this owner and removes aggregate border/padding draft controls. Initial static/runtime verification is pending. Full SfxTabPage infrastructure, shadow/merge/diagonal/theme controls, exact device hit regions, full widget units, RTL/vertical/follow/shared-format and whole parity remain unverified. Existing semantic statuses/defaults/contracts/evidence prefixes and registered save/open/recovery exceptions remain unchanged.",
+        "Iteration208 verified closure: earlier pending prose is historical. Native six-line selection/cache/tri-state/mouse/modifier/keyboard behavior, separate four metrics and Synchronize, presets/style/color/thickness/custom transitions and native fresh separate box/info FillItemSet passed one full upstream-absent profile plus original-failure and genuinely-new-case-only closures. Browser device dispatches all overlapping hit regions and suppresses mouse focus auto-selection like SilentGrabFocus; empty selectors leave arrows unhandled. Current actual union13451 app110inventory14infrastructure258Chromium, no passing runtime replay, actual100 app/inventory counters bound to whole identical source/maps or complete contiguous declaration/body/enclosing branch/all-location proofs. All559 prior acceptance files preserve547 byte-identical bodies,11 exact source-backed native control/delta/metric migrations and one infrastructure file with one genuinely new case; four new acceptance files. Every286 prior metadata record and registered save/open/recovery exception is retained without semantic promotion. Exact VCL pixel/arrow/diagonal geometry, shadow/merge/theme controls, full SfxTabPage/SfxItemSet infrastructure/widget units and RTL/vertical/follow/shared-format/full kernel/browser parity remain unverified."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "React renders source-owned frame selector and border-page controls through DOM widgets."
+      },
+      "evidence": {
+        "local": [
+          {
+            "path": "apps/office/src/sw/browser/presentation/WriterBorderPage.tsx",
+            "marker": "WriterBorderPage"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/native-border-page.test.tsx",
+            "marker": "native"
+          }
+        ],
+        "upstream": [
+          {
+            "path": "vendor/libreoffice-reference/cui/uiconfig/ui/borderpage.ui",
+            "marker": "Line Arrangement"
+          }
+        ]
+      }
     }
   ]
 }

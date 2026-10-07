@@ -1,0 +1,245 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/svx/source/dialog/frmsel.ts": "36f84b7d43e400db09e7cfe56783795c701fe45f6d77b0d95163fe37fb891f78",
+    "apps/office/src/cui/source/tabpages/border.ts": "ce354b9d490d911d9806fa83b8850e5ec9cb9e4f14fb96cbe419012b1e4fc089",
+    "apps/office/src/sw/browser/presentation/WriterBorderPage.tsx": "54d6a1239d2ab3deccd0b0cfe3ac18c0379074e6b67c504702a0b756cba18a84",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx": "3d674b1af468a83a46028ddbcaae45e3540fb778d483f9991b179815959d7cad",
+    "scripts/check-module-boundaries.mjs": "396e50fcc13f19a509d4f570e231958d2b83c3b8e697b8d9ddc0e700f528807c",
+    "scripts/check-module-boundaries.test.ts": "57652be1eaf23b98a795e994b609648c2ee2df3983695b1dd0e803db8d386743",
+    "apps/office/e2e/writer-table-properties-history.spec.ts": "af1892a91bc7dde7627315648e77025a77f82562ae914e2a1773498511b2c2df",
+    "apps/office/e2e/writer-native-table-properties-reset.spec.ts": "5b6b23841e655fed6782099ba347bfda89c02d43d423255d59903f017585a1f1",
+    "apps/office/e2e/writer-table-border-changed-items.spec.ts": "3c0df65ae46bb9895120daced8ea7d27093fab4c6449e74262d8bd58c1160b55",
+    "apps/office/e2e/writer-table-border-common-state.spec.ts": "13c7e4aa318b89543c06ba039ea9cc3e66d87f20aad8cbcee1cc480785c604d7",
+    "apps/office/src/sw/browser/presentation/native-table-border-changed-items.test.tsx": "6b1dce2d2b492df982f1de701feae8dd41344fba72d601809208041db00b5b9e",
+    "apps/office/src/sw/browser/editor/native-cell-box-render.test.tsx": "6172d17f4a0cdfc52d863d6da423ca50f7535fdb306090eee15050e88d3ff187",
+    "apps/office/src/sw/browser/presentation/native-table-column-page.test.tsx": "4e566b1df82db1e317d19594f3356289758eb204a9264c932c173da478269708",
+    "apps/office/src/sw/browser/presentation/native-table-properties-reset.test.tsx": "bd8e4a0723cc927c23189f28b247a4ddd5ed17f56c30f184c2c0c4c7dcef19c1",
+    "apps/office/src/sw/browser/presentation/native-table-border-common-state.test.tsx": "7f0cb542c1d6a7234859a6fce364d0ba3356a49939f064747ca85dd5213e770d",
+    "apps/office/src/sw/browser/presentation/native-table-properties.test.tsx": "f4fcaa57e21786769c0198ae66bb4b2ccc1d1fa6dd0c54d51c60e46cf5fdfb33",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.test.tsx": "a8fc7ce3e1e13b920a742c8bd35ce776d82d6feb1c2bbd2d8ee829f9aacfb9ed",
+    "apps/office/src/svx/source/dialog/native-frame-selector.test.ts": "b141cd774c815bd3c32ade6d37fd6eeae55bbf1a1488869fc4dcd2ebdc78eb63",
+    "apps/office/src/cui/source/tabpages/native-border-page.test.ts": "0d549bd3e21c64d940805b2bdfd1035d5942a6d49635217ec9ba7919ecbc4e14",
+    "apps/office/src/sw/browser/presentation/native-border-page.test.tsx": "a72c762c54f4da48e33f673bd60c9835d687f182122c6884b68d70f5182220b5",
+    "apps/office/e2e/writer-native-border-page.spec.ts": "2ea3ae2ea119627f3b58f3e944b3aafcff45bacb8c7ac04d050be32c465c9b4d",
+    "docs/program/source-provenance.json": "90d19c6ebe345047733a996d8b4369bae111dd36079d21fc58606e9ee0baf024",
+    "docs/program/parity/runtime-inventory.json": "5476cca851de75b7189ad00e2516d45086f51a8097c830a62b9d237de4db6d89"
+  },
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1443,
+      "sha256": "a8a8f232ddf18150f12ea515b1e2f013c9913c4771c238d63548334157ee4468",
+      "totals": [],
+      "failedCases": []
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/3D968G.app-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 156932,
+      "sha256": "3a3602e13096681c1ea4e042871cebab2e00a14a2add9a14242414454ea14db3",
+      "totals": [
+        "Test Files  4 failed | 418 passed (422)",
+        "Tests  4 failed | 13442 passed (13446)"
+      ],
+      "failedCases": [
+        {
+          "name": "apps/office/src/sw/browser/editor/native-cell-box-render.test.tsx > native empty box guides preserve column geometry and dialog retains a custom native border",
+          "assertion": [
+            "TestingLibraryElementError: Unable to find an accessible element with the role \"option\" and name \"Current border\""
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/browser/presentation/native-border-page.test.tsx > native preset and selected style/color/thickness changes retain independent distances",
+          "assertion": [
+            "Error: expect(element).toHaveValue(150)"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/browser/presentation/native-table-border-changed-items.test.tsx > native untouched acceptance skips temporary selection with nonzero original history endpoints",
+          "assertion": [
+            "AssertionError: expected \"Push\" to not be called at all, but actually been called 1 times"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/browser/presentation/native-table-border-common-state.test.tsx > owns native dialog fallback and partial output input=mixed",
+          "assertion": [
+            "Error: Unknown pool default: 10023"
+          ]
+        }
+      ],
+      "caseCounts": {
+        "passed": 13442,
+        "failed": 4,
+        "skipped": 0,
+        "total": 13446
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 16034,
+          "covered": 16030,
+          "skipped": 0,
+          "pct": 99.97
+        },
+        "statements": {
+          "total": 17603,
+          "covered": 17599,
+          "skipped": 0,
+          "pct": 99.97
+        },
+        "functions": {
+          "total": 4087,
+          "covered": 4085,
+          "skipped": 0,
+          "pct": 99.95
+        },
+        "branches": {
+          "total": 13197,
+          "covered": 13192,
+          "skipped": 0,
+          "pct": 99.96
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverage": {
+        "lines": 99.97,
+        "statements": 99.97,
+        "functions": 99.95,
+        "branches": 99.96
+      },
+      "incompleteFileCount": 4,
+      "coverageMapSHA256": "f2564764bb59aa95f4e3eeed88b1338bde7bc27e609f3f2a4f11ce946496fc8f"
+    },
+    {
+      "kind": "inventory",
+      "command": "npm run test:inventory:coverage -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/3D968G.inventory-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 42204,
+      "sha256": "a755d34d3453a249692d75438d4bc6e0054e4b56aa68409dc5ab91328169880e",
+      "totals": [
+        "Test Files  1 failed | 35 passed (36)",
+        "Tests  1 failed | 109 passed (110)"
+      ],
+      "failedCases": [
+        {
+          "name": "scripts/libreoffice-inventory/parity-mapping-cli.test.ts > parity mapping CLI composes the Writer mapping report with owned upstream marker evidence",
+          "assertion": [
+            "Error: Runtime module paths must be unique and lexicographically ordered."
+          ]
+        }
+      ],
+      "caseCounts": {
+        "passed": 109,
+        "failed": 1,
+        "skipped": 0,
+        "total": 110
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 1464,
+          "covered": 1460,
+          "skipped": 0,
+          "pct": 99.72
+        },
+        "statements": {
+          "total": 1523,
+          "covered": 1519,
+          "skipped": 0,
+          "pct": 99.73
+        },
+        "functions": {
+          "total": 384,
+          "covered": 381,
+          "skipped": 0,
+          "pct": 99.21
+        },
+        "branches": {
+          "total": 1081,
+          "covered": 1081,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "coverage": {
+        "lines": 99.72,
+        "statements": 99.73,
+        "functions": 99.21,
+        "branches": 100
+      },
+      "incompleteFileCount": 1,
+      "coverageMapSHA256": "a96feff21ca12466ade745b407042933886d6e733120243517de47d11c51b9d5"
+    },
+    {
+      "kind": "scripts",
+      "command": "npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts scripts/check-module-boundaries.test.ts",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 223,
+      "sha256": "252136f55a95cbaa0837075589bf670dfbdb5b706012177721f9da7a7bd121a7",
+      "totals": [
+        "Test Files  3 passed (3)",
+        "Tests  14 passed (14)"
+      ],
+      "failedCases": []
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 45800,
+      "sha256": "cce2275b856102cf52f410ced6d045869cdcacb25226d067b2bdb78fd3fc22fc",
+      "totals": [
+        "2 failed",
+        "254 passed (3.6m)"
+      ],
+      "failedCases": [
+        {
+          "name": "writer-native-border-page.spec.ts > native six-line border page and selected history width=1280",
+          "errors": [
+            [],
+            [
+              "Error: locator.click: Test timeout of 30000ms exceeded."
+            ]
+          ]
+        },
+        {
+          "name": "writer-native-border-page.spec.ts > native six-line border page and selected history width=390",
+          "errors": [
+            [],
+            [
+              "Error: locator.click: Test timeout of 30000ms exceeded."
+            ]
+          ]
+        }
+      ],
+      "caseCounts": {
+        "startTime": "2026-10-07T06:34:00.430Z",
+        "duration": 216281.865,
+        "expected": 254,
+        "skipped": 0,
+        "unexpected": 2,
+        "flaky": 0
+      }
+    }
+  ]
+}

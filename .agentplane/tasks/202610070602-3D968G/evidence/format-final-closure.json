@@ -1,0 +1,19 @@
+{
+  "reason": "Only remaining formatter failure; no runtime or source-input change",
+  "records": [
+    {
+      "command": "npm exec -- prettier --write apps/office/e2e/writer-native-border-page.spec.ts",
+      "exit": 0,
+      "sha256": "c889e332dd39e8c6aac893e349bb65bc64c485c4d9dfaf0009fde834fad277d4",
+      "diagnostics": []
+    },
+    {
+      "command": "npm exec -- prettier --check apps/office/e2e/writer-native-border-page.spec.ts",
+      "exit": 0,
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+      "diagnostics": [
+        "All matched files use Prettier code style!"
+      ]
+    }
+  ]
+}

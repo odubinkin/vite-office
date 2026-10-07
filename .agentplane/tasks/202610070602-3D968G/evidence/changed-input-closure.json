@@ -1,0 +1,23 @@
+{
+  "reason": "Only changed source, failed old cases and genuinely new cases; no passing runtime replay",
+  "records": [
+    {
+      "command": "npm exec -- prettier --write apps/office/src/sw/browser/presentation/WriterBorderPage.tsx apps/office/src/sw/browser/presentation/native-border-page.test.tsx apps/office/src/cui/source/tabpages/native-border-page.test.ts apps/office/src/sw/browser/editor/native-cell-box-render.test.tsx apps/office/src/sw/browser/presentation/native-table-border-changed-items.test.tsx apps/office/src/sw/browser/presentation/native-table-border-common-state.test.tsx apps/office/e2e/writer-native-border-page.spec.ts",
+      "exit": 0,
+      "sha256": "fd607588aa7802b18818f2caf4ff24de0b4d56c58faa4db88e9622c2e3d49c33",
+      "diagnostics": []
+    },
+    {
+      "command": "npm exec -- eslint apps/office/src/sw/browser/presentation/WriterBorderPage.tsx apps/office/src/sw/browser/presentation/native-border-page.test.tsx apps/office/src/cui/source/tabpages/native-border-page.test.ts apps/office/src/sw/browser/editor/native-cell-box-render.test.tsx apps/office/src/sw/browser/presentation/native-table-border-changed-items.test.tsx apps/office/src/sw/browser/presentation/native-table-border-common-state.test.tsx apps/office/e2e/writer-native-border-page.spec.ts --max-warnings 0",
+      "exit": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run typecheck",
+      "exit": 0,
+      "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed",
+      "diagnostics": []
+    }
+  ]
+}

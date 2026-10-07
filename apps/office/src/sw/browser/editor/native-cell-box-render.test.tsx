@@ -45,9 +45,9 @@ it("native empty box guides preserve column geometry and dialog retains a custom
       />,
     );
     fireEvent.click(screen.getByRole("tab", { name: "Borders" }));
-    expect(screen.getByRole("option", { name: "Current border" })).toHaveValue(
-      "2pt dashed #112233",
-    );
+    expect(screen.getByRole("button", { name: "Top border" }).querySelector("span")).toHaveStyle({
+      borderTop: "2pt dashed #112233",
+    });
     cleanup();
     const noRows = doc.nodes.MakeTableNode("NoRows", { width: 3000 });
     noRows.AddColumnWidth(3000);
@@ -63,8 +63,11 @@ it("native empty box guides preserve column geometry and dialog retains a custom
       />,
     );
     fireEvent.click(screen.getByRole("tab", { name: "Borders" }));
-    expect(screen.getByRole("combobox", { name: "Cell border" })).toHaveValue("none");
-    expect(screen.getByRole("spinbutton", { name: "Cell padding (cm)" })).toHaveValue(0);
+    expect(screen.getByRole("button", { name: "Top border" })).toHaveAttribute(
+      "data-writer-border-state",
+      "1",
+    );
+    expect(screen.getByRole("spinbutton", { name: "Top padding (cm)" })).toHaveValue(0);
   } finally {
     session.Close();
   }

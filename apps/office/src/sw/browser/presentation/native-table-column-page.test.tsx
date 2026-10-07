@@ -163,8 +163,8 @@ it("mounted native column draft validates remaining table properties before acce
   fireEvent.change(screen.getByRole("spinbutton", { name: "Column 1 width (cm)" }), {
     target: { value: "5" },
   });
-  fireEvent.click(screen.getByRole("tab", { name: "Borders" }));
-  fireEvent.change(screen.getByRole("spinbutton", { name: "Cell padding (cm)" }), {
+  fireEvent.click(screen.getByRole("tab", { name: "Text Flow" }));
+  fireEvent.change(screen.getByRole("spinbutton", { name: "Minimum row height (cm)" }), {
     target: { value: "-1" },
   });
   const form = screen.getByRole("button", { name: "OK" }).closest("form");

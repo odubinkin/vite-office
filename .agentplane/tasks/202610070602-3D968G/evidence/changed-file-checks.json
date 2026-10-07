@@ -1,0 +1,32 @@
+{
+  "records": [
+    {
+      "command": "Unchanged JSDoc validator on approved changed code/acceptance paths; actual physical-line count",
+      "exit": 0,
+      "errors": [],
+      "physicalLines": {
+        "apps/office/src/svx/source/dialog/frmsel.ts": 273,
+        "apps/office/src/cui/source/tabpages/border.ts": 400,
+        "apps/office/src/sw/browser/presentation/WriterBorderPage.tsx": 427,
+        "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx": 643,
+        "scripts/check-module-boundaries.mjs": 366,
+        "scripts/check-module-boundaries.test.ts": 216,
+        "apps/office/e2e/writer-table-properties-history.spec.ts": 110,
+        "apps/office/e2e/writer-native-table-properties-reset.spec.ts": 139,
+        "apps/office/e2e/writer-table-border-changed-items.spec.ts": 70,
+        "apps/office/e2e/writer-table-border-common-state.spec.ts": 101,
+        "apps/office/src/sw/browser/presentation/native-table-border-changed-items.test.tsx": 332,
+        "apps/office/src/sw/browser/editor/native-cell-box-render.test.tsx": 285,
+        "apps/office/src/sw/browser/presentation/native-table-column-page.test.tsx": 181,
+        "apps/office/src/sw/browser/presentation/native-table-properties-reset.test.tsx": 194,
+        "apps/office/src/sw/browser/presentation/native-table-border-common-state.test.tsx": 226,
+        "apps/office/src/sw/browser/presentation/native-table-properties.test.tsx": 112,
+        "apps/office/src/sw/browser/presentation/WriterTableDialog.test.tsx": 291,
+        "apps/office/src/svx/source/dialog/native-frame-selector.test.ts": 149,
+        "apps/office/src/cui/source/tabpages/native-border-page.test.ts": 350,
+        "apps/office/src/sw/browser/presentation/native-border-page.test.tsx": 332,
+        "apps/office/e2e/writer-native-border-page.spec.ts": 163
+      }
+    }
+  ]
+}

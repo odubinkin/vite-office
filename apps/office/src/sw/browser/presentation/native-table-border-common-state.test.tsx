@@ -76,12 +76,17 @@ for (const selected of [false, true])
         state = f.shell.CaptureCursorState(),
         revision = f.doc.GetDocumentStateManager().GetModelRevision();
       openBorders();
-      expect(screen.getByRole("spinbutton", { name: "Cell padding (cm)" })).toHaveValue(
+      expect(screen.getByRole("spinbutton", { name: "Top padding (cm)" })).toHaveValue(
         selected ? 0.35 : 0,
       );
-      expect(screen.getByRole("combobox", { name: "Cell border" })).toHaveValue(
-        selected ? "2pt solid #654321" : "mixed",
+      expect(screen.getByRole("button", { name: "Top border" })).toHaveAttribute(
+        "data-writer-border-state",
+        selected ? "0" : "2",
       );
+      if (selected)
+        expect(
+          screen.getByRole("button", { name: "Top border" }).querySelector("span"),
+        ).toHaveStyle({ borderTop: "2pt solid #654321" });
       expect(f.shell.getShellCursor()).toBe(cursor);
       expect(f.shell.CaptureCursorState()).toEqual(state);
       expect(f.doc.GetDocumentStateManager().GetModelRevision()).toBe(revision);
@@ -100,9 +105,7 @@ it("retains four native distances on border-only selected-row acceptance and ori
       cell.GetBox(),
   );
   openBorders();
-  fireEvent.change(screen.getByRole("combobox", { name: "Cell border" }), {
-    target: { value: "none" },
-  });
+  fireEvent.click(screen.getByRole("button", { name: "No Borders" }));
   fireEvent.click(screen.getByRole("button", { name: "OK" }));
   for (const [i, cell] of f.boxes.entries())
     for (const edge of [0, 1, 2, 3]) {
@@ -142,17 +145,18 @@ it("Reset restores mixed input and unrelated acceptance publishes no border payl
     />,
   );
   fireEvent.click(screen.getByRole("tab", { name: "Borders" }));
-  fireEvent.change(screen.getByRole("combobox", { name: "Cell border" }), {
-    target: { value: "none" },
-  });
-  fireEvent.change(screen.getByRole("spinbutton", { name: "Cell padding (cm)" }), {
+  fireEvent.click(screen.getByRole("button", { name: "No Borders" }));
+  fireEvent.change(screen.getByRole("spinbutton", { name: "Top padding (cm)" }), {
     target: { value: "1" },
   });
   fireEvent.click(screen.getByRole("button", { name: "Reset" }));
-  expect(screen.getByRole("combobox", { name: "Cell border" })).toHaveValue("mixed");
-  expect(screen.getByRole("spinbutton", { name: "Cell padding (cm)" })).toHaveValue(0);
+  expect(screen.getByRole("button", { name: "Top border" })).toHaveAttribute(
+    "data-writer-border-state",
+    "2",
+  );
+  expect(screen.getByRole("spinbutton", { name: "Top padding (cm)" })).toHaveValue(0);
   fireEvent.click(screen.getByRole("button", { name: "OK" }));
-  expect(submit.mock.calls[0]?.[0]).not.toHaveProperty("borderItems");
+  expect(submit.mock.calls[0]?.[0]?.borderItems?.GetItemIfSet(RES_BOX)).toBeUndefined();
   expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(0);
 });
 for (const nativeInput of ["absent", "box-only", "mixed"] as const)
@@ -170,6 +174,8 @@ for (const nativeInput of ["absent", "box-only", "mixed"] as const)
       box.SetLine(new SvxBorderLine(0x13579b, 13), 0);
       for (const edge of [0, 1, 2, 3]) box.SetDistance(50 + edge * 20, edge);
       input.Put(box);
+      info.SetDist(true);
+      info.SetTable(true);
       if (nativeInput === "mixed") {
         info.SetValid(Flags.TOP, false);
         input.Put(info);
@@ -184,31 +190,31 @@ for (const nativeInput of ["absent", "box-only", "mixed"] as const)
         />,
       );
       fireEvent.click(screen.getByRole("tab", { name: "Borders" }));
-      expect(screen.getByRole("combobox", { name: "Cell border" })).toHaveValue(
-        nativeInput === "absent"
-          ? "none"
-          : nativeInput === "mixed"
-            ? "mixed"
-            : exportBorderShorthand(box.GetTop()),
+      expect(screen.getByRole("button", { name: "Top border" })).toHaveAttribute(
+        "data-writer-border-state",
+        nativeInput === "absent" ? "1" : nativeInput === "mixed" ? "2" : "0",
       );
-      fireEvent.change(screen.getByRole("spinbutton", { name: "Cell padding (cm)" }), {
+      if (nativeInput === "box-only")
+        expect(
+          screen.getByRole("button", { name: "Top border" }).querySelector("span"),
+        ).toHaveStyle({ borderTop: exportBorderShorthand(box.GetTop()) });
+      if (!(screen.getByRole("checkbox", { name: "Synchronize" }) as HTMLInputElement).checked)
+        fireEvent.click(screen.getByRole("checkbox", { name: "Synchronize" }));
+      fireEvent.change(screen.getByRole("spinbutton", { name: "Top padding (cm)" }), {
         target: { value: "0.2" },
       });
       if (nativeInput === "mixed") {
-        fireEvent.change(screen.getByRole("combobox", { name: "Cell border" }), {
-          target: { value: "none" },
-        });
-        fireEvent.change(screen.getByRole("combobox", { name: "Cell border" }), {
-          target: { value: "mixed" },
-        });
+        fireEvent.click(screen.getByRole("button", { name: "Top border" }));
+        fireEvent.click(screen.getByRole("button", { name: "Top border" }));
       }
       fireEvent.click(screen.getByRole("button", { name: "OK" }));
       const output = required(submit.mock.calls[0]?.[0]?.borderItems as SfxItemSet | undefined),
         next = output.Get(RES_BOX) as SvxBoxItem,
-        flags = output.Get(SID_ATTR_BORDER_INNER) as SvxBoxInfoItem;
+        flags = (output.GetItemIfSet(SID_ATTR_BORDER_INNER) ??
+          input.Get(SID_ATTR_BORDER_INNER)) as SvxBoxInfoItem;
       for (const edge of [0, 1, 2, 3]) expect(next.GetDistance(edge)).toBe(113);
       expect(next.GetTop()?.toJSON()).toEqual(
-        nativeInput === "absent" ? undefined : box.GetTop()?.toJSON(),
+        nativeInput === "absent" || nativeInput === "mixed" ? undefined : box.GetTop()?.toJSON(),
       );
       expect(flags.IsValid(Flags.TOP)).toBe(nativeInput !== "mixed");
       expect(flags.IsValid(Flags.DISTANCE)).toBe(true);

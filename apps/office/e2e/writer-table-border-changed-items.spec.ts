@@ -49,7 +49,7 @@ for (const width of [1280, 390])
       await expect(cells.nth(1)).toHaveCSS("padding-left", "75.6px");
       await page.getByRole("button", { name: "Table Properties", exact: true }).click();
       await page.getByRole("tab", { name: "Borders", exact: true }).click();
-      await page.getByRole("combobox", { name: "Cell border" }).selectOption("none");
+      await page.getByRole("button", { name: "No Borders", exact: true }).click();
       await page.getByRole("button", { name: "OK", exact: true }).click();
       await expect(cells.nth(0)).toHaveCSS("border-top-style", "none");
       await expect(cells.nth(0)).toHaveCSS("outline-style", "dashed");

@@ -80,7 +80,7 @@ for (const viewport of [1280, 390])
     await page.getByRole("button", { name: "Table Properties", exact: true }).click();
     await page.getByRole("spinbutton", { name: "Table width (cm)" }).fill("8");
     await page.getByRole("tab", { name: "Borders", exact: true }).click();
-    await page.getByRole("spinbutton", { name: "Cell padding (cm)" }).fill("0.2");
+    await page.getByRole("spinbutton", { name: "Top padding (cm)" }).fill("0.2");
     await page.getByRole("tab", { name: "Text Flow", exact: true }).click();
     await page.getByRole("combobox", { name: "Cell vertical alignment" }).selectOption("3");
     await page.getByRole("button", { name: "OK", exact: true }).click();

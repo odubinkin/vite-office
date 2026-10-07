@@ -124,18 +124,14 @@ for (const mode of ["untouched", "reset", "change-back"] as const)
           setter = vi.spyOn(f.shell, "SetTabBorders");
         if (mode !== "untouched") {
           fireEvent.click(screen.getByRole("tab", { name: "Borders" }));
-          fireEvent.change(screen.getByRole("combobox", { name: "Cell border" }), {
-            target: { value: "none" },
-          });
-          fireEvent.change(screen.getByRole("spinbutton", { name: "Cell padding (cm)" }), {
+          fireEvent.click(screen.getByRole("button", { name: "No Borders" }));
+          fireEvent.change(screen.getByRole("spinbutton", { name: "Top padding (cm)" }), {
             target: { value: "3" },
           });
           if (mode === "reset") fireEvent.click(screen.getByRole("button", { name: "Reset" }));
           else {
-            fireEvent.change(screen.getByRole("combobox", { name: "Cell border" }), {
-              target: { value: "mixed" },
-            });
-            fireEvent.change(screen.getByRole("spinbutton", { name: "Cell padding (cm)" }), {
+            fireEvent.click(screen.getByRole("button", { name: "Reset" }));
+            fireEvent.change(screen.getByRole("spinbutton", { name: "Top padding (cm)" }), {
               target: { value: "0" },
             });
           }
@@ -145,7 +141,8 @@ for (const mode of ["untouched", "reset", "change-back"] as const)
         expect(input).not.toHaveProperty("border");
         expect(input).not.toHaveProperty("padding");
         expect(ItemSetToTableParam(f.shell, input)).toBe(true);
-        expect(setter).not.toHaveBeenCalled();
+        expect(setter).toHaveBeenCalledOnce();
+        expect(input.borderItems?.GetItemIfSet(RES_BOX)).toBeUndefined();
         expect(values(f)).toEqual(original);
         expect(f.shell.CaptureCursorState().point).toEqual(before.point);
         expect(f.shell.GetPendingCharacterItems().Equals(before.pendingCharacterItems, true)).toBe(
@@ -168,16 +165,14 @@ for (const field of ["border", "padding"] as const)
             original = values(f);
           fireEvent.click(screen.getByRole("tab", { name: "Borders" }));
           if (field === "border")
-            fireEvent.change(screen.getByRole("combobox", { name: "Cell border" }), {
-              target: { value: "none" },
-            });
+            fireEvent.click(screen.getByRole("button", { name: "No Borders" }));
           else
-            fireEvent.change(screen.getByRole("spinbutton", { name: "Cell padding (cm)" }), {
+            fireEvent.change(screen.getByRole("spinbutton", { name: "Top padding (cm)" }), {
               target: { value: "0" },
             });
           fireEvent.click(screen.getByRole("button", { name: "OK" }));
           const input = required(f.submit.mock.calls[0]?.[0]);
-          const boxItem = input.borderItems?.Get(RES_BOX) as SvxBoxItem;
+          const boxItem = input.borderItems?.GetItemIfSet(RES_BOX) as SvxBoxItem;
           if (field === "border") {
             expect(boxItem).toBeInstanceOf(SvxBoxItem);
             expect(exportBorderShorthand(boxItem.GetTop())).toBe("none");
@@ -291,8 +286,9 @@ it("native untouched acceptance skips temporary selection with nonzero original 
     expect(input).not.toHaveProperty("border");
     expect(input).not.toHaveProperty("padding");
     expect(ItemSetToTableParam(f.shell, input)).toBe(true);
-    expect(push).not.toHaveBeenCalled();
-    expect(border).not.toHaveBeenCalled();
+    expect(push).toHaveBeenCalledOnce();
+    expect(border).toHaveBeenCalledOnce();
+    expect(input.borderItems?.GetItemIfSet(RES_BOX)).toBeUndefined();
     expect(split).not.toHaveBeenCalled();
     expect(values(f)).toEqual(original);
     expect(f.shell.Undo()).toBe(true);

@@ -1,0 +1,21 @@
+{
+  "baselineTag": "libreoffice-26.8.0.2",
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceSHA256": {
+    "svx/source/dialog/frmsel.cxx": "c3a84d19b24c14337783e3011c617a409d41e3af1a09f9956a20a8dffc6254b4",
+    "cui/source/tabpages/border.cxx": "8e66dee6229b85712397c97f06ec7f3a924a4addf6abee7a7b88eb9d3d08d26d",
+    "cui/uiconfig/ui/borderpage.ui": "cd15d015489ce4299aad2b43be547394c0b06472de76a80b9943f7fd3fe8799e",
+    "include/svx/framebordertype.hxx": "a40da0b0fe50c8cd606b415929d51c6785f4ca8653f3e71fefa69b88d960a07b",
+    "include/editeng/borderline.hxx": "a6e5fbbb5adc4187eb81c34bdc3523c3cfc1119110ad725990c3ca13893e2a2c",
+    "sw/source/uibase/shells/tabsh.cxx": "ac075f90575663fac974e2804e7111b1df3f596eb5bb400fb9fc2f4be0058163"
+  },
+  "reviewer": "Current CODER source comparison; not independent. Exact implementation EVALUATOR phase follows commit.",
+  "nativeSelection": "Six represented edge IDs and enabled inner policies; cached complete line ownership, Show/DontCare/Hide cycling, equality/selection/modifier behavior and source keyboard disabled-neighbor table. Empty selectors do not handle arrows. Device hit dispatch keeps every intersected region; source SilentGrabFocus suppresses mouse auto-selection; ordinary keyboard focus selects first edge without applying a line.",
+  "nativePage": "Reset reads owned original box/info and effective default or mixed state, saves all four distances, source modification/default28 and Synchronize policy. Preset five-by-six state matrices for four modes, source style order18 and widths5/50/75/150/225/450, custom bounds5/110..900pt100 and DOUBLE_THIN filtering/transition; source computed line width remains distinct from clamped displayed spinner value.",
+  "nativeOutput": "Fresh box/info, source component validity, disabled edge validity, DIST handling and conversion avoidance, default clearing and separate item publication. Native INFO-only output is legitimate with no Box delta; actual application occurs when either item is SET, original distances/lines remain source owned. Direct old generic negative validation rejection uses existing height metric because source padding clamps0.",
+  "sourceBackedMigrations": "Complete token-normalized baseline bodies:547 byte-identical of559,11 native control/delta/metric migrations and one infrastructure addition. Original case names/generators/non-migration tokens retained. One newly authored draft assertion for empty arrow handling was corrected from true to source false; all four empty arrows and enabled/native keyboard traces execute in a genuinely new case, without rerunning the passing original case.",
+  "evidence": "13451 actual app110inventory14infrastructure258Chromium cases;100 actual source-bound counters for both app/inventory; one full absent profile and failure/new-only closures, no passing replay or skip promotion. Bad anchored Chromium selector initially discovered0tests and was corrected for two new cases only.",
+  "deliberateExceptions": "All286 prior metadata fields/prefixes/statuses/defaults and registered save/open/recovery exceptions preserved.",
+  "residualScope": "Exact VCL pixel/arrow/diagonal geometry and full widget units, native shadow/merge/theme controls and SfxTabPage infrastructure, RTL/vertical/follow/shared-format and whole kernel/browser parity remain unverified.",
+  "result": "PASS bounded source-owned six-line page scope; whole parity remains active."
+}
