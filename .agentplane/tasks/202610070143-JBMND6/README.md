@@ -1,10 +1,11 @@
 ---
 id: "202610070143-JBMND6"
 title: "Move cell vertical alignment into native document ownership and common selection state"
-status: "DOING"
+result_summary: "Native SwFormatVertOrient replaces scalar cell alignment; document owns common selected/current state and ring updates, UI consumes numeric native state, full item preserved in ODT/primitive boundary/history; intentional I/O deviations retained. Full project parity remains unverified."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - ".agentplane/tasks/202610070143-JBMND6/evidence/coverage-source-proof.json"
   findings:
     - "Exact SHA scope39, native full three-field item, selected/current/ring admissions, numeric dialog state, ODT and primitive boundary, history and fixed-row alignment validated. Original lint rework closed by case block and unchanged targeted lint/JSDoc/format. Distinct13216app109inventory5scripts246Chromium pass;48 focused skips stay skipped, no passing replay; actual100 application/inventory with exact source/map transfer proof."
-commit: null
+commit:
+  hash: "800b91a6be0b7f57cd36669a8b6c822f9ba1199d"
+  message: "🚧 JBMND6 code: close native orientation lexical declaration verification"
 comments:
   -
     author: "CODER"
     body: "Start: implement native document-owned complete cell vertical alignment under standing iterative authorization; no upstream-executing tests or raw AP artifacts."
+  -
+    author: "CODER"
+    body: "Verified: native full cell orientation document ownership and selection-driven UI; same current-agent EVALUATOR explicitly not independent;13216app109inventory5scripts246ChromiumPASS actual100 app/inventory,48 focused skips retained; real lint rework closed, no passing replay or upstream invocation, clean canonical verification tail."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "PASS: implementation800b91a6be0b7f57cd36669a8b6c822f9ba1199d exact scope/native contracts/same-agent non-independent evaluator; distinct13216app109inventory5scripts246Chromium,48 skips retained; actual100 app/inventory source/map proof; one full upstream-absent profile, focused failures/new only, finally restored; unchanged scoped lint repair and source gates pass;0forbidden current-leaf artifacts, parent536977 prefix and registered I/O exceptions preserved."
+  -
+    type: "status"
+    at: "2026-10-07T02:19:04.986Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native full cell orientation document ownership and selection-driven UI; same current-agent EVALUATOR explicitly not independent;13216app109inventory5scripts246ChromiumPASS actual100 app/inventory,48 focused skips retained; real lint rework closed, no passing replay or upstream invocation, clean canonical verification tail."
 doc_version: 3
-doc_updated_at: "2026-10-07T02:18:50.089Z"
+doc_updated_at: "2026-10-07T02:19:04.987Z"
 doc_updated_by: "CODER"
 description: "Iteration203: replace scalar kernel cell alignment and shell-owned mutation with full SwFormatVertOrient, native SwDoc SetBoxAttr/SetBoxAlign/GetBoxAlign selection and history; use common native dialog state and changed-item submission, preserving registered document I/O deviations."
 sections:
