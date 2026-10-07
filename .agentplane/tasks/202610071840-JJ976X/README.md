@@ -4,7 +4,7 @@ title: "Own numbering property publication in native SwXNumberingRules"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -20,10 +20,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-07T19:05:26.612Z"
+  updated_by: "CODER"
+  note: "PASS exact implementation fdf1bcf9960c3c36c22bfc32ddd585a07e93a582 represented source-owned numbering getter/public contracts, actual ODT/Worker and288Chromium; ONE upstream-absent full profile plus1genuinelynew case only,13589app110inventory15infra finaluniquePASS,zero passing replay,3skipsretainedwithoutpromotion,all-four source-bound app/inventorycoverage100. Public visibility access-only source has entire identical emitted JavaScript runtime binding; final static/source/scope/artifact and same-current-agent explicitly non-independent EVALUATOR PASS. Final Findings and Verification persisted before canonical verification; fullgoalactive/residualsrecorded."
   attempts: 0
 quality_review:
   state: "pass"
@@ -54,8 +54,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: Replace duplicated XML numbering property assembly with source-owned represented SwXNumberingRules getter chain within standing authorized parity goal."
+  -
+    type: "verify"
+    at: "2026-10-07T19:05:26.612Z"
+    author: "CODER"
+    state: "ok"
+    note: "PASS exact implementation fdf1bcf9960c3c36c22bfc32ddd585a07e93a582 represented source-owned numbering getter/public contracts, actual ODT/Worker and288Chromium; ONE upstream-absent full profile plus1genuinelynew case only,13589app110inventory15infra finaluniquePASS,zero passing replay,3skipsretainedwithoutpromotion,all-four source-bound app/inventorycoverage100. Public visibility access-only source has entire identical emitted JavaScript runtime binding; final static/source/scope/artifact and same-current-agent explicitly non-independent EVALUATOR PASS. Final Findings and Verification persisted before canonical verification; fullgoalactive/residualsrecorded."
 doc_version: 3
-doc_updated_at: "2026-10-07T19:05:23.948Z"
+doc_updated_at: "2026-10-07T19:05:26.669Z"
 doc_updated_by: "CODER"
 description: "Iteration224: remove duplicated Writer XML numbering property assembly in favor of actual source-owned SwXNumberingRules getter chain, native active geometry predicates, signed start and optional bullet properties for represented contracts."
 sections:
@@ -69,7 +75,41 @@ sections:
     Two production owners plus one fresh acceptance file and evidence-only append to existing two metadata records. No old acceptance edits, UI rewriting or registered deviation changes.
   Plan: "Implement existing represented SwXNumberingRules getter chain getByIndex/getRuleByIndex/GetNumberingRuleByIndex/GetPropertiesForNumFormat; retain explicit typed record port rather than claim complete UNO Any/PropertyValue sequence. Read owned const format through native getters, publish only active legacy/alignment geometry, signed16 StartWith, Prefix/Suffix/ParentNumbering, optional ListFormat only when present, BulletChar includingNUL and optional BulletFont only for CHAR_SPECIAL with existing Font owner. XML rule bridge keeps only rule identity/level iteration and consumes service properties; remove duplicate browser kind/raw geometry/marker assembly. Preserve standard ODF1.3 list-format omission and registered save/open/recovery deviations. Add source-derived literal mode/default/optional/index/independence contracts and actual common/automatic/body/cell ODT+Worker evidence. Preserve all602 prior acceptance byte-identical and all302 metadata statuses/defaults; append bounded evidence only. ONE full runtime without upstream; later original failures/new cases only,zero passing replay. Same-current-agent review explicitly not independent; persist final verification then finish actual implementation SHA, parent full prefix/stash preserved. Stop for material scope/risk drift."
   Verify Steps: "Initial six static once:format:check,lint,typecheck,check:dependencies,check:docs,check:file-size. ONE full upstream-absent runtime:hide vendor/libreoffice-reference;test:static,full app/inventory coverage,all15existing infrastructure,full Chromium288existing;finally restore. Tests never invoke pinned source; all source/task writes wait for actual terminal handles; later runtime only original failures or genuinely new cases,zero passing replay. Later static/source only failed/changed inputs. Source-derived literal active-group MM100 predicates,signed StartWith, optional ListFormat/BulletChar/FontName including zero and present-empty descriptors; detached snapshots and range failures; actual native core/XML/common automatic body/cell ODT Worker path and existing Chrome geometry/editing/history. Actual app/inventory all4coverage100 with entire identical source/maps or full contiguous declaration/body/enclosingbranch/all-location certificates; no clamps/exclusions/skipped promotion. After restore resource generator--check/source-tree/source-provenance/invariants/parity; source anchor/hash review. Preserve602oldtestsbyte-identical/all302metadata fields/status/defaults/prefixes; scopedJSDoc/realphysical<1000,artifact census no source/Python/raw maps/results/scripts in AgentPlane,doctor/routing/diff,clean actual SHA review and same-current-agent explicitly not independent EVALUATOR. Final Findings/Verification before canonicalverify, checkpoint before finish actual implementation SHA; full parent prefix and deferredstash preserved,exhaustive goalACTIVE."
-  Verification: "PASS represented source-owned numbering getter/public helper contracts and actual XML/common automatic body/cell ODT/Worker; all602prior tests byte-identical. ONE full upstream-absent runtime13588app110inventory15infra288ChromePASS plus1genuinelynew public API case only; final13589uniqueapp,zero passing replay/unresolved/uncaught,3skipsretainedwithoutpromotion. Access-only modifiers and formatter collapse after header audit have entire identical emitted JavaScript module binding to sole build/Chrome; actual current-source all4 app/inventorycoverage100 uses fresh maps/complete unchanged declaration-body-control proofs, no skippedpromotion orcounterclamps. Initial5staticPASS/freshformatFAIL closedscopedformatlint; changedgetter/freshcase finalroottypes/scopedchecks and5restoredsourcegates/scopedJSDoc/physical max769/302prior metadata/doctor0errors2oldwarnings/routing/diff/artifactsPASS. Clean actual implementation fdf1bcf9960c3c36c22bfc32ddd585a07e93a582 reviewPASS and same-current-agent explicitly not independent EVALUATOR PASS at .agentplane/tasks/202610071840-JJ976X/quality/20261007-190450011-recovery-context/quality-report.json. Final Findings/Verification before canonicalverify/checkpointcommit and finish actual implementationSHA. ExhaustivegoalACTIVE."
+  Verification: |-
+    PASS represented source-owned numbering getter/public helper contracts and actual XML/common automatic body/cell ODT/Worker; all602prior tests byte-identical. ONE full upstream-absent runtime13588app110inventory15infra288ChromePASS plus1genuinelynew public API case only; final13589uniqueapp,zero passing replay/unresolved/uncaught,3skipsretainedwithoutpromotion. Access-only modifiers and formatter collapse after header audit have entire identical emitted JavaScript module binding to sole build/Chrome; actual current-source all4 app/inventorycoverage100 uses fresh maps/complete unchanged declaration-body-control proofs, no skippedpromotion orcounterclamps. Initial5staticPASS/freshformatFAIL closedscopedformatlint; changedgetter/freshcase finalroottypes/scopedchecks and5restoredsourcegates/scopedJSDoc/physical max769/302prior metadata/doctor0errors2oldwarnings/routing/diff/artifactsPASS. Clean actual implementation fdf1bcf9960c3c36c22bfc32ddd585a07e93a582 reviewPASS and same-current-agent explicitly not independent EVALUATOR PASS at .agentplane/tasks/202610071840-JJ976X/quality/20261007-190450011-recovery-context/quality-report.json. Final Findings/Verification before canonicalverify/checkpointcommit and finish actual implementationSHA. ExhaustivegoalACTIVE.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-07T19:05:26.612Z — VERIFY — ok
+
+    By: CODER
+
+    Note: PASS exact implementation fdf1bcf9960c3c36c22bfc32ddd585a07e93a582 represented source-owned numbering getter/public contracts, actual ODT/Worker and288Chromium; ONE upstream-absent full profile plus1genuinelynew case only,13589app110inventory15infra finaluniquePASS,zero passing replay,3skipsretainedwithoutpromotion,all-four source-bound app/inventorycoverage100. Public visibility access-only source has entire identical emitted JavaScript runtime binding; final static/source/scope/artifact and same-current-agent explicitly non-independent EVALUATOR PASS. Final Findings and Verification persisted before canonical verification; fullgoalactive/residualsrecorded.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-07T19:05:23.948Z, excerpt_hash=sha256:9440c837a76ad0ab3f2d841852d0fbcbf5ebe8df5f791f63e1bd3fde5202ef2d
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610071840-JJ976X/blueprint/resolved-snapshot.json
+    - old_digest: d5e021a7d625875fb679bf6d7ad3cd27f5f88d82271778be5d54de6cf65b0e4d
+    - current_digest: d5e021a7d625875fb679bf6d7ad3cd27f5f88d82271778be5d54de6cf65b0e4d
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610071840-JJ976X
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610071840-JJ976X
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert this leaf implementation and bounded metadata evidence only; preserve immutable prior DONE leaves, full parent prefix and deferred stash."
   Findings: |-
     Iteration224 closes duplicate XML numbering publication by actual represented SwXNumberingRules getter ownership. Native chain getByIndex/getRuleByIndex/GetNumberingRuleByIndex/staticGetPropertiesForNumFormat reads original const rule levels, emits only active native legacy/alignment MM100 geometry, signed16StartWith, Prefix/Suffix/ParentNumbering, optionalListFormat and CHAR_SPECIAL-only scalar BulletChar/ownedFont.Name (absence distinct from present-empty). Writer XML bridge retains only identity/level iteration and calls original service; duplicated browser-kind/rawgeometry/marker assembly removed. Native public helper visibility follows unosett.hxx; typed independent record port remains explicit partial UNO contract, not fullAny/PropertyValue sequence. StandardODF1.3 ListFormat extension omission and registered deviations preserved.
@@ -102,6 +142,39 @@ Initial six static once:format:check,lint,typecheck,check:dependencies,check:doc
 ## Verification
 
 PASS represented source-owned numbering getter/public helper contracts and actual XML/common automatic body/cell ODT/Worker; all602prior tests byte-identical. ONE full upstream-absent runtime13588app110inventory15infra288ChromePASS plus1genuinelynew public API case only; final13589uniqueapp,zero passing replay/unresolved/uncaught,3skipsretainedwithoutpromotion. Access-only modifiers and formatter collapse after header audit have entire identical emitted JavaScript module binding to sole build/Chrome; actual current-source all4 app/inventorycoverage100 uses fresh maps/complete unchanged declaration-body-control proofs, no skippedpromotion orcounterclamps. Initial5staticPASS/freshformatFAIL closedscopedformatlint; changedgetter/freshcase finalroottypes/scopedchecks and5restoredsourcegates/scopedJSDoc/physical max769/302prior metadata/doctor0errors2oldwarnings/routing/diff/artifactsPASS. Clean actual implementation fdf1bcf9960c3c36c22bfc32ddd585a07e93a582 reviewPASS and same-current-agent explicitly not independent EVALUATOR PASS at .agentplane/tasks/202610071840-JJ976X/quality/20261007-190450011-recovery-context/quality-report.json. Final Findings/Verification before canonicalverify/checkpointcommit and finish actual implementationSHA. ExhaustivegoalACTIVE.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-07T19:05:26.612Z — VERIFY — ok
+
+By: CODER
+
+Note: PASS exact implementation fdf1bcf9960c3c36c22bfc32ddd585a07e93a582 represented source-owned numbering getter/public contracts, actual ODT/Worker and288Chromium; ONE upstream-absent full profile plus1genuinelynew case only,13589app110inventory15infra finaluniquePASS,zero passing replay,3skipsretainedwithoutpromotion,all-four source-bound app/inventorycoverage100. Public visibility access-only source has entire identical emitted JavaScript runtime binding; final static/source/scope/artifact and same-current-agent explicitly non-independent EVALUATOR PASS. Final Findings and Verification persisted before canonical verification; fullgoalactive/residualsrecorded.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-07T19:05:23.948Z, excerpt_hash=sha256:9440c837a76ad0ab3f2d841852d0fbcbf5ebe8df5f791f63e1bd3fde5202ef2d
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610071840-JJ976X/blueprint/resolved-snapshot.json
+- old_digest: d5e021a7d625875fb679bf6d7ad3cd27f5f88d82271778be5d54de6cf65b0e4d
+- current_digest: d5e021a7d625875fb679bf6d7ad3cd27f5f88d82271778be5d54de6cf65b0e4d
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610071840-JJ976X
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610071840-JJ976X
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
