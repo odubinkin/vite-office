@@ -1,10 +1,11 @@
 ---
 id: "202610071137-8RTP52"
 title: "Restore native table naming through properties and undo"
-status: "DOING"
+result_summary: "Table Properties now apply changed raw names through native frame/document owners; empty and collision names use unique allocation, same-name is a no-op, name-only undo resolves recreated live frames without moving the cursor or recording replay actions. Name page reset, ASCII-space guard, focus, cancel and grouped history verified:13509 app,110 inventory,14 infrastructure,274 Chromium; source-bound actual100; one full upstream-absent run, failed/new-only closure, no passing replay. Full parity and frame/modal/allocator/keyboard residuals remain unverified."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +39,16 @@ quality_review:
     - ".agentplane/tasks/202610071137-8RTP52/evidence/exact-sha-review.json"
   findings:
     - "Native frame name owner, raw document rename, cursor-free name lookup undo/recreated owners, replay suppression, Properties changed Name/page guard/reset/cancel/history/ODT verified.21semantic paths,577old files573identical4exact migrations,580current, all293prior metadata fields/defaults/exceptions preserved; no whole-parity promotion."
-commit: null
+commit:
+  hash: "c0168febda45e1cdce445aa9fdaf4c687770576c"
+  message: "🚧 8RTP52 parity: restore native table name owners and properties history"
 comments:
   -
     author: "CODER"
     body: "Start: restore source-owned table names and Properties behavior under standing iterative authorization."
+  -
+    author: "CODER"
+    body: "Verified: native frame name owner, changed Name Properties, name lookup undo and browser page contracts pass at exact implementation SHA."
 events:
   -
     type: "status"
@@ -57,8 +63,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native frame table names, changed-only Properties and cursor-free lookup undo verified at c0168febda45; 13509 app, 110 inventory, 14 infrastructure, 274 Chromium resolved; source-bound actual100; ONE upstream-absent full run and failed/new-only closure, no passing replay. Same current-agent evaluator PASS, explicitly not independent. Full parity remains unverified."
+  -
+    type: "status"
+    at: "2026-10-07T12:35:23.138Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native frame name owner, changed Name Properties, name lookup undo and browser page contracts pass at exact implementation SHA."
 doc_version: 3
-doc_updated_at: "2026-10-07T12:35:09.752Z"
+doc_updated_at: "2026-10-07T12:35:23.139Z"
 doc_updated_by: "CODER"
 description: "Iteration214: source-owned SwFrameFormat table identity, document rename and cursor-free name undo, editable native Properties Name control and source-backed validation. Preserve registered deviations and all unrelated assertions."
 sections:
