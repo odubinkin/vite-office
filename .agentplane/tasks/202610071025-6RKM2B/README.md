@@ -1,10 +1,11 @@
 ---
 id: "202610071025-6RKM2B"
 title: "Move native row height editing to its upstream dialog"
-status: "DOING"
+result_summary: "Native row height uses its source separate dialog with Fit to size and MINLAY bounds; Table Properties omits the extra height control, and menu refocus preserves selected row owners before native height dispatch."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 21
+revision: 22
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +39,16 @@ quality_review:
     - ".agentplane/tasks/202610071025-6RKM2B/evidence/exact-sha-review.json"
   findings:
     - "13495 app, 110 inventory, 14 infrastructure and 272 Chromium cases resolved without passing replay; actual current-source app and inventory coverage 100 percent; 21 approved semantic paths and original metadata preserved. Scope audit reconstruction normalized path order only."
-commit: null
+commit:
+  hash: "c6c4eb13d4d8ef76e817f097c4900253d196de64"
+  message: "🚧 6RKM2B code: edit native row height in its own dialog"
 comments:
   -
     author: "CODER"
     body: "Start: Port separate native row height dialog and source command placement under standing iterative authorization; preserve original selection and history."
+  -
+    author: "CODER"
+    body: "Verified: source native row height dialog and slot20507 preserve native row selection, Fixed and Minimum behavior, clipping, owners and undo through the generated menu; exact implementation reviewed with source-bound evidence and no passing replay."
 events:
   -
     type: "status"
@@ -57,8 +63,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Source row height slot20507 and separate Fixed/Minimum dialog preserve native current and selected row owners, menu refocus and history. Exact implementation c6c4eb13 reviewed by same agent, not independent; 13495 app 110 inventory 14 infrastructure 272 Chromium resolved, actual source-bound coverage 100 percent, zero passing replay. Final Findings and Verification precede this record."
+  -
+    type: "status"
+    at: "2026-10-07T11:03:03.793Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: source native row height dialog and slot20507 preserve native row selection, Fixed and Minimum behavior, clipping, owners and undo through the generated menu; exact implementation reviewed with source-bound evidence and no passing replay."
 doc_version: 3
-doc_updated_at: "2026-10-07T11:02:51.980Z"
+doc_updated_at: "2026-10-07T11:03:03.794Z"
 doc_updated_by: "CODER"
 description: "Replace misplaced Table Properties height control with source SwTableHeightDlg and SetRowHeight menu command, preserving native row ownership and history."
 sections:
