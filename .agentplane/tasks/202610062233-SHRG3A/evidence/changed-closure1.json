@@ -1,0 +1,33 @@
+{
+  "records": [
+    {
+      "command": "Unchanged JSDoc validator on approved changed code/acceptance paths; actual physical-line count",
+      "exit": 1,
+      "errors": [
+        "apps/office/src/sw/source/filter/xml/native-row-frame-size-roundtrip.test.ts:190 function is missing JSDoc"
+      ],
+      "physicalLines": {
+        "apps/office/src/sw/browser/filter/xml/writer-document-codec.ts": 807,
+        "apps/office/src/sw/source/filter/xml/native-row-frame-size-roundtrip.test.ts": 193,
+        "apps/office/src/sw/browser/editor/native-row-frame-size.test.tsx": 84,
+        "apps/office/e2e/writer-native-row-frame-size.spec.ts": 58
+      }
+    },
+    {
+      "command": "npm exec -- prettier --check apps/office/src/sw/browser/filter/xml/writer-document-codec.ts apps/office/src/sw/source/filter/xml/native-row-frame-size-roundtrip.test.ts apps/office/src/sw/browser/editor/native-row-frame-size.test.tsx apps/office/e2e/writer-native-row-frame-size.spec.ts",
+      "exit": 0,
+      "bytes": 66,
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+      "diagnostics": [
+        "All matched files use Prettier code style!"
+      ]
+    },
+    {
+      "command": "npm exec -- eslint apps/office/src/sw/browser/filter/xml/writer-document-codec.ts apps/office/src/sw/source/filter/xml/native-row-frame-size-roundtrip.test.ts apps/office/src/sw/browser/editor/native-row-frame-size.test.tsx apps/office/e2e/writer-native-row-frame-size.spec.ts --max-warnings 0",
+      "exit": 0,
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnostics": []
+    }
+  ]
+}
