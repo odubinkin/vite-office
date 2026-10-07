@@ -1,0 +1,14 @@
+{
+  "iteration": 209,
+  "leaf": "202610070714-T9NGQB",
+  "implementation": "ca41b2cfdbf8c50c745532f2466876181d16f105",
+  "evidenceTail": "0c4e476ef3cb6177589e320076094dea45c81254",
+  "close": "40b928af49d0fd2d41464f5ee4940dbd68f38ef6",
+  "completePriorCharacters": 561879,
+  "completePriorSHA256": "148d324dbfac868fbc561aac29aec2e68257a7fce3dbb700c4b756213b22d2fa",
+  "completePriorPrefixPreserved": true,
+  "finalFindingsSHA256": "c86958e51bdf86094b33d0c4bdb5ab0420d6e314c1559daa5c7e2e6309f5b166",
+  "parentGoalState": "ACTIVE; full implemented parity unverified",
+  "postLeafTrackedAndAllClean": true,
+  "closeRecovery": "Oracle generic close subject validation failed; scoped AP concrete-subject commit preserved immutable DONE and exact implementation binding."
+}
