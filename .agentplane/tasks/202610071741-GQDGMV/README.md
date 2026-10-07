@@ -4,7 +4,7 @@ title: "Apply native StarBats and StarMath bullet symbol import conversion"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -20,10 +20,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-07T18:12:21.324Z"
+  updated_by: "CODER"
+  note: "PASS exact implementation 9a561bd4ee6196bfcb6ed957891741af8ed8ae5e; same-current-agent EVALUATOR explicitly not independent PASS. ONE upstream-absent full runtime 13582 app/110 inventory/15 infrastructure/286 Chromium, zero passing replay, source-bound all-four app and inventory coverage 100 percent; final static/source/scope/artifact gates PASS, residuals recorded. Final Findings and Verification persisted before this canonical verification."
   attempts: 0
 quality_review:
   state: "pass"
@@ -54,8 +54,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: native legacy bullet glyph/family conversion with actual immutable tables, lazy importer owner, explicit SAX factory port, source symbol fallback and complete existing I/O deviation preservation."
+  -
+    type: "verify"
+    at: "2026-10-07T18:12:21.324Z"
+    author: "CODER"
+    state: "ok"
+    note: "PASS exact implementation 9a561bd4ee6196bfcb6ed957891741af8ed8ae5e; same-current-agent EVALUATOR explicitly not independent PASS. ONE upstream-absent full runtime 13582 app/110 inventory/15 infrastructure/286 Chromium, zero passing replay, source-bound all-four app and inventory coverage 100 percent; final static/source/scope/artifact gates PASS, residuals recorded. Final Findings and Verification persisted before this canonical verification."
 doc_version: 3
-doc_updated_at: "2026-10-07T18:11:50.398Z"
+doc_updated_at: "2026-10-07T18:12:21.389Z"
 doc_updated_by: "CODER"
 description: "Iteration222: existing ODT bullet glyph/family input must follow xmlnumi GetProperties legacy font conversion, native immutable unotools tables and lazy SvXMLImport converter ownership; actual browser symbol fallback follows native StarSymbol/OpenSymbol relation. Preserve deliberate I/O/recovery deviations and all unrelated prior acceptance/metadata."
 sections:
@@ -77,7 +83,41 @@ sections:
     docs/program/parity/runtime-inventory.json
   Plan: "Port the actual existing StarBats/StarMath bullet import conversion through pinned unotools ConvertChar tables and xmlnumi GetProperties. Preserve all224 slots in both tables, U+00xx/U+F0xx aliases, uint16 narrowing/subtraction, zero-slot substitution U+E12C, out-of-range retention and native ASCII family matching/publication mutation including repeated GetProperties behavior. Add bounded actual SvXMLImport lazy conversion ownership instead of placing conversion in a browser or Writer adapter: replace its interface-only placeholder with the source-shaped implemented conversion base; keep SAX root factory as explicit structural SvXMLImportRootFactory. Existing Writer table import coordinator inherits that base; production list contexts borrow the actual importer, isolated existing constructor calls obtain the same implemented owner. Preserve existing constructor callers and all other context fields/contracts; class remains explicitly partial, no full-native claim. Add StarSymbol browser face backed by existing OpenSymbol resource following source-related symbol fallback, preserve stored StarSymbol family; complete physical font coverage remains separately unverified. Register unotools and native xmloff->unotools edge in dependency checker with fresh boundary assertions, never bypass enforcement. Tests: frozen native conversion output census plus literal context controls/legacy repeated publication, actual common/automatic/body/cell/Worker/package reopen and real Chromium fonts/glyph/gap/typing/history at1280/390.14semantic paths. Preserve597 prior acceptance files, only2 exact type-import aliases to renamed root port with all inputs/assertions retained; any further old expectation migration only after actual original failure and exact source proof. Preserve all301prior metadata fields/statuses/defaults/prefixes/exceptions plus1explicitly unverified unotools record,302total. Standing user goal authorizes safe local parity/refactoring work, no new confirmation. No network/outside-repo access, subagents, upstream/source/Python/raw artifacts in AgentPlane. Same current agent role phases, EVALUATOR explicitly not independent."
   Verify Steps: "Initial6static once:format:check,lint,typecheck,check:dependencies,check:docs,check:file-size. ONE full runtime without vendor:hide vendor/libreoffice-reference; test:static,full app/inventory coverage,14existing infrastructure plus fresh boundary cases,full Chromium; finally restore, freeze source/task writes until actual terminal handle. Tests never invoke pinned source; later runtime only original failures or genuinely new cases, zero passing replay. Later static/source only failed or changed inputs. Require actual current-source app/inventory all4coverage100 via entire identical source/maps or contiguous complete declaration/body/enclosing-branch/all-locations proofs; no skips/exclusions/clamps/threshold changes. Check all224entries both aliases and source uint16/zero/out-of-range semantics, context font matching and native repeated GetProperties mutation, actual original Font/Rule/Worker/ODT ownership and Chromium font loading/glyph/spacing/history. After restore run resource generator--check,source-tree,source-provenance,invariants,parity. Preserve597old cases/tests except2type-only import aliases, all301prior metadata plus1unverified mapping; bounded English evidence/source anchors/hashes/counts only. JSDoc/actual physical<1000,artifact census,doctor/routing/diff,clean actual implementation SHA review,full parent Findings prefix/deferred stash preserved. Final Findings/Verification before canonical verify; persist canonical verification before finish actual implementation SHA, never mutate DONE leaf."
-  Verification: "PASS: complete native legacy import table branch and actual XML import owner/glyph/family publication; all13582app110inventory15infrastructure286Chromium in ONE upstream-absent full profile,zero runtime failed/skipped/uncaught/passing replay; no closure or unchanged rebuild. Actual current-source all4 app/inventory coverage100,299+38whole sources/maps and4complete prior app regions; invalid raw paintfrm whole map replaced only by previous entire identical-source verified certificate. All7production unchanged after full build/Chromium. Initial5other static PASS; frozen-handle type failure and closure1 fresh Which-constructor type failure closed by final root typecheck/scoped changed checks;5restored-only source gates/scoped JSDoc/physical<1000(max963 inclCSS)/scope301prior metadata+1unverified302/597old595unchanged2exact type-only aliases all assertions retained/448native table values identical/doctor0errors2oldwarnings/routing/diff/artifacts PASS. Clean actual implementation SHA 9a561bd4ee6196bfcb6ed957891741af8ed8ae5e review PASS and same-current-agent explicitly not independent EVALUATOR PASS at .agentplane/tasks/202610071741-GQDGMV/quality/20261007-181131914-recovery-context/quality-report.json. Final canonical verification checkpoint before finish actual implementation SHA; full goal remains ACTIVE."
+  Verification: |-
+    PASS: complete native legacy import table branch and actual XML import owner/glyph/family publication; all13582app110inventory15infrastructure286Chromium in ONE upstream-absent full profile,zero runtime failed/skipped/uncaught/passing replay; no closure or unchanged rebuild. Actual current-source all4 app/inventory coverage100,299+38whole sources/maps and4complete prior app regions; invalid raw paintfrm whole map replaced only by previous entire identical-source verified certificate. All7production unchanged after full build/Chromium. Initial5other static PASS; frozen-handle type failure and closure1 fresh Which-constructor type failure closed by final root typecheck/scoped changed checks;5restored-only source gates/scoped JSDoc/physical<1000(max963 inclCSS)/scope301prior metadata+1unverified302/597old595unchanged2exact type-only aliases all assertions retained/448native table values identical/doctor0errors2oldwarnings/routing/diff/artifacts PASS. Clean actual implementation SHA 9a561bd4ee6196bfcb6ed957891741af8ed8ae5e review PASS and same-current-agent explicitly not independent EVALUATOR PASS at .agentplane/tasks/202610071741-GQDGMV/quality/20261007-181131914-recovery-context/quality-report.json. Final canonical verification checkpoint before finish actual implementation SHA; full goal remains ACTIVE.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-07T18:12:21.324Z — VERIFY — ok
+
+    By: CODER
+
+    Note: PASS exact implementation 9a561bd4ee6196bfcb6ed957891741af8ed8ae5e; same-current-agent EVALUATOR explicitly not independent PASS. ONE upstream-absent full runtime 13582 app/110 inventory/15 infrastructure/286 Chromium, zero passing replay, source-bound all-four app and inventory coverage 100 percent; final static/source/scope/artifact gates PASS, residuals recorded. Final Findings and Verification persisted before this canonical verification.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-07T18:11:50.398Z, excerpt_hash=sha256:24dfb7d5011b0a0a7d701c307f5618d732a4ae494a5df5a6c24448acc1ad78a1
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610071741-GQDGMV/blueprint/resolved-snapshot.json
+    - old_digest: 7e2d1ae6900ecf99c77a699e5824b3c522a64db1caf487e2137a33e3183ae6ec
+    - current_digest: 7e2d1ae6900ecf99c77a699e5824b3c522a64db1caf487e2137a33e3183ae6ec
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610071741-GQDGMV
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610071741-GQDGMV
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this leaf implementation; preserve prior DONE tasks, parent full Findings prefix, deferred stash and deliberate I/O/recovery deviations."
   Findings: |-
     Iteration222 closes the existing StarBats/StarMath bullet glyph/family import gap. Both actual unotools224slot tables ported without omitted entries; source uint16 aliases/subtraction,29/5zero holes ->U+E12C and out-of-range retention preserved. Native output digests b38a0e2c74c5a58d7f1eaf8c11d6feb5eb3e8954945290006fa44042cdbb7e77 and86d64838b3b06ed42f60d4e9db288064c3985a30f7b07885cd44d26294738db3 match all slots and both aliases. Actual implemented SvXMLImport owns independent lazy handles; production list levels borrow original Writer importer through existing table coordinator. Interface-only SvXMLImport placeholder becomes explicit SAX root factory port plus real bounded source-owned conversion base; no browser/TextRuns glyph conversion or duplicate Font owner. Isolated existing constructor callers use that same implemented base. GetProperties uses native exact ASCII family matching, mutates glyph each publication and changes only published descriptor family to StarSymbol; repeat StarMath '?' ->U+00BF ->U+E0AA matches source rather than inventing idempotence. Standard/other/nonbullet/empty/astral/aliases/holes/import precedence retained. Browser StarSymbol face uses existing related OpenSymbol resource, preserving actual stored family; full physical glyph coverage remains unverified. Dependency checker admits native xmloff->unotools only with fresh boundary assertions.
@@ -118,6 +158,39 @@ Initial6static once:format:check,lint,typecheck,check:dependencies,check:docs,ch
 ## Verification
 
 PASS: complete native legacy import table branch and actual XML import owner/glyph/family publication; all13582app110inventory15infrastructure286Chromium in ONE upstream-absent full profile,zero runtime failed/skipped/uncaught/passing replay; no closure or unchanged rebuild. Actual current-source all4 app/inventory coverage100,299+38whole sources/maps and4complete prior app regions; invalid raw paintfrm whole map replaced only by previous entire identical-source verified certificate. All7production unchanged after full build/Chromium. Initial5other static PASS; frozen-handle type failure and closure1 fresh Which-constructor type failure closed by final root typecheck/scoped changed checks;5restored-only source gates/scoped JSDoc/physical<1000(max963 inclCSS)/scope301prior metadata+1unverified302/597old595unchanged2exact type-only aliases all assertions retained/448native table values identical/doctor0errors2oldwarnings/routing/diff/artifacts PASS. Clean actual implementation SHA 9a561bd4ee6196bfcb6ed957891741af8ed8ae5e review PASS and same-current-agent explicitly not independent EVALUATOR PASS at .agentplane/tasks/202610071741-GQDGMV/quality/20261007-181131914-recovery-context/quality-report.json. Final canonical verification checkpoint before finish actual implementation SHA; full goal remains ACTIVE.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-07T18:12:21.324Z — VERIFY — ok
+
+By: CODER
+
+Note: PASS exact implementation 9a561bd4ee6196bfcb6ed957891741af8ed8ae5e; same-current-agent EVALUATOR explicitly not independent PASS. ONE upstream-absent full runtime 13582 app/110 inventory/15 infrastructure/286 Chromium, zero passing replay, source-bound all-four app and inventory coverage 100 percent; final static/source/scope/artifact gates PASS, residuals recorded. Final Findings and Verification persisted before this canonical verification.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-07T18:11:50.398Z, excerpt_hash=sha256:24dfb7d5011b0a0a7d701c307f5618d732a4ae494a5df5a6c24448acc1ad78a1
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610071741-GQDGMV/blueprint/resolved-snapshot.json
+- old_digest: 7e2d1ae6900ecf99c77a699e5824b3c522a64db1caf487e2137a33e3183ae6ec
+- current_digest: 7e2d1ae6900ecf99c77a699e5824b3c522a64db1caf487e2137a33e3183ae6ec
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610071741-GQDGMV
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610071741-GQDGMV
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
