@@ -1,0 +1,13 @@
+{
+  "iteration": 207,
+  "leaf": "202610070438-GCAPDR",
+  "implementation": "ae01a2e08e28a876ea8514b837c18d345920429d",
+  "evidenceTail": "ee6fe8908cd84307b2c313a74b0f1edb14f1cdc5",
+  "close": "bbc3283eeeb6a7c0a0f7a7056af1073467e264e5",
+  "completePriorCharacters": 553553,
+  "completePriorSHA256": "f0f1a156985c965c84772b61756b6d92d211d50777ce14558fcb999684ebba41",
+  "completePriorPrefixPreserved": true,
+  "finalFindingsSHA256": "1d3320d0c5fa0682e1bdd5cc8075e9e0373efa520bcd7d15c60f71ecf9752266",
+  "parentGoalState": "ACTIVE; full implemented parity unverified",
+  "postLeafCleanTrackedAndAll": true
+}
