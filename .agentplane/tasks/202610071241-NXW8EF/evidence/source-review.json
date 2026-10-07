@@ -33,5 +33,13 @@
     "window": "txtcrsr.cxx127-139 routes ordinary/selected Home End to shell LeftMargin/RightMargin(falseBasic). Browser retains Ctrl/Meta section route and guards Alt/composition/missing selection, measures DOM UTF16 lines and routes through SwEditWin. Native view and shell share persistent layout."
   },
   "residual": "Full RTL/bidi and readonly scrolling/fly/merged-text frames, complete GetLayoutFrame graph/formatting and native marked-list-level/DOM label-affinity painting remain unverified. Device nullable text covered by explicit fault injection, not a normal rendered-paragraph claim. Native Name informational modal, allocator/chart/frame attributes and whole parity remain unverified. Registered save/open/recovery deviations preserved.",
-  "reviewer": "Current CODER source review; same current-agent EVALUATOR explicitly not independent."
+  "reviewer": "Current CODER source review; same current-agent EVALUATOR explicitly not independent.",
+  "fixtureLifecycleCorrection": {
+    "source": "sw/source/uibase/uiview/view.cxx",
+    "lines": "1174-1230",
+    "scope": "Stop painting/listening during destruction; React fixtures unmount before native session disposal. No assertion or GetViewFrame contract weakened.",
+    "prior214AndCurrent215UncaughtErrors": 27,
+    "originalErrorOnlyClosure3Passed": 27,
+    "finalUncaughtErrors": 0
+  }
 }

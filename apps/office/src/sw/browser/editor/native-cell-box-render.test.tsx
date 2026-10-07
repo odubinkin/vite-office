@@ -141,6 +141,7 @@ it("isolates missing-edge guides for every native paint family on natural and fi
         expect(painted.style.borderTopColor).toBe("rgb(17, 34, 51)");
       }
   } finally {
+    cleanup();
     session.Close();
   }
 });
@@ -234,6 +235,7 @@ for (const fixed of [false, true])
       expect(box.GetParagraphs()[0]).toBe(node);
       expect(node.GetText()).toBe("NativePaint");
     } finally {
+      cleanup();
       session.Close();
     }
   });
@@ -278,6 +280,7 @@ it.each([
       expect(cell).toHaveStyle({ borderTopStyle: paint, paddingTop: "0px" });
       expect(box.GetBox().GetTop()?.GetBorderLineStyle()).toBe(style);
     } finally {
+      cleanup();
       session.Close();
     }
   },

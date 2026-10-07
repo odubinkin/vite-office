@@ -3,9 +3,14 @@
   "semanticPaths": [
     "apps/office/e2e/native-line-margin.spec.ts",
     "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts",
+    "apps/office/src/sw/browser/editor/native-cell-box-render.test.tsx",
+    "apps/office/src/sw/browser/editor/native-collapsing-border-paint.test.tsx",
     "apps/office/src/sw/browser/editor/native-line-margin.test.tsx",
     "apps/office/src/sw/browser/editor/native-section-navigation.test.tsx",
     "apps/office/src/sw/browser/editor/writer-line-measurement.ts",
+    "apps/office/src/sw/browser/presentation/native-border-page.test.tsx",
+    "apps/office/src/sw/browser/presentation/native-table-border-owner-history.test.tsx",
+    "apps/office/src/sw/browser/presentation/native-table-height-delta.test.tsx",
     "apps/office/src/sw/source/core/crsr/swcrsr.ts",
     "apps/office/src/sw/source/core/crsr/trvltbl.ts",
     "apps/office/src/sw/source/core/layout/newfrm.ts",
@@ -20,15 +25,50 @@
     "docs/program/parity/runtime-inventory.json",
     "docs/program/source-provenance.json"
   ],
-  "scopeCount": 18,
+  "scopeCount": 23,
   "priorAcceptanceFiles": 580,
-  "byteIdenticalAcceptanceFiles": 579,
+  "byteIdenticalAcceptanceFiles": 574,
   "exactSourceBackedMigrations": [
     {
       "path": "apps/office/src/sw/browser/editor/native-section-navigation.test.tsx",
       "beforeSHA256": "b2762d56afa3127a16effb6cd1f1b41c4b19a980669fe765749670708b4154e9",
       "expectedSHA256": "a154265570e3c55178e61312db2e4aa2be1259a42919aac8dd348b0657974092",
       "currentSHA256": "a154265570e3c55178e61312db2e4aa2be1259a42919aac8dd348b0657974092",
+      "exact": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/native-cell-box-render.test.tsx",
+      "beforeSHA256": "ec00a1c0fab40bdde5698fc34783a7cbd6332f2dc9ffdabba8e1bd58465baf44",
+      "expectedSHA256": "d68c9ac5dbce87f72a678d40aa446d705d4cd14ec470af512ae48f72b45ce304",
+      "currentSHA256": "d68c9ac5dbce87f72a678d40aa446d705d4cd14ec470af512ae48f72b45ce304",
+      "exact": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/native-collapsing-border-paint.test.tsx",
+      "beforeSHA256": "9e3a10d6c17b6bed6d2be1b2bcb9c3997c0775904bd1a42962d526798b77d2fa",
+      "expectedSHA256": "0350484dbb9df957b4d5766310f40fa910a401012412766abe62d959672f8474",
+      "currentSHA256": "0350484dbb9df957b4d5766310f40fa910a401012412766abe62d959672f8474",
+      "exact": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/native-table-height-delta.test.tsx",
+      "beforeSHA256": "02f24070e946441e6facd9c245f3b29ffffb705d3f0c6f397c9d918feaf252e2",
+      "expectedSHA256": "c2d45ac4881880c7714ae9971dc4603baef76274bcc0cbc48c6f5d522f2380b2",
+      "currentSHA256": "c2d45ac4881880c7714ae9971dc4603baef76274bcc0cbc48c6f5d522f2380b2",
+      "exact": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/native-border-page.test.tsx",
+      "beforeSHA256": "f0fbebfa9661246dd3308531d3615d26e3d0846c27a0ac60d133deca1dfbf55b",
+      "expectedSHA256": "00701512f22346d54fe190279d363d70185c9c03b91ae934c9d11987b3c33279",
+      "currentSHA256": "00701512f22346d54fe190279d363d70185c9c03b91ae934c9d11987b3c33279",
+      "exact": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/native-table-border-owner-history.test.tsx",
+      "beforeSHA256": "fb38615596705a5f38329e8a8e3765e50cfcd74ef79e7aed33f90f5c528ec571",
+      "expectedSHA256": "ef18275d5e611d5c183ba709479a8c889e59c2adf943f182e2e275839dd44104",
+      "currentSHA256": "ef18275d5e611d5c183ba709479a8c889e59c2adf943f182e2e275839dd44104",
       "exact": true
     }
   ],

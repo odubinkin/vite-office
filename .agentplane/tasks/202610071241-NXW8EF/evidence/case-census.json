@@ -3,11 +3,13 @@
     "original": 13529,
     "current": 13532,
     "newCases": 3,
-    "resolved": 1,
+    "resolved": 28,
     "passed": 13532,
     "unresolvedCount": 0,
-    "skippedObservationsRetained": 8,
+    "skippedObservationsRetained": 24,
     "passingReplay": 0,
+    "originalUncaughtErrorCases": 27,
+    "finalUncaughtErrorCases": 0,
     "inputs": [
       {
         "file": "NXW8EF.app-results.json",
@@ -29,6 +31,13 @@
         "passed": 1,
         "failed": 0,
         "skipped": 5
+      },
+      {
+        "file": "NXW8EF.app-closure3-results.json",
+        "sha256": "6a43c28380b46b24f047ddee0eae17af1510fcf14d8ea3dca6d17e38bdac0b83",
+        "passed": 27,
+        "failed": 0,
+        "skipped": 16
       }
     ]
   },
@@ -41,6 +50,8 @@
     "unresolvedCount": 0,
     "skippedObservationsRetained": 0,
     "passingReplay": 0,
+    "originalUncaughtErrorCases": 0,
+    "finalUncaughtErrorCases": 0,
     "inputs": [
       {
         "file": "NXW8EF.inventory-results.json",

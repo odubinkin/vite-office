@@ -49,7 +49,9 @@
         "skipped": 0,
         "total": 13529
       },
-      "errors": [],
+      "errors": [
+        "27 uncaught SwView detached-frame errors: mapped to original file/name cases in lifecycle-rework.json; resolved by original-error-only closure3."
+      ],
       "coverageCounts": {
         "lines": {
           "total": 16421,
@@ -89,7 +91,9 @@
         "branches": 99.92
       },
       "incompleteFileCount": 3,
-      "coverageMapSHA256": "1b70a87900cfccdaa7c5f87e044821630e00d2db26ec9caceb7d3c3265246e6b"
+      "coverageMapSHA256": "1b70a87900cfccdaa7c5f87e044821630e00d2db26ec9caceb7d3c3265246e6b",
+      "unhandledErrorCount": 27,
+      "jsonReporterLimitation": "Assertion JSON omitted uncaught errors; terminal output is authoritative for these errors."
     },
     {
       "kind": "inventory",

@@ -326,6 +326,7 @@ it("actual selected native border page applies inner/outer/padding items to orig
     expect(doc.GetUndoManager().GetUndoActionCount()).toBeGreaterThan(0);
     expect(boxes[2]?.GetBox().Which()).toBe(RES_BOX);
   } finally {
+    cleanup();
     session.Close();
   }
 });

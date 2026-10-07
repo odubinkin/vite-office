@@ -1,0 +1,165 @@
+{
+  "reason": "27 uncaught detached-frame exceptions in sole full profile and previous214, not threshold-only success. Mounted fixtures must unmount before native session disposal; no assertions or product lifecycle contract weakened.",
+  "source": "sw/source/uibase/uiview/view.cxx1174-1230: hide edit window, stop listeners and invalidate view during destruction.",
+  "migrations": [
+    {
+      "path": "apps/office/src/sw/browser/editor/native-cell-box-render.test.tsx",
+      "finalizerOrdinals": [
+        2,
+        3,
+        4
+      ],
+      "beforeSHA256": "ec00a1c0fab40bdde5698fc34783a7cbd6332f2dc9ffdabba8e1bd58465baf44",
+      "currentSHA256": "d68c9ac5dbce87f72a678d40aa446d705d4cd14ec470af512ae48f72b45ce304",
+      "assertionsInputsNamesAndUnrelatedFinalizersPreserved": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/native-collapsing-border-paint.test.tsx",
+      "finalizerOrdinals": [
+        1
+      ],
+      "beforeSHA256": "9e3a10d6c17b6bed6d2be1b2bcb9c3997c0775904bd1a42962d526798b77d2fa",
+      "currentSHA256": "0350484dbb9df957b4d5766310f40fa910a401012412766abe62d959672f8474",
+      "assertionsInputsNamesAndUnrelatedFinalizersPreserved": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/native-table-height-delta.test.tsx",
+      "finalizerOrdinals": [
+        1
+      ],
+      "beforeSHA256": "02f24070e946441e6facd9c245f3b29ffffb705d3f0c6f397c9d918feaf252e2",
+      "currentSHA256": "c2d45ac4881880c7714ae9971dc4603baef76274bcc0cbc48c6f5d522f2380b2",
+      "assertionsInputsNamesAndUnrelatedFinalizersPreserved": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/native-border-page.test.tsx",
+      "finalizerOrdinals": [
+        2
+      ],
+      "beforeSHA256": "f0fbebfa9661246dd3308531d3615d26e3d0846c27a0ac60d133deca1dfbf55b",
+      "currentSHA256": "00701512f22346d54fe190279d363d70185c9c03b91ae934c9d11987b3c33279",
+      "assertionsInputsNamesAndUnrelatedFinalizersPreserved": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/native-table-border-owner-history.test.tsx",
+      "finalizerOrdinals": [
+        1
+      ],
+      "beforeSHA256": "fb38615596705a5f38329e8a8e3765e50cfcd74ef79e7aed33f90f5c528ec571",
+      "currentSHA256": "ef18275d5e611d5c183ba709479a8c889e59c2adf943f182e2e275839dd44104",
+      "assertionsInputsNamesAndUnrelatedFinalizersPreserved": true
+    }
+  ],
+  "originalUncaughtErrors": 27,
+  "originalErrorCases": [
+    {
+      "file": "src/sw/browser/editor/native-cell-box-render.test.tsx",
+      "name": "isolates missing-edge guides for every native paint family on natural and fixed rows"
+    },
+    {
+      "file": "src/sw/browser/editor/native-cell-box-render.test.tsx",
+      "name": "renders independent native edges/distances and native history fixed=false"
+    },
+    {
+      "file": "src/sw/browser/editor/native-cell-box-render.test.tsx",
+      "name": "renders independent native edges/distances and native history fixed=true"
+    },
+    {
+      "file": "src/sw/browser/editor/native-cell-box-render.test.tsx",
+      "name": "projects native style=0 on the browser paint boundary"
+    },
+    {
+      "file": "src/sw/browser/editor/native-cell-box-render.test.tsx",
+      "name": "projects native style=1 on the browser paint boundary"
+    },
+    {
+      "file": "src/sw/browser/editor/native-cell-box-render.test.tsx",
+      "name": "projects native style=2 on the browser paint boundary"
+    },
+    {
+      "file": "src/sw/browser/editor/native-cell-box-render.test.tsx",
+      "name": "projects native style=3 on the browser paint boundary"
+    },
+    {
+      "file": "src/sw/browser/editor/native-cell-box-render.test.tsx",
+      "name": "projects native style=4 on the browser paint boundary"
+    },
+    {
+      "file": "src/sw/browser/editor/native-cell-box-render.test.tsx",
+      "name": "projects native style=5 on the browser paint boundary"
+    },
+    {
+      "file": "src/sw/browser/editor/native-cell-box-render.test.tsx",
+      "name": "projects native style=6 on the browser paint boundary"
+    },
+    {
+      "file": "src/sw/browser/editor/native-cell-box-render.test.tsx",
+      "name": "projects native style=7 on the browser paint boundary"
+    },
+    {
+      "file": "src/sw/browser/editor/native-cell-box-render.test.tsx",
+      "name": "projects native style=8 on the browser paint boundary"
+    },
+    {
+      "file": "src/sw/browser/editor/native-cell-box-render.test.tsx",
+      "name": "projects native style=9 on the browser paint boundary"
+    },
+    {
+      "file": "src/sw/browser/editor/native-cell-box-render.test.tsx",
+      "name": "projects native style=10 on the browser paint boundary"
+    },
+    {
+      "file": "src/sw/browser/editor/native-cell-box-render.test.tsx",
+      "name": "projects native style=11 on the browser paint boundary"
+    },
+    {
+      "file": "src/sw/browser/editor/native-cell-box-render.test.tsx",
+      "name": "projects native style=12 on the browser paint boundary"
+    },
+    {
+      "file": "src/sw/browser/editor/native-cell-box-render.test.tsx",
+      "name": "projects native style=13 on the browser paint boundary"
+    },
+    {
+      "file": "src/sw/browser/editor/native-cell-box-render.test.tsx",
+      "name": "projects native style=14 on the browser paint boundary"
+    },
+    {
+      "file": "src/sw/browser/editor/native-cell-box-render.test.tsx",
+      "name": "projects native style=15 on the browser paint boundary"
+    },
+    {
+      "file": "src/sw/browser/editor/native-cell-box-render.test.tsx",
+      "name": "projects native style=16 on the browser paint boundary"
+    },
+    {
+      "file": "src/sw/browser/editor/native-cell-box-render.test.tsx",
+      "name": "projects native style=17 on the browser paint boundary"
+    },
+    {
+      "file": "src/sw/browser/editor/native-collapsing-border-paint.test.tsx",
+      "name": "native collapsing paint preserves original cell lines and grouped history fixed=false"
+    },
+    {
+      "file": "src/sw/browser/editor/native-collapsing-border-paint.test.tsx",
+      "name": "native collapsing paint preserves original cell lines and grouped history fixed=true"
+    },
+    {
+      "file": "src/sw/browser/presentation/native-table-height-delta.test.tsx",
+      "name": "unrelated properties preserve mounted fixed rows selected=false"
+    },
+    {
+      "file": "src/sw/browser/presentation/native-table-height-delta.test.tsx",
+      "name": "unrelated properties preserve mounted fixed rows selected=true"
+    },
+    {
+      "file": "src/sw/browser/presentation/native-border-page.test.tsx",
+      "name": "actual selected native border page applies inner/outer/padding items to original owners and grouped history"
+    },
+    {
+      "file": "src/sw/browser/presentation/native-table-border-owner-history.test.tsx",
+      "name": "thin native shell forwards its actual cursor once and renders only the current cell change through repeated UndoRedo"
+    }
+  ],
+  "prior214UncaughtErrors": 27
+}

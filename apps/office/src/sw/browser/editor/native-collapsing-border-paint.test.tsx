@@ -118,6 +118,7 @@ it.each([false, true])(
       );
       expect(node.GetText()).toContain("!");
     } finally {
+      cleanup();
       session.Close();
     }
   },

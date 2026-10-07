@@ -88,6 +88,7 @@ it("thin native shell forwards its actual cursor once and renders only the curre
       expect(f.node.GetText()).toBe("Cell 3");
     }
   } finally {
+    cleanup();
     f.session.Close();
   }
 });

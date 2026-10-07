@@ -1,0 +1,16 @@
+{
+  "records": [
+    {
+      "command": "Unchanged JSDoc validator on approved changed code/acceptance paths; actual physical-line count",
+      "exit": 0,
+      "errors": [],
+      "physicalLines": {
+        "apps/office/src/sw/browser/editor/native-cell-box-render.test.tsx": 288,
+        "apps/office/src/sw/browser/editor/native-collapsing-border-paint.test.tsx": 126,
+        "apps/office/src/sw/browser/presentation/native-table-height-delta.test.tsx": 124,
+        "apps/office/src/sw/browser/presentation/native-border-page.test.tsx": 333,
+        "apps/office/src/sw/browser/presentation/native-table-border-owner-history.test.tsx": 131
+      }
+    }
+  ]
+}
