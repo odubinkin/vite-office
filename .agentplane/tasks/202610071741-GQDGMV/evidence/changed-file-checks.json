@@ -1,0 +1,23 @@
+{
+  "records": [
+    {
+      "command": "Unchanged JSDoc validator on approved changed code/acceptance paths; actual physical-line count",
+      "exit": 0,
+      "errors": [],
+      "physicalLines": {
+        "apps/office/src/unotools/source/misc/fontcvt.ts": 67,
+        "apps/office/src/xmloff/source/core/xmlimp.ts": 296,
+        "apps/office/src/xmloff/source/style/xmlnumi.ts": 311,
+        "apps/office/src/sw/source/filter/xml/xmltbli.ts": 206,
+        "apps/office/src/sw/source/filter/xml/xmlimp.ts": 924,
+        "apps/office/src/vcl/browser/lo-runtime-fonts.css": 963,
+        "scripts/check-module-boundaries.mjs": 368,
+        "apps/office/src/xmloff/source/style/native-legacy-bullet-symbol.test.ts": 174,
+        "apps/office/e2e/native-legacy-bullet-symbol.spec.ts": 168,
+        "scripts/check-legacy-font-boundary.test.ts": 21,
+        "apps/office/src/xmloff/source/core/xmlimp.test.ts": 187,
+        "apps/office/src/sax/source/fastparser/fastparser.test.ts": 244
+      }
+    }
+  ]
+}

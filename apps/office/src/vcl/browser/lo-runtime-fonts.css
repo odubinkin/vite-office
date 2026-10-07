@@ -952,3 +952,11 @@
   font-style: normal;
   font-weight: 400;
 }
+
+/* Native symbol fallback relates StarSymbol to the available OpenSymbol face. */
+@font-face {
+  font-family: "StarSymbol";
+  src: url("/fonts/truetype/opens___.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+}

@@ -1,0 +1,50 @@
+{
+  "records": [
+    {
+      "phase": "absent-profile",
+      "kind": "build",
+      "exit": 0,
+      "uncaughtErrorCount": 0,
+      "outputSHA256": "beefc99a12b866e024e6e543c0c2f396f49d5a6fdd6d55eb938606d8abe96990",
+      "assertionFailures": 0
+    },
+    {
+      "phase": "absent-profile",
+      "kind": "app",
+      "exit": 1,
+      "uncaughtErrorCount": 0,
+      "outputSHA256": "a4afef4305a305d1d6178cba2faa96723efc769dc9145503e37eb63fa828f53b",
+      "assertionFailures": 0
+    },
+    {
+      "phase": "absent-profile",
+      "kind": "inventory",
+      "exit": 0,
+      "uncaughtErrorCount": 0,
+      "outputSHA256": "36da4bc56629e37e7662fd7186a992bb055dc752e9db498992f8cefb84d61ad5",
+      "assertionFailures": 0
+    },
+    {
+      "phase": "absent-profile",
+      "kind": "scripts",
+      "exit": 0,
+      "uncaughtErrorCount": 0,
+      "outputSHA256": "b7cca52ee0e8cd97291ce9a5c3981e091a980cc90d1cb6eaa172ffddd75b9da6",
+      "assertionFailures": 0
+    },
+    {
+      "phase": "absent-profile",
+      "kind": "chromium",
+      "exit": 0,
+      "uncaughtErrorCount": 0,
+      "outputSHA256": "050cbc08f602237ab85631be936757deaa4eb3576953c1cc88fc17fd24c1c25f",
+      "assertionFailures": 0
+    }
+  ],
+  "unresolvedUncaught": 0,
+  "staticFailure": "Initial typecheck rejected frozen converter private-field structural typing. Closure1 closed that type but exposed a fresh font item constructor missing its Which argument. Closure2 root tools/app typecheck and changed-input format/lint passed; all5other initial static gates passed.",
+  "runtimeFailures": [],
+  "passingReplay": 0,
+  "runtimeResolution": "All13582 app110 inventory15 infrastructure286 Chromium actual cases passed the sole absent-upstream profile. No runtime closure, skipped observations, passing replay, extra full run or unchanged rebuild. App exit1 solely original full-graph branch coverage observation: byte-unchanged browser edit window zero inferred else plus paintfrm negative inferred else. Actual complete current-source proof adds complete identical prior counters or uses entire previous verified source/maps/counters for invalid aggregate, never sanitizes individual counters.",
+  "processObservation": "All semantic/task writes waited for actual terminal profile/static handles; vendor restored. Source review initially referenced an absent guessed xmloff library file; route recomputed, actual pinned xmlimp.cxx unotools fontcvt include used as native dependency evidence, no implementation change or broad source rerun."
+}

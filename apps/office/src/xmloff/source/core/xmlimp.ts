@@ -8,6 +8,10 @@ import {
   type FastXmlParseOptions,
 } from "../../../sax/source/fastparser/fastparser";
 import { getXMLToken, XMLToken } from "./xmltoken";
+import {
+  createLegacySymbolImportConverter,
+  type ConvertChar,
+} from "../../../unotools/source/misc/fontcvt";
 
 /** ODF import's SAX resource ceilings. */
 export type OdfXmlLimits = FastXmlLimits;
@@ -178,13 +182,29 @@ export class SvXMLIgnoreContext extends SvXMLImportContext {
 }
 
 /** Root factory matching LibreOffice's CreateFastContext boundary. */
-export interface SvXMLImport {
+export interface SvXMLImportRootFactory {
   createFastContext(element: XMLToken, attributes: FastAttributeList): SvXMLImportContext | null;
   createUnknownContext(
     namespaceURI: string,
     localName: string,
     attributes: FastAttributeList,
   ): SvXMLImportContext | null;
+}
+
+/** Owns the represented native lazy symbol converters; other importer responsibilities remain outside this partial base. */
+export class SvXMLImport {
+  private hBatsFontConv: Readonly<ConvertChar> | undefined;
+  private hMathFontConv: Readonly<ConvertChar> | undefined;
+  /** Converts the supported legacy StarBats scalar with the import-owned lazy handle. @param character - Native scalar. @returns StarSymbol scalar. */
+  public ConvStarBatsCharToStarSymbol(character: number): number {
+    this.hBatsFontConv ??= createLegacySymbolImportConverter("StarBats");
+    return this.hBatsFontConv.RecodeChar(character);
+  }
+  /** Converts the supported legacy StarMath scalar with the independent import-owned handle. @param character - Native scalar. @returns StarSymbol scalar. */
+  public ConvStarMathCharToStarSymbol(character: number): number {
+    this.hMathFontConv ??= createLegacySymbolImportConverter("StarMath");
+    return this.hMathFontConv.RecodeChar(character);
+  }
 }
 
 /** One owned context stack frame. */
@@ -199,7 +219,7 @@ interface ContextFrame {
 /** Parses XML through fast import contexts. @param xml - Decoded XML. @param xmlImport - Root factory. @param options - Limits and cancellation. @returns Nothing. */
 export function parseOdfXmlStream(
   xml: string,
-  xmlImport: SvXMLImport,
+  xmlImport: SvXMLImportRootFactory,
   options: OdfXmlParseOptions = {},
 ): void {
   const stack: ContextFrame[] = [];

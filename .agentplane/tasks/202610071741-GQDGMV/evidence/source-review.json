@@ -1,0 +1,139 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "productionSHA256": {
+    "apps/office/src/unotools/source/misc/fontcvt.ts": "a3ba68456c1e5395fb331879946016e10a88c77db551275300a3ed527f3707f9",
+    "apps/office/src/xmloff/source/core/xmlimp.ts": "b3dc68667cd1d4d0db68bd3395bb0c5ae6d041b3afea2c27dd3974a7354e4a28",
+    "apps/office/src/xmloff/source/style/xmlnumi.ts": "c5c5fc9904e81b298400e5f26e715c953ec7614dca6216d9e7a10f749f5340e7",
+    "apps/office/src/sw/source/filter/xml/xmltbli.ts": "64a63d7eded803bd22f00ac776b79d7f184aa7b4f5f91b99109b1231c4e78bd8",
+    "apps/office/src/sw/source/filter/xml/xmlimp.ts": "19dc0d93f85b94c069a8423d1e69347c594bf01b00602a386db8f5c6b6ece964",
+    "apps/office/src/vcl/browser/lo-runtime-fonts.css": "e9c58a5740068c98764ccc577fc1e5b8bf4fb8d8579d084b6e2321a2efd9127f",
+    "scripts/check-module-boundaries.mjs": "6dd2416c3c84f55f543ee186f13026dc7695ecf7075eb2dd1824fc34b4b734ba"
+  },
+  "sourceSHA256": {
+    "unotools/source/misc/fontcvt.cxx": "6fec8cd932aebfa2f96697af25eacfaa841f8cae67f7938a7fadf3cd25dc9abe",
+    "xmloff/source/core/xmlimp.cxx": "c7f1cf389f94f8edf7a290c36cb9ed7127199d41df53ff5b065aa58661f5de78",
+    "xmloff/source/style/xmlnumi.cxx": "0d3dc7ad575d5686ca47be2004bb8db553a233863f5f2c84561258adba6fa7e1",
+    "unotools/source/misc/fontdefs.cxx": "1520341392fcfc93ef8b76526cd80dddd84e0f27bf33ae3d1062adf4d9d57e63",
+    "vcl/source/font/PhysicalFontCollection.cxx": "23553db06a1bbf645fb4438ceea5db2772c022242af551d4645bfe149b31839e",
+    "sw/source/filter/xml/xmlimp.cxx": "16a4ee3e35ce862dafefcac9ba6264d23c145392665af5a74eb0a2ac27da6e20"
+  },
+  "anchors": {
+    "unotools/source/misc/fontcvt.cxx": [
+      {
+        "marker": "aStarBatsTab",
+        "line": 37
+      },
+      {
+        "marker": "aStarMathTab",
+        "line": 111
+      },
+      {
+        "marker": "ConvertChar::RecodeChar",
+        "line": 1239
+      },
+      {
+        "marker": "CreateFontToSubsFontConverter",
+        "line": 1310
+      },
+      {
+        "marker": "0xE12C",
+        "line": 1263
+      }
+    ],
+    "xmloff/source/core/xmlimp.cxx": [
+      {
+        "marker": "SvXMLImport::ConvStarBatsCharToStarSymbol",
+        "line": 1958
+      },
+      {
+        "marker": "SvXMLImport::ConvStarMathCharToStarSymbol",
+        "line": 1975
+      },
+      {
+        "marker": "hBatsFontConv",
+        "line": 351
+      },
+      {
+        "marker": "hMathFontConv",
+        "line": 352
+      },
+      {
+        "marker": "unotools/fontcvt.hxx",
+        "line": 77
+      }
+    ],
+    "xmloff/source/style/xmlnumi.cxx": [
+      {
+        "marker": "SvxXMLListLevelStyleContext_Impl::GetProperties",
+        "line": 364
+      },
+      {
+        "marker": "ConvStarBatsCharToStarSymbol",
+        "line": 468
+      },
+      {
+        "marker": "ConvStarMathCharToStarSymbol",
+        "line": 473
+      },
+      {
+        "marker": "StarSymbol",
+        "line": 465
+      }
+    ],
+    "unotools/source/misc/fontdefs.cxx": [
+      {
+        "marker": "IsOpenSymbol",
+        "line": 409
+      }
+    ],
+    "vcl/source/font/PhysicalFontCollection.cxx": [
+      {
+        "marker": "ImplInitGenericGlyphFallback",
+        "line": 108
+      },
+      {
+        "marker": "starsymbol",
+        "line": 118
+      },
+      {
+        "marker": "opensymbol",
+        "line": 118
+      }
+    ],
+    "sw/source/filter/xml/xmlimp.cxx": [
+      {
+        "marker": "SwXMLImport::SwXMLImport",
+        "line": 322
+      },
+      {
+        "marker": "SvXMLImport",
+        "line": 100
+      }
+    ]
+  },
+  "tables": [
+    {
+      "name": "aStarBatsTab",
+      "slots": 224,
+      "zeroSlots": 29,
+      "allNativeValuesIdentical": true,
+      "observableOutputSHA256": "b38a0e2c74c5a58d7f1eaf8c11d6feb5eb3e8954945290006fa44042cdbb7e77"
+    },
+    {
+      "name": "aStarMathTab",
+      "slots": 224,
+      "zeroSlots": 5,
+      "allNativeValuesIdentical": true,
+      "observableOutputSHA256": "86d64838b3b06ed42f60d4e9db288064c3985a30f7b07885cd44d26294738db3"
+    }
+  ],
+  "scope": "Existing legacy bullet glyph/family input uses exact native table branch, uint16 alias arithmetic, holes U+E12C and out-of-range retention. Actual implemented SvXMLImport base owns independent lazy handles; production list levels borrow original Writer importer. Native GetProperties mutates glyph each publication while renaming only published Font descriptor; stored legacy family retained. Explicit SAX factory structural port replaces interface-only placeholder; two old type aliases preserve all inputs/assertions. Native related StarSymbol/OpenSymbol browser fallback preserves stored StarSymbol family; all prior code classification/default/status/I/O deviations retained.",
+  "residuals": [
+    "Native converter functions/strings/export path and other font tables/search-name/factory flags remain unrepresented; no full converter/factory/class claim.",
+    "Native SvXMLImport is only its actual implemented symbol conversion responsibility; full import state/services/contexts and original Writer table import adapter remain partial. Isolated old level-constructor calls instantiate that implemented owner; production borrows original importer.",
+    "Complete physical glyph coverage/metrics/shaping/fallback ranking, full FontDescriptor members/SwFont/script/style/redline/graphics and ODT true compatibility flag/config persistence remain unverified.",
+    "Adjacent generic empty bullet publication differs from native NUL BulletChar string and exporter zero/control fallback remains to source-audit; no closure claim from legacy-only zero evidence.",
+    "Exhaustive parent goal remains ACTIVE; registered save/open/recovery deviations unchanged."
+  ],
+  "failures": []
+}

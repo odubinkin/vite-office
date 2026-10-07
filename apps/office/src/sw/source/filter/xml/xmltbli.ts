@@ -3,6 +3,7 @@ import { SwFormatVertOrient } from "../../../inc/fmtornt";
 import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
 import { importBoxProperties } from "../../../../xmloff/source/style/bordrhdl";
 import { RES_BOX } from "../../../inc/hintids";
+import { SvXMLImport } from "../../../../xmloff/source/core/xmlimp";
 
 import type { OdfTableStyle } from "../../../../xmloff/source/table/XMLTableImport";
 import type { SwDoc } from "../../core/doc/doc";
@@ -16,7 +17,7 @@ import type {
 } from "../../core/table/swtable";
 
 /** Keeps table import state scoped to one Writer XML stream coordinator. */
-export class SwXMLTableImport {
+export class SwXMLTableImport extends SvXMLImport {
   private readonly tableStyles = new Map<string, OdfTableStyle>();
   private activeTable: SwTable | undefined;
   private activeRow: SwTableLine | undefined;
@@ -27,7 +28,9 @@ export class SwXMLTableImport {
   private headerRowCount = 0;
 
   /** Binds the table callbacks to the temporary document. @param document - Canonical Writer graph. @returns Nothing. */
-  public constructor(public readonly document: SwDoc) {}
+  public constructor(public readonly document: SwDoc) {
+    super();
+  }
 
   /** Retains a referenced table style until SAX body import. */
   /** Projects one canonical Writer table value. @param argument1 - Callback input. @param argument2 - Callback input. @returns Callback result. */ public registerTableStyle(

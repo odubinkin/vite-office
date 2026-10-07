@@ -1,0 +1,65 @@
+{
+  "app": {
+    "original": 13582,
+    "current": 13582,
+    "newCases": 0,
+    "resolved": 0,
+    "passed": 13582,
+    "unresolvedCount": 0,
+    "skippedObservationsRetained": 0,
+    "passingReplay": 0,
+    "originalUncaughtErrorCases": 0,
+    "finalUncaughtErrorCases": 0,
+    "inputs": [
+      {
+        "file": "GQDGMV.app-results.json",
+        "sha256": "d9904caacde059e576363dae9cbebe1b7cfac8ec601203617e1e8d1e39a31362",
+        "passed": 13582,
+        "failed": 0,
+        "skipped": 0
+      }
+    ]
+  },
+  "inventory": {
+    "original": 110,
+    "current": 110,
+    "newCases": 0,
+    "resolved": 0,
+    "passed": 110,
+    "unresolvedCount": 0,
+    "skippedObservationsRetained": 0,
+    "passingReplay": 0,
+    "originalUncaughtErrorCases": 0,
+    "finalUncaughtErrorCases": 0,
+    "inputs": [
+      {
+        "file": "GQDGMV.inventory-results.json",
+        "sha256": "1473f27f2d18bd26ed0524a30b63d4982af8d5f83ac8ec94ab141bbb37f85d1c",
+        "passed": 110,
+        "failed": 0,
+        "skipped": 0
+      }
+    ]
+  },
+  "chromium": {
+    "current": 286,
+    "passed": 286,
+    "unresolvedCount": 0,
+    "passingReplay": 0,
+    "inputs": [
+      {
+        "file": "GQDGMV.chromium-results.json",
+        "sha256": "38e4756950239f3a831ee8cc2b427c8f29387400977c4cf5ed1268103785a694",
+        "counts": {
+          "startTime": "2026-10-07T17:58:41.170Z",
+          "duration": 147548.833,
+          "expected": 286,
+          "skipped": 0,
+          "unexpected": 0,
+          "flaky": 0
+        }
+      }
+    ]
+  },
+  "failures": []
+}

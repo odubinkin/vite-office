@@ -7,7 +7,7 @@ import {
   parseOdfXmlStream,
   SvXMLIgnoreContext,
   SvXMLImportContext,
-  type SvXMLImport,
+  type SvXMLImportRootFactory as SvXMLImport,
 } from "../../../xmloff/source/core/xmlimp";
 import { ODF_NAMESPACES, XMLToken } from "../../../xmloff/source/core/xmltoken";
 

@@ -43,7 +43,7 @@ import {
   SvXMLImportContext,
   type OdfXmlDiagnostic,
   type OdfXmlParseOptions,
-  type SvXMLImport as SvXMLImportContract,
+  type SvXMLImportRootFactory as SvXMLImportContract,
 } from "../../../../xmloff/source/core/xmlimp";
 import { XMLToken } from "../../../../xmloff/source/core/xmltoken";
 import {

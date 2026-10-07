@@ -4,7 +4,7 @@ import {
   FastAttributeList,
   parseOdfXmlStream,
   SvXMLImportContext,
-  type SvXMLImport,
+  type SvXMLImportRootFactory as SvXMLImport,
 } from "./xmlimp";
 import { XMLToken, ODF_NAMESPACES } from "./xmltoken";
 

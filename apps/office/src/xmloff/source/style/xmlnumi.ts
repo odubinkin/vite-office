@@ -1,5 +1,5 @@
 /** @fileoverview Owns independent supported list-level positioning and attribute import from pinned xmlnumi.cxx. */
-import { FastAttributeList, SvXMLImportContext } from "../core/xmlimp";
+import { FastAttributeList, SvXMLImport, SvXMLImportContext } from "../core/xmlimp";
 import { ODF_NAMESPACES, XMLToken } from "../core/xmltoken";
 import { SvXMLUnitConverter } from "../core/xmluconv";
 import { importFamilyName } from "./XMLFontStylesContext";
@@ -58,7 +58,8 @@ export class SvxXMLListLevelStyleContext_Impl extends SvXMLImportContext {
   };
   private readonly level: number;
   private readonly kind: "bullet" | "numbered";
-  private readonly bulletChar: string;
+  private bulletChar: string;
+  private readonly xmlImport: SvXMLImport;
   private readonly format: string;
   private readonly suffix: string;
   private readonly prefix: string;
@@ -73,6 +74,7 @@ export class SvxXMLListLevelStyleContext_Impl extends SvXMLImportContext {
     private readonly fontDeclarations?: Pick<XMLListStyleImportTarget, "getFontFace">,
   ) {
     super();
+    this.xmlImport = fontDeclarations instanceof SvXMLImport ? fontDeclarations : new SvXMLImport();
     this.kind = element === XMLToken.TEXT_LIST_LEVEL_STYLE_BULLET ? "bullet" : "numbered";
     attributes.assertOnly(
       [
@@ -152,12 +154,25 @@ export class SvxXMLListLevelStyleContext_Impl extends SvXMLImportContext {
       this.listFormat += this.suffix;
     }
     const distance = this.legacy.minLabelDistance;
+    let bulletFontName = this.bulletFontName;
+    if (this.kind === "bullet" && bulletFontName !== "") {
+      // The source mutates cBullet on each publication while changing only
+      // the published descriptor family, not the stored legacy font name.
+      const scalar = this.bulletChar.codePointAt(0) ?? 0;
+      if (/^starbats$/i.test(bulletFontName)) {
+        this.bulletChar = String.fromCodePoint(this.xmlImport.ConvStarBatsCharToStarSymbol(scalar));
+        bulletFontName = "StarSymbol";
+      } else if (/^starmath$/i.test(bulletFontName)) {
+        this.bulletChar = String.fromCodePoint(this.xmlImport.ConvStarMathCharToStarSymbol(scalar));
+        bulletFontName = "StarSymbol";
+      }
+    }
     return {
       level: this.level,
       kind: this.kind,
       numberingType: type.value,
       ...(this.kind === "bullet"
-        ? { bulletChar: this.bulletChar, bulletFont: { name: this.bulletFontName } }
+        ? { bulletChar: this.bulletChar, bulletFont: { name: bulletFontName } }
         : {}),
       prefix: this.prefix,
       suffix: this.suffix,

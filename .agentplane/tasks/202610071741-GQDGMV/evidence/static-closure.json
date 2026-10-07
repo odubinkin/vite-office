@@ -1,0 +1,34 @@
+{
+  "records": [
+    {
+      "command": "npm run typecheck --workspace @vite-office/office",
+      "exit": 2,
+      "bytes": 490,
+      "sha256": "afad715d9d9a8347a1eb35a8159f3659bd7cef1652ad6ac0ec32f95a198a5e37",
+      "diagnostics": [
+        "src/xmloff/source/style/native-legacy-bullet-symbol.test.ts(140,23): error TS2554: Expected 2-4 arguments, but got 1.",
+        "npm error Lifecycle script `typecheck` failed with error:",
+        "npm error code 2",
+        "npm error path /Users/odubinkin/Projects/vite-office/apps/office",
+        "npm error workspace @vite-office/office@0.1.0",
+        "npm error location /Users/odubinkin/Projects/vite-office/apps/office",
+        "npm error command failed",
+        "npm error command sh -c tsc --noEmit"
+      ]
+    },
+    {
+      "command": "npm exec -- prettier --check apps/office/src/unotools/source/misc/fontcvt.ts apps/office/src/xmloff/source/core/xmlimp.ts",
+      "exit": 0,
+      "bytes": 66,
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+      "diagnostics": []
+    },
+    {
+      "command": "npm exec -- eslint --max-warnings 0 apps/office/src/unotools/source/misc/fontcvt.ts apps/office/src/xmloff/source/core/xmlimp.ts",
+      "exit": 0,
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnostics": []
+    }
+  ]
+}

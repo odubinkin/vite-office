@@ -1,0 +1,51 @@
+{
+  "records": [
+    {
+      "command": "npm run format:check",
+      "exit": 0,
+      "bytes": 122,
+      "sha256": "ac1729f86eee878f5f4d6c948c510d2cc91bb5568f6dd088f70f3885e137d116",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run lint",
+      "exit": 0,
+      "bytes": 55,
+      "sha256": "a6172cb57fa696e705408fdc605fba1ae07b852fdf0614d7c2b623349e285b6e",
+      "diagnostics": [
+        "> eslint . --max-warnings 0"
+      ]
+    },
+    {
+      "command": "npm run typecheck",
+      "exit": 2,
+      "bytes": 517,
+      "sha256": "fd88ee1b08e7aebc94655edd360fe48c1800d7586c75e6754be029aa2c9fe33e",
+      "diagnostics": [
+        "apps/office/src/unotools/source/misc/fontcvt.ts(63,34): error TS2741: Property 'table' is missing in type 'Readonly<ConvertChar>' but required in type 'ConvertChar'.",
+        "apps/office/src/unotools/source/misc/fontcvt.ts(63,45): error TS2741: Property 'table' is missing in type 'Readonly<ConvertChar>' but required in type 'ConvertChar'."
+      ]
+    },
+    {
+      "command": "npm run check:dependencies",
+      "exit": 0,
+      "bytes": 189,
+      "sha256": "09d26cd386849505c0b35cb2894e42d3119df3d36e2409b401aa95c02a474a3b",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:docs",
+      "exit": 0,
+      "bytes": 119,
+      "sha256": "0942917f582179614314caa32f4b27406f2cdc4bdd472f7659b8e484d2ed93bc",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:file-size",
+      "exit": 0,
+      "bytes": 3996,
+      "sha256": "d2c3a8ee9e3870f6a50e8f30b67dd3075a2fd67b7ed4245e5ea0349a62d4e6a6",
+      "diagnostics": []
+    }
+  ]
+}

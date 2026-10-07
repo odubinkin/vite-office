@@ -1,0 +1,58 @@
+{
+  "base": "42db07983fedaf1289219d1633ae2ef1c54942e8",
+  "semanticPaths": [
+    "apps/office/e2e/native-legacy-bullet-symbol.spec.ts",
+    "apps/office/src/sax/source/fastparser/fastparser.test.ts",
+    "apps/office/src/sw/source/filter/xml/xmlimp.ts",
+    "apps/office/src/sw/source/filter/xml/xmltbli.ts",
+    "apps/office/src/unotools/source/misc/fontcvt.ts",
+    "apps/office/src/vcl/browser/lo-runtime-fonts.css",
+    "apps/office/src/xmloff/source/core/xmlimp.test.ts",
+    "apps/office/src/xmloff/source/core/xmlimp.ts",
+    "apps/office/src/xmloff/source/style/native-legacy-bullet-symbol.test.ts",
+    "apps/office/src/xmloff/source/style/xmlnumi.ts",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/source-provenance.json",
+    "scripts/check-legacy-font-boundary.test.ts",
+    "scripts/check-module-boundaries.mjs"
+  ],
+  "scopeCount": 14,
+  "priorAcceptanceFiles": 597,
+  "byteIdenticalAcceptanceFiles": 595,
+  "exactSourceBackedMigrations": [
+    {
+      "path": "apps/office/src/xmloff/source/core/xmlimp.test.ts",
+      "beforeSHA256": "a455983d6974402936fa141db4d05d18ff967ba16646a80be65fe94471d0239b",
+      "currentSHA256": "a68609e6f894db7b2b92df9da69893d89e4101ab308f248e047d662aa67a7900",
+      "change": "Only type import aliases renamed explicit SAX root factory port; all runtime inputs and assertions byte-identical",
+      "source": "Native SvXMLImport conversion owner is now an actual implemented base, root factory remains explicit structural SAX port"
+    },
+    {
+      "path": "apps/office/src/sax/source/fastparser/fastparser.test.ts",
+      "beforeSHA256": "a9ff0379c23449c23025f6e1b0612e50417aec2331520d365ca5197134b7e47b",
+      "currentSHA256": "2fa8c96df4da2943bc9c4cd439583eccd90b3fdd4301b6325751fc96b45c854f",
+      "change": "Only type import aliases renamed explicit SAX root factory port; all runtime inputs and assertions byte-identical",
+      "source": "Native SvXMLImport conversion owner is now an actual implemented base, root factory remains explicit structural SAX port"
+    }
+  ],
+  "newAcceptanceFiles": [
+    "apps/office/src/xmloff/source/style/native-legacy-bullet-symbol.test.ts",
+    "apps/office/e2e/native-legacy-bullet-symbol.spec.ts",
+    "scripts/check-legacy-font-boundary.test.ts"
+  ],
+  "metadata": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "oldRecords": 301,
+      "currentRecords": 302,
+      "allPriorFieldsPrefixesAndStatusesPreserved": true
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "oldRecords": 301,
+      "currentRecords": 302,
+      "allPriorFieldsPrefixesAndStatusesPreserved": true
+    }
+  ],
+  "failures": []
+}
