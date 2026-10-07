@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202610071544-HP2B9C",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-07T16:04:16.663Z",
+  "verdict": "pass",
+  "summary": "Same current agent EVALUATOR, explicitly not independent: exact implementation 3b48e0a5d85344ad8c3744767455565bdff9e675 checked clean; actual current-source coverage/cases/whole maps and regions, preserved588 acceptance/298prior fields plus1unverified native mapping, source/policy/default exception limits reviewed. Bounded Number paint slice verified; broad parity remains ACTIVE.",
+  "evaluated_sha": "3b48e0a5d85344ad8c3744767455565bdff9e675",
+  "blueprint_digest": "911a21262cfb4746dcbb9ee75e9e183c110011253984b4f40c909503846bb8da",
+  "findings": [
+    "13,566app110inventory14infra280Chrome pass after exactly5original failures closed,0passing replay/uncaught/unresolved. Complete app/inventory all4 metrics100; filtered exits1 retain full-graph threshold diagnostics, no exclusions/clamps/skips promoted. Process static-ledger overlap explicitly retained without semantic drift."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610071544-HP2B9C/README.md",
+    ".agentplane/tasks/202610071544-HP2B9C/evidence/exact-sha-review.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Full native painter frame/portion geometry, non-Number branches, RTL/bidi/redline and complete color/config/theme/persistence pipeline remain unverified; deliberate save/open/recovery deviations preserved."
+  ]
+}
