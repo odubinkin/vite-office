@@ -1,10 +1,11 @@
 ---
 id: "202610071741-GQDGMV"
 title: "Apply native StarBats and StarMath bullet symbol import conversion"
-status: "DOING"
+result_summary: "Implemented native legacy bullet symbol import conversion; ONE upstream-absent full runtime passed 13582 app, 110 inventory, 15 infrastructure and 286 Chromium cases, zero passing replay; actual source-bound all-four app/inventory coverage 100 percent, exact implementation review and same-current-agent explicitly not independent EVALUATOR PASS. Persistent parity goal remains active."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
     - ".agentplane/tasks/202610071741-GQDGMV/evidence/exact-sha-review.json"
   findings:
     - "Exact 448 native table entries and uint16/zero/out-of-range/repeated conversion behavior match pinned source. XML importer owns lazy converters; UI receives native glyph and StarSymbol Font. All prior acceptance retained, only two type-only aliases changed. Native import classes, other conversion tables, full physical glyph coverage, font shaping/configuration and generic empty bullet behavior remain partial or unverified; persistent parity goal remains active."
-commit: null
+commit:
+  hash: "9a561bd4ee6196bfcb6ed957891741af8ed8ae5e"
+  message: "🧩 GQDGMV parity: apply native legacy bullet symbol import conversion"
 comments:
   -
     author: "CODER"
     body: "Start: native legacy bullet glyph/family conversion with actual immutable tables, lazy importer owner, explicit SAX factory port, source symbol fallback and complete existing I/O deviation preservation."
+  -
+    author: "CODER"
+    body: "Verified: Native StarBats/StarMath bullet import conversion, XML importer ownership and StarSymbol publication match the bounded pinned-source branch; all evidence and residuals recorded."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "PASS exact implementation 9a561bd4ee6196bfcb6ed957891741af8ed8ae5e; same-current-agent EVALUATOR explicitly not independent PASS. ONE upstream-absent full runtime 13582 app/110 inventory/15 infrastructure/286 Chromium, zero passing replay, source-bound all-four app and inventory coverage 100 percent; final static/source/scope/artifact gates PASS, residuals recorded. Final Findings and Verification persisted before this canonical verification."
+  -
+    type: "status"
+    at: "2026-10-07T18:12:23.872Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Native StarBats/StarMath bullet import conversion, XML importer ownership and StarSymbol publication match the bounded pinned-source branch; all evidence and residuals recorded."
 doc_version: 3
-doc_updated_at: "2026-10-07T18:12:21.389Z"
+doc_updated_at: "2026-10-07T18:12:23.873Z"
 doc_updated_by: "CODER"
 description: "Iteration222: existing ODT bullet glyph/family input must follow xmlnumi GetProperties legacy font conversion, native immutable unotools tables and lazy SvXMLImport converter ownership; actual browser symbol fallback follows native StarSymbol/OpenSymbol relation. Preserve deliberate I/O/recovery deviations and all unrelated prior acceptance/metadata."
 sections:
