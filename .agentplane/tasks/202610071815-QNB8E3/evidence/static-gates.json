@@ -1,0 +1,51 @@
+{
+  "records": [
+    {
+      "command": "npm run format:check",
+      "exit": 1,
+      "bytes": 214,
+      "sha256": "f9b6b95800db7fa715580ca87a5de4b070ee71ca4f54ae2134473b371c5911f2",
+      "diagnostics": [
+        "[warn] apps/office/e2e/native-empty-bullet.spec.ts",
+        "[warn] Code style issues found in the above file. Run Prettier with --write to fix."
+      ]
+    },
+    {
+      "command": "npm run lint",
+      "exit": 0,
+      "bytes": 55,
+      "sha256": "a6172cb57fa696e705408fdc605fba1ae07b852fdf0614d7c2b623349e285b6e",
+      "diagnostics": [
+        "> eslint . --max-warnings 0"
+      ]
+    },
+    {
+      "command": "npm run typecheck",
+      "exit": 0,
+      "bytes": 240,
+      "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:dependencies",
+      "exit": 0,
+      "bytes": 189,
+      "sha256": "09d26cd386849505c0b35cb2894e42d3119df3d36e2409b401aa95c02a474a3b",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:docs",
+      "exit": 0,
+      "bytes": 119,
+      "sha256": "f4641e6a7207d9739eff971f26dafe9b909932ea11f5de4d344ec28c6d9d4458",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:file-size",
+      "exit": 0,
+      "bytes": 3996,
+      "sha256": "17c72467b1be99837cd58ca527b5d00e8e949c9911b04dad2e31e4266184347c",
+      "diagnostics": []
+    }
+  ]
+}

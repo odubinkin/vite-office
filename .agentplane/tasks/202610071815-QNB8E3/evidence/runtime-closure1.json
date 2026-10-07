@@ -1,0 +1,31 @@
+{
+  "kind": "app",
+  "profile": "upstream-absent",
+  "command": "npm run test:coverage --workspace @vite-office/office -- src/xmloff/source/style/xmlnume.test.ts src/xmloff/source/style/xmlnumi.test.ts -t ^(?:owns native marker attribute omission, available-level clamping and bullet controls|retains native optional declaration defaults and byte-string integer indices|owns source-created leaf references and reads them only at list publication)$ --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/QNB8E3.closure1.app-results.json",
+  "originalFailedNames": [
+    {
+      "file": "src/xmloff/source/style/xmlnume.test.ts",
+      "name": "owns native marker attribute omission, available-level clamping and bullet controls"
+    },
+    {
+      "file": "src/xmloff/source/style/xmlnumi.test.ts",
+      "name": "retains native optional declaration defaults and byte-string integer indices"
+    },
+    {
+      "file": "src/xmloff/source/style/xmlnumi.test.ts",
+      "name": "owns source-created leaf references and reads them only at list publication"
+    }
+  ],
+  "vendorRestored": true,
+  "exit": 1,
+  "outputSHA256": "ef7cf4d5f46390a26716598ef3734efe42656a639587d355f6b806443a51f698",
+  "bytes": 33267,
+  "caseCounts": {
+    "passed": 3,
+    "failed": 0,
+    "skipped": 6,
+    "total": 9
+  },
+  "failedCases": [],
+  "unhandledErrorCount": 0
+}

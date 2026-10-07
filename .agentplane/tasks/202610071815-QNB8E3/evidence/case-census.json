@@ -1,0 +1,72 @@
+{
+  "app": {
+    "original": 13585,
+    "current": 13585,
+    "newCases": 0,
+    "resolved": 3,
+    "passed": 13585,
+    "unresolvedCount": 0,
+    "skippedObservationsRetained": 6,
+    "passingReplay": 0,
+    "originalUncaughtErrorCases": 0,
+    "finalUncaughtErrorCases": 0,
+    "inputs": [
+      {
+        "file": "QNB8E3.app-results.json",
+        "sha256": "777f2962060f987992dc96656dce722f58007c6aadef0c41fd93294bcaf20c01",
+        "passed": 13582,
+        "failed": 3,
+        "skipped": 0
+      },
+      {
+        "file": "QNB8E3.closure1.app-results.json",
+        "sha256": "5d50a3f9ac21f263900716753d044b10944fc5aa2e17204f217837f4020b10a8",
+        "passed": 3,
+        "failed": 0,
+        "skipped": 6
+      }
+    ]
+  },
+  "inventory": {
+    "original": 110,
+    "current": 110,
+    "newCases": 0,
+    "resolved": 0,
+    "passed": 110,
+    "unresolvedCount": 0,
+    "skippedObservationsRetained": 0,
+    "passingReplay": 0,
+    "originalUncaughtErrorCases": 0,
+    "finalUncaughtErrorCases": 0,
+    "inputs": [
+      {
+        "file": "QNB8E3.inventory-results.json",
+        "sha256": "cd04e000d00acce5a1fa9968b22816341ed98d1c2b78aa9a39d87fcca73f8ba7",
+        "passed": 110,
+        "failed": 0,
+        "skipped": 0
+      }
+    ]
+  },
+  "chromium": {
+    "current": 288,
+    "passed": 288,
+    "unresolvedCount": 0,
+    "passingReplay": 0,
+    "inputs": [
+      {
+        "file": "QNB8E3.chromium-results.json",
+        "sha256": "a867504dc5e17821e0a3e3ab6f1347c25fb78c5ad5d7c4ba5a14f1bdc8db59f7",
+        "counts": {
+          "startTime": "2026-10-07T18:24:54.370Z",
+          "duration": 147648.89,
+          "expected": 288,
+          "skipped": 0,
+          "unexpected": 0,
+          "flaky": 0
+        }
+      }
+    ]
+  },
+  "failures": []
+}

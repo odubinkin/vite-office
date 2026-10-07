@@ -1,0 +1,28 @@
+{
+  "records": [
+    {
+      "file": "QNB8E3.app.output",
+      "sha256": "262d6df167a5b499fb5b63ea5bef464fdf17bb46b0d206e740d40333132117e1",
+      "thresholdErrors": [
+        "ERROR: Coverage for branches (99.98%) does not meet global threshold (100%)"
+      ]
+    },
+    {
+      "file": "QNB8E3.closure1.app.output",
+      "sha256": "ef7cf4d5f46390a26716598ef3734efe42656a639587d355f6b806443a51f698",
+      "thresholdErrors": [
+        "ERROR: Coverage for lines (2.32%) does not meet global threshold (100%)",
+        "ERROR: Coverage for functions (0.7%) does not meet global threshold (100%)",
+        "ERROR: Coverage for statements (2.16%) does not meet global threshold (100%)",
+        "ERROR: Coverage for branches (1.26%) does not meet global threshold (100%)"
+      ]
+    }
+  ],
+  "initialStaticFailure": "format:check fresh native-empty-bullet.spec.ts only; other five gates PASS. Second formatter pass and changed fresh format/lint PASS.",
+  "originalRuntimeFailure": "Only three old scalar expectations; source-backed corrections preserve every input and all other assertions. Exactly original three cases passed in one narrow upstream-absent closure, six skipped retained without promotion.",
+  "coverageDisposition": "Initial app exit1 includes raw branch threshold99.98; closure exit1 solely unchanged full-graph thresholds. Entire identical source/maps or full contiguous declaration/body/enclosing branch/all-locations verified certificates establish actual current-source all-four100. Invalid paintfrm aggregate uses entire previous verified source/map/counters, no count sanitation.",
+  "readOnlyDiscoveryRecovery": "Missing guessed file paths and a not-yet-written raw profile output yielded no evidence; route recomputed and authoritative existing sources/terminal handles used. No runtime restarted on observation timeout.",
+  "noPassingReplay": true,
+  "noSecondFullProfile": true,
+  "vendorRestored": true
+}

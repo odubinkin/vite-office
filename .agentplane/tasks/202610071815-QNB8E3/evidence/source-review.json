@@ -1,0 +1,84 @@
+{
+  "pinSHA": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "tag": "libreoffice-26.8.0.2",
+  "records": [
+    {
+      "path": "xmloff/source/style/xmlnumi.cxx",
+      "sha256": "0d3dc7ad575d5686ca47be2004bb8db553a233863f5f2c84561258adba6fa7e1",
+      "anchors": [
+        "cBullet( 0 )",
+        "if (!aIter.isEmpty())",
+        "cBullet = aIter.toString().iterateCodePoints",
+        "OUString(&cBullet, 1)",
+        "ConvStarBatsCharToStarSymbol",
+        "ConvStarMathCharToStarSymbol"
+      ],
+      "anchorLines": [
+        238,
+        280,
+        282,
+        482,
+        468,
+        473
+      ]
+    },
+    {
+      "path": "xmloff/source/style/xmlnume.cxx",
+      "sha256": "8606376ea6a2e4378a69122f886719632c6c391bc26c98b477b2cdc35e5f286c",
+      "anchors": [
+        "sal_UCS4 cBullet = 0xf095",
+        "if( !sValue.isEmpty() )",
+        "cBullet = sValue.iterateCodePoints",
+        "if( cBullet )",
+        "if( cBullet < ' ' )",
+        "cBullet = 0xF000 + 149",
+        "OUString(&cBullet, 1)",
+        "XML_BULLET_CHAR, u\"\"_ustr"
+      ],
+      "anchorLines": [
+        93,
+        136,
+        138,
+        295,
+        297,
+        299,
+        302,
+        309
+      ]
+    },
+    {
+      "path": "sw/source/core/unocore/unosett.cxx",
+      "sha256": "a94596e54298e0c9d1191791cb4e98d30996d3c61ec547b677d25ed03ef2134b",
+      "anchors": [
+        "sal_UCS4 cBullet = rFormat.GetBulletChar()",
+        "aUString = OUString(&cBullet, 1)",
+        "u\"BulletChar\"_ustr, aUString"
+      ],
+      "anchorLines": [
+        1462,
+        1472,
+        1473
+      ]
+    }
+  ],
+  "production": [
+    {
+      "path": "apps/office/src/xmloff/source/style/xmlnumi.ts",
+      "sha256": "86735a970c3aaab4932d8744b5dd458971419652900da16454b77a3e5511e437"
+    },
+    {
+      "path": "apps/office/src/xmloff/source/style/xmlnume.ts",
+      "sha256": "77e6a5790e4515d606c1310bd912414971cc434db3f92bae573e8b519d4156f3"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/xmlexp.ts",
+      "sha256": "f8a34578b21b8908d48bc88411fbecb3833f9b567264c0376999eeb7fae884eb"
+    }
+  ],
+  "scope": "Native XML bullet scalar constructor/read/publication, exporter scalar default/zero/control/first-codepoint, actual Writer rule publication removing browser zero-to-empty projection.",
+  "residuals": [
+    "Full XML/UNO/filter/native UI/FontDescriptor/font shaping and all unrepresented properties remain partial/unverified.",
+    "Generic browser zero-to-empty visible marker remains intentional boundary; XML no longer uses it.",
+    "Registered save/open/recovery deviations unchanged; exhaustive persistent goal ACTIVE."
+  ]
+}

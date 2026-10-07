@@ -156,7 +156,7 @@ it("retains native optional declaration defaults and byte-string integer indices
       );
       expect(context.GetProperties().suffix).toBe("");
       expect(context.GetProperties().bulletChar).toBe(
-        token === XMLToken.TEXT_LIST_LEVEL_STYLE_NUMBER ? undefined : "",
+        token === XMLToken.TEXT_LIST_LEVEL_STYLE_NUMBER ? undefined : "\0",
       );
     }
   }
@@ -231,7 +231,7 @@ it("owns source-created leaf references and reads them only at list publication"
         level: 0,
         kind: "bullet",
         numberingType: 6,
-        bulletChar: "",
+        bulletChar: "\0",
         bulletFont: { name: "" },
         prefix: "",
         suffix: "",

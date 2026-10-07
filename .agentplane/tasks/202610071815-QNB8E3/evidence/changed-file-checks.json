@@ -1,0 +1,18 @@
+{
+  "records": [
+    {
+      "command": "Unchanged JSDoc validator on approved changed code/acceptance paths; actual physical-line count",
+      "exit": 0,
+      "errors": [],
+      "physicalLines": {
+        "apps/office/src/xmloff/source/style/xmlnumi.ts": 310,
+        "apps/office/src/xmloff/source/style/xmlnume.ts": 94,
+        "apps/office/src/sw/source/filter/xml/xmlexp.ts": 784,
+        "apps/office/src/xmloff/source/style/native-bullet-scalar.test.ts": 143,
+        "apps/office/e2e/native-empty-bullet.spec.ts": 80,
+        "apps/office/src/xmloff/source/style/xmlnumi.test.ts": 256,
+        "apps/office/src/xmloff/source/style/xmlnume.test.ts": 119
+      }
+    }
+  ]
+}

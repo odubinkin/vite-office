@@ -96,7 +96,7 @@ it("owns native marker attribute omission, available-level clamping and bullet c
   ).not.toContain("text:display-levels");
   for (const [bulletChar, expected] of [
     [undefined, "\uF095"],
-    ["", ""],
+    ["", "\uF095"],
     ["\u0001", "\uF095"],
     ["●", "●"],
   ] as const) {

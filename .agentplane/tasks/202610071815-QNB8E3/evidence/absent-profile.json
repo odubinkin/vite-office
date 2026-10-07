@@ -1,0 +1,203 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/xmloff/source/style/xmlnumi.ts": "86735a970c3aaab4932d8744b5dd458971419652900da16454b77a3e5511e437",
+    "apps/office/src/xmloff/source/style/xmlnume.ts": "77e6a5790e4515d606c1310bd912414971cc434db3f92bae573e8b519d4156f3",
+    "apps/office/src/sw/source/filter/xml/xmlexp.ts": "f8a34578b21b8908d48bc88411fbecb3833f9b567264c0376999eeb7fae884eb",
+    "apps/office/src/xmloff/source/style/native-bullet-scalar.test.ts": "d5584159baf89eac779446ee50e1db06b1d54d90f1f2339545898973cee3bd84",
+    "apps/office/e2e/native-empty-bullet.spec.ts": "9801321890e7b61a3ccdf0d361a31806257efb16b8b3f219de525ca0ce0f9373",
+    "apps/office/src/xmloff/source/style/xmlnumi.test.ts": "c2cbb824b6a952b1d3eba48630e4955870d86a21954cb781db1b65b09ab6e03f",
+    "apps/office/src/xmloff/source/style/xmlnume.test.ts": "806e27201dc3b98b98ea7e688d1866d30639ed2240cc37efd33c0917c09e74a0",
+    "docs/program/source-provenance.json": "caeb9324cecedeff4815dc2be21b1c1c1104389be61976e454ea3bb992c0e6fc",
+    "docs/program/parity/runtime-inventory.json": "4c81ddecf30c4e85dc2955e86708314e9225af5dddef6bb7ac9c577ea3d19a03"
+  },
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1443,
+      "sha256": "ffa3d120a87669c77c1559c60b250a3882c9ceff453f30805853f287545c12b0",
+      "totals": [],
+      "failedCases": [],
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/QNB8E3.app-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 74999,
+      "sha256": "262d6df167a5b499fb5b63ea5bef464fdf17bb46b0d206e740d40333132117e1",
+      "totals": [
+        "Test Files  2 failed | 446 passed (448)",
+        "Tests  3 failed | 13582 passed (13585)"
+      ],
+      "failedCases": [
+        {
+          "name": "apps/office/src/xmloff/source/style/xmlnume.test.ts > owns native marker attribute omission, available-level clamping and bullet controls",
+          "assertion": [
+            "AssertionError: expected '<text:list-level-style-bullet text:le…' to contain 'style:num-prefix=\"[\" style:num-suffix…'"
+          ]
+        },
+        {
+          "name": "apps/office/src/xmloff/source/style/xmlnumi.test.ts > retains native optional declaration defaults and byte-string integer indices",
+          "assertion": [
+            "AssertionError: expected '\\u0000' to be '' // Object.is equality"
+          ]
+        },
+        {
+          "name": "apps/office/src/xmloff/source/style/xmlnumi.test.ts > owns source-created leaf references and reads them only at list publication",
+          "assertion": [
+            "AssertionError: expected \"vi.fn()\" to be called with arguments: [ 'Owned', { name: 'Display', …(2) } ]"
+          ]
+        }
+      ],
+      "caseCounts": {
+        "passed": 13582,
+        "failed": 3,
+        "skipped": 0,
+        "total": 13585
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 16585,
+          "covered": 16585,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 18210,
+          "covered": 18210,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 4230,
+          "covered": 4230,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 13737,
+          "covered": 13735,
+          "skipped": 0,
+          "pct": 99.98
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 99.98
+      },
+      "incompleteFileCount": 2,
+      "coverageMapSHA256": "ae12e5cc6658c9d719622254fc34aabf3a6026b89015e258b68fb3cda4da4862",
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "inventory",
+      "command": "npm run test:inventory:coverage -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/QNB8E3.inventory-results.json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 40595,
+      "sha256": "00a2fca2a71c186189e762bd5cbe9596217e3087e71b20ff0afc58398cc5b36f",
+      "totals": [
+        "Test Files  36 passed (36)",
+        "Tests  110 passed (110)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "passed": 110,
+        "failed": 0,
+        "skipped": 0,
+        "total": 110
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 1464,
+          "covered": 1464,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 1523,
+          "covered": 1523,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 384,
+          "covered": 384,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 1081,
+          "covered": 1081,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100
+      },
+      "incompleteFileCount": 0,
+      "coverageMapSHA256": "963ddeb364c1ff8831c81087b5a896ca624fb8c6cb2b40af1340b9ceba4d7f61",
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "scripts",
+      "command": "npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts scripts/check-module-boundaries.test.ts scripts/check-legacy-font-boundary.test.ts",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 223,
+      "sha256": "5d7d2b52432b0d5d32c0a9c1ba6bec0dbabdf68d2a5b392745b456c5d4d83db6",
+      "totals": [
+        "Test Files  4 passed (4)",
+        "Tests  15 passed (15)"
+      ],
+      "failedCases": [],
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 39773,
+      "sha256": "ef2df48d545e5078d136a2f9acd7f52d225ebbb66cfb8f894a9c904500257d48",
+      "totals": [
+        "288 passed (2.5m)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "startTime": "2026-10-07T18:24:54.370Z",
+        "duration": 147648.89,
+        "expected": 288,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "unhandledErrorCount": 0
+    }
+  ]
+}

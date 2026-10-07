@@ -4,11 +4,7 @@
 import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
 import { exportBoxProperties } from "../../../../xmloff/source/style/bordrhdl";
 
-import {
-  getWriterNumFormatKind,
-  getWriterNumFormatBullet,
-  SvxNumType,
-} from "../../core/doc/number";
+import { getWriterNumFormatKind, SvxNumType } from "../../core/doc/number";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { SwFrameSize } from "../../../inc/fmtfsize";
 
@@ -471,7 +467,7 @@ function projectNumberingRule(rule: SwNumRule): XMLTextListRuleSource {
           ...numberingPositionToMM100(format.GetPositionProperties()),
           kind: getWriterNumFormatKind(format),
           numberingType: format.GetNumberingType(),
-          bulletChar: getWriterNumFormatBullet(format),
+          bulletChar: String.fromCodePoint(format.GetBulletChar()),
           ...(format.GetNumberingType() === SvxNumType.SVX_NUM_CHAR_SPECIAL
             ? { bulletFont: { name: format.GetBulletFont()?.GetFamilyName() ?? "" } }
             : {}),

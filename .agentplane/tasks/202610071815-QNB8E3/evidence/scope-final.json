@@ -1,0 +1,52 @@
+{
+  "base": "ab0657dd8239020dcfb2f89cd907e3bd7934d964",
+  "semanticPaths": [
+    "apps/office/e2e/native-empty-bullet.spec.ts",
+    "apps/office/src/sw/source/filter/xml/xmlexp.ts",
+    "apps/office/src/xmloff/source/style/native-bullet-scalar.test.ts",
+    "apps/office/src/xmloff/source/style/xmlnume.test.ts",
+    "apps/office/src/xmloff/source/style/xmlnume.ts",
+    "apps/office/src/xmloff/source/style/xmlnumi.test.ts",
+    "apps/office/src/xmloff/source/style/xmlnumi.ts",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/source-provenance.json"
+  ],
+  "scopeCount": 9,
+  "priorAcceptanceFiles": 600,
+  "byteIdenticalAcceptanceFiles": 598,
+  "exactSourceBackedMigrations": [
+    {
+      "path": "apps/office/src/xmloff/source/style/xmlnumi.test.ts",
+      "beforeSHA256": "c2cbb824b6a952b1d3eba48630e4955870d86a21954cb781db1b65b09ab6e03f",
+      "currentSHA256": "610537bd8ced999a272f2866761c2c1a8b3895b63102adbafd89137889426765",
+      "change": "Only original failed source-backed scalar expectations; all inputs and other assertions retained",
+      "source": "Pinned xmlnumi cBullet=0 always OUString(&cBullet,1); xmlnume initialF095 ignores empty BulletChar"
+    },
+    {
+      "path": "apps/office/src/xmloff/source/style/xmlnume.test.ts",
+      "beforeSHA256": "806e27201dc3b98b98ea7e688d1866d30639ed2240cc37efd33c0917c09e74a0",
+      "currentSHA256": "38a4d7c16e715a7488e308ed80d04e000dba824b39660a1ff4e190f97353c39b",
+      "change": "Only original failed source-backed scalar expectations; all inputs and other assertions retained",
+      "source": "Pinned xmlnumi cBullet=0 always OUString(&cBullet,1); xmlnume initialF095 ignores empty BulletChar"
+    }
+  ],
+  "newAcceptanceFiles": [
+    "apps/office/src/xmloff/source/style/native-bullet-scalar.test.ts",
+    "apps/office/e2e/native-empty-bullet.spec.ts"
+  ],
+  "metadata": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "oldRecords": 302,
+      "currentRecords": 302,
+      "allPriorFieldsPrefixesAndStatusesPreserved": true
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "oldRecords": 302,
+      "currentRecords": 302,
+      "allPriorFieldsPrefixesAndStatusesPreserved": true
+    }
+  ],
+  "failures": []
+}

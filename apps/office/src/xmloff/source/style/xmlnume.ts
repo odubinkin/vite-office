@@ -34,8 +34,9 @@ export class SvxXMLNumRuleExport {
       attributes.push(`style:num-suffix="${this.escapeValue(properties.suffix)}"`);
     const element = type === 6 ? "text:list-level-style-bullet" : "text:list-level-style-number";
     if (type === 6) {
-      let bullet = properties.bulletChar ?? "\uF095";
-      if (bullet.length !== 0 && (bullet.codePointAt(0) as number) < 32) bullet = "\uF095";
+      let cBullet = properties.bulletChar?.codePointAt(0) ?? 0xf095;
+      if (cBullet !== 0 && cBullet < 32) cBullet = 0xf095;
+      const bullet = cBullet === 0 ? "" : String.fromCodePoint(cBullet);
       attributes.push(`text:bullet-char="${this.escapeValue(bullet)}"`);
     } else {
       attributes.push(

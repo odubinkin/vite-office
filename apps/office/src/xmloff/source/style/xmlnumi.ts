@@ -58,7 +58,7 @@ export class SvxXMLListLevelStyleContext_Impl extends SvXMLImportContext {
   };
   private readonly level: number;
   private readonly kind: "bullet" | "numbered";
-  private bulletChar: string;
+  private cBullet: number;
   private readonly xmlImport: SvXMLImport;
   private readonly format: string;
   private readonly suffix: string;
@@ -92,7 +92,7 @@ export class SvxXMLListLevelStyleContext_Impl extends SvXMLImportContext {
     );
     const parsed = attributes.getAsInteger(XMLToken.TEXT_LEVEL);
     this.level = parsed === null ? -1 : parsed >= 1 ? parsed - 1 : 0;
-    this.bulletChar = [...(attributes.get(XMLToken.TEXT_BULLET_CHAR) ?? "")][0] ?? "";
+    this.cBullet = attributes.get(XMLToken.TEXT_BULLET_CHAR)?.codePointAt(0) ?? 0;
     this.format = attributes.get(XMLToken.STYLE_NUM_FORMAT) ?? "1";
     this.suffix = attributes.get(XMLToken.STYLE_NUM_SUFFIX) ?? "";
     this.prefix = attributes.get(XMLToken.STYLE_NUM_PREFIX) ?? "";
@@ -158,12 +158,11 @@ export class SvxXMLListLevelStyleContext_Impl extends SvXMLImportContext {
     if (this.kind === "bullet" && bulletFontName !== "") {
       // The source mutates cBullet on each publication while changing only
       // the published descriptor family, not the stored legacy font name.
-      const scalar = this.bulletChar.codePointAt(0) ?? 0;
       if (/^starbats$/i.test(bulletFontName)) {
-        this.bulletChar = String.fromCodePoint(this.xmlImport.ConvStarBatsCharToStarSymbol(scalar));
+        this.cBullet = this.xmlImport.ConvStarBatsCharToStarSymbol(this.cBullet);
         bulletFontName = "StarSymbol";
       } else if (/^starmath$/i.test(bulletFontName)) {
-        this.bulletChar = String.fromCodePoint(this.xmlImport.ConvStarMathCharToStarSymbol(scalar));
+        this.cBullet = this.xmlImport.ConvStarMathCharToStarSymbol(this.cBullet);
         bulletFontName = "StarSymbol";
       }
     }
@@ -172,7 +171,7 @@ export class SvxXMLListLevelStyleContext_Impl extends SvXMLImportContext {
       kind: this.kind,
       numberingType: type.value,
       ...(this.kind === "bullet"
-        ? { bulletChar: this.bulletChar, bulletFont: { name: bulletFontName } }
+        ? { bulletChar: String.fromCodePoint(this.cBullet), bulletFont: { name: bulletFontName } }
         : {}),
       prefix: this.prefix,
       suffix: this.suffix,
