@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202610070830-2B9EBJ",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-07T09:16:50.120Z",
+  "verdict": "pass",
+  "summary": "Exact 62ff891 native collapsing border arbitration satisfies bounded source and browser scope; same current-agent review, not independent",
+  "evaluated_sha": "62ff891512a799aa94ce6097ce6bc4afa228ac70",
+  "blueprint_digest": "75e8f839f45f4ab2d3a69d4250fd24fde1dcaf33b5ad02c5ce0da391e999a331",
+  "findings": [
+    "Native Style ordering and overlap splits match pinned integer contracts; all actual 13473 app,110 inventory,14 infrastructure,268 Chromium cases resolved with no passing replay; current source-map coverage certificates and exact prior acceptance migration reviewed"
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610070830-2B9EBJ/README.md",
+    ".agentplane/tasks/202610070830-2B9EBJ/evidence/exact-sha-review.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Existing unchanged row-height conversion to Minimum requires next leaf; full physical VCL paint/scaled/Word/RTL/vertical/follow and whole parity remain unverified"
+  ]
+}

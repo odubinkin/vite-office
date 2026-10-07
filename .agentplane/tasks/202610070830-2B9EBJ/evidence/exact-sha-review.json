@@ -1,0 +1,197 @@
+{
+  "auditCorrection": "Initial scanner-only fragment reader did not rescan template interpolation tails. Exact full-byte two-interval reconstruction replaces that reader; no source/runtime changes or assertion removal.",
+  "evaluatedImplementationSHA": "62ff891512a799aa94ce6097ce6bc4afa228ac70",
+  "evaluator": "Same current coding agent EVALUATOR phase; explicitly not independent",
+  "verdict": "pass",
+  "cases": {
+    "app": 13473,
+    "inventory": 110,
+    "infrastructure": 14,
+    "chromium": 268
+  },
+  "actualApp100": {
+    "lines": {
+      "total": 16216,
+      "covered": 16216,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 17801,
+      "covered": 17801,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 4120,
+      "covered": 4120,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 13327,
+      "covered": 13327,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "actualInventory100": {
+    "lines": {
+      "total": 1464,
+      "covered": 1464,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 1523,
+      "covered": 1523,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 384,
+      "covered": 384,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 1081,
+      "covered": 1081,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "actualCountersAndCensusReconstructedExactly": true,
+  "strictWholeOrCompleteContiguousDeclarationBodyEnclosingBranchAllLocationsProof": true,
+  "oldAcceptance": {
+    "prior": 566,
+    "byteIdentical": 565,
+    "exactSourceWinnerMigration": {
+      "equal": true,
+      "migrations": [
+        {
+          "label": "Source winner conditional only; all other complete prior tokens unchanged",
+          "oldTokenSHA256": "7e73a25c7dae8ec51786ceb2107212c2011919a7ee91bb1850d70ceefc7327b4",
+          "newTokenSHA256": "1bb2a8522235c9cfe71c183d230f70a2122a92abf9d8cd9426004775a08acf78",
+          "count": 1
+        }
+      ],
+      "normalizedTokenSHA256": "38410a090dfdf7586ddd4071e42f3acc84197529642d1c7bb1fd400142aee9e8",
+      "completeRemainingBytesIdentical": true
+    },
+    "newFiles": 4,
+    "current": 570,
+    "initialNewPassedBodiesPreserved": [
+      {
+        "path": "apps/office/src/svx/source/dialog/native-frame-style.test.ts",
+        "initialSHA256": "0cad513b80f26b1a6dbe672a28bc926b2f5663fd54d71f8b2d1decb84a0564d6",
+        "currentSHA256": "0cad513b80f26b1a6dbe672a28bc926b2f5663fd54d71f8b2d1decb84a0564d6",
+        "proof": {
+          "byteIdentical": true
+        }
+      },
+      {
+        "path": "apps/office/src/sw/source/core/layout/native-collapsing-border-painter.test.ts",
+        "initialSHA256": "6d55946b0f432d8c21fe995e8c1ff5950f8bf6a19b44d78625576c82c94b2f0d",
+        "currentSHA256": "6d55946b0f432d8c21fe995e8c1ff5950f8bf6a19b44d78625576c82c94b2f0d",
+        "proof": {
+          "byteIdentical": true
+        }
+      },
+      {
+        "path": "apps/office/src/sw/browser/editor/native-collapsing-border-paint.test.tsx",
+        "initialSHA256": "040e544387a9b35f9cad395ea6d039f7b9981bd5c8b3416fb71d1d76bd169fca",
+        "currentSHA256": "9e3a10d6c17b6bed6d2be1b2bcb9c3997c0775904bd1a42962d526798b77d2fa",
+        "proof": {
+          "equal": true,
+          "migrations": [
+            {
+              "label": "Only failed fixed=true paint-device fallback; passed false branch untouched",
+              "count": 1,
+              "oldIntervalSHA256": "3cea97ec31f7f0b9410dbb7a7ec0f7c730dce5f7817a1078d7df8837c5caea19",
+              "newIntervalSHA256": "b43caecf19b0b2cfd073c0d39700217f00b7ddd2ce9c5d473872c46bfbb4779c"
+            },
+            {
+              "label": "Strengthened initial/three Undo Fixed wrapper assertions",
+              "count": 1,
+              "oldIntervalSHA256": "1fb500007165436737fd2cadf444bfa29d207673a91bb7df9e5478af54ade489",
+              "newIntervalSHA256": "b80cea239c0f8fa33e73bee5ccfeff6e5b4fd4bd67c03b44df21b78527de635e"
+            }
+          ],
+          "fullExpectedSHA256": "9e3a10d6c17b6bed6d2be1b2bcb9c3997c0775904bd1a42962d526798b77d2fa",
+          "allOriginalColorOwnerHistoryODTAssertionsRetained": true
+        }
+      },
+      {
+        "path": "apps/office/e2e/writer-collapsing-border-arbitration.spec.ts",
+        "initialSHA256": "153b6a9e9ab2e1687365e0d36b850840db3183466699607cfe908db83c1665cd",
+        "currentSHA256": "153b6a9e9ab2e1687365e0d36b850840db3183466699607cfe908db83c1665cd",
+        "proof": {
+          "byteIdentical": true
+        }
+      }
+    ]
+  },
+  "metadata": {
+    "prior": 289,
+    "current": 291,
+    "allPriorFieldsPrefixesStatusesDefaultsRegisteredExceptionsPreserved": true,
+    "noSemanticPromotion": true
+  },
+  "initialStaticGatesOnce": true,
+  "oneFullUpstreamAbsentProfile": true,
+  "failedOrGenuinelyNewCasesOnly": true,
+  "passingRuntimeReplay": 0,
+  "focusedSkippedObservationsRemainSkipped": {
+    "app": 1,
+    "inventory": 7
+  },
+  "sourceComparison": "PASS bounded native integer Style/overlap arbitration and shared-edge browser paint; whole parity remains active.",
+  "currentProductionMatchesInitialBuildAnd268Browser": true,
+  "finalCppunitCoverageDisabledNoNewCounters": true,
+  "launchOrderingLimitation": "During closure2 launch, git staging had completed but the previous read-only AP route command was still awaiting terminal observation. No concurrent source/AP mutation occurred; all processes are terminal. Do not claim absence of all concurrent read-only route observation.",
+  "nextLeaf": "Existing tabsh.ts168 unconditionally SetRowHeight(Minimum) even when only merge mode changes. New fixed=true test fixture now reads actual paint device after this existing conversion; explicit original Fixed wrappers checked initially and on each Undo. Row height type preservation is not claimed and will be corrected in a separate leaf.",
+  "priorityBulletCases": [
+    {
+      "title": "Writer native label width prevents overlap width=1280 cell=false",
+      "passed": true
+    },
+    {
+      "title": "Writer native label width prevents overlap width=1280 cell=true",
+      "passed": true
+    },
+    {
+      "title": "Writer native label width prevents overlap width=390 cell=false",
+      "passed": true
+    },
+    {
+      "title": "Writer native label width prevents overlap width=390 cell=true",
+      "passed": true
+    }
+  ],
+  "artifacts": {
+    "wholeAgentplaneForbiddenSourceOrPythonCount": 0,
+    "activeFiles": 16,
+    "activeExtensions": [
+      "json",
+      "md"
+    ],
+    "noRawCoverageResultsOrSourceSnapshots": true,
+    "rawEvidenceLocation": "Ignored project dependency cache; no pinned sources copied into AP"
+  },
+  "vendorRestored": true,
+  "residualScope": "Physical native frames/primitives/junctions/shading/theme/scaled Style/refmode/Word limited ends/RTL/vertical/merged spans/follow and whole kernel/browser parity remain unverified.",
+  "failures": []
+}
