@@ -4,7 +4,7 @@ title: "Use native numbering font policy for list markers"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -17,10 +17,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-07T16:56:33.993Z"
+  updated_by: "CODER"
+  note: "PASS: bounded native numbering font policy at implementation e7f70aab6932f1ae3528623753269c945635dcb6; actual current-source four-metric app/inventory100,13574app110inventory14infra282Chromium final unique passes,zero passing replay/uncaught. ONE full upstream-absent profile and original failed-case closures only.591prior acceptance and299prior fields retained; source/static/governance/quality/exact SHA pass. ODT custom-face persistence and tight-tab pointer interception explicitly remain open; full parity ACTIVE."
   attempts: 0
 quality_review:
   state: "pass"
@@ -51,8 +51,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: apply the source-native represented numbering font policy to actual body/cell markers, preserve all registered deviations and run one absent-upstream full profile."
+  -
+    type: "verify"
+    at: "2026-10-07T16:56:33.993Z"
+    author: "CODER"
+    state: "ok"
+    note: "PASS: bounded native numbering font policy at implementation e7f70aab6932f1ae3528623753269c945635dcb6; actual current-source four-metric app/inventory100,13574app110inventory14infra282Chromium final unique passes,zero passing replay/uncaught. ONE full upstream-absent profile and original failed-case closures only.591prior acceptance and299prior fields retained; source/static/governance/quality/exact SHA pass. ODT custom-face persistence and tight-tab pointer interception explicitly remain open; full parity ACTIVE."
 doc_version: 3
-doc_updated_at: "2026-10-07T16:56:08.608Z"
+doc_updated_at: "2026-10-07T16:56:34.059Z"
 doc_updated_by: "CODER"
 description: "Iteration220: resolve represented Number/Bullet font state under native txtfld NewNumberPortion responsibility, use source default compatibility flag and actual optional bullet font in shared body/cell renderer; retain existing text and marked background/minimum widths, preserve registered deviations."
 sections:
@@ -71,7 +77,41 @@ sections:
     Bounded existing list-label font behavior. Original591acceptance unchanged unless exact source-backed new-default assertion migration is actually required.
   Plan: "Resolve the existing represented numbering font members under pinned SwTextFormatter::NewNumberPortion responsibility: original paragraph attr set as the base, optional bullet font family override, native default reset of bullet weight/posture and both labels' underline, numbering weight/posture preserved, inherited height and color. Add actual DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT setting(defaultfalse), use original per-document owner and keep older browser transfer records missing only this newly represented field defaultfalse; retain strict validation for all prior fields. Native values remain immutable projections to the shared body/cell marker renderer; no private UI font owner, no TextRuns layer, no width/background/history changes. Character-format/paragraph-mark/redline full SwFont/script/graphics/device shaping remain explicit residuals. Add real core/mounted/Chromium and legacy transfer tests; preserve591 prior acceptance bytes except exact source-backed assertion migration only if original failing native-default expectation requires it. Add one bounded unverified mapping, preserve all299 prior fields/statuses/defaults/registered save/open/recovery exceptions."
   Verify Steps: "Run initial npm format:check, lint, typecheck, check:dependencies, check:docs, check:file-size once. ONE full runtime profile: hide vendor/libreoffice-reference, run test:static, full app coverage, inventory coverage, infrastructure14 cases and full Chromium; restore vendor in finally after actual handle terminal. Never import/execute upstream from tests; freeze source and task writes while profile live. Later runtime only original failures or genuinely new cases, zero passing replay; static/source closures only failures or changed inputs. Require actual current-source100 app and inventory all four metrics using byte-identical complete maps or contiguous declaration/body/branch/location evidence without exclusions/clamps/skips. Retain591prior acceptance bytes; only exact original source-backed native-default assertion migration permitted after actual failure, all unrelated assertions/inputs retained. Verify all299 prior metadata records and fields preserved plus one explicitly bounded native txtfld mapping, no promotion. After restore run generator --check, source-tree, provenance, invariants and parity source gates. Inspect pinned NewNumberPortion font construction, DocumentSettingManager false default and paragraph attr ownership source contracts, audit scoped JSDoc/physical sizes, bounded English-only AgentPlane artifacts, exact implementation SHA, parent Findings prefix, doctor and routing. Record final Findings/Verification before canonical verify; same-current-agent quality review explicitly not independent; finish actual implementation SHA and leave clean tree."
-  Verification: "Command: initial six static gates, scoped failure/changed-input checks; ONE full upstream-absent profile; only original failed-case closures; restored five source gates; current-source coverage, source/case/scope/artifact/governance audits. Result: final13,574app110inventory14infra282Chromium pass, zero uncaught/passing replay/unresolved accepted cases. App/inventory all four actual coverage metrics100;591prior acceptance unchanged, all299prior metadata fields retained plus one bounded unverified record,10semantic paths. Four skipped app observations retained, filtered exit1 solely global coverage thresholds. Scope: represented numbering font policy and shared device rendering; custom-font ODT persistence and tight-tab pointer interception remain open, explicitly outside this font leaf correction. Evidence: evidence/absent-profile.json,closure1.json through closure5.json,case-census.json,final-coverage.json,scope-final.json,source-review.json,source-gates.json,static-gates.json and scoped closures,changed-file-checks.json,terminal-error-census.json,governance.json,artifact-census.json. Exact clean implementation e7f70aab6932f1ae3528623753269c945635dcb6 source/map/counter/region and result digests reviewed PASS; evidence/exact-sha-review.json and .agentplane/tasks/202610071612-6RVSXZ/quality/20261007-165534527-recovery-context/quality-report.json (same current agent, explicitly not independent). No final production drift; canonical verification follows these finalized sections."
+  Verification: |-
+    Command: initial six static gates, scoped failure/changed-input checks; ONE full upstream-absent profile; only original failed-case closures; restored five source gates; current-source coverage, source/case/scope/artifact/governance audits. Result: final13,574app110inventory14infra282Chromium pass, zero uncaught/passing replay/unresolved accepted cases. App/inventory all four actual coverage metrics100;591prior acceptance unchanged, all299prior metadata fields retained plus one bounded unverified record,10semantic paths. Four skipped app observations retained, filtered exit1 solely global coverage thresholds. Scope: represented numbering font policy and shared device rendering; custom-font ODT persistence and tight-tab pointer interception remain open, explicitly outside this font leaf correction. Evidence: evidence/absent-profile.json,closure1.json through closure5.json,case-census.json,final-coverage.json,scope-final.json,source-review.json,source-gates.json,static-gates.json and scoped closures,changed-file-checks.json,terminal-error-census.json,governance.json,artifact-census.json. Exact clean implementation e7f70aab6932f1ae3528623753269c945635dcb6 source/map/counter/region and result digests reviewed PASS; evidence/exact-sha-review.json and .agentplane/tasks/202610071612-6RVSXZ/quality/20261007-165534527-recovery-context/quality-report.json (same current agent, explicitly not independent). No final production drift; canonical verification follows these finalized sections.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-07T16:56:33.993Z — VERIFY — ok
+
+    By: CODER
+
+    Note: PASS: bounded native numbering font policy at implementation e7f70aab6932f1ae3528623753269c945635dcb6; actual current-source four-metric app/inventory100,13574app110inventory14infra282Chromium final unique passes,zero passing replay/uncaught. ONE full upstream-absent profile and original failed-case closures only.591prior acceptance and299prior fields retained; source/static/governance/quality/exact SHA pass. ODT custom-face persistence and tight-tab pointer interception explicitly remain open; full parity ACTIVE.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-07T16:56:08.608Z, excerpt_hash=sha256:726c7a5f7e61ac3d69330f7cbd2f2a581c3cfdbdd0d8e38b10b78c84fb77ea28
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610071612-6RVSXZ/blueprint/resolved-snapshot.json
+    - old_digest: 30792076459da8aab76cfd28eddf2f79265cc6ecbfe843a27256b63387269f5e
+    - current_digest: 30792076459da8aab76cfd28eddf2f79265cc6ecbfe843a27256b63387269f5e
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610071612-6RVSXZ
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610071612-6RVSXZ
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this leaf implementation commit; preserve prior DONE tasks, full parent Findings prefix, deferred stash and all registered I/O/recovery deviations."
   Findings: |-
     Iteration220 implements the represented font-construction branch of pinned SwTextFormatter::NewNumberPortion under native txtfld responsibility. SwTextFormatInfo::GetCharAttr returns the original paragraph-property node attr set. Bullets use the actual optional numbering Font family, inherit paragraph height/color, and reset weight/posture/underline with the source default DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT=false. Numbers preserve weight/posture and reset underline. The actual per-document setting and strict native settings owner remain authoritative; older graph records missing only this new field migrate to false without weakening prior field validation. Immutable font values reach the shared body/cell marker device; no private UI font owner or TextRuns adapter. Existing marker minimum glyph width and native minimum distance, marked-label background, follow suppression, content editing and undo semantics are retained.
@@ -110,6 +150,39 @@ Run initial npm format:check, lint, typecheck, check:dependencies, check:docs, c
 ## Verification
 
 Command: initial six static gates, scoped failure/changed-input checks; ONE full upstream-absent profile; only original failed-case closures; restored five source gates; current-source coverage, source/case/scope/artifact/governance audits. Result: final13,574app110inventory14infra282Chromium pass, zero uncaught/passing replay/unresolved accepted cases. App/inventory all four actual coverage metrics100;591prior acceptance unchanged, all299prior metadata fields retained plus one bounded unverified record,10semantic paths. Four skipped app observations retained, filtered exit1 solely global coverage thresholds. Scope: represented numbering font policy and shared device rendering; custom-font ODT persistence and tight-tab pointer interception remain open, explicitly outside this font leaf correction. Evidence: evidence/absent-profile.json,closure1.json through closure5.json,case-census.json,final-coverage.json,scope-final.json,source-review.json,source-gates.json,static-gates.json and scoped closures,changed-file-checks.json,terminal-error-census.json,governance.json,artifact-census.json. Exact clean implementation e7f70aab6932f1ae3528623753269c945635dcb6 source/map/counter/region and result digests reviewed PASS; evidence/exact-sha-review.json and .agentplane/tasks/202610071612-6RVSXZ/quality/20261007-165534527-recovery-context/quality-report.json (same current agent, explicitly not independent). No final production drift; canonical verification follows these finalized sections.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-07T16:56:33.993Z — VERIFY — ok
+
+By: CODER
+
+Note: PASS: bounded native numbering font policy at implementation e7f70aab6932f1ae3528623753269c945635dcb6; actual current-source four-metric app/inventory100,13574app110inventory14infra282Chromium final unique passes,zero passing replay/uncaught. ONE full upstream-absent profile and original failed-case closures only.591prior acceptance and299prior fields retained; source/static/governance/quality/exact SHA pass. ODT custom-face persistence and tight-tab pointer interception explicitly remain open; full parity ACTIVE.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-07T16:56:08.608Z, excerpt_hash=sha256:726c7a5f7e61ac3d69330f7cbd2f2a581c3cfdbdd0d8e38b10b78c84fb77ea28
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610071612-6RVSXZ/blueprint/resolved-snapshot.json
+- old_digest: 30792076459da8aab76cfd28eddf2f79265cc6ecbfe843a27256b63387269f5e
+- current_digest: 30792076459da8aab76cfd28eddf2f79265cc6ecbfe843a27256b63387269f5e
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610071612-6RVSXZ
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610071612-6RVSXZ
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
