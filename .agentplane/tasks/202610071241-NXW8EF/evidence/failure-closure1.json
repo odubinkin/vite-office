@@ -1,0 +1,64 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/sw/source/core/text/txtfrm.ts": "a86156891ae15bafe45b0474bf52aa5709fb2b7b56f4282cd85e9635b5df704e",
+    "apps/office/src/sw/source/core/text/itrtxt.ts": "659583cf24d63dc9f0789492f879024e60cc837f151e3875e42a3259cd26b342",
+    "apps/office/src/sw/source/core/text/frmcrsr.ts": "4cf1fe458f3f59c21c43b9e3617cdb63a69bb42c8554f99054d6e6a7b962044d",
+    "apps/office/src/sw/source/core/layout/newfrm.ts": "44ae7e620f6f271913df427fe26872a225acb5420e814773f5df68286be25c3c",
+    "apps/office/src/sw/source/core/crsr/swcrsr.ts": "ecbeb443c70bf93079cf28078548574cbe9eff3f92b00a0e945ef50f8bacdf4a",
+    "apps/office/src/sw/source/core/crsr/trvltbl.ts": "00e739d2a7bf4979bc4411aec122f7eabb888091412f952f172a018b7bc0dbac",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts": "4b7c256d33864499c7e0a2e416e8e9ee3ab4998d366ff026d1b8a34a703966eb",
+    "apps/office/src/sw/source/uibase/wrtsh/move.ts": "f4b1db40d657d16c4f46307faa1bb19ddbeafde9c2f7e48cbd8eb4f2b4bcb5f9",
+    "apps/office/src/sw/source/uibase/docvw/edtwin.ts": "8b43387297ecae3f6ff2c39fe5d52c7f79dbeddf79cb9bc10a1a7ccc39178992",
+    "apps/office/src/sw/source/uibase/uiview/view.ts": "dfcff469eecbb6bb0410ac762bc4f141fbf607cd9db391ae2288c1640999e31b",
+    "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts": "9963a881fe4a8c838dc6c0672a2ce2375aa2ea7d0687b61f8927b9afdba4c4ce",
+    "apps/office/src/sw/browser/editor/writer-line-measurement.ts": "727f78a23e683b8767c05815068c8fc9654bb613602e858a1c63e13cbbbb728d",
+    "apps/office/src/sw/browser/editor/native-section-navigation.test.tsx": "a154265570e3c55178e61312db2e4aa2be1259a42919aac8dd348b0657974092",
+    "apps/office/src/sw/source/uibase/wrtsh/native-line-margin.test.ts": "3cce73d641b4e363af0686e3ce45d0fe4cf4ec28d63075f4614b9011c8dffb19",
+    "apps/office/src/sw/browser/editor/native-line-margin.test.tsx": "8d3111165cf857dff012ed104ec3421bfbed41fd1af3c64098c18eda6c2a4fc9",
+    "apps/office/e2e/native-line-margin.spec.ts": "e09ad4b490d3958551c8b8e91d82488b6d72401bc96bcff10418307e73d31018",
+    "docs/program/source-provenance.json": "4b57327e370b5fd863afbb465b08fb71aec150937715856daa584dd74268befb",
+    "docs/program/parity/runtime-inventory.json": "aec3515948318d89201834d22d58b3d9f6edf7504b1a5f09aec58aa516863269"
+  },
+  "originalFailures": [],
+  "genuinelyNewCases": [
+    {
+      "file": "src/sw/browser/editor/native-line-margin.test.tsx",
+      "name": "unfragmented DOM ports use native text coordinates"
+    },
+    {
+      "file": "src/sw/browser/editor/native-line-margin.test.tsx",
+      "name": "nullable device text and detached document geometry have explicit empty fallback"
+    },
+    {
+      "file": "src/sw/browser/editor/native-line-margin.test.tsx",
+      "name": "selection publication replacing the graph rejects stale cursor geometry"
+    }
+  ],
+  "originalChromiumFailures": [],
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/browser/editor/native-line-margin.test.tsx -t ^(unfragmented DOM ports use native text coordinates|nullable device text and detached document geometry have explicit empty fallback|selection publication replacing the graph rejects stale cursor geometry)$ --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/NXW8EF.app-closure1-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 31300,
+      "sha256": "d6168b84ef605bde1b06f35ceda63d68059e44a17b01427e2dea5a666660cada",
+      "failedCases": [
+        {
+          "name": "apps/office/src/sw/browser/editor/native-line-margin.test.tsx > selection publication replacing the graph rejects stale cursor geometry",
+          "message": [
+            "AssertionError: expected true to be false // Object.is equality"
+          ]
+        }
+      ],
+      "caseCounts": {
+        "passed": 2,
+        "failed": 1,
+        "skipped": 3,
+        "total": 6
+      },
+      "coverageMapSHA256": "b67294014cfd6cc698b3be52b055aa4297e83696f6bd948209bf76a37a508e31"
+    }
+  ]
+}

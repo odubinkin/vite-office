@@ -7,6 +7,8 @@ import { SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
 import { SwFormatPageDesc } from "../attr/fmtpdsc";
+import type { SwPaM } from "../crsr/pam";
+import { MoveTextFrameMargin } from "./frmcrsr";
 import {
   RES_BREAK,
   RES_KEEP,
@@ -152,12 +154,27 @@ export const DEFAULT_SW_TEXT_FRAME_SETTINGS: SwTextFrameSettings = Object.freeze
 });
 
 /** A master or follow frame; offsets always refer to the same source text node. */
-export interface SwTextFrame {
-  readonly end: number;
-  readonly follow: boolean;
-  readonly nodeId: string;
-  readonly start: number;
-  readonly topSpacing: number;
+export class SwTextFrame {
+  readonly #lines: readonly SwTextLine[];
+  /** Retains the native fragment fields and its complete formatted lines. @param nodeId - Model projection identity. @param start - Frame start. @param end - Frame end. @param follow - Follow classification. @param topSpacing - Frame spacing. @param lines - Device-shaped lines. @returns Frame. */
+  public constructor(
+    public readonly nodeId: string,
+    public readonly start: number,
+    public readonly end: number,
+    public readonly follow: boolean,
+    public readonly topSpacing: number,
+    lines: readonly SwTextLine[],
+  ) {
+    this.#lines = lines;
+  }
+  /** Moves to the current visual line start. @param pam - Native cursor. @returns Admission result. */
+  public LeftMargin(pam: SwPaM): boolean {
+    return MoveTextFrameMargin(this, this.#lines, pam, true);
+  }
+  /** Moves to the current visual line end. @param pam - Native cursor. @param api - Include soft-line trailing spaces. @returns Admission result. */
+  public RightMargin(pam: SwPaM, api = false): boolean {
+    return MoveTextFrameMargin(this, this.#lines, pam, false, api);
+  }
 }
 
 /** Writer's adjacent paragraph spacing, with contextual suppression for equal styles. @param previous - Preceding text frame input. @param current - Current text frame input. @param settings - Document spacing flags. @returns Gap in twips. */
@@ -186,11 +203,14 @@ export function makeSwTextFrame(
   const last = input.lines[lastLine];
   if (first === undefined || last === undefined || lastLine < firstLine)
     throw new Error("Writer text frames require a non-empty consecutive line range.");
-  return Object.freeze({
-    end: last.end,
-    follow: firstLine > 0,
-    nodeId: input.id,
-    start: first.start,
+  const frame = new SwTextFrame(
+    input.id,
+    first.start,
+    last.end,
+    firstLine > 0,
     topSpacing,
-  });
+    input.lines.slice(firstLine, lastLine + 1),
+  );
+  Object.freeze(frame);
+  return frame;
 }

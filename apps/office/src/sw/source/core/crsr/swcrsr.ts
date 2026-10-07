@@ -3,9 +3,40 @@ import { SwPaM } from "./pam";
 import { SwEndNode, SwTableBoxStartNode, SwTableNode, type SwStartNode } from "../docnode/node";
 import type { SwTextNode } from "../txtnode/ndtxt";
 import { SwTable, type SwTableBox } from "../table/swtable";
+import type { SwRootFrame } from "../layout/newfrm";
 
 /** Persistent Writer cursor; cell navigation never uses body ordinals or display paragraphs. */
 export class SwCursor extends SwPaM {
+  private inFrontOfLabel = false;
+  /** Reads native list-label cursor affinity. @returns Label position state. */
+  public IsInFrontOfLabel(): boolean {
+    return this.inFrontOfLabel;
+  }
+  /** Assigns native label affinity without changing the text point. @param value - Label state. @returns Nothing. */
+  public SetInFrontOfLabel_(value: boolean): void {
+    this.inFrontOfLabel = value;
+  }
+  /** Delegates margin movement to the current native layout frame. @param layout - Owning layout. @param left - Beginning direction. @param api - API movement. @returns Native frame admission. */
+  public LeftRightMargin(layout: SwRootFrame, left: boolean, api = false): boolean {
+    const frame = layout.GetCursorTextFrame(this.GetPoint().GetNode() as SwTextNode);
+    return frame !== undefined && (left ? frame.LeftMargin(this) : frame.RightMargin(this, api));
+  }
+  /** Checks a margin using a temporary PaM as upstream does. @param layout - Owning layout. @param left - Beginning direction. @param api - API movement. @returns Whether the point is at its margin. */
+  public IsAtLeftRightMargin(layout: SwRootFrame, left: boolean, api = false): boolean {
+    const frame = layout.GetCursorTextFrame(this.GetPoint().GetNode() as SwTextNode);
+    if (frame === undefined) return false;
+    const pam = new SwPaM(this.GetPoint());
+    try {
+      if (!left && pam.GetPoint().GetContentIndex() > 0)
+        pam.GetPoint().Assign(pam.GetPoint().GetNode(), pam.GetPoint().GetContentIndex() - 1);
+      return (
+        (left ? frame.LeftMargin(pam) : frame.RightMargin(pam, api)) &&
+        pam.GetPoint().GetContentIndex() === this.GetPoint().GetContentIndex()
+      );
+    } finally {
+      pam.Dispose();
+    }
+  }
   /** Creates a native editing cursor attached to an existing selection ring. @param ring - Native ring owner. @returns New registered cursor. */
   public Create(ring: SwPaM): SwCursor {
     return new SwCursor(this.GetPoint(), undefined, ring);

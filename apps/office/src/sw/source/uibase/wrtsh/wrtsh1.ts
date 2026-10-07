@@ -73,6 +73,9 @@ import {
   RejectRepeatedHeadlineSelection,
 } from "./wrtsh-selection";
 import type { SelectionType } from "../inc/wrtsh";
+import { SwRootFrame } from "../../core/layout/newfrm";
+import { SwTextCursor } from "../../core/text/itrtxt";
+import { MoveShellMargin } from "./move";
 import { createWriterReadFragmentAction } from "../../filter/basflt/shellio";
 /** Logical paragraph indentation values accepted by the browser ruler shell boundary. */
 export interface WriterParagraphIndentValue {
@@ -95,10 +98,14 @@ export class SwWrtShell extends SwFEShell {
   private readonly listShell: SwListShell;
   private pendingCharacterItems: SfxItemSet;
   private readonly undoContext: SwUndoRedoContext;
-  /** Creates a shell at the end of the first Writer paragraph. @param docShell - Persistent owning document shell. @param dialogController - Writer dialog lifecycle controller. @returns Nothing. */
+  /** Creates a shell at the end of the first Writer paragraph. @param docShell - Persistent owning document shell. @param dialogController - Writer dialog lifecycle controller. @param layout - Persistent view layout, or standalone shell layout. @returns Nothing. */
   public constructor(
     private readonly docShell: SwDocShell,
     dialogController: WriterDialogController = new WriterDialogController(),
+    private readonly layout = new SwRootFrame(
+      /** Resolves the standalone shell's current document. @returns Native document. */ () =>
+        docShell.GetDoc(),
+    ),
   ) {
     super();
     const paragraph = docShell.GetDoc().paragraphs[0] as WriterParagraph;
@@ -123,6 +130,24 @@ export class SwWrtShell extends SwFEShell {
   /** Returns the persistent owning document shell. @returns SwDocShell. */
   public GetDocShell(): SwDocShell {
     return this.docShell;
+  }
+  /** Returns the persistent native layout owner. @returns Current view layout. */
+  public override GetLayout(): SwRootFrame {
+    return this.layout;
+  }
+  /** Moves to the native visual line start. @param select - Extend selection. @param basic - Basic API call. @returns Native admission. */
+  public LeftMargin(select = false, basic = false): boolean {
+    return this.RunNotificationTransaction(
+      /** Publishes final native movement state once. @returns Admission. */ () =>
+        MoveShellMargin(this, true, select, basic),
+    );
+  }
+  /** Moves to the native visual line end. @param select - Extend selection. @param basic - Basic API call includes spaces. @returns Native admission. */
+  public RightMargin(select = false, basic = false): boolean {
+    return this.RunNotificationTransaction(
+      /** Publishes final native movement state once. @returns Admission. */ () =>
+        MoveShellMargin(this, false, select, basic),
+    );
   }
   /** Returns the current canonical Writer document. @returns Shell-owned SwDoc. */
   public GetDoc(): WriterDocument {
@@ -368,6 +393,8 @@ export class SwWrtShell extends SwFEShell {
     )
       return false;
     this.pendingCharacterItems = pointNode.GetCharacterItemsAt(point.GetContentIndex());
+    SwTextCursor.SetRightMargin(false);
+    this.SetInFrontOfLabel(false);
     this.docShell.GetUndoManager().BreakUndoGrouping();
     this.ClearTableCursor();
     this.cursor.Assign(point, mark);

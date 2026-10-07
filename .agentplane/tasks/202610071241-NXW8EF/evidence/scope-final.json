@@ -1,0 +1,55 @@
+{
+  "base": "1524cc0c8c5a7e4a9714e9e9875aa651347ba323",
+  "semanticPaths": [
+    "apps/office/e2e/native-line-margin.spec.ts",
+    "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts",
+    "apps/office/src/sw/browser/editor/native-line-margin.test.tsx",
+    "apps/office/src/sw/browser/editor/native-section-navigation.test.tsx",
+    "apps/office/src/sw/browser/editor/writer-line-measurement.ts",
+    "apps/office/src/sw/source/core/crsr/swcrsr.ts",
+    "apps/office/src/sw/source/core/crsr/trvltbl.ts",
+    "apps/office/src/sw/source/core/layout/newfrm.ts",
+    "apps/office/src/sw/source/core/text/frmcrsr.ts",
+    "apps/office/src/sw/source/core/text/itrtxt.ts",
+    "apps/office/src/sw/source/core/text/txtfrm.ts",
+    "apps/office/src/sw/source/uibase/docvw/edtwin.ts",
+    "apps/office/src/sw/source/uibase/uiview/view.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/move.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-line-margin.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/source-provenance.json"
+  ],
+  "scopeCount": 18,
+  "priorAcceptanceFiles": 580,
+  "byteIdenticalAcceptanceFiles": 579,
+  "exactSourceBackedMigrations": [
+    {
+      "path": "apps/office/src/sw/browser/editor/native-section-navigation.test.tsx",
+      "beforeSHA256": "b2762d56afa3127a16effb6cd1f1b41c4b19a980669fe765749670708b4154e9",
+      "expectedSHA256": "a154265570e3c55178e61312db2e4aa2be1259a42919aac8dd348b0657974092",
+      "currentSHA256": "a154265570e3c55178e61312db2e4aa2be1259a42919aac8dd348b0657974092",
+      "exact": true
+    }
+  ],
+  "newAcceptanceFiles": [
+    "apps/office/src/sw/source/uibase/wrtsh/native-line-margin.test.ts",
+    "apps/office/src/sw/browser/editor/native-line-margin.test.tsx",
+    "apps/office/e2e/native-line-margin.spec.ts"
+  ],
+  "metadata": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "oldRecords": 295,
+      "currentRecords": 298,
+      "allPriorFieldsPrefixesAndStatusesPreserved": true
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "oldRecords": 295,
+      "currentRecords": 298,
+      "allPriorFieldsPrefixesAndStatusesPreserved": true
+    }
+  ],
+  "failures": []
+}

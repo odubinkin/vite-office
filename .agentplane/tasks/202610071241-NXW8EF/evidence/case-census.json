@@ -1,0 +1,75 @@
+{
+  "app": {
+    "original": 13529,
+    "current": 13532,
+    "newCases": 3,
+    "resolved": 1,
+    "passed": 13532,
+    "unresolvedCount": 0,
+    "skippedObservationsRetained": 8,
+    "passingReplay": 0,
+    "inputs": [
+      {
+        "file": "NXW8EF.app-results.json",
+        "sha256": "8f5dddb07b26343ef5a578793b499a6fb7f14e1f1252ab2159c58597e71f6143",
+        "passed": 13529,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "file": "NXW8EF.app-closure1-results.json",
+        "sha256": "5181a41c5c6cfc64e3a8f39d4a674708b5da8716d1fabf2484abe44a48e2afe5",
+        "passed": 2,
+        "failed": 1,
+        "skipped": 3
+      },
+      {
+        "file": "NXW8EF.app-closure2-results.json",
+        "sha256": "f6d7e9194cb62a591a8cca6b40e19cb3602977e718fc032aa6a7b187cb3bab2e",
+        "passed": 1,
+        "failed": 0,
+        "skipped": 5
+      }
+    ]
+  },
+  "inventory": {
+    "original": 110,
+    "current": 110,
+    "newCases": 0,
+    "resolved": 0,
+    "passed": 110,
+    "unresolvedCount": 0,
+    "skippedObservationsRetained": 0,
+    "passingReplay": 0,
+    "inputs": [
+      {
+        "file": "NXW8EF.inventory-results.json",
+        "sha256": "0cf163a5563d2112bb9257eab3230273361c655dd3fb8fcd51bbab7b26a2e28e",
+        "passed": 110,
+        "failed": 0,
+        "skipped": 0
+      }
+    ]
+  },
+  "chromium": {
+    "current": 276,
+    "passed": 276,
+    "unresolvedCount": 0,
+    "passingReplay": 0,
+    "inputs": [
+      {
+        "file": "NXW8EF.chromium-results.json",
+        "sha256": "f4878041b91fa051be8903556d960ae1d961e07ef12281ce7f93bf2bfd732cd7",
+        "counts": {
+          "startTime": "2026-10-07T13:01:11.845Z",
+          "duration": 144602.342,
+          "expected": 276,
+          "skipped": 0,
+          "unexpected": 0,
+          "flaky": 0
+        }
+      }
+    ]
+  },
+  "failures": []
+}

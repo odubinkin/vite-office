@@ -1,0 +1,27 @@
+{
+  "records": [
+    {
+      "command": "Unchanged JSDoc validator on approved changed code/acceptance paths; actual physical-line count",
+      "exit": 0,
+      "errors": [],
+      "physicalLines": {
+        "apps/office/src/sw/source/core/text/txtfrm.ts": 217,
+        "apps/office/src/sw/source/core/text/itrtxt.ts": 48,
+        "apps/office/src/sw/source/core/text/frmcrsr.ts": 30,
+        "apps/office/src/sw/source/core/layout/newfrm.ts": 793,
+        "apps/office/src/sw/source/core/crsr/swcrsr.ts": 239,
+        "apps/office/src/sw/source/core/crsr/trvltbl.ts": 381,
+        "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts": 986,
+        "apps/office/src/sw/source/uibase/wrtsh/move.ts": 16,
+        "apps/office/src/sw/source/uibase/docvw/edtwin.ts": 560,
+        "apps/office/src/sw/source/uibase/uiview/view.ts": 265,
+        "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts": 596,
+        "apps/office/src/sw/browser/editor/writer-line-measurement.ts": 114,
+        "apps/office/src/sw/browser/editor/native-section-navigation.test.tsx": 204,
+        "apps/office/src/sw/source/uibase/wrtsh/native-line-margin.test.ts": 248,
+        "apps/office/src/sw/browser/editor/native-line-margin.test.tsx": 100,
+        "apps/office/e2e/native-line-margin.spec.ts": 104
+      }
+    }
+  ]
+}

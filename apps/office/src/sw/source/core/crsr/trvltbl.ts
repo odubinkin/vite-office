@@ -7,6 +7,7 @@ import { SwTextNode } from "../txtnode/ndtxt";
 import type { SwDoc } from "../doc/doc";
 import type { SwUndoCursorState } from "../undo/undobj";
 import type { SwTableLine } from "../table/swtable";
+import { SwRootFrame } from "../layout/newfrm";
 
 /** Native extended range retains the first structural node and trailing table owners. */
 export type ExtendedSelection = readonly [SwNode, readonly SwTableNode[]];
@@ -19,9 +20,44 @@ export enum PopMode {
 
 /** Core cursor shell precedes editing/frame shells and owns actual table movement. */
 export abstract class SwCursorShell extends SwModify {
+  private cursorLayout: SwRootFrame | undefined;
+  /** Returns the native cursor's persistent layout owner. @returns Current document layout. */
+  public GetLayout(): SwRootFrame {
+    return (this.cursorLayout ??= new SwRootFrame(
+      /** Resolves the actual cursor-shell document. @returns Native document. */ () =>
+        this.GetDoc(),
+    ));
+  }
+  /** Reads the ordinary native cursor's label affinity. @returns Label position state. */
+  public IsInFrontOfLabel(): boolean {
+    return this.cursor.IsInFrontOfLabel();
+  }
+  /** Updates label affinity only when changed. @param value - New label state. @returns Whether changed. */
+  public SetInFrontOfLabel(value: boolean): boolean {
+    if (value === this.IsInFrontOfLabel()) return false;
+    this.cursor.SetInFrontOfLabel_(value);
+    return true;
+  }
+  /** Executes native LRMargin including repeated Home label entry. @param left - Beginning direction. @param api - API end includes spaces. @returns Frame or label admission. */
+  public LRMargin(left: boolean, api = false): boolean {
+    const cursor = this.getShellCursor(),
+      layout = this.GetLayout(),
+      atLeft = this.cursor.IsAtLeftRightMargin(layout, true, api);
+    let moved = cursor.LeftRightMargin(layout, left, api);
+    if (left && !this.IsTableMode() && moved && atLeft && !this.cursor.HasMark()) {
+      const node = this.cursor.GetPoint().GetNode() as SwTextNode;
+      if (node.HasVisibleNumberingOrBullet()) this.SetInFrontOfLabel(true);
+    } else if (!left) moved = this.SetInFrontOfLabel(false) || moved;
+    if (moved) this.UpdateTableCursor();
+    return moved;
+  }
   protected cursor!: SwCursor;
   protected tableCursor: SwTableCursor | undefined;
   private stackCursor: SwCursor | undefined;
+  /** Clears all native saved cursor positions before a user movement. @returns Nothing. */
+  public ResetCursorStack(): void {
+    while (this.stackCursor !== undefined) this.Pop(PopMode.DeleteStack);
+  }
   /** Returns the actual saved native cursor head. @returns Registered stack cursor or no saved cursor. */
   protected GetStackCursor(): SwCursor | undefined {
     return this.stackCursor;

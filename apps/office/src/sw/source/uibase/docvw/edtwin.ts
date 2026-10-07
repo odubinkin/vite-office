@@ -16,6 +16,7 @@ import { SwTab, type SwTableMousePoint } from "../../../inc/fesh";
 import type { SwTabFrame } from "../../core/layout/tabfrm";
 import { SwTabCols } from "../../core/bastyp/tabcol";
 import { PointerStyle } from "../../../../vcl/ptrstyle";
+import type { SwTextLine } from "../../core/text/txtfrm";
 
 /** Performs no invalidation for detached/test edit windows. @returns Nothing. */
 function ignoreEditWindowInvalidation(): void {}
@@ -370,6 +371,24 @@ export class SwEditWin {
   public MoveSectionBoundary(start: boolean, select = false): boolean {
     return this.Complete(
       start ? this.wrtShell.StartOfSection(select) : this.wrtShell.EndOfSection(select),
+    );
+  }
+  /** Publishes device lines for the actual current master/follow text frame. @param nodeIndex - Current native text-node index. @param lines - Browser-shaped UTF16 lines. @param start - Frame start. @param end - Frame end. @returns Whether the owner exists. */
+  public SetCursorTextFrame(
+    nodeIndex: number,
+    lines: readonly SwTextLine[],
+    start: number,
+    end: number,
+  ): boolean {
+    const node = this.ResolveTextNode(nodeIndex);
+    if (node === undefined) return false;
+    this.wrtShell.GetLayout().SetCursorTextFrame(node, lines, start, end);
+    return true;
+  }
+  /** Executes source line-boundary intent through the native shell. @param left - Beginning direction. @param select - Extend selection. @returns Native admission. */
+  public MoveLineBoundary(left: boolean, select = false): boolean {
+    return this.Complete(
+      left ? this.wrtShell.LeftMargin(select, false) : this.wrtShell.RightMargin(select, false),
     );
   }
 

@@ -1,0 +1,12 @@
+{
+  "records": [
+    {
+      "command": "Unchanged JSDoc validator on approved changed code/acceptance paths; actual physical-line count",
+      "exit": 0,
+      "errors": [],
+      "physicalLines": {
+        "apps/office/src/sw/browser/editor/native-line-margin.test.tsx": 221
+      }
+    }
+  ]
+}

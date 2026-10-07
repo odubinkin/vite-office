@@ -42,7 +42,7 @@ export class SwView {
 
   /** Creates one persistent view over a persistent document shell. @param docShell - Owning Writer document shell. @returns Nothing. */
   public constructor(private readonly docShell: SwDocShell) {
-    this.wrtShell = new SwWrtShell(docShell, this.dialogController);
+    this.wrtShell = new SwWrtShell(docShell, this.dialogController, this.layout);
     this.docShell.SetView(this);
     this.editWindow = new SwEditWin(
       this.wrtShell,

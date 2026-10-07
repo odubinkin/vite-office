@@ -1,0 +1,61 @@
+{
+  "records": [
+    {
+      "command": "npm run format:check",
+      "exit": 1,
+      "bytes": 213,
+      "sha256": "adee50e96089333bf7f8705e0177466f54acb5d6b5bcb2c504bdf0e15e4cd628",
+      "diagnostics": [
+        "[warn] apps/office/e2e/native-line-margin.spec.ts",
+        "[warn] Code style issues found in the above file. Run Prettier with --write to fix."
+      ]
+    },
+    {
+      "command": "npm run lint",
+      "exit": 0,
+      "bytes": 55,
+      "sha256": "a6172cb57fa696e705408fdc605fba1ae07b852fdf0614d7c2b623349e285b6e",
+      "diagnostics": [
+        "> eslint . --max-warnings 0"
+      ]
+    },
+    {
+      "command": "npm run typecheck",
+      "exit": 2,
+      "bytes": 350,
+      "sha256": "aee7adf1242cc7536f3e4b616c761a822296c7ab1d6dc06d87ebbeaf8646ca35",
+      "diagnostics": [
+        "apps/office/src/sw/source/core/text/txtfrm.ts(206,3): error TS2741: Property '#lines' is missing in type 'Readonly<SwTextFrame>' but required in type 'SwTextFrame'."
+      ]
+    },
+    {
+      "command": "npm run check:dependencies",
+      "exit": 0,
+      "bytes": 189,
+      "sha256": "b695da221298514a757417e6612508b913f501e478b0c1cc00bf4b5b41c2b7f0",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:docs",
+      "exit": 1,
+      "bytes": 849,
+      "sha256": "2dc14470e6185ee9905fe6d566d467ecd46aadf63a69ce801c69a2bc784b60b7",
+      "diagnostics": [
+        "    throw new Error(`JSDoc validation failed:\\n${errors.join(\"\\n\")}`);",
+        "Error: JSDoc validation failed:",
+        "apps/office/src/sw/source/core/crsr/trvltbl.ts:26 function is missing JSDoc",
+        "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts:102 function documents 2/3 parameters",
+        "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts:105 function is missing JSDoc",
+        "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts:137 function is missing JSDoc",
+        "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts:141 function is missing JSDoc"
+      ]
+    },
+    {
+      "command": "npm run check:file-size",
+      "exit": 0,
+      "bytes": 3925,
+      "sha256": "39a03e9ed450e2bc2d47013ecaae9d4413ff3121e485567fb138bc9a575198e4",
+      "diagnostics": []
+    }
+  ]
+}

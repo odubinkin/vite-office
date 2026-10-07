@@ -146,11 +146,10 @@ describe("native section navigation UI", /** Registers native selection and brow
       expect(f.shell.getShellCursor()).toBe(ordinary);
     },
   );
-  it("accepts Meta intent and leaves visual-line,Alt,composition and unavailable selection unhandled", /** Checks translation does not guess native cursor from DOM siblings. @returns Nothing. */ () => {
+  it("accepts Meta intent and leaves Alt,composition and unavailable selection unhandled", /** Checks translation does not guess native cursor from DOM siblings. @returns Nothing. */ () => {
     const f = fixture(),
       tail = screen.getByLabelText("Row 1 column 2 paragraph 2");
     for (const mods of [
-      {},
       { ctrlKey: true, altKey: true },
       { ctrlKey: true, isComposing: true },
     ]) {

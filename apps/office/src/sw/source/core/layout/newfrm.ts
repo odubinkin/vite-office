@@ -17,7 +17,7 @@ import {
   makeSwTextFrame,
   projectSwLineNumbers,
   type SwLineNumberMark,
-  type SwTextFrame,
+  SwTextFrame,
   type SwTextFrameInput,
   type SwTextFrameMeasurement,
   type SwTextFrameSettings,
@@ -98,6 +98,29 @@ export interface SwRootFrameSnapshot {
 
 /** Persistent Writer layout root owning page and text-frame identity over device measurements. */
 export class SwRootFrame {
+  private readonly cursorFrames = new WeakMap<
+    SwTextNode,
+    { readonly text: string; readonly frame: SwTextFrame }
+  >();
+  /** Installs device-shaped geometry for an existing text-node frame. @param node - Native text owner. @param lines - Actual device lines. @param start - Master/follow start. @param end - Master/follow end. @returns Nothing. */
+  public SetCursorTextFrame(
+    node: SwTextNode,
+    lines: readonly SwTextLine[],
+    start: number,
+    end: number,
+  ): void {
+    this.cursorFrames.set(node, {
+      text: node.GetText(),
+      frame: new SwTextFrame(String(node.GetIndex()), start, end, start > 0, 0, lines),
+    });
+  }
+  /** Resolves the current native cursor's measured frame without stale text geometry. @param node - Existing model text owner. @returns Current frame, or no valid measurement. */
+  public GetCursorTextFrame(node: SwTextNode): SwTextFrame | undefined {
+    const measured = this.cursorFrames.get(node);
+    return node.GetDoc() === this.getDocument() && measured?.text === node.GetText()
+      ? measured.frame
+      : undefined;
+  }
   private dirty = true;
   private dirtyFrom = 0;
   private lastDocument: SwDoc | undefined;

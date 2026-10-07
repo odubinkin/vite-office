@@ -14,6 +14,7 @@ import type { WriterCursorSelection } from "./writer-selection-types";
 import { SwTab } from "../../inc/fesh";
 import { browserPointerStyle } from "../../../vcl/browser/pointer";
 import { SwTabFrame, type SwTableMouseCell } from "../../source/core/layout/tabfrm";
+import { measureWriterCursorTextLines } from "./writer-line-measurement";
 
 /** Mounted paragraph lookup retained by the browser edit window. */
 export type BrowserWriterParagraphResolver = (
@@ -46,7 +47,7 @@ export class BrowserWriterEditWindow {
   public constructor(
     private readonly editWindow: SwEditWin,
     private readonly environment: BrowserWriterEditWindowEnvironment,
-    resolveParagraph: BrowserWriterParagraphResolver,
+    private readonly resolveParagraph: BrowserWriterParagraphResolver,
   ) {
     this.selectionMapper = new BrowserWriterSelectionMapper(environment, resolveParagraph);
     /* c8 ignore start -- JSDOM lacks caretRangeFromPoint; geometry has isolated coverage. */
@@ -171,6 +172,39 @@ export class BrowserWriterEditWindow {
         if (this.SynchronizeSelection()) {
           this.editWindow.MoveSectionBoundary(event.key === "Home", event.shiftKey);
           event.preventDefault();
+        }
+      } else if (
+        (event.key === "Home" || event.key === "End") &&
+        !event.ctrlKey &&
+        !event.metaKey &&
+        !event.altKey &&
+        !event.nativeEvent.isComposing
+      ) {
+        const selection = this.selectionMapper.Read(),
+          point = selection?.point,
+          element =
+            point === undefined
+              ? undefined
+              : this.resolveParagraph(point.paragraphId, point.offset);
+        if (
+          selection !== undefined &&
+          point?.nodeIndex !== undefined &&
+          element !== undefined &&
+          this.ApplySelection(selection)
+        ) {
+          const start = Number(element.dataset.writerFragmentStart ?? 0),
+            end = Number(element.dataset.writerFragmentEnd ?? element.textContent?.length ?? 0);
+          if (
+            this.editWindow.SetCursorTextFrame(
+              point.nodeIndex,
+              measureWriterCursorTextLines(element),
+              start,
+              end,
+            )
+          ) {
+            this.editWindow.MoveLineBoundary(event.key === "Home", event.shiftKey);
+            event.preventDefault();
+          }
         }
       } else if (
         event.key === "Tab" &&

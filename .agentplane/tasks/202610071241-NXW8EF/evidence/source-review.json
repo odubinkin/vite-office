@@ -1,0 +1,37 @@
+{
+  "baselineTag": "libreoffice-26.8.0.2",
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceSHA256": {
+    "sw/source/core/text/frmcrsr.cxx": "0a86fdd9d05ec78cc20d63c25865b99262d0717acf4e9053f276a65a07c68338",
+    "sw/source/core/text/itrtxt.cxx": "3eb492cc2c3ccaf194a0207f72401ee8d61d03343810360c29628cb51dbc8a9d",
+    "sw/source/core/crsr/swcrsr.cxx": "682cbb23cd826925fbf67362f31e7a9903cce89863fa6263aa08675ef9516644",
+    "sw/source/core/crsr/crsrsh.cxx": "22a10693b0097a1788df0b2b63153790a37a4ce0f79ddaa4da8ec2c30c3c4f3a",
+    "sw/source/uibase/wrtsh/move.cxx": "266b3e88648bdecb5a9d98ddf6d1d7189763a6a4d0a428e06e793c12a31699e8",
+    "sw/source/uibase/shells/txtcrsr.cxx": "311959b6875d53acdb78c3fa3c5874c66da45380c329d70048caae1233d1ac6e",
+    "sw/source/uibase/inc/wrtsh.hxx": "b4d95a93df5a07fe869e8768d5e130ac86fc0fb8aa98fe123d8d568d13e858e4",
+    "sw/inc/crsrsh.hxx": "d5b15bac7672883e45c63022c5f3b188d210373651dcf2895115b1a019af0503"
+  },
+  "productionSHA256": {
+    "apps/office/src/sw/source/core/text/txtfrm.ts": "a86156891ae15bafe45b0474bf52aa5709fb2b7b56f4282cd85e9635b5df704e",
+    "apps/office/src/sw/source/core/text/itrtxt.ts": "659583cf24d63dc9f0789492f879024e60cc837f151e3875e42a3259cd26b342",
+    "apps/office/src/sw/source/core/text/frmcrsr.ts": "4cf1fe458f3f59c21c43b9e3617cdb63a69bb42c8554f99054d6e6a7b962044d",
+    "apps/office/src/sw/source/core/layout/newfrm.ts": "44ae7e620f6f271913df427fe26872a225acb5420e814773f5df68286be25c3c",
+    "apps/office/src/sw/source/core/crsr/swcrsr.ts": "ecbeb443c70bf93079cf28078548574cbe9eff3f92b00a0e945ef50f8bacdf4a",
+    "apps/office/src/sw/source/core/crsr/trvltbl.ts": "00e739d2a7bf4979bc4411aec122f7eabb888091412f952f172a018b7bc0dbac",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts": "4b7c256d33864499c7e0a2e416e8e9ee3ab4998d366ff026d1b8a34a703966eb",
+    "apps/office/src/sw/source/uibase/wrtsh/move.ts": "f4b1db40d657d16c4f46307faa1bb19ddbeafde9c2f7e48cbd8eb4f2b4bcb5f9",
+    "apps/office/src/sw/source/uibase/docvw/edtwin.ts": "8b43387297ecae3f6ff2c39fe5d52c7f79dbeddf79cb9bc10a1a7ccc39178992",
+    "apps/office/src/sw/source/uibase/uiview/view.ts": "dfcff469eecbb6bb0410ac762bc4f141fbf607cd9db391ae2288c1640999e31b",
+    "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts": "9963a881fe4a8c838dc6c0672a2ce2375aa2ea7d0687b61f8927b9afdba4c4ce",
+    "apps/office/src/sw/browser/editor/writer-line-measurement.ts": "727f78a23e683b8767c05815068c8fc9654bb613602e858a1c63e13cbbbb728d"
+  },
+  "contracts": {
+    "frame": "frmcrsr.cxx672-695/748-789: current formatted visual line start/end, skip hard break, trim ASCII spaces only interactive nonlast/follow lines; right margin affinity flag retained by native iterator. Existing fragment schema now native SwTextFrame methods; full layout-frame graph remains partial.",
+    "iterator": "itrtxt.cxx210-229 CharToLine and CharCursorToLine resolve next line at boundary, previous nonempty line only with right affinity, except after hard break; native UTF16 positions.",
+    "cursor": "swcrsr.cxx2145-2179 frame admission and temporary PaM margin query, right query decrements initial nonzero point, no document history. Current measured root frames keyed by real native nodes reject changed text/foreign graph.",
+    "shell": "crsrsh.cxx541-574 LRMargin repeats Home into visible label with no mark/table mode, End clears label state; move.cxx78-95/176-207 resets native cursor stack, starts/ends represented selection lifecycle then native movement. Pending input refreshed by existing UpdateTableCursor.",
+    "window": "txtcrsr.cxx127-139 routes ordinary/selected Home End to shell LeftMargin/RightMargin(falseBasic). Browser retains Ctrl/Meta section route and guards Alt/composition/missing selection, measures DOM UTF16 lines and routes through SwEditWin. Native view and shell share persistent layout."
+  },
+  "residual": "Full RTL/bidi and readonly scrolling/fly/merged-text frames, complete GetLayoutFrame graph/formatting and native marked-list-level/DOM label-affinity painting remain unverified. Device nullable text covered by explicit fault injection, not a normal rendered-paragraph claim. Native Name informational modal, allocator/chart/frame attributes and whole parity remain unverified. Registered save/open/recovery deviations preserved.",
+  "reviewer": "Current CODER source review; same current-agent EVALUATOR explicitly not independent."
+}
