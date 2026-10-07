@@ -1,10 +1,11 @@
 ---
 id: "202610070258-JSRZD5"
 title: "Move Writer table border application to native document ownership"
-status: "DOING"
+result_summary: "Document owns border admission, selected endpoint rectangle, history and notification; removed unselected whole-table fallback.13239app109inventory5scripts248Chromium PASS, actual100 app/inventory,548oldtests and281metadata prefixes preserved. Native box/info carrier parity remains next."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
   findings:
     - "Removed shell border mutation and whole-unselected-table fallback; actual original graph/current or marked rectangle history preserved.13239app109inventory5scripts248Chromium PASS, actual100 via proven whole source/maps actual counters.548oldtests and281metadata prefixes preserved."
     - "Source gates executed before absence profile; post-restoration unchanged native input hashes proved, no passing replay or audit while live. No tested production/source/metadata input changed."
-commit: null
+commit:
+  hash: "e2b40fc4a89b6cdf42e93a612ad03ec1f93ec60c"
+  message: "🚧 JSRZD5 code: delegate table borders to native document selection and history"
 comments:
   -
     author: "CODER"
     body: "Start: authorized native border document ownership and point/mark selection correction; preserve deliberate I/O deviations and all prior acceptance contracts."
+  -
+    author: "CODER"
+    body: "Verified: native SwDoc border ownership and point/mark rectangle scope preserve original graph and cursor history; all declared cases pass without upstream, actual100 source/maps coverage and deliberate I/O deviations retained."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: exact implementation e2b40fc4a89b6cdf42e93a612ad03ec1f93ec60c passes native document border ownership and endpoint scope;13239app109inventory5scripts248Chromium PASS without upstream, actual100 source/maps coverage,548oldtests and281metadata prefixes preserved. Same-agent EVALUATOR not independent; full native border model remains next."
+  -
+    type: "status"
+    at: "2026-10-07T03:12:01.350Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native SwDoc border ownership and point/mark rectangle scope preserve original graph and cursor history; all declared cases pass without upstream, actual100 source/maps coverage and deliberate I/O deviations retained."
 doc_version: 3
-doc_updated_at: "2026-10-07T03:11:39.725Z"
+doc_updated_at: "2026-10-07T03:12:01.351Z"
 doc_updated_by: "CODER"
 description: "Iteration205: remove shell-owned box formatting and whole-unselected-table fallback; use SwDoc border ownership and actual point/mark rectangle scope, document history and notification. Preserve deliberate I/O deviations; full native box/info carriers remain next."
 sections:
