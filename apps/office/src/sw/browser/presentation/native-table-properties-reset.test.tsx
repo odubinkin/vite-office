@@ -150,13 +150,13 @@ it("Text Flow and Borders Reset each restore their initial controls and preserve
     expect.objectContaining({
       width: 2835,
       minRowHeight: 1134,
-      padding: 80,
-      border: "1pt solid #000000",
       headerRows: 0,
       repeatHeaderRows: false,
     }),
   );
   expect(f.submit.mock.calls[0]?.[0]).not.toHaveProperty("verticalAlign");
+  expect(f.submit.mock.calls[0]?.[0]).not.toHaveProperty("padding");
+  expect(f.submit.mock.calls[0]?.[0]).not.toHaveProperty("border");
 });
 it("Reset after invalid page data clears validation and Cancel keeps original owners", /** Checks no accidental submit/history or whole-document mutation. @returns Nothing. */ () => {
   const f = fixture();

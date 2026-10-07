@@ -196,8 +196,9 @@ function WriterTablePropertiesDialog({
               marginBottom: formatPage.below,
               columnWidths,
               minRowHeight,
-              padding,
-              border,
+              ...(padding === initial.padding && border === initial.border
+                ? {}
+                : { padding, border }),
               ...(verticalAlign === initial.verticalAlign ? {} : { verticalAlign }),
               headerRows: textFlowPage.GetRowsToRepeat(),
               repeatHeaderRows: textFlowPage.GetRowsToRepeat() > 0,

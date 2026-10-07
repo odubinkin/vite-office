@@ -1,0 +1,75 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx": "cc21f0f7e1d7c7b49570f593bd7411ce4ef5c18639830c98870bfc07573252cd",
+    "apps/office/src/sw/source/uibase/shells/tabsh.ts": "9f0d7de4e25987431129ef88aec9b73087eb5a613fc92a6f391eaff591e480ea",
+    "apps/office/src/sw/source/core/frmedt/fetab.ts": "a4485c4db928c7c20e0621227a0acd887b8a17c700efc30e25d45022292776c9",
+    "apps/office/src/sw/browser/presentation/native-table-properties-reset.test.tsx": "8d043daa39d5590f493300ecc2ae95f029d952de57ff3bb5efc1f57e71cca8e4",
+    "apps/office/src/sw/browser/presentation/native-table-border-changed-items.test.tsx": "e64df1560c6dd01cb02642dadd42701880234db9cbd031046c29c51a0454fe15",
+    "apps/office/e2e/writer-table-border-changed-items.spec.ts": "4b6ef3a0378b68c33d6e3624e989b3632bfd6a73741bd240a779c6f5556c9d30",
+    "docs/program/source-provenance.json": "7b2f416fffc7ba8e93ee35014fd00047aebe9d12efbe4fa98676ca316e14e7f7",
+    "docs/program/parity/runtime-inventory.json": "13ad2fc96ddabfdf8d3c90df393d6d9a7a472e4cd65dd70f0f61e97dda272480"
+  },
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm exec -- vitest run src/sw/browser/presentation/native-table-border-changed-items.test.tsx -t native untouched acceptance skips temporary selection with nonzero original history endpoints|represented direct border admission retains nonzero ordinary history and original cell identities --coverage --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0 --coverage.reporter=json --coverage.reporter=json-summary --coverage.reportOnFailure --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/A9NQZ4.app-closure2-results.json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 531,
+      "sha256": "482ce8b674412ec3a3ff6a9aa2c289c5b4e8c6a83b65c2053d2f95056f4aa824",
+      "totals": [
+        "Test Files  1 passed (1)",
+        "Tests  2 passed | 11 skipped (13)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "passed": 2,
+        "failed": 0,
+        "skipped": 11,
+        "total": 13
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 15089,
+          "covered": 3065,
+          "skipped": 0,
+          "pct": 20.31
+        },
+        "statements": {
+          "total": 16556,
+          "covered": 3186,
+          "skipped": 0,
+          "pct": 19.24
+        },
+        "functions": {
+          "total": 3858,
+          "covered": 824,
+          "skipped": 0,
+          "pct": 21.35
+        },
+        "branches": {
+          "total": 12315,
+          "covered": 1287,
+          "skipped": 0,
+          "pct": 10.45
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverage": {
+        "lines": 20.31,
+        "statements": 19.24,
+        "functions": 21.35,
+        "branches": 10.45
+      },
+      "incompleteFileCount": 252,
+      "coverageMapSHA256": "98222d669eb79027af9ab2514f6767f9ad215973c7483e399d2270cceb01b5b9"
+    }
+  ]
+}

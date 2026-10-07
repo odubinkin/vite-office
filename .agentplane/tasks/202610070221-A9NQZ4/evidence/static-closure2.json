@@ -1,0 +1,11 @@
+{
+  "records": [
+    {
+      "command": "npm run typecheck --workspace @vite-office/office",
+      "exit": 0,
+      "sha256": "95074d7a9bb3a320c929b8c8311534bfdc86e140dc41177f3228e50a346e94b2",
+      "bytes": 55,
+      "diagnostics": []
+    }
+  ]
+}

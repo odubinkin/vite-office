@@ -1,0 +1,33 @@
+{
+  "records": [
+    {
+      "command": "Unchanged JSDoc validator on approved changed code/acceptance paths; actual physical-line count",
+      "exit": 0,
+      "errors": [],
+      "physicalLines": {
+        "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx": 619,
+        "apps/office/src/sw/source/uibase/shells/tabsh.ts": 181,
+        "apps/office/src/sw/browser/presentation/native-table-properties-reset.test.tsx": 182,
+        "apps/office/src/sw/browser/presentation/native-table-border-changed-items.test.tsx": 207,
+        "apps/office/e2e/writer-table-border-changed-items.spec.ts": 66
+      }
+    },
+    {
+      "command": "npm exec -- prettier --check apps/office/src/sw/browser/presentation/WriterTableDialog.tsx apps/office/src/sw/source/uibase/shells/tabsh.ts apps/office/src/sw/browser/presentation/native-table-properties-reset.test.tsx apps/office/src/sw/browser/presentation/native-table-border-changed-items.test.tsx apps/office/e2e/writer-table-border-changed-items.spec.ts",
+      "exit": 1,
+      "bytes": 172,
+      "sha256": "7fdcc083b551771f5732ab9db8f1f6229577fe8ee5608c44c2a31ebdeb75f42a",
+      "diagnostics": [
+        "[warn] apps/office/e2e/writer-table-border-changed-items.spec.ts",
+        "[warn] Code style issues found in the above file. Run Prettier with --write to fix."
+      ]
+    },
+    {
+      "command": "npm exec -- eslint apps/office/src/sw/browser/presentation/WriterTableDialog.tsx apps/office/src/sw/source/uibase/shells/tabsh.ts apps/office/src/sw/browser/presentation/native-table-properties-reset.test.tsx apps/office/src/sw/browser/presentation/native-table-border-changed-items.test.tsx apps/office/e2e/writer-table-border-changed-items.spec.ts --max-warnings 0",
+      "exit": 0,
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnostics": []
+    }
+  ]
+}

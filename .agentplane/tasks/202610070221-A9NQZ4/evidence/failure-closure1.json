@@ -1,0 +1,105 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx": "cc21f0f7e1d7c7b49570f593bd7411ce4ef5c18639830c98870bfc07573252cd",
+    "apps/office/src/sw/source/uibase/shells/tabsh.ts": "9f0d7de4e25987431129ef88aec9b73087eb5a613fc92a6f391eaff591e480ea",
+    "apps/office/src/sw/source/core/frmedt/fetab.ts": "a4485c4db928c7c20e0621227a0acd887b8a17c700efc30e25d45022292776c9",
+    "apps/office/src/sw/browser/presentation/native-table-properties-reset.test.tsx": "8d043daa39d5590f493300ecc2ae95f029d952de57ff3bb5efc1f57e71cca8e4",
+    "apps/office/src/sw/browser/presentation/native-table-border-changed-items.test.tsx": "ad37640e7ce24504ded91c1448005c1fff41aa25dd0f3a573cc3dec6e059c274",
+    "apps/office/e2e/writer-table-border-changed-items.spec.ts": "4b6ef3a0378b68c33d6e3624e989b3632bfd6a73741bd240a779c6f5556c9d30",
+    "docs/program/source-provenance.json": "7b2f416fffc7ba8e93ee35014fd00047aebe9d12efbe4fa98676ca316e14e7f7",
+    "docs/program/parity/runtime-inventory.json": "13ad2fc96ddabfdf8d3c90df393d6d9a7a472e4cd65dd70f0f61e97dda272480"
+  },
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1443,
+      "sha256": "c3d5ffb14eef3ecffebd032cbdf9beec6206ff5141d5b7be74b1cf75dc54df48",
+      "totals": [],
+      "failedCases": []
+    },
+    {
+      "kind": "app",
+      "command": "npm exec -- vitest run src/sw/source/uibase/wrtsh/native-row-height-owner-history.test.ts src/sw/source/uibase/wrtsh/native-row-split-owner-history.test.ts src/sw/source/uibase/wrtsh/native-table-properties.test.ts src/sw/browser/presentation/native-table-border-changed-items.test.tsx -t native minimum-row-height history and continued editing mode=properties|native row split ownership and grouped history mode=properties|native table property application uses native selection scope and one attribute history selected=false|native represented complete box item history|native original cursor history before temporary border selection --coverage --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0 --coverage.reporter=json --coverage.reporter=json-summary --coverage.reportOnFailure --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/A9NQZ4.app-closure1-results.json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 819,
+      "sha256": "48e50fed3ce742af88686bc2e15fc060186a1a66718e61c5291af20d1f175786",
+      "totals": [
+        "Test Files  4 passed (4)",
+        "Tests  10 passed | 15 skipped (25)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "passed": 10,
+        "failed": 0,
+        "skipped": 15,
+        "total": 25
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 15089,
+          "covered": 5187,
+          "skipped": 0,
+          "pct": 34.37
+        },
+        "statements": {
+          "total": 16556,
+          "covered": 5402,
+          "skipped": 0,
+          "pct": 32.62
+        },
+        "functions": {
+          "total": 3858,
+          "covered": 1328,
+          "skipped": 0,
+          "pct": 34.42
+        },
+        "branches": {
+          "total": 12315,
+          "covered": 2848,
+          "skipped": 0,
+          "pct": 23.12
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverage": {
+        "lines": 34.37,
+        "statements": 32.62,
+        "functions": 34.42,
+        "branches": 23.12
+      },
+      "incompleteFileCount": 252,
+      "coverageMapSHA256": "ce3da6e87d36f2e73fa66b3a77be1b4582cc43077e13cc42efba14289341c0f5"
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts apps/office/e2e/writer-table-border-changed-items.spec.ts --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 705,
+      "sha256": "ae31e1f340dc7355a04201d0058a69b0b39b04902d33d7f87ee975e7ea6f3b7d",
+      "totals": [
+        "2 passed (3.5s)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "startTime": "2026-10-07T02:44:42.502Z",
+        "duration": 3451.392,
+        "expected": 2,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    }
+  ]
+}

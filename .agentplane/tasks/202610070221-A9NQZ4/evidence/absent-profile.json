@@ -1,0 +1,218 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx": "310989e1ad16339cdc77f454479c459beb9b10bd00ebfe99f5cd34343f24f85c",
+    "apps/office/src/sw/source/uibase/shells/tabsh.ts": "945d754c93d7d675eeb63689b046bae88ab91acb54fa906ca4840f0be4119b47",
+    "apps/office/src/sw/browser/presentation/native-table-properties-reset.test.tsx": "8d043daa39d5590f493300ecc2ae95f029d952de57ff3bb5efc1f57e71cca8e4",
+    "apps/office/src/sw/browser/presentation/native-table-border-changed-items.test.tsx": "21ee32839098a698e2c2de3eb9125dd4f1de2a24271a65e20b132341742a2758",
+    "apps/office/e2e/writer-table-border-changed-items.spec.ts": "7564396bb087b22a6623f4b541808dd6b28b46731baf3472b9cd5ba85372a3f8",
+    "docs/program/source-provenance.json": "e7e29d5d8e7f5c88432820689b6f358ac864ea6c48e7c98d8083300c2e722092",
+    "docs/program/parity/runtime-inventory.json": "b35517ed2d5f45427f5fdfc14d34a4937b5c565fac6d8ac979d58a6294fc8a3e"
+  },
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1443,
+      "sha256": "186b8d68940fa8e7a4cd98500db2932b5a077fd21e1a60f771a16440f9277f40",
+      "totals": [],
+      "failedCases": []
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/A9NQZ4.app-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 3023975,
+      "sha256": "1a31010cd38224a1a99cc5eac4ce6e88ff80fab9e19a1fad1a8beccc0df2f86b",
+      "totals": [
+        "Test Files  3 failed | 407 passed (410)",
+        "Tests  3 failed | 13221 passed (13224)"
+      ],
+      "failedCases": [
+        {
+          "name": "apps/office/src/sw/source/uibase/wrtsh/native-row-height-owner-history.test.ts > native minimum-row-height history and continued editing mode=properties",
+          "assertion": [
+            "AssertionError: expected { node: SwTextNode{ …(16) }, …(1) } to deeply equal { Object (node, offset) }"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/source/uibase/wrtsh/native-row-split-owner-history.test.ts > native row split ownership and grouped history mode=properties",
+          "assertion": [
+            "AssertionError: expected { node: SwTextNode{ …(16) }, …(1) } to deeply equal { Object (node, offset) }"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/source/uibase/wrtsh/native-table-properties.test.ts > native table property application uses native selection scope and one attribute history selected=false",
+          "assertion": [
+            "AssertionError: expected { Object (node, offset) } to deeply equal { Object (node, offset) }"
+          ]
+        }
+      ],
+      "caseCounts": {
+        "passed": 13221,
+        "failed": 3,
+        "skipped": 0,
+        "total": 13224
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 15088,
+          "covered": 15088,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 16555,
+          "covered": 16554,
+          "skipped": 0,
+          "pct": 99.99
+        },
+        "functions": {
+          "total": 3858,
+          "covered": 3858,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 12311,
+          "covered": 12307,
+          "skipped": 0,
+          "pct": 99.96
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverage": {
+        "lines": 100,
+        "statements": 99.99,
+        "functions": 100,
+        "branches": 99.96
+      },
+      "incompleteFileCount": 3,
+      "coverageMapSHA256": "c69ab589012ad1377dcf1a5b1824ac59c49463934d5fd3e3dc6e2387f31c625c"
+    },
+    {
+      "kind": "inventory",
+      "command": "npm run test:inventory:coverage -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/A9NQZ4.inventory-results.json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 40596,
+      "sha256": "956de7141bd60e78d91f7d2ffdce602392455056b683f0ac2e4a37e114e2caf7",
+      "totals": [
+        "Test Files  36 passed (36)",
+        "Tests  109 passed (109)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "passed": 109,
+        "failed": 0,
+        "skipped": 0,
+        "total": 109
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 1464,
+          "covered": 1464,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 1523,
+          "covered": 1523,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 384,
+          "covered": 384,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 1080,
+          "covered": 1080,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100
+      },
+      "incompleteFileCount": 0,
+      "coverageMapSHA256": "f54a78f1a08292295c7639242f2e0250e2c03a83fe9b0e55d1428ca42f95cf1f"
+    },
+    {
+      "kind": "scripts",
+      "command": "npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 218,
+      "sha256": "ca07f2a3157bd8a8922a21260f1c3ba7c5aa704f354323a9b46f61b18dc09831",
+      "totals": [
+        "Test Files  2 passed (2)",
+        "Tests  5 passed (5)"
+      ],
+      "failedCases": []
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 40702,
+      "sha256": "435850decd965264d7e992d9a8700cbfc4b45d4261ecd35830ce2cba71dbfeba",
+      "totals": [
+        "2 failed",
+        "246 passed (1.7m)"
+      ],
+      "failedCases": [
+        {
+          "name": "writer-table-border-changed-items.spec.ts > native changed border properties preserve untouched cells width=1280",
+          "errors": [
+            [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCSS\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed",
+              "Expected: \u001b[32m\"none\"\u001b[39m",
+              "Received: \u001b[31m\"dashed\"\u001b[39m"
+            ]
+          ]
+        },
+        {
+          "name": "writer-table-border-changed-items.spec.ts > native changed border properties preserve untouched cells width=390",
+          "errors": [
+            [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCSS\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed",
+              "Expected: \u001b[32m\"none\"\u001b[39m",
+              "Received: \u001b[31m\"dashed\"\u001b[39m"
+            ]
+          ]
+        }
+      ],
+      "caseCounts": {
+        "startTime": "2026-10-07T02:36:00.595Z",
+        "duration": 102228.093,
+        "expected": 246,
+        "skipped": 0,
+        "unexpected": 2,
+        "flaky": 0
+      }
+    }
+  ]
+}

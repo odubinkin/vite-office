@@ -20,8 +20,8 @@ export interface SwTableProperties {
   readonly marginBottom?: number;
   readonly columnWidths: readonly number[];
   readonly minRowHeight: number;
-  readonly padding: number;
-  readonly border: string;
+  readonly padding?: number | undefined;
+  readonly border?: string | undefined;
   readonly verticalAlign?: number | undefined;
   readonly headerRows: number;
   readonly repeatHeaderRows: boolean;
@@ -45,15 +45,21 @@ export function ItemSetToTableParam(shell: SwFEShell, value: SwTableProperties):
   return shell.RunNotificationTransaction(
     /** Groups native property mutations. @returns Whether admitted. */ () => {
       const undo = shell.GetDoc().GetUndoManager();
+      const cursorState = shell.CaptureCursorState();
       undo.StartUndo("Table Properties");
       try {
-        shell.SetTabBorders({ padding: value.padding, border: value.border });
-        if (value.rowSplit !== undefined) {
+        const borders = {
+          ...(value.padding === undefined ? {} : { padding: value.padding }),
+          ...(value.border === undefined ? {} : { border: value.border }),
+        };
+        const hasBorders = value.padding !== undefined || value.border !== undefined;
+        if (hasBorders || value.rowSplit !== undefined) {
           const selected = shell.IsTableMode();
           shell.Push();
           try {
             if (!selected) shell.SelTable();
-            shell.SetRowSplit(value.rowSplit);
+            if (hasBorders) shell.SetTabBorders(borders, cursorState);
+            if (value.rowSplit !== undefined) shell.SetRowSplit(value.rowSplit, cursorState);
           } finally {
             if (!selected) shell.ClearMark();
             shell.Pop(PopMode.DeleteCurrent);

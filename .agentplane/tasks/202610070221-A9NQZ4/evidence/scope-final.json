@@ -1,0 +1,35 @@
+{
+  "base": "d3af14e552e5d9c6c84ad61e154f72ff34be802f",
+  "approvedPaths": [
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx",
+    "apps/office/src/sw/source/uibase/shells/tabsh.ts",
+    "apps/office/src/sw/source/core/frmedt/fetab.ts",
+    "apps/office/src/sw/browser/presentation/native-table-properties-reset.test.tsx",
+    "apps/office/src/sw/browser/presentation/native-table-border-changed-items.test.tsx",
+    "apps/office/e2e/writer-table-border-changed-items.spec.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "actualSemanticPaths": [
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx",
+    "apps/office/src/sw/browser/presentation/native-table-properties-reset.test.tsx",
+    "apps/office/src/sw/source/core/frmedt/fetab.ts",
+    "apps/office/src/sw/source/uibase/shells/tabsh.ts",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/source-provenance.json",
+    "apps/office/e2e/writer-table-border-changed-items.spec.ts",
+    "apps/office/src/sw/browser/presentation/native-table-border-changed-items.test.tsx"
+  ],
+  "oldAcceptanceFiles": 546,
+  "oldAcceptanceByteIdentical": 545,
+  "oldAcceptanceChanged": [
+    "apps/office/src/sw/browser/presentation/native-table-properties-reset.test.tsx"
+  ],
+  "totalAcceptanceFiles": 548,
+  "newAcceptanceFiles": 2,
+  "semanticRecords": 281,
+  "entirePriorPrefixesPreserved": true,
+  "historicalLiteralAssertionSurfacePreserved": true,
+  "parentPrefixSHA256": "66ab8dc41a81b9399fe98adca300cd572f1b782b378650ff061a0b05aa23d60c",
+  "failures": []
+}

@@ -1,0 +1,51 @@
+{
+  "records": [
+    {
+      "command": "npm run format:check",
+      "exit": 1,
+      "bytes": 228,
+      "sha256": "7e08676a8e6bd45a9f3da242519847ad2446b79415eb1aa47d69a1f5618d5e5b",
+      "diagnostics": [
+        "[warn] apps/office/e2e/writer-table-border-changed-items.spec.ts",
+        "[warn] Code style issues found in the above file. Run Prettier with --write to fix."
+      ]
+    },
+    {
+      "command": "npm run lint",
+      "exit": 0,
+      "bytes": 55,
+      "sha256": "a6172cb57fa696e705408fdc605fba1ae07b852fdf0614d7c2b623349e285b6e",
+      "diagnostics": [
+        "> eslint . --max-warnings 0"
+      ]
+    },
+    {
+      "command": "npm run typecheck",
+      "exit": 0,
+      "bytes": 240,
+      "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:dependencies",
+      "exit": 0,
+      "bytes": 189,
+      "sha256": "69c3c95384bc7ce69ac714a34818475fa93f51014c06b8fc45e6879255ecf7dd",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:docs",
+      "exit": 0,
+      "bytes": 119,
+      "sha256": "fbc82ffa2a26a951cc81562bf15a1ec76f785cae7d89d818c2523e402339f193",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:file-size",
+      "exit": 0,
+      "bytes": 3865,
+      "sha256": "a2746758adad2f449b4f0e8a0a1e8074511ef613a9a9c17d667db04fd69b5b43",
+      "diagnostics": []
+    }
+  ]
+}

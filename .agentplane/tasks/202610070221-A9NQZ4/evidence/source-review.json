@@ -1,0 +1,11 @@
+{
+  "sourceSHA256": {
+    "cui/source/tabpages/border.cxx": "8e66dee6229b85712397c97f06ec7f3a924a4addf6abee7a7b88eb9d3d08d26d",
+    "sw/source/uibase/shells/tabsh.cxx": "ac075f90575663fac974e2804e7111b1df3f596eb5bb400fb9fc2f4be0058163",
+    "sw/source/core/frmedt/fetab.cxx": "e7b7c7164f76d7e67eddcf863128d41c3c2ea2946362b8509bab0bc2cdc9f016",
+    "sw/source/core/docnode/ndtbl1.cxx": "c94a3a78edc61fc2b2a0419371f70cffc5466ceca3d0b8f29160cceff0b37663"
+  },
+  "parentFindingsCharacters": 541073,
+  "parentFindingsSHA256": "5dc3324e978f9bf090791b6ad39ccf7b294878b92473d82aefddff7ea6748efb",
+  "contracts": "SvxBorderTabPage compares complete box/info and supplies changed items; ItemSetToTableParam bBorder from SET box/info, conditional Push/temporary select-all/ClearMark/Pop shared with rowSplit. SwFEShell delegates native borders to doc. Full native items/per-edge validity/union geometry/common mixed border controls/document ownership remain unverified."
+}

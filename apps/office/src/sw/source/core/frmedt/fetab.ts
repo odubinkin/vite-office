@@ -10,6 +10,7 @@ import { SwTableBoxStartNode } from "../docnode/node";
 import { CheckSplitCells } from "./tblsel";
 import type { SwTextNode } from "../txtnode/ndtxt";
 import { SwUndoAttrTable } from "../undo/untbl";
+import type { SwUndoCursorState } from "../undo/undobj";
 import { SwTab, type SwTableMousePoint } from "../../../inc/fesh";
 import { SwTabFrame, type SwTableMouseCell, type SwTableMouseRect } from "../layout/tabfrm";
 import { SwTabCols } from "../bastyp/tabcol";
@@ -384,11 +385,16 @@ export abstract class SwFEShell extends SwEditShell {
     return SwDoc.GetRowHeight(this.getShellCursor());
   }
 
-  /** Applies native row splitting through document-owned current or selected rows. @param split - Whether rows may split. @returns Whether admitted. */
-  public SetRowSplit(split: boolean): boolean {
+  /** Applies native row splitting through document-owned current or selected rows. @param split - Whether rows may split. @param cursorState - Original displayed cursor before temporary selection. @returns Whether admitted. */
+  public SetRowSplit(split: boolean, cursorState?: SwUndoCursorState): boolean {
     return this.RunNotificationTransaction(
       /** Forwards actual native selection and pending history attributes. @returns Whether admitted. */
-      () => this.GetDoc().SetRowSplit(this.getShellCursor(), split, this.CaptureCursorState()),
+      () =>
+        this.GetDoc().SetRowSplit(
+          this.getShellCursor(),
+          split,
+          cursorState ?? this.CaptureCursorState(),
+        ),
     );
   }
 
@@ -397,8 +403,11 @@ export abstract class SwFEShell extends SwEditShell {
     return SwDoc.GetRowSplit(this.getShellCursor());
   }
 
-  /** Applies borders to selected boxes or the whole unselected table. @param value - Border and padding attributes. @returns Whether admitted. */
-  public SetTabBorders(value: Pick<SwTableBoxFormat, "padding" | "border">): boolean {
+  /** Applies borders to selected boxes or the whole unselected table. @param value - Border and padding attributes. @param cursorState - Original displayed cursor before temporary selection. @returns Whether admitted. */
+  public SetTabBorders(
+    value: Pick<SwTableBoxFormat, "padding" | "border">,
+    cursorState?: SwUndoCursorState,
+  ): boolean {
     const table = this.IsCursorInTable()?.GetTable();
     if (table === undefined) return false;
     const boxes = this.GetTableBoxes(table, true);
@@ -407,6 +416,7 @@ export abstract class SwFEShell extends SwEditShell {
       /** Updates represented border attributes only. @returns Nothing. */ () => {
         for (const box of boxes) box.SetFormat({ ...box.GetFormat(), ...value });
       },
+      cursorState,
     );
   }
 
@@ -444,9 +454,13 @@ export abstract class SwFEShell extends SwEditShell {
     );
   }
 
-  /** Records native attribute payload and invokes the existing shell transaction. @param table - Actual table owner. @param operation - Initial mutation. @returns Whether admitted. */
-  private ChangeTable(table: SwTable, operation: () => void): boolean {
-    const action = new SwUndoAttrTable(table, this.CaptureCursorState());
+  /** Records native attribute payload and invokes the existing shell transaction. @param table - Actual table owner. @param operation - Initial mutation. @param cursorState - Original displayed cursor before temporary selection. @returns Whether admitted. */
+  private ChangeTable(
+    table: SwTable,
+    operation: () => void,
+    cursorState?: SwUndoCursorState,
+  ): boolean {
+    const action = new SwUndoAttrTable(table, cursorState ?? this.CaptureCursorState());
     return this.ApplyAction(
       action,
       false,
