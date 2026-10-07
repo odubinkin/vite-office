@@ -1,0 +1,21 @@
+{
+  "iteration": 211,
+  "leaf": "202610070920-1HYVRE",
+  "implementation": "07950b29e9900b5cf2234cd6bc059dca7c6ab17c",
+  "evidenceTail": "ed8d2c63a48f5b87c2653ad4ea029c17e8d68ba7",
+  "close": "0a30edc089c85525c6a5dc5510428268346ff995",
+  "completePriorCharacters": 571048,
+  "completePriorSHA256": "33f21b5fd52edd5cc55845e31e11d04d5ade6568f7af0156f4e164c917c32c30",
+  "completePriorPrefixPreserved": true,
+  "finalFindingsSHA256": "f1acffd23bc38e9bbfcfba9ef6da42bea7f2879e41effd0bd78e3a2c37cfa5c4",
+  "cases": {
+    "app": 13483,
+    "inventory": 110,
+    "infrastructure": 14,
+    "chromium": 270
+  },
+  "oldAcceptanceBytesRetained": 570,
+  "parentGoalState": "ACTIVE; whole implemented parity unverified",
+  "postLeafTrackedAndAllClean": true,
+  "nextLeaf": "Port source-shaped separate SwTableHeightDlg automatic checkbox and command UI placement; extra properties height field composition remains unverified."
+}
