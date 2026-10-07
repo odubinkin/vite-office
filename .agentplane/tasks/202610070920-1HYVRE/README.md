@@ -1,10 +1,11 @@
 ---
 id: "202610070920-1HYVRE"
 title: "Preserve row height when Table Properties does not edit it"
-status: "DOING"
+result_summary: "Unchanged table properties preserve original Fixed Minimum Variable row height attributes"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +39,16 @@ quality_review:
     - ".agentplane/tasks/202610070920-1HYVRE/evidence/exact-sha-review.json"
   findings:
     - "Source presence-only delta admission preserves Fixed/Minimum/Variable and mixed rows;13483app110inventory14infrastructure270Chromium resolved without passing replay; all570old test bytes and291metadata prefixes retained; strict actual100 whole current-source/maps certificates verified including entire prior map for negative V8 inferred counters"
-commit: null
+commit:
+  hash: "07950b29e9900b5cf2234cd6bc059dca7c6ab17c"
+  message: "🚧 1HYVRE code: preserve unchanged native row height"
 comments:
   -
     author: "CODER"
     body: "Start: preserve source presence-only row-height delta admission under standing iterative parity authorization"
+  -
+    author: "CODER"
+    body: "Verified: unrelated table properties preserve original native row height types and mixed selection attributes"
 events:
   -
     type: "status"
@@ -57,8 +63,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Exact07950b29 unchanged height delta preserves native row types/owners;13483app110inventory14infrastructure270Chromium actual union,0passing replay; strict current-source whole-map100 certificates including complete prior map for invalid inferred counts; all570old tests/291metadata prefixes retained; same-agent evaluator not independent; separate native height UI/full parity remain active"
+  -
+    type: "status"
+    at: "2026-10-07T09:57:32.052Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: unrelated table properties preserve original native row height types and mixed selection attributes"
 doc_version: 3
-doc_updated_at: "2026-10-07T09:57:21.115Z"
+doc_updated_at: "2026-10-07T09:57:32.054Z"
 doc_updated_by: "CODER"
 description: "Iteration211 under standing native UI parity goal: apply only explicitly changed represented row-height input, preserving original Fixed/Variable/Minimum and mixed owners through unrelated table properties."
 sections:
