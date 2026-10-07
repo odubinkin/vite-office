@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202610071815-QNB8E3",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-07T18:34:18.032Z",
+  "verdict": "pass",
+  "summary": "Same-current-agent review explicitly not independent, actual implementation 46a66b37109a5f6acb5e4bdbe2cb02347a3f15f1 PASS. ONE full upstream-absent profile and original three failure closure only:13585 app,110 inventory,15 infrastructure,288 Chromium final uniquePASS; zero passing replay,6skipped observations retained without promotion; actual current-source all-four app/inventory coverage100.",
+  "evaluated_sha": "46a66b37109a5f6acb5e4bdbe2cb02347a3f15f1",
+  "blueprint_digest": "0d17c722dda40d040ed0a831add129aa739f28dce18a39c029041c5a8691d51f",
+  "findings": [
+    "Native XML scalar default/publication, zero/control/empty/first-codepoint export and actual Writer rule ownership match pinned xmlnumi/xmlnume/unosett anchors. Browser glyph projection removed from XML. All600 prior acceptance retained except three exact source-backed expectations in2files after original failures,302metadata preserved. Full UNO sequence/helper architecture, full importer/native UI/font shaping/unrepresented attributes remain partial/unverified; registered I/O/recovery deviations unchanged, exhaustive goal active."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610071815-QNB8E3/README.md",
+    ".agentplane/tasks/202610071815-QNB8E3/evidence/exact-sha-review.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}

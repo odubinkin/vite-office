@@ -1,0 +1,94 @@
+{
+  "implementationSHA": "46a66b37109a5f6acb5e4bdbe2cb02347a3f15f1",
+  "verdict": "pass",
+  "sameCurrentAgentReviewExplicitlyNotIndependent": true,
+  "caseCounts": {
+    "app": 13585,
+    "inventory": 110,
+    "infrastructure": 15,
+    "chromium": 288
+  },
+  "passingReplay": 0,
+  "skippedObservationsRetained": 6,
+  "sourceBoundCoverage": {
+    "app": {
+      "lines": {
+        "total": 16585,
+        "covered": 16585,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 18210,
+        "covered": 18210,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 4230,
+        "covered": 4230,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 13737,
+        "covered": 13737,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "inventory": {
+      "lines": {
+        "total": 1464,
+        "covered": 1464,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 1523,
+        "covered": 1523,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 384,
+        "covered": 384,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 1081,
+        "covered": 1081,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    }
+  },
+  "scopeCount": 9,
+  "priorAcceptance": 600,
+  "priorMetadata": 302,
+  "nativeSourceOwners": 3,
+  "fullProfileCount": 1,
+  "originalFailureClosureCases": 3,
+  "parentPrefixPreserved": true,
+  "deferredStashPreserved": true,
+  "residuals": [
+    "Full XML/UNO/filter/native UI/FontDescriptor/font shaping and all unrepresented properties remain partial/unverified.",
+    "Generic browser zero-to-empty visible marker remains intentional boundary; XML no longer uses it.",
+    "Registered save/open/recovery deviations unchanged; exhaustive persistent goal ACTIVE."
+  ],
+  "exhaustiveGoal": "ACTIVE, not achieved",
+  "failures": []
+}
