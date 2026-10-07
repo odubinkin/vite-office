@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202610071105-PWQ4D5",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-07T11:24:42.982Z",
+  "verdict": "pass",
+  "summary": "Exact implementation1b1e0e68 removes obsolete height ingress with source-native separate height ownership; same-agent EVALUATOR explicitly not independent.",
+  "evaluated_sha": "1b1e0e6845caf368320f9c3e832bc87cbf53779b",
+  "blueprint_digest": "ae286493bbf390ce22033efc128eff694e3d1e46d8857551e3705e9ec5ceb566",
+  "findings": [
+    "13497app110inventory14infrastructure272Chromium resolved,0passing replay,5focused skips retained. Actual current-source app and inventory coverage100 via290and38whole source/map certificates; original metadata and all unrelated acceptance assertions preserved. Native properties and height have independent undo groups with original mixed row owners."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610071105-PWQ4D5/README.md",
+    ".agentplane/tasks/202610071105-PWQ4D5/evidence/exact-sha-review.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
