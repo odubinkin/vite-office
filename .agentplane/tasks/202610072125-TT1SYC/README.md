@@ -1,10 +1,11 @@
 ---
 id: "202610072125-TT1SYC"
 title: "Advance list text past occupied bullet at exhausted tab stops"
-status: "DOING"
+result_summary: "Native list text advances beyond occupied bullet to next tab;13672app296ChromePASS, one full absent run and only actual failed cases closure, goal ACTIVE."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -43,11 +44,16 @@ quality_review:
     - ".agentplane/tasks/202610072125-TT1SYC/evidence/case-census.json"
   findings:
     - "609old acceptance files byte-identical;303metadata records retain302prior prefixes/status/defaults.13672app110inventory15infra296Chrome uniquePASS, zero passing replay, all4 source-bound app/inventory100. Only original failed fixtures/order cases rerun; initial outcomes retained. Five pinned source owners and scope8; full formatter/RTL/overflow/specialized compatibility/ruler ownership remain unverified."
-commit: null
+commit:
+  hash: "07ab11fc4137c3badf02a158c89b5fc5d5db0f5a"
+  message: "🧩 TT1SYC parity: advance text beyond exhausted bullet tabs"
 comments:
   -
     author: "CODER"
     body: "Start: implement priority native list tab advance after occupied glyph width under standing user authorization; preserve all old acceptance and one upstream-absent runtime."
+  -
+    author: "CODER"
+    body: "Verified: bounded native exhausted bullet tab correction at07ab11fc4137c3badf02a158c89b5fc5d5db0f5a;13672app110inventory15infra296Chrome uniquePASS, all4source-bound100,609prior tests unchanged and one absent full profile, only original failure closure; native full formatter/ruler and exhaustive goal remain incomplete."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified bounded native exhausted-tab correction at07ab11fc:13672app110inventory15infra296Chrome uniquePASS, all4source-bound100, one full upstream-absent run and only actual failures closure,609old acceptance unchanged, partial native obligations and goal ACTIVE retained."
+  -
+    type: "status"
+    at: "2026-10-07T21:48:41.908Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: bounded native exhausted bullet tab correction at07ab11fc4137c3badf02a158c89b5fc5d5db0f5a;13672app110inventory15infra296Chrome uniquePASS, all4source-bound100,609prior tests unchanged and one absent full profile, only original failure closure; native full formatter/ruler and exhaustive goal remain incomplete."
 doc_version: 3
-doc_updated_at: "2026-10-07T21:48:24.566Z"
+doc_updated_at: "2026-10-07T21:48:41.909Z"
 doc_updated_by: "CODER"
 description: "Priority follow-up to reported bullet overlap: source-bound LTR label-alignment list tab selection after actual glyph advance, next explicit/default tab with native compatibility flags, measured browser refresh. Preserve legacy label-width distance, authored four-field layout, model/history/IO deviations. One full runtime absent upstream; no passing replay or upstream/raw AP sources."
 sections:
