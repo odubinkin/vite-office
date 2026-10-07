@@ -4,7 +4,7 @@ title: "Advance list text past occupied bullet at exhausted tab stops"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -20,10 +20,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-07T21:48:24.503Z"
+  updated_by: "CODER"
+  note: "Verified bounded native exhausted-tab correction at07ab11fc:13672app110inventory15infra296Chrome uniquePASS, all4source-bound100, one full upstream-absent run and only actual failures closure,609old acceptance unchanged, partial native obligations and goal ACTIVE retained."
   attempts: 0
 quality_review:
   state: "pass"
@@ -56,8 +56,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement priority native list tab advance after occupied glyph width under standing user authorization; preserve all old acceptance and one upstream-absent runtime."
+  -
+    type: "verify"
+    at: "2026-10-07T21:48:24.503Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified bounded native exhausted-tab correction at07ab11fc:13672app110inventory15infra296Chrome uniquePASS, all4source-bound100, one full upstream-absent run and only actual failures closure,609old acceptance unchanged, partial native obligations and goal ACTIVE retained."
 doc_version: 3
-doc_updated_at: "2026-10-07T21:47:54.436Z"
+doc_updated_at: "2026-10-07T21:48:24.566Z"
 doc_updated_by: "CODER"
 description: "Priority follow-up to reported bullet overlap: source-bound LTR label-alignment list tab selection after actual glyph advance, next explicit/default tab with native compatibility flags, measured browser refresh. Preserve legacy label-width distance, authored four-field layout, model/history/IO deviations. One full runtime absent upstream; no passing replay or upstream/raw AP sources."
 sections:
@@ -82,6 +88,39 @@ sections:
     Result: PASS final unique13672app110inventory15infrastructure296Chromium; zero unresolved/passing replay/flaky/uncaught. Focused two skipped inventory observations remain skipped, whole-graph focused coverage threshold exits retained. Source-bound all4 app/inventory100 without counter clamps/exclusions. Initial failures and explicit fixture/order correction are retained in evidence rather than hidden.
     Evidence: evidence/absent-profile.json, runtime-closure1.json, case-census.json, final-coverage.json, scope-final.json, source-review.json, source-gates.json, static-gates.json and scoped closures, changed-file-checks.json, artifact-census.json, governance.json. Raw maps/results/source snapshots only in ignored application cache, not AP.
     Scope: exact8semantic paths;609old acceptance files byte-identical,302old metadata contracts/prefixes preserved plus one honest partial native helper; real body/cell glyph-to-text positions, typing/UndoRedo and font/device updates. All original defaults/status/IO exceptions retained. Exact implementation SHA review and canonical verification checkpoint before actual-SHA finish; full parent/stash remain retained. Exhaustive goal ACTIVE.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-07T21:48:24.503Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified bounded native exhausted-tab correction at07ab11fc:13672app110inventory15infra296Chrome uniquePASS, all4source-bound100, one full upstream-absent run and only actual failures closure,609old acceptance unchanged, partial native obligations and goal ACTIVE retained.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-07T21:47:54.436Z, excerpt_hash=sha256:91d3be34c2b4ee88d908f0294d36f0ec622aeb20d118ae89cf8354b63973295a
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610072125-TT1SYC/blueprint/resolved-snapshot.json
+    - old_digest: cc57cf488b5918612b753d870bcab461838212f90817b198d5db3a5a49c1d512
+    - current_digest: cc57cf488b5918612b753d870bcab461838212f90817b198d5db3a5a49c1d512
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610072125-TT1SYC
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610072125-TT1SYC
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this leaf's intentional implementation and task artifacts; retain previous occupied-label correction and parent history."
   Findings: |-
     Pinned LibreOffice26.8.0.2 SHA9bc445578031fecf56086729d8e4940c77e14d65: txttab SwLineInfo::GetTabStop searches strictly beyond occupied label advance; NewTabPortion retains default-distance integer arithmetic, one-twip floor, native TAB_COMPAT minimum and bounded hanging-indent admission. inftxt InitLineInfo inserts/replaces list tab and removes preceding defaults; ndtxt and itrtxt define relative tab origin. Existing e625c6f3 occupied-label minimum retained. New partial txttab helper is production-used by the shared browser paragraph device over frozen native primitive inputs. Glyph advance is measured before paint, normalized from page transforms and refreshed for font readiness/loading and resize; device geometry alone changes, no extra model/history owner. Authored four-field listLayout, legacy distance, original609acceptance files and all302old metadata fields/prefixes/status/defaults preserved; exactly one new mapped partial module produces303records. Initial six static checks: format/lint/type/JSDoc failed; dependencies/size passed. Scoped changed/failed-input closures1..4 retain initial observations and finish PASS. ONE full upstream-absent profile: buildPASS, app13669PASS3freshfixtureFAIL, inventory109PASS1metadata-orderFAIL, infrastructure15PASS, Chromium292oldPASS4freshfixtureFAIL. Correct only fresh fixture inputs by explicit label-alignment/collapsed geometry and sort metadata by canonical path; no production behavior change after full profile, no old expectation edits. Only original failed cases rerun: app3PASS0SKIP, inventory1PASS2SKIP, Chromium4PASS0SKIP. Focused app/inventory CLI exit1 solely from unchanged whole-graph coverage thresholds, all actual assertions pass; combine actual source-bound maps rather than rerun passing suites. Final unique13672app110inventory15infrastructure296ChromiumPASS, zero unresolved/flaky/uncaught/passing replay. All4app100 L16687/S18321/F4244/B13834, inventory100 L1464/S1523/F384/B1081. Proof:300whole app38whole inventory source/maps; two complete prior regions (paragraph30S6F57B, projection68S26F44B) from verified59XVYZ; negative paintfrm -36 uses the entire unchanged prior verified map, never individual count sanitization. Five restored source gates,5source anchor/hash owners, exact8semantic scope, physical60..655lines/JSDoc, AP5639files0forbidden, doctor0errors2oldwarnings/routing/diffPASS. Full parent643730prefix/hash and deferred stash retained. Same-current-agent exact-SHA review is not independent; no whole formatter/list/table/UI or goal completion claim. Specialized direct-margin IGNORE_FIRST_LINE list-tab normalization, native wrapping/frame bounds/RTL/vertical/right-center-decimal/fill/font/ink, full native Ruler/ColumnItem/slot ownership and unknown exact user document reproduction remain unverified. Conscious save/open/recovery deviations unchanged; exhaustive goal ACTIVE.
@@ -121,6 +160,39 @@ Command: six initial static gates with only failed/changed-input scoped closure;
 Result: PASS final unique13672app110inventory15infrastructure296Chromium; zero unresolved/passing replay/flaky/uncaught. Focused two skipped inventory observations remain skipped, whole-graph focused coverage threshold exits retained. Source-bound all4 app/inventory100 without counter clamps/exclusions. Initial failures and explicit fixture/order correction are retained in evidence rather than hidden.
 Evidence: evidence/absent-profile.json, runtime-closure1.json, case-census.json, final-coverage.json, scope-final.json, source-review.json, source-gates.json, static-gates.json and scoped closures, changed-file-checks.json, artifact-census.json, governance.json. Raw maps/results/source snapshots only in ignored application cache, not AP.
 Scope: exact8semantic paths;609old acceptance files byte-identical,302old metadata contracts/prefixes preserved plus one honest partial native helper; real body/cell glyph-to-text positions, typing/UndoRedo and font/device updates. All original defaults/status/IO exceptions retained. Exact implementation SHA review and canonical verification checkpoint before actual-SHA finish; full parent/stash remain retained. Exhaustive goal ACTIVE.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-07T21:48:24.503Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified bounded native exhausted-tab correction at07ab11fc:13672app110inventory15infra296Chrome uniquePASS, all4source-bound100, one full upstream-absent run and only actual failures closure,609old acceptance unchanged, partial native obligations and goal ACTIVE retained.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-07T21:47:54.436Z, excerpt_hash=sha256:91d3be34c2b4ee88d908f0294d36f0ec622aeb20d118ae89cf8354b63973295a
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610072125-TT1SYC/blueprint/resolved-snapshot.json
+- old_digest: cc57cf488b5918612b753d870bcab461838212f90817b198d5db3a5a49c1d512
+- current_digest: cc57cf488b5918612b753d870bcab461838212f90817b198d5db3a5a49c1d512
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610072125-TT1SYC
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610072125-TT1SYC
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
