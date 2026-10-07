@@ -1,10 +1,11 @@
 ---
 id: "202610071920-YQ77NP"
 title: "Preserve Shift linear table column border dragging"
-status: "DOING"
+result_summary: "Existing browser drag now retains native solitary Shift and translates following internal column borders with source five-device-pixel limits; row Shift ignored. Final13623app110inventory15infrastructure290Chrome PASS, one upstream-absent full profile and only two original Chrome failure closures, all4 source-bound coverage100. All603prior acceptance302metadata preserved; full ruler/core/UI goal remains ACTIVE."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
     - ".agentplane/tasks/202610071920-YQ77NP/evidence/exact-sha-review.json"
   findings:
     - "Same current agent EVALUATOR review is explicitly not independent. Full ruler and exhaustive core/UI parity remain partial; registered IO deviations preserved."
-commit: null
+commit:
+  hash: "1faf5d9fb924eba5c939ffacd8bdd7d5a69b0d32"
+  message: "🧩 YQ77NP parity: preserve Shift table column border tracking"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved native solitary Shift column border translation under standing user parity authorization, preserving old acceptance and upstream-absent single profile."
+  -
+    author: "CODER"
+    body: "Verified: native solitary Shift column border tracking, source masks and original table history pass declared source/static/runtime checks with zero passing replay."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Final13623app110inventory15infrastructure290Chrome PASS; one full upstream-absent profile, only two original Chrome failures closed, zero passing replay, all4 source-bound coverage100,603oldacceptance302metadata preserved. Exact implementation1faf5d9fb924eba5c939ffacd8bdd7d5a69b0d32 review/EVALUATOR PASS explicitly same current agent not independent; all declared gates and source/artifact scope proofs recorded."
+  -
+    type: "status"
+    at: "2026-10-07T19:45:21.945Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native solitary Shift column border tracking, source masks and original table history pass declared source/static/runtime checks with zero passing replay."
 doc_version: 3
-doc_updated_at: "2026-10-07T19:44:10.523Z"
+doc_updated_at: "2026-10-07T19:45:21.947Z"
 doc_updated_by: "CODER"
 description: "Iteration225: browser loses native drag modifier; source SvxRuler EvalModifier Shift linear DragBorders must translate following separators with native five-device-pixel constraints, preserve deferred original table history and ordinary row drag. Standing user parity goal authorizes safe local implementation; registered IO deviations unchanged."
 sections:
