@@ -4,7 +4,7 @@ title: "Preserve native bullet font families through ODT list styles"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 22
+revision: 23
 origin:
   system: "manual"
 depends_on: []
@@ -18,10 +18,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-07T17:33:34.105Z"
+  updated_by: "CODER"
+  note: "Verified exact implementation c057c3284b2861dc181147670974e3927294b481: native bullet Font family ODT path, source predicates/empty descriptor, all284 Chromium, unique13579 app110 inventory14 infrastructure; only original3 app1 inventory closures, zero passing replay/uncaught, all4 actual current-source coverage100, source/static/scoped/artifact/governance PASS; full parent ACTIVE and registered I/O deviations preserved."
   attempts: 0
 quality_review:
   state: "pass"
@@ -52,8 +52,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: restore the native represented bullet font family ODT path with source lookup/fallback/import precedence/empty-descriptor behavior; preserve upstream ruler admission and all deliberate I/O deviations."
+  -
+    type: "verify"
+    at: "2026-10-07T17:33:34.105Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified exact implementation c057c3284b2861dc181147670974e3927294b481: native bullet Font family ODT path, source predicates/empty descriptor, all284 Chromium, unique13579 app110 inventory14 infrastructure; only original3 app1 inventory closures, zero passing replay/uncaught, all4 actual current-source coverage100, source/static/scoped/artifact/governance PASS; full parent ACTIVE and registered I/O deviations preserved."
 doc_version: 3
-doc_updated_at: "2026-10-07T17:33:25.001Z"
+doc_updated_at: "2026-10-07T17:33:34.167Z"
 doc_updated_by: "CODER"
 description: "Iteration221: close the actual existing optional bullet Font family loss across source-owned Writer UNO, xmloff list import/export and font-face lookup boundaries; preserve native empty-descriptor behavior and registered I/O/recovery deviations. Upstream confirms admitted tight-tab indent gesture consumes click intentionally, so do not invent a pointer-affinity fix."
 sections:
@@ -77,7 +83,41 @@ sections:
     apps/office/src/xmloff/source/style/xmlnumi.test.ts
   Plan: "Restore the existing optional bullet Font family across native Writer UNO and ODT boundaries. Mirror xmlnume.cxx CHAR_SPECIAL nonempty family, font auto-style pool Find branch and direct fo:font-family fallback; keep Writer font pool ownership and no artificial bullet-font registration. Mirror xmlnumi.cxx declared face resolution followed by nonempty direct-family override under original level context ownership, then source GetProperties bullet FontDescriptor publication and SwXNumberingRules copy/apply/commit ignoring an empty descriptor Name. Reuse existing shared family-name import/export handlers, no private adapters or duplicate font owner. Pass immutable represented descriptor member only, not a fake full FontDescriptor. Include common/automatic rules, body/cell, family quoting and missing/empty/numbered paths, actual graph roundtrip and Chromium glyph/reset/history. Preserve594 old acceptance bytes and all300 prior metadata fields/statuses/defaults/exceptions, append bounded evidence only. Upstream admitted indent drag consumes the tight-tab click intentionally; record correction to prior suspected defect without altering DONE220. Preserve conscious save/open/recovery deviations. Same current agent role phases, no independent evaluator claim; no network, outside-repo access or raw/upstream/source/Python artifacts in AgentPlane. Include native editeng unofdesc responsibility for represented FontDescriptor Name conversion, because enforced module boundaries forbid direct sw/core -> vcl constructor dependency. Preserve actual Font/format copy ownership; pure Name conversion returns original native Font, not a fabricated full descriptor class. Scope adds only this necessary source-owned file (15 semantic paths)."
   Verify Steps: "Initial npm format:check,lint,typecheck,check:dependencies,check:docs,check:file-size once; ONE full upstream-absent profile: hide vendor/libreoffice-reference and run test:static, app coverage, inventory coverage, infrastructure14 and full Chromium; restore in finally, freeze source/task writes until terminal actual handle. Never invoke pinned upstream from tests. Later runtime only original failed or truly new cases, zero passing replay; static/source closures only failures/changed inputs. Require actual current-source all4 metrics100 app/inventory using complete byte-identical maps or contiguous full declaration/body/enclosing-branch/location proofs, no exclusions/clamps/skipped promotion. Preserve594 old acceptance bytes (only exact actual source-default assertion migration after original failure with all other inputs/assertions retained if needed),all300 prior records/fields/statuses/defaults/exceptions plus one explicitly bounded unverified editeng Name-conversion mapping, no module promotion. After restored run resource generator--check,source-tree,provenance,invariants,parity. Inspect exact source xmlnume/xmlnumi/unosett family/empty/lookup/precedence contracts and edtwin3+edtwin ruler admission correction; JSDoc/actual physical<1000, English bounded evidence, artifact census, doctor/routing/diff, clean actual implementation SHA and full parent prefix. Final Findings/Verification before canonical verify; same-current-agent EVALUATOR explicitly not independent; persist canonical verification state before finish actual implementation SHA."
-  Verification: "PASS: source-reviewed represented bullet Font family ODT/UNO path with source-owned editeng conversion and native empty-Name policy; real packages/common+automatic/body+cell/Worker and all284 Chromium PASS. ONE full upstream-absent profile only; original3 app and1 inventory failures closed in one bounded absent-upstream closure, zero passing replay,5app+2inventory skipped observations retained. Final unique13579app110inventory14infra284Chromium;zero uncaught/unresolved. Actual current-source all4 coverage100 for app/inventory with complete maps/source/counter bindings,298+38whole files and9complete prior app-region proofs. Production unchanged after full build/Chromium. Initial6static and scoped failed/changed-input closures,5restored source gates,scoped JSDoc/physical<1000(max997),scope594old593unchanged1literalnative-empty-descriptor migration,all300prior metadata preserved+1unverified new301,artifact census,doctor0errors2oldwarnings/routing/diff pass. Clean exact implementation c057c3284b2861dc181147670974e3927294b481 review and same-current-agent EVALUATOR quality/20261007-173307727-recovery-context/quality-report.json PASS; no independent review claim. Final canonical verification must be persisted before finish actual implementation SHA."
+  Verification: |-
+    PASS: source-reviewed represented bullet Font family ODT/UNO path with source-owned editeng conversion and native empty-Name policy; real packages/common+automatic/body+cell/Worker and all284 Chromium PASS. ONE full upstream-absent profile only; original3 app and1 inventory failures closed in one bounded absent-upstream closure, zero passing replay,5app+2inventory skipped observations retained. Final unique13579app110inventory14infra284Chromium;zero uncaught/unresolved. Actual current-source all4 coverage100 for app/inventory with complete maps/source/counter bindings,298+38whole files and9complete prior app-region proofs. Production unchanged after full build/Chromium. Initial6static and scoped failed/changed-input closures,5restored source gates,scoped JSDoc/physical<1000(max997),scope594old593unchanged1literalnative-empty-descriptor migration,all300prior metadata preserved+1unverified new301,artifact census,doctor0errors2oldwarnings/routing/diff pass. Clean exact implementation c057c3284b2861dc181147670974e3927294b481 review and same-current-agent EVALUATOR quality/20261007-173307727-recovery-context/quality-report.json PASS; no independent review claim. Final canonical verification must be persisted before finish actual implementation SHA.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-07T17:33:34.105Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified exact implementation c057c3284b2861dc181147670974e3927294b481: native bullet Font family ODT path, source predicates/empty descriptor, all284 Chromium, unique13579 app110 inventory14 infrastructure; only original3 app1 inventory closures, zero passing replay/uncaught, all4 actual current-source coverage100, source/static/scoped/artifact/governance PASS; full parent ACTIVE and registered I/O deviations preserved.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-07T17:33:25.001Z, excerpt_hash=sha256:183b89adcf86e4836c668dd0e7cbc8dc5629e78931556da2e29f66cb6e2d822a
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610071703-3BMYTW/blueprint/resolved-snapshot.json
+    - old_digest: f657966473b2c715d0ed88c280ff2d18ddd87d51e2ecfd0cdec8fa095332e2dc
+    - current_digest: f657966473b2c715d0ed88c280ff2d18ddd87d51e2ecfd0cdec8fa095332e2dc
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610071703-3BMYTW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610071703-3BMYTW
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert this leaf implementation only; preserve prior DONE tasks, complete parent Findings prefix, deferred stash and all conscious I/O/recovery deviations."
   Findings: |-
     Iteration221 closes actual custom bullet Font family loss in ODT list styles. The original native optional Font stays owned by SwNumFormat; the represented UNO descriptor Name is validated before copy/apply/commit and converted by source-owned editeng unofdesc. Empty Name ignores the copied optional Font, malformed values reject atomically. CHAR_SPECIAL nonempty family exports an existing font auto-style pool Find alias or shared quoted direct fo:font-family fallback; no artificial bullet-font registration. Import resolves a nonempty existing declaration first and then applies nonempty direct family override; unknown/absent faces retain prior level state, bullet GetProperties publishes the native empty descriptor. Existing family handlers are shared without cyclic exporter imports or a new font owner. Common/automatic rules, body/cell nodes, package reexport/reopen and Worker graph preserve actual families.
@@ -121,6 +161,39 @@ Initial npm format:check,lint,typecheck,check:dependencies,check:docs,check:file
 ## Verification
 
 PASS: source-reviewed represented bullet Font family ODT/UNO path with source-owned editeng conversion and native empty-Name policy; real packages/common+automatic/body+cell/Worker and all284 Chromium PASS. ONE full upstream-absent profile only; original3 app and1 inventory failures closed in one bounded absent-upstream closure, zero passing replay,5app+2inventory skipped observations retained. Final unique13579app110inventory14infra284Chromium;zero uncaught/unresolved. Actual current-source all4 coverage100 for app/inventory with complete maps/source/counter bindings,298+38whole files and9complete prior app-region proofs. Production unchanged after full build/Chromium. Initial6static and scoped failed/changed-input closures,5restored source gates,scoped JSDoc/physical<1000(max997),scope594old593unchanged1literalnative-empty-descriptor migration,all300prior metadata preserved+1unverified new301,artifact census,doctor0errors2oldwarnings/routing/diff pass. Clean exact implementation c057c3284b2861dc181147670974e3927294b481 review and same-current-agent EVALUATOR quality/20261007-173307727-recovery-context/quality-report.json PASS; no independent review claim. Final canonical verification must be persisted before finish actual implementation SHA.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-07T17:33:34.105Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified exact implementation c057c3284b2861dc181147670974e3927294b481: native bullet Font family ODT path, source predicates/empty descriptor, all284 Chromium, unique13579 app110 inventory14 infrastructure; only original3 app1 inventory closures, zero passing replay/uncaught, all4 actual current-source coverage100, source/static/scoped/artifact/governance PASS; full parent ACTIVE and registered I/O deviations preserved.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-07T17:33:25.001Z, excerpt_hash=sha256:183b89adcf86e4836c668dd0e7cbc8dc5629e78931556da2e29f66cb6e2d822a
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610071703-3BMYTW/blueprint/resolved-snapshot.json
+- old_digest: f657966473b2c715d0ed88c280ff2d18ddd87d51e2ecfd0cdec8fa095332e2dc
+- current_digest: f657966473b2c715d0ed88c280ff2d18ddd87d51e2ecfd0cdec8fa095332e2dc
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610071703-3BMYTW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610071703-3BMYTW
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
