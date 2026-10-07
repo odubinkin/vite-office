@@ -1,10 +1,11 @@
 ---
 id: "202610070221-A9NQZ4"
 title: "Preserve untouched cell borders in table properties through native changed-item admission"
-status: "DOING"
+result_summary: "Preserve untouched table border/distance pair on unrelated OK/Reset/change-back; edited represented pair retains source coupling, original cursor history survives temporary whole-table selection. Full native box/info/common mixed/per-edge/document border ownership remains unverified and next priority; registered I/O deviations retained."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 23
+revision: 24
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - ".agentplane/tasks/202610070221-A9NQZ4/evidence/scope-final.json"
   findings:
     - "Exact8path scope and paired represented carrier admission verified. Initial three original cursor assertions unchanged and pass after history correction; original two browser failures corrected against existing guide rendering. Final current-source13229app109inventory5scripts248ChromiumPASS,26 focused skips retained;4 newly authored pre-commit independent-field assumptions retired after pinned source contradiction and excluded from acceptance, no baseline case deletion or passing replay. Actual100 app/inventory strict source/map proof."
-commit: null
+commit:
+  hash: "3c4cd47f038596182e7886aec8b46bfb0689874e"
+  message: "🚧 A9NQZ4 code: preserve untouched cell borders and original property cursor history"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved8path changed-border/padding properties correction under standing goal, retain insertion and original graph/history, one absent profile and strict actual coverage evidence."
+  -
+    author: "CODER"
+    body: "Verified: untouched border pair no longer rewrites heterogeneous cells; source conditional caller selection retains original cursor/pending attributes through grouped history.13229current application109inventory5scripts248ChromiumPASS actual100 app/inventory;26focused skips retained and4new incorrect pre-commit assumptions excluded, no baseline deletions or passing replay. Same-agent EVALUATOR explicitly not independent PASS and0forbidden artifacts."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "PASS implementation3c4cd47f038596182e7886aec8b46bfb0689874e: untouched paired border carrier omitted, source conditional temporary selection and original cursor history;13229current app109inventory5scripts248Chromium pass,26focused skips retained,4new pre-commit incorrect independent-field assumptions retired without baseline deletion. Actual100 application/inventory exact source/maps;8paths546old545byte-identical1migration548total281records preserved. Same-agent non-independent EVALUATOR PASS,0forbidden artifacts, vendor restored, no passing/full replay, full native box/mixed/per-edge/doc ownership still unverified."
+  -
+    type: "status"
+    at: "2026-10-07T02:51:25.834Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: untouched border pair no longer rewrites heterogeneous cells; source conditional caller selection retains original cursor/pending attributes through grouped history.13229current application109inventory5scripts248ChromiumPASS actual100 app/inventory;26focused skips retained and4new incorrect pre-commit assumptions excluded, no baseline deletions or passing replay. Same-agent EVALUATOR explicitly not independent PASS and0forbidden artifacts."
 doc_version: 3
-doc_updated_at: "2026-10-07T02:51:16.695Z"
+doc_updated_at: "2026-10-07T02:51:25.835Z"
 doc_updated_by: "CODER"
 description: "Iteration204 under C9TN6M: existing properties dialog always sends first-cell border/padding and rewrites heterogeneous selected/table cell formatting on unrelated acceptance. Match SvxBorderTabPage::FillItemSet changed-item omission and ItemSetToTableParam conditional border/row-split selection lifetime. One bounded correction; full native box items/border geometry remain unverified."
 sections:
