@@ -1,0 +1,35 @@
+{
+  "vendorRestored": true,
+  "sourceSnapshot": "6RVSXZ.closure4.source",
+  "preProfileSHA256": {
+    "apps/office/src/sw/source/core/doc/DocumentSettingManager.ts": "adf77f3f67cb372e0129511264ee323675344a6043e27735b7ea891c3bfe1a61",
+    "apps/office/src/sw/source/core/text/txtfld.ts": "344351337859c63654870c5390c513aa60381ce0af494386c96a829cf04114e8",
+    "apps/office/src/sw/browser/presentation/writer-view-projection.ts": "30afab66fa1df43c05839b2592c001e07fb0055eec0f8e70fa559eb8b6ad23f1",
+    "apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx": "a1c7dfeb1974f6799414c2d8356cc638a5bb09e5a557961f3d42ee10690f3a27",
+    "apps/office/src/sw/browser/filter/xml/writer-document-codec.ts": "851a34ad05a550c4a8a759924906955466e08f28ebc2d13588dcbcab6aa5628f",
+    "apps/office/src/sw/source/core/text/native-numbering-font.test.ts": "f2405238fa63de7c2e88d9090169318da880fa815251f51d25dcacd02c70b8f3",
+    "apps/office/src/sw/browser/editor/native-numbering-font.test.tsx": "66462c16b6e1919a65608b4941f12ec2104e688351ab824f43aff78acee8c7a0",
+    "apps/office/e2e/native-numbering-font.spec.ts": "bddd21929009f1bf31c29526f82002316f1eca3817cb3ba5edae9c0d1a415797",
+    "docs/program/source-provenance.json": "a7cab7e202d1596e439926c313661a672c39cd2e7a5ecc83058d17090daf3119",
+    "docs/program/parity/runtime-inventory.json": "f46466e10d325c8971ebc5d5ddb0c1f71a891a8ce8831414374c0ac009f50de3"
+  },
+  "records": [
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts apps/office/e2e/native-numbering-font.spec.ts --grep native numbering font body cell width=(1280|390)$ --reporter=list,json",
+      "exit": 1,
+      "bytes": 5295,
+      "sha256": "6f61009455e9c7ca4fce4fe58ecbd67b59448b104ffb4097ae78e117061ed7b9",
+      "caseCounts": {
+        "startTime": "2026-10-07T16:50:49.971Z",
+        "duration": 4910.063,
+        "expected": 0,
+        "skipped": 0,
+        "unexpected": 2,
+        "flaky": 0
+      },
+      "unhandledErrorCount": 0,
+      "profile": "upstream-absent"
+    }
+  ]
+}

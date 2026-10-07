@@ -1,0 +1,19 @@
+{
+  "records": [
+    {
+      "command": "Unchanged JSDoc validator on approved changed code/acceptance paths; actual physical-line count",
+      "exit": 0,
+      "errors": [],
+      "physicalLines": {
+        "apps/office/src/sw/source/core/doc/DocumentSettingManager.ts": 77,
+        "apps/office/src/sw/source/core/text/txtfld.ts": 72,
+        "apps/office/src/sw/browser/presentation/writer-view-projection.ts": 629,
+        "apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx": 327,
+        "apps/office/src/sw/browser/filter/xml/writer-document-codec.ts": 984,
+        "apps/office/src/sw/source/core/text/native-numbering-font.test.ts": 143,
+        "apps/office/src/sw/browser/editor/native-numbering-font.test.tsx": 176,
+        "apps/office/e2e/native-numbering-font.spec.ts": 170
+      }
+    }
+  ]
+}

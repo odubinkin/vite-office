@@ -2,6 +2,7 @@
 
 import { Fragment, useRef } from "react";
 import { browserFontFamily } from "./writer-font-family";
+import { FontItalic, FontLineStyle, FontWeight } from "../../../editeng/source/items/textitem";
 
 import type {
   WriterParagraphProjection as WriterParagraph,
@@ -45,6 +46,7 @@ export function WriterEditableParagraph({
         : `Writer paragraph ${index + 1}`
       : `Row ${cellPosition.rowIndex + 1} column ${cellPosition.cellIndex + 1} paragraph ${cellPosition.paragraphIndex + 1}`;
   const listLayout = paragraph.listLayout;
+  const markerFont = paragraph.listMarkerFont;
   const markerStartPt =
     listLayout === undefined ? 0 : listLayout.indentAtPt + listLayout.firstLineIndentPt;
   const contentStartPt =
@@ -111,12 +113,36 @@ export function WriterEditableParagraph({
               paddingInlineEnd: `${paragraph.listMarkerMinimumDistancePt ?? 0}pt`,
               textAlign: "left",
               fontFamily: browserFontFamily(
-                paragraph.computedStyle.fontFamily,
-                paragraph.computedStyle.fontFamilyGeneric,
+                markerFont?.familyName ?? paragraph.computedStyle.fontFamily,
+                markerFont === undefined
+                  ? paragraph.computedStyle.fontFamilyGeneric
+                  : markerFont.genericFamily,
               ),
-              fontSize: `${paragraph.computedStyle.fontSizePt}pt`,
-              fontStyle: paragraph.computedStyle.fontStyle,
-              fontWeight: paragraph.computedStyle.fontWeight,
+              fontSize: `${markerFont === undefined ? paragraph.computedStyle.fontSizePt : markerFont.heightTwips / 20}pt`,
+              fontStyle:
+                markerFont === undefined
+                  ? paragraph.computedStyle.fontStyle
+                  : markerFont.posture === FontItalic.OBLIQUE
+                    ? "oblique"
+                    : markerFont.posture === FontItalic.NORMAL
+                      ? "italic"
+                      : "normal",
+              fontWeight:
+                markerFont === undefined
+                  ? paragraph.computedStyle.fontWeight
+                  : markerFont.weight >= FontWeight.BOLD
+                    ? 700
+                    : 400,
+              textDecorationLine:
+                markerFont === undefined || markerFont.underline === FontLineStyle.NONE
+                  ? undefined
+                  : "underline",
+              color:
+                markerFont === undefined
+                  ? undefined
+                  : markerFont.color === "auto"
+                    ? "initial"
+                    : markerFont.color,
               lineHeight: paragraph.computedStyle.lineHeight,
             }}
           >

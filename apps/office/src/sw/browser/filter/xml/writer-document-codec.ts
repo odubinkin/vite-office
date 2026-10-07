@@ -45,7 +45,10 @@ import { SwpHints } from "../../../source/core/txtnode/ndhints";
 import { SwFormatAutoFormat } from "../../../source/core/txtnode/txatbase";
 import { MakeTextAttr } from "../../../source/core/txtnode/thints";
 import type { WriterPageDescriptorValue } from "../../../source/core/layout/pagedesc";
-import type { DocumentSettingId } from "../../../source/core/doc/DocumentSettingManager";
+import {
+  getDefaultDocumentSettings,
+  type DocumentSettingId,
+} from "../../../source/core/doc/DocumentSettingManager";
 import {
   decodeSfxItemSet,
   encodeSfxItemSet,
@@ -694,7 +697,13 @@ export function decodeWriterDocument(
       throw new Error("Stored Writer page descriptor follow link is invalid.");
     descriptor.SetFollow(follow);
   }
-  document.GetDocumentSettingManager().SetValues(record.documentSettings);
+  const settings = { ...record.documentSettings };
+  // Older browser graph records predate this represented native setting.
+  // All prior fields retain the strict current-schema validation contract.
+  if (!Object.hasOwn(settings, "DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT"))
+    settings.DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT =
+      getDefaultDocumentSettings().DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT;
+  document.GetDocumentSettingManager().SetValues(settings);
   if (record.textFormatCollections[0]?.id !== "default")
     throw new Error("Stored Writer style is invalid.");
   for (const style of record.textFormatCollections) {

@@ -1,0 +1,32 @@
+{
+  "records": [
+    {
+      "command": "npm exec -- prettier --write apps/office/e2e/native-numbering-font.spec.ts",
+      "exit": 0,
+      "bytes": 63,
+      "sha256": "4118d13b5bafa0ee2d0c27093c471d4ad6b45e631f6687fe2651b5d1b4e64c7b",
+      "diagnostics": []
+    },
+    {
+      "command": "npm exec -- prettier --check apps/office/e2e/native-numbering-font.spec.ts",
+      "exit": 0,
+      "bytes": 66,
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+      "diagnostics": []
+    },
+    {
+      "command": "npm exec -- eslint apps/office/e2e/native-numbering-font.spec.ts",
+      "exit": 0,
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnostics": []
+    },
+    {
+      "command": "npm exec --workspace @vite-office/office -- tsc --noEmit",
+      "exit": 0,
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnostics": []
+    }
+  ]
+}

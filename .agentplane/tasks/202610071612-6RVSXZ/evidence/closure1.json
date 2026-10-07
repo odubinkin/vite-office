@@ -1,0 +1,52 @@
+{
+  "vendorRestored": true,
+  "sourceSnapshot": "6RVSXZ.closure1.source",
+  "preProfileSHA256": {
+    "apps/office/src/sw/source/core/doc/DocumentSettingManager.ts": "adf77f3f67cb372e0129511264ee323675344a6043e27735b7ea891c3bfe1a61",
+    "apps/office/src/sw/source/core/text/txtfld.ts": "344351337859c63654870c5390c513aa60381ce0af494386c96a829cf04114e8",
+    "apps/office/src/sw/browser/presentation/writer-view-projection.ts": "30afab66fa1df43c05839b2592c001e07fb0055eec0f8e70fa559eb8b6ad23f1",
+    "apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx": "a1c7dfeb1974f6799414c2d8356cc638a5bb09e5a557961f3d42ee10690f3a27",
+    "apps/office/src/sw/browser/filter/xml/writer-document-codec.ts": "851a34ad05a550c4a8a759924906955466e08f28ebc2d13588dcbcab6aa5628f",
+    "apps/office/src/sw/source/core/text/native-numbering-font.test.ts": "f2405238fa63de7c2e88d9090169318da880fa815251f51d25dcacd02c70b8f3",
+    "apps/office/src/sw/browser/editor/native-numbering-font.test.tsx": "66462c16b6e1919a65608b4941f12ec2104e688351ab824f43aff78acee8c7a0",
+    "apps/office/e2e/native-numbering-font.spec.ts": "7275de099bb04a72868eaccbc5940b6e316d4d07c7fbaafb8e8eb942c2f3eba2",
+    "docs/program/source-provenance.json": "a7cab7e202d1596e439926c313661a672c39cd2e7a5ecc83058d17090daf3119",
+    "docs/program/parity/runtime-inventory.json": "f46466e10d325c8971ebc5d5ddb0c1f71a891a8ce8831414374c0ac009f50de3"
+  },
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/browser/editor/native-numbering-font.test.tsx -t detached and follow projections retain the previous device fallback without another font owner --coverage.reportOnFailure --coverage.reporter=json --coverage.reporter=json-summary --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/6RVSXZ.closure1.app-results.json",
+      "exit": 1,
+      "bytes": 2017,
+      "sha256": "6cfc51dfa023cd498145a8f3119816b582027750b9dfa19d26627a33708923d7",
+      "caseCounts": {
+        "passed": 1,
+        "failed": 0,
+        "skipped": 4,
+        "total": 5
+      },
+      "failures": [],
+      "unhandledErrorCount": 0,
+      "coverageMapSHA256": "fd97364e5d44fb00e9f7aa88c5ab96be8d2d0afc44375f3cb99e1494d7bacd0b",
+      "profile": "upstream-absent"
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts apps/office/e2e/native-numbering-font.spec.ts --grep ^native numbering font body cell width=(1280|390)$ --reporter=list,json",
+      "exit": 1,
+      "bytes": 354,
+      "sha256": "e2c57dfaab3d26d5376957b3226371ae582849b341f3b397c113737db4516b70",
+      "caseCounts": {
+        "startTime": "2026-10-07T16:46:12.993Z",
+        "duration": 1154.671,
+        "expected": 0,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "unhandledErrorCount": 0,
+      "profile": "upstream-absent"
+    }
+  ]
+}

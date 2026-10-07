@@ -1,0 +1,56 @@
+{
+  "records": [
+    {
+      "command": "npm run format:check",
+      "exit": 1,
+      "bytes": 281,
+      "sha256": "4ea43f136d8fabd11359491913303ec608b83453d38ce76cac645d56324230d2",
+      "diagnostics": [
+        "[warn] apps/office/e2e/native-numbering-font.spec.ts",
+        "[warn] apps/office/src/sw/browser/editor/native-numbering-font.test.tsx",
+        "[warn] Code style issues found in 2 files. Run Prettier with --write to fix."
+      ]
+    },
+    {
+      "command": "npm run lint",
+      "exit": 1,
+      "bytes": 629,
+      "sha256": "7f18600afa283ebe38f66eb4cc8f9630da53da71794639ec47141702f3edf738",
+      "diagnostics": [
+        "> eslint . --max-warnings 0",
+        "  49:9  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "  70:55  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "  42:18  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "✖ 3 problems (3 errors, 0 warnings)"
+      ]
+    },
+    {
+      "command": "npm run typecheck",
+      "exit": 0,
+      "bytes": 240,
+      "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:dependencies",
+      "exit": 0,
+      "bytes": 189,
+      "sha256": "77e6dc7ac4cce08952014018679bf79e49cf60dadd2bd9f3801a1ecfb79b16ef",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:docs",
+      "exit": 0,
+      "bytes": 119,
+      "sha256": "48fad4b86ef738641a1151dd36c98b600168388619dc22e85c35e2b2ffc6d4d5",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:file-size",
+      "exit": 0,
+      "bytes": 3996,
+      "sha256": "97ec92df9e2ef5319722ac115a17e2be05feaf654a770b422b94eb83d349d7b2",
+      "diagnostics": []
+    }
+  ]
+}

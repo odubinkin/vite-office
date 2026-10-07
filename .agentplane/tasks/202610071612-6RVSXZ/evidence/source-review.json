@@ -1,0 +1,106 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "productionSHA256": {
+    "apps/office/src/sw/source/core/doc/DocumentSettingManager.ts": "adf77f3f67cb372e0129511264ee323675344a6043e27735b7ea891c3bfe1a61",
+    "apps/office/src/sw/source/core/text/txtfld.ts": "344351337859c63654870c5390c513aa60381ce0af494386c96a829cf04114e8",
+    "apps/office/src/sw/browser/presentation/writer-view-projection.ts": "30afab66fa1df43c05839b2592c001e07fb0055eec0f8e70fa559eb8b6ad23f1",
+    "apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx": "a1c7dfeb1974f6799414c2d8356cc638a5bb09e5a557961f3d42ee10690f3a27",
+    "apps/office/src/sw/browser/filter/xml/writer-document-codec.ts": "851a34ad05a550c4a8a759924906955466e08f28ebc2d13588dcbcab6aa5628f"
+  },
+  "sourceSHA256": {
+    "sw/source/core/text/txtfld.cxx": "121d478dbc68755ea0869d2a91c3f24bb8df72547e9671c41cb381bd3b06e2dd",
+    "sw/source/core/text/inftxt.hxx": "18f637adf8fc040bc6205b6e6073f3a7786401c0d54e56565945dbd479ab59de",
+    "sw/source/core/doc/DocumentSettingManager.cxx": "a737a8cdb6e967bd81389cc45f5e563bb9624fbf74deb52ca78f9bfd68d2b1ba",
+    "include/tools/fontenum.hxx": "26853c512e9d5fdb3a0eccd6fcdab42b0522b558ba9a32b4714baa0da150056d",
+    "sw/source/core/text/porfld.cxx": "a53a623e4e806998b066926ab943594e5a2ca308b94d27bb4bd7e2739faebb9b"
+  },
+  "anchors": {
+    "sw/source/core/text/txtfld.cxx": [
+      {
+        "marker": "SwTextFormatter::NewNumberPortion",
+        "line": 506
+      },
+      {
+        "marker": "pNumRule->Get( nLevel )",
+        "line": 532
+      },
+      {
+        "marker": "rNumFormat.GetBulletFont()",
+        "line": 574
+      },
+      {
+        "marker": "new SwFont( &rInf.GetCharAttr(), pIDSA )",
+        "line": 577
+      },
+      {
+        "marker": "DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT",
+        "line": 580
+      },
+      {
+        "marker": "SetItalic( ITALIC_NONE",
+        "line": 589
+      },
+      {
+        "marker": "SetWeight( WEIGHT_NORMAL",
+        "line": 592
+      },
+      {
+        "marker": "pNumFnt->SetName( pFormatFnt->GetFamilyName()",
+        "line": 608
+      },
+      {
+        "marker": "checkApplyParagraphMarkFormatToNumbering",
+        "line": 334
+      }
+    ],
+    "sw/source/core/text/inftxt.hxx": [
+      {
+        "marker": "GetTextFrame()->GetTextNodeForParaProps()->GetSwAttrSet()",
+        "line": 851
+      }
+    ],
+    "sw/source/core/doc/DocumentSettingManager.cxx": [
+      {
+        "marker": "mbDoNotResetParaAttrsForNumFont(false)",
+        "line": 73
+      },
+      {
+        "marker": "case DocumentSettingId::DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT",
+        "line": 248
+      },
+      {
+        "marker": "mbDoNotResetParaAttrsForNumFont = value;",
+        "line": 573
+      }
+    ],
+    "include/tools/fontenum.hxx": [
+      {
+        "marker": "WEIGHT_NORMAL",
+        "line": 114
+      },
+      {
+        "marker": "ITALIC_NONE",
+        "line": 213
+      }
+    ],
+    "sw/source/core/text/porfld.cxx": [
+      {
+        "marker": "SwNumberPortion::Paint",
+        "line": 703
+      },
+      {
+        "marker": "SwFontSave aSave(rInf, pFont)",
+        "line": 764
+      }
+    ]
+  },
+  "scope": "Original paragraph attr owner, optional bullet family and represented native weight/posture/underline/height/color policy; immutable browser device values preserve actual owners.",
+  "residuals": [
+    "Full SwFont/SwSubFont script and format/paragraph-mark/redline/graphics/portion graph and physical font metadata beyond family unrepresented; no full native class or constructor claim.",
+    "Browser uses represented400/700 weight, CSS posture/underline and initial ink conversion; full native weight spectrum/decoration/theme/device shaping and font metrics remain unverified.",
+    "Compatibility flag is represented in actual document/Worker/graph records with false default; ODT true-flag filter/config persistence remains unrepresented, no claim made.",
+    "Observed adjacent defects remain open: custom optional bullet family is not emitted/read by current ODT list style filter; zero-first-line-indent tight-tab marker pointer can be intercepted by ruler gesture (Chromium closure3). Current Chromium font cases use native Home transitions and absent optional face; custom-face coverage is native core/mounted only. No pointer/filter fix claim.",
+    "Exhaustive parent core/browser/UI parity remains ACTIVE; registered save/open/recovery deviations unchanged."
+  ],
+  "failures": []
+}

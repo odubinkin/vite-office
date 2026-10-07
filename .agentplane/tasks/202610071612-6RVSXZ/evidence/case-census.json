@@ -1,0 +1,132 @@
+{
+  "app": {
+    "original": 13574,
+    "current": 13574,
+    "newCases": 0,
+    "resolved": 1,
+    "passed": 13574,
+    "unresolvedCount": 0,
+    "skippedObservationsRetained": 4,
+    "passingReplay": 0,
+    "originalUncaughtErrorCases": 0,
+    "finalUncaughtErrorCases": 0,
+    "inputs": [
+      {
+        "file": "6RVSXZ.app-results.json",
+        "sha256": "c9184ad179c6233ff86d17e6e700e2431774a59c5d62cb73581f5dca92efbb64",
+        "passed": 13573,
+        "failed": 1,
+        "skipped": 0
+      },
+      {
+        "file": "6RVSXZ.closure1.app-results.json",
+        "sha256": "84a79dd195e94f3a9fb2fb93074debfecb5070c8b7e3da49a9ae42fd76b00cdd",
+        "passed": 1,
+        "failed": 0,
+        "skipped": 4
+      }
+    ]
+  },
+  "inventory": {
+    "original": 110,
+    "current": 110,
+    "newCases": 0,
+    "resolved": 0,
+    "passed": 110,
+    "unresolvedCount": 0,
+    "skippedObservationsRetained": 0,
+    "passingReplay": 0,
+    "originalUncaughtErrorCases": 0,
+    "finalUncaughtErrorCases": 0,
+    "inputs": [
+      {
+        "file": "6RVSXZ.inventory-results.json",
+        "sha256": "632ff8c5c91c14d6fa19b6d62e01ac5170c16f119fe23d9d257396dab50046e7",
+        "passed": 110,
+        "failed": 0,
+        "skipped": 0
+      }
+    ]
+  },
+  "chromium": {
+    "current": 282,
+    "passed": 282,
+    "unresolvedCount": 0,
+    "passingReplay": 0,
+    "inputs": [
+      {
+        "file": "6RVSXZ.chromium-results.json",
+        "sha256": "e1647a2f10610b0bd0a9573a090473ff5abcc096592fa94d44f09e3a35be6159",
+        "counts": {
+          "startTime": "2026-10-07T16:34:05.855Z",
+          "duration": 242440.653,
+          "expected": 280,
+          "skipped": 0,
+          "unexpected": 2,
+          "flaky": 0
+        }
+      },
+      {
+        "file": "6RVSXZ.closure1.chromium-results.json",
+        "sha256": "a2fd634dbb9c296050cd15ec863962db26e360cb6d57988a776d7a81fbca195f",
+        "counts": {
+          "startTime": "2026-10-07T16:46:12.993Z",
+          "duration": 1154.671,
+          "expected": 0,
+          "skipped": 0,
+          "unexpected": 0,
+          "flaky": 0
+        }
+      },
+      {
+        "file": "6RVSXZ.closure2.chromium-results.json",
+        "sha256": "bbbb6b3d61784e5f63c5f824c407f6d423cc6019a801e3cc4f454d605d10855d",
+        "counts": {
+          "startTime": "2026-10-07T16:46:33.628Z",
+          "duration": 15084.637999999999,
+          "expected": 0,
+          "skipped": 0,
+          "unexpected": 2,
+          "flaky": 0
+        }
+      },
+      {
+        "file": "6RVSXZ.closure3.chromium-results.json",
+        "sha256": "201e5af9d8a493069f41e5f707c6b0822c1ccc6dfdf0099d6ee5d83bcefc0d02",
+        "counts": {
+          "startTime": "2026-10-07T16:48:43.461Z",
+          "duration": 15246.014000000001,
+          "expected": 0,
+          "skipped": 0,
+          "unexpected": 2,
+          "flaky": 0
+        }
+      },
+      {
+        "file": "6RVSXZ.closure4.chromium-results.json",
+        "sha256": "2282f44dbeb72730c0b3491b1aa2111765508938e0f722d159a5f0ea4b017c68",
+        "counts": {
+          "startTime": "2026-10-07T16:50:49.971Z",
+          "duration": 4910.063,
+          "expected": 0,
+          "skipped": 0,
+          "unexpected": 2,
+          "flaky": 0
+        }
+      },
+      {
+        "file": "6RVSXZ.closure5.chromium-results.json",
+        "sha256": "4f5a19abb43d4890f4d8421ee51d403ef021e2173593cc25a1ed01c16ed384e7",
+        "counts": {
+          "startTime": "2026-10-07T16:52:04.378Z",
+          "duration": 6646.942,
+          "expected": 2,
+          "skipped": 0,
+          "unexpected": 0,
+          "flaky": 0
+        }
+      }
+    ]
+  },
+  "failures": []
+}

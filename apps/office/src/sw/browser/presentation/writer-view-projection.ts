@@ -65,6 +65,10 @@ import type { WriterPageDescriptorValue } from "../../source/core/layout/pagedes
 import { projectWriterLineHeightItem } from "../../source/core/text/itrform2";
 import { resolveSwNumberPortionBackground } from "../../source/core/text/inftxt";
 import type { SwViewOption } from "../../inc/viewopt";
+import {
+  resolveSwNumberPortionFont,
+  type SwNumberPortionFont,
+} from "../../source/core/text/txtfld";
 
 /** Detached document style selector metadata. */
 export type WriterParagraphStyleOption = StyleToolboxEntry;
@@ -77,6 +81,8 @@ export interface WriterParagraphProjection {
   readonly listMarkerMinimumDistancePt?: number;
   /** Window-device decoration derived from the native marked list level and view options. */
   readonly listMarkerBackgroundColor?: string;
+  /** Detached native font values used only by the numbering paint device. */
+  readonly listMarkerFont?: Readonly<SwNumberPortionFont>;
   readonly alignment: WriterParagraphAlignment;
   readonly bulletChar?: string;
   readonly computedStyle: WriterParagraphComputedStyle;
@@ -233,6 +239,7 @@ export class WriterViewProjection {
             ? getWriterNumFormatBullet(node.GetNumRule()?.Get(list.level))
             : undefined;
         const listMarker = node.GetListLabel();
+        const listMarkerFont = resolveSwNumberPortionFont(node);
         const listMarkerBackgroundColor =
           viewOptions === undefined
             ? undefined
@@ -340,6 +347,7 @@ export class WriterViewProjection {
             ? { inFrontOfLabel: true }
             : {}),
           ...(listMarker === undefined ? {} : { listMarker }),
+          ...(listMarkerFont === undefined ? {} : { listMarkerFont }),
           ...(listMarkerBackgroundColor === undefined ? {} : { listMarkerBackgroundColor }),
           numRuleName: node.GetNumRuleName(),
           nodeIndex: node.GetIndex(),

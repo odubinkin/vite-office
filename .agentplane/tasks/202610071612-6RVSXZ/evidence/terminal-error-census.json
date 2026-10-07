@@ -1,0 +1,121 @@
+{
+  "records": [
+    {
+      "phase": "absent-profile",
+      "kind": "build",
+      "exit": 0,
+      "uncaughtErrorCount": 0,
+      "outputSHA256": "84258be969211cd71d47427ee32ba24fddce505be51179a015ca35bb8176275f",
+      "assertionFailures": 0
+    },
+    {
+      "phase": "absent-profile",
+      "kind": "app",
+      "exit": 1,
+      "uncaughtErrorCount": 0,
+      "outputSHA256": "f4cbadbf24a36168841e88333c43497cfc13a08163f79fa1aad635b958423050",
+      "assertionFailures": 1
+    },
+    {
+      "phase": "absent-profile",
+      "kind": "inventory",
+      "exit": 0,
+      "uncaughtErrorCount": 0,
+      "outputSHA256": "36af797ab702410b3bee54653bd90a49e6080b58e2da3b756032dd636c70cb96",
+      "assertionFailures": 0
+    },
+    {
+      "phase": "absent-profile",
+      "kind": "scripts",
+      "exit": 0,
+      "uncaughtErrorCount": 0,
+      "outputSHA256": "2c31132934158aec1fae403b4d3703e7056b855e38d27b1cc3633daae9e5b0fc",
+      "assertionFailures": 0
+    },
+    {
+      "phase": "absent-profile",
+      "kind": "chromium",
+      "exit": 1,
+      "uncaughtErrorCount": 0,
+      "outputSHA256": "ca3952ba9a40b2c16e7b1151f88648ee4df398c99fe8257233db5f7cd7836498",
+      "assertionFailures": 2
+    },
+    {
+      "phase": "closure1",
+      "kind": "app",
+      "exit": 1,
+      "uncaughtErrorCount": 0,
+      "outputSHA256": "6cfc51dfa023cd498145a8f3119816b582027750b9dfa19d26627a33708923d7",
+      "assertionFailures": 0
+    },
+    {
+      "phase": "closure1",
+      "kind": "chromium",
+      "exit": 1,
+      "uncaughtErrorCount": 0,
+      "outputSHA256": "e2c57dfaab3d26d5376957b3226371ae582849b341f3b397c113737db4516b70",
+      "assertionFailures": 0
+    },
+    {
+      "phase": "closure2",
+      "kind": "chromium",
+      "exit": 1,
+      "uncaughtErrorCount": 0,
+      "outputSHA256": "980d579d9501e732cfc5504cf6b63a90e05722230b958f4982efcccaa9aead42",
+      "assertionFailures": 2
+    },
+    {
+      "phase": "closure3",
+      "kind": "chromium",
+      "exit": 1,
+      "uncaughtErrorCount": 0,
+      "outputSHA256": "f23be67e9f3c692941e54f1adfdffac0430871f14a61aa0d4808e2a1fe1c4780",
+      "assertionFailures": 2
+    },
+    {
+      "phase": "closure4",
+      "kind": "chromium",
+      "exit": 1,
+      "uncaughtErrorCount": 0,
+      "outputSHA256": "6f61009455e9c7ca4fce4fe58ecbd67b59448b104ffb4097ae78e117061ed7b9",
+      "assertionFailures": 2
+    },
+    {
+      "phase": "closure5",
+      "kind": "chromium",
+      "exit": 0,
+      "uncaughtErrorCount": 0,
+      "outputSHA256": "b181a6d8d20aeb42b1db23122c8e9ea54fa974c73c9f17c9fb9b696878273717",
+      "assertionFailures": 0
+    }
+  ],
+  "unresolvedUncaught": 0,
+  "staticFailure": "Initial format and lint failures were limited to fresh formatting and non-null assertions; scoped failed/changed-input closures passed. Later scoped checks after fresh fixture edits passed.",
+  "runtimeFailures": [
+    {
+      "name": "apps/office/src/sw/browser/editor/native-numbering-font.test.tsx > detached and follow projections retain the previous device fallback without another font owner",
+      "assertion": [
+        "Error: expect(element).toHaveStyle()"
+      ]
+    },
+    {
+      "name": "native-numbering-font.spec.ts > native numbering font body cell width=1280",
+      "errors": [
+        [
+          "Error: ODT export does not support script-specific character formatting."
+        ]
+      ]
+    },
+    {
+      "name": "native-numbering-font.spec.ts > native numbering font body cell width=390",
+      "errors": [
+        [
+          "Error: ODT export does not support script-specific character formatting."
+        ]
+      ]
+    }
+  ],
+  "passingReplay": 0,
+  "runtimeResolution": "Original fresh app CSS initial matcher compares inline declaration separately, closure1 original case passes; its exit1 is solely full-graph coverage thresholds. Both original fresh Chromium cases finally pass closure5. Full fixture script-specific formatting unsupported by export was corrected to uniform script attrs; custom optional bullet face is unrepresented at ODT boundary, documented as open defect and the bounded device case uses explicitly absent face. Zero-first-line-indent marker pointer interception by ruler remains open, test uses actual native Home transitions, no pointer fix claim. Fresh nested-font DOM text node fixtures now select actual descendant text via TreeWalker for glyph geometry and selection.",
+  "processObservation": "Closure1 Chromium selector with leading anchor matched no cases; retained actual terminal no-tests output, corrected selector for only original failed cases. Closure2 exposed ODT custom-face loss, closure3 exposed tight-tab label pointer interception, closure4 exposed fresh selection fixture choosing an element rather than descendant text. These observations remain visible. Closure5 passed both original cases, no passing case replay; all source/task writes waited for terminal runtime and static ledgers."
+}
