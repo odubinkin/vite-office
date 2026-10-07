@@ -1,0 +1,35 @@
+{
+  "records": [
+    {
+      "command": "npm run format:check",
+      "exit": 0,
+      "bytes": 122,
+      "sha256": "ac1729f86eee878f5f4d6c948c510d2cc91bb5568f6dd088f70f3885e137d116",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run typecheck",
+      "exit": 2,
+      "bytes": 855,
+      "sha256": "48356b07e833eadab344e41d6098a9dfd10594677a8e050cad9e47cbfcd87c68",
+      "diagnostics": [
+        "src/sw/browser/presentation/WriterTableDialog.tsx(119,18): error TS2345: Argument of type 'SfxItemSet' is not assignable to parameter of type 'SfxPoolItem'.",
+        "  Type 'SfxItemSet' is missing the following properties from type 'SfxPoolItem': shareable, isShareable, setNonShareable, which, and 3 more.",
+        "npm error Lifecycle script `typecheck` failed with error:",
+        "npm error code 2",
+        "npm error path /Users/odubinkin/Projects/vite-office/apps/office",
+        "npm error workspace @vite-office/office@0.1.0",
+        "npm error location /Users/odubinkin/Projects/vite-office/apps/office",
+        "npm error command failed",
+        "npm error command sh -c tsc --noEmit"
+      ]
+    },
+    {
+      "command": "npm run check:docs",
+      "exit": 0,
+      "bytes": 119,
+      "sha256": "99018a16a2e0e7492babc06e3eca28cf014a23a7c77db3a0160b51b40c873842",
+      "diagnostics": []
+    }
+  ]
+}

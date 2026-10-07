@@ -84,11 +84,12 @@ function browserCellBoxStyle(item: SvxBoxItem, fixedGuide: boolean): React.CSSPr
     <div className="max-w-full" data-writer-table={table.GetName()}>
       <table
         aria-label={table.GetName()}
-        className="table-fixed border-collapse"
+        className="table-fixed"
         ref={retainElement}
         style={{
           tableLayout: "fixed",
-          borderCollapse: "collapse",
+          borderCollapse: format.borderModel === "collapsing" ? "collapse" : "separate",
+          borderSpacing: 0,
           width: area.width / 15,
           marginLeft: area.left / 15,
           marginRight: area.right / 15,

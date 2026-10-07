@@ -1,0 +1,104 @@
+{
+  "app": {
+    "original": 13459,
+    "current": 13465,
+    "newCases": 6,
+    "resolved": 0,
+    "passed": 13465,
+    "unresolvedCount": 0,
+    "skippedObservationsRetained": 5,
+    "passingReplay": 0,
+    "inputs": [
+      {
+        "file": "T9NGQB.app-results.json",
+        "sha256": "17e49ae53ecc6f6d076e3826bea7d797fc540eea6c4a21ea42662b6e9417bbcb",
+        "passed": 13459,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "file": "T9NGQB.app-closure2-results.json",
+        "sha256": "75ebcd46e0f02a9d45f1d6b0636dfa43c3778f44eb6afef3559ca5edb9248322",
+        "passed": 6,
+        "failed": 0,
+        "skipped": 5
+      }
+    ]
+  },
+  "inventory": {
+    "original": 110,
+    "current": 110,
+    "newCases": 0,
+    "resolved": 0,
+    "passed": 110,
+    "unresolvedCount": 0,
+    "skippedObservationsRetained": 0,
+    "passingReplay": 0,
+    "inputs": [
+      {
+        "file": "T9NGQB.inventory-results.json",
+        "sha256": "c9579fb5b14918d0c6e222c766efa1f8e5992b595ca24667da36579c2de616ae",
+        "passed": 110,
+        "failed": 0,
+        "skipped": 0
+      }
+    ]
+  },
+  "chromium": {
+    "current": 266,
+    "passed": 266,
+    "unresolvedCount": 0,
+    "passingReplay": 0,
+    "inputs": [
+      {
+        "file": "T9NGQB.chromium-results.json",
+        "sha256": "04e34ae1c350813d6259a518c5cf2a04fd1d07cf71bf46d05bfbeb4911ab4b33",
+        "counts": {
+          "startTime": "2026-10-07T07:47:16.464Z",
+          "duration": 463304.049,
+          "expected": 263,
+          "skipped": 0,
+          "unexpected": 1,
+          "flaky": 0
+        }
+      },
+      {
+        "file": "T9NGQB.chromium-closure1-results.json",
+        "sha256": "45255784e828f804d3d684c110fad84fc90f783d450e1e79b4715c7d1c9eba25",
+        "counts": {
+          "startTime": "2026-10-07T07:57:51.931Z",
+          "duration": 15908.653,
+          "expected": 1,
+          "skipped": 0,
+          "unexpected": 0,
+          "flaky": 0
+        }
+      },
+      {
+        "file": "T9NGQB.chromium-closure2-results.json",
+        "sha256": "4c98018ac20257c7f7762d90ddf65eb7093d9c5950fc9c842cba50cc9c59efc5",
+        "counts": {
+          "startTime": "2026-10-07T08:13:23.385Z",
+          "duration": 6173.539000000001,
+          "expected": 0,
+          "skipped": 0,
+          "unexpected": 2,
+          "flaky": 0
+        }
+      },
+      {
+        "file": "T9NGQB.chromium-closure3-results.json",
+        "sha256": "74fd6b1b2079ab612062e74523747cbe239e0d36c021da748cc08edc9499fded",
+        "counts": {
+          "startTime": "2026-10-07T08:17:13.068Z",
+          "duration": 9159.956,
+          "expected": 2,
+          "skipped": 0,
+          "unexpected": 0,
+          "flaky": 0
+        }
+      }
+    ]
+  },
+  "failures": []
+}

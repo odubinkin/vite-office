@@ -14,9 +14,10 @@ import {
   SvxBoxInfoItem,
   SvxBoxInfoItemValidFlags,
 } from "../../../../editeng/source/items/frmitems";
-import { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
+import { SfxItemSet, SfxItemState } from "../../../../svl/source/items/itemset";
 import { SID_ATTR_BORDER_INNER } from "../../../../svx/inc/svxids";
-import { RES_BOX } from "../../../inc/hintids";
+import { RES_BOX, RES_COLLAPSING_BORDERS } from "../../../inc/hintids";
 import { importBoxProperties } from "../../../../xmloff/source/style/bordrhdl";
 
 /** Represented table-property inputs in native twips; original model owners remain in the shell. */
@@ -43,6 +44,7 @@ export interface SwTableProperties {
 export function TableParamToItemSet(shell: SwFEShell): SfxItemSet {
   const value = new SfxItemSet(shell.GetDoc().GetAttrPool(), [
     [RES_BOX, RES_BOX],
+    [RES_COLLAPSING_BORDERS, RES_COLLAPSING_BORDERS],
     [SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER],
   ]);
   const info = new SvxBoxInfoItem(SID_ATTR_BORDER_INNER);
@@ -53,6 +55,12 @@ export function TableParamToItemSet(shell: SwFEShell): SfxItemSet {
     value.Put(info);
     return value;
   }
+  value.Put(
+    new SfxBoolItem(
+      RES_COLLAPSING_BORDERS,
+      shell.IsCursorInTable()?.GetTable().GetFormat().borderModel === "collapsing",
+    ),
+  );
   const selected = shell.IsTableMode();
   return shell.RunNotificationTransaction(
     /** Temporarily selects only for whole-table properties and restores original cursors. @returns Owned native items. */
@@ -98,7 +106,8 @@ export function ItemSetToTableParam(shell: SwFEShell, value: SwTableProperties):
       undo.StartUndo("Table Properties");
       try {
         const hasBorders =
-          value.borderItems !== undefined ||
+          value.borderItems?.GetItemState(RES_BOX, false) === SfxItemState.SET ||
+          value.borderItems?.GetItemState(SID_ATTR_BORDER_INNER, false) === SfxItemState.SET ||
           value.padding !== undefined ||
           value.border !== undefined;
         const borders =
@@ -166,8 +175,15 @@ export function ItemSetToTableParam(shell: SwFEShell, value: SwTableProperties):
         representation.columns.splice(0, representation.columns.length, ...value.columnWidths);
         const singleRow = representation.FillTabCols(columns);
         shell.SetTabCols(columns, singleRow);
+        const merge =
+          value.borderItems?.GetItemState(RES_COLLAPSING_BORDERS, false) === SfxItemState.SET
+            ? value.borderItems.Get(RES_COLLAPSING_BORDERS)
+            : undefined;
         shell.SetTableAttr({
           width: value.width,
+          ...(merge instanceof SfxBoolItem
+            ? { borderModel: merge.GetValue() ? "collapsing" : "separating" }
+            : {}),
           ...(value.layoutSplit === undefined ? {} : { layoutSplit: value.layoutSplit }),
           ...(value.horiOrient === undefined
             ? {}

@@ -1,0 +1,16 @@
+{
+  "records": [
+    {
+      "command": "npm exec -- prettier --write apps/office/e2e/writer-native-collapsing-borders.spec.ts",
+      "exit": 0,
+      "sha256": "6b5248a1c2126cbb21b4e6cffa5b5b8b6b1160953b5c90ebe34239711ec6a7b6",
+      "bytes": 62
+    },
+    {
+      "command": "npm exec -- prettier --check apps/office/e2e/writer-native-collapsing-borders.spec.ts",
+      "exit": 0,
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+      "bytes": 66
+    }
+  ]
+}

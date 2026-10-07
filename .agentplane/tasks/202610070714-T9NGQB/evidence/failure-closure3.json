@@ -1,0 +1,42 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/sw/inc/hintids.ts": "1be8bbaf3dd09c231c5c9a8e98d8cc28b901d40453fb3cf86a6135a698f9700f",
+    "apps/office/src/sw/source/core/attr/swatrset.ts": "d9893c6d29d42f9b1ff52f402ce7d617874ef41caa96d8aebb90b47e77924062",
+    "apps/office/src/svl/source/items/cenumitm.ts": "ceaa94c96446efbc1a0b9d7ec542820cf29525fbc4774c5e85941321148338e9",
+    "apps/office/src/cui/source/tabpages/border.ts": "2f77c5e5d41285096e256fa090619830c8459fec28faaaa1e05b98a190104164",
+    "apps/office/src/sw/source/uibase/shells/tabsh.ts": "32182fda1c3b280a83efa12261547114cc5e4226ea3b008087c22b81950aab5e",
+    "apps/office/src/sw/browser/presentation/WriterBorderPage.tsx": "1a5438116aac2fb94fca876ab0b4c803cf1e3d88ab0f118bd56896613156900b",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx": "fd0d8a5b66addc4b44d32ece3a5f1f77ac7fe5551d17225e4beb0e7c999fb74a",
+    "apps/office/src/sw/browser/editor/WriterEditableTable.tsx": "659989b766bc908d9db4ca9f81db95a5f76f106d0157468ec9759ae928ceba4c",
+    "apps/office/src/cui/source/tabpages/native-collapsing-border-page.test.ts": "e2ea7d180a9b407830662bcd84884d18f2e5438c63b7692c6567cf4fd41d872e",
+    "apps/office/src/sw/browser/presentation/native-collapsing-table-borders.test.tsx": "8d9664c9962374a4b3940f41f9c04d0a1e7a59e35ac30199ff7eb017e636030b",
+    "apps/office/e2e/writer-native-collapsing-borders.spec.ts": "72d7dd0338ac031a9b24f41e429b748a03d3271e4e3cf9762a2f52b3af183a0e",
+    "apps/office/src/sw/browser/editor/native-cell-box-render.test.tsx": "ec00a1c0fab40bdde5698fc34783a7cbd6332f2dc9ffdabba8e1bd58465baf44",
+    "apps/office/src/sw/browser/presentation/native-border-page.test.tsx": "f0fbebfa9661246dd3308531d3615d26e3d0846c27a0ac60d133deca1dfbf55b",
+    "docs/program/source-provenance.json": "1b24771e1c38f72b5065dcee4f7e79ff5fcdae2901051847bc25c4709458dca0",
+    "docs/program/parity/runtime-inventory.json": "ef7721631fe23b16efde6fbaf5d806957a3ee30f36ac156d617f689587af29c1"
+  },
+  "records": [
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts writer-native-collapsing-borders.spec.ts --grep=native coupled border and merging item acceptance width=(1280|390)$ --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 689,
+      "sha256": "22d45d6501444bfbe76e82ebae824373ebe3d73f8cb656e3c1e67086dfc6f61e",
+      "totals": [
+        "2 passed (9.2s)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "startTime": "2026-10-07T08:17:13.068Z",
+        "duration": 9159.956,
+        "expected": 2,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    }
+  ]
+}

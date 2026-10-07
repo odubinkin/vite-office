@@ -1,0 +1,9 @@
+{
+  "records": [
+    {
+      "command": "npm exec -- prettier --check docs/program/source-provenance.json docs/program/parity/runtime-inventory.json apps/office/e2e/writer-native-collapsing-borders.spec.ts",
+      "exit": 0,
+      "result": "All matched files use Prettier code style; final metadata append and closure3 readiness correction."
+    }
+  ]
+}

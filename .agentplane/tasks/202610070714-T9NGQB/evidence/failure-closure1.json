@@ -1,0 +1,42 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/sw/inc/hintids.ts": "1be8bbaf3dd09c231c5c9a8e98d8cc28b901d40453fb3cf86a6135a698f9700f",
+    "apps/office/src/sw/source/core/attr/swatrset.ts": "d9893c6d29d42f9b1ff52f402ce7d617874ef41caa96d8aebb90b47e77924062",
+    "apps/office/src/svl/source/items/cenumitm.ts": "ceaa94c96446efbc1a0b9d7ec542820cf29525fbc4774c5e85941321148338e9",
+    "apps/office/src/cui/source/tabpages/border.ts": "2f77c5e5d41285096e256fa090619830c8459fec28faaaa1e05b98a190104164",
+    "apps/office/src/sw/source/uibase/shells/tabsh.ts": "32182fda1c3b280a83efa12261547114cc5e4226ea3b008087c22b81950aab5e",
+    "apps/office/src/sw/browser/presentation/WriterBorderPage.tsx": "1a5438116aac2fb94fca876ab0b4c803cf1e3d88ab0f118bd56896613156900b",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx": "92019dbfa52464fb97bf0561030627331f9759e20d16271b3b6dbe2450bf7da7",
+    "apps/office/src/sw/browser/editor/WriterEditableTable.tsx": "659989b766bc908d9db4ca9f81db95a5f76f106d0157468ec9759ae928ceba4c",
+    "apps/office/src/cui/source/tabpages/native-collapsing-border-page.test.ts": "e2ea7d180a9b407830662bcd84884d18f2e5438c63b7692c6567cf4fd41d872e",
+    "apps/office/src/sw/browser/presentation/native-collapsing-table-borders.test.tsx": "d59fd40d7b46013e3509c608f5186c8ed4f5eb31ea4c6828e11490a264328b53",
+    "apps/office/e2e/writer-native-collapsing-borders.spec.ts": "e6f748a8de0716a6eb236edcaa39324d8ca46efc2b51f3d09fda034d40b59893",
+    "apps/office/src/sw/browser/editor/native-cell-box-render.test.tsx": "ec00a1c0fab40bdde5698fc34783a7cbd6332f2dc9ffdabba8e1bd58465baf44",
+    "apps/office/src/sw/browser/presentation/native-border-page.test.tsx": "f0fbebfa9661246dd3308531d3615d26e3d0846c27a0ac60d133deca1dfbf55b",
+    "docs/program/source-provenance.json": "1b24771e1c38f72b5065dcee4f7e79ff5fcdae2901051847bc25c4709458dca0",
+    "docs/program/parity/runtime-inventory.json": "ef7721631fe23b16efde6fbaf5d806957a3ee30f36ac156d617f689587af29c1"
+  },
+  "records": [
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts foundation.spec.ts --grep=Writer menu keyboard navigation and accessible application chrome$ --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 530,
+      "sha256": "009a00b484ac02dda9656eb68f0ed3d76e0cf2130255df5ce0d4699f2eec9ec8",
+      "totals": [
+        "1 passed (15.9s)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "startTime": "2026-10-07T07:57:51.931Z",
+        "duration": 15908.653,
+        "expected": 1,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    }
+  ]
+}

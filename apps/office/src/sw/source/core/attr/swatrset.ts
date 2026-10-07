@@ -73,6 +73,7 @@ import {
   RES_KEEP,
   RES_LINENUMBER,
   RES_BOX,
+  RES_COLLAPSING_BORDERS,
 } from "../../../inc/hintids";
 import type { SwDoc } from "../doc/doc";
 import { SwNumRuleItem } from "../para/paratr";
@@ -93,6 +94,11 @@ export class SwAttrPool extends SfxItemPool {
         if (!item.PutValue(value)) throw new Error("Stored Writer box is invalid.");
         return item;
       },
+    );
+    this.RegisterDefaultItem(
+      new SfxBoolItem(RES_COLLAPSING_BORDERS, false),
+      /** Restores native adjacent-border merging. @param value - Stored boolean. @returns Owned item. */
+      (value) => new SfxBoolItem(RES_COLLAPSING_BORDERS, Boolean(value)),
     );
     this.RegisterDefaultItem(new SwFormatINetFormat("", ""));
     const device = document.GetDefaultFontDevice();

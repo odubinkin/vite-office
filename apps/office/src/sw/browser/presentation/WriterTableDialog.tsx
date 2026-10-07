@@ -7,8 +7,9 @@ import type { SwTable, SwTableBox } from "../../source/core/table/swtable";
 import { SvxBorderTabPage } from "../../../cui/source/tabpages/border";
 import { WriterBorderPage } from "./WriterBorderPage";
 import { SvxBoxInfoItem } from "../../../editeng/source/items/frmitems";
-import { SfxItemSet } from "../../../svl/source/items/itemset";
-import { RES_BOX } from "../../inc/hintids";
+import { SfxBoolItem } from "../../../svl/source/items/cenumitm";
+import { SfxItemSet, SfxItemState } from "../../../svl/source/items/itemset";
+import { RES_BOX, RES_COLLAPSING_BORDERS } from "../../inc/hintids";
 import { SID_ATTR_BORDER_INNER } from "../../../svx/inc/svxids";
 import type { SwTableProperties } from "../../source/uibase/shells/tabsh";
 import {
@@ -110,7 +111,20 @@ function WriterTablePropertiesDialog({
         info.SetDefDist(28);
         input.Put(info);
       }
-      return new SvxBorderTabPage(input, RES_BOX);
+      const native = new SfxItemSet(input.GetPool(), [
+        [RES_BOX, RES_BOX],
+        [RES_COLLAPSING_BORDERS, RES_COLLAPSING_BORDERS],
+        [SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER],
+      ]);
+      native.SetParent(input.GetParent());
+      native.PutSet(input, false);
+      if (input.GetItemState(RES_COLLAPSING_BORDERS, false) === SfxItemState.DISABLED)
+        native.DisableItem(RES_COLLAPSING_BORDERS);
+      if (input.GetItemState(RES_COLLAPSING_BORDERS) === SfxItemState.UNKNOWN)
+        native.Put(
+          new SfxBoolItem(RES_COLLAPSING_BORDERS, table.GetFormat().borderModel === "collapsing"),
+        );
+      return new SvxBorderTabPage(native, RES_BOX, RES_COLLAPSING_BORDERS);
     },
   );
   const [, refreshPage] = useState(0);
@@ -216,6 +230,7 @@ function WriterTablePropertiesDialog({
               borderItems?.GetPool() ?? table.GetTableNode().GetDoc().GetAttrPool(),
               [
                 [RES_BOX, RES_BOX],
+                [RES_COLLAPSING_BORDERS, RES_COLLAPSING_BORDERS],
                 [SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER],
               ],
             );

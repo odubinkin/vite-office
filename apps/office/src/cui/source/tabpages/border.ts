@@ -6,6 +6,7 @@ import {
   SvxBoxInfoItemValidFlags as Valid,
 } from "../../../editeng/source/items/frmitems";
 import { SvxBorderLineStyle as Style } from "../../../editeng/source/items/borderline";
+import { SfxBoolItem } from "../../../svl/source/items/cenumitm";
 import { SfxItemSet, SfxItemState } from "../../../svl/source/items/itemset";
 import { SID_ATTR_BORDER_INNER } from "../../../svx/inc/svxids";
 import {
@@ -55,12 +56,15 @@ function minimumLineWidth(style: Style): number {
   return 15;
 }
 
-/** Owns represented border widgets; shadow/merge/diagonal items remain separate native obligations. */
+/** Owns represented border widgets; shadow/diagonal items remain separate native obligations. */
 export class SvxBorderTabPage {
   public readonly frameSelector = new FrameSelector();
   private readonly original: SfxItemSet;
   private readonly oldBox: SvxBoxItem | undefined;
   private readonly oldInfo: SvxBoxInfoItem | undefined;
+  private readonly oldMerge: SfxBoolItem | undefined;
+  private merge: boolean | undefined;
+  private savedMerge: boolean | undefined;
   private readonly horizontal: boolean;
   private readonly vertical: boolean;
   private readonly distanceVisible: boolean;
@@ -74,10 +78,11 @@ export class SvxBorderTabPage {
   private customWidth = false;
   private color = 0;
   private preset: number | undefined;
-  /** Captures owned input, independent of document mutation. @param input - Native original items. @param boxWhich - Pool's outer box identity. @returns Nothing. */
+  /** Captures owned input, independent of document mutation. @param input - Native original items. @param boxWhich - Pool's outer box identity. @param mergeWhich - Mapped Writer table-mode item. @returns Nothing. */
   public constructor(
     input: SfxItemSet,
     private readonly boxWhich: number,
+    private readonly mergeWhich?: number,
   ) {
     this.original = input.Clone();
     const box =
@@ -86,6 +91,11 @@ export class SvxBorderTabPage {
       input.GetItemState(SID_ATTR_BORDER_INNER) >= SfxItemState.DEFAULT
         ? input.Get(SID_ATTR_BORDER_INNER)
         : undefined;
+    const merge =
+      mergeWhich !== undefined && input.GetItemState(mergeWhich) >= SfxItemState.DEFAULT
+        ? input.Get(mergeWhich)
+        : undefined;
+    this.oldMerge = merge instanceof SfxBoolItem ? merge.Clone() : undefined;
     this.oldBox = box instanceof SvxBoxItem ? box.Clone() : undefined;
     this.oldInfo = info instanceof SvxBoxInfoItem ? info.Clone() : undefined;
     this.horizontal = this.oldInfo?.IsHor() ?? false;
@@ -95,6 +105,7 @@ export class SvxBorderTabPage {
   }
   /** Restores source frame lines, saved metrics, uniform line controls and selection. @returns Nothing. */
   public Reset(): void {
+    this.merge = this.savedMerge = this.oldMerge?.GetValue();
     const selector = this.frameSelector;
     selector.Initialize(
       FrameSelFlags.Outer |
@@ -152,6 +163,18 @@ export class SvxBorderTabPage {
         value,
       ) => value === this.distances[0],
     );
+  }
+  /** Reads Writer table mode presentation for the mapped collapsing item. @returns Visibility. */
+  public IsMergeAdjacentVisible(): boolean {
+    return this.mergeWhich !== undefined;
+  }
+  /** Reads the native saved tri-state checkbox. @returns Boolean or indeterminate. */
+  public GetMergeAdjacentState(): boolean | undefined {
+    return this.merge;
+  }
+  /** Edits only the native checkbox state. @param value - Checkbox state. @returns Nothing. */
+  public SetMergeAdjacentState(value: boolean | undefined): void {
+    this.merge = value;
   }
   /** Lists native line styles in the source order. @returns Styles. */
   public GetLineStyles(): readonly Style[] {
@@ -326,6 +349,16 @@ export class SvxBorderTabPage {
   }
   /** Reconstructs fresh native outer/inner items and separately publishes changed values. @param output - Native output set, with original pool/ranges. @returns Whether an item changed. */
   public FillItemSet(output: SfxItemSet): boolean {
+    let changed = false;
+    if (this.merge !== this.savedMerge) {
+      if (this.merge === undefined) output.ClearItem(this.mergeWhich as number);
+      else if (this.oldMerge !== undefined) {
+        const item = this.oldMerge.Clone();
+        item.SetValue(this.merge);
+        output.Put(item);
+      }
+      changed = true;
+    }
     const box = new SvxBoxItem(this.boxWhich),
       info = new SvxBoxInfoItem(SID_ATTR_BORDER_INNER),
       selector = this.frameSelector;
@@ -378,9 +411,8 @@ export class SvxBorderTabPage {
     if (!put) {
       output.ClearItem(this.boxWhich);
       output.ClearItem(SID_ATTR_BORDER_INNER);
-      return false;
+      return changed;
     }
-    let changed = false;
     if (this.oldBox === undefined || !box.equals(this.oldBox)) {
       output.Put(box);
       changed = true;

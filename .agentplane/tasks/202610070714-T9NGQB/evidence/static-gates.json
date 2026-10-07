@@ -1,0 +1,68 @@
+{
+  "records": [
+    {
+      "command": "npm run format:check",
+      "exit": 1,
+      "bytes": 227,
+      "sha256": "2269f5a037416d1188160bf200b431d35d95503d31c1231e168cdef7d4f02e9b",
+      "diagnostics": [
+        "[warn] apps/office/e2e/writer-native-collapsing-borders.spec.ts",
+        "[warn] Code style issues found in the above file. Run Prettier with --write to fix."
+      ]
+    },
+    {
+      "command": "npm run lint",
+      "exit": 0,
+      "bytes": 55,
+      "sha256": "a6172cb57fa696e705408fdc605fba1ae07b852fdf0614d7c2b623349e285b6e",
+      "diagnostics": [
+        "> eslint . --max-warnings 0"
+      ]
+    },
+    {
+      "command": "npm run typecheck",
+      "exit": 2,
+      "bytes": 3725,
+      "sha256": "beb7e57d90d216e9533100555fdd6dbf8f98262066bfacc05c16ef8c54e46bf2",
+      "diagnostics": [
+        "src/sw/browser/presentation/native-collapsing-table-borders.test.tsx(49,74): error TS2769: No overload matches this call.",
+        "  Overload 1 of 2, '(role: ByRoleMatcher, options?: ByRoleOptions | undefined): HTMLElement', gave the following error.",
+        "  Overload 2 of 2, '(role: ByRoleMatcher, options?: ByRoleOptions | undefined): HTMLElement', gave the following error.",
+        "src/sw/browser/presentation/native-collapsing-table-borders.test.tsx(50,62): error TS2769: No overload matches this call.",
+        "  Overload 1 of 2, '(role: ByRoleMatcher, options?: ByRoleOptions | undefined): HTMLElement', gave the following error.",
+        "  Overload 2 of 2, '(role: ByRoleMatcher, options?: ByRoleOptions | undefined): HTMLElement', gave the following error.",
+        "src/sw/browser/presentation/native-collapsing-table-borders.test.tsx(86,65): error TS2769: No overload matches this call.",
+        "  Overload 1 of 2, '(role: ByRoleMatcher, options?: ByRoleOptions | undefined): HTMLElement', gave the following error.",
+        "  Overload 2 of 2, '(role: ByRoleMatcher, options?: ByRoleOptions | undefined): HTMLElement', gave the following error.",
+        "src/sw/browser/presentation/native-collapsing-table-borders.test.tsx(89,66): error TS2769: No overload matches this call.",
+        "  Overload 1 of 2, '(role: ByRoleMatcher, options?: ByRoleOptions | undefined): HTMLElement', gave the following error.",
+        "  Overload 2 of 2, '(role: ByRoleMatcher, options?: ByRoleOptions | undefined): HTMLElement', gave the following error."
+      ]
+    },
+    {
+      "command": "npm run check:dependencies",
+      "exit": 0,
+      "bytes": 189,
+      "sha256": "f3cb31720434c8735a23e649e8e16ed9f545a462c678ba37e16fd6b291693d5d",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:docs",
+      "exit": 1,
+      "bytes": 532,
+      "sha256": "de649f8d48fe5700ae2cea139427eb759f8e25f6b5e037a253b0fb2abd130032",
+      "diagnostics": [
+        "    throw new Error(`JSDoc validation failed:\\n${errors.join(\"\\n\")}`);",
+        "Error: JSDoc validation failed:",
+        "apps/office/src/cui/source/tabpages/border.ts:82 function documents 2/3 parameters"
+      ]
+    },
+    {
+      "command": "npm run check:file-size",
+      "exit": 0,
+      "bytes": 3925,
+      "sha256": "617e2b892cbe9f4728bbf7e7c6a38005866e019c19439ce15f9c17aeb089ebb3",
+      "diagnostics": []
+    }
+  ]
+}

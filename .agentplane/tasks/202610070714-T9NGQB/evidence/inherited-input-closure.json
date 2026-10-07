@@ -1,0 +1,28 @@
+{
+  "records": [
+    {
+      "command": "npm exec -- prettier --check apps/office/src/sw/browser/presentation/WriterTableDialog.tsx apps/office/src/sw/browser/presentation/native-collapsing-table-borders.test.tsx apps/office/e2e/writer-native-collapsing-borders.spec.ts",
+      "exit": 1,
+      "bytes": 171,
+      "sha256": "8cdf0363325f50b26c50a87301ae881d1d238c45b5bae600ab3cfa707397c582",
+      "diagnostics": [
+        "[warn] apps/office/e2e/writer-native-collapsing-borders.spec.ts",
+        "[warn] Code style issues found in the above file. Run Prettier with --write to fix."
+      ]
+    },
+    {
+      "command": "npm exec -- eslint apps/office/src/sw/browser/presentation/WriterTableDialog.tsx apps/office/src/sw/browser/presentation/native-collapsing-table-borders.test.tsx apps/office/e2e/writer-native-collapsing-borders.spec.ts --max-warnings 0",
+      "exit": 0,
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run typecheck",
+      "exit": 0,
+      "bytes": 240,
+      "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed",
+      "diagnostics": []
+    }
+  ]
+}

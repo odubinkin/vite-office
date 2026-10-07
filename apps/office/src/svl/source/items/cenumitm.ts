@@ -7,7 +7,7 @@ export class SfxBoolItem extends SfxPoolItem {
   /** Creates a boolean item. @param which - Item identity. @param value - Boolean value. @returns Nothing. */
   public constructor(
     which = 0,
-    private readonly value = false,
+    private value = false,
   ) {
     super(which);
   }
@@ -15,6 +15,11 @@ export class SfxBoolItem extends SfxPoolItem {
   /** Returns the stored boolean. @returns Boolean value. */
   public GetValue(): boolean {
     return this.value;
+  }
+
+  /** Sets the native boolean payload. @param value - New value. @returns Nothing. */
+  public SetValue(value: boolean): void {
+    this.value = value;
   }
 
   /** Creates an independent boolean item. @returns Cloned item. */

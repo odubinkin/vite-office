@@ -1,0 +1,10 @@
+{
+  "wholeAgentplaneForbiddenSourceOrPythonCount": 0,
+  "activeFiles": 17,
+  "activeExtensions": [
+    "json",
+    "md"
+  ],
+  "noRawCoverageResultsOrSourceSnapshots": true,
+  "rawEvidenceLocation": "Ignored project dependency cache; no pinned sources copied into AP"
+}

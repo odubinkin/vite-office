@@ -1,0 +1,92 @@
+{
+  "base": "08c3e3b4f86caf8309065744ac4f389579ee8248",
+  "approvedPaths": [
+    "apps/office/src/sw/inc/hintids.ts",
+    "apps/office/src/sw/source/core/attr/swatrset.ts",
+    "apps/office/src/svl/source/items/cenumitm.ts",
+    "apps/office/src/cui/source/tabpages/border.ts",
+    "apps/office/src/sw/source/uibase/shells/tabsh.ts",
+    "apps/office/src/sw/browser/presentation/WriterBorderPage.tsx",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx",
+    "apps/office/src/sw/browser/editor/WriterEditableTable.tsx",
+    "apps/office/src/cui/source/tabpages/native-collapsing-border-page.test.ts",
+    "apps/office/src/sw/browser/presentation/native-collapsing-table-borders.test.tsx",
+    "apps/office/e2e/writer-native-collapsing-borders.spec.ts",
+    "apps/office/src/sw/browser/editor/native-cell-box-render.test.tsx",
+    "apps/office/src/sw/browser/presentation/native-border-page.test.tsx",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "actualSemanticPaths": [
+    "apps/office/src/cui/source/tabpages/border.ts",
+    "apps/office/src/svl/source/items/cenumitm.ts",
+    "apps/office/src/sw/browser/editor/WriterEditableTable.tsx",
+    "apps/office/src/sw/browser/presentation/WriterBorderPage.tsx",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx",
+    "apps/office/src/sw/inc/hintids.ts",
+    "apps/office/src/sw/source/core/attr/swatrset.ts",
+    "apps/office/src/sw/source/uibase/shells/tabsh.ts",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/source-provenance.json",
+    "apps/office/e2e/writer-native-collapsing-borders.spec.ts",
+    "apps/office/src/cui/source/tabpages/native-collapsing-border-page.test.ts",
+    "apps/office/src/sw/browser/presentation/native-collapsing-table-borders.test.tsx"
+  ],
+  "oldAcceptanceFiles": 563,
+  "oldByteIdentical": 563,
+  "newAcceptanceFiles": 3,
+  "totalAcceptanceFiles": 566,
+  "oldAcceptanceCensusSHA256": "23600399282c370cc54bea3019e858f86c1646a305b20bfcd669574d2695be96",
+  "fresh": [
+    {
+      "path": "apps/office/src/cui/source/tabpages/native-collapsing-border-page.test.ts",
+      "initialSHA256": "e2ea7d180a9b407830662bcd84884d18f2e5438c63b7692c6567cf4fd41d872e",
+      "currentSHA256": "e2ea7d180a9b407830662bcd84884d18f2e5438c63b7692c6567cf4fd41d872e",
+      "initialPassedDefinitionsPreserved": 2,
+      "newDefinitions": 0
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/native-collapsing-table-borders.test.tsx",
+      "initialSHA256": "d59fd40d7b46013e3509c608f5186c8ed4f5eb31ea4c6828e11490a264328b53",
+      "currentSHA256": "8d9664c9962374a4b3940f41f9c04d0a1e7a59e35ac30199ff7eb017e636030b",
+      "initialPassedDefinitionsPreserved": 3,
+      "newDefinitions": 1
+    },
+    {
+      "path": "apps/office/e2e/writer-native-collapsing-borders.spec.ts",
+      "initialSHA256": "e6f748a8de0716a6eb236edcaa39324d8ca46efc2b51f3d09fda034d40b59893",
+      "currentSHA256": "72d7dd0338ac031a9b24f41e429b748a03d3271e4e3cf9762a2f52b3af183a0e",
+      "initialPassedDefinitionsPreserved": 1,
+      "newDefinitions": 1
+    }
+  ],
+  "metadata": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "prior": 289,
+      "current": 289,
+      "priorFieldsPrefixesStatusesDefaultsAndExceptionsPreserved": true,
+      "currentSHA256": "416767481525abd22c6a9a7dea0db5b5feacb078c8f91431fbdffeb4be04fbca"
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "prior": 289,
+      "current": 289,
+      "priorFieldsPrefixesStatusesDefaultsAndExceptionsPreserved": true,
+      "currentSHA256": "477ea2907a2d1e6330c34aec00a2d9c25f219bf455c01171c7271f84c1bfb180"
+    }
+  ],
+  "parentFindingsCharacters": 561879,
+  "parentFindingsSHA256": "148d324dbfac868fbc561aac29aec2e68257a7fce3dbb700c4b756213b22d2fa",
+  "artifacts": {
+    "wholeAgentplaneForbiddenSourceOrPythonCount": 0,
+    "activeFiles": 17,
+    "activeExtensions": [
+      "json",
+      "md"
+    ],
+    "noRawCoverageResultsOrSourceSnapshots": true,
+    "rawEvidenceLocation": "Ignored project dependency cache; no pinned sources copied into AP"
+  },
+  "failures": []
+}

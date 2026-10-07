@@ -1,0 +1,109 @@
+{
+  "proof": "Actual counters with complete identical source/maps or complete contiguous declaration/body/enclosing branch/location proofs; focused skips retained as skipped.",
+  "previousVerified": {
+    "app": {
+      "map": "3D968G.app-final.json",
+      "proof": "3D968G.app-proof.json",
+      "mapHash": "21d09911e56aad7a99d125f91f85f4e395ca248df581cc31de8fc77db9499096",
+      "proofHash": "61ed067187880c78aa79cc3745fe09e2c033fc0941c4f165dab7bf5067af84bb"
+    },
+    "inventory": {
+      "map": "3D968G.inventory-final.json",
+      "proof": "3D968G.inventory-proof.json",
+      "mapHash": "4d28303359a40d81f6561b021418d1a053cc09033832ea09913dd8fc3d61d33d",
+      "proofHash": "e4a57c478310d6bacc7a9b7d4d3d11b0a37bc5c7872abb8e69eae124af3b57c6"
+    }
+  },
+  "app": {
+    "coverage": {
+      "lines": {
+        "total": 16080,
+        "covered": 16080,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 17652,
+        "covered": 17652,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 4098,
+        "covered": 4098,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 13238,
+        "covered": 13238,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "mapSHA256": "fe0f18353a496d228a1f4ecd5b4940777fef220e604b9f374d3d8d5f527bff61",
+    "proofSHA256": "de92f15de13bb6e50559b233ae57b1ec2a41256ef286c009db1fa9cd1fbfe39f",
+    "files": 286,
+    "wholeFiles": 285,
+    "transfers": [
+      {
+        "path": "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx",
+        "initialSourceSHA256": "92019dbfa52464fb97bf0561030627331f9759e20d16271b3b6dbe2450bf7da7",
+        "currentSourceSHA256": "fd0d8a5b66addc4b44d32ece3a5f1f77ac7fe5551d17225e4beb0e7c999fb74a",
+        "regionCount": 4,
+        "counts": {
+          "statements": 120,
+          "functions": 44,
+          "branches": 39
+        }
+      }
+    ],
+    "gaps": []
+  },
+  "inventory": {
+    "coverage": {
+      "lines": {
+        "total": 1464,
+        "covered": 1464,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 1523,
+        "covered": 1523,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 384,
+        "covered": 384,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 1081,
+        "covered": 1081,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "mapSHA256": "b54f0c213687d37b33b85299eb37789044a0cc295af6a4be14d4fee20c9f548f",
+    "proofSHA256": "5c43a8f01265876178c73869204175bfde82507529383d6eac361ff12ce0b0b8",
+    "files": 38,
+    "wholeFiles": 38,
+    "transfers": [],
+    "gaps": []
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "records": [
+    {
+      "command": "Unchanged JSDoc validator on approved changed code/acceptance paths; actual physical-line count",
+      "exit": 0,
+      "errors": [],
+      "physicalLines": {
+        "apps/office/src/sw/inc/hintids.ts": 206,
+        "apps/office/src/sw/source/core/attr/swatrset.ts": 439,
+        "apps/office/src/svl/source/items/cenumitm.ts": 42,
+        "apps/office/src/cui/source/tabpages/border.ts": 432,
+        "apps/office/src/sw/source/uibase/shells/tabsh.ts": 288,
+        "apps/office/src/sw/browser/presentation/WriterBorderPage.tsx": 456,
+        "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx": 658,
+        "apps/office/src/sw/browser/editor/WriterEditableTable.tsx": 274,
+        "apps/office/src/cui/source/tabpages/native-collapsing-border-page.test.ts": 70,
+        "apps/office/src/sw/browser/presentation/native-collapsing-table-borders.test.tsx": 255,
+        "apps/office/e2e/writer-native-collapsing-borders.spec.ts": 155,
+        "apps/office/src/sw/browser/editor/native-cell-box-render.test.tsx": 285,
+        "apps/office/src/sw/browser/presentation/native-border-page.test.tsx": 332
+      }
+    }
+  ]
+}

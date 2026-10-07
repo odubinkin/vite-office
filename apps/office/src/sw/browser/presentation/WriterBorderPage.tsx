@@ -421,6 +421,35 @@ export function WriterBorderPage({
           </label>
         </fieldset>
       ) : null}
+      {page.IsMergeAdjacentVisible() ? (
+        <fieldset className="rounded border p-3">
+          <legend className="text-sm font-bold">Properties</legend>
+          <label className="flex items-center gap-2 text-sm">
+            <input
+              type="checkbox"
+              checked={page.GetMergeAdjacentState() === true}
+              aria-checked={
+                page.GetMergeAdjacentState() === undefined ? "mixed" : page.GetMergeAdjacentState()
+              }
+              ref={
+                /** Projects native indeterminate checkbox state. @param element - DOM device. @returns Nothing. */
+                (element) => {
+                  if (element !== null)
+                    element.indeterminate = page.GetMergeAdjacentState() === undefined;
+                }
+              }
+              onChange={
+                /** Dispatches the native table merging checkbox. @param event - Checkbox. @returns Nothing. */
+                (event) => {
+                  page.SetMergeAdjacentState(event.target.checked);
+                  onChange();
+                }
+              }
+            />
+            Merge adjacent line styles
+          </label>
+        </fieldset>
+      ) : null}
     </div>
   );
 }

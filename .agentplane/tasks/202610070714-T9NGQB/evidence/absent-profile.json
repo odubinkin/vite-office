@@ -1,0 +1,193 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/sw/inc/hintids.ts": "1be8bbaf3dd09c231c5c9a8e98d8cc28b901d40453fb3cf86a6135a698f9700f",
+    "apps/office/src/sw/source/core/attr/swatrset.ts": "d9893c6d29d42f9b1ff52f402ce7d617874ef41caa96d8aebb90b47e77924062",
+    "apps/office/src/svl/source/items/cenumitm.ts": "ceaa94c96446efbc1a0b9d7ec542820cf29525fbc4774c5e85941321148338e9",
+    "apps/office/src/cui/source/tabpages/border.ts": "2f77c5e5d41285096e256fa090619830c8459fec28faaaa1e05b98a190104164",
+    "apps/office/src/sw/source/uibase/shells/tabsh.ts": "32182fda1c3b280a83efa12261547114cc5e4226ea3b008087c22b81950aab5e",
+    "apps/office/src/sw/browser/presentation/WriterBorderPage.tsx": "1a5438116aac2fb94fca876ab0b4c803cf1e3d88ab0f118bd56896613156900b",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx": "92019dbfa52464fb97bf0561030627331f9759e20d16271b3b6dbe2450bf7da7",
+    "apps/office/src/sw/browser/editor/WriterEditableTable.tsx": "659989b766bc908d9db4ca9f81db95a5f76f106d0157468ec9759ae928ceba4c",
+    "apps/office/src/cui/source/tabpages/native-collapsing-border-page.test.ts": "e2ea7d180a9b407830662bcd84884d18f2e5438c63b7692c6567cf4fd41d872e",
+    "apps/office/src/sw/browser/presentation/native-collapsing-table-borders.test.tsx": "d59fd40d7b46013e3509c608f5186c8ed4f5eb31ea4c6828e11490a264328b53",
+    "apps/office/e2e/writer-native-collapsing-borders.spec.ts": "e6f748a8de0716a6eb236edcaa39324d8ca46efc2b51f3d09fda034d40b59893",
+    "apps/office/src/sw/browser/editor/native-cell-box-render.test.tsx": "ec00a1c0fab40bdde5698fc34783a7cbd6332f2dc9ffdabba8e1bd58465baf44",
+    "apps/office/src/sw/browser/presentation/native-border-page.test.tsx": "f0fbebfa9661246dd3308531d3615d26e3d0846c27a0ac60d133deca1dfbf55b",
+    "docs/program/source-provenance.json": "1b24771e1c38f72b5065dcee4f7e79ff5fcdae2901051847bc25c4709458dca0",
+    "docs/program/parity/runtime-inventory.json": "ef7721631fe23b16efde6fbaf5d806957a3ee30f36ac156d617f689587af29c1"
+  },
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1443,
+      "sha256": "5ae7e0009cb4d1e6c1b43a4ecf9603977eebcc3ed069a38eeff39d547c8cbd64",
+      "totals": [],
+      "failedCases": []
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/T9NGQB.app-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 139725,
+      "sha256": "7a634e4f3a8ffc68dc36c1ea8ab8c8df507b0a47569a4268c3edd28c91e4bd7f",
+      "totals": [
+        "Test Files  424 passed (424)",
+        "Tests  13459 passed (13459)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "passed": 13459,
+        "failed": 0,
+        "skipped": 0,
+        "total": 13459
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 16077,
+          "covered": 16077,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 17649,
+          "covered": 17649,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 4098,
+          "covered": 4098,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 13236,
+          "covered": 13235,
+          "skipped": 0,
+          "pct": 99.99
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 99.99
+      },
+      "incompleteFileCount": 1,
+      "coverageMapSHA256": "dd5dc46987190227bf87f0d6785ef54b20092d2a448cff09d624d77565fc8779"
+    },
+    {
+      "kind": "inventory",
+      "command": "npm run test:inventory:coverage -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/T9NGQB.inventory-results.json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 40696,
+      "sha256": "b8aec7faead5054ca1078543218bd02f52737af89e2eabb05e246b0d584373a7",
+      "totals": [
+        "Test Files  36 passed (36)",
+        "Tests  110 passed (110)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "passed": 110,
+        "failed": 0,
+        "skipped": 0,
+        "total": 110
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 1464,
+          "covered": 1464,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 1523,
+          "covered": 1523,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 384,
+          "covered": 384,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 1081,
+          "covered": 1081,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100
+      },
+      "incompleteFileCount": 0,
+      "coverageMapSHA256": "331fef08669430f6802ca09c64f3c0720e8c3bd5d55a3165019d493faef18bb5"
+    },
+    {
+      "kind": "scripts",
+      "command": "npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts scripts/check-module-boundaries.test.ts",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 223,
+      "sha256": "0df3091d65a08b6f3c51e9e4d17ce894ce0b89d19f14dce3cfc97fe8d50eee68",
+      "totals": [
+        "Test Files  3 passed (3)",
+        "Tests  14 passed (14)"
+      ],
+      "failedCases": []
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 38586,
+      "sha256": "48a68daa6cf48f767d1e3191468cc29ac320c18bcbf95ca40b3f9e350badeb93",
+      "totals": [
+        "1 failed",
+        "263 passed (7.7m)"
+      ],
+      "failedCases": [
+        {
+          "name": "foundation.spec.ts > Writer menu keyboard navigation and accessible application chrome",
+          "errors": [
+            []
+          ]
+        }
+      ],
+      "caseCounts": {
+        "startTime": "2026-10-07T07:47:16.464Z",
+        "duration": 463304.049,
+        "expected": 263,
+        "skipped": 0,
+        "unexpected": 1,
+        "flaky": 0
+      }
+    }
+  ]
+}
