@@ -1,0 +1,27 @@
+{
+  "iteration": 214,
+  "leaf": "202610071137-8RTP52",
+  "implementation": "c0168febda45e1cdce445aa9fdaf4c687770576c",
+  "evidenceTail": "4a00a8a7cbf7912bf0ffd654a6e82550c02262b1",
+  "close": "9451a550c8ad3de5b78343c50a9a17bcfdfdf422",
+  "completePriorCharacters": 585271,
+  "completePriorSHA256": "c75cbad1fffd8967f011799b9fe521e303d4b5ef0599055b17f9db57f33fbf6e",
+  "completePriorPrefixPreserved": true,
+  "finalFindingsCharacters": 590713,
+  "finalFindingsSHA256": "563e2d1468dcd204f562b0a3d810577269bac9c4fbf1a2df72aa7d839ad5fbbd",
+  "cases": {
+    "app": 13509,
+    "inventory": 110,
+    "infrastructure": 14,
+    "chromium": 274
+  },
+  "passingReplay": 0,
+  "priorAcceptanceFiles": 577,
+  "priorAcceptanceByteIdentical": 573,
+  "approvedSourceBackedMigrations": 4,
+  "currentAcceptanceFiles": 580,
+  "priorMetadataFieldsAndExceptionsPreserved": 293,
+  "currentMetadataRecords": 295,
+  "parentGoalState": "ACTIVE; whole parity unverified",
+  "nextLeaf": "Source audit browser Home/End caret movement; native Name informational-message modal remains separate unverified residual"
+}
