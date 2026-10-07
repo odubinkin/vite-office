@@ -1,10 +1,11 @@
 ---
 id: "202610071333-H29XNH"
 title: "Preserve native list-label cursor affinity through the browser selection boundary"
-status: "DOING"
+result_summary: "Native before-label cursor state now survives UI selection and repeated Home, renders a caret at the marker, handles marker clicks and native insertion/UndoRedo. Source owner and defaults retained;298prior metadata and intentional exceptions preserved. Whole project parity remains ACTIVE."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 22
+revision: 23
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +39,16 @@ quality_review:
     - ".agentplane/tasks/202610071333-H29XNH/evidence/exact-sha-review.json"
   findings:
     - "Reconstructed source-bound100 coverage/case/scope audits match committed bytes;13545app110inventory14infra278Chromium,0unresolved or uncaught,0passing replay. Source owner/state/publication and marker DOM boundary are verified;298 prior metadata records and registered exceptions preserved."
-commit: null
+commit:
+  hash: "e10492db5e7d9c7fcecedd0b330a4e53f5754fc3"
+  message: "🧩 H29XNH parity: preserve native list-label cursor and browser caret affinity"
 comments:
   -
     author: "CODER"
     body: "Start: preserve native label affinity through actual browser Selection and marker caret; standing user parity authorization applies."
+  -
+    author: "CODER"
+    body: "Verified: native SwPaM label affinity and browser caret boundary completed;13545app110inventory14infra278Chrome,actual100,0uncaught0unresolved0passing replay; same-agent exact implementation evaluation pass."
 events:
   -
     type: "status"
@@ -57,8 +63,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native label affinity verified at implementation e10492db5e7d9c7fcecedd0b330a4e53f5754fc3:13545app110inventory14infra278Chrome,0uncaught0unresolved0passing replay,actual100app/inventory;15paths582identical1exact prior assertion migration298metadata retained. Same-agent exact evaluation pass; whole parity ACTIVE."
+  -
+    type: "status"
+    at: "2026-10-07T14:22:31.360Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native SwPaM label affinity and browser caret boundary completed;13545app110inventory14infra278Chrome,actual100,0uncaught0unresolved0passing replay; same-agent exact implementation evaluation pass."
 doc_version: 3
-doc_updated_at: "2026-10-07T14:22:05.415Z"
+doc_updated_at: "2026-10-07T14:22:31.361Z"
 doc_updated_by: "CODER"
 description: "Iteration216 of parent202609240501-C9TN6M. Distinguish native before-label affinity from text offset0 in actual browser selection and marker caret paint. Preserve node owners, selection/history and registered save/open/recovery deviations; whole parity remains active."
 sections:
