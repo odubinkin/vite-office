@@ -4,7 +4,7 @@ title: "Preserve Shift linear table column border dragging"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -20,10 +20,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-07T19:44:10.463Z"
+  updated_by: "CODER"
+  note: "Final13623app110inventory15infrastructure290Chrome PASS; one full upstream-absent profile, only two original Chrome failures closed, zero passing replay, all4 source-bound coverage100,603oldacceptance302metadata preserved. Exact implementation1faf5d9fb924eba5c939ffacd8bdd7d5a69b0d32 review/EVALUATOR PASS explicitly same current agent not independent; all declared gates and source/artifact scope proofs recorded."
   attempts: 0
 quality_review:
   state: "pass"
@@ -54,8 +54,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement approved native solitary Shift column border translation under standing user parity authorization, preserving old acceptance and upstream-absent single profile."
+  -
+    type: "verify"
+    at: "2026-10-07T19:44:10.463Z"
+    author: "CODER"
+    state: "ok"
+    note: "Final13623app110inventory15infrastructure290Chrome PASS; one full upstream-absent profile, only two original Chrome failures closed, zero passing replay, all4 source-bound coverage100,603oldacceptance302metadata preserved. Exact implementation1faf5d9fb924eba5c939ffacd8bdd7d5a69b0d32 review/EVALUATOR PASS explicitly same current agent not independent; all declared gates and source/artifact scope proofs recorded."
 doc_version: 3
-doc_updated_at: "2026-10-07T19:43:46.959Z"
+doc_updated_at: "2026-10-07T19:44:10.523Z"
 doc_updated_by: "CODER"
 description: "Iteration225: browser loses native drag modifier; source SvxRuler EvalModifier Shift linear DragBorders must translate following separators with native five-device-pixel constraints, preserve deferred original table history and ordinary row drag. Standing user parity goal authorizes safe local implementation; registered IO deviations unchanged."
 sections:
@@ -79,6 +85,39 @@ sections:
     Result: final13623app110inventory15infrastructure290ChromePASS, zero unresolved/skipped/flaky/passing replay; all4 source-bound app/inventory100. Source/resource and final static gates PASS. All603oldacceptance and302metadata contracts retained;7intentional semantic files, no AP source/Python/raw results.
     Evidence: evidence/absent-profile.json, runtime-closure1.json, runtime-closure2.json, static-gates.json, static-closure1..4.json, final-coverage.json, case-census.json, scope-final.json, source-review.json, source-gates.json, changed-file-checks.json, artifact-census.json, governance.json; raw ignored cache YQ77NP.*. Initial failures and bounded corrections retained in Findings. Exact implementation SHA 1faf5d9fb924eba5c939ffacd8bdd7d5a69b0d32 reviewPASS and same-current-agent EVALUATOR PASS (explicitly not independent) at .agentplane/tasks/202610071920-YQ77NP/quality/20261007-194332637-recovery-context/quality-report.json. All semantic bytes match the sole profile; failed Chrome fixture-only closures preserve zero passing replay. Canonical verify and persisted checkpoint before finish reference this actual implementation SHA.
     Scope: solitary Shift existing internal-column border behavior and modifier ingress; source row Shift ignore, owned table/cursor/list/history, real1280/390 geometry/cancel/Enter/UndoRedo/typing/ODT. Exhaustive goal not complete; registered IO exceptions preserved.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-07T19:44:10.463Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Final13623app110inventory15infrastructure290Chrome PASS; one full upstream-absent profile, only two original Chrome failures closed, zero passing replay, all4 source-bound coverage100,603oldacceptance302metadata preserved. Exact implementation1faf5d9fb924eba5c939ffacd8bdd7d5a69b0d32 review/EVALUATOR PASS explicitly same current agent not independent; all declared gates and source/artifact scope proofs recorded.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-07T19:43:46.959Z, excerpt_hash=sha256:b583d36e76814eb17fe934d49e3ed57f50152b3b13de6af8e312a3019fea6fc8
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610071920-YQ77NP/blueprint/resolved-snapshot.json
+    - old_digest: f700a1150a8e2ba51a955e6c16a56e9876d9dabb154abebc1bade22cea8b97fd
+    - current_digest: f700a1150a8e2ba51a955e6c16a56e9876d9dabb154abebc1bade22cea8b97fd
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610071920-YQ77NP
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610071920-YQ77NP
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only the actual task implementation commit; preserve previously closed tasks, parent historical Findings and the deferred stash."
   Findings: |-
     Implemented source-derived solitary KEY_SHIFT on existing horizontal LTR internal column-border drag. Actual browser ingress now supplies native modifier bits; SwEditWin captures exact solitary Shift at admission, excludes outer margins/combined masks from this branch, translates following SwTabCols entries right-to-left, preserves five-device-pixel spacing and visible CalcPropMaxRight maximum, and derives every preview from original geometry. Row solitary Shift remains native ignored. Actual document/SwUndoAttrTable ownership, outside text cursor/list and original nodes/boxes/rows retained.
@@ -122,6 +161,39 @@ Command: initial six static gates, scoped static-closure1..4; ONE upstream-absen
 Result: final13623app110inventory15infrastructure290ChromePASS, zero unresolved/skipped/flaky/passing replay; all4 source-bound app/inventory100. Source/resource and final static gates PASS. All603oldacceptance and302metadata contracts retained;7intentional semantic files, no AP source/Python/raw results.
 Evidence: evidence/absent-profile.json, runtime-closure1.json, runtime-closure2.json, static-gates.json, static-closure1..4.json, final-coverage.json, case-census.json, scope-final.json, source-review.json, source-gates.json, changed-file-checks.json, artifact-census.json, governance.json; raw ignored cache YQ77NP.*. Initial failures and bounded corrections retained in Findings. Exact implementation SHA 1faf5d9fb924eba5c939ffacd8bdd7d5a69b0d32 reviewPASS and same-current-agent EVALUATOR PASS (explicitly not independent) at .agentplane/tasks/202610071920-YQ77NP/quality/20261007-194332637-recovery-context/quality-report.json. All semantic bytes match the sole profile; failed Chrome fixture-only closures preserve zero passing replay. Canonical verify and persisted checkpoint before finish reference this actual implementation SHA.
 Scope: solitary Shift existing internal-column border behavior and modifier ingress; source row Shift ignore, owned table/cursor/list/history, real1280/390 geometry/cancel/Enter/UndoRedo/typing/ODT. Exhaustive goal not complete; registered IO exceptions preserved.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-07T19:44:10.463Z — VERIFY — ok
+
+By: CODER
+
+Note: Final13623app110inventory15infrastructure290Chrome PASS; one full upstream-absent profile, only two original Chrome failures closed, zero passing replay, all4 source-bound coverage100,603oldacceptance302metadata preserved. Exact implementation1faf5d9fb924eba5c939ffacd8bdd7d5a69b0d32 review/EVALUATOR PASS explicitly same current agent not independent; all declared gates and source/artifact scope proofs recorded.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-07T19:43:46.959Z, excerpt_hash=sha256:b583d36e76814eb17fe934d49e3ed57f50152b3b13de6af8e312a3019fea6fc8
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610071920-YQ77NP/blueprint/resolved-snapshot.json
+- old_digest: f700a1150a8e2ba51a955e6c16a56e9876d9dabb154abebc1bade22cea8b97fd
+- current_digest: f700a1150a8e2ba51a955e6c16a56e9876d9dabb154abebc1bade22cea8b97fd
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610071920-YQ77NP
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610071920-YQ77NP
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
