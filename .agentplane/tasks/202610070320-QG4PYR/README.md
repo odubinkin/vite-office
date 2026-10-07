@@ -1,10 +1,11 @@
 ---
 id: "202610070320-QG4PYR"
 title: "Replace scalar Writer cell borders with native box items across existing document flows"
-status: "DOING"
+result_summary: "Native box items replace scalar kernel cell borders; one absence profile with failed/new-only closures,13333app110inventory13scripts252Chromium, actual100 app/inventory,550 old acceptance and281 metadata prefixes preserved; full goal remains ACTIVE."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 23
+revision: 24
 origin:
   system: "manual"
 depends_on: []
@@ -41,7 +42,9 @@ quality_review:
   findings:
     - "Native owned box/info/line items replace scalar kernel borders across original graph, history, process/storage, ODF and browser paint; bounded representation migrations preserve all550 prior acceptance contracts and281 metadata prefixes."
     - "One full upstream-absent profile followed only by original failures and genuinely new cases; actual13333app110inventory13scripts252Chromium, strict actual100 app/inventory, no passing replay or promoted skips."
-commit: null
+commit:
+  hash: "13a7867b7c6a27f591aea3739fac895f431c8a31"
+  message: "🚧 QG4PYR code: replace scalar cell borders with native box items"
 comments:
   -
     author: "CODER"
@@ -52,6 +55,9 @@ comments:
   -
     author: "CODER"
     body: "Start: resume bounded native box verification with required test-infrastructure discovery integration under standing authorization."
+  -
+    author: "CODER"
+    body: "Verified: native owned box/info/line integration across existing kernel and browser document flows, preserved historical contracts and actual coverage; implementation13a7867b7c6a27f591aea3739fac895f431c8a31, evidence tail748c46eadf0f7761e2d40f672a055f77f3cbb6cb."
 events:
   -
     type: "status"
@@ -80,8 +86,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified implementation13a7867b7c6a27f591aea3739fac895f431c8a31: native owned box/info/line flow, actual13333app110inventory13scripts252Chromium; actual100 app/inventory,550 historical acceptance contracts and281 metadata prefixes preserved. One full upstream-absent profile plus failure/new-only closure; source gates after restoration; exact same-agent EVALUATOR pass, explicitly not independent. Full parent goal unverified."
+  -
+    type: "status"
+    at: "2026-10-07T04:33:30.523Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native owned box/info/line integration across existing kernel and browser document flows, preserved historical contracts and actual coverage; implementation13a7867b7c6a27f591aea3739fac895f431c8a31, evidence tail748c46eadf0f7761e2d40f672a055f77f3cbb6cb."
 doc_version: 3
-doc_updated_at: "2026-10-07T04:32:53.289Z"
+doc_updated_at: "2026-10-07T04:33:30.524Z"
 doc_updated_by: "CODER"
 description: "Iteration206: canonical owned SvxBoxItem/SvxBoxInfoItem and SvxBorderLine replace kernel CSS border/padding; native item-set selection validity and edge distribution, clone/history, independent ODF edges/distances, primitive worker/storage and direct browser render. Existing UI scalar fields stay only at the presentation ingress while per-edge controls remain separate follow-up. Preserve deliberate I/O deviations."
 sections:
