@@ -1,6 +1,7 @@
 /** @fileoverview Projects one canonical Writer paragraph inside the browser editing host. */
 
-import { Fragment, useRef } from "react";
+import { Fragment, useLayoutEffect, useRef } from "react";
+import { resolveSwNumberingTabPosition } from "../../source/core/text/txttab";
 import { browserFontFamily } from "./writer-font-family";
 import { FontItalic, FontLineStyle, FontWeight } from "../../../editeng/source/items/textitem";
 
@@ -39,6 +40,7 @@ export function WriterEditableParagraph({
   retainElement,
 }: WriterEditableParagraphProps): React.JSX.Element {
   const paragraphElement = useRef<HTMLParagraphElement | null>(null);
+  const labelElement = useRef<HTMLSpanElement | null>(null);
   const label =
     cellPosition === undefined
       ? index === 0
@@ -54,6 +56,51 @@ export function WriterEditableParagraph({
       ? listLayout.listTabPositionPt
       : (listLayout?.indentAtPt ?? 0);
   const markerWidthPt = Math.max(0, contentStartPt - markerStartPt);
+  useLayoutEffect(
+    /** Measures glyph advance in the browser device before applying native strict-after-label tab lookup. @returns Font/geometry subscription cleanup or nothing for unmeasured/legacy/follow frames. */
+    () => {
+      const glyph = labelElement.current;
+      const settings = paragraph.listTabSettings;
+      if (glyph === null) return;
+      const label = glyph.parentElement as HTMLElement;
+      label.style.width = listLayout?.labelFollowedBy === "listtab" ? `${markerWidthPt}pt` : "";
+      if (settings === undefined || listLayout === undefined) return;
+      let active = true;
+      const measure =
+        /** Converts actual glyph advance to native twips without retaining mutable model state. @returns Nothing. */ (): void => {
+          if (!active) return;
+          const width = glyph.getBoundingClientRect().width;
+          if (width <= 0) return;
+          // Device rectangles include page transforms; computed widths retain CSS layout units.
+          const layoutWidth = Number.parseFloat(getComputedStyle(label).width);
+          const scale = layoutWidth > 0 ? label.getBoundingClientRect().width / layoutWidth : 1;
+          const advance = Math.round((width / scale) * 15);
+          const start = markerStartPt * 20;
+          const next = resolveSwNumberingTabPosition(
+            start + advance,
+            listLayout.indentAtPt * 20,
+            contentStartPt * 20,
+            settings,
+          );
+          label.style.width = `${Math.max(advance, next - start) / 20}pt`;
+        };
+      measure();
+      const observer =
+        typeof ResizeObserver === "undefined" ? undefined : new ResizeObserver(measure);
+      observer?.observe(glyph);
+      const fonts = glyph.ownerDocument.fonts;
+      void fonts?.ready.then(measure);
+      fonts?.addEventListener("loadingdone", measure);
+      globalThis.addEventListener("resize", measure);
+      return /** Stops measurements after this immutable projection is released. @returns Nothing. */ () => {
+        active = false;
+        observer?.disconnect();
+        fonts?.removeEventListener("loadingdone", measure);
+        globalThis.removeEventListener("resize", measure);
+      };
+    },
+    [paragraph, isFollow, markerStartPt, contentStartPt, markerWidthPt, listLayout],
+  );
   return (
     <div
       className="relative shrink-0"
@@ -159,7 +206,9 @@ export function WriterEditableParagraph({
                 }}
               />
             ) : null}
-            {listMarker}
+            <span ref={labelElement} data-writer-list-label>
+              {listMarker}
+            </span>
           </span>
         )}
         <p

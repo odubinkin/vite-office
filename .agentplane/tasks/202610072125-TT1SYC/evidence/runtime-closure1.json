@@ -1,0 +1,73 @@
+{
+  "profile": "upstream-absent",
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/browser/editor/native-numbering-tab.test.tsx -t ^(?:measured native label tab follows glyph and font refresh cell=false|measured native label tab follows glyph and font refresh cell=true|zero-width detached device and omitted list layout retain compatibility)$ --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/TT1SYC.closure1.app-results.json",
+      "exit": 1,
+      "outputSHA256": "d0f86cbab01a2238f0aac99b1a9fa85218b46a5819e1ed3c5251b43148a9eee4",
+      "bytes": 30892,
+      "unhandledErrorCount": 0,
+      "originalFailedNames": [
+        {
+          "file": "src/sw/browser/editor/native-numbering-tab.test.tsx",
+          "name": "measured native label tab follows glyph and font refresh cell=false"
+        },
+        {
+          "file": "src/sw/browser/editor/native-numbering-tab.test.tsx",
+          "name": "measured native label tab follows glyph and font refresh cell=true"
+        },
+        {
+          "file": "src/sw/browser/editor/native-numbering-tab.test.tsx",
+          "name": "zero-width detached device and omitted list layout retain compatibility"
+        }
+      ],
+      "caseCounts": {
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "total": 3
+      },
+      "failedCases": []
+    },
+    {
+      "kind": "inventory",
+      "command": "npm run test:inventory:coverage -- scripts/libreoffice-inventory/parity-mapping-cli.test.ts -t ^(?:parity mapping CLI composes the Writer mapping report with owned upstream marker evidence)$ --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/TT1SYC.closure1.inventory-results.json",
+      "exit": 1,
+      "outputSHA256": "71ad5a47779d39ba171d03b7898fffda2e0c2dcbbed92299e36e9667b14a9e5a",
+      "bytes": 5240,
+      "unhandledErrorCount": 0,
+      "originalFailedNames": [
+        {
+          "file": "scripts/libreoffice-inventory/parity-mapping-cli.test.ts",
+          "name": "parity mapping CLI composes the Writer mapping report with owned upstream marker evidence"
+        }
+      ],
+      "caseCounts": {
+        "passed": 1,
+        "failed": 0,
+        "skipped": 2,
+        "total": 3
+      },
+      "failedCases": []
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts apps/office/e2e/writer-native-numbering-tab.spec.ts --reporter=list,json",
+      "exit": 0,
+      "outputSHA256": "5ba5d7d2cadc461d65d35b0981b22ee2394f8ad7543c53876d82140d69694f68",
+      "bytes": 999,
+      "unhandledErrorCount": 0,
+      "caseCounts": {
+        "startTime": "2026-10-07T21:43:28.281Z",
+        "duration": 4771.38,
+        "expected": 4,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "originalFailedNames": "Exactly four original failed fresh exhausted bullet tab cases"
+    }
+  ]
+}

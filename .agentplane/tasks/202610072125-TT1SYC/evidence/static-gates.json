@@ -1,0 +1,69 @@
+{
+  "records": [
+    {
+      "command": "npm run format:check",
+      "exit": 1,
+      "bytes": 222,
+      "sha256": "cf921dfcd7ba411fa82a1558fdb2c1fb2eae167e9b84ca3b6c022b50d1693034",
+      "diagnostics": [
+        "[warn] apps/office/e2e/writer-native-numbering-tab.spec.ts",
+        "[warn] Code style issues found in the above file. Run Prettier with --write to fix."
+      ]
+    },
+    {
+      "command": "npm run lint",
+      "exit": 1,
+      "bytes": 1813,
+      "sha256": "8ef9c827f0e342716f3759937d32b15372f2a8bc3e99dbe840a11edcc665bd3a",
+      "diagnostics": [
+        "> eslint . --max-warnings 0",
+        "  63:7  error  Error: Calling setState synchronously within an effect can trigger cascading renders",
+        "  52:7   error  Missing JSDoc comment  jsdoc/require-jsdoc",
+        "  53:20  error  Missing JSDoc comment  jsdoc/require-jsdoc",
+        "✖ 3 problems (3 errors, 0 warnings)"
+      ]
+    },
+    {
+      "command": "npm run typecheck",
+      "exit": 2,
+      "bytes": 1010,
+      "sha256": "2a735a2f4c4c8e55618fae6d094eee4913a50f51dd77733886d65220bfb185af",
+      "diagnostics": [
+        "src/sw/browser/editor/native-numbering-tab.test.tsx(76,13): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.",
+        "src/sw/browser/editor/native-numbering-tab.test.tsx(78,13): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.",
+        "src/sw/browser/editor/native-numbering-tab.test.tsx(80,26): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.",
+        "npm error Lifecycle script `typecheck` failed with error:",
+        "npm error code 2",
+        "npm error path /Users/odubinkin/Projects/vite-office/apps/office",
+        "npm error workspace @vite-office/office@0.1.0",
+        "npm error location /Users/odubinkin/Projects/vite-office/apps/office",
+        "npm error command failed",
+        "npm error command sh -c tsc --noEmit"
+      ]
+    },
+    {
+      "command": "npm run check:dependencies",
+      "exit": 0,
+      "bytes": 189,
+      "sha256": "b1d48974acf0b7ccf492bec2d7723279c693a86546adc9a7a58310e0e97263f8",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:docs",
+      "exit": 1,
+      "bytes": 542,
+      "sha256": "857cac37359b8ab95df8b8e3220b4139b24e302e1d61bec13c22aee929b14f77",
+      "diagnostics": [
+        "    throw new Error(`JSDoc validation failed:\\n${errors.join(\"\\n\")}`);",
+        "Error: JSDoc validation failed:"
+      ]
+    },
+    {
+      "command": "npm run check:file-size",
+      "exit": 0,
+      "bytes": 3996,
+      "sha256": "0fe7df0e31dc3f2eaca4ebe182e4c0a2458638829ea08fbc7a6818f54eab974f",
+      "diagnostics": []
+    }
+  ]
+}

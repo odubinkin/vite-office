@@ -1,0 +1,39 @@
+{
+  "base": "85b11ba6a879c0731767fefdd7f11cabcd66bab4",
+  "semanticPaths": [
+    "apps/office/e2e/writer-native-numbering-tab.spec.ts",
+    "apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx",
+    "apps/office/src/sw/browser/editor/native-numbering-tab.test.tsx",
+    "apps/office/src/sw/browser/presentation/writer-view-projection.ts",
+    "apps/office/src/sw/source/core/text/native-numbering-tab.test.ts",
+    "apps/office/src/sw/source/core/text/txttab.ts",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/source-provenance.json"
+  ],
+  "scopeCount": 8,
+  "priorAcceptanceFiles": 609,
+  "byteIdenticalAcceptanceFiles": 609,
+  "exactSourceBackedMigrations": [],
+  "newAcceptanceFiles": [
+    "apps/office/src/sw/source/core/text/native-numbering-tab.test.ts",
+    "apps/office/src/sw/browser/editor/native-numbering-tab.test.tsx",
+    "apps/office/e2e/writer-native-numbering-tab.spec.ts"
+  ],
+  "metadata": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "oldRecords": 302,
+      "currentRecords": 303,
+      "allPriorFieldsPrefixesAndStatusesPreserved": true,
+      "newPartialModule": "apps/office/src/sw/source/core/text/txttab.ts"
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "oldRecords": 302,
+      "currentRecords": 303,
+      "allPriorFieldsPrefixesAndStatusesPreserved": true,
+      "newPartialModule": "apps/office/src/sw/source/core/text/txttab.ts"
+    }
+  ],
+  "failures": []
+}

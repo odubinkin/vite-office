@@ -1,0 +1,91 @@
+{
+  "app": {
+    "original": 13672,
+    "current": 13672,
+    "newCases": 0,
+    "resolved": 3,
+    "passed": 13672,
+    "unresolvedCount": 0,
+    "skippedObservationsRetained": 0,
+    "passingReplay": 0,
+    "originalUncaughtErrorCases": 0,
+    "finalUncaughtErrorCases": 0,
+    "inputs": [
+      {
+        "file": "TT1SYC.app-results.json",
+        "sha256": "888ffa6a6a885da255f9fed90526d2b4e14edbaba3de72459ff2478e4736f8e2",
+        "passed": 13669,
+        "failed": 3,
+        "skipped": 0
+      },
+      {
+        "file": "TT1SYC.closure1.app-results.json",
+        "sha256": "2fc2667dd815b3e980b07e25c313e5920562b70281ee20bd6c8ae9fb81136b1e",
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0
+      }
+    ]
+  },
+  "inventory": {
+    "original": 110,
+    "current": 110,
+    "newCases": 0,
+    "resolved": 1,
+    "passed": 110,
+    "unresolvedCount": 0,
+    "skippedObservationsRetained": 2,
+    "passingReplay": 0,
+    "originalUncaughtErrorCases": 0,
+    "finalUncaughtErrorCases": 0,
+    "inputs": [
+      {
+        "file": "TT1SYC.inventory-results.json",
+        "sha256": "3b436bd8142be5e71616ca5bcd72398fc77360363278b5c9ecf809943b25b9a7",
+        "passed": 109,
+        "failed": 1,
+        "skipped": 0
+      },
+      {
+        "file": "TT1SYC.closure1.inventory-results.json",
+        "sha256": "c57c1b0ed2839cd34f667e1f3175876bffa81fd75e2ff26c20398517e7cba480",
+        "passed": 1,
+        "failed": 0,
+        "skipped": 2
+      }
+    ]
+  },
+  "chromium": {
+    "current": 296,
+    "passed": 296,
+    "unresolvedCount": 0,
+    "passingReplay": 0,
+    "inputs": [
+      {
+        "file": "TT1SYC.chromium-results.json",
+        "sha256": "f8803baeae6b27cbd58b3292f25514e6252d75abbe736b625fd3d986e803db47",
+        "counts": {
+          "startTime": "2026-10-07T21:39:43.399Z",
+          "duration": 151273.744,
+          "expected": 292,
+          "skipped": 0,
+          "unexpected": 4,
+          "flaky": 0
+        }
+      },
+      {
+        "file": "TT1SYC.closure1.chromium-results.json",
+        "sha256": "5f1792543cd9ca8cd99b1a2e3168dca38af3b82e7d014fd65b3864ea7dfa1623",
+        "counts": {
+          "startTime": "2026-10-07T21:43:28.281Z",
+          "duration": 4771.38,
+          "expected": 4,
+          "skipped": 0,
+          "unexpected": 0,
+          "flaky": 0
+        }
+      }
+    ]
+  },
+  "failures": []
+}

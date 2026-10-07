@@ -1,0 +1,17 @@
+{
+  "records": [
+    {
+      "command": "Unchanged JSDoc validator on approved changed code/acceptance paths; actual physical-line count",
+      "exit": 0,
+      "errors": [],
+      "physicalLines": {
+        "apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx": 376,
+        "apps/office/src/sw/browser/presentation/writer-view-projection.ts": 655,
+        "apps/office/src/sw/source/core/text/txttab.ts": 60,
+        "apps/office/src/sw/source/core/text/native-numbering-tab.test.ts": 197,
+        "apps/office/src/sw/browser/editor/native-numbering-tab.test.tsx": 214,
+        "apps/office/e2e/writer-native-numbering-tab.spec.ts": 138
+      }
+    }
+  ]
+}

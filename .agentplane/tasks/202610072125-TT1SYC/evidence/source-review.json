@@ -1,0 +1,93 @@
+{
+  "pinSHA": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "tag": "libreoffice-26.8.0.2",
+  "records": [
+    {
+      "path": "sw/source/core/text/txttab.cxx",
+      "sha256": "7fa5085bc2ea1984b5f77d8c81b043b13ad79c63583bd95faa0fc1b0785f597c",
+      "symbols": [
+        "SwLineInfo::GetTabStop",
+        "SwLineInfo::strict-next-stop",
+        "SwTextFormatter::NewTabPortion",
+        "SwTextFormatter::minimum-default-distance",
+        "DocumentSettingId::TAB_COMPAT",
+        "DocumentSettingId::TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST"
+      ],
+      "anchorLines": [
+        43,
+        55,
+        70,
+        203,
+        212,
+        274
+      ]
+    },
+    {
+      "path": "sw/source/core/text/inftxt.cxx",
+      "sha256": "83c4ab4654f825bb64a852f41f5f8bf79a0196aa7e1f78cf3e07ea5a04ab5d4a",
+      "symbols": [
+        "SwLineInfo::InitLineInfo",
+        "SwLineInfo::list-tab-insertion"
+      ],
+      "anchorLines": [
+        120,
+        131
+      ]
+    },
+    {
+      "path": "sw/source/core/txtnode/ndtxt.cxx",
+      "sha256": "8cf38bae998b54451bbcbbc15fd69600d0f24490cf86c33c7cd54f72c63871f1",
+      "symbols": [
+        "SwTextNode::GetListTabStopPosition",
+        "SwTextNode::GetLeftMarginForTabCalculation"
+      ],
+      "anchorLines": [
+        4885,
+        3544
+      ]
+    },
+    {
+      "path": "sw/source/core/text/itrtxt.hxx",
+      "sha256": "481e58c32c859e20eadbf333c4034493f209f23d58c531e8217531abbae840b6",
+      "symbols": [
+        "SwTextMargin::GetTabLeft"
+      ],
+      "anchorLines": [
+        196
+      ]
+    },
+    {
+      "path": "sw/source/core/text/porfld.cxx",
+      "sha256": "a53a623e4e806998b066926ab943594e5a2ca308b94d27bb4bd7e2739faebb9b",
+      "symbols": [
+        "SwNumberPortion::Format",
+        "SwNumberPortion::occupied-width-minimum"
+      ],
+      "anchorLines": [
+        607,
+        653
+      ]
+    }
+  ],
+  "production": [
+    {
+      "path": "apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx",
+      "sha256": "67f801742f6a6bd252f4f53dc6e1b315748d7f53e8f262f80da3e125f0ac55d0"
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/writer-view-projection.ts",
+      "sha256": "663bfc2891776fdf5ede2802afd4eb08cd7f959601ef61ea27dfd0a4743bdbde"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/text/txttab.ts",
+      "sha256": "cbd00eb850efc867a932c7914ae9ca91dd30396bd8a1b9c13107c7083b460ddd"
+    }
+  ],
+  "scope": "Source-bound bounded LTR label-alignment tab selection after occupied glyph advance and immutable browser device refresh.",
+  "residuals": [
+    "Full SwLineInfo/SwTextFormatter/SwNumberPortion owner hierarchy, frame clipping/wrapping/fly/tab-over-margin/spacing and right/center/decimal/fill portions remain unrepresented.",
+    "RTL/vertical/bidi/fonts/ink and specialized direct-margin IGNORE_FIRST_LINE list-tab normalization remain unverified; this is not exhaustive list or user-document parity.",
+    "Exact original user document/browser was not provided; bounded exhausted-tab gap repair does not claim every possible overlap corrected.",
+    "Native SvxRuler/SvxColumnItem/slot geometry ownership remains subsequent work; registered save/open/recovery deviations unchanged, goal ACTIVE."
+  ]
+}

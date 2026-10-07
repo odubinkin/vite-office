@@ -69,6 +69,7 @@ import {
   resolveSwNumberPortionFont,
   type SwNumberPortionFont,
 } from "../../source/core/text/txtfld";
+import type { SwNumberingTabSettings } from "../../source/core/text/txttab";
 
 /** Detached document style selector metadata. */
 export type WriterParagraphStyleOption = StyleToolboxEntry;
@@ -79,6 +80,8 @@ export interface WriterParagraphProjection {
   readonly inFrontOfLabel?: boolean;
   /** Minimum occupied label gap, separate from authored list indentation. */
   readonly listMarkerMinimumDistancePt?: number;
+  /** Native tab search inputs for label-alignment numbering; legacy numbering has no following tab portion. */
+  readonly listTabSettings?: Readonly<SwNumberingTabSettings>;
   /** Window-device decoration derived from the native marked list level and view options. */
   readonly listMarkerBackgroundColor?: string;
   /** Detached native font values used only by the numbering paint device. */
@@ -328,6 +331,29 @@ export class WriterViewProjection {
                   listFormat.GetPositionAndSpaceMode() === "label-alignment"
                     ? 0
                     : listFormat.GetCharTextDistance() / 20,
+                ...(listFormat.GetPositionAndSpaceMode() === "label-alignment" &&
+                listFormat.GetLabelFollowedBy() === "listtab"
+                  ? {
+                      listTabSettings: Object.freeze({
+                        defaultDistance: defaultTabDistance,
+                        relativeToIndent: tabsRelativeToIndent,
+                        tabCompat: document.GetDocumentSettingManager().get("TAB_COMPAT"),
+                        tabAtLeftIndent: document
+                          .GetDocumentSettingManager()
+                          .get("TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST"),
+                        stops: Object.freeze(
+                          tabItem.GetStops().map(
+                            /** Copies original native tabs without filtering zero/default entries. @param stop - Original tab. @returns Immutable native inputs. */
+                            (stop) =>
+                              Object.freeze({
+                                position: stop.GetTabPos(),
+                                adjustment: stop.GetAdjustment(),
+                              }),
+                          ),
+                        ),
+                      }),
+                    }
+                  : {}),
                 listLayout: Object.freeze({
                   firstLineIndentPt: resolveSwListFirstLineIndent(node) / 20,
                   indentAtPt: listTextLeft / 20,
