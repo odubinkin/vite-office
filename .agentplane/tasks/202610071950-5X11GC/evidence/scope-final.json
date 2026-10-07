@@ -1,0 +1,43 @@
+{
+  "base": "b4510de3d2a2666cfafa9c6fff1407a589230bc2",
+  "semanticPaths": [
+    "apps/office/e2e/writer-native-table-proportional-drag.spec.ts",
+    "apps/office/src/sw/browser/editor/native-table-linear-drag.test.tsx",
+    "apps/office/src/sw/source/uibase/docvw/edtwin.ts",
+    "apps/office/src/sw/source/uibase/docvw/native-table-proportional-drag.test.ts",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/source-provenance.json"
+  ],
+  "scopeCount": 6,
+  "priorAcceptanceFiles": 606,
+  "byteIdenticalAcceptanceFiles": 605,
+  "exactSourceBackedMigrations": [
+    {
+      "path": "apps/office/src/sw/browser/editor/native-table-linear-drag.test.tsx",
+      "beforeSHA256": "9cee11497e3766ca28cad1d609afae2e305d88e0cf067450f89c7fbd11f44239",
+      "currentSHA256": "d9ec455193ece224cea030ca19fabb6e65d27db851ca82bdd22497dc3701e5bc",
+      "change": "Only original failed mounted Shift modifier mask 2 expected vector plus formatter; all inputs and other assertions retained",
+      "source": "Pinned SvxRuler solitary KEY_MOD1 proportional preparation and DragBorders integer per-thousand positions",
+      "originalFailure": "mounted Shift modifier mask 2"
+    }
+  ],
+  "newAcceptanceFiles": [
+    "apps/office/src/sw/source/uibase/docvw/native-table-proportional-drag.test.ts",
+    "apps/office/e2e/writer-native-table-proportional-drag.spec.ts"
+  ],
+  "metadata": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "oldRecords": 302,
+      "currentRecords": 302,
+      "allPriorFieldsPrefixesAndStatusesPreserved": true
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "oldRecords": 302,
+      "currentRecords": 302,
+      "allPriorFieldsPrefixesAndStatusesPreserved": true
+    }
+  ],
+  "failures": []
+}

@@ -17,7 +17,7 @@ import type { SwTabFrame } from "../../core/layout/tabfrm";
 import { SwTabCols } from "../../core/bastyp/tabcol";
 import { PointerStyle } from "../../../../vcl/ptrstyle";
 import type { SwTextLine } from "../../core/text/txtfrm";
-import { KEY_SHIFT } from "../../../../vcl/keycodes";
+import { KEY_SHIFT, KEY_MOD1 } from "../../../../vcl/keycodes";
 
 /** Performs no invalidation for detached/test edit windows. @returns Nothing. */
 function ignoreEditWindowInvalidation(): void {}
@@ -62,6 +62,7 @@ export class SwEditWin {
         readonly minimum: number;
         readonly maximum: number;
         readonly linear: boolean;
+        readonly proportional?: Readonly<{ nTotalDist: number; pPercBuf: readonly number[] }>;
         position: number;
       }
     | undefined;
@@ -168,9 +169,42 @@ export class SwEditWin {
       else if (Math.abs(rect.right - point.x) <= 5) index = original.Count();
       else return false;
     }
-    // SvxRuler::EvalModifier selects linear movement only for solitary Shift.
-    // Margin modifier tracking and the other native modes remain unrepresented.
+    const position =
+      index === -1
+        ? original.GetLeft()
+        : index === original.Count()
+          ? original.GetRight()
+          : original.GetEntry(index).nPos;
+    // SvxRuler::EvalModifier selects exact solitary masks. The represented
+    // proportional Border branch has zero-width fences in a flat table.
     const linear = modifier === KEY_SHIFT && index >= 0 && index < original.Count();
+    let proportional: Readonly<{ nTotalDist: number; pPercBuf: readonly number[] }> | undefined;
+    let proportionalReserve = 0;
+    if (modifier === KEY_MOD1 && index >= 0 && index < original.Count()) {
+      // PrepareProportional_Impl stores unsigned per-thousand cumulative
+      // widths. Ruler positions and integer division are device pixels.
+      const first = Math.round(position / scale),
+        right = Math.round(original.GetRight() / scale),
+        nTotalDist = right - first,
+        pPercBuf = Array.from(
+          { length: original.Count() },
+          /** Initializes native per-thousand storage. @returns Empty share. */ () => 0,
+        );
+      let previous = first,
+        smallest = 65535;
+      for (let i = index + 1; i <= original.Count(); i++) {
+        const edge = i === original.Count() ? right : Math.round(original.GetEntry(i).nPos / scale);
+        smallest = Math.min(smallest, edge - previous);
+        if (i < original.Count())
+          pPercBuf[i] = Math.trunc(((edge - first) * 1000) / nTotalDist) & 0xffff;
+        previous = edge;
+      }
+      proportional = { nTotalDist, pPercBuf };
+      // CalcPropMaxRight performs this minimum-space expression in float,
+      // then converts to integer pixels before the final glMinFrame guard.
+      proportionalReserve =
+        Math.trunc(Math.fround(Math.fround(5 / Math.fround(smallest)) * nTotalDist)) * scale;
+    }
     const minimum =
       index === -1
         ? 0
@@ -195,13 +229,9 @@ export class SwEditWin {
                 1) *
                 5 *
                 scale
-            : original.GetEntry(index).nMax;
-    const position =
-      index === -1
-        ? original.GetLeft()
-        : index === original.Count()
-          ? original.GetRight()
-          : original.GetEntry(index).nPos;
+            : proportional === undefined
+              ? original.GetEntry(index).nMax
+              : original.GetRight() - proportionalReserve;
     this.tableBorderDrag = {
       axis: "column",
       start: point,
@@ -214,6 +244,7 @@ export class SwEditWin {
       minimum: minimum + (index === -1 ? 0 : 5 * scale),
       maximum: maximum - (index === original.Count() ? 0 : 5 * scale),
       linear,
+      ...(proportional === undefined ? {} : { proportional }),
       position,
     };
     return true;
@@ -315,6 +346,18 @@ export class SwEditWin {
           entry.nPos = Math.min(entry.nPos + delta, right);
           right = entry.nPos - 5 * drag.scale;
         }
+      } else if (drag.proportional !== undefined) {
+        const first = Math.round(drag.initialPosition / drag.scale),
+          left = Math.round(drag.position / drag.scale),
+          total = drag.proportional.nTotalDist - (left - first);
+        drag.position = Math.round(left * drag.scale);
+        drag.next.Assign(drag.original);
+        drag.next.GetEntry(drag.index).nPos = drag.position;
+        for (let i = drag.next.Count() - 1; i > drag.index; i--)
+          drag.next.GetEntry(i).nPos = Math.round(
+            (left + Math.trunc((total * (drag.proportional.pPercBuf[i] as number)) / 1000)) *
+              drag.scale,
+          );
       } else if (drag.index === -1) drag.next.SetLeft(drag.position);
       else if (drag.index === drag.next.Count()) drag.next.SetRight(drag.position);
       else drag.next.GetEntry(drag.index).nPos = drag.position;

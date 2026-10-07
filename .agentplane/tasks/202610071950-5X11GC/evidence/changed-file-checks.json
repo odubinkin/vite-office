@@ -1,0 +1,15 @@
+{
+  "records": [
+    {
+      "command": "Unchanged JSDoc validator on approved changed code/acceptance paths; actual physical-line count",
+      "exit": 0,
+      "errors": [],
+      "physicalLines": {
+        "apps/office/src/sw/source/uibase/docvw/edtwin.ts": 639,
+        "apps/office/src/sw/source/uibase/docvw/native-table-proportional-drag.test.ts": 210,
+        "apps/office/e2e/writer-native-table-proportional-drag.spec.ts": 157,
+        "apps/office/src/sw/browser/editor/native-table-linear-drag.test.tsx": 136
+      }
+    }
+  ]
+}

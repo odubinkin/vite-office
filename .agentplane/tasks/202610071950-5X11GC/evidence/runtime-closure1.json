@@ -1,0 +1,23 @@
+{
+  "kind": "app",
+  "profile": "upstream-absent",
+  "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/browser/editor/native-table-linear-drag.test.tsx -t ^(?:mounted Shift modifier mask 2)$ --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/5X11GC.closure1.app-results.json",
+  "originalFailedNames": [
+    {
+      "file": "src/sw/browser/editor/native-table-linear-drag.test.tsx",
+      "name": "mounted Shift modifier mask 2"
+    }
+  ],
+  "vendorRestored": true,
+  "exit": 1,
+  "outputSHA256": "11d308884ae1a3d97e331303f94892fc4422e0047ee4a5dcada85147ba8523b2",
+  "bytes": 30141,
+  "caseCounts": {
+    "passed": 1,
+    "failed": 0,
+    "skipped": 16,
+    "total": 17
+  },
+  "failedCases": [],
+  "unhandledErrorCount": 0
+}

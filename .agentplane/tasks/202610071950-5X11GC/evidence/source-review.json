@@ -1,0 +1,58 @@
+{
+  "pinSHA": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "tag": "libreoffice-26.8.0.2",
+  "records": [
+    {
+      "path": "sw/source/uibase/docvw/edtwin3.cxx",
+      "sha256": "c31fb7bdad5a1e9cd5f7e33a939796945222a8066d27f431d180426d0707fd6f",
+      "anchors": [
+        "bool SwEditWin::RulerColumnDrag",
+        "tools::Long nTol = 5L",
+        "rRuler.StartDocDrag( rMEvt, RulerType::Border, nTol )"
+      ],
+      "anchorLines": [
+        86,
+        91,
+        93
+      ]
+    },
+    {
+      "path": "svx/source/dialog/svxruler.cxx",
+      "sha256": "4289126ba34117e4c8c7b5cee3cba3ab8c7858f9386b93c073ae55c386081f9a",
+      "anchors": [
+        "void SvxRuler::EvalModifier()",
+        "case KEY_MOD1:",
+        "m_nDragType = SvxRulerDragFlags::OBJECT_SIZE_PROPORTIONAL",
+        "void SvxRuler::PrepareProportional_Impl(RulerType eType)",
+        "mxRulerImpl->pPercBuf[i] = static_cast<sal_uInt16>((lActWidth * 1000)",
+        "void SvxRuler::DragBorders()",
+        "tools::Long SvxRuler::CalcPropMaxRight",
+        "glMinFrame / static_cast<float>(lMinSpace) * lColumns",
+        "constexpr tools::Long glMinFrame = 5"
+      ],
+      "anchorLines": [
+        2542,
+        2572,
+        2575,
+        2415,
+        2494,
+        1804,
+        3566,
+        3657,
+        171
+      ]
+    }
+  ],
+  "production": [
+    {
+      "path": "apps/office/src/sw/source/uibase/docvw/edtwin.ts",
+      "sha256": "6c6393fb4faea0352371da4247909dfb1b733070144dff25c5f1f049d253f58b"
+    }
+  ],
+  "scope": "Repair existing exact solitary KEY_MOD1 internal horizontal LTR table-column proportional branch using source uint16 per-thousand shares, integer ruler device-pixel positions and float minimum-space reserve.",
+  "residuals": [
+    "Native current-line/snapping/margin modifier/vertical/RTL/merged/nested/protected and full SvxRuler ownership remain partial or unverified; whole core/UI parity is not proven.",
+    "Represented browser device geometry and native original SwTabCols/document/history retained; no fake source-only application or standalone detached adapter.",
+    "Registered save/open/recovery deviations unchanged; exhaustive persistent goal ACTIVE."
+  ]
+}

@@ -81,7 +81,7 @@ for (let mask = 0; mask < 16; mask++)
       expect(f.table.GetColumnWidths()).toEqual([1500, 1500, 1500]);
       fireEvent.mouseUp(document, { clientX: 220, clientY: 700 });
       expect(f.table.GetColumnWidths()).toEqual(
-        mask === 1 ? [1800, 1500, 1200] : [1800, 1200, 1500],
+        mask === 1 ? [1800, 1500, 1200] : mask === 2 ? [1800, 1350, 1350] : [1800, 1200, 1500],
       );
       expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(1);
     },
