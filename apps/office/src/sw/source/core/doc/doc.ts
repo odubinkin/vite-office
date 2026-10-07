@@ -19,6 +19,7 @@ import {
   GetSwBoxAttr,
   GetSwBoxAlign,
   SetSwBoxAttr,
+  SetSwTabBorders,
 } from "../docnode/ndtbl1";
 import type { SwCursor } from "../crsr/swcrsr";
 import type { SwFormatFrameSize } from "../../../inc/fmtfsize";
@@ -93,6 +94,14 @@ export interface WriterEmbeddedFont {
 
 /** Final Writer document aggregate; notification and domain policies are composed managers. */
 export class SwDoc {
+  /** Applies represented border attributes over native point/mark cell endpoints. @param cursor - Original shell cursor. @param value - Supplied border and distance attributes. @param cursorState - Optional original displayed cursor state. @returns Whether admitted. */
+  public SetTabBorders(
+    cursor: SwCursor,
+    value: Pick<SwTableBoxFormat, "padding" | "border">,
+    cursorState?: SwUndoCursorState,
+  ): boolean {
+    return SetSwTabBorders(this, cursor, value, cursorState);
+  }
   /** Reads native row geometry over actual physical cell owners. @param result - Output carrier. @param frame - Native frame. @param start - Current cell. @returns Whether represented. */
   public static GetTabRows(result: SwTabCols, frame: SwTabFrame, start: SwTableBox): boolean {
     return GetSwTabRows(result, frame, start);

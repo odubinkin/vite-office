@@ -1,0 +1,10 @@
+{
+  "sourceSHA256": {
+    "sw/source/core/frmedt/fetab.cxx": "e7b7c7164f76d7e67eddcf863128d41c3c2ea2946362b8509bab0bc2cdc9f016",
+    "sw/source/core/docnode/ndtbl1.cxx": "c94a3a78edc61fc2b2a0419371f70cffc5466ceca3d0b8f29160cceff0b37663",
+    "include/editeng/boxitem.hxx": "1ab1da9b367a7db2a2d84e2c7548403c41298abf6906b4070fb845c15e8ee113"
+  },
+  "parentFindingsCharacters": 545933,
+  "parentFindingsSHA256": "dda5e7e1420f673e92c0a4a2e4b9210cd745fb87d973a96d4df620099e943bff",
+  "contracts": "Native SwFEShell SetTabBorders delegates original shell cursor to SwDoc; native ndtbl1 validates current content table and uses point/mark layout endpoints through lcl_GetStartEndCell/MakeSelUnions before attribute undo, box application and modified state. Existing flat shared-column SwTable CreateSelection represents the endpoint rectangle. Native box/info/per-edge validity/outer-inner and split/follow/RTL/vertical layout union fidelity remains unverified and next; existing scalar carrier is temporary, not final parity."
+}

@@ -1,0 +1,15 @@
+{
+  "appProofRecords": 278,
+  "inventoryProofRecords": 38,
+  "mapSHA256": "75f1bd8e100471ff0ab7cdef21aae70e1ea6ed638ce232108a9965307433fa46",
+  "proofSHA256": "5a346cd206a5cacd293971a281bb50fb219eb7fb242540e5f8fd56400f021c60",
+  "inventoryMapSHA256": "1b9f52438968e201a82de4773dcbb51983c310b6f8117459faab61452f411070",
+  "inventoryProofSHA256": "bfc89c97438a53aa1879994ad0fbe25e2fc12e4b262501c7260d57200f2d1541",
+  "strictWholeSourceAndMaps": true,
+  "previousWholeVerifiedReuse": {
+    "path": "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts",
+    "sourceSHA256": "31f0716ba99faec45d08f966387308e32a41c2cceb1bcd0ec4ac8416b2492454",
+    "entireMapsEqual": true,
+    "addedActualCounters": true
+  }
+}

@@ -215,7 +215,7 @@ export abstract class SwFEShell extends SwEditShell {
   public override GetTableSel(search: 0 | 1 | 2 = SwTable.SEARCH_NONE): readonly SwTableBox[] {
     const table = this.IsCursorInTable()?.GetTable();
     if (table === undefined) return [];
-    if (search === SwTable.SEARCH_NONE) return this.GetTableBoxes(table, false);
+    if (search === SwTable.SEARCH_NONE) return this.GetTableBoxes(table);
     const cursor = this.getShellCursor(),
       point = cursor.GetPoint().GetNode().StartOfSectionNode(),
       mark = cursor.GetMark().GetNode().StartOfSectionNode();
@@ -403,20 +403,19 @@ export abstract class SwFEShell extends SwEditShell {
     return SwDoc.GetRowSplit(this.getShellCursor());
   }
 
-  /** Applies borders to selected boxes or the whole unselected table. @param value - Border and padding attributes. @param cursorState - Original displayed cursor before temporary selection. @returns Whether admitted. */
+  /** Forwards border application to native document ownership. @param value - Border and padding attributes. @param cursorState - Original displayed cursor before temporary selection. @returns Whether admitted. */
   public SetTabBorders(
     value: Pick<SwTableBoxFormat, "padding" | "border">,
     cursorState?: SwUndoCursorState,
   ): boolean {
-    const table = this.IsCursorInTable()?.GetTable();
-    if (table === undefined) return false;
-    const boxes = this.GetTableBoxes(table, true);
-    return this.ChangeTable(
-      table,
-      /** Updates represented border attributes only. @returns Nothing. */ () => {
-        for (const box of boxes) box.SetFormat({ ...box.GetFormat(), ...value });
-      },
-      cursorState,
+    return this.RunNotificationTransaction(
+      /** Retains original cursor attributes while the document applies the selection union. @returns Whether admitted. */
+      () =>
+        this.GetDoc().SetTabBorders(
+          this.getShellCursor(),
+          value,
+          cursorState ?? this.CaptureCursorState(),
+        ),
     );
   }
 
@@ -433,15 +432,14 @@ export abstract class SwFEShell extends SwEditShell {
     return SwDoc.GetBoxAlign(this.getShellCursor());
   }
 
-  /** Resolves original boxes from native selected-cell rings. @param table - Connected table. @param whole - Expand an unselected table. @returns Actual boxes. */
-  private GetTableBoxes(table: SwTable, whole: boolean): readonly SwTableBox[] {
+  /** Resolves original boxes from native selected-cell rings. @param table - Connected table. @returns Actual boxes. */
+  private GetTableBoxes(table: SwTable): readonly SwTableBox[] {
     const boxes = table
       .GetTabLines()
       .flatMap(
         /** Reads actual row owners. @param row - Native row. @returns Original boxes. */ (row) =>
           row.GetTabBoxes(),
       );
-    if (!this.HasBoxSelection() && whole) return boxes;
     const sections = [...this.GetCursor().GetRingContainer()].map(
       /** Reads a native selected cell section. @param cursor - Actual ring member. @returns Original section. */ (
         cursor,
@@ -454,13 +452,9 @@ export abstract class SwFEShell extends SwEditShell {
     );
   }
 
-  /** Records native attribute payload and invokes the existing shell transaction. @param table - Actual table owner. @param operation - Initial mutation. @param cursorState - Original displayed cursor before temporary selection. @returns Whether admitted. */
-  private ChangeTable(
-    table: SwTable,
-    operation: () => void,
-    cursorState?: SwUndoCursorState,
-  ): boolean {
-    const action = new SwUndoAttrTable(table, cursorState ?? this.CaptureCursorState());
+  /** Records native frame attributes and invokes the existing shell transaction. @param table - Actual table owner. @param operation - Initial mutation. @returns Whether admitted. */
+  private ChangeTable(table: SwTable, operation: () => void): boolean {
+    const action = new SwUndoAttrTable(table, this.CaptureCursorState());
     return this.ApplyAction(
       action,
       false,

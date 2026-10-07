@@ -1,0 +1,87 @@
+{
+  "appFiles": 278,
+  "app": {
+    "lines": {
+      "total": 15112,
+      "covered": 15112,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 16580,
+      "covered": 16580,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 3864,
+      "covered": 3864,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 12327,
+      "covered": 12327,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "inventoryFiles": 38,
+  "inventory": {
+    "lines": {
+      "total": 1464,
+      "covered": 1464,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 1523,
+      "covered": 1523,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 384,
+      "covered": 384,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 1080,
+      "covered": 1080,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "mapSHA256": "75f1bd8e100471ff0ab7cdef21aae70e1ea6ed638ce232108a9965307433fa46",
+  "proofSHA256": "5a346cd206a5cacd293971a281bb50fb219eb7fb242540e5f8fd56400f021c60",
+  "initialMapSHA256": "6c7c83331a56391e88280f200567351bc3236081f7a980e727959e594afc7796",
+  "inventoryMapSHA256": "1b9f52438968e201a82de4773dcbb51983c310b6f8117459faab61452f411070",
+  "inventoryProofSHA256": "bfc89c97438a53aa1879994ad0fbe25e2fc12e4b262501c7260d57200f2d1541",
+  "previousVerifiedMapSHA256": "697586eeecf43a3a4b4491a9e6f6438d2a09b548125384f0759cccfd504bba6f",
+  "previousVerifiedProofSHA256": "db2d69611413e31433573dc8357cb43f7e428e3b6d325f2d6636c7d5143d09fc",
+  "previousEntireSourceMapReuse": {
+    "path": "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts",
+    "sourceSHA256": "31f0716ba99faec45d08f966387308e32a41c2cceb1bcd0ec4ac8416b2492454",
+    "entireMapsEqual": true,
+    "addedActualCounters": true
+  },
+  "wholeSourcesUnchangedSinceProfile": true,
+  "noRegionTransfers": true,
+  "noPassingTestReplay": true,
+  "focusedSkippedObservations": 0,
+  "sourceGatesTiming": "Source gates executed before the full absence profile; restored source digests identical and no source/metadata input changed. Previously passing gates not replayed.",
+  "sourceGatesRestoredInputDigestsMatch": true
+}

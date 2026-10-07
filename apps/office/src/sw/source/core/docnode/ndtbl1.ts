@@ -1,13 +1,70 @@
 /** @fileoverview Owns represented native row attributes and history from original selected lines in ndtbl1.cxx. */
-import type { SwTable, SwTableBox, SwTableLine, SwTableLineFormat } from "../table/swtable";
+import {
+  SwTable,
+  type SwTableBox,
+  type SwTableBoxFormat,
+  type SwTableLine,
+  type SwTableLineFormat,
+} from "../table/swtable";
 import type { SwDoc } from "../doc/doc";
 import { SwTableBoxStartNode, SwTableNode } from "./node";
 import { SwTableCursor, type SwCursor } from "../crsr/swcrsr";
 import { SwUndoAttrTable } from "../undo/untbl";
 import { createWriterCollapsedCursorState, type SwUndoCursorState } from "../undo/undobj";
-import type { SwTextNode } from "../txtnode/ndtxt";
+import { SwTextNode } from "../txtnode/ndtxt";
 import type { SwFormatFrameSize } from "../../../inc/fmtfsize";
 import { SwFormatVertOrient } from "../../../inc/fmtornt";
+
+/** Applies represented borders over the native start/end cell union for a flat shared-column table. @param doc - Owning document. @param cursor - Actual point/mark cursor, independent of ordinary rings. @param value - Supplied border and distance attributes. @param cursorState - Optional original shell history state. @returns Whether admitted. */
+export function SetSwTabBorders(
+  doc: SwDoc,
+  cursor: SwCursor,
+  value: Pick<SwTableBoxFormat, "padding" | "border">,
+  cursorState?: SwUndoCursorState,
+): boolean {
+  const node = cursor.GetPoint().GetNode(),
+    start = node.StartOfSectionNode(),
+    end = cursor.GetMark().GetNode().StartOfSectionNode();
+  if (!(node instanceof SwTextNode) || node.GetNodes() !== doc.nodes) return false;
+  if (!(start instanceof SwTableBoxStartNode) || !(end instanceof SwTableBoxStartNode))
+    return false;
+  const tableNode = start.StartOfSectionNode();
+  if (tableNode !== end.StartOfSectionNode()) return false;
+  const table = (tableNode as SwTableNode).GetTable();
+  if (!doc.GetTables().includes(table)) return false;
+  const owners = table.GetTabLines().flatMap(
+    /** Reads connected original cell owners. @param row - Native row. @returns Actual boxes. */
+    (row) => row.GetTabBoxes(),
+  );
+  if (
+    !owners.some(
+      /** Admits the original point cell. @param box - Connected box. @returns Whether current. */
+      (box) => box.GetStartNode() === start,
+    ) ||
+    !owners.some(
+      /** Admits the original mark cell. @param box - Connected box. @returns Whether current. */
+      (box) => box.GetStartNode() === end,
+    )
+  )
+    return false;
+  const boxes: SwTableBox[] = [];
+  // lcl_GetStartEndCell/MakeSelUnions use point and mark, not an ordinary PaM ring.
+  table.CreateSelection(start, end, boxes, SwTable.SEARCH_NONE);
+  return doc.RunModelTransaction(
+    /** Records original attributes and publishes the admitted native operation. @returns Whether admitted. */
+    () => {
+      const offset = cursor.GetPoint().GetContentIndex(),
+        before =
+          cursorState ??
+          createWriterCollapsedCursorState(node, offset, node.GetCharacterItemsAt(offset)),
+        action = new SwUndoAttrTable(table, before);
+      for (const box of boxes) box.SetFormat({ ...box.GetFormat(), ...value });
+      doc.GetUndoManager().AddUndoAction(action);
+      doc.NotifyModelChange({ kind: "node-content-changed", nodeIndex: tableNode.GetIndex() });
+      return true;
+    },
+  );
+}
 
 /** Resolves canonical table boxes as native lcl_GetBoxSel: ordinary getters use the current point, setters use all ring points. @param cursor - Original cursor. @param allCursors - Expand ordinary ring points. @returns Original box identities. */
 function GetBoxSelection(cursor: SwCursor, allCursors = false): readonly SwTableBox[] {

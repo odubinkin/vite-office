@@ -1,0 +1,31 @@
+{
+  "base": "9be8e6318f54a2b10419d832db47b99e5161cdf5",
+  "approvedPaths": [
+    "apps/office/src/sw/source/core/doc/doc.ts",
+    "apps/office/src/sw/source/core/docnode/ndtbl1.ts",
+    "apps/office/src/sw/source/core/frmedt/fetab.ts",
+    "apps/office/src/sw/source/core/docnode/native-table-border-owner.test.ts",
+    "apps/office/src/sw/browser/presentation/native-table-border-owner-history.test.tsx",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "actualSemanticPaths": [
+    "apps/office/src/sw/source/core/doc/doc.ts",
+    "apps/office/src/sw/source/core/docnode/ndtbl1.ts",
+    "apps/office/src/sw/source/core/frmedt/fetab.ts",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/source-provenance.json",
+    "apps/office/src/sw/browser/presentation/native-table-border-owner-history.test.tsx",
+    "apps/office/src/sw/source/core/docnode/native-table-border-owner.test.ts"
+  ],
+  "oldAcceptanceFiles": 548,
+  "oldAcceptanceByteIdentical": 548,
+  "oldAcceptanceChanged": [],
+  "totalAcceptanceFiles": 550,
+  "newAcceptanceFiles": 2,
+  "semanticRecords": 281,
+  "entirePriorPrefixesPreserved": true,
+  "historicalLiteralAssertionSurfacePreserved": true,
+  "parentPrefixSHA256": "67cb6ee1e46ea02f4f90957d6a40d9811f549110bdfd1ba642e2fd85e74d817c",
+  "failures": []
+}
