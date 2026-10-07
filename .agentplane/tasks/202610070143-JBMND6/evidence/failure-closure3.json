@@ -1,0 +1,115 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/offapi/com/sun/star/text/VertOrientation.ts": "5ce88f3650b30b9d7f146edaaaff93f2fb7c57a4870dff0d2204c9eff8d53c4f",
+    "apps/office/src/offapi/com/sun/star/text/RelOrientation.ts": "75429c7c575101cf1a7f14df5e93243344c0c266d2cee7bc7d661d7c1880e4f1",
+    "apps/office/src/sw/inc/fmtornt.ts": "5f2628525b859a82b2da0c128a34c2a6efb4b68783d140eb374262342c54ee71",
+    "apps/office/src/sw/inc/hintids.ts": "7666a65059a0571a0d6d3df4dedfe1152db2fb429d50b2176771b13497715b1f",
+    "apps/office/src/sw/source/core/table/swtable.ts": "f13f38056f2a92be6ca3d64ec114d337ea09096053de93ceb0d608847329252a",
+    "apps/office/src/sw/source/core/docnode/ndtbl1.ts": "cadef6253b957f0dc3f4e60ccb9bd048435028e03c9a191e36accdd0d364a7bd",
+    "apps/office/src/sw/source/core/doc/doc.ts": "94eefb7e31c58e880b1fc81f394a129b393343fb49f012736f241156995c4a7a",
+    "apps/office/src/sw/source/core/frmedt/fetab.ts": "5ff78853c2505dc4f9ed4ceaa27e227e95eb498db33a20d1caa4f5aa4913c9bb",
+    "apps/office/src/sw/source/uibase/shells/tabsh.ts": "aed2fcb28b7a2639e1d9d4cd4608a80e9d361f63894500813c16adfffde4810f",
+    "apps/office/src/sw/source/filter/xml/xmltbli.ts": "38ea18ca85f01a56d86ce9946bda22f7ea925510dd1ee9475c117a31fc8487ba",
+    "apps/office/src/sw/source/filter/xml/xmlexp.ts": "96b9e1f04c7f88cb1a14cc3ed3f76d4641c80e588a77f3a5714fa4801be434fb",
+    "apps/office/src/sw/browser/filter/xml/writer-document-codec.ts": "70a2499cdd17da9e0376fc735f77fea6c3880fe5cf917b5ea26f51f70d05ab25",
+    "apps/office/src/sw/browser/editor/WriterEditableTable.tsx": "48fcbb7f3b67d2118e2146352616857260f0fdced2457e0a47cb5ed50c7c900b",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx": "2196bdfc8c819c3511c364f248e1b359a7242e631e871233762dfff8e180b55a",
+    "apps/office/src/sw/browser/presentation/WriterInsertTableDialog.tsx": "68fe2012434f5392493ba52c02b3df8982a5a8eec3d115849511841d8cf7b37b",
+    "apps/office/src/sw/browser/presentation/writer-view.tsx": "2d94b149f2825964ac7ba02d78009ab7f68a17a09749476214f19e50a47e9e35",
+    "apps/office/src/sw/browser/presentation/writer-view.test.tsx": "a2b51acda24c2fbc113df173736ecbf80ecbeeda0e5df52952743ab59796ca78",
+    "apps/office/src/sw/source/filter/xml/odt-table-roundtrip.test.ts": "d6048357a29bbd548be08725eeef925d09d0d591c063447233c79d051eb7af73",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.test.tsx": "702c230d2b4a9745b53f02d12ba51c5ec8eea498b9a74c3f0e271166cc4c172f",
+    "apps/office/src/sw/browser/presentation/native-table-properties-reset.test.tsx": "26900059f34509de8a3e510a8685aa122130515ba72f236b860249cfee28500f",
+    "apps/office/src/sw/source/uibase/wrtsh/native-row-split-owner-history.test.ts": "80cf77c99271a4d54b525016146b58141dfcafba2755fa50066e4f9b2cb7818d",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-properties.test.ts": "fc2a2a143467447ccffb9bec1d162bd41205a4f7db6857391af28b3828345372",
+    "apps/office/src/sw/source/uibase/wrtsh/native-row-height-owner-history.test.ts": "7c8172143a5c639dd4f52cb7e34b918408250ef5adeda4eab890cdce8fcb3109",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-column-page-history.test.ts": "7e556883d3a2b97a81aae9ec49b0f34a605640994994cb217f716dae25d8e3a6",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-text-flow-split-history.test.ts": "8a20be980739fdbe47319a767ddec1a52da953cc9171538d30353f3a128aab01",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-text-flow-headline-history.test.ts": "2ca0a94fd324b17ed7ad8596e54b95fde7cc4baec589a0484cec110f9147d3af",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-format-lifecycle-history.test.ts": "8854aefd25f6d02a7ac4b468dd46d5e4c10439ce29273f5209da53754510a7aa",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-traversal.test.ts": "6266484fa5c03df82391f54191cf19ec2ff0eb10c94e55692d38b2dee79fd23b",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-properties-reset-history.test.ts": "03d1f8c082c286d178ab5818fe255ac644ad3e71057c02ec0e19f1776b7d9299",
+    "apps/office/src/sw/source/core/undo/native-insert-table-history.test.ts": "14501e3da34e90fee1e35175ca69e0a6856242ed106c11313a7a777368ca8d2b",
+    "apps/office/e2e/writer-table-properties-history.spec.ts": "62ff9b4b77916a3f04be44703fafa569203ff1456bc9c7bea8595bf6d768aa49",
+    "apps/office/src/sw/inc/fmtornt.test.ts": "5a648cb3665579fbb453bf6c804d59c4a4e0b02bd6f15a551b7a4bd639f9db0b",
+    "apps/office/src/sw/source/filter/xml/native-cell-alignment-roundtrip.test.ts": "233f3526af3e333270d089a46ddf585a28f00dd87d3c65d993007c5503304609",
+    "apps/office/src/sw/browser/presentation/native-cell-alignment-state.test.tsx": "4ff2a587bca54839047a9120f9ed23dbf0342860bb870123e59ae60788382945",
+    "apps/office/e2e/writer-native-cell-alignment.spec.ts": "e1a4e967e7ed2426d68284e724cc4d2192d896fff453e400c0d055e567241392",
+    "docs/program/source-provenance.json": "60fa8e4f4fea8369bd86743b1bbd6af1757191ba101c10adf33c91016f75aec7",
+    "docs/program/parity/runtime-inventory.json": "d7a82915c6a1c18c431359be8c2a867dba155eb9d9c61c39742a47d6bf9361f0",
+    "apps/office/src/sw/source/core/undo/untbl.ts": "90fe583367c3eb17f6e055b9c302efc57d715ffa7d17099ba4b5aae49ddf8337"
+  },
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1443,
+      "sha256": "0f690960ef187bc6755419e9a3264eaec28a3c5a3d2fcc77150836e7c52b963f",
+      "totals": [],
+      "failedCases": []
+    },
+    {
+      "kind": "app",
+      "command": "npm exec -- vitest run src/sw/source/core/docnode/native-cell-alignment-owner.test.ts -t failed UNO scalar extraction preserves native zero defaults and isolated clone after each supported member --coverage --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0 --coverage.reporter=json --coverage.reporter=json-summary --coverage.reportOnFailure --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/JBMND6.app-closure3-results.json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 501,
+      "sha256": "0bb24c55f8981692b97f38594efd3bbac26133b7cb33c92c570324e1dfae5b85",
+      "totals": [
+        "Test Files  1 skipped (1)",
+        "Tests  7 skipped (7)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "passed": 0,
+        "failed": 0,
+        "skipped": 7,
+        "total": 7
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 15086,
+          "covered": 746,
+          "skipped": 0,
+          "pct": 4.94
+        },
+        "statements": {
+          "total": 16551,
+          "covered": 765,
+          "skipped": 0,
+          "pct": 4.62
+        },
+        "functions": {
+          "total": 3858,
+          "covered": 105,
+          "skipped": 0,
+          "pct": 2.72
+        },
+        "branches": {
+          "total": 12295,
+          "covered": 181,
+          "skipped": 0,
+          "pct": 1.47
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverage": {
+        "lines": 4.94,
+        "statements": 4.62,
+        "functions": 2.72,
+        "branches": 1.47
+      },
+      "incompleteFileCount": 255,
+      "coverageMapSHA256": "2b6611e14b1627730ecaa49fa6fb5497e03fb1cf8654c644f9e70140fdb2bc33"
+    }
+  ]
+}

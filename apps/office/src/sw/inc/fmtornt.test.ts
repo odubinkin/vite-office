@@ -111,3 +111,18 @@ it("native integer extraction and symmetric negative position conversion retain 
   expect(item.GetPos()).toBe(-2147483648);
   expect(item.PutValue(1, 3)).toBe(false);
 });
+
+it("failed UNO scalar extraction preserves native zero defaults and isolated clone after each supported member", /** Checks fresh primitive shapes against literal native defaults and conversion. @returns Nothing. */ () => {
+  const item = new SwFormatVertOrient(99, 2, 7);
+  expect(item.PutValue([], 2)).toBe(true);
+  expect(item.GetPos()).toBe(0);
+  expect(item.PutValue(3, 0)).toBe(true);
+  expect(item.GetVertOrient()).toBe(3);
+  expect(item.PutValue(7, 1)).toBe(true);
+  expect(item.GetRelationOrient()).toBe(7);
+  expect(item.PutValue(-1270, 0x82)).toBe(true);
+  expect(item.GetPos()).toBe(-720);
+  expect(item.PutValue(0, 9)).toBe(false);
+  expect(item.GetPos()).toBe(-720);
+  expect(item.Clone()).toEqual(new SwFormatVertOrient(-720, 3, 7));
+});

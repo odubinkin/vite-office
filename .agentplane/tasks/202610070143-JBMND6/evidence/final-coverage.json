@@ -32,7 +32,7 @@
         "pct": "Unknown"
       }
     },
-    "mapSHA256": "45e6f61855118e31f637da87bc20168b623b4e80eb877e57e74c3720e83f0e4f",
+    "mapSHA256": "a1cab5f59dd9445ded2a6cb5d6c6452f9240f9a0600f1a01b8f76c2b352434dc",
     "files": 278
   },
   "inventory": {
@@ -88,13 +88,13 @@
     {
       "path": "apps/office/src/sw/inc/fmtornt.ts",
       "kind": "entire contiguous byte-identical regions; full decl/body function and full enclosing branch/location maps; actual counters only",
-      "initialSourceSHA256": "867d0a4a13727fadcca9f6cbc1eebf6ad5a0ff2d2c81fe2162bd8bba313d825b",
-      "currentSourceSHA256": "6d24a43dfcd90b4644d71a23cbbdb128066b3f3cf453f27252ddfe6751615ac0",
-      "regionCount": 5,
+      "initialSourceSHA256": "6d24a43dfcd90b4644d71a23cbbdb128066b3f3cf453f27252ddfe6751615ac0",
+      "currentSourceSHA256": "5f2628525b859a82b2da0c128a34c2a6efb4b68783d140eb374262342c54ee71",
+      "regionCount": 3,
       "transferredActualCounters": {
-        "statements": 21,
-        "functions": 9,
-        "branches": 7
+        "statements": 27,
+        "functions": 10,
+        "branches": 18
       }
     },
     {

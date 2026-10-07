@@ -4,7 +4,7 @@ title: "Move cell vertical alignment into native document ownership and common s
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 12
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,22 @@ verification:
   updated_by: null
   note: null
   attempts: 0
+quality_review:
+  state: "rework"
+  updated_at: "2026-10-07T02:12:37.387Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent deterministic review found unclosed ESLint case declaration in native item update; acceptance union and actual coverage100 pass."
+  evaluated_sha: "0dbcf1642bd1b2c22cea46459b3cf1556957c732"
+  blueprint_digest: "250b16738e00fd87da72fe477c68ef3afd9b4021569063e4c61cd048c9347423"
+  evidence_refs:
+    - ".agentplane/tasks/202610070143-JBMND6/README.md"
+    - ".agentplane/tasks/202610070143-JBMND6/quality/20261007-021237387-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610070143-JBMND6/quality/20261007-021237387-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610070143-JBMND6/quality/20261007-021237387-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610070143-JBMND6/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610070143-JBMND6/evidence/exact-sha-review.json"
+  findings:
+    - "The clause2 lexical position declaration requires a switch block; prior truncated check output did not expose the lint failure. Close only after scoped lint and fresh source-linked evidence."
 commit: null
 comments:
   -

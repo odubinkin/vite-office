@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202610070143-JBMND6",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-07T02:12:37.387Z",
+  "verdict": "rework",
+  "summary": "Same-agent deterministic review found unclosed ESLint case declaration in native item update; acceptance union and actual coverage100 pass.",
+  "evaluated_sha": "0dbcf1642bd1b2c22cea46459b3cf1556957c732",
+  "blueprint_digest": "250b16738e00fd87da72fe477c68ef3afd9b4021569063e4c61cd048c9347423",
+  "findings": [
+    "The clause2 lexical position declaration requires a switch block; prior truncated check output did not expose the lint failure. Close only after scoped lint and fresh source-linked evidence."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610070143-JBMND6/README.md",
+    ".agentplane/tasks/202610070143-JBMND6/evidence/exact-sha-review.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}

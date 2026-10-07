@@ -76,13 +76,14 @@ export class SwFormatVertOrient extends SfxPoolItem {
       case 1:
         this.relation = numeric >= -32768 && numeric <= 32767 ? numeric : 0;
         break;
-      case 2:
+      case 2: {
         const position = numeric >= -2147483648 && numeric <= 2147483647 ? numeric : 0;
         this.position =
           memberId & 0x80
             ? Math.trunc((position * 72 + (position >= 0 ? 63 : -63)) / 127)
             : position;
         break;
+      }
       default:
         return false;
     }
