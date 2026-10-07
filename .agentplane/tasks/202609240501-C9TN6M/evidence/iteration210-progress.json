@@ -1,0 +1,14 @@
+{
+  "iteration": 210,
+  "leaf": "202610070830-2B9EBJ",
+  "implementation": "62ff891512a799aa94ce6097ce6bc4afa228ac70",
+  "evidenceTail": "3698ab53805bb0b26d2707ff3b2b4460016891d5",
+  "close": "36a4f3556f6bff3e82505ed88ca4fd3418922fa4",
+  "completePriorCharacters": 566610,
+  "completePriorSHA256": "c86958e51bdf86094b33d0c4bdb5ab0420d6e314c1559daa5c7e2e6309f5b166",
+  "completePriorPrefixPreserved": true,
+  "finalFindingsSHA256": "33f21b5fd52edd5cc55845e31e11d04d5ade6568f7af0156f4e164c917c32c30",
+  "parentGoalState": "ACTIVE; full implemented parity unverified",
+  "postLeafTrackedAndAllClean": true,
+  "nextLeaf": "Unchanged table properties row-height type must stay Fixed; current shell unconditionally writes Minimum."
+}
