@@ -1,10 +1,11 @@
 ---
 id: "202610070714-T9NGQB"
 title: "Restore native table collapsing-border control and rendering"
-status: "DOING"
+result_summary: "verified-202610070714-T9NGQB"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-07T08:25:50.483Z"
+  updated_at: "2026-10-07T08:26:06.755Z"
   updated_by: "CODER"
-  note: "PASS ca41b2cfdbf8c50c745532f2466876181d16f105 native table merging control/attribute/render-mode scope;13465app110inventory14infrastructure266Chromium actual cases, strict100 app/inventory current-source maps; one full absent profile and failure/new-only closures,0passing replay;563 old acceptance bytes and289 prior metadata/exceptions preserved. Same-agent exact EVALUATOR PASS, not independent. Full parity remains unverified."
+  note: "verified-202610070714-T9NGQB"
   attempts: 0
 quality_review:
   state: "pass"
@@ -40,11 +41,16 @@ quality_review:
     - ".agentplane/tasks/202610070714-T9NGQB/evidence/scope-final.json"
   findings:
     - "Native false default and owned tri-state changed-item flow preserve original state/parent authority; table attributes and cell borders apply in grouped history. Strict current-source counter/case reconstruction and all563 prior acceptance bytes,289 metadata fields/prefixes/statuses/defaults/exceptions pass."
-commit: null
+commit:
+  hash: "ca41b2cfdbf8c50c745532f2466876181d16f105"
+  message: "🚧 T9NGQB code: restore native table border merging"
 comments:
   -
     author: "CODER"
     body: "Start: restore source-owned collapsing-border item and control through existing table attributes, history, paint and ODT under standing iterative parity authorization."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610070714-T9NGQB. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -59,8 +65,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "PASS ca41b2cfdbf8c50c745532f2466876181d16f105 native table merging control/attribute/render-mode scope;13465app110inventory14infrastructure266Chromium actual cases, strict100 app/inventory current-source maps; one full absent profile and failure/new-only closures,0passing replay;563 old acceptance bytes and289 prior metadata/exceptions preserved. Same-agent exact EVALUATOR PASS, not independent. Full parity remains unverified."
+  -
+    type: "verify"
+    at: "2026-10-07T08:26:06.755Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610070714-T9NGQB"
+  -
+    type: "status"
+    at: "2026-10-07T08:26:06.902Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610070714-T9NGQB. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-07T08:25:50.572Z"
+doc_updated_at: "2026-10-07T08:26:06.903Z"
 doc_updated_by: "CODER"
 description: "Iteration209: restore existing table borderModel behavior through the source-owned Merge adjacent line styles control, native boolean item input/output, grouped table attributes, rendering and ODT/history; preserve registered I/O deviations."
 sections:
@@ -125,6 +144,36 @@ sections:
     - freshness: route=computed_local remote=remote_skipped
     - repeat_allowed: false
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-07T08:26:06.755Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610070714-T9NGQB
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-07T08:25:50.572Z, excerpt_hash=sha256:179a921801d5038aeca25c95dbc1f1d8c35e300ad6951707fcfdb2654b0985e8
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610070714-T9NGQB/blueprint/resolved-snapshot.json
+    - old_digest: d921ac6dbda6d887028abe0e33a4c1be6836569650eb13853966d1e8757c7772
+    - current_digest: d921ac6dbda6d887028abe0e33a4c1be6836569650eb13853966d1e8757c7772
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610070714-T9NGQB
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610070714-T9NGQB --result verified-202610070714-T9NGQB --commit 0c4e476ef3cb6177589e320076094dea45c81254
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
     <!-- END VERIFICATION RESULTS -->
@@ -215,6 +264,36 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-07T08:26:06.755Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610070714-T9NGQB
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-07T08:25:50.572Z, excerpt_hash=sha256:179a921801d5038aeca25c95dbc1f1d8c35e300ad6951707fcfdb2654b0985e8
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610070714-T9NGQB/blueprint/resolved-snapshot.json
+- old_digest: d921ac6dbda6d887028abe0e33a4c1be6836569650eb13853966d1e8757c7772
+- current_digest: d921ac6dbda6d887028abe0e33a4c1be6836569650eb13853966d1e8757c7772
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610070714-T9NGQB
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610070714-T9NGQB --result verified-202610070714-T9NGQB --commit 0c4e476ef3cb6177589e320076094dea45c81254
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
