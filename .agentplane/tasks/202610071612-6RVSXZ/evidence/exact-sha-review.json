@@ -1,0 +1,125 @@
+{
+  "evaluatedImplementationSHA": "e7f70aab6932f1ae3528623753269c945635dcb6",
+  "evaluator": "Same current agent EVALUATOR phase; explicitly not independent",
+  "verdict": "pass",
+  "cases": {
+    "app": 13574,
+    "inventory": 110,
+    "infrastructure": 14,
+    "chromium": 282
+  },
+  "actualCurrentSourceCoverage": {
+    "app": {
+      "lines": {
+        "total": 16531,
+        "covered": 16531,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 18152,
+        "covered": 18152,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 4220,
+        "covered": 4220,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 13682,
+        "covered": 13682,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "inventory": {
+      "lines": {
+        "total": 1464,
+        "covered": 1464,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 1523,
+        "covered": 1523,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 384,
+        "covered": 384,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 1081,
+        "covered": 1081,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    }
+  },
+  "wholeCurrentSourceFiles": {
+    "app": 297,
+    "inventory": 38
+  },
+  "completeCurrentChangedRegionProofs": 0,
+  "completePriorAppRegionCertificates": 4,
+  "approvedSemanticPaths": 10,
+  "priorAcceptanceFiles": 591,
+  "priorByteIdenticalAcceptanceFiles": 591,
+  "exactSourceBackedMigrations": 0,
+  "currentAcceptanceFiles": 594,
+  "metadataRecords": 300,
+  "allPriorMetadataFieldsAndExceptionsPreserved": true,
+  "oneFullUpstreamAbsentProfile": true,
+  "allProfilesTerminalVendorRestored": true,
+  "passingReplay": 0,
+  "skippedObservationsRetained": 4,
+  "unresolvedUncaught": 0,
+  "priorityBullet": [
+    {
+      "title": "Writer native label width prevents overlap width=1280 cell=false",
+      "passed": true
+    },
+    {
+      "title": "Writer native label width prevents overlap width=1280 cell=true",
+      "passed": true
+    },
+    {
+      "title": "Writer native label width prevents overlap width=390 cell=false",
+      "passed": true
+    },
+    {
+      "title": "Writer native label width prevents overlap width=390 cell=true",
+      "passed": true
+    }
+  ],
+  "auditReconstruction": "Coverage, cases and scope reconstructed byte-identically at implementation HEAD; complete source-region and map/counter bindings verified.",
+  "accidentalRedundantBuild": false,
+  "chromiumScope": "All280 original passing Chromium cases plus2 original failed cases closed and build bind unchanged final production source; later only fresh fixtures changed; ODT custom-font and tight-tab pointer defects explicitly remain open.",
+  "changedInputBuild": "None needed: final production hashes match full profile",
+  "residual": [
+    "Full SwFont/SwSubFont script and format/paragraph-mark/redline/graphics/portion graph and physical font metadata beyond family unrepresented; no full native class or constructor claim.",
+    "Browser uses represented400/700 weight, CSS posture/underline and initial ink conversion; full native weight spectrum/decoration/theme/device shaping and font metrics remain unverified.",
+    "Compatibility flag is represented in actual document/Worker/graph records with false default; ODT true-flag filter/config persistence remains unrepresented, no claim made.",
+    "Observed adjacent defects remain open: custom optional bullet family is not emitted/read by current ODT list style filter; zero-first-line-indent tight-tab marker pointer can be intercepted by ruler gesture (Chromium closure3). Current Chromium font cases use native Home transitions and absent optional face; custom-face coverage is native core/mounted only. No pointer/filter fix claim.",
+    "Exhaustive parent core/browser/UI parity remains ACTIVE; registered save/open/recovery deviations unchanged."
+  ],
+  "failures": []
+}
