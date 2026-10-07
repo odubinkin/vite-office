@@ -1,10 +1,11 @@
 ---
 id: "202610070602-3D968G"
 title: "Replace aggregate table border widgets with native six-line border page"
-status: "DOING"
+result_summary: "Implemented native FrameSelector/SvxBorderTabPage six-edge selection, styles/presets/thickness, independent distances, Reset and info-only FillItemSet;13451app110inventory14infrastructure258Chromium PASS, source-bound app/inventory100%, no passing replay. Whole kernel/browser parity remains unverified and parent goal active."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -43,11 +44,16 @@ quality_review:
   findings:
     - "Native FrameSelector and SvxBorderTabPage own six edges, native tri-state selection, source presets and styles, independent four distances, Reset and info-only FillItemSet. React renders and dispatches the native owner, including source pointer multi-hit and silent focus behavior."
     - "Exact source, complete old acceptance migrations, all prior metadata fields and registered deviations are preserved. Current source-bound actual app and inventory counters and case census reconstruct exactly without passing test replay."
-commit: null
+commit:
+  hash: "61d4c2617649b72096cca1f2d40df9d74d9dcb3f"
+  message: "🚧 3D968G code: use native six-line table border page"
 comments:
   -
     author: "CODER"
     body: "Start: replace aggregate table border widgets with source-owned native FrameSelector and SvxBorderTabPage under standing iterative native architecture authorization, preserving registered I/O deviations."
+  -
+    author: "CODER"
+    body: "Verified: native six-line border page and React interactions match approved source scope; one full upstream-absent profile and failed/new-only closures; exact same-agent review PASS."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "PASS exact implementation 61d4c2617649b72096cca1f2d40df9d74d9dcb3f: approved native six-line border page; actual13451app110inventory14infrastructure258Chromium; source-bound app/inventory100%; one full upstream-absent profile, failed/new-only closures, no passing replay. Final Findings/Verification precede this canonical record. Same-agent EVALUATOR pass explicitly not independent; whole parity remains active."
+  -
+    type: "status"
+    at: "2026-10-07T07:09:57.985Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native six-line border page and React interactions match approved source scope; one full upstream-absent profile and failed/new-only closures; exact same-agent review PASS."
 doc_version: 3
-doc_updated_at: "2026-10-07T07:09:39.507Z"
+doc_updated_at: "2026-10-07T07:09:57.987Z"
 doc_updated_by: "CODER"
 description: "Iteration208: source-owned FrameSelector and SvxBorderTabPage for existing Writer box/info line and distance items; native presets, selected-line style/color/width, independent padding/sync, Reset and exact separate FillItemSet deltas through actual properties. Remove aggregate CSS border/padding controls; preserve registered I/O deviations and whole goal."
 sections:
