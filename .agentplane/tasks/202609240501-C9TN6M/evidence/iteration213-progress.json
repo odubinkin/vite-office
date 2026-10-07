@@ -1,0 +1,23 @@
+{
+  "iteration": 213,
+  "leaf": "202610071105-PWQ4D5",
+  "implementation": "1b1e0e6845caf368320f9c3e832bc87cbf53779b",
+  "evidenceTail": "6d906f4de927957e61b43a4b232f92d29f588c5a",
+  "close": "7e4748b105ae7825fe888f923e969a1bdfedd603",
+  "completePriorCharacters": 580224,
+  "completePriorSHA256": "e9d950be742a0cbd7662b67c797efa16b35599dee4c03930a84d5dea17071ace",
+  "completePriorPrefixPreserved": true,
+  "finalFindingsCharacters": 585271,
+  "finalFindingsSHA256": "c75cbad1fffd8967f011799b9fe521e303d4b5ef0599055b17f9db57f33fbf6e",
+  "cases": {
+    "app": 13497,
+    "inventory": 110,
+    "infrastructure": 14,
+    "chromium": 272
+  },
+  "passingReplay": 0,
+  "priorAcceptanceByteIdentical": 561,
+  "approvedSourceBackedMigrations": 15,
+  "parentGoalState": "ACTIVE; whole parity unverified",
+  "nextLeaf": "Native Table Properties Name application, source SetTableName ownership/history"
+}
