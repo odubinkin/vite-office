@@ -1,0 +1,165 @@
+{
+  "evaluatedImplementationSHA": "07950b29e9900b5cf2234cd6bc059dca7c6ab17c",
+  "evaluator": "Same current coding agent EVALUATOR phase; explicitly not independent",
+  "verdict": "pass",
+  "cases": {
+    "app": 13483,
+    "inventory": 110,
+    "infrastructure": 14,
+    "chromium": 270
+  },
+  "actualCurrentSourceCoverage": {
+    "app": {
+      "lines": {
+        "total": 16217,
+        "covered": 16217,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 17802,
+        "covered": 17802,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 4120,
+        "covered": 4120,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 13331,
+        "covered": 13331,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "inventory": {
+      "lines": {
+        "total": 1464,
+        "covered": 1464,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 1523,
+        "covered": 1523,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 384,
+        "covered": 384,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 1081,
+        "covered": 1081,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    }
+  },
+  "wholeSourceAndEntireMapsOnly": true,
+  "invalidRawCounterWholePriorFallback": [
+    {
+      "path": "apps/office/src/sw/source/core/layout/paintfrm.ts",
+      "reason": "V8 raw inferred else counter is negative; use entire prior verified current-byte-identical source and entire maps/counters, never sanitize individual counts",
+      "priorMap": "2B9EBJ.app-final.json",
+      "priorMapSHA256": "f7fd1dfd9fbdc808cab2921973af3edcfb0c6c0b639301ea881475e36b4d7279",
+      "discardedInvalidAggregateSHA256": "2d7e9eec174d20bf0b4f3bd27d3ce4e03f2134efe9012a818348608673544cdc",
+      "negativeCounts": [
+        -76
+      ]
+    }
+  ],
+  "noIndividualCounterSanitization": true,
+  "actualCountersAndCensusReconstructedExactly": true,
+  "oneFullUpstreamAbsentProfile": true,
+  "originalFailuresOnlyClosure": true,
+  "passingRuntimeReplay": 0,
+  "focusedAppSkippedObservationsRetained": 5,
+  "all570OldAcceptanceFilesByteIdentical": true,
+  "newFailedDraftCorrections": [
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-height-delta.test.ts",
+      "initialSHA256": "df79eb481ba2cf2fd73d8e69115743f9c26139b9e346d28d09e391e5ef19065d",
+      "currentSHA256": "df79eb481ba2cf2fd73d8e69115743f9c26139b9e346d28d09e391e5ef19065d",
+      "proof": {
+        "byteIdentical": true
+      }
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/native-table-height-delta.test.tsx",
+      "initialSHA256": "8af09635ebbcc3b6c05e4a388c740e462acf69610c7205963285463ae301c34c",
+      "currentSHA256": "ccfb539b2dfef9b8ffa8189322161494f92b7cfa89fb62abedb2229e6a83513b",
+      "proof": {
+        "exactFailedDraftUnitCorrection": true,
+        "allOtherBytesRetained": true,
+        "priorFivePassingDraftsUnchanged": true
+      }
+    },
+    {
+      "path": "apps/office/e2e/writer-native-properties-height.spec.ts",
+      "initialSHA256": "0c2a0cf9c64b5ad8dec36a3e933d26146e07ac71c021f3a18a90cc7fc059dee7",
+      "currentSHA256": "2ba60aa81020e0a9a1793ea3824dc488f2fab1f0d34a4af12588d7a1a4c13a0d",
+      "proof": {
+        "exactTwoFailedDraftVisibleGlyphClicks": true,
+        "allOtherBytesRetained": true,
+        "allHeightHistoryTextAssertionsRetained": true
+      }
+    }
+  ],
+  "metadata": {
+    "prior": 291,
+    "current": 291,
+    "fullFieldsPrefixesStatusesDefaultsRegisteredExceptionsPreserved": true,
+    "noPromotion": true
+  },
+  "currentProductionMatchesFullBuildAndBrowser": true,
+  "priorityBulletCases": [
+    {
+      "title": "Writer native label width prevents overlap width=1280 cell=false",
+      "passed": true
+    },
+    {
+      "title": "Writer native label width prevents overlap width=1280 cell=true",
+      "passed": true
+    },
+    {
+      "title": "Writer native label width prevents overlap width=390 cell=false",
+      "passed": true
+    },
+    {
+      "title": "Writer native label width prevents overlap width=390 cell=true",
+      "passed": true
+    }
+  ],
+  "artifacts": {
+    "wholeAgentplaneForbiddenSourceOrPythonCount": 0,
+    "activeFiles": 14,
+    "activeExtensions": [
+      "json",
+      "md"
+    ],
+    "noRawCoverageResultsOrSourceSnapshots": true,
+    "rawEvidenceLocation": "Ignored project dependency cache; no pinned sources copied into AP"
+  },
+  "sourceComparison": "PASS bounded absent/changed table-properties height delta and original row-owner preservation; whole parity ACTIVE.",
+  "residualScope": "Separate native height-dialog/command placement, full row metric/auto checkbox composition and whole kernel/browser parity remain unverified.",
+  "failures": []
+}

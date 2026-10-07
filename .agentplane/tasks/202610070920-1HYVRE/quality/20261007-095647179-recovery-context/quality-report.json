@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202610070920-1HYVRE",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-07T09:56:47.179Z",
+  "verdict": "pass",
+  "summary": "Exact07950b29 preserves unchanged native row height; same current-agent review, explicitly not independent",
+  "evaluated_sha": "07950b29e9900b5cf2234cd6bc059dca7c6ab17c",
+  "blueprint_digest": "429910e7e54ba48d9625ca3fde8aec08fb277ca85e17c5dc31c0e1adf0bb0a07",
+  "findings": [
+    "Source presence-only delta admission preserves Fixed/Minimum/Variable and mixed rows;13483app110inventory14infrastructure270Chromium resolved without passing replay; all570old test bytes and291metadata prefixes retained; strict actual100 whole current-source/maps certificates verified including entire prior map for negative V8 inferred counters"
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610070920-1HYVRE/README.md",
+    ".agentplane/tasks/202610070920-1HYVRE/evidence/exact-sha-review.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Separate upstream SwTableHeightDlg and command UI placement still required; whole implemented kernel/browser parity unverified"
+  ]
+}
