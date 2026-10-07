@@ -4,7 +4,7 @@ title: "Bind native edit-window and editing-shell owners to SwView"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 28
+revision: 29
 origin:
   system: "manual"
 depends_on: []
@@ -20,10 +20,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-07T21:15:13.637Z"
+  updated_by: "CODER"
+  note: "Verified actual implementation20ab572c52122585a8c8adf710eb8dd2b933dd33: required native view/shared layout owner contract,13646app110inventory15infra292Chromium uniquePASS, source-bound all4coverage100,2238old expectations retained; same-current-agent exact reconstruction/evaluatorPASS not independent. One full upstream-absent run, only original failure rerun; full parity goal remains active."
   attempts: 0
 quality_review:
   state: "pass"
@@ -57,8 +57,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: bind the actual SwView owner at native edit-window and editing-shell boundaries; migrate only audited constructor/import fixture inputs and preserve all operation assertions."
+  -
+    type: "verify"
+    at: "2026-10-07T21:15:13.637Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified actual implementation20ab572c52122585a8c8adf710eb8dd2b933dd33: required native view/shared layout owner contract,13646app110inventory15infra292Chromium uniquePASS, source-bound all4coverage100,2238old expectations retained; same-current-agent exact reconstruction/evaluatorPASS not independent. One full upstream-absent run, only original failure rerun; full parity goal remains active."
 doc_version: 3
-doc_updated_at: "2026-10-07T21:14:51.134Z"
+doc_updated_at: "2026-10-07T21:15:13.696Z"
 doc_updated_by: "CODER"
 description: "Repair one native ownership contract: SwEditWin holds required SwView reference and resolves SwWrtShell through it; SwView passes itself to its persistent edit window and editing shell, whose GetView returns its borrowed source owner (no fake/default view and detached core shells reject GetView). Preserve all operation logic, layout/cursor/list/table/history/defaults and intentional IO exceptions. Migrate exactly41 existing fixture inputs to actual SwView(DocShell).GetWrtShell and SwEditWin(shell.GetView), imports/formatter only; preserve every original test name, expectation, authored input, assertion and cleanup. Add meaningful native ownership/lifetime/document replacement/cross-view/failure-contract tests.3production+41fixture+1fresh+2metadata=47semantic files; no new upstream/Python/raw AP artifacts. One full upstream-absent runtime, later only actual failures/new cases and failed/changed static inputs, zero passing replay; all4 source-bound coverage100. Real SvxRuler/column item/slot pipeline remains subsequent work and is not represented by a fake renamed wrapper. Exact SHA review, canonical verify/checkpoint, finish actual implementation SHA; full parent historical prefix and stash retained. Standing user goal authorizes this safe local refactor; no network/outside-repo/destructive actions."
 sections:
@@ -75,6 +81,39 @@ sections:
     Result: current bounded owner/refactor criteriaPASS:13646app110inventory15infrastructure292Chromium unique cases,0unresolved0passing replay;16focused skips retained. Actual all4app/inventory100 with complete source/map/body/branch/location proof. Initial failures and raw threshold process exits retained in evidence.
     Evidence: evidence/absent-profile.json,runtime-closure1.json,case-census.json,final-coverage.json,scope-final.json,source-review.json,static-gates.json,static-closure1.json,static-closure2.json,source-gates.json,changed-file-checks.json,artifact-census.json,governance.json. Raw source/maps/reports/scripts only ignored app cache; no upstream source or Python in AP.
     Scope: required edit-window creation-view reference and shared layout ownership,48semantic paths,608prior files with567byte-identical41audited fixture migrations and2238unchanged expectation calls,1new609current;302metadata contracts preserved. Full native shell/ruler/slot architecture, unknown document-specific bullet reproduction and exhaustive parity remain unverified. Actual implementation20ab572c52122585a8c8adf710eb8dd2b933dd33 exact reconstruction reviewPASS0failures and same-current-agent EVALUATOR PASS explicitly not independent at .agentplane/tasks/202610072032-59XVYZ/quality/20261007-211419904-recovery-context/quality-report.json; canonical verification/checkpoint before finish; standing user goal authorizes this safe local scope.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-07T21:15:13.637Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified actual implementation20ab572c52122585a8c8adf710eb8dd2b933dd33: required native view/shared layout owner contract,13646app110inventory15infra292Chromium uniquePASS, source-bound all4coverage100,2238old expectations retained; same-current-agent exact reconstruction/evaluatorPASS not independent. One full upstream-absent run, only original failure rerun; full parity goal remains active.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-07T21:14:51.134Z, excerpt_hash=sha256:9619f607e7081b2a381e67854f3bcf9c2b048362588d0deaf564985b6a1d32f8
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610072032-59XVYZ/blueprint/resolved-snapshot.json
+    - old_digest: 90d6016d226a895168b8b0a97a53455ebd7517a0a68da9fa1fdcca0d14f4d9bb
+    - current_digest: 90d6016d226a895168b8b0a97a53455ebd7517a0a68da9fa1fdcca0d14f4d9bb
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610072032-59XVYZ
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610072032-59XVYZ
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the task's intentional three production files, constructor/import-only fixture migrations, fresh ownership test and metadata note together. Preserve parent historical evidence and unrelated commits/stash; do not use destructive history operations."
   Findings: |-
     Iteration227 binds the existing native edit-window and editing-shell children to their actual creating SwView. Required SwEditWin.m_rView/GetView removes direct shell injection and every operation resolves through that exact source view; SwWrtShell.GetView retains its creation owner even when a different view is active on the same DocShell. SwView supplies itself to both persistent children. The duplicate editing-shell layout field/factory/GetLayout override is removed; the existing cursor-shell owner receives the real view root once, retaining its single lazy root only for detached core shells. Native SwViewShell is the upstream layout owner; the full local shell hierarchy remains partial. Detached backend SwWrtShell construction remains a model-port boundary and rejects GetView without a real view, with no fake/default view or legacy edit-window overload.
@@ -113,6 +152,39 @@ Command: initial six static gates; failed/changed-input scoped static closures; 
 Result: current bounded owner/refactor criteriaPASS:13646app110inventory15infrastructure292Chromium unique cases,0unresolved0passing replay;16focused skips retained. Actual all4app/inventory100 with complete source/map/body/branch/location proof. Initial failures and raw threshold process exits retained in evidence.
 Evidence: evidence/absent-profile.json,runtime-closure1.json,case-census.json,final-coverage.json,scope-final.json,source-review.json,static-gates.json,static-closure1.json,static-closure2.json,source-gates.json,changed-file-checks.json,artifact-census.json,governance.json. Raw source/maps/reports/scripts only ignored app cache; no upstream source or Python in AP.
 Scope: required edit-window creation-view reference and shared layout ownership,48semantic paths,608prior files with567byte-identical41audited fixture migrations and2238unchanged expectation calls,1new609current;302metadata contracts preserved. Full native shell/ruler/slot architecture, unknown document-specific bullet reproduction and exhaustive parity remain unverified. Actual implementation20ab572c52122585a8c8adf710eb8dd2b933dd33 exact reconstruction reviewPASS0failures and same-current-agent EVALUATOR PASS explicitly not independent at .agentplane/tasks/202610072032-59XVYZ/quality/20261007-211419904-recovery-context/quality-report.json; canonical verification/checkpoint before finish; standing user goal authorizes this safe local scope.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-07T21:15:13.637Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified actual implementation20ab572c52122585a8c8adf710eb8dd2b933dd33: required native view/shared layout owner contract,13646app110inventory15infra292Chromium uniquePASS, source-bound all4coverage100,2238old expectations retained; same-current-agent exact reconstruction/evaluatorPASS not independent. One full upstream-absent run, only original failure rerun; full parity goal remains active.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-07T21:14:51.134Z, excerpt_hash=sha256:9619f607e7081b2a381e67854f3bcf9c2b048362588d0deaf564985b6a1d32f8
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610072032-59XVYZ/blueprint/resolved-snapshot.json
+- old_digest: 90d6016d226a895168b8b0a97a53455ebd7517a0a68da9fa1fdcca0d14f4d9bb
+- current_digest: 90d6016d226a895168b8b0a97a53455ebd7517a0a68da9fa1fdcca0d14f4d9bb
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610072032-59XVYZ
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610072032-59XVYZ
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
