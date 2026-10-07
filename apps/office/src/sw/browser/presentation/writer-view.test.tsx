@@ -207,13 +207,17 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
       target: { value: "4" },
     });
     fireEvent.click(within(dialog).getByRole("tab", { name: "Text Flow" }));
-    fireEvent.change(within(dialog).getByRole("spinbutton", { name: "Minimum row height (cm)" }), {
-      target: { value: "1" },
-    });
     fireEvent.change(within(dialog).getByRole("combobox", { name: "Cell vertical alignment" }), {
       target: { value: "3" },
     });
     fireEvent.click(within(dialog).getByRole("button", { name: "OK" }));
+    fireEvent.click(screen.getByRole("button", { name: "Table" }));
+    fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Size" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Row Height…" }));
+    fireEvent.change(screen.getByRole("spinbutton", { name: "Height (cm)" }), {
+      target: { value: "1" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "OK" }));
     expect(table?.GetColumnWidths()[0]).toBe(2268);
     expect(table?.GetTabLines()[1]?.GetFormat().frameSize?.GetHeight()).toBe(567);
     expect(table?.GetTabLines()[1]?.GetTabBoxes()[0]?.GetVertOrient().GetVertOrient()).toBe(

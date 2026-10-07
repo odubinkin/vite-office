@@ -18,7 +18,6 @@ import {
   SwTextFlowPage,
 } from "../../source/ui/table/tabledlg";
 import { HoriOrientation } from "../../../offapi/com/sun/star/text/HoriOrientation";
-import type { SwFormatFrameSize } from "../../inc/fmtfsize";
 
 /** Editable table geometry expressed in Writer twips. */
 export interface WriterTableDialogValue extends SwTableProperties {
@@ -35,7 +34,6 @@ export function WriterTableDialog(
     table?: SwTable;
     selectedBoxes?: readonly SwTableBox[];
     borderItems?: SfxItemSet | undefined;
-    rowHeight?: SwFormatFrameSize | undefined;
     boxAlign?: number | undefined;
     lineSelected?: boolean;
     suggestedName?: string;
@@ -57,7 +55,6 @@ function WriterTablePropertiesDialog({
   table,
   selectedBoxes,
   borderItems,
-  rowHeight,
   boxAlign,
   availableWidth,
   lineSelected = false,
@@ -67,7 +64,6 @@ function WriterTablePropertiesDialog({
   table: SwTable;
   selectedBoxes?: readonly SwTableBox[];
   borderItems?: SfxItemSet | undefined;
-  rowHeight?: SwFormatFrameSize | undefined;
   boxAlign?: number | undefined;
   lineSelected?: boolean;
   availableWidth: number;
@@ -134,7 +130,6 @@ function WriterTablePropertiesDialog({
     /** Retains initial input values for the represented Text Flow and Borders pages. @returns Original page values. */
     () => {
       return {
-        minRowHeight: rowHeight?.GetHeight() ?? 0,
         verticalAlign:
           boxAlign === VertOrientation.CENTER || boxAlign === VertOrientation.BOTTOM
             ? boxAlign
@@ -142,7 +137,6 @@ function WriterTablePropertiesDialog({
       };
     },
   );
-  const [minRowHeight, setMinRowHeight] = useState(initial.minRowHeight);
   const [verticalAlign, setVerticalAlign] = useState<WriterTableDialogValue["verticalAlign"]>(
     initial.verticalAlign,
   );
@@ -220,8 +214,7 @@ function WriterTablePropertiesDialog({
                 /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ (
                   value,
                 ) => value <= 0,
-              ) ||
-              minRowHeight < 0
+              )
             ) {
               setError("Enter valid table dimensions and positive column widths.");
               return;
@@ -246,7 +239,6 @@ function WriterTablePropertiesDialog({
               marginTop: formatPage.above,
               marginBottom: formatPage.below,
               columnWidths,
-              ...(minRowHeight === initial.minRowHeight ? {} : { minRowHeight }),
               ...(hasChangedBorders ? { borderItems: changedBorders } : {}),
               ...(verticalAlign === initial.verticalAlign ? {} : { verticalAlign }),
               headerRows: textFlowPage.GetRowsToRepeat(),
@@ -531,7 +523,6 @@ function WriterTablePropertiesDialog({
                   />
                   rows
                 </label>
-                {field("Minimum row height (cm)", minRowHeight, setMinRowHeight)}
                 <label className="flex items-center gap-2 text-sm">
                   <input
                     checked={textFlowPage.IsSplit()}
@@ -629,7 +620,6 @@ function WriterTablePropertiesDialog({
                 else if (activeTab === "columns") columnPage.Reset();
                 else if (activeTab === "text-flow") {
                   textFlowPage.Reset();
-                  setMinRowHeight(initial.minRowHeight);
                   setVerticalAlign(initial.verticalAlign);
                 } else {
                   borderPage.Reset();

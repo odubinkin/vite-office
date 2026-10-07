@@ -16,6 +16,8 @@ import { WriterBookmarkDialog } from "./WriterBookmarkDialog";
 import { WriterInsertBreakDialog } from "./WriterInsertBreakDialog";
 import { WriterPageStyleDialog } from "./WriterPageStyleDialog";
 import { WriterTableDialog, type WriterTableDialogValue } from "./WriterTableDialog";
+import { WriterRowHeightDialog } from "./WriterRowHeightDialog";
+import { SwTableHeightDlg } from "../../source/ui/table/rowht";
 import { WriterLineNumberingDialog } from "./WriterLineNumberingDialog";
 import { WriterFileDialog } from "./WriterFileDialog";
 import type {
@@ -119,6 +121,7 @@ export function WriterWorkbench({
   const [tableBorderItems, setTableBorderItems] =
     useState<ReturnType<typeof TableParamToItemSet>>();
   const [lineNumberingDialog, setLineNumberingDialog] = useState(false);
+  const [rowHeightDialog, setRowHeightDialog] = useState<SwTableHeightDlg>();
   const currentTable = view.GetWrtShell().IsCursorInTable()?.GetTable();
   const availableTableWidth =
     snapshot.pageDescriptor.width -
@@ -148,6 +151,15 @@ export function WriterWorkbench({
               },
             isEnabled: /** Checks table selection. @returns Availability. */ () =>
               currentTable !== undefined,
+          },
+          {
+            id: WRITER_COMMAND_IDS.setRowHeight,
+            capabilityId: "CAP-0137",
+            execute: /** Captures the native row-height draft. @returns Nothing. */ () =>
+              setRowHeightDialog(new SwTableHeightDlg(view.GetWrtShell())),
+            isEnabled:
+              /** Restricts height editing to native table context. @returns Availability. */ () =>
+                currentTable !== undefined,
           },
           {
             id: WRITER_COMMAND_IDS.lineNumberingDialog,
@@ -291,6 +303,7 @@ export function WriterWorkbench({
     dialogRequest === undefined &&
     fileDialogKind === undefined &&
     tableDialog === undefined &&
+    rowHeightDialog === undefined &&
     !lineNumberingDialog;
   useEffect(
     /** Routes the active frame's direct document focus key. @returns Listener cleanup. */
@@ -582,7 +595,6 @@ export function WriterWorkbench({
       </WriterWorkspaceChrome>
       {tableDialog === undefined ? null : (
         <WriterTableDialog
-          rowHeight={view.GetWrtShell().GetRowHeight()}
           boxAlign={view.GetWrtShell().GetBoxAlign()}
           occupiedNames={occupiedTableNames}
           suggestedName={suggestedTableName}
@@ -601,6 +613,21 @@ export function WriterWorkbench({
               setTableDialog(undefined)
           }
           onSubmit={submitTable}
+        />
+      )}
+      {rowHeightDialog === undefined ? null : (
+        <WriterRowHeightDialog
+          draft={rowHeightDialog}
+          onCancel={
+            /** Discards the row-height draft. @returns Nothing. */ () =>
+              setRowHeightDialog(undefined)
+          }
+          onSubmit={
+            /** Applies accepted size to the native selected rows. @returns Nothing. */ () => {
+              rowHeightDialog.Apply();
+              setRowHeightDialog(undefined);
+            }
+          }
         />
       )}
       {lineNumberingDialog ? (

@@ -149,7 +149,6 @@ describe("Writer browser table controls", /** Verifies the bounded table scenari
         onSubmit={submit}
         table={table}
         borderItems={nativeTableInputForTest(table)}
-        rowHeight={new SwFormatFrameSize(SwFrameSize.Minimum, 0, 200)}
         boxAlign={VertOrientation.CENTER}
       />,
     );
@@ -169,9 +168,7 @@ describe("Writer browser table controls", /** Verifies the bounded table scenari
     });
     fireEvent.click(screen.getByLabelText("Repeat header"));
     fireEvent.click(screen.getByLabelText("Allow table to split across pages and columns"));
-    fireEvent.change(screen.getByRole("spinbutton", { name: "Minimum row height (cm)" }), {
-      target: { value: "1" },
-    });
+    expect(screen.queryByRole("spinbutton", { name: "Minimum row height (cm)" })).toBeNull();
     fireEvent.change(screen.getByRole("combobox", { name: "Cell vertical alignment" }), {
       target: { value: "3" },
     });
@@ -192,7 +189,6 @@ describe("Writer browser table controls", /** Verifies the bounded table scenari
     expect(submit).toHaveBeenCalledWith(
       expect.objectContaining({
         width: 6803,
-        minRowHeight: 567,
         verticalAlign: VertOrientation.BOTTOM,
         repeatHeaderRows: false,
         layoutSplit: false,

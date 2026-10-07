@@ -16,10 +16,10 @@ afterEach(
     for (const session of sessions.splice(0)) session.Close();
   },
 );
-/** Creates actual row/box owners for declarative controls. @param count - Actual columns. @param partial - Native partial-selection flag. @returns Original owners and acceptance callbacks. */
-function fixture(count = 3, partial = false) {
+/** Creates actual row/box owners for declarative controls. @param count - Actual columns. @param partial - Native partial-selection flag. @param name - Native input name. @returns Original owners and acceptance callbacks. */
+function fixture(count = 3, partial = false, name = "Columns") {
   const doc = new SwDoc(),
-    table = doc.nodes.MakeTableNode("Columns", {
+    table = doc.nodes.MakeTableNode(name, {
       width: count === 3 ? 6000 : count * 1000,
       horiOrient: H.LEFT,
     });
@@ -159,14 +159,11 @@ it("mounted workbench passes actual row versus whole-table selection to native c
   expect(screen.getByRole("checkbox", { name: "Adapt table width" })).toBeEnabled();
 });
 it("mounted native column draft validates remaining table properties before acceptance", /** Checks retained dialog rejection without publishing canonical widths. @returns Nothing. */ () => {
-  const f = fixture();
+  const f = fixture(3, false, "");
   fireEvent.change(screen.getByRole("spinbutton", { name: "Column 1 width (cm)" }), {
     target: { value: "5" },
   });
-  fireEvent.click(screen.getByRole("tab", { name: "Text Flow" }));
-  fireEvent.change(screen.getByRole("spinbutton", { name: "Minimum row height (cm)" }), {
-    target: { value: "-1" },
-  });
+  fireEvent.click(screen.getByRole("tab", { name: "Table" }));
   const form = screen.getByRole("button", { name: "OK" }).closest("form");
   if (form === null) throw new Error("Missing native column-page form");
   fireEvent.submit(form);

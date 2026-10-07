@@ -143,9 +143,11 @@ export class BrowserWriterEditWindow {
   }
 
   public readonly HandleFocus =
-    /** Handles root focus by resolving the current SwNodes coordinate. @param event - React focus event. @returns Nothing. */ (
+    /** Preserves native cursor on menu refocus; ordinary paragraph focus resolves its SwNodes coordinate. @param event - React focus event. @returns Nothing. */ (
       event: React.FocusEvent<HTMLElement>,
     ): void => {
+      if (event.relatedTarget !== null && event.relatedTarget.closest('[role="menu"]') !== null)
+        return;
       const paragraph = (event.target as HTMLElement).closest<HTMLParagraphElement>(
         "[data-writer-node-index]",
       );

@@ -86,6 +86,7 @@ const specs: readonly CommandSpec[] = [
   { commandUrl: ".uno:StatusBarVisible", semantics: "check" },
   { browserControlLabel: "Paragraph style", commandUrl: ".uno:StyleApply", semantics: "radio" },
   { commandUrl: ".uno:TableDialog", showsDialog: true },
+  { commandUrl: ".uno:SetRowHeight", showsDialog: true },
   { commandUrl: ".uno:Underline", semantics: "check" },
   { commandUrl: ".uno:UnderlineSingle", semantics: "check" },
   { commandUrl: ".uno:Undo" },
@@ -144,6 +145,7 @@ const commandAliases = {
   selectAll: ".uno:SelectAll",
   styleApply: ".uno:StyleApply",
   tableDialog: ".uno:TableDialog",
+  setRowHeight: ".uno:SetRowHeight",
   toggleHorizontalRuler: ".uno:Ruler",
   toggleVerticalRuler: ".uno:VRuler",
   toggleSidebar: ".uno:Sidebar",
@@ -209,6 +211,7 @@ const commandCapabilities: Readonly<Record<string, `CAP-${string}`>> = {
   ".uno:Underline": "CAP-0109",
   ".uno:UnderlineSingle": "CAP-0109",
   ".uno:TableDialog": "CAP-0137",
+  ".uno:SetRowHeight": "CAP-0137",
   ".uno:Undo": "CAP-0102",
   ".uno:StyleApply?Style:string=Default%20Paragraph%20Style&FamilyName:string=ParagraphStyles":
     "CAP-0112",
@@ -269,6 +272,7 @@ const inventoryAliasNames = [
   "underline",
   "underlineSingle",
   "tableDialog",
+  "setRowHeight",
   "undo",
   "unorderedList",
 ] as const;

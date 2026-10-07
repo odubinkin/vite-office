@@ -47,9 +47,10 @@ it("mounted fixed row clips original editable text while minimum row keeps natur
       },
     );
     position2.Dispose();
-    fireEvent.click(screen.getByRole("button", { name: "Table Properties" }));
-    fireEvent.click(screen.getByRole("tab", { name: "Text Flow" }));
-    expect(screen.getByRole("spinbutton", { name: "Minimum row height (cm)" })).toHaveValue(1.59);
+    fireEvent.click(screen.getByRole("button", { name: "Table" }));
+    fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Size" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Row Height…" }));
+    expect(screen.getByRole("spinbutton", { name: "Height (cm)" })).toHaveValue(1.59);
     fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
     expect(table.GetTabLines()[0]).toBe(fixed);
     expect(required(fixed.GetTabBoxes()[0]).GetParagraphs()[0]).toBe(fixedNode);

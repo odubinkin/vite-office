@@ -1,0 +1,20 @@
+{
+  "records": [
+    {
+      "command": "npm exec -- prettier --write docs/program/source-provenance.json docs/program/parity/runtime-inventory.json; npm exec -- prettier --check same two paths",
+      "exit": 0,
+      "evidence": "Actual scoped formatter/check terminal exit0 before source gates."
+    },
+    {
+      "command": "npm run check:source-provenance after retaining old provenance record order",
+      "exit": 0,
+      "evidence": "Actual terminal exit0: 293 modules, 206 mapped, 71 browser adaptations, 16 infrastructure; runtime inventory remains sorted; old provenance entry order retained.",
+      "inputSHA256": "0f054e6005162351c8435d3572e93c07e46f204495b3c48816d37dad695ecf14"
+    },
+    {
+      "command": "npm exec -- prettier --check apps/office/src/sw/browser/presentation/native-row-height-dialog.test.tsx; npm exec -- eslint same path after exact failed label correction",
+      "exit": 0,
+      "evidence": "Actual terminal static handle2834 exit0; only failing new label corrected, original four passing definitions unchanged."
+    }
+  ]
+}

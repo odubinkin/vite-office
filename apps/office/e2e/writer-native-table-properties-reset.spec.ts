@@ -76,12 +76,11 @@ for (const viewport of [1280, 390]) {
     const header = page.getByRole("checkbox", { name: "Repeat header", exact: true });
     const originalHeader = await header.isChecked();
     await header.setChecked(!originalHeader);
-    await page.getByRole("spinbutton", { name: "Minimum row height (cm)", exact: true }).fill("1");
     await page.getByRole("button", { name: "Reset", exact: true }).click();
     await expect(header).toBeChecked({ checked: originalHeader });
     await expect(
       page.getByRole("spinbutton", { name: "Minimum row height (cm)", exact: true }),
-    ).toHaveValue("0");
+    ).toHaveCount(0);
     await page.getByRole("tab", { name: "Borders", exact: true }).click();
     await expect(
       page.getByRole("spinbutton", { name: "Top padding (cm)", exact: true }),

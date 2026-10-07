@@ -15,10 +15,10 @@ import { SwDoc } from "../../source/core/doc/doc";
 import { HoriOrientation as H } from "../../../offapi/com/sun/star/text/HoriOrientation";
 import { WriterTableDialog } from "./WriterTableDialog";
 afterEach(cleanup);
-/** Mounts original non-default input values. @returns Original graph and callbacks. */
-function fixture() {
+/** Mounts original non-default input values. @param name - Native input name. @returns Original graph and callbacks. */
+function fixture(name = "Reset") {
   const doc = new SwDoc(),
-    table = doc.nodes.MakeTableNode("Reset", {
+    table = doc.nodes.MakeTableNode(name, {
       width: 6000,
       horiOrient: H.LEFT,
       marginTop: 120,
@@ -49,7 +49,6 @@ function fixture() {
     <WriterTableDialog
       table={table}
       borderItems={nativeTableInputForTest(table)}
-      rowHeight={row.GetFrameSize()}
       boxAlign={box.GetVertOrient().GetVertOrient()}
       availableWidth={9000}
       onCancel={cancel}
@@ -132,7 +131,6 @@ it("Text Flow and Borders Reset each restore their initial controls and preserve
   fireEvent.change(screen.getByRole("spinbutton", { name: "Header rows" }), {
     target: { value: "2" },
   });
-  metric("Minimum row height (cm)", "1");
   fireEvent.click(
     screen.getByRole("checkbox", { name: "Allow table to split across pages and columns" }),
   );
@@ -143,12 +141,11 @@ it("Text Flow and Borders Reset each restore their initial controls and preserve
   expect(screen.queryByRole("checkbox", { name: "Header" })).not.toBeInTheDocument();
   expect(screen.getByRole("checkbox", { name: "Repeat header" })).not.toBeChecked();
   expect(screen.getByRole("spinbutton", { name: "Header rows" })).toHaveValue(1);
-  expect(screen.getByRole("spinbutton", { name: "Minimum row height (cm)" })).toHaveValue(0.53);
+  expect(screen.queryByRole("spinbutton", { name: "Minimum row height (cm)" })).toBeNull();
   expect(
     screen.getByRole("checkbox", { name: "Allow table to split across pages and columns" }),
   ).toBeChecked();
   expect(screen.getByRole("combobox", { name: "Cell vertical alignment" })).toHaveValue("3");
-  metric("Minimum row height (cm)", "2");
   tab("Borders");
   reset();
   expect(screen.getByRole("spinbutton", { name: "Top padding (cm)" })).toHaveValue(0);
@@ -160,7 +157,6 @@ it("Text Flow and Borders Reset each restore their initial controls and preserve
   expect(f.submit).toHaveBeenCalledWith(
     expect.objectContaining({
       width: 2835,
-      minRowHeight: 1134,
       headerRows: 0,
       repeatHeaderRows: false,
     }),
@@ -171,10 +167,9 @@ it("Text Flow and Borders Reset each restore their initial controls and preserve
   expect(f.submit.mock.calls[0]?.[0]?.borderItems?.GetItemIfSet(RES_BOX)).toBeUndefined();
 });
 it("Reset after invalid page data clears validation and Cancel keeps original owners", /** Checks no accidental submit/history or whole-document mutation. @returns Nothing. */ () => {
-  const f = fixture();
-  tab("Text Flow");
-  metric("Minimum row height (cm)", "-1");
-  const input = screen.getByRole("spinbutton", { name: "Minimum row height (cm)" }),
+  const f = fixture("");
+  tab("Columns");
+  const input = screen.getByRole("spinbutton", { name: "Column 1 width (cm)" }),
     form = input.closest("form");
   if (form === null) throw new Error("Missing reset form");
   fireEvent.submit(form);

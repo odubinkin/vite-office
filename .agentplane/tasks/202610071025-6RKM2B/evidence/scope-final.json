@@ -1,0 +1,177 @@
+{
+  "base": "891635e20252fa32fa7dfdc7531752c69b400b45",
+  "approvedPaths": [
+    "apps/office/src/sw/source/ui/table/rowht.ts",
+    "apps/office/src/sw/browser/presentation/WriterRowHeightDialog.tsx",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx",
+    "apps/office/src/sw/browser/presentation/writer-view.tsx",
+    "scripts/generate-writer-ui-resources.ts",
+    "apps/office/src/sw/uiconfig/swriter/writer-ui.generated.json",
+    "apps/office/src/sw/browser/editor/native-table-selection.test.tsx",
+    "apps/office/src/sw/browser/editor/native-row-frame-size.test.tsx",
+    "apps/office/src/sw/browser/presentation/native-table-properties-reset.test.tsx",
+    "apps/office/src/sw/browser/presentation/native-table-column-page.test.tsx",
+    "apps/office/src/sw/browser/presentation/writer-view.test.tsx",
+    "apps/office/src/sw/browser/presentation/native-table-height-delta.test.tsx",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.test.tsx",
+    "apps/office/e2e/writer-native-table-properties-reset.spec.ts",
+    "apps/office/src/sw/source/ui/table/native-row-height-dialog.test.ts",
+    "apps/office/src/sw/browser/presentation/native-row-height-dialog.test.tsx",
+    "apps/office/e2e/writer-native-row-height-dialog.spec.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json",
+    "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts",
+    "scripts/libreoffice-inventory/parity-mapping-cli.test.ts"
+  ],
+  "actualSemanticPaths": [
+    "apps/office/e2e/writer-native-table-properties-reset.spec.ts",
+    "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts",
+    "apps/office/src/sw/browser/editor/native-row-frame-size.test.tsx",
+    "apps/office/src/sw/browser/editor/native-table-selection.test.tsx",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.test.tsx",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx",
+    "apps/office/src/sw/browser/presentation/native-table-column-page.test.tsx",
+    "apps/office/src/sw/browser/presentation/native-table-height-delta.test.tsx",
+    "apps/office/src/sw/browser/presentation/native-table-properties-reset.test.tsx",
+    "apps/office/src/sw/browser/presentation/writer-view.test.tsx",
+    "apps/office/src/sw/browser/presentation/writer-view.tsx",
+    "apps/office/src/sw/uiconfig/swriter/writer-ui.generated.json",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/source-provenance.json",
+    "scripts/generate-writer-ui-resources.ts",
+    "scripts/libreoffice-inventory/parity-mapping-cli.test.ts",
+    "apps/office/e2e/writer-native-row-height-dialog.spec.ts",
+    "apps/office/src/sw/browser/presentation/WriterRowHeightDialog.tsx",
+    "apps/office/src/sw/browser/presentation/native-row-height-dialog.test.tsx",
+    "apps/office/src/sw/source/ui/table/native-row-height-dialog.test.ts",
+    "apps/office/src/sw/source/ui/table/rowht.ts"
+  ],
+  "oldAcceptanceFiles": 573,
+  "oldByteIdentical": 564,
+  "migrations": [
+    {
+      "path": "apps/office/e2e/writer-native-table-properties-reset.spec.ts",
+      "beforeSHA256": "5b6b23841e655fed6782099ba347bfda89c02d43d423255d59903f017585a1f1",
+      "currentSHA256": "993317b058515802552c55e1ff2d16be1be2edea0607248931e766ed441ac5d5",
+      "sourceBackedMigration": "Only removed Table Properties height-control ingress/expectations, native row-height command replacement or invalid remaining geometry fixture; unchanged non-height assertions reviewed in exact diff."
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/native-row-frame-size.test.tsx",
+      "beforeSHA256": "fa39c1bdd99a3dc67b4781506b5be91e13d11b80280714750f1e8206c3fb065b",
+      "currentSHA256": "c8417184d924c0fc1974daaca6197a9a812e9a8a7cdcee33d09eb5a3ecc2fae4",
+      "sourceBackedMigration": "Only removed Table Properties height-control ingress/expectations, native row-height command replacement or invalid remaining geometry fixture; unchanged non-height assertions reviewed in exact diff."
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/native-table-selection.test.tsx",
+      "beforeSHA256": "d13f6e56a8a653c3fa0da3d10dbe98b2c8e453c701d827f9f00fd77f65164282",
+      "currentSHA256": "88bb3c81f47967bf65386d1b557caae5395884e5cc8ff5c28c9991b496edef1c",
+      "sourceBackedMigration": "Only removed Table Properties height-control ingress/expectations, native row-height command replacement or invalid remaining geometry fixture; unchanged non-height assertions reviewed in exact diff."
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/WriterTableDialog.test.tsx",
+      "beforeSHA256": "a8fc7ce3e1e13b920a742c8bd35ce776d82d6feb1c2bbd2d8ee829f9aacfb9ed",
+      "currentSHA256": "3b5e0d38ba8bfb5edb3442a2d9fd17e5303c0ca88ca251152d3c24f0363326ca",
+      "sourceBackedMigration": "Only removed Table Properties height-control ingress/expectations, native row-height command replacement or invalid remaining geometry fixture; unchanged non-height assertions reviewed in exact diff."
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/native-table-column-page.test.tsx",
+      "beforeSHA256": "4e566b1df82db1e317d19594f3356289758eb204a9264c932c173da478269708",
+      "currentSHA256": "092276bc045bacdda7ad104d9fdc03613a874e81d8b66ec079da3d682e187f80",
+      "sourceBackedMigration": "Only removed Table Properties height-control ingress/expectations, native row-height command replacement or invalid remaining geometry fixture; unchanged non-height assertions reviewed in exact diff."
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/native-table-height-delta.test.tsx",
+      "beforeSHA256": "ccfb539b2dfef9b8ffa8189322161494f92b7cfa89fb62abedb2229e6a83513b",
+      "currentSHA256": "02f24070e946441e6facd9c245f3b29ffffb705d3f0c6f397c9d918feaf252e2",
+      "sourceBackedMigration": "Only removed Table Properties height-control ingress/expectations, native row-height command replacement or invalid remaining geometry fixture; unchanged non-height assertions reviewed in exact diff."
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/native-table-properties-reset.test.tsx",
+      "beforeSHA256": "bd8e4a0723cc927c23189f28b247a4ddd5ed17f56c30f184c2c0c4c7dcef19c1",
+      "currentSHA256": "58ebf1104e638bbb61eb72d30e743f67d44f76f594696f4b48424a3893bf9d7d",
+      "sourceBackedMigration": "Only removed Table Properties height-control ingress/expectations, native row-height command replacement or invalid remaining geometry fixture; unchanged non-height assertions reviewed in exact diff."
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/writer-view.test.tsx",
+      "beforeSHA256": "a2b51acda24c2fbc113df173736ecbf80ecbeeda0e5df52952743ab59796ca78",
+      "currentSHA256": "79f3d81e7f3df1378e2d2c358974f49212e2336e857ce0e7cc50a657f37956af",
+      "sourceBackedMigration": "Only removed Table Properties height-control ingress/expectations, native row-height command replacement or invalid remaining geometry fixture; unchanged non-height assertions reviewed in exact diff."
+    },
+    {
+      "path": "scripts/libreoffice-inventory/parity-mapping-cli.test.ts",
+      "beforeSHA256": "5cd1d404b9a270a5c6d641130be9a3c93c6fd90184c215fd13fcd9e9b7618bb3",
+      "currentSHA256": "4a790e5fced884d304e605aa8d5ffdd3bd503b91bf6e8f7b6c92883aecd7a740",
+      "sourceBackedMigration": "Only removed Table Properties height-control ingress/expectations, native row-height command replacement or invalid remaining geometry fixture; unchanged non-height assertions reviewed in exact diff."
+    }
+  ],
+  "newAcceptanceFiles": 3,
+  "totalAcceptanceFiles": 576,
+  "oldAcceptanceCensusSHA256": "5f1fc3336f25b8ef0fc3f0ec0a004c25d53acf7e8f7b7a25eb738c0a9f71b192",
+  "fresh": [
+    {
+      "path": "apps/office/src/sw/source/ui/table/native-row-height-dialog.test.ts",
+      "initialSHA256": "0674b37867ce3c6f2d1760a235c8be6a6c5232799e2e6204d30def49b0d788cb",
+      "currentSHA256": "0674b37867ce3c6f2d1760a235c8be6a6c5232799e2e6204d30def49b0d788cb",
+      "proof": {
+        "byteIdentical": true
+      }
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/native-row-height-dialog.test.tsx",
+      "initialSHA256": "a3de0e91fea094782d13868813b8e8665fc398fa05f8f17384113eb100a43dbc",
+      "currentSHA256": "c0dec43d3f123217b3d8e545987d3f642baad109e6b18f4f36e5a0cad10b50f9",
+      "proof": {
+        "originalFourPassingMountedDefinitionsTokenIdentical": true,
+        "oneGenuinelyNewTopLevelCase": true,
+        "initialClosureNestedUnexecutedSkipRetained": true,
+        "exactNewFailedLabelCorrection": true
+      }
+    },
+    {
+      "path": "apps/office/e2e/writer-native-row-height-dialog.spec.ts",
+      "initialSHA256": "d161c438e11b8f072ca23b5e80870e21050b582c82a68a6a32b80adc758f05b1",
+      "currentSHA256": "9a3e794fe49f0f4fb3a4e24625375e37158f44d5b59f3d87ac41e71d431834fa",
+      "proof": {
+        "exactDeviceQuantizationExpectationCorrection": true,
+        "allOtherBytesAndAssertionsRetained": true
+      }
+    }
+  ],
+  "metadata": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "prior": 291,
+      "current": 293,
+      "priorFieldsPrefixesStatusesDefaultsAndExceptionsPreserved": true,
+      "newModules": [
+        "apps/office/src/sw/browser/presentation/WriterRowHeightDialog.tsx",
+        "apps/office/src/sw/source/ui/table/rowht.ts"
+      ],
+      "currentSHA256": "0f054e6005162351c8435d3572e93c07e46f204495b3c48816d37dad695ecf14"
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "prior": 291,
+      "current": 293,
+      "priorFieldsPrefixesStatusesDefaultsAndExceptionsPreserved": true,
+      "newModules": [
+        "apps/office/src/sw/browser/presentation/WriterRowHeightDialog.tsx",
+        "apps/office/src/sw/source/ui/table/rowht.ts"
+      ],
+      "currentSHA256": "8024bdfaa0715b9a6b2fe014910fb8e1b75a8e2bd8292545e484e4e2bafbd2c7"
+    }
+  ],
+  "parentFindingsCharacters": 575377,
+  "parentFindingsSHA256": "f1acffd23bc38e9bbfcfba9ef6da42bea7f2879e41effd0bd78e3a2c37cfa5c4",
+  "artifacts": {
+    "wholeAgentplaneForbiddenSourceOrPythonCount": 0,
+    "activeFiles": 20,
+    "activeExtensions": [
+      "json",
+      "md"
+    ],
+    "noRawCoverageResultsOrSourceSnapshots": true,
+    "rawEvidenceLocation": "Ignored project dependency cache; no pinned sources copied into AP"
+  },
+  "failures": []
+}

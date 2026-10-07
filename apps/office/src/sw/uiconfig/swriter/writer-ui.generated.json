@@ -51,6 +51,7 @@
     "selectAll": ".uno:SelectAll",
     "styleApply": ".uno:StyleApply",
     "tableDialog": ".uno:TableDialog",
+    "setRowHeight": ".uno:SetRowHeight",
     "toggleHorizontalRuler": ".uno:Ruler",
     "toggleVerticalRuler": ".uno:VRuler",
     "toggleSidebar": ".uno:Sidebar",
@@ -120,6 +121,7 @@
     { "capabilityId": "CAP-0109", "commandUrl": ".uno:Underline" },
     { "capabilityId": "CAP-0109", "commandUrl": ".uno:UnderlineSingle" },
     { "capabilityId": "CAP-0137", "commandUrl": ".uno:TableDialog" },
+    { "capabilityId": "CAP-0137", "commandUrl": ".uno:SetRowHeight" },
     { "capabilityId": "CAP-0102", "commandUrl": ".uno:Undo" },
     { "capabilityId": "CAP-0105", "commandUrl": ".uno:DefaultBullet" }
   ],
@@ -920,6 +922,18 @@
       "shortcuts": [],
       "slotId": 20460
     },
+    ".uno:SetRowHeight": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0137",
+      "controlLabel": "Row Height",
+      "label": "Row Height",
+      "placements": ["sw/uiconfig/swriter/menubar/menubar.xml"],
+      "semantics": "action",
+      "showsDialog": true,
+      "shortcuts": [],
+      "slotId": 20507
+    },
     ".uno:Underline": {
       "browserOwned": false,
       "argumentSchema": [],
@@ -1327,6 +1341,11 @@
     {
       "classification": "supported-upstream",
       "commandUrl": ".uno:TableDialog",
+      "sources": ["sw/uiconfig/swriter/menubar/menubar.xml"]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:SetRowHeight",
       "sources": ["sw/uiconfig/swriter/menubar/menubar.xml"]
     },
     {
@@ -4267,14 +4286,6 @@
       "classification": "X",
       "context": [".uno:TableMenu", ".uno:TableAutoFitMenu"],
       "entryKind": "command",
-      "sourceUrl": ".uno:SetRowHeight",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:TableMenu", ".uno:TableAutoFitMenu"],
-      "entryKind": "command",
       "sourceUrl": ".uno:SetMinimalRowHeight",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
@@ -4324,14 +4335,6 @@
       "context": [".uno:TableMenu", ".uno:TableAutoFitMenu"],
       "entryKind": "command",
       "sourceUrl": ".uno:DistributeColumns",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:TableMenu"],
-      "entryKind": "menu",
-      "sourceUrl": ".uno:TableAutoFitMenu",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
     },
@@ -6562,6 +6565,12 @@
             ],
             "kind": "menu",
             "label": "Select"
+          },
+          {
+            "id": ".uno:TableAutoFitMenu",
+            "items": [{ "commandUrl": ".uno:SetRowHeight", "kind": "command", "visible": true }],
+            "kind": "menu",
+            "label": "Size"
           },
           { "kind": "separator" },
           { "commandUrl": ".uno:TableDialog", "kind": "command", "visible": true }
@@ -8851,12 +8860,6 @@
         "classification": "X",
         "context": [".uno:TableMenu", ".uno:TableAutoFitMenu"],
         "entryKind": "command",
-        "sourceUrl": ".uno:SetRowHeight"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:TableMenu", ".uno:TableAutoFitMenu"],
-        "entryKind": "command",
         "sourceUrl": ".uno:SetMinimalRowHeight"
       },
       {
@@ -8894,12 +8897,6 @@
         "context": [".uno:TableMenu", ".uno:TableAutoFitMenu"],
         "entryKind": "command",
         "sourceUrl": ".uno:DistributeColumns"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:TableMenu"],
-        "entryKind": "menu",
-        "sourceUrl": ".uno:TableAutoFitMenu"
       },
       {
         "classification": "X",

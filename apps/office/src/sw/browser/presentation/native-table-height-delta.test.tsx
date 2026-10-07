@@ -21,23 +21,17 @@ it.each(["untouched", "reset", "restored", "changed", "cancel"])(
       submit = vi.fn(),
       cancel = vi.fn();
     render(
-      <WriterTableDialog
-        table={table}
-        rowHeight={row.GetFrameSize()}
-        availableWidth={9000}
-        onCancel={cancel}
-        onSubmit={submit}
-      />,
+      <WriterTableDialog table={table} availableWidth={9000} onCancel={cancel} onSubmit={submit} />,
     );
     fireEvent.click(screen.getByRole("tab", { name: "Text Flow" }));
     if (mode !== "untouched") {
-      fireEvent.change(screen.getByRole("spinbutton", { name: "Minimum row height (cm)" }), {
-        target: { value: "2" },
+      fireEvent.change(screen.getByRole("combobox", { name: "Cell vertical alignment" }), {
+        target: { value: "3" },
       });
       if (mode === "reset") fireEvent.click(screen.getByRole("button", { name: "Reset" }));
       if (mode === "restored")
-        fireEvent.change(screen.getByRole("spinbutton", { name: "Minimum row height (cm)" }), {
-          target: { value: "1" },
+        fireEvent.change(screen.getByRole("combobox", { name: "Cell vertical alignment" }), {
+          target: { value: "0" },
         });
     }
     fireEvent.click(screen.getByRole("button", { name: mode === "cancel" ? "Cancel" : "OK" }));
@@ -46,8 +40,8 @@ it.each(["untouched", "reset", "restored", "changed", "cancel"])(
       expect(submit).not.toHaveBeenCalled();
     } else {
       expect(submit).toHaveBeenCalledOnce();
-      if (mode === "changed") expect(submit.mock.calls[0]?.[0].minRowHeight).toBe(1134);
-      else expect(submit.mock.calls[0]?.[0]).not.toHaveProperty("minRowHeight");
+      expect(submit.mock.calls[0]?.[0]).not.toHaveProperty("minRowHeight");
+      if (mode === "changed") expect(submit.mock.calls[0]?.[0].verticalAlign).toBe(3);
     }
     expect(row.GetFrameSize().GetHeightSizeType()).toBe(SwFrameSize.Fixed);
     expect(row.GetFrameSize().GetHeight()).toBe(567);

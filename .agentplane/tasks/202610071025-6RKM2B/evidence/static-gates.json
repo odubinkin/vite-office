@@ -1,0 +1,70 @@
+{
+  "records": [
+    {
+      "command": "npm run format:check",
+      "exit": 1,
+      "bytes": 226,
+      "sha256": "91ef8d0a6a4a566e0aac44ecc11a13212ab46985938c6ddb1995aa1efe119229",
+      "diagnostics": [
+        "[warn] apps/office/e2e/writer-native-row-height-dialog.spec.ts",
+        "[warn] Code style issues found in the above file. Run Prettier with --write to fix."
+      ]
+    },
+    {
+      "command": "npm run lint",
+      "exit": 1,
+      "bytes": 955,
+      "sha256": "f382f16008694347280d0fa03d879836fae9ee750ba38c9a075d3d4f4bce069f",
+      "diagnostics": [
+        "> eslint . --max-warnings 0",
+        "  86:19  error  Error: This value cannot be modified",
+        "✖ 1 problem (1 error, 0 warnings)"
+      ]
+    },
+    {
+      "command": "npm run typecheck",
+      "exit": 2,
+      "bytes": 1801,
+      "sha256": "e87344c0d3a6e299c8f2250cdd3ab48fe2557cf578cb066010d3b412d47b1fd5",
+      "diagnostics": [
+        "src/sw/browser/presentation/native-row-height-dialog.test.tsx(38,64): error TS2339: Property 'slotId' does not exist on type 'WriterCommandResource'.",
+        "src/sw/browser/presentation/native-table-column-page.test.tsx(166,11): error TS2551: Property 'SetName' does not exist on type 'SwTable'. Did you mean 'GetName'?",
+        "src/sw/browser/presentation/native-table-properties-reset.test.tsx(171,11): error TS2551: Property 'SetName' does not exist on type 'SwTable'. Did you mean 'GetName'?",
+        "src/sw/browser/presentation/native-table-properties-reset.test.tsx(181,11): error TS2551: Property 'SetName' does not exist on type 'SwTable'. Did you mean 'GetName'?",
+        "src/sw/browser/presentation/WriterTableDialog.test.tsx(133,24): error TS2304: Cannot find name 'SwFormatFrameSize'.",
+        "src/sw/browser/presentation/WriterTableDialog.test.tsx(133,42): error TS2304: Cannot find name 'SwFrameSize'.",
+        "src/sw/source/ui/table/native-row-height-dialog.test.ts(7,28): error TS2307: Cannot find module '../../uibase/wrtsh/wrtsh' or its corresponding type declarations.",
+        "src/sw/source/ui/table/native-row-height-dialog.test.ts(70,15): error TS2353: Object literal may only specify known properties, and 'id' does not exist in type 'Readonly<{ title: string; locale?: string; }>'.",
+        "npm error Lifecycle script `typecheck` failed with error:",
+        "npm error code 2",
+        "npm error path /Users/odubinkin/Projects/vite-office/apps/office",
+        "npm error workspace @vite-office/office@0.1.0"
+      ]
+    },
+    {
+      "command": "npm run check:dependencies",
+      "exit": 0,
+      "bytes": 189,
+      "sha256": "832c714d75e2e49af84dc2aa5c609073d9a4a2ca03545c5a0bd0deaa8bf8f766",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:docs",
+      "exit": 1,
+      "bytes": 546,
+      "sha256": "bca098376bcb431f9d46facfc413adf2cc56a2ea4a8e5b9a1175c7af51811627",
+      "diagnostics": [
+        "    throw new Error(`JSDoc validation failed:\\n${errors.join(\"\\n\")}`);",
+        "Error: JSDoc validation failed:",
+        "apps/office/src/sw/source/ui/table/native-row-height-dialog.test.ts:47 function is missing JSDoc"
+      ]
+    },
+    {
+      "command": "npm run check:file-size",
+      "exit": 0,
+      "bytes": 3925,
+      "sha256": "b2550ed919068c08f325869385bedd923144ce97e3a1a131971544e3717ca7c2",
+      "diagnostics": []
+    }
+  ]
+}

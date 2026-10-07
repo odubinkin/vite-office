@@ -1,0 +1,184 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/sw/source/ui/table/rowht.ts": "834ddffb0a0285b0a58fe57b6b6ad1630c7872dd9b6a5edf8eba270bd631565f",
+    "apps/office/src/sw/browser/presentation/WriterRowHeightDialog.tsx": "e267db0e41f39eb505583c2be95962891bf7c1c5d96b98b969eea19dcae3158b",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx": "befa93f0ca46055c9f240341e5c3417906bff0c8c06dd636c45f6ad2e36d566c",
+    "apps/office/src/sw/browser/presentation/writer-view.tsx": "59f06dbd6176545387095b317bfb8fbeda30553931c993c5cf41e69829f4fc37",
+    "scripts/generate-writer-ui-resources.ts": "76b5589c1692e7f61f920a7138eae52f3d73a6482da5b05dc45494880762988e",
+    "apps/office/src/sw/uiconfig/swriter/writer-ui.generated.json": "d7b705c88bb2c4c6821291cc4af798f75d01e89a2caaadcceaad32d3fba6a0cc",
+    "apps/office/src/sw/browser/editor/native-table-selection.test.tsx": "88bb3c81f47967bf65386d1b557caae5395884e5cc8ff5c28c9991b496edef1c",
+    "apps/office/src/sw/browser/editor/native-row-frame-size.test.tsx": "c8417184d924c0fc1974daaca6197a9a812e9a8a7cdcee33d09eb5a3ecc2fae4",
+    "apps/office/src/sw/browser/presentation/native-table-properties-reset.test.tsx": "58ebf1104e638bbb61eb72d30e743f67d44f76f594696f4b48424a3893bf9d7d",
+    "apps/office/src/sw/browser/presentation/native-table-column-page.test.tsx": "092276bc045bacdda7ad104d9fdc03613a874e81d8b66ec079da3d682e187f80",
+    "apps/office/src/sw/browser/presentation/writer-view.test.tsx": "79f3d81e7f3df1378e2d2c358974f49212e2336e857ce0e7cc50a657f37956af",
+    "apps/office/src/sw/browser/presentation/native-table-height-delta.test.tsx": "02f24070e946441e6facd9c245f3b29ffffb705d3f0c6f397c9d918feaf252e2",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.test.tsx": "3b5e0d38ba8bfb5edb3442a2d9fd17e5303c0ca88ca251152d3c24f0363326ca",
+    "apps/office/e2e/writer-native-table-properties-reset.spec.ts": "993317b058515802552c55e1ff2d16be1be2edea0607248931e766ed441ac5d5",
+    "apps/office/src/sw/source/ui/table/native-row-height-dialog.test.ts": "0674b37867ce3c6f2d1760a235c8be6a6c5232799e2e6204d30def49b0d788cb",
+    "apps/office/src/sw/browser/presentation/native-row-height-dialog.test.tsx": "df6815c8a729ab08303b0b46047a436e54c6965bc74909d8e228fdf56116f2bf",
+    "apps/office/e2e/writer-native-row-height-dialog.spec.ts": "9a3e794fe49f0f4fb3a4e24625375e37158f44d5b59f3d87ac41e71d431834fa",
+    "docs/program/source-provenance.json": "4aa1790a42a433555f0423c6ac7ecd9cc5cb7974104bc4819cc28092ccd827bf",
+    "docs/program/parity/runtime-inventory.json": "379fdc6af11f2b9698c9fc0645e91a4d13f6e0f6c2f777e230d005a6e036e793",
+    "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts": "249cf8a3a79346bbb45a369887f3aacf58ac39819893345b61483280744fe21e"
+  },
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1443,
+      "sha256": "594b5cd4de49bda0d355c8a66682b772a7375cbe5fe89727347314fe67606f50",
+      "totals": [],
+      "failedCases": []
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/browser/editor/native-table-selection.test.tsx src/sw/browser/presentation/writer-view.test.tsx src/sw/browser/presentation/native-row-height-dialog.test.tsx --testNamePattern=^table properties use native selected rows and preserve other row geometry$|^Writer browser presentation inserts, selects, edits and reopens a canonical Writer table$|^menu refocus preserves native row selection before height dispatch$ --coverage.reportOnFailure --coverage.reporter=json-summary --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/6RKM2B.app-closure1-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 2912,
+      "sha256": "4e745acdc5f4807c41e9810b6d66693b8be991322eb569020a9a436a9d7aea37",
+      "totals": [
+        "Test Files  2 passed | 1 skipped (3)",
+        "Tests  2 passed | 27 skipped (29)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "passed": 2,
+        "failed": 0,
+        "skipped": 27,
+        "total": 29
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 16257,
+          "covered": 6573,
+          "skipped": 0,
+          "pct": 40.43
+        },
+        "statements": {
+          "total": 17843,
+          "covered": 6848,
+          "skipped": 0,
+          "pct": 38.37
+        },
+        "functions": {
+          "total": 4138,
+          "covered": 1795,
+          "skipped": 0,
+          "pct": 43.37
+        },
+        "branches": {
+          "total": 13341,
+          "covered": 3821,
+          "skipped": 0,
+          "pct": 28.64
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverage": {
+        "lines": 40.43,
+        "statements": 38.37,
+        "functions": 43.37,
+        "branches": 28.64
+      },
+      "incompleteFileCount": 256,
+      "coverageMapSHA256": "04577c80e4ff4f3a122aac3fd9599f5eb1dd4593f059ebcc399429d3aff2dc6a"
+    },
+    {
+      "kind": "inventory",
+      "command": "npm run test:inventory:coverage -- scripts/libreoffice-inventory/parity-mapping-cli.test.ts --testNamePattern=^parity mapping CLI composes the Writer mapping report with owned upstream marker evidence$ --coverage.reportOnFailure --coverage.reporter=json-summary --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/6RKM2B.inventory-closure1-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 2727,
+      "sha256": "73b0e603c84cfb04b830665deac0f994c64e9bb4d5cf298f2f3d99b6c363f1a2",
+      "totals": [
+        "Test Files  1 failed (1)",
+        "Tests  1 failed | 2 skipped (3)"
+      ],
+      "failedCases": [
+        {
+          "name": "scripts/libreoffice-inventory/parity-mapping-cli.test.ts > parity mapping CLI composes the Writer mapping report with owned upstream marker evidence",
+          "assertion": [
+            "AssertionError: expected { …(22) } to match object { …(19) }"
+          ]
+        }
+      ],
+      "caseCounts": {
+        "passed": 0,
+        "failed": 1,
+        "skipped": 2,
+        "total": 3
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 1464,
+          "covered": 433,
+          "skipped": 0,
+          "pct": 29.57
+        },
+        "statements": {
+          "total": 1523,
+          "covered": 439,
+          "skipped": 0,
+          "pct": 28.82
+        },
+        "functions": {
+          "total": 384,
+          "covered": 120,
+          "skipped": 0,
+          "pct": 31.25
+        },
+        "branches": {
+          "total": 1081,
+          "covered": 402,
+          "skipped": 0,
+          "pct": 37.18
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "coverage": {
+        "lines": 29.57,
+        "statements": 28.82,
+        "functions": 31.25,
+        "branches": 37.18
+      },
+      "incompleteFileCount": 38,
+      "coverageMapSHA256": "d386360160db171bb48402738ead4d129c726407191cdc94b9039515671af00f"
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts apps/office/e2e/writer-native-row-height-dialog.spec.ts --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 649,
+      "sha256": "fe816bd03b4aef890dc6c69d6eb48b93dedc010a5b42dd2551419a32d6929383",
+      "totals": [
+        "2 passed (5.4s)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "startTime": "2026-10-07T10:48:56.475Z",
+        "duration": 5396.348,
+        "expected": 2,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    }
+  ]
+}

@@ -1,0 +1,231 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/sw/source/ui/table/rowht.ts": "834ddffb0a0285b0a58fe57b6b6ad1630c7872dd9b6a5edf8eba270bd631565f",
+    "apps/office/src/sw/browser/presentation/WriterRowHeightDialog.tsx": "e267db0e41f39eb505583c2be95962891bf7c1c5d96b98b969eea19dcae3158b",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx": "befa93f0ca46055c9f240341e5c3417906bff0c8c06dd636c45f6ad2e36d566c",
+    "apps/office/src/sw/browser/presentation/writer-view.tsx": "59f06dbd6176545387095b317bfb8fbeda30553931c993c5cf41e69829f4fc37",
+    "scripts/generate-writer-ui-resources.ts": "76b5589c1692e7f61f920a7138eae52f3d73a6482da5b05dc45494880762988e",
+    "apps/office/src/sw/uiconfig/swriter/writer-ui.generated.json": "d7b705c88bb2c4c6821291cc4af798f75d01e89a2caaadcceaad32d3fba6a0cc",
+    "apps/office/src/sw/browser/editor/native-table-selection.test.tsx": "88bb3c81f47967bf65386d1b557caae5395884e5cc8ff5c28c9991b496edef1c",
+    "apps/office/src/sw/browser/editor/native-row-frame-size.test.tsx": "c8417184d924c0fc1974daaca6197a9a812e9a8a7cdcee33d09eb5a3ecc2fae4",
+    "apps/office/src/sw/browser/presentation/native-table-properties-reset.test.tsx": "58ebf1104e638bbb61eb72d30e743f67d44f76f594696f4b48424a3893bf9d7d",
+    "apps/office/src/sw/browser/presentation/native-table-column-page.test.tsx": "092276bc045bacdda7ad104d9fdc03613a874e81d8b66ec079da3d682e187f80",
+    "apps/office/src/sw/browser/presentation/writer-view.test.tsx": "79f3d81e7f3df1378e2d2c358974f49212e2336e857ce0e7cc50a657f37956af",
+    "apps/office/src/sw/browser/presentation/native-table-height-delta.test.tsx": "02f24070e946441e6facd9c245f3b29ffffb705d3f0c6f397c9d918feaf252e2",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.test.tsx": "3b5e0d38ba8bfb5edb3442a2d9fd17e5303c0ca88ca251152d3c24f0363326ca",
+    "apps/office/e2e/writer-native-table-properties-reset.spec.ts": "993317b058515802552c55e1ff2d16be1be2edea0607248931e766ed441ac5d5",
+    "apps/office/src/sw/source/ui/table/native-row-height-dialog.test.ts": "0674b37867ce3c6f2d1760a235c8be6a6c5232799e2e6204d30def49b0d788cb",
+    "apps/office/src/sw/browser/presentation/native-row-height-dialog.test.tsx": "a3de0e91fea094782d13868813b8e8665fc398fa05f8f17384113eb100a43dbc",
+    "apps/office/e2e/writer-native-row-height-dialog.spec.ts": "d161c438e11b8f072ca23b5e80870e21050b582c82a68a6a32b80adc758f05b1",
+    "docs/program/source-provenance.json": "da1f679be4fc312cd60d7c183e81a4a353af0a57977706e6c501a9eec88d36a5",
+    "docs/program/parity/runtime-inventory.json": "bb4d3de82efd47b86dfebf07a639059d6d028398d3092d7ed3e17081f1154651"
+  },
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1443,
+      "sha256": "5a9c378e4dceaf4756916dcc785f98180cd841596ddf0801f86fb235682294e9",
+      "totals": [],
+      "failedCases": []
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/6RKM2B.app-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 266722,
+      "sha256": "8271d86d5a49174b55e11f064cba2ead1e188321df0e5472416ac19d106d6d75",
+      "totals": [
+        "Test Files  2 failed | 429 passed (431)",
+        "Tests  2 failed | 13492 passed (13494)"
+      ],
+      "failedCases": [
+        {
+          "name": "apps/office/src/sw/browser/editor/native-table-selection.test.tsx > table properties use native selected rows and preserve other row geometry",
+          "assertion": [
+            "TestingLibraryElementError: Unable to find an accessible element with the role \"dialog\" and name \"Row Height\""
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/browser/presentation/writer-view.test.tsx > Writer browser presentation inserts, selects, edits and reopens a canonical Writer table",
+          "assertion": [
+            "AssertionError: expected undefined to be 567 // Object.is equality"
+          ]
+        }
+      ],
+      "caseCounts": {
+        "passed": 13492,
+        "failed": 2,
+        "skipped": 0,
+        "total": 13494
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 16255,
+          "covered": 16255,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 17841,
+          "covered": 17841,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 4138,
+          "covered": 4138,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 13337,
+          "covered": 13335,
+          "skipped": 0,
+          "pct": 99.98
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 99.98
+      },
+      "incompleteFileCount": 2,
+      "coverageMapSHA256": "db94650286315706936714f21fc6255f2026fb45e617f8b4f98356625336b03e"
+    },
+    {
+      "kind": "inventory",
+      "command": "npm run test:inventory:coverage -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/6RKM2B.inventory-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 42199,
+      "sha256": "f10c20a6a1e3dc4deb6511a7dde10e59be870fe2496d427e803efb936d32f2a7",
+      "totals": [
+        "Test Files  1 failed | 35 passed (36)",
+        "Tests  1 failed | 109 passed (110)"
+      ],
+      "failedCases": [
+        {
+          "name": "scripts/libreoffice-inventory/parity-mapping-cli.test.ts > parity mapping CLI composes the Writer mapping report with owned upstream marker evidence",
+          "assertion": [
+            "Error: Runtime module paths must be unique and lexicographically ordered."
+          ]
+        }
+      ],
+      "caseCounts": {
+        "passed": 109,
+        "failed": 1,
+        "skipped": 0,
+        "total": 110
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 1464,
+          "covered": 1460,
+          "skipped": 0,
+          "pct": 99.72
+        },
+        "statements": {
+          "total": 1523,
+          "covered": 1519,
+          "skipped": 0,
+          "pct": 99.73
+        },
+        "functions": {
+          "total": 384,
+          "covered": 381,
+          "skipped": 0,
+          "pct": 99.21
+        },
+        "branches": {
+          "total": 1081,
+          "covered": 1081,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "coverage": {
+        "lines": 99.72,
+        "statements": 99.73,
+        "functions": 99.21,
+        "branches": 100
+      },
+      "incompleteFileCount": 1,
+      "coverageMapSHA256": "7780497c6227614ec8e99657929bd6fbb8b2b24ad7dfc24dc8d3d2f28f6eb135"
+    },
+    {
+      "kind": "scripts",
+      "command": "npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts scripts/check-module-boundaries.test.ts",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 223,
+      "sha256": "1cd35f4265641276d8c3c93bb346a4a480c49e478c11d1ebf52b9c550acf083d",
+      "totals": [
+        "Test Files  3 passed (3)",
+        "Tests  14 passed (14)"
+      ],
+      "failedCases": []
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 43658,
+      "sha256": "415993cd2e3dbfbec4a065b212797dbe19c28b265e7b88fb527cccae1d170743",
+      "totals": [
+        "2 failed",
+        "270 passed (4.4m)"
+      ],
+      "failedCases": [
+        {
+          "name": "writer-native-row-height-dialog.spec.ts > Writer native row height dialog width=1280",
+          "errors": [
+            [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCSS\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed",
+              "Expected: \u001b[32m\"40.06\u001b[7m67\u001b[27mpx\"\u001b[39m",
+              "Received: \u001b[31m\"40.06\u001b[7m25\u001b[27mpx\"\u001b[39m"
+            ]
+          ]
+        },
+        {
+          "name": "writer-native-row-height-dialog.spec.ts > Writer native row height dialog width=390",
+          "errors": [
+            [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCSS\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed",
+              "Expected: \u001b[32m\"40.06\u001b[7m67\u001b[27mpx\"\u001b[39m",
+              "Received: \u001b[31m\"40.06\u001b[7m25\u001b[27mpx\"\u001b[39m"
+            ]
+          ]
+        }
+      ],
+      "caseCounts": {
+        "startTime": "2026-10-07T10:40:54.657Z",
+        "duration": 264777.35699999996,
+        "expected": 270,
+        "skipped": 0,
+        "unexpected": 2,
+        "flaky": 0
+      }
+    }
+  ]
+}
