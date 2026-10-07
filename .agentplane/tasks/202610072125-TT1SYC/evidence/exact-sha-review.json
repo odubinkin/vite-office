@@ -1,0 +1,100 @@
+{
+  "implementationSHA": "07ab11fc4137c3badf02a158c89b5fc5d5db0f5a",
+  "verdict": "pass",
+  "sameCurrentAgentReviewExplicitlyNotIndependent": true,
+  "caseCounts": {
+    "app": 13672,
+    "inventory": 110,
+    "infrastructure": 15,
+    "chromium": 296
+  },
+  "passingReplay": 0,
+  "fullProfileCount": 1,
+  "runtimeClosureCases": {
+    "app": 3,
+    "inventory": 1,
+    "chromium": 4
+  },
+  "skippedObservationsRetained": 2,
+  "sourceBoundCoverage": {
+    "app": {
+      "lines": {
+        "total": 16687,
+        "covered": 16687,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 18321,
+        "covered": 18321,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 4244,
+        "covered": 4244,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 13834,
+        "covered": 13834,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "inventory": {
+      "lines": {
+        "total": 1464,
+        "covered": 1464,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 1523,
+        "covered": 1523,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 384,
+        "covered": 384,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 1081,
+        "covered": 1081,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    }
+  },
+  "scopeCount": 8,
+  "priorAcceptance": 609,
+  "priorMetadata": 302,
+  "currentMetadata": 303,
+  "nativeSourceOwners": 5,
+  "parentPrefixPreserved": true,
+  "deferredStashPreserved": true,
+  "residuals": [
+    "Full SwLineInfo/SwTextFormatter/SwNumberPortion owner hierarchy, frame clipping/wrapping/fly/tab-over-margin/spacing and right/center/decimal/fill portions remain unrepresented.",
+    "RTL/vertical/bidi/fonts/ink and specialized direct-margin IGNORE_FIRST_LINE list-tab normalization remain unverified; this is not exhaustive list or user-document parity.",
+    "Exact original user document/browser was not provided; bounded exhausted-tab gap repair does not claim every possible overlap corrected.",
+    "Native SvxRuler/SvxColumnItem/slot geometry ownership remains subsequent work; registered save/open/recovery deviations unchanged, goal ACTIVE."
+  ],
+  "exhaustiveGoal": "ACTIVE, not achieved",
+  "failures": []
+}
