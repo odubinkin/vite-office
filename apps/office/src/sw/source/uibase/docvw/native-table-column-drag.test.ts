@@ -10,6 +10,7 @@ import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrient
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { writeOdtDocument } from "../../filter/xml/wrtxml";
 import { readOdtDocument } from "../../filter/xml/swxml";
+import { SwView } from "../uiview/view";
 const shells: SwWrtShell[] = [];
 afterEach(
   /** Releases native cursors after tracking tests. @returns Nothing. */ () => {
@@ -51,10 +52,10 @@ function fixture(widths = [1500, 1500, 1500]) {
   doc.EnsureNumRule("Numbering", "numbered");
   node.SetNumRule("Numbering");
   node.SetListId("drag-list");
-  const shell = new SwWrtShell(
+  const shell = new SwView(
       new SwDocShell(doc, createDocument({ id: "column-drag", suiteId: "writer", title: "Drag" })),
-    ),
-    edit = new SwEditWin(shell);
+    ).GetWrtShell(),
+    edit = new SwEditWin(shell.GetView());
   shells.push(shell);
   edit.SetSelection({ point: { nodeIndex: body.GetIndex(), contentIndex: 0 } });
   const total =

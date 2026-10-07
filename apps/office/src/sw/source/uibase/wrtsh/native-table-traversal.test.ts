@@ -9,7 +9,7 @@ import { SwDoc } from "../../core/doc/doc";
 import { SwPosition } from "../../core/crsr/pam";
 import { SwCursor } from "../../core/crsr/swcrsr";
 import { SwDocShell } from "../app/docsh";
-import { SwWrtShell } from "./wrtsh1";
+
 import { SwEditWin } from "../docvw/edtwin";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { createWriterNumFormat } from "../../core/doc/number";
@@ -18,6 +18,7 @@ import { RES_MARGIN_TEXTLEFT } from "../../../inc/hintids";
 import { SvxTextLeftMarginItem } from "../../../../editeng/source/items/frmitems";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import { WriterViewProjection } from "../../../browser/presentation/writer-view-projection";
+import { SwView } from "../uiview/view";
 
 /** Requires a native fixture member. @param value - Optional owner. @returns Owner. */
 function required<T>(value: T | undefined): T {
@@ -58,9 +59,9 @@ function fixture() {
   const other = doc.nodes.MakeTableNode("Other");
   doc.nodes.AppendTableRow(other, 1);
   const metadata = createDocument({ id: "table-traversal", suiteId: "writer", title: "Table" }),
-    shell = new SwWrtShell(new SwDocShell(doc, metadata)),
+    shell = new SwView(new SwDocShell(doc, metadata)).GetWrtShell(),
     invalidate = vi.fn(),
-    edit = new SwEditWin(shell, invalidate);
+    edit = new SwEditWin(shell.GetView(), invalidate);
   return {
     doc,
     body,

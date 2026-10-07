@@ -1,0 +1,230 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/sw/source/uibase/docvw/edtwin.ts": "12cdcddb94f9a4a0462b8c8df9ad1406decf63346fec8a83beea8384a7245e1a",
+    "apps/office/src/sw/source/uibase/uiview/view.ts": "5452f2eefa90adb58cf929b758b8225da278ebf1cae4122ad21625a6dd6a8d3b",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts": "a663f0a9b1b42f75591aad39d8ed748035d09070dee347a4135879586ee76ea3",
+    "apps/office/src/sw/source/uibase/docvw/native-edit-view-ownership.test.ts": "d593be78a1ff3ab372ef51d394fc438f7d3673866b691453718f9d5227b8de14",
+    "apps/office/src/sw/browser/editor/native-line-margin.test.tsx": "7fbb7dd8dc3ee95d24471f5f4d9480aed1ab6aac98cea916976e690f3b9c0b94",
+    "apps/office/src/sw/source/core/doc/native-outline-movement.test.ts": "e85f4dc7feb86f6e4638de22e5c545c824fe18005bc17cda7813268b9d4d6207",
+    "apps/office/src/sw/source/core/edit/native-list-continuation-ring.test.ts": "229c6ac88d437f04261f5c343e13d8ffe5c74344167006f197a2170d1a244fdc",
+    "apps/office/src/sw/source/core/edit/native-list-ring.test.ts": "526ccc72f0c3a8b494b2f54d7830a64b258a50c161e788f5861836f38b6f13d4",
+    "apps/office/src/sw/source/core/frmedt/native-table-mouse.test.ts": "ab0a80e7952ac2ad36d9520ae3b7b243c841692a5d94491c55548594f4125bc0",
+    "apps/office/src/sw/source/core/txtnode/native-split-attributes.test.ts": "3f907539dcd027fe3cc852ad72800eb9c7e4884ecc3c26dbda9346f16c5b122c",
+    "apps/office/src/sw/source/core/undo/native-split-history.test.ts": "ddbed098f98acce6f572b0fb2e1b196b9d30282cf3db5bbd557fa21e49e9ab59",
+    "apps/office/src/sw/source/ui/table/native-row-height-dialog.test.ts": "65ff75cfeeff7e6afa930505b55a74b7636c0410c90585763c9da245963453f9",
+    "apps/office/src/sw/source/uibase/docvw/edtwin.test.ts": "3b2d6b28ae7e8ef8753320949d1a8afb613967138e9e5278acd459b2edab0adb",
+    "apps/office/src/sw/source/uibase/docvw/native-label-affinity.test.ts": "ee2904dcb0a33739372e55ce5a6bdcc99e678ed6bb7b79920c7432d94be0df5e",
+    "apps/office/src/sw/source/uibase/docvw/native-list-backspace.test.ts": "b67e65f5c5e753dc5fa2c88505cfd30e2830b6396b28990aebdc52cfb35f487e",
+    "apps/office/src/sw/source/uibase/docvw/native-list-enter.test.ts": "1377cfb84514ec60dd66207536f70bd9d99ab665a3e7f5fe2979f3c91c6dcefe",
+    "apps/office/src/sw/source/uibase/docvw/native-list-tab.test.ts": "5c7fe518dc656aefb6720987779e8459543135856a838f5a5c93dcdac3e35c95",
+    "apps/office/src/sw/source/uibase/docvw/native-table-column-drag.test.ts": "6c153a76a224742d48e26e4a57d80e1338c75aae1e0eed78d6c8bd9147e259bf",
+    "apps/office/src/sw/source/uibase/docvw/native-table-linear-drag.test.ts": "cb235d168bfa45a66dcf7ba89c53f2dc3af8d39921965587e30615f4f20e6e5f",
+    "apps/office/src/sw/source/uibase/docvw/native-table-pointer.test.ts": "b2cbd39013e2005fcbab4efa525c442e3ffef19265850272b3944e2263aae77e",
+    "apps/office/src/sw/source/uibase/docvw/native-table-proportional-drag.test.ts": "1fd2f9b69f27463b4d74a535ff5fa17b97c4483a56a61913fba7b22c12e1b420",
+    "apps/office/src/sw/source/uibase/docvw/native-table-row-drag.test.ts": "0ee59bffe7e4a0b04301eeb6f6d8076c80e46b6567c98a7c70423e39fdc5fe4c",
+    "apps/office/src/sw/source/uibase/wrtsh/native-line-margin.test.ts": "2eec409bd34a0fbfaff26c6c581cf10db687a4e3f9897a2ff8a852e271dbfa2e",
+    "apps/office/src/sw/source/uibase/wrtsh/native-row-height-owner-history.test.ts": "878425182ba002df22098efc8d273926f2972db274a3ecee79914b8006403da2",
+    "apps/office/src/sw/source/uibase/wrtsh/native-row-split-owner-history.test.ts": "869bd96a478cc900bf2282337c7f4f6639f84f7ee436751b625e31a10f5f5e18",
+    "apps/office/src/sw/source/uibase/wrtsh/native-section-navigation.test.ts": "7b1f9d2b8aded85a67b4fc4a3884955e1c56be89183bbc6ec56e935fec5b7b7c",
+    "apps/office/src/sw/source/uibase/wrtsh/native-select-all.test.ts": "25fddd4cf3889c209b472db3bb6e9ff087452591e6d6c25ab23f384522b1376d",
+    "apps/office/src/sw/source/uibase/wrtsh/native-tabcols-history.test.ts": "737dc82f6155c1c1854a395faedba1156a1c43169d6d2d664d5d18eddce39f55",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-column-page-history.test.ts": "e298bd5d8e664e302569cf7cf546f6a1117c1a9bb3bfed19438a5f1eaca8f4f2",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-cursor-rings.test.ts": "1a6430e7f77bff03155559918e03af221a26f684fee0a1c4123080401827f671",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-delete.test.ts": "7ed76c44299b0cb6f92483c4b7eddd7447b4a59f1768040f58e5974f6392763e",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-editing.test.ts": "24069d10d9c631c5739609d8911baf2cd779659a1a1042972195ff9e2860e16b",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-format-lifecycle-history.test.ts": "505a80bf7b4d55d738a09b449266948192a1c11d945e44c10531573bcb97652c",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-height-command-separation.test.ts": "397d605db013bc1d404069dfe1eae070986b126bff09730b6371b3d0d9801c36",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-height-delta.test.ts": "11e29323f29b0f24d497b2c6c7c16d46878f422ae571502202b8da43cdd6125a",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-layout-split-history.test.ts": "e583a59b78a866bf26dd119536873b98cd3ca54a008e8466a8a4cbab52c0ecba",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-name-history.test.ts": "ebf1cecc941a89134aa9647a842642e0efe99fc27f171fddcae6ebd56322306b",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-paste.test.ts": "bc5eb5bb4b63fbd1e0a1d0d0640febec74232a1c4e64e4cf2313742f9a9e951a",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-plain-paste.test.ts": "ffc2a8af851d743c574db92be01297ba937fef7441f3741e612873c47ee2136b",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-properties-reset-history.test.ts": "f43ae7ac9161112adefc133de30c76d6a67ba96679427c3bdd3e68150521d59f",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-properties.test.ts": "240e712765431f020332864c4b34a7ec1dc985a98838c7adf6539ffa639380db",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-selection.test.ts": "d2ebec5b7286bab1b3ee2acb03ba8b680da4f54ba15126a694feca1734e857dc",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-text-flow-headline-history.test.ts": "5363eeb8b83d6073ed714cd18d026fc3661a1c18e98fa88af1fd6a47d65c4768",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-text-flow-split-history.test.ts": "530d8d480943d0e011e3ce787c8669ef83e5e6470e8644cdfd4c84849c0d4605",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-traversal.test.ts": "1d691edee0d9c0e7449313a9cbb6e70b9eccb7adf91f24d4fce383e5b3a26401",
+    "docs/program/source-provenance.json": "403bcf1933acdbcabe83b002141ab9132332716fe8c037866f1f343262ee8081",
+    "docs/program/parity/runtime-inventory.json": "baaf92919a8acc59075f5b80542ba65a41fa3b56c3c09d40d8974bc03a8748a8",
+    "apps/office/src/sw/source/core/crsr/trvltbl.ts": "7bb4b6d843105efba810e7a4523c8bbcbef06dc90f561b867f673f6962e86ba3"
+  },
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1443,
+      "sha256": "77a479c579d0b381aa2a814acbfc7c922a1914e2a15323d8be5bdffab49c8753",
+      "totals": [],
+      "failedCases": [],
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/59XVYZ.app-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 74131,
+      "sha256": "c7293c14b04b6ed9f72e25025d50f4ca12004f36794302cf6ae686d0df9bb095",
+      "totals": [
+        "Test Files  1 failed | 452 passed (453)",
+        "Tests  1 failed | 13645 passed (13646)"
+      ],
+      "failedCases": [
+        {
+          "name": "apps/office/src/sw/source/uibase/wrtsh/native-line-margin.test.ts > native repeated Home enters visible labels and End clears without document history",
+          "assertion": [
+            "AssertionError: expected true to be false // Object.is equality"
+          ]
+        }
+      ],
+      "caseCounts": {
+        "passed": 13645,
+        "failed": 1,
+        "skipped": 0,
+        "total": 13646
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 16633,
+          "covered": 16632,
+          "skipped": 0,
+          "pct": 99.99
+        },
+        "statements": {
+          "total": 18262,
+          "covered": 18261,
+          "skipped": 0,
+          "pct": 99.99
+        },
+        "functions": {
+          "total": 4236,
+          "covered": 4235,
+          "skipped": 0,
+          "pct": 99.97
+        },
+        "branches": {
+          "total": 13781,
+          "covered": 13779,
+          "skipped": 0,
+          "pct": 99.98
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverage": {
+        "lines": 99.99,
+        "statements": 99.99,
+        "functions": 99.97,
+        "branches": 99.98
+      },
+      "incompleteFileCount": 3,
+      "coverageMapSHA256": "c151316d72d63510db9a92afb6639265b11c8b26c264e64ea96fdab359a1477c",
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "inventory",
+      "command": "npm run test:inventory:coverage -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/59XVYZ.inventory-results.json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 40596,
+      "sha256": "d9a9736a1eb8acf0a8a77b5e327f1c95101faecbec9a90f82631d7f474245a45",
+      "totals": [
+        "Test Files  36 passed (36)",
+        "Tests  110 passed (110)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "passed": 110,
+        "failed": 0,
+        "skipped": 0,
+        "total": 110
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 1464,
+          "covered": 1464,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 1523,
+          "covered": 1523,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 384,
+          "covered": 384,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 1081,
+          "covered": 1081,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100
+      },
+      "incompleteFileCount": 0,
+      "coverageMapSHA256": "cf5bf4c6163387573d435ca18e241b42f0f000368356ce91a30a8d90a478b420",
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "scripts",
+      "command": "npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts scripts/check-module-boundaries.test.ts scripts/check-legacy-font-boundary.test.ts",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 223,
+      "sha256": "eddf607f6181945fb319224f7e91c56792b22532c2166ae74fa70278fca24775",
+      "totals": [
+        "Test Files  4 passed (4)",
+        "Tests  15 passed (15)"
+      ],
+      "failedCases": [],
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 40418,
+      "sha256": "2478a9275ef97204de46fbf5d666dc42f4c207dd65899729660933dad944afb8",
+      "totals": [
+        "292 passed (2.3m)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "startTime": "2026-10-07T21:03:10.375Z",
+        "duration": 140971.655,
+        "expected": 292,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "unhandledErrorCount": 0
+    }
+  ]
+}

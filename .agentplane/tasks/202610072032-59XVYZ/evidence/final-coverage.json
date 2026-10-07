@@ -1,0 +1,713 @@
+{
+  "proof": "Actual counters with complete identical source/maps or complete contiguous declaration/body/enclosing branch/location proofs; focused skips retained as skipped.",
+  "previousVerified": {
+    "app": {
+      "map": "5X11GC.app-final.json",
+      "proof": "5X11GC.app-proof.json",
+      "mapHash": "64403fd6e302aafc705c32256d92fae33df404d3b7d0a318976fe7842e83688f",
+      "proofHash": "aef19c3547d67f8f914552f695dc02b4a7b8ba2b4cc628d3413e9b38b3eca6c3"
+    },
+    "inventory": {
+      "map": "5X11GC.inventory-final.json",
+      "proof": "5X11GC.inventory-proof.json",
+      "mapHash": "b98b22dabe9b501ad96ec36ff0dd00d40511bc4fbcb7aed7299cc37ad345eb7c",
+      "proofHash": "5c43a8f01265876178c73869204175bfde82507529383d6eac361ff12ce0b0b8"
+    }
+  },
+  "app": {
+    "coverage": {
+      "lines": {
+        "total": 16633,
+        "covered": 16633,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 18262,
+        "covered": 18262,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 4236,
+        "covered": 4236,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 13781,
+        "covered": 13781,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "mapSHA256": "62717ff096c984144a2f3fa088b3206d545f4216dce80fce2f28e53695648dcc",
+    "proofSHA256": "8382c7ee34e58da4d032ff7304bb48f87c339447ac4c40a46db1e642a2727c68",
+    "files": 299,
+    "invalidWholeFallbacks": [
+      {
+        "path": "apps/office/src/sw/source/core/layout/paintfrm.ts",
+        "reason": "V8 raw inferred else counter is negative; use entire prior verified current-byte-identical source and entire maps/counters, never sanitize individual counts",
+        "priorMap": "5X11GC.app-final.json",
+        "priorMapSHA256": "64403fd6e302aafc705c32256d92fae33df404d3b7d0a318976fe7842e83688f",
+        "discardedInvalidAggregateSHA256": "0cce6af0c2bbbc8222c1fef8369a9f72241ce18d3181dd6336db689d390660f4",
+        "negativeCounts": [
+          -36
+        ]
+      }
+    ],
+    "priorRegionTransfers": [
+      {
+        "path": "apps/office/src/sw/source/core/crsr/trvltbl.ts",
+        "priorSourceSHA256": "d82ba6a1e64d86944cfb93ce29c8f3c63923242cb32f174d34e6928d8451cf92",
+        "currentSourceSHA256": "7bb4b6d843105efba810e7a4523c8bbcbef06dc90f561b867f673f6962e86ba3",
+        "priorMap": "5X11GC.app-final.json",
+        "priorMapSHA256": "64403fd6e302aafc705c32256d92fae33df404d3b7d0a318976fe7842e83688f",
+        "regions": [
+          {
+            "oldStart": 1,
+            "oldEnd": 23,
+            "newStart": 1,
+            "newEnd": 23,
+            "byteLength": 1073,
+            "sha256": "75e98e9e960f059634057b15e2f44b91e8a17840f604e096636df27c86425b41"
+          },
+          {
+            "oldStart": 25,
+            "oldEnd": 28,
+            "newStart": 25,
+            "newEnd": 28,
+            "byteLength": 185,
+            "sha256": "5cba2ba23ca8389eeb5cb8defa0a5c4bd1598b24c03c833d891e4de96e02ef4b"
+          },
+          {
+            "oldStart": 29,
+            "oldEnd": 33,
+            "newStart": 30,
+            "newEnd": 34,
+            "byteLength": 88,
+            "sha256": "6a4eb624116296c5aa1497f880ed514f94550ba8beaa11e1313c53c98a29035a"
+          },
+          {
+            "oldStart": 35,
+            "oldEnd": 419,
+            "newStart": 35,
+            "newEnd": 419,
+            "byteLength": 18340,
+            "sha256": "b8fbe49e7f12719e18a002ed9a7f8cc07f05c9eb1d2d4e73a07b0b168bed20e7"
+          }
+        ],
+        "counts": {
+          "statements": 255,
+          "functions": 38,
+          "branches": 76
+        }
+      },
+      {
+        "path": "apps/office/src/sw/source/uibase/docvw/edtwin.ts",
+        "priorSourceSHA256": "6c6393fb4faea0352371da4247909dfb1b733070144dff25c5f1f049d253f58b",
+        "currentSourceSHA256": "12cdcddb94f9a4a0462b8c8df9ad1406decf63346fec8a83beea8384a7245e1a",
+        "priorMap": "5X11GC.app-final.json",
+        "priorMapSHA256": "64403fd6e302aafc705c32256d92fae33df404d3b7d0a318976fe7842e83688f",
+        "regions": [
+          {
+            "oldStart": 1,
+            "oldEnd": 10,
+            "newStart": 1,
+            "newEnd": 10,
+            "byteLength": 480,
+            "sha256": "4e30cba4a4b3f787982c389a66027b969b905344bb359cf1f8e49bf3642a46ff"
+          },
+          {
+            "oldStart": 12,
+            "oldEnd": 113,
+            "newStart": 12,
+            "newEnd": 113,
+            "byteLength": 3873,
+            "sha256": "30cb8703d26c8b4ffe9b826580a434809e4406a508ecf45d162deb6aaa1a4787"
+          },
+          {
+            "oldStart": 115,
+            "oldEnd": 119,
+            "newStart": 115,
+            "newEnd": 119,
+            "byteLength": 230,
+            "sha256": "448200c913225cd07ed837679eb93eb545758958a2160cb10cd8e36bea8f934c"
+          },
+          {
+            "oldStart": 121,
+            "oldEnd": 124,
+            "newStart": 121,
+            "newEnd": 124,
+            "byteLength": 204,
+            "sha256": "cb86d5f4424bbd6964d9d1b0dc052c20e34514829a822c898a06add2f43e749c"
+          },
+          {
+            "oldStart": 126,
+            "oldEnd": 133,
+            "newStart": 126,
+            "newEnd": 133,
+            "byteLength": 552,
+            "sha256": "d7ef2d0f536335d055fffc237b4ab3f88fc6c34a72f4e0d1cec58edfe73c13a0"
+          },
+          {
+            "oldStart": 135,
+            "oldEnd": 139,
+            "newStart": 135,
+            "newEnd": 139,
+            "byteLength": 267,
+            "sha256": "7e1a2bdbab31f2d6eda01b3f2b218ad14443a9dd1638d9d52fdb7fd683d57b3d"
+          },
+          {
+            "oldStart": 142,
+            "oldEnd": 150,
+            "newStart": 142,
+            "newEnd": 150,
+            "byteLength": 494,
+            "sha256": "793dd6b749229432f4c1ce0b3a67b39180301a011582eca69b9013c283e00263"
+          },
+          {
+            "oldStart": 152,
+            "oldEnd": 152,
+            "newStart": 152,
+            "newEnd": 152,
+            "byteLength": 33,
+            "sha256": "f4566b8528d0d5fc9e7384b046650cd972c78cb490f57a29ac0aea79b018f0eb"
+          },
+          {
+            "oldStart": 154,
+            "oldEnd": 254,
+            "newStart": 158,
+            "newEnd": 258,
+            "byteLength": 4359,
+            "sha256": "0e6595f312547809446227784a847fd586a39fd6f32084562756ce5a01938004"
+          },
+          {
+            "oldStart": 256,
+            "oldEnd": 256,
+            "newStart": 260,
+            "newEnd": 260,
+            "byteLength": 33,
+            "sha256": "f4566b8528d0d5fc9e7384b046650cd972c78cb490f57a29ac0aea79b018f0eb"
+          },
+          {
+            "oldStart": 258,
+            "oldEnd": 367,
+            "newStart": 266,
+            "newEnd": 375,
+            "byteLength": 4674,
+            "sha256": "69a0c54a12a2f81c9d77227dfcbd4299fd014bbb46ba43efb84b9bc943b27a86"
+          },
+          {
+            "oldStart": 369,
+            "oldEnd": 382,
+            "newStart": 381,
+            "newEnd": 394,
+            "byteLength": 746,
+            "sha256": "35c9a98c4de44dc682aa2216ad6e438f03135a88302485ee46cf312701f2a787"
+          },
+          {
+            "oldStart": 385,
+            "oldEnd": 389,
+            "newStart": 397,
+            "newEnd": 401,
+            "byteLength": 42,
+            "sha256": "7bae42a249bfcc30804f73957c779324b6d0525295d2220b45b18036f1f69e8e"
+          },
+          {
+            "oldStart": 391,
+            "oldEnd": 391,
+            "newStart": 403,
+            "newEnd": 403,
+            "byteLength": 21,
+            "sha256": "7bb18c02b4d024a2d66fcf5942dea4ead6a3ad56977ee7a84cfa1240e5b0c437"
+          },
+          {
+            "oldStart": 393,
+            "oldEnd": 397,
+            "newStart": 405,
+            "newEnd": 409,
+            "byteLength": 129,
+            "sha256": "09e87eb811890075388771427eb0b44bb37aa3689898325fc9f9514f0bd3660b"
+          },
+          {
+            "oldStart": 398,
+            "oldEnd": 399,
+            "newStart": 415,
+            "newEnd": 416,
+            "byteLength": 147,
+            "sha256": "de8960d9659f1f1c73835e0c5570890dc516811241c689abcf706788f1e54bd1"
+          },
+          {
+            "oldStart": 401,
+            "oldEnd": 410,
+            "newStart": 418,
+            "newEnd": 427,
+            "byteLength": 582,
+            "sha256": "9175a33bfe089a5ccc7231caa8723ad54ba457d3452fdee2dc46ce6f5e6a365a"
+          },
+          {
+            "oldStart": 412,
+            "oldEnd": 418,
+            "newStart": 429,
+            "newEnd": 435,
+            "byteLength": 253,
+            "sha256": "c8574c4e95bb4d74e019cad6856e1f1ba08e1b7793ae9d96fba454898b3f6d7b"
+          },
+          {
+            "oldStart": 420,
+            "oldEnd": 420,
+            "newStart": 437,
+            "newEnd": 437,
+            "byteLength": 10,
+            "sha256": "ff6f623cd010dfe2adbd28fd591cdf950b001e428cc77a4ce23cd5d1f0218310"
+          },
+          {
+            "oldStart": 428,
+            "oldEnd": 438,
+            "newStart": 447,
+            "newEnd": 457,
+            "byteLength": 384,
+            "sha256": "490e03d55335aaf1913ef2e840121d364e5355b8bbc9880a5a46f68626a7c96c"
+          },
+          {
+            "oldStart": 440,
+            "oldEnd": 444,
+            "newStart": 459,
+            "newEnd": 463,
+            "byteLength": 111,
+            "sha256": "d5715a951f577ba0e125f65d81e3338fe5a8f938edaff9ea0c9f97d7c5adb519"
+          },
+          {
+            "oldStart": 446,
+            "oldEnd": 451,
+            "newStart": 465,
+            "newEnd": 470,
+            "byteLength": 330,
+            "sha256": "db765a0c7f11e3e69aee70368d4e89b25e368eea9d17b510bda97e6d9d4a31a8"
+          },
+          {
+            "oldStart": 453,
+            "oldEnd": 463,
+            "newStart": 474,
+            "newEnd": 484,
+            "byteLength": 501,
+            "sha256": "cd81ac138fc70a8dc1619d8cacf0ed87c2c69f843e3c85c69bd8856b033c13a3"
+          },
+          {
+            "oldStart": 465,
+            "oldEnd": 469,
+            "newStart": 486,
+            "newEnd": 490,
+            "byteLength": 282,
+            "sha256": "ead2ba484aa35e3c57db09abe6a2866b5d181a25b0c376883339c36593823d4b"
+          },
+          {
+            "oldStart": 471,
+            "oldEnd": 475,
+            "newStart": 494,
+            "newEnd": 498,
+            "byteLength": 302,
+            "sha256": "09e5daa75c512052837845969176c13b5acec3887f3c930290ae65739eeea5ed"
+          },
+          {
+            "oldStart": 477,
+            "oldEnd": 479,
+            "newStart": 500,
+            "newEnd": 502,
+            "byteLength": 140,
+            "sha256": "507f387dd47aea4d07ff26e46ad3c52dc80849ba2e0e559507ac898772feb6f4"
+          },
+          {
+            "oldStart": 483,
+            "oldEnd": 484,
+            "newStart": 506,
+            "newEnd": 507,
+            "byteLength": 83,
+            "sha256": "94e9d84ed7be1d1bae8436143545aa7a1926b2e715341590b8aff676d325efd4"
+          },
+          {
+            "oldStart": 486,
+            "oldEnd": 492,
+            "newStart": 511,
+            "newEnd": 517,
+            "byteLength": 271,
+            "sha256": "38438180f8f210f727e5f75ec77bf1de718aa6c754402606a14661407d0b698c"
+          },
+          {
+            "oldStart": 495,
+            "oldEnd": 500,
+            "newStart": 520,
+            "newEnd": 525,
+            "byteLength": 204,
+            "sha256": "d717662458f7096fa2fe0dcf319f762532da9f40835b9c2ae939806a1359b67d"
+          },
+          {
+            "oldStart": 502,
+            "oldEnd": 505,
+            "newStart": 527,
+            "newEnd": 530,
+            "byteLength": 167,
+            "sha256": "8a63f60b8090665285d79e704445e6db7b14bbddee6b6c59c6dcd96e9c8f9213"
+          },
+          {
+            "oldStart": 507,
+            "oldEnd": 510,
+            "newStart": 532,
+            "newEnd": 535,
+            "byteLength": 214,
+            "sha256": "394b85be651ea485b4e849f74bf5c805a2102de72e1aca7930193a6941e10816"
+          },
+          {
+            "oldStart": 512,
+            "oldEnd": 516,
+            "newStart": 537,
+            "newEnd": 541,
+            "byteLength": 217,
+            "sha256": "3c64a58afe912629196f121003621f9e0aa9f7b832477548085bdde55b15c535"
+          },
+          {
+            "oldStart": 518,
+            "oldEnd": 523,
+            "newStart": 543,
+            "newEnd": 548,
+            "byteLength": 198,
+            "sha256": "97dec0d78604451eb3261c0a7bd085d9c343d1f8994d5c1f25ed49d369a25115"
+          },
+          {
+            "oldStart": 525,
+            "oldEnd": 526,
+            "newStart": 550,
+            "newEnd": 551,
+            "byteLength": 13,
+            "sha256": "7aacbae2dd8384254aeaf05c2bce61cc6304e32ae8292ef87a3faeef7306cd45"
+          },
+          {
+            "oldStart": 528,
+            "oldEnd": 531,
+            "newStart": 553,
+            "newEnd": 556,
+            "byteLength": 120,
+            "sha256": "f99e1762c69f1d87787106af42e221c37ad43ebdb15df09f70e674dd4d992ff4"
+          },
+          {
+            "oldStart": 533,
+            "oldEnd": 536,
+            "newStart": 558,
+            "newEnd": 561,
+            "byteLength": 121,
+            "sha256": "3b9ce1c6559aee1ef2d1269e9ef795cb19c04db5967ad1996d4d930c47b8f05f"
+          },
+          {
+            "oldStart": 538,
+            "oldEnd": 541,
+            "newStart": 563,
+            "newEnd": 566,
+            "byteLength": 171,
+            "sha256": "11ddda3c1f49a3d49b1848a518416f7933488ea943f0c15eb9a74d290d788e91"
+          },
+          {
+            "oldStart": 543,
+            "oldEnd": 545,
+            "newStart": 568,
+            "newEnd": 570,
+            "byteLength": 189,
+            "sha256": "2fbae1f284464581849aba1eee8aaa8cf54719f6959ef2b17a84242920b28fae"
+          },
+          {
+            "oldStart": 547,
+            "oldEnd": 551,
+            "newStart": 572,
+            "newEnd": 576,
+            "byteLength": 142,
+            "sha256": "ea4f4b1d474c288e4b9daf1929a7287f2f17a6a7729fcece457742b7a3add9b2"
+          },
+          {
+            "oldStart": 553,
+            "oldEnd": 556,
+            "newStart": 578,
+            "newEnd": 581,
+            "byteLength": 206,
+            "sha256": "7630391b657d211ac41ff671af9887c1cc6505f33cb499b5d469b21270c69b64"
+          },
+          {
+            "oldStart": 558,
+            "oldEnd": 561,
+            "newStart": 583,
+            "newEnd": 586,
+            "byteLength": 195,
+            "sha256": "ab9b5337281eafe0ce94c6248f0145c3315f2d7a138a2cc7567b3506212c20bb"
+          },
+          {
+            "oldStart": 563,
+            "oldEnd": 566,
+            "newStart": 588,
+            "newEnd": 591,
+            "byteLength": 105,
+            "sha256": "d1c745ec1b2519b724bb784b867b18cd91ec00dfe67988e989bf50ab63fa4962"
+          },
+          {
+            "oldStart": 568,
+            "oldEnd": 571,
+            "newStart": 593,
+            "newEnd": 596,
+            "byteLength": 105,
+            "sha256": "eb108444cd395ae9bb6ba60df9e9328e218f9b2a77eca6b9a445ed19304e05b7"
+          },
+          {
+            "oldStart": 573,
+            "oldEnd": 576,
+            "newStart": 598,
+            "newEnd": 601,
+            "byteLength": 123,
+            "sha256": "f3b6e8b38c4cb5ac49ca50ea7249a5080f2eb4a0ba8f6f8a8e2548ec38e37355"
+          },
+          {
+            "oldStart": 578,
+            "oldEnd": 581,
+            "newStart": 603,
+            "newEnd": 606,
+            "byteLength": 177,
+            "sha256": "402ab02e60fa38773fd947f2ca7363b910d876cd25c9316913cb746d239246c7"
+          },
+          {
+            "oldStart": 583,
+            "oldEnd": 586,
+            "newStart": 608,
+            "newEnd": 611,
+            "byteLength": 130,
+            "sha256": "879902c22c1936f25cf49029d192394c897e8dd1b15ad456f10008238d6be1fd"
+          },
+          {
+            "oldStart": 588,
+            "oldEnd": 591,
+            "newStart": 613,
+            "newEnd": 616,
+            "byteLength": 201,
+            "sha256": "c859a826547d26a79b28b412ea30a55f3efe3e16a9372e13065f9ec03d373930"
+          },
+          {
+            "oldStart": 593,
+            "oldEnd": 596,
+            "newStart": 618,
+            "newEnd": 621,
+            "byteLength": 222,
+            "sha256": "09b16eef9dc8a8a3a9580b9c092d7478dfe2af3982351c18957b7f3ca6954dfd"
+          },
+          {
+            "oldStart": 598,
+            "oldEnd": 601,
+            "newStart": 623,
+            "newEnd": 626,
+            "byteLength": 214,
+            "sha256": "8064131e16b7eeba24bcba5b5584ce0d37535c8847dda87cd6c816dbe64a3249"
+          },
+          {
+            "oldStart": 603,
+            "oldEnd": 607,
+            "newStart": 628,
+            "newEnd": 632,
+            "byteLength": 236,
+            "sha256": "4bc418003feb3353488f250968a0749fade9bc9a146d72507cafe52b9920f494"
+          },
+          {
+            "oldStart": 609,
+            "oldEnd": 612,
+            "newStart": 634,
+            "newEnd": 637,
+            "byteLength": 247,
+            "sha256": "3158f470c5d400ff736b9a15656f98ed0e1dedb2d390955670a7dd8492b11aec"
+          },
+          {
+            "oldStart": 614,
+            "oldEnd": 626,
+            "newStart": 639,
+            "newEnd": 651,
+            "byteLength": 810,
+            "sha256": "a31ff0f4aad8e9f37c300597e71547e3815cec6aeee56d9f02375a60e2dd768b"
+          },
+          {
+            "oldStart": 628,
+            "oldEnd": 639,
+            "newStart": 653,
+            "newEnd": 664,
+            "byteLength": 448,
+            "sha256": "4f81ee5a928cc9e437144a1cd7b60ac9365c302c19ac74384735cb0dc977c0d4"
+          }
+        ],
+        "counts": {
+          "statements": 18,
+          "functions": 9,
+          "branches": 74
+        }
+      },
+      {
+        "path": "apps/office/src/sw/source/uibase/uiview/view.ts",
+        "priorSourceSHA256": "411cc9528672050fb45b3267efd7c0599d8b102150346195ed93d09ec1ae36cb",
+        "currentSourceSHA256": "5452f2eefa90adb58cf929b758b8225da278ebf1cae4122ad21625a6dd6a8d3b",
+        "priorMap": "5X11GC.app-final.json",
+        "priorMapSHA256": "64403fd6e302aafc705c32256d92fae33df404d3b7d0a318976fe7842e83688f",
+        "regions": [
+          {
+            "oldStart": 1,
+            "oldEnd": 47,
+            "newStart": 1,
+            "newEnd": 47,
+            "byteLength": 2216,
+            "sha256": "630f23190f4becec73956627eadad9f4346c1047c9599941464ac74ea13cb9ba"
+          },
+          {
+            "oldStart": 49,
+            "oldEnd": 50,
+            "newStart": 55,
+            "newEnd": 56,
+            "byteLength": 69,
+            "sha256": "70b43ed4ed913ce4c3389260ff1c9107003369ce38a162dc62fb3949e69aef10"
+          },
+          {
+            "oldStart": 52,
+            "oldEnd": 265,
+            "newStart": 58,
+            "newEnd": 271,
+            "byteLength": 8832,
+            "sha256": "3bb1c5d5269a5d42724be6e40ec879f6d67a6916120cb8eecbc70474232dd67f"
+          }
+        ],
+        "counts": {
+          "statements": 84,
+          "functions": 32,
+          "branches": 19
+        }
+      },
+      {
+        "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+        "priorSourceSHA256": "fee05b67619a94a2a71cf57c42b88bb4dbf110714847b9d702c1bb558b8d932f",
+        "currentSourceSHA256": "a663f0a9b1b42f75591aad39d8ed748035d09070dee347a4135879586ee76ea3",
+        "priorMap": "5X11GC.app-final.json",
+        "priorMapSHA256": "64403fd6e302aafc705c32256d92fae33df404d3b7d0a318976fe7842e83688f",
+        "regions": [
+          {
+            "oldStart": 1,
+            "oldEnd": 8,
+            "newStart": 1,
+            "newEnd": 8,
+            "byteLength": 611,
+            "sha256": "08b3341e607e8f2a9549fe650f33e500ffe5f42d10dcad46bbfa8f42bc4397e1"
+          },
+          {
+            "oldStart": 9,
+            "oldEnd": 76,
+            "newStart": 10,
+            "newEnd": 77,
+            "byteLength": 2826,
+            "sha256": "0623f502f13a1cb0a7ebdd604cb5e16da408454356d66bb278c4fe6e51a02e9b"
+          },
+          {
+            "oldStart": 78,
+            "oldEnd": 101,
+            "newStart": 79,
+            "newEnd": 102,
+            "byteLength": 1162,
+            "sha256": "41eed616918bc1fcc855e18191c42df3a3088fbac8eb6645b9c78079125d877b"
+          },
+          {
+            "oldStart": 103,
+            "oldEnd": 105,
+            "newStart": 104,
+            "newEnd": 106,
+            "byteLength": 141,
+            "sha256": "24c09c585a533bd853f1cb2eefdac91a81c3035c3e9c3d59c9fb95a78ab4e4d5"
+          },
+          {
+            "oldStart": 110,
+            "oldEnd": 110,
+            "newStart": 108,
+            "newEnd": 108,
+            "byteLength": 31,
+            "sha256": "5ad790c93818d358abee067ca0322fa56488e21c7c99c3a661f92c3cf0d0acb1"
+          },
+          {
+            "oldStart": 111,
+            "oldEnd": 111,
+            "newStart": 110,
+            "newEnd": 110,
+            "byteLength": 5,
+            "sha256": "f56ddd49bc32b268367a4cc7d6f98511705647b07d972b22f089104468c3c4eb"
+          },
+          {
+            "oldStart": 113,
+            "oldEnd": 135,
+            "newStart": 112,
+            "newEnd": 134,
+            "byteLength": 1055,
+            "sha256": "ce8a24df1affb8d86ea08e29e25c25366b94d85e3ef72802fd373440d1d104e5"
+          },
+          {
+            "oldStart": 139,
+            "oldEnd": 999,
+            "newStart": 139,
+            "newEnd": 999,
+            "byteLength": 40913,
+            "sha256": "91670d0be7df2a68b2b8b6a866199d85b09a544877d560d91cc01f99d1617d5d"
+          }
+        ],
+        "counts": {
+          "statements": 329,
+          "functions": 111,
+          "branches": 103
+        }
+      }
+    ],
+    "wholeFiles": 299,
+    "transfers": [],
+    "gaps": []
+  },
+  "inventory": {
+    "coverage": {
+      "lines": {
+        "total": 1464,
+        "covered": 1464,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 1523,
+        "covered": 1523,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 384,
+        "covered": 384,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 1081,
+        "covered": 1081,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "mapSHA256": "ff2926ffde8d14065132187397d6beb6b7bf0d0cab9df800ef5484447ec2b17d",
+    "proofSHA256": "5c43a8f01265876178c73869204175bfde82507529383d6eac361ff12ce0b0b8",
+    "files": 38,
+    "invalidWholeFallbacks": [],
+    "priorRegionTransfers": [],
+    "wholeFiles": 38,
+    "transfers": [],
+    "gaps": []
+  }
+}

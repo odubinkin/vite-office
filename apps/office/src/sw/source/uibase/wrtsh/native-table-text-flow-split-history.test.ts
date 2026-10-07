@@ -12,6 +12,7 @@ import { ItemSetToTableParam } from "../shells/tabsh";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { writeOdtDocument } from "../../filter/xml/wrtxml";
 import { readOdtDocument } from "../../filter/xml/swxml";
+import { SwView } from "../uiview/view";
 const shells: SwWrtShell[] = [];
 afterEach(
   /** Releases native lifetimes. @returns Nothing. */ () => {
@@ -46,13 +47,13 @@ for (const selected of [false, true])
       doc.EnsureNumRule("Numbering", "numbered");
       node.SetNumRule("Numbering");
       node.SetListId("split-list");
-      const shell = new SwWrtShell(
+      const shell = new SwView(
           new SwDocShell(
             doc,
             createDocument({ id: "native-split", suiteId: "writer", title: "Split" }),
           ),
-        ),
-        edit = new SwEditWin(shell);
+        ).GetWrtShell(),
+        edit = new SwEditWin(shell.GetView());
       shells.push(shell);
       edit.SetSelection({ point: { nodeIndex: node.GetIndex(), contentIndex: 2 } });
       expect(shell.GetRowSplit()).toBe(false);
@@ -154,9 +155,9 @@ it("native unchanged mixed and default dialog items preserve row attributes", /*
   table.AddColumnWidth(6000);
   for (const keepTogether of [true, false]) doc.nodes.AppendTableRow(table, 1, { keepTogether });
   const node = required(table.GetTabLines()[0]?.GetTabBoxes()[0]?.GetParagraphs()[0]),
-    shell = new SwWrtShell(
+    shell = new SwView(
       new SwDocShell(doc, createDocument({ id: "mixed-split", suiteId: "writer", title: "Mixed" })),
-    );
+    ).GetWrtShell();
   shells.push(shell);
   shell.FocusNode(node);
   const page = new SwTextFlowPage(table);

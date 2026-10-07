@@ -8,6 +8,7 @@ import { SwEditWin } from "./edtwin";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { PointerStyle } from "../../../../vcl/ptrstyle";
 import { SwTab } from "../../../inc/fesh";
+import { SwView } from "../uiview/view";
 const shells: SwWrtShell[] = [];
 afterEach(
   /** Releases actual native cursors and isolated classification spies. @returns Nothing. */ () => {
@@ -23,14 +24,14 @@ function fixture() {
   const table = doc.nodes.MakeTableNode("Pointer", {}, body);
   table.AddColumnWidth(1500);
   doc.nodes.AppendTableRow(table, 1);
-  const shell = new SwWrtShell(
+  const shell = new SwView(
     new SwDocShell(doc, createDocument({ id: "pointer", suiteId: "writer", title: "Pointer" })),
-  );
+  ).GetWrtShell();
   const node = table.GetTabLines()[0]?.GetTabBoxes()[0]?.GetParagraphs()[0];
   if (node === undefined) throw new Error("Missing cell");
   shell.SetPaM(new SwPosition(node, 0));
   shells.push(shell);
-  return { doc, shell, edit: new SwEditWin(shell) };
+  return { doc, shell, edit: new SwEditWin(shell.GetView()) };
 }
 it.each([
   [SwTab.COL_HORI, PointerStyle.HSizeBar],

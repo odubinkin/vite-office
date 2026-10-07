@@ -3,13 +3,14 @@ import { it, expect, vi } from "vitest";
 import { SwDoc } from "../../core/doc/doc";
 import { SwTabCols } from "../../core/bastyp/tabcol";
 import { SwDocShell } from "../app/docsh";
-import { SwWrtShell } from "./wrtsh1";
+
 import { SwEditWin } from "../docvw/edtwin";
 import { subscribeToSwModify } from "../../../inc/calbck";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { writeOdtDocument } from "../../filter/xml/wrtxml";
 import { readOdtDocument } from "../../filter/xml/swxml";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
+import { SwView } from "../uiview/view";
 /** Requires a connected fixture owner. @param value - Actual optional owner. @returns Owner. */
 function required<T>(value: T | undefined): T {
   if (value === undefined) throw new Error("Missing native column fixture owner");
@@ -42,8 +43,8 @@ function fixture(automatic = false) {
       doc,
       createDocument({ id: "native-columns", suiteId: "writer", title: "Widths" }),
     ),
-    shell = new SwWrtShell(docShell),
-    edit = new SwEditWin(shell),
+    shell = new SwView(docShell).GetWrtShell(),
+    edit = new SwEditWin(shell.GetView()),
     invalidate = vi.fn();
   subscribeToSwModify(shell, invalidate);
   edit.SetSelection({ point: { nodeIndex: node.GetIndex(), contentIndex: 2 } });

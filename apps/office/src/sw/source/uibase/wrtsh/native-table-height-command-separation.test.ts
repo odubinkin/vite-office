@@ -2,7 +2,7 @@
 import { expect, it, vi } from "vitest";
 import { SwDoc } from "../../core/doc/doc";
 import { SwDocShell } from "../app/docsh";
-import { SwWrtShell } from "./wrtsh1";
+
 import { SwEditWin } from "../docvw/edtwin";
 import { ItemSetToTableParam } from "../shells/tabsh";
 import { SwTableHeightDlg } from "../../ui/table/rowht";
@@ -10,6 +10,7 @@ import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { writeOdtDocument } from "../../filter/xml/wrtxml";
 import { readOdtDocument } from "../../filter/xml/swxml";
+import { SwView } from "../uiview/view";
 
 for (const selected of [false, true])
   it(
@@ -30,12 +31,12 @@ for (const selected of [false, true])
         node = box?.GetParagraphs()[0];
       if (box === undefined || node === undefined) throw Error("Missing independent height owner");
       node.SetText("Original");
-      const shell = new SwWrtShell(
+      const shell = new SwView(
         new SwDocShell(
           doc,
           createDocument({ id: "separate-height", suiteId: "writer", title: "Height" }),
         ),
-      );
+      ).GetWrtShell();
       try {
         shell.FocusNode(node);
         shell.ToggleCharacterFormat("bold");
@@ -112,7 +113,7 @@ for (const selected of [false, true])
         ).toEqual(accepted.slice(0, 2));
         shell.ClearMark();
         shell.FocusNode(node);
-        new SwEditWin(shell).InsertText("!");
+        new SwEditWin(shell.GetView()).InsertText("!");
         expect(node.GetText()).toContain("!");
       } finally {
         shell.Close();

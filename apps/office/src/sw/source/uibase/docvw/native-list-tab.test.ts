@@ -6,8 +6,9 @@ import { SwPosition } from "../../core/crsr/pam";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { SwDocShell } from "../app/docsh";
-import { SwWrtShell } from "../wrtsh/wrtsh1";
+
 import { SwEditWin } from "./edtwin";
+import { SwView } from "../uiview/view";
 
 /** Requires a real fixture owner. @param value - Optional owner. @returns Owner. */
 function required<T>(value: T | undefined): T {
@@ -23,11 +24,11 @@ function fixture() {
     row = doc.nodes.AppendTableRow(table, 2),
     cell = required(required(row.GetTabBoxes()[0]).GetParagraphs()[0]),
     neighbor = required(required(row.GetTabBoxes()[1]).GetParagraphs()[0]),
-    shell = new SwWrtShell(
+    shell = new SwView(
       new SwDocShell(doc, createDocument({ id: "paragraph-tab", suiteId: "writer", title: "Tab" })),
-    ),
+    ).GetWrtShell(),
     invalidate = vi.fn(),
-    edit = new SwEditWin(shell, invalidate);
+    edit = new SwEditWin(shell.GetView(), invalidate);
   cell.SetText("cell");
   neighbor.SetText("neighbor");
   return { doc, body, table, cell, neighbor, shell, invalidate, edit };

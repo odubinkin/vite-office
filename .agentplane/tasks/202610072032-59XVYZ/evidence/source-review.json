@@ -1,0 +1,91 @@
+{
+  "pinSHA": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "tag": "libreoffice-26.8.0.2",
+  "records": [
+    {
+      "path": "sw/source/uibase/docvw/edtwin.cxx",
+      "sha256": "f679baf21d41f78d6494bead35aebf6333eed298a6e24892452a4bb4623b7eb3",
+      "symbols": [
+        "SwEditWin::SwEditWin",
+        "SwEditWin::m_rView"
+      ],
+      "anchorLines": [
+        5566,
+        5579
+      ]
+    },
+    {
+      "path": "sw/source/uibase/inc/edtwin.hxx",
+      "sha256": "f74a20b852368d1b7eadcb13d6a51fa962bd5a0ce2d3d40ce8f6f058235a1bc0",
+      "symbols": [
+        "SwEditWin::GetView const",
+        "SwEditWin::GetView"
+      ],
+      "anchorLines": [
+        262,
+        263
+      ]
+    },
+    {
+      "path": "sw/source/uibase/inc/wrtsh.hxx",
+      "sha256": "b4d95a93df5a07fe869e8768d5e130ac86fc0fb8aa98fe123d8d568d13e858e4",
+      "symbols": [
+        "SwWrtShell::GetView const",
+        "SwWrtShell::GetView",
+        "SwWrtShell::m_rView"
+      ],
+      "anchorLines": [
+        460,
+        461,
+        602
+      ]
+    },
+    {
+      "path": "sw/source/uibase/wrtsh/wrtsh1.cxx",
+      "sha256": "212c1c622fab71d59d8ec5566f40906d1840513391b8ec1e175b90befe6c04ac",
+      "symbols": [
+        "SwWrtShell::SwWrtShell"
+      ],
+      "anchorLines": [
+        2138
+      ]
+    },
+    {
+      "path": "sw/source/core/view/viewsh.cxx",
+      "sha256": "c465fcf642a0884cce5f3a39fa975ecf3e7a5c41dd0014e24898f5a361d8424d",
+      "symbols": [
+        "SwViewShell::GetLayout",
+        "SwViewShell::mpLayout"
+      ],
+      "anchorLines": [
+        2341,
+        2343
+      ]
+    }
+  ],
+  "production": [
+    {
+      "path": "apps/office/src/sw/source/uibase/docvw/edtwin.ts",
+      "sha256": "12cdcddb94f9a4a0462b8c8df9ad1406decf63346fec8a83beea8384a7245e1a"
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/uiview/view.ts",
+      "sha256": "5452f2eefa90adb58cf929b758b8225da278ebf1cae4122ad21625a6dd6a8d3b"
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+      "sha256": "a663f0a9b1b42f75591aad39d8ed748035d09070dee347a4135879586ee76ea3"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/crsr/trvltbl.ts",
+      "sha256": "7bb4b6d843105efba810e7a4523c8bbcbef06dc90f561b867f673f6962e86ba3"
+    }
+  ],
+  "scope": "Native source view references for existing edit-window/editing-shell children; eliminate direct shell injection and duplicate shared layout storage.",
+  "residuals": [
+    "Detached backend SwWrtShell construction remains an explicit model-port boundary and rejects GetView without a real native view.",
+    "Native layout originates in SwViewShell in upstream; existing local cursor-shell hierarchy owns the shared root without a duplicate editing-shell override. Full native hierarchy remains partial.",
+    "Full SvxRuler/SvxColumnItem/slot geometry ownership, exhaustive core/UI parity and unknown document-specific bullet reproduction remain unproven.",
+    "Registered save/open/recovery deviations unchanged; persistent exhaustive goal ACTIVE."
+  ]
+}

@@ -8,7 +8,7 @@ import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import type { SwDoc } from "../../core/doc/doc";
 import type { WriterClipboardSelection, WriterTransferDocument } from "../dochdl/swdtflvr";
 import type { WriterPasteDocument } from "../dochdl/swdtflvr";
-import type { SwWrtShell } from "../wrtsh/wrtsh1";
+import type { SwView } from "../uiview/view";
 import { SwTextNode as SwTextNodeClass } from "../../core/txtnode/ndtxt";
 import { SwTableBoxStartNode } from "../../core/docnode/node";
 import * as numfunc from "../../core/doc/number";
@@ -111,18 +111,18 @@ export class SwEditWin {
         pointer = PointerStyle.TabSelectW;
         break;
     }
-    if (!checkTableSelection || !this.wrtShell.IsTableMode()) this.pointer = pointer;
+    if (!checkTableSelection || !this.m_rView.GetWrtShell().IsTableMode()) this.pointer = pointer;
     return true;
   }
 
   /** Replaces device frame measurements before native mouse classification. @param frames - Live master/follow frames. @returns Nothing. */
   public SetTableMouseFrames(frames: readonly SwTabFrame[]): void {
-    this.wrtShell.SetTableMouseFrames(frames);
+    this.m_rView.GetWrtShell().SetTableMouseFrames(frames);
   }
 
   /** Reports native cursor geometry without changing the selection. @param point - Device position. @returns Native table cursor kind. */
   public WhichMouseTabCol(point: SwTableMousePoint): SwTab {
-    return this.wrtShell.WhichMouseTabCol(point);
+    return this.m_rView.GetWrtShell().WhichMouseTabCol(point);
   }
 
   /** Starts native single-left-click table edge selection and optional capture. @param point - Device position. @param button - Platform button. @param clicks - Native click count. @param modifier - Native key mask captured at drag admission. @returns Whether handled. */
@@ -131,14 +131,14 @@ export class SwEditWin {
     this.tableBorderDrag = undefined;
     if (button !== 0 || clicks !== 1) return false;
     const kind = this.WhichMouseTabCol(point);
-    if (!this.wrtShell.IsTableMode()) {
+    if (!this.m_rView.GetWrtShell().IsTableMode()) {
       if (kind === SwTab.COL_HORI) return this.RulerColumnDrag(point, modifier);
       if (kind === SwTab.ROW_HORI) return this.RulerRowDrag(point);
     }
     if (kind !== SwTab.SEL_HORI && kind !== SwTab.ROWSEL_HORI && kind !== SwTab.COLSEL_HORI)
       return false;
-    this.wrtShell.EnterStdMode();
-    const selected = this.wrtShell.SelectTableRowCol(point);
+    this.m_rView.GetWrtShell().EnterStdMode();
+    const selected = this.m_rView.GetWrtShell().SelectTableRowCol(point);
     if (selected && kind !== SwTab.SEL_HORI) {
       this.tableMouseStart = point;
       this.tableRowDrag = kind === SwTab.ROWSEL_HORI;
@@ -148,9 +148,13 @@ export class SwEditWin {
 
   /** Starts represented source ruler Border/Margin tracking over native columns with5px hit tolerance. @param point - Actual document border hit. @param modifier - Native drag modifier mask. @returns Whether tracking was admitted. */
   public RulerColumnDrag(point: SwTableMousePoint, modifier = 0): boolean {
-    const hit = this.wrtShell.GetBox(point),
+    const hit = this.m_rView.GetWrtShell().GetBox(point),
       original = new SwTabCols();
-    if (hit === undefined || hit.row || !this.wrtShell.GetMouseTabCols(original, point))
+    if (
+      hit === undefined ||
+      hit.row ||
+      !this.m_rView.GetWrtShell().GetMouseTabCols(original, point)
+    )
       return false;
     const rect = (hit.frame.mouseGeometry as NonNullable<SwTabFrame["mouseGeometry"]>).rect,
       scale = (original.GetRight() - original.GetLeft()) / (rect.right - rect.left),
@@ -252,9 +256,13 @@ export class SwEditWin {
 
   /** Starts native horizontal row-border tracking with the source following-row translation policy. @param point - Actual document hit. @returns Whether admitted. */
   public RulerRowDrag(point: SwTableMousePoint): boolean {
-    const hit = this.wrtShell.GetBox(point),
+    const hit = this.m_rView.GetWrtShell().GetBox(point),
       original = new SwTabCols();
-    if (hit === undefined || !hit.row || !this.wrtShell.GetMouseTabRows(original, point))
+    if (
+      hit === undefined ||
+      !hit.row ||
+      !this.m_rView.GetWrtShell().GetMouseTabRows(original, point)
+    )
       return false;
     const rect = (hit.frame.mouseGeometry as NonNullable<SwTabFrame["mouseGeometry"]>).rect,
       scale = original.GetRight() / (rect.bottom - rect.top),
@@ -365,7 +373,11 @@ export class SwEditWin {
     }
     return (
       this.tableMouseStart !== undefined &&
-      this.Complete(this.wrtShell.SelectTableRowCol(this.tableMouseStart, point, this.tableRowDrag))
+      this.Complete(
+        this.m_rView
+          .GetWrtShell()
+          .SelectTableRowCol(this.tableMouseStart, point, this.tableRowDrag),
+      )
     );
   }
 
@@ -380,24 +392,29 @@ export class SwEditWin {
       if (drag.initialPosition !== drag.position)
         this.Complete(
           drag.axis === "row"
-            ? this.wrtShell.SetMouseTabRows(drag.next, false, drag.start)
-            : this.wrtShell.SetMouseTabCols(drag.next, false, drag.start),
+            ? this.m_rView.GetWrtShell().SetMouseTabRows(drag.next, false, drag.start)
+            : this.m_rView.GetWrtShell().SetMouseTabCols(drag.next, false, drag.start),
         );
     }
     return captured;
   }
 
-  /** Creates one edit-window owner for an attached Writer shell. @param wrtShell - Persistent edit shell. @param invalidateBindings - Final operation-state invalidation. @returns Nothing. */
+  /** Creates the native edit window for its persistent Writer view. @param m_rView - Exact owning view. @param invalidateBindings - Final operation-state invalidation. @returns Nothing. */
   public constructor(
-    private readonly wrtShell: SwWrtShell,
+    private readonly m_rView: SwView,
     invalidateBindings?: () => void,
   ) {
     this.invalidateBindings = invalidateBindings ?? ignoreEditWindowInvalidation;
   }
 
+  /** Returns the exact source view retained by this edit window. @returns Owning Writer view. */
+  public GetView(): SwView {
+    return this.m_rView;
+  }
+
   /** Resolves the current canonical document for the view's persistent layout root. @returns Active Writer document. */
   public GetDoc(): SwDoc {
-    return this.wrtShell.GetDoc();
+    return this.m_rView.GetWrtShell().GetDoc();
   }
 
   /** Applies a current SwNodes selection to the shell PaM. @param selection - Point and optional mark. @returns Whether every endpoint was accepted. */
@@ -408,7 +425,7 @@ export class SwEditWin {
     const inFrontOfLabel =
       selection.point.inFrontOfLabel === true &&
       mark === undefined &&
-      !this.wrtShell.IsTableMode() &&
+      !this.m_rView.GetWrtShell().IsTableMode() &&
       point.GetContentIndex() === 0 &&
       (point.GetNode() as SwTextNode).HasVisibleNumberingOrBullet();
     try {
@@ -416,15 +433,17 @@ export class SwEditWin {
         selection.point.inRepeatedHeadline === undefined &&
         selection.mark?.inRepeatedHeadline === undefined
       )
-        this.wrtShell.SetPaM(point, mark, inFrontOfLabel);
+        this.m_rView.GetWrtShell().SetPaM(point, mark, inFrontOfLabel);
       else
-        this.wrtShell.UpdateCursor(
-          point,
-          mark,
-          selection.point.inRepeatedHeadline === true ||
-            selection.mark?.inRepeatedHeadline === true,
-          inFrontOfLabel,
-        );
+        this.m_rView
+          .GetWrtShell()
+          .UpdateCursor(
+            point,
+            mark,
+            selection.point.inRepeatedHeadline === true ||
+              selection.mark?.inRepeatedHeadline === true,
+            inFrontOfLabel,
+          );
       return true;
     } finally {
       point.Dispose();
@@ -436,20 +455,22 @@ export class SwEditWin {
   public FocusNode(nodeIndex: number): boolean {
     const node = this.ResolveTextNode(nodeIndex);
     if (node === undefined) return false;
-    this.wrtShell.FocusNode(node);
+    this.m_rView.GetWrtShell().FocusNode(node);
     return true;
   }
 
   /** Selects the complete Writer body. @returns Nothing. */
   public SelectAll(): void {
-    this.wrtShell.SelectAll();
+    this.m_rView.GetWrtShell().SelectAll();
     this.invalidateBindings();
   }
 
   /** Executes Writer section/document boundary intent independently of platform geometry. @param start - Beginning direction. @param select - Extend selection. @returns Native movement result. */
   public MoveSectionBoundary(start: boolean, select = false): boolean {
     return this.Complete(
-      start ? this.wrtShell.StartOfSection(select) : this.wrtShell.EndOfSection(select),
+      start
+        ? this.m_rView.GetWrtShell().StartOfSection(select)
+        : this.m_rView.GetWrtShell().EndOfSection(select),
     );
   }
   /** Publishes device lines for the actual current master/follow text frame. @param nodeIndex - Current native text-node index. @param lines - Browser-shaped UTF16 lines. @param start - Frame start. @param end - Frame end. @returns Whether the owner exists. */
@@ -461,28 +482,32 @@ export class SwEditWin {
   ): boolean {
     const node = this.ResolveTextNode(nodeIndex);
     if (node === undefined) return false;
-    this.wrtShell.GetLayout().SetCursorTextFrame(node, lines, start, end);
+    this.m_rView.GetWrtShell().GetLayout().SetCursorTextFrame(node, lines, start, end);
     return true;
   }
   /** Executes source line-boundary intent through the native shell. @param left - Beginning direction. @param select - Extend selection. @returns Native admission. */
   public MoveLineBoundary(left: boolean, select = false): boolean {
     return this.Complete(
-      left ? this.wrtShell.LeftMargin(select, false) : this.wrtShell.RightMargin(select, false),
+      left
+        ? this.m_rView.GetWrtShell().LeftMargin(select, false)
+        : this.m_rView.GetWrtShell().RightMargin(select, false),
     );
   }
 
   /** Handles represented paragraph Tab with native numbering, cell and ordinary text priority. @param shift - Promote, previous-cell or consumed body no-op direction. @returns Whether Writer owns the key, including supported boundary no-ops. */
   public HandleTab(shift = false): boolean {
-    const point = this.wrtShell.getShellCursor().GetPoint(),
+    const point = this.m_rView.GetWrtShell().getShellCursor().GetPoint(),
       node = point.GetNode() as SwTextNode;
     if (node.GetNumRule() !== undefined && point.GetContentIndex() === 0) {
       this.Complete(
-        shift || numfunc.NumDownChangesIndent(this.wrtShell)
-          ? this.wrtShell.NumUpDown(!shift)
-          : this.wrtShell.Insert("\t"),
+        shift || numfunc.NumDownChangesIndent(this.m_rView.GetWrtShell())
+          ? this.m_rView.GetWrtShell().NumUpDown(!shift)
+          : this.m_rView.GetWrtShell().Insert("\t"),
       );
     } else if (node.StartOfSectionNode() instanceof SwTableBoxStartNode) {
-      this.Complete(shift ? this.wrtShell.GoPrevCell() : this.wrtShell.GoNextCell());
+      this.Complete(
+        shift ? this.m_rView.GetWrtShell().GoPrevCell() : this.m_rView.GetWrtShell().GoNextCell(),
+      );
     } else {
       const coll = node.GetTextFormatColl();
       if (
@@ -490,127 +515,127 @@ export class SwEditWin {
         coll.IsAssignedToListLevelOfOutlineStyle() &&
         (shift ? coll.GetAssignedOutlineStyleLevel() > 0 : coll.GetAssignedOutlineStyleLevel() < 9)
       )
-        this.Complete(this.wrtShell.OutlineUpDown(shift ? -1 : 1));
-      else if (!shift) this.Complete(this.wrtShell.Insert("\t"));
+        this.Complete(this.m_rView.GetWrtShell().OutlineUpDown(shift ? -1 : 1));
+      else if (!shift) this.Complete(this.m_rView.GetWrtShell().Insert("\t"));
     }
     return true;
   }
 
   /** Inserts ordinary text through Writer typing semantics. @param text - Inserted text. @returns Whether the document changed. */
   public InsertText(text: string): boolean {
-    return this.Complete(this.wrtShell.Insert(text));
+    return this.Complete(this.m_rView.GetWrtShell().Insert(text));
   }
 
   /** Replaces the current selection. @param text - Replacement text. @returns Whether the document changed. */
   public ReplaceSelection(text: string): boolean {
-    return this.Complete(this.wrtShell.Replace(text));
+    return this.Complete(this.m_rView.GetWrtShell().Replace(text));
   }
 
   /** Handles Backspace numbering and indentation before text deletion. @param shift - ShiftBackspace restores numbering. @returns Whether the document changed. */
   public DeleteLeft(shift = false): boolean {
-    const cursor = this.wrtShell.getShellCursor(),
+    const cursor = this.m_rView.GetWrtShell().getShellCursor(),
       point = cursor.GetPoint(),
       node = point.GetNode() as SwTextNode;
     if (!cursor.HasMark() && point.GetContentIndex() === 0) {
       const rule = node.GetNumRule(),
         noNum = !node.IsCountedInList();
-      if ((rule === undefined || (noNum && !shift)) && this.wrtShell.TryRemoveIndent())
+      if ((rule === undefined || (noNum && !shift)) && this.m_rView.GetWrtShell().TryRemoveIndent())
         return this.Complete(true);
       if (
         (!shift && !noNum) ||
         (shift && noNum) ||
         (!shift && node.Len() === 0 && rule !== undefined && !rule.IsOutlineRule())
       ) {
-        if (this.wrtShell.NumOrNoNum(shift)) return this.Complete(true);
+        if (this.m_rView.GetWrtShell().NumOrNoNum(shift)) return this.Complete(true);
       }
     }
-    return this.Complete(this.wrtShell.DelLeft());
+    return this.Complete(this.m_rView.GetWrtShell().DelLeft());
   }
 
   /** Deletes after the current cursor. @returns Whether the document changed. */
   public DeleteRight(): boolean {
-    return this.Complete(this.wrtShell.DelRight());
+    return this.Complete(this.m_rView.GetWrtShell().DelRight());
   }
 
   /** Deletes the current selection. @returns Whether the document changed. */
   public DeleteSelection(): boolean {
-    return this.Complete(this.wrtShell.DeleteSelection());
+    return this.Complete(this.m_rView.GetWrtShell().DeleteSelection());
   }
 
   /** Handles ordinary Enter before deciding whether to split,as native KeyInput does. @returns Whether the document changed. */
   public InsertParagraph(): boolean {
-    const cursor = this.wrtShell.getShellCursor();
+    const cursor = this.m_rView.GetWrtShell().getShellCursor();
     const node = cursor.GetPoint().GetNode() as SwTextNode;
     const rule = node.GetNumRule();
     if (!cursor.HasMark() && node.Len() === 0 && rule !== undefined && !rule.IsOutlineRule())
-      return this.Complete(this.wrtShell.DelNumRules());
+      return this.Complete(this.m_rView.GetWrtShell().DelNumRules());
     return this.SplitNode();
   }
 
   /** Splits the active text node. @returns Whether the document changed. */
   public SplitNode(): boolean {
-    return this.Complete(this.wrtShell.SplitNode());
+    return this.Complete(this.m_rView.GetWrtShell().SplitNode());
   }
 
   /** Toggles direct character formatting. @param format - Supported Writer format. @returns Whether state changed. */
   public ToggleCharacterFormat(format: "bold" | "italic" | "underline"): boolean {
-    return this.Complete(this.wrtShell.ToggleCharacterFormat(format));
+    return this.Complete(this.m_rView.GetWrtShell().ToggleCharacterFormat(format));
   }
 
   /** Applies a list kind to the active paragraph. @param kind - Supported list kind. @returns Whether state changed. */
   public SetParagraphListKind(kind: "bullet" | "numbered"): boolean {
-    return this.Complete(this.wrtShell.SetParagraphListKind(kind));
+    return this.Complete(this.m_rView.GetWrtShell().SetParagraphListKind(kind));
   }
 
   /** Undoes one Writer action. @returns Whether an action was undone. */
   public Undo(): boolean {
-    return this.Complete(this.wrtShell.Undo());
+    return this.Complete(this.m_rView.GetWrtShell().Undo());
   }
 
   /** Redoes one Writer action. @returns Whether an action was redone. */
   public Redo(): boolean {
-    return this.Complete(this.wrtShell.Redo());
+    return this.Complete(this.m_rView.GetWrtShell().Redo());
   }
 
   /** Starts extended-text input at the canonical selection. @returns Nothing. */
   public StartExtTextInput(): void {
-    this.wrtShell.StartComposition();
+    this.m_rView.GetWrtShell().StartComposition();
   }
 
   /** Updates transient extended text without mutating SwDoc. @param text - Current composition text. @returns Nothing. */
   public UpdateExtTextInput(text: string): void {
-    this.wrtShell.UpdateComposition(text);
+    this.m_rView.GetWrtShell().UpdateComposition(text);
   }
 
   /** Commits or cancels extended-text input. @returns Whether the document changed. */
   public EndExtTextInput(): boolean {
-    return this.Complete(this.wrtShell.EndComposition());
+    return this.Complete(this.m_rView.GetWrtShell().EndComposition());
   }
 
   /** Creates model-owned clipboard representations for the current selection. @returns Transfer payload or undefined. */
   public CreateSelectionTransfer(): WriterClipboardSelection | undefined {
-    return this.wrtShell.CreateTransferable().CreateSelection();
+    return this.m_rView.GetWrtShell().CreateTransferable().CreateSelection();
   }
 
   /** Copies the current Writer selection through a native event writer. @param write - Synchronous MIME writer. @returns Nothing. */
   public CopyTransfer(write: (selection: WriterClipboardSelection) => void): void {
-    this.wrtShell.CreateTransferable().Copy(write);
+    this.m_rView.GetWrtShell().CreateTransferable().Copy(write);
   }
 
   /** Writes the current transfer and then removes its selection. @param write - Synchronous MIME writer. @returns Nothing. */
   public CutTransfer(write: (selection: WriterClipboardSelection) => void): void {
-    this.wrtShell.CreateTransferable().Cut(write);
+    this.m_rView.GetWrtShell().CreateTransferable().Cut(write);
     this.invalidateBindings();
   }
 
   /** Inserts a sanitized transfer document at the current PaM. @param paste - Parsed transfer document. @returns Whether the document changed. */
   public Paste(paste: WriterPasteDocument): boolean {
-    return this.Complete(this.wrtShell.PasteAtCursor(paste));
+    return this.Complete(this.m_rView.GetWrtShell().PasteAtCursor(paste));
   }
 
   /** Inserts a Writer transfer document into the current target pool through the shell. @param paste - Writer-owned transfer document. @returns Whether the document changed. */
   public PasteTransfer(paste: WriterTransferDocument): boolean {
-    return this.Complete(this.wrtShell.CreateTransferable().Paste(paste));
+    return this.Complete(this.m_rView.GetWrtShell().CreateTransferable().Paste(paste));
   }
 
   /** Resolves one platform endpoint without exposing SwNode identity outside this owner. @param position - Current node/content coordinates. @returns Registered Writer position or undefined. */
@@ -624,7 +649,7 @@ export class SwEditWin {
   /** Resolves an actual connected text node, including table-cell sections. @param nodeIndex - Current SwNodes index. @returns Owned text node or undefined. */
   private ResolveTextNode(nodeIndex: number): SwTextNode | undefined {
     if (!Number.isInteger(nodeIndex)) return undefined;
-    const document = this.wrtShell.GetDoc();
+    const document = this.m_rView.GetWrtShell().GetDoc();
     if (nodeIndex < 0 || nodeIndex >= document.nodes.Count()) return undefined;
     const node = document.nodes.at(nodeIndex);
     return node instanceof SwTextNodeClass ? node : undefined;

@@ -9,6 +9,7 @@ import { SwDocShell } from "../app/docsh";
 import { SwWrtShell } from "./wrtsh1";
 import { SwEditWin } from "../docvw/edtwin";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
+import { SwView } from "../uiview/view";
 const shells: SwWrtShell[] = [];
 afterEach(
   /** Releases registered native cursor owners. @returns Nothing. */ () => {
@@ -31,8 +32,8 @@ function fixture(text: string, cell = false) {
       doc,
       createDocument({ id: "margins", suiteId: "writer", title: "Margins" }),
     ),
-    shell = new SwWrtShell(docShell),
-    edit = new SwEditWin(shell);
+    shell = new SwView(docShell).GetWrtShell(),
+    edit = new SwEditWin(shell.GetView());
   shells.push(shell);
   shell.FocusNode(node);
   doc.GetUndoManager().Clear();
@@ -209,6 +210,7 @@ it("native repeated Home enters visible labels and End clears without document h
   expect(f.edit.SetCursorTextFrame(-1, [], 0, 0)).toBe(false);
   const root = SwCursorShell.prototype.GetLayout.call(f.shell);
   expect(SwCursorShell.prototype.GetLayout.call(f.shell)).toBe(root);
+  root.SetCursorTextFrame(f.node, [], 0, 0);
   expect(f.shell.getShellCursor().LeftRightMargin(root, true)).toBe(false);
   expect(f.shell.getShellCursor().IsAtLeftRightMargin(root, true)).toBe(false);
   const other = new SwDoc().paragraphs[0];

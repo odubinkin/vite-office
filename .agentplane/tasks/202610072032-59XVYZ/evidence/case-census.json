@@ -1,0 +1,72 @@
+{
+  "app": {
+    "original": 13646,
+    "current": 13646,
+    "newCases": 0,
+    "resolved": 1,
+    "passed": 13646,
+    "unresolvedCount": 0,
+    "skippedObservationsRetained": 16,
+    "passingReplay": 0,
+    "originalUncaughtErrorCases": 0,
+    "finalUncaughtErrorCases": 0,
+    "inputs": [
+      {
+        "file": "59XVYZ.app-results.json",
+        "sha256": "f2351bedb11f9448daa3ceba2007e0f500cd1d3b7e30be5bc1d4dcc32d86bd6d",
+        "passed": 13645,
+        "failed": 1,
+        "skipped": 0
+      },
+      {
+        "file": "59XVYZ.closure1.app-results.json",
+        "sha256": "6bd2ecd9b5fe23a27ea80998d3c2a4ab615b7de45ca50cd43a39a491eb86fda5",
+        "passed": 1,
+        "failed": 0,
+        "skipped": 16
+      }
+    ]
+  },
+  "inventory": {
+    "original": 110,
+    "current": 110,
+    "newCases": 0,
+    "resolved": 0,
+    "passed": 110,
+    "unresolvedCount": 0,
+    "skippedObservationsRetained": 0,
+    "passingReplay": 0,
+    "originalUncaughtErrorCases": 0,
+    "finalUncaughtErrorCases": 0,
+    "inputs": [
+      {
+        "file": "59XVYZ.inventory-results.json",
+        "sha256": "6791b3b2f9b31535266afca03f056af2413840d5e15706ae101cf5b64d6f91b1",
+        "passed": 110,
+        "failed": 0,
+        "skipped": 0
+      }
+    ]
+  },
+  "chromium": {
+    "current": 292,
+    "passed": 292,
+    "unresolvedCount": 0,
+    "passingReplay": 0,
+    "inputs": [
+      {
+        "file": "59XVYZ.chromium-results.json",
+        "sha256": "39c6bc0b96ca32ad1506d9036779f17faa23cb10c858a077e2213f3167c94ef5",
+        "counts": {
+          "startTime": "2026-10-07T21:03:10.375Z",
+          "duration": 140971.655,
+          "expected": 292,
+          "skipped": 0,
+          "unexpected": 0,
+          "flaky": 0
+        }
+      }
+    ]
+  },
+  "failures": []
+}

@@ -18,6 +18,7 @@ import { SwUndoNumRuleStart } from "../undo/unnum";
 import { SfxRequest } from "../../../../sfx2/source/control/request";
 import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
 import { RES_MARGIN_FIRSTLINE, RES_MARGIN_TEXTLEFT, RES_MARGIN_RIGHT } from "../../../inc/hintids";
+import { SwView } from "../../uibase/uiview/view";
 const shells: SwWrtShell[] = [];
 afterEach(
   /** Closes all native owners. @returns Nothing. */ () => {
@@ -63,8 +64,8 @@ function fixture() {
       doc,
       createDocument({ id: "ring-list", suiteId: "writer", title: "Ring lists" }),
     ),
-    shell = new SwWrtShell(docShell),
-    edit = new SwEditWin(shell);
+    shell = new SwView(docShell).GetWrtShell(),
+    edit = new SwEditWin(shell.GetView());
   shells.push(shell);
   return {
     doc,

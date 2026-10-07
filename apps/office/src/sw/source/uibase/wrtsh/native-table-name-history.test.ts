@@ -5,7 +5,7 @@ import { SwDoc } from "../../core/doc/doc";
 import { SwFrameFormat } from "../../core/layout/atrfrm";
 import { SwUndoRenameTable } from "../../core/undo/untbl";
 import { SwDocShell } from "../app/docsh";
-import { SwWrtShell } from "./wrtsh1";
+
 import { SwEditWin } from "../docvw/edtwin";
 import { ItemSetToTableParam } from "../shells/tabsh";
 import { SwFormatTablePage } from "../../ui/table/tabledlg";
@@ -13,6 +13,7 @@ import { SwInsertTableFlags } from "../../../inc/itabenum";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { writeOdtDocument } from "../../filter/xml/wrtxml";
 import { readOdtDocument } from "../../filter/xml/swxml";
+import { SwView } from "../uiview/view";
 
 /** Creates live native table and editing owners. @returns Original owners. */
 function fixture() {
@@ -29,7 +30,7 @@ function fixture() {
       doc,
       createDocument({ id: "names", suiteId: "writer", title: "Names" }),
     ),
-    shell = new SwWrtShell(docShell);
+    shell = new SwView(docShell).GetWrtShell();
   shell.FocusNode(node);
   shell.SetPaM(new SwPosition(node, 0));
   doc.GetUndoManager().Clear();
@@ -79,7 +80,7 @@ it("native frame name is the table identity and recording defaults follow source
     }
     undo.DoUndo(false);
     f.shell.SetTableName(format, "Unrecorded");
-    new SwEditWin(f.shell).InsertText("X");
+    new SwEditWin(f.shell.GetView()).InsertText("X");
     expect(undo.GetUndoActionCount()).toBe(3);
     expect(undo.DoesUndo()).toBe(false);
     undo.DoUndo(true);
@@ -166,7 +167,7 @@ it("properties rename and geometry share one native history through ODT and cont
       title: "Names",
     });
     expect(reopened.document.GetTables()[0]?.GetName()).toBe("Accepted");
-    new SwEditWin(f.shell).InsertText("X");
+    new SwEditWin(f.shell.GetView()).InsertText("X");
     expect(f.node.GetText()).toBe("XCell");
   } finally {
     f.shell.Close();

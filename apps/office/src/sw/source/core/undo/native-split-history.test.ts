@@ -10,9 +10,10 @@ import { SwFormatINetFormat } from "../txtnode/fmtatr2";
 import { SwTextINetFormat } from "../txtnode/txtatr2";
 import { SetAttrMode } from "../../../inc/swtypes";
 import { SwDocShell } from "../../uibase/app/docsh";
-import { SwWrtShell } from "../../uibase/wrtsh/wrtsh1";
+
 import { SwEditWin } from "../../uibase/docvw/edtwin";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
+import { SwView } from "../../uibase/uiview/view";
 
 /** Requires an actual owner. @param value - Optional native owner. @returns Actual owner. */
 function required<T>(value: T | undefined): T {
@@ -43,12 +44,12 @@ function fixture(family = 54, mask = 0, ignored = 0, text = "abcdefgh") {
   hint.SetLockExpandFlag(mask !== 0);
   hint.SetFormatIgnoreStart(Boolean(ignored & 1));
   hint.SetFormatIgnoreEnd(Boolean(ignored & 2));
-  const shell = new SwWrtShell(
+  const shell = new SwView(
     new SwDocShell(
       doc,
       createDocument({ id: "native-split-history", suiteId: "writer", title: "Split history" }),
     ),
-  );
+  ).GetWrtShell();
   return { doc, node, hint, value, shell };
 }
 /** Sets a real native point without portable coordinates. @param owner - Native owners. @param offset - Point offset. @returns Nothing. */
@@ -283,14 +284,14 @@ it("native table cell Enter restores original ranged history and leaves adjacent
   node.SetText("abcdefgh");
   neighbor.SetText("neighbor");
   node.InsertItem(new SwFormatINetFormat("cell-url", ""), 2, 6, SetAttrMode.NOHINTADJUST);
-  const shell = new SwWrtShell(
+  const shell = new SwView(
       new SwDocShell(
         doc,
         createDocument({ id: "split-cell", suiteId: "writer", title: "Cell history" }),
       ),
-    ),
+    ).GetWrtShell(),
     edit = new SwEditWin(
-      shell,
+      shell.GetView(),
       /** Ignores rendering invalidation. @returns Nothing. */ () => undefined,
     );
   expect(edit.SetSelection({ point: { nodeIndex: node.GetIndex(), contentIndex: 4 } })).toBe(true);

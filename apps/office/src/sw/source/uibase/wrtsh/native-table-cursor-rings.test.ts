@@ -4,11 +4,12 @@ import { it, expect, describe } from "vitest";
 import { SwDoc } from "../../core/doc/doc";
 import { SwPosition, getWriterSelectedTextRanges } from "../../core/crsr/pam";
 import { SwCursor, SwTableCursor } from "../../core/crsr/swcrsr";
-import { SwWrtShell } from "./wrtsh1";
+
 import { SwDocShell } from "../app/docsh";
 import { SwEditWin } from "../docvw/edtwin";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { projectWriterCharacterAttributes } from "../../core/txtnode/txatbase";
+import { SwView } from "../uiview/view";
 /** Requires an actual test owner. @param value - Optional owner. @returns Owner. */
 function required<T>(value: T | undefined): T {
   if (value === undefined) throw new Error("Missing cursor-ring owner");
@@ -43,10 +44,10 @@ function fixture() {
   const tail = doc.nodes.AppendTableCellParagraph(required(boxes[4]));
   tail.SetText("Tail");
   const empty = doc.nodes.AppendTableCellParagraph(required(boxes[7]));
-  const shell = new SwWrtShell(
+  const shell = new SwView(
       new SwDocShell(doc, createDocument({ id: "rings", suiteId: "writer", title: "Rings" })),
-    ),
-    edit = new SwEditWin(shell);
+    ).GetWrtShell(),
+    edit = new SwEditWin(shell.GetView());
   return { doc, body, table, boxes, nodes, tail, empty, shell, edit };
 }
 /** Selects the real middle column without selecting neighboring columns. @param f - Owners. @returns Displayed table owner. */

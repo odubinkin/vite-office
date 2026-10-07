@@ -6,6 +6,7 @@ import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { subscribeToSwModify } from "../../../inc/calbck";
 import type { SwModelHint } from "../../../inc/hints";
 import type { SwViewOption } from "../../../inc/viewopt";
+import type { SwView } from "../uiview/view";
 import { SwPosition, type WriterTextRange } from "../../core/crsr/pam";
 import { SwCursor, SwTableCursor } from "../../core/crsr/swcrsr";
 import { PopMode } from "../../core/crsr/trvltbl";
@@ -74,7 +75,7 @@ import {
   RejectRepeatedHeadlineSelection,
 } from "./wrtsh-selection";
 import type { SelectionType } from "../inc/wrtsh";
-import { SwRootFrame } from "../../core/layout/newfrm";
+import type { SwRootFrame } from "../../core/layout/newfrm";
 import { SwTextCursor } from "../../core/text/itrtxt";
 import { MoveShellMargin } from "./move";
 import { createWriterReadFragmentAction } from "../../filter/basflt/shellio";
@@ -99,17 +100,15 @@ export class SwWrtShell extends SwFEShell {
   private readonly listShell: SwListShell;
   private pendingCharacterItems: SfxItemSet;
   private readonly undoContext: SwUndoRedoContext;
-  /** Creates a shell at the end of the first Writer paragraph. @param docShell - Persistent owning document shell. @param dialogController - Writer dialog lifecycle controller. @param layout - Persistent view layout, or standalone shell layout. @param viewOptions - Existing view options or standalone defaults. @returns Nothing. */
+  /** Creates a shell at the end of the first Writer paragraph. @param docShell - Persistent owning document shell. @param dialogController - Writer dialog lifecycle controller. @param layout - Persistent view layout, or standalone shell layout. @param viewOptions - Existing view options or standalone defaults. @param m_rView - Exact native view, absent for standalone core shells. @returns Nothing. */
   public constructor(
     private readonly docShell: SwDocShell,
     dialogController: WriterDialogController = new WriterDialogController(),
-    private readonly layout = new SwRootFrame(
-      /** Resolves the standalone shell's current document. @returns Native document. */ () =>
-        docShell.GetDoc(),
-    ),
+    layout?: SwRootFrame,
     viewOptions?: SwViewOption,
+    private readonly m_rView?: SwView,
   ) {
-    super(viewOptions);
+    super(viewOptions, layout);
     const paragraph = docShell.GetDoc().paragraphs[0] as WriterParagraph;
     this.cursor = new SwCursor(new SwPosition(paragraph, paragraph.Len()));
     this.pendingCharacterItems = paragraph.GetCharacterItemsAt(paragraph.Len());
@@ -133,9 +132,10 @@ export class SwWrtShell extends SwFEShell {
   public GetDocShell(): SwDocShell {
     return this.docShell;
   }
-  /** Returns the persistent native layout owner. @returns Current view layout. */
-  public override GetLayout(): SwRootFrame {
-    return this.layout;
+  /** Returns the source view retained by this shell without consulting another current view. @returns Owning Writer view. */
+  public GetView(): SwView {
+    if (this.m_rView === undefined) throw new Error("SwWrtShell has no attached SwView.");
+    return this.m_rView;
   }
   /** Moves to the native visual line start. @param select - Extend selection. @param basic - Basic API call. @returns Native admission. */
   public LeftMargin(select = false, basic = false): boolean {

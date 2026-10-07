@@ -1,0 +1,568 @@
+{
+  "base": "705781f0a1b47dddcafde0ae497e1e8065f922df",
+  "semanticPaths": [
+    "apps/office/src/sw/browser/editor/native-line-margin.test.tsx",
+    "apps/office/src/sw/source/core/crsr/trvltbl.ts",
+    "apps/office/src/sw/source/core/doc/native-outline-movement.test.ts",
+    "apps/office/src/sw/source/core/edit/native-list-continuation-ring.test.ts",
+    "apps/office/src/sw/source/core/edit/native-list-ring.test.ts",
+    "apps/office/src/sw/source/core/frmedt/native-table-mouse.test.ts",
+    "apps/office/src/sw/source/core/txtnode/native-split-attributes.test.ts",
+    "apps/office/src/sw/source/core/undo/native-split-history.test.ts",
+    "apps/office/src/sw/source/ui/table/native-row-height-dialog.test.ts",
+    "apps/office/src/sw/source/uibase/docvw/edtwin.test.ts",
+    "apps/office/src/sw/source/uibase/docvw/edtwin.ts",
+    "apps/office/src/sw/source/uibase/docvw/native-edit-view-ownership.test.ts",
+    "apps/office/src/sw/source/uibase/docvw/native-label-affinity.test.ts",
+    "apps/office/src/sw/source/uibase/docvw/native-list-backspace.test.ts",
+    "apps/office/src/sw/source/uibase/docvw/native-list-enter.test.ts",
+    "apps/office/src/sw/source/uibase/docvw/native-list-tab.test.ts",
+    "apps/office/src/sw/source/uibase/docvw/native-table-column-drag.test.ts",
+    "apps/office/src/sw/source/uibase/docvw/native-table-linear-drag.test.ts",
+    "apps/office/src/sw/source/uibase/docvw/native-table-pointer.test.ts",
+    "apps/office/src/sw/source/uibase/docvw/native-table-proportional-drag.test.ts",
+    "apps/office/src/sw/source/uibase/docvw/native-table-row-drag.test.ts",
+    "apps/office/src/sw/source/uibase/uiview/view.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-line-margin.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-row-height-owner-history.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-row-split-owner-history.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-section-navigation.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-select-all.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-tabcols-history.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-column-page-history.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-cursor-rings.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-delete.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-editing.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-format-lifecycle-history.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-height-command-separation.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-height-delta.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-layout-split-history.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-name-history.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-paste.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-plain-paste.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-properties-reset-history.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-properties.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-selection.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-text-flow-headline-history.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-text-flow-split-history.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-traversal.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/source-provenance.json"
+  ],
+  "scopeCount": 48,
+  "priorAcceptanceFiles": 608,
+  "byteIdenticalAcceptanceFiles": 567,
+  "exactSourceBackedMigrations": [
+    {
+      "path": "apps/office/src/sw/browser/editor/native-line-margin.test.tsx",
+      "beforeSHA256": "37f29ea344024ea874c4419df364d678743b5725fd3e75ff4a7e39bf2618cfad",
+      "currentSHA256": "7fbb7dd8dc3ee95d24471f5f4d9480aed1ab6aac98cea916976e690f3b9c0b94",
+      "change": "Actual SwView(DocShell).GetWrtShell constructor and SwEditWin(shell.GetView) arguments; required imports and formatter only; every other input/body/cleanup retained",
+      "source": "Pinned SwEditWin and SwWrtShell m_rView constructor/GetView references",
+      "expectationCalls": {
+        "count": 32,
+        "sha256": "9bf4584e87800620047bc219a2f52f300bc8b90bb9261ccccdf43b2cbfa17405"
+      },
+      "originalExpectationsPreserved": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/doc/native-outline-movement.test.ts",
+      "beforeSHA256": "e0d7206497d6af332b2ee3ed75737535a888ed517f9db5d4f39336d157779c2c",
+      "currentSHA256": "e85f4dc7feb86f6e4638de22e5c545c824fe18005bc17cda7813268b9d4d6207",
+      "change": "Actual SwView(DocShell).GetWrtShell constructor and SwEditWin(shell.GetView) arguments; required imports and formatter only; every other input/body/cleanup retained",
+      "source": "Pinned SwEditWin and SwWrtShell m_rView constructor/GetView references",
+      "expectationCalls": {
+        "count": 90,
+        "sha256": "aa62d4097f0169a98ec97e85b6df1f4a2da70985c71445dc804b185464e0f295"
+      },
+      "originalExpectationsPreserved": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/edit/native-list-continuation-ring.test.ts",
+      "beforeSHA256": "db76596ee0edd82a70365f342a4b9d34dc8150c0b8803fb24b4579ea714b7184",
+      "currentSHA256": "229c6ac88d437f04261f5c343e13d8ffe5c74344167006f197a2170d1a244fdc",
+      "change": "Actual SwView(DocShell).GetWrtShell constructor and SwEditWin(shell.GetView) arguments; required imports and formatter only; every other input/body/cleanup retained",
+      "source": "Pinned SwEditWin and SwWrtShell m_rView constructor/GetView references",
+      "expectationCalls": {
+        "count": 131,
+        "sha256": "e6314c6a33fe4da2478ed57a9425740169556361c1851bd743765b262614c07a"
+      },
+      "originalExpectationsPreserved": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/edit/native-list-ring.test.ts",
+      "beforeSHA256": "131629047f013458392f18b6a306237f90bb48a1b1a0d90b6348082a4e2f7d87",
+      "currentSHA256": "526ccc72f0c3a8b494b2f54d7830a64b258a50c161e788f5861836f38b6f13d4",
+      "change": "Actual SwView(DocShell).GetWrtShell constructor and SwEditWin(shell.GetView) arguments; required imports and formatter only; every other input/body/cleanup retained",
+      "source": "Pinned SwEditWin and SwWrtShell m_rView constructor/GetView references",
+      "expectationCalls": {
+        "count": 132,
+        "sha256": "8ac72504fd754473720641b605d75ac52e7000ddbf80e767576fa5d82fdc49f8"
+      },
+      "originalExpectationsPreserved": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/frmedt/native-table-mouse.test.ts",
+      "beforeSHA256": "39675197f3e5bef3370b314887e8c4108d52fa73f7ac5ffb91fd2d0a9a47d927",
+      "currentSHA256": "ab0a80e7952ac2ad36d9520ae3b7b243c841692a5d94491c55548594f4125bc0",
+      "change": "Actual SwView(DocShell).GetWrtShell constructor and SwEditWin(shell.GetView) arguments; required imports and formatter only; every other input/body/cleanup retained",
+      "source": "Pinned SwEditWin and SwWrtShell m_rView constructor/GetView references",
+      "expectationCalls": {
+        "count": 39,
+        "sha256": "fcb3e6b73b0bae9913aaa07b26b5607b4e7915bf79166c482d3e8531b620bcd7"
+      },
+      "originalExpectationsPreserved": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/txtnode/native-split-attributes.test.ts",
+      "beforeSHA256": "8231b0368f9d03a7a2e3233afcc098c1a729bd9ab27ff4326597b0e8eff481b4",
+      "currentSHA256": "3f907539dcd027fe3cc852ad72800eb9c7e4884ecc3c26dbda9346f16c5b122c",
+      "change": "Actual SwView(DocShell).GetWrtShell constructor and SwEditWin(shell.GetView) arguments; required imports and formatter only; every other input/body/cleanup retained",
+      "source": "Pinned SwEditWin and SwWrtShell m_rView constructor/GetView references",
+      "expectationCalls": {
+        "count": 81,
+        "sha256": "e67dce23303c407e020db1fed5a295d82a569800e039cb243d6aa61a47e5f711"
+      },
+      "originalExpectationsPreserved": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/native-split-history.test.ts",
+      "beforeSHA256": "29999a59e754da3b3ab556af718ef68cabcb93ad0240ba68e3ea65e88c04c899",
+      "currentSHA256": "ddbed098f98acce6f572b0fb2e1b196b9d30282cf3db5bbd557fa21e49e9ab59",
+      "change": "Actual SwView(DocShell).GetWrtShell constructor and SwEditWin(shell.GetView) arguments; required imports and formatter only; every other input/body/cleanup retained",
+      "source": "Pinned SwEditWin and SwWrtShell m_rView constructor/GetView references",
+      "expectationCalls": {
+        "count": 60,
+        "sha256": "a723eb5656aa2135c1e4974e28c4e4759caf89460524a018c8a0ebeba651abf3"
+      },
+      "originalExpectationsPreserved": true
+    },
+    {
+      "path": "apps/office/src/sw/source/ui/table/native-row-height-dialog.test.ts",
+      "beforeSHA256": "0674b37867ce3c6f2d1760a235c8be6a6c5232799e2e6204d30def49b0d788cb",
+      "currentSHA256": "65ff75cfeeff7e6afa930505b55a74b7636c0410c90585763c9da245963453f9",
+      "change": "Actual SwView(DocShell).GetWrtShell constructor and SwEditWin(shell.GetView) arguments; required imports and formatter only; every other input/body/cleanup retained",
+      "source": "Pinned SwEditWin and SwWrtShell m_rView constructor/GetView references",
+      "expectationCalls": {
+        "count": 22,
+        "sha256": "ad818876775656d971bf74ae799ebf00d2a20eb92812d5ed4b55625d319ad362"
+      },
+      "originalExpectationsPreserved": true
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/docvw/edtwin.test.ts",
+      "beforeSHA256": "de1a7175c24cec70a430eccf84a81b22b61c36edc57486211a33a09617899312",
+      "currentSHA256": "3b2d6b28ae7e8ef8753320949d1a8afb613967138e9e5278acd459b2edab0adb",
+      "change": "Actual SwView(DocShell).GetWrtShell constructor and SwEditWin(shell.GetView) arguments; required imports and formatter only; every other input/body/cleanup retained",
+      "source": "Pinned SwEditWin and SwWrtShell m_rView constructor/GetView references",
+      "expectationCalls": {
+        "count": 22,
+        "sha256": "557f8fcb2bb492815d628208cb0a5d906c89740f93481d3dc440b5c227cf190a"
+      },
+      "originalExpectationsPreserved": true
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/docvw/native-label-affinity.test.ts",
+      "beforeSHA256": "1eb37f1e8c8607db9413d6462dffae0a31dbc815bd7d968583aca7b25ee3cd26",
+      "currentSHA256": "ee2904dcb0a33739372e55ce5a6bdcc99e678ed6bb7b79920c7432d94be0df5e",
+      "change": "Actual SwView(DocShell).GetWrtShell constructor and SwEditWin(shell.GetView) arguments; required imports and formatter only; every other input/body/cleanup retained",
+      "source": "Pinned SwEditWin and SwWrtShell m_rView constructor/GetView references",
+      "expectationCalls": {
+        "count": 34,
+        "sha256": "0fa6e8d20044a237d143807dbf6f9520cff5bdd775f693bfd742e304dfcbcd13"
+      },
+      "originalExpectationsPreserved": true
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/docvw/native-list-backspace.test.ts",
+      "beforeSHA256": "ef2962848a6ec723059544d3f8cceba321f6d2dc6e76c91ca9f807ba69a828e3",
+      "currentSHA256": "b67e65f5c5e753dc5fa2c88505cfd30e2830b6396b28990aebdc52cfb35f487e",
+      "change": "Actual SwView(DocShell).GetWrtShell constructor and SwEditWin(shell.GetView) arguments; required imports and formatter only; every other input/body/cleanup retained",
+      "source": "Pinned SwEditWin and SwWrtShell m_rView constructor/GetView references",
+      "expectationCalls": {
+        "count": 101,
+        "sha256": "f975981a07cf95d965869bc91bfc291fc80dc2e3cf4e6d34892d214eca9a825b"
+      },
+      "originalExpectationsPreserved": true
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/docvw/native-list-enter.test.ts",
+      "beforeSHA256": "8d19174a72985d3c9376770a1144db3867d6dfba46767d6ed453b8fde2afeecb",
+      "currentSHA256": "1377cfb84514ec60dd66207536f70bd9d99ab665a3e7f5fe2979f3c91c6dcefe",
+      "change": "Actual SwView(DocShell).GetWrtShell constructor and SwEditWin(shell.GetView) arguments; required imports and formatter only; every other input/body/cleanup retained",
+      "source": "Pinned SwEditWin and SwWrtShell m_rView constructor/GetView references",
+      "expectationCalls": {
+        "count": 89,
+        "sha256": "cb3c2166a7ef253929fca1ddc1dd0dd404249d90f8112f227c8fa720a2ac3749"
+      },
+      "originalExpectationsPreserved": true
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/docvw/native-list-tab.test.ts",
+      "beforeSHA256": "3bb7917c03f7a5541e8a65b21cdb4fd6c7765ee1cffa44eda52a4b3ec08610bb",
+      "currentSHA256": "5c7fe518dc656aefb6720987779e8459543135856a838f5a5c93dcdac3e35c95",
+      "change": "Actual SwView(DocShell).GetWrtShell constructor and SwEditWin(shell.GetView) arguments; required imports and formatter only; every other input/body/cleanup retained",
+      "source": "Pinned SwEditWin and SwWrtShell m_rView constructor/GetView references",
+      "expectationCalls": {
+        "count": 58,
+        "sha256": "46dab527b7041a742c555a4bf08fbc4e3f0583ec9a20a88f75cf09f18b046cd3"
+      },
+      "originalExpectationsPreserved": true
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/docvw/native-table-column-drag.test.ts",
+      "beforeSHA256": "034bb757227d5308cf37e408939804ed4ab58073dd9139deae294d4445e98972",
+      "currentSHA256": "6c153a76a224742d48e26e4a57d80e1338c75aae1e0eed78d6c8bd9147e259bf",
+      "change": "Actual SwView(DocShell).GetWrtShell constructor and SwEditWin(shell.GetView) arguments; required imports and formatter only; every other input/body/cleanup retained",
+      "source": "Pinned SwEditWin and SwWrtShell m_rView constructor/GetView references",
+      "expectationCalls": {
+        "count": 55,
+        "sha256": "f7268dfefe75fc20ed1253d30077f6607b6c6d1e41da9cf1d01bad7e5d76702f"
+      },
+      "originalExpectationsPreserved": true
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/docvw/native-table-linear-drag.test.ts",
+      "beforeSHA256": "c81202f3fa0948d79e07f70debf61a600c9ab7bcb9b4cbd6f909fd8dd7b74c13",
+      "currentSHA256": "cb235d168bfa45a66dcf7ba89c53f2dc3af8d39921965587e30615f4f20e6e5f",
+      "change": "Actual SwView(DocShell).GetWrtShell constructor and SwEditWin(shell.GetView) arguments; required imports and formatter only; every other input/body/cleanup retained",
+      "source": "Pinned SwEditWin and SwWrtShell m_rView constructor/GetView references",
+      "expectationCalls": {
+        "count": 32,
+        "sha256": "0bee362de2c289309750e2ec75437702618095fac6bec049f33cacf8a3a2e683"
+      },
+      "originalExpectationsPreserved": true
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/docvw/native-table-pointer.test.ts",
+      "beforeSHA256": "12f5789e153c17808e39572ea67f5bcc20d65ed0ba21ecd89f82ebf957cf5049",
+      "currentSHA256": "b2cbd39013e2005fcbab4efa525c442e3ffef19265850272b3944e2263aae77e",
+      "change": "Actual SwView(DocShell).GetWrtShell constructor and SwEditWin(shell.GetView) arguments; required imports and formatter only; every other input/body/cleanup retained",
+      "source": "Pinned SwEditWin and SwWrtShell m_rView constructor/GetView references",
+      "expectationCalls": {
+        "count": 16,
+        "sha256": "c518ed8ec5586f721a8e726f02caf7fa02fb523b6bc972e5086c9433a639fcad"
+      },
+      "originalExpectationsPreserved": true
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/docvw/native-table-proportional-drag.test.ts",
+      "beforeSHA256": "f36ff4e46c438ef5d3a41d983e9b9681e1da52b134eba199e7f1368221451b64",
+      "currentSHA256": "1fd2f9b69f27463b4d74a535ff5fa17b97c4483a56a61913fba7b22c12e1b420",
+      "change": "Actual SwView(DocShell).GetWrtShell constructor and SwEditWin(shell.GetView) arguments; required imports and formatter only; every other input/body/cleanup retained",
+      "source": "Pinned SwEditWin and SwWrtShell m_rView constructor/GetView references",
+      "expectationCalls": {
+        "count": 27,
+        "sha256": "1716a92c2ea4bce9a64328dd1d5adee90562e2e71f942d922c012af00b890461"
+      },
+      "originalExpectationsPreserved": true
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/docvw/native-table-row-drag.test.ts",
+      "beforeSHA256": "3bb4d22751f507f3578adbb605341ef0636ae1cf85e0500866a1de0c9b8900b1",
+      "currentSHA256": "0ee59bffe7e4a0b04301eeb6f6d8076c80e46b6567c98a7c70423e39fdc5fe4c",
+      "change": "Actual SwView(DocShell).GetWrtShell constructor and SwEditWin(shell.GetView) arguments; required imports and formatter only; every other input/body/cleanup retained",
+      "source": "Pinned SwEditWin and SwWrtShell m_rView constructor/GetView references",
+      "expectationCalls": {
+        "count": 54,
+        "sha256": "e6dd5f7fd555623fb5775821f10f4c830090e40e07b84791021302d0e74c4e3d"
+      },
+      "originalExpectationsPreserved": true
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-line-margin.test.ts",
+      "beforeSHA256": "3cce73d641b4e363af0686e3ce45d0fe4cf4ec28d63075f4614b9011c8dffb19",
+      "currentSHA256": "13f7d3c0ab4507ec1d7cf49da161b945eb9d91130d04a40f3e634dbe56d62142",
+      "change": "Actual native view constructors/imports/format plus explicit empty measured frame on the shared root after actual original failure; original model/text inputs, all expectation calls and cleanup retained",
+      "source": "Pinned SwEditWin and SwWrtShell m_rView constructor/GetView references",
+      "expectationCalls": {
+        "count": 68,
+        "sha256": "e55b89d48552bc5d90dc2296c28ad77bcbee8e0f73f06691d21cbb21a09fdaaf"
+      },
+      "originalExpectationsPreserved": true
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-row-height-owner-history.test.ts",
+      "beforeSHA256": "be7ea40480c72cb29a62d1af118f198388e3144123c0b098d327b495b26527e4",
+      "currentSHA256": "878425182ba002df22098efc8d273926f2972db274a3ecee79914b8006403da2",
+      "change": "Actual SwView(DocShell).GetWrtShell constructor and SwEditWin(shell.GetView) arguments; required imports and formatter only; every other input/body/cleanup retained",
+      "source": "Pinned SwEditWin and SwWrtShell m_rView constructor/GetView references",
+      "expectationCalls": {
+        "count": 22,
+        "sha256": "a4cecd8a83e9ec86493777a51ef59312230e7dcd70c38b66572c6a7a4b329bcf"
+      },
+      "originalExpectationsPreserved": true
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-row-split-owner-history.test.ts",
+      "beforeSHA256": "20b56f4a6d711aa897f4f053797cb093a7f750d14ddec40a7f0b583a4da8198b",
+      "currentSHA256": "869bd96a478cc900bf2282337c7f4f6639f84f7ee436751b625e31a10f5f5e18",
+      "change": "Actual SwView(DocShell).GetWrtShell constructor and SwEditWin(shell.GetView) arguments; required imports and formatter only; every other input/body/cleanup retained",
+      "source": "Pinned SwEditWin and SwWrtShell m_rView constructor/GetView references",
+      "expectationCalls": {
+        "count": 25,
+        "sha256": "8abf8cd2bfd16232c9de0f3b094168b618d054455bc923de02a3e974a352a66a"
+      },
+      "originalExpectationsPreserved": true
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-section-navigation.test.ts",
+      "beforeSHA256": "40a26a2c989b8b92f7151b0f06367a4f7d7a72d924e65a7c98e5a2309d5b3a27",
+      "currentSHA256": "7b1f9d2b8aded85a67b4fc4a3884955e1c56be89183bbc6ec56e935fec5b7b7c",
+      "change": "Actual SwView(DocShell).GetWrtShell constructor and SwEditWin(shell.GetView) arguments; required imports and formatter only; every other input/body/cleanup retained",
+      "source": "Pinned SwEditWin and SwWrtShell m_rView constructor/GetView references",
+      "expectationCalls": {
+        "count": 78,
+        "sha256": "0e4961cdd5f477ec6784e095f502aa9f9c853b812b8389e599e99aa0490837ca"
+      },
+      "originalExpectationsPreserved": true
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-select-all.test.ts",
+      "beforeSHA256": "d03727d5bd03575cbac412c053887b28433834ec9789b04cd8d47ff15d338a64",
+      "currentSHA256": "25fddd4cf3889c209b472db3bb6e9ff087452591e6d6c25ab23f384522b1376d",
+      "change": "Actual SwView(DocShell).GetWrtShell constructor and SwEditWin(shell.GetView) arguments; required imports and formatter only; every other input/body/cleanup retained",
+      "source": "Pinned SwEditWin and SwWrtShell m_rView constructor/GetView references",
+      "expectationCalls": {
+        "count": 67,
+        "sha256": "0b7f91d7b88dccd6e0da115688b13e4965da54de956384a1dbb6b81a47d9cf44"
+      },
+      "originalExpectationsPreserved": true
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-tabcols-history.test.ts",
+      "beforeSHA256": "8a58155bd33cea6bd609833ebb92e06f0ccddd29c78c109b8cc0897920517f20",
+      "currentSHA256": "737dc82f6155c1c1854a395faedba1156a1c43169d6d2d664d5d18eddce39f55",
+      "change": "Actual SwView(DocShell).GetWrtShell constructor and SwEditWin(shell.GetView) arguments; required imports and formatter only; every other input/body/cleanup retained",
+      "source": "Pinned SwEditWin and SwWrtShell m_rView constructor/GetView references",
+      "expectationCalls": {
+        "count": 50,
+        "sha256": "d5f80449d24031486302673df80162a560efeb61c9bc4a4923f6815a9634605e"
+      },
+      "originalExpectationsPreserved": true
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-column-page-history.test.ts",
+      "beforeSHA256": "5d1d6ec91c4ec9edcf7f6dadbf7db173ac1816e604146da5d02aaaaa175f2a77",
+      "currentSHA256": "e298bd5d8e664e302569cf7cf546f6a1117c1a9bb3bfed19438a5f1eaca8f4f2",
+      "change": "Actual SwView(DocShell).GetWrtShell constructor and SwEditWin(shell.GetView) arguments; required imports and formatter only; every other input/body/cleanup retained",
+      "source": "Pinned SwEditWin and SwWrtShell m_rView constructor/GetView references",
+      "expectationCalls": {
+        "count": 26,
+        "sha256": "6c57585c393e13ffa44a2abf74908a43a4a2ccc30f1538dd355c778c7493e5d5"
+      },
+      "originalExpectationsPreserved": true
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-cursor-rings.test.ts",
+      "beforeSHA256": "91499ecf9da7a47ff5491bc684f205f3287ab728ab9d9e30f3a312f2aa6d4cee",
+      "currentSHA256": "1a6430e7f77bff03155559918e03af221a26f684fee0a1c4123080401827f671",
+      "change": "Actual SwView(DocShell).GetWrtShell constructor and SwEditWin(shell.GetView) arguments; required imports and formatter only; every other input/body/cleanup retained",
+      "source": "Pinned SwEditWin and SwWrtShell m_rView constructor/GetView references",
+      "expectationCalls": {
+        "count": 72,
+        "sha256": "6f90976d9379f21486444ae6063ff2c9e143ffb858f48286e1389543006cd7b7"
+      },
+      "originalExpectationsPreserved": true
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-delete.test.ts",
+      "beforeSHA256": "b420359f2eec53310c9ec7f09a4709ed9994fedca39853c0c6d98f1704f4f750",
+      "currentSHA256": "7ed76c44299b0cb6f92483c4b7eddd7447b4a59f1768040f58e5974f6392763e",
+      "change": "Actual SwView(DocShell).GetWrtShell constructor and SwEditWin(shell.GetView) arguments; required imports and formatter only; every other input/body/cleanup retained",
+      "source": "Pinned SwEditWin and SwWrtShell m_rView constructor/GetView references",
+      "expectationCalls": {
+        "count": 111,
+        "sha256": "7350606da04d097eb7127c102f9aab7dfacd461d9495ca44f051fe1e54534152"
+      },
+      "originalExpectationsPreserved": true
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-editing.test.ts",
+      "beforeSHA256": "0d2469fb9e8f37fe1ec2055f4f68d3210a0788b8cdea70d2f7b2dce9110570cf",
+      "currentSHA256": "24069d10d9c631c5739609d8911baf2cd779659a1a1042972195ff9e2860e16b",
+      "change": "Actual SwView(DocShell).GetWrtShell constructor and SwEditWin(shell.GetView) arguments; required imports and formatter only; every other input/body/cleanup retained",
+      "source": "Pinned SwEditWin and SwWrtShell m_rView constructor/GetView references",
+      "expectationCalls": {
+        "count": 79,
+        "sha256": "dea8627d2a22edf83820ad4f7430a568071662da9995569c81de7382f5225a44"
+      },
+      "originalExpectationsPreserved": true
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-format-lifecycle-history.test.ts",
+      "beforeSHA256": "48333e3f36e1515b6f3c20854385dd5d8443716304a85665a34f25514da357c0",
+      "currentSHA256": "505a80bf7b4d55d738a09b449266948192a1c11d945e44c10531573bcb97652c",
+      "change": "Actual SwView(DocShell).GetWrtShell constructor and SwEditWin(shell.GetView) arguments; required imports and formatter only; every other input/body/cleanup retained",
+      "source": "Pinned SwEditWin and SwWrtShell m_rView constructor/GetView references",
+      "expectationCalls": {
+        "count": 33,
+        "sha256": "940c81e51b1939a8672ef72a1c9fe893b9ab2a5d94e76759479cf432c3342520"
+      },
+      "originalExpectationsPreserved": true
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-height-command-separation.test.ts",
+      "beforeSHA256": "1c0613f7250c9134e5b137632419f06e4051954873289087f661da31e369c1a6",
+      "currentSHA256": "397d605db013bc1d404069dfe1eae070986b126bff09730b6371b3d0d9801c36",
+      "change": "Actual SwView(DocShell).GetWrtShell constructor and SwEditWin(shell.GetView) arguments; required imports and formatter only; every other input/body/cleanup retained",
+      "source": "Pinned SwEditWin and SwWrtShell m_rView constructor/GetView references",
+      "expectationCalls": {
+        "count": 26,
+        "sha256": "d6b0a143b1c30acd1606658e9725362c86d9afc6e36359e11b8eaf97e6e22ff8"
+      },
+      "originalExpectationsPreserved": true
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-height-delta.test.ts",
+      "beforeSHA256": "ba76973fe7dd201faa61154c5784358f7b6e7d93e0cf332109c5052be94ce69e",
+      "currentSHA256": "11e29323f29b0f24d497b2c6c7c16d46878f422ae571502202b8da43cdd6125a",
+      "change": "Actual SwView(DocShell).GetWrtShell constructor and SwEditWin(shell.GetView) arguments; required imports and formatter only; every other input/body/cleanup retained",
+      "source": "Pinned SwEditWin and SwWrtShell m_rView constructor/GetView references",
+      "expectationCalls": {
+        "count": 22,
+        "sha256": "48a1fab2a824e949b82a5785ff27f5e2ca99aadebf1cd474e8a49d18792ef9d1"
+      },
+      "originalExpectationsPreserved": true
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-layout-split-history.test.ts",
+      "beforeSHA256": "adc28c1da433fbb23a97ca471b13796e4b2e86ed42c38f8bca7d1ec6f7d26440",
+      "currentSHA256": "e583a59b78a866bf26dd119536873b98cd3ca54a008e8466a8a4cbab52c0ecba",
+      "change": "Actual SwView(DocShell).GetWrtShell constructor and SwEditWin(shell.GetView) arguments; required imports and formatter only; every other input/body/cleanup retained",
+      "source": "Pinned SwEditWin and SwWrtShell m_rView constructor/GetView references",
+      "expectationCalls": {
+        "count": 21,
+        "sha256": "ee299157a9b164b8feff2f759199071888bfc4f0b8ff2b330fbb2ece817c1b8b"
+      },
+      "originalExpectationsPreserved": true
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-name-history.test.ts",
+      "beforeSHA256": "a473b004cc6ce94618df1c8e0c3d998f222b0343540ac08fe6d0ab0e4639eff5",
+      "currentSHA256": "ebf1cecc941a89134aa9647a842642e0efe99fc27f171fddcae6ebd56322306b",
+      "change": "Actual SwView(DocShell).GetWrtShell constructor and SwEditWin(shell.GetView) arguments; required imports and formatter only; every other input/body/cleanup retained",
+      "source": "Pinned SwEditWin and SwWrtShell m_rView constructor/GetView references",
+      "expectationCalls": {
+        "count": 71,
+        "sha256": "a7add9f9efcf8069f4fb967950527d7e3a7924c8ae0b91414a44fcd480b51cd8"
+      },
+      "originalExpectationsPreserved": true
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-paste.test.ts",
+      "beforeSHA256": "dcdd268b2833f498f072e9d5eb97d26e65ce801c3cd361bf8d9de92ade39903e",
+      "currentSHA256": "bc5eb5bb4b63fbd1e0a1d0d0640febec74232a1c4e64e4cf2313742f9a9e951a",
+      "change": "Actual SwView(DocShell).GetWrtShell constructor and SwEditWin(shell.GetView) arguments; required imports and formatter only; every other input/body/cleanup retained",
+      "source": "Pinned SwEditWin and SwWrtShell m_rView constructor/GetView references",
+      "expectationCalls": {
+        "count": 34,
+        "sha256": "5ce0a5c1247bb421210d4cb3e6a5d9533b56859263269491b530834ad0bd35c7"
+      },
+      "originalExpectationsPreserved": true
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-plain-paste.test.ts",
+      "beforeSHA256": "48ba30d3c9ed5872558da27c3a3a229daa11e57f68aaa921506c65aa45c88fd6",
+      "currentSHA256": "ffc2a8af851d743c574db92be01297ba937fef7441f3741e612873c47ee2136b",
+      "change": "Actual SwView(DocShell).GetWrtShell constructor and SwEditWin(shell.GetView) arguments; required imports and formatter only; every other input/body/cleanup retained",
+      "source": "Pinned SwEditWin and SwWrtShell m_rView constructor/GetView references",
+      "expectationCalls": {
+        "count": 92,
+        "sha256": "c2104acbc3c2652ca99df148ca7ad8ab5b3bfd3415ce007036b93048122256e3"
+      },
+      "originalExpectationsPreserved": true
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-properties-reset-history.test.ts",
+      "beforeSHA256": "fcbfaf2b90e37862e8997314444973f1ab930e092c332c2735f81d6549ed5fb0",
+      "currentSHA256": "f43ae7ac9161112adefc133de30c76d6a67ba96679427c3bdd3e68150521d59f",
+      "change": "Actual SwView(DocShell).GetWrtShell constructor and SwEditWin(shell.GetView) arguments; required imports and formatter only; every other input/body/cleanup retained",
+      "source": "Pinned SwEditWin and SwWrtShell m_rView constructor/GetView references",
+      "expectationCalls": {
+        "count": 22,
+        "sha256": "de09d242ead4c9cc684ee9568ff5c8531844a5668cb73e8a77f1875baa1d309c"
+      },
+      "originalExpectationsPreserved": true
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-properties.test.ts",
+      "beforeSHA256": "ce27154155753a90c8eaf0a888b80d518596b1f7ca33d94f04c681ecdde4c186",
+      "currentSHA256": "240e712765431f020332864c4b34a7ec1dc985a98838c7adf6539ffa639380db",
+      "change": "Actual SwView(DocShell).GetWrtShell constructor and SwEditWin(shell.GetView) arguments; required imports and formatter only; every other input/body/cleanup retained",
+      "source": "Pinned SwEditWin and SwWrtShell m_rView constructor/GetView references",
+      "expectationCalls": {
+        "count": 43,
+        "sha256": "1ddd4a8f61d6b062bcef534c85eb88d498a82daf16a59ac9ea5b941bd75152b8"
+      },
+      "originalExpectationsPreserved": true
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-selection.test.ts",
+      "beforeSHA256": "aa639339717da950d33a97813ba09fe0ba15ae5816923b26905b0880a0491f08",
+      "currentSHA256": "d2ebec5b7286bab1b3ee2acb03ba8b680da4f54ba15126a694feca1734e857dc",
+      "change": "Actual SwView(DocShell).GetWrtShell constructor and SwEditWin(shell.GetView) arguments; required imports and formatter only; every other input/body/cleanup retained",
+      "source": "Pinned SwEditWin and SwWrtShell m_rView constructor/GetView references",
+      "expectationCalls": {
+        "count": 48,
+        "sha256": "e4b070e54cb7442fbeeb94c37a552ea03a7efa247eac5fe8ea21cb719e3e7b62"
+      },
+      "originalExpectationsPreserved": true
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-text-flow-headline-history.test.ts",
+      "beforeSHA256": "b425624891abf98f3e3711baabe6b0bbf6a1ffbd11a21222d176a385c2f05997",
+      "currentSHA256": "5363eeb8b83d6073ed714cd18d026fc3661a1c18e98fa88af1fd6a47d65c4768",
+      "change": "Actual SwView(DocShell).GetWrtShell constructor and SwEditWin(shell.GetView) arguments; required imports and formatter only; every other input/body/cleanup retained",
+      "source": "Pinned SwEditWin and SwWrtShell m_rView constructor/GetView references",
+      "expectationCalls": {
+        "count": 17,
+        "sha256": "a359a3ae0cfa2e2d4c12a76060c281130bf212e55777ff3ca214473c7f4f56dd"
+      },
+      "originalExpectationsPreserved": true
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-text-flow-split-history.test.ts",
+      "beforeSHA256": "1fbcc2f7cd58008cec41455f0c7920892266ba2791560ee9dba6db401ce20b11",
+      "currentSHA256": "530d8d480943d0e011e3ce787c8669ef83e5e6470e8644cdfd4c84849c0d4605",
+      "change": "Actual SwView(DocShell).GetWrtShell constructor and SwEditWin(shell.GetView) arguments; required imports and formatter only; every other input/body/cleanup retained",
+      "source": "Pinned SwEditWin and SwWrtShell m_rView constructor/GetView references",
+      "expectationCalls": {
+        "count": 25,
+        "sha256": "d16be951ef2f4df0d0ba14b968d890b463455e944b90521ed41742d7d0b6f6c1"
+      },
+      "originalExpectationsPreserved": true
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-traversal.test.ts",
+      "beforeSHA256": "d7c8955df893bac37e826d7e148fc654936f6dadba1c60f336c099e72445558b",
+      "currentSHA256": "1d691edee0d9c0e7449313a9cbb6e70b9eccb7adf91f24d4fce383e5b3a26401",
+      "change": "Actual SwView(DocShell).GetWrtShell constructor and SwEditWin(shell.GetView) arguments; required imports and formatter only; every other input/body/cleanup retained",
+      "source": "Pinned SwEditWin and SwWrtShell m_rView constructor/GetView references",
+      "expectationCalls": {
+        "count": 111,
+        "sha256": "41de8ed945d4c90bacae1df0d6c19e293214701216c31d11cbc5df30b138675d"
+      },
+      "originalExpectationsPreserved": true
+    }
+  ],
+  "newAcceptanceFiles": [
+    "apps/office/src/sw/source/uibase/docvw/native-edit-view-ownership.test.ts"
+  ],
+  "metadata": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "oldRecords": 302,
+      "currentRecords": 302,
+      "allPriorFieldsPrefixesAndStatusesPreserved": true
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "oldRecords": 302,
+      "currentRecords": 302,
+      "allPriorFieldsPrefixesAndStatusesPreserved": true
+    }
+  ],
+  "failures": []
+}

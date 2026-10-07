@@ -7,6 +7,7 @@ import { createWriterDocument } from "../../core/doc/doc";
 import { SwDocShell } from "../app/docsh";
 import { SwWrtShell } from "../wrtsh/wrtsh1";
 import { SwEditWin } from "./edtwin";
+import { SwView } from "../uiview/view";
 
 /** Creates one edit window over a canonical Writer shell. @returns Edit-window fixture. */
 function createEditWindow(): Readonly<{
@@ -15,14 +16,14 @@ function createEditWindow(): Readonly<{
   shell: SwWrtShell;
 }> {
   const document = createWriterDocument();
-  const shell = new SwWrtShell(
+  const shell = new SwView(
     new SwDocShell(
       document,
       createDocument({ id: "edtwin", suiteId: "writer", title: "Edit window" }),
     ),
-  );
+  ).GetWrtShell();
   const invalidate = vi.fn();
-  return { editWindow: new SwEditWin(shell, invalidate), invalidate, shell };
+  return { editWindow: new SwEditWin(shell.GetView(), invalidate), invalidate, shell };
 }
 
 describe("SwEditWin", /** Registers platform-neutral edit-window tests. @returns Nothing. */ () => {
@@ -63,7 +64,7 @@ describe("SwEditWin", /** Registers platform-neutral edit-window tests. @returns
     editWindow.UpdateExtTextInput("IME");
     expect(editWindow.EndExtTextInput()).toBe(true);
     expect(invalidate).toHaveBeenCalled();
-    const detached = new SwEditWin(shell);
+    const detached = new SwEditWin(shell.GetView());
     detached.SelectAll();
     expect(detached.InsertText("")).toBe(false);
   });

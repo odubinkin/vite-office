@@ -10,11 +10,12 @@ import { SwTabCols } from "../../core/bastyp/tabcol";
 import { SwDoc } from "../../core/doc/doc";
 import { subscribeToSwModify } from "../../../inc/calbck";
 import { SwDocShell } from "../app/docsh";
-import { SwWrtShell } from "./wrtsh1";
+
 import { SwEditWin } from "../docvw/edtwin";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { SwFEShell } from "../../core/frmedt/fetab";
 import { ItemSetToTableParam, type SwTableProperties } from "../shells/tabsh";
+import { SwView } from "../uiview/view";
 
 /** Requires an actual fixture owner. @param value - Optional owner. @returns Owner. */
 function required<T>(value: T | undefined): T {
@@ -71,9 +72,9 @@ function fixture() {
       doc,
       createDocument({ id: "table-properties", suiteId: "writer", title: "Properties" }),
     ),
-    shell = new SwWrtShell(docShell),
+    shell = new SwView(docShell).GetWrtShell(),
     invalidate = vi.fn(),
-    edit = new SwEditWin(shell);
+    edit = new SwEditWin(shell.GetView());
   subscribeToSwModify(shell, invalidate);
   const value: SwTableProperties = {
     width: 5000,

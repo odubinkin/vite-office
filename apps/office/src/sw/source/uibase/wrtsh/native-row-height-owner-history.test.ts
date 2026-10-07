@@ -3,12 +3,13 @@ import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
 import { expect, it, vi } from "vitest";
 import { SwDoc } from "../../core/doc/doc";
 import { SwDocShell } from "../app/docsh";
-import { SwWrtShell } from "./wrtsh1";
+
 import { SwEditWin } from "../docvw/edtwin";
 import { SwTableHeightDlg } from "../../ui/table/rowht";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { writeOdtDocument } from "../../filter/xml/wrtxml";
 import { readOdtDocument } from "../../filter/xml/swxml";
+import { SwView } from "../uiview/view";
 /** Requires an original native owner. @param value - Possible owner. @returns Actual owner. */
 function required<T>(value: T | undefined): T {
   if (value === undefined) throw new Error("Missing row-height history owner");
@@ -35,13 +36,13 @@ for (const mode of ["direct", "selected", "dialog"] as const)
     node.SetListId("height-list");
     doc.EnsureNumRule("Numbering", "numbered");
     node.SetNumRule("Numbering");
-    const shell = new SwWrtShell(
+    const shell = new SwView(
         new SwDocShell(
           doc,
           createDocument({ id: "height-owner", suiteId: "writer", title: "Height" }),
         ),
-      ),
-      edit = new SwEditWin(shell);
+      ).GetWrtShell(),
+      edit = new SwEditWin(shell.GetView());
     try {
       edit.SetSelection({ point: { nodeIndex: node.GetIndex(), contentIndex: 2 } });
       shell.ToggleCharacterFormat("bold");

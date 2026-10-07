@@ -3,10 +3,11 @@ import { describe, expect, it, vi } from "vitest";
 import { SwDoc } from "../../core/doc/doc";
 import { SwTextNode } from "../../core/txtnode/ndtxt";
 import { SwDocShell } from "../app/docsh";
-import { SwWrtShell } from "./wrtsh1";
+
 import { SwEditWin } from "../docvw/edtwin";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { WriterViewProjection } from "../../../browser/presentation/writer-view-projection";
+import { SwView } from "../uiview/view";
 
 /** Requires an actual owner. @param value - Optional node. @returns Owner. */
 function required<T>(value: T | undefined): T {
@@ -29,9 +30,9 @@ function fixture() {
   node.SetText("abcd");
   neighbor.SetText("neighbor");
   const metadata = createDocument({ id: "native-table", suiteId: "writer", title: "Table" }),
-    shell = new SwWrtShell(new SwDocShell(doc, metadata)),
+    shell = new SwView(new SwDocShell(doc, metadata)).GetWrtShell(),
     invalidate = vi.fn(),
-    edit = new SwEditWin(shell, invalidate);
+    edit = new SwEditWin(shell.GetView(), invalidate);
   return { doc, body, table, box, neighborBox, node, neighbor, metadata, shell, edit, invalidate };
 }
 /** Sets literal actual-node coordinates. @param owner - Fixture. @param offset - Point offset. @param mark - Optional fixed offset. @returns Nothing. */

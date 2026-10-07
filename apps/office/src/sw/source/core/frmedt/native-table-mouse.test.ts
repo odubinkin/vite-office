@@ -8,6 +8,7 @@ import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { SwTabFrame, type SwTableMouseGeometry } from "../layout/tabfrm";
 import { SwTab } from "../../../inc/fesh";
 import { SwTableCursor } from "../crsr/swcrsr";
+import { SwView } from "../../uibase/uiview/view";
 /** Requires a real fixture owner. @param value - Optional connected owner. @returns Actual owner. */
 function required<T>(value: T | null | undefined): T {
   if (value === null || value === undefined) throw new Error("Missing real mouse fixture owner");
@@ -35,11 +36,11 @@ function fixture() {
     /** Authors distinct cell text. @param box - Actual owner. @param index - Literal index. @returns Nothing. */
     (box, index) => required(box.GetParagraphs()[0]).SetText("Cell" + index),
   );
-  const shell = new SwWrtShell(
+  const shell = new SwView(
       new SwDocShell(doc, createDocument({ id: "mouse", suiteId: "writer", title: "Mouse" })),
-    ),
+    ).GetWrtShell(),
     invalidate = vi.fn(),
-    edit = new SwEditWin(shell, invalidate);
+    edit = new SwEditWin(shell.GetView(), invalidate);
   shells.push(shell);
   const geometry: SwTableMouseGeometry = {
     rect: { left: 100, right: 400, top: 100, bottom: 250 },

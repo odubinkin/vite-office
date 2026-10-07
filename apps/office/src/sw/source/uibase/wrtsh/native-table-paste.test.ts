@@ -5,7 +5,7 @@ import { SwDoc } from "../../core/doc/doc";
 import { SwPaM, SwPosition } from "../../core/crsr/pam";
 import { SwTableCursor } from "../../core/crsr/swcrsr";
 import { SwDocShell } from "../app/docsh";
-import { SwWrtShell } from "./wrtsh1";
+
 import { SwEditWin } from "../docvw/edtwin";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { createWriterReadFragmentAction } from "../../filter/basflt/shellio";
@@ -14,6 +14,7 @@ import { createWriterCharacterItemSet } from "../../core/txtnode/txatbase";
 import { SetAttrMode } from "../../../inc/swtypes";
 import { SwFormatINetFormat } from "../../core/txtnode/fmtatr2";
 import type { WriterPasteDocument } from "../dochdl/swdtflvr";
+import { SwView } from "../uiview/view";
 
 /** Requires an actual owner. @param value - Owner. @returns Defined owner. */
 function required<T>(value: T | undefined): T {
@@ -54,10 +55,10 @@ function fixture(reverse: boolean, empty: boolean) {
       return tail;
     },
   );
-  const shell = new SwWrtShell(
+  const shell = new SwView(
     new SwDocShell(doc, createDocument({ id: "table-paste", suiteId: "writer", title: "Paste" })),
-  );
-  selectTableRow(new SwEditWin(shell), required(nodes[1]).GetIndex());
+  ).GetWrtShell();
+  selectTableRow(new SwEditWin(shell.GetView()), required(nodes[1]).GetIndex());
   const display = shell.getShellCursor() as SwTableCursor;
   display
     .GetPoint()

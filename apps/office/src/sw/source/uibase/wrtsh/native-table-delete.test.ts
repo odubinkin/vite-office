@@ -3,7 +3,7 @@ import { selectTableRow } from "../../../../../test-support/table-mouse";
 import { it, expect } from "vitest";
 import { SwDoc } from "../../core/doc/doc";
 import { SwTableCursor } from "../../core/crsr/swcrsr";
-import { SwWrtShell } from "./wrtsh1";
+
 import { SwDocShell } from "../app/docsh";
 import { SwEditWin } from "../docvw/edtwin";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
@@ -18,6 +18,7 @@ import { readOdtDocument } from "../../filter/xml/swxml";
 import { RES_CHRATR_POSTURE, RES_CHRATR_WEIGHT } from "../../../inc/hintids";
 import { SwFormatINetFormat } from "../../core/txtnode/fmtatr2";
 import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
+import { SwView } from "../uiview/view";
 
 it("native empty append merges copied automatic items without retaining duplicate boundaries", /** Checks native zero-length CopyAttr item precedence and later insertion. @returns Nothing. */ () => {
   const doc = new SwDoc(),
@@ -226,8 +227,8 @@ function fixture(extras = true, lists = true) {
       doc,
       createDocument({ id: "table-delete", suiteId: "writer", title: "Delete" }),
     ),
-    shell = new SwWrtShell(docShell),
-    edit = new SwEditWin(shell);
+    shell = new SwView(docShell).GetWrtShell(),
+    edit = new SwEditWin(shell.GetView());
   return { doc, body, table, lines, boxes, nodes, tails, docShell, shell, edit };
 }
 /** Selects only actual middle-column boxes. @param f - Native owners. @param reverse - Display point in the final selected cell. @returns Display owner. */

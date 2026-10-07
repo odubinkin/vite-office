@@ -1,0 +1,52 @@
+{
+  "records": [
+    {
+      "command": "npm exec -- prettier --check apps/office/src/sw/source/core/crsr/trvltbl.ts apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts apps/office/src/sw/source/uibase/docvw/native-edit-view-ownership.test.ts",
+      "reason": "Changed constructor/layout source and fresh InitNew fixture only; prior passing untouched files not replayed.",
+      "exit": 0,
+      "bytes": 66,
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+      "diagnostics": []
+    },
+    {
+      "command": "npm exec -- eslint apps/office/src/sw/source/core/crsr/trvltbl.ts apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts apps/office/src/sw/source/uibase/docvw/native-edit-view-ownership.test.ts --max-warnings 0",
+      "reason": "Changed constructor/layout source and fresh fixture inputs.",
+      "exit": 0,
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run typecheck",
+      "reason": "Original failed InitNew type signature and changed constructor/import graph.",
+      "exit": 0,
+      "bytes": 240,
+      "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:file-size",
+      "reason": "Original failed wrtsh1.ts1006 physical lines; remove duplicate layout ownership instead of compression/exclusion.",
+      "exit": 0,
+      "bytes": 3996,
+      "sha256": "a22657eb459659baa3de304dcda125cfcdcb15be17372531809e857ba21d6fd7",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:dependencies",
+      "reason": "Changed SwRootFrame value import to type and shared cursor-shell constructor graph.",
+      "exit": 0,
+      "bytes": 189,
+      "sha256": "cecff2a146c1a0b1777ee88119245e5c28301522246287660e51069e8ab172d5",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:docs",
+      "reason": "Changed native cursor-shell constructor JSDoc and fresh fixture callback documentation.",
+      "exit": 0,
+      "bytes": 119,
+      "sha256": "28aff6929a7ee5bd2793a6341389d2df5a4be74bb2e08e1d3a3acaf9d3c9380c",
+      "diagnostics": []
+    }
+  ]
+}

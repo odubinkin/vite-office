@@ -21,17 +21,17 @@ export enum PopMode {
 
 /** Core cursor shell precedes editing/frame shells and owns actual table movement. */
 export abstract class SwCursorShell extends SwModify {
-  /** Creates a cursor shell using actual view options or standalone defaults. @param viewOptions - Existing view-option identity. @returns Nothing. */
+  /** Creates a cursor shell using actual view options or standalone defaults. @param viewOptions - Existing view-option identity. @param cursorLayout - Shared native view layout, absent for standalone shells. @returns Nothing. */
   public constructor(
     private readonly viewOptions = new SwViewOption(
       /** Retains standalone options without a frame invalidation owner. @returns Nothing. */ () => {},
     ),
+    private cursorLayout?: SwRootFrame,
   ) {
     super();
   }
   private m_sMarkedListId = "";
   private m_nMarkedListLevel = 0;
-  private cursorLayout: SwRootFrame | undefined;
   /** Returns the native cursor's persistent layout owner. @returns Current document layout. */
   public GetLayout(): SwRootFrame {
     return (this.cursorLayout ??= new SwRootFrame(

@@ -3,7 +3,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { createWriterDocument } from "../../core/doc/doc";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { SwDocShell } from "../app/docsh";
-import { SwWrtShell } from "../wrtsh/wrtsh1";
+
 import { SwEditWin } from "./edtwin";
 import { SwPaM, SwPosition } from "../../core/crsr/pam";
 import { SwUndoDelNum } from "../../core/undo/unnum";
@@ -19,6 +19,7 @@ import {
   RES_PARATR_LIST_RESTARTVALUE,
   RES_PARATR_LIST_ISCOUNTED,
 } from "../../../inc/hintids";
+import { SwView } from "../uiview/view";
 const documents: ReturnType<typeof createWriterDocument>[] = [];
 afterEach(
   /** Releases native owners. @returns Nothing. */ () => {
@@ -42,9 +43,9 @@ function fixture() {
       doc,
       createDocument({ id: "list-enter", suiteId: "writer", title: "Enter" }),
     ),
-    shell = new SwWrtShell(docShell),
+    shell = new SwView(docShell).GetWrtShell(),
     invalidate = vi.fn(),
-    win = new SwEditWin(shell, invalidate);
+    win = new SwEditWin(shell.GetView(), invalidate);
   return { doc, body, first, second, boxes, docShell, shell, win, invalidate };
 }
 describe("native list Enter", /** Registers actual-node behavior. @returns Nothing. */ () => {

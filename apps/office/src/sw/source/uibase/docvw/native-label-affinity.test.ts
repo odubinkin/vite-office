@@ -7,6 +7,7 @@ import { SwWrtShell } from "../wrtsh/wrtsh1";
 import { SwEditWin } from "./edtwin";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { SwPaM, SwPosition } from "../../core/crsr/pam";
+import { SwView } from "../uiview/view";
 const shells: SwWrtShell[] = [];
 afterEach(
   /** Releases native cursor subscriptions. @returns Nothing. */ () => {
@@ -29,8 +30,8 @@ function fixture(cell: boolean, kind: "bullet" | "numbered" | "none") {
       doc,
       createDocument({ id: "labels", suiteId: "writer", title: "Labels" }),
     ),
-    shell = new SwWrtShell(docShell),
-    edit = new SwEditWin(shell);
+    shell = new SwView(docShell).GetWrtShell(),
+    edit = new SwEditWin(shell.GetView());
   shells.push(shell);
   shell.FocusNode(node);
   doc.GetUndoManager().Clear();

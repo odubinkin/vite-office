@@ -1,0 +1,23 @@
+{
+  "kind": "app",
+  "profile": "upstream-absent",
+  "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/source/uibase/wrtsh/native-line-margin.test.ts -t ^(?:native repeated Home enters visible labels and End clears without document history)$ --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/59XVYZ.closure1.app-results.json",
+  "originalFailedNames": [
+    {
+      "file": "src/sw/source/uibase/wrtsh/native-line-margin.test.ts",
+      "name": "native repeated Home enters visible labels and End clears without document history"
+    }
+  ],
+  "vendorRestored": true,
+  "exit": 1,
+  "outputSHA256": "29cf5bdff6913f3bc40751b636e2e91935f38204b0da2a362c885bb7fa213101",
+  "bytes": 31085,
+  "caseCounts": {
+    "passed": 1,
+    "failed": 0,
+    "skipped": 16,
+    "total": 17
+  },
+  "failedCases": [],
+  "unhandledErrorCount": 0
+}

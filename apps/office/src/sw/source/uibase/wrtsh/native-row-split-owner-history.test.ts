@@ -4,13 +4,14 @@ import { VertOrientation } from "./../../../../offapi/com/sun/star/text/VertOrie
 import { expect, it, vi } from "vitest";
 import { SwDoc } from "../../core/doc/doc";
 import { SwDocShell } from "../app/docsh";
-import { SwWrtShell } from "./wrtsh1";
+
 import { SwEditWin } from "../docvw/edtwin";
 import { ItemSetToTableParam } from "../shells/tabsh";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { writeOdtDocument } from "../../filter/xml/wrtxml";
 import { readOdtDocument } from "../../filter/xml/swxml";
 import { PopMode } from "../../core/crsr/trvltbl";
+import { SwView } from "../uiview/view";
 /** Authors independent row flags and original cell/list owners. @returns Native fixture. */
 function fixture() {
   const doc = new SwDoc(),
@@ -26,13 +27,13 @@ function fixture() {
   node.SetListId("owner-list");
   doc.EnsureNumRule("Numbering", "numbered");
   node.SetNumRule("Numbering");
-  const shell = new SwWrtShell(
+  const shell = new SwView(
       new SwDocShell(
         doc,
         createDocument({ id: "row-split-owner", suiteId: "writer", title: "Owner" }),
       ),
-    ),
-    edit = new SwEditWin(shell);
+    ).GetWrtShell(),
+    edit = new SwEditWin(shell.GetView());
   edit.SetSelection({ point: { nodeIndex: node.GetIndex(), contentIndex: 2 } });
   return { doc, table, rows, box, node, shell, edit };
 }

@@ -12,6 +12,7 @@ import { HoriOrientation as H } from "../../../../offapi/com/sun/star/text/HoriO
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { writeOdtDocument } from "../../filter/xml/wrtxml";
 import { readOdtDocument } from "../../filter/xml/swxml";
+import { SwView } from "../uiview/view";
 const shells: SwWrtShell[] = [];
 afterEach(
   /** Releases actual native shell lifetimes. @returns Nothing. */ () => {
@@ -43,13 +44,13 @@ function fixture() {
   doc.EnsureNumRule("Numbering", "numbered");
   node.SetNumRule("Numbering");
   node.SetListId("column-page-list");
-  const shell = new SwWrtShell(
+  const shell = new SwView(
       new SwDocShell(
         doc,
         createDocument({ id: "column-page", suiteId: "writer", title: "Columns" }),
       ),
-    ),
-    edit = new SwEditWin(shell);
+    ).GetWrtShell(),
+    edit = new SwEditWin(shell.GetView());
   shells.push(shell);
   edit.SetSelection({ point: { nodeIndex: node.GetIndex(), contentIndex: 2 } });
   const pageDesc = doc.GetPageDesc().GetValue(),

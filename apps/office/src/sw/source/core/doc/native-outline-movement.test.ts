@@ -11,6 +11,7 @@ import { SwWrtShell } from "../../uibase/wrtsh/wrtsh1";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { SvxWeightItem } from "../../../../editeng/source/items/textitem";
 import { RES_CHRATR_WEIGHT } from "../../../inc/hintids";
+import { SwView } from "../../uibase/uiview/view";
 
 const shells: SwWrtShell[] = [];
 afterEach(
@@ -33,7 +34,7 @@ function fixture() {
       doc,
       createDocument({ id: "native-outline", suiteId: "writer", title: "Outline" }),
     ),
-    shell = new SwWrtShell(docShell);
+    shell = new SwView(docShell).GetWrtShell();
   first.SetText("First");
   shells.push(shell);
   return { doc, first, second, third, shell, docShell };
@@ -349,7 +350,7 @@ describe("native outline movement", /** Registers source-shaped outline behavior
     f.first.SetAttrListLevel(8);
     f.doc.GetUndoManager().Clear();
     expect(NumDownChangesIndent(f.shell)).toBe(false);
-    const edit = new SwEditWin(f.shell);
+    const edit = new SwEditWin(f.shell.GetView());
     expect(edit.HandleTab()).toBe(true);
     expect(f.first.GetText()).toBe("\tFirst");
     expect(f.first.GetActualListLevel()).toBe(8);
@@ -388,7 +389,7 @@ describe("native outline movement", /** Registers source-shaped outline behavior
     f.first.SetAttrListLevel(9);
     f.doc.GetUndoManager().Clear();
     expect(NumDownChangesIndent(f.shell)).toBe(true);
-    const edit = new SwEditWin(f.shell);
+    const edit = new SwEditWin(f.shell.GetView());
     expect(edit.HandleTab()).toBe(true);
     expect(f.first.GetText()).toBe("First");
     expect(f.first.GetActualListLevel()).toBe(9);

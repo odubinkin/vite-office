@@ -24,9 +24,10 @@ import { FontWeight, SvxWeightItem } from "../../../../editeng/source/items/text
 import { RES_CHRATR_WEIGHT } from "../../../inc/hintids";
 import { readWriterAsciiParagraphs, prepareWriterAsciiParagraphs } from "../../filter/ascii/parasc";
 import { SwDocShell } from "../../uibase/app/docsh";
-import { SwWrtShell } from "../../uibase/wrtsh/wrtsh1";
+
 import { SwEditWin } from "../../uibase/docvw/edtwin";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
+import { SwView } from "../../uibase/uiview/view";
 
 /** Requires an actual owner. @param value - Optional value. @returns Native owner. */
 function required<T>(value: T | undefined): T {
@@ -358,14 +359,14 @@ it("native selected table plain paste retains both cells character formatting th
   second.SetText("Italic");
   automatic(first);
   automatic(second, 0, second.Len(), "italic");
-  const shell = new SwWrtShell(
+  const shell = new SwView(
     new SwDocShell(
       doc,
       createDocument({ id: "split-native-items", suiteId: "writer", title: "Native split" }),
     ),
-  );
+  ).GetWrtShell();
   try {
-    selectTableRow(new SwEditWin(shell), first.GetIndex());
+    selectTableRow(new SwEditWin(shell.GetView()), first.GetIndex());
     expect(shell.PastePlainTextAtCursor("X\nY")).toBe(true);
     const boxes = row.GetTabBoxes();
     for (let cycle = 0; cycle < 3; cycle++) {

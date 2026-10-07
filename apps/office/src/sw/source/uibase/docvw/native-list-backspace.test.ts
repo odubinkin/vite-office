@@ -12,6 +12,7 @@ import { SwNumRuleItem } from "../../core/para/paratr";
 import { SwNumRuleType, SvxNumType } from "../../core/doc/number";
 import { SvxFirstLineIndentItem } from "../../../../editeng/source/items/frmitems";
 import { RES_MARGIN_FIRSTLINE } from "../../../inc/hintids";
+import { SwView } from "../uiview/view";
 const documents: ReturnType<typeof createWriterDocument>[] = [];
 afterEach(
   /** Releases native document owners. @returns Nothing. */ () => {
@@ -36,8 +37,8 @@ function fixture() {
       doc,
       createDocument({ id: "backspace", suiteId: "writer", title: "Backspace" }),
     ),
-    shell = new SwWrtShell(docShell),
-    win = new SwEditWin(shell);
+    shell = new SwView(docShell).GetWrtShell(),
+    win = new SwEditWin(shell.GetView());
   return { doc, body, first, second, boxes, table, docShell, shell, win };
 }
 /** Places a native collapsed cursor at a content offset. @param shell - Persistent editing shell. @param node - Actual node. @param offset - Content offset. @returns Nothing. */

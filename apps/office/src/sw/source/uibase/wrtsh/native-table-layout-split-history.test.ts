@@ -15,6 +15,7 @@ import {
   type OdfTableStyle,
 } from "../../../../xmloff/source/table/XMLTableImport";
 import { SwTabFrame } from "../../core/layout/tabfrm";
+import { SwView } from "../uiview/view";
 const shells: SwWrtShell[] = [];
 afterEach(
   /** Releases original shells. @returns Nothing. */ () => {
@@ -85,13 +86,13 @@ it.each([undefined, true, false])(
     doc.EnsureNumRule("Numbering", "numbered");
     node.SetNumRule("Numbering");
     node.SetListId("split-list");
-    const shell = new SwWrtShell(
+    const shell = new SwView(
         new SwDocShell(
           doc,
           createDocument({ id: "split-history", suiteId: "writer", title: "Split" }),
         ),
-      ),
-      edit = new SwEditWin(shell);
+      ).GetWrtShell(),
+      edit = new SwEditWin(shell.GetView());
     shells.push(shell);
     edit.SetSelection({ point: { nodeIndex: node.GetIndex(), contentIndex: 2 } });
     const frame = new SwTabFrame(table),

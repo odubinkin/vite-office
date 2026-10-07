@@ -125,7 +125,7 @@ it("unfragmented DOM ports use native text coordinates", /** Checks the public a
   delete f.element.dataset.writerFragmentStart;
   delete f.element.dataset.writerFragmentEnd;
   const adapter = new BrowserWriterEditWindow(
-    new SwEditWin(f.shell),
+    new SwEditWin(f.shell.GetView()),
     {
       document,
       getSelection: /** Reads actual native selection. @returns Selection. */ () =>
@@ -163,7 +163,7 @@ it("nullable device text and detached document geometry have explicit empty fall
   const selection = window.getSelection();
   selection?.setBaseAndExtent(f.element, 0, f.element, 0);
   const adapter = new BrowserWriterEditWindow(
-    new SwEditWin(f.shell),
+    new SwEditWin(f.shell.GetView()),
     {
       document,
       getSelection: /** Reads actual native selection. @returns Selection. */ () =>
@@ -181,7 +181,7 @@ it("selection publication replacing the graph rejects stale cursor geometry", /*
   const f = fixture(true),
     oldIndex = f.node.GetIndex(),
     adapter = new BrowserWriterEditWindow(
-      new SwEditWin(f.shell),
+      new SwEditWin(f.shell.GetView()),
       {
         document,
         getSelection: /** Reads actual native selection. @returns Selection. */ () =>

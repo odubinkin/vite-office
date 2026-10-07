@@ -6,9 +6,10 @@ import { SwPosition } from "../../core/crsr/pam";
 import { SwTableCursor } from "../../core/crsr/swcrsr";
 import { SwTable, type SwTableBox } from "../../core/table/swtable";
 import { SwDocShell } from "../app/docsh";
-import { SwWrtShell } from "./wrtsh1";
+
 import { SwEditWin } from "../docvw/edtwin";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
+import { SwView } from "../uiview/view";
 /** Requires an actual owner. @param value - Optional node. @returns Owner. */
 function required<T>(value: T | undefined): T {
   if (value === undefined) throw new Error("Missing table owner");
@@ -37,14 +38,14 @@ function fixture() {
   );
   const tail = doc.nodes.AppendTableCellParagraph(required(boxes[3]));
   tail.SetText("Tail");
-  const shell = new SwWrtShell(
+  const shell = new SwView(
       new SwDocShell(
         doc,
         createDocument({ id: "selection", suiteId: "writer", title: "Selection" }),
       ),
-    ),
+    ).GetWrtShell(),
     invalidate = vi.fn(),
-    edit = new SwEditWin(shell, invalidate);
+    edit = new SwEditWin(shell.GetView(), invalidate);
   return { doc, body, table, boxes, tail, shell, edit, invalidate };
 }
 /** Creates one registered cursor over actual cell text. @param box - Cell. @returns Cursor. */

@@ -45,10 +45,16 @@ export class SwView {
     this.viewOptions = new SwViewOption(
       /** Invalidates view-option slot state. @returns Nothing. */ () => this.Invalidate("view"),
     );
-    this.wrtShell = new SwWrtShell(docShell, this.dialogController, this.layout, this.viewOptions);
+    this.wrtShell = new SwWrtShell(
+      docShell,
+      this.dialogController,
+      this.layout,
+      this.viewOptions,
+      this,
+    );
     this.docShell.SetView(this);
     this.editWindow = new SwEditWin(
-      this.wrtShell,
+      this,
       /** Publishes final operation state after edit-window compound actions close. @returns Nothing. */ () =>
         this.Invalidate("document", "history", "selection"),
     );

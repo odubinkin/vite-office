@@ -2,13 +2,14 @@
 import { expect, it, vi } from "vitest";
 import { SwDoc } from "../../core/doc/doc";
 import { SwDocShell } from "../app/docsh";
-import { SwWrtShell } from "./wrtsh1";
+
 import { SwEditWin } from "../docvw/edtwin";
 import { ItemSetToTableParam } from "../shells/tabsh";
 import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { writeOdtDocument } from "../../filter/xml/wrtxml";
 import { readOdtDocument } from "../../filter/xml/swxml";
+import { SwView } from "../uiview/view";
 for (const selected of [false, true])
   it(
     "absent table height delta preserves mixed original rows selected=" + selected,
@@ -29,12 +30,12 @@ for (const selected of [false, true])
       if (box === undefined || node === undefined)
         throw Error("Missing original height delta owner");
       node.SetText("Original");
-      const shell = new SwWrtShell(
+      const shell = new SwView(
         new SwDocShell(
           doc,
           createDocument({ id: "height-delta", suiteId: "writer", title: "Delta" }),
         ),
-      );
+      ).GetWrtShell();
       try {
         shell.FocusNode(node);
         shell.ToggleCharacterFormat("bold");
@@ -93,7 +94,7 @@ for (const selected of [false, true])
         ]);
         shell.ClearMark();
         shell.FocusNode(node);
-        new SwEditWin(shell).InsertText("!");
+        new SwEditWin(shell.GetView()).InsertText("!");
         expect(node.GetText()).toContain("!");
       } finally {
         shell.Close();
@@ -109,12 +110,12 @@ it("explicit zero minimum height retains its authored native row delta", /** Dis
     }),
     node = row.GetTabBoxes()[0]?.GetParagraphs()[0];
   if (node === undefined) throw Error("Missing explicit height owner");
-  const shell = new SwWrtShell(
+  const shell = new SwView(
     new SwDocShell(
       doc,
       createDocument({ id: "explicit-height", suiteId: "writer", title: "Height" }),
     ),
-  );
+  ).GetWrtShell();
   try {
     shell.FocusNode(node);
     expect(shell.SetRowHeight(new SwFormatFrameSize(SwFrameSize.Minimum, 0, 0))).toBe(true);

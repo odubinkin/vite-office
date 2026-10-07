@@ -11,6 +11,7 @@ import { ItemSetToTableParam } from "../shells/tabsh";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { writeOdtDocument } from "../../filter/xml/wrtxml";
 import { readOdtDocument } from "../../filter/xml/swxml";
+import { SwView } from "../uiview/view";
 const shells: SwWrtShell[] = [];
 afterEach(
   /** Releases native shell lifetimes. @returns Nothing. */ () => {
@@ -43,7 +44,7 @@ for (const original of [0, 2]) {
     doc.EnsureNumRule("Numbering", "numbered");
     node.SetNumRule("Numbering");
     node.SetListId("headline-list");
-    const shell = new SwWrtShell(
+    const shell = new SwView(
         new SwDocShell(
           doc,
           createDocument({
@@ -52,8 +53,8 @@ for (const original of [0, 2]) {
             title: "Headline",
           }),
         ),
-      ),
-      edit = new SwEditWin(shell),
+      ).GetWrtShell(),
+      edit = new SwEditWin(shell.GetView()),
       page = new SwTextFlowPage(table);
     shells.push(shell);
     edit.SetSelection({ point: { nodeIndex: node.GetIndex(), contentIndex: 2 } });

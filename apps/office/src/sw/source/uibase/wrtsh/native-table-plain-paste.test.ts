@@ -28,6 +28,7 @@ import { SwTextAttrEnd } from "../../core/txtnode/txatbase";
 import { SwFormatINetFormat } from "../../core/txtnode/fmtatr2";
 import { SwpHints } from "../../core/txtnode/ndhints";
 import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
+import { SwView } from "../uiview/view";
 const shells: SwWrtShell[] = [];
 it("native empty end split preserves expanding AUTO items and removes closed hints", /** Checks native empty suffix attributes. @returns Nothing. */ () => {
   for (const text of ["", "AB"])
@@ -172,11 +173,11 @@ function fixture(reverse = false, lists = true) {
       return tail;
     },
   );
-  const shell = new SwWrtShell(
+  const shell = new SwView(
     new SwDocShell(doc, createDocument({ id: "table-ascii", suiteId: "writer", title: "ASCII" })),
-  );
+  ).GetWrtShell();
   shells.push(shell);
-  selectTableRow(new SwEditWin(shell), required(nodes[1]).GetIndex());
+  selectTableRow(new SwEditWin(shell.GetView()), required(nodes[1]).GetIndex());
   const display = shell.getShellCursor() as SwTableCursor;
   display.GetPoint().Assign(reverse ? required(tails[2]) : required(nodes[1]), reverse ? 5 : 0);
   display.GetMark().Assign(reverse ? required(nodes[1]) : required(tails[2]), 0);
@@ -531,11 +532,11 @@ it("native blank plain paragraphs retain minimal history in default empty cells"
   table.AddColumnWidth(3000);
   const row = doc.nodes.AppendTableRow(table, 2),
     first = required(required(row.GetTabBoxes()[0]).GetParagraphs()[0]);
-  const shell = new SwWrtShell(
+  const shell = new SwView(
     new SwDocShell(doc, createDocument({ id: "blank-ascii", suiteId: "writer", title: "Blank" })),
-  );
+  ).GetWrtShell();
   shells.push(shell);
-  selectTableRow(new SwEditWin(shell), first.GetIndex());
+  selectTableRow(new SwEditWin(shell.GetView()), first.GetIndex());
   expect(shell.PastePlainTextAtCursor("\n\n")).toBe(true);
   expect(
     row

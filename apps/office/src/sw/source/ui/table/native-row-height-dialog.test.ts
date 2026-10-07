@@ -4,11 +4,12 @@ import { SwTableHeightDlg } from "./rowht";
 import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
 import { SwDoc } from "../../core/doc/doc";
 import { SwDocShell } from "../../uibase/app/docsh";
-import { SwWrtShell } from "../../uibase/wrtsh/wrtsh1";
+
 import { SwEditWin } from "../../uibase/docvw/edtwin";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { writeOdtDocument } from "../../filter/xml/wrtxml";
 import { readOdtDocument } from "../../filter/xml/swxml";
+import { SwView } from "../../uibase/uiview/view";
 
 for (const type of [SwFrameSize.Fixed, SwFrameSize.Minimum, SwFrameSize.Variable])
   for (const selected of [false, true])
@@ -24,12 +25,12 @@ for (const type of [SwFrameSize.Fixed, SwFrameSize.Minimum, SwFrameSize.Variable
           node = rows[0]?.GetTabBoxes()[0]?.GetParagraphs()[0];
         if (node === undefined) throw Error("Missing original row owner");
         node.SetText("Original");
-        const shell = new SwWrtShell(
+        const shell = new SwView(
           new SwDocShell(
             doc,
             createDocument({ id: "height-dialog", suiteId: "writer", title: "Height" }),
           ),
-        );
+        ).GetWrtShell();
         try {
           shell.FocusNode(node);
           if (selected) shell.SelTable();
@@ -79,7 +80,7 @@ for (const type of [SwFrameSize.Fixed, SwFrameSize.Minimum, SwFrameSize.Variable
           expect(rows[0]?.GetTabBoxes()[0]?.GetParagraphs()[0]).toBe(node);
           shell.ClearMark();
           shell.FocusNode(node);
-          new SwEditWin(shell).InsertText("!");
+          new SwEditWin(shell.GetView()).InsertText("!");
           expect(node.GetText()).toContain("!");
         } finally {
           shell.Close();
@@ -89,12 +90,12 @@ for (const type of [SwFrameSize.Fixed, SwFrameSize.Minimum, SwFrameSize.Variable
 
 it("native row-height metric bounds and absent table input", /** Checks MINLAY and native no-item defaults without synthetic shell mocks. @returns Nothing. */ () => {
   const doc = new SwDoc(),
-    shell = new SwWrtShell(
+    shell = new SwView(
       new SwDocShell(
         doc,
         createDocument({ id: "height-bounds", suiteId: "writer", title: "Bounds" }),
       ),
-    );
+    ).GetWrtShell();
   try {
     const draft = new SwTableHeightDlg(shell);
     expect(draft.height).toBe(23);

@@ -4,10 +4,11 @@ import { SwDoc } from "../../core/doc/doc";
 import { SwPosition } from "../../core/crsr/pam";
 import { SwTableCursor } from "../../core/crsr/swcrsr";
 import { SwDocShell } from "../app/docsh";
-import { SwWrtShell } from "./wrtsh1";
+
 import { SwEditWin } from "../docvw/edtwin";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { SwTextNode } from "../../core/txtnode/ndtxt";
+import { SwView } from "../uiview/view";
 /** Requires an existing native test owner. @param value - Optional member. @returns Actual owner. */
 function required<T>(value: T | undefined): T {
   if (value === undefined) throw new Error("Missing section fixture owner");
@@ -38,11 +39,11 @@ function fixture() {
   const lastTail = doc.nodes.AppendTableCellParagraph(required(row1.GetTabBoxes()[1]));
   lastTail.SetText("LastTail");
   const after = doc.nodes.MakeTextNode("After"),
-    shell = new SwWrtShell(
+    shell = new SwView(
       new SwDocShell(doc, createDocument({ id: "sections", suiteId: "writer", title: "Sections" })),
-    ),
+    ).GetWrtShell(),
     invalidate = vi.fn(),
-    edit = new SwEditWin(shell, invalidate);
+    edit = new SwEditWin(shell.GetView(), invalidate);
   return { doc, body, after, table, cells, tail, lastTail, shell, edit, invalidate };
 }
 /** Places actual registered selection endpoints. @param f - Owners. @param node - Point text. @param offset - Point offset. @param anchor - Optional fixed text. @param anchorOffset - Fixed offset. @returns Nothing. */
