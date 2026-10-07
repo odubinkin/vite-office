@@ -1,0 +1,53 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "command": "npm exec -- tsx scripts/generate-writer-ui-resources.ts --check",
+      "exit": 0,
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:source-tree",
+      "exit": 0,
+      "bytes": 162,
+      "sha256": "6c5bd2e3c84892b8cc26b8b1b5f06a950891f9d5988a8ef1f1496f0c252cd33e",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "exit": 0,
+      "bytes": 205,
+      "sha256": "772a24ec9824ff781d15d30eca1e0f322dbd86eeef45d46a123b36cb077cb621",
+      "diagnostics": [
+        "Source provenance check passed for 301 runtime modules (214 mapped, 71 browser adaptations, 16 local infrastructure)."
+      ]
+    },
+    {
+      "command": "npm run inventory:invariants",
+      "exit": 0,
+      "bytes": 136,
+      "sha256": "8d0f3757af43331b4c62ffa7ccf5497bcce67449a871937b94a526bde8e7fdbe",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run inventory:parity",
+      "exit": 0,
+      "bytes": 2023460,
+      "sha256": "7e2d77830aa78f889ae59d98c55f9a8c9b4d2f678994f4c5fd62dee7709dcc3e",
+      "diagnostics": [
+        "> tsx scripts/libreoffice-inventory/parity-mapping-cli.ts --baseline docs/program/libreoffice-baseline.json --mappings docs/program/parity/writer-command-slice.json --runtime-inventory docs/program/parity/runtime-inventory.json --runtime-root apps/office/src --local-root . --upstream-root vendor/libreoffice-reference",
+        "        \"reason\": \"browser-runtime-inapplicable\",",
+        "        \"rationale\": \"Native crash/session recovery depends on desktop process and backup-file lifecycle not used by this browser document workflow.\"",
+        "        \"reason\": \"browser-runtime-inapplicable\",",
+        "        \"rationale\": \"Native crash/session recovery depends on desktop process and backup-file lifecycle not used by this browser document workflow.\"",
+        "      \"path\": \"apps/office/src/framework/browser/presentation/CommandMenuBar.tsx\",",
+        "      \"side\": \"upstream\"",
+        "      \"path\": \"apps/office/src/framework/browser/presentation/CommandMenuBar.tsx\",",
+        "      \"side\": \"upstream\"",
+        "      \"path\": \"apps/office/src/sw/browser/presentation/WriterMenuBar.test.tsx\","
+      ]
+    }
+  ]
+}

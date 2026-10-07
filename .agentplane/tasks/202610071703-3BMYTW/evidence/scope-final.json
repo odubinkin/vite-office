@@ -1,0 +1,53 @@
+{
+  "base": "ff8e883f9359439cddab2572e7d4b1f45744ab5b",
+  "semanticPaths": [
+    "apps/office/e2e/native-bullet-font-roundtrip.spec.ts",
+    "apps/office/src/editeng/source/uno/unofdesc.ts",
+    "apps/office/src/sw/source/core/unocore/unosett.ts",
+    "apps/office/src/sw/source/filter/xml/native-bullet-font-roundtrip.test.ts",
+    "apps/office/src/sw/source/filter/xml/xmlexp.ts",
+    "apps/office/src/sw/source/filter/xml/xmlimp.ts",
+    "apps/office/src/xmloff/source/style/XMLFontAutoStylePool.ts",
+    "apps/office/src/xmloff/source/style/XMLFontStylesContext.ts",
+    "apps/office/src/xmloff/source/style/native-bullet-font.test.ts",
+    "apps/office/src/xmloff/source/style/xmlnume.ts",
+    "apps/office/src/xmloff/source/style/xmlnumi.test.ts",
+    "apps/office/src/xmloff/source/style/xmlnumi.ts",
+    "apps/office/src/xmloff/source/text/txtparae.ts",
+    "apps/office/src/xmloff/source/text/txtparai.ts",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/source-provenance.json"
+  ],
+  "scopeCount": 16,
+  "priorAcceptanceFiles": 594,
+  "byteIdenticalAcceptanceFiles": 593,
+  "exactSourceBackedMigrations": [
+    {
+      "path": "apps/office/src/xmloff/source/style/xmlnumi.test.ts",
+      "beforeSHA256": "c2ced81b9d5138d6c5934c03445e2528a5a0e07e1770d781c70be59dee2db64b",
+      "currentSHA256": "c2cbb824b6a952b1d3eba48630e4955870d86a21954cb781db1b65b09ab6e03f",
+      "change": "Only literal expected bullet GetProperties adds native present empty descriptor; all inputs and other assertions retained",
+      "source": "xmlnumi.cxx GetProperties bullet FontDescriptor.Name from level font state, initially empty; actual original failure observed"
+    }
+  ],
+  "newAcceptanceFiles": [
+    "apps/office/src/sw/source/filter/xml/native-bullet-font-roundtrip.test.ts",
+    "apps/office/src/xmloff/source/style/native-bullet-font.test.ts",
+    "apps/office/e2e/native-bullet-font-roundtrip.spec.ts"
+  ],
+  "metadata": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "oldRecords": 300,
+      "currentRecords": 301,
+      "allPriorFieldsPrefixesAndStatusesPreserved": true
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "oldRecords": 300,
+      "currentRecords": 301,
+      "allPriorFieldsPrefixesAndStatusesPreserved": true
+    }
+  ],
+  "failures": []
+}

@@ -1,0 +1,216 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/sw/source/core/unocore/unosett.ts": "dc399f239f444251039ceb9e68f8cf04cf5e4aa213045d7ef858399b1cb1129a",
+    "apps/office/src/sw/source/filter/xml/xmlexp.ts": "5e487efdede0ff89019a81351a9286717d4dcece576bb20fc737c3fad11f1d29",
+    "apps/office/src/sw/source/filter/xml/xmlimp.ts": "f6048c7c54c365f92b458c1c1dce6e6b42a6143277ff722b128747f2338757b4",
+    "apps/office/src/xmloff/source/style/xmlnume.ts": "2482b15599e8e73e86a49fc7ba3ac217e83b52b6a95864b82edeb9866c04d102",
+    "apps/office/src/xmloff/source/style/xmlnumi.ts": "70feba553393c3d15982bfb8426ef98213fc3d674537a5ad6cbea7732db20fd4",
+    "apps/office/src/xmloff/source/text/txtparae.ts": "b4f9ff6fab298e73e0ffd35ad2f4f80b188f7434b99c1fa5523f6dadc3427091",
+    "apps/office/src/xmloff/source/text/txtparai.ts": "92089b55aeeed6a4532e72273111595912ca12434321841053329c5bdab5afca",
+    "apps/office/src/xmloff/source/style/XMLFontAutoStylePool.ts": "3e77dfd590fc360a993dfd71ca14c69e3edfebc8c777a74d7489db8069924bf5",
+    "apps/office/src/xmloff/source/style/XMLFontStylesContext.ts": "ac021b432dbeac679b07edee621cf8812262a5c5c43da2f25dc30ab62eaf7941",
+    "apps/office/src/editeng/source/uno/unofdesc.ts": "7d4603db7d23961afd8d3cbea0fb071c4d7cbd743c5086b31164c46dc853029b",
+    "apps/office/src/sw/source/filter/xml/native-bullet-font-roundtrip.test.ts": "067e05f77c624b6d6ad6918907d6033234232e5644ddbeabe2b45c5d954f8de2",
+    "apps/office/src/xmloff/source/style/native-bullet-font.test.ts": "5c7e00fd092b0a81005630be8d6114230d8b25c8defbf0af30defa2fabb11e1e",
+    "apps/office/e2e/native-bullet-font-roundtrip.spec.ts": "146b6de3c9cc23f4687d54adccef909df03f9848606f0e0bcad01607e6f56584",
+    "docs/program/source-provenance.json": "ba820d7fd3b0a803e05d30933322c0a6fac9d7a84e7c52366ecc769bc08264c2",
+    "docs/program/parity/runtime-inventory.json": "2efd59d238868b2dedcea4ddf3f6535c66db6d87c326f59aac88cc9d22723682"
+  },
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1443,
+      "sha256": "311b464b9a01d21d73aba52d711ff333cc1504405ef315947cb78385b833fff5",
+      "totals": [],
+      "failedCases": [],
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/3BMYTW.app-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 74649,
+      "sha256": "5c10fef4d9d4d0778ee7a14cbb172a5ce03d4a446f542e4a698472304daef3a7",
+      "totals": [
+        "Test Files  2 failed | 444 passed (446)",
+        "Tests  3 failed | 13576 passed (13579)"
+      ],
+      "failedCases": [
+        {
+          "name": "apps/office/src/xmloff/source/style/xmlnumi.test.ts > owns source-created leaf references and reads them only at list publication",
+          "assertion": [
+            "AssertionError: expected \"vi.fn()\" to be called with arguments: [ 'Owned', { name: 'Display', …(2) } ]"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/source/filter/xml/native-bullet-font-roundtrip.test.ts > retains custom bullet families through common and automatic ODT rules, body/cell nodes and Worker graph",
+          "assertion": [
+            "AssertionError: expected [ 'BodyFont' ] to include 'CellFont'"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/source/filter/xml/native-bullet-font-roundtrip.test.ts > includes the native represented font family when checking duplicate common and automatic rule definitions",
+          "assertion": [
+            "Error: Duplicate ODF list style: Shared"
+          ]
+        }
+      ],
+      "caseCounts": {
+        "passed": 13576,
+        "failed": 3,
+        "skipped": 0,
+        "total": 13579
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 16559,
+          "covered": 16559,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 18182,
+          "covered": 18182,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 4225,
+          "covered": 4225,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 13717,
+          "covered": 13715,
+          "skipped": 0,
+          "pct": 99.98
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 99.98
+      },
+      "incompleteFileCount": 2,
+      "coverageMapSHA256": "bea4cfdfed108aedc57b3cfc3c58230e11c01ebba99ef706125b17ba1d876e58",
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "inventory",
+      "command": "npm run test:inventory:coverage -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/3BMYTW.inventory-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 42197,
+      "sha256": "6d4698cfb710f58b1fdad5159b48fa2cc78106b24d6c61b909f564d6ac78620d",
+      "totals": [
+        "Test Files  1 failed | 35 passed (36)",
+        "Tests  1 failed | 109 passed (110)"
+      ],
+      "failedCases": [
+        {
+          "name": "scripts/libreoffice-inventory/parity-mapping-cli.test.ts > parity mapping CLI composes the Writer mapping report with owned upstream marker evidence",
+          "assertion": [
+            "Error: Runtime module paths must be unique and lexicographically ordered."
+          ]
+        }
+      ],
+      "caseCounts": {
+        "passed": 109,
+        "failed": 1,
+        "skipped": 0,
+        "total": 110
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 1464,
+          "covered": 1460,
+          "skipped": 0,
+          "pct": 99.72
+        },
+        "statements": {
+          "total": 1523,
+          "covered": 1519,
+          "skipped": 0,
+          "pct": 99.73
+        },
+        "functions": {
+          "total": 384,
+          "covered": 381,
+          "skipped": 0,
+          "pct": 99.21
+        },
+        "branches": {
+          "total": 1081,
+          "covered": 1081,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "coverage": {
+        "lines": 99.72,
+        "statements": 99.73,
+        "functions": 99.21,
+        "branches": 100
+      },
+      "incompleteFileCount": 1,
+      "coverageMapSHA256": "da51e4d315128982ba48358d2567303a3287364d19bef9627c039073dc0b4bf7",
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "scripts",
+      "command": "npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts scripts/check-module-boundaries.test.ts",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 223,
+      "sha256": "8db71862fe869557f812a877763158ceae365ec1a8b4c2fadc6d58636cbbef54",
+      "totals": [
+        "Test Files  3 passed (3)",
+        "Tests  14 passed (14)"
+      ],
+      "failedCases": [],
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 39301,
+      "sha256": "9d5d45d198c94958fcd6f76f935a821ff3d48e77438be50a2b722dadc7e948d3",
+      "totals": [
+        "284 passed (2.3m)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "startTime": "2026-10-07T17:25:04.429Z",
+        "duration": 139776.706,
+        "expected": 284,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "unhandledErrorCount": 0
+    }
+  ]
+}

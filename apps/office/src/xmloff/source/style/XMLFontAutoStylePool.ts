@@ -1,27 +1,7 @@
 /** @fileoverview Implements LibreOffice's document font-face auto-style pool. */
 
 import { escapeXml } from "../text/txtparae";
-import type { OdfEmbeddedFont } from "./XMLFontStylesContext";
-
-/** Quotes one semicolon-separated model family list as an ODF SVG family list. @param familyName - Model family list. @returns ODF value. */
-function exportFamilyName(familyName: string): string {
-  return familyName
-    .split(";")
-    .map(
-      /** Normalizes one family. @param family - Family segment. @returns ODF family. */ (family) =>
-        family.trim(),
-    )
-    .filter(
-      /** Removes empty families. @param family - Family. @returns Whether non-empty. */ (family) =>
-        family.length > 0,
-    )
-    .map(
-      /** Quotes families containing ODF separators. @param family - Family. @returns Quoted family. */ (
-        family,
-      ) => (/[ ,]/.test(family) ? `'${family}'` : family),
-    )
-    .join(", ");
-}
+import { exportFamilyName, type OdfEmbeddedFont } from "./XMLFontStylesContext";
 
 /** Deduplicates fonts and assigns the same stable face names as XMLFontAutoStylePool. */
 export class XMLFontAutoStylePool {

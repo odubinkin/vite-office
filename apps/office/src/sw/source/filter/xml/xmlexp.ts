@@ -4,7 +4,11 @@
 import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
 import { exportBoxProperties } from "../../../../xmloff/source/style/bordrhdl";
 
-import { getWriterNumFormatKind, getWriterNumFormatBullet } from "../../core/doc/number";
+import {
+  getWriterNumFormatKind,
+  getWriterNumFormatBullet,
+  SvxNumType,
+} from "../../core/doc/number";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { SwFrameSize } from "../../../inc/fmtfsize";
 
@@ -111,6 +115,8 @@ export function exportStylesXml(document: SwDoc): string {
     /** Never cancels named style serialization. @returns False. */ () => false,
     /** Registers a font used by an inherited list base. @param family - Font family. @param generic - Generic family. @returns Face name. */
     (family, generic) => fonts.Add(family, generic),
+    /** Borrows the existing pool without registering a bullet font. @param family - Family. @returns Existing face. */
+    (family) => fonts.Find(family),
   ).namedStyles;
   const namedRules = new Map<string, SwNumRule>();
   const styles = document.GetTextFormatColls().map(
@@ -203,7 +209,11 @@ export function exportStylesXml(document: SwDoc): string {
       `<style:master-page style:name="${escapeXml(descriptor.GetName())}" style:page-layout-name="${layoutName}"${follow}/>`,
     );
   }
-  const exporter = new SvxXMLNumRuleExport(escapeXml);
+  const exporter = new SvxXMLNumRuleExport(
+    escapeXml,
+    /** Borrows existing declarations. @param family - Family. @returns Existing face. */
+    (family) => fonts.Find(family),
+  );
   const numberingStyles = [...namedRules.values()]
     .map(
       /** Emits the referenced named numbering definition, including rules absent from the current body. @param rule - Owned rule. @returns Definition XML. */
@@ -242,15 +252,18 @@ export function exportContentXml(
     isCancelled,
     /** Registers one used font. @param family - Model family. @param generic - ODF generic family. @returns Face name. */
     (family, generic) => fonts.Add(family, generic),
+    /** Borrows the existing pool without registering a bullet font. @param family - Family. @returns Existing face. */
+    (family) => fonts.Find(family),
   );
   return `<?xml version="1.0" encoding="UTF-8"?><office:document-content ${OFFICE_NAMESPACES} office:version="1.3">${fonts.exportXML()}<office:automatic-styles>${exported.automaticStyles}</office:automatic-styles><office:body><office:text>${exported.body}</office:text></office:body></office:document-content>`;
 }
 
-/** Projects the same deterministic style/body source for both package streams. @param document - Writer model. @param isCancelled - Cancellation probe. @param fontFaceName - Font registry. @returns Common/automatic style and body fragments. */
+/** Projects the same model source for both package streams. @param document - Writer model. @param isCancelled - Cancellation probe. @param fontFaceName - Font registry. @param existingFontFaceName - Existing face lookup. @returns Style/body fragments. */
 function exportWriterText(
   document: SwDoc,
   isCancelled: () => boolean,
   fontFaceName: (family: string, generic?: string) => string,
+  existingFontFaceName: (family: string) => string | undefined,
 ): OdfTextExport {
   return exportTextParagraphs(
     {
@@ -338,6 +351,7 @@ function exportWriterText(
     },
     isCancelled,
     fontFaceName,
+    existingFontFaceName,
   );
 }
 
@@ -458,6 +472,9 @@ function projectNumberingRule(rule: SwNumRule): XMLTextListRuleSource {
           kind: getWriterNumFormatKind(format),
           numberingType: format.GetNumberingType(),
           bulletChar: getWriterNumFormatBullet(format),
+          ...(format.GetNumberingType() === SvxNumType.SVX_NUM_CHAR_SPECIAL
+            ? { bulletFont: { name: format.GetBulletFont()?.GetFamilyName() ?? "" } }
+            : {}),
           prefix: format.GetPrefix(),
           suffix: format.GetSuffix(),
           startWith: (format.GetStart() << 16) >> 16,

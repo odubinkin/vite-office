@@ -61,6 +61,8 @@ export interface XMLListLevelImport {
   /** Native sal_Int16 UNO NumberingType, independent of editeng format ownership. */
   readonly numberingType?: number;
   readonly bulletChar?: string;
+  /** Represented Name member of the native BulletFont descriptor. */
+  readonly bulletFont?: Readonly<{ name: string }>;
   readonly prefix: string;
   readonly suffix: string;
   readonly startWith?: number;

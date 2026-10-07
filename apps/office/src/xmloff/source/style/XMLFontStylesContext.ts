@@ -164,7 +164,7 @@ class XMLFontStyleContextFontFaceUri extends SvXMLImportContext {
 }
 
 /** Converts an ODF comma-separated quoted family list to LibreOffice's semicolon form. @param value - SVG family list. @returns Model family list. */
-function importFamilyName(value: string): string {
+export function importFamilyName(value: string): string {
   const families = value.match(/(?:'[^']*'|"[^"]*"|[^,])+/g) ?? [];
   return families
     .map(
@@ -181,4 +181,24 @@ function importFamilyName(value: string): string {
         family.length > 0,
     )
     .join(";");
+}
+
+/** Quotes one semicolon-separated model family list as an ODF SVG family list. @param familyName - Model family list. @returns ODF value. */
+export function exportFamilyName(familyName: string): string {
+  return familyName
+    .split(";")
+    .map(
+      /** Normalizes one family. @param family - Family segment. @returns ODF family. */ (family) =>
+        family.trim(),
+    )
+    .filter(
+      /** Removes empty families. @param family - Family. @returns Whether non-empty. */ (family) =>
+        family.length > 0,
+    )
+    .map(
+      /** Quotes families containing ODF separators. @param family - Family. @returns Quoted family. */ (
+        family,
+      ) => (/[ ,]/.test(family) ? `'${family}'` : family),
+    )
+    .join(", ");
 }

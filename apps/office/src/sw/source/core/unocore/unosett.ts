@@ -1,5 +1,6 @@
 /** @fileoverview Owns supported numbering position property conversion from pinned SwXNumberingRules in unosett.cxx. */
 import { SwNumFormat, SvxNumType, type SwNumRule } from "../doc/number";
+import { fontFromUnoDescriptorName } from "../../../../editeng/source/uno/unofdesc";
 
 import type { NumberingPositionProperties } from "../../../../editeng/source/items/numitem";
 
@@ -62,6 +63,8 @@ export interface WriterNumberingRuleProperties extends NumberingPositionProperti
   readonly kind: "bullet" | "numbered";
   readonly numberingType?: SvxNumType;
   readonly bulletChar?: string;
+  /** Represented Name member of the native UNO BulletFont descriptor. */
+  readonly bulletFont?: Readonly<{ name: string }>;
   readonly suffix: string;
   readonly prefix?: string;
   readonly startWith?: number;
@@ -86,6 +89,12 @@ export class SwXNumberingRules {
     level: number,
   ): void {
     const applied = new SwNumFormat(rule.Get(level));
+    const bulletFont = properties.bulletFont;
+    if (
+      bulletFont !== undefined &&
+      (bulletFont === null || typeof bulletFont !== "object" || typeof bulletFont.name !== "string")
+    )
+      throw new NumberingRulePropertyError("Invalid bullet font descriptor.");
     const converted = numberingPositionToTwips(properties);
     const type =
       properties.numberingType ??
@@ -95,6 +104,11 @@ export class SwXNumberingRules {
     applied.SetNumberingType(type);
     if (properties.bulletChar !== undefined)
       applied.SetBulletChar(properties.bulletChar.codePointAt(0) ?? 0);
+    // Native UNO ignores a valid descriptor with an empty Name, preserving
+    // the copied format's optional font rather than clearing its owner.
+    if (bulletFont !== undefined && bulletFont.name !== "") {
+      applied.SetBulletFont(fontFromUnoDescriptorName(bulletFont.name));
+    }
     if (converted.absLSpace !== undefined) applied.SetAbsLSpace(converted.absLSpace);
     if (converted.firstLineOffset !== undefined)
       applied.SetFirstLineOffset(converted.firstLineOffset);

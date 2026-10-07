@@ -157,11 +157,12 @@ export interface OdfTextExport {
 
 /** Bounded xmloff export context owning one complete text export pass. */
 export class XMLTextParagraphExport {
-  /** Captures the live model source and operation ports. @param source - Reiterable model source. @param isCancelled - Cooperative cancellation probe. @param fontFaceName - Optional family-to-face resolver. @returns Nothing. */
+  /** Captures model source and operation ports. @param source - Model source. @param isCancelled - Cancellation probe. @param fontFaceName - Font registration. @param existingFontFaceName - Existing face lookup for numbering export. @returns Nothing. */
   public constructor(
     private readonly source: XMLTextExportSource,
     private readonly isCancelled: () => boolean,
     private readonly fontFaceName?: (familyName: string, generic?: string) => string,
+    private readonly existingFontFaceName?: (familyName: string) => string | undefined,
   ) {}
 
   /** Exports automatic styles and text elements under this context's ownership. @returns XML fragments. */
@@ -170,7 +171,7 @@ export class XMLTextParagraphExport {
     const paragraphStyleNames = new Map<string, string>();
     const characterStyleNames = new Map<string, string>();
     const listRules = new Map<string, XMLTextListRuleSource>();
-    const numRuleExport = new SvxXMLNumRuleExport(escapeXml);
+    const numRuleExport = new SvxXMLNumRuleExport(escapeXml, this.existingFontFaceName);
     for (const paragraph of source.paragraphs()) {
       if (isCancelled()) throw new Error("ODT operation was cancelled.");
       if (paragraph.list !== undefined) {
@@ -328,13 +329,19 @@ export class XMLTextParagraphExport {
   }
 }
 
-/** Exports live Writer paragraphs through an owned xmloff export context. @param source - Reiterable model source. @param isCancelled - Cooperative cancellation probe. @param fontFaceName - Optional family-to-face resolver. @returns XML fragments. */
+/** Exports live Writer paragraphs through xmloff ownership. @param source - Model source. @param isCancelled - Cancellation probe. @param fontFaceName - Font registration. @param existingFontFaceName - Existing face lookup for numbering. @returns XML fragments. */
 export function exportTextParagraphs(
   source: XMLTextExportSource,
   isCancelled: () => boolean = /** Never cancels. @returns False. */ () => false,
   fontFaceName?: (familyName: string, generic?: string) => string,
+  existingFontFaceName?: (familyName: string) => string | undefined,
 ): OdfTextExport {
-  return new XMLTextParagraphExport(source, isCancelled, fontFaceName).Export();
+  return new XMLTextParagraphExport(
+    source,
+    isCancelled,
+    fontFaceName,
+    existingFontFaceName,
+  ).Export();
 }
 
 /** Emits the ordered paragraph stream, nesting list paragraphs in text:list/text:list-item elements. @param paragraphs - Flat paragraph sequence. @param paragraphStyleNames - Automatic paragraph styles. @param characterStyleNames - Automatic text styles. @param listStyleNames - Automatic list styles. @param isCancelled - Cancellation probe. @param listIdentities - Shared export-pass list catalogue. @param usedXmlIds - Shared unique XML identities. @returns ODF body fragment. */

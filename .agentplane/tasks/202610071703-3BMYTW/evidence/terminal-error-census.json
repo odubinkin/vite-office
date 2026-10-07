@@ -1,0 +1,91 @@
+{
+  "records": [
+    {
+      "phase": "absent-profile",
+      "kind": "build",
+      "exit": 0,
+      "uncaughtErrorCount": 0,
+      "outputSHA256": "311b464b9a01d21d73aba52d711ff333cc1504405ef315947cb78385b833fff5",
+      "assertionFailures": 0
+    },
+    {
+      "phase": "absent-profile",
+      "kind": "app",
+      "exit": 1,
+      "uncaughtErrorCount": 0,
+      "outputSHA256": "5c10fef4d9d4d0778ee7a14cbb172a5ce03d4a446f542e4a698472304daef3a7",
+      "assertionFailures": 3
+    },
+    {
+      "phase": "absent-profile",
+      "kind": "inventory",
+      "exit": 1,
+      "uncaughtErrorCount": 0,
+      "outputSHA256": "6d4698cfb710f58b1fdad5159b48fa2cc78106b24d6c61b909f564d6ac78620d",
+      "assertionFailures": 1
+    },
+    {
+      "phase": "absent-profile",
+      "kind": "scripts",
+      "exit": 0,
+      "uncaughtErrorCount": 0,
+      "outputSHA256": "8db71862fe869557f812a877763158ceae365ec1a8b4c2fadc6d58636cbbef54",
+      "assertionFailures": 0
+    },
+    {
+      "phase": "absent-profile",
+      "kind": "chromium",
+      "exit": 0,
+      "uncaughtErrorCount": 0,
+      "outputSHA256": "9d5d45d198c94958fcd6f76f935a821ff3d48e77438be50a2b722dadc7e948d3",
+      "assertionFailures": 0
+    },
+    {
+      "phase": "closure1",
+      "kind": "app",
+      "exit": 1,
+      "uncaughtErrorCount": 0,
+      "outputSHA256": "197ad860c37c60b850712739244a55b5401959a1fcefd1af662659b42aad02a0",
+      "assertionFailures": 0
+    },
+    {
+      "phase": "closure1",
+      "kind": "inventory",
+      "exit": 1,
+      "uncaughtErrorCount": 0,
+      "outputSHA256": "b063fc177687cb29c05b3f9361e4c8fab6266a9cddced43c9e21e7974ecd6ff9",
+      "assertionFailures": 0
+    }
+  ],
+  "unresolvedUncaught": 0,
+  "staticFailure": "Initial fresh tuple typing, five fresh JSDoc callbacks and forbidden direct core-to-VCL import failed; source-owned editeng Name conversion and scoped failure/changed-input closures pass.",
+  "runtimeFailures": [
+    {
+      "name": "apps/office/src/xmloff/source/style/xmlnumi.test.ts > owns source-created leaf references and reads them only at list publication",
+      "assertion": [
+        "AssertionError: expected \"vi.fn()\" to be called with arguments: [ 'Owned', { name: 'Display', …(2) } ]"
+      ]
+    },
+    {
+      "name": "apps/office/src/sw/source/filter/xml/native-bullet-font-roundtrip.test.ts > retains custom bullet families through common and automatic ODT rules, body/cell nodes and Worker graph",
+      "assertion": [
+        "AssertionError: expected [ 'BodyFont' ] to include 'CellFont'"
+      ]
+    },
+    {
+      "name": "apps/office/src/sw/source/filter/xml/native-bullet-font-roundtrip.test.ts > includes the native represented font family when checking duplicate common and automatic rule definitions",
+      "assertion": [
+        "Error: Duplicate ODF list style: Shared"
+      ]
+    },
+    {
+      "name": "scripts/libreoffice-inventory/parity-mapping-cli.test.ts > parity mapping CLI composes the Writer mapping report with owned upstream marker evidence",
+      "assertion": [
+        "Error: Runtime module paths must be unique and lexicographically ordered."
+      ]
+    }
+  ],
+  "passingReplay": 0,
+  "runtimeResolution": "Original three app failures: exact expected bullet GetProperties now includes native empty descriptor; fresh fixture inspects body and cell owners separately, and distinct XML aliases exercise one shared native rule name. Original inventory failure was accidental locale sorting; binary lexical order restored. All original Chromium284 passed, no Chromium rerun. Closure1 runs only original3 app and1 inventory cases; whole-graph focused coverage exit1 retained and counters bound by complete current-source proof.",
+  "processObservation": "ONE full runtime absent-upstream profile. Later runtime only original failed cases, no passing replay. All semantic/task writes waited for actual terminal handles and vendor restoration. Source-review anchor spacing mismatch corrected from actual pinned source without changing implementation; empty orchestration-template invocation did not produce verification and was corrected before any evidence claim."
+}

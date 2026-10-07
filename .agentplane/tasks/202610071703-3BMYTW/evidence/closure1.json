@@ -1,0 +1,58 @@
+{
+  "vendorRestored": true,
+  "sourceSnapshot": "3BMYTW.closure1.source",
+  "preProfileSHA256": {
+    "apps/office/src/sw/source/core/unocore/unosett.ts": "dc399f239f444251039ceb9e68f8cf04cf5e4aa213045d7ef858399b1cb1129a",
+    "apps/office/src/sw/source/filter/xml/xmlexp.ts": "5e487efdede0ff89019a81351a9286717d4dcece576bb20fc737c3fad11f1d29",
+    "apps/office/src/sw/source/filter/xml/xmlimp.ts": "f6048c7c54c365f92b458c1c1dce6e6b42a6143277ff722b128747f2338757b4",
+    "apps/office/src/xmloff/source/style/xmlnume.ts": "2482b15599e8e73e86a49fc7ba3ac217e83b52b6a95864b82edeb9866c04d102",
+    "apps/office/src/xmloff/source/style/xmlnumi.ts": "70feba553393c3d15982bfb8426ef98213fc3d674537a5ad6cbea7732db20fd4",
+    "apps/office/src/xmloff/source/text/txtparae.ts": "b4f9ff6fab298e73e0ffd35ad2f4f80b188f7434b99c1fa5523f6dadc3427091",
+    "apps/office/src/xmloff/source/text/txtparai.ts": "92089b55aeeed6a4532e72273111595912ca12434321841053329c5bdab5afca",
+    "apps/office/src/xmloff/source/style/XMLFontAutoStylePool.ts": "3e77dfd590fc360a993dfd71ca14c69e3edfebc8c777a74d7489db8069924bf5",
+    "apps/office/src/xmloff/source/style/XMLFontStylesContext.ts": "ac021b432dbeac679b07edee621cf8812262a5c5c43da2f25dc30ab62eaf7941",
+    "apps/office/src/editeng/source/uno/unofdesc.ts": "7d4603db7d23961afd8d3cbea0fb071c4d7cbd743c5086b31164c46dc853029b",
+    "apps/office/src/sw/source/filter/xml/native-bullet-font-roundtrip.test.ts": "f79ca732945744eb0da078f2f7282a2f4812a95f624d388d5a6b41adcb210ee9",
+    "apps/office/src/xmloff/source/style/native-bullet-font.test.ts": "5c7e00fd092b0a81005630be8d6114230d8b25c8defbf0af30defa2fabb11e1e",
+    "apps/office/e2e/native-bullet-font-roundtrip.spec.ts": "146b6de3c9cc23f4687d54adccef909df03f9848606f0e0bcad01607e6f56584",
+    "docs/program/source-provenance.json": "44758853a1287442c9ec0a5ca11fa6e602c39faf1a4e0ee5e0e1cc8b82442ea6",
+    "docs/program/parity/runtime-inventory.json": "49e959c5b976460d890c985f422d815039b69ecc9b6819f51ca1a8fc523363f7",
+    "apps/office/src/xmloff/source/style/xmlnumi.test.ts": "c2cbb824b6a952b1d3eba48630e4955870d86a21954cb781db1b65b09ab6e03f"
+  },
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/xmloff/source/style/xmlnumi.test.ts src/sw/source/filter/xml/native-bullet-font-roundtrip.test.ts -t owns source-created leaf references and reads them only at list publication|retains custom bullet families through common and automatic ODT rules, body/cell nodes and Worker graph|includes the native represented font family when checking duplicate common and automatic rule definitions --coverage.reportOnFailure --coverage.reporter=json --coverage.reporter=json-summary --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/3BMYTW.closure1.app-results.json",
+      "exit": 1,
+      "bytes": 2576,
+      "sha256": "197ad860c37c60b850712739244a55b5401959a1fcefd1af662659b42aad02a0",
+      "caseCounts": {
+        "passed": 3,
+        "failed": 0,
+        "skipped": 5,
+        "total": 8
+      },
+      "failures": [],
+      "unhandledErrorCount": 0,
+      "coverageMapSHA256": "d796a292ae0fa0b86809532a1aefefc340771ca29a7e9f75e135b76b29fdffed",
+      "profile": "upstream-absent"
+    },
+    {
+      "kind": "inventory",
+      "command": "npm run test:inventory:coverage -- scripts/libreoffice-inventory/parity-mapping-cli.test.ts -t parity mapping CLI composes the Writer mapping report with owned upstream marker evidence --coverage.reportOnFailure --coverage.reporter=json --coverage.reporter=json-summary --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/3BMYTW.closure1.inventory-results.json",
+      "exit": 1,
+      "bytes": 1430,
+      "sha256": "b063fc177687cb29c05b3f9361e4c8fab6266a9cddced43c9e21e7974ecd6ff9",
+      "caseCounts": {
+        "passed": 1,
+        "failed": 0,
+        "skipped": 2,
+        "total": 3
+      },
+      "failures": [],
+      "unhandledErrorCount": 0,
+      "coverageMapSHA256": "485be265a9020224141f09dff71f337d3dfa8f551a079b14d9c0a0a8f86396f3",
+      "profile": "upstream-absent"
+    }
+  ]
+}

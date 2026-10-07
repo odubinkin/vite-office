@@ -1,6 +1,7 @@
 /** @fileoverview Owns supported ODF 1.3 list label-alignment serialization from pinned xmlnume.cxx. */
 import type { OdfListLevelLayout } from "../text/txtparae";
 import { SvXMLUnitConverter } from "../core/xmluconv";
+import { exportFamilyName } from "./XMLFontStylesContext";
 
 /** Native-style UNO properties for one supported numbering level at the XML export boundary. */
 export interface XMLListLevelExport extends OdfListLevelLayout {
@@ -8,6 +9,8 @@ export interface XMLListLevelExport extends OdfListLevelLayout {
   /** Native sal_Int16 UNO NumberingType: ARABIC=4, NUMBER_NONE=5, CHAR_SPECIAL=6. */
   readonly numberingType?: number;
   readonly bulletChar?: string;
+  /** Represented Name member of the native BulletFont descriptor. */
+  readonly bulletFont?: Readonly<{ name: string }>;
   readonly prefix?: string;
   readonly suffix?: string;
   readonly startWith?: number;
@@ -16,8 +19,11 @@ export interface XMLListLevelExport extends OdfListLevelLayout {
 
 /** Source-owned standard ODF numbering exporter with an XML attribute encoding port. */
 export class SvxXMLNumRuleExport {
-  /** Binds the XML writer encoding boundary. @param escapeValue - XML value encoding. @returns Exporter. */
-  public constructor(private readonly escapeValue: (value: string) => string) {}
+  /** Binds XML encoding and borrowed font declarations. @param escapeValue - XML encoding. @param fontFaceName - Existing font pool lookup; does not register fonts. @returns Exporter. */
+  public constructor(
+    private readonly escapeValue: (value: string) => string,
+    private readonly fontFaceName?: (familyName: string) => string | undefined,
+  ) {}
   /** Exports one native numbering property sequence. @param level - Zero-based level. @param properties - Level properties. @returns Standard ODF 1.3 XML. */
   public exportLevelStyle(level: number, properties: XMLListLevelExport): string {
     const attributes = [`text:level="${level + 1}"`];
@@ -40,7 +46,17 @@ export class SvxXMLNumRuleExport {
       const display = Math.min(properties.parentNumbering ?? 1, level + 1);
       if (display > 1 && type !== 5) attributes.push(`text:display-levels="${display}"`);
     }
-    return `<${element} ${attributes.join(" ")}>${exportListLevelLayout(properties)}</${element}>`;
+    const family = type === 6 ? (properties.bulletFont?.name ?? "") : "";
+    let fontProperties = "";
+    if (family !== "") {
+      const face = this.fontFaceName?.(family);
+      const attribute =
+        face === undefined || face === ""
+          ? `fo:font-family="${this.escapeValue(exportFamilyName(family))}"`
+          : `style:font-name="${this.escapeValue(face)}"`;
+      fontProperties = `<style:text-properties ${attribute}/>`;
+    }
+    return `<${element} ${attributes.join(" ")}>${exportListLevelLayout(properties)}${fontProperties}</${element}>`;
   }
 }
 

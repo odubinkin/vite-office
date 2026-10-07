@@ -2,6 +2,7 @@
 import { FastAttributeList, SvXMLImportContext } from "../core/xmlimp";
 import { ODF_NAMESPACES, XMLToken } from "../core/xmltoken";
 import { SvXMLUnitConverter } from "../core/xmluconv";
+import { importFamilyName } from "./XMLFontStylesContext";
 import type {
   XMLListLevelImport,
   XMLListLevelImportProperties,
@@ -64,8 +65,13 @@ export class SvxXMLListLevelStyleContext_Impl extends SvXMLImportContext {
   private readonly startWith: number;
   private readonly parentNumbering: number;
   private listFormat: string | undefined;
-  /** Retains native declaration defaults before any property children. @param element - Supported level family. @param attributes - Optional declaration fields. @returns Context. */
-  public constructor(element: XMLToken, attributes: FastAttributeList) {
+  private bulletFontName = "";
+  /** Retains native declaration defaults before property children. @param element - Level family. @param attributes - Declaration fields. @param fontDeclarations - Borrowed existing font declarations. @returns Context. */
+  public constructor(
+    element: XMLToken,
+    attributes: FastAttributeList,
+    private readonly fontDeclarations?: Pick<XMLListStyleImportTarget, "getFontFace">,
+  ) {
     super();
     this.kind = element === XMLToken.TEXT_LIST_LEVEL_STYLE_BULLET ? "bullet" : "numbered";
     attributes.assertOnly(
@@ -122,6 +128,11 @@ export class SvxXMLListLevelStyleContext_Impl extends SvXMLImportContext {
       (values) => {
         this.legacy = { ...this.legacy, ...values };
       },
+      this.fontDeclarations,
+      /** Updates only successfully resolved native font family values. @param family - Model family. @returns Nothing. */
+      (family) => {
+        this.bulletFontName = family;
+      },
     );
   }
   /** Assembles the supported native property sequence only when the owning rule reads it. @returns Declaration and both MM100 geometry groups. */
@@ -145,7 +156,9 @@ export class SvxXMLListLevelStyleContext_Impl extends SvXMLImportContext {
       level: this.level,
       kind: this.kind,
       numberingType: type.value,
-      ...(this.kind === "bullet" ? { bulletChar: this.bulletChar } : {}),
+      ...(this.kind === "bullet"
+        ? { bulletChar: this.bulletChar, bulletFont: { name: this.bulletFontName } }
+        : {}),
       prefix: this.prefix,
       suffix: this.suffix,
       ...(this.kind === "bullet"
@@ -167,11 +180,13 @@ export class SvxXMLListLevelStyleContext_Impl extends SvXMLImportContext {
 
 /** Imports native legacy spacing and selects mode only from its explicit attribute. */
 class SvxXMLListLevelStyleAttrContext_Impl extends SvXMLImportContext {
-  /** Parses native MM100 legacy measures. @param attributes - List properties. @param save - Raw field sink. @param saveLegacy - Successful legacy measure sink. @returns Context. */
+  /** Parses native MM100 geometry and represented font attributes. @param attributes - List or text properties. @param save - Geometry sink. @param saveLegacy - Legacy measure sink. @param fontDeclarations - Borrowed declarations. @param saveFont - Resolved family sink. @returns Context. */
   public constructor(
     attributes: FastAttributeList,
     private readonly save: (values: XMLListLevelImportProperties["values"]) => void,
     saveLegacy: (values: Partial<LegacyListMeasures>) => void,
+    fontDeclarations?: Pick<XMLListStyleImportTarget, "getFontFace">,
+    saveFont?: (family: string) => void,
   ) {
     super();
     const converter = new SvXMLUnitConverter("mm100");
@@ -197,6 +212,14 @@ class SvxXMLListLevelStyleAttrContext_Impl extends SvXMLImportContext {
               mode === "label-alignment" ? "label-alignment" : "label-width-and-position",
           }),
     });
+    const faceName = attributes.get(XMLToken.STYLE_FONT_NAME) ?? "";
+    if (faceName !== "") {
+      const family = fontDeclarations?.getFontFace?.(faceName);
+      if (family !== undefined) saveFont?.(family);
+    }
+    // Native direct family processing follows and overrides resolved declarations.
+    const familyName = attributes.get(XMLToken.FO_FONT_FAMILY) ?? "";
+    if (familyName !== "") saveFont?.(importFamilyName(familyName));
   }
   /** Parses the alignment leaf independently from the selected mode. @param element - Child token. @param attributes - Alignment attributes. @returns Leaf context. */
   public override createFastChildContext(
@@ -215,6 +238,8 @@ class SvxXMLListLevelStyleAttrContext_Impl extends SvXMLImportContext {
 /** Model-facing numbering publication port used by the source-owned list context. */
 export interface XMLListStyleImportTarget {
   registerListStyle(styleName: string, rule: XMLTextListRule): void;
+  /** Resolves an existing declaration; missing faces retain the level's prior font. */
+  getFontFace?(name: string): string | undefined;
 }
 
 /** Owns native list identity and the source-ordered level context references. */
@@ -243,7 +268,7 @@ export class SvxXMLListStyleContext extends SvXMLImportContext {
       element !== XMLToken.TEXT_LIST_LEVEL_STYLE_BULLET
     )
       return null;
-    const context = new SvxXMLListLevelStyleContext_Impl(element, attributes);
+    const context = new SvxXMLListLevelStyleContext_Impl(element, attributes, this.target);
     this.levelStyles.push(context);
     return context;
   }

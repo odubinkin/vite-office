@@ -1,0 +1,62 @@
+{
+  "records": [
+    {
+      "command": "npm run format:check",
+      "exit": 0,
+      "bytes": 122,
+      "sha256": "ac1729f86eee878f5f4d6c948c510d2cc91bb5568f6dd088f70f3885e137d116",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run lint",
+      "exit": 0,
+      "bytes": 55,
+      "sha256": "a6172cb57fa696e705408fdc605fba1ae07b852fdf0614d7c2b623349e285b6e",
+      "diagnostics": [
+        "> eslint . --max-warnings 0"
+      ]
+    },
+    {
+      "command": "npm run typecheck",
+      "exit": 2,
+      "bytes": 784,
+      "sha256": "ebc34a52cd1a7e54e18f16deb333659725d1a7482455080dcdb5035ad1483a0f",
+      "diagnostics": [
+        "src/sw/source/filter/xml/native-bullet-font-roundtrip.test.ts(101,35): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.",
+        "npm error Lifecycle script `typecheck` failed with error:",
+        "npm error code 2",
+        "npm error path /Users/odubinkin/Projects/vite-office/apps/office",
+        "npm error workspace @vite-office/office@0.1.0",
+        "npm error location /Users/odubinkin/Projects/vite-office/apps/office",
+        "npm error command failed",
+        "npm error command sh -c tsc --noEmit"
+      ]
+    },
+    {
+      "command": "npm run check:dependencies",
+      "exit": 1,
+      "bytes": 238,
+      "sha256": "32f8acbdfb5f90ffbd50cad8126e127cc0fcd1a36b93e0bb0c878540838f54b3",
+      "diagnostics": [
+        "Module boundary check failed:"
+      ]
+    },
+    {
+      "command": "npm run check:docs",
+      "exit": 1,
+      "bytes": 956,
+      "sha256": "570881ffdb9403b5628c42b4c868b388f0759609d9c982b80cfdb35dd1807bb3",
+      "diagnostics": [
+        "    throw new Error(`JSDoc validation failed:\\n${errors.join(\"\\n\")}`);",
+        "Error: JSDoc validation failed:"
+      ]
+    },
+    {
+      "command": "npm run check:file-size",
+      "exit": 0,
+      "bytes": 3996,
+      "sha256": "c9d7a52a480658be4ba8103d65c2a458b62d0f6802c98710bbd291170d3c278f",
+      "diagnostics": []
+    }
+  ]
+}

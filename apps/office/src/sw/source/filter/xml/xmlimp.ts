@@ -397,6 +397,8 @@ class SwXMLImport
           previous.GetNumberingType() !== applied.GetNumberingType() ||
           JSON.stringify(previous.GetMarkerProperties()) !==
             JSON.stringify(applied.GetMarkerProperties()) ||
+          (previous.GetBulletFont()?.GetFamilyName() ?? "") !==
+            (applied.GetBulletFont()?.GetFamilyName() ?? "") ||
           (getWriterNumFormatKind(applied) === "bullet" &&
             getWriterNumFormatBullet(previous) !== getWriterNumFormatBullet(applied)) ||
           JSON.stringify(previous.GetPositionProperties()) !==

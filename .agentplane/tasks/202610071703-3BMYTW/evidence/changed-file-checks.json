@@ -1,0 +1,25 @@
+{
+  "records": [
+    {
+      "command": "Unchanged JSDoc validator on approved changed code/acceptance paths; actual physical-line count",
+      "exit": 0,
+      "errors": [],
+      "physicalLines": {
+        "apps/office/src/sw/source/core/unocore/unosett.ts": 138,
+        "apps/office/src/sw/source/filter/xml/xmlexp.ts": 788,
+        "apps/office/src/sw/source/filter/xml/xmlimp.ts": 924,
+        "apps/office/src/xmloff/source/style/xmlnume.ts": 93,
+        "apps/office/src/xmloff/source/style/xmlnumi.ts": 296,
+        "apps/office/src/xmloff/source/text/txtparae.ts": 997,
+        "apps/office/src/xmloff/source/text/txtparai.ts": 604,
+        "apps/office/src/xmloff/source/style/XMLFontAutoStylePool.ts": 71,
+        "apps/office/src/xmloff/source/style/XMLFontStylesContext.ts": 205,
+        "apps/office/src/editeng/source/uno/unofdesc.ts": 10,
+        "apps/office/src/sw/source/filter/xml/native-bullet-font-roundtrip.test.ts": 160,
+        "apps/office/src/xmloff/source/style/native-bullet-font.test.ts": 114,
+        "apps/office/e2e/native-bullet-font-roundtrip.spec.ts": 171,
+        "apps/office/src/xmloff/source/style/xmlnumi.test.ts": 256
+      }
+    }
+  ]
+}

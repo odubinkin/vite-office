@@ -1,0 +1,121 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "productionSHA256": {
+    "apps/office/src/sw/source/core/unocore/unosett.ts": "dc399f239f444251039ceb9e68f8cf04cf5e4aa213045d7ef858399b1cb1129a",
+    "apps/office/src/sw/source/filter/xml/xmlexp.ts": "5e487efdede0ff89019a81351a9286717d4dcece576bb20fc737c3fad11f1d29",
+    "apps/office/src/sw/source/filter/xml/xmlimp.ts": "f6048c7c54c365f92b458c1c1dce6e6b42a6143277ff722b128747f2338757b4",
+    "apps/office/src/xmloff/source/style/xmlnume.ts": "2482b15599e8e73e86a49fc7ba3ac217e83b52b6a95864b82edeb9866c04d102",
+    "apps/office/src/xmloff/source/style/xmlnumi.ts": "70feba553393c3d15982bfb8426ef98213fc3d674537a5ad6cbea7732db20fd4",
+    "apps/office/src/xmloff/source/text/txtparae.ts": "b4f9ff6fab298e73e0ffd35ad2f4f80b188f7434b99c1fa5523f6dadc3427091",
+    "apps/office/src/xmloff/source/text/txtparai.ts": "92089b55aeeed6a4532e72273111595912ca12434321841053329c5bdab5afca",
+    "apps/office/src/xmloff/source/style/XMLFontAutoStylePool.ts": "3e77dfd590fc360a993dfd71ca14c69e3edfebc8c777a74d7489db8069924bf5",
+    "apps/office/src/xmloff/source/style/XMLFontStylesContext.ts": "ac021b432dbeac679b07edee621cf8812262a5c5c43da2f25dc30ab62eaf7941",
+    "apps/office/src/editeng/source/uno/unofdesc.ts": "7d4603db7d23961afd8d3cbea0fb071c4d7cbd743c5086b31164c46dc853029b"
+  },
+  "sourceSHA256": {
+    "xmloff/source/style/xmlnume.cxx": "8606376ea6a2e4378a69122f886719632c6c391bc26c98b477b2cdc35e5f286c",
+    "xmloff/source/style/xmlnumi.cxx": "0d3dc7ad575d5686ca47be2004bb8db553a233863f5f2c84561258adba6fa7e1",
+    "sw/source/core/unocore/unosett.cxx": "a94596e54298e0c9d1191791cb4e98d30996d3c61ec547b677d25ed03ef2134b",
+    "editeng/source/uno/unofdesc.cxx": "37ca297e819c2ddbb678477ab449092f65325f3502bc96473b384bae5ee84012",
+    "sw/source/filter/xml/xmlfonte.cxx": "807bfd9861997da23b11c0394f70e04e2aebcdc3474c54b16ed68e421e86edcf",
+    "sw/source/uibase/docvw/edtwin3.cxx": "c31fb7bdad5a1e9cd5f7e33a939796945222a8066d27f431d180426d0707fd6f",
+    "sw/source/uibase/docvw/edtwin.cxx": "f679baf21d41f78d6494bead35aebf6333eed298a6e24892452a4bb4623b7eb3"
+  },
+  "anchors": {
+    "xmloff/source/style/xmlnume.cxx": [
+      {
+        "marker": "BulletFont",
+        "line": 94
+      },
+      {
+        "marker": "!sBulletFontName.isEmpty()",
+        "line": 542
+      },
+      {
+        "marker": "GetFontAutoStylePool()->Find",
+        "line": 545
+      },
+      {
+        "marker": "XML_TEXT_PROPERTIES",
+        "line": 618
+      }
+    ],
+    "xmloff/source/style/xmlnumi.cxx": [
+      {
+        "marker": "XML_FONT_NAME",
+        "line": 578
+      },
+      {
+        "marker": "FillProperties",
+        "line": 652
+      },
+      {
+        "marker": "XML_FONT_FAMILY",
+        "line": 581
+      },
+      {
+        "marker": "BulletFont",
+        "line": 121
+      }
+    ],
+    "sw/source/core/unocore/unosett.cxx": [
+      {
+        "marker": "#i93725",
+        "line": 1983
+      },
+      {
+        "marker": "SvxUnoFontDescriptor::ConvertToFont",
+        "line": 1988
+      },
+      {
+        "marker": "SetBulletFont",
+        "line": 1989
+      }
+    ],
+    "editeng/source/uno/unofdesc.cxx": [
+      {
+        "marker": "SvxUnoFontDescriptor::ConvertToFont",
+        "line": 44
+      },
+      {
+        "marker": "rFont.SetFamilyName( rDesc.Name )",
+        "line": 46
+      }
+    ],
+    "sw/source/filter/xml/xmlfonte.cxx": [
+      {
+        "marker": "SwXMLFontAutoStylePool_Impl",
+        "line": 33
+      }
+    ],
+    "sw/source/uibase/docvw/edtwin3.cxx": [
+      {
+        "marker": "SwEditWin::RulerMarginDrag",
+        "line": 101
+      },
+      {
+        "marker": "!rRuler.StartDocDrag",
+        "line": 93
+      }
+    ],
+    "sw/source/uibase/docvw/edtwin.cxx": [
+      {
+        "marker": "RulerMarginDrag",
+        "line": 3264
+      },
+      {
+        "marker": "SetNumRuleNodeFromDoc",
+        "line": 3259
+      }
+    ]
+  },
+  "scope": "Only represented BulletFont descriptor Name through actual native optional Font/UNO/xmloff owners: CHAR_SPECIAL nonempty family exports existing pool Find alias or quoted direct family fallback; declaration import first then nonempty direct override; malformed descriptor rejection, empty Name ignores copied optional Font. Existing family handlers shared without artificial font registration or duplicate font owner.",
+  "pointerCorrection": "Iteration220 suspicion corrected: edtwin3 RulerMarginDrag negates StartDocDrag. edtwin returns before ordinary selection when indent drag is admitted. Existing zero-indent tight-tab marker gesture matches source; no pointer-affinity fix claimed.",
+  "residuals": [
+    "Full FontDescriptor members/style/pitch/charset/family classifications/metrics and native Font conversion beyond represented Name remain unimplemented/unverified.",
+    "StarBats/StarMath glyph recoding and full VCL shaping/script/SwFont/style/paragraph-mark/redline/graphics/portion graph remain unrepresented.",
+    "ODT true numbering-font compatibility flag/config persistence and complete native weights/decorations/theme/metrics/device behavior remain unverified.",
+    "Exhaustive parent core/browser/UI parity remains ACTIVE; registered save/open/recovery deviations unchanged."
+  ],
+  "failures": []
+}

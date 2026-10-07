@@ -232,6 +232,7 @@ it("owns source-created leaf references and reads them only at list publication"
         kind: "bullet",
         numberingType: 6,
         bulletChar: "",
+        bulletFont: { name: "" },
         prefix: "",
         suffix: "",
         listFormat: "%1%",
