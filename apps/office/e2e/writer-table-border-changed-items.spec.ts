@@ -1,4 +1,5 @@
 /** @fileoverview Verifies production properties preserve heterogeneous untouched cell borders and independent changed-item history. */
+import { nativeBoxFormat } from "../src/test/table-box-test-helpers";
 import { expect, test } from "@playwright/test";
 import { SwDoc } from "../src/sw/source/core/doc/doc";
 import { writeOdtDocument } from "../src/sw/source/filter/xml/wrtxml";
@@ -13,8 +14,8 @@ for (const width of [1280, 390])
       table.AddColumnWidth(3000);
       table.AddColumnWidth(3000);
       const row = doc.nodes.AppendTableRow(table, 2, {}, [
-        { padding: 567, border: "1pt solid #000000" },
-        { padding: 1134, border: "none" },
+        nativeBoxFormat({ padding: 567, border: "1pt solid #000000" }),
+        nativeBoxFormat({ padding: 1134, border: "none" }),
       ]);
       for (const [i, box] of row.GetTabBoxes().entries()) {
         const node = box.GetParagraphs()[0];

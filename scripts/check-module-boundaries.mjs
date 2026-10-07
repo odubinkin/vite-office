@@ -17,6 +17,7 @@ const moduleNames = [
   "sax",
   "sfx2",
   "svl",
+  "svtools",
   "svx",
   "sw",
   "vcl",
@@ -24,7 +25,7 @@ const moduleNames = [
 ];
 const knownModules = new Set(moduleNames);
 const allowedEdges = new Map([
-  ["editeng", new Set(["svl", "vcl"])],
+  ["editeng", new Set(["offapi", "svl", "svtools", "vcl"])],
   ["framework", new Set(["sfx2", "svl"])],
   ["o3tl", new Set()],
   ["offapi", new Set()],
@@ -32,6 +33,7 @@ const allowedEdges = new Map([
   ["sax", new Set()],
   ["sfx2", new Set(["svl"])],
   ["svl", new Set()],
+  ["svtools", new Set()],
   ["svx", new Set()],
   [
     "sw",
@@ -49,7 +51,7 @@ const allowedEdges = new Map([
     ]),
   ],
   ["vcl", new Set(["svl"])],
-  ["xmloff", new Set(["sax"])],
+  ["xmloff", new Set(["editeng", "sax"])],
 ]);
 /** Reports whether a native module edge is outside the explicit allowlist. @param sourceModule - Importing owner. @param targetModule - Imported owner. @returns Forbidden flag. */
 export function isForbiddenModuleEdge(sourceModule, targetModule) {

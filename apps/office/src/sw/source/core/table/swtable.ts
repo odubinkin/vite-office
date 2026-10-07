@@ -7,6 +7,9 @@ import { SwTextNode } from "../txtnode/ndtxt";
 import { SwTabCols } from "../bastyp/tabcol";
 import { SwFormatFrameSize } from "../../../inc/fmtfsize";
 import { SwFormatVertOrient } from "../../../inc/fmtornt";
+import { SvxBoxItem } from "../../../../editeng/source/items/frmitems";
+import { SvxBorderLine } from "../../../../editeng/source/items/borderline";
+import { RES_BOX } from "../../../inc/hintids";
 
 /** Physical table geometry imported from Writer table style properties, in twips. */
 export interface SwTableFormat {
@@ -31,9 +34,16 @@ export interface SwTableLineFormat {
 
 /** Bounded cell geometry owned by SwTableBox. */
 export interface SwTableBoxFormat {
-  readonly padding?: number | undefined;
-  readonly border?: string | undefined;
+  readonly box?: SvxBoxItem | undefined;
   readonly vertOrient?: SwFormatVertOrient | undefined;
+}
+
+/** Creates Writer insertion border defaults without a CSS intermediary. @param borders - Default borders enabled. @returns Owned box item. */
+export function createWriterTableBoxItem(borders: boolean): SvxBoxItem {
+  const item = new SvxBoxItem(RES_BOX);
+  item.SetAllDistances(borders ? 55 : 0);
+  if (borders) for (const edge of [0, 1, 2, 3]) item.SetLine(new SvxBorderLine(0, 10), edge);
+  return item;
 }
 
 /** Owns one cell section and its ordered paragraphs. */
@@ -55,6 +65,7 @@ export class SwTableBox {
   public GetFormat(): SwTableBoxFormat {
     return {
       ...this.format,
+      ...(this.format.box === undefined ? {} : { box: this.format.box.Clone() }),
       ...(this.format.vertOrient === undefined
         ? {}
         : { vertOrient: this.format.vertOrient.Clone() }),
@@ -64,9 +75,14 @@ export class SwTableBox {
   /** Replaces cell geometry. @param value - New values. @returns Nothing. */
   public SetFormat(value: SwTableBoxFormat): void {
     this.format = {
-      ...value,
+      ...(value.box === undefined ? {} : { box: value.box.Clone() }),
       ...(value.vertOrient === undefined ? {} : { vertOrient: value.vertOrient.Clone() }),
     };
+  }
+
+  /** Reads an independent native box item including borderless pool defaults. @returns Complete item. */
+  public GetBox(): SvxBoxItem {
+    return this.format.box?.Clone() ?? new SvxBoxItem(RES_BOX);
   }
 
   /** Reads an independent effective native vertical orientation item. @returns Complete item including pool defaults. */

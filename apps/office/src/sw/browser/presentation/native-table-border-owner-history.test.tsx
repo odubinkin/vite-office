@@ -1,4 +1,9 @@
 /** @fileoverview Checks thin native border delegation, original cursor history and caller-selected table properties. */
+import {
+  nativeBoxFormat,
+  tableBorderItems,
+  tableBoxFormatForTest,
+} from "../../../test/table-box-test-helpers";
 import { act, cleanup, render, screen } from "@testing-library/react";
 import { afterEach, expect, it, vi } from "vitest";
 import { createWriterDocumentSession } from "../composition/writer-module";
@@ -21,7 +26,7 @@ function fixture() {
   const boxes = [];
   for (let row = 0; row < 2; row++)
     for (const box of doc.nodes.AppendTableRow(table, 2).GetTabBoxes()) {
-      box.SetFormat({ border: "1pt solid #112233", padding: 150 });
+      box.SetFormat(nativeBoxFormat({ border: "1pt solid #112233", padding: 150 }));
       required(box.GetParagraphs()[0]).SetText("Cell " + boxes.length);
       boxes.push(box);
     }
@@ -43,12 +48,20 @@ it("thin native shell forwards its actual cursor once and renders only the curre
       untouched = screen.getByRole("textbox", { name: "Row 1 column 1 paragraph 1" }).closest("td");
     act(
       /** Publishes current cell borders to the actual mounted view. @returns Nothing. */ () => {
-        expect(f.shell.SetTabBorders({ border: "none", padding: 0 })).toBe(true);
+        expect(
+          f.shell.SetTabBorders(
+            tableBorderItems(
+              f.shell.GetDoc(),
+              { border: "none", padding: 0 },
+              f.shell.GetCursor(false),
+            ),
+          ),
+        ).toBe(true);
       },
     );
     expect(setter).toHaveBeenCalledExactlyOnceWith(
       cursor,
-      { border: "none", padding: 0 },
+      tableBorderItems(f.doc, { border: "none", padding: 0 }, cursor),
       original,
     );
     expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(1);
@@ -97,8 +110,12 @@ for (const selected of [false, true])
         }),
       ).toBe(true);
       for (const [index, box] of f.boxes.entries()) {
-        expect(box.GetFormat().border).toBe(!selected || index >= 2 ? "none" : "1pt solid #112233");
-        expect(box.GetFormat().padding).toBe(!selected || index >= 2 ? 0 : 150);
+        expect(tableBoxFormatForTest(box.GetFormat()).border).toBe(
+          !selected || index >= 2 ? "none" : "1pt solid #112233",
+        );
+        expect(tableBoxFormatForTest(box.GetFormat()).padding).toBe(
+          !selected || index >= 2 ? 0 : 150,
+        );
       }
       expect(f.shell.IsTableMode()).toBe(selected);
       expect(f.shell.getShellCursor()).toBe(cursor);

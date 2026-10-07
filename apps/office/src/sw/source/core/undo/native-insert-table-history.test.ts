@@ -1,4 +1,5 @@
 /** @fileoverview Verifies body table insertion through actual native shell, nodes and grouped history without upstream access. */
+import { nativeBoxFormat } from "../../../../test/table-box-test-helpers";
 import { VertOrientation } from "./../../../../offapi/com/sun/star/text/VertOrientation";
 import { SwFormatVertOrient } from "./../../../inc/fmtornt";
 
@@ -164,10 +165,12 @@ it.each([
         required(required(table.GetTabLines()[0]).GetTabBoxes()[0]).GetParagraphs()[0],
       ).GetTextFormatColl().id,
     ).toBe(style);
-    expect(required(required(table.GetTabLines()[0]).GetTabBoxes()[0]).GetFormat()).toEqual({
-      padding: mode === SwInsertTableFlags.All ? 55 : 0,
-      border: mode === SwInsertTableFlags.All ? "0.5pt solid #000000" : "none",
-    });
+    expect(required(required(table.GetTabLines()[0]).GetTabBoxes()[0]).GetFormat()).toEqual(
+      nativeBoxFormat({
+        padding: mode === SwInsertTableFlags.All ? 55 : 0,
+        border: mode === SwInsertTableFlags.All ? "0.5pt solid #000000" : "none",
+      }),
+    );
     position.Dispose();
     doc.Dispose();
   },
@@ -176,17 +179,17 @@ it("uses first free native names on collisions and owns dialog construction valu
   const o = fixture(),
     original = o.doc.nodes.MakeTableNode("Table1");
   const occupied = o.doc.nodes.MakeTableNode("Table3"),
-    box = {
+    box = nativeBoxFormat({
       padding: 123,
       border: "none",
       vertOrient: new SwFormatVertOrient(0, VertOrientation.BOTTOM),
-    },
+    }),
     flags = { mnInsMode: SwInsertTableFlags.Headline, mnRowsToRepeat: 0 };
   try {
     const table = required(o.shell.InsertTable(flags, 2, 1, "Table1", box));
     expect(table.GetName()).toBe("Table2");
     flags.mnRowsToRepeat = 2;
-    box.padding = 999;
+    required(box.box).SetAllDistances(999);
     expect(o.shell.Undo()).toBe(true);
     expect(o.shell.Redo()).toBe(true);
     const recreated = required(o.doc.GetTables()[0]);
@@ -196,11 +199,13 @@ it("uses first free native names on collisions and owns dialog construction valu
       repeatHeaderRows: false,
       layoutSplit: false,
     });
-    expect(required(required(recreated.GetTabLines()[0]).GetTabBoxes()[0]).GetFormat()).toEqual({
-      padding: 123,
-      border: "none",
-      vertOrient: new SwFormatVertOrient(0, VertOrientation.BOTTOM),
-    });
+    expect(required(required(recreated.GetTabLines()[0]).GetTabBoxes()[0]).GetFormat()).toEqual(
+      nativeBoxFormat({
+        padding: 123,
+        border: "none",
+        vertOrient: new SwFormatVertOrient(0, VertOrientation.BOTTOM),
+      }),
+    );
     expect(o.doc.GetTables()).toContain(original);
     expect(o.doc.GetTables()).toContain(occupied);
   } finally {

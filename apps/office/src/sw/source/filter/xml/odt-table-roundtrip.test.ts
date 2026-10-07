@@ -1,4 +1,5 @@
 /** @fileoverview Verifies source-backed and synthetic canonical Writer table round trips. */
+import { nativeBoxFormat, tableBoxFormatForTest } from "../../../../test/table-box-test-helpers";
 import { VertOrientation } from "./../../../../offapi/com/sun/star/text/VertOrientation";
 import { SwFormatVertOrient } from "./../../../inc/fmtornt";
 
@@ -113,7 +114,7 @@ describe("Writer canonical ODF tables", /** Verifies the bounded table scenario.
       ),
     ).toEqual([1, 1]);
     expect(original[0]?.widths).toEqual([9638]);
-    expect(original[0]?.rows[0]?.cells[0]?.format.padding).toBe(55);
+    expect(tableBoxFormatForTest(original[0]?.rows[0]?.cells[0]?.format ?? {}).padding).toBe(55);
     expect(
       imported.document.nodes
         .getBodyContent()
@@ -153,16 +154,16 @@ describe("Writer canonical ODF tables", /** Verifies the bounded table scenario.
       2,
       { frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 500), keepTogether: false },
       [
-        {
+        nativeBoxFormat({
           padding: 100,
           border: "none",
           vertOrient: new SwFormatVertOrient(0, VertOrientation.NONE),
-        },
-        {
+        }),
+        nativeBoxFormat({
           padding: 120,
           border: "1pt solid #000000",
           vertOrient: new SwFormatVertOrient(0, VertOrientation.CENTER),
-        },
+        }),
       ],
     );
     first.GetTabBoxes()[0]?.GetParagraphs()[0]?.SetText("one");

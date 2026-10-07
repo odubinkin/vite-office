@@ -44,6 +44,7 @@ for (const mode of ["border-only", "row-split-only", "both"] as const)
       }
     },
   );
+import { nativeBoxFormat, tableBorderItems } from "../../../test/table-box-test-helpers";
 import { afterEach, expect, it, vi } from "vitest";
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { createWriterDocumentSession } from "../composition/writer-module";
@@ -67,8 +68,8 @@ function fixture() {
   table.AddColumnWidth(3000);
   for (let r = 0; r < 2; r++)
     doc.nodes.AppendTableRow(table, 2, {}, [
-      { padding: 567, border: "1pt solid #000000" },
-      { padding: 1134, border: "none" },
+      nativeBoxFormat({ padding: 567, border: "1pt solid #000000" }),
+      nativeBoxFormat({ padding: 1134, border: "none" }),
     ]);
   const boxes = table
       .GetTabLines()
@@ -99,9 +100,8 @@ function fixture() {
 /** Reads authored border and distance values. @param f - Actual fixture. @returns Independent scalar values. */
 function values(f: ReturnType<typeof fixture>) {
   return f.boxes.map(
-    /** Reads original box values. @param box - Original cell. @returns Authored values. */ (
-      box,
-    ) => [box.GetFormat().border, box.GetFormat().padding],
+    /** Reads original box values. @param box - Original cell. @returns Authored values. */ (box) =>
+      box.GetBox().QueryValue(),
   );
 }
 for (const mode of ["untouched", "reset", "change-back"] as const)
@@ -189,9 +189,22 @@ for (const field of ["border", "padding"] as const)
               i,
             ) =>
               !selected || i < 2
-                ? field === "border"
-                  ? ["none", 567]
-                  : ["1pt solid #000000", 0]
+                ? required(
+                    nativeBoxFormat(
+                      field === "border"
+                        ? { border: "none", padding: 567 }
+                        : { border: "1pt solid #000000", padding: 0 },
+                      field === "border"
+                        ? []
+                        : i === 0
+                          ? [3]
+                          : i === 1
+                            ? []
+                            : i === 2
+                              ? [0, 3]
+                              : [0],
+                    ).box,
+                  ).QueryValue()
                 : pair,
           );
           for (let cycle = 0; cycle < 3; cycle++) {
@@ -216,7 +229,7 @@ for (const field of ["border", "padding"] as const)
             restored.map(
               /** Reads independent persisted fields. @param box - Restored owner. @returns Values. */ (
                 box,
-              ) => [box.GetFormat().border, box.GetFormat().padding],
+              ) => box.GetBox().QueryValue(),
             ),
           ).toEqual(expected);
           f.shell.ClearMark();
@@ -297,7 +310,15 @@ it("represented direct border admission retains nonzero ordinary history and ori
       .SetSelection({ point: { nodeIndex: f.node.GetIndex(), contentIndex: 2 } });
     const before = f.shell.CaptureCursorState(),
       original = values(f);
-    expect(f.shell.SetTabBorders({ border: "none", padding: 0 })).toBe(true);
+    expect(
+      f.shell.SetTabBorders(
+        tableBorderItems(
+          f.shell.GetDoc(),
+          { border: "none", padding: 0 },
+          f.shell.GetCursor(false),
+        ),
+      ),
+    ).toBe(true);
     expect(f.shell.IsTableMode()).toBe(false);
     expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(1);
     expect(f.shell.Undo()).toBe(true);

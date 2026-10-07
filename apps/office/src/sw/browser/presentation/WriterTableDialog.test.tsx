@@ -1,4 +1,5 @@
 /** @fileoverview Verifies the Writer table controls and editable cell boundary. */
+import { nativeBoxFormat } from "../../../test/table-box-test-helpers";
 import { VertOrientation } from "./../../../offapi/com/sun/star/text/VertOrientation";
 import { SwFormatVertOrient } from "./../../inc/fmtornt";
 
@@ -131,11 +132,11 @@ describe("Writer browser table controls", /** Verifies the bounded table scenari
       2,
       { frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 200) },
       [
-        {
+        nativeBoxFormat({
           padding: 50,
           border: "none",
           vertOrient: new SwFormatVertOrient(0, VertOrientation.CENTER),
-        },
+        }),
         {},
       ],
     );
@@ -207,7 +208,9 @@ describe("Writer browser table controls", /** Verifies the bounded table scenari
     const document = createWriterDocument();
     const table = document.nodes.MakeTableNode("Table1", { width: 5000 });
     table.AddColumnWidth(5000);
-    const row = document.nodes.AppendTableRow(table, 1, {}, [{ padding: 80, border: "none" }]);
+    const row = document.nodes.AppendTableRow(table, 1, {}, [
+      nativeBoxFormat({ padding: 80, border: "none" }),
+    ]);
     const node = row.GetTabBoxes()[0]?.GetParagraphs()[0];
     if (node === undefined) throw new Error("Writer test cell is missing.");
     node.SetText("start");

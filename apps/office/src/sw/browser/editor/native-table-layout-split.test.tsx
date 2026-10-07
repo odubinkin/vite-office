@@ -1,4 +1,5 @@
 /** @fileoverview Verifies native split policy changes physical pages while retaining canonical editable cells. */
+import { nativeBoxFormat } from "../../../test/table-box-test-helpers";
 import { SwFormatFrameSize, SwFrameSize } from "../../inc/fmtfsize";
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, expect, it } from "vitest";
@@ -43,7 +44,7 @@ it.each([undefined, true, false])(
           table,
           1,
           { frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 200) },
-          [{ padding: 0, border: "none" }],
+          [nativeBoxFormat({ padding: 0, border: "none" })],
         )
         .GetTabBoxes()[0]
         ?.GetParagraphs()[0];

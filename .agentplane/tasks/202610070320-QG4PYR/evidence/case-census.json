@@ -1,0 +1,108 @@
+{
+  "app": {
+    "original": 13322,
+    "current": 13333,
+    "newCases": 11,
+    "resolved": 5,
+    "passed": 13333,
+    "unresolvedCount": 0,
+    "skippedObservationsRetained": 180,
+    "passingReplay": 0,
+    "inputs": [
+      {
+        "file": "QG4PYR.app-results.json",
+        "sha256": "ac5954e968beb6be52cf36ebb7b992c76ca91b8b62259e12218da49b1fda6b25",
+        "passed": 13318,
+        "failed": 4,
+        "skipped": 0
+      },
+      {
+        "file": "QG4PYR.app-closure2-results.json",
+        "sha256": "ad787bcd6ae15eaf992379ba15cab9815f19a63ad8aa1ad481c39ba27e7114e9",
+        "passed": 8,
+        "failed": 1,
+        "skipped": 92
+      },
+      {
+        "file": "QG4PYR.app-closure3-results.json",
+        "sha256": "f4dedf3910defac094e917375cda462265b320dba017e56778b8cea1293b11c6",
+        "passed": 1,
+        "failed": 0,
+        "skipped": 24
+      },
+      {
+        "file": "QG4PYR.app-closure5-results.json",
+        "sha256": "c07442588de8685ac32497c5b1729b6b6362d4942bb8abda0ef813106e4b7571",
+        "passed": 4,
+        "failed": 0,
+        "skipped": 30
+      },
+      {
+        "file": "QG4PYR.app-closure6-results.json",
+        "sha256": "f5d189df85f0befcd28d752b4f2838100cb60e40caec40f6606dca02baaa3638",
+        "passed": 2,
+        "failed": 0,
+        "skipped": 34
+      }
+    ]
+  },
+  "inventory": {
+    "original": 109,
+    "current": 110,
+    "newCases": 1,
+    "resolved": 1,
+    "passed": 110,
+    "unresolvedCount": 0,
+    "skippedObservationsRetained": 8,
+    "passingReplay": 0,
+    "inputs": [
+      {
+        "file": "QG4PYR.inventory-results.json",
+        "sha256": "9d80181afe9f2c21b965d6f73e0ce1521bc68dcbc9d7073011a245a33a9f721a",
+        "passed": 108,
+        "failed": 1,
+        "skipped": 0
+      },
+      {
+        "file": "QG4PYR.inventory-closure2-results.json",
+        "sha256": "8b0587b093e1ea5e4bc2dbe584765903cf28ba2872785cee346559179eb4d633",
+        "passed": 2,
+        "failed": 0,
+        "skipped": 8
+      }
+    ]
+  },
+  "chromium": {
+    "current": 252,
+    "passed": 252,
+    "unresolvedCount": 0,
+    "passingReplay": 0,
+    "inputs": [
+      {
+        "file": "QG4PYR.chromium-results.json",
+        "sha256": "eb56fa63ddf4d576bd7554a4704f498489d267536c50a6ad6658959bee8060d6",
+        "counts": {
+          "startTime": "2026-10-07T03:58:28.363Z",
+          "duration": 107715.257,
+          "expected": 240,
+          "skipped": 0,
+          "unexpected": 12,
+          "flaky": 0
+        }
+      },
+      {
+        "file": "QG4PYR.chromium-closure2-results.json",
+        "sha256": "e11a5b6b1419bc005611b6aa96c723866ce22d60fdc5c68a30ff16b26fb27daf",
+        "counts": {
+          "startTime": "2026-10-07T04:11:38.229Z",
+          "duration": 7275.619000000001,
+          "expected": 12,
+          "skipped": 0,
+          "unexpected": 0,
+          "flaky": 0
+        }
+      }
+    ]
+  },
+  "failures": []
+}

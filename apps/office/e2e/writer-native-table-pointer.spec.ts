@@ -1,4 +1,5 @@
 /** @fileoverview Checks real table interior pointer placement and explicit row gutter selection. */
+import { nativeBoxFormat } from "../src/test/table-box-test-helpers";
 import { SwFormatFrameSize, SwFrameSize } from "../src/sw/inc/fmtfsize";
 import { selectBrowserTableRow } from "../test-support/table-mouse-e2e";
 import { expect, test } from "@playwright/test";
@@ -29,7 +30,7 @@ for (const width of [1280, 390])
     if (first === undefined || target === undefined || empty === undefined)
       throw new Error("Missing table fixture");
     for (const box of row.GetTabBoxes())
-      box.SetFormat({ padding: 300, border: "1px solid #000000" });
+      box.SetFormat(nativeBoxFormat({ padding: 300, border: "1px solid #000000" }));
     first.SetText("Keep");
     target.SetText("Upper");
     const shell = new SwWrtShell(new SwDocShell(doc, metadata));

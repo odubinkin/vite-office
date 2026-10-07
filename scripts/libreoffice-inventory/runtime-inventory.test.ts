@@ -94,6 +94,28 @@ describe("runtime inventory" /** Groups strict parser and complete-coverage chec
     ]);
   });
 
+  it("keeps nested test fixture helpers outside the production module inventory", /** Checks the existing test directory without excluding similarly named runtime owners. @returns Nothing. */ () => {
+    expect(
+      selectRuntimeModulePaths("src/", [
+        "test/setup.ts",
+        "test/table-box-test-helpers.ts",
+        "test/fixtures/native.tsx",
+        "test/wrtsh-test-helpers.ts",
+        "sw/source/core/unused.test.ts",
+        "sw/source/core/unused.test.tsx",
+        "notes.md",
+        "sw/browser/native.tsx",
+        "sw/source/core/test.ts",
+        "svtools/source/control/ctrlbox.ts",
+      ]),
+    ).toEqual([
+      "src/svtools/source/control/ctrlbox.ts",
+      "src/sw/browser/native.tsx",
+      "src/sw/source/core/test.ts",
+      "src/test/wrtsh-test-helpers.ts",
+    ]);
+  });
+
   it("selects production TypeScript entries and extracts sorted exported functions" /** Verifies discovery excludes tests and setup files. @returns Nothing. */, function selectsRuntimePaths(): void {
     expect(
       selectRuntimeModulePaths("src/", [

@@ -1,4 +1,5 @@
 /** @fileoverview Verifies production cell alignment state, geometry and native selected-cell history without upstream access. */
+import { nativeBoxFormat } from "../src/test/table-box-test-helpers";
 import { expect, test } from "@playwright/test";
 import { selectBrowserTableRow } from "../test-support/table-mouse-e2e";
 import { SwDoc } from "../src/sw/source/core/doc/doc";
@@ -21,8 +22,14 @@ for (const width of [1280, 390])
           2,
           { frameSize: new SwFormatFrameSize(type, 0, 1200) },
           [
-            { padding: 30, vertOrient: new SwFormatVertOrient(0, rowIndex === 0 ? 3 : 0) },
-            { padding: 30, vertOrient: new SwFormatVertOrient(0, rowIndex === 0 ? 2 : 3) },
+            nativeBoxFormat({
+              padding: 30,
+              vertOrient: new SwFormatVertOrient(0, rowIndex === 0 ? 3 : 0),
+            }),
+            nativeBoxFormat({
+              padding: 30,
+              vertOrient: new SwFormatVertOrient(0, rowIndex === 0 ? 2 : 3),
+            }),
           ],
         );
         for (const [column, box] of row.GetTabBoxes().entries()) {

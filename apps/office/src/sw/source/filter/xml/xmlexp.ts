@@ -2,6 +2,7 @@
  * @fileoverview Reimplements the bounded Writer ODF XML export bridge from pinned LibreOffice `sw/source/filter/xml/xmlexp.cxx`.
  */
 import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
+import { exportBoxProperties } from "../../../../xmloff/source/style/bordrhdl";
 
 import { getWriterNumFormatKind, getWriterNumFormatBullet } from "../../core/doc/number";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
@@ -315,8 +316,7 @@ function exportWriterText(
                       cell,
                     ) => ({
                       format: {
-                        padding: cell.GetFormat().padding,
-                        border: cell.GetFormat().border,
+                        ...exportBoxProperties(cell.GetFormat().box),
                         verticalAlign:
                           cell.GetFormat().vertOrient === undefined
                             ? undefined

@@ -1,0 +1,51 @@
+{
+  "records": [
+    {
+      "command": "npm run format:check",
+      "exit": 0,
+      "bytes": 122,
+      "sha256": "ac1729f86eee878f5f4d6c948c510d2cc91bb5568f6dd088f70f3885e137d116",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run lint",
+      "exit": 1,
+      "bytes": 673,
+      "sha256": "c21ca8a3acf7e148084474f8b1151f2dc40459b0e379171bd702b0513a86f400",
+      "diagnostics": [
+        "> eslint . --max-warnings 0",
+        "  14:3  error  Explicit enum value must only be a literal value (string or number)  @typescript-eslint/prefer-literal-enum-member",
+        "  20:3  error  Explicit enum value must only be a literal value (string or number)  @typescript-eslint/prefer-literal-enum-member",
+        "  22:3  error  Explicit enum value must only be a literal value (string or number)  @typescript-eslint/prefer-literal-enum-member",
+        "✖ 3 problems (3 errors, 0 warnings)"
+      ]
+    },
+    {
+      "command": "npm run typecheck",
+      "exit": 2,
+      "bytes": 1370,
+      "sha256": "5c4ef3567f973627d65585cc6bd4ad4697b40cc62c573a4f70607e2b4cdfe184",
+      "diagnostics": [
+        "src/sw/browser/filter/xml/writer-document-codec.ts(276,7): error TS18046: 'line.color' is of type 'unknown'.",
+        "src/sw/browser/filter/xml/writer-document-codec.ts(277,7): error TS18046: 'line.color' is of type 'unknown'.",
+        "src/sw/browser/filter/xml/writer-document-codec.ts(280,33): error TS18046: 'line.style' is of type 'unknown'.",
+        "src/sw/browser/filter/xml/writer-document-codec.ts(280,51): error TS18046: 'line.style' is of type 'unknown'.",
+        "src/sw/source/filter/xml/native-cell-box-roundtrip.test.ts(80,23): error TS18048: 'record.tables' is possibly 'undefined'.",
+        "src/sw/source/filter/xml/native-cell-box-roundtrip.test.ts(100,21): error TS2532: Object is possibly 'undefined'.",
+        "src/sw/source/filter/xml/odt-table-roundtrip.test.ts(117,51): error TS2339: Property 'padding' does not exist on type 'SwTableBoxFormat'.",
+        "npm error Lifecycle script `typecheck` failed with error:",
+        "npm error code 2",
+        "npm error path /Users/odubinkin/Projects/vite-office/apps/office",
+        "npm error workspace @vite-office/office@0.1.0",
+        "npm error location /Users/odubinkin/Projects/vite-office/apps/office"
+      ]
+    },
+    {
+      "command": "npm run check:dependencies",
+      "exit": 0,
+      "bytes": 189,
+      "sha256": "901a0ea2960f5178c20d6b0fae73dfa41d3553da83011175bd3f1f253c5ca91d",
+      "diagnostics": []
+    }
+  ]
+}

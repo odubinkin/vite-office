@@ -1,0 +1,29 @@
+{
+  "records": [
+    {
+      "command": "npm run lint",
+      "exit": 0,
+      "bytes": 55,
+      "sha256": "a6172cb57fa696e705408fdc605fba1ae07b852fdf0614d7c2b623349e285b6e",
+      "diagnostics": [
+        "> eslint . --max-warnings 0"
+      ]
+    },
+    {
+      "command": "npm run typecheck",
+      "exit": 2,
+      "bytes": 675,
+      "sha256": "2752fd35a227a98c43efa46baed243eed3afa4b6e11c45e3fc2cb4f0567ce925",
+      "diagnostics": [
+        "src/sw/source/filter/xml/odt-table-roundtrip.test.ts(117,12): error TS2304: Cannot find name 'tableBoxFormatForTest'.",
+        "npm error Lifecycle script `typecheck` failed with error:",
+        "npm error code 2",
+        "npm error path /Users/odubinkin/Projects/vite-office/apps/office",
+        "npm error workspace @vite-office/office@0.1.0",
+        "npm error location /Users/odubinkin/Projects/vite-office/apps/office",
+        "npm error command failed",
+        "npm error command sh -c tsc --noEmit"
+      ]
+    }
+  ]
+}

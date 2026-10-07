@@ -1,0 +1,21 @@
+{
+  "reference": "libreoffice-26.8.0.2",
+  "referenceCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceSHA256": {
+    "svtools/source/control/ctrlbox.cxx": "a5e0f427f2564620dfb76d93870fff01ef0db7c3b9abaed7a2b433bebb3b4372",
+    "editeng/source/items/borderline.cxx": "828754a81b1e74abc01f738cdcbe5e5d71e08d50c70ca445835613e6de52603a",
+    "editeng/source/items/frmitems.cxx": "0a506d3769fe82ebe1272e5dda128f082d775d3eda7280911b5e8df78557754f",
+    "include/editeng/boxitem.hxx": "1ab1da9b367a7db2a2d84e2c7548403c41298abf6906b4070fb845c15e8ee113",
+    "include/editeng/borderline.hxx": "a6e5fbbb5adc4187eb81c34bdc3523c3cfc1119110ad725990c3ca13893e2a2c",
+    "include/svtools/borderline.hxx": "e550bad57e1e86e3df26e00a1f40e7cd2b13227750f42255bd5f552c7eb422dd",
+    "include/svtools/ctrlbox.hxx": "08e71d8a0d66a80cf51f0f8ecb55482c7367bbcc0c105dc898aabdf3cad6afa8",
+    "sw/source/uibase/shells/tabsh.cxx": "ac075f90575663fac974e2804e7111b1df3f596eb5bb400fb9fc2f4be0058163",
+    "sw/source/core/docnode/ndtbl1.cxx": "c94a3a78edc61fc2b2a0419371f70cffc5466ceca3d0b8f29160cceff0b37663",
+    "sw/source/core/frmedt/fetab.cxx": "e7b7c7164f76d7e67eddcf863128d41c3c2ea2946362b8509bab0bc2cdc9f016",
+    "xmloff/source/style/bordrhdl.cxx": "a09deb5c7eec14085158483b0af7f113a90fdc96112ec7426dd70bbc51ea2ba7",
+    "offapi/com/sun/star/table/BorderLineStyle.idl": "2899f5523b5546982dd2f392acf8b9d2ca45abebc4700b1b2485a57af33a1339",
+    "include/svx/svxids.hrc": "8490030f09b56de06bba37683b28301900358b4d67aa8fdc7966878f09487d21"
+  },
+  "contracts": "Native owned lines/component metrics and supported values; four lines and signed16 default0 distances; info validity127; SID_ATTR_BORDER_INNER10023 and RES_BOX113; source point/mark union border validity/distribution and complete distances; ODF style/measure/component rules. Browser paint reads original box items. Source hashes/reference prose only; no upstream source copies in task artifacts.",
+  "residualScope": "Complete native themes/shading/Word, per-edge/common-state widgets, RTL/vertical/follow/shared-format/layout obligations remain unverified. Parent goal remains ACTIVE."
+}

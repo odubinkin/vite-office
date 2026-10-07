@@ -1,4 +1,5 @@
 /** @fileoverview Real Chromium native table alignment, linked metrics and history at desktop and narrow widths. */
+import { nativeBoxFormat } from "../src/test/table-box-test-helpers";
 import { selectBrowserTableRow } from "../test-support/table-mouse-e2e";
 import { expect, test } from "@playwright/test";
 import { SwDoc } from "../src/sw/source/core/doc/doc";
@@ -60,8 +61,8 @@ for (const viewport of [1280, 390])
       table.AddColumnWidth(2000);
       doc.nodes
         .AppendTableRow(table, 2, {}, [
-          { border: "none", padding: 0 },
-          { border: "none", padding: 0 },
+          nativeBoxFormat({ border: "none", padding: 0 }),
+          nativeBoxFormat({ border: "none", padding: 0 }),
         ])
         .GetTabBoxes()[0]
         ?.GetParagraphs()[0]

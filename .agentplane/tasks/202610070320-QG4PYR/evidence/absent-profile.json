@@ -1,0 +1,392 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/offapi/com/sun/star/table/BorderLineStyle.ts": "a5916b5922139734702d3a98649828d20ace56e59e8ff6584a77bff276fb9f67",
+    "apps/office/src/svtools/source/control/ctrlbox.ts": "4ec36a7ef603d5fc9dedcb9bbc53fd1774a92019fb33543565a9ec333ddbc9ce",
+    "apps/office/src/editeng/source/items/borderline.ts": "c350b97e3cef61712ae71604c24827800dce43bc8efa3c362e81aada2d21424d",
+    "apps/office/src/editeng/source/items/frmitems.ts": "c70018a2bdd308fa0b44b53de5ac22916d8422ef4255f8336521e8584a56bc66",
+    "apps/office/src/svx/inc/svxids.ts": "fa60f4dfa36d7d764feb0586e1d2159fa2f51315c1e2d66ec8418e27bc4b3826",
+    "apps/office/src/xmloff/source/style/bordrhdl.ts": "5467fa74fd57bee8f525f00fac59081422d1bd8127763285b618d32e074382fd",
+    "apps/office/src/sw/inc/hintids.ts": "fa836c4d407d25c5edfdaa3591ff5577215e7bd58b3f1247fb71b465f14b8cfd",
+    "apps/office/src/sw/source/core/attr/swatrset.ts": "afa1d654d9555fac3cf9a33ab3a2784b7c563da4c8784a34b9d26d6a7c1da48f",
+    "apps/office/src/sw/source/core/table/swtable.ts": "c39fe8733dc078c0cb7a09f47ffad22cceeabe10d8376141ecc2d55400893f3b",
+    "apps/office/src/sw/source/core/doc/doc.ts": "9bbb895d027f200d5ca296f51aa0ccee46855d942d1989b0b4b3fd363f6bfce7",
+    "apps/office/src/sw/source/core/docnode/ndtbl1.ts": "21b9df1bbb61879bb89786ae1f2e37f030000da2cd7519783616c108fd6926e5",
+    "apps/office/src/sw/source/core/frmedt/fetab.ts": "b5ee358cf6a16d12ec697980218be8f94cd9f9ea16bce8a736db226bffe56dbb",
+    "apps/office/src/sw/source/core/undo/untbl.ts": "0f236af7f61c63d6ea0bd945d3868bb983682a4e1c157affd7c2c47857c1225b",
+    "apps/office/src/sw/source/uibase/shells/tabsh.ts": "73ccc4f42324284d683714f7cc60a427df41642cadef0f65a30a08f598b447f0",
+    "apps/office/src/sw/source/filter/xml/xmltbli.ts": "fd1f3bb18f1f5f3a36e26f7c1d61c5fc49f7e7609dee847cfdb316b4e259b890",
+    "apps/office/src/sw/source/filter/xml/xmlexp.ts": "c4608ae422c5f2fafbb11dde785f91221e38df6568c586be1d4b42338c53d53b",
+    "apps/office/src/sw/browser/filter/xml/writer-document-codec.ts": "a25dc9af5a235704d54eebbb3f6ab3dd8544253719cf6aa067808e03613b76a4",
+    "apps/office/src/sw/browser/editor/WriterEditableTable.tsx": "6b1ef764827615f56041a8055929518bf78faa16e53df6b201872d81f888225d",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx": "df396c4eecf92326778e9a5d29551b88cacb594ab7b3562939e41ccd97ec5565",
+    "apps/office/src/sw/browser/presentation/writer-view.tsx": "b10668a75e07acc18c2348adaeabea970e8438daa25d0611fc2f6b09f54622b3",
+    "apps/office/src/xmloff/source/table/XMLTableImport.ts": "fff949f18db55b00a94934b4ccf184bfc240d1fc5c4a21d051ccaa003f06cdd0",
+    "apps/office/src/xmloff/source/table/XMLTableExport.ts": "945bdcf99578dcac59239d48d1996b7cbc98384ebd0a677f432cc57fbb130ff7",
+    "apps/office/src/xmloff/source/core/xmltoken.ts": "3191eb63ec153c91369fd2be02285d672a8a3f0ad106881588bf79f3e216896c",
+    "apps/office/e2e/writer-native-cell-alignment.spec.ts": "f8a945dc5202f1d1906b58afbd770633b6fb072a105d54d9a8459961b950141c",
+    "apps/office/e2e/writer-native-list-marker-width.spec.ts": "dd4046c8e180de10a8230566a720b8a3f333f5867dc37d7d7ff39ce29977b185",
+    "apps/office/e2e/writer-native-table-layout-split.spec.ts": "cc72da6201c05fe09bf4c2564eb6c27558671331587dd17af67a0fe33a9cd0c3",
+    "apps/office/e2e/writer-native-table-pointer.spec.ts": "40153d57f6cca3bae58c46833523b839c93cb7de80b12847046738997dfaa8ec",
+    "apps/office/e2e/writer-native-table-properties-reset.spec.ts": "6be3df099cadcabcafeff8fa97b83e075088c49366b4d08f004f512c178d5b27",
+    "apps/office/e2e/writer-native-table-text-flow-headline.spec.ts": "2eac5f5f9341bfce811abe920b22869b4e1e7cd0ded778bfbc5b2d37bc2ef6cb",
+    "apps/office/e2e/writer-native-table-text-flow-split.spec.ts": "dea3efba216bbfc2fc01c7a1bc3587451a54a84ec07c25585b110c3fc2daa185",
+    "apps/office/e2e/writer-table-alignment.spec.ts": "b98d3697c54bdbbdb373c24324d0f9b2c14859176f1f1d856ca320a2b2dc6a61",
+    "apps/office/e2e/writer-table-border-changed-items.spec.ts": "ec3315609ae6bc9fce3df909b3c5e35dfd56efb6c91918ddeead11df4414ddc0",
+    "apps/office/e2e/writer-table-print-area.spec.ts": "dadf988f87edccd81c65e93cba3ee4ea5495c8e15af842658d81627e6d8a9df8",
+    "apps/office/e2e/writer-table-properties-history.spec.ts": "d5dd1c44a96c82dac5a78f0fb93a092874a1374b9d2d6bdacb5dab83d105df07",
+    "apps/office/src/sw/browser/editor/native-row-frame-size.test.tsx": "147712eab737f81c48eb3938ab0107296484abb201aa9bbb6e9bcfa1f5411098",
+    "apps/office/src/sw/browser/editor/native-table-layout-split.test.tsx": "00e7870017e29fb95f4de20836d546328c07c879dbebb2afed64aa4011fdfa5a",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.test.tsx": "3b8c2222176f36fc7293e4425d0bfc9ec9b9681661e25502abcb262dc050aa92",
+    "apps/office/src/sw/browser/presentation/native-table-border-changed-items.test.tsx": "838eba5ef8e22132340df57921f137a6595accd844376f1ac69b1857b612d687",
+    "apps/office/src/sw/browser/presentation/native-table-border-owner-history.test.tsx": "79811ce8c49bad99e2173562d273c6386594d6665addd327ea58b2d20ce00f9b",
+    "apps/office/src/sw/browser/presentation/native-table-properties-reset.test.tsx": "1a358b8e18e690fa6b59ff65859fa14b11db3803490e4b3f7b2883e8f3df17ca",
+    "apps/office/src/sw/browser/presentation/native-table-properties.test.tsx": "3fc455ca1e02030402688613668f3cca4011496b9e9df16e1a15deb4988e98f1",
+    "apps/office/src/sw/source/core/docnode/native-cell-alignment-owner.test.ts": "4d8324422859fd9523facb6d845560c0a9a2dc7d2ba1926cbe4439e16b8a46ad",
+    "apps/office/src/sw/source/core/docnode/native-table-border-owner.test.ts": "3506b23c527a4abe90c9793d9fa2aede8208f556860729bbca4c132126e55d14",
+    "apps/office/src/sw/source/core/table/native-column-insertion.test.ts": "6e5a44feaa043eb44765fa9cea3f31c3adb1652067116c309e000a07a97463c1",
+    "apps/office/src/sw/source/core/table/native-row-insertion.test.ts": "70783e6dd1bd73a87270576b50b5ff6a4458593a3114c2df916f740e7011427b",
+    "apps/office/src/sw/source/core/undo/native-insert-table-history.test.ts": "ad107c818871196dbe5d746f743e2d308bd030d7cfc2999671e7d953cca8af38",
+    "apps/office/src/sw/source/filter/xml/native-cell-alignment-roundtrip.test.ts": "233f3526af3e333270d089a46ddf585a28f00dd87d3c65d993007c5503304609",
+    "apps/office/src/sw/source/filter/xml/odt-table-roundtrip.test.ts": "8c27063b737f96de76a6a7d8f6a8a7b6de3ba392afcf1a43414ef225255e1873",
+    "apps/office/src/sw/source/uibase/wrtsh/native-row-height-owner-history.test.ts": "7c8172143a5c639dd4f52cb7e34b918408250ef5adeda4eab890cdce8fcb3109",
+    "apps/office/src/sw/source/uibase/wrtsh/native-row-split-owner-history.test.ts": "80cf77c99271a4d54b525016146b58141dfcafba2755fa50066e4f9b2cb7818d",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-column-page-history.test.ts": "7e556883d3a2b97a81aae9ec49b0f34a605640994994cb217f716dae25d8e3a6",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-format-lifecycle-history.test.ts": "8854aefd25f6d02a7ac4b468dd46d5e4c10439ce29273f5209da53754510a7aa",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-properties-reset-history.test.ts": "03d1f8c082c286d178ab5818fe255ac644ad3e71057c02ec0e19f1776b7d9299",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-properties.test.ts": "546369bbe862076175ef1c9fd6ef5c850af877a0508c6339218f88cac197c613",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-text-flow-headline-history.test.ts": "2ca0a94fd324b17ed7ad8596e54b95fde7cc4baec589a0484cec110f9147d3af",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-text-flow-split-history.test.ts": "398493738ee145dd666fc2215edcd6c00bdad4f7a4999aa043b59b50e1d94e43",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-traversal.test.ts": "d7c8955df893bac37e826d7e148fc654936f6dadba1c60f336c099e72445558b",
+    "apps/office/src/editeng/source/items/boxitem.test.ts": "fcca7d3f2cac23ec531a91262c4537ded8253facf7142da3b21019d8a0feee7d",
+    "apps/office/src/svtools/source/control/ctrlbox.test.ts": "7e0916863249e51ac825a44c9646a70ee1a4b8da5f090e9abe4d4c472135d42e",
+    "apps/office/src/sw/source/filter/xml/native-cell-box-roundtrip.test.ts": "3ffb3f108d881befc011358cb28aa3557bf9e330992d63051647ef9eedf14fe9",
+    "apps/office/src/sw/source/core/docnode/native-box-border-items.test.ts": "0a7567be65727bcfe5beb83d0ae837f04155c9cdbc7031c3a4c859177bfe5857",
+    "apps/office/src/sw/browser/editor/native-cell-box-render.test.tsx": "1ae7780fcaef404f732a93ee92e0ea4318de9758fd190790e9eb737b0322d790",
+    "apps/office/e2e/writer-native-cell-box.spec.ts": "6f308376328599fe104ade417b1e4c70bba7d1aa28990b19909a9b0d9aff8e33",
+    "apps/office/src/test/table-box-test-helpers.ts": "b83a0f793f98a6e59994b87c6aa05e5880bf962e3a4857b8fa4b56a19752e58b",
+    "docs/program/source-provenance.json": "c0b927e6d41f05f266636f130e7361d5a837c98b4dd873d0377bc9c82945d4d5",
+    "docs/program/parity/runtime-inventory.json": "af3d8ada2fa2c63ab323561a9c5c70585e9e35cb81229d16004ce31a7e506009",
+    "scripts/check-module-boundaries.mjs": "e144537c91b64cce31e0890d5fe19f3dafb6a1bf3e10e78f9ba927db1f601008",
+    "scripts/check-module-boundaries.test.ts": "4dc0f3896dc89ac0a0de0ff932f9113c12a2982fe4543e7f1d9cd084483a7993"
+  },
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1443,
+      "sha256": "9e479df3d78eb31f4749bdaceeae0e51690dd57c0fbf9158ec70c0b69f6e4b04",
+      "totals": [],
+      "failedCases": []
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/QG4PYR.app-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 118538,
+      "sha256": "a81650617c4e4fc5ca11329af860d0b8e00e4fe976806f69691efac546e5022a",
+      "totals": [
+        "Test Files  3 failed | 414 passed (417)",
+        "Tests  4 failed | 13318 passed (13322)"
+      ],
+      "failedCases": [
+        {
+          "name": "apps/office/src/sw/browser/editor/native-cell-box-render.test.tsx > renders independent native edges/distances and native history fixed=true",
+          "assertion": [
+            "Error: expect(element).toHaveStyle()"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/browser/editor/native-row-frame-size.test.tsx > fixed row owns bounds independently of clipped guide and authored border content",
+          "assertion": [
+            "Error: expect(element).toHaveStyle()"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/browser/presentation/native-table-border-changed-items.test.tsx > native represented complete box item history field=padding selected=false",
+          "assertion": [
+            "Error: Historical scalar observation requires a uniform native box; use explicit per-edge assertions."
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/browser/presentation/native-table-border-changed-items.test.tsx > native represented complete box item history field=padding selected=true",
+          "assertion": [
+            "Error: Historical scalar observation requires a uniform native box; use explicit per-edge assertions."
+          ]
+        }
+      ],
+      "caseCounts": {
+        "passed": 13318,
+        "failed": 4,
+        "skipped": 0,
+        "total": 13322
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 15643,
+          "covered": 15631,
+          "skipped": 0,
+          "pct": 99.92
+        },
+        "statements": {
+          "total": 17172,
+          "covered": 17148,
+          "skipped": 0,
+          "pct": 99.86
+        },
+        "functions": {
+          "total": 3993,
+          "covered": 3990,
+          "skipped": 0,
+          "pct": 99.92
+        },
+        "branches": {
+          "total": 12897,
+          "covered": 12852,
+          "skipped": 0,
+          "pct": 99.65
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverage": {
+        "lines": 99.92,
+        "statements": 99.86,
+        "functions": 99.92,
+        "branches": 99.65
+      },
+      "incompleteFileCount": 9,
+      "coverageMapSHA256": "c16467f643b38f6a5effd0d84bf32b5ede6c94c8581e00b3c80349f2de7b48bb"
+    },
+    {
+      "kind": "inventory",
+      "command": "npm run test:inventory:coverage -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/QG4PYR.inventory-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 42193,
+      "sha256": "4d1bc7abfe2fb420117a95c991afbd5bdc26ee771c8a9422d86bb89a3da00c50",
+      "totals": [
+        "Test Files  1 failed | 35 passed (36)",
+        "Tests  1 failed | 108 passed (109)"
+      ],
+      "failedCases": [
+        {
+          "name": "scripts/libreoffice-inventory/parity-mapping-cli.test.ts > parity mapping CLI composes the Writer mapping report with owned upstream marker evidence",
+          "assertion": [
+            "Error: Runtime module paths must be unique and lexicographically ordered."
+          ]
+        }
+      ],
+      "caseCounts": {
+        "passed": 108,
+        "failed": 1,
+        "skipped": 0,
+        "total": 109
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 1464,
+          "covered": 1460,
+          "skipped": 0,
+          "pct": 99.72
+        },
+        "statements": {
+          "total": 1523,
+          "covered": 1519,
+          "skipped": 0,
+          "pct": 99.73
+        },
+        "functions": {
+          "total": 384,
+          "covered": 381,
+          "skipped": 0,
+          "pct": 99.21
+        },
+        "branches": {
+          "total": 1080,
+          "covered": 1080,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "coverage": {
+        "lines": 99.72,
+        "statements": 99.73,
+        "functions": 99.21,
+        "branches": 100
+      },
+      "incompleteFileCount": 1,
+      "coverageMapSHA256": "497c223d16fde611cdc2c929a1bba79b3cd4fa8007f79667755ec91a086acdaf"
+    },
+    {
+      "kind": "scripts",
+      "command": "npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts scripts/check-module-boundaries.test.ts",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 223,
+      "sha256": "2a71dcfd7f8639d7464fa24312ce9c909c1298d28c124fa119abbfda2e366ab0",
+      "totals": [
+        "Test Files  3 passed (3)",
+        "Tests  13 passed (13)"
+      ],
+      "failedCases": []
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 65749,
+      "sha256": "87e7a670f5c4ffb42c258c371ea33dbccbda763dd2d9bea647ec7d3e1b45b98b",
+      "totals": [
+        "12 failed",
+        "240 passed (1.8m)"
+      ],
+      "failedCases": [
+        {
+          "name": "writer-native-cell-box.spec.ts > native four-edge cell paint and text history width=1280 fixed=false",
+          "errors": [
+            [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeCloseTo\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m, \u001b[22mprecision\u001b[2m)\u001b[22m",
+              "Expected: \u001b[32m2.6666666666666665\u001b[39m",
+              "Received: \u001b[31m2\u001b[39m"
+            ]
+          ]
+        },
+        {
+          "name": "writer-native-cell-box.spec.ts > native four-edge cell paint and text history width=1280 fixed=true",
+          "errors": [
+            [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeCloseTo\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m, \u001b[22mprecision\u001b[2m)\u001b[22m",
+              "Expected: \u001b[32m2.6666666666666665\u001b[39m",
+              "Received: \u001b[31m2\u001b[39m"
+            ]
+          ]
+        },
+        {
+          "name": "writer-native-cell-box.spec.ts > native four-edge cell paint and text history width=390 fixed=false",
+          "errors": [
+            [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeCloseTo\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m, \u001b[22mprecision\u001b[2m)\u001b[22m",
+              "Expected: \u001b[32m2.6666666666666665\u001b[39m",
+              "Received: \u001b[31m2\u001b[39m"
+            ]
+          ]
+        },
+        {
+          "name": "writer-native-cell-box.spec.ts > native four-edge cell paint and text history width=390 fixed=true",
+          "errors": [
+            [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeCloseTo\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m, \u001b[22mprecision\u001b[2m)\u001b[22m",
+              "Expected: \u001b[32m2.6666666666666665\u001b[39m",
+              "Received: \u001b[31m2\u001b[39m"
+            ]
+          ]
+        },
+        {
+          "name": "writer-table-print-area.spec.ts > Writer native table print geometry left width=1280",
+          "errors": [
+            [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeCloseTo\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m, \u001b[22mprecision\u001b[2m)\u001b[22m",
+              "Expected: \u001b[32m150\u001b[39m",
+              "Received: \u001b[31m149.25\u001b[39m"
+            ]
+          ]
+        },
+        {
+          "name": "writer-table-print-area.spec.ts > Writer native table print geometry center width=1280",
+          "errors": [
+            [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeCloseTo\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m, \u001b[22mprecision\u001b[2m)\u001b[22m",
+              "Expected: \u001b[32m150\u001b[39m",
+              "Received: \u001b[31m149.25\u001b[39m"
+            ]
+          ]
+        },
+        {
+          "name": "writer-table-print-area.spec.ts > Writer native table print geometry right width=1280",
+          "errors": [
+            [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeCloseTo\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m, \u001b[22mprecision\u001b[2m)\u001b[22m",
+              "Expected: \u001b[32m150\u001b[39m",
+              "Received: \u001b[31m149.25\u001b[39m"
+            ]
+          ]
+        },
+        {
+          "name": "writer-table-print-area.spec.ts > Writer native table print geometry margins width=1280",
+          "errors": [
+            [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeCloseTo\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m, \u001b[22mprecision\u001b[2m)\u001b[22m",
+              "Expected: \u001b[32m295\u001b[39m",
+              "Received: \u001b[31m294.25\u001b[39m"
+            ]
+          ]
+        },
+        {
+          "name": "writer-table-print-area.spec.ts > Writer native table print geometry left width=390",
+          "errors": [
+            [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeCloseTo\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m, \u001b[22mprecision\u001b[2m)\u001b[22m",
+              "Expected: \u001b[32m150\u001b[39m",
+              "Received: \u001b[31m149.25\u001b[39m"
+            ]
+          ]
+        },
+        {
+          "name": "writer-table-print-area.spec.ts > Writer native table print geometry center width=390",
+          "errors": [
+            [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeCloseTo\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m, \u001b[22mprecision\u001b[2m)\u001b[22m",
+              "Expected: \u001b[32m150\u001b[39m",
+              "Received: \u001b[31m149.25\u001b[39m"
+            ]
+          ]
+        },
+        {
+          "name": "writer-table-print-area.spec.ts > Writer native table print geometry right width=390",
+          "errors": [
+            [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeCloseTo\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m, \u001b[22mprecision\u001b[2m)\u001b[22m",
+              "Expected: \u001b[32m150\u001b[39m",
+              "Received: \u001b[31m149.25\u001b[39m"
+            ]
+          ]
+        },
+        {
+          "name": "writer-table-print-area.spec.ts > Writer native table print geometry margins width=390",
+          "errors": [
+            [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeCloseTo\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m, \u001b[22mprecision\u001b[2m)\u001b[22m",
+              "Expected: \u001b[32m295\u001b[39m",
+              "Received: \u001b[31m294.25\u001b[39m"
+            ]
+          ]
+        }
+      ],
+      "caseCounts": {
+        "startTime": "2026-10-07T03:58:28.363Z",
+        "duration": 107715.257,
+        "expected": 240,
+        "skipped": 0,
+        "unexpected": 12,
+        "flaky": 0
+      }
+    }
+  ]
+}

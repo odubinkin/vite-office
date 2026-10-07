@@ -1,4 +1,5 @@
 /** @fileoverview Verifies native column graph, proportional widths, layout admission and shared history with local owners. */
+import { nativeBoxFormat } from "../../../../test/table-box-test-helpers";
 import { expect, it, vi } from "vitest";
 import { createWriterDocumentSession } from "../../../browser/composition/writer-module";
 import { SwInsertTableFlags } from "../../../inc/itabenum";
@@ -38,7 +39,7 @@ function fixture() {
       row.GetTabBoxes().forEach(
         /** Applies native source content and geometry. @param box - Owner. @param column - Coordinate. @returns Nothing. */
         (box, column) => {
-          box.SetFormat({ padding: 20 + index + column });
+          box.SetFormat(nativeBoxFormat({ padding: 20 + index + column }));
           required(box.GetParagraphs()[0]).SetText("r" + index + "c" + column);
         },
       ),

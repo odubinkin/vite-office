@@ -4,6 +4,7 @@ import { VertOrientation } from "../../../offapi/com/sun/star/text/VertOrientati
 import { useState } from "react";
 import { WriterInsertTableDialog } from "./WriterInsertTableDialog";
 import type { SwTable, SwTableBox } from "../../source/core/table/swtable";
+import { exportBorderShorthand } from "../../../xmloff/source/style/bordrhdl";
 import type { SwTableProperties } from "../../source/uibase/shells/tabsh";
 import {
   SwFormatTablePage,
@@ -89,8 +90,8 @@ function WriterTablePropertiesDialog({
     /** Retains initial input values for the represented Text Flow and Borders pages. @returns Original page values. */
     () => ({
       minRowHeight: rowHeight?.GetHeight() ?? 0,
-      padding: rows[0]?.GetTabBoxes()[0]?.GetFormat().padding ?? 100,
-      border: rows[0]?.GetTabBoxes()[0]?.GetFormat().border ?? "0.5pt solid #666666",
+      padding: rows[0]?.GetTabBoxes()[0]?.GetBox().GetDistance(0) ?? 0,
+      border: exportBorderShorthand(rows[0]?.GetTabBoxes()[0]?.GetBox().GetTop()),
       verticalAlign:
         boxAlign === VertOrientation.CENTER || boxAlign === VertOrientation.BOTTOM
           ? boxAlign
@@ -570,6 +571,11 @@ function WriterTablePropertiesDialog({
                     }
                     value={border}
                   >
+                    {["none", "0.5pt solid #666666", "1pt solid #000000"].includes(
+                      border,
+                    ) ? null : (
+                      <option value={border}>Current border</option>
+                    )}
                     <option value="none">None</option>
                     <option value="0.5pt solid #666666">Thin solid</option>
                     <option value="1pt solid #000000">Solid</option>

@@ -244,7 +244,7 @@ export function selectRuntimeModulePaths(
           (path.endsWith(".ts") || path.endsWith(".tsx")) &&
           !path.endsWith(".test.ts") &&
           !path.endsWith(".test.tsx") &&
-          path !== "test/setup.ts"
+          (!path.startsWith("test/") || path === "test/wrtsh-test-helpers.ts")
         );
       },
     )

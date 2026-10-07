@@ -5,6 +5,7 @@ import { XMLToken } from "../core/xmltoken";
 import { importOdfLength } from "../core/xmluconv";
 import type { XMLTextImportTarget } from "../text/txtparai";
 import { XMLTextImportHelper } from "../text/txtimp";
+import type { OdfBoxProperties } from "../style/bordrhdl";
 
 /** Supported ODF table style families and physical properties. */
 export type OdfTableStyle =
@@ -26,12 +27,10 @@ export type OdfTableStyle =
       readonly height?: number | undefined;
       readonly keepTogether?: boolean | undefined;
     }
-  | {
+  | (OdfBoxProperties & {
       readonly family: "table-cell";
-      readonly padding?: number | undefined;
-      readonly border?: string | undefined;
       readonly verticalAlign?: "top" | "middle" | "bottom" | undefined;
-    };
+    });
 
 /** Writer-facing streaming table operations; canonical ownership stays in sw. */
 export interface XMLTableImportTarget extends XMLTextImportTarget {
@@ -200,7 +199,24 @@ export class XMLTableStyleContext extends SvXMLImportContext {
       }
     } else if (this.family === "table-cell" && element === XMLToken.STYLE_TABLE_CELL_PROPERTIES) {
       attributes.assertOnly(
-        [XMLToken.STYLE_VERTICAL_ALIGN, XMLToken.FO_PADDING, XMLToken.FO_BORDER],
+        [
+          XMLToken.STYLE_VERTICAL_ALIGN,
+          XMLToken.FO_PADDING,
+          XMLToken.FO_BORDER,
+          XMLToken.FO_PADDING_TOP,
+          XMLToken.FO_PADDING_BOTTOM,
+          XMLToken.FO_PADDING_LEFT,
+          XMLToken.FO_PADDING_RIGHT,
+          XMLToken.FO_BORDER_TOP,
+          XMLToken.FO_BORDER_BOTTOM,
+          XMLToken.FO_BORDER_LEFT,
+          XMLToken.FO_BORDER_RIGHT,
+          XMLToken.STYLE_BORDER_LINE_WIDTH,
+          XMLToken.STYLE_BORDER_LINE_WIDTH_TOP,
+          XMLToken.STYLE_BORDER_LINE_WIDTH_BOTTOM,
+          XMLToken.STYLE_BORDER_LINE_WIDTH_LEFT,
+          XMLToken.STYLE_BORDER_LINE_WIDTH_RIGHT,
+        ],
         "table cell properties",
       );
       const align = attributes.get(XMLToken.STYLE_VERTICAL_ALIGN) || undefined;
@@ -210,6 +226,19 @@ export class XMLTableStyleContext extends SvXMLImportContext {
         family: "table-cell",
         padding: length(XMLToken.FO_PADDING, "table cell padding"),
         border: attributes.get(XMLToken.FO_BORDER) ?? undefined,
+        paddingTop: length(XMLToken.FO_PADDING_TOP, "table cell padding"),
+        paddingBottom: length(XMLToken.FO_PADDING_BOTTOM, "table cell padding"),
+        paddingLeft: length(XMLToken.FO_PADDING_LEFT, "table cell padding"),
+        paddingRight: length(XMLToken.FO_PADDING_RIGHT, "table cell padding"),
+        borderTop: attributes.get(XMLToken.FO_BORDER_TOP) ?? undefined,
+        borderBottom: attributes.get(XMLToken.FO_BORDER_BOTTOM) ?? undefined,
+        borderLeft: attributes.get(XMLToken.FO_BORDER_LEFT) ?? undefined,
+        borderRight: attributes.get(XMLToken.FO_BORDER_RIGHT) ?? undefined,
+        borderLineWidth: attributes.get(XMLToken.STYLE_BORDER_LINE_WIDTH) ?? undefined,
+        borderLineWidthTop: attributes.get(XMLToken.STYLE_BORDER_LINE_WIDTH_TOP) ?? undefined,
+        borderLineWidthBottom: attributes.get(XMLToken.STYLE_BORDER_LINE_WIDTH_BOTTOM) ?? undefined,
+        borderLineWidthLeft: attributes.get(XMLToken.STYLE_BORDER_LINE_WIDTH_LEFT) ?? undefined,
+        borderLineWidthRight: attributes.get(XMLToken.STYLE_BORDER_LINE_WIDTH_RIGHT) ?? undefined,
         verticalAlign: align,
       };
     } else return new SvXMLIgnoreContext();

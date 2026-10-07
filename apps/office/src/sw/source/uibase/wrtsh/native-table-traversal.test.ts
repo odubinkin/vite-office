@@ -1,4 +1,5 @@
 /** @fileoverview Verifies native table cursor traversal and actual retained row history without upstream execution. */
+import { nativeBoxFormat } from "../../../../test/table-box-test-helpers";
 import { VertOrientation } from "./../../../../offapi/com/sun/star/text/VertOrientation";
 import { SwFormatVertOrient } from "./../../../inc/fmtornt";
 
@@ -36,7 +37,10 @@ function fixture() {
       table,
       2,
       { frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 480), keepTogether: true },
-      [{ padding: 120 }, { vertOrient: new SwFormatVertOrient(0, VertOrientation.BOTTOM) }],
+      [
+        nativeBoxFormat({ padding: 120 }),
+        { vertOrient: new SwFormatVertOrient(0, VertOrientation.BOTTOM) },
+      ],
     );
   const boxes = [...firstRow.GetTabBoxes(), ...lastRow.GetTabBoxes()],
     cells = boxes.map(
@@ -223,7 +227,7 @@ describe("native table traversal", /** Registers actual cursor/row/history contr
       frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 480),
       keepTogether: true,
     });
-    expect(row.GetTabBoxes()[0]?.GetFormat()).toEqual({ padding: 120 });
+    expect(row.GetTabBoxes()[0]?.GetFormat()).toEqual(nativeBoxFormat({ padding: 120 }));
     expect(row.GetTabBoxes()[1]?.GetFormat()).toEqual({
       vertOrient: new SwFormatVertOrient(0, VertOrientation.BOTTOM),
     });

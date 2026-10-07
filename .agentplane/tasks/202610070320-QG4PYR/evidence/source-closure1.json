@@ -1,0 +1,24 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "command": "npm run check:source-provenance",
+      "exit": 0,
+      "bytes": 205,
+      "sha256": "b16199a818cb0cb5e0797b97db77692f4cbb99ff06507efef8c2c5bef5f0becb",
+      "diagnostics": [
+        "Source provenance check passed for 286 runtime modules (201 mapped, 69 browser adaptations, 16 local infrastructure)."
+      ]
+    },
+    {
+      "command": "npm run inventory:parity",
+      "exit": 1,
+      "bytes": 968,
+      "sha256": "ca1d483aa34f61c45d9e014d2aabc98b90393513bd2c4ab759349c9d0338e4b0",
+      "diagnostics": [
+        "> tsx scripts/libreoffice-inventory/parity-mapping-cli.ts --baseline docs/program/libreoffice-baseline.json --mappings docs/program/parity/writer-command-slice.json --runtime-inventory docs/program/parity/runtime-inventory.json --runtime-root apps/office/src --local-root . --upstream-root vendor/libreoffice-reference",
+        "Error: Runtime module inventory does not exactly cover discovered production modules."
+      ]
+    }
+  ]
+}

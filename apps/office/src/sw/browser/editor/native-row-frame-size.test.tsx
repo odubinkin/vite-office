@@ -1,4 +1,5 @@
 /** @fileoverview Verifies mounted native fixed-row clipping and current-row properties metric. */
+import { nativeBoxFormat } from "../../../test/table-box-test-helpers";
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { expect, it } from "vitest";
 import { SwFormatFrameSize, SwFrameSize } from "../../inc/fmtfsize";
@@ -67,7 +68,7 @@ it("fixed native row retains a visible guide for authored border none", /** Chec
     table,
     1,
     { frameSize: new SwFormatFrameSize(SwFrameSize.Fixed, 0, 600) },
-    [{ border: "none", padding: 0 }],
+    [nativeBoxFormat({ border: "none", padding: 0 })],
   );
   required(required(row.GetTabBoxes()[0]).GetParagraphs()[0]).SetText("Guide");
   try {
@@ -96,7 +97,7 @@ it("fixed row owns bounds independently of clipped guide and authored border con
       table,
       1,
       { frameSize: new SwFormatFrameSize(type, 0, 600) },
-      [{ border, padding: 0 }],
+      [nativeBoxFormat({ border, padding: 0 })],
     );
     required(required(row.GetTabBoxes()[0]).GetParagraphs()[0]).SetText("Original row bounds");
   }
@@ -120,7 +121,14 @@ it("fixed row owns bounds independently of clipped guide and authored border con
       height: "40px",
       border: "1px dashed #cbd5e1",
     });
-    expect(b).toHaveStyle({ position: "absolute", height: "40px", border: "1px solid #000000" });
+    expect(b).toHaveStyle({
+      position: "absolute",
+      height: "40px",
+      borderTop: "0.75pt solid #000000",
+      borderBottom: "0.75pt solid #000000",
+      borderLeft: "0.75pt solid #000000",
+      borderRight: "0.75pt solid #000000",
+    });
     expect(
       screen
         .getByRole("textbox", { name: "Row 3 column 1 paragraph 1" })

@@ -9,6 +9,15 @@ import { SwTabCols } from "../../core/bastyp/tabcol";
 import { SwTableRep } from "../table/swtablerep";
 import { PopMode } from "../../core/crsr/trvltbl";
 import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
+import {
+  SvxBoxItem,
+  SvxBoxInfoItem,
+  SvxBoxInfoItemValidFlags,
+} from "../../../../editeng/source/items/frmitems";
+import { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { SID_ATTR_BORDER_INNER } from "../../../../svx/inc/svxids";
+import { RES_BOX } from "../../../inc/hintids";
+import { importBoxProperties } from "../../../../xmloff/source/style/bordrhdl";
 
 /** Represented table-property inputs in native twips; original model owners remain in the shell. */
 export interface SwTableProperties {
@@ -48,11 +57,47 @@ export function ItemSetToTableParam(shell: SwFEShell, value: SwTableProperties):
       const cursorState = shell.CaptureCursorState();
       undo.StartUndo("Table Properties");
       try {
-        const borders = {
-          ...(value.padding === undefined ? {} : { padding: value.padding }),
-          ...(value.border === undefined ? {} : { border: value.border }),
-        };
         const hasBorders = value.padding !== undefined || value.border !== undefined;
+        const borders = new SfxItemSet(shell.GetDoc().GetAttrPool(), [
+          [RES_BOX, RES_BOX],
+          [SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER],
+        ]);
+        if (hasBorders) {
+          const current = table
+            .GetTabLines()
+            .flatMap(
+              /** Finds the original current box for omitted ingress fields. @param row - Row. @returns Boxes. */
+              (row) => row.GetTabBoxes(),
+            )
+            .find(
+              /** Matches the native current section. @param box - Box. @returns Whether current. */
+              (box) =>
+                box.GetStartNode() ===
+                shell.GetCursor(false).GetPoint().GetNode().StartOfSectionNode(),
+            );
+          const item = current?.GetBox() ?? new SvxBoxItem(RES_BOX);
+          // hasBorders guarantees a represented declaration; invalid values throw at ingress.
+          const supplied = importBoxProperties(
+            { padding: value.padding, border: value.border },
+            RES_BOX,
+          ) as SvxBoxItem;
+          const box = item;
+          if (value.padding !== undefined) box.SetAllDistances(value.padding);
+          if (value.border !== undefined)
+            for (const edge of [0, 1, 2, 3]) box.SetLine(supplied.GetLine(edge), edge);
+          const info = new SvxBoxInfoItem(SID_ATTR_BORDER_INNER);
+          info.SetTable(true);
+          info.SetDist(true);
+          if (value.border === undefined) {
+            info.SetValid(SvxBoxInfoItemValidFlags.ALL, false);
+            info.SetValid(SvxBoxInfoItemValidFlags.DISTANCE);
+          } else {
+            info.SetLine(supplied.GetTop(), 0);
+            info.SetLine(supplied.GetLeft(), 1);
+          }
+          borders.Put(box);
+          borders.Put(info);
+        }
         if (hasBorders || value.rowSplit !== undefined) {
           const selected = shell.IsTableMode();
           shell.Push();

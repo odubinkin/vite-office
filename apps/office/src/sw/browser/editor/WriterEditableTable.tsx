@@ -7,6 +7,44 @@ import type { SwTable } from "../../source/core/table/swtable";
 import { SwTabFrame, type SwTablePrintArea } from "../../source/core/layout/tabfrm";
 import type { WriterParagraphProjection } from "../presentation/writer-view-projection";
 import { WriterEditableParagraph } from "./WriterEditableParagraph";
+import type { SvxBoxItem } from "../../../editeng/source/items/frmitems";
+import type { SvxBorderLine } from "../../../editeng/source/items/borderline";
+
+/** Projects one native line to the browser paint device. @param line - Owned native line. @param fixedGuide - Paint a guide inside an isolated fixed-row wrapper. @returns CSS paint value. */
+function browserBorderLine(line: SvxBorderLine | undefined, fixedGuide: boolean): string {
+  if (line === undefined || line.isEmpty()) return fixedGuide ? "1px dashed #cbd5e1" : "none";
+  const style = line.GetBorderLineStyle();
+  const cssStyle =
+    style === 1
+      ? "dotted"
+      : [2, 14, 16, 17].includes(style)
+        ? "dashed"
+        : (style >= 3 && style <= 9) || style === 15
+          ? "double"
+          : style === 10
+            ? "ridge"
+            : style === 11
+              ? "groove"
+              : style === 12
+                ? "outset"
+                : style === 13
+                  ? "inset"
+                  : "solid";
+  return `${line.GetScaledWidth() / 20}pt ${cssStyle} #${(line.GetColor() & 0xffffff).toString(16).padStart(6, "0")}`;
+}
+/** Projects the four independent native edges and distances directly. @param item - Actual box item. @param fixedGuide - Use isolated fixed-row guides. @returns Browser geometry. */
+function browserCellBoxStyle(item: SvxBoxItem, fixedGuide: boolean): React.CSSProperties {
+  return {
+    borderTop: browserBorderLine(item.GetTop(), fixedGuide),
+    borderBottom: browserBorderLine(item.GetBottom(), fixedGuide),
+    borderLeft: browserBorderLine(item.GetLeft(), fixedGuide),
+    borderRight: browserBorderLine(item.GetRight(), fixedGuide),
+    paddingTop: item.GetDistance(0) / 15,
+    paddingBottom: item.GetDistance(1) / 15,
+    paddingLeft: item.GetDistance(2) / 15,
+    paddingRight: item.GetDistance(3) / 15,
+  };
+}
 
 /** Renders one visible, editable Writer table with row selection. */
 /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ export function WriterEditableTable({
@@ -118,7 +156,8 @@ import { WriterEditableParagraph } from "./WriterEditableParagraph";
                       cell,
                       cellIndex,
                     ) => {
-                      const cellFormat = cell.GetFormat();
+                      const boxItem = cell.GetBox(),
+                        boxStyle = browserCellBoxStyle(boxItem, nativeRow.HasFixSize());
                       const content = cell.GetParagraphs().map(
                         /** Handles the browser table interaction. @param argument1 - Callback input. @param argument2 - Callback input. @returns Callback result. */ (
                           paragraph,
@@ -158,7 +197,11 @@ import { WriterEditableParagraph } from "./WriterEditableParagraph";
                               : undefined
                           }
                           data-writer-border-guide={
-                            cellFormat.border === undefined || cellFormat.border === "none"
+                            [0, 1, 2, 3].every(
+                              /** Checks native painted border absence. @param edge - Side. @returns Whether empty. */ (
+                                edge,
+                              ) => boxItem.GetLine(edge)?.isEmpty() ?? true,
+                            )
                               ? "true"
                               : undefined
                           }
@@ -170,12 +213,14 @@ import { WriterEditableParagraph } from "./WriterEditableParagraph";
                           }
                           key={cellIndex}
                           style={{
-                            border: nativeRow.HasFixSize()
-                              ? "none"
-                              : cellFormat.border === "none"
-                                ? "1px dashed #cbd5e1"
-                                : (cellFormat.border ?? "1px solid #94a3b8"),
-                            padding: nativeRow.HasFixSize() ? 0 : (cellFormat.padding ?? 100) / 15,
+                            ...(nativeRow.HasFixSize() ? { border: "none", padding: 0 } : boxStyle),
+                            outline: [0, 1, 2, 3].every(
+                              /** Keeps borderless table guides outside native column geometry. @param edge - Native side. @returns Whether unpainted. */
+                              (edge) => boxItem.GetLine(edge)?.isEmpty() ?? true,
+                            )
+                              ? "1px dashed #cbd5e1"
+                              : undefined,
+                            outlineOffset: -1,
                             verticalAlign:
                               cell.GetVertOrient().GetVertOrient() === VertOrientation.CENTER
                                 ? "middle"
@@ -204,11 +249,7 @@ import { WriterEditableParagraph } from "./WriterEditableParagraph";
                                         VertOrientation.BOTTOM
                                       ? "safe flex-end"
                                       : "flex-start",
-                                border:
-                                  cellFormat.border === "none"
-                                    ? "1px dashed #cbd5e1"
-                                    : (cellFormat.border ?? "1px solid #94a3b8"),
-                                padding: (cellFormat.padding ?? 100) / 15,
+                                ...boxStyle,
                               }}
                             >
                               {content}

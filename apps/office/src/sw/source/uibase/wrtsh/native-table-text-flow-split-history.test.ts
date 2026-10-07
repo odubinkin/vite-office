@@ -1,4 +1,5 @@
 /** @fileoverview Verifies independent native split item publication through selection, history, ODT and original cursor owners. */
+import { nativeBoxFormat } from "../../../../test/table-box-test-helpers";
 import { VertOrientation } from "./../../../../offapi/com/sun/star/text/VertOrientation";
 
 import { afterEach, expect, it } from "vitest";
@@ -35,8 +36,8 @@ for (const selected of [false, true])
       table.AddColumnWidth(3000);
       for (const keepTogether of [true, false, true])
         doc.nodes.AppendTableRow(table, 2, { keepTogether }, [
-          { padding: 0, border: "none" },
-          { padding: 0, border: "none" },
+          nativeBoxFormat({ padding: 0, border: "none" }),
+          nativeBoxFormat({ padding: 0, border: "none" }),
         ]);
       const rows = [...table.GetTabLines()],
         box = required(rows[0]?.GetTabBoxes()[0]),

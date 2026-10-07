@@ -1,0 +1,15 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "command": "npm run inventory:parity",
+      "exit": 1,
+      "bytes": 968,
+      "sha256": "ca1d483aa34f61c45d9e014d2aabc98b90393513bd2c4ab759349c9d0338e4b0",
+      "diagnostics": [
+        "> tsx scripts/libreoffice-inventory/parity-mapping-cli.ts --baseline docs/program/libreoffice-baseline.json --mappings docs/program/parity/writer-command-slice.json --runtime-inventory docs/program/parity/runtime-inventory.json --runtime-root apps/office/src --local-root . --upstream-root vendor/libreoffice-reference",
+        "Error: Runtime module inventory does not exactly cover discovered production modules."
+      ]
+    }
+  ]
+}

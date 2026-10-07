@@ -1,5 +1,7 @@
 /** @fileoverview Projects a persistent SwView through browser-only command and editor adapters. */
 import { SwFormatVertOrient } from "../../inc/fmtornt";
+import { importBoxProperties } from "../../../xmloff/source/style/bordrhdl";
+import { RES_BOX } from "../../inc/hintids";
 
 import { SwInsertTableFlags } from "../../inc/itabenum";
 /* eslint-disable react-refresh/only-export-components -- Pure presentation helpers are exported for focused behavior verification. */
@@ -179,8 +181,7 @@ export function WriterWorkbench({
           value.columns,
           value.name,
           {
-            padding: value.padding,
-            border: value.border,
+            box: importBoxProperties({ padding: value.padding, border: value.border }, RES_BOX),
             vertOrient: new SwFormatVertOrient(0, value.verticalAlign),
           },
         );

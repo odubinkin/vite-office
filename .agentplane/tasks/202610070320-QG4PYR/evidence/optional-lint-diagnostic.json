@@ -1,0 +1,6 @@
+{
+  "command": "ap task lint --verify-steps-changed",
+  "exit": 3,
+  "requiredGate": false,
+  "diagnostic": "Optional rollout heuristic classified source-contract Verify Steps prose as execution output in the active and several historical tasks. The active Verify Steps describe defaults, criteria and source responsibilities rather than executed output. Historical DONE tasks are immutable and remain untouched. Required declared gates and canonical lifecycle validations remain authoritative; no optional lint pass is claimed."
+}

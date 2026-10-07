@@ -1,11 +1,6 @@
 /** @fileoverview Owns represented native SwFEShell table attributes, selection and history from fetab.cxx. */
 import { SwEditShell } from "../edit/edtab";
-import {
-  SwTable,
-  type SwTableBox,
-  type SwTableFormat,
-  type SwTableBoxFormat,
-} from "../table/swtable";
+import { SwTable, type SwTableBox, type SwTableFormat } from "../table/swtable";
 import { SwTableBoxStartNode } from "../docnode/node";
 import { CheckSplitCells } from "./tblsel";
 import type { SwTextNode } from "../txtnode/ndtxt";
@@ -16,6 +11,7 @@ import { SwTabFrame, type SwTableMouseCell, type SwTableMouseRect } from "../lay
 import { SwTabCols } from "../bastyp/tabcol";
 import { SwDoc } from "../doc/doc";
 import type { SwFormatFrameSize } from "../../../inc/fmtfsize";
+import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 
 /** Native mouse hit over actual measured frame and box owners. */
 interface SwTableMouseHit {
@@ -404,10 +400,7 @@ export abstract class SwFEShell extends SwEditShell {
   }
 
   /** Forwards border application to native document ownership. @param value - Border and padding attributes. @param cursorState - Original displayed cursor before temporary selection. @returns Whether admitted. */
-  public SetTabBorders(
-    value: Pick<SwTableBoxFormat, "padding" | "border">,
-    cursorState?: SwUndoCursorState,
-  ): boolean {
+  public SetTabBorders(value: SfxItemSet, cursorState?: SwUndoCursorState): boolean {
     return this.RunNotificationTransaction(
       /** Retains original cursor attributes while the document applies the selection union. @returns Whether admitted. */
       () =>

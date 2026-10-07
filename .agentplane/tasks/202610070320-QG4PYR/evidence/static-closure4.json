@@ -1,0 +1,24 @@
+{
+  "records": [
+    {
+      "command": "npm run typecheck",
+      "exit": 2,
+      "bytes": 1408,
+      "sha256": "0182df3297d053dc0bbda23c3f2fa56b2949a5a8f286ef027c8eea073d694fd4",
+      "diagnostics": [
+        "src/editeng/source/items/boxitem.test.ts(24,21): error TS2345: Argument of type '-1' is not assignable to parameter of type 'SvxBoxItemLine'.",
+        "src/editeng/source/items/boxitem.test.ts(25,21): error TS2345: Argument of type '0.5' is not assignable to parameter of type 'SvxBoxItemLine'.",
+        "src/editeng/source/items/boxitem.test.ts(26,24): error TS2345: Argument of type '4' is not assignable to parameter of type 'SvxBoxItemLine'.",
+        "src/editeng/source/items/boxitem.test.ts(27,24): error TS2345: Argument of type '0.5' is not assignable to parameter of type 'SvxBoxItemLine'.",
+        "src/editeng/source/items/boxitem.test.ts(28,26): error TS2345: Argument of type '4' is not assignable to parameter of type 'SvxBoxItemLine'.",
+        "src/editeng/source/items/boxitem.test.ts(30,28): error TS2345: Argument of type '4' is not assignable to parameter of type 'SvxBoxItemLine'.",
+        "npm error Lifecycle script `typecheck` failed with error:",
+        "npm error code 2",
+        "npm error path /Users/odubinkin/Projects/vite-office/apps/office",
+        "npm error workspace @vite-office/office@0.1.0",
+        "npm error location /Users/odubinkin/Projects/vite-office/apps/office",
+        "npm error command failed"
+      ]
+    }
+  ]
+}

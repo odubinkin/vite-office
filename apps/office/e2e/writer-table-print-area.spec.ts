@@ -1,4 +1,5 @@
 /** @fileoverview Verifies actual production table alignment, column scaling and repeated headline edits through ODT Open. */
+import { nativeBoxFormat } from "../src/test/table-box-test-helpers";
 import { SwFormatFrameSize, SwFrameSize } from "../src/sw/inc/fmtfsize";
 import { expect, test } from "@playwright/test";
 import { SwDoc } from "../src/sw/source/core/doc/doc";
@@ -54,8 +55,8 @@ for (const viewport of [1280, 390])
             2,
             { frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 1000) },
             [
-              { padding: 0, border: "0px none" },
-              { padding: 0, border: "0px none" },
+              nativeBoxFormat({ padding: 0, border: "0px none" }),
+              nativeBoxFormat({ padding: 0, border: "0px none" }),
             ],
           )
           .GetTabBoxes()

@@ -1,0 +1,63 @@
+{
+  "records": [
+    {
+      "command": "npm run format:check",
+      "exit": 1,
+      "bytes": 217,
+      "sha256": "e55833c71308ddf3139f34822e55035ad0b7c8fd682ed417fe2d1554364d0746",
+      "diagnostics": [
+        "[warn] apps/office/e2e/writer-native-cell-box.spec.ts",
+        "[warn] Code style issues found in the above file. Run Prettier with --write to fix."
+      ]
+    },
+    {
+      "command": "npm run lint",
+      "exit": 1,
+      "bytes": 554,
+      "sha256": "4ef71de20fc7a30ee029dca7fd8558f84c73b39d000b77cfefb50fd553c0b86d",
+      "diagnostics": [
+        "> eslint . --max-warnings 0",
+        "  14:3  error  Duplicate enum member value 3  @typescript-eslint/no-duplicate-enum-values",
+        "  20:3  error  Duplicate enum member value 1  @typescript-eslint/no-duplicate-enum-values",
+        "  22:3  error  Duplicate enum member value 17  @typescript-eslint/no-duplicate-enum-values",
+        "✖ 3 problems (3 errors, 0 warnings)"
+      ]
+    },
+    {
+      "command": "npm run typecheck",
+      "exit": 2,
+      "bytes": 1369,
+      "sha256": "c123543aad32b32d393c85c9657634b9975d21f5566f1154354121bd1719e788",
+      "diagnostics": [
+        "apps/office/src/editeng/source/items/borderline.ts(50,36): error TS2345: Argument of type '7' is not assignable to parameter of type 'BorderWidthImplFlags | undefined'.",
+        "apps/office/src/editeng/source/items/borderline.ts(56,36): error TS2345: Argument of type '7' is not assignable to parameter of type 'BorderWidthImplFlags | undefined'.",
+        "apps/office/src/editeng/source/items/borderline.ts(62,36): error TS2345: Argument of type '7' is not assignable to parameter of type 'BorderWidthImplFlags | undefined'.",
+        "apps/office/src/editeng/source/items/borderline.ts(67,36): error TS2345: Argument of type '7' is not assignable to parameter of type 'BorderWidthImplFlags | undefined'.",
+        "apps/office/src/editeng/source/items/borderline.ts(69,36): error TS2345: Argument of type '6' is not assignable to parameter of type 'BorderWidthImplFlags | undefined'.",
+        "apps/office/src/editeng/source/items/borderline.ts(71,36): error TS2345: Argument of type '5' is not assignable to parameter of type 'BorderWidthImplFlags | undefined'.",
+        "apps/office/src/editeng/source/items/borderline.ts(165,11): error TS2345: Argument of type '7' is not assignable to parameter of type 'BorderWidthImplFlags | undefined'."
+      ]
+    },
+    {
+      "command": "npm run check:dependencies",
+      "exit": 1,
+      "bytes": 489,
+      "sha256": "a8f7a01fb55d668a79a581e976a5e06c4eba1c363f07fcf9372b5706dc8ce1e9",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:docs",
+      "exit": 0,
+      "bytes": 119,
+      "sha256": "016581528f94e50fdead76f19dd6cec1104bdf96ada07caa3445f0b2b1fef6e3",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:file-size",
+      "exit": 0,
+      "bytes": 3925,
+      "sha256": "c47eabd1f738ccf5057dd20c382181a7ce64c4a202dc651c107649810d26f560",
+      "diagnostics": []
+    }
+  ]
+}

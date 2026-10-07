@@ -1,6 +1,8 @@
 /** @fileoverview Adapts xmloff table SAX callbacks to canonical Writer SwTable sections, following pinned xmltbli.cxx. */
 import { SwFormatVertOrient } from "../../../inc/fmtornt";
 import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
+import { importBoxProperties } from "../../../../xmloff/source/style/bordrhdl";
+import { RES_BOX } from "../../../inc/hintids";
 
 import type { OdfTableStyle } from "../../../../xmloff/source/table/XMLTableImport";
 import type { SwDoc } from "../../core/doc/doc";
@@ -128,7 +130,7 @@ export class SwXMLTableImport {
     const style = this.resolveTableStyle(styleName, "table-cell");
     const { verticalAlign, ...format } = tableStyleValues(style);
     cell.SetFormat({
-      ...format,
+      box: importBoxProperties(format, RES_BOX),
       ...(verticalAlign === undefined
         ? {}
         : {

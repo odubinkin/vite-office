@@ -1,4 +1,5 @@
 /** @fileoverview Verifies the actual React workbench delegates accepted table properties to native owners and history. */
+import { nativeBoxFormat, tableBoxFormatForTest } from "../../../test/table-box-test-helpers";
 import { selectMountedTableRow } from "../../../../test-support/table-mouse-dom";
 import { render, cleanup, screen, fireEvent, act } from "@testing-library/react";
 import { afterEach, it, expect, vi } from "vitest";
@@ -25,12 +26,12 @@ function fixture() {
   table.AddColumnWidth(3000);
   table.AddColumnWidth(3000);
   doc.nodes.AppendTableRow(table, 2, {}, [
-    { border: "none", padding: 50 },
-    { border: "none", padding: 50 },
+    nativeBoxFormat({ border: "none", padding: 50 }),
+    nativeBoxFormat({ border: "none", padding: 50 }),
   ]);
   doc.nodes.AppendTableRow(table, 2, {}, [
-    { border: "none", padding: 50 },
-    { border: "none", padding: 50 },
+    nativeBoxFormat({ border: "none", padding: 50 }),
+    nativeBoxFormat({ border: "none", padding: 50 }),
   ]);
   const first = table.GetTabLines()[0]?.GetTabBoxes()[0]?.GetParagraphs()[0];
   if (first === undefined) throw new Error("Missing mounted table owner");
@@ -65,8 +66,12 @@ it("accepts native properties as one history action and retains real selected ce
     align: undefined,
   });
   expect(f.table.GetFormat().width).toBe(4535);
-  expect(f.table.GetTabLines()[0]?.GetTabBoxes()[0]?.GetFormat().padding).toBe(113);
-  expect(f.table.GetTabLines()[1]?.GetTabBoxes()[0]?.GetFormat().padding).toBe(50);
+  expect(
+    tableBoxFormatForTest(f.table.GetTabLines()[0]?.GetTabBoxes()[0]?.GetFormat() ?? {}).padding,
+  ).toBe(113);
+  expect(
+    tableBoxFormatForTest(f.table.GetTabLines()[1]?.GetTabBoxes()[0]?.GetFormat() ?? {}).padding,
+  ).toBe(50);
   expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(1);
   for (let cycle = 0; cycle < 2; cycle++) {
     act(
@@ -75,7 +80,9 @@ it("accepts native properties as one history action and retains real selected ce
       },
     );
     expect(f.table.GetFormat().width).toBe(6000);
-    expect(f.table.GetTabLines()[0]?.GetTabBoxes()[0]?.GetFormat().padding).toBe(50);
+    expect(
+      tableBoxFormatForTest(f.table.GetTabLines()[0]?.GetTabBoxes()[0]?.GetFormat() ?? {}).padding,
+    ).toBe(50);
     expect(f.shell.HasBoxSelection()).toBe(true);
     act(
       /** Reapplies native table properties. @returns Nothing. */ () => {

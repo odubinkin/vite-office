@@ -1,4 +1,5 @@
 /** @fileoverview Verifies upstream current-page Reset over original native table drafts and independent properties pages. */
+import { nativeBoxFormat, tableBoxFormatForTest } from "../../../test/table-box-test-helpers";
 import { VertOrientation } from "./../../../offapi/com/sun/star/text/VertOrientation";
 import { SwFormatVertOrient } from "./../../inc/fmtornt";
 
@@ -29,12 +30,14 @@ function fixture() {
     frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 300),
     keepTogether: true,
   });
-  box.SetFormat({
-    ...box.GetFormat(),
-    padding: 80,
-    border: "1pt solid #000000",
-    vertOrient: new SwFormatVertOrient(0, VertOrientation.BOTTOM),
-  });
+  box.SetFormat(
+    nativeBoxFormat({
+      ...tableBoxFormatForTest(box.GetFormat()),
+      padding: 80,
+      border: "1pt solid #000000",
+      vertOrient: new SwFormatVertOrient(0, VertOrientation.BOTTOM),
+    }),
+  );
   const submit = vi.fn(),
     cancel = vi.fn();
   render(
@@ -176,6 +179,6 @@ it("Reset after invalid page data clears validation and Cancel keeps original ow
   expect(f.cancel).toHaveBeenCalledOnce();
   expect(f.submit).not.toHaveBeenCalled();
   expect(f.table.GetColumnWidths()).toEqual([2000, 2000, 2000]);
-  expect(f.box.GetFormat().padding).toBe(80);
+  expect(tableBoxFormatForTest(f.box.GetFormat()).padding).toBe(80);
   expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(0);
 });

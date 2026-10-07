@@ -1,0 +1,13 @@
+{
+  "command": "Unchanged TypeScript project compiler; syntactic and semantic diagnostics on two newly changed acceptance paths",
+  "paths": [
+    "apps/office/src/editeng/source/items/boxitem.test.ts",
+    "apps/office/src/sw/source/core/docnode/native-box-border-items.test.ts"
+  ],
+  "errors": [],
+  "exit": 0,
+  "sourceSHA256": {
+    "apps/office/src/editeng/source/items/boxitem.test.ts": "8bda2c3f568dfeaaabddc8850404053b08a413430cf40fcf36c65f163a79ddca",
+    "apps/office/src/sw/source/core/docnode/native-box-border-items.test.ts": "ddf03e0523fbe57a2eae102f6747eaaf9ca7df6b3abab7fa81ea007de03df2d1"
+  }
+}

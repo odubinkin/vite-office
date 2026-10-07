@@ -11,6 +11,19 @@ import {
 } from "./check-module-boundaries.mjs";
 
 describe("runtime ownership boundaries", /** Registers runtime ownership boundary cases. @returns Nothing. */ function defineRuntimeBoundaryTests(): void {
+  it("admits native border value dependencies while rejecting reverse browser edges", /** Checks source-owned box dependencies and browser isolation. @returns Nothing. */ () => {
+    expect(isForbiddenModuleEdge("editeng", "offapi")).toBe(false);
+    expect(isForbiddenModuleEdge("editeng", "svtools")).toBe(false);
+    expect(isForbiddenModuleEdge("xmloff", "editeng")).toBe(false);
+    expect(isForbiddenModuleEdge("svtools", "editeng")).toBe(true);
+    expect(isForbiddenModuleEdge("svtools", "sw")).toBe(true);
+    expect(getRuntimeOwnershipLayer("svtools/source/control/ctrlbox.ts")).toBe(
+      "upstream-mechanism",
+    );
+    expect(getRuntimeOwnershipViolation("svtools/source/control/ctrlbox.ts", "", "react")).toMatch(
+      /browser presentation package/u,
+    );
+  });
   it("classifies native o3tl utilities and restricts the Writer container dependency", /** Checks the precise source utility edge and browser isolation. @returns Nothing. */ () => {
     expect(getRuntimeOwnershipLayer("o3tl/inc/sorted_vector.ts")).toBe("upstream-mechanism");
     expect(isForbiddenModuleEdge("sw", "o3tl")).toBe(false);

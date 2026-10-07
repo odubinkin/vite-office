@@ -1,6 +1,7 @@
 /** @fileoverview Emits ordered ODF table blocks from Writer's canonical table graph. */
 
 import { escapeXml, exportOdfLength, type XMLTextParagraphSource } from "../text/txtparae";
+import type { OdfBoxProperties } from "../style/bordrhdl";
 
 /** Ordered text and table blocks supplied by Writer's canonical node array. */
 export type XMLTextExportBlock =
@@ -31,11 +32,11 @@ export interface XMLTableExportSource {
       keepTogether?: boolean | undefined;
     }>;
     cells: readonly Readonly<{
-      format: Readonly<{
-        padding?: number | undefined;
-        border?: string | undefined;
-        verticalAlign?: string | undefined;
-      }>;
+      format: Readonly<
+        OdfBoxProperties & {
+          verticalAlign?: string | undefined;
+        }
+      >;
       paragraphs: readonly XMLTextParagraphSource[];
     }>[];
   }>[];
@@ -108,7 +109,18 @@ export interface XMLTableExportSource {
       body += `<table:table-row table:style-name="${rowName}">`;
       for (const [cellIndex, cell] of row.cells.entries()) {
         const cellName = `${rowName}.C${cellIndex + 1}`;
-        const cellProperties = `${cell.format.padding === undefined ? "" : ` fo:padding="${exportOdfLength(cell.format.padding)}"`}${cell.format.border === undefined ? "" : ` fo:border="${escapeXml(cell.format.border)}"`}${cell.format.verticalAlign === undefined ? "" : ` style:vertical-align="${escapeXml(cell.format.verticalAlign)}"`}`;
+        let cellProperties = `${cell.format.padding === undefined ? "" : ` fo:padding="${exportOdfLength(cell.format.padding)}"`}${cell.format.border === undefined ? "" : ` fo:border="${escapeXml(cell.format.border)}"`}${cell.format.verticalAlign === undefined ? "" : ` style:vertical-align="${escapeXml(cell.format.verticalAlign)}"`}${cell.format.borderLineWidth === undefined ? "" : ` style:border-line-width="${escapeXml(cell.format.borderLineWidth)}"`}`;
+        for (const side of ["Top", "Bottom", "Left", "Right"]) {
+          const padding = cell.format[`padding${side}` as keyof OdfBoxProperties],
+            border = cell.format[`border${side}` as keyof OdfBoxProperties],
+            compound = cell.format[`borderLineWidth${side}` as keyof OdfBoxProperties];
+          if (typeof padding === "number")
+            cellProperties += ` fo:padding-${side.toLowerCase()}="${exportOdfLength(padding)}"`;
+          if (typeof border === "string")
+            cellProperties += ` fo:border-${side.toLowerCase()}="${escapeXml(border)}"`;
+          if (typeof compound === "string")
+            cellProperties += ` style:border-line-width-${side.toLowerCase()}="${escapeXml(compound)}"`;
+        }
         automaticStyles += `<style:style style:name="${cellName}" style:family="table-cell"><style:table-cell-properties${cellProperties}/></style:style>`;
         body += `<table:table-cell table:style-name="${cellName}" office:value-type="string">${renderParagraphs(cell.paragraphs)}</table:table-cell>`;
       }

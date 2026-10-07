@@ -1,4 +1,5 @@
 /** @fileoverview Checks native counted row insertion, selected edges and document history without upstream access. */
+import { nativeBoxFormat } from "../../../../test/table-box-test-helpers";
 import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
 import { expect, it, vi } from "vitest";
 import { createWriterDocumentSession } from "../../../browser/composition/writer-module";
@@ -30,7 +31,7 @@ function fixture() {
       row.GetTabBoxes().forEach(
         /** Sets native cell geometry and text. @param box - Actual box. @param column - Coordinate. @returns Nothing. */
         (box, column) => {
-          box.SetFormat({ padding: 20 + index });
+          box.SetFormat(nativeBoxFormat({ padding: 20 + index }));
           required(box.GetParagraphs()[0]).SetText("row" + index + "col" + column);
         },
       );

@@ -1,6 +1,9 @@
 /** @fileoverview Internal canonical Writer graph codec used behind boundary-specific envelopes. */
 import { SwFormatVertOrient } from "../../../inc/fmtornt";
 import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
+import { SvxBoxItem } from "../../../../editeng/source/items/frmitems";
+import { SvxBorderLine, type BorderLineRecord } from "../../../../editeng/source/items/borderline";
+import { importBoxProperties } from "../../../../xmloff/source/style/bordrhdl";
 
 import {
   SvxNumType,
@@ -34,6 +37,7 @@ import type { WriterParagraphStyleGroup } from "../../../inc/poolfmt";
 import type { WriterParagraphListKind } from "../../../source/core/doc/list";
 import {
   RES_PARATR_OUTLINELEVEL,
+  RES_BOX,
   WRITER_CHARACTER_WHICH_RANGES,
   WRITER_TEXT_NODE_WHICH_RANGES,
 } from "../../../inc/hintids";
@@ -139,16 +143,42 @@ interface WriterTableRecord {
 }
 
 /** Primitive complete box item; legacy scalar alignment is accepted only at storage ingress. */
-type WriterBoxFormatRecord = Omit<SwTableBoxFormat, "vertOrient"> & {
+type WriterBoxFormatRecord = {
+  readonly box?:
+    | Readonly<{
+        which: number;
+        lines: readonly (BorderLineRecord | null)[];
+        distances: readonly number[];
+        removeAdjacent: boolean;
+      }>
+    | undefined;
+  readonly padding?: number | undefined;
+  readonly border?: string | undefined;
   readonly vertOrient?:
     Readonly<{ position: number; orientation: number; relation: number }> | undefined;
   readonly verticalAlign?: "top" | "middle" | "bottom" | undefined;
 };
 /** Encodes complete public native fields without transporting a class. @param value - Original box format. @returns Primitive format. */
 function encodeBoxFormat(value: SwTableBoxFormat): WriterBoxFormatRecord {
-  const { vertOrient, ...format } = value;
+  const { vertOrient, box } = value;
   return {
-    ...format,
+    box:
+      box === undefined
+        ? undefined
+        : {
+            which: box.Which(),
+            lines: [0, 1, 2, 3].map(
+              /** Encodes complete native line state. @param edge - Side. @returns Primitive line or null. */ (
+                edge,
+              ) => box.GetLine(edge)?.toJSON() ?? null,
+            ),
+            distances: [0, 1, 2, 3].map(
+              /** Preserves authored signed distance. @param edge - Side. @returns Signed twips. */ (
+                edge,
+              ) => box.GetDistance(edge, true),
+            ),
+            removeAdjacent: box.GetRemoveAdjCellBorder(),
+          },
     vertOrient:
       vertOrient === undefined
         ? undefined
@@ -161,7 +191,8 @@ function encodeBoxFormat(value: SwTableBoxFormat): WriterBoxFormatRecord {
 }
 /** Restores native item ownership from primitive or prior scalar storage. @param value - Primitive box record. @returns Native box format. */
 function decodeBoxFormat(value: WriterBoxFormatRecord): SwTableBoxFormat {
-  const { vertOrient, verticalAlign, ...format } = value;
+  const { vertOrient, verticalAlign } = value;
+  const format: SwTableBoxFormat = { box: decodeBoxItem(value) };
   if (vertOrient === undefined)
     return {
       ...format,
@@ -201,6 +232,76 @@ function decodeBoxFormat(value: WriterBoxFormatRecord): SwTableBoxFormat {
       vertOrient.relation,
     ),
   };
+}
+
+/** Validates and restores primitive native box state; legacy CSS enters only here. @param value - Untrusted stored format. @returns Owned native box or absent. */
+function decodeBoxItem(value: WriterBoxFormatRecord): SvxBoxItem | undefined {
+  const record = value.box;
+  if (record === undefined) {
+    if (
+      (value.padding !== undefined && !Number.isSafeInteger(value.padding)) ||
+      (value.border !== undefined && typeof value.border !== "string")
+    )
+      throw new Error("Stored Writer legacy box is invalid.");
+    return importBoxProperties({ padding: value.padding, border: value.border }, RES_BOX);
+  }
+  if (
+    !isRecord(record) ||
+    !Number.isInteger(record.which) ||
+    record.which < 0 ||
+    record.which > 32767 ||
+    !Array.isArray(record.lines) ||
+    record.lines.length !== 4 ||
+    !Array.isArray(record.distances) ||
+    record.distances.length !== 4 ||
+    typeof record.removeAdjacent !== "boolean"
+  )
+    throw new Error("Stored Writer native box is invalid.");
+  const item = new SvxBoxItem(record.which);
+  for (const edge of [0, 1, 2, 3]) {
+    const distance = record.distances[edge];
+    if (
+      typeof distance !== "number" ||
+      !Number.isInteger(distance) ||
+      distance < -32768 ||
+      distance > 32767
+    )
+      throw new Error("Stored Writer box distance is invalid.");
+    item.SetDistance(distance, edge);
+    const line = record.lines[edge];
+    if (line === null) continue;
+    if (
+      !isRecord(line) ||
+      typeof line.color !== "number" ||
+      !Number.isInteger(line.color) ||
+      line.color < 0 ||
+      line.color > 0xffffffff ||
+      !Number.isSafeInteger(line.width) ||
+      typeof line.style !== "number" ||
+      !Number.isInteger(line.style) ||
+      (line.style !== 32767 && (line.style < 0 || line.style > 17)) ||
+      typeof line.scale !== "number" ||
+      !Number.isFinite(line.scale) ||
+      typeof line.mirror !== "boolean" ||
+      typeof line.useLeftTop !== "boolean" ||
+      !Array.isArray(line.implementation) ||
+      line.implementation.length !== 4 ||
+      !Number.isInteger(line.implementation[0]) ||
+      line.implementation[0] < 0 ||
+      line.implementation[0] > 7 ||
+      line.implementation
+        .slice(1)
+        .some(
+          /** Rejects invalid native rate fields. @param rate - Stored rate. @returns Whether malformed. */ (
+            rate: unknown,
+          ) => typeof rate !== "number" || !Number.isFinite(rate),
+        )
+    )
+      throw new Error("Stored Writer native border line is invalid.");
+    item.SetLine(SvxBorderLine.FromRecord(line as unknown as BorderLineRecord), edge);
+  }
+  item.SetRemoveAdjCellBorder(record.removeAdjacent);
+  return item;
 }
 
 /** Primitive complete frame item for process and storage boundaries. */

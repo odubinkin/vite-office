@@ -1,0 +1,23 @@
+{
+  "reason": "Final bounded verification notes changed two metadata inputs after earlier source gates; changed-input validation only.",
+  "records": [
+    {
+      "command": "npm exec -- prettier --check docs/program/source-provenance.json docs/program/parity/runtime-inventory.json",
+      "exit": 0,
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+      "bytes": 66,
+      "diagnostics": [
+        "All matched files use Prettier code style!"
+      ]
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "exit": 0,
+      "sha256": "b16199a818cb0cb5e0797b97db77692f4cbb99ff06507efef8c2c5bef5f0becb",
+      "bytes": 205,
+      "diagnostics": [
+        "Source provenance check passed for 286 runtime modules (201 mapped, 69 browser adaptations, 16 local infrastructure)."
+      ]
+    }
+  ]
+}

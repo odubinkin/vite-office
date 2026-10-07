@@ -1,0 +1,132 @@
+{
+  "proof": "Actual counters with complete identical source/maps or complete contiguous declaration/body/enclosing branch/location proofs; focused skips retained as skipped.",
+  "previousVerified": {
+    "app": {
+      "map": "JSRZD5.app-final.json",
+      "proof": "JSRZD5.coverage-proof.json",
+      "mapHash": "75f1bd8e100471ff0ab7cdef21aae70e1ea6ed638ce232108a9965307433fa46",
+      "proofHash": "5a346cd206a5cacd293971a281bb50fb219eb7fb242540e5f8fd56400f021c60"
+    },
+    "inventory": {
+      "map": "JSRZD5.inventory-initial.json",
+      "proof": "JSRZD5.inventory-proof.json",
+      "mapHash": "1b9f52438968e201a82de4773dcbb51983c310b6f8117459faab61452f411070",
+      "proofHash": "bfc89c97438a53aa1879994ad0fbe25e2fc12e4b262501c7260d57200f2d1541"
+    }
+  },
+  "app": {
+    "coverage": {
+      "lines": {
+        "total": 15643,
+        "covered": 15643,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 17172,
+        "covered": 17172,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 3994,
+        "covered": 3994,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 12901,
+        "covered": 12901,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "mapSHA256": "211db8682db1fa7f3fbea0c095702243a7724a55b9d8f8305a7cc72fe46ba965",
+    "proofSHA256": "8c04adf41789b8c3e94e83b7217c9402fd71fd9322f20276226e0447a5a3a1c3",
+    "files": 283,
+    "wholeFiles": 281,
+    "transfers": [
+      {
+        "path": "apps/office/src/sw/browser/editor/WriterEditableTable.tsx",
+        "initialSourceSHA256": "6b1ef764827615f56041a8055929518bf78faa16e53df6b201872d81f888225d",
+        "currentSourceSHA256": "d0e916c3748a41717fde69ad98b7776119b9215fd8e0959d56c2959c521370e9",
+        "regionCount": 6,
+        "counts": {
+          "statements": 23,
+          "functions": 8,
+          "branches": 35
+        }
+      },
+      {
+        "path": "apps/office/src/sw/source/uibase/shells/tabsh.ts",
+        "initialSourceSHA256": "73ccc4f42324284d683714f7cc60a427df41642cadef0f65a30a08f598b447f0",
+        "currentSourceSHA256": "25c7f18807866031fa01d35d0043868265d802398a6c561c3e148cf38d502aaf",
+        "regionCount": 4,
+        "counts": {
+          "statements": 66,
+          "functions": 13,
+          "branches": 29
+        }
+      }
+    ],
+    "gaps": []
+  },
+  "inventory": {
+    "coverage": {
+      "lines": {
+        "total": 1464,
+        "covered": 1464,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 1523,
+        "covered": 1523,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 384,
+        "covered": 384,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 1081,
+        "covered": 1081,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "mapSHA256": "4d0d3f173eab6af27e7d9ebad7b7c97157fad864d546b7c6da16817b2c9e624c",
+    "proofSHA256": "d46904065da7893cc717b0f3896bfba71659ebfb76fd30730e047239c1dfda58",
+    "files": 38,
+    "wholeFiles": 37,
+    "transfers": [
+      {
+        "path": "scripts/libreoffice-inventory/runtime-inventory.ts",
+        "initialSourceSHA256": "35a87e5a6b58133dcb224ecc5ffcbc423bb5d19d1f3f5cbe8b9fa46544ddf176",
+        "currentSourceSHA256": "374c4f558e289d4259709be592d8ca6bdfb4078ba05e605545df93473b3c5e6c",
+        "regionCount": 2,
+        "counts": {
+          "statements": 199,
+          "functions": 45,
+          "branches": 83
+        }
+      }
+    ],
+    "gaps": []
+  }
+}

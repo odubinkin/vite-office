@@ -1,4 +1,5 @@
 /** @fileoverview Verifies production native headline defaults, count bounds, page transitions and canonical history. */
+import { nativeBoxFormat, tableBoxFormatForTest } from "../src/test/table-box-test-helpers";
 import { expect, test, type Page } from "@playwright/test";
 import { SwDoc } from "../src/sw/source/core/doc/doc";
 import { HoriOrientation as H } from "../src/offapi/com/sun/star/text/HoriOrientation";
@@ -15,7 +16,7 @@ async function open(page: Page) {
   for (let c = 0; c < 3; c++) table.AddColumnWidth(2000);
   for (let r = 0; r < 3; r++)
     for (const [c, box] of doc.nodes.AppendTableRow(table, 3).GetTabBoxes().entries()) {
-      box.SetFormat({ ...box.GetFormat(), padding: 80 });
+      box.SetFormat(nativeBoxFormat({ ...tableBoxFormatForTest(box.GetFormat()), padding: 80 }));
       const node = box.GetParagraphs()[0];
       if (node === undefined) throw new Error("Missing format lifecycle cell");
       node.SetText(r === 0 && c === 0 ? "Cell" : "B");

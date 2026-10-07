@@ -1,4 +1,5 @@
 /** @fileoverview Verifies production native whole-table page movement and exact ODT split policy. */
+import { nativeBoxFormat } from "../src/test/table-box-test-helpers";
 import { SwFormatFrameSize, SwFrameSize } from "../src/sw/inc/fmtfsize";
 import { expect, test } from "@playwright/test";
 import { SwDoc } from "../src/sw/source/core/doc/doc";
@@ -29,7 +30,7 @@ for (const width of [1280, 390])
             table,
             1,
             { frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 400) },
-            [{ padding: 0, border: "none" }],
+            [nativeBoxFormat({ padding: 0, border: "none" })],
           )
           .GetTabBoxes()[0]
           ?.GetParagraphs()[0];

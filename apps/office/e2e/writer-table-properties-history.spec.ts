@@ -1,4 +1,5 @@
 /** @fileoverview Verifies real browser table properties, selected-cell scope and one native Undo/Redo without upstream execution. */
+import { nativeBoxFormat } from "../src/test/table-box-test-helpers";
 import { VertOrientation } from "./../src/offapi/com/sun/star/text/VertOrientation";
 import { SwFormatVertOrient } from "./../src/sw/inc/fmtornt";
 
@@ -26,16 +27,16 @@ for (const viewport of [1280, 390])
     for (let row = 0; row < 2; row++)
       for (const [column, box] of doc.nodes
         .AppendTableRow(table, 2, {}, [
-          {
+          nativeBoxFormat({
             padding: 50,
             border: "none",
             vertOrient: new SwFormatVertOrient(0, VertOrientation.NONE),
-          },
-          {
+          }),
+          nativeBoxFormat({
             padding: 50,
             border: "none",
             vertOrient: new SwFormatVertOrient(0, VertOrientation.NONE),
-          },
+          }),
         ])
         .GetTabBoxes()
         .entries()) {

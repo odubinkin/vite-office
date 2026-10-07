@@ -1,4 +1,9 @@
 /** @fileoverview Verifies native document border ownership and point/mark union scope over original cells. */
+import {
+  nativeBoxFormat,
+  tableBorderItems,
+  tableBoxFormatForTest,
+} from "../../../../test/table-box-test-helpers";
 import { expect, it, vi } from "vitest";
 import { SwDoc } from "../doc/doc";
 import { SwPosition } from "../crsr/pam";
@@ -18,11 +23,13 @@ function fixture() {
   const boxes = [];
   for (let row = 0; row < 3; row++)
     for (const box of doc.nodes.AppendTableRow(table, 3).GetTabBoxes()) {
-      box.SetFormat({
-        border: "1pt solid #112233",
-        padding: 80 + boxes.length,
-        vertOrient: new SwFormatVertOrient(720, 3, 7),
-      });
+      box.SetFormat(
+        nativeBoxFormat({
+          border: "1pt solid #112233",
+          padding: 80 + boxes.length,
+          vertOrient: new SwFormatVertOrient(720, 3, 7),
+        }),
+      );
       required(box.GetParagraphs()[0]).SetText("Original " + boxes.length);
       boxes.push(box);
     }
@@ -37,15 +44,21 @@ it("ordinary direct border application affects only the current cell and records
     node = required(f.nodes[4]),
     cursor = new SwCursor(new SwPosition(node, 2)),
     revision = f.doc.GetDocumentStateManager().GetModelRevision();
-  expect(f.doc.SetTabBorders(cursor, { border: "none" })).toBe(true);
+  expect(f.doc.SetTabBorders(cursor, tableBorderItems(f.doc, { border: "none" }, cursor))).toBe(
+    true,
+  );
   expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(1);
   expect(f.doc.GetDocumentStateManager().GetModelRevision()).toBe(revision + 1);
   for (const [index, box] of f.boxes.entries()) {
-    expect(box.GetFormat().border).toBe(index === 4 ? "none" : "1pt solid #112233");
-    expect(box.GetFormat().padding).toBe(80 + index);
+    expect(tableBoxFormatForTest(box.GetFormat()).border).toBe(
+      index === 4 ? "none" : "1pt solid #112233",
+    );
+    expect(tableBoxFormatForTest(box.GetFormat()).padding).toBe(80 + index);
     expect(box.GetVertOrient()).toEqual(new SwFormatVertOrient(720, 3, 7));
   }
-  expect(f.doc.SetTabBorders(cursor, { border: "none" })).toBe(true);
+  expect(f.doc.SetTabBorders(cursor, tableBorderItems(f.doc, { border: "none" }, cursor))).toBe(
+    true,
+  );
   expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(2);
   expect(cursor.GetPoint().GetNode()).toBe(node);
   expect(cursor.GetPoint().GetContentIndex()).toBe(2);
@@ -65,10 +78,14 @@ for (const reverse of [false, true])
       cursor.SetMark();
       cursor.GetMark().Assign(mark, 3);
       if (cursor instanceof SwTableCursor) cursor.ActualizeSelection([required(f.boxes[0])]);
-      expect(f.doc.SetTabBorders(cursor, { padding: 0 })).toBe(true);
+      expect(f.doc.SetTabBorders(cursor, tableBorderItems(f.doc, { padding: 0 }, cursor))).toBe(
+        true,
+      );
       for (const [index, box] of f.boxes.entries()) {
-        expect(box.GetFormat().padding).toBe([4, 5, 7, 8].includes(index) ? 0 : 80 + index);
-        expect(box.GetFormat().border).toBe("1pt solid #112233");
+        expect(tableBoxFormatForTest(box.GetFormat()).padding).toBe(
+          [4, 5, 7, 8].includes(index) ? 0 : 80 + index,
+        );
+        expect(tableBoxFormatForTest(box.GetFormat()).border).toBe("1pt solid #112233");
         expect(box.GetParagraphs()[0]).toBe(f.nodes[index]);
       }
       expect(cursor.GetPoint().GetNode()).toBe(point);
@@ -83,11 +100,17 @@ it("rejects non-content, body, foreign and disconnected document inputs without 
     cursor = new SwCursor(new SwPosition(required(f.nodes[0]))),
     foreign = new SwDoc(),
     before = f.doc.GetDocumentStateManager().GetModelRevision();
-  expect(f.doc.SetTabBorders(body, { border: "none" })).toBe(false);
-  expect(f.doc.SetTabBorders(nonContent, { border: "none" })).toBe(false);
-  expect(foreign.SetTabBorders(cursor, { border: "none" })).toBe(false);
+  expect(f.doc.SetTabBorders(body, tableBorderItems(f.doc, { border: "none" }, body))).toBe(false);
+  expect(
+    f.doc.SetTabBorders(nonContent, tableBorderItems(f.doc, { border: "none" }, nonContent)),
+  ).toBe(false);
+  expect(foreign.SetTabBorders(cursor, tableBorderItems(foreign, { border: "none" }, cursor))).toBe(
+    false,
+  );
   const connected = vi.spyOn(f.doc, "GetTables").mockReturnValue([]);
-  expect(f.doc.SetTabBorders(cursor, { border: "none" })).toBe(false);
+  expect(f.doc.SetTabBorders(cursor, tableBorderItems(f.doc, { border: "none" }, cursor))).toBe(
+    false,
+  );
   connected.mockRestore();
   expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(0);
   expect(f.doc.GetDocumentStateManager().GetModelRevision()).toBe(before);
@@ -103,18 +126,26 @@ it("rejects body and cross-table marks and disconnected point or mark cells", /*
   const otherBox = required(f.doc.nodes.AppendTableRow(other, 1).GetTabBoxes()[0]);
   cursor.SetMark();
   cursor.GetMark().Assign(required(f.doc.paragraphs[0]), 0);
-  expect(f.doc.SetTabBorders(cursor, { border: "none" })).toBe(false);
+  expect(f.doc.SetTabBorders(cursor, tableBorderItems(f.doc, { border: "none" }, cursor))).toBe(
+    false,
+  );
   cursor.GetMark().Assign(required(otherBox.GetParagraphs()[0]), 0);
-  expect(f.doc.SetTabBorders(cursor, { border: "none" })).toBe(false);
+  expect(f.doc.SetTabBorders(cursor, tableBorderItems(f.doc, { border: "none" }, cursor))).toBe(
+    false,
+  );
   cursor.GetMark().Assign(required(f.nodes[8]), 1);
   const last = required(f.table.GetTabLines()[2]),
     missing = required(f.boxes[8]);
   last.RemoveBox(missing);
-  expect(f.doc.SetTabBorders(cursor, { border: "none" })).toBe(false);
+  expect(f.doc.SetTabBorders(cursor, tableBorderItems(f.doc, { border: "none" }, cursor))).toBe(
+    false,
+  );
   last.AddBox(missing);
   required(f.table.GetTabLines()[0]).RemoveBox(required(f.boxes[0]));
-  expect(f.doc.SetTabBorders(cursor, { border: "none" })).toBe(false);
+  expect(f.doc.SetTabBorders(cursor, tableBorderItems(f.doc, { border: "none" }, cursor))).toBe(
+    false,
+  );
   expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(0);
-  expect(required(f.boxes[4]).GetFormat().border).toBe("1pt solid #112233");
+  expect(tableBoxFormatForTest(required(f.boxes[4]).GetFormat()).border).toBe("1pt solid #112233");
   cursor.Dispose();
 });

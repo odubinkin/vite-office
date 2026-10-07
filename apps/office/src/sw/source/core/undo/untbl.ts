@@ -35,6 +35,7 @@ export class SwUndoInsTable extends SwUndo {
         ? undefined
         : {
             ...boxFormat,
+            ...(boxFormat.box === undefined ? {} : { box: boxFormat.box.Clone() }),
             ...(boxFormat.vertOrient === undefined
               ? {}
               : { vertOrient: boxFormat.vertOrient.Clone() }),

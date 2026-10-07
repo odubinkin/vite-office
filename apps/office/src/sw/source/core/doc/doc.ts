@@ -6,7 +6,13 @@ import { SwLineNumberInfo } from "../../../inc/lineinfo";
 import { SwNodes } from "../docnode/nodes";
 import { SwTableNode, type SwNode } from "../docnode/node";
 import { SwTextNode } from "../txtnode/ndtxt";
-import type { SwTable, SwTableBox, SwTableBoxFormat } from "../table/swtable";
+import {
+  createWriterTableBoxItem,
+  type SwTable,
+  type SwTableBox,
+  type SwTableBoxFormat,
+} from "../table/swtable";
+import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SwUndoAttrTable, SwUndoTableNdsChg } from "../undo/untbl";
 import type { SwTabCols } from "../bastyp/tabcol";
 import type { SwTabFrame } from "../layout/tabfrm";
@@ -97,7 +103,7 @@ export class SwDoc {
   /** Applies represented border attributes over native point/mark cell endpoints. @param cursor - Original shell cursor. @param value - Supplied border and distance attributes. @param cursorState - Optional original displayed cursor state. @returns Whether admitted. */
   public SetTabBorders(
     cursor: SwCursor,
-    value: Pick<SwTableBoxFormat, "padding" | "border">,
+    value: SfxItemSet,
     cursorState?: SwUndoCursorState,
   ): boolean {
     return SetSwTabBorders(this, cursor, value, cursorState);
@@ -932,9 +938,7 @@ export class SwDoc {
         Array.from(
           { length: columns },
           /** Creates independent represented box attributes. @returns Box format. */ () =>
-            boxFormat === undefined
-              ? { padding: borders ? 55 : 0, border: borders ? "0.5pt solid #000000" : "none" }
-              : { ...boxFormat },
+            boxFormat === undefined ? { box: createWriterTableBoxItem(borders) } : { ...boxFormat },
         ),
       );
       for (const box of line.GetTabBoxes())

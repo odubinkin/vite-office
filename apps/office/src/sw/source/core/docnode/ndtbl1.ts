@@ -2,7 +2,6 @@
 import {
   SwTable,
   type SwTableBox,
-  type SwTableBoxFormat,
   type SwTableLine,
   type SwTableLineFormat,
 } from "../table/swtable";
@@ -14,12 +13,20 @@ import { createWriterCollapsedCursorState, type SwUndoCursorState } from "../und
 import { SwTextNode } from "../txtnode/ndtxt";
 import type { SwFormatFrameSize } from "../../../inc/fmtfsize";
 import { SwFormatVertOrient } from "../../../inc/fmtornt";
+import {
+  SvxBoxItem,
+  SvxBoxInfoItem,
+  SvxBoxInfoItemValidFlags,
+} from "../../../../editeng/source/items/frmitems";
+import type { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { RES_BOX } from "../../../inc/hintids";
+import { SID_ATTR_BORDER_INNER } from "../../../../svx/inc/svxids";
 
 /** Applies represented borders over the native start/end cell union for a flat shared-column table. @param doc - Owning document. @param cursor - Actual point/mark cursor, independent of ordinary rings. @param value - Supplied border and distance attributes. @param cursorState - Optional original shell history state. @returns Whether admitted. */
 export function SetSwTabBorders(
   doc: SwDoc,
   cursor: SwCursor,
-  value: Pick<SwTableBoxFormat, "padding" | "border">,
+  value: SfxItemSet,
   cursorState?: SwUndoCursorState,
 ): boolean {
   const node = cursor.GetPoint().GetNode(),
@@ -50,6 +57,51 @@ export function SetSwTabBorders(
   const boxes: SwTableBox[] = [];
   // lcl_GetStartEndCell/MakeSelUnions use point and mark, not an ordinary PaM ring.
   table.CreateSelection(start, end, boxes, SwTable.SEARCH_NONE);
+  const outer = value.GetItemIfSet(RES_BOX, false),
+    inner = value.GetItemIfSet(SID_ATTR_BORDER_INNER, false);
+  const supplied = outer instanceof SvxBoxItem ? outer : undefined;
+  const info = inner instanceof SvxBoxInfoItem ? inner : undefined;
+  const valid =
+    /** Reads explicit native validity or the absent-info default. @param flag - Component mask. @returns Whether valid. */
+    (flag: SvxBoxInfoItemValidFlags): boolean => info?.IsValid(flag) ?? true;
+  const topValid = supplied !== undefined && valid(SvxBoxInfoItemValidFlags.TOP),
+    bottomValid = supplied !== undefined && valid(SvxBoxInfoItemValidFlags.BOTTOM),
+    leftValid = supplied !== undefined && valid(SvxBoxInfoItemValidFlags.LEFT),
+    rightValid = supplied !== undefined && valid(SvxBoxInfoItemValidFlags.RIGHT);
+  const horizontalValid = valid(SvxBoxInfoItemValidFlags.HORI),
+    verticalValid = valid(SvxBoxInfoItemValidFlags.VERT);
+  const positions = table.GetTabLines().flatMap(
+    /** Locates selected original boxes in the represented flat union. @param row - Native row. @param rowIndex - Row coordinate. @returns Selected coordinates. */
+    (row, rowIndex) =>
+      row.GetTabBoxes().flatMap(
+        /** Keeps original selected owners. @param box - Native box. @param column - Column coordinate. @returns Coordinate or empty. */
+        (box, column) => (boxes.includes(box) ? [{ box, row: rowIndex, column }] : []),
+      ),
+  );
+  const top = Math.min(
+      ...positions.map(
+        /** Reads row. @param position - Native coordinate. @returns Row. */ (position) =>
+          position.row,
+      ),
+    ),
+    bottom = Math.max(
+      ...positions.map(
+        /** Reads row. @param position - Native coordinate. @returns Row. */ (position) =>
+          position.row,
+      ),
+    ),
+    left = Math.min(
+      ...positions.map(
+        /** Reads column. @param position - Native coordinate. @returns Column. */ (position) =>
+          position.column,
+      ),
+    ),
+    right = Math.max(
+      ...positions.map(
+        /** Reads column. @param position - Native coordinate. @returns Column. */ (position) =>
+          position.column,
+      ),
+    );
   return doc.RunModelTransaction(
     /** Records original attributes and publishes the admitted native operation. @returns Whether admitted. */
     () => {
@@ -58,7 +110,27 @@ export function SetSwTabBorders(
           cursorState ??
           createWriterCollapsedCursorState(node, offset, node.GetCharacterItemsAt(offset)),
         action = new SwUndoAttrTable(table, before);
-      for (const box of boxes) box.SetFormat({ ...box.GetFormat(), ...value });
+      for (const position of positions) {
+        const box = position.box,
+          item = box.GetBox();
+        if (topValid) {
+          if (position.row === top) item.SetLine(supplied.GetTop(), 0);
+          else if (horizontalValid) item.SetLine(undefined, 0);
+        }
+        if (position.column === left) {
+          if (leftValid) item.SetLine(supplied.GetLeft(), 2);
+        } else if (verticalValid) item.SetLine(info?.GetVert(), 2);
+        if (rightValid) {
+          if (position.column === right) item.SetLine(supplied.GetRight(), 3);
+          else if (verticalValid) item.SetLine(undefined, 3);
+        }
+        if (position.row === bottom) {
+          if (bottomValid) item.SetLine(supplied.GetBottom(), 1);
+        } else if (horizontalValid) item.SetLine(info?.GetHori(), 1);
+        if (supplied !== undefined)
+          for (const edge of [0, 1, 2, 3]) item.SetDistance(supplied.GetDistance(edge), edge);
+        box.SetFormat({ ...box.GetFormat(), box: item });
+      }
       doc.GetUndoManager().AddUndoAction(action);
       doc.NotifyModelChange({ kind: "node-content-changed", nodeIndex: tableNode.GetIndex() });
       return true;

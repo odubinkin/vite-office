@@ -14,6 +14,7 @@ import {
   SvxRightMarginItem,
   SvxTextLeftMarginItem,
   SvxULSpaceItem,
+  SvxBoxItem,
 } from "../../../../editeng/source/items/frmitems";
 import {
   FontItalic,
@@ -71,6 +72,7 @@ import {
   RES_PARATR_OUTLINELEVEL,
   RES_KEEP,
   RES_LINENUMBER,
+  RES_BOX,
 } from "../../../inc/hintids";
 import type { SwDoc } from "../doc/doc";
 import { SwNumRuleItem } from "../para/paratr";
@@ -83,6 +85,15 @@ export class SwAttrPool extends SfxItemPool {
   /** Creates and registers Writer's bounded paragraph defaults. @param document - Owning Writer document. @returns Nothing. */
   public constructor(private readonly document: SwDoc) {
     super();
+    this.RegisterDefaultItem(
+      new SvxBoxItem(RES_BOX),
+      /** Restores the represented native box value. @param value - UNO sequence. @returns Owned item. */
+      (value) => {
+        const item = new SvxBoxItem(RES_BOX);
+        if (!item.PutValue(value)) throw new Error("Stored Writer box is invalid.");
+        return item;
+      },
+    );
     this.RegisterDefaultItem(new SwFormatINetFormat("", ""));
     const device = document.GetDefaultFontDevice();
     this.RegisterDefaultItem(

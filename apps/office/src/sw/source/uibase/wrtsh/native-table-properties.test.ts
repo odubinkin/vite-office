@@ -1,4 +1,5 @@
 /** @fileoverview Verifies native table-property owners, selection, attribute-only history and lifecycle without upstream execution. */
+import { nativeBoxFormat, tableBoxFormatForTest } from "../../../../test/table-box-test-helpers";
 import { VertOrientation } from "./../../../../offapi/com/sun/star/text/VertOrientation";
 import { SwFormatVertOrient } from "./../../../inc/fmtornt";
 
@@ -38,16 +39,16 @@ function fixture() {
       2,
       { frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 100), keepTogether: false },
       [
-        {
+        nativeBoxFormat({
           padding: 50,
           border: "none",
           vertOrient: new SwFormatVertOrient(0, VertOrientation.NONE),
-        },
-        {
+        }),
+        nativeBoxFormat({
           padding: 50,
           border: "none",
           vertOrient: new SwFormatVertOrient(0, VertOrientation.NONE),
-        },
+        }),
       ],
     );
   const boxes = table
@@ -155,40 +156,52 @@ describe("native table property application", /** Registers actual-owner contrac
       ).toEqual(
         selected
           ? [
-              {
+              nativeBoxFormat(
+                {
+                  padding: 200,
+                  border: f.value.border,
+                  vertOrient: new SwFormatVertOrient(0, VertOrientation.BOTTOM),
+                },
+                [3],
+              ),
+              nativeBoxFormat({
                 padding: 200,
                 border: f.value.border,
                 vertOrient: new SwFormatVertOrient(0, VertOrientation.BOTTOM),
-              },
-              {
-                padding: 200,
-                border: f.value.border,
-                vertOrient: new SwFormatVertOrient(0, VertOrientation.BOTTOM),
-              },
+              }),
               formats[2],
               formats[3],
             ]
           : [
-              {
-                padding: 200,
-                border: f.value.border,
-                vertOrient: new SwFormatVertOrient(0, VertOrientation.BOTTOM),
-              },
-              {
-                padding: 200,
-                border: f.value.border,
-                vertOrient: new SwFormatVertOrient(0, VertOrientation.NONE),
-              },
-              {
-                padding: 200,
-                border: f.value.border,
-                vertOrient: new SwFormatVertOrient(0, VertOrientation.NONE),
-              },
-              {
+              nativeBoxFormat(
+                {
+                  padding: 200,
+                  border: f.value.border,
+                  vertOrient: new SwFormatVertOrient(0, VertOrientation.BOTTOM),
+                },
+                [3],
+              ),
+              nativeBoxFormat({
                 padding: 200,
                 border: f.value.border,
                 vertOrient: new SwFormatVertOrient(0, VertOrientation.NONE),
-              },
+              }),
+              nativeBoxFormat(
+                {
+                  padding: 200,
+                  border: f.value.border,
+                  vertOrient: new SwFormatVertOrient(0, VertOrientation.NONE),
+                },
+                [0, 3],
+              ),
+              nativeBoxFormat(
+                {
+                  padding: 200,
+                  border: f.value.border,
+                  vertOrient: new SwFormatVertOrient(0, VertOrientation.NONE),
+                },
+                [0],
+              ),
             ],
       );
       for (let cycle = 0; cycle < 2; cycle++) {
@@ -258,7 +271,7 @@ describe("native table property application", /** Registers actual-owner contrac
       expect(
         f.boxes.map(
           /** Reads unchanged borders. @param box - Actual box. @returns Border. */ (box) =>
-            box.GetFormat().border,
+            tableBoxFormatForTest(box.GetFormat()).border,
         ),
       ).toEqual(["none", "none", "none", "none"]);
       expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(0);

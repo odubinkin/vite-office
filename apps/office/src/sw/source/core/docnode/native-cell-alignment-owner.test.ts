@@ -1,4 +1,5 @@
 /** @fileoverview Verifies document-owned box selection, complete item history and native asymmetric getter scope. */
+import { nativeBoxFormat, tableBorderItems } from "../../../../test/table-box-test-helpers";
 import { expect, it, vi } from "vitest";
 import { SwDoc } from "../doc/doc";
 import { SwPosition } from "../crsr/pam";
@@ -131,24 +132,30 @@ it("body shell alignment and border requests retain absent table admission", /**
     shell = session.view.GetWrtShell();
   expect(shell.GetBoxAlign()).toBe(65535);
   expect(shell.SetBoxAlign(2)).toBe(false);
-  expect(shell.SetTabBorders({ padding: 44, border: "none" })).toBe(false);
+  expect(
+    shell.SetTabBorders(
+      tableBorderItems(shell.GetDoc(), { padding: 44, border: "none" }, shell.GetCursor(false)),
+    ),
+  ).toBe(false);
   session.Close();
 });
 it("insertion history retains absent native orientation independently of authored padding", /** Checks optional complete-item cloning admission and original default across redo. @returns Nothing. */ () => {
   const session = createWriterDocumentSession(),
     shell = session.view.GetWrtShell(),
-    box = { padding: 42 };
+    box = nativeBoxFormat({ padding: 42 });
   const table = required(
     shell.InsertTable({ mnInsMode: 2, mnRowsToRepeat: 0 }, 1, 1, "DefaultAlign", box),
   );
-  box.padding = 99;
-  expect(table.GetTabLines()[0]?.GetTabBoxes()[0]?.GetFormat()).toEqual({ padding: 42 });
+  required(box.box).SetAllDistances(99);
+  expect(table.GetTabLines()[0]?.GetTabBoxes()[0]?.GetFormat()).toEqual(
+    nativeBoxFormat({ padding: 42 }),
+  );
   expect(shell.Undo()).toBe(true);
   expect(shell.Redo()).toBe(true);
   const cell = required(
     session.docShell.GetDoc().GetTables()[0]?.GetTabLines()[0]?.GetTabBoxes()[0],
   );
-  expect(cell.GetFormat()).toEqual({ padding: 42 });
+  expect(cell.GetFormat()).toEqual(nativeBoxFormat({ padding: 42 }));
   expect(cell.GetVertOrient().GetVertOrient()).toBe(0);
   session.Close();
 });
