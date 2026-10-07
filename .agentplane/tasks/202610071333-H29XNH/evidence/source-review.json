@@ -1,0 +1,31 @@
+{
+  "baselineTag": "libreoffice-26.8.0.2",
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceSHA256": {
+    "sw/inc/pam.hxx": "261e281789f347d0b5fe4d75c6187ad0279f9716b5f344b3e3a5b2cdc0905290",
+    "sw/source/core/crsr/pam.cxx": "6b88edc57ef122759003e459fd0b43bb9b1ff409b89238b7c598ab291dbf4f77",
+    "sw/source/core/crsr/crsrsh.cxx": "22a10693b0097a1788df0b2b63153790a37a4ce0f79ddaa4da8ec2c30c3c4f3a",
+    "sw/source/core/text/itrcrsr.cxx": "862315cefee568e882f24e64226664227fd06a672640493ebc0c48d107389ee2",
+    "sw/source/core/edit/editsh.cxx": "73025af65692efee4e3d59d565c1597958092657bd751077afaf168c7f751f08",
+    "sw/source/uibase/docvw/edtwin.cxx": "f679baf21d41f78d6494bead35aebf6333eed298a6e24892452a4bb4623b7eb3"
+  },
+  "productionSHA256": {
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts": "4fb6d75266748da4120478f4e5519a71f7a067ab2e4b82663ca26f1fc68aba3c",
+    "apps/office/src/sw/source/uibase/docvw/edtwin.ts": "5d850de03eb597c61935c7db193cec0f6593012769bdbe4dc61dcae2ca840f57",
+    "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts": "d013e4798dd1642f59e72531ed1317a02a6653cd80a81f33b0e5317819d5d910",
+    "apps/office/src/sw/browser/editor/writer-selection.ts": "48a077631db296f3127b36ad08abc3ea990c6d9d117a464ff49f26bc89f74bd9",
+    "apps/office/src/sw/browser/editor/writer-selection-types.ts": "d602d06afd4a02884b6ab3d7378ba4ef710e5afd2f5d97ce1346470b9fcd14cd",
+    "apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx": "7be7bccb1d16e81b796a87f3dc99e9caa5d16e3eef0ab1a958acb1c01eda8571",
+    "apps/office/src/sw/browser/presentation/writer-view-projection.ts": "5c12751744b483c49c9a37688b61fd0693a7a5abf6ecd2e34cda48e59bc33e91",
+    "apps/office/src/sw/source/core/crsr/pam.ts": "5b947ad8321922fe4ecc5a49436a323f0e0ab9b5995c493e323f3c5d09c120ec",
+    "apps/office/src/sw/source/core/crsr/swcrsr.ts": "150b01670f3d507493cda00ab5f825dcc3a21ff44d8d11634a482cb4b8aa5e0c"
+  },
+  "contracts": {
+    "stateOwner": "pam.hxx192/225-226 and pam.cxx446-605 defaultfalse: label affinity belongs to SwPaM, not duplicate SwCursor field. Existing getters/setters relocated only; no invented assignment clearing.",
+    "nativeAdmission": "crsrsh.cxx1062-1163 uses visible numbering/bullet, no mark/table mode, compares old/new label affinity even with same text position and publishes final state. Native SwEditWin validates device label hit and shell SetPaM/UpdateCursor admit it distinctly from text0.",
+    "devicePainting": "crsrsh.cxx2380-2400 requests SwSPExtendRange::BEFORE and itrcrsr.cxx612-640/1350-1380 resolves preceding label geometry. Browser restores editable DOM boundary immediately after the noneditable decoration (Chromium rejects the preceding empty boundary) while preserving native BEFORE-label state, maps model content0 plus affinity, paints device caret at actual marker edge; no cursor/document ownership in React.",
+    "insertion": "editsh.cxx98-186 Insert2 clears label affinity at native end action. Existing SwWrtShell Insert now brackets actual InsertAtCursor and native clear with final notification transaction. Empty insertion existingfalse contract preserved; Replace/full overwrite/IME keyboard semantics remain separate.",
+    "nativeKeyboardResidual": "edtwin.cxx2429-2432 normal printable char calls NumOrNoNum() before text buffering; existing defaulttrue already-counted label has no numbering delta. Full key-state/default branches, Delete-at-label, arrow movement and IME affinity remain individually unverified."
+  },
+  "residual": "Native marked-list-level shading and list-level/ruler mechanics, label attributes/full geometry/RTL/bidi/frame lifecycle, broader keyboard/IME/overwrite/Replace label policies remain unverified. Existing intentional save/open/recovery deviations retained, whole parity ACTIVE. Same current-agent evaluator explicitly not independent."
+}

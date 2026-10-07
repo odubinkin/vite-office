@@ -335,6 +335,22 @@ export class BrowserWriterEditWindow {
         event.preventDefault();
         return;
       }
+      const marker =
+        event.target instanceof Element
+          ? event.target.closest<HTMLElement>("[data-writer-list-marker]")
+          : null;
+      if (event.button === 0 && marker?.parentElement != null) {
+        const parent = marker.parentElement,
+          offset = Array.from(parent.childNodes).indexOf(marker) + 1;
+        event.currentTarget.focus({ preventScroll: true });
+        if (
+          this.selectionMapper.SetBaseAndExtent(parent, offset, parent, offset) &&
+          this.SynchronizeSelection()
+        ) {
+          event.preventDefault();
+          return;
+        }
+      }
       /* c8 ignore start -- Native text caret geometry retains its isolated adapter and Chromium checks. */
       if (this.pointerSelection.Start(event.button, event.clientX, event.clientY))
         this.SynchronizeSelection();
@@ -562,6 +578,9 @@ export class BrowserWriterEditWindow {
       : {
           contentIndex: position.offset,
           nodeIndex: position.nodeIndex,
+          ...(position.inFrontOfLabel === undefined
+            ? {}
+            : { inFrontOfLabel: position.inFrontOfLabel }),
           ...(position.inRepeatedHeadline === undefined
             ? {}
             : { inRepeatedHeadline: position.inRepeatedHeadline }),

@@ -1,0 +1,37 @@
+{
+  "vendorRestored": true,
+  "sourceSnapshot": "H29XNH.closure7.source",
+  "records": [
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts native-label-affinity.spec.ts --reporter=list,json",
+      "exit": 1,
+      "sha256": "e7d1d0f8d78e3cb958ca0a1fd4a3e7ae86a794ebe9b358302cb17a3cd51de2c9",
+      "bytes": 6939,
+      "unhandledErrorCount": 0,
+      "stats": {
+        "startTime": "2026-10-07T14:06:49.909Z",
+        "duration": 3719.308,
+        "expected": 0,
+        "skipped": 0,
+        "unexpected": 2,
+        "flaky": 0
+      },
+      "errors": [
+        {
+          "name": "native before-label caret and input body cell width=1280",
+          "assertion": [
+            "Error: {\"labelX\":272,\"caretX\":272,\"height\":16,\"focusBefore\":false,\"focusOffset\":0}"
+          ]
+        },
+        {
+          "name": "native before-label caret and input body cell width=390",
+          "assertion": [
+            "Error: {\"labelX\":228,\"caretX\":228,\"height\":16,\"focusBefore\":false,\"focusOffset\":0}"
+          ]
+        }
+      ],
+      "profile": "upstream-absent"
+    }
+  ]
+}

@@ -7,15 +7,6 @@ import type { SwRootFrame } from "../layout/newfrm";
 
 /** Persistent Writer cursor; cell navigation never uses body ordinals or display paragraphs. */
 export class SwCursor extends SwPaM {
-  private inFrontOfLabel = false;
-  /** Reads native list-label cursor affinity. @returns Label position state. */
-  public IsInFrontOfLabel(): boolean {
-    return this.inFrontOfLabel;
-  }
-  /** Assigns native label affinity without changing the text point. @param value - Label state. @returns Nothing. */
-  public SetInFrontOfLabel_(value: boolean): void {
-    this.inFrontOfLabel = value;
-  }
   /** Delegates margin movement to the current native layout frame. @param layout - Owning layout. @param left - Beginning direction. @param api - API movement. @returns Native frame admission. */
   public LeftRightMargin(layout: SwRootFrame, left: boolean, api = false): boolean {
     const frame = layout.GetCursorTextFrame(this.GetPoint().GetNode() as SwTextNode);

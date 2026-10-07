@@ -372,8 +372,8 @@ export class SwWrtShell extends SwFEShell {
   public SetCursor(position: SwPosition): boolean {
     return this.SetPaM(position);
   }
-  /** Assigns canonical Writer positions to the persistent PaM. @param point - Moving endpoint. @param mark - Optional fixed endpoint. @returns Whether the cursor changed. */
-  public SetPaM(point: SwPosition, mark?: SwPosition): boolean {
+  /** Assigns canonical Writer positions to the persistent PaM. @param point - Moving endpoint. @param mark - Optional fixed endpoint. @param inFrontOfLabel - Validated native label affinity. @returns Whether the cursor changed. */
+  public SetPaM(point: SwPosition, mark?: SwPosition, inFrontOfLabel = false): boolean {
     const pointNode = point.GetNode() as WriterParagraph;
     const markNode = mark?.GetNode() as WriterParagraph | undefined;
     if (
@@ -389,20 +389,26 @@ export class SwWrtShell extends SwFEShell {
       currentPoint.GetNode() === pointNode &&
       currentPoint.GetContentIndex() === point.GetContentIndex() &&
       currentMark?.GetNode() === markNode &&
-      currentMark?.GetContentIndex() === mark?.GetContentIndex()
+      currentMark?.GetContentIndex() === mark?.GetContentIndex() &&
+      this.IsInFrontOfLabel() === inFrontOfLabel
     )
       return false;
     this.pendingCharacterItems = pointNode.GetCharacterItemsAt(point.GetContentIndex());
     SwTextCursor.SetRightMargin(false);
-    this.SetInFrontOfLabel(false);
     this.docShell.GetUndoManager().BreakUndoGrouping();
     this.ClearTableCursor();
     this.cursor.Assign(point, mark);
+    this.SetInFrontOfLabel(inFrontOfLabel);
     this.NotifySelection();
     return true;
   }
-  /** Applies interactive table-mode admission separately from low-level PaM assignment, as native UpdateCursor does. @param point - Moving hit. @param mark - Fixed hit. @param inRepeatedHeadline - Actual follow headline occurrence. @returns Whether cursor changed. */
-  public UpdateCursor(point: SwPosition, mark?: SwPosition, inRepeatedHeadline = false): boolean {
+  /** Applies interactive table-mode admission separately from low-level PaM assignment, as native UpdateCursor does. @param point - Moving hit. @param mark - Fixed hit. @param inRepeatedHeadline - Actual follow headline occurrence. @param inFrontOfLabel - Validated native label affinity. @returns Whether cursor changed. */
+  public UpdateCursor(
+    point: SwPosition,
+    mark?: SwPosition,
+    inRepeatedHeadline = false,
+    inFrontOfLabel = false,
+  ): boolean {
     const doc = this.GetDoc();
     if (point.GetNode().GetDoc() !== doc || (mark !== undefined && mark.GetNode().GetDoc() !== doc))
       return false;
@@ -418,7 +424,7 @@ export class SwWrtShell extends SwFEShell {
       return RejectRepeatedHeadlineSelection(this, point, mark);
     return this.RunNotificationTransaction(
       /** Publishes only the final native cursor ownership. @returns Whether changed. */ () => {
-        const changed = this.SetPaM(point, mark);
+        const changed = this.SetPaM(point, mark, inFrontOfLabel);
         if (!tableSelection || this.HasBoxSelection()) return changed;
         this.tableCursor = new SwTableCursor(point, mark);
         this.cursor.DeleteMark();
@@ -501,7 +507,14 @@ export class SwWrtShell extends SwFEShell {
 
   /** Inserts text at the persistent Writer cursor, matching the bounded SwWrtShell insertion boundary. @param text - Text to insert or replace the selection with. @returns Whether the document changed. */
   public Insert(text: string): boolean {
-    return text.length > 0 && InsertAtCursor(this, text, true);
+    if (text.length === 0) return false;
+    return this.RunNotificationTransaction(
+      /** Clears Insert2 label affinity before final publication. @returns Whether text changed. */ () => {
+        const changed = InsertAtCursor(this, text, true);
+        this.SetInFrontOfLabel(false);
+        return changed;
+      },
+    );
   }
 
   /** Replaces the current Writer selection without joining ordinary typing undo groups. @param text - Replacement text. @returns Whether content changed. */

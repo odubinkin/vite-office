@@ -79,7 +79,10 @@ export function WriterEditableParagraph({
       )}
       <div
         className={listMarker === undefined ? "" : "flex items-start"}
-        style={{ marginInlineStart: listMarker === undefined ? undefined : `${markerStartPt}pt` }}
+        style={{
+          marginInlineStart: listMarker === undefined ? undefined : `${markerStartPt}pt`,
+          caretColor: paragraph.inFrontOfLabel ? "transparent" : undefined,
+        }}
       >
         {listMarker !== undefined && isFollow ? (
           <span
@@ -97,6 +100,7 @@ export function WriterEditableParagraph({
             data-testid={`writer-list-marker-${paragraph.id}`}
             data-writer-list-marker={paragraph.id}
             style={{
+              position: "relative",
               /* v8 ignore next -- Space-follow numbering is imported but not exposed by the current command surface. */
               marginInlineEnd: listLayout?.labelFollowedBy === "space" ? "0.25em" : undefined,
               width: listLayout?.labelFollowedBy === "listtab" ? `${markerWidthPt}pt` : undefined,
@@ -115,6 +119,19 @@ export function WriterEditableParagraph({
               lineHeight: paragraph.computedStyle.lineHeight,
             }}
           >
+            {paragraph.inFrontOfLabel ? (
+              <span
+                data-writer-label-caret={paragraph.id}
+                style={{
+                  position: "absolute",
+                  insetInlineStart: 0,
+                  top: "0.15em",
+                  height: "1em",
+                  borderInlineStart: "1px solid currentColor",
+                  pointerEvents: "none",
+                }}
+              />
+            ) : null}
             {listMarker}
           </span>
         )}
@@ -146,6 +163,7 @@ export function WriterEditableParagraph({
           }
           role="textbox"
           style={{
+            caretColor: paragraph.inFrontOfLabel ? "transparent" : undefined,
             whiteSpace: cellPosition === undefined ? undefined : "pre-wrap",
             overflowWrap: cellPosition === undefined ? undefined : "break-word",
             backgroundColor:

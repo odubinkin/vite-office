@@ -141,6 +141,15 @@ export class SwPosition {
 
 /** Represents Writer's direction-preserving Point-and-Mark selection. */
 export class SwPaM {
+  private inFrontOfLabel = false;
+  /** Reads native list-label cursor affinity. @returns Label position state. */
+  public IsInFrontOfLabel(): boolean {
+    return this.inFrontOfLabel;
+  }
+  /** Assigns native label affinity without changing the text point. @param value - Label state. @returns Nothing. */
+  public SetInFrontOfLabel_(value: boolean): void {
+    this.inFrontOfLabel = value;
+  }
   private next: SwPaM = this;
   private previous: SwPaM = this;
   private point: SwPosition;

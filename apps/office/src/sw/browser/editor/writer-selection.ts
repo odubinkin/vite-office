@@ -37,6 +37,7 @@ export class BrowserWriterSelectionMapper {
       current !== undefined &&
       current.point.paragraphId === cursor.point.paragraphId &&
       current.point.offset === cursor.point.offset &&
+      (current.point.inFrontOfLabel === true) === (cursor.point.inFrontOfLabel === true) &&
       current.mark?.paragraphId === cursor.mark?.paragraphId &&
       current.mark?.offset === cursor.mark?.offset
     )
@@ -123,19 +124,31 @@ export function restoreWriterDomSelection(
       : resolveParagraph(cursor.mark.paragraphId, cursor.mark.offset);
   if (pointParagraph === undefined || (cursor.mark !== undefined && markParagraph === undefined))
     return false;
-  const point = getWriterTextCaretPoint(
-    pointParagraph,
-    cursor.point.offset - Number(pointParagraph.dataset.writerFragmentStart ?? 0),
-  );
+  const marker =
+    cursor.point.inFrontOfLabel === true && cursor.mark === undefined
+      ? pointParagraph.parentElement?.querySelector<HTMLElement>("[data-writer-list-marker]")
+      : undefined;
+  if (
+    cursor.point.inFrontOfLabel === true &&
+    cursor.mark === undefined &&
+    (marker == null || marker.dataset.writerListMarker !== cursor.point.paragraphId)
+  )
+    return false;
+  const point =
+    marker == null
+      ? getWriterTextCaretPoint(
+          pointParagraph,
+          cursor.point.offset - Number(pointParagraph.dataset.writerFragmentStart ?? 0),
+        )
+      : {
+          node: marker.parentNode as Node,
+          offset: Array.from((marker.parentNode as Node).childNodes).indexOf(marker) + 1,
+        };
   if (cursor.mark === undefined || markParagraph === undefined) {
     const editingHost = pointParagraph.closest("[data-writer-editing-host]");
     if (editingHost === null || editingHost !== pointParagraph.ownerDocument.activeElement)
       pointParagraph.focus();
-    const range = pointParagraph.ownerDocument.createRange();
-    range.setStart(point.node, point.offset);
-    range.collapse(true);
-    selection.removeAllRanges();
-    selection.addRange(range);
+    selection.setBaseAndExtent(point.node, point.offset, point.node, point.offset);
     return true;
   }
   const mark = getWriterTextCaretPoint(
@@ -257,15 +270,32 @@ function getWriterDomPosition(
   node: Node,
   offset: number,
 ): WriterCursorSelection["point"] | undefined {
-  const paragraph = getWriterSelectionParagraph(node);
+  const element = node instanceof HTMLElement ? node : node.parentElement,
+    following = node.childNodes[offset],
+    preceding = node.childNodes[offset - 1],
+    marker =
+      element?.closest<HTMLElement>("[data-writer-list-marker]") ??
+      (following instanceof HTMLElement && following.hasAttribute("data-writer-list-marker")
+        ? following
+        : preceding instanceof HTMLElement && preceding.hasAttribute("data-writer-list-marker")
+          ? preceding
+          : undefined),
+    paragraph =
+      marker == null
+        ? getWriterSelectionParagraph(node)
+        : marker.nextElementSibling instanceof HTMLParagraphElement &&
+            marker.nextElementSibling.dataset.writerParagraphId === marker.dataset.writerListMarker
+          ? marker.nextElementSibling
+          : undefined;
   if (paragraph === undefined) return undefined;
   const paragraphRange = paragraph.ownerDocument.createRange();
   paragraphRange.selectNodeContents(paragraph);
-  const writerOffset = getWriterRangeOffset(paragraphRange, node, offset);
+  const writerOffset = marker == null ? getWriterRangeOffset(paragraphRange, node, offset) : 0;
   /* v8 ignore next -- A live native Selection endpoint is a valid Range endpoint by construction. */
   return writerOffset === undefined
     ? undefined
     : {
+        ...(marker == null ? {} : { inFrontOfLabel: true }),
         ...(paragraph.dataset.writerNodeIndex === undefined
           ? {}
           : { nodeIndex: Number(paragraph.dataset.writerNodeIndex) }),

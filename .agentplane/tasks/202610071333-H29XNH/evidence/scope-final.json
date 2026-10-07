@@ -1,0 +1,52 @@
+{
+  "base": "8895ff1aba560bdf5074f5315405d27752b0a074",
+  "semanticPaths": [
+    "apps/office/e2e/native-label-affinity.spec.ts",
+    "apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx",
+    "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts",
+    "apps/office/src/sw/browser/editor/native-label-affinity.test.tsx",
+    "apps/office/src/sw/browser/editor/native-table-pointer.test.tsx",
+    "apps/office/src/sw/browser/editor/writer-selection-types.ts",
+    "apps/office/src/sw/browser/editor/writer-selection.ts",
+    "apps/office/src/sw/browser/presentation/writer-view-projection.ts",
+    "apps/office/src/sw/source/core/crsr/pam.ts",
+    "apps/office/src/sw/source/core/crsr/swcrsr.ts",
+    "apps/office/src/sw/source/uibase/docvw/edtwin.ts",
+    "apps/office/src/sw/source/uibase/docvw/native-label-affinity.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/source-provenance.json"
+  ],
+  "scopeCount": 15,
+  "priorAcceptanceFiles": 583,
+  "byteIdenticalAcceptanceFiles": 582,
+  "exactSourceBackedMigrations": [
+    {
+      "path": "apps/office/src/sw/browser/editor/native-table-pointer.test.tsx",
+      "beforeSHA256": "73d2583044e6ca97a3062158a9beccd9687a641a67aea05c0ade1464cc8a1b31",
+      "currentSHA256": "a6c739971dea8431a337e3b5d61ee900ff57c2ae9b77709f93ed2dc826f70067",
+      "change": "Only marker-hit insertion expectation CeXll to XCell; all inputs and other assertions retained",
+      "source": "crsrsh.cxx SetCursor label affinity maps to content0"
+    }
+  ],
+  "newAcceptanceFiles": [
+    "apps/office/src/sw/source/uibase/docvw/native-label-affinity.test.ts",
+    "apps/office/src/sw/browser/editor/native-label-affinity.test.tsx",
+    "apps/office/e2e/native-label-affinity.spec.ts"
+  ],
+  "metadata": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "oldRecords": 298,
+      "currentRecords": 298,
+      "allPriorFieldsPrefixesAndStatusesPreserved": true
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "oldRecords": 298,
+      "currentRecords": 298,
+      "allPriorFieldsPrefixesAndStatusesPreserved": true
+    }
+  ],
+  "failures": []
+}

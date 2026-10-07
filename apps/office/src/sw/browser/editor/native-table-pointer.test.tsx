@@ -135,7 +135,7 @@ it("list marker click inside a cell never becomes row selection", /** Checks lis
   expect(f.session.view.GetWrtShell().getShellCursor().GetPoint().GetNode()).toBe(f.target);
   expect(f.target.IsInList()).toBe(true);
   type(f.editor);
-  expect(f.target.GetText()).toBe("CeXll");
+  expect(f.target.GetText()).toBe("XCell");
   expect(f.editor).toHaveAttribute("data-list-kind", "numbered");
   expect(f.first.GetText()).toBe("Keep");
 });

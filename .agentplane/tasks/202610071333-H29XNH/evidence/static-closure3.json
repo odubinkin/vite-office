@@ -1,0 +1,25 @@
+{
+  "records": [
+    {
+      "command": "node_modules/.bin/prettier --check apps/office/src/sw/browser/editor/writer-selection.ts apps/office/src/sw/browser/editor/browser-writer-edit-window.ts apps/office/src/sw/browser/editor/native-label-affinity.test.tsx apps/office/src/sw/browser/editor/native-table-pointer.test.tsx apps/office/e2e/native-label-affinity.spec.ts docs/program/source-provenance.json docs/program/parity/runtime-inventory.json",
+      "exit": 0,
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+      "bytes": 66,
+      "diagnostics": []
+    },
+    {
+      "command": "node_modules/.bin/eslint apps/office/src/sw/browser/editor/writer-selection.ts apps/office/src/sw/browser/editor/browser-writer-edit-window.ts apps/office/src/sw/browser/editor/native-label-affinity.test.tsx apps/office/src/sw/browser/editor/native-table-pointer.test.tsx apps/office/e2e/native-label-affinity.spec.ts --max-warnings 0",
+      "exit": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "diagnostics": []
+    },
+    {
+      "command": "npm run typecheck --workspace @vite-office/office",
+      "exit": 0,
+      "sha256": "95074d7a9bb3a320c929b8c8311534bfdc86e140dc41177f3228e50a346e94b2",
+      "bytes": 55,
+      "diagnostics": []
+    }
+  ]
+}

@@ -23,6 +23,8 @@ function ignoreEditWindowInvalidation(): void {}
 
 /** One canonical edit-window endpoint expressed in current SwNodes coordinates. */
 export interface SwEditWindowPosition {
+  /** Native label hit affinity supplied by the device geometry boundary. */
+  readonly inFrontOfLabel?: boolean;
   readonly contentIndex: number;
   readonly nodeIndex: number;
   /** Actual table-cell frame classification; absent for model positions without view geometry. */
@@ -333,18 +335,25 @@ export class SwEditWin {
     const point = this.ResolvePosition(selection.point);
     const mark = selection.mark === undefined ? undefined : this.ResolvePosition(selection.mark);
     if (point === undefined || (selection.mark !== undefined && mark === undefined)) return false;
+    const inFrontOfLabel =
+      selection.point.inFrontOfLabel === true &&
+      mark === undefined &&
+      !this.wrtShell.IsTableMode() &&
+      point.GetContentIndex() === 0 &&
+      (point.GetNode() as SwTextNode).HasVisibleNumberingOrBullet();
     try {
       if (
         selection.point.inRepeatedHeadline === undefined &&
         selection.mark?.inRepeatedHeadline === undefined
       )
-        this.wrtShell.SetPaM(point, mark);
+        this.wrtShell.SetPaM(point, mark, inFrontOfLabel);
       else
         this.wrtShell.UpdateCursor(
           point,
           mark,
           selection.point.inRepeatedHeadline === true ||
             selection.mark?.inRepeatedHeadline === true,
+          inFrontOfLabel,
         );
       return true;
     } finally {

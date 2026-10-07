@@ -1,0 +1,222 @@
+{
+  "app": {
+    "original": 13541,
+    "current": 13545,
+    "newCases": 4,
+    "resolved": 5,
+    "passed": 13545,
+    "unresolvedCount": 0,
+    "skippedObservationsRetained": 26,
+    "passingReplay": 0,
+    "originalUncaughtErrorCases": 0,
+    "finalUncaughtErrorCases": 0,
+    "inputs": [
+      {
+        "file": "H29XNH.app-results.json",
+        "sha256": "6f87abc63f0cdf1750e13b3ee4f94f4379312f2e5f28ce23e73b5005f79bede8",
+        "passed": 13537,
+        "failed": 4,
+        "skipped": 0
+      },
+      {
+        "file": "H29XNH.closure1.app-results.json",
+        "sha256": "2c63b324a916631d2be177329109bc360111f0b89d4dbf4591f271efd436683c",
+        "passed": 2,
+        "failed": 2,
+        "skipped": 3
+      },
+      {
+        "file": "H29XNH.closure2.app-results.json",
+        "sha256": "81184ece1f19272ce5506f9c3a69b5cdf1143fd6081e6ef68f7e3981076268f0",
+        "passed": 2,
+        "failed": 0,
+        "skipped": 1
+      },
+      {
+        "file": "H29XNH.closure10.app-results.json",
+        "sha256": "1f24fd3aff89f8da25b615b3e158250cd37044a2a259871c7da9fbc01574acc1",
+        "passed": 1,
+        "failed": 1,
+        "skipped": 3
+      },
+      {
+        "file": "H29XNH.closure11.app-results.json",
+        "sha256": "ad31a0134550a55e0bd161cf9b98bc9e6997fec3201e477c87f0c34b9630b737",
+        "passed": 0,
+        "failed": 1,
+        "skipped": 4
+      },
+      {
+        "file": "H29XNH.closure12.app-results.json",
+        "sha256": "9bb890f9a00104041b8711455c6895952dd4ff03c243ad31e1c320ebfc7fac9d",
+        "passed": 1,
+        "failed": 1,
+        "skipped": 4
+      },
+      {
+        "file": "H29XNH.closure13.app-results.json",
+        "sha256": "2f7b3f1026ea904547d16663bceb99a5061b780f137db84d92755bdaf16a8a7b",
+        "passed": 1,
+        "failed": 1,
+        "skipped": 5
+      },
+      {
+        "file": "H29XNH.closure14.app-results.json",
+        "sha256": "ff1ecb8f42cc295ead258edb39434b0068db54710fa96822478c920643389d13",
+        "passed": 1,
+        "failed": 0,
+        "skipped": 6
+      }
+    ]
+  },
+  "inventory": {
+    "original": 110,
+    "current": 110,
+    "newCases": 0,
+    "resolved": 0,
+    "passed": 110,
+    "unresolvedCount": 0,
+    "skippedObservationsRetained": 0,
+    "passingReplay": 0,
+    "originalUncaughtErrorCases": 0,
+    "finalUncaughtErrorCases": 0,
+    "inputs": [
+      {
+        "file": "H29XNH.inventory-results.json",
+        "sha256": "de1b0f00e52dbe956d923766dd18ad414ee130b6375fd020000087ee3e3127d9",
+        "passed": 110,
+        "failed": 0,
+        "skipped": 0
+      }
+    ]
+  },
+  "chromium": {
+    "current": 278,
+    "passed": 278,
+    "unresolvedCount": 0,
+    "passingReplay": 0,
+    "inputs": [
+      {
+        "file": "H29XNH.chromium-results.json",
+        "sha256": "63b408b35c4c1db9b430dd25b9700919782020dcb19bcae8c1ba7da8785b937f",
+        "counts": {
+          "startTime": "2026-10-07T13:55:26.272Z",
+          "duration": 128875.722,
+          "expected": 276,
+          "skipped": 0,
+          "unexpected": 2,
+          "flaky": 0
+        }
+      },
+      {
+        "file": "H29XNH.closure1.chromium-results.json",
+        "sha256": "6e8bdfe4b4c4e86f313390b0aba21a3beaddd70cfb493a77c90f0114149caa9c",
+        "counts": {
+          "startTime": "2026-10-07T14:02:50.922Z",
+          "duration": 2982.35,
+          "expected": 0,
+          "skipped": 0,
+          "unexpected": 2,
+          "flaky": 0
+        }
+      },
+      {
+        "file": "H29XNH.closure2.chromium-results.json",
+        "sha256": "fd78640d2e607925dd16e33b88615ba2d00bf4dbba638fb3ed465ba2d16984ab",
+        "counts": {
+          "startTime": "2026-10-07T14:03:20.899Z",
+          "duration": 3193.2980000000002,
+          "expected": 0,
+          "skipped": 0,
+          "unexpected": 2,
+          "flaky": 0
+        }
+      },
+      {
+        "file": "H29XNH.closure3.chromium-results.json",
+        "sha256": "778fa5ac7b1efb9afd043d3600b200f928be8ad39fc200d158a143464744abbb",
+        "counts": {
+          "startTime": "2026-10-07T14:04:12.638Z",
+          "duration": 3048.951,
+          "expected": 0,
+          "skipped": 0,
+          "unexpected": 2,
+          "flaky": 0
+        }
+      },
+      {
+        "file": "H29XNH.closure4.chromium-results.json",
+        "sha256": "7d47f17e6cd3110407877c941a9070f863cf3b7f395f1a1a2f813fa014ec325b",
+        "counts": {
+          "startTime": "2026-10-07T14:04:56.226Z",
+          "duration": 3107.727,
+          "expected": 0,
+          "skipped": 0,
+          "unexpected": 2,
+          "flaky": 0
+        }
+      },
+      {
+        "file": "H29XNH.closure5.chromium-results.json",
+        "sha256": "29c78f377b62dfbd8b91cdab4b6a22226af4b3f28dc46301db81198451eb26d5",
+        "counts": {
+          "startTime": "2026-10-07T14:05:31.187Z",
+          "duration": 2928.868,
+          "expected": 0,
+          "skipped": 0,
+          "unexpected": 2,
+          "flaky": 0
+        }
+      },
+      {
+        "file": "H29XNH.closure6.chromium-results.json",
+        "sha256": "3c6c5b4c5404951572010c794c46bcdc4a19034fac70f998ad904d7474aa6987",
+        "counts": {
+          "startTime": "2026-10-07T14:05:51.201Z",
+          "duration": 2717.8940000000002,
+          "expected": 0,
+          "skipped": 0,
+          "unexpected": 2,
+          "flaky": 0
+        }
+      },
+      {
+        "file": "H29XNH.closure7.chromium-results.json",
+        "sha256": "99674181706fb6e14546cca3a81dbcf3c776ec229e6a8b419a9bd0ab80d99703",
+        "counts": {
+          "startTime": "2026-10-07T14:06:49.909Z",
+          "duration": 3719.308,
+          "expected": 0,
+          "skipped": 0,
+          "unexpected": 2,
+          "flaky": 0
+        }
+      },
+      {
+        "file": "H29XNH.closure8.chromium-results.json",
+        "sha256": "bde9033d5e620e11f946f6206f7139e94c487665ba6aac377866b6ef130a90aa",
+        "counts": {
+          "startTime": "2026-10-07T14:07:28.145Z",
+          "duration": 3650.803,
+          "expected": 0,
+          "skipped": 0,
+          "unexpected": 2,
+          "flaky": 0
+        }
+      },
+      {
+        "file": "H29XNH.closure9.chromium-results.json",
+        "sha256": "46dcf8652edb3524c8aae9f7d6769e4564634481c09c7959bc1993cac2231226",
+        "counts": {
+          "startTime": "2026-10-07T14:08:51.538Z",
+          "duration": 3235.933,
+          "expected": 2,
+          "skipped": 0,
+          "unexpected": 0,
+          "flaky": 0
+        }
+      }
+    ]
+  },
+  "failures": []
+}

@@ -1,0 +1,30 @@
+{
+  "vendorRestored": true,
+  "sourceSnapshot": "H29XNH.closure13.source",
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/browser/editor/native-label-affinity.test.tsx -t native marker pointer preserves|native unfragmented text caret --coverage.reportOnFailure --coverage.reporter=json --coverage.reporter=json-summary --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/H29XNH.closure13.app-results.json",
+      "exit": 1,
+      "sha256": "ee6d31029a7ee3a0105fafe6bca9e0034aa21e7a3384a64b6a45f7c3928ba54f",
+      "bytes": 3364,
+      "unhandledErrorCount": 0,
+      "caseCounts": {
+        "passed": 1,
+        "failed": 1,
+        "skipped": 5,
+        "total": 7
+      },
+      "failures": [
+        {
+          "name": "native marker pointer preserves table-border priority and guards missing platform selection",
+          "assertion": [
+            "AssertionError: expected undefined to be defined"
+          ]
+        }
+      ],
+      "coverageMapSHA256": "9bed8fa517b6f35bcf7486d5df07f30c2e58547abdd3eec76d04f515430a5fa6",
+      "profile": "upstream-absent"
+    }
+  ]
+}

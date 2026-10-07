@@ -1,0 +1,24 @@
+{
+  "records": [
+    {
+      "command": "Unchanged JSDoc validator on approved changed code/acceptance paths; actual physical-line count",
+      "exit": 0,
+      "errors": [],
+      "physicalLines": {
+        "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts": 999,
+        "apps/office/src/sw/source/uibase/docvw/edtwin.ts": 569,
+        "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts": 615,
+        "apps/office/src/sw/browser/editor/writer-selection.ts": 336,
+        "apps/office/src/sw/browser/editor/writer-selection-types.ts": 20,
+        "apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx": 300,
+        "apps/office/src/sw/browser/presentation/writer-view-projection.ts": 610,
+        "apps/office/src/sw/source/uibase/docvw/native-label-affinity.test.ts": 113,
+        "apps/office/src/sw/browser/editor/native-label-affinity.test.tsx": 396,
+        "apps/office/e2e/native-label-affinity.spec.ts": 84,
+        "apps/office/src/sw/source/core/crsr/pam.ts": 333,
+        "apps/office/src/sw/source/core/crsr/swcrsr.ts": 230,
+        "apps/office/src/sw/browser/editor/native-table-pointer.test.tsx": 156
+      }
+    }
+  ]
+}

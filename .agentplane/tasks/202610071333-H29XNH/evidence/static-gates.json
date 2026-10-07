@@ -1,0 +1,59 @@
+{
+  "records": [
+    {
+      "command": "npm run format:check",
+      "exit": 1,
+      "bytes": 743,
+      "sha256": "9dbbf4ebe82507ce83939163f6d58b882b33916e6aabf2ff8920e4997375f83b",
+      "diagnostics": [
+        "[warn] apps/office/e2e/native-label-affinity.spec.ts",
+        "[warn] apps/office/src/sw/browser/editor/browser-writer-edit-window.ts",
+        "[warn] apps/office/src/sw/browser/editor/native-label-affinity.test.tsx",
+        "[warn] apps/office/src/sw/browser/editor/writer-selection.ts",
+        "[warn] apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx",
+        "[warn] apps/office/src/sw/browser/presentation/writer-view-projection.ts",
+        "[warn] apps/office/src/sw/source/uibase/docvw/edtwin.ts",
+        "[warn] apps/office/src/sw/source/uibase/docvw/native-label-affinity.test.ts",
+        "[warn] apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+        "[warn] Code style issues found in 9 files. Run Prettier with --write to fix."
+      ]
+    },
+    {
+      "command": "npm run lint",
+      "exit": 0,
+      "bytes": 55,
+      "sha256": "a6172cb57fa696e705408fdc605fba1ae07b852fdf0614d7c2b623349e285b6e",
+      "diagnostics": [
+        "> eslint . --max-warnings 0"
+      ]
+    },
+    {
+      "command": "npm run typecheck",
+      "exit": 0,
+      "bytes": 240,
+      "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:dependencies",
+      "exit": 0,
+      "bytes": 189,
+      "sha256": "b695da221298514a757417e6612508b913f501e478b0c1cc00bf4b5b41c2b7f0",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:docs",
+      "exit": 0,
+      "bytes": 119,
+      "sha256": "c6a7d0bbe83ed544ba45089fe70ee3225d316b2b550bce0e4916527e4a9abc07",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:file-size",
+      "exit": 0,
+      "bytes": 3925,
+      "sha256": "993561b2a2e0ed141a4c3e6d6978fc137a2a46896cbecd243f58158c99978580",
+      "diagnostics": []
+    }
+  ]
+}

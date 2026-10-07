@@ -69,6 +69,8 @@ export type WriterParagraphStyleOption = StyleToolboxEntry;
 
 /** Primitive/resource-ID projection of one text node, owned only by the browser presenter. */
 export interface WriterParagraphProjection {
+  /** Device caret painting follows the current native cursor's before-label state. */
+  readonly inFrontOfLabel?: boolean;
   /** Minimum occupied label gap, separate from authored list indentation. */
   readonly listMarkerMinimumDistancePt?: number;
   readonly alignment: WriterParagraphAlignment;
@@ -203,6 +205,7 @@ export class WriterViewProjection {
     cursor: SwPaM,
     documentState: SfxObjectShellState,
   ): WriterPresentationProjection {
+    const inFrontOfLabel = !cursor.HasMark() && cursor.IsInFrontOfLabel();
     const defaultTabs = document
       .GetAttrPool()
       .GetUserOrPoolDefaultItem(RES_PARATR_TABSTOP) as SvxTabStopItem;
@@ -324,6 +327,9 @@ export class WriterViewProjection {
               }),
           ...(node.DoesListGeometryWin() ? { listGeometryWins: true } : {}),
           listId: node.GetListId(),
+          ...(inFrontOfLabel && cursor.GetPoint().GetNode() === node
+            ? { inFrontOfLabel: true }
+            : {}),
           ...(listMarker === undefined ? {} : { listMarker }),
           numRuleName: node.GetNumRuleName(),
           nodeIndex: node.GetIndex(),
@@ -357,6 +363,7 @@ export class WriterViewProjection {
             },
           }),
       point: {
+        ...(inFrontOfLabel ? { inFrontOfLabel: true } : {}),
         nodeIndex: point.GetNodeIndex(),
         offset: point.GetContentIndex(),
         paragraphId: this.GetNodeId(point.GetNode() as SwTextNode),

@@ -1,0 +1,54 @@
+{
+  "vendorRestored": true,
+  "sourceSnapshot": "H29XNH.closure2.source",
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/browser/editor/native-label-affinity.test.tsx -t mounted repeated Home --coverage.reportOnFailure --coverage.reporter=json --coverage.reporter=json-summary --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/H29XNH.closure2.app-results.json",
+      "exit": 1,
+      "sha256": "6b1e27d9ab897fa5f19dd8a49dbb971984850113d9378bce3323e074a4edf4e2",
+      "bytes": 2035,
+      "unhandledErrorCount": 0,
+      "caseCounts": {
+        "passed": 2,
+        "failed": 0,
+        "skipped": 1,
+        "total": 3
+      },
+      "failures": [],
+      "coverageMapSHA256": "9c6525d73d9efb9933e0a51c01a5c52028b68d0abf6c58da60f27f1df8bcc256",
+      "profile": "upstream-absent"
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts native-label-affinity.spec.ts --reporter=list,json",
+      "exit": 1,
+      "sha256": "013d940d212b7d2294cbeeeecb821e0a660a845ac3431e5a5d543a94b6212ee4",
+      "bytes": 5795,
+      "unhandledErrorCount": 0,
+      "stats": {
+        "startTime": "2026-10-07T14:03:20.899Z",
+        "duration": 3193.2980000000002,
+        "expected": 0,
+        "skipped": 0,
+        "unexpected": 2,
+        "flaky": 0
+      },
+      "errors": [
+        {
+          "name": "native before-label caret and input body cell width=1280",
+          "assertion": [
+            "Error: {\"labelX\":272,\"caretX\":272,\"height\":16,\"focusBefore\":false,\"focusOffset\":0}"
+          ]
+        },
+        {
+          "name": "native before-label caret and input body cell width=390",
+          "assertion": [
+            "Error: {\"labelX\":228,\"caretX\":228,\"height\":16,\"focusBefore\":false,\"focusOffset\":0}"
+          ]
+        }
+      ],
+      "profile": "upstream-absent"
+    }
+  ]
+}

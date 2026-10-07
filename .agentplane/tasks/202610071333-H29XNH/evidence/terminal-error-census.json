@@ -1,0 +1,156 @@
+{
+  "records": [
+    {
+      "phase": "absent-profile",
+      "kind": "build",
+      "outputSHA256": "403183a9467533cdb74f83abb704667be9c8d9cc9b214a0a2fb1441e13076582",
+      "uncaughtErrorCount": 0
+    },
+    {
+      "phase": "absent-profile",
+      "kind": "app",
+      "outputSHA256": "3ae5daf20fee303fbffc98d01b74fd546bd195e18f7617b9fcf1bbdaefb856ab",
+      "uncaughtErrorCount": 0
+    },
+    {
+      "phase": "absent-profile",
+      "kind": "inventory",
+      "outputSHA256": "9f9ba83342d449a621c6022306c7afc41aef5afc9da72153cd9c57d11f69db98",
+      "uncaughtErrorCount": 0
+    },
+    {
+      "phase": "absent-profile",
+      "kind": "scripts",
+      "outputSHA256": "d698608b7cd8b5c94fc6a84c82d43a2c0b33af774b9bf4a792d83d5538a7efe3",
+      "uncaughtErrorCount": 0
+    },
+    {
+      "phase": "absent-profile",
+      "kind": "chromium",
+      "outputSHA256": "733a6d3ebf24ae7b06e832851d9765cb5824b79d1de94464a5f43a146f3d1d97",
+      "uncaughtErrorCount": 0
+    },
+    {
+      "phase": "closure1",
+      "kind": "build",
+      "outputSHA256": "79ce524d79fdc7c553fc5e329ad4bda6c8d496c75653c46124fe1c3fc5878fc5",
+      "uncaughtErrorCount": 0
+    },
+    {
+      "phase": "closure1",
+      "kind": "app",
+      "outputSHA256": "4a60b7e0d56e44451000694386d59ca0351226f30fe3b80da583943253be039a",
+      "uncaughtErrorCount": 0
+    },
+    {
+      "phase": "closure1",
+      "kind": "chromium",
+      "outputSHA256": "0c8b4b52bb7d5260824a4dd12947b66d752259b7179ce59627d8eefca790db48",
+      "uncaughtErrorCount": 0
+    },
+    {
+      "phase": "closure2",
+      "kind": "app",
+      "outputSHA256": "6b1e27d9ab897fa5f19dd8a49dbb971984850113d9378bce3323e074a4edf4e2",
+      "uncaughtErrorCount": 0
+    },
+    {
+      "phase": "closure2",
+      "kind": "chromium",
+      "outputSHA256": "013d940d212b7d2294cbeeeecb821e0a660a845ac3431e5a5d543a94b6212ee4",
+      "uncaughtErrorCount": 0
+    },
+    {
+      "phase": "closure3",
+      "kind": "build",
+      "outputSHA256": "1e6d62ba94163c39410cbe64821278dd737a7014fba246d42883628d950bcc82",
+      "uncaughtErrorCount": 0
+    },
+    {
+      "phase": "closure3",
+      "kind": "chromium",
+      "outputSHA256": "3494a35410a77e5f789da83c5a38d2ec95163926105de8ad0b534337a5014a46",
+      "uncaughtErrorCount": 0
+    },
+    {
+      "phase": "closure4",
+      "kind": "chromium",
+      "outputSHA256": "e770aad3b4a0ac917acc57fb6f2c5f82d0ddefb9c6afc3c815c562327ce0eedf",
+      "uncaughtErrorCount": 0
+    },
+    {
+      "phase": "closure5",
+      "kind": "build",
+      "outputSHA256": "b3dbcfe8fee4766f3c11087148a96222f165e258539b656882dc706e4f74fd2c",
+      "uncaughtErrorCount": 0
+    },
+    {
+      "phase": "closure5",
+      "kind": "chromium",
+      "outputSHA256": "c014c6b2720a8f8a7bddaf5c7e016497bcd9b56744baa429aa725f1eece3e78c",
+      "uncaughtErrorCount": 0
+    },
+    {
+      "phase": "closure6",
+      "kind": "chromium",
+      "outputSHA256": "0adf3bd770f87b85b7fd7bfad9e303f33970b00b5486b84778874e2849d77e05",
+      "uncaughtErrorCount": 0
+    },
+    {
+      "phase": "closure7",
+      "kind": "chromium",
+      "outputSHA256": "e7d1d0f8d78e3cb958ca0a1fd4a3e7ae86a794ebe9b358302cb17a3cd51de2c9",
+      "uncaughtErrorCount": 0
+    },
+    {
+      "phase": "closure8",
+      "kind": "chromium",
+      "outputSHA256": "8038588fed1c00eeaa9eb6ccf44d836df1c5903cc281e3c48cfa297b83f51ade",
+      "uncaughtErrorCount": 0
+    },
+    {
+      "phase": "closure9",
+      "kind": "build",
+      "outputSHA256": "a49d0d24fafbadbc3b7079440b3e9e6f4e3e8c8065ac6debee925ed346912882",
+      "uncaughtErrorCount": 0
+    },
+    {
+      "phase": "closure9",
+      "kind": "chromium",
+      "outputSHA256": "3fe1a194c67c1e1b65055573d0dd98f1fe3efe1119b40c0c7d001056779576af",
+      "uncaughtErrorCount": 0
+    },
+    {
+      "phase": "closure10",
+      "kind": "app",
+      "outputSHA256": "da907448ba8d13091dca968dc937b652d7305fa00bbe619cafe4977be01b2cb6",
+      "uncaughtErrorCount": 0
+    },
+    {
+      "phase": "closure11",
+      "kind": "app",
+      "outputSHA256": "38fcca66d7875c4818f1089b5c8a19baa22444e6907b7b9eb8371892087d8973",
+      "uncaughtErrorCount": 0
+    },
+    {
+      "phase": "closure12",
+      "kind": "app",
+      "outputSHA256": "a1bd7465d8b98e39a19ee74a1315cbbe8b6585e68f5600b0d10f34c125a25eba",
+      "uncaughtErrorCount": 0
+    },
+    {
+      "phase": "closure13",
+      "kind": "app",
+      "outputSHA256": "ee6d31029a7ee3a0105fafe6bca9e0034aa21e7a3384a64b6a45f7c3928ba54f",
+      "uncaughtErrorCount": 0
+    },
+    {
+      "phase": "closure14",
+      "kind": "app",
+      "outputSHA256": "51a7ed92518a9fc54f3383a56d1fa88f5ae3392f7f3976d0fcdf0635555db2b5",
+      "uncaughtErrorCount": 0
+    }
+  ],
+  "unresolvedUncaught": 0,
+  "accidentalRedundantBuild": "closure3 repeated an unchanged build while only test diagnostics changed; no runtime passing test case replay and no second full profile. Other post-full builds closure1,5,9 correspond to production input changes."
+}

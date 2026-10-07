@@ -1,0 +1,33 @@
+{
+  "vendorRestored": true,
+  "sourceSnapshot": "H29XNH.closure9.source",
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "exit": 0,
+      "sha256": "a49d0d24fafbadbc3b7079440b3e9e6f4e3e8c8065ac6debee925ed346912882",
+      "bytes": 1443,
+      "unhandledErrorCount": 0,
+      "profile": "upstream-absent"
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts native-label-affinity.spec.ts --reporter=list,json",
+      "exit": 0,
+      "sha256": "3fe1a194c67c1e1b65055573d0dd98f1fe3efe1119b40c0c7d001056779576af",
+      "bytes": 10778,
+      "unhandledErrorCount": 0,
+      "stats": {
+        "startTime": "2026-10-07T14:08:51.538Z",
+        "duration": 3235.933,
+        "expected": 2,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "errors": [],
+      "profile": "upstream-absent"
+    }
+  ]
+}

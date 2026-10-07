@@ -1,0 +1,29 @@
+{
+  "records": [
+    {
+      "command": "node_modules/.bin/prettier --check apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts apps/office/src/sw/source/uibase/docvw/edtwin.ts apps/office/src/sw/browser/editor/browser-writer-edit-window.ts apps/office/src/sw/browser/editor/writer-selection.ts apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx apps/office/src/sw/browser/presentation/writer-view-projection.ts apps/office/src/sw/source/uibase/docvw/native-label-affinity.test.ts apps/office/src/sw/browser/editor/native-label-affinity.test.tsx apps/office/e2e/native-label-affinity.spec.ts",
+      "exit": 1,
+      "sha256": "57a12bc0cb42a87a442ef51d807c13f80452e5537d0ed90e9ff9cd1f28ec1870",
+      "bytes": 225,
+      "diagnostics": [
+        "[warn] apps/office/src/sw/browser/editor/native-label-affinity.test.tsx",
+        "[warn] apps/office/e2e/native-label-affinity.spec.ts",
+        "[warn] Code style issues found in 2 files. Run Prettier with --write to fix."
+      ]
+    },
+    {
+      "command": "node_modules/.bin/eslint apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts apps/office/src/sw/source/uibase/docvw/edtwin.ts apps/office/src/sw/browser/editor/browser-writer-edit-window.ts apps/office/src/sw/browser/editor/writer-selection.ts apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx apps/office/src/sw/browser/presentation/writer-view-projection.ts apps/office/src/sw/source/uibase/docvw/native-label-affinity.test.ts apps/office/src/sw/browser/editor/native-label-affinity.test.tsx apps/office/e2e/native-label-affinity.spec.ts --max-warnings 0",
+      "exit": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "diagnostics": []
+    },
+    {
+      "command": "npm run typecheck --workspace @vite-office/office",
+      "exit": 0,
+      "sha256": "95074d7a9bb3a320c929b8c8311534bfdc86e140dc41177f3228e50a346e94b2",
+      "bytes": 55,
+      "diagnostics": []
+    }
+  ]
+}

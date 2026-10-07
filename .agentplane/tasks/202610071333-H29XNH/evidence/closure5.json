@@ -1,0 +1,46 @@
+{
+  "vendorRestored": true,
+  "sourceSnapshot": "H29XNH.closure5.source",
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "exit": 0,
+      "sha256": "b3dbcfe8fee4766f3c11087148a96222f165e258539b656882dc706e4f74fd2c",
+      "bytes": 1443,
+      "unhandledErrorCount": 0,
+      "profile": "upstream-absent"
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts native-label-affinity.spec.ts --reporter=list,json",
+      "exit": 1,
+      "sha256": "c014c6b2720a8f8a7bddaf5c7e016497bcd9b56744baa429aa725f1eece3e78c",
+      "bytes": 6075,
+      "unhandledErrorCount": 0,
+      "stats": {
+        "startTime": "2026-10-07T14:05:31.187Z",
+        "duration": 2928.868,
+        "expected": 0,
+        "skipped": 0,
+        "unexpected": 2,
+        "flaky": 0
+      },
+      "errors": [
+        {
+          "name": "native before-label caret and input body cell width=1280",
+          "assertion": [
+            "Error: {\"labelX\":272,\"caretX\":272,\"height\":16,\"focusBefore\":false,\"focusOffset\":0}"
+          ]
+        },
+        {
+          "name": "native before-label caret and input body cell width=390",
+          "assertion": [
+            "Error: {\"labelX\":228,\"caretX\":228,\"height\":16,\"focusBefore\":false,\"focusOffset\":0}"
+          ]
+        }
+      ],
+      "profile": "upstream-absent"
+    }
+  ]
+}

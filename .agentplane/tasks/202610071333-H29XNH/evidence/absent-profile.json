@@ -1,0 +1,236 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts": "4fb6d75266748da4120478f4e5519a71f7a067ab2e4b82663ca26f1fc68aba3c",
+    "apps/office/src/sw/source/uibase/docvw/edtwin.ts": "5d850de03eb597c61935c7db193cec0f6593012769bdbe4dc61dcae2ca840f57",
+    "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts": "cfe5a0717a23bdb20ffdd3225f05e969ca9c60f9ac42434613cbe5a6bab5f3ca",
+    "apps/office/src/sw/browser/editor/writer-selection.ts": "aa406335d9282aca4c1aadd349061d5c60e3cbac230dba4653a9a4425a0eb658",
+    "apps/office/src/sw/browser/editor/writer-selection-types.ts": "d602d06afd4a02884b6ab3d7378ba4ef710e5afd2f5d97ce1346470b9fcd14cd",
+    "apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx": "7be7bccb1d16e81b796a87f3dc99e9caa5d16e3eef0ab1a958acb1c01eda8571",
+    "apps/office/src/sw/browser/presentation/writer-view-projection.ts": "5c12751744b483c49c9a37688b61fd0693a7a5abf6ecd2e34cda48e59bc33e91",
+    "apps/office/src/sw/source/uibase/docvw/native-label-affinity.test.ts": "1eb37f1e8c8607db9413d6462dffae0a31dbc815bd7d968583aca7b25ee3cd26",
+    "apps/office/src/sw/browser/editor/native-label-affinity.test.tsx": "cf9ad4124c61d39864a0b89a3d22e51c1644a07f296c250ade548d64f92c204d",
+    "apps/office/e2e/native-label-affinity.spec.ts": "42db5d090c3246e1bad68ce681daa5ec94b0c0032ba4490b84402b7ff0f92241",
+    "docs/program/source-provenance.json": "d190bf7125bf58c71836907c0b41c7bbc970c21ce3022a6443b327d717b118c9",
+    "docs/program/parity/runtime-inventory.json": "ab8a53dc5c5a5c218f362e188fe87ea2d8cd4d66dba9ef9679be82decb071f16",
+    "apps/office/src/sw/source/core/crsr/pam.ts": "5b947ad8321922fe4ecc5a49436a323f0e0ab9b5995c493e323f3c5d09c120ec",
+    "apps/office/src/sw/source/core/crsr/swcrsr.ts": "150b01670f3d507493cda00ab5f825dcc3a21ff44d8d11634a482cb4b8aa5e0c"
+  },
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1443,
+      "sha256": "403183a9467533cdb74f83abb704667be9c8d9cc9b214a0a2fb1441e13076582",
+      "totals": [],
+      "failedCases": [],
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/H29XNH.app-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 73055,
+      "sha256": "3ae5daf20fee303fbffc98d01b74fd546bd195e18f7617b9fcf1bbdaefb856ab",
+      "totals": [
+        "Test Files  2 failed | 436 passed (438)",
+        "Tests  4 failed | 13537 passed (13541)"
+      ],
+      "failedCases": [
+        {
+          "name": "apps/office/src/sw/browser/editor/native-label-affinity.test.tsx > mounted repeated Home paints native label and End clears cell=false",
+          "assertion": [
+            "Error: expect(element).toHaveStyle()"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/browser/editor/native-label-affinity.test.tsx > mounted repeated Home paints native label and End clears cell=true",
+          "assertion": [
+            "Error: expect(element).toHaveStyle()"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/browser/editor/native-label-affinity.test.tsx > label DOM mapper distinguishes text0, skips equal labels and guards missing markers",
+          "assertion": [
+            "AssertionError: expected { point: { …(4) } } to be undefined"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/browser/editor/native-table-pointer.test.tsx > list marker click inside a cell never becomes row selection",
+          "assertion": [
+            "AssertionError: expected 'XCell' to be 'CeXll' // Object.is equality"
+          ]
+        }
+      ],
+      "caseCounts": {
+        "passed": 13537,
+        "failed": 4,
+        "skipped": 0,
+        "total": 13541
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 16441,
+          "covered": 16441,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 18048,
+          "covered": 18048,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 4191,
+          "covered": 4191,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 13557,
+          "covered": 13552,
+          "skipped": 0,
+          "pct": 99.96
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 99.96
+      },
+      "incompleteFileCount": 3,
+      "coverageMapSHA256": "3fea91c605ce4106f8ce6e5d74ab3decf4f64c6d04aa05d4b0a045cda61f2f20",
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "inventory",
+      "command": "npm run test:inventory:coverage -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/H29XNH.inventory-results.json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 40596,
+      "sha256": "9f9ba83342d449a621c6022306c7afc41aef5afc9da72153cd9c57d11f69db98",
+      "totals": [
+        "Test Files  36 passed (36)",
+        "Tests  110 passed (110)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "passed": 110,
+        "failed": 0,
+        "skipped": 0,
+        "total": 110
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 1464,
+          "covered": 1464,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 1523,
+          "covered": 1523,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 384,
+          "covered": 384,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 1081,
+          "covered": 1081,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100
+      },
+      "incompleteFileCount": 0,
+      "coverageMapSHA256": "afeee076197ab564e0dad8776b86aefc91f6ab562d9e8d5d9ae441549bda760d",
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "scripts",
+      "command": "npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts scripts/check-module-boundaries.test.ts",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 223,
+      "sha256": "d698608b7cd8b5c94fc6a84c82d43a2c0b33af774b9bf4a792d83d5538a7efe3",
+      "totals": [
+        "Test Files  3 passed (3)",
+        "Tests  14 passed (14)"
+      ],
+      "failedCases": [],
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 43638,
+      "sha256": "733a6d3ebf24ae7b06e832851d9765cb5824b79d1de94464a5f43a146f3d1d97",
+      "totals": [
+        "2 failed",
+        "276 passed (2.1m)"
+      ],
+      "failedCases": [
+        {
+          "name": "native-label-affinity.spec.ts > native before-label caret and input body cell width=1280",
+          "errors": [
+            [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m",
+              "Expected: \u001b[32mtrue\u001b[39m",
+              "Received: \u001b[31mfalse\u001b[39m"
+            ]
+          ]
+        },
+        {
+          "name": "native-label-affinity.spec.ts > native before-label caret and input body cell width=390",
+          "errors": [
+            [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m",
+              "Expected: \u001b[32mtrue\u001b[39m",
+              "Received: \u001b[31mfalse\u001b[39m"
+            ]
+          ]
+        }
+      ],
+      "caseCounts": {
+        "startTime": "2026-10-07T13:55:26.272Z",
+        "duration": 128875.722,
+        "expected": 276,
+        "skipped": 0,
+        "unexpected": 2,
+        "flaky": 0
+      },
+      "unhandledErrorCount": 0
+    }
+  ]
+}
