@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "task_id": "202610071458-GXQVRN",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-07T15:25:04.681Z",
+  "verdict": "pass",
+  "summary": "Same current agent, explicitly not independent: native marked-list cursor integration audited at implementation 7247aa556ed5a949d1712898375299e5f1550216; source-bound coverage/case/scope reconstruction passed byte-identically.",
+  "evaluated_sha": "7247aa556ed5a949d1712898375299e5f1550216",
+  "blueprint_digest": "3dff902e07284dc6a80ff0ed4d0a26e9b58b13f66fa7f3a4a9256f832484c0f2",
+  "findings": [
+    "13559 app,110 inventory,14 infrastructure,278 full Chromium;zero unresolved or uncaught,0passing replay,8focused skipped observations retained. Actual current-source app/inventory all4 coverage100 via complete source/map and complete declaration/body/enclosing branch/location certificates.",
+    "8 semantic paths, all587 prior acceptance byte-identical,0 migrations;298 metadata records/fields/defaults/statuses/exceptions retained. ONE full upstream-absent runtime;one4original-failure/2new-case closure and one changed-input final build,all terminal restored."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610071458-GXQVRN/README.md",
+    ".agentplane/tasks/202610071458-GXQVRN/evidence/exact-sha-review.json",
+    ".agentplane/tasks/202610071458-GXQVRN/evidence/source-review.json",
+    ".agentplane/tasks/202610071458-GXQVRN/evidence/final-coverage.json",
+    ".agentplane/tasks/202610071458-GXQVRN/evidence/case-census.json",
+    ".agentplane/tasks/202610071458-GXQVRN/evidence/terminal-error-census.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Marker painting/ruler, full colors/config persistence, SwViewShell and source-file hierarchy, merged/redline property selection remain follow-ups.278 full Chrome passes precede isolated native publication repair;final direct native original-failure/atomic cases and changed-input build verify it. Whole parity ACTIVE."
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "records": [
+    {
+      "command": "npm run check:docs (final changed task docs)",
+      "exit": 0,
+      "bytes": 119,
+      "sha256": "898fb773a52b1d37525567c27733784abab754aee2abfb56cff349d29f0fc1eb"
+    }
+  ]
+}

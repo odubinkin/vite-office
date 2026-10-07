@@ -4,7 +4,7 @@ title: "Connect native cursor label affinity to marked list levels"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,32 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-07T15:25:57.741Z"
+  updated_by: "CODER"
+  note: "Native cursor marked-list integration verified at implementation7247aa556ed5a949d1712898375299e5f1550216:13559app110inventory14infra278fullChrome,zero unresolved/uncaught/passing replay,actual100app/inventory;8paths587prior acceptance byte-identical298metadata retained. Same-agent exact evaluation pass,explicitly not independent; final native repair/build and browser scope recorded; whole parityACTIVE."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-07T15:25:04.681Z"
+  updated_by: "EVALUATOR"
+  note: "Same current agent, explicitly not independent: native marked-list cursor integration audited at implementation 7247aa556ed5a949d1712898375299e5f1550216; source-bound coverage/case/scope reconstruction passed byte-identically."
+  evaluated_sha: "7247aa556ed5a949d1712898375299e5f1550216"
+  blueprint_digest: "3dff902e07284dc6a80ff0ed4d0a26e9b58b13f66fa7f3a4a9256f832484c0f2"
+  evidence_refs:
+    - ".agentplane/tasks/202610071458-GXQVRN/README.md"
+    - ".agentplane/tasks/202610071458-GXQVRN/quality/20261007-152504681-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610071458-GXQVRN/quality/20261007-152504681-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610071458-GXQVRN/quality/20261007-152504681-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610071458-GXQVRN/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610071458-GXQVRN/evidence/exact-sha-review.json"
+    - ".agentplane/tasks/202610071458-GXQVRN/evidence/source-review.json"
+    - ".agentplane/tasks/202610071458-GXQVRN/evidence/final-coverage.json"
+    - ".agentplane/tasks/202610071458-GXQVRN/evidence/case-census.json"
+    - ".agentplane/tasks/202610071458-GXQVRN/evidence/terminal-error-census.json"
+  findings:
+    - "13559 app,110 inventory,14 infrastructure,278 full Chromium;zero unresolved or uncaught,0passing replay,8focused skipped observations retained. Actual current-source app/inventory all4 coverage100 via complete source/map and complete declaration/body/enclosing branch/location certificates."
+    - "8 semantic paths, all587 prior acceptance byte-identical,0 migrations;298 metadata records/fields/defaults/statuses/exceptions retained. ONE full upstream-absent runtime;one4original-failure/2new-case closure and one changed-input final build,all terminal restored."
 commit: null
 comments:
   -
@@ -35,8 +56,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: connect source-owned cursor label affinity to native marked-list levels and shared view options under standing iterative authorization."
+  -
+    type: "verify"
+    at: "2026-10-07T15:25:57.741Z"
+    author: "CODER"
+    state: "ok"
+    note: "Native cursor marked-list integration verified at implementation7247aa556ed5a949d1712898375299e5f1550216:13559app110inventory14infra278fullChrome,zero unresolved/uncaught/passing replay,actual100app/inventory;8paths587prior acceptance byte-identical298metadata retained. Same-agent exact evaluation pass,explicitly not independent; final native repair/build and browser scope recorded; whole parityACTIVE."
 doc_version: 3
-doc_updated_at: "2026-10-07T15:23:07.557Z"
+doc_updated_at: "2026-10-07T15:25:57.792Z"
 doc_updated_by: "CODER"
 description: "Iteration218: restore pinned cursor-shell marked list identity/depth, field-shading gate, native UpdateMarkedListLevel and forced refresh on label-to-label cursor admission, sharing existing SwView options with the actual shell. Preserve serialization defaults and intentional browser exceptions."
 sections:
@@ -47,6 +74,40 @@ sections:
   Verification: |-
     Command: ONE full upstream-absent build/app/inventory/infrastructure/Chromium; one focused4original-failure/2new-case runtime and one changed-input final build; exact source-bound coverage/case/scope reconstruction; six initial static gates with failed/changed-input closures;5 source/resource/provenance/invariant/parity gates after restoration; JSDoc/physical/doctor/routing/diff/artifact checks; same-agent exact implementation evaluation.
     Result: pass. Evidence:13559 app,110 inventory,14 infrastructure,278 Chromium,zero unresolved/uncaught/passing replay;8 focused skipped observations retained. All4 app/inventory metrics actual100 with entire source/maps or complete declaration/body/enclosing branch/location proofs;294 whole app,38 whole inventory,5 complete prior app region certificates.8 semantic paths,all587 prior acceptance byte-identical,0 migrations;298 prior metadata records/fields/defaults/statuses/exceptions retained. All profiles terminal,vendor restored,max physical999,doctor0 errors2 prior warnings,AP forbidden/raw0. No mandatory check skipped. Scope: source-owned cursor marked-list identity/depth, actual view-option gate/identity, counted rule predicate, forced label refresh and atomic native publication. Full278 browser scenarios precede the isolated native publication repair; final native cases and changed-input build verify that repair without replaying passing browser cases. Marker paint/ruler/full color-config and merged-redline graph remain explicit follow-ups.
+    Exact implementation7247aa556ed5a949d1712898375299e5f1550216 audited; same-agent quality verdict pass explicitly not independent, report quality/20261007-152504681-recovery-context/quality-report.json.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-07T15:25:57.741Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Native cursor marked-list integration verified at implementation7247aa556ed5a949d1712898375299e5f1550216:13559app110inventory14infra278fullChrome,zero unresolved/uncaught/passing replay,actual100app/inventory;8paths587prior acceptance byte-identical298metadata retained. Same-agent exact evaluation pass,explicitly not independent; final native repair/build and browser scope recorded; whole parityACTIVE.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-07T15:25:55.323Z, excerpt_hash=sha256:71f9e1bca85ed17b4e8c96fd6aeb8bf2fb3b31f0f4aff99a77c1623693183481
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610071458-GXQVRN/blueprint/resolved-snapshot.json
+    - old_digest: 3dff902e07284dc6a80ff0ed4d0a26e9b58b13f66fa7f3a4a9256f832484c0f2
+    - current_digest: 3dff902e07284dc6a80ff0ed4d0a26e9b58b13f66fa7f3a4a9256f832484c0f2
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610071458-GXQVRN
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610071458-GXQVRN
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only the leaf's implementation commit and intentional evidence tail. Keep registered exceptions, prior DONE tasks and deferred stash untouched."
   Findings: |-
     Preflight main clean at f298cea02ee11eae0f3020414c3b04c601b4b85b; AP direct, ORCHESTRATOR planning and CODER execution under standing iterative authorization.
@@ -58,6 +119,7 @@ sections:
     Process observation: first coverage proof adapter's nonzero diagnostic referenced prior DONE217 after template replacement. No DONE mutation; corrected diagnostic target and recomputed current218 route before editing.
     Browser scope:278 full cases,including all4 priority native-label-width cases,passed before isolated SetPaM publication repair. Final native edit-window original-failure and atomic cases plus changed-input production build verify repaired code; no separate browser rendering path changed. No current-source browser replay claim.
     Residual: marker shading paint/ruler UI, full color/config persistence and SwViewShell hierarchy, merged/hidden-redline paragraph property selection and full frame/word-count invalidation remain unverified. Native crsrsh members currently reside on the pre-existing SwCursorShell in trvltbl module; full translation-unit/topology refinement remains unverified. Whole parity ACTIVE. Deferred stash c85f4a0e453dfd06d6e199554784f2c286737472 untouched. Complete parent603822-character prefix SHA158db3dc14d3c1f1105deb4c144c3a8f983242cd5a8235dac083636ae327193c must be preserved. Same current agent exact implementation evaluation is explicitly not independent.
+    Exact implementation audit passed at7247aa556ed5a949d1712898375299e5f1550216:coverage/case/scope reports reconstructed byte-identically, full source/map/counter and raw result digests bound. Same current agent EVALUATOR phase explicitly not independent; report quality/20261007-152504681-recovery-context/quality-report.json. Final Findings/Verification precede canonical verification; finish references the implementation SHA.
 id_source: "generated"
 ---
 ## Summary
@@ -80,6 +142,40 @@ Run six initial format:check/lint/typecheck/check:dependencies/check:docs/check:
 
 Command: ONE full upstream-absent build/app/inventory/infrastructure/Chromium; one focused4original-failure/2new-case runtime and one changed-input final build; exact source-bound coverage/case/scope reconstruction; six initial static gates with failed/changed-input closures;5 source/resource/provenance/invariant/parity gates after restoration; JSDoc/physical/doctor/routing/diff/artifact checks; same-agent exact implementation evaluation.
 Result: pass. Evidence:13559 app,110 inventory,14 infrastructure,278 Chromium,zero unresolved/uncaught/passing replay;8 focused skipped observations retained. All4 app/inventory metrics actual100 with entire source/maps or complete declaration/body/enclosing branch/location proofs;294 whole app,38 whole inventory,5 complete prior app region certificates.8 semantic paths,all587 prior acceptance byte-identical,0 migrations;298 prior metadata records/fields/defaults/statuses/exceptions retained. All profiles terminal,vendor restored,max physical999,doctor0 errors2 prior warnings,AP forbidden/raw0. No mandatory check skipped. Scope: source-owned cursor marked-list identity/depth, actual view-option gate/identity, counted rule predicate, forced label refresh and atomic native publication. Full278 browser scenarios precede the isolated native publication repair; final native cases and changed-input build verify that repair without replaying passing browser cases. Marker paint/ruler/full color-config and merged-redline graph remain explicit follow-ups.
+Exact implementation7247aa556ed5a949d1712898375299e5f1550216 audited; same-agent quality verdict pass explicitly not independent, report quality/20261007-152504681-recovery-context/quality-report.json.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-07T15:25:57.741Z — VERIFY — ok
+
+By: CODER
+
+Note: Native cursor marked-list integration verified at implementation7247aa556ed5a949d1712898375299e5f1550216:13559app110inventory14infra278fullChrome,zero unresolved/uncaught/passing replay,actual100app/inventory;8paths587prior acceptance byte-identical298metadata retained. Same-agent exact evaluation pass,explicitly not independent; final native repair/build and browser scope recorded; whole parityACTIVE.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-07T15:25:55.323Z, excerpt_hash=sha256:71f9e1bca85ed17b4e8c96fd6aeb8bf2fb3b31f0f4aff99a77c1623693183481
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610071458-GXQVRN/blueprint/resolved-snapshot.json
+- old_digest: 3dff902e07284dc6a80ff0ed4d0a26e9b58b13f66fa7f3a4a9256f832484c0f2
+- current_digest: 3dff902e07284dc6a80ff0ed4d0a26e9b58b13f66fa7f3a4a9256f832484c0f2
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610071458-GXQVRN
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610071458-GXQVRN
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
@@ -96,3 +192,4 @@ Scope8 semantic paths:5production1fresh2metadata. All587 prior acceptance byte-i
 Process observation: first coverage proof adapter's nonzero diagnostic referenced prior DONE217 after template replacement. No DONE mutation; corrected diagnostic target and recomputed current218 route before editing.
 Browser scope:278 full cases,including all4 priority native-label-width cases,passed before isolated SetPaM publication repair. Final native edit-window original-failure and atomic cases plus changed-input production build verify repaired code; no separate browser rendering path changed. No current-source browser replay claim.
 Residual: marker shading paint/ruler UI, full color/config persistence and SwViewShell hierarchy, merged/hidden-redline paragraph property selection and full frame/word-count invalidation remain unverified. Native crsrsh members currently reside on the pre-existing SwCursorShell in trvltbl module; full translation-unit/topology refinement remains unverified. Whole parity ACTIVE. Deferred stash c85f4a0e453dfd06d6e199554784f2c286737472 untouched. Complete parent603822-character prefix SHA158db3dc14d3c1f1105deb4c144c3a8f983242cd5a8235dac083636ae327193c must be preserved. Same current agent exact implementation evaluation is explicitly not independent.
+Exact implementation audit passed at7247aa556ed5a949d1712898375299e5f1550216:coverage/case/scope reports reconstructed byte-identically, full source/map/counter and raw result digests bound. Same current agent EVALUATOR phase explicitly not independent; report quality/20261007-152504681-recovery-context/quality-report.json. Final Findings/Verification precede canonical verification; finish references the implementation SHA.

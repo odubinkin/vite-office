@@ -1,8 +1,8 @@
 {
-  "wholeAgentplaneFilesInspected": 5425,
+  "wholeAgentplaneFilesInspected": 5431,
   "wholeAgentplaneForbiddenSourceOrPythonCount": 0,
   "forbiddenPaths": [],
-  "activeEvidenceFiles": 15,
+  "activeEvidenceFiles": 18,
   "noRawCoverageResultsOrSourceSnapshots": true,
   "unexpectedRawPaths": [],
   "rawEvidenceLocation": "Ignored apps/office/node_modules/.cache/parity-coverage only",
