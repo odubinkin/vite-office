@@ -499,6 +499,12 @@ export class SwTextNode extends SwContentNode {
   public GetActualListLevel(): number {
     return this.mpNodeNum?.GetLevelInListTree() ?? -1;
   }
+  /** Queries marked-label state through the existing list and derived tree depth. @returns Whether this member's label is marked. */
+  public HasMarkedLabel(): boolean {
+    if (!this.IsInList()) return false;
+    const list = this.GetDoc().GetDocumentListsManager().GetListByName(this.GetListId());
+    return list?.IsListLevelMarked(this.GetActualListLevel()) ?? false;
+  }
   /** Reports enumeration using the bound rule and actual level. @returns Number presence. */
   public HasNumber(): boolean {
     return this.GetActualNumFormat()?.IsEnumeration() ?? false;

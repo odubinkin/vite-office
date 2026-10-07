@@ -1,0 +1,39 @@
+{
+  "records": [
+    {
+      "command": "npm run typecheck (scope refinement first attempt)",
+      "exit": 2,
+      "diagnostics": [
+        "New fixture used two incorrect public signatures; corrected to SetParagraphTextLeftMargin and createWriterNumRule before runtime."
+      ]
+    },
+    {
+      "command": "npm exec -- prettier --write apps/office/src/sw/source/core/doc/native-marked-list-level.test.ts",
+      "exit": 0,
+      "sha256": "7a684dfa97ebfa26ca0dbbbc1acb8d91ac14a54f9b3c2b5b608ec70affc19930",
+      "bytes": 85,
+      "diagnostics": []
+    },
+    {
+      "command": "npm exec -- prettier --check apps/office/src/sw/source/core/doc/native-marked-list-level.test.ts apps/office/src/sw/source/uibase/app/docsh.ts",
+      "exit": 0,
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+      "bytes": 66,
+      "diagnostics": []
+    },
+    {
+      "command": "npm exec -- eslint apps/office/src/sw/source/core/doc/native-marked-list-level.test.ts apps/office/src/sw/source/uibase/app/docsh.ts",
+      "exit": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "diagnostics": []
+    },
+    {
+      "command": "npm run typecheck",
+      "exit": 0,
+      "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed",
+      "bytes": 240,
+      "diagnostics": []
+    }
+  ]
+}

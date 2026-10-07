@@ -1,0 +1,51 @@
+{
+  "records": [
+    {
+      "command": "npm run format:check",
+      "exit": 1,
+      "bytes": 238,
+      "sha256": "dfada357707e653b0f68be3bc14c136f7260ca7d42056f324f639b82f96295b2",
+      "diagnostics": [
+        "[warn] apps/office/src/sw/source/core/doc/native-marked-list-level.test.ts",
+        "[warn] Code style issues found in the above file. Run Prettier with --write to fix."
+      ]
+    },
+    {
+      "command": "npm run lint",
+      "exit": 0,
+      "bytes": 55,
+      "sha256": "a6172cb57fa696e705408fdc605fba1ae07b852fdf0614d7c2b623349e285b6e",
+      "diagnostics": [
+        "> eslint . --max-warnings 0"
+      ]
+    },
+    {
+      "command": "npm run typecheck",
+      "exit": 0,
+      "bytes": 240,
+      "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:dependencies",
+      "exit": 0,
+      "bytes": 189,
+      "sha256": "b695da221298514a757417e6612508b913f501e478b0c1cc00bf4b5b41c2b7f0",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:docs",
+      "exit": 0,
+      "bytes": 119,
+      "sha256": "fc89a3c677d387b4f119b5fe8606ff83a08fcb177cb41e5fa00339d786e8c435",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:file-size",
+      "exit": 0,
+      "bytes": 3996,
+      "sha256": "fc28eb922693ef7fd56b8433d52acad25c0bc8d9887ec4615034c0a7b5f771fa",
+      "diagnostics": []
+    }
+  ]
+}

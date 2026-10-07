@@ -349,6 +349,10 @@ export class SwDoc {
   public GetDocumentListsManager(): DocumentListsManager {
     return this.listsManager;
   }
+  /** Marks an existing native list without creating or editing its numbering ownership. @param listId - Persistent list identity. @param level - Native list depth. @param value - Mark or clear. @returns Nothing. */
+  public MarkListLevel(listId: string, level: number, value: boolean): void {
+    this.GetDocumentListsManager().GetListByName(listId)?.MarkListLevel(level, value);
+  }
 
   /** Returns the source-owned shown numbered-item registry. @returns Document list items. */
   public getIDocumentListItems(): DocumentListItemsManager {

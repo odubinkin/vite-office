@@ -1,0 +1,35 @@
+{
+  "base": "834a4786e3ac8b7a73651dc7f6782a6c0d3de349",
+  "semanticPaths": [
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts",
+    "apps/office/src/sw/source/core/doc/doc.ts",
+    "apps/office/src/sw/source/core/doc/list.ts",
+    "apps/office/src/sw/source/core/doc/native-marked-list-level.test.ts",
+    "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
+    "apps/office/src/sw/source/uibase/app/docsh.ts",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/source-provenance.json"
+  ],
+  "scopeCount": 8,
+  "priorAcceptanceFiles": 586,
+  "byteIdenticalAcceptanceFiles": 586,
+  "exactSourceBackedMigrations": [],
+  "newAcceptanceFiles": [
+    "apps/office/src/sw/source/core/doc/native-marked-list-level.test.ts"
+  ],
+  "metadata": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "oldRecords": 298,
+      "currentRecords": 298,
+      "allPriorFieldsPrefixesAndStatusesPreserved": true
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "oldRecords": 298,
+      "currentRecords": 298,
+      "allPriorFieldsPrefixesAndStatusesPreserved": true
+    }
+  ],
+  "failures": []
+}

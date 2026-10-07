@@ -1,0 +1,68 @@
+{
+  "records": [
+    {
+      "phase": "absent-profile",
+      "kind": "build",
+      "exit": 0,
+      "uncaughtErrorCount": 0,
+      "outputSHA256": "61a01250e8b6679d201572b420c320aed078986829d5ac878dac3393e8080998",
+      "assertionFailures": 0
+    },
+    {
+      "phase": "absent-profile",
+      "kind": "app",
+      "exit": 1,
+      "uncaughtErrorCount": 0,
+      "outputSHA256": "67533750421a7e1ace9e268cb30ba635584846bf9494c5832f9b1dc775f13445",
+      "assertionFailures": 0
+    },
+    {
+      "phase": "absent-profile",
+      "kind": "inventory",
+      "exit": 0,
+      "uncaughtErrorCount": 0,
+      "outputSHA256": "04ee071785112bd4bf0a734d427e958eaa81179efa826f08914327d8e59ade79",
+      "assertionFailures": 0
+    },
+    {
+      "phase": "absent-profile",
+      "kind": "scripts",
+      "exit": 0,
+      "uncaughtErrorCount": 0,
+      "outputSHA256": "d3b7d90f53ce2fe4158ff9c394f44255c44770ed67d4a86eeb0a972070a76021",
+      "assertionFailures": 0
+    },
+    {
+      "phase": "absent-profile",
+      "kind": "chromium",
+      "exit": 0,
+      "uncaughtErrorCount": 0,
+      "outputSHA256": "7be05b05d9bc2d7b4190026fc3bd215c1db36b107a147485be7b144b56a5c94a",
+      "assertionFailures": 0
+    },
+    {
+      "phase": "closure1",
+      "kind": "app",
+      "exit": 1,
+      "uncaughtErrorCount": 0,
+      "outputSHA256": "3ca317e54368954401e178d60f38f0d8538323e71add6868fc12231f89d98a69",
+      "assertionFailures": 1
+    },
+    {
+      "phase": "closure2",
+      "kind": "app",
+      "exit": 1,
+      "uncaughtErrorCount": 0,
+      "outputSHA256": "6d09de0c785ed9636e1bb0130470da1f04982e64187bd4ad6aead4c4e76ec53b",
+      "assertionFailures": 0
+    }
+  ],
+  "unresolvedUncaught": 0,
+  "fixtureFailure": "Only new actual-shell acceptance closure1 expected standalone hint while SwDocShell correctly publishes transaction batches. Corrected observer retains batch identity and reads all nested hints; same original failed case passed closure2.",
+  "staticRefinementFailure": "Two incorrect public fixture signatures caught by TypeScript; corrected before focused runtime.",
+  "processErrors": "Task Summary tool succeeded before local variable shadowed text output helper; recovered route and remaining sections. Initial changed-file evidence writer used wrong date prefix and failed ENOENT without creating an artifact; corrected writer passed. No production bytes affected.",
+  "oneFullProfile": true,
+  "passingReplay": 0,
+  "accidentalRedundantBuild": false,
+  "vendorRestored": true
+}

@@ -1,0 +1,40 @@
+{
+  "vendorRestored": true,
+  "sourceSnapshot": "A4HCRT.closure1.source",
+  "preProfileSHA256": {
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts": "3cc5869e78b34317b7bef1f22713ecabe8f3bc2ab62f3b9620f73e2a850425f4",
+    "apps/office/src/sw/source/core/doc/list.ts": "dd13a8819fc7948d47f16d7bddfc4764bd64a383446bb1ed04c36fe599ab5f50",
+    "apps/office/src/sw/source/core/doc/doc.ts": "e2bb17eee564dbfcf3460f39a6ac46f979efbd0c9d5d7c87cc8f7d4fece7cd8c",
+    "apps/office/src/sw/source/core/txtnode/ndtxt.ts": "4d2eb15f2350181bb07b286d3b0b37ad44944d8ef8773bf6cc98504bdb3fbc09",
+    "apps/office/src/sw/source/core/doc/native-marked-list-level.test.ts": "942e8b79876b4f170d1ef25f14de4a12124218f76f54252e82054a47a9c10108",
+    "docs/program/source-provenance.json": "063b03ccef6b82d8c4f33d4c626f9af61d3e3c90af62d7c8d3999a96679ed3cd",
+    "docs/program/parity/runtime-inventory.json": "22029e95323802f5a3d15858d11dc50453d91c9893c684c82d91bce34d7d6262",
+    "apps/office/src/sw/source/uibase/app/docsh.ts": "b3e4423375789b5ac6a4053266bd191867294a249cf60287a54a09984f12bcd0"
+  },
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/source/core/doc/native-marked-list-level.test.ts -t native list repaint preserves shell content generation --coverage.reportOnFailure --coverage.reporter=json --coverage.reporter=json-summary --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/A4HCRT.closure1.app-results.json",
+      "exit": 1,
+      "bytes": 3311,
+      "sha256": "3ca317e54368954401e178d60f38f0d8538323e71add6868fc12231f89d98a69",
+      "caseCounts": {
+        "passed": 0,
+        "failed": 1,
+        "skipped": 5,
+        "total": 6
+      },
+      "failures": [
+        {
+          "name": "native list repaint preserves shell content generation while genuine edits and mixed transactions advance it",
+          "assertion": [
+            "AssertionError: expected [ 'model-transaction', …(6) ] to include 'numbering-changed'"
+          ]
+        }
+      ],
+      "unhandledErrorCount": 0,
+      "coverageMapSHA256": "0aa6cb0f877308fe7d39cc3beb1bb9affa8a7b70b638a838c59390ab13d9df24",
+      "profile": "upstream-absent"
+    }
+  ]
+}

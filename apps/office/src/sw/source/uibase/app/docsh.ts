@@ -519,7 +519,8 @@ function isContentMutationHint(hint: SwModelHint): boolean {
     hint.kind === "node-content-changed" ||
     hint.kind === "node-inserted" ||
     hint.kind === "node-removed" ||
-    hint.kind === "numbering-changed" ||
+    (hint.kind === "numbering-changed" &&
+      (hint.ruleName !== undefined || hint.nodeIndex === undefined)) ||
     hint.kind === "line-number-info-changed"
   );
 }

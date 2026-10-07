@@ -1,0 +1,26 @@
+{
+  "baselineTag": "libreoffice-26.8.0.2",
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceSHA256": {
+    "sw/source/core/doc/list.cxx": "71f5c095d18cb04452f23ed4eedb8f53d0fd2baf77054d6cc32dff43cbfc2922",
+    "sw/source/core/SwNumberTree/SwNumberTree.cxx": "c06bc5fee531f7526af80e3a434a5b723168e23e43a4ee9f6828635b483cf741",
+    "sw/source/core/doc/docnum.cxx": "cc26bbbc1bf4fd2c8a86a2e3d11b6138556181b8e7919c35bc2806478804a1d4",
+    "sw/source/core/txtnode/ndtxt.cxx": "8cf38bae998b54451bbcbbc15fd69600d0f24490cf86c33c7cd54f72c63871f1"
+  },
+  "productionSHA256": {
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts": "3cc5869e78b34317b7bef1f22713ecabe8f3bc2ab62f3b9620f73e2a850425f4",
+    "apps/office/src/sw/source/core/doc/list.ts": "dd13a8819fc7948d47f16d7bddfc4764bd64a383446bb1ed04c36fe599ab5f50",
+    "apps/office/src/sw/source/core/doc/doc.ts": "e2bb17eee564dbfcf3460f39a6ac46f979efbd0c9d5d7c87cc8f7d4fece7cd8c",
+    "apps/office/src/sw/source/core/txtnode/ndtxt.ts": "4d2eb15f2350181bb07b286d3b0b37ad44944d8ef8773bf6cc98504bdb3fbc09",
+    "apps/office/src/sw/source/uibase/app/docsh.ts": "b3e4423375789b5ac6a4053266bd191867294a249cf60287a54a09984f12bcd0"
+  },
+  "contracts": {
+    "markedLevel": "list.cxx32 and134-176 stores MAXLEVEL10 sentinel; same level marking noops. Switch notifies former depth before state assignment and new depth afterward. Clear notifies former depth before resetting sentinel regardless supplied level. No extra level clamping.",
+    "notification": "SwNumberTree.cxx1140-1174 rejects negative levels, chooses GetRoot for existing child or self for root/orphan and recursively visits sorted depth. Child NotifyNode invoked without generic IsNotifiable/IsNotificationEnabled/reading/phantom gates; existing actual SwNodeNum owner policy remains.",
+    "docDelegate": "docnum.cxx2786-2796 resolves only existing list ID then delegates; no creation, history or formatting command.",
+    "textQuery": "ndtxt.cxx3066-3078 HasMarkedLabel queries IsInList, existing document list owner and actual derived list depth; missing/plain members false.",
+    "renderInvalidation": "ndtxt.cxx3031-3057 NumRuleChgd sends same-old/new left-margin LegacyModifyHint noop to invalidate layout, without changing serialized content. Existing browser bridge treats indexed paragraph numbering-only notifications as render-only; ruleName-bearing or unqualified numbering notifications preserve mutation default. Real shell acceptance proves repaint delivery/clean generation, text/attribute/style/node/rule/line-number mutation and mixed-batch persistence semantics.",
+    "ownership": "Retain existing represented single document-range tree and text-owned number records. Native marking state lives only in SwList. Original numbering vectors and Undo history retained; no private browser or React state."
+  },
+  "residual": "Cursor-shell MarkListLevel/UpdateMarkedListLevel and view-field-shading options, marker painting/ruler level integration, hidden-redline/original-range list tree variants and native NumRuleChgd full frame/word-count invalidation remain individually unverified. Registered save/open/recovery deviations and298prior metadata states/defaults/exceptions retained; whole parity ACTIVE. Exact evaluator is same current agent and explicitly not independent."
+}

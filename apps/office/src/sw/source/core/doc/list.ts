@@ -38,6 +38,7 @@ export const WRITER_LIST_WHICH_RANGES = [
 export class SwList {
   private readonly root: SwNodeNum;
   private defaultListStyleName: string;
+  private mnMarkedListLevel = WRITER_MAX_LIST_LEVEL + 1;
 
   /** Creates a list. @param listId - Unique list identity. @param defaultListStyle - Owning numbering rule. @returns Nothing. */
   public constructor(
@@ -100,6 +101,29 @@ export class SwList {
   /** Reports whether this list has registered items. @returns True when non-empty. */
   public HasNodes(): boolean {
     return this.root.GetChildCount() !== 0;
+  }
+  /** Changes the native marked depth and notifies former items before changing state. @param level - Native list level, not clamped. @param value - Mark or clear the represented list. @returns Nothing. */
+  public MarkListLevel(level: number, value: boolean): void {
+    if (value) {
+      if (level !== this.mnMarkedListLevel) {
+        if (this.mnMarkedListLevel !== WRITER_MAX_LIST_LEVEL + 1)
+          this.NotifyItemsOnListLevel(this.mnMarkedListLevel);
+        this.mnMarkedListLevel = level;
+        this.NotifyItemsOnListLevel(this.mnMarkedListLevel);
+      }
+    } else {
+      if (this.mnMarkedListLevel !== WRITER_MAX_LIST_LEVEL + 1)
+        this.NotifyItemsOnListLevel(this.mnMarkedListLevel);
+      this.mnMarkedListLevel = WRITER_MAX_LIST_LEVEL + 1;
+    }
+  }
+  /** Tests exact native depth including the MAXLEVEL sentinel. @param level - Requested level. @returns Whether it matches the retained mark. */
+  public IsListLevelMarked(level: number): boolean {
+    return level === this.mnMarkedListLevel;
+  }
+  /** Notifies items in the existing represented document-range tree. @param level - Requested depth. @returns Nothing. */
+  private NotifyItemsOnListLevel(level: number): void {
+    this.root.NotifyNodesOnListLevel(level);
   }
 }
 

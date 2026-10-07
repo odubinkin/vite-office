@@ -53,6 +53,19 @@ export abstract class SwNumberTreeNode {
   protected abstract IsNotificationEnabled(document: SwDoc): boolean;
   /** Validates and notifies one concrete policy record. @returns Nothing. */
   protected abstract NotifyNode(): void;
+  /** Notifies the represented tree's items at one native list level. @param level - Requested depth, negative values are rejected. @returns Nothing. */
+  public NotifyNodesOnListLevel(level: number): void {
+    if (level < 0) return;
+    const root = this.GetParent() === undefined ? this : (this.GetRoot() as SwNumberTreeNode);
+    root.NotifyChildrenOnDepth(level);
+  }
+  /** Visits sorted descendants at the requested depth without adding notification policy gates. @param depth - Remaining native depth. @returns Nothing. */
+  private NotifyChildrenOnDepth(depth: number): void {
+    for (const child of this.mChildren) {
+      if (depth === 0) child.NotifyNode();
+      else child.NotifyChildrenOnDepth(depth - 1);
+    }
+  }
   /** Invalidates this record's parent prefix. @returns Nothing. */
   public InvalidateMe(): void {
     this.mpParent?.Invalidate(this);
