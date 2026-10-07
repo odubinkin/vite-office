@@ -80,10 +80,10 @@
       ],
       "failedCases": [],
       "caseCounts": {
-        "passed": 13188,
+        "passed": 3,
         "failed": 0,
-        "skipped": 0,
-        "total": 13188
+        "skipped": 6,
+        "total": 9
       },
       "errors": [],
       "coverageCounts": {
@@ -169,5 +169,6 @@
         "flaky": 0
       }
     }
-  ]
+  ],
+  "reportingCorrection": "Focused app counters parsed from actual closure1 result file:3passed6skipped9total. Initial13188counts inadvertently read by report parser corrected from original raw output/result without any rerun or counter fabrication."
 }
