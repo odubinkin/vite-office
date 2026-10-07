@@ -1,10 +1,11 @@
 ---
 id: "202610071703-3BMYTW"
 title: "Preserve native bullet font families through ODT list styles"
-status: "DOING"
+result_summary: "Closed bounded family-loss defect: unique13579 app110 inventory14 infrastructure284 Chromium PASS, one full upstream-absent profile and only3 original app/1 inventory closures; actual current-source all4 app/inventory coverage100, no uncaught/passing replay. Tight-tab ruler suspicion corrected from native source; deliberate I/O/recovery deviations preserved. Full parent remains active with explicit complete-font/graphics/config residuals."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 23
+revision: 24
 origin:
   system: "manual"
 depends_on: []
@@ -39,11 +40,16 @@ quality_review:
     - ".agentplane/tasks/202610071703-3BMYTW/evidence/exact-sha-review.json"
   findings:
     - "Complete font descriptors, historical glyph recoding, full SwFont/VCL/script/style/graphics/config and exhaustive parent parity remain explicitly unverified; conscious I/O/recovery exceptions preserved."
-commit: null
+commit:
+  hash: "c057c3284b2861dc181147670974e3927294b481"
+  message: "🧩 3BMYTW parity: preserve native bullet font families in ODT list styles"
 comments:
   -
     author: "CODER"
     body: "Start: restore the native represented bullet font family ODT path with source lookup/fallback/import precedence/empty-descriptor behavior; preserve upstream ruler admission and all deliberate I/O deviations."
+  -
+    author: "CODER"
+    body: "Verified: native represented bullet Font family persists through ODT/UNO/common/automatic/body/cell/Worker; source native empty-Name behavior and glyph separation confirmed, exact implementation and same-current-agent evaluation pass."
 events:
   -
     type: "status"
@@ -58,8 +64,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified exact implementation c057c3284b2861dc181147670974e3927294b481: native bullet Font family ODT path, source predicates/empty descriptor, all284 Chromium, unique13579 app110 inventory14 infrastructure; only original3 app1 inventory closures, zero passing replay/uncaught, all4 actual current-source coverage100, source/static/scoped/artifact/governance PASS; full parent ACTIVE and registered I/O deviations preserved."
+  -
+    type: "status"
+    at: "2026-10-07T17:33:54.443Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native represented bullet Font family persists through ODT/UNO/common/automatic/body/cell/Worker; source native empty-Name behavior and glyph separation confirmed, exact implementation and same-current-agent evaluation pass."
 doc_version: 3
-doc_updated_at: "2026-10-07T17:33:34.167Z"
+doc_updated_at: "2026-10-07T17:33:54.444Z"
 doc_updated_by: "CODER"
 description: "Iteration221: close the actual existing optional bullet Font family loss across source-owned Writer UNO, xmloff list import/export and font-face lookup boundaries; preserve native empty-descriptor behavior and registered I/O/recovery deviations. Upstream confirms admitted tight-tab indent gesture consumes click intentionally, so do not invent a pointer-affinity fix."
 sections:
