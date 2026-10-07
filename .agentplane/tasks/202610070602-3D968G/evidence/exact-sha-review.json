@@ -1,0 +1,132 @@
+{
+  "evaluatedImplementationSHA": "61d4c2617649b72096cca1f2d40df9d74d9dcb3f",
+  "evaluator": "Same current coding agent in EVALUATOR phase; explicitly not independent",
+  "verdict": "pass",
+  "cases": {
+    "app": 13451,
+    "inventory": 110,
+    "infrastructure": 14,
+    "chromium": 258
+  },
+  "actualApp100": {
+    "lines": {
+      "total": 16049,
+      "covered": 16049,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 17620,
+      "covered": 17620,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 4091,
+      "covered": 4091,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 13207,
+      "covered": 13207,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "actualInventory100": {
+    "lines": {
+      "total": 1464,
+      "covered": 1464,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 1523,
+      "covered": 1523,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 384,
+      "covered": 384,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 1081,
+      "covered": 1081,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "actualCountersAndCensusReconstructedExactly": true,
+  "strictWholeOrContiguousDeclarationBodyEnclosingBranchAllLocationsProof": true,
+  "oldAcceptance": {
+    "files": 559,
+    "byteIdentical": 547,
+    "completeNativeSourceMigrations": 11,
+    "infrastructureAddition": 1,
+    "newFiles": 4,
+    "currentFiles": 563
+  },
+  "metadata": {
+    "prior": 286,
+    "current": 289,
+    "completePriorFieldsPrefixesStatusesDefaultsAndExceptionsPreserved": true,
+    "noSemanticPromotion": true
+  },
+  "initialStaticGatesOnce": true,
+  "failedOrChangedInputClosuresOnly": true,
+  "oneFullUpstreamAbsentProfile": true,
+  "passingRuntimeReplay": 0,
+  "focusedSkipObservationsRemainSkipped": {
+    "app": 116,
+    "inventory": 2
+  },
+  "sourceComparison": "PASS bounded source-owned six-line page scope; whole parity remains active.",
+  "priorityBulletRegression": {
+    "implementation": "e625c6f3b56279490cd3fc9292afa2a3ee2f4d92",
+    "currentChromiumCases": [
+      {
+        "title": "Writer native label width prevents overlap width=1280 cell=false",
+        "passed": true
+      },
+      {
+        "title": "Writer native label width prevents overlap width=1280 cell=true",
+        "passed": true
+      },
+      {
+        "title": "Writer native label width prevents overlap width=390 cell=false",
+        "passed": true
+      },
+      {
+        "title": "Writer native label width prevents overlap width=390 cell=true",
+        "passed": true
+      }
+    ]
+  },
+  "sourceCorrectionEvidence": "Only one newly authored empty-arrow assertion changed true to source false; unchanged complete remainder and genuinely new all-four-arrow trace bind it without passing-case replay.",
+  "artifactCensus": {
+    "currentTaskArtifactCount": 21,
+    "wholeAgentplaneForbiddenSourceOrPythonCount": 0,
+    "currentTaskBoundedEnglishJsonMarkdownOnly": true,
+    "noRawCoverageResultsOrSourceSnapshots": true,
+    "forbidden": []
+  },
+  "vendorRestored": true,
+  "residualScope": "Exact VCL pixel/arrow/diagonal geometry and full widget units, native shadow/merge/theme controls and SfxTabPage infrastructure, RTL/vertical/follow/shared-format and whole kernel/browser parity remain unverified.",
+  "failures": []
+}

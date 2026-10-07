@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "task_id": "202610070602-3D968G",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-07T07:08:56.832Z",
+  "verdict": "pass",
+  "summary": "Same current agent EVALUATOR exact implementation 61d4c2617649b72096cca1f2d40df9d74d9dcb3f passes approved native six-line border-page scope; explicitly not independent.",
+  "evaluated_sha": "61d4c2617649b72096cca1f2d40df9d74d9dcb3f",
+  "blueprint_digest": "c2c868f664cf8469b4ea2293f3e693bcbbb2c27ad74e4edaf1232f26bd329ac5",
+  "findings": [
+    "Native FrameSelector and SvxBorderTabPage own six edges, native tri-state selection, source presets and styles, independent four distances, Reset and info-only FillItemSet. React renders and dispatches the native owner, including source pointer multi-hit and silent focus behavior.",
+    "Exact source, complete old acceptance migrations, all prior metadata fields and registered deviations are preserved. Current source-bound actual app and inventory counters and case census reconstruct exactly without passing test replay."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610070602-3D968G/README.md",
+    ".agentplane/tasks/202610070602-3D968G/evidence/exact-sha-review.json",
+    ".agentplane/tasks/202610070602-3D968G/evidence/scope-final.json",
+    ".agentplane/tasks/202610070602-3D968G/evidence/final-coverage.json",
+    ".agentplane/tasks/202610070602-3D968G/evidence/case-census.json",
+    ".agentplane/tasks/202610070602-3D968G/evidence/source-review.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Exact VCL geometry and full widget units, shadow/merge/theme controls, full SfxTabPage infrastructure, RTL/vertical/follow/shared-format and whole kernel/browser parity remain unverified. Parent goal remains active."
+  ]
+}
