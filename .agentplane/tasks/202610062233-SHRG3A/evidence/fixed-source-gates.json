@@ -1,0 +1,17 @@
+{
+  "scope": "Genuinely changed fixed bounds metadata evidence; other passing gates not repeated.",
+  "records": [
+    {
+      "command": "npm run check:source-provenance",
+      "exit": 0,
+      "bytes": 205,
+      "sha256": "bdeb0bf33fa05c6c67595e031c149a49984e6ae4c95f3feecde64dad810b8cde"
+    },
+    {
+      "command": "npm run inventory:parity",
+      "exit": 0,
+      "bytes": 1758911,
+      "sha256": "2ac4b9418682b56c0f4b9c6bb5c553b2b62b25396459d0b07827b3b7b432ce24"
+    }
+  ]
+}

@@ -2,5 +2,11 @@
   "command": "npm run typecheck --workspace @vite-office/office",
   "result": "pass",
   "exit": 0,
-  "scope": "Genuinely changed native graph boundary and new transport/guide acceptance; tools typecheck not replayed"
+  "scope": "Genuinely changed native graph boundary and new transport/guide acceptance; tools typecheck not replayed",
+  "fixedBoundsClosure": {
+    "command": "npm run typecheck --workspace @vite-office/office",
+    "exit": 0,
+    "result": "pass",
+    "scope": "Genuinely changed fixed row positioning and new bounds test"
+  }
 }
