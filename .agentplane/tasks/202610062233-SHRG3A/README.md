@@ -1,10 +1,11 @@
 ---
 id: "202610062233-SHRG3A"
 title: "Replace scalar row height with native frame size ownership and behavior"
-status: "DOING"
+result_summary: "Native row frame size ownership and behavior implemented, preserving full item defaults/flags/history/ODT and original graph; scalar kernel aliases removed, actual fixed browser bounds and primitive process boundary verified. Full parity remains unverified."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 28
+revision: 29
 origin:
   system: "manual"
 depends_on: []
@@ -42,11 +43,16 @@ quality_review:
   findings:
     - "Exact implementation source digests match54approved paths,20production/27exact native migrations/5new acceptance/2metadata;536old509byte-identical27approved migrations541total,277prior semantic prefixes/exceptions retained+1new unverified module278. Final distinct13192app109inventory5scripts243Chromium PASS, no historical passing/full replay;8focused skips retained."
     - "Actual100 coverage all dimensions app275/inventory38. Raw counters verified with273whole-identical sources/maps+2complete contiguous-region files and full declaration/body/enclosing branch/locations. All vendor restores complete, source/scope/AP checks outside profiles,0forbidden current artifacts. Original failed native graph boundary/physical row bounds repaired without weakening40px assertions."
-commit: null
+commit:
+  hash: "8f1c1e066e4a273b3d400a18761e402339aa625d"
+  message: "🧩 SHRG3A code: own native row frame sizes and fixed bounds"
 comments:
   -
     author: "CODER"
     body: "Start: replace scalar row-height state with approved native complete frame-size ownership and flat-row behavior under standing iterative authorization."
+  -
+    author: "CODER"
+    body: "Verified: native row frame size item and complete document ownership/resize/flat fixed bounds/ODT/Worker transport pass at implementation8f1c1e066e4a273b3d400a18761e402339aa625d. Final13192app109inventory5scripts243Chromium pass, actual100 coverage all dimensions; initial full profile once, only originalfailed/new focused closure and no passing replay. Same current-agent EVALUATOR explicitly not independent; registered exceptions retained, full parity and parent goal remain active."
 events:
   -
     type: "status"
@@ -61,8 +67,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "PASS actual implementation8f1c1e066e4a273b3d400a18761e402339aa625d. Complete native row frame item/defaults/clone/equality/document ownership/resize type retention/fixed bounds/ODT/Worker storage verified. Final distinct13192app109inventory5scripts243Chromium pass; actual100 app275/inventory38 all dimensions, raw full-source/maps/complete-region proof only. Six static gates once and failed/genuinelychanged closures, source/scope/doctor/routing/diff/current artifacts pass0forbidden; original failures resolved without weakened40px assertion or passing/full replay. Vendor restored,536old509byte-identical27exact native migrations541total;277prior prefixes/exceptions+1new unverified module278. Same-agent exactSHA EVALUATOR explicitly not independent. Parent531065prefix/stash retained, full parity unverified and goal active."
+  -
+    type: "status"
+    at: "2026-10-07T01:37:02.221Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native row frame size item and complete document ownership/resize/flat fixed bounds/ODT/Worker transport pass at implementation8f1c1e066e4a273b3d400a18761e402339aa625d. Final13192app109inventory5scripts243Chromium pass, actual100 coverage all dimensions; initial full profile once, only originalfailed/new focused closure and no passing replay. Same current-agent EVALUATOR explicitly not independent; registered exceptions retained, full parity and parent goal remain active."
 doc_version: 3
-doc_updated_at: "2026-10-07T01:36:21.590Z"
+doc_updated_at: "2026-10-07T01:37:02.223Z"
 doc_updated_by: "CODER"
 description: "Iteration202: native SvxSizeItem/SwFormatFrameSize defaults, full equality and clone replace kernel minHeight; document setters, resize type retention, flat-row layout/clip, ODT Fixed versus Minimum and native UI getter state. Preserve all registered exceptions and literal acceptance intents through explicit native contract migrations."
 sections:
