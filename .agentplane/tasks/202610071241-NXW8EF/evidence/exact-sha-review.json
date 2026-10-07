@@ -1,7 +1,7 @@
 {
-  "evaluatedImplementationSHA": "918d8042348c386060a55a750bdfa7ecb234934e",
+  "evaluatedImplementationSHA": "e70da231bfa8121cf7597bd196566603fa203bfc",
   "evaluator": "Same current coding agent EVALUATOR phase; explicitly not independent",
-  "verdict": "rework",
+  "verdict": "pass",
   "cases": {
     "app": 13532,
     "inventory": 110,
@@ -80,10 +80,10 @@
   },
   "completePriorAppRegionCertificates": 9,
   "currentAfterProfileSourceChanges": 0,
-  "approvedSemanticPaths": 18,
+  "approvedSemanticPaths": 23,
   "priorAcceptanceFiles": 580,
-  "priorByteIdenticalAcceptanceFiles": 579,
-  "exactSourceBackedMigrations": 1,
+  "priorByteIdenticalAcceptanceFiles": 574,
+  "exactSourceBackedMigrations": 6,
   "currentAcceptanceFiles": 583,
   "all295PriorMetadataFieldsAndExceptionsPreserved": true,
   "currentMetadataRecords": 298,
@@ -91,10 +91,10 @@
   "allProfilesTerminalVendorRestored": true,
   "passingReplay": 0,
   "skippedObservationsRetained": {
-    "app": 8,
+    "app": 24,
     "inventory": 0
   },
-  "subsetExit1": "Full app exit1 initially branch thresholds only; new port cases and original failed nested-hint fixture closure verified; subset exit1 thresholds retained honestly, no passing replay.",
+  "subsetExit1": "Full app exit1 includes branch threshold AND27pre-existing uncaught detached-frame errors, both retained.27original error cases resolved by fixture-only unmount ordering; final subset exit1 thresholds only. New port cases and failed nested-hint fixture resolved; no passing replay.",
   "priorityBullet": [
     {
       "title": "Writer native label width prevents overlap width=1280 cell=false",
@@ -119,17 +119,18 @@
       "reason": "V8 raw inferred else counter is negative; use entire prior verified current-byte-identical source and entire maps/counters, never sanitize individual counts",
       "priorMap": "8RTP52.app-final.json",
       "priorMapSHA256": "a67f6b226c823f5a5a67d88f2b4c50cbd1a9b72773d9b836d6e40438ffa0873e",
-      "discardedInvalidAggregateSHA256": "067ef1cc9ade86efa91aec729eb7aa57f3d40bbca1cb5c7a8e62dc0f966cc0ff",
+      "discardedInvalidAggregateSHA256": "f4dcaa26ae96c49916a5f604d2c4ec721743bd72ff5485933dea4f84b54a5e25",
       "negativeCounts": [
-        -36
+        -124
       ]
     }
   ],
+  "originalUncaughtErrorCases": 27,
+  "finalUncaughtErrorCases": 0,
+  "fixtureOnlyCleanupInsertions": 7,
   "completeParentPrefixPreserved": true,
   "noForbiddenArtifacts": true,
   "auditReconstruction": "Coverage/case/scope reports reconstructed byte-identically after exact implementation commit. Complete current-source maps/finite nonnegative counters and prior complete region source/ancestor bindings verified.",
   "residual": "Full RTL/bidi and readonly scrolling/fly/merged-text frames, complete GetLayoutFrame graph/formatting and native marked-list-level/DOM label-affinity painting remain unverified. Device nullable text covered by explicit fault injection, not a normal rendered-paragraph claim. Native Name informational modal, allocator/chart/frame attributes and whole parity remain unverified. Registered save/open/recovery deviations preserved.",
-  "failures": [
-    "Actual threshold exit1 explanation"
-  ]
+  "failures": []
 }
