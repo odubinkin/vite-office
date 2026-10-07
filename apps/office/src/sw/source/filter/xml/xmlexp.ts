@@ -4,7 +4,6 @@
 import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
 import { exportBoxProperties } from "../../../../xmloff/source/style/bordrhdl";
 
-import { getWriterNumFormatKind, SvxNumType } from "../../core/doc/number";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { SwFrameSize } from "../../../inc/fmtfsize";
 
@@ -91,7 +90,7 @@ import {
   RES_LINENUMBER,
 } from "../../../inc/hintids";
 import { WRITER_MAX_LIST_LEVEL } from "../../core/doc/list";
-import { numberingPositionToMM100 } from "../../core/unocore/unosett";
+import { SwXNumberingRules } from "../../core/unocore/unosett";
 import type { SwDoc } from "../../core/doc/doc";
 import { SwTableNode } from "../../core/docnode/node";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
@@ -457,26 +456,12 @@ function projectParagraph(node: SwTextNode): XMLTextParagraphSource {
 
 /** Projects an owned numbering rule for common and automatic ODF definitions. @param rule - Native rule. @returns Neutral per-level properties. */
 function projectNumberingRule(rule: SwNumRule): XMLTextListRuleSource {
+  const properties = new SwXNumberingRules(rule);
   return {
     levels: Array.from(
       { length: WRITER_MAX_LIST_LEVEL + 1 },
-      /** Projects one native numbering property sequence, including signed UNO StartWith. @param _unused - Array slot. @param index - Writer list level. @returns Level properties. */
-      (_unused, index) => {
-        const format = rule.Get(index);
-        return {
-          ...numberingPositionToMM100(format.GetPositionProperties()),
-          kind: getWriterNumFormatKind(format),
-          numberingType: format.GetNumberingType(),
-          bulletChar: String.fromCodePoint(format.GetBulletChar()),
-          ...(format.GetNumberingType() === SvxNumType.SVX_NUM_CHAR_SPECIAL
-            ? { bulletFont: { name: format.GetBulletFont()?.GetFamilyName() ?? "" } }
-            : {}),
-          prefix: format.GetPrefix(),
-          suffix: format.GetSuffix(),
-          startWith: (format.GetStart() << 16) >> 16,
-          parentNumbering: format.GetIncludeUpperLevels(),
-        };
-      },
+      /** Reads the represented native numbering properties from their actual service owner. @param _unused - Array slot. @param index - Writer list level. @returns Level properties. */
+      (_unused, index) => properties.getByIndex(index),
     ),
     name: rule.GetName(),
   };

@@ -1,0 +1,18 @@
+{
+  "path": "apps/office/src/sw/source/core/unocore/unosett.ts",
+  "fullProfileSourceSHA256": "44897cfce3864f11864e7faf815dec71b01f5eda4b21b82dfe77715e7b48443b",
+  "currentSourceSHA256": "be9c73f76bce51b920aa2e224ff9d0079b980810e2e2b52b50ba934865822d69",
+  "change": "Only native public API TypeScript visibility modifiers and formatter signature-line collapse after header source review; no runtime statement changed.",
+  "entireEmittedModuleSHA256": "8e46054207de9df59a015d086f03b1e65aa315be8e106cc01e2e69775bb78e4e",
+  "bytes": 6628,
+  "entireEmittedJavaScriptIdentical": true,
+  "compiler": "Installed TypeScript",
+  "compilerOptions": {
+    "target": 99,
+    "module": 99,
+    "sourceMap": false,
+    "removeComments": true
+  },
+  "scope": "Source-bound full build/Chromium module runtime binding through complete equal emitted JavaScript; new public API acceptance executes final current-source module once. XML export source unchanged after full profile.",
+  "sourceMaps": "Not treated as current source coverage; actual final coverage uses fresh current source map and complete unchanged declaration/body/enclosing branch/all-locations transfers."
+}

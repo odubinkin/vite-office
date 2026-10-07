@@ -1,0 +1,23 @@
+{
+  "kind": "app",
+  "profile": "upstream-absent",
+  "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/source/core/unocore/native-numbering-publication.test.ts -t ^(?:exposes source public numbering format and borrowed rule getter entry points)$ --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/JJ976X.closure1.app-results.json",
+  "genuinelyNewNames": [
+    {
+      "file": "src/sw/source/core/unocore/native-numbering-publication.test.ts",
+      "name": "exposes source public numbering format and borrowed rule getter entry points"
+    }
+  ],
+  "vendorRestored": true,
+  "exit": 1,
+  "outputSHA256": "78053eab951a22f0b686d48b29aa9473c7c82bbdbb7a3cf1b4b1cc3a2653e263",
+  "bytes": 31491,
+  "caseCounts": {
+    "passed": 1,
+    "failed": 0,
+    "skipped": 3,
+    "total": 4
+  },
+  "failedCases": [],
+  "unhandledErrorCount": 0
+}

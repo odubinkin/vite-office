@@ -1,0 +1,14 @@
+{
+  "records": [
+    {
+      "command": "Unchanged JSDoc validator on approved changed code/acceptance paths; actual physical-line count",
+      "exit": 0,
+      "errors": [],
+      "physicalLines": {
+        "apps/office/src/sw/source/core/unocore/unosett.ts": 194,
+        "apps/office/src/sw/source/filter/xml/xmlexp.ts": 769,
+        "apps/office/src/sw/source/core/unocore/native-numbering-publication.test.ts": 249
+      }
+    }
+  ]
+}

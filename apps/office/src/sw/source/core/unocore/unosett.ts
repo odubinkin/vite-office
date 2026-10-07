@@ -1,5 +1,6 @@
 /** @fileoverview Owns supported numbering position property conversion from pinned SwXNumberingRules in unosett.cxx. */
-import { SwNumFormat, SvxNumType, type SwNumRule } from "../doc/number";
+import { SwNumFormat, SvxNumType, type SwNumRule, type ConstSwNumFormat } from "../doc/number";
+import { WRITER_MAX_LIST_LEVEL } from "../doc/list";
 import { fontFromUnoDescriptorName } from "../../../../editeng/source/uno/unofdesc";
 
 import type { NumberingPositionProperties } from "../../../../editeng/source/items/numitem";
@@ -76,6 +77,61 @@ export interface WriterNumberingRuleProperties extends NumberingPositionProperti
 export class SwXNumberingRules {
   /** Binds the native numbering-rule service to its Writer rule. @param rule - Document-owned rule. @returns Service. */
   public constructor(private readonly rule: SwNumRule) {}
+
+  /** Reads the represented native property record through the rule service. @param level - Zero-based level. @returns Independent supported properties in MM100. */
+  public getByIndex(level: number): WriterNumberingRuleProperties {
+    return this.getRuleByIndex(level);
+  }
+
+  /** Validates native MAXLEVEL bounds before reading the borrowed rule. @param level - Zero-based level. @returns Independent represented properties. */
+  public getRuleByIndex(level: number): WriterNumberingRuleProperties {
+    if (!Number.isInteger(level) || level < 0 || level > WRITER_MAX_LIST_LEVEL)
+      throw new RangeError("Numbering rule index is out of range.");
+    return this.GetNumberingRuleByIndex(this.rule, level);
+  }
+
+  /** Resolves the original document-owned level without cloning its format. @param rule - Borrowed native rule. @param level - Validated level. @returns Supported property record. */
+  public GetNumberingRuleByIndex(rule: SwNumRule, level: number): WriterNumberingRuleProperties {
+    return SwXNumberingRules.GetPropertiesForNumFormat(rule.Get(level));
+  }
+
+  /** Publishes only native active geometry and represented optional marker properties. @param format - Borrowed const format. @returns Independent supported record; full UNO sequence remains unrepresented. */
+  public static GetPropertiesForNumFormat(format: ConstSwNumFormat): WriterNumberingRuleProperties {
+    const mode = format.GetPositionAndSpaceMode(),
+      type = format.GetNumberingType(),
+      font = format.GetBulletFont();
+    const position = numberingPositionToMM100(
+      mode === "label-width-and-position"
+        ? {
+            absLSpace: format.GetAbsLSpace(),
+            firstLineOffset: format.GetFirstLineOffset(),
+            charTextDistance: format.GetCharTextDistance(),
+          }
+        : {
+            labelFollowedBy: format.GetLabelFollowedBy(),
+            listTabPosition: format.GetListtabPos(),
+            firstLineIndent: format.GetFirstLineIndent(),
+            indentAt: format.GetIndentAt(),
+          },
+    );
+    return {
+      kind: type === SvxNumType.SVX_NUM_CHAR_SPECIAL ? "bullet" : "numbered",
+      numberingType: type,
+      prefix: format.GetPrefix(),
+      suffix: format.GetSuffix(),
+      startWith: (format.GetStart() << 16) >> 16,
+      parentNumbering: format.GetIncludeUpperLevels(),
+      ...(format.HasListFormat() ? { listFormat: format.GetListFormat() } : {}),
+      ...position,
+      positionAndSpaceMode: mode,
+      ...(type === SvxNumType.SVX_NUM_CHAR_SPECIAL
+        ? {
+            bulletChar: String.fromCodePoint(format.GetBulletChar()),
+            ...(font === undefined ? {} : { bulletFont: { name: font.GetFamilyName() } }),
+          }
+        : {}),
+    };
+  }
 
   /** Replaces one level through the native UNO application boundary. @param level - Zero-based level. @param properties - Supported property sequence. @returns Nothing. */
   public replaceByIndex(level: number, properties: WriterNumberingRuleProperties): void {

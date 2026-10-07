@@ -1,0 +1,39 @@
+{
+  "records": [
+    {
+      "command": "npm exec -- prettier --check apps/office/src/sw/source/core/unocore/unosett.ts apps/office/src/sw/source/core/unocore/native-numbering-publication.test.ts",
+      "exit": 0,
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+      "bytes": 66,
+      "diagnostics": [
+        "Checking formatting...",
+        "All matched files use Prettier code style!"
+      ]
+    },
+    {
+      "command": "npm exec -- eslint apps/office/src/sw/source/core/unocore/unosett.ts apps/office/src/sw/source/core/unocore/native-numbering-publication.test.ts --max-warnings 0",
+      "exit": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "diagnostics": [
+        ""
+      ]
+    },
+    {
+      "command": "npm run typecheck",
+      "exit": 0,
+      "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed",
+      "bytes": 240,
+      "diagnostics": [
+        "",
+        "",
+        "> vite-office@0.1.0 typecheck:tools",
+        "> tsc --project tsconfig.tools.json",
+        "",
+        "",
+        "> @vite-office/office@0.1.0 typecheck",
+        "> tsc --noEmit"
+      ]
+    }
+  ]
+}

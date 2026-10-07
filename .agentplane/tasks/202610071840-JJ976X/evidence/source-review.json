@@ -1,0 +1,82 @@
+{
+  "pinSHA": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "tag": "libreoffice-26.8.0.2",
+  "records": [
+    {
+      "path": "sw/source/core/unocore/unosett.cxx",
+      "sha256": "a94596e54298e0c9d1191791cb4e98d30996d3c61ec547b677d25ed03ef2134b",
+      "anchors": [
+        "SwXNumberingRules::getByIndex",
+        "getRuleByIndex(nIndex)",
+        "SwXNumberingRules::getRuleByIndex",
+        "if(nIndex < 0 || MAXLEVEL <= nIndex)",
+        "SwXNumberingRules::GetNumberingRuleByIndex",
+        "return GetPropertiesForNumFormat(",
+        "SwXNumberingRules::GetPropertiesForNumFormat",
+        "rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION",
+        "rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT",
+        "nINT16 = rFormat.GetStart()",
+        "if (rFormat.HasListFormat())",
+        "if(pFont)",
+        "OUString(&cBullet, 1)"
+      ],
+      "anchorLines": [
+        1175,
+        1177,
+        1183,
+        1089,
+        1229,
+        1287,
+        1355,
+        1400,
+        1417,
+        1397,
+        1383,
+        1480,
+        1472
+      ]
+    },
+    {
+      "path": "sw/inc/unosett.hxx",
+      "sha256": "e7897870b593c4d3fc5d7f867ab569b2de39c7faeea6243e286506d6da022ca9",
+      "anchors": [
+        "getRuleByIndex(sal_Int32 nIndex)",
+        "static css::uno::Sequence<css::beans::PropertyValue> GetPropertiesForNumFormat"
+      ],
+      "anchorLines": [
+        190,
+        209
+      ]
+    },
+    {
+      "path": "xmloff/source/style/xmlnume.cxx",
+      "sha256": "8606376ea6a2e4378a69122f886719632c6c391bc26c98b477b2cdc35e5f286c",
+      "anchors": [
+        "if (!sListFormat.isEmpty())",
+        "SvtSaveOptions::ODFSVER_EXTENDED",
+        "in ODF 1.3 we write only prefix/suffix"
+      ],
+      "anchorLines": [
+        268,
+        265,
+        272
+      ]
+    }
+  ],
+  "production": [
+    {
+      "path": "apps/office/src/sw/source/core/unocore/unosett.ts",
+      "sha256": "be9c73f76bce51b920aa2e224ff9d0079b980810e2e2b52b50ba934865822d69"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/xmlexp.ts",
+      "sha256": "2a0b1b4aca7875030a210f85764e734c7e2672f1ddce6c9becf85edfec312ca1"
+    }
+  ],
+  "scope": "Existing represented SwXNumberingRules property getter chain/active predicates and original core-to-XML ownership; remove duplicate property assembly.",
+  "residuals": [
+    "Typed independent records represent supported fields; complete native UNO Any/PropertyValue sequence, service state, property getter overloads, CharStyle/legal/chapter/graphics/fullFontDescriptor remain partial or unrepresented.",
+    "Existing ODF1.3 nonextended mode and ListFormat extension omission preserved; actual extended save config and other XML/native UI/font shaping responsibilities remain unverified.",
+    "Registered save/open/recovery deviations unchanged; exhaustive persistent goal ACTIVE."
+  ]
+}

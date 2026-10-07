@@ -1,0 +1,32 @@
+{
+  "base": "749823a0b5d7023b2d3e0417c15c2717379f5e1f",
+  "semanticPaths": [
+    "apps/office/src/sw/source/core/unocore/native-numbering-publication.test.ts",
+    "apps/office/src/sw/source/core/unocore/unosett.ts",
+    "apps/office/src/sw/source/filter/xml/xmlexp.ts",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/source-provenance.json"
+  ],
+  "scopeCount": 5,
+  "priorAcceptanceFiles": 602,
+  "byteIdenticalAcceptanceFiles": 602,
+  "exactSourceBackedMigrations": [],
+  "newAcceptanceFiles": [
+    "apps/office/src/sw/source/core/unocore/native-numbering-publication.test.ts"
+  ],
+  "metadata": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "oldRecords": 302,
+      "currentRecords": 302,
+      "allPriorFieldsPrefixesAndStatusesPreserved": true
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "oldRecords": 302,
+      "currentRecords": 302,
+      "allPriorFieldsPrefixesAndStatusesPreserved": true
+    }
+  ],
+  "failures": []
+}

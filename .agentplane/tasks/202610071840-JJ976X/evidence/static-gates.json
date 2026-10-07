@@ -1,0 +1,51 @@
+{
+  "records": [
+    {
+      "command": "npm run format:check",
+      "exit": 1,
+      "bytes": 246,
+      "sha256": "c975b1b4bf225aaeae4e631bac658d35073fb30697be9ff8668f6e08f7fc8f8d",
+      "diagnostics": [
+        "[warn] apps/office/src/sw/source/core/unocore/native-numbering-publication.test.ts",
+        "[warn] Code style issues found in the above file. Run Prettier with --write to fix."
+      ]
+    },
+    {
+      "command": "npm run lint",
+      "exit": 0,
+      "bytes": 55,
+      "sha256": "a6172cb57fa696e705408fdc605fba1ae07b852fdf0614d7c2b623349e285b6e",
+      "diagnostics": [
+        "> eslint . --max-warnings 0"
+      ]
+    },
+    {
+      "command": "npm run typecheck",
+      "exit": 0,
+      "bytes": 240,
+      "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:dependencies",
+      "exit": 0,
+      "bytes": 189,
+      "sha256": "09d26cd386849505c0b35cb2894e42d3119df3d36e2409b401aa95c02a474a3b",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:docs",
+      "exit": 0,
+      "bytes": 119,
+      "sha256": "411811edf0e84b48377418ebee0f0f8407d4721911459cb0f3f52aa0e913f678",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:file-size",
+      "exit": 0,
+      "bytes": 3996,
+      "sha256": "ee12e520c69d3f9dcbe15306e47fcac54f1d5b76224bcb16c2d2854d7cd9df84",
+      "diagnostics": []
+    }
+  ]
+}
