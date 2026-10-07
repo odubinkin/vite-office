@@ -78,7 +78,6 @@ function fixture() {
   const value: SwTableProperties = {
     width: 5000,
     columnWidths: [2000, 3000],
-    minRowHeight: 300,
     padding: 200,
     border: "0.5pt solid #666666",
     verticalAlign: VertOrientation.BOTTOM,
@@ -128,7 +127,7 @@ describe("native table property application", /** Registers actual-owner contrac
       expect(f.docShell.IsModified()).toBe(true);
       expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(1);
       expect(f.doc.GetUndoManager().GetUndoAction()?.GetComment()).toBe("Table Properties");
-      expect(f.doc.GetUndoManager().GetUndoAction()?.GetPayloadSize()).toBe(63);
+      expect(f.doc.GetUndoManager().GetUndoAction()?.GetPayloadSize()).toBe(54);
       expect(f.table.GetColumnWidths()).toEqual([2000, 3000]);
       expect(f.table.GetFormat()).toEqual({
         width: 5000,
@@ -140,7 +139,7 @@ describe("native table property application", /** Registers actual-owner contrac
         repeatHeaderRows: false,
       });
       expect(rows[0]?.GetFormat()).toEqual({
-        frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 300),
+        frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 100),
         keepTogether: true,
       });
       expect(rows[1]?.GetFormat()).toEqual({

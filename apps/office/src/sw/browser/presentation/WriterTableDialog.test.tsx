@@ -110,7 +110,6 @@ describe("Writer browser table controls", /** Verifies the bounded table scenari
         rows: 3,
         columns: 2,
         width: 6000,
-        minRowHeight: 0,
         padding: 100,
         border: "0.5pt solid #666666",
         verticalAlign: VertOrientation.NONE,

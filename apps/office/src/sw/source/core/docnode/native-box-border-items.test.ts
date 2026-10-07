@@ -73,7 +73,6 @@ it("applies padding-only and border-only presentation ingress through original n
       const input = {
         width: 6000,
         columnWidths: [3000, 3000],
-        minRowHeight: 0,
         headerRows: 0,
         repeatHeaderRows: false,
         ...(field === "padding" ? { padding: 42 } : { border: "none" }),
@@ -111,7 +110,6 @@ it("uses native default box distances while the retained ordinary cursor is outs
       ItemSetToTableParam(shell, {
         width: 6000,
         columnWidths: [3000, 3000],
-        minRowHeight: 0,
         headerRows: 0,
         repeatHeaderRows: false,
         border: "none",
@@ -402,7 +400,6 @@ it("preserves all independent native box attributes for layout-only presentation
       ItemSetToTableParam(shell, {
         width: 6000,
         columnWidths: [2000, 4000],
-        minRowHeight: 120,
         headerRows: 0,
         repeatHeaderRows: false,
       }),

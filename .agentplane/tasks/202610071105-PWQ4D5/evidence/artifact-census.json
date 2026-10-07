@@ -1,0 +1,9 @@
+{
+  "wholeAgentplaneForbiddenSourceOrPythonCount": 0,
+  "activeExtensions": [
+    "json",
+    "md"
+  ],
+  "noRawCoverageResultsOrSourceSnapshots": true,
+  "rawEvidenceLocation": "Ignored project dependency cache only"
+}

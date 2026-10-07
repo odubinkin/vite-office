@@ -1,0 +1,29 @@
+{
+  "records": [
+    {
+      "command": "Unchanged JSDoc validator on approved changed code/acceptance paths; actual physical-line count",
+      "exit": 0,
+      "errors": [],
+      "physicalLines": {
+        "apps/office/src/sw/source/uibase/shells/tabsh.ts": 285,
+        "apps/office/src/sw/browser/presentation/WriterInsertTableDialog.tsx": 239,
+        "apps/office/src/sw/browser/presentation/native-table-border-owner-history.test.tsx": 130,
+        "apps/office/src/sw/browser/presentation/native-table-border-changed-items.test.tsx": 330,
+        "apps/office/src/sw/browser/presentation/native-collapsing-table-borders.test.tsx": 254,
+        "apps/office/src/sw/browser/presentation/WriterTableDialog.test.tsx": 286,
+        "apps/office/src/sw/source/uibase/wrtsh/native-row-split-owner-history.test.ts": 146,
+        "apps/office/src/sw/source/uibase/wrtsh/native-table-height-delta.test.ts": 130,
+        "apps/office/src/sw/source/uibase/wrtsh/native-table-text-flow-split-history.test.ts": 185,
+        "apps/office/src/sw/source/uibase/wrtsh/native-table-properties-reset-history.test.ts": 133,
+        "apps/office/src/sw/source/uibase/wrtsh/native-table-column-page-history.test.ts": 148,
+        "apps/office/src/sw/source/uibase/wrtsh/native-row-height-owner-history.test.ts": 127,
+        "apps/office/src/sw/source/uibase/wrtsh/native-table-format-lifecycle-history.test.ts": 150,
+        "apps/office/src/sw/source/uibase/wrtsh/native-table-properties.test.ts": 281,
+        "apps/office/src/sw/source/uibase/wrtsh/native-table-text-flow-headline-history.test.ts": 110,
+        "apps/office/src/sw/source/core/docnode/native-box-border-items.test.ts": 418,
+        "apps/office/src/sw/source/core/docnode/native-table-border-common-state.test.ts": 358,
+        "apps/office/src/sw/source/uibase/wrtsh/native-table-height-command-separation.test.ts": 122
+      }
+    }
+  ]
+}

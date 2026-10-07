@@ -1,0 +1,19 @@
+{
+  "baselineTag": "libreoffice-26.8.0.2",
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceSHA256": {
+    "sw/source/uibase/shells/tabsh.cxx": "ac075f90575663fac974e2804e7111b1df3f596eb5bb400fb9fc2f4be0058163",
+    "sw/source/ui/table/rowht.cxx": "d2f674e43223f744ec8caa905f732677aecc04efe5fcfc2117257effb05bff58",
+    "sw/source/ui/table/instable.cxx": "0f3fc7deadb637642b8796239d9480b9108f0b664f8c1fa06fdc387d7b4763e0"
+  },
+  "productionSHA256": {
+    "apps/office/src/sw/source/uibase/shells/tabsh.ts": "c42848ed2f9119e6659843f18d6784365b2365ae3a4d102540bbcad7861f6586",
+    "apps/office/src/sw/browser/presentation/WriterInsertTableDialog.tsx": "10b4ecc29a03be1a6f07352beb33d765dfefc07382eab1de4111e090c8ac5b07"
+  },
+  "properties": "Source tabsh.cxx ItemSetToTableParam admits present table/column/headline/alignment/border/split items but never SetRowHeight. Local obsolete minRowHeight member and scalar Minimum-row-height call removed. Width-size table item is separate from row height.",
+  "height": "rowht.cxx35-67 captures GetRowHeight, constructs Fixed item then Minimum when Fit to size checked, applies native SetRowHeight. Existing native SetRowHeight API retains authored zero; dialog MINLAY23 remains separately tested. Native mixed current/selected row types, original owners/cursor/history/ODT/continued edit retain existing contracts.",
+  "insertion": "Source SwInsTableDlg input owns name/dimensions/options/autoformat, no minimum-row-height input. Browser presentation no longer fabricates minRowHeight0 into table properties. Full insertion defaults, autoformat and all UI/core parity remain separately unverified.",
+  "history": "Local SwSaveTable.GetPayloadSize for two widths, two rows and four boxes is1+2+2*(1+2)=9. Removing the obsolete height action changes grouped property payload7*9=63 to6*9=54; exact two source-backed old expectation cases migrated, no other assertions loosened.",
+  "reviewer": "Current CODER source comparison, same-agent EVALUATOR follows explicitly not independent",
+  "residual": "Full Help/unit preferences/modal lifecycle/other size commands, insertion autoformat/default completeness and whole kernel/browser parity remain unverified. Registered save/open/recovery deviations preserved."
+}

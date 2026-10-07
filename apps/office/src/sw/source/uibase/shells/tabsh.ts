@@ -8,7 +8,6 @@ import type { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriO
 import { SwTabCols } from "../../core/bastyp/tabcol";
 import { SwTableRep } from "../table/swtablerep";
 import { PopMode } from "../../core/crsr/trvltbl";
-import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
 import {
   SvxBoxItem,
   SvxBoxInfoItem,
@@ -29,7 +28,6 @@ export interface SwTableProperties {
   readonly marginTop?: number;
   readonly marginBottom?: number;
   readonly columnWidths: readonly number[];
-  readonly minRowHeight?: number | undefined;
   readonly padding?: number | undefined;
   readonly border?: string | undefined;
   readonly borderItems?: SfxItemSet | undefined;
@@ -165,8 +163,6 @@ export function ItemSetToTableParam(shell: SwFEShell, value: SwTableProperties):
           }
         }
         shell.SetRowsToRepeat(value.headerRows, value.repeatHeaderRows);
-        if (value.minRowHeight !== undefined)
-          shell.SetRowHeight(new SwFormatFrameSize(SwFrameSize.Minimum, 0, value.minRowHeight));
         if (value.verticalAlign !== undefined) shell.SetBoxAlign(value.verticalAlign);
         const columns = new SwTabCols();
         shell.GetTabCols(columns);

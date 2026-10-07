@@ -117,15 +117,7 @@ it("explicit zero minimum height retains its authored native row delta", /** Dis
   );
   try {
     shell.FocusNode(node);
-    expect(
-      ItemSetToTableParam(shell, {
-        width: 3000,
-        columnWidths: [3000],
-        minRowHeight: 0,
-        headerRows: 0,
-        repeatHeaderRows: false,
-      }),
-    ).toBe(true);
+    expect(shell.SetRowHeight(new SwFormatFrameSize(SwFrameSize.Minimum, 0, 0))).toBe(true);
     expect(row.GetFrameSize().GetHeightSizeType()).toBe(SwFrameSize.Minimum);
     expect(row.GetFrameSize().GetHeight()).toBe(0);
     expect(shell.Undo()).toBe(true);

@@ -62,7 +62,6 @@ export function WriterInsertTableDialog({
                 /** Uses the represented insert geometry. @returns Column width. */ () =>
                   availableWidth / value.columns,
               ),
-              minRowHeight: 0,
               padding: 100,
               border,
               verticalAlign: VertOrientation.NONE,

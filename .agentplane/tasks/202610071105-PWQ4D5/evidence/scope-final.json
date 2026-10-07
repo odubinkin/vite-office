@@ -1,0 +1,179 @@
+{
+  "base": "27e076f9e6a1b80999a3526a6c459ebb63f9cb52",
+  "approvedPaths": [
+    "apps/office/src/sw/source/uibase/shells/tabsh.ts",
+    "apps/office/src/sw/browser/presentation/WriterInsertTableDialog.tsx",
+    "apps/office/src/sw/browser/presentation/native-table-border-owner-history.test.tsx",
+    "apps/office/src/sw/browser/presentation/native-table-border-changed-items.test.tsx",
+    "apps/office/src/sw/browser/presentation/native-collapsing-table-borders.test.tsx",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.test.tsx",
+    "apps/office/src/sw/source/uibase/wrtsh/native-row-split-owner-history.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-height-delta.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-text-flow-split-history.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-properties-reset-history.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-column-page-history.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-row-height-owner-history.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-format-lifecycle-history.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-properties.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-text-flow-headline-history.test.ts",
+    "apps/office/src/sw/source/core/docnode/native-box-border-items.test.ts",
+    "apps/office/src/sw/source/core/docnode/native-table-border-common-state.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-height-command-separation.test.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "actualSemanticPaths": [
+    "apps/office/src/sw/browser/presentation/WriterInsertTableDialog.tsx",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.test.tsx",
+    "apps/office/src/sw/browser/presentation/native-collapsing-table-borders.test.tsx",
+    "apps/office/src/sw/browser/presentation/native-table-border-changed-items.test.tsx",
+    "apps/office/src/sw/browser/presentation/native-table-border-owner-history.test.tsx",
+    "apps/office/src/sw/source/core/docnode/native-box-border-items.test.ts",
+    "apps/office/src/sw/source/core/docnode/native-table-border-common-state.test.ts",
+    "apps/office/src/sw/source/uibase/shells/tabsh.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-row-height-owner-history.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-row-split-owner-history.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-column-page-history.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-format-lifecycle-history.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-height-command-separation.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-height-delta.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-properties-reset-history.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-properties.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-text-flow-headline-history.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-text-flow-split-history.test.ts",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/source-provenance.json"
+  ],
+  "oldAcceptanceFiles": 576,
+  "oldByteIdentical": 561,
+  "migrations": [
+    {
+      "path": "apps/office/src/sw/browser/presentation/WriterTableDialog.test.tsx",
+      "beforeSHA256": "3b5e0d38ba8bfb5edb3442a2d9fd17e5303c0ca88ca251152d3c24f0363326ca",
+      "currentSHA256": "1a2dbf71ad2ae0d764a2e9f7b7d0d63eed94be1dbee4dd6dd73a32fa68db81b0",
+      "proof": "Exact obsolete minRowHeight fields only, source native dialog/API replacement, unchanged original height100 and history63-to54 removing one9unit row-height action; all unrelated bytes/assertions preserved."
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/native-collapsing-table-borders.test.tsx",
+      "beforeSHA256": "8d9664c9962374a4b3940f41f9c04d0a1e7a59e35ac30199ff7eb017e636030b",
+      "currentSHA256": "f15fd05b1212042862ecb99d1327ed1679d2e2290e2dcd1206f3b957554c2587",
+      "proof": "Exact obsolete minRowHeight fields only, source native dialog/API replacement, unchanged original height100 and history63-to54 removing one9unit row-height action; all unrelated bytes/assertions preserved."
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/native-table-border-changed-items.test.tsx",
+      "beforeSHA256": "fb429554d790af27a4b318b5b37ddbbb6e37f7e054f028a7018e7960e6c911b4",
+      "currentSHA256": "a367fd42b17bb5c9ce4e5dc74756a33f53337c18707082af4280bb7f16bb2f2b",
+      "proof": "Exact obsolete minRowHeight fields only, source native dialog/API replacement, unchanged original height100 and history63-to54 removing one9unit row-height action; all unrelated bytes/assertions preserved."
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/native-table-border-owner-history.test.tsx",
+      "beforeSHA256": "79811ce8c49bad99e2173562d273c6386594d6665addd327ea58b2d20ce00f9b",
+      "currentSHA256": "fb38615596705a5f38329e8a8e3765e50cfcd74ef79e7aed33f90f5c528ec571",
+      "proof": "Exact obsolete minRowHeight fields only, source native dialog/API replacement, unchanged original height100 and history63-to54 removing one9unit row-height action; all unrelated bytes/assertions preserved."
+    },
+    {
+      "path": "apps/office/src/sw/source/core/docnode/native-box-border-items.test.ts",
+      "beforeSHA256": "ddf03e0523fbe57a2eae102f6747eaaf9ca7df6b3abab7fa81ea007de03df2d1",
+      "currentSHA256": "596d85ffe9fbab65428f49c9f74426369fefefe05c8e937374976dbd5d555253",
+      "proof": "Exact obsolete minRowHeight fields only, source native dialog/API replacement, unchanged original height100 and history63-to54 removing one9unit row-height action; all unrelated bytes/assertions preserved."
+    },
+    {
+      "path": "apps/office/src/sw/source/core/docnode/native-table-border-common-state.test.ts",
+      "beforeSHA256": "01b1a82299861846d991c9805cacdec7e4b98e0340561f8782ee4a7b8d13f8c8",
+      "currentSHA256": "e2fe112a66b8e9236c3377f0422debb9adcf3388cccacfa1a68c3db8fe433a55",
+      "proof": "Exact obsolete minRowHeight fields only, source native dialog/API replacement, unchanged original height100 and history63-to54 removing one9unit row-height action; all unrelated bytes/assertions preserved."
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-row-height-owner-history.test.ts",
+      "beforeSHA256": "7c8172143a5c639dd4f52cb7e34b918408250ef5adeda4eab890cdce8fcb3109",
+      "currentSHA256": "be7ea40480c72cb29a62d1af118f198388e3144123c0b098d327b495b26527e4",
+      "proof": "Exact obsolete minRowHeight fields only, source native dialog/API replacement, unchanged original height100 and history63-to54 removing one9unit row-height action; all unrelated bytes/assertions preserved."
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-row-split-owner-history.test.ts",
+      "beforeSHA256": "80cf77c99271a4d54b525016146b58141dfcafba2755fa50066e4f9b2cb7818d",
+      "currentSHA256": "20b56f4a6d711aa897f4f053797cb093a7f750d14ddec40a7f0b583a4da8198b",
+      "proof": "Exact obsolete minRowHeight fields only, source native dialog/API replacement, unchanged original height100 and history63-to54 removing one9unit row-height action; all unrelated bytes/assertions preserved."
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-column-page-history.test.ts",
+      "beforeSHA256": "7e556883d3a2b97a81aae9ec49b0f34a605640994994cb217f716dae25d8e3a6",
+      "currentSHA256": "5d1d6ec91c4ec9edcf7f6dadbf7db173ac1816e604146da5d02aaaaa175f2a77",
+      "proof": "Exact obsolete minRowHeight fields only, source native dialog/API replacement, unchanged original height100 and history63-to54 removing one9unit row-height action; all unrelated bytes/assertions preserved."
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-format-lifecycle-history.test.ts",
+      "beforeSHA256": "8854aefd25f6d02a7ac4b468dd46d5e4c10439ce29273f5209da53754510a7aa",
+      "currentSHA256": "48333e3f36e1515b6f3c20854385dd5d8443716304a85665a34f25514da357c0",
+      "proof": "Exact obsolete minRowHeight fields only, source native dialog/API replacement, unchanged original height100 and history63-to54 removing one9unit row-height action; all unrelated bytes/assertions preserved."
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-height-delta.test.ts",
+      "beforeSHA256": "df79eb481ba2cf2fd73d8e69115743f9c26139b9e346d28d09e391e5ef19065d",
+      "currentSHA256": "ba76973fe7dd201faa61154c5784358f7b6e7d93e0cf332109c5052be94ce69e",
+      "proof": "Exact obsolete minRowHeight fields only, source native dialog/API replacement, unchanged original height100 and history63-to54 removing one9unit row-height action; all unrelated bytes/assertions preserved."
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-properties-reset-history.test.ts",
+      "beforeSHA256": "03d1f8c082c286d178ab5818fe255ac644ad3e71057c02ec0e19f1776b7d9299",
+      "currentSHA256": "fcbfaf2b90e37862e8997314444973f1ab930e092c332c2735f81d6549ed5fb0",
+      "proof": "Exact obsolete minRowHeight fields only, source native dialog/API replacement, unchanged original height100 and history63-to54 removing one9unit row-height action; all unrelated bytes/assertions preserved."
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-properties.test.ts",
+      "beforeSHA256": "546369bbe862076175ef1c9fd6ef5c850af877a0508c6339218f88cac197c613",
+      "currentSHA256": "ce27154155753a90c8eaf0a888b80d518596b1f7ca33d94f04c681ecdde4c186",
+      "proof": "Exact obsolete minRowHeight fields only, source native dialog/API replacement, unchanged original height100 and history63-to54 removing one9unit row-height action; all unrelated bytes/assertions preserved."
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-text-flow-headline-history.test.ts",
+      "beforeSHA256": "2ca0a94fd324b17ed7ad8596e54b95fde7cc4baec589a0484cec110f9147d3af",
+      "currentSHA256": "b425624891abf98f3e3711baabe6b0bbf6a1ffbd11a21222d176a385c2f05997",
+      "proof": "Exact obsolete minRowHeight fields only, source native dialog/API replacement, unchanged original height100 and history63-to54 removing one9unit row-height action; all unrelated bytes/assertions preserved."
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-text-flow-split-history.test.ts",
+      "beforeSHA256": "398493738ee145dd666fc2215edcd6c00bdad4f7a4999aa043b59b50e1d94e43",
+      "currentSHA256": "1fbcc2f7cd58008cec41455f0c7920892266ba2791560ee9dba6db401ce20b11",
+      "proof": "Exact obsolete minRowHeight fields only, source native dialog/API replacement, unchanged original height100 and history63-to54 removing one9unit row-height action; all unrelated bytes/assertions preserved."
+    }
+  ],
+  "newAcceptanceFiles": 1,
+  "totalAcceptanceFiles": 577,
+  "fresh": [
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-height-command-separation.test.ts",
+      "currentSHA256": "1c0613f7250c9134e5b137632419f06e4051954873289087f661da31e369c1a6",
+      "initialSHA256": "1c0613f7250c9134e5b137632419f06e4051954873289087f661da31e369c1a6",
+      "byteIdenticalToFullProfile": true
+    }
+  ],
+  "metadata": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "prior": 293,
+      "current": 293,
+      "priorFieldsPrefixesStatusesDefaultsAndExceptionsPreserved": true,
+      "currentSHA256": "86046cf6843333d1d4ac11f08febc45fcad12c572f62ffed095c3167a6f6b495"
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "prior": 293,
+      "current": 293,
+      "priorFieldsPrefixesStatusesDefaultsAndExceptionsPreserved": true,
+      "currentSHA256": "c69ef9152592e88eca46171a979795225d25049787f0802435424ab4cbc9712a"
+    }
+  ],
+  "parentFindingsCharacters": 580224,
+  "parentFindingsSHA256": "e9d950be742a0cbd7662b67c797efa16b35599dee4c03930a84d5dea17071ace",
+  "artifacts": {
+    "wholeAgentplaneForbiddenSourceOrPythonCount": 0,
+    "activeExtensions": [
+      "json",
+      "md"
+    ],
+    "noRawCoverageResultsOrSourceSnapshots": true,
+    "rawEvidenceLocation": "Ignored project dependency cache only"
+  },
+  "failures": []
+}

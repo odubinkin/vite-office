@@ -81,7 +81,6 @@ for (const selected of [false, true])
         ItemSetToTableParam(shell, {
           width: 6000,
           columnWidths: [3000, 3000],
-          minRowHeight: 0,
           padding: 0,
           border: "none",
           verticalAlign: VertOrientation.NONE,
@@ -165,7 +164,6 @@ it("native unchanged mixed and default dialog items preserve row attributes", /*
   ItemSetToTableParam(shell, {
     width: 6000,
     columnWidths: [6000],
-    minRowHeight: 0,
     padding: 0,
     border: "none",
     verticalAlign: VertOrientation.NONE,

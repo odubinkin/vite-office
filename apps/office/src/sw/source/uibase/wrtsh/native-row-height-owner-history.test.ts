@@ -1,13 +1,11 @@
 /** @fileoverview Verifies row-height shell forwarding, selected dialog history and original native graph. */
-import { VertOrientation } from "./../../../../offapi/com/sun/star/text/VertOrientation";
-
 import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
 import { expect, it, vi } from "vitest";
 import { SwDoc } from "../../core/doc/doc";
 import { SwDocShell } from "../app/docsh";
 import { SwWrtShell } from "./wrtsh1";
 import { SwEditWin } from "../docvw/edtwin";
-import { ItemSetToTableParam } from "../shells/tabsh";
+import { SwTableHeightDlg } from "../../ui/table/rowht";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { writeOdtDocument } from "../../filter/xml/wrtxml";
 import { readOdtDocument } from "../../filter/xml/swxml";
@@ -16,7 +14,7 @@ function required<T>(value: T | undefined): T {
   if (value === undefined) throw new Error("Missing row-height history owner");
   return value;
 }
-for (const mode of ["direct", "selected", "properties"] as const)
+for (const mode of ["direct", "selected", "dialog"] as const)
   it(`native minimum-row-height history and continued editing mode=${mode}`, /** Checks doc-owned height with original selection, pending input, list and three undo cycles. @returns Completion. */ async () => {
     const doc = new SwDoc(),
       table = doc.nodes.MakeTableNode("HeightHistory", { width: 6000 });
@@ -54,24 +52,17 @@ for (const mode of ["direct", "selected", "properties"] as const)
         apply = vi.spyOn(shell, "ApplyAction"),
         setter = vi.spyOn(doc, "SetRowHeight");
       expect(shell.GetRowHeight()?.GetHeight()).toBe(mode === "selected" ? undefined : 400);
-      const properties = {
-        width: 6000,
-        columnWidths: [3000, 3000],
-        minRowHeight: 900,
-        padding: 0,
-        border: "none",
-        verticalAlign: VertOrientation.NONE,
-        headerRows: 0,
-        repeatHeaderRows: false,
-      };
+      const draft = new SwTableHeightDlg(shell);
+      draft.SetHeight(900);
+      draft.SetFit(true);
       expect(
-        mode === "properties"
-          ? ItemSetToTableParam(shell, properties)
+        mode === "dialog"
+          ? draft.Apply()
           : shell.SetRowHeight(new SwFormatFrameSize(SwFrameSize.Minimum, 0, 900)),
       ).toBe(true);
       expect(setter).toHaveBeenCalledTimes(1);
       expect(setter.mock.calls[0]?.[0]).toBe(cursor);
-      if (mode !== "properties") expect(apply).not.toHaveBeenCalled();
+      expect(apply).not.toHaveBeenCalled();
       expect(shell.getShellCursor()).toBe(cursor);
       expect(shell.CaptureCursorState().point).toEqual(before.point);
       expect(shell.CaptureCursorState().mark).toEqual(before.mark);

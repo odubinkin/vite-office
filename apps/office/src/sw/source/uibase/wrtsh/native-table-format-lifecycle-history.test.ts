@@ -67,7 +67,6 @@ function accept(f: ReturnType<typeof fixture>): boolean {
     marginTop: f.format.above,
     marginBottom: f.format.below,
     columnWidths: data.columns,
-    minRowHeight: 0,
     padding: 0,
     border: "none",
     verticalAlign: VertOrientation.NONE,

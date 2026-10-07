@@ -102,7 +102,6 @@ for (const selected of [false, true])
         ItemSetToTableParam(f.shell, {
           width: 6000,
           columnWidths: [3000, 3000],
-          minRowHeight: 0,
           headerRows: 0,
           repeatHeaderRows: false,
           padding: 0,

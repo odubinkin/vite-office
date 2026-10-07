@@ -39,7 +39,6 @@ function fixture() {
 const properties = {
   width: 6000,
   columnWidths: [3000, 3000],
-  minRowHeight: 0,
   padding: 0,
   border: "none",
   verticalAlign: VertOrientation.NONE,

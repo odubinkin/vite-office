@@ -19,7 +19,6 @@ for (const mode of ["border-only", "row-split-only", "both"] as const)
           ItemSetToTableParam(f.shell, {
             width: 6000,
             columnWidths: [3000, 3000],
-            minRowHeight: 0,
             headerRows: 0,
             repeatHeaderRows: false,
             ...(mode === "row-split-only" ? {} : { border: "none", padding: 0 }),
@@ -253,7 +252,6 @@ it("native absent border payload never invokes shell mutation for undefined keys
       ItemSetToTableParam(f.shell, {
         width: 6000,
         columnWidths: [3000, 3000],
-        minRowHeight: 0,
         headerRows: 0,
         repeatHeaderRows: false,
         padding: undefined,

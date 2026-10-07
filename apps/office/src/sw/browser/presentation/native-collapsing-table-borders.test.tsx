@@ -143,7 +143,6 @@ it("table-only boolean items do not request cell-border writes and stored false 
     ItemSetToTableParam(f.shell, {
       width: 6000,
       columnWidths: [3000, 3000],
-      minRowHeight: 0,
       headerRows: 0,
       repeatHeaderRows: false,
       borderItems: items,

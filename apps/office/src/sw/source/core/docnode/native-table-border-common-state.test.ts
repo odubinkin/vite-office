@@ -313,7 +313,6 @@ it("returns pool defaults outside a table and applies owned native payload ahead
     ItemSetToTableParam(f.shell, {
       width: 6000,
       columnWidths: [2000, 2000, 2000],
-      minRowHeight: 0,
       headerRows: 0,
       repeatHeaderRows: false,
       borderItems: input,
