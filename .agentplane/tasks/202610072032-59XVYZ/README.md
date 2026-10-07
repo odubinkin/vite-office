@@ -1,10 +1,11 @@
 ---
 id: "202610072032-59XVYZ"
 title: "Bind native edit-window and editing-shell owners to SwView"
-status: "DOING"
+result_summary: "Native edit/shell creation-view references and shared layout ownership implemented;13646app110inventory15infra292ChromiumPASS. Full native ruler/core/UI parity remains unverified under active goal."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 29
+revision: 30
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
     - ".agentplane/tasks/202610072032-59XVYZ/evidence/governance.json"
   findings:
     - "Required SwEditWin source-view reference replaces direct shell injection; both children retain their creation view and share the same layout.48semantic paths,567old files identical41audited fixture migrations with2238original expectations preserved,1new609current;302metadata prefixes unchanged.13646app110inventory15infra292Chromium current cases pass with zero passing replay; only original empty-frame failure rerun,16skips retained. Source-bound all4coverage100; full native ruler/slot/hierarchy and exhaustive goal remain incomplete."
-commit: null
+commit:
+  hash: "20ab572c52122585a8c8adf710eb8dd2b933dd33"
+  message: "🧩 59XVYZ parity: bind edit owners to their native view"
 comments:
   -
     author: "CODER"
     body: "Start: bind the actual SwView owner at native edit-window and editing-shell boundaries; migrate only audited constructor/import fixture inputs and preserve all operation assertions."
+  -
+    author: "CODER"
+    body: "Verified: source view references and one shared layout replace direct shell injection and duplicate layout ownership;13646app110inventory15infra292ChromiumPASS with zero passing replay, exact implementation20ab572c52122585a8c8adf710eb8dd2b933dd33 and source-bound coverage verified."
 events:
   -
     type: "status"
@@ -63,8 +69,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified actual implementation20ab572c52122585a8c8adf710eb8dd2b933dd33: required native view/shared layout owner contract,13646app110inventory15infra292Chromium uniquePASS, source-bound all4coverage100,2238old expectations retained; same-current-agent exact reconstruction/evaluatorPASS not independent. One full upstream-absent run, only original failure rerun; full parity goal remains active."
+  -
+    type: "status"
+    at: "2026-10-07T21:15:26.813Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: source view references and one shared layout replace direct shell injection and duplicate layout ownership;13646app110inventory15infra292ChromiumPASS with zero passing replay, exact implementation20ab572c52122585a8c8adf710eb8dd2b933dd33 and source-bound coverage verified."
 doc_version: 3
-doc_updated_at: "2026-10-07T21:15:13.696Z"
+doc_updated_at: "2026-10-07T21:15:26.815Z"
 doc_updated_by: "CODER"
 description: "Repair one native ownership contract: SwEditWin holds required SwView reference and resolves SwWrtShell through it; SwView passes itself to its persistent edit window and editing shell, whose GetView returns its borrowed source owner (no fake/default view and detached core shells reject GetView). Preserve all operation logic, layout/cursor/list/table/history/defaults and intentional IO exceptions. Migrate exactly41 existing fixture inputs to actual SwView(DocShell).GetWrtShell and SwEditWin(shell.GetView), imports/formatter only; preserve every original test name, expectation, authored input, assertion and cleanup. Add meaningful native ownership/lifetime/document replacement/cross-view/failure-contract tests.3production+41fixture+1fresh+2metadata=47semantic files; no new upstream/Python/raw AP artifacts. One full upstream-absent runtime, later only actual failures/new cases and failed/changed static inputs, zero passing replay; all4 source-bound coverage100. Real SvxRuler/column item/slot pipeline remains subsequent work and is not represented by a fake renamed wrapper. Exact SHA review, canonical verify/checkpoint, finish actual implementation SHA; full parent historical prefix and stash retained. Standing user goal authorizes this safe local refactor; no network/outside-repo/destructive actions."
 sections:
