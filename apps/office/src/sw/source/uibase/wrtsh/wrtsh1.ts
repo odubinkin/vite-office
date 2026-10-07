@@ -5,6 +5,7 @@ import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { subscribeToSwModify } from "../../../inc/calbck";
 import type { SwModelHint } from "../../../inc/hints";
+import type { SwViewOption } from "../../../inc/viewopt";
 import { SwPosition, type WriterTextRange } from "../../core/crsr/pam";
 import { SwCursor, SwTableCursor } from "../../core/crsr/swcrsr";
 import { PopMode } from "../../core/crsr/trvltbl";
@@ -98,7 +99,7 @@ export class SwWrtShell extends SwFEShell {
   private readonly listShell: SwListShell;
   private pendingCharacterItems: SfxItemSet;
   private readonly undoContext: SwUndoRedoContext;
-  /** Creates a shell at the end of the first Writer paragraph. @param docShell - Persistent owning document shell. @param dialogController - Writer dialog lifecycle controller. @param layout - Persistent view layout, or standalone shell layout. @returns Nothing. */
+  /** Creates a shell at the end of the first Writer paragraph. @param docShell - Persistent owning document shell. @param dialogController - Writer dialog lifecycle controller. @param layout - Persistent view layout, or standalone shell layout. @param viewOptions - Existing view options or standalone defaults. @returns Nothing. */
   public constructor(
     private readonly docShell: SwDocShell,
     dialogController: WriterDialogController = new WriterDialogController(),
@@ -106,8 +107,9 @@ export class SwWrtShell extends SwFEShell {
       /** Resolves the standalone shell's current document. @returns Native document. */ () =>
         docShell.GetDoc(),
     ),
+    viewOptions?: SwViewOption,
   ) {
-    super();
+    super(viewOptions);
     const paragraph = docShell.GetDoc().paragraphs[0] as WriterParagraph;
     this.cursor = new SwCursor(new SwPosition(paragraph, paragraph.Len()));
     this.pendingCharacterItems = paragraph.GetCharacterItemsAt(paragraph.Len());
@@ -266,7 +268,6 @@ export class SwWrtShell extends SwFEShell {
       (!checkPosition || point.GetNode() !== node || point.GetContentIndex() !== offset)
     );
   }
-
   /** Refreshes shell-owned input/bindings after traversal, retaining input during saved temporary selections. @param restored - Native saved-position restoration. @returns Nothing. */
   protected override UpdateTableCursor(restored = false): void {
     if (!restored && this.GetStackCursor() === undefined)
@@ -374,33 +375,39 @@ export class SwWrtShell extends SwFEShell {
   }
   /** Assigns canonical Writer positions to the persistent PaM. @param point - Moving endpoint. @param mark - Optional fixed endpoint. @param inFrontOfLabel - Validated native label affinity. @returns Whether the cursor changed. */
   public SetPaM(point: SwPosition, mark?: SwPosition, inFrontOfLabel = false): boolean {
-    const pointNode = point.GetNode() as WriterParagraph;
-    const markNode = mark?.GetNode() as WriterParagraph | undefined;
-    if (
-      pointNode.GetDoc() !== this.GetDoc() ||
-      (markNode !== undefined && markNode.GetDoc() !== this.GetDoc())
-    )
-      return false;
-    const currentPoint = this.getShellCursor().GetPoint();
-    const currentMark = this.getShellCursor().HasMark()
-      ? this.getShellCursor().GetMark()
-      : undefined;
-    if (
-      currentPoint.GetNode() === pointNode &&
-      currentPoint.GetContentIndex() === point.GetContentIndex() &&
-      currentMark?.GetNode() === markNode &&
-      currentMark?.GetContentIndex() === mark?.GetContentIndex() &&
-      this.IsInFrontOfLabel() === inFrontOfLabel
-    )
-      return false;
-    this.pendingCharacterItems = pointNode.GetCharacterItemsAt(point.GetContentIndex());
-    SwTextCursor.SetRightMargin(false);
-    this.docShell.GetUndoManager().BreakUndoGrouping();
-    this.ClearTableCursor();
-    this.cursor.Assign(point, mark);
-    this.SetInFrontOfLabel(inFrontOfLabel);
-    this.NotifySelection();
-    return true;
+    return this.RunNotificationTransaction(
+      /** Publishes native label invalidation and final cursor state together like SwCallLink. @returns Whether cursor changed. */ () => {
+        const pointNode = point.GetNode() as WriterParagraph;
+        const markNode = mark?.GetNode() as WriterParagraph | undefined;
+        if (
+          pointNode.GetDoc() !== this.GetDoc() ||
+          (markNode !== undefined && markNode.GetDoc() !== this.GetDoc())
+        )
+          return false;
+        const currentPoint = this.getShellCursor().GetPoint();
+        const currentMark = this.getShellCursor().HasMark()
+          ? this.getShellCursor().GetMark()
+          : undefined;
+        if (
+          currentPoint.GetNode() === pointNode &&
+          currentPoint.GetContentIndex() === point.GetContentIndex() &&
+          currentMark?.GetNode() === markNode &&
+          currentMark?.GetContentIndex() === mark?.GetContentIndex() &&
+          this.IsInFrontOfLabel() === inFrontOfLabel
+        )
+          return false;
+        this.pendingCharacterItems = pointNode.GetCharacterItemsAt(point.GetContentIndex());
+        SwTextCursor.SetRightMargin(false);
+        this.docShell.GetUndoManager().BreakUndoGrouping();
+        this.ClearTableCursor();
+        this.cursor.Assign(point, mark);
+        if (inFrontOfLabel || this.IsInFrontOfLabel())
+          this.cursor.SetInFrontOfLabel_(!inFrontOfLabel);
+        this.SetInFrontOfLabel(inFrontOfLabel);
+        this.NotifySelection();
+        return true;
+      },
+    );
   }
   /** Applies interactive table-mode admission separately from low-level PaM assignment, as native UpdateCursor does. @param point - Moving hit. @param mark - Fixed hit. @param inRepeatedHeadline - Actual follow headline occurrence. @param inFrontOfLabel - Validated native label affinity. @returns Whether cursor changed. */
   public UpdateCursor(
@@ -499,12 +506,10 @@ export class SwWrtShell extends SwFEShell {
     }
     return pasteWriterTransfer(paste, this);
   }
-
   /** Reads plain clipboard text at native selected-cell points. @param text - Plain clipboard text. @returns Whether imported. */
   public PastePlainTextAtCursor(text: string): boolean {
     return PastePlainText(this, text);
   }
-
   /** Inserts text at the persistent Writer cursor, matching the bounded SwWrtShell insertion boundary. @param text - Text to insert or replace the selection with. @returns Whether the document changed. */
   public Insert(text: string): boolean {
     if (text.length === 0) return false;
@@ -516,17 +521,14 @@ export class SwWrtShell extends SwFEShell {
       },
     );
   }
-
   /** Replaces the current Writer selection without joining ordinary typing undo groups. @param text - Replacement text. @returns Whether content changed. */
   public Replace(text: string): boolean {
     return text.length > 0 && InsertAtCursor(this, text, false);
   }
-
   /** Inserts a paragraph break at the persistent Writer cursor. @returns Whether a break was inserted. */
   public SplitNode(): boolean {
     return SplitAtCursor(this);
   }
-
   /** Changes numbering at an unselected paragraph start. @param numOn - Count the current item when true. @returns Whether numbering changed. */
   public NumOrNoNum(numOn = true): boolean {
     const point = this.getShellCursor().GetPoint(),
@@ -555,7 +557,6 @@ export class SwWrtShell extends SwFEShell {
       },
     );
   }
-
   /** Removes paragraph-start indentation in the native firstline/hanging/left order. @returns Whether a paragraph item changed. */
   public TryRemoveIndent(): boolean {
     const node = this.GetActiveParagraph();
@@ -572,7 +573,6 @@ export class SwWrtShell extends SwFEShell {
       ),
     ]);
   }
-
   /** Deletes the preceding grapheme or the current selection. @returns Whether content changed. */
   public DelLeft(): boolean {
     return DeleteAtCursor(this, "backspace");

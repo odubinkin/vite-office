@@ -1,7 +1,19 @@
 /** @fileoverview Implements the bounded Writer view-option owner from `sw/inc/viewopt.hxx`. */
 
+/** Native appearance-bit identities from viewopt.hxx. */
+export enum ViewOptFlags {
+  NONE = 0x0000,
+  IndexShadings = 0x0001,
+  Links = 0x0002,
+  VisitedLinks = 0x0004,
+  FieldShadings = 0x0008,
+  Shadow = 0x0010,
+}
+
 /** View-local visibility flags consumed by SwView and browser presentation. */
 export class SwViewOption {
+  private appearanceFlags =
+    ViewOptFlags.IndexShadings | ViewOptFlags.FieldShadings | ViewOptFlags.Shadow;
   private horizontalRulerVisible = true;
   private verticalRulerVisible = true;
   private sidebarVisible = true;
@@ -9,6 +21,20 @@ export class SwViewOption {
 
   /** Creates view options with one bindings invalidation callback. @param changed - State-change callback. @returns Nothing. */
   public constructor(private readonly changed: () => void) {}
+
+  /** Tests configured native appearance bits. @param flag - Requested bits. @returns Whether any requested bit is set. */
+  public IsAppearanceFlag(flag: ViewOptFlags): boolean {
+    return (this.appearanceFlags & flag) !== 0;
+  }
+  /** Reads native field-shading visibility. @returns Whether field shadings are enabled. */
+  public IsFieldShadings(): boolean {
+    return this.IsAppearanceFlag(ViewOptFlags.FieldShadings);
+  }
+  /** Sets or clears native appearance bits without implicit redraw or configuration persistence. @param flag - Native bits. @param set - Enable or disable. @returns Nothing. */
+  public SetAppearanceFlag(flag: ViewOptFlags, set: boolean): void {
+    if (set) this.appearanceFlags |= flag;
+    else this.appearanceFlags &= ~flag;
+  }
 
   /** Returns horizontal-ruler visibility. @returns Whether visible. */
   public IsHorizontalRulerVisible(): boolean {

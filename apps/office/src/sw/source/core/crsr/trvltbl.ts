@@ -8,6 +8,7 @@ import type { SwDoc } from "../doc/doc";
 import type { SwUndoCursorState } from "../undo/undobj";
 import type { SwTableLine } from "../table/swtable";
 import { SwRootFrame } from "../layout/newfrm";
+import { SwViewOption } from "../../../inc/viewopt";
 
 /** Native extended range retains the first structural node and trailing table owners. */
 export type ExtendedSelection = readonly [SwNode, readonly SwTableNode[]];
@@ -20,6 +21,16 @@ export enum PopMode {
 
 /** Core cursor shell precedes editing/frame shells and owns actual table movement. */
 export abstract class SwCursorShell extends SwModify {
+  /** Creates a cursor shell using actual view options or standalone defaults. @param viewOptions - Existing view-option identity. @returns Nothing. */
+  public constructor(
+    private readonly viewOptions = new SwViewOption(
+      /** Retains standalone options without a frame invalidation owner. @returns Nothing. */ () => {},
+    ),
+  ) {
+    super();
+  }
+  private m_sMarkedListId = "";
+  private m_nMarkedListLevel = 0;
   private cursorLayout: SwRootFrame | undefined;
   /** Returns the native cursor's persistent layout owner. @returns Current document layout. */
   public GetLayout(): SwRootFrame {
@@ -36,7 +47,34 @@ export abstract class SwCursorShell extends SwModify {
   public SetInFrontOfLabel(value: boolean): boolean {
     if (value === this.IsInFrontOfLabel()) return false;
     this.cursor.SetInFrontOfLabel_(value);
+    this.UpdateMarkedListLevel();
     return true;
+  }
+  /** Returns the existing native view-option owner. @returns Shared view options. */
+  public GetViewOptions(): SwViewOption {
+    return this.viewOptions;
+  }
+  /** Reconciles marked-list ownership only when the native identity/depth pair changes. @param listId - Existing list identity or empty. @param level - Native depth. @returns Nothing. */
+  public MarkListLevel(listId: string, level: number): void {
+    if (listId === this.m_sMarkedListId && level === this.m_nMarkedListLevel) return;
+    if (this.GetViewOptions().IsFieldShadings()) {
+      if (this.m_sMarkedListId.length !== 0)
+        this.GetDoc().MarkListLevel(this.m_sMarkedListId, this.m_nMarkedListLevel, false);
+      if (listId.length !== 0) this.GetDoc().MarkListLevel(listId, level, true);
+    }
+    this.m_sMarkedListId = listId;
+    this.m_nMarkedListLevel = level;
+  }
+  /** Reads actual paragraph numbering and label affinity to update native marked depth. @returns Nothing. */
+  public UpdateMarkedListLevel(): void {
+    const node = this.cursor.GetPoint().GetNode();
+    if (!(node instanceof SwTextNode)) return;
+    if (!node.IsNumbered()) {
+      this.cursor.SetInFrontOfLabel_(false);
+      this.MarkListLevel("", 0);
+    } else if (this.cursor.IsInFrontOfLabel()) {
+      if (node.IsInList()) this.MarkListLevel(node.GetListId(), node.GetActualListLevel());
+    } else this.MarkListLevel("", 0);
   }
   /** Executes native LRMargin including repeated Home label entry. @param left - Beginning direction. @param api - API end includes spaces. @returns Frame or label admission. */
   public LRMargin(left: boolean, api = false): boolean {

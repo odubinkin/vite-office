@@ -1,0 +1,17 @@
+{
+  "records": [
+    {
+      "command": "Unchanged JSDoc validator on approved changed code/acceptance paths; actual physical-line count",
+      "exit": 0,
+      "errors": [],
+      "physicalLines": {
+        "apps/office/src/sw/inc/viewopt.ts": 81,
+        "apps/office/src/sw/source/core/crsr/trvltbl.ts": 419,
+        "apps/office/src/sw/source/core/txtnode/ndtxt.ts": 999,
+        "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts": 999,
+        "apps/office/src/sw/source/uibase/uiview/view.ts": 265,
+        "apps/office/src/sw/source/core/crsr/native-marked-list-cursor.test.ts": 316
+      }
+    }
+  ]
+}

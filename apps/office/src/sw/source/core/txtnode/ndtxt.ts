@@ -104,12 +104,10 @@ export type WriterParagraphAlignment = (typeof WRITER_PARAGRAPH_ALIGNMENTS)[numb
 export class SwTextNode extends SwContentNode {
   private mText: string;
   private m_pSwpHints: SwpHints | undefined;
-
   /** Reads the native hint container. @returns Current owned container. */
   private get pSwpHints(): SwpHints | undefined {
     return this.m_pSwpHints;
   }
-
   /** Applies node ownership to every existing hint assignment. @param hints - Replacement container. @returns Nothing. */
   private set pSwpHints(hints: SwpHints | undefined) {
     this.m_pSwpHints = ReplaceTextNodeHints(this, this.m_pSwpHints, hints);
@@ -120,7 +118,6 @@ export class SwTextNode extends SwContentNode {
   private mbInSetOrResetAttr = false;
   private m_bLastOutlineState = false;
   private m_bNotifiable = true;
-
   /** Creates a text node in one Writer content section. @param nodes - Owning node array. @param startOfSection - Containing section. @param formatColl - Registered paragraph style. @param text - Initial canonical text. @returns Nothing. */
   public constructor(
     nodes: SwNodes,
@@ -131,7 +128,6 @@ export class SwTextNode extends SwContentNode {
     super(nodes, startOfSection, formatColl);
     this.mText = text;
   }
-
   /** Returns the canonical node text. @returns Canonical text. */
   public GetText(): string {
     return this.mText;
@@ -498,6 +494,10 @@ export class SwTextNode extends SwContentNode {
   /** Returns the derived tree level. @returns Tree level, or minus one without a record. */
   public GetActualListLevel(): number {
     return this.mpNodeNum?.GetLevelInListTree() ?? -1;
+  }
+  /** Reports native counted numbering from the actual owned rule. @returns Whether numbered, including counted bullets. */
+  public IsNumbered(): boolean {
+    return this.GetNum()?.GetNumRule() !== undefined && this.IsCountedInList();
   }
   /** Queries marked-label state through the existing list and derived tree depth. @returns Whether this member's label is marked. */
   public HasMarkedLabel(): boolean {

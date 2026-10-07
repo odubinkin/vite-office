@@ -1,0 +1,33 @@
+{
+  "vendorRestored": true,
+  "sourceSnapshot": "GXQVRN.closure1.source",
+  "preProfileSHA256": {
+    "apps/office/src/sw/inc/viewopt.ts": "145debd14065dc3563f3d791f6d4f37ada57795a3421c624d9371bbfc89e920d",
+    "apps/office/src/sw/source/core/crsr/trvltbl.ts": "d82ba6a1e64d86944cfb93ce29c8f3c63923242cb32f174d34e6928d8451cf92",
+    "apps/office/src/sw/source/core/txtnode/ndtxt.ts": "e7bdb2e6799811025f52c1ccd2dc3e1d4c22670a558287348bd829979dbf01aa",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts": "fee05b67619a94a2a71cf57c42b88bb4dbf110714847b9d702c1bb558b8d932f",
+    "apps/office/src/sw/source/uibase/uiview/view.ts": "411cc9528672050fb45b3267efd7c0599d8b102150346195ed93d09ec1ae36cb",
+    "apps/office/src/sw/source/core/crsr/native-marked-list-cursor.test.ts": "93a4934b1fc93cb1eed21c882c4a8f887bd9bcc8e2e3d39d204de924df2cbba0",
+    "docs/program/source-provenance.json": "dac2c7680246179a9359310189013e606cbc2866c88dae6281d0d5a9abc65628",
+    "docs/program/parity/runtime-inventory.json": "1442daf96c3dc2d2faec5b7e107d8717a53a827026ed3f3ec994a58aadb3b36d"
+  },
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/source/core/crsr/native-marked-list-cursor.test.ts src/sw/source/uibase/docvw/native-label-affinity.test.ts -t native device label affinity preserves original|native standalone options|native label admission publishes --coverage.reportOnFailure --coverage.reporter=json --coverage.reporter=json-summary --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/GXQVRN.closure1.app-results.json",
+      "exit": 1,
+      "bytes": 2259,
+      "sha256": "59d62cf6a6f38daac0d19bac17544f761f23ae7e878baedd513b9e7c6f7a33b0",
+      "caseCounts": {
+        "passed": 6,
+        "failed": 0,
+        "skipped": 8,
+        "total": 14
+      },
+      "failures": [],
+      "unhandledErrorCount": 0,
+      "coverageMapSHA256": "ef89d6efcc128e1184aa392978fa1e5fcc0c2cf10d6d474e98d854623e47fecc",
+      "profile": "upstream-absent"
+    }
+  ]
+}

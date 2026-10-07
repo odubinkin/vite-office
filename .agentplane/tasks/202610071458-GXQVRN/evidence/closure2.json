@@ -1,0 +1,15 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "exit": 0,
+      "profile": "upstream-absent",
+      "bytes": 1443,
+      "sha256": "39bf4f5e02fa7cb6dc7681b9baa804241b90cdea61e53fe632d3ff162a7c1c38",
+      "unhandledErrorCount": 0,
+      "reason": "Changed-input build after actual SetPaM transaction repair; no runtime test or unchanged build repeated."
+    }
+  ]
+}

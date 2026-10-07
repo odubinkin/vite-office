@@ -1,0 +1,71 @@
+{
+  "records": [
+    {
+      "phase": "absent-profile",
+      "kind": "build",
+      "exit": 0,
+      "uncaughtErrorCount": 0,
+      "outputSHA256": "61b9eeae0e7892e167f56407237710914e9fab243ee9ce7fc395c9bfedadcfea",
+      "assertionFailures": 0
+    },
+    {
+      "phase": "absent-profile",
+      "kind": "app",
+      "exit": 1,
+      "uncaughtErrorCount": 0,
+      "outputSHA256": "090e28a2841d0b753e1b8ebf07378cec06fbb6257af4e72d5254a36fd1858bee",
+      "assertionFailures": 4
+    },
+    {
+      "phase": "absent-profile",
+      "kind": "inventory",
+      "exit": 0,
+      "uncaughtErrorCount": 0,
+      "outputSHA256": "2ea87374050633b3ac0f765e73885a4d0c837580fb84041d69546fc520791dce",
+      "assertionFailures": 0
+    },
+    {
+      "phase": "absent-profile",
+      "kind": "scripts",
+      "exit": 0,
+      "uncaughtErrorCount": 0,
+      "outputSHA256": "39e51c202386ce85be5c2678f60c7b5ddc866da1e97fab0972987c04bfd565e1",
+      "assertionFailures": 0
+    },
+    {
+      "phase": "absent-profile",
+      "kind": "chromium",
+      "exit": 0,
+      "uncaughtErrorCount": 0,
+      "outputSHA256": "614e0abf1b13292f9a3217460d458898a7cb62435ab95e6d9db7d2d219d6fd74",
+      "assertionFailures": 0
+    },
+    {
+      "phase": "closure1",
+      "kind": "app",
+      "exit": 1,
+      "uncaughtErrorCount": 0,
+      "outputSHA256": "59d62cf6a6f38daac0d19bac17544f761f23ae7e878baedd513b9e7c6f7a33b0",
+      "assertionFailures": 0
+    },
+    {
+      "phase": "closure2",
+      "kind": "build",
+      "exit": 0,
+      "uncaughtErrorCount": 0,
+      "outputSHA256": "39bf4f5e02fa7cb6dc7681b9baa804241b90cdea61e53fe632d3ff162a7c1c38",
+      "assertionFailures": 0
+    }
+  ],
+  "unresolvedUncaught": 0,
+  "originalFailure": "4 prior device-label-affinity cases observed separate repaint and final cursor publications through bare SetPaM; fixed the actual source-shaped SwCallLink transaction boundary. Original acceptance expectations remained byte-identical;4 original failures passed closure1.",
+  "staticFailure": "Initial JSDoc/check:docs found one undocumented fresh test IIFE; added its documentation and failed/changed-input scoped checks passed.",
+  "processError": "Initial coverage proof adapter routed its nonzero diagnostic to prior DONE217 task because of template replacement; no DONE mutation. Corrected the diagnostic target and recomputed current218 route before editing.",
+  "oneFullProfile": true,
+  "focusedRuntimeProfiles": 1,
+  "passingReplay": 0,
+  "accidentalRedundantBuild": false,
+  "changedInputBuild": "closure2 compiles final SetPaM repair, upstream absent; no runtime tests or unchanged build repeated.",
+  "vendorRestored": true,
+  "chromiumScope": "278 full browser cases passed before the isolated SetPaM publication-boundary repair. Final direct native edit-window original-failure and atomic publication cases verify the repaired behavior; changed-input final production build passed. No separate browser rendering code changed."
+}

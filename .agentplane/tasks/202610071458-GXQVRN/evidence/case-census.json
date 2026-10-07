@@ -1,0 +1,72 @@
+{
+  "app": {
+    "original": 13557,
+    "current": 13559,
+    "newCases": 2,
+    "resolved": 4,
+    "passed": 13559,
+    "unresolvedCount": 0,
+    "skippedObservationsRetained": 8,
+    "passingReplay": 0,
+    "originalUncaughtErrorCases": 0,
+    "finalUncaughtErrorCases": 0,
+    "inputs": [
+      {
+        "file": "GXQVRN.app-results.json",
+        "sha256": "8224bedef9e7a30ada43117d015d22610330e1f55e0e990178c23e3b0de21ea5",
+        "passed": 13553,
+        "failed": 4,
+        "skipped": 0
+      },
+      {
+        "file": "GXQVRN.closure1.app-results.json",
+        "sha256": "e81588b87f0b0c07676db7d0101431741a346d02b41cfbcf94c26b14731c4815",
+        "passed": 6,
+        "failed": 0,
+        "skipped": 8
+      }
+    ]
+  },
+  "inventory": {
+    "original": 110,
+    "current": 110,
+    "newCases": 0,
+    "resolved": 0,
+    "passed": 110,
+    "unresolvedCount": 0,
+    "skippedObservationsRetained": 0,
+    "passingReplay": 0,
+    "originalUncaughtErrorCases": 0,
+    "finalUncaughtErrorCases": 0,
+    "inputs": [
+      {
+        "file": "GXQVRN.inventory-results.json",
+        "sha256": "661aa567d702df2850f23ff4a5374c7b445ee2b7884ba770ee10946aac2beebd",
+        "passed": 110,
+        "failed": 0,
+        "skipped": 0
+      }
+    ]
+  },
+  "chromium": {
+    "current": 278,
+    "passed": 278,
+    "unresolvedCount": 0,
+    "passingReplay": 0,
+    "inputs": [
+      {
+        "file": "GXQVRN.chromium-results.json",
+        "sha256": "ac5d5dd083476a2ce55de33959596b4e9885fea8037b8d90083a4c53e14fe39d",
+        "counts": {
+          "startTime": "2026-10-07T15:10:16.030Z",
+          "duration": 225960.044,
+          "expected": 278,
+          "skipped": 0,
+          "unexpected": 0,
+          "flaky": 0
+        }
+      }
+    ]
+  },
+  "failures": []
+}

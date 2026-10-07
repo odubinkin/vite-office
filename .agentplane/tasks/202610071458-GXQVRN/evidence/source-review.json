@@ -1,0 +1,28 @@
+{
+  "baselineTag": "libreoffice-26.8.0.2",
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceSHA256": {
+    "sw/source/core/crsr/crsrsh.cxx": "22a10693b0097a1788df0b2b63153790a37a4ce0f79ddaa4da8ec2c30c3c4f3a",
+    "sw/inc/viewopt.hxx": "38ee138e6e3ca5f7b59750b0e2b82e77c663fce4a1130930d6fe0236bbac574d",
+    "sw/source/uibase/config/viewopt.cxx": "0e8e4a5b9cbc878825ff28d4849549d599d1401ab740321e444b22736b027154",
+    "sw/source/core/txtnode/ndtxt.cxx": "8cf38bae998b54451bbcbbc15fd69600d0f24490cf86c33c7cd54f72c63871f1",
+    "officecfg/registry/schema/org/openoffice/Office/UI.xcs": "1736f7e89bafb7f26a7e86542be20d30c159bd88987898f53deaf87385cc64a6",
+    "officecfg/registry/data/org/openoffice/Office/UI.xcu": "e38951be1e60f8b281b3fc443240c00c0be4ab5d4a061990228f866d64e6a413"
+  },
+  "productionSHA256": {
+    "apps/office/src/sw/inc/viewopt.ts": "145debd14065dc3563f3d791f6d4f37ada57795a3421c624d9371bbfc89e920d",
+    "apps/office/src/sw/source/core/crsr/trvltbl.ts": "d82ba6a1e64d86944cfb93ce29c8f3c63923242cb32f174d34e6928d8451cf92",
+    "apps/office/src/sw/source/core/txtnode/ndtxt.ts": "e7bdb2e6799811025f52c1ccd2dc3e1d4c22670a558287348bd829979dbf01aa",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts": "fee05b67619a94a2a71cf57c42b88bb4dbf110714847b9d702c1bb558b8d932f",
+    "apps/office/src/sw/source/uibase/uiview/view.ts": "411cc9528672050fb45b3267efd7c0599d8b102150346195ed93d09ec1ae36cb"
+  },
+  "contracts": {
+    "cursor": "crsrsh.cxx391-440 stores empty ID/level0 defaults, exact pair noop, gates former clear/new mark on actual field shading but always changes bookkeeping. Update reads actual paragraph rule/count and list membership; nontext returns without changing label/mark. Unnumbered clears affinity then empty0 mark; numbered before-label in-list marks actual ID/depth, ordinary text clears.",
+    "affinity": "SetInFrontOfLabel1519-1529 updates marked level only on affinity change. Native SetCursor1161-1163 forces opposite flag when either old/new label intent exists before applying actual new intent, so label-to-label point changes refresh marks even with unchanged boolean.",
+    "numbered": "ndtxt.cxx3060-3063 IsNumbered uses actual number record rule and IsCountedInList, including counted bullet labels; visible glyph predicate does not replace counted-rule state.",
+    "view": "Actual existing SwViewOption identity shared with ancestor cursor-shell GetViewOptions; standalone shell creates exactly one separate default option owner. No duplicate React mark/shading state or full absent SwViewShell claim.",
+    "atomic": "crsrsh.cxx1153 SwCallLink encloses actual point/label admission. Existing typed browser shell SetPaM now batches list repaint and final cursor-selection notifications, retaining native document-level callback order; original observer expectations preserved.",
+    "appearance": "viewopt.hxx210-218 native bit identities NONE0/Index1/Links2/Visited4/Field8/Shadow16. viewopt.cxx541-578 uses bitwise any/set/clear; no implicit repaint callback in setter. Native constructor288 copies configured s_aInitialColorConfig. Configured desktop UI.xcs/xcu defaults index/field/shadow true, links/visited false. LibreOfficeKit-active suppression is not the target desktop-like UI; configuration persistence remains unimplemented and unverified."
+  },
+  "residual": "Marker shading paint and ruler UI, configuration persistence/full color-owner graph, full SwViewShell hierarchy and merged/hidden-redline paragraph property selection remain individually unverified. Preserve all298 metadata prior states/defaults/exceptions, no blanket promotion. Whole parity ACTIVE; exact same-agent evaluation explicitly not independent."
+}

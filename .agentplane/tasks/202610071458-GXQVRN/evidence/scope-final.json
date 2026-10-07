@@ -1,0 +1,35 @@
+{
+  "base": "f298cea02ee11eae0f3020414c3b04c601b4b85b",
+  "semanticPaths": [
+    "apps/office/src/sw/inc/viewopt.ts",
+    "apps/office/src/sw/source/core/crsr/native-marked-list-cursor.test.ts",
+    "apps/office/src/sw/source/core/crsr/trvltbl.ts",
+    "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
+    "apps/office/src/sw/source/uibase/uiview/view.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/source-provenance.json"
+  ],
+  "scopeCount": 8,
+  "priorAcceptanceFiles": 587,
+  "byteIdenticalAcceptanceFiles": 587,
+  "exactSourceBackedMigrations": [],
+  "newAcceptanceFiles": [
+    "apps/office/src/sw/source/core/crsr/native-marked-list-cursor.test.ts"
+  ],
+  "metadata": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "oldRecords": 298,
+      "currentRecords": 298,
+      "allPriorFieldsPrefixesAndStatusesPreserved": true
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "oldRecords": 298,
+      "currentRecords": 298,
+      "allPriorFieldsPrefixesAndStatusesPreserved": true
+    }
+  ],
+  "failures": []
+}

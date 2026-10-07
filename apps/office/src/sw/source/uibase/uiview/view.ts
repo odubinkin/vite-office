@@ -42,15 +42,15 @@ export class SwView {
 
   /** Creates one persistent view over a persistent document shell. @param docShell - Owning Writer document shell. @returns Nothing. */
   public constructor(private readonly docShell: SwDocShell) {
-    this.wrtShell = new SwWrtShell(docShell, this.dialogController, this.layout);
+    this.viewOptions = new SwViewOption(
+      /** Invalidates view-option slot state. @returns Nothing. */ () => this.Invalidate("view"),
+    );
+    this.wrtShell = new SwWrtShell(docShell, this.dialogController, this.layout, this.viewOptions);
     this.docShell.SetView(this);
     this.editWindow = new SwEditWin(
       this.wrtShell,
       /** Publishes final operation state after edit-window compound actions close. @returns Nothing. */ () =>
         this.Invalidate("document", "history", "selection"),
-    );
-    this.viewOptions = new SwViewOption(
-      /** Invalidates view-option slot state. @returns Nothing. */ () => this.Invalidate("view"),
     );
     this.viewCommandShell = new SwViewCommandShell(this);
     this.tableShell = new SwTableShell(this.wrtShell);
