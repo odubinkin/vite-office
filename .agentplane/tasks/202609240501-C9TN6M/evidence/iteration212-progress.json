@@ -1,0 +1,20 @@
+{
+  "iteration": 212,
+  "leaf": "202610071025-6RKM2B",
+  "implementation": "c6c4eb13d4d8ef76e817f097c4900253d196de64",
+  "evidenceTail": "d0e63599a1a055e0cea0cffd317dc3e9bbd3acee",
+  "close": "8f79f58f6d7171e8c861c09b21e2e7b258634431",
+  "completePriorCharacters": 575377,
+  "completePriorSHA256": "f1acffd23bc38e9bbfcfba9ef6da42bea7f2879e41effd0bd78e3a2c37cfa5c4",
+  "completePriorPrefixPreserved": true,
+  "finalFindingsSHA256": "e9d950be742a0cbd7662b67c797efa16b35599dee4c03930a84d5dea17071ace",
+  "cases": {
+    "app": 13495,
+    "inventory": 110,
+    "infrastructure": 14,
+    "chromium": 272
+  },
+  "passingReplay": 0,
+  "parentGoalState": "ACTIVE; whole parity unverified",
+  "nextLeaf": "Remove direct minRowHeight compatibility and use native height API/slot"
+}
