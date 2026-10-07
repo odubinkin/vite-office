@@ -1,10 +1,11 @@
 ---
 id: "202610071840-JJ976X"
 title: "Own numbering property publication in native SwXNumberingRules"
-status: "DOING"
+result_summary: "XML numbering publication now consumes source-owned SwXNumberingRules properties. ONE upstream-absent full runtime plus1genuinelynew public API case only yields13589app110inventory15infra288Chrome finaluniquePASS,zero passing replay,actual all-four current-source coverage100.602oldtests/302metadata and registered deviations retained; exhaustive parity goalactive."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
     - ".agentplane/tasks/202610071840-JJ976X/evidence/exact-sha-review.json"
   findings:
     - "Duplicate XML numbering property assembly removed; original represented SwXNumberingRules getter owns active mode predicates, signedStartWith, optionalListFormat/BulletChar/Font.Name and independent values. Native public helper/static contracts source-reviewed; actual ODT/Worker and existing Chrome regressions pass. All602oldtests byte-identical and302metadata retained. Full UNOAny/Sequence/service state/CharStyle/legal/chapter/graphics/fullFontDescriptor, existing setter visibility, generic TextRuns/Worker/native UI and extended save config remain partial/unverified; registered I/O/recovery deviations unchanged and exhaustive goalactive."
-commit: null
+commit:
+  hash: "fdf1bcf9960c3c36c22bfc32ddd585a07e93a582"
+  message: "🧩 JJ976X parity: own native numbering property publication"
 comments:
   -
     author: "CODER"
     body: "Start: Replace duplicated XML numbering property assembly with source-owned represented SwXNumberingRules getter chain within standing authorized parity goal."
+  -
+    author: "CODER"
+    body: "Verified: Represented native SwXNumberingRules getter chain and public helpers own active MM100/optional marker publication; duplicate XML assembly removed, evidence and residuals recorded."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "PASS exact implementation fdf1bcf9960c3c36c22bfc32ddd585a07e93a582 represented source-owned numbering getter/public contracts, actual ODT/Worker and288Chromium; ONE upstream-absent full profile plus1genuinelynew case only,13589app110inventory15infra finaluniquePASS,zero passing replay,3skipsretainedwithoutpromotion,all-four source-bound app/inventorycoverage100. Public visibility access-only source has entire identical emitted JavaScript runtime binding; final static/source/scope/artifact and same-current-agent explicitly non-independent EVALUATOR PASS. Final Findings and Verification persisted before canonical verification; fullgoalactive/residualsrecorded."
+  -
+    type: "status"
+    at: "2026-10-07T19:05:29.291Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Represented native SwXNumberingRules getter chain and public helpers own active MM100/optional marker publication; duplicate XML assembly removed, evidence and residuals recorded."
 doc_version: 3
-doc_updated_at: "2026-10-07T19:05:26.669Z"
+doc_updated_at: "2026-10-07T19:05:29.293Z"
 doc_updated_by: "CODER"
 description: "Iteration224: remove duplicated Writer XML numbering property assembly in favor of actual source-owned SwXNumberingRules getter chain, native active geometry predicates, signed start and optional bullet properties for represented contracts."
 sections:
