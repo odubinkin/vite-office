@@ -1,10 +1,11 @@
 ---
 id: "202610070438-GCAPDR"
 title: "Read native common table border items for selected properties input"
-status: "DOING"
+result_summary: "Native common border input/output and source selection/default28 restored; represented properties verified; full border page and whole parity remain active."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -39,11 +40,16 @@ quality_review:
   findings:
     - "Actual source bytes and reconstructed counters/case census match the reviewed implementation; 13376 app,110 inventory,13 scripts,254 Chromium pass, actual100 four metrics; all old acceptance and metadata contracts retained through explicit source-backed migrations."
     - "Existing bullet overlap fix e625c6f3 remains present and four actual current production Chromium glyph-geometry cases pass; no passing/full test replay."
-commit: null
+commit:
+  hash: "ae01a2e08e28a876ea8514b837c18d345920429d"
+  message: "🚧 GCAPDR code: read native common table border items"
 comments:
   -
     author: "CODER"
     body: "Start: implement source-shaped common border getter and native table-properties item-set input/output under standing iterative refactoring authorization, preserving all registered I/O deviations."
+  -
+    author: "CODER"
+    body: "Verified: native selected/common border items now feed and leave table properties through owned SfxItemSet; exact implementation ae01a2e08e28a876ea8514b837c18d345920429d,13376 app110 inventory13 scripts254 Chromium with actual100 coverage, strict source/scope/static gates and same-agent EVALUATOR pass. Full parent goal remains active."
 events:
   -
     type: "status"
@@ -58,8 +64,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: exact implementation ae01a2e08e28a876ea8514b837c18d345920429d meets native common-border scope;13376 app110 inventory13 scripts254 Chromium, actual100 coverage, source/scope/static gates and same-agent exact EVALUATOR pass; vendor restored, no replay; full goal remains active."
+  -
+    type: "status"
+    at: "2026-10-07T05:58:48.998Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native selected/common border items now feed and leave table properties through owned SfxItemSet; exact implementation ae01a2e08e28a876ea8514b837c18d345920429d,13376 app110 inventory13 scripts254 Chromium with actual100 coverage, strict source/scope/static gates and same-agent EVALUATOR pass. Full parent goal remains active."
 doc_version: 3
-doc_updated_at: "2026-10-07T05:58:03.995Z"
+doc_updated_at: "2026-10-07T05:58:49.003Z"
 doc_updated_by: "CODER"
 description: "Iteration207: implement source GetTabBorders outer/inner common values and mixed validity over native point/mark union; source table-properties temporary selection/input flags; remove first-cell browser border reads and preserve unrelated fields on partial edits. Preserve registered document I/O deviations and whole goal scope."
 sections:
