@@ -1,10 +1,11 @@
 ---
 id: "202610071544-HP2B9C"
 title: "Paint marked list labels through native view colors"
-status: "DOING"
+result_summary: "Painted native marked list levels through original view/color owners and shared master marker; exact implementation verified, broad painter/color/UI parity remains in active parent."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +39,16 @@ quality_review:
     - ".agentplane/tasks/202610071544-HP2B9C/evidence/exact-sha-review.json"
   findings:
     - "13,566app110inventory14infra280Chrome pass after exactly5original failures closed,0passing replay/uncaught/unresolved. Complete app/inventory all4 metrics100; filtered exits1 retain full-graph threshold diagnostics, no exclusions/clamps/skips promoted. Process static-ledger overlap explicitly retained without semantic drift."
-commit: null
+commit:
+  hash: "3b48e0a5d85344ad8c3744767455565bdff9e675"
+  message: "🧩 HP2B9C parity: paint native marked list levels"
 comments:
   -
     author: "CODER"
     body: "Start: implement the authorized native list marker background slice using actual view-color and marked-level owners, preserving all prior acceptance and one absent-upstream profile."
+  -
+    author: "CODER"
+    body: "Verified: native Number background policy uses actual SwViewColors and marked-level owners;13566app110inventory14infra280Chrome,actual app/inventory all4coverage100,588prior acceptance unchanged and registered save/open/recovery exceptions retained."
 events:
   -
     type: "status"
@@ -57,8 +63,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified exact implementation3b48e0a5d85344ad8c3744767455565bdff9e675:13566app110inventory14infra280Chrome,zero unresolved/uncaught/passing replay;one full absent-upstream profile and only5original failed cases closed. Actual source/map app/inventory all4 metrics100,588prior acceptance unchanged/299metadata,source/static/artifact/governance gates pass. Same-agent quality explicitly not independent; recorded threshold-only focused exits and static-ledger overlap, broad native painter/colors/UI parity residuals remain."
+  -
+    type: "status"
+    at: "2026-10-07T16:05:59.453Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native Number background policy uses actual SwViewColors and marked-level owners;13566app110inventory14infra280Chrome,actual app/inventory all4coverage100,588prior acceptance unchanged and registered save/open/recovery exceptions retained."
 doc_version: 3
-doc_updated_at: "2026-10-07T16:05:13.471Z"
+doc_updated_at: "2026-10-07T16:05:59.455Z"
 doc_updated_by: "CODER"
 description: "Iteration219: restore bounded SwViewColors ownership and native Number DrawViewOpt admission, project actual marked labels to the shared body/cell marker painter; preserve native label widths and prior acceptance, run one full upstream-absent profile."
 sections:
