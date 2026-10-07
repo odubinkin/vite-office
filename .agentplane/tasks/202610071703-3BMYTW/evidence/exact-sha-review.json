@@ -1,0 +1,137 @@
+{
+  "evaluatedImplementationSHA": "c057c3284b2861dc181147670974e3927294b481",
+  "evaluator": "Same current agent EVALUATOR phase; explicitly not independent",
+  "verdict": "pass",
+  "cases": {
+    "app": 13579,
+    "inventory": 110,
+    "infrastructure": 14,
+    "chromium": 284
+  },
+  "actualCurrentSourceCoverage": {
+    "app": {
+      "lines": {
+        "total": 16559,
+        "covered": 16559,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 18182,
+        "covered": 18182,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 4225,
+        "covered": 4225,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 13717,
+        "covered": 13717,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "inventory": {
+      "lines": {
+        "total": 1464,
+        "covered": 1464,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 1523,
+        "covered": 1523,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 384,
+        "covered": 384,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 1081,
+        "covered": 1081,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    }
+  },
+  "wholeCurrentSourceFiles": {
+    "app": 298,
+    "inventory": 38
+  },
+  "completeCurrentChangedRegionProofs": 0,
+  "completePriorAppRegionCertificates": 9,
+  "approvedSemanticPaths": 16,
+  "priorAcceptanceFiles": 594,
+  "priorByteIdenticalAcceptanceFiles": 593,
+  "exactSourceBackedMigrations": 1,
+  "currentAcceptanceFiles": 597,
+  "metadataRecords": 301,
+  "allPriorMetadataFieldsAndExceptionsPreserved": true,
+  "oneFullUpstreamAbsentProfile": true,
+  "allProfilesTerminalVendorRestored": true,
+  "passingReplay": 0,
+  "skippedObservationsRetained": {
+    "app": 5,
+    "inventory": 2
+  },
+  "unresolvedUncaught": 0,
+  "priorityBullet": [
+    {
+      "title": "Writer native label width prevents overlap width=1280 cell=false",
+      "passed": true
+    },
+    {
+      "title": "Writer native label width prevents overlap width=1280 cell=true",
+      "passed": true
+    },
+    {
+      "title": "Writer native label width prevents overlap width=390 cell=false",
+      "passed": true
+    },
+    {
+      "title": "Writer native label width prevents overlap width=390 cell=true",
+      "passed": true
+    }
+  ],
+  "customBulletFont": [
+    {
+      "title": "native bullet font ODT body cell width=1280",
+      "passed": true
+    },
+    {
+      "title": "native bullet font ODT body cell width=390",
+      "passed": true
+    }
+  ],
+  "auditReconstruction": "Coverage, cases and scope reconstructed byte-identically at implementation HEAD; complete source-region and map/counter bindings verified.",
+  "accidentalRedundantBuild": false,
+  "chromiumScope": "All284 Chromium cases pass sole full profile, including real custom-face ODT and glyph-gap/body-cell/history; unchanged final production binds full build and Chromium, no replay.",
+  "changedInputBuild": "None needed: final production hashes match full profile",
+  "residual": [
+    "Full FontDescriptor members/style/pitch/charset/family classifications/metrics and native Font conversion beyond represented Name remain unimplemented/unverified.",
+    "StarBats/StarMath glyph recoding and full VCL shaping/script/SwFont/style/paragraph-mark/redline/graphics/portion graph remain unrepresented.",
+    "ODT true numbering-font compatibility flag/config persistence and complete native weights/decorations/theme/metrics/device behavior remain unverified.",
+    "Exhaustive parent core/browser/UI parity remains ACTIVE; registered save/open/recovery deviations unchanged."
+  ],
+  "failures": []
+}

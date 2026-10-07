@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202610071703-3BMYTW",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-07T17:33:07.727Z",
+  "verdict": "pass",
+  "summary": "Same current agent EVALUATOR, explicitly not independent: exact implementation c057c3284b2861dc181147670974e3927294b481 preserves native represented bullet font family through ODT/UNO; sole full absent-upstream284 Chromium PASS and only original3 app/1 inventory closures PASS; actual all4 current-source app/inventory coverage100; no unresolved cases/uncaught/passing replay.",
+  "evaluated_sha": "c057c3284b2861dc181147670974e3927294b481",
+  "blueprint_digest": "f657966473b2c715d0ed88c280ff2d18ddd87d51e2ecfd0cdec8fa095332e2dc",
+  "findings": [
+    "Complete font descriptors, historical glyph recoding, full SwFont/VCL/script/style/graphics/config and exhaustive parent parity remain explicitly unverified; conscious I/O/recovery exceptions preserved."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610071703-3BMYTW/README.md",
+    ".agentplane/tasks/202610071703-3BMYTW/evidence/exact-sha-review.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
