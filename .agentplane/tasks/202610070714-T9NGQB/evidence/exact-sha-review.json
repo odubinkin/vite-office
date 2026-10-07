@@ -1,0 +1,151 @@
+{
+  "auditCorrection": "Initial exact-review reader expected an array for the single changed-input lint record; corrected schema handling before verdict, no source/runtime changes.",
+  "evaluatedImplementationSHA": "ca41b2cfdbf8c50c745532f2466876181d16f105",
+  "evaluator": "Same current coding agent EVALUATOR phase; explicitly not independent",
+  "verdict": "pass",
+  "cases": {
+    "app": 13465,
+    "inventory": 110,
+    "infrastructure": 14,
+    "chromium": 266
+  },
+  "actualApp100": {
+    "lines": {
+      "total": 16080,
+      "covered": 16080,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 17652,
+      "covered": 17652,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 4098,
+      "covered": 4098,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 13238,
+      "covered": 13238,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "actualInventory100": {
+    "lines": {
+      "total": 1464,
+      "covered": 1464,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 1523,
+      "covered": 1523,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 384,
+      "covered": 384,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 1081,
+      "covered": 1081,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "actualCountersAndCensusReconstructedExactly": true,
+  "strictWholeOrCompleteContiguousDeclarationBodyEnclosingBranchAllLocationsProof": true,
+  "oldAcceptance": {
+    "prior": 563,
+    "byteIdentical": 563,
+    "newFiles": 3,
+    "current": 566,
+    "initialNewPassedBodiesAndGeneratorsPreserved": [
+      {
+        "path": "apps/office/src/cui/source/tabpages/native-collapsing-border-page.test.ts",
+        "initialSHA256": "e2ea7d180a9b407830662bcd84884d18f2e5438c63b7692c6567cf4fd41d872e",
+        "currentSHA256": "e2ea7d180a9b407830662bcd84884d18f2e5438c63b7692c6567cf4fd41d872e",
+        "initialPassedDefinitionsPreserved": 2,
+        "newDefinitions": 0
+      },
+      {
+        "path": "apps/office/src/sw/browser/presentation/native-collapsing-table-borders.test.tsx",
+        "initialSHA256": "d59fd40d7b46013e3509c608f5186c8ed4f5eb31ea4c6828e11490a264328b53",
+        "currentSHA256": "8d9664c9962374a4b3940f41f9c04d0a1e7a59e35ac30199ff7eb017e636030b",
+        "initialPassedDefinitionsPreserved": 3,
+        "newDefinitions": 1
+      },
+      {
+        "path": "apps/office/e2e/writer-native-collapsing-borders.spec.ts",
+        "initialSHA256": "e6f748a8de0716a6eb236edcaa39324d8ca46efc2b51f3d09fda034d40b59893",
+        "currentSHA256": "72d7dd0338ac031a9b24f41e429b748a03d3271e4e3cf9762a2f52b3af183a0e",
+        "initialPassedDefinitionsPreserved": 1,
+        "newDefinitions": 1
+      }
+    ]
+  },
+  "metadata": {
+    "prior": 289,
+    "current": 289,
+    "allPriorFieldsPrefixesStatusesDefaultsRegisteredExceptionsPreserved": true,
+    "noSemanticPromotion": true
+  },
+  "initialStaticGatesOnce": true,
+  "oneFullUpstreamAbsentProfile": true,
+  "failedOrGenuinelyNewCasesOnly": true,
+  "passingRuntimeReplay": 0,
+  "focusedSkippedObservationsRemainSkipped": 5,
+  "sourceComparison": "PASS bounded native merging control/table attribute/existing render-mode scope; whole parity remains active.",
+  "currentProductionMatchesClosure2BuildAndClosure3Browser": true,
+  "priorityBulletCases": [
+    {
+      "title": "Writer native label width prevents overlap width=1280 cell=false",
+      "passed": true
+    },
+    {
+      "title": "Writer native label width prevents overlap width=1280 cell=true",
+      "passed": true
+    },
+    {
+      "title": "Writer native label width prevents overlap width=390 cell=false",
+      "passed": true
+    },
+    {
+      "title": "Writer native label width prevents overlap width=390 cell=true",
+      "passed": true
+    }
+  ],
+  "artifacts": {
+    "wholeAgentplaneForbiddenSourceOrPythonCount": 0,
+    "activeFiles": 17,
+    "activeExtensions": [
+      "json",
+      "md"
+    ],
+    "noRawCoverageResultsOrSourceSnapshots": true,
+    "rawEvidenceLocation": "Ignored project dependency cache; no pinned sources copied into AP"
+  },
+  "vendorRestored": true,
+  "residualScope": "Exact competing-line pixel arbitration, full widget units, shadow/diagonal/theme, full SfxTabPage/slot-pool/frame-attribute infrastructure and SfxBoolItem refcount enforcement, RTL/vertical/follow/shared-format and whole kernel/browser parity remain unverified.",
+  "failures": []
+}
