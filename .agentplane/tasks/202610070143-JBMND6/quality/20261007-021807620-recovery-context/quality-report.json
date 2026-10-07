@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "202610070143-JBMND6",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-07T02:18:07.620Z",
+  "verdict": "pass",
+  "summary": "Native document cell orientation ownership and selected common UI contract pass at 800b91a6be0b7f57cd36669a8b6c822f9ba1199d; same current agent EVALUATOR phase, explicitly not independent",
+  "evaluated_sha": "800b91a6be0b7f57cd36669a8b6c822f9ba1199d",
+  "blueprint_digest": "250b16738e00fd87da72fe477c68ef3afd9b4021569063e4c61cd048c9347423",
+  "findings": [
+    "Exact SHA scope39, native full three-field item, selected/current/ring admissions, numeric dialog state, ODT and primitive boundary, history and fixed-row alignment validated. Original lint rework closed by case block and unchanged targeted lint/JSDoc/format. Distinct13216app109inventory5scripts246Chromium pass;48 focused skips stay skipped, no passing replay; actual100 application/inventory with exact source/map transfer proof."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610070143-JBMND6/README.md",
+    ".agentplane/tasks/202610070143-JBMND6/evidence/exact-sha-review.json",
+    ".agentplane/tasks/202610070143-JBMND6/evidence/changed-file-closure4.json",
+    ".agentplane/tasks/202610070143-JBMND6/evidence/coverage-source-proof.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Native pooling, fly/nested/merged/protection/full layout and full border/row splitting/SfxItemSet/widget behavior and project-wide parity remain unverified; parent and goal remain active."
+  ]
+}
