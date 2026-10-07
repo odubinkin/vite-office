@@ -1,0 +1,19 @@
+{
+  "scope": "Only failed parity module lexicographic order gate;278module semantics unchanged.",
+  "record": {
+    "command": "npm run inventory:parity",
+    "exit": 0,
+    "sha256": "94123421b4be303bf86de24f05a67085a266863f26ce8198ebf6785b0fbdc829",
+    "bytes": 1757828,
+    "diagnostics": [
+      "> tsx scripts/libreoffice-inventory/parity-mapping-cli.ts --baseline docs/program/libreoffice-baseline.json --mappings docs/program/parity/writer-command-slice.json --runtime-inventory docs/program/parity/runtime-inventory.json --runtime-root apps/office/src --local-root . --upstream-root vendor/libreoffice-reference",
+      "        \"reason\": \"browser-runtime-inapplicable\",",
+      "        \"reason\": \"browser-runtime-inapplicable\",",
+      "      \"path\": \"apps/office/src/sw/browser/filter/xml/odt-worker-runtime.ts\",",
+      "      \"path\": \"apps/office/src/sw/source/filter/xml/odt-worker-runtime.test.ts\",",
+      "      \"path\": \"apps/office/src/sw/browser/filter/xml/odt-worker-runtime.ts\",",
+      "      \"path\": \"apps/office/src/sw/source/filter/xml/odt-worker-runtime.test.ts\",",
+      "      \"path\": \"apps/office/src/sw/browser/filter/xml/odt-worker-runtime.ts\","
+    ]
+  }
+}
