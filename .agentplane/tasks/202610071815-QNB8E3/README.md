@@ -1,10 +1,11 @@
 ---
 id: "202610071815-QNB8E3"
 title: "Preserve native bullet scalar defaults and XML export sanitization"
-status: "DOING"
+result_summary: "Native XML bullet scalar/default/zero/control/first-codepoint ownership fixed, browser glyph projection removed from XML; final unique13585app110inventory15infra288Chromium PASS with ONE upstream-absent full runtime and original three failure closure only,zero passing replay,actual all-four app/inventory coverage100. Registered deviations preserved; full parity goal active."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 20
+revision: 21
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
     - ".agentplane/tasks/202610071815-QNB8E3/evidence/exact-sha-review.json"
   findings:
     - "Native XML scalar default/publication, zero/control/empty/first-codepoint export and actual Writer rule ownership match pinned xmlnumi/xmlnume/unosett anchors. Browser glyph projection removed from XML. All600 prior acceptance retained except three exact source-backed expectations in2files after original failures,302metadata preserved. Full UNO sequence/helper architecture, full importer/native UI/font shaping/unrepresented attributes remain partial/unverified; registered I/O/recovery deviations unchanged, exhaustive goal active."
-commit: null
+commit:
+  hash: "46a66b37109a5f6acb5e4bdbe2cb02347a3f15f1"
+  message: "🧩 QNB8E3 parity: preserve native bullet scalar import and export"
 comments:
   -
     author: "CODER"
     body: "Start: Implement native XML bullet scalar defaults and export sanitization within standing authorized parity goal; preserve prior acceptance and registered deviations."
+  -
+    author: "CODER"
+    body: "Verified: Native XML bullet scalar constructor, publication, export default/zero/control and actual Writer rule owner match bounded pinned source; original failure closure and all evidence recorded."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "PASS actual implementation 46a66b37109a5f6acb5e4bdbe2cb02347a3f15f1 native bullet scalar import/export and actual XML owner; ONE upstream-absent full profile plus original three failures only closure yields13585app110inventory15infra288Chrome uniquePASS,zero passing replay,6skips retained without promotion,actual source-bound all-four coverage100; final static/source/old acceptance/artifact gates and same-current-agent explicitly non-independent EVALUATOR PASS. Final Findings and Verification persisted before canonical verification; residuals and active exhaustive goal recorded."
+  -
+    type: "status"
+    at: "2026-10-07T18:35:26.115Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Native XML bullet scalar constructor, publication, export default/zero/control and actual Writer rule owner match bounded pinned source; original failure closure and all evidence recorded."
 doc_version: 3
-doc_updated_at: "2026-10-07T18:35:23.595Z"
+doc_updated_at: "2026-10-07T18:35:26.116Z"
 doc_updated_by: "CODER"
 description: "Iteration223: close pinned xmlnumi/xmlnume scalar ownership and absent/empty/NUL/control/multicodepoint bullet import/export behavior; retain native legacy conversion and registered save/open/recovery deviations."
 sections:
