@@ -1,0 +1,133 @@
+{
+  "evaluatedImplementationSHA": "c0168febda45e1cdce445aa9fdaf4c687770576c",
+  "evaluator": "Same current coding agent EVALUATOR phase; explicitly not independent",
+  "verdict": "pass",
+  "cases": {
+    "app": 13509,
+    "inventory": 110,
+    "infrastructure": 14,
+    "chromium": 274
+  },
+  "actualCurrentSourceCoverage": {
+    "app": {
+      "lines": {
+        "total": 16314,
+        "covered": 16314,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 17905,
+        "covered": 17905,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 4158,
+        "covered": 4158,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 13375,
+        "covered": 13375,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "inventory": {
+      "lines": {
+        "total": 1464,
+        "covered": 1464,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 1523,
+        "covered": 1523,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 384,
+        "covered": 384,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 1081,
+        "covered": 1081,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    }
+  },
+  "wholeCurrentSourceFiles": {
+    "app": 292,
+    "inventory": 38
+  },
+  "completePriorAppRegionCertificates": 10,
+  "currentAfterProfileSourceChanges": 0,
+  "approvedSemanticPaths": 21,
+  "priorAcceptanceFiles": 577,
+  "priorByteIdenticalAcceptanceFiles": 573,
+  "exactSourceBackedMigrations": 4,
+  "currentAcceptanceFiles": 580,
+  "all293PriorMetadataFieldsAndExceptionsPreserved": true,
+  "currentMetadataRecords": 295,
+  "oneFullUpstreamAbsentProfile": true,
+  "allProfilesTerminalVendorRestored": true,
+  "passingReplay": 0,
+  "skippedObservationsRetained": {
+    "app": 18,
+    "inventory": 2
+  },
+  "subsetExit1": "App and inventory failed-only/new-only closure cases pass; exit1 global subset thresholds retained honestly.",
+  "priorityBullet": [
+    {
+      "title": "Writer native label width prevents overlap width=1280 cell=false",
+      "passed": true
+    },
+    {
+      "title": "Writer native label width prevents overlap width=1280 cell=true",
+      "passed": true
+    },
+    {
+      "title": "Writer native label width prevents overlap width=390 cell=false",
+      "passed": true
+    },
+    {
+      "title": "Writer native label width prevents overlap width=390 cell=true",
+      "passed": true
+    }
+  ],
+  "wholePainterFallback": [
+    {
+      "path": "apps/office/src/sw/source/core/layout/paintfrm.ts",
+      "reason": "V8 raw inferred else counter is negative; use entire prior verified current-byte-identical source and entire maps/counters, never sanitize individual counts",
+      "priorMap": "PWQ4D5.app-final.json",
+      "priorMapSHA256": "e48de84ab9ab34f6ef824d332e4c5562c6795fcbc7ddca755682c426184ab209",
+      "discardedInvalidAggregateSHA256": "725dec807ff7e02a1604dfb358144d460952e1f894a86717fb687c672e615db8",
+      "negativeCounts": [
+        -36
+      ]
+    }
+  ],
+  "completeParentPrefixPreserved": true,
+  "noForbiddenArtifacts": true,
+  "auditReconstruction": "Coverage/case/scope reports reconstructed byte-identically after exact implementation commit. Complete current-source maps/finite nonnegative counters and prior complete region source/ancestor bindings verified.",
+  "residual": "Formulas/OLE/chart references, mail merge, default/unused/all frame collections, full frame attribute ownership/fly frames/widget units/modal infrastructure and whole kernel/browser parity remain unverified. Existing registered save/open/recovery deviations preserved. Numeric suffix allocator parity and native NameChanged hint granularity remain unverified. Browser End did not set an end caret in the new name fixture; established explicit DOM end caret setup resolves the name acceptance test, while actual Home/End remains a separate audit. Name validation currently uses the existing inline React error presentation; complete native informational-message modal composition and dismissal remain unverified.",
+  "failures": []
+}

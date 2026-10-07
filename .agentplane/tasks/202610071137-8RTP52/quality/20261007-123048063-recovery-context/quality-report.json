@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202610071137-8RTP52",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-07T12:30:48.063Z",
+  "verdict": "pass",
+  "summary": "Exact c0168febda45 source-bound table-name closure passes:13509app110inventory14infrastructure274Chromium; actual100 app/inventory; ONE full upstream-absent run and failed/new-only closure; same current agent, explicitly not independent.",
+  "evaluated_sha": "c0168febda45e1cdce445aa9fdaf4c687770576c",
+  "blueprint_digest": "968c963501a0cb8de16ee40d5a6891280c7a6a05ab2747614c7e8dc00536746b",
+  "findings": [
+    "Native frame name owner, raw document rename, cursor-free name lookup undo/recreated owners, replay suppression, Properties changed Name/page guard/reset/cancel/history/ODT verified.21semantic paths,577old files573identical4exact migrations,580current, all293prior metadata fields/defaults/exceptions preserved; no whole-parity promotion."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610071137-8RTP52/README.md",
+    ".agentplane/tasks/202610071137-8RTP52/evidence/exact-sha-review.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Full frame attributes and NameChanged hint granularity, formulas/charts/mail-merge/numeric suffix allocator, native informational-message modal and browser Home/End remain unverified."
+  ]
+}
