@@ -1,0 +1,151 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/editeng/source/items/frmitems.ts": "2075625fc863d5cf9563f4c25dbc484e497ffb76b72ce6a947f0c7e25adfafd3",
+    "apps/office/src/sw/inc/hintids.ts": "9583fdb506c3b609304cc7cf11dbacc7d5a8862eee25a9ef2ca7f23005299dc7",
+    "apps/office/src/sw/inc/fmtfsize.ts": "0853490f19973d04d04d9b5848940d3728ecbe12c618b9800b27a8d4816d59d0",
+    "apps/office/src/sw/source/core/table/swtable.ts": "a118ffb2e845842e3d01754c853b40231efb6f7726c7b145eb5b9b9fec747fe0",
+    "apps/office/src/sw/source/core/docnode/ndtbl1.ts": "131519a5a164521e4b114f952d4b431c1151e51c145a170284659a152230a87b",
+    "apps/office/src/sw/source/core/doc/doc.ts": "1fab07a6c9957da644e0f8b6316745f6d69508b3f3ba3e29ea2701fa426d8a52",
+    "apps/office/src/sw/source/core/frmedt/fetab.ts": "ff1957320799bf4f4b9fd5821e6908000b3c99567194a68a0b2b63cf36f36fcd",
+    "apps/office/src/sw/source/core/docnode/ndtbl.ts": "59885c3c4e3f12a5d1e1ba883e2d27ea62966c79e18c57e38d991f90e7f907b3",
+    "apps/office/src/sw/source/core/layout/tabfrm.ts": "83ff0655197862921c6f7ba85c5ef9b1ada93deff2b569328966ed75837f5709",
+    "apps/office/src/sw/source/core/layout/newfrm.ts": "b057c31204c53d00d12064d1f53dcdf147ada65647ff2f3b79406b1522ac9fad",
+    "apps/office/src/sw/browser/editor/WriterEditableTable.tsx": "25ed31fa47763bfeefbd3f13d9a901b0b04dec181b24b2145bd077a8c3b4d463",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx": "1f6427c97cb69c3da344a53157e7ae2f9a47e96894e45c0e409b4c5df6baaa30",
+    "apps/office/src/sw/browser/presentation/writer-view.tsx": "adee7ee1526c4eb5d566c6e145c852a464544a6e4d8eee81d3a9d21371df2e89",
+    "apps/office/src/sw/source/uibase/shells/tabsh.ts": "76b40406e22f2caa3cb7a6a4cece7e7e2098aca003d37c592311f5432264eaf1",
+    "apps/office/src/sw/source/filter/xml/xmltbli.ts": "e31059e2da0c3213067174805e12e406f89cd5083c465f4fd95215d6c9689d5a",
+    "apps/office/src/sw/source/filter/xml/xmlexp.ts": "6142fdb0cc45dc2512a840068697aecdebfca8b298431277df1d4d07acee6c74",
+    "apps/office/src/xmloff/source/table/XMLTableImport.ts": "031c0ff0325c7388da19ca9945995d1b44572164570181a4b1f3245dd94827a2",
+    "apps/office/src/xmloff/source/table/XMLTableExport.ts": "a6d786a803c783b69a480524cfc4ef5ecd778298692a885c2632e853e2fd774f",
+    "apps/office/src/xmloff/source/core/xmltoken.ts": "6b155f7eceeb6fbc2eced9a050dc0a00e46b3dce3b570ba5f2abea75d3bbcf04",
+    "apps/office/src/sw/browser/filter/xml/writer-document-codec.ts": "b2f5f5d10f76d5a599e1b7659c029152e522d49a97991fea1c77e2584b38cf6a",
+    "apps/office/src/sw/browser/editor/native-table-document-row.test.tsx": "ef5de7941db0fff0149fe4b2d2c1fabc750fe30fa921cd94d354f81bd2fd6f3c",
+    "apps/office/src/sw/browser/editor/native-table-print-area.test.tsx": "f022a9b9cbd3a99c20181e4cc134d098985a19cb727ecef84587a1fcb11b238a",
+    "apps/office/src/sw/browser/editor/native-headline-selection.test.tsx": "88c01bebb2fca6ae9b8304c6e560448dad8ae551b598f5550a705c5cc0d7fee5",
+    "apps/office/src/sw/browser/editor/native-table-headlines.test.tsx": "db261c7d68bf2ba48c39d84555cb67c706d11804a645139882979d4a7da0a849",
+    "apps/office/src/sw/browser/editor/native-table-selection.test.tsx": "d13f6e56a8a653c3fa0da3d10dbe98b2c8e453c701d827f9f00fd77f65164282",
+    "apps/office/src/sw/browser/editor/native-table-row-drag.test.tsx": "fec0fd860c35af7fc399e120b08d4a30684ad3c78a6a604f2d9bafcccacf3eff",
+    "apps/office/src/sw/browser/editor/native-table-layout-split.test.tsx": "c9fb29decde0f1874cd6a65e4b2430ac03408b4ed5d2b82456537f4f87a7c37f",
+    "apps/office/src/sw/source/filter/xml/odt-table-roundtrip.test.ts": "ba06ca1a4681bfbf7d666ab2e401ddf3e73d878ff8658472135751e4c12741c9",
+    "apps/office/src/sw/browser/presentation/writer-view.test.tsx": "5502bfbb31876e4d290a282fcab1f10e2280f83d04719fd36f16ac814869251e",
+    "apps/office/src/sw/browser/presentation/native-table-properties-reset.test.tsx": "1e9b15a86f1d046525dcee87d2f52a4f8929239fe2d345ca3ae2f415b87d2450",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.test.tsx": "fb422001a680249650a12ac3bfb299873758e8990ee86647893a8128cab6a962",
+    "apps/office/src/sw/browser/presentation/WriterPageLayout.test.tsx": "7e6c117475d7fad41819ac0a847329e6c6241a5e7f4ac4891436fec1750f6067",
+    "apps/office/src/sw/source/uibase/docvw/native-table-row-drag.test.ts": "3bb4d22751f507f3578adbb605341ef0636ae1cf85e0500866a1de0c9b8900b1",
+    "apps/office/src/sw/source/core/table/native-row-insertion.test.ts": "91f6bc56315e575a24e9702872d5617d34fbcc88026f77a80d15164b06a8d8c8",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-properties.test.ts": "fe148fd17a25e4ee3e2e3a6f2b7ea17df129db2425adbc16ef4687d4662ac93b",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-traversal.test.ts": "b23a005ffb10c43bf842809246e3b0b2ef47f36fa4059dbdd9d1fa711b5f7863",
+    "apps/office/src/sw/source/uibase/wrtsh/native-row-height-owner-history.test.ts": "e35b09f32ce2f34866cb2539165c6fafebaead72184d9529557b0691a58d0420",
+    "apps/office/src/sw/source/core/docnode/native-row-height-owner.test.ts": "716adc7a673e7daf690d3fdbc00a31747b2faaaaca7198530d5f48bb3a6f3041",
+    "apps/office/src/sw/source/core/docnode/native-row-split-owner.test.ts": "c3cf76e6cfb5d4262f04dd7a03b2a59521de411998c8e2fe3dad5811bcf2a484",
+    "apps/office/src/sw/source/core/docnode/native-tabrows.test.ts": "3f31b5c43dae9b76005570638adff86fb316959d2f764cbddbf2f32211865e47",
+    "apps/office/e2e/writer-table-headlines.spec.ts": "4654a0413b415123b8f91efcd24fcf57d0ddb4098b81e89d6ca2ec6d44c2aabf",
+    "apps/office/e2e/writer-native-table-mouse.spec.ts": "3d7d5ba0991e83e58e12b43c59924b728851c78142d95c03b40b5337a2944244",
+    "apps/office/e2e/writer-native-table-layout-split.spec.ts": "9b1d4bf7bcccd3da6eecaee376c1bf4baf46bf08109277ed49189f5c3c5b0f7d",
+    "apps/office/e2e/writer-headline-selection.spec.ts": "90471484df8ddeb99ead6c5f078223f7cfa3be8d50a985c40fd5eea36ec791b4",
+    "apps/office/e2e/writer-table-print-area.spec.ts": "c31cef8a8bc873cce4031b6aa4eb33bc99b219443d64a1ebe85e34a1bee1c9dc",
+    "apps/office/e2e/writer-native-table-pointer.spec.ts": "f98b00e8d34cc273297303c964c64e39eacce8f86430ed8bf254ebe88f39d035",
+    "apps/office/e2e/writer-native-table-text-flow-split.spec.ts": "adce5161ff6ec2bb0170aaadd25e9806556a9468a54845a3954685d8d502bf3a",
+    "apps/office/src/sw/inc/fmtfsize.test.ts": "f89a7f54df6f3627cf44d6445a94f3777344f0edfb8c844c33b846582fe7c352",
+    "apps/office/src/sw/source/core/docnode/native-row-frame-size.test.ts": "034cc8eaa268c7f42a9efed4d630d67ca55e4e2f2af570d316ec399a2d9d91a5",
+    "apps/office/src/sw/source/filter/xml/native-row-frame-size-roundtrip.test.ts": "789f933a5f9ef3339928c92e93f2b611b8b06d3d3d8105596f876889575a1695",
+    "apps/office/src/sw/browser/editor/native-row-frame-size.test.tsx": "d701540007312ee90bec5cb5b35fd4b523f70ba1a101e67017ad3f2f49c54a90",
+    "apps/office/e2e/writer-native-row-frame-size.spec.ts": "0d3652f1a96e4fef0f36c40d0be1d3a813759aaa330c5cf93a33a9ec2b7e196b",
+    "docs/program/source-provenance.json": "3ceeaa7942ab1d70323eeb8ff6b933e500ce9c15731cdbe5451a09b7b950f0c8",
+    "docs/program/parity/runtime-inventory.json": "e858a7dcb320a7c496dd84dd92c728d44d967eae48d9a8346b9db01c77c9b635"
+  },
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1443,
+      "sha256": "0881206d13c2553d54a8f12f52647e132f4ae21a14b2f38041fe7a58861b263d",
+      "totals": [],
+      "failedCases": []
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/browser/editor/native-row-frame-size.test.tsx --testNamePattern ^fixed row owns bounds independently --coverage.reportOnFailure --coverage.reporter=json --coverage.reporter=json-summary --coverage.reporter=text --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/SHRG3A.app-closure2-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 28334,
+      "sha256": "bcf41b2c4835ad8f9c2e1434b59e7015355250f6ca06d340ea99ceba44e98c33",
+      "totals": [
+        "Test Files  1 passed (1)",
+        "Tests  1 passed | 2 skipped (3)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "passed": 1,
+        "failed": 0,
+        "skipped": 2,
+        "total": 3
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 14981,
+          "covered": 3141,
+          "skipped": 0,
+          "pct": 20.96
+        },
+        "statements": {
+          "total": 16431,
+          "covered": 3246,
+          "skipped": 0,
+          "pct": 19.75
+        },
+        "functions": {
+          "total": 3832,
+          "covered": 945,
+          "skipped": 0,
+          "pct": 24.66
+        },
+        "branches": {
+          "total": 12174,
+          "covered": 1460,
+          "skipped": 0,
+          "pct": 11.99
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverage": {
+        "lines": 20.96,
+        "statements": 19.75,
+        "functions": 24.66,
+        "branches": 11.99
+      },
+      "incompleteFileCount": 247,
+      "coverageMapSHA256": "a085297f9c565a94bc3542084dbfcfa6fa247571cc97b2719e9331401c717638"
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts apps/office/e2e/writer-native-row-frame-size.spec.ts --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 687,
+      "sha256": "fc5e05008a24e0c01759dd839a3bb0de62afa3082d9a6cec004799eba0e079e7",
+      "totals": [
+        "2 passed (3.3s)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "startTime": "2026-10-07T01:32:04.846Z",
+        "duration": 3344.127,
+        "expected": 2,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    }
+  ]
+}
