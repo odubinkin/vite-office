@@ -1,10 +1,11 @@
 ---
 id: "202610071427-A4HCRT"
 title: "Restore native list-level marking and descendant notification owners"
-status: "DOING"
+result_summary: "Restored SwList marked depth, SwNumberTree root/depth dispatch, SwDoc delegation and SwTextNode marked-label query; shell repaint leaves serialized content generation and modified state unchanged. All586 prior acceptance and298 metadata states/defaults/exceptions preserved. Exact same-agent evaluation passes at implementation SHA; cursor/view shading/ruler wiring remains follow-up."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 22
+revision: 23
 origin:
   system: "manual"
 depends_on: []
@@ -43,11 +44,16 @@ quality_review:
   findings:
     - "13551 app,110 inventory,14 infrastructure,278 Chromium cases; zero unresolved,uncaught or passing replay. Actual current-source app/inventory all4 coverage metrics100, complete source/map or contiguous full declaration/body/enclosing branch/location certificates."
     - "8 approved semantic paths, all586 prior acceptance byte-identical,0 migrations; all298 metadata records, fields, defaults, statuses and save/open/recovery exceptions preserved. ONE full upstream-absent runtime;2 focused new/original-failure closures. No repeated build."
-commit: null
+commit:
+  hash: "26cf7851bcef7db761ea51798a9247de8b68a7ae"
+  message: "🧩 A4HCRT parity: restore native list marking and render invalidation"
 comments:
   -
     author: "CODER"
     body: "Start: restore native list marked-level state, depth notifications and actual owner queries under standing iterative authorization."
+  -
+    author: "CODER"
+    body: "Verified: native marked-list owners, depth notifications, actual membership queries and render-only shell invalidation match pinned source contracts;13551app110inventory14infra278Chrome,actual100app/inventory,zero unresolved/uncaught/passing replay. Whole parity remains ACTIVE."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native list marking and render invalidation verified at implementation 26cf7851bcef7db761ea51798a9247de8b68a7ae:13551app110inventory14infra278Chrome,zero uncaught/unresolved/passing replay,actual100app/inventory;8paths586prior acceptance byte-identical298metadata retained. Same-agent exact evaluation pass,explicitly not independent; whole parity ACTIVE."
+  -
+    type: "status"
+    at: "2026-10-07T14:53:39.192Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native marked-list owners, depth notifications, actual membership queries and render-only shell invalidation match pinned source contracts;13551app110inventory14infra278Chrome,actual100app/inventory,zero unresolved/uncaught/passing replay. Whole parity remains ACTIVE."
 doc_version: 3
-doc_updated_at: "2026-10-07T14:53:21.671Z"
+doc_updated_at: "2026-10-07T14:53:39.194Z"
 doc_updated_by: "CODER"
 description: "Iteration217: implement pinned SwList marked-level state, SwNumberTree level-depth notifications, SwDoc marking delegate and SwTextNode HasMarkedLabel query for existing native lists. Preserve source order/defaults and prepare direct UI consumption without React-owned list state; cursor/view shading and ruler integration remain subsequent bounded work."
 sections:
