@@ -1,10 +1,11 @@
 ---
 id: "202610072051-4FRJFD"
 title: "Verify reported bullet overlap against native occupied label width"
-status: "DOING"
+result_summary: "Current occupied-label correction verified:9app4ChromiumPASS upstream absent; unknown user-specific reproduction remains open under active goal."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
     - ".agentplane/tasks/202610072051-4FRJFD/evidence/bullet-width-review.json"
   findings:
     - "Existing e625c6f3 occupied-width correction is present.9app and4Chromium cases pass once without upstream; current default bullet glyph/text gap18.3046875px. User-specific reproduction remains unspecified and is explicitly not claimed fixed."
-commit: null
+commit:
+  hash: "c7ad60ccfe918b06438c433da3a2f12a8c2ccfa0"
+  message: "🔎 4FRJFD task: verify current bullet occupied width"
 comments:
   -
     author: "CODER"
     body: "Start: prioritize reported bullet overlap, verify existing correction against pinned source and current production geometry without upstream present; retain deferred ownership work."
+  -
+    author: "CODER"
+    body: "Verified: bounded current bullet-width investigation recorded against pinned source;9app4ChromiumPASS once without upstream, existing correction present, no production change or unknown-document fix claimed."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified bounded current-checkout source comparison and occupied-width scenarios:9app4ChromiumPASS once without upstream, source unchanged, existing fix e625c6f3. Unknown user document reproduction not claimed fixed; parent/goal active."
+  -
+    type: "status"
+    at: "2026-10-07T20:54:11.782Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: bounded current bullet-width investigation recorded against pinned source;9app4ChromiumPASS once without upstream, existing correction present, no production change or unknown-document fix claimed."
 doc_version: 3
-doc_updated_at: "2026-10-07T20:54:02.618Z"
+doc_updated_at: "2026-10-07T20:54:11.784Z"
 doc_updated_by: "CODER"
 description: "User-priority investigation of reported bullet/text overlap; inspect pinned formatting and production browser geometry, verify existing occupied-width correction without upstream present, distinguish reproduced issues from missing document-specific reproduction. Preserve deferred ownership task and intentional IO deviations."
 sections:
