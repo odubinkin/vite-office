@@ -1,10 +1,11 @@
 ---
 id: "202610071105-PWQ4D5"
 title: "Remove row height compatibility from table properties"
-status: "DOING"
+result_summary: "Table Properties preserve original native row heights and no longer accept scalar height compatibility; separate native dialog and API own current or selected row height and independent undo groups."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +39,16 @@ quality_review:
     - ".agentplane/tasks/202610071105-PWQ4D5/evidence/exact-sha-review.json"
   findings:
     - "13497app110inventory14infrastructure272Chromium resolved,0passing replay,5focused skips retained. Actual current-source app and inventory coverage100 via290and38whole source/map certificates; original metadata and all unrelated acceptance assertions preserved. Native properties and height have independent undo groups with original mixed row owners."
-commit: null
+commit:
+  hash: "1b1e0e6845caf368320f9c3e832bc87cbf53779b"
+  message: "🚧 PWQ4D5 code: remove row height table properties compatibility"
 comments:
   -
     author: "CODER"
     body: "Start: remove source-incompatible row height property ingress and migrate exact callers to native height ownership, under standing iterative user authorization."
+  -
+    author: "CODER"
+    body: "Verified: native row height is owned by source separate dialog or complete-size API; Properties preserve mixed row heights and independent undo, original owners and cursor. Actual source-bound cases and coverage verified with no passing replay."
 events:
   -
     type: "status"
@@ -57,8 +63,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Implementation1b1e0e68 removes obsolete scalar table-properties row height; separate native API/dialog and independent history preserve mixed current/selected owners.13497app110inventory14infrastructure272Chromium resolved, actual current-source coverage100, zero passing replay and5skips retained; exact same-agent EVALUATOR PASS, not independent. Final Findings/Verification precede this record."
+  -
+    type: "status"
+    at: "2026-10-07T11:26:13.821Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native row height is owned by source separate dialog or complete-size API; Properties preserve mixed row heights and independent undo, original owners and cursor. Actual source-bound cases and coverage verified with no passing replay."
 doc_version: 3
-doc_updated_at: "2026-10-07T11:26:08.167Z"
+doc_updated_at: "2026-10-07T11:26:13.824Z"
 doc_updated_by: "CODER"
 description: "Iteration213 under parent202609240501-C9TN6M. Remove obsolete minRowHeight ingress from ItemSetToTableParam and insertion presentation; source tabsh properties does not set row height. Migrate exact obsolete test inputs and height-only expectations to native SetRowHeight or SwTableHeightDlg, preserve all unrelated assertions, graph owners, cursor and history. User standing iterative authorization applies; no network, save/open/recovery deviation changes or upstream source/scripts in AP."
 sections:
