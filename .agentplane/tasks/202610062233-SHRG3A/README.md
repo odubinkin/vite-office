@@ -4,7 +4,7 @@ title: "Replace scalar row height with native frame size ownership and behavior"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 21
+revision: 22
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: replace scalar row-height state with approved native complete frame-size ownership and flat-row behavior under standing iterative authorization."
 doc_version: 3
-doc_updated_at: "2026-10-07T01:22:27.368Z"
+doc_updated_at: "2026-10-07T01:25:49.660Z"
 doc_updated_by: "CODER"
 description: "Iteration202: native SvxSizeItem/SwFormatFrameSize defaults, full equality and clone replace kernel minHeight; document setters, resize type retention, flat-row layout/clip, ODT Fixed versus Minimum and native UI getter state. Preserve all registered exceptions and literal acceptance intents through explicit native contract migrations."
 sections:
@@ -63,6 +63,10 @@ sections:
   Findings: |-
     Previous201 is authoritative DONE and clean main d6ded8320f8370a4792a07aaa93aaf77e122effd: verified progress. Current runtime still stores only minHeight and numeric Get/SetRowHeight, loses complete native frame-size equality/default/type and forces resize to numeric minimum. UI guesses first row. Pinned fmtfsize.hxx/atrfrm.cxx and sizeitem.hxx/frmitems.cxx establish source item inheritance/defaults/complete equality/clone; hintids.hxx RES_FRM_SIZE90. ndtbl1.cxx compares full item and clones getter; ndtbl.cxx resize copies frame item and promotes only Variable before document setter. tabfrm.cxx fixed row min calculation returns authored height; Minimum floor and Variable content. xmlitemm row map distinguishes Fixed row-height versus Minimum min-row-height, xmlexpit omits other types; xmlimpit positive minimum1. Relevant sources inspected read-only, no copies stored. Two harmless narrow source rg lookups returned empty; parent route recomputed and bounded source-folder fallback found actual mapper definitions. No task duplicates/nested AGENTS/user instructions; no network/global/outside access.
     Pre-mutation source refinement: xmlimpit delegates nMin1/nMax65535 to SAX converter; exact converter source clamps successfully parsed values, including zero/negative to1 and oversized to65535, rather than discarding zero. Initial zero-no-item assumption was wrong; update native import acceptance to actual clamp before code edits. All approved paths unchanged; plan/verification re-approved under standing source-fidelity objective, no weakened source criterion.
+
+    - Observation: Initial full absent profile app13188 inventory109 scripts5 passed; Chromium214passed29failed. Table Open failures display frameSize.Clone is not a function because native frame items lost methods across Worker structured clone. Two app branch gaps remain. No tests use upstream; vendor restored.
+      Impact: Native item introduction exposed existing graph boundary raw row format transfer; browser tables with authored height fail to open. Three unrelated browser timeout cases also retained for focused closure.
+      Resolution: Standing iterative goal reapproved one additional existing codec owner:54paths20production. Encode all eight native public fields and restore only at process/storage boundary, retaining legacy-v16 minimum height ingress without kernel aliases. Add three genuinely new transport/malformed/guide cases; rebuild and run only originalfailed29 Chromium and new3 app cases. No historical passing or full replay.
 id_source: "generated"
 ---
 ## Summary
@@ -105,3 +109,7 @@ Revert eventual implementation in a new task, retain original stashc85f4a0e453df
 
 Previous201 is authoritative DONE and clean main d6ded8320f8370a4792a07aaa93aaf77e122effd: verified progress. Current runtime still stores only minHeight and numeric Get/SetRowHeight, loses complete native frame-size equality/default/type and forces resize to numeric minimum. UI guesses first row. Pinned fmtfsize.hxx/atrfrm.cxx and sizeitem.hxx/frmitems.cxx establish source item inheritance/defaults/complete equality/clone; hintids.hxx RES_FRM_SIZE90. ndtbl1.cxx compares full item and clones getter; ndtbl.cxx resize copies frame item and promotes only Variable before document setter. tabfrm.cxx fixed row min calculation returns authored height; Minimum floor and Variable content. xmlitemm row map distinguishes Fixed row-height versus Minimum min-row-height, xmlexpit omits other types; xmlimpit positive minimum1. Relevant sources inspected read-only, no copies stored. Two harmless narrow source rg lookups returned empty; parent route recomputed and bounded source-folder fallback found actual mapper definitions. No task duplicates/nested AGENTS/user instructions; no network/global/outside access.
 Pre-mutation source refinement: xmlimpit delegates nMin1/nMax65535 to SAX converter; exact converter source clamps successfully parsed values, including zero/negative to1 and oversized to65535, rather than discarding zero. Initial zero-no-item assumption was wrong; update native import acceptance to actual clamp before code edits. All approved paths unchanged; plan/verification re-approved under standing source-fidelity objective, no weakened source criterion.
+
+- Observation: Initial full absent profile app13188 inventory109 scripts5 passed; Chromium214passed29failed. Table Open failures display frameSize.Clone is not a function because native frame items lost methods across Worker structured clone. Two app branch gaps remain. No tests use upstream; vendor restored.
+  Impact: Native item introduction exposed existing graph boundary raw row format transfer; browser tables with authored height fail to open. Three unrelated browser timeout cases also retained for focused closure.
+  Resolution: Standing iterative goal reapproved one additional existing codec owner:54paths20production. Encode all eight native public fields and restore only at process/storage boundary, retaining legacy-v16 minimum height ingress without kernel aliases. Add three genuinely new transport/malformed/guide cases; rebuild and run only originalfailed29 Chromium and new3 app cases. No historical passing or full replay.

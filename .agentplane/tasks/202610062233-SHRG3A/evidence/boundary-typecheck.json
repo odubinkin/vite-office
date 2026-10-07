@@ -1,0 +1,6 @@
+{
+  "command": "npm run typecheck --workspace @vite-office/office",
+  "result": "pass",
+  "exit": 0,
+  "scope": "Genuinely changed native graph boundary and new transport/guide acceptance; tools typecheck not replayed"
+}
