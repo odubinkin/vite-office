@@ -1,0 +1,13 @@
+{
+  "iteration": 208,
+  "leaf": "202610070602-3D968G",
+  "implementation": "61d4c2617649b72096cca1f2d40df9d74d9dcb3f",
+  "evidenceTail": "bf0bb5ae2564b4e332640501409a89234eb4fe9a",
+  "close": "2a559b99049f9d2ac0c17c46564df33fa2c96802",
+  "completePriorCharacters": 557896,
+  "completePriorSHA256": "1d3320d0c5fa0682e1bdd5cc8075e9e0373efa520bcd7d15c60f71ecf9752266",
+  "completePriorPrefixPreserved": true,
+  "finalFindingsSHA256": "148d324dbfac868fbc561aac29aec2e68257a7fce3dbb700c4b756213b22d2fa",
+  "parentGoalState": "ACTIVE; full implemented parity unverified",
+  "postLeafCleanTrackedAndAll": true
+}
