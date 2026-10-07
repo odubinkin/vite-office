@@ -1,4 +1,5 @@
 /** @fileoverview Checks real table interior pointer placement and explicit row gutter selection. */
+import { SwFormatFrameSize, SwFrameSize } from "../src/sw/inc/fmtfsize";
 import { selectBrowserTableRow } from "../test-support/table-mouse-e2e";
 import { expect, test } from "@playwright/test";
 import { SwDoc } from "../src/sw/source/core/doc/doc";
@@ -19,7 +20,9 @@ for (const width of [1280, 390])
     body.SetText("Body neighbor");
     const table = doc.nodes.MakeTableNode("Pointer", { width: 6000, headerRows: 0 }, body);
     for (let column = 0; column < 3; column++) table.AddColumnWidth(2000);
-    const row = doc.nodes.AppendTableRow(table, 3, { minHeight: 2400 });
+    const row = doc.nodes.AppendTableRow(table, 3, {
+      frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 2400),
+    });
     const first = row.GetTabBoxes()[0]?.GetParagraphs()[0],
       target = row.GetTabBoxes()[1]?.GetParagraphs()[0],
       empty = row.GetTabBoxes()[2]?.GetParagraphs()[0];

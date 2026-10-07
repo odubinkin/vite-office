@@ -25,7 +25,11 @@ export interface XMLTableExportSource {
   readonly columnWidths: readonly number[];
   readonly softPageBreakRows: readonly number[];
   readonly rows: readonly Readonly<{
-    format: Readonly<{ minHeight?: number | undefined; keepTogether?: boolean | undefined }>;
+    format: Readonly<{
+      minHeight?: number | undefined;
+      height?: number | undefined;
+      keepTogether?: boolean | undefined;
+    }>;
     cells: readonly Readonly<{
       format: Readonly<{
         padding?: number | undefined;
@@ -99,7 +103,7 @@ export interface XMLTableExportSource {
       if (rowIndex === repeatedHeaders && repeatedHeaders > 0) body += "</table:table-header-rows>";
       if (table.softPageBreakRows.includes(rowIndex)) body += "<text:soft-page-break/>";
       const rowName = `${prefix}.R${rowIndex + 1}`;
-      const rowProperties = `${row.format.minHeight === undefined ? "" : ` style:min-row-height="${exportOdfLength(row.format.minHeight)}"`}${row.format.keepTogether === undefined ? "" : ` fo:keep-together="${row.format.keepTogether ? "always" : "auto"}"`}`;
+      const rowProperties = `${row.format.height === undefined ? "" : ` style:row-height="${exportOdfLength(row.format.height)}"`}${row.format.minHeight === undefined ? "" : ` style:min-row-height="${exportOdfLength(row.format.minHeight)}"`}${row.format.keepTogether === undefined ? "" : ` fo:keep-together="${row.format.keepTogether ? "always" : "auto"}"`}`;
       automaticStyles += `<style:style style:name="${rowName}" style:family="table-row"><style:table-row-properties${rowProperties}/></style:style>`;
       body += `<table:table-row table:style-name="${rowName}">`;
       for (const [cellIndex, cell] of row.cells.entries()) {

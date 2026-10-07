@@ -1,4 +1,5 @@
 /** @fileoverview Verifies actual production table alignment, column scaling and repeated headline edits through ODT Open. */
+import { SwFormatFrameSize, SwFrameSize } from "../src/sw/inc/fmtfsize";
 import { expect, test } from "@playwright/test";
 import { SwDoc } from "../src/sw/source/core/doc/doc";
 import { SwDocShell } from "../src/sw/source/uibase/app/docsh";
@@ -48,10 +49,15 @@ for (const viewport of [1280, 390])
       table.AddColumnWidth(3000);
       for (let row = 0; row < 5; row++)
         for (const [col, box] of doc.nodes
-          .AppendTableRow(table, 2, { minHeight: 1000 }, [
-            { padding: 0, border: "0px none" },
-            { padding: 0, border: "0px none" },
-          ])
+          .AppendTableRow(
+            table,
+            2,
+            { frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 1000) },
+            [
+              { padding: 0, border: "0px none" },
+              { padding: 0, border: "0px none" },
+            ],
+          )
           .GetTabBoxes()
           .entries())
           required(box.GetParagraphs()[0]).SetText(`Cell${row}-${col}`);

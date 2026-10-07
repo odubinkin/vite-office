@@ -1,4 +1,5 @@
 /** @fileoverview Verifies represented minimum-row-height document ownership without upstream dependencies. */
+import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
 import { expect, it, vi } from "vitest";
 import { SwDoc } from "../doc/doc";
 import { SwCursor, SwTableCursor } from "../crsr/swcrsr";
@@ -15,7 +16,13 @@ function fixture() {
   table.AddColumnWidth(3000);
   table.AddColumnWidth(3000);
   for (const minHeight of [undefined, 400, 0])
-    doc.nodes.AppendTableRow(table, 2, { minHeight, keepTogether: true });
+    doc.nodes.AppendTableRow(table, 2, {
+      frameSize:
+        minHeight === undefined
+          ? undefined
+          : new SwFormatFrameSize(SwFrameSize.Minimum, 0, minHeight),
+      keepTogether: true,
+    });
   const rows = [...table.GetTabLines()],
     node = required(required(required(rows[1]).GetTabBoxes()[0]).GetParagraphs()[0]);
   node.SetText("middle");
@@ -39,15 +46,19 @@ it("document minimum height ignores ordinary mark and ring and records same-valu
     mark = f.cursor.GetMark(),
     count = f.doc.GetUndoManager().GetUndoActionCount(),
     revision = f.doc.GetDocumentStateManager().GetModelRevision();
-  expect(SwDoc.GetRowHeight(f.cursor)).toBe(400);
-  expect(f.doc.SetRowHeight(f.cursor, 720)).toBe(true);
+  expect(SwDoc.GetRowHeight(f.cursor)?.GetHeight()).toBe(400);
+  expect(f.doc.SetRowHeight(f.cursor, new SwFormatFrameSize(SwFrameSize.Minimum, 0, 720))).toBe(
+    true,
+  );
   expect(
     f.rows.map(
       /** Reads original row heights. @param row - Native row. @returns Stored height. */ (row) =>
-        row.GetFormat().minHeight,
+        row.GetFormat().frameSize?.GetHeight(),
     ),
   ).toEqual([undefined, 720, 0]);
-  expect(f.doc.SetRowHeight(f.cursor, 720)).toBe(true);
+  expect(f.doc.SetRowHeight(f.cursor, new SwFormatFrameSize(SwFrameSize.Minimum, 0, 720))).toBe(
+    true,
+  );
   expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(count + 2);
   expect(f.doc.GetDocumentStateManager().GetModelRevision()).toBe(revision + 2);
   expect(notify).toHaveBeenCalledTimes(2);
@@ -71,23 +82,29 @@ it("document minimum-height getter retains zero defaults and mixed or empty no-i
   selected.InsertBox(required(required(f.rows[0]).GetTabBoxes()[0]));
   selected.InsertBox(required(required(f.rows[0]).GetTabBoxes()[1]));
   selected.InsertBox(required(required(f.rows[2]).GetTabBoxes()[0]));
-  expect(SwDoc.GetRowHeight(selected)).toBe(0);
-  expect(f.doc.SetRowHeight(selected, 900)).toBe(true);
+  expect(SwDoc.GetRowHeight(selected)).toBeUndefined();
+  expect(f.doc.SetRowHeight(selected, new SwFormatFrameSize(SwFrameSize.Minimum, 0, 900))).toBe(
+    true,
+  );
   expect(
     f.rows.map(
       /** Reads actual selected heights. @param row - Native row. @returns Height. */ (row) =>
-        row.GetFormat().minHeight,
+        row.GetFormat().frameSize?.GetHeight(),
     ),
   ).toEqual([900, 400, 900]);
-  expect(SwDoc.GetRowHeight(selected)).toBe(900);
+  expect(SwDoc.GetRowHeight(selected)?.GetHeight()).toBe(900);
   selected.InsertBox(required(required(f.rows[1]).GetTabBoxes()[0]));
   expect(SwDoc.GetRowHeight(selected)).toBeUndefined();
-  expect(f.doc.SetRowHeight(selected, 500)).toBe(true);
-  expect(SwDoc.GetRowHeight(selected)).toBe(500);
+  expect(f.doc.SetRowHeight(selected, new SwFormatFrameSize(SwFrameSize.Minimum, 0, 500))).toBe(
+    true,
+  );
+  expect(SwDoc.GetRowHeight(selected)?.GetHeight()).toBe(500);
   selected.ActualizeSelection([]);
   expect(SwDoc.GetRowHeight(selected)).toBeUndefined();
   const count = f.doc.GetUndoManager().GetUndoActionCount();
-  expect(f.doc.SetRowHeight(selected, 200)).toBe(false);
+  expect(f.doc.SetRowHeight(selected, new SwFormatFrameSize(SwFrameSize.Minimum, 0, 200))).toBe(
+    false,
+  );
   expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(count);
   selected.Dispose();
   f.cursor.Dispose();
@@ -96,21 +113,29 @@ it("document minimum height refuses foreign, removed, outside and disconnected o
   const f = fixture(),
     foreign = fixture(),
     count = f.doc.GetUndoManager().GetUndoActionCount();
-  expect(f.doc.SetRowHeight(foreign.cursor, 700)).toBe(false);
+  expect(
+    f.doc.SetRowHeight(foreign.cursor, new SwFormatFrameSize(SwFrameSize.Minimum, 0, 700)),
+  ).toBe(false);
   const row = required(f.rows[1]);
   f.table.RemoveLine(row);
-  expect(f.doc.SetRowHeight(f.cursor, 700)).toBe(false);
+  expect(f.doc.SetRowHeight(f.cursor, new SwFormatFrameSize(SwFrameSize.Minimum, 0, 700))).toBe(
+    false,
+  );
   expect(SwDoc.GetRowHeight(f.cursor)).toBeUndefined();
   f.table.AddLine(row);
   f.cursor.GetPoint().Assign(required(f.doc.paragraphs[0]), 0);
   expect(SwDoc.GetRowHeight(f.cursor)).toBeUndefined();
-  expect(f.doc.SetRowHeight(f.cursor, 700)).toBe(false);
+  expect(f.doc.SetRowHeight(f.cursor, new SwFormatFrameSize(SwFrameSize.Minimum, 0, 700))).toBe(
+    false,
+  );
   f.doc.nodes.MakeTextNode("Following");
   f.doc.nodes.DeleteTable(f.table.GetTableNode());
   const position = new SwPosition(f.node, 0),
     disconnected = new SwCursor(position);
   position.Dispose();
-  expect(f.doc.SetRowHeight(disconnected, 700)).toBe(false);
+  expect(f.doc.SetRowHeight(disconnected, new SwFormatFrameSize(SwFrameSize.Minimum, 0, 700))).toBe(
+    false,
+  );
   expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(count);
   disconnected.Dispose();
   f.cursor.Dispose();

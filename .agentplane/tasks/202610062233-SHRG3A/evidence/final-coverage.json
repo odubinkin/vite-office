@@ -32,7 +32,7 @@
         "pct": "Unknown"
       }
     },
-    "mapSHA256": "8067c194a512f61569c3e37ef7cff28efc6f5607a55888f1d1c3f558fd58f6bf",
+    "mapSHA256": "1803ae6733a408b9ea6e1ae543ba3ccbbed1b44116f718e89dfa518273952787",
     "files": 275
   },
   "inventory": {
@@ -74,6 +74,18 @@
   "proof": "Actual initial counters transferred only over full identical maps/source or complete contiguous identical source ranges with full mapped locations; current changed ranges use focused raw counters. Skipped cases retained as skipped. No counts fabricated.",
   "transfers": [
     {
+      "path": "apps/office/src/sw/browser/editor/WriterEditableTable.tsx",
+      "kind": "entire contiguous byte-identical regions; full decl/body function and full enclosing branch/location maps; actual counters only",
+      "initialSourceSHA256": "213d990b8a00d6d390b3a389f37097e31e37ade92cf2e8fa41f1b284cd5e42e8",
+      "currentSourceSHA256": "25ed31fa47763bfeefbd3f13d9a901b0b04dec181b24b2145bd077a8c3b4d463",
+      "regionCount": 2,
+      "transferredActualCounters": {
+        "statements": 19,
+        "functions": 7,
+        "branches": 30
+      }
+    },
+    {
       "path": "apps/office/src/sw/browser/filter/xml/writer-document-codec.ts",
       "kind": "entire contiguous byte-identical regions; full decl/body function and full enclosing branch/location maps; actual counters only",
       "initialSourceSHA256": "352b4b1148dd4df539c3086c81a9556d4126714d149c17d82ae058a88161d1aa",
@@ -86,6 +98,6 @@
       }
     }
   ],
-  "wholeIdenticalFileCount": 274,
+  "wholeIdenticalFileCount": 273,
   "gaps": []
 }

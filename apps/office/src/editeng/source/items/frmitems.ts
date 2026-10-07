@@ -4,6 +4,59 @@
 
 import { SfxPoolItem } from "../../../svl/source/items/poolitem";
 
+/** Owns the two-dimensional native size item from sizeitem.hxx and frmitems.cxx. */
+export class SvxSizeItem extends SfxPoolItem {
+  /** Creates an independent twip size. @param which - Native item identity. @param size - Authored dimensions. @returns Nothing. */
+  public constructor(
+    which: number,
+    private size = { width: 0, height: 0 },
+  ) {
+    super(which);
+    this.size = { ...size };
+  }
+  /** Reads the independent native dimensions. @returns Twip dimensions. */
+  public GetSize(): Readonly<{ width: number; height: number }> {
+    return { ...this.size };
+  }
+  /** Replaces native dimensions. @param size - Twip dimensions. @returns Nothing. */
+  public SetSize(size: Readonly<{ width: number; height: number }>): void {
+    this.size = { ...size };
+  }
+  /** Reads native width. @returns Twips. */
+  public GetWidth(): number {
+    return this.size.width;
+  }
+  /** Reads native height. @returns Twips. */
+  public GetHeight(): number {
+    return this.size.height;
+  }
+  /** Replaces native width. @param width - Twips. @returns Nothing. */
+  public SetWidth(width: number): void {
+    this.size.width = width;
+  }
+  /** Replaces native height. @param height - Twips. @returns Nothing. */
+  public SetHeight(height: number): void {
+    this.size.height = height;
+  }
+  /** Copies actual size and item identity. @returns Independent item. */
+  public Clone(): SvxSizeItem {
+    return new SvxSizeItem(this.Which(), this.GetSize());
+  }
+  /** Compares native identity and both dimensions. @param other - Candidate item. @returns Whether equal. */
+  public equals(other: SfxPoolItem): boolean {
+    return (
+      other instanceof SvxSizeItem &&
+      other.Which() === this.Which() &&
+      other.GetWidth() === this.GetWidth() &&
+      other.GetHeight() === this.GetHeight()
+    );
+  }
+  /** Exposes the supported default native size value without twip conversion. @returns Native dimensions. */
+  public QueryValue(): Readonly<{ Width: number; Height: number }> {
+    return { Width: this.GetWidth(), Height: this.GetHeight() };
+  }
+}
+
 /** Stores Writer's direct text-left margin in twips, matching the bounded `SvxTextLeftMarginItem` role. */
 export class SvxTextLeftMarginItem extends SfxPoolItem {
   /** Creates a left-margin item. @param textLeft - Direct text-left margin in twips. @param which - Item identity. @returns Nothing. */

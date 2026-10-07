@@ -10,7 +10,7 @@ import {
 import type { SwDoc } from "../doc/doc";
 import { SwTableNode } from "../docnode/node";
 import type { SwTable } from "../table/swtable";
-import { SwTabFrame, type SwTablePrintArea } from "./tabfrm";
+import { SwTabFrame, SwRowFrame, type SwTablePrintArea } from "./tabfrm";
 import {
   createSwTextFrameInputs,
   getSwTextFrameGap,
@@ -432,7 +432,7 @@ function createSwTableFrameInputs(
             /** map handles this value. @param row - Input 1. @param index - Input 2. @returns The result. */ (
               row,
               index,
-            ) => Math.max(row.GetFormat().minHeight ?? 0, measured?.rowHeights[index] ?? 240),
+            ) => new SwRowFrame(row).Format(measured?.rowHeights[index] ?? 240),
           ),
       });
     } else paragraphIndex += 1;

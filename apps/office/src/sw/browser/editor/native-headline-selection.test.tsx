@@ -1,4 +1,5 @@
 /** @fileoverview Checks actual DOM ranges retain native table selection and repeated headline view context. */
+import { SwFormatFrameSize, SwFrameSize } from "../../inc/fmtfsize";
 import { selectMountedTableRow } from "../../../../test-support/table-mouse-dom";
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, expect, it } from "vitest";
@@ -35,7 +36,9 @@ function fixture() {
   table.AddColumnWidth(2000);
   const nodes = [];
   for (let row = 0; row < 4; row++)
-    for (const box of doc.nodes.AppendTableRow(table, 2, { minHeight: 300 }).GetTabBoxes()) {
+    for (const box of doc.nodes
+      .AppendTableRow(table, 2, { frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 300) })
+      .GetTabBoxes()) {
       const node = required(box.GetParagraphs()[0]);
       node.SetText("Cell" + nodes.length);
       nodes.push(node);

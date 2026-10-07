@@ -23,6 +23,7 @@ export type OdfTableStyle =
   | {
       readonly family: "table-row";
       readonly minHeight?: number | undefined;
+      readonly height?: number | undefined;
       readonly keepTogether?: boolean | undefined;
     }
   | {
@@ -91,7 +92,13 @@ export class XMLTableStyleContext extends SvXMLImportContext {
         label: string,
       ): number | undefined => {
         const value = attributes.get(token);
-        return value === null ? undefined : importOdfLength(value, false, label);
+        return value === null
+          ? undefined
+          : importOdfLength(
+              value,
+              token === XMLToken.STYLE_MIN_ROW_HEIGHT || token === XMLToken.STYLE_ROW_HEIGHT,
+              label,
+            );
       };
     if (this.style !== undefined)
       throw new Error(`Duplicate ODF table style properties: ${this.name}`);
@@ -166,7 +173,7 @@ export class XMLTableStyleContext extends SvXMLImportContext {
       };
     } else if (this.family === "table-row" && element === XMLToken.STYLE_TABLE_ROW_PROPERTIES) {
       attributes.assertOnly(
-        [XMLToken.STYLE_MIN_ROW_HEIGHT, XMLToken.FO_KEEP_TOGETHER],
+        [XMLToken.STYLE_MIN_ROW_HEIGHT, XMLToken.STYLE_ROW_HEIGHT, XMLToken.FO_KEEP_TOGETHER],
         "table row properties",
       );
       const keep = attributes.get(XMLToken.FO_KEEP_TOGETHER);
@@ -174,9 +181,23 @@ export class XMLTableStyleContext extends SvXMLImportContext {
         throw new Error(`Unsupported ODF table row keep-together: ${keep}`);
       this.style = {
         family: "table-row",
-        minHeight: length(XMLToken.STYLE_MIN_ROW_HEIGHT, "table row height"),
         keepTogether: keep === null ? undefined : keep === "always",
       };
+      // Native item import visits attributes in document order; the last size member wins.
+      for (const [token] of attributes) {
+        if (token === XMLToken.STYLE_MIN_ROW_HEIGHT)
+          this.style = {
+            ...this.style,
+            minHeight: length(token, "table row height"),
+            height: undefined,
+          };
+        else if (token === XMLToken.STYLE_ROW_HEIGHT)
+          this.style = {
+            ...this.style,
+            height: length(token, "table fixed row height"),
+            minHeight: undefined,
+          };
+      }
     } else if (this.family === "table-cell" && element === XMLToken.STYLE_TABLE_CELL_PROPERTIES) {
       attributes.assertOnly(
         [XMLToken.STYLE_VERTICAL_ALIGN, XMLToken.FO_PADDING, XMLToken.FO_BORDER],

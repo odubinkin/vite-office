@@ -1,4 +1,5 @@
 /** @fileoverview Verifies document-owned row split admission, original cursor collection and history without upstream dependencies. */
+import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
 import { expect, it } from "vitest";
 import { SwDoc } from "../doc/doc";
 import { SwCursor, SwTableCursor } from "../crsr/swcrsr";
@@ -11,7 +12,10 @@ function fixture() {
   table.AddColumnWidth(3000);
   table.AddColumnWidth(3000);
   for (const keepTogether of [undefined, true, false])
-    doc.nodes.AppendTableRow(table, 2, { keepTogether, minHeight: 400 });
+    doc.nodes.AppendTableRow(table, 2, {
+      keepTogether,
+      frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 400),
+    });
   const rows = table.GetTabLines(),
     node = required(required(required(rows[1]).GetTabBoxes()[0]).GetParagraphs()[0]);
   node.SetText("middle");
@@ -46,7 +50,7 @@ it("document row split ignores an ordinary mark and extra ring while retaining n
     f.rows.map(
       /** Reads unrelated row heights. @param row - Native row. @returns Original height. */ (
         row,
-      ) => row.GetFormat().minHeight,
+      ) => row.GetFormat().frameSize?.GetHeight(),
     ),
   ).toEqual([400, 400, 400]);
   expect(f.table.GetFormat().layoutSplit).toBe(false);

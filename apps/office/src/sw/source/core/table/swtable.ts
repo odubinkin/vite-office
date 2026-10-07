@@ -5,6 +5,7 @@ import type { SwDoc } from "../doc/doc";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { SwTextNode } from "../txtnode/ndtxt";
 import { SwTabCols } from "../bastyp/tabcol";
+import { SwFormatFrameSize } from "../../../inc/fmtfsize";
 
 /** Physical table geometry imported from Writer table style properties, in twips. */
 export interface SwTableFormat {
@@ -23,7 +24,7 @@ export interface SwTableFormat {
 
 /** Bounded row geometry owned by SwTableLine. */
 export interface SwTableLineFormat {
-  readonly minHeight?: number | undefined;
+  readonly frameSize?: SwFormatFrameSize | undefined;
   readonly keepTogether?: boolean | undefined;
 }
 
@@ -75,16 +76,29 @@ export class SwTableLine {
   private readonly boxes: SwTableBox[] = [];
 
   /** Creates a row. @param format - Imported row geometry. @returns Nothing. */
-  public constructor(private format: SwTableLineFormat = {}) {}
+  public constructor(private format: SwTableLineFormat = {}) {
+    this.SetFormat(format);
+  }
 
   /** Returns row geometry. @returns Immutable values. */
   public GetFormat(): SwTableLineFormat {
-    return { ...this.format };
+    return {
+      ...this.format,
+      ...(this.format.frameSize === undefined ? {} : { frameSize: this.format.frameSize.Clone() }),
+    };
   }
 
   /** Replaces row geometry. @param value - New values. @returns Nothing. */
   public SetFormat(value: SwTableLineFormat): void {
-    this.format = { ...value };
+    this.format = {
+      ...value,
+      ...(value.frameSize === undefined ? {} : { frameSize: value.frameSize.Clone() }),
+    };
+  }
+
+  /** Reads an independent effective native frame-size item, including pool defaults. @returns Complete frame size. */
+  public GetFrameSize(): SwFormatFrameSize {
+    return this.format.frameSize?.Clone() ?? new SwFormatFrameSize();
   }
 
   /** Adds a cell to this row. @param box - Canonical cell. @param index - Native insertion coordinate. @returns Nothing. */

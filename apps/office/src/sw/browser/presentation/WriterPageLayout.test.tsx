@@ -1,5 +1,6 @@
 /** @fileoverview Verifies the browser page dialog, rulers, pagination, and paged workspace chrome. */
 
+import { SwFormatFrameSize, SwFrameSize } from "../../inc/fmtfsize";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
@@ -328,8 +329,12 @@ describe("Writer physical page browser UI", /** Registers page-layout UI cases. 
     first.SetText("Before");
     const table = document.nodes.MakeTableNode("Paged", { width: 1500 }, first);
     table.AddColumnWidth(1500);
-    document.nodes.AppendTableRow(table, 1, { minHeight: 450 });
-    document.nodes.AppendTableRow(table, 1, { minHeight: 450 });
+    document.nodes.AppendTableRow(table, 1, {
+      frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 450),
+    });
+    document.nodes.AppendTableRow(table, 1, {
+      frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 450),
+    });
     const after = document.nodes.MakeTextNode("After");
     const paragraphs = [
       { ...paragraph("before", "Before"), nodeIndex: first.GetIndex() },

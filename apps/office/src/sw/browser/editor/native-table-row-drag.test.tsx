@@ -80,10 +80,10 @@ it("mounted row capture blocks browser drag/selection/click while release off-ho
   expect(f.shell.CaptureCursorState().point).toEqual(cursor.point);
   fireEvent.mouseMove(document, { clientX: 1000, clientY: 183 });
   expect(document.querySelector("[data-writer-table-row-guide]")).toHaveStyle({ top: "180px" });
-  expect(required(f.table.GetTabLines()[0]).GetFormat().minHeight).toBeUndefined();
+  expect(required(f.table.GetTabLines()[0]).GetFormat().frameSize?.GetHeight()).toBeUndefined();
   expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(0);
   fireEvent.mouseUp(document, { clientX: 1000, clientY: 183 });
-  expect(required(f.table.GetTabLines()[0]).GetFormat().minHeight).toBe(1200);
+  expect(required(f.table.GetTabLines()[0]).GetFormat().frameSize?.GetHeight()).toBe(1200);
   expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(1);
   expect(document.querySelector("[data-writer-table-row-guide]")).toBeNull();
   expect(fireEvent.click(f.paragraph)).toBe(false);
@@ -103,7 +103,7 @@ it.each(["Escape", "blur", "teardown"])(
     } else if (termination === "blur") fireEvent.blur(window);
     else cleanup();
     fireEvent.mouseUp(document, { clientX: 900, clientY: 180 });
-    expect(required(f.table.GetTabLines()[0]).GetFormat().minHeight).toBeUndefined();
+    expect(required(f.table.GetTabLines()[0]).GetFormat().frameSize?.GetHeight()).toBeUndefined();
     expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(0);
     expect(document.querySelector("[data-writer-table-row-guide]")).toBeNull();
   },
@@ -114,7 +114,7 @@ it("mounted Enter accepts native bottom row once while teardown removes all trac
   fireEvent.mouseMove(f.host, { clientX: 300, clientY: 275 });
   expect(fireEvent.keyDown(f.host, { key: "Enter" })).toBe(false);
   fireEvent.mouseUp(f.host, { clientX: 150, clientY: 290 });
-  expect(required(f.table.GetTabLines()[2]).GetFormat().minHeight).toBe(1125);
+  expect(required(f.table.GetTabLines()[2]).GetFormat().frameSize?.GetHeight()).toBe(1125);
   expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(1);
   act(
     /** Restores actual history before view shutdown. @returns Nothing. */ () => {
@@ -131,7 +131,7 @@ it("mounted device rows retain table ownership when the page wrapper measurement
   fireEvent.mouseDown(f.paragraph, { button: 0, detail: 1, clientX: 150, clientY: 200 });
   fireEvent.mouseMove(document, { clientX: 350, clientY: 220 });
   fireEvent.mouseUp(document, { clientX: 350, clientY: 220 });
-  expect(required(f.table.GetTabLines()[1]).GetFormat().minHeight).toBe(1050);
+  expect(required(f.table.GetTabLines()[1]).GetFormat().frameSize?.GetHeight()).toBe(1050);
   expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(1);
 });
 
@@ -149,7 +149,7 @@ it("mounted native border GrabFocus leaves toolbar focus and retains the origina
   expect(f.shell.CaptureCursorState().point).toEqual(cursor.point);
   fireEvent.mouseMove(document, { clientX: 300, clientY: 175 });
   fireEvent.keyDown(f.host, { key: "Enter" });
-  expect(required(f.table.GetTabLines()[0]).GetFormat().minHeight).toBe(1125);
+  expect(required(f.table.GetTabLines()[0]).GetFormat().frameSize?.GetHeight()).toBe(1125);
   expect(f.shell.CaptureCursorState().point).toEqual(cursor.point);
   button.remove();
   fireEvent.mouseDown(f.paragraph, { button: 0, detail: 1, clientX: 95, clientY: 125 });

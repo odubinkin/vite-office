@@ -95,19 +95,19 @@ it("native row drag shifts following borders and preserves cursor/list/box graph
   expect(
     f.lines.map(
       /** Reads retained row formats. @param line - Original row. @returns Minimum. */ (line) =>
-        line.GetFormat().minHeight,
+        line.GetFormat().frameSize?.GetHeight(),
     ),
   ).toEqual([undefined, undefined, undefined]);
   expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(0);
   f.edit.MouseButtonUp(false, { x: 0, y: 183 });
-  expect(required(f.lines[0]).GetFormat().minHeight).toBe(1200);
+  expect(required(f.lines[0]).GetFormat().frameSize?.GetHeight()).toBe(1200);
   expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(1);
   expect(f.shell.CaptureCursorState().point).toEqual(cursor.point);
   for (let cycle = 0; cycle < 3; cycle++) {
     expect(f.shell.Undo()).toBe(true);
-    expect(required(f.lines[0]).GetFormat().minHeight).toBeUndefined();
+    expect(required(f.lines[0]).GetFormat().frameSize?.GetHeight()).toBeUndefined();
     expect(f.shell.Redo()).toBe(true);
-    expect(required(f.lines[0]).GetFormat().minHeight).toBe(1200);
+    expect(required(f.lines[0]).GetFormat().frameSize?.GetHeight()).toBe(1200);
     for (let r = 0; r < 3; r++) {
       expect(f.table.GetTabLines()[r]).toBe(f.lines[r]);
       expect(required(f.lines[r]).GetTabBoxes()[0]).toBe(boxes[r]);
@@ -124,7 +124,9 @@ it("native row drag shifts following borders and preserves cursor/list/box graph
     title: "Rows",
   });
   expect(
-    required(required(reopened.document.GetTables()[0]).GetTabLines()[0]).GetFormat().minHeight,
+    required(required(reopened.document.GetTables()[0]).GetTabLines()[0])
+      .GetFormat()
+      .frameSize?.GetHeight(),
   ).toBe(1200);
 });
 it.each([
@@ -140,7 +142,7 @@ it.each([
     expect(f.edit.MouseButtonDown({ x: 150, y: from })).toBe(true);
     f.edit.MouseMove({ x: 1000, y: to });
     f.edit.MouseButtonUp();
-    expect(required(f.lines[row]).GetFormat().minHeight).toBe(height);
+    expect(required(f.lines[row]).GetFormat().frameSize?.GetHeight()).toBe(height);
   },
 );
 it.each([true, false])(
@@ -152,7 +154,7 @@ it.each([true, false])(
     expect(f.edit.MouseButtonDown({ x: 150, y: 150 })).toBe(true);
     f.edit.MouseMove({ x: 0, y: 175 });
     f.edit.MouseButtonUp(cancel);
-    expect(required(f.lines[0]).GetFormat().minHeight).toBe(cancel ? undefined : 1125);
+    expect(required(f.lines[0]).GetFormat().frameSize?.GetHeight()).toBe(cancel ? undefined : 1125);
   },
 );
 it("native current-cell row ingress retains actual cursor and no-cell guards", /** Checks all native current and mouse ingress routes. @returns Nothing. */ () => {

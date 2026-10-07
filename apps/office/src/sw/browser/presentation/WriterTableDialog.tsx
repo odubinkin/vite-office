@@ -10,6 +10,7 @@ import {
   SwTextFlowPage,
 } from "../../source/ui/table/tabledlg";
 import { HoriOrientation } from "../../../offapi/com/sun/star/text/HoriOrientation";
+import type { SwFormatFrameSize } from "../../inc/fmtfsize";
 
 /** Editable table geometry expressed in Writer twips. */
 export interface WriterTableDialogValue extends SwTableProperties {
@@ -25,6 +26,7 @@ export function WriterTableDialog(
   props: Readonly<{
     table?: SwTable;
     selectedBoxes?: readonly SwTableBox[];
+    rowHeight?: SwFormatFrameSize | undefined;
     lineSelected?: boolean;
     suggestedName?: string;
     occupiedNames?: readonly string[];
@@ -44,6 +46,7 @@ export function WriterTableDialog(
 function WriterTablePropertiesDialog({
   table,
   selectedBoxes,
+  rowHeight,
   availableWidth,
   lineSelected = false,
   onCancel,
@@ -51,6 +54,7 @@ function WriterTablePropertiesDialog({
 }: Readonly<{
   table: SwTable;
   selectedBoxes?: readonly SwTableBox[];
+  rowHeight?: SwFormatFrameSize | undefined;
   lineSelected?: boolean;
   availableWidth: number;
   onCancel: () => void;
@@ -80,7 +84,7 @@ function WriterTablePropertiesDialog({
   const [initial] = useState(
     /** Retains initial input values for the represented Text Flow and Borders pages. @returns Original page values. */
     () => ({
-      minRowHeight: rows[0]?.GetFormat().minHeight ?? 0,
+      minRowHeight: rowHeight?.GetHeight() ?? 0,
       padding: rows[0]?.GetTabBoxes()[0]?.GetFormat().padding ?? 100,
       border: rows[0]?.GetTabBoxes()[0]?.GetFormat().border ?? "0.5pt solid #666666",
       verticalAlign: rows[0]?.GetTabBoxes()[0]?.GetFormat().verticalAlign ?? "top",

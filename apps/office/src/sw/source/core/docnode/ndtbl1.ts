@@ -6,6 +6,7 @@ import { SwTableCursor, type SwCursor } from "../crsr/swcrsr";
 import { SwUndoAttrTable } from "../undo/untbl";
 import { createWriterCollapsedCursorState, type SwUndoCursorState } from "../undo/undobj";
 import type { SwTextNode } from "../txtnode/ndtxt";
+import type { SwFormatFrameSize } from "../../../inc/fmtfsize";
 
 /** Collects represented original lines without removing row-split ancestors. @param table - Native table. @param boxes - Actual selected boxes or whole dialog input. @returns Original lines. */
 function CollectLines(table: SwTable, boxes?: readonly SwTableBox[]): readonly SwTableLine[] {
@@ -69,24 +70,24 @@ export function SetSwRowSplit(
   return SetRowAttr(doc, cursor, { keepTogether: !split }, cursorState);
 }
 
-/** Reads the common represented minimum height, including the zero default. @param cursor - Original current or table-selected cursor. @returns Common height or no item for mixed or absent rows. */
-export function GetSwRowHeight(cursor: SwCursor): number | undefined {
+/** Reads the complete common native size item, including native default types. @param cursor - Original current or table-selected cursor. @returns Cloned common item or no item for mixed or absent rows. */
+export function GetSwRowHeight(cursor: SwCursor): SwFormatFrameSize | undefined {
   const rows = CollectSwRowSplitLines(cursor),
     first = rows[0];
   if (first === undefined) return undefined;
-  const height = first.GetFormat().minHeight ?? 0;
-  for (const row of rows) if ((row.GetFormat().minHeight ?? 0) !== height) return undefined;
-  return height;
+  const size = first.GetFrameSize();
+  for (const row of rows) if (!size.equals(row.GetFrameSize())) return undefined;
+  return size.Clone();
 }
 
-/** Applies the represented minimum-height item through native document row ownership. @param doc - Owning document. @param cursor - Actual current or table-selected cursor. @param height - Minimum height in twips. @param cursorState - Optional shell history attributes. @returns Whether admitted. */
+/** Applies the complete native size item through document row ownership. @param doc - Owning document. @param cursor - Actual current or table-selected cursor. @param size - Complete authored frame size. @param cursorState - Optional shell history attributes. @returns Whether admitted. */
 export function SetSwRowHeight(
   doc: SwDoc,
   cursor: SwCursor,
-  height: number,
+  size: SwFormatFrameSize,
   cursorState?: SwUndoCursorState,
 ): boolean {
-  return SetRowAttr(doc, cursor, { minHeight: height }, cursorState);
+  return SetRowAttr(doc, cursor, { frameSize: size }, cursorState);
 }
 
 /** Records original row attributes through one document transaction, including same-value requests. @param doc - Owning document. @param cursor - Actual current or table-selected cursor. @param value - Represented row item. @param cursorState - Optional shell history attributes. @returns Whether admitted. */

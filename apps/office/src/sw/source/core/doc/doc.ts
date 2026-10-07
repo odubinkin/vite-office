@@ -18,6 +18,7 @@ import {
   SetSwRowHeight,
 } from "../docnode/ndtbl1";
 import type { SwCursor } from "../crsr/swcrsr";
+import type { SwFormatFrameSize } from "../../../inc/fmtfsize";
 import { createWriterCollapsedCursorState, type SwUndoCursorState } from "../undo/undobj";
 import { SwInsertTableFlags, type SwInsertTableOptions } from "../../../inc/itabenum";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
@@ -101,13 +102,17 @@ export class SwDoc {
   public SetRowSplit(cursor: SwCursor, split: boolean, cursorState?: SwUndoCursorState): boolean {
     return SetSwRowSplit(this, cursor, split, cursorState);
   }
-  /** Reads the common represented minimum-row-height item. @param cursor - Actual current or table-selected cursor. @returns Common height or no item. */
-  public static GetRowHeight(cursor: SwCursor): number | undefined {
+  /** Reads the complete common native row-size item. @param cursor - Actual current or table-selected cursor. @returns Cloned common frame size or no item. */
+  public static GetRowHeight(cursor: SwCursor): SwFormatFrameSize | undefined {
     return GetSwRowHeight(cursor);
   }
-  /** Publishes represented minimum height through document-owned row attributes and history. @param cursor - Actual current or table-selected cursor. @param height - Minimum height in twips. @param cursorState - Optional shell history attributes. @returns Whether admitted. */
-  public SetRowHeight(cursor: SwCursor, height: number, cursorState?: SwUndoCursorState): boolean {
-    return SetSwRowHeight(this, cursor, height, cursorState);
+  /** Publishes the complete size item through document-owned row attributes and history. @param cursor - Actual current or table-selected cursor. @param size - Native frame-size item. @param cursorState - Optional shell history attributes. @returns Whether admitted. */
+  public SetRowHeight(
+    cursor: SwCursor,
+    size: SwFormatFrameSize,
+    cursorState?: SwUndoCursorState,
+  ): boolean {
+    return SetSwRowHeight(this, cursor, size, cursorState);
   }
   /** Applies native row-height deltas through the source ndtbl owner split. @param next - Requested rows. @param currentColumnOnly - Original hit cell only. @param frame - Physical frame. @param start - Actual cell. @param cursorState - Retained native cursor. @returns Whether changed. */
   public SetTabRows(

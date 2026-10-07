@@ -21,6 +21,7 @@ import type {
   SwTableLineFormat,
 } from "../../../source/core/table/swtable";
 import { SwLineNumberInfo, type SwLineNumberInfoValue } from "../../../inc/lineinfo";
+import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
 import type { DefaultFontDevice } from "../../../source/core/doc/default-font";
 import {
   isWriterParagraphStyle,
@@ -127,12 +128,88 @@ interface WriterTableRecord {
   readonly columnWidths: readonly number[];
   readonly softPageBreakRows: readonly number[];
   readonly rows: readonly Readonly<{
-    format: SwTableLineFormat;
+    format: WriterRowFormatRecord;
     cells: readonly Readonly<{
       format: SwTableBoxFormat;
       paragraphs: readonly WriterTextNodeRecord[];
     }>[];
   }>[];
+}
+
+/** Primitive complete frame item for process and storage boundaries. */
+interface WriterFrameSizeRecord {
+  readonly width: number;
+  readonly height: number;
+  readonly widthType: SwFrameSize;
+  readonly heightType: SwFrameSize;
+  readonly widthPercent: number;
+  readonly heightPercent: number;
+  readonly widthPercentRelation: number;
+  readonly heightPercentRelation: number;
+}
+/** Row boundary record, including prior v16 minimum-height ingress. */
+type WriterRowFormatRecord = Omit<SwTableLineFormat, "frameSize"> & {
+  readonly frameSize?: WriterFrameSizeRecord | undefined;
+  readonly minHeight?: number | undefined;
+};
+/** Encodes public native values without transferring a class prototype. @param value - Original row format. @returns Primitive row record. */
+function encodeRowFormat(value: SwTableLineFormat): WriterRowFormatRecord {
+  const { frameSize, ...format } = value;
+  return {
+    ...format,
+    frameSize:
+      frameSize === undefined
+        ? undefined
+        : {
+            width: frameSize.GetWidth(),
+            height: frameSize.GetHeight(),
+            widthType: frameSize.GetWidthSizeType(),
+            heightType: frameSize.GetHeightSizeType(),
+            widthPercent: frameSize.GetWidthPercent(),
+            heightPercent: frameSize.GetHeightPercent(),
+            widthPercentRelation: frameSize.GetWidthPercentRelation(),
+            heightPercentRelation: frameSize.GetHeightPercentRelation(),
+          },
+  };
+}
+/** Restores the complete native item at the existing graph boundary. @param value - Primitive row record. @returns Native row format. */
+function decodeRowFormat(value: WriterRowFormatRecord): SwTableLineFormat {
+  const { frameSize, minHeight, ...format } = value;
+  if (frameSize === undefined)
+    return {
+      ...format,
+      frameSize:
+        minHeight === undefined
+          ? undefined
+          : new SwFormatFrameSize(SwFrameSize.Minimum, 0, minHeight),
+    };
+  if (
+    !isRecord(frameSize) ||
+    [
+      frameSize.width,
+      frameSize.height,
+      frameSize.widthType,
+      frameSize.heightType,
+      frameSize.widthPercent,
+      frameSize.heightPercent,
+      frameSize.widthPercentRelation,
+      frameSize.heightPercentRelation,
+    ].some(
+      /** Rejects non-numeric native fields at an untrusted graph boundary. @param field - Serialized value. @returns Whether invalid. */ (
+        field,
+      ) => typeof field !== "number" || !Number.isFinite(field),
+    ) ||
+    ![0, 1, 2].includes(frameSize.widthType) ||
+    ![0, 1, 2].includes(frameSize.heightType)
+  )
+    throw new Error("Stored Writer frame size is invalid.");
+  const item = new SwFormatFrameSize(frameSize.heightType, frameSize.width, frameSize.height);
+  item.SetWidthSizeType(frameSize.widthType);
+  item.SetWidthPercent(frameSize.widthPercent);
+  item.SetHeightPercent(frameSize.heightPercent);
+  item.SetWidthPercentRelation(frameSize.widthPercentRelation);
+  item.SetHeightPercentRelation(frameSize.heightPercentRelation);
+  return { ...format, frameSize: item };
 }
 
 /** Canonical ranged Writer attribute record; browser run projections never cross a boundary. */
@@ -298,7 +375,7 @@ export function encodeWriterDocument(document: SwDoc): WriterDocumentRecord {
           /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ (
             row,
           ) => ({
-            format: row.GetFormat(),
+            format: encodeRowFormat(row.GetFormat()),
             cells: row.GetTabBoxes().map(
               /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ (
                 cell,
@@ -612,7 +689,7 @@ export function decodeWriterDocument(
       const row = document.nodes.AppendTableRow(
         table,
         rowRecord.cells.length,
-        rowRecord.format,
+        decodeRowFormat(rowRecord.format),
         rowRecord.cells.map(
           /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ (
             cell,

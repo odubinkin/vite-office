@@ -1,4 +1,5 @@
 /** @fileoverview Mounted table Tab observes document-owned insertion and coherent native cursor state. */
+import { SwFormatFrameSize, SwFrameSize } from "../../inc/fmtfsize";
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { expect, it, vi } from "vitest";
 import { createWriterDocumentSession } from "../composition/writer-module";
@@ -21,7 +22,10 @@ it("renders default Tab append through document insertion without action replay"
       source = required(table.GetTabLines()[0]),
       last = required(required(source.GetTabBoxes()[1]).GetParagraphs()[0]);
     last.SetText("last");
-    source.SetFormat({ minHeight: 480, keepTogether: true });
+    source.SetFormat({
+      frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 480),
+      keepTogether: true,
+    });
     const position = new SwPosition(last, 2);
     shell.SetCursor(position);
     position.Dispose();
@@ -39,7 +43,10 @@ it("renders default Tab append through document insertion without action replay"
     const row = required(table.GetTabLines()[1]),
       cell = required(required(row.GetTabBoxes()[0]).GetParagraphs()[0]),
       fresh = screen.getByLabelText("Row 2 column 1 paragraph 1");
-    expect(row.GetFormat()).toEqual({ minHeight: 480, keepTogether: true });
+    expect(row.GetFormat()).toEqual({
+      frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 480),
+      keepTogether: true,
+    });
     expect(cell.GetTextFormatColl().id).toBe("table-contents");
     expect(fresh.contains(selection.focusNode)).toBe(true);
     expect(selection.focusOffset).toBe(0);

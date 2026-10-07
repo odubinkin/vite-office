@@ -213,7 +213,7 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
     });
     fireEvent.click(within(dialog).getByRole("button", { name: "OK" }));
     expect(table?.GetColumnWidths()[0]).toBe(2268);
-    expect(table?.GetTabLines()[1]?.GetFormat().minHeight).toBe(567);
+    expect(table?.GetTabLines()[1]?.GetFormat().frameSize?.GetHeight()).toBe(567);
     expect(table?.GetTabLines()[1]?.GetTabBoxes()[0]?.GetFormat().verticalAlign).toBe("bottom");
     const cell = screen.getByLabelText("Row 2 column 1 paragraph 1");
     cell.focus();

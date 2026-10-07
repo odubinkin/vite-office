@@ -162,8 +162,8 @@ it("table properties use native selected rows and preserve other row geometry", 
     target: { value: "1" },
   });
   fireEvent.click(within(dialog).getByRole("button", { name: "OK" }));
-  expect(f.table.GetTabLines()[0]?.GetFormat().minHeight).toBeUndefined();
-  expect(f.table.GetTabLines()[1]?.GetFormat().minHeight).toBe(567);
+  expect(f.table.GetTabLines()[0]?.GetFormat().frameSize?.GetHeight()).toBeUndefined();
+  expect(f.table.GetTabLines()[1]?.GetFormat().frameSize?.GetHeight()).toBe(567);
   expect(painted("First")).toHaveLength(2);
   expect(f.shell.HasBoxSelection()).toBe(true);
 });
@@ -185,8 +185,8 @@ it("row surface delegates to native selection and caret properties apply to its 
     target: { value: "1" },
   });
   fireEvent.click(within(dialog).getByRole("button", { name: "OK" }));
-  expect(f.table.GetTabLines()[0]?.GetFormat().minHeight).toBe(567);
-  expect(f.table.GetTabLines()[1]?.GetFormat().minHeight).toBeUndefined();
+  expect(f.table.GetTabLines()[0]?.GetFormat().frameSize?.GetHeight()).toBe(567);
+  expect(f.table.GetTabLines()[1]?.GetFormat().frameSize?.GetHeight()).toBeUndefined();
   expect(painted("First")).toHaveLength(0);
 });
 it("clicking an already current empty cell focuses the paragraph without a second editing host", /** Checks actual DOM focus while preserving native current point. @returns Nothing. */ () => {

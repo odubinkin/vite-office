@@ -8,6 +8,7 @@ import type { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriO
 import { SwTabCols } from "../../core/bastyp/tabcol";
 import { SwTableRep } from "../table/swtablerep";
 import { PopMode } from "../../core/crsr/trvltbl";
+import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
 
 /** Represented table-property inputs in native twips; original model owners remain in the shell. */
 export interface SwTableProperties {
@@ -59,7 +60,7 @@ export function ItemSetToTableParam(shell: SwFEShell, value: SwTableProperties):
           }
         }
         shell.SetRowsToRepeat(value.headerRows, value.repeatHeaderRows);
-        shell.SetRowHeight(value.minRowHeight);
+        shell.SetRowHeight(new SwFormatFrameSize(SwFrameSize.Minimum, 0, value.minRowHeight));
         shell.SetBoxAlign(value.verticalAlign);
         const columns = new SwTabCols();
         shell.GetTabCols(columns);

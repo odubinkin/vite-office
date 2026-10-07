@@ -14,6 +14,7 @@ import { SwTab, type SwTableMousePoint } from "../../../inc/fesh";
 import { SwTabFrame, type SwTableMouseCell, type SwTableMouseRect } from "../layout/tabfrm";
 import { SwTabCols } from "../bastyp/tabcol";
 import { SwDoc } from "../doc/doc";
+import type { SwFormatFrameSize } from "../../../inc/fmtfsize";
 
 /** Native mouse hit over actual measured frame and box owners. */
 interface SwTableMouseHit {
@@ -370,16 +371,16 @@ export abstract class SwFEShell extends SwEditShell {
     return this.SetTableAttr({ headerRows: count, repeatHeaderRows: repeat });
   }
 
-  /** Applies row height to current or selected rows. @param height - Minimum height in twips. @returns Whether admitted. */
-  public SetRowHeight(height: number): boolean {
+  /** Applies a complete native size to current or selected rows. @param size - Native frame-size item. @returns Whether admitted. */
+  public SetRowHeight(size: SwFormatFrameSize): boolean {
     return this.RunNotificationTransaction(
       /** Forwards actual native selection and pending history attributes. @returns Whether admitted. */
-      () => this.GetDoc().SetRowHeight(this.getShellCursor(), height, this.CaptureCursorState()),
+      () => this.GetDoc().SetRowHeight(this.getShellCursor(), size, this.CaptureCursorState()),
     );
   }
 
-  /** Reads the common represented minimum height over native current or selected rows. @returns Common height or no item. */
-  public GetRowHeight(): number | undefined {
+  /** Reads a clone of the complete common native row-size item. @returns Common size or no item. */
+  public GetRowHeight(): SwFormatFrameSize | undefined {
     return SwDoc.GetRowHeight(this.getShellCursor());
   }
 

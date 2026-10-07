@@ -1,4 +1,5 @@
 /** @fileoverview Checks native counted row insertion, selected edges and document history without upstream access. */
+import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
 import { expect, it, vi } from "vitest";
 import { createWriterDocumentSession } from "../../../browser/composition/writer-module";
 import { SwInsertTableFlags } from "../../../inc/itabenum";
@@ -23,7 +24,9 @@ function fixture() {
   rows.forEach(
     /** Gives each source row distinct native geometry and content. @param row - Actual row. @param index - Coordinate. @returns Nothing. */
     (row, index) => {
-      row.SetFormat({ minHeight: (index + 1) * 240 });
+      row.SetFormat({
+        frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, (index + 1) * 240),
+      });
       row.GetTabBoxes().forEach(
         /** Sets native cell geometry and text. @param box - Actual box. @param column - Coordinate. @returns Nothing. */
         (box, column) => {

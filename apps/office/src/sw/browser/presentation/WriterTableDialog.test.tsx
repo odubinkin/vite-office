@@ -1,5 +1,6 @@
 /** @fileoverview Verifies the Writer table controls and editable cell boundary. */
 
+import { SwFormatFrameSize, SwFrameSize } from "../../inc/fmtfsize";
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
@@ -123,10 +124,12 @@ describe("Writer browser table controls", /** Verifies the bounded table scenari
     const table = document.nodes.MakeTableNode("Table1", { width: 5000 });
     table.AddColumnWidth(2500);
     table.AddColumnWidth(2500);
-    document.nodes.AppendTableRow(table, 2, { minHeight: 200 }, [
-      { padding: 50, border: "none", verticalAlign: "middle" },
-      {},
-    ]);
+    document.nodes.AppendTableRow(
+      table,
+      2,
+      { frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 200) },
+      [{ padding: 50, border: "none", verticalAlign: "middle" }, {}],
+    );
     const submit = vi.fn();
     render(
       <WriterTableDialog
@@ -134,6 +137,7 @@ describe("Writer browser table controls", /** Verifies the bounded table scenari
         onCancel={vi.fn()}
         onSubmit={submit}
         table={table}
+        rowHeight={new SwFormatFrameSize(SwFrameSize.Minimum, 0, 200)}
       />,
     );
     expect(screen.getByRole("dialog", { name: "Table Properties" })).toBeInTheDocument();

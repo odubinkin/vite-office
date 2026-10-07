@@ -1,5 +1,6 @@
 /** @fileoverview Verifies source-backed and synthetic canonical Writer table round trips. */
 
+import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -145,10 +146,15 @@ describe("Writer canonical ODF tables", /** Verifies the bounded table scenario.
     );
     table.AddColumnWidth(2000);
     table.AddColumnWidth(4000);
-    const first = document.nodes.AppendTableRow(table, 2, { minHeight: 500, keepTogether: false }, [
-      { padding: 100, border: "none", verticalAlign: "top" },
-      { padding: 120, border: "1pt solid #000000", verticalAlign: "middle" },
-    ]);
+    const first = document.nodes.AppendTableRow(
+      table,
+      2,
+      { frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 500), keepTogether: false },
+      [
+        { padding: 100, border: "none", verticalAlign: "top" },
+        { padding: 120, border: "1pt solid #000000", verticalAlign: "middle" },
+      ],
+    );
     first.GetTabBoxes()[0]?.GetParagraphs()[0]?.SetText("one");
     first.GetTabBoxes()[1]?.GetParagraphs()[0]?.SetText("two");
     table.AddSoftPageBreak();

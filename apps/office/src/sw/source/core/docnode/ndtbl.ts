@@ -3,7 +3,10 @@ import type { SwDoc } from "../doc/doc";
 import { SwTable, type SwTableBox, type SwTableLine } from "../table/swtable";
 import type { SwTabFrame } from "../layout/tabfrm";
 import { SwTabCols } from "../bastyp/tabcol";
-import { SwUndoAttrTable } from "../undo/untbl";
+import { SwFrameSize, type SwFormatFrameSize } from "../../../inc/fmtfsize";
+import { SwPosition } from "../crsr/pam";
+import { SwCursor } from "../crsr/swcrsr";
+import type { SwTextNode } from "../txtnode/ndtxt";
 import { createWriterCollapsedCursorState, type SwUndoCursorState } from "../undo/undobj";
 /** Native row-boundary fuzzy distance in twips. */
 const ROWFUZZY = 25;
@@ -113,7 +116,7 @@ export function SetSwTabRows(
     return false;
   const geometry = frame.mouseGeometry as NonNullable<SwTabFrame["mouseGeometry"]>,
     scale = GetSwTabRowDeviceScale(frame),
-    updates = new Map<SwTableLine, number>();
+    updates = new Map<SwTableLine, { size: SwFormatFrameSize; point: SwTextNode }>();
   for (let i = 0; i <= next.Count(); i++) {
     const oldStart = i === 0 ? 0 : old.GetEntry(i - 1).nPos,
       oldEnd = i === old.Count() ? old.GetRight() : old.GetEntry(i).nPos,
@@ -136,7 +139,13 @@ export function SetSwTabRows(
         );
       if (line === undefined || cell.box.GetParagraphs().length === 0) continue;
       const height = Math.round((cell.rect.bottom - cell.rect.top) * scale) + difference;
-      if (height !== (line.GetFormat().minHeight ?? 0)) updates.set(line, height);
+      const size = line.GetFrameSize();
+      if (height !== size.GetHeight()) {
+        size.SetHeight(height);
+        if (size.GetHeightSizeType() === SwFrameSize.Variable)
+          size.SetHeightSizeType(SwFrameSize.Minimum);
+        updates.set(line, { size, point: cell.box.GetParagraphs()[0] as SwTextNode });
+      }
       break;
     }
   }
@@ -145,14 +154,22 @@ export function SetSwTabRows(
     /** Records one attribute-only native history without changing cursor or box ownership. @returns Whether changed. */ () => {
       const before =
         cursorState ?? createWriterCollapsedCursorState(node, 0, node.GetCharacterItemsAt(0));
-      const action = new SwUndoAttrTable(table, before);
-      for (const [line, height] of updates)
-        line.SetFormat({ ...line.GetFormat(), minHeight: height });
-      doc.GetUndoManager().AddUndoAction(action);
-      doc.NotifyModelChange({
-        kind: "node-content-changed",
-        nodeIndex: table.GetTableNode().GetIndex(),
-      });
+      const undo = doc.GetUndoManager();
+      undo.StartUndo("Table Properties");
+      try {
+        for (const { size, point } of updates.values()) {
+          const position = new SwPosition(point, 0),
+            cursor = new SwCursor(position);
+          position.Dispose();
+          try {
+            doc.SetRowHeight(cursor, size, before);
+          } finally {
+            cursor.Dispose();
+          }
+        }
+      } finally {
+        undo.EndUndo();
+      }
       return true;
     },
   );

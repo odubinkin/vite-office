@@ -1,4 +1,5 @@
 /** @fileoverview Verifies row-height shell forwarding, selected dialog history and original native graph. */
+import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
 import { expect, it, vi } from "vitest";
 import { SwDoc } from "../../core/doc/doc";
 import { SwDocShell } from "../app/docsh";
@@ -20,7 +21,13 @@ for (const mode of ["direct", "selected", "properties"] as const)
     table.AddColumnWidth(3000);
     table.AddColumnWidth(3000);
     for (const minHeight of [300, 400, 500])
-      doc.nodes.AppendTableRow(table, 2, { minHeight, keepTogether: true });
+      doc.nodes.AppendTableRow(table, 2, {
+        frameSize:
+          minHeight === undefined
+            ? undefined
+            : new SwFormatFrameSize(SwFrameSize.Minimum, 0, minHeight),
+        keepTogether: true,
+      });
     const rows = [...table.GetTabLines()],
       box = required(required(rows[1]).GetTabBoxes()[0]),
       node = required(box.GetParagraphs()[0]);
@@ -44,7 +51,7 @@ for (const mode of ["direct", "selected", "properties"] as const)
         before = shell.CaptureCursorState(),
         apply = vi.spyOn(shell, "ApplyAction"),
         setter = vi.spyOn(doc, "SetRowHeight");
-      expect(shell.GetRowHeight()).toBe(mode === "selected" ? undefined : 400);
+      expect(shell.GetRowHeight()?.GetHeight()).toBe(mode === "selected" ? undefined : 400);
       const properties = {
         width: 6000,
         columnWidths: [3000, 3000],
@@ -56,7 +63,9 @@ for (const mode of ["direct", "selected", "properties"] as const)
         repeatHeaderRows: false,
       };
       expect(
-        mode === "properties" ? ItemSetToTableParam(shell, properties) : shell.SetRowHeight(900),
+        mode === "properties"
+          ? ItemSetToTableParam(shell, properties)
+          : shell.SetRowHeight(new SwFormatFrameSize(SwFrameSize.Minimum, 0, 900)),
       ).toBe(true);
       expect(setter).toHaveBeenCalledTimes(1);
       expect(setter.mock.calls[0]?.[0]).toBe(cursor);
@@ -74,7 +83,7 @@ for (const mode of ["direct", "selected", "properties"] as const)
           rows.map(
             /** Reads original height attributes. @param row - Actual row. @returns Height. */ (
               row,
-            ) => row.GetFormat().minHeight,
+            ) => row.GetFormat().frameSize?.GetHeight(),
           ),
         ).toEqual(expected);
         expect(
@@ -88,7 +97,7 @@ for (const mode of ["direct", "selected", "properties"] as const)
         expect(
           rows.map(
             /** Reads restored heights. @param row - Actual row. @returns Height. */ (row) =>
-              row.GetFormat().minHeight,
+              row.GetFormat().frameSize?.GetHeight(),
           ),
         ).toEqual([300, 400, 500]);
         expect(shell.CaptureCursorState().point).toEqual(before.point);
@@ -107,7 +116,7 @@ for (const mode of ["direct", "selected", "properties"] as const)
           .map(
             /** Reads independent imported row height. @param row - Imported native row. @returns Height. */ (
               row,
-            ) => row.GetFormat().minHeight,
+            ) => row.GetFormat().frameSize?.GetHeight(),
           ),
       ).toEqual(expected);
       shell.ClearMark();

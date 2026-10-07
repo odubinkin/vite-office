@@ -1,4 +1,5 @@
 /** @fileoverview Checks browser tables consume native horizontal print areas without replacing model owners. */
+import { SwFormatFrameSize, SwFrameSize } from "../../inc/fmtfsize";
 import { act, cleanup, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
 import { createWriterDocumentSession } from "../composition/writer-module";
@@ -30,7 +31,7 @@ function fixture(format: SwTableFormat) {
   table.AddColumnWidth(3000);
   for (let row = 0; row < 5; row++)
     for (const [col, box] of doc.nodes
-      .AppendTableRow(table, 2, { minHeight: 300 })
+      .AppendTableRow(table, 2, { frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 300) })
       .GetTabBoxes()
       .entries())
       box.GetParagraphs()[0]?.SetText(`Cell${row}-${col}`);

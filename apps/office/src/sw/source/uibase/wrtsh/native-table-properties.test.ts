@@ -1,4 +1,5 @@
 /** @fileoverview Verifies native table-property owners, selection, attribute-only history and lifecycle without upstream execution. */
+import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
 import { describe, it, expect, vi } from "vitest";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { SwTabCols } from "../../core/bastyp/tabcol";
@@ -29,10 +30,15 @@ function fixture() {
   table.AddColumnWidth(3000);
   table.AddColumnWidth(3000);
   for (let index = 0; index < 2; index++)
-    doc.nodes.AppendTableRow(table, 2, { minHeight: 100, keepTogether: false }, [
-      { padding: 50, border: "none", verticalAlign: "top" },
-      { padding: 50, border: "none", verticalAlign: "top" },
-    ]);
+    doc.nodes.AppendTableRow(
+      table,
+      2,
+      { frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 100), keepTogether: false },
+      [
+        { padding: 50, border: "none", verticalAlign: "top" },
+        { padding: 50, border: "none", verticalAlign: "top" },
+      ],
+    );
   const boxes = table
       .GetTabLines()
       .flatMap(
@@ -121,8 +127,14 @@ describe("native table property application", /** Registers actual-owner contrac
         headerRows: 0,
         repeatHeaderRows: false,
       });
-      expect(rows[0]?.GetFormat()).toEqual({ minHeight: 300, keepTogether: true });
-      expect(rows[1]?.GetFormat()).toEqual({ minHeight: 100, keepTogether: !selected });
+      expect(rows[0]?.GetFormat()).toEqual({
+        frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 300),
+        keepTogether: true,
+      });
+      expect(rows[1]?.GetFormat()).toEqual({
+        frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 100),
+        keepTogether: !selected,
+      });
       expect(
         f.boxes.map(
           /** Projects actual box attributes. @param box - Original box. @returns Current attributes. */ (
@@ -183,7 +195,7 @@ describe("native table property application", /** Registers actual-owner contrac
     expect(ItemSetToTableParam(f.shell, f.value)).toBe(false);
     expect(f.shell.SetTableAttr({ width: 4000 })).toBe(false);
     expect(f.shell.SetTabCols(new SwTabCols(), false)).toBe(false);
-    expect(f.shell.SetRowHeight(20)).toBe(false);
+    expect(f.shell.SetRowHeight(new SwFormatFrameSize(SwFrameSize.Minimum, 0, 20))).toBe(false);
     expect(f.shell.SetBoxAlign("middle")).toBe(false);
     expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(0);
     expect(f.table.GetFormat().width).toBe(6000);

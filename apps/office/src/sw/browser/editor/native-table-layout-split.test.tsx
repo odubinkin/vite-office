@@ -1,4 +1,5 @@
 /** @fileoverview Verifies native split policy changes physical pages while retaining canonical editable cells. */
+import { SwFormatFrameSize, SwFrameSize } from "../../inc/fmtfsize";
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, expect, it } from "vitest";
 import { createWriterDocumentSession } from "../composition/writer-module";
@@ -38,7 +39,12 @@ it.each([undefined, true, false])(
     table.AddColumnWidth(4000);
     for (let r = 0; r < 3; r++) {
       const node = doc.nodes
-        .AppendTableRow(table, 1, { minHeight: 200 }, [{ padding: 0, border: "none" }])
+        .AppendTableRow(
+          table,
+          1,
+          { frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 200) },
+          [{ padding: 0, border: "none" }],
+        )
         .GetTabBoxes()[0]
         ?.GetParagraphs()[0];
       if (node === undefined) throw new Error("Missing native cell");

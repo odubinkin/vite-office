@@ -1,4 +1,5 @@
 /** @fileoverview Verifies native table cursor traversal and actual retained row history without upstream execution. */
+import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
 import { describe, expect, it, vi } from "vitest";
 import { SwDoc } from "../../core/doc/doc";
 import { SwPosition } from "../../core/crsr/pam";
@@ -28,10 +29,12 @@ function fixture() {
   table.AddColumnWidth(3000);
   table.AddColumnWidth(2400);
   const firstRow = doc.nodes.AppendTableRow(table, 2),
-    lastRow = doc.nodes.AppendTableRow(table, 2, { minHeight: 480, keepTogether: true }, [
-      { padding: 120 },
-      { verticalAlign: "bottom" },
-    ]);
+    lastRow = doc.nodes.AppendTableRow(
+      table,
+      2,
+      { frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 480), keepTogether: true },
+      [{ padding: 120 }, { verticalAlign: "bottom" }],
+    );
   const boxes = [...firstRow.GetTabBoxes(), ...lastRow.GetTabBoxes()],
     cells = boxes.map(
       /** Reads the real first paragraph. @param box - Native cell. @returns Text owner. */ (box) =>
@@ -213,7 +216,10 @@ describe("native table traversal", /** Registers actual cursor/row/history contr
     expect(history.GetUndoActionCount()).toBe(1);
     point(f, fresh);
     expect(f.doc.nodes.Count()).toBe(nodeCount + 6);
-    expect(row.GetFormat()).toEqual({ minHeight: 480, keepTogether: true });
+    expect(row.GetFormat()).toEqual({
+      frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 480),
+      keepTogether: true,
+    });
     expect(row.GetTabBoxes()[0]?.GetFormat()).toEqual({ padding: 120 });
     expect(row.GetTabBoxes()[1]?.GetFormat()).toEqual({ verticalAlign: "bottom" });
     expect(fresh.GetText()).toBe("");

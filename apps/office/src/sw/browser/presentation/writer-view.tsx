@@ -570,6 +570,7 @@ export function WriterWorkbench({
       </WriterWorkspaceChrome>
       {tableDialog === undefined ? null : (
         <WriterTableDialog
+          rowHeight={view.GetWrtShell().GetRowHeight()}
           occupiedNames={occupiedTableNames}
           suggestedName={suggestedTableName}
           {...(tableDialog === "properties" && currentTable !== undefined

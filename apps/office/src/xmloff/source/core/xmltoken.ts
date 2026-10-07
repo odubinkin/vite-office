@@ -206,6 +206,7 @@ export enum XMLToken {
   XML_ID,
   STYLE_LIST_STYLE_NAME,
   STYLE_MAY_BREAK_BETWEEN_ROWS,
+  STYLE_ROW_HEIGHT,
 }
 
 const entries: readonly (readonly [string, string, XMLToken])[] = [
@@ -336,6 +337,7 @@ const entries: readonly (readonly [string, string, XMLToken])[] = [
   [ODF_NAMESPACES.style, "width", XMLToken.STYLE_WIDTH],
   [ODF_NAMESPACES.style, "rel-width", XMLToken.STYLE_REL_WIDTH],
   [ODF_NAMESPACES.style, "min-row-height", XMLToken.STYLE_MIN_ROW_HEIGHT],
+  [ODF_NAMESPACES.style, "row-height", XMLToken.STYLE_ROW_HEIGHT],
   [ODF_NAMESPACES.style, "may-break-between-rows", XMLToken.STYLE_MAY_BREAK_BETWEEN_ROWS],
   [ODF_NAMESPACES.style, "column-width", XMLToken.STYLE_COLUMN_WIDTH],
   [ODF_NAMESPACES.style, "vertical-align", XMLToken.STYLE_VERTICAL_ALIGN],

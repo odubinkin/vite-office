@@ -1,4 +1,5 @@
 /** @fileoverview Verifies production cross-cell ranges and repeated table headline restrictions through genuine ODT UI. */
+import { SwFormatFrameSize, SwFrameSize } from "../src/sw/inc/fmtfsize";
 import { expect, test } from "@playwright/test";
 import { SwDoc } from "../src/sw/source/core/doc/doc";
 import { SwDocShell } from "../src/sw/source/uibase/app/docsh";
@@ -34,7 +35,9 @@ for (const width of [1280, 390])
     table.AddColumnWidth(2500);
     for (let row = 0; row < 5; row++)
       for (const [column, box] of doc.nodes
-        .AppendTableRow(table, 2, { minHeight: 1000 })
+        .AppendTableRow(table, 2, {
+          frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 1000),
+        })
         .GetTabBoxes()
         .entries())
         required(box.GetParagraphs()[0]).SetText(`Cell${row}-${column}`);
@@ -169,7 +172,7 @@ test("Writer native cross-cell bold formats the selected original rectangle and 
   table.AddColumnWidth(2500);
   for (let row = 0; row < 5; row++)
     for (const [column, box] of doc.nodes
-      .AppendTableRow(table, 2, { minHeight: 1000 })
+      .AppendTableRow(table, 2, { frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 1000) })
       .GetTabBoxes()
       .entries())
       required(box.GetParagraphs()[0]).SetText(`Cell${row}-${column}`);

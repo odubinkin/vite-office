@@ -1,6 +1,29 @@
 /** @fileoverview Formats represented horizontal table print areas from native SwTabFrame::Format. */
-import type { SwTable, SwTableBox } from "../table/swtable";
+import type { SwTable, SwTableBox, SwTableLine } from "../table/swtable";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
+import { SwFrameSize } from "../../../inc/fmtfsize";
+
+/** Owns represented flat-row height over its original native line. */
+export class SwRowFrame {
+  /** Binds the actual row owner. @param line - Original native line. @returns Nothing. */
+  public constructor(private readonly line: SwTableLine) {}
+  /** Reads the original row owner. @returns Native line. */
+  public GetTabLine(): SwTableLine {
+    return this.line;
+  }
+  /** Reads the native fixed-height flag. @returns Whether fixed. */
+  public HasFixSize(): boolean {
+    return this.line.GetFrameSize().GetHeightSizeType() === SwFrameSize.Fixed;
+  }
+  /** Resolves represented native row height from the complete item and device content extent. @param contentHeight - Measured content height in twips. @returns Authored fixed height, minimum floor or natural content height. */
+  public Format(contentHeight: number): number {
+    const size = this.line.GetFrameSize();
+    if (size.GetHeightSizeType() === SwFrameSize.Fixed) return size.GetHeight();
+    return size.GetHeightSizeType() === SwFrameSize.Minimum
+      ? Math.max(size.GetHeight(), contentHeight)
+      : contentHeight;
+  }
+}
 
 /** Table print bounds relative to its upper frame, in twips. */
 export interface SwTablePrintArea {

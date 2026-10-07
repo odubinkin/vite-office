@@ -1,4 +1,5 @@
 /** @fileoverview Verifies production native split controls, physical pages, saved state and original editable history. */
+import { SwFormatFrameSize, SwFrameSize } from "../src/sw/inc/fmtfsize";
 import { expect, test } from "@playwright/test";
 import { SwDoc } from "../src/sw/source/core/doc/doc";
 import { writeOdtDocument } from "../src/sw/source/filter/xml/wrtxml";
@@ -23,9 +24,12 @@ for (const width of [1280, 390])
     table.AddColumnWidth(6000);
     for (let r = 0; r < 3; r++) {
       const node = doc.nodes
-        .AppendTableRow(table, 1, { minHeight: 400, keepTogether: r !== 1 }, [
-          { padding: 0, border: "none" },
-        ])
+        .AppendTableRow(
+          table,
+          1,
+          { frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 400), keepTogether: r !== 1 },
+          [{ padding: 0, border: "none" }],
+        )
         .GetTabBoxes()[0]
         ?.GetParagraphs()[0];
       if (node === undefined) throw new Error("Missing row");

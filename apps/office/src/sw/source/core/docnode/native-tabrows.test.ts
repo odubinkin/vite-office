@@ -1,4 +1,5 @@
 /** @fileoverview Verifies native ndtbl row carriers, fuzzy bounds and original row attribute owners. */
+import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
 import { expect, it, vi } from "vitest";
 import { SwDoc } from "../doc/doc";
 import { SwTabFrame } from "../layout/tabfrm";
@@ -98,7 +99,7 @@ it.each([24, 25, 300, -300])(
     expect(
       f.lines.map(
         /** Reads native attribute owners. @param line - Original row. @returns Authored minimum. */
-        (line) => line.GetFormat().minHeight,
+        (line) => line.GetFormat().frameSize?.GetHeight(),
       ),
     ).toEqual(
       Math.abs(delta) < 25
@@ -118,7 +119,7 @@ it.each([true, false])(
     SwDoc.GetTabRows(next, f.frame, f.start);
     next.SetRight(2400);
     expect(f.doc.SetTabRows(next, current, f.frame, f.start)).toBe(!current);
-    expect(required(f.lines[2]).GetFormat().minHeight).toBe(current ? undefined : 900);
+    expect(required(f.lines[2]).GetFormat().frameSize?.GetHeight()).toBe(current ? undefined : 900);
   },
 );
 it("native row carrier rejects missing, flat, foreign and disconnected frame owners", /** Checks source ownership without history. @returns Nothing. */ () => {
@@ -150,7 +151,7 @@ it("native missing content and unchanged authored height create no attribute his
     next = new SwTabCols();
   SwDoc.GetTabRows(next, f.frame, f.start);
   next.SetRight(2400);
-  required(f.lines[2]).SetFormat({ minHeight: 900 });
+  required(f.lines[2]).SetFormat({ frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 900) });
   expect(f.doc.SetTabRows(next, false, f.frame, f.start)).toBe(false);
   vi.spyOn(f.start, "GetParagraphs").mockReturnValue([]);
   expect(f.doc.SetTabRows(next, false, f.frame, f.start)).toBe(false);
@@ -186,7 +187,7 @@ it("native row delta ignores foreign and non-text physical cells before adjustin
   SwDoc.GetTabRows(rows, f.frame, f.start);
   rows.SetRight(2400);
   expect(f.doc.SetTabRows(rows, false, f.frame, f.start)).toBe(true);
-  expect(required(f.lines[2]).GetFormat().minHeight).toBe(900);
+  expect(required(f.lines[2]).GetFormat().frameSize?.GetHeight()).toBe(900);
   expect(foreign.doc.GetUndoManager().GetUndoActionCount()).toBe(0);
   vi.restoreAllMocks();
 });

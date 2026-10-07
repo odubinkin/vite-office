@@ -1,4 +1,5 @@
 /** @fileoverview Browser table frame over canonical SwTable rows and SwTextNode cell paragraphs. */
+import { SwRowFrame } from "../../source/core/layout/tabfrm";
 
 import type { SwTable } from "../../source/core/table/swtable";
 import { SwTabFrame, type SwTablePrintArea } from "../../source/core/layout/tabfrm";
@@ -91,6 +92,7 @@ import { WriterEditableParagraph } from "./WriterEditableParagraph";
               const row = table.GetTabLines()[rowIndex] as ReturnType<
                 SwTable["GetTabLines"]
               >[number];
+              const nativeRow = new SwRowFrame(row);
               const isRepeatedHeadline = frameRowIndex < repeatedHeaderRows;
               return (
                 <tr
@@ -107,7 +109,7 @@ import { WriterEditableParagraph } from "./WriterEditableParagraph";
                   data-writer-table-row={rowIndex}
                   data-writer-repeated-headline={isRepeatedHeadline ? "true" : undefined}
                   key={rowIndex}
-                  style={{ height: (row.GetFormat().minHeight ?? 0) / 15 }}
+                  style={{ height: nativeRow.Format(0) / 15 }}
                 >
                   {row.GetTabBoxes().map(
                     /** Handles the browser table interaction. @param argument1 - Callback input. @param argument2 - Callback input. @returns Callback result. */ (
@@ -115,6 +117,34 @@ import { WriterEditableParagraph } from "./WriterEditableParagraph";
                       cellIndex,
                     ) => {
                       const cellFormat = cell.GetFormat();
+                      const content = cell.GetParagraphs().map(
+                        /** Handles the browser table interaction. @param argument1 - Callback input. @param argument2 - Callback input. @returns Callback result. */ (
+                          paragraph,
+                          paragraphIndex,
+                        ) => {
+                          const projection = paragraphs.get(paragraph.GetIndex());
+                          if (projection === undefined)
+                            throw new Error(
+                              "Writer table cell has no connected paragraph projection.",
+                            );
+                          return (
+                            <WriterEditableParagraph
+                              cellPosition={{ rowIndex, cellIndex, paragraphIndex }}
+                              index={paragraphIndex}
+                              isActive={activeParagraphId === projection.id}
+                              key={projection.id}
+                              listMarker={projection.listMarker}
+                              paragraph={projection}
+                              retainElement={
+                                /** Registers visible paragraphs;measurement uses the same render without a live selection surface. @param id - Stable display ID. @param element - Paragraph mount or cleanup. @returns Nothing. */ (
+                                  id,
+                                  element,
+                                ) => retainParagraphElement?.(id, element)
+                              }
+                            />
+                          );
+                        },
+                      );
                       const CellTag = rowIndex < (format.headerRows ?? 0) ? "th" : "td";
                       return (
                         <CellTag
@@ -138,41 +168,37 @@ import { WriterEditableParagraph } from "./WriterEditableParagraph";
                           }
                           key={cellIndex}
                           style={{
-                            border:
-                              cellFormat.border === "none"
+                            border: nativeRow.HasFixSize()
+                              ? "none"
+                              : cellFormat.border === "none"
                                 ? "1px dashed #cbd5e1"
                                 : (cellFormat.border ?? "1px solid #94a3b8"),
-                            padding: (cellFormat.padding ?? 100) / 15,
+                            padding: nativeRow.HasFixSize() ? 0 : (cellFormat.padding ?? 100) / 15,
                             verticalAlign: cellFormat.verticalAlign ?? "top",
                           }}
                         >
-                          {cell.GetParagraphs().map(
-                            /** Handles the browser table interaction. @param argument1 - Callback input. @param argument2 - Callback input. @returns Callback result. */ (
-                              paragraph,
-                              paragraphIndex,
-                            ) => {
-                              const projection = paragraphs.get(paragraph.GetIndex());
-                              if (projection === undefined)
-                                throw new Error(
-                                  "Writer table cell has no connected paragraph projection.",
-                                );
-                              return (
-                                <WriterEditableParagraph
-                                  cellPosition={{ rowIndex, cellIndex, paragraphIndex }}
-                                  index={paragraphIndex}
-                                  isActive={activeParagraphId === projection.id}
-                                  key={projection.id}
-                                  listMarker={projection.listMarker}
-                                  paragraph={projection}
-                                  retainElement={
-                                    /** Registers visible paragraphs;measurement uses the same render without a live selection surface. @param id - Stable display ID. @param element - Paragraph mount or cleanup. @returns Nothing. */ (
-                                      id,
-                                      element,
-                                    ) => retainParagraphElement?.(id, element)
-                                  }
-                                />
-                              );
-                            },
+                          {nativeRow.HasFixSize() ? (
+                            <div
+                              data-writer-fixed-row-content="true"
+                              style={{
+                                position: "absolute",
+                                top: 0,
+                                left: 0,
+                                right: 0,
+                                height: row.GetFrameSize().GetHeight() / 15,
+                                boxSizing: "border-box",
+                                overflow: "hidden",
+                                border:
+                                  cellFormat.border === "none"
+                                    ? "1px dashed #cbd5e1"
+                                    : (cellFormat.border ?? "1px solid #94a3b8"),
+                                padding: (cellFormat.padding ?? 100) / 15,
+                              }}
+                            >
+                              {content}
+                            </div>
+                          ) : (
+                            content
                           )}
                         </CellTag>
                       );

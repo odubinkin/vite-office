@@ -1,4 +1,5 @@
 /** @fileoverview Verifies production ODT repeated table headlines share actual native editing and history on desktop/mobile. */
+import { SwFormatFrameSize, SwFrameSize } from "../src/sw/inc/fmtfsize";
 import { expect, test } from "@playwright/test";
 import { SwDoc } from "../src/sw/source/core/doc/doc";
 import { SwDocShell } from "../src/sw/source/uibase/app/docsh";
@@ -29,7 +30,7 @@ test("Writer headline-adjacent text reflow retains a source caret beyond the old
   table.AddColumnWidth(5000);
   for (let row = 0; row < 4; row++) {
     const node = doc.nodes
-      .AppendTableRow(table, 1, { minHeight: 1000 })
+      .AppendTableRow(table, 1, { frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 1000) })
       .GetTabBoxes()[0]
       ?.GetParagraphs()[0];
     if (node === undefined) throw new Error("Missing actual table row");
@@ -129,7 +130,9 @@ for (const width of [1280, 390])
     table.AddColumnWidth(5000);
     for (let row = 0; row < 5; row++) {
       const node = doc.nodes
-        .AppendTableRow(table, 1, { minHeight: 1000 })
+        .AppendTableRow(table, 1, {
+          frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 1000),
+        })
         .GetTabBoxes()[0]
         ?.GetParagraphs()[0];
       if (node === undefined) throw new Error("Missing native fixture row");

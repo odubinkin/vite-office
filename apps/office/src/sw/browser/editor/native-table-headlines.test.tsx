@@ -1,4 +1,5 @@
 /** @fileoverview Verifies repeated table headlines paint and edit the same native nodes through one existing edit window. */
+import { SwFormatFrameSize, SwFrameSize } from "../../inc/fmtfsize";
 import { act, cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
 import { createWriterDocumentSession } from "../composition/writer-module";
@@ -36,7 +37,7 @@ function fixture(repeat = true, list = false, bodyText = "Before") {
       index,
     ) => {
       const node = doc.nodes
-        .AppendTableRow(table, 1, { minHeight: 300 })
+        .AppendTableRow(table, 1, { frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 300) })
         .GetTabBoxes()[0]
         ?.GetParagraphs()[0];
       if (node === undefined) throw new Error("Missing native header");

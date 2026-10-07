@@ -3,6 +3,7 @@
  */
 import { getWriterNumFormatKind, getWriterNumFormatBullet } from "../../core/doc/number";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
+import { SwFrameSize } from "../../../inc/fmtfsize";
 
 import {
   SvxAdjust,
@@ -299,7 +300,14 @@ function exportWriterText(
                 /** Projects one canonical Writer table value. @param argument1 - Callback input. @returns Callback result. */ (
                   row,
                 ) => ({
-                  format: row.GetFormat(),
+                  format: {
+                    keepTogether: row.GetFormat().keepTogether,
+                    ...(row.GetFrameSize().GetHeightSizeType() === SwFrameSize.Minimum
+                      ? { minHeight: row.GetFrameSize().GetHeight() }
+                      : row.GetFrameSize().GetHeightSizeType() === SwFrameSize.Fixed
+                        ? { height: row.GetFrameSize().GetHeight() }
+                        : {}),
+                  },
                   cells: row.GetTabBoxes().map(
                     /** Projects one canonical Writer table value. @param argument1 - Callback input. @returns Callback result. */ (
                       cell,

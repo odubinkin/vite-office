@@ -2,12 +2,12 @@
 
 import type { OdfTableStyle } from "../../../../xmloff/source/table/XMLTableImport";
 import type { SwDoc } from "../../core/doc/doc";
+import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
 import type {
   SwTable,
   SwTableBox,
   SwTableLine,
   SwTableFormat,
-  SwTableLineFormat,
   SwTableBoxFormat,
 } from "../../core/table/swtable";
 
@@ -85,14 +85,29 @@ export class SwXMLTableImport {
     const table = this.requireTable();
     /* v8 ignore next -- SAX row contexts cannot nest under a row context. */
     if (this.activeRow !== undefined) throw new Error("Nested ODF table rows are not supported.");
-    const style = this.resolveTableStyle(styleName, "table-row");
+    const style = this.resolveTableStyle(styleName, "table-row") as Extract<
+      OdfTableStyle,
+      { family: "table-row" }
+    >;
     const count = table.GetColumnWidths().length;
     if (count === 0) throw new Error("ODF table has no declared columns.");
-    this.activeRow = this.document.nodes.AppendTableRow(
-      table,
-      count,
-      tableStyleValues(style) as SwTableLineFormat,
-    );
+    this.activeRow = this.document.nodes.AppendTableRow(table, count, {
+      keepTogether: style.keepTogether,
+      frameSize:
+        style.minHeight !== undefined
+          ? new SwFormatFrameSize(
+              SwFrameSize.Minimum,
+              0,
+              Math.min(65535, Math.max(1, style.minHeight)),
+            )
+          : style.height !== undefined
+            ? new SwFormatFrameSize(
+                SwFrameSize.Fixed,
+                0,
+                Math.min(65535, Math.max(1, style.height)),
+              )
+            : undefined,
+    });
     if (this.inHeaderRows) this.headerRowCount += 1;
     this.rowCellIndex = 0;
   }

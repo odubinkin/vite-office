@@ -1,4 +1,5 @@
 /** @fileoverview Checks real native row, column, corner and captured table drag in production Chromium. */
+import { SwFormatFrameSize, SwFrameSize } from "../src/sw/inc/fmtfsize";
 import { expect, test } from "@playwright/test";
 import { SwDoc } from "../src/sw/source/core/doc/doc";
 import { createDocument } from "../src/sfx2/source/doc/objsh";
@@ -23,7 +24,9 @@ for (const width of [1280, 390])
     body.SetText("Body neighbor");
     for (let c = 0; c < 3; c++) table.AddColumnWidth(1500);
     for (let r = 0; r < 3; r++) {
-      const row = doc.nodes.AppendTableRow(table, 3, { minHeight: 750 });
+      const row = doc.nodes.AppendTableRow(table, 3, {
+        frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 750),
+      });
       for (const [c, box] of row.GetTabBoxes().entries())
         required(box.GetParagraphs()[0]).SetText(`Cell${r}${c}`);
     }

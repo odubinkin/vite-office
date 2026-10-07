@@ -1,4 +1,5 @@
 /** @fileoverview Verifies upstream current-page Reset over original native table drafts and independent properties pages. */
+import { SwFormatFrameSize, SwFrameSize } from "../../inc/fmtfsize";
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, expect, it, vi } from "vitest";
 import { SwDoc } from "../../source/core/doc/doc";
@@ -20,7 +21,11 @@ function fixture() {
   const row = table.GetTabLines()[0],
     box = row?.GetTabBoxes()[0];
   if (row === undefined || box === undefined) throw new Error("Missing original reset graph");
-  row.SetFormat({ ...row.GetFormat(), minHeight: 300, keepTogether: true });
+  row.SetFormat({
+    ...row.GetFormat(),
+    frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 300),
+    keepTogether: true,
+  });
   box.SetFormat({
     ...box.GetFormat(),
     padding: 80,
@@ -30,7 +35,13 @@ function fixture() {
   const submit = vi.fn(),
     cancel = vi.fn();
   render(
-    <WriterTableDialog table={table} availableWidth={9000} onCancel={cancel} onSubmit={submit} />,
+    <WriterTableDialog
+      table={table}
+      rowHeight={row.GetFrameSize()}
+      availableWidth={9000}
+      onCancel={cancel}
+      onSubmit={submit}
+    />,
   );
   return { doc, table, row, box, submit, cancel };
 }
