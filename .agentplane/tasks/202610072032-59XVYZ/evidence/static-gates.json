@@ -1,0 +1,60 @@
+{
+  "records": [
+    {
+      "command": "npm run format:check",
+      "exit": 0,
+      "bytes": 122,
+      "sha256": "ac1729f86eee878f5f4d6c948c510d2cc91bb5568f6dd088f70f3885e137d116",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run lint",
+      "exit": 0,
+      "bytes": 55,
+      "sha256": "a6172cb57fa696e705408fdc605fba1ae07b852fdf0614d7c2b623349e285b6e",
+      "diagnostics": [
+        "> eslint . --max-warnings 0"
+      ]
+    },
+    {
+      "command": "npm run typecheck",
+      "exit": 2,
+      "bytes": 673,
+      "sha256": "592b269c1faaaef11a6504ae126f62efaafda666155a7a8ae245409ee1d547c5",
+      "diagnostics": [
+        "src/sw/source/uibase/docvw/native-edit-view-ownership.test.ts(69,9): error TS2554: Expected 1 arguments, but got 2.",
+        "npm error Lifecycle script `typecheck` failed with error:",
+        "npm error code 2",
+        "npm error path /Users/odubinkin/Projects/vite-office/apps/office",
+        "npm error workspace @vite-office/office@0.1.0",
+        "npm error location /Users/odubinkin/Projects/vite-office/apps/office",
+        "npm error command failed",
+        "npm error command sh -c tsc --noEmit"
+      ]
+    },
+    {
+      "command": "npm run check:dependencies",
+      "exit": 0,
+      "bytes": 189,
+      "sha256": "cecff2a146c1a0b1777ee88119245e5c28301522246287660e51069e8ab172d5",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:docs",
+      "exit": 0,
+      "bytes": 119,
+      "sha256": "28aff6929a7ee5bd2793a6341389d2df5a4be74bb2e08e1d3a3acaf9d3c9380c",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:file-size",
+      "exit": 1,
+      "bytes": 4426,
+      "sha256": "368bd563de3b6d6869ca0858754344607afa388ce44c51eaec304a73f3869b46",
+      "diagnostics": [
+        "    throw new Error(`Authored files at or above 1,000 lines:\\n${failures.join(\"\\n\")}`);",
+        "Error: Authored files at or above 1,000 lines:"
+      ]
+    }
+  ]
+}
