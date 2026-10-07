@@ -1,10 +1,11 @@
 ---
 id: "202610071612-6RVSXZ"
 title: "Use native numbering font policy for list markers"
-status: "DOING"
+result_summary: "Native bullet optional face and false-default weight/posture/underline reset now reach body/cell markers through immutable native values; numbering preserves weight/posture. ONE absent-upstream full profile, only original failure closures; final13574app110inventory14infra282Chromium passes, four-metric app/inventory100 with actual source/map/region proof;591prior acceptance and299prior metadata fields retained,300records. Full native/UI parity ACTIVE and registered deviations unchanged."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +39,16 @@ quality_review:
     - ".agentplane/tasks/202610071612-6RVSXZ/evidence/exact-sha-review.json"
   findings:
     - "13,574 app110inventory14infra282Chromium final unique pass, zero passing replay/uncaught/unresolved accepted cases; one full absent-upstream profile, original failure closures only, actual app/inventory four metrics100. Four skipped observations and filtered coverage-only exit1 retained. ODT custom-face persistence and zero-indent tight-tab pointer failures remain explicitly open; current device checks use absent optional face and native keyboard affinity."
-commit: null
+commit:
+  hash: "e7f70aab6932f1ae3528623753269c945635dcb6"
+  message: "🧩 6RVSXZ parity: use native numbering font policy"
 comments:
   -
     author: "CODER"
     body: "Start: apply the source-native represented numbering font policy to actual body/cell markers, preserve all registered deviations and run one absent-upstream full profile."
+  -
+    author: "CODER"
+    body: "Verified: represented native font policy and shared marker rendering; source/static/runtime/coverage/case/scope/exact SHA and same-agent quality evidence pass; residual ODT custom font and tight-tab pointer defects retained."
 events:
   -
     type: "status"
@@ -57,8 +63,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "PASS: bounded native numbering font policy at implementation e7f70aab6932f1ae3528623753269c945635dcb6; actual current-source four-metric app/inventory100,13574app110inventory14infra282Chromium final unique passes,zero passing replay/uncaught. ONE full upstream-absent profile and original failed-case closures only.591prior acceptance and299prior fields retained; source/static/governance/quality/exact SHA pass. ODT custom-face persistence and tight-tab pointer interception explicitly remain open; full parity ACTIVE."
+  -
+    type: "status"
+    at: "2026-10-07T16:57:06.743Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: represented native font policy and shared marker rendering; source/static/runtime/coverage/case/scope/exact SHA and same-agent quality evidence pass; residual ODT custom font and tight-tab pointer defects retained."
 doc_version: 3
-doc_updated_at: "2026-10-07T16:56:34.059Z"
+doc_updated_at: "2026-10-07T16:57:06.745Z"
 doc_updated_by: "CODER"
 description: "Iteration220: resolve represented Number/Bullet font state under native txtfld NewNumberPortion responsibility, use source default compatibility flag and actual optional bullet font in shared body/cell renderer; retain existing text and marked background/minimum widths, preserve registered deviations."
 sections:
