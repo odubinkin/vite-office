@@ -1,10 +1,11 @@
 ---
 id: "202610071241-NXW8EF"
 title: "Route Home End through native visual-line cursor owners"
-status: "DOING"
+result_summary: "UI submits raw visual-line geometry to persistent native text frame/cursor/shell owners. Interactive/API spaces, hard-break, Shift/reversed marks, body/cell/follow and history pass.13532app110inventory14infra276Chromium resolved;27original uncaught exceptions fixed by seven cleanup-only calls,0final uncaught0passing replay;actual100 app/inventory. Registered save/open/recovery deviations retained; DOM list-label and whole parity remain active."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 18
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +39,16 @@ quality_review:
     - ".agentplane/tasks/202610071241-NXW8EF/evidence/exact-sha-review.json"
   findings:
     - "13532 app,110 inventory,14 infrastructure,276 Chromium resolved;27 original uncaught detached-frame cases fixed by seven unmount calls only.24 skip observations retained,0 passing replay. Actual current-source100 app/inventory;23 approved paths,574 prior tests identical6 exact migrations, all295 prior metadata fields/exceptions preserved."
-commit: null
+commit:
+  hash: "e70da231bfa8121cf7597bd196566603fa203bfc"
+  message: "🚧 NXW8EF parity: unmount failed fixtures before native view disposal"
 comments:
   -
     author: "CODER"
     body: "Start: implement standing-authorized source-native Home End through measured text frames, real cursor/shell owners and browser geometry only; preserve registered deviations and unrelated assertions."
+  -
+    author: "CODER"
+    body: "Verified: native frame and cursor Home/End behavior, exact source-bound coverage and original uncaught-error-only closure; all residual parity explicit."
 events:
   -
     type: "status"
@@ -57,8 +63,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native Home/End exact final e70da231bfa8121cf7597bd196566603fa203bfc verified.13532app110inventory14infrastructure276Chromium resolved;27 original uncaught exceptions fixed,0final uncaught0passing replay;24skip observations retained. Actual current-source100 app/inventory,23paths6exact migrations, all295prior metadata preserved. Same-agent evaluator explicitly not independent PASS; residual full parity and DOM list-label painting unverified."
+  -
+    type: "status"
+    at: "2026-10-07T13:27:33.002Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native frame and cursor Home/End behavior, exact source-bound coverage and original uncaught-error-only closure; all residual parity explicit."
 doc_version: 3
-doc_updated_at: "2026-10-07T13:27:15.043Z"
+doc_updated_at: "2026-10-07T13:27:33.003Z"
 doc_updated_by: "CODER"
 description: "Iteration215: replace delegated browser Home/End with source-owned SwTextFrame, SwCursor and shell margin movement, using browser device line measurements only. Preserve registered deviations and unrelated acceptance; one fix task, no upstream source artifacts or runtime dependency."
 sections:
