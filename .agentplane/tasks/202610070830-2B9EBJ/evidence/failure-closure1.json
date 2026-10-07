@@ -1,0 +1,151 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/svx/source/dialog/framelink.ts": "23c113062c256d4e940125b69bcb63bc40e967bbf1918456f047cb64b3e0bf78",
+    "apps/office/src/sw/source/core/layout/paintfrm.ts": "8f981e99d7baf7e3747bc447b2b3c5ae8f8cfcbb4efbceb5a9100cb1003d91a9",
+    "apps/office/src/sw/browser/editor/WriterEditableTable.tsx": "100e87f2edc04b82b5b80f92be6371086aa711af4b9d27507171f0e22b6b914e",
+    "apps/office/src/svx/source/dialog/native-frame-style.test.ts": "0cad513b80f26b1a6dbe672a28bc926b2f5663fd54d71f8b2d1decb84a0564d6",
+    "apps/office/src/sw/source/core/layout/native-collapsing-border-painter.test.ts": "6d55946b0f432d8c21fe995e8c1ff5950f8bf6a19b44d78625576c82c94b2f0d",
+    "apps/office/src/sw/browser/editor/native-collapsing-border-paint.test.tsx": "9e3a10d6c17b6bed6d2be1b2bcb9c3997c0775904bd1a42962d526798b77d2fa",
+    "apps/office/e2e/writer-collapsing-border-arbitration.spec.ts": "153b6a9e9ab2e1687365e0d36b850840db3183466699607cfe908db83c1665cd",
+    "apps/office/e2e/writer-native-collapsing-borders.spec.ts": "c426dd0fccef1f9a2f7940b53b29c32fa1ee7ed6a2c24730d3a7b4fbbb459496",
+    "docs/program/source-provenance.json": "79deef3af819a5c4d11b13ea83c9669135dc3cefc96fe6d6bd87fe715653b0cb",
+    "docs/program/parity/runtime-inventory.json": "cd28a230fe4d47a846143bccf3cdf7aae859b2b7443dead44155232c2e2514ca"
+  },
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/browser/editor/native-collapsing-border-paint.test.tsx --testNamePattern=^native collapsing paint preserves original cell lines and grouped history fixed=true$ --coverage.reportOnFailure --coverage.reporter=json-summary --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/2B9EBJ.app-closure1-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 4747,
+      "sha256": "b8bef125ac2fa42d7f74fd04201af5c5e790fcbae03993061ff2fbb5929c4233",
+      "totals": [
+        "Test Files  1 passed (1)",
+        "Tests  1 passed | 1 skipped (2)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "passed": 1,
+        "failed": 0,
+        "skipped": 1,
+        "total": 2
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 16216,
+          "covered": 6159,
+          "skipped": 0,
+          "pct": 37.98
+        },
+        "statements": {
+          "total": 17801,
+          "covered": 6398,
+          "skipped": 0,
+          "pct": 35.94
+        },
+        "functions": {
+          "total": 4120,
+          "covered": 1695,
+          "skipped": 0,
+          "pct": 41.14
+        },
+        "branches": {
+          "total": 13327,
+          "covered": 3344,
+          "skipped": 0,
+          "pct": 25.09
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverage": {
+        "lines": 37.98,
+        "statements": 35.94,
+        "functions": 41.14,
+        "branches": 25.09
+      },
+      "incompleteFileCount": 254,
+      "coverageMapSHA256": "06817ffd6c714a5d02b891b492cb069ea8822f13215d4e09afb81561586a6ea8"
+    },
+    {
+      "kind": "inventory",
+      "command": "npm run test:inventory:coverage -- scripts/libreoffice-inventory/cppunit-registration-cli.test.ts scripts/libreoffice-inventory/parity-mapping-cli.test.ts --testNamePattern=(runs filesystem readers and writers with owned Git and source fixtures|composes the Writer mapping report with owned upstream marker evidence)$ --coverage.reportOnFailure --coverage.reporter=json-summary --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/2B9EBJ.inventory-closure1-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 3544,
+      "sha256": "4ca0d35f99810cc174e19c0ac8e544c37b75e79fa2a1e7f42652769e26952b6b",
+      "totals": [
+        "Test Files  2 failed (2)",
+        "Tests  2 failed | 3 skipped (5)"
+      ],
+      "failedCases": [
+        {
+          "name": "/Users/odubinkin/Projects/vite-office/scripts/libreoffice-inventory/cppunit-registration-cli.test.ts > Cppunit registration inventory CLI runs filesystem readers and writers with owned Git and source fixtures",
+          "assertion": [
+            "Error: STACK_TRACE_ERROR"
+          ]
+        },
+        {
+          "name": "/Users/odubinkin/Projects/vite-office/scripts/libreoffice-inventory/parity-mapping-cli.test.ts > parity mapping CLI composes the Writer mapping report with owned upstream marker evidence",
+          "assertion": [
+            "Error: STACK_TRACE_ERROR"
+          ]
+        }
+      ],
+      "caseCounts": {
+        "passed": 0,
+        "failed": 2,
+        "skipped": 3,
+        "total": 5
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 1464,
+          "covered": 539,
+          "skipped": 0,
+          "pct": 36.81
+        },
+        "statements": {
+          "total": 1523,
+          "covered": 549,
+          "skipped": 0,
+          "pct": 36.04
+        },
+        "functions": {
+          "total": 384,
+          "covered": 155,
+          "skipped": 0,
+          "pct": 40.36
+        },
+        "branches": {
+          "total": 1081,
+          "covered": 448,
+          "skipped": 0,
+          "pct": 41.44
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "coverage": {
+        "lines": 36.81,
+        "statements": 36.04,
+        "functions": 40.36,
+        "branches": 41.44
+      },
+      "incompleteFileCount": 37,
+      "coverageMapSHA256": "d77d2025ddadaf1d2d03e4e4874f5602355543c79e2691fba4c89a9ead11e72c"
+    }
+  ],
+  "resultReaderCorrection": "Closure command output JSON paths were correct; initial bounded reader still read old initial results. After terminal/restoration corrected bounded case fields against actual closure1 results, preserving real command exits/output hashes/coverage maps/profile state. No runtime replay."
+}

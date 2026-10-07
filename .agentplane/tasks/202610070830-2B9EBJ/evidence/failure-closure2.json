@@ -1,0 +1,84 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/svx/source/dialog/framelink.ts": "23c113062c256d4e940125b69bcb63bc40e967bbf1918456f047cb64b3e0bf78",
+    "apps/office/src/sw/source/core/layout/paintfrm.ts": "8f981e99d7baf7e3747bc447b2b3c5ae8f8cfcbb4efbceb5a9100cb1003d91a9",
+    "apps/office/src/sw/browser/editor/WriterEditableTable.tsx": "100e87f2edc04b82b5b80f92be6371086aa711af4b9d27507171f0e22b6b914e",
+    "apps/office/src/svx/source/dialog/native-frame-style.test.ts": "0cad513b80f26b1a6dbe672a28bc926b2f5663fd54d71f8b2d1decb84a0564d6",
+    "apps/office/src/sw/source/core/layout/native-collapsing-border-painter.test.ts": "6d55946b0f432d8c21fe995e8c1ff5950f8bf6a19b44d78625576c82c94b2f0d",
+    "apps/office/src/sw/browser/editor/native-collapsing-border-paint.test.tsx": "9e3a10d6c17b6bed6d2be1b2bcb9c3997c0775904bd1a42962d526798b77d2fa",
+    "apps/office/e2e/writer-collapsing-border-arbitration.spec.ts": "153b6a9e9ab2e1687365e0d36b850840db3183466699607cfe908db83c1665cd",
+    "apps/office/e2e/writer-native-collapsing-borders.spec.ts": "c426dd0fccef1f9a2f7940b53b29c32fa1ee7ed6a2c24730d3a7b4fbbb459496",
+    "docs/program/source-provenance.json": "79deef3af819a5c4d11b13ea83c9669135dc3cefc96fe6d6bd87fe715653b0cb",
+    "docs/program/parity/runtime-inventory.json": "cd28a230fe4d47a846143bccf3cdf7aae859b2b7443dead44155232c2e2514ca"
+  },
+  "records": [
+    {
+      "kind": "inventory",
+      "command": "npm run test:inventory:coverage -- scripts/libreoffice-inventory/cppunit-registration-cli.test.ts scripts/libreoffice-inventory/parity-mapping-cli.test.ts --no-file-parallelism --maxWorkers=1 --testNamePattern=(runs filesystem readers and writers with owned Git and source fixtures|composes the Writer mapping report with owned upstream marker evidence)$ --coverage.reportOnFailure --coverage.reporter=json-summary --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/2B9EBJ.inventory-closure2-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 2714,
+      "sha256": "25ee77f34fb4e2d131e1b88dcc02c4423e96c73bee642fe1116171a3bc24b34f",
+      "totals": [
+        "Test Files  1 failed | 1 passed (2)",
+        "Tests  1 failed | 1 passed | 3 skipped (5)"
+      ],
+      "failedCases": [
+        {
+          "name": "scripts/libreoffice-inventory/cppunit-registration-cli.test.ts > Cppunit registration inventory CLI runs filesystem readers and writers with owned Git and source fixtures",
+          "assertion": [
+            "Error: STACK_TRACE_ERROR"
+          ]
+        }
+      ],
+      "caseCounts": {
+        "passed": 1,
+        "failed": 1,
+        "skipped": 3,
+        "total": 5
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 1464,
+          "covered": 553,
+          "skipped": 0,
+          "pct": 37.77
+        },
+        "statements": {
+          "total": 1523,
+          "covered": 563,
+          "skipped": 0,
+          "pct": 36.96
+        },
+        "functions": {
+          "total": 384,
+          "covered": 160,
+          "skipped": 0,
+          "pct": 41.66
+        },
+        "branches": {
+          "total": 1081,
+          "covered": 453,
+          "skipped": 0,
+          "pct": 41.9
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "coverage": {
+        "lines": 37.77,
+        "statements": 36.96,
+        "functions": 41.66,
+        "branches": 41.9
+      },
+      "incompleteFileCount": 37,
+      "coverageMapSHA256": "f2ae00c1280e56111fccf8093874fa492895280296ffa9dd8640bee92846d38d"
+    }
+  ]
+}

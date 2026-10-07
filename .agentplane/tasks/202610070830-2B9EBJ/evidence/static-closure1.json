@@ -1,0 +1,16 @@
+{
+  "records": [
+    {
+      "command": "npm exec -- prettier --write apps/office/e2e/writer-collapsing-border-arbitration.spec.ts",
+      "exit": 0,
+      "bytes": 66,
+      "sha256": "18c410a529aef983eb119b8b965ccc280f4fa553913ac9dfdd549447a69081cc"
+    },
+    {
+      "command": "npm exec -- prettier --check apps/office/e2e/writer-collapsing-border-arbitration.spec.ts",
+      "exit": 0,
+      "bytes": 66,
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    }
+  ]
+}

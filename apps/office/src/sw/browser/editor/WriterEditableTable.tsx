@@ -9,11 +9,14 @@ import type { WriterParagraphProjection } from "../presentation/writer-view-proj
 import { WriterEditableParagraph } from "./WriterEditableParagraph";
 import type { SvxBoxItem } from "../../../editeng/source/items/frmitems";
 import type { SvxBorderLine } from "../../../editeng/source/items/borderline";
+import { Style } from "../../../svx/source/dialog/framelink";
+import { SwTabFramePainter } from "../../source/core/layout/paintfrm";
 
 /** Projects one native line to the browser paint device. @param line - Owned native line. @param fixedGuide - Paint a guide inside an isolated fixed-row wrapper. @returns CSS paint value. */
-function browserBorderLine(line: SvxBorderLine | undefined, fixedGuide: boolean): string {
-  if (line === undefined || line.isEmpty()) return fixedGuide ? "1px dashed #cbd5e1" : "none";
-  const style = line.GetBorderLineStyle();
+function browserBorderLine(line: SvxBorderLine | Style | undefined, fixedGuide: boolean): string {
+  if (line === undefined || (line instanceof Style ? line.GetWidth() === 0 : line.isEmpty()))
+    return fixedGuide ? "1px dashed #cbd5e1" : "none";
+  const style = line instanceof Style ? line.Type() : line.GetBorderLineStyle();
   const cssStyle =
     style === 1
       ? "dotted"
@@ -30,7 +33,9 @@ function browserBorderLine(line: SvxBorderLine | undefined, fixedGuide: boolean)
                 : style === 13
                   ? "inset"
                   : "solid";
-  return `${line.GetScaledWidth() / 20}pt ${cssStyle} #${(line.GetColor() & 0xffffff).toString(16).padStart(6, "0")}`;
+  const width = line instanceof Style ? line.GetWidth() : line.GetScaledWidth();
+  const color = line instanceof Style ? line.GetColorPrim() : line.GetColor();
+  return `${width / 20}pt ${cssStyle} #${(color & 0xffffff).toString(16).padStart(6, "0")}`;
 }
 /** Projects the four independent native edges and distances directly. @param item - Actual box item. @param fixedGuide - Use isolated fixed-row guides. @returns Browser geometry. */
 function browserCellBoxStyle(item: SvxBoxItem, fixedGuide: boolean): React.CSSProperties {
@@ -73,6 +78,14 @@ function browserCellBoxStyle(item: SvxBoxItem, fixedGuide: boolean): React.CSSPr
   retainParagraphElement?: (id: string, element: HTMLParagraphElement | null) => void;
 }>): React.JSX.Element {
   const format = table.GetFormat();
+  const resolved = new Map<string, Style>();
+  if (format.borderModel === "collapsing")
+    new SwTabFramePainter(table).PaintLines(
+      /** Projects resolved native line ownership onto the existing flat cell paint device. @param line - Native interval. @param horizontal - Native family. @returns Nothing. */
+      (line, horizontal) => {
+        resolved.set(`${horizontal}:${line.mnKey}:${line.mnStartPos}`, line.maAttribute);
+      },
+    );
   const columnWidth = table.GetColumnWidths().reduce(
     /** Adds native column reference widths. @param sum - Previous extent. @param width - Column width. @returns Total. */
     (sum, width) => sum + width,
@@ -159,6 +172,24 @@ function browserCellBoxStyle(item: SvxBoxItem, fixedGuide: boolean): React.CSSPr
                     ) => {
                       const boxItem = cell.GetBox(),
                         boxStyle = browserCellBoxStyle(boxItem, nativeRow.HasFixSize());
+                      if (format.borderModel === "collapsing") {
+                        boxStyle.borderTop = browserBorderLine(
+                          resolved.get(`true:${rowIndex}:${cellIndex}`),
+                          nativeRow.HasFixSize(),
+                        );
+                        boxStyle.borderBottom = browserBorderLine(
+                          resolved.get(`true:${rowIndex + 1}:${cellIndex}`),
+                          nativeRow.HasFixSize(),
+                        );
+                        boxStyle.borderLeft = browserBorderLine(
+                          resolved.get(`false:${cellIndex}:${rowIndex}`),
+                          nativeRow.HasFixSize(),
+                        );
+                        boxStyle.borderRight = browserBorderLine(
+                          resolved.get(`false:${cellIndex + 1}:${rowIndex}`),
+                          nativeRow.HasFixSize(),
+                        );
+                      }
                       const content = cell.GetParagraphs().map(
                         /** Handles the browser table interaction. @param argument1 - Callback input. @param argument2 - Callback input. @returns Callback result. */ (
                           paragraph,

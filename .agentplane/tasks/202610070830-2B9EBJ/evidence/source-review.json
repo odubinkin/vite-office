@@ -1,0 +1,25 @@
+{
+  "baselineTag": "libreoffice-26.8.0.2",
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceSHA256": {
+    "sw/source/core/layout/paintfrm.cxx": "df87cd19e4f7f5cbe69f74e931ec8528063f12001d54eda138c321b761e18b51",
+    "svx/source/dialog/framelink.cxx": "ad475be2017f0b96dcf8e71cad4ca77af589a226a21cbd20423207febcc53644",
+    "sal/rtl/math.cxx": "cdb0bec43858bffdcd9d253e1babb2bb734eb31eb8316aafefd4b8d84cce9075"
+  },
+  "productionSHA256": {
+    "apps/office/src/svx/source/dialog/framelink.ts": "23c113062c256d4e940125b69bcb63bc40e967bbf1918456f047cb64b3e0bf78",
+    "apps/office/src/sw/source/core/layout/paintfrm.ts": "8f981e99d7baf7e3747bc447b2b3c5ae8f8cfcbb4efbceb5a9100cb1003d91a9",
+    "apps/office/src/sw/browser/editor/WriterEditableTable.tsx": "100e87f2edc04b82b5b80f92be6371086aa711af4b9d27507171f0e22b6b914e"
+  },
+  "reviewer": "Current CODER source comparison; not independent. Exact implementation EVALUATOR phase follows commit.",
+  "nativeStyle": "framelink.cxx35-155 normalizes copied border components at represented integer scale1, clamps total65535 and shrinks gap then paired components;162-183 mirrors double components.215-303 Word weights including OUTSET25;306-335 width, single/double, gap and exactly one-unit style comparison. Integer components are exact for rtl math approxEqual representable integer rule; full floating/scaled API is outside this port. Color does not determine native priority.",
+  "nativePainter": "paintfrm.cxx2240-2335 owns entries/overlap IDs;3007-3100 inserts row/cell left/right/top/bottom and mirrors right/bottom;3102-3210 ordered set Insert implements all three overlap splits/restart and std::max(new,old), so new wins equal priority. Native owned clones and nonempty intervals preserved. Existing flat cell grid substitutes for physical VCL frame coordinates; Word limitedends/outer exclusions/orientation/follow/spans unrepresented.",
+  "browserPaint": "Actual borderModel selects native painter only for collapse; both adjacent flat native cells paint identical resolved Style. Separate mode retains own native SvxBoxItem sides. Original boxes/paragraphs/table owners and native history/ODT remain, no TextRuns or scalar CSS kernel bridge introduced. Existing browser CSS family/baseRGB mapping is a paint adaptation; full primitive/shading/theme/refmode/junction parity is not certified.",
+  "evidence": "Actual13473app110inventory14infrastructure268Chromium union,0unresolved0passing runtime replay;1app7inventory focused skip observations remain skipped. ONE full upstream-absent profile and original-failure-only closures. Final Cppunit timeout-only closure disables V8 coverage without changing30000ms/all8072 assertions and contributes no counters; actual100 from whole byte-identical source and entire maps only.",
+  "priorityBullet": "Existing measured label width plus minimum native distance stays byte-identical; four body/cell Chromium1280/390 overlap regressions passed original absence profile.",
+  "deliberateExceptions": "All566 old acceptance contracts preserved:565byte-identical and one exact native source-winner conditional migration; four new acceptance files. All289 metadata complete prior fields/prefixes/statuses/defaults and registered save/open/recovery exceptions retained;2newbounded modules=291, no whole semantic promotion.",
+  "nextLeaf": "Existing tabsh.ts168 unconditionally SetRowHeight(Minimum) even when only merge mode changes. New fixed=true test fixture now reads actual paint device after this existing conversion; explicit original Fixed wrappers checked initially and on each Undo. Row height type preservation is not claimed and will be corrected in a separate leaf.",
+  "launchOrderingLimitation": "During closure2 launch, git staging had completed but the previous read-only AP route command was still awaiting terminal observation. No concurrent source/AP mutation occurred; all processes are terminal. Do not claim absence of all concurrent read-only route observation.",
+  "residualScope": "Physical native frames/primitives/junctions/shading/theme/scaled Style/refmode/Word limited ends/RTL/vertical/merged spans/follow and whole kernel/browser parity remain unverified.",
+  "result": "PASS bounded native integer Style/overlap arbitration and shared-edge browser paint; whole parity remains active."
+}

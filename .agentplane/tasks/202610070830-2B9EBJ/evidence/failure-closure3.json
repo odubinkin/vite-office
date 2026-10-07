@@ -1,0 +1,30 @@
+{
+  "vendorRestored": true,
+  "productionSHA256": {
+    "apps/office/src/svx/source/dialog/framelink.ts": "23c113062c256d4e940125b69bcb63bc40e967bbf1918456f047cb64b3e0bf78",
+    "apps/office/src/sw/source/core/layout/paintfrm.ts": "8f981e99d7baf7e3747bc447b2b3c5ae8f8cfcbb4efbceb5a9100cb1003d91a9",
+    "apps/office/src/sw/browser/editor/WriterEditableTable.tsx": "100e87f2edc04b82b5b80f92be6371086aa711af4b9d27507171f0e22b6b914e"
+  },
+  "records": [
+    {
+      "kind": "inventory",
+      "command": "npm exec -- vitest run --config scripts/libreoffice-inventory/vitest.config.ts scripts/libreoffice-inventory/cppunit-registration-cli.test.ts --maxWorkers=1 --testNamePattern=runs filesystem readers and writers with owned Git and source fixtures$ --coverage.enabled=false --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/2B9EBJ.inventory-closure3-results.json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 565,
+      "sha256": "1e3ce21a32c0c4b16c8c7969700da287113750fc7618f95570961d31a9fca52d",
+      "caseCounts": {
+        "passed": 1,
+        "failed": 0,
+        "skipped": 1,
+        "total": 2
+      },
+      "failedCases": [],
+      "totals": [
+        "Test Files  1 passed (1)",
+        "Tests  1 passed | 1 skipped (2)"
+      ]
+    }
+  ],
+  "coverageCollection": "Only the remaining original failed Cppunit case runs without V8 instrumentation overhead; original test timeout30000 and every8072 source-record assertion unchanged. No coverage is claimed from this run; strict current-source identical-map counters come from actual earlier verified/full/coverage closure maps."
+}

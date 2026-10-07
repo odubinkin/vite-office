@@ -1,0 +1,19 @@
+{
+  "records": [
+    {
+      "command": "Unchanged JSDoc validator on approved changed code/acceptance paths; actual physical-line count",
+      "exit": 0,
+      "errors": [],
+      "physicalLines": {
+        "apps/office/src/svx/source/dialog/framelink.ts": 109,
+        "apps/office/src/sw/source/core/layout/paintfrm.ts": 165,
+        "apps/office/src/sw/browser/editor/WriterEditableTable.tsx": 305,
+        "apps/office/src/svx/source/dialog/native-frame-style.test.ts": 100,
+        "apps/office/src/sw/source/core/layout/native-collapsing-border-painter.test.ts": 73,
+        "apps/office/src/sw/browser/editor/native-collapsing-border-paint.test.tsx": 125,
+        "apps/office/e2e/writer-collapsing-border-arbitration.spec.ts": 97,
+        "apps/office/e2e/writer-native-collapsing-borders.spec.ts": 158
+      }
+    }
+  ]
+}

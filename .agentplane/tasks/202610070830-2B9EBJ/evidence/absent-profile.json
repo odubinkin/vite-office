@@ -1,0 +1,200 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/svx/source/dialog/framelink.ts": "23c113062c256d4e940125b69bcb63bc40e967bbf1918456f047cb64b3e0bf78",
+    "apps/office/src/sw/source/core/layout/paintfrm.ts": "8f981e99d7baf7e3747bc447b2b3c5ae8f8cfcbb4efbceb5a9100cb1003d91a9",
+    "apps/office/src/sw/browser/editor/WriterEditableTable.tsx": "100e87f2edc04b82b5b80f92be6371086aa711af4b9d27507171f0e22b6b914e",
+    "apps/office/src/svx/source/dialog/native-frame-style.test.ts": "0cad513b80f26b1a6dbe672a28bc926b2f5663fd54d71f8b2d1decb84a0564d6",
+    "apps/office/src/sw/source/core/layout/native-collapsing-border-painter.test.ts": "6d55946b0f432d8c21fe995e8c1ff5950f8bf6a19b44d78625576c82c94b2f0d",
+    "apps/office/src/sw/browser/editor/native-collapsing-border-paint.test.tsx": "040e544387a9b35f9cad395ea6d039f7b9981bd5c8b3416fb71d1d76bd169fca",
+    "apps/office/e2e/writer-collapsing-border-arbitration.spec.ts": "153b6a9e9ab2e1687365e0d36b850840db3183466699607cfe908db83c1665cd",
+    "apps/office/e2e/writer-native-collapsing-borders.spec.ts": "c426dd0fccef1f9a2f7940b53b29c32fa1ee7ed6a2c24730d3a7b4fbbb459496",
+    "docs/program/source-provenance.json": "79deef3af819a5c4d11b13ea83c9669135dc3cefc96fe6d6bd87fe715653b0cb",
+    "docs/program/parity/runtime-inventory.json": "006367507f06ffc0d388b6cd0b52a125e5ea4970001c57fa1c2cc33242e6446d"
+  },
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1443,
+      "sha256": "1c87403bd6458effe64ba453199204a3e7d718d8f82b0ccea76aef5c989c1d82",
+      "totals": [],
+      "failedCases": []
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/2B9EBJ.app-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 139105,
+      "sha256": "f731a1e7180b9c5897972a73e5dad32956048f2d172ae64872deb90db06f4bb5",
+      "totals": [
+        "Test Files  1 failed | 426 passed (427)",
+        "Tests  1 failed | 13472 passed (13473)"
+      ],
+      "failedCases": [
+        {
+          "name": "apps/office/src/sw/browser/editor/native-collapsing-border-paint.test.tsx > native collapsing paint preserves original cell lines and grouped history fixed=true",
+          "assertion": [
+            "Error: Missing native paint device"
+          ]
+        }
+      ],
+      "caseCounts": {
+        "passed": 13472,
+        "failed": 1,
+        "skipped": 0,
+        "total": 13473
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 16216,
+          "covered": 16216,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 17801,
+          "covered": 17801,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 4120,
+          "covered": 4120,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 13327,
+          "covered": 13326,
+          "skipped": 0,
+          "pct": 99.99
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 99.99
+      },
+      "incompleteFileCount": 1,
+      "coverageMapSHA256": "15819d3acb8d5e41b23dc3d7f9ff3fb075c730f4b4efd198124c6f593e9028f7"
+    },
+    {
+      "kind": "inventory",
+      "command": "npm run test:inventory:coverage -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/2B9EBJ.inventory-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 43631,
+      "sha256": "50c4fa152e32a69c826d7646f6c7804c4548fa82b47ebc09590bd2ecb126c5e7",
+      "totals": [
+        "Test Files  2 failed | 34 passed (36)",
+        "Tests  2 failed | 108 passed (110)"
+      ],
+      "failedCases": [
+        {
+          "name": "scripts/libreoffice-inventory/cppunit-registration-cli.test.ts > Cppunit registration inventory CLI runs filesystem readers and writers with owned Git and source fixtures",
+          "assertion": [
+            "Error: STACK_TRACE_ERROR"
+          ]
+        },
+        {
+          "name": "scripts/libreoffice-inventory/parity-mapping-cli.test.ts > parity mapping CLI composes the Writer mapping report with owned upstream marker evidence",
+          "assertion": [
+            "Error: Runtime module paths must be unique and lexicographically ordered."
+          ]
+        }
+      ],
+      "caseCounts": {
+        "passed": 108,
+        "failed": 2,
+        "skipped": 0,
+        "total": 110
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 1464,
+          "covered": 1460,
+          "skipped": 0,
+          "pct": 99.72
+        },
+        "statements": {
+          "total": 1523,
+          "covered": 1519,
+          "skipped": 0,
+          "pct": 99.73
+        },
+        "functions": {
+          "total": 384,
+          "covered": 381,
+          "skipped": 0,
+          "pct": 99.21
+        },
+        "branches": {
+          "total": 1081,
+          "covered": 1081,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "coverage": {
+        "lines": 99.72,
+        "statements": 99.73,
+        "functions": 99.21,
+        "branches": 100
+      },
+      "incompleteFileCount": 1,
+      "coverageMapSHA256": "d7382697cde2bd2b24c89fae8860d27d6ee4f4a9ee476c152d64e77b3c0d51f4"
+    },
+    {
+      "kind": "scripts",
+      "command": "npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts scripts/check-module-boundaries.test.ts",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 223,
+      "sha256": "d571a480ffafc47adbbe278cd5d70ec29ab24e73a2e078f1ec76dcb770f5b231",
+      "totals": [
+        "Test Files  3 passed (3)",
+        "Tests  14 passed (14)"
+      ],
+      "failedCases": []
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 37217,
+      "sha256": "7187d6e753dd7ade1b89c406f6f506bb553a8b0a97b5cb6b6b4287619ca48af3",
+      "totals": [
+        "268 passed (4.8m)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "startTime": "2026-10-07T08:53:13.438Z",
+        "duration": 288080.974,
+        "expected": 268,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    }
+  ]
+}

@@ -139,7 +139,10 @@ for (const width of [1280, 390])
           right = await cells.nth(1).boundingBox();
         if (left === null || right === null) throw Error("Missing contiguous native cells");
         expect(Math.abs(left.x + left.width - right.x)).toBeLessThan(1);
-        await expect(cells.nth(0)).toHaveCSS("border-right-color", "rgb(171, 205, 239)");
+        await expect(cells.nth(0)).toHaveCSS(
+          "border-right-color",
+          next === "collapse" ? "rgb(18, 52, 86)" : "rgb(171, 205, 239)",
+        );
         await expect(cells.nth(1)).toHaveCSS("border-left-color", "rgb(18, 52, 86)");
         const editor = page.getByRole("textbox", {
           name: "Row 2 column 1 paragraph 1",

@@ -1,0 +1,126 @@
+{
+  "auditCorrection": "Initial scanner-only fragment reader did not rescan template interpolation tails. Exact full-byte two-interval reconstruction replaces that reader; no source/runtime changes or assertion removal.",
+  "base": "063697ee0a6e23b0735bb05fd702234f8e15a79c",
+  "approvedPaths": [
+    "apps/office/src/svx/source/dialog/framelink.ts",
+    "apps/office/src/sw/source/core/layout/paintfrm.ts",
+    "apps/office/src/sw/browser/editor/WriterEditableTable.tsx",
+    "apps/office/src/svx/source/dialog/native-frame-style.test.ts",
+    "apps/office/src/sw/source/core/layout/native-collapsing-border-painter.test.ts",
+    "apps/office/src/sw/browser/editor/native-collapsing-border-paint.test.tsx",
+    "apps/office/e2e/writer-collapsing-border-arbitration.spec.ts",
+    "apps/office/e2e/writer-native-collapsing-borders.spec.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "actualSemanticPaths": [
+    "apps/office/e2e/writer-native-collapsing-borders.spec.ts",
+    "apps/office/src/sw/browser/editor/WriterEditableTable.tsx",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/source-provenance.json",
+    "apps/office/e2e/writer-collapsing-border-arbitration.spec.ts",
+    "apps/office/src/svx/source/dialog/framelink.ts",
+    "apps/office/src/svx/source/dialog/native-frame-style.test.ts",
+    "apps/office/src/sw/browser/editor/native-collapsing-border-paint.test.tsx",
+    "apps/office/src/sw/source/core/layout/native-collapsing-border-painter.test.ts",
+    "apps/office/src/sw/source/core/layout/paintfrm.ts"
+  ],
+  "oldAcceptanceFiles": 566,
+  "oldByteIdentical": 565,
+  "oldSourceWinnerMigrations": 1,
+  "completeOldMigration": {
+    "equal": true,
+    "migrations": [
+      {
+        "label": "Source winner conditional only; all other complete prior tokens unchanged",
+        "oldTokenSHA256": "7e73a25c7dae8ec51786ceb2107212c2011919a7ee91bb1850d70ceefc7327b4",
+        "newTokenSHA256": "1bb2a8522235c9cfe71c183d230f70a2122a92abf9d8cd9426004775a08acf78",
+        "count": 1
+      }
+    ],
+    "normalizedTokenSHA256": "38410a090dfdf7586ddd4071e42f3acc84197529642d1c7bb1fd400142aee9e8",
+    "completeRemainingBytesIdentical": true
+  },
+  "newAcceptanceFiles": 4,
+  "totalAcceptanceFiles": 570,
+  "oldAcceptanceCensusSHA256": "89fa7cc5bf1792575b1738e4fd4e0918443b6b346f43f19516a7933a8fe70418",
+  "fresh": [
+    {
+      "path": "apps/office/src/svx/source/dialog/native-frame-style.test.ts",
+      "initialSHA256": "0cad513b80f26b1a6dbe672a28bc926b2f5663fd54d71f8b2d1decb84a0564d6",
+      "currentSHA256": "0cad513b80f26b1a6dbe672a28bc926b2f5663fd54d71f8b2d1decb84a0564d6",
+      "proof": {
+        "byteIdentical": true
+      }
+    },
+    {
+      "path": "apps/office/src/sw/source/core/layout/native-collapsing-border-painter.test.ts",
+      "initialSHA256": "6d55946b0f432d8c21fe995e8c1ff5950f8bf6a19b44d78625576c82c94b2f0d",
+      "currentSHA256": "6d55946b0f432d8c21fe995e8c1ff5950f8bf6a19b44d78625576c82c94b2f0d",
+      "proof": {
+        "byteIdentical": true
+      }
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/native-collapsing-border-paint.test.tsx",
+      "initialSHA256": "040e544387a9b35f9cad395ea6d039f7b9981bd5c8b3416fb71d1d76bd169fca",
+      "currentSHA256": "9e3a10d6c17b6bed6d2be1b2bcb9c3997c0775904bd1a42962d526798b77d2fa",
+      "proof": {
+        "equal": true,
+        "migrations": [
+          {
+            "label": "Only failed fixed=true paint-device fallback; passed false branch untouched",
+            "count": 1,
+            "oldIntervalSHA256": "3cea97ec31f7f0b9410dbb7a7ec0f7c730dce5f7817a1078d7df8837c5caea19",
+            "newIntervalSHA256": "b43caecf19b0b2cfd073c0d39700217f00b7ddd2ce9c5d473872c46bfbb4779c"
+          },
+          {
+            "label": "Strengthened initial/three Undo Fixed wrapper assertions",
+            "count": 1,
+            "oldIntervalSHA256": "1fb500007165436737fd2cadf444bfa29d207673a91bb7df9e5478af54ade489",
+            "newIntervalSHA256": "b80cea239c0f8fa33e73bee5ccfeff6e5b4fd4bd67c03b44df21b78527de635e"
+          }
+        ],
+        "fullExpectedSHA256": "9e3a10d6c17b6bed6d2be1b2bcb9c3997c0775904bd1a42962d526798b77d2fa",
+        "allOriginalColorOwnerHistoryODTAssertionsRetained": true
+      }
+    },
+    {
+      "path": "apps/office/e2e/writer-collapsing-border-arbitration.spec.ts",
+      "initialSHA256": "153b6a9e9ab2e1687365e0d36b850840db3183466699607cfe908db83c1665cd",
+      "currentSHA256": "153b6a9e9ab2e1687365e0d36b850840db3183466699607cfe908db83c1665cd",
+      "proof": {
+        "byteIdentical": true
+      }
+    }
+  ],
+  "metadata": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "prior": 289,
+      "current": 291,
+      "priorFieldsPrefixesStatusesDefaultsAndExceptionsPreserved": true,
+      "currentSHA256": "c603d42607276c1df8cded877fbf96e41b7b9a5b7b8c4a438dca7179617c6e25"
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "prior": 289,
+      "current": 291,
+      "priorFieldsPrefixesStatusesDefaultsAndExceptionsPreserved": true,
+      "currentSHA256": "3d584be92d2dbed4aad32deafca1783be059ec46d62f19f2a72957d66f2aad5f"
+    }
+  ],
+  "parentFindingsCharacters": 566610,
+  "parentFindingsSHA256": "c86958e51bdf86094b33d0c4bdb5ab0420d6e314c1559daa5c7e2e6309f5b166",
+  "artifacts": {
+    "wholeAgentplaneForbiddenSourceOrPythonCount": 0,
+    "activeFiles": 16,
+    "activeExtensions": [
+      "json",
+      "md"
+    ],
+    "noRawCoverageResultsOrSourceSnapshots": true,
+    "rawEvidenceLocation": "Ignored project dependency cache; no pinned sources copied into AP"
+  },
+  "failures": []
+}

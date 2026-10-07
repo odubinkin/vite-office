@@ -1,0 +1,18 @@
+{
+  "records": [
+    {
+      "command": "npm exec -- prettier --write docs/program/source-provenance.json docs/program/parity/runtime-inventory.json",
+      "exit": 0
+    },
+    {
+      "command": "npm exec -- prettier --check docs/program/source-provenance.json docs/program/parity/runtime-inventory.json",
+      "exit": 0
+    }
+  ],
+  "verifiedNotesOnly": true,
+  "sourceGateClosure": "All five post-restoration source gates pass after final metadata notes",
+  "sha256": {
+    "docs/program/source-provenance.json": "c603d42607276c1df8cded877fbf96e41b7b9a5b7b8c4a438dca7179617c6e25",
+    "docs/program/parity/runtime-inventory.json": "3d584be92d2dbed4aad32deafca1783be059ec46d62f19f2a72957d66f2aad5f"
+  }
+}
