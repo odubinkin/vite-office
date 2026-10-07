@@ -4,7 +4,7 @@ title: "Replace scalar row height with native frame size ownership and behavior"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 24
+revision: 28
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,31 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-07T01:36:21.484Z"
+  updated_by: "CODER"
+  note: "PASS actual implementation8f1c1e066e4a273b3d400a18761e402339aa625d. Complete native row frame item/defaults/clone/equality/document ownership/resize type retention/fixed bounds/ODT/Worker storage verified. Final distinct13192app109inventory5scripts243Chromium pass; actual100 app275/inventory38 all dimensions, raw full-source/maps/complete-region proof only. Six static gates once and failed/genuinelychanged closures, source/scope/doctor/routing/diff/current artifacts pass0forbidden; original failures resolved without weakened40px assertion or passing/full replay. Vendor restored,536old509byte-identical27exact native migrations541total;277prior prefixes/exceptions+1new unverified module278. Same-agent exactSHA EVALUATOR explicitly not independent. Parent531065prefix/stash retained, full parity unverified and goal active."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-07T01:35:54.130Z"
+  updated_by: "EVALUATOR"
+  note: "PASS at actual implementation 8f1c1e066e4a273b3d400a18761e402339aa625d; same current-agent EVALUATOR explicitly not independent. Native complete row frame item, original document ownership, fixed bounds and primitive Worker/storage transfer verified."
+  evaluated_sha: "8f1c1e066e4a273b3d400a18761e402339aa625d"
+  blueprint_digest: "0a17d133ae0700328b5caabe9184e0e2791c6215e2d0d338acc5145bc896b34f"
+  evidence_refs:
+    - ".agentplane/tasks/202610062233-SHRG3A/README.md"
+    - ".agentplane/tasks/202610062233-SHRG3A/quality/20261007-013554130-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610062233-SHRG3A/quality/20261007-013554130-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610062233-SHRG3A/quality/20261007-013554130-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610062233-SHRG3A/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610062233-SHRG3A/evidence/exact-sha-review.json"
+    - ".agentplane/tasks/202610062233-SHRG3A/evidence/coverage-source-proof.json"
+    - ".agentplane/tasks/202610062233-SHRG3A/evidence/scope-audit.json"
+    - ".agentplane/tasks/202610062233-SHRG3A/evidence/source-review.json"
+  findings:
+    - "Exact implementation source digests match54approved paths,20production/27exact native migrations/5new acceptance/2metadata;536old509byte-identical27approved migrations541total,277prior semantic prefixes/exceptions retained+1new unverified module278. Final distinct13192app109inventory5scripts243Chromium PASS, no historical passing/full replay;8focused skips retained."
+    - "Actual100 coverage all dimensions app275/inventory38. Raw counters verified with273whole-identical sources/maps+2complete contiguous-region files and full declaration/body/enclosing branch/locations. All vendor restores complete, source/scope/AP checks outside profiles,0forbidden current artifacts. Original failed native graph boundary/physical row bounds repaired without weakening40px assertions."
 commit: null
 comments:
   -
@@ -35,8 +55,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: replace scalar row-height state with approved native complete frame-size ownership and flat-row behavior under standing iterative authorization."
+  -
+    type: "verify"
+    at: "2026-10-07T01:36:21.484Z"
+    author: "CODER"
+    state: "ok"
+    note: "PASS actual implementation8f1c1e066e4a273b3d400a18761e402339aa625d. Complete native row frame item/defaults/clone/equality/document ownership/resize type retention/fixed bounds/ODT/Worker storage verified. Final distinct13192app109inventory5scripts243Chromium pass; actual100 app275/inventory38 all dimensions, raw full-source/maps/complete-region proof only. Six static gates once and failed/genuinelychanged closures, source/scope/doctor/routing/diff/current artifacts pass0forbidden; original failures resolved without weakened40px assertion or passing/full replay. Vendor restored,536old509byte-identical27exact native migrations541total;277prior prefixes/exceptions+1new unverified module278. Same-agent exactSHA EVALUATOR explicitly not independent. Parent531065prefix/stash retained, full parity unverified and goal active."
 doc_version: 3
-doc_updated_at: "2026-10-07T01:34:34.278Z"
+doc_updated_at: "2026-10-07T01:36:21.590Z"
 doc_updated_by: "CODER"
 description: "Iteration202: native SvxSizeItem/SwFormatFrameSize defaults, full equality and clone replace kernel minHeight; document setters, resize type retention, flat-row layout/clip, ODT Fixed versus Minimum and native UI getter state. Preserve all registered exceptions and literal acceptance intents through explicit native contract migrations."
 sections:
@@ -63,6 +89,41 @@ sections:
     Command: ONE full upstream-absent build/app/inventory/scripts/Chromium profile; only originalfailed29/new3 closure then remaining2/new1 closure, production rebuilt before each. Result: final distinct13192app109inventory5scripts243Chromium PASS0residual/flaky. Initial13188app passed; focused3PASS6skip and1PASS2skip, skips not promoted. Initial Chromium214PASS29FAIL, focused27PASS2FAIL then2PASS. All vendor restores finally, all source/scope/AP audits outside profiles and awaited, no tests call upstream and no full/passing replay.
     Command: strict actual coverage/source proof. Result: actual100 all app/inventory dimensions. App275 L14981/S16431/F3832/B12174 map1803ae6733a408b9ea6e1ae543ba3ccbbed1b44116f718e89dfa518273952787 proof827a5b448ebeee68632af90a0b589c4eb9a499ad1ca21f1cf9be5176db0c29a1;273whole-identical+2full contiguous region files. Inventory38 L1464/S1523/F384/B1080 mapaa17b277d1cf1f5be390c47ed48492d81979d2673bd43ad62c90e5ce450798fa proofbba763d4d7885fd8e6c808012fa5076f978483a51ef15926e7e324b1ca130222. Raw actual counters only, whole source/maps/full declaration/body/enclosing branch/locations verified, previous verified identical whole editing-host map permitted, no fabrication.
     Exact successful implementation SHA review and same current-agent EVALUATOR explicitly not independent; current artifact/generatedquality census, canonical verify, actualSHA finish/full parent append/clean census complete lifecycle. Full percentage/fly/vertical/nested/merged/protection/border/UNO/pooling/widget/SfxItemSet/full parity unverified; parent/goal active.
+
+    Exact implementation8f1c1e066e4a273b3d400a18761e402339aa625d source/case/coverage/current evidence review PASS. Same current-agent EVALUATOR explicitly not independent: .agentplane/tasks/202610062233-SHRG3A/quality/20261007-013554130-recovery-context/quality-report.json. Final distinct13192app109inventory5scripts243Chromium,4genuinelynew focused cases and8skips retained; no historical passing/full replay. Final current artifact census and canonical verification follow these final findings; finish only actual implementation SHA, preserve entire parent prefix and leave goal active.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-07T01:36:21.484Z — VERIFY — ok
+
+    By: CODER
+
+    Note: PASS actual implementation8f1c1e066e4a273b3d400a18761e402339aa625d. Complete native row frame item/defaults/clone/equality/document ownership/resize type retention/fixed bounds/ODT/Worker storage verified. Final distinct13192app109inventory5scripts243Chromium pass; actual100 app275/inventory38 all dimensions, raw full-source/maps/complete-region proof only. Six static gates once and failed/genuinelychanged closures, source/scope/doctor/routing/diff/current artifacts pass0forbidden; original failures resolved without weakened40px assertion or passing/full replay. Vendor restored,536old509byte-identical27exact native migrations541total;277prior prefixes/exceptions+1new unverified module278. Same-agent exactSHA EVALUATOR explicitly not independent. Parent531065prefix/stash retained, full parity unverified and goal active.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-07T01:36:20.795Z, excerpt_hash=sha256:a9ecfc03214d1c52e22b4cefeb1d9b321940eea7f4a9d6c2b61449ea4c910b66
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610062233-SHRG3A/blueprint/resolved-snapshot.json
+    - old_digest: 0a17d133ae0700328b5caabe9184e0e2791c6215e2d0d338acc5145bc896b34f
+    - current_digest: 0a17d133ae0700328b5caabe9184e0e2791c6215e2d0d338acc5145bc896b34f
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610062233-SHRG3A
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610062233-SHRG3A -m 🧩 SHRG3A task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert eventual implementation in a new task, retain original stashc85f4a0e453dfd06d6e199554784f2c286737472; no destructive reset or pop/drop. Vendor restored finally. No upstream sources/helpers/scripts/Python/raw maps/results/frames in AP, raw only ignored app cache."
   Findings: |-
     Previous201 is authoritative DONE and clean main d6ded8320f8370a4792a07aaa93aaf77e122effd: verified progress. Current runtime still stores only minHeight and numeric Get/SetRowHeight, loses complete native frame-size equality/default/type and forces resize to numeric minimum. UI guesses first row. Pinned fmtfsize.hxx/atrfrm.cxx and sizeitem.hxx/frmitems.cxx establish source item inheritance/defaults/complete equality/clone; hintids.hxx RES_FRM_SIZE90. ndtbl1.cxx compares full item and clones getter; ndtbl.cxx resize copies frame item and promotes only Variable before document setter. tabfrm.cxx fixed row min calculation returns authored height; Minimum floor and Variable content. xmlitemm row map distinguishes Fixed row-height versus Minimum min-row-height, xmlexpit omits other types; xmlimpit positive minimum1. Relevant sources inspected read-only, no copies stored. Two harmless narrow source rg lookups returned empty; parent route recomputed and bounded source-folder fallback found actual mapper definitions. No task duplicates/nested AGENTS/user instructions; no network/global/outside access.
@@ -78,6 +139,8 @@ sections:
     Coverage findings: actual100 app275files L14981/S16431/F3832/B12174 map1803ae6733a408b9ea6e1ae543ba3ccbbed1b44116f718e89dfa518273952787 proof827a5b448ebeee68632af90a0b589c4eb9a499ad1ca21f1cf9be5176db0c29a1;273complete whole-identical sources/maps and2complete contiguous-region files with full function declaration/body and full enclosing branch/locations, actual initial/focused counters only. Previous201 verified whole-identical editing-host map allowed with full source/map/proof digest matching. Inventory38whole-identical source/maps actual100 L1464/S1523/F384/B1080 mapaa17b277d1cf1f5be390c47ed48492d81979d2673bd43ad62c90e5ce450798fa proofbba763d4d7885fd8e6c808012fa5076f978483a51ef15926e7e324b1ca130222. Original raw/output digests and current source checked; no synthesized counters.
     Scope:54approved semantic paths20production including1new module,27exact approved native acceptance/fixture migrations,5new acceptance files,2metadata.536prior files509byte-identical+27explicit migrations reconstructed exactly against virtual baseline AST transformation and native getter fixture ingress, preserving case/literal numeric behavior intents; deliberate Variable0 versus Minimum0 full-item mixed correction retained.541total files.277prior complete metadata prefixes/defaults/statuses/classifications/contracts and registered exceptions unchanged+1new unverified module278; parent531065/SHA76e8f305a423f9bc45be522f905228683aa45762c66867c58b01d3314af705cd untouched. Doctor0errors2known warnings/routing/diff pass, original stash retained.
     Residual: percentage/fly/vertical/nested/merged/protection/full border/row-content split/UNO member IDs/PutValue/pooling/widget/SfxItemSet/full parity unverified. Exact successful implementation SHA will be evaluated by same current-agent EVALUATOR explicitly not independent. Final prose before canonical verify, finish actual implementationSHA, entire parent append and clean tracked/untracked; parent/goal active.
+
+    Exact implementation8f1c1e066e4a273b3d400a18761e402339aa625d source/case/coverage/current evidence review PASS. Same current-agent EVALUATOR explicitly not independent: .agentplane/tasks/202610062233-SHRG3A/quality/20261007-013554130-recovery-context/quality-report.json. Final distinct13192app109inventory5scripts243Chromium,4genuinelynew focused cases and8skips retained; no historical passing/full replay. Final current artifact census and canonical verification follow these final findings; finish only actual implementation SHA, preserve entire parent prefix and leave goal active.
 id_source: "generated"
 ---
 ## Summary
@@ -115,6 +178,41 @@ Command: ONE full upstream-absent build/app/inventory/scripts/Chromium profile; 
 Command: strict actual coverage/source proof. Result: actual100 all app/inventory dimensions. App275 L14981/S16431/F3832/B12174 map1803ae6733a408b9ea6e1ae543ba3ccbbed1b44116f718e89dfa518273952787 proof827a5b448ebeee68632af90a0b589c4eb9a499ad1ca21f1cf9be5176db0c29a1;273whole-identical+2full contiguous region files. Inventory38 L1464/S1523/F384/B1080 mapaa17b277d1cf1f5be390c47ed48492d81979d2673bd43ad62c90e5ce450798fa proofbba763d4d7885fd8e6c808012fa5076f978483a51ef15926e7e324b1ca130222. Raw actual counters only, whole source/maps/full declaration/body/enclosing branch/locations verified, previous verified identical whole editing-host map permitted, no fabrication.
 Exact successful implementation SHA review and same current-agent EVALUATOR explicitly not independent; current artifact/generatedquality census, canonical verify, actualSHA finish/full parent append/clean census complete lifecycle. Full percentage/fly/vertical/nested/merged/protection/border/UNO/pooling/widget/SfxItemSet/full parity unverified; parent/goal active.
 
+Exact implementation8f1c1e066e4a273b3d400a18761e402339aa625d source/case/coverage/current evidence review PASS. Same current-agent EVALUATOR explicitly not independent: .agentplane/tasks/202610062233-SHRG3A/quality/20261007-013554130-recovery-context/quality-report.json. Final distinct13192app109inventory5scripts243Chromium,4genuinelynew focused cases and8skips retained; no historical passing/full replay. Final current artifact census and canonical verification follow these final findings; finish only actual implementation SHA, preserve entire parent prefix and leave goal active.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-07T01:36:21.484Z — VERIFY — ok
+
+By: CODER
+
+Note: PASS actual implementation8f1c1e066e4a273b3d400a18761e402339aa625d. Complete native row frame item/defaults/clone/equality/document ownership/resize type retention/fixed bounds/ODT/Worker storage verified. Final distinct13192app109inventory5scripts243Chromium pass; actual100 app275/inventory38 all dimensions, raw full-source/maps/complete-region proof only. Six static gates once and failed/genuinelychanged closures, source/scope/doctor/routing/diff/current artifacts pass0forbidden; original failures resolved without weakened40px assertion or passing/full replay. Vendor restored,536old509byte-identical27exact native migrations541total;277prior prefixes/exceptions+1new unverified module278. Same-agent exactSHA EVALUATOR explicitly not independent. Parent531065prefix/stash retained, full parity unverified and goal active.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-07T01:36:20.795Z, excerpt_hash=sha256:a9ecfc03214d1c52e22b4cefeb1d9b321940eea7f4a9d6c2b61449ea4c910b66
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610062233-SHRG3A/blueprint/resolved-snapshot.json
+- old_digest: 0a17d133ae0700328b5caabe9184e0e2791c6215e2d0d338acc5145bc896b34f
+- current_digest: 0a17d133ae0700328b5caabe9184e0e2791c6215e2d0d338acc5145bc896b34f
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610062233-SHRG3A
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610062233-SHRG3A -m 🧩 SHRG3A task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
+
 ## Rollback Plan
 
 Revert eventual implementation in a new task, retain original stashc85f4a0e453dfd06d6e199554784f2c286737472; no destructive reset or pop/drop. Vendor restored finally. No upstream sources/helpers/scripts/Python/raw maps/results/frames in AP, raw only ignored app cache.
@@ -134,3 +232,5 @@ Verification findings: six initial static gates ONCE, focused failures and genui
 Coverage findings: actual100 app275files L14981/S16431/F3832/B12174 map1803ae6733a408b9ea6e1ae543ba3ccbbed1b44116f718e89dfa518273952787 proof827a5b448ebeee68632af90a0b589c4eb9a499ad1ca21f1cf9be5176db0c29a1;273complete whole-identical sources/maps and2complete contiguous-region files with full function declaration/body and full enclosing branch/locations, actual initial/focused counters only. Previous201 verified whole-identical editing-host map allowed with full source/map/proof digest matching. Inventory38whole-identical source/maps actual100 L1464/S1523/F384/B1080 mapaa17b277d1cf1f5be390c47ed48492d81979d2673bd43ad62c90e5ce450798fa proofbba763d4d7885fd8e6c808012fa5076f978483a51ef15926e7e324b1ca130222. Original raw/output digests and current source checked; no synthesized counters.
 Scope:54approved semantic paths20production including1new module,27exact approved native acceptance/fixture migrations,5new acceptance files,2metadata.536prior files509byte-identical+27explicit migrations reconstructed exactly against virtual baseline AST transformation and native getter fixture ingress, preserving case/literal numeric behavior intents; deliberate Variable0 versus Minimum0 full-item mixed correction retained.541total files.277prior complete metadata prefixes/defaults/statuses/classifications/contracts and registered exceptions unchanged+1new unverified module278; parent531065/SHA76e8f305a423f9bc45be522f905228683aa45762c66867c58b01d3314af705cd untouched. Doctor0errors2known warnings/routing/diff pass, original stash retained.
 Residual: percentage/fly/vertical/nested/merged/protection/full border/row-content split/UNO member IDs/PutValue/pooling/widget/SfxItemSet/full parity unverified. Exact successful implementation SHA will be evaluated by same current-agent EVALUATOR explicitly not independent. Final prose before canonical verify, finish actual implementationSHA, entire parent append and clean tracked/untracked; parent/goal active.
+
+Exact implementation8f1c1e066e4a273b3d400a18761e402339aa625d source/case/coverage/current evidence review PASS. Same current-agent EVALUATOR explicitly not independent: .agentplane/tasks/202610062233-SHRG3A/quality/20261007-013554130-recovery-context/quality-report.json. Final distinct13192app109inventory5scripts243Chromium,4genuinelynew focused cases and8skips retained; no historical passing/full replay. Final current artifact census and canonical verification follow these final findings; finish only actual implementation SHA, preserve entire parent prefix and leave goal active.
