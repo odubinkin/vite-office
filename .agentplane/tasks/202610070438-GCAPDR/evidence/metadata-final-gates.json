@@ -1,0 +1,37 @@
+{
+  "reason": "Only changed metadata input after verified closure prose append; resources/tree/invariant inputs unchanged.",
+  "records": [
+    {
+      "command": "npm exec -- prettier --check docs/program/source-provenance.json docs/program/parity/runtime-inventory.json",
+      "exit": 0,
+      "bytes": 66,
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "exit": 0,
+      "bytes": 205,
+      "sha256": "b16199a818cb0cb5e0797b97db77692f4cbb99ff06507efef8c2c5bef5f0becb",
+      "diagnostics": [
+        "Source provenance check passed for 286 runtime modules (201 mapped, 69 browser adaptations, 16 local infrastructure)."
+      ]
+    },
+    {
+      "command": "npm run inventory:parity",
+      "exit": 0,
+      "bytes": 1868929,
+      "sha256": "71aad0c5ee2cf222f9520ef4f9c71997aca2a3fa617d0d5ed4cda15bbfeb8175",
+      "diagnostics": [
+        "          \"justification\": \"Iteration206 draft: scalar kernel cell border/padding storage is replaced by owned SvxBoxItem plus the existing vertical item. Represented lines retain native color/style/width/component arith",
+        "          \"justification\": \"These four existing margin, indent and spacing classes now reside with their pinned frmitems.cxx owner. Existing assertions cover signed margin values, cloning, equality, browser item-codec ro",
+        "          \"justification\": \"Iteration206 draft: scalar kernel cell border/padding storage is replaced by owned SvxBoxItem plus the existing vertical item. Represented lines retain native color/style/width/component arith",
+        "          \"justification\": \"Iteration206 draft: scalar kernel cell border/padding storage is replaced by owned SvxBoxItem plus the existing vertical item. Represented lines retain native color/style/width/component arith",
+        "          \"justification\": \"Iteration206 draft: scalar kernel cell border/padding storage is replaced by owned SvxBoxItem plus the existing vertical item. Represented lines retain native color/style/width/component arith",
+        "          \"justification\": \"Projects canonical SwTable rows and editable SwTextNode cell paragraphs into the browser page. Iteration138 removes the table-cell post-DOM diff/direct text mutation, imperative innerHTML sync",
+        "          \"justification\": \"Worker structured-clone graph codec lives in the browser boundary; SwDoc remains the canonical model and filter interfaces accept SwDoc. Declared levels retain independent native legacy and al",
+        "          \"justification\": \"Presents bounded Insert Table and Table Properties controls over the canonical Writer table graph. Iteration176 removes React table-property writes through inherited SwFEShell and native ItemS"
+      ]
+    }
+  ]
+}

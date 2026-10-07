@@ -26,6 +26,7 @@ import {
   GetSwBoxAlign,
   SetSwBoxAttr,
   SetSwTabBorders,
+  GetSwTabBorders,
 } from "../docnode/ndtbl1";
 import type { SwCursor } from "../crsr/swcrsr";
 import type { SwFormatFrameSize } from "../../../inc/fmtfsize";
@@ -107,6 +108,10 @@ export class SwDoc {
     cursorState?: SwUndoCursorState,
   ): boolean {
     return SetSwTabBorders(this, cursor, value, cursorState);
+  }
+  /** Reads original native selection common border items. @param cursor - Actual display cursor. @param value - In/out native item set. @returns Nothing. */
+  public GetTabBorders(cursor: SwCursor, value: SfxItemSet): void {
+    GetSwTabBorders(this, cursor, value);
   }
   /** Reads native row geometry over actual physical cell owners. @param result - Output carrier. @param frame - Native frame. @param start - Current cell. @returns Whether represented. */
   public static GetTabRows(result: SwTabCols, frame: SwTabFrame, start: SwTableBox): boolean {

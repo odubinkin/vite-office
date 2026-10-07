@@ -4,7 +4,15 @@ import { VertOrientation } from "../../../offapi/com/sun/star/text/VertOrientati
 import { useState } from "react";
 import { WriterInsertTableDialog } from "./WriterInsertTableDialog";
 import type { SwTable, SwTableBox } from "../../source/core/table/swtable";
-import { exportBorderShorthand } from "../../../xmloff/source/style/bordrhdl";
+import { exportBorderShorthand, importBoxProperties } from "../../../xmloff/source/style/bordrhdl";
+import {
+  SvxBoxItem,
+  SvxBoxInfoItem,
+  SvxBoxInfoItemValidFlags,
+} from "../../../editeng/source/items/frmitems";
+import { SfxItemSet } from "../../../svl/source/items/itemset";
+import { RES_BOX } from "../../inc/hintids";
+import { SID_ATTR_BORDER_INNER } from "../../../svx/inc/svxids";
 import type { SwTableProperties } from "../../source/uibase/shells/tabsh";
 import {
   SwFormatTablePage,
@@ -28,6 +36,7 @@ export function WriterTableDialog(
   props: Readonly<{
     table?: SwTable;
     selectedBoxes?: readonly SwTableBox[];
+    borderItems?: SfxItemSet | undefined;
     rowHeight?: SwFormatFrameSize | undefined;
     boxAlign?: number | undefined;
     lineSelected?: boolean;
@@ -49,6 +58,7 @@ export function WriterTableDialog(
 function WriterTablePropertiesDialog({
   table,
   selectedBoxes,
+  borderItems,
   rowHeight,
   boxAlign,
   availableWidth,
@@ -58,6 +68,7 @@ function WriterTablePropertiesDialog({
 }: Readonly<{
   table: SwTable;
   selectedBoxes?: readonly SwTableBox[];
+  borderItems?: SfxItemSet | undefined;
   rowHeight?: SwFormatFrameSize | undefined;
   boxAlign?: number | undefined;
   lineSelected?: boolean;
@@ -88,15 +99,32 @@ function WriterTablePropertiesDialog({
   const columnWidths = formatPage.data.columns;
   const [initial] = useState(
     /** Retains initial input values for the represented Text Flow and Borders pages. @returns Original page values. */
-    () => ({
-      minRowHeight: rowHeight?.GetHeight() ?? 0,
-      padding: rows[0]?.GetTabBoxes()[0]?.GetBox().GetDistance(0) ?? 0,
-      border: exportBorderShorthand(rows[0]?.GetTabBoxes()[0]?.GetBox().GetTop()),
-      verticalAlign:
-        boxAlign === VertOrientation.CENTER || boxAlign === VertOrientation.BOTTOM
-          ? boxAlign
-          : VertOrientation.NONE,
-    }),
+    () => {
+      const box = (
+        (borderItems?.Get(RES_BOX) ??
+          table
+            .GetTableNode()
+            .GetDoc()
+            .GetAttrPool()
+            .GetUserOrPoolDefaultItem(RES_BOX)) as SvxBoxItem
+      ).Clone();
+      const item = borderItems?.GetItemIfSet(SID_ATTR_BORDER_INNER);
+      const info =
+        item instanceof SvxBoxInfoItem ? item.Clone() : new SvxBoxInfoItem(SID_ATTR_BORDER_INNER);
+      return {
+        minRowHeight: rowHeight?.GetHeight() ?? 0,
+        padding: box.GetDistance(0),
+        border: info.IsValid(SvxBoxInfoItemValidFlags.TOP)
+          ? exportBorderShorthand(box.GetTop())
+          : undefined,
+        box,
+        info,
+        verticalAlign:
+          boxAlign === VertOrientation.CENTER || boxAlign === VertOrientation.BOTTOM
+            ? boxAlign
+            : VertOrientation.NONE,
+      };
+    },
   );
   const [minRowHeight, setMinRowHeight] = useState(initial.minRowHeight);
   const [padding, setPadding] = useState(initial.padding);
@@ -185,6 +213,30 @@ function WriterTablePropertiesDialog({
               setError("Enter valid table dimensions and positive column widths.");
               return;
             }
+            let changedBorders: SfxItemSet | undefined;
+            if (padding !== initial.padding || border !== initial.border) {
+              const box = initial.box.Clone(),
+                info = initial.info.Clone();
+              if (padding !== initial.padding) box.SetAllDistances(padding);
+              if (border !== initial.border && border !== undefined) {
+                const next = importBoxProperties({ border }, RES_BOX) as SvxBoxItem;
+                for (const edge of [0, 1, 2, 3]) box.SetLine(next.GetLine(edge), edge);
+                info.SetLine(next.GetTop(), 0);
+                info.SetLine(next.GetLeft(), 1);
+                info.SetValid(SvxBoxInfoItemValidFlags.ALL);
+              }
+              info.SetDist(true);
+              info.SetValid(SvxBoxInfoItemValidFlags.DISTANCE);
+              changedBorders = new SfxItemSet(
+                borderItems?.GetPool() ?? table.GetTableNode().GetDoc().GetAttrPool(),
+                [
+                  [RES_BOX, RES_BOX],
+                  [SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER],
+                ],
+              );
+              changedBorders.Put(box);
+              changedBorders.Put(info);
+            }
             onSubmit({
               name: name.trim(),
               rows: rowCount,
@@ -197,9 +249,7 @@ function WriterTablePropertiesDialog({
               marginBottom: formatPage.below,
               columnWidths,
               minRowHeight,
-              ...(padding === initial.padding && border === initial.border
-                ? {}
-                : { padding, border }),
+              ...(changedBorders === undefined ? {} : { borderItems: changedBorders }),
               ...(verticalAlign === initial.verticalAlign ? {} : { verticalAlign }),
               headerRows: textFlowPage.GetRowsToRepeat(),
               repeatHeaderRows: textFlowPage.GetRowsToRepeat() > 0,
@@ -567,13 +617,14 @@ function WriterTablePropertiesDialog({
                     onChange={
                       /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ (
                         event,
-                      ) => setBorder(event.target.value)
+                      ) =>
+                        setBorder(event.target.value === "mixed" ? undefined : event.target.value)
                     }
-                    value={border}
+                    value={border ?? "mixed"}
                   >
-                    {["none", "0.5pt solid #666666", "1pt solid #000000"].includes(
-                      border,
-                    ) ? null : (
+                    {initial.border === undefined ? <option value="mixed">Mixed</option> : null}
+                    {border === undefined ||
+                    ["none", "0.5pt solid #666666", "1pt solid #000000"].includes(border) ? null : (
                       <option value={border}>Current border</option>
                     )}
                     <option value="none">None</option>

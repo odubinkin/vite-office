@@ -1,0 +1,20 @@
+{
+  "baselineTag": "libreoffice-26.8.0.2",
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceSHA256": {
+    "sw/source/core/docnode/ndtbl1.cxx": "c94a3a78edc61fc2b2a0419371f70cffc5466ceca3d0b8f29160cceff0b37663",
+    "sw/source/core/frmedt/fetab.cxx": "e7b7c7164f76d7e67eddcf863128d41c3c2ea2946362b8509bab0bc2cdc9f016",
+    "sw/source/uibase/shells/tabsh.cxx": "ac075f90575663fac974e2804e7111b1df3f596eb5bb400fb9fc2f4be0058163",
+    "cui/source/tabpages/border.cxx": "8e66dee6229b85712397c97f06ec7f3a924a4addf6abee7a7b88eb9d3d08d26d",
+    "sw/inc/swtypes.hxx": "51bf121cc074709d17314ffbba2d3676eae976a17dd2f4ee0e69d357fec3b361"
+  },
+  "evaluator": "Source comparison by the current CODER; explicitly not independent; exact implementation EVALUATOR follows after commit.",
+  "nativeRead": "Original flat point/mark union; caller box/info cloned, first-set complete line equality and absence comparisons, mixed independent outer4/inner2 validity and cleared lines, joint four-distance comparison with mixed zero and invalid DISTANCE, ResetFlags127 and original table/dist/min/default policies retained; rejected owners leave supplied items unchanged.",
+  "nativeDialogInput": "TableParamToItemSet uses current native selection or Push/temporary whole-table selection, materializes actual editing ring count, native table/dist/min/default28 policies, source DISABLE/reset ordering and finally ClearMark/Pop restoration. Source single selected cell remains cell-mode inner policy; actual document/model revision/history/native cursors retain original state.",
+  "nativeBrowserBoundary": "Registered properties slot captures owned SfxItemSet once before mounting; sidebar and menu execute that same slot. Properties retains complete box/info and unknown/native mixed input, Reset saved native0/Mixed and four native distances; border-only change retains all distances and partial input flags. Native changed output is preferred/cloned by ItemSetToTableParam; scalar ingress and insertion remain explicit existing boundaries.",
+  "sourceProvenAcceptanceMigrations": "556 old files546 byte-identical+10 complete normalized bodies; original case definitions/generators, fixtures and every non-migration token retained. Explicit migrations only add native fixture input/owned item assertions, source common mixed0/Mixed Reset/change-back and no changed payload for same saved0, and distinguish native absent border from dashed outline guide. Original graph/history/ODT/continued-input checks retained. No old test names/counts/skips weakened.",
+  "deliberateExceptions": "Every registered I/O/save/open/recovery exception and complete286 metadata field/prefix/status/default is preserved; no semantic status promotion.",
+  "residualScope": "Full native SvxBorderTabPage six-edge/four-distance/style/color/arrangement/shadow widget composition and info-only FillItemSet behavior, full SfxItemSet tab-dialog orchestration, RTL/vertical/follow/shared-format/layout union completeness and whole kernel/browser parity remain unverified; parent/goal stay active.",
+  "result": "PASS bounded represented native common-input scope; full parity not claimed.",
+  "observedReferenceHEAD": "9bc445578031fecf56086729d8e4940c77e14d65"
+}

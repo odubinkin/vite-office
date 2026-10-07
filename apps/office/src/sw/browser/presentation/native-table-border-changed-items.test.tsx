@@ -44,7 +44,14 @@ for (const mode of ["border-only", "row-split-only", "both"] as const)
       }
     },
   );
-import { nativeBoxFormat, tableBorderItems } from "../../../test/table-box-test-helpers";
+import {
+  nativeTableInputForTest,
+  nativeBoxFormat,
+  tableBorderItems,
+} from "../../../test/table-box-test-helpers";
+import { RES_BOX } from "../../inc/hintids";
+import { SvxBoxItem } from "../../../editeng/source/items/frmitems";
+import { exportBorderShorthand } from "../../../xmloff/source/style/bordrhdl";
 import { afterEach, expect, it, vi } from "vitest";
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { createWriterDocumentSession } from "../composition/writer-module";
@@ -58,8 +65,8 @@ function required<T>(value: T | undefined): T {
   if (value === undefined) throw Error("Missing border owner");
   return value;
 }
-/** Creates independently authored cell formats over original native nodes. @returns Actual owners. */
-function fixture() {
+/** Creates independently authored cell formats over original native nodes. @param selected - Capture selected-row input before opening. @returns Actual owners. */
+function fixture(selected = false) {
   const session = createWriterDocumentSession(),
     doc = session.docShell.GetDoc(),
     shell = session.view.GetWrtShell(),
@@ -85,10 +92,12 @@ function fixture() {
   shell.FocusNode(node);
   shell.ToggleCharacterFormat("bold");
   doc.GetUndoManager().Clear();
+  if (selected) expect(shell.SelectTableRow()).toBe(true);
   const submit = vi.fn();
   render(
     <WriterTableDialog
       table={table}
+      borderItems={nativeTableInputForTest(table, selected ? shell.GetTableSel() : undefined)}
       availableWidth={6000}
       boxAlign={shell.GetBoxAlign()}
       onSubmit={submit}
@@ -124,10 +133,10 @@ for (const mode of ["untouched", "reset", "change-back"] as const)
           if (mode === "reset") fireEvent.click(screen.getByRole("button", { name: "Reset" }));
           else {
             fireEvent.change(screen.getByRole("combobox", { name: "Cell border" }), {
-              target: { value: "1pt solid #000000" },
+              target: { value: "mixed" },
             });
             fireEvent.change(screen.getByRole("spinbutton", { name: "Cell padding (cm)" }), {
-              target: { value: "1" },
+              target: { value: "0" },
             });
           }
         }
@@ -152,9 +161,8 @@ for (const field of ["border", "padding"] as const)
     it(
       "native represented complete box item history field=" + field + " selected=" + selected,
       /** Checks explicit field admission, selected scope, original graph and repeated history. @returns Completion. */ async () => {
-        const f = fixture();
+        const f = fixture(selected);
         try {
-          if (selected) expect(f.shell.SelectTableRow()).toBe(true);
           const cursor = f.shell.getShellCursor(),
             before = f.shell.CaptureCursorState(),
             original = values(f);
@@ -169,11 +177,12 @@ for (const field of ["border", "padding"] as const)
             });
           fireEvent.click(screen.getByRole("button", { name: "OK" }));
           const input = required(f.submit.mock.calls[0]?.[0]);
-          expect(input).toHaveProperty(field, field === "border" ? "none" : 0);
-          expect(input).toHaveProperty(
-            field === "border" ? "padding" : "border",
-            field === "border" ? 567 : "1pt solid #000000",
-          );
+          const boxItem = input.borderItems?.Get(RES_BOX) as SvxBoxItem;
+          if (field === "border") {
+            expect(boxItem).toBeInstanceOf(SvxBoxItem);
+            expect(exportBorderShorthand(boxItem.GetTop())).toBe("none");
+            for (const edge of [0, 1, 2, 3]) expect(boxItem.GetDistance(edge)).toBe(0);
+          } else expect(boxItem).toBeUndefined();
           expect(ItemSetToTableParam(f.shell, input)).toBe(true);
           expect(f.shell.getShellCursor()).toBe(cursor);
           expect(f.shell.IsTableMode()).toBe(selected);
@@ -188,21 +197,14 @@ for (const field of ["border", "padding"] as const)
               pair,
               i,
             ) =>
-              !selected || i < 2
+              field === "border" && (!selected || i < 2)
                 ? required(
                     nativeBoxFormat(
-                      field === "border"
-                        ? { border: "none", padding: 567 }
-                        : { border: "1pt solid #000000", padding: 0 },
-                      field === "border"
-                        ? []
-                        : i === 0
-                          ? [3]
-                          : i === 1
-                            ? []
-                            : i === 2
-                              ? [0, 3]
-                              : [0],
+                      {
+                        border: field === "border" || i % 2 === 1 ? "none" : "1pt solid #000000",
+                        padding: 0,
+                      },
+                      field === "border" || i % 2 === 1 ? [] : [3],
                     ).box,
                   ).QueryValue()
                 : pair,

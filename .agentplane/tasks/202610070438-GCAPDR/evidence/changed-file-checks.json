@@ -1,0 +1,52 @@
+{
+  "records": [
+    {
+      "command": "Unchanged JSDoc validator on approved changed code/acceptance paths; actual physical-line count",
+      "exit": 1,
+      "errors": [
+        "apps/office/src/sw/browser/presentation/native-table-border-changed-items.test.tsx:69 function documents 0/1 parameters"
+      ],
+      "physicalLines": {
+        "apps/office/src/sw/source/core/doc/doc.ts": 974,
+        "apps/office/src/sw/source/core/docnode/ndtbl1.ts": 418,
+        "apps/office/src/sw/source/core/frmedt/fetab.ts": 469,
+        "apps/office/src/sw/source/uibase/shells/tabsh.ts": 272,
+        "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx": 677,
+        "apps/office/src/sw/browser/presentation/writer-view.tsx": 809,
+        "apps/office/src/sw/browser/editor/native-cell-box-render.test.tsx": 282,
+        "apps/office/src/sw/browser/presentation/native-table-border-changed-items.test.tsx": 336,
+        "apps/office/src/sw/browser/presentation/native-table-properties-reset.test.tsx": 193,
+        "apps/office/src/sw/browser/presentation/native-table-format-lifecycle.test.tsx": 110,
+        "apps/office/src/sw/browser/presentation/native-cell-alignment-state.test.tsx": 98,
+        "apps/office/src/sw/browser/presentation/native-insert-table-dialog.test.tsx": 149,
+        "apps/office/src/sw/browser/presentation/native-table-text-flow-split.test.tsx": 89,
+        "apps/office/src/sw/browser/presentation/WriterTableDialog.test.tsx": 286,
+        "apps/office/src/sw/browser/presentation/native-table-column-page.test.tsx": 181,
+        "apps/office/src/sw/browser/presentation/native-table-text-flow-headline.test.tsx": 110,
+        "apps/office/src/sw/browser/presentation/native-table-properties.test.tsx": 112,
+        "apps/office/e2e/writer-table-border-changed-items.spec.ts": 65,
+        "apps/office/src/sw/source/core/docnode/native-table-border-common-state.test.ts": 335,
+        "apps/office/src/sw/browser/presentation/native-table-border-common-state.test.tsx": 220,
+        "apps/office/e2e/writer-table-border-common-state.spec.ts": 90,
+        "apps/office/src/test/table-box-test-helpers.ts": 141
+      }
+    },
+    {
+      "command": "npm exec -- prettier --check apps/office/src/sw/source/core/doc/doc.ts apps/office/src/sw/source/core/docnode/ndtbl1.ts apps/office/src/sw/source/core/frmedt/fetab.ts apps/office/src/sw/source/uibase/shells/tabsh.ts apps/office/src/sw/browser/presentation/WriterTableDialog.tsx apps/office/src/sw/browser/presentation/writer-view.tsx apps/office/src/sw/browser/editor/native-cell-box-render.test.tsx apps/office/src/sw/browser/presentation/native-table-border-changed-items.test.tsx apps/office/src/sw/browser/presentation/native-table-properties-reset.test.tsx apps/office/src/sw/browser/presentation/native-table-format-lifecycle.test.tsx apps/office/src/sw/browser/presentation/native-cell-alignment-state.test.tsx apps/office/src/sw/browser/presentation/native-insert-table-dialog.test.tsx apps/office/src/sw/browser/presentation/native-table-text-flow-split.test.tsx apps/office/src/sw/browser/presentation/WriterTableDialog.test.tsx apps/office/src/sw/browser/presentation/native-table-column-page.test.tsx apps/office/src/sw/browser/presentation/native-table-text-flow-headline.test.tsx apps/office/src/sw/browser/presentation/native-table-properties.test.tsx apps/office/e2e/writer-table-border-changed-items.spec.ts apps/office/src/sw/source/core/docnode/native-table-border-common-state.test.ts apps/office/src/sw/browser/presentation/native-table-border-common-state.test.tsx apps/office/e2e/writer-table-border-common-state.spec.ts apps/office/src/test/table-box-test-helpers.ts",
+      "exit": 1,
+      "bytes": 171,
+      "sha256": "6f77618c4ac5c1e0231aa9f45152d6819cb9a2f320a9242281f235de88cf5851",
+      "diagnostics": [
+        "[warn] apps/office/e2e/writer-table-border-common-state.spec.ts",
+        "[warn] Code style issues found in the above file. Run Prettier with --write to fix."
+      ]
+    },
+    {
+      "command": "npm exec -- eslint apps/office/src/sw/source/core/doc/doc.ts apps/office/src/sw/source/core/docnode/ndtbl1.ts apps/office/src/sw/source/core/frmedt/fetab.ts apps/office/src/sw/source/uibase/shells/tabsh.ts apps/office/src/sw/browser/presentation/WriterTableDialog.tsx apps/office/src/sw/browser/presentation/writer-view.tsx apps/office/src/sw/browser/editor/native-cell-box-render.test.tsx apps/office/src/sw/browser/presentation/native-table-border-changed-items.test.tsx apps/office/src/sw/browser/presentation/native-table-properties-reset.test.tsx apps/office/src/sw/browser/presentation/native-table-format-lifecycle.test.tsx apps/office/src/sw/browser/presentation/native-cell-alignment-state.test.tsx apps/office/src/sw/browser/presentation/native-insert-table-dialog.test.tsx apps/office/src/sw/browser/presentation/native-table-text-flow-split.test.tsx apps/office/src/sw/browser/presentation/WriterTableDialog.test.tsx apps/office/src/sw/browser/presentation/native-table-column-page.test.tsx apps/office/src/sw/browser/presentation/native-table-text-flow-headline.test.tsx apps/office/src/sw/browser/presentation/native-table-properties.test.tsx apps/office/e2e/writer-table-border-changed-items.spec.ts apps/office/src/sw/source/core/docnode/native-table-border-common-state.test.ts apps/office/src/sw/browser/presentation/native-table-border-common-state.test.tsx apps/office/e2e/writer-table-border-common-state.spec.ts apps/office/src/test/table-box-test-helpers.ts --max-warnings 0",
+      "exit": 0,
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnostics": []
+    }
+  ]
+}

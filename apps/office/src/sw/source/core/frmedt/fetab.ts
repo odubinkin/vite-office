@@ -412,6 +412,11 @@ export abstract class SwFEShell extends SwEditShell {
     );
   }
 
+  /** Reads borders through native document ownership using the actual display cursor. @param value - In/out native items. @returns Nothing. */
+  public GetTabBorders(value: SfxItemSet): void {
+    this.GetDoc().GetTabBorders(this.getShellCursor(), value);
+  }
+
   /** Applies vertical alignment to selected boxes or the current box only. @param align - Content alignment. @returns Whether admitted. */
   public SetBoxAlign(align: number): boolean {
     return this.RunNotificationTransaction(

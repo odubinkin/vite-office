@@ -1,5 +1,6 @@
 /** @fileoverview Verifies the Writer table controls and editable cell boundary. */
-import { nativeBoxFormat } from "../../../test/table-box-test-helpers";
+import { nativeTableInputForTest, nativeBoxFormat } from "../../../test/table-box-test-helpers";
+import { RES_BOX } from "../../inc/hintids";
 import { VertOrientation } from "./../../../offapi/com/sun/star/text/VertOrientation";
 import { SwFormatVertOrient } from "./../../inc/fmtornt";
 
@@ -147,6 +148,7 @@ describe("Writer browser table controls", /** Verifies the bounded table scenari
         onCancel={vi.fn()}
         onSubmit={submit}
         table={table}
+        borderItems={nativeTableInputForTest(table)}
         rowHeight={new SwFormatFrameSize(SwFrameSize.Minimum, 0, 200)}
         boxAlign={VertOrientation.CENTER}
       />,
@@ -186,12 +188,13 @@ describe("Writer browser table controls", /** Verifies the bounded table scenari
       expect.objectContaining({
         width: 6803,
         minRowHeight: 567,
-        padding: 113,
-        border: "0.5pt solid #666666",
         verticalAlign: VertOrientation.BOTTOM,
         repeatHeaderRows: false,
         layoutSplit: false,
       }),
+    );
+    expect(submit.mock.calls[0]?.[0]?.borderItems?.Get(RES_BOX)).toEqual(
+      nativeBoxFormat({ padding: 113, border: "0.5pt solid #666666" }).box,
     );
     submit.mockClear();
     fireEvent.change(screen.getByRole("spinbutton", { name: "Column 1 width (cm)" }), {

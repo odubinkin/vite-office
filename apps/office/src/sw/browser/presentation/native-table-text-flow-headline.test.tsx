@@ -1,4 +1,5 @@
 /** @fileoverview Verifies native Table Properties headline composition/defaults and direct source draft ownership. */
+import { nativeTableInputForTest } from "../../../test/table-box-test-helpers";
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, expect, it, vi } from "vitest";
 import { SwDoc } from "../../source/core/doc/doc";
@@ -14,7 +15,13 @@ function fixture(format: SwTableFormat = {}, rows = 3) {
   const submit = vi.fn(),
     cancel = vi.fn();
   render(
-    <WriterTableDialog table={table} availableWidth={9000} onCancel={cancel} onSubmit={submit} />,
+    <WriterTableDialog
+      table={table}
+      borderItems={nativeTableInputForTest(table)}
+      availableWidth={9000}
+      onCancel={cancel}
+      onSubmit={submit}
+    />,
   );
   fireEvent.click(screen.getByRole("tab", { name: "Text Flow" }));
   return { doc, table, submit, cancel };

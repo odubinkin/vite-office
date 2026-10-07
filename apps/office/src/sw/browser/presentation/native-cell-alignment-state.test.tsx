@@ -1,4 +1,5 @@
 /** @fileoverview Verifies common native cell alignment and changed-item dialog submission over actual selected owners. */
+import { nativeTableInputForTest } from "../../../test/table-box-test-helpers";
 import { SwFormatFrameSize, SwFrameSize } from "../../inc/fmtfsize";
 import { WriterWorkbench } from "./writer-view";
 
@@ -34,6 +35,7 @@ for (const alignment of [0, 2, 3, 65535])
       render(
         <WriterTableDialog
           table={table}
+          borderItems={nativeTableInputForTest(table)}
           availableWidth={6000}
           boxAlign={shell.GetBoxAlign()}
           onCancel={vi.fn()}

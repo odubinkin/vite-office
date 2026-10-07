@@ -10,7 +10,8 @@ import { RES_BOX } from "../sw/inc/hintids";
 import type { SwTableBoxFormat } from "../sw/source/core/table/swtable";
 import type { SwFormatVertOrient } from "../sw/inc/fmtornt";
 import type { SwDoc } from "../sw/source/core/doc/doc";
-import type { SwCursor } from "../sw/source/core/crsr/swcrsr";
+import { SwCursor } from "../sw/source/core/crsr/swcrsr";
+import { SwPosition } from "../sw/source/core/crsr/pam";
 import { SwTableBoxStartNode, SwTableNode } from "../sw/source/core/docnode/node";
 import { importBoxProperties, exportBorderShorthand } from "../xmloff/source/style/bordrhdl";
 
@@ -100,4 +101,40 @@ export function tableBorderItems(
   result.Put(item);
   result.Put(info);
   return result;
+}
+
+/** Captures native common table-property input for direct component fixtures, without invoking upstream. @param table - Original document table. @param selectedBoxes - Optional selected endpoint owners. @returns Owned native source input. */
+export function nativeTableInputForTest(
+  table: import("../sw/source/core/table/swtable").SwTable,
+  selectedBoxes?: readonly import("../sw/source/core/table/swtable").SwTableBox[],
+): SfxItemSet {
+  const doc = table.GetTableNode().GetDoc(),
+    result = new SfxItemSet(doc.GetAttrPool(), [
+      [RES_BOX, RES_BOX],
+      [SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER],
+    ]);
+  const info = new SvxBoxInfoItem(SID_ATTR_BORDER_INNER);
+  info.SetTable(selectedBoxes === undefined || selectedBoxes.length > 1);
+  info.SetDist(true);
+  info.SetMinDist(true);
+  info.SetDefDist(28);
+  result.Put(info);
+  const boxes =
+    selectedBoxes ??
+    table.GetTabLines().flatMap(
+      /** Reads original fixture owners. @param row - Actual row. @returns Original boxes. */
+      (row) => row.GetTabBoxes(),
+    );
+  const first = boxes[0]?.GetParagraphs()[0],
+    last = boxes.at(-1)?.GetParagraphs().at(-1);
+  if (first === undefined || last === undefined) return result;
+  const cursor = new SwCursor(new SwPosition(first, 0));
+  try {
+    cursor.SetMark();
+    cursor.GetMark().Assign(last, last.Len());
+    doc.GetTabBorders(cursor, result);
+    return result;
+  } finally {
+    cursor.Dispose();
+  }
 }

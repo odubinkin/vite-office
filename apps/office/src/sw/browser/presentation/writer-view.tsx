@@ -50,7 +50,7 @@ import type { SwView } from "../../source/uibase/uiview/view";
 import { WriterViewStore, type WriterViewSnapshot } from "./writer-view-projection";
 import { installWriterEmbeddedFonts } from "../../../vcl/browser/embedded-font-loader";
 import type { SwDoc } from "../../source/core/doc/doc";
-import { ItemSetToTableParam } from "../../source/uibase/shells/tabsh";
+import { ItemSetToTableParam, TableParamToItemSet } from "../../source/uibase/shells/tabsh";
 import { SwLineNumberInfo } from "../../inc/lineinfo";
 import { createSfxShell } from "../../../sfx2/source/control/shell";
 import { createWriterInterface } from "../../sdi/swriter";
@@ -116,6 +116,8 @@ export function WriterWorkbench({
   );
   const suggestedTableName = activeDocument.GetUniqueTableName();
   const [tableDialog, setTableDialog] = useState<"insert" | "properties">();
+  const [tableBorderItems, setTableBorderItems] =
+    useState<ReturnType<typeof TableParamToItemSet>>();
   const [lineNumberingDialog, setLineNumberingDialog] = useState(false);
   const currentTable = view.GetWrtShell().IsCursorInTable()?.GetTable();
   const availableTableWidth =
@@ -139,8 +141,11 @@ export function WriterWorkbench({
           {
             id: WRITER_COMMAND_IDS.tableDialog,
             capabilityId: "CAP-0137",
-            execute: /** Opens selected table properties. @returns Nothing. */ () =>
-              setTableDialog("properties"),
+            execute:
+              /** Opens selected table properties with native input items. @returns Nothing. */ () => {
+                setTableBorderItems(TableParamToItemSet(view.GetWrtShell()));
+                setTableDialog("properties");
+              },
             isEnabled: /** Checks table selection. @returns Availability. */ () =>
               currentTable !== undefined,
           },
@@ -441,8 +446,8 @@ export function WriterWorkbench({
                 aria-label="Table Properties"
                 className="grid size-9 place-items-center rounded-lg hover:bg-indigo-50"
                 onClick={
-                  /** Opens the selected table's properties. @returns Nothing. */
-                  () => setTableDialog("properties")
+                  /** Opens properties through the native command input route. @returns Dispatch result. */
+                  () => commandSource.Execute(WRITER_COMMAND_IDS.tableDialog)
                 }
                 title="Table Properties"
                 type="button"
@@ -582,7 +587,7 @@ export function WriterWorkbench({
           occupiedNames={occupiedTableNames}
           suggestedName={suggestedTableName}
           {...(tableDialog === "properties" && currentTable !== undefined
-            ? { table: currentTable }
+            ? { table: currentTable, borderItems: tableBorderItems }
             : {})}
           {...(view.GetWrtShell().IsTableMode()
             ? { selectedBoxes: view.GetWrtShell().GetTableSel() }

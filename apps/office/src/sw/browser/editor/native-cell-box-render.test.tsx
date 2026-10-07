@@ -1,4 +1,5 @@
 /** @fileoverview Verifies direct native box rendering on natural and fixed rows and through native history. */
+import { nativeTableInputForTest } from "../../../test/table-box-test-helpers";
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, expect, it } from "vitest";
 import { SvxBoxItem } from "../../../editeng/source/items/frmitems";
@@ -37,6 +38,7 @@ it("native empty box guides preserve column geometry and dialog retains a custom
     render(
       <WriterTableDialog
         table={table}
+        borderItems={nativeTableInputForTest(table)}
         availableWidth={3000}
         onCancel={/** Leaves the test dialog mounted. @returns Nothing. */ () => undefined}
         onSubmit={/** Keeps assertions at UI ingress. @returns Nothing. */ () => undefined}
@@ -52,6 +54,7 @@ it("native empty box guides preserve column geometry and dialog retains a custom
     render(
       <WriterTableDialog
         table={noRows}
+        borderItems={nativeTableInputForTest(noRows)}
         availableWidth={3000}
         onCancel={/** Leaves empty-table defaults inspectable. @returns Nothing. */ () => undefined}
         onSubmit={

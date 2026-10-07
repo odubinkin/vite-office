@@ -31,11 +31,51 @@ export interface SwTableProperties {
   readonly minRowHeight: number;
   readonly padding?: number | undefined;
   readonly border?: string | undefined;
+  readonly borderItems?: SfxItemSet | undefined;
   readonly verticalAlign?: number | undefined;
   readonly headerRows: number;
   readonly repeatHeaderRows: boolean;
   readonly layoutSplit?: boolean;
   readonly rowSplit?: boolean;
+}
+
+/** Captures the represented native table-properties border input over the source selection scope. @param shell - Original editing shell. @returns Owned native input items. */
+export function TableParamToItemSet(shell: SwFEShell): SfxItemSet {
+  const value = new SfxItemSet(shell.GetDoc().GetAttrPool(), [
+    [RES_BOX, RES_BOX],
+    [SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER],
+  ]);
+  const info = new SvxBoxInfoItem(SID_ATTR_BORDER_INNER);
+  info.SetDist(true);
+  info.SetMinDist(true);
+  info.SetDefDist(28);
+  if (shell.IsCursorInTable() === undefined) {
+    value.Put(info);
+    return value;
+  }
+  const selected = shell.IsTableMode();
+  return shell.RunNotificationTransaction(
+    /** Temporarily selects only for whole-table properties and restores original cursors. @returns Owned native items. */
+    () => {
+      if (!selected) {
+        shell.Push();
+        shell.SelTable();
+      }
+      try {
+        const count = [...shell.GetCursor().GetRingContainer()].length;
+        info.SetTable((shell.IsTableMode() && count > 1) || !selected);
+        info.SetValid(SvxBoxInfoItemValidFlags.DISABLE, !selected || !shell.IsTableMode());
+        value.Put(info);
+        shell.GetTabBorders(value);
+        return value;
+      } finally {
+        if (!selected) {
+          shell.ClearMark();
+          shell.Pop(PopMode.DeleteCurrent);
+        }
+      }
+    },
+  );
 }
 
 /** Applies one accepted dialog as one native history and notification group. @param shell - Actual frame-editing shell. @param value - Accepted attributes. @returns Whether a table was targeted. */
@@ -57,12 +97,17 @@ export function ItemSetToTableParam(shell: SwFEShell, value: SwTableProperties):
       const cursorState = shell.CaptureCursorState();
       undo.StartUndo("Table Properties");
       try {
-        const hasBorders = value.padding !== undefined || value.border !== undefined;
-        const borders = new SfxItemSet(shell.GetDoc().GetAttrPool(), [
-          [RES_BOX, RES_BOX],
-          [SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER],
-        ]);
-        if (hasBorders) {
+        const hasBorders =
+          value.borderItems !== undefined ||
+          value.padding !== undefined ||
+          value.border !== undefined;
+        const borders =
+          value.borderItems?.Clone() ??
+          new SfxItemSet(shell.GetDoc().GetAttrPool(), [
+            [RES_BOX, RES_BOX],
+            [SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER],
+          ]);
+        if (hasBorders && value.borderItems === undefined) {
           const current = table
             .GetTabLines()
             .flatMap(

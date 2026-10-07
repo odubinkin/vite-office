@@ -1,5 +1,10 @@
 /** @fileoverview Verifies upstream current-page Reset over original native table drafts and independent properties pages. */
-import { nativeBoxFormat, tableBoxFormatForTest } from "../../../test/table-box-test-helpers";
+import {
+  nativeTableInputForTest,
+  nativeBoxFormat,
+  tableBoxFormatForTest,
+} from "../../../test/table-box-test-helpers";
+import { RES_BOX } from "../../inc/hintids";
 import { VertOrientation } from "./../../../offapi/com/sun/star/text/VertOrientation";
 import { SwFormatVertOrient } from "./../../inc/fmtornt";
 
@@ -43,6 +48,7 @@ function fixture() {
   render(
     <WriterTableDialog
       table={table}
+      borderItems={nativeTableInputForTest(table)}
       rowHeight={row.GetFrameSize()}
       boxAlign={box.GetVertOrient().GetVertOrient()}
       availableWidth={9000}
@@ -89,9 +95,10 @@ it("Table Reset restores shared native geometry while retaining Borders draft an
       width: 6000,
       columnWidths: [2000, 2000, 2000],
       marginTop: 120,
-      padding: 567,
     }),
   );
+  for (const edge of [0, 1, 2, 3])
+    expect(f.submit.mock.calls[0]?.[0]?.borderItems?.Get(RES_BOX).GetDistance(edge)).toBe(567);
   expect(f.table.GetFormat().width).toBe(6000);
   expect(f.table.GetTabLines()[0]).toBe(f.row);
   expect(f.row.GetTabBoxes()[0]).toBe(f.box);
@@ -146,8 +153,8 @@ it("Text Flow and Borders Reset each restore their initial controls and preserve
   metric("Minimum row height (cm)", "2");
   tab("Borders");
   reset();
-  expect(screen.getByRole("spinbutton", { name: "Cell padding (cm)" })).toHaveValue(0.14);
-  expect(screen.getByRole("combobox", { name: "Cell border" })).toHaveValue("1pt solid #000000");
+  expect(screen.getByRole("spinbutton", { name: "Cell padding (cm)" })).toHaveValue(0);
+  expect(screen.getByRole("combobox", { name: "Cell border" })).toHaveValue("mixed");
   fireEvent.click(screen.getByRole("button", { name: "OK" }));
   expect(f.submit).toHaveBeenCalledWith(
     expect.objectContaining({
@@ -160,6 +167,7 @@ it("Text Flow and Borders Reset each restore their initial controls and preserve
   expect(f.submit.mock.calls[0]?.[0]).not.toHaveProperty("verticalAlign");
   expect(f.submit.mock.calls[0]?.[0]).not.toHaveProperty("padding");
   expect(f.submit.mock.calls[0]?.[0]).not.toHaveProperty("border");
+  expect(f.submit.mock.calls[0]?.[0]).not.toHaveProperty("borderItems");
 });
 it("Reset after invalid page data clears validation and Cancel keeps original owners", /** Checks no accidental submit/history or whole-document mutation. @returns Nothing. */ () => {
   const f = fixture();

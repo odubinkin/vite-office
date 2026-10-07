@@ -38,27 +38,32 @@ for (const width of [1280, 390])
       await expect(cells.nth(0)).toHaveCSS("padding-left", "37.8px");
       await expect(cells.nth(1)).toHaveCSS("padding-left", "75.6px");
       await expect(cells.nth(0)).toHaveCSS("border-top-style", "solid");
-      await expect(cells.nth(1)).toHaveCSS("border-top-style", "dashed");
+      await expect(cells.nth(1)).toHaveCSS("border-top-style", "none");
+      await expect(cells.nth(1)).toHaveCSS("outline-style", "dashed");
       await page.getByRole("textbox", { name: "Row 1 column 1 paragraph 1", exact: true }).click();
       await page.getByRole("button", { name: "Table Properties", exact: true }).click();
       await page.getByRole("button", { name: "OK", exact: true }).click();
       await expect(cells.nth(0)).toHaveCSS("border-top-style", "solid");
-      await expect(cells.nth(1)).toHaveCSS("border-top-style", "dashed");
+      await expect(cells.nth(1)).toHaveCSS("border-top-style", "none");
+      await expect(cells.nth(1)).toHaveCSS("outline-style", "dashed");
       await expect(cells.nth(1)).toHaveCSS("padding-left", "75.6px");
       await page.getByRole("button", { name: "Table Properties", exact: true }).click();
       await page.getByRole("tab", { name: "Borders", exact: true }).click();
       await page.getByRole("combobox", { name: "Cell border" }).selectOption("none");
       await page.getByRole("button", { name: "OK", exact: true }).click();
-      await expect(cells.nth(0)).toHaveCSS("border-top-style", "dashed");
-      await expect(cells.nth(0)).toHaveCSS("padding-left", "37.8px");
-      await expect(cells.nth(1)).toHaveCSS("padding-left", "37.8px");
+      await expect(cells.nth(0)).toHaveCSS("border-top-style", "none");
+      await expect(cells.nth(0)).toHaveCSS("outline-style", "dashed");
+      await expect(cells.nth(0)).toHaveCSS("padding-left", "0px");
+      await expect(cells.nth(1)).toHaveCSS("padding-left", "0px");
       for (let cycle = 0; cycle < 3; cycle++) {
         await page.getByRole("button", { name: "Undo", exact: true }).click();
         await expect(cells.nth(0)).toHaveCSS("border-top-style", "solid");
-        await expect(cells.nth(1)).toHaveCSS("border-top-style", "dashed");
+        await expect(cells.nth(1)).toHaveCSS("border-top-style", "none");
+        await expect(cells.nth(1)).toHaveCSS("outline-style", "dashed");
         await page.getByRole("button", { name: "Redo", exact: true }).click();
-        await expect(cells.nth(0)).toHaveCSS("border-top-style", "dashed");
-        await expect(cells.nth(1)).toHaveCSS("padding-left", "37.8px");
+        await expect(cells.nth(0)).toHaveCSS("border-top-style", "none");
+        await expect(cells.nth(0)).toHaveCSS("outline-style", "dashed");
+        await expect(cells.nth(1)).toHaveCSS("padding-left", "0px");
       }
     },
   );

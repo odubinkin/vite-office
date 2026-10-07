@@ -1,0 +1,121 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/sw/source/core/doc/doc.ts": "ce0b89046aa63dc2b49db5ae7ea88271f30b41963168367bc3a159f5890d6ce4",
+    "apps/office/src/sw/source/core/docnode/ndtbl1.ts": "8c93929b93c65284a7b64e71dac0ab48bb20aca54e0c841edde15557687b6db8",
+    "apps/office/src/sw/source/core/frmedt/fetab.ts": "8b527ee906a35be978238258ab1a3b8da16136b98f1cf3d468dcfc8237a22a2a",
+    "apps/office/src/sw/source/uibase/shells/tabsh.ts": "9d71c06703bb308d7489efb03f893167e10810d967113c11de396df75892a125",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx": "b23c93fc693b7a1a6d631a6df6d720c46940b1ccd62519e1f68557acfce4cdcf",
+    "apps/office/src/sw/browser/presentation/writer-view.tsx": "1540495e62898c0c108d2ce0c7c1230d81214476c528c36f51564cce0613822e",
+    "apps/office/src/sw/browser/editor/native-cell-box-render.test.tsx": "5acea2e318b21eb592b5b4c7841079d4f0bbdd91146b82cda2f8ae03d4a26408",
+    "apps/office/src/sw/browser/presentation/native-table-border-changed-items.test.tsx": "dc7ed990b2c1084d57ee9d468d931b569de7b5d0396a54b12b4f0787bb4e28ea",
+    "apps/office/src/sw/browser/presentation/native-table-properties-reset.test.tsx": "4edbd38b6c531af18e1f7ba46abb169ab36a1fa5b8778367b510c215643f0505",
+    "apps/office/src/sw/browser/presentation/native-table-format-lifecycle.test.tsx": "2cfdafd92a904705132811ce1172abd9c30f1fc5df3c7cec44a120b1d04e4fed",
+    "apps/office/src/sw/browser/presentation/native-cell-alignment-state.test.tsx": "6f8e2443be42932fc644e8b22036e5a2ae341da2c3b6586e4d7cc6fd3850f4ca",
+    "apps/office/src/sw/browser/presentation/native-insert-table-dialog.test.tsx": "33f4c7e26839564224ed9c52132163fc8c2724abc746b53ffacdc783ad4f22d9",
+    "apps/office/src/sw/browser/presentation/native-table-text-flow-split.test.tsx": "b5512f83c9ac49f0fea0b9fc4ad6ba0df57e39dbab6eb38ada4151dffd45ecb0",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.test.tsx": "1377acd6188abcab80db8459ca243d111b50c068cd7efac51eec906324efd3f6",
+    "apps/office/src/sw/browser/presentation/native-table-column-page.test.tsx": "e6780a187fc9bcb7fa8687327d80a1d544ed4e6568fcb88ed6ecb513c8b55824",
+    "apps/office/src/sw/browser/presentation/native-table-text-flow-headline.test.tsx": "27c59c78faad03cadb16d99bfc46d30f7bb8163299a43d14dba6a56cc859903d",
+    "apps/office/src/sw/browser/presentation/native-table-properties.test.tsx": "3fc455ca1e02030402688613668f3cca4011496b9e9df16e1a15deb4988e98f1",
+    "apps/office/e2e/writer-table-border-changed-items.spec.ts": "f98e00f2b1c240d72c8f48f693d6f9fb0c631d09b36d0683c07be1d1bd84abd3",
+    "apps/office/src/sw/source/core/docnode/native-table-border-common-state.test.ts": "01b1a82299861846d991c9805cacdec7e4b98e0340561f8782ee4a7b8d13f8c8",
+    "apps/office/src/sw/browser/presentation/native-table-border-common-state.test.tsx": "434bfb1826888cc8737f446999f1fd551d43563460a14ec0e3359a599f336263",
+    "apps/office/e2e/writer-table-border-common-state.spec.ts": "d7ecfd3a421b6e39c222cf3287c0c691d3e9ad75e518489495dba4fd18363cba",
+    "apps/office/src/test/table-box-test-helpers.ts": "5cc503fbbe8f26365c0d2ef5509fa5f9e6e9c38d9ba0bb002cd3faede1cbdb59",
+    "docs/program/source-provenance.json": "8617ce69b38a0728fcb8c7414e4006b78a2f74261412f0c55b53495b34d726cf",
+    "docs/program/parity/runtime-inventory.json": "fbfa5c534c323e812bff4e706a5ed2e125a5eb4a33080770bb38345d7746595e"
+  },
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1443,
+      "sha256": "ef55f0bf3d3253e11b5b7470d6617e4c99eb317a8486bc8780cbcd42d12346e3",
+      "totals": [],
+      "failedCases": []
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/framework/browser/app/desktop.test.tsx src/sw/browser/presentation/native-table-border-changed-items.test.tsx src/sw/browser/presentation/native-table-border-common-state.test.tsx src/sw/source/core/docnode/native-table-border-common-state.test.ts --testNamePattern=^(App opens an ODT through the computer tab and exports a parseable package|native represented complete box item history field=padding selected=(false|true)|reads native common input rather than first cell selected=(false|true)|retains four native distances on border-only selected-row acceptance and original graph through history|retains cell-mode inner policy for one selected native cell)$ --coverage.reportOnFailure --coverage.reporter=json-summary --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/GCAPDR.app-closure1-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 3804,
+      "sha256": "8e9f7b183490906d4264cb813f79019fee582d7ed884cf224ae09fa758c8968d",
+      "totals": [
+        "Test Files  4 passed (4)",
+        "Tests  7 passed | 60 skipped (67)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "passed": 7,
+        "failed": 0,
+        "skipped": 60,
+        "total": 67
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 15733,
+          "covered": 7414,
+          "skipped": 0,
+          "pct": 47.12
+        },
+        "statements": {
+          "total": 17272,
+          "covered": 7732,
+          "skipped": 0,
+          "pct": 44.76
+        },
+        "functions": {
+          "total": 4005,
+          "covered": 2002,
+          "skipped": 0,
+          "pct": 49.98
+        },
+        "branches": {
+          "total": 12967,
+          "covered": 4370,
+          "skipped": 0,
+          "pct": 33.7
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverage": {
+        "lines": 47.12,
+        "statements": 44.76,
+        "functions": 49.98,
+        "branches": 33.7
+      },
+      "incompleteFileCount": 248,
+      "coverageMapSHA256": "8e881e223657d596701cd6d73372200bb2e78095dbf8eccfadbe0ba168ecedc2"
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts writer-native-table-properties-reset.spec.ts writer-table-border-changed-items.spec.ts writer-table-border-common-state.spec.ts --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1689,
+      "sha256": "a245ffff9c85186d66f528c36eb6863d46cd16423138d9434f8e35580224e196",
+      "totals": [
+        "6 passed (10.2s)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "startTime": "2026-10-07T05:17:52.435Z",
+        "duration": 10239.329,
+        "expected": 6,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    }
+  ]
+}

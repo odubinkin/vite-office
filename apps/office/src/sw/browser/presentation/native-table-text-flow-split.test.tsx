@@ -1,4 +1,5 @@
 /** @fileoverview Verifies direct native split widgets, mixed state and properties draft isolation. */
+import { nativeTableInputForTest } from "../../../test/table-box-test-helpers";
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, expect, it, vi } from "vitest";
 import { SwDoc } from "../../source/core/doc/doc";
@@ -23,6 +24,7 @@ function fixture(selected = false, split?: boolean) {
   render(
     <WriterTableDialog
       table={table}
+      borderItems={nativeTableInputForTest(table)}
       {...(selected ? { selectedBoxes: [box] } : {})}
       availableWidth={6000}
       onSubmit={submit}

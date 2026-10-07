@@ -1,0 +1,65 @@
+{
+  "records": [
+    {
+      "command": "npm run format:check",
+      "exit": 1,
+      "bytes": 227,
+      "sha256": "a67683accb396997c16d657feb17e0d6dca043fc76e71e444971deaa7ecd6d23",
+      "diagnostics": [
+        "[warn] apps/office/e2e/writer-table-border-common-state.spec.ts",
+        "[warn] Code style issues found in the above file. Run Prettier with --write to fix."
+      ]
+    },
+    {
+      "command": "npm run lint",
+      "exit": 0,
+      "bytes": 55,
+      "sha256": "a6172cb57fa696e705408fdc605fba1ae07b852fdf0614d7c2b623349e285b6e",
+      "diagnostics": [
+        "> eslint . --max-warnings 0"
+      ]
+    },
+    {
+      "command": "npm run typecheck",
+      "exit": 2,
+      "bytes": 859,
+      "sha256": "2b20a117f272738affa7cc8c885bf77f6fd6869fb7d3b8b6d0c6c4f10d20bf98",
+      "diagnostics": [
+        "src/sw/source/core/docnode/native-table-border-common-state.test.ts(212,64): error TS2345: Argument of type 'SwCursor' is not assignable to parameter of type 'SwPosition'.",
+        "  Type 'SwCursor' is missing the following properties from type 'SwPosition': nNode, nContent, GetNodeIndex, GetNode, and 5 more.",
+        "npm error Lifecycle script `typecheck` failed with error:",
+        "npm error code 2",
+        "npm error path /Users/odubinkin/Projects/vite-office/apps/office",
+        "npm error workspace @vite-office/office@0.1.0",
+        "npm error location /Users/odubinkin/Projects/vite-office/apps/office",
+        "npm error command failed",
+        "npm error command sh -c tsc --noEmit"
+      ]
+    },
+    {
+      "command": "npm run check:dependencies",
+      "exit": 0,
+      "bytes": 189,
+      "sha256": "da120d2535210d31f59ee2377ceb70548d357a9db8173d85b1e8ccfa077fc920",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:docs",
+      "exit": 1,
+      "bytes": 569,
+      "sha256": "14093311dc82add763f4569e40f7dd1d04f853b16652d9f530b8cd6a602fb292",
+      "diagnostics": [
+        "    throw new Error(`JSDoc validation failed:\\n${errors.join(\"\\n\")}`);",
+        "Error: JSDoc validation failed:",
+        "apps/office/src/sw/browser/presentation/native-table-border-changed-items.test.tsx:69 function documents 0/1 parameters"
+      ]
+    },
+    {
+      "command": "npm run check:file-size",
+      "exit": 0,
+      "bytes": 3925,
+      "sha256": "b398e18f430cd12283c2b841574e063a2d70706f0293ec40623e89f5c3b155cb",
+      "diagnostics": []
+    }
+  ]
+}

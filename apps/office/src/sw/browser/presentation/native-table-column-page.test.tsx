@@ -1,4 +1,5 @@
 /** @fileoverview Verifies declarative browser column controls over shared native page state and shell selection ingress. */
+import { nativeTableInputForTest } from "../../../test/table-box-test-helpers";
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, expect, it, vi } from "vitest";
 import { SwDoc } from "../../source/core/doc/doc";
@@ -29,6 +30,7 @@ function fixture(count = 3, partial = false) {
   render(
     <WriterTableDialog
       table={table}
+      borderItems={nativeTableInputForTest(table)}
       lineSelected={partial}
       availableWidth={9000}
       onCancel={cancel}
