@@ -1,0 +1,6 @@
+{
+  "observation": "Initial finish returned E_GIT exit5 because canonical ap verify changed the active README and finish requires clean tracked state before its deterministic close commit.",
+  "impact": "Task remained DOING/verified; no implementation or DONE mutation. No manual prose changed after canonical verify.",
+  "resolution": "Recomputed current leaf route, preserve and commit canonical verification README plus this bounded closeout note; retry finish with the reviewed implementation3b48e0a5d85344ad8c3744767455565bdff9e675, not lifecycle tail.",
+  "newTestsOrRuntime": false
+}
