@@ -4,7 +4,7 @@ title: "Preserve native proportional Ctrl table column dragging"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 13
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -25,6 +25,22 @@ verification:
   updated_by: null
   note: null
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-07T20:15:25.979Z"
+  updated_by: "EVALUATOR"
+  note: "Exact implementation 0ed044246af68df2633c27acb97d7f565747b967 reconstruction passes: native proportional Ctrl behavior, final actual unique case census, source-bound coverage and exact approved scope."
+  evaluated_sha: "0ed044246af68df2633c27acb97d7f565747b967"
+  blueprint_digest: "4701470adf09f107bca5562e1f730087043f825112b18729d46973c45340b568"
+  evidence_refs:
+    - ".agentplane/tasks/202610071950-5X11GC/README.md"
+    - ".agentplane/tasks/202610071950-5X11GC/quality/20261007-201525979-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610071950-5X11GC/quality/20261007-201525979-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610071950-5X11GC/quality/20261007-201525979-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610071950-5X11GC/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610071950-5X11GC/evidence/exact-sha-review.json"
+  findings:
+    - "Same current agent review explicitly not independent. One original mounted pure-Ctrl source-backed expected vector migrated after actual failure; one focused PASS and sixteen skipped observations, zero passing replay. Full SvxRuler ownership and remaining native modes remain partial; persistent goal ACTIVE."
 commit: null
 comments:
   -
@@ -39,7 +55,7 @@ events:
     to: "DOING"
     note: "Start: implement approved source proportional primary-modifier internal table column drag with native ruler arithmetic; preserve old inputs and only source-backed mask2 expectation migration after original failure."
 doc_version: 3
-doc_updated_at: "2026-10-07T20:13:46.438Z"
+doc_updated_at: "2026-10-07T20:15:45.831Z"
 doc_updated_by: "CODER"
 description: "Iteration226: solitary native primary modifier on existing internal column borders must proportionally resize following columns with source permille and integer ruler arithmetic, preserving ordinary/Shift/margin/row tracking and native history. Standing user goal authorizes safe local parity work."
 sections:
@@ -60,7 +76,7 @@ sections:
   Verification: |-
     Command: six initial static gates once and changed-test-only static-closure1; ONE full upstream-absent build/app/inventory/infrastructure/Chromium profile; original-failed-only mounted Ctrl runtime-closure1; five restored source gates; source-bound coverage proof/census, exact scope/old acceptance/metadata, physical/JSDoc checks, AP artifact census and doctor/routing/diff.
     Result: final unique13641app110inventory15infrastructure292ChromePASS,0unresolved/flaky/uncaught/passing replay;16 focused skipped observations retained without promotion. Actual source-bound all4app/inventory100; build/static/source gatesPASS. One original mounted Ctrl expected vector migrated after actual failure;605other prior files byte-identical, all302metadata contracts retained, exact6semantic paths,2new608current acceptance files. No source/Python/raw maps/results in AP; ignored cache only.
-    Evidence: evidence/static-gates.json, static-closure1.json, absent-profile.json, runtime-closure1.json, final-coverage.json, case-census.json, scope-final.json, source-review.json, source-gates.json, changed-file-checks.json, artifact-census.json, governance.json; raw5X11GC.* ignored cache. Nonzero full/focused coverage thresholds and original expectation failure explicitly retained in Findings. Exact implementation SHA review and current-agent EVALUATOR (not independent) follow checkpoint; final Verification will precede canonical verify and implementation-SHA finish.
+    Evidence: evidence/static-gates.json, static-closure1.json, absent-profile.json, runtime-closure1.json, final-coverage.json, case-census.json, scope-final.json, source-review.json, source-gates.json, changed-file-checks.json, artifact-census.json, governance.json; raw5X11GC.* ignored cache. Nonzero full/focused coverage thresholds and original expectation failure explicitly retained in Findings. Exact implementation 0ed044246af68df2633c27acb97d7f565747b967 reconstruction reviewPASS and same-current-agent EVALUATOR PASS (explicitly not independent) recorded at .agentplane/tasks/202610071950-5X11GC/quality/20261007-201525979-recovery-context/quality-report.json. Final Verification is persisted before canonical verification; its checkpoint precedes finish of the actual implementation SHA.
     Scope: source solitary KEY_MOD1 proportional internal-column branch, integer/permille/float constraints, actual original table/cursor/list/history and browser geometry/cancel/Enter/continued typing/3UndoRedo/ODT. Exhaustive goalACTIVE; registered IO exceptions preserved.
   Rollback Plan: "Revert only the actual task implementation commit; retain prior DONE artifacts, parent full historical Findings and deferred stash."
   Findings: |-
@@ -69,7 +85,7 @@ sections:
     Coverage CLI full/focused nonzero thresholds are retained as evidence, not reported as successful process exits. Actual current source-bound all4app L16631/S18259/F4236/B13780 andinventory1464/1523/384/1081 are100 through299wholeapp38wholeinventory and one complete declaration/body/enclosing branch/location prior transfer. Invalid raw paintfrm V8 aggregate−36 uses the entire previously verified identical source/map/counters, never individual sanitization, clamping or exclusions. Raw sources/maps/results remain only ignored cache.
     Command: six initial static gates once; only changed old mounted-test format/lint/type closure; five restored source/resource/provenance/invariant/parity gates. Result: allPASS. Source-only restored gates are separate from upstream-absent runtime tests. Actual pinned edtwin3/svxruler anchor hashes checked. Source review does not promote broad parity statuses.
     Result: exact6semantic paths,606prior acceptance with605byte-identical and one exact one-line source-backed expected-vector migration;2new608current files. All302metadata fields/classifications/status/defaults/history prefixes retained. Physical changed files136..639<1000; JSDocPASS. AP source/Python/raw source-map/result ban verified. Doctor0errors2oldwarnings; routing/diffPASS. Original document/list/history and3UndoRedo/ODT reopen/cancel/Enter plus real1280/390 geometry/continued typing covered.
-    Residuals: full native SvxRuler/SfxColumnItem ownership, current-line/snapping/margin modifiers, vertical/RTL/merged/nested/protected behavior and exhaustive core/UI parity remain partial or unverified. This leaf fixes one represented proportional internal-border branch. Registered save/open/recovery deviations preserved; goalACTIVE. Exact implementation SHA review and same-current-agent EVALUATOR, explicitly not independent, follow implementation checkpoint; canonical verification checkpoint precedes finish of actual implementation SHA. Parent full636107character prefixSHA35678e6bb963fde236c89e8fb0fc1f115c10cc2ba609d959ef25e11ed5449e68 and stashc85f4a0e453dfd06d6e199554784f2c286737472 preserved.
+    Residuals: full native SvxRuler/SfxColumnItem ownership, current-line/snapping/margin modifiers, vertical/RTL/merged/nested/protected behavior and exhaustive core/UI parity remain partial or unverified. This leaf fixes one represented proportional internal-border branch. Registered save/open/recovery deviations preserved; goalACTIVE. Exact implementation 0ed044246af68df2633c27acb97d7f565747b967 reconstruction reviewPASS and same-current-agent EVALUATOR PASS (explicitly not independent) recorded at .agentplane/tasks/202610071950-5X11GC/quality/20261007-201525979-recovery-context/quality-report.json. Final Verification is persisted before canonical verification; its checkpoint precedes finish of the actual implementation SHA. Parent full636107character prefixSHA35678e6bb963fde236c89e8fb0fc1f115c10cc2ba609d959ef25e11ed5449e68 and stashc85f4a0e453dfd06d6e199554784f2c286737472 preserved.
 id_source: "generated"
 ---
 ## Summary
@@ -100,7 +116,7 @@ Repair existing solitary KEY_MOD1 horizontal LTR internal-column border drag usi
 
 Command: six initial static gates once and changed-test-only static-closure1; ONE full upstream-absent build/app/inventory/infrastructure/Chromium profile; original-failed-only mounted Ctrl runtime-closure1; five restored source gates; source-bound coverage proof/census, exact scope/old acceptance/metadata, physical/JSDoc checks, AP artifact census and doctor/routing/diff.
 Result: final unique13641app110inventory15infrastructure292ChromePASS,0unresolved/flaky/uncaught/passing replay;16 focused skipped observations retained without promotion. Actual source-bound all4app/inventory100; build/static/source gatesPASS. One original mounted Ctrl expected vector migrated after actual failure;605other prior files byte-identical, all302metadata contracts retained, exact6semantic paths,2new608current acceptance files. No source/Python/raw maps/results in AP; ignored cache only.
-Evidence: evidence/static-gates.json, static-closure1.json, absent-profile.json, runtime-closure1.json, final-coverage.json, case-census.json, scope-final.json, source-review.json, source-gates.json, changed-file-checks.json, artifact-census.json, governance.json; raw5X11GC.* ignored cache. Nonzero full/focused coverage thresholds and original expectation failure explicitly retained in Findings. Exact implementation SHA review and current-agent EVALUATOR (not independent) follow checkpoint; final Verification will precede canonical verify and implementation-SHA finish.
+Evidence: evidence/static-gates.json, static-closure1.json, absent-profile.json, runtime-closure1.json, final-coverage.json, case-census.json, scope-final.json, source-review.json, source-gates.json, changed-file-checks.json, artifact-census.json, governance.json; raw5X11GC.* ignored cache. Nonzero full/focused coverage thresholds and original expectation failure explicitly retained in Findings. Exact implementation 0ed044246af68df2633c27acb97d7f565747b967 reconstruction reviewPASS and same-current-agent EVALUATOR PASS (explicitly not independent) recorded at .agentplane/tasks/202610071950-5X11GC/quality/20261007-201525979-recovery-context/quality-report.json. Final Verification is persisted before canonical verification; its checkpoint precedes finish of the actual implementation SHA.
 Scope: source solitary KEY_MOD1 proportional internal-column branch, integer/permille/float constraints, actual original table/cursor/list/history and browser geometry/cancel/Enter/continued typing/3UndoRedo/ODT. Exhaustive goalACTIVE; registered IO exceptions preserved.
 
 ## Rollback Plan
@@ -114,4 +130,4 @@ Command: ONE full upstream-absent build/app/inventory/infrastructure/Chromium pr
 Coverage CLI full/focused nonzero thresholds are retained as evidence, not reported as successful process exits. Actual current source-bound all4app L16631/S18259/F4236/B13780 andinventory1464/1523/384/1081 are100 through299wholeapp38wholeinventory and one complete declaration/body/enclosing branch/location prior transfer. Invalid raw paintfrm V8 aggregate−36 uses the entire previously verified identical source/map/counters, never individual sanitization, clamping or exclusions. Raw sources/maps/results remain only ignored cache.
 Command: six initial static gates once; only changed old mounted-test format/lint/type closure; five restored source/resource/provenance/invariant/parity gates. Result: allPASS. Source-only restored gates are separate from upstream-absent runtime tests. Actual pinned edtwin3/svxruler anchor hashes checked. Source review does not promote broad parity statuses.
 Result: exact6semantic paths,606prior acceptance with605byte-identical and one exact one-line source-backed expected-vector migration;2new608current files. All302metadata fields/classifications/status/defaults/history prefixes retained. Physical changed files136..639<1000; JSDocPASS. AP source/Python/raw source-map/result ban verified. Doctor0errors2oldwarnings; routing/diffPASS. Original document/list/history and3UndoRedo/ODT reopen/cancel/Enter plus real1280/390 geometry/continued typing covered.
-Residuals: full native SvxRuler/SfxColumnItem ownership, current-line/snapping/margin modifiers, vertical/RTL/merged/nested/protected behavior and exhaustive core/UI parity remain partial or unverified. This leaf fixes one represented proportional internal-border branch. Registered save/open/recovery deviations preserved; goalACTIVE. Exact implementation SHA review and same-current-agent EVALUATOR, explicitly not independent, follow implementation checkpoint; canonical verification checkpoint precedes finish of actual implementation SHA. Parent full636107character prefixSHA35678e6bb963fde236c89e8fb0fc1f115c10cc2ba609d959ef25e11ed5449e68 and stashc85f4a0e453dfd06d6e199554784f2c286737472 preserved.
+Residuals: full native SvxRuler/SfxColumnItem ownership, current-line/snapping/margin modifiers, vertical/RTL/merged/nested/protected behavior and exhaustive core/UI parity remain partial or unverified. This leaf fixes one represented proportional internal-border branch. Registered save/open/recovery deviations preserved; goalACTIVE. Exact implementation 0ed044246af68df2633c27acb97d7f565747b967 reconstruction reviewPASS and same-current-agent EVALUATOR PASS (explicitly not independent) recorded at .agentplane/tasks/202610071950-5X11GC/quality/20261007-201525979-recovery-context/quality-report.json. Final Verification is persisted before canonical verification; its checkpoint precedes finish of the actual implementation SHA. Parent full636107character prefixSHA35678e6bb963fde236c89e8fb0fc1f115c10cc2ba609d959ef25e11ed5449e68 and stashc85f4a0e453dfd06d6e199554784f2c286737472 preserved.

@@ -1,0 +1,94 @@
+{
+  "implementationSHA": "0ed044246af68df2633c27acb97d7f565747b967",
+  "verdict": "pass",
+  "sameCurrentAgentReviewExplicitlyNotIndependent": true,
+  "caseCounts": {
+    "app": 13641,
+    "inventory": 110,
+    "infrastructure": 15,
+    "chromium": 292
+  },
+  "passingReplay": 0,
+  "fullProfileCount": 1,
+  "onlyOriginalMountedFailureClosureCases": 1,
+  "skippedObservationsRetained": 16,
+  "sourceBoundCoverage": {
+    "app": {
+      "lines": {
+        "total": 16631,
+        "covered": 16631,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 18259,
+        "covered": 18259,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 4236,
+        "covered": 4236,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 13780,
+        "covered": 13780,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "inventory": {
+      "lines": {
+        "total": 1464,
+        "covered": 1464,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 1523,
+        "covered": 1523,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 384,
+        "covered": 384,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 1081,
+        "covered": 1081,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    }
+  },
+  "scopeCount": 6,
+  "priorAcceptance": 606,
+  "priorMetadata": 302,
+  "nativeSourceOwners": 2,
+  "parentPrefixPreserved": true,
+  "deferredStashPreserved": true,
+  "residuals": [
+    "Native current-line/snapping/margin modifier/vertical/RTL/merged/nested/protected and full SvxRuler ownership remain partial or unverified; whole core/UI parity is not proven.",
+    "Represented browser device geometry and native original SwTabCols/document/history retained; no fake source-only application or standalone detached adapter.",
+    "Registered save/open/recovery deviations unchanged; exhaustive persistent goal ACTIVE."
+  ],
+  "exhaustiveGoal": "ACTIVE, not achieved",
+  "failures": []
+}

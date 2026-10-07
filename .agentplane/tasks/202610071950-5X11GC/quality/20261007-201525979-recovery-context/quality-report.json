@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202610071950-5X11GC",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-07T20:15:25.979Z",
+  "verdict": "pass",
+  "summary": "Exact implementation 0ed044246af68df2633c27acb97d7f565747b967 reconstruction passes: native proportional Ctrl behavior, final actual unique case census, source-bound coverage and exact approved scope.",
+  "evaluated_sha": "0ed044246af68df2633c27acb97d7f565747b967",
+  "blueprint_digest": "4701470adf09f107bca5562e1f730087043f825112b18729d46973c45340b568",
+  "findings": [
+    "Same current agent review explicitly not independent. One original mounted pure-Ctrl source-backed expected vector migrated after actual failure; one focused PASS and sixteen skipped observations, zero passing replay. Full SvxRuler ownership and remaining native modes remain partial; persistent goal ACTIVE."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610071950-5X11GC/README.md",
+    ".agentplane/tasks/202610071950-5X11GC/evidence/exact-sha-review.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
