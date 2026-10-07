@@ -1,0 +1,123 @@
+{
+  "evaluatedImplementationSHA": "ae01a2e08e28a876ea8514b837c18d345920429d",
+  "evaluator": "Same current coding agent in EVALUATOR phase; explicitly not independent",
+  "verdict": "pass",
+  "cases": {
+    "app": 13376,
+    "inventory": 110,
+    "scripts": 13,
+    "chromium": 254
+  },
+  "actualApp100": {
+    "lines": {
+      "total": 15733,
+      "covered": 15733,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 17272,
+      "covered": 17272,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 4005,
+      "covered": 4005,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 12967,
+      "covered": 12967,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "actualInventory100": {
+    "lines": {
+      "total": 1464,
+      "covered": 1464,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 1523,
+      "covered": 1523,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 384,
+      "covered": 384,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 1081,
+      "covered": 1081,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "actualCountersAndCaseCensusReconstructedExactly": true,
+  "strictWholeOrContiguousSourceAndCompleteMapsProof": true,
+  "oldAcceptance": {
+    "files": 556,
+    "byteIdentical": 546,
+    "completeNormalizedSourceBackedMigrations": 10,
+    "newFiles": 3
+  },
+  "metadata": {
+    "old": 286,
+    "current": 286,
+    "completePriorFieldsAndPrefixesPreserved": true,
+    "noStatusPromotion": true
+  },
+  "sourceGatesTiming": "After vendor restoration; failed or changed-input closures only.",
+  "oneFullUpstreamAbsentProfile": true,
+  "failedAndGenuinelyNewCasesOnlyAfterward": true,
+  "passingReplay": 0,
+  "skippedObservationsRemainSkipped": {
+    "app": 60
+  },
+  "vendorRestored": true,
+  "artifactCount": 18,
+  "forbiddenArtifactCount": 0,
+  "priorityBulletRegression": {
+    "implementation": "e625c6f3b56279490cd3fc9292afa2a3ee2f4d92",
+    "sourceContract": "Occupied marker width at least measured glyph plus native minimum distance; current max-content/minimum padding remains present.",
+    "currentChromiumCases": [
+      {
+        "title": "Writer native label width prevents overlap width=1280 cell=false",
+        "passed": true
+      },
+      {
+        "title": "Writer native label width prevents overlap width=1280 cell=true",
+        "passed": true
+      },
+      {
+        "title": "Writer native label width prevents overlap width=390 cell=false",
+        "passed": true
+      },
+      {
+        "title": "Writer native label width prevents overlap width=390 cell=true",
+        "passed": true
+      }
+    ]
+  },
+  "residualScope": "Full native SvxBorderTabPage six-edge/four-distance/style/color/arrangement/shadow widget composition and info-only FillItemSet behavior, full SfxItemSet tab-dialog orchestration, RTL/vertical/follow/shared-format/layout union completeness and whole kernel/browser parity remain unverified; parent/goal stay active.",
+  "failures": []
+}

@@ -1,0 +1,9 @@
+{
+  "evaluatedImplementationSHA": "ae01a2e08e28a876ea8514b837c18d345920429d",
+  "phase": "After final prose and canonical verification; implementation unchanged",
+  "artifactCountBeforeThisRecord": 22,
+  "forbiddenArtifactCount": 0,
+  "allowedArtifacts": "Bounded English task/evaluator summaries only; no upstream source/scripts/Python/raw maps/results",
+  "vendorRestored": true,
+  "gitDiffCheckExit": 0
+}
