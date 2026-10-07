@@ -1,0 +1,16 @@
+{
+  "records": [
+    {
+      "command": "npm exec -- prettier --write apps/office/e2e/writer-native-properties-height.spec.ts",
+      "exit": 0,
+      "bytes": 61,
+      "sha256": "538323f1f5fbfcf0edf1e0827d91265c0a7d79da09f50cc33d6201657297ce5e"
+    },
+    {
+      "command": "npm exec -- prettier --check apps/office/e2e/writer-native-properties-height.spec.ts",
+      "exit": 0,
+      "bytes": 66,
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    }
+  ]
+}

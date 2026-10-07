@@ -1,0 +1,22 @@
+{
+  "baselineTag": "libreoffice-26.8.0.2",
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceSHA256": {
+    "sw/source/uibase/shells/tabsh.cxx": "ac075f90575663fac974e2804e7111b1df3f596eb5bb400fb9fc2f4be0058163",
+    "sw/source/ui/table/rowht.cxx": "d2f674e43223f744ec8caa905f732677aecc04efe5fcfc2117257effb05bff58",
+    "sw/source/ui/table/tabledlg.cxx": "8784376ef8a6517596379155caa49027b70d4c801c0866c9991b9998e1781a5a",
+    "sw/uiconfig/swriter/ui/tabletextflowpage.ui": "429beb8d9aa3d5664ec4486bce67debc55737505307dd2ffa946b1cebce280f5"
+  },
+  "productionSHA256": {
+    "apps/office/src/sw/source/uibase/shells/tabsh.ts": "872fef32bb481a28475a9f3d44ded13297472779d9a9f9ccc113fdbaa62aa3b9",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx": "da677c2681503809ef27e97123f3447927da8ecabb851a75b5dda8d0132dafeb"
+  },
+  "reviewer": "Current CODER source comparison; same-agent exact EVALUATOR phase follows, explicitly not independent.",
+  "nativeAdmission": "tabsh.cxx277-459 ItemSetToTableParam admits only GetItemIfSet/SET attributes and does not issue SetRowHeight. Absence must not mutate row attributes. Existing represented explicit minimum height keeps prior selected/current-row shell path and grouped history; browser change-only ingress avoids unrequested type conversion/flattening mixed inputs.",
+  "nativeHeightUI": "rowht.cxx35-67 SwTableHeightDlg captures GetRowHeight, checkbox active when not Fixed, Apply authors Fixed then switches Minimum if fit active. Table Properties source tab/text-flow UI has no row-height field. Existing browser Text Flow field is not certified native UI parity or registered intentional exception; separate height dialog/command UI composition remains next iterative work.",
+  "changedDraft": "Unchanged original, Reset and explicit edit-to-original omit minRowHeight. Explicit authored zero remains distinguishable from absence at shell ingress. Native Fixed/Minimum/Variable and mixed selected ownership preserved across unrelated properties. No new scalar translation layer introduced.",
+  "priorityBullet": "Existing label width and minimum distance source fix retained; full current Chromium body/cell1280/390 regression evidence reviewed separately.",
+  "deliberateExceptions": "Prior570 acceptance files unchanged; prior291 metadata complete fields/prefixes/statuses/defaults and registered save/open/recovery exceptions preserved. No semantic promotion.",
+  "residualScope": "Separate native height-dialog/command placement, full row metric/auto checkbox composition and whole kernel/browser parity remain unverified.",
+  "result": "PASS bounded absent/changed table-properties height delta and original row-owner preservation; whole parity ACTIVE."
+}

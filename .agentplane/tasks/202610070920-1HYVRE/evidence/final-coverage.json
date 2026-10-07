@@ -1,0 +1,110 @@
+{
+  "proof": "Actual counters with complete identical source/maps or complete contiguous declaration/body/enclosing branch/location proofs; focused skips retained as skipped.",
+  "previousVerified": {
+    "app": {
+      "map": "2B9EBJ.app-final.json",
+      "proof": "2B9EBJ.app-proof.json",
+      "mapHash": "f7fd1dfd9fbdc808cab2921973af3edcfb0c6c0b639301ea881475e36b4d7279",
+      "proofHash": "04471b0cdbda29121d4d60bd02c6b1b7b5b4403c17deca1aa2de1cc44d4dba2d"
+    },
+    "inventory": {
+      "map": "2B9EBJ.inventory-final.json",
+      "proof": "2B9EBJ.inventory-proof.json",
+      "mapHash": "c717e801c8dc64f6ac2c959daf1cae93725c6875b2a31e8ecd83d7e1b05cd9bf",
+      "proofHash": "ce72eaece0f734e0cd19165b1865b26fe8dd215af21fd54269494097c27500a5"
+    }
+  },
+  "app": {
+    "coverage": {
+      "lines": {
+        "total": 16217,
+        "covered": 16217,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 17802,
+        "covered": 17802,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 4120,
+        "covered": 4120,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 13331,
+        "covered": 13331,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "mapSHA256": "26837afaa441f720a3832b59b5be3e2f91078efb4435bc12cdafd171564db11b",
+    "proofSHA256": "cbe22338f09a36edcf374a203f83deaaaef00831259b52552008afde7a7012a9",
+    "files": 288,
+    "invalidWholeFallbacks": [
+      {
+        "path": "apps/office/src/sw/source/core/layout/paintfrm.ts",
+        "reason": "V8 raw inferred else counter is negative; use entire prior verified current-byte-identical source and entire maps/counters, never sanitize individual counts",
+        "priorMap": "2B9EBJ.app-final.json",
+        "priorMapSHA256": "f7fd1dfd9fbdc808cab2921973af3edcfb0c6c0b639301ea881475e36b4d7279",
+        "discardedInvalidAggregateSHA256": "2d7e9eec174d20bf0b4f3bd27d3ce4e03f2134efe9012a818348608673544cdc",
+        "negativeCounts": [
+          -76
+        ]
+      }
+    ],
+    "wholeFiles": 288,
+    "transfers": [],
+    "gaps": []
+  },
+  "inventory": {
+    "coverage": {
+      "lines": {
+        "total": 1464,
+        "covered": 1464,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 1523,
+        "covered": 1523,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 384,
+        "covered": 384,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 1081,
+        "covered": 1081,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "mapSHA256": "39333fc4cafad8a1d4c8dd6e65cabd15c4e51e4af242f5af3f57b1986ac222d1",
+    "proofSHA256": "5c43a8f01265876178c73869204175bfde82507529383d6eac361ff12ce0b0b8",
+    "files": 38,
+    "invalidWholeFallbacks": [],
+    "wholeFiles": 38,
+    "transfers": [],
+    "gaps": []
+  }
+}

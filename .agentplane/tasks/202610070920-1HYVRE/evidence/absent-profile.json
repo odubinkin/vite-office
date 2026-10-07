@@ -1,0 +1,216 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/sw/source/uibase/shells/tabsh.ts": "872fef32bb481a28475a9f3d44ded13297472779d9a9f9ccc113fdbaa62aa3b9",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx": "da677c2681503809ef27e97123f3447927da8ecabb851a75b5dda8d0132dafeb",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-height-delta.test.ts": "df79eb481ba2cf2fd73d8e69115743f9c26139b9e346d28d09e391e5ef19065d",
+    "apps/office/src/sw/browser/presentation/native-table-height-delta.test.tsx": "8af09635ebbcc3b6c05e4a388c740e462acf69610c7205963285463ae301c34c",
+    "apps/office/e2e/writer-native-properties-height.spec.ts": "0c2a0cf9c64b5ad8dec36a3e933d26146e07ac71c021f3a18a90cc7fc059dee7",
+    "docs/program/source-provenance.json": "5ae4b11c906ec408dffb06741d8335137c61d6b89ff2a8654030d0111b1416c7",
+    "docs/program/parity/runtime-inventory.json": "79a30cc1abfa3717640d68257bba8d253d5908406cbcc0ef693a62a3de1452c9"
+  },
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1443,
+      "sha256": "ea7af7e825dde49c76ca2a07d6f87381f5bde4ea368a3d2cb7a2cb6e7e43c1ca",
+      "totals": [],
+      "failedCases": []
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/1HYVRE.app-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 147576,
+      "sha256": "b9c92f6a8998f4d696c2c2d67e2358ffb51e48b1b92d375c1d1712f3ea83bd46",
+      "totals": [
+        "Test Files  1 failed | 428 passed (429)",
+        "Tests  2 failed | 13481 passed (13483)"
+      ],
+      "failedCases": [
+        {
+          "name": "apps/office/src/sw/browser/presentation/native-table-height-delta.test.tsx > unrelated properties preserve mounted fixed rows selected=false",
+          "assertion": [
+            "Error: expect(element).toHaveStyle()"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/browser/presentation/native-table-height-delta.test.tsx > unrelated properties preserve mounted fixed rows selected=true",
+          "assertion": [
+            "Error: expect(element).toHaveStyle()"
+          ]
+        }
+      ],
+      "caseCounts": {
+        "passed": 13481,
+        "failed": 2,
+        "skipped": 0,
+        "total": 13483
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 16217,
+          "covered": 16217,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 17802,
+          "covered": 17802,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 4120,
+          "covered": 4120,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 13331,
+          "covered": 13329,
+          "skipped": 0,
+          "pct": 99.98
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 99.98
+      },
+      "incompleteFileCount": 2,
+      "coverageMapSHA256": "c75d0273d1bc4ae1123c1c4233378bba0f32e23175f17192839521ae9a5a8b9d"
+    },
+    {
+      "kind": "inventory",
+      "command": "npm run test:inventory:coverage -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/1HYVRE.inventory-results.json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 40604,
+      "sha256": "5a576a8c8bf47b563ae55d1edc58e4d782835b373da35038a0cd1b66816c3334",
+      "totals": [
+        "Test Files  36 passed (36)",
+        "Tests  110 passed (110)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "passed": 110,
+        "failed": 0,
+        "skipped": 0,
+        "total": 110
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 1464,
+          "covered": 1464,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 1523,
+          "covered": 1523,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 384,
+          "covered": 384,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 1081,
+          "covered": 1081,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100
+      },
+      "incompleteFileCount": 0,
+      "coverageMapSHA256": "42fbed5231b91381a56e570f3993505cc19e28be76ef1ac8858164dcd54912a3"
+    },
+    {
+      "kind": "scripts",
+      "command": "npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts scripts/check-module-boundaries.test.ts",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 223,
+      "sha256": "d79168d90f17510b5c89df0e93ab458b6094d7d8ed05b136582f6ad845c92f9f",
+      "totals": [
+        "Test Files  3 passed (3)",
+        "Tests  14 passed (14)"
+      ],
+      "failedCases": []
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 44941,
+      "sha256": "04424bce2320f8b14f438f98ee07593c69643511c1dc2506a16d8496847416c9",
+      "totals": [
+        "3 failed",
+        "267 passed (7.6m)"
+      ],
+      "failedCases": [
+        {
+          "name": "writer-native-properties-height.spec.ts > Writer unrelated properties preserve fixed row height width=1280",
+          "errors": [
+            [],
+            [
+              "Error: locator.click: Test timeout of 30000ms exceeded."
+            ]
+          ]
+        },
+        {
+          "name": "writer-native-properties-height.spec.ts > Writer unrelated properties preserve fixed row height width=390",
+          "errors": [
+            [],
+            [
+              "Error: locator.click: Test timeout of 30000ms exceeded."
+            ]
+          ]
+        },
+        {
+          "name": "writer-table-border-common-state.spec.ts > native common border input and selected four-distance history width=390",
+          "errors": [
+            []
+          ]
+        }
+      ],
+      "caseCounts": {
+        "startTime": "2026-10-07T09:39:34.051Z",
+        "duration": 455349.094,
+        "expected": 267,
+        "skipped": 0,
+        "unexpected": 3,
+        "flaky": 0
+      }
+    }
+  ]
+}

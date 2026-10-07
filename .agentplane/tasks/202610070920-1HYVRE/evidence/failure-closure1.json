@@ -1,0 +1,47 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/sw/source/uibase/shells/tabsh.ts": "872fef32bb481a28475a9f3d44ded13297472779d9a9f9ccc113fdbaa62aa3b9",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx": "da677c2681503809ef27e97123f3447927da8ecabb851a75b5dda8d0132dafeb",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-height-delta.test.ts": "df79eb481ba2cf2fd73d8e69115743f9c26139b9e346d28d09e391e5ef19065d",
+    "apps/office/src/sw/browser/presentation/native-table-height-delta.test.tsx": "ccfb539b2dfef9b8ffa8189322161494f92b7cfa89fb62abedb2229e6a83513b",
+    "apps/office/e2e/writer-native-properties-height.spec.ts": "2ba60aa81020e0a9a1793ea3824dc488f2fab1f0d34a4af12588d7a1a4c13a0d",
+    "docs/program/source-provenance.json": "5ae4b11c906ec408dffb06741d8335137c61d6b89ff2a8654030d0111b1416c7",
+    "docs/program/parity/runtime-inventory.json": "79a30cc1abfa3717640d68257bba8d253d5908406cbcc0ef693a62a3de1452c9"
+  },
+  "records": [
+    {
+      "kind": "app",
+      "profile": "upstream-absent",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/browser/presentation/native-table-height-delta.test.tsx --testNamePattern=^unrelated properties preserve mounted fixed rows selected=(false|true)$ --coverage.reportOnFailure --coverage.reporter=json-summary --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/1HYVRE.app-closure1-results.json",
+      "exit": 1,
+      "bytes": 6955,
+      "sha256": "e268bb8d3e846715f5e760f68b45d6291862910165bfc9472a4ba3602fcf2ade",
+      "caseCounts": {
+        "passed": 2,
+        "failed": 0,
+        "skipped": 5,
+        "total": 7
+      },
+      "failedCases": [],
+      "coverageMapSHA256": "d63c465ec75e3fd357503962e6cc7fc864e11c5b20113832efee039a62626962"
+    },
+    {
+      "kind": "chromium",
+      "profile": "upstream-absent",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts apps/office/e2e/writer-native-properties-height.spec.ts apps/office/e2e/writer-table-border-common-state.spec.ts --grep Writer unrelated properties preserve fixed row height width=(1280|390)$|native common border input and selected four-distance history width=390$ --reporter=list,json",
+      "exit": 0,
+      "bytes": 1012,
+      "sha256": "09d593d69e2291a8f60c8bb39e15140a8982dab62c4b5dac5440ebf4b475af6f",
+      "caseCounts": {
+        "startTime": "2026-10-07T09:50:21.832Z",
+        "duration": 6647.709,
+        "expected": 3,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "failedCases": []
+    }
+  ]
+}

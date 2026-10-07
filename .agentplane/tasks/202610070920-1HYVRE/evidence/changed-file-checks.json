@@ -1,0 +1,16 @@
+{
+  "records": [
+    {
+      "command": "Unchanged JSDoc validator on approved changed code/acceptance paths; actual physical-line count",
+      "exit": 0,
+      "errors": [],
+      "physicalLines": {
+        "apps/office/src/sw/source/uibase/shells/tabsh.ts": 289,
+        "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx": 658,
+        "apps/office/src/sw/source/uibase/wrtsh/native-table-height-delta.test.ts": 138,
+        "apps/office/src/sw/browser/presentation/native-table-height-delta.test.tsx": 129,
+        "apps/office/e2e/writer-native-properties-height.spec.ts": 71
+      }
+    }
+  ]
+}

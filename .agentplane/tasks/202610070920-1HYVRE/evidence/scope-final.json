@@ -1,0 +1,85 @@
+{
+  "base": "6c88aa6ba2104fd90e59d85d5ea7d8fbde47ecf7",
+  "approvedPaths": [
+    "apps/office/src/sw/source/uibase/shells/tabsh.ts",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-height-delta.test.ts",
+    "apps/office/src/sw/browser/presentation/native-table-height-delta.test.tsx",
+    "apps/office/e2e/writer-native-properties-height.spec.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "actualSemanticPaths": [
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx",
+    "apps/office/src/sw/source/uibase/shells/tabsh.ts",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/source-provenance.json",
+    "apps/office/e2e/writer-native-properties-height.spec.ts",
+    "apps/office/src/sw/browser/presentation/native-table-height-delta.test.tsx",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-height-delta.test.ts"
+  ],
+  "oldAcceptanceFiles": 570,
+  "oldByteIdentical": 570,
+  "newAcceptanceFiles": 3,
+  "totalAcceptanceFiles": 573,
+  "oldAcceptanceCensusSHA256": "f244145341896be8415ad1dc16a045bd47f0597738c32e54403ca94737f3a40c",
+  "fresh": [
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-height-delta.test.ts",
+      "initialSHA256": "df79eb481ba2cf2fd73d8e69115743f9c26139b9e346d28d09e391e5ef19065d",
+      "currentSHA256": "df79eb481ba2cf2fd73d8e69115743f9c26139b9e346d28d09e391e5ef19065d",
+      "proof": {
+        "byteIdentical": true
+      }
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/native-table-height-delta.test.tsx",
+      "initialSHA256": "8af09635ebbcc3b6c05e4a388c740e462acf69610c7205963285463ae301c34c",
+      "currentSHA256": "ccfb539b2dfef9b8ffa8189322161494f92b7cfa89fb62abedb2229e6a83513b",
+      "proof": {
+        "exactFailedDraftUnitCorrection": true,
+        "allOtherBytesRetained": true,
+        "priorFivePassingDraftsUnchanged": true
+      }
+    },
+    {
+      "path": "apps/office/e2e/writer-native-properties-height.spec.ts",
+      "initialSHA256": "0c2a0cf9c64b5ad8dec36a3e933d26146e07ac71c021f3a18a90cc7fc059dee7",
+      "currentSHA256": "2ba60aa81020e0a9a1793ea3824dc488f2fab1f0d34a4af12588d7a1a4c13a0d",
+      "proof": {
+        "exactTwoFailedDraftVisibleGlyphClicks": true,
+        "allOtherBytesRetained": true,
+        "allHeightHistoryTextAssertionsRetained": true
+      }
+    }
+  ],
+  "metadata": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "prior": 291,
+      "current": 291,
+      "priorFieldsPrefixesStatusesDefaultsAndExceptionsPreserved": true,
+      "currentSHA256": "fd597fe591a60f9da42bcf22a7a1310815e866ffed50c6e69b94ce0ab35885cc"
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "prior": 291,
+      "current": 291,
+      "priorFieldsPrefixesStatusesDefaultsAndExceptionsPreserved": true,
+      "currentSHA256": "416f171b953282debcd52fe81e8c3d44c0998a267663adf3fe475aa80c030999"
+    }
+  ],
+  "parentFindingsCharacters": 571048,
+  "parentFindingsSHA256": "33f21b5fd52edd5cc55845e31e11d04d5ade6568f7af0156f4e164c917c32c30",
+  "artifacts": {
+    "wholeAgentplaneForbiddenSourceOrPythonCount": 0,
+    "activeFiles": 14,
+    "activeExtensions": [
+      "json",
+      "md"
+    ],
+    "noRawCoverageResultsOrSourceSnapshots": true,
+    "rawEvidenceLocation": "Ignored project dependency cache; no pinned sources copied into AP"
+  },
+  "failures": []
+}

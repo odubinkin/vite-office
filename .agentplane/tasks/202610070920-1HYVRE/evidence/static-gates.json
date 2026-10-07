@@ -1,0 +1,51 @@
+{
+  "records": [
+    {
+      "command": "npm run format:check",
+      "exit": 1,
+      "bytes": 226,
+      "sha256": "31c70ff563362a96880811043be672de623ba9b161258c61ca78ddf9e65f7c44",
+      "diagnostics": [
+        "[warn] apps/office/e2e/writer-native-properties-height.spec.ts",
+        "[warn] Code style issues found in the above file. Run Prettier with --write to fix."
+      ]
+    },
+    {
+      "command": "npm run lint",
+      "exit": 0,
+      "bytes": 55,
+      "sha256": "a6172cb57fa696e705408fdc605fba1ae07b852fdf0614d7c2b623349e285b6e",
+      "diagnostics": [
+        "> eslint . --max-warnings 0"
+      ]
+    },
+    {
+      "command": "npm run typecheck",
+      "exit": 0,
+      "bytes": 240,
+      "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:dependencies",
+      "exit": 0,
+      "bytes": 189,
+      "sha256": "dafb779a5711ca857b7c867abdcb791f05919d01f13e73df65ed4560e5e44b20",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:docs",
+      "exit": 0,
+      "bytes": 119,
+      "sha256": "227070ac37cb4231a35fe36fb9f18c4d5f3cf262da6a81d4ba506f9b0bd41b74",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:file-size",
+      "exit": 0,
+      "bytes": 3925,
+      "sha256": "fb096685f130f2ade72eb71cebfb3c1541f1ab7a0a6c6a15ccaf91ef71eb7b77",
+      "diagnostics": []
+    }
+  ]
+}

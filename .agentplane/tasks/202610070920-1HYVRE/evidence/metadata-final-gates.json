@@ -1,0 +1,17 @@
+{
+  "records": [
+    {
+      "command": "npm exec -- prettier --write docs/program/source-provenance.json docs/program/parity/runtime-inventory.json",
+      "exit": 0
+    },
+    {
+      "command": "npm exec -- prettier --check docs/program/source-provenance.json docs/program/parity/runtime-inventory.json",
+      "exit": 0
+    }
+  ],
+  "notesOnly": true,
+  "sha256": {
+    "docs/program/source-provenance.json": "fd597fe591a60f9da42bcf22a7a1310815e866ffed50c6e69b94ce0ab35885cc",
+    "docs/program/parity/runtime-inventory.json": "416f171b953282debcd52fe81e8c3d44c0998a267663adf3fe475aa80c030999"
+  }
+}

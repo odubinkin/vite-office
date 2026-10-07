@@ -29,7 +29,7 @@ export interface SwTableProperties {
   readonly marginTop?: number;
   readonly marginBottom?: number;
   readonly columnWidths: readonly number[];
-  readonly minRowHeight: number;
+  readonly minRowHeight?: number | undefined;
   readonly padding?: number | undefined;
   readonly border?: string | undefined;
   readonly borderItems?: SfxItemSet | undefined;
@@ -165,7 +165,8 @@ export function ItemSetToTableParam(shell: SwFEShell, value: SwTableProperties):
           }
         }
         shell.SetRowsToRepeat(value.headerRows, value.repeatHeaderRows);
-        shell.SetRowHeight(new SwFormatFrameSize(SwFrameSize.Minimum, 0, value.minRowHeight));
+        if (value.minRowHeight !== undefined)
+          shell.SetRowHeight(new SwFormatFrameSize(SwFrameSize.Minimum, 0, value.minRowHeight));
         if (value.verticalAlign !== undefined) shell.SetBoxAlign(value.verticalAlign);
         const columns = new SwTabCols();
         shell.GetTabCols(columns);
