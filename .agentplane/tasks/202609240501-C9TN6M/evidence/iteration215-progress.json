@@ -1,0 +1,33 @@
+{
+  "iteration": 215,
+  "leaf": "202610071241-NXW8EF",
+  "implementation": "e70da231bfa8121cf7597bd196566603fa203bfc",
+  "productImplementation": "918d8042348c386060a55a750bdfa7ecb234934e",
+  "evidenceTail": "c58c355d4b9a9baa8d5ffbd699c2b5dcdb228316",
+  "close": "17a973295fc1a3087a02b50a52f2f59b3487d2aa",
+  "completePriorCharacters": 590713,
+  "completePriorSHA256": "563e2d1468dcd204f562b0a3d810577269bac9c4fbf1a2df72aa7d839ad5fbbd",
+  "completePriorPrefixPreserved": true,
+  "finalFindingsCharacters": 596663,
+  "finalFindingsSHA256": "154e01e5daa154a4be4ea8132f523324e64cd9faddff3b32a2a99b8b9c8ea975",
+  "cases": {
+    "app": 13532,
+    "inventory": 110,
+    "infrastructure": 14,
+    "chromium": 276
+  },
+  "initialUncaughtErrors": 27,
+  "originalErrorOnlyResolved": 27,
+  "finalUncaughtErrors": 0,
+  "passingReplay": 0,
+  "skipObservationsRetained": 24,
+  "priorAcceptanceFiles": 580,
+  "priorAcceptanceByteIdentical": 574,
+  "approvedExactMigrations": 6,
+  "currentAcceptanceFiles": 583,
+  "priorMetadataFieldsAndExceptionsPreserved": 295,
+  "currentMetadataRecords": 298,
+  "parentGoalState": "ACTIVE; whole parity unverified",
+  "nextLeaf": "Native list-label affinity browser caret, marked list level and ruler integration",
+  "correctiveEvidence": "Prior214/current215 JSON assertion pass omitted27uncaught errors; original logs retained, five fixture lifecycle corrections resolve them without suppressing GetViewFrame or replaying successful cases."
+}
