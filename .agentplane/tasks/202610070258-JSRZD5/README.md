@@ -4,7 +4,7 @@ title: "Move Writer table border application to native document ownership"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 11
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,30 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-07T03:11:39.674Z"
+  updated_by: "CODER"
+  note: "Verified: exact implementation e2b40fc4a89b6cdf42e93a612ad03ec1f93ec60c passes native document border ownership and endpoint scope;13239app109inventory5scripts248Chromium PASS without upstream, actual100 source/maps coverage,548oldtests and281metadata prefixes preserved. Same-agent EVALUATOR not independent; full native border model remains next."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-07T03:11:38.016Z"
+  updated_by: "EVALUATOR"
+  note: "Same-current-agent EVALUATOR phase, explicitly not independent: exact implementation e2b40fc4a89b6cdf42e93a612ad03ec1f93ec60c passes native document border ownership and point/mark rectangle criteria."
+  evaluated_sha: "e2b40fc4a89b6cdf42e93a612ad03ec1f93ec60c"
+  blueprint_digest: "2e7f270596c447263f184534cf85f47522e7b264401b3c0490d6ff68fc4b7cb3"
+  evidence_refs:
+    - ".agentplane/tasks/202610070258-JSRZD5/README.md"
+    - ".agentplane/tasks/202610070258-JSRZD5/quality/20261007-031138016-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610070258-JSRZD5/quality/20261007-031138016-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610070258-JSRZD5/quality/20261007-031138016-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610070258-JSRZD5/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610070258-JSRZD5/evidence/exact-sha-review.json"
+    - ".agentplane/tasks/202610070258-JSRZD5/evidence/final-coverage.json"
+    - ".agentplane/tasks/202610070258-JSRZD5/evidence/scope-final.json"
+  findings:
+    - "Removed shell border mutation and whole-unselected-table fallback; actual original graph/current or marked rectangle history preserved.13239app109inventory5scripts248Chromium PASS, actual100 via proven whole source/maps actual counters.548oldtests and281metadata prefixes preserved."
+    - "Source gates executed before absence profile; post-restoration unchanged native input hashes proved, no passing replay or audit while live. No tested production/source/metadata input changed."
 commit: null
 comments:
   -
@@ -35,8 +54,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: authorized native border document ownership and point/mark selection correction; preserve deliberate I/O deviations and all prior acceptance contracts."
+  -
+    type: "verify"
+    at: "2026-10-07T03:11:39.674Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified: exact implementation e2b40fc4a89b6cdf42e93a612ad03ec1f93ec60c passes native document border ownership and endpoint scope;13239app109inventory5scripts248Chromium PASS without upstream, actual100 source/maps coverage,548oldtests and281metadata prefixes preserved. Same-agent EVALUATOR not independent; full native border model remains next."
 doc_version: 3
-doc_updated_at: "2026-10-07T03:10:26.544Z"
+doc_updated_at: "2026-10-07T03:11:39.725Z"
 doc_updated_by: "CODER"
 description: "Iteration205: remove shell-owned box formatting and whole-unselected-table fallback; use SwDoc border ownership and actual point/mark rectangle scope, document history and notification. Preserve deliberate I/O deviations; full native box/info carriers remain next."
 sections:
@@ -48,7 +73,43 @@ sections:
     2. ONE full upstream-absent build/app/inventory/scripts/Chromium profile; restore vendor finally. Tests never invoke upstream; no source/scope/AP audits or mutations while profile live. Only original failed or genuinely new cases afterward, no passing/full replay. Actual100 app/inventory via actual complete source/maps or complete contiguous byte-identical declaration/body/branch/locations; skips stay skipped. Raw sources/maps/scripts/results only ignored app cache, AP bounded English prose/counts/hashes.
     3. New actual SwDoc and mounted native shell contracts cover current cell, point/mark rectangle in both directions, ignored ordinary rings, selected rectangles, body/foreign/disconnected/cross-table/missing endpoint rejection, same-value admission, independent supplied fields, modified state/one publication, nonzero cursor and repeated UndoRedo, unchanged graph and table properties selected/temporary whole-table semantics. All548 old acceptance files byte-identical plus2new,281 metadata contracts/prefixes and deliberate I/O exceptions preserved.
     4. Once restored resource generation--check/source-tree/provenance/invariants/parity; doctor/routing/diff/source digests/current leaf quality census0forbidden; exact implementation SHA same-current-agent EVALUATOR explicitly not independent. Final prose before canonical verification, finish actual implementation SHA and clean tracked/all state. Preserve full545933-character parent Findings prefix SHA dda5e7e1420f673e92c0a4a2e4b9210cd745fb87d973a96d4df620099e943bff; full goal remains unverified.
-  Verification: "Pending implementation and declared upstream-absent checks; no parity completion claim."
+  Verification: |-
+    Command: initial six static gates once; one full upstream-absent build/app/inventory/scripts/Chromium profile; scoped unchanged JSDoc/format/lint/physical lines; source gates and restored source identity; doctor/routing/diff; same-current-agent exact implementation EVALUATOR phase.
+    Result: PASS at e2b40fc4a89b6cdf42e93a612ad03ec1f93ec60c.13239app109inventory5scripts248Chromium cases PASS;0test failures/flaky/skipped. Actual100 app278/inventory38 all four dimensions. Initial coverage-only exit1 resolved by actual prior verified counters for one entire byte-identical source/maps; no test rerun, fabricated counters or region transfers. Source gates passed before absence; restored input digests identical, timing disclosed in Findings.
+    Evidence: evidence/exact-sha-review.json,absent-profile.json,final-coverage.json,coverage-source-proof.json,static-gates.json,changed-file-checks.json,source-gates.json,source-review.json,scope-final.json,governance.json and generated quality report. All548 old acceptance files byte-identical;281metadata/default/classification/evidence prefixes retained. Current-leaf census0forbidden; vendor restored; raw sources/maps/results/helpers only ignored app cache. Native full border carrier/layout-union parity and parent completion remain unverified.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-07T03:11:39.674Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified: exact implementation e2b40fc4a89b6cdf42e93a612ad03ec1f93ec60c passes native document border ownership and endpoint scope;13239app109inventory5scripts248Chromium PASS without upstream, actual100 source/maps coverage,548oldtests and281metadata prefixes preserved. Same-agent EVALUATOR not independent; full native border model remains next.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-07T03:11:39.187Z, excerpt_hash=sha256:6bfe8b12920247eaa2dc8b812c100537fa6b14b72713cf495cd5ddd2abd8722e
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610070258-JSRZD5/blueprint/resolved-snapshot.json
+    - old_digest: 2e7f270596c447263f184534cf85f47522e7b264401b3c0490d6ff68fc4b7cb3
+    - current_digest: 2e7f270596c447263f184534cf85f47522e7b264401b3c0490d6ff68fc4b7cb3
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610070258-JSRZD5
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610070258-JSRZD5 -m 🧩 JSRZD5 task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this leaf implementation in a new task. Retain immutable DONE tasks, parent history and existing deferred stash."
   Findings: |-
     Iteration205 concrete progress: moved represented SetTabBorders into SwDoc/ndtbl1 and replaced SwFEShell border mutation with a thin native document delegate. Removed shell whole-unselected-table fallback and redundant whole flag, plus border-only cursorState argument from frame ChangeTable. Native point/mark endpoint rectangle replaces ordinary ring scope; same-value history, connected original graph, nonzero original cursor and selected/temporary whole-table properties semantics retained.
@@ -59,7 +120,7 @@ sections:
 
     ONE full upstream-absent build PASS;13239 app cases PASS0fail0skip;109inventory PASS with actual100;5script checks PASS;248Chromium PASS0unexpected0flaky0skip. Initial application exit1 solely branch coverage (12326/12327), no test failures. Missing branch is unchanged browser-writer-edit-window.ts. Reused actual prior verified counters only after full source SHA31f0716ba99faec45d08f966387308e32a41c2cceb1bcd0ec4ac8416b2492454 and entire statement/function/branch maps proved byte-identical against verified previous map/proof digests. Final actual100 app278files L15112/S16580/F3864/B12327; inventory38 L1464/S1523/F384/B1080. No focused run, passing replay, fabricated counters, region transfer or new skips. Raw maps/reports/sources/helpers only ignored app cache.
 
-    Scope7semantic paths; all548 prior acceptance files byte-identical+2new=550. All281 metadata records retain complete old evidence/responsibility/default/classification/justification prefixes and deliberate I/O exceptions, without status promotion. Parent complete545933-character Findings prefix SHA dda5e7e1420f673e92c0a4a2e4b9210cd745fb87d973a96d4df620099e943bff retained. Doctor0errors2knownwarnings; routing/diff PASS. Current-leaf census0forbidden. Prior turn restated completed bullet correction with no new authoritative state; this turn implements and verifies the next native ownership correction. Startup missing guessed source/config lookup paths were corrected via discovery and route recomputation before mutation; no approval/scope bypass claim. Deferred stash retained. Exact-SHA same-current-agent EVALUATOR phase pending, explicitly not independent. Goal ACTIVE.
+    Scope7semantic paths; all548 prior acceptance files byte-identical+2new=550. All281 metadata records retain complete old evidence/responsibility/default/classification/justification prefixes and deliberate I/O exceptions, without status promotion. Parent complete545933-character Findings prefix SHA dda5e7e1420f673e92c0a4a2e4b9210cd745fb87d973a96d4df620099e943bff retained. Doctor0errors2knownwarnings; routing/diff PASS. Current-leaf census0forbidden. Prior turn restated completed bullet correction with no new authoritative state; this turn implements and verifies the next native ownership correction. Startup missing guessed source/config lookup paths were corrected via discovery and route recomputation before mutation; no approval/scope bypass claim. Deferred stash retained. Exact implementation e2b40fc4a89b6cdf42e93a612ad03ec1f93ec60c passes same-current-agent EVALUATOR phase, explicitly not independent. Structured quality report and exact reconstruction proof recorded. Goal ACTIVE.
 id_source: "generated"
 ---
 ## Summary
@@ -83,7 +144,42 @@ Under standing explicit iterative native UI authorization: move existing border 
 
 ## Verification
 
-Pending implementation and declared upstream-absent checks; no parity completion claim.
+Command: initial six static gates once; one full upstream-absent build/app/inventory/scripts/Chromium profile; scoped unchanged JSDoc/format/lint/physical lines; source gates and restored source identity; doctor/routing/diff; same-current-agent exact implementation EVALUATOR phase.
+Result: PASS at e2b40fc4a89b6cdf42e93a612ad03ec1f93ec60c.13239app109inventory5scripts248Chromium cases PASS;0test failures/flaky/skipped. Actual100 app278/inventory38 all four dimensions. Initial coverage-only exit1 resolved by actual prior verified counters for one entire byte-identical source/maps; no test rerun, fabricated counters or region transfers. Source gates passed before absence; restored input digests identical, timing disclosed in Findings.
+Evidence: evidence/exact-sha-review.json,absent-profile.json,final-coverage.json,coverage-source-proof.json,static-gates.json,changed-file-checks.json,source-gates.json,source-review.json,scope-final.json,governance.json and generated quality report. All548 old acceptance files byte-identical;281metadata/default/classification/evidence prefixes retained. Current-leaf census0forbidden; vendor restored; raw sources/maps/results/helpers only ignored app cache. Native full border carrier/layout-union parity and parent completion remain unverified.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-07T03:11:39.674Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified: exact implementation e2b40fc4a89b6cdf42e93a612ad03ec1f93ec60c passes native document border ownership and endpoint scope;13239app109inventory5scripts248Chromium PASS without upstream, actual100 source/maps coverage,548oldtests and281metadata prefixes preserved. Same-agent EVALUATOR not independent; full native border model remains next.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-07T03:11:39.187Z, excerpt_hash=sha256:6bfe8b12920247eaa2dc8b812c100537fa6b14b72713cf495cd5ddd2abd8722e
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610070258-JSRZD5/blueprint/resolved-snapshot.json
+- old_digest: 2e7f270596c447263f184534cf85f47522e7b264401b3c0490d6ff68fc4b7cb3
+- current_digest: 2e7f270596c447263f184534cf85f47522e7b264401b3c0490d6ff68fc4b7cb3
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610070258-JSRZD5
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610070258-JSRZD5 -m 🧩 JSRZD5 task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
@@ -99,4 +195,4 @@ Six initial static gates PASS once. Scoped unchanged JSDoc/format/lint and physi
 
 ONE full upstream-absent build PASS;13239 app cases PASS0fail0skip;109inventory PASS with actual100;5script checks PASS;248Chromium PASS0unexpected0flaky0skip. Initial application exit1 solely branch coverage (12326/12327), no test failures. Missing branch is unchanged browser-writer-edit-window.ts. Reused actual prior verified counters only after full source SHA31f0716ba99faec45d08f966387308e32a41c2cceb1bcd0ec4ac8416b2492454 and entire statement/function/branch maps proved byte-identical against verified previous map/proof digests. Final actual100 app278files L15112/S16580/F3864/B12327; inventory38 L1464/S1523/F384/B1080. No focused run, passing replay, fabricated counters, region transfer or new skips. Raw maps/reports/sources/helpers only ignored app cache.
 
-Scope7semantic paths; all548 prior acceptance files byte-identical+2new=550. All281 metadata records retain complete old evidence/responsibility/default/classification/justification prefixes and deliberate I/O exceptions, without status promotion. Parent complete545933-character Findings prefix SHA dda5e7e1420f673e92c0a4a2e4b9210cd745fb87d973a96d4df620099e943bff retained. Doctor0errors2knownwarnings; routing/diff PASS. Current-leaf census0forbidden. Prior turn restated completed bullet correction with no new authoritative state; this turn implements and verifies the next native ownership correction. Startup missing guessed source/config lookup paths were corrected via discovery and route recomputation before mutation; no approval/scope bypass claim. Deferred stash retained. Exact-SHA same-current-agent EVALUATOR phase pending, explicitly not independent. Goal ACTIVE.
+Scope7semantic paths; all548 prior acceptance files byte-identical+2new=550. All281 metadata records retain complete old evidence/responsibility/default/classification/justification prefixes and deliberate I/O exceptions, without status promotion. Parent complete545933-character Findings prefix SHA dda5e7e1420f673e92c0a4a2e4b9210cd745fb87d973a96d4df620099e943bff retained. Doctor0errors2knownwarnings; routing/diff PASS. Current-leaf census0forbidden. Prior turn restated completed bullet correction with no new authoritative state; this turn implements and verifies the next native ownership correction. Startup missing guessed source/config lookup paths were corrected via discovery and route recomputation before mutation; no approval/scope bypass claim. Deferred stash retained. Exact implementation e2b40fc4a89b6cdf42e93a612ad03ec1f93ec60c passes same-current-agent EVALUATOR phase, explicitly not independent. Structured quality report and exact reconstruction proof recorded. Goal ACTIVE.

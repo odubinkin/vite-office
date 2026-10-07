@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "task_id": "202610070258-JSRZD5",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-07T03:11:38.016Z",
+  "verdict": "pass",
+  "summary": "Same-current-agent EVALUATOR phase, explicitly not independent: exact implementation e2b40fc4a89b6cdf42e93a612ad03ec1f93ec60c passes native document border ownership and point/mark rectangle criteria.",
+  "evaluated_sha": "e2b40fc4a89b6cdf42e93a612ad03ec1f93ec60c",
+  "blueprint_digest": "2e7f270596c447263f184534cf85f47522e7b264401b3c0490d6ff68fc4b7cb3",
+  "findings": [
+    "Removed shell border mutation and whole-unselected-table fallback; actual original graph/current or marked rectangle history preserved.13239app109inventory5scripts248Chromium PASS, actual100 via proven whole source/maps actual counters.548oldtests and281metadata prefixes preserved.",
+    "Source gates executed before absence profile; post-restoration unchanged native input hashes proved, no passing replay or audit while live. No tested production/source/metadata input changed."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610070258-JSRZD5/README.md",
+    ".agentplane/tasks/202610070258-JSRZD5/evidence/exact-sha-review.json",
+    ".agentplane/tasks/202610070258-JSRZD5/evidence/final-coverage.json",
+    ".agentplane/tasks/202610070258-JSRZD5/evidence/scope-final.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Full native box/info per-edge carriers, validity/distribution and split/follow/RTL/vertical layout unions remain unverified and next; parent goal stays ACTIVE."
+  ]
+}
