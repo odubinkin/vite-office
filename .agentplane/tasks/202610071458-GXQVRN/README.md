@@ -1,10 +1,11 @@
 ---
 id: "202610071458-GXQVRN"
 title: "Connect native cursor label affinity to marked list levels"
-status: "DOING"
+result_summary: "Connected native cursor label affinity to SwList marked-level owners and shared existing options; fixed actual SwCallLink-shaped publication without changing any prior acceptance.587 prior acceptance and298 metadata states/defaults/exceptions preserved; exact same-agent audit passes at implementationSHA. Marker paint/ruler and full native color/view/redline hierarchy remain follow-ups."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -43,11 +44,16 @@ quality_review:
   findings:
     - "13559 app,110 inventory,14 infrastructure,278 full Chromium;zero unresolved or uncaught,0passing replay,8focused skipped observations retained. Actual current-source app/inventory all4 coverage100 via complete source/map and complete declaration/body/enclosing branch/location certificates."
     - "8 semantic paths, all587 prior acceptance byte-identical,0 migrations;298 metadata records/fields/defaults/statuses/exceptions retained. ONE full upstream-absent runtime;one4original-failure/2new-case closure and one changed-input final build,all terminal restored."
-commit: null
+commit:
+  hash: "7247aa556ed5a949d1712898375299e5f1550216"
+  message: "🧩 GXQVRN parity: connect native cursor marked list levels"
 comments:
   -
     author: "CODER"
     body: "Start: connect source-owned cursor label affinity to native marked-list levels and shared view options under standing iterative authorization."
+  -
+    author: "CODER"
+    body: "Verified: native cursor list/depth bookkeeping, field-shading gate, actual view-option identity, counted-rule query and forced label refresh; atomic SetPaM publication preserves original expectations.13559app110inventory14infra278fullChrome,actual100app/inventory,zero unresolved/uncaught/passing replay. Whole parityACTIVE."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native cursor marked-list integration verified at implementation7247aa556ed5a949d1712898375299e5f1550216:13559app110inventory14infra278fullChrome,zero unresolved/uncaught/passing replay,actual100app/inventory;8paths587prior acceptance byte-identical298metadata retained. Same-agent exact evaluation pass,explicitly not independent; final native repair/build and browser scope recorded; whole parityACTIVE."
+  -
+    type: "status"
+    at: "2026-10-07T15:26:57.252Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native cursor list/depth bookkeeping, field-shading gate, actual view-option identity, counted-rule query and forced label refresh; atomic SetPaM publication preserves original expectations.13559app110inventory14infra278fullChrome,actual100app/inventory,zero unresolved/uncaught/passing replay. Whole parityACTIVE."
 doc_version: 3
-doc_updated_at: "2026-10-07T15:25:57.792Z"
+doc_updated_at: "2026-10-07T15:26:57.253Z"
 doc_updated_by: "CODER"
 description: "Iteration218: restore pinned cursor-shell marked list identity/depth, field-shading gate, native UpdateMarkedListLevel and forced refresh on label-to-label cursor admission, sharing existing SwView options with the actual shell. Preserve serialization defaults and intentional browser exceptions."
 sections:
