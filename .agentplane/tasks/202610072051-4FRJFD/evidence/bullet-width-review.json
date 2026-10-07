@@ -1,0 +1,126 @@
+{
+  "base": "705781f0a1b47dddcafde0ae497e1e8065f922df",
+  "existingFix": "e625c6f3b56279490cd3fc9292afa2a3ee2f4d92",
+  "upstreamPin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sources": [
+    {
+      "path": "sw/source/core/text/porfld.cxx",
+      "lines": [
+        607,
+        681
+      ],
+      "sha256": "a53a623e4e806998b066926ab943594e5a2ca308b94d27bb4bd7e2739faebb9b"
+    },
+    {
+      "path": "sw/source/core/text/txtfld.cxx",
+      "lines": [
+        535,
+        538
+      ],
+      "sha256": "121d478dbc68755ea0869d2a91c3f24bb8df72547e9671c41cb381bd3b06e2dd"
+    }
+  ],
+  "runtimeSources": [
+    {
+      "path": "apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx",
+      "sha256": "a1c7dfeb1974f6799414c2d8356cc638a5bb09e5a557961f3d42ee10690f3a27"
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/writer-view-projection.ts",
+      "sha256": "30afab66fa1df43c05839b2592c001e07fb0055eec0f8e70fa559eb8b6ad23f1"
+    }
+  ],
+  "profile": {
+    "commands": [
+      {
+        "name": "build",
+        "argv": [
+          "npm",
+          "run",
+          "build"
+        ],
+        "cwd": ".",
+        "exitCode": 0,
+        "upstreamAbsent": true
+      },
+      {
+        "name": "app",
+        "argv": [
+          "npx",
+          "vitest",
+          "run",
+          "src/sw/browser/editor/native-list-marker-width.test.tsx",
+          "--reporter=json",
+          "--outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/4FRJFD/app-results.json"
+        ],
+        "cwd": "apps/office",
+        "exitCode": 0,
+        "upstreamAbsent": true
+      },
+      {
+        "name": "chromium",
+        "argv": [
+          "npx",
+          "playwright",
+          "test",
+          "--config",
+          "apps/office/playwright.config.ts",
+          "apps/office/e2e/writer-native-list-marker-width.spec.ts",
+          "--reporter=json"
+        ],
+        "cwd": ".",
+        "exitCode": 0,
+        "upstreamAbsent": true
+      }
+    ],
+    "restored": true,
+    "rawHashes": [
+      {
+        "name": "app-results.json",
+        "sha256": "ae107d7de277ae4fe990cc2cf6c0c53bb93841a536d6dd9982f16aed635e05fd"
+      },
+      {
+        "name": "chromium.log",
+        "sha256": "f0fb0d040107779aee11e25777305eac9c7ab9a82ef485657a184248886561db"
+      },
+      {
+        "name": "build.log",
+        "sha256": "099fb8c15e49c5f1e39a0a6af7936767a483f531ea7a03bd372e84e5e5e59b63"
+      },
+      {
+        "name": "profile.json",
+        "sha256": "4aa9567613f87e4c4def08f3276351d862d224b831a0af4d87173d44e7f71abe"
+      }
+    ]
+  },
+  "counts": {
+    "app": 9,
+    "chromium": 4,
+    "failures": 0,
+    "skipped": 0,
+    "flaky": 0
+  },
+  "manualGeometry": {
+    "widths": [
+      1280,
+      390
+    ],
+    "gapCssPx": 18.3046875,
+    "creation": "production formatting toolbar"
+  },
+  "assumptions": [
+    "Verified current checkout in Chromium; user document/browser not specified."
+  ],
+  "weakLinks": [
+    "Cannot infer all documents/browsers or full native layout parity from these bounded scenarios."
+  ],
+  "final": "Current code includes the earlier occupied-width correction and passes selected overlap scenarios; no new production fix fabricated.",
+  "deferredPatchSha256": "5844aef23d272577d1331863eebc8601969237f317f7843fc1b61dab131400fc",
+  "sourceUnchanged": true,
+  "governance": {
+    "doctorErrors": 0,
+    "doctorPreexistingWarnings": 2,
+    "routing": true,
+    "diff": true
+  }
+}
