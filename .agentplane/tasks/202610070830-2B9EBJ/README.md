@@ -1,10 +1,11 @@
 ---
 id: "202610070830-2B9EBJ"
 title: "Use native collapsing table border arbitration before browser paint"
-status: "DOING"
+result_summary: "Native collapsing table borders use source Style priority and interval splitting before browser paint"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +39,16 @@ quality_review:
     - ".agentplane/tasks/202610070830-2B9EBJ/evidence/exact-sha-review.json"
   findings:
     - "Native Style ordering and overlap splits match pinned integer contracts; all actual 13473 app,110 inventory,14 infrastructure,268 Chromium cases resolved with no passing replay; current source-map coverage certificates and exact prior acceptance migration reviewed"
-commit: null
+commit:
+  hash: "62ff891512a799aa94ce6097ce6bc4afa228ac70"
+  message: "🚧 2B9EBJ code: resolve native collapsing table borders"
 comments:
   -
     author: "CODER"
     body: "Start: Restore source-owned integer frame style and collapsing border arbitration under standing iterative goal authorization; preserve existing native owners, tests, metadata and I/O deviations. One full upstream-absent profile, no passing replay."
+  -
+    author: "CODER"
+    body: "Verified: native collapsing table border arbitration and shared-edge paint"
 events:
   -
     type: "status"
@@ -57,8 +63,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Exact62ff891 native Style/overlap/shared-edge paint verified;13473app110inventory14infrastructure268Chromium actual union,0passing replay,strict current-source-map100; prior566contracts/289metadata prefixes retained; same-agent evaluator not independent; full parity and existing row-height type fix remain active"
+  -
+    type: "status"
+    at: "2026-10-07T09:17:57.598Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native collapsing table border arbitration and shared-edge paint"
 doc_version: 3
-doc_updated_at: "2026-10-07T09:17:47.933Z"
+doc_updated_at: "2026-10-07T09:17:57.600Z"
 doc_updated_by: "CODER"
 description: "Iteration210 under the standing iterative UI/native parity goal: restore svx frame Style width/component ordering and SwLineEntry/SwTabFramePainter overlap arbitration for existing flat collapsing tables; browser renders the native winner on both shared sides. Preserve native box owners, separate mode, I/O deviations, old acceptance contracts and prior metadata. Exact primitive geometry/full native frames/Word/RTL/spans remain explicit residuals."
 sections:
