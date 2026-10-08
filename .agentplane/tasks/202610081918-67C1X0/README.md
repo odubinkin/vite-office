@@ -1,10 +1,11 @@
 ---
 id: "202610081918-67C1X0"
 title: "Register and release native row frame format clients through movement and history"
-status: "DOING"
+result_summary: "Register native row frame clients and release their formats through table history and rendering"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 19
+revision: 21
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-08T19:44:56.114Z"
+  updated_at: "2026-10-08T19:45:09.633Z"
   updated_by: "CODER"
-  note: "Verified actual implementation94ab0a92c04676614e7b869025c17943cfa687ae: native row frame registration/movement/destruction, direct UI/layout item access and lifetime;1293 unique app/11fresh/11Chromium upstream-absent cases,zero passing replay,all-four100% actual source-bound coverage,all scoped static/source/governance/artifact gates passed. Full suite next247;full goal incomplete."
+  note: "Register native row frame clients and release their formats through table history and rendering"
   attempts: 0
 quality_review:
   state: "pass"
@@ -41,11 +42,16 @@ quality_review:
   findings:
     - "Four deterministic certificates reconstructed byte-identically;14 semantic paths match actual implementation;1293 unique app and11 Chromium cases pass upstream absent,11 fresh,zero passing replay;all-four source-bound100% coverage."
     - "649 old acceptance files byte-identical;two exact captures before native destruction preserve literal/identity/history assertions;316 metadata records and registered IO/recovery deviations preserved."
-commit: null
+commit:
+  hash: "94ab0a92c04676614e7b869025c17943cfa687ae"
+  message: "🧩 67C1X0 code: register and release native row frame clients"
 comments:
   -
     author: "CODER"
     body: "Start: implement native row/frame client registration and typed owner movement, destruction after actual row/table deletion, and temporary UI/layout frame cleanup under standing user-approved parity scope."
+  -
+    author: "CODER"
+    body: "Verified: Register native row frame clients and release their formats through table history and rendering. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -60,8 +66,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified actual implementation94ab0a92c04676614e7b869025c17943cfa687ae: native row frame registration/movement/destruction, direct UI/layout item access and lifetime;1293 unique app/11fresh/11Chromium upstream-absent cases,zero passing replay,all-four100% actual source-bound coverage,all scoped static/source/governance/artifact gates passed. Full suite next247;full goal incomplete."
+  -
+    type: "verify"
+    at: "2026-10-08T19:45:09.633Z"
+    author: "CODER"
+    state: "ok"
+    note: "Register native row frame clients and release their formats through table history and rendering"
+  -
+    type: "status"
+    at: "2026-10-08T19:45:09.731Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Register native row frame clients and release their formats through table history and rendering. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-08T19:44:56.415Z"
+doc_updated_at: "2026-10-08T19:45:09.731Z"
 doc_updated_by: "CODER"
 description: "Implement native row frame/line format registration and typed change/move hints, eliminate stale row registrations and temporary layout/UI frame leaks; preserve original graph and source-bound targeted verification."
 sections:
@@ -132,6 +151,36 @@ sections:
     - freshness: route=computed_local remote=remote_skipped
     - repeat_allowed: false
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-08T19:45:09.633Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Register native row frame clients and release their formats through table history and rendering
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-08T19:44:56.415Z, excerpt_hash=sha256:cbd411d860e94f40b26141cf1d10442709e9a7df7bf8f48354b5fe966dbd0cbf
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610081918-67C1X0/blueprint/resolved-snapshot.json
+    - old_digest: 590574430ea053f33ff8e0898a9628057f638a76cfb8fa0e5c160ff5cc528caf
+    - current_digest: 590574430ea053f33ff8e0898a9628057f638a76cfb8fa0e5c160ff5cc528caf
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610081918-67C1X0
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610081918-67C1X0 --result verified-202610081918-67C1X0 --commit a8af946fdae3bc77150d758df8605c8617d3f697
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
     <!-- END VERIFICATION RESULTS -->
@@ -230,6 +279,36 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-08T19:45:09.633Z — VERIFY — ok
+
+By: CODER
+
+Note: Register native row frame clients and release their formats through table history and rendering
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-08T19:44:56.415Z, excerpt_hash=sha256:cbd411d860e94f40b26141cf1d10442709e9a7df7bf8f48354b5fe966dbd0cbf
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610081918-67C1X0/blueprint/resolved-snapshot.json
+- old_digest: 590574430ea053f33ff8e0898a9628057f638a76cfb8fa0e5c160ff5cc528caf
+- current_digest: 590574430ea053f33ff8e0898a9628057f638a76cfb8fa0e5c160ff5cc528caf
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610081918-67C1X0
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610081918-67C1X0 --result verified-202610081918-67C1X0 --commit a8af946fdae3bc77150d758df8605c8617d3f697
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
