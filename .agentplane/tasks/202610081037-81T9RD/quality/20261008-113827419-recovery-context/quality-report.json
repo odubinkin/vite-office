@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202610081037-81T9RD",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-08T11:38:27.419Z",
+  "verdict": "pass",
+  "summary": "Exact ab796a27b84c native ruler ownership scope passes reconstructed evidence; same current agent, explicitly not independent",
+  "evaluated_sha": "ab796a27b84c9e14b0dcbb362d137f3ee82ad2b6",
+  "blueprint_digest": "6e4f3556f973cd73a9caa9f59d6fb5d5ca098b487359cb115694b2e8b250b7bb",
+  "findings": [
+    "Four committed reports reconstructed byte-identically against actual implementation; all11 semantic paths, all620 prior acceptance sources, app13785 inventory110 infra19 Chromium299, one full absent profile and one original-failure/new-only closure, all-four exact-source-bound coverage100, protected IO pin stash and parent preserved. Independent per-row column widths/current-line apply and full native SFX/VCL ruler state remain explicit partial follow-ups."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610081037-81T9RD/README.md",
+    ".agentplane/tasks/202610081037-81T9RD/evidence/implementation-review.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Independent per-row column widths/current-line column core apply remains unsupported; source native flag retained but Writer uses existing ordinary shared-column contract until the next real core model/history/layout/filter port. Full SFX/VCL/margin/vertical state remains partial. Review is by same current agent, not independent."
+  ]
+}

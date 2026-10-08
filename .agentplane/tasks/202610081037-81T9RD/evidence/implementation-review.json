@@ -1,0 +1,76 @@
+{
+  "evaluatedSHA": "ab796a27b84c9e14b0dcbb362d137f3ee82ad2b6",
+  "baseline": "6a7372323b3e44ea4529e8cb98edce4ce6b8a272",
+  "reviewer": "Same current agent in EVALUATOR role; explicitly not independent",
+  "reconstructed": [
+    {
+      "path": ".agentplane/tasks/202610081037-81T9RD/evidence/final-coverage.json",
+      "sha256": "433a603383d8a00f1b489147fb8824f133d3ab0738a604de81c71c77f973d8fb",
+      "byteIdenticalReconstruction": true
+    },
+    {
+      "path": ".agentplane/tasks/202610081037-81T9RD/evidence/case-census.json",
+      "sha256": "419491451ad1af2c05e1dc1deca7035ff86d849b266a3874bd5b9d947efa3d24",
+      "byteIdenticalReconstruction": true
+    },
+    {
+      "path": ".agentplane/tasks/202610081037-81T9RD/evidence/scope-final.json",
+      "sha256": "3fb6fcc81ebd46cd40e25285d9ccc7492cef3faf167038265f848a0cae2bbdd6",
+      "byteIdenticalReconstruction": true
+    },
+    {
+      "path": ".agentplane/tasks/202610081037-81T9RD/evidence/native-source-review.json",
+      "sha256": "da759022642b5f7ce1b584fa12f16b1f59f9e10eedc24080405fed87c1b882f5",
+      "byteIdenticalReconstruction": true
+    }
+  ],
+  "semanticPaths": [
+    "apps/office/src/svtools/source/control/ruler.ts",
+    "apps/office/src/svx/source/dialog/svxruler.ts",
+    "apps/office/src/sw/source/uibase/docvw/edtwin.ts",
+    "apps/office/src/sw/source/uibase/uiview/view.ts",
+    "apps/office/src/sw/source/uibase/uiview/viewtab.ts",
+    "scripts/check-module-boundaries.mjs",
+    "apps/office/src/svx/source/dialog/native-table-ruler.test.ts",
+    "apps/office/src/sw/source/uibase/docvw/native-ruler-ownership.test.ts",
+    "scripts/native-ruler-boundary.test.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "oneFullUpstreamAbsentProfile": true,
+  "focusedRuntimeClosures": 1,
+  "noPassingTestReplay": true,
+  "uniquePassingCases": {
+    "app": 13785,
+    "inventory": 110,
+    "infrastructure": 19,
+    "chromium": 299
+  },
+  "newAppAcceptanceCases": 36,
+  "allFourExactSourceBoundCoverage100": true,
+  "priorAcceptancePreserved": {
+    "byteIdenticalFiles": 620,
+    "migrations": 0
+  },
+  "protectedIOProductionPreserved": 4,
+  "unchangedBrowserModifierBridge": {
+    "path": "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts",
+    "sha256": "060a06dd9a77e530de1756b2f4c4384e6b2ddd1ee20c68fb175daab2eeb99ee7"
+  },
+  "parentPrefixPreserved": true,
+  "stashPreserved": true,
+  "wholeAPIncludingIgnoredAudit": {
+    "files": 5846,
+    "forbiddenPaths": [],
+    "registeredIdenticalPolicyBackupSHA256": "130064d9e92c9f4fb7332e350eeddc639114dcf38a811b2b34e165e2ec892789"
+  },
+  "nativeScope": "Persistent native Ruler/SvxRuler ownership and Writer delegation for represented flat-table tracking; independent per-row column apply remains a real next core gap, no full ruler/table/module promotion",
+  "residuals": [
+    "Independent per-row column widths/current-line column apply remain unsupported in SwDoc and SwTable. This is a real upstream gap requiring the next core correction, not a registered intentional exception.",
+    "Full SFX bindings/listener/slot state, native VCL ruler painting/ticks/snapping/protection/page/paragraph/frame/object/tab/indent state and vertical/RTL document dragging remain partial.",
+    "Represented border values retain injected logical/device conversion; complete native VCL pixel-vector ownership and window/null offsets remain incomplete.",
+    "Column-margin modifier geometry and single-row paragraph-indent bottom range retain existing partial contracts; native item pooling/UNO members from prior work remain incomplete.",
+    "Registered IO/open/save/recovery/settings remain byte-identical; no full upstream/module parity promotion."
+  ],
+  "failures": []
+}
