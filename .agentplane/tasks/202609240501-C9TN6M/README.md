@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 253
+revision: 254
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-08T19:11:02.537Z"
+doc_updated_at: "2026-10-08T19:46:11.655Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -1219,6 +1219,20 @@ sections:
     Actual-SHA EVALUATOR phase is the same current agent and explicitly non-independent. All19 semantic paths match actual implementation bytes; four coverage/runtime/scope/source certificates reconstructed byte-identically; quality/20261008-190836310-recovery-context/quality-report.json records pass and actual SHA. Meaningful close result avoids the previous generic subject rejection; leaf is DONE and immutable, clean tracked close.
 
     Full native SwRowFrame registration/retargeting/destruction and typed TableLineFormatChanged/MoveTableLine hints remain unimplemented. Current stateless row frame reads its original line each query; this is not full lifecycle parity. Detached/deleted insertion row registration and native client lifetime need the next coherent fix, along with remaining pooling/full frame attributes/modified flag/nested/merged/UNO. Whole core/browser parity remains incomplete and goal ACTIVE; registered open/save/recovery/settings deviations preserved.
+
+    ### Iteration 242 — original native row frame clients and lifecycle
+
+    Completed leaf202610081918-67C1X0. Actual implementation94ab0a92c04676614e7b869025c17943cfa687ae; verification checkpointa8af946fdae3bc77150d758df8605c8617d3f697; meaningful close47f76e1107c97cd4a3cebef7f5010945be0e7488. SwRowFrame is now an original SwClient registered at the line's native format, with GetFormat/RegisterToFormat/DestroyImpl and direct native frame-size item reads. Native ClaimFrameFormat directly retargets physical clients matching its original row before row registration; shared peer frames remain untouched. ChgFrameFormat publishes typed TableLineFormatChanged, while SaveTable history publishes distinct MoveTableLineHint before row re-registration and native KillEmptyFrameFormat. Both use borrowed native owner/line references and original graph identity.
+
+    Destructive flat row/table node removal destroys matching physical row clients before releasing the model row registration. SwRowFrame and SwTableLine cleanup destroy a format only after its last represented client; ordinary RemoveLine remains a nondestructive detach. Real JSX rendering and SwRootFrame measurement destroy temporary registered frames in finally, including projection exceptions; no global frame registry, dead-owner cache or replacement DTO is introduced.
+
+    Eleven fresh literal cases across three files validate native registration/claim/peer movement/typed hint order/last-client disposal, repeated attribute and numeric insertion history, complete flat table deletion, mounted rendering/measurement and exception cleanup.1293 unique app scenarios and11Chromium pass upstream physically absent/restored finally, zero passing replay. Initial four failures: two new native graph fixtures corrected and two old numeric history comparisons capture expected construction values before destructive Undo instead of reading deleted native owners. Exact literal attribute/identity/history assertions remain intact;649of651 old acceptance files entirely byte-identical. Failed-only closure4passed/19skipped; new exception and previously unexecuted alignment/headline closure15passed/2skipped. Partial raw threshold exits retained.
+
+    All-four100% app17592lines/19320statements/4422functions/14333branches and inventory1464/1523/384/1081 use actual counters with prior241 only by whole identical source/maps or complete unchanged declaration/body/enclosing branch/all locations;313app/38inventory sources. No clamping/sanitization or unchanged inventory/infra runtime replay. User cadence: last full237,next247,no full242. All316 metadata fields/order/status/default/classification/evidence prefixes retained with bounded append-only notes, no promotion. Six static checks/build, separate restored-vendor generator/source-tree/provenance/invariants/parity, doctor/routing/diff and artifact checks pass. Six native source files byte-bound to pin9bc445578031fecf56086729d8e4940c77e14d65; protectedIO4, entire writer-view and stashc85f4a0e453dfd06d6e199554784f2c286737472 unchanged. No upstream/application/Python/scripts/raw maps/results/snapshots in AgentPlane.
+
+    Actual-SHA EVALUATOR is the current agent, explicitly non-independent.14 semantic paths match actual implementation; four certificates reconstructed byte-identically, quality/20261008-194435409-recovery-context/quality-report.json records pass and actual SHA, owner verification recorded. A stale1193 checker expectation was corrected to authoritative1293 without changing counters or replaying runtime. Leaf DONE remains immutable and tracked close clean.
+
+    Full native physical frame hierarchy/invalidation/follows/repeated frame lifetime/pooling/nested/merged/UNO and whole core/browser parity remain unverified. Flat teardown is the represented native DelFrames subset; it is not full frame-tree parity. Goal remains ACTIVE, registered open/save/recovery/settings deviations preserved.
 id_source: "generated"
 ---
 ## Summary
@@ -2411,3 +2425,17 @@ Twelve fresh cases (7native ownership/core/listener/claim/insertion,3history,2mo
 Actual-SHA EVALUATOR phase is the same current agent and explicitly non-independent. All19 semantic paths match actual implementation bytes; four coverage/runtime/scope/source certificates reconstructed byte-identically; quality/20261008-190836310-recovery-context/quality-report.json records pass and actual SHA. Meaningful close result avoids the previous generic subject rejection; leaf is DONE and immutable, clean tracked close.
 
 Full native SwRowFrame registration/retargeting/destruction and typed TableLineFormatChanged/MoveTableLine hints remain unimplemented. Current stateless row frame reads its original line each query; this is not full lifecycle parity. Detached/deleted insertion row registration and native client lifetime need the next coherent fix, along with remaining pooling/full frame attributes/modified flag/nested/merged/UNO. Whole core/browser parity remains incomplete and goal ACTIVE; registered open/save/recovery/settings deviations preserved.
+
+### Iteration 242 — original native row frame clients and lifecycle
+
+Completed leaf202610081918-67C1X0. Actual implementation94ab0a92c04676614e7b869025c17943cfa687ae; verification checkpointa8af946fdae3bc77150d758df8605c8617d3f697; meaningful close47f76e1107c97cd4a3cebef7f5010945be0e7488. SwRowFrame is now an original SwClient registered at the line's native format, with GetFormat/RegisterToFormat/DestroyImpl and direct native frame-size item reads. Native ClaimFrameFormat directly retargets physical clients matching its original row before row registration; shared peer frames remain untouched. ChgFrameFormat publishes typed TableLineFormatChanged, while SaveTable history publishes distinct MoveTableLineHint before row re-registration and native KillEmptyFrameFormat. Both use borrowed native owner/line references and original graph identity.
+
+Destructive flat row/table node removal destroys matching physical row clients before releasing the model row registration. SwRowFrame and SwTableLine cleanup destroy a format only after its last represented client; ordinary RemoveLine remains a nondestructive detach. Real JSX rendering and SwRootFrame measurement destroy temporary registered frames in finally, including projection exceptions; no global frame registry, dead-owner cache or replacement DTO is introduced.
+
+Eleven fresh literal cases across three files validate native registration/claim/peer movement/typed hint order/last-client disposal, repeated attribute and numeric insertion history, complete flat table deletion, mounted rendering/measurement and exception cleanup.1293 unique app scenarios and11Chromium pass upstream physically absent/restored finally, zero passing replay. Initial four failures: two new native graph fixtures corrected and two old numeric history comparisons capture expected construction values before destructive Undo instead of reading deleted native owners. Exact literal attribute/identity/history assertions remain intact;649of651 old acceptance files entirely byte-identical. Failed-only closure4passed/19skipped; new exception and previously unexecuted alignment/headline closure15passed/2skipped. Partial raw threshold exits retained.
+
+All-four100% app17592lines/19320statements/4422functions/14333branches and inventory1464/1523/384/1081 use actual counters with prior241 only by whole identical source/maps or complete unchanged declaration/body/enclosing branch/all locations;313app/38inventory sources. No clamping/sanitization or unchanged inventory/infra runtime replay. User cadence: last full237,next247,no full242. All316 metadata fields/order/status/default/classification/evidence prefixes retained with bounded append-only notes, no promotion. Six static checks/build, separate restored-vendor generator/source-tree/provenance/invariants/parity, doctor/routing/diff and artifact checks pass. Six native source files byte-bound to pin9bc445578031fecf56086729d8e4940c77e14d65; protectedIO4, entire writer-view and stashc85f4a0e453dfd06d6e199554784f2c286737472 unchanged. No upstream/application/Python/scripts/raw maps/results/snapshots in AgentPlane.
+
+Actual-SHA EVALUATOR is the current agent, explicitly non-independent.14 semantic paths match actual implementation; four certificates reconstructed byte-identically, quality/20261008-194435409-recovery-context/quality-report.json records pass and actual SHA, owner verification recorded. A stale1193 checker expectation was corrected to authoritative1293 without changing counters or replaying runtime. Leaf DONE remains immutable and tracked close clean.
+
+Full native physical frame hierarchy/invalidation/follows/repeated frame lifetime/pooling/nested/merged/UNO and whole core/browser parity remain unverified. Flat teardown is the represented native DelFrames subset; it is not full frame-tree parity. Goal remains ACTIVE, registered open/save/recovery/settings deviations preserved.
