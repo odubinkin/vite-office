@@ -4,7 +4,7 @@ title: "Use native row items and limits at the Writer ruler boundary"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 12
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -18,11 +18,27 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-08T09:48:34.032Z"
+  updated_by: "CODER"
+  note: "Actual implementation a94335fd975e6275d718088f55f63f448c2527b0: final docs recorded first; exact reviewed seven-file native row scope, sole full upstream-absent profile plus original failed/new cases only;13725app/110inventory/16infra/299Chromium PASS, all-four source-bound coverage100,618 acceptance files unchanged,307 records preserved each, quality PASS explicitly same-current-agent. Residual full ruler/slot/vertical/single-row contexts remain documented; goal ACTIVE."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-08T09:48:05.181Z"
+  updated_by: "EVALUATOR"
+  note: "Exact implementation a94335fd975e6275d718088f55f63f448c2527b0 satisfies approved native row boundary scope; same-current-agent review explicitly not independent."
+  evaluated_sha: "a94335fd975e6275d718088f55f63f448c2527b0"
+  blueprint_digest: "fa5f8389a7f170a740e58ff661f15906583bc8d0b5bf06c399c13167b4375a1d"
+  evidence_refs:
+    - ".agentplane/tasks/202610080904-VEQGJS/README.md"
+    - ".agentplane/tasks/202610080904-VEQGJS/quality/20261008-094805181-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610080904-VEQGJS/quality/20261008-094805181-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610080904-VEQGJS/quality/20261008-094805181-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610080904-VEQGJS/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610080904-VEQGJS/evidence/implementation-review.json"
+  findings:
+    - "Reconstructed four committed evidence reports byte-identically; all7 semantic bytes bound to actual SHA,618 prior acceptance sources unchanged,307 prior metadata records preserved each, all-four source-bound coverage100; sole full absent profile and only original failure/new cases, no passing replay."
 commit: null
 comments:
   -
@@ -36,8 +52,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: port source-owned Writer row item conversion and real drag limits under the standing authorized goal, preserving original owners/acceptance and registered IO deviations; one full upstream-absent profile."
+  -
+    type: "verify"
+    at: "2026-10-08T09:48:34.032Z"
+    author: "CODER"
+    state: "ok"
+    note: "Actual implementation a94335fd975e6275d718088f55f63f448c2527b0: final docs recorded first; exact reviewed seven-file native row scope, sole full upstream-absent profile plus original failed/new cases only;13725app/110inventory/16infra/299Chromium PASS, all-four source-bound coverage100,618 acceptance files unchanged,307 records preserved each, quality PASS explicitly same-current-agent. Residual full ruler/slot/vertical/single-row contexts remain documented; goal ACTIVE."
 doc_version: 3
-doc_updated_at: "2026-10-08T09:46:15.078Z"
+doc_updated_at: "2026-10-08T09:48:34.111Z"
 doc_updated_by: "CODER"
 description: "Iteration230: port the actual StateTabWin row value branch and native row slot constants, route production row drag through SwView/SvxColumnItem visibility/end/min/max, retain original SwTabCols model/apply and row margin/follow guards, verify pinned horizontal/vertical item contracts and real history without touching registered IO deviations."
 sections:
@@ -62,7 +84,40 @@ sections:
     Result: required checks PASS after source-backed product correction. ONE full absent profile retained app13719PASS1FAIL; focused original failure1PASS8SKIP and five genuinely new cases5PASS9SKIP resolve it without passing replay. Vendor restored after every profile.
     Evidence: evidence/case-census.json final unique13725app/110inventory/299Chromium;16infrastructure; zero unresolved/uncaught/flaky/passing replay. evidence/final-coverage.json exact current-source all-four100 app16916/18577/4306/13983, inventory1464/1523/384/1081. evidence/scope-final.json scope7,618byte-identical prior acceptance,307preserved records each. evidence/native-source-review.json six pinned upstream source hashes/all-location anchors,4production/4protectedIO; evidence/changed-file-checks.json unchanged scoped JSDoc and physical<1000. artifact-census.json and governance.json PASS with two pre-existing doctor warnings.
     Scope: actual native row item conversion and horizontal-writing real row capture/apply plus new row-to-column handoff cases; full native row/ruler/slot contexts remain partial. All full and focused tests executed with upstream absent; restored source-only commands inspect upstream without invoking it.
-    No mandatory checks skipped. Focused coverage threshold exit1 observations are retained, followed by exact source-bound cumulative coverage100. Chromium299PASS belongs to the sole full initial profile; changed production additionally binds the focused corrected assertion/new cases and changed-input build, without claiming another full browser run. Exact implementation SHA review, canonical verification and finish pending.
+    No mandatory checks skipped. Focused coverage threshold exit1 observations are retained, followed by exact source-bound cumulative coverage100. Chromium299PASS belongs to the sole full initial profile; changed production additionally binds the focused corrected assertion/new cases and changed-input build, without claiming another full browser run. Exact implementation a94335fd975e6275d718088f55f63f448c2527b0 reviewed PASS: four committed reports reconstructed byte-identically, all7 semantic files and exact source/map/result hashes checked against actual implementation. Same current agent in EVALUATOR role, explicitly not independent. Quality report .agentplane/tasks/202610080904-VEQGJS/quality/20261008-094805181-recovery-context/quality-report.json records PASS with stated residuals. Canonical verification follows these final Findings/Verification; commit its checkpoint before finish, always finish the actual implementation SHA above rather than the workflow tail.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-08T09:48:34.032Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Actual implementation a94335fd975e6275d718088f55f63f448c2527b0: final docs recorded first; exact reviewed seven-file native row scope, sole full upstream-absent profile plus original failed/new cases only;13725app/110inventory/16infra/299Chromium PASS, all-four source-bound coverage100,618 acceptance files unchanged,307 records preserved each, quality PASS explicitly same-current-agent. Residual full ruler/slot/vertical/single-row contexts remain documented; goal ACTIVE.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-08T09:48:32.406Z, excerpt_hash=sha256:2af0b4a38f0f525ed416fce811e9e6bf980e22d8d4e627732b015cfa5b8110b2
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610080904-VEQGJS/blueprint/resolved-snapshot.json
+    - old_digest: fa5f8389a7f170a740e58ff661f15906583bc8d0b5bf06c399c13167b4375a1d
+    - current_digest: fa5f8389a7f170a740e58ff661f15906583bc8d0b5bf06c399c13167b4375a1d
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610080904-VEQGJS
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610080904-VEQGJS
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert implementation through a new approved leaf; preserve original native model/history owners and registered IO deviations."
   Findings: |-
     Iteration230 source-bound scope: StateTabWin rows now create native SvxColumnItem values through SwView; SwEditWin consumes actual item visibility/end/min/max and represented bottom-margin limits. Native active0, LeftMin-only distance, zero clamp then uint16, same-index vertical mirror, constrained invisible tail and row slots10992/10993 match pinned LibreOffice 9bc445578031fecf56086729d8e4940c77e14d65. Source review records all occurrences, including the row ExecuteTabWin assignment at1086 and row StateTabWin SetWhich at2205, rather than relying on the first column occurrence.
@@ -70,7 +125,7 @@ sections:
     Evidence: ONE full upstream-absent profile: build PASS; app13719PASS1FAIL; inventory110PASS; infrastructure16PASS; Chromium299PASS with zero flaky/skipped/unexpected. After correction, only original failed case1PASS8SKIP plus changed-input build, then five new cases5PASS9SKIP. Focused CLI exits1 are retained whole-graph threshold observations, not assertion failures. Final unique app13725PASS/inventory110PASS/infrastructure16PASS/Chromium299PASS, zero unresolved/uncaught/passing replay,17 skipped observations retained. No second full profile or browser replay.
     Exact source-bound cumulative coverage is all-four100: app L16916/S18577/F4306/B13983; inventory L1464/S1523/F384/B1081. Whole identical maps/sources and complete contiguous mapped declarations/bodies/enclosing branches/locations bind actual code. The invalid V8 negative paintfrm raw aggregate uses the entire prior certified identical source/map; no count sanitization. Initial full raw coverage and correction maps remain unchanged in ignored cache; AP contains only bounded hashes/counts/identifiers.
     Scope7 (4production,1fresh acceptance,2metadata); all618 prior acceptance sources byte-identical; both307-record metadata sets preserve all prior field/evidence prefixes, defaults/classes/statuses without promotion. Four protected IO production files byte-identical. Fresh test14 cases, maximum physical code679lines; scoped unchanged JSDoc PASS. Initial6static PASS; two changed-input closures PASS; restored5source-only gates PASS. Doctor0errors2existingwarnings (managed hook readiness/fallback and historical DONE2Z3962 missing implementation SHA), routing and diff PASS. Source/AP artifact ban PASS; no upstream/Python/raw maps/results saved in AP. Original stash c85f4a0e453dfd06d6e199554784f2c286737472 and entire parent652459char prefix SHAe21958d1c024492f2e5d3e0df5065b1c7af893b99d98259c10410a71f4d3c385 preserved.
-    Residuals: full SvxRuler/SfxBindings/SfxItemSet and StateTabWin page/frame/section contexts; vertical/RTL document dragging, native row modifier/snapping/protection and single-row paragraph-indent bottom-margin range; pooled item guards/full WhichId, nonzero UNO members/default factory/presentation remain partial. Registered IO/open/save/recovery deviations untouched. Goal remains ACTIVE; no complete row/ruler/module or whole-upstream parity claim. Exact implementation SHA review, evaluator, canonical verify checkpoint and finish are pending.
+    Residuals: full SvxRuler/SfxBindings/SfxItemSet and StateTabWin page/frame/section contexts; vertical/RTL document dragging, native row modifier/snapping/protection and single-row paragraph-indent bottom-margin range; pooled item guards/full WhichId, nonzero UNO members/default factory/presentation remain partial. Registered IO/open/save/recovery deviations untouched. Goal remains ACTIVE; no complete row/ruler/module or whole-upstream parity claim. Exact implementation a94335fd975e6275d718088f55f63f448c2527b0 reviewed PASS: four committed reports reconstructed byte-identically, all7 semantic files and exact source/map/result hashes checked against actual implementation. Same current agent in EVALUATOR role, explicitly not independent. Quality report .agentplane/tasks/202610080904-VEQGJS/quality/20261008-094805181-recovery-context/quality-report.json records PASS with stated residuals. Canonical verification follows these final Findings/Verification; commit its checkpoint before finish, always finish the actual implementation SHA above rather than the workflow tail.
 id_source: "generated"
 ---
 ## Summary
@@ -105,7 +160,40 @@ Command: exact commands and hashes in evidence/static-gates.json, static-closure
 Result: required checks PASS after source-backed product correction. ONE full absent profile retained app13719PASS1FAIL; focused original failure1PASS8SKIP and five genuinely new cases5PASS9SKIP resolve it without passing replay. Vendor restored after every profile.
 Evidence: evidence/case-census.json final unique13725app/110inventory/299Chromium;16infrastructure; zero unresolved/uncaught/flaky/passing replay. evidence/final-coverage.json exact current-source all-four100 app16916/18577/4306/13983, inventory1464/1523/384/1081. evidence/scope-final.json scope7,618byte-identical prior acceptance,307preserved records each. evidence/native-source-review.json six pinned upstream source hashes/all-location anchors,4production/4protectedIO; evidence/changed-file-checks.json unchanged scoped JSDoc and physical<1000. artifact-census.json and governance.json PASS with two pre-existing doctor warnings.
 Scope: actual native row item conversion and horizontal-writing real row capture/apply plus new row-to-column handoff cases; full native row/ruler/slot contexts remain partial. All full and focused tests executed with upstream absent; restored source-only commands inspect upstream without invoking it.
-No mandatory checks skipped. Focused coverage threshold exit1 observations are retained, followed by exact source-bound cumulative coverage100. Chromium299PASS belongs to the sole full initial profile; changed production additionally binds the focused corrected assertion/new cases and changed-input build, without claiming another full browser run. Exact implementation SHA review, canonical verification and finish pending.
+No mandatory checks skipped. Focused coverage threshold exit1 observations are retained, followed by exact source-bound cumulative coverage100. Chromium299PASS belongs to the sole full initial profile; changed production additionally binds the focused corrected assertion/new cases and changed-input build, without claiming another full browser run. Exact implementation a94335fd975e6275d718088f55f63f448c2527b0 reviewed PASS: four committed reports reconstructed byte-identically, all7 semantic files and exact source/map/result hashes checked against actual implementation. Same current agent in EVALUATOR role, explicitly not independent. Quality report .agentplane/tasks/202610080904-VEQGJS/quality/20261008-094805181-recovery-context/quality-report.json records PASS with stated residuals. Canonical verification follows these final Findings/Verification; commit its checkpoint before finish, always finish the actual implementation SHA above rather than the workflow tail.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-08T09:48:34.032Z — VERIFY — ok
+
+By: CODER
+
+Note: Actual implementation a94335fd975e6275d718088f55f63f448c2527b0: final docs recorded first; exact reviewed seven-file native row scope, sole full upstream-absent profile plus original failed/new cases only;13725app/110inventory/16infra/299Chromium PASS, all-four source-bound coverage100,618 acceptance files unchanged,307 records preserved each, quality PASS explicitly same-current-agent. Residual full ruler/slot/vertical/single-row contexts remain documented; goal ACTIVE.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-08T09:48:32.406Z, excerpt_hash=sha256:2af0b4a38f0f525ed416fce811e9e6bf980e22d8d4e627732b015cfa5b8110b2
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610080904-VEQGJS/blueprint/resolved-snapshot.json
+- old_digest: fa5f8389a7f170a740e58ff661f15906583bc8d0b5bf06c399c13167b4375a1d
+- current_digest: fa5f8389a7f170a740e58ff661f15906583bc8d0b5bf06c399c13167b4375a1d
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610080904-VEQGJS
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610080904-VEQGJS
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
@@ -118,4 +206,4 @@ The original new separator test exposed a real product error (expected1125, actu
 Evidence: ONE full upstream-absent profile: build PASS; app13719PASS1FAIL; inventory110PASS; infrastructure16PASS; Chromium299PASS with zero flaky/skipped/unexpected. After correction, only original failed case1PASS8SKIP plus changed-input build, then five new cases5PASS9SKIP. Focused CLI exits1 are retained whole-graph threshold observations, not assertion failures. Final unique app13725PASS/inventory110PASS/infrastructure16PASS/Chromium299PASS, zero unresolved/uncaught/passing replay,17 skipped observations retained. No second full profile or browser replay.
 Exact source-bound cumulative coverage is all-four100: app L16916/S18577/F4306/B13983; inventory L1464/S1523/F384/B1081. Whole identical maps/sources and complete contiguous mapped declarations/bodies/enclosing branches/locations bind actual code. The invalid V8 negative paintfrm raw aggregate uses the entire prior certified identical source/map; no count sanitization. Initial full raw coverage and correction maps remain unchanged in ignored cache; AP contains only bounded hashes/counts/identifiers.
 Scope7 (4production,1fresh acceptance,2metadata); all618 prior acceptance sources byte-identical; both307-record metadata sets preserve all prior field/evidence prefixes, defaults/classes/statuses without promotion. Four protected IO production files byte-identical. Fresh test14 cases, maximum physical code679lines; scoped unchanged JSDoc PASS. Initial6static PASS; two changed-input closures PASS; restored5source-only gates PASS. Doctor0errors2existingwarnings (managed hook readiness/fallback and historical DONE2Z3962 missing implementation SHA), routing and diff PASS. Source/AP artifact ban PASS; no upstream/Python/raw maps/results saved in AP. Original stash c85f4a0e453dfd06d6e199554784f2c286737472 and entire parent652459char prefix SHAe21958d1c024492f2e5d3e0df5065b1c7af893b99d98259c10410a71f4d3c385 preserved.
-Residuals: full SvxRuler/SfxBindings/SfxItemSet and StateTabWin page/frame/section contexts; vertical/RTL document dragging, native row modifier/snapping/protection and single-row paragraph-indent bottom-margin range; pooled item guards/full WhichId, nonzero UNO members/default factory/presentation remain partial. Registered IO/open/save/recovery deviations untouched. Goal remains ACTIVE; no complete row/ruler/module or whole-upstream parity claim. Exact implementation SHA review, evaluator, canonical verify checkpoint and finish are pending.
+Residuals: full SvxRuler/SfxBindings/SfxItemSet and StateTabWin page/frame/section contexts; vertical/RTL document dragging, native row modifier/snapping/protection and single-row paragraph-indent bottom-margin range; pooled item guards/full WhichId, nonzero UNO members/default factory/presentation remain partial. Registered IO/open/save/recovery deviations untouched. Goal remains ACTIVE; no complete row/ruler/module or whole-upstream parity claim. Exact implementation a94335fd975e6275d718088f55f63f448c2527b0 reviewed PASS: four committed reports reconstructed byte-identically, all7 semantic files and exact source/map/result hashes checked against actual implementation. Same current agent in EVALUATOR role, explicitly not independent. Quality report .agentplane/tasks/202610080904-VEQGJS/quality/20261008-094805181-recovery-context/quality-report.json records PASS with stated residuals. Canonical verification follows these final Findings/Verification; commit its checkpoint before finish, always finish the actual implementation SHA above rather than the workflow tail.

@@ -1,0 +1,65 @@
+{
+  "evaluatedSHA": "a94335fd975e6275d718088f55f63f448c2527b0",
+  "baseline": "a8b7b5da26ec67ea34619410511027e697204968",
+  "reviewer": "Same current agent in EVALUATOR role; explicitly not independent",
+  "reconstructed": [
+    {
+      "path": ".agentplane/tasks/202610080904-VEQGJS/evidence/final-coverage.json",
+      "sha256": "dd36eccdd7b705311ebc53f893ec3c78a2b7993a50bc8b757a7376f1530cbdf0",
+      "byteIdenticalReconstruction": true
+    },
+    {
+      "path": ".agentplane/tasks/202610080904-VEQGJS/evidence/case-census.json",
+      "sha256": "2ca680943bd3ddca165a86c4f01c59943b3492e3f063b47172591747c352a29b",
+      "byteIdenticalReconstruction": true
+    },
+    {
+      "path": ".agentplane/tasks/202610080904-VEQGJS/evidence/scope-final.json",
+      "sha256": "a1095a7d0aef02fed98752fe96c2840b71b1258923e32b71c97c821328815a71",
+      "byteIdenticalReconstruction": true
+    },
+    {
+      "path": ".agentplane/tasks/202610080904-VEQGJS/evidence/native-source-review.json",
+      "sha256": "711575af14f0dc1488debdc41e9e6b4fe2bb403378b19844da48275198b0d049",
+      "byteIdenticalReconstruction": true
+    }
+  ],
+  "semanticPaths": [
+    "apps/office/src/svx/inc/svxids.ts",
+    "apps/office/src/sw/source/uibase/uiview/viewtab.ts",
+    "apps/office/src/sw/source/uibase/uiview/view.ts",
+    "apps/office/src/sw/source/uibase/docvw/edtwin.ts",
+    "apps/office/src/sw/source/uibase/uiview/native-row-item-boundary.test.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "oneFullUpstreamAbsentProfile": true,
+  "noPassingTestReplay": true,
+  "uniquePassingCases": {
+    "app": 13725,
+    "inventory": 110,
+    "infrastructure": 16,
+    "chromium": 299
+  },
+  "allFourExactSourceBoundCoverage100": true,
+  "priorAcceptancePreserved": {
+    "byteIdenticalFiles": 618,
+    "migrations": 0
+  },
+  "protectedIOProductionPreserved": 4,
+  "parentPrefixPreserved": true,
+  "stashPreserved": true,
+  "wholeAPIncludingIgnoredAudit": {
+    "files": 5808,
+    "forbiddenPaths": [],
+    "registeredIdenticalPolicyBackupSHA256": "130064d9e92c9f4fb7332e350eeddc639114dcf38a811b2b34e165e2ec892789"
+  },
+  "nativeScope": "Actual StateTabWin row conversion, native SwView row item visibility/position/limits at document ruler ingress and absolute selected row application; no full SvxRuler/slot/StateTabWin promotion",
+  "residuals": [
+    "Full SvxRuler/SfxBindings/SfxItemSet slot ownership and complete StateTabWin page/frame/section contexts remain partial.",
+    "Vertical/RTL document dragging, native row modifier/snapping/protection and single-row paragraph-indent bottom-margin range are not fully ported.",
+    "Pooled item refcount guards/full uint16 WhichId and nonzero UNO members/default factory/presentation remain partial from iteration229.",
+    "Registered IO/open/save/recovery/settings behavior remains byte-identical; no full upstream/module parity claim."
+  ],
+  "failures": []
+}
