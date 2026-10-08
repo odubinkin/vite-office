@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 254
+revision: 255
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-08T19:46:11.655Z"
+doc_updated_at: "2026-10-08T20:19:44.746Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -1233,6 +1233,20 @@ sections:
     Actual-SHA EVALUATOR is the current agent, explicitly non-independent.14 semantic paths match actual implementation; four certificates reconstructed byte-identically, quality/20261008-194435409-recovery-context/quality-report.json records pass and actual SHA, owner verification recorded. A stale1193 checker expectation was corrected to authoritative1293 without changing counters or replaying runtime. Leaf DONE remains immutable and tracked close clean.
 
     Full native physical frame hierarchy/invalidation/follows/repeated frame lifetime/pooling/nested/merged/UNO and whole core/browser parity remain unverified. Flat teardown is the represented native DelFrames subset; it is not full frame-tree parity. Goal remains ACTIVE, registered open/save/recovery/settings deviations preserved.
+
+    ### Iteration 243 — native shared cell formats and complete item-set history
+
+    Completed leaf202610081953-FT0HZ1. Actual implementation57b9fda0a19503f9df84fccce914b73f71c44474; verification checkpoint193a268373499661c818a26ded39b6c656bed5ad; meaningful clean close78a128d5a2764a9150613091b822746073ba5a1f. Original SwTableBox is now a registered SwClient at document-owned SwTableBoxFormat/SwFrameFormat with exact box WhichId ranges, native default frame inheritance and concrete pooled vertical orientation. Complete direct items, inheritance and auto state survive shared claims; direct formula/value items are excluded when native sharing requires exclusivity. Three-field records remain explicit construction/transport boundaries only, preserving existing codecs.
+
+    Native ChgFrameFormat emits typed TableBoxFormatChanged before box registration unless the native loading flag suppresses it. Attribute history stores deduplicated complete cell SfxItemSets and numeric indices, recreates shared owners and emits distinct MoveTableBoxHint before original box registration and KillEmptyFrameFormat. SetSwTabBorders reuses formats by old native owner and native changed-side type; SetBoxAttr uses per-operation old-to-new format sharing. Native insertion shares source box formats, actual row/column/table section deletion unregisters model cell clients, and main JSX rendering borrows original native border/orientation items. Fresh real mounted command/Undo/Redo tests reject cell DTO GetFormat/SetFormat calls while retaining model/text/cursor identities.
+
+    Initial1299app cases:1296pass3fail, all two old files reading deleted box formats after destructive Undo. Bound scope refined to exactly two additional expected-before-deletion captures; five old files total adopt native constructors or capture original expected values before destruction. Literal geometry, identity and repeated history assertions unchanged. Failed-only closure3pass13skip; two new shared4x4border/admission scenarios2pass5skip.1301unique app passes including11fresh and25Chromium passes, zero passing runtime replay. Build/runtime physically upstream absent/restored finally; raw partial threshold exits1 retained.
+
+    Cumulative actual source-bound coverage100% app17722lines/19453statements/4440functions/14358branches and inventory1464/1523/384/1081. Prior242 used only for whole identical source/maps or complete unchanged declaration/body/enclosing branch/all locations;11modified source region proofs. Unchanged inventory/infra runtime not replayed.649of654prior acceptance files byte-identical;five exact migrations reconstructed from original source. All316metadata fields/order/default/status/classification/evidence prefixes preserved, append-only notes/no promotion. Six statics and restored-vendor source gates/governance/artifact audits pass. Seven native sources byte-bound pin9bc445578031fecf56086729d8e4940c77e14d65;IO4/wholewriter-view/stash preserved. No upstream/application/Python/scripts/raw maps/results in AgentPlane.
+
+    Current-agent EVALUATOR explicitly non-independent reviewed21actual implementation paths and reconstructed four certificates byte-identically. quality/20261008-201811396-recovery-context/quality-report.json binds actual implementationSHA and pass; owner verification recorded. DONE leaf immutable. Full suite243 skipped under explicit user cadence:last237,next247.
+
+    Full SwCellFrame hierarchy/retargeting/invalidation, numeric formatting/calculation, native width replacement/shared format arrays, pooling/nested/merged/UNO/default modified-state and whole core/browser parity remain unverified. This leaf establishes native cell model ownership/history/direct UI queries, not full physical cell-frame parity. Goal ACTIVE; registered open/save/recovery/settings deviations preserved.
 id_source: "generated"
 ---
 ## Summary
@@ -2439,3 +2453,17 @@ All-four100% app17592lines/19320statements/4422functions/14333branches and inven
 Actual-SHA EVALUATOR is the current agent, explicitly non-independent.14 semantic paths match actual implementation; four certificates reconstructed byte-identically, quality/20261008-194435409-recovery-context/quality-report.json records pass and actual SHA, owner verification recorded. A stale1193 checker expectation was corrected to authoritative1293 without changing counters or replaying runtime. Leaf DONE remains immutable and tracked close clean.
 
 Full native physical frame hierarchy/invalidation/follows/repeated frame lifetime/pooling/nested/merged/UNO and whole core/browser parity remain unverified. Flat teardown is the represented native DelFrames subset; it is not full frame-tree parity. Goal remains ACTIVE, registered open/save/recovery/settings deviations preserved.
+
+### Iteration 243 — native shared cell formats and complete item-set history
+
+Completed leaf202610081953-FT0HZ1. Actual implementation57b9fda0a19503f9df84fccce914b73f71c44474; verification checkpoint193a268373499661c818a26ded39b6c656bed5ad; meaningful clean close78a128d5a2764a9150613091b822746073ba5a1f. Original SwTableBox is now a registered SwClient at document-owned SwTableBoxFormat/SwFrameFormat with exact box WhichId ranges, native default frame inheritance and concrete pooled vertical orientation. Complete direct items, inheritance and auto state survive shared claims; direct formula/value items are excluded when native sharing requires exclusivity. Three-field records remain explicit construction/transport boundaries only, preserving existing codecs.
+
+Native ChgFrameFormat emits typed TableBoxFormatChanged before box registration unless the native loading flag suppresses it. Attribute history stores deduplicated complete cell SfxItemSets and numeric indices, recreates shared owners and emits distinct MoveTableBoxHint before original box registration and KillEmptyFrameFormat. SetSwTabBorders reuses formats by old native owner and native changed-side type; SetBoxAttr uses per-operation old-to-new format sharing. Native insertion shares source box formats, actual row/column/table section deletion unregisters model cell clients, and main JSX rendering borrows original native border/orientation items. Fresh real mounted command/Undo/Redo tests reject cell DTO GetFormat/SetFormat calls while retaining model/text/cursor identities.
+
+Initial1299app cases:1296pass3fail, all two old files reading deleted box formats after destructive Undo. Bound scope refined to exactly two additional expected-before-deletion captures; five old files total adopt native constructors or capture original expected values before destruction. Literal geometry, identity and repeated history assertions unchanged. Failed-only closure3pass13skip; two new shared4x4border/admission scenarios2pass5skip.1301unique app passes including11fresh and25Chromium passes, zero passing runtime replay. Build/runtime physically upstream absent/restored finally; raw partial threshold exits1 retained.
+
+Cumulative actual source-bound coverage100% app17722lines/19453statements/4440functions/14358branches and inventory1464/1523/384/1081. Prior242 used only for whole identical source/maps or complete unchanged declaration/body/enclosing branch/all locations;11modified source region proofs. Unchanged inventory/infra runtime not replayed.649of654prior acceptance files byte-identical;five exact migrations reconstructed from original source. All316metadata fields/order/default/status/classification/evidence prefixes preserved, append-only notes/no promotion. Six statics and restored-vendor source gates/governance/artifact audits pass. Seven native sources byte-bound pin9bc445578031fecf56086729d8e4940c77e14d65;IO4/wholewriter-view/stash preserved. No upstream/application/Python/scripts/raw maps/results in AgentPlane.
+
+Current-agent EVALUATOR explicitly non-independent reviewed21actual implementation paths and reconstructed four certificates byte-identically. quality/20261008-201811396-recovery-context/quality-report.json binds actual implementationSHA and pass; owner verification recorded. DONE leaf immutable. Full suite243 skipped under explicit user cadence:last237,next247.
+
+Full SwCellFrame hierarchy/retargeting/invalidation, numeric formatting/calculation, native width replacement/shared format arrays, pooling/nested/merged/UNO/default modified-state and whole core/browser parity remain unverified. This leaf establishes native cell model ownership/history/direct UI queries, not full physical cell-frame parity. Goal ACTIVE; registered open/save/recovery/settings deviations preserved.
