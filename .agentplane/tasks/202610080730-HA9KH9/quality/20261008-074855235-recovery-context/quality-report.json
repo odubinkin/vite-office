@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "task_id": "202610080730-HA9KH9",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-08T07:48:55.235Z",
+  "verdict": "pass",
+  "summary": "Stationary Writer dialog chrome and independent scroll surfaces satisfy approved scope with complete declared verification.",
+  "evaluated_sha": "7b8890de9985d33591cd70db64cdb27ea628958f",
+  "blueprint_digest": "763bbae93436df68a4bd4061857ba54635f437817c7a52b34224eee4fd5c3d2a",
+  "findings": [
+    "Reviewed CSS flex/clip constraints, nested form ownership, responsive tablist isolation and native callback preservation. Browser assertions and screenshots verify independent scrolling and visible tracks; no remaining actionable findings in scoped diff."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610080730-HA9KH9/README.md",
+    "apps/office/e2e/writer-dialog-layout.spec.ts",
+    "apps/office/e2e/writer-responsive-sidebar.spec.ts"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Browser execution covers Chromium only; no Safari/Firefox or full native parity claim. Existing doctor and production bundle-size warnings remain outside scope."
+  ]
+}
