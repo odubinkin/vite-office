@@ -1,0 +1,155 @@
+{
+  "evaluatedSHA": "913bf782799155f0ab7ee9a72d1fd8f13b1733e7",
+  "evaluator": "current coding agent; explicitly non-independent",
+  "committedScopePaths": [
+    {
+      "path": "apps/office/src/sw/inc/hints.ts",
+      "sha256": "5f5538d2e101ebea3c06cc987ed6b38b486b2785d1aca95e32320dae49b728ed",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/inc/calbck.ts",
+      "sha256": "188ffc870def0d153e7fa988b7f1b4a0535a15ad2d77d9980ae925f49808c317",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/attr/format.ts",
+      "sha256": "705b7a8b2a8b54c2e216b71caefa477f67ffc1546fe38fe50eec4fa346612dd3",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/inc/swtblfmt.ts",
+      "sha256": "f5b14c62778d31a9a75f61aa3096398516310dc71116c145646535bd7a7a5ab2",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/svl/source/items/itemset.ts",
+      "sha256": "8b3f2dd732154333347727e7ff2e871123baca6a5b81f97faa99407f4361fef9",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/table/swtable.ts",
+      "sha256": "d980240fd0f0f61a39404b48386e7e3dee6310a4609765be210477a8865fe394",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/svl/source/items/cintitem.ts",
+      "sha256": "bd377b98db6cf749e384830708de069a1a2f6be1d76ddabae5f78720d17a9a1d",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/svl/source/items/intitem.ts",
+      "sha256": "5ed4a0e10f7fbf19ba18d2f72166638ec8f0c4792b22b91f483bb38bd02fa6af",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/editeng/source/items/frmitems.ts",
+      "sha256": "5885a306b49b35e1d5599a9bc049595d234fbbeaab96ae81a9ec49096bec3365",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/attr/swatrset.ts",
+      "sha256": "f8473fcccff7c2800dd6a444e0b5806d7b2a8a6847a559bb5af4c39a21ff7372",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/attr/cellatr.ts",
+      "sha256": "b484efa20927084b96d6bfed4270e916a6460d93f778dae4822c931c74feea27",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/attr/native-format-attribute-notify.test.ts",
+      "sha256": "2f41319579e7308fd480931115492e24b4d8453073a47794fbfbc6884777d4e8",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/native-format-attribute-notify-history.test.ts",
+      "sha256": "e777d272668bcce4501c8719f3df70413aa717fa5b819141bc5dab34c32dd2b0",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/native-format-attribute-notify.test.tsx",
+      "sha256": "ad8f82cdacf5ce255304c51d83e7e44cf5639a5537424ff6614192c57bae763b",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "docs/program/source-provenance.json",
+      "sha256": "0e7bd29a9d6a8f1fc49e26962b0b690e1107aae4c3f24a4053518962d9378aab",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "sha256": "6316df2614f6e575fb0cc9f4f73b1f57a5ab75ba3a6fd8539fd807c6bbbbdced",
+      "actualCommittedBytes": true
+    }
+  ],
+  "deterministicCertificatesReconstructedByteIdentically": [
+    {
+      "identifier": "final-coverage.json",
+      "sha256": "da6b17a8adadc1acfe4e7a23168804150378b4f6e0d15e8c4149d6c5e1cd994d"
+    },
+    {
+      "identifier": "runtime-census.json",
+      "sha256": "f3791027df0da3e25a207541a10e4d1623f93d19f8999d2f83fb3fb5173c90d7"
+    },
+    {
+      "identifier": "scope-integrity.json",
+      "sha256": "d09b145d511a90dbfdd65141b5611d6538b132a16cd1f629578ca96c4529c892"
+    },
+    {
+      "identifier": "native-source-review.json",
+      "sha256": "dc6a604a0ecec5bed4bdf1daebdfbbf68286183f9b4f2c62777728e57b758e95"
+    }
+  ],
+  "reconstructions": [
+    {
+      "identifier": "proof",
+      "exit": 0,
+      "outputSHA256": "13e4fec81203b43095d649eb4f30d40a9abd5b77d916d00a51363b298f5fac23"
+    },
+    {
+      "identifier": "census",
+      "exit": 0,
+      "outputSHA256": "031b93bf60095b835b0a69a6e268a0ceda966aefdd1bb35747a41890f70e84c2"
+    },
+    {
+      "identifier": "scope",
+      "exit": 0,
+      "outputSHA256": "516a73ba0ed7064bb500acf3c107dd7f4f584df7394f0b2a003217dff651f1c7"
+    },
+    {
+      "identifier": "source",
+      "exit": 0,
+      "outputSHA256": "8a440f38cfc3e533760a7fcb15d5471ceffb36ea201c1d619f0fdcaaa48580d0"
+    }
+  ],
+  "approvedScopeSatisfied": true,
+  "sourceBoundNativeFiles": 16,
+  "runtime": {
+    "uniqueApp": 1575,
+    "fresh": 20,
+    "chromium": 13,
+    "unchangedPassingReplays": 0,
+    "explicitAffectedRevalidations": 3,
+    "upstreamAbsentRestored": true
+  },
+  "coverageAllFour100": true,
+  "priorAcceptance": {
+    "count": 660,
+    "byteIdentical": 660
+  },
+  "metadata": {
+    "priorRecords": 317,
+    "newPartialRecord": 1,
+    "preserved": true
+  },
+  "fullSuiteCadence": {
+    "last": 237,
+    "next": 247
+  },
+  "residualGaps": [
+    "Full native font/cache/fill/frame invalidation and geometry/content/follows/VCL remain partial.",
+    "SwTableFormula second-base/parser/calculation/name conversion/UNO and complete numeric pool processing remain unported.",
+    "Browser paint-device compatibility signal remains; complete direct native UI registration and whole project parity unproven. Goal ACTIVE."
+  ]
+}

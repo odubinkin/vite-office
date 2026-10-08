@@ -4,7 +4,7 @@ title: "Restore native format attribute delta notifications and inheritance filt
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 21
+revision: 23
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,27 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-08T21:29:50.953Z"
+  updated_by: "CODER"
+  note: "Verified actual implementation 913bf782799155f0ab7ee9a72d1fd8f13b1733e7;1575unique app20fresh13Chromium;all-four100actual app/inventory;source/static/build/governance/artifact pass;660old byte-identical;317old metadata preserved;explicitly non-independent actual-SHA EVALUATOR pass. Full245 skipped user cadence237→247, whole goal ACTIVE."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-08T21:29:50.299Z"
+  updated_by: "EVALUATOR"
+  note: "Actual implementation 913bf782799155f0ab7ee9a72d1fd8f13b1733e7 reviewed by the current coding agent, explicitly non-independent;16 committed semantic paths and4 deterministic certificates reconstructed byte-identically.1575unique app/20fresh/13Chromium and app/inventory all-four100;660old acceptance and317old metadata preserved."
+  evaluated_sha: "913bf782799155f0ab7ee9a72d1fd8f13b1733e7"
+  blueprint_digest: "74175534f9db8e2d43597d0cb3f19bde10c6f8105ff1dcec695b09c1f5803606"
+  evidence_refs:
+    - ".agentplane/tasks/202610082053-5TDXPQ/README.md"
+    - ".agentplane/tasks/202610082053-5TDXPQ/quality/20261008-212950299-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610082053-5TDXPQ/quality/20261008-212950299-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610082053-5TDXPQ/quality/20261008-212950299-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610082053-5TDXPQ/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610082053-5TDXPQ/evidence/actual-sha-review.json"
+  findings:
+    - "Exact native deltas/locking/inherited filtering and pooled cell defaults verified. Existing device invalidation does not add model revisions.3 materially affected fresh revalidations disclosed; raw partial coverage threshold exits/skips retained. Complete native UI registration, formula calculation and frame geometry/invalidation remain partial; whole goal ACTIVE."
 commit: null
 comments:
   -
@@ -35,8 +51,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: native exact format change deltas, locking and inheritance filtering under standing upstream parity goal; preserve660prior tests and actual100coverage, one upstream-absent related runtime profile."
+  -
+    type: "verify"
+    at: "2026-10-08T21:29:50.953Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified actual implementation 913bf782799155f0ab7ee9a72d1fd8f13b1733e7;1575unique app20fresh13Chromium;all-four100actual app/inventory;source/static/build/governance/artifact pass;660old byte-identical;317old metadata preserved;explicitly non-independent actual-SHA EVALUATOR pass. Full245 skipped user cadence237→247, whole goal ACTIVE."
 doc_version: 3
-doc_updated_at: "2026-10-08T21:28:25.447Z"
+doc_updated_at: "2026-10-08T21:29:51.009Z"
 doc_updated_by: "CODER"
 description: "Iteration245: replace generic row/cell format attribute notification overrides with native SwAttrSetChg and AttrSetChangeHint through SwModify locking, existing Put_BC/ClearItem_BC, original parent registration and native Differentiate filtering. Preserve original clients, document device notifications and registered I/O deviations. Verify actual original frame notification identity, inheritance, locking/reentrancy and real UI/history without upstream runtime; all prior tests byte-identical and actual100coverage, full cadence237to247."
 sections:
@@ -78,6 +100,39 @@ sections:
     Reason: explicit user cadence one full run per10AgentPlane tasks, last237,next247,current245.
     Risk: whole-project parity is not proven by the targeted leaf.
     Approval:user active goal.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-08T21:29:50.953Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified actual implementation 913bf782799155f0ab7ee9a72d1fd8f13b1733e7;1575unique app20fresh13Chromium;all-four100actual app/inventory;source/static/build/governance/artifact pass;660old byte-identical;317old metadata preserved;explicitly non-independent actual-SHA EVALUATOR pass. Full245 skipped user cadence237→247, whole goal ACTIVE.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-08T21:28:25.447Z, excerpt_hash=sha256:86e4eb12ffe7fb605375a3f4f8bca84078943a8e626fa40a133c2de612870e60
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610082053-5TDXPQ/blueprint/resolved-snapshot.json
+    - old_digest: 74175534f9db8e2d43597d0cb3f19bde10c6f8105ff1dcec695b09c1f5803606
+    - current_digest: 74175534f9db8e2d43597d0cb3f19bde10c6f8105ff1dcec695b09c1f5803606
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610082053-5TDXPQ
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610082053-5TDXPQ -m 🧩 5TDXPQ task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this leaf's semantic implementation commit; preserve previous completed leaves, parent exact prefix and registered document I/O deviations."
   Findings: |-
     Previous244 DONE actual8214d309ac4a7a67cee7724f59c20e49d0aef8c5; clean main/direct47b9d5853ab51daa3be1ba5e20172dc344c7025a. Read-only review found base SwFormat emits document-only generic signals and native row/cell formats supply separate generic client overrides; neither conveys native changed-item sets. Existing Put_BC/ClearItem_BC already collect exact native deltas and will be reused. This leaf replaces generic kernel shims with original native typed change sets and inheritance filtering, enabling subsequent frame invalidation work; it does not claim full frame parity. Standing user goal authorizes safe local implementation. No network/global/subagents/source copies/AP raw files.
@@ -140,6 +195,39 @@ Skipped:full app/inventory/Chromium suite.
 Reason: explicit user cadence one full run per10AgentPlane tasks, last237,next247,current245.
 Risk: whole-project parity is not proven by the targeted leaf.
 Approval:user active goal.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-08T21:29:50.953Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified actual implementation 913bf782799155f0ab7ee9a72d1fd8f13b1733e7;1575unique app20fresh13Chromium;all-four100actual app/inventory;source/static/build/governance/artifact pass;660old byte-identical;317old metadata preserved;explicitly non-independent actual-SHA EVALUATOR pass. Full245 skipped user cadence237→247, whole goal ACTIVE.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-08T21:28:25.447Z, excerpt_hash=sha256:86e4eb12ffe7fb605375a3f4f8bca84078943a8e626fa40a133c2de612870e60
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610082053-5TDXPQ/blueprint/resolved-snapshot.json
+- old_digest: 74175534f9db8e2d43597d0cb3f19bde10c6f8105ff1dcec695b09c1f5803606
+- current_digest: 74175534f9db8e2d43597d0cb3f19bde10c6f8105ff1dcec695b09c1f5803606
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610082053-5TDXPQ
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610082053-5TDXPQ -m 🧩 5TDXPQ task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 

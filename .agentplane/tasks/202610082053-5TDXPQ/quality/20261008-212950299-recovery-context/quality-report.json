@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202610082053-5TDXPQ",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-08T21:29:50.299Z",
+  "verdict": "pass",
+  "summary": "Actual implementation 913bf782799155f0ab7ee9a72d1fd8f13b1733e7 reviewed by the current coding agent, explicitly non-independent;16 committed semantic paths and4 deterministic certificates reconstructed byte-identically.1575unique app/20fresh/13Chromium and app/inventory all-four100;660old acceptance and317old metadata preserved.",
+  "evaluated_sha": "913bf782799155f0ab7ee9a72d1fd8f13b1733e7",
+  "blueprint_digest": "74175534f9db8e2d43597d0cb3f19bde10c6f8105ff1dcec695b09c1f5803606",
+  "findings": [
+    "Exact native deltas/locking/inherited filtering and pooled cell defaults verified. Existing device invalidation does not add model revisions.3 materially affected fresh revalidations disclosed; raw partial coverage threshold exits/skips retained. Complete native UI registration, formula calculation and frame geometry/invalidation remain partial; whole goal ACTIVE."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610082053-5TDXPQ/README.md",
+    ".agentplane/tasks/202610082053-5TDXPQ/evidence/actual-sha-review.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
