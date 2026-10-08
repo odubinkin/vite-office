@@ -4,7 +4,7 @@ title: "Own shared native row frame formats and claim them before mutation"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 10
 origin:
   system: "manual"
 depends_on:
@@ -18,11 +18,31 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-08T19:08:37.267Z"
+  updated_by: "CODER"
+  note: "Verified native shared row frame ownership, claim-before-write and unique item-set history topology.297 unique app cases including12 fresh and11 Chromium cases passed with upstream absent/restored; no passing replay, no full241. All-four100% app17541/19261/4410/14299 and inventory1464/1523/384/1081 bound to actual current counters and unchanged source/map proofs. Six static/source/governance/artifact gates pass after recorded bounded closures. Actual implementation03809acf8c537da7db76c492b3882fbfd606c5cc and current-agent non-independent quality review bind19 paths/four reconstructed certificates. Whole core/UI/native layout client lifetime remains incomplete."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-08T19:08:36.310Z"
+  updated_by: "EVALUATOR"
+  note: "Current-agent, explicitly non-independent review of actual implementation 03809acf8c537da7db76c492b3882fbfd606c5cc: native shared row formats and item-set history meet approved bounded scope."
+  evaluated_sha: "03809acf8c537da7db76c492b3882fbfd606c5cc"
+  blueprint_digest: "5ee09179793b84c2a5e1b5ed34a69ade1e6a7c88ec6bd6a96f059e341f8abd3f"
+  evidence_refs:
+    - ".agentplane/tasks/202610081841-C4324W/README.md"
+    - ".agentplane/tasks/202610081841-C4324W/quality/20261008-190836310-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610081841-C4324W/quality/20261008-190836310-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610081841-C4324W/quality/20261008-190836310-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610081841-C4324W/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610081841-C4324W/evidence/actual-sha-review.json"
+    - ".agentplane/tasks/202610081841-C4324W/evidence/final-coverage.json"
+    - ".agentplane/tasks/202610081841-C4324W/evidence/runtime-census.json"
+    - ".agentplane/tasks/202610081841-C4324W/evidence/native-source-review.json"
+  findings:
+    - "All19 semantic paths match actual committed bytes; four independent deterministic certificates reconstruct byte-identically.297 unique app/12 fresh/11 Chromium pass upstream-absent, no passing replay, all-four100% actual-source-bound coverage.647 old files unchanged, one constructor-only migration;315 prior records and registered I/O defaults preserved."
+    - "Current-agent review is not an independent agent review. Whole native row/core/UI parity is incomplete; full row layout client lifetime/move/change hints, pooling, modified-state flag, merged/nested/UNO remain outside this leaf."
 commit: null
 comments:
   -
@@ -36,8 +56,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement source-bound shared native row frame formats and claim-before-write, native item-set history/topology and direct mounted UI with standing iterative approval. Targeted upstream-absent verification, no full241 or passing replay; preserve registered deviations."
+  -
+    type: "verify"
+    at: "2026-10-08T19:08:37.267Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified native shared row frame ownership, claim-before-write and unique item-set history topology.297 unique app cases including12 fresh and11 Chromium cases passed with upstream absent/restored; no passing replay, no full241. All-four100% app17541/19261/4410/14299 and inventory1464/1523/384/1081 bound to actual current counters and unchanged source/map proofs. Six static/source/governance/artifact gates pass after recorded bounded closures. Actual implementation03809acf8c537da7db76c492b3882fbfd606c5cc and current-agent non-independent quality review bind19 paths/four reconstructed certificates. Whole core/UI/native layout client lifetime remains incomplete."
 doc_version: 3
-doc_updated_at: "2026-10-08T19:04:57.225Z"
+doc_updated_at: "2026-10-08T19:09:15.106Z"
 doc_updated_by: "CODER"
 description: "Iteration241 replaces per-row attribute records with native SwTableLineFormat item-set ownership, shared SwClient registration, ClaimFrameFormat copy-on-write and operation-local format reuse. Builders/transport keep explicit value records; attribute history preserves shared format topology. Standing iterative user goal authorizes safe local work. Targeted upstream-absent tests and exact-source coverage100; full last237,next247."
 sections:
@@ -83,6 +109,39 @@ sections:
     Reason: user-approved cadence last237,next247; this is leaf241, targeted new/related tests plus all-four100% coverage required.
     Risk: whole core/UI parity remains incomplete, including full row frame client lifecycle/modify hints/pooling/nested/merged/UNO.
     Approval: active user goal testing instructions.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-08T19:08:37.267Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified native shared row frame ownership, claim-before-write and unique item-set history topology.297 unique app cases including12 fresh and11 Chromium cases passed with upstream absent/restored; no passing replay, no full241. All-four100% app17541/19261/4410/14299 and inventory1464/1523/384/1081 bound to actual current counters and unchanged source/map proofs. Six static/source/governance/artifact gates pass after recorded bounded closures. Actual implementation03809acf8c537da7db76c492b3882fbfd606c5cc and current-agent non-independent quality review bind19 paths/four reconstructed certificates. Whole core/UI/native layout client lifetime remains incomplete.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-08T19:04:57.225Z, excerpt_hash=sha256:fda1b3de41a4289e247d85109422e931678e507dea463683380798205a427ea6
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610081841-C4324W/blueprint/resolved-snapshot.json
+    - old_digest: 5ee09179793b84c2a5e1b5ed34a69ade1e6a7c88ec6bd6a96f059e341f8abd3f
+    - current_digest: 5ee09179793b84c2a5e1b5ed34a69ade1e6a7c88ec6bd6a96f059e341f8abd3f
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610081841-C4324W
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610081841-C4324W -m 🧩 C4324W task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert eventual implementation commit locally without rewriting DONE leaves."
   Findings: |-
     Previous240 is DONE, actual native row items/transport passed263app/11Chromium with all-four100. Preflight main/direct, approved current leaf241, same-agent CODER. Original parent prefix698356/hash ec8b64039ba56f1496388dfbba48e24de89b5e742fca7e232747b0a30802a1be remains intact.
@@ -95,6 +154,8 @@ sections:
     Observation: source parity gate rejected appending the new runtime module out of lexicographic order. Resolution: insert it in enforced order, preserving all315 prior records/relative order/fields; only failed source gate rerun and passed. Runtime was not replayed. Initial failure recorded.
     Residual gaps: native SwRowFrame client registration/retargeting, native typed move/change hints/destruction, document modified flag, full native pooling/frame attributes, nested/merged/UNO and whole core/browser parity remain unverified. Current stateless SwRowFrame reads its original line on every query; do not claim full lifecycle. No status/default/classification promotion. Following coherent leaf should address actual native row/client lifetime including detached insertion rows.
     Current-agent EVALUATOR review must bind actual implementation SHA and reconstruct four certificates; it is explicitly not independent. Final clean close and exact-prefix parent append pending. No delegation/network/global access or upstream/Python/scripts/raw/source artifacts in AgentPlane.
+
+    Final pre-close audit: actual implementation03809acf8c537da7db76c492b3882fbfd606c5cc reviewed in current-agent EVALUATOR phase explicitly non-independent.19 semantic paths are byte-identical to that commit; four coverage/runtime/scope/source certificates reconstructed byte-identically. Quality pass recorded at quality/20261008-190836310-recovery-context/quality-report.json, owner verification recorded. Runtime297unique/12fresh/11Chromium, zero passing replay, all-four100%; all scoped checks pass after preserved bounded failures/closures. Clean close and parent exact-prefix append remain lifecycle steps, full goal active.
 id_source: "generated"
 ---
 ## Summary
@@ -151,6 +212,39 @@ Reason: user-approved cadence last237,next247; this is leaf241, targeted new/rel
 Risk: whole core/UI parity remains incomplete, including full row frame client lifecycle/modify hints/pooling/nested/merged/UNO.
 Approval: active user goal testing instructions.
 
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-08T19:08:37.267Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified native shared row frame ownership, claim-before-write and unique item-set history topology.297 unique app cases including12 fresh and11 Chromium cases passed with upstream absent/restored; no passing replay, no full241. All-four100% app17541/19261/4410/14299 and inventory1464/1523/384/1081 bound to actual current counters and unchanged source/map proofs. Six static/source/governance/artifact gates pass after recorded bounded closures. Actual implementation03809acf8c537da7db76c492b3882fbfd606c5cc and current-agent non-independent quality review bind19 paths/four reconstructed certificates. Whole core/UI/native layout client lifetime remains incomplete.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-08T19:04:57.225Z, excerpt_hash=sha256:fda1b3de41a4289e247d85109422e931678e507dea463683380798205a427ea6
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610081841-C4324W/blueprint/resolved-snapshot.json
+- old_digest: 5ee09179793b84c2a5e1b5ed34a69ade1e6a7c88ec6bd6a96f059e341f8abd3f
+- current_digest: 5ee09179793b84c2a5e1b5ed34a69ade1e6a7c88ec6bd6a96f059e341f8abd3f
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610081841-C4324W
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610081841-C4324W -m 🧩 C4324W task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
+
 ## Rollback Plan
 
 Revert eventual implementation commit locally without rewriting DONE leaves.
@@ -167,3 +261,5 @@ Observation: the first helper-integrity certificate used default Prettier option
 Observation: source parity gate rejected appending the new runtime module out of lexicographic order. Resolution: insert it in enforced order, preserving all315 prior records/relative order/fields; only failed source gate rerun and passed. Runtime was not replayed. Initial failure recorded.
 Residual gaps: native SwRowFrame client registration/retargeting, native typed move/change hints/destruction, document modified flag, full native pooling/frame attributes, nested/merged/UNO and whole core/browser parity remain unverified. Current stateless SwRowFrame reads its original line on every query; do not claim full lifecycle. No status/default/classification promotion. Following coherent leaf should address actual native row/client lifetime including detached insertion rows.
 Current-agent EVALUATOR review must bind actual implementation SHA and reconstruct four certificates; it is explicitly not independent. Final clean close and exact-prefix parent append pending. No delegation/network/global access or upstream/Python/scripts/raw/source artifacts in AgentPlane.
+
+Final pre-close audit: actual implementation03809acf8c537da7db76c492b3882fbfd606c5cc reviewed in current-agent EVALUATOR phase explicitly non-independent.19 semantic paths are byte-identical to that commit; four coverage/runtime/scope/source certificates reconstructed byte-identically. Quality pass recorded at quality/20261008-190836310-recovery-context/quality-report.json, owner verification recorded. Runtime297unique/12fresh/11Chromium, zero passing replay, all-four100%; all scoped checks pass after preserved bounded failures/closures. Clean close and parent exact-prefix append remain lifecycle steps, full goal active.

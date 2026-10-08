@@ -1,0 +1,170 @@
+{
+  "evaluatedSHA": "03809acf8c537da7db76c492b3882fbfd606c5cc",
+  "evaluator": "current coding agent; explicitly non-independent",
+  "committedScopePaths": [
+    {
+      "path": "apps/office/src/svl/source/notify/SfxBroadcaster.ts",
+      "sha256": "30cf518a903b1f4215155072d7178ed6e5a2f21785aaa6e90d4c4e605cc0ca94",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/attr/format.ts",
+      "sha256": "adf62cb70fa66a90763cdbfac9a49421c02f3304bc80a0a6ae3ee4758d9b01a5",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/layout/atrfrm.ts",
+      "sha256": "e0b43ecbc5e55d87b01474d9a52ef06c2ee0103753b93c0748795b54583dbee2",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/attr/swatrset.ts",
+      "sha256": "58fdaef6fd48471fb604caca543613d79b881d6df57bae4b65ec965ff1a6b414",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/table/swtable.ts",
+      "sha256": "475ab9741d3e755578afef916d0638743c532cd4ca04cdfaed854fe895719551",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/docnode/nodes.ts",
+      "sha256": "c0f1a2957f2f67fa9528eb091a9b7418b451176befa036f7e740a5234b68936e",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/docnode/ndtbl1.ts",
+      "sha256": "93227fccb0bde9c24681bbb79dd6528d58f946e8d7df5494974cb0c1330e7b93",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/doc/doc.ts",
+      "sha256": "f5c8645073f3c2556fc834f3cc75066e1b2445121bb3c31068803e7974e5e562",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/untbl.ts",
+      "sha256": "f64ed09566d057e7a7683291f67e3868f24c72f09521630430aeb848cbe6fdce",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/xmltbli.ts",
+      "sha256": "1ddfddc04811f5a0a7cba6a61fbc5c6c0902a37af71f800793d9846bf975f177",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/filter/xml/writer-table-item-codec.ts",
+      "sha256": "101359a867c05df95e39222865695e7a577d8caad9a9bab75c6ce19a2a0f7397",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/inc/swtblfmt.ts",
+      "sha256": "af4ae9d20bc7ac2f1448b10f307f5bd7a93d9b3c9cb6afc5d52fa4b815ec79b9",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/table/native-column-insertion.test.ts",
+      "sha256": "ef114135236288f3f23a10abafb9aa74aae146054f6065861dfb14a5f87f3476",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/table/native-row-frame-format.test.ts",
+      "sha256": "79b36744b155d73cbb72024c9d7f349b7c268acd8707cb85d75c6f0fb4b925b9",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/native-row-frame-format-history.test.ts",
+      "sha256": "4bf5e81bd56af30c9d281ba4c0b586dbb689c2db69984d8181b20788958d87cb",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/native-row-frame-format.test.tsx",
+      "sha256": "59b8c1aa05a06badb8229bcdc753292fec15e050ac57542bdad1e4fe922ca9b1",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/test/table-row-test-helpers.ts",
+      "sha256": "c0c3426c3013e448c3b1851d1307fb209665e009a39aad4c73d25227314ff83f",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "docs/program/source-provenance.json",
+      "sha256": "0ee4e195a0519a941a8b8fd1d9c7291fb34ad2df7723ff603fa6b4903e7ef4db",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "sha256": "382db781496f9601b0f5af5140655e8b1ae0cb7e61141763c24e5f887a27c59f",
+      "actualCommittedBytes": true
+    }
+  ],
+  "deterministicCertificatesReconstructedByteIdentically": [
+    {
+      "identifier": "final-coverage.json",
+      "sha256": "c235e13333ceb81dcba0293f08a5c25b5e9844ad2aa1b9317f15e1e5e0c82a68"
+    },
+    {
+      "identifier": "runtime-census.json",
+      "sha256": "1d1ffee14d28e29e730063fadb6cd4ae8c2254c9be9c294f74f1a525d3f7eb14"
+    },
+    {
+      "identifier": "scope-integrity.json",
+      "sha256": "a994fa67b8e0b12b7b24895c6950f21b1286f5fe2ed71da2cf766dc3b157b9b9"
+    },
+    {
+      "identifier": "native-source-review.json",
+      "sha256": "84b7fe9adf07ed1f2e196a4864f44c60f4bacb1a966aa72e56569be929e1db69"
+    }
+  ],
+  "reconstructions": [
+    {
+      "name": "241proofScript",
+      "exit": 0,
+      "outputSHA256": "e19c71be0ebbb584e9876b2ac2f7023c85388ba04deeb92bc2b81e679ca7344b"
+    },
+    {
+      "name": "241censusScript",
+      "exit": 0,
+      "outputSHA256": "6670e6ff38e0052555e6a511b72f7f4da628ddffd7c52462486cee1928e42c41"
+    },
+    {
+      "name": "241scopeScript",
+      "exit": 0,
+      "outputSHA256": "942ae72aae5d8d533e4dd4fdf56799828c38eba6050ca97beb1874698735d461"
+    },
+    {
+      "name": "241sourceReviewScript",
+      "exit": 0,
+      "outputSHA256": "842a3e12433cf5693b232a8c1defc1ce253600a07e522ff8e0a2b7dc8292f27a"
+    }
+  ],
+  "approvedScopeSatisfied": true,
+  "sourceBoundNativeFiles": 10,
+  "runtime": {
+    "app": 297,
+    "fresh": 12,
+    "chromium": 11,
+    "noPassingReplay": true,
+    "upstreamAbsentRestored": true
+  },
+  "coverageAllFour100": true,
+  "priorAcceptance": {
+    "count": 648,
+    "byteIdentical": 647,
+    "exactConstructorOnly": 1
+  },
+  "metadata": {
+    "priorRecords": 315,
+    "newPartialRecord": 1,
+    "preserved": true
+  },
+  "fullSuiteCadence": {
+    "last": 237,
+    "next": 247
+  },
+  "residualGaps": [
+    "Native SwRowFrame client retarget/destruction and typed move/change hints remain unimplemented.",
+    "Detached insertion row lifetime/pooling/default modified-state flag/nested/merged/UNO remain unverified.",
+    "Whole core/browser parity remains incomplete; active goal must remain active."
+  ]
+}
