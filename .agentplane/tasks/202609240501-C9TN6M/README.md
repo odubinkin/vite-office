@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 246
+revision: 247
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-08T14:30:06.392Z"
+doc_updated_at: "2026-10-08T14:32:40.686Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -1143,6 +1143,8 @@ sections:
     Six final static gates and five post-restoration source gates PASS; policy routing/doctor/diff PASS, two longstanding doctor warnings unchanged. Four native source files equal pinned Git bytes9bc445578031fecf56086729d8e4940c77e14d65; protected5 IO/bridge files byte-identical, original stashc85f4a0e453dfd06d6e199554784f2c286737472 preserved. Source physical lines798/384/926/289; fresh181/294/126, no compression. AgentPlane contains no upstream/application/Python sources or raw maps/results; raw snapshots remain ignored cache only. Supported clean task-complete used a meaningful result and actual implementation SHA; no bare finish retry or DONE mutation.
 
     The entire prior672207-character Findings prefixSHAd0f82bab90026a904fc4fb0dfdadcc626e2dd19111bf3f3d4b0ce41e6b9b1903 remains unchanged. Goal and parent remain active. Existing retained row redo is unchanged and partial: upstream calls Doc InsertRow afresh, which is the next coherent source-backed refactor. Full merged/nested/spanned/protected/autoformat/redline/pooling/signed-arithmetic/full VCL frame and browser physical table behavior remain unverified; no full module/table parity claim or registered IO/recovery/settings change.
+
+    Iteration235 trace erratum: the preceding deterministic-close field accidentally contains the tool output truncation banner because a combined response was parsed by its first line. Verified git log and immutable leaf README establish the actual deterministic close5fc27b74a68d5b5903bdfb400eb6084b49a7fcd4, implementation6b118e4b228ed67fc393234ac2403a299a5df990 and verification1403b5eca5a696d410cb357acb61b090d8de0946. This append corrects the reference without changing any prior Findings prefix or DONE task artifact. All implementation/test/native-source evidence remains unchanged.
 id_source: "generated"
 ---
 ## Summary
@@ -2259,3 +2261,5 @@ App all-four100 L17295/S18996/F4372/B14161; inventory all-four100 L1464/S1523/F3
 Six final static gates and five post-restoration source gates PASS; policy routing/doctor/diff PASS, two longstanding doctor warnings unchanged. Four native source files equal pinned Git bytes9bc445578031fecf56086729d8e4940c77e14d65; protected5 IO/bridge files byte-identical, original stashc85f4a0e453dfd06d6e199554784f2c286737472 preserved. Source physical lines798/384/926/289; fresh181/294/126, no compression. AgentPlane contains no upstream/application/Python sources or raw maps/results; raw snapshots remain ignored cache only. Supported clean task-complete used a meaningful result and actual implementation SHA; no bare finish retry or DONE mutation.
 
 The entire prior672207-character Findings prefixSHAd0f82bab90026a904fc4fb0dfdadcc626e2dd19111bf3f3d4b0ce41e6b9b1903 remains unchanged. Goal and parent remain active. Existing retained row redo is unchanged and partial: upstream calls Doc InsertRow afresh, which is the next coherent source-backed refactor. Full merged/nested/spanned/protected/autoformat/redline/pooling/signed-arithmetic/full VCL frame and browser physical table behavior remain unverified; no full module/table parity claim or registered IO/recovery/settings change.
+
+Iteration235 trace erratum: the preceding deterministic-close field accidentally contains the tool output truncation banner because a combined response was parsed by its first line. Verified git log and immutable leaf README establish the actual deterministic close5fc27b74a68d5b5903bdfb400eb6084b49a7fcd4, implementation6b118e4b228ed67fc393234ac2403a299a5df990 and verification1403b5eca5a696d410cb357acb61b090d8de0946. This append corrects the reference without changing any prior Findings prefix or DONE task artifact. All implementation/test/native-source evidence remains unchanged.
