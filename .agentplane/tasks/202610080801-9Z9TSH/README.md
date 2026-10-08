@@ -1,10 +1,11 @@
 ---
 id: "202610080801-9Z9TSH"
 title: "Use native column items at the Writer ruler boundary"
-status: "DOING"
+result_summary: "verified-202610080801-9Z9TSH"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 28
+revision: 30
 origin:
   system: "manual"
 depends_on: []
@@ -21,9 +22,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-08T08:57:32.402Z"
+  updated_at: "2026-10-08T08:58:04.723Z"
   updated_by: "CODER"
-  note: "Final native column item boundary verified at a9b69b581295c980996d31cd0e8ffccdb96bce1c. Exact same-agent review PASS; one upstream-absent full profile,13711 app/110 inventory/16 infrastructure/299 Chromium unique passes, all-four exact-source coverage100 and zero passing replay. Protected IO,613 old acceptance files,original21 migrated assertions,parent prefix and stash preserved; full ruler/slot/row/StateTabWin parity remains partial."
+  note: "verified-202610080801-9Z9TSH"
   attempts: 0
 quality_review:
   state: "pass"
@@ -43,11 +44,16 @@ quality_review:
   findings:
     - "Four committed source-bound evidence reconstructions are byte-identical; scope14,613 prior acceptance files unchanged and original21 selector assertions retained; all-four app/inventory coverage100,13711/110/16/299 unique passes and zero passing replay."
     - "Native defaults, value copying, signed limits, uint16 constructor/count/index contracts and real Writer drag item ingress are pinned-source backed; protected IO baseline remains identical."
-commit: null
+commit:
+  hash: "a9b69b581295c980996d31cd0e8ffccdb96bce1c"
+  message: "🧩 9Z9TSH parity: convert native column index arguments"
 comments:
   -
     author: "CODER"
     body: "Start: implement production-used native column item boundary under standing goal authorization, with source-bound verification and one absent runtime profile."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610080801-9Z9TSH. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -62,8 +68,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Final native column item boundary verified at a9b69b581295c980996d31cd0e8ffccdb96bce1c. Exact same-agent review PASS; one upstream-absent full profile,13711 app/110 inventory/16 infrastructure/299 Chromium unique passes, all-four exact-source coverage100 and zero passing replay. Protected IO,613 old acceptance files,original21 migrated assertions,parent prefix and stash preserved; full ruler/slot/row/StateTabWin parity remains partial."
+  -
+    type: "verify"
+    at: "2026-10-08T08:58:04.723Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610080801-9Z9TSH"
+  -
+    type: "status"
+    at: "2026-10-08T08:58:04.820Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610080801-9Z9TSH. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-08T08:57:32.458Z"
+doc_updated_at: "2026-10-08T08:58:04.821Z"
 doc_updated_by: "CODER"
 description: "Iteration229: production-used SvxColumnItem values and SwView-owned table-column conversion replace direct separator visibility and limits in document drag admission. Preserve original SwTabCols model/apply owners and prior acceptance; generic ruler ownership is the next dependency."
 sections:
@@ -144,6 +163,36 @@ sections:
     - operator_action: run_exact_argv
     - can_execute_now: true
     - safe_command: agentplane commit 202610080801-9Z9TSH -m 🧩 9Z9TSH task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-10-08T08:58:04.723Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610080801-9Z9TSH
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-08T08:57:32.458Z, excerpt_hash=sha256:d812350c9b1a8e0bae5a706a21ae78afc364016566f9e2feb5b9bb9e04e16bd9
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610080801-9Z9TSH/blueprint/resolved-snapshot.json
+    - old_digest: 246fb558f43f84d6899218c094d2a7314142bdb70d885fdc15757225dc5f1c48
+    - current_digest: 246fb558f43f84d6899218c094d2a7314142bdb70d885fdc15757225dc5f1c48
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610080801-9Z9TSH
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610080801-9Z9TSH --result verified-202610080801-9Z9TSH --commit 0f4ea5a5b1f155b0027b9d7b23c40475ded65d83
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -261,6 +310,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane commit 202610080801-9Z9TSH -m 🧩 9Z9TSH task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-08T08:58:04.723Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610080801-9Z9TSH
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-08T08:57:32.458Z, excerpt_hash=sha256:d812350c9b1a8e0bae5a706a21ae78afc364016566f9e2feb5b9bb9e04e16bd9
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610080801-9Z9TSH/blueprint/resolved-snapshot.json
+- old_digest: 246fb558f43f84d6899218c094d2a7314142bdb70d885fdc15757225dc5f1c48
+- current_digest: 246fb558f43f84d6899218c094d2a7314142bdb70d885fdc15757225dc5f1c48
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610080801-9Z9TSH
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610080801-9Z9TSH --result verified-202610080801-9Z9TSH --commit 0f4ea5a5b1f155b0027b9d7b23c40475ded65d83
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
