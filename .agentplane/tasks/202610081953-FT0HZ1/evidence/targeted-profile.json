@@ -1,0 +1,138 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/sw/inc/swtblfmt.ts": "267b40f5a505042f438ecf480bcdd4dff26a4f5f5b6a81c6b04b31ae62113730",
+    "apps/office/src/sw/inc/hints.ts": "c5a4f57613ee8550d9f419a77c45c544fddb0d4c40cd142018adfbb83c2e7c32",
+    "apps/office/src/sw/inc/hintids.ts": "0748561d0011794a4628c76b59b361edb2953e1459fc7cd0bf5d78fbafdb03de",
+    "apps/office/src/sw/source/core/layout/atrfrm.ts": "241279790ad3183d2b38252adce583152f49f9ead76f4473088193ca921283e1",
+    "apps/office/src/sw/source/core/attr/swatrset.ts": "14839b74ec8adc7b605b8792823cac4d919580233394a3d171c7af7f5f91369e",
+    "apps/office/src/sw/source/core/doc/doc.ts": "8e4cd9f0b660bf0c881a3d663a2e84bc499031e8025131c1f41cb196c91c8db8",
+    "apps/office/src/sw/source/core/table/swtable.ts": "d43980833b0f9537d446e592759ddd020bca77f8284e60de16a979f5a82df87b",
+    "apps/office/src/sw/source/core/docnode/nodes.ts": "35fdbc29b71bda0a547c8e12d650fa2262855e4bb9c24477f8b3f5c4ef46bce8",
+    "apps/office/src/sw/source/core/docnode/ndtbl1.ts": "b8bde955d2e04c0e91586ebc7424f6d1c21343d0eea69ade9b755806cf4f4bf3",
+    "apps/office/src/sw/source/core/undo/untbl.ts": "6401650ca2c3b8bc11e5d95299bde432cb51eb551f419734bf2308cc61271089",
+    "apps/office/src/sw/browser/editor/WriterEditableTable.tsx": "44317660cb4dd8c7f4395162f060837d4d1d00898cfcf8b2bdcb3b6c64db16f7",
+    "apps/office/src/sw/source/core/crsr/native-table-shell-owner.test.ts": "5694d74945aceddae8326f978cec236003bd5be7469437c2d8a6396a5613aa15",
+    "apps/office/src/sw/source/core/table/native-column-insertion.test.ts": "ad00b19d2322ffa01955441cddd5e6c55a20d9320501cf631c014ec45d21c9c1",
+    "apps/office/src/sw/browser/editor/native-table-document-row.test.tsx": "3d0a160ebbee18ef5ee5ebc32e302f7dc3fbe49f27d64bc10f127716c34562ef",
+    "apps/office/src/sw/source/core/table/native-box-frame-format.test.ts": "ffa6247a78d9cfef4c31534e52a27d9bb0af250363dda7cfd04f4ca181fc7b5c",
+    "apps/office/src/sw/source/core/undo/native-box-frame-format-history.test.ts": "e1555cd035569d1634a9c2d7de07d811f2f2dc542f7cc5e8eb194d2bf99f019c",
+    "apps/office/src/sw/browser/editor/native-box-frame-format.test.tsx": "3d265973d5094dd7f83b132338c57e32a4981432072c3282fc950244019d0787",
+    "docs/program/source-provenance.json": "98c370ac6422d3fa4782f3aebbc6660747e23888dfbc5501d3825f7c8e0073b1",
+    "docs/program/parity/runtime-inventory.json": "4682529d1a62be6a10290a471afed6936b94035f7568136892bf79ed537415d8"
+  },
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1443,
+      "sha256": "a67e089b143f1ca114c28aa02cd6fe0b0e285d4e95dd7ccdd6870928e00a6385",
+      "totals": [],
+      "failedCases": [],
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/source/core/table/native-box-frame-format.test.ts src/sw/source/core/undo/native-box-frame-format-history.test.ts src/sw/browser/editor/native-box-frame-format.test.tsx src/sw/source/core/crsr/native-table-shell-owner.test.ts src/sw/source/core/table/native-column-insertion.test.ts src/sw/browser/editor/native-table-document-row.test.tsx src/sw/source/core/docnode/native-table-border-owner.test.ts src/sw/source/core/docnode/native-table-border-common-state.test.ts src/sw/source/core/docnode/native-box-border-items.test.ts src/sw/source/core/docnode/native-cell-alignment-owner.test.ts src/sw/browser/editor/native-cell-box-render.test.tsx src/sw/browser/presentation/native-cell-alignment-state.test.tsx src/sw/source/filter/xml/native-cell-box-roundtrip.test.ts src/sw/source/filter/xml/native-cell-alignment-roundtrip.test.ts src/sw/source/filter/xml/odt-table-roundtrip.test.ts src/sw/source/filter/xml/native-independent-column-odf.test.ts src/sw/browser/presentation/native-table-border-changed-items.test.tsx src/sw/browser/presentation/native-table-border-owner-history.test.tsx src/sw/browser/presentation/native-table-border-common-state.test.tsx src/sw/browser/presentation/native-border-page.test.tsx src/sw/browser/presentation/native-collapsing-table-borders.test.tsx src/sw/browser/editor/native-collapsing-border-paint.test.tsx src/sw/source/core/layout/native-collapsing-border-painter.test.ts src/sw/source/core/table/native-independent-column-insertion.test.ts src/sw/source/core/table/native-independent-columns.test.ts src/sw/source/core/undo/native-independent-column-insertion-history.test.ts src/sw/browser/editor/native-independent-column-insertion.test.tsx src/sw/browser/editor/native-independent-column-render.test.tsx src/sw/browser/editor/native-table-column-commands.test.tsx src/sw/browser/editor/native-table-column-drag.test.tsx src/sw/source/uibase/docvw/native-table-column-drag.test.ts src/sw/source/core/table/native-numeric-row-insertion.test.ts src/sw/source/core/undo/native-numeric-row-insertion-history.test.ts src/sw/browser/editor/native-numeric-row-insertion.test.tsx src/sw/source/core/table/native-row-frame-format.test.ts src/sw/source/core/undo/native-row-frame-format-history.test.ts src/sw/source/core/undo/native-row-format-client-history.test.ts src/sw/browser/editor/native-row-format-client.test.tsx src/sw/source/uibase/wrtsh/native-table-delete.test.ts src/sw/browser/editor/native-table-delete.test.tsx src/sw/source/core/undo/native-delete-history.test.ts src/sw/source/uibase/wrtsh/native-table-traversal.test.ts src/sw/source/uibase/wrtsh/native-table-properties.test.ts src/sw/source/uibase/wrtsh/native-table-properties-reset-history.test.ts src/sw/browser/presentation/native-table-properties.test.tsx src/sw/browser/presentation/native-table-properties-reset.test.tsx src/sw/browser/presentation/native-independent-table-properties.test.tsx src/sw/source/core/layout/native-table-print-area.test.ts src/sw/source/core/layout/newfrm.test.ts src/sw/inc/fmtornt.test.ts --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/FT0HZ1.app-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 46957,
+      "sha256": "38aa559539df8960b64a722f1e254059cd0dadba2b5aa4813145027591dba841",
+      "totals": [
+        "Test Files  2 failed | 48 passed (50)",
+        "Tests  3 failed | 1296 passed (1299)"
+      ],
+      "failedCases": [
+        {
+          "name": "apps/office/src/sw/browser/editor/native-numeric-row-insertion.test.tsx > mounted numeric row menu behind=false",
+          "assertion": [
+            "TypeError: Cannot read properties of undefined (reading 'GetAttrSet')"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/browser/editor/native-numeric-row-insertion.test.tsx > mounted numeric row menu behind=true",
+          "assertion": [
+            "TypeError: Cannot read properties of undefined (reading 'GetAttrSet')"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/source/core/table/native-independent-columns.test.ts > native column insertion conserves each independent row and retains every original box through history",
+          "assertion": [
+            "TypeError: Cannot read properties of undefined (reading 'GetAttrSet')"
+          ]
+        }
+      ],
+      "caseCounts": {
+        "passed": 1296,
+        "failed": 3,
+        "skipped": 0,
+        "total": 1299
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 17722,
+          "covered": 11251,
+          "skipped": 0,
+          "pct": 63.48
+        },
+        "statements": {
+          "total": 19453,
+          "covered": 11966,
+          "skipped": 0,
+          "pct": 61.51
+        },
+        "functions": {
+          "total": 4440,
+          "covered": 2839,
+          "skipped": 0,
+          "pct": 63.94
+        },
+        "branches": {
+          "total": 14358,
+          "covered": 7795,
+          "skipped": 0,
+          "pct": 54.29
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverage": {
+        "lines": 63.48,
+        "statements": 61.51,
+        "functions": 63.94,
+        "branches": 54.29
+      },
+      "incompleteFileCount": 263,
+      "coverageMapSHA256": "e064de0ac1b6c31cd4b2fa8885234f9cdfa65d5e738b1106c33d3c65a6e33846",
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts writer-native-cell-alignment.spec.ts writer-native-cell-box.spec.ts writer-native-border-page.spec.ts writer-native-collapsing-borders.spec.ts writer-native-column-commands.spec.ts writer-native-insert-table-row-history.spec.ts writer-native-document-row.spec.ts --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 4283,
+      "sha256": "1154e0d8ebfbeeda33401699cb7369a934da7df2a70ae98486ffc9f0e06ff40f",
+      "totals": [
+        "25 passed (18.1s)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "startTime": "2026-10-08T20:10:08.521Z",
+        "duration": 18138.901,
+        "expected": 25,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "unhandledErrorCount": 0
+    }
+  ]
+}
