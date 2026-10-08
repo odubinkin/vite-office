@@ -1,0 +1,17 @@
+{
+  "profile": "upstream-absent",
+  "allowedCases": "Exactly two new previously unexecuted cases; all already passing cases remain skipped.",
+  "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/source/core/table/native-box-frame-format.test.ts --testNamePattern=^native border publication reuses shared formats only for identical changed-side types$|^invalid insertion and incomplete table teardown preserve native cell registrations$ --coverage.reportOnFailure --coverage.reporter=json-summary --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/FT0HZ1.closure2.app-results.json",
+  "exit": 1,
+  "bytes": 2212,
+  "sha256": "f0783fed144fca163314c67333325bdcbeaba7e8e12cbbe5fe45158abb3ad1ab",
+  "caseCounts": {
+    "passed": 2,
+    "failed": 0,
+    "skipped": 5,
+    "total": 7
+  },
+  "failedCases": [],
+  "coverageMapSHA256": "8a355f6322b95c12e84e8d984b8f20a5ef56f544f73e9224596b1e2f3a3e5b50",
+  "vendorRestored": true
+}
