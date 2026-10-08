@@ -1,0 +1,16 @@
+{
+  "records": [
+    {
+      "command": "npm run check:source-provenance",
+      "exit": 0,
+      "sha256": "c6b4d1023dae5c63459e63679928727f34512756e97f8f214ae487da81e4d533",
+      "reason": "Production-native item body changed with native At uint16 parameter correction; changed-input source gates only"
+    },
+    {
+      "command": "npm run inventory:parity",
+      "exit": 0,
+      "sha256": "9941cf45704e39342193e5a75ec512f4fd2330613949e8dcf0b941bf7e01345f",
+      "reason": "Production-native item body changed with native At uint16 parameter correction; changed-input source gates only"
+    }
+  ]
+}

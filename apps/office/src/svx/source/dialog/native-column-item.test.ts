@@ -127,6 +127,17 @@ it("native uint16 construction and count retain raw vector ownership across wrap
   expect(clone.At(65535)).not.toBe(item.At(65535));
   expect(new SvxColumnItem(65537).GetActColumn()).toBe(1);
 });
+it("native column indexing converts the argument to uint16 before accessing ownership", /** Checks the source At parameter conversion over mutable owned entries. @returns Nothing. */ () => {
+  const item = new SvxColumnItem();
+  item.Append(new SvxColumnDescription(0, 10, true));
+  item.Append(new SvxColumnDescription(10, 20, false));
+  expect(item.At(65536)).toBe(item.At(0));
+  expect(item.At(65537)).toBe(item.At(1));
+  expect(item.At(-65535)).toBe(item.At(1));
+  item.At(65537).nEnd = 30;
+  expect(item.At(1).nEnd).toBe(30);
+  expect(item.At(0).nEnd).toBe(10);
+});
 it.each([-1, 32768, 1.5, NaN])(
   "owned item identity rejects invalid local WhichId %s",
   /** Checks the existing bounded item identity domain. @param invalid - Invalid identity. @returns Nothing. */ (

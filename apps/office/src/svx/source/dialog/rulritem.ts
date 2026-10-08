@@ -72,7 +72,7 @@ export class SvxColumnItem extends SfxPoolItem {
   }
   /** Returns the mutable owned description. @param index - Native column index. @returns Owned description. */
   public At(index: number): SvxColumnDescription {
-    return this.columns[index] as SvxColumnDescription;
+    return this.columns[index & 0xffff] as SvxColumnDescription;
   }
   /** Returns current column description. @returns Owned active description. */
   public GetActiveColumnDescription(): SvxColumnDescription {

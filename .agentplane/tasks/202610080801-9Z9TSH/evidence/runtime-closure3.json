@@ -1,0 +1,27 @@
+{
+  "profile": "upstream-absent",
+  "reason": "Native At uint16 argument contract changed; rebuild changed input and run only the genuinely new index-conversion case, no passing replay",
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "exit": 0,
+      "outputSHA256": "1e0b42cbfb0445cfb2341c2238a05af19d34eb90d2c5ef0847735e48e1b850a2",
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/svx/source/dialog/native-column-item.test.ts -t ^native column indexing converts the argument to uint16 before accessing ownership$ --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/9Z9TSH.closure3.app-results.json",
+      "exit": 1,
+      "outputSHA256": "2873f53b812a08ca9403e3dd089c0b6bd0c2a1054ed0ba310463420906a49a14",
+      "unhandledErrorCount": 0,
+      "caseCounts": {
+        "passed": 1,
+        "failed": 0,
+        "skipped": 8,
+        "total": 9
+      }
+    }
+  ]
+}

@@ -12,7 +12,7 @@
         "apps/office/src/sw/source/uibase/uiview/view.ts": 285,
         "apps/office/src/sw/source/uibase/docvw/edtwin.ts": 667,
         "scripts/check-module-boundaries.mjs": 368,
-        "apps/office/src/svx/source/dialog/native-column-item.test.ts": 144,
+        "apps/office/src/svx/source/dialog/native-column-item.test.ts": 155,
         "apps/office/src/sw/source/uibase/uiview/native-column-item-boundary.test.ts": 150,
         "scripts/native-column-item-boundary.test.ts": 19,
         "apps/office/src/sw/browser/presentation/current-dialog-baseline.test.tsx": 395,
