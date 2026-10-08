@@ -1,0 +1,86 @@
+{
+  "app": {
+    "original": 13800,
+    "current": 13808,
+    "newCases": 8,
+    "resolved": 16,
+    "passed": 13808,
+    "unresolvedCount": 0,
+    "skippedObservationsRetained": 89,
+    "passingReplay": 0,
+    "originalUncaughtErrorCases": 0,
+    "finalUncaughtErrorCases": 0,
+    "inputs": [
+      {
+        "file": "8MWTR6.app-results.json",
+        "sha256": "d501c34f6f3f3718705c212edd06278527d912e7fc247a1021646e7dbdc8dfc5",
+        "passed": 13785,
+        "failed": 15,
+        "skipped": 0
+      },
+      {
+        "file": "8MWTR6.closure1.app-results.json",
+        "sha256": "110da96ffe24063bbad005da7c726668069c3a116673c6bc13f82e125650345f",
+        "passed": 20,
+        "failed": 0,
+        "skipped": 67
+      },
+      {
+        "file": "8MWTR6.closure2.app-results.json",
+        "sha256": "0df56fe17362904e0b999e3e8b2af3b95a1089050350ed973c5de4f1cf378348",
+        "passed": 2,
+        "failed": 1,
+        "skipped": 20
+      },
+      {
+        "file": "8MWTR6.closure3.app-results.json",
+        "sha256": "0a13657f0733fec30e038ee72226525e33a565198482cc31cef2bb83c3253aec",
+        "passed": 1,
+        "failed": 0,
+        "skipped": 2
+      }
+    ]
+  },
+  "inventory": {
+    "original": 110,
+    "current": 110,
+    "newCases": 0,
+    "resolved": 0,
+    "passed": 110,
+    "unresolvedCount": 0,
+    "skippedObservationsRetained": 0,
+    "passingReplay": 0,
+    "originalUncaughtErrorCases": 0,
+    "finalUncaughtErrorCases": 0,
+    "inputs": [
+      {
+        "file": "8MWTR6.inventory-results.json",
+        "sha256": "785906ca639c757e0a7fdc91a59d1d54b01092afc515dbaf28eb574c58ad57df",
+        "passed": 110,
+        "failed": 0,
+        "skipped": 0
+      }
+    ]
+  },
+  "chromium": {
+    "current": 299,
+    "passed": 299,
+    "unresolvedCount": 0,
+    "passingReplay": 0,
+    "inputs": [
+      {
+        "file": "8MWTR6.chromium-results.json",
+        "sha256": "cba39e26bf9860a8e86af4e8ee5b1c9afaea5b55893493519766cbddfc4d5274",
+        "counts": {
+          "startTime": "2026-10-08T12:14:17.148Z",
+          "duration": 303354.976,
+          "expected": 299,
+          "skipped": 0,
+          "unexpected": 0,
+          "flaky": 0
+        }
+      }
+    ]
+  },
+  "failures": []
+}

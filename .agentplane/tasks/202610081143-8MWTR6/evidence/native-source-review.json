@@ -1,0 +1,379 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "base": "a448d28bf7c1e9c4cdc0e69156a106f5bde633f1",
+  "sources": [
+    {
+      "path": "sw/source/core/table/swtable.cxx",
+      "sha256": "10c536056498dd001b3a5c75638040ee5daef966ede231c66947da8e704b1206",
+      "anchors": [
+        {
+          "identifier": "void SwTable::GetTabCols(",
+          "line": 526,
+          "allMatchingLines": [
+            526
+          ]
+        },
+        {
+          "identifier": "void SwTable::SetTabCols(",
+          "line": 831,
+          "allMatchingLines": [
+            831
+          ]
+        },
+        {
+          "identifier": "static void lcl_AdjustWidthsInLine(",
+          "line": 994,
+          "allMatchingLines": [
+            994
+          ]
+        },
+        {
+          "identifier": "void SwTable::NewSetTabCols(",
+          "line": 1166,
+          "allMatchingLines": [
+            1166
+          ]
+        },
+        {
+          "identifier": "static void lcl_ModifyBoxes(",
+          "line": 263,
+          "allMatchingLines": [
+            263,
+            284
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sw/source/core/table/swnewtable.cxx",
+      "sha256": "222899c5938f08cf797c5e552ff5a9307a591e173e0708ac6f2efdf4f84a19da",
+      "anchors": [
+        {
+          "identifier": "bool SwTable::NewInsertCol(",
+          "line": 655,
+          "allMatchingLines": [
+            655
+          ]
+        },
+        {
+          "identifier": "aFrameSz.SetWidth( nNewBoxWidth );",
+          "line": 773,
+          "allMatchingLines": [
+            773
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sw/source/core/docnode/ndtbl.cxx",
+      "sha256": "d3220445657cd54a44fc741bebf5d514b4d62f5607fcfb5e0f7ef30700075d8d",
+      "anchors": [
+        {
+          "identifier": "void SwDoc::SetTabCols(",
+          "line": 2871,
+          "allMatchingLines": [
+            2871,
+            3060
+          ]
+        },
+        {
+          "identifier": "void SwDoc::SetTabCols(SwTable&",
+          "line": 3060,
+          "allMatchingLines": [
+            3060
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sw/source/core/undo/untbl.cxx",
+      "sha256": "147e1b9f9870416bc83d2b918a0621e810003594b9a95ede372518925b2c245b",
+      "anchors": [
+        {
+          "identifier": "SaveTable::SaveTable(",
+          "line": 887,
+          "allMatchingLines": [
+            887
+          ]
+        },
+        {
+          "identifier": "void SaveTable::RestoreAttr(",
+          "line": 937,
+          "allMatchingLines": [
+            937
+          ]
+        },
+        {
+          "identifier": "SwUndoTableNdsChg::SwUndoTableNdsChg(",
+          "line": 1502,
+          "allMatchingLines": [
+            1502
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sw/source/core/frmedt/tblsel.cxx",
+      "sha256": "97ce23ff487798ee5f6789025d7b53c1ff04118ac28a2a766f1e7165498bda4c",
+      "anchors": [
+        {
+          "identifier": "bool CheckSplitCells(",
+          "line": 1960,
+          "allMatchingLines": [
+            1960,
+            1969
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sw/source/filter/xml/xmltble.cxx",
+      "sha256": "45f2cff0b4f02b57cbdb7cde42fe0f749ae77d95e97bfe39fe1c2be5f96e1eea",
+      "anchors": [
+        {
+          "identifier": "SwXMLTableLines_Impl::SwXMLTableLines_Impl",
+          "line": 124,
+          "allMatchingLines": [
+            124
+          ]
+        },
+        {
+          "identifier": "XML_NUMBER_COLUMNS_SPANNED",
+          "line": 817,
+          "allMatchingLines": [
+            817
+          ]
+        },
+        {
+          "identifier": "XML_COVERED_TABLE_CELL",
+          "line": 965,
+          "allMatchingLines": [
+            965,
+            998
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sw/source/filter/xml/xmltbli.cxx",
+      "sha256": "eb46a2cbffc3700ed24c9099ec86e888bbdfa3a7b3a920de1356e4a98f264fab",
+      "anchors": [
+        {
+          "identifier": "XML_NUMBER_COLUMNS_SPANNED",
+          "line": 401,
+          "allMatchingLines": [
+            401
+          ]
+        },
+        {
+          "identifier": "XML_COVERED_TABLE_CELL",
+          "line": 855,
+          "allMatchingLines": [
+            855,
+            856
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sw/source/filter/inc/wrtswtbl.hxx",
+      "sha256": "8bb832a8e9d94d8a772beafbf6fe1eb1040b4fd8a18c9339d50578876a0d9677",
+      "anchors": [
+        {
+          "identifier": "SwWriteTableCol::operator==",
+          "line": 187,
+          "allMatchingLines": [
+            187
+          ]
+        },
+        {
+          "identifier": "SwWriteTableCol::operator<",
+          "line": 194,
+          "allMatchingLines": [
+            194
+          ]
+        },
+        {
+          "identifier": "#define COLFUZZY 20",
+          "line": 42,
+          "allMatchingLines": [
+            42
+          ]
+        }
+      ]
+    },
+    {
+      "path": "include/o3tl/sorted_vector.hxx",
+      "sha256": "4ef74875a7b188cd80b5267bc0a43d6b30fb5a2ef6017650e8b596067ff4aaa2",
+      "anchors": [
+        {
+          "identifier": "struct find_unique",
+          "line": 26,
+          "allMatchingLines": [
+            26
+          ]
+        },
+        {
+          "identifier": "std::lower_bound(first, last, v, Compare())",
+          "line": 31,
+          "allMatchingLines": [
+            31
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sw/source/uibase/uiview/viewtab.cxx",
+      "sha256": "f93e2b889762ab0165db3d1485d3bbae6e9e97794c79870c2299756b4095e7a1",
+      "anchors": [
+        {
+          "identifier": "rSh.SetTabCols(aTabCols, bSingleLine);",
+          "line": 984,
+          "allMatchingLines": [
+            984
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sw/inc/fmtfsize.hxx",
+      "sha256": "e880b0482e55550ee27f1b8f49d8a84a3894056298dab20ef3c4a5a22522e6b0",
+      "anchors": [
+        {
+          "identifier": "class SW_DLLPUBLIC SwFormatFrameSize",
+          "line": 50,
+          "allMatchingLines": [
+            50
+          ]
+        },
+        {
+          "identifier": "SwFrameSize::Variable",
+          "line": 75,
+          "allMatchingLines": [
+            75
+          ]
+        }
+      ]
+    }
+  ],
+  "production": [
+    {
+      "path": "apps/office/src/sw/source/core/table/swtable.ts",
+      "sha256": "798ea31a363a042dd09f044a1cccf15e9b823efaa330fd4c05dfc2733fccf007"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/docnode/ndtbl.ts",
+      "sha256": "79990a298f5158f6954aa5adc4cebddc6dc863d79bc522c7b27031da0b1f7657"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/doc/doc.ts",
+      "sha256": "b6500cd556252da9778d9f288ee3f24f7f5a8d30191c3ba1858e266116575765"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/docnode/nodes.ts",
+      "sha256": "c71826c4932dc1379727cd2c959157654ef057effac91b139b48e343d03bb8b1"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/untbl.ts",
+      "sha256": "4d5806ef95514bb846350f04a71c7e0f8b9b6726185ae6f68eba96328ead6181"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/frmedt/tblsel.ts",
+      "sha256": "4184d685b3e0dc7e404887393b4de973dc3b5785e6265bf06f1f7b2e754c07e9"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/layout/tabfrm.ts",
+      "sha256": "255b0c08628c109768b007ddad5a0aa989bfd6fa5b9c1abb9c0ccad82c4ff3fc"
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/WriterEditableTable.tsx",
+      "sha256": "45a85f0e381336cccc56d6b0a6cd8c929326e197f61e3bb30cb5e606bd504815"
+    },
+    {
+      "path": "apps/office/src/sw/browser/filter/xml/writer-document-codec.ts",
+      "sha256": "61de74d43923bbbec2c91ca6ddcfe63217720f35f93a4621f3656b91f41f9b55"
+    },
+    {
+      "path": "apps/office/src/sw/browser/filter/xml/writer-table-item-codec.ts",
+      "sha256": "132f6bd381148fda2b6c5a79be4bf0ef93af598b6a98004e93e972f65546d009"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/xmlexp.ts",
+      "sha256": "986f010d9e693e3565ac6da3c46558d11614e07dee2a358f4dac180654bdfb4d"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/xmltbli.ts",
+      "sha256": "84c3f97dc6353607893cde1fe35eec244084b85e9c85004e0a3cb2d98cbf8641"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/xmltble.ts",
+      "sha256": "972cf55b034b9d3b1fb2f3d6031f26544ed2f73b6a645c1f329f1615d8bb7cea"
+    },
+    {
+      "path": "apps/office/src/xmloff/source/table/XMLTableExport.ts",
+      "sha256": "8520963dfe9b2f8699693ba0e2095226222d413b7cfadd58b8a3a669b647cf61"
+    },
+    {
+      "path": "apps/office/src/xmloff/source/table/XMLTableImport.ts",
+      "sha256": "ef8d3652a9938bd1f2fae0cac9a730b28ef18bd7be8cb460ec1626169a1f707d"
+    },
+    {
+      "path": "apps/office/src/xmloff/source/core/xmltoken.ts",
+      "sha256": "ec3587e69963ad85eba6a72a85d639d82e8982162df61be10025f1694f788183"
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/docvw/edtwin.ts",
+      "sha256": "31f0101d2be1cde60d4fdb77ef0385549993e884c6d3636d90e55a7331b74afb"
+    }
+  ],
+  "protectedIO": [
+    {
+      "path": "apps/office/src/sw/browser/storage/writer-odt-store.ts",
+      "sha256": "0fb4ebffca5a00fe63ff327379305d64143c7014dace0a7e13edb8c0c241232e",
+      "baselineByteIdentical": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/workflows/writer-odt-io.ts",
+      "sha256": "7c214afab59dbc5df1087f107e2b7bf2bf01d8623a2995e8eb19a45575361306",
+      "baselineByteIdentical": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/WriterFileDialog.tsx",
+      "sha256": "50ad125f5a254eb1772b62abe3681e4632df6c7870ea9647622b2268394c88c3",
+      "baselineByteIdentical": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/writer-view.tsx",
+      "sha256": "5fbe8e47d24a0d03e4f5925e9002ab31a61c140f1ae819cf8805439f4ef253cc",
+      "baselineByteIdentical": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts",
+      "sha256": "060a06dd9a77e530de1756b2f4c4384e6b2ddd1ee20c68fb175daab2eeb99ee7",
+      "baselineByteIdentical": true
+    }
+  ],
+  "parent": {
+    "characters": 662987,
+    "sha256": "987d8167d3c9ab3662a5c38cb2e0f43281934ff0120778272a1d88299af2c86b",
+    "unchanged": true
+  },
+  "stash": {
+    "commit": "c85f4a0e453dfd06d6e199554784f2c286737472",
+    "preserved": true
+  },
+  "sourceBoundContracts": [
+    "Connected flat-row widths belong to independently cloned complete SwTableBox native frame-size items, with declaration widths limited to builder/import ingress. Shared legacy width requests author original boxes without forbidding native zero items; positive UI width admission remains separate.",
+    "Native GetTabCols uses current-row visible and other-row hidden fuzzy boundaries/constraints; NewSetTabCols maps integer widths and adjusts actual original lines, honoring current-line unspanned apply. Writer forwards true current-line ruler flags to original document transaction and history.",
+    "Original SaveTable attribute history and column-insertion retained sections include complete independent frame widths. Existing graph, nodes, cursor and repeated undo/redo owners stay native.",
+    "Writer XML uses native row-box cumulative union boundaries with first-row total; source sorted-vector fuzzy20 lower bound insertion/find coalesces close boundaries. Actual cells carry spans and covered XML slots without duplicate native sections; browser borrows the same grid.",
+    "ODF exports/imports represented flat independent cells, including source fuzzy20 normalization within tolerance. Browser codec copies all eight native frame-size fields and legacy ingress. No TextRuns translation is introduced."
+  ],
+  "residuals": [
+    "Full merged/row-span/nested table graph propagation and selection, complete native XML styles and border formats remain incomplete.",
+    "Box/line table native item pooling/UNO/format identity and full inherited attributes remain partial.",
+    "Complete SFX bindings, VCL painting/ticks/snapping/protection/page/frame/paragraph/ruler state, RTL/vertical document dragging and collapsed-border pixel geometry remain partial.",
+    "Native uint16 wrapped-delta equality, full VCL pixel-vector ownership/window/null offsets, column-margin modifier state and other full native contexts are not certified.",
+    "Registered IO/open/save/recovery/settings remain byte-identical; no full module/upstream parity promotion."
+  ]
+}

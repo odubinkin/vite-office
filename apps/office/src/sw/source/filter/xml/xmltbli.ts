@@ -8,12 +8,12 @@ import { SvXMLImport } from "../../../../xmloff/source/core/xmlimp";
 import type { OdfTableStyle } from "../../../../xmloff/source/table/XMLTableImport";
 import type { SwDoc } from "../../core/doc/doc";
 import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
-import type {
-  SwTable,
-  SwTableBox,
+import {
+  type SwTable,
+  type SwTableBox,
   SwTableLine,
-  SwTableFormat,
-  SwTableBoxFormat,
+  type SwTableFormat,
+  type SwTableBoxFormat,
 } from "../../core/table/swtable";
 
 /** Keeps table import state scoped to one Writer XML stream coordinator. */
@@ -24,6 +24,8 @@ export class SwXMLTableImport extends SvXMLImport {
   protected activeCell: SwTableBox | undefined;
   protected cellParagraphCount = 0;
   private rowCellIndex = 0;
+  private readonly columnWidths: number[] = [];
+  private pendingCovered = 0;
   private inHeaderRows = false;
   private headerRowCount = 0;
 
@@ -53,6 +55,7 @@ export class SwXMLTableImport extends SvXMLImport {
       name,
       tableStyleValues(style) as SwTableFormat,
     );
+    this.columnWidths.length = 0;
     this.headerRowCount = 0;
     this.inHeaderRows = false;
   }
@@ -83,6 +86,7 @@ export class SwXMLTableImport extends SvXMLImport {
       { family: "table-column" }
     >;
     table.AddColumnWidth(style.columnWidth ?? 0);
+    this.columnWidths.push(style.columnWidth ?? 0);
   }
 
   /** Opens one ordered table row with the declared column count. */
@@ -96,9 +100,9 @@ export class SwXMLTableImport extends SvXMLImport {
       OdfTableStyle,
       { family: "table-row" }
     >;
-    const count = table.GetColumnWidths().length;
+    const count = this.columnWidths.length;
     if (count === 0) throw new Error("ODF table has no declared columns.");
-    this.activeRow = this.document.nodes.AppendTableRow(table, count, {
+    this.activeRow = new SwTableLine({
       keepTogether: style.keepTogether,
       frameSize:
         style.minHeight !== undefined
@@ -115,24 +119,39 @@ export class SwXMLTableImport extends SvXMLImport {
               )
             : undefined,
     });
+    table.AddLine(this.activeRow);
+    this.pendingCovered = 0;
     if (this.inHeaderRows) this.headerRowCount += 1;
     this.rowCellIndex = 0;
   }
 
   /** Selects one canonical cell and its first paragraph. */
-  /** Projects one canonical Writer table value. @param argument1 - Callback input. @returns Callback result. */ public beginTableCell(
+  /** Creates one native box over declared grid columns. @param styleName - Cell style. @param columnSpan - Number of source grid columns. @returns Nothing. */ public beginTableCell(
     styleName: string,
+    columnSpan = 1,
   ): void {
     const row = this.activeRow;
     /* v8 ignore next -- SAX cell contexts are created only by an open row and cannot overlap. */
     if (row === undefined || this.activeCell !== undefined)
       throw new Error("ODF table cell is outside a row.");
-    const cell = row.GetTabBoxes()[this.rowCellIndex];
-    if (cell === undefined)
+    if (this.pendingCovered !== 0 || this.rowCellIndex + columnSpan > this.columnWidths.length)
       throw new Error("ODF table row contains more cells than declared columns.");
+    const width = this.columnWidths
+        .slice(this.rowCellIndex, this.rowCellIndex + columnSpan)
+        .reduce(
+          /** Sums native declared columns for this source cell span. @param sum - Prior extent. @param value - Native grid width. @returns Cell width. */ (
+            sum,
+            value,
+          ) => sum + value,
+          0,
+        ),
+      cell = this.document.nodes.AppendTableBox(this.requireTable(), row, {
+        frameSize: new SwFormatFrameSize(SwFrameSize.Variable, width, 0),
+      });
     const style = this.resolveTableStyle(styleName, "table-cell");
     const { verticalAlign, ...format } = tableStyleValues(style);
     cell.SetFormat({
+      ...cell.GetFormat(),
       box: importBoxProperties(format, RES_BOX),
       ...(verticalAlign === undefined
         ? {}
@@ -149,7 +168,14 @@ export class SwXMLTableImport extends SvXMLImport {
     } as SwTableBoxFormat);
     this.activeCell = cell;
     this.cellParagraphCount = 0;
-    this.rowCellIndex += 1;
+    this.rowCellIndex += columnSpan;
+    this.pendingCovered = columnSpan - 1;
+  }
+
+  /** Consumes one covered union-grid slot without creating a duplicate native box. @returns Nothing. */
+  public coveredTableCell(): void {
+    if (this.pendingCovered === 0) throw new Error("ODF covered table cell has no spanning cell.");
+    this.pendingCovered--;
   }
 
   /** Closes a cell after its paragraph contexts. */
@@ -159,7 +185,11 @@ export class SwXMLTableImport extends SvXMLImport {
 
   /** Validates the row's cell cardinality. */
   /** Projects one canonical Writer table value.  @returns Callback result. */ public endTableRow(): void {
-    if (this.activeRow === undefined || this.rowCellIndex !== this.activeRow.GetTabBoxes().length)
+    if (
+      this.activeRow === undefined ||
+      this.rowCellIndex !== this.columnWidths.length ||
+      this.pendingCovered !== 0
+    )
       throw new Error("ODF table row cell count differs from declared columns.");
     this.activeRow = undefined;
   }

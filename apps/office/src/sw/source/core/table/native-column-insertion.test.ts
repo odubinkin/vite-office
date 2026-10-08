@@ -80,7 +80,10 @@ for (const behind of [false, true])
         for (const rowIndex of f.rows.keys()) {
           const source = required(required(originals[rowIndex])[behind ? 2 : 1]);
           for (const box of required(inserted[rowIndex])) {
-            expect(box.GetFormat()).toEqual(source.GetFormat());
+            const expectedFormat = source.GetFormat(),
+              frameSize = required(expectedFormat.frameSize).Clone();
+            frameSize.SetWidth(7500);
+            expect(box.GetFormat()).toEqual({ ...expectedFormat, frameSize });
             const cell = required(box.GetParagraphs()[0]);
             expect(cell.GetText()).toBe("");
             expect(cell.GetTextFormatColl()).toBe(

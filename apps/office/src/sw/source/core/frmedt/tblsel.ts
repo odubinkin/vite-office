@@ -9,24 +9,16 @@ export function CheckSplitCells(shell: SwFEShell, divisions: number): boolean {
   if (table === undefined) return false;
   const boxes = shell.GetTableSel(SwTable.SEARCH_COL),
     page = shell.GetDoc().GetPageDesc().GetValue(),
-    printWidth = new SwTabFrame(table).Format(
-      page.width - page.leftMargin - page.rightMargin,
-    ).width,
-    widths = table.GetColumnWidths(),
-    total = widths.reduce(
-      /** Adds native shared reference widths. @param sum - Prior extent. @param width - Column extent. @returns Total. */
-      (sum, width) => sum + width,
-      0,
-    ),
+    frame = new SwTabFrame(table),
+    upperWidth = page.width - page.leftMargin - page.rightMargin,
     minimum = (divisions * 23) & 0xffff;
-  if (boxes.length === 0 || total <= 0) return false;
+  if (boxes.length === 0 || frame.Format(upperWidth).width <= 0) return false;
   return table.GetTabLines().every(
     /** Checks actual selected boxes without replacing layout/model owners. @param line - Native row. @returns Whether admitted. */
     (line) =>
       line.GetTabBoxes().every(
         /** Tests selected cell print width. @param box - Actual box. @param column - Coordinate. @returns Whether wide enough. */
-        (box, column) =>
-          !boxes.includes(box) || ((widths[column] as number) * printWidth) / total >= minimum,
+        (box) => !boxes.includes(box) || frame.GetBoxPrintWidth(box, upperWidth) >= minimum,
       ),
   );
 }

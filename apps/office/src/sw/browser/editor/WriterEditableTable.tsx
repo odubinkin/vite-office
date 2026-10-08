@@ -1,4 +1,6 @@
 /** @fileoverview Browser table frame over canonical SwTable rows and SwTextNode cell paragraphs. */
+import { SwXMLTableLines } from "../../source/filter/xml/xmltble";
+
 import { VertOrientation } from "../../../offapi/com/sun/star/text/VertOrientation";
 
 import { SwRowFrame } from "../../source/core/layout/tabfrm";
@@ -86,7 +88,8 @@ function browserCellBoxStyle(item: SvxBoxItem, fixedGuide: boolean): React.CSSPr
         resolved.set(`${horizontal}:${line.mnKey}:${line.mnStartPos}`, line.maAttribute);
       },
     );
-  const columnWidth = table.GetColumnWidths().reduce(
+  const grid = new SwXMLTableLines(table);
+  const columnWidth = grid.GetColumnWidths().reduce(
     /** Adds native column reference widths. @param sum - Previous extent. @param width - Column width. @returns Total. */
     (sum, width) => sum + width,
     0,
@@ -112,7 +115,7 @@ function browserCellBoxStyle(item: SvxBoxItem, fixedGuide: boolean): React.CSSPr
         }}
       >
         <colgroup>
-          {table.GetColumnWidths().map(
+          {grid.GetColumnWidths().map(
             /** Handles the browser table interaction. @param argument1 - Callback input. @param argument2 - Callback input. @returns Callback result. */ (
               width,
               index,
@@ -120,7 +123,7 @@ function browserCellBoxStyle(item: SvxBoxItem, fixedGuide: boolean): React.CSSPr
               <col
                 key={index}
                 style={{
-                  width: `${columnWidth === 0 ? 100 / table.GetColumnWidths().length : (width * 100) / columnWidth}%`,
+                  width: `${columnWidth === 0 ? 100 / grid.GetColumnWidths().length : (width * 100) / columnWidth}%`,
                 }}
               />
             ),
@@ -243,6 +246,7 @@ function browserCellBoxStyle(item: SvxBoxItem, fixedGuide: boolean): React.CSSPr
                               ? "relative bg-indigo-50 outline outline-1 outline-indigo-300"
                               : "relative"
                           }
+                          colSpan={grid.GetColumnSpan(cell)}
                           key={cellIndex}
                           style={{
                             ...(nativeRow.HasFixSize() ? { border: "none", padding: 0 } : boxStyle),

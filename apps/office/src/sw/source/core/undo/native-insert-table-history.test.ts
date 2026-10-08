@@ -4,6 +4,7 @@ import { VertOrientation } from "./../../../../offapi/com/sun/star/text/VertOrie
 import { SwFormatVertOrient } from "./../../../inc/fmtornt";
 
 import { expect, it } from "vitest";
+import { SwFormatFrameSize } from "../../../inc/fmtfsize";
 import { SwDoc } from "../doc/doc";
 import { SwTextNode } from "../txtnode/ndtxt";
 import { SwPosition } from "../crsr/pam";
@@ -165,12 +166,13 @@ it.each([
         required(required(table.GetTabLines()[0]).GetTabBoxes()[0]).GetParagraphs()[0],
       ).GetTextFormatColl().id,
     ).toBe(style);
-    expect(required(required(table.GetTabLines()[0]).GetTabBoxes()[0]).GetFormat()).toEqual(
-      nativeBoxFormat({
+    expect(required(required(table.GetTabLines()[0]).GetTabBoxes()[0]).GetFormat()).toEqual({
+      ...nativeBoxFormat({
         padding: mode === SwInsertTableFlags.All ? 55 : 0,
         border: mode === SwInsertTableFlags.All ? "0.5pt solid #000000" : "none",
       }),
-    );
+      frameSize: new SwFormatFrameSize(undefined, 32767, 0),
+    });
     position.Dispose();
     doc.Dispose();
   },
@@ -199,13 +201,14 @@ it("uses first free native names on collisions and owns dialog construction valu
       repeatHeaderRows: false,
       layoutSplit: false,
     });
-    expect(required(required(recreated.GetTabLines()[0]).GetTabBoxes()[0]).GetFormat()).toEqual(
-      nativeBoxFormat({
+    expect(required(required(recreated.GetTabLines()[0]).GetTabBoxes()[0]).GetFormat()).toEqual({
+      ...nativeBoxFormat({
         padding: 123,
         border: "none",
         vertOrient: new SwFormatVertOrient(0, VertOrientation.BOTTOM),
       }),
-    );
+      frameSize: new SwFormatFrameSize(undefined, 65535, 0),
+    });
     expect(o.doc.GetTables()).toContain(original);
     expect(o.doc.GetTables()).toContain(occupied);
   } finally {

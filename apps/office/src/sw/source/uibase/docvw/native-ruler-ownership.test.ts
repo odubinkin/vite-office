@@ -188,14 +188,23 @@ it("Writer item conversion retains original constrained carrier owners and hidde
   expect(original.GetEntry(0).nPos).toBe(1650);
 });
 
-it("Writer source ruler axis exchange retains existing column contract and independent row history", /** Checks new combined capture sequence through source owners while independent column-row graphs remain unsupported. @returns Nothing. */ () => {
+it("Writer source ruler axis exchange retains native current-line columns and independent row history", /** Checks native current-line columns and row capture through the original owners. @returns Nothing. */ () => {
   const f = fixture(),
     apply = vi.spyOn(f.shell, "SetMouseTabCols"),
     originalLines = [...f.table.GetTabLines()];
   f.edit.MouseButtonDown({ x: 200, y: 125 }, 0, 1, KEY_MOD1 | KEY_SHIFT);
   expect(f.view.GetHRuler().IsActLineOnly()).toBe(true);
   expect(f.edit.MouseButtonUp(false, { x: 230, y: 125 })).toBe(true);
-  expect(apply.mock.calls[0]?.[1]).toBe(false);
+  expect(apply.mock.calls[0]?.[1]).toBe(true);
+  expect(
+    required(f.lines[1])
+      .GetTabBoxes()
+      .map(
+        /** Reads native sizes outside the current line. @param box - Original cell. @returns Width. */ (
+          box,
+        ) => box.GetFrameSize().GetWidth(),
+      ),
+  ).toEqual([1500, 1500, 1500]);
   expect(f.table.GetColumnWidths()).toEqual([1950, 1050, 1500]);
   expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(1);
   f.edit.MouseButtonDown({ x: 150, y: 200 }, 0, 1, KEY_MOD1);

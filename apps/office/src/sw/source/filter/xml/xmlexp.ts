@@ -1,6 +1,8 @@
 /**
  * @fileoverview Reimplements the bounded Writer ODF XML export bridge from pinned LibreOffice `sw/source/filter/xml/xmlexp.cxx`.
  */
+import { SwXMLTableLines } from "./xmltble";
+
 import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
 import { exportBoxProperties } from "../../../../xmloff/source/style/bordrhdl";
 
@@ -279,7 +281,8 @@ function exportWriterText(
             yield { kind: "paragraph" as const, paragraph: projectParagraph(block) };
             continue;
           }
-          const table = block.GetTable();
+          const table = block.GetTable(),
+            grid = new SwXMLTableLines(table);
           const format = table.GetFormat();
           const orient = format.horiOrient;
           yield {
@@ -305,7 +308,7 @@ function exportWriterText(
                           : undefined,
                       marginRight: orient === HoriOrientation.NONE ? format.marginRight : undefined,
                     },
-              columnWidths: table.GetColumnWidths(),
+              columnWidths: grid.GetColumnWidths(),
               softPageBreakRows: table.GetSoftPageBreakRows(),
               rows: table.GetTabLines().map(
                 /** Projects one canonical Writer table value. @param argument1 - Callback input. @returns Callback result. */ (
@@ -323,6 +326,7 @@ function exportWriterText(
                     /** Projects one canonical Writer table value. @param argument1 - Callback input. @returns Callback result. */ (
                       cell,
                     ) => ({
+                      columnSpan: grid.GetColumnSpan(cell),
                       format: {
                         ...exportBoxProperties(cell.GetFormat().box),
                         verticalAlign:

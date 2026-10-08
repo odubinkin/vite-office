@@ -1,0 +1,146 @@
+{
+  "command": "TypeScript syntactic/semantic diagnostics for nine changed-input source files with actual project options; physical counts over scope34",
+  "targets": [
+    "apps/office/src/sw/source/core/table/swtable.ts",
+    "apps/office/src/sw/source/core/docnode/native-cell-alignment-owner.test.ts",
+    "apps/office/src/sw/source/core/table/native-column-insertion.test.ts",
+    "apps/office/src/sw/source/core/undo/native-insert-table-history.test.ts",
+    "apps/office/src/sw/source/uibase/docvw/native-table-column-drag.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-tabcols-history.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-properties.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-traversal.test.ts",
+    "apps/office/src/sw/source/core/table/native-independent-columns.test.ts"
+  ],
+  "errors": [],
+  "physical": [
+    {
+      "path": "apps/office/src/sw/source/core/table/swtable.ts",
+      "lines": 744
+    },
+    {
+      "path": "apps/office/src/sw/source/core/docnode/ndtbl.ts",
+      "lines": 236
+    },
+    {
+      "path": "apps/office/src/sw/source/core/doc/doc.ts",
+      "lines": 948
+    },
+    {
+      "path": "apps/office/src/sw/source/core/docnode/nodes.ts",
+      "lines": 570
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/untbl.ts",
+      "lines": 427
+    },
+    {
+      "path": "apps/office/src/sw/source/core/frmedt/tblsel.ts",
+      "lines": 25
+    },
+    {
+      "path": "apps/office/src/sw/source/core/layout/tabfrm.ts",
+      "lines": 129
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/WriterEditableTable.tsx",
+      "lines": 309
+    },
+    {
+      "path": "apps/office/src/sw/browser/filter/xml/writer-document-codec.ts",
+      "lines": 916
+    },
+    {
+      "path": "apps/office/src/sw/browser/filter/xml/writer-table-item-codec.ts",
+      "lines": 91
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/xmlexp.ts",
+      "lines": 773
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/xmltbli.ts",
+      "lines": 236
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/xmltble.ts",
+      "lines": 72
+    },
+    {
+      "path": "apps/office/src/xmloff/source/table/XMLTableExport.ts",
+      "lines": 140
+    },
+    {
+      "path": "apps/office/src/xmloff/source/table/XMLTableImport.ts",
+      "lines": 402
+    },
+    {
+      "path": "apps/office/src/xmloff/source/core/xmltoken.ts",
+      "lines": 451
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/docvw/edtwin.ts",
+      "lines": 535
+    },
+    {
+      "path": "apps/office/src/sw/source/core/table/native-independent-columns.test.ts",
+      "lines": 362
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/native-independent-column-render.test.tsx",
+      "lines": 175
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/native-independent-column-odf.test.ts",
+      "lines": 163
+    },
+    {
+      "path": "apps/office/src/sw/source/core/table/native-tabcols.test.ts",
+      "lines": 266
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/docvw/native-table-linear-drag.test.ts",
+      "lines": 231
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/docvw/native-table-proportional-drag.test.ts",
+      "lines": 226
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/native-table-linear-drag.test.tsx",
+      "lines": 153
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/docvw/native-ruler-ownership.test.ts",
+      "lines": 237
+    },
+    {
+      "path": "apps/office/src/sw/source/core/docnode/native-cell-alignment-owner.test.ts",
+      "lines": 191
+    },
+    {
+      "path": "apps/office/src/sw/source/core/table/native-column-insertion.test.ts",
+      "lines": 406
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/native-insert-table-history.test.ts",
+      "lines": 293
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/docvw/native-table-column-drag.test.ts",
+      "lines": 266
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-tabcols-history.test.ts",
+      "lines": 194
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-properties.test.ts",
+      "lines": 293
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-traversal.test.ts",
+      "lines": 420
+    }
+  ],
+  "exit": 0
+}

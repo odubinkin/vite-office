@@ -69,6 +69,24 @@ export class SwTabFrame {
     return this.table;
   }
 
+  /** Resolves an actual box reference width against this table's print area. @param box - Original box. @param upperWidth - Upper print width. @returns Device-neutral print width in twips. */
+  public GetBoxPrintWidth(box: SwTableBox, upperWidth: number): number {
+    const wished =
+      this.table.GetFormat().width ??
+      this.table
+        .GetColumnWidths()
+        .reduce(
+          /** Adds original native reference widths. @param sum - Prior width. @param width - Box width. @returns Total. */ (
+            sum,
+            width,
+          ) => sum + width,
+          0,
+        );
+    return wished === 0
+      ? 0
+      : (box.GetFrameSize().GetWidth() * this.Format(upperWidth).width) / wished;
+  }
+
   /** Reads the native table-frame split item with its true default. @returns Whether table rows may occupy follow frames. */
   public IsLayoutSplitAllowed(): boolean {
     return this.table.GetFormat().layoutSplit ?? true;

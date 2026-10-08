@@ -37,6 +37,7 @@ export interface SwTableLineFormat {
 export interface SwTableBoxFormat {
   readonly box?: SvxBoxItem | undefined;
   readonly vertOrient?: SwFormatVertOrient | undefined;
+  readonly frameSize?: SwFormatFrameSize | undefined;
 }
 
 /** Creates Writer insertion border defaults without a CSS intermediary. @param borders - Default borders enabled. @returns Owned box item. */
@@ -67,6 +68,7 @@ export class SwTableBox {
     return {
       ...this.format,
       ...(this.format.box === undefined ? {} : { box: this.format.box.Clone() }),
+      ...(this.format.frameSize === undefined ? {} : { frameSize: this.format.frameSize.Clone() }),
       ...(this.format.vertOrient === undefined
         ? {}
         : { vertOrient: this.format.vertOrient.Clone() }),
@@ -77,8 +79,20 @@ export class SwTableBox {
   public SetFormat(value: SwTableBoxFormat): void {
     this.format = {
       ...(value.box === undefined ? {} : { box: value.box.Clone() }),
+      ...((value.frameSize ?? this.format.frameSize) === undefined
+        ? {}
+        : { frameSize: (value.frameSize ?? (this.format.frameSize as SwFormatFrameSize)).Clone() }),
       ...(value.vertOrient === undefined ? {} : { vertOrient: value.vertOrient.Clone() }),
     };
+  }
+
+  /** Reads the complete native box frame-size value. @returns Independent frame item including pool defaults. */
+  public GetFrameSize(): SwFormatFrameSize {
+    return this.format.frameSize?.Clone() ?? new SwFormatFrameSize();
+  }
+  /** Replaces the native box frame-size attribute without changing other attributes. @param value - Borrowed size. @returns Nothing. */
+  public SetFrameSize(value: SwFormatFrameSize): void {
+    this.SetFormat({ ...this.GetFormat(), frameSize: value });
   }
 
   /** Reads an independent native box item including borderless pool defaults. @returns Complete item. */
@@ -159,7 +173,7 @@ export class SwTable {
   public static readonly SEARCH_ROW = 1;
   public static readonly SEARCH_COL = 2;
   private readonly lines: SwTableLine[] = [];
-  private readonly columnWidths: number[] = [];
+  private readonly declaredColumnWidths: number[] = [];
   private readonly softPageBreakRows: number[] = [];
 
   /** Creates one table graph at its owning start node. @param tableNode - Node-array owner. @param name - ODF table name. @param format - Physical table geometry. @returns Nothing. */
@@ -237,12 +251,17 @@ export class SwTable {
 
   /** Appends one defined column width. @param twips - Width in twips. @returns Nothing. */
   public AddColumnWidth(twips: number): void {
-    this.columnWidths.push(twips);
+    this.declaredColumnWidths.push(twips);
   }
 
   /** Returns ordered column widths. @returns Widths in twips. */
   public GetColumnWidths(): readonly number[] {
-    return this.columnWidths;
+    return this.lines.length === 0
+      ? this.declaredColumnWidths
+      : (this.lines[0] as SwTableLine).GetTabBoxes().map(
+          /** Reads canonical first-row box widths for legacy column declarations. @param box - Original box. @returns Native width. */
+          (box) => box.GetFrameSize().GetWidth(),
+        );
   }
 
   /** Fills native flat-table separators using source integer scaling and fuzzy insertion. @param result - Existing frame edges and output entries. @param start - Actual current box. @param refreshHidden - Refresh visibility only. @param currentRowOnly - Omit other-row constraint scan. @returns Whether the box belongs to this table. */
@@ -264,19 +283,31 @@ export class SwTable {
       actual = result.GetRight() - left;
     const wished =
       this.format.width ??
-      this.columnWidths.reduce(
+      this.GetColumnWidths().reduce(
         /** Sums canonical box widths. @param sum - Prior width. @param width - Box width. @returns Total. */ (
           sum,
           width,
         ) => sum + width,
         0,
       );
-    const positions = [0];
-    let sum = 0;
-    for (const width of this.columnWidths) {
-      sum += width;
-      positions.push(wished === 0 ? 0 : Math.trunc((sum * actual) / wished));
-    }
+    const positionsFor =
+      /** Reads native cumulative box positions. @param line - Original row. @returns Source integer positions. */ (
+        line: SwTableLine,
+      ): number[] => {
+        const positions = [0];
+        let sum = 0;
+        for (const box of line.GetTabBoxes()) {
+          sum += box.GetFrameSize().GetWidth();
+          positions.push(wished === 0 ? 0 : Math.trunc((sum * actual) / wished));
+        }
+        return positions;
+      };
+    const current = this.lines.find(
+        /** Finds the actual current line. @param line - Original row. @returns Whether connected. */ (
+          line,
+        ) => line.GetTabBoxes().includes(start),
+      ) as SwTableLine,
+      positions = positionsFor(current);
     if (refreshHidden) {
       for (let i = 0; i < result.Count(); i++) {
         const entry = result.GetEntry(i);
@@ -286,38 +317,47 @@ export class SwTable {
         entry.bHidden = true;
       }
     } else result.Remove(0, result.Count());
-    for (const position of positions.slice(0, -1)) {
-      if (refreshHidden) {
-        for (let i = 0; i < result.Count(); i++)
-          if (Math.abs(position - result.GetEntry(i).nPos) <= 20) {
-            result.SetHidden(i, false);
-            break;
-          }
-      } else {
-        let index = 0;
-        while (index < result.Count() && result.GetEntry(index).nPos < position) index++;
-        const before = index > 0 ? result.GetEntry(index - 1).nPos : undefined;
-        const after = index < result.Count() ? result.GetEntry(index).nPos : undefined;
-        if (
-          (before === undefined || position > before + 20) &&
-          (after === undefined || position < (after >= 20 ? after - 20 : after))
-        )
-          result.Insert(position, false, index);
-      }
-    }
+    const insert =
+      /** Merges source fuzzy visible/hidden boundaries. @param position - Relative native position. @param hidden - Other-row edge. @returns Nothing. */ (
+        position: number,
+        hidden: boolean,
+      ): void => {
+        if (refreshHidden) {
+          for (let i = 0; i < result.Count(); i++)
+            if (Math.abs(position - result.GetEntry(i).nPos) <= 20) {
+              result.SetHidden(i, false);
+              break;
+            }
+        } else {
+          let index = 0;
+          while (index < result.Count() && result.GetEntry(index).nPos < position) index++;
+          const before = index > 0 ? result.GetEntry(index - 1).nPos : undefined;
+          const after = index < result.Count() ? result.GetEntry(index).nPos : undefined;
+          if (
+            (before === undefined || position > before + 20) &&
+            (after === undefined || position < (after >= 20 ? after - 20 : after))
+          )
+            result.Insert(position, hidden, index);
+        }
+      };
+    for (const position of positions.slice(0, -1)) insert(position, false);
     if (!refreshHidden && !currentRowOnly) {
-      for (let column = 0; column < this.columnWidths.length; column++) {
-        const position = positions[column] as number,
-          minimum = positions[Math.max(0, column - 1)] as number,
-          maximum = positions[column + 1] as number;
-        for (let i = 0; i < result.Count(); i++) {
-          const entry = result.GetEntry(i),
-            low = entry.nPos >= 20 ? entry.nPos - 20 : entry.nPos;
-          if (position >= low && position <= entry.nPos + 20) {
-            entry.nMin = Math.max(entry.nMin, minimum);
-            entry.nMax = Math.min(entry.nMax, maximum);
-          } else if (maximum >= low && maximum <= entry.nPos + 20)
-            entry.nMin = Math.max(entry.nMin, position);
+      for (const line of this.lines) {
+        const edges = positionsFor(line);
+        for (const position of edges.slice(0, -1)) insert(position, true);
+        for (let column = 0; column < line.GetTabBoxes().length; column++) {
+          const position = edges[column] as number,
+            minimum = edges[Math.max(0, column - 1)] as number,
+            maximum = edges[column + 1] as number;
+          for (let i = 0; i < result.Count(); i++) {
+            const entry = result.GetEntry(i),
+              low = entry.nPos >= 20 ? entry.nPos - 20 : entry.nPos;
+            if (position >= low && position <= entry.nPos + 20) {
+              entry.nMin = Math.max(entry.nMin, minimum);
+              entry.nMax = Math.min(entry.nMax, maximum);
+            } else if (maximum >= low && maximum <= entry.nPos + 20)
+              entry.nMin = Math.max(entry.nMin, position);
+          }
         }
       }
     }
@@ -352,7 +392,7 @@ export class SwTable {
     }
   }
 
-  /** Applies native separator and edge changes to the represented shared flat box model. @param next - New frame geometry. @param previous - Original frame geometry. @param start - Actual current box. @param currentRowOnly - Unsupported independent row graph request. @returns Whether admitted. */
+  /** Applies native separator and edge changes to each original flat-table line. @param next - New frame geometry. @param previous - Original frame geometry. @param start - Actual current box. @param currentRowOnly - Adjust only the actual current unspanned line. @returns Whether admitted. */
   public SetTabCols(
     next: SwTabCols,
     previous: SwTabCols,
@@ -360,7 +400,6 @@ export class SwTable {
     currentRowOnly: boolean,
   ): boolean {
     if (
-      currentRowOnly ||
       !this.lines.some(
         /** Checks actual box ownership. @param line - Native row. @returns Whether connected. */ (
           line,
@@ -373,7 +412,7 @@ export class SwTable {
       newWidth = next.GetRight() - next.GetLeft();
     const oldWish =
       this.format.width ??
-      this.columnWidths.reduce(
+      this.GetColumnWidths().reduce(
         /** Sums canonical box widths. @param sum - Prior width. @param width - Box width. @returns Total. */ (
           sum,
           width,
@@ -416,33 +455,39 @@ export class SwTable {
       if (oldBorder !== newBorder && oldBorder > 0 && newBorder > 0)
         changes.push([oldBorder & 0xffff, newBorder & 0xffff]);
     }
-    let change = 0,
-      border = 0,
-      rest = 0;
-    for (let i = 0; i < this.columnWidths.length; i++) {
-      const width = this.columnWidths[i] as number;
-      let newBoxWidth = width - rest;
-      rest = 0;
-      border += width;
-      if (change < changes.length && border + 20 >= (changes[change] as [number, number])[0]) {
-        border -= 20;
-        while (change < changes.length && border > (changes[change] as [number, number])[0])
-          change++;
-        if (change < changes.length) {
-          border += 20;
-          if (border + 20 >= (changes[change] as [number, number])[0]) {
-            rest = (changes[change] as [number, number])[1] - border;
-            newBoxWidth += rest;
+    if (changes.length === 0) return true;
+    for (const line of this.lines) {
+      if (currentRowOnly && !line.GetTabBoxes().includes(start)) continue;
+      let change = 0,
+        border = 0,
+        rest = 0;
+      for (const box of line.GetTabBoxes()) {
+        const width = box.GetFrameSize().GetWidth();
+        let newBoxWidth = width - rest;
+        rest = 0;
+        border += width;
+        if (change < changes.length && border + 20 >= (changes[change] as [number, number])[0]) {
+          border -= 20;
+          while (change < changes.length && border > (changes[change] as [number, number])[0])
             change++;
+          if (change < changes.length) {
+            border += 20;
+            if (border + 20 >= (changes[change] as [number, number])[0]) {
+              rest = (changes[change] as [number, number])[1] - border;
+              newBoxWidth += rest;
+              change++;
+            }
           }
         }
-      }
-      if (newBoxWidth !== width) {
-        if (newBoxWidth < 0) {
-          rest += 1 - newBoxWidth;
-          newBoxWidth = 1;
+        if (newBoxWidth !== width) {
+          if (newBoxWidth < 0) {
+            rest += 1 - newBoxWidth;
+            newBoxWidth = 1;
+          }
+          const size = box.GetFrameSize();
+          size.SetWidth(newBoxWidth);
+          box.SetFrameSize(size);
         }
-        this.SetColumnWidth(i, newBoxWidth);
       }
     }
     return true;
@@ -450,13 +495,35 @@ export class SwTable {
 
   /** Changes one existing column's physical width. @param index - Zero-based column. @param twips - Positive width. @returns Nothing. */
   public SetColumnWidth(index: number, twips: number): void {
-    if (index < 0 || index >= this.columnWidths.length || !Number.isFinite(twips) || twips <= 0)
+    if (
+      index < 0 ||
+      index >= this.GetColumnWidths().length ||
+      !Number.isFinite(twips) ||
+      twips <= 0
+    )
       throw new Error("Writer table column width is invalid.");
-    this.columnWidths[index] = twips;
+    if (this.lines.length === 0) this.declaredColumnWidths[index] = twips;
+    for (const line of this.lines) {
+      const box = line.GetTabBoxes()[index] as SwTableBox,
+        size = box.GetFrameSize();
+      size.SetWidth(twips);
+      box.SetFrameSize(size);
+    }
   }
 
   /** Adds one row at its native table position. @param line - Row. @param index - Insertion position. @returns Nothing. */
   public AddLine(line: SwTableLine, index = this.lines.length): void {
+    const widths = this.GetColumnWidths();
+    line.GetTabBoxes().forEach(
+      /** Initializes native box size from builder declarations without overwriting authored values. @param box - Native box. @param column - Declaration index. @returns Nothing. */
+      (box, column) => {
+        if (box.GetFormat().frameSize === undefined && widths[column] !== undefined) {
+          const size = box.GetFrameSize();
+          size.SetWidth(widths[column] as number);
+          box.SetFrameSize(size);
+        }
+      },
+    );
     this.lines.splice(index, 0, line);
   }
 
@@ -496,19 +563,36 @@ export class SwTable {
     return true;
   }
 
-  /** Restores the native shared width vector from table history. @param widths - Independent reference widths. @returns Nothing. */
+  /** Assigns shared ingress dimensions to the original native box items. @param widths - Reference widths including native zero values. @returns Nothing. */
   public SetColumnWidths(widths: readonly number[]): void {
-    this.columnWidths.splice(0, this.columnWidths.length, ...widths);
+    if (this.lines.length === 0)
+      this.declaredColumnWidths.splice(0, this.declaredColumnWidths.length, ...widths);
+    else
+      for (const line of this.lines)
+        line.GetTabBoxes().forEach(
+          /** Assigns native dimensions without applying positive UI width admission. @param box - Original box. @param index - Column. @returns Nothing. */
+          (box, index) => {
+            const width = widths[index];
+            if (width === undefined) return;
+            const size = box.GetFrameSize();
+            size.SetWidth(width);
+            box.SetFrameSize(size);
+          },
+        );
   }
-  /** Proportionally adjusts cumulative boundaries as native lcl_ModifyBoxes does. @param oldWidth - Original total. @param newWidth - Requested total. @returns Nothing. */
+  /** Scales every native line independently as lcl_ModifyBoxes does. @param oldWidth - Old table width. @param newWidth - Requested width. @returns Nothing. */
   public AdjustWidths(oldWidth: number, newWidth: number): void {
-    let originalSum = 0,
-      sum = 0;
-    for (let i = 0; i < this.columnWidths.length; i++) {
-      originalSum += this.columnWidths[i] as number;
-      const wished = Math.trunc((originalSum * newWidth) / oldWidth);
-      this.columnWidths[i] = wished - sum;
-      sum = wished;
+    for (const line of this.lines) {
+      let originalSum = 0,
+        sum = 0;
+      for (const box of line.GetTabBoxes()) {
+        const size = box.GetFrameSize();
+        originalSum += size.GetWidth();
+        const wished = Math.trunc((originalSum * newWidth) / oldWidth);
+        size.SetWidth(wished - sum);
+        box.SetFrameSize(size);
+        sum = wished;
+      }
     }
   }
   /** Enters native new-model column insertion. @param document - Owner. @param boxes - Expanded actual column boxes. @param count - Native unsigned count. @param behind - Trailing edge. @param insertDummy - Native redline policy. @returns Whether inserted. */
@@ -548,11 +632,11 @@ export class SwTable {
         (box, column) => {
           if (boxes.includes(box)) {
             selected.push(column);
-            addWidth += this.columnWidths[column] as number;
+            addWidth += box.GetFrameSize().GetWidth();
           }
         },
       );
-      if (selected.length === 0 || line.GetTabBoxes().length !== this.columnWidths.length)
+      if (selected.length === 0 || line.GetTabBoxes().length !== this.GetColumnWidths().length)
         return false;
       positions.push(behind ? Math.max(...selected) : Math.min(...selected));
     }
@@ -574,7 +658,7 @@ export class SwTable {
       )
     )
       return false;
-    const tableWidth = this.columnWidths.reduce(
+    const tableWidth = this.GetColumnWidths().reduce(
       /** Adds native reference widths. @param sum - Prior sum. @param width - Native width. @returns Total. */
       (sum, width) => sum + width,
       0,
@@ -592,21 +676,14 @@ export class SwTable {
         const sourceColumn = positions[row] as number,
           source = line.GetTabBoxes()[sourceColumn] as SwTableBox,
           index = sourceColumn + (behind ? 1 : 0);
-        for (let i = 0; i < count; i++)
-          document
-            .GetNodes()
-            .InsertTableBox(
-              this,
-              line,
-              document.GetNodes().PrepareTableBox(this, source),
-              index + i,
-            );
+        for (let i = 0; i < count; i++) {
+          const section = document.GetNodes().PrepareTableBox(this, source),
+            size = section.box.GetFrameSize();
+          size.SetWidth(newBoxWidth);
+          section.box.SetFrameSize(size);
+          document.GetNodes().InsertTableBox(this, line, section, index + i);
+        }
       },
-    );
-    this.columnWidths.splice(
-      (positions[0] as number) + (behind ? 1 : 0),
-      0,
-      ...Array<number>(count).fill(newBoxWidth),
     );
     return true;
   }

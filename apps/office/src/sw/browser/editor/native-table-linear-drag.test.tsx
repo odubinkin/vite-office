@@ -83,6 +83,23 @@ for (let mask = 0; mask < 16; mask++)
       expect(f.table.GetColumnWidths()).toEqual(
         mask === 1 ? [1800, 1500, 1200] : mask === 2 ? [1800, 1350, 1350] : [1800, 1200, 1500],
       );
+      expect(
+        required(f.table.GetTabLines()[1])
+          .GetTabBoxes()
+          .map(
+            /** Reads the uncaptured original line through native box owners. @param box - Original cell. @returns Width. */ (
+              box,
+            ) => box.GetFrameSize().GetWidth(),
+          ),
+      ).toEqual(
+        mask === 3
+          ? [1500, 1500, 1500]
+          : mask === 1
+            ? [1800, 1500, 1200]
+            : mask === 2
+              ? [1800, 1350, 1350]
+              : [1800, 1200, 1500],
+      );
       expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(1);
     },
   );

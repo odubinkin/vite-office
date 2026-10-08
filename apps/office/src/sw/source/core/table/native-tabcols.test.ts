@@ -51,7 +51,9 @@ it("scales source cumulative boundaries and retains adjacent minimum/maximum con
   const foreign = fixture();
   expect(f.table.GetTabCols(value, foreign.box)).toBe(false);
   expect(f.table.SetTabCols(value, value, foreign.box, false)).toBe(false);
-  expect(f.table.SetTabCols(value, value, f.box, true)).toBe(false);
+  expect(f.table.SetTabCols(value, value, f.box, true)).toBe(true);
+  expect(f.table.GetColumnWidths()).toEqual([1000, 2000, 3000]);
+  expect(f.box.GetFrameSize().GetWidth()).toBe(1000);
   const row = geometry(100, 3100);
   f.table.GetTabCols(row, f.box, false, true);
   expect(row.GetEntry(0).nMin).toBe(100);

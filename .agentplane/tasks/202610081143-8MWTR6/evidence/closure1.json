@@ -1,0 +1,135 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/source/core/docnode/native-cell-alignment-owner.test.ts src/sw/source/core/table/native-column-insertion.test.ts src/sw/source/core/undo/native-insert-table-history.test.ts src/sw/source/uibase/docvw/native-table-column-drag.test.ts src/sw/source/uibase/wrtsh/native-tabcols-history.test.ts src/sw/source/uibase/wrtsh/native-table-properties.test.ts src/sw/source/uibase/wrtsh/native-table-traversal.test.ts src/sw/source/core/table/native-independent-columns.test.ts --testNamePattern ^(?:insertion history retains absent native orientation independently of authored padding|inserts counted columns from selected edge behind=false|inserts counted columns from selected edge behind=true|refuses narrow selected columns before mutation and honors native unsigned division admission|rejects invalid native column selections and counts without graph or history changes|keeps native header, repeat, split and single-row default-border policy mode=0 repeat=4|keeps native header, repeat, split and single-row default-border policy mode=2 repeat=0|keeps native header, repeat, split and single-row default-border policy mode=10 repeat=2|keeps native header, repeat, split and single-row default-border policy mode=11 repeat=1|uses first free native names on collisions and owns dialog construction values across redo|native mouse ingress applies only the current row and rejects missing cell content before history|rejects foreign tables and invalid geometry before admitting native current-row normalization/history|native table property application uses native selection scope and one attribute history selected=false|native table property application uses native selection scope and one attribute history selected=true|native table traversal appends empty sections with native style/direct items and restores their identities through history|legacy shared-width ingress admits zero native items and retains complete box attributes|builder width ingress remains native item declarations until original rows connect|streamed box ingress rejects foreign or disconnected rows before native sections mutate|implicit native box print widths resolve reference sums and zero geometry admission|native direct column insertion rejects zero and unsigned-rounding widths without replacing owners)$ --coverage.reportOnFailure --coverage.reporter=json --coverage.reporter=json-summary --coverage.reporter=text --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/8MWTR6.closure1.app-results.json",
+      "profile": "upstream-absent-focused",
+      "exit": 1,
+      "sha256": "54986420e323e8d52f6a77dc0bb3a8b427620512ff2e8c398508b2987f90f92e",
+      "caseCounts": {
+        "passed": 20,
+        "failed": 0,
+        "skipped": 67,
+        "total": 87
+      },
+      "passedNames": [
+        "apps/office/src/sw/source/core/docnode/native-cell-alignment-owner.test.ts > insertion history retains absent native orientation independently of authored padding",
+        "apps/office/src/sw/source/core/table/native-column-insertion.test.ts > inserts counted columns from selected edge behind=false",
+        "apps/office/src/sw/source/core/table/native-column-insertion.test.ts > inserts counted columns from selected edge behind=true",
+        "apps/office/src/sw/source/core/table/native-column-insertion.test.ts > refuses narrow selected columns before mutation and honors native unsigned division admission",
+        "apps/office/src/sw/source/core/table/native-column-insertion.test.ts > rejects invalid native column selections and counts without graph or history changes",
+        "apps/office/src/sw/source/core/table/native-independent-columns.test.ts > legacy shared-width ingress admits zero native items and retains complete box attributes",
+        "apps/office/src/sw/source/core/table/native-independent-columns.test.ts > builder width ingress remains native item declarations until original rows connect",
+        "apps/office/src/sw/source/core/table/native-independent-columns.test.ts > streamed box ingress rejects foreign or disconnected rows before native sections mutate",
+        "apps/office/src/sw/source/core/table/native-independent-columns.test.ts > implicit native box print widths resolve reference sums and zero geometry admission",
+        "apps/office/src/sw/source/core/table/native-independent-columns.test.ts > native direct column insertion rejects zero and unsigned-rounding widths without replacing owners",
+        "apps/office/src/sw/source/core/undo/native-insert-table-history.test.ts > keeps native header, repeat, split and single-row default-border policy mode=0 repeat=4",
+        "apps/office/src/sw/source/core/undo/native-insert-table-history.test.ts > keeps native header, repeat, split and single-row default-border policy mode=2 repeat=0",
+        "apps/office/src/sw/source/core/undo/native-insert-table-history.test.ts > keeps native header, repeat, split and single-row default-border policy mode=10 repeat=2",
+        "apps/office/src/sw/source/core/undo/native-insert-table-history.test.ts > keeps native header, repeat, split and single-row default-border policy mode=11 repeat=1",
+        "apps/office/src/sw/source/core/undo/native-insert-table-history.test.ts > uses first free native names on collisions and owns dialog construction values across redo",
+        "apps/office/src/sw/source/uibase/docvw/native-table-column-drag.test.ts > native mouse ingress applies only the current row and rejects missing cell content before history",
+        "apps/office/src/sw/source/uibase/wrtsh/native-tabcols-history.test.ts > rejects foreign tables and invalid geometry before admitting native current-row normalization/history",
+        "apps/office/src/sw/source/uibase/wrtsh/native-table-properties.test.ts > native table property application uses native selection scope and one attribute history selected=false",
+        "apps/office/src/sw/source/uibase/wrtsh/native-table-properties.test.ts > native table property application uses native selection scope and one attribute history selected=true",
+        "apps/office/src/sw/source/uibase/wrtsh/native-table-traversal.test.ts > native table traversal appends empty sections with native style/direct items and restores their identities through history"
+      ],
+      "failedCases": [],
+      "unhandledErrorCount": 0,
+      "coverageMapSHA256": "483590159e32b143e2787a822153609cf7b64eaea19e8791abe02845665dd835"
+    }
+  ],
+  "originalFailures": [
+    {
+      "file": "src/sw/source/core/docnode/native-cell-alignment-owner.test.ts",
+      "name": "insertion history retains absent native orientation independently of authored padding"
+    },
+    {
+      "file": "src/sw/source/core/table/native-column-insertion.test.ts",
+      "name": "inserts counted columns from selected edge behind=false"
+    },
+    {
+      "file": "src/sw/source/core/table/native-column-insertion.test.ts",
+      "name": "inserts counted columns from selected edge behind=true"
+    },
+    {
+      "file": "src/sw/source/core/table/native-column-insertion.test.ts",
+      "name": "refuses narrow selected columns before mutation and honors native unsigned division admission"
+    },
+    {
+      "file": "src/sw/source/core/table/native-column-insertion.test.ts",
+      "name": "rejects invalid native column selections and counts without graph or history changes"
+    },
+    {
+      "file": "src/sw/source/core/undo/native-insert-table-history.test.ts",
+      "name": "keeps native header, repeat, split and single-row default-border policy mode=0 repeat=4"
+    },
+    {
+      "file": "src/sw/source/core/undo/native-insert-table-history.test.ts",
+      "name": "keeps native header, repeat, split and single-row default-border policy mode=2 repeat=0"
+    },
+    {
+      "file": "src/sw/source/core/undo/native-insert-table-history.test.ts",
+      "name": "keeps native header, repeat, split and single-row default-border policy mode=10 repeat=2"
+    },
+    {
+      "file": "src/sw/source/core/undo/native-insert-table-history.test.ts",
+      "name": "keeps native header, repeat, split and single-row default-border policy mode=11 repeat=1"
+    },
+    {
+      "file": "src/sw/source/core/undo/native-insert-table-history.test.ts",
+      "name": "uses first free native names on collisions and owns dialog construction values across redo"
+    },
+    {
+      "file": "src/sw/source/uibase/docvw/native-table-column-drag.test.ts",
+      "name": "native mouse ingress rejects per-row and missing cell content before history"
+    },
+    {
+      "file": "src/sw/source/uibase/wrtsh/native-tabcols-history.test.ts",
+      "name": "rejects foreign tables, per-row writes and invalid geometry before normalization/history"
+    },
+    {
+      "file": "src/sw/source/uibase/wrtsh/native-table-properties.test.ts",
+      "name": "native table property application uses native selection scope and one attribute history selected=false"
+    },
+    {
+      "file": "src/sw/source/uibase/wrtsh/native-table-properties.test.ts",
+      "name": "native table property application uses native selection scope and one attribute history selected=true"
+    },
+    {
+      "file": "src/sw/source/uibase/wrtsh/native-table-traversal.test.ts",
+      "name": "native table traversal appends empty sections with native style/direct items and restores their identities through history"
+    }
+  ],
+  "allowedNames": [
+    "insertion history retains absent native orientation independently of authored padding",
+    "inserts counted columns from selected edge behind=false",
+    "inserts counted columns from selected edge behind=true",
+    "refuses narrow selected columns before mutation and honors native unsigned division admission",
+    "rejects invalid native column selections and counts without graph or history changes",
+    "keeps native header, repeat, split and single-row default-border policy mode=0 repeat=4",
+    "keeps native header, repeat, split and single-row default-border policy mode=2 repeat=0",
+    "keeps native header, repeat, split and single-row default-border policy mode=10 repeat=2",
+    "keeps native header, repeat, split and single-row default-border policy mode=11 repeat=1",
+    "uses first free native names on collisions and owns dialog construction values across redo",
+    "native mouse ingress applies only the current row and rejects missing cell content before history",
+    "rejects foreign tables and invalid geometry before admitting native current-row normalization/history",
+    "native table property application uses native selection scope and one attribute history selected=false",
+    "native table property application uses native selection scope and one attribute history selected=true",
+    "native table traversal appends empty sections with native style/direct items and restores their identities through history",
+    "legacy shared-width ingress admits zero native items and retains complete box attributes",
+    "builder width ingress remains native item declarations until original rows connect",
+    "streamed box ingress rejects foreign or disconnected rows before native sections mutate",
+    "implicit native box print widths resolve reference sums and zero geometry admission",
+    "native direct column insertion rejects zero and unsigned-rounding widths without replacing owners"
+  ],
+  "newNames": [
+    "legacy shared-width ingress admits zero native items and retains complete box attributes",
+    "builder width ingress remains native item declarations until original rows connect",
+    "streamed box ingress rejects foreign or disconnected rows before native sections mutate",
+    "implicit native box print widths resolve reference sums and zero geometry admission",
+    "native direct column insertion rejects zero and unsigned-rounding widths without replacing owners"
+  ],
+  "passingReplayExpected": 0
+}

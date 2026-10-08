@@ -166,6 +166,21 @@ it.each([0, KEY_SHIFT, KEY_MOD1 | KEY_SHIFT, KEY_MOD1 | KEY_MOD2, KEY_MOD1 | KEY
     expect(f.table.GetColumnWidths()).toEqual(
       modifier === KEY_SHIFT ? [1800, 1500, 1200] : [1800, 1200, 1500],
     );
+    expect(
+      required(f.table.GetTabLines()[1])
+        .GetTabBoxes()
+        .map(
+          /** Reads native widths outside the captured current line. @param box - Original box. @returns Width. */ (
+            box,
+          ) => box.GetFrameSize().GetWidth(),
+        ),
+    ).toEqual(
+      modifier === (KEY_MOD1 | KEY_SHIFT)
+        ? [1500, 1500, 1500]
+        : modifier === KEY_SHIFT
+          ? [1800, 1500, 1200]
+          : [1800, 1200, 1500],
+    );
   },
 );
 it.each([100, 400])(

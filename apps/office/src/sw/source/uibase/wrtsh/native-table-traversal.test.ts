@@ -228,9 +228,13 @@ describe("native table traversal", /** Registers actual cursor/row/history contr
       frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 480),
       keepTogether: true,
     });
-    expect(row.GetTabBoxes()[0]?.GetFormat()).toEqual(nativeBoxFormat({ padding: 120 }));
+    expect(row.GetTabBoxes()[0]?.GetFormat()).toEqual({
+      ...nativeBoxFormat({ padding: 120 }),
+      frameSize: new SwFormatFrameSize(SwFrameSize.Variable, 3000, 0),
+    });
     expect(row.GetTabBoxes()[1]?.GetFormat()).toEqual({
       vertOrient: new SwFormatVertOrient(0, VertOrientation.BOTTOM),
+      frameSize: new SwFormatFrameSize(SwFrameSize.Variable, 2400, 0),
     });
     expect(fresh.GetText()).toBe("");
     expect(second.GetText()).toBe("");

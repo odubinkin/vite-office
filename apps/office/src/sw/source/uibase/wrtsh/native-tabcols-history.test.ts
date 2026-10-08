@@ -103,7 +103,7 @@ it.each([false, true])(
     f.shell.Close();
   },
 );
-it("rejects foreign tables, per-row writes and invalid geometry before normalization/history", /** Checks native mutation admission. @returns Nothing. */ () => {
+it("rejects foreign tables and invalid geometry before admitting native current-row normalization/history", /** Checks native mutation admission. @returns Nothing. */ () => {
   const f = fixture(true),
     foreign = fixture(),
     previous = new SwTabCols();
@@ -120,12 +120,42 @@ it("rejects foreign tables, per-row writes and invalid geometry before normaliza
   expect(f.doc.SetTabCols(f.table, previous, previous, required(foreign.boxes[0]), false)).toBe(
     false,
   );
-  expect(f.doc.SetTabCols(f.table, previous, previous, required(f.boxes[0]), true)).toBe(false);
-  expect(f.shell.SetTabCols(previous, true)).toBe(false);
   expect(f.table.GetColumnWidths()).toEqual([3000, 3000]);
   expect(f.table.GetFormat().width).toBe(6000);
   expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(0);
-  expect(f.doc.SetTabCols(f.table, previous, previous, required(f.boxes[0]), false)).toBe(true);
+  const currentOnly = new SwTabCols(previous);
+  currentOnly.GetEntry(0).nPos = 2000;
+  expect(f.doc.SetTabCols(f.table, currentOnly, previous, required(f.boxes[0]), true)).toBe(true);
+  expect(f.table.GetColumnWidths()).toEqual([2000, 6640]);
+  expect(
+    required(f.rows[1])
+      .GetTabBoxes()
+      .map(
+        /** Reads normalized other-row boxes. @param box - Actual cell. @returns Width. */
+        (box) => box.GetFrameSize().GetWidth(),
+      ),
+  ).toEqual([4320, 4320]);
+  expect(f.table.GetFormat().width).toBe(8640);
+  expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(1);
+  expect(f.shell.Undo()).toBe(true);
+  expect(f.table.GetColumnWidths()).toEqual([4320, 4320]);
+  const normalized = new SwTabCols();
+  expect(f.shell.GetTabCols(normalized)).toBe(true);
+  const shellOnly = new SwTabCols(normalized);
+  shellOnly.GetEntry(0).nPos = 2600;
+  expect(f.shell.SetTabCols(shellOnly, true)).toBe(true);
+  expect(f.table.GetColumnWidths()).toEqual([2600, 6040]);
+  expect(
+    required(f.rows[1])
+      .GetTabBoxes()
+      .map(
+        /** Preserves other-row sizes through current-row shell apply. @param box - Actual cell. @returns Width. */
+        (box) => box.GetFrameSize().GetWidth(),
+      ),
+  ).toEqual([4320, 4320]);
+  expect(f.shell.Undo()).toBe(true);
+  expect(f.table.GetColumnWidths()).toEqual([4320, 4320]);
+  expect(f.doc.SetTabCols(f.table, normalized, normalized, required(f.boxes[0]), false)).toBe(true);
   expect(f.table.GetFormat().width).toBe(8640);
   f.edit.SetSelection({ point: { nodeIndex: f.body.GetIndex(), contentIndex: 0 } });
   expect(f.shell.GetTabCols(new SwTabCols())).toBe(false);

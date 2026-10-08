@@ -40,7 +40,8 @@ export interface XMLTableImportTarget extends XMLTextImportTarget {
   beginTableHeaderRows(): void;
   endTableHeaderRows(): void;
   beginTableRow(styleName: string): void;
-  beginTableCell(styleName: string): void;
+  beginTableCell(styleName: string, columnSpan?: number): void;
+  coveredTableCell?(): void;
   endTableCell(): void;
   endTableRow(): void;
   endTable(): void;
@@ -346,6 +347,11 @@ class XMLTableRowContext extends SvXMLImportContext {
   ): SvXMLImportContext | null {
     if (element === XMLToken.TABLE_TABLE_CELL)
       return new XMLTableCellContext(this.target, attributes, this.helper);
+    if (element === XMLToken.TABLE_COVERED_TABLE_CELL) {
+      attributes.assertOnly([], "covered table cell");
+      this.target.coveredTableCell?.();
+      return new SvXMLIgnoreContext();
+    }
     return null;
   }
   /** Closes the row. @returns Nothing. */
@@ -363,8 +369,14 @@ class XMLTableCellContext extends SvXMLImportContext {
     private readonly helper: XMLTextImportHelper,
   ) {
     super();
-    attributes.assertOnly([XMLToken.TABLE_STYLE_NAME, XMLToken.TABLE_VALUE_TYPE], "table cell");
-    this.target.beginTableCell(attributes.get(XMLToken.TABLE_STYLE_NAME) ?? "");
+    attributes.assertOnly(
+      [XMLToken.TABLE_STYLE_NAME, XMLToken.TABLE_VALUE_TYPE, XMLToken.TABLE_NUMBER_COLUMNS_SPANNED],
+      "table cell",
+    );
+    this.target.beginTableCell(
+      attributes.get(XMLToken.TABLE_STYLE_NAME) ?? "",
+      repeatCount(attributes, XMLToken.TABLE_NUMBER_COLUMNS_SPANNED),
+    );
   }
   /** Imports a cell paragraph with the existing Writer text context. @param element - Child token. @param attributes - Paragraph values. @returns Child context. */
   public override createFastChildContext(

@@ -208,8 +208,8 @@ export class SwUndoTableNdsChg extends SwUndo {
   private readonly sourceColumn: number;
   private readonly columnIndex: number;
   private readonly insertionNodes: readonly number[];
-  private readonly beforeWidths: readonly number[];
-  private afterWidths: readonly number[] = [];
+  private readonly beforeAttributes: SaveTable | undefined;
+  private afterAttributes: SaveTable | undefined;
   private customAfter = false;
   /** Captures coordinates before mutation. @param table - Connected table. @param selection - Original boxes. @param before - Original cursor. @param count - Native count. @param behind - Selected edge direction. @param columnMode - Native column insertion mode. @returns Nothing. */
   public constructor(
@@ -248,7 +248,7 @@ export class SwUndoTableNdsChg extends SwUndo {
     );
     this.sourceColumn = behind ? Math.max(...columns) : Math.min(...columns);
     this.columnIndex = this.sourceColumn + (behind ? 1 : 0);
-    this.beforeWidths = columnMode ? [...table.GetColumnWidths()] : [];
+    this.beforeAttributes = columnMode ? new SaveTable(table) : undefined;
     this.insertionNodes = columnMode
       ? table.GetTabLines().map(
           /** Captures numeric native cell insertion boundaries before mutation. @param line - Original row. @returns Boundary index. */
@@ -300,7 +300,7 @@ export class SwUndoTableNdsChg extends SwUndo {
         target = nodes.at(this.beforeNode + shift) as SwTextNode;
       for (const saved of [...this.columnSections].reverse())
         nodes.RemoveTableBox(table, saved.line, saved.section, target, this.beforeContent);
-      table.SetColumnWidths(this.beforeWidths);
+      (this.beforeAttributes as SaveTable).RestoreAttr(table);
       return;
     }
     const target = nodes.at(
@@ -341,7 +341,7 @@ export class SwUndoTableNdsChg extends SwUndo {
             this.columnIndex + (index % this.count),
           ),
       );
-      table.SetColumnWidths(this.afterWidths);
+      (this.afterAttributes as SaveTable).RestoreAttr(table);
       if (!this.customAfter) this.SaveNewBoxes();
       return;
     }
@@ -366,7 +366,7 @@ export class SwUndoTableNdsChg extends SwUndo {
   public SaveNewBoxes(table?: SwTable, after?: SwUndoCursorState): void {
     if (table !== undefined) {
       if (this.columnMode) {
-        this.afterWidths = [...table.GetColumnWidths()];
+        this.afterAttributes = new SaveTable(table);
         this.columnSections = table.GetTabLines().flatMap(
           /** Captures actual inserted cells in each native row. @param line - Original row. @returns Retained owners. */
           (line) =>

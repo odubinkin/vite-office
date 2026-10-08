@@ -1,0 +1,293 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/sw/source/core/table/swtable.ts": "849d58aec0e6ea163d25a5f19a3a64209bc87331be761da06e86eb0c9aa26371",
+    "apps/office/src/sw/source/core/docnode/ndtbl.ts": "79990a298f5158f6954aa5adc4cebddc6dc863d79bc522c7b27031da0b1f7657",
+    "apps/office/src/sw/source/core/doc/doc.ts": "b6500cd556252da9778d9f288ee3f24f7f5a8d30191c3ba1858e266116575765",
+    "apps/office/src/sw/source/core/docnode/nodes.ts": "c71826c4932dc1379727cd2c959157654ef057effac91b139b48e343d03bb8b1",
+    "apps/office/src/sw/source/core/undo/untbl.ts": "4d5806ef95514bb846350f04a71c7e0f8b9b6726185ae6f68eba96328ead6181",
+    "apps/office/src/sw/source/core/frmedt/tblsel.ts": "4184d685b3e0dc7e404887393b4de973dc3b5785e6265bf06f1f7b2e754c07e9",
+    "apps/office/src/sw/source/core/layout/tabfrm.ts": "255b0c08628c109768b007ddad5a0aa989bfd6fa5b9c1abb9c0ccad82c4ff3fc",
+    "apps/office/src/sw/browser/editor/WriterEditableTable.tsx": "45a85f0e381336cccc56d6b0a6cd8c929326e197f61e3bb30cb5e606bd504815",
+    "apps/office/src/sw/browser/filter/xml/writer-document-codec.ts": "61de74d43923bbbec2c91ca6ddcfe63217720f35f93a4621f3656b91f41f9b55",
+    "apps/office/src/sw/browser/filter/xml/writer-table-item-codec.ts": "132f6bd381148fda2b6c5a79be4bf0ef93af598b6a98004e93e972f65546d009",
+    "apps/office/src/sw/source/filter/xml/xmlexp.ts": "986f010d9e693e3565ac6da3c46558d11614e07dee2a358f4dac180654bdfb4d",
+    "apps/office/src/sw/source/filter/xml/xmltbli.ts": "84c3f97dc6353607893cde1fe35eec244084b85e9c85004e0a3cb2d98cbf8641",
+    "apps/office/src/sw/source/filter/xml/xmltble.ts": "db406a47895fa529db22d9d813bdc3938a80fde4cfed55f421442558538975f2",
+    "apps/office/src/xmloff/source/table/XMLTableExport.ts": "8520963dfe9b2f8699693ba0e2095226222d413b7cfadd58b8a3a669b647cf61",
+    "apps/office/src/xmloff/source/table/XMLTableImport.ts": "ef8d3652a9938bd1f2fae0cac9a730b28ef18bd7be8cb460ec1626169a1f707d",
+    "apps/office/src/xmloff/source/core/xmltoken.ts": "ec3587e69963ad85eba6a72a85d639d82e8982162df61be10025f1694f788183",
+    "apps/office/src/sw/source/uibase/docvw/edtwin.ts": "31f0101d2be1cde60d4fdb77ef0385549993e884c6d3636d90e55a7331b74afb",
+    "apps/office/src/sw/source/core/table/native-independent-columns.test.ts": "d7aca41104b9ce2484dc5186d3a256402579fbef11340096843ce2c5c72172ab",
+    "apps/office/src/sw/browser/editor/native-independent-column-render.test.tsx": "5fc100e6ca631dcef7a449f4c88e78fea7558ef442cc82daad1ee26eb87bdb16",
+    "apps/office/src/sw/source/filter/xml/native-independent-column-odf.test.ts": "d24360cdc4c63203b02f0d6ac27296d1a3e0d399987ffbc411964e710a22ab16",
+    "apps/office/src/sw/source/core/table/native-tabcols.test.ts": "c48ae7aad4956d4a42e13a3028515a5a96471f8f3c7f9bfa539674630ec307eb",
+    "apps/office/src/sw/source/uibase/docvw/native-table-linear-drag.test.ts": "ff7a0b2cc4a3397774984e1f468de125b5fa12ca19a1ce031982c671b92bf93f",
+    "apps/office/src/sw/source/uibase/docvw/native-table-proportional-drag.test.ts": "cb211e9800be25ddbeb779923aeedea9a9a9182efd55b2cd39a86499ff3593f8",
+    "apps/office/src/sw/browser/editor/native-table-linear-drag.test.tsx": "35d5821b038b860ffe9044073489f85de637501f1cf447fe697cd18d64e33853",
+    "apps/office/src/sw/source/uibase/docvw/native-ruler-ownership.test.ts": "7cd896706aea1882e8d6e48fad58f593e483a81fd5f3fe0c07cf8af597d07fdf",
+    "docs/program/source-provenance.json": "336db6d2c919380ef820eab3169bd644c3be313750c7323c3e8393041bd69fb0",
+    "docs/program/parity/runtime-inventory.json": "e1542373ff0312d84726db79b8ee49875a6a594ff5d548116a166f835de32c7a"
+  },
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1443,
+      "sha256": "d45e56ab900a305baaae4a4c6818d5fef0abff479253779679ac49ec77506dae",
+      "totals": [],
+      "failedCases": [],
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/8MWTR6.app-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 112042,
+      "sha256": "613e9752080f4f834185ff0b0100bfcbf85fe60ce2048b5d2d83a6d1d6348196",
+      "totals": [
+        "Test Files  7 failed | 459 passed (466)",
+        "Tests  15 failed | 13785 passed (13800)"
+      ],
+      "failedCases": [
+        {
+          "name": "apps/office/src/sw/source/core/docnode/native-cell-alignment-owner.test.ts > insertion history retains absent native orientation independently of authored padding",
+          "assertion": [
+            "AssertionError: expected { box: SvxBoxItem{ …(5) }, …(1) } to deeply equal { box: SvxBoxItem{ which: 113, …(4) } }"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/source/core/table/native-column-insertion.test.ts > inserts counted columns from selected edge behind=false",
+          "assertion": [
+            "AssertionError: expected { box: SvxBoxItem{ …(5) }, …(1) } to deeply equal { box: SvxBoxItem{ …(5) }, …(1) }"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/source/core/table/native-column-insertion.test.ts > inserts counted columns from selected edge behind=true",
+          "assertion": [
+            "AssertionError: expected { box: SvxBoxItem{ …(5) }, …(1) } to deeply equal { box: SvxBoxItem{ …(5) }, …(1) }"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/source/core/table/native-column-insertion.test.ts > refuses narrow selected columns before mutation and honors native unsigned division admission",
+          "assertion": [
+            "Error: Writer table column width is invalid."
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/source/core/table/native-column-insertion.test.ts > rejects invalid native column selections and counts without graph or history changes",
+          "assertion": [
+            "Error: Writer table column width is invalid."
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/source/core/undo/native-insert-table-history.test.ts > keeps native header, repeat, split and single-row default-border policy mode=0 repeat=4",
+          "assertion": [
+            "AssertionError: expected { box: SvxBoxItem{ …(5) }, …(1) } to deeply equal { box: SvxBoxItem{ which: 113, …(4) } }"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/source/core/undo/native-insert-table-history.test.ts > keeps native header, repeat, split and single-row default-border policy mode=2 repeat=0",
+          "assertion": [
+            "AssertionError: expected { box: SvxBoxItem{ …(5) }, …(1) } to deeply equal { box: SvxBoxItem{ which: 113, …(4) } }"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/source/core/undo/native-insert-table-history.test.ts > keeps native header, repeat, split and single-row default-border policy mode=10 repeat=2",
+          "assertion": [
+            "AssertionError: expected { box: SvxBoxItem{ …(5) }, …(1) } to deeply equal { box: SvxBoxItem{ which: 113, …(4) } }"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/source/core/undo/native-insert-table-history.test.ts > keeps native header, repeat, split and single-row default-border policy mode=11 repeat=1",
+          "assertion": [
+            "AssertionError: expected { box: SvxBoxItem{ …(5) }, …(1) } to deeply equal { box: SvxBoxItem{ which: 113, …(4) } }"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/source/core/undo/native-insert-table-history.test.ts > uses first free native names on collisions and owns dialog construction values across redo",
+          "assertion": [
+            "AssertionError: expected { box: SvxBoxItem{ …(5) }, …(2) } to deeply equal { box: SvxBoxItem{ …(5) }, …(1) }"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/source/uibase/docvw/native-table-column-drag.test.ts > native mouse ingress rejects per-row and missing cell content before history",
+          "assertion": [
+            "AssertionError: expected true to be false // Object.is equality"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/source/uibase/wrtsh/native-tabcols-history.test.ts > rejects foreign tables, per-row writes and invalid geometry before normalization/history",
+          "assertion": [
+            "AssertionError: expected true to be false // Object.is equality"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/source/uibase/wrtsh/native-table-properties.test.ts > native table property application uses native selection scope and one attribute history selected=false",
+          "assertion": [
+            "AssertionError: expected [ …(4) ] to deeply equal [ …(4) ]"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/source/uibase/wrtsh/native-table-properties.test.ts > native table property application uses native selection scope and one attribute history selected=true",
+          "assertion": [
+            "AssertionError: expected [ …(4) ] to deeply equal [ …(4) ]"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/source/uibase/wrtsh/native-table-traversal.test.ts > native table traversal appends empty sections with native style/direct items and restores their identities through history",
+          "assertion": [
+            "AssertionError: expected { box: SvxBoxItem{ …(5) }, …(1) } to deeply equal { box: SvxBoxItem{ which: 113, …(4) } }"
+          ]
+        }
+      ],
+      "caseCounts": {
+        "passed": 13785,
+        "failed": 15,
+        "skipped": 0,
+        "total": 13800
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 17244,
+          "covered": 17237,
+          "skipped": 0,
+          "pct": 99.95
+        },
+        "statements": {
+          "total": 18933,
+          "covered": 18922,
+          "skipped": 0,
+          "pct": 99.94
+        },
+        "functions": {
+          "total": 4370,
+          "covered": 4367,
+          "skipped": 0,
+          "pct": 99.93
+        },
+        "branches": {
+          "total": 14136,
+          "covered": 14124,
+          "skipped": 0,
+          "pct": 99.91
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverage": {
+        "lines": 99.95,
+        "statements": 99.94,
+        "functions": 99.93,
+        "branches": 99.91
+      },
+      "incompleteFileCount": 9,
+      "coverageMapSHA256": "8e612bd63839aa921072047380b956c494a47a4303380cec97cc3c0363f471ce",
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "inventory",
+      "command": "npm run test:inventory:coverage -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/8MWTR6.inventory-results.json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 40604,
+      "sha256": "6d633715214ad5fd234b362dc29a0a4e9a36313b59aed0a3ef023687c8177791",
+      "totals": [
+        "Test Files  36 passed (36)",
+        "Tests  110 passed (110)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "passed": 110,
+        "failed": 0,
+        "skipped": 0,
+        "total": 110
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 1464,
+          "covered": 1464,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 1523,
+          "covered": 1523,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 384,
+          "covered": 384,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 1081,
+          "covered": 1081,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100
+      },
+      "incompleteFileCount": 0,
+      "coverageMapSHA256": "41c13d7fef7743684c1b66407c58f8842bb3e953481b3b75277848bdc4ae1e74",
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "scripts",
+      "command": "npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts scripts/check-module-boundaries.test.ts scripts/check-legacy-font-boundary.test.ts scripts/native-column-item-boundary.test.ts scripts/native-ruler-boundary.test.ts",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 224,
+      "sha256": "164cc81562fef11a6b405483bb37efa7bdf83ceb214d20b3f9b289a58b9b020f",
+      "totals": [
+        "Test Files  6 passed (6)",
+        "Tests  19 passed (19)"
+      ],
+      "failedCases": [],
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 41458,
+      "sha256": "5b5dddbdf6cec8e7bd7379aff449621bd1bff11e3b271b9fc29e36ba7a745f54",
+      "totals": [
+        "299 passed (5.1m)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "startTime": "2026-10-08T12:14:17.148Z",
+        "duration": 303354.976,
+        "expected": 299,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "unhandledErrorCount": 0
+    }
+  ]
+}

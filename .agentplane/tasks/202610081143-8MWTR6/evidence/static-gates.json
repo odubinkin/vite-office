@@ -1,0 +1,54 @@
+{
+  "records": [
+    {
+      "command": "npm run format:check",
+      "exit": 1,
+      "bytes": 242,
+      "sha256": "8aad61a2d57a07e3072f8da30e87a8fd02f0aaa005c2ad6f3a266560c74a6cad",
+      "diagnostics": [
+        "[warn] apps/office/src/sw/source/core/table/native-independent-columns.test.ts",
+        "[warn] Code style issues found in the above file. Run Prettier with --write to fix."
+      ]
+    },
+    {
+      "command": "npm run lint",
+      "exit": 0,
+      "bytes": 55,
+      "sha256": "a6172cb57fa696e705408fdc605fba1ae07b852fdf0614d7c2b623349e285b6e",
+      "diagnostics": [
+        "> eslint . --max-warnings 0"
+      ]
+    },
+    {
+      "command": "npm run typecheck",
+      "exit": 0,
+      "bytes": 240,
+      "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:dependencies",
+      "exit": 0,
+      "bytes": 189,
+      "sha256": "989f7d67f520a633dd5265d8d25f4da4a77e701ae57a5c0da13f07d16b167127",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:docs",
+      "exit": 1,
+      "bytes": 769,
+      "sha256": "582a920a9860956eaec8cb162cd5955993f46c6803c18da453c2b2927e016740",
+      "diagnostics": [
+        "    throw new Error(`JSDoc validation failed:\\n${errors.join(\"\\n\")}`);",
+        "Error: JSDoc validation failed:"
+      ]
+    },
+    {
+      "command": "npm run check:file-size",
+      "exit": 0,
+      "bytes": 4068,
+      "sha256": "1794d62f060c4de79130095fcdbdbd6b3be604f2b91eb95d969e09ededda39aa",
+      "diagnostics": []
+    }
+  ]
+}

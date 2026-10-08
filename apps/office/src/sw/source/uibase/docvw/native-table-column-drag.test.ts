@@ -216,11 +216,24 @@ it("native guards reject row borders, table-selection mode, right/double and det
   expect(f.edit.MouseButtonUp()).toBe(true);
   expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(0);
 });
-it("native mouse ingress rejects per-row and missing cell content before history", /** Checks bounded position ingress with actual native frames. @returns Nothing. */ () => {
+it("native mouse ingress applies only the current row and rejects missing cell content before history", /** Checks bounded position ingress with actual native frames. @returns Nothing. */ () => {
   const f = fixture(),
     cols = new SwTabCols();
   expect(f.shell.GetMouseTabCols(cols, { x: 200, y: 125 })).toBe(true);
-  expect(f.shell.SetMouseTabCols(cols, true, { x: 200, y: 125 })).toBe(false);
+  cols.GetEntry(0).nPos += 300;
+  expect(f.shell.SetMouseTabCols(cols, true, { x: 200, y: 125 })).toBe(true);
+  expect(f.table.GetColumnWidths()).toEqual([1800, 1200, 1500]);
+  expect(
+    required(f.rows[1])
+      .GetTabBoxes()
+      .map(
+        /** Reads unaffected native dimensions. @param box - Original cell. @returns Width. */
+        (box) => box.GetFrameSize().GetWidth(),
+      ),
+  ).toEqual([1500, 1500, 1500]);
+  expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(1);
+  expect(f.shell.Undo()).toBe(true);
+  expect(f.table.GetColumnWidths()).toEqual([1500, 1500, 1500]);
   vi.spyOn(required(f.boxes[0]), "GetParagraphs").mockReturnValue([]);
   expect(f.shell.SetMouseTabCols(cols, false, { x: 200, y: 125 })).toBe(false);
   expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(0);

@@ -20,13 +20,16 @@ import { SwPosition } from "../../../source/core/crsr/pam";
 import { SwDoc, type WriterEmbeddedFont } from "../../../source/core/doc/doc";
 import { SwTableNode } from "../../../source/core/docnode/node";
 import type { SwTextNode } from "../../../source/core/txtnode/ndtxt";
-import type {
-  SwTableBoxFormat,
-  SwTableFormat,
-  SwTableLineFormat,
-} from "../../../source/core/table/swtable";
+import type { SwTableBoxFormat, SwTableFormat } from "../../../source/core/table/swtable";
 import { SwLineNumberInfo, type SwLineNumberInfoValue } from "../../../inc/lineinfo";
-import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
+import {
+  encodeRowFormat,
+  decodeRowFormat,
+  encodeFrameSize,
+  decodeFrameSize,
+  type WriterRowFormatRecord,
+  type WriterFrameSizeRecord,
+} from "./writer-table-item-codec";
 import type { DefaultFontDevice } from "../../../source/core/doc/default-font";
 import {
   isWriterParagraphStyle,
@@ -147,6 +150,7 @@ interface WriterTableRecord {
 
 /** Primitive complete box item; legacy scalar alignment is accepted only at storage ingress. */
 type WriterBoxFormatRecord = {
+  readonly frameSize?: WriterFrameSizeRecord | undefined;
   readonly box?:
     | Readonly<{
         which: number;
@@ -163,8 +167,9 @@ type WriterBoxFormatRecord = {
 };
 /** Encodes complete public native fields without transporting a class. @param value - Original box format. @returns Primitive format. */
 function encodeBoxFormat(value: SwTableBoxFormat): WriterBoxFormatRecord {
-  const { vertOrient, box } = value;
+  const { vertOrient, box, frameSize } = value;
   return {
+    frameSize: encodeFrameSize(frameSize),
     box:
       box === undefined
         ? undefined
@@ -195,7 +200,10 @@ function encodeBoxFormat(value: SwTableBoxFormat): WriterBoxFormatRecord {
 /** Restores native item ownership from primitive or prior scalar storage. @param value - Primitive box record. @returns Native box format. */
 function decodeBoxFormat(value: WriterBoxFormatRecord): SwTableBoxFormat {
   const { vertOrient, verticalAlign } = value;
-  const format: SwTableBoxFormat = { box: decodeBoxItem(value) };
+  const format: SwTableBoxFormat = {
+    box: decodeBoxItem(value),
+    ...(value.frameSize === undefined ? {} : { frameSize: decodeFrameSize(value.frameSize) }),
+  };
   if (vertOrient === undefined)
     return {
       ...format,
@@ -305,82 +313,6 @@ function decodeBoxItem(value: WriterBoxFormatRecord): SvxBoxItem | undefined {
   }
   item.SetRemoveAdjCellBorder(record.removeAdjacent);
   return item;
-}
-
-/** Primitive complete frame item for process and storage boundaries. */
-interface WriterFrameSizeRecord {
-  readonly width: number;
-  readonly height: number;
-  readonly widthType: SwFrameSize;
-  readonly heightType: SwFrameSize;
-  readonly widthPercent: number;
-  readonly heightPercent: number;
-  readonly widthPercentRelation: number;
-  readonly heightPercentRelation: number;
-}
-/** Row boundary record, including prior v16 minimum-height ingress. */
-type WriterRowFormatRecord = Omit<SwTableLineFormat, "frameSize"> & {
-  readonly frameSize?: WriterFrameSizeRecord | undefined;
-  readonly minHeight?: number | undefined;
-};
-/** Encodes public native values without transferring a class prototype. @param value - Original row format. @returns Primitive row record. */
-function encodeRowFormat(value: SwTableLineFormat): WriterRowFormatRecord {
-  const { frameSize, ...format } = value;
-  return {
-    ...format,
-    frameSize:
-      frameSize === undefined
-        ? undefined
-        : {
-            width: frameSize.GetWidth(),
-            height: frameSize.GetHeight(),
-            widthType: frameSize.GetWidthSizeType(),
-            heightType: frameSize.GetHeightSizeType(),
-            widthPercent: frameSize.GetWidthPercent(),
-            heightPercent: frameSize.GetHeightPercent(),
-            widthPercentRelation: frameSize.GetWidthPercentRelation(),
-            heightPercentRelation: frameSize.GetHeightPercentRelation(),
-          },
-  };
-}
-/** Restores the complete native item at the existing graph boundary. @param value - Primitive row record. @returns Native row format. */
-function decodeRowFormat(value: WriterRowFormatRecord): SwTableLineFormat {
-  const { frameSize, minHeight, ...format } = value;
-  if (frameSize === undefined)
-    return {
-      ...format,
-      frameSize:
-        minHeight === undefined
-          ? undefined
-          : new SwFormatFrameSize(SwFrameSize.Minimum, 0, minHeight),
-    };
-  if (
-    !isRecord(frameSize) ||
-    [
-      frameSize.width,
-      frameSize.height,
-      frameSize.widthType,
-      frameSize.heightType,
-      frameSize.widthPercent,
-      frameSize.heightPercent,
-      frameSize.widthPercentRelation,
-      frameSize.heightPercentRelation,
-    ].some(
-      /** Rejects non-numeric native fields at an untrusted graph boundary. @param field - Serialized value. @returns Whether invalid. */ (
-        field,
-      ) => typeof field !== "number" || !Number.isFinite(field),
-    ) ||
-    ![0, 1, 2].includes(frameSize.widthType) ||
-    ![0, 1, 2].includes(frameSize.heightType)
-  )
-    throw new Error("Stored Writer frame size is invalid.");
-  const item = new SwFormatFrameSize(frameSize.heightType, frameSize.width, frameSize.height);
-  item.SetWidthSizeType(frameSize.widthType);
-  item.SetWidthPercent(frameSize.widthPercent);
-  item.SetHeightPercent(frameSize.heightPercent);
-  item.SetWidthPercentRelation(frameSize.widthPercentRelation);
-  item.SetHeightPercentRelation(frameSize.heightPercentRelation);
-  return { ...format, frameSize: item };
 }
 
 /** Canonical ranged Writer attribute record; browser run projections never cross a boundary. */

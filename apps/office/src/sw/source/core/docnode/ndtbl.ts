@@ -6,6 +6,7 @@ import { SwTabCols } from "../bastyp/tabcol";
 import { SwFrameSize, type SwFormatFrameSize } from "../../../inc/fmtfsize";
 import { SwPosition } from "../crsr/pam";
 import { SwCursor } from "../crsr/swcrsr";
+import { SwUndoAttrTable } from "../undo/untbl";
 import type { SwTextNode } from "../txtnode/ndtxt";
 import { createWriterCollapsedCursorState, type SwUndoCursorState } from "../undo/undobj";
 /** Native row-boundary fuzzy distance in twips. */
@@ -170,6 +171,64 @@ export function SetSwTabRows(
       } finally {
         undo.EndUndo();
       }
+      return true;
+    },
+  );
+}
+
+/** Applies native per-box column changes inside the document-owned attribute transaction. @param doc - Original document. @param table - Original table. @param next - Requested geometry. @param previous - Captured geometry. @param start - Current box. @param currentRowOnly - Current unspanned line only. @param cursorState - Original shell cursor. @returns Whether admitted. */
+export function SetSwTabCols(
+  doc: SwDoc,
+  table: SwTable,
+  next: SwTabCols,
+  previous: SwTabCols,
+  start: SwTableBox,
+  currentRowOnly: boolean,
+  cursorState?: SwUndoCursorState,
+): boolean {
+  if (
+    !doc.GetTables().includes(table) ||
+    !table
+      .GetTabLines()
+      .some(
+        /** Checks actual native box ownership. @param line - Table row. @returns Whether connected. */ (
+          line,
+        ) => line.GetTabBoxes().includes(start),
+      )
+  )
+    return false;
+  const node = start.GetParagraphs()[0];
+  if (node === undefined || node.GetNodes() !== doc.GetNodes()) return false;
+  table.ValidateTabCols(next, previous);
+  return doc.RunModelTransaction(
+    /** Records the original native table attributes around one admitted mutation. @returns Whether admitted. */
+    () => {
+      const before =
+        cursorState ?? createWriterCollapsedCursorState(node, 0, node.GetCharacterItemsAt(0));
+      const actualWidth = previous.GetRight() - previous.GetLeft();
+      const wishedWidth =
+        table.GetFormat().width ??
+        table
+          .GetColumnWidths()
+          .reduce(
+            /** Sums native box widths. @param sum - Prior total. @param width - Box width. @returns Total width. */ (
+              sum,
+              width,
+            ) => sum + width,
+            0,
+          );
+      if (actualWidth !== wishedWidth) {
+        table.AdjustWidths(wishedWidth, actualWidth);
+        table.SetFormat({ ...table.GetFormat(), width: actualWidth });
+        table.GetTabCols(previous, start);
+      }
+      const action = new SwUndoAttrTable(table, before);
+      table.SetTabCols(next, previous, start, currentRowOnly);
+      doc.GetUndoManager().AddUndoAction(action);
+      doc.NotifyModelChange({
+        kind: "node-content-changed",
+        nodeIndex: table.GetTableNode().GetIndex(),
+      });
       return true;
     },
   );

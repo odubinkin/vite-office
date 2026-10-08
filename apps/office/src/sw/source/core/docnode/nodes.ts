@@ -228,6 +228,23 @@ export class SwNodes {
     return line;
   }
 
+  /** Appends one original cell section while a streamed row is built. @param table - Connected table. @param line - Connected row. @param format - Native box attributes. @returns Original box. */
+  public AppendTableBox(table: SwTable, line: SwTableLine, format: SwTableBoxFormat): SwTableBox {
+    const tableNode = table.GetTableNode();
+    if (tableNode.GetNodes() !== this || !table.GetTabLines().includes(line))
+      throw new Error("Writer table row belongs to another table.");
+    const start = new SwTableBoxStartNode(this, tableNode),
+      paragraph = new SwTextNode(this, start, this.document.GetDfltTextFormatColl()),
+      end = new SwEndNode(this, start),
+      box = new SwTableBox(start, format);
+    start.setEndOfSection(end);
+    this.nodeArray.splice(tableNode.EndOfSectionNode().GetIndex(), 0, start, paragraph, end);
+    this.InsertOutlineNode(paragraph);
+    line.AddBox(box);
+    this.document.NotifyModelChange({ index: tableNode.GetIndex(), kind: "node-inserted" });
+    return box;
+  }
+
   /** Adds another paragraph within an existing cell section. @param box - Cell. @returns New paragraph. */
   public AppendTableCellParagraph(box: SwTableBox): SwTextNode {
     const start = box.GetStartNode();

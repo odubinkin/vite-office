@@ -1,0 +1,6 @@
+{
+  "observation": "Initial acceptance-input audit admitted two changed current-row calls, but also needed to account for the ordinary apply using a fresh native carrier after normalization/undo. Reviewed exact source diff; new carrier preserves literal native normalization and all foreign/invalid/history checks. No product or test edits and no passing replay.",
+  "scopeCount": 34,
+  "migrations": 12,
+  "failureCount": 1
+}

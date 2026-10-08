@@ -32,6 +32,7 @@ export interface XMLTableExportSource {
       keepTogether?: boolean | undefined;
     }>;
     cells: readonly Readonly<{
+      columnSpan?: number | undefined;
       format: Readonly<
         OdfBoxProperties & {
           verticalAlign?: string | undefined;
@@ -122,7 +123,9 @@ export interface XMLTableExportSource {
             cellProperties += ` style:border-line-width-${side.toLowerCase()}="${escapeXml(compound)}"`;
         }
         automaticStyles += `<style:style style:name="${cellName}" style:family="table-cell"><style:table-cell-properties${cellProperties}/></style:style>`;
-        body += `<table:table-cell table:style-name="${cellName}" office:value-type="string">${renderParagraphs(cell.paragraphs)}</table:table-cell>`;
+        body += `<table:table-cell table:style-name="${cellName}"${(cell.columnSpan ?? 1) > 1 ? ` table:number-columns-spanned="${cell.columnSpan}"` : ""} office:value-type="string">${renderParagraphs(cell.paragraphs)}</table:table-cell>`;
+        for (let covered = 1; covered < (cell.columnSpan ?? 1); covered++)
+          body += "<table:covered-table-cell/>";
       }
       body += "</table:table-row>";
     }

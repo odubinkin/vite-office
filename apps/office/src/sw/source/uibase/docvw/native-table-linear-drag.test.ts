@@ -168,6 +168,15 @@ it.each([
     f.edit.MouseButtonDown({ x: 200, y: 125 }, 0, 1, modifier);
     f.edit.MouseButtonUp(false, { x: 220, y: 125 });
     expect(f.table.GetColumnWidths()).toEqual([1800, 1200, 1500]);
+    expect(
+      required(f.rows[1])
+        .GetTabBoxes()
+        .map(
+          /** Reads native widths of the other actual line. @param box - Original box. @returns Width. */ (
+            box,
+          ) => box.GetFrameSize().GetWidth(),
+        ),
+    ).toEqual(modifier === (KEY_MOD1 | KEY_SHIFT) ? [1500, 1500, 1500] : [1800, 1200, 1500]);
   },
 );
 it.each([100, 400])(

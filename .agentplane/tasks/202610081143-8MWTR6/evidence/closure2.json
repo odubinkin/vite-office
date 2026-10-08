@@ -1,0 +1,49 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/source/core/table/native-independent-columns.test.ts src/sw/browser/editor/native-independent-column-render.test.tsx src/sw/source/filter/xml/native-independent-column-odf.test.ts --testNamePattern ^(?:native XML column union uses inclusive fuzzy20 lower bounds and keeps original boxes|mounted native fuzzy20 union avoids thin duplicate columns and retains actual box owners|ODF fuzzy20 column equivalence exports the native shared grid without extra covered owners)$ --coverage.reportOnFailure --coverage.reporter=json --coverage.reporter=json-summary --coverage.reporter=text --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/8MWTR6.closure2.app-results.json",
+      "profile": "upstream-absent-focused",
+      "exit": 1,
+      "sha256": "4ec01eb5a43991789e355357bb8cce4e9171bc3bb6173772e12fae8501fc7ea5",
+      "caseCounts": {
+        "passed": 2,
+        "failed": 1,
+        "skipped": 20,
+        "total": 23
+      },
+      "passedNames": [
+        "apps/office/src/sw/source/core/table/native-independent-columns.test.ts > native XML column union uses inclusive fuzzy20 lower bounds and keeps original boxes",
+        "apps/office/src/sw/source/filter/xml/native-independent-column-odf.test.ts > ODF fuzzy20 column equivalence exports the native shared grid without extra covered owners"
+      ],
+      "failedCases": [
+        {
+          "name": "apps/office/src/sw/browser/editor/native-independent-column-render.test.tsx > mounted native fuzzy20 union avoids thin duplicate columns and retains actual box owners",
+          "errors": [
+            [
+              "AssertionError: expected  to have a length of 4 but got +0",
+              "    at Proxy.<anonymous> (file:///Users/odubinkin/Projects/vite-office/node_modules/@vitest/expect/dist/index.js:1389:20)",
+              "    at Proxy.<anonymous> (file:///Users/odubinkin/Projects/vite-office/node_modules/@vitest/expect/dist/index.js:1156:15)",
+              "    at Proxy.methodWrapper (file:///Users/odubinkin/Projects/vite-office/node_modules/chai/index.js:1700:25)"
+            ]
+          ]
+        }
+      ],
+      "unhandledErrorCount": 0,
+      "coverageMapSHA256": "84142fefb91f1c4d5c6e0e4d393e7530506b7e2c870ac89e682a158c77a1cb0f"
+    }
+  ],
+  "originalFailures": [],
+  "allowedNames": [
+    "native XML column union uses inclusive fuzzy20 lower bounds and keeps original boxes",
+    "mounted native fuzzy20 union avoids thin duplicate columns and retains actual box owners",
+    "ODF fuzzy20 column equivalence exports the native shared grid without extra covered owners"
+  ],
+  "newNames": [
+    "native XML column union uses inclusive fuzzy20 lower bounds and keeps original boxes",
+    "mounted native fuzzy20 union avoids thin duplicate columns and retains actual box owners",
+    "ODF fuzzy20 column equivalence exports the native shared grid without extra covered owners"
+  ],
+  "passingReplayExpected": 0
+}

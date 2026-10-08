@@ -257,13 +257,13 @@ export class SwEditWin {
                   drag.ruler.IsActLineOnly(),
                   drag.start,
                 )
-            : this.m_rView.GetWrtShell().SetMouseTabCols(
-                applySwTableColumnItem(drag.original, item, page.width),
-                // The represented shared-column model still rejects independent row geometry.
-                // Retain its existing ordinary column contract until that core branch is ported.
-                false,
-                drag.start,
-              ),
+            : this.m_rView
+                .GetWrtShell()
+                .SetMouseTabCols(
+                  applySwTableColumnItem(drag.original, item, page.width),
+                  drag.ruler.IsActLineOnly(),
+                  drag.start,
+                ),
         );
       }
     }

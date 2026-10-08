@@ -154,7 +154,7 @@ describe("native table property application", /** Registers actual-owner contrac
           ) => box.GetFormat(),
         ),
       ).toEqual(
-        selected
+        (selected
           ? [
               nativeBoxFormat(
                 {
@@ -202,7 +202,18 @@ describe("native table property application", /** Registers actual-owner contrac
                 },
                 [0],
               ),
-            ],
+            ]
+        ).map(
+          /** Includes global column sizes alongside selected cell attributes. @param format - Expected border and alignment. @param index - Row-major box index. @returns Complete expected format. */
+          (format, index) => ({
+            ...format,
+            frameSize: new SwFormatFrameSize(
+              SwFrameSize.Variable,
+              index % 2 === 0 ? 2000 : 3000,
+              0,
+            ),
+          }),
+        ),
       );
       for (let cycle = 0; cycle < 2; cycle++) {
         expect(f.shell.Undo()).toBe(true);

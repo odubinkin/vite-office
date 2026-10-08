@@ -1,6 +1,7 @@
 /** @fileoverview Verifies document-owned box selection, complete item history and native asymmetric getter scope. */
 import { nativeBoxFormat, tableBorderItems } from "../../../../test/table-box-test-helpers";
 import { expect, it, vi } from "vitest";
+import { SwFormatFrameSize } from "../../../inc/fmtfsize";
 import { SwDoc } from "../doc/doc";
 import { SwPosition } from "../crsr/pam";
 import { SwCursor, SwTableCursor } from "../crsr/swcrsr";
@@ -147,15 +148,17 @@ it("insertion history retains absent native orientation independently of authore
     shell.InsertTable({ mnInsMode: 2, mnRowsToRepeat: 0 }, 1, 1, "DefaultAlign", box),
   );
   required(box.box).SetAllDistances(99);
-  expect(table.GetTabLines()[0]?.GetTabBoxes()[0]?.GetFormat()).toEqual(
-    nativeBoxFormat({ padding: 42 }),
-  );
+  const expected = {
+    ...nativeBoxFormat({ padding: 42 }),
+    frameSize: new SwFormatFrameSize(undefined, 65535, 0),
+  };
+  expect(table.GetTabLines()[0]?.GetTabBoxes()[0]?.GetFormat()).toEqual(expected);
   expect(shell.Undo()).toBe(true);
   expect(shell.Redo()).toBe(true);
   const cell = required(
     session.docShell.GetDoc().GetTables()[0]?.GetTabLines()[0]?.GetTabBoxes()[0],
   );
-  expect(cell.GetFormat()).toEqual(nativeBoxFormat({ padding: 42 }));
+  expect(cell.GetFormat()).toEqual(expected);
   expect(cell.GetVertOrient().GetVertOrient()).toBe(0);
   session.Close();
 });

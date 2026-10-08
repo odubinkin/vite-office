@@ -15,10 +15,10 @@ import {
   type SwTableBoxFormat,
 } from "../table/swtable";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
-import { SwUndoAttrTable, SwUndoTableNdsChg } from "../undo/untbl";
+import { SwUndoTableNdsChg } from "../undo/untbl";
 import type { SwTabCols } from "../bastyp/tabcol";
 import type { SwTabFrame } from "../layout/tabfrm";
-import { GetSwTabRows, SetSwTabRows } from "../docnode/ndtbl";
+import { GetSwTabRows, SetSwTabRows, SetSwTabCols } from "../docnode/ndtbl";
 import {
   GetSwCursorRowSplit,
   SetSwRowSplit,
@@ -785,53 +785,7 @@ export class SwDoc {
     currentRowOnly: boolean,
     cursorState?: SwUndoCursorState,
   ): boolean {
-    if (
-      !this.GetTables().includes(table) ||
-      currentRowOnly ||
-      !table
-        .GetTabLines()
-        .some(
-          /** Checks actual native box ownership. @param line - Table row. @returns Whether connected. */ (
-            line,
-          ) => line.GetTabBoxes().includes(start),
-        )
-    )
-      return false;
-    const node = start.GetParagraphs()[0];
-    if (node === undefined || node.GetNodes() !== this.nodes) return false;
-    table.ValidateTabCols(next, previous);
-    return this.RunModelTransaction(
-      /** Records the original native table attributes around one admitted mutation. @returns Whether admitted. */
-      () => {
-        const before =
-          cursorState ?? createWriterCollapsedCursorState(node, 0, node.GetCharacterItemsAt(0));
-        const actualWidth = previous.GetRight() - previous.GetLeft();
-        const wishedWidth =
-          table.GetFormat().width ??
-          table
-            .GetColumnWidths()
-            .reduce(
-              /** Sums native box widths. @param sum - Prior total. @param width - Box width. @returns Total width. */ (
-                sum,
-                width,
-              ) => sum + width,
-              0,
-            );
-        if (actualWidth !== wishedWidth) {
-          table.AdjustWidths(wishedWidth, actualWidth);
-          table.SetFormat({ ...table.GetFormat(), width: actualWidth });
-          table.GetTabCols(previous, start);
-        }
-        const action = new SwUndoAttrTable(table, before);
-        table.SetTabCols(next, previous, start, currentRowOnly);
-        this.undoManager.AddUndoAction(action);
-        this.NotifyModelChange({
-          kind: "node-content-changed",
-          nodeIndex: table.GetTableNode().GetIndex(),
-        });
-        return true;
-      },
-    );
+    return SetSwTabCols(this, table, next, previous, start, currentRowOnly, cursorState);
   }
   /** Inserts native counted flat rows and publishes one document-owned history record. @param boxes - Actual selected boxes. @param count - Native row count. @param behind - Insert after the selected edge. @param insertDummy - Native tracked-change policy. @param cursorState - Original browser cursor attributes. @param afterCursor - Optional unchanged live selection after insertion. @returns Whether admitted. */
   public InsertRow(

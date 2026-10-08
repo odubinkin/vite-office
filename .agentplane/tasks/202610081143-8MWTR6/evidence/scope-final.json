@@ -1,0 +1,218 @@
+{
+  "base": "a448d28bf7c1e9c4cdc0e69156a106f5bde633f1",
+  "semanticPaths": [
+    "apps/office/src/sw/browser/editor/WriterEditableTable.tsx",
+    "apps/office/src/sw/browser/editor/native-independent-column-render.test.tsx",
+    "apps/office/src/sw/browser/editor/native-table-linear-drag.test.tsx",
+    "apps/office/src/sw/browser/filter/xml/writer-document-codec.ts",
+    "apps/office/src/sw/browser/filter/xml/writer-table-item-codec.ts",
+    "apps/office/src/sw/source/core/doc/doc.ts",
+    "apps/office/src/sw/source/core/docnode/native-cell-alignment-owner.test.ts",
+    "apps/office/src/sw/source/core/docnode/ndtbl.ts",
+    "apps/office/src/sw/source/core/docnode/nodes.ts",
+    "apps/office/src/sw/source/core/frmedt/tblsel.ts",
+    "apps/office/src/sw/source/core/layout/tabfrm.ts",
+    "apps/office/src/sw/source/core/table/native-column-insertion.test.ts",
+    "apps/office/src/sw/source/core/table/native-independent-columns.test.ts",
+    "apps/office/src/sw/source/core/table/native-tabcols.test.ts",
+    "apps/office/src/sw/source/core/table/swtable.ts",
+    "apps/office/src/sw/source/core/undo/native-insert-table-history.test.ts",
+    "apps/office/src/sw/source/core/undo/untbl.ts",
+    "apps/office/src/sw/source/filter/xml/native-independent-column-odf.test.ts",
+    "apps/office/src/sw/source/filter/xml/xmlexp.ts",
+    "apps/office/src/sw/source/filter/xml/xmltble.ts",
+    "apps/office/src/sw/source/filter/xml/xmltbli.ts",
+    "apps/office/src/sw/source/uibase/docvw/edtwin.ts",
+    "apps/office/src/sw/source/uibase/docvw/native-ruler-ownership.test.ts",
+    "apps/office/src/sw/source/uibase/docvw/native-table-column-drag.test.ts",
+    "apps/office/src/sw/source/uibase/docvw/native-table-linear-drag.test.ts",
+    "apps/office/src/sw/source/uibase/docvw/native-table-proportional-drag.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-tabcols-history.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-properties.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-traversal.test.ts",
+    "apps/office/src/xmloff/source/core/xmltoken.ts",
+    "apps/office/src/xmloff/source/table/XMLTableExport.ts",
+    "apps/office/src/xmloff/source/table/XMLTableImport.ts",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/source-provenance.json"
+  ],
+  "scopeCount": 34,
+  "priorAcceptanceFiles": 623,
+  "byteIdenticalAcceptanceFiles": 611,
+  "sourceBackedMigrations": [
+    {
+      "path": "apps/office/src/sw/browser/editor/native-table-linear-drag.test.tsx",
+      "beforeSHA256": "d9ec455193ece224cea030ca19fabb6e65d27db851ca82bdd22497dc3701e5bc",
+      "afterSHA256": "35d5821b038b860ffe9044073489f85de637501f1cf447fe697cd18d64e33853",
+      "diffSHA256": "923d70e81dea1c59cee6fe13233662ffb97ace39e95041890c1604b71f222952",
+      "priorAssertionInputs": 16,
+      "currentAssertionInputs": 17,
+      "removedOriginalInputCount": 0,
+      "removedOriginalInputsSHA256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "addedAssertionInputs": 1,
+      "sourceJustification": "Original assertion input expressions preserved; expected complete per-box frame values and current-row true replace contradictory omitted-size/refusal expectations, with stronger independent row/history assertions. swtable.cxx994-1040/1166-1263, swnewtable.cxx768-778 and ndtbl.cxx2871-2924/3060-3075."
+    },
+    {
+      "path": "apps/office/src/sw/source/core/docnode/native-cell-alignment-owner.test.ts",
+      "beforeSHA256": "4d8324422859fd9523facb6d845560c0a9a2dc7d2ba1926cbe4439e16b8a46ad",
+      "afterSHA256": "8f14e10ccbb7db5e7f0bc4d518a9c6a632f02b6ab2b4c64e5d586f4f8055af64",
+      "diffSHA256": "36770c493d64c2cdd3a12b7bed5d25a4ca15cfca120d3e2611ccf7945a03c1b8",
+      "priorAssertionInputs": 56,
+      "currentAssertionInputs": 56,
+      "removedOriginalInputCount": 0,
+      "removedOriginalInputsSHA256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "addedAssertionInputs": 0,
+      "sourceJustification": "Original assertion input expressions preserved; expected complete per-box frame values and current-row true replace contradictory omitted-size/refusal expectations, with stronger independent row/history assertions. swtable.cxx994-1040/1166-1263, swnewtable.cxx768-778 and ndtbl.cxx2871-2924/3060-3075."
+    },
+    {
+      "path": "apps/office/src/sw/source/core/table/native-column-insertion.test.ts",
+      "beforeSHA256": "6e5a44feaa043eb44765fa9cea3f31c3adb1652067116c309e000a07a97463c1",
+      "afterSHA256": "4296d83dd26cbb72894bfc7fc311c22b707a7c1f92246627fe8e140bdec76e3f",
+      "diffSHA256": "b17c1f1115def7dabf022b95094a8ac1dad0c401d8628a11bf791a71419fe404",
+      "priorAssertionInputs": 86,
+      "currentAssertionInputs": 86,
+      "removedOriginalInputCount": 0,
+      "removedOriginalInputsSHA256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "addedAssertionInputs": 0,
+      "sourceJustification": "Original assertion input expressions preserved; expected complete per-box frame values and current-row true replace contradictory omitted-size/refusal expectations, with stronger independent row/history assertions. swtable.cxx994-1040/1166-1263, swnewtable.cxx768-778 and ndtbl.cxx2871-2924/3060-3075."
+    },
+    {
+      "path": "apps/office/src/sw/source/core/table/native-tabcols.test.ts",
+      "beforeSHA256": "891c719d25064c3fee3b40ce2bf13dd8dc0af18f68169e42326f113ccaa47fcf",
+      "afterSHA256": "c48ae7aad4956d4a42e13a3028515a5a96471f8f3c7f9bfa539674630ec307eb",
+      "diffSHA256": "76b36f5a76ab6375597c05331a9cc87cad96bbd54fc12e0b6676052beb68cb85",
+      "priorAssertionInputs": 46,
+      "currentAssertionInputs": 48,
+      "removedOriginalInputCount": 0,
+      "removedOriginalInputsSHA256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "addedAssertionInputs": 2,
+      "sourceJustification": "Original assertion input expressions preserved; expected complete per-box frame values and current-row true replace contradictory omitted-size/refusal expectations, with stronger independent row/history assertions. swtable.cxx994-1040/1166-1263, swnewtable.cxx768-778 and ndtbl.cxx2871-2924/3060-3075."
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/native-insert-table-history.test.ts",
+      "beforeSHA256": "ad107c818871196dbe5d746f743e2d308bd030d7cfc2999671e7d953cca8af38",
+      "afterSHA256": "ab688fafe567513e98302068b77273e01fea4a93afce6416fc81913f1c5823a6",
+      "diffSHA256": "64c2ce5ad4700246d1964417e25ccfb6def136d87d3288f73596068f21a4a6b2",
+      "priorAssertionInputs": 67,
+      "currentAssertionInputs": 67,
+      "removedOriginalInputCount": 0,
+      "removedOriginalInputsSHA256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "addedAssertionInputs": 0,
+      "sourceJustification": "Original assertion input expressions preserved; expected complete per-box frame values and current-row true replace contradictory omitted-size/refusal expectations, with stronger independent row/history assertions. swtable.cxx994-1040/1166-1263, swnewtable.cxx768-778 and ndtbl.cxx2871-2924/3060-3075."
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/docvw/native-ruler-ownership.test.ts",
+      "beforeSHA256": "a24f1f493340ef50b74eaaf6484cfc57c178527d69b0c5138d7e2c6c024f1fc7",
+      "afterSHA256": "7cd896706aea1882e8d6e48fad58f593e483a81fd5f3fe0c07cf8af597d07fdf",
+      "diffSHA256": "1878fec280044ab6514416abda9e147f59cac1929b618c4e044a1a4c8aa6542d",
+      "priorAssertionInputs": 70,
+      "currentAssertionInputs": 71,
+      "removedOriginalInputCount": 0,
+      "removedOriginalInputsSHA256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "addedAssertionInputs": 1,
+      "sourceJustification": "Original assertion input expressions preserved; expected complete per-box frame values and current-row true replace contradictory omitted-size/refusal expectations, with stronger independent row/history assertions. swtable.cxx994-1040/1166-1263, swnewtable.cxx768-778 and ndtbl.cxx2871-2924/3060-3075."
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/docvw/native-table-column-drag.test.ts",
+      "beforeSHA256": "6c153a76a224742d48e26e4a57d80e1338c75aae1e0eed78d6c8bd9147e259bf",
+      "afterSHA256": "feb9c630b8dd32940b250c861184e097fa7a06a6ed5f3b17a314e296dd294e5a",
+      "diffSHA256": "e97bd029126f10c7ab844ebad9423d6e3cf7281c988f51d5d4f540d40fbf1299",
+      "priorAssertionInputs": 55,
+      "currentAssertionInputs": 60,
+      "removedOriginalInputCount": 0,
+      "removedOriginalInputsSHA256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "addedAssertionInputs": 5,
+      "sourceJustification": "Original assertion input expressions preserved; expected complete per-box frame values and current-row true replace contradictory omitted-size/refusal expectations, with stronger independent row/history assertions. swtable.cxx994-1040/1166-1263, swnewtable.cxx768-778 and ndtbl.cxx2871-2924/3060-3075."
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/docvw/native-table-linear-drag.test.ts",
+      "beforeSHA256": "cb235d168bfa45a66dcf7ba89c53f2dc3af8d39921965587e30615f4f20e6e5f",
+      "afterSHA256": "ff7a0b2cc4a3397774984e1f468de125b5fa12ca19a1ce031982c671b92bf93f",
+      "diffSHA256": "72becb1f188e31ffbeda360487b9b16a9de1795189621350f44236eb15c153e7",
+      "priorAssertionInputs": 32,
+      "currentAssertionInputs": 33,
+      "removedOriginalInputCount": 0,
+      "removedOriginalInputsSHA256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "addedAssertionInputs": 1,
+      "sourceJustification": "Original assertion input expressions preserved; expected complete per-box frame values and current-row true replace contradictory omitted-size/refusal expectations, with stronger independent row/history assertions. swtable.cxx994-1040/1166-1263, swnewtable.cxx768-778 and ndtbl.cxx2871-2924/3060-3075."
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/docvw/native-table-proportional-drag.test.ts",
+      "beforeSHA256": "1fd2f9b69f27463b4d74a535ff5fa17b97c4483a56a61913fba7b22c12e1b420",
+      "afterSHA256": "cb211e9800be25ddbeb779923aeedea9a9a9182efd55b2cd39a86499ff3593f8",
+      "diffSHA256": "6efd3a00f715d1bf44c1eb30c6a89b525c57ab8acbb2b7b1c3fa37e483de4616",
+      "priorAssertionInputs": 27,
+      "currentAssertionInputs": 28,
+      "removedOriginalInputCount": 0,
+      "removedOriginalInputsSHA256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "addedAssertionInputs": 1,
+      "sourceJustification": "Original assertion input expressions preserved; expected complete per-box frame values and current-row true replace contradictory omitted-size/refusal expectations, with stronger independent row/history assertions. swtable.cxx994-1040/1166-1263, swnewtable.cxx768-778 and ndtbl.cxx2871-2924/3060-3075."
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-tabcols-history.test.ts",
+      "beforeSHA256": "737dc82f6155c1c1854a395faedba1156a1c43169d6d2d664d5d18eddce39f55",
+      "afterSHA256": "d5bb7d945591b2b6cb392253b7a6fb720fb1eb055a8a7102129de7c67dcfb0b7",
+      "diffSHA256": "9257244eca84fc96f3db7caf5858b6e14cd09744418b3d1d8ff497a313c18716",
+      "priorAssertionInputs": 50,
+      "currentAssertionInputs": 61,
+      "removedOriginalInputCount": 3,
+      "removedOriginalInputsSHA256": "29c40af82910bf28edb516587ce393269898ca2884f04cb6e30dc23dfa87fa13",
+      "addedAssertionInputs": 14,
+      "sourceJustification": "Replace unsupported-current-line refusal with literal native current-row2000/6640 and2600/6040 plus unchanged other-row4320/4320 after normalization and undo; foreign/invalid gates preserved. Ordinary apply obtains a fresh native carrier after two independent edits/undos rather than reusing the old mutable carrier; literal normalization assertion retained"
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-properties.test.ts",
+      "beforeSHA256": "240e712765431f020332864c4b34a7ec1dc985a98838c7adf6539ffa639380db",
+      "afterSHA256": "d6d01e3f38a56fde39ceb56a0bc81917232d801d6a88591b33ed22af8c20ade8",
+      "diffSHA256": "235a16c1eeeb5d13ccc2bfa9ed3a3667371d13634fa1c90d7bc34398037db91c",
+      "priorAssertionInputs": 43,
+      "currentAssertionInputs": 43,
+      "removedOriginalInputCount": 0,
+      "removedOriginalInputsSHA256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "addedAssertionInputs": 0,
+      "sourceJustification": "Original assertion input expressions preserved; expected complete per-box frame values and current-row true replace contradictory omitted-size/refusal expectations, with stronger independent row/history assertions. swtable.cxx994-1040/1166-1263, swnewtable.cxx768-778 and ndtbl.cxx2871-2924/3060-3075."
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-traversal.test.ts",
+      "beforeSHA256": "1d691edee0d9c0e7449313a9cbb6e70b9eccb7adf91f24d4fce383e5b3a26401",
+      "afterSHA256": "898021cf417177fb26b62428aaffdc27c9774b7d888c227974e1b6326744412f",
+      "diffSHA256": "1c884efc9a7331e296bebc67a9b2e6ebb9eca1d4ed39cd3261768928bcbfe2b2",
+      "priorAssertionInputs": 111,
+      "currentAssertionInputs": 111,
+      "removedOriginalInputCount": 0,
+      "removedOriginalInputsSHA256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "addedAssertionInputs": 0,
+      "sourceJustification": "Original assertion input expressions preserved; expected complete per-box frame values and current-row true replace contradictory omitted-size/refusal expectations, with stronger independent row/history assertions. swtable.cxx994-1040/1166-1263, swnewtable.cxx768-778 and ndtbl.cxx2871-2924/3060-3075."
+    }
+  ],
+  "newAcceptanceFiles": [
+    "apps/office/src/sw/source/core/table/native-independent-columns.test.ts",
+    "apps/office/src/sw/browser/editor/native-independent-column-render.test.tsx",
+    "apps/office/src/sw/source/filter/xml/native-independent-column-odf.test.ts"
+  ],
+  "metadata": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "oldRecords": 309,
+      "currentRecords": 311,
+      "priorFieldsPrefixesStatesDefaultsClassesPreserved": true,
+      "added": [
+        "apps/office/src/sw/browser/filter/xml/writer-table-item-codec.ts",
+        "apps/office/src/sw/source/filter/xml/xmltble.ts"
+      ],
+      "newNativePartialUnverified": true
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "oldRecords": 309,
+      "currentRecords": 311,
+      "priorFieldsPrefixesStatesDefaultsClassesPreserved": true,
+      "added": [
+        "apps/office/src/sw/browser/filter/xml/writer-table-item-codec.ts",
+        "apps/office/src/sw/source/filter/xml/xmltble.ts"
+      ],
+      "newNativePartialUnverified": true
+    }
+  ],
+  "failures": []
+}

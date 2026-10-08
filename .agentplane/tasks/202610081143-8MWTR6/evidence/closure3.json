@@ -1,0 +1,32 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/browser/editor/native-independent-column-render.test.tsx --testNamePattern ^(?:mounted native fuzzy20 union avoids thin duplicate columns and retains actual box owners)$ --coverage.reportOnFailure --coverage.reporter=json --coverage.reporter=json-summary --coverage.reporter=text --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/8MWTR6.closure3.app-results.json",
+      "profile": "upstream-absent-focused",
+      "exit": 1,
+      "sha256": "bcde6cd406b3fdff1ddf2f52abf1797b627e6cda353d6909a7b84104479b0ea8",
+      "caseCounts": {
+        "passed": 1,
+        "failed": 0,
+        "skipped": 2,
+        "total": 3
+      },
+      "passedNames": [
+        "apps/office/src/sw/browser/editor/native-independent-column-render.test.tsx > mounted native fuzzy20 union avoids thin duplicate columns and retains actual box owners"
+      ],
+      "failedCases": [],
+      "unhandledErrorCount": 0,
+      "coverageMapSHA256": "2e035f9d229131cade037af7e3575cbf676dbe03fbe6bb0aacafd2133ca46a89"
+    }
+  ],
+  "originalFailures": [],
+  "allowedNames": [
+    "mounted native fuzzy20 union avoids thin duplicate columns and retains actual box owners"
+  ],
+  "newNames": [
+    "mounted native fuzzy20 union avoids thin duplicate columns and retains actual box owners"
+  ],
+  "passingReplayExpected": 0
+}
