@@ -1,0 +1,284 @@
+{
+  "implementationSHA": "d1ebc7d7f6bc3b85d42438edb5f9e5edb912a6c8",
+  "reviewer": "Current agent EVALUATOR role; not an independent reviewer",
+  "independent": false,
+  "paths": [
+    {
+      "path": "apps/office/src/sw/source/core/table/swtable.ts",
+      "sha256": "099a6e08d48add28d452417719091737ee142342e77898c6dac17df33124caa4",
+      "actualCommittedBytes": true,
+      "physicalLines": 821
+    },
+    {
+      "path": "apps/office/src/sw/source/core/docnode/ndtbl1.ts",
+      "sha256": "e203be07585284e674fcdb19a2425479ceb53225909c51a278ae0d9c91dae1e4",
+      "actualCommittedBytes": true,
+      "physicalLines": 421
+    },
+    {
+      "path": "apps/office/src/sw/source/core/doc/doc.ts",
+      "sha256": "20c3856bb377bbbbb3cc65816d133f3fc6c5fa633ab448a7dc35595f795de13c",
+      "actualCommittedBytes": true,
+      "physicalLines": 914
+    },
+    {
+      "path": "apps/office/src/sw/source/core/frmedt/fetab.ts",
+      "sha256": "21dc2860da202f6e36fe66105c0bb4ba731bd2ef8df95efb1482ddaf52a04468",
+      "actualCommittedBytes": true,
+      "physicalLines": 469
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/shells/tabsh.ts",
+      "sha256": "5d4d58d719b36678ca9f9f8ade14c46263225fce0030f45de0e4af44c9e97346",
+      "actualCommittedBytes": true,
+      "physicalLines": 406
+    },
+    {
+      "path": "apps/office/src/sw/source/ui/table/tabledlg.ts",
+      "sha256": "a605f189b3bc5598796ec7d3660c043131fbc6cec166858d5105f6ee67e5a897",
+      "actualCommittedBytes": true,
+      "physicalLines": 626
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/xmltbli.ts",
+      "sha256": "6d18b7f0cb1bb0ad5392bd185ee3cf2b50ac91b13199bfd54fdeb9a1f47120fa",
+      "actualCommittedBytes": true,
+      "physicalLines": 237
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/xmlexp.ts",
+      "sha256": "729e4a37302f8cf01f45f1d1f4dd43205950afe38235600b46df8d4282c20bc0",
+      "actualCommittedBytes": true,
+      "physicalLines": 775
+    },
+    {
+      "path": "apps/office/src/sw/browser/filter/xml/writer-table-item-codec.ts",
+      "sha256": "e7a852de275fe44b68ebf5806fa8c67ebd94e6e6d750f7041d97879a55fdb78c",
+      "actualCommittedBytes": true,
+      "physicalLines": 105
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/native-table-document-row.test.tsx",
+      "sha256": "949b452a1a4a093d87485e6e1066b85e4eaef46896446ca83e38f634a2b7250d",
+      "actualCommittedBytes": true,
+      "physicalLines": 102
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/native-table-split-items.test.tsx",
+      "sha256": "c80d78960a4329eab52709af02c4bb4b6514a42b00b2a220e90b07d1ad9a5deb",
+      "actualCommittedBytes": true,
+      "physicalLines": 185
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/native-table-properties-reset.test.tsx",
+      "sha256": "7100e9b3257affcbe784715e697814d5431cc5fb487b2380c2608cfffb3b87ec",
+      "actualCommittedBytes": true,
+      "physicalLines": 191
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/native-table-text-flow-split.test.tsx",
+      "sha256": "fd0c33a8d7aa441c6abedfb4b8c8a961c68975026d3c8665c78da055859b83e4",
+      "actualCommittedBytes": true,
+      "physicalLines": 89
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/native-row-frame-size-roundtrip.test.ts",
+      "sha256": "f9c65110a35780590b5194f0eee9f2e3299d7b7cdb9df1374011d9300cb15874",
+      "actualCommittedBytes": true,
+      "physicalLines": 203
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/odt-table-roundtrip.test.ts",
+      "sha256": "343257e1686f7e5d85eb25f81d2f112290297857a60ae16ba6a5ab656cc3af37",
+      "actualCommittedBytes": true,
+      "physicalLines": 522
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-row-split-owner-history.test.ts",
+      "sha256": "7f58591c041ea67ce257fe957b9d2621c42f43638d8ea57f3f8f720fc69de2c1",
+      "actualCommittedBytes": true,
+      "physicalLines": 153
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/native-numeric-row-insertion-history.test.ts",
+      "sha256": "b71b4e0dfe9a6679e6e9dca462767ad1a6df0407e983834d3d52afda7706dd02",
+      "actualCommittedBytes": true,
+      "physicalLines": 164
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-traversal.test.ts",
+      "sha256": "91352a8f42e0ee0f3693720d3e32567967d616c4d51c8d64b3d4aa08e0d84cfd",
+      "actualCommittedBytes": true,
+      "physicalLines": 437
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-height-delta.test.ts",
+      "sha256": "a928e19ceb6be3465b2f65fa62a312598ab1d6f890fb468b3c9392952a880f72",
+      "actualCommittedBytes": true,
+      "physicalLines": 138
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-layout-split-history.test.ts",
+      "sha256": "7c6321915e59086623ea7e807966084a2c68a4a2781184a068e807b6cad39ed1",
+      "actualCommittedBytes": true,
+      "physicalLines": 151
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-row-height-owner-history.test.ts",
+      "sha256": "0bb1df61e3ed4d0ffc3ae2c14de1b561f623f70a65eff73dc62bcf015edcc354",
+      "actualCommittedBytes": true,
+      "physicalLines": 135
+    },
+    {
+      "path": "apps/office/src/sw/source/ui/table/native-table-text-flow-split.test.ts",
+      "sha256": "11b463270b44a7f1166576a56980e2d5ed3767462aa52ad96941066f44972899",
+      "actualCommittedBytes": true,
+      "physicalLines": 97
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-properties.test.ts",
+      "sha256": "8a85a6f2b2f3e054f8b24fa6e24e08701f96a23513b31e51b57dea4c5a49d1af",
+      "actualCommittedBytes": true,
+      "physicalLines": 300
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-height-command-separation.test.ts",
+      "sha256": "e0e531ec59694bcf79fe58901e57fd0dde769c92a242a5aa2fd15f65eed265a9",
+      "actualCommittedBytes": true,
+      "physicalLines": 130
+    },
+    {
+      "path": "apps/office/src/sw/source/core/docnode/native-row-height-owner.test.ts",
+      "sha256": "896ee84e21108a41a9b8fa56ff5748c83b98f92d74ad0f2e5e7c20be80c826b3",
+      "actualCommittedBytes": true,
+      "physicalLines": 151
+    },
+    {
+      "path": "apps/office/src/sw/source/core/table/native-numeric-row-insertion.test.ts",
+      "sha256": "abbca4c2359ffb1c3f3d7ddd88e2d492c1645f409141fb762414d967fa4c6770",
+      "actualCommittedBytes": true,
+      "physicalLines": 133
+    },
+    {
+      "path": "apps/office/src/sw/source/core/docnode/native-row-split-owner.test.ts",
+      "sha256": "031fefd5437dd29a395a41ae633bbd63296b154a9d6baebe9292565bebfb0e8e",
+      "actualCommittedBytes": true,
+      "physicalLines": 136
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-text-flow-split-history.test.ts",
+      "sha256": "993ca7d9ecac49ac4605e8580737a2a086b05b3b871ff87e69297a6bb0e28fd3",
+      "actualCommittedBytes": true,
+      "physicalLines": 190
+    },
+    {
+      "path": "apps/office/src/sw/source/core/docnode/native-row-frame-size.test.ts",
+      "sha256": "ea0531b629bab68f890de09884c4b79bba6f322ad0c58b1733e3a12389ebf124",
+      "actualCommittedBytes": true,
+      "physicalLines": 139
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/native-table-border-changed-items.test.tsx",
+      "sha256": "b22cdaacd27ed488b88159dd27331ccb92f1f5fb3189caa187cab63926104828",
+      "actualCommittedBytes": true,
+      "physicalLines": 330
+    },
+    {
+      "path": "apps/office/src/sw/source/core/docnode/native-row-split-items.test.ts",
+      "sha256": "bd9f327e3f17df8b53871c5991eb425f07c85bdb39484cf7d00f8b547c35db48",
+      "actualCommittedBytes": true,
+      "physicalLines": 158
+    },
+    {
+      "path": "apps/office/src/sw/browser/filter/xml/native-row-split-item-transport.test.ts",
+      "sha256": "a10a6ecde2cb79079fb847dc32692451ea1214d1c7ace23c5f2b8ac4111399d8",
+      "actualCommittedBytes": true,
+      "physicalLines": 106
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/native-row-split-core-items.test.tsx",
+      "sha256": "ecf11321a7ea0724208088521c07d9dd74684c0c011b597bee6b034913dfefe2",
+      "actualCommittedBytes": true,
+      "physicalLines": 161
+    },
+    {
+      "path": "apps/office/src/test/table-row-test-helpers.ts",
+      "sha256": "dc7f7ebcb818ccb0502a534a0997dca1c711b401460d3d8e955c1b9a0b5078fc",
+      "actualCommittedBytes": true,
+      "physicalLines": 20
+    },
+    {
+      "path": "docs/program/source-provenance.json",
+      "sha256": "f88321a581a469e4754d2f05f372c95bd273d97a72d429729907e767f0bd5eef",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "sha256": "9e8e66d4d4418321d6ec412c0bda1063e5c9dee036dcbeeb1eaafa7b63db875f",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/e2e/writer-native-table-text-flow-split.spec.ts",
+      "sha256": "8a94eee203ae4beaeccd600b14aaa7ea1b7cf1cafe93d66bc95bb69cbd418e31",
+      "actualCommittedBytes": true,
+      "physicalLines": 145
+    }
+  ],
+  "reconstructedCertificates": [
+    {
+      "identifier": "final-coverage.json",
+      "sha256": "95c5589677db5a52ab98121d5d75b0311e191e2e704c149b05f3bdc8007ba019"
+    },
+    {
+      "identifier": "runtime-census.json",
+      "sha256": "2df7ab81f995392e66b19b861f38d54872ce0c369b22b046af0995500875e875"
+    },
+    {
+      "identifier": "scope-final.json",
+      "sha256": "c34dc5d057776b6cb9554c9cdc2a97a82ce0f264064c2c59b3d5bfeece9782fb"
+    },
+    {
+      "identifier": "native-source-review.json",
+      "sha256": "15502e6dde2cc96c4ec07eb52c94a8c30cfc37576ed7c9f8fa1ce90aa5babaf3"
+    }
+  ],
+  "reconstructions": [
+    {
+      "identifier": "240proofScript",
+      "exit": 0,
+      "outputSHA256": "8c80a3827406f463288bd5c2c237a2b317574af0a6edc778809aa67ea112454b",
+      "noTestsExecuted": true
+    },
+    {
+      "identifier": "240censusScript",
+      "exit": 0,
+      "outputSHA256": "80b570846cddb74bfa88ddc31f7c787376cc05e2bc7fc0fbdcbaf239cf263e88",
+      "noTestsExecuted": true
+    },
+    {
+      "identifier": "240scopeScript",
+      "exit": 0,
+      "outputSHA256": "1ae46e32759d1b86f7e1fd53014b6a5ea5a6fa0411725d87fae27f5d652edeb4",
+      "noTestsExecuted": true
+    },
+    {
+      "identifier": "240sourceReviewScript",
+      "exit": 0,
+      "outputSHA256": "0c0324fb5f7eb31dcf0f944592a683c5d4b4540b2524c2f22d46cb4cc067f381",
+      "noTestsExecuted": true
+    }
+  ],
+  "coverageAllFour100": true,
+  "scopeCount": 37,
+  "appCases": 263,
+  "chromiumCases": 11,
+  "freshCases": 33,
+  "passingReplay": 0,
+  "fullCadence": {
+    "last": 237,
+    "next": 247
+  },
+  "noSourceOrRawMapsInAgentplane": true,
+  "verdict": "pass",
+  "residual": "Full shared row frame-format ownership/ClaimFrameFormat/pooling/nested/merged/UNO and scalar table formats, legacy explicit DTO completeness and whole core/browser goal parity remain unverified."
+}
