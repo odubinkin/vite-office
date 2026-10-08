@@ -4,7 +4,7 @@ title: "Register and release native row frame format clients through movement an
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,30 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-08T19:44:56.114Z"
+  updated_by: "CODER"
+  note: "Verified actual implementation94ab0a92c04676614e7b869025c17943cfa687ae: native row frame registration/movement/destruction, direct UI/layout item access and lifetime;1293 unique app/11fresh/11Chromium upstream-absent cases,zero passing replay,all-four100% actual source-bound coverage,all scoped static/source/governance/artifact gates passed. Full suite next247;full goal incomplete."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-08T19:44:35.409Z"
+  updated_by: "EVALUATOR"
+  note: "Current-agent EVALUATOR phase, explicitly non-independent: actual implementation 94ab0a92c04676614e7b869025c17943cfa687ae satisfies the represented native row frame lifecycle contract."
+  evaluated_sha: "94ab0a92c04676614e7b869025c17943cfa687ae"
+  blueprint_digest: "590574430ea053f33ff8e0898a9628057f638a76cfb8fa0e5c160ff5cc528caf"
+  evidence_refs:
+    - ".agentplane/tasks/202610081918-67C1X0/README.md"
+    - ".agentplane/tasks/202610081918-67C1X0/quality/20261008-194435409-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610081918-67C1X0/quality/20261008-194435409-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610081918-67C1X0/quality/20261008-194435409-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610081918-67C1X0/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610081918-67C1X0/evidence/actual-sha-review.json"
+    - ".agentplane/tasks/202610081918-67C1X0/evidence/governance.json"
+    - ".agentplane/tasks/202610081918-67C1X0/evidence/source-gates.json"
+  findings:
+    - "Four deterministic certificates reconstructed byte-identically;14 semantic paths match actual implementation;1293 unique app and11 Chromium cases pass upstream absent,11 fresh,zero passing replay;all-four source-bound100% coverage."
+    - "649 old acceptance files byte-identical;two exact captures before native destruction preserve literal/identity/history assertions;316 metadata records and registered IO/recovery deviations preserved."
 commit: null
 comments:
   -
@@ -35,8 +54,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement native row/frame client registration and typed owner movement, destruction after actual row/table deletion, and temporary UI/layout frame cleanup under standing user-approved parity scope."
+  -
+    type: "verify"
+    at: "2026-10-08T19:44:56.114Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified actual implementation94ab0a92c04676614e7b869025c17943cfa687ae: native row frame registration/movement/destruction, direct UI/layout item access and lifetime;1293 unique app/11fresh/11Chromium upstream-absent cases,zero passing replay,all-four100% actual source-bound coverage,all scoped static/source/governance/artifact gates passed. Full suite next247;full goal incomplete."
 doc_version: 3
-doc_updated_at: "2026-10-08T19:38:50.663Z"
+doc_updated_at: "2026-10-08T19:44:56.415Z"
 doc_updated_by: "CODER"
 description: "Implement native row frame/line format registration and typed change/move hints, eliminate stale row registrations and temporary layout/UI frame leaks; preserve original graph and source-bound targeted verification."
 sections:
@@ -77,6 +102,39 @@ sections:
     Reason: user cadence last237,next247; current leaf242 requires new/related tests and100% coverage.
     Risk: complete native frame hierarchy/invalidation/follows/pooling/nested/merged/UNO and whole core/browser parity remain incomplete.
     Approval: active user goal and testing instructions.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-08T19:44:56.114Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified actual implementation94ab0a92c04676614e7b869025c17943cfa687ae: native row frame registration/movement/destruction, direct UI/layout item access and lifetime;1293 unique app/11fresh/11Chromium upstream-absent cases,zero passing replay,all-four100% actual source-bound coverage,all scoped static/source/governance/artifact gates passed. Full suite next247;full goal incomplete.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-08T19:38:50.663Z, excerpt_hash=sha256:cbd411d860e94f40b26141cf1d10442709e9a7df7bf8f48354b5fe966dbd0cbf
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610081918-67C1X0/blueprint/resolved-snapshot.json
+    - old_digest: 590574430ea053f33ff8e0898a9628057f638a76cfb8fa0e5c160ff5cc528caf
+    - current_digest: 590574430ea053f33ff8e0898a9628057f638a76cfb8fa0e5c160ff5cc528caf
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610081918-67C1X0
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610081918-67C1X0
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only the intentional semantic implementation commit if needed, preserving task traceability, all prior DONE tasks, parent prefix, pin/stash and registered IO/recovery/settings deviations."
   Findings: |-
     Previous241 is DONE with actual implementation03809acf8c537da7db76c492b3882fbfd606c5cc. Current242 preflight main/direct, existing approved leaf continued under standing user goal, same-agent CODER/EVALUATOR roles and no delegation. Parent702566chars/hash9356459286ee4c72f5bfe127f7437675f32438e1643e6cf110c322ee455bd8d5 remains an exact unchanged prefix before final append.
@@ -88,6 +146,10 @@ sections:
     Result:1293 unique application passes,11fresh,11Chromium, zero passing replay; all-four100 app/inventory actual source-bound coverage, no full242.649old files entire byte-identical, two exact before-destruction captures only;316records/status/default/classification/order/evidence prefixes preserved. Registered I/O/recovery/settings, writer-view, pin and stash unchanged.
     Residual gaps: complete native frame tree/invalidation/follows/repeated frame lifetime/pooling/nested/merged/UNO and whole core/browser parity remain unverified. Flat DelFrames representation is not complete native hierarchy parity. Full goal must remain ACTIVE; next full suite247.
     Current-agent EVALUATOR review must be explicitly non-independent, bind actual implementation SHA and reconstruct four certificates byte-identically. No source/Python/scripts/raw maps/results in AgentPlane, external access or DONE-leaf mutation. Clean meaningful close and exact-prefix parent append remain lifecycle steps.
+
+    Observation: actual-SHA review script adaptation briefly expected1193 rather than the authoritative1293 runtime census. Resolution: correct only the checker expectation and reconstruct all four certificates unchanged; no runtime replay, production/test/counter changes or pass-criteria relaxation.
+
+    Final pre-close audit: actual implementation94ab0a92c04676614e7b869025c17943cfa687ae and14 semantic paths verified. Same-agent EVALUATOR phase explicitly non-independent; four certificates reconstructed byte-identically, quality/20261008-194435409-recovery-context/quality-report.json records pass and actual SHA. Owner verification recorded;1293unique/11fresh/11Chromium and all-four100%, zero passing replay. Clean meaningful close and exact-prefix parent append remain;full goal ACTIVE.
 id_source: "generated"
 ---
 ## Summary
@@ -139,6 +201,39 @@ Reason: user cadence last237,next247; current leaf242 requires new/related tests
 Risk: complete native frame hierarchy/invalidation/follows/pooling/nested/merged/UNO and whole core/browser parity remain incomplete.
 Approval: active user goal and testing instructions.
 
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-08T19:44:56.114Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified actual implementation94ab0a92c04676614e7b869025c17943cfa687ae: native row frame registration/movement/destruction, direct UI/layout item access and lifetime;1293 unique app/11fresh/11Chromium upstream-absent cases,zero passing replay,all-four100% actual source-bound coverage,all scoped static/source/governance/artifact gates passed. Full suite next247;full goal incomplete.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-08T19:38:50.663Z, excerpt_hash=sha256:cbd411d860e94f40b26141cf1d10442709e9a7df7bf8f48354b5fe966dbd0cbf
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610081918-67C1X0/blueprint/resolved-snapshot.json
+- old_digest: 590574430ea053f33ff8e0898a9628057f638a76cfb8fa0e5c160ff5cc528caf
+- current_digest: 590574430ea053f33ff8e0898a9628057f638a76cfb8fa0e5c160ff5cc528caf
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610081918-67C1X0
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610081918-67C1X0
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
+
 ## Rollback Plan
 
 Revert only the intentional semantic implementation commit if needed, preserving task traceability, all prior DONE tasks, parent prefix, pin/stash and registered IO/recovery/settings deviations.
@@ -154,3 +249,7 @@ Observation: cumulative source-bound coverage initially lacked one JSX throw sta
 Result:1293 unique application passes,11fresh,11Chromium, zero passing replay; all-four100 app/inventory actual source-bound coverage, no full242.649old files entire byte-identical, two exact before-destruction captures only;316records/status/default/classification/order/evidence prefixes preserved. Registered I/O/recovery/settings, writer-view, pin and stash unchanged.
 Residual gaps: complete native frame tree/invalidation/follows/repeated frame lifetime/pooling/nested/merged/UNO and whole core/browser parity remain unverified. Flat DelFrames representation is not complete native hierarchy parity. Full goal must remain ACTIVE; next full suite247.
 Current-agent EVALUATOR review must be explicitly non-independent, bind actual implementation SHA and reconstruct four certificates byte-identically. No source/Python/scripts/raw maps/results in AgentPlane, external access or DONE-leaf mutation. Clean meaningful close and exact-prefix parent append remain lifecycle steps.
+
+Observation: actual-SHA review script adaptation briefly expected1193 rather than the authoritative1293 runtime census. Resolution: correct only the checker expectation and reconstruct all four certificates unchanged; no runtime replay, production/test/counter changes or pass-criteria relaxation.
+
+Final pre-close audit: actual implementation94ab0a92c04676614e7b869025c17943cfa687ae and14 semantic paths verified. Same-agent EVALUATOR phase explicitly non-independent; four certificates reconstructed byte-identically, quality/20261008-194435409-recovery-context/quality-report.json records pass and actual SHA. Owner verification recorded;1293unique/11fresh/11Chromium and all-four100%, zero passing replay. Clean meaningful close and exact-prefix parent append remain;full goal ACTIVE.

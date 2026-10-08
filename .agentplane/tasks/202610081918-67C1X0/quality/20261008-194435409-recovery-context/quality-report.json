@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "task_id": "202610081918-67C1X0",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-08T19:44:35.409Z",
+  "verdict": "pass",
+  "summary": "Current-agent EVALUATOR phase, explicitly non-independent: actual implementation 94ab0a92c04676614e7b869025c17943cfa687ae satisfies the represented native row frame lifecycle contract.",
+  "evaluated_sha": "94ab0a92c04676614e7b869025c17943cfa687ae",
+  "blueprint_digest": "590574430ea053f33ff8e0898a9628057f638a76cfb8fa0e5c160ff5cc528caf",
+  "findings": [
+    "Four deterministic certificates reconstructed byte-identically;14 semantic paths match actual implementation;1293 unique app and11 Chromium cases pass upstream absent,11 fresh,zero passing replay;all-four source-bound100% coverage.",
+    "649 old acceptance files byte-identical;two exact captures before native destruction preserve literal/identity/history assertions;316 metadata records and registered IO/recovery deviations preserved."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610081918-67C1X0/README.md",
+    ".agentplane/tasks/202610081918-67C1X0/evidence/actual-sha-review.json",
+    ".agentplane/tasks/202610081918-67C1X0/evidence/governance.json",
+    ".agentplane/tasks/202610081918-67C1X0/evidence/source-gates.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Full native frame hierarchy/invalidation/follows/pooling/nested/merged/UNO and whole core/browser parity remain incomplete;goal must remain active."
+  ]
+}

@@ -1,0 +1,145 @@
+{
+  "evaluatedSHA": "94ab0a92c04676614e7b869025c17943cfa687ae",
+  "evaluator": "current coding agent; explicitly non-independent",
+  "committedScopePaths": [
+    {
+      "path": "apps/office/src/sw/inc/hints.ts",
+      "sha256": "ba40dc579cc1ba3103972c58fbc77f1f87b4be883e12120d7d156c4b9e3aa1e8",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/layout/tabfrm.ts",
+      "sha256": "e13ee14536058f8166fa985d1b99be58fa98700500fefadfd917d413bdbfb810",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/table/swtable.ts",
+      "sha256": "76038c831bca2607eb1bfe2916631907ce97a4b334c62fa28f4efdd038e18521",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/untbl.ts",
+      "sha256": "dddfab8ec6339b7d71549ce5c6ed31c253287964c13b366640c96abbba31dfde",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/docnode/nodes.ts",
+      "sha256": "c5bd89480613448ef9e55574734c3406eebc386c5285be117fc418f7f17ae8f8",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/layout/newfrm.ts",
+      "sha256": "447346cdcf11103aa414f8f07b51db8683db41dad39b99dcee3df8e6391d72df",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/WriterEditableTable.tsx",
+      "sha256": "0798cc5f8348e317a68488664e907397b10c96a9f4ba439cd0f550da7f75d3b6",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/layout/native-row-format-client.test.ts",
+      "sha256": "c9569dec6d99ee66cc960016b33fc22e7bdf25db59e743546a083d484da66ff5",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/native-row-format-client-history.test.ts",
+      "sha256": "65db02faba252b681b4f8d3e8207a187c3590127d093ccba1913cb82b8b7c4e0",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/native-row-format-client.test.tsx",
+      "sha256": "1db1b577a3827989e1e293084ec04fffb51ea898e1279f4790c31471fcb047dc",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "docs/program/source-provenance.json",
+      "sha256": "2704fc4266687adfe020d13a49eea702ba8a329c8bcafc625e08db9d7a83c0e6",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "sha256": "ab02b5fb9d63c22c37ea1404c15c937e742a6143b5509991c473afdf2c7429a1",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/native-table-document-row.test.tsx",
+      "sha256": "a0af0294ca0bf304485f894f4adf685d8edb006078dbdc87e7e677268cbbb436",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-traversal.test.ts",
+      "sha256": "7c4145b9c3e49170a580beca68a1216b3bd2e17034fe40cfb9e9c5aba81f1656",
+      "actualCommittedBytes": true
+    }
+  ],
+  "deterministicCertificatesReconstructedByteIdentically": [
+    {
+      "identifier": "final-coverage.json",
+      "sha256": "a935ab0d5c992eb00e4736352b89ae8a9aa2b7efc6ca603f3f3d844531c956e3"
+    },
+    {
+      "identifier": "runtime-census.json",
+      "sha256": "458eabeee2e668e586b048acb5781b8c2a3c1931682e9c368968f96d21222269"
+    },
+    {
+      "identifier": "scope-integrity.json",
+      "sha256": "84d30a89937a87725c14c581cbe4115a132a8117fbea3b56faae2c04146584b8"
+    },
+    {
+      "identifier": "native-source-review.json",
+      "sha256": "a7470a30d726fdbbcd901ec94a8c344bc1c4f092193442778870ac94c2e8f3eb"
+    }
+  ],
+  "reconstructions": [
+    {
+      "name": "242proofScript",
+      "exit": 0,
+      "outputSHA256": "8421eb383d440ecf3fcb957eece4aace76cbf5126c2d0e3789e28c775995bfae"
+    },
+    {
+      "name": "242censusScript",
+      "exit": 0,
+      "outputSHA256": "bd701743b41f9334c1ef64fe9bdd0f6e03146962b7e63b87eff9738fea080aa1"
+    },
+    {
+      "name": "242scopeScript",
+      "exit": 0,
+      "outputSHA256": "4552cf6e9688de1aae96986806695df197d176470e985004babf93e492b138da"
+    },
+    {
+      "name": "242sourceReviewScript",
+      "exit": 0,
+      "outputSHA256": "bde310fbe251fe9238b57f4e5d24b036cfa6bdbfa5d40bbd50cff1bc471fcb5f"
+    }
+  ],
+  "approvedScopeSatisfied": true,
+  "sourceBoundNativeFiles": 6,
+  "runtime": {
+    "app": 1293,
+    "fresh": 11,
+    "chromium": 11,
+    "noPassingReplay": true,
+    "upstreamAbsentRestored": true
+  },
+  "coverageAllFour100": true,
+  "priorAcceptance": {
+    "count": 651,
+    "byteIdentical": 649,
+    "exactExpectedValuesCapturedBeforeNativeDestruction": 2
+  },
+  "metadata": {
+    "priorRecords": 316,
+    "newPartialRecord": 0,
+    "preserved": true
+  },
+  "fullSuiteCadence": {
+    "last": 237,
+    "next": 247
+  },
+  "residualGaps": [
+    "Complete native frame hierarchy/invalidation/follow/repeated frame lifetime remains unverified.",
+    "Full pooling/default modified-state flag/nested/merged/UNO remains unverified.",
+    "Whole core/browser parity remains incomplete; active goal must remain active."
+  ]
+}
