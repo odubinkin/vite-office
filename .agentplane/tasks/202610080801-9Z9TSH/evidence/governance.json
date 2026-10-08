@@ -4,7 +4,7 @@
       "command": "ap doctor",
       "exit": 0,
       "bytes": 1616,
-      "sha256": "e16c7caf2b984b47c57a4b16c6e5461f78178f8e16a48e45f81ea7c09887e8d3",
+      "sha256": "a5b3e6030d4d5133377ec1fc0524a83714c77b3ae03de2434cd80664e5db529f",
       "diagnostics": [
         "warning: doctor findings: errors=0 warnings=2 info=2",
         "- [WARN] State: managed AgentPlane hook shim is missing current readiness or fallback branches",

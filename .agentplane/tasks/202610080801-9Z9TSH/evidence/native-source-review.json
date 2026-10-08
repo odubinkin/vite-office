@@ -40,6 +40,10 @@
           "line": 435
         },
         {
+          "identifier": "SvxColumnItem::Count",
+          "line": 526
+        },
+        {
           "identifier": "SvxColumnItem::CalcOrtho",
           "line": 440
         },
@@ -169,7 +173,7 @@
     },
     {
       "path": "apps/office/src/svx/source/dialog/rulritem.ts",
-      "sha256": "176eaa81bf4c9e53ccc7b50a7d4f2b85496722f096a7b244c3abd9e8a353946b"
+      "sha256": "bd36f103ae6f8bd2ccea305b88cd1d26c84ffebf395275207c4243f8c9922794"
     },
     {
       "path": "apps/office/src/sw/source/uibase/uiview/viewtab.ts",
@@ -211,7 +215,7 @@
     }
   ],
   "sourceBoundContracts": [
-    "Native column description upper-only65535 clamp, signed width/limits, default0 edges/active, table=false and ortho=true.",
+    "Native column description upper-only65535 clamp, signed width/limits, default0 edges/active, table=false and ortho=true; constructor active/edges and Count use native uint16 casts, while consistency and Clone retain full raw vector ownership.",
     "Append and Clone copy mutable fields; equality excludes ortho; active consistency only checks index/count.",
     "View table columns subtract Left, mirror RTL order/limits, clamp frame distances at zero then uint16 cast, append visible unconstrained tail.",
     "Document drag consumes actual view item visibility/end/min/max; original SwTabCols still owns preview/model/apply, unchanged native shell/history.",

@@ -47,8 +47,8 @@
         "pct": "Unknown"
       }
     },
-    "mapSHA256": "7511dd9e8174f973d5185dff842292c496e5f4e0560a684cf688dbe1c325aad5",
-    "proofSHA256": "53beb58562f0576fa5ce7d532482017f67731730e9eabca36c2d7ea66857afc0",
+    "mapSHA256": "abd6a5b78f72ca56a865b0aa6d9b97b17ed4c8aa7c43e8bb0f07988f87fd803c",
+    "proofSHA256": "a469d2a8a644978430ad7c46482abd9f9124737b178b730e8f10ec2697a68f53",
     "files": 304,
     "invalidWholeFallbacks": [
       {
@@ -1942,8 +1942,20 @@
         }
       }
     ],
-    "wholeFiles": 304,
-    "transfers": [],
+    "wholeFiles": 303,
+    "transfers": [
+      {
+        "path": "apps/office/src/svx/source/dialog/rulritem.ts",
+        "initialSourceSHA256": "176eaa81bf4c9e53ccc7b50a7d4f2b85496722f096a7b244c3abd9e8a353946b",
+        "currentSourceSHA256": "bd36f103ae6f8bd2ccea305b88cd1d26c84ffebf395275207c4243f8c9922794",
+        "regionCount": 3,
+        "counts": {
+          "statements": 47,
+          "functions": 20,
+          "branches": 11
+        }
+      }
+    ],
     "gaps": []
   },
   "inventory": {

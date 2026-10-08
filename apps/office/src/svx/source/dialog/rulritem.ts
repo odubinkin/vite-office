@@ -61,9 +61,9 @@ export class SvxColumnItem extends SfxPoolItem {
   /** Implements native default/table construction. @param active - Active column. @param left - Optional table left. @param right - Optional table right. @returns Nothing. */
   public constructor(active = 0, left?: number, right?: number) {
     super(SID_RULER_BORDERS);
-    this.active = active;
-    this.left = left ?? 0;
-    this.right = right ?? 0;
+    this.active = active & 0xffff;
+    this.left = (left ?? 0) & 0xffff;
+    this.right = (right ?? 0) & 0xffff;
     this.table = left !== undefined;
   }
   /** Appends a value copy, retaining mutable independent column ownership. @param description - Borrowed input description. @returns Nothing. */
@@ -80,7 +80,7 @@ export class SvxColumnItem extends SfxPoolItem {
   }
   /** Returns represented column count. @returns Number of descriptions. */
   public Count(): number {
-    return this.columns.length;
+    return this.columns.length & 0xffff;
   }
   /** Changes left frame distance. @param value - New distance. @returns Nothing. */
   public SetLeft(value: number): void {

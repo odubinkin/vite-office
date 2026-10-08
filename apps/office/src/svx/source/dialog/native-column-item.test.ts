@@ -106,6 +106,27 @@ it("native Append and Clone own descriptions and equality ignores ortho", /** Ch
   defaultItem.SetRight(13);
   expect(defaultItem.equals(defaultItem.Clone())).toBe(true);
 });
+it("native uint16 construction and count retain raw vector ownership across wrap", /** Checks literal native casts without truncating actual owned descriptions. @returns Nothing. */ () => {
+  const table = new SvxColumnItem(-1, -1, 65538);
+  expect(table.GetActColumn()).toBe(65535);
+  expect(table.GetLeft()).toBe(65535);
+  expect(table.GetRight()).toBe(2);
+  const item = new SvxColumnItem(),
+    description = new SvxColumnDescription(0, 1, true);
+  for (let i = 0; i < 65536; i++) item.Append(description);
+  expect(item.Count()).toBe(0);
+  expect(item.IsConsistent()).toBe(true);
+  expect(item.IsLastAct()).toBe(false);
+  expect(item.CalcOrtho()).toBe(false);
+  item.At(65535).nEnd = 7;
+  item.SetLeft(100000);
+  const clone = item.Clone();
+  expect(clone.GetLeft()).toBe(100000);
+  expect(clone.Count()).toBe(0);
+  expect(clone.At(65535).nEnd).toBe(7);
+  expect(clone.At(65535)).not.toBe(item.At(65535));
+  expect(new SvxColumnItem(65537).GetActColumn()).toBe(1);
+});
 it.each([-1, 32768, 1.5, NaN])(
   "owned item identity rejects invalid local WhichId %s",
   /** Checks the existing bounded item identity domain. @param invalid - Invalid identity. @returns Nothing. */ (

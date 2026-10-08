@@ -1,12 +1,12 @@
 {
   "app": {
     "original": 13691,
-    "current": 13709,
-    "newCases": 18,
+    "current": 13710,
+    "newCases": 19,
     "resolved": 1,
-    "passed": 13709,
+    "passed": 13710,
     "unresolvedCount": 0,
-    "skippedObservationsRetained": 23,
+    "skippedObservationsRetained": 30,
     "passingReplay": 0,
     "originalUncaughtErrorCases": 0,
     "finalUncaughtErrorCases": 0,
@@ -24,6 +24,13 @@
         "passed": 19,
         "failed": 0,
         "skipped": 23
+      },
+      {
+        "file": "9Z9TSH.closure2.app-results.json",
+        "sha256": "facb4b445c3e07c7dca766d3d81b447bcb5067a76aceba5387056c42560dcda8",
+        "passed": 1,
+        "failed": 0,
+        "skipped": 7
       }
     ]
   },

@@ -1,0 +1,27 @@
+{
+  "profile": "upstream-absent",
+  "reason": "Actual native uint16 production contract changed; rebuild changed input and run only one genuinely new overflow case, no passing test replay",
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "exit": 0,
+      "outputSHA256": "8b0ec33426e367711aa2d51801b66c11f4913c5f77b80e7ffefbbfab0675cdf2",
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/svx/source/dialog/native-column-item.test.ts -t ^native uint16 construction and count retain raw vector ownership across wrap$ --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/9Z9TSH.closure2.app-results.json",
+      "exit": 1,
+      "outputSHA256": "bd7eac9c53de2dfbf2d1913b7934fa4a51f56ee97ab6a2fb58f7230054469fc8",
+      "unhandledErrorCount": 0,
+      "caseCounts": {
+        "passed": 1,
+        "failed": 0,
+        "skipped": 7,
+        "total": 8
+      }
+    }
+  ]
+}
