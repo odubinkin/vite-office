@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 252
+revision: 253
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-08T18:34:22.170Z"
+doc_updated_at: "2026-10-08T19:11:02.537Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -1205,6 +1205,20 @@ sections:
     Commit-msg rejected documentation scope verify, resolved with permitted task scope. Task complete recorded DONE but its generated generic verified-ID close subject failed validation; authoritative done-pending-artifact route was audited and a permitted explicit close subject committed the exact task artifacts. No implementation edits or runtime replay, and no later DONE leaf mutation.
 
     Full native shared SwTableLineFormat GetFrameFormat/ClaimFrameFormat ownership and pooling/refcounts, nested/merged/row-span semantics, complete UNO/localization/presentation/table scalar format ownership and explicit legacy DTO completeness remain genuine unresolved architecture gaps. Preserve registered IO/recovery/settings deviations. Parent and full goal remain ACTIVE/DOING; prefix694655/hashff9a9c38677f3673fecb19a60790b94f551c0f2084e3062d0dd8abfd4318ff08 remains byte-identical.
+
+    ### Iteration 241 — shared native row frame formats and indexed item-set history
+
+    Completed leaf202610081841-C4324W. Actual implementation03809acf8c537da7db76c492b3882fbfd606c5cc; verification checkpoint07d4b764bb9304aed95b9bed2ec75e77f8ec906a; close0c86e3399fa5b1fc27775957d5b0ae9a8cacccd1. Canonical SwTableLine is now a SwClient of a document-owned SwTableLineFormat/SwFrameFormat/SwFormat with native SfxItemSet and exact aTableLineSetRange. Default frame inheritance and concrete frame-size/row-split pool defaults replace per-row canonical value records. Exclusive ClaimFrameFormat retains identity; shared claim copies all native items and moves only the claiming original row. Native lcl_ProcessRowAttr-shaped operation-local old/new reuse preserves selected sharing and untouched peers. The core accepts SfxPoolItem directly, without the intermediate row DTO wrapper.
+
+    SaveTable now deduplicates direct native item sets by original shared format identity, retains numeric row format indices and reconstructs new shared owners for attribute Undo/Redo. Original row/box/text/cursor identities survive repeated replay; complete frame-size, border and vertical items are retained independently. Native row insertion shares the current source format. DTO values remain explicit builder/transport boundaries only. Mounted main UI sends native items into original row item sets; SetFormat construction boundary is not called by publication or history.
+
+    Twelve fresh cases (7native ownership/core/listener/claim/insertion,3history,2mounted) plus related modules produced297 unique app passes and11 Chromium passes with upstream physically absent/restored in finally. Four initial fresh fixture failures were corrected by creating offset2 after filling empty content; failed-only closure passed4, skipped the passing insertion case, zero passing replay. Raw partial threshold exit1 retained. All-four100% app17541lines/19261statements/4410functions/14299branches and inventory1464/1523/384/1081 bind actual targeted counters to prior240 only by whole source/maps equality or complete unchanged declaration/body/enclosing branch/all locations.313 app/38 inventory files. Unchanged inventory/infra runtime not replayed. Last full237,next247; no full241.
+
+    647of648 prior acceptance files byte-identical; one native constructor-only migration, helper type/absent-item representation only, all old assertion/literal/loop bodies retained. All315 prior metadata fields/status/default/classification/evidence prefixes retained; one new native row-format record stays unverified/partial. Six static gates, build, separate generator/source-tree/provenance/invariants/parity, routing/doctor/diff and artifact checks pass. Initial new-module ordering failure corrected by enforced lexicographic insertion, only failed source gate repeated. Scope certificate Prettier config corrected without changing old tests. Ten native files bound to pin9bc445578031fecf56086729d8e4940c77e14d65; four protected IO files and entire Writer UI source unchanged; stashc85f4a0e453dfd06d6e199554784f2c286737472 preserved. No upstream/application/Python/scripts/raw/source snapshots in AgentPlane; legitimate routing source and exact ignored framework backup only.
+
+    Actual-SHA EVALUATOR phase is the same current agent and explicitly non-independent. All19 semantic paths match actual implementation bytes; four coverage/runtime/scope/source certificates reconstructed byte-identically; quality/20261008-190836310-recovery-context/quality-report.json records pass and actual SHA. Meaningful close result avoids the previous generic subject rejection; leaf is DONE and immutable, clean tracked close.
+
+    Full native SwRowFrame registration/retargeting/destruction and typed TableLineFormatChanged/MoveTableLine hints remain unimplemented. Current stateless row frame reads its original line each query; this is not full lifecycle parity. Detached/deleted insertion row registration and native client lifetime need the next coherent fix, along with remaining pooling/full frame attributes/modified flag/nested/merged/UNO. Whole core/browser parity remains incomplete and goal ACTIVE; registered open/save/recovery/settings deviations preserved.
 id_source: "generated"
 ---
 ## Summary
@@ -2383,3 +2397,17 @@ Thirty-three fresh cases (6core/native,24transport/legacy/ODF,3mounted/explicit 
 Commit-msg rejected documentation scope verify, resolved with permitted task scope. Task complete recorded DONE but its generated generic verified-ID close subject failed validation; authoritative done-pending-artifact route was audited and a permitted explicit close subject committed the exact task artifacts. No implementation edits or runtime replay, and no later DONE leaf mutation.
 
 Full native shared SwTableLineFormat GetFrameFormat/ClaimFrameFormat ownership and pooling/refcounts, nested/merged/row-span semantics, complete UNO/localization/presentation/table scalar format ownership and explicit legacy DTO completeness remain genuine unresolved architecture gaps. Preserve registered IO/recovery/settings deviations. Parent and full goal remain ACTIVE/DOING; prefix694655/hashff9a9c38677f3673fecb19a60790b94f551c0f2084e3062d0dd8abfd4318ff08 remains byte-identical.
+
+### Iteration 241 — shared native row frame formats and indexed item-set history
+
+Completed leaf202610081841-C4324W. Actual implementation03809acf8c537da7db76c492b3882fbfd606c5cc; verification checkpoint07d4b764bb9304aed95b9bed2ec75e77f8ec906a; close0c86e3399fa5b1fc27775957d5b0ae9a8cacccd1. Canonical SwTableLine is now a SwClient of a document-owned SwTableLineFormat/SwFrameFormat/SwFormat with native SfxItemSet and exact aTableLineSetRange. Default frame inheritance and concrete frame-size/row-split pool defaults replace per-row canonical value records. Exclusive ClaimFrameFormat retains identity; shared claim copies all native items and moves only the claiming original row. Native lcl_ProcessRowAttr-shaped operation-local old/new reuse preserves selected sharing and untouched peers. The core accepts SfxPoolItem directly, without the intermediate row DTO wrapper.
+
+SaveTable now deduplicates direct native item sets by original shared format identity, retains numeric row format indices and reconstructs new shared owners for attribute Undo/Redo. Original row/box/text/cursor identities survive repeated replay; complete frame-size, border and vertical items are retained independently. Native row insertion shares the current source format. DTO values remain explicit builder/transport boundaries only. Mounted main UI sends native items into original row item sets; SetFormat construction boundary is not called by publication or history.
+
+Twelve fresh cases (7native ownership/core/listener/claim/insertion,3history,2mounted) plus related modules produced297 unique app passes and11 Chromium passes with upstream physically absent/restored in finally. Four initial fresh fixture failures were corrected by creating offset2 after filling empty content; failed-only closure passed4, skipped the passing insertion case, zero passing replay. Raw partial threshold exit1 retained. All-four100% app17541lines/19261statements/4410functions/14299branches and inventory1464/1523/384/1081 bind actual targeted counters to prior240 only by whole source/maps equality or complete unchanged declaration/body/enclosing branch/all locations.313 app/38 inventory files. Unchanged inventory/infra runtime not replayed. Last full237,next247; no full241.
+
+647of648 prior acceptance files byte-identical; one native constructor-only migration, helper type/absent-item representation only, all old assertion/literal/loop bodies retained. All315 prior metadata fields/status/default/classification/evidence prefixes retained; one new native row-format record stays unverified/partial. Six static gates, build, separate generator/source-tree/provenance/invariants/parity, routing/doctor/diff and artifact checks pass. Initial new-module ordering failure corrected by enforced lexicographic insertion, only failed source gate repeated. Scope certificate Prettier config corrected without changing old tests. Ten native files bound to pin9bc445578031fecf56086729d8e4940c77e14d65; four protected IO files and entire Writer UI source unchanged; stashc85f4a0e453dfd06d6e199554784f2c286737472 preserved. No upstream/application/Python/scripts/raw/source snapshots in AgentPlane; legitimate routing source and exact ignored framework backup only.
+
+Actual-SHA EVALUATOR phase is the same current agent and explicitly non-independent. All19 semantic paths match actual implementation bytes; four coverage/runtime/scope/source certificates reconstructed byte-identically; quality/20261008-190836310-recovery-context/quality-report.json records pass and actual SHA. Meaningful close result avoids the previous generic subject rejection; leaf is DONE and immutable, clean tracked close.
+
+Full native SwRowFrame registration/retargeting/destruction and typed TableLineFormatChanged/MoveTableLine hints remain unimplemented. Current stateless row frame reads its original line each query; this is not full lifecycle parity. Detached/deleted insertion row registration and native client lifetime need the next coherent fix, along with remaining pooling/full frame attributes/modified flag/nested/merged/UNO. Whole core/browser parity remains incomplete and goal ACTIVE; registered open/save/recovery/settings deviations preserved.
