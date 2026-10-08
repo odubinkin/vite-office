@@ -1,0 +1,206 @@
+{
+  "evaluatedSHA": "89ac353e3e287cededa015e7e0f6f45f734d1783",
+  "evaluator": "Current agent EVALUATOR phase, explicitly not independent",
+  "verdict": "pass",
+  "production": [
+    {
+      "path": "apps/office/src/sw/source/uibase/table/swtablerep.ts",
+      "sha256": "86dcd3994e8960a615cfb0b14d4e576ab236fc555e4abc064e18f15d37b55ea3",
+      "exactActualSHABytes": true,
+      "physicalLines": 226
+    },
+    {
+      "path": "apps/office/src/sw/source/ui/table/tabledlg.ts",
+      "sha256": "6f0956ea48ee3bc89b4d6dcfb81f079ead3bc36f66a8d15cba9f71cbcb1cda51",
+      "exactActualSHABytes": true,
+      "physicalLines": 593
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/shells/tabsh.ts",
+      "sha256": "b19f029f38ced8fe3f8caf16e8bcff95f151455b842a9f6e7aeecf358eb6ad04",
+      "exactActualSHABytes": true,
+      "physicalLines": 303
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx",
+      "sha256": "731bf131b29186810f26c56c3ec6e9e292490d3c0c3a004a3920b0a8c6be9652",
+      "exactActualSHABytes": true,
+      "physicalLines": 688
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/writer-view.tsx",
+      "sha256": "39ab77fd187dacc071bd644ad75f0385b8de0946bc84143e1f688c370d3aaf39",
+      "exactActualSHABytes": true,
+      "physicalLines": 983
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/table/native-hidden-table-representation.test.ts",
+      "sha256": "08e726bc9f4094ff2d6451800c0c7c42742b513e9b92bf262aa2b75006fe1431",
+      "exactActualSHABytes": true,
+      "physicalLines": 144
+    },
+    {
+      "path": "apps/office/src/sw/source/ui/table/native-hidden-table-column-page.test.ts",
+      "sha256": "ef0909a9a6e364f08180c7fd983fee8ddef18751df687dc07982a15dbf4fc908",
+      "exactActualSHABytes": true,
+      "physicalLines": 174
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/native-independent-table-properties.test.tsx",
+      "sha256": "20c38b5bf665d0b4b5f83e119ef3ce0936c055f6ce923c01c99aaea984732e29",
+      "exactActualSHABytes": true,
+      "physicalLines": 268
+    },
+    {
+      "path": "apps/office/src/sw/source/core/table/native-tabcols.test.ts",
+      "sha256": "e273117acb85605b3f4625e9f480f7f5ace9a1fe438b25ea144ed227b739784e",
+      "exactActualSHABytes": true,
+      "physicalLines": 305
+    },
+    {
+      "path": "apps/office/src/sw/source/ui/table/native-table-column-page.test.ts",
+      "sha256": "3fd339bd7f89972fd4b18a619a39d2c2706622235ccb6050dafd1b2f334d6c72",
+      "exactActualSHABytes": true,
+      "physicalLines": 365
+    },
+    {
+      "path": "apps/office/src/sw/source/ui/table/native-table-format-page.test.ts",
+      "sha256": "7822be180c2e8004429a3305df3c6266d7df21581b1d013b3dc48b990851b4b7",
+      "exactActualSHABytes": true,
+      "physicalLines": 290
+    },
+    {
+      "path": "apps/office/src/sw/source/ui/table/native-table-format-lifecycle.test.ts",
+      "sha256": "376c8751a543d6183162bd7de43afed1b2a4dd6957b3ede26fe4b54b5ce05c5c",
+      "exactActualSHABytes": true,
+      "physicalLines": 223
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-column-page-history.test.ts",
+      "sha256": "fdc438c4a411d3a6aa0415f59bb4467e4ad48c36a7e121270e419429583f61cc",
+      "exactActualSHABytes": true,
+      "physicalLines": 158
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-format-lifecycle-history.test.ts",
+      "sha256": "e4502f683e6adb9117bb977c544a0027befbd14e2bd60a15f3fd511970321bcf",
+      "exactActualSHABytes": true,
+      "physicalLines": 166
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-properties-reset-history.test.ts",
+      "sha256": "f5972d7ca0bbd451cd2a9fe6a321c66579bb2a9ee74b6a2c605192101f2e5b72",
+      "exactActualSHABytes": true,
+      "physicalLines": 143
+    },
+    {
+      "path": "docs/program/source-provenance.json",
+      "sha256": "3905d31b0f9c3cc30b5fe777f5142b480e3d71288ac0161790aaf6200a2f0bc6",
+      "exactActualSHABytes": true
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "sha256": "fc41da80fddd44b441ffab1ddf300c88ca4be95b0adbd8ee4818f86a7d36fee2",
+      "exactActualSHABytes": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/table/swtable.ts",
+      "sha256": "17615dec974377072a528414c604c3abd619fda599ba3600a36e94bcc3d5c0b0",
+      "exactActualSHABytes": true,
+      "physicalLines": 813
+    },
+    {
+      "path": "apps/office/src/sw/source/core/docnode/ndtbl.ts",
+      "sha256": "a090e5f0807fe38d44abe12d1e294e31067d61b3b18bb6119f5b490dbe33ebfd",
+      "exactActualSHABytes": true,
+      "physicalLines": 341
+    },
+    {
+      "path": "apps/office/src/sw/source/core/table/native-table-frame-width.test.ts",
+      "sha256": "56028e6cadf31b371e422b4a1603fe6817dfdf7e832c9a386d003786bbfd4882",
+      "exactActualSHABytes": true,
+      "physicalLines": 200
+    },
+    {
+      "path": "apps/office/e2e/writer-native-independent-table-properties.spec.ts",
+      "sha256": "9346ad311c1ce1548fb5766c61a0865b486b18f3bf0bd3e31efb6847ddf88632",
+      "exactActualSHABytes": true,
+      "physicalLines": 142
+    }
+  ],
+  "records": [
+    {
+      "check": "237proofScript",
+      "exit": 0,
+      "outputSHA256": "7d98a223706c5b655695c09651df84278e00ec98124212f759fbf28ce5d50820",
+      "bytes": 715
+    },
+    {
+      "check": "237censusScript",
+      "exit": 0,
+      "outputSHA256": "79315f0271564ced644d31662abebb49bca29de5904cfe2ce65519244a43204a",
+      "bytes": 2226
+    },
+    {
+      "check": "237scopeScript",
+      "exit": 0,
+      "outputSHA256": "3b0eddb32d95132c9b36bf3f59d8b8c32b3c54a000e4872105505bb09e0c2ecc",
+      "bytes": 9947
+    }
+  ],
+  "reconstructed": [
+    {
+      "path": ".agentplane/tasks/202610081522-TGQKD1/evidence/final-coverage.json",
+      "sha256": "8f95a64815b5a369b22f1ea9b1f3f33ab6e77a8fc9a8f85baec02033b24f85de",
+      "currentSHA256": "8f95a64815b5a369b22f1ea9b1f3f33ab6e77a8fc9a8f85baec02033b24f85de",
+      "byteIdentical": true
+    },
+    {
+      "path": ".agentplane/tasks/202610081522-TGQKD1/evidence/case-census.json",
+      "sha256": "8bfddc92dc063d1064864d002d48c9b11fb240af5161d603c5973bdc15592d26",
+      "currentSHA256": "8bfddc92dc063d1064864d002d48c9b11fb240af5161d603c5973bdc15592d26",
+      "byteIdentical": true
+    },
+    {
+      "path": ".agentplane/tasks/202610081522-TGQKD1/evidence/scope-final.json",
+      "sha256": "a723761e9c951e65aff1d2bd5171624f275869f6885b17b0176f68ff36e1995c",
+      "currentSHA256": "a723761e9c951e65aff1d2bd5171624f275869f6885b17b0176f68ff36e1995c",
+      "byteIdentical": true
+    }
+  ],
+  "uniqueCaseCounts": {
+    "app": 13870,
+    "inventory": 110,
+    "infra": 19,
+    "chromium": 301,
+    "freshApp": 25,
+    "freshChromium": 2
+  },
+  "passingReplay": 0,
+  "focusedSkipsRetained": 11,
+  "oneFullUpstreamAbsentProfile": true,
+  "noTestsReplayedDuringReview": true,
+  "noIndividualCounterAlteration": true,
+  "scopeCount": 21,
+  "priorAcceptanceByteIdentical": 627,
+  "metadataRecordsPreserved": 311,
+  "sourceAnchorsReviewed": 7,
+  "sourceMatchedContracts": [
+    "Native table properties use complete TColumn nWidth/bVisible intervals, original scalar defaults, deep Assign retaining destination vector, computed visible/all counts and native sorted hidden separator merge with new-position tie, left-before-old reconstruction, 3-twip rounding and right-space clamp.",
+    "Visible page fields aggregate hidden intervals and SetVisibleWidth updates the first interval while zeroing covered successors; native format reconciliation only updates the first visible-count raw entries.",
+    "Main browser captures current-cursor SwTabCols after temporary border selection restoration and accepts the actual shared SwTableRep into tabsh. HasColsChanged alone gates FillTabCols and current-line SetTabCols; explicit numeric ingress remains separate.",
+    "Native frame-size notification scales all independent original box rows with cumulative arithmetic. Represented SetFormat owns this reaction; ndtbl normalization removes the manual duplicate scale. Column SetTabCols keeps its native modify-locked counterpart by setting internal frame geometry directly.",
+    "Literal native core/page/representation and mounted direct-owner tests cover width-only frame reaction, hidden constraints, current-row column edits, cancel, geometry, owners, cursor and repeated Undo/Redo. Chromium at1280/390 verifies independent physical cells and retained ordinary text input.",
+    "Seven prior fixtures migrate only TColumn API reads/writes/ingress, retaining every literal expected width/count/owner/style/text/history value. Five width-only numeric fixtures retain their explicit legacy ingress; the genuinely new mounted native width-only case detects and resolves the missing frame reaction."
+  ],
+  "originalAppFailuresResolved": 5,
+  "newNativeWidthRedGreen": true,
+  "chromiumFreshExpectationCorrectionExplicit": true,
+  "residuals": [
+    "Full SwModify/SfxHint/SwFrameFormat attribute notification and merged/nested/spanned/RTL/vertical/percentage/pooling/signed arithmetic remain partial and unverified.",
+    "Untouched browser properties OK preserves column geometry but materializes attribute defaults into an Undo entry. The fresh Chromium test explicitly observes and undoes this existing behavior; changed-item publication parity needs the next separate task. No unchanged-dialog history parity claim.",
+    "Registered IO/open/save/recovery/settings remain preserved; no full module/upstream parity promotion."
+  ],
+  "allDeclaredGatesPassed": true,
+  "registeredIOPreserved": true
+}

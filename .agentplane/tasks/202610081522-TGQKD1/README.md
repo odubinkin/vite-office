@@ -4,7 +4,7 @@ title: "Preserve native hidden separators through table properties and current-r
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 19
+revision: 22
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,27 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-08T16:39:59.017Z"
+  updated_by: "CODER"
+  note: "PASS actual impl89ac353e3e287cededa015e7e0f6f45f734d1783; current-agent evaluator explicitly not independent reconstructed all3 certificates without test replay. Final unique13870app/110inventory/19infra/301Chromium; app/inventory all-four100 exact-source cumulative; scope21,634 prior files627 identical7 API migrations,311 metadata preserved, native7/IO/pin/stash/parent/AP gates pass. Untouched-dialog default-history and full architecture residuals explicit."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-08T16:39:58.150Z"
+  updated_by: "EVALUATOR"
+  note: "Current-agent EVALUATOR, explicitly not independent: pass at actual implementation 89ac353e3e287cededa015e7e0f6f45f734d1783; source bytes and coverage/case/scope certificates reproduced without test replay."
+  evaluated_sha: "89ac353e3e287cededa015e7e0f6f45f734d1783"
+  blueprint_digest: "d07efa49aca07b5e5f45a6fbc57f72a673e7a2fcf37014b7170d229d7b40bf15"
+  evidence_refs:
+    - ".agentplane/tasks/202610081522-TGQKD1/README.md"
+    - ".agentplane/tasks/202610081522-TGQKD1/quality/20261008-163958150-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610081522-TGQKD1/quality/20261008-163958150-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610081522-TGQKD1/quality/20261008-163958150-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610081522-TGQKD1/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610081522-TGQKD1/evidence/quality-actual-sha.json"
+  findings:
+    - "Direct mounted native owner and production Chromium cover independent rows, current-line columns, width-only all-row scaling and original-owner history. Core normalization scales once. All declared gates pass; untouched-dialog attribute-default Undo materialization remains an explicit next-task gap."
 commit: null
 comments:
   -
@@ -35,8 +51,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement approved native hidden-separator table representation and current-row properties with one absent profile and exact-source evidence; standing user goal authorizes safe local parity/refactoring."
+  -
+    type: "verify"
+    at: "2026-10-08T16:39:59.017Z"
+    author: "CODER"
+    state: "ok"
+    note: "PASS actual impl89ac353e3e287cededa015e7e0f6f45f734d1783; current-agent evaluator explicitly not independent reconstructed all3 certificates without test replay. Final unique13870app/110inventory/19infra/301Chromium; app/inventory all-four100 exact-source cumulative; scope21,634 prior files627 identical7 API migrations,311 metadata preserved, native7/IO/pin/stash/parent/AP gates pass. Untouched-dialog default-history and full architecture residuals explicit."
 doc_version: 3
-doc_updated_at: "2026-10-08T16:38:36.045Z"
+doc_updated_at: "2026-10-08T16:40:20.932Z"
 doc_updated_by: "CODER"
 description: "Replace flat visible-only table dialog geometry with native TColumn width/visibility entries from current SwTabCols, preserve hidden constraints in FillTabCols, native visible column-page arithmetic, and direct accepted SwTableRep application for independent rows. Preserve registered IO/recovery and all unrelated acceptance."
 sections:
@@ -81,6 +103,8 @@ sections:
     Command: exact-source cumulative coverage reconstruction. Result: all-four app100 L17364/S19070/F4381/B14191; inventory100 L1464/S1523/F384/B1081. Actual counters from the sole profile and selected closures, whole identical source/maps and certified236 complete contiguous declaration/body/enclosing-branch/all-location bindings. App306 whole files and5 prior region bindings; inventory38 whole files. Invalid inferred V8 counts admit only entire previous identical source/map/counter certificates. No count sanitation or passing-test rerun.
 
     Command: six final static gates; five post-restoration source gates; ap doctor, policy routing, git diff --check; native-source, scope and artifact audits. Result: PASS. Native7 sources match pin9bc445578031fecf56086729d8e4940c77e14d65. Protected4 IO/bridge files identical and writer-view exact four native geometry additions reverse to the entire baseline, proving complete registered IO regions preserved. Stashc85f4a0e453dfd06d6e199554784f2c286737472 and full parent681968-character prefix5ce660c5a8ee85995b2732836471411dfedf273fb9e8da57ab43dc418b7a6241 preserved. Scope21;634 prior acceptance files with627 identical and7 declared TColumn API migrations preserving every assertion literal/owner contract;311 metadata records and field/evidence prefixes/status/default/classification preserved. No upstream/application/Python/raw maps/results in AgentPlane; only bounded English Markdown/JSON. Two pre-existing doctor warnings remain: hook readiness and historical DONE2Z3962 missing implementation hash. Actual-SHA current-agent EVALUATOR follows this checkpoint, explicitly not independent.
+
+    Actual implementation: 89ac353e3e287cededa015e7e0f6f45f734d1783. Current-agent EVALUATOR explicitly not independent: PASS at the actual SHA; coverage/case/scope reports reproduced byte-identically without running tests and every semantic path matches the commit. Quality and owner verification recorded PASS. Full module/parent/goal parity remains unclaimed.
   Rollback Plan: "Revert only the actual task-scoped implementation commit if needed, preserving existing task history, source pin, original stash and all other changes."
   Findings: |-
     Native SwTableRep now owns complete TColumn nWidth/bVisible intervals, visible/all counts, deep Assign retaining vector identity and exact hidden separator merge/order/tie/rounding. Main mounted properties capture current-cursor SwTabCols after border selection restoration, render native visible widths and accept the shared native owner into tabsh. HasColsChanged alone gates native separator changes; independent current-row boxes and hidden constraints remain coherent through history.
@@ -144,6 +168,8 @@ Command: targeted current-source build and only two genuinely new independent ta
 Command: exact-source cumulative coverage reconstruction. Result: all-four app100 L17364/S19070/F4381/B14191; inventory100 L1464/S1523/F384/B1081. Actual counters from the sole profile and selected closures, whole identical source/maps and certified236 complete contiguous declaration/body/enclosing-branch/all-location bindings. App306 whole files and5 prior region bindings; inventory38 whole files. Invalid inferred V8 counts admit only entire previous identical source/map/counter certificates. No count sanitation or passing-test rerun.
 
 Command: six final static gates; five post-restoration source gates; ap doctor, policy routing, git diff --check; native-source, scope and artifact audits. Result: PASS. Native7 sources match pin9bc445578031fecf56086729d8e4940c77e14d65. Protected4 IO/bridge files identical and writer-view exact four native geometry additions reverse to the entire baseline, proving complete registered IO regions preserved. Stashc85f4a0e453dfd06d6e199554784f2c286737472 and full parent681968-character prefix5ce660c5a8ee85995b2732836471411dfedf273fb9e8da57ab43dc418b7a6241 preserved. Scope21;634 prior acceptance files with627 identical and7 declared TColumn API migrations preserving every assertion literal/owner contract;311 metadata records and field/evidence prefixes/status/default/classification preserved. No upstream/application/Python/raw maps/results in AgentPlane; only bounded English Markdown/JSON. Two pre-existing doctor warnings remain: hook readiness and historical DONE2Z3962 missing implementation hash. Actual-SHA current-agent EVALUATOR follows this checkpoint, explicitly not independent.
+
+Actual implementation: 89ac353e3e287cededa015e7e0f6f45f734d1783. Current-agent EVALUATOR explicitly not independent: PASS at the actual SHA; coverage/case/scope reports reproduced byte-identically without running tests and every semantic path matches the commit. Quality and owner verification recorded PASS. Full module/parent/goal parity remains unclaimed.
 
 ## Rollback Plan
 
