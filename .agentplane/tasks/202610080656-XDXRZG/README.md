@@ -1,10 +1,11 @@
 ---
 id: "202610080656-XDXRZG"
 title: "Unify Writer dialog styling and responsive layout"
-status: "DOING"
+result_summary: "verified-202610080656-XDXRZG"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -18,7 +19,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-08T07:19:12.118Z"
+  updated_at: "2026-10-08T07:20:39.784Z"
   updated_by: "CODER"
   note: "verified-202610080656-XDXRZG"
   attempts: 0
@@ -40,11 +41,16 @@ quality_review:
   findings:
     - "Shared modal surfaces, padded content/actions and shrinkable responsive fields match Open/Export; no text/control collisions or horizontal overflow at the three declared viewports. Existing document handlers remain intact."
     - "Exhaustive inventory now includes the shared heading and the existing collision panel. Source provenance, module boundaries, typecheck, lint, build, static smoke, doctor and policy routing pass."
-commit: null
+commit:
+  hash: "f4edd14242cf10d0016611848f2f1570232473ed"
+  message: "🧪 XDXRZG task: record dialog layout verification and review"
 comments:
   -
     author: "CODER"
     body: "Start: Apply the approved Writer dialog visual contract and verify responsive geometry without changing document workflows."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610080656-XDXRZG. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -65,8 +71,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202610080656-XDXRZG"
+  -
+    type: "verify"
+    at: "2026-10-08T07:20:39.784Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610080656-XDXRZG"
+  -
+    type: "status"
+    at: "2026-10-08T07:20:40.493Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610080656-XDXRZG. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-08T07:19:12.337Z"
+doc_updated_at: "2026-10-08T07:20:40.495Z"
 doc_updated_by: "CODER"
 description: "Match all Writer dialogs to Open document and Export, complete Save As spacing, and eliminate overlapping controls across desktop and narrow/short viewports."
 sections:
@@ -159,6 +178,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-10-08T07:20:39.784Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610080656-XDXRZG
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-08T07:19:12.337Z, excerpt_hash=sha256:1d2415b0b45bccaafc3efed364a66edc3944e881213eff6e08196ea75a479698
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610080656-XDXRZG/blueprint/resolved-snapshot.json
+    - old_digest: 4591aec1ec002772739b53271ec9ccc53e2a21062faae437567230e8116f30f0
+    - current_digest: 4591aec1ec002772739b53271ec9ccc53e2a21062faae437567230e8116f30f0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610080656-XDXRZG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610080656-XDXRZG --result verified-202610080656-XDXRZG --commit f4edd14242cf10d0016611848f2f1570232473ed
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the task implementation commit to restore the prior dialog presentation; document model and stored content are unaffected."
   Findings: |-
@@ -173,6 +222,10 @@ sections:
     - Browser geometry initially identified the Page Style overlap, which was fixed. The new test now targets the header close button explicitly where Bookmark also has a footer Close action.
     - The browser collision fixture uses the public TXT import flow so the existing nonempty-document save requirement is satisfied.
     Residual scope: Chromium at the declared viewports is verified; no claim of native LibreOffice parity or full cross-browser certification is made. Existing doctor warnings are unrelated to dialog presentation.
+extensions:
+  implementation_commit:
+    hash: "272b23346ded43aff673d38a76dbf5c8ee0fffc6"
+    message: "🎨 XDXRZG code: unify Writer dialog styling and responsive layout"
 id_source: "generated"
 ---
 ## Summary
@@ -269,6 +322,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202610080656-XDXRZG --result verified-202610080656-XDXRZG --commit 272b23346ded43aff673d38a76dbf5c8ee0fffc6
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-08T07:20:39.784Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610080656-XDXRZG
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-08T07:19:12.337Z, excerpt_hash=sha256:1d2415b0b45bccaafc3efed364a66edc3944e881213eff6e08196ea75a479698
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610080656-XDXRZG/blueprint/resolved-snapshot.json
+- old_digest: 4591aec1ec002772739b53271ec9ccc53e2a21062faae437567230e8116f30f0
+- current_digest: 4591aec1ec002772739b53271ec9ccc53e2a21062faae437567230e8116f30f0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610080656-XDXRZG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610080656-XDXRZG --result verified-202610080656-XDXRZG --commit f4edd14242cf10d0016611848f2f1570232473ed
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
