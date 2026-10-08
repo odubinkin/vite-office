@@ -25,8 +25,8 @@ import { SwRootFrame } from "../../core/layout/newfrm";
 import { SelectionType } from "../inc/wrtsh";
 import type { SwTabCols } from "../../core/bastyp/tabcol";
 import type { SvxColumnItem } from "../../../../svx/source/dialog/rulritem";
-import { SID_RULER_BORDERS } from "../../../../svx/inc/svxids";
-import { createSwTableColumnItem } from "./viewtab";
+import { SID_RULER_BORDERS, SID_RULER_ROWS_VERTICAL } from "../../../../svx/inc/svxids";
+import { createSwTableColumnItem, createSwTableRowItem } from "./viewtab";
 
 /** Persistent Writer view joining SwDocShell, SwWrtShell, and frame dispatch. */
 export class SwView {
@@ -128,6 +128,15 @@ export class SwView {
       active,
       this.GetDocShell().GetDoc().GetPageDesc().GetValue().width,
       SID_RULER_BORDERS,
+    );
+  }
+
+  /** Converts horizontal-writing table rows for the native vertical ruler. @param rows - Borrowed Writer row separators. @returns Owned ruler value. */
+  public GetTableRulerRowItem(rows: SwTabCols): SvxColumnItem {
+    return createSwTableRowItem(
+      rows,
+      this.GetDocShell().GetDoc().GetPageDesc().GetValue().height,
+      SID_RULER_ROWS_VERTICAL,
     );
   }
 

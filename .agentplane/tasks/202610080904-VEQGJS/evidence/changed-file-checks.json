@@ -1,0 +1,16 @@
+{
+  "records": [
+    {
+      "command": "Unchanged JSDoc validator on approved changed code/acceptance paths; actual physical-line count",
+      "exit": 0,
+      "errors": [],
+      "physicalLines": {
+        "apps/office/src/svx/inc/svxids.ts": 10,
+        "apps/office/src/sw/source/uibase/uiview/viewtab.ts": 74,
+        "apps/office/src/sw/source/uibase/uiview/view.ts": 294,
+        "apps/office/src/sw/source/uibase/docvw/edtwin.ts": 679,
+        "apps/office/src/sw/source/uibase/uiview/native-row-item-boundary.test.ts": 270
+      }
+    }
+  ]
+}

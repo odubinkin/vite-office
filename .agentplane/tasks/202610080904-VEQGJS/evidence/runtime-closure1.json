@@ -1,0 +1,27 @@
+{
+  "profile": "upstream-absent",
+  "reason": "Original new-row test failed: apply selected item end directly, retain following-row delta. Changed-input build and exactly original failed case only, no passing replay",
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "exit": 0,
+      "outputSHA256": "4465e76c401e360fcd0de33d823934950c14ed893757ca000b9fe6a68ef31bf9",
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/source/uibase/uiview/native-row-item-boundary.test.ts -t ^document row separator range uses source item bounds and preserves original owners through history$ --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/VEQGJS.closure1.app-results.json",
+      "exit": 1,
+      "outputSHA256": "76d26a7633d2db3ba7adc64f23ecefa2cb1bb68a369abbf249e87f9216c91a13",
+      "unhandledErrorCount": 0,
+      "caseCounts": {
+        "passed": 1,
+        "failed": 0,
+        "skipped": 8,
+        "total": 9
+      }
+    }
+  ]
+}

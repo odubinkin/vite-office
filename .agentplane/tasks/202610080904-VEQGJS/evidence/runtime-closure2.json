@@ -1,0 +1,20 @@
+{
+  "profile": "upstream-absent",
+  "reason": "Exactly five genuinely new row-to-column handoff cases across separator/margin/modifier modes, closing changed method current-source proof gaps; no build or passing-case replay",
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/source/uibase/uiview/native-row-item-boundary.test.ts -t ^native row-to-column capture handoff .* --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/VEQGJS.closure2.app-results.json",
+      "exit": 1,
+      "outputSHA256": "7feade983c590a58cb1adee823d1f047e98c8c6fb7bc8da93ced25a6f27853cc",
+      "unhandledErrorCount": 0,
+      "caseCounts": {
+        "passed": 5,
+        "failed": 0,
+        "skipped": 9,
+        "total": 14
+      }
+    }
+  ]
+}

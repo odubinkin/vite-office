@@ -3247,18 +3247,28 @@
           {
             "path": "apps/office/src/sw/source/uibase/uiview/native-column-item-boundary.test.ts",
             "marker": "document column drag consumes native view item"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/uiview/native-row-item-boundary.test.ts",
+            "marker": "native row value"
           }
         ],
         "upstream": [
           {
             "path": "vendor/libreoffice-reference/include/svx/svxids.hrc",
             "marker": "SID_ATTR_BORDER_INNER"
+          },
+          {
+            "path": "vendor/libreoffice-reference/include/svx/svxids.hrc",
+            "marker": "SID_RULER_ROWS_VERTICAL"
           }
         ]
       },
       "localPath": "apps/office/src/svx/inc/svxids.ts",
       "localSymbols": [
-        "SID_ATTR_BORDER_INNER"
+        "SID_ATTR_BORDER_INNER",
+        "SID_RULER_ROWS",
+        "SID_RULER_ROWS_VERTICAL"
       ],
       "omittedResponsibilities": [
         "Full source-module obligations remain unverified; Iteration206 draft: scalar kernel cell border/padding storage is replaced by owned SvxBoxItem plus the existing vertical item. Represented lines retain native color/style/width/component arithmetic, signed16 distances/default0, cloning, metrics and supported UNO values; SvxBoxInfoItem retains native validity127. SetTabBorders consumes SfxItemSet and distributes flat union outer/inner lines using source validity rules. Insertion defaults55twips/black10twip lines and0/no-border are preserved. Process/storage uses complete primitive native state with legacy scalar ingress only; ODF and browser paint carry four independent sides. Initial static and upstream-absent runtime verification are pending. Complete native color shading/theme/Word/macros/fly/vertical/RTL/follow/shared-format behavior, per-edge/common-state border widgets and full parity remain unverified. All existing statuses/defaults/evidence/registered I/O/recovery exceptions are preserved."
@@ -3266,7 +3276,8 @@
       "preservedResponsibilities": [
         "Owns the represented native source responsibility and explicit browser transport/filter boundary. Verification pending.",
         "Iteration206 verified closure: the earlier draft pending statement is historical. Native box/info/line ownership, supported values/defaults/metrics, flat source-defined border distribution, original graph and history, complete primitive transport and four-edge ODF/browser paint passed one full upstream-absent profile with failed/new-case-only closures. Current app and inventory actual counters each reach100% lines/statements/functions/branches under complete identical-source/maps or complete contiguous mapped-region proof. All550 prior acceptance contracts are preserved by522 byte-identical files and28 exact native-representation AST migrations; six new acceptance files and two new infrastructure cases are added. Full per-edge/common-state widgets, native themes/shading/Word and RTL/vertical/follow/shared-format completeness remain unverified; no semantic status or registered I/O/recovery exception is promoted.",
-        "Iteration229 introduces actual production-used SvxColumnItem ownership at the SwView table-column conversion boundary from StateTabWin. Native visibility/end/min/max descriptions replace direct SwTabCols interpretation during document column drag admission, while original SwTabCols remains model/preview/apply data. Native defaults, upper-only65535 description clamp, copied Append/Clone and equality excluding ortho are retained. The svx->svl edge is native Library_svx-owned, with no SW/browser reverse dependency. Full SvxRuler/SfxBindings slots, complete StateTabWin frames/rows, pooled refcount mutability and UNO member queries/PutValue remain partial or unverified. Registered IO deviations and all semantic states/defaults/classes remain unchanged."
+        "Iteration229 introduces actual production-used SvxColumnItem ownership at the SwView table-column conversion boundary from StateTabWin. Native visibility/end/min/max descriptions replace direct SwTabCols interpretation during document column drag admission, while original SwTabCols remains model/preview/apply data. Native defaults, upper-only65535 description clamp, copied Append/Clone and equality excluding ortho are retained. The svx->svl edge is native Library_svx-owned, with no SW/browser reverse dependency. Full SvxRuler/SfxBindings slots, complete StateTabWin frames/rows, pooled refcount mutability and UNO member queries/PutValue remain partial or unverified. Registered IO deviations and all semantic states/defaults/classes remain unchanged.",
+        "Iteration230 adds the actual StateTabWin row value branch and source SID_RULER_ROWS/ROWS_VERTICAL constants. Source row edges use LeftMin and page extent, active0, clamped uint16 frame distances, same-index vertical orientation with zero-clamped limits and the source invisible constrained tail. SwView supplies production horizontal-writing row items; document row capture consumes their separator visibility/end/min/max, internal glMinFrame maximum guard and previous-separator bottom-margin bounds instead of unrestricted RightMax. Native SwTabCols remains original model/preview/apply and follow-flow/last-row guard owner. Full ruler/slot/page-frame state, vertical document dragging, snapping/protection/modifier rows and single-row paragraph-indent margin-range context remain partial; no broad promotion, old statuses/defaults/classes and registered IO deviations remain unchanged."
       ],
       "status": "mapped",
       "upstreamPath": "include/svx/svxids.hrc",
@@ -20073,6 +20084,10 @@
           {
             "path": "apps/office/src/sw/source/uibase/uiview/native-column-item-boundary.test.ts",
             "marker": "document column drag consumes native view item"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/uiview/native-row-item-boundary.test.ts",
+            "marker": "native row value"
           }
         ],
         "upstream": [
@@ -20247,6 +20262,14 @@
           {
             "path": "vendor/libreoffice-reference/svx/source/dialog/svxruler.cxx",
             "marker": "SvxRuler::DragBorders"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/uibase/uiview/viewtab.cxx",
+            "marker": "const int nLft = aTabCols.GetLeftMin();"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/uibase/uiview/viewtab.cxx",
+            "marker": "aTabCols[i] = rCol.nEnd + aTabCols.GetLeft();"
           }
         ]
       },
@@ -20254,7 +20277,8 @@
       "localSymbols": [
         "SwEditWin",
         "RulerColumnDrag",
-        "GetTableColumnDragPosition"
+        "GetTableColumnDragPosition",
+        "RulerRowDrag"
       ],
       "omittedResponsibilities": [
         "Native VCL painting, accessibility, drag services, and platform event classes remain in the browser adapter."
@@ -20281,7 +20305,9 @@
         "Iteration225 restores exact native keyboard modifier mask at browser table MouseButtonDown ingress. Solitary Shift on horizontal LTR internal column borders selects source SvxRuler EvalModifier OBJECT_SIZE_LINEAR, translating following separators right-to-left with five-device-pixel constraints and visible CalcPropMaxRight limit. Each preview starts from original SwTabCols; original document/shell/history ownership, row solitary-Shift ignore, mouse/Enter/Escape and3UndoRedo/ODT/Chromium geometry retained. This ports only that existing drag branch; full SvxRuler owner, proportional/current-line/snapping/margin modifier/vertical/RTL/merged/nested/protection behavior remain partial or unverified. All classifications/statuses/defaults and registered IO deviations unchanged.",
         "Iteration226 ports exact solitary KEY_MOD1 internal horizontal LTR table-column dragging from pinned SvxRuler EvalModifier, PrepareProportional_Impl, DragBorders and CalcPropMaxRight. Following separators use native uint16 per-thousand shares, integer device-pixel division and float minimum-width reserve. Ordinary, solitary Shift, row and margin branches retain existing ownership and semantics; original shell cursor, list marker, ODT and repeated history retained. One original mounted pure-Ctrl expectation migrates after its actual failure; every other prior acceptance input and assertion remains unchanged. Full SvxRuler/SfxColumnItem ownership, current-line/snapping/margin modifiers, vertical/RTL/merged/nested/protection behavior remain partial or unverified. All classifications, statuses, defaults and registered IO deviations preserved.",
         "Iteration227 aligns native view ownership: SwEditWin retains required m_rView and GetView, resolves every shell operation through that exact source view; SwView binds itself to both persistent edit window and SwWrtShell, whose GetView retains its creation owner rather than another currently active DocShell view. Direct shell injection into SwEditWin is removed, no legacy overload/default/fake view. Detached core SwWrtShell remains an explicit model-port construction boundary and rejects GetView without an attached real view. Exactly41 prior fixtures migrate actual owner construction/imports/formatter with every original assertion and input retained. Cross-document/shared-shell-view/lifecycle/layout/cursor/typing/history native tests and real browser suite validate ownership. This is a prerequisite; full SvxRuler/SvxColumnItem/slot geometry ownership and exhaustive parity remain partial. All prior defaults/status/classes and registered IO deviations retained.",
-        "Iteration229 introduces actual production-used SvxColumnItem ownership at the SwView table-column conversion boundary from StateTabWin. Native visibility/end/min/max descriptions replace direct SwTabCols interpretation during document column drag admission, while original SwTabCols remains model/preview/apply data. Native defaults, upper-only65535 description clamp, copied Append/Clone and equality excluding ortho are retained. The svx->svl edge is native Library_svx-owned, with no SW/browser reverse dependency. Full SvxRuler/SfxBindings slots, complete StateTabWin frames/rows, pooled refcount mutability and UNO member queries/PutValue remain partial or unverified. Registered IO deviations and all semantic states/defaults/classes remain unchanged."
+        "Iteration229 introduces actual production-used SvxColumnItem ownership at the SwView table-column conversion boundary from StateTabWin. Native visibility/end/min/max descriptions replace direct SwTabCols interpretation during document column drag admission, while original SwTabCols remains model/preview/apply data. Native defaults, upper-only65535 description clamp, copied Append/Clone and equality excluding ortho are retained. The svx->svl edge is native Library_svx-owned, with no SW/browser reverse dependency. Full SvxRuler/SfxBindings slots, complete StateTabWin frames/rows, pooled refcount mutability and UNO member queries/PutValue remain partial or unverified. Registered IO deviations and all semantic states/defaults/classes remain unchanged.",
+        "Iteration230 adds the actual StateTabWin row value branch and source SID_RULER_ROWS/ROWS_VERTICAL constants. Source row edges use LeftMin and page extent, active0, clamped uint16 frame distances, same-index vertical orientation with zero-clamped limits and the source invisible constrained tail. SwView supplies production horizontal-writing row items; document row capture consumes their separator visibility/end/min/max, internal glMinFrame maximum guard and previous-separator bottom-margin bounds instead of unrestricted RightMax. Native SwTabCols remains original model/preview/apply and follow-flow/last-row guard owner. Full ruler/slot/page-frame state, vertical document dragging, snapping/protection/modifier rows and single-row paragraph-indent margin-range context remain partial; no broad promotion, old statuses/defaults/classes and registered IO deviations remain unchanged.",
+        "Iteration230 original new native-boundary test exposed stale selected-row translation: the item end was admitted but the old carrier position was incremented. Source ExecuteTabWin sets row separators from rCol.nEnd plus Left. Selected row preview now assigns that absolute native position; only following separators and table end translate by the captured delta. The original failed case closes with native item position/min/max, original graph and undo/redo. Five genuinely new three-by-three row-to-column handoffs cover independent items and ordinary/Shift/Ctrl/separate margins after cancellation, without passing-case replay."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/uibase/docvw/edtwin.cxx",
@@ -21238,6 +21264,10 @@
           {
             "path": "apps/office/src/sw/source/uibase/uiview/native-column-item-boundary.test.ts",
             "marker": "document column drag consumes native view item"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/uiview/native-row-item-boundary.test.ts",
+            "marker": "native row value"
           }
         ],
         "upstream": [
@@ -21273,7 +21303,8 @@
       },
       "localPath": "apps/office/src/sw/source/uibase/uiview/view.ts",
       "localSymbols": [
-        "SwView"
+        "SwView",
+        "GetTableRulerRowItem"
       ],
       "omittedResponsibilities": [
         "Upstream obligations outside SwView, SwView::GetDispatcher, SwView::ImpSetVerb, and SwView::GotFocus remain intentionally omitted; browser workflows, projections, subscriptions, and clipboard/file/storage adapters are owned under sw/browser."
@@ -21288,7 +21319,8 @@
         "Iteration218 native cursor marked-list integration pending verification: cursor ID/depth bookkeeping, source field-shading gate, counted-rule query and forced label-to-label refresh; existing actual view options shared without duplicate presentation state. Marker painting/ruler/config persistence and hidden-redline tree variants remain unverified; no prior status/default/exception promotion.",
         "Iteration218 verified native cursor-mark ownership: empty list ID/level0 defaults, exact pair noop, field-shading-gated former clear/new mark with bookkeeping retained while disabled; original counted-rule/membership query and nontext early return; SetInFrontOfLabel update plus forced refresh on label-to-label admission. Existing actual view-option identity shared through cursor-shell ancestor; native appearance bits and configured desktop defaults retained, setters do not implicitly redraw. SwCallLink-shaped SetPaM transaction publishes repaint and final cursor state together; original587 acceptance untouched. Full color/config persistence, marker painting/ruler and hidden-redline property/tree variants remain unverified. All prior states/defaults/exceptions preserved.",
         "Iteration227 aligns native view ownership: SwEditWin retains required m_rView and GetView, resolves every shell operation through that exact source view; SwView binds itself to both persistent edit window and SwWrtShell, whose GetView retains its creation owner rather than another currently active DocShell view. Direct shell injection into SwEditWin is removed, no legacy overload/default/fake view. Detached core SwWrtShell remains an explicit model-port construction boundary and rejects GetView without an attached real view. Exactly41 prior fixtures migrate actual owner construction/imports/formatter with every original assertion and input retained. Cross-document/shared-shell-view/lifecycle/layout/cursor/typing/history native tests and real browser suite validate ownership. This is a prerequisite; full SvxRuler/SvxColumnItem/slot geometry ownership and exhaustive parity remain partial. All prior defaults/status/classes and registered IO deviations retained.",
-        "Iteration229 introduces actual production-used SvxColumnItem ownership at the SwView table-column conversion boundary from StateTabWin. Native visibility/end/min/max descriptions replace direct SwTabCols interpretation during document column drag admission, while original SwTabCols remains model/preview/apply data. Native defaults, upper-only65535 description clamp, copied Append/Clone and equality excluding ortho are retained. The svx->svl edge is native Library_svx-owned, with no SW/browser reverse dependency. Full SvxRuler/SfxBindings slots, complete StateTabWin frames/rows, pooled refcount mutability and UNO member queries/PutValue remain partial or unverified. Registered IO deviations and all semantic states/defaults/classes remain unchanged."
+        "Iteration229 introduces actual production-used SvxColumnItem ownership at the SwView table-column conversion boundary from StateTabWin. Native visibility/end/min/max descriptions replace direct SwTabCols interpretation during document column drag admission, while original SwTabCols remains model/preview/apply data. Native defaults, upper-only65535 description clamp, copied Append/Clone and equality excluding ortho are retained. The svx->svl edge is native Library_svx-owned, with no SW/browser reverse dependency. Full SvxRuler/SfxBindings slots, complete StateTabWin frames/rows, pooled refcount mutability and UNO member queries/PutValue remain partial or unverified. Registered IO deviations and all semantic states/defaults/classes remain unchanged.",
+        "Iteration230 adds the actual StateTabWin row value branch and source SID_RULER_ROWS/ROWS_VERTICAL constants. Source row edges use LeftMin and page extent, active0, clamped uint16 frame distances, same-index vertical orientation with zero-clamped limits and the source invisible constrained tail. SwView supplies production horizontal-writing row items; document row capture consumes their separator visibility/end/min/max, internal glMinFrame maximum guard and previous-separator bottom-margin bounds instead of unrestricted RightMax. Native SwTabCols remains original model/preview/apply and follow-flow/last-row guard owner. Full ruler/slot/page-frame state, vertical document dragging, snapping/protection/modifier rows and single-row paragraph-indent margin-range context remain partial; no broad promotion, old statuses/defaults/classes and registered IO deviations remain unchanged."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/uibase/uiview/view.cxx",
@@ -21341,13 +21373,15 @@
       "localPath": "apps/office/src/sw/source/uibase/uiview/viewtab.ts",
       "upstreamPath": "sw/source/uibase/uiview/viewtab.cxx",
       "localSymbols": [
-        "createSwTableColumnItem"
+        "createSwTableColumnItem",
+        "createSwTableRowItem"
       ],
       "upstreamSymbols": [
         "SwView::StateTabWin"
       ],
       "preservedResponsibilities": [
-        "Iteration229 introduces actual production-used SvxColumnItem ownership at the SwView table-column conversion boundary from StateTabWin. Native visibility/end/min/max descriptions replace direct SwTabCols interpretation during document column drag admission, while original SwTabCols remains model/preview/apply data. Native defaults, upper-only65535 description clamp, copied Append/Clone and equality excluding ortho are retained. The svx->svl edge is native Library_svx-owned, with no SW/browser reverse dependency. Full SvxRuler/SfxBindings slots, complete StateTabWin frames/rows, pooled refcount mutability and UNO member queries/PutValue remain partial or unverified. Registered IO deviations and all semantic states/defaults/classes remain unchanged."
+        "Iteration229 introduces actual production-used SvxColumnItem ownership at the SwView table-column conversion boundary from StateTabWin. Native visibility/end/min/max descriptions replace direct SwTabCols interpretation during document column drag admission, while original SwTabCols remains model/preview/apply data. Native defaults, upper-only65535 description clamp, copied Append/Clone and equality excluding ortho are retained. The svx->svl edge is native Library_svx-owned, with no SW/browser reverse dependency. Full SvxRuler/SfxBindings slots, complete StateTabWin frames/rows, pooled refcount mutability and UNO member queries/PutValue remain partial or unverified. Registered IO deviations and all semantic states/defaults/classes remain unchanged.",
+        "Iteration230 adds the actual StateTabWin row value branch and source SID_RULER_ROWS/ROWS_VERTICAL constants. Source row edges use LeftMin and page extent, active0, clamped uint16 frame distances, same-index vertical orientation with zero-clamped limits and the source invisible constrained tail. SwView supplies production horizontal-writing row items; document row capture consumes their separator visibility/end/min/max, internal glMinFrame maximum guard and previous-separator bottom-margin bounds instead of unrestricted RightMax. Native SwTabCols remains original model/preview/apply and follow-flow/last-row guard owner. Full ruler/slot/page-frame state, vertical document dragging, snapping/protection/modifier rows and single-row paragraph-indent margin-range context remain partial; no broad promotion, old statuses/defaults/classes and registered IO deviations remain unchanged."
       ],
       "omittedResponsibilities": [
         "Full SvxRuler and native slot/frame ownership, row state conversion, member QueryValue/PutValue and SfxPoolItem refcount guards."
@@ -21361,12 +21395,20 @@
           {
             "path": "apps/office/src/sw/source/uibase/uiview/native-column-item-boundary.test.ts",
             "marker": "native table column state"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/uiview/native-row-item-boundary.test.ts",
+            "marker": "native row value"
           }
         ],
         "upstream": [
           {
             "path": "vendor/libreoffice-reference/sw/source/uibase/uiview/viewtab.cxx",
             "marker": "SwView::StateTabWin"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/uibase/uiview/viewtab.cxx",
+            "marker": "const int nLft = aTabCols.GetLeftMin();"
           }
         ]
       }

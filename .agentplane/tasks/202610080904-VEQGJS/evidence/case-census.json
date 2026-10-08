@@ -1,0 +1,79 @@
+{
+  "app": {
+    "original": 13720,
+    "current": 13725,
+    "newCases": 5,
+    "resolved": 1,
+    "passed": 13725,
+    "unresolvedCount": 0,
+    "skippedObservationsRetained": 17,
+    "passingReplay": 0,
+    "originalUncaughtErrorCases": 0,
+    "finalUncaughtErrorCases": 0,
+    "inputs": [
+      {
+        "file": "VEQGJS.app-results.json",
+        "sha256": "cdaa3c88b19b41ca865b149cc6aa6c8dc4ea4ca845629d4e5dcb3938c4213dcf",
+        "passed": 13719,
+        "failed": 1,
+        "skipped": 0
+      },
+      {
+        "file": "VEQGJS.closure1.app-results.json",
+        "sha256": "019301852f5f47783e48f9739f49447ee64993127f5ffea4395dc68472ae1be6",
+        "passed": 1,
+        "failed": 0,
+        "skipped": 8
+      },
+      {
+        "file": "VEQGJS.closure2.app-results.json",
+        "sha256": "8c81c1e57c3150749299e06b725b6a23d516a22eea66d3e8850ec5df25bac726",
+        "passed": 5,
+        "failed": 0,
+        "skipped": 9
+      }
+    ]
+  },
+  "inventory": {
+    "original": 110,
+    "current": 110,
+    "newCases": 0,
+    "resolved": 0,
+    "passed": 110,
+    "unresolvedCount": 0,
+    "skippedObservationsRetained": 0,
+    "passingReplay": 0,
+    "originalUncaughtErrorCases": 0,
+    "finalUncaughtErrorCases": 0,
+    "inputs": [
+      {
+        "file": "VEQGJS.inventory-results.json",
+        "sha256": "f8a2a120d5f8f5e6a53e21f039abc3267f8e7455bdca429af30abdc4621238d8",
+        "passed": 110,
+        "failed": 0,
+        "skipped": 0
+      }
+    ]
+  },
+  "chromium": {
+    "current": 299,
+    "passed": 299,
+    "unresolvedCount": 0,
+    "passingReplay": 0,
+    "inputs": [
+      {
+        "file": "VEQGJS.chromium-results.json",
+        "sha256": "611d977e3342eaf6de08cae963635296527a3e7f86f19dc8bb7973164c3a013e",
+        "counts": {
+          "startTime": "2026-10-08T09:22:25.594Z",
+          "duration": 467014.38399999996,
+          "expected": 299,
+          "skipped": 0,
+          "unexpected": 0,
+          "flaky": 0
+        }
+      }
+    ]
+  },
+  "failures": []
+}

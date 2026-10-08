@@ -1,0 +1,46 @@
+{
+  "base": "a8b7b5da26ec67ea34619410511027e697204968",
+  "semanticPaths": [
+    "apps/office/src/svx/inc/svxids.ts",
+    "apps/office/src/sw/source/uibase/docvw/edtwin.ts",
+    "apps/office/src/sw/source/uibase/uiview/native-row-item-boundary.test.ts",
+    "apps/office/src/sw/source/uibase/uiview/view.ts",
+    "apps/office/src/sw/source/uibase/uiview/viewtab.ts",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/source-provenance.json"
+  ],
+  "scopeCount": 7,
+  "priorAcceptanceFiles": 618,
+  "byteIdenticalAcceptanceFiles": 618,
+  "exactSourceBackedMigrations": [],
+  "newAcceptanceFiles": [
+    "apps/office/src/sw/source/uibase/uiview/native-row-item-boundary.test.ts"
+  ],
+  "metadata": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "oldRecords": 307,
+      "currentRecords": 307,
+      "allPriorFieldsPrefixesAndStatusesPreserved": true,
+      "extendedPartialModules": [
+        "apps/office/src/svx/inc/svxids.ts",
+        "apps/office/src/sw/source/uibase/uiview/viewtab.ts",
+        "apps/office/src/sw/source/uibase/uiview/view.ts",
+        "apps/office/src/sw/source/uibase/docvw/edtwin.ts"
+      ]
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "oldRecords": 307,
+      "currentRecords": 307,
+      "allPriorFieldsPrefixesAndStatusesPreserved": true,
+      "extendedPartialModules": [
+        "apps/office/src/svx/inc/svxids.ts",
+        "apps/office/src/sw/source/uibase/uiview/viewtab.ts",
+        "apps/office/src/sw/source/uibase/uiview/view.ts",
+        "apps/office/src/sw/source/uibase/docvw/edtwin.ts"
+      ]
+    }
+  ],
+  "failures": []
+}

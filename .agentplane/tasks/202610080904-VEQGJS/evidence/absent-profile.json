@@ -1,0 +1,189 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/svx/inc/svxids.ts": "68136fbd6e272c3449c25ef02e66c4e75f51b8e125095c1837d8b945c8a4d1e0",
+    "apps/office/src/sw/source/uibase/uiview/viewtab.ts": "97c1e0d03b66dadf7588091622fdc128003a350f8f35c713f37af4cac346b35d",
+    "apps/office/src/sw/source/uibase/uiview/view.ts": "e8a6d8c8342991101c576cd0a0b5606587539b74d2e7720881bf4acd35ce56e0",
+    "apps/office/src/sw/source/uibase/docvw/edtwin.ts": "3863339b3abbc5434eddd198ca228a2c6700129ddc3ead8f688cc1fbe28194a2",
+    "apps/office/src/sw/source/uibase/uiview/native-row-item-boundary.test.ts": "491e4e257711a85b8a54bb69e05cae27be42d8f196246ecc3e78f24d014b6022",
+    "docs/program/source-provenance.json": "aecc2fb79e6c8f226532a7710d830b9cc67bdc1c6cfa94ecce538b34e85874bb",
+    "docs/program/parity/runtime-inventory.json": "79f0d8c035a141167cc742afc067be3d49c35932f7819c6a4879751c0c66e191"
+  },
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1443,
+      "sha256": "27ceda20d77386b4b25e64cac6e23f3e1a2ad3e646884ac0404b2872801822cd",
+      "totals": [],
+      "failedCases": [],
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/VEQGJS.app-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 78595,
+      "sha256": "6b0435089c5906474edd540dac760e58fcf8407ed2efbf3b93de0a4a99c38ab7",
+      "totals": [
+        "Test Files  1 failed | 459 passed (460)",
+        "Tests  1 failed | 13719 passed (13720)"
+      ],
+      "failedCases": [
+        {
+          "name": "apps/office/src/sw/source/uibase/uiview/native-row-item-boundary.test.ts > document row separator range uses source item bounds and preserves original owners through history",
+          "assertion": [
+            "AssertionError: expected 1095 to be 1125 // Object.is equality"
+          ]
+        }
+      ],
+      "caseCounts": {
+        "passed": 13719,
+        "failed": 1,
+        "skipped": 0,
+        "total": 13720
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 16915,
+          "covered": 16913,
+          "skipped": 0,
+          "pct": 99.98
+        },
+        "statements": {
+          "total": 18577,
+          "covered": 18575,
+          "skipped": 0,
+          "pct": 99.98
+        },
+        "functions": {
+          "total": 4306,
+          "covered": 4305,
+          "skipped": 0,
+          "pct": 99.97
+        },
+        "branches": {
+          "total": 13981,
+          "covered": 13978,
+          "skipped": 0,
+          "pct": 99.97
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverage": {
+        "lines": 99.98,
+        "statements": 99.98,
+        "functions": 99.97,
+        "branches": 99.97
+      },
+      "incompleteFileCount": 4,
+      "coverageMapSHA256": "996ec951ccf55b920ee469f5b1df9db7c17c79122d760ec4d7d222c937704338",
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "inventory",
+      "command": "npm run test:inventory:coverage -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/VEQGJS.inventory-results.json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 40703,
+      "sha256": "754a42b8cc2e095b85c6003671da5122e8cf839b691295dab687516770fcecf9",
+      "totals": [
+        "Test Files  36 passed (36)",
+        "Tests  110 passed (110)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "passed": 110,
+        "failed": 0,
+        "skipped": 0,
+        "total": 110
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 1464,
+          "covered": 1464,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 1523,
+          "covered": 1523,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 384,
+          "covered": 384,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 1081,
+          "covered": 1081,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100
+      },
+      "incompleteFileCount": 0,
+      "coverageMapSHA256": "1b997a79b3a00730b5ff4c93ec6da52e902595fca4233039d68506bc5c544df3",
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "scripts",
+      "command": "npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts scripts/check-module-boundaries.test.ts scripts/check-legacy-font-boundary.test.ts scripts/native-column-item-boundary.test.ts",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 224,
+      "sha256": "df9961464ed37e3496f6e9e659db8587a517198c01c4a55a4a09aafbf98fd488",
+      "totals": [
+        "Test Files  5 passed (5)",
+        "Tests  16 passed (16)"
+      ],
+      "failedCases": [],
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 41495,
+      "sha256": "fe525013e7f64377d42becf1a0ffb6e35a2e008833ee9892f46f4372af937b9d",
+      "totals": [
+        "299 passed (7.8m)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "startTime": "2026-10-08T09:22:25.594Z",
+        "duration": 467014.38399999996,
+        "expected": 299,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "unhandledErrorCount": 0
+    }
+  ]
+}

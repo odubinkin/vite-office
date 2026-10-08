@@ -267,14 +267,17 @@ export class SwEditWin {
       !this.m_rView.GetWrtShell().GetMouseTabRows(original, point)
     )
       return false;
-    const rect = (hit.frame.mouseGeometry as NonNullable<SwTabFrame["mouseGeometry"]>).rect,
+    const rows = this.m_rView.GetTableRulerRowItem(original),
+      rect = (hit.frame.mouseGeometry as NonNullable<SwTabFrame["mouseGeometry"]>).rect,
       scale = original.GetRight() / (rect.bottom - rect.top),
       origin = rect.top;
     let index = -1,
       distance = Infinity;
     for (let i = 0; i < original.Count(); i++) {
-      const difference = Math.abs(origin + original.GetEntry(i).nPos / scale - point.y);
-      if (!original.IsHidden(i) && difference <= 5 && difference < distance) {
+      const difference = Math.abs(
+        origin + (rows.At(i).nEnd + original.GetLeft()) / scale - point.y,
+      );
+      if (rows.At(i).bVisible && difference <= 5 && difference < distance) {
         index = i;
         distance = difference;
       }
@@ -287,9 +290,16 @@ export class SwEditWin {
         index === original.Count()
           ? index === 0
             ? 0
-            : original.GetEntry(index - 1).nPos
-          : original.GetEntry(index).nMin,
-      position = index === original.Count() ? original.GetRight() : original.GetEntry(index).nPos;
+            : rows.At(index - 1).nEnd + original.GetLeft()
+          : rows.At(index).nEndMin + original.GetLeft(),
+      position =
+        index === original.Count() ? original.GetRight() : rows.At(index).nEnd + original.GetLeft(),
+      maximum =
+        index === original.Count()
+          ? index === 0
+            ? original.GetRightMax()
+            : rows.At(index - 1).nEndMax + original.GetLeft()
+          : rows.At(index).nEndMax + original.GetLeft() - 5 * scale;
     this.tableBorderDrag = {
       axis: "row",
       start: point,
@@ -300,7 +310,7 @@ export class SwEditWin {
       origin,
       scale,
       minimum: minimum + 5 * scale,
-      maximum: original.GetRightMax(),
+      maximum,
       linear: false,
       position,
     };
@@ -344,7 +354,9 @@ export class SwEditWin {
       if (drag.axis === "row") {
         const delta = drag.position - drag.initialPosition;
         drag.next.Assign(drag.original);
-        for (let i = drag.index; i < drag.next.Count(); i++) drag.next.GetEntry(i).nPos += delta;
+        for (let i = drag.index; i < drag.next.Count(); i++)
+          drag.next.GetEntry(i).nPos =
+            i === drag.index ? drag.position : drag.original.GetEntry(i).nPos + delta;
         drag.next.SetRight(drag.original.GetRight() + delta);
       } else if (drag.linear) {
         // SvxRuler::DragBorders OBJECT_SIZE_LINEAR visits following borders
