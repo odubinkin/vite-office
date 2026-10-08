@@ -1,0 +1,17 @@
+{
+  "profile": "upstream-absent",
+  "allowedCases": "Exactly four previously failed fresh cases; the passing insertion case remains skipped.",
+  "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/source/core/undo/native-row-frame-format-history.test.ts src/sw/browser/presentation/native-row-frame-format.test.tsx --testNamePattern=^undo restores independent complete native attributes and indexed shared topology authored=|^mounted split dialog mutates native shared row item sets and reconstructs history selected= --coverage.reportOnFailure --coverage.reporter=json-summary --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/C4324W.closure1.app-results.json",
+  "exit": 1,
+  "bytes": 2686,
+  "sha256": "bf61b7f4dc6d33ca993ea0fa7acbf7e4a63256cfccb3bd232820f2caeb662752",
+  "caseCounts": {
+    "passed": 4,
+    "failed": 0,
+    "skipped": 1,
+    "total": 5
+  },
+  "failedCases": [],
+  "coverageMapSHA256": "756fc3d97b90ec3034a347e87eb5c59a5491f1e3abadc15e5344dd32ab5ca30b",
+  "vendorRestored": true
+}
