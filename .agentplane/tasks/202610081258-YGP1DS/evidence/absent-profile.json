@@ -1,0 +1,187 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/sw/source/core/table/swtable.ts": "5760faf8351091c280246b585a2923745251a99d7a54deed1587e0cd1392a077",
+    "apps/office/src/sw/source/core/table/native-independent-table-selection.test.ts": "f1f7ca36bb8a29914d678d6f40fb22258a56e5f52345779888102d845d1d1e37",
+    "apps/office/src/sw/browser/editor/native-independent-table-selection.test.tsx": "8f9ab21282bc506773f776e159d8a534821529f51a18b970ecb4d07320261f87",
+    "docs/program/source-provenance.json": "b878e4c53358479220fc1114d6d9cb59e456a9ea9e6b00747d492a04d44e12ae",
+    "docs/program/parity/runtime-inventory.json": "5e0f161e3935d00cf509074d2715e53040d6779e6703f8c095ea79b954c8670f"
+  },
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1443,
+      "sha256": "81d9799a985b7b210e007c22d741566afea36accd9b69455d627b95cf15ff60f",
+      "totals": [],
+      "failedCases": [],
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/YGP1DS.app-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 91691,
+      "sha256": "84ca58cd9f7ac307af89e5e20af5f9e35267a8a45bb41eeced122672e8224d25",
+      "totals": [
+        "Test Files  1 failed | 467 passed (468)",
+        "Tests  1 failed | 13820 passed (13821)"
+      ],
+      "failedCases": [
+        {
+          "name": "apps/office/src/sw/source/core/table/native-independent-table-selection.test.ts > physical selection less than half overlap combines both off-range intervals",
+          "assertion": [
+            "AssertionError: expected [ SwTableBox{ …(2) }, …(4) ] to deeply equal [ SwTableBox{ …(2) }, …(3) ]"
+          ]
+        }
+      ],
+      "caseCounts": {
+        "passed": 13820,
+        "failed": 1,
+        "skipped": 0,
+        "total": 13821
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 17283,
+          "covered": 17281,
+          "skipped": 0,
+          "pct": 99.98
+        },
+        "statements": {
+          "total": 18982,
+          "covered": 18980,
+          "skipped": 0,
+          "pct": 99.98
+        },
+        "functions": {
+          "total": 4371,
+          "covered": 4370,
+          "skipped": 0,
+          "pct": 99.97
+        },
+        "branches": {
+          "total": 14160,
+          "covered": 14157,
+          "skipped": 0,
+          "pct": 99.97
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverage": {
+        "lines": 99.98,
+        "statements": 99.98,
+        "functions": 99.97,
+        "branches": 99.97
+      },
+      "incompleteFileCount": 4,
+      "coverageMapSHA256": "8835313a1d4b2610dead0f4448ef40f7d9483cba5496240c4483559a359a0493",
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "inventory",
+      "command": "npm run test:inventory:coverage -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/YGP1DS.inventory-results.json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 40779,
+      "sha256": "8e5ea30d0d8fe591292b2b2d8060de53147e4784559faa75036f07e8fd742c5e",
+      "totals": [
+        "Test Files  36 passed (36)",
+        "Tests  110 passed (110)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "passed": 110,
+        "failed": 0,
+        "skipped": 0,
+        "total": 110
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 1464,
+          "covered": 1464,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 1523,
+          "covered": 1523,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 384,
+          "covered": 384,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 1081,
+          "covered": 1081,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100
+      },
+      "incompleteFileCount": 0,
+      "coverageMapSHA256": "9635e127c1b108ec65595015714af0a2a9fa4ef884f736d77a5babb90168a400",
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "scripts",
+      "command": "npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts scripts/check-module-boundaries.test.ts scripts/check-legacy-font-boundary.test.ts scripts/native-column-item-boundary.test.ts scripts/native-ruler-boundary.test.ts",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 224,
+      "sha256": "8abaef3c918f9a3343bb049abba0abafea01f7436346a6a1ee174264fc82a75d",
+      "totals": [
+        "Test Files  6 passed (6)",
+        "Tests  19 passed (19)"
+      ],
+      "failedCases": [],
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 41460,
+      "sha256": "b2aee6773ec26de6e37d15e98281f99215372e59b1ac8dd26003463a664a7f5b",
+      "totals": [
+        "299 passed (5.4m)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "startTime": "2026-10-08T13:16:02.297Z",
+        "duration": 325043.81100000005,
+        "expected": 299,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "unhandledErrorCount": 0
+    }
+  ]
+}

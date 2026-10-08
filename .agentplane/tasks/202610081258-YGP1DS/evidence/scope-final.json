@@ -1,0 +1,35 @@
+{
+  "base": "70b2c0eb68d81d6ff05d1ef23935f0cf1cfc784d",
+  "semanticPaths": [
+    "apps/office/src/sw/browser/editor/native-independent-table-selection.test.tsx",
+    "apps/office/src/sw/source/core/table/native-independent-table-selection.test.ts",
+    "apps/office/src/sw/source/core/table/swtable.ts",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/source-provenance.json"
+  ],
+  "scopeCount": 5,
+  "priorAcceptanceFiles": 626,
+  "byteIdenticalAcceptanceFiles": 626,
+  "sourceBackedMigrations": [],
+  "newAcceptanceFiles": [
+    "apps/office/src/sw/source/core/table/native-independent-table-selection.test.ts",
+    "apps/office/src/sw/browser/editor/native-independent-table-selection.test.tsx"
+  ],
+  "metadata": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "oldRecords": 311,
+      "currentRecords": 311,
+      "priorFieldsPrefixesStatesDefaultsClassesPreserved": true,
+      "newRecords": 0
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "oldRecords": 311,
+      "currentRecords": 311,
+      "priorFieldsPrefixesStatesDefaultsClassesPreserved": true,
+      "newRecords": 0
+    }
+  ],
+  "failures": []
+}

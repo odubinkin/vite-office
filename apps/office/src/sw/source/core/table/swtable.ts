@@ -700,7 +700,31 @@ export class SwTable {
     return this.lines;
   }
 
-  /** Collects native boxes for the represented flat shared-column grid. @param start - First endpoint section. @param end - Other endpoint section. @param boxes - Replaced sorted selection. @param search - Rectangle or complete rows. @returns Nothing. */
+  /** Collects flat cells by native center and majority overlap. @param line - Original row. @param min - Left search border. @param max - Right search border. @param selected - Native identity set. @returns Nothing. */
+  private SearchSelection(
+    line: SwTableLine,
+    min: number,
+    max: number,
+    selected: Set<SwTableBox>,
+  ): void {
+    let left = 0,
+      right = 0;
+    const mid = Math.trunc((max + min) / 2);
+    for (const box of line.GetTabBoxes()) {
+      right += box.GetFrameSize().GetWidth();
+      if (right > min) {
+        const add =
+          right <= max
+            ? left >= min || right >= mid || right - min > min - left
+            : left <= mid || right - max < max - left;
+        if (add) selected.add(box);
+      }
+      if (right >= max) break;
+      left = right;
+    }
+  }
+
+  /** Collects original boxes by physical endpoint borders from swnewtable.cxx. @param start - First endpoint section. @param end - Other endpoint section. @param boxes - Replaced sorted selection. @param search - Physical range or complete rows/columns. @returns Nothing. */
   public CreateSelection(
     start: SwTableBoxStartNode,
     end: SwTableBoxStartNode,
@@ -708,27 +732,51 @@ export class SwTable {
     search: 0 | 1 | 2,
   ): void {
     boxes.length = 0;
-    const endpoints: { row: number; column: number }[] = [];
-    for (const [row, line] of this.lines.entries())
-      for (const [column, box] of line.GetTabBoxes().entries())
+    const endpoints: { row: number; min: number; max: number }[] = [],
+      selected = new Set<SwTableBox>();
+    for (const [row, line] of this.lines.entries()) {
+      let right = 0;
+      for (const box of line.GetTabBoxes()) {
+        const left = right;
+        right += box.GetFrameSize().GetWidth();
         if (box.GetStartNode() === start || box.GetStartNode() === end) {
           boxes.push(box);
-          endpoints.push({ row, column });
-          if (start === end) endpoints.push({ row, column });
+          selected.add(box);
+          endpoints.push({ row, min: left, max: right });
+          if (start === end) endpoints.push({ row, min: left, max: right });
         }
+      }
+    }
     if (endpoints.length !== 2) return;
-    const first = endpoints[0] as { row: number; column: number },
-      last = endpoints[1] as { row: number; column: number };
-    const left = Math.min(first.column, last.column),
-      right = Math.max(first.column, last.column);
+    const first = endpoints[0] as { row: number; min: number; max: number },
+      last = endpoints[1] as { row: number; min: number; max: number };
+    if (search === SwTable.SEARCH_ROW) {
+      for (let row = first.row; row <= last.row; row++)
+        for (const box of (this.lines[row] as SwTableLine).GetTabBoxes()) selected.add(box);
+    } else {
+      const minWidth = Math.min(first.max - first.min, last.max - last.min),
+        overlap = Math.min(first.max, last.max) - Math.max(first.min, last.min);
+      if (first.row === last.row || overlap + overlap < minWidth) {
+        first.min = last.min = Math.min(first.min, last.min);
+        first.max = last.max = Math.max(first.max, last.max);
+      }
+      if (search === SwTable.SEARCH_COL)
+        for (let row = 0; row < first.row; row++)
+          this.SearchSelection(this.lines[row] as SwTableLine, first.min, first.max, selected);
+      for (let row = first.row; row <= last.row; row++)
+        this.SearchSelection(
+          this.lines[row] as SwTableLine,
+          Math.min(first.min, last.min),
+          Math.max(first.max, last.max),
+          selected,
+        );
+      if (search === SwTable.SEARCH_COL)
+        for (let row = last.row + 1; row < this.lines.length; row++)
+          this.SearchSelection(this.lines[row] as SwTableLine, last.min, last.max, selected);
+    }
     boxes.length = 0;
-    for (
-      let row = search === SwTable.SEARCH_COL ? 0 : first.row;
-      row <= (search === SwTable.SEARCH_COL ? this.lines.length - 1 : last.row);
-      row++
-    )
-      for (const [column, box] of (this.lines[row] as SwTableLine).GetTabBoxes().entries())
-        if (search === SwTable.SEARCH_ROW || (column >= left && column <= right)) boxes.push(box);
+    for (const line of this.lines)
+      for (const box of line.GetTabBoxes()) if (selected.has(box)) boxes.push(box);
   }
 
   /** Stores the table-owned soft pagination hint. @returns Nothing. */

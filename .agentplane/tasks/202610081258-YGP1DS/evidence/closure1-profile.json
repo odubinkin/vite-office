@@ -1,0 +1,17 @@
+{
+  "profile": "upstream-absent",
+  "vendorRestored": true,
+  "allowedCases": "One original failed literal plus one genuinely new native trailing-majority branch case",
+  "file": "apps/office/src/sw/source/core/table/native-independent-table-selection.test.ts",
+  "pattern": "^physical selection (less than half overlap combines both off-range intervals|trailing majority selects beyond the integer midpoint)$",
+  "command": "npm run test:coverage --workspace @vite-office/office -- apps/office/src/sw/source/core/table/native-independent-table-selection.test.ts -t ^physical selection (less than half overlap combines both off-range intervals|trailing majority selects beyond the integer midpoint)$ --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/YGP1DS.closure1.app-results.json",
+  "exit": 1,
+  "outputSHA256": "e9e2887d826c264135e302c99b6b6b54375bac531f5eb37d84f70078e82da711",
+  "bytes": 33706,
+  "passed": 0,
+  "failed": 0,
+  "skipped": 0,
+  "caseTotals": [],
+  "failedCases": [],
+  "unhandledErrorCount": 0
+}
