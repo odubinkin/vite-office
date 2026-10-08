@@ -315,7 +315,10 @@ function exportWriterText(
                   row,
                 ) => ({
                   format: {
-                    keepTogether: row.GetFormat().keepTogether,
+                    keepTogether:
+                      row.GetFormat().rowSplit === undefined
+                        ? undefined
+                        : !row.GetRowSplit().GetValue(),
                     ...(row.GetFrameSize().GetHeightSizeType() === SwFrameSize.Minimum
                       ? { minHeight: row.GetFrameSize().GetHeight() }
                       : row.GetFrameSize().GetHeightSizeType() === SwFrameSize.Fixed

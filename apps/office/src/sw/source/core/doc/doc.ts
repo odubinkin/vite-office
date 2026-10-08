@@ -37,6 +37,7 @@ import {
 } from "../docnode/ndtbl1";
 import type { SwCursor } from "../crsr/swcrsr";
 import type { SwFormatFrameSize } from "../../../inc/fmtfsize";
+import type { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
 import { SwFormatVertOrient } from "../../../inc/fmtornt";
 import type { SwUndoCursorState } from "../undo/undobj";
 import { SwInsertTableFlags, type SwInsertTableOptions } from "../../../inc/itabenum";
@@ -140,11 +141,15 @@ export class SwDoc {
   }
 
   /** Reads native row split from current or selected canonical boxes. @param cursor - Original shell cursor. @returns Common row item or no item. */
-  public static GetRowSplit(cursor: SwCursor): boolean | undefined {
+  public static GetRowSplit(cursor: SwCursor): SwFormatRowSplit | undefined {
     return GetSwCursorRowSplit(cursor);
   }
   /** Publishes native row split attributes through document-owned history. @param cursor - Actual current or selected cursor. @param split - New row item. @param cursorState - Optional shell cursor attributes. @returns Whether admitted. */
-  public SetRowSplit(cursor: SwCursor, split: boolean, cursorState?: SwUndoCursorState): boolean {
+  public SetRowSplit(
+    cursor: SwCursor,
+    split: SwFormatRowSplit,
+    cursorState?: SwUndoCursorState,
+  ): boolean {
     return SetSwRowSplit(this, cursor, split, cursorState);
   }
   /** Reads the complete common native row-size item. @param cursor - Actual current or table-selected cursor. @returns Cloned common frame size or no item. */

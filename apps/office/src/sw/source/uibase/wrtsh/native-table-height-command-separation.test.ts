@@ -1,4 +1,8 @@
 /** @fileoverview Verifies independent source table-properties and row-height history over native owners. */
+import {
+  nativeRowFormatForTest,
+  rowKeepTogetherForTest,
+} from "../../../../test/table-row-test-helpers";
 import { expect, it, vi } from "vitest";
 import { SwDoc } from "../../core/doc/doc";
 import { SwDocShell } from "../app/docsh";
@@ -22,10 +26,14 @@ for (const selected of [false, true])
       table.AddColumnWidth(3000);
       const types = [SwFrameSize.Fixed, SwFrameSize.Minimum, SwFrameSize.Variable];
       for (const [i, type] of types.entries())
-        doc.nodes.AppendTableRow(table, 2, {
-          frameSize: new SwFormatFrameSize(type, 0, 600 + i * 300),
-          keepTogether: true,
-        });
+        doc.nodes.AppendTableRow(
+          table,
+          2,
+          nativeRowFormatForTest({
+            frameSize: new SwFormatFrameSize(type, 0, 600 + i * 300),
+            keepTogether: true,
+          }),
+        );
       const rows = [...table.GetTabLines()],
         box = rows[0]?.GetTabBoxes()[0],
         node = box?.GetParagraphs()[0];
@@ -94,7 +102,7 @@ for (const selected of [false, true])
             rows.every(
               /** Reads original split items. @param row - Native row. @returns Whether kept together. */ (
                 row,
-              ) => row.GetFormat().keepTogether,
+              ) => rowKeepTogetherForTest(row.GetFormat()),
             ),
           ).toBe(true);
         }

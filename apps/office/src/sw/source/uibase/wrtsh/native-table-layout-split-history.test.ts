@@ -1,4 +1,8 @@
 /** @fileoverview Verifies native table split item XML mapping, canonical history and original ownership. */
+import {
+  nativeRowFormatForTest,
+  rowKeepTogetherForTest,
+} from "../../../../test/table-row-test-helpers";
 import { afterEach, expect, it } from "vitest";
 import { SwDoc } from "../../core/doc/doc";
 import { SwDocShell } from "../app/docsh";
@@ -76,7 +80,8 @@ it.each([undefined, true, false])(
         doc.paragraphs[0],
       );
     table.AddColumnWidth(6000);
-    for (let r = 0; r < 3; r++) doc.nodes.AppendTableRow(table, 1, { keepTogether: r === 1 });
+    for (let r = 0; r < 3; r++)
+      doc.nodes.AppendTableRow(table, 1, nativeRowFormatForTest({ keepTogether: r === 1 }));
     const row = table.GetTabLines()[0],
       box = row?.GetTabBoxes()[0],
       node = box?.GetParagraphs()[0];
@@ -121,7 +126,7 @@ it.each([undefined, true, false])(
       expect(table.GetTabLines()[0]).toBe(row);
       expect(row.GetTabBoxes()[0]).toBe(box);
       expect(box.GetParagraphs()[0]).toBe(node);
-      expect(table.GetTabLines()[1]?.GetFormat().keepTogether).toBe(true);
+      expect(rowKeepTogetherForTest(table.GetTabLines()[1]?.GetFormat())).toBe(true);
     }
     edit.SetSelection({ point: { nodeIndex: node.GetIndex(), contentIndex: 2 } });
     edit.InsertText("X");

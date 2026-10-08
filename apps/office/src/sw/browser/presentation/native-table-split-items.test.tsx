@@ -1,4 +1,5 @@
 /** @fileoverview Verifies native concrete Text Flow items on the mounted UI-to-shell path with original owners and Undo/Redo. */
+import { nativeRowFormatForTest } from "../../../test/table-row-test-helpers";
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, expect, it, vi } from "vitest";
 import { createWriterDocumentSession } from "../composition/writer-module";
@@ -34,7 +35,7 @@ function fixture(selected = false) {
     });
   table.AddColumnWidth(6000);
   for (const keepTogether of [true, false, true])
-    doc.nodes.AppendTableRow(table, 1, { keepTogether });
+    doc.nodes.AppendTableRow(table, 1, nativeRowFormatForTest({ keepTogether }));
   const rows = [...table.GetTabLines()],
     boxes = rows.map(
       /** Reads original cells. @param row - Original line. @returns Original box. */ (row) =>
@@ -103,7 +104,10 @@ for (const selected of [false, true])
                   /** Computes independent expected native row attributes. @param format - Original format. @param index - Row index. @returns Expected format. */ (
                     format,
                     index,
-                  ) => (selected && index !== 0 ? format : { ...format, keepTogether: false }),
+                  ) =>
+                    selected && index !== 0
+                      ? format
+                      : nativeRowFormatForTest({ ...format, keepTogether: false }),
                 );
         expect(f.table.GetFormat()).toStrictEqual(finalFormat);
         expect(

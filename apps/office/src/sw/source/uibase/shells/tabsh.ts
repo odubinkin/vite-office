@@ -130,8 +130,7 @@ export function ItemSetToTableParam(
           try {
             if (!selected) shell.SelTable();
             if (borders) shell.SetTabBorders(input, cursorState);
-            if (rowSplit instanceof SwFormatRowSplit)
-              shell.SetRowSplit(rowSplit.GetValue(), cursorState);
+            if (rowSplit instanceof SwFormatRowSplit) shell.SetRowSplit(rowSplit, cursorState);
           } finally {
             if (!selected) shell.ClearMark();
             shell.Pop(PopMode.DeleteCurrent);
@@ -263,7 +262,8 @@ function ApplyExplicitTableProperties(shell: SwFEShell, value: SwTableProperties
           try {
             if (!selected) shell.SelTable();
             if (hasBorders) shell.SetTabBorders(borders, cursorState);
-            if (value.rowSplit !== undefined) shell.SetRowSplit(value.rowSplit, cursorState);
+            if (value.rowSplit !== undefined)
+              shell.SetRowSplit(new SwFormatRowSplit(value.rowSplit), cursorState);
           } finally {
             if (!selected) shell.ClearMark();
             shell.Pop(PopMode.DeleteCurrent);

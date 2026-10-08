@@ -1,5 +1,6 @@
 /** @fileoverview Transports complete native Writer frame-size values across browser storage boundaries. */
 import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
+import { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
 import type { SwTableLineFormat } from "../../../source/core/table/swtable";
 /** Primitive complete frame item for process and storage boundaries. */
 export interface WriterFrameSizeRecord {
@@ -13,30 +14,44 @@ export interface WriterFrameSizeRecord {
   readonly heightPercentRelation: number;
 }
 /** Row boundary record, including prior v16 minimum-height ingress. */
-export type WriterRowFormatRecord = Omit<SwTableLineFormat, "frameSize"> & {
+export type WriterRowFormatRecord = Omit<SwTableLineFormat, "frameSize" | "rowSplit"> & {
   readonly frameSize?: WriterFrameSizeRecord | undefined;
   readonly minHeight?: number | undefined;
+  readonly rowSplit?: boolean | undefined;
+  /** Prior primitive inverse row flag, accepted only at snapshot ingestion. */
+  readonly keepTogether?: boolean | undefined;
 };
 /** Encodes public native values without transferring a class prototype. @param value - Original row format. @returns Primitive row record. */
 export function encodeRowFormat(value: SwTableLineFormat): WriterRowFormatRecord {
-  const { frameSize, ...format } = value;
+  const { frameSize, rowSplit, ...format } = value;
   return {
     ...format,
+    rowSplit: rowSplit?.GetValue(),
     frameSize: encodeFrameSize(frameSize),
   };
 }
 /** Restores the complete native item at the existing graph boundary. @param value - Primitive row record. @returns Native row format. */
 export function decodeRowFormat(value: WriterRowFormatRecord): SwTableLineFormat {
-  const { frameSize, minHeight, ...format } = value;
+  const { frameSize, minHeight, rowSplit, keepTogether, ...format } = value;
+  if (
+    (rowSplit !== undefined && typeof rowSplit !== "boolean") ||
+    (keepTogether !== undefined && typeof keepTogether !== "boolean")
+  )
+    throw new Error("Stored Writer row split is invalid.");
+  const split = rowSplit ?? (keepTogether === undefined ? undefined : !keepTogether);
+  const native = {
+    ...format,
+    rowSplit: split === undefined ? undefined : new SwFormatRowSplit(split),
+  };
   if (frameSize === undefined)
     return {
-      ...format,
+      ...native,
       frameSize:
         minHeight === undefined
           ? undefined
           : new SwFormatFrameSize(SwFrameSize.Minimum, 0, minHeight),
     };
-  return { ...format, frameSize: decodeFrameSize(frameSize) };
+  return { ...native, frameSize: decodeFrameSize(frameSize) };
 }
 
 /** Encodes all public native frame-size fields. @param frameSize - Optional native item. @returns Complete primitive record or no authored item. */

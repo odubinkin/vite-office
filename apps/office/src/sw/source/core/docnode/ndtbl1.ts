@@ -12,6 +12,7 @@ import { SwUndoAttrTable } from "../undo/untbl";
 import { createWriterCollapsedCursorState, type SwUndoCursorState } from "../undo/undobj";
 import { SwTextNode } from "../txtnode/ndtxt";
 import type { SwFormatFrameSize } from "../../../inc/fmtfsize";
+import type { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
 import { SwFormatVertOrient } from "../../../inc/fmtornt";
 import {
   SvxBoxItem,
@@ -333,21 +334,24 @@ export function CollectSwRowSplitLines(cursor: SwCursor): readonly SwTableLine[]
 }
 
 /** Reads a common row item from original native lines. @param rows - Selected lines. @returns Common value or no item. */
-function GetRowSplit(rows: readonly SwTableLine[]): boolean | undefined {
+function GetRowSplit(rows: readonly SwTableLine[]): SwFormatRowSplit | undefined {
   const first = rows[0];
   if (first === undefined) return undefined;
-  const value = !(first.GetFormat().keepTogether ?? false);
-  for (const row of rows) if (!(row.GetFormat().keepTogether ?? false) !== value) return undefined;
-  return value;
+  const item = first.GetRowSplit();
+  for (const row of rows) if (row.GetRowSplit().GetValue() !== item.GetValue()) return undefined;
+  return item;
 }
 
 /** Reads row splitting from the actual current or selected native cursor. @param cursor - Native cursor. @returns Common item or no item. */
-export function GetSwCursorRowSplit(cursor: SwCursor): boolean | undefined {
+export function GetSwCursorRowSplit(cursor: SwCursor): SwFormatRowSplit | undefined {
   return GetRowSplit(CollectSwRowSplitLines(cursor));
 }
 
 /** Reads a common native row item, retaining no-item for empty or mixed selection. @param table - Original table owner. @param boxes - Original selected boxes, or whole table dialog input. @returns Common split value or no item. */
-export function GetSwRowSplit(table: SwTable, boxes?: readonly SwTableBox[]): boolean | undefined {
+export function GetSwRowSplit(
+  table: SwTable,
+  boxes?: readonly SwTableBox[],
+): SwFormatRowSplit | undefined {
   return GetRowSplit(CollectLines(table, boxes));
 }
 
@@ -355,10 +359,10 @@ export function GetSwRowSplit(table: SwTable, boxes?: readonly SwTableBox[]): bo
 export function SetSwRowSplit(
   doc: SwDoc,
   cursor: SwCursor,
-  split: boolean,
+  split: SwFormatRowSplit,
   cursorState?: SwUndoCursorState,
 ): boolean {
-  return SetRowAttr(doc, cursor, { keepTogether: !split }, cursorState);
+  return SetRowAttr(doc, cursor, { rowSplit: split }, cursorState);
 }
 
 /** Reads the complete common native size item, including native default types. @param cursor - Original current or table-selected cursor. @returns Cloned common item or no item for mixed or absent rows. */

@@ -1,4 +1,5 @@
 /** @fileoverview Verifies native independent table/row split saved items and selected original lines. */
+import { nativeRowFormatForTest } from "../../../../test/table-row-test-helpers";
 import { expect, it } from "vitest";
 import { SwDoc } from "../../core/doc/doc";
 import { SwTextFlowPage } from "./tabledlg";
@@ -12,7 +13,11 @@ function fixture(split?: boolean, keep: readonly (boolean | undefined)[] = [true
   table.AddColumnWidth(3000);
   table.AddColumnWidth(3000);
   for (const value of keep)
-    doc.nodes.AppendTableRow(table, 2, value === undefined ? {} : { keepTogether: value });
+    doc.nodes.AppendTableRow(
+      table,
+      2,
+      value === undefined ? {} : nativeRowFormatForTest({ keepTogether: value }),
+    );
   return { doc, table, page: new SwTextFlowPage(table) };
 }
 it.each([undefined, true, false])(
@@ -65,28 +70,28 @@ it("native selected lines aggregate actual boxes and return no item for empty/fo
   if (first === undefined || second === undefined) throw new Error("Missing original lines");
   expect(new SwTextFlowPage(f.table, [first]).GetRowSplitState()).toBe(false);
   expect(new SwTextFlowPage(f.table, [second]).GetRowSplitState()).toBe(true);
-  expect(GetSwRowSplit(f.table, [])).toBeUndefined();
+  expect(GetSwRowSplit(f.table, [])?.GetValue()).toBeUndefined();
   const other = fixture(true, [false]).table.GetTabLines()[0]?.GetTabBoxes()[0];
   if (other === undefined) throw new Error("Missing foreign owner");
-  expect(GetSwRowSplit(f.table, [other])).toBeUndefined();
-  expect(GetSwRowSplit(fixture(true, []).table)).toBeUndefined();
-  expect(GetSwRowSplit(f.table, [first, second])).toBeUndefined();
+  expect(GetSwRowSplit(f.table, [other])?.GetValue()).toBeUndefined();
+  expect(GetSwRowSplit(fixture(true, []).table)?.GetValue()).toBeUndefined();
+  expect(GetSwRowSplit(f.table, [first, second])?.GetValue()).toBeUndefined();
   const node = first.GetParagraphs()[0];
   if (node === undefined) throw new Error("Missing original text");
   const position = new SwPosition(node, 0),
     current = new SwCursor(position),
     selected = new SwTableCursor(position);
   position.Dispose();
-  expect(SwDoc.GetRowSplit(current)).toBe(false);
-  expect(SwDoc.GetRowSplit(selected)).toBeUndefined();
+  expect(SwDoc.GetRowSplit(current)?.GetValue()).toBe(false);
+  expect(SwDoc.GetRowSplit(selected)?.GetValue()).toBeUndefined();
   selected.InsertBox(first);
-  expect(SwDoc.GetRowSplit(selected)).toBe(false);
+  expect(SwDoc.GetRowSplit(selected)?.GetValue()).toBe(false);
   selected.InsertBox(second);
-  expect(SwDoc.GetRowSplit(selected)).toBeUndefined();
+  expect(SwDoc.GetRowSplit(selected)?.GetValue()).toBeUndefined();
   const body = f.doc.paragraphs[0];
   if (body === undefined) throw new Error("Missing native body");
   current.GetPoint().Assign(body, 0);
-  expect(SwDoc.GetRowSplit(current)).toBeUndefined();
+  expect(SwDoc.GetRowSplit(current)?.GetValue()).toBeUndefined();
   current.Dispose();
   selected.Dispose();
 });

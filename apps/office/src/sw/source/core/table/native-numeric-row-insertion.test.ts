@@ -1,4 +1,5 @@
 /** @fileoverview Literal native row counts, independent formats and top-border transfer without upstream execution. */
+import { nativeRowFormatForTest } from "../../../../test/table-row-test-helpers";
 import { expect, it } from "vitest";
 import { SwDoc } from "../doc/doc";
 import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
@@ -23,10 +24,12 @@ function fixture(borders: boolean) {
   table.AddColumnWidth(5000);
   for (const [row, authored] of widths.entries()) {
     const line = doc.nodes.AppendTableRow(table, authored.length);
-    line.SetFormat({
-      frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 240 + row * 100),
-      keepTogether: row === 1,
-    });
+    line.SetFormat(
+      nativeRowFormatForTest({
+        frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 240 + row * 100),
+        keepTogether: row === 1,
+      }),
+    );
     for (const [column, box] of line.GetTabBoxes().entries()) {
       const size = box.GetFrameSize(),
         item = new SvxBoxItem(RES_BOX);

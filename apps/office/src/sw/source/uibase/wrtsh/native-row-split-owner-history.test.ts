@@ -1,4 +1,9 @@
 /** @fileoverview Verifies native current versus Properties-selected row split ownership, original history and continued editing. */
+import { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
+import {
+  nativeRowFormatForTest,
+  rowKeepTogetherForTest,
+} from "../../../../test/table-row-test-helpers";
 import { VertOrientation } from "./../../../../offapi/com/sun/star/text/VertOrientation";
 
 import { expect, it, vi } from "vitest";
@@ -19,7 +24,7 @@ function fixture() {
   table.AddColumnWidth(3000);
   table.AddColumnWidth(3000);
   for (const keepTogether of [false, false, false])
-    doc.nodes.AppendTableRow(table, 2, { keepTogether });
+    doc.nodes.AppendTableRow(table, 2, nativeRowFormatForTest({ keepTogether }));
   const rows = [...table.GetTabLines()],
     box = required(required(rows[1]).GetTabBoxes()[0]),
     node = required(box.GetParagraphs()[0]);
@@ -59,7 +64,9 @@ for (const mode of ["direct", "properties", "selected"] as const)
         apply = vi.spyOn(f.shell, "ApplyAction"),
         docSet = vi.spyOn(f.doc, "SetRowSplit");
       expect(
-        mode === "direct" ? f.shell.SetRowSplit(false) : ItemSetToTableParam(f.shell, properties),
+        mode === "direct"
+          ? f.shell.SetRowSplit(new SwFormatRowSplit(false))
+          : ItemSetToTableParam(f.shell, properties),
       ).toBe(true);
       expect(docSet).toHaveBeenCalledTimes(1);
       if (mode === "direct") expect(apply).not.toHaveBeenCalled();
@@ -76,14 +83,14 @@ for (const mode of ["direct", "properties", "selected"] as const)
         expect(
           f.rows.map(
             /** Reads original flags. @param row - Native row. @returns Stored item. */ (row) =>
-              row.GetFormat().keepTogether,
+              rowKeepTogetherForTest(row.GetFormat()),
           ),
         ).toEqual(expected);
         expect(f.shell.Undo()).toBe(true);
         expect(
           f.rows.map(
             /** Reads restored flags. @param row - Native row. @returns Stored item. */ (row) =>
-              row.GetFormat().keepTogether,
+              rowKeepTogetherForTest(row.GetFormat()),
           ),
         ).toEqual([false, false, false]);
         expect(f.shell.CaptureCursorState().point).toEqual(before.point);
@@ -101,7 +108,7 @@ for (const mode of ["direct", "properties", "selected"] as const)
           .GetTabLines()
           .map(
             /** Reads round-trip flags. @param row - Native row. @returns Stored item. */ (row) =>
-              row.GetFormat().keepTogether,
+              rowKeepTogetherForTest(row.GetFormat()),
           ),
       ).toEqual(expected);
       f.shell.ClearMark();

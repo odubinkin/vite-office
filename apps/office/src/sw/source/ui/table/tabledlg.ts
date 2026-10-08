@@ -42,7 +42,7 @@ export class SwTextFlowPage {
   public constructor(table: SwTable, selectedBoxes?: readonly SwTableBox[]) {
     this.originalHeadline = table.GetRowsToRepeat();
     this.originalSplit = table.GetFormat().layoutSplit ?? true;
-    this.originalRowSplit = GetSwRowSplit(table, selectedBoxes);
+    this.originalRowSplit = GetSwRowSplit(table, selectedBoxes)?.GetValue();
     this.Reset();
   }
   /** Restores source checkbox/count widgets and their saved values. @returns Nothing. */

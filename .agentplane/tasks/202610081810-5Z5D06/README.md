@@ -4,7 +4,7 @@ title: "Own row splitting as native items through core and document transport"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: implement approved240 canonical row item and native core contracts with exact acceptance migration and targeted upstream-absent verification."
 doc_version: 3
-doc_updated_at: "2026-10-08T18:26:35.534Z"
+doc_updated_at: "2026-10-08T18:30:53.873Z"
 doc_updated_by: "CODER"
 description: "Iteration240 removes canonical row keepTogether inversion, carries SwFormatRowSplit through SwDoc/SwFEShell and native item-set input, retains native item clone ownership in row/history/insertion, and converts only at ODF and browser primitive boundaries. Preserve old snapshot ingress and registered IO/recovery/settings. Exact native acceptance migration and targeted upstream-absent coverage; no full suite until247."
 sections:
@@ -93,7 +93,13 @@ sections:
     4. Run format:check/lint/typecheck/check:dependencies/check:docs/check:file-size and upstream-absent build/static. Run new and related row/split/height/history/XML/transport/UI and related Chromium tests once with vendor unavailable/restored finally; failed/new-only closures, no passing replay. Full suite240 intentionally not run under updated user policy; last237,next247.
     5. Deterministically prove actual targeted counters plus prior239 whole identical source/maps or complete mapped declarations/body/enclosing branch/all locations yield all-four100% app/inventory; never sanitize counts or weaken threshold. Unchanged inventory/infra runtime certificate only after exact source/map binding.
     6. Separate source generator --check/source-tree/provenance/invariants/parity after restoration, all315prior metadata states/defaults/classifications/prefixes preserved. Source<1000physical lines, protectedIO4/writer-view/pin/stash preserved, no upstream/application/Python/raw maps/results/scripts under AgentPlane, doctor/routing/diff/task-scoped final state. Actual SHA current-agent EVALUATOR review explicitly not independent; close only240 and exact-prefix append parent; full goal active.
-  Verification: "Pending native row-item implementation and targeted verification."
+  Verification: |-
+    Command: npm run format:check; lint; typecheck; check:dependencies; check:docs; check:file-size. Result: pass. Evidence: six final gates, source physical lines below1000; earlier typecheck/JSDoc/format failures preserved and repaired.
+    Command: targeted-profile.json and closure1.json recorded exact upstream-absent build/app/Chromium argv. Result: pass for all263 unique app and11 Chromium cases;33 fresh cases; three failed initial cases resolved in a four-case failed/new-only closure,36 skips retained, zero passing replay. Raw selected-coverage threshold exits remain1; exact cumulative final-coverage.json proves100% lines/statements/functions/branches for current app17473/19188/4396/14287 and inventory1464/1523/384/1081 using real current counters plus prior239 entire unchanged source/maps or complete mapped regions.
+    Command: generator --check; check:source-tree; check:source-provenance; inventory:invariants; inventory:parity. Result: pass after upstream restoration;315 records, every prior state/default/classification/field/prefix preserved. Twelve pinned native source files byte-verified. Scope37;645 prior acceptance files:623 unchanged,22 exact declared migrations;3 fresh files. Three source-backed stale unvisited-Borders admission corrections preserve every other assertion and legacy DTO history.
+    Command: ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check; artifact census. Result: pass; doctor retains only two historic warnings. Zero upstream/application/Python/raw artifacts in AgentPlane, bounded English records only; pin/stash/IO4/writer-view/parent prefix untouched.
+    Skipped: full test suite240. Reason/Approval: user objective explicitly requires full once per10 tasks; last237,next247. Risk: whole core/browser parity not established; complete native shared row frame-format pooling/claims/nested/merged/UNO remains partial. Unchanged inventory/infra certified after whole source/maps equality, no rerun.
+    Actual implementation SHA review and task close pending.
   Rollback Plan: "Revert the eventual implementation commit locally; retain traceability and never rewrite DONE tasks."
   Findings: |-
     Previous239 is DONE and exact-source coverage is verified. Current GetRowSplit/SetRowSplit core/shell contracts are boolean, rows store keepTogether inversion and transport copies that scalar. Pinned native methods clone common SwFormatRowSplit values and accept concrete items. This leaf removes the canonical scalar; browser old-snapshot ingress remains explicit. No full shared-frame-format promotion.
@@ -101,6 +107,8 @@ sections:
     Typecheck exposed one additional existing Chromium row fixture in writer-native-table-text-flow-split.spec.ts: TS2353 keepTogether is no longer canonical. Extend the same representation-only acceptance migration to this file, preserving all browser assertions and literals. No production behavior or verification contract expansion; standing iterative goal authorizes this necessary related-test repair. The failed typecheck remains recorded; no runtime cases have executed for240.
 
     Initial targeted profile:259 app passed,3failed;11 Chromium passed. Fresh transport omitted-item not.toBe(undefined) assertion is an invalid test and becomes conditional only for authored input, retaining default/absence checks. Two old border cases assert eager unvisited Borders admission, contradicted by native tabdlg.cxx619 and tabsh.cxx332 and unchanged prior/current WriterTableDialog behavior. Migrate exactly three admission observations to source-correct zero calls; preserve every other old assertion including legacy DTO Undo/Redo. No production border changes or passing replay. Current task verification explicitly declares this bounded source-backed correction.
+
+    Verified row-native closure: row input/read/Undo/Redo own concrete clones, effective defaulttrue, common getter independent and mixed/empty absence, SetRowSplit concrete through frame/document/history, same-value transaction/notifications and original selection/cursor. Browser encoding writes primitive rowSplit, accepts legacy inverse only at ingress, rejects malformed flags, preserves native priority; structured-clone/JSON/ODF exact attrs and original mounted owners are verified. Source native table-row format sharing/ClaimFrameFormat is still not implemented and is a genuine next architecture gap. Existing legacy DTO helper remains explicit and is not main native UI; no complete parity claim. Coverage100 uses whole/complete region equality only, all nine modified source modules bind to verified prior239 regions and current actual counters. Three initial failed assertions and static failures are preserved; no passing replay. Current-agent EVALUATOR review will be explicitly non-independent. Parent prefix694655/hashff9a9c38677f3673fecb19a60790b94f551c0f2084e3062d0dd8abfd4318ff08 retained.
 id_source: "generated"
 ---
 ## Summary
@@ -166,7 +174,12 @@ Iteration240 replaces canonical SwTableLineFormat.keepTogether with optional nat
 
 ## Verification
 
-Pending native row-item implementation and targeted verification.
+Command: npm run format:check; lint; typecheck; check:dependencies; check:docs; check:file-size. Result: pass. Evidence: six final gates, source physical lines below1000; earlier typecheck/JSDoc/format failures preserved and repaired.
+Command: targeted-profile.json and closure1.json recorded exact upstream-absent build/app/Chromium argv. Result: pass for all263 unique app and11 Chromium cases;33 fresh cases; three failed initial cases resolved in a four-case failed/new-only closure,36 skips retained, zero passing replay. Raw selected-coverage threshold exits remain1; exact cumulative final-coverage.json proves100% lines/statements/functions/branches for current app17473/19188/4396/14287 and inventory1464/1523/384/1081 using real current counters plus prior239 entire unchanged source/maps or complete mapped regions.
+Command: generator --check; check:source-tree; check:source-provenance; inventory:invariants; inventory:parity. Result: pass after upstream restoration;315 records, every prior state/default/classification/field/prefix preserved. Twelve pinned native source files byte-verified. Scope37;645 prior acceptance files:623 unchanged,22 exact declared migrations;3 fresh files. Three source-backed stale unvisited-Borders admission corrections preserve every other assertion and legacy DTO history.
+Command: ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check; artifact census. Result: pass; doctor retains only two historic warnings. Zero upstream/application/Python/raw artifacts in AgentPlane, bounded English records only; pin/stash/IO4/writer-view/parent prefix untouched.
+Skipped: full test suite240. Reason/Approval: user objective explicitly requires full once per10 tasks; last237,next247. Risk: whole core/browser parity not established; complete native shared row frame-format pooling/claims/nested/merged/UNO remains partial. Unchanged inventory/infra certified after whole source/maps equality, no rerun.
+Actual implementation SHA review and task close pending.
 
 ## Rollback Plan
 
@@ -179,3 +192,5 @@ Previous239 is DONE and exact-source coverage is verified. Current GetRowSplit/S
 Typecheck exposed one additional existing Chromium row fixture in writer-native-table-text-flow-split.spec.ts: TS2353 keepTogether is no longer canonical. Extend the same representation-only acceptance migration to this file, preserving all browser assertions and literals. No production behavior or verification contract expansion; standing iterative goal authorizes this necessary related-test repair. The failed typecheck remains recorded; no runtime cases have executed for240.
 
 Initial targeted profile:259 app passed,3failed;11 Chromium passed. Fresh transport omitted-item not.toBe(undefined) assertion is an invalid test and becomes conditional only for authored input, retaining default/absence checks. Two old border cases assert eager unvisited Borders admission, contradicted by native tabdlg.cxx619 and tabsh.cxx332 and unchanged prior/current WriterTableDialog behavior. Migrate exactly three admission observations to source-correct zero calls; preserve every other old assertion including legacy DTO Undo/Redo. No production border changes or passing replay. Current task verification explicitly declares this bounded source-backed correction.
+
+Verified row-native closure: row input/read/Undo/Redo own concrete clones, effective defaulttrue, common getter independent and mixed/empty absence, SetRowSplit concrete through frame/document/history, same-value transaction/notifications and original selection/cursor. Browser encoding writes primitive rowSplit, accepts legacy inverse only at ingress, rejects malformed flags, preserves native priority; structured-clone/JSON/ODF exact attrs and original mounted owners are verified. Source native table-row format sharing/ClaimFrameFormat is still not implemented and is a genuine next architecture gap. Existing legacy DTO helper remains explicit and is not main native UI; no complete parity claim. Coverage100 uses whole/complete region equality only, all nine modified source modules bind to verified prior239 regions and current actual counters. Three initial failed assertions and static failures are preserved; no passing replay. Current-agent EVALUATOR review will be explicitly non-independent. Parent prefix694655/hashff9a9c38677f3673fecb19a60790b94f551c0f2084e3062d0dd8abfd4318ff08 retained.

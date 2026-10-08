@@ -1,4 +1,5 @@
 /** @fileoverview Numeric row history re-enters Doc InsertRow and resolves current native sections. */
+import { nativeRowFormatForTest } from "../../../../test/table-row-test-helpers";
 import { expect, it, vi } from "vitest";
 import { createWriterDocumentSession } from "../../../browser/composition/writer-module";
 import { SwInsertTableFlags } from "../../../inc/itabenum";
@@ -108,10 +109,12 @@ it("numeric row redo borrows current source formats after undo", /** Checks redo
     expect(doc.InsertRow([required(source.GetTabBoxes()[0])], 1, true)).toBe(true);
     const old = required(table.GetTabLines()[2]);
     expect(shell.Undo()).toBe(true);
-    source.SetFormat({
-      frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 777),
-      keepTogether: true,
-    });
+    source.SetFormat(
+      nativeRowFormatForTest({
+        frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 777),
+        keepTogether: true,
+      }),
+    );
     expect(shell.Redo()).toBe(true);
     const current = required(table.GetTabLines()[2]);
     expect(current).not.toBe(old);

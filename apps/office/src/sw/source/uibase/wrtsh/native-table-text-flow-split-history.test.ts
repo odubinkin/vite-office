@@ -1,4 +1,8 @@
 /** @fileoverview Verifies independent native split item publication through selection, history, ODT and original cursor owners. */
+import {
+  nativeRowFormatForTest,
+  rowKeepTogetherForTest,
+} from "../../../../test/table-row-test-helpers";
 import { nativeBoxFormat } from "../../../../test/table-box-test-helpers";
 import { VertOrientation } from "./../../../../offapi/com/sun/star/text/VertOrientation";
 
@@ -36,7 +40,7 @@ for (const selected of [false, true])
       table.AddColumnWidth(3000);
       table.AddColumnWidth(3000);
       for (const keepTogether of [true, false, true])
-        doc.nodes.AppendTableRow(table, 2, { keepTogether }, [
+        doc.nodes.AppendTableRow(table, 2, nativeRowFormatForTest({ keepTogether }), [
           nativeBoxFormat({ padding: 0, border: "none" }),
           nativeBoxFormat({ padding: 0, border: "none" }),
         ]);
@@ -56,11 +60,11 @@ for (const selected of [false, true])
         edit = new SwEditWin(shell.GetView());
       shells.push(shell);
       edit.SetSelection({ point: { nodeIndex: node.GetIndex(), contentIndex: 2 } });
-      expect(shell.GetRowSplit()).toBe(false);
+      expect(shell.GetRowSplit()?.GetValue()).toBe(false);
       if (selected) expect(shell.SelectTableRow()).toBe(true);
       else {
         expect(shell.SelectTable()).toBe(true);
-        expect(shell.GetRowSplit()).toBeUndefined();
+        expect(shell.GetRowSplit()?.GetValue()).toBeUndefined();
         shell.EnterStdMode();
         edit.SetSelection({ point: { nodeIndex: node.GetIndex(), contentIndex: 2 } });
       }
@@ -103,7 +107,7 @@ for (const selected of [false, true])
           rows.map(
             /** Reads actual original row values. @param row - Original line. @returns Stored inverse item. */ (
               row,
-            ) => row.GetFormat().keepTogether,
+            ) => rowKeepTogetherForTest(row.GetFormat()),
           ),
         ).toEqual(finalKeep);
         expect(shell.CaptureCursorState().point).toEqual(cursor.point);
@@ -114,7 +118,7 @@ for (const selected of [false, true])
           rows.map(
             /** Reads restored original row values. @param row - Native line. @returns Stored inverse item. */ (
               row,
-            ) => row.GetFormat().keepTogether,
+            ) => rowKeepTogetherForTest(row.GetFormat()),
           ),
         ).toEqual([true, false, true]);
         expect(shell.Redo()).toBe(true);
@@ -133,7 +137,7 @@ for (const selected of [false, true])
           .map(
             /** Reads round-trip original row policies. @param row - Original line. @returns Stored inverse item. */ (
               row,
-            ) => row.GetFormat().keepTogether,
+            ) => rowKeepTogetherForTest(row.GetFormat()),
           ),
       ).toEqual(finalKeep);
       shell.EnterStdMode();
@@ -146,14 +150,15 @@ for (const selected of [false, true])
       ]);
       const body = required(doc.paragraphs[0]);
       edit.SetSelection({ point: { nodeIndex: body.GetIndex(), contentIndex: 0 } });
-      expect(shell.GetRowSplit()).toBeUndefined();
+      expect(shell.GetRowSplit()?.GetValue()).toBeUndefined();
     });
   }
 it("native unchanged mixed and default dialog items preserve row attributes", /** Checks omitted item publication rather than flattening source rows. @returns Nothing. */ () => {
   const doc = new SwDoc(),
     table = doc.nodes.MakeTableNode("Mixed", { width: 6000 });
   table.AddColumnWidth(6000);
-  for (const keepTogether of [true, false]) doc.nodes.AppendTableRow(table, 1, { keepTogether });
+  for (const keepTogether of [true, false])
+    doc.nodes.AppendTableRow(table, 1, nativeRowFormatForTest({ keepTogether }));
   const node = required(table.GetTabLines()[0]?.GetTabBoxes()[0]?.GetParagraphs()[0]),
     shell = new SwView(
       new SwDocShell(doc, createDocument({ id: "mixed-split", suiteId: "writer", title: "Mixed" })),
@@ -179,7 +184,7 @@ it("native unchanged mixed and default dialog items preserve row attributes", /*
       .map(
         /** Reads independent original rows. @param row - Native line. @returns Stored policy. */ (
           row,
-        ) => row.GetFormat().keepTogether,
+        ) => rowKeepTogetherForTest(row.GetFormat()),
       ),
   ).toEqual([true, false]);
 });

@@ -1,4 +1,8 @@
 /** @fileoverview Verifies absent property height deltas preserve original native row types and owners. */
+import {
+  nativeRowFormatForTest,
+  rowKeepTogetherForTest,
+} from "../../../../test/table-row-test-helpers";
 import { expect, it, vi } from "vitest";
 import { SwDoc } from "../../core/doc/doc";
 import { SwDocShell } from "../app/docsh";
@@ -20,10 +24,14 @@ for (const selected of [false, true])
       table.AddColumnWidth(3000);
       const modes = [SwFrameSize.Fixed, SwFrameSize.Minimum, SwFrameSize.Variable];
       for (const [i, mode] of modes.entries())
-        doc.nodes.AppendTableRow(table, 2, {
-          frameSize: new SwFormatFrameSize(mode, 0, 600 + i * 300),
-          keepTogether: true,
-        });
+        doc.nodes.AppendTableRow(
+          table,
+          2,
+          nativeRowFormatForTest({
+            frameSize: new SwFormatFrameSize(mode, 0, 600 + i * 300),
+            keepTogether: true,
+          }),
+        );
       const rows = [...table.GetTabLines()],
         box = rows[0]?.GetTabBoxes()[0],
         node = box?.GetParagraphs()[0];
@@ -59,7 +67,7 @@ for (const selected of [false, true])
           for (const [i, row] of rows.entries()) {
             expect(row.GetFrameSize().GetHeightSizeType()).toBe(modes[i]);
             expect(row.GetFrameSize().GetHeight()).toBe(600 + i * 300);
-            expect(row.GetFormat().keepTogether).toBe(true);
+            expect(rowKeepTogetherForTest(row.GetFormat())).toBe(true);
           }
           expect(rows[0]?.GetTabBoxes()[0]).toBe(box);
           expect(box?.GetParagraphs()[0]).toBe(node);

@@ -1,4 +1,9 @@
 /** @fileoverview Verifies document-owned row split admission, original cursor collection and history without upstream dependencies. */
+import { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
+import {
+  nativeRowFormatForTest,
+  rowKeepTogetherForTest,
+} from "../../../../test/table-row-test-helpers";
 import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
 import { expect, it } from "vitest";
 import { SwDoc } from "../doc/doc";
@@ -12,10 +17,14 @@ function fixture() {
   table.AddColumnWidth(3000);
   table.AddColumnWidth(3000);
   for (const keepTogether of [undefined, true, false])
-    doc.nodes.AppendTableRow(table, 2, {
-      keepTogether,
-      frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 400),
-    });
+    doc.nodes.AppendTableRow(
+      table,
+      2,
+      nativeRowFormatForTest({
+        keepTogether,
+        frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 400),
+      }),
+    );
   const rows = table.GetTabLines(),
     node = required(required(required(rows[1]).GetTabBoxes()[0]).GetParagraphs()[0]);
   node.SetText("middle");
@@ -39,11 +48,11 @@ it("document row split ignores an ordinary mark and extra ring while retaining n
   const before = f.doc.GetUndoManager().GetUndoActionCount(),
     revision = f.doc.GetDocumentStateManager().GetModelRevision();
   expect(CollectSwRowSplitLines(f.cursor)).toEqual([f.rows[1]]);
-  expect(f.doc.SetRowSplit(f.cursor, true)).toBe(true);
+  expect(f.doc.SetRowSplit(f.cursor, new SwFormatRowSplit(true))).toBe(true);
   expect(
     f.rows.map(
       /** Reads original inverse items. @param row - Native row. @returns Stored item. */ (row) =>
-        row.GetFormat().keepTogether,
+        rowKeepTogetherForTest(row.GetFormat()),
     ),
   ).toEqual([undefined, false, false]);
   expect(
@@ -55,7 +64,7 @@ it("document row split ignores an ordinary mark and extra ring while retaining n
   ).toEqual([400, 400, 400]);
   expect(f.table.GetFormat().layoutSplit).toBe(false);
   expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(before + 1);
-  expect(f.doc.SetRowSplit(f.cursor, true)).toBe(true);
+  expect(f.doc.SetRowSplit(f.cursor, new SwFormatRowSplit(true))).toBe(true);
   expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(before + 2);
   expect(f.cursor.GetPoint().GetNode()).toBe(f.node);
   expect(f.cursor.GetPoint().GetContentIndex()).toBe(2);
@@ -73,23 +82,23 @@ it("document row split collects original table-selected lines once and rejects a
   selected.InsertBox(required(required(f.rows[0]).GetTabBoxes()[1]));
   selected.InsertBox(required(required(f.rows[2]).GetTabBoxes()[0]));
   expect(CollectSwRowSplitLines(selected)).toEqual([f.rows[0], f.rows[2]]);
-  expect(f.doc.SetRowSplit(selected, false)).toBe(true);
+  expect(f.doc.SetRowSplit(selected, new SwFormatRowSplit(false))).toBe(true);
   expect(
     f.rows.map(
       /** Reads original row item after selection. @param row - Native row. @returns Stored item. */ (
         row,
-      ) => row.GetFormat().keepTogether,
+      ) => rowKeepTogetherForTest(row.GetFormat()),
     ),
   ).toEqual([true, true, true]);
   const count = f.doc.GetUndoManager().GetUndoActionCount();
   selected.ActualizeSelection([]);
-  expect(f.doc.SetRowSplit(selected, true)).toBe(false);
-  expect(f.doc.SetRowSplit(other.cursor, false)).toBe(false);
+  expect(f.doc.SetRowSplit(selected, new SwFormatRowSplit(true))).toBe(false);
+  expect(f.doc.SetRowSplit(other.cursor, new SwFormatRowSplit(false))).toBe(false);
   f.table.RemoveLine(required(f.rows[1]));
-  expect(f.doc.SetRowSplit(f.cursor, false)).toBe(false);
+  expect(f.doc.SetRowSplit(f.cursor, new SwFormatRowSplit(false))).toBe(false);
   f.table.AddLine(required(f.rows[1]));
   f.cursor.GetPoint().Assign(required(f.doc.paragraphs[0]), 0);
-  expect(f.doc.SetRowSplit(f.cursor, false)).toBe(false);
+  expect(f.doc.SetRowSplit(f.cursor, new SwFormatRowSplit(false))).toBe(false);
   expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(count);
   selected.Dispose();
   f.cursor.Dispose();
@@ -108,9 +117,9 @@ it("disconnected native table cursor is rejected before attribute history", /** 
   const position = new SwPosition(node, 0),
     current = new SwCursor(position);
   position.Dispose();
-  expect(SwDoc.GetRowSplit(current)).toBe(true);
-  expect(f.doc.SetRowSplit(current, false)).toBe(true);
-  expect(SwDoc.GetRowSplit(current)).toBe(false);
+  expect(SwDoc.GetRowSplit(current)?.GetValue()).toBe(true);
+  expect(f.doc.SetRowSplit(current, new SwFormatRowSplit(false))).toBe(true);
+  expect(SwDoc.GetRowSplit(current)?.GetValue()).toBe(false);
   current.Dispose();
   f.doc.nodes.MakeTextNode("Following");
   f.doc.nodes.DeleteTable(f.table.GetTableNode());
@@ -118,10 +127,10 @@ it("disconnected native table cursor is rejected before attribute history", /** 
     detached = new SwCursor(detachedPosition);
   detachedPosition.Dispose();
   const count = f.doc.GetUndoManager().GetUndoActionCount();
-  expect(f.doc.SetRowSplit(detached, true)).toBe(false);
+  expect(f.doc.SetRowSplit(detached, new SwFormatRowSplit(true))).toBe(false);
   expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(count);
   detached.GetPoint().Assign(required(f.doc.paragraphs[0]), 0);
-  expect(SwDoc.GetRowSplit(detached)).toBeUndefined();
+  expect(SwDoc.GetRowSplit(detached)?.GetValue()).toBeUndefined();
   detached.Dispose();
   f.cursor.Dispose();
 });

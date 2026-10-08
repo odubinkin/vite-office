@@ -1,4 +1,5 @@
 /** @fileoverview Verifies source-backed and synthetic canonical Writer table round trips. */
+import { nativeRowFormatForTest } from "../../../../test/table-row-test-helpers";
 import { nativeBoxFormat, tableBoxFormatForTest } from "../../../../test/table-box-test-helpers";
 import { VertOrientation } from "./../../../../offapi/com/sun/star/text/VertOrientation";
 import { SwFormatVertOrient } from "./../../../inc/fmtornt";
@@ -152,7 +153,10 @@ describe("Writer canonical ODF tables", /** Verifies the bounded table scenario.
     const first = document.nodes.AppendTableRow(
       table,
       2,
-      { frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 500), keepTogether: false },
+      nativeRowFormatForTest({
+        frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 500),
+        keepTogether: false,
+      }),
       [
         nativeBoxFormat({
           padding: 100,
@@ -169,7 +173,11 @@ describe("Writer canonical ODF tables", /** Verifies the bounded table scenario.
     first.GetTabBoxes()[0]?.GetParagraphs()[0]?.SetText("one");
     first.GetTabBoxes()[1]?.GetParagraphs()[0]?.SetText("two");
     table.AddSoftPageBreak();
-    const second = document.nodes.AppendTableRow(table, 2, { keepTogether: true });
+    const second = document.nodes.AppendTableRow(
+      table,
+      2,
+      nativeRowFormatForTest({ keepTogether: true }),
+    );
     const cell = second.GetTabBoxes()[0];
     const cellParagraph = cell?.GetParagraphs()[0];
     if (cell === undefined || cellParagraph === undefined)

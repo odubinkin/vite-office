@@ -1,4 +1,5 @@
 /** @fileoverview Verifies production native split controls, physical pages, saved state and original editable history. */
+import { nativeRowFormatForTest } from "../src/test/table-row-test-helpers";
 import { nativeBoxFormat } from "../src/test/table-box-test-helpers";
 import { SwFormatFrameSize, SwFrameSize } from "../src/sw/inc/fmtfsize";
 import { expect, test } from "@playwright/test";
@@ -28,7 +29,10 @@ for (const width of [1280, 390])
         .AppendTableRow(
           table,
           1,
-          { frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 400), keepTogether: r !== 1 },
+          nativeRowFormatForTest({
+            frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 400),
+            keepTogether: r !== 1,
+          }),
           [nativeBoxFormat({ padding: 0, border: "none" })],
         )
         .GetTabBoxes()[0]

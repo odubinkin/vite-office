@@ -1,5 +1,9 @@
 /** @fileoverview Verifies independent ODT row height types, ordered native import and source clamp limits. */
 import {
+  nativeRowFormatForTest,
+  rowKeepTogetherForTest,
+} from "../../../../test/table-row-test-helpers";
+import {
   encodeWriterDocument,
   decodeWriterDocument,
 } from "../../../browser/filter/xml/writer-document-codec";
@@ -123,7 +127,11 @@ it("native row sizes cross structured clone and JSON with all eight fields and o
   item.SetHeightPercent(255);
   item.SetWidthPercentRelation(2);
   item.SetHeightPercentRelation(3);
-  doc.nodes.AppendTableRow(table, 1, { frameSize: item, keepTogether: true });
+  doc.nodes.AppendTableRow(
+    table,
+    1,
+    nativeRowFormatForTest({ frameSize: item, keepTogether: true }),
+  );
   doc.nodes.AppendTableRow(table, 1);
   doc.nodes.AppendTableRow(table, 1, { frameSize: new SwFormatFrameSize() });
   for (const record of [
@@ -133,7 +141,7 @@ it("native row sizes cross structured clone and JSON with all eight fields and o
     const reopened = decodeWriterDocument(record),
       rows = required(reopened.GetTables()[0]).GetTabLines();
     expect(required(rows[0]).GetFrameSize().equals(item)).toBe(true);
-    expect(required(rows[0]).GetFormat().keepTogether).toBe(true);
+    expect(rowKeepTogetherForTest(required(rows[0]).GetFormat())).toBe(true);
     expect(required(rows[1]).GetFrameSize().equals(new SwFormatFrameSize())).toBe(true);
     expect(required(rows[2]).GetFrameSize().GetHeightSizeType()).toBe(SwFrameSize.Variable);
   }

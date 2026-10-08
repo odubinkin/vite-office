@@ -1,4 +1,8 @@
 /** @fileoverview Verifies represented minimum-row-height document ownership without upstream dependencies. */
+import {
+  nativeRowFormatForTest,
+  rowKeepTogetherForTest,
+} from "../../../../test/table-row-test-helpers";
 import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
 import { expect, it, vi } from "vitest";
 import { SwDoc } from "../doc/doc";
@@ -16,13 +20,17 @@ function fixture() {
   table.AddColumnWidth(3000);
   table.AddColumnWidth(3000);
   for (const minHeight of [undefined, 400, 0])
-    doc.nodes.AppendTableRow(table, 2, {
-      frameSize:
-        minHeight === undefined
-          ? undefined
-          : new SwFormatFrameSize(SwFrameSize.Minimum, 0, minHeight),
-      keepTogether: true,
-    });
+    doc.nodes.AppendTableRow(
+      table,
+      2,
+      nativeRowFormatForTest({
+        frameSize:
+          minHeight === undefined
+            ? undefined
+            : new SwFormatFrameSize(SwFrameSize.Minimum, 0, minHeight),
+        keepTogether: true,
+      }),
+    );
   const rows = [...table.GetTabLines()],
     node = required(required(required(rows[1]).GetTabBoxes()[0]).GetParagraphs()[0]);
   node.SetText("middle");
@@ -65,7 +73,7 @@ it("document minimum height ignores ordinary mark and ring and records same-valu
   expect(
     f.rows.map(
       /** Reads unrelated row items. @param row - Native row. @returns Stored flag. */ (row) =>
-        row.GetFormat().keepTogether,
+        rowKeepTogetherForTest(row.GetFormat()),
     ),
   ).toEqual([true, true, true]);
   expect(f.table.GetFormat().layoutSplit).toBe(false);

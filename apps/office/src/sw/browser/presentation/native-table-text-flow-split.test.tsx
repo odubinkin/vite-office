@@ -1,4 +1,5 @@
 /** @fileoverview Verifies direct native split widgets, mixed state and properties draft isolation. */
+import { nativeRowFormatForTest } from "../../../test/table-row-test-helpers";
 import { nativeTableInputForTest } from "../../../test/table-box-test-helpers";
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, expect, it, vi } from "vitest";
@@ -16,7 +17,7 @@ function fixture(selected = false, split?: boolean) {
     });
   table.AddColumnWidth(6000);
   for (const keepTogether of [true, false, true])
-    doc.nodes.AppendTableRow(table, 1, { keepTogether });
+    doc.nodes.AppendTableRow(table, 1, nativeRowFormatForTest({ keepTogether }));
   const box = table.GetTabLines()[0]?.GetTabBoxes()[0];
   if (box === undefined) throw new Error("Missing original selected box");
   const submit = vi.fn(),

@@ -1,4 +1,5 @@
 /** @fileoverview Verifies native table cursor traversal and actual retained row history without upstream execution. */
+import { nativeRowFormatForTest } from "../../../../test/table-row-test-helpers";
 import { nativeBoxFormat } from "../../../../test/table-box-test-helpers";
 import { VertOrientation } from "./../../../../offapi/com/sun/star/text/VertOrientation";
 import { SwFormatVertOrient } from "./../../../inc/fmtornt";
@@ -37,7 +38,10 @@ function fixture() {
     lastRow = doc.nodes.AppendTableRow(
       table,
       2,
-      { frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 480), keepTogether: true },
+      nativeRowFormatForTest({
+        frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 480),
+        keepTogether: true,
+      }),
       [
         nativeBoxFormat({ padding: 120 }),
         { vertOrient: new SwFormatVertOrient(0, VertOrientation.BOTTOM) },
@@ -224,10 +228,12 @@ describe("native table traversal", /** Registers actual cursor/row/history contr
     expect(history.GetUndoActionCount()).toBe(1);
     point(f, fresh);
     expect(f.doc.nodes.Count()).toBe(nodeCount + 6);
-    expect(row.GetFormat()).toEqual({
-      frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 480),
-      keepTogether: true,
-    });
+    expect(row.GetFormat()).toEqual(
+      nativeRowFormatForTest({
+        frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 480),
+        keepTogether: true,
+      }),
+    );
     expect(row.GetTabBoxes()[0]?.GetFormat()).toEqual({
       ...nativeBoxFormat({ padding: 120 }),
       frameSize: new SwFormatFrameSize(SwFrameSize.Variable, 3000, 0),

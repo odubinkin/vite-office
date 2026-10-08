@@ -8,6 +8,7 @@ import { SwTextNode } from "../txtnode/ndtxt";
 import { SwTabCols } from "../bastyp/tabcol";
 import { SwFormatFrameSize } from "../../../inc/fmtfsize";
 import { SwFormatVertOrient } from "../../../inc/fmtornt";
+import { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
 import { SvxBoxItem } from "../../../../editeng/source/items/frmitems";
 import { SvxBorderLine } from "../../../../editeng/source/items/borderline";
 import { RES_BOX } from "../../../inc/hintids";
@@ -30,7 +31,7 @@ export interface SwTableFormat {
 /** Bounded row geometry owned by SwTableLine. */
 export interface SwTableLineFormat {
   readonly frameSize?: SwFormatFrameSize | undefined;
-  readonly keepTogether?: boolean | undefined;
+  readonly rowSplit?: SwFormatRowSplit | undefined;
 }
 
 /** Bounded cell geometry owned by SwTableBox. */
@@ -132,6 +133,7 @@ export class SwTableLine {
     return {
       ...this.format,
       ...(this.format.frameSize === undefined ? {} : { frameSize: this.format.frameSize.Clone() }),
+      ...(this.format.rowSplit === undefined ? {} : { rowSplit: this.format.rowSplit.Clone() }),
     };
   }
 
@@ -140,7 +142,13 @@ export class SwTableLine {
     this.format = {
       ...value,
       ...(value.frameSize === undefined ? {} : { frameSize: value.frameSize.Clone() }),
+      ...(value.rowSplit === undefined ? {} : { rowSplit: value.rowSplit.Clone() }),
     };
+  }
+
+  /** Reads an independent effective native row split item, including the true default. @returns Native row split item. */
+  public GetRowSplit(): SwFormatRowSplit {
+    return this.format.rowSplit?.Clone() ?? new SwFormatRowSplit();
   }
 
   /** Reads an independent effective native frame-size item, including pool defaults. @returns Complete frame size. */

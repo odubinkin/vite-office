@@ -1,5 +1,6 @@
 /** @fileoverview Adapts xmloff table SAX callbacks to canonical Writer SwTable sections, following pinned xmltbli.cxx. */
 import { SwFormatVertOrient } from "../../../inc/fmtornt";
+import { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
 import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
 import { importBoxProperties } from "../../../../xmloff/source/style/bordrhdl";
 import { RES_BOX } from "../../../inc/hintids";
@@ -103,7 +104,8 @@ export class SwXMLTableImport extends SvXMLImport {
     const count = this.columnWidths.length;
     if (count === 0) throw new Error("ODF table has no declared columns.");
     this.activeRow = new SwTableLine({
-      keepTogether: style.keepTogether,
+      rowSplit:
+        style.keepTogether === undefined ? undefined : new SwFormatRowSplit(!style.keepTogether),
       frameSize:
         style.minHeight !== undefined
           ? new SwFormatFrameSize(

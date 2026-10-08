@@ -1,4 +1,5 @@
 /** @fileoverview Verifies native changed-item admission preserves heterogeneous cell borders, history and original selection. */
+import { SwFormatRowSplit } from "../../inc/fmtrowsplt";
 for (const mode of ["border-only", "row-split-only", "both"] as const)
   it(
     "native original cursor history before temporary border selection mode=" + mode,
@@ -11,7 +12,7 @@ for (const mode of ["border-only", "row-split-only", "both"] as const)
         f.session.view
           .GetEditWin()
           .SetSelection({ point: { nodeIndex: node.GetIndex(), contentIndex: 2 } });
-        expect(f.shell.SetRowSplit(true)).toBe(true);
+        expect(f.shell.SetRowSplit(new SwFormatRowSplit(true))).toBe(true);
         f.doc.GetUndoManager().Clear();
         const before = f.shell.CaptureCursorState(),
           cursor = f.shell.getShellCursor();
@@ -140,7 +141,7 @@ for (const mode of ["untouched", "reset", "change-back"] as const)
         expect(input).not.toHaveProperty("border");
         expect(input).not.toHaveProperty("padding");
         expect(ItemSetToTableParam(f.shell, input)).toBe(true);
-        expect(setter).toHaveBeenCalledOnce();
+        expect(setter).toHaveBeenCalledTimes(mode === "untouched" ? 0 : 1);
         expect(input.borderItems?.GetItemIfSet(RES_BOX)).toBeUndefined();
         expect(values(f)).toEqual(original);
         expect(f.shell.CaptureCursorState().point).toEqual(before.point);
@@ -284,8 +285,8 @@ it("native untouched acceptance skips temporary selection with nonzero original 
     expect(input).not.toHaveProperty("border");
     expect(input).not.toHaveProperty("padding");
     expect(ItemSetToTableParam(f.shell, input)).toBe(true);
-    expect(push).toHaveBeenCalledOnce();
-    expect(border).toHaveBeenCalledOnce();
+    expect(push).not.toHaveBeenCalled();
+    expect(border).not.toHaveBeenCalled();
     expect(input.borderItems?.GetItemIfSet(RES_BOX)).toBeUndefined();
     expect(split).not.toHaveBeenCalled();
     expect(values(f)).toEqual(original);

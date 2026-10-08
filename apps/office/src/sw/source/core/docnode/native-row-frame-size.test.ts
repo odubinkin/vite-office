@@ -1,4 +1,8 @@
 /** @fileoverview Verifies native full-item row ownership, layout and resize history without upstream access. */
+import {
+  nativeRowFormatForTest,
+  rowKeepTogetherForTest,
+} from "../../../../test/table-row-test-helpers";
 import { expect, it, vi } from "vitest";
 import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
 import { SwDoc } from "../doc/doc";
@@ -63,7 +67,11 @@ it.each([SwFrameSize.Variable, SwFrameSize.Minimum, SwFrameSize.Fixed])(
     item.SetHeightPercent(60);
     item.SetWidthPercentRelation(2);
     item.SetHeightPercentRelation(3);
-    const row = doc.nodes.AppendTableRow(table, 1, { frameSize: item, keepTogether: true }),
+    const row = doc.nodes.AppendTableRow(
+        table,
+        1,
+        nativeRowFormatForTest({ frameSize: item, keepTogether: true }),
+      ),
       box = required(row.GetTabBoxes()[0]),
       node = required(box.GetParagraphs()[0]);
     node.SetText("original");
@@ -85,7 +93,7 @@ it.each([SwFrameSize.Variable, SwFrameSize.Minimum, SwFrameSize.Fixed])(
     result.SetHeight(750);
     result.SetHeightSizeType(type);
     expect(result.equals(item)).toBe(true);
-    expect(row.GetFormat().keepTogether).toBe(true);
+    expect(rowKeepTogetherForTest(row.GetFormat())).toBe(true);
     expect(doc.GetUndoManager().GetUndoActionCount()).toBe(1);
     const position = new SwPosition(node, 0),
       cursor = new SwCursor(position);

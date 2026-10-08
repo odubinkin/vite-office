@@ -1,4 +1,5 @@
 /** @fileoverview Verifies native table-property owners, selection, attribute-only history and lifecycle without upstream execution. */
+import { nativeRowFormatForTest } from "../../../../test/table-row-test-helpers";
 import { nativeBoxFormat, tableBoxFormatForTest } from "../../../../test/table-box-test-helpers";
 import { VertOrientation } from "./../../../../offapi/com/sun/star/text/VertOrientation";
 import { SwFormatVertOrient } from "./../../../inc/fmtornt";
@@ -38,7 +39,10 @@ function fixture() {
     doc.nodes.AppendTableRow(
       table,
       2,
-      { frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 100), keepTogether: false },
+      nativeRowFormatForTest({
+        frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 100),
+        keepTogether: false,
+      }),
       [
         nativeBoxFormat({
           padding: 50,
@@ -139,14 +143,18 @@ describe("native table property application", /** Registers actual-owner contrac
         headerRows: 0,
         repeatHeaderRows: false,
       });
-      expect(rows[0]?.GetFormat()).toEqual({
-        frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 100),
-        keepTogether: true,
-      });
-      expect(rows[1]?.GetFormat()).toEqual({
-        frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 100),
-        keepTogether: !selected,
-      });
+      expect(rows[0]?.GetFormat()).toEqual(
+        nativeRowFormatForTest({
+          frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 100),
+          keepTogether: true,
+        }),
+      );
+      expect(rows[1]?.GetFormat()).toEqual(
+        nativeRowFormatForTest({
+          frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 100),
+          keepTogether: !selected,
+        }),
+      );
       expect(
         f.boxes.map(
           /** Projects actual box attributes. @param box - Original box. @returns Current attributes. */ (

@@ -11,6 +11,7 @@ import { SwTabFrame, type SwTableMouseCell, type SwTableMouseRect } from "../lay
 import { SwTabCols } from "../bastyp/tabcol";
 import { SwDoc } from "../doc/doc";
 import type { SwFormatFrameSize } from "../../../inc/fmtfsize";
+import type { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 
 /** Native mouse hit over actual measured frame and box owners. */
@@ -382,7 +383,7 @@ export abstract class SwFEShell extends SwEditShell {
   }
 
   /** Applies native row splitting through document-owned current or selected rows. @param split - Whether rows may split. @param cursorState - Original displayed cursor before temporary selection. @returns Whether admitted. */
-  public SetRowSplit(split: boolean, cursorState?: SwUndoCursorState): boolean {
+  public SetRowSplit(split: SwFormatRowSplit, cursorState?: SwUndoCursorState): boolean {
     return this.RunNotificationTransaction(
       /** Forwards actual native selection and pending history attributes. @returns Whether admitted. */
       () =>
@@ -395,7 +396,7 @@ export abstract class SwFEShell extends SwEditShell {
   }
 
   /** Reads the common item over native current or selected rows. @returns Common split value or no item for mixed/non-table input. */
-  public GetRowSplit(): boolean | undefined {
+  public GetRowSplit(): SwFormatRowSplit | undefined {
     return SwDoc.GetRowSplit(this.getShellCursor());
   }
 

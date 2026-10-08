@@ -1,4 +1,5 @@
 /** @fileoverview Verifies upstream current-page Reset over original native table drafts and independent properties pages. */
+import { nativeRowFormatForTest } from "../../../test/table-row-test-helpers";
 import {
   nativeTableInputForTest,
   nativeBoxFormat,
@@ -30,11 +31,13 @@ function fixture(name = "Reset") {
   const row = table.GetTabLines()[0],
     box = row?.GetTabBoxes()[0];
   if (row === undefined || box === undefined) throw new Error("Missing original reset graph");
-  row.SetFormat({
-    ...row.GetFormat(),
-    frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 300),
-    keepTogether: true,
-  });
+  row.SetFormat(
+    nativeRowFormatForTest({
+      ...row.GetFormat(),
+      frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 300),
+      keepTogether: true,
+    }),
+  );
   box.SetFormat(
     nativeBoxFormat({
       ...tableBoxFormatForTest(box.GetFormat()),
