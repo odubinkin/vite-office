@@ -255,6 +255,7 @@ describe("native table traversal", /** Registers actual cursor/row/history contr
     expect(after.activeParagraph.text).toBe("");
     expect(before.activeParagraph.text).toBe("cell3");
     for (let cycle = 0; cycle < 2; cycle++) {
+      const acceptedFormat = row.GetFormat();
       expect(f.edit.Undo()).toBe(true);
       point(f, last, 3);
       expect(f.doc.nodes.Count()).toBe(nodeCount);
@@ -268,7 +269,7 @@ describe("native table traversal", /** Registers actual cursor/row/history contr
       fresh = required(required(row.GetTabBoxes()[0]).GetParagraphs()[0]);
       expect(row).not.toBe(previousRow);
       expect(fresh).not.toBe(previousFresh);
-      expect(row.GetFormat()).toEqual(previousRow.GetFormat());
+      expect(row.GetFormat()).toEqual(acceptedFormat);
       expect(fresh.GetTextFormatColl()).toBe(style);
       expect(fresh.GetParagraphTextLeftMargin()).toBe(720);
       point(f, fresh);

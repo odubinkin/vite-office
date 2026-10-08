@@ -2,6 +2,8 @@
 import type { SwTable, SwTableLine, SwTableBox, SwTableBoxFormat } from "../table/swtable";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import type { SwTableLineFormat } from "../../../inc/swtblfmt";
+import { MoveTableLineHint } from "../../../inc/hints";
+import type { SwFrameFormat } from "../layout/atrfrm";
 import { SwTableNode } from "../docnode/node";
 import type { SwDoc } from "../doc/doc";
 import type { SwInsertTableOptions } from "../../../inc/itabenum";
@@ -101,6 +103,11 @@ export class SwUndoInsTable extends SwUndo {
   }
 }
 
+/** Deletes a native frame format after its final represented client is removed. @param format - Prior native owner. @returns Nothing. */
+function KillEmptyFrameFormat(format: SwFrameFormat): void {
+  if (!format.HasListeners()) format.DisposeModify();
+}
+
 /** Retains table attributes only, corresponding to native SaveTable's represented flat-grid slice. */
 class SaveTable {
   private readonly format;
@@ -154,7 +161,11 @@ class SaveTable {
         index,
       ) => {
         const row = table.GetTabLines()[index] as SwTableLine;
-        row.ChgFrameFormat(formats[saved.formatIndex] as SwTableLineFormat);
+        const previous = row.GetFrameFormat(),
+          restored = formats[saved.formatIndex] as SwTableLineFormat;
+        previous.CallSwClientNotify(new MoveTableLineHint(restored, row));
+        row.RegisterToModify(restored);
+        KillEmptyFrameFormat(previous);
         saved.boxes.forEach(
           /** Restores an original box format. @param format - Retained attributes. @param column - Column index. @returns Nothing. */ (
             format,

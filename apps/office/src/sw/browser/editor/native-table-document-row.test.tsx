@@ -57,6 +57,7 @@ it("renders default Tab append through document insertion without action replay"
     expect(selection.focusOffset).toBe(0);
     expect(shell.GetActiveParagraph()).toBe(cell);
     expect(doc.GetUndoManager().GetUndoActionCount()).toBe(1);
+    const acceptedFormat = row.GetFormat();
     for (let cycle = 0; cycle < 3; cycle++) {
       act(
         /** Reverts one native row unit. @returns Nothing. */ () => {
@@ -76,7 +77,7 @@ it("renders default Tab append through document insertion without action replay"
         currentCell = required(required(currentRow.GetTabBoxes()[0]).GetParagraphs()[0]);
       expect(currentRow).not.toBe(row);
       expect(currentCell).not.toBe(cell);
-      expect(currentRow.GetFormat()).toEqual(row.GetFormat());
+      expect(currentRow.GetFormat()).toEqual(acceptedFormat);
       expect(
         currentRow.GetTabBoxes().map(
           /** Reads recreated native frame attributes. @param box - Actual box. @returns Format. */

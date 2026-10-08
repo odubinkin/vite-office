@@ -151,154 +151,160 @@ function browserCellBoxStyle(item: SvxBoxItem, fixedGuide: boolean): React.CSSPr
               >[number];
               const nativeRow = new SwRowFrame(row);
               const isRepeatedHeadline = frameRowIndex < repeatedHeaderRows;
-              return (
-                <tr
-                  aria-selected={
-                    !isRepeatedHeadline &&
-                    row
-                      .GetTabBoxes()
-                      .every(
-                        /** Projects actual native table ownership. @param box - Current owner. @returns Operation result. */ (
-                          box,
-                        ) => selectedBoxes?.includes(box.GetStartNode().GetIndex()) === true,
-                      )
-                  }
-                  data-writer-table-row={rowIndex}
-                  data-writer-repeated-headline={isRepeatedHeadline ? "true" : undefined}
-                  key={rowIndex}
-                  style={{ height: nativeRow.Format(0) / 15 }}
-                >
-                  {row.GetTabBoxes().map(
-                    /** Handles the browser table interaction. @param argument1 - Callback input. @param argument2 - Callback input. @returns Callback result. */ (
-                      cell,
-                      cellIndex,
-                    ) => {
-                      const boxItem = cell.GetBox(),
-                        boxStyle = browserCellBoxStyle(boxItem, nativeRow.HasFixSize());
-                      if (format.borderModel === "collapsing") {
-                        boxStyle.borderTop = browserBorderLine(
-                          resolved.get(`true:${rowIndex}:${cellIndex}`),
-                          nativeRow.HasFixSize(),
-                        );
-                        boxStyle.borderBottom = browserBorderLine(
-                          resolved.get(`true:${rowIndex + 1}:${cellIndex}`),
-                          nativeRow.HasFixSize(),
-                        );
-                        boxStyle.borderLeft = browserBorderLine(
-                          resolved.get(`false:${cellIndex}:${rowIndex}`),
-                          nativeRow.HasFixSize(),
-                        );
-                        boxStyle.borderRight = browserBorderLine(
-                          resolved.get(`false:${cellIndex + 1}:${rowIndex}`),
-                          nativeRow.HasFixSize(),
-                        );
-                      }
-                      const content = cell.GetParagraphs().map(
-                        /** Handles the browser table interaction. @param argument1 - Callback input. @param argument2 - Callback input. @returns Callback result. */ (
-                          paragraph,
-                          paragraphIndex,
-                        ) => {
-                          const projection = paragraphs.get(paragraph.GetIndex());
-                          if (projection === undefined)
-                            throw new Error(
-                              "Writer table cell has no connected paragraph projection.",
-                            );
-                          return (
-                            <WriterEditableParagraph
-                              cellPosition={{ rowIndex, cellIndex, paragraphIndex }}
-                              index={paragraphIndex}
-                              isActive={activeParagraphId === projection.id}
-                              key={projection.id}
-                              listMarker={projection.listMarker}
-                              paragraph={projection}
-                              retainElement={
-                                /** Registers visible paragraphs;measurement uses the same render without a live selection surface. @param id - Stable display ID. @param element - Paragraph mount or cleanup. @returns Nothing. */ (
-                                  id,
-                                  element,
-                                ) => retainParagraphElement?.(id, element)
-                              }
-                            />
+              try {
+                return (
+                  <tr
+                    aria-selected={
+                      !isRepeatedHeadline &&
+                      row
+                        .GetTabBoxes()
+                        .every(
+                          /** Projects actual native table ownership. @param box - Current owner. @returns Operation result. */ (
+                            box,
+                          ) => selectedBoxes?.includes(box.GetStartNode().GetIndex()) === true,
+                        )
+                    }
+                    data-writer-table-row={rowIndex}
+                    data-writer-repeated-headline={isRepeatedHeadline ? "true" : undefined}
+                    key={rowIndex}
+                    style={{ height: nativeRow.Format(0) / 15 }}
+                  >
+                    {row.GetTabBoxes().map(
+                      /** Handles the browser table interaction. @param argument1 - Callback input. @param argument2 - Callback input. @returns Callback result. */ (
+                        cell,
+                        cellIndex,
+                      ) => {
+                        const boxItem = cell.GetBox(),
+                          boxStyle = browserCellBoxStyle(boxItem, nativeRow.HasFixSize());
+                        if (format.borderModel === "collapsing") {
+                          boxStyle.borderTop = browserBorderLine(
+                            resolved.get(`true:${rowIndex}:${cellIndex}`),
+                            nativeRow.HasFixSize(),
                           );
-                        },
-                      );
-                      const CellTag = rowIndex < (format.headerRows ?? 0) ? "th" : "td";
-                      return (
-                        <CellTag
-                          data-writer-table-box={cell.GetStartNode().GetIndex()}
-                          data-writer-editor-selected={
-                            !isRepeatedHeadline &&
-                            selectedBoxes?.includes(cell.GetStartNode().GetIndex()) === true
-                              ? "true"
-                              : undefined
-                          }
-                          data-writer-border-guide={
-                            [0, 1, 2, 3].every(
-                              /** Checks native painted border absence. @param edge - Side. @returns Whether empty. */ (
-                                edge,
-                              ) => boxItem.GetLine(edge)?.isEmpty() ?? true,
-                            )
-                              ? "true"
-                              : undefined
-                          }
-                          className={
-                            !isRepeatedHeadline &&
-                            selectedBoxes?.includes(cell.GetStartNode().GetIndex()) === true
-                              ? "relative bg-indigo-50 outline outline-1 outline-indigo-300"
-                              : "relative"
-                          }
-                          colSpan={grid.GetColumnSpan(cell)}
-                          key={cellIndex}
-                          style={{
-                            ...(nativeRow.HasFixSize() ? { border: "none", padding: 0 } : boxStyle),
-                            outline: [0, 1, 2, 3].every(
-                              /** Keeps borderless table guides outside native column geometry. @param edge - Native side. @returns Whether unpainted. */
-                              (edge) => boxItem.GetLine(edge)?.isEmpty() ?? true,
-                            )
-                              ? "1px dashed #cbd5e1"
-                              : undefined,
-                            outlineOffset: -1,
-                            verticalAlign:
-                              cell.GetVertOrient().GetVertOrient() === VertOrientation.CENTER
-                                ? "middle"
-                                : cell.GetVertOrient().GetVertOrient() === VertOrientation.BOTTOM
-                                  ? "bottom"
-                                  : "top",
-                          }}
-                        >
-                          {nativeRow.HasFixSize() ? (
-                            <div
-                              data-writer-fixed-row-content="true"
-                              style={{
-                                position: "absolute",
-                                top: 0,
-                                left: 0,
-                                right: 0,
-                                height: row.GetFrameSize().GetHeight() / 15,
-                                boxSizing: "border-box",
-                                overflow: "hidden",
-                                display: "flex",
-                                flexDirection: "column",
-                                justifyContent:
-                                  cell.GetVertOrient().GetVertOrient() === VertOrientation.CENTER
-                                    ? "safe center"
-                                    : cell.GetVertOrient().GetVertOrient() ===
-                                        VertOrientation.BOTTOM
-                                      ? "safe flex-end"
-                                      : "flex-start",
-                                ...boxStyle,
-                              }}
-                            >
-                              {content}
-                            </div>
-                          ) : (
-                            content
-                          )}
-                        </CellTag>
-                      );
-                    },
-                  )}
-                </tr>
-              );
+                          boxStyle.borderBottom = browserBorderLine(
+                            resolved.get(`true:${rowIndex + 1}:${cellIndex}`),
+                            nativeRow.HasFixSize(),
+                          );
+                          boxStyle.borderLeft = browserBorderLine(
+                            resolved.get(`false:${cellIndex}:${rowIndex}`),
+                            nativeRow.HasFixSize(),
+                          );
+                          boxStyle.borderRight = browserBorderLine(
+                            resolved.get(`false:${cellIndex + 1}:${rowIndex}`),
+                            nativeRow.HasFixSize(),
+                          );
+                        }
+                        const content = cell.GetParagraphs().map(
+                          /** Handles the browser table interaction. @param argument1 - Callback input. @param argument2 - Callback input. @returns Callback result. */ (
+                            paragraph,
+                            paragraphIndex,
+                          ) => {
+                            const projection = paragraphs.get(paragraph.GetIndex());
+                            if (projection === undefined)
+                              throw new Error(
+                                "Writer table cell has no connected paragraph projection.",
+                              );
+                            return (
+                              <WriterEditableParagraph
+                                cellPosition={{ rowIndex, cellIndex, paragraphIndex }}
+                                index={paragraphIndex}
+                                isActive={activeParagraphId === projection.id}
+                                key={projection.id}
+                                listMarker={projection.listMarker}
+                                paragraph={projection}
+                                retainElement={
+                                  /** Registers visible paragraphs;measurement uses the same render without a live selection surface. @param id - Stable display ID. @param element - Paragraph mount or cleanup. @returns Nothing. */ (
+                                    id,
+                                    element,
+                                  ) => retainParagraphElement?.(id, element)
+                                }
+                              />
+                            );
+                          },
+                        );
+                        const CellTag = rowIndex < (format.headerRows ?? 0) ? "th" : "td";
+                        return (
+                          <CellTag
+                            data-writer-table-box={cell.GetStartNode().GetIndex()}
+                            data-writer-editor-selected={
+                              !isRepeatedHeadline &&
+                              selectedBoxes?.includes(cell.GetStartNode().GetIndex()) === true
+                                ? "true"
+                                : undefined
+                            }
+                            data-writer-border-guide={
+                              [0, 1, 2, 3].every(
+                                /** Checks native painted border absence. @param edge - Side. @returns Whether empty. */ (
+                                  edge,
+                                ) => boxItem.GetLine(edge)?.isEmpty() ?? true,
+                              )
+                                ? "true"
+                                : undefined
+                            }
+                            className={
+                              !isRepeatedHeadline &&
+                              selectedBoxes?.includes(cell.GetStartNode().GetIndex()) === true
+                                ? "relative bg-indigo-50 outline outline-1 outline-indigo-300"
+                                : "relative"
+                            }
+                            colSpan={grid.GetColumnSpan(cell)}
+                            key={cellIndex}
+                            style={{
+                              ...(nativeRow.HasFixSize()
+                                ? { border: "none", padding: 0 }
+                                : boxStyle),
+                              outline: [0, 1, 2, 3].every(
+                                /** Keeps borderless table guides outside native column geometry. @param edge - Native side. @returns Whether unpainted. */
+                                (edge) => boxItem.GetLine(edge)?.isEmpty() ?? true,
+                              )
+                                ? "1px dashed #cbd5e1"
+                                : undefined,
+                              outlineOffset: -1,
+                              verticalAlign:
+                                cell.GetVertOrient().GetVertOrient() === VertOrientation.CENTER
+                                  ? "middle"
+                                  : cell.GetVertOrient().GetVertOrient() === VertOrientation.BOTTOM
+                                    ? "bottom"
+                                    : "top",
+                            }}
+                          >
+                            {nativeRow.HasFixSize() ? (
+                              <div
+                                data-writer-fixed-row-content="true"
+                                style={{
+                                  position: "absolute",
+                                  top: 0,
+                                  left: 0,
+                                  right: 0,
+                                  height: row.GetFrameSize().GetHeight() / 15,
+                                  boxSizing: "border-box",
+                                  overflow: "hidden",
+                                  display: "flex",
+                                  flexDirection: "column",
+                                  justifyContent:
+                                    cell.GetVertOrient().GetVertOrient() === VertOrientation.CENTER
+                                      ? "safe center"
+                                      : cell.GetVertOrient().GetVertOrient() ===
+                                          VertOrientation.BOTTOM
+                                        ? "safe flex-end"
+                                        : "flex-start",
+                                  ...boxStyle,
+                                }}
+                              >
+                                {content}
+                              </div>
+                            ) : (
+                              content
+                            )}
+                          </CellTag>
+                        );
+                      },
+                    )}
+                  </tr>
+                );
+              } finally {
+                nativeRow.DestroyImpl();
+              }
             },
           )}
         </tbody>

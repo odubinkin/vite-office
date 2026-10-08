@@ -1,0 +1,232 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sources": [
+    {
+      "path": "sw/inc/hints.hxx",
+      "sha256": "bcd9e3d72adc75313d616c566b0cb1b89a6e7e1d0947b90b09a36364cb467bf3",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "MoveTableLineHint",
+          "line": 195,
+          "allMatchingLines": [
+            195,
+            200
+          ]
+        },
+        {
+          "identifier": "TableLineFormatChanged",
+          "line": 219,
+          "allMatchingLines": [
+            219,
+            224,
+            225
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sw/source/core/table/swtable.cxx",
+      "sha256": "10c536056498dd001b3a5c75638040ee5daef966ede231c66947da8e704b1206",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "SwTableLine::SwTableLine",
+          "line": 1455,
+          "allMatchingLines": [
+            1455
+          ]
+        },
+        {
+          "identifier": "SwTableLine::~SwTableLine",
+          "line": 1464,
+          "allMatchingLines": [
+            1464
+          ]
+        },
+        {
+          "identifier": "SwTableLine::ClaimFrameFormat",
+          "line": 1477,
+          "allMatchingLines": [
+            1477
+          ]
+        },
+        {
+          "identifier": "SwTableLine::ChgFrameFormat",
+          "line": 1510,
+          "allMatchingLines": [
+            1510
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sw/source/core/layout/tabfrm.cxx",
+      "sha256": "d1d616197c6aeac1b1ba075995892b34cfdbea60838e88136f9bf4a52e90970f",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "SwRowFrame::SwRowFrame",
+          "line": 4639,
+          "allMatchingLines": [
+            4639
+          ]
+        },
+        {
+          "identifier": "SwRowFrame::DestroyImpl",
+          "line": 4675,
+          "allMatchingLines": [
+            4675
+          ]
+        },
+        {
+          "identifier": "SwRowFrame::SwClientNotify",
+          "line": 4714,
+          "allMatchingLines": [
+            4714
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sw/source/core/layout/wsfrm.cxx",
+      "sha256": "68b33e1acaf748e65210b8856f8b094368459565446b7ab5c386684fcae0aeb1",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "SwFrame::RegisterToFormat",
+          "line": 368,
+          "allMatchingLines": [
+            368
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sw/source/core/undo/untbl.cxx",
+      "sha256": "147e1b9f9870416bc83d2b918a0621e810003594b9a95ede372518925b2c245b",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "KillEmptyFrameFormat",
+          "line": 104,
+          "allMatchingLines": [
+            104,
+            1121,
+            1131
+          ]
+        },
+        {
+          "identifier": "SaveTable::NewFrameFormatForLine",
+          "line": 1114,
+          "allMatchingLines": [
+            1114
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sw/source/core/docnode/ndtbl.cxx",
+      "sha256": "d3220445657cd54a44fc741bebf5d514b4d62f5607fcfb5e0f7ef30700075d8d",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "SwTableNode::DelFrames",
+          "line": 2604,
+          "allMatchingLines": [
+            2604
+          ]
+        },
+        {
+          "identifier": "SwTableNode::ImplDestroy",
+          "line": 2496,
+          "allMatchingLines": [
+            2496
+          ]
+        }
+      ]
+    }
+  ],
+  "production": [
+    {
+      "path": "apps/office/src/sw/inc/hints.ts",
+      "sha256": "ba40dc579cc1ba3103972c58fbc77f1f87b4be883e12120d7d156c4b9e3aa1e8",
+      "physicalLines": 78
+    },
+    {
+      "path": "apps/office/src/sw/source/core/layout/tabfrm.ts",
+      "sha256": "e13ee14536058f8166fa985d1b99be58fa98700500fefadfd917d413bdbfb810",
+      "physicalLines": 162
+    },
+    {
+      "path": "apps/office/src/sw/source/core/table/swtable.ts",
+      "sha256": "76038c831bca2607eb1bfe2916631907ce97a4b334c62fa28f4efdd038e18521",
+      "physicalLines": 872
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/untbl.ts",
+      "sha256": "dddfab8ec6339b7d71549ce5c6ed31c253287964c13b366640c96abbba31dfde",
+      "physicalLines": 370
+    },
+    {
+      "path": "apps/office/src/sw/source/core/docnode/nodes.ts",
+      "sha256": "c5bd89480613448ef9e55574734c3406eebc386c5285be117fc418f7f17ae8f8",
+      "physicalLines": 591
+    },
+    {
+      "path": "apps/office/src/sw/source/core/layout/newfrm.ts",
+      "sha256": "447346cdcf11103aa414f8f07b51db8683db41dad39b99dcee3df8e6391d72df",
+      "physicalLines": 797
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/WriterEditableTable.tsx",
+      "sha256": "0798cc5f8348e317a68488664e907397b10c96a9f4ba439cd0f550da7f75d3b6",
+      "physicalLines": 314
+    }
+  ],
+  "protectedIO": [
+    {
+      "path": "apps/office/src/sw/browser/storage/writer-odt-store.ts",
+      "sha256": "0fb4ebffca5a00fe63ff327379305d64143c7014dace0a7e13edb8c0c241232e",
+      "baselineByteIdentical": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/workflows/writer-odt-io.ts",
+      "sha256": "7c214afab59dbc5df1087f107e2b7bf2bf01d8623a2995e8eb19a45575361306",
+      "baselineByteIdentical": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/WriterFileDialog.tsx",
+      "sha256": "50ad125f5a254eb1772b62abe3681e4632df6c7870ea9647622b2268394c88c3",
+      "baselineByteIdentical": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts",
+      "sha256": "060a06dd9a77e530de1756b2f4c4384e6b2ddd1ee20c68fb175daab2eeb99ee7",
+      "baselineByteIdentical": true
+    }
+  ],
+  "writerUI": {
+    "path": "apps/office/src/sw/browser/presentation/writer-view.tsx",
+    "sha256": "782755425f440a2438a2994ee429a6ee7b37e4f65ca8e5f1855c9d18db8f9de1",
+    "entireSourceByteIdentical": true
+  },
+  "parent": {
+    "characters": 702566,
+    "sha256": "9356459286ee4c72f5bfe127f7437675f32438e1643e6cf110c322ee455bd8d5",
+    "unchanged": true
+  },
+  "stash": {
+    "commit": "c85f4a0e453dfd06d6e199554784f2c286737472",
+    "preserved": true
+  },
+  "sourceBoundContracts": [
+    "Native SwRowFrame is an original SwClient registered at its row format; GetFormat reads this registration and height resolution uses the exact native frame-size item.",
+    "Native ClaimFrameFormat moves all actual SwRowFrame clients for the claiming original row directly before re-registering that model row, leaving frames of peer rows unchanged.",
+    "Native ChgFrameFormat emits TableLineFormatChanged with borrowed new-format/original-line references before row registration. SaveTable NewFrameFormatForLine emits the distinct MoveTableLineHint, directly registers the row and invokes KillEmptyFrameFormat.",
+    "Native SwRowFrame DestroyImpl and SwTableLine destruction release their registration and delete a format only after its final represented client. Destructive row/table removal tears down the represented flat row frame clients before row model registration ends; ordinary nondestructive RemoveLine remains detachable.",
+    "Mounted WriterEditableTable rendering and SwRootFrame measurement use direct registered native row-frame item reads and release temporary clients in finally. Original native rows, boxes, text and document cursor remain the owners throughout repeated attribute and numeric history.",
+    "Full physical layout tree, native invalidation, follows/repeat frames, pooling, nested/merged table, UNO and modified-state contracts remain unverified. Flat teardown is a represented subset of native DelFrames, not complete hierarchical destruction.",
+    "All prior316 metadata records/states/defaults/classifications/evidence prefixes and649 unaffected prior acceptance files stay unchanged except append-only bounded metadata notes; two old history cases capture expected construction values before native destruction without weakening literal/identity/history assertions. Registered IO/recovery deviations, whole writer-view source and stash remain unchanged; the full goal remains incomplete."
+  ]
+}

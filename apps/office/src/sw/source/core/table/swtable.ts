@@ -3,6 +3,8 @@
 import type { SwTableBoxStartNode, SwTableNode } from "../docnode/node";
 import type { SwDoc } from "../doc/doc";
 import { SwFrameFormat } from "../layout/atrfrm";
+import { SwRowFrame } from "../layout/tabfrm";
+import { TableLineFormatChanged } from "../../../inc/hints";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { SwTextNode } from "../txtnode/ndtxt";
 import { SwTabCols } from "../bastyp/tabcol";
@@ -153,14 +155,31 @@ export class SwTableLine extends SwClient {
     if (!shared) return original;
     const copy = original.GetDoc().MakeTableLineFormat();
     copy.CopyFormatFrom(original);
-    this.ChgFrameFormat(copy);
+    original.ForAllListeners(
+      /** Moves frame clients bound to this original row before the row registration. @param client - Original format listener. @returns Continue flag. */
+      (client) => {
+        if (client instanceof SwRowFrame && client.GetTabLine() === this)
+          client.RegisterToFormat(copy);
+        return false;
+      },
+    );
+    this.RegisterToModify(copy);
     return copy;
   }
   /** Moves the original row registration to another same-document format. @param format - Replacement native owner. @returns Nothing. */
   public ChgFrameFormat(format: SwTableLineFormat): void {
     if (format.GetDoc() !== this.GetFrameFormat().GetDoc())
       throw new Error("Writer row format belongs to another document.");
+    const original = this.GetFrameFormat();
+    original.CallSwClientNotify(new TableLineFormatChanged(format, this));
     this.RegisterToModify(format);
+    if (!original.HasListeners()) original.DisposeModify();
+  }
+  /** Ends original row client lifetime without touching surviving format peers. @returns Nothing. */
+  public override Dispose(): void {
+    const format = this.GetRegisteredIn();
+    super.Dispose();
+    if (format !== undefined && !format.HasListeners()) format.DisposeModify();
   }
   /** Exposes authored row values only at explicit construction and transport boundaries. @returns Independent direct values. */
   public GetFormat(): SwTableLineFormatValue {

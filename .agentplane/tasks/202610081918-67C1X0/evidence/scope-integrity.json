@@ -1,0 +1,58 @@
+{
+  "base": "058cbe9888ffabd9ffb11b4a8920222aea3ba3e1",
+  "priorAcceptanceFiles": 651,
+  "entireByteIdenticalPriorAcceptanceFiles": 649,
+  "exactBeforeDestructiveUndoValueCaptureOnly": [
+    "apps/office/src/sw/browser/editor/native-table-document-row.test.tsx",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-traversal.test.ts"
+  ],
+  "oldLiteralAttributeIdentityAndHistoryAssertionsPreserved": true,
+  "freshAcceptanceFiles": [
+    {
+      "path": "apps/office/src/sw/source/core/layout/native-row-format-client.test.ts",
+      "sha256": "c9569dec6d99ee66cc960016b33fc22e7bdf25db59e743546a083d484da66ff5",
+      "noOnlySkipTodo": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/native-row-format-client-history.test.ts",
+      "sha256": "65db02faba252b681b4f8d3e8207a187c3590127d093ccba1913cb82b8b7c4e0",
+      "noOnlySkipTodo": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/native-row-format-client.test.tsx",
+      "sha256": "1db1b577a3827989e1e293084ec04fffb51ea898e1279f4790c31471fcb047dc",
+      "noOnlySkipTodo": true
+    }
+  ],
+  "metadata": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "priorRecords": 316,
+      "priorFieldsStatusesDefaultsClassificationOrderAndEvidencePrefixesPreserved": true,
+      "newRecords": 0
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "priorRecords": 316,
+      "priorFieldsStatusesDefaultsClassificationOrderAndEvidencePrefixesPreserved": true,
+      "newRecords": 0
+    }
+  ],
+  "approvedSemanticPaths": [
+    "apps/office/src/sw/inc/hints.ts",
+    "apps/office/src/sw/source/core/layout/tabfrm.ts",
+    "apps/office/src/sw/source/core/table/swtable.ts",
+    "apps/office/src/sw/source/core/undo/untbl.ts",
+    "apps/office/src/sw/source/core/docnode/nodes.ts",
+    "apps/office/src/sw/source/core/layout/newfrm.ts",
+    "apps/office/src/sw/browser/editor/WriterEditableTable.tsx",
+    "apps/office/src/sw/source/core/layout/native-row-format-client.test.ts",
+    "apps/office/src/sw/source/core/undo/native-row-format-client-history.test.ts",
+    "apps/office/src/sw/browser/editor/native-row-format-client.test.tsx",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json",
+    "apps/office/src/sw/browser/editor/native-table-document-row.test.tsx",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-traversal.test.ts"
+  ],
+  "unexpectedPaths": []
+}

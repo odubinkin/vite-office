@@ -2,22 +2,56 @@
 import type { SwTable, SwTableBox, SwTableLine } from "../table/swtable";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { SwFrameSize } from "../../../inc/fmtfsize";
+import { SwClient, type SwModify } from "../../../inc/calbck";
+import type { SwModelHint } from "../../../inc/hints";
+import type { SwFrameFormat } from "./atrfrm";
 
 /** Owns represented flat-row height over its original native line. */
-export class SwRowFrame {
+export class SwRowFrame extends SwClient {
   /** Binds the actual row owner. @param line - Original native line. @returns Nothing. */
-  public constructor(private readonly line: SwTableLine) {}
+  public constructor(private readonly line: SwTableLine) {
+    super();
+    this.RegisterToFormat(line.GetFrameFormat());
+  }
+  /** Reads the registered native frame format. @returns Current native owner. */
+  public GetFormat(): SwFrameFormat {
+    return this.GetRegisteredIn() as SwFrameFormat;
+  }
+  /** Registers this native frame at another format. @param format - New native owner. @returns Nothing. */
+  public RegisterToFormat(format: SwFrameFormat): void {
+    this.RegisterToModify(format);
+  }
+  /** Releases the frame and deletes its format only when no represented clients remain. @returns Nothing. */
+  public DestroyImpl(): void {
+    const format = this.GetRegisteredIn();
+    super.Dispose();
+    if (format !== undefined && !format.HasListeners()) format.DisposeModify();
+  }
+  /** Ends native frame lifetime through the original destruction body. @returns Nothing. */
+  public override Dispose(): void {
+    this.DestroyImpl();
+  }
+  /** Follows only original-row change and history movement hints. @param source - Emitting native owner. @param hint - Typed native notification. @returns Nothing. */
+  protected override SwClientNotify(source: SwModify, hint: SwModelHint): void {
+    if (hint.kind === "model-transaction") {
+      for (const nested of hint.hints) this.SwClientNotify(source, nested);
+    } else if (hint.kind === "table-line-format-changed") {
+      if (hint.m_rTabLine === this.line) this.RegisterToFormat(hint.m_rNewFormat);
+    } else if (hint.kind === "move-table-line") {
+      if (hint.m_rTableLine === this.line) this.RegisterToFormat(hint.m_rNewFormat);
+    } else super.SwClientNotify(source, hint);
+  }
   /** Reads the original row owner. @returns Native line. */
   public GetTabLine(): SwTableLine {
     return this.line;
   }
   /** Reads the native fixed-height flag. @returns Whether fixed. */
   public HasFixSize(): boolean {
-    return this.line.GetFrameSize().GetHeightSizeType() === SwFrameSize.Fixed;
+    return this.GetFormat().GetFrameSize().GetHeightSizeType() === SwFrameSize.Fixed;
   }
   /** Resolves represented native row height from the complete item and device content extent. @param contentHeight - Measured content height in twips. @returns Authored fixed height, minimum floor or natural content height. */
   public Format(contentHeight: number): number {
-    const size = this.line.GetFrameSize();
+    const size = this.GetFormat().GetFrameSize();
     if (size.GetHeightSizeType() === SwFrameSize.Fixed) return size.GetHeight();
     return size.GetHeightSizeType() === SwFrameSize.Minimum
       ? Math.max(size.GetHeight(), contentHeight)

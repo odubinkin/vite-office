@@ -19,15 +19,15 @@
     "coverage": {
       "lines": {
         "total": 17592,
-        "covered": 17591,
+        "covered": 17592,
         "skipped": 0,
-        "pct": 99.99
+        "pct": 100
       },
       "statements": {
         "total": 19320,
-        "covered": 19319,
+        "covered": 19320,
         "skipped": 0,
-        "pct": 99.99
+        "pct": 100
       },
       "functions": {
         "total": 4422,
@@ -37,9 +37,9 @@
       },
       "branches": {
         "total": 14333,
-        "covered": 14328,
+        "covered": 14333,
         "skipped": 0,
-        "pct": 99.96
+        "pct": 100
       },
       "branchesTrue": {
         "total": 0,
@@ -48,8 +48,8 @@
         "pct": "Unknown"
       }
     },
-    "mapSHA256": "6b060b375180819653edfc59d59fed6ded9ea9048a1cfba4aa43990088ad3dfd",
-    "proofSHA256": "45ce5081741970ad2751f8f9ea61b9e1c7d4779aa2b3ef24958beaa82b8f51dc",
+    "mapSHA256": "68de19f8c3d193595bd62133b34f21ee0c572c86a2739e1528579a70968cc589",
+    "proofSHA256": "5beb50774c733b4ece7abcbdd539edf0bcf8eb1d260992418d745205a2b5438f",
     "files": 313,
     "invalidWholeFallbacks": [
       {
@@ -57,7 +57,7 @@
         "reason": "V8 raw inferred else counter is negative; use entire prior verified current-byte-identical source and entire maps/counters, never sanitize individual counts",
         "priorMap": "C4324W.app-final.json",
         "priorMapSHA256": "2e657fd846d9ee3ef055cb6a72e65277b1ea6731b698be7380927724207d0750",
-        "discardedInvalidAggregateSHA256": "5c795fa1aad94dac959ff06a5df719d8abda2d75822d7bb0b645aefcf5414962",
+        "discardedInvalidAggregateSHA256": "a36fb64b8abd2237af7463262517fec60357e314f5333c31297ebc60a5c9d470",
         "negativeCounts": [
           -62
         ]
@@ -389,48 +389,7 @@
     ],
     "wholeFiles": 313,
     "transfers": [],
-    "gaps": [
-      {
-        "file": "apps/office/src/sw/browser/editor/WriterEditableTable.tsx",
-        "summary": {
-          "lines": {
-            "total": 45,
-            "covered": 44,
-            "skipped": 0,
-            "pct": 97.77
-          },
-          "functions": {
-            "total": 15,
-            "covered": 15,
-            "skipped": 0,
-            "pct": 100
-          },
-          "statements": {
-            "total": 45,
-            "covered": 44,
-            "skipped": 0,
-            "pct": 97.77
-          },
-          "branches": {
-            "total": 93,
-            "covered": 88,
-            "skipped": 0,
-            "pct": 94.62
-          }
-        },
-        "statements": [
-          204
-        ],
-        "functions": [],
-        "branches": [
-          168,
-          203,
-          264,
-          285,
-          287
-        ]
-      }
-    ]
+    "gaps": []
   },
   "inventory": {
     "coverage": {

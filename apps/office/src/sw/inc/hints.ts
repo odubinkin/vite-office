@@ -1,9 +1,34 @@
 /** @fileoverview Defines bounded typed Writer model hints from pinned `sw/inc/hints.hxx`. */
 
 import type { SfxHint } from "../../svl/source/notify/SfxBroadcaster";
+import type { SwFrameFormat } from "../source/core/layout/atrfrm";
+import type { SwTableLineFormat } from "./swtblfmt";
+import type { SwTableLine } from "../source/core/table/swtable";
+
+/** Native history hint moves the original line frame clients to a reconstructed owner. */
+export class MoveTableLineHint implements SfxHint {
+  public readonly kind = "move-table-line";
+  /** Borrows exact native owner and line references. @param m_rNewFormat - Restored frame format. @param m_rTableLine - Original row. @returns Nothing. */
+  public constructor(
+    public readonly m_rNewFormat: SwFrameFormat,
+    public readonly m_rTableLine: SwTableLine,
+  ) {}
+}
+
+/** Native row format change identifies precisely which original row frame clients move. */
+export class TableLineFormatChanged implements SfxHint {
+  public readonly kind = "table-line-format-changed";
+  /** Borrows exact changed owner and original line references. @param m_rNewFormat - Replacement row format. @param m_rTabLine - Original row. @returns Nothing. */
+  public constructor(
+    public readonly m_rNewFormat: SwTableLineFormat,
+    public readonly m_rTabLine: SwTableLine,
+  ) {}
+}
 
 /** Atomic Writer notifications emitted by model and shell boundaries. */
 export type SwAtomicModelHint =
+  | MoveTableLineHint
+  | TableLineFormatChanged
   | Readonly<{
       formatId?: string;
       kind: "attribute-set-changed";

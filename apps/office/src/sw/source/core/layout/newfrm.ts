@@ -449,14 +449,19 @@ function createSwTableFrameInputs(
         table,
         tableName: table.GetName(),
         afterParagraphIndex: paragraphIndex,
-        rowHeights: table
-          .GetTabLines()
-          .map(
-            /** map handles this value. @param row - Input 1. @param index - Input 2. @returns The result. */ (
-              row,
-              index,
-            ) => new SwRowFrame(row).Format(measured?.rowHeights[index] ?? 240),
-          ),
+        rowHeights: table.GetTabLines().map(
+          /** map handles this value. @param row - Input 1. @param index - Input 2. @returns The result. */ (
+            row,
+            index,
+          ) => {
+            const frame = new SwRowFrame(row);
+            try {
+              return frame.Format(measured?.rowHeights[index] ?? 240);
+            } finally {
+              frame.DestroyImpl();
+            }
+          },
+        ),
       });
     } else paragraphIndex += 1;
   }
