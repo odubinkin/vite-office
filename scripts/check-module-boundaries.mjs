@@ -37,7 +37,7 @@ const allowedEdges = new Map([
   ["sfx2", new Set(["svl"])],
   ["svl", new Set()],
   ["svtools", new Set()],
-  ["svx", new Set(["editeng"])],
+  ["svx", new Set(["editeng", "svl"])],
   [
     "sw",
     new Set([

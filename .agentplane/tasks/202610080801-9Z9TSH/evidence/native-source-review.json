@@ -1,0 +1,226 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sources": [
+    {
+      "path": "include/svx/rulritem.hxx",
+      "sha256": "4ad70d10c53ebe5a7a1be39c4bf111f7fc03e0e9b0b1a8c7d60d22cb13e33a88",
+      "anchors": [
+        {
+          "identifier": "struct SVX_DLLPUBLIC SvxColumnDescription",
+          "line": 120
+        },
+        {
+          "identifier": "class SVX_DLLPUBLIC SvxColumnItem",
+          "line": 149
+        },
+        {
+          "identifier": "GetActiveColumnDescription",
+          "line": 183
+        },
+        {
+          "identifier": "IsConsistent",
+          "line": 197
+        }
+      ]
+    },
+    {
+      "path": "svx/source/dialog/rulritem.cxx",
+      "sha256": "3ecabe5ebe2d7830f2d74d9baee9b180f4451d036b2298cef14dc5b5ed38e6d2",
+      "anchors": [
+        {
+          "identifier": "SvxColumnItem::operator==",
+          "line": 387
+        },
+        {
+          "identifier": "SvxColumnItem::SvxColumnItem",
+          "line": 406
+        },
+        {
+          "identifier": "SvxColumnItem::Clone",
+          "line": 435
+        },
+        {
+          "identifier": "SvxColumnItem::CalcOrtho",
+          "line": 440
+        },
+        {
+          "identifier": "SvxColumnItem::QueryValue",
+          "line": 456
+        },
+        {
+          "identifier": "SvxColumnItem::Append",
+          "line": 551
+        },
+        {
+          "identifier": "SvxColumnDescription::SvxColumnDescription",
+          "line": 577
+        },
+        {
+          "identifier": "SvxColumnDescription::operator==",
+          "line": 594
+        },
+        {
+          "identifier": "SvxColumnDescription::GetWidth",
+          "line": 608
+        },
+        {
+          "identifier": "SvxColumnItem::IsConsistent",
+          "line": 619
+        }
+      ]
+    },
+    {
+      "path": "sw/source/uibase/uiview/viewtab.cxx",
+      "sha256": "f93e2b889762ab0165db3d1485d3bbae6e9e97794c79870c2299756b4095e7a1",
+      "anchors": [
+        {
+          "identifier": "void SwView::StateTabWin",
+          "line": 1388
+        },
+        {
+          "identifier": "const int nLft = aTabCols.GetLeftMin() + aTabCols.GetLeft();",
+          "line": 1922
+        },
+        {
+          "identifier": "SvxColumnItem aColItem(nNum, nL, nR);",
+          "line": 1929
+        },
+        {
+          "identifier": "if(bIsTableRTL)",
+          "line": 954
+        },
+        {
+          "identifier": "aColItem.SetWhich(nWhich);",
+          "line": 1972
+        }
+      ]
+    },
+    {
+      "path": "include/svl/poolitem.hxx",
+      "sha256": "cfbe8314efb61fb9956aef3b44aae678361603a416f0b91e8b1f301e0c436294",
+      "anchors": [
+        {
+          "identifier": "void                     SetWhich",
+          "line": 686
+        },
+        {
+          "identifier": "assert(m_nRefCount==0);",
+          "line": 689
+        }
+      ]
+    },
+    {
+      "path": "include/svx/svxids.hrc",
+      "sha256": "8490030f09b56de06bba37683b28301900358b4d67aa8fdc7966878f09487d21",
+      "anchors": [
+        {
+          "identifier": "#define SID_RULER_BORDERS ",
+          "line": 249
+        }
+      ]
+    },
+    {
+      "path": "include/svl/solar.hrc",
+      "sha256": "73c3aeb9a7ed1e0762a89dff9e1f0fcd82497dc61e509bd8176cee37a07e4ba2",
+      "anchors": [
+        {
+          "identifier": "#define SID_SVX_START",
+          "line": 81
+        }
+      ]
+    },
+    {
+      "path": "svx/Library_svx.mk",
+      "sha256": "a0af26d878a7a40fd0ffca0a90ca058c290a10f7b53fb0c833401232a9c0407e",
+      "anchors": [
+        {
+          "identifier": "gb_Library_use_libraries,svx",
+          "line": 47
+        },
+        {
+          "identifier": "    svl ",
+          "line": 69
+        }
+      ]
+    },
+    {
+      "path": "sw/uiconfig/swriter/ui/insertbookmark.ui",
+      "sha256": "e4c05d7b0b2c5a2f401cf4f4617e6deaf67dbc0adaf132fb7825c02385ec1152",
+      "anchors": [
+        {
+          "identifier": "id=\"close\"",
+          "line": 40
+        },
+        {
+          "identifier": "<action-widget response=\"-7\">close</action-widget>",
+          "line": 406
+        }
+      ]
+    }
+  ],
+  "production": [
+    {
+      "path": "apps/office/src/svl/source/items/poolitem.ts",
+      "sha256": "c0e606a0b9fa84d7bdaf06165ce0ad29d8cdf636903ac8b2109fd4da61844d61"
+    },
+    {
+      "path": "apps/office/src/svx/inc/svxids.ts",
+      "sha256": "7d7bbb3c5ff6f02341e9f425295188135def1a3b88d032ce439f74a8c5028bbe"
+    },
+    {
+      "path": "apps/office/src/svx/source/dialog/rulritem.ts",
+      "sha256": "176eaa81bf4c9e53ccc7b50a7d4f2b85496722f096a7b244c3abd9e8a353946b"
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/uiview/viewtab.ts",
+      "sha256": "52fcc06109282620ffb4d248f1eb5539a177539f88187e251274cd16d4045b6d"
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/uiview/view.ts",
+      "sha256": "7ce69b6d2c2a91ccbc27e2e4785bb167cf81b23d196e3e9b67027b957c29e45a"
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/docvw/edtwin.ts",
+      "sha256": "85e7930b44953b1a2cadc39f9267f0a1250f8d0834870963c44a08d7175bfd80"
+    },
+    {
+      "path": "scripts/check-module-boundaries.mjs",
+      "sha256": "f536a59e00ced1ec15e6c5e9f8b53cd24f0a94a5f7b1d0ad0c65e0e98285482f"
+    }
+  ],
+  "protectedIO": [
+    {
+      "path": "apps/office/src/sw/browser/storage/writer-odt-store.ts",
+      "sha256": "0fb4ebffca5a00fe63ff327379305d64143c7014dace0a7e13edb8c0c241232e",
+      "byteIdenticalToCurrentBaseline": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/workflows/writer-odt-io.ts",
+      "sha256": "7c214afab59dbc5df1087f107e2b7bf2bf01d8623a2995e8eb19a45575361306",
+      "byteIdenticalToCurrentBaseline": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/WriterFileDialog.tsx",
+      "sha256": "50ad125f5a254eb1772b62abe3681e4632df6c7870ea9647622b2268394c88c3",
+      "byteIdenticalToCurrentBaseline": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/writer-view.tsx",
+      "sha256": "5fbe8e47d24a0d03e4f5925e9002ab31a61c140f1ae819cf8805439f4ef253cc",
+      "byteIdenticalToCurrentBaseline": true
+    }
+  ],
+  "sourceBoundContracts": [
+    "Native column description upper-only65535 clamp, signed width/limits, default0 edges/active, table=false and ortho=true.",
+    "Append and Clone copy mutable fields; equality excludes ortho; active consistency only checks index/count.",
+    "View table columns subtract Left, mirror RTL order/limits, clamp frame distances at zero then uint16 cast, append visible unconstrained tail.",
+    "Document drag consumes actual view item visibility/end/min/max; original SwTabCols still owns preview/model/apply, unchanged native shell/history.",
+    "Only native Library_svx svx->svl edge admitted; reverse SW/browser ownership rejected."
+  ],
+  "residuals": [
+    "Full SvxRuler/SfxBindings/SfxItemSet slot dispatch and StateTabWin page/frame/section owners not yet ported.",
+    "Row value conversion and native active-column production selection, vertical/RTL document drag, pooled refcount guard and full uint16 WhichId domain remain partial.",
+    "UNO nonzero member QueryValue/PutValue and GetPresentation/CreateDefault are not represented; default member-zero query has no payload.",
+    "Browser IO/settings/open/save/recovery deviations remain untouched. Two expected current-baseline UI guard rejections are captured at the host Promise boundary with exact error assertions, not claimed as successful ordinary browser flows."
+  ]
+}

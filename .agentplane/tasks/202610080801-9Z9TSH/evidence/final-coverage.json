@@ -1,0 +1,1991 @@
+{
+  "proof": "Actual counters with complete identical source/maps or complete contiguous declaration/body/enclosing branch/location proofs; focused skips retained as skipped.",
+  "previousVerified": {
+    "app": {
+      "map": "TT1SYC.app-final.json",
+      "proof": "TT1SYC.app-proof.json",
+      "mapHash": "45c0fbead4263d8e8eef7be362cad9651e044a78f30ec315b42ad6ea54051b10",
+      "proofHash": "8b4096ce29c09374a2635d417dd87dd971b7d52ce2b3b1ba42de8b13b243496b"
+    },
+    "inventory": {
+      "map": "TT1SYC.inventory-final.json",
+      "proof": "TT1SYC.inventory-proof.json",
+      "mapHash": "155c98b4ec068c1e1ca42a4401646009cdefc58a27076c5089e6da27416696da",
+      "proofHash": "e4a57c478310d6bacc7a9b7d4d3d11b0a37bc5c7872abb8e69eae124af3b57c6"
+    }
+  },
+  "app": {
+    "coverage": {
+      "lines": {
+        "total": 16898,
+        "covered": 16898,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 18559,
+        "covered": 18559,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 4304,
+        "covered": 4304,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 13968,
+        "covered": 13968,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "mapSHA256": "7511dd9e8174f973d5185dff842292c496e5f4e0560a684cf688dbe1c325aad5",
+    "proofSHA256": "53beb58562f0576fa5ce7d532482017f67731730e9eabca36c2d7ea66857afc0",
+    "files": 304,
+    "invalidWholeFallbacks": [
+      {
+        "path": "apps/office/src/sw/source/core/layout/paintfrm.ts",
+        "reason": "V8 raw inferred else counter is negative; use entire prior verified current-byte-identical source and entire maps/counters, never sanitize individual counts",
+        "priorMap": "TT1SYC.app-final.json",
+        "priorMapSHA256": "45c0fbead4263d8e8eef7be362cad9651e044a78f30ec315b42ad6ea54051b10",
+        "discardedInvalidAggregateSHA256": "075682b7591767c87ac2764367f33634381d12b2ae3525ff0648d1866b865333",
+        "negativeCounts": [
+          -36
+        ]
+      }
+    ],
+    "priorRegionTransfers": [
+      {
+        "path": "apps/office/src/svl/source/items/poolitem.ts",
+        "priorSourceSHA256": "ef386a07047cce5e88b45f2295177ee86e705d82bd72a5d5f1e699a9830eb6ce",
+        "currentSourceSHA256": "c0e606a0b9fa84d7bdaf06165ce0ad29d8cdf636903ac8b2109fd4da61844d61",
+        "priorMap": "TT1SYC.app-final.json",
+        "priorMapSHA256": "45c0fbead4263d8e8eef7be362cad9651e044a78f30ec315b42ad6ea54051b10",
+        "regions": [
+          {
+            "oldStart": 1,
+            "oldEnd": 35,
+            "newStart": 1,
+            "newEnd": 35,
+            "byteLength": 1163,
+            "sha256": "480e4ffbe314f5d90148eb0784eca25b87fc2906721520c59726d1b3d32962fa"
+          },
+          {
+            "oldStart": 37,
+            "oldEnd": 45,
+            "newStart": 37,
+            "newEnd": 45,
+            "byteLength": 278,
+            "sha256": "358b251ab098117d237b624c9e6031a89fadbb8df4ba10205f27ecd5b0221fc6"
+          },
+          {
+            "oldStart": 46,
+            "oldEnd": 119,
+            "newStart": 53,
+            "newEnd": 126,
+            "byteLength": 2689,
+            "sha256": "6c5f08a791b5f779074bb845329c6ea7305b806359a1d5c0e871aec705c7fe16"
+          }
+        ],
+        "counts": {
+          "statements": 18,
+          "functions": 13,
+          "branches": 2
+        }
+      },
+      {
+        "path": "apps/office/src/svx/inc/svxids.ts",
+        "priorSourceSHA256": "fa60f4dfa36d7d764feb0586e1d2159fa2f51315c1e2d66ec8418e27bc4b3826",
+        "currentSourceSHA256": "7d7bbb3c5ff6f02341e9f425295188135def1a3b88d032ce439f74a8c5028bbe",
+        "priorMap": "TT1SYC.app-final.json",
+        "priorMapSHA256": "45c0fbead4263d8e8eef7be362cad9651e044a78f30ec315b42ad6ea54051b10",
+        "regions": [
+          {
+            "oldStart": 1,
+            "oldEnd": 3,
+            "newStart": 1,
+            "newEnd": 3,
+            "byteLength": 193,
+            "sha256": "56ca665132fafdf9e5e4633a3938350fcb8006568b1d9eeb1e437883f54e2a2f"
+          },
+          {
+            "oldStart": 4,
+            "oldEnd": 4,
+            "newStart": 6,
+            "newEnd": 6,
+            "byteLength": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ],
+        "counts": {
+          "statements": 1,
+          "functions": 0,
+          "branches": 0
+        }
+      },
+      {
+        "path": "apps/office/src/sw/browser/presentation/WriterBookmarkDialog.tsx",
+        "priorSourceSHA256": "729d7d7a797711a416e09a12f45c4e3bc630050d15476be7f72ffbd854d61a60",
+        "currentSourceSHA256": "0ca49ff00139357ad0cfa4d9534e3dc33d998503bb41df8d71e2142a5ed426b4",
+        "priorMap": "TT1SYC.app-final.json",
+        "priorMapSHA256": "45c0fbead4263d8e8eef7be362cad9651e044a78f30ec315b42ad6ea54051b10",
+        "regions": [
+          {
+            "oldStart": 1,
+            "oldEnd": 2,
+            "newStart": 1,
+            "newEnd": 2,
+            "byteLength": 97,
+            "sha256": "98429a0aff376109fa66c4a53cdf174c4111a20576694273e4aa3cd8e63a0176"
+          },
+          {
+            "oldStart": 3,
+            "oldEnd": 51,
+            "newStart": 4,
+            "newEnd": 52,
+            "byteLength": 1776,
+            "sha256": "00d89fa60bd85bcfe1b19ff9fa0428b1d9bb1d67dbe66589202abae71032e750"
+          },
+          {
+            "oldStart": 53,
+            "oldEnd": 61,
+            "newStart": 54,
+            "newEnd": 62,
+            "byteLength": 349,
+            "sha256": "f920c927a46dc4955022c6892b79ec52c2a1146c163713138c96d85576338eb2"
+          },
+          {
+            "oldStart": 87,
+            "oldEnd": 87,
+            "newStart": 76,
+            "newEnd": 76,
+            "byteLength": 15,
+            "sha256": "7f6a145347f4f57353c9819f1a1b9bde9e67fde985c6d24299083e83f7d07693"
+          },
+          {
+            "oldStart": 105,
+            "oldEnd": 150,
+            "newStart": 109,
+            "newEnd": 154,
+            "byteLength": 1755,
+            "sha256": "1edd74b1ef60860804fb0eb9a691069c90645357a810c4e6ff37eabf5dc6368f"
+          },
+          {
+            "oldStart": 152,
+            "oldEnd": 162,
+            "newStart": 156,
+            "newEnd": 166,
+            "byteLength": 251,
+            "sha256": "8163ba2f54cb96040a42eed09e36741f4d97b4cbb3d5e6077f73b48c2da116aa"
+          }
+        ],
+        "counts": {
+          "statements": 10,
+          "functions": 6,
+          "branches": 6
+        }
+      },
+      {
+        "path": "apps/office/src/sw/browser/presentation/WriterFileDialog.tsx",
+        "priorSourceSHA256": "201e8847ad78a6bf0204025bdf481698e87aca6a15a772489ee91f3f404e4643",
+        "currentSourceSHA256": "50ad125f5a254eb1772b62abe3681e4632df6c7870ea9647622b2268394c88c3",
+        "priorMap": "TT1SYC.app-final.json",
+        "priorMapSHA256": "45c0fbead4263d8e8eef7be362cad9651e044a78f30ec315b42ad6ea54051b10",
+        "regions": [
+          {
+            "oldStart": 1,
+            "oldEnd": 2,
+            "newStart": 1,
+            "newEnd": 2,
+            "byteLength": 96,
+            "sha256": "0ffcd7555213831e59eb1fd6cc8a6e2f9bc055a2c04e0232b79bfa0a11821dce"
+          },
+          {
+            "oldStart": 3,
+            "oldEnd": 3,
+            "newStart": 4,
+            "newEnd": 4,
+            "byteLength": 72,
+            "sha256": "77d7932b224e9f05b0e0d0573edef1af5d597e28312412209b1d6ff4e5e55c30"
+          },
+          {
+            "oldStart": 5,
+            "oldEnd": 13,
+            "newStart": 6,
+            "newEnd": 14,
+            "byteLength": 552,
+            "sha256": "67a90a823f65866305ee593a772e741556c02316a505388a2fd6e9b842400a34"
+          },
+          {
+            "oldStart": 14,
+            "oldEnd": 16,
+            "newStart": 17,
+            "newEnd": 19,
+            "byteLength": 73,
+            "sha256": "e2ed68525ed9c418caabb0b5645604f6e343a1dfa059e6b15662599a572995e6"
+          },
+          {
+            "oldStart": 17,
+            "oldEnd": 18,
+            "newStart": 21,
+            "newEnd": 22,
+            "byteLength": 131,
+            "sha256": "b30e070ced88dd4d3090d060ef3b0c001e5764aeb869bb88212bd5aa2e42710b"
+          },
+          {
+            "oldStart": 19,
+            "oldEnd": 27,
+            "newStart": 24,
+            "newEnd": 32,
+            "byteLength": 283,
+            "sha256": "0922d7c6bac0f5d7ae42cb036240d1c82c82e6b08de2b485c74a83367cfd2644"
+          },
+          {
+            "oldStart": 28,
+            "oldEnd": 51,
+            "newStart": 40,
+            "newEnd": 63,
+            "byteLength": 1028,
+            "sha256": "5fb94a8056980e65bee20cf811d8aa2a91d5a8795420a3f7eb2f3f573ec9d9be"
+          },
+          {
+            "oldStart": 52,
+            "oldEnd": 80,
+            "newStart": 66,
+            "newEnd": 94,
+            "byteLength": 882,
+            "sha256": "ee29d5458cb0debc2ff0693a1528ccd75df1026bb1e5dcf2e11186c0e1e36e1e"
+          },
+          {
+            "oldStart": 82,
+            "oldEnd": 84,
+            "newStart": 96,
+            "newEnd": 98,
+            "byteLength": 53,
+            "sha256": "ce0d0280170cb2ebe9f3be4e94ff083902f3bd0a6b795be2baf2d23661169d16"
+          },
+          {
+            "oldStart": 87,
+            "oldEnd": 93,
+            "newStart": 101,
+            "newEnd": 107,
+            "byteLength": 104,
+            "sha256": "45e272704f3d572287ab5eb4048a175978030467a04f87c4ca4999206d806be5"
+          },
+          {
+            "oldStart": 99,
+            "oldEnd": 102,
+            "newStart": 133,
+            "newEnd": 136,
+            "byteLength": 257,
+            "sha256": "73fff4ec8e4fecae6647918c33b9b11c416d316a7438666c72e48b9e8abae5c4"
+          },
+          {
+            "oldStart": 122,
+            "oldEnd": 122,
+            "newStart": 143,
+            "newEnd": 143,
+            "byteLength": 6,
+            "sha256": "67694c125cca8ca0a62725dfef58e8526eab4d227697d733f055295d901fc772"
+          },
+          {
+            "oldStart": 124,
+            "oldEnd": 156,
+            "newStart": 154,
+            "newEnd": 186,
+            "byteLength": 1293,
+            "sha256": "3fe964ff36ab7b053eaf16bd79cd99c1915f7e88737e8130dbe56682728d2813"
+          },
+          {
+            "oldStart": 185,
+            "oldEnd": 253,
+            "newStart": 252,
+            "newEnd": 320,
+            "byteLength": 3583,
+            "sha256": "5a37dbbb16ce282176e8b4bc092367aeaf824beb22c69cacdc6600cca1d7f4f3"
+          },
+          {
+            "oldStart": 255,
+            "oldEnd": 358,
+            "newStart": 322,
+            "newEnd": 425,
+            "byteLength": 5239,
+            "sha256": "0ece7a31b3690a896939e6de260cd9470a6332906a4f93d825d5b4a7f449d361"
+          },
+          {
+            "oldStart": 360,
+            "oldEnd": 379,
+            "newStart": 427,
+            "newEnd": 446,
+            "byteLength": 745,
+            "sha256": "f96f540b16ec340ea6fbb05d2ca044ef867e4f47ea77af94220f08950061cdd8"
+          },
+          {
+            "oldStart": 403,
+            "oldEnd": 404,
+            "newStart": 473,
+            "newEnd": 474,
+            "byteLength": 31,
+            "sha256": "6707dc0781745b5bb1d4f7b7d603c6c2ecddd160ea19ea5570fac188448dfc29"
+          },
+          {
+            "oldStart": 406,
+            "oldEnd": 483,
+            "newStart": 476,
+            "newEnd": 553,
+            "byteLength": 3493,
+            "sha256": "ada8da2db444a21cff40ef7355565812eb7662a649cbf0b270ce9b09020287d8"
+          }
+        ],
+        "counts": {
+          "statements": 20,
+          "functions": 6,
+          "branches": 18
+        }
+      },
+      {
+        "path": "apps/office/src/sw/browser/presentation/WriterHyperlinkDialog.tsx",
+        "priorSourceSHA256": "7110db0701f2179dcfeca576df1b35c1e02f93df030d93218d0d578a348fd501",
+        "currentSourceSHA256": "8cb29693c606e310be79abd7768baa455db92e35bab366a18ace4e96fc1c2b33",
+        "priorMap": "TT1SYC.app-final.json",
+        "priorMapSHA256": "45c0fbead4263d8e8eef7be362cad9651e044a78f30ec315b42ad6ea54051b10",
+        "regions": [
+          {
+            "oldStart": 1,
+            "oldEnd": 2,
+            "newStart": 1,
+            "newEnd": 2,
+            "byteLength": 83,
+            "sha256": "9709528078d69e0e471a75f4ffb3d5488fd8a47f22815e8aa27428d81a6fbbc2"
+          },
+          {
+            "oldStart": 3,
+            "oldEnd": 42,
+            "newStart": 4,
+            "newEnd": 43,
+            "byteLength": 1621,
+            "sha256": "6da3955d19690dafcc8a1b558e795d7126bbca2d978f1ae0b693112e6cf3cc2a"
+          },
+          {
+            "oldStart": 44,
+            "oldEnd": 65,
+            "newStart": 45,
+            "newEnd": 66,
+            "byteLength": 824,
+            "sha256": "0f171f8085d4cdd9cbd49ce2675358375d68c8c711ce2163e9518ccd2cf252c6"
+          },
+          {
+            "oldStart": 89,
+            "oldEnd": 89,
+            "newStart": 107,
+            "newEnd": 107,
+            "byteLength": 79,
+            "sha256": "d2418816b1c08b42aa9d1b155f6cbc0cb01a4eeaea18bf71f917032fd6df8c6f"
+          },
+          {
+            "oldStart": 91,
+            "oldEnd": 93,
+            "newStart": 134,
+            "newEnd": 136,
+            "byteLength": 132,
+            "sha256": "e0d1f1c7516e05571770bfd390949b2d45631f0af26dbd2f7c77f1e35ebf253c"
+          },
+          {
+            "oldStart": 96,
+            "oldEnd": 96,
+            "newStart": 140,
+            "newEnd": 140,
+            "byteLength": 17,
+            "sha256": "0bf0a088a649c22dc9b184a9519d1ed05a4389bc2c3c5f1b6c8c857c3fb84ba1"
+          },
+          {
+            "oldStart": 102,
+            "oldEnd": 103,
+            "newStart": 142,
+            "newEnd": 143,
+            "byteLength": 37,
+            "sha256": "4151020b7320633f5094ff8092986f302740d2f353f2adc5d02834ec0e86e55d"
+          },
+          {
+            "oldStart": 144,
+            "oldEnd": 150,
+            "newStart": 147,
+            "newEnd": 153,
+            "byteLength": 266,
+            "sha256": "a3bc561db731a1942aa5b11bf54ffb649b2aa582be89824ba1a333b52b806135"
+          },
+          {
+            "oldStart": 155,
+            "oldEnd": 162,
+            "newStart": 155,
+            "newEnd": 162,
+            "byteLength": 134,
+            "sha256": "3030ebc5735df7013a0308d96c7817729ba3622fd9d3d100ad131b2f7d985cea"
+          }
+        ],
+        "counts": {
+          "statements": 9,
+          "functions": 2,
+          "branches": 7
+        }
+      },
+      {
+        "path": "apps/office/src/sw/browser/presentation/WriterInsertBreakDialog.tsx",
+        "priorSourceSHA256": "36843f113064c2be3d1612fccf8c553fa51272a4d9ebc50049e91c3df0c77840",
+        "currentSourceSHA256": "6dfc8adbff11905a2c218996aadd9eb6a3e0455a372eea3a74c8726c9c0a5013",
+        "priorMap": "TT1SYC.app-final.json",
+        "priorMapSHA256": "45c0fbead4263d8e8eef7be362cad9651e044a78f30ec315b42ad6ea54051b10",
+        "regions": [
+          {
+            "oldStart": 1,
+            "oldEnd": 2,
+            "newStart": 1,
+            "newEnd": 2,
+            "byteLength": 108,
+            "sha256": "1b59cb5ab562f8d14e1f45bf2685e677e4b887921ced090e8c80fe9da12afa32"
+          },
+          {
+            "oldStart": 3,
+            "oldEnd": 29,
+            "newStart": 4,
+            "newEnd": 30,
+            "byteLength": 1027,
+            "sha256": "d768cc6e384abfdd68b2087f3d6792d9a0a68c4bdfde887acd938ffd2154c2c3"
+          },
+          {
+            "oldStart": 31,
+            "oldEnd": 38,
+            "newStart": 32,
+            "newEnd": 39,
+            "byteLength": 229,
+            "sha256": "2564928a17a26d7de423f34249a70162c195e35468f5bcf05ac226395548bcce"
+          },
+          {
+            "oldStart": 52,
+            "oldEnd": 58,
+            "newStart": 56,
+            "newEnd": 62,
+            "byteLength": 252,
+            "sha256": "e42157fc5c2070da73e5b363354719fae50959d73777ef9aaa85badcc0db5f82"
+          },
+          {
+            "oldStart": 63,
+            "oldEnd": 70,
+            "newStart": 64,
+            "newEnd": 71,
+            "byteLength": 142,
+            "sha256": "b11339ff69a508147c606c99efac2f657f7231794c19a0b70a9418c6d9c45a64"
+          }
+        ],
+        "counts": {
+          "statements": 5,
+          "functions": 2,
+          "branches": 1
+        }
+      },
+      {
+        "path": "apps/office/src/sw/browser/presentation/WriterInsertTableDialog.tsx",
+        "priorSourceSHA256": "10b4ecc29a03be1a6f07352beb33d765dfefc07382eab1de4111e090c8ac5b07",
+        "currentSourceSHA256": "93574a673441d592c4ca71249fbce39ddba96287fc8911174f2eed79136fee2e",
+        "priorMap": "TT1SYC.app-final.json",
+        "priorMapSHA256": "45c0fbead4263d8e8eef7be362cad9651e044a78f30ec315b42ad6ea54051b10",
+        "regions": [
+          {
+            "oldStart": 1,
+            "oldEnd": 1,
+            "newStart": 1,
+            "newEnd": 1,
+            "byteLength": 80,
+            "sha256": "614be6c7ecbd32caa4b4d291e45eebf221dcc0f682a14259cb995d36428f809f"
+          },
+          {
+            "oldStart": 2,
+            "oldEnd": 46,
+            "newStart": 3,
+            "newEnd": 47,
+            "byteLength": 1600,
+            "sha256": "e29d39c2ced6a9b92a492d00f189f2c2c62f1eac2bc48b5a9d79ae83e8c8bb05"
+          },
+          {
+            "oldStart": 48,
+            "oldEnd": 77,
+            "newStart": 49,
+            "newEnd": 78,
+            "byteLength": 1230,
+            "sha256": "983280b5f7cfb75db5385d7f202ec76e511dacb9627481352dd725e84ca9c032"
+          },
+          {
+            "oldStart": 93,
+            "oldEnd": 93,
+            "newStart": 96,
+            "newEnd": 96,
+            "byteLength": 17,
+            "sha256": "0bf0a088a649c22dc9b184a9519d1ed05a4389bc2c3c5f1b6c8c857c3fb84ba1"
+          },
+          {
+            "oldStart": 122,
+            "oldEnd": 122,
+            "newStart": 125,
+            "newEnd": 125,
+            "byteLength": 21,
+            "sha256": "b8d1918176757f7935444fcf43fbbdd5f055a65dc3bfbdc1dd1f925edd564a5b"
+          },
+          {
+            "oldStart": 123,
+            "oldEnd": 123,
+            "newStart": 148,
+            "newEnd": 148,
+            "byteLength": 19,
+            "sha256": "25ed259d3151312046607cc2f42fc9384c6bbc6e90e9d5fc62cf90b50a9c1559"
+          },
+          {
+            "oldStart": 146,
+            "oldEnd": 146,
+            "newStart": 149,
+            "newEnd": 149,
+            "byteLength": 17,
+            "sha256": "0bf0a088a649c22dc9b184a9519d1ed05a4389bc2c3c5f1b6c8c857c3fb84ba1"
+          },
+          {
+            "oldStart": 162,
+            "oldEnd": 162,
+            "newStart": 165,
+            "newEnd": 165,
+            "byteLength": 17,
+            "sha256": "0bf0a088a649c22dc9b184a9519d1ed05a4389bc2c3c5f1b6c8c857c3fb84ba1"
+          },
+          {
+            "oldStart": 183,
+            "oldEnd": 183,
+            "newStart": 186,
+            "newEnd": 186,
+            "byteLength": 17,
+            "sha256": "0bf0a088a649c22dc9b184a9519d1ed05a4389bc2c3c5f1b6c8c857c3fb84ba1"
+          },
+          {
+            "oldStart": 197,
+            "oldEnd": 197,
+            "newStart": 217,
+            "newEnd": 217,
+            "byteLength": 17,
+            "sha256": "0bf0a088a649c22dc9b184a9519d1ed05a4389bc2c3c5f1b6c8c857c3fb84ba1"
+          },
+          {
+            "oldStart": 224,
+            "oldEnd": 227,
+            "newStart": 227,
+            "newEnd": 230,
+            "byteLength": 145,
+            "sha256": "a184bb4840382b4c377f9304fa5c7e772282bc97d07606773ee22652bb62ad53"
+          },
+          {
+            "oldStart": 229,
+            "oldEnd": 239,
+            "newStart": 232,
+            "newEnd": 242,
+            "byteLength": 174,
+            "sha256": "93a9d76f65f8bf64d2c821c5eef93043ab220f933e3112fdb87ca9715b2416dc"
+          }
+        ],
+        "counts": {
+          "statements": 9,
+          "functions": 5,
+          "branches": 5
+        }
+      },
+      {
+        "path": "apps/office/src/sw/browser/presentation/WriterLineNumberingDialog.tsx",
+        "priorSourceSHA256": "b0daea3a9e4e55980ac587ee1b2a11e791227cb242ed4784a4051ef6d09d6ae1",
+        "currentSourceSHA256": "3acfa7ba6afb6caaa2ccc465a3ed4b540518adb41d99b795f39df48205db88b2",
+        "priorMap": "TT1SYC.app-final.json",
+        "priorMapSHA256": "45c0fbead4263d8e8eef7be362cad9651e044a78f30ec315b42ad6ea54051b10",
+        "regions": [
+          {
+            "oldStart": 1,
+            "oldEnd": 1,
+            "newStart": 1,
+            "newEnd": 1,
+            "byteLength": 88,
+            "sha256": "b1b9f92effa748377c62c9809221da8fad70df0d7067060935ca3eef68de3d8b"
+          },
+          {
+            "oldStart": 2,
+            "oldEnd": 32,
+            "newStart": 3,
+            "newEnd": 33,
+            "byteLength": 1090,
+            "sha256": "0d67ee7741ddcb626015291da3decf0c93ae872da7427e06044e760d62448895"
+          },
+          {
+            "oldStart": 34,
+            "oldEnd": 41,
+            "newStart": 35,
+            "newEnd": 42,
+            "byteLength": 247,
+            "sha256": "a2c5fc6cfbe194c16ffa7fa9ba95f2328024dbee52707ae8fde6203da4f48681"
+          },
+          {
+            "oldStart": 79,
+            "oldEnd": 79,
+            "newStart": 46,
+            "newEnd": 46,
+            "byteLength": 18,
+            "sha256": "67724f4e252e3e96fef4180dc1b9db5f6e6f39d49ce92ad37512a928fcc35ed5"
+          },
+          {
+            "oldStart": 85,
+            "oldEnd": 86,
+            "newStart": 48,
+            "newEnd": 49,
+            "byteLength": 123,
+            "sha256": "5d384fc9a01a1e5e81825bcaada4da42941a26ae7589951fd0e672dbb455b72d"
+          },
+          {
+            "oldStart": 88,
+            "oldEnd": 88,
+            "newStart": 51,
+            "newEnd": 51,
+            "byteLength": 15,
+            "sha256": "7f6a145347f4f57353c9819f1a1b9bde9e67fde985c6d24299083e83f7d07693"
+          },
+          {
+            "oldStart": 89,
+            "oldEnd": 89,
+            "newStart": 53,
+            "newEnd": 53,
+            "byteLength": 14,
+            "sha256": "5057980b8abf4b96a6f7915c67a78634729ba9f00e148e5b80f90baecaa3f7fb"
+          },
+          {
+            "oldStart": 90,
+            "oldEnd": 90,
+            "newStart": 55,
+            "newEnd": 55,
+            "byteLength": 18,
+            "sha256": "8291722a1d74b85d617bcfedf6990238d6cc61ef6bab9cb5b25f0827506a9856"
+          },
+          {
+            "oldStart": 93,
+            "oldEnd": 93,
+            "newStart": 132,
+            "newEnd": 132,
+            "byteLength": 18,
+            "sha256": "67724f4e252e3e96fef4180dc1b9db5f6e6f39d49ce92ad37512a928fcc35ed5"
+          },
+          {
+            "oldStart": 98,
+            "oldEnd": 99,
+            "newStart": 134,
+            "newEnd": 135,
+            "byteLength": 123,
+            "sha256": "5d384fc9a01a1e5e81825bcaada4da42941a26ae7589951fd0e672dbb455b72d"
+          },
+          {
+            "oldStart": 101,
+            "oldEnd": 101,
+            "newStart": 137,
+            "newEnd": 137,
+            "byteLength": 15,
+            "sha256": "7f6a145347f4f57353c9819f1a1b9bde9e67fde985c6d24299083e83f7d07693"
+          },
+          {
+            "oldStart": 102,
+            "oldEnd": 102,
+            "newStart": 139,
+            "newEnd": 139,
+            "byteLength": 14,
+            "sha256": "5057980b8abf4b96a6f7915c67a78634729ba9f00e148e5b80f90baecaa3f7fb"
+          },
+          {
+            "oldStart": 103,
+            "oldEnd": 103,
+            "newStart": 141,
+            "newEnd": 141,
+            "byteLength": 18,
+            "sha256": "8291722a1d74b85d617bcfedf6990238d6cc61ef6bab9cb5b25f0827506a9856"
+          },
+          {
+            "oldStart": 106,
+            "oldEnd": 106,
+            "newStart": 143,
+            "newEnd": 143,
+            "byteLength": 18,
+            "sha256": "67724f4e252e3e96fef4180dc1b9db5f6e6f39d49ce92ad37512a928fcc35ed5"
+          },
+          {
+            "oldStart": 109,
+            "oldEnd": 110,
+            "newStart": 145,
+            "newEnd": 146,
+            "byteLength": 123,
+            "sha256": "5d384fc9a01a1e5e81825bcaada4da42941a26ae7589951fd0e672dbb455b72d"
+          },
+          {
+            "oldStart": 112,
+            "oldEnd": 112,
+            "newStart": 148,
+            "newEnd": 148,
+            "byteLength": 15,
+            "sha256": "7f6a145347f4f57353c9819f1a1b9bde9e67fde985c6d24299083e83f7d07693"
+          },
+          {
+            "oldStart": 113,
+            "oldEnd": 113,
+            "newStart": 150,
+            "newEnd": 150,
+            "byteLength": 14,
+            "sha256": "5057980b8abf4b96a6f7915c67a78634729ba9f00e148e5b80f90baecaa3f7fb"
+          },
+          {
+            "oldStart": 114,
+            "oldEnd": 114,
+            "newStart": 152,
+            "newEnd": 152,
+            "byteLength": 18,
+            "sha256": "8291722a1d74b85d617bcfedf6990238d6cc61ef6bab9cb5b25f0827506a9856"
+          },
+          {
+            "oldStart": 117,
+            "oldEnd": 117,
+            "newStart": 154,
+            "newEnd": 154,
+            "byteLength": 18,
+            "sha256": "67724f4e252e3e96fef4180dc1b9db5f6e6f39d49ce92ad37512a928fcc35ed5"
+          },
+          {
+            "oldStart": 122,
+            "oldEnd": 123,
+            "newStart": 156,
+            "newEnd": 157,
+            "byteLength": 123,
+            "sha256": "5d384fc9a01a1e5e81825bcaada4da42941a26ae7589951fd0e672dbb455b72d"
+          },
+          {
+            "oldStart": 125,
+            "oldEnd": 125,
+            "newStart": 159,
+            "newEnd": 159,
+            "byteLength": 15,
+            "sha256": "7f6a145347f4f57353c9819f1a1b9bde9e67fde985c6d24299083e83f7d07693"
+          },
+          {
+            "oldStart": 126,
+            "oldEnd": 126,
+            "newStart": 161,
+            "newEnd": 161,
+            "byteLength": 14,
+            "sha256": "5057980b8abf4b96a6f7915c67a78634729ba9f00e148e5b80f90baecaa3f7fb"
+          },
+          {
+            "oldStart": 127,
+            "oldEnd": 128,
+            "newStart": 163,
+            "newEnd": 164,
+            "byteLength": 33,
+            "sha256": "be22294cbf2a8d91b9b9fa3cb7ea001c2b6585b00517d8bfe64d1a7a8ddf5c9a"
+          },
+          {
+            "oldStart": 163,
+            "oldEnd": 165,
+            "newStart": 166,
+            "newEnd": 168,
+            "byteLength": 127,
+            "sha256": "d250aa21e880feb9d80990108177a0935e929e16255307f7f10026f24d38c4b3"
+          },
+          {
+            "oldStart": 167,
+            "oldEnd": 174,
+            "newStart": 170,
+            "newEnd": 177,
+            "byteLength": 82,
+            "sha256": "f2ca99681e15e1a4c6df9e911764fb83f0308636b9c8385adbd2e52d3acd1344"
+          }
+        ],
+        "counts": {
+          "statements": 4,
+          "functions": 3,
+          "branches": 0
+        }
+      },
+      {
+        "path": "apps/office/src/sw/browser/presentation/WriterPageStyleDialog.tsx",
+        "priorSourceSHA256": "8a8005d0e4bb61e3b13e762f3bd4b242adf12f397aff10c491440c9a2221f85d",
+        "currentSourceSHA256": "a7c20fb6269d767b09114a6de6bc4fb8f9f22c47a50559e762c446835f06c92a",
+        "priorMap": "TT1SYC.app-final.json",
+        "priorMapSHA256": "45c0fbead4263d8e8eef7be362cad9651e044a78f30ec315b42ad6ea54051b10",
+        "regions": [
+          {
+            "oldStart": 1,
+            "oldEnd": 3,
+            "newStart": 1,
+            "newEnd": 3,
+            "byteLength": 228,
+            "sha256": "a2646f08df7357040742379423da1832a385b23741cf29756233d2b8305d10b6"
+          },
+          {
+            "oldStart": 4,
+            "oldEnd": 54,
+            "newStart": 5,
+            "newEnd": 55,
+            "byteLength": 2066,
+            "sha256": "2eb1da0995ff83f69928491f40672a1f4c2d9b9f54bf028275f058e156a35076"
+          },
+          {
+            "oldStart": 56,
+            "oldEnd": 68,
+            "newStart": 57,
+            "newEnd": 69,
+            "byteLength": 439,
+            "sha256": "bef72978219ea7a6008b5f9ecca0dbc2b873f10bd3be34102de2436e6305029d"
+          },
+          {
+            "oldStart": 84,
+            "oldEnd": 84,
+            "newStart": 125,
+            "newEnd": 125,
+            "byteLength": 28,
+            "sha256": "00e47957207109a1109b09da9d1c060e316520988ed785725dc59f6051b67339"
+          },
+          {
+            "oldStart": 101,
+            "oldEnd": 101,
+            "newStart": 150,
+            "newEnd": 150,
+            "byteLength": 21,
+            "sha256": "b8d1918176757f7935444fcf43fbbdd5f055a65dc3bfbdc1dd1f925edd564a5b"
+          },
+          {
+            "oldStart": 102,
+            "oldEnd": 102,
+            "newStart": 165,
+            "newEnd": 165,
+            "byteLength": 19,
+            "sha256": "25ed259d3151312046607cc2f42fc9384c6bbc6e90e9d5fc62cf90b50a9c1559"
+          },
+          {
+            "oldStart": 132,
+            "oldEnd": 132,
+            "newStart": 170,
+            "newEnd": 170,
+            "byteLength": 28,
+            "sha256": "00e47957207109a1109b09da9d1c060e316520988ed785725dc59f6051b67339"
+          },
+          {
+            "oldStart": 135,
+            "oldEnd": 135,
+            "newStart": 174,
+            "newEnd": 174,
+            "byteLength": 19,
+            "sha256": "25ed259d3151312046607cc2f42fc9384c6bbc6e90e9d5fc62cf90b50a9c1559"
+          },
+          {
+            "oldStart": 137,
+            "oldEnd": 137,
+            "newStart": 175,
+            "newEnd": 175,
+            "byteLength": 18,
+            "sha256": "504f3ec70948cdf7ca31659605b9428887c5557235ed8a1d53d5945e6f98793c"
+          },
+          {
+            "oldStart": 144,
+            "oldEnd": 144,
+            "newStart": 179,
+            "newEnd": 179,
+            "byteLength": 28,
+            "sha256": "00e47957207109a1109b09da9d1c060e316520988ed785725dc59f6051b67339"
+          },
+          {
+            "oldStart": 147,
+            "oldEnd": 147,
+            "newStart": 183,
+            "newEnd": 183,
+            "byteLength": 19,
+            "sha256": "25ed259d3151312046607cc2f42fc9384c6bbc6e90e9d5fc62cf90b50a9c1559"
+          },
+          {
+            "oldStart": 149,
+            "oldEnd": 149,
+            "newStart": 184,
+            "newEnd": 184,
+            "byteLength": 18,
+            "sha256": "504f3ec70948cdf7ca31659605b9428887c5557235ed8a1d53d5945e6f98793c"
+          },
+          {
+            "oldStart": 201,
+            "oldEnd": 201,
+            "newStart": 200,
+            "newEnd": 200,
+            "byteLength": 18,
+            "sha256": "e5232daef8c2d07e939e94c37a42cc2b6c906e30a7ca6d939b9ad099833ed7d9"
+          },
+          {
+            "oldStart": 210,
+            "oldEnd": 211,
+            "newStart": 214,
+            "newEnd": 215,
+            "byteLength": 35,
+            "sha256": "028b6ae257dd1c98808a410a63c2ca2b6e89926a875cb442c627214b3a1009b7"
+          },
+          {
+            "oldStart": 212,
+            "oldEnd": 212,
+            "newStart": 219,
+            "newEnd": 219,
+            "byteLength": 14,
+            "sha256": "9c370fbe57d1d10503c7d54daa245e263e252b0f99413b957c46bd68ab1850ec"
+          },
+          {
+            "oldStart": 217,
+            "oldEnd": 223,
+            "newStart": 221,
+            "newEnd": 227,
+            "byteLength": 216,
+            "sha256": "d5794b5102466f3f5f71e19a1ef32b15baa8e863ede7ff4d614e0ce43b1ebb18"
+          },
+          {
+            "oldStart": 228,
+            "oldEnd": 248,
+            "newStart": 229,
+            "newEnd": 249,
+            "byteLength": 486,
+            "sha256": "76947b0bd8d4a627c9902ef26ae11cd78c85fe5726f7dd095d9654ad9359bec5"
+          },
+          {
+            "oldStart": 250,
+            "oldEnd": 262,
+            "newStart": 251,
+            "newEnd": 263,
+            "byteLength": 502,
+            "sha256": "bd238b35863897c2d3a2bd0a41a32ad351b75b91a019da15b331010b37f0ec01"
+          },
+          {
+            "oldStart": 264,
+            "oldEnd": 277,
+            "newStart": 265,
+            "newEnd": 278,
+            "byteLength": 466,
+            "sha256": "d5fbe4b7f68e314e7420f4cea234fbe296129567d0e212ad601be6aa0e9fc923"
+          }
+        ],
+        "counts": {
+          "statements": 11,
+          "functions": 5,
+          "branches": 2
+        }
+      },
+      {
+        "path": "apps/office/src/sw/browser/presentation/WriterParagraphDialog.tsx",
+        "priorSourceSHA256": "76c215d098555b6d71ab11cda25fef440e0c117357df07c1bbb5b3b388da070d",
+        "currentSourceSHA256": "c6cb73f22a93e7fbf3a003d36ce53ffc8033af389f98e3ed9c8fc65b85dec6fb",
+        "priorMap": "TT1SYC.app-final.json",
+        "priorMapSHA256": "45c0fbead4263d8e8eef7be362cad9651e044a78f30ec315b42ad6ea54051b10",
+        "regions": [
+          {
+            "oldStart": 1,
+            "oldEnd": 1,
+            "newStart": 1,
+            "newEnd": 1,
+            "byteLength": 86,
+            "sha256": "3b92f6d5ca8fe3bb975e82ceb7953e617305f89f1d224bb556de5307d3197b4a"
+          },
+          {
+            "oldStart": 2,
+            "oldEnd": 46,
+            "newStart": 3,
+            "newEnd": 47,
+            "byteLength": 1812,
+            "sha256": "5a2a621fdd75da52e3aa611379630b3116fa41c6182303780c44e4c5f4d9e0ca"
+          },
+          {
+            "oldStart": 48,
+            "oldEnd": 49,
+            "newStart": 49,
+            "newEnd": 50,
+            "byteLength": 29,
+            "sha256": "ffe285b9d4c43c281f47a66acc7c9b840383fb4e4d299189e3572c97c58306a7"
+          },
+          {
+            "oldStart": 107,
+            "oldEnd": 107,
+            "newStart": 83,
+            "newEnd": 83,
+            "byteLength": 21,
+            "sha256": "b8d1918176757f7935444fcf43fbbdd5f055a65dc3bfbdc1dd1f925edd564a5b"
+          },
+          {
+            "oldStart": 135,
+            "oldEnd": 135,
+            "newStart": 102,
+            "newEnd": 102,
+            "byteLength": 30,
+            "sha256": "ec430e6e8fa7d579ac0fd06293b75ac8253039c5f6674e97edafdbd82b2e9b59"
+          },
+          {
+            "oldStart": 139,
+            "oldEnd": 139,
+            "newStart": 106,
+            "newEnd": 106,
+            "byteLength": 21,
+            "sha256": "b8d1918176757f7935444fcf43fbbdd5f055a65dc3bfbdc1dd1f925edd564a5b"
+          },
+          {
+            "oldStart": 141,
+            "oldEnd": 141,
+            "newStart": 107,
+            "newEnd": 107,
+            "byteLength": 20,
+            "sha256": "21e6add2a026a5fc2d6cbf4be88132f71bd6287774d12f6f1931915a9267dc93"
+          },
+          {
+            "oldStart": 170,
+            "oldEnd": 170,
+            "newStart": 115,
+            "newEnd": 115,
+            "byteLength": 23,
+            "sha256": "617f58dc46494b6e88a34bdef87e8f8690a44aeed5e4f9dd21bfa6cc3b77c2a9"
+          },
+          {
+            "oldStart": 201,
+            "oldEnd": 201,
+            "newStart": 124,
+            "newEnd": 124,
+            "byteLength": 30,
+            "sha256": "ec430e6e8fa7d579ac0fd06293b75ac8253039c5f6674e97edafdbd82b2e9b59"
+          },
+          {
+            "oldStart": 205,
+            "oldEnd": 205,
+            "newStart": 128,
+            "newEnd": 128,
+            "byteLength": 21,
+            "sha256": "b8d1918176757f7935444fcf43fbbdd5f055a65dc3bfbdc1dd1f925edd564a5b"
+          },
+          {
+            "oldStart": 207,
+            "oldEnd": 207,
+            "newStart": 129,
+            "newEnd": 129,
+            "byteLength": 20,
+            "sha256": "21e6add2a026a5fc2d6cbf4be88132f71bd6287774d12f6f1931915a9267dc93"
+          },
+          {
+            "oldStart": 221,
+            "oldEnd": 221,
+            "newStart": 134,
+            "newEnd": 134,
+            "byteLength": 30,
+            "sha256": "ec430e6e8fa7d579ac0fd06293b75ac8253039c5f6674e97edafdbd82b2e9b59"
+          },
+          {
+            "oldStart": 225,
+            "oldEnd": 225,
+            "newStart": 138,
+            "newEnd": 138,
+            "byteLength": 21,
+            "sha256": "b8d1918176757f7935444fcf43fbbdd5f055a65dc3bfbdc1dd1f925edd564a5b"
+          },
+          {
+            "oldStart": 227,
+            "oldEnd": 227,
+            "newStart": 139,
+            "newEnd": 139,
+            "byteLength": 20,
+            "sha256": "21e6add2a026a5fc2d6cbf4be88132f71bd6287774d12f6f1931915a9267dc93"
+          },
+          {
+            "oldStart": 270,
+            "oldEnd": 270,
+            "newStart": 147,
+            "newEnd": 147,
+            "byteLength": 23,
+            "sha256": "617f58dc46494b6e88a34bdef87e8f8690a44aeed5e4f9dd21bfa6cc3b77c2a9"
+          },
+          {
+            "oldStart": 289,
+            "oldEnd": 289,
+            "newStart": 161,
+            "newEnd": 161,
+            "byteLength": 23,
+            "sha256": "617f58dc46494b6e88a34bdef87e8f8690a44aeed5e4f9dd21bfa6cc3b77c2a9"
+          },
+          {
+            "oldStart": 302,
+            "oldEnd": 302,
+            "newStart": 179,
+            "newEnd": 179,
+            "byteLength": 23,
+            "sha256": "617f58dc46494b6e88a34bdef87e8f8690a44aeed5e4f9dd21bfa6cc3b77c2a9"
+          },
+          {
+            "oldStart": 346,
+            "oldEnd": 346,
+            "newStart": 193,
+            "newEnd": 193,
+            "byteLength": 27,
+            "sha256": "e30138b3f154d3a913c5f08ff4ecaf83af37b71bd42962b20a3eb02cea72a282"
+          },
+          {
+            "oldStart": 350,
+            "oldEnd": 350,
+            "newStart": 195,
+            "newEnd": 195,
+            "byteLength": 21,
+            "sha256": "b8d1918176757f7935444fcf43fbbdd5f055a65dc3bfbdc1dd1f925edd564a5b"
+          },
+          {
+            "oldStart": 351,
+            "oldEnd": 351,
+            "newStart": 197,
+            "newEnd": 197,
+            "byteLength": 30,
+            "sha256": "ec430e6e8fa7d579ac0fd06293b75ac8253039c5f6674e97edafdbd82b2e9b59"
+          },
+          {
+            "oldStart": 354,
+            "oldEnd": 356,
+            "newStart": 200,
+            "newEnd": 202,
+            "byteLength": 97,
+            "sha256": "9f83ce5c3ad99a87285d97d5bf277c0568a61128617d34ccd216ef16a22e1c5e"
+          },
+          {
+            "oldStart": 358,
+            "oldEnd": 359,
+            "newStart": 205,
+            "newEnd": 206,
+            "byteLength": 48,
+            "sha256": "8481069078c9a92b0f6d7c7a7fd650e6ab4a508d3c2f1b7c27819ce67e192bc2"
+          },
+          {
+            "oldStart": 375,
+            "oldEnd": 375,
+            "newStart": 207,
+            "newEnd": 207,
+            "byteLength": 20,
+            "sha256": "21e6add2a026a5fc2d6cbf4be88132f71bd6287774d12f6f1931915a9267dc93"
+          },
+          {
+            "oldStart": 396,
+            "oldEnd": 396,
+            "newStart": 239,
+            "newEnd": 239,
+            "byteLength": 25,
+            "sha256": "3c5b9bce1de3d0e5a5eaeb7423d638157e291c1248009080062af037aab39788"
+          },
+          {
+            "oldStart": 400,
+            "oldEnd": 400,
+            "newStart": 244,
+            "newEnd": 244,
+            "byteLength": 30,
+            "sha256": "ec430e6e8fa7d579ac0fd06293b75ac8253039c5f6674e97edafdbd82b2e9b59"
+          },
+          {
+            "oldStart": 402,
+            "oldEnd": 402,
+            "newStart": 246,
+            "newEnd": 246,
+            "byteLength": 30,
+            "sha256": "094647e53e56d357541bac32372a203a3411b6128d4edc95f1aec00e170372c0"
+          },
+          {
+            "oldStart": 404,
+            "oldEnd": 405,
+            "newStart": 252,
+            "newEnd": 253,
+            "byteLength": 41,
+            "sha256": "03898d3e6a1333b6036e0c4bced5af639a36111a3bb960f08a6b96f4fbe51ccd"
+          },
+          {
+            "oldStart": 408,
+            "oldEnd": 408,
+            "newStart": 263,
+            "newEnd": 263,
+            "byteLength": 27,
+            "sha256": "c773c57b21c2f3a87069391001b895c5d9e4a89b07d2b2f69ae8ef14b07e6e32"
+          },
+          {
+            "oldStart": 457,
+            "oldEnd": 457,
+            "newStart": 437,
+            "newEnd": 437,
+            "byteLength": 30,
+            "sha256": "ec430e6e8fa7d579ac0fd06293b75ac8253039c5f6674e97edafdbd82b2e9b59"
+          },
+          {
+            "oldStart": 461,
+            "oldEnd": 461,
+            "newStart": 441,
+            "newEnd": 441,
+            "byteLength": 21,
+            "sha256": "b8d1918176757f7935444fcf43fbbdd5f055a65dc3bfbdc1dd1f925edd564a5b"
+          },
+          {
+            "oldStart": 463,
+            "oldEnd": 463,
+            "newStart": 442,
+            "newEnd": 442,
+            "byteLength": 20,
+            "sha256": "21e6add2a026a5fc2d6cbf4be88132f71bd6287774d12f6f1931915a9267dc93"
+          },
+          {
+            "oldStart": 469,
+            "oldEnd": 469,
+            "newStart": 447,
+            "newEnd": 447,
+            "byteLength": 30,
+            "sha256": "ec430e6e8fa7d579ac0fd06293b75ac8253039c5f6674e97edafdbd82b2e9b59"
+          },
+          {
+            "oldStart": 473,
+            "oldEnd": 473,
+            "newStart": 451,
+            "newEnd": 451,
+            "byteLength": 21,
+            "sha256": "b8d1918176757f7935444fcf43fbbdd5f055a65dc3bfbdc1dd1f925edd564a5b"
+          },
+          {
+            "oldStart": 475,
+            "oldEnd": 475,
+            "newStart": 452,
+            "newEnd": 452,
+            "byteLength": 20,
+            "sha256": "21e6add2a026a5fc2d6cbf4be88132f71bd6287774d12f6f1931915a9267dc93"
+          },
+          {
+            "oldStart": 480,
+            "oldEnd": 481,
+            "newStart": 492,
+            "newEnd": 493,
+            "byteLength": 31,
+            "sha256": "9ff111d447c21e6d80dc7f5a0fd43ed61850ad0dfdd3ef12ff1fdcef63d5f4fa"
+          },
+          {
+            "oldStart": 483,
+            "oldEnd": 493,
+            "newStart": 495,
+            "newEnd": 505,
+            "byteLength": 333,
+            "sha256": "8728a73952437cf3f9d8342f60967d0635ba0cead560de6fd9c0e8c4059b46d4"
+          },
+          {
+            "oldStart": 495,
+            "oldEnd": 543,
+            "newStart": 507,
+            "newEnd": 555,
+            "byteLength": 1188,
+            "sha256": "1726119d031faed6e0d337d94abae878230ddd0a76cbc975494956a266dbf2d2"
+          }
+        ],
+        "counts": {
+          "statements": 7,
+          "functions": 6,
+          "branches": 1
+        }
+      },
+      {
+        "path": "apps/office/src/sw/browser/presentation/WriterRowHeightDialog.tsx",
+        "priorSourceSHA256": "e267db0e41f39eb505583c2be95962891bf7c1c5d96b98b969eea19dcae3158b",
+        "currentSourceSHA256": "5442d82f0a74a5d3dc8098ca1ee66b733fe1ebda37b48f7cd1c770b0d59ba2ed",
+        "priorMap": "TT1SYC.app-final.json",
+        "priorMapSHA256": "45c0fbead4263d8e8eef7be362cad9651e044a78f30ec315b42ad6ea54051b10",
+        "regions": [
+          {
+            "oldStart": 1,
+            "oldEnd": 1,
+            "newStart": 1,
+            "newEnd": 1,
+            "byteLength": 92,
+            "sha256": "a18bcaa1361c0658a98908718b8e17b615d9a81068353cb84b06f7dd4333bd8f"
+          },
+          {
+            "oldStart": 2,
+            "oldEnd": 43,
+            "newStart": 3,
+            "newEnd": 44,
+            "byteLength": 1355,
+            "sha256": "01703b10b88b0944b8c7af47c640d82568f3000fc7db0ece0d078dbf76592ed6"
+          },
+          {
+            "oldStart": 45,
+            "oldEnd": 52,
+            "newStart": 46,
+            "newEnd": 53,
+            "byteLength": 237,
+            "sha256": "9c5f37695c7513f79ebbb88ae35fd64bad948bd3160a86770bc64dbedb0f3679"
+          },
+          {
+            "oldStart": 79,
+            "oldEnd": 79,
+            "newStart": 58,
+            "newEnd": 58,
+            "byteLength": 18,
+            "sha256": "67724f4e252e3e96fef4180dc1b9db5f6e6f39d49ce92ad37512a928fcc35ed5"
+          },
+          {
+            "oldStart": 83,
+            "oldEnd": 83,
+            "newStart": 68,
+            "newEnd": 68,
+            "byteLength": 24,
+            "sha256": "767f698a6e140a8311a8561a586b0c9994a8319d590be18f149c913ab07b706c"
+          },
+          {
+            "oldStart": 85,
+            "oldEnd": 85,
+            "newStart": 70,
+            "newEnd": 70,
+            "byteLength": 28,
+            "sha256": "f3c791277df581ddfc57e2cdaa86ad7cdaefe65c330c0b91be466cdd0e47cae2"
+          },
+          {
+            "oldStart": 87,
+            "oldEnd": 87,
+            "newStart": 72,
+            "newEnd": 72,
+            "byteLength": 26,
+            "sha256": "139167742380e8d24e5c7cd3a3b986001a73ad0461f91f86fea769b75d5aba9a"
+          },
+          {
+            "oldStart": 89,
+            "oldEnd": 94,
+            "newStart": 74,
+            "newEnd": 79,
+            "byteLength": 138,
+            "sha256": "04301856e06f476cf0434958685ef44472e6678e2d32cbdad465c5a64fe7d0e5"
+          },
+          {
+            "oldStart": 105,
+            "oldEnd": 117,
+            "newStart": 108,
+            "newEnd": 120,
+            "byteLength": 436,
+            "sha256": "3fc92285240951963349c694c085af5e642c118849e3f08e12237fed1d68bef8"
+          },
+          {
+            "oldStart": 119,
+            "oldEnd": 126,
+            "newStart": 122,
+            "newEnd": 129,
+            "byteLength": 82,
+            "sha256": "f2ca99681e15e1a4c6df9e911764fb83f0308636b9c8385adbd2e52d3acd1344"
+          }
+        ],
+        "counts": {
+          "statements": 9,
+          "functions": 5,
+          "branches": 1
+        }
+      },
+      {
+        "path": "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx",
+        "priorSourceSHA256": "c928d78e99653b986270421afbb9755b50bc7572bed958616e497e6cdafa2415",
+        "currentSourceSHA256": "fbac77f0c77e8534864a7ca6d7cf92f8414971c03ebf2c9718f2a0b04b3c53e6",
+        "priorMap": "TT1SYC.app-final.json",
+        "priorMapSHA256": "45c0fbead4263d8e8eef7be362cad9651e044a78f30ec315b42ad6ea54051b10",
+        "regions": [
+          {
+            "oldStart": 1,
+            "oldEnd": 1,
+            "newStart": 1,
+            "newEnd": 1,
+            "byteLength": 100,
+            "sha256": "acf0782f2a216f048597a18065529d6e1ac78292bf5ab482aee6edfdfc06b236"
+          },
+          {
+            "oldStart": 2,
+            "oldEnd": 191,
+            "newStart": 3,
+            "newEnd": 192,
+            "byteLength": 7567,
+            "sha256": "385248d0483df9e8ca9f4486715583a16a88cf32d454fa17dad9775e5f27b339"
+          },
+          {
+            "oldStart": 193,
+            "oldEnd": 254,
+            "newStart": 194,
+            "newEnd": 255,
+            "byteLength": 2717,
+            "sha256": "8bfd999b66ab1a90f2e2a2b78a5b7325c11bd56a89e84e35dd46d90affe1d98d"
+          },
+          {
+            "oldStart": 317,
+            "oldEnd": 317,
+            "newStart": 291,
+            "newEnd": 291,
+            "byteLength": 36,
+            "sha256": "038ef295bc1eac16a42de0b53926832bb07d4e1e629091d130a1bb33544258ec"
+          },
+          {
+            "oldStart": 319,
+            "oldEnd": 322,
+            "newStart": 293,
+            "newEnd": 296,
+            "byteLength": 124,
+            "sha256": "e49679935737aa47c475613eb5c37a6fe64871ae16484831527a6c08f2596500"
+          },
+          {
+            "oldStart": 327,
+            "oldEnd": 328,
+            "newStart": 406,
+            "newEnd": 407,
+            "byteLength": 42,
+            "sha256": "39bcfa252e83f0d3bda77d31ecd1a3a9d12eb04b03e8231043e6bb5a56d898f5"
+          },
+          {
+            "oldStart": 335,
+            "oldEnd": 336,
+            "newStart": 410,
+            "newEnd": 411,
+            "byteLength": 55,
+            "sha256": "1cde4955f6806e7ee32e7512200b867c63d44fcfc5450b96aa541f2752da26e1"
+          },
+          {
+            "oldStart": 340,
+            "oldEnd": 340,
+            "newStart": 415,
+            "newEnd": 415,
+            "byteLength": 30,
+            "sha256": "acaac61dcbaaa26282ad2a45552a958b4daacdf7c67d25010de97ebda6336b97"
+          },
+          {
+            "oldStart": 344,
+            "oldEnd": 344,
+            "newStart": 419,
+            "newEnd": 419,
+            "byteLength": 36,
+            "sha256": "0c11068492af26326eb5f5f825b632455630146e9446064a00560f1dfd4fe777"
+          },
+          {
+            "oldStart": 347,
+            "oldEnd": 347,
+            "newStart": 423,
+            "newEnd": 423,
+            "byteLength": 42,
+            "sha256": "cec74cd2cd9c7c2ef399f14fd0ddbcc7370be0e6e0af2c37cb76d2596c6d4a7e"
+          },
+          {
+            "oldStart": 349,
+            "oldEnd": 357,
+            "newStart": 425,
+            "newEnd": 433,
+            "byteLength": 282,
+            "sha256": "0ad0090ed8ca4d79516b30ec4dab127abed58d0e37b0362ed09f89b4721f7717"
+          },
+          {
+            "oldStart": 358,
+            "oldEnd": 358,
+            "newStart": 508,
+            "newEnd": 508,
+            "byteLength": 27,
+            "sha256": "1a18aca64a8eeae19c92688e1e508da89e23b46ec1186b2f4382a6052446e084"
+          },
+          {
+            "oldStart": 385,
+            "oldEnd": 385,
+            "newStart": 519,
+            "newEnd": 519,
+            "byteLength": 30,
+            "sha256": "202361e6f12001642bde43246905f3f0c4549ba77c4e30bc758fb9a7cadcd190"
+          },
+          {
+            "oldStart": 387,
+            "oldEnd": 387,
+            "newStart": 521,
+            "newEnd": 521,
+            "byteLength": 38,
+            "sha256": "c06330fca0a528deda80ab518d0738c4fc9391b6fff5708f5aa789e955a09f52"
+          },
+          {
+            "oldStart": 389,
+            "oldEnd": 390,
+            "newStart": 523,
+            "newEnd": 524,
+            "byteLength": 82,
+            "sha256": "06d97a87ad4287a4b9653f2ea7c3a10b949d9c07180ad15b956c010b49c6f0e9"
+          },
+          {
+            "oldStart": 426,
+            "oldEnd": 426,
+            "newStart": 525,
+            "newEnd": 525,
+            "byteLength": 25,
+            "sha256": "aab81fdfa3632011902dd7fb2d29b70493f5abcfdbec08cd58de1c57ca289d8f"
+          },
+          {
+            "oldStart": 457,
+            "oldEnd": 457,
+            "newStart": 548,
+            "newEnd": 548,
+            "byteLength": 25,
+            "sha256": "aab81fdfa3632011902dd7fb2d29b70493f5abcfdbec08cd58de1c57ca289d8f"
+          },
+          {
+            "oldStart": 523,
+            "oldEnd": 523,
+            "newStart": 549,
+            "newEnd": 549,
+            "byteLength": 23,
+            "sha256": "617f58dc46494b6e88a34bdef87e8f8690a44aeed5e4f9dd21bfa6cc3b77c2a9"
+          },
+          {
+            "oldStart": 546,
+            "oldEnd": 546,
+            "newStart": 569,
+            "newEnd": 569,
+            "byteLength": 23,
+            "sha256": "617f58dc46494b6e88a34bdef87e8f8690a44aeed5e4f9dd21bfa6cc3b77c2a9"
+          },
+          {
+            "oldStart": 566,
+            "oldEnd": 566,
+            "newStart": 581,
+            "newEnd": 581,
+            "byteLength": 23,
+            "sha256": "617f58dc46494b6e88a34bdef87e8f8690a44aeed5e4f9dd21bfa6cc3b77c2a9"
+          },
+          {
+            "oldStart": 587,
+            "oldEnd": 587,
+            "newStart": 590,
+            "newEnd": 590,
+            "byteLength": 23,
+            "sha256": "617f58dc46494b6e88a34bdef87e8f8690a44aeed5e4f9dd21bfa6cc3b77c2a9"
+          },
+          {
+            "oldStart": 599,
+            "oldEnd": 599,
+            "newStart": 602,
+            "newEnd": 602,
+            "byteLength": 23,
+            "sha256": "617f58dc46494b6e88a34bdef87e8f8690a44aeed5e4f9dd21bfa6cc3b77c2a9"
+          },
+          {
+            "oldStart": 637,
+            "oldEnd": 637,
+            "newStart": 640,
+            "newEnd": 640,
+            "byteLength": 16,
+            "sha256": "18a26ac7ece324a554c6cd541a9b6eadabc9b88ef07f673f95392e3e8cfe4afa"
+          },
+          {
+            "oldStart": 638,
+            "oldEnd": 638,
+            "newStart": 644,
+            "newEnd": 644,
+            "byteLength": 14,
+            "sha256": "9c370fbe57d1d10503c7d54daa245e263e252b0f99413b957c46bd68ab1850ec"
+          },
+          {
+            "oldStart": 641,
+            "oldEnd": 666,
+            "newStart": 646,
+            "newEnd": 671,
+            "byteLength": 1084,
+            "sha256": "b1df251ab43341a3b54ab5a9e6a447aac0705574385eebe22023d133a305022d"
+          },
+          {
+            "oldStart": 668,
+            "oldEnd": 675,
+            "newStart": 673,
+            "newEnd": 680,
+            "byteLength": 82,
+            "sha256": "f2ca99681e15e1a4c6df9e911764fb83f0308636b9c8385adbd2e52d3acd1344"
+          }
+        ],
+        "counts": {
+          "statements": 54,
+          "functions": 14,
+          "branches": 25
+        }
+      },
+      {
+        "path": "apps/office/src/sw/browser/presentation/writer-view.tsx",
+        "priorSourceSHA256": "59f06dbd6176545387095b317bfb8fbeda30553931c993c5cf41e69829f4fc37",
+        "currentSourceSHA256": "5fbe8e47d24a0d03e4f5925e9002ab31a61c140f1ae819cf8805439f4ef253cc",
+        "priorMap": "TT1SYC.app-final.json",
+        "priorMapSHA256": "45c0fbead4263d8e8eef7be362cad9651e044a78f30ec315b42ad6ea54051b10",
+        "regions": [
+          {
+            "oldStart": 1,
+            "oldEnd": 22,
+            "newStart": 1,
+            "newEnd": 22,
+            "byteLength": 1440,
+            "sha256": "98bd856e7a91e6602828484e2b61011b4bcd3e01bf096490534a8e1b2fcf14a9"
+          },
+          {
+            "oldStart": 23,
+            "oldEnd": 58,
+            "newStart": 25,
+            "newEnd": 60,
+            "byteLength": 2037,
+            "sha256": "e91226c17c60a8e63cd45189abeec6d1bc4cebe65f7fea7a1a5c042eb84184df"
+          },
+          {
+            "oldStart": 59,
+            "oldEnd": 124,
+            "newStart": 68,
+            "newEnd": 133,
+            "byteLength": 2531,
+            "sha256": "d3dbd4c9165c766f86d73f5d19e8606183775a6660880d36e26b9610a3bbb5aa"
+          },
+          {
+            "oldStart": 125,
+            "oldEnd": 246,
+            "newStart": 138,
+            "newEnd": 259,
+            "byteLength": 5027,
+            "sha256": "5fcb2aa0f00a1b8305362ba6ed511cf0b7177d3d4306ff995a405c6d213934a5"
+          },
+          {
+            "oldStart": 250,
+            "oldEnd": 252,
+            "newStart": 264,
+            "newEnd": 266,
+            "byteLength": 128,
+            "sha256": "621e57fccdbd968dd0f8bd4e6fdc89f59c73101f04c42e7918a2ae58fb494ed1"
+          },
+          {
+            "oldStart": 268,
+            "oldEnd": 268,
+            "newStart": 277,
+            "newEnd": 277,
+            "byteLength": 10,
+            "sha256": "6eaff87a20b8f2f16d5d702e151c249a7b4bf5cf09763db5c80f29d0f1efacf9"
+          },
+          {
+            "oldStart": 269,
+            "oldEnd": 269,
+            "newStart": 319,
+            "newEnd": 319,
+            "byteLength": 6,
+            "sha256": "58636dd91683339092f700bf39dd97cef08ab7e1a75e5ae24bdc7de2ecf16d40"
+          },
+          {
+            "oldStart": 271,
+            "oldEnd": 272,
+            "newStart": 321,
+            "newEnd": 322,
+            "byteLength": 5,
+            "sha256": "95ef01bc08dbc3b63e4e75ea3d26a5b941891877e27ad891329c8411d7d8dc4d"
+          },
+          {
+            "oldStart": 273,
+            "oldEnd": 722,
+            "newStart": 369,
+            "newEnd": 818,
+            "byteLength": 18693,
+            "sha256": "59adb66816f7cf067a9c1171494566ec64a345315dc8ef3ccac0c1f2ec2c648b"
+          },
+          {
+            "oldStart": 723,
+            "oldEnd": 836,
+            "newStart": 866,
+            "newEnd": 979,
+            "byteLength": 4918,
+            "sha256": "266242514923411e9356f1ff64a06e401a31274d91a036b2b6f33e696b5f1a7f"
+          }
+        ],
+        "counts": {
+          "statements": 126,
+          "functions": 70,
+          "branches": 60
+        }
+      },
+      {
+        "path": "apps/office/src/sw/browser/storage/writer-odt-store.ts",
+        "priorSourceSHA256": "a245fa0efe64182f9202141e5d046d50951f9c57c3d3ad4c1d3f14d5923543f1",
+        "currentSourceSHA256": "0fb4ebffca5a00fe63ff327379305d64143c7014dace0a7e13edb8c0c241232e",
+        "priorMap": "TT1SYC.app-final.json",
+        "priorMapSHA256": "45c0fbead4263d8e8eef7be362cad9651e044a78f30ec315b42ad6ea54051b10",
+        "regions": [
+          {
+            "oldStart": 1,
+            "oldEnd": 19,
+            "newStart": 1,
+            "newEnd": 19,
+            "byteLength": 745,
+            "sha256": "20451766c6f1de674768faf379b603971609c246f9c3ca54868405d17d695372"
+          },
+          {
+            "oldStart": 20,
+            "oldEnd": 133,
+            "newStart": 21,
+            "newEnd": 134,
+            "byteLength": 3718,
+            "sha256": "bad976402552e276b1e45eb4defc0fa5b91d4220faf93f534a42196f9490da2f"
+          },
+          {
+            "oldStart": 134,
+            "oldEnd": 254,
+            "newStart": 174,
+            "newEnd": 294,
+            "byteLength": 4497,
+            "sha256": "422b7d0785f02a9d847543c8c624a76085db4c0220178fe944551718da38afd1"
+          }
+        ],
+        "counts": {
+          "statements": 78,
+          "functions": 27,
+          "branches": 13
+        }
+      },
+      {
+        "path": "apps/office/src/sw/browser/workflows/writer-odt-io.ts",
+        "priorSourceSHA256": "e6dfa9e2a635aac5692c942a71aa6ea39963356afc2d15c0c9f78dcbb12b5808",
+        "currentSourceSHA256": "7c214afab59dbc5df1087f107e2b7bf2bf01d8623a2995e8eb19a45575361306",
+        "priorMap": "TT1SYC.app-final.json",
+        "priorMapSHA256": "45c0fbead4263d8e8eef7be362cad9651e044a78f30ec315b42ad6ea54051b10",
+        "regions": [
+          {
+            "oldStart": 1,
+            "oldEnd": 7,
+            "newStart": 1,
+            "newEnd": 7,
+            "byteLength": 349,
+            "sha256": "ae0fca6981ebf747f06383cced9b7e7c595a7c8b705814789531ffbc330b71ac"
+          },
+          {
+            "oldStart": 8,
+            "oldEnd": 15,
+            "newStart": 14,
+            "newEnd": 21,
+            "byteLength": 445,
+            "sha256": "2f493188b0186d3b7ee1576129860d02acbaf803941a8a7ee9aed9889aa4b4d2"
+          },
+          {
+            "oldStart": 16,
+            "oldEnd": 29,
+            "newStart": 61,
+            "newEnd": 74,
+            "byteLength": 591,
+            "sha256": "5632efc2538d4d8976829cf625a539d023c4369b6b298f76c489e1c99e9a442c"
+          },
+          {
+            "oldStart": 30,
+            "oldEnd": 48,
+            "newStart": 88,
+            "newEnd": 106,
+            "byteLength": 718,
+            "sha256": "fc5c846a88b495c006f385d8c50fcb9c8cb8391fe3c0980514056691fa4b15b9"
+          },
+          {
+            "oldStart": 50,
+            "oldEnd": 114,
+            "newStart": 107,
+            "newEnd": 171,
+            "byteLength": 2012,
+            "sha256": "e08feb2f6d83a5776596cddccb0605d7bebbb2fda6e584f5a8f4eee92558eae2"
+          },
+          {
+            "oldStart": 115,
+            "oldEnd": 120,
+            "newStart": 193,
+            "newEnd": 198,
+            "byteLength": 226,
+            "sha256": "31a35ececfbe2a87d933f12f5248aab5b6809d9e3864d9ea0844d5327f3f2b91"
+          },
+          {
+            "oldStart": 121,
+            "oldEnd": 125,
+            "newStart": 200,
+            "newEnd": 204,
+            "byteLength": 130,
+            "sha256": "7eddfcfdf9efe05f015acdf76c4eaec9cad417b9e73b526c62c8dc9061c1f0a7"
+          },
+          {
+            "oldStart": 126,
+            "oldEnd": 127,
+            "newStart": 206,
+            "newEnd": 207,
+            "byteLength": 105,
+            "sha256": "5bb6c3bbd897198ba77e94cc1f85e50f7b7df07ab3ff4d6f3370ea89af4a05cc"
+          },
+          {
+            "oldStart": 129,
+            "oldEnd": 136,
+            "newStart": 209,
+            "newEnd": 216,
+            "byteLength": 380,
+            "sha256": "d889fda28715659defacc4cee00c463c533cd2271aa3988288c95dcb677ddd96"
+          },
+          {
+            "oldStart": 139,
+            "oldEnd": 141,
+            "newStart": 223,
+            "newEnd": 225,
+            "byteLength": 7,
+            "sha256": "7b8b600a5b448b1e4d02df09746ed3ca3172f75c4aabb01dde080e36cab074b4"
+          }
+        ],
+        "counts": {
+          "statements": 26,
+          "functions": 5,
+          "branches": 12
+        }
+      },
+      {
+        "path": "apps/office/src/sw/source/uibase/docvw/edtwin.ts",
+        "priorSourceSHA256": "12cdcddb94f9a4a0462b8c8df9ad1406decf63346fec8a83beea8384a7245e1a",
+        "currentSourceSHA256": "85e7930b44953b1a2cadc39f9267f0a1250f8d0834870963c44a08d7175bfd80",
+        "priorMap": "TT1SYC.app-final.json",
+        "priorMapSHA256": "45c0fbead4263d8e8eef7be362cad9651e044a78f30ec315b42ad6ea54051b10",
+        "regions": [
+          {
+            "oldStart": 1,
+            "oldEnd": 158,
+            "newStart": 1,
+            "newEnd": 158,
+            "byteLength": 6786,
+            "sha256": "b5e6e0e2e6cf9aa0d1ec56814f1241beeee195633ac074cc2f71c9843dce0b52"
+          },
+          {
+            "oldStart": 160,
+            "oldEnd": 164,
+            "newStart": 161,
+            "newEnd": 165,
+            "byteLength": 235,
+            "sha256": "d6832246d44726872d26412f2fda1228ea8ce17fbad65988ed799bfd201aa910"
+          },
+          {
+            "oldStart": 167,
+            "oldEnd": 180,
+            "newStart": 170,
+            "newEnd": 183,
+            "byteLength": 392,
+            "sha256": "5d31de87840767c9edfaf4d5af81589c1648897005310e20145a506a4c420b3d"
+          },
+          {
+            "oldStart": 182,
+            "oldEnd": 218,
+            "newStart": 185,
+            "newEnd": 221,
+            "byteLength": 1850,
+            "sha256": "3e568f2f01c36db33ec487ad1d006b83c98107ce3264dfdcf616d129feddb9b6"
+          },
+          {
+            "oldStart": 220,
+            "oldEnd": 230,
+            "newStart": 223,
+            "newEnd": 233,
+            "byteLength": 528,
+            "sha256": "b8bf25229275c38ba52b03d07f86328a29cfb800dda249f3c50cc6ae629cad6d"
+          },
+          {
+            "oldStart": 232,
+            "oldEnd": 236,
+            "newStart": 235,
+            "newEnd": 239,
+            "byteLength": 128,
+            "sha256": "5cdf08adc906ccfd1baea301b738c032841ebeb479eda9a48f08c31d77147f6e"
+          },
+          {
+            "oldStart": 238,
+            "oldEnd": 664,
+            "newStart": 241,
+            "newEnd": 667,
+            "byteLength": 19004,
+            "sha256": "f2ff5fbdfa3bb20c92c802812ed9633fafccd22b2461fd9af6d16d937a1a94ac"
+          }
+        ],
+        "counts": {
+          "statements": 216,
+          "functions": 45,
+          "branches": 102
+        }
+      },
+      {
+        "path": "apps/office/src/sw/source/uibase/uiview/view.ts",
+        "priorSourceSHA256": "5452f2eefa90adb58cf929b758b8225da278ebf1cae4122ad21625a6dd6a8d3b",
+        "currentSourceSHA256": "7ce69b6d2c2a91ccbc27e2e4785bb167cf81b23d196e3e9b67027b957c29e45a",
+        "priorMap": "TT1SYC.app-final.json",
+        "priorMapSHA256": "45c0fbead4263d8e8eef7be362cad9651e044a78f30ec315b42ad6ea54051b10",
+        "regions": [
+          {
+            "oldStart": 1,
+            "oldEnd": 25,
+            "newStart": 1,
+            "newEnd": 25,
+            "byteLength": 1109,
+            "sha256": "548cf6753389a8ed7fb9b7289dfc25c9edbd9d8b1bd34d3780dff3bd98cc38be"
+          },
+          {
+            "oldStart": 26,
+            "oldEnd": 119,
+            "newStart": 30,
+            "newEnd": 123,
+            "byteLength": 3996,
+            "sha256": "56f217fe0c5a6c700cd26be571b772115132faa9182040faaa1c75a24d88c7d6"
+          },
+          {
+            "oldStart": 120,
+            "oldEnd": 271,
+            "newStart": 134,
+            "newEnd": 285,
+            "byteLength": 6167,
+            "sha256": "b736f60d7ac256150aaa56316384d789673bbf5386258529bcad57d25c95b110"
+          }
+        ],
+        "counts": {
+          "statements": 91,
+          "functions": 33,
+          "branches": 19
+        }
+      }
+    ],
+    "wholeFiles": 304,
+    "transfers": [],
+    "gaps": []
+  },
+  "inventory": {
+    "coverage": {
+      "lines": {
+        "total": 1464,
+        "covered": 1464,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 1523,
+        "covered": 1523,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 384,
+        "covered": 384,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 1081,
+        "covered": 1081,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "mapSHA256": "f07247a53e90725348db18d918317bab26f6d95e58cf03367b981293997934ac",
+    "proofSHA256": "e4a57c478310d6bacc7a9b7d4d3d11b0a37bc5c7872abb8e69eae124af3b57c6",
+    "files": 38,
+    "invalidWholeFallbacks": [],
+    "priorRegionTransfers": [],
+    "wholeFiles": 38,
+    "transfers": [],
+    "gaps": []
+  }
+}

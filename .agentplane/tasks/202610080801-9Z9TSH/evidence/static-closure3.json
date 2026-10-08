@@ -1,0 +1,29 @@
+{
+  "reason": "Only failed JSDoc and changed new test input closure after adding host-list documentation",
+  "records": [
+    {
+      "command": "npm exec -- prettier --check apps/office/src/sw/browser/presentation/current-dialog-baseline.test.tsx apps/office/src/sw/browser/presentation/writer-view-document-key.test.tsx",
+      "exit": 0,
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+      "diagnostics": []
+    },
+    {
+      "command": "npm exec -- eslint --max-warnings 0 apps/office/src/sw/browser/presentation/current-dialog-baseline.test.tsx apps/office/src/sw/browser/presentation/writer-view-document-key.test.tsx",
+      "exit": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run typecheck",
+      "exit": 0,
+      "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:docs",
+      "exit": 0,
+      "sha256": "984d21446ce87172028e3f2f801ce87cf0769e82388ece8aceaf31c671034817",
+      "diagnostics": []
+    }
+  ]
+}

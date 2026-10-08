@@ -1,0 +1,61 @@
+{
+  "base": "b5da6bf4c985f88be6aa5bddae6a1957ad10afc6",
+  "semanticPaths": [
+    "apps/office/src/svl/source/items/poolitem.ts",
+    "apps/office/src/svx/inc/svxids.ts",
+    "apps/office/src/svx/source/dialog/native-column-item.test.ts",
+    "apps/office/src/svx/source/dialog/rulritem.ts",
+    "apps/office/src/sw/browser/presentation/current-dialog-baseline.test.tsx",
+    "apps/office/src/sw/browser/presentation/writer-view-document-key.test.tsx",
+    "apps/office/src/sw/source/uibase/docvw/edtwin.ts",
+    "apps/office/src/sw/source/uibase/uiview/native-column-item-boundary.test.ts",
+    "apps/office/src/sw/source/uibase/uiview/view.ts",
+    "apps/office/src/sw/source/uibase/uiview/viewtab.ts",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/source-provenance.json",
+    "scripts/check-module-boundaries.mjs",
+    "scripts/native-column-item-boundary.test.ts"
+  ],
+  "scopeCount": 14,
+  "priorAcceptanceFiles": 614,
+  "byteIdenticalAcceptanceFiles": 613,
+  "exactSourceBackedMigrations": [
+    {
+      "path": "apps/office/src/sw/browser/presentation/writer-view-document-key.test.tsx",
+      "beforeSHA256": "bb2d20c55accd0fa8fa3241650cfbf42af52ef9668063280aa94f4f0fe09dadc",
+      "afterSHA256": "ff33cb5a173286b8ea57c1f86cce2d17eefa01948f91a7edd431e3cbd5606982",
+      "originalAssertions": 21,
+      "allOriginalAssertionsAndInputsUnchanged": true,
+      "onlySourceBackedMigration": "Target the bookmark resource action-area Close, preserving the independently added window-heading Close control; insertbookmark.ui close response -7"
+    }
+  ],
+  "newAcceptanceFiles": [
+    "apps/office/src/svx/source/dialog/native-column-item.test.ts",
+    "apps/office/src/sw/source/uibase/uiview/native-column-item-boundary.test.ts",
+    "scripts/native-column-item-boundary.test.ts",
+    "apps/office/src/sw/browser/presentation/current-dialog-baseline.test.tsx"
+  ],
+  "metadata": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "oldRecords": 305,
+      "currentRecords": 307,
+      "allPriorFieldsPrefixesAndStatusesPreserved": true,
+      "newPartialModules": [
+        "apps/office/src/svx/source/dialog/rulritem.ts",
+        "apps/office/src/sw/source/uibase/uiview/viewtab.ts"
+      ]
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "oldRecords": 305,
+      "currentRecords": 307,
+      "allPriorFieldsPrefixesAndStatusesPreserved": true,
+      "newPartialModules": [
+        "apps/office/src/svx/source/dialog/rulritem.ts",
+        "apps/office/src/sw/source/uibase/uiview/viewtab.ts"
+      ]
+    }
+  ],
+  "failures": []
+}

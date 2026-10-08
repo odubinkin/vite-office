@@ -1,0 +1,48 @@
+{
+  "profile": "upstream-absent",
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/browser/presentation/writer-view-document-key.test.tsx src/sw/browser/presentation/current-dialog-baseline.test.tsx -t ^(?:Writer direct document key keeps the bookmark modal's focus and resumes after cancellation|current .*)$ --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/9Z9TSH.closure1.app-results.json",
+      "exit": 1,
+      "outputSHA256": "19565fb54c9b8a2032bf6f41b61ada33ae473f088dddc6da7a86bca05924920e",
+      "bytes": 31557,
+      "unhandledErrorCount": 0,
+      "originalFailedNames": [
+        {
+          "file": "src/sw/browser/presentation/writer-view-document-key.test.tsx",
+          "name": "Writer direct document key keeps the bookmark modal's focus and resumes after cancellation"
+        }
+      ],
+      "caseCounts": {
+        "passed": 19,
+        "failed": 0,
+        "skipped": 23,
+        "total": 42
+      },
+      "failedCases": []
+    },
+    {
+      "kind": "inventory",
+      "command": "npm run test:inventory:coverage -- scripts/libreoffice-inventory/parity-mapping-cli.test.ts -t ^(?:parity mapping CLI composes the Writer mapping report with owned upstream marker evidence)$ --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/9Z9TSH.closure1.inventory-results.json",
+      "exit": 1,
+      "outputSHA256": "c3407823ae8af5194e865a3ec8a2ac4ecc0f8eb3314b6337fb8add692e0e1bbb",
+      "bytes": 5240,
+      "unhandledErrorCount": 0,
+      "originalFailedNames": [
+        {
+          "file": "scripts/libreoffice-inventory/parity-mapping-cli.test.ts",
+          "name": "parity mapping CLI composes the Writer mapping report with owned upstream marker evidence"
+        }
+      ],
+      "caseCounts": {
+        "passed": 1,
+        "failed": 0,
+        "skipped": 2,
+        "total": 3
+      },
+      "failedCases": []
+    }
+  ]
+}

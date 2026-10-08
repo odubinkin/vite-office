@@ -1,0 +1,51 @@
+{
+  "records": [
+    {
+      "command": "npm run format:check",
+      "exit": 0,
+      "bytes": 122,
+      "sha256": "ac1729f86eee878f5f4d6c948c510d2cc91bb5568f6dd088f70f3885e137d116",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run lint",
+      "exit": 1,
+      "bytes": 384,
+      "sha256": "1381378fff63e6042e084c788a2b85fbf849f8a0852df0fd2939bd074bd97cbd",
+      "diagnostics": [
+        "> eslint . --max-warnings 0",
+        "  78:12  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "  88:17  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "✖ 2 problems (2 errors, 0 warnings)"
+      ]
+    },
+    {
+      "command": "npm run typecheck",
+      "exit": 0,
+      "bytes": 240,
+      "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:dependencies",
+      "exit": 0,
+      "bytes": 189,
+      "sha256": "642ee4db944b2cf27fbbf4cb23a480e8e035722e55c424c33c9dcbcc22d50aa1",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:docs",
+      "exit": 0,
+      "bytes": 119,
+      "sha256": "11dbb4899c0cd7c9cda0dfa598736158a584de2d10e859325ebe871b93cd6d6c",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:file-size",
+      "exit": 0,
+      "bytes": 4068,
+      "sha256": "5f4e853ae4b7680dc9ec4e1fa9234cff9cf6a0d70f96704957e11b489c8ca15b",
+      "diagnostics": []
+    }
+  ]
+}

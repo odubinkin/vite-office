@@ -23,6 +23,10 @@ import { SwWrtShell } from "../wrtsh/wrtsh1";
 import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
 import { SwRootFrame } from "../../core/layout/newfrm";
 import { SelectionType } from "../inc/wrtsh";
+import type { SwTabCols } from "../../core/bastyp/tabcol";
+import type { SvxColumnItem } from "../../../../svx/source/dialog/rulritem";
+import { SID_RULER_BORDERS } from "../../../../svx/inc/svxids";
+import { createSwTableColumnItem } from "./viewtab";
 
 /** Persistent Writer view joining SwDocShell, SwWrtShell, and frame dispatch. */
 export class SwView {
@@ -115,6 +119,16 @@ export class SwView {
   /** Returns the platform-neutral Writer edit-window owner. @returns Persistent edit window. */
   public GetEditWin(): SwEditWin {
     return this.editWindow;
+  }
+
+  /** Converts document-mouse column state at the source view boundary. @param columns - Borrowed native separators. @param active - Active native column. @returns Owned ruler value. */
+  public GetTableRulerColumnItem(columns: SwTabCols, active = 0): SvxColumnItem {
+    return createSwTableColumnItem(
+      columns,
+      active,
+      this.GetDocShell().GetDoc().GetPageDesc().GetValue().width,
+      SID_RULER_BORDERS,
+    );
   }
 
   /** Returns the persistent core layout root for browser device measurements. @returns Layout root. */

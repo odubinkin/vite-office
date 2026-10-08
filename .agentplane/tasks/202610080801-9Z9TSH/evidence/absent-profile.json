@@ -1,0 +1,201 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/svl/source/items/poolitem.ts": "c0e606a0b9fa84d7bdaf06165ce0ad29d8cdf636903ac8b2109fd4da61844d61",
+    "apps/office/src/svx/inc/svxids.ts": "7d7bbb3c5ff6f02341e9f425295188135def1a3b88d032ce439f74a8c5028bbe",
+    "apps/office/src/svx/source/dialog/rulritem.ts": "176eaa81bf4c9e53ccc7b50a7d4f2b85496722f096a7b244c3abd9e8a353946b",
+    "apps/office/src/sw/source/uibase/uiview/viewtab.ts": "52fcc06109282620ffb4d248f1eb5539a177539f88187e251274cd16d4045b6d",
+    "apps/office/src/sw/source/uibase/uiview/view.ts": "7ce69b6d2c2a91ccbc27e2e4785bb167cf81b23d196e3e9b67027b957c29e45a",
+    "apps/office/src/sw/source/uibase/docvw/edtwin.ts": "85e7930b44953b1a2cadc39f9267f0a1250f8d0834870963c44a08d7175bfd80",
+    "scripts/check-module-boundaries.mjs": "f536a59e00ced1ec15e6c5e9f8b53cd24f0a94a5f7b1d0ad0c65e0e98285482f",
+    "apps/office/src/svx/source/dialog/native-column-item.test.ts": "c3773600744ea7710bc5bfd6ddee2fa6a3aa7a6a46dd803196cb921e6b9c5361",
+    "apps/office/src/sw/source/uibase/uiview/native-column-item-boundary.test.ts": "8d248f9936d6a729d1a806c24c6e628bff1b4fecb5d6a8ce0a0903da95987e00",
+    "scripts/native-column-item-boundary.test.ts": "f14e45f5448e0eff3d914e55b409809ea11c159699d2e5bd4c165fc94d9fa334",
+    "docs/program/source-provenance.json": "1c48a0e2d92a579be24cd4ba8f9ec6d013a3cd077496ba1bfbb96083e569241e",
+    "docs/program/parity/runtime-inventory.json": "c03bf76309d7042abb3f5a57b26540070b42399f9655dd3f6e8a37ade9a957da"
+  },
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1443,
+      "sha256": "2a8dd22d821a5cf80d90c8ea3b42c5b7c9943015596342fa660ead8083ac01dc",
+      "totals": [],
+      "failedCases": [],
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/9Z9TSH.app-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 85808,
+      "sha256": "00b6cfb93aadaebebdcf7b253928602979edc5a109423b0f3bddaa24fc63cc52",
+      "totals": [
+        "Test Files  1 failed | 457 passed (458)",
+        "Tests  1 failed | 13690 passed (13691)"
+      ],
+      "failedCases": [
+        {
+          "name": "apps/office/src/sw/browser/presentation/writer-view-document-key.test.tsx > Writer direct document key keeps the bookmark modal's focus and resumes after cancellation",
+          "assertion": [
+            "TestingLibraryElementError: Found multiple elements with the role \"button\" and name \"Close\""
+          ]
+        }
+      ],
+      "caseCounts": {
+        "passed": 13690,
+        "failed": 1,
+        "skipped": 0,
+        "total": 13691
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 16898,
+          "covered": 16884,
+          "skipped": 0,
+          "pct": 99.91
+        },
+        "statements": {
+          "total": 18559,
+          "covered": 18536,
+          "skipped": 0,
+          "pct": 99.87
+        },
+        "functions": {
+          "total": 4304,
+          "covered": 4297,
+          "skipped": 0,
+          "pct": 99.83
+        },
+        "branches": {
+          "total": 13968,
+          "covered": 13946,
+          "skipped": 0,
+          "pct": 99.84
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverage": {
+        "lines": 99.91,
+        "statements": 99.87,
+        "functions": 99.83,
+        "branches": 99.84
+      },
+      "incompleteFileCount": 9,
+      "coverageMapSHA256": "7db52fcbaab9f884cdb9bfccbd16d6c81d3f54e4edc72f347814d5f0759d6688",
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "inventory",
+      "command": "npm run test:inventory:coverage -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/9Z9TSH.inventory-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 42194,
+      "sha256": "91997915b5ea56d7a03ba2f8eace07424d6673e91467222d6a4df5fd6a4f3ab2",
+      "totals": [
+        "Test Files  1 failed | 35 passed (36)",
+        "Tests  1 failed | 109 passed (110)"
+      ],
+      "failedCases": [
+        {
+          "name": "scripts/libreoffice-inventory/parity-mapping-cli.test.ts > parity mapping CLI composes the Writer mapping report with owned upstream marker evidence",
+          "assertion": [
+            "Error: Runtime module paths must be unique and lexicographically ordered."
+          ]
+        }
+      ],
+      "caseCounts": {
+        "passed": 109,
+        "failed": 1,
+        "skipped": 0,
+        "total": 110
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 1464,
+          "covered": 1460,
+          "skipped": 0,
+          "pct": 99.72
+        },
+        "statements": {
+          "total": 1523,
+          "covered": 1519,
+          "skipped": 0,
+          "pct": 99.73
+        },
+        "functions": {
+          "total": 384,
+          "covered": 381,
+          "skipped": 0,
+          "pct": 99.21
+        },
+        "branches": {
+          "total": 1081,
+          "covered": 1081,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "coverage": {
+        "lines": 99.72,
+        "statements": 99.73,
+        "functions": 99.21,
+        "branches": 100
+      },
+      "incompleteFileCount": 1,
+      "coverageMapSHA256": "ad5f80272d7710b6dae6837f39b6ca51645216ac25e41887a499558f14c2d69b",
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "scripts",
+      "command": "npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts scripts/check-module-boundaries.test.ts scripts/check-legacy-font-boundary.test.ts scripts/native-column-item-boundary.test.ts",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 223,
+      "sha256": "db29713b2299acfc21844f55eaeeebeeeeb9dda398d47404d2200b097fec9ccf",
+      "totals": [
+        "Test Files  5 passed (5)",
+        "Tests  16 passed (16)"
+      ],
+      "failedCases": [],
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 41474,
+      "sha256": "c844fc95ac9a8b470021e56a8afb1bcbf6e1db10a6f6efd4d50929dcc726d08e",
+      "totals": [
+        "299 passed (3.4m)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "startTime": "2026-10-08T08:20:41.077Z",
+        "duration": 202215.587,
+        "expected": 299,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "unhandledErrorCount": 0
+    }
+  ]
+}

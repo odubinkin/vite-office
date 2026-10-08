@@ -156,14 +156,17 @@ export class SwEditWin {
       !this.m_rView.GetWrtShell().GetMouseTabCols(original, point)
     )
       return false;
-    const rect = (hit.frame.mouseGeometry as NonNullable<SwTabFrame["mouseGeometry"]>).rect,
+    const columns = this.m_rView.GetTableRulerColumnItem(original),
+      rect = (hit.frame.mouseGeometry as NonNullable<SwTabFrame["mouseGeometry"]>).rect,
       scale = (original.GetRight() - original.GetLeft()) / (rect.right - rect.left),
       origin = rect.left - original.GetLeft() / scale;
     let index = -1,
       distance = Infinity;
     for (let i = 0; i < original.Count(); i++) {
-      const difference = Math.abs(origin + original.GetEntry(i).nPos / scale - point.x);
-      if (!original.IsHidden(i) && difference <= 5 && difference < distance) {
+      const difference = Math.abs(
+        origin + (columns.At(i).nEnd + original.GetLeft()) / scale - point.x,
+      );
+      if (columns.At(i).bVisible && difference <= 5 && difference < distance) {
         index = i;
         distance = difference;
       }
@@ -178,7 +181,7 @@ export class SwEditWin {
         ? original.GetLeft()
         : index === original.Count()
           ? original.GetRight()
-          : original.GetEntry(index).nPos;
+          : columns.At(index).nEnd + original.GetLeft();
     // SvxRuler::EvalModifier selects exact solitary masks. The represented
     // proportional Border branch has zero-width fences in a flat table.
     const linear = modifier === KEY_SHIFT && index >= 0 && index < original.Count();
@@ -216,7 +219,7 @@ export class SwEditWin {
           ? original.Count() === 0
             ? original.GetLeft()
             : original.GetEntry(index - 1).nPos
-          : original.GetEntry(index).nMin;
+          : columns.At(index).nEndMin + original.GetLeft();
     const maximum =
       index === -1
         ? original.Count() === 0
@@ -228,13 +231,13 @@ export class SwEditWin {
             ? original.GetRight() -
               (Array.from({ length: original.Count() - index - 1 }).filter(
                 /** Counts source CalcPropMaxRight visible following separators. @param _unused - Empty value. @param offset - Following separator offset. @returns Whether visible. */
-                (_unused, offset) => !original.IsHidden(index + offset + 1),
+                (_unused, offset) => columns.At(index + offset + 1).bVisible,
               ).length +
                 1) *
                 5 *
                 scale
             : proportional === undefined
-              ? original.GetEntry(index).nMax
+              ? columns.At(index).nEndMax + original.GetLeft()
               : original.GetRight() - proportionalReserve;
     this.tableBorderDrag = {
       axis: "column",

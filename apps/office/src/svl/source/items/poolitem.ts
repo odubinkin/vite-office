@@ -33,7 +33,7 @@ export abstract class SfxPoolItem {
   }
 
   /** Creates one item for a concrete WhichId or zero-valued request return. @param which - Bounded Writer/SVL item identity. @returns Nothing. */
-  protected constructor(private readonly which: number) {
+  protected constructor(private which: number) {
     if (!Number.isInteger(which) || which < 0 || which > 32767)
       throw new Error("SfxPoolItem WhichId is invalid.");
   }
@@ -41,6 +41,13 @@ export abstract class SfxPoolItem {
   /** Returns this item's WhichId. @returns Item identity, including zero for request values. */
   public Which(): number {
     return this.which;
+  }
+
+  /** Changes the identity of an owned item before insertion into a set. @param which - Bounded local item identity. @returns Nothing. */
+  public SetWhich(which: number): void {
+    if (!Number.isInteger(which) || which < 0 || which > 32767)
+      throw new Error("SfxPoolItem WhichId is invalid.");
+    this.which = which;
   }
 
   /** Creates an independent item with the same type and value. @returns Cloned item, or null for a static state sentinel. */

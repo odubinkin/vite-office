@@ -207,7 +207,10 @@ describe("Writer direct document key", /** Groups frame focus routing. @returns 
             fixture.fileDialogs.Show(kind),
         );
       const dialog = fixture.frame.getByRole("dialog");
-      const cancel = within(dialog).getByRole("button", {
+      const actionPanel =
+        kind === "bookmark" ? dialog.querySelector<HTMLElement>(".writer-dialog-actions") : dialog;
+      if (actionPanel === null) throw new Error("Missing native bookmark action area");
+      const cancel = within(actionPanel).getByRole("button", {
         name: ["bookmark", "open", "save-as", "export"].includes(kind) ? "Close" : "Cancel",
       });
       cancel.focus();
