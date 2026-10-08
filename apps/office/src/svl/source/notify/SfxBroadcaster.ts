@@ -39,6 +39,14 @@ export class SfxBroadcaster<Hint extends SfxHint> {
     return true;
   }
 
+  /** Visits live slots in native order, stopping when requested. @param visitor - Listener predicate. @returns Nothing. */
+  public ForAllListeners(visitor: (listener: SfxListenerTarget<Hint>) => boolean): void {
+    for (let index = 0; index < this.listeners.length; index++) {
+      const listener = this.listeners[index];
+      if (listener !== undefined && visitor(listener)) break;
+    }
+  }
+
   /** Reports whether live listeners are attached. @returns True for a non-empty broadcaster. */
   public HasListeners(): boolean {
     return this.listeners.length > this.removedPositions.length;

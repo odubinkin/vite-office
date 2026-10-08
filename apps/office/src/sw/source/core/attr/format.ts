@@ -2,12 +2,13 @@
  * @fileoverview Reimplements bounded SwFormat attribute ownership and derivation from pinned `sw/source/core/attr/format.cxx`.
  */
 
+import { SwModify } from "../../../inc/calbck";
 import type { SfxItemSet, WhichRangesContainer } from "../../../../svl/source/items/itemset";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { SwAttrSet, type SwAttrPool } from "./swatrset";
 
 /** Base class for identity-bearing Writer styles and formats. */
-export class SwFormat {
+export class SwFormat extends SwModify {
   private readonly attributeSet: SwAttrSet;
   private derivedFrom: SwFormat | undefined;
   private autoFormat = true;
@@ -19,6 +20,7 @@ export class SwFormat {
     ranges: WhichRangesContainer,
     derivedFrom?: SwFormat,
   ) {
+    super();
     this.attributeSet = new SwAttrSet(pool, ranges);
     this.SetDerivedFrom(derivedFrom);
   }
@@ -98,7 +100,7 @@ export class SwFormat {
   }
 
   /** Emits one format-owned attribute hint through the document broadcaster. @returns Nothing. */
-  private NotifyAttributeSet(): void {
+  protected NotifyAttributeSet(): void {
     this.attributeSet.GetDoc().NotifyModelChange({
       formatId: this.formatName,
       kind: "attribute-set-changed",
@@ -106,7 +108,7 @@ export class SwFormat {
   }
 
   /** Emits one format inheritance/name hint through the document broadcaster. @returns Nothing. */
-  private NotifyFormatInheritance(): void {
+  protected NotifyFormatInheritance(): void {
     this.attributeSet.GetDoc().NotifyModelChange({
       formatId: this.formatName,
       kind: "format-inheritance-changed",

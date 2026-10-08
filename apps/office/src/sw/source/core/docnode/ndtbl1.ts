@@ -1,10 +1,6 @@
 /** @fileoverview Owns represented native row attributes and history from original selected lines in ndtbl1.cxx. */
-import {
-  SwTable,
-  type SwTableBox,
-  type SwTableLine,
-  type SwTableLineFormat,
-} from "../table/swtable";
+import { SwTable, type SwTableBox, type SwTableLine } from "../table/swtable";
+import type { SwTableLineFormat } from "../../../inc/swtblfmt";
 import type { SwDoc } from "../doc/doc";
 import { SwTableBoxStartNode, SwTableNode } from "./node";
 import { SwTableCursor, type SwCursor } from "../crsr/swcrsr";
@@ -22,6 +18,7 @@ import {
   type SvxBoxInfoItemLine,
 } from "../../../../editeng/source/items/frmitems";
 import type { SvxBorderLine } from "../../../../editeng/source/items/borderline";
+import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { RES_BOX } from "../../../inc/hintids";
 import { SID_ATTR_BORDER_INNER } from "../../../../svx/inc/svxids";
@@ -362,7 +359,7 @@ export function SetSwRowSplit(
   split: SwFormatRowSplit,
   cursorState?: SwUndoCursorState,
 ): boolean {
-  return SetRowAttr(doc, cursor, { rowSplit: split }, cursorState);
+  return SetRowAttr(doc, cursor, split, cursorState);
 }
 
 /** Reads the complete common native size item, including native default types. @param cursor - Original current or table-selected cursor. @returns Cloned common item or no item for mixed or absent rows. */
@@ -382,14 +379,14 @@ export function SetSwRowHeight(
   size: SwFormatFrameSize,
   cursorState?: SwUndoCursorState,
 ): boolean {
-  return SetRowAttr(doc, cursor, { frameSize: size }, cursorState);
+  return SetRowAttr(doc, cursor, size, cursorState);
 }
 
 /** Records original row attributes through one document transaction, including same-value requests. @param doc - Owning document. @param cursor - Actual current or table-selected cursor. @param value - Represented row item. @param cursorState - Optional shell history attributes. @returns Whether admitted. */
 function SetRowAttr(
   doc: SwDoc,
   cursor: SwCursor,
-  value: SwTableLineFormat,
+  value: SfxPoolItem,
   cursorState?: SwUndoCursorState,
 ): boolean {
   const node = cursor.GetPoint().GetNode() as SwTextNode;
@@ -409,7 +406,17 @@ function SetRowAttr(
           node.GetCharacterItemsAt(cursor.GetPoint().GetContentIndex()),
         );
       const action = new SwUndoAttrTable(table, before);
-      for (const row of rows) row.SetFormat({ ...row.GetFormat(), ...value });
+      const formats = new Map<SwTableLineFormat, SwTableLineFormat>();
+      for (const row of rows) {
+        const original = row.GetFrameFormat(),
+          reused = formats.get(original);
+        if (reused !== undefined) row.ChgFrameFormat(reused);
+        else {
+          const owned = row.ClaimFrameFormat();
+          owned.SetFormatAttr(value);
+          formats.set(original, owned);
+        }
+      }
       doc.GetUndoManager().AddUndoAction(action);
       doc.NotifyModelChange({
         kind: "node-content-changed",

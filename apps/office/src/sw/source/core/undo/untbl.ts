@@ -1,5 +1,7 @@
 /** @fileoverview Owns numeric native table insertion history through Writer's SwUndoTableNdsChg from untbl.cxx. */
 import type { SwTable, SwTableLine, SwTableBox, SwTableBoxFormat } from "../table/swtable";
+import { SfxItemSet } from "../../../../svl/source/items/itemset";
+import type { SwTableLineFormat } from "../../../inc/swtblfmt";
 import { SwTableNode } from "../docnode/node";
 import type { SwDoc } from "../doc/doc";
 import type { SwInsertTableOptions } from "../../../inc/itabenum";
@@ -103,34 +105,56 @@ export class SwUndoInsTable extends SwUndo {
 class SaveTable {
   private readonly format;
   private readonly lines;
+  private readonly rowFormats: SfxItemSet[] = [];
   /** Captures independent attribute payload without copying text or graph owners. @param table - Original table. @returns Nothing. */
   public constructor(table: SwTable) {
     this.format = table.GetFormat();
+    const formats = new Map<SwTableLineFormat, number>();
     this.lines = table.GetTabLines().map(
       /** Saves represented row and box attributes. @param row - Native row. @returns Independent attributes. */ (
         row,
-      ) => ({
-        format: row.GetFormat(),
-        boxes: row
-          .GetTabBoxes()
-          .map(
-            /** Saves one box format. @param box - Original box. @returns Independent attributes. */ (
-              box,
-            ) => box.GetFormat(),
-          ),
-      }),
+      ) => {
+        const format = row.GetFrameFormat();
+        let index = formats.get(format);
+        if (index === undefined) {
+          index = this.rowFormats.length;
+          const source = format.GetAttrSet(),
+            saved = new SfxItemSet(source.GetPool(), source.GetRanges());
+          saved.PutSet(source);
+          this.rowFormats.push(saved);
+          formats.set(format, index);
+        }
+        return {
+          formatIndex: index,
+          boxes: row
+            .GetTabBoxes()
+            .map(
+              /** Saves one box format. @param box - Original box. @returns Independent attributes. */ (
+                box,
+              ) => box.GetFormat(),
+            ),
+        };
+      },
     );
   }
   /** Restores attributes on original graph owners. @param table - Connected table. @returns Nothing. */
   public RestoreAttr(table: SwTable): void {
     table.SetFormat(this.format);
+    const formats = this.rowFormats.map(
+      /** Recreates one native owner for each saved item set. @param saved - Independent direct items. @returns New shared format. */
+      (saved) => {
+        const format = table.GetTableNode().GetDoc().MakeTableLineFormat();
+        format.SetFormatAttrSet(saved);
+        return format;
+      },
+    );
     this.lines.forEach(
       /** Restores an original row and its boxes. @param saved - Retained attributes. @param index - Row index. @returns Nothing. */ (
         saved,
         index,
       ) => {
         const row = table.GetTabLines()[index] as SwTableLine;
-        row.SetFormat(saved.format);
+        row.ChgFrameFormat(formats[saved.formatIndex] as SwTableLineFormat);
         saved.boxes.forEach(
           /** Restores an original box format. @param format - Retained attributes. @param column - Column index. @returns Nothing. */ (
             format,

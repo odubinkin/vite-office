@@ -1,7 +1,8 @@
 /** @fileoverview Implements the Writer SwDoc aggregate from pinned LibreOffice `sw/inc/doc.hxx` and `sw/source/core/doc/docnew.cxx`. */
 
 import { SwAttrPool } from "../attr/swatrset";
-import type { SwFrameFormat } from "../layout/atrfrm";
+import { SwTableLineFormat } from "../../../inc/swtblfmt";
+import { SwFrameFormat } from "../layout/atrfrm";
 import { SetTableName } from "./docchart";
 import type { SwFormat } from "../attr/format";
 import { SwLineNumberInfo } from "../../../inc/lineinfo";
@@ -188,6 +189,8 @@ export class SwDoc {
   public SetInReading(reading: boolean): void {
     this.mbInReading = reading;
   }
+  private readonly defaultFrameFormat: SwFrameFormat;
+  private nextTableLineFormat = 0;
   private readonly attrPool: SwAttrPool;
   private readonly styleAccess: IStyleAccess;
   private readonly contentOperationsManager: DocumentContentOperationsManager;
@@ -212,6 +215,7 @@ export class SwDoc {
     this.locale = options?.locale ?? "en-US";
     this.pageDescs = [createDefaultWriterPageDescriptor(this.locale)];
     this.attrPool = new SwAttrPool(this);
+    this.defaultFrameFormat = new SwFrameFormat(this.attrPool, "Default Frame Format");
     this.styleAccess = createStyleManager();
     this.stylePoolManager = new DocumentStylePoolManager(this.attrPool);
     this.listsManager = new DocumentListsManager(this.stateManager);
@@ -222,6 +226,16 @@ export class SwDoc {
       this.nodes.MakeTextNode();
   }
 
+  /** Reads the document-owned default frame. @returns Native default format. */
+  public GetDfltFrameFormat(): SwFrameFormat {
+    return this.defaultFrameFormat;
+  }
+  /** Creates a uniquely named native row format derived from the default frame. @returns Native row format. */
+  public MakeTableLineFormat(): SwTableLineFormat {
+    const format = new SwTableLineFormat(this.attrPool, this.defaultFrameFormat);
+    format.SetFormatName("TableLine" + ++this.nextTableLineFormat);
+    return format;
+  }
   /** Returns the document locale used for script-specific defaults. @returns BCP 47 locale. */
   public GetLocale(): string {
     return this.locale;

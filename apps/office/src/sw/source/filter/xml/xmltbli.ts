@@ -103,7 +103,9 @@ export class SwXMLTableImport extends SvXMLImport {
     >;
     const count = this.columnWidths.length;
     if (count === 0) throw new Error("ODF table has no declared columns.");
-    this.activeRow = new SwTableLine({
+    const frameFormat = table.GetTableNode().GetDoc().MakeTableLineFormat();
+    this.activeRow = new SwTableLine(frameFormat);
+    this.activeRow.SetFormat({
       rowSplit:
         style.keepTogether === undefined ? undefined : new SwFormatRowSplit(!style.keepTogether),
       frameSize:

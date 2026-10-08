@@ -12,7 +12,7 @@ import {
   SwTableLine,
   type SwTableBoxFormat,
   type SwTableFormat,
-  type SwTableLineFormat,
+  type SwTableLineFormatValue,
 } from "../table/swtable";
 
 /** Actual row/cell section nodes retained by table insertion history. */
@@ -205,14 +205,16 @@ export class SwNodes {
   public AppendTableRow(
     table: SwTable,
     columnCount: number,
-    lineFormat: SwTableLineFormat = {},
+    lineFormat: SwTableLineFormatValue = {},
     boxFormats: readonly SwTableBoxFormat[] = [],
   ): SwTableLine {
     if (!Number.isInteger(columnCount) || columnCount < 1)
       throw new Error("Writer table row needs at least one cell.");
     const tableNode = table.GetTableNode();
     if (tableNode.GetNodes() !== this) throw new Error("Writer table belongs to another document.");
-    const line = new SwTableLine(lineFormat);
+    const frameFormat = this.document.MakeTableLineFormat(),
+      line = new SwTableLine(frameFormat);
+    line.SetFormat(lineFormat);
     for (let column = 0; column < columnCount; column += 1) {
       const start = new SwTableBoxStartNode(this, tableNode);
       const paragraph = new SwTextNode(this, start, this.document.GetDfltTextFormatColl());
@@ -262,7 +264,7 @@ export class SwNodes {
     const tableNode = table.GetTableNode();
     if (tableNode.GetNodes() !== this || !table.GetTabLines().includes(source))
       throw new Error("Writer table row belongs to another table.");
-    const line = new SwTableLine(source.GetFormat()),
+    const line = new SwTableLine(source.GetFrameFormat()),
       nodes: SwNode[] = [];
     for (const box of source.GetTabBoxes()) {
       const section = this.PrepareTableBox(table, box);

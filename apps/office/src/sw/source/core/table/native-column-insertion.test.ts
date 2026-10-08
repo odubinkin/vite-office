@@ -367,7 +367,7 @@ it("retains native box sections and enforces actual connection boundaries", /** 
       /** Rejects foreign detached nodes. @returns Nothing. */ () =>
         f.doc.nodes.InsertTableBox(f.table, line, foreign, 0),
     ).toThrow("not detached");
-    const empty = new SwTableLine();
+    const empty = new SwTableLine(f.doc.MakeTableLineFormat());
     f.table.AddLine(empty);
     expect(
       /** Rejects an empty insertion row. @returns Nothing. */ () =>

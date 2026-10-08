@@ -8,7 +8,10 @@ import { SwTextNode } from "../txtnode/ndtxt";
 import { SwTabCols } from "../bastyp/tabcol";
 import { SwFormatFrameSize } from "../../../inc/fmtfsize";
 import { SwFormatVertOrient } from "../../../inc/fmtornt";
-import { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
+import { SwClient } from "../../../inc/calbck";
+import { SwTableLineFormat } from "../../../inc/swtblfmt";
+import type { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
+import { RES_FRM_SIZE, RES_ROW_SPLIT } from "../../../inc/hintids";
 import { SvxBoxItem } from "../../../../editeng/source/items/frmitems";
 import { SvxBorderLine } from "../../../../editeng/source/items/borderline";
 import { RES_BOX } from "../../../inc/hintids";
@@ -29,7 +32,7 @@ export interface SwTableFormat {
 }
 
 /** Bounded row geometry owned by SwTableLine. */
-export interface SwTableLineFormat {
+export interface SwTableLineFormatValue {
   readonly frameSize?: SwFormatFrameSize | undefined;
   readonly rowSplit?: SwFormatRowSplit | undefined;
 }
@@ -120,40 +123,69 @@ export class SwTableBox {
 }
 
 /** Owns one ordered set of Writer table cells and row geometry. */
-export class SwTableLine {
+export class SwTableLine extends SwClient {
   private readonly boxes: SwTableBox[] = [];
 
-  /** Creates a row. @param format - Imported row geometry. @returns Nothing. */
-  public constructor(private format: SwTableLineFormat = {}) {
-    this.SetFormat(format);
+  /** Registers a row at its document-owned native format. @param format - Native row format. @returns Nothing. */
+  public constructor(format: SwTableLineFormat) {
+    super();
+    this.RegisterToModify(format);
   }
-
-  /** Returns row geometry. @returns Immutable values. */
-  public GetFormat(): SwTableLineFormat {
+  /** Reads the original shared native format. @returns Registered format. */
+  public GetFrameFormat(): SwTableLineFormat {
+    return this.GetRegisteredIn() as SwTableLineFormat;
+  }
+  /** Makes this line the exclusive row client before mutation. @returns Owned native format. */
+  public ClaimFrameFormat(): SwTableLineFormat {
+    const original = this.GetFrameFormat();
+    let shared = false;
+    original.ForAllListeners(
+      /** Finds another original row client. @param client - Registered listener. @returns Whether found. */ (
+        client,
+      ) => {
+        if (client instanceof SwTableLine && client !== this) {
+          shared = true;
+          return true;
+        }
+        return false;
+      },
+    );
+    if (!shared) return original;
+    const copy = original.GetDoc().MakeTableLineFormat();
+    copy.CopyFormatFrom(original);
+    this.ChgFrameFormat(copy);
+    return copy;
+  }
+  /** Moves the original row registration to another same-document format. @param format - Replacement native owner. @returns Nothing. */
+  public ChgFrameFormat(format: SwTableLineFormat): void {
+    if (format.GetDoc() !== this.GetFrameFormat().GetDoc())
+      throw new Error("Writer row format belongs to another document.");
+    this.RegisterToModify(format);
+  }
+  /** Exposes authored row values only at explicit construction and transport boundaries. @returns Independent direct values. */
+  public GetFormat(): SwTableLineFormatValue {
+    const items = this.GetFrameFormat().GetAttrSet(),
+      size = items.GetItemIfSet(RES_FRM_SIZE, false) as SwFormatFrameSize | undefined,
+      split = items.GetItemIfSet(RES_ROW_SPLIT, false) as SwFormatRowSplit | undefined;
     return {
-      ...this.format,
-      ...(this.format.frameSize === undefined ? {} : { frameSize: this.format.frameSize.Clone() }),
-      ...(this.format.rowSplit === undefined ? {} : { rowSplit: this.format.rowSplit.Clone() }),
+      ...(size === undefined ? {} : { frameSize: size.Clone() }),
+      ...(split === undefined ? {} : { rowSplit: split.Clone() }),
     };
   }
-
-  /** Replaces row geometry. @param value - New values. @returns Nothing. */
-  public SetFormat(value: SwTableLineFormat): void {
-    this.format = {
-      ...value,
-      ...(value.frameSize === undefined ? {} : { frameSize: value.frameSize.Clone() }),
-      ...(value.rowSplit === undefined ? {} : { rowSplit: value.rowSplit.Clone() }),
-    };
+  /** Replaces direct row values at the explicit builder boundary. @param value - New authored values. @returns Nothing. */
+  public SetFormat(value: SwTableLineFormatValue): void {
+    const format = this.ClaimFrameFormat();
+    format.ResetAllFormatAttr();
+    if (value.frameSize !== undefined) format.SetFormatAttr(value.frameSize);
+    if (value.rowSplit !== undefined) format.SetFormatAttr(value.rowSplit);
   }
-
-  /** Reads an independent effective native row split item, including the true default. @returns Native row split item. */
+  /** Reads an independent effective native row split, including the inherited true default. @returns Concrete item. */
   public GetRowSplit(): SwFormatRowSplit {
-    return this.format.rowSplit?.Clone() ?? new SwFormatRowSplit();
+    return this.GetFrameFormat().GetRowSplit().Clone();
   }
-
-  /** Reads an independent effective native frame-size item, including pool defaults. @returns Complete frame size. */
+  /** Reads complete independent native frame size, including inherited defaults. @returns Concrete item. */
   public GetFrameSize(): SwFormatFrameSize {
-    return this.format.frameSize?.Clone() ?? new SwFormatFrameSize();
+    return this.GetFrameFormat().GetFrameSize().Clone();
   }
 
   /** Adds a cell to this row. @param box - Canonical cell. @param index - Native insertion coordinate. @returns Nothing. */

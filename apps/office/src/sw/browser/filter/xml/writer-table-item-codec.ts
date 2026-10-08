@@ -1,7 +1,7 @@
 /** @fileoverview Transports complete native Writer frame-size values across browser storage boundaries. */
 import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
 import { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
-import type { SwTableLineFormat } from "../../../source/core/table/swtable";
+import type { SwTableLineFormatValue } from "../../../source/core/table/swtable";
 /** Primitive complete frame item for process and storage boundaries. */
 export interface WriterFrameSizeRecord {
   readonly width: number;
@@ -14,7 +14,7 @@ export interface WriterFrameSizeRecord {
   readonly heightPercentRelation: number;
 }
 /** Row boundary record, including prior v16 minimum-height ingress. */
-export type WriterRowFormatRecord = Omit<SwTableLineFormat, "frameSize" | "rowSplit"> & {
+export type WriterRowFormatRecord = Omit<SwTableLineFormatValue, "frameSize" | "rowSplit"> & {
   readonly frameSize?: WriterFrameSizeRecord | undefined;
   readonly minHeight?: number | undefined;
   readonly rowSplit?: boolean | undefined;
@@ -22,7 +22,7 @@ export type WriterRowFormatRecord = Omit<SwTableLineFormat, "frameSize" | "rowSp
   readonly keepTogether?: boolean | undefined;
 };
 /** Encodes public native values without transferring a class prototype. @param value - Original row format. @returns Primitive row record. */
-export function encodeRowFormat(value: SwTableLineFormat): WriterRowFormatRecord {
+export function encodeRowFormat(value: SwTableLineFormatValue): WriterRowFormatRecord {
   const { frameSize, rowSplit, ...format } = value;
   return {
     ...format,
@@ -31,7 +31,7 @@ export function encodeRowFormat(value: SwTableLineFormat): WriterRowFormatRecord
   };
 }
 /** Restores the complete native item at the existing graph boundary. @param value - Primitive row record. @returns Native row format. */
-export function decodeRowFormat(value: WriterRowFormatRecord): SwTableLineFormat {
+export function decodeRowFormat(value: WriterRowFormatRecord): SwTableLineFormatValue {
   const { frameSize, minHeight, rowSplit, keepTogether, ...format } = value;
   if (
     (rowSplit !== undefined && typeof rowSplit !== "boolean") ||
