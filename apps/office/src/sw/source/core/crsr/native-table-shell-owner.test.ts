@@ -58,6 +58,11 @@ it("inherits native cell traversal and publishes already executed row history in
     expect(f.shell.GetActiveParagraph()).toBe(cell);
     expect(cell.GetText()).toBe("");
     expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(1);
+    const acceptedFormat = row.GetFormat(),
+      acceptedBoxFormats = row.GetTabBoxes().map(
+        /** Reads originally accepted cell attributes. @param box - Prior cell. @returns Format. */
+        (box) => box.GetFormat(),
+      );
     for (let cycle = 0; cycle < 3; cycle++) {
       expect(f.shell.Undo()).toBe(true);
       expect(f.table.GetTabLines()).toEqual([f.first, f.last]);
@@ -71,18 +76,13 @@ it("inherits native cell traversal and publishes already executed row history in
         currentCell = required(required(currentRow.GetTabBoxes()[0]).GetParagraphs()[0]);
       expect(currentRow).not.toBe(row);
       expect(currentCell).not.toBe(cell);
-      expect(currentRow.GetFormat()).toEqual(row.GetFormat());
+      expect(currentRow.GetFormat()).toEqual(acceptedFormat);
       expect(
         currentRow.GetTabBoxes().map(
           /** Reads recreated complete cell attributes. @param box - Current cell. @returns Format. */
           (box) => box.GetFormat(),
         ),
-      ).toEqual(
-        row.GetTabBoxes().map(
-          /** Reads originally accepted cell attributes. @param box - Prior cell. @returns Format. */
-          (box) => box.GetFormat(),
-        ),
-      );
+      ).toEqual(acceptedBoxFormats);
       expect(f.shell.GetActiveParagraph()).toBe(currentCell);
       expect(currentCell.GetText()).toBe("");
       expect(insert).toHaveBeenCalledTimes(cycle + 2);
@@ -121,7 +121,10 @@ it("rejects invalid row counts and foreign owners without history or node mutati
     expect(f.doc.InsertRow(other.last.GetTabBoxes())).toBe(false);
     expect(
       f.doc.InsertRow([
-        new SwTableBox(required(f.doc.paragraphs[0]).StartOfSectionNode() as SwTableBoxStartNode),
+        new SwTableBox(
+          f.doc.MakeTableBoxFormat(),
+          required(f.doc.paragraphs[0]).StartOfSectionNode() as SwTableBoxStartNode,
+        ),
       ]),
     ).toBe(false);
     expect(f.doc.InsertRow(f.first.GetTabBoxes(), 65536)).toBe(false);

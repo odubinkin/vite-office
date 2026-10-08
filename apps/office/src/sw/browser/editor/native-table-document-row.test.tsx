@@ -57,7 +57,11 @@ it("renders default Tab append through document insertion without action replay"
     expect(selection.focusOffset).toBe(0);
     expect(shell.GetActiveParagraph()).toBe(cell);
     expect(doc.GetUndoManager().GetUndoActionCount()).toBe(1);
-    const acceptedFormat = row.GetFormat();
+    const acceptedFormat = row.GetFormat(),
+      acceptedBoxFormats = row.GetTabBoxes().map(
+        /** Reads originally accepted insertion attributes. @param box - Prior owner. @returns Format. */
+        (box) => box.GetFormat(),
+      );
     for (let cycle = 0; cycle < 3; cycle++) {
       act(
         /** Reverts one native row unit. @returns Nothing. */ () => {
@@ -83,12 +87,7 @@ it("renders default Tab append through document insertion without action replay"
           /** Reads recreated native frame attributes. @param box - Actual box. @returns Format. */
           (box) => box.GetFormat(),
         ),
-      ).toEqual(
-        row.GetTabBoxes().map(
-          /** Reads originally accepted insertion attributes. @param box - Prior owner. @returns Format. */
-          (box) => box.GetFormat(),
-        ),
-      );
+      ).toEqual(acceptedBoxFormats);
       expect(shell.GetActiveParagraph()).toBe(currentCell);
       expect(insert).toHaveBeenCalledTimes(cycle + 2);
       expect(

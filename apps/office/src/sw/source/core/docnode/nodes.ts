@@ -206,6 +206,7 @@ export class SwNodes {
           return false;
         },
       );
+      for (const box of row.GetTabBoxes()) box.Dispose();
       row.Dispose();
     }
     this.nodeArray.splice(index, end - index + 1);
@@ -233,7 +234,8 @@ export class SwNodes {
       start.setEndOfSection(end);
       this.nodeArray.splice(tableNode.EndOfSectionNode().GetIndex(), 0, start, paragraph, end);
       this.InsertOutlineNode(paragraph);
-      const box = new SwTableBox(start, boxFormats[column]);
+      const box = new SwTableBox(this.document.MakeTableBoxFormat(), start);
+      box.SetFormat(boxFormats[column] ?? {});
       line.AddBox(box);
     }
     table.AddLine(line);
@@ -249,7 +251,8 @@ export class SwNodes {
     const start = new SwTableBoxStartNode(this, tableNode),
       paragraph = new SwTextNode(this, start, this.document.GetDfltTextFormatColl()),
       end = new SwEndNode(this, start),
-      box = new SwTableBox(start, format);
+      box = new SwTableBox(this.document.MakeTableBoxFormat(), start);
+    box.SetFormat(format);
     start.setEndOfSection(end);
     this.nodeArray.splice(tableNode.EndOfSectionNode().GetIndex(), 0, start, paragraph, end);
     this.InsertOutlineNode(paragraph);
@@ -297,7 +300,7 @@ export class SwNodes {
     start.setEndOfSection(end);
     const items = original.GetpSwAttrSet();
     if (items !== undefined) paragraph.SetAttr(items);
-    return { box: new SwTableBox(start, source.GetFormat()), nodes: [start, paragraph, end] };
+    return { box: new SwTableBox(source.GetFrameFormat(), start), nodes: [start, paragraph, end] };
   }
   /** Connects an actual native cell section at its row coordinate. @param table - Owner. @param line - Connected row. @param section - Detached native box. @param column - Insertion coordinate. @returns Nothing. */
   public InsertTableBox(
@@ -333,7 +336,7 @@ export class SwNodes {
       }
     this.document.NotifyModelChange({ index, kind: "node-inserted" });
   }
-  /** Disconnects only an inserted native box while retaining its actual owners. @param table - Owner. @param line - Connected row. @param section - Inserted actual nodes. @param target - Surviving native cursor node. @param offset - Cursor content. @returns Nothing. */
+  /** Deletes an inserted native box section and releases its format registration. @param table - Owner. @param line - Connected row. @param section - Inserted actual nodes. @param target - Surviving native cursor node. @param offset - Cursor content. @returns Nothing. */
   public RemoveTableBox(
     table: SwTable,
     line: SwTableLine,
@@ -363,6 +366,7 @@ export class SwNodes {
       }
     this.nodeArray.splice(index, section.nodes.length);
     line.RemoveBox(section.box);
+    section.box.Dispose();
     this.document.NotifyModelChange({ index, kind: "node-removed" });
   }
 
@@ -436,6 +440,7 @@ export class SwNodes {
         return false;
       },
     );
+    for (const box of section.line.GetTabBoxes()) box.Dispose();
     section.line.Dispose();
     this.document.NotifyModelChange({ index, kind: "node-removed" });
   }

@@ -94,6 +94,16 @@ for (const behind of [false, true])
         expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(1);
         expect(f.doc.GetUndoManager().GetUndoAction(0)).toBeInstanceOf(SwUndoTableNdsChg);
         expect(f.doc.GetUndoManager().GetUndoAction(0)?.GetPayloadSize()).toBe(12);
+        const insertedFormats = inserted.map(
+          /** Captures accepted attributes before native deletion. @param boxes - Original inserted boxes. @returns Complete values. */ (
+            boxes,
+          ) =>
+            boxes.map(
+              /** Reads original inserted attributes. @param box - Prior native owner. @returns Complete format. */ (
+                box,
+              ) => box.GetFormat(),
+            ),
+        );
         for (let cycle = 0; cycle < 3; cycle++) {
           expect(f.shell.CaptureCursorState()).toEqual(before);
           expect(f.shell.Undo()).toBe(true);
@@ -112,12 +122,7 @@ for (const behind of [false, true])
                 /** Reads full recreated attributes. @param box - New native owner. @returns Complete format. */
                 (box) => box.GetFormat(),
               ),
-            ).toEqual(
-              boxes.map(
-                /** Reads original inserted attributes. @param box - Prior native owner. @returns Complete format. */
-                (box) => box.GetFormat(),
-              ),
-            );
+            ).toEqual(insertedFormats[row]);
             for (const [offset, box] of current.entries()) {
               expect(box).not.toBe(boxes[offset]);
               expect(required(box.GetParagraphs()[0]).GetText()).toBe("");
@@ -288,7 +293,10 @@ it("rejects invalid native column selections and counts without graph or history
     ).toBe(false);
     expect(
       f.doc.InsertCol([
-        new SwTableBox(required(f.doc.paragraphs[0]).StartOfSectionNode() as SwTableBoxStartNode),
+        new SwTableBox(
+          f.doc.MakeTableBoxFormat(),
+          required(f.doc.paragraphs[0]).StartOfSectionNode() as SwTableBoxStartNode,
+        ),
       ]),
     ).toBe(false);
     expect(f.doc.InsertCol([required(boxes[0])])).toBe(false);

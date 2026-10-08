@@ -4,14 +4,19 @@ import type { SwTableBoxStartNode, SwTableNode } from "../docnode/node";
 import type { SwDoc } from "../doc/doc";
 import { SwFrameFormat } from "../layout/atrfrm";
 import { SwRowFrame } from "../layout/tabfrm";
-import { TableLineFormatChanged } from "../../../inc/hints";
+import { TableLineFormatChanged, TableBoxFormatChanged } from "../../../inc/hints";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { SwTextNode } from "../txtnode/ndtxt";
 import { SwTabCols } from "../bastyp/tabcol";
 import { SwFormatFrameSize } from "../../../inc/fmtfsize";
 import { SwFormatVertOrient } from "../../../inc/fmtornt";
 import { SwClient } from "../../../inc/calbck";
-import { SwTableLineFormat } from "../../../inc/swtblfmt";
+import {
+  SwTableLineFormat,
+  SwTableBoxFormat as SwNativeTableBoxFormat,
+} from "../../../inc/swtblfmt";
+import { SfxItemState } from "../../../../svl/source/items/itemset";
+import { RES_BOXATR_FORMULA, RES_BOXATR_VALUE, RES_VERT_ORIENT } from "../../../inc/hintids";
 import type { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
 import { RES_FRM_SIZE, RES_ROW_SPLIT } from "../../../inc/hintids";
 import { SvxBoxItem } from "../../../../editeng/source/items/frmitems";
@@ -39,7 +44,7 @@ export interface SwTableLineFormatValue {
   readonly rowSplit?: SwFormatRowSplit | undefined;
 }
 
-/** Bounded cell geometry owned by SwTableBox. */
+/** Explicit construction/transport values; canonical cells own native SwTableBoxFormat item sets. */
 export interface SwTableBoxFormat {
   readonly box?: SvxBoxItem | undefined;
   readonly vertOrient?: SwFormatVertOrient | undefined;
@@ -55,62 +60,116 @@ export function createWriterTableBoxItem(borders: boolean): SvxBoxItem {
 }
 
 /** Owns one cell section and its ordered paragraphs. */
-export class SwTableBox {
-  /** Creates a cell. @param format - Imported cell geometry. @returns Nothing. */
-  /** Projects one canonical Writer table value. @param argument1 - Callback input. @param argument2 - Callback input. @returns Callback result. */ public constructor(
+export class SwTableBox extends SwClient {
+  /** Registers the original cell at its native format. @param format - Native owner. @param startNode - Original cell section. @returns Nothing. */
+  public constructor(
+    format: SwNativeTableBoxFormat,
     private readonly startNode: SwTableBoxStartNode,
-    private format: SwTableBoxFormat = {},
   ) {
-    this.SetFormat(format);
+    super();
+    if (format.GetDoc() !== startNode.GetDoc())
+      throw new Error("Writer cell format belongs to another document.");
+    this.RegisterToModify(this.CheckBoxFormat(format));
   }
-
-  /** Returns the cell's node-array section. @returns Cell start node. */
+  /** Keeps direct value/formula owners exclusive at native box construction. @param format - Requested owner. @returns Admitted native format. */
+  private CheckBoxFormat(format: SwNativeTableBoxFormat): SwNativeTableBoxFormat {
+    const items = format.GetAttrSet();
+    if (
+      (items.GetItemState(RES_BOXATR_VALUE, false) === SfxItemState.SET ||
+        items.GetItemState(RES_BOXATR_FORMULA, false) === SfxItemState.SET) &&
+      format.GetTableBox() !== undefined
+    ) {
+      const copy = format.GetDoc().MakeTableBoxFormat();
+      copy.CopyFormatFrom(format);
+      copy.ResetFormatAttr(RES_BOXATR_FORMULA);
+      copy.ResetFormatAttr(RES_BOXATR_VALUE);
+      return copy;
+    }
+    return format;
+  }
+  /** Reads original registered native owner. @returns Native box format. */
+  public GetFrameFormat(): SwNativeTableBoxFormat {
+    return this.GetRegisteredIn() as SwNativeTableBoxFormat;
+  }
+  /** Claims exclusive native cell ownership before modification. @returns Original or independently copied owner. */
+  public ClaimFrameFormat(): SwNativeTableBoxFormat {
+    const original = this.GetFrameFormat();
+    let shared = false;
+    original.ForAllListeners(
+      /** Finds another original native cell. @param client - Native listener. @returns Whether found. */ (
+        client,
+      ) => {
+        if (client instanceof SwTableBox && client !== this) {
+          shared = true;
+          return true;
+        }
+        return false;
+      },
+    );
+    if (!shared) return original;
+    const copy = original.GetDoc().MakeTableBoxFormat();
+    copy.CopyFormatFrom(original);
+    copy.ResetFormatAttr(RES_BOXATR_FORMULA);
+    copy.ResetFormatAttr(RES_BOXATR_VALUE);
+    this.RegisterToModify(copy);
+    return copy;
+  }
+  /** Emits the native change hint before box registration. @param format - New same-document owner. @param needToReregister - Native loading notification flag. @returns Nothing. */
+  public ChgFrameFormat(format: SwNativeTableBoxFormat, needToReregister = true): void {
+    const original = this.GetFrameFormat();
+    if (format.GetDoc() !== original.GetDoc())
+      throw new Error("Writer cell format belongs to another document.");
+    if (needToReregister) original.CallSwClientNotify(new TableBoxFormatChanged(format, this));
+    this.RegisterToModify(format);
+    if (!original.HasListeners()) original.DisposeModify();
+  }
+  /** Releases the native box and deletes only a final-client format. @returns Nothing. */
+  public override Dispose(): void {
+    const format = this.GetRegisteredIn();
+    super.Dispose();
+    if (format !== undefined && !format.HasListeners()) format.DisposeModify();
+  }
+  /** Reads original native section start. @returns Section start. */
   public GetStartNode(): SwTableBoxStartNode {
     return this.startNode;
   }
-
-  /** Returns cell geometry. @returns Immutable values. */
+  /** Copies direct items only for construction/transport. @returns Independent boundary values. */
   public GetFormat(): SwTableBoxFormat {
+    const items = this.GetFrameFormat().GetAttrSet(),
+      box = items.GetItemIfSet(RES_BOX, false) as SvxBoxItem | undefined,
+      frameSize = items.GetItemIfSet(RES_FRM_SIZE, false) as SwFormatFrameSize | undefined,
+      vertOrient = items.GetItemIfSet(RES_VERT_ORIENT, false) as SwFormatVertOrient | undefined;
     return {
-      ...this.format,
-      ...(this.format.box === undefined ? {} : { box: this.format.box.Clone() }),
-      ...(this.format.frameSize === undefined ? {} : { frameSize: this.format.frameSize.Clone() }),
-      ...(this.format.vertOrient === undefined
-        ? {}
-        : { vertOrient: this.format.vertOrient.Clone() }),
+      ...(box === undefined ? {} : { box: box.Clone() }),
+      ...(frameSize === undefined ? {} : { frameSize: frameSize.Clone() }),
+      ...(vertOrient === undefined ? {} : { vertOrient: vertOrient.Clone() }),
     };
   }
-
-  /** Replaces cell geometry. @param value - New values. @returns Nothing. */
+  /** Replaces boundary values while retaining absent width and complete other native attributes. @param value - Construction/transport input. @returns Nothing. */
   public SetFormat(value: SwTableBoxFormat): void {
-    this.format = {
-      ...(value.box === undefined ? {} : { box: value.box.Clone() }),
-      ...((value.frameSize ?? this.format.frameSize) === undefined
-        ? {}
-        : { frameSize: (value.frameSize ?? (this.format.frameSize as SwFormatFrameSize)).Clone() }),
-      ...(value.vertOrient === undefined ? {} : { vertOrient: value.vertOrient.Clone() }),
-    };
+    const format = this.ClaimFrameFormat();
+    format.ResetFormatAttr(RES_BOX);
+    format.ResetFormatAttr(RES_VERT_ORIENT);
+    if (value.box !== undefined) format.SetFormatAttr(value.box);
+    if (value.frameSize !== undefined) format.SetFormatAttr(value.frameSize);
+    if (value.vertOrient !== undefined) format.SetFormatAttr(value.vertOrient);
   }
-
-  /** Reads the complete native box frame-size value. @returns Independent frame item including pool defaults. */
+  /** Copies the effective size for independent width editing. @returns Complete independent item. */
   public GetFrameSize(): SwFormatFrameSize {
-    return this.format.frameSize?.Clone() ?? new SwFormatFrameSize();
+    return this.GetFrameFormat().GetFrameSize().Clone();
   }
-  /** Replaces the native box frame-size attribute without changing other attributes. @param value - Borrowed size. @returns Nothing. */
+  /** Writes a complete item directly into a claimed native format. @param value - Borrowed native size. @returns Nothing. */
   public SetFrameSize(value: SwFormatFrameSize): void {
-    this.SetFormat({ ...this.GetFormat(), frameSize: value });
+    this.ClaimFrameFormat().SetFormatAttr(value);
   }
-
-  /** Reads an independent native box item including borderless pool defaults. @returns Complete item. */
+  /** Copies the effective box for independent edge editing. @returns Complete independent item. */
   public GetBox(): SvxBoxItem {
-    return this.format.box?.Clone() ?? new SvxBoxItem(RES_BOX);
+    return this.GetFrameFormat().GetBox().Clone();
   }
-
-  /** Reads an independent effective native vertical orientation item. @returns Complete item including pool defaults. */
+  /** Copies effective orientation for independent editing. @returns Complete item. */
   public GetVertOrient(): SwFormatVertOrient {
-    return this.format.vertOrient?.Clone() ?? new SwFormatVertOrient();
+    return this.GetFrameFormat().GetVertOrient().Clone();
   }
-
   /** Reads the cell's current native node-array section, including split/join history changes. @returns Text nodes in document order. */
   public GetParagraphs(): readonly SwTextNode[] {
     const nodes = this.startNode.GetNodes();
@@ -579,7 +638,10 @@ export class SwTable {
     line.GetTabBoxes().forEach(
       /** Initializes native box size from builder declarations without overwriting authored values. @param box - Native box. @param column - Declaration index. @returns Nothing. */
       (box, column) => {
-        if (box.GetFormat().frameSize === undefined && widths[column] !== undefined) {
+        if (
+          box.GetFrameFormat().GetAttrSet().GetItemIfSet(RES_FRM_SIZE, false) === undefined &&
+          widths[column] !== undefined
+        ) {
           const size = box.GetFrameSize();
           size.SetWidth(widths[column] as number);
           box.SetFrameSize(size);
@@ -627,7 +689,7 @@ export class SwTable {
           if (noTop.GetTop() === undefined) return;
           noTop.SetLine(undefined, 0);
           const target = behind ? (section.line.GetTabBoxes()[column] as SwTableBox) : box;
-          target.SetFormat({ ...target.GetFormat(), box: noTop });
+          target.ClaimFrameFormat().SetFormatAttr(noTop);
         },
       );
       document.GetNodes().InsertTableRow(this, section, index + i);
@@ -751,11 +813,10 @@ export class SwTable {
           size.SetWidth(newBoxWidth);
           section.box.SetFrameSize(size);
           if (hasRightBorder && (!behind || i + 1 < count))
-            section.box.SetFormat({ ...section.box.GetFormat(), box: noRightBorder });
+            section.box.ClaimFrameFormat().SetFormatAttr(noRightBorder);
           document.GetNodes().InsertTableBox(this, line, section, index + i);
         }
-        if (behind && hasRightBorder)
-          source.SetFormat({ ...source.GetFormat(), box: noRightBorder });
+        if (behind && hasRightBorder) source.ClaimFrameFormat().SetFormatAttr(noRightBorder);
       },
     );
     return true;

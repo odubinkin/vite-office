@@ -1,8 +1,11 @@
 /** @fileoverview Owns numeric native table insertion history through Writer's SwUndoTableNdsChg from untbl.cxx. */
 import type { SwTable, SwTableLine, SwTableBox, SwTableBoxFormat } from "../table/swtable";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
-import type { SwTableLineFormat } from "../../../inc/swtblfmt";
-import { MoveTableLineHint } from "../../../inc/hints";
+import type {
+  SwTableLineFormat,
+  SwTableBoxFormat as SwNativeTableBoxFormat,
+} from "../../../inc/swtblfmt";
+import { MoveTableLineHint, MoveTableBoxHint } from "../../../inc/hints";
 import type { SwFrameFormat } from "../layout/atrfrm";
 import { SwTableNode } from "../docnode/node";
 import type { SwDoc } from "../doc/doc";
@@ -113,10 +116,12 @@ class SaveTable {
   private readonly format;
   private readonly lines;
   private readonly rowFormats: SfxItemSet[] = [];
+  private readonly boxFormats: SfxItemSet[] = [];
   /** Captures independent attribute payload without copying text or graph owners. @param table - Original table. @returns Nothing. */
   public constructor(table: SwTable) {
     this.format = table.GetFormat();
-    const formats = new Map<SwTableLineFormat, number>();
+    const formats = new Map<SwTableLineFormat, number>(),
+      boxFormats = new Map<SwNativeTableBoxFormat, number>();
     this.lines = table.GetTabLines().map(
       /** Saves represented row and box attributes. @param row - Native row. @returns Independent attributes. */ (
         row,
@@ -133,13 +138,23 @@ class SaveTable {
         }
         return {
           formatIndex: index,
-          boxes: row
-            .GetTabBoxes()
-            .map(
-              /** Saves one box format. @param box - Original box. @returns Independent attributes. */ (
-                box,
-              ) => box.GetFormat(),
-            ),
+          boxes: row.GetTabBoxes().map(
+            /** Saves a shared native box item set once. @param box - Original box. @returns Saved format index. */ (
+              box,
+            ) => {
+              const format = box.GetFrameFormat();
+              let index = boxFormats.get(format);
+              if (index === undefined) {
+                index = this.boxFormats.length;
+                const source = format.GetAttrSet(),
+                  saved = new SfxItemSet(source.GetPool(), source.GetRanges());
+                saved.PutSet(source);
+                this.boxFormats.push(saved);
+                boxFormats.set(format, index);
+              }
+              return index;
+            },
+          ),
         };
       },
     );
@@ -151,6 +166,15 @@ class SaveTable {
       /** Recreates one native owner for each saved item set. @param saved - Independent direct items. @returns New shared format. */
       (saved) => {
         const format = table.GetTableNode().GetDoc().MakeTableLineFormat();
+        format.SetFormatAttrSet(saved);
+        return format;
+      },
+    );
+    const boxFormats = this.boxFormats.map(
+      /** Recreates a shared native box format. @param saved - Independent direct items. @returns New native owner. */ (
+        saved,
+      ) => {
+        const format = table.GetTableNode().GetDoc().MakeTableBoxFormat();
         format.SetFormatAttrSet(saved);
         return format;
       },
@@ -167,10 +191,17 @@ class SaveTable {
         row.RegisterToModify(restored);
         KillEmptyFrameFormat(previous);
         saved.boxes.forEach(
-          /** Restores an original box format. @param format - Retained attributes. @param column - Column index. @returns Nothing. */ (
-            format,
+          /** Moves an original box to its shared restored format. @param index - Saved format index. @param column - Original column. @returns Nothing. */ (
+            index,
             column,
-          ) => (row.GetTabBoxes()[column] as SwTableBox).SetFormat(format),
+          ) => {
+            const box = row.GetTabBoxes()[column] as SwTableBox,
+              previous = box.GetFrameFormat(),
+              restored = boxFormats[index] as SwNativeTableBoxFormat;
+            previous.CallSwClientNotify(new MoveTableBoxHint(restored, box));
+            box.RegisterToModify(restored);
+            KillEmptyFrameFormat(previous);
+          },
         );
       },
     );

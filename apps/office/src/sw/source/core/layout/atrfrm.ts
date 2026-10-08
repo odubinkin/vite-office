@@ -4,6 +4,9 @@ import type { SwAttrPool } from "../attr/swatrset";
 import type { SwDoc } from "../doc/doc";
 import type { WhichRangesContainer } from "../../../../svl/source/items/itemset";
 import { SwFormatFrameSize } from "../../../inc/fmtfsize";
+import { SwFormatVertOrient } from "../../../inc/fmtornt";
+import { SvxBoxItem } from "../../../../editeng/source/items/frmitems";
+import { RES_BOX, RES_VERT_ORIENT } from "../../../inc/hintids";
 import { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
 import { RES_ROW_SPLIT, RES_FRM_SIZE, RES_COLLAPSING_BORDERS } from "../../../inc/hintids";
 
@@ -25,6 +28,14 @@ export class SwFrameFormat extends SwFormat {
   /** Reads complete effective native frame size. @returns Owned or inherited item. */
   public GetFrameSize(): SwFormatFrameSize {
     return this.GetAttrSet().Get(RES_FRM_SIZE) as SwFormatFrameSize;
+  }
+  /** Reads effective complete native box attributes. @returns Owned, inherited or pooled item. */
+  public GetBox(): SvxBoxItem {
+    return this.GetAttrSet().Get(RES_BOX) as SvxBoxItem;
+  }
+  /** Reads effective complete native vertical orientation. @returns Owned, inherited or pooled item. */
+  public GetVertOrient(): SwFormatVertOrient {
+    return this.GetAttrSet().Get(RES_VERT_ORIENT) as SwFormatVertOrient;
   }
   /** Resolves the owning native document. @returns Attribute-pool owner. */
   public GetDoc(): SwDoc {

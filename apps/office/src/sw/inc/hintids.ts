@@ -139,6 +139,11 @@ export const RES_LAYOUT_SPLIT = 120 as const;
 /** Native row split attribute, RES_FRMATR_BEGIN +40. */
 export const RES_ROW_SPLIT = 129 as const;
 
+/** Native cell formula identity; concrete calculation remains unimplemented. */
+export const RES_BOXATR_FORMULA = 158 as const;
+/** Native cell numeric value identity; concrete value processing remains unimplemented. */
+export const RES_BOXATR_VALUE = 159 as const;
+
 /** WhichIds supported by the current Writer text-node auto-attribute set. */
 export const WRITER_TEXT_NODE_WHICH_RANGES = [
   [RES_CHRATR_COLOR, RES_CHRATR_COLOR],

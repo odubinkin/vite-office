@@ -1,7 +1,7 @@
 /** @fileoverview Implements the Writer SwDoc aggregate from pinned LibreOffice `sw/inc/doc.hxx` and `sw/source/core/doc/docnew.cxx`. */
 
 import { SwAttrPool } from "../attr/swatrset";
-import { SwTableLineFormat } from "../../../inc/swtblfmt";
+import { SwTableLineFormat, SwTableBoxFormat } from "../../../inc/swtblfmt";
 import { SwFrameFormat } from "../layout/atrfrm";
 import { SetTableName } from "./docchart";
 import type { SwFormat } from "../attr/format";
@@ -13,7 +13,7 @@ import {
   createWriterTableBoxItem,
   type SwTable,
   type SwTableBox,
-  type SwTableBoxFormat,
+  type SwTableBoxFormat as SwTableBoxFormatValue,
 } from "../table/swtable";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import type { SwTabCols } from "../bastyp/tabcol";
@@ -191,6 +191,7 @@ export class SwDoc {
   }
   private readonly defaultFrameFormat: SwFrameFormat;
   private nextTableLineFormat = 0;
+  private nextTableBoxFormat = 0;
   private readonly attrPool: SwAttrPool;
   private readonly styleAccess: IStyleAccess;
   private readonly contentOperationsManager: DocumentContentOperationsManager;
@@ -234,6 +235,12 @@ export class SwDoc {
   public MakeTableLineFormat(): SwTableLineFormat {
     const format = new SwTableLineFormat(this.attrPool, this.defaultFrameFormat);
     format.SetFormatName("TableLine" + ++this.nextTableLineFormat);
+    return format;
+  }
+  /** Creates a unique native cell format derived from the default frame. @returns Native box owner. */
+  public MakeTableBoxFormat(): SwTableBoxFormat {
+    const format = new SwTableBoxFormat(this.attrPool, this.defaultFrameFormat);
+    format.SetFormatName("TableBox" + ++this.nextTableBoxFormat);
     return format;
   }
   /** Returns the document locale used for script-specific defaults. @returns BCP 47 locale. */
@@ -852,7 +859,7 @@ export class SwDoc {
     rows: number,
     columns: number,
     name = "",
-    boxFormat?: SwTableBoxFormat,
+    boxFormat?: SwTableBoxFormatValue,
   ): SwTable {
     const node = position.GetNode();
     if (

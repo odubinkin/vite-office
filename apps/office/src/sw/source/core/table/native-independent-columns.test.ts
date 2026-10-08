@@ -242,6 +242,11 @@ it("native column insertion conserves each independent row and retains every ori
       row,
     ) => required(row.GetTabBoxes()[1]),
   );
+  const insertedFormats = inserted.map(
+    /** Captures accepted native values before deletion. @param box - Inserted original owner. @returns Complete format. */ (
+      box,
+    ) => box.GetFormat(),
+  );
   for (let cycle = 0; cycle < 3; cycle++) {
     expect(f.shell.Undo()).toBe(true);
     expect(f.lines.map(widths)).toEqual([
@@ -260,7 +265,7 @@ it("native column insertion conserves each independent row and retains every ori
     for (const [row, box] of inserted.entries()) {
       const current = required(required(f.lines[row]).GetTabBoxes()[1]);
       expect(current).not.toBe(box);
-      expect(current.GetFormat()).toEqual(box.GetFormat());
+      expect(current.GetFormat()).toEqual(insertedFormats[row]);
       expect(required(current.GetParagraphs()[0]).GetText()).toBe("");
       expect(
         required(f.lines[row])

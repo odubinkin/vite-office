@@ -1,0 +1,294 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sources": [
+    {
+      "path": "sw/inc/hints.hxx",
+      "sha256": "bcd9e3d72adc75313d616c566b0cb1b89a6e7e1d0947b90b09a36364cb467bf3",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "MoveTableBoxHint",
+          "line": 204,
+          "allMatchingLines": [
+            204,
+            209
+          ]
+        },
+        {
+          "identifier": "TableBoxFormatChanged",
+          "line": 227,
+          "allMatchingLines": [
+            227,
+            232,
+            233
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sw/inc/swtblfmt.hxx",
+      "sha256": "2782894b041d629a56a0c3405c419623fdcdd1d4565d0cd378a83c5bad99151b",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "SwTableBoxFormat",
+          "line": 52,
+          "allMatchingLines": [
+            52,
+            56,
+            68
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sw/source/core/table/swtable.cxx",
+      "sha256": "10c536056498dd001b3a5c75638040ee5daef966ede231c66947da8e704b1206",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "SwTableBox::SwTableBox",
+          "line": 2025,
+          "allMatchingLines": [
+            2025,
+            2038,
+            2060
+          ]
+        },
+        {
+          "identifier": "SwTableBox::~SwTableBox",
+          "line": 2095,
+          "allMatchingLines": [
+            2095
+          ]
+        },
+        {
+          "identifier": "SwTableBox::CheckBoxFormat",
+          "line": 2109,
+          "allMatchingLines": [
+            2109
+          ]
+        },
+        {
+          "identifier": "SwTableBox::ClaimFrameFormat",
+          "line": 2133,
+          "allMatchingLines": [
+            2133
+          ]
+        },
+        {
+          "identifier": "SwTableBox::ChgFrameFormat",
+          "line": 2169,
+          "allMatchingLines": [
+            2169
+          ]
+        },
+        {
+          "identifier": "SwTableBoxFormat::GetTableBox",
+          "line": 2741,
+          "allMatchingLines": [
+            2741
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sw/source/core/bastyp/init.cxx",
+      "sha256": "ffc4aeb0518fa5d885ab9a2aa2cd99a21b1613ceedcc27c581407d8f68ca96b3",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "aTableBoxSetRange",
+          "line": 224,
+          "allMatchingLines": [
+            224
+          ]
+        },
+        {
+          "identifier": "new SwFormatVertOrient",
+          "line": 415,
+          "allMatchingLines": [
+            415
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sw/source/core/doc/docfmt.cxx",
+      "sha256": "1f4845c5c0221e5a86d0751139245d120ec541b2bb29cceb747b8239b8ab680b",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "SwDoc::MakeTableBoxFormat",
+          "line": 1772,
+          "allMatchingLines": [
+            1772
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sw/source/core/docnode/ndtbl1.cxx",
+      "sha256": "c94a3a78edc61fc2b2a0419371f70cffc5466ceca3d0b8f29160cceff0b37663",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "SwDoc::SetTabBorders",
+          "line": 688,
+          "allMatchingLines": [
+            688
+          ]
+        },
+        {
+          "identifier": "SwDoc::SetBoxAttr",
+          "line": 1276,
+          "allMatchingLines": [
+            1276
+          ]
+        },
+        {
+          "identifier": "SwTableFormatCmp::FindNewFormat",
+          "line": 107,
+          "allMatchingLines": [
+            107,
+            287,
+            922,
+            1293
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sw/source/core/undo/untbl.cxx",
+      "sha256": "147e1b9f9870416bc83d2b918a0621e810003594b9a95ede372518925b2c245b",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "KillEmptyFrameFormat",
+          "line": 104,
+          "allMatchingLines": [
+            104,
+            1121,
+            1131
+          ]
+        },
+        {
+          "identifier": "SaveTable::NewFrameFormatForBox",
+          "line": 1124,
+          "allMatchingLines": [
+            1124
+          ]
+        },
+        {
+          "identifier": "SaveBox::RestoreAttr",
+          "line": 1236,
+          "allMatchingLines": [
+            1236
+          ]
+        }
+      ]
+    }
+  ],
+  "production": [
+    {
+      "path": "apps/office/src/sw/inc/swtblfmt.ts",
+      "sha256": "267b40f5a505042f438ecf480bcdd4dff26a4f5f5b6a81c6b04b31ae62113730",
+      "physicalLines": 96
+    },
+    {
+      "path": "apps/office/src/sw/inc/hints.ts",
+      "sha256": "c5a4f57613ee8550d9f419a77c45c544fddb0d4c40cd142018adfbb83c2e7c32",
+      "physicalLines": 98
+    },
+    {
+      "path": "apps/office/src/sw/inc/hintids.ts",
+      "sha256": "0748561d0011794a4628c76b59b361edb2953e1459fc7cd0bf5d78fbafdb03de",
+      "physicalLines": 215
+    },
+    {
+      "path": "apps/office/src/sw/source/core/layout/atrfrm.ts",
+      "sha256": "241279790ad3183d2b38252adce583152f49f9ead76f4473088193ca921283e1",
+      "physicalLines": 44
+    },
+    {
+      "path": "apps/office/src/sw/source/core/attr/swatrset.ts",
+      "sha256": "14839b74ec8adc7b605b8792823cac4d919580233394a3d171c7af7f5f91369e",
+      "physicalLines": 454
+    },
+    {
+      "path": "apps/office/src/sw/source/core/doc/doc.ts",
+      "sha256": "8e4cd9f0b660bf0c881a3d663a2e84bc499031e8025131c1f41cb196c91c8db8",
+      "physicalLines": 935
+    },
+    {
+      "path": "apps/office/src/sw/source/core/table/swtable.ts",
+      "sha256": "d43980833b0f9537d446e592759ddd020bca77f8284e60de16a979f5a82df87b",
+      "physicalLines": 933
+    },
+    {
+      "path": "apps/office/src/sw/source/core/docnode/nodes.ts",
+      "sha256": "35fdbc29b71bda0a547c8e12d650fa2262855e4bb9c24477f8b3f5c4ef46bce8",
+      "physicalLines": 596
+    },
+    {
+      "path": "apps/office/src/sw/source/core/docnode/ndtbl1.ts",
+      "sha256": "b8bde955d2e04c0e91586ebc7424f6d1c21343d0eea69ade9b755806cf4f4bf3",
+      "physicalLines": 474
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/untbl.ts",
+      "sha256": "6401650ca2c3b8bc11e5d95299bde432cb51eb551f419734bf2308cc61271089",
+      "physicalLines": 401
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/WriterEditableTable.tsx",
+      "sha256": "44317660cb4dd8c7f4395162f060837d4d1d00898cfcf8b2bdcb3b6c64db16f7",
+      "physicalLines": 318
+    }
+  ],
+  "protectedIO": [
+    {
+      "path": "apps/office/src/sw/browser/storage/writer-odt-store.ts",
+      "sha256": "0fb4ebffca5a00fe63ff327379305d64143c7014dace0a7e13edb8c0c241232e",
+      "baselineByteIdentical": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/workflows/writer-odt-io.ts",
+      "sha256": "7c214afab59dbc5df1087f107e2b7bf2bf01d8623a2995e8eb19a45575361306",
+      "baselineByteIdentical": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/WriterFileDialog.tsx",
+      "sha256": "50ad125f5a254eb1772b62abe3681e4632df6c7870ea9647622b2268394c88c3",
+      "baselineByteIdentical": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts",
+      "sha256": "060a06dd9a77e530de1756b2f4c4384e6b2ddd1ee20c68fb175daab2eeb99ee7",
+      "baselineByteIdentical": true
+    }
+  ],
+  "writerUI": {
+    "path": "apps/office/src/sw/browser/presentation/writer-view.tsx",
+    "sha256": "782755425f440a2438a2994ee429a6ee7b37e4f65ca8e5f1855c9d18db8f9de1",
+    "entireSourceByteIdentical": true
+  },
+  "parent": {
+    "characters": 706479,
+    "sha256": "a6fec708ac0df532852be172468b2500ea7273b8654a2a60be08a1d65e37555b",
+    "unchanged": true
+  },
+  "stash": {
+    "commit": "c85f4a0e453dfd06d6e199554784f2c286737472",
+    "preserved": true
+  },
+  "sourceBoundContracts": [
+    "Original SwTableBox registers as a SwClient at document-owned native SwTableBoxFormat with exact aTableBoxSetRange, default parent and pooled concrete vertical item. Explicit three-field records remain construction/transport boundaries only.",
+    "CheckBoxFormat excludes direct formula/value items when a native box format already owns another box; ClaimFrameFormat copies complete direct items/inheritance/auto state and separates other box clients before writes. Concrete calculation and number-format engines remain unimplemented.",
+    "ChgFrameFormat emits native TableBoxFormatChanged before model registration unless the native loading flag suppresses it, and destroys a format after its final represented client. Native SwCellFrame client retargeting and full physical cell frame hierarchy remain absent.",
+    "SetSwTabBorders uses an operation-local old format and native changed-side type map; SetBoxAttr reuses old-to-new native owners. Both write directly into claimed item sets and preserve complete unrelated native items, peers and document-owned attribute history.",
+    "SaveTable deduplicates full direct native cell item sets and saves numeric indices. Restoration creates shared document-owned native formats, broadcasts MoveTableBoxHint before original box registration and deletes empty old formats. Physical frame/numeric attribute differences from native MoveTableBox remain incomplete.",
+    "Native insertion shares source cell formats; destructive row/column/table node removal releases original cell clients; ordinary RemoveBox remains nondestructive. Main JSX rendering reads original native cell border/orientation items directly; mounted command/Undo/Redo tests reject cell DTO calls.",
+    "All654 prior acceptance files are preserved:649 byte-identical and five exact native constructor or expected-before-destruction migrations. All316 metadata records/status/default/classification/order/prefixes retained, no promotion. Registered IO/recovery deviations, whole writer-view and stash preserved; goal ACTIVE."
+  ]
+}

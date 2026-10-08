@@ -174,7 +174,8 @@ function browserCellBoxStyle(item: SvxBoxItem, fixedGuide: boolean): React.CSSPr
                         cell,
                         cellIndex,
                       ) => {
-                        const boxItem = cell.GetBox(),
+                        const cellFormat = cell.GetFrameFormat(),
+                          boxItem = cellFormat.GetBox(),
                           boxStyle = browserCellBoxStyle(boxItem, nativeRow.HasFixSize());
                         if (format.borderModel === "collapsing") {
                           boxStyle.borderTop = browserBorderLine(
@@ -261,9 +262,11 @@ function browserCellBoxStyle(item: SvxBoxItem, fixedGuide: boolean): React.CSSPr
                                 : undefined,
                               outlineOffset: -1,
                               verticalAlign:
-                                cell.GetVertOrient().GetVertOrient() === VertOrientation.CENTER
+                                cellFormat.GetVertOrient().GetVertOrient() ===
+                                VertOrientation.CENTER
                                   ? "middle"
-                                  : cell.GetVertOrient().GetVertOrient() === VertOrientation.BOTTOM
+                                  : cellFormat.GetVertOrient().GetVertOrient() ===
+                                      VertOrientation.BOTTOM
                                     ? "bottom"
                                     : "top",
                             }}
@@ -282,9 +285,10 @@ function browserCellBoxStyle(item: SvxBoxItem, fixedGuide: boolean): React.CSSPr
                                   display: "flex",
                                   flexDirection: "column",
                                   justifyContent:
-                                    cell.GetVertOrient().GetVertOrient() === VertOrientation.CENTER
+                                    cellFormat.GetVertOrient().GetVertOrient() ===
+                                    VertOrientation.CENTER
                                       ? "safe center"
-                                      : cell.GetVertOrient().GetVertOrient() ===
+                                      : cellFormat.GetVertOrient().GetVertOrient() ===
                                           VertOrientation.BOTTOM
                                         ? "safe flex-end"
                                         : "flex-start",

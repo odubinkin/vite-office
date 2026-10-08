@@ -1,6 +1,6 @@
 /** @fileoverview Owns represented native row attributes and history from original selected lines in ndtbl1.cxx. */
 import { SwTable, type SwTableBox, type SwTableLine } from "../table/swtable";
-import type { SwTableLineFormat } from "../../../inc/swtblfmt";
+import type { SwTableLineFormat, SwTableBoxFormat } from "../../../inc/swtblfmt";
 import type { SwDoc } from "../doc/doc";
 import { SwTableBoxStartNode, SwTableNode } from "./node";
 import { SwTableCursor, type SwCursor } from "../crsr/swcrsr";
@@ -119,26 +119,62 @@ export function SetSwTabBorders(
           cursorState ??
           createWriterCollapsedCursorState(node, offset, node.GetCharacterItemsAt(offset)),
         action = new SwUndoAttrTable(table, before);
+      const formats = new Map<SwTableBoxFormat, Map<number, SwTableBoxFormat>>();
       for (const position of positions) {
         const box = position.box,
-          item = box.GetBox();
+          original = box.GetFrameFormat(),
+          item = original.GetBox().Clone();
+        let type = 0;
         if (topValid) {
-          if (position.row === top) item.SetLine(supplied.GetTop(), 0);
-          else if (horizontalValid) item.SetLine(undefined, 0);
+          if (position.row === top) {
+            item.SetLine(supplied.GetTop(), 0);
+            type |= 1;
+          } else if (horizontalValid) {
+            item.SetLine(undefined, 0);
+            type |= 2;
+          }
         }
         if (position.column === left) {
-          if (leftValid) item.SetLine(supplied.GetLeft(), 2);
-        } else if (verticalValid) item.SetLine(info?.GetVert(), 2);
+          if (leftValid) {
+            item.SetLine(supplied.GetLeft(), 2);
+            type |= 4;
+          }
+        } else if (verticalValid) {
+          item.SetLine(info?.GetVert(), 2);
+          type |= 8;
+        }
         if (rightValid) {
-          if (position.column === right) item.SetLine(supplied.GetRight(), 3);
-          else if (verticalValid) item.SetLine(undefined, 3);
+          if (position.column === right) {
+            item.SetLine(supplied.GetRight(), 3);
+            type |= 16;
+          } else if (verticalValid) {
+            item.SetLine(undefined, 3);
+            type |= 32;
+          }
         }
         if (position.row === bottom) {
-          if (bottomValid) item.SetLine(supplied.GetBottom(), 1);
-        } else if (horizontalValid) item.SetLine(info?.GetHori(), 1);
+          if (bottomValid) {
+            item.SetLine(supplied.GetBottom(), 1);
+            type |= 64;
+          }
+        } else if (horizontalValid) {
+          item.SetLine(info?.GetHori(), 1);
+          type |= 128;
+        }
         if (supplied !== undefined)
           for (const edge of [0, 1, 2, 3]) item.SetDistance(supplied.GetDistance(edge), edge);
-        box.SetFormat({ ...box.GetFormat(), box: item });
+        const existing = formats.get(original)?.get(type);
+        if (existing !== undefined) box.ChgFrameFormat(existing);
+        else {
+          const format = box.ClaimFrameFormat();
+          format.SetFormatAttr(item);
+          let replacements = formats.get(original);
+          if (replacements === undefined) {
+            replacements = new Map();
+            formats.set(original, replacements);
+          }
+          replacements.set(type, format);
+        }
       }
       doc.GetUndoManager().AddUndoAction(action);
       doc.NotifyModelChange({ kind: "node-content-changed", nodeIndex: tableNode.GetIndex() });
@@ -201,7 +237,7 @@ export function GetSwTabBorders(doc: SwDoc, cursor: SwCursor, value: SfxItemSet)
       );
   let distanceSet = false;
   for (const position of positions) {
-    const item = position.box.GetBox();
+    const item = position.box.GetFrameFormat().GetBox();
     if (position.row === top) outer(0, SvxBoxInfoItemValidFlags.TOP, item);
     if (position.column === left) outer(2, SvxBoxInfoItemValidFlags.LEFT, item);
     else inner(1, SvxBoxInfoItemValidFlags.VERT, item.GetLeft());
@@ -244,8 +280,8 @@ export function GetSwBoxAttr(cursor: SwCursor): SwFormatVertOrient | undefined {
   const boxes = GetBoxSelection(cursor),
     first = boxes[0];
   if (first === undefined) return undefined;
-  const item = first.GetVertOrient();
-  for (const box of boxes) if (!item.equals(box.GetVertOrient())) return undefined;
+  const item = first.GetFrameFormat().GetVertOrient().Clone();
+  for (const box of boxes) if (!item.equals(box.GetFrameFormat().GetVertOrient())) return undefined;
   return item;
 }
 
@@ -253,7 +289,7 @@ export function GetSwBoxAttr(cursor: SwCursor): SwFormatVertOrient | undefined {
 export function GetSwBoxAlign(cursor: SwCursor): number {
   let align = 0xffff;
   for (const box of GetBoxSelection(cursor)) {
-    const orientation = box.GetVertOrient().GetVertOrient();
+    const orientation = box.GetFrameFormat().GetVertOrient().GetVertOrient();
     if (align === 0xffff) align = orientation & 0xffff;
     else if (orientation !== align) return 0xffff;
   }
@@ -286,7 +322,17 @@ export function SetSwBoxAttr(
           node.GetCharacterItemsAt(cursor.GetPoint().GetContentIndex()),
         );
       const action = new SwUndoAttrTable(table, before);
-      for (const box of boxes) box.SetFormat({ ...box.GetFormat(), vertOrient: value });
+      const formats = new Map<SwTableBoxFormat, SwTableBoxFormat>();
+      for (const box of boxes) {
+        const original = box.GetFrameFormat(),
+          existing = formats.get(original);
+        if (existing !== undefined) box.ChgFrameFormat(existing);
+        else {
+          const format = box.ClaimFrameFormat();
+          format.SetFormatAttr(value);
+          formats.set(original, format);
+        }
+      }
       doc.GetUndoManager().AddUndoAction(action);
       doc.NotifyModelChange({
         kind: "node-content-changed",

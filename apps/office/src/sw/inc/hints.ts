@@ -2,8 +2,8 @@
 
 import type { SfxHint } from "../../svl/source/notify/SfxBroadcaster";
 import type { SwFrameFormat } from "../source/core/layout/atrfrm";
-import type { SwTableLineFormat } from "./swtblfmt";
-import type { SwTableLine } from "../source/core/table/swtable";
+import type { SwTableLineFormat, SwTableBoxFormat } from "./swtblfmt";
+import type { SwTableLine, SwTableBox } from "../source/core/table/swtable";
 
 /** Native history hint moves the original line frame clients to a reconstructed owner. */
 export class MoveTableLineHint implements SfxHint {
@@ -25,8 +25,28 @@ export class TableLineFormatChanged implements SfxHint {
   ) {}
 }
 
+/** Native history notification borrows the original cell and reconstructed owner. */
+export class MoveTableBoxHint implements SfxHint {
+  public readonly kind = "move-table-box";
+  /** Borrows original native references. @param m_rNewFormat - Restored owner. @param m_rTableBox - Original box. @returns Nothing. */
+  public constructor(
+    public readonly m_rNewFormat: SwFrameFormat,
+    public readonly m_rTableBox: SwTableBox,
+  ) {}
+}
+/** Native cell change identifies the original owner and box. */
+export class TableBoxFormatChanged implements SfxHint {
+  public readonly kind = "table-box-format-changed";
+  /** Borrows original native references. @param m_rNewFormat - New box format. @param m_rTableBox - Original box. @returns Nothing. */
+  public constructor(
+    public readonly m_rNewFormat: SwTableBoxFormat,
+    public readonly m_rTableBox: SwTableBox,
+  ) {}
+}
 /** Atomic Writer notifications emitted by model and shell boundaries. */
 export type SwAtomicModelHint =
+  | MoveTableBoxHint
+  | TableBoxFormatChanged
   | MoveTableLineHint
   | TableLineFormatChanged
   | Readonly<{

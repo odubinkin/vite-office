@@ -1,0 +1,50 @@
+{
+  "currentUniqueExecutedAppCases": 1301,
+  "currentPassedAppCases": 1301,
+  "freshPassedCases": 11,
+  "freshByFile": [
+    {
+      "path": "apps/office/src/sw/source/core/table/native-box-frame-format.test.ts",
+      "passedCases": 7
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/native-box-frame-format-history.test.ts",
+      "passedCases": 3
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/native-box-frame-format.test.tsx",
+      "passedCases": 1
+    }
+  ],
+  "appPassingReplayCount": 0,
+  "failedAttemptsRetained": 3,
+  "focusedSkippedObservations": 18,
+  "chromiumPassingReplayCount": 0,
+  "uniqueExecutedChromiumCases": 25,
+  "fullSuiteExecutedThisLeaf": false,
+  "fullSuiteCadence": {
+    "lastLeaf": 237,
+    "nextLeaf": 247
+  },
+  "unchangedInventoryAndInfrastructure": "No current leaf execution; prior242 actual certified counters accepted only after whole current source/maps equality.",
+  "executedFiles": [
+    {
+      "identifier": "FT0HZ1.app-results.json",
+      "sha256": "4ab658f374285de43ada7260e2757c823bb135e02d223ed1f73c762e08f5727b"
+    },
+    {
+      "identifier": "FT0HZ1.closure1.app-results.json",
+      "sha256": "3a7a6a562887768151339ba879486edafa46c6b497d1c4cd83b5d8c97deaab1a"
+    },
+    {
+      "identifier": "FT0HZ1.closure2.app-results.json",
+      "sha256": "20362fb223d4a7dd18beda25c73e7caa78e3aba5fb73de69507fc43f5a6d630b"
+    },
+    {
+      "identifier": "FT0HZ1.chromium-results.json",
+      "sha256": "da394fa40eace7e4abcc926c1798e19670e09e6c7c5a44c98d405461d662aacf"
+    }
+  ],
+  "rawThresholdExitsRetained": true,
+  "coverageCertificate": "final-coverage.json"
+}

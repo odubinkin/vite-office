@@ -102,6 +102,18 @@ for (const behind of [false, true])
           }
           for (const box of source.GetTabBoxes())
             expect(box.GetBox().GetTop() !== undefined).toBe(behind);
+          const previousFormats = previous.map(
+            /** Captures accepted values before native deletion. @param line - Original inserted row. @returns Complete box values. */ (
+              line,
+            ) =>
+              line
+                .GetTabBoxes()
+                .map(
+                  /** Reads accepted previous attributes. @param box - Prior box. @returns Format. */ (
+                    box,
+                  ) => box.GetFormat(),
+                ),
+          );
           act(
             /** Reverts the actual native row action. @returns Nothing. */ () => {
               expect(shell.Undo()).toBe(true);
@@ -131,15 +143,7 @@ for (const behind of [false, true])
                     box,
                   ) => box.GetFormat(),
                 ),
-            ).toEqual(
-              required(previous[offset])
-                .GetTabBoxes()
-                .map(
-                  /** Reads accepted previous attributes. @param box - Prior box. @returns Format. */ (
-                    box,
-                  ) => box.GetFormat(),
-                ),
-            );
+            ).toEqual(previousFormats[offset]);
             for (const [column, box] of line.GetTabBoxes().entries()) {
               expect(box).not.toBe(required(previous[offset]).GetTabBoxes()[column]);
               expect(box.GetParagraphs()[0]).not.toBe(required(previousParagraphs[offset])[column]);
