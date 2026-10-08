@@ -1,10 +1,11 @@
 ---
 id: "202610081647-HFS3EK"
 title: "Publish native changed table property items from pages to shell"
-status: "DOING"
+result_summary: "Native table-property UI now publishes SfxItemSet directly, retains borrowed representation/page exchange and clears Reset ranges; targeted412 app/38 Chromium/45 fresh cases pass with actual all-four100 and no passing replay. Full next247; whole parent/goal parity remains unverified."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 28
+revision: 30
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-08T17:44:48.636Z"
+  updated_at: "2026-10-08T17:45:47.013Z"
   updated_by: "CODER"
-  note: "Verified native table-property item exchange at d8d894a35fc37b51a90775e24707256083406740:412 targeted app/38 Chromium/45 fresh, passing replay0; actual current-source-bound app/inventory all-four100.17 semantic paths;635/639 prior files unchanged with4 exact native migrations;313 metadata records preserve311 originals. Static/build/source/governance/artifact/IO/pin/stash gates pass. No full suite; next247. Same-agent evaluator is not independent. Whole parent/goal parity remains unverified."
+  note: "Native table-property UI now publishes SfxItemSet directly, retains borrowed representation/page exchange and clears Reset ranges; targeted412 app/38 Chromium/45 fresh cases pass with actual all-four100 and no passing replay. Full next247; whole parent/goal parity remains unverified."
   attempts: 0
 quality_review:
   state: "pass"
@@ -41,11 +42,16 @@ quality_review:
     - ".agentplane/tasks/202610081647-HFS3EK/evidence/native-source-review.json"
   findings:
     - "Main properties UI sends SfxItemSet directly without DTO fallback; native pointer/explicit SET items, unconditional Columns output, created Borders admission and page-range Reset are source-bound. Four whole-file native expectation/input migrations preserve635 of639 prior files; four new acceptance files and313 metadata records retain311 prior fields/prefixes/states/defaults/classes."
-commit: null
+commit:
+  hash: "d8d894a35fc37b51a90775e24707256083406740"
+  message: "🧩 HFS3EK code: publish native table property items"
 comments:
   -
     author: "CODER"
     body: "Start: implement the approved native changed-item publication and actual UI-to-SfxItemSet shell path; one upstream-absent profile and exact-source evidence only."
+  -
+    author: "CODER"
+    body: "Verified: Native table-property UI now publishes SfxItemSet directly, retains borrowed representation/page exchange and clears Reset ranges; targeted412 app/38 Chromium/45 fresh cases pass with actual all-four100 and no passing replay. Full next247; whole parent/goal parity remains unverified.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -60,8 +66,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified native table-property item exchange at d8d894a35fc37b51a90775e24707256083406740:412 targeted app/38 Chromium/45 fresh, passing replay0; actual current-source-bound app/inventory all-four100.17 semantic paths;635/639 prior files unchanged with4 exact native migrations;313 metadata records preserve311 originals. Static/build/source/governance/artifact/IO/pin/stash gates pass. No full suite; next247. Same-agent evaluator is not independent. Whole parent/goal parity remains unverified."
+  -
+    type: "verify"
+    at: "2026-10-08T17:45:47.013Z"
+    author: "CODER"
+    state: "ok"
+    note: "Native table-property UI now publishes SfxItemSet directly, retains borrowed representation/page exchange and clears Reset ranges; targeted412 app/38 Chromium/45 fresh cases pass with actual all-four100 and no passing replay. Full next247; whole parent/goal parity remains unverified."
+  -
+    type: "status"
+    at: "2026-10-08T17:45:47.106Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Native table-property UI now publishes SfxItemSet directly, retains borrowed representation/page exchange and clears Reset ranges; targeted412 app/38 Chromium/45 fresh cases pass with actual all-four100 and no passing replay. Full next247; whole parent/goal parity remains unverified.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-08T17:44:48.686Z"
+doc_updated_at: "2026-10-08T17:45:47.106Z"
 doc_updated_by: "CODER"
 description: "Iteration238 under ongoing authorized parity goal. Port native SwPtrItem/FN table identities and route mounted properties through SfxItemSet changed items. Empty acceptance must preserve full formats/history/defaults; page/name/spacing/headline/geometry/border/flow changes follow native publication and one grouped history. Keep declared IO deviations, no network or outside access, no upstream/Python/raw evidence in AgentPlane, tests only upstream absent exactly one full profile then failed/new closures."
 sections:
@@ -127,6 +146,36 @@ sections:
     - operator_action: run_exact_argv
     - can_execute_now: true
     - safe_command: agentplane commit 202610081647-HFS3EK -m 🧩 HFS3EK task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-10-08T17:45:47.013Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Native table-property UI now publishes SfxItemSet directly, retains borrowed representation/page exchange and clears Reset ranges; targeted412 app/38 Chromium/45 fresh cases pass with actual all-four100 and no passing replay. Full next247; whole parent/goal parity remains unverified.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-08T17:44:48.686Z, excerpt_hash=sha256:e72ededff5aa6363c1ceabc92eee52e0158967ae5238635e2189a77ddeb0cef3
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610081647-HFS3EK/blueprint/resolved-snapshot.json
+    - old_digest: 08cc1f3072e9d4ec59c3ea6670e9d2c2362c645754e98176729a8ce5dd058bbc
+    - current_digest: 08cc1f3072e9d4ec59c3ea6670e9d2c2362c645754e98176729a8ce5dd058bbc
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610081647-HFS3EK
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610081647-HFS3EK --result verified-202610081647-HFS3EK --commit 24b5072e1a2a99f2c21771a88dea230559e69936
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -214,6 +263,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane commit 202610081647-HFS3EK -m 🧩 HFS3EK task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-08T17:45:47.013Z — VERIFY — ok
+
+By: CODER
+
+Note: Native table-property UI now publishes SfxItemSet directly, retains borrowed representation/page exchange and clears Reset ranges; targeted412 app/38 Chromium/45 fresh cases pass with actual all-four100 and no passing replay. Full next247; whole parent/goal parity remains unverified.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-08T17:44:48.686Z, excerpt_hash=sha256:e72ededff5aa6363c1ceabc92eee52e0158967ae5238635e2189a77ddeb0cef3
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610081647-HFS3EK/blueprint/resolved-snapshot.json
+- old_digest: 08cc1f3072e9d4ec59c3ea6670e9d2c2362c645754e98176729a8ce5dd058bbc
+- current_digest: 08cc1f3072e9d4ec59c3ea6670e9d2c2362c645754e98176729a8ce5dd058bbc
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610081647-HFS3EK
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610081647-HFS3EK --result verified-202610081647-HFS3EK --commit 24b5072e1a2a99f2c21771a88dea230559e69936
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
