@@ -84,7 +84,34 @@ for (const behind of [false, true])
           expect(f.table.GetTabLines()).toEqual(f.rows);
           expect(f.shell.CaptureCursorState()).toEqual(before);
           expect(f.shell.Redo()).toBe(true);
-          expect(f.table.GetTabLines().slice(index, index + 2)).toEqual(inserted);
+          const current = f.table.GetTabLines().slice(index, index + 2);
+          expect(
+            current.map(
+              /** Reads recreated native row attributes. @param row - New owner. @returns Format. */
+              (row) => row.GetFormat(),
+            ),
+          ).toEqual(
+            inserted.map(
+              /** Reads original insertion attributes. @param row - Prior owner. @returns Format. */
+              (row) => row.GetFormat(),
+            ),
+          );
+          for (const [offset, row] of current.entries()) {
+            expect(row).not.toBe(inserted[offset]);
+            for (const [column, box] of row.GetTabBoxes().entries()) {
+              expect(box).not.toBe(required(inserted[offset]).GetTabBoxes()[column]);
+              expect(box.GetFormat()).toEqual(
+                required(required(inserted[offset]).GetTabBoxes()[column]).GetFormat(),
+              );
+              expect(required(box.GetParagraphs()[0]).GetText()).toBe("");
+            }
+          }
+          expect(
+            f.table.GetTabLines().filter(
+              /** Keeps every original native row. @param row - Current row. @returns Whether original. */
+              (row) => !current.includes(row),
+            ),
+          ).toEqual(f.rows);
         }
       } finally {
         f.session.Close();

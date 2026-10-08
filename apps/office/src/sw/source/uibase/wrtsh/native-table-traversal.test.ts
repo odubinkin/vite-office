@@ -213,9 +213,9 @@ describe("native table traversal", /** Registers actual cursor/row/history contr
       projection = new WriterViewProjection(),
       before = projection.Project(f.doc, last, f.shell.GetCursor(), f.metadata);
     expect(f.edit.HandleTab()).toBe(true);
-    const row = required(f.table.GetTabLines()[2]),
-      fresh = required(row.GetTabBoxes()[0]?.GetParagraphs()[0]),
-      second = required(row.GetTabBoxes()[1]?.GetParagraphs()[0]),
+    let row = required(f.table.GetTabLines()[2]),
+      fresh = required(row.GetTabBoxes()[0]?.GetParagraphs()[0]);
+    const second = required(row.GetTabBoxes()[1]?.GetParagraphs()[0]),
       history = f.doc.GetUndoManager(),
       action = history.GetUndoAction(0) as SwUndoTableNdsChg;
     expect(action).toBeInstanceOf(SwUndoTableNdsChg);
@@ -255,7 +255,16 @@ describe("native table traversal", /** Registers actual cursor/row/history contr
       expect(f.table.GetTabLines()).toHaveLength(2);
       expect(retained.GetNode()).toBe(last);
       expect(retained.GetContentIndex()).toBe(3);
+      const previousRow = row,
+        previousFresh = fresh;
       expect(f.edit.Redo()).toBe(true);
+      row = required(f.table.GetTabLines()[2]);
+      fresh = required(required(row.GetTabBoxes()[0]).GetParagraphs()[0]);
+      expect(row).not.toBe(previousRow);
+      expect(fresh).not.toBe(previousFresh);
+      expect(row.GetFormat()).toEqual(previousRow.GetFormat());
+      expect(fresh.GetTextFormatColl()).toBe(style);
+      expect(fresh.GetParagraphTextLeftMargin()).toBe(720);
       point(f, fresh);
       expect(f.table.GetTabLines()[2]).toBe(row);
       expect(row.GetTabBoxes()[0]?.GetParagraphs()[0]).toBe(fresh);
@@ -269,6 +278,9 @@ describe("native table traversal", /** Registers actual cursor/row/history contr
     expect(f.edit.Undo()).toBe(true);
     expect(f.table.GetTabLines()).toHaveLength(2);
     expect(f.edit.Redo()).toBe(true);
+    fresh = required(
+      required(required(f.table.GetTabLines()[2]).GetTabBoxes()[0]).GetParagraphs()[0],
+    );
     expect(f.edit.Redo()).toBe(true);
     expect(fresh.GetText()).toBe("X");
     expect(source.GetText()).toBe("cell2");

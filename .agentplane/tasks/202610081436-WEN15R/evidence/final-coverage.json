@@ -1,0 +1,503 @@
+{
+  "proof": "Actual counters with complete identical source/maps or complete contiguous declaration/body/enclosing branch/location proofs; focused skips retained as skipped.",
+  "previousVerified": {
+    "app": {
+      "map": "GCPB6V.app-final.json",
+      "proof": "GCPB6V.app-proof.json",
+      "mapHash": "d58aff77ccaf4cf9846e1861e5ec19c2f16d3cc8d8749011a94eb553f56bbc89",
+      "proofHash": "c49f71d16e22515cdb15fdbe0a4fc2aa8abbfe50332d900b295917e7ce57b63a"
+    },
+    "inventory": {
+      "map": "GCPB6V.inventory-final.json",
+      "proof": "GCPB6V.inventory-proof.json",
+      "mapHash": "8043f5764be436a273e93d5f6e640f8025ecd6757d94d0c99694aa54d53df23d",
+      "proofHash": "5c43a8f01265876178c73869204175bfde82507529383d6eac361ff12ce0b0b8"
+    }
+  },
+  "app": {
+    "coverage": {
+      "lines": {
+        "total": 17291,
+        "covered": 17291,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 18992,
+        "covered": 18992,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 4373,
+        "covered": 4373,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 14147,
+        "covered": 14147,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "mapSHA256": "d4dc6ccdad0fab70ba1ed82d65d7266bfc18f2735c99cfca408aa4bb5f1eb46d",
+    "proofSHA256": "20fdb63fb3eb2450c4b7f96cca5e18c511a06874eacbcf95c99c3503fb404ef2",
+    "files": 308,
+    "invalidWholeFallbacks": [
+      {
+        "path": "apps/office/src/sw/source/core/layout/paintfrm.ts",
+        "reason": "V8 raw inferred else counter is negative; use entire prior verified current-byte-identical source and entire maps/counters, never sanitize individual counts",
+        "priorMap": "GCPB6V.app-final.json",
+        "priorMapSHA256": "d58aff77ccaf4cf9846e1861e5ec19c2f16d3cc8d8749011a94eb553f56bbc89",
+        "discardedInvalidAggregateSHA256": "4237a1dea8bfda5d6e5bb3b4a716d49082f02cc53f200777837a5afb644ba2a9",
+        "negativeCounts": [
+          -36
+        ]
+      }
+    ],
+    "priorRegionTransfers": [
+      {
+        "path": "apps/office/src/sw/source/core/doc/doc.ts",
+        "priorSourceSHA256": "3a2a6058d12d74e7ac317d6c09d65511b056463e0c2c861a95cf0f076afc8bce",
+        "currentSourceSHA256": "2344eb0588f990bf405370ed77aa5a730f5b8b14075e0fda041c28748ab1f116",
+        "priorMap": "GCPB6V.app-final.json",
+        "priorMapSHA256": "d58aff77ccaf4cf9846e1861e5ec19c2f16d3cc8d8749011a94eb553f56bbc89",
+        "regions": [
+          {
+            "oldStart": 1,
+            "oldEnd": 17,
+            "newStart": 1,
+            "newEnd": 17,
+            "byteLength": 735,
+            "sha256": "a2844ad289abcf3b2b395f08094b65b0e8ac2573907faf8d3f6683134d71bf1d"
+          },
+          {
+            "oldStart": 19,
+            "oldEnd": 20,
+            "newStart": 18,
+            "newEnd": 19,
+            "byteLength": 102,
+            "sha256": "f28713550762f460fe0edb5d334f6337817dabf72d66b7be25b5b79f04ed0092"
+          },
+          {
+            "oldStart": 22,
+            "oldEnd": 35,
+            "newStart": 27,
+            "newEnd": 40,
+            "byteLength": 370,
+            "sha256": "fa0eed3eefb32525de09eb7c51504391db43f81d8fcb585f8df65963e64804b2"
+          },
+          {
+            "oldStart": 37,
+            "oldEnd": 798,
+            "newStart": 42,
+            "newEnd": 803,
+            "byteLength": 37292,
+            "sha256": "42c02aa92406c6a3e9c0a06527bef798e30cd465b5630e23cb6166fb95d678c7"
+          },
+          {
+            "oldStart": 822,
+            "oldEnd": 927,
+            "newStart": 805,
+            "newEnd": 910,
+            "byteLength": 4420,
+            "sha256": "48ce318d1f1ec56d5873d5b28583e127bc05d40e03bf9a9c03a0590575f6e58b"
+          }
+        ],
+        "counts": {
+          "statements": 347,
+          "functions": 92,
+          "branches": 120
+        }
+      },
+      {
+        "path": "apps/office/src/sw/source/core/docnode/ndtbl.ts",
+        "priorSourceSHA256": "e63fc04ef05e2f90ec7fa91020aebf65e0f6f0c3423c79ba9b4f77811aa53a7a",
+        "currentSourceSHA256": "af609947e6775af0d5bba582de44b13b4fcfaf87affacbf9c134c84109dbfabe",
+        "priorMap": "GCPB6V.app-final.json",
+        "priorMapSHA256": "d58aff77ccaf4cf9846e1861e5ec19c2f16d3cc8d8749011a94eb553f56bbc89",
+        "regions": [
+          {
+            "oldStart": 1,
+            "oldEnd": 282,
+            "newStart": 1,
+            "newEnd": 282,
+            "byteLength": 12496,
+            "sha256": "b51b8103c780bbfc0e7c2cca8f74c6d2d8d7fb5efcea9a22fbcd6f65e3a60c8a"
+          },
+          {
+            "oldStart": 284,
+            "oldEnd": 290,
+            "newStart": 337,
+            "newEnd": 343,
+            "byteLength": 80,
+            "sha256": "a71d6a58ddc31d049b92fd16e230dd5a413486c3e5b79459bf4400047f2d86a0"
+          }
+        ],
+        "counts": {
+          "statements": 116,
+          "functions": 15,
+          "branches": 35
+        }
+      },
+      {
+        "path": "apps/office/src/sw/source/core/docnode/nodes.ts",
+        "priorSourceSHA256": "c71826c4932dc1379727cd2c959157654ef057effac91b139b48e343d03bb8b1",
+        "currentSourceSHA256": "d56ad93c63a6ef23d84096d74bbb89fbd3a297731ab1c3232a89a3072570a131",
+        "priorMap": "GCPB6V.app-final.json",
+        "priorMapSHA256": "d58aff77ccaf4cf9846e1861e5ec19c2f16d3cc8d8749011a94eb553f56bbc89",
+        "regions": [
+          {
+            "oldStart": 1,
+            "oldEnd": 355,
+            "newStart": 1,
+            "newEnd": 355,
+            "byteLength": 16720,
+            "sha256": "7cde73e23e72f1c547ee8731d6cc383fa1aa9539945aecc6f974fe0ef9ea9d33"
+          },
+          {
+            "oldStart": 357,
+            "oldEnd": 387,
+            "newStart": 357,
+            "newEnd": 387,
+            "byteLength": 1268,
+            "sha256": "1e2bcdf4425ebaa9ab1fd813ac4be803d6b85276b2319551cc6d7b2b45118a3c"
+          },
+          {
+            "oldStart": 389,
+            "oldEnd": 570,
+            "newStart": 389,
+            "newEnd": 570,
+            "byteLength": 8577,
+            "sha256": "1158441c618175d64e7e957490d8a8e2aaa2062647ec642fc0341f86efbf3d44"
+          }
+        ],
+        "counts": {
+          "statements": 284,
+          "functions": 49,
+          "branches": 76
+        }
+      },
+      {
+        "path": "apps/office/src/sw/source/core/table/swtable.ts",
+        "priorSourceSHA256": "71cd418e280205e78befc1c57a932dff115bd6621e800c4f0a362e470f733071",
+        "currentSourceSHA256": "71b3006d081f7925b108947064657d1c8563502bb6377e4a9829672932f0afff",
+        "priorMap": "GCPB6V.app-final.json",
+        "priorMapSHA256": "d58aff77ccaf4cf9846e1861e5ec19c2f16d3cc8d8749011a94eb553f56bbc89",
+        "regions": [
+          {
+            "oldStart": 1,
+            "oldEnd": 558,
+            "newStart": 1,
+            "newEnd": 558,
+            "byteLength": 23282,
+            "sha256": "0bc18d39e937d228ddf8030078b1b9f7f2fe2b7dc56467480a4b3a644aa99157"
+          },
+          {
+            "oldStart": 563,
+            "oldEnd": 799,
+            "newStart": 573,
+            "newEnd": 809,
+            "byteLength": 10028,
+            "sha256": "85c18b411b7c5eb1dc6fcad67ea9da7c62067492bd415ae1ceb0311c32f69362"
+          }
+        ],
+        "counts": {
+          "statements": 364,
+          "functions": 62,
+          "branches": 143
+        }
+      },
+      {
+        "path": "apps/office/src/sw/source/core/undo/untbl.ts",
+        "priorSourceSHA256": "c01d5f011e525ae845a5106ce9dec847fd0e6b49364c7331b7596bf24263c4c7",
+        "currentSourceSHA256": "e9dffe05f46754061a540f5fb529014ec9ad85f2dd9c15c6417b56a566679c5d",
+        "priorMap": "GCPB6V.app-final.json",
+        "priorMapSHA256": "d58aff77ccaf4cf9846e1861e5ec19c2f16d3cc8d8749011a94eb553f56bbc89",
+        "regions": [
+          {
+            "oldStart": 2,
+            "oldEnd": 2,
+            "newStart": 2,
+            "newEnd": 2,
+            "byteLength": 91,
+            "sha256": "cfcac9daa1099a6969b58339fbdfb1c7f43cf17b43dabe244180cb16cc17887a"
+          },
+          {
+            "oldStart": 4,
+            "oldEnd": 6,
+            "newStart": 4,
+            "newEnd": 6,
+            "byteLength": 149,
+            "sha256": "7b6e0693b382cc249015a246b22bb3685016ba321094f019fe2eabfad7353edf"
+          },
+          {
+            "oldStart": 8,
+            "oldEnd": 188,
+            "newStart": 7,
+            "newEnd": 187,
+            "byteLength": 7689,
+            "sha256": "1b366e48632c8bd26dc4ff8f4a9ed28667a4c0ff31151f4c201a43a3d3b2af2e"
+          },
+          {
+            "oldStart": 190,
+            "oldEnd": 193,
+            "newStart": 189,
+            "newEnd": 192,
+            "byteLength": 167,
+            "sha256": "3d068b697e0f6fb45a820b2936868b1a223207c78241e504fce3ab4780720c67"
+          },
+          {
+            "oldStart": 199,
+            "oldEnd": 199,
+            "newStart": 193,
+            "newEnd": 193,
+            "byteLength": 56,
+            "sha256": "1c512666f056abc42c3824d023c581a286874d80e222b655ef2bd367d08b4cfd"
+          },
+          {
+            "oldStart": 201,
+            "oldEnd": 201,
+            "newStart": 196,
+            "newEnd": 196,
+            "byteLength": 30,
+            "sha256": "340e9e82a03b659adac71cdf50992295d0bc04483756ced7acf28315c29cc000"
+          },
+          {
+            "oldStart": 203,
+            "oldEnd": 214,
+            "newStart": 198,
+            "newEnd": 209,
+            "byteLength": 456,
+            "sha256": "75447021d35893b3d08a38eab8c3b1144c500d473563c409caeab1199a8f7c15"
+          },
+          {
+            "oldStart": 226,
+            "oldEnd": 226,
+            "newStart": 210,
+            "newEnd": 210,
+            "byteLength": 43,
+            "sha256": "c008085342daa3c75e28c63b9f98d40b050c708a5f3c3feddf5816a1d714d822"
+          },
+          {
+            "oldStart": 228,
+            "oldEnd": 229,
+            "newStart": 212,
+            "newEnd": 213,
+            "byteLength": 52,
+            "sha256": "8fe79bd0352a1381ec3a4646090e9d8d40a59137ba19aa2ea73bc78ccef59b2f"
+          },
+          {
+            "oldStart": 236,
+            "oldEnd": 236,
+            "newStart": 215,
+            "newEnd": 215,
+            "byteLength": 3,
+            "sha256": "737db166c79ae98e44bbe5ad43e03bf3774f7b3696068842d56a72e863dfeb20"
+          },
+          {
+            "oldStart": 238,
+            "oldEnd": 238,
+            "newStart": 217,
+            "newEnd": 217,
+            "byteLength": 44,
+            "sha256": "f2066efe75646fccd444eaba384f27d75e641d6ed657b894eaab9da138d83314"
+          },
+          {
+            "oldStart": 248,
+            "oldEnd": 250,
+            "newStart": 221,
+            "newEnd": 223,
+            "byteLength": 19,
+            "sha256": "a7f8e4b46a8c4f484c787ec98795c854669cf1a2eb24145ef9c0315ace699d0a"
+          },
+          {
+            "oldStart": 252,
+            "oldEnd": 252,
+            "newStart": 225,
+            "newEnd": 225,
+            "byteLength": 65,
+            "sha256": "7cc0a7706689ed29465ad53764f5c438b4a17f0ce3d9b95db7c911a050b6189e"
+          },
+          {
+            "oldStart": 254,
+            "oldEnd": 254,
+            "newStart": 227,
+            "newEnd": 227,
+            "byteLength": 68,
+            "sha256": "93cd2278468e6f4e4ea2c3b65c5b993fcacde3624d9155c660c99da9ae9579c5"
+          },
+          {
+            "oldStart": 255,
+            "oldEnd": 255,
+            "newStart": 232,
+            "newEnd": 232,
+            "byteLength": 26,
+            "sha256": "57e2a55f8ae2f6e7c3eb4c50cfcc2b12458f6de6694f353c30005a247ee195fc"
+          },
+          {
+            "oldStart": 261,
+            "oldEnd": 262,
+            "newStart": 234,
+            "newEnd": 235,
+            "byteLength": 108,
+            "sha256": "92691036c298c44823533aa4becea049dfcda2b47a299426d099df476003826a"
+          },
+          {
+            "oldStart": 264,
+            "oldEnd": 277,
+            "newStart": 237,
+            "newEnd": 250,
+            "byteLength": 392,
+            "sha256": "591d28c1629a1240fb0f5e16ffb7742656d570de51cbfd1e038a9e8b4d685ed0"
+          },
+          {
+            "oldStart": 295,
+            "oldEnd": 295,
+            "newStart": 257,
+            "newEnd": 257,
+            "byteLength": 10,
+            "sha256": "ec2df0c78951df12724937e6610a3d903bc37eec7e093eb8f0244ce22f3c6869"
+          },
+          {
+            "oldStart": 299,
+            "oldEnd": 299,
+            "newStart": 265,
+            "newEnd": 265,
+            "byteLength": 10,
+            "sha256": "6eaff87a20b8f2f16d5d702e151c249a7b4bf5cf09763db5c80f29d0f1efacf9"
+          },
+          {
+            "oldStart": 313,
+            "oldEnd": 313,
+            "newStart": 277,
+            "newEnd": 277,
+            "byteLength": 10,
+            "sha256": "6eaff87a20b8f2f16d5d702e151c249a7b4bf5cf09763db5c80f29d0f1efacf9"
+          },
+          {
+            "oldStart": 314,
+            "oldEnd": 314,
+            "newStart": 279,
+            "newEnd": 279,
+            "byteLength": 5,
+            "sha256": "28d86778615f6af47bb1bc4f40face756749768e5111f114cfa234a5060c25af"
+          },
+          {
+            "oldStart": 320,
+            "oldEnd": 320,
+            "newStart": 297,
+            "newEnd": 297,
+            "byteLength": 3,
+            "sha256": "737db166c79ae98e44bbe5ad43e03bf3774f7b3696068842d56a72e863dfeb20"
+          },
+          {
+            "oldStart": 322,
+            "oldEnd": 322,
+            "newStart": 299,
+            "newEnd": 299,
+            "byteLength": 22,
+            "sha256": "1ebc5f8149817f04e765dc35ad922ab3a7139137a5afa08b3ee1079539cec32f"
+          },
+          {
+            "oldStart": 324,
+            "oldEnd": 324,
+            "newStart": 302,
+            "newEnd": 302,
+            "byteLength": 30,
+            "sha256": "37137379fb5a3b53c9ba883e8b56dcf38dda3dbfcc105fddd3b9019694b3fe95"
+          },
+          {
+            "oldStart": 326,
+            "oldEnd": 326,
+            "newStart": 303,
+            "newEnd": 303,
+            "byteLength": 11,
+            "sha256": "44b88f5ccadbddf87dc772581e735b37fb8ed4ea633ae07ed501a9ec7cd389b3"
+          },
+          {
+            "oldStart": 353,
+            "oldEnd": 353,
+            "newStart": 313,
+            "newEnd": 313,
+            "byteLength": 15,
+            "sha256": "f2569ba419fff8eab9106ae03d962074ca59bf96932a9821c211e48215df9ec0"
+          },
+          {
+            "oldStart": 369,
+            "oldEnd": 372,
+            "newStart": 324,
+            "newEnd": 327,
+            "byteLength": 131,
+            "sha256": "a08c370c24b2feae06388f190602203812f7570f22372454bba071286fcf1aa1"
+          },
+          {
+            "oldStart": 381,
+            "oldEnd": 385,
+            "newStart": 332,
+            "newEnd": 336,
+            "byteLength": 113,
+            "sha256": "477e919da1a337a3ae402d72444f511cf51454b7206d391dcd7e4d1af57ec3d2"
+          }
+        ],
+        "counts": {
+          "statements": 58,
+          "functions": 21,
+          "branches": 7
+        }
+      }
+    ],
+    "wholeFiles": 308,
+    "transfers": [],
+    "gaps": []
+  },
+  "inventory": {
+    "coverage": {
+      "lines": {
+        "total": 1464,
+        "covered": 1464,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 1523,
+        "covered": 1523,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 384,
+        "covered": 384,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 1081,
+        "covered": 1081,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "mapSHA256": "9934004e42fd7eee7dc30ece25b5fafc415d2e5f398ab8cbb51992d5bee27ab8",
+    "proofSHA256": "5c43a8f01265876178c73869204175bfde82507529383d6eac361ff12ce0b0b8",
+    "files": 38,
+    "invalidWholeFallbacks": [],
+    "priorRegionTransfers": [],
+    "wholeFiles": 38,
+    "transfers": [],
+    "gaps": []
+  }
+}

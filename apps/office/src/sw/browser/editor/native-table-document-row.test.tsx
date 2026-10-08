@@ -67,8 +67,24 @@ it("renders default Tab append through document insertion without action replay"
           expect(shell.Redo()).toBe(true);
         },
       );
-      expect(table.GetTabLines()[1]).toBe(row);
-      expect(shell.GetActiveParagraph()).toBe(cell);
+      const currentRow = required(table.GetTabLines()[1]),
+        currentCell = required(required(currentRow.GetTabBoxes()[0]).GetParagraphs()[0]);
+      expect(currentRow).not.toBe(row);
+      expect(currentCell).not.toBe(cell);
+      expect(currentRow.GetFormat()).toEqual(row.GetFormat());
+      expect(
+        currentRow.GetTabBoxes().map(
+          /** Reads recreated native frame attributes. @param box - Actual box. @returns Format. */
+          (box) => box.GetFormat(),
+        ),
+      ).toEqual(
+        row.GetTabBoxes().map(
+          /** Reads originally accepted insertion attributes. @param box - Prior owner. @returns Format. */
+          (box) => box.GetFormat(),
+        ),
+      );
+      expect(shell.GetActiveParagraph()).toBe(currentCell);
+      expect(insert).toHaveBeenCalledTimes(cycle + 2);
       expect(
         screen.getByLabelText("Row 2 column 1 paragraph 1").contains(selection.focusNode),
       ).toBe(true);

@@ -1,0 +1,52 @@
+{
+  "records": [
+    {
+      "command": "npm run format:check",
+      "exit": 0,
+      "bytes": 122,
+      "sha256": "ac1729f86eee878f5f4d6c948c510d2cc91bb5568f6dd088f70f3885e137d116",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run lint",
+      "exit": 1,
+      "bytes": 286,
+      "sha256": "dd22147f6f35b8babec88a5b13ffa635f88c3a9988f56281ba79d3e8cb30ba43",
+      "diagnostics": [
+        "> eslint . --max-warnings 0",
+        "  41:10  error  'createWriterCollapsedCursorState' is defined but never used  @typescript-eslint/no-unused-vars",
+        "✖ 1 problem (1 error, 0 warnings)"
+      ]
+    },
+    {
+      "command": "npm run typecheck",
+      "exit": 2,
+      "bytes": 325,
+      "sha256": "52a2508e4e625f63c0581eed9b05e5d806e04d8e9af23d3a66029852793158ac",
+      "diagnostics": [
+        "apps/office/src/sw/source/core/doc/doc.ts(41,10): error TS6133: 'createWriterCollapsedCursorState' is declared but its value is never read."
+      ]
+    },
+    {
+      "command": "npm run check:dependencies",
+      "exit": 0,
+      "bytes": 189,
+      "sha256": "cc81d549645fa6a013c06b442431679afbbb73c023951b2165c702fa5f42c2f5",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:docs",
+      "exit": 0,
+      "bytes": 120,
+      "sha256": "09656f8d8c55406e37ab2f7da33c18f746698e72a093c1c1d1ee62d748f55de7",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:file-size",
+      "exit": 0,
+      "bytes": 4069,
+      "sha256": "ae898b42aed094a39d6d67a99134cf7ca4eaaf4a509a83e1b8f3372bdd5c3ce3",
+      "diagnostics": []
+    }
+  ]
+}

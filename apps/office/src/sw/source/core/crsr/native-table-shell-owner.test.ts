@@ -67,8 +67,25 @@ it("inherits native cell traversal and publishes already executed row history in
         before.pendingCharacterItems.Get(RES_CHRATR_WEIGHT).QueryValue(),
       );
       expect(f.shell.Redo()).toBe(true);
-      expect(f.table.GetTabLines()[2]).toBe(row);
-      expect(f.shell.GetActiveParagraph()).toBe(cell);
+      const currentRow = required(f.table.GetTabLines()[2]),
+        currentCell = required(required(currentRow.GetTabBoxes()[0]).GetParagraphs()[0]);
+      expect(currentRow).not.toBe(row);
+      expect(currentCell).not.toBe(cell);
+      expect(currentRow.GetFormat()).toEqual(row.GetFormat());
+      expect(
+        currentRow.GetTabBoxes().map(
+          /** Reads recreated complete cell attributes. @param box - Current cell. @returns Format. */
+          (box) => box.GetFormat(),
+        ),
+      ).toEqual(
+        row.GetTabBoxes().map(
+          /** Reads originally accepted cell attributes. @param box - Prior cell. @returns Format. */
+          (box) => box.GetFormat(),
+        ),
+      );
+      expect(f.shell.GetActiveParagraph()).toBe(currentCell);
+      expect(currentCell.GetText()).toBe("");
+      expect(insert).toHaveBeenCalledTimes(cycle + 2);
       expect(f.cell.GetText()).toBe("original");
     }
   } finally {

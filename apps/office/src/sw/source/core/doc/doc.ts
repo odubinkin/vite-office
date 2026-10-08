@@ -15,10 +15,15 @@ import {
   type SwTableBoxFormat,
 } from "../table/swtable";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
-import { SwUndoTableNdsChg } from "../undo/untbl";
 import type { SwTabCols } from "../bastyp/tabcol";
 import type { SwTabFrame } from "../layout/tabfrm";
-import { GetSwTabRows, SetSwTabRows, SetSwTabCols, InsertSwTableColumns } from "../docnode/ndtbl";
+import {
+  GetSwTabRows,
+  SetSwTabRows,
+  SetSwTabCols,
+  InsertSwTableColumns,
+  InsertSwTableRows,
+} from "../docnode/ndtbl";
 import {
   GetSwCursorRowSplit,
   SetSwRowSplit,
@@ -33,7 +38,7 @@ import {
 import type { SwCursor } from "../crsr/swcrsr";
 import type { SwFormatFrameSize } from "../../../inc/fmtfsize";
 import { SwFormatVertOrient } from "../../../inc/fmtornt";
-import { createWriterCollapsedCursorState, type SwUndoCursorState } from "../undo/undobj";
+import type { SwUndoCursorState } from "../undo/undobj";
 import { SwInsertTableFlags, type SwInsertTableOptions } from "../../../inc/itabenum";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { DocumentContentOperationsManager } from "./DocumentContentOperationsManager";
@@ -796,29 +801,7 @@ export class SwDoc {
     cursorState?: SwUndoCursorState,
     afterCursor?: SwUndoCursorState,
   ): boolean {
-    if (boxes.length === 0) return false;
-    const section = (boxes[0] as SwTableBox).GetStartNode(),
-      tableNode = section.StartOfSectionNode();
-    if (!(tableNode instanceof SwTableNode) || tableNode.GetNodes() !== this.nodes) return false;
-    const table = tableNode.GetTable();
-    return this.RunModelTransaction(
-      /** Lets the table own insertion before publishing its native undo record. @returns Whether inserted. */
-      () => {
-        const last = (boxes.at(-1) as SwTableBox).GetParagraphs().at(-1) as SwTextNode,
-          before =
-            cursorState ??
-            createWriterCollapsedCursorState(
-              last,
-              last.Len(),
-              last.GetCharacterItemsAt(last.Len()),
-            ),
-          action = new SwUndoTableNdsChg(table, boxes, before, count, behind);
-        if (!table.InsertRow(this, boxes, count, behind, insertDummy)) return false;
-        action.SaveNewBoxes(table, afterCursor);
-        this.undoManager.AddUndoAction(action);
-        return true;
-      },
-    );
+    return InsertSwTableRows(this, boxes, count, behind, insertDummy, cursorState, afterCursor);
   }
 
   /** Inserts native columns and publishes one already-executed document history action. @param boxes - Expanded actual column selection. @param count - Native count. @param behind - Trailing edge. @param insertDummy - Redline policy. @param cursorState - Optional shell attributes. @param afterCursor - Optional preserved live selection. @returns Whether inserted. */

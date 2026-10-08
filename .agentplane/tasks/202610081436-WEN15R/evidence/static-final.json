@@ -1,0 +1,48 @@
+{
+  "records": [
+    {
+      "command": "npm run format:check",
+      "exit": 0,
+      "bytes": 122,
+      "sha256": "ac1729f86eee878f5f4d6c948c510d2cc91bb5568f6dd088f70f3885e137d116",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run lint",
+      "exit": 0,
+      "bytes": 55,
+      "sha256": "a6172cb57fa696e705408fdc605fba1ae07b852fdf0614d7c2b623349e285b6e",
+      "diagnostics": [
+        "> eslint . --max-warnings 0"
+      ]
+    },
+    {
+      "command": "npm run typecheck",
+      "exit": 0,
+      "bytes": 240,
+      "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:dependencies",
+      "exit": 0,
+      "bytes": 189,
+      "sha256": "cc81d549645fa6a013c06b442431679afbbb73c023951b2165c702fa5f42c2f5",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:docs",
+      "exit": 0,
+      "bytes": 120,
+      "sha256": "09656f8d8c55406e37ab2f7da33c18f746698e72a093c1c1d1ee62d748f55de7",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:file-size",
+      "exit": 0,
+      "bytes": 4069,
+      "sha256": "ae898b42aed094a39d6d67a99134cf7ca4eaaf4a509a83e1b8f3372bdd5c3ce3",
+      "diagnostics": []
+    }
+  ]
+}

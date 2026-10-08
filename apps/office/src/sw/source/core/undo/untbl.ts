@@ -1,10 +1,9 @@
-/** @fileoverview Owns numeric column history and retained flat row sections through Writer's SwUndoTableNdsChg ownership from untbl.cxx. */
+/** @fileoverview Owns numeric native table insertion history through Writer's SwUndoTableNdsChg from untbl.cxx. */
 import type { SwTable, SwTableLine, SwTableBox, SwTableBoxFormat } from "../table/swtable";
-import { SwTableNode, type SwTableBoxStartNode } from "../docnode/node";
+import { SwTableNode } from "../docnode/node";
 import type { SwDoc } from "../doc/doc";
 import type { SwInsertTableOptions } from "../../../inc/itabenum";
 import { SwPosition } from "../crsr/pam";
-import type { SwTableRowSection } from "../docnode/nodes";
 import type { SwTextNode } from "../txtnode/ndtxt";
 import {
   SwUndo,
@@ -186,20 +185,16 @@ export class SwUndoAttrTable extends SwUndo {
   }
 }
 
-/** Native column history re-enters document insertion by numeric selection; flat row history retains inserted sections. */
+/** Native table insertion history stores numeric selected/new box starts and re-enters document insertion on redo. */
 export class SwUndoTableNdsChg extends SwUndo {
   private readonly m_nSttNode: number;
   private readonly beforeNode: number;
   private readonly beforeContent: number;
-  private readonly insertionNode: number;
-  private readonly sourceRow: number;
-  private readonly rowIndex: number;
-  private sections: SwTableRowSection[];
-  private columnNodes: { index: number; nodeCount: number }[] = [];
   private readonly selectedBoxStarts: readonly number[];
-  private readonly beforeAttributes: SaveTable | undefined;
+  private readonly beforeAttributes: SaveTable;
+  private insertedNodes: { index: number; nodeCount: number }[] = [];
   private customAfter = false;
-  /** Captures coordinates before mutation. @param table - Connected table. @param selection - Original boxes. @param before - Original cursor. @param count - Native count. @param behind - Selected edge direction. @param columnMode - Native column insertion mode. @returns Nothing. */
+  /** Captures numeric selection and original formats before mutation. @param table - Actual table. @param selection - Original selected boxes. @param before - Original cursor. @param count - Native count. @param behind - Trailing edge. @param columnMode - Native column insertion action. @returns Nothing. */
   public constructor(
     table: SwTable,
     selection: readonly SwTableBox[],
@@ -212,55 +207,33 @@ export class SwUndoTableNdsChg extends SwUndo {
     this.m_nSttNode = table.GetTableNode().GetIndex();
     this.beforeNode = before.point.node.GetIndex();
     this.beforeContent = before.point.offset;
-    this.sections = [];
-    const selected = selection.map(
-      /** Resolves actual selected row ownership. @param box - Original box. @returns Row index. */
-      (box) =>
-        table.GetTabLines().findIndex(
-          /** Matches a row by original box identity. @param row - Native row. @returns Whether selected. */
-          (row) => row.GetTabBoxes().includes(box),
-        ),
-    );
-    this.sourceRow = behind ? Math.max(...selected) : Math.min(...selected);
-    this.rowIndex = this.sourceRow + (behind ? 1 : 0);
     this.selectedBoxStarts = selection.map(
-      /** Saves native selected coordinates without graph owners. @param box - Selected box. @returns Start index. */
+      /** Saves original native coordinates without graph owners. @param box - Selected box. @returns Start index. */
       (box) => box.GetStartNode().GetIndex(),
     );
-    this.beforeAttributes = columnMode ? new SaveTable(table) : undefined;
-    const next = table.GetTabLines()[this.rowIndex];
-    this.insertionNode =
-      next === undefined
-        ? table.GetTableNode().EndOfSectionNode().GetIndex()
-        : (next.GetTabBoxes()[0] as SwTableBox).GetStartNode().GetIndex();
+    this.beforeAttributes = new SaveTable(table);
   }
-  /** Reports retained section units. @returns Node count. */
+  /** Reports actual inserted node extents without retaining their sections. @returns Node units. */
   public override GetPayloadSize(): number {
-    if (this.columnMode)
-      return this.columnNodes.reduce(
-        /** Counts retained native cell nodes. @param sum - Prior units. @param saved - Actual cell section. @returns Total. */
-        (sum, saved) => sum + saved.nodeCount,
-        0,
-      );
-    return this.sections.reduce(
-      /** Counts actual retained nodes. @param count - Prior count. @param section - Inserted section. @returns Total. */
-      (count, section) => count + section.nodes.length,
+    return this.insertedNodes.reduce(
+      /** Counts inserted native nodes. @param sum - Prior units. @param saved - Numeric extent. @returns Total. */
+      (sum, saved) => sum + saved.nodeCount,
       0,
     );
   }
-  /** Removes all inserted rows as one native action. @param context - Native context. @returns Nothing. */
+  /** Removes currently connected inserted sections resolved by numeric starts. @param context - Native context. @returns Nothing. */
   protected override UndoImpl(context: SwUndoRedoContext): void {
-    const nodes = context.GetDoc().nodes,
+    const nodes = context.GetDoc().GetNodes(),
       table = (nodes.at(this.m_nSttNode) as SwTableNode).GetTable();
+    let targetIndex = this.beforeNode;
+    for (const saved of this.insertedNodes)
+      if (saved.index <= targetIndex) targetIndex += saved.nodeCount;
+    const target = nodes.at(targetIndex) as SwTextNode;
     if (this.columnMode) {
-      let targetIndex = this.beforeNode;
-      for (const saved of this.columnNodes)
-        if (saved.index <= targetIndex) targetIndex += saved.nodeCount;
-      const target = nodes.at(targetIndex) as SwTextNode;
-      for (const saved of [...this.columnNodes].reverse()) {
+      for (const saved of [...this.insertedNodes].reverse()) {
         const box = table.GetTableBox(saved.index) as SwTableBox,
           line = table.GetTabLines().find(
-            /** Finds the actual row owner. @param row - Native row. @returns Whether owned. */
+            /** Finds the current actual row owner. @param row - Row. @returns Whether owned. */
             (row) => row.GetTabBoxes().includes(box),
           ) as SwTableLine,
           start = box.GetStartNode();
@@ -275,109 +248,87 @@ export class SwUndoTableNdsChg extends SwUndo {
           this.beforeContent,
         );
       }
-      (this.beforeAttributes as SaveTable).RestoreAttr(table);
-      return;
-    }
-    const target = nodes.at(
-      this.beforeNode + (this.beforeNode >= this.insertionNode ? this.GetPayloadSize() : 0),
-    ) as SwTextNode;
-    for (const section of [...this.sections].reverse())
-      nodes.RemoveTableRow(table, section, target, this.beforeContent);
-  }
-  /** Resolves the recreated table and native row boundary on redo. @param context - Native context. @returns Nothing. */
-  protected override RedoImpl(context: SwUndoRedoContext): void {
-    const nodes = context.GetDoc().nodes,
-      table = (nodes.at(this.m_nSttNode) as SwTableNode).GetTable();
-    if (this.columnMode) {
-      const selected = this.selectedBoxStarts.map(
-          /** Resolves the original numeric selection. @param index - Saved coordinate. @returns Current box. */
-          (index) => table.GetTableBox(index) as SwTableBox,
+    } else {
+      const starts = new Set(
+          this.insertedNodes.map(
+            /** Reads inserted numeric section starts. @param saved - Extent. @returns Start. */
+            (saved) => saved.index,
+          ),
         ),
-        originalBoxes = table.GetTabLines().flatMap(
-          /** Captures temporary original identities for new-box discovery. @param line - Row. @returns Original cells. */
-          (line) => line.GetTabBoxes(),
-        );
-      context.GetDoc().InsertCol(selected, this.count, this.behind);
-      this.SaveNewBoxes(table, undefined, originalBoxes);
-      return;
-    }
-    if (
-      (
-        (this.sections[0] as SwTableRowSection).nodes[0] as SwTableBoxStartNode
-      ).StartOfSectionNode() !== table.GetTableNode()
-    ) {
-      this.sections = [];
-      for (let i = 0; i < this.count; i++)
-        this.sections.push(
-          nodes.PrepareTableRow(table, table.GetTabLines()[this.sourceRow] as SwTableLine),
-        );
-    }
-    this.sections.forEach(
-      /** Connects one retained row at its original boundary. @param section - Actual row. @param index - Count offset. @returns Nothing. */
-      (section, index) => nodes.InsertTableRow(table, section, this.rowIndex + index),
-    );
-    if (!this.customAfter) this.SaveNewBoxes();
-  }
-  /** Records inserted native boxes after successful mutation. @param table - Initial connected owner. @param after - Optional preserved live selection. @param originalBoxes - Temporary pre-insertion identities. @returns Nothing. */
-  public SaveNewBoxes(
-    table?: SwTable,
-    after?: SwUndoCursorState,
-    originalBoxes?: readonly SwTableBox[],
-  ): void {
-    if (table !== undefined) {
-      if (this.columnMode) {
-        this.columnNodes = table.GetTabLines().flatMap(
-          /** Discovers new cells using temporary pre-insertion identities. @param line - Row. @returns Numeric extents. */
+        lines = table.GetTabLines().filter(
+          /** Resolves actual inserted flat rows from native new boxes. @param line - Current row. @returns Whether inserted. */
           (line) =>
-            line
-              .GetTabBoxes()
-              .filter(
-                /** Excludes original survivors. @param box - Connected cell. @returns Whether inserted. */
-                (box) => !(originalBoxes as readonly SwTableBox[]).includes(box),
-              )
-              .map(
-                /** Saves native coordinates without retaining graph owners. @param box - Inserted cell. @returns Numeric extent. */
-                (box) => ({
-                  index: box.GetStartNode().GetIndex(),
-                  nodeCount:
-                    box.GetStartNode().EndOfSectionNode().GetIndex() -
-                    box.GetStartNode().GetIndex() +
-                    1,
-                }),
-              ),
+            line.GetTabBoxes().some(
+              /** Matches connected native box starts. @param box - Current box. @returns Whether inserted. */
+              (box) => starts.has(box.GetStartNode().GetIndex()),
+            ),
         );
-      } else
-        this.sections = table
-          .GetTabLines()
-          .slice(this.rowIndex, this.rowIndex + this.count)
-          .map(
-            /** Captures actual inserted node ranges. @param line - Connected row. @returns Actual section. */
-            (line) => {
-              const boxes = line.GetTabBoxes(),
-                start = (boxes[0] as SwTableBox).GetStartNode(),
-                end = (boxes.at(-1) as SwTableBox).GetStartNode().EndOfSectionNode();
-              return {
-                line,
-                nodes: start
-                  .GetNodes()
-                  .entries()
-                  .slice(start.GetIndex(), end.GetIndex() + 1),
-              };
-            },
-          );
+      for (const line of [...lines].reverse()) {
+        const start = (line.GetTabBoxes()[0] as SwTableBox).GetStartNode(),
+          end = (line.GetTabBoxes().at(-1) as SwTableBox).GetStartNode().EndOfSectionNode();
+        nodes.RemoveTableRow(
+          table,
+          {
+            line,
+            nodes: nodes.entries().slice(start.GetIndex(), end.GetIndex() + 1),
+          },
+          target,
+          this.beforeContent,
+        );
+      }
     }
+    this.beforeAttributes.RestoreAttr(table);
+  }
+  /** Resolves original numeric selection and invokes the corresponding native document insertion. @param context - Native context. @returns Nothing. */
+  protected override RedoImpl(context: SwUndoRedoContext): void {
+    const doc = context.GetDoc(),
+      table = (doc.GetNodes().at(this.m_nSttNode) as SwTableNode).GetTable(),
+      selected = this.selectedBoxStarts.map(
+        /** Resolves original selected boxes in the live graph. @param index - Numeric start. @returns Current owner. */
+        (index) => table.GetTableBox(index) as SwTableBox,
+      ),
+      originalBoxes = table.GetTabLines().flatMap(
+        /** Captures temporary original identities for new-box discovery. @param line - Row. @returns Actual cells. */
+        (line) => line.GetTabBoxes(),
+      );
+    if (this.columnMode) doc.InsertCol(selected, this.count, this.behind);
+    else doc.InsertRow(selected, this.count, this.behind);
+    this.SaveNewBoxes(table, originalBoxes);
+  }
+  /** Records numeric new-box extents by original identity difference. @param table - Current table. @param originalBoxes - Temporary original box list. @param after - Optional preserved shell selection. @returns Nothing. */
+  public SaveNewBoxes(
+    table: SwTable,
+    originalBoxes: readonly SwTableBox[],
+    after?: SwUndoCursorState,
+  ): void {
+    this.insertedNodes = table.GetTabLines().flatMap(
+      /** Discovers inserted connected boxes in native node order. @param line - Row. @returns Numeric extents. */
+      (line) =>
+        line
+          .GetTabBoxes()
+          .filter(
+            /** Excludes original surviving owners. @param box - Current cell. @returns Whether inserted. */
+            (box) => !originalBoxes.includes(box),
+          )
+          .map(
+            /** Records actual section extents without retaining nodes. @param box - New box. @returns Numeric extent. */
+            (box) => ({
+              index: box.GetStartNode().GetIndex(),
+              nodeCount:
+                box.GetStartNode().EndOfSectionNode().GetIndex() -
+                box.GetStartNode().GetIndex() +
+                1,
+            }),
+          ),
+    );
     if (after !== undefined) {
       this.customAfter = true;
       this.SetAfterCursor(after);
     } else if (!this.customAfter) {
-      const first = (
-        this.columnMode
-          ? (table as SwTable)
-              .GetTableNode()
-              .GetNodes()
-              .at((this.columnNodes[0] as { index: number }).index + 1)
-          : (this.sections[0] as SwTableRowSection).nodes[1]
-      ) as SwTextNode;
+      const first = table
+        .GetTableNode()
+        .GetNodes()
+        .at((this.insertedNodes[0] as { index: number }).index + 1) as SwTextNode;
       this.SetAfterCursor(createWriterCollapsedCursorState(first, 0, first.GetCharacterItemsAt(0)));
     }
   }

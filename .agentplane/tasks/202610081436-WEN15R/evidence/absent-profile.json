@@ -1,0 +1,214 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/sw/source/core/table/swtable.ts": "71b3006d081f7925b108947064657d1c8563502bb6377e4a9829672932f0afff",
+    "apps/office/src/sw/source/core/undo/untbl.ts": "e9dffe05f46754061a540f5fb529014ec9ad85f2dd9c15c6417b56a566679c5d",
+    "apps/office/src/sw/source/core/doc/doc.ts": "2344eb0588f990bf405370ed77aa5a730f5b8b14075e0fda041c28748ab1f116",
+    "apps/office/src/sw/source/core/docnode/ndtbl.ts": "af609947e6775af0d5bba582de44b13b4fcfaf87affacbf9c134c84109dbfabe",
+    "apps/office/src/sw/source/core/docnode/nodes.ts": "d56ad93c63a6ef23d84096d74bbb89fbd3a297731ab1c3232a89a3072570a131",
+    "apps/office/src/sw/source/core/table/native-numeric-row-insertion.test.ts": "f1670ab8c8823e2ae4291683119415bfe7619d29e10df8785b612d0aab891c79",
+    "apps/office/src/sw/source/core/undo/native-numeric-row-insertion-history.test.ts": "bfa159ea3cac617f680b837d334280c3db091e806a2ef731e692db54a16c9fc7",
+    "apps/office/src/sw/browser/editor/native-numeric-row-insertion.test.tsx": "a8e6c4bf0881830bd806cebee71a573b42cf3b013a2a17d6a9d40d5a1278d96b",
+    "apps/office/src/sw/source/core/table/native-row-insertion.test.ts": "877bdbbe0978f7a2ba6ffd12428bb25be3603fc59dde2d0f5b5177b672992881",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-traversal.test.ts": "89df9f96c56b691c9a7cc21a1daf656ea40d1012c9f095ff1f15202ac0e8b321",
+    "apps/office/src/sw/browser/editor/native-table-tab.test.tsx": "1a40fee4824469fd19186ec751604391acc139d5cc582c36db61abdddd3ac932",
+    "apps/office/src/sw/browser/editor/native-table-document-row.test.tsx": "5b36b3aef57e8fc6023dd6a0d8f38624eabd0476548342a7226c924d264ca250",
+    "docs/program/source-provenance.json": "f3a9f2222781ff2fd5dbd79a4b651bfd608c6b985e2560c28951539242b15c60",
+    "docs/program/parity/runtime-inventory.json": "d62d2086ca7a6356b17222a6dfc4b95e4e014ba91c25fc045049325071c0e7e9"
+  },
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1443,
+      "sha256": "f341e2a99cd9bd421bb3613a7de9a52f0d2601dc292e3f077e5a39ee60532e20",
+      "totals": [],
+      "failedCases": [],
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/WEN15R.app-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 83540,
+      "sha256": "8ae0e4e57794ed2d0671512541daa32627f345dc14690657f65313e6bf38fefd",
+      "totals": [
+        "Test Files  3 failed | 471 passed (474)",
+        "Tests  4 failed | 13841 passed (13845)"
+      ],
+      "failedCases": [
+        {
+          "name": "apps/office/src/sw/browser/editor/native-numeric-row-insertion.test.tsx > mounted numeric row menu behind=false",
+          "assertion": [
+            "Error: SwNode is disconnected from its SwNodes array."
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/browser/editor/native-numeric-row-insertion.test.tsx > mounted numeric row menu behind=true",
+          "assertion": [
+            "Error: SwNode is disconnected from its SwNodes array."
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/source/core/crsr/native-table-shell-owner.test.ts > inherits native cell traversal and publishes already executed row history in the document",
+          "assertion": [
+            "AssertionError: expected SwTableLine{ format: {}, …(1) } to be SwTableLine{ format: {}, …(1) } // Object.is equality"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/source/core/undo/native-insert-table-history.test.ts > replays inserted table, appended native row and later cell typing through one history stack",
+          "assertion": [
+            "AssertionError: expected SwTableLine{ format: {}, …(1) } to be SwTableLine{ format: {}, …(1) } // Object.is equality"
+          ]
+        }
+      ],
+      "caseCounts": {
+        "passed": 13841,
+        "failed": 4,
+        "skipped": 0,
+        "total": 13845
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 17291,
+          "covered": 17289,
+          "skipped": 0,
+          "pct": 99.98
+        },
+        "statements": {
+          "total": 18992,
+          "covered": 18990,
+          "skipped": 0,
+          "pct": 99.98
+        },
+        "functions": {
+          "total": 4373,
+          "covered": 4372,
+          "skipped": 0,
+          "pct": 99.97
+        },
+        "branches": {
+          "total": 14147,
+          "covered": 14144,
+          "skipped": 0,
+          "pct": 99.97
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverage": {
+        "lines": 99.98,
+        "statements": 99.98,
+        "functions": 99.97,
+        "branches": 99.97
+      },
+      "incompleteFileCount": 4,
+      "coverageMapSHA256": "1c832fcc0f221e4e4926cb8ca78a3db469e861e23024bffa87580cc1c51ecfce",
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "inventory",
+      "command": "npm run test:inventory:coverage -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/WEN15R.inventory-results.json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 40596,
+      "sha256": "5e35b3f7aaf964ddbea8a393b3df4d250ee072888e3afd7836006c867681d925",
+      "totals": [
+        "Test Files  36 passed (36)",
+        "Tests  110 passed (110)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "passed": 110,
+        "failed": 0,
+        "skipped": 0,
+        "total": 110
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 1464,
+          "covered": 1464,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 1523,
+          "covered": 1523,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 384,
+          "covered": 384,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 1081,
+          "covered": 1081,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100
+      },
+      "incompleteFileCount": 0,
+      "coverageMapSHA256": "ef2addc751ccb38d0cf5038112b601e7d7f65ea769e3e9bf69810a6208e92fa1",
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "scripts",
+      "command": "npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts scripts/check-module-boundaries.test.ts scripts/check-legacy-font-boundary.test.ts scripts/native-column-item-boundary.test.ts scripts/native-ruler-boundary.test.ts",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 223,
+      "sha256": "d37577622f2c5099c7eff7069dad22d74e87758662dc811ba591280a21d0da4e",
+      "totals": [
+        "Test Files  6 passed (6)",
+        "Tests  19 passed (19)"
+      ],
+      "failedCases": [],
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 41460,
+      "sha256": "8757658a8acec71ff6b6aced72c53d9f66e427fb90625fb630f4d13ad381e621",
+      "totals": [
+        "299 passed (4.3m)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "startTime": "2026-10-08T14:59:35.981Z",
+        "duration": 258510.153,
+        "expected": 299,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "unhandledErrorCount": 0
+    }
+  ]
+}

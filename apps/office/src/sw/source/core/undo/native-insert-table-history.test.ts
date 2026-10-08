@@ -35,14 +35,30 @@ it("replays inserted table, appended native row and later cell typing through on
     o.shell.FocusNode(last);
     expect(o.shell.GoNextCell()).toBe(true);
     expect(table.GetTabLines()).toHaveLength(3);
-    const appended = table.GetTabLines()[2],
+    const appended = required(table.GetTabLines()[2]),
       cell = o.shell.GetActiveParagraph();
     o.shell.Insert("fresh");
     expect(o.shell.Undo()).toBe(true);
     expect(o.shell.Undo()).toBe(true);
     expect(o.shell.Redo()).toBe(true);
-    expect(table.GetTabLines()[2]).toBe(appended);
-    expect(o.shell.GetActiveParagraph()).toBe(cell);
+    const currentRow = required(table.GetTabLines()[2]),
+      currentCell = required(required(currentRow.GetTabBoxes()[0]).GetParagraphs()[0]);
+    expect(currentRow).not.toBe(appended);
+    expect(currentCell).not.toBe(cell);
+    expect(currentRow.GetFormat()).toEqual(appended.GetFormat());
+    expect(
+      currentRow.GetTabBoxes().map(
+        /** Reads complete newly recreated attributes. @param box - Current cell. @returns Format. */
+        (box) => box.GetFormat(),
+      ),
+    ).toEqual(
+      appended.GetTabBoxes().map(
+        /** Reads originally accepted attributes. @param box - Prior cell. @returns Format. */
+        (box) => box.GetFormat(),
+      ),
+    );
+    expect(o.shell.GetActiveParagraph()).toBe(currentCell);
+    expect(currentCell.GetText()).toBe("");
     expect(o.shell.Redo()).toBe(true);
     for (let cycle = 0; cycle < 3; cycle++) {
       expect(o.shell.Undo()).toBe(true);

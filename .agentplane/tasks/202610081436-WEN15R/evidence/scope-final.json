@@ -1,0 +1,170 @@
+{
+  "base": "ef851816ec55a4d04f40b94fe3d68bfc2249fd02",
+  "semanticPaths": [
+    "apps/office/src/sw/browser/editor/native-numeric-row-insertion.test.tsx",
+    "apps/office/src/sw/browser/editor/native-table-document-row.test.tsx",
+    "apps/office/src/sw/browser/editor/native-table-tab.test.tsx",
+    "apps/office/src/sw/source/core/crsr/native-table-shell-owner.test.ts",
+    "apps/office/src/sw/source/core/doc/doc.ts",
+    "apps/office/src/sw/source/core/docnode/ndtbl.ts",
+    "apps/office/src/sw/source/core/docnode/nodes.ts",
+    "apps/office/src/sw/source/core/table/native-numeric-row-insertion.test.ts",
+    "apps/office/src/sw/source/core/table/native-row-insertion.test.ts",
+    "apps/office/src/sw/source/core/table/swtable.ts",
+    "apps/office/src/sw/source/core/undo/native-insert-table-history.test.ts",
+    "apps/office/src/sw/source/core/undo/native-numeric-row-insertion-history.test.ts",
+    "apps/office/src/sw/source/core/undo/untbl.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-traversal.test.ts",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/source-provenance.json"
+  ],
+  "scopeCount": 16,
+  "priorAcceptanceFiles": 631,
+  "byteIdenticalAcceptanceFiles": 625,
+  "sourceBackedMigrations": [
+    {
+      "path": "apps/office/src/sw/browser/editor/native-table-document-row.test.tsx",
+      "oldSHA256": "ef5de7941db0fff0149fe4b2d2c1fabc750fe30fa921cd94d354f81bd2fd6f3c",
+      "currentSHA256": "5b36b3aef57e8fc6023dd6a0d8f38624eabd0476548342a7226c924d264ca250",
+      "originalAssertions": 18,
+      "unchangedAssertions": 16,
+      "sourceBackedChangedAssertions": [
+        {
+          "sha256": "b6dae3a33ff91651b5647fdeb713a899492a7d98169ba8cb52ea3b7afb0c03c3"
+        },
+        {
+          "sha256": "4e002d5398397ce793bf7534eaa79322ec3e308275e4cb09d21f2966c4834a80"
+        }
+      ],
+      "newAssertions": 6,
+      "nativeAnchors": [
+        "untbl.cxx1510-1574 original/new box numeric discovery and complete original attributes",
+        "untbl.cxx1836-1880 redo calls Doc InsertRow and creates new boxes"
+      ],
+      "reason": "Reconnecting old inserted row/cell identities contradicts native Doc InsertRow redo. Fresh owner identity, complete formats/style/cursor and later typing/table recreation replace only those checks.",
+      "fixtureRebinding": "New current row/cell variables identify the actual newly created owners after redo."
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/native-table-tab.test.tsx",
+      "oldSHA256": "bac50053afcd0c553365e0e8385d55085a1ecb0ee106890f88f2425e20ba04a6",
+      "currentSHA256": "1a40fee4824469fd19186ec751604391acc139d5cc582c36db61abdddd3ac932",
+      "originalAssertions": 42,
+      "unchangedAssertions": 40,
+      "sourceBackedChangedAssertions": [
+        {
+          "sha256": "f8b1854e1f8692b1372de0ddc64cb6344eec3921b495a968a428f2e7496f8381"
+        },
+        {
+          "sha256": "cae3ebed6730f7e857046d6a4fb57d86db4a667204fbb12e29e09c18a4e76ba4"
+        }
+      ],
+      "newAssertions": 6,
+      "nativeAnchors": [
+        "untbl.cxx1510-1574 original/new box numeric discovery and complete original attributes",
+        "untbl.cxx1836-1880 redo calls Doc InsertRow and creates new boxes"
+      ],
+      "reason": "Reconnecting old inserted row/cell identities contradicts native Doc InsertRow redo. Fresh owner identity, complete formats/style/cursor and later typing/table recreation replace only those checks.",
+      "fixtureRebinding": "New current row/cell variables identify the actual newly created owners after redo."
+    },
+    {
+      "path": "apps/office/src/sw/source/core/crsr/native-table-shell-owner.test.ts",
+      "oldSHA256": "e15616be9c850b3e0723d0892fec840f8f2bf4e2ea9dcf536beb9b71f8df4728",
+      "currentSHA256": "2f2ceaf37f05c5798a4142cea76fa4fd95a7d1767078833aca188452d77cb3dd",
+      "originalAssertions": 42,
+      "unchangedAssertions": 40,
+      "sourceBackedChangedAssertions": [
+        {
+          "sha256": "ecc3f4e7361ef7c6175e998483807b1acf2491774506cdc11b422219a5c2fe90"
+        },
+        {
+          "sha256": "cae3ebed6730f7e857046d6a4fb57d86db4a667204fbb12e29e09c18a4e76ba4"
+        }
+      ],
+      "newAssertions": 7,
+      "nativeAnchors": [
+        "untbl.cxx1510-1574 original/new box numeric discovery and complete original attributes",
+        "untbl.cxx1836-1880 redo calls Doc InsertRow and creates new boxes"
+      ],
+      "reason": "Reconnecting old inserted row/cell identities contradicts native Doc InsertRow redo. Fresh owner identity, complete formats/style/cursor and later typing/table recreation replace only those checks.",
+      "fixtureRebinding": "New current row/cell variables identify the actual newly created owners after redo."
+    },
+    {
+      "path": "apps/office/src/sw/source/core/table/native-row-insertion.test.ts",
+      "oldSHA256": "70783e6dd1bd73a87270576b50b5ff6a4458593a3114c2df916f740e7011427b",
+      "currentSHA256": "877bdbbe0978f7a2ba6ffd12428bb25be3603fc59dde2d0f5b5177b672992881",
+      "originalAssertions": 44,
+      "unchangedAssertions": 43,
+      "sourceBackedChangedAssertions": [
+        {
+          "sha256": "93a4c26328b44a5995235efc177b2e6ce63da57f2483338e4218b0b410c28aa4"
+        }
+      ],
+      "newAssertions": 6,
+      "nativeAnchors": [
+        "untbl.cxx1510-1574 original/new box numeric discovery and complete original attributes",
+        "untbl.cxx1836-1880 redo calls Doc InsertRow and creates new boxes"
+      ],
+      "reason": "Reconnecting old inserted row/cell identities contradicts native Doc InsertRow redo. Fresh owner identity, complete formats/style/cursor and later typing/table recreation replace only those checks.",
+      "fixtureRebinding": "New current row/cell variables identify the actual newly created owners after redo."
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/native-insert-table-history.test.ts",
+      "oldSHA256": "ab688fafe567513e98302068b77273e01fea4a93afce6416fc81913f1c5823a6",
+      "currentSHA256": "93a835abb700a9801260d931706db8b9c4f9c0b150c5dfbdd828ae178c764a9b",
+      "originalAssertions": 67,
+      "unchangedAssertions": 65,
+      "sourceBackedChangedAssertions": [
+        {
+          "sha256": "1e9b0488bc62e8d44e175cbecc73871471fd1980747d32920cb63a0238335b22"
+        },
+        {
+          "sha256": "51759e6536c70c566d5a85cccff0a40a31321e3d52b84b99889674a83393c3b9"
+        }
+      ],
+      "newAssertions": 6,
+      "nativeAnchors": [
+        "untbl.cxx1510-1574 original/new box numeric discovery and complete original attributes",
+        "untbl.cxx1836-1880 redo calls Doc InsertRow and creates new boxes"
+      ],
+      "reason": "Reconnecting old inserted row/cell identities contradicts native Doc InsertRow redo. Fresh owner identity, complete formats/style/cursor and later typing/table recreation replace only those checks.",
+      "fixtureRebinding": "New current row/cell variables identify the actual newly created owners after redo."
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-traversal.test.ts",
+      "oldSHA256": "898021cf417177fb26b62428aaffdc27c9774b7d888c227974e1b6326744412f",
+      "currentSHA256": "89df9f96c56b691c9a7cc21a1daf656ea40d1012c9f095ff1f15202ac0e8b321",
+      "originalAssertions": 111,
+      "unchangedAssertions": 111,
+      "sourceBackedChangedAssertions": [],
+      "newAssertions": 5,
+      "nativeAnchors": [
+        "untbl.cxx1510-1574 original/new box numeric discovery and complete original attributes",
+        "untbl.cxx1836-1880 redo calls Doc InsertRow and creates new boxes"
+      ],
+      "reason": "Reconnecting old inserted row/cell identities contradicts native Doc InsertRow redo. Fresh owner identity, complete formats/style/cursor and later typing/table recreation replace only those checks.",
+      "fixtureRebinding": "Existing row/fresh variables now resolve the newly connected owners after each row redo; all old assertions remain and fresh identity/style/margin720 assertions are added."
+    }
+  ],
+  "newAcceptanceFiles": [
+    "apps/office/src/sw/source/core/table/native-numeric-row-insertion.test.ts",
+    "apps/office/src/sw/source/core/undo/native-numeric-row-insertion-history.test.ts",
+    "apps/office/src/sw/browser/editor/native-numeric-row-insertion.test.tsx"
+  ],
+  "metadata": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "oldRecords": 311,
+      "currentRecords": 311,
+      "priorFieldsPrefixesStatesDefaultsClassesPreserved": true,
+      "newRecords": 0
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "oldRecords": 311,
+      "currentRecords": 311,
+      "priorFieldsPrefixesStatesDefaultsClassesPreserved": true,
+      "newRecords": 0
+    }
+  ],
+  "failures": []
+}

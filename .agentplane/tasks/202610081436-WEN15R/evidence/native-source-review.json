@@ -1,0 +1,183 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "base": "ef851816ec55a4d04f40b94fe3d68bfc2249fd02",
+  "sources": [
+    {
+      "path": "sw/source/core/table/swnewtable.cxx",
+      "sha256": "222899c5938f08cf797c5e552ff5a9307a591e173e0708ac6f2efdf4f84a19da",
+      "anchors": [
+        {
+          "identifier": "bool SwTable::InsertRow(",
+          "line": 1512,
+          "allMatchingLines": [
+            1512
+          ]
+        }
+      ],
+      "pinBytesVerified": true
+    },
+    {
+      "path": "sw/source/core/doc/tblrwcl.cxx",
+      "sha256": "f4d7786b18f6c011e66eee4332e2e44aaef9ad8d0480d6bfa5a6f065e836508a",
+      "anchors": [
+        {
+          "identifier": "static void lcl_CopyCol(",
+          "line": 216,
+          "allMatchingLines": [
+            216
+          ]
+        },
+        {
+          "identifier": "static SwTableLine* lcl_CopyRow(",
+          "line": 214,
+          "allMatchingLines": [
+            214,
+            349
+          ]
+        },
+        {
+          "identifier": "bool SwTable::InsertRow_(",
+          "line": 491,
+          "allMatchingLines": [
+            491
+          ]
+        }
+      ],
+      "pinBytesVerified": true
+    },
+    {
+      "path": "sw/source/core/table/swtable.cxx",
+      "sha256": "10c536056498dd001b3a5c75638040ee5daef966ede231c66947da8e704b1206",
+      "anchors": [
+        {
+          "identifier": "SwTableBox* SwTable::GetTableBox( SwNodeOffset",
+          "line": 1391,
+          "allMatchingLines": [
+            1391
+          ]
+        }
+      ],
+      "pinBytesVerified": true
+    },
+    {
+      "path": "sw/source/core/docnode/ndtbl.cxx",
+      "sha256": "d3220445657cd54a44fc741bebf5d514b4d62f5607fcfb5e0f7ef30700075d8d",
+      "anchors": [
+        {
+          "identifier": "bool SwDoc::InsertRow(",
+          "line": 1871,
+          "allMatchingLines": [
+            1871
+          ]
+        }
+      ],
+      "pinBytesVerified": true
+    },
+    {
+      "path": "sw/source/core/undo/untbl.cxx",
+      "sha256": "147e1b9f9870416bc83d2b918a0621e810003594b9a95ede372518925b2c245b",
+      "anchors": [
+        {
+          "identifier": "void SwUndoTableNdsChg::RedoImpl(",
+          "line": 1836,
+          "allMatchingLines": [
+            1836
+          ]
+        },
+        {
+          "identifier": "void SwUndoTableNdsChg::SaveNewBoxes(",
+          "line": 1548,
+          "allMatchingLines": [
+            1548,
+            1598
+          ]
+        },
+        {
+          "identifier": "void SwUndoTableNdsChg::ReNewBoxes(",
+          "line": 1532,
+          "allMatchingLines": [
+            1532
+          ]
+        },
+        {
+          "identifier": "void SaveTable::RestoreAttr(",
+          "line": 937,
+          "allMatchingLines": [
+            937
+          ]
+        }
+      ],
+      "pinBytesVerified": true
+    }
+  ],
+  "production": [
+    {
+      "path": "apps/office/src/sw/source/core/table/swtable.ts",
+      "sha256": "71b3006d081f7925b108947064657d1c8563502bb6377e4a9829672932f0afff"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/untbl.ts",
+      "sha256": "e9dffe05f46754061a540f5fb529014ec9ad85f2dd9c15c6417b56a566679c5d"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/doc/doc.ts",
+      "sha256": "2344eb0588f990bf405370ed77aa5a730f5b8b14075e0fda041c28748ab1f116"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/docnode/ndtbl.ts",
+      "sha256": "af609947e6775af0d5bba582de44b13b4fcfaf87affacbf9c134c84109dbfabe"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/docnode/nodes.ts",
+      "sha256": "d56ad93c63a6ef23d84096d74bbb89fbd3a297731ab1c3232a89a3072570a131"
+    }
+  ],
+  "protectedIO": [
+    {
+      "path": "apps/office/src/sw/browser/storage/writer-odt-store.ts",
+      "sha256": "0fb4ebffca5a00fe63ff327379305d64143c7014dace0a7e13edb8c0c241232e",
+      "baselineByteIdentical": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/workflows/writer-odt-io.ts",
+      "sha256": "7c214afab59dbc5df1087f107e2b7bf2bf01d8623a2995e8eb19a45575361306",
+      "baselineByteIdentical": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/WriterFileDialog.tsx",
+      "sha256": "50ad125f5a254eb1772b62abe3681e4632df6c7870ea9647622b2268394c88c3",
+      "baselineByteIdentical": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/writer-view.tsx",
+      "sha256": "5fbe8e47d24a0d03e4f5925e9002ab31a61c140f1ae819cf8805439f4ef253cc",
+      "baselineByteIdentical": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts",
+      "sha256": "060a06dd9a77e530de1756b2f4c4384e6b2ddd1ee20c68fb175daab2eeb99ee7",
+      "baselineByteIdentical": true
+    }
+  ],
+  "parent": {
+    "characters": 677679,
+    "sha256": "2abc6a8ca5379eda39a8582af468246816c4131acc98114caea52f1c96cb196a",
+    "unchanged": true
+  },
+  "stash": {
+    "commit": "c85f4a0e453dfd06d6e199554784f2c286737472",
+    "preserved": true
+  },
+  "sourceBoundContracts": [
+    "Native row insertion selects the before/behind extreme and copies all actual boxes of the selected source row, retaining complete independent widths/heights and copied attributes.",
+    "TOP transfer follows doc/tblrwcl copying flags: before keeps TOP only on first inserted row and clears original/subsequent copies; behind clears every new TOP and preserves source. All other edge attributes remain unchanged.",
+    "ndtbl owns document row/column insertion with DoesUndo, temporary original boxes, scoped recording suppression/finally restoration and one success action.",
+    "SwUndoTableNdsChg stores numeric selected/new starts and complete original attributes; undo resolves current actual inserted flat rows/sections; redo invokes Doc InsertRow or InsertCol, creating fresh owners. No retained row graph or duplicate shared-width vector.",
+    "Six old retained-row identity fixtures migrate to actual fresh owners with complete attribute/text/style/cursor/Tab/table recreation checks preserved."
+  ],
+  "residuals": [
+    "Merged/nested/spanned/protected graphs and full native layout/pooling/redline/autoformat/signed arithmetic remain partial and unverified.",
+    "Native cursor/frame/full SaveTable structural reconstruction lifetimes and independent physical browser cell layout remain partial.",
+    "Registered IO/open/save/recovery/settings remain byte-identical; no full module/upstream parity promotion."
+  ]
+}

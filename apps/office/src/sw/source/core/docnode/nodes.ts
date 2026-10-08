@@ -353,7 +353,7 @@ export class SwNodes {
     this.document.NotifyModelChange({ index, kind: "node-removed" });
   }
 
-  /** Connects a row's retained sections at its native boundary. @param table - Target table. @param section - Prepared or retained row. @param rowIndex - Native row position. @returns Nothing. */
+  /** Connects a prepared native row at its actual boundary. @param table - Target table. @param section - Prepared native row. @param rowIndex - Native row position. @returns Nothing. */
   public InsertTableRow(
     table: SwTable,
     section: SwTableRowSection,
@@ -385,7 +385,7 @@ export class SwNodes {
     this.document.NotifyModelChange({ index, kind: "node-inserted" });
   }
 
-  /** Disconnects an inserted row while preserving its identities for Redo. @param table - Owning table. @param section - Connected inserted row. @param target - Surviving cursor owner. @param offset - Retargeted registered offset. @returns Nothing. */
+  /** Disconnects an actual inserted row and retargets registered indices. @param table - Owning table. @param section - Connected inserted row. @param target - Surviving cursor owner. @param offset - Retargeted registered offset. @returns Nothing. */
   public RemoveTableRow(
     table: SwTable,
     section: SwTableRowSection,

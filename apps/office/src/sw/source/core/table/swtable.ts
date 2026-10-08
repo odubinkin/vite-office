@@ -556,10 +556,20 @@ export class SwTable {
     const row = behind ? Math.max(...selected) : Math.min(...selected),
       source = this.lines[row] as SwTableLine,
       index = row + (behind ? 1 : 0);
-    for (let i = 0; i < count; i++)
-      document
-        .GetNodes()
-        .InsertTableRow(this, document.GetNodes().PrepareTableRow(this, source), index + i);
+    for (let i = 0; i < count; i++) {
+      const section = document.GetNodes().PrepareTableRow(this, source);
+      source.GetTabBoxes().forEach(
+        /** Transfers native TOP border according to row insertion direction. @param box - Original source box. @param column - Actual row coordinate. @returns Nothing. */
+        (box, column) => {
+          const noTop = box.GetBox();
+          if (noTop.GetTop() === undefined) return;
+          noTop.SetLine(undefined, 0);
+          const target = behind ? (section.line.GetTabBoxes()[column] as SwTableBox) : box;
+          target.SetFormat({ ...target.GetFormat(), box: noTop });
+        },
+      );
+      document.GetNodes().InsertTableRow(this, section, index + i);
+    }
     return true;
   }
 

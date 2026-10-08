@@ -280,7 +280,60 @@ export function InsertSwTableColumns(
       }
       if (!inserted) return false;
       if (action !== undefined) {
-        action.SaveNewBoxes(table, afterCursor, originalBoxes);
+        action.SaveNewBoxes(table, originalBoxes as readonly SwTableBox[], afterCursor);
+        manager.AddUndoAction(action);
+      }
+      return true;
+    },
+  );
+}
+
+/** Inserts rows with source-owned history gating. @param doc - Actual owner. @param boxes - Original selection. @param count - Native count. @param behind - Trailing edge. @param insertDummy - Native redline flag. @param cursorState - Optional shell cursor. @param afterCursor - Optional preserved selection. @returns Whether inserted. */
+export function InsertSwTableRows(
+  doc: SwDoc,
+  boxes: readonly SwTableBox[],
+  count: number,
+  behind: boolean,
+  insertDummy: boolean,
+  cursorState?: SwUndoCursorState,
+  afterCursor?: SwUndoCursorState,
+): boolean {
+  if (boxes.length === 0) return false;
+  const tableNode = (boxes[0] as SwTableBox).GetStartNode().StartOfSectionNode();
+  if (!(tableNode instanceof SwTableNode) || tableNode.GetNodes() !== doc.GetNodes()) return false;
+  return doc.RunModelTransaction(
+    /** Publishes history after actual native insertion succeeds. @returns Whether inserted. */
+    () => {
+      const table = tableNode.GetTable(),
+        manager = doc.GetUndoManager();
+      let action: SwUndoTableNdsChg | undefined;
+      let originalBoxes: readonly SwTableBox[] | undefined;
+      if (manager.DoesUndo()) {
+        const last = (boxes.at(-1) as SwTableBox).GetParagraphs().at(-1) as SwTextNode,
+          before =
+            cursorState ??
+            createWriterCollapsedCursorState(
+              last,
+              last.Len(),
+              last.GetCharacterItemsAt(last.Len()),
+            );
+        action = new SwUndoTableNdsChg(table, boxes, before, count, behind);
+        originalBoxes = table.GetTabLines().flatMap(
+          /** Captures temporary original identities. @param line - Native row. @returns Actual boxes. */
+          (line) => line.GetTabBoxes(),
+        );
+      }
+      const undoEnabled = manager.DoesUndo();
+      let inserted: boolean;
+      manager.DoUndo(false);
+      try {
+        inserted = table.InsertRow(doc, boxes, count, behind, insertDummy);
+      } finally {
+        manager.DoUndo(undoEnabled);
+      }
+      if (!inserted) return false;
+      if (action !== undefined) {
+        action.SaveNewBoxes(table, originalBoxes as readonly SwTableBox[], afterCursor);
         manager.AddUndoAction(action);
       }
       return true;

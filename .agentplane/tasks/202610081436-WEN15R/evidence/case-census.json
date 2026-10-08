@@ -1,0 +1,72 @@
+{
+  "app": {
+    "original": 13845,
+    "current": 13845,
+    "newCases": 0,
+    "resolved": 4,
+    "passed": 13845,
+    "unresolvedCount": 0,
+    "skippedObservationsRetained": 20,
+    "passingReplay": 0,
+    "originalUncaughtErrorCases": 0,
+    "finalUncaughtErrorCases": 0,
+    "inputs": [
+      {
+        "file": "WEN15R.app-results.json",
+        "sha256": "acaa6a4f924142b7465cdcd3615a41bc9891d38798df22c4913f5d9609ae370d",
+        "passed": 13841,
+        "failed": 4,
+        "skipped": 0
+      },
+      {
+        "file": "WEN15R.closure1.app-results.json",
+        "sha256": "ba3631a14b899d41faf7968756f60f830b3a7632951e7aec6fa42cfac3c7218a",
+        "passed": 4,
+        "failed": 0,
+        "skipped": 20
+      }
+    ]
+  },
+  "inventory": {
+    "original": 110,
+    "current": 110,
+    "newCases": 0,
+    "resolved": 0,
+    "passed": 110,
+    "unresolvedCount": 0,
+    "skippedObservationsRetained": 0,
+    "passingReplay": 0,
+    "originalUncaughtErrorCases": 0,
+    "finalUncaughtErrorCases": 0,
+    "inputs": [
+      {
+        "file": "WEN15R.inventory-results.json",
+        "sha256": "1f1cf9ce30d9967e3b3bfefc497ff9781a5cb92f0928aa56e70d48cfa0ed76a3",
+        "passed": 110,
+        "failed": 0,
+        "skipped": 0
+      }
+    ]
+  },
+  "chromium": {
+    "current": 299,
+    "passed": 299,
+    "unresolvedCount": 0,
+    "passingReplay": 0,
+    "inputs": [
+      {
+        "file": "WEN15R.chromium-results.json",
+        "sha256": "71b8fe377331ec8580475128a5a1485fd496bff0c02be376fdc5f44843ce8308",
+        "counts": {
+          "startTime": "2026-10-08T14:59:35.981Z",
+          "duration": 258510.153,
+          "expected": 299,
+          "skipped": 0,
+          "unexpected": 0,
+          "flaky": 0
+        }
+      }
+    ]
+  },
+  "failures": []
+}

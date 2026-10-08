@@ -121,8 +121,18 @@ describe("native table Tab UI", /** Registers actual mounted cell traversal cont
         expect(f.shell.Redo()).toBe(true);
       },
     );
-    expect(f.table.GetTabLines()[2]).toBe(row);
-    expect(f.shell.GetCursor().GetPoint().GetNode()).toBe(node);
+    const currentRow = required(f.table.GetTabLines()[2]),
+      currentNode = required(required(currentRow.GetTabBoxes()[0]).GetParagraphs()[0]);
+    expect(currentRow).not.toBe(row);
+    expect(currentNode).not.toBe(node);
+    expect(currentRow.GetFormat()).toEqual(row.GetFormat());
+    expect(currentNode.GetTextFormatColl()).toBe(node.GetTextFormatColl());
+    expect(f.shell.GetCursor().GetPoint().GetNode()).toBe(currentNode);
+    expect(
+      screen
+        .getByLabelText("Row 3 column 1 paragraph 1")
+        .contains(window.getSelection()?.focusNode ?? null),
+    ).toBe(true);
     expect(screen.getByLabelText("Row 3 column 1 paragraph 1")).toHaveTextContent("");
     expect(f.doc.paragraphs[0]?.GetText()).toBe("");
     expect(last).toHaveTextContent("Cell3");

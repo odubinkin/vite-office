@@ -1,0 +1,22 @@
+{
+  "scope": "Only the four originally failed cases; every previously passing case retained as skipped where selected files overlap.",
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/browser/editor/native-numeric-row-insertion.test.tsx src/sw/source/core/crsr/native-table-shell-owner.test.ts src/sw/source/core/undo/native-insert-table-history.test.ts --testNamePattern ^(mounted numeric row menu behind=(false|true)|inherits native cell traversal and publishes already executed row history in the document|replays inserted table, appended native row and later cell typing through one history stack)$ --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/WEN15R.closure1.app-results.json",
+      "exit": 1,
+      "bytes": 31687,
+      "sha256": "b561ca009d83487062b142f7e73205044ae4af0ad04d3bc66bffe10b7a5c41a4",
+      "caseCounts": {
+        "passed": 4,
+        "failed": 0,
+        "skipped": 20,
+        "total": 24
+      },
+      "failedCases": [],
+      "unhandledErrorCount": 0,
+      "coverageMapSHA256": "f08a0ce01daf41cc37a47075f3a8345468352393d4fb9b6cf4746dcf98067545"
+    }
+  ]
+}
