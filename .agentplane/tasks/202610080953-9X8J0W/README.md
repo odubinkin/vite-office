@@ -1,10 +1,11 @@
 ---
 id: "202610080953-9X8J0W"
 title: "Preserve native table row drag modifiers and proportional geometry"
-status: "DOING"
+result_summary: "Native Writer row drag modifiers, preceding integer-device proportions, active-line-only limits and Margin2 source behavior verified in approved four-file scope, preserving619 prior acceptance files and registered IO deviations."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - ".agentplane/tasks/202610080953-9X8J0W/evidence/implementation-review.json"
   findings:
     - "Reconstructed four committed reports byte-identically, all4 actual semantic bytes tied to sole full absent profile;13749app/110inventory/16infra/299Chromium PASS,24new cases,619prior acceptance unchanged,307record prefixes/states preserved each; all-four exact-source coverage100 and honest residuals, no replay."
-commit: null
+commit:
+  hash: "399bae596d9a45d08bca7dda4fb60eb7dbf23483"
+  message: "🧩 9X8J0W code: preserve native Writer row drag modifier policies"
 comments:
   -
     author: "CODER"
     body: "Start: implement the standing-authorized native row modifier scope after source inspection; preserve four-file scope, prior acceptance and registered IO, one absent runtime profile."
+  -
+    author: "CODER"
+    body: "Verified: source row exact-mask Ctrl/CtrlShift proportional and active-line-only policies now reach original Writer document ingress, model/frame/cursor/history owners preserved. Actual implementation 399bae596d9a45d08bca7dda4fb60eb7dbf23483 reviewed;13749app/110inventory/16infra/299Chromium PASS in sole upstream-absent profile, all-four exact-source cumulative coverage100. Committed canonical verify checkpoint 2c194d3718e039c935ded23545adac1ab2a33fde; full native ruler contexts remain partial."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Actual implementation 399bae596d9a45d08bca7dda4fb60eb7dbf23483: final docs recorded first; exact reviewed four-file native row modifier scope, sole full upstream-absent profile;13749app/110inventory/16infra/299Chromium PASS, all-four source-bound cumulative coverage100,619prior acceptance files unchanged,307records preserved each, quality PASS explicitly same-current-agent. Raw threshold exit1 retained; no runtime replay. Full ruler/slot/vertical/snapping/single-row contexts remain partial; goal ACTIVE."
+  -
+    type: "status"
+    at: "2026-10-08T10:27:08.612Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: source row exact-mask Ctrl/CtrlShift proportional and active-line-only policies now reach original Writer document ingress, model/frame/cursor/history owners preserved. Actual implementation 399bae596d9a45d08bca7dda4fb60eb7dbf23483 reviewed;13749app/110inventory/16infra/299Chromium PASS in sole upstream-absent profile, all-four exact-source cumulative coverage100. Committed canonical verify checkpoint 2c194d3718e039c935ded23545adac1ab2a33fde; full native ruler contexts remain partial."
 doc_version: 3
-doc_updated_at: "2026-10-08T10:26:26.380Z"
+doc_updated_at: "2026-10-08T10:27:08.614Z"
 doc_updated_by: "CODER"
 description: "Iteration231: source EvalModifier row behavior, native proportional preceding-row device shares and active-line-only apply through existing real edit-window ingress. Preserve registered IO and all prior acceptance sources; one full upstream-absent profile, no passing replay."
 sections:
