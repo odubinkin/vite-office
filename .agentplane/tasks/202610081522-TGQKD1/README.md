@@ -1,10 +1,11 @@
 ---
 id: "202610081522-TGQKD1"
 title: "Preserve native hidden separators through table properties and current-row geometry"
-status: "DOING"
+result_summary: "Preserved complete native table-property hidden intervals and actual current-row owner ingress; added core frame-width reaction and removed double normalization scaling. Verified direct UI and Chromium independent rows/history, unique13870app/110inventory/19infra/301Chromium, cumulative app/inventory all-four100, actual-SHA evaluator explicitly not independent, source/IO/AP constraints preserved. Untouched-dialog changed-item history and full architecture remain next-task gaps; parent/goal active."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 22
+revision: 24
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-08T16:39:59.017Z"
+  updated_at: "2026-10-08T16:40:41.915Z"
   updated_by: "CODER"
-  note: "PASS actual impl89ac353e3e287cededa015e7e0f6f45f734d1783; current-agent evaluator explicitly not independent reconstructed all3 certificates without test replay. Final unique13870app/110inventory/19infra/301Chromium; app/inventory all-four100 exact-source cumulative; scope21,634 prior files627 identical7 API migrations,311 metadata preserved, native7/IO/pin/stash/parent/AP gates pass. Untouched-dialog default-history and full architecture residuals explicit."
+  note: "Preserved complete native table-property hidden intervals and actual current-row owner ingress; added core frame-width reaction and removed double normalization scaling. Verified direct UI and Chromium independent rows/history, unique13870app/110inventory/19infra/301Chromium, cumulative app/inventory all-four100, actual-SHA evaluator explicitly not independent, source/IO/AP constraints preserved. Untouched-dialog changed-item history and full architecture remain next-task gaps; parent/goal active."
   attempts: 0
 quality_review:
   state: "pass"
@@ -38,11 +39,16 @@ quality_review:
     - ".agentplane/tasks/202610081522-TGQKD1/evidence/quality-actual-sha.json"
   findings:
     - "Direct mounted native owner and production Chromium cover independent rows, current-line columns, width-only all-row scaling and original-owner history. Core normalization scales once. All declared gates pass; untouched-dialog attribute-default Undo materialization remains an explicit next-task gap."
-commit: null
+commit:
+  hash: "89ac353e3e287cededa015e7e0f6f45f734d1783"
+  message: "🧩 TGQKD1 code: preserve native table property geometry and frame width reactions"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved native hidden-separator table representation and current-row properties with one absent profile and exact-source evidence; standing user goal authorizes safe local parity/refactoring."
+  -
+    author: "CODER"
+    body: "Verified: Preserved complete native table-property hidden intervals and actual current-row owner ingress; added core frame-width reaction and removed double normalization scaling. Verified direct UI and Chromium independent rows/history, unique13870app/110inventory/19infra/301Chromium, cumulative app/inventory all-four100, actual-SHA evaluator explicitly not independent, source/IO/AP constraints preserved. Untouched-dialog changed-item history and full architecture remain next-task gaps; parent/goal active.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -57,8 +63,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "PASS actual impl89ac353e3e287cededa015e7e0f6f45f734d1783; current-agent evaluator explicitly not independent reconstructed all3 certificates without test replay. Final unique13870app/110inventory/19infra/301Chromium; app/inventory all-four100 exact-source cumulative; scope21,634 prior files627 identical7 API migrations,311 metadata preserved, native7/IO/pin/stash/parent/AP gates pass. Untouched-dialog default-history and full architecture residuals explicit."
+  -
+    type: "verify"
+    at: "2026-10-08T16:40:41.915Z"
+    author: "CODER"
+    state: "ok"
+    note: "Preserved complete native table-property hidden intervals and actual current-row owner ingress; added core frame-width reaction and removed double normalization scaling. Verified direct UI and Chromium independent rows/history, unique13870app/110inventory/19infra/301Chromium, cumulative app/inventory all-four100, actual-SHA evaluator explicitly not independent, source/IO/AP constraints preserved. Untouched-dialog changed-item history and full architecture remain next-task gaps; parent/goal active."
+  -
+    type: "status"
+    at: "2026-10-08T16:40:42.008Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Preserved complete native table-property hidden intervals and actual current-row owner ingress; added core frame-width reaction and removed double normalization scaling. Verified direct UI and Chromium independent rows/history, unique13870app/110inventory/19infra/301Chromium, cumulative app/inventory all-four100, actual-SHA evaluator explicitly not independent, source/IO/AP constraints preserved. Untouched-dialog changed-item history and full architecture remain next-task gaps; parent/goal active.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-08T16:40:20.932Z"
+doc_updated_at: "2026-10-08T16:40:42.008Z"
 doc_updated_by: "CODER"
 description: "Replace flat visible-only table dialog geometry with native TColumn width/visibility entries from current SwTabCols, preserve hidden constraints in FillTabCols, native visible column-page arithmetic, and direct accepted SwTableRep application for independent rows. Preserve registered IO/recovery and all unrelated acceptance."
 sections:
@@ -105,6 +124,39 @@ sections:
     Command: six final static gates; five post-restoration source gates; ap doctor, policy routing, git diff --check; native-source, scope and artifact audits. Result: PASS. Native7 sources match pin9bc445578031fecf56086729d8e4940c77e14d65. Protected4 IO/bridge files identical and writer-view exact four native geometry additions reverse to the entire baseline, proving complete registered IO regions preserved. Stashc85f4a0e453dfd06d6e199554784f2c286737472 and full parent681968-character prefix5ce660c5a8ee85995b2732836471411dfedf273fb9e8da57ab43dc418b7a6241 preserved. Scope21;634 prior acceptance files with627 identical and7 declared TColumn API migrations preserving every assertion literal/owner contract;311 metadata records and field/evidence prefixes/status/default/classification preserved. No upstream/application/Python/raw maps/results in AgentPlane; only bounded English Markdown/JSON. Two pre-existing doctor warnings remain: hook readiness and historical DONE2Z3962 missing implementation hash. Actual-SHA current-agent EVALUATOR follows this checkpoint, explicitly not independent.
 
     Actual implementation: 89ac353e3e287cededa015e7e0f6f45f734d1783. Current-agent EVALUATOR explicitly not independent: PASS at the actual SHA; coverage/case/scope reports reproduced byte-identically without running tests and every semantic path matches the commit. Quality and owner verification recorded PASS. Full module/parent/goal parity remains unclaimed.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-08T16:40:41.915Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Preserved complete native table-property hidden intervals and actual current-row owner ingress; added core frame-width reaction and removed double normalization scaling. Verified direct UI and Chromium independent rows/history, unique13870app/110inventory/19infra/301Chromium, cumulative app/inventory all-four100, actual-SHA evaluator explicitly not independent, source/IO/AP constraints preserved. Untouched-dialog changed-item history and full architecture remain next-task gaps; parent/goal active.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-08T16:40:20.932Z, excerpt_hash=sha256:cbe4813bae5ec481d838f30af96c5d21ead854dcc60cba5039f850fec369d967
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610081522-TGQKD1/blueprint/resolved-snapshot.json
+    - old_digest: d07efa49aca07b5e5f45a6fbc57f72a673e7a2fcf37014b7170d229d7b40bf15
+    - current_digest: d07efa49aca07b5e5f45a6fbc57f72a673e7a2fcf37014b7170d229d7b40bf15
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610081522-TGQKD1
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610081522-TGQKD1 --result verified-202610081522-TGQKD1 --commit c65c8e3756038147a2f08178d28b700e840e6e47
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only the actual task-scoped implementation commit if needed, preserving existing task history, source pin, original stash and all other changes."
   Findings: |-
     Native SwTableRep now owns complete TColumn nWidth/bVisible intervals, visible/all counts, deep Assign retaining vector identity and exact hidden separator merge/order/tie/rounding. Main mounted properties capture current-cursor SwTabCols after border selection restoration, render native visible widths and accept the shared native owner into tabsh. HasColsChanged alone gates native separator changes; independent current-row boxes and hidden constraints remain coherent through history.
@@ -170,6 +222,39 @@ Command: exact-source cumulative coverage reconstruction. Result: all-four app10
 Command: six final static gates; five post-restoration source gates; ap doctor, policy routing, git diff --check; native-source, scope and artifact audits. Result: PASS. Native7 sources match pin9bc445578031fecf56086729d8e4940c77e14d65. Protected4 IO/bridge files identical and writer-view exact four native geometry additions reverse to the entire baseline, proving complete registered IO regions preserved. Stashc85f4a0e453dfd06d6e199554784f2c286737472 and full parent681968-character prefix5ce660c5a8ee85995b2732836471411dfedf273fb9e8da57ab43dc418b7a6241 preserved. Scope21;634 prior acceptance files with627 identical and7 declared TColumn API migrations preserving every assertion literal/owner contract;311 metadata records and field/evidence prefixes/status/default/classification preserved. No upstream/application/Python/raw maps/results in AgentPlane; only bounded English Markdown/JSON. Two pre-existing doctor warnings remain: hook readiness and historical DONE2Z3962 missing implementation hash. Actual-SHA current-agent EVALUATOR follows this checkpoint, explicitly not independent.
 
 Actual implementation: 89ac353e3e287cededa015e7e0f6f45f734d1783. Current-agent EVALUATOR explicitly not independent: PASS at the actual SHA; coverage/case/scope reports reproduced byte-identically without running tests and every semantic path matches the commit. Quality and owner verification recorded PASS. Full module/parent/goal parity remains unclaimed.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-08T16:40:41.915Z — VERIFY — ok
+
+By: CODER
+
+Note: Preserved complete native table-property hidden intervals and actual current-row owner ingress; added core frame-width reaction and removed double normalization scaling. Verified direct UI and Chromium independent rows/history, unique13870app/110inventory/19infra/301Chromium, cumulative app/inventory all-four100, actual-SHA evaluator explicitly not independent, source/IO/AP constraints preserved. Untouched-dialog changed-item history and full architecture remain next-task gaps; parent/goal active.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-08T16:40:20.932Z, excerpt_hash=sha256:cbe4813bae5ec481d838f30af96c5d21ead854dcc60cba5039f850fec369d967
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610081522-TGQKD1/blueprint/resolved-snapshot.json
+- old_digest: d07efa49aca07b5e5f45a6fbc57f72a673e7a2fcf37014b7170d229d7b40bf15
+- current_digest: d07efa49aca07b5e5f45a6fbc57f72a673e7a2fcf37014b7170d229d7b40bf15
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610081522-TGQKD1
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610081522-TGQKD1 --result verified-202610081522-TGQKD1 --commit c65c8e3756038147a2f08178d28b700e840e6e47
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
