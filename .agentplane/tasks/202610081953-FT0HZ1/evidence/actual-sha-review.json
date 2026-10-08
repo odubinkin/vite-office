@@ -1,0 +1,180 @@
+{
+  "evaluatedSHA": "57b9fda0a19503f9df84fccce914b73f71c44474",
+  "evaluator": "current coding agent; explicitly non-independent",
+  "committedScopePaths": [
+    {
+      "path": "apps/office/src/sw/inc/swtblfmt.ts",
+      "sha256": "267b40f5a505042f438ecf480bcdd4dff26a4f5f5b6a81c6b04b31ae62113730",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/inc/hints.ts",
+      "sha256": "c5a4f57613ee8550d9f419a77c45c544fddb0d4c40cd142018adfbb83c2e7c32",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/inc/hintids.ts",
+      "sha256": "0748561d0011794a4628c76b59b361edb2953e1459fc7cd0bf5d78fbafdb03de",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/layout/atrfrm.ts",
+      "sha256": "241279790ad3183d2b38252adce583152f49f9ead76f4473088193ca921283e1",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/attr/swatrset.ts",
+      "sha256": "14839b74ec8adc7b605b8792823cac4d919580233394a3d171c7af7f5f91369e",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/doc/doc.ts",
+      "sha256": "8e4cd9f0b660bf0c881a3d663a2e84bc499031e8025131c1f41cb196c91c8db8",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/table/swtable.ts",
+      "sha256": "d43980833b0f9537d446e592759ddd020bca77f8284e60de16a979f5a82df87b",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/docnode/nodes.ts",
+      "sha256": "35fdbc29b71bda0a547c8e12d650fa2262855e4bb9c24477f8b3f5c4ef46bce8",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/docnode/ndtbl1.ts",
+      "sha256": "b8bde955d2e04c0e91586ebc7424f6d1c21343d0eea69ade9b755806cf4f4bf3",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/untbl.ts",
+      "sha256": "6401650ca2c3b8bc11e5d95299bde432cb51eb551f419734bf2308cc61271089",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/WriterEditableTable.tsx",
+      "sha256": "44317660cb4dd8c7f4395162f060837d4d1d00898cfcf8b2bdcb3b6c64db16f7",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/crsr/native-table-shell-owner.test.ts",
+      "sha256": "5694d74945aceddae8326f978cec236003bd5be7469437c2d8a6396a5613aa15",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/table/native-column-insertion.test.ts",
+      "sha256": "ad00b19d2322ffa01955441cddd5e6c55a20d9320501cf631c014ec45d21c9c1",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/native-table-document-row.test.tsx",
+      "sha256": "3d0a160ebbee18ef5ee5ebc32e302f7dc3fbe49f27d64bc10f127716c34562ef",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/table/native-box-frame-format.test.ts",
+      "sha256": "e976d92399044a1a43fee860b89abf439fdf5aeaa79a15d535f196f9b860cb69",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/native-box-frame-format-history.test.ts",
+      "sha256": "e1555cd035569d1634a9c2d7de07d811f2f2dc542f7cc5e8eb194d2bf99f019c",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/native-box-frame-format.test.tsx",
+      "sha256": "3d265973d5094dd7f83b132338c57e32a4981432072c3282fc950244019d0787",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "docs/program/source-provenance.json",
+      "sha256": "9ce0a2626809d9d52c340c4ca5dc13c2b5cfceb1eab3386477618b222cb120c1",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "sha256": "4a12147eb6b8ca3109c25be994d791ffc4f90531a621b445cf242811b8e55ad8",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/native-numeric-row-insertion.test.tsx",
+      "sha256": "1f62a8bc128bb713ded0cab6b555328a8b69ac70d6bdae9809e4ec086bf8f696",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/table/native-independent-columns.test.ts",
+      "sha256": "29064395a23cbf309bd1bc4f472ba4e5dfe01248568e3ae8045dec521d66c416",
+      "actualCommittedBytes": true
+    }
+  ],
+  "deterministicCertificatesReconstructedByteIdentically": [
+    {
+      "identifier": "final-coverage.json",
+      "sha256": "ba67fe8f61935ebf1ef4000f324e0b446b54b75a5d3bc4dcf2f0c74ecb6f11ef"
+    },
+    {
+      "identifier": "runtime-census.json",
+      "sha256": "3a355c8c8b99363f51d9bff53b62cedf5f0570f4681927845d2b8297c5f20b8b"
+    },
+    {
+      "identifier": "scope-integrity.json",
+      "sha256": "62f24f51b233709cc9b3ef8cf43721b3a0c0bd0404dd937bfb5bc18602b0068a"
+    },
+    {
+      "identifier": "native-source-review.json",
+      "sha256": "a8129b9451ea6dfa2d6d60cb4280b9e726dc27fa606d88154e828d490d498102"
+    }
+  ],
+  "reconstructions": [
+    {
+      "name": "proof",
+      "exit": 0,
+      "outputSHA256": "661252e685572d1e19a7e5071dacc2c699f86dd8e5d90814d4b54308106b7b95"
+    },
+    {
+      "name": "census",
+      "exit": 0,
+      "outputSHA256": "bcfaa38a15af793b0e95fd7b61a42cd9b340d7f8b4ee7004abf0b2c1891431db"
+    },
+    {
+      "name": "scope",
+      "exit": 0,
+      "outputSHA256": "f18394a8b31ba0e6acfbb69b353c0dc84022fce9fc5fdc8a56c5aba7433acc6e"
+    },
+    {
+      "name": "source",
+      "exit": 0,
+      "outputSHA256": "39123e60248c7416b13c06283e0ae59e135fa222703e887b5db8f9e776ad7d22"
+    }
+  ],
+  "approvedScopeSatisfied": true,
+  "sourceBoundNativeFiles": 7,
+  "runtime": {
+    "app": 1301,
+    "fresh": 11,
+    "chromium": 25,
+    "noPassingReplay": true,
+    "upstreamAbsentRestored": true
+  },
+  "coverageAllFour100": true,
+  "priorAcceptance": {
+    "count": 654,
+    "byteIdentical": 649,
+    "exactConstructorOrExpectedBeforeNativeDestruction": 5
+  },
+  "metadata": {
+    "priorRecords": 316,
+    "newPartialRecord": 0,
+    "preserved": true
+  },
+  "fullSuiteCadence": {
+    "last": 237,
+    "next": 247
+  },
+  "residualGaps": [
+    "Native SwCellFrame hierarchy/retargeting/invalidation remains unimplemented.",
+    "Number formatting/calculation/width replacement/format arrays/pooling/nested/merged/UNO/modified-state remain partial.",
+    "Whole core/browser parity incomplete; goal ACTIVE."
+  ]
+}
