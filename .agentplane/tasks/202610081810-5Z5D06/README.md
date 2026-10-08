@@ -1,10 +1,11 @@
 ---
 id: "202610081810-5Z5D06"
 title: "Own row splitting as native items through core and document transport"
-status: "DOING"
+result_summary: "verified-202610081810-5Z5D06"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 20
+revision: 22
 origin:
   system: "manual"
 depends_on: []
@@ -20,9 +21,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-08T18:32:03.956Z"
+  updated_at: "2026-10-08T18:32:43.301Z"
   updated_by: "CODER"
-  note: "Native row-item scope verified at actual implementation d1ebc7d7f6bc3b85d42438edb5f9e5edb912a6c8:263 unique app,11 Chromium,33 fresh; all-four app/inventory100%; exact source-map and acceptance/metadata scope; six static/source/build/gov/artifact gates pass. No passing replay or full240; last237,next247. Current-agent EVALUATOR explicitly not independent."
+  note: "verified-202610081810-5Z5D06"
   attempts: 0
 quality_review:
   state: "pass"
@@ -50,11 +51,16 @@ quality_review:
     - "All37 committed paths byte-verified; four certificates rebuilt identically without runtime replay.263 unique app/11 Chromium/33 fresh pass; current app and inventory all-four100 counters source/map bound."
     - "Pin12source files, IO4/writer-view/stash/parent prefix,315 metadata fields/states/defaults/classes and623 unchanged prior acceptance files verified.22 exact old migrations include three declared source-backed unvisited Borders zero-call observations; all other expectations/history retained."
     - "Six static/build/source/governance/artifact gates pass. Tests upstream absent with finally restoration; no full240, last237,next247; no upstream/application/Python/raw source/maps/results in AgentPlane."
-commit: null
+commit:
+  hash: "d1ebc7d7f6bc3b85d42438edb5f9e5edb912a6c8"
+  message: "🧩 5Z5D06 code: own Writer row splitting through native items"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved240 canonical row item and native core contracts with exact acceptance migration and targeted upstream-absent verification."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610081810-5Z5D06. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -69,8 +75,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native row-item scope verified at actual implementation d1ebc7d7f6bc3b85d42438edb5f9e5edb912a6c8:263 unique app,11 Chromium,33 fresh; all-four app/inventory100%; exact source-map and acceptance/metadata scope; six static/source/build/gov/artifact gates pass. No passing replay or full240; last237,next247. Current-agent EVALUATOR explicitly not independent."
+  -
+    type: "verify"
+    at: "2026-10-08T18:32:43.301Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610081810-5Z5D06"
+  -
+    type: "status"
+    at: "2026-10-08T18:32:43.396Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610081810-5Z5D06. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-08T18:32:27.923Z"
+doc_updated_at: "2026-10-08T18:32:43.396Z"
 doc_updated_by: "CODER"
 description: "Iteration240 removes canonical row keepTogether inversion, carries SwFormatRowSplit through SwDoc/SwFEShell and native item-set input, retains native item clone ownership in row/history/insertion, and converts only at ODF and browser primitive boundaries. Preserve old snapshot ingress and registered IO/recovery/settings. Exact native acceptance migration and targeted upstream-absent coverage; no full suite until247."
 sections:
@@ -132,6 +151,39 @@ sections:
     Command: ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check; artifact census. Result: pass; doctor retains only two historic warnings. Zero upstream/application/Python/raw artifacts in AgentPlane, bounded English records only; pin/stash/IO4/writer-view/parent prefix untouched.
     Skipped: full test suite240. Reason/Approval: user objective explicitly requires full once per10 tasks; last237,next247. Risk: whole core/browser parity not established; complete native shared row frame-format pooling/claims/nested/merged/UNO remains partial. Unchanged inventory/infra certified after whole source/maps equality, no rerun.
     Actual implementation SHA:d1ebc7d7f6bc3b85d42438edb5f9e5edb912a6c8. Current-agent EVALUATOR review explicitly not independent:37 committed paths byte-verified, four certificates reconstructed byte-identically without executing tests; structured quality_review pass and CODER verification ok recorded. Whole goal remains ACTIVE; shared row format ownership is a genuine next gap.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-08T18:32:43.301Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610081810-5Z5D06
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-08T18:32:27.923Z, excerpt_hash=sha256:7bee95b1fe46780a17299300d9c38dab1b822b81c87a5c125ae7fbdb4acc0feb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610081810-5Z5D06/blueprint/resolved-snapshot.json
+    - old_digest: 72f150949fac49191dd67b43b9caa844922516cdda7bb0b99bccfa78053ef52c
+    - current_digest: 72f150949fac49191dd67b43b9caa844922516cdda7bb0b99bccfa78053ef52c
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610081810-5Z5D06
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610081810-5Z5D06 --result verified-202610081810-5Z5D06 --commit d3f76db35d66add1650ced3da81b1c1a4c7f9e6d
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the eventual implementation commit locally; retain traceability and never rewrite DONE tasks."
   Findings: |-
     Previous239 is DONE and exact-source coverage is verified. Current GetRowSplit/SetRowSplit core/shell contracts are boolean, rows store keepTogether inversion and transport copies that scalar. Pinned native methods clone common SwFormatRowSplit values and accept concrete items. This leaf removes the canonical scalar; browser old-snapshot ingress remains explicit. No full shared-frame-format promotion.
@@ -214,6 +266,39 @@ Command: generator --check; check:source-tree; check:source-provenance; inventor
 Command: ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check; artifact census. Result: pass; doctor retains only two historic warnings. Zero upstream/application/Python/raw artifacts in AgentPlane, bounded English records only; pin/stash/IO4/writer-view/parent prefix untouched.
 Skipped: full test suite240. Reason/Approval: user objective explicitly requires full once per10 tasks; last237,next247. Risk: whole core/browser parity not established; complete native shared row frame-format pooling/claims/nested/merged/UNO remains partial. Unchanged inventory/infra certified after whole source/maps equality, no rerun.
 Actual implementation SHA:d1ebc7d7f6bc3b85d42438edb5f9e5edb912a6c8. Current-agent EVALUATOR review explicitly not independent:37 committed paths byte-verified, four certificates reconstructed byte-identically without executing tests; structured quality_review pass and CODER verification ok recorded. Whole goal remains ACTIVE; shared row format ownership is a genuine next gap.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-08T18:32:43.301Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610081810-5Z5D06
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-08T18:32:27.923Z, excerpt_hash=sha256:7bee95b1fe46780a17299300d9c38dab1b822b81c87a5c125ae7fbdb4acc0feb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610081810-5Z5D06/blueprint/resolved-snapshot.json
+- old_digest: 72f150949fac49191dd67b43b9caa844922516cdda7bb0b99bccfa78053ef52c
+- current_digest: 72f150949fac49191dd67b43b9caa844922516cdda7bb0b99bccfa78053ef52c
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610081810-5Z5D06
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610081810-5Z5D06 --result verified-202610081810-5Z5D06 --commit d3f76db35d66add1650ced3da81b1c1a4c7f9e6d
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
