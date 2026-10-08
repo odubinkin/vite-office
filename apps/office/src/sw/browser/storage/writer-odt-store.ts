@@ -17,6 +17,7 @@ export interface WriterOdtStore {
   save(record: BrowserWriterDocument): Promise<void>;
   saveAs(record: BrowserWriterDocument): Promise<void>;
   rename(record: BrowserWriterDocument, previousTitle: string): Promise<void>;
+  replace(record: BrowserWriterDocument, previousId: string): Promise<void>;
 }
 
 /** IndexedDB v2 store with atomic title uniqueness. */
@@ -129,6 +130,45 @@ export class IndexedDbWriterOdtStore implements WriterOdtStore {
    * @returns Operation result.
    */ public rename(record: BrowserWriterDocument, previousTitle: string): Promise<void> {
     return this.write(record, "rename", previousTitle);
+  }
+
+  /** Atomically replaces one colliding target record and removes the current record. @param record - Replacement bytes under the target identity. @param previousId - Current document identity to remove. @returns Completion. */
+  public async replace(record: BrowserWriterDocument, previousId: string): Promise<void> {
+    if (!record.title.trim()) throw new Error("Document name is required.");
+    const db = await this.open();
+    try {
+      await new Promise<void>(
+        /** Performs one atomic target replacement. @param resolve - Success completion. @param reject - Failure completion. @returns Nothing. */ (
+          resolve,
+          reject,
+        ) => {
+          const transaction = db.transaction(DOCUMENTS, "readwrite");
+          const store = transaction.objectStore(DOCUMENTS);
+          const target = store.get(record.id);
+          target.onsuccess =
+            /** Confirms that the selected conflict still owns its title. @returns Nothing. */ () => {
+              const existing = target.result as BrowserWriterDocument | undefined;
+              if (existing === undefined || existing.title !== record.title) {
+                transaction.abort();
+                reject(new Error("The conflicting document changed in another tab."));
+                return;
+              }
+              store.put(record);
+              if (previousId !== record.id) store.delete(previousId);
+            };
+          target.onerror = /** Reports target lookup failure. @returns Nothing. */ () =>
+            reject(target.error);
+          transaction.oncomplete = /** Reports committed replacement. @returns Nothing. */ () =>
+            resolve();
+          transaction.onerror = /** Reports transaction failure. @returns Nothing. */ () =>
+            reject(transaction.error);
+          transaction.onabort = /** Reports transaction abort. @returns Nothing. */ () =>
+            reject(transaction.error ?? new Error("Storage write failed."));
+        },
+      );
+    } finally {
+      db.close();
+    }
   }
 
   /**

@@ -10,8 +10,11 @@ title from its first two normalized words and delays persistence until both
 words exist. It resolves occupied titles with the first available ` (n)` suffix.
 Computer-file imports use the same suffix allocator when the user chooses to
 keep both copies; choosing overwrite retains the existing record ID and replaces
-its ODT bytes. This is product-level browser behavior, not an emulation of the
-LibreOffice desktop file picker.
+its ODT bytes. Manual rename uses the same editable collision loop. Explicit
+rename overwrite atomically replaces the selected target and removes the old
+current record; another occupied alternative refreshes the suggestion and keeps
+the dialog open. This is product-level browser behavior, not an emulation of
+the LibreOffice desktop file picker.
 
 The previous JSON snapshot adapter was removed. The new store does not read,
 convert, or delete old JSON records. Writer undo history and UI state remain

@@ -15,6 +15,7 @@ import {
   getUniqueWriterTitle,
   openBrowserWriterDocument,
   openWriterText,
+  overwriteBrowserWriterDocument,
   saveWriterAsBrowserCopy,
 } from "./writer-odt-io";
 
@@ -141,6 +142,26 @@ describe("Writer browser ODT saving", /** Registers ODT persistence assertions. 
     new SwWrtShell(shell).Insert("Two words");
     expect(await autosaveWriter(shell, store)).toBe(true);
     expect(shell.GetTitle()).toBe("My chosen name");
+    shell.Close();
+  });
+
+  it("overwrites a rename conflict and adopts its identity without retaining the old record", /** Checks atomic overwrite workflow ownership. @returns Completion. */ async () => {
+    const store = new IndexedDbWriterOdtStore("rename-overwrite", new IDBFactory());
+    const shell = makeShell();
+    new SwWrtShell(shell).Insert("Current body");
+    expect(await autosaveWriter(shell, store)).toBe(true);
+    const currentId = shell.GetDocumentId();
+    await store.save({ bytes: new Uint8Array([1]), id: "target", title: "Target", version: 1 });
+    const target = await store.load("target");
+    if (target === undefined) throw new Error("Expected overwrite target.");
+    await overwriteBrowserWriterDocument(shell, store, target);
+    expect(shell.GetDocumentId()).toBe("target");
+    expect(shell.GetTitle()).toBe("Target");
+    expect(await store.load(currentId)).toBeUndefined();
+    const replaced = await store.load("target");
+    if (replaced === undefined) throw new Error("Expected replaced target.");
+    const archive = new ZipFile(replaced.bytes);
+    expect(await archive.readTextEntry("content.xml")).toContain("Current<text:s/>body");
     shell.Close();
   });
 

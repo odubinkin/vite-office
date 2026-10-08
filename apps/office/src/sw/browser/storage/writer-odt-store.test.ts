@@ -153,6 +153,23 @@ describe("IndexedDbWriterOdtStore", /** Registers IndexedDB ODT behavior tests. 
     expect((await store.load("two"))?.title).toBe("Second");
   });
 
+  it("atomically replaces a conflicting target and removes the previous identity", /** Checks rename-overwrite record semantics. @returns Completion. */ async () => {
+    const store = new IndexedDbWriterOdtStore("odt-replace", new IDBFactory());
+    await store.save(record("current", "Current", 1));
+    await store.save(record("target", "Target", 1));
+    await store.replace(record("target", "Target", 2), "current");
+    expect(await store.load("current")).toBeUndefined();
+    expect(await store.load("target")).toMatchObject({
+      id: "target",
+      title: "Target",
+      version: 2,
+    });
+    expect(await store.list()).toHaveLength(1);
+    await expect(store.replace(record("missing", "Missing"), "target")).rejects.toThrow(
+      /changed in another tab/,
+    );
+  });
+
   it("does not read or delete retired JSON records", /** Checks that no migration runs. @returns Completion. */ async () => {
     const factory = new IDBFactory();
     const database = await openDatabase(factory, "retired-json", 1);

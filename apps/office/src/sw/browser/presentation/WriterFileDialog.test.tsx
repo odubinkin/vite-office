@@ -238,6 +238,15 @@ describe("WriterFileDialog", /** Registers file dialog interaction tests. @retur
     const name = await screen.findByRole("textbox", { name: "New document name" });
     expect(name).toHaveValue("Plan (2)");
     expect(screen.getByText(/Replace “Plan” or keep both documents/)).toBeVisible();
+    fireEvent.change(name, { target: { value: "Plan (1)" } });
+    fireEvent.click(screen.getByRole("button", { name: "Save as new" }));
+    await waitFor(
+      /** Waits for repeated collision resolution. @returns Nothing. */ () => {
+        expect(close).not.toHaveBeenCalled();
+        expect(screen.getByRole("textbox", { name: "New document name" })).toHaveValue("Plan (2)");
+        expect(screen.getByText(/Replace “Plan \(1\)” or keep both documents/)).toBeVisible();
+      },
+    );
     fireEvent.click(screen.getByRole("button", { name: "Save as new" }));
     await waitFor(
       /** Waits for the new browser copy. @returns Nothing. */ () =>

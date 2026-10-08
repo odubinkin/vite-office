@@ -20,6 +20,7 @@ import { WriterRowHeightDialog } from "./WriterRowHeightDialog";
 import { SwTableHeightDlg } from "../../source/ui/table/rowht";
 import { WriterLineNumberingDialog } from "./WriterLineNumberingDialog";
 import { WriterFileDialog } from "./WriterFileDialog";
+import { WriterNameCollisionPanel } from "./WriterNameCollisionPanel";
 import type {
   WriterFileDialogController,
   WriterFileDialogKind,
@@ -56,6 +57,13 @@ import { ItemSetToTableParam, TableParamToItemSet } from "../../source/uibase/sh
 import { SwLineNumberInfo } from "../../inc/lineinfo";
 import { createSfxShell } from "../../../sfx2/source/control/shell";
 import { createWriterInterface } from "../../sdi/swriter";
+import type { BrowserWriterDocument } from "../storage/writer-odt-store";
+import { getUniqueWriterTitle, overwriteBrowserWriterDocument } from "../workflows/writer-odt-io";
+
+/** Manual title edit paused on an occupied browser title. */
+interface WriterRenameCollision {
+  readonly conflicting: BrowserWriterDocument;
+}
 
 /** Properties selecting a persistent Writer view for projection. */
 export interface WriterWorkbenchProps {
@@ -122,6 +130,10 @@ export function WriterWorkbench({
     useState<ReturnType<typeof TableParamToItemSet>>();
   const [lineNumberingDialog, setLineNumberingDialog] = useState(false);
   const [rowHeightDialog, setRowHeightDialog] = useState<SwTableHeightDlg>();
+  const [renameCollision, setRenameCollision] = useState<WriterRenameCollision>();
+  const [renameTitle, setRenameTitle] = useState("");
+  const [renameBusy, setRenameBusy] = useState(false);
+  const [renameError, setRenameError] = useState<string>();
   const currentTable = view.GetWrtShell().IsCursorInTable()?.GetTable();
   const availableTableWidth =
     snapshot.pageDescriptor.width -
@@ -244,31 +256,114 @@ export function WriterWorkbench({
     fileDialogs?.GetSnapshot ?? getNoDialog,
     fileDialogs?.GetSnapshot ?? getNoDialog,
   );
-  const handleDocumentTitleChange = useCallback(
-    /** Persists an inline-edited document title through the owning shell. @param title - Committed title. @returns Nothing. */
-    (title: string): void => {
+  const commitDocumentTitle = useCallback(
+    /** Persists one collision-free inline title through the owning shell. @param title - Committed title. @returns Completion. */ async (
+      title: string,
+    ): Promise<void> => {
       const shell = view.GetDocShell();
       const previous = shell.GetTitle();
       if (!shell.RenameDocument(title)) return;
-      if (autosave !== undefined)
-        void autosave.Flush().catch(
-          /**
-           * Handles the Writer browser operation.
-           * @param error - Input value.
-           * @returns Operation result.
-           */ (error: unknown) => {
-            shell.RenameDocument(previous);
-            shell.SetMediumOperation(
-              "save",
-              "failed",
-              shell.GetDocumentState().contentGeneration,
-              error instanceof Error ? error.message : String(error),
-            );
-          },
+      if (autosave === undefined) return;
+      try {
+        await autosave.Flush();
+      } catch (error) {
+        shell.RenameDocument(previous);
+        shell.SetMediumOperation(
+          "save",
+          "failed",
+          shell.GetDocumentState().contentGeneration,
+          error instanceof Error ? error.message : String(error),
         );
+        throw error;
+      }
     },
-    [view, autosave],
+    [autosave, view],
   );
+  const handleDocumentTitleChange = useCallback(
+    /** Checks one inline-edited title before persisting it. @param title - Committed title. @returns Nothing. */
+    (title: string): void => {
+      void (
+        /** Resolves storage collisions before applying the title. @returns Completion. */ async function resolveDocumentTitle(): Promise<void> {
+          const store = services?.odtStore;
+          const shell = view.GetDocShell();
+          if (store !== undefined) {
+            const documents = await store.list();
+            const conflicting = documents.find(
+              /** Finds another browser record with the requested title. @param document - Stored record. @returns Whether it conflicts. */ (
+                document,
+              ) => document.title === title && document.id !== shell.GetDocumentId(),
+            );
+            if (conflicting !== undefined) {
+              setRenameCollision({ conflicting });
+              setRenameTitle(getUniqueWriterTitle(title, documents));
+              setRenameError(undefined);
+              return;
+            }
+          }
+          await commitDocumentTitle(title);
+        }
+      )().catch(
+        /** Reports title lookup or persistence failure through the document medium. @param error - Failure value. @returns Nothing. */ (
+          error: unknown,
+        ) => {
+          const shell = view.GetDocShell();
+          shell.SetMediumOperation(
+            "save",
+            "failed",
+            shell.GetDocumentState().contentGeneration,
+            error instanceof Error ? error.message : String(error),
+          );
+        },
+      );
+    },
+    [commitDocumentTitle, services?.odtStore, view],
+  );
+
+  /** Resolves the rename collision with the editable alternative, repeating the prompt for another occupied name. @param requestedTitle - User-entered alternative. @returns Completion. */
+  async function saveRenamedDocumentAs(requestedTitle: string): Promise<void> {
+    const store = services?.odtStore;
+    if (store === undefined) throw new Error("Browser storage is unavailable.");
+    const normalized = requestedTitle.trim();
+    if (normalized.length === 0) throw new Error("Document name is required.");
+    setRenameBusy(true);
+    setRenameError(undefined);
+    try {
+      const documents = await store.list();
+      const currentId = view.GetDocShell().GetDocumentId();
+      const conflicting = documents.find(
+        /** Finds another record with the edited alternative title. @param document - Stored record. @returns Whether it conflicts. */ (
+          document,
+        ) => document.title === normalized && document.id !== currentId,
+      );
+      if (conflicting !== undefined) {
+        setRenameCollision({ conflicting });
+        setRenameTitle(getUniqueWriterTitle(normalized, documents));
+        return;
+      }
+      await commitDocumentTitle(normalized);
+      setRenameCollision(undefined);
+    } catch (error) {
+      setRenameError(error instanceof Error ? error.message : String(error));
+    } finally {
+      setRenameBusy(false);
+    }
+  }
+
+  /** Overwrites the selected conflicting record with the active Writer model. @returns Completion. */
+  async function overwriteRenamedDocument(): Promise<void> {
+    const store = services?.odtStore;
+    if (store === undefined || renameCollision === undefined) return;
+    setRenameBusy(true);
+    setRenameError(undefined);
+    try {
+      await overwriteBrowserWriterDocument(view.GetDocShell(), store, renameCollision.conflicting);
+      setRenameCollision(undefined);
+    } catch (error) {
+      setRenameError(error instanceof Error ? error.message : String(error));
+    } finally {
+      setRenameBusy(false);
+    }
+  }
 
   const resolveCommandArguments = useCallback(
     /** Resolves command arguments without reading the rendered DOM. @param commandId - Stable command identity. @returns No browser-derived arguments. */
@@ -719,6 +814,43 @@ export function WriterWorkbench({
             }
           }
         />
+      )}
+      {renameCollision === undefined ? null : (
+        <div
+          aria-label="Resolve document name"
+          aria-modal="true"
+          className="fixed inset-0 z-[70] grid place-items-center bg-slate-950/50 p-4 backdrop-blur-[2px]"
+          role="dialog"
+        >
+          <div className="w-full max-w-xl overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl">
+            <WriterNameCollisionPanel
+              busy={renameBusy}
+              conflictingTitle={renameCollision.conflicting.title}
+              onCancel={
+                /** Cancels the pending title change. @returns Nothing. */ () => {
+                  setRenameCollision(undefined);
+                  setRenameError(undefined);
+                }
+              }
+              onOverwrite={
+                /** Replaces the selected conflicting document. @returns Nothing. */ () =>
+                  void overwriteRenamedDocument()
+              }
+              onSaveAs={
+                /** Retries the rename with the editable alternative. @param title - Requested alternative. @returns Nothing. */ (
+                  title,
+                ) => void saveRenamedDocumentAs(title)
+              }
+              onTitleChange={setRenameTitle}
+              title={renameTitle}
+            />
+            {renameError === undefined ? null : (
+              <p className="mx-6 mb-6 rounded-lg bg-red-50 p-3 text-sm text-red-700" role="alert">
+                {renameError}
+              </p>
+            )}
+          </div>
+        </div>
       )}
       {fileDialogKind === undefined ||
       services === undefined ||

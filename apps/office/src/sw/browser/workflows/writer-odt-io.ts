@@ -46,9 +46,11 @@ export function getUniqueWriterTitle(
     ),
   );
   if (!occupied.has(normalized)) return normalized;
-  let index = 1;
-  while (occupied.has(`${normalized} (${index})`)) index += 1;
-  return `${normalized} (${index})`;
+  const indexed = /^(.*) \((\d+)\)$/u.exec(normalized);
+  const root = indexed?.[1]?.trim() || normalized;
+  let index = indexed === null ? 1 : Number(indexed[2]) + 1;
+  while (occupied.has(`${root} (${index})`)) index += 1;
+  return `${root} (${index})`;
 }
 
 /** Derives the browser title represented by a supported imported filename. @param filename - Computer filename. @returns Extension-free title. */
@@ -165,6 +167,27 @@ export function getImportedWriterTitle(filename: string): string {
     },
   );
   return true;
+}
+
+/** Replaces one colliding browser document with the active model and adopts the target identity. @param docShell - Active Writer shell. @param store - Browser store. @param target - Existing record selected for overwrite. @returns Completion. */
+export async function overwriteBrowserWriterDocument(
+  docShell: SwDocShell,
+  store: WriterOdtStore,
+  target: BrowserWriterDocument,
+): Promise<void> {
+  const state = docShell.GetDocumentState();
+  if (!hasWriterContent(docShell.GetDoc())) throw new Error("Empty documents cannot be saved.");
+  if (
+    docShell.GetMedium().kind === "untitled" &&
+    getAutomaticWriterTitle(docShell.GetDoc()) === undefined
+  )
+    throw new Error("A new document needs at least two words before it can be saved.");
+  const bytes = await docShell.SerializeOdt(undefined, target.title);
+  await store.replace(
+    { bytes, id: target.id, title: target.title, version: state.contentGeneration },
+    state.id,
+  );
+  docShell.AdoptSavedBrowserCopy(target.id, target.title, state.contentGeneration);
 }
 
 /** Imports a UTF-8 text file with paragraph breaks and fresh browser identity. */

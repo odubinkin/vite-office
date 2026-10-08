@@ -19,6 +19,7 @@ import {
   type ImportedWriterIdentity,
 } from "../workflows/writer-odt-io";
 import { exportWriterTextToPort, saveWriterOdtToPort } from "../workflows/writer-document-io";
+import { WriterNameCollisionPanel } from "./WriterNameCollisionPanel";
 
 /** Describes the Writer browser value. */ export interface WriterFileDialogProps {
   readonly autosave?: WriterAutosaveController;
@@ -209,96 +210,55 @@ interface PendingWriterImport {
           </button>
         </div>
         {kind === "open" && pendingImport !== undefined ? (
-          <form
-            className="grid gap-4 p-6"
-            onSubmit={
-              /** Saves the imported file under a new unique browser title. @param event - Form event. @returns Nothing. */ (
-                event,
-              ) => {
-                event.preventDefault();
+          <WriterNameCollisionPanel
+            busy={busy}
+            conflictingTitle={pendingImport.conflicting.title}
+            onCancel={
+              /** Returns to file selection without importing. @returns Nothing. */ () => {
+                setError(undefined);
+                setPendingImport(undefined);
+              }
+            }
+            onOverwrite={
+              /** Replaces the colliding browser document. @returns Nothing. */ () =>
                 void run(
-                  /** Validates the requested copy name before replacing the live document. @returns Completion. */ async () => {
+                  /** Imports through the existing record identity. @returns Completion. */ () =>
+                    openImportedFile(pendingImport.file, pendingImport.bytes, {
+                      id: pendingImport.conflicting.id,
+                      title: pendingImport.conflicting.title,
+                    }),
+                )
+            }
+            onSaveAs={
+              /** Saves the imported file under an editable alternative title. @param requestedTitle - User-entered title. @returns Nothing. */ (
+                requestedTitle,
+              ) =>
+                void run(
+                  /** Repeats collision resolution or imports under the unique title. @returns Completion. */ async () => {
                     if (store === undefined) throw new Error("Browser storage is unavailable.");
-                    const normalized = importTitle.trim();
+                    const normalized = requestedTitle.trim();
                     if (normalized.length === 0) throw new Error("Document name is required.");
                     const latest = await store.list();
-                    if (
-                      latest.some(
-                        /** Detects a newly occupied title while the prompt was open. @param document - Stored record. @returns Whether the title is occupied. */ (
-                          document,
-                        ) => document.title === normalized,
-                      )
-                    )
-                      throw new Error("A document with this name already exists.");
+                    const conflicting = latest.find(
+                      /** Finds a user-entered occupied title. @param document - Stored record. @returns Whether titles match. */ (
+                        document,
+                      ) => document.title === normalized,
+                    );
+                    if (conflicting !== undefined) {
+                      setPendingImport({ ...pendingImport, conflicting });
+                      setImportTitle(getUniqueWriterTitle(normalized, latest));
+                      return false;
+                    }
                     await openImportedFile(pendingImport.file, pendingImport.bytes, {
                       id: globalThis.crypto.randomUUID(),
                       title: normalized,
                     });
                   },
-                );
-              }
+                )
             }
-          >
-            <div>
-              <h3 className="font-semibold text-slate-950">A document with this name exists</h3>
-              <p className="mt-1 text-sm text-slate-600">
-                Replace “{pendingImport.conflicting.title}” or keep both documents with a new name.
-              </p>
-            </div>
-            <label className="grid gap-1 text-sm font-medium text-slate-700">
-              New document name
-              <input
-                autoFocus
-                className="rounded-lg border border-slate-300 p-2 focus-visible:outline-2 focus-visible:outline-indigo-600"
-                onChange={
-                  /** Updates the proposed imported title. @param event - Input event. @returns Nothing. */ (
-                    event,
-                  ) => setImportTitle(event.target.value)
-                }
-                required
-                value={importTitle}
-              />
-            </label>
-            <div className="flex flex-wrap justify-end gap-2">
-              <button
-                className="rounded-lg px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100"
-                disabled={busy}
-                onClick={
-                  /** Returns to file selection without importing. @returns Nothing. */ () => {
-                    setError(undefined);
-                    setPendingImport(undefined);
-                  }
-                }
-                type="button"
-              >
-                Cancel
-              </button>
-              <button
-                className="rounded-lg border border-red-300 px-3 py-2 text-sm font-semibold text-red-700 hover:bg-red-50"
-                disabled={busy}
-                onClick={
-                  /** Replaces the colliding browser document. @returns Nothing. */ () =>
-                    void run(
-                      /** Imports through the existing record identity. @returns Completion. */ () =>
-                        openImportedFile(pendingImport.file, pendingImport.bytes, {
-                          id: pendingImport.conflicting.id,
-                          title: pendingImport.conflicting.title,
-                        }),
-                    )
-                }
-                type="button"
-              >
-                Replace existing
-              </button>
-              <button
-                className="rounded-lg bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-700"
-                disabled={busy}
-                type="submit"
-              >
-                Save as new
-              </button>
-            </div>
-          </form>
+            onTitleChange={setImportTitle}
+            title={importTitle}
+          />
         ) : kind === "open" ? (
           <div className="px-6 pb-6">
             <div

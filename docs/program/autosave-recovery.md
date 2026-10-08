@@ -24,9 +24,12 @@ browser session is open; undo history is not encoded in the ODT.
 The toolbar has no manual Save button. Ctrl/Meta+S immediately writes the current
 document through the same browser-local storage path as autosave. Save As creates a separate named browser copy and adopts
 it as the current primary document, leaving the previous copy in place. Editing
-the title changes the primary copy's name atomically on the next immediate save;
-an occupied name is rejected without overwriting another document. Export is a
-download-only dialog with ODT and TXT choices. Open is a dialog listing browser
+the title changes the primary copy's name atomically on the next immediate save.
+An occupied title opens the same collision dialog as computer-file import: the
+user may explicitly replace the existing browser record or accept/edit a
+first-free indexed suggestion. If the edited alternative is also occupied, the
+dialog repeats with its next indexed suggestion instead of silently failing.
+Export is a download-only dialog with ODT and TXT choices. Open is a dialog listing browser
 copies and accepting ODT or TXT from the computer. When an imported filename
 matches a browser copy, Open pauses before replacing the active document and
 asks whether to overwrite that exact browser record or save a separate copy.
