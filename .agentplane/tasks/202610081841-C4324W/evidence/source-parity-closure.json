@@ -1,0 +1,19 @@
+{
+  "command": "npm run inventory:parity",
+  "exit": 0,
+  "bytes": 2191620,
+  "sha256": "26f0d47491048641bd829e05a6d130858b1a52fd989fd2525f8f1258918aa635",
+  "resolution": "The new module is inserted in the existing enforced lexicographic order; all prior fields and relative ordering are preserved.",
+  "diagnostics": [
+    "> tsx scripts/libreoffice-inventory/parity-mapping-cli.ts --baseline docs/program/libreoffice-baseline.json --mappings docs/program/parity/writer-command-slice.json --runtime-inventory docs/program/parity/runtime-inventory.json --runtime-root apps/office/src --local-root . --upstream-root vendor/libreoffice-reference",
+    "        \"reason\": \"browser-runtime-inapplicable\",",
+    "        \"rationale\": \"Native crash/session recovery depends on desktop process and backup-file lifecycle not used by this browser document workflow.\"",
+    "        \"reason\": \"browser-runtime-inapplicable\",",
+    "        \"rationale\": \"Native crash/session recovery depends on desktop process and backup-file lifecycle not used by this browser document workflow.\"",
+    "      \"path\": \"apps/office/src/framework/browser/presentation/CommandMenuBar.tsx\",",
+    "      \"side\": \"upstream\"",
+    "      \"path\": \"apps/office/src/framework/browser/presentation/CommandMenuBar.tsx\",",
+    "      \"side\": \"upstream\"",
+    "      \"path\": \"apps/office/src/sw/browser/presentation/WriterMenuBar.test.tsx\","
+  ]
+}

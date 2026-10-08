@@ -4,7 +4,7 @@ title: "Own shared native row frame formats and claim them before mutation"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 5
+revision: 7
 origin:
   system: "manual"
 depends_on:
@@ -37,7 +37,7 @@ events:
     to: "DOING"
     note: "Start: implement source-bound shared native row frame formats and claim-before-write, native item-set history/topology and direct mounted UI with standing iterative approval. Targeted upstream-absent verification, no full241 or passing replay; preserve registered deviations."
 doc_version: 3
-doc_updated_at: "2026-10-08T18:42:56.464Z"
+doc_updated_at: "2026-10-08T19:04:57.225Z"
 doc_updated_by: "CODER"
 description: "Iteration241 replaces per-row attribute records with native SwTableLineFormat item-set ownership, shared SwClient registration, ClaimFrameFormat copy-on-write and operation-local format reuse. Builders/transport keep explicit value records; attribute history preserves shared format topology. Standing iterative user goal authorizes safe local work. Targeted upstream-absent tests and exact-source coverage100; full last237,next247."
 sections:
@@ -70,9 +70,31 @@ sections:
     4. Six static format/lint/type/dependency/docs/file-size gates, build/static and new/related row/split/height/format/item/insert/history/ODF/UI/Chromium tests once upstream absent/restored finally. Failed/new-only closures without passing replay. Full241 skipped by user cadence last237,next247.
     5. All-four100% cumulative actual app/inventory counters transfer only entire identical current source/maps or complete declaration/body/enclosing branch/all locations from240. No clamping/sanitization; raw exits/skips retained. No inventory/infra runtime replay if unchanged whole source/maps verified.
     6. After restoration separate generator/source-tree/provenance/invariants/parity, doctor/routing/diff/artifact audits; source<1000physical lines, IO4/writer-view/pin/stash protected. Actual implementation SHA current-agent EVALUATOR explicitly non-independent, exact task scope/old source-map bindings, clean tracked finish241/DONE immutable and exact-prefix parent append698356/hash ec8b64039ba56f1496388dfbba48e24de89b5e742fca7e232747b0a30802a1be. Full goal active; full row layout/pooling/UNO remains unverified.
-  Verification: "Pending implementation and source-bound targeted evidence."
+  Verification: |-
+    Command: npm run test:static, npm run test:coverage --workspace @vite-office/office with the exact 45-file new/related selection in evidence/targeted-profile.json, and the five-file Chromium selection recorded there.
+    Result: pass for represented runtime behavior. Initial293 passes/four fresh fixture failures, then exactly four failed cases passed with one previously passing insertion case skipped.297 unique app cases (12 fresh) and11 Chromium cases; zero passing replay/unhandled errors/flaky cases. Upstream was physically absent for runtime/build and restored in finally. Raw targeted coverage threshold exit1 is retained, not relabeled as a whole-suite pass.
+    Command: source-bound actual-counter reconstruction recorded in evidence/final-coverage.json.
+    Result: pass. App100%17541lines/19261statements/4410functions/14299branches, inventory100%1464/1523/384/1081.313 app/38 inventory source files; prior240 counters accepted only for whole identical current source/maps or complete unchanged declaration/body/enclosing branch/all locations. No counter clamping/sanitization. Unchanged inventory/infra runtime not replayed.
+    Command: npm run format:check; npm run lint; npm run typecheck; npm run check:dependencies; npm run check:docs; npm run check:file-size; generator --check; npm run check:source-tree; npm run check:source-provenance; npm run inventory:invariants; npm run inventory:parity; ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check.
+    Result: pass after new module lexicographic ordering correction. Source gates run separately with restored upstream; two historical doctor warnings unchanged. Ten pinned source files byte-bound to9bc445578031fecf56086729d8e4940c77e14d65; no external access.
+    Evidence: targeted-profile,closure1,runtime-census,final-coverage,static-final,source-gates,source-parity-closure,scope-integrity,native-source-review,governance,artifact-census bounded JSON. Raw maps/results/source snapshots/scripts stay only in ignored application cache.
+    Scope: native shared row format/client registration, claim-before-write/operation-local reuse, full direct native item-set history topology, native insertion sharing, and mounted main UI/native item publication.647of648 old acceptance files byte-identical; one exact constructor migration, representation-only helper migration,12 fresh cases/three files;315 prior metadata fields/status/defaults/evidence prefixes retained, one new partial record. Registered IO/recovery/settings unchanged.
+    Skipped: full suite.
+    Reason: user-approved cadence last237,next247; this is leaf241, targeted new/related tests plus all-four100% coverage required.
+    Risk: whole core/UI parity remains incomplete, including full row frame client lifecycle/modify hints/pooling/nested/merged/UNO.
+    Approval: active user goal testing instructions.
   Rollback Plan: "Revert eventual implementation commit locally without rewriting DONE leaves."
-  Findings: "Previous240 is DONE, actual native row items/transport passed263app/11Chromium with all-four100. Source row format is still a copied value record; native ClaimFrameFormat and operation-local old/new format sharing remain missing. Preflight main clean, direct mode, standing user approval; no duplicate open leaf. Parent original prefix698356 retained. Full writer row-frame listener lifecycle and modified-state flag require separate evidence; no complete module promotion."
+  Findings: |-
+    Previous240 is DONE, actual native row items/transport passed263app/11Chromium with all-four100. Preflight main/direct, approved current leaf241, same-agent CODER. Original parent prefix698356/hash ec8b64039ba56f1496388dfbba48e24de89b5e742fca7e232747b0a30802a1be remains intact.
+
+    Iteration241 now owns canonical native SwTableLineFormat/SfxItemSet and original SwClient registration rather than per-row copied records. Exclusive ClaimFrameFormat preserves identity; shared claims clone complete native attributes without moving peers; operation-local old/new reuse preserves selected sharing. Native SaveTable deduplicates direct item sets and reconstructs shared owners by index. Native row insertion shares its current source format. Explicit value records exist only at construction/transport boundaries; the mounted main UI edits native items and history never calls row SetFormat.
+
+    Observation: initial implementation script stopped at a stale comment delimiter; corrected against the read source before final scoped changes. Read-only missing-path probes were recomputed through the route oracle; no outside-repo access.
+    Observation: four fresh fixture cases initially created offset2 before their empty paragraph had text. Impact: these fresh cases stopped before native behavior. Resolution: initialize valid offset0 then assign2 after text; four failed-only cases passed, passing insertion remained skipped. Initial/focused partial coverage threshold exit1 retained; all-four100% proven separately by actual-source-bound counter reconstruction.
+    Observation: the first helper-integrity certificate used default Prettier options and reported a difference. Resolution: use the repository's resolved config; no fixture/assertion changes. Exact original constructor-only mutation and helper type/absent-item representation verified.
+    Observation: source parity gate rejected appending the new runtime module out of lexicographic order. Resolution: insert it in enforced order, preserving all315 prior records/relative order/fields; only failed source gate rerun and passed. Runtime was not replayed. Initial failure recorded.
+    Residual gaps: native SwRowFrame client registration/retargeting, native typed move/change hints/destruction, document modified flag, full native pooling/frame attributes, nested/merged/UNO and whole core/browser parity remain unverified. Current stateless SwRowFrame reads its original line on every query; do not claim full lifecycle. No status/default/classification promotion. Following coherent leaf should address actual native row/client lifetime including detached insertion rows.
+    Current-agent EVALUATOR review must bind actual implementation SHA and reconstruct four certificates; it is explicitly not independent. Final clean close and exact-prefix parent append pending. No delegation/network/global access or upstream/Python/scripts/raw/source artifacts in AgentPlane.
 id_source: "generated"
 ---
 ## Summary
@@ -116,7 +138,18 @@ Iteration241 replaces per-row canonical attribute records with document-owned Sw
 
 ## Verification
 
-Pending implementation and source-bound targeted evidence.
+Command: npm run test:static, npm run test:coverage --workspace @vite-office/office with the exact 45-file new/related selection in evidence/targeted-profile.json, and the five-file Chromium selection recorded there.
+Result: pass for represented runtime behavior. Initial293 passes/four fresh fixture failures, then exactly four failed cases passed with one previously passing insertion case skipped.297 unique app cases (12 fresh) and11 Chromium cases; zero passing replay/unhandled errors/flaky cases. Upstream was physically absent for runtime/build and restored in finally. Raw targeted coverage threshold exit1 is retained, not relabeled as a whole-suite pass.
+Command: source-bound actual-counter reconstruction recorded in evidence/final-coverage.json.
+Result: pass. App100%17541lines/19261statements/4410functions/14299branches, inventory100%1464/1523/384/1081.313 app/38 inventory source files; prior240 counters accepted only for whole identical current source/maps or complete unchanged declaration/body/enclosing branch/all locations. No counter clamping/sanitization. Unchanged inventory/infra runtime not replayed.
+Command: npm run format:check; npm run lint; npm run typecheck; npm run check:dependencies; npm run check:docs; npm run check:file-size; generator --check; npm run check:source-tree; npm run check:source-provenance; npm run inventory:invariants; npm run inventory:parity; ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check.
+Result: pass after new module lexicographic ordering correction. Source gates run separately with restored upstream; two historical doctor warnings unchanged. Ten pinned source files byte-bound to9bc445578031fecf56086729d8e4940c77e14d65; no external access.
+Evidence: targeted-profile,closure1,runtime-census,final-coverage,static-final,source-gates,source-parity-closure,scope-integrity,native-source-review,governance,artifact-census bounded JSON. Raw maps/results/source snapshots/scripts stay only in ignored application cache.
+Scope: native shared row format/client registration, claim-before-write/operation-local reuse, full direct native item-set history topology, native insertion sharing, and mounted main UI/native item publication.647of648 old acceptance files byte-identical; one exact constructor migration, representation-only helper migration,12 fresh cases/three files;315 prior metadata fields/status/defaults/evidence prefixes retained, one new partial record. Registered IO/recovery/settings unchanged.
+Skipped: full suite.
+Reason: user-approved cadence last237,next247; this is leaf241, targeted new/related tests plus all-four100% coverage required.
+Risk: whole core/UI parity remains incomplete, including full row frame client lifecycle/modify hints/pooling/nested/merged/UNO.
+Approval: active user goal testing instructions.
 
 ## Rollback Plan
 
@@ -124,4 +157,13 @@ Revert eventual implementation commit locally without rewriting DONE leaves.
 
 ## Findings
 
-Previous240 is DONE, actual native row items/transport passed263app/11Chromium with all-four100. Source row format is still a copied value record; native ClaimFrameFormat and operation-local old/new format sharing remain missing. Preflight main clean, direct mode, standing user approval; no duplicate open leaf. Parent original prefix698356 retained. Full writer row-frame listener lifecycle and modified-state flag require separate evidence; no complete module promotion.
+Previous240 is DONE, actual native row items/transport passed263app/11Chromium with all-four100. Preflight main/direct, approved current leaf241, same-agent CODER. Original parent prefix698356/hash ec8b64039ba56f1496388dfbba48e24de89b5e742fca7e232747b0a30802a1be remains intact.
+
+Iteration241 now owns canonical native SwTableLineFormat/SfxItemSet and original SwClient registration rather than per-row copied records. Exclusive ClaimFrameFormat preserves identity; shared claims clone complete native attributes without moving peers; operation-local old/new reuse preserves selected sharing. Native SaveTable deduplicates direct item sets and reconstructs shared owners by index. Native row insertion shares its current source format. Explicit value records exist only at construction/transport boundaries; the mounted main UI edits native items and history never calls row SetFormat.
+
+Observation: initial implementation script stopped at a stale comment delimiter; corrected against the read source before final scoped changes. Read-only missing-path probes were recomputed through the route oracle; no outside-repo access.
+Observation: four fresh fixture cases initially created offset2 before their empty paragraph had text. Impact: these fresh cases stopped before native behavior. Resolution: initialize valid offset0 then assign2 after text; four failed-only cases passed, passing insertion remained skipped. Initial/focused partial coverage threshold exit1 retained; all-four100% proven separately by actual-source-bound counter reconstruction.
+Observation: the first helper-integrity certificate used default Prettier options and reported a difference. Resolution: use the repository's resolved config; no fixture/assertion changes. Exact original constructor-only mutation and helper type/absent-item representation verified.
+Observation: source parity gate rejected appending the new runtime module out of lexicographic order. Resolution: insert it in enforced order, preserving all315 prior records/relative order/fields; only failed source gate rerun and passed. Runtime was not replayed. Initial failure recorded.
+Residual gaps: native SwRowFrame client registration/retargeting, native typed move/change hints/destruction, document modified flag, full native pooling/frame attributes, nested/merged/UNO and whole core/browser parity remain unverified. Current stateless SwRowFrame reads its original line on every query; do not claim full lifecycle. No status/default/classification promotion. Following coherent leaf should address actual native row/client lifetime including detached insertion rows.
+Current-agent EVALUATOR review must bind actual implementation SHA and reconstruct four certificates; it is explicitly not independent. Final clean close and exact-prefix parent append pending. No delegation/network/global access or upstream/Python/scripts/raw/source artifacts in AgentPlane.
