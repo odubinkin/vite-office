@@ -1,10 +1,11 @@
 ---
 id: "202610081258-YGP1DS"
 title: "Select independent native table cells by physical borders"
-status: "DOING"
+result_summary: "Aligned physical native table selection and preserved original UI history"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 21
+revision: 23
 origin:
   system: "manual"
 depends_on: []
@@ -22,7 +23,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-08T13:33:41.565Z"
+  updated_at: "2026-10-08T13:34:26.027Z"
   updated_by: "CODER"
   note: "Aligned physical native table selection and preserved original UI history"
   attempts: 0
@@ -44,11 +45,16 @@ quality_review:
   findings:
     - "Pinned swnewtable physical interval, integer midpoint, half overlap and majority contracts match the represented flat graph; original boxes/cursors/history/DOM remain native. All626 prior acceptance bytes and311 metadata states/defaults/classes preserved. No full table/module promotion."
     - "Fresh reconstruction of final coverage, case census and scope is byte-identical without test replay. Unique13822 app/110 inventory/19 infra/299 Chromium pass,14 fresh cases, all-four app/inventory100 exact-source bound; original failed literal resolved, empty admission and raw threshold exits/skips retained."
-commit: null
+commit:
+  hash: "9479fd9fbbfe64e01e2f4b478e9e90bc205be11a"
+  message: "🔧 YGP1DS code: select native table cells by physical borders"
 comments:
   -
     author: "CODER"
     body: "Start: Implement source-shaped physical native table selection under standing user parity authorization; preserve all original acceptance and run one upstream-absent profile."
+  -
+    author: "CODER"
+    body: "Verified: Aligned physical native table selection and preserved original UI history. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -75,8 +81,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Aligned physical native table selection and preserved original UI history"
+  -
+    type: "verify"
+    at: "2026-10-08T13:34:26.027Z"
+    author: "CODER"
+    state: "ok"
+    note: "Aligned physical native table selection and preserved original UI history"
+  -
+    type: "status"
+    at: "2026-10-08T13:34:26.172Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Aligned physical native table selection and preserved original UI history. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-08T13:33:41.648Z"
+doc_updated_at: "2026-10-08T13:34:26.173Z"
 doc_updated_by: "CODER"
 description: "Iteration234 of approved parent202609240501-C9TN6M. Replace SwTable CreateSelection shared-index rectangles with pinned swnewtable actual box widths, half-overlap interval combination and native majority/center admission. Preserve original box identities, sorted selection, partial endpoint and row contracts. Verify actual shell rings, formatting undo and mounted menu painting. Existing unequal-edge column insertion remains explicitly unsupported and a separate follow-up."
 sections:
@@ -160,6 +179,36 @@ sections:
     - operator_action: run_exact_argv
     - can_execute_now: true
     - safe_command: agentplane task complete 202610081258-YGP1DS --result verified-202610081258-YGP1DS --commit e90796bb0141e7df60ae0b1f04790440b5354bd0
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-10-08T13:34:26.027Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Aligned physical native table selection and preserved original UI history
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-08T13:33:41.648Z, excerpt_hash=sha256:da8dd989245eb18061c685f34abab64016184615c0493d4897bf8bd44bbd548d
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610081258-YGP1DS/blueprint/resolved-snapshot.json
+    - old_digest: 9bc132e7cf1c8cb9f9f6907ef4d22606c1900e6c5a7d2608b94daca840c2e000
+    - current_digest: 9bc132e7cf1c8cb9f9f6907ef4d22606c1900e6c5a7d2608b94daca840c2e000
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610081258-YGP1DS
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610081258-YGP1DS --result verified-202610081258-YGP1DS --commit ca2e23ee033c7955b030f9401bb42e2928c14206
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -277,6 +326,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202610081258-YGP1DS --result verified-202610081258-YGP1DS --commit e90796bb0141e7df60ae0b1f04790440b5354bd0
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-08T13:34:26.027Z — VERIFY — ok
+
+By: CODER
+
+Note: Aligned physical native table selection and preserved original UI history
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-08T13:33:41.648Z, excerpt_hash=sha256:da8dd989245eb18061c685f34abab64016184615c0493d4897bf8bd44bbd548d
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610081258-YGP1DS/blueprint/resolved-snapshot.json
+- old_digest: 9bc132e7cf1c8cb9f9f6907ef4d22606c1900e6c5a7d2608b94daca840c2e000
+- current_digest: 9bc132e7cf1c8cb9f9f6907ef4d22606c1900e6c5a7d2608b94daca840c2e000
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610081258-YGP1DS
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610081258-YGP1DS --result verified-202610081258-YGP1DS --commit ca2e23ee033c7955b030f9401bb42e2928c14206
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
