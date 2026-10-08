@@ -1,0 +1,137 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/sw/inc/hints.ts": "ba40dc579cc1ba3103972c58fbc77f1f87b4be883e12120d7d156c4b9e3aa1e8",
+    "apps/office/src/sw/source/core/layout/tabfrm.ts": "e13ee14536058f8166fa985d1b99be58fa98700500fefadfd917d413bdbfb810",
+    "apps/office/src/sw/source/core/table/swtable.ts": "76038c831bca2607eb1bfe2916631907ce97a4b334c62fa28f4efdd038e18521",
+    "apps/office/src/sw/source/core/undo/untbl.ts": "dddfab8ec6339b7d71549ce5c6ed31c253287964c13b366640c96abbba31dfde",
+    "apps/office/src/sw/source/core/docnode/nodes.ts": "c5bd89480613448ef9e55574734c3406eebc386c5285be117fc418f7f17ae8f8",
+    "apps/office/src/sw/source/core/layout/newfrm.ts": "447346cdcf11103aa414f8f07b51db8683db41dad39b99dcee3df8e6391d72df",
+    "apps/office/src/sw/browser/editor/WriterEditableTable.tsx": "0798cc5f8348e317a68488664e907397b10c96a9f4ba439cd0f550da7f75d3b6",
+    "apps/office/src/sw/source/core/layout/native-row-format-client.test.ts": "c9569dec6d99ee66cc960016b33fc22e7bdf25db59e743546a083d484da66ff5",
+    "apps/office/src/sw/source/core/undo/native-row-format-client-history.test.ts": "199761a7ab29df040ed05691816cb519825aa676ff6d088cf6bc594bedd82498",
+    "apps/office/src/sw/browser/editor/native-row-format-client.test.tsx": "05abe74faaad6e343275c5ba72eb1cbbae2f9a1a6fe00fb8f8d4389193f75346",
+    "docs/program/source-provenance.json": "2b1e6f6085d620e67837484c2882192c72da22b5f1f590baf8666f59b548970c",
+    "docs/program/parity/runtime-inventory.json": "22cadab8f8316a9203ea7f98cf23e06fc1828bcd92260cc3df0837b2d91a8d91"
+  },
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1443,
+      "sha256": "13852fb63e089fc5d9daf0d8043928fb5604f6693eeece37eaf985f9b36e1f64",
+      "totals": [],
+      "failedCases": [],
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/source/core/table/native-row-frame-format.test.ts src/sw/source/core/undo/native-row-frame-format-history.test.ts src/sw/browser/presentation/native-row-frame-format.test.tsx src/sw/source/core/docnode/native-row-split-items.test.ts src/sw/browser/filter/xml/native-row-split-item-transport.test.ts src/sw/browser/presentation/native-row-split-core-items.test.tsx src/sw/browser/editor/native-table-document-row.test.tsx src/sw/browser/presentation/native-table-split-items.test.tsx src/sw/browser/presentation/native-table-properties-reset.test.tsx src/sw/browser/presentation/native-table-text-flow-split.test.tsx src/sw/source/filter/xml/native-row-frame-size-roundtrip.test.ts src/sw/source/filter/xml/odt-table-roundtrip.test.ts src/sw/source/uibase/wrtsh/native-row-split-owner-history.test.ts src/sw/source/core/undo/native-numeric-row-insertion-history.test.ts src/sw/source/uibase/wrtsh/native-table-traversal.test.ts src/sw/source/uibase/wrtsh/native-table-height-delta.test.ts src/sw/source/uibase/wrtsh/native-table-layout-split-history.test.ts src/sw/source/uibase/wrtsh/native-row-height-owner-history.test.ts src/sw/source/ui/table/native-table-text-flow-split.test.ts src/sw/source/uibase/wrtsh/native-table-properties.test.ts src/sw/source/uibase/wrtsh/native-table-height-command-separation.test.ts src/sw/source/core/docnode/native-row-height-owner.test.ts src/sw/source/core/table/native-numeric-row-insertion.test.ts src/sw/source/core/docnode/native-row-split-owner.test.ts src/sw/source/uibase/wrtsh/native-table-text-flow-split-history.test.ts src/sw/source/core/docnode/native-row-frame-size.test.ts src/sw/browser/presentation/native-table-border-changed-items.test.tsx src/sw/inc/native-table-split-items.test.ts src/sw/source/uibase/shells/native-table-property-item-input.test.ts src/sw/source/core/layout/native-table-layout-split.test.ts src/sw/browser/editor/native-table-layout-split.test.tsx src/sw/browser/editor/native-row-frame-size.test.tsx src/sw/browser/editor/native-numeric-row-insertion.test.tsx src/sw/browser/presentation/native-row-height-dialog.test.tsx src/sw/browser/presentation/native-table-height-delta.test.tsx src/sw/browser/presentation/native-table-property-output.test.tsx src/sw/browser/presentation/native-independent-table-properties.test.tsx src/sw/source/filter/xml/odt-table-alignment.test.ts src/sw/source/filter/xml/odt-table-cell-lists.test.ts src/sw/source/ui/table/native-table-property-output.test.ts src/sw/source/ui/table/native-row-height-dialog.test.ts src/svl/source/notify/notify.test.ts src/sw/source/core/table/native-column-insertion.test.ts src/sw/source/core/attr/internet-pool-default.test.ts src/sw/source/core/attr/list-restart-default.test.ts src/sw/source/core/layout/native-row-format-client.test.ts src/sw/source/core/undo/native-row-format-client-history.test.ts src/sw/browser/editor/native-row-format-client.test.tsx src/sw/source/core/layout/newfrm.test.ts src/sw/source/core/layout/native-table-print-area.test.ts src/sw/source/uibase/wrtsh/native-table-delete.test.ts src/sw/browser/editor/native-table-delete.test.tsx src/sw/source/core/undo/native-delete-history.test.ts --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/67C1X0.app-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 49851,
+      "sha256": "01b3ce4007ed9149a0596740800f2284c1797cfacb6b439a59a3b7e152b9d12b",
+      "totals": [
+        "Test Files  4 failed | 49 passed (53)",
+        "Tests  4 failed | 1274 passed (1278)"
+      ],
+      "failedCases": [
+        {
+          "name": "apps/office/src/sw/browser/editor/native-row-format-client.test.tsx > native table measurement destroys each temporary row frame while retaining its canonical row owner",
+          "assertion": [
+            "AssertionError: expected [] to not have a length of +0"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/browser/editor/native-table-document-row.test.tsx > renders default Tab append through document insertion without action replay",
+          "assertion": [
+            "TypeError: Cannot read properties of undefined (reading 'GetAttrSet')"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/source/core/undo/native-row-format-client-history.test.ts > complete native table deletion releases original row and physical frame registrations",
+          "assertion": [
+            "Error: Writer inserted table needs following text."
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/source/uibase/wrtsh/native-table-traversal.test.ts > native table traversal appends empty sections with native style/direct items and restores their identities through history",
+          "assertion": [
+            "TypeError: Cannot read properties of undefined (reading 'GetAttrSet')"
+          ]
+        }
+      ],
+      "caseCounts": {
+        "passed": 1274,
+        "failed": 4,
+        "skipped": 0,
+        "total": 1278
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 17592,
+          "covered": 11148,
+          "skipped": 0,
+          "pct": 63.36
+        },
+        "statements": {
+          "total": 19320,
+          "covered": 11861,
+          "skipped": 0,
+          "pct": 61.39
+        },
+        "functions": {
+          "total": 4422,
+          "covered": 2862,
+          "skipped": 0,
+          "pct": 64.72
+        },
+        "branches": {
+          "total": 14333,
+          "covered": 7764,
+          "skipped": 0,
+          "pct": 54.16
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverage": {
+        "lines": 63.36,
+        "statements": 61.39,
+        "functions": 64.72,
+        "branches": 54.16
+      },
+      "incompleteFileCount": 260,
+      "coverageMapSHA256": "9b41f1b1b8d4faa41388013dd0ee13fc21a460ce62914286c6343b1678245699",
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts writer-native-table-text-flow-split.spec.ts writer-native-table-layout-split.spec.ts writer-native-row-frame-size.spec.ts writer-native-document-row.spec.ts writer-native-table-tab.spec.ts --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 2497,
+      "sha256": "1821251a4aa275f359870d5d501a61cc90060c66f687dd950a34e2b4f612dfbc",
+      "totals": [
+        "11 passed (8.6s)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "startTime": "2026-10-08T19:31:32.773Z",
+        "duration": 8628.306,
+        "expected": 11,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "unhandledErrorCount": 0
+    }
+  ]
+}
