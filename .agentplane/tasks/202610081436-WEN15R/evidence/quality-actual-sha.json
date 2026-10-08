@@ -1,0 +1,172 @@
+{
+  "evaluatedSHA": "83412794968661f02031b1b0f57b8fda1a9fecf1",
+  "evaluator": "Current agent EVALUATOR phase, explicitly not independent",
+  "verdict": "pass",
+  "production": [
+    {
+      "path": "apps/office/src/sw/source/core/table/swtable.ts",
+      "sha256": "71b3006d081f7925b108947064657d1c8563502bb6377e4a9829672932f0afff",
+      "exactActualSHABytes": true,
+      "physicalLines": 808
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/untbl.ts",
+      "sha256": "e9dffe05f46754061a540f5fb529014ec9ad85f2dd9c15c6417b56a566679c5d",
+      "exactActualSHABytes": true,
+      "physicalLines": 335
+    },
+    {
+      "path": "apps/office/src/sw/source/core/doc/doc.ts",
+      "sha256": "2344eb0588f990bf405370ed77aa5a730f5b8b14075e0fda041c28748ab1f116",
+      "exactActualSHABytes": true,
+      "physicalLines": 909
+    },
+    {
+      "path": "apps/office/src/sw/source/core/docnode/ndtbl.ts",
+      "sha256": "af609947e6775af0d5bba582de44b13b4fcfaf87affacbf9c134c84109dbfabe",
+      "exactActualSHABytes": true,
+      "physicalLines": 342
+    },
+    {
+      "path": "apps/office/src/sw/source/core/docnode/nodes.ts",
+      "sha256": "d56ad93c63a6ef23d84096d74bbb89fbd3a297731ab1c3232a89a3072570a131",
+      "exactActualSHABytes": true,
+      "physicalLines": 569
+    },
+    {
+      "path": "apps/office/src/sw/source/core/table/native-numeric-row-insertion.test.ts",
+      "sha256": "f1670ab8c8823e2ae4291683119415bfe7619d29e10df8785b612d0aab891c79",
+      "exactActualSHABytes": true,
+      "physicalLines": 130
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/native-numeric-row-insertion-history.test.ts",
+      "sha256": "bfa159ea3cac617f680b837d334280c3db091e806a2ef731e692db54a16c9fc7",
+      "exactActualSHABytes": true,
+      "physicalLines": 161
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/native-numeric-row-insertion.test.tsx",
+      "sha256": "a735451ad060c9b170071458c6cd10c450121c8c37cf4bfa37cce942282edbec",
+      "exactActualSHABytes": true,
+      "physicalLines": 156
+    },
+    {
+      "path": "apps/office/src/sw/source/core/table/native-row-insertion.test.ts",
+      "sha256": "877bdbbe0978f7a2ba6ffd12428bb25be3603fc59dde2d0f5b5177b672992881",
+      "exactActualSHABytes": true,
+      "physicalLines": 208
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-traversal.test.ts",
+      "sha256": "89df9f96c56b691c9a7cc21a1daf656ea40d1012c9f095ff1f15202ac0e8b321",
+      "exactActualSHABytes": true,
+      "physicalLines": 431
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/native-table-tab.test.tsx",
+      "sha256": "1a40fee4824469fd19186ec751604391acc139d5cc582c36db61abdddd3ac932",
+      "exactActualSHABytes": true,
+      "physicalLines": 216
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/native-table-document-row.test.tsx",
+      "sha256": "5b36b3aef57e8fc6023dd6a0d8f38624eabd0476548342a7226c924d264ca250",
+      "exactActualSHABytes": true,
+      "physicalLines": 97
+    },
+    {
+      "path": "apps/office/src/sw/source/core/crsr/native-table-shell-owner.test.ts",
+      "sha256": "2f2ceaf37f05c5798a4142cea76fa4fd95a7d1767078833aca188452d77cb3dd",
+      "exactActualSHABytes": true,
+      "physicalLines": 158
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/native-insert-table-history.test.ts",
+      "sha256": "93a835abb700a9801260d931706db8b9c4f9c0b150c5dfbdd828ae178c764a9b",
+      "exactActualSHABytes": true,
+      "physicalLines": 308
+    },
+    {
+      "path": "docs/program/source-provenance.json",
+      "sha256": "c9ba2fceff71c5fb4d52ceb746e95d5f919bdaa6d076a145c14eeff75151da9f",
+      "exactActualSHABytes": true
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "sha256": "7978cf83a3446315270f9b5c81fbbaa6e4bdf07cd6ac5262bce354045717202e",
+      "exactActualSHABytes": true
+    }
+  ],
+  "records": [
+    {
+      "check": "236proofScript",
+      "exit": 0,
+      "outputSHA256": "86b4ac5ce075985f6af671ff96ccc59e2d5ee5b0ae027e1eb36f1cece38f7101",
+      "bytes": 715
+    },
+    {
+      "check": "236censusScript",
+      "exit": 0,
+      "outputSHA256": "1176fe14e70d8edf067c8d87045ccd10c7b2b768c904cf6c609feccea665887e",
+      "bytes": 1247
+    },
+    {
+      "check": "236scopeScript",
+      "exit": 0,
+      "outputSHA256": "0748aed791db339bbf634e45c9e0d2b95bb4975672a7737ae2895cc732602b6a",
+      "bytes": 7531
+    }
+  ],
+  "reconstructed": [
+    {
+      "path": ".agentplane/tasks/202610081436-WEN15R/evidence/final-coverage.json",
+      "sha256": "23ee56462a477523547c115b1cd593e1ec962f2bc1850bef1164528dbd605714",
+      "currentSHA256": "23ee56462a477523547c115b1cd593e1ec962f2bc1850bef1164528dbd605714",
+      "byteIdentical": true
+    },
+    {
+      "path": ".agentplane/tasks/202610081436-WEN15R/evidence/case-census.json",
+      "sha256": "b3c77307c6cc4dfd6d38201f7a934d35bb6d2bc4c3f791b5e3f02ff51522c923",
+      "currentSHA256": "b3c77307c6cc4dfd6d38201f7a934d35bb6d2bc4c3f791b5e3f02ff51522c923",
+      "byteIdentical": true
+    },
+    {
+      "path": ".agentplane/tasks/202610081436-WEN15R/evidence/scope-final.json",
+      "sha256": "cfdb62247e0e5edc9c09498b9e6dce64d811a070ff91e2f1e38f57e754158cc5",
+      "currentSHA256": "cfdb62247e0e5edc9c09498b9e6dce64d811a070ff91e2f1e38f57e754158cc5",
+      "byteIdentical": true
+    }
+  ],
+  "uniqueCaseCounts": {
+    "app": 13845,
+    "inventory": 110,
+    "infra": 19,
+    "chromium": 299,
+    "fresh": 11
+  },
+  "passingReplay": 0,
+  "focusedSkipsRetained": 20,
+  "oneFullUpstreamAbsentProfile": true,
+  "noTestsReplayedDuringReview": true,
+  "noIndividualCounterAlteration": true,
+  "scopeCount": 16,
+  "priorAcceptanceByteIdentical": 625,
+  "metadataRecordsPreserved": 311,
+  "sourceAnchorsReviewed": 5,
+  "sourceMatchedContracts": [
+    "Native row insertion selects the before/behind extreme and copies all actual boxes of the selected source row, retaining complete independent widths/heights and copied attributes.",
+    "TOP transfer follows doc/tblrwcl copying flags: before keeps TOP only on first inserted row and clears original/subsequent copies; behind clears every new TOP and preserves source. All other edge attributes remain unchanged.",
+    "ndtbl owns document row/column insertion with DoesUndo, temporary original boxes, scoped recording suppression/finally restoration and one success action.",
+    "SwUndoTableNdsChg stores numeric selected/new starts and complete original attributes; undo resolves current actual inserted flat rows/sections; redo invokes Doc InsertRow or InsertCol, creating fresh owners. No retained row graph or duplicate shared-width vector.",
+    "Six old retained-row identity fixtures migrate to actual fresh owners with complete attribute/text/style/cursor/Tab/table recreation checks preserved."
+  ],
+  "actualFailedCaseResolved": 4,
+  "residuals": [
+    "Merged/nested/spanned/protected graphs and full native layout/pooling/redline/autoformat/signed arithmetic remain partial and unverified.",
+    "Native cursor/frame/full SaveTable structural reconstruction lifetimes and independent physical browser cell layout remain partial.",
+    "Registered IO/open/save/recovery/settings remain byte-identical; no full module/upstream parity promotion."
+  ],
+  "allDeclaredGatesPassed": true,
+  "registeredIOPreserved": true
+}

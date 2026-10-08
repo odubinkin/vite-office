@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202610081436-WEN15R",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-08T15:12:45.581Z",
+  "verdict": "pass",
+  "summary": "Actual implementation 83412794968661f02031b1b0f57b8fda1a9fecf1 passes the approved numeric native row insertion/history contract. Current-agent EVALUATOR phase is explicitly not independent.",
+  "evaluated_sha": "83412794968661f02031b1b0f57b8fda1a9fecf1",
+  "blueprint_digest": "7e2e4f8f1216e12a62d79754b43f7ff3d11ec8a67f9d524218a356b881846683",
+  "findings": [
+    "Fresh reconstruction byte-identically reproduces coverage, unique case and scope reports without tests. All-four app/inventory100,13845/110/19/299 unique passes,11 fresh cases,20 focused skips retained, passingReplay0. Scope16,625/631 prior test files byte-identical with6 native-backed owner fixture migrations;311 metadata records and pin/IO/stash/parent preserved."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610081436-WEN15R/README.md",
+    ".agentplane/tasks/202610081436-WEN15R/evidence/quality-actual-sha.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Full merged/nested/spanned/protected/autoformat/redline/pooling/signed arithmetic/native physical layout and full module/parent/goal parity remain partial and unverified; existing registered deviations remain."
+  ]
+}
