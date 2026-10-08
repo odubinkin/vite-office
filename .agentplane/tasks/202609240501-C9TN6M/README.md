@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 255
+revision: 256
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-08T20:19:44.746Z"
+doc_updated_at: "2026-10-08T20:47:47.553Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -1247,6 +1247,20 @@ sections:
     Current-agent EVALUATOR explicitly non-independent reviewed21actual implementation paths and reconstructed four certificates byte-identically. quality/20261008-201811396-recovery-context/quality-report.json binds actual implementationSHA and pass; owner verification recorded. DONE leaf immutable. Full suite243 skipped under explicit user cadence:last237,next247.
 
     Full SwCellFrame hierarchy/retargeting/invalidation, numeric formatting/calculation, native width replacement/shared format arrays, pooling/nested/merged/UNO/default modified-state and whole core/browser parity remain unverified. This leaf establishes native cell model ownership/history/direct UI queries, not full physical cell-frame parity. Goal ACTIVE; registered open/save/recovery/settings deviations preserved.
+
+    ### Iteration 244 — original linked native cell frame clients
+
+    Completed leaf202610082025-EJV880. Actual implementation8214d309ac4a7a67cee7724f59c20e49d0aef8c5; verification checkpoint2a3c5b954f8466bbb499c6b5578f4ddce502caeb; meaningful clean closefd52764f42b0b49e400f6ba549e6ed5b9fe7656a. SwFrame and SwLayoutFrame now own original registration and linked upper/next/previous/lower pointers. SwRowFrame creates original SwCellFrame children in box order and inherits typed native format queries. Matching physical cell clients move before model registration during shared ClaimFrameFormat; distinct TableBoxFormatChanged and MoveTableBoxHint retain actual cell/frame identities through complete native attribute Undo/Redo.
+
+    Actual column/row/table deletion unlinks and destroys matching linked/repeated physical clients before model box disposal; final native format client deletion is retained. Main JSX traverses original row lowers/next cells, collapsing painter borrows registered cell items, and box-width measurement uses a native cell frame. All temporary frames are released after success or projection/paint exceptions. No cloned frame graph, cell DTO cache or TextRuns bridge introduced.
+
+    1318unique app scenarios passed including12fresh, plus25Chromium; zero passing runtime replay. One fresh initial CSS unit assertion corrected to actual1.5pt from equivalent2px, failed-only closure1pass2skip. Build/runtime physically upstream absent/restored finally.657prior acceptance files byte-identical. Existing316metadata fields/default/status/classification/evidence prefixes and relative order preserved; one unverified wsfrm module inserted into enforced runtime ordering,317total. Source provenance retains old order. Initial atomic-hint test misuse and metadata ordering failures corrected; final six statics/build/source/governance/artifact audits pass. Closeout staging named a config-advertised absent tasks.json; route/status recomputed and only existing task subtree staged, no manual database edit.
+
+    Actual all-four100coverage app17793lines/19535statements/4461functions/14394branches and inventory1464/1523/384/1081;314app/38inventory. Prior243 accepted only for whole current byte-identical source/maps or complete unchanged declaration/body/enclosing branch/all locations;5modified-source region proofs. Invalid focused V8 painter inferred-else counter retained raw; entire initial current-byte-identical painter maps/counters already independently all-four100 supply that module, with no individual sanitization. Unchanged inventory/infra runtime not replayed. Eight native source files bound to pin9bc445578031fecf56086729d8e4940c77e14d65; IO4/whole writer-view/stash retained. No upstream/application/Python/scripts/raw maps/results in AgentPlane; raw scripts/data remain in ignored app cache.
+
+    Current-agent EVALUATOR explicitly non-independent reviewed11actual committed semantic paths and reconstructed4certificates byte-identically; quality/20261008-204518728-recovery-context/quality-report.json evaluated_sha binds actual implementation and pass. Owner verification recorded, DONE leaf immutable. Full suite244 skipped under user cadence last237,next247.
+
+    Full native frame geometry/flags/invalidation/content/follows/accessibility/fly/root, nested/merged/UNO/pooling/calculation/modified-state and whole core/browser parity remain incomplete. This repair establishes represented original linked cell ownership and native registration/history/lifetime; broader layout mechanics are still unverified. Registered open/save/recovery/settings deviations preserved; goal ACTIVE.
 id_source: "generated"
 ---
 ## Summary
@@ -2467,3 +2481,17 @@ Cumulative actual source-bound coverage100% app17722lines/19453statements/4440fu
 Current-agent EVALUATOR explicitly non-independent reviewed21actual implementation paths and reconstructed four certificates byte-identically. quality/20261008-201811396-recovery-context/quality-report.json binds actual implementationSHA and pass; owner verification recorded. DONE leaf immutable. Full suite243 skipped under explicit user cadence:last237,next247.
 
 Full SwCellFrame hierarchy/retargeting/invalidation, numeric formatting/calculation, native width replacement/shared format arrays, pooling/nested/merged/UNO/default modified-state and whole core/browser parity remain unverified. This leaf establishes native cell model ownership/history/direct UI queries, not full physical cell-frame parity. Goal ACTIVE; registered open/save/recovery/settings deviations preserved.
+
+### Iteration 244 — original linked native cell frame clients
+
+Completed leaf202610082025-EJV880. Actual implementation8214d309ac4a7a67cee7724f59c20e49d0aef8c5; verification checkpoint2a3c5b954f8466bbb499c6b5578f4ddce502caeb; meaningful clean closefd52764f42b0b49e400f6ba549e6ed5b9fe7656a. SwFrame and SwLayoutFrame now own original registration and linked upper/next/previous/lower pointers. SwRowFrame creates original SwCellFrame children in box order and inherits typed native format queries. Matching physical cell clients move before model registration during shared ClaimFrameFormat; distinct TableBoxFormatChanged and MoveTableBoxHint retain actual cell/frame identities through complete native attribute Undo/Redo.
+
+Actual column/row/table deletion unlinks and destroys matching linked/repeated physical clients before model box disposal; final native format client deletion is retained. Main JSX traverses original row lowers/next cells, collapsing painter borrows registered cell items, and box-width measurement uses a native cell frame. All temporary frames are released after success or projection/paint exceptions. No cloned frame graph, cell DTO cache or TextRuns bridge introduced.
+
+1318unique app scenarios passed including12fresh, plus25Chromium; zero passing runtime replay. One fresh initial CSS unit assertion corrected to actual1.5pt from equivalent2px, failed-only closure1pass2skip. Build/runtime physically upstream absent/restored finally.657prior acceptance files byte-identical. Existing316metadata fields/default/status/classification/evidence prefixes and relative order preserved; one unverified wsfrm module inserted into enforced runtime ordering,317total. Source provenance retains old order. Initial atomic-hint test misuse and metadata ordering failures corrected; final six statics/build/source/governance/artifact audits pass. Closeout staging named a config-advertised absent tasks.json; route/status recomputed and only existing task subtree staged, no manual database edit.
+
+Actual all-four100coverage app17793lines/19535statements/4461functions/14394branches and inventory1464/1523/384/1081;314app/38inventory. Prior243 accepted only for whole current byte-identical source/maps or complete unchanged declaration/body/enclosing branch/all locations;5modified-source region proofs. Invalid focused V8 painter inferred-else counter retained raw; entire initial current-byte-identical painter maps/counters already independently all-four100 supply that module, with no individual sanitization. Unchanged inventory/infra runtime not replayed. Eight native source files bound to pin9bc445578031fecf56086729d8e4940c77e14d65; IO4/whole writer-view/stash retained. No upstream/application/Python/scripts/raw maps/results in AgentPlane; raw scripts/data remain in ignored app cache.
+
+Current-agent EVALUATOR explicitly non-independent reviewed11actual committed semantic paths and reconstructed4certificates byte-identically; quality/20261008-204518728-recovery-context/quality-report.json evaluated_sha binds actual implementation and pass. Owner verification recorded, DONE leaf immutable. Full suite244 skipped under user cadence last237,next247.
+
+Full native frame geometry/flags/invalidation/content/follows/accessibility/fly/root, nested/merged/UNO/pooling/calculation/modified-state and whole core/browser parity remain incomplete. This repair establishes represented original linked cell ownership and native registration/history/lifetime; broader layout mechanics are still unverified. Registered open/save/recovery/settings deviations preserved; goal ACTIVE.
