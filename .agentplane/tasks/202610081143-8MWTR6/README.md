@@ -1,10 +1,11 @@
 ---
 id: "202610081143-8MWTR6"
 title: "Own native independent row column widths through box frame sizes"
-status: "DOING"
+result_summary: "verified-202610081143-8MWTR6"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 23
+revision: 25
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-08T12:46:42.675Z"
+  updated_at: "2026-10-08T12:46:55.035Z"
   updated_by: "CODER"
-  note: "Final documented hook/preflight observations preserve actual implementation4c55ad4f82435345c6cdb20dba41062ffe20ada6. Runtime/native/source/scope/coverage/artifact/governance evidence and same-agent EVALUATOR PASS unchanged;13808app110inventory19infra299ChromiumPASS,zero passing replay. Corrected task-scope checkpoint precedes close; no hook bypass, no test rerun, goalACTIVE."
+  note: "verified-202610081143-8MWTR6"
   attempts: 0
 quality_review:
   state: "pass"
@@ -42,11 +43,16 @@ quality_review:
   findings:
     - "Reconstructed exact-source coverage/case/scope evidence byte-identically against actual implementation SHA; unique13808app/110inventory/19infra/299ChromiumPASS,23fresh cases, zero passing replay,89skips retained, all4current-source app/inventory100 without sanitation."
     - "Native11source anchors/current17production hashes,34exact paths,611other prior acceptance files unchanged and12source-backed full-format/current-row migrations;309prior metadata preserved,311current newnative partial unverified."
-commit: null
+commit:
+  hash: "4c55ad4f82435345c6cdb20dba41062ffe20ada6"
+  message: "🔧 8MWTR6 code: Own native cell widths and independent row column tracking"
 comments:
   -
     author: "CODER"
     body: "Start: implement source-native per-box frame size and independent current-row columns across original model/history/DOM/filter owners under standing user parity authorization; scope27 declared, preserve IO/pin/stash/parent and source-only test independence."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610081143-8MWTR6. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -73,8 +79,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Final documented hook/preflight observations preserve actual implementation4c55ad4f82435345c6cdb20dba41062ffe20ada6. Runtime/native/source/scope/coverage/artifact/governance evidence and same-agent EVALUATOR PASS unchanged;13808app110inventory19infra299ChromiumPASS,zero passing replay. Corrected task-scope checkpoint precedes close; no hook bypass, no test rerun, goalACTIVE."
+  -
+    type: "verify"
+    at: "2026-10-08T12:46:55.035Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610081143-8MWTR6"
+  -
+    type: "status"
+    at: "2026-10-08T12:46:55.179Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610081143-8MWTR6. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-08T12:46:42.761Z"
+doc_updated_at: "2026-10-08T12:46:55.181Z"
 doc_updated_by: "CODER"
 description: "Replace shared flat-table column geometry with native per-box SwFormatFrameSize ownership and source current-row column application, including original graph history, current-row visible/all-row hidden separators, DOM union grid and ODF union-grid spans/roundtrip. Remove retained Writer ordinary-column fallback only once native document/history/render/filter mechanics support independent widths. Standing user iterative parity authorization applies; registered IO/recovery/open/save policy unchanged; pinned source read only, tests never read upstream."
 sections:
@@ -220,6 +239,36 @@ sections:
     - operator_action: run_exact_argv
     - can_execute_now: true
     - safe_command: agentplane task complete 202610081143-8MWTR6 --result verified-202610081143-8MWTR6 --commit 4c55ad4f82435345c6cdb20dba41062ffe20ada6
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-10-08T12:46:55.035Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610081143-8MWTR6
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-08T12:46:42.761Z, excerpt_hash=sha256:0f10577c9a1665a4303f75ec1f4a480a7b58b8185786e4e8b7d92421214dce90
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610081143-8MWTR6/blueprint/resolved-snapshot.json
+    - old_digest: 801bf23bda014b988c07384c8ad34ae2dd885a4eaa270a770ed8a57d3c0c4075
+    - current_digest: 801bf23bda014b988c07384c8ad34ae2dd885a4eaa270a770ed8a57d3c0c4075
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610081143-8MWTR6
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610081143-8MWTR6 --result verified-202610081143-8MWTR6 --commit ae322970b58d1f5e9542a71529e5f9f0de8048a6
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -397,6 +446,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202610081143-8MWTR6 --result verified-202610081143-8MWTR6 --commit 4c55ad4f82435345c6cdb20dba41062ffe20ada6
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-08T12:46:55.035Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610081143-8MWTR6
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-08T12:46:42.761Z, excerpt_hash=sha256:0f10577c9a1665a4303f75ec1f4a480a7b58b8185786e4e8b7d92421214dce90
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610081143-8MWTR6/blueprint/resolved-snapshot.json
+- old_digest: 801bf23bda014b988c07384c8ad34ae2dd885a4eaa270a770ed8a57d3c0c4075
+- current_digest: 801bf23bda014b988c07384c8ad34ae2dd885a4eaa270a770ed8a57d3c0c4075
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610081143-8MWTR6
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610081143-8MWTR6 --result verified-202610081143-8MWTR6 --commit ae322970b58d1f5e9542a71529e5f9f0de8048a6
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
