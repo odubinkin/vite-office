@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 256
+revision: 257
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-08T20:47:47.553Z"
+doc_updated_at: "2026-10-08T21:31:04.786Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -1261,6 +1261,18 @@ sections:
     Current-agent EVALUATOR explicitly non-independent reviewed11actual committed semantic paths and reconstructed4certificates byte-identically; quality/20261008-204518728-recovery-context/quality-report.json evaluated_sha binds actual implementation and pass. Owner verification recorded, DONE leaf immutable. Full suite244 skipped under user cadence last237,next247.
 
     Full native frame geometry/flags/invalidation/content/follows/accessibility/fly/root, nested/merged/UNO/pooling/calculation/modified-state and whole core/browser parity remain incomplete. This repair establishes represented original linked cell ownership and native registration/history/lifetime; broader layout mechanics are still unverified. Registered open/save/recovery/settings deviations preserved; goal ACTIVE.
+
+    ### Iteration 245 — native format attribute deltas and pooled cell defaults
+
+    Completed leaf202610082053-5TDXPQ. Actual implementation913bf782799155f0ab7ee9a72d1fd8f13b1733e7; verification checkpoint4f06bca1b0a4aa0949a9b08e3d694be2f3258c07; meaningful clean closec39febc4096b97fdf7492c4813913fab60e89d41. SwAttrSetChg borrows actual original format sets and deltas; copies clone only deltas. AttrSetChangeHint and ClientNotifyAttrChg deliver precise effective old/new items to actual registered SwModify clients under native boolean locking. Original parent format registration and Differentiate filter every locally-present WhichId, including INVALID/DISABLED. Row/cell generic attribute overrides removed and copied native claims locked; original physical frame/model/history identities retained.
+
+    Native pooled defaults127/157/158/159 now use actual protection false flags, CntUInt32Item/SfxUInt32Item hierarchy, numeric format100 with native locale text normalization modulo10000, detached non-shareable formula ownership and zero double/NaN equality. Existing browser paint-device invalidation follows native clients without recording an extra document model mutation. SwTableFormula second-base/parser/calculation/name conversion, complete numeric processing, frame cache/fill/invalidation/geometry and direct native UI registration remain partial; source metadata not promoted.
+
+    1575unique app cases including20fresh and13Chromium passed. Initial1538pass6fail; closure1 resolves6 failures and explicitly revalidates3 fresh cases affected by corrected production device semantics,9pass30skip; closure2 only2new cases and29 previously unexecuted related frame/box item scenarios,31pass14skip. No unchanged passing replay. All profiles physically upstream absent/restored finally.660prior acceptance files byte-identical;663total.317prior metadata fields/status/default/classification/order/prefixes retained and one new cellatr module unverified,318total.
+
+    Actual all-four100 coverage app17953lines/19706statements/4515functions/14489branches across315sources, inventory1464/1523/384/1081 across38sources. Prior244 accepted only whole-source/maps or complete unchanged declaration/signature/body/enclosing branch/all-location proofs;10 modified-source transfers. Generated V8 duplicate method display ordinal changes verified with complete source hashes, no individual counter sanitization. Full source guards, six statics/build/governance/artifact checks pass.16pinned native sources, IO4/whole writer-view/stash preserved. No upstream/application/Python/scripts/raw maps/results saved in AgentPlane. Name-only runtime census collision corrected by file/fullName/occurrence identity; initial static and metadata ordering errors retained in Findings.
+
+    Current-agent EVALUATOR explicitly non-independent reconstructed4certificates byte-identically for16actual committed paths; quality/20261008-212950299-recovery-context/quality-report.json evaluated_sha binds actual implementation and pass. DONE leaf immutable. Full245 skipped by explicit user cadence last237,next247. Native UI subscription/invalidation and whole existing-function upstream parity still incomplete; registered open/save/recovery/settings deviations preserved; goal ACTIVE.
 id_source: "generated"
 ---
 ## Summary
@@ -2495,3 +2507,15 @@ Actual all-four100coverage app17793lines/19535statements/4461functions/14394bran
 Current-agent EVALUATOR explicitly non-independent reviewed11actual committed semantic paths and reconstructed4certificates byte-identically; quality/20261008-204518728-recovery-context/quality-report.json evaluated_sha binds actual implementation and pass. Owner verification recorded, DONE leaf immutable. Full suite244 skipped under user cadence last237,next247.
 
 Full native frame geometry/flags/invalidation/content/follows/accessibility/fly/root, nested/merged/UNO/pooling/calculation/modified-state and whole core/browser parity remain incomplete. This repair establishes represented original linked cell ownership and native registration/history/lifetime; broader layout mechanics are still unverified. Registered open/save/recovery/settings deviations preserved; goal ACTIVE.
+
+### Iteration 245 — native format attribute deltas and pooled cell defaults
+
+Completed leaf202610082053-5TDXPQ. Actual implementation913bf782799155f0ab7ee9a72d1fd8f13b1733e7; verification checkpoint4f06bca1b0a4aa0949a9b08e3d694be2f3258c07; meaningful clean closec39febc4096b97fdf7492c4813913fab60e89d41. SwAttrSetChg borrows actual original format sets and deltas; copies clone only deltas. AttrSetChangeHint and ClientNotifyAttrChg deliver precise effective old/new items to actual registered SwModify clients under native boolean locking. Original parent format registration and Differentiate filter every locally-present WhichId, including INVALID/DISABLED. Row/cell generic attribute overrides removed and copied native claims locked; original physical frame/model/history identities retained.
+
+Native pooled defaults127/157/158/159 now use actual protection false flags, CntUInt32Item/SfxUInt32Item hierarchy, numeric format100 with native locale text normalization modulo10000, detached non-shareable formula ownership and zero double/NaN equality. Existing browser paint-device invalidation follows native clients without recording an extra document model mutation. SwTableFormula second-base/parser/calculation/name conversion, complete numeric processing, frame cache/fill/invalidation/geometry and direct native UI registration remain partial; source metadata not promoted.
+
+1575unique app cases including20fresh and13Chromium passed. Initial1538pass6fail; closure1 resolves6 failures and explicitly revalidates3 fresh cases affected by corrected production device semantics,9pass30skip; closure2 only2new cases and29 previously unexecuted related frame/box item scenarios,31pass14skip. No unchanged passing replay. All profiles physically upstream absent/restored finally.660prior acceptance files byte-identical;663total.317prior metadata fields/status/default/classification/order/prefixes retained and one new cellatr module unverified,318total.
+
+Actual all-four100 coverage app17953lines/19706statements/4515functions/14489branches across315sources, inventory1464/1523/384/1081 across38sources. Prior244 accepted only whole-source/maps or complete unchanged declaration/signature/body/enclosing branch/all-location proofs;10 modified-source transfers. Generated V8 duplicate method display ordinal changes verified with complete source hashes, no individual counter sanitization. Full source guards, six statics/build/governance/artifact checks pass.16pinned native sources, IO4/whole writer-view/stash preserved. No upstream/application/Python/scripts/raw maps/results saved in AgentPlane. Name-only runtime census collision corrected by file/fullName/occurrence identity; initial static and metadata ordering errors retained in Findings.
+
+Current-agent EVALUATOR explicitly non-independent reconstructed4certificates byte-identically for16actual committed paths; quality/20261008-212950299-recovery-context/quality-report.json evaluated_sha binds actual implementation and pass. DONE leaf immutable. Full245 skipped by explicit user cadence last237,next247. Native UI subscription/invalidation and whole existing-function upstream parity still incomplete; registered open/save/recovery/settings deviations preserved; goal ACTIVE.
