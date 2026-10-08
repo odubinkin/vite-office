@@ -1,0 +1,46 @@
+{
+  "currentUniqueExecutedAppCases": 1318,
+  "currentPassedAppCases": 1318,
+  "freshPassedCases": 12,
+  "freshByFile": [
+    {
+      "path": "apps/office/src/sw/source/core/layout/native-cell-format-client.test.ts",
+      "passedCases": 5
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/native-cell-format-client-history.test.ts",
+      "passedCases": 4
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/native-cell-format-client.test.tsx",
+      "passedCases": 3
+    }
+  ],
+  "appPassingReplayCount": 0,
+  "failedAttemptsRetained": 1,
+  "focusedSkippedObservations": 2,
+  "chromiumPassingReplayCount": 0,
+  "uniqueExecutedChromiumCases": 25,
+  "fullSuiteExecutedThisLeaf": false,
+  "fullSuiteCadence": {
+    "lastLeaf": 237,
+    "nextLeaf": 247
+  },
+  "unchangedInventoryAndInfrastructure": "No current leaf execution; prior243 actual certified counters accepted only after whole current source/maps equality.",
+  "executedFiles": [
+    {
+      "identifier": "EJV880.app-results.json",
+      "sha256": "223583d5f1269c405513cea7ede1153a006d803cf0d02c819fff480cdad729be"
+    },
+    {
+      "identifier": "EJV880.closure1.app-results.json",
+      "sha256": "10f2ff56107384e84e5aea85077777ed3fa81c9b57383dc5eef2274ed1f41c4b"
+    },
+    {
+      "identifier": "EJV880.chromium-results.json",
+      "sha256": "728f540827a18650db2ee39bf6cbe0f89667d9b5435783822e5c408fcefde498"
+    }
+  ],
+  "rawThresholdExitsRetained": true,
+  "coverageCertificate": "final-coverage.json"
+}

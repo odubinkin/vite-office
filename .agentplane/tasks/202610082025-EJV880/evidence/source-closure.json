@@ -1,0 +1,23 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "command": "npm run inventory:parity",
+      "exit": 0,
+      "bytes": 2238776,
+      "sha256": "24f11f66fa4d2e14494d0f03b5792bac7584a38824657f812c286e77fc5835ce",
+      "diagnostics": [
+        "> tsx scripts/libreoffice-inventory/parity-mapping-cli.ts --baseline docs/program/libreoffice-baseline.json --mappings docs/program/parity/writer-command-slice.json --runtime-inventory docs/program/parity/runtime-inventory.json --runtime-root apps/office/src --local-root . --upstream-root vendor/libreoffice-reference",
+        "        \"reason\": \"browser-runtime-inapplicable\",",
+        "        \"rationale\": \"Native crash/session recovery depends on desktop process and backup-file lifecycle not used by this browser document workflow.\"",
+        "        \"reason\": \"browser-runtime-inapplicable\",",
+        "        \"rationale\": \"Native crash/session recovery depends on desktop process and backup-file lifecycle not used by this browser document workflow.\"",
+        "      \"path\": \"apps/office/src/framework/browser/presentation/CommandMenuBar.tsx\",",
+        "      \"side\": \"upstream\"",
+        "      \"path\": \"apps/office/src/framework/browser/presentation/CommandMenuBar.tsx\",",
+        "      \"side\": \"upstream\"",
+        "      \"path\": \"apps/office/src/sw/browser/presentation/WriterMenuBar.test.tsx\","
+      ]
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "base": "8037794df5f81473bcc3669a29c03dff6ec5e06b",
+  "priorAcceptanceFiles": 657,
+  "entireByteIdenticalPriorAcceptanceFiles": 657,
+  "exactBeforeDestructiveUndoValueCaptureOnly": [],
+  "oldLiteralAttributeIdentityAndHistoryAssertionsPreserved": true,
+  "freshAcceptanceFiles": [
+    {
+      "path": "apps/office/src/sw/source/core/layout/native-cell-format-client.test.ts",
+      "sha256": "6bef368c0c57970a4e49d8b60e512642dd1d2db9b91d054db306bd6a2463933a",
+      "noOnlySkipTodo": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/native-cell-format-client-history.test.ts",
+      "sha256": "b002a577a22eb4b8d1dbcfc8dadb6a4158be00820489b521e186f3781bf5ad1e",
+      "noOnlySkipTodo": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/native-cell-format-client.test.tsx",
+      "sha256": "de675caeab93a362c906f0c81dd18a4424e34098039fd6a7557c2adffa1c93b9",
+      "noOnlySkipTodo": true
+    }
+  ],
+  "metadata": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "priorRecords": 316,
+      "priorFieldsStatusesDefaultsClassificationOrderAndEvidencePrefixesPreserved": true,
+      "newRecords": 1
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "priorRecords": 316,
+      "priorFieldsStatusesDefaultsClassificationOrderAndEvidencePrefixesPreserved": true,
+      "newRecords": 1
+    }
+  ],
+  "approvedSemanticPaths": [
+    "apps/office/src/sw/source/core/layout/wsfrm.ts",
+    "apps/office/src/sw/source/core/layout/tabfrm.ts",
+    "apps/office/src/sw/source/core/table/swtable.ts",
+    "apps/office/src/sw/source/core/docnode/nodes.ts",
+    "apps/office/src/sw/source/core/layout/paintfrm.ts",
+    "apps/office/src/sw/browser/editor/WriterEditableTable.tsx",
+    "apps/office/src/sw/source/core/layout/native-cell-format-client.test.ts",
+    "apps/office/src/sw/source/core/undo/native-cell-format-client-history.test.ts",
+    "apps/office/src/sw/browser/editor/native-cell-format-client.test.tsx",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "unexpectedPaths": []
+}

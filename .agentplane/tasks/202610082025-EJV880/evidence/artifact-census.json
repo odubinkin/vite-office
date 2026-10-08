@@ -1,0 +1,14 @@
+{
+  "wholeAgentplaneFilesInspected": 6089,
+  "wholeAgentplaneForbiddenSourceOrPythonCount": 0,
+  "forbiddenPaths": [],
+  "activeEvidenceFiles": 15,
+  "noRawCoverageResultsOrSourceSnapshots": true,
+  "unexpectedRawPaths": [],
+  "rawEvidenceLocation": "Ignored apps/office/node_modules/.cache/parity-coverage only",
+  "legitimatePolicySources": [
+    ".agentplane/policy/check-routing.mjs",
+    ".agentplane/.upgrade/baseline/policy/check-routing.mjs"
+  ],
+  "activeTaskNotesEnglish": true
+}

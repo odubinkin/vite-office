@@ -2,7 +2,7 @@
  * @fileoverview Implements the Writer SwNodes array and fixed sections from the pinned LibreOffice `sw/source/core/docnode/nodes.cxx` boundary.
  */
 
-import { SwRowFrame } from "../layout/tabfrm";
+import { SwRowFrame, SwCellFrame } from "../layout/tabfrm";
 import { SwOutlineNodes } from "./ndnum";
 import type { SwDoc } from "../doc/doc";
 import { SwEndNode, SwStartNode, SwTableBoxStartNode, SwTableNode, type SwNode } from "./node";
@@ -206,7 +206,7 @@ export class SwNodes {
           return false;
         },
       );
-      for (const box of row.GetTabBoxes()) box.Dispose();
+      for (const box of row.GetTabBoxes()) this.DestroyTableBox(box);
       row.Dispose();
     }
     this.nodeArray.splice(index, end - index + 1);
@@ -366,7 +366,7 @@ export class SwNodes {
       }
     this.nodeArray.splice(index, section.nodes.length);
     line.RemoveBox(section.box);
-    section.box.Dispose();
+    this.DestroyTableBox(section.box);
     this.document.NotifyModelChange({ index, kind: "node-removed" });
   }
 
@@ -440,9 +440,25 @@ export class SwNodes {
         return false;
       },
     );
-    for (const box of section.line.GetTabBoxes()) box.Dispose();
+    for (const box of section.line.GetTabBoxes()) this.DestroyTableBox(box);
     section.line.Dispose();
     this.document.NotifyModelChange({ index, kind: "node-removed" });
+  }
+
+  /** Removes actual cell layout clients before releasing the original model box. @param box - Deleted native cell. @returns Nothing. */
+  private DestroyTableBox(box: SwTableBox): void {
+    box.GetFrameFormat().ForAllListeners(
+      /** Removes matching original physical cells only. @param client - Native format listener. @returns Continue flag. */ (
+        client,
+      ) => {
+        if (client instanceof SwCellFrame && client.GetTabBox() === box) {
+          if (client.GetUpper() !== undefined) client.RemoveFromLayout();
+          client.DestroyImpl();
+        }
+        return false;
+      },
+    );
+    box.Dispose();
   }
 
   /** Inserts a new text node immediately before the content end sentinel. @param text - Initial text. @returns Inserted text node. */

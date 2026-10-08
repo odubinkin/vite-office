@@ -1,0 +1,17 @@
+{
+  "profile": "upstream-absent",
+  "allowedCases": "Exactly one previously failed fresh mounted native cell frame case; all already passing cases remain skipped.",
+  "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/browser/editor/native-cell-format-client.test.tsx --testNamePattern=^mounted main table renders native linked cell formats and history without box query wrappers$ --coverage.reportOnFailure --coverage.reporter=json-summary --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/EJV880.closure1.app-results.json",
+  "exit": 1,
+  "bytes": 2168,
+  "sha256": "89a7f568a37b4af751655ab06e0b51d5e59563030ebb8afe38b7e5ba420acd81",
+  "caseCounts": {
+    "passed": 1,
+    "failed": 0,
+    "skipped": 2,
+    "total": 3
+  },
+  "failedCases": [],
+  "coverageMapSHA256": "8ca2def11e0d89cc0b68a1bf6b6a528838cfd7b21ae893d9003338aad9ece68a",
+  "vendorRestored": true
+}

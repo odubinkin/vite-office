@@ -3,7 +3,7 @@ import { SwXMLTableLines } from "../../source/filter/xml/xmltble";
 
 import { VertOrientation } from "../../../offapi/com/sun/star/text/VertOrientation";
 
-import { SwRowFrame } from "../../source/core/layout/tabfrm";
+import { SwRowFrame, SwCellFrame } from "../../source/core/layout/tabfrm";
 
 import type { SwTable } from "../../source/core/table/swtable";
 import { SwTabFrame, type SwTablePrintArea } from "../../source/core/layout/tabfrm";
@@ -152,6 +152,7 @@ function browserCellBoxStyle(item: SvxBoxItem, fixedGuide: boolean): React.CSSPr
               const nativeRow = new SwRowFrame(row);
               const isRepeatedHeadline = frameRowIndex < repeatedHeaderRows;
               try {
+                let nativeCell = nativeRow.Lower();
                 return (
                   <tr
                     aria-selected={
@@ -174,7 +175,9 @@ function browserCellBoxStyle(item: SvxBoxItem, fixedGuide: boolean): React.CSSPr
                         cell,
                         cellIndex,
                       ) => {
-                        const cellFormat = cell.GetFrameFormat(),
+                        const frame = nativeCell as SwCellFrame;
+                        nativeCell = frame.GetNext();
+                        const cellFormat = frame.GetFormat(),
                           boxItem = cellFormat.GetBox(),
                           boxStyle = browserCellBoxStyle(boxItem, nativeRow.HasFixSize());
                         if (format.borderModel === "collapsing") {

@@ -1,0 +1,315 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sources": [
+    {
+      "path": "sw/source/core/layout/wsfrm.cxx",
+      "sha256": "68b33e1acaf748e65210b8856f8b094368459565446b7ab5c386684fcae0aeb1",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "SwFrame::SwFrame",
+          "line": 325,
+          "allMatchingLines": [
+            325
+          ]
+        },
+        {
+          "identifier": "SwFrame::KnowsFormat",
+          "line": 363,
+          "allMatchingLines": [
+            363
+          ]
+        },
+        {
+          "identifier": "SwFrame::RegisterToFormat",
+          "line": 368,
+          "allMatchingLines": [
+            368
+          ]
+        },
+        {
+          "identifier": "SwFrame::InsertBehind",
+          "line": 925,
+          "allMatchingLines": [
+            925
+          ]
+        },
+        {
+          "identifier": "SwFrame::RemoveFromLayout",
+          "line": 1067,
+          "allMatchingLines": [
+            1067
+          ]
+        },
+        {
+          "identifier": "SwLayoutFrame::SwLayoutFrame",
+          "line": 2689,
+          "allMatchingLines": [
+            2689
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sw/source/core/layout/ssfrm.cxx",
+      "sha256": "fb1a9ec461658a38717635cf625403aba6d154d0540cef404e58ed8ca230c466",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "SwLayoutFrame::GetFormat",
+          "line": 396,
+          "allMatchingLines": [
+            396,
+            401
+          ]
+        },
+        {
+          "identifier": "SwLayoutFrame::DestroyImpl",
+          "line": 481,
+          "allMatchingLines": [
+            481
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sw/source/core/inc/frame.hxx",
+      "sha256": "81b9bd0cfa717d3b499ee3da640a02738e754609bb57607ca584621978f1b8b0",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "class SAL_DLLPUBLIC_RTTI SwFrame",
+          "line": 133,
+          "allMatchingLines": [
+            133,
+            324
+          ]
+        },
+        {
+          "identifier": "GetDep",
+          "line": 330,
+          "allMatchingLines": [
+            330,
+            490,
+            492
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sw/source/core/inc/layfrm.hxx",
+      "sha256": "124274deb557248947164dd9cbbf05287fb8d9bdd88c61e665e6cf4342a5c2c2",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "class SAL_DLLPUBLIC_RTTI SwLayoutFrame",
+          "line": 37,
+          "allMatchingLines": [
+            37
+          ]
+        },
+        {
+          "identifier": "m_pLower",
+          "line": 36,
+          "allMatchingLines": [
+            36,
+            55,
+            103,
+            104
+          ]
+        },
+        {
+          "identifier": "GetFormat",
+          "line": 122,
+          "allMatchingLines": [
+            122,
+            123
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sw/source/core/layout/tabfrm.cxx",
+      "sha256": "d1d616197c6aeac1b1ba075995892b34cfdbea60838e88136f9bf4a52e90970f",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "SwRowFrame::SwRowFrame",
+          "line": 4639,
+          "allMatchingLines": [
+            4639
+          ]
+        },
+        {
+          "identifier": "SwRowFrame::DestroyImpl",
+          "line": 4675,
+          "allMatchingLines": [
+            4675
+          ]
+        },
+        {
+          "identifier": "SwCellFrame::SwCellFrame",
+          "line": 5804,
+          "allMatchingLines": [
+            5804
+          ]
+        },
+        {
+          "identifier": "SwCellFrame::DestroyImpl",
+          "line": 5832,
+          "allMatchingLines": [
+            5832
+          ]
+        },
+        {
+          "identifier": "SwCellFrame::SwClientNotify",
+          "line": 6379,
+          "allMatchingLines": [
+            6379
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sw/source/core/table/swtable.cxx",
+      "sha256": "10c536056498dd001b3a5c75638040ee5daef966ede231c66947da8e704b1206",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "SwTableBox::ClaimFrameFormat",
+          "line": 2133,
+          "allMatchingLines": [
+            2133
+          ]
+        },
+        {
+          "identifier": "SwTableBox::ChgFrameFormat",
+          "line": 2169,
+          "allMatchingLines": [
+            2169
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sw/inc/hints.hxx",
+      "sha256": "bcd9e3d72adc75313d616c566b0cb1b89a6e7e1d0947b90b09a36364cb467bf3",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "MoveTableBoxHint",
+          "line": 204,
+          "allMatchingLines": [
+            204,
+            209
+          ]
+        },
+        {
+          "identifier": "TableBoxFormatChanged",
+          "line": 227,
+          "allMatchingLines": [
+            227,
+            232,
+            233
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sw/source/core/undo/untbl.cxx",
+      "sha256": "147e1b9f9870416bc83d2b918a0621e810003594b9a95ede372518925b2c245b",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "SaveTable::NewFrameFormatForBox",
+          "line": 1124,
+          "allMatchingLines": [
+            1124
+          ]
+        },
+        {
+          "identifier": "SaveBox::RestoreAttr",
+          "line": 1236,
+          "allMatchingLines": [
+            1236
+          ]
+        }
+      ]
+    }
+  ],
+  "production": [
+    {
+      "path": "apps/office/src/sw/source/core/layout/wsfrm.ts",
+      "sha256": "3fdfd6d257e507988d6db1361dcf182fbfc691dd00eef4206a756751070ae0aa",
+      "physicalLines": 96
+    },
+    {
+      "path": "apps/office/src/sw/source/core/layout/tabfrm.ts",
+      "sha256": "1d18cfc1cb96ed6555e5d6dc840f54ad92695619353d9eacdc623d01f1e4a895",
+      "physicalLines": 198
+    },
+    {
+      "path": "apps/office/src/sw/source/core/table/swtable.ts",
+      "sha256": "30f3a2cd302adda038b621015708aac969974b605c55192bb1c3958f328ebbb5",
+      "physicalLines": 942
+    },
+    {
+      "path": "apps/office/src/sw/source/core/docnode/nodes.ts",
+      "sha256": "6388d1d1d4eb0cf2bdfd9577b1729e764523d1d90eb5158667b97b11bfa71868",
+      "physicalLines": 612
+    },
+    {
+      "path": "apps/office/src/sw/source/core/layout/paintfrm.ts",
+      "sha256": "d90d0928ad66a4907e0e512fb19a2fa96c9ac1fee5aceac7b5ec741735e2c79d",
+      "physicalLines": 169
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/WriterEditableTable.tsx",
+      "sha256": "8c9a2e824049037fd506b05f91c598e12beb0504b57f57cace39a4c5d13c7754",
+      "physicalLines": 321
+    }
+  ],
+  "protectedIO": [
+    {
+      "path": "apps/office/src/sw/browser/storage/writer-odt-store.ts",
+      "sha256": "0fb4ebffca5a00fe63ff327379305d64143c7014dace0a7e13edb8c0c241232e",
+      "baselineByteIdentical": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/workflows/writer-odt-io.ts",
+      "sha256": "7c214afab59dbc5df1087f107e2b7bf2bf01d8623a2995e8eb19a45575361306",
+      "baselineByteIdentical": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/WriterFileDialog.tsx",
+      "sha256": "50ad125f5a254eb1772b62abe3681e4632df6c7870ea9647622b2268394c88c3",
+      "baselineByteIdentical": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts",
+      "sha256": "060a06dd9a77e530de1756b2f4c4384e6b2ddd1ee20c68fb175daab2eeb99ee7",
+      "baselineByteIdentical": true
+    }
+  ],
+  "writerUI": {
+    "path": "apps/office/src/sw/browser/presentation/writer-view.tsx",
+    "sha256": "782755425f440a2438a2994ee429a6ee7b37e4f65ca8e5f1855c9d18db8f9de1",
+    "entireSourceByteIdentical": true
+  },
+  "parent": {
+    "characters": 710281,
+    "sha256": "fccb2f0dca6bfdaa56b2a602f0468b718442a13c68e175bdfb935f427e3de80a",
+    "unchanged": true
+  },
+  "stash": {
+    "commit": "c85f4a0e453dfd06d6e199554784f2c286737472",
+    "preserved": true
+  },
+  "sourceBoundContracts": [
+    "SwFrame and SwLayoutFrame retain actual registered owners and source-shaped null/upper/next/previous/lower pointers. Native construction, typed GetFormat, original InsertBehind and RemoveFromLayout and recursive lower teardown follow pinned wsfrm/ssfrm contracts; full native geometry/flags/fly/content/follows/accessibility/UNO remain unverified.",
+    "SwRowFrame creates actual original SwCellFrame children in box order. Native matching box claims retarget physical cell clients before model registration; distinct change and SaveTable movement hints retain original box/frame identity.",
+    "Real row/column/table deletion removes matching physical cells from their original links and destroys frames before original model clients; final represented client releases its native format. Ordinary RemoveBox remains nondestructive.",
+    "Main JSX traverses actual native row lower/next frames; collapsing painter and width measurement borrow registered native format items with success/exception finally teardown. No frame clone, side-map layout graph, cell DTO cache or TextRuns conversion.",
+    "All657 prior acceptance files remain byte-identical. Existing316 metadata records fields/status/default/classification/order/prefixes retained and one unverified wsfrm record appended to317; no promotion. Protected IO/recovery deviations, whole writer-view, pin and stash preserved; goal ACTIVE."
+  ]
+}

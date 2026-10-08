@@ -1,0 +1,36 @@
+{
+  "records": [
+    {
+      "command": "npm run format:check",
+      "exit": 0,
+      "bytes": 122,
+      "sha256": "ac1729f86eee878f5f4d6c948c510d2cc91bb5568f6dd088f70f3885e137d116",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run lint",
+      "exit": 0,
+      "bytes": 55,
+      "sha256": "a6172cb57fa696e705408fdc605fba1ae07b852fdf0614d7c2b623349e285b6e",
+      "diagnostics": [
+        "> eslint . --max-warnings 0"
+      ]
+    },
+    {
+      "command": "npm run typecheck",
+      "exit": 2,
+      "bytes": 915,
+      "sha256": "952871ed7223e054f38a3d294060713bb5d715721ae32e050a235bade0a05bc0",
+      "diagnostics": [
+        "src/sw/source/core/layout/native-cell-format-client.test.ts(163,5): error TS2322: Type '\"model-transaction\"' is not assignable to type '\"move-table-box\" | \"table-box-format-changed\" | \"move-table-line\" | \"table-line-format-changed\" | \"attribute-set-changed\" | \"cursor-selection-changed\" | \"document-disposed\" | ... 11 more ... | \"medium-operation-changed\"'.",
+        "npm error Lifecycle script `typecheck` failed with error:",
+        "npm error code 2",
+        "npm error path /Users/odubinkin/Projects/vite-office/apps/office",
+        "npm error workspace @vite-office/office@0.1.0",
+        "npm error location /Users/odubinkin/Projects/vite-office/apps/office",
+        "npm error command failed",
+        "npm error command sh -c tsc --noEmit"
+      ]
+    }
+  ]
+}

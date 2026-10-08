@@ -1,0 +1,32 @@
+{
+  "records": [
+    {
+      "command": "npm run typecheck",
+      "exit": 0,
+      "bytes": 240,
+      "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:dependencies",
+      "exit": 0,
+      "bytes": 189,
+      "sha256": "caf05dfaee596c86c0676170089705bde9b12ee358f31882c63799dfe7a5735b",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:docs",
+      "exit": 0,
+      "bytes": 120,
+      "sha256": "589aba97b724df30f7ede7f74970b695427c6d694efa72538a2817f4e5d89578",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:file-size",
+      "exit": 0,
+      "bytes": 4069,
+      "sha256": "f9622c84551dc177d29fa1ee7b8802f9b4533b1b71d039af347a38ca8ae8a66f",
+      "diagnostics": []
+    }
+  ]
+}

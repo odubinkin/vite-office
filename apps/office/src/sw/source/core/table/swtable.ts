@@ -3,7 +3,7 @@
 import type { SwTableBoxStartNode, SwTableNode } from "../docnode/node";
 import type { SwDoc } from "../doc/doc";
 import { SwFrameFormat } from "../layout/atrfrm";
-import { SwRowFrame } from "../layout/tabfrm";
+import { SwRowFrame, SwCellFrame } from "../layout/tabfrm";
 import { TableLineFormatChanged, TableBoxFormatChanged } from "../../../inc/hints";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { SwTextNode } from "../txtnode/ndtxt";
@@ -111,6 +111,15 @@ export class SwTableBox extends SwClient {
     copy.CopyFormatFrom(original);
     copy.ResetFormatAttr(RES_BOXATR_FORMULA);
     copy.ResetFormatAttr(RES_BOXATR_VALUE);
+    original.ForAllListeners(
+      /** Moves cell frames naming this original box before model registration. @param client - Original listener. @returns Continue flag. */ (
+        client,
+      ) => {
+        if (client instanceof SwCellFrame && client.GetTabBox() === this)
+          client.RegisterToFormat(copy);
+        return false;
+      },
+    );
     this.RegisterToModify(copy);
     return copy;
   }

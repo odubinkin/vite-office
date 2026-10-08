@@ -4003,6 +4003,18 @@
           {
             "path": "apps/office/src/sw/browser/editor/native-box-frame-format.test.tsx",
             "marker": "@fileoverview"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/layout/native-cell-format-client.test.ts",
+            "marker": "@fileoverview"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/undo/native-cell-format-client-history.test.ts",
+            "marker": "@fileoverview"
+          },
+          {
+            "path": "apps/office/src/sw/browser/editor/native-cell-format-client.test.tsx",
+            "marker": "@fileoverview"
           }
         ],
         "upstream": [
@@ -4117,7 +4129,9 @@
         "Iteration242 registers original SwRowFrame clients at native row formats. ClaimFrameFormat directly retargets matching physical row clients before row registration; ChgFrameFormat and SaveTable history use distinct native TableLineFormatChanged and MoveTableLineHint notifications. Flat row/table deletion releases row frames before the model row and destroys formats only after their last represented client. Temporary JSX rendering and layout measurement release frames in finally while retaining direct native item reads. Full layout invalidation, frame hierarchy/follows, pooling, merged/nested tables and UNO remain unverified. Targeted checks pending; last full237, next247; previous classifications, defaults and registered I/O/recovery deviations preserved.",
         "Iteration242 verified targeted closure:11 fresh native registration/hint/claim/history/deletion and main UI measurement/render/exception-lifetime cases plus related modules passed1293 unique app cases and11 Chromium cases. Two old cases now capture expected attributes before native destruction; literal attributes, original/new identities and history assertions remain intact.649 unaffected old acceptance files are byte-identical. Initial four failed cases passed in a failed-only closure; an additional new exception case and previously unexecuted related alignment/headline modules completed coverage, with zero passing replay. App and inventory all-four100% coverage uses actual counters and prior241 only for whole identical source/maps or complete unchanged declaration/body/enclosing branch/all locations. Full native hierarchy/invalidation/follows/pooling/nested/merged/UNO and whole core/browser parity remain unverified; previous metadata status/default/classification and registered deviations preserved. Last full237,next247; no full242.",
         "Iteration243 owns native SwTableBoxFormat item sets through registered SwTableBox clients, exact box ranges and default frame inheritance. Cell claims retain complete direct attributes and separate shared calculation items; border and vertical commands reuse operation-local native format owners. SaveTable stores deduplicated complete cell item sets and numeric indices, restoring shared owners with MoveTableBoxHint before model registration. Actual section deletion releases cell clients; native insertion shares source formats; the main JSX table reads native border and orientation items directly. Full SwCellFrame hierarchy, invalidation, calculation, nested/merged tables and UNO remain partial. Targeted verification pending; last full237, next247; existing classifications/defaults and registered I/O/recovery deviations preserved.",
-        "Iteration243 verified1301 unique app cases including11 fresh native cell ownership/default/item-set/claim/hint/history/deletion and mounted rendering scenarios, plus25 Chromium cases, all runtime/build physically upstream absent/restored finally. Five old acceptance files capture expected attributes before native destruction or adopt native constructors without weakening literal/identity/history assertions;649 unaffected prior files remain byte-identical. Three initial failures passed failed-only; two new border-sharing/admission cases completed coverage, with zero passing replay. App and inventory all-four100% actual counters are bound to current bytes/maps or complete unchanged declarations/bodies/enclosing branches/all locations from242. Full SwCellFrame hierarchy/invalidation, calculation, numeric formatting, nested/merged/UNO/pooling/modified-state and whole project parity remain partial. Existing316 classifications/defaults/status/evidence prefixes and registered I/O/recovery deviations preserved. Last full237,next247; no full243."
+        "Iteration243 verified1301 unique app cases including11 fresh native cell ownership/default/item-set/claim/hint/history/deletion and mounted rendering scenarios, plus25 Chromium cases, all runtime/build physically upstream absent/restored finally. Five old acceptance files capture expected attributes before native destruction or adopt native constructors without weakening literal/identity/history assertions;649 unaffected prior files remain byte-identical. Three initial failures passed failed-only; two new border-sharing/admission cases completed coverage, with zero passing replay. App and inventory all-four100% actual counters are bound to current bytes/maps or complete unchanged declarations/bodies/enclosing branches/all locations from242. Full SwCellFrame hierarchy/invalidation, calculation, numeric formatting, nested/merged/UNO/pooling/modified-state and whole project parity remain partial. Existing316 classifications/defaults/status/evidence prefixes and registered I/O/recovery deviations preserved. Last full237,next247; no full243.",
+        "Iteration244 connects actual SwFrame and SwLayoutFrame registration and original linked lower/sibling pointers. SwRowFrame constructs SwCellFrame children; native box claims retarget matching physical clients before model registration and history moves original cell frames. Recursive flat layout teardown and actual cell deletion release registrations; JSX, collapsing border paint and width measurement borrow registered native format items and release frames in finally. Full native geometry, flags, invalidation, content, follows, accessibility, fly/root and UNO remain unverified. Targeted verification pending; last full237,next247; prior metadata status/default/classification and registered I/O/recovery deviations preserved.",
+        "Iteration244 verified1318 unique app cases including12 fresh linked-frame ownership, claim ordering, transaction/history, deletion and main rendering/lifetime cases, plus25 Chromium cases. All657 prior acceptance files remain byte-identical; no passing runtime replay. Build/runtime upstream physically absent and restored finally; one fresh CSS-unit expectation corrected in a failed-only closure1pass2skip. Actual app/inventory all-four100% coverage binds current source/maps and complete unchanged declarations/bodies/enclosing branches/all locations from243. Invalid focused V8 painter inferred-else counters are retained raw; the entire valid initial current-byte-identical painter maps/counters already all-four100 supply that module, without counter sanitization. Prior316 metadata fields/order/status/default/classification/evidence prefixes retained; new wsfrm module unverified, inserted into required runtime order. Full native geometry/flags/invalidation/content/follows/accessibility/fly/root/UNO and whole project parity remain partial. Registered I/O/recovery deviations preserved; last full237,next247; no full244."
       ],
       "browserResponsibilities": [
         "Iteration188: device rectangles and mouse events are supplied by the browser; actual table/box/cursor selection belongs to native shell owners."
@@ -13535,6 +13549,18 @@
           {
             "path": "apps/office/src/sw/browser/editor/native-box-frame-format.test.tsx",
             "marker": "@fileoverview"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/layout/native-cell-format-client.test.ts",
+            "marker": "@fileoverview"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/undo/native-cell-format-client-history.test.ts",
+            "marker": "@fileoverview"
+          },
+          {
+            "path": "apps/office/src/sw/browser/editor/native-cell-format-client.test.tsx",
+            "marker": "@fileoverview"
           }
         ],
         "upstream": [
@@ -13674,7 +13700,9 @@
         "Iteration242 registers original SwRowFrame clients at native row formats. ClaimFrameFormat directly retargets matching physical row clients before row registration; ChgFrameFormat and SaveTable history use distinct native TableLineFormatChanged and MoveTableLineHint notifications. Flat row/table deletion releases row frames before the model row and destroys formats only after their last represented client. Temporary JSX rendering and layout measurement release frames in finally while retaining direct native item reads. Full layout invalidation, frame hierarchy/follows, pooling, merged/nested tables and UNO remain unverified. Targeted checks pending; last full237, next247; previous classifications, defaults and registered I/O/recovery deviations preserved.",
         "Iteration242 verified targeted closure:11 fresh native registration/hint/claim/history/deletion and main UI measurement/render/exception-lifetime cases plus related modules passed1293 unique app cases and11 Chromium cases. Two old cases now capture expected attributes before native destruction; literal attributes, original/new identities and history assertions remain intact.649 unaffected old acceptance files are byte-identical. Initial four failed cases passed in a failed-only closure; an additional new exception case and previously unexecuted related alignment/headline modules completed coverage, with zero passing replay. App and inventory all-four100% coverage uses actual counters and prior241 only for whole identical source/maps or complete unchanged declaration/body/enclosing branch/all locations. Full native hierarchy/invalidation/follows/pooling/nested/merged/UNO and whole core/browser parity remain unverified; previous metadata status/default/classification and registered deviations preserved. Last full237,next247; no full242.",
         "Iteration243 owns native SwTableBoxFormat item sets through registered SwTableBox clients, exact box ranges and default frame inheritance. Cell claims retain complete direct attributes and separate shared calculation items; border and vertical commands reuse operation-local native format owners. SaveTable stores deduplicated complete cell item sets and numeric indices, restoring shared owners with MoveTableBoxHint before model registration. Actual section deletion releases cell clients; native insertion shares source formats; the main JSX table reads native border and orientation items directly. Full SwCellFrame hierarchy, invalidation, calculation, nested/merged tables and UNO remain partial. Targeted verification pending; last full237, next247; existing classifications/defaults and registered I/O/recovery deviations preserved.",
-        "Iteration243 verified1301 unique app cases including11 fresh native cell ownership/default/item-set/claim/hint/history/deletion and mounted rendering scenarios, plus25 Chromium cases, all runtime/build physically upstream absent/restored finally. Five old acceptance files capture expected attributes before native destruction or adopt native constructors without weakening literal/identity/history assertions;649 unaffected prior files remain byte-identical. Three initial failures passed failed-only; two new border-sharing/admission cases completed coverage, with zero passing replay. App and inventory all-four100% actual counters are bound to current bytes/maps or complete unchanged declarations/bodies/enclosing branches/all locations from242. Full SwCellFrame hierarchy/invalidation, calculation, numeric formatting, nested/merged/UNO/pooling/modified-state and whole project parity remain partial. Existing316 classifications/defaults/status/evidence prefixes and registered I/O/recovery deviations preserved. Last full237,next247; no full243."
+        "Iteration243 verified1301 unique app cases including11 fresh native cell ownership/default/item-set/claim/hint/history/deletion and mounted rendering scenarios, plus25 Chromium cases, all runtime/build physically upstream absent/restored finally. Five old acceptance files capture expected attributes before native destruction or adopt native constructors without weakening literal/identity/history assertions;649 unaffected prior files remain byte-identical. Three initial failures passed failed-only; two new border-sharing/admission cases completed coverage, with zero passing replay. App and inventory all-four100% actual counters are bound to current bytes/maps or complete unchanged declarations/bodies/enclosing branches/all locations from242. Full SwCellFrame hierarchy/invalidation, calculation, numeric formatting, nested/merged/UNO/pooling/modified-state and whole project parity remain partial. Existing316 classifications/defaults/status/evidence prefixes and registered I/O/recovery deviations preserved. Last full237,next247; no full243.",
+        "Iteration244 connects actual SwFrame and SwLayoutFrame registration and original linked lower/sibling pointers. SwRowFrame constructs SwCellFrame children; native box claims retarget matching physical clients before model registration and history moves original cell frames. Recursive flat layout teardown and actual cell deletion release registrations; JSX, collapsing border paint and width measurement borrow registered native format items and release frames in finally. Full native geometry, flags, invalidation, content, follows, accessibility, fly/root and UNO remain unverified. Targeted verification pending; last full237,next247; prior metadata status/default/classification and registered I/O/recovery deviations preserved.",
+        "Iteration244 verified1318 unique app cases including12 fresh linked-frame ownership, claim ordering, transaction/history, deletion and main rendering/lifetime cases, plus25 Chromium cases. All657 prior acceptance files remain byte-identical; no passing runtime replay. Build/runtime upstream physically absent and restored finally; one fresh CSS-unit expectation corrected in a failed-only closure1pass2skip. Actual app/inventory all-four100% coverage binds current source/maps and complete unchanged declarations/bodies/enclosing branches/all locations from243. Invalid focused V8 painter inferred-else counters are retained raw; the entire valid initial current-byte-identical painter maps/counters already all-four100 supply that module, without counter sanitization. Prior316 metadata fields/order/status/default/classification/evidence prefixes retained; new wsfrm module unverified, inserted into required runtime order. Full native geometry/flags/invalidation/content/follows/accessibility/fly/root/UNO and whole project parity remain partial. Registered I/O/recovery deviations preserved; last full237,next247; no full244."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/docnode/nodes.cxx",
@@ -14994,6 +15022,18 @@
           {
             "path": "apps/office/src/sw/source/core/layout/native-collapsing-border-painter.test.ts",
             "marker": "native line splitting preserves ordered coverage and new-style ties horizontal=%s"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/layout/native-cell-format-client.test.ts",
+            "marker": "@fileoverview"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/undo/native-cell-format-client-history.test.ts",
+            "marker": "@fileoverview"
+          },
+          {
+            "path": "apps/office/src/sw/browser/editor/native-cell-format-client.test.tsx",
+            "marker": "@fileoverview"
           }
         ],
         "upstream": [
@@ -15024,7 +15064,9 @@
       "preservedResponsibilities": [
         "Source interval overlap classification and all three Insert split/restart/tie-new branches over existing flat native cell owners. Native frame Style is copied; browser receives independent resolved entries.",
         "Iteration210 pending verification: existing collapsing table boundaries now use source-owned integer frame Style component ordering and SwLineEntry/SwTabFramePainter overlap splitting before browser paint. Both shared sides receive the native winner; separate mode and original box owners remain independent. Source new-on-equal priority differs from browser CSS conflict selection. Full physical VCL primitives/junctions/shading/theme/scaled Style API/Word frame compatibility/RTL/vertical/span/follow behavior and whole parity remain unverified; every prior field/status/default/evidence/registered I/O/recovery deviation is preserved.",
-        "Iteration210 verified closure: represented integer-twip svx Style owns normalized components/defaults, copy/mirror, native width/single-double/gap/one-unit ordering and optional Word weights. SwLineEntry/SwTabFramePainter retain ordered interval classification, splitting/restart and new-on-equal winner. Existing flat native table cells feed source-owned arbitration; browser paints the same resolved shared edge on adjacent cells while separating mode retains their own lines. Original cell attributes and native owners/history/ODT remain. One full upstream-absent profile and original-failure-only closures establish actual13473app110inventory14infrastructure268Chromium cases,0unresolved0passing replay;1app and7inventory focused skip observations remain skipped. Actual100 app/inventory coverage uses current whole-identical source and entire-map certificates; final timeout-only Cppunit closure disabled coverage, preserved 30000ms timeout/all8072 assertions and contributes no coverage counters. Fixed-row new draft fixture now observes actual existing paint device after properties apply and explicitly checks original Fixed wrappers on initial/Undo states; existing shell unconditionally converts unchanged row height to Minimum on OK, reserved for next leaf. Runtime inventory canonical ASCII ordering corrected without changing prior record fields. All566 prior acceptance contracts retained except one source-winner shared-edge color conditional; four new acceptance files. All289 prior metadata fields/prefixes/statuses/defaults/registered save/open/recovery exceptions preserved;291 modules after two new bounded native modules, no whole semantic promotion. Native physical frame geometry/primitives/junctions/shading/theme/scaled/refmode/Word limited ends/RTL/vertical/spans/follow and whole parity remain unverified."
+        "Iteration210 verified closure: represented integer-twip svx Style owns normalized components/defaults, copy/mirror, native width/single-double/gap/one-unit ordering and optional Word weights. SwLineEntry/SwTabFramePainter retain ordered interval classification, splitting/restart and new-on-equal winner. Existing flat native table cells feed source-owned arbitration; browser paints the same resolved shared edge on adjacent cells while separating mode retains their own lines. Original cell attributes and native owners/history/ODT remain. One full upstream-absent profile and original-failure-only closures establish actual13473app110inventory14infrastructure268Chromium cases,0unresolved0passing replay;1app and7inventory focused skip observations remain skipped. Actual100 app/inventory coverage uses current whole-identical source and entire-map certificates; final timeout-only Cppunit closure disabled coverage, preserved 30000ms timeout/all8072 assertions and contributes no coverage counters. Fixed-row new draft fixture now observes actual existing paint device after properties apply and explicitly checks original Fixed wrappers on initial/Undo states; existing shell unconditionally converts unchanged row height to Minimum on OK, reserved for next leaf. Runtime inventory canonical ASCII ordering corrected without changing prior record fields. All566 prior acceptance contracts retained except one source-winner shared-edge color conditional; four new acceptance files. All289 prior metadata fields/prefixes/statuses/defaults/registered save/open/recovery exceptions preserved;291 modules after two new bounded native modules, no whole semantic promotion. Native physical frame geometry/primitives/junctions/shading/theme/scaled/refmode/Word limited ends/RTL/vertical/spans/follow and whole parity remain unverified.",
+        "Iteration244 connects actual SwFrame and SwLayoutFrame registration and original linked lower/sibling pointers. SwRowFrame constructs SwCellFrame children; native box claims retarget matching physical clients before model registration and history moves original cell frames. Recursive flat layout teardown and actual cell deletion release registrations; JSX, collapsing border paint and width measurement borrow registered native format items and release frames in finally. Full native geometry, flags, invalidation, content, follows, accessibility, fly/root and UNO remain unverified. Targeted verification pending; last full237,next247; prior metadata status/default/classification and registered I/O/recovery deviations preserved.",
+        "Iteration244 verified1318 unique app cases including12 fresh linked-frame ownership, claim ordering, transaction/history, deletion and main rendering/lifetime cases, plus25 Chromium cases. All657 prior acceptance files remain byte-identical; no passing runtime replay. Build/runtime upstream physically absent and restored finally; one fresh CSS-unit expectation corrected in a failed-only closure1pass2skip. Actual app/inventory all-four100% coverage binds current source/maps and complete unchanged declarations/bodies/enclosing branches/all locations from243. Invalid focused V8 painter inferred-else counters are retained raw; the entire valid initial current-byte-identical painter maps/counters already all-four100 supply that module, without counter sanitization. Prior316 metadata fields/order/status/default/classification/evidence prefixes retained; new wsfrm module unverified, inserted into required runtime order. Full native geometry/flags/invalidation/content/follows/accessibility/fly/root/UNO and whole project parity remain partial. Registered I/O/recovery deviations preserved; last full237,next247; no full244."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/layout/paintfrm.cxx",
@@ -15056,7 +15098,9 @@
         "Iteration202 removes scalar row minHeight storage and numeric kernel height contracts. Native SvxSizeItem/SwFormatFrameSize owns both dimensions, both sizing types, both percentages and both relations with native defaults, Which90, full equality, clone and supported default size query. Original rows retain copied items, document getter compares complete items and returns clone; resize uses native document setter with copied full size, preserving Fixed/Minimum and promoting only Variable. Flat layout and mounted cells use native Variable/Minimum/Fixed semantics, fixed content clipped, properties metric from shell common getter. ODT row-height Fixed/min-row-height Minimum/Variable omission and native height clamp1..65535; attributes apply in order. Full percentage/fly/vertical/nested/merged/protection/UNO member IDs/PutValue/pooling/widget/SfxItemSet/full parity remains unverified; all prior contracts/classifications/statuses/exceptions retained.",
         "Iteration233 moves connected flat-table column geometry into each original SwTableBox SwFormatFrameSize. Native current-row visible/other-row hidden fuzzy separator union and per-line NewSetTabCols adjustments feed original Writer document attribute history; actual Ctrl+Shift current-line columns replace the retained ordinary shared-column fallback. Source XML union grids/spans and browser device colspans preserve independent original cells, with complete native frame-size values in browser codec and declared grid widths only at import/builder ingress. No row-width side map, graph replacement or TextRuns conversion. Flat unspanned source behavior is represented; full row-span propagation/nested/merged graphs, frame item pooling/UNO, RTL/vertical/SFX/VCL/full ruler state remain partial. Registered recovery/open/save/settings untouched, previous statuses/defaults/classes preserved.",
         "Iteration242 registers original SwRowFrame clients at native row formats. ClaimFrameFormat directly retargets matching physical row clients before row registration; ChgFrameFormat and SaveTable history use distinct native TableLineFormatChanged and MoveTableLineHint notifications. Flat row/table deletion releases row frames before the model row and destroys formats only after their last represented client. Temporary JSX rendering and layout measurement release frames in finally while retaining direct native item reads. Full layout invalidation, frame hierarchy/follows, pooling, merged/nested tables and UNO remain unverified. Targeted checks pending; last full237, next247; previous classifications, defaults and registered I/O/recovery deviations preserved.",
-        "Iteration242 verified targeted closure:11 fresh native registration/hint/claim/history/deletion and main UI measurement/render/exception-lifetime cases plus related modules passed1293 unique app cases and11 Chromium cases. Two old cases now capture expected attributes before native destruction; literal attributes, original/new identities and history assertions remain intact.649 unaffected old acceptance files are byte-identical. Initial four failed cases passed in a failed-only closure; an additional new exception case and previously unexecuted related alignment/headline modules completed coverage, with zero passing replay. App and inventory all-four100% coverage uses actual counters and prior241 only for whole identical source/maps or complete unchanged declaration/body/enclosing branch/all locations. Full native hierarchy/invalidation/follows/pooling/nested/merged/UNO and whole core/browser parity remain unverified; previous metadata status/default/classification and registered deviations preserved. Last full237,next247; no full242."
+        "Iteration242 verified targeted closure:11 fresh native registration/hint/claim/history/deletion and main UI measurement/render/exception-lifetime cases plus related modules passed1293 unique app cases and11 Chromium cases. Two old cases now capture expected attributes before native destruction; literal attributes, original/new identities and history assertions remain intact.649 unaffected old acceptance files are byte-identical. Initial four failed cases passed in a failed-only closure; an additional new exception case and previously unexecuted related alignment/headline modules completed coverage, with zero passing replay. App and inventory all-four100% coverage uses actual counters and prior241 only for whole identical source/maps or complete unchanged declaration/body/enclosing branch/all locations. Full native hierarchy/invalidation/follows/pooling/nested/merged/UNO and whole core/browser parity remain unverified; previous metadata status/default/classification and registered deviations preserved. Last full237,next247; no full242.",
+        "Iteration244 connects actual SwFrame and SwLayoutFrame registration and original linked lower/sibling pointers. SwRowFrame constructs SwCellFrame children; native box claims retarget matching physical clients before model registration and history moves original cell frames. Recursive flat layout teardown and actual cell deletion release registrations; JSX, collapsing border paint and width measurement borrow registered native format items and release frames in finally. Full native geometry, flags, invalidation, content, follows, accessibility, fly/root and UNO remain unverified. Targeted verification pending; last full237,next247; prior metadata status/default/classification and registered I/O/recovery deviations preserved.",
+        "Iteration244 verified1318 unique app cases including12 fresh linked-frame ownership, claim ordering, transaction/history, deletion and main rendering/lifetime cases, plus25 Chromium cases. All657 prior acceptance files remain byte-identical; no passing runtime replay. Build/runtime upstream physically absent and restored finally; one fresh CSS-unit expectation corrected in a failed-only closure1pass2skip. Actual app/inventory all-four100% coverage binds current source/maps and complete unchanged declarations/bodies/enclosing branches/all locations from243. Invalid focused V8 painter inferred-else counters are retained raw; the entire valid initial current-byte-identical painter maps/counters already all-four100 supply that module, without counter sanitization. Prior316 metadata fields/order/status/default/classification/evidence prefixes retained; new wsfrm module unverified, inserted into required runtime order. Full native geometry/flags/invalidation/content/follows/accessibility/fly/root/UNO and whole project parity remain partial. Registered I/O/recovery deviations preserved; last full237,next247; no full244."
       ],
       "omittedResponsibilities": [
         "Complete native layout frame construction,fly/border offsets,vertical/RTL/merged/nested/rowspan/split-row and relative-width semantics remain unverified."
@@ -15157,6 +15201,18 @@
           },
           {
             "path": "apps/office/src/sw/browser/editor/native-row-format-client.test.tsx",
+            "marker": "@fileoverview"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/layout/native-cell-format-client.test.ts",
+            "marker": "@fileoverview"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/undo/native-cell-format-client-history.test.ts",
+            "marker": "@fileoverview"
+          },
+          {
+            "path": "apps/office/src/sw/browser/editor/native-cell-format-client.test.tsx",
             "marker": "@fileoverview"
           }
         ],
@@ -15486,6 +15542,18 @@
           {
             "path": "apps/office/src/sw/browser/editor/native-box-frame-format.test.tsx",
             "marker": "@fileoverview"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/layout/native-cell-format-client.test.ts",
+            "marker": "@fileoverview"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/undo/native-cell-format-client-history.test.ts",
+            "marker": "@fileoverview"
+          },
+          {
+            "path": "apps/office/src/sw/browser/editor/native-cell-format-client.test.tsx",
+            "marker": "@fileoverview"
           }
         ],
         "upstream": [
@@ -15627,7 +15695,9 @@
         "Iteration242 registers original SwRowFrame clients at native row formats. ClaimFrameFormat directly retargets matching physical row clients before row registration; ChgFrameFormat and SaveTable history use distinct native TableLineFormatChanged and MoveTableLineHint notifications. Flat row/table deletion releases row frames before the model row and destroys formats only after their last represented client. Temporary JSX rendering and layout measurement release frames in finally while retaining direct native item reads. Full layout invalidation, frame hierarchy/follows, pooling, merged/nested tables and UNO remain unverified. Targeted checks pending; last full237, next247; previous classifications, defaults and registered I/O/recovery deviations preserved.",
         "Iteration242 verified targeted closure:11 fresh native registration/hint/claim/history/deletion and main UI measurement/render/exception-lifetime cases plus related modules passed1293 unique app cases and11 Chromium cases. Two old cases now capture expected attributes before native destruction; literal attributes, original/new identities and history assertions remain intact.649 unaffected old acceptance files are byte-identical. Initial four failed cases passed in a failed-only closure; an additional new exception case and previously unexecuted related alignment/headline modules completed coverage, with zero passing replay. App and inventory all-four100% coverage uses actual counters and prior241 only for whole identical source/maps or complete unchanged declaration/body/enclosing branch/all locations. Full native hierarchy/invalidation/follows/pooling/nested/merged/UNO and whole core/browser parity remain unverified; previous metadata status/default/classification and registered deviations preserved. Last full237,next247; no full242.",
         "Iteration243 owns native SwTableBoxFormat item sets through registered SwTableBox clients, exact box ranges and default frame inheritance. Cell claims retain complete direct attributes and separate shared calculation items; border and vertical commands reuse operation-local native format owners. SaveTable stores deduplicated complete cell item sets and numeric indices, restoring shared owners with MoveTableBoxHint before model registration. Actual section deletion releases cell clients; native insertion shares source formats; the main JSX table reads native border and orientation items directly. Full SwCellFrame hierarchy, invalidation, calculation, nested/merged tables and UNO remain partial. Targeted verification pending; last full237, next247; existing classifications/defaults and registered I/O/recovery deviations preserved.",
-        "Iteration243 verified1301 unique app cases including11 fresh native cell ownership/default/item-set/claim/hint/history/deletion and mounted rendering scenarios, plus25 Chromium cases, all runtime/build physically upstream absent/restored finally. Five old acceptance files capture expected attributes before native destruction or adopt native constructors without weakening literal/identity/history assertions;649 unaffected prior files remain byte-identical. Three initial failures passed failed-only; two new border-sharing/admission cases completed coverage, with zero passing replay. App and inventory all-four100% actual counters are bound to current bytes/maps or complete unchanged declarations/bodies/enclosing branches/all locations from242. Full SwCellFrame hierarchy/invalidation, calculation, numeric formatting, nested/merged/UNO/pooling/modified-state and whole project parity remain partial. Existing316 classifications/defaults/status/evidence prefixes and registered I/O/recovery deviations preserved. Last full237,next247; no full243."
+        "Iteration243 verified1301 unique app cases including11 fresh native cell ownership/default/item-set/claim/hint/history/deletion and mounted rendering scenarios, plus25 Chromium cases, all runtime/build physically upstream absent/restored finally. Five old acceptance files capture expected attributes before native destruction or adopt native constructors without weakening literal/identity/history assertions;649 unaffected prior files remain byte-identical. Three initial failures passed failed-only; two new border-sharing/admission cases completed coverage, with zero passing replay. App and inventory all-four100% actual counters are bound to current bytes/maps or complete unchanged declarations/bodies/enclosing branches/all locations from242. Full SwCellFrame hierarchy/invalidation, calculation, numeric formatting, nested/merged/UNO/pooling/modified-state and whole project parity remain partial. Existing316 classifications/defaults/status/evidence prefixes and registered I/O/recovery deviations preserved. Last full237,next247; no full243.",
+        "Iteration244 connects actual SwFrame and SwLayoutFrame registration and original linked lower/sibling pointers. SwRowFrame constructs SwCellFrame children; native box claims retarget matching physical clients before model registration and history moves original cell frames. Recursive flat layout teardown and actual cell deletion release registrations; JSX, collapsing border paint and width measurement borrow registered native format items and release frames in finally. Full native geometry, flags, invalidation, content, follows, accessibility, fly/root and UNO remain unverified. Targeted verification pending; last full237,next247; prior metadata status/default/classification and registered I/O/recovery deviations preserved.",
+        "Iteration244 verified1318 unique app cases including12 fresh linked-frame ownership, claim ordering, transaction/history, deletion and main rendering/lifetime cases, plus25 Chromium cases. All657 prior acceptance files remain byte-identical; no passing runtime replay. Build/runtime upstream physically absent and restored finally; one fresh CSS-unit expectation corrected in a failed-only closure1pass2skip. Actual app/inventory all-four100% coverage binds current source/maps and complete unchanged declarations/bodies/enclosing branches/all locations from243. Invalid focused V8 painter inferred-else counters are retained raw; the entire valid initial current-byte-identical painter maps/counters already all-four100 supply that module, without counter sanitization. Prior316 metadata fields/order/status/default/classification/evidence prefixes retained; new wsfrm module unverified, inserted into required runtime order. Full native geometry/flags/invalidation/content/follows/accessibility/fly/root/UNO and whole project parity remain partial. Registered I/O/recovery deviations preserved; last full237,next247; no full244."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/table/swtable.cxx",
@@ -26936,6 +27006,85 @@
           {
             "path": "vendor/libreoffice-reference/sw/source/core/table/swtable.cxx",
             "marker": "ClaimFrameFormat"
+          }
+        ]
+      }
+    },
+    {
+      "classification": "upstream-mechanism",
+      "localPath": "apps/office/src/sw/source/core/layout/wsfrm.ts",
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/layout/wsfrm.cxx",
+      "localSymbols": [
+        "SwFrame",
+        "SwLayoutFrame"
+      ],
+      "upstreamSymbols": [
+        "SwFrame::SwFrame",
+        "SwFrame::KnowsFormat",
+        "SwFrame::RegisterToFormat",
+        "SwFrame::InsertBehind",
+        "SwFrame::RemoveFromLayout",
+        "SwLayoutFrame::SwLayoutFrame"
+      ],
+      "preservedResponsibilities": [
+        "Iteration244 connects actual SwFrame and SwLayoutFrame registration and original linked lower/sibling pointers. SwRowFrame constructs SwCellFrame children; native box claims retarget matching physical clients before model registration and history moves original cell frames. Recursive flat layout teardown and actual cell deletion release registrations; JSX, collapsing border paint and width measurement borrow registered native format items and release frames in finally. Full native geometry, flags, invalidation, content, follows, accessibility, fly/root and UNO remain unverified. Targeted verification pending; last full237,next247; prior metadata status/default/classification and registered I/O/recovery deviations preserved.",
+        "Iteration244 verified1318 unique app cases including12 fresh linked-frame ownership, claim ordering, transaction/history, deletion and main rendering/lifetime cases, plus25 Chromium cases. All657 prior acceptance files remain byte-identical; no passing runtime replay. Build/runtime upstream physically absent and restored finally; one fresh CSS-unit expectation corrected in a failed-only closure1pass2skip. Actual app/inventory all-four100% coverage binds current source/maps and complete unchanged declarations/bodies/enclosing branches/all locations from243. Invalid focused V8 painter inferred-else counters are retained raw; the entire valid initial current-byte-identical painter maps/counters already all-four100 supply that module, without counter sanitization. Prior316 metadata fields/order/status/default/classification/evidence prefixes retained; new wsfrm module unverified, inserted into required runtime order. Full native geometry/flags/invalidation/content/follows/accessibility/fly/root/UNO and whole project parity remain partial. Registered I/O/recovery deviations preserved; last full237,next247; no full244."
+      ],
+      "omittedResponsibilities": [
+        "Complete native geometry, flags, invalidation, content, follows, accessibility, fly/root and UNO remain unverified."
+      ],
+      "evidence": {
+        "local": [
+          {
+            "path": "apps/office/src/sw/source/core/layout/wsfrm.ts",
+            "marker": "SwLayoutFrame"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/layout/native-cell-format-client.test.ts",
+            "marker": "@fileoverview"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/undo/native-cell-format-client-history.test.ts",
+            "marker": "@fileoverview"
+          },
+          {
+            "path": "apps/office/src/sw/browser/editor/native-cell-format-client.test.tsx",
+            "marker": "@fileoverview"
+          }
+        ],
+        "upstream": [
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/layout/wsfrm.cxx",
+            "marker": "SwFrame::SwFrame"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/layout/wsfrm.cxx",
+            "marker": "SwFrame::KnowsFormat"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/layout/wsfrm.cxx",
+            "marker": "SwFrame::RegisterToFormat"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/layout/wsfrm.cxx",
+            "marker": "SwFrame::InsertBehind"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/layout/wsfrm.cxx",
+            "marker": "SwFrame::RemoveFromLayout"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/layout/wsfrm.cxx",
+            "marker": "SwLayoutFrame::SwLayoutFrame"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/layout/ssfrm.cxx",
+            "marker": "SwLayoutFrame::GetFormat"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/layout/ssfrm.cxx",
+            "marker": "SwLayoutFrame::DestroyImpl"
           }
         ]
       }

@@ -2,30 +2,28 @@
 import type { SwTable, SwTableBox, SwTableLine } from "../table/swtable";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { SwFrameSize } from "../../../inc/fmtfsize";
-import { SwClient, type SwModify } from "../../../inc/calbck";
+import type { SwModify } from "../../../inc/calbck";
+import { SwLayoutFrame } from "./wsfrm";
 import type { SwModelHint } from "../../../inc/hints";
-import type { SwFrameFormat } from "./atrfrm";
 
 /** Owns represented flat-row height over its original native line. */
-export class SwRowFrame extends SwClient {
+export class SwRowFrame extends SwLayoutFrame {
   /** Binds the actual row owner. @param line - Original native line. @returns Nothing. */
   public constructor(private readonly line: SwTableLine) {
-    super();
-    this.RegisterToFormat(line.GetFrameFormat());
-  }
-  /** Reads the registered native frame format. @returns Current native owner. */
-  public GetFormat(): SwFrameFormat {
-    return this.GetRegisteredIn() as SwFrameFormat;
-  }
-  /** Registers this native frame at another format. @param format - New native owner. @returns Nothing. */
-  public RegisterToFormat(format: SwFrameFormat): void {
-    this.RegisterToModify(format);
+    super(line.GetFrameFormat());
+    let previous: SwCellFrame | undefined;
+    for (const box of line.GetTabBoxes()) {
+      const frame = new SwCellFrame(box);
+      frame.InsertBehind(this, previous);
+      previous = frame;
+    }
   }
   /** Releases the frame and deletes its format only when no represented clients remain. @returns Nothing. */
-  public DestroyImpl(): void {
+  public override DestroyImpl(): void {
     const format = this.GetRegisteredIn();
     super.Dispose();
     if (format !== undefined && !format.HasListeners()) format.DisposeModify();
+    super.DestroyImpl();
   }
   /** Ends native frame lifetime through the original destruction body. @returns Nothing. */
   public override Dispose(): void {
@@ -56,6 +54,39 @@ export class SwRowFrame extends SwClient {
     return size.GetHeightSizeType() === SwFrameSize.Minimum
       ? Math.max(size.GetHeight(), contentHeight)
       : contentHeight;
+  }
+}
+
+/** Native cell frame retains and registers its original model box. */
+export class SwCellFrame extends SwLayoutFrame {
+  /** Registers at the original native box format. @param box - Original cell model. @returns Nothing. */
+  public constructor(private readonly box: SwTableBox) {
+    super(box.GetFrameFormat());
+  }
+  /** Reads the original cell identity. @returns Native box. */
+  public GetTabBox(): SwTableBox {
+    return this.box;
+  }
+  /** Releases this frame and any represented lowers, deleting only a final-client format. @returns Nothing. */
+  public override DestroyImpl(): void {
+    const format = this.GetRegisteredIn();
+    super.Dispose();
+    if (format !== undefined && !format.HasListeners()) format.DisposeModify();
+    super.DestroyImpl();
+  }
+  /** Ends native frame lifetime through its destruction body. @returns Nothing. */
+  public override Dispose(): void {
+    this.DestroyImpl();
+  }
+  /** Follows only hints naming its original native cell. @param source - Original emitting format. @param hint - Native notification. @returns Nothing. */
+  protected override SwClientNotify(source: SwModify, hint: SwModelHint): void {
+    if (hint.kind === "model-transaction") {
+      for (const nested of hint.hints) this.SwClientNotify(source, nested);
+    } else if (hint.kind === "table-box-format-changed") {
+      if (hint.m_rTableBox === this.box) this.RegisterToFormat(hint.m_rNewFormat);
+    } else if (hint.kind === "move-table-box") {
+      if (hint.m_rTableBox === this.box) this.RegisterToFormat(hint.m_rNewFormat);
+    } else super.SwClientNotify(source, hint);
   }
 }
 
@@ -116,9 +147,14 @@ export class SwTabFrame {
           ) => sum + width,
           0,
         );
-    return wished === 0
-      ? 0
-      : (box.GetFrameSize().GetWidth() * this.Format(upperWidth).width) / wished;
+    const frame = new SwCellFrame(box);
+    try {
+      return wished === 0
+        ? 0
+        : (frame.GetFormat().GetFrameSize().GetWidth() * this.Format(upperWidth).width) / wished;
+    } finally {
+      frame.DestroyImpl();
+    }
   }
 
   /** Reads the native table-frame split item with its true default. @returns Whether table rows may occupy follow frames. */

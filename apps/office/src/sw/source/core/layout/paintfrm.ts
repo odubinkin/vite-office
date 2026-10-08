@@ -1,6 +1,7 @@
 /** @fileoverview Owns native collapsing-border overlap arbitration over represented flat cell frames. */
 import { Style } from "../../../../svx/source/dialog/framelink";
 import type { SwTable } from "../table/swtable";
+import { SwRowFrame, SwCellFrame } from "./tabfrm";
 
 /** Native overlap classification for two line intervals. */
 export enum OverlapType {
@@ -38,24 +39,28 @@ export class SwTabFramePainter {
   /** Traverses source cell ownership in row order; grid coordinates adapt existing flat frames. @param table - Original native table. @returns Nothing. */
   public constructor(table: SwTable) {
     for (const [r, row] of table.GetTabLines().entries()) {
-      for (const [c, cell] of row.GetTabBoxes().entries()) {
-        const box = cell.GetBox(),
-          left = new Style(box.GetLeft()),
-          right = new Style(box.GetRight()),
-          top = new Style(box.GetTop()),
-          bottom = new Style(box.GetBottom());
-        right.MirrorSelf();
-        bottom.MirrorSelf();
-        this.Insert(new SwLineEntry(c, r, r + 1, c === 0, left), false);
-        this.Insert(
-          new SwLineEntry(c + 1, r, r + 1, c === row.GetTabBoxes().length - 1, right),
-          false,
-        );
-        this.Insert(new SwLineEntry(r, c, c + 1, r === 0, top), true);
-        this.Insert(
-          new SwLineEntry(r + 1, c, c + 1, r === table.GetTabLines().length - 1, bottom),
-          true,
-        );
+      const frame = new SwRowFrame(row);
+      try {
+        let c = 0;
+        for (let lower = frame.Lower(); lower !== undefined; lower = lower.GetNext(), c++) {
+          const cell = lower as SwCellFrame,
+            box = cell.GetFormat().GetBox(),
+            left = new Style(box.GetLeft()),
+            right = new Style(box.GetRight()),
+            top = new Style(box.GetTop()),
+            bottom = new Style(box.GetBottom());
+          right.MirrorSelf();
+          bottom.MirrorSelf();
+          this.Insert(new SwLineEntry(c, r, r + 1, c === 0, left), false);
+          this.Insert(new SwLineEntry(c + 1, r, r + 1, cell.GetNext() === undefined, right), false);
+          this.Insert(new SwLineEntry(r, c, c + 1, r === 0, top), true);
+          this.Insert(
+            new SwLineEntry(r + 1, c, c + 1, r === table.GetTabLines().length - 1, bottom),
+            true,
+          );
+        }
+      } finally {
+        frame.DestroyImpl();
       }
     }
   }
