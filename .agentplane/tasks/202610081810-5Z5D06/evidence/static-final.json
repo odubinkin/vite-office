@@ -1,0 +1,44 @@
+{
+  "records": [
+    {
+      "command": "npm run format:check",
+      "exit": 0,
+      "bytes": 122,
+      "sha256": "ac1729f86eee878f5f4d6c948c510d2cc91bb5568f6dd088f70f3885e137d116",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run lint",
+      "exit": 0,
+      "bytes": 55,
+      "sha256": "a6172cb57fa696e705408fdc605fba1ae07b852fdf0614d7c2b623349e285b6e",
+      "diagnostics": [
+        "> eslint . --max-warnings 0"
+      ]
+    },
+    {
+      "command": "npm run typecheck",
+      "exit": 0,
+      "bytes": 240,
+      "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:dependencies",
+      "exit": 0,
+      "bytes": 189,
+      "sha256": "3a33deaf18d53d80500f83c1cd7d8124966bc18e14b7b578dc50ed3bec52ccd6",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:docs",
+      "exit": 1,
+      "bytes": 3303,
+      "sha256": "16c3fe3539cbbca3b98ef2a654beb286a7739afb24e0c00ff2ef549a59dcb3d3",
+      "diagnostics": [
+        "    throw new Error(`JSDoc validation failed:\\n${errors.join(\"\\n\")}`);",
+        "Error: JSDoc validation failed:"
+      ]
+    }
+  ]
+}

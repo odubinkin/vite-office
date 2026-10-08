@@ -4,7 +4,7 @@ title: "Own row splitting as native items through core and document transport"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: implement approved240 canonical row item and native core contracts with exact acceptance migration and targeted upstream-absent verification."
 doc_version: 3
-doc_updated_at: "2026-10-08T18:11:51.231Z"
+doc_updated_at: "2026-10-08T18:18:46.023Z"
 doc_updated_by: "CODER"
 description: "Iteration240 removes canonical row keepTogether inversion, carries SwFormatRowSplit through SwDoc/SwFEShell and native item-set input, retains native item clone ownership in row/history/insertion, and converts only at ODF and browser primitive boundaries. Preserve old snapshot ingress and registered IO/recovery/settings. Exact native acceptance migration and targeted upstream-absent coverage; no full suite until247."
 sections:
@@ -83,6 +83,8 @@ sections:
     apps/office/src/test/table-row-test-helpers.ts
     docs/program/source-provenance.json
     docs/program/parity/runtime-inventory.json
+    Additional related Chromium acceptance migration:
+    apps/office/e2e/writer-native-table-text-flow-split.spec.ts
   Plan: "Iteration240 replaces canonical SwTableLineFormat.keepTogether with optional native SwFormatRowSplit ownership, cloned on input/read/history and effective true default. Core document and frame shell GetRowSplit return independent common concrete items or absent for mixed/no owner; SetRowSplit accept concrete items and preserve cursor/selection/history. Text Flow reads native value at widget boundary and shell native input forwards the original item; explicit DTO compatibility converts only at its boundary. ODF converts keep-together only at XML import/export; primitive browser codec writes rowSplit and reads native boolean plus legacy keepTogether only at storage ingress. No persistent inverse scalar or bool core fallback. Update only exact old row fixture/observation/API representations; preserve every old acceptance expectation via test-only native construction/observation helpers, without weakening geometry/owners/text/cursor/history. Add independent row item/core/history, primitive/legacy/ODF and mounted direct native-path tests. Metadata remains partial; full shared row frame-format pooling/claims/nested/merged semantics unverified. Registered IO/recovery/settings unchanged. Targeted upstream-absent checks plus exact-source all-four100% cumulative certificate from239; no full240 (last237,next247). Same agent roles sequential, no delegation/network/global reads."
   Verify Steps: |-
     1. Check pin9bc445578031fecf56086729d8e4940c77e14d65 native fmtrowsplt.hxx/atrfrm.cxx/ndtbl1.cxx/fetab.cxx/swtable.hxx/xmltbli.cxx/xmltble.cxx sources for cloned common-item getter, item setter, original row ownership, defaulttrue and XML/property inversion. Record only identifiers/hashes in AgentPlane.
@@ -93,7 +95,10 @@ sections:
     6. Separate source generator --check/source-tree/provenance/invariants/parity after restoration, all315prior metadata states/defaults/classifications/prefixes preserved. Source<1000physical lines, protectedIO4/writer-view/pin/stash preserved, no upstream/application/Python/raw maps/results/scripts under AgentPlane, doctor/routing/diff/task-scoped final state. Actual SHA current-agent EVALUATOR review explicitly not independent; close only240 and exact-prefix append parent; full goal active.
   Verification: "Pending native row-item implementation and targeted verification."
   Rollback Plan: "Revert the eventual implementation commit locally; retain traceability and never rewrite DONE tasks."
-  Findings: "Previous239 is DONE and exact-source coverage is verified. Current GetRowSplit/SetRowSplit core/shell contracts are boolean, rows store keepTogether inversion and transport copies that scalar. Pinned native methods clone common SwFormatRowSplit values and accept concrete items. This leaf removes the canonical scalar; browser old-snapshot ingress remains explicit. No full shared-frame-format promotion."
+  Findings: |-
+    Previous239 is DONE and exact-source coverage is verified. Current GetRowSplit/SetRowSplit core/shell contracts are boolean, rows store keepTogether inversion and transport copies that scalar. Pinned native methods clone common SwFormatRowSplit values and accept concrete items. This leaf removes the canonical scalar; browser old-snapshot ingress remains explicit. No full shared-frame-format promotion.
+
+    Typecheck exposed one additional existing Chromium row fixture in writer-native-table-text-flow-split.spec.ts: TS2353 keepTogether is no longer canonical. Extend the same representation-only acceptance migration to this file, preserving all browser assertions and literals. No production behavior or verification contract expansion; standing iterative goal authorizes this necessary related-test repair. The failed typecheck remains recorded; no runtime cases have executed for240.
 id_source: "generated"
 ---
 ## Summary
@@ -141,6 +146,8 @@ apps/office/src/sw/browser/presentation/native-row-split-core-items.test.tsx
 apps/office/src/test/table-row-test-helpers.ts
 docs/program/source-provenance.json
 docs/program/parity/runtime-inventory.json
+Additional related Chromium acceptance migration:
+apps/office/e2e/writer-native-table-text-flow-split.spec.ts
 
 ## Plan
 
@@ -166,3 +173,5 @@ Revert the eventual implementation commit locally; retain traceability and never
 ## Findings
 
 Previous239 is DONE and exact-source coverage is verified. Current GetRowSplit/SetRowSplit core/shell contracts are boolean, rows store keepTogether inversion and transport copies that scalar. Pinned native methods clone common SwFormatRowSplit values and accept concrete items. This leaf removes the canonical scalar; browser old-snapshot ingress remains explicit. No full shared-frame-format promotion.
+
+Typecheck exposed one additional existing Chromium row fixture in writer-native-table-text-flow-split.spec.ts: TS2353 keepTogether is no longer canonical. Extend the same representation-only acceptance migration to this file, preserving all browser assertions and literals. No production behavior or verification contract expansion; standing iterative goal authorizes this necessary related-test repair. The failed typecheck remains recorded; no runtime cases have executed for240.
