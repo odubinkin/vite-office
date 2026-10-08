@@ -1,0 +1,17 @@
+{
+  "profile": "upstream-absent",
+  "allowedCases": "Exactly three previously failed cases; all already passing cases remain skipped.",
+  "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/browser/editor/native-numeric-row-insertion.test.tsx src/sw/source/core/table/native-independent-columns.test.ts --testNamePattern=^mounted numeric row menu behind=(false|true)$|^native column insertion conserves each independent row and retains every original box through history$ --coverage.reportOnFailure --coverage.reporter=json-summary --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/FT0HZ1.closure1.app-results.json",
+  "exit": 1,
+  "bytes": 2489,
+  "sha256": "b51d983df0a898e33bff2760ef93568ad7713181931a9247b0abdad53500dd3d",
+  "caseCounts": {
+    "passed": 3,
+    "failed": 0,
+    "skipped": 13,
+    "total": 16
+  },
+  "failedCases": [],
+  "coverageMapSHA256": "969b630aa1bf39fbfffb59e8e5b6ba8641e41208145bb90fab70bdc284f41085",
+  "vendorRestored": true
+}
