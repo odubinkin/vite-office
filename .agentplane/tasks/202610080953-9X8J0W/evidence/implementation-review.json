@@ -1,0 +1,68 @@
+{
+  "evaluatedSHA": "399bae596d9a45d08bca7dda4fb60eb7dbf23483",
+  "baseline": "5c9fb0c9f315705b5755a275f1471d980558cddd",
+  "reviewer": "Same current agent in EVALUATOR role; explicitly not independent",
+  "reconstructed": [
+    {
+      "path": ".agentplane/tasks/202610080953-9X8J0W/evidence/final-coverage.json",
+      "sha256": "c83c2b72d950899de3ff4b19f4ec146477f552c7de7e171ef8abe2ad3118de91",
+      "byteIdenticalReconstruction": true
+    },
+    {
+      "path": ".agentplane/tasks/202610080953-9X8J0W/evidence/case-census.json",
+      "sha256": "bad6fbc5867d2b8818e3c7134caaa4e56931097d24b70e4d7f1570f6fc249c8e",
+      "byteIdenticalReconstruction": true
+    },
+    {
+      "path": ".agentplane/tasks/202610080953-9X8J0W/evidence/scope-final.json",
+      "sha256": "a7d78cf2402da4e263497e83db1dd192b1887c3cdaa8a65ec5cceed3bd2e8d03",
+      "byteIdenticalReconstruction": true
+    },
+    {
+      "path": ".agentplane/tasks/202610080953-9X8J0W/evidence/native-source-review.json",
+      "sha256": "bc3fe3a671d97f029eb7719cad90ff49a7511c572b85ffdc59d5095726d757ea",
+      "byteIdenticalReconstruction": true
+    }
+  ],
+  "semanticPaths": [
+    "apps/office/src/sw/source/uibase/docvw/edtwin.ts",
+    "apps/office/src/sw/source/uibase/docvw/native-row-modifier-drag.test.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "oneFullUpstreamAbsentProfile": true,
+  "noPassingTestReplay": true,
+  "noRuntimeClosureNeeded": true,
+  "uniquePassingCases": {
+    "app": 13749,
+    "inventory": 110,
+    "infrastructure": 16,
+    "chromium": 299
+  },
+  "newAcceptanceCases": 24,
+  "allFourExactSourceBoundCoverage100": true,
+  "priorAcceptancePreserved": {
+    "byteIdenticalFiles": 619,
+    "migrations": 0
+  },
+  "protectedIOProductionPreserved": 4,
+  "unchangedBrowserModifierBridge": {
+    "path": "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts",
+    "sha256": "060a06dd9a77e530de1756b2f4c4384e6b2ddd1ee20c68fb175daab2eeb99ee7"
+  },
+  "parentPrefixPreserved": true,
+  "stashPreserved": true,
+  "wholeAPIncludingIgnoredAudit": {
+    "files": 5825,
+    "forbiddenPaths": [],
+    "registeredIdenticalPolicyBackupSHA256": "130064d9e92c9f4fb7332e350eeddc639114dcf38a811b2b34e165e2ec892789"
+  },
+  "nativeScope": "Source row exact-mask modifier, preceding integer-device proportional shares/limits, active-line-only apply and Margin2 following-border branch at original real document ingress; no full SvxRuler/slot/StateTabWin promotion",
+  "residuals": [
+    "Full SvxRuler/SfxBindings/SfxItemSet slot ownership and StateTabWin page/frame/section contexts remain partial.",
+    "Vertical/RTL document dragging, native snapping/protection and single-row paragraph-indent bottom-margin range remain incomplete; represented row modifier behavior alone is certified.",
+    "Pooled item guards/full uint16 WhichId and nonzero UNO members/default factory/presentation remain partial from prior native value work.",
+    "Registered IO/open/save/recovery/settings preserved byte-identically; no full upstream/module parity promotion."
+  ],
+  "failures": []
+}

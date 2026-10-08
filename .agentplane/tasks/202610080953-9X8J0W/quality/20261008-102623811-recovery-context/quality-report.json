@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202610080953-9X8J0W",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-08T10:26:23.811Z",
+  "verdict": "pass",
+  "summary": "Exact implementation 399bae596d9a45d08bca7dda4fb60eb7dbf23483 satisfies approved source row modifier scope; same-current-agent review explicitly not independent.",
+  "evaluated_sha": "399bae596d9a45d08bca7dda4fb60eb7dbf23483",
+  "blueprint_digest": "74af5a69be641564b6a435b34cbe2130f6633d8ab427206f4aa5116e96ad1922",
+  "findings": [
+    "Reconstructed four committed reports byte-identically, all4 actual semantic bytes tied to sole full absent profile;13749app/110inventory/16infra/299Chromium PASS,24new cases,619prior acceptance unchanged,307record prefixes/states preserved each; all-four exact-source coverage100 and honest residuals, no replay."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610080953-9X8J0W/README.md",
+    ".agentplane/tasks/202610080953-9X8J0W/evidence/implementation-review.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Full native SvxRuler/slot/page/frame contexts, vertical/RTL document dragging, snapping/protection and single-row indent range remain partial; no module/full-goal promotion."
+  ]
+}
