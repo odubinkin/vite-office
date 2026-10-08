@@ -1,0 +1,36 @@
+{
+  "currentUniqueExecutedAppCases": 178,
+  "currentPassedAppCases": 178,
+  "freshPassedCases": 12,
+  "freshByFile": [
+    {
+      "path": "apps/office/src/sw/inc/native-table-split-items.test.ts",
+      "passedCases": 4
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/native-table-split-items.test.tsx",
+      "passedCases": 8
+    }
+  ],
+  "appPassingReplayCount": 0,
+  "chromiumPassingReplayCount": 0,
+  "uniqueExecutedChromiumCases": 8,
+  "fullSuiteExecutedThisLeaf": false,
+  "fullSuiteCadence": {
+    "lastLeaf": 237,
+    "nextLeaf": 247
+  },
+  "unchangedInventoryAndInfrastructure": "No current leaf execution; prior238 actual certified counters accepted only after whole current source/maps equality.",
+  "executedFiles": [
+    {
+      "identifier": "J0EAJE.app-results.json",
+      "sha256": "489dea728ba0d8619b57266903f86fedbcbed37e1032ec49a894e3e63e1ac2e2"
+    },
+    {
+      "identifier": "J0EAJE.chromium-results.json",
+      "sha256": "05f2c6d60809c5a87cc308c1eb3673e6a262fd532e69ecfb0184097a61ad58f3"
+    }
+  ],
+  "rawThresholdExitsRetained": true,
+  "coverageCertificate": "final-coverage.json"
+}

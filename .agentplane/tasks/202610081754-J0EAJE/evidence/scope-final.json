@@ -1,0 +1,52 @@
+{
+  "base": "7ddc0d2dfd3bbf999907fe035e623b5b47715659",
+  "scopeCount": 10,
+  "semanticPaths": [
+    "apps/office/src/sw/browser/presentation/native-table-split-items.test.tsx",
+    "apps/office/src/sw/inc/fmtlsplt.ts",
+    "apps/office/src/sw/inc/fmtrowsplt.ts",
+    "apps/office/src/sw/inc/native-table-split-items.test.ts",
+    "apps/office/src/sw/source/core/attr/swatrset.ts",
+    "apps/office/src/sw/source/ui/table/tabledlg.ts",
+    "apps/office/src/sw/source/uibase/shells/native-table-property-item-input.test.ts",
+    "apps/office/src/sw/source/uibase/shells/tabsh.ts",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/source-provenance.json"
+  ],
+  "priorAcceptanceFiles": 643,
+  "byteIdenticalPriorAcceptanceFiles": 642,
+  "migrations": [
+    {
+      "path": "apps/office/src/sw/source/uibase/shells/native-table-property-item-input.test.ts",
+      "originalSHA256": "5a3173bcf229f01171949ae257ff4bc894ca89cb7b6b053bd7d7c09ae4ed690a",
+      "currentSHA256": "d12c9a3f7703254b6029c75d60bfef4bb6436da886849e88d97e6022dde51933",
+      "wholeFileExactNativeConstructionMigration": true,
+      "allAssertionsByteIdentical": true,
+      "assertions": 66
+    }
+  ],
+  "freshAcceptanceFiles": 2,
+  "metadata": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "originalRecords": 313,
+      "currentRecords": 315,
+      "allPriorFieldsPrefixesStatesDefaultsClassesPreserved": true,
+      "newNativeRecords": [
+        "apps/office/src/sw/inc/fmtlsplt.ts",
+        "apps/office/src/sw/inc/fmtrowsplt.ts"
+      ]
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "originalRecords": 313,
+      "currentRecords": 315,
+      "allPriorFieldsPrefixesStatesDefaultsClassesPreserved": true,
+      "newNativeRecords": [
+        "apps/office/src/sw/inc/fmtlsplt.ts",
+        "apps/office/src/sw/inc/fmtrowsplt.ts"
+      ]
+    }
+  ],
+  "allChecksPassed": true
+}

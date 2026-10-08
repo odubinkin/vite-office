@@ -80,12 +80,24 @@ import { SwNumRuleItem } from "../para/paratr";
 import { SwFormatPageDesc } from "./fmtpdsc";
 import { getDefaultFontSelection, getWriterDefaultFontLanguage } from "../doc/default-font";
 import { SwFormatINetFormat } from "../txtnode/fmtatr2";
+import { SwFormatLayoutSplit } from "../../../inc/fmtlsplt";
+import { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
 
 /** Writer-owned item pool with defaults for the currently implemented WhichIds. */
 export class SwAttrPool extends SfxItemPool {
   /** Creates and registers Writer's bounded paragraph defaults. @param document - Owning Writer document. @returns Nothing. */
   public constructor(private readonly document: SwDoc) {
     super();
+    this.RegisterDefaultItem(
+      new SwFormatLayoutSplit(),
+      /** Restores the concrete table split item. @param value - Stored boolean. @returns Native item. */
+      (value) => new SwFormatLayoutSplit(Boolean(value)),
+    );
+    this.RegisterDefaultItem(
+      new SwFormatRowSplit(),
+      /** Restores the concrete row split item. @param value - Stored boolean. @returns Native item. */
+      (value) => new SwFormatRowSplit(Boolean(value)),
+    );
     this.RegisterDefaultItem(
       new SvxBoxItem(RES_BOX),
       /** Restores the represented native box value. @param value - UNO sequence. @returns Owned item. */

@@ -1,0 +1,110 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/sw/inc/fmtlsplt.ts": "23f7e27f71f7276f5bb6758b2868fbc3a75b74d35b8a607a1eb0a0ed0ce792cf",
+    "apps/office/src/sw/inc/fmtrowsplt.ts": "c74e6beb88e2aba18149e9beb15ed2988490a2e4ad382f200d9e91ec942a0888",
+    "apps/office/src/sw/source/core/attr/swatrset.ts": "a40ae837ac01c7a3d04830ce93f59859792fda6c2e17fad09aef51c7199f9dd7",
+    "apps/office/src/sw/source/ui/table/tabledlg.ts": "b91a32070f3faeb7296fa6f5a80d3188e2719aa54e2263d8a25608734534b645",
+    "apps/office/src/sw/source/uibase/shells/tabsh.ts": "3cadeac8e0d2aa4c2f06b363c259a99b756a5de0b1580c64e7e1d60711f78d62",
+    "apps/office/src/sw/inc/native-table-split-items.test.ts": "eb38d3fc9cfb5a9d4b95b50744b88aa8b4c3d7206685107e413678679d7889c7",
+    "apps/office/src/sw/browser/presentation/native-table-split-items.test.tsx": "ec5355f6976f4ee9e8dc886ac3be601c01043f423b98b52370c1defe900562fa",
+    "apps/office/src/sw/source/uibase/shells/native-table-property-item-input.test.ts": "d12c9a3f7703254b6029c75d60bfef4bb6436da886849e88d97e6022dde51933",
+    "docs/program/source-provenance.json": "ecedf6e182292587b2d01b2f6ddb09a325dabaa64c9b5dfc383be82d6864d67e",
+    "docs/program/parity/runtime-inventory.json": "e035b417b9cc93c1bdf213d9b4271f34f2de1727513fb7d96e6e8e03e827641d"
+  },
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1443,
+      "sha256": "3828e70ba70dd3a97049781760d5fde31537043055b8b7ab7e66f461e9754c78",
+      "totals": [],
+      "failedCases": [],
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/inc/native-table-split-items.test.ts src/sw/browser/presentation/native-table-split-items.test.tsx src/sw/source/core/attr/list-restart-default.test.ts src/sw/source/core/attr/internet-pool-default.test.ts src/svl/source/items/itempool-default-registration.test.ts src/svl/source/items/itemset.test.ts src/svl/source/items/itemset-equality.test.ts src/sw/source/ui/table/native-table-text-flow-split.test.ts src/sw/source/ui/table/native-table-text-flow-headline.test.ts src/sw/source/ui/table/native-table-property-output.test.ts src/sw/source/uibase/shells/native-table-property-item-input.test.ts src/sw/source/uibase/wrtsh/native-table-text-flow-split-history.test.ts src/sw/source/uibase/wrtsh/native-table-text-flow-headline-history.test.ts src/sw/source/uibase/wrtsh/native-table-properties.test.ts src/sw/source/uibase/wrtsh/native-table-properties-reset-history.test.ts src/sw/browser/presentation/native-table-text-flow-split.test.tsx src/sw/browser/presentation/native-table-text-flow-headline.test.tsx src/sw/browser/presentation/native-table-property-output.test.tsx src/sw/browser/presentation/native-independent-table-properties.test.tsx src/sw/browser/presentation/native-table-properties.test.tsx src/sw/browser/presentation/native-table-properties-reset.test.tsx --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/J0EAJE.app-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 37585,
+      "sha256": "3a36df1d23b7ee5a76812c8e95946c7bf901a8cafb46b1ad2c3a518c5df4e78b",
+      "totals": [
+        "Test Files  21 passed (21)",
+        "Tests  178 passed (178)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "passed": 178,
+        "failed": 0,
+        "skipped": 0,
+        "total": 178
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 17468,
+          "covered": 8621,
+          "skipped": 0,
+          "pct": 49.35
+        },
+        "statements": {
+          "total": 19183,
+          "covered": 9080,
+          "skipped": 0,
+          "pct": 47.33
+        },
+        "functions": {
+          "total": 4395,
+          "covered": 2304,
+          "skipped": 0,
+          "pct": 52.42
+        },
+        "branches": {
+          "total": 14269,
+          "covered": 5321,
+          "skipped": 0,
+          "pct": 37.29
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverage": {
+        "lines": 49.35,
+        "statements": 47.33,
+        "functions": 52.42,
+        "branches": 37.29
+      },
+      "incompleteFileCount": 268,
+      "coverageMapSHA256": "dc900275a6b1cc51ea27f4f9720cbd7970565e8072ccb2e88051092522211210",
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts writer-native-table-text-flow-split.spec.ts writer-native-table-layout-split.spec.ts writer-native-table-text-flow-headline.spec.ts --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1952,
+      "sha256": "a61014d2a0bfeb818050582e8f0721068f214e598b83c6c4eda2a046e4a07015",
+      "totals": [
+        "8 passed (8.9s)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "startTime": "2026-10-08T17:59:36.146Z",
+        "duration": 8861.214,
+        "expected": 8,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "unhandledErrorCount": 0
+    }
+  ]
+}

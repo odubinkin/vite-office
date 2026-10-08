@@ -11,6 +11,8 @@ import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SfxStringItem } from "../../../../svl/source/items/stritem";
 import { SfxUInt16Item } from "../../../../svl/source/items/intitem";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
+import { SwFormatLayoutSplit } from "../../../inc/fmtlsplt";
+import { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
 import {
   SvxULSpaceItem,
   SvxBoxItem,
@@ -22,13 +24,7 @@ import {
   FN_PARAM_TABLE_NAME,
   FN_PARAM_TABLE_HEADLINE,
 } from "../../../inc/cmdid";
-import {
-  RES_BOX,
-  RES_UL_SPACE,
-  RES_LAYOUT_SPLIT,
-  RES_ROW_SPLIT,
-  RES_COLLAPSING_BORDERS,
-} from "../../../inc/hintids";
+import { RES_BOX, RES_UL_SPACE, RES_COLLAPSING_BORDERS } from "../../../inc/hintids";
 import { SID_ATTR_BORDER_INNER } from "../../../../svx/inc/svxids";
 import { HoriOrientation as H } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
@@ -147,7 +143,7 @@ it("native spacing and table flags leave width and headline attributes unadverti
     original = f.table.GetFormat(),
     header = vi.spyOn(f.shell, "SetRowsToRepeat");
   f.input.Put(new SvxULSpaceItem(240, 120, RES_UL_SPACE));
-  f.input.Put(new SfxBoolItem(RES_LAYOUT_SPLIT, false));
+  f.input.Put(new SwFormatLayoutSplit(false));
   f.input.Put(new SfxBoolItem(RES_COLLAPSING_BORDERS, true));
   ItemSetToTableParam(f.shell, f.input);
   expect(header).not.toHaveBeenCalled();
@@ -185,7 +181,7 @@ it.each(["cursor", "row"])(
     f.input.Put(new SwPtrItem(FN_TABLE_REP, rep));
     f.input.Put(new SfxUInt16Item(FN_PARAM_TABLE_HEADLINE, 2));
     f.input.Put(new SfxUInt16Item(FN_TABLE_SET_VERT_ALIGN, VertOrientation.BOTTOM));
-    f.input.Put(new SfxBoolItem(RES_ROW_SPLIT, false));
+    f.input.Put(new SwFormatRowSplit(false));
     const border = new SvxBoxItem(RES_BOX);
     border.SetAllDistances(50);
     const info = new SvxBoxInfoItem(SID_ATTR_BORDER_INNER);
@@ -294,7 +290,7 @@ it("native row-split-only input does not request border writes and retains compl
   const f = fixture(),
     borders = vi.spyOn(f.shell, "SetTabBorders"),
     original = f.table.GetFormat();
-  f.input.Put(new SfxBoolItem(RES_ROW_SPLIT, false));
+  f.input.Put(new SwFormatRowSplit(false));
   expect(ItemSetToTableParam(f.shell, f.input)).toBe(true);
   expect(borders).not.toHaveBeenCalled();
   expect(f.table.GetFormat()).toStrictEqual(original);

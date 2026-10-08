@@ -1,0 +1,21 @@
+{
+  "finalMetadataFormat": {
+    "command": "npm run format:check",
+    "session": 71247,
+    "observedExit": 0
+  },
+  "records": [
+    {
+      "command": "npm run check:source-provenance",
+      "exit": 0,
+      "bytes": 205,
+      "sha256": "aa83fa02542b5437d865acff82f6873c4b088d98ed240ca613d6253538a96552"
+    },
+    {
+      "command": "npm run inventory:parity",
+      "exit": 0,
+      "bytes": 2148673,
+      "sha256": "e6d1a8f3683d36afcc5ae0dfef84c36e55c8845ec1068316fdbd656fed79eb0f"
+    }
+  ]
+}

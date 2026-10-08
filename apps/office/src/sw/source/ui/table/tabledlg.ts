@@ -7,9 +7,10 @@ import type { SwTabCols } from "../../core/bastyp/tabcol";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SfxUInt16Item } from "../../../../svl/source/items/intitem";
 import { SfxStringItem } from "../../../../svl/source/items/stritem";
-import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
+import { SwFormatLayoutSplit } from "../../../inc/fmtlsplt";
+import { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
 import { SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";
-import { RES_UL_SPACE, RES_LAYOUT_SPLIT, RES_ROW_SPLIT } from "../../../inc/hintids";
+import { RES_UL_SPACE } from "../../../inc/hintids";
 import { FN_TABLE_REP, FN_PARAM_TABLE_NAME, FN_PARAM_TABLE_HEADLINE } from "../../../inc/cmdid";
 import { SwPtrItem } from "../../uibase/utlui/uiitems";
 
@@ -83,9 +84,8 @@ export class SwTextFlowPage {
     if (changed.headerRows !== undefined)
       output?.Put(new SfxUInt16Item(FN_PARAM_TABLE_HEADLINE, changed.headerRows));
     if (changed.layoutSplit !== undefined)
-      output?.Put(new SfxBoolItem(RES_LAYOUT_SPLIT, changed.layoutSplit));
-    if (changed.rowSplit !== undefined)
-      output?.Put(new SfxBoolItem(RES_ROW_SPLIT, changed.rowSplit));
+      output?.Put(new SwFormatLayoutSplit(changed.layoutSplit));
+    if (changed.rowSplit !== undefined) output?.Put(new SwFormatRowSplit(changed.rowSplit));
     return changed;
   }
   /** Resolves the current item over the original native input set. @returns Accepted headline count. */

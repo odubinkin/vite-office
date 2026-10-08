@@ -1,0 +1,257 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sources": [
+    {
+      "path": "sw/inc/fmtlsplt.hxx",
+      "sha256": "f1bad8d61cd26e6d8f950139bfe3d2c4c8ddab2f4f66982bc83352e686a10f18",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "SwFormatLayoutSplit( bool bSplit = true",
+          "line": 33,
+          "allMatchingLines": [
+            33
+          ]
+        },
+        {
+          "identifier": "Clone",
+          "line": 36,
+          "allMatchingLines": [
+            36
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sw/inc/fmtrowsplt.hxx",
+      "sha256": "de22a6a2d12fa16ac6810341aff01b61700cd33fe8028b9e3b3fca54a6c1c5e0",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "SwFormatRowSplit( bool bSplit = true",
+          "line": 33,
+          "allMatchingLines": [
+            33
+          ]
+        },
+        {
+          "identifier": "Clone",
+          "line": 36,
+          "allMatchingLines": [
+            36
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sw/source/core/layout/atrfrm.cxx",
+      "sha256": "61410fa07c330f5a0be094ac3e484bca0dbf439c0d8662460494a27952b1b82c",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "SwFormatLayoutSplit::Clone",
+          "line": 2085,
+          "allMatchingLines": [
+            2085
+          ]
+        },
+        {
+          "identifier": "SwFormatRowSplit::Clone",
+          "line": 2090,
+          "allMatchingLines": [
+            2090
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sw/source/core/bastyp/init.cxx",
+      "sha256": "ffc4aeb0518fa5d885ab9a2aa2cd99a21b1613ceedcc27c581407d8f68ca96b3",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "{ RES_LAYOUT_SPLIT, new SwFormatLayoutSplit",
+          "line": 426,
+          "allMatchingLines": [
+            426
+          ]
+        },
+        {
+          "identifier": "{ RES_ROW_SPLIT, new SwFormatRowSplit",
+          "line": 435,
+          "allMatchingLines": [
+            435
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sw/source/ui/table/tabledlg.cxx",
+      "sha256": "8784376ef8a6517596379155caa49027b70d4c801c0866c9991b9998e1781a5a",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "bool  SwTextFlowPage::FillItemSet",
+          "line": 1326,
+          "allMatchingLines": [
+            1326
+          ]
+        },
+        {
+          "identifier": "SwFormatLayoutSplit( m_xSplitCB",
+          "line": 1341,
+          "allMatchingLines": [
+            1341
+          ]
+        },
+        {
+          "identifier": "SwFormatRowSplit( m_xSplitRowCB",
+          "line": 1344,
+          "allMatchingLines": [
+            1344
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sw/source/uibase/shells/tabsh.cxx",
+      "sha256": "ac075f90575663fac974e2804e7111b1df3f596eb5bb400fb9fc2f4be0058163",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "const SwFormatRowSplit* pSplit",
+          "line": 295,
+          "allMatchingLines": [
+            295
+          ]
+        },
+        {
+          "identifier": "RES_LAYOUT_SPLIT",
+          "line": 113,
+          "allMatchingLines": [
+            113,
+            417,
+            1406
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sfx2/source/dialog/tabdlg.cxx",
+      "sha256": "97684181a588cefdc5c1105a845ba41abb19eb8da21679fc82fcce52a77c4199",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "SfxTabDialogController::CreatePages",
+          "line": 769,
+          "allMatchingLines": [
+            769
+          ]
+        },
+        {
+          "identifier": "DeferResetToFirstActivation",
+          "line": 790,
+          "allMatchingLines": [
+            790,
+            1040
+          ]
+        }
+      ]
+    },
+    {
+      "path": "svl/source/items/cenumitm.cxx",
+      "sha256": "2fa6c07a52219072527cd5b7aa54029e3827151dae937091a9be86a8916642fa",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "SfxBoolItem::QueryValue",
+          "line": 208,
+          "allMatchingLines": [
+            208
+          ]
+        },
+        {
+          "identifier": "SfxBoolItem::operator ==",
+          "line": 182,
+          "allMatchingLines": [
+            182
+          ]
+        }
+      ]
+    }
+  ],
+  "production": [
+    {
+      "path": "apps/office/src/sw/inc/fmtlsplt.ts",
+      "sha256": "23f7e27f71f7276f5bb6758b2868fbc3a75b74d35b8a607a1eb0a0ed0ce792cf",
+      "physicalLines": 17
+    },
+    {
+      "path": "apps/office/src/sw/inc/fmtrowsplt.ts",
+      "sha256": "c74e6beb88e2aba18149e9beb15ed2988490a2e4ad382f200d9e91ec942a0888",
+      "physicalLines": 17
+    },
+    {
+      "path": "apps/office/src/sw/source/core/attr/swatrset.ts",
+      "sha256": "a40ae837ac01c7a3d04830ce93f59859792fda6c2e17fad09aef51c7199f9dd7",
+      "physicalLines": 450
+    },
+    {
+      "path": "apps/office/src/sw/source/ui/table/tabledlg.ts",
+      "sha256": "b91a32070f3faeb7296fa6f5a80d3188e2719aa54e2263d8a25608734534b645",
+      "physicalLines": 626
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/shells/tabsh.ts",
+      "sha256": "3cadeac8e0d2aa4c2f06b363c259a99b756a5de0b1580c64e7e1d60711f78d62",
+      "physicalLines": 406
+    }
+  ],
+  "protectedIO": [
+    {
+      "path": "apps/office/src/sw/browser/storage/writer-odt-store.ts",
+      "sha256": "0fb4ebffca5a00fe63ff327379305d64143c7014dace0a7e13edb8c0c241232e",
+      "baselineByteIdentical": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/workflows/writer-odt-io.ts",
+      "sha256": "7c214afab59dbc5df1087f107e2b7bf2bf01d8623a2995e8eb19a45575361306",
+      "baselineByteIdentical": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/WriterFileDialog.tsx",
+      "sha256": "50ad125f5a254eb1772b62abe3681e4632df6c7870ea9647622b2268394c88c3",
+      "baselineByteIdentical": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts",
+      "sha256": "060a06dd9a77e530de1756b2f4c4384e6b2ddd1ee20c68fb175daab2eeb99ee7",
+      "baselineByteIdentical": true
+    }
+  ],
+  "writerUI": {
+    "path": "apps/office/src/sw/browser/presentation/writer-view.tsx",
+    "sha256": "782755425f440a2438a2994ee429a6ee7b37e4f65ca8e5f1855c9d18db8f9de1",
+    "entireSourceByteIdentical": true
+  },
+  "parent": {
+    "characters": 691601,
+    "sha256": "54ebaa66ec9cb824f718bd875a5f68d2dbbd244b7345ec0d57551ccc7f512715",
+    "unchanged": true
+  },
+  "stash": {
+    "commit": "c85f4a0e453dfd06d6e199554784f2c286737472",
+    "preserved": true
+  },
+  "sourceBoundContracts": [
+    "Concrete derived SfxBoolItem constructors use literal native Which120/129 and true defaults; independent Clone copies current identity and value without demoting the class.",
+    "SwAttrPool registers concrete true defaults, matching native init.cxx. Primitive boolean browser restoration preserves concrete type; invalid/disabled/inherited/direct states remain distinct.",
+    "Text Flow creates native concrete items only for changed widgets. Native shell consumes explicitly SET concrete items without materializing unchanged defaults; selected row/whole table scope and one original-owner/cursor/history transaction verified through mounted UI.",
+    "Native CreatePages eagerly constructs registered pages, with deferred Reset only when requested. No lazy creation change is justified by this source; eager current page construction retained."
+  ],
+  "residuals": [
+    "Native full shared-frame-format item sets, row keepTogether scalar inversion and table scalar format ownership remain partial.",
+    "Full item-instance pooling/refcounts, presentation/localization, SfxBoolItem PutValue/UNO and complete SfxTabPage orchestration remain unverified. No whole-module or metadata-status promotion.",
+    "Registered IO/recovery/settings, original-owner identities and all old acceptance assertions preserved. Whole core/browser parity incomplete."
+  ]
+}

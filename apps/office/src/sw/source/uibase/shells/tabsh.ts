@@ -14,6 +14,8 @@ import {
   SvxBoxInfoItemValidFlags,
 } from "../../../../editeng/source/items/frmitems";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
+import { SwFormatLayoutSplit } from "../../../inc/fmtlsplt";
+import { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
 import { SfxItemSet, SfxItemState } from "../../../../svl/source/items/itemset";
 import { SID_ATTR_BORDER_INNER } from "../../../../svx/inc/svxids";
 import {
@@ -122,13 +124,13 @@ export function ItemSetToTableParam(
           input.GetItemState(RES_BOX, false) === SfxItemState.SET ||
           input.GetItemState(SID_ATTR_BORDER_INNER, false) === SfxItemState.SET;
         const rowSplit = input.GetItemIfSet(RES_ROW_SPLIT, false);
-        if (borders || rowSplit instanceof SfxBoolItem) {
+        if (borders || rowSplit instanceof SwFormatRowSplit) {
           const selected = shell.IsTableMode();
           shell.Push();
           try {
             if (!selected) shell.SelTable();
             if (borders) shell.SetTabBorders(input, cursorState);
-            if (rowSplit instanceof SfxBoolItem)
+            if (rowSplit instanceof SwFormatRowSplit)
               shell.SetRowSplit(rowSplit.GetValue(), cursorState);
           } finally {
             if (!selected) shell.ClearMark();
@@ -171,7 +173,7 @@ export function ItemSetToTableParam(
             marginBottom: spacing.GetLower(),
           };
         const layoutSplit = input.GetItemIfSet(RES_LAYOUT_SPLIT, false);
-        if (layoutSplit instanceof SfxBoolItem)
+        if (layoutSplit instanceof SwFormatLayoutSplit)
           attributes = { ...attributes, layoutSplit: layoutSplit.GetValue() };
         const merge = input.GetItemIfSet(RES_COLLAPSING_BORDERS, false);
         if (merge instanceof SfxBoolItem)
