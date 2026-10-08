@@ -17,7 +17,9 @@ import type { SwTabFrame } from "../../core/layout/tabfrm";
 import { SwTabCols } from "../../core/bastyp/tabcol";
 import { PointerStyle } from "../../../../vcl/ptrstyle";
 import type { SwTextLine } from "../../core/text/txtfrm";
-import { KEY_SHIFT, KEY_MOD1 } from "../../../../vcl/keycodes";
+import type { SvxRuler } from "../../../../svx/source/dialog/svxruler";
+import { RulerType } from "../../../../svtools/source/control/ruler";
+import { applySwTableColumnItem, applySwTableRowItem } from "../uiview/viewtab";
 
 /** Performs no invalidation for detached/test edit windows. @returns Nothing. */
 function ignoreEditWindowInvalidation(): void {}
@@ -54,17 +56,7 @@ export class SwEditWin {
         readonly axis: "column" | "row";
         readonly start: SwTableMousePoint;
         readonly original: SwTabCols;
-        readonly next: SwTabCols;
-        readonly index: number;
-        readonly initialPosition: number;
-        readonly origin: number;
-        readonly scale: number;
-        readonly minimum: number;
-        readonly maximum: number;
-        readonly linear: boolean;
-        readonly activeLineOnly: boolean;
-        readonly proportional?: Readonly<{ nTotalDist: number; pPercBuf: readonly number[] }>;
-        position: number;
+        readonly ruler: SvxRuler;
       }
     | undefined;
 
@@ -129,6 +121,7 @@ export class SwEditWin {
   /** Starts native single-left-click table edge selection and optional capture. @param point - Device position. @param button - Platform button. @param clicks - Native click count. @param modifier - Native key mask captured at drag admission. @returns Whether handled. */
   public MouseButtonDown(point: SwTableMousePoint, button = 0, clicks = 1, modifier = 0): boolean {
     this.tableMouseStart = undefined;
+    this.tableBorderDrag?.ruler.CancelDrag();
     this.tableBorderDrag = undefined;
     if (button !== 0 || clicks !== 1) return false;
     const kind = this.WhichMouseTabCol(point);
@@ -147,7 +140,7 @@ export class SwEditWin {
     return this.Complete(selected);
   }
 
-  /** Starts represented source ruler Border/Margin tracking over native columns with5px hit tolerance. @param point - Actual document border hit. @param modifier - Native drag modifier mask. @returns Whether tracking was admitted. */
+  /** Delegates represented column hits to the persistent native horizontal ruler with5px tolerance. @param point - Document device hit. @param modifier - Captured native mask. @returns Whether captured. */
   public RulerColumnDrag(point: SwTableMousePoint, modifier = 0): boolean {
     const hit = this.m_rView.GetWrtShell().GetBox(point),
       original = new SwTabCols();
@@ -157,109 +150,29 @@ export class SwEditWin {
       !this.m_rView.GetWrtShell().GetMouseTabCols(original, point)
     )
       return false;
-    const columns = this.m_rView.GetTableRulerColumnItem(original),
-      rect = (hit.frame.mouseGeometry as NonNullable<SwTabFrame["mouseGeometry"]>).rect,
+    const rect = (hit.frame.mouseGeometry as NonNullable<SwTabFrame["mouseGeometry"]>).rect,
       scale = (original.GetRight() - original.GetLeft()) / (rect.right - rect.left),
-      origin = rect.left - original.GetLeft() / scale;
-    let index = -1,
-      distance = Infinity;
-    for (let i = 0; i < original.Count(); i++) {
-      const difference = Math.abs(
-        origin + (columns.At(i).nEnd + original.GetLeft()) / scale - point.x,
-      );
-      if (columns.At(i).bVisible && difference <= 5 && difference < distance) {
-        index = i;
-        distance = difference;
-      }
-    }
-    if (index === -1) {
-      if (Math.abs(rect.left - point.x) <= 5) index = -1;
-      else if (Math.abs(rect.right - point.x) <= 5) index = original.Count();
-      else return false;
-    }
-    const position =
-      index === -1
-        ? original.GetLeft()
-        : index === original.Count()
-          ? original.GetRight()
-          : columns.At(index).nEnd + original.GetLeft();
-    // SvxRuler::EvalModifier selects exact solitary masks. The represented
-    // proportional Border branch has zero-width fences in a flat table.
-    const linear = modifier === KEY_SHIFT && index >= 0 && index < original.Count();
-    let proportional: Readonly<{ nTotalDist: number; pPercBuf: readonly number[] }> | undefined;
-    let proportionalReserve = 0;
-    if (modifier === KEY_MOD1 && index >= 0 && index < original.Count()) {
-      // PrepareProportional_Impl stores unsigned per-thousand cumulative
-      // widths. Ruler positions and integer division are device pixels.
-      const first = Math.round(position / scale),
-        right = Math.round(original.GetRight() / scale),
-        nTotalDist = right - first,
-        pPercBuf = Array.from(
-          { length: original.Count() },
-          /** Initializes native per-thousand storage. @returns Empty share. */ () => 0,
-        );
-      let previous = first,
-        smallest = 65535;
-      for (let i = index + 1; i <= original.Count(); i++) {
-        const edge = i === original.Count() ? right : Math.round(original.GetEntry(i).nPos / scale);
-        smallest = Math.min(smallest, edge - previous);
-        if (i < original.Count())
-          pPercBuf[i] = Math.trunc(((edge - first) * 1000) / nTotalDist) & 0xffff;
-        previous = edge;
-      }
-      proportional = { nTotalDist, pPercBuf };
-      // CalcPropMaxRight performs this minimum-space expression in float,
-      // then converts to integer pixels before the final glMinFrame guard.
-      proportionalReserve =
-        Math.trunc(Math.fround(Math.fround(5 / Math.fround(smallest)) * nTotalDist)) * scale;
-    }
-    const minimum =
-      index === -1
-        ? 0
-        : index === original.Count()
-          ? original.Count() === 0
-            ? original.GetLeft()
-            : original.GetEntry(index - 1).nPos
-          : columns.At(index).nEndMin + original.GetLeft();
-    const maximum =
-      index === -1
-        ? original.Count() === 0
-          ? original.GetRight()
-          : original.GetEntry(0).nPos
-        : index === original.Count()
-          ? original.GetRightMax()
-          : linear
-            ? original.GetRight() -
-              (Array.from({ length: original.Count() - index - 1 }).filter(
-                /** Counts source CalcPropMaxRight visible following separators. @param _unused - Empty value. @param offset - Following separator offset. @returns Whether visible. */
-                (_unused, offset) => columns.At(index + offset + 1).bVisible,
-              ).length +
-                1) *
-                5 *
-                scale
-            : proportional === undefined
-              ? columns.At(index).nEndMax + original.GetLeft()
-              : original.GetRight() - proportionalReserve;
-    this.tableBorderDrag = {
-      axis: "column",
-      start: point,
-      original,
-      next: new SwTabCols(original),
-      index,
-      initialPosition: position,
-      origin,
+      ruler = this.m_rView.GetHRuler();
+    ruler.Update(this.m_rView.GetTableRulerColumnItem(original), {
+      left: original.GetLeft(),
+      right: original.GetRight(),
+      rightMax: original.GetRightMax(),
+      origin: rect.left - original.GetLeft() / scale,
       scale,
-      minimum: minimum + (index === -1 ? 0 : 5 * scale),
-      maximum: maximum - (index === original.Count() ? 0 : 5 * scale),
-      linear,
-      activeLineOnly: false,
-      ...(proportional === undefined ? {} : { proportional }),
-      position,
-    };
+      margin1: true,
+      margin2: true,
+    });
+    if (
+      !ruler.StartDocDrag(point, RulerType.Border, 5, modifier) &&
+      !ruler.StartDocDrag(point, RulerType.Margin1, 5, modifier) &&
+      !ruler.StartDocDrag(point, RulerType.Margin2, 5, modifier)
+    )
+      return false;
+    this.tableBorderDrag = { axis: "column", start: point, original, ruler };
     return true;
   }
 
-  /** Starts horizontal-writing row tracking with native exact-mask modifier policy. @param point - Actual document hit. @param modifier - Captured native key mask. @returns Whether admitted. */
+  /** Delegates horizontal-writing row hits to the persistent native vertical ruler. @param point - Document device hit. @param modifier - Captured native mask. @returns Whether captured. */
   public RulerRowDrag(point: SwTableMousePoint, modifier = 0): boolean {
     const hit = this.m_rView.GetWrtShell().GetBox(point),
       original = new SwTabCols();
@@ -269,89 +182,33 @@ export class SwEditWin {
       !this.m_rView.GetWrtShell().GetMouseTabRows(original, point)
     )
       return false;
-    const rows = this.m_rView.GetTableRulerRowItem(original),
-      rect = (hit.frame.mouseGeometry as NonNullable<SwTabFrame["mouseGeometry"]>).rect,
-      scale = original.GetRight() / (rect.bottom - rect.top),
-      origin = rect.top;
-    let index = -1,
-      distance = Infinity;
-    for (let i = 0; i < original.Count(); i++) {
-      const difference = Math.abs(
-        origin + (rows.At(i).nEnd + original.GetLeft()) / scale - point.y,
-      );
-      if (rows.At(i).bVisible && difference <= 5 && difference < distance) {
-        index = i;
-        distance = difference;
-      }
-    }
-    if (index === -1) {
-      if (Math.abs(rect.bottom - point.y) > 5 || !original.IsLastRowAllowedToChange()) return false;
-      index = original.Count();
-    }
-    const activeLineOnly = modifier === (KEY_MOD1 | KEY_SHIFT) && index < original.Count();
-    let previousVisible = index - 1;
-    if (activeLineOnly)
-      while (previousVisible >= 0 && !rows.At(previousVisible).bVisible) previousVisible--;
-    const position =
-        index === original.Count() ? original.GetRight() : rows.At(index).nEnd + original.GetLeft(),
-      proportional =
-        modifier === KEY_MOD1
-          ? {
-              nTotalDist: Math.round(position / scale),
-              pPercBuf: Array.from(
-                { length: index },
-                /** Stores native preceding-border uint16 per-thousand shares. @param _unused - Empty entry. @param i - Original separator. @returns Source share. */
-                (_unused, i) =>
-                  Math.trunc(
-                    (Math.round((rows.At(i).nEnd + original.GetLeft()) / scale) * 1000) /
-                      Math.round(position / scale),
-                  ) & 0xffff,
-              ),
-            }
-          : undefined,
-      minimum =
-        proportional !== undefined
-          ? (index === original.Count() ? index : index + 1) * 5 * scale
-          : activeLineOnly
-            ? previousVisible < 0
-              ? 0
-              : rows.At(previousVisible).nEnd + original.GetLeft()
-            : index === original.Count()
-              ? index === 0
-                ? 0
-                : rows.At(index - 1).nEnd + original.GetLeft()
-              : rows.At(index).nEndMin + original.GetLeft(),
-      maximum =
-        index === original.Count()
-          ? index === 0
-            ? original.GetRightMax()
-            : rows.At(index - 1).nEndMax + original.GetLeft()
-          : rows.At(index).nEndMax + original.GetLeft() - 5 * scale;
-    this.tableBorderDrag = {
-      axis: "row",
-      start: point,
-      original,
-      next: new SwTabCols(original),
-      index,
-      initialPosition: position,
-      origin,
-      scale,
-      minimum: minimum + 5 * scale,
-      maximum,
-      linear: false,
-      activeLineOnly,
-      ...(proportional === undefined ? {} : { proportional }),
-      position,
-    };
+    const rect = (hit.frame.mouseGeometry as NonNullable<SwTabFrame["mouseGeometry"]>).rect,
+      ruler = this.m_rView.GetVRuler();
+    ruler.Update(this.m_rView.GetTableRulerRowItem(original), {
+      left: original.GetLeft(),
+      right: original.GetRight(),
+      rightMax: original.GetRightMax(),
+      origin: rect.top,
+      scale: original.GetRight() / (rect.bottom - rect.top),
+      margin1: false,
+      margin2: original.IsLastRowAllowedToChange(),
+    });
+    if (
+      !ruler.StartDocDrag(point, RulerType.Border, 5, modifier) &&
+      !ruler.StartDocDrag(point, RulerType.Margin2, 5, modifier)
+    )
+      return false;
+    this.tableBorderDrag = { axis: "row", start: point, original, ruler };
     return true;
   }
-  /** Reads the transient native guide on its physical axis. @returns Axis and device coordinate or no tracking. */
+
+  /** Reads the transient native ruler guide on its physical axis. @returns Axis and device coordinate or no capture. */
   public GetTableBorderDragPosition():
     Readonly<{ axis: "column" | "row"; position: number }> | undefined {
     const drag = this.tableBorderDrag;
     return drag === undefined
       ? undefined
-      : { axis: drag.axis, position: drag.origin + drag.position / drag.scale };
+      : { axis: drag.axis, position: drag.ruler.GetDragPosition() as number };
   }
   /** Reads the row tracking coordinate without publishing content. @returns Guide Y or no row tracking. */
   public GetTableRowDragPosition(): number | undefined {
@@ -368,69 +225,7 @@ export class SwEditWin {
   /** Extends an active native table mouse capture. @param point - Device position. @returns Whether handled. */
   public MouseMove(point: SwTableMousePoint): boolean {
     const drag = this.tableBorderDrag;
-    if (drag !== undefined) {
-      drag.position = Math.round(
-        Math.max(
-          drag.minimum,
-          Math.min(
-            drag.maximum,
-            drag.initialPosition +
-              (drag.axis === "column" ? point.x - drag.start.x : point.y - drag.start.y) *
-                drag.scale,
-          ),
-        ),
-      );
-      if (drag.axis === "row") {
-        if (drag.proportional !== undefined)
-          drag.position = Math.round(Math.round(drag.position / drag.scale) * drag.scale);
-        const delta = drag.position - drag.initialPosition;
-        drag.next.Assign(drag.original);
-        if (drag.proportional !== undefined) {
-          const total =
-            drag.proportional.nTotalDist +
-            Math.round(drag.position / drag.scale) -
-            Math.round(drag.initialPosition / drag.scale);
-          for (let i = 0; i < drag.index; i++)
-            drag.next.GetEntry(i).nPos = Math.round(
-              Math.trunc((total * (drag.proportional.pPercBuf[i] as number)) / 1000) * drag.scale,
-            );
-          // DragBorders uses nIndex=0 for Margin2; its following-border
-          // translation therefore also visits proportional borders after0.
-          if (drag.index === drag.next.Count())
-            for (let i = 1; i < drag.next.Count(); i++) drag.next.GetEntry(i).nPos += delta;
-        }
-        for (let i = drag.index; i < drag.next.Count(); i++)
-          drag.next.GetEntry(i).nPos =
-            i === drag.index ? drag.position : drag.original.GetEntry(i).nPos + delta;
-        drag.next.SetRight(drag.original.GetRight() + delta);
-      } else if (drag.linear) {
-        // SvxRuler::DragBorders OBJECT_SIZE_LINEAR visits following borders
-        // from right to left, preserving five device pixels between them.
-        const delta = drag.position - drag.initialPosition;
-        drag.next.Assign(drag.original);
-        let right = drag.original.GetRight() - 5 * drag.scale;
-        for (let i = drag.next.Count() - 1; i >= drag.index; i--) {
-          const entry = drag.next.GetEntry(i);
-          entry.nPos = Math.min(entry.nPos + delta, right);
-          right = entry.nPos - 5 * drag.scale;
-        }
-      } else if (drag.proportional !== undefined) {
-        const first = Math.round(drag.initialPosition / drag.scale),
-          left = Math.round(drag.position / drag.scale),
-          total = drag.proportional.nTotalDist - (left - first);
-        drag.position = Math.round(left * drag.scale);
-        drag.next.Assign(drag.original);
-        drag.next.GetEntry(drag.index).nPos = drag.position;
-        for (let i = drag.next.Count() - 1; i > drag.index; i--)
-          drag.next.GetEntry(i).nPos = Math.round(
-            (left + Math.trunc((total * (drag.proportional.pPercBuf[i] as number)) / 1000)) *
-              drag.scale,
-          );
-      } else if (drag.index === -1) drag.next.SetLeft(drag.position);
-      else if (drag.index === drag.next.Count()) drag.next.SetRight(drag.position);
-      else drag.next.GetEntry(drag.index).nPos = drag.position;
-      return true;
-    }
+    if (drag !== undefined) return drag.ruler.Tracking(point);
     return (
       this.tableMouseStart !== undefined &&
       this.Complete(
@@ -448,13 +243,29 @@ export class SwEditWin {
     if (!cancelled && point !== undefined && drag !== undefined) this.MouseMove(point);
     this.tableMouseStart = undefined;
     this.tableBorderDrag = undefined;
-    if (drag !== undefined && !cancelled) {
-      if (drag.initialPosition !== drag.position)
+    if (drag !== undefined) {
+      drag.ruler.EndTracking(cancelled);
+      if (drag.ruler.HasChanged()) {
+        const page = this.m_rView.GetDocShell().GetDoc().GetPageDesc().GetValue(),
+          item = drag.ruler.GetColumnItem();
         this.Complete(
           drag.axis === "row"
-            ? this.m_rView.GetWrtShell().SetMouseTabRows(drag.next, drag.activeLineOnly, drag.start)
-            : this.m_rView.GetWrtShell().SetMouseTabCols(drag.next, false, drag.start),
+            ? this.m_rView
+                .GetWrtShell()
+                .SetMouseTabRows(
+                  applySwTableRowItem(drag.original, item, page.height),
+                  drag.ruler.IsActLineOnly(),
+                  drag.start,
+                )
+            : this.m_rView.GetWrtShell().SetMouseTabCols(
+                applySwTableColumnItem(drag.original, item, page.width),
+                // The represented shared-column model still rejects independent row geometry.
+                // Retain its existing ordinary column contract until that core branch is ported.
+                false,
+                drag.start,
+              ),
         );
+      }
     }
     return captured;
   }

@@ -1,0 +1,54 @@
+{
+  "records": [
+    {
+      "command": "npm run format:check",
+      "exit": 1,
+      "bytes": 240,
+      "sha256": "63f7376cfd2a84434f7dfda4aab076db37b73953290b28aca86fd4c33c928ca0",
+      "diagnostics": [
+        "[warn] apps/office/src/sw/source/uibase/docvw/native-ruler-ownership.test.ts",
+        "[warn] Code style issues found in the above file. Run Prettier with --write to fix."
+      ]
+    },
+    {
+      "command": "npm run lint",
+      "exit": 1,
+      "bytes": 500,
+      "sha256": "fbe12885c55fcf356bf94d49912e3540e3aa0a231ae4159e99a0e6c28ca9ae37",
+      "diagnostics": [
+        "> eslint . --max-warnings 0",
+        "  264:5  error  '_tolerance' is defined but never used  @typescript-eslint/no-unused-vars",
+        "  21:3  error  Explicit enum value must only be a literal value (string or number)  @typescript-eslint/prefer-literal-enum-member",
+        "✖ 2 problems (2 errors, 0 warnings)"
+      ]
+    },
+    {
+      "command": "npm run typecheck",
+      "exit": 0,
+      "bytes": 240,
+      "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:dependencies",
+      "exit": 0,
+      "bytes": 189,
+      "sha256": "3543ca5258ac14c6656981143c104bda0e05aa3467d585f73ade57b0c1767763",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:docs",
+      "exit": 0,
+      "bytes": 119,
+      "sha256": "5348447bd0ce38a7334a8614ed5109c91ad0753e5a3dbe1ff99636c85441f34f",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:file-size",
+      "exit": 0,
+      "bytes": 4068,
+      "sha256": "5b669743fac1fb735cbf8a226f9f3bc1d5c3839ede964ef3af9c749af98552d5",
+      "diagnostics": []
+    }
+  ]
+}

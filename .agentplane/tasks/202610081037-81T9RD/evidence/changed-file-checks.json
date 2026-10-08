@@ -1,0 +1,20 @@
+{
+  "records": [
+    {
+      "command": "Unchanged JSDoc validator on approved changed code/acceptance paths; actual physical-line count",
+      "exit": 0,
+      "errors": [],
+      "physicalLines": {
+        "apps/office/src/svtools/source/control/ruler.ts": 172,
+        "apps/office/src/svx/source/dialog/svxruler.ts": 426,
+        "apps/office/src/sw/source/uibase/docvw/edtwin.ts": 535,
+        "apps/office/src/sw/source/uibase/uiview/view.ts": 310,
+        "apps/office/src/sw/source/uibase/uiview/viewtab.ts": 105,
+        "scripts/check-module-boundaries.mjs": 369,
+        "apps/office/src/svx/source/dialog/native-table-ruler.test.ts": 350,
+        "apps/office/src/sw/source/uibase/docvw/native-ruler-ownership.test.ts": 228,
+        "scripts/native-ruler-boundary.test.ts": 28
+      }
+    }
+  ]
+}

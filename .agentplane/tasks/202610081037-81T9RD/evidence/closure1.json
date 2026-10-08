@@ -1,0 +1,49 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/browser/editor/native-table-linear-drag.test.tsx src/sw/source/uibase/docvw/native-table-linear-drag.test.ts src/sw/source/uibase/docvw/native-table-proportional-drag.test.ts src/svx/source/dialog/native-table-ruler.test.ts src/sw/source/uibase/docvw/native-ruler-ownership.test.ts --testNamePattern ^(?:mounted Shift modifier mask 3|exact Shift selection excludes combined mask 12288|native proportional selection excludes other exact masks 12288|native unequal hidden column fences retain source limit for mask(?:4096|8192)|native unequal row shares survive fractional backtracking and distinct bottom admission|Writer source ruler axis exchange retains existing column contract and independent row history)$ --coverage.reportOnFailure --coverage.reporter=json --coverage.reporter=json-summary --coverage.reporter=text --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/81T9RD.closure1.app-results.json",
+      "profile": "upstream-absent-focused",
+      "exit": 1,
+      "sha256": "e7fa4a35efc844a0cd5f73aa32e9bb651ac31db3450cbc1969b3df1c1ab0cdd9",
+      "caseCounts": {
+        "passed": 7,
+        "failed": 0,
+        "skipped": 81,
+        "total": 88
+      },
+      "passedNames": [
+        "apps/office/src/svx/source/dialog/native-table-ruler.test.ts > native unequal hidden column fences retain source limit for mask4096",
+        "apps/office/src/svx/source/dialog/native-table-ruler.test.ts > native unequal hidden column fences retain source limit for mask8192",
+        "apps/office/src/svx/source/dialog/native-table-ruler.test.ts > native unequal row shares survive fractional backtracking and distinct bottom admission",
+        "apps/office/src/sw/browser/editor/native-table-linear-drag.test.tsx > mounted Shift modifier mask 3",
+        "apps/office/src/sw/source/uibase/docvw/native-ruler-ownership.test.ts > Writer source ruler axis exchange retains existing column contract and independent row history",
+        "apps/office/src/sw/source/uibase/docvw/native-table-linear-drag.test.ts > exact Shift selection excludes combined mask 12288",
+        "apps/office/src/sw/source/uibase/docvw/native-table-proportional-drag.test.ts > native proportional selection excludes other exact masks 12288"
+      ],
+      "failedCases": [],
+      "unhandledErrorCount": 0,
+      "coverageMapSHA256": "6ed3f303dd8c7e331bd3606d9b75ed9aad4824bc55b4bc2f6fe3df622004b4d8"
+    },
+    {
+      "kind": "inventory",
+      "command": "npm run test:inventory:coverage -- scripts/libreoffice-inventory/parity-mapping-cli.test.ts --testNamePattern ^parity mapping CLI composes the Writer mapping report with owned upstream marker evidence$ --coverage.reportOnFailure --coverage.reporter=json --coverage.reporter=json-summary --coverage.reporter=text --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/81T9RD.closure1.inventory-results.json",
+      "profile": "upstream-absent-focused",
+      "exit": 1,
+      "sha256": "3cf94bf37d84d650cff09e2ded38183c2e0e2fe72afc4373bf7167d499449eee",
+      "caseCounts": {
+        "passed": 1,
+        "failed": 0,
+        "skipped": 2,
+        "total": 3
+      },
+      "passedNames": [
+        "scripts/libreoffice-inventory/parity-mapping-cli.test.ts > parity mapping CLI composes the Writer mapping report with owned upstream marker evidence"
+      ],
+      "failedCases": [],
+      "unhandledErrorCount": 0,
+      "coverageMapSHA256": "a136987504b3f67d931535d98b3215248418e6da01e91beefc917591161f55d1"
+    }
+  ]
+}

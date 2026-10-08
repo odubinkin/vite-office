@@ -1,0 +1,56 @@
+{
+  "base": "6a7372323b3e44ea4529e8cb98edce4ce6b8a272",
+  "semanticPaths": [
+    "apps/office/src/svtools/source/control/ruler.ts",
+    "apps/office/src/svx/source/dialog/native-table-ruler.test.ts",
+    "apps/office/src/svx/source/dialog/svxruler.ts",
+    "apps/office/src/sw/source/uibase/docvw/edtwin.ts",
+    "apps/office/src/sw/source/uibase/docvw/native-ruler-ownership.test.ts",
+    "apps/office/src/sw/source/uibase/uiview/view.ts",
+    "apps/office/src/sw/source/uibase/uiview/viewtab.ts",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/source-provenance.json",
+    "scripts/check-module-boundaries.mjs",
+    "scripts/native-ruler-boundary.test.ts"
+  ],
+  "scopeCount": 11,
+  "priorAcceptanceFiles": 620,
+  "byteIdenticalAcceptanceFiles": 620,
+  "exactSourceBackedMigrations": [],
+  "newAcceptanceFiles": [
+    "apps/office/src/svx/source/dialog/native-table-ruler.test.ts",
+    "apps/office/src/sw/source/uibase/docvw/native-ruler-ownership.test.ts",
+    "scripts/native-ruler-boundary.test.ts"
+  ],
+  "metadata": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "oldRecords": 307,
+      "currentRecords": 309,
+      "allPriorFieldsPrefixesAndStatusesPreserved": true,
+      "extendedPartialModules": [
+        "apps/office/src/svtools/source/control/ruler.ts",
+        "apps/office/src/svx/source/dialog/svxruler.ts",
+        "apps/office/src/sw/source/uibase/docvw/edtwin.ts",
+        "apps/office/src/sw/source/uibase/uiview/view.ts",
+        "apps/office/src/sw/source/uibase/uiview/viewtab.ts",
+        "scripts/check-module-boundaries.mjs"
+      ]
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "oldRecords": 307,
+      "currentRecords": 309,
+      "allPriorFieldsPrefixesAndStatusesPreserved": true,
+      "extendedPartialModules": [
+        "apps/office/src/svtools/source/control/ruler.ts",
+        "apps/office/src/svx/source/dialog/svxruler.ts",
+        "apps/office/src/sw/source/uibase/docvw/edtwin.ts",
+        "apps/office/src/sw/source/uibase/uiview/view.ts",
+        "apps/office/src/sw/source/uibase/uiview/viewtab.ts",
+        "scripts/check-module-boundaries.mjs"
+      ]
+    }
+  ],
+  "failures": []
+}

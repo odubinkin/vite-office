@@ -1,0 +1,212 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/svtools/source/control/ruler.ts": "872bbfcdf41eb4b759cab7ef29b3ab7d567984c6abd0098ccb35f07c3784bf5d",
+    "apps/office/src/svx/source/dialog/svxruler.ts": "e87b7c5c3682dc3fdfb04d4803090cf5808ba6a9c63819cc932d28744b824fc5",
+    "apps/office/src/sw/source/uibase/docvw/edtwin.ts": "31f0101d2be1cde60d4fdb77ef0385549993e884c6d3636d90e55a7331b74afb",
+    "apps/office/src/sw/source/uibase/uiview/view.ts": "258897bfead4a21fe6f02aa23421cba7568eb2e58437ef13730e3ab6ecd9cd54",
+    "apps/office/src/sw/source/uibase/uiview/viewtab.ts": "14a9af90c629b3b1b0c7e8c35b4406aaf0b03d4e2b16f3969e2ed95f6ea46844",
+    "scripts/check-module-boundaries.mjs": "a0c89b18d56a1a6a124eea61336b4d41763a08b27fc9d45a86a2708de7063d26",
+    "apps/office/src/svx/source/dialog/native-table-ruler.test.ts": "a3566950d6234c3f5499bd333ca70ef4b60841f2dbb7a257d331c1edc5864f68",
+    "apps/office/src/sw/source/uibase/docvw/native-ruler-ownership.test.ts": "e21374199770ac7f95c54955ca350959238fefccd70795b76a419e4d57b45a95",
+    "scripts/native-ruler-boundary.test.ts": "88ee39cd92a1d907686406d3f1f04020474a276b09596a1d98c98f25860c2619",
+    "docs/program/source-provenance.json": "d3c1d3267ae5c29fc9569178775ec03b33c704d1fb0172eaf7e827ce2b5123eb",
+    "docs/program/parity/runtime-inventory.json": "28c46693c8912a12eb4eca25d385fcf396a4148a0a9f15f5f6a10b8b5367b446"
+  },
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1443,
+      "sha256": "c5e766a8426316217a2fad1caf60690a131fe52361c0511a4df83669a1e98cab",
+      "totals": [],
+      "failedCases": [],
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/81T9RD.app-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 91448,
+      "sha256": "b6d78827b69127c576929fcfac0101e4422a0d38fbd1ee679ee5d9d067326aa9",
+      "totals": [
+        "Test Files  3 failed | 460 passed (463)",
+        "Tests  3 failed | 13778 passed (13781)"
+      ],
+      "failedCases": [
+        {
+          "name": "apps/office/src/sw/browser/editor/native-table-linear-drag.test.tsx > mounted Shift modifier mask 3",
+          "assertion": [
+            "AssertionError: expected [ 1500, 1500, 1500 ] to deeply equal [ 1800, 1200, 1500 ]"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/source/uibase/docvw/native-table-linear-drag.test.ts > exact Shift selection excludes combined mask 12288",
+          "assertion": [
+            "AssertionError: expected [ 1500, 1500, 1500 ] to deeply equal [ 1800, 1200, 1500 ]"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/source/uibase/docvw/native-table-proportional-drag.test.ts > native proportional selection excludes other exact masks 12288",
+          "assertion": [
+            "AssertionError: expected [ 1500, 1500, 1500 ] to deeply equal [ 1800, 1200, 1500 ]"
+          ]
+        }
+      ],
+      "caseCounts": {
+        "passed": 13778,
+        "failed": 3,
+        "skipped": 0,
+        "total": 13781
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 17138,
+          "covered": 17136,
+          "skipped": 0,
+          "pct": 99.98
+        },
+        "statements": {
+          "total": 18818,
+          "covered": 18816,
+          "skipped": 0,
+          "pct": 99.98
+        },
+        "functions": {
+          "total": 4348,
+          "covered": 4347,
+          "skipped": 0,
+          "pct": 99.97
+        },
+        "branches": {
+          "total": 14080,
+          "covered": 14075,
+          "skipped": 0,
+          "pct": 99.96
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverage": {
+        "lines": 99.98,
+        "statements": 99.98,
+        "functions": 99.97,
+        "branches": 99.96
+      },
+      "incompleteFileCount": 5,
+      "coverageMapSHA256": "68b26706f91da313f9c728a8fd7e04db58bc0ebe3ed91bc8f2a6aacd97354515",
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "inventory",
+      "command": "npm run test:inventory:coverage -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/81T9RD.inventory-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 42205,
+      "sha256": "387c435121ea6fd3a0fff464b7dc7163b1f98a4b1e2e1178be8c094bef22eb36",
+      "totals": [
+        "Test Files  1 failed | 35 passed (36)",
+        "Tests  1 failed | 109 passed (110)"
+      ],
+      "failedCases": [
+        {
+          "name": "scripts/libreoffice-inventory/parity-mapping-cli.test.ts > parity mapping CLI composes the Writer mapping report with owned upstream marker evidence",
+          "assertion": [
+            "Error: Runtime module paths must be unique and lexicographically ordered."
+          ]
+        }
+      ],
+      "caseCounts": {
+        "passed": 109,
+        "failed": 1,
+        "skipped": 0,
+        "total": 110
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 1464,
+          "covered": 1460,
+          "skipped": 0,
+          "pct": 99.72
+        },
+        "statements": {
+          "total": 1523,
+          "covered": 1519,
+          "skipped": 0,
+          "pct": 99.73
+        },
+        "functions": {
+          "total": 384,
+          "covered": 381,
+          "skipped": 0,
+          "pct": 99.21
+        },
+        "branches": {
+          "total": 1081,
+          "covered": 1081,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "coverage": {
+        "lines": 99.72,
+        "statements": 99.73,
+        "functions": 99.21,
+        "branches": 100
+      },
+      "incompleteFileCount": 1,
+      "coverageMapSHA256": "23fbae87da6c8b98f5237e81d8a09efe76bb9ff7d6ab76e3df4eb69957fbfc35",
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "scripts",
+      "command": "npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts scripts/check-module-boundaries.test.ts scripts/check-legacy-font-boundary.test.ts scripts/native-column-item-boundary.test.ts scripts/native-ruler-boundary.test.ts",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 224,
+      "sha256": "8e3b05b8dec81822cccd74f85dd371e9bd3f477df192e790d43044fa65497773",
+      "totals": [
+        "Test Files  6 passed (6)",
+        "Tests  19 passed (19)"
+      ],
+      "failedCases": [],
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 41460,
+      "sha256": "81c803948464d5320c75b06e2b65f9a9bc9c4282e3f692cc44d729563c5844c5",
+      "totals": [
+        "299 passed (6.0m)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "startTime": "2026-10-08T11:05:14.861Z",
+        "duration": 358400.58,
+        "expected": 299,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "unhandledErrorCount": 0
+    }
+  ]
+}

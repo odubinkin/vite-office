@@ -1,0 +1,301 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sources": [
+    {
+      "path": "svtools/source/control/ruler.cxx",
+      "sha256": "3d311b4b4fdfa0c05651bb7aa169c2b2a39def6023059b9dd1ffdb29f80bd413",
+      "anchors": [
+        {
+          "identifier": "bool Ruler::StartDocDrag(",
+          "line": 2260,
+          "allMatchingLines": [
+            2260
+          ]
+        },
+        {
+          "identifier": "bool Ruler::ImplStartDrag(",
+          "line": 1799,
+          "allMatchingLines": [
+            1799
+          ]
+        },
+        {
+          "identifier": "void Ruler::ImplDrag(",
+          "line": 1839,
+          "allMatchingLines": [
+            1839
+          ]
+        },
+        {
+          "identifier": "void Ruler::ImplEndDrag()",
+          "line": 1913,
+          "allMatchingLines": [
+            1913
+          ]
+        },
+        {
+          "identifier": "void Ruler::CancelDrag()",
+          "line": 2328,
+          "allMatchingLines": [
+            2328
+          ]
+        }
+      ]
+    },
+    {
+      "path": "include/svtools/ruler.hxx",
+      "sha256": "fe0d39a80344d230670b1efbf7f0aecbc769d8aa754b025d396f19bec4ac2526",
+      "anchors": [
+        {
+          "identifier": "enum class RulerType",
+          "line": 463,
+          "allMatchingLines": [
+            463
+          ]
+        },
+        {
+          "identifier": "enum class RulerBorderStyle",
+          "line": 494,
+          "allMatchingLines": [
+            494
+          ]
+        },
+        {
+          "identifier": "struct RulerBorder",
+          "line": 504,
+          "allMatchingLines": [
+            504
+          ]
+        }
+      ]
+    },
+    {
+      "path": "svx/source/dialog/svxruler.cxx",
+      "sha256": "4289126ba34117e4c8c7b5cee3cba3ab8c7858f9386b93c073ae55c386081f9a",
+      "anchors": [
+        {
+          "identifier": "void SvxRuler::UpdateColumns()",
+          "line": 751,
+          "allMatchingLines": [
+            751
+          ]
+        },
+        {
+          "identifier": "void SvxRuler::EvalModifier()",
+          "line": 2542,
+          "allMatchingLines": [
+            2542
+          ]
+        },
+        {
+          "identifier": "void SvxRuler::PrepareProportional_Impl",
+          "line": 2415,
+          "allMatchingLines": [
+            2415
+          ]
+        },
+        {
+          "identifier": "void SvxRuler::CalcMinMax()",
+          "line": 2646,
+          "allMatchingLines": [
+            2646
+          ]
+        },
+        {
+          "identifier": "void SvxRuler::DragBorders()",
+          "line": 1804,
+          "allMatchingLines": [
+            1804
+          ]
+        },
+        {
+          "identifier": "void SvxRuler::ApplyBorders()",
+          "line": 2314,
+          "allMatchingLines": [
+            2314
+          ]
+        }
+      ]
+    },
+    {
+      "path": "include/svx/ruler.hxx",
+      "sha256": "5c8a3e745cfb8fb92487df4a4269cba1739016d28664249f25cd410bea58754a",
+      "anchors": [
+        {
+          "identifier": "enum class SvxRulerDragFlags",
+          "line": 50,
+          "allMatchingLines": [
+            50
+          ]
+        },
+        {
+          "identifier": "OBJECT_LEFT_INDENT_ONLY",
+          "line": 60,
+          "allMatchingLines": [
+            60
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sw/source/uibase/docvw/edtwin3.cxx",
+      "sha256": "c31fb7bdad5a1e9cd5f7e33a939796945222a8066d27f431d180426d0707fd6f",
+      "anchors": [
+        {
+          "identifier": "bool SwEditWin::RulerColumnDrag",
+          "line": 86,
+          "allMatchingLines": [
+            86
+          ]
+        },
+        {
+          "identifier": "SvxRuler& rRuler = bVerticalMode",
+          "line": 92,
+          "allMatchingLines": [
+            92,
+            104
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sw/source/uibase/uiview/viewtab.cxx",
+      "sha256": "f93e2b889762ab0165db3d1485d3bbae6e9e97794c79870c2299756b4095e7a1",
+      "anchors": [
+        {
+          "identifier": "rSh.SetMouseTabCols( aTabCols, bSingleLine,",
+          "line": 980,
+          "allMatchingLines": [
+            980
+          ]
+        },
+        {
+          "identifier": "rSh.SetMouseTabRows( aTabCols, bSingleLine, m_aTabColFromDocPos );",
+          "line": 1100,
+          "allMatchingLines": [
+            1100
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sw/source/core/table/swtable.cxx",
+      "sha256": "10c536056498dd001b3a5c75638040ee5daef966ede231c66947da8e704b1206",
+      "anchors": [
+        {
+          "identifier": "void SwTable::SetTabCols(",
+          "line": 831,
+          "allMatchingLines": [
+            831
+          ]
+        },
+        {
+          "identifier": "NewSetTabCols( aParm, rNew, rOld, pStart, bCurRowOnly );",
+          "line": 932,
+          "allMatchingLines": [
+            932
+          ]
+        }
+      ]
+    },
+    {
+      "path": "svx/Library_svx.mk",
+      "sha256": "a0af26d878a7a40fd0ffca0a90ca058c290a10f7b53fb0c833401232a9c0407e",
+      "anchors": [
+        {
+          "identifier": "    svt \\",
+          "line": 70,
+          "allMatchingLines": [
+            70
+          ]
+        },
+        {
+          "identifier": "    vcl \\",
+          "line": 76,
+          "allMatchingLines": [
+            76
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sw/Library_sw.mk",
+      "sha256": "1cc9486ec61a2137b9ad88a0b1f3904594681d2ac2b13964fd02bbbb8f135493",
+      "anchors": [
+        {
+          "identifier": "    svt \\",
+          "line": 82,
+          "allMatchingLines": [
+            82
+          ]
+        }
+      ]
+    }
+  ],
+  "production": [
+    {
+      "path": "apps/office/src/svtools/source/control/ruler.ts",
+      "sha256": "872bbfcdf41eb4b759cab7ef29b3ab7d567984c6abd0098ccb35f07c3784bf5d"
+    },
+    {
+      "path": "apps/office/src/svx/source/dialog/svxruler.ts",
+      "sha256": "c65e3cb9fbc44d712a6b18d9d4fc62cfe189a2766fc475227bf7475100f1dedf"
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/docvw/edtwin.ts",
+      "sha256": "f06d1bd479a3e161bc46aad2568771559abed0867589fff4063c4639542e7427"
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/uiview/view.ts",
+      "sha256": "258897bfead4a21fe6f02aa23421cba7568eb2e58437ef13730e3ab6ecd9cd54"
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/uiview/viewtab.ts",
+      "sha256": "14a9af90c629b3b1b0c7e8c35b4406aaf0b03d4e2b16f3969e2ed95f6ea46844"
+    },
+    {
+      "path": "scripts/check-module-boundaries.mjs",
+      "sha256": "a0c89b18d56a1a6a124eea61336b4d41763a08b27fc9d45a86a2708de7063d26"
+    }
+  ],
+  "protectedIO": [
+    {
+      "path": "apps/office/src/sw/browser/storage/writer-odt-store.ts",
+      "sha256": "0fb4ebffca5a00fe63ff327379305d64143c7014dace0a7e13edb8c0c241232e",
+      "byteIdenticalToCurrentBaseline": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/workflows/writer-odt-io.ts",
+      "sha256": "7c214afab59dbc5df1087f107e2b7bf2bf01d8623a2995e8eb19a45575361306",
+      "byteIdenticalToCurrentBaseline": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/WriterFileDialog.tsx",
+      "sha256": "50ad125f5a254eb1772b62abe3681e4632df6c7870ea9647622b2268394c88c3",
+      "byteIdenticalToCurrentBaseline": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/writer-view.tsx",
+      "sha256": "5fbe8e47d24a0d03e4f5925e9002ab31a61c140f1ae819cf8805439f4ef253cc",
+      "byteIdenticalToCurrentBaseline": true
+    }
+  ],
+  "unchangedBrowserModifierBridge": {
+    "path": "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts",
+    "sha256": "060a06dd9a77e530de1756b2f4c4384e6b2ddd1ee20c68fb175daab2eeb99ee7"
+  },
+  "sourceBoundContracts": [
+    "SwEditWin delegates represented Border/Margin tracking to persistent SwView horizontal/vertical Ruler owners with source5px tolerance; original Writer carrier and document hit remain apply owners.",
+    "SVTOOLS owns captured physical axis and native start/move/end/cancel hook state; SVX owns independent SvxColumnItem copies, modifier flags, constraints, transient geometry and source uint16 percent/width-block buffers, without SW/browser reverse imports.",
+    "Represented column linear/proportional and row ordinary/proportional/current-line policies retain captured values and original model/history; class declines unrepresented writing/frame-column contexts.",
+    "Writer ExecuteTabWin-shaped value conversion preserves original SwTabCols entry owners/constraints and native visibility. Row current-line flags reach original core; column apply preserves the prior ordinary shared-column contract because SwDoc/SwTable explicitly reject independent row geometry.",
+    "Native Library_svx uses svt/vcl and Library_sw uses svt; graph permits only required native directions, preserving reverse/browser ownership gates."
+  ],
+  "residuals": [
+    "Independent per-row column widths/current-line column apply remain unsupported in SwDoc and SwTable. This is a real upstream gap requiring the next core correction, not a registered intentional exception.",
+    "Full SFX bindings/listener/slot state, native VCL ruler painting/ticks/snapping/protection/page/paragraph/frame/object/tab/indent state and vertical/RTL document dragging remain partial.",
+    "Represented border values retain injected logical/device conversion; complete native VCL pixel-vector ownership and window/null offsets remain incomplete.",
+    "Column-margin modifier geometry and single-row paragraph-indent bottom range retain existing partial contracts; native item pooling/UNO members from prior work remain incomplete.",
+    "Registered IO/open/save/recovery/settings remain byte-identical; no full upstream/module parity promotion."
+  ]
+}

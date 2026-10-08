@@ -27,6 +27,7 @@ import type { SwTabCols } from "../../core/bastyp/tabcol";
 import type { SvxColumnItem } from "../../../../svx/source/dialog/rulritem";
 import { SID_RULER_BORDERS, SID_RULER_ROWS_VERTICAL } from "../../../../svx/inc/svxids";
 import { createSwTableColumnItem, createSwTableRowItem } from "./viewtab";
+import { SvxRuler } from "../../../../svx/source/dialog/svxruler";
 
 /** Persistent Writer view joining SwDocShell, SwWrtShell, and frame dispatch. */
 export class SwView {
@@ -38,6 +39,8 @@ export class SwView {
   private readonly viewOptions: SwViewOption;
   private readonly wrtShell: SwWrtShell;
   private readonly editWindow: SwEditWin;
+  private readonly horizontalRuler = new SvxRuler(true);
+  private readonly verticalRuler = new SvxRuler(false);
   private readonly layout = new SwRootFrame(
     /** Resolves the current document after New/Open replaces the shell graph. @returns Active Writer document. */ () =>
       this.docShell.GetDoc(),
@@ -119,6 +122,16 @@ export class SwView {
   /** Returns the platform-neutral Writer edit-window owner. @returns Persistent edit window. */
   public GetEditWin(): SwEditWin {
     return this.editWindow;
+  }
+
+  /** Returns this view's persistent native horizontal ruler. @returns Horizontal ruler owner. */
+  public GetHRuler(): SvxRuler {
+    return this.horizontalRuler;
+  }
+
+  /** Returns this view's persistent native vertical ruler. @returns Vertical ruler owner. */
+  public GetVRuler(): SvxRuler {
+    return this.verticalRuler;
   }
 
   /** Converts document-mouse column state at the source view boundary. @param columns - Borrowed native separators. @param active - Active native column. @returns Owned ruler value. */
@@ -245,6 +258,9 @@ export class SwView {
 
   /** Releases view, dispatcher, and document-shell subscriptions at explicit session close. @returns Nothing. */
   public Close(): void {
+    this.editWindow.MouseButtonUp(true);
+    this.horizontalRuler.CancelDrag();
+    this.verticalRuler.CancelDrag();
     this.wrtShellSubscription();
     this.frame?.CloseView();
     this.frame = undefined;

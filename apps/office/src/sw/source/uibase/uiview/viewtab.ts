@@ -1,6 +1,6 @@
 /** @fileoverview Ports table column and row values from SwView::StateTabWin, without claiming full slot/frame dispatch. */
 import { SvxColumnDescription, SvxColumnItem } from "../../../../svx/source/dialog/rulritem";
-import type { SwTabCols } from "../../core/bastyp/tabcol";
+import { SwTabCols } from "../../core/bastyp/tabcol";
 
 /** Creates native ruler columns from borrowed Writer separators. @param columns - Original native geometry. @param active - Active native column. @param pageExtent - Native page width or vertical page height. @param which - Ruler item slot. @param rightToLeft - Mirror table descriptions. @returns Independent native column item. */
 export function createSwTableColumnItem(
@@ -70,4 +70,35 @@ export function createSwTableRowItem(
   item.Append(new SvxColumnDescription(start, verticalWriting ? right : left, right, right, false));
   item.SetWhich(which);
   return item;
+}
+
+/** Applies represented horizontal-writing native column items at the Writer ExecuteTabWin boundary. @param original - Captured Writer geometry. @param item - Accepted native ruler value. @param pageExtent - Current page width. @returns Owned Writer separators. */
+export function applySwTableColumnItem(
+  original: SwTabCols,
+  item: SvxColumnItem,
+  pageExtent: number,
+): SwTabCols {
+  const columns = new SwTabCols(original);
+  columns.SetLeft(item.GetLeft() - columns.GetLeftMin());
+  if (item.GetRight() > 0) columns.SetRight(pageExtent - columns.GetLeftMin() - item.GetRight());
+  for (let i = 0; i < item.Count() - 1 && i < columns.Count(); i++) {
+    columns.GetEntry(i).nPos = item.At(i).nEnd + columns.GetLeft();
+    columns.SetHidden(i, !item.At(i).bVisible);
+  }
+  return columns;
+}
+
+/** Applies represented horizontal-writing native row items at the Writer ExecuteTabWin boundary. @param original - Captured Writer row geometry. @param item - Accepted native ruler value. @param pageExtent - Current page height. @returns Owned Writer rows. */
+export function applySwTableRowItem(
+  original: SwTabCols,
+  item: SvxColumnItem,
+  pageExtent: number,
+): SwTabCols {
+  const rows = new SwTabCols(original);
+  rows.SetRight(pageExtent - rows.GetLeftMin() - item.GetRight());
+  for (let i = 0; i < item.Count() - 1 && i < rows.Count(); i++) {
+    rows.GetEntry(i).nPos = item.At(i).nEnd + rows.GetLeft();
+    rows.SetHidden(i, !item.At(i).bVisible);
+  }
+  return rows;
 }

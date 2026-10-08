@@ -1,0 +1,23 @@
+{
+  "reason": "Changed-input4 source/tests format/lint/app typecheck after original-failure corrections and genuine new cases; initial dependency/docs/physical checks remain passing",
+  "records": [
+    {
+      "command": "npm exec -- prettier --check apps/office/src/sw/source/uibase/docvw/edtwin.ts apps/office/src/svx/source/dialog/svxruler.ts apps/office/src/svx/source/dialog/native-table-ruler.test.ts apps/office/src/sw/source/uibase/docvw/native-ruler-ownership.test.ts",
+      "exit": 0,
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+      "diagnostics": []
+    },
+    {
+      "command": "npm exec -- eslint --max-warnings 0 apps/office/src/sw/source/uibase/docvw/edtwin.ts apps/office/src/svx/source/dialog/svxruler.ts apps/office/src/svx/source/dialog/native-table-ruler.test.ts apps/office/src/sw/source/uibase/docvw/native-ruler-ownership.test.ts",
+      "exit": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run typecheck --workspace @vite-office/office",
+      "exit": 0,
+      "sha256": "95074d7a9bb3a320c929b8c8311534bfdc86e140dc41177f3228e50a346e94b2",
+      "diagnostics": []
+    }
+  ]
+}

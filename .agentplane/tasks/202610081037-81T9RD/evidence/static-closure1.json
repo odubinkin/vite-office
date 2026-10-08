@@ -1,0 +1,20 @@
+{
+  "reason": "Close original formatting/unused probe argument/nonliteral enum lint failures on three changed files only; initial type/dependency/docs/size remain passing",
+  "records": [
+    {
+      "command": "npm exec -- prettier --check apps/office/src/sw/source/uibase/docvw/native-ruler-ownership.test.ts apps/office/src/svx/source/dialog/svxruler.ts apps/office/src/svx/source/dialog/native-table-ruler.test.ts",
+      "exit": 0,
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+      "diagnostics": []
+    },
+    {
+      "command": "npm exec -- eslint --max-warnings 0 apps/office/src/sw/source/uibase/docvw/native-ruler-ownership.test.ts apps/office/src/svx/source/dialog/svxruler.ts apps/office/src/svx/source/dialog/native-table-ruler.test.ts",
+      "exit": 1,
+      "sha256": "6b25fa2f4a1802c3ed6c67324bf1421d835faf2f4fec5d069c4a2b36d2010073",
+      "diagnostics": [
+        "  21:3  error  Duplicate enum member value 4  @typescript-eslint/no-duplicate-enum-values",
+        "✖ 1 problem (1 error, 0 warnings)"
+      ]
+    }
+  ]
+}
