@@ -4,7 +4,7 @@ title: "Connect native linked cell frame clients to original formats and renderi
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,36 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-08T20:45:42.654Z"
+  updated_by: "CODER"
+  note: "Verified actual implementation8214d309ac4a7a67cee7724f59c20e49d0aef8c5: native linked cell frames, original format client claim/history ordering and recursive lifetime;1318unique app/12fresh/25Chromium, zero passing replay, all-four100actual source-bound coverage,657prior files unchanged. Six statics/build/source/governance/artifact pass. Explicitly non-independent actual-SHA EVALUATOR pass; full cadence237to247; whole parity incomplete."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-08T20:45:18.728Z"
+  updated_by: "EVALUATOR"
+  note: "Current-agent explicitly non-independent review of actual implementation 8214d309ac4a7a67cee7724f59c20e49d0aef8c5: all approved linked native cell frame ownership and lifetime contracts verified."
+  evaluated_sha: "8214d309ac4a7a67cee7724f59c20e49d0aef8c5"
+  blueprint_digest: "f977633115751a086fa969487074e89b053bae01c8a98eb6b720e7c3df54e9a3"
+  evidence_refs:
+    - ".agentplane/tasks/202610082025-EJV880/README.md"
+    - ".agentplane/tasks/202610082025-EJV880/quality/20261008-204518728-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610082025-EJV880/quality/20261008-204518728-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610082025-EJV880/quality/20261008-204518728-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610082025-EJV880/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610082025-EJV880/evidence/actual-sha-review.json"
+    - ".agentplane/tasks/202610082025-EJV880/evidence/final-coverage.json"
+    - ".agentplane/tasks/202610082025-EJV880/evidence/runtime-census.json"
+    - ".agentplane/tasks/202610082025-EJV880/evidence/scope-integrity.json"
+    - ".agentplane/tasks/202610082025-EJV880/evidence/native-source-review.json"
+    - ".agentplane/tasks/202610082025-EJV880/evidence/static-final.json"
+    - ".agentplane/tasks/202610082025-EJV880/evidence/source-gates.json"
+    - ".agentplane/tasks/202610082025-EJV880/evidence/governance.json"
+    - ".agentplane/tasks/202610082025-EJV880/evidence/artifact-census.json"
+  findings:
+    - "Eleven semantic paths equal actual committed bytes. Four deterministic coverage, runtime, scope and pinned-source certificates reconstructed byte-identically;1318 unique app cases including12 fresh plus25 Chromium, no passing replay, all-four100 actual source-bound coverage.657 prior test files unchanged;316 prior metadata preserved and one unverified native record added."
+    - "Main JSX, collapsing painter and width measurement use actual registered native cell frames; original claims and history retarget matching physical clients before model registration and deletion releases linked and repeated clients."
 commit: null
 comments:
   -
@@ -35,8 +60,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: Connect original linked native SwCellFrame clients through common frame bases, format claims/history, direct rendering and recursive flat teardown; retain all prior acceptance files and registered deviations."
+  -
+    type: "verify"
+    at: "2026-10-08T20:45:42.654Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified actual implementation8214d309ac4a7a67cee7724f59c20e49d0aef8c5: native linked cell frames, original format client claim/history ordering and recursive lifetime;1318unique app/12fresh/25Chromium, zero passing replay, all-four100actual source-bound coverage,657prior files unchanged. Six statics/build/source/governance/artifact pass. Explicitly non-independent actual-SHA EVALUATOR pass; full cadence237to247; whole parity incomplete."
 doc_version: 3
-doc_updated_at: "2026-10-08T20:44:09.747Z"
+doc_updated_at: "2026-10-08T20:46:28.905Z"
 doc_updated_by: "CODER"
 description: "Iteration244: replace duplicated flat-row registration with native frame bases and original linked cell clients; retarget native box claims/history, recursive deletion and direct main UI/painter ownership without DTOs. Preserve registered deviations and targeted test cadence."
 sections:
@@ -75,6 +106,40 @@ sections:
     Risk: broader unrelated behavior is not re-executed this leaf; unchanged whole source/maps retain prior actual certified counters.
     Approval: standing user goal and explicit testing instructions.
     Residual gaps: full native frame geometry/flags/invalidation/content/follows/accessibility/fly/root, pooling/nested/merged/UNO/calculation/modified-state and whole core/browser parity remain partial; goal ACTIVE. Actual-SHA explicitly non-independent current-agent EVALUATOR required before closure.
+    Actual implementation:8214d309ac4a7a67cee7724f59c20e49d0aef8c5. Explicitly non-independent current-agent EVALUATOR pass bound to actualSHA;11committed paths and4certificate reconstructions byte-identical. quality/20261008-204518728-recovery-context/quality-report.json.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-08T20:45:42.654Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified actual implementation8214d309ac4a7a67cee7724f59c20e49d0aef8c5: native linked cell frames, original format client claim/history ordering and recursive lifetime;1318unique app/12fresh/25Chromium, zero passing replay, all-four100actual source-bound coverage,657prior files unchanged. Six statics/build/source/governance/artifact pass. Explicitly non-independent actual-SHA EVALUATOR pass; full cadence237to247; whole parity incomplete.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-08T20:45:42.255Z, excerpt_hash=sha256:4dfe46dbbc1f7cb249728d5857d52878c9e87f426dddd69aaebf67acd8aa7fa2
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610082025-EJV880/blueprint/resolved-snapshot.json
+    - old_digest: f977633115751a086fa969487074e89b053bae01c8a98eb6b720e7c3df54e9a3
+    - current_digest: f977633115751a086fa969487074e89b053bae01c8a98eb6b720e7c3df54e9a3
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610082025-EJV880
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610082025-EJV880
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the intentional implementation commit through a new approved follow-up without rewriting completed task history. Preserve registered I/O deviations, actual coverage certificates and original model ownership."
   Findings: |-
     Previous243 is DONE at implementation57b9fda0a19503f9df84fccce914b73f71c44474; main/direct clean preflight, parent only active. Read-only comparison found absent native cell frame clients and duplicated row registration, missing linked row cell ownership. Standing user goal authorizes this safe local coherent repair; no repeat approval requested. Native GetFormat belongs to SwLayoutFrame (ssfrm.cxx), while shared registration/links belong to SwFrame (wsfrm.cxx). A guessed absent layfrm.cxx path and a no-match wsfrm MoveTableBox search were followed by route recomputation and exact discovered sources; no mutation or runtime was performed on those errors. Full frame invalidation/geometry/content/accessibility/follows remain partial. No global/network/subagents/AP copied source/raw evidence.
@@ -85,6 +150,8 @@ sections:
     Observation: parity inventory rejected a final appended native record because runtime paths must be ordered. Resolution: insert new wsfrm record into required runtime ordering while preserving all316 prior records' relative order and fields; source provenance preserves original order plus the new record. An intermediate whole-provenance sort was restored before final gates; scope-integrity independently proves prior prefixes/order/defaults/statuses/classifications unchanged.
     Result:1318unique app passes/12fresh/25Chromium;657 old acceptance files byte-identical;314app/38inventory actual all-four100 coverage. Six statics/build/restored source/governance/artifact audits pass;8native sources pinned, IO4/wholewriter-view/stash preserved. All raw files/scripts stay ignored outside AgentPlane. Last full237,next247,no full244.
     Full native geometry/flags/invalidation/content/follows/accessibility/fly/root/UNO and broader calculation/pooling/nested/merged/modified-state parity remain unverified. No full parity promotion, registered save/open/recovery/settings deviations unchanged; goal ACTIVE. Current-agent review remains explicitly non-independent and will bind actual implementation SHA.
+    Actual implementation8214d309ac4a7a67cee7724f59c20e49d0aef8c5. Current-agent EVALUATOR explicitly non-independent reviewed11committed semantic paths and reconstructed four deterministic certificates byte-identically. quality/20261008-204518728-recovery-context/quality-report.json binds evaluated_sha to actual implementation and pass. No passing runtime replay at review; approved scope complete, broader native parity remains incomplete.
+    Closeout observation: a staging command named config-advertised tasks.json, absent in this backend; git add stopped and verification checkpoint refused unstaged README changes. Route recomputed and actual status inspected. Resolution: stage only the existing active task subtree; no task database was manually created/edited, no semantic changes or runtime replay.
 id_source: "generated"
 ---
 ## Summary
@@ -133,6 +200,40 @@ Reason: explicit user cadence once per10tasks, last237,next247.
 Risk: broader unrelated behavior is not re-executed this leaf; unchanged whole source/maps retain prior actual certified counters.
 Approval: standing user goal and explicit testing instructions.
 Residual gaps: full native frame geometry/flags/invalidation/content/follows/accessibility/fly/root, pooling/nested/merged/UNO/calculation/modified-state and whole core/browser parity remain partial; goal ACTIVE. Actual-SHA explicitly non-independent current-agent EVALUATOR required before closure.
+Actual implementation:8214d309ac4a7a67cee7724f59c20e49d0aef8c5. Explicitly non-independent current-agent EVALUATOR pass bound to actualSHA;11committed paths and4certificate reconstructions byte-identical. quality/20261008-204518728-recovery-context/quality-report.json.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-08T20:45:42.654Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified actual implementation8214d309ac4a7a67cee7724f59c20e49d0aef8c5: native linked cell frames, original format client claim/history ordering and recursive lifetime;1318unique app/12fresh/25Chromium, zero passing replay, all-four100actual source-bound coverage,657prior files unchanged. Six statics/build/source/governance/artifact pass. Explicitly non-independent actual-SHA EVALUATOR pass; full cadence237to247; whole parity incomplete.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-08T20:45:42.255Z, excerpt_hash=sha256:4dfe46dbbc1f7cb249728d5857d52878c9e87f426dddd69aaebf67acd8aa7fa2
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610082025-EJV880/blueprint/resolved-snapshot.json
+- old_digest: f977633115751a086fa969487074e89b053bae01c8a98eb6b720e7c3df54e9a3
+- current_digest: f977633115751a086fa969487074e89b053bae01c8a98eb6b720e7c3df54e9a3
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610082025-EJV880
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610082025-EJV880
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
@@ -148,3 +249,5 @@ Observation: focused V8 paint map contains inferred else counter-92. Resolution:
 Observation: parity inventory rejected a final appended native record because runtime paths must be ordered. Resolution: insert new wsfrm record into required runtime ordering while preserving all316 prior records' relative order and fields; source provenance preserves original order plus the new record. An intermediate whole-provenance sort was restored before final gates; scope-integrity independently proves prior prefixes/order/defaults/statuses/classifications unchanged.
 Result:1318unique app passes/12fresh/25Chromium;657 old acceptance files byte-identical;314app/38inventory actual all-four100 coverage. Six statics/build/restored source/governance/artifact audits pass;8native sources pinned, IO4/wholewriter-view/stash preserved. All raw files/scripts stay ignored outside AgentPlane. Last full237,next247,no full244.
 Full native geometry/flags/invalidation/content/follows/accessibility/fly/root/UNO and broader calculation/pooling/nested/merged/modified-state parity remain unverified. No full parity promotion, registered save/open/recovery/settings deviations unchanged; goal ACTIVE. Current-agent review remains explicitly non-independent and will bind actual implementation SHA.
+Actual implementation8214d309ac4a7a67cee7724f59c20e49d0aef8c5. Current-agent EVALUATOR explicitly non-independent reviewed11committed semantic paths and reconstructed four deterministic certificates byte-identically. quality/20261008-204518728-recovery-context/quality-report.json binds evaluated_sha to actual implementation and pass. No passing runtime replay at review; approved scope complete, broader native parity remains incomplete.
+Closeout observation: a staging command named config-advertised tasks.json, absent in this backend; git add stopped and verification checkpoint refused unstaged README changes. Route recomputed and actual status inspected. Resolution: stage only the existing active task subtree; no task database was manually created/edited, no semantic changes or runtime replay.

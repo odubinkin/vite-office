@@ -1,0 +1,129 @@
+{
+  "evaluatedSHA": "8214d309ac4a7a67cee7724f59c20e49d0aef8c5",
+  "evaluator": "current coding agent; explicitly non-independent",
+  "committedScopePaths": [
+    {
+      "path": "apps/office/src/sw/source/core/layout/wsfrm.ts",
+      "sha256": "3fdfd6d257e507988d6db1361dcf182fbfc691dd00eef4206a756751070ae0aa",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/layout/tabfrm.ts",
+      "sha256": "1d18cfc1cb96ed6555e5d6dc840f54ad92695619353d9eacdc623d01f1e4a895",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/table/swtable.ts",
+      "sha256": "30f3a2cd302adda038b621015708aac969974b605c55192bb1c3958f328ebbb5",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/docnode/nodes.ts",
+      "sha256": "6388d1d1d4eb0cf2bdfd9577b1729e764523d1d90eb5158667b97b11bfa71868",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/layout/paintfrm.ts",
+      "sha256": "d90d0928ad66a4907e0e512fb19a2fa96c9ac1fee5aceac7b5ec741735e2c79d",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/WriterEditableTable.tsx",
+      "sha256": "8c9a2e824049037fd506b05f91c598e12beb0504b57f57cace39a4c5d13c7754",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/layout/native-cell-format-client.test.ts",
+      "sha256": "6bef368c0c57970a4e49d8b60e512642dd1d2db9b91d054db306bd6a2463933a",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/native-cell-format-client-history.test.ts",
+      "sha256": "b002a577a22eb4b8d1dbcfc8dadb6a4158be00820489b521e186f3781bf5ad1e",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/native-cell-format-client.test.tsx",
+      "sha256": "de675caeab93a362c906f0c81dd18a4424e34098039fd6a7557c2adffa1c93b9",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "docs/program/source-provenance.json",
+      "sha256": "4d0e7b13283c919aa7004253fb5192f1300d468832b8f8f9515407c0d51936c0",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "sha256": "9aab2354c353fdfa76fd725b99a811642e18965a14930e25e437d156c9f221e4",
+      "actualCommittedBytes": true
+    }
+  ],
+  "deterministicCertificatesReconstructedByteIdentically": [
+    {
+      "identifier": "final-coverage.json",
+      "sha256": "ec555d998e443bcaa149c6e5e792054d3548c24a10386de66d7d14dadd82f299"
+    },
+    {
+      "identifier": "runtime-census.json",
+      "sha256": "9abe2f3f083ee6a5bec1075b0a37d0fb6d406c9a13b0dbc2c738b7808444072d"
+    },
+    {
+      "identifier": "scope-integrity.json",
+      "sha256": "aeb4866ca04d3a59e3717b17a69c796ad63132ca44db15277bb769fa2999e995"
+    },
+    {
+      "identifier": "native-source-review.json",
+      "sha256": "d09125379b0bb77e3ca9174db86aecf7bbce9a0444274e58ff77b8e26835ee9d"
+    }
+  ],
+  "reconstructions": [
+    {
+      "name": "proof",
+      "exit": 0,
+      "outputSHA256": "26124760ebfeaf8bf63d25d3e532dfef5886483469a380a34f0275f24798ae47"
+    },
+    {
+      "name": "census",
+      "exit": 0,
+      "outputSHA256": "006caf8791a4f88fa792a4fb350cd5049ea4b96220aca8420d96937380f84ed3"
+    },
+    {
+      "name": "scope",
+      "exit": 0,
+      "outputSHA256": "3c0cef9e7063f0459c9a2204850e0621f82200f70eff5f11b7869b51f7c88c62"
+    },
+    {
+      "name": "source",
+      "exit": 0,
+      "outputSHA256": "1c1368502fa9c14f4f1626b9be5cb42bb91b49c2937a00d6d11dbeaaa25709fd"
+    }
+  ],
+  "approvedScopeSatisfied": true,
+  "sourceBoundNativeFiles": 8,
+  "runtime": {
+    "app": 1318,
+    "fresh": 12,
+    "chromium": 25,
+    "noPassingReplay": true,
+    "upstreamAbsentRestored": true
+  },
+  "coverageAllFour100": true,
+  "priorAcceptance": {
+    "count": 657,
+    "byteIdentical": 657
+  },
+  "metadata": {
+    "priorRecords": 316,
+    "newPartialRecord": 1,
+    "preserved": true
+  },
+  "fullSuiteCadence": {
+    "last": 237,
+    "next": 247
+  },
+  "residualGaps": [
+    "Full native frame geometry/flags/invalidation/content/follows/accessibility/fly/root remains partial.",
+    "Number formatting/calculation/pooling/nested/merged/UNO/modified-state remain partial.",
+    "Whole core/browser parity incomplete; goal ACTIVE."
+  ]
+}
