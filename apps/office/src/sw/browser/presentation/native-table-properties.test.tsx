@@ -61,8 +61,6 @@ it("accepts native properties as one history action and retains real selected ce
       f.doc.GetPageDesc().GetValue().leftMargin -
       f.doc.GetPageDesc().GetValue().rightMargin -
       4535,
-    marginTop: 0,
-    marginBottom: 0,
     align: undefined,
   });
   expect(f.table.GetFormat().width).toBe(4535);

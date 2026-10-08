@@ -4,7 +4,7 @@ import { createWriterInterface } from "../../../sdi/swriter";
 import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
 import type { SwWrtShell } from "../wrtsh/wrtsh1";
 import type { SwFEShell } from "../../core/frmedt/fetab";
-import type { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
+import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { SwTabCols } from "../../core/bastyp/tabcol";
 import { SwTableRep } from "../table/swtablerep";
 import { PopMode } from "../../core/crsr/trvltbl";
@@ -16,7 +16,24 @@ import {
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { SfxItemSet, SfxItemState } from "../../../../svl/source/items/itemset";
 import { SID_ATTR_BORDER_INNER } from "../../../../svx/inc/svxids";
-import { RES_BOX, RES_COLLAPSING_BORDERS } from "../../../inc/hintids";
+import {
+  RES_BOX,
+  RES_COLLAPSING_BORDERS,
+  RES_UL_SPACE,
+  RES_LAYOUT_SPLIT,
+  RES_ROW_SPLIT,
+} from "../../../inc/hintids";
+import {
+  FN_TABLE_REP,
+  FN_PARAM_TABLE_NAME,
+  FN_PARAM_TABLE_HEADLINE,
+  FN_TABLE_SET_VERT_ALIGN,
+} from "../../../inc/cmdid";
+import { SwPtrItem } from "../utlui/uiitems";
+import { SfxStringItem } from "../../../../svl/source/items/stritem";
+import { SfxUInt16Item } from "../../../../svl/source/items/intitem";
+import { SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";
+import type { SwTableFormat } from "../../core/table/swtable";
 import { importBoxProperties } from "../../../../xmloff/source/style/bordrhdl";
 
 /** Represented table-property inputs in native twips; original model owners remain in the shell. */
@@ -87,8 +104,92 @@ export function TableParamToItemSet(shell: SwFEShell): SfxItemSet {
   );
 }
 
+/** Applies explicitly published native table items as one source-owned history and notification group. @param shell - Original frame-editing shell. @param input - Native changed items or explicit legacy ingress. @returns Whether a table was targeted. */
+export function ItemSetToTableParam(
+  shell: SwFEShell,
+  input: SfxItemSet | SwTableProperties,
+): boolean {
+  if (!(input instanceof SfxItemSet)) return ApplyExplicitTableProperties(shell, input);
+  const table = shell.IsCursorInTable()?.GetTable();
+  if (table === undefined) return false;
+  return shell.RunNotificationTransaction(
+    /** Consumes only explicitly set items and preserves the borrowed representation. @returns Whether admitted. */ () => {
+      const undo = shell.GetDoc().GetUndoManager(),
+        cursorState = shell.CaptureCursorState();
+      undo.StartUndo("Table Properties");
+      try {
+        const borders =
+          input.GetItemState(RES_BOX, false) === SfxItemState.SET ||
+          input.GetItemState(SID_ATTR_BORDER_INNER, false) === SfxItemState.SET;
+        const rowSplit = input.GetItemIfSet(RES_ROW_SPLIT, false);
+        if (borders || rowSplit instanceof SfxBoolItem) {
+          const selected = shell.IsTableMode();
+          shell.Push();
+          try {
+            if (!selected) shell.SelTable();
+            if (borders) shell.SetTabBorders(input, cursorState);
+            if (rowSplit instanceof SfxBoolItem)
+              shell.SetRowSplit(rowSplit.GetValue(), cursorState);
+          } finally {
+            if (!selected) shell.ClearMark();
+            shell.Pop(PopMode.DeleteCurrent);
+          }
+        }
+        const headline = input.GetItemIfSet(FN_PARAM_TABLE_HEADLINE, false);
+        if (headline instanceof SfxUInt16Item)
+          shell.SetRowsToRepeat(headline.GetValue(), headline.GetValue() > 0);
+        const vertical = input.GetItemIfSet(FN_TABLE_SET_VERT_ALIGN, false);
+        if (vertical instanceof SfxUInt16Item) shell.SetBoxAlign(vertical.GetValue());
+        const name = input.GetItemIfSet(FN_PARAM_TABLE_NAME, false);
+        if (name instanceof SfxStringItem)
+          shell.SetTableName(table.GetFrameFormat(), name.GetValue());
+        const pointer = input.GetItemIfSet(FN_TABLE_REP, false);
+        const representation = pointer instanceof SwPtrItem ? pointer.GetValue() : undefined;
+        let attributes: SwTableFormat = {};
+        if (representation instanceof SwTableRep) {
+          attributes = {
+            ...(representation.align === HoriOrientation.FULL
+              ? {}
+              : { width: representation.width }),
+            horiOrient: representation.align,
+            marginLeft: representation.left,
+            marginRight: representation.right,
+            align: undefined,
+          };
+          if (representation.HasColsChanged()) {
+            const columns = new SwTabCols();
+            shell.GetTabCols(columns);
+            const singleRow = representation.FillTabCols(columns);
+            shell.SetTabCols(columns, singleRow);
+          }
+        }
+        const spacing = input.GetItemIfSet(RES_UL_SPACE, false);
+        if (spacing instanceof SvxULSpaceItem)
+          attributes = {
+            ...attributes,
+            marginTop: spacing.GetUpper(),
+            marginBottom: spacing.GetLower(),
+          };
+        const layoutSplit = input.GetItemIfSet(RES_LAYOUT_SPLIT, false);
+        if (layoutSplit instanceof SfxBoolItem)
+          attributes = { ...attributes, layoutSplit: layoutSplit.GetValue() };
+        const merge = input.GetItemIfSet(RES_COLLAPSING_BORDERS, false);
+        if (merge instanceof SfxBoolItem)
+          attributes = {
+            ...attributes,
+            borderModel: merge.GetValue() ? "collapsing" : "separating",
+          };
+        if (Object.keys(attributes).length !== 0) shell.SetTableAttr(attributes);
+        return true;
+      } finally {
+        undo.EndUndo();
+      }
+    },
+  );
+}
+
 /** Applies one accepted dialog as one native history and notification group. @param shell - Actual frame-editing shell. @param value - Accepted attributes. @returns Whether a table was targeted. */
-export function ItemSetToTableParam(shell: SwFEShell, value: SwTableProperties): boolean {
+function ApplyExplicitTableProperties(shell: SwFEShell, value: SwTableProperties): boolean {
   const table = shell.IsCursorInTable()?.GetTable();
   if (table === undefined) return false;
   if (

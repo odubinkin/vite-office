@@ -1,0 +1,32 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "command": "npm run check:source-provenance",
+      "exit": 0,
+      "bytes": 205,
+      "sha256": "c58396bc356082f4ccc4f3200c1d501a5b6be3bc5033a6411b2b5b48f5715658",
+      "diagnostics": [
+        "Source provenance check passed for 313 runtime modules (223 mapped, 73 browser adaptations, 17 local infrastructure)."
+      ]
+    },
+    {
+      "command": "npm run inventory:parity",
+      "exit": 0,
+      "bytes": 2138951,
+      "sha256": "7ce699239a66c5f43b5f7d20a243a056d3160289900bd2cc0b20e1870835a45c",
+      "diagnostics": [
+        "> tsx scripts/libreoffice-inventory/parity-mapping-cli.ts --baseline docs/program/libreoffice-baseline.json --mappings docs/program/parity/writer-command-slice.json --runtime-inventory docs/program/parity/runtime-inventory.json --runtime-root apps/office/src --local-root . --upstream-root vendor/libreoffice-reference",
+        "        \"reason\": \"browser-runtime-inapplicable\",",
+        "        \"rationale\": \"Native crash/session recovery depends on desktop process and backup-file lifecycle not used by this browser document workflow.\"",
+        "        \"reason\": \"browser-runtime-inapplicable\",",
+        "        \"rationale\": \"Native crash/session recovery depends on desktop process and backup-file lifecycle not used by this browser document workflow.\"",
+        "      \"path\": \"apps/office/src/framework/browser/presentation/CommandMenuBar.tsx\",",
+        "      \"side\": \"upstream\"",
+        "      \"path\": \"apps/office/src/framework/browser/presentation/CommandMenuBar.tsx\",",
+        "      \"side\": \"upstream\"",
+        "      \"path\": \"apps/office/src/sw/browser/presentation/WriterMenuBar.test.tsx\","
+      ]
+    }
+  ]
+}

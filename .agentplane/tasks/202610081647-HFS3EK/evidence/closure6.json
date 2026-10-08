@@ -1,0 +1,35 @@
+{
+  "scope": "Only two newly failed insertion-callback cases; all previously passing cases retained as skipped.",
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/browser/presentation/native-table-property-output.test.tsx --testNamePattern ^(native insertion branch remains separate from properties item output headertrue|native insertion branch remains separate from properties item output headerfalse)$ --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/HFS3EK.closure6.app-results.json",
+      "exit": 1,
+      "bytes": 34731,
+      "sha256": "7bb43db13263e58fcdde5902e31abe3e027a468cdb9c6684aad6a563fbce92a4",
+      "caseCounts": {
+        "passed": 0,
+        "failed": 2,
+        "skipped": 15,
+        "total": 17
+      },
+      "failedCases": [
+        {
+          "name": "apps/office/src/sw/browser/presentation/native-table-property-output.test.tsx > native insertion branch remains separate from properties item output headertrue",
+          "assertion": [
+            "AssertionError: expected { mnInsMode: 2, mnRowsToRepeat: +0 } to deeply equal { mnInsMode: 1, mnRowsToRepeat: +0 }"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/browser/presentation/native-table-property-output.test.tsx > native insertion branch remains separate from properties item output headerfalse",
+          "assertion": [
+            "AssertionError: expected { mnInsMode: 8, mnRowsToRepeat: +0 } to deeply equal { mnInsMode: 2, mnRowsToRepeat: +0 }"
+          ]
+        }
+      ],
+      "unhandledErrorCount": 0,
+      "coverageMapSHA256": "5adf04ad01e2756114652725591143d7c35cb62aeaab6bb85fff09e9a066f713"
+    }
+  ]
+}

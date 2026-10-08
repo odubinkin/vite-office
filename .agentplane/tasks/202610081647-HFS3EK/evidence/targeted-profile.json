@@ -1,0 +1,198 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/sw/inc/cmdid.ts": "79ad0035b1d1165ece102812e2ef0867ae470959a41ab873b86060e15cd1db69",
+    "apps/office/src/sw/source/uibase/utlui/uiitems.ts": "95c8b8676815300537a90b58be95bf093341c54edeab6cfea055e0baf5629eeb",
+    "apps/office/src/sw/inc/hintids.ts": "d8b96b5b69293a47477207b5de36eb4e74c8c9c905e33045363c6440787398f4",
+    "apps/office/src/sw/source/ui/table/tabledlg.ts": "8f9a35fbfd5fe5b03923391ce46c07da79d4a17f5269829f4a4e4fde6696c104",
+    "apps/office/src/sw/source/uibase/shells/tabsh.ts": "88d17a667bd6896fa38edb05172bcd4b7b20d0eb32e1ceb00348c00eb2f3c2e4",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx": "8218d4e0f4a782efb0d5c5ed0f2cce5f08dbb135bb2ed00b9977ca98944c7387",
+    "apps/office/src/sw/browser/presentation/writer-view.tsx": "71769a5f70389c5411ecfdde70a4ffaa351241d3cf5508c1d4f9cd6114b2bfbc",
+    "apps/office/src/sw/source/uibase/utlui/native-pointer-items.test.ts": "669bd5188f4e72fb3c78bccb1a89fcf56ee4b8acce1dede0146d30a3b6b58c89",
+    "apps/office/src/sw/source/ui/table/native-table-property-output.test.ts": "e4a24244d5d19ea7d81ace0e73b530718fb3416ff5babfca145a6dde290d1a3a",
+    "apps/office/src/sw/source/uibase/shells/native-table-property-item-input.test.ts": "72cf418891d73fbc9754eeb9c50ca3afc4ea49882097728cfba695e1d184f7d3",
+    "apps/office/src/sw/browser/presentation/native-table-property-output.test.tsx": "c9b4061f51d24a76a3e3aae33ef1ad148b90a617a6b6033fcac1d85276b6dfec",
+    "apps/office/src/sw/browser/presentation/native-independent-table-properties.test.tsx": "29ae455d2d2eca9d3829323c8020780b85242721bf4474d4180283d689de0d30",
+    "apps/office/e2e/writer-native-independent-table-properties.spec.ts": "5d72565bd68033825d8a5aeeb29bb361b618862d910cda5b1047dcadab27de85",
+    "docs/program/source-provenance.json": "80c0ef9a9b7a128b88328d1de9253b8e3e2ec5cc8aee02e979cc88efb191a0e3",
+    "docs/program/parity/runtime-inventory.json": "9b7a845b995718cda91c46bd8f774112e8793b195972125ce88f9f149d0000b2"
+  },
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1443,
+      "sha256": "f7fa6e6ab4270b393eb9f4762581b718bcea1f41f0f13e7a013d76c1ae7b264b",
+      "totals": [],
+      "failedCases": [],
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/source/ui/table/native-table-format-page.test.ts src/sw/source/ui/table/native-table-format-lifecycle.test.ts src/sw/source/ui/table/native-table-column-page.test.ts src/sw/source/ui/table/native-hidden-table-column-page.test.ts src/sw/source/ui/table/native-table-text-flow-headline.test.ts src/sw/source/ui/table/native-table-text-flow-split.test.ts src/sw/source/uibase/table/native-hidden-table-representation.test.ts src/sw/source/uibase/wrtsh/native-table-properties.test.ts src/sw/source/uibase/wrtsh/native-table-format-lifecycle-history.test.ts src/sw/source/uibase/wrtsh/native-table-properties-reset-history.test.ts src/sw/source/uibase/wrtsh/native-table-column-page-history.test.ts src/sw/source/uibase/wrtsh/native-table-text-flow-headline-history.test.ts src/sw/source/uibase/wrtsh/native-table-text-flow-split-history.test.ts src/sw/source/uibase/wrtsh/native-table-name-history.test.ts src/sw/source/core/table/native-tabcols.test.ts src/sw/source/core/table/native-table-frame-width.test.ts src/sw/source/core/docnode/native-table-border-owner.test.ts src/sw/source/core/docnode/native-table-border-common-state.test.ts src/svl/source/items/itemset.test.ts src/svl/source/items/itemset-equality.test.ts src/editeng/source/items/frmitems.test.ts src/sw/browser/presentation/native-independent-table-properties.test.tsx src/sw/browser/presentation/native-table-properties.test.tsx src/sw/browser/presentation/native-table-format-lifecycle.test.tsx src/sw/browser/presentation/native-table-column-page.test.tsx src/sw/browser/presentation/native-table-properties-reset.test.tsx src/sw/browser/presentation/native-table-name-page.test.tsx src/sw/browser/presentation/native-table-text-flow-headline.test.tsx src/sw/browser/presentation/native-table-text-flow-split.test.tsx src/sw/browser/presentation/native-table-border-changed-items.test.tsx src/sw/browser/presentation/native-table-border-common-state.test.tsx src/sw/browser/presentation/native-table-border-owner-history.test.tsx src/sw/browser/presentation/native-collapsing-table-borders.test.tsx src/sw/browser/presentation/native-table-alignment.test.tsx src/sw/source/uibase/utlui/native-pointer-items.test.ts src/sw/source/ui/table/native-table-property-output.test.ts src/sw/source/uibase/shells/native-table-property-item-input.test.ts src/sw/browser/presentation/native-table-property-output.test.tsx --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/HFS3EK.app-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 46618,
+      "sha256": "c834676dfe07f5e8898d40ceb4b873645d6bdab9723c2c25daf4692b0e186584",
+      "totals": [
+        "Test Files  3 failed | 35 passed (38)",
+        "Tests  10 failed | 356 passed (366)"
+      ],
+      "failedCases": [
+        {
+          "name": "apps/office/src/sw/browser/presentation/native-table-alignment.test.tsx > applies native Automatic through actual UI and attribute history",
+          "assertion": [
+            "AssertionError: expected { width: 3000, align: undefined, …(7) } to match object { horiOrient: 6, width: 8000, …(4) }"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/browser/presentation/native-table-alignment.test.tsx > applies native Left through actual UI and attribute history",
+          "assertion": [
+            "AssertionError: expected { width: 3000, align: 'left', …(4) } to match object { horiOrient: 3, width: 3000, …(4) }"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/browser/presentation/native-table-properties.test.tsx > accepts native properties as one history action and retains real selected cell owners",
+          "assertion": [
+            "AssertionError: expected \"SetTableAttr\" to be called with arguments: [ Array(1) ]"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/browser/presentation/native-table-property-output.test.tsx > mounted untouched pageTable submits an empty native set and preserves exact defaults",
+          "assertion": [
+            "AssertionError: expected 1 to be +0 // Object.is equality"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/browser/presentation/native-table-property-output.test.tsx > mounted untouched pageColumns submits an empty native set and preserves exact defaults",
+          "assertion": [
+            "AssertionError: expected 1 to be +0 // Object.is equality"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/browser/presentation/native-table-property-output.test.tsx > mounted untouched pageText Flow submits an empty native set and preserves exact defaults",
+          "assertion": [
+            "AssertionError: expected 1 to be +0 // Object.is equality"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/browser/presentation/native-table-property-output.test.tsx > mounted untouched pageBorders submits an empty native set and preserves exact defaults",
+          "assertion": [
+            "AssertionError: expected 1 to be +0 // Object.is equality"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/browser/presentation/native-table-property-output.test.tsx > mounted name-only publication advertises one native name item and retains frame defaults",
+          "assertion": [
+            "AssertionError: expected 2 to be 1 // Object.is equality"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/browser/presentation/native-table-property-output.test.tsx > mounted upper spacing emits only native upper-lower items and one frame action",
+          "assertion": [
+            "AssertionError: expected 2 to be 1 // Object.is equality"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/browser/presentation/native-table-property-output.test.tsx > mounted Text Flow publishes changed headline and split without a table representation",
+          "assertion": [
+            "AssertionError: expected 3 to be 2 // Object.is equality"
+          ]
+        }
+      ],
+      "caseCounts": {
+        "passed": 356,
+        "failed": 10,
+        "skipped": 0,
+        "total": 366
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 17451,
+          "covered": 8684,
+          "skipped": 0,
+          "pct": 49.76
+        },
+        "statements": {
+          "total": 19167,
+          "covered": 9169,
+          "skipped": 0,
+          "pct": 47.83
+        },
+        "functions": {
+          "total": 4388,
+          "covered": 2297,
+          "skipped": 0,
+          "pct": 52.34
+        },
+        "branches": {
+          "total": 14263,
+          "covered": 5417,
+          "skipped": 0,
+          "pct": 37.97
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverage": {
+        "lines": 49.76,
+        "statements": 47.83,
+        "functions": 52.34,
+        "branches": 37.97
+      },
+      "incompleteFileCount": 266,
+      "coverageMapSHA256": "16516cb063f95ab6e5a9be868aba4170d54cd1d41b51868f335b2ceec10edfaf",
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts writer-native-independent-table-properties.spec.ts writer-native-table-format-lifecycle.spec.ts writer-native-table-column-page.spec.ts writer-native-table-properties-reset.spec.ts writer-native-table-text-flow-headline.spec.ts writer-native-table-text-flow-split.spec.ts writer-table-border-changed-items.spec.ts writer-table-border-common-state.spec.ts writer-table-properties-history.spec.ts writer-table-alignment.spec.ts native-table-name.spec.ts --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 12910,
+      "sha256": "a0e7b6f3730879aeca1667afe8d1ccb81ef29d3e17ddf5f0cbe66313cec604f7",
+      "totals": [
+        "2 failed",
+        "36 passed (27.7s)"
+      ],
+      "failedCases": [
+        {
+          "name": "writer-native-independent-table-properties.spec.ts > native independent properties columns frame-width and history width=1280",
+          "errors": [
+            [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeDisabled\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed",
+              "Expected: disabled",
+              "Received: enabled"
+            ]
+          ]
+        },
+        {
+          "name": "writer-native-independent-table-properties.spec.ts > native independent properties columns frame-width and history width=390",
+          "errors": [
+            [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeDisabled\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed",
+              "Expected: disabled",
+              "Received: enabled"
+            ]
+          ]
+        }
+      ],
+      "caseCounts": {
+        "startTime": "2026-10-08T17:06:09.189Z",
+        "duration": 27689.068,
+        "expected": 36,
+        "skipped": 0,
+        "unexpected": 2,
+        "flaky": 0
+      },
+      "unhandledErrorCount": 0
+    }
+  ]
+}

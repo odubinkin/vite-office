@@ -1,0 +1,41 @@
+{
+  "scope": "Only the originally failed vertical UI case and two originally failed Chromium independent-column cases; no passing replay.",
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/browser/presentation/native-table-property-output.test.tsx --testNamePattern ^(native vertical-only UI output advertises the literal alignment item and restores original cell formats)$ --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/HFS3EK.closure4.app-results.json",
+      "exit": 1,
+      "bytes": 31223,
+      "sha256": "37bc0df37b6ab8e299d622c4e085e6542ae4a0a56778db2e055ebdbf1091afa3",
+      "caseCounts": {
+        "passed": 1,
+        "failed": 0,
+        "skipped": 9,
+        "total": 10
+      },
+      "failedCases": [],
+      "unhandledErrorCount": 0,
+      "coverageMapSHA256": "ed3f6fbe277083356374ab3fc3c744461acb2ffcfd66c4fe2febf03c98810bf0"
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts writer-native-independent-table-properties.spec.ts --reporter=list,json",
+      "exit": 0,
+      "bytes": 733,
+      "sha256": "e334c19d46156241eba5e31053d4284b8049d26baceefffefda2f32ea075ee45",
+      "caseCounts": {
+        "startTime": "2026-10-08T17:18:57.037Z",
+        "duration": 5866.9400000000005,
+        "expected": 2,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "failedCases": []
+    }
+  ],
+  "build": {
+    "exit": 0
+  }
+}

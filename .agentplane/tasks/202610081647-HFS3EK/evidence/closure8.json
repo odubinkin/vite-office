@@ -1,0 +1,22 @@
+{
+  "scope": "Only one new represented repeated-headline insertion callback case; all passing cases retained as skipped.",
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/browser/presentation/native-table-property-output.test.tsx --testNamePattern ^native repeated-headline insertion --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/HFS3EK.closure8.app-results.json",
+      "exit": 1,
+      "bytes": 31148,
+      "sha256": "e90536c6a24b5fb286cb7c8528a27cc1d9e77214e85fc165aed4eba90d2409bb",
+      "caseCounts": {
+        "passed": 1,
+        "failed": 0,
+        "skipped": 17,
+        "total": 18
+      },
+      "failedCases": [],
+      "unhandledErrorCount": 0,
+      "coverageMapSHA256": "6698a353c82ea8a0e7e1ae50e7f5f452c6100f7ef49ef3ea2d4010b29675379d"
+    }
+  ]
+}

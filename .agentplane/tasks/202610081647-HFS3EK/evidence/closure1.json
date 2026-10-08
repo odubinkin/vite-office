@@ -1,0 +1,35 @@
+{
+  "scope": "Only the remaining original failures and one corrected source-derived visited Borders case; previously passing cases retained as skipped.",
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/browser/presentation/native-table-alignment.test.tsx src/sw/browser/presentation/native-table-properties.test.tsx src/sw/browser/presentation/native-table-property-output.test.tsx --testNamePattern ^(applies native Automatic through actual UI and attribute history|applies native Left through actual UI and attribute history|accepts native properties as one history action and retains real selected cell owners|mounted untouched pageTable submits an empty native set and preserves exact defaults|mounted untouched pageColumns submits an empty native set and preserves exact defaults|mounted untouched pageText Flow submits an empty native set and preserves exact defaults|mounted untouched pageBorders submits an empty native set and preserves exact defaults|mounted name-only publication advertises one native name item and retains frame defaults|mounted upper spacing emits only native upper-lower items and one frame action|mounted Text Flow publishes changed headline and split without a table representation|mounted visited Borders publishes native inner-border metadata and one source history group)$ --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/HFS3EK.closure1.app-results.json",
+      "exit": 1,
+      "bytes": 38895,
+      "sha256": "5876792428750a76c59f43ee4b579c21da7a0f7ffce08d7bcbe32402ef5e674f",
+      "caseCounts": {
+        "passed": 8,
+        "failed": 2,
+        "skipped": 5,
+        "total": 15
+      },
+      "failedCases": [
+        {
+          "name": "apps/office/src/sw/browser/presentation/native-table-alignment.test.tsx > applies native Left through actual UI and attribute history",
+          "assertion": [
+            "AssertionError: expected { width: 3000, align: 'left', …(4) } to match object { align: 'left', width: 3000, …(4) }"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/browser/presentation/native-table-property-output.test.tsx > mounted visited Borders publishes native inner-border metadata and one source history group",
+          "assertion": [
+            "AssertionError: expected [ …(5) ] to strictly equal [ { …(1) }, { …(1) }, { …(1) }, …(2) ]"
+          ]
+        }
+      ],
+      "unhandledErrorCount": 0,
+      "coverageMapSHA256": "25be400fa2f7cd96ccc4541498f16de14756ec93b4f9fdcfa5fd0829cba4d23d"
+    }
+  ]
+}

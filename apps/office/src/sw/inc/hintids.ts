@@ -134,6 +134,11 @@ export const RES_LINENUMBER = 123 as const;
 /** Table adjacent-border merging, RES_FRMATR_BEGIN + 43. */
 export const RES_COLLAPSING_BORDERS = 132 as const;
 
+/** Native table split attribute, RES_FRMATR_BEGIN +31. */
+export const RES_LAYOUT_SPLIT = 120 as const;
+/** Native row split attribute, RES_FRMATR_BEGIN +40. */
+export const RES_ROW_SPLIT = 129 as const;
+
 /** WhichIds supported by the current Writer text-node auto-attribute set. */
 export const WRITER_TEXT_NODE_WHICH_RANGES = [
   [RES_CHRATR_COLOR, RES_CHRATR_COLOR],

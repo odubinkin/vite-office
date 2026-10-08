@@ -8,6 +8,9 @@ import { SwTableRep } from "../../source/uibase/table/swtablerep";
 import { HoriOrientation as H } from "../../../offapi/com/sun/star/text/HoriOrientation";
 import type { SwTable } from "../../source/core/table/swtable";
 import * as tableShell from "../../source/uibase/shells/tabsh";
+import { SfxItemSet } from "../../../svl/source/items/itemset";
+import { FN_TABLE_REP } from "../../inc/cmdid";
+import { SwPtrItem } from "../../source/uibase/utlui/uiitems";
 
 const sessions: ReturnType<typeof createWriterDocumentSession>[] = [];
 afterEach(
@@ -224,7 +227,10 @@ it("mounted native width-only acceptance scales every independent row through fr
   });
   fireEvent.click(screen.getByRole("button", { name: "OK" }));
   expect(acceptance).toHaveBeenCalledOnce();
-  const accepted = required(acceptance.mock.calls[0]?.[1].tableRep);
+  const input = required(acceptance.mock.calls[0]?.[1]);
+  expect(input).toBeInstanceOf(SfxItemSet);
+  if (!(input instanceof SfxItemSet)) throw new Error("Missing native changed-item input");
+  const accepted = (input.Get(FN_TABLE_REP) as SwPtrItem).GetValue() as SwTableRep;
   expect(accepted).toBeInstanceOf(SwTableRep);
   expect([accepted.width, accepted.GetColCount(), accepted.GetAllColCount()]).toEqual([1440, 3, 4]);
   expect([accepted.HasWidthChanged(), accepted.HasColsChanged()]).toEqual([true, false]);

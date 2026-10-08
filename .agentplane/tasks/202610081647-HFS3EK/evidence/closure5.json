@@ -1,0 +1,35 @@
+{
+  "scope": "Only sixteen new native publication/reset/column metric and insertion-callback cases; previously passing cases retained as skipped.",
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/source/ui/table/native-table-property-output.test.ts src/sw/source/uibase/shells/native-table-property-item-input.test.ts src/sw/browser/presentation/native-table-property-output.test.tsx --testNamePattern ^native (changed-item Columns orientation|row-split-only|active Columns acceptance|Reset|insertion branch remains separate) --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/HFS3EK.closure5.app-results.json",
+      "exit": 1,
+      "bytes": 43620,
+      "sha256": "9eaa0fecc6f6f4226f604335e3c10d3c3c3a5959b5485bece10f4d3afb055cda",
+      "caseCounts": {
+        "passed": 14,
+        "failed": 2,
+        "skipped": 25,
+        "total": 41
+      },
+      "failedCases": [
+        {
+          "name": "apps/office/src/sw/browser/presentation/native-table-property-output.test.tsx > native insertion branch remains separate from properties item output headertrue",
+          "assertion": [
+            "TestingLibraryElementError: Found multiple elements with the role \"button\" and name \"More Options\""
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/browser/presentation/native-table-property-output.test.tsx > native insertion branch remains separate from properties item output headerfalse",
+          "assertion": [
+            "TestingLibraryElementError: Found multiple elements with the role \"button\" and name \"More Options\""
+          ]
+        }
+      ],
+      "unhandledErrorCount": 0,
+      "coverageMapSHA256": "d33db1087ae6bfbe4c62281d8286cbfb70d104ed582f368f4516e8bf4ac4cc5b"
+    }
+  ]
+}

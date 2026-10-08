@@ -1,0 +1,7 @@
+{
+  "initialIgnoredPathDiagnosticCount": 0,
+  "path": ".agentplane/.upgrade/baseline/policy/check-routing.mjs",
+  "resolution": "Exact framework policy backup is byte-identical to the legitimate routing source; it is not upstream or application source",
+  "policySHA256": "130064d9e92c9f4fb7332e350eeddc639114dcf38a811b2b34e165e2ec892789",
+  "byteIdentical": true
+}

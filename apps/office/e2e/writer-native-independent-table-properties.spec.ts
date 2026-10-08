@@ -94,11 +94,7 @@ for (const viewport of [1280, 390]) {
     await page.getByRole("button", { name: "Table Properties", exact: true }).click();
     await page.getByRole("button", { name: "OK", exact: true }).click();
     await geometry(page, original);
-    // Existing attribute-default materialization creates history without a column change.
-    // Keep its geometry explicit; the follow-up task must fix the changed-item contract.
-    await expect(page.getByRole("button", { name: "Undo", exact: true })).toBeEnabled();
-    await page.getByRole("button", { name: "Undo", exact: true }).click();
-    await geometry(page, original);
+    await expect(page.getByRole("button", { name: "Undo", exact: true })).toBeDisabled();
     await page.getByRole("button", { name: "Table Properties", exact: true }).click();
     await page.getByRole("tab", { name: "Columns", exact: true }).click();
     await page.getByRole("spinbutton", { name: "Column 1 width (cm)", exact: true }).fill("2.54");

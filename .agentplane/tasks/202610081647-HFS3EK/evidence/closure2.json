@@ -1,0 +1,22 @@
+{
+  "scope": "Only two cases failed in closure1; all passing cases retained as skipped.",
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/browser/presentation/native-table-alignment.test.tsx src/sw/browser/presentation/native-table-property-output.test.tsx --testNamePattern ^(applies native Left through actual UI and attribute history|mounted visited Borders publishes native inner-border metadata and one source history group)$ --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/HFS3EK.closure2.app-results.json",
+      "exit": 1,
+      "bytes": 31600,
+      "sha256": "56b431edb63cbbd3043474616a5109b315dfcb10c431b78c7d2109fa45ae5ed9",
+      "caseCounts": {
+        "passed": 2,
+        "failed": 0,
+        "skipped": 11,
+        "total": 13
+      },
+      "failedCases": [],
+      "unhandledErrorCount": 0,
+      "coverageMapSHA256": "bbecbca3ec2c8e7495be069d0771167d44789c8c217070d3e7a26ef8d26cf8cb"
+    }
+  ]
+}

@@ -4,6 +4,14 @@ import type { SwTable, SwTableBox } from "../../core/table/swtable";
 import { GetSwRowSplit } from "../../core/docnode/ndtbl1";
 import { SwTableRep, type TColumn } from "../../uibase/table/swtablerep";
 import type { SwTabCols } from "../../core/bastyp/tabcol";
+import { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { SfxUInt16Item } from "../../../../svl/source/items/intitem";
+import { SfxStringItem } from "../../../../svl/source/items/stritem";
+import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
+import { SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";
+import { RES_UL_SPACE, RES_LAYOUT_SPLIT, RES_ROW_SPLIT } from "../../../inc/hintids";
+import { FN_TABLE_REP, FN_PARAM_TABLE_NAME, FN_PARAM_TABLE_HEADLINE } from "../../../inc/cmdid";
+import { SwPtrItem } from "../../uibase/utlui/uiitems";
 
 /** Native table-manager automatic width sentinel, INVALID_TWIPS/LONG_MAX. */
 const lAutoWidth = Number(0x7fffffffffffffffn);
@@ -63,15 +71,22 @@ export class SwTextFlowPage {
   public ValueChangedHdl(value: number): void {
     this.headerRows = Math.max(1, Math.min(100, Math.round(value)));
   }
-  /** Emits native headline/table/row items only when saved widget values changed. @returns Changed represented native items. */
-  public FillItemSet(): SwTextFlowItems {
-    return {
+  /** Emits native headline/table/row items only when saved widget values changed. @param output - Optional native changed-item destination. @returns Changed represented native items. */
+  public FillItemSet(output?: SfxItemSet): SwTextFlowItems {
+    const changed: SwTextFlowItems = {
       ...(this.headline === this.savedHeadline && this.headerRows === this.savedHeaderRows
         ? {}
         : { headerRows: this.headline ? this.headerRows : 0 }),
       ...(this.split === this.savedSplit ? {} : { layoutSplit: this.split }),
       ...(this.rowSplit === this.savedRowSplit ? {} : { rowSplit: this.rowSplit === true }),
     };
+    if (changed.headerRows !== undefined)
+      output?.Put(new SfxUInt16Item(FN_PARAM_TABLE_HEADLINE, changed.headerRows));
+    if (changed.layoutSplit !== undefined)
+      output?.Put(new SfxBoolItem(RES_LAYOUT_SPLIT, changed.layoutSplit));
+    if (changed.rowSplit !== undefined)
+      output?.Put(new SfxBoolItem(RES_ROW_SPLIT, changed.rowSplit));
+    return changed;
   }
   /** Resolves the current item over the original native input set. @returns Accepted headline count. */
   public GetRowsToRepeat(): number {
@@ -293,16 +308,29 @@ export class SwFormatTablePage {
     this.metrics.right = this.savedRight = this.data.right;
   }
 
-  /** Applies native still-focused metric correction and reports source modified state. @param focusedField - Optional actual focused metric. @returns Whether the page was modified. */
-  public FillItemSet(focusedField?: "width" | "left" | "right" | "above" | "below"): boolean {
+  /** Applies native still-focused metric correction and reports source modified state. @param focusedField - Optional actual focused metric. @param output - Optional native changed-item destination. @returns Whether the page was modified. */
+  public FillItemSet(
+    focusedField?: "width" | "left" | "right" | "above" | "below",
+    output?: SfxItemSet,
+  ): boolean {
     if (focusedField !== undefined) this.ModifyHdl(focusedField);
-    return this.modified || this.GetNameItem() !== undefined;
+    if (this.modified && (this.above !== this.originalAbove || this.below !== this.originalBelow))
+      output?.Put(new SvxULSpaceItem(this.above, this.below, RES_UL_SPACE));
+    const name = this.GetNameItem();
+    if (name !== undefined) {
+      output?.Put(new SfxStringItem(FN_PARAM_TABLE_NAME, name));
+      this.modified = true;
+    }
+    return this.modified;
   }
 
-  /** Publishes native metric/radio values, saved-spacing flags and column correction to the shared representation. @param focusedField - Optional actual focused metric. @returns Nothing. */
-  public DeactivatePage(focusedField?: "width" | "left" | "right" | "above" | "below"): boolean {
+  /** Publishes native metric/radio values, saved-spacing flags and column correction to the shared representation. @param focusedField - Optional actual focused metric. @param output - Optional native changed-item destination. @returns Nothing. */
+  public DeactivatePage(
+    focusedField?: "width" | "left" | "right" | "above" | "below",
+    output?: SfxItemSet,
+  ): boolean {
     if (this.name.includes(" ")) return false;
-    if (!this.FillItemSet(focusedField)) return true;
+    if (!this.FillItemSet(focusedField, output)) return true;
     const data = this.data,
       count = data.GetColCount();
     if (this.metrics.left !== this.savedLeft || this.metrics.right !== this.savedRight) {
@@ -341,6 +369,7 @@ export class SwFormatTablePage {
       data.SetWidthChanged();
       data.width = data.space;
     }
+    if (data.HasWidthChanged()) output?.Put(new SwPtrItem(FN_TABLE_REP, data));
     return true;
   }
 }
@@ -551,11 +580,14 @@ export class SwTableColumnPage {
     if (this.modified) this.data.SetColsChanged();
     return this.modified;
   }
-  /** Publishes accepted table width and source orientation-dependent side-space corrections. @param focusedSlot - Optional source focused field. @returns Nothing. */
-  public DeactivatePage(focusedSlot?: number): void {
+  /** Publishes accepted table width and source orientation-dependent side-space corrections. @param focusedSlot - Optional source focused field. @param output - Optional native changed-item destination. @returns Nothing. */
+  public DeactivatePage(focusedSlot?: number, output?: SfxItemSet): void {
     this.FillItemSet(focusedSlot);
     const data = this.data;
-    if (data.align === HoriOrientation.FULL || data.width === this.tableWidth) return;
+    if (data.align === HoriOrientation.FULL || data.width === this.tableWidth) {
+      output?.Put(new SwPtrItem(FN_TABLE_REP, data));
+      return;
+    }
     data.width = this.tableWidth;
     const diff = data.space - data.width - data.left - data.right;
     switch (data.align) {
@@ -589,5 +621,6 @@ export class SwTableColumnPage {
         break;
     }
     data.SetWidthChanged();
+    output?.Put(new SwPtrItem(FN_TABLE_REP, data));
   }
 }

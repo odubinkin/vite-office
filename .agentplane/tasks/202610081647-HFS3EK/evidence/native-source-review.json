@@ -1,0 +1,296 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "base": "0c2590f96d59a7dc99951c6da3aae43a618a3c8a",
+  "sources": [
+    {
+      "path": "sw/inc/cmdid.h",
+      "sha256": "0fc2b65bf5e326254c90a3490f334cefcd8156ba5113e1e19876a3135b87fa6c",
+      "anchors": [
+        {
+          "identifier": "FN_TABLE_REP",
+          "line": 396,
+          "allMatchingLines": [
+            396
+          ]
+        },
+        {
+          "identifier": "FN_TABLE_SET_VERT_ALIGN",
+          "line": 476,
+          "allMatchingLines": [
+            476
+          ]
+        },
+        {
+          "identifier": "FN_PARAM_TABLE_NAME",
+          "line": 844,
+          "allMatchingLines": [
+            844
+          ]
+        },
+        {
+          "identifier": "FN_PARAM_TABLE_HEADLINE",
+          "line": 845,
+          "allMatchingLines": [
+            845
+          ]
+        }
+      ],
+      "pinBytesVerified": true
+    },
+    {
+      "path": "sw/inc/hintids.hxx",
+      "sha256": "c69353d16f8f15575a82843880cc016c6033e2f86e91905f999a0cfec8cf398f",
+      "anchors": [
+        {
+          "identifier": "RES_LAYOUT_SPLIT",
+          "line": 377,
+          "allMatchingLines": [
+            377
+          ]
+        },
+        {
+          "identifier": "RES_ROW_SPLIT",
+          "line": 387,
+          "allMatchingLines": [
+            387
+          ]
+        }
+      ],
+      "pinBytesVerified": true
+    },
+    {
+      "path": "sw/source/uibase/inc/uiitems.hxx",
+      "sha256": "b4b59f6ceb3ac3857cab65f46c9f083a7a95a1d87fea25c08117855f3cf1b2fd",
+      "anchors": [
+        {
+          "identifier": "SwPtrItem",
+          "line": 61,
+          "allMatchingLines": [
+            61,
+            66,
+            67,
+            69
+          ]
+        },
+        {
+          "identifier": "GetValue",
+          "line": 72,
+          "allMatchingLines": [
+            72,
+            106
+          ]
+        }
+      ],
+      "pinBytesVerified": true
+    },
+    {
+      "path": "sw/source/uibase/utlui/uiitems.cxx",
+      "sha256": "67047bdb5cc933b66e489a9928f0688e68eab887bf17683f56beacab47c27c7a",
+      "anchors": [
+        {
+          "identifier": "SwPtrItem::SwPtrItem",
+          "line": 192,
+          "allMatchingLines": [
+            192
+          ]
+        },
+        {
+          "identifier": "SwPtrItem::Clone",
+          "line": 200,
+          "allMatchingLines": [
+            200
+          ]
+        },
+        {
+          "identifier": "SwPtrItem::operator==",
+          "line": 205,
+          "allMatchingLines": [
+            205
+          ]
+        }
+      ],
+      "pinBytesVerified": true
+    },
+    {
+      "path": "sw/source/ui/table/tabledlg.cxx",
+      "sha256": "8784376ef8a6517596379155caa49027b70d4c801c0866c9991b9998e1781a5a",
+      "anchors": [
+        {
+          "identifier": "SwFormatTablePage::FillItemSet",
+          "line": 393,
+          "allMatchingLines": [
+            393
+          ]
+        },
+        {
+          "identifier": "SwFormatTablePage::DeactivatePage",
+          "line": 618,
+          "allMatchingLines": [
+            618
+          ]
+        },
+        {
+          "identifier": "SwTableColumnPage::DeactivatePage",
+          "line": 1129,
+          "allMatchingLines": [
+            1129
+          ]
+        },
+        {
+          "identifier": "SwTextFlowPage::FillItemSet",
+          "line": 1326,
+          "allMatchingLines": [
+            1326
+          ]
+        }
+      ],
+      "pinBytesVerified": true
+    },
+    {
+      "path": "sw/source/uibase/shells/tabsh.cxx",
+      "sha256": "ac075f90575663fac974e2804e7111b1df3f596eb5bb400fb9fc2f4be0058163",
+      "anchors": [
+        {
+          "identifier": "void ItemSetToTableParam(",
+          "line": 277,
+          "allMatchingLines": [
+            277
+          ]
+        },
+        {
+          "identifier": "if(pRep->HasColsChanged())",
+          "line": 396,
+          "allMatchingLines": [
+            396
+          ]
+        }
+      ],
+      "pinBytesVerified": true
+    },
+    {
+      "path": "sfx2/source/dialog/tabdlg.cxx",
+      "sha256": "97684181a588cefdc5c1105a845ba41abb19eb8da21679fc82fcce52a77c4199",
+      "anchors": [
+        {
+          "identifier": "SfxTabDialogController, ResetHdl",
+          "line": 140,
+          "allMatchingLines": [
+            140,
+            210
+          ]
+        },
+        {
+          "identifier": "bool bModified = false;",
+          "line": 611,
+          "allMatchingLines": [
+            611
+          ]
+        }
+      ],
+      "pinBytesVerified": true
+    },
+    {
+      "path": "sw/inc/itabenum.hxx",
+      "sha256": "c6a19df97975a734dfced93d076c5cfa3f96694188e21a3d9141c64b35aac5ff",
+      "anchors": [
+        {
+          "identifier": "Headline           = 0x02",
+          "line": 29,
+          "allMatchingLines": [
+            29
+          ]
+        },
+        {
+          "identifier": "SplitLayout        = 0x08",
+          "line": 30,
+          "allMatchingLines": [
+            30
+          ]
+        }
+      ],
+      "pinBytesVerified": true
+    }
+  ],
+  "production": [
+    {
+      "path": "apps/office/src/sw/inc/cmdid.ts",
+      "sha256": "79ad0035b1d1165ece102812e2ef0867ae470959a41ab873b86060e15cd1db69"
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/utlui/uiitems.ts",
+      "sha256": "95c8b8676815300537a90b58be95bf093341c54edeab6cfea055e0baf5629eeb"
+    },
+    {
+      "path": "apps/office/src/sw/inc/hintids.ts",
+      "sha256": "d8b96b5b69293a47477207b5de36eb4e74c8c9c905e33045363c6440787398f4"
+    },
+    {
+      "path": "apps/office/src/sw/source/ui/table/tabledlg.ts",
+      "sha256": "4b5d1accd7b7de7ae2688feb12435f3ddc1a8627e746b15bb8f2eb469cb53ad5"
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/shells/tabsh.ts",
+      "sha256": "88d17a667bd6896fa38edb05172bcd4b7b20d0eb32e1ceb00348c00eb2f3c2e4"
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx",
+      "sha256": "29603da06021772907191aeedfdaaf820701e95a60aa91b41ca6505650d302f4"
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/writer-view.tsx",
+      "sha256": "782755425f440a2438a2994ee429a6ee7b37e4f65ca8e5f1855c9d18db8f9de1"
+    }
+  ],
+  "protectedIO": [
+    {
+      "path": "apps/office/src/sw/browser/storage/writer-odt-store.ts",
+      "sha256": "0fb4ebffca5a00fe63ff327379305d64143c7014dace0a7e13edb8c0c241232e",
+      "baselineByteIdentical": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/workflows/writer-odt-io.ts",
+      "sha256": "7c214afab59dbc5df1087f107e2b7bf2bf01d8623a2995e8eb19a45575361306",
+      "baselineByteIdentical": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/WriterFileDialog.tsx",
+      "sha256": "50ad125f5a254eb1772b62abe3681e4632df6c7870ea9647622b2268394c88c3",
+      "baselineByteIdentical": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts",
+      "sha256": "060a06dd9a77e530de1756b2f4c4384e6b2ddd1ee20c68fb175daab2eeb99ee7",
+      "baselineByteIdentical": true
+    }
+  ],
+  "writerUI": {
+    "path": "apps/office/src/sw/browser/presentation/writer-view.tsx",
+    "sha256": "782755425f440a2438a2994ee429a6ee7b37e4f65ca8e5f1855c9d18db8f9de1",
+    "baselineSHA256": "39ab77fd187dacc071bd644ad75f0385b8de0946bc84143e1f688c370d3aaf39",
+    "onlyNativePropertiesIngress": true,
+    "completeIOHandlerRegionsByteIdentical": true,
+    "reversedExactNativeIngressMatchesEntireBaseline": true
+  },
+  "parent": {
+    "characters": 686947,
+    "sha256": "932660520332dc5a66cc4cef46608459128d9b84b2795a4615c8920bb1bd0b3b",
+    "unchanged": true
+  },
+  "stash": {
+    "commit": "c85f4a0e453dfd06d6e199554784f2c286737472",
+    "preserved": true
+  },
+  "sourceBoundContracts": [
+    "SwPtrItem Clone/equality/GetValue borrow the original graph; four FN WhichIds and layout/row split WhichIds use pinned literal native identities.",
+    "Format and Text Flow pages publish only changed represented items. Columns DeactivatePage always advertises its borrowed SwTableRep, including unchanged geometry, as the pinned source.",
+    "The mounted UI retains native page exchange output between tabs, admits Borders output only after activation, and clears the represented page item ranges on Reset. Untouched initial Table OK emits no items and creates no Undo.",
+    "Main properties dispatch passes the native SfxItemSet directly; there is no fallback to the legacy DTO. The explicit old DTO ingress remains separate for existing non-UI callers.",
+    "The shell consumes explicitly SET items, groups original-owner/cursor/history writes, preserves unchanged frame defaults, and keeps FULL stored frame width separate from layout width. HasColsChanged alone requests separator writes.",
+    "Four exact old acceptance migrations retain all physical geometry/owner/text/history assertions while correcting native input projection and old default/materialized observations. Forty-five fresh literal pointer/page/shell/mounted cases and related unchanged module cases yield412 current unique app and38 Chromium passes; no passing replay."
+  ],
+  "residuals": [
+    "Complete native item classes/factories, SfxTabPage orchestration, full SfxItemSet-backed frame formats, notifications, merged/nested/RTL/vertical/percentage/layout behavior and whole core/browser parity remain unverified.",
+    "The explicit legacy DTO API remains for existing non-UI callers; only the main properties UI path is proven native in this leaf.",
+    "Registered IO/open/save/recovery/settings and all prior metadata states/defaults/classes remain preserved; no full module/upstream parity promotion."
+  ]
+}

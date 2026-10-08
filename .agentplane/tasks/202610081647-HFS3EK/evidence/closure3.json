@@ -1,0 +1,29 @@
+{
+  "scope": "Six new source-contract cases plus previously unexecuted related WriterWorkbench/insertion module cases; already passing leaf cases retained as skipped.",
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/browser/presentation/writer-view.test.tsx src/sw/browser/presentation/native-insert-table-dialog.test.tsx src/sw/source/ui/table/native-table-property-output.test.ts src/sw/source/uibase/shells/native-table-property-item-input.test.ts src/sw/browser/presentation/native-table-property-output.test.tsx --testNamePattern ^(native Columns publishes its borrowed representation while untouched format and flow publish no deltas|mounted visited Columns advertises the borrowed native representation even without edits|native publication rejects a spaced name before both page exchange and OK|native publication refuses an empty table graph without accepting changed name items|native vertical-only UI output advertises the literal alignment item and restores original cell formats|native border-only item admission preserves cursor and complete original formats through undo|native insertion dialog presentation accepts an empty name through Workbench and chooses the first unused native name|native insertion dialog presentation submits native Writer defaults while retaining the inactive repeat check|native insertion dialog presentation restores entered repetition and submits sizes above the old caps|native insertion dialog presentation shows a nonblocking warning and native name collision sensitivity|native insertion dialog presentation retains native uint16 admission for Rows|native insertion dialog presentation retains native uint16 admission for Columns|Writer browser presentation uses icons for the standard toolbar and keeps Save and Paragraph off their upstream-hidden positions|Writer browser presentation renders an imported table before the first body paragraph|Writer browser presentation does not apply stale table properties after the document changes|Writer browser presentation inserts, selects, edits and reopens a canonical Writer table|Writer browser presentation exposes a package font and reports a stable fallback when browser loading is unavailable|Writer browser presentation creates, navigates, renames and removes bookmarks and inserts a hard page break from Insert|Writer browser presentation connects advanced toolbar controls to Writer paragraph items|Writer browser presentation adds Writer proportional leading to the natural browser line-box estimate|Writer browser presentation projects fixed, minimum, and extra Writer line spacing|Writer browser presentation projects explicit paragraph colors without altering native text attributes|Writer browser presentation presents save, open, failure and modified states from the owned medium|Writer browser presentation maps command errors to stable user-facing messages|Writer browser presentation completes shell-owned hyperlink and page dialogs from the browser presenter|Writer browser presentation rolls back a title edit when immediate browser persistence fails|Writer browser presentation flushes browser storage on Ctrl/Meta\\+S without opening Save As or Export|Writer browser presentation reports immediate local save failures|Writer browser presentation ignores a rejected title and presents non-Error save failures|Writer browser presentation passes an active autosave controller into file dialogs|Writer browser presentation keeps the suite test root active)$ --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/HFS3EK.closure3.app-results.json",
+      "exit": 1,
+      "bytes": 176068,
+      "sha256": "1cc93a96f3ee3bbf9f03d8e7d6bf5c37f27b7bc52d3be0ac74a41cae13fa2d65",
+      "caseCounts": {
+        "passed": 30,
+        "failed": 1,
+        "skipped": 19,
+        "total": 50
+      },
+      "failedCases": [
+        {
+          "name": "apps/office/src/sw/browser/presentation/native-table-property-output.test.tsx > native vertical-only UI output advertises the literal alignment item and restores original cell formats",
+          "assertion": [
+            "TestingLibraryElementError: Unable to find an accessible element with the role \"combobox\" and name \"Vertical alignment\""
+          ]
+        }
+      ],
+      "unhandledErrorCount": 0,
+      "coverageMapSHA256": "8e091e6db6c4af9639fef25daf8f77140fb5ee83c62b1a10b4d01df763707ae2"
+    }
+  ]
+}

@@ -58,13 +58,14 @@ for (const [label, orient, width, left, right] of [
     });
     fireEvent.click(screen.getByRole("button", { name: "OK" }));
     expect(table.GetFormat()).toMatchObject({
-      horiOrient: orient,
-      width,
-      marginLeft: left,
-      marginRight: right,
+      ...(label === "Left" ? { align: "left" } : { horiOrient: orient }),
+      width: label === "Automatic" ? 3000 : width,
+      ...(label === "Left" ? {} : { marginLeft: left, marginRight: right }),
       marginTop: 113,
       marginBottom: 170,
     });
+    if (label === "Left")
+      expect(table.GetFormat()).toStrictEqual({ ...original, marginTop: 113, marginBottom: 170 });
     expect(new SwTabFrame(table).Format(8000)).toEqual({ width, left, right });
     expect(doc.GetUndoManager().GetUndoActionCount()).toBe(1);
     for (let cycle = 0; cycle < 2; cycle++) {

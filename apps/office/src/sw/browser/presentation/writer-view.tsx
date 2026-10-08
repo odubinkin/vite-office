@@ -221,7 +221,10 @@ export function WriterWorkbench({
           },
         );
       } else if (currentTable !== undefined) {
-        ItemSetToTableParam(view.GetWrtShell(), value);
+        ItemSetToTableParam(
+          view.GetWrtShell(),
+          value.items as NonNullable<WriterTableDialogValue["items"]>,
+        );
       }
       setTableDialog(undefined);
     };

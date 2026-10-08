@@ -1,0 +1,92 @@
+{
+  "base": "0c2590f96d59a7dc99951c6da3aae43a618a3c8a",
+  "scopeCount": 17,
+  "semanticPaths": [
+    "apps/office/e2e/writer-native-independent-table-properties.spec.ts",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx",
+    "apps/office/src/sw/browser/presentation/native-independent-table-properties.test.tsx",
+    "apps/office/src/sw/browser/presentation/native-table-alignment.test.tsx",
+    "apps/office/src/sw/browser/presentation/native-table-properties.test.tsx",
+    "apps/office/src/sw/browser/presentation/native-table-property-output.test.tsx",
+    "apps/office/src/sw/browser/presentation/writer-view.tsx",
+    "apps/office/src/sw/inc/cmdid.ts",
+    "apps/office/src/sw/inc/hintids.ts",
+    "apps/office/src/sw/source/ui/table/native-table-property-output.test.ts",
+    "apps/office/src/sw/source/ui/table/tabledlg.ts",
+    "apps/office/src/sw/source/uibase/shells/native-table-property-item-input.test.ts",
+    "apps/office/src/sw/source/uibase/shells/tabsh.ts",
+    "apps/office/src/sw/source/uibase/utlui/native-pointer-items.test.ts",
+    "apps/office/src/sw/source/uibase/utlui/uiitems.ts",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/source-provenance.json"
+  ],
+  "priorAcceptanceFiles": 639,
+  "byteIdenticalAcceptanceFiles": 635,
+  "newAcceptanceFiles": [
+    "apps/office/src/sw/source/uibase/utlui/native-pointer-items.test.ts",
+    "apps/office/src/sw/source/ui/table/native-table-property-output.test.ts",
+    "apps/office/src/sw/source/uibase/shells/native-table-property-item-input.test.ts",
+    "apps/office/src/sw/browser/presentation/native-table-property-output.test.tsx"
+  ],
+  "migrations": [
+    {
+      "path": "apps/office/e2e/writer-native-independent-table-properties.spec.ts",
+      "originalSHA256": "9346ad311c1ce1548fb5766c61a0865b486b18f3bf0bd3e31efb6847ddf88632",
+      "currentSHA256": "5d72565bd68033825d8a5aeeb29bb361b618862d910cda5b1047dcadab27de85",
+      "entireFileMatchesDeclaredNativeTransformation": true,
+      "originalAssertions": 0,
+      "currentAssertions": 0,
+      "reason": "Fix declared untouched-dialog history observation; all literal physical widths, owners and three nontrivial Undo/Redo cycles retained."
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/native-independent-table-properties.test.tsx",
+      "originalSHA256": "20c38b5bf665d0b4b5f83e119ef3ce0936c055f6ce923c01c99aaea984732e29",
+      "currentSHA256": "29ae455d2d2eca9d3829323c8020780b85242721bf4474d4180283d689de0d30",
+      "entireFileMatchesDeclaredNativeTransformation": true,
+      "originalAssertions": 53,
+      "currentAssertions": 54,
+      "reason": "Native item-set input projection only; all literal width/count/style/owner/cursor/text/history assertions unchanged."
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/native-table-alignment.test.tsx",
+      "originalSHA256": "fae36cc4af6f15db7573342d0b6fb4ad4d51c32def6168ae2e609f5001349b3a",
+      "currentSHA256": "fea2128582dcf3835ce9fece7fed744d05a2da07165bb501b8d52f7dcacc2945",
+      "entireFileMatchesDeclaredNativeTransformation": true,
+      "originalAssertions": 9,
+      "currentAssertions": 10,
+      "reason": "Native FULL retains stored width and layout width separately; unchanged LEFT retains original omitted explicit attributes. Every literal rendered width/left/right and owner/text/history assertion retained; stricter complete original format check added."
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/native-table-properties.test.tsx",
+      "originalSHA256": "f4fcaa57e21786769c0198ae66bb4b2ccc1d1fa6dd0c54d51c60e46cf5fdfb33",
+      "currentSHA256": "5598494e9b605f7d7e7b23230fc5168194f1e7edf114f29f5bf355435d1cbb5c",
+      "entireFileMatchesDeclaredNativeTransformation": true,
+      "originalAssertions": 16,
+      "currentAssertions": 16,
+      "reason": "Native changed frame attribute input omits unchanged UL pair; existing width/padding/original graph/history assertions unchanged."
+    }
+  ],
+  "metadata": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "originalRecords": 311,
+      "currentRecords": 313,
+      "allPriorFieldsPrefixesStatesDefaultsClassesPreserved": true,
+      "newNativeRecords": [
+        "apps/office/src/sw/inc/cmdid.ts",
+        "apps/office/src/sw/source/uibase/utlui/uiitems.ts"
+      ]
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "originalRecords": 311,
+      "currentRecords": 313,
+      "allPriorFieldsPrefixesStatesDefaultsClassesPreserved": true,
+      "newNativeRecords": [
+        "apps/office/src/sw/inc/cmdid.ts",
+        "apps/office/src/sw/source/uibase/utlui/uiitems.ts"
+      ]
+    }
+  ],
+  "failures": []
+}

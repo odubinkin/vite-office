@@ -1,0 +1,22 @@
+{
+  "scope": "Only two newly failed insertion-callback cases; all previously passing cases retained as skipped.",
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/browser/presentation/native-table-property-output.test.tsx --testNamePattern ^(native insertion branch remains separate from properties item output headertrue|native insertion branch remains separate from properties item output headerfalse)$ --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/HFS3EK.closure7.app-results.json",
+      "exit": 1,
+      "bytes": 31498,
+      "sha256": "d76741a7178864b726bb2e4b1b0189dfd9d7f9337a6cdc5146794ed31b3c96b4",
+      "caseCounts": {
+        "passed": 2,
+        "failed": 0,
+        "skipped": 15,
+        "total": 17
+      },
+      "failedCases": [],
+      "unhandledErrorCount": 0,
+      "coverageMapSHA256": "9ccac3cd00333a22b68c98492defb8b9127a8f631a6f287d4e0f7e1a7346b9ea"
+    }
+  ]
+}

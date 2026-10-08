@@ -1,0 +1,89 @@
+{
+  "currentUniqueExecutedAppCases": 412,
+  "currentPassedAppCases": 412,
+  "freshPassedCases": 45,
+  "freshByFile": [
+    {
+      "path": "apps/office/src/sw/source/uibase/utlui/native-pointer-items.test.ts",
+      "passedCases": 3
+    },
+    {
+      "path": "apps/office/src/sw/source/ui/table/native-table-property-output.test.ts",
+      "passedCases": 14
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/shells/native-table-property-item-input.test.ts",
+      "passedCases": 10
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/native-table-property-output.test.tsx",
+      "passedCases": 18
+    }
+  ],
+  "supersededDraftCases": [
+    {
+      "path": "apps/office/src/sw/browser/presentation/native-table-property-output.test.tsx",
+      "identifier": "mounted untouched pageColumns submits an empty native set and preserves exact defaults",
+      "reason": "Fresh draft expectation superseded by pinned native Columns/created Borders publication contract; no prior baseline acceptance case removed."
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/native-table-property-output.test.tsx",
+      "identifier": "mounted untouched pageBorders submits an empty native set and preserves exact defaults",
+      "reason": "Fresh draft expectation superseded by pinned native Columns/created Borders publication contract; no prior baseline acceptance case removed."
+    },
+    {
+      "path": "apps/office/src/sw/source/ui/table/native-table-property-output.test.ts",
+      "identifier": "untouched native pages publish no geometry name spacing or headline defaults",
+      "reason": "Fresh draft expectation superseded by pinned native Columns/created Borders publication contract; no prior baseline acceptance case removed."
+    }
+  ],
+  "appPassingReplayCount": 0,
+  "chromiumPassingReplayCount": 0,
+  "uniqueExecutedChromiumCases": 38,
+  "fullSuiteExecutedThisLeaf": false,
+  "fullSuiteCadence": {
+    "lastLeaf": 237,
+    "nextLeaf": 247
+  },
+  "unchangedInventoryAndInfrastructure": "No current leaf execution; prior actual certified counters accepted only after whole current source/map equality. Current metadata source checks executed.",
+  "executedFiles": [
+    {
+      "identifier": "HFS3EK.app-results.json",
+      "sha256": "61ff3373197eb8aa34d9982254845e26f15836321c14798e163cd35793c79b42"
+    },
+    {
+      "identifier": "HFS3EK.closure1.app-results.json",
+      "sha256": "ec736bd00b8551288576654ae4c75085bd2d80eafec9509de8916506f4c78c1a"
+    },
+    {
+      "identifier": "HFS3EK.closure2.app-results.json",
+      "sha256": "3ad7ea1c59569322188a51018ac3a8b5464b028ba312dca7cc5e53807d3890fb"
+    },
+    {
+      "identifier": "HFS3EK.closure3.app-results.json",
+      "sha256": "b1108d215af98ddeb7455e40bb5dae64bb21908163591faf6bf48d61df660abf"
+    },
+    {
+      "identifier": "HFS3EK.closure4.app-results.json",
+      "sha256": "c6a7c5b61d39b1d237506c6d0c7bb7ce21779566559e1679760bba073376cc59"
+    },
+    {
+      "identifier": "HFS3EK.closure5.app-results.json",
+      "sha256": "fd995b30475374a5f37c42fcb1d8a212cf8b64ee3a3f6d67f50b516fe4790e90"
+    },
+    {
+      "identifier": "HFS3EK.closure6.app-results.json",
+      "sha256": "9c65b9561a81ae2e7ba3a875a467909120c7b7508e5697c7d97905ac4c5537ee"
+    },
+    {
+      "identifier": "HFS3EK.closure7.app-results.json",
+      "sha256": "d6b6dec03460f33164fc30263e442e80149e096b577815701c0228f493bddb69"
+    },
+    {
+      "identifier": "HFS3EK.closure8.app-results.json",
+      "sha256": "abb646a2238ffbdea366dbcfe41203b5312acfc3c4a4f9b74323896c2d803b64"
+    }
+  ],
+  "rawThresholdExitsRetained": true,
+  "coverageCertificate": "final-coverage.json"
+}

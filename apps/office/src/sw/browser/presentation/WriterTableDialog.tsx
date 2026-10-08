@@ -10,7 +10,21 @@ import { WriterBorderPage } from "./WriterBorderPage";
 import { SvxBoxInfoItem } from "../../../editeng/source/items/frmitems";
 import { SfxBoolItem } from "../../../svl/source/items/cenumitm";
 import { SfxItemSet, SfxItemState } from "../../../svl/source/items/itemset";
-import { RES_BOX, RES_COLLAPSING_BORDERS } from "../../inc/hintids";
+import {
+  RES_BOX,
+  RES_COLLAPSING_BORDERS,
+  RES_UL_SPACE,
+  RES_LAYOUT_SPLIT,
+  RES_ROW_SPLIT,
+} from "../../inc/hintids";
+import {
+  FN_TABLE_REP,
+  FN_TABLE_SET_VERT_ALIGN,
+  FN_PARAM_TABLE_NAME,
+  FN_PARAM_TABLE_HEADLINE,
+} from "../../inc/cmdid";
+import { SwPtrItem } from "../../source/uibase/utlui/uiitems";
+import { SfxUInt16Item } from "../../../svl/source/items/intitem";
 import { SID_ATTR_BORDER_INNER } from "../../../svx/inc/svxids";
 import type { SwTabCols } from "../../source/core/bastyp/tabcol";
 import type { SwTableProperties } from "../../source/uibase/shells/tabsh";
@@ -23,6 +37,8 @@ import { HoriOrientation } from "../../../offapi/com/sun/star/text/HoriOrientati
 
 /** Editable table geometry expressed in Writer twips. */
 export interface WriterTableDialogValue extends SwTableProperties {
+  /** Actual native changed-item output for properties acceptance. */
+  readonly items?: SfxItemSet;
   readonly rows: number;
   readonly columns: number;
   /** Native insertion-only option, independent of properties changed-item flags. */
@@ -77,6 +93,10 @@ function WriterTablePropertiesDialog({
   const rows = table.GetTabLines();
   const nameInput = useRef<HTMLInputElement>(null);
   const rowCount = rows.length;
+  const [changedItems] = useState(
+    /** Retains native exchange output across page deactivation. @returns Changed item set. */
+    () => new SfxItemSet(table.GetTableNode().GetDoc().GetAttrPool(), [[1, 32767]]),
+  );
   const [formatPage] = useState(
     /** Creates the native draft once per mounted dialog. @returns Format page or insert mode. */
     () => {
@@ -91,6 +111,7 @@ function WriterTablePropertiesDialog({
     /** Captures the native initial headline item once per dialog. @returns Native Text Flow headline owner. */
     () => new SwTextFlowPage(table, selectedBoxes),
   );
+  const borderPageActivated = useRef(false);
   const [borderPage] = useState(
     /** Captures the native border page input once. @returns Native border owner. */ () => {
       const input =
@@ -203,13 +224,17 @@ function WriterTablePropertiesDialog({
               const focused = event.currentTarget.ownerDocument.activeElement?.getAttribute(
                 "data-writer-table-format-field",
               ) as Parameters<SwFormatTablePage["DeactivatePage"]>[0] | null;
-              if (!formatPage.DeactivatePage(focused ?? undefined)) {
+              if (!formatPage.DeactivatePage(focused ?? undefined, changedItems)) {
                 setError("The name of the table must not contain spaces.");
                 nameInput.current?.focus();
                 return;
               }
             }
-            if (activeTab === "columns") columnPage.DeactivatePage();
+            if (activeTab !== "table") formatPage.FillItemSet(undefined, changedItems);
+            if (activeTab === "columns") columnPage.DeactivatePage(undefined, changedItems);
+            if (formatPage.data.HasWidthChanged() || formatPage.data.HasColsChanged())
+              changedItems.Put(new SwPtrItem(FN_TABLE_REP, formatPage.data));
+            textFlowPage.FillItemSet(changedItems);
             const columnWidths = Array.from(
               { length: columnCount },
               /** Mirrors accepted visible widths for explicit-value consumers. @param _unused - Array value. @param index - Native visible column. @returns Width. */
@@ -238,8 +263,13 @@ function WriterTablePropertiesDialog({
                 [SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER],
               ],
             );
-            const hasChangedBorders = borderPage.FillItemSet(changedBorders);
+            const hasChangedBorders =
+              borderPageActivated.current && borderPage.FillItemSet(changedBorders);
+            changedItems.PutSet(changedBorders, false);
+            if (verticalAlign !== initial.verticalAlign)
+              changedItems.Put(new SfxUInt16Item(FN_TABLE_SET_VERT_ALIGN, verticalAlign));
             onSubmit({
+              items: changedItems,
               ...(formatPage.GetNameItem() === undefined
                 ? {}
                 : { name: formatPage.GetNameItem() as string }),
@@ -288,14 +318,19 @@ function WriterTablePropertiesDialog({
                     key={id}
                     onClick={
                       /** Deactivates and activates the shared native pages. @returns Nothing. */ () => {
-                        if (activeTab === "table" && !formatPage.DeactivatePage()) {
+                        if (
+                          activeTab === "table" &&
+                          !formatPage.DeactivatePage(undefined, changedItems)
+                        ) {
                           setError("The name of the table must not contain spaces.");
                           nameInput.current?.focus();
                           return;
                         }
-                        if (activeTab === "columns") columnPage.DeactivatePage();
+                        if (activeTab === "columns")
+                          columnPage.DeactivatePage(undefined, changedItems);
                         if (id === "columns") columnPage.ActivatePage();
                         if (id === "table") formatPage.ActivatePage();
+                        if (id === "borders") borderPageActivated.current = true;
                         setActiveTab(id);
                         refreshPage(
                           /** Presents accepted shared geometry. @param version - Display version. @returns Next version. */
@@ -665,6 +700,19 @@ function WriterTablePropertiesDialog({
                 } else {
                   borderPage.Reset();
                 }
+                for (const which of activeTab === "table"
+                  ? [FN_TABLE_REP, FN_PARAM_TABLE_NAME, RES_UL_SPACE]
+                  : activeTab === "columns"
+                    ? [FN_TABLE_REP]
+                    : activeTab === "text-flow"
+                      ? [
+                          FN_PARAM_TABLE_HEADLINE,
+                          RES_LAYOUT_SPLIT,
+                          RES_ROW_SPLIT,
+                          FN_TABLE_SET_VERT_ALIGN,
+                        ]
+                      : [RES_BOX, SID_ATTR_BORDER_INNER, RES_COLLAPSING_BORDERS])
+                  changedItems.ClearItem(which);
                 setError(undefined);
                 refreshPage(
                   /** Presents reset native fields without changing the active page. @param version - Current version. @returns Next version. */
