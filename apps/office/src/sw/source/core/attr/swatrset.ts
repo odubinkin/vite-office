@@ -15,6 +15,7 @@ import {
   SvxTextLeftMarginItem,
   SvxULSpaceItem,
   SvxBoxItem,
+  SvxProtectItem,
 } from "../../../../editeng/source/items/frmitems";
 import {
   FontItalic,
@@ -84,12 +85,40 @@ import { SwFormatVertOrient } from "../../../inc/fmtornt";
 import { SwFormatFrameSize } from "../../../inc/fmtfsize";
 import { SwFormatLayoutSplit } from "../../../inc/fmtlsplt";
 import { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
+import { SwTableBoxNumFormat, SwTableBoxFormula, SwTableBoxValue } from "./cellatr";
 
 /** Writer-owned item pool with defaults for the currently implemented WhichIds. */
 export class SwAttrPool extends SfxItemPool {
   /** Creates and registers Writer's bounded paragraph defaults. @param document - Owning Writer document. @returns Nothing. */
   public constructor(private readonly document: SwDoc) {
     super();
+    this.RegisterDefaultItem(
+      new SvxProtectItem(127),
+      /** Restores the existing browser protection snapshot. @param value - Stored flags. @returns Native item. */
+      (value) => {
+        const item = new SvxProtectItem(127);
+        if (!Array.isArray(value)) throw new Error("Stored Writer protection is invalid.");
+        item.SetContentProtect(Boolean(value[0]));
+        item.SetSizeProtect(Boolean(value[1]));
+        item.SetPosProtect(Boolean(value[2]));
+        return item;
+      },
+    );
+    this.RegisterDefaultItem(
+      new SwTableBoxNumFormat(),
+      /** Restores native unsigned format bits from the signed browser scalar. @param value - Stored scalar. @returns Native item. */
+      (value) => new SwTableBoxNumFormat(Number(value) >>> 0),
+    );
+    this.RegisterDefaultItem(
+      new SwTableBoxFormula(""),
+      /** Restores the detached represented formula. @param value - Stored formula. @returns Native item. */
+      (value) => new SwTableBoxFormula(String(value)),
+    );
+    this.RegisterDefaultItem(
+      new SwTableBoxValue(),
+      /** Restores the represented double. @param value - Stored scalar. @returns Native item. */
+      (value) => new SwTableBoxValue(Number(value)),
+    );
     this.RegisterDefaultItem(new SwFormatFrameSize());
     this.RegisterDefaultItem(new SwFormatVertOrient());
     this.RegisterDefaultItem(

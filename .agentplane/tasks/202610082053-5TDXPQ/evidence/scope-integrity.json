@@ -1,0 +1,57 @@
+{
+  "base": "0e2d02c014a1602d0eb20cfa0226deb60a9000eb",
+  "priorAcceptanceFiles": 660,
+  "entireByteIdenticalPriorAcceptanceFiles": 660,
+  "exactBeforeDestructiveUndoValueCaptureOnly": [],
+  "oldLiteralAttributeIdentityAndHistoryAssertionsPreserved": true,
+  "freshAcceptanceFiles": [
+    {
+      "path": "apps/office/src/sw/source/core/attr/native-format-attribute-notify.test.ts",
+      "sha256": "2f41319579e7308fd480931115492e24b4d8453073a47794fbfbc6884777d4e8",
+      "noOnlySkipTodo": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/native-format-attribute-notify-history.test.ts",
+      "sha256": "e777d272668bcce4501c8719f3df70413aa717fa5b819141bc5dab34c32dd2b0",
+      "noOnlySkipTodo": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/native-format-attribute-notify.test.tsx",
+      "sha256": "ad8f82cdacf5ce255304c51d83e7e44cf5639a5537424ff6614192c57bae763b",
+      "noOnlySkipTodo": true
+    }
+  ],
+  "metadata": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "priorRecords": 317,
+      "priorFieldsStatusesDefaultsClassificationOrderAndEvidencePrefixesPreserved": true,
+      "newRecords": 1
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "priorRecords": 317,
+      "priorFieldsStatusesDefaultsClassificationOrderAndEvidencePrefixesPreserved": true,
+      "newRecords": 1
+    }
+  ],
+  "approvedSemanticPaths": [
+    "apps/office/src/sw/inc/hints.ts",
+    "apps/office/src/sw/inc/calbck.ts",
+    "apps/office/src/sw/source/core/attr/format.ts",
+    "apps/office/src/sw/inc/swtblfmt.ts",
+    "apps/office/src/svl/source/items/itemset.ts",
+    "apps/office/src/sw/source/core/table/swtable.ts",
+    "apps/office/src/svl/source/items/cintitem.ts",
+    "apps/office/src/svl/source/items/intitem.ts",
+    "apps/office/src/editeng/source/items/frmitems.ts",
+    "apps/office/src/sw/source/core/attr/swatrset.ts",
+    "apps/office/src/sw/source/core/attr/cellatr.ts",
+    "apps/office/src/sw/source/core/attr/native-format-attribute-notify.test.ts",
+    "apps/office/src/sw/source/core/undo/native-format-attribute-notify-history.test.ts",
+    "apps/office/src/sw/browser/editor/native-format-attribute-notify.test.tsx",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "unexpectedPaths": []
+}

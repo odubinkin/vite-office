@@ -1,0 +1,17 @@
+{
+  "profile": "upstream-absent",
+  "allowedCases": "Exactly2 new native parent/no-op/transaction cases and previously unexecuted related EditEngine frame/box item modules; all14 previously executed core cases skipped.",
+  "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/source/core/attr/native-format-attribute-notify.test.ts src/editeng/source/items/frmitems.test.ts src/editeng/source/items/boxitem.test.ts --testNamePattern=^(?!(?:native change descriptors borrow originals and copy only independently owned delta items|single native item mutation publishes precise effective deltas to original clients before the device notification|native multi-item changes and reset ranges retain inherited old and effective default new values|native boolean modify lock suppresses single set set-copy and all reset notifications while retaining mutations|original parent format clients filter every local WhichId and reparent without graph copies|native Differentiate includes invalid disabled and unequal local identities plus self and empty branches|native inherited transactions filter atomic deltas before forwarding one original client batch|native modify guard suppresses recursive writes and releases the original lock after a client exception|actual linked row and cell frame clients receive precise native format item deltas through their original registrations|native unsigned32 items retain native inheritance, signed UNO bits and independent clones|native protection defaults keep three independent flags and exact member clone contracts|native formula items are non-shareable and clone represented text without defined-in ownership|native numeric cell values pool NaNs and preserve zero, negative zero, doubles and independent clones|actual pooled protection and cell defaults supply effective native old and reset deltas)$) --coverage.reportOnFailure --coverage.reporter=json-summary --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/5TDXPQ.closure2.app-results.json",
+  "exit": 1,
+  "bytes": 4979,
+  "sha256": "23f542d3dfe6ac31d5a9cb9c2e95e8bd58e0ba5587840a5c2de94b450ce07740",
+  "caseCounts": {
+    "passed": 31,
+    "failed": 0,
+    "skipped": 14,
+    "total": 45
+  },
+  "failedCases": [],
+  "coverageMapSHA256": "361064bd2ff1b7aa098809945e867dac619edf4234caa37e3f0905cfcf294873",
+  "vendorRestored": true
+}

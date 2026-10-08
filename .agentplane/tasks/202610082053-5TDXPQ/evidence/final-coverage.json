@@ -1,0 +1,1074 @@
+{
+  "proof": "Actual counters with complete identical source/maps or complete contiguous declaration/body/enclosing branch/location proofs; focused skips retained as skipped.",
+  "previousVerified": {
+    "app": {
+      "map": "EJV880.app-final.json",
+      "proof": "EJV880.app-proof.json",
+      "mapHash": "6ddc21d75b75cdbf6eb2b8d1c020337756c90188c84adb57780cb8030da9fbae",
+      "proofHash": "f14cbbb7fae4586c983af402718468389cdd4e472f231ff612ec1724e23b62e5"
+    },
+    "inventory": {
+      "map": "EJV880.inventory-final.json",
+      "proof": "EJV880.inventory-proof.json",
+      "mapHash": "da92417393e70c25433dd424f8e2af5dbd4c6a822a2e6497489b6ebfe7aa44a7",
+      "proofHash": "5c43a8f01265876178c73869204175bfde82507529383d6eac361ff12ce0b0b8"
+    }
+  },
+  "profile": "Targeted new and related app tests; unchanged inventory uses whole prior actual certificate only after exact current source and maps equality. Full cadence237 to247.",
+  "app": {
+    "coverage": {
+      "lines": {
+        "total": 17953,
+        "covered": 17953,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 19706,
+        "covered": 19706,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 4515,
+        "covered": 4515,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 14489,
+        "covered": 14489,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "mapSHA256": "4611bf9a34452655d4e7af559ca4a067b75e389e9bc8064cd48775f5cbfaf153",
+    "proofSHA256": "f8cf5860b1a98e4e99d61efbed026c99381889c7ca9345d9396ca98dc2d9eeff",
+    "files": 315,
+    "invalidWholeFallbacks": [
+      {
+        "path": "apps/office/src/sw/source/core/layout/paintfrm.ts",
+        "reason": "V8 raw inferred else counter is negative; use entire prior verified current-byte-identical source and entire maps/counters, never sanitize individual counts",
+        "priorMap": "EJV880.app-final.json",
+        "priorMapSHA256": "6ddc21d75b75cdbf6eb2b8d1c020337756c90188c84adb57780cb8030da9fbae",
+        "discardedInvalidAggregateSHA256": "c61d73628e8426a05c7cb17d36609646983676498b210d800395e1cc83591376",
+        "negativeCounts": [
+          -60
+        ]
+      }
+    ],
+    "priorRegionTransfers": [
+      {
+        "path": "apps/office/src/editeng/source/items/frmitems.ts",
+        "priorSourceSHA256": "c70018a2bdd308fa0b44b53de5ac22916d8422ef4255f8336521e8584a56bc66",
+        "currentSourceSHA256": "5885a306b49b35e1d5599a9bc049595d234fbbeaab96ae81a9ec49096bec3365",
+        "priorMap": "EJV880.app-final.json",
+        "priorMapSHA256": "6ddc21d75b75cdbf6eb2b8d1c020337756c90188c84adb57780cb8030da9fbae",
+        "regions": [
+          {
+            "oldStart": 1,
+            "oldEnd": 7,
+            "newStart": 1,
+            "newEnd": 7,
+            "byteLength": 302,
+            "sha256": "a012a3282e22204acaec142834849eb8d6287c230443442ee85382ffd20729f0"
+          },
+          {
+            "oldStart": 8,
+            "oldEnd": 705,
+            "newStart": 92,
+            "newEnd": 789,
+            "byteLength": 28775,
+            "sha256": "8c2562a8428fe8ae0268f3897322330d373a7162ebc8b2fbd37d2fc52106adea"
+          }
+        ],
+        "counts": {
+          "statements": 289,
+          "functions": 96,
+          "branches": 129
+        },
+        "generatedFunctionDisplayLabels": [
+          {
+            "prior": "(anonymous_0)",
+            "current": "(anonymous_11)",
+            "fullDeclarationSignatureAndBodySHA256": "55e2e5cf6dd323c6f0e3d3013cfce5d96f3113f8e77c0666f1e623b610a99d42",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "(anonymous_1)",
+            "current": "(anonymous_12)",
+            "fullDeclarationSignatureAndBodySHA256": "456213339fc6d488b5636da8d306006731c7b67ab1c2d862b0abe43600b3cce6",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "(anonymous_2)",
+            "current": "(anonymous_13)",
+            "fullDeclarationSignatureAndBodySHA256": "b7a25e389ca6c4c40bc458b103ab36d37438de4e1d33c86e2e5d6575c0de8208",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "(anonymous_6)",
+            "current": "(anonymous_17)",
+            "fullDeclarationSignatureAndBodySHA256": "497cfdf8900dd37a23708f4fd1057ab7d03a2db89748922c31ae232ddca7f71f",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "(anonymous_7)",
+            "current": "(anonymous_18)",
+            "fullDeclarationSignatureAndBodySHA256": "1d7edc9e78cd483410b6f8921c88ac5163d775d0858e83e6d3edb950bffbcd4c",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "constructor",
+            "current": "constructor_2",
+            "fullDeclarationSignatureAndBodySHA256": "1b62a35a4c360a53e26f1bd87eedb68f05ac2ba3610209137e03add6c5508b66",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "(anonymous_22)",
+            "current": "(anonymous_33)",
+            "fullDeclarationSignatureAndBodySHA256": "69f1cc0ae569c2488cf2ff668b0f9834ee45741a350e5d991cfff1666f42a5b3",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "Clone",
+            "current": "Clone_2",
+            "fullDeclarationSignatureAndBodySHA256": "49e08524eee15a0d823568c00b7c782b183947b1f190a64826b777c08645d67b",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "equals",
+            "current": "equals_2",
+            "fullDeclarationSignatureAndBodySHA256": "e5b6e443e3702540bece9bb3f142b74a96297672f9ca6e87f01624375c97f1f1",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "(anonymous_27)",
+            "current": "(anonymous_38)",
+            "fullDeclarationSignatureAndBodySHA256": "1bfca4968225c22b499e31423ec59975aa44518cff709cc3d76a279719c90dc3",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "QueryValue",
+            "current": "QueryValue_2",
+            "fullDeclarationSignatureAndBodySHA256": "3db4693fc0916fef6d2d646643ea30d88f38cb388e11b3ebbbb51a2ac8ac5e14",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "(anonymous_32)",
+            "current": "(anonymous_43)",
+            "fullDeclarationSignatureAndBodySHA256": "6bb2e166d8cdf5b46912a57596ea31fd51ec553c780c3472993a6ada0d4d2ebc",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "(anonymous_33)",
+            "current": "(anonymous_44)",
+            "fullDeclarationSignatureAndBodySHA256": "fc8f8324da0a0730ac75ba38a921271a39251ed746c24ba3c36cb3003081bc77",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "PutValue",
+            "current": "PutValue_2",
+            "fullDeclarationSignatureAndBodySHA256": "772c1b9fc08e974a2daadc47f05c5fdf110cc114254debea417518e0c8e88741",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "constructor_2",
+            "current": "constructor_3",
+            "fullDeclarationSignatureAndBodySHA256": "1b62a35a4c360a53e26f1bd87eedb68f05ac2ba3610209137e03add6c5508b66",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "Clone_2",
+            "current": "Clone_3",
+            "fullDeclarationSignatureAndBodySHA256": "cf2b43ad82b16da4b1458be890f33a6486bd17f7ed2c05cf272fe10931add4ff",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "equals_2",
+            "current": "equals_3",
+            "fullDeclarationSignatureAndBodySHA256": "03d7a3012ab9a07e4eb28652bd7e8b7854c2e5f349cbec7ef8316bb0d9766782",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "(anonymous_57)",
+            "current": "(anonymous_68)",
+            "fullDeclarationSignatureAndBodySHA256": "86611c312d82c7e78174d9def0b6ff1bb2435341f6490bc325f7552af2ef6bf3",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "QueryValue_2",
+            "current": "QueryValue_3",
+            "fullDeclarationSignatureAndBodySHA256": "ad312a9a30156df39ba2ea252bfbe6d543585b866dc0e36f4ae50448c71e5856",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "PutValue_2",
+            "current": "PutValue_3",
+            "fullDeclarationSignatureAndBodySHA256": "8529e5b050f1c21cbcbe9eabe8ec9b3e2c04aec1f60e81dba986d9847ee8200a",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "constructor_3",
+            "current": "constructor_4",
+            "fullDeclarationSignatureAndBodySHA256": "6c03f96003872962ae11b503cdea3c4b5ef1167271df50e94d080545bdc7c9ce",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "Clone_3",
+            "current": "Clone_4",
+            "fullDeclarationSignatureAndBodySHA256": "7ca7aa932c48720f8598329d9b9fb9db9b7b66357e9d414bda0487eca638a864",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "equals_3",
+            "current": "equals_4",
+            "fullDeclarationSignatureAndBodySHA256": "842f8d24b92c100411be783c0559d7b53f6fc0c57f276f1dbd892241301618b5",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "QueryValue_3",
+            "current": "QueryValue_4",
+            "fullDeclarationSignatureAndBodySHA256": "5b48e54502072a087edacf7d816c0020e09df8f52e883e5b95cf55567640e6e1",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "constructor_4",
+            "current": "constructor_5",
+            "fullDeclarationSignatureAndBodySHA256": "a00c84627add79022434ab29f5f9af328cbc439d94393ed56ff54b785ec642f0",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "Clone_4",
+            "current": "Clone_5",
+            "fullDeclarationSignatureAndBodySHA256": "802d42a7dd214fc541c13522c977a04fedcc036a5b60f15cfbabc3d481647bbe",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "equals_4",
+            "current": "equals_5",
+            "fullDeclarationSignatureAndBodySHA256": "5f2575c52cbeaa78d2c566d4bdd4d89d132ff510930dce304105e01a2e9199fa",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "QueryValue_4",
+            "current": "QueryValue_5",
+            "fullDeclarationSignatureAndBodySHA256": "902ca6f4f3fbfd937b5747d7b92dbe380202eeeb58f3e1b0c75493c1ac87157b",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "constructor_5",
+            "current": "constructor_6",
+            "fullDeclarationSignatureAndBodySHA256": "7c557e19337f7a08c83a3ab3f1be1363005a55d5e44d25c3970dcf72029a969a",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "Clone_5",
+            "current": "Clone_6",
+            "fullDeclarationSignatureAndBodySHA256": "dc14d841a8aff7d45474caba599eed9a8c13bef4574bef7f6b7e4c3ff72b7ead",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "equals_5",
+            "current": "equals_6",
+            "fullDeclarationSignatureAndBodySHA256": "9c229049b07ba8a9e8e76cd5d995a842bc637e960c66ac9edd58b487ede780b8",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "QueryValue_5",
+            "current": "QueryValue_6",
+            "fullDeclarationSignatureAndBodySHA256": "0f7f4da1710ece453eb03f24f07756f078b592fa17b77d5740dd7d143b3856f9",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "constructor_6",
+            "current": "constructor_7",
+            "fullDeclarationSignatureAndBodySHA256": "ba5cdc11f50ab71bff45e0528bcf6196d97fd54b8c85e283fc9790e033e839e2",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "Clone_6",
+            "current": "Clone_7",
+            "fullDeclarationSignatureAndBodySHA256": "db540f5241995cab29dde973381b061bc639221f227fb165a9ea1d4508b00cc7",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "equals_6",
+            "current": "equals_7",
+            "fullDeclarationSignatureAndBodySHA256": "d63cb3ffe0c339edcd1fd6d9888a76299f407cddd53cdd358cc4c862d8e0ecf2",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "QueryValue_6",
+            "current": "QueryValue_7",
+            "fullDeclarationSignatureAndBodySHA256": "d9c9bf2cec64666c44c581e234e7bb8a4cbaa052640b6ea282cffde340580577",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "constructor_7",
+            "current": "constructor_8",
+            "fullDeclarationSignatureAndBodySHA256": "f7b1cb90cde3373cfce68806bd02d2a4897a9e72ba74da3fc9713c89257ef9fd",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "(anonymous_89)",
+            "current": "(anonymous_100)",
+            "fullDeclarationSignatureAndBodySHA256": "5cbb265df22611996c3a0f1d52064fdac6d0be9f68f929f8c1f201c12889d5be",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "Clone_7",
+            "current": "Clone_8",
+            "fullDeclarationSignatureAndBodySHA256": "e025d5640179720123aa5c22b5d6387b354000d4bfb48587272be9aaf52199ab",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "equals_7",
+            "current": "equals_8",
+            "fullDeclarationSignatureAndBodySHA256": "c24d90a92c6b67660e727edb71a6d5a95548e71f83ddb9771c14584413900cc1",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "QueryValue_7",
+            "current": "QueryValue_8",
+            "fullDeclarationSignatureAndBodySHA256": "11ef57f0f90d2bf4ff80e25716f7a0be8e7ccbfb273e2d736d24b6c44364361a",
+            "allLocationsAndEnclosingBranchesVerified": true
+          }
+        ]
+      },
+      {
+        "path": "apps/office/src/svl/source/items/cintitem.ts",
+        "priorSourceSHA256": "7625604921b934f19a93789ba7eec8e2e7f9426d5a74b382cdf66471589f3ee0",
+        "currentSourceSHA256": "bd377b98db6cf749e384830708de069a1a2f6be1d76ddabae5f78720d17a9a1d",
+        "priorMap": "EJV880.app-final.json",
+        "priorMapSHA256": "6ddc21d75b75cdbf6eb2b8d1c020337756c90188c84adb57780cb8030da9fbae",
+        "regions": [
+          {
+            "oldStart": 1,
+            "oldEnd": 4,
+            "newStart": 1,
+            "newEnd": 4,
+            "byteLength": 156,
+            "sha256": "ea0ca2cc07a6e7ad4ca9fca0671a5c9240e7ed0a216c8a79374d9108584f3615"
+          },
+          {
+            "oldStart": 5,
+            "oldEnd": 42,
+            "newStart": 56,
+            "newEnd": 93,
+            "byteLength": 1283,
+            "sha256": "ae13a9883eb80249584ac6ac91582c4f852816062106f3b1165ee1c921d0b971"
+          }
+        ],
+        "counts": {
+          "statements": 8,
+          "functions": 5,
+          "branches": 3
+        },
+        "generatedFunctionDisplayLabels": [
+          {
+            "prior": "constructor",
+            "current": "constructor_2",
+            "fullDeclarationSignatureAndBodySHA256": "178e7eee8924e2142dab5ac95392d83d4b96ef456fc5944a07245e17ccf91ce7",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "GetValue",
+            "current": "GetValue_2",
+            "fullDeclarationSignatureAndBodySHA256": "5fd479ff186a462ceb4f50da9a0ea3b1160f55c081d639477c4f31bfa8d8f099",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "Clone",
+            "current": "Clone_2",
+            "fullDeclarationSignatureAndBodySHA256": "081a84d5f1a5add57336e7729ac8f56910dd7bea44aff6913518f01d268628ce",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "equals",
+            "current": "equals_2",
+            "fullDeclarationSignatureAndBodySHA256": "20188ec5a62147b638a7eaea9499f59967f957e963d3c4c6cd4207144eb8861a",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "QueryValue",
+            "current": "QueryValue_2",
+            "fullDeclarationSignatureAndBodySHA256": "d9c9bf2cec64666c44c581e234e7bb8a4cbaa052640b6ea282cffde340580577",
+            "allLocationsAndEnclosingBranchesVerified": true
+          }
+        ]
+      },
+      {
+        "path": "apps/office/src/svl/source/items/intitem.ts",
+        "priorSourceSHA256": "8c7001c69685119aa828f6fc9b4ffe23b77171651ef644a6ee34e3d740296c25",
+        "currentSourceSHA256": "5ed4a0e10f7fbf19ba18d2f72166638ec8f0c4792b22b91f483bb38bd02fa6af",
+        "priorMap": "EJV880.app-final.json",
+        "priorMapSHA256": "6ddc21d75b75cdbf6eb2b8d1c020337756c90188c84adb57780cb8030da9fbae",
+        "regions": [
+          {
+            "oldStart": 1,
+            "oldEnd": 3,
+            "newStart": 1,
+            "newEnd": 3,
+            "byteLength": 129,
+            "sha256": "9d9493087020677765a0701470eca3d043c0841ecf4a08746476f5e66e1c4f2f"
+          },
+          {
+            "oldStart": 5,
+            "oldEnd": 53,
+            "newStart": 17,
+            "newEnd": 65,
+            "byteLength": 1771,
+            "sha256": "87d2833d6ecab0bbce711191c2ca37bebf3dd62c77999b9927677e2438bae3fc"
+          }
+        ],
+        "counts": {
+          "statements": 10,
+          "functions": 7,
+          "branches": 7
+        },
+        "generatedFunctionDisplayLabels": [
+          {
+            "prior": "constructor",
+            "current": "constructor_2",
+            "fullDeclarationSignatureAndBodySHA256": "084e639179da996d75256c1aa68ba0c918889f80502f06a96415e0a3e2e01392",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "Clone",
+            "current": "Clone_2",
+            "fullDeclarationSignatureAndBodySHA256": "fa3685af6ba28c158196d6092c959ec3956c81bd91ae2f408ee03373dd6c5d72",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "constructor_2",
+            "current": "constructor_3",
+            "fullDeclarationSignatureAndBodySHA256": "996c4a084f5c57f5ee134cf5dbdafd95dbc8726eb788d002f6a71e8532f3d920",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "Clone_2",
+            "current": "Clone_3",
+            "fullDeclarationSignatureAndBodySHA256": "e57d16b7b46600a6f44bdd540ef4798ea16963eeb072496a912337e4e6e130d2",
+            "allLocationsAndEnclosingBranchesVerified": true
+          }
+        ]
+      },
+      {
+        "path": "apps/office/src/svl/source/items/itemset.ts",
+        "priorSourceSHA256": "4d3668065fc8bf9a864770880d36d8f5cc7b07b21011edd3baf4a39380f2f753",
+        "currentSourceSHA256": "8b3f2dd732154333347727e7ff2e871123baca6a5b81f97faa99407f4361fef9",
+        "priorMap": "EJV880.app-final.json",
+        "priorMapSHA256": "6ddc21d75b75cdbf6eb2b8d1c020337756c90188c84adb57780cb8030da9fbae",
+        "regions": [
+          {
+            "oldStart": 1,
+            "oldEnd": 180,
+            "newStart": 1,
+            "newEnd": 180,
+            "byteLength": 7698,
+            "sha256": "8992ab5218ca3931fc2cf3ff1e0bd1223532852d17b3a201a4e03e3c5572e415"
+          },
+          {
+            "oldStart": 181,
+            "oldEnd": 261,
+            "newStart": 191,
+            "newEnd": 271,
+            "byteLength": 3911,
+            "sha256": "aab9f693cbe66f78f6bbd611cbdc89e39a3d1f174e36af3b52be745d6441e8bb"
+          }
+        ],
+        "counts": {
+          "statements": 121,
+          "functions": 28,
+          "branches": 57
+        },
+        "generatedFunctionDisplayLabels": []
+      },
+      {
+        "path": "apps/office/src/sw/inc/calbck.ts",
+        "priorSourceSHA256": "33143d4265c4a5838a735eb5d719c048405249a0396ae11e0a0778addbe77bc0",
+        "currentSourceSHA256": "188ffc870def0d153e7fa988b7f1b4a0535a15ad2d77d9980ae925f49808c317",
+        "priorMap": "EJV880.app-final.json",
+        "priorMapSHA256": "6ddc21d75b75cdbf6eb2b8d1c020337756c90188c84adb57780cb8030da9fbae",
+        "regions": [
+          {
+            "oldStart": 1,
+            "oldEnd": 4,
+            "newStart": 1,
+            "newEnd": 4,
+            "byteLength": 263,
+            "sha256": "36ecc80cb82624a7efd34484af4f4c78cf015647d1a7251bddb185645f52c120"
+          },
+          {
+            "oldStart": 6,
+            "oldEnd": 67,
+            "newStart": 7,
+            "newEnd": 68,
+            "byteLength": 2593,
+            "sha256": "78b641d26c20d7a07e86bf69857e4d3b1a3683e8850792bc81b3978f2093b468"
+          },
+          {
+            "oldStart": 68,
+            "oldEnd": 93,
+            "newStart": 70,
+            "newEnd": 95,
+            "byteLength": 1070,
+            "sha256": "cd2de1d35890260d048f1e933d8d31fd3acb6f2091618d3a30281ac5902e603a"
+          },
+          {
+            "oldStart": 96,
+            "oldEnd": 107,
+            "newStart": 111,
+            "newEnd": 122,
+            "byteLength": 515,
+            "sha256": "32fed6e11c8cd6df91c4419b16e05317bc36bcfc882fa0f85943bf07dee8ed5b"
+          },
+          {
+            "oldStart": 108,
+            "oldEnd": 146,
+            "newStart": 147,
+            "newEnd": 185,
+            "byteLength": 1556,
+            "sha256": "302cd6946f890477926c1501258f3f554fbf46f1989b846e76f98a6d7a8cd47b"
+          },
+          {
+            "oldStart": 147,
+            "oldEnd": 147,
+            "newStart": 199,
+            "newEnd": 199,
+            "byteLength": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ],
+        "counts": {
+          "statements": 60,
+          "functions": 17,
+          "branches": 12
+        },
+        "generatedFunctionDisplayLabels": [
+          {
+            "prior": "(anonymous_17)",
+            "current": "(anonymous_23)",
+            "fullDeclarationSignatureAndBodySHA256": "5b16c3f891045add8679ad5c71d70e717eb613b863611c854f5d57d4ea563d0e",
+            "allLocationsAndEnclosingBranchesVerified": true
+          }
+        ]
+      },
+      {
+        "path": "apps/office/src/sw/inc/hints.ts",
+        "priorSourceSHA256": "c5a4f57613ee8550d9f419a77c45c544fddb0d4c40cd142018adfbb83c2e7c32",
+        "currentSourceSHA256": "5f5538d2e101ebea3c06cc987ed6b38b486b2785d1aca95e32320dae49b728ed",
+        "priorMap": "EJV880.app-final.json",
+        "priorMapSHA256": "6ddc21d75b75cdbf6eb2b8d1c020337756c90188c84adb57780cb8030da9fbae",
+        "regions": [
+          {
+            "oldStart": 1,
+            "oldEnd": 2,
+            "newStart": 1,
+            "newEnd": 2,
+            "byteLength": 94,
+            "sha256": "99084c6a8e5e5abec04f170cfdf7ab1dbbff39c6c30b002cf4262d81702c3b33"
+          },
+          {
+            "oldStart": 3,
+            "oldEnd": 47,
+            "newStart": 4,
+            "newEnd": 48,
+            "byteLength": 2240,
+            "sha256": "e9d6056c6a005ee5da4acf048614a15875564e767dda55f48d86216ecab53000"
+          },
+          {
+            "oldStart": 48,
+            "oldEnd": 98,
+            "newStart": 50,
+            "newEnd": 100,
+            "byteLength": 2097,
+            "sha256": "35196e4b168e0beb780de75b2e6d1f8ed60cfae9f511205fa7f2b04641469eb5"
+          },
+          {
+            "oldStart": 99,
+            "oldEnd": 99,
+            "newStart": 146,
+            "newEnd": 146,
+            "byteLength": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ],
+        "counts": {
+          "statements": 13,
+          "functions": 5,
+          "branches": 1
+        },
+        "generatedFunctionDisplayLabels": []
+      },
+      {
+        "path": "apps/office/src/sw/inc/swtblfmt.ts",
+        "priorSourceSHA256": "267b40f5a505042f438ecf480bcdd4dff26a4f5f5b6a81c6b04b31ae62113730",
+        "currentSourceSHA256": "f5b14c62778d31a9a75f61aa3096398516310dc71116c145646535bd7a7a5ab2",
+        "priorMap": "EJV880.app-final.json",
+        "priorMapSHA256": "6ddc21d75b75cdbf6eb2b8d1c020337756c90188c84adb57780cb8030da9fbae",
+        "regions": [
+          {
+            "oldStart": 1,
+            "oldEnd": 32,
+            "newStart": 1,
+            "newEnd": 32,
+            "byteLength": 1294,
+            "sha256": "ececeab63418e366ba8ceac7414744949de1467138ec621edb28af5c759eed19"
+          },
+          {
+            "oldStart": 37,
+            "oldEnd": 87,
+            "newStart": 33,
+            "newEnd": 83,
+            "byteLength": 1742,
+            "sha256": "1613f66e865f4cf2a04eb888f2ce73ec8ae6c60304373dad59fc4dbb04d8918f"
+          },
+          {
+            "oldStart": 92,
+            "oldEnd": 97,
+            "newStart": 84,
+            "newEnd": 89,
+            "byteLength": 243,
+            "sha256": "c88f0a99f4b7db26e15b73e20402cbb3eaf5e22924898fee85cd3c3b5042483e"
+          }
+        ],
+        "counts": {
+          "statements": 18,
+          "functions": 8,
+          "branches": 1
+        },
+        "generatedFunctionDisplayLabels": [
+          {
+            "prior": "(anonymous_7)",
+            "current": "(anonymous_6)",
+            "fullDeclarationSignatureAndBodySHA256": "dd65fa11c3f54ce01916e4bf306fd1ad58d5ab64c7e1a157c19780a261851944",
+            "allLocationsAndEnclosingBranchesVerified": true
+          }
+        ]
+      },
+      {
+        "path": "apps/office/src/sw/source/core/attr/format.ts",
+        "priorSourceSHA256": "adf62cb70fa66a90763cdbfac9a49421c02f3304bc80a0a6ae3ee4758d9b01a5",
+        "currentSourceSHA256": "705b7a8b2a8b54c2e216b71caefa477f67ffc1546fe38fe50eec4fa346612dd3",
+        "priorMap": "EJV880.app-final.json",
+        "priorMapSHA256": "6ddc21d75b75cdbf6eb2b8d1c020337756c90188c84adb57780cb8030da9fbae",
+        "regions": [
+          {
+            "oldStart": 1,
+            "oldEnd": 4,
+            "newStart": 1,
+            "newEnd": 4,
+            "byteLength": 136,
+            "sha256": "f0a4d222fca32392e20acba4b02c117d051808432a2c0f0d97589b05a70a8b35"
+          },
+          {
+            "oldStart": 6,
+            "oldEnd": 7,
+            "newStart": 6,
+            "newEnd": 7,
+            "byteLength": 167,
+            "sha256": "19f2ad9e15fbfff35ef5d593e6808200f818a4c80c320401d88a19d92c5b7a0e"
+          },
+          {
+            "oldStart": 8,
+            "oldEnd": 58,
+            "newStart": 9,
+            "newEnd": 59,
+            "byteLength": 2058,
+            "sha256": "7d2fcbfeab468a224f047c6b0e9802a0d1f8b268aacf9948de671c10ed5668a6"
+          },
+          {
+            "oldStart": 59,
+            "oldEnd": 63,
+            "newStart": 62,
+            "newEnd": 66,
+            "byteLength": 117,
+            "sha256": "a962bdd1d44c0dfacc21da661790fe20ba6f52a30b9cdb9a1b8693422409891b"
+          },
+          {
+            "oldStart": 65,
+            "oldEnd": 65,
+            "newStart": 68,
+            "newEnd": 68,
+            "byteLength": 52,
+            "sha256": "0dee12b0d12c483a0da7ddf321468b28b75956ad8d81b355f9b09d5b8b5c8257"
+          },
+          {
+            "oldStart": 68,
+            "oldEnd": 69,
+            "newStart": 77,
+            "newEnd": 78,
+            "byteLength": 23,
+            "sha256": "9761341ee1e992aa33585a7bd3b3e1768789356761ea207727f752eaeadc95d9"
+          },
+          {
+            "oldStart": 72,
+            "oldEnd": 72,
+            "newStart": 80,
+            "newEnd": 80,
+            "byteLength": 53,
+            "sha256": "536b652c4a10a7f201b4d18b97d13c85bc0ea62ca42c84664ad8135b9c117048"
+          },
+          {
+            "oldStart": 75,
+            "oldEnd": 76,
+            "newStart": 91,
+            "newEnd": 92,
+            "byteLength": 23,
+            "sha256": "9761341ee1e992aa33585a7bd3b3e1768789356761ea207727f752eaeadc95d9"
+          },
+          {
+            "oldStart": 82,
+            "oldEnd": 83,
+            "newStart": 110,
+            "newEnd": 111,
+            "byteLength": 23,
+            "sha256": "9761341ee1e992aa33585a7bd3b3e1768789356761ea207727f752eaeadc95d9"
+          },
+          {
+            "oldStart": 86,
+            "oldEnd": 86,
+            "newStart": 113,
+            "newEnd": 113,
+            "byteLength": 39,
+            "sha256": "4e7493ef39fe4dc6e0aabd146f8c9df15ba2645de418c899dd48a9e7453bccf6"
+          },
+          {
+            "oldStart": 90,
+            "oldEnd": 101,
+            "newStart": 140,
+            "newEnd": 151,
+            "byteLength": 337,
+            "sha256": "28ed2f2704bd8f237e40cc4289eec020d810a29a477f0f13c0c795b50a766c21"
+          },
+          {
+            "oldStart": 103,
+            "oldEnd": 103,
+            "newStart": 153,
+            "newEnd": 153,
+            "byteLength": 40,
+            "sha256": "990ff7c904caba4a22c2a9870cd0ab892d0800618ae445c2463874935e93b574"
+          },
+          {
+            "oldStart": 105,
+            "oldEnd": 118,
+            "newStart": 155,
+            "newEnd": 168,
+            "byteLength": 369,
+            "sha256": "1f76bdba44a0098696c267a12246085dd504417f55619a9b7c9da74dbec9b46a"
+          }
+        ],
+        "counts": {
+          "statements": 14,
+          "functions": 8,
+          "branches": 6
+        },
+        "generatedFunctionDisplayLabels": []
+      },
+      {
+        "path": "apps/office/src/sw/source/core/attr/swatrset.ts",
+        "priorSourceSHA256": "14839b74ec8adc7b605b8792823cac4d919580233394a3d171c7af7f5f91369e",
+        "currentSourceSHA256": "f8473fcccff7c2800dd6a444e0b5806d7b2a8a6847a559bb5af4c39a21ff7372",
+        "priorMap": "EJV880.app-final.json",
+        "priorMapSHA256": "6ddc21d75b75cdbf6eb2b8d1c020337756c90188c84adb57780cb8030da9fbae",
+        "regions": [
+          {
+            "oldStart": 1,
+            "oldEnd": 17,
+            "newStart": 1,
+            "newEnd": 17,
+            "byteLength": 389,
+            "sha256": "a08e6998caf7c1350cbb891348c18b2aa964035691e2ab7aa9d33ef289f782cf"
+          },
+          {
+            "oldStart": 18,
+            "oldEnd": 86,
+            "newStart": 19,
+            "newEnd": 87,
+            "byteLength": 2146,
+            "sha256": "5ea0335a3e82c9d6472e3d762e6f36ba3175a59892933bb4a64662fb5be4105d"
+          },
+          {
+            "oldStart": 87,
+            "oldEnd": 92,
+            "newStart": 89,
+            "newEnd": 94,
+            "byteLength": 328,
+            "sha256": "5296d4b49784487950c94eb9def203412e9e8fe987d23055ff1af9e5ad9a7144"
+          },
+          {
+            "oldStart": 93,
+            "oldEnd": 455,
+            "newStart": 122,
+            "newEnd": 484,
+            "byteLength": 17077,
+            "sha256": "fa4ba74421e76f218bc64e0f6dc9adfc3c097ec93e1e12c44971a69167055c4d"
+          }
+        ],
+        "counts": {
+          "statements": 85,
+          "functions": 42,
+          "branches": 34
+        },
+        "generatedFunctionDisplayLabels": [
+          {
+            "prior": "(anonymous_1)",
+            "current": "(anonymous_5)",
+            "fullDeclarationSignatureAndBodySHA256": "b548f0197cca50196f08eb40db11300e03449a753ebdf5a24f360b555a9923de",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "(anonymous_2)",
+            "current": "(anonymous_6)",
+            "fullDeclarationSignatureAndBodySHA256": "508f2d6f19e1cf63ee5e4c2a3a842d39d0528cadb5150c87fd6d0a3382b7f0e5",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "(anonymous_3)",
+            "current": "(anonymous_7)",
+            "fullDeclarationSignatureAndBodySHA256": "a7fcec2f085f1f55051f655249374429fc3e602732e21f9d1c11c2e1639d758b",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "(anonymous_4)",
+            "current": "(anonymous_8)",
+            "fullDeclarationSignatureAndBodySHA256": "c19dab2f7d163116e84741bef42f7fd0364af63acdb7ba7a7ab083da90895b17",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "(anonymous_5)",
+            "current": "(anonymous_9)",
+            "fullDeclarationSignatureAndBodySHA256": "28b5b31cc849b9736d9c60423cf3fac04ecdafcdf2c6acb54691b0ee6fa5146e",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "(anonymous_6)",
+            "current": "(anonymous_10)",
+            "fullDeclarationSignatureAndBodySHA256": "95d388fa28194001c8c39b45050d1fd974c43ac1d0aab34a869623ba66a78a72",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "(anonymous_7)",
+            "current": "(anonymous_11)",
+            "fullDeclarationSignatureAndBodySHA256": "f463efcf9ffe15e25d0a278efa77729504ca39b9809af6bc03b09dbb332da26b",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "(anonymous_8)",
+            "current": "(anonymous_12)",
+            "fullDeclarationSignatureAndBodySHA256": "d95f13590637a54d93fd2aea4b3e1502ce1a74cf514476155961dad0550d0d4d",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "(anonymous_9)",
+            "current": "(anonymous_13)",
+            "fullDeclarationSignatureAndBodySHA256": "4084eee667c68e3d6d81fcc906a154588f1470400985680763c4ec20d79de085",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "(anonymous_10)",
+            "current": "(anonymous_14)",
+            "fullDeclarationSignatureAndBodySHA256": "a48444996ac78332c56b39ba676f48d75ae2064b7accf9d0dae5edb5999a80c0",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "(anonymous_11)",
+            "current": "(anonymous_15)",
+            "fullDeclarationSignatureAndBodySHA256": "0623a08c495912009980bc7cee7e2ee4ba8dc89698149e8e68e833042a352b28",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "(anonymous_13)",
+            "current": "(anonymous_17)",
+            "fullDeclarationSignatureAndBodySHA256": "63bcf7ef326a31b404a274ce1e0728670381b05a9bc320a150326eed15cfb83b",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "(anonymous_14)",
+            "current": "(anonymous_18)",
+            "fullDeclarationSignatureAndBodySHA256": "2ef45d1c13d9df3389371c714e3e0c2e9a6ab8fd29a570d629fbffca452d1a65",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "(anonymous_15)",
+            "current": "(anonymous_19)",
+            "fullDeclarationSignatureAndBodySHA256": "34b52229efa38a06662b92da5dac0bf0460185a26b8a5ec36e1f605d2e09cd7b",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "(anonymous_16)",
+            "current": "(anonymous_20)",
+            "fullDeclarationSignatureAndBodySHA256": "1f4755e25e4ff049ff2f32e48524eb71ece567b6700ca56e9fa7d0cc59f80f33",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "(anonymous_17)",
+            "current": "(anonymous_21)",
+            "fullDeclarationSignatureAndBodySHA256": "ef24c12f0e8ef293687a23b207436c359ffe5b06d10ed8a6191ca1e8ea12a9fd",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "(anonymous_18)",
+            "current": "(anonymous_22)",
+            "fullDeclarationSignatureAndBodySHA256": "71e2983692389fa33d9addb3612b2004c6bbe21e5b9222ac9666fe456f77541f",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "(anonymous_19)",
+            "current": "(anonymous_23)",
+            "fullDeclarationSignatureAndBodySHA256": "462eb3f1018670b1b40dfd3e468e811281b3e4128a0a9341d77d9ee0b6f7325d",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "(anonymous_20)",
+            "current": "(anonymous_24)",
+            "fullDeclarationSignatureAndBodySHA256": "0815e8c0b22413cd0a02c46a9112744a32424df746dd7b6a1a134e706d8a22ea",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "(anonymous_21)",
+            "current": "(anonymous_25)",
+            "fullDeclarationSignatureAndBodySHA256": "6f4fe60bcf8d83b1969d85c8304d4d0edf88693473142f97d8398d4905b706a5",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "(anonymous_22)",
+            "current": "(anonymous_26)",
+            "fullDeclarationSignatureAndBodySHA256": "941fcf63ebe604677ffbaa9f7be02fc0674eb07da3ddae023399ffa1ef895215",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "(anonymous_26)",
+            "current": "(anonymous_30)",
+            "fullDeclarationSignatureAndBodySHA256": "a0fc53d2806104291c5308ea01bd140f5455528632dc66ff33dcae1661607605",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "(anonymous_27)",
+            "current": "(anonymous_31)",
+            "fullDeclarationSignatureAndBodySHA256": "559b5ad6531c5bb54d2a5cbd74afe53d6a810cb7ae0819bd5961eb92b5f6b86f",
+            "allLocationsAndEnclosingBranchesVerified": true
+          },
+          {
+            "prior": "(anonymous_28)",
+            "current": "(anonymous_32)",
+            "fullDeclarationSignatureAndBodySHA256": "4273577c08555cedaa12fcbcf2e9fd81a91e44cc4fb2a7fd72c1959556450d85",
+            "allLocationsAndEnclosingBranchesVerified": true
+          }
+        ]
+      },
+      {
+        "path": "apps/office/src/sw/source/core/table/swtable.ts",
+        "priorSourceSHA256": "30f3a2cd302adda038b621015708aac969974b605c55192bb1c3958f328ebbb5",
+        "currentSourceSHA256": "d980240fd0f0f61a39404b48386e7e3dee6310a4609765be210477a8865fe394",
+        "priorMap": "EJV880.app-final.json",
+        "priorMapSHA256": "6ddc21d75b75cdbf6eb2b8d1c020337756c90188c84adb57780cb8030da9fbae",
+        "regions": [
+          {
+            "oldStart": 1,
+            "oldEnd": 82,
+            "newStart": 1,
+            "newEnd": 82,
+            "byteLength": 4041,
+            "sha256": "dc071b7c103a232a71e128fb40e7acb1448a539f3af3e5a40724a47833be047d"
+          },
+          {
+            "oldStart": 86,
+            "oldEnd": 110,
+            "newStart": 91,
+            "newEnd": 115,
+            "byteLength": 898,
+            "sha256": "7391fd4937b26d93d82c877498d8db51c5dded558e2b66357cca30d5b2af7e47"
+          },
+          {
+            "oldStart": 114,
+            "oldEnd": 224,
+            "newStart": 124,
+            "newEnd": 234,
+            "byteLength": 5306,
+            "sha256": "fda1a536a4e22f8aa4f7b3124c090923d1c9e0a619e4fccea24ea2ea8d18f980"
+          },
+          {
+            "oldStart": 226,
+            "oldEnd": 943,
+            "newStart": 241,
+            "newEnd": 958,
+            "byteLength": 30611,
+            "sha256": "c99ee735c45e39df56a55254384095acc8d140bc923e188ad664986c9ed91987"
+          }
+        ],
+        "counts": {
+          "statements": 450,
+          "functions": 75,
+          "branches": 163
+        },
+        "generatedFunctionDisplayLabels": []
+      }
+    ],
+    "wholeFiles": 314,
+    "transfers": [
+      {
+        "path": "apps/office/src/sw/source/core/attr/format.ts",
+        "initialSourceSHA256": "c6083b6fd22026623866ffee95a5c76a2d3e21af67c308e486b0ee067d204a64",
+        "currentSourceSHA256": "705b7a8b2a8b54c2e216b71caefa477f67ffc1546fe38fe50eec4fa346612dd3",
+        "regionCount": 3,
+        "counts": {
+          "statements": 84,
+          "functions": 14,
+          "branches": 26
+        }
+      }
+    ],
+    "gaps": []
+  },
+  "inventory": {
+    "coverage": {
+      "lines": {
+        "total": 1464,
+        "covered": 1464,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 1523,
+        "covered": 1523,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 384,
+        "covered": 384,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 1081,
+        "covered": 1081,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "mapSHA256": "ce85b688e2bd5167b3b4d96ac3780553717ec54e0fe7e6574f7d6ee26bb30c41",
+    "proofSHA256": "5c43a8f01265876178c73869204175bfde82507529383d6eac361ff12ce0b0b8",
+    "files": 38,
+    "invalidWholeFallbacks": [],
+    "priorRegionTransfers": [],
+    "wholeFiles": 38,
+    "transfers": [],
+    "gaps": []
+  }
+}

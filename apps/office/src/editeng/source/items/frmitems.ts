@@ -5,6 +5,90 @@
 import { SfxPoolItem } from "../../../svl/source/items/poolitem";
 import { SvxBorderLine, SvxBorderLineStyle, roundBorderMetric } from "./borderline";
 
+/** Native protection item with independent content, size and position flags. */
+export class SvxProtectItem extends SfxPoolItem {
+  private bCntnt = false;
+  private bSize = false;
+  private bPos = false;
+  /** Creates the three false native defaults. @param which - Item identity. @returns Nothing. */
+  public constructor(which: number) {
+    super(which);
+  }
+  /** Reads content protection. @returns Content flag. */
+  public IsContentProtected(): boolean {
+    return this.bCntnt;
+  }
+  /** Reads size protection. @returns Size flag. */
+  public IsSizeProtected(): boolean {
+    return this.bSize;
+  }
+  /** Reads position protection. @returns Position flag. */
+  public IsPosProtected(): boolean {
+    return this.bPos;
+  }
+  /** Changes content protection. @param value - New flag. @returns Nothing. */
+  public SetContentProtect(value: boolean): void {
+    this.bCntnt = value;
+  }
+  /** Changes size protection. @param value - New flag. @returns Nothing. */
+  public SetSizeProtect(value: boolean): void {
+    this.bSize = value;
+  }
+  /** Changes position protection. @param value - New flag. @returns Nothing. */
+  public SetPosProtect(value: boolean): void {
+    this.bPos = value;
+  }
+  /** Clones all three independent flags. @returns Owned protection item. */
+  public Clone(): SvxProtectItem {
+    const copy = new SvxProtectItem(this.Which());
+    copy.bCntnt = this.bCntnt;
+    copy.bSize = this.bSize;
+    copy.bPos = this.bPos;
+    return copy;
+  }
+  /** Compares identity and all protection flags. @param other - Candidate. @returns Whether equal. */
+  public equals(other: SfxPoolItem): boolean {
+    return (
+      other instanceof SvxProtectItem &&
+      other.Which() === this.Which() &&
+      other.bCntnt === this.bCntnt &&
+      other.bSize === this.bSize &&
+      other.bPos === this.bPos
+    );
+  }
+  /** Projects native member flags; omitted member selects the existing browser snapshot boundary. @param member - Native member identity. @returns Member flag or browser snapshot. */
+  public QueryValue(member?: number): boolean | readonly boolean[] | undefined {
+    if (member === undefined) return [this.bCntnt, this.bSize, this.bPos];
+    switch (member & ~0x80) {
+      case 0:
+        return this.bCntnt;
+      case 1:
+        return this.bSize;
+      case 2:
+        return this.bPos;
+      default:
+        return undefined;
+    }
+  }
+  /** Changes one native member flag. @param value - New flag. @param member - Native member identity. @returns Whether recognized. */
+  public PutValue(value: boolean, member: number): boolean {
+    switch (member & ~0x80) {
+      case 0:
+        this.bCntnt = value;
+        break;
+      case 1:
+        this.bSize = value;
+        break;
+      case 2:
+        this.bPos = value;
+        break;
+      default:
+        return false;
+    }
+    return true;
+  }
+}
+
 /** Native box edge order from boxitem.hxx. */
 export enum SvxBoxItemLine {
   TOP = 0,

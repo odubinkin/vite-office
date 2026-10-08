@@ -1,7 +1,19 @@
 /** @fileoverview Implements SfxInt16Item from pinned svl/source/items/intitem.cxx. */
 
 import { SfxPoolItem } from "./poolitem";
-import { CntUInt16Item } from "./cintitem";
+import { CntUInt16Item, CntUInt32Item } from "./cintitem";
+
+/** Native unsigned32 subclass and zero-valued constructor defaults. */
+export class SfxUInt32Item extends CntUInt32Item {
+  /** Creates an unsigned item. @param which - Item identity. @param value - Unsigned scalar. @returns Nothing. */
+  public constructor(which = 0, value = 0) {
+    super(which, value);
+  }
+  /** Preserves the concrete subclass when cloning. @returns Owned scalar item. */
+  public override Clone(): SfxUInt32Item {
+    return new SfxUInt32Item(this.Which(), this.GetValue());
+  }
+}
 
 /** Native unsigned item subclass with the zero-valued SfxUInt16Item constructor defaults. */
 export class SfxUInt16Item extends CntUInt16Item {

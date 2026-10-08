@@ -1,0 +1,540 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sources": [
+    {
+      "path": "sw/inc/hints.hxx",
+      "sha256": "bcd9e3d72adc75313d616c566b0cb1b89a6e7e1d0947b90b09a36364cb467bf3",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "SwAttrSetChg",
+          "line": 41,
+          "allMatchingLines": [
+            41,
+            314,
+            315,
+            316,
+            392,
+            395,
+            401,
+            402,
+            403
+          ]
+        },
+        {
+          "identifier": "AttrSetChangeHint",
+          "line": 311,
+          "allMatchingLines": [
+            311,
+            316
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sw/source/core/attr/hints.cxx",
+      "sha256": "7428cb32180100e27c69644507bf41a5c7be05ac415f57262a2b2e21aacc1a3f",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "SwAttrSetChg::SwAttrSetChg",
+          "line": 88,
+          "allMatchingLines": [
+            88,
+            95
+          ]
+        },
+        {
+          "identifier": "SwAttrSetChg::ClearItem",
+          "line": 109,
+          "allMatchingLines": [
+            109
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sw/inc/calbck.hxx",
+      "sha256": "73ea8d8a37531764eafc158e9caa0a902b84d599b45e15b4a0bcdc5587ebfb43",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "LockModify",
+          "line": 230,
+          "allMatchingLines": [
+            230
+          ]
+        },
+        {
+          "identifier": "UnlockModify",
+          "line": 231,
+          "allMatchingLines": [
+            231
+          ]
+        },
+        {
+          "identifier": "IsModifyLocked",
+          "line": 232,
+          "allMatchingLines": [
+            232
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sw/source/core/attr/calbck.cxx",
+      "sha256": "8d07e0396ce1f4f874685604d01af2a75d35a7e01845e4e4561cf86f0891e155",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "ClientNotifyAttrChg",
+          "line": 301,
+          "allMatchingLines": [
+            301
+          ]
+        },
+        {
+          "identifier": "SwModify::SwClientNotify",
+          "line": 143,
+          "allMatchingLines": [
+            143,
+            252
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sw/source/core/attr/format.cxx",
+      "sha256": "69f8fcbb4cf0375c74703fc88e53c98e6d11016320513923f4f3a71ff98c281a",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "SwFormat::SetFormatAttr",
+          "line": 460,
+          "allMatchingLines": [
+            460,
+            539
+          ]
+        },
+        {
+          "identifier": "SwFormat::ResetFormatAttr",
+          "line": 202,
+          "allMatchingLines": [
+            202,
+            632
+          ]
+        },
+        {
+          "identifier": "SwFormat::ResetAllFormatAttr",
+          "line": 660,
+          "allMatchingLines": [
+            660
+          ]
+        },
+        {
+          "identifier": "SwFormat::SwClientNotify",
+          "line": 222,
+          "allMatchingLines": [
+            222
+          ]
+        }
+      ]
+    },
+    {
+      "path": "svl/source/items/itemset.cxx",
+      "sha256": "e9cd6e67ef9f5f9bd02f0cea10543d41f0d03ace23e903841db38d894dc26dbe",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "SfxItemSet::Differentiate",
+          "line": 1015,
+          "allMatchingLines": [
+            1015
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sw/source/core/table/swtable.cxx",
+      "sha256": "10c536056498dd001b3a5c75638040ee5daef966ede231c66947da8e704b1206",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "SwTableBox::ClaimFrameFormat",
+          "line": 2133,
+          "allMatchingLines": [
+            2133
+          ]
+        },
+        {
+          "identifier": "SwTableLine::ClaimFrameFormat",
+          "line": 1477,
+          "allMatchingLines": [
+            1477
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sw/source/core/bastyp/init.cxx",
+      "sha256": "ffc4aeb0518fa5d885ab9a2aa2cd99a21b1613ceedcc27c581407d8f68ca96b3",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "new SvxProtectItem",
+          "line": 413,
+          "allMatchingLines": [
+            413
+          ]
+        },
+        {
+          "identifier": "new SwTableBoxNumFormat",
+          "line": 465,
+          "allMatchingLines": [
+            465
+          ]
+        },
+        {
+          "identifier": "new SwTableBoxFormula",
+          "line": 466,
+          "allMatchingLines": [
+            466
+          ]
+        },
+        {
+          "identifier": "new SwTableBoxValue",
+          "line": 467,
+          "allMatchingLines": [
+            467
+          ]
+        }
+      ]
+    },
+    {
+      "path": "include/svl/cintitem.hxx",
+      "sha256": "73711feea9311e7e6e456a85f1a8c411362986091b6cd090510ceb49cfc151db",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "CntUInt32Item",
+          "line": 127,
+          "allMatchingLines": [
+            127,
+            132,
+            133,
+            154
+          ]
+        },
+        {
+          "identifier": "SetValue",
+          "line": 54,
+          "allMatchingLines": [
+            54,
+            88,
+            123,
+            158
+          ]
+        }
+      ]
+    },
+    {
+      "path": "svl/source/items/cintitem.cxx",
+      "sha256": "535b43a30cae96d635112c7ba022b06ad0918016b910f6767f1de54ab75f5066",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "CntUInt32Item::QueryValue",
+          "line": 244,
+          "allMatchingLines": [
+            244
+          ]
+        },
+        {
+          "identifier": "CntUInt32Item::PutValue",
+          "line": 253,
+          "allMatchingLines": [
+            253,
+            263
+          ]
+        }
+      ]
+    },
+    {
+      "path": "include/svl/intitem.hxx",
+      "sha256": "eb19271d90ef142eb6e161cba53f8e823d7079eeaf92535da574e1511eebd2d9",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "SfxUInt32Item",
+          "line": 110,
+          "allMatchingLines": [
+            110,
+            114,
+            115,
+            118,
+            119
+          ]
+        }
+      ]
+    },
+    {
+      "path": "include/editeng/protitem.hxx",
+      "sha256": "bf78307a4806bdbb4711fa6229753393ee384903ec5c140e2261340d572ac34a",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "SvxProtectItem",
+          "line": 25,
+          "allMatchingLines": [
+            25,
+            33,
+            42,
+            43,
+            44,
+            55,
+            69
+          ]
+        },
+        {
+          "identifier": "IsContentProtected",
+          "line": 57,
+          "allMatchingLines": [
+            57
+          ]
+        }
+      ]
+    },
+    {
+      "path": "editeng/source/items/frmitems.cxx",
+      "sha256": "0a506d3769fe82ebe1272e5dda128f082d775d3eda7280911b5e8df78557754f",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "SvxProtectItem::operator==",
+          "line": 2479,
+          "allMatchingLines": [
+            2479
+          ]
+        },
+        {
+          "identifier": "SvxProtectItem::QueryValue",
+          "line": 2490,
+          "allMatchingLines": [
+            2490
+          ]
+        },
+        {
+          "identifier": "SvxProtectItem::Clone",
+          "line": 2525,
+          "allMatchingLines": [
+            2525
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sw/inc/cellatr.hxx",
+      "sha256": "4ea926e23b4b775f43a0b02fb737e05f087759a3b83aeba3131c0ea46389ff9f",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "getSwDefaultTextFormat",
+          "line": 36,
+          "allMatchingLines": [
+            36,
+            42
+          ]
+        },
+        {
+          "identifier": "SwTableBoxNumFormat",
+          "line": 38,
+          "allMatchingLines": [
+            38,
+            41,
+            42,
+            46,
+            48,
+            122,
+            129
+          ]
+        },
+        {
+          "identifier": "SwTableBoxFormula",
+          "line": 55,
+          "allMatchingLines": [
+            55,
+            61,
+            62,
+            66,
+            76,
+            124,
+            131
+          ]
+        },
+        {
+          "identifier": "SwTableBoxValue",
+          "line": 99,
+          "allMatchingLines": [
+            99,
+            103,
+            104,
+            105,
+            109,
+            111,
+            126,
+            133
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sw/source/core/attr/cellatr.cxx",
+      "sha256": "ff9f4eb524e31e42e1e79829da2500c441ec506e4fa0068e889a23804886cce6",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "SwTableBoxNumFormat::SwTableBoxNumFormat",
+          "line": 38,
+          "allMatchingLines": [
+            38
+          ]
+        },
+        {
+          "identifier": "SwTableBoxFormula::Clone",
+          "line": 71,
+          "allMatchingLines": [
+            71
+          ]
+        },
+        {
+          "identifier": "SwTableBoxValue::operator==",
+          "line": 176,
+          "allMatchingLines": [
+            176
+          ]
+        }
+      ]
+    },
+    {
+      "path": "include/svl/zforlist.hxx",
+      "sha256": "a90ea5e76c3d058ee262743b7ec2841edfabf8dd4ec3d21777f71b03bfd83684",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "SV_COUNTRY_LANGUAGE_OFFSET",
+          "line": 39,
+          "allMatchingLines": [
+            39
+          ]
+        },
+        {
+          "identifier": "NF_STANDARD_FORMAT_TEXT",
+          "line": 46,
+          "allMatchingLines": [
+            46
+          ]
+        }
+      ]
+    }
+  ],
+  "production": [
+    {
+      "path": "apps/office/src/sw/inc/hints.ts",
+      "sha256": "5f5538d2e101ebea3c06cc987ed6b38b486b2785d1aca95e32320dae49b728ed",
+      "physicalLines": 145
+    },
+    {
+      "path": "apps/office/src/sw/inc/calbck.ts",
+      "sha256": "188ffc870def0d153e7fa988b7f1b4a0535a15ad2d77d9980ae925f49808c317",
+      "physicalLines": 198
+    },
+    {
+      "path": "apps/office/src/sw/source/core/attr/format.ts",
+      "sha256": "705b7a8b2a8b54c2e216b71caefa477f67ffc1546fe38fe50eec4fa346612dd3",
+      "physicalLines": 167
+    },
+    {
+      "path": "apps/office/src/sw/inc/swtblfmt.ts",
+      "sha256": "f5b14c62778d31a9a75f61aa3096398516310dc71116c145646535bd7a7a5ab2",
+      "physicalLines": 88
+    },
+    {
+      "path": "apps/office/src/svl/source/items/itemset.ts",
+      "sha256": "8b3f2dd732154333347727e7ff2e871123baca6a5b81f97faa99407f4361fef9",
+      "physicalLines": 270
+    },
+    {
+      "path": "apps/office/src/sw/source/core/table/swtable.ts",
+      "sha256": "d980240fd0f0f61a39404b48386e7e3dee6310a4609765be210477a8865fe394",
+      "physicalLines": 957
+    },
+    {
+      "path": "apps/office/src/svl/source/items/cintitem.ts",
+      "sha256": "bd377b98db6cf749e384830708de069a1a2f6be1d76ddabae5f78720d17a9a1d",
+      "physicalLines": 92
+    },
+    {
+      "path": "apps/office/src/svl/source/items/intitem.ts",
+      "sha256": "5ed4a0e10f7fbf19ba18d2f72166638ec8f0c4792b22b91f483bb38bd02fa6af",
+      "physicalLines": 64
+    },
+    {
+      "path": "apps/office/src/editeng/source/items/frmitems.ts",
+      "sha256": "5885a306b49b35e1d5599a9bc049595d234fbbeaab96ae81a9ec49096bec3365",
+      "physicalLines": 788
+    },
+    {
+      "path": "apps/office/src/sw/source/core/attr/swatrset.ts",
+      "sha256": "f8473fcccff7c2800dd6a444e0b5806d7b2a8a6847a559bb5af4c39a21ff7372",
+      "physicalLines": 483
+    },
+    {
+      "path": "apps/office/src/sw/source/core/attr/cellatr.ts",
+      "sha256": "b484efa20927084b96d6bfed4270e916a6460d93f778dae4822c931c74feea27",
+      "physicalLines": 99
+    }
+  ],
+  "protectedIO": [
+    {
+      "path": "apps/office/src/sw/browser/storage/writer-odt-store.ts",
+      "sha256": "0fb4ebffca5a00fe63ff327379305d64143c7014dace0a7e13edb8c0c241232e",
+      "baselineByteIdentical": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/workflows/writer-odt-io.ts",
+      "sha256": "7c214afab59dbc5df1087f107e2b7bf2bf01d8623a2995e8eb19a45575361306",
+      "baselineByteIdentical": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/WriterFileDialog.tsx",
+      "sha256": "50ad125f5a254eb1772b62abe3681e4632df6c7870ea9647622b2268394c88c3",
+      "baselineByteIdentical": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts",
+      "sha256": "060a06dd9a77e530de1756b2f4c4384e6b2ddd1ee20c68fb175daab2eeb99ee7",
+      "baselineByteIdentical": true
+    }
+  ],
+  "writerUI": {
+    "path": "apps/office/src/sw/browser/presentation/writer-view.tsx",
+    "sha256": "782755425f440a2438a2994ee429a6ee7b37e4f65ca8e5f1855c9d18db8f9de1",
+    "entireSourceByteIdentical": true
+  },
+  "parent": {
+    "characters": 713885,
+    "sha256": "b266920d76eed2c8340488da9ed6d669859e293dd2c1c58695b5770e2b96ad17",
+    "unchanged": true
+  },
+  "stash": {
+    "commit": "c85f4a0e453dfd06d6e199554784f2c286737472",
+    "preserved": true
+  },
+  "sourceBoundContracts": [
+    "SwAttrSetChg retains borrowed original set/delta references; copy clones only the delta. AttrSetChangeHint has exact old/new descriptors. ClientNotifyAttrChg locks original SwModify while dispatching, suppresses reentrance and unlocks in finally.",
+    "SwFormat mutators collect actual effective old/new values through native BC methods. Registered parent SwFormat clients clone and Differentiate inherited deltas by all local WhichIds including INVALID/DISABLED. Row/cell generic attribute overrides removed. Locked native claim copies do not broadcast. Full native cache/font/fill/frame invalidation/geometry remains partial.",
+    "Existing browser paint-device invalidation follows actual native clients without recording an extra document model mutation. Exact original row/cell registered frames, Undo/Redo graphs and mounted main UI retained. Device boundary remains a bounded browser adaptation; full direct native UI registration and native VCL behavior unverified.",
+    "Native defaults127/157/158/159 use SvxProtectItem flags false, SfxUInt32Item/CntUInt32Item hierarchy, SwTableBoxNumFormat100 with locale text normalization modulo10000, SwTableBoxFormula non-sharing/detached clone ownership and SwTableBoxValue zero/NaN equality. Full SwTableFormula second-base/parser/calculation/name conversion/presentation/UNO remains unported.",
+    "All660 prior acceptance files remain byte-identical. Existing317 metadata records fields/status/default/classification/order/prefixes retained; one new cellatr module unverified, total318. Registered IO/recovery/settings deviations, whole writer-view, pin and stash preserved; goal ACTIVE."
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "profile": "upstream-absent",
+  "allowedCases": "Exactly6 previously failed cases plus3 explicitly recorded fresh direct-device/UI cases whose production notification semantics changed; other passing cases skipped. Three affected-case revalidations are disclosed.",
+  "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/source/core/attr/native-format-attribute-notify.test.ts src/sw/source/core/docnode/native-box-border-items.test.ts src/sw/source/core/docnode/native-table-border-owner.test.ts src/sw/source/core/table/native-row-frame-format.test.ts src/sw/browser/editor/native-format-attribute-notify.test.tsx --testNamePattern=^(?:original parent format clients filter every local WhichId and reparent without graph copies|distributes native outer and inner lines over the endpoint union and preserves the original graph through history|ordinary direct border application affects only the current cell and records one same-value history action|shared row claim clones all attributes while moving only the claiming original client|core row mutation reuses one claimed owner for selected original peers selected=false|core row mutation reuses one claimed owner for selected original peers selected=true|single native item mutation publishes precise effective deltas to original clients before the device notification|direct native format item writes refresh the main UI through original document signals and preserve original frame clients|native row item deltas drive mounted fixed height and original cell alignment through repeated real history)$ --coverage.reportOnFailure --coverage.reporter=json-summary --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/5TDXPQ.closure1.app-results.json",
+  "exit": 1,
+  "bytes": 4826,
+  "sha256": "58b60e57e20cb44e91908a0ac32fb45a1f8fcceb75730939667f7ffbd46e0ef6",
+  "caseCounts": {
+    "passed": 9,
+    "failed": 0,
+    "skipped": 30,
+    "total": 39
+  },
+  "failedCases": [],
+  "coverageMapSHA256": "ccc264a857dc90eb8870ab838cd8d637118d135ed9f8e9cd93e354db34f90091",
+  "vendorRestored": true
+}

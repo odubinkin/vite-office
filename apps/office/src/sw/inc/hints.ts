@@ -1,5 +1,6 @@
 /** @fileoverview Defines bounded typed Writer model hints from pinned `sw/inc/hints.hxx`. */
 
+import type { SwAttrSet } from "../source/core/attr/swatrset";
 import type { SfxHint } from "../../svl/source/notify/SfxBroadcaster";
 import type { SwFrameFormat } from "../source/core/layout/atrfrm";
 import type { SwTableLineFormat, SwTableBoxFormat } from "./swtblfmt";
@@ -45,6 +46,7 @@ export class TableBoxFormatChanged implements SfxHint {
 }
 /** Atomic Writer notifications emitted by model and shell boundaries. */
 export type SwAtomicModelHint =
+  | AttrSetChangeHint
   | MoveTableBoxHint
   | TableBoxFormatChanged
   | MoveTableLineHint
@@ -95,4 +97,49 @@ export function hasSwModelHintKind(hint: SwModelHint, kind: SwAtomicModelHint["k
         ) => nested.kind === kind,
       ))
   );
+}
+
+/** Native change descriptor borrows an original attribute set and its delta; copies own only the delta. */
+export class SwAttrSetChg {
+  private readonly m_pTheChgdSet: SwAttrSet;
+  private readonly m_pChgSet: SwAttrSet;
+  /** Copies a native change descriptor. @param source - Original change. @returns Nothing. */
+  public constructor(source: SwAttrSetChg);
+  /** Borrows original and delta sets. @param source - Original changed set. @param changed - Exact delta. @returns Nothing. */
+  public constructor(source: SwAttrSet, changed: SwAttrSet);
+  /** Implements native borrowed and copied ownership. @param source - Changed set or descriptor. @param changed - Borrowed delta when constructing. @returns Nothing. */
+  public constructor(source: SwAttrSet | SwAttrSetChg, changed?: SwAttrSet) {
+    if (source instanceof SwAttrSetChg) {
+      this.m_pTheChgdSet = source.GetTheChgdSet();
+      this.m_pChgSet = source.GetChgSet().CloneAsValue();
+    } else {
+      this.m_pTheChgdSet = source;
+      this.m_pChgSet = changed as SwAttrSet;
+    }
+  }
+  /** Reads the exact changed items. @returns Borrowed or copy-owned delta. */
+  public GetChgSet(): SwAttrSet {
+    return this.m_pChgSet;
+  }
+  /** Reads the original changed set identity. @returns Original owner. */
+  public GetTheChgdSet(): SwAttrSet {
+    return this.m_pTheChgdSet;
+  }
+  /** Counts delta items. @returns Native count. */
+  public Count(): number {
+    return this.m_pChgSet.Count();
+  }
+  /** Clears one delta WhichId. @param which - Native identity. @returns Nothing. */
+  public ClearItem(which: number): void {
+    this.m_pChgSet.ClearItem(which);
+  }
+}
+/** Native attribute change borrows old and new change descriptors. */
+export class AttrSetChangeHint implements SfxHint {
+  public readonly kind = "attr-set-change";
+  /** Borrows exact old/new deltas. @param m_pOld - Previous change or absent. @param m_pNew - Accepted change or absent. @returns Nothing. */
+  public constructor(
+    public readonly m_pOld: SwAttrSetChg | undefined,
+    public readonly m_pNew: SwAttrSetChg | undefined,
+  ) {}
 }

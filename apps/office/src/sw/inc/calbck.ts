@@ -2,7 +2,8 @@
 
 import { SfxBroadcaster, type SfxListenerTarget } from "../../svl/source/notify/SfxBroadcaster";
 import { SfxListener } from "../../svl/source/notify/lstner";
-import type { SwAtomicModelHint, SwModelHint } from "./hints";
+import { AttrSetChangeHint, SwAttrSetChg, type SwAtomicModelHint, type SwModelHint } from "./hints";
+import type { SwAttrSet } from "../source/core/attr/swatrset";
 
 /** One Writer client registered at no more than one SwModify. */
 export class SwClient extends SfxListener<SwModelHint> {
@@ -65,6 +66,7 @@ export class SwModify
   extends SfxBroadcaster<SwModelHint>
   implements SfxListenerTarget<SwModelHint>
 {
+  private m_bModifyLocked = false;
   private notificationDepth = 0;
   private pendingHints: SwAtomicModelHint[] = [];
   private registeredIn: SwModify | undefined;
@@ -91,8 +93,21 @@ export class SwModify
   /** Receives and propagates one parent notification. @param broadcaster - Parent source. @param hint - Typed hint. @returns Nothing. */
   public Notify(broadcaster: SfxBroadcaster<SwModelHint>, hint: SwModelHint): void {
     if (broadcaster !== this.registeredIn) return;
-    if (hint.kind === "model-transaction") {
-      if (this.notificationDepth === 0) this.Broadcast(hint);
+    if (hint.kind === "attr-set-change") {
+      this.SwClientNotify(broadcaster as SwModify, hint);
+    } else if (hint.kind === "model-transaction") {
+      if (
+        hint.hints.some(
+          /** Identifies native attribute deltas requiring parent filtering. @param nested - Atomic hint. @returns Whether native. */
+          (nested) => nested.kind === "attr-set-change",
+        )
+      )
+        this.RunNotificationTransaction(
+          /** Filters each original native delta before the existing transaction boundary. @returns Nothing. */ () => {
+            for (const nested of hint.hints) this.Notify(broadcaster, nested);
+          },
+        );
+      else if (this.notificationDepth === 0) this.Broadcast(hint);
       else for (const nested of hint.hints) this.CallSwClientNotify(nested);
     } else this.CallSwClientNotify(hint);
   }
@@ -103,6 +118,30 @@ export class SwModify
     const parent = this.registeredIn.GetRegisteredIn();
     this.registeredIn = undefined;
     if (parent !== undefined) this.RegisterToModify(parent);
+  }
+
+  /** Locks native modify notifications; the source flag is boolean, not a depth counter. @returns Nothing. */
+  public LockModify(): void {
+    this.m_bModifyLocked = true;
+  }
+  /** Unlocks native modify notifications. @returns Nothing. */
+  public UnlockModify(): void {
+    this.m_bModifyLocked = false;
+  }
+  /** Reads the native modify lock. @returns Whether locked. */
+  public IsModifyLocked(): boolean {
+    return this.m_bModifyLocked;
+  }
+  /** Dispatches native attribute changes while preventing recursive modify calls. @param source - Native emitting owner. @param hint - Native notification. @returns Nothing. */
+  public SwClientNotify(source: SwModify, hint: SwModelHint): void {
+    void source;
+    if (hint.kind !== "attr-set-change" || this.IsModifyLocked()) return;
+    this.LockModify();
+    try {
+      this.CallSwClientNotify(hint);
+    } finally {
+      this.UnlockModify();
+    }
   }
 
   /** Emits or queues one atomic Writer hint. @param hint - Atomic typed change. @returns Nothing. */
@@ -143,4 +182,17 @@ export function subscribeToSwModify(
   const client = new SwClient(callback);
   client.RegisterToModify(modify);
   return /** Detaches the callback-backed client. @returns Nothing. */ (): void => client.Dispose();
+}
+
+/** Emits original native attribute change descriptors through modify locking. @param modify - Actual format source. @param set - Original changed attributes. @param oldSet - Effective old items. @param newSet - Effective new items. @returns Nothing. */
+export function ClientNotifyAttrChg(
+  modify: SwModify,
+  set: SwAttrSet,
+  oldSet: SwAttrSet,
+  newSet: SwAttrSet,
+): void {
+  modify.SwClientNotify(
+    modify,
+    new AttrSetChangeHint(new SwAttrSetChg(set, oldSet), new SwAttrSetChg(set, newSet)),
+  );
 }

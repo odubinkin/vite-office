@@ -2,9 +2,10 @@
  * @fileoverview Reimplements bounded SwFormat attribute ownership and derivation from pinned `sw/source/core/attr/format.cxx`.
  */
 
-import { SwModify } from "../../../inc/calbck";
+import { SwModify, ClientNotifyAttrChg } from "../../../inc/calbck";
 import type { SfxItemSet, WhichRangesContainer } from "../../../../svl/source/items/itemset";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
+import { AttrSetChangeHint, SwAttrSetChg, type SwModelHint } from "../../../inc/hints";
 import { SwAttrSet, type SwAttrPool } from "./swatrset";
 
 /** Base class for identity-bearing Writer styles and formats. */
@@ -56,37 +57,86 @@ export class SwFormat extends SwModify {
       throw new Error("SwFormat parent belongs to another pool.");
     if (this.derivedFrom === derivedFrom) return false;
     this.derivedFrom = derivedFrom;
+    if (derivedFrom !== undefined) this.RegisterToModify(derivedFrom);
+    else this.EndListening();
     this.attributeSet.SetParent(derivedFrom?.GetAttrSet());
     this.NotifyFormatInheritance();
     return true;
   }
 
-  /** Stores one direct format item. @param item - Format item. @returns True when changed. */
+  /** Stores one direct item using native effective old/new deltas. @param item - Format item. @returns True when changed. */
   public SetFormatAttr(item: SfxPoolItem): boolean {
-    const changed = this.attributeSet.Put(item) !== undefined;
-    if (changed) this.NotifyAttributeSet();
+    if (this.IsModifyLocked()) return this.attributeSet.Put(item) !== undefined;
+    const oldSet = new SwAttrSet(this.attributeSet.GetPool(), this.attributeSet.GetRanges()),
+      newSet = new SwAttrSet(this.attributeSet.GetPool(), this.attributeSet.GetRanges());
+    const changed = this.attributeSet.Put_BC(item, oldSet, newSet);
+    if (changed) {
+      ClientNotifyAttrChg(this, this.attributeSet, oldSet, newSet);
+      this.NotifyAttributeSet();
+    }
     return changed;
   }
-
-  /** Copies direct format items from another set. @param set - Source item set. @returns True when changed. */
+  /** Copies one complete native item-set delta. @param set - Source set. @returns True when changed. */
   public SetFormatAttrSet(set: SfxItemSet): boolean {
-    const changed = this.attributeSet.PutSet(set);
-    if (changed) this.NotifyAttributeSet();
+    if (set.Count() === 0) return false;
+    const source = set.Clone();
+    if (this.IsModifyLocked()) return this.attributeSet.PutSet(source);
+    const oldSet = new SwAttrSet(this.attributeSet.GetPool(), this.attributeSet.GetRanges()),
+      newSet = new SwAttrSet(this.attributeSet.GetPool(), this.attributeSet.GetRanges());
+    const changed = this.attributeSet.Put_BC(source, oldSet, newSet);
+    if (changed) {
+      ClientNotifyAttrChg(this, this.attributeSet, oldSet, newSet);
+      this.NotifyAttributeSet();
+    }
     return changed;
   }
-
-  /** Clears one direct format item. @param which - Cleared WhichId. @returns True when removed. */
-  public ResetFormatAttr(which: number): boolean {
-    const changed = this.attributeSet.ClearItem(which) !== 0;
-    if (changed) this.NotifyAttributeSet();
+  /** Resets one identity or an inclusive native range. @param which - First WhichId. @param last - Optional last WhichId. @returns Whether removed. */
+  public ResetFormatAttr(which: number, last = 0): boolean {
+    if (this.attributeSet.Count() === 0) return false;
+    if (last === 0 || last < which) last = which;
+    if (this.IsModifyLocked())
+      return (
+        (last === which
+          ? this.attributeSet.ClearItem(which)
+          : this.attributeSet.ClearItem_BC(which, last)) !== 0
+      );
+    const oldSet = new SwAttrSet(this.attributeSet.GetPool(), this.attributeSet.GetRanges()),
+      newSet = new SwAttrSet(this.attributeSet.GetPool(), this.attributeSet.GetRanges());
+    const changed = this.attributeSet.ClearItem_BC(which, last, oldSet, newSet) !== 0;
+    if (changed) {
+      ClientNotifyAttrChg(this, this.attributeSet, oldSet, newSet);
+      this.NotifyAttributeSet();
+    }
     return changed;
   }
-
-  /** Clears every direct format item. @returns Removed item count. */
+  /** Clears all native direct attributes and returns the collected effective new-item count. @returns Native count. */
   public ResetAllFormatAttr(): number {
-    const count = this.attributeSet.ClearItem();
-    if (count > 0) this.NotifyAttributeSet();
-    return count;
+    if (this.attributeSet.Count() === 0) return 0;
+    if (this.IsModifyLocked()) return this.attributeSet.ClearItem();
+    const oldSet = new SwAttrSet(this.attributeSet.GetPool(), this.attributeSet.GetRanges()),
+      newSet = new SwAttrSet(this.attributeSet.GetPool(), this.attributeSet.GetRanges());
+    if (this.attributeSet.ClearItem_BC(0, oldSet, newSet) !== 0) {
+      ClientNotifyAttrChg(this, this.attributeSet, oldSet, newSet);
+      this.NotifyAttributeSet();
+    }
+    return newSet.Count();
+  }
+  /** Filters inherited native deltas by every locally-present WhichId. @param source - Original notifying parent. @param hint - Native change. @returns Nothing. */
+  public override SwClientNotify(source: SwModify, hint: SwModelHint): void {
+    if (hint.kind === "attr-set-change") {
+      const old = hint.m_pOld,
+        next = hint.m_pNew;
+      if (old !== undefined && next !== undefined && old.GetTheChgdSet() !== this.attributeSet) {
+        const filteredNew = new SwAttrSetChg(next);
+        filteredNew.GetChgSet().Differentiate(this.attributeSet);
+        if (filteredNew.Count() === 0) return;
+        const filteredOld = new SwAttrSetChg(old);
+        filteredOld.GetChgSet().Differentiate(this.attributeSet);
+        super.SwClientNotify(source, new AttrSetChangeHint(filteredOld, filteredNew));
+        return;
+      }
+    }
+    super.SwClientNotify(source, hint);
   }
 
   /** Reports whether this is an automatic rather than named format. @returns Auto-format flag. */
@@ -99,9 +149,9 @@ export class SwFormat extends SwModify {
     this.autoFormat = autoFormat;
   }
 
-  /** Emits one format-owned attribute hint through the document broadcaster. @returns Nothing. */
+  /** Invalidates the existing browser device after native clients without recording another document mutation. @returns Nothing. */
   protected NotifyAttributeSet(): void {
-    this.attributeSet.GetDoc().NotifyModelChange({
+    this.attributeSet.GetDoc().GetDocumentStateManager().CallSwClientNotify({
       formatId: this.formatName,
       kind: "attribute-set-changed",
     });

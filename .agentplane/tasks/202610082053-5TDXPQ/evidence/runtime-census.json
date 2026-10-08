@@ -1,0 +1,67 @@
+{
+  "uniqueAppCases": 1575,
+  "passedUniqueAppCases": 1575,
+  "freshCases": 20,
+  "priorAcceptanceFiles": 660,
+  "priorAcceptanceByteIdentical": true,
+  "freshAcceptanceFiles": 3,
+  "acceptanceFiles": 663,
+  "runs": [
+    {
+      "identifier": "app-results.json",
+      "sha256": "d5f93f2cdf1cff874a78cae1b31f227f1a16cb8a9918273c15509f07b8050ecc",
+      "passed": 1538,
+      "failed": 6,
+      "skipped": 0
+    },
+    {
+      "identifier": "closure1.app-results.json",
+      "sha256": "925c85f1a9c1997983a5dd97d6e580adf88380fd3b735e7ad4e67a7eac0d4068",
+      "passed": 9,
+      "failed": 0,
+      "skipped": 30
+    },
+    {
+      "identifier": "closure2.app-results.json",
+      "sha256": "8e3fa41b86906bcd23d9676270f0fed77b484e1b8dc32c423b894794eb65a500",
+      "passed": 31,
+      "failed": 0,
+      "skipped": 14
+    }
+  ],
+  "materiallyAffectedFreshCaseRevalidations": [
+    "apps/office/src/sw/browser/editor/native-format-attribute-notify.test.tsx > direct native format item writes refresh the main UI through original document signals and preserve original frame clients #1",
+    "apps/office/src/sw/browser/editor/native-format-attribute-notify.test.tsx > native row item deltas drive mounted fixed height and original cell alignment through repeated real history #1",
+    "apps/office/src/sw/source/core/attr/native-format-attribute-notify.test.ts > single native item mutation publishes precise effective deltas to original clients before the device notification #1"
+  ],
+  "unchangedPassingReplays": 0,
+  "chromium": {
+    "passed": 13,
+    "unexpected": 0,
+    "skipped": 0,
+    "sha256": "a3b865ec8c02139b61772f00c1a746b3c9b271f7b75488052b39e6663c621ca8"
+  },
+  "upstreamAbsentProfiles": [
+    {
+      "identifier": "targeted-profile.json",
+      "vendorRestored": true
+    },
+    {
+      "identifier": "closure1.json",
+      "vendorRestored": true
+    },
+    {
+      "identifier": "closure2.json",
+      "vendorRestored": true
+    }
+  ],
+  "fullSuite": {
+    "skipped": true,
+    "reason": "Explicit user cadence once per10AgentPlane tasks",
+    "lastFullIteration": 237,
+    "nextFullIteration": 247,
+    "currentIteration": 245
+  },
+  "rawThresholdExitsRetained": true,
+  "noCoverageOrSkipSanitization": true
+}

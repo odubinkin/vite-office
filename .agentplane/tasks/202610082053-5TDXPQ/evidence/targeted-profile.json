@@ -1,0 +1,153 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/sw/inc/hints.ts": "5f5538d2e101ebea3c06cc987ed6b38b486b2785d1aca95e32320dae49b728ed",
+    "apps/office/src/sw/inc/calbck.ts": "188ffc870def0d153e7fa988b7f1b4a0535a15ad2d77d9980ae925f49808c317",
+    "apps/office/src/sw/source/core/attr/format.ts": "c6083b6fd22026623866ffee95a5c76a2d3e21af67c308e486b0ee067d204a64",
+    "apps/office/src/sw/inc/swtblfmt.ts": "f5b14c62778d31a9a75f61aa3096398516310dc71116c145646535bd7a7a5ab2",
+    "apps/office/src/svl/source/items/itemset.ts": "8b3f2dd732154333347727e7ff2e871123baca6a5b81f97faa99407f4361fef9",
+    "apps/office/src/sw/source/core/table/swtable.ts": "d980240fd0f0f61a39404b48386e7e3dee6310a4609765be210477a8865fe394",
+    "apps/office/src/svl/source/items/cintitem.ts": "bd377b98db6cf749e384830708de069a1a2f6be1d76ddabae5f78720d17a9a1d",
+    "apps/office/src/svl/source/items/intitem.ts": "5ed4a0e10f7fbf19ba18d2f72166638ec8f0c4792b22b91f483bb38bd02fa6af",
+    "apps/office/src/editeng/source/items/frmitems.ts": "5885a306b49b35e1d5599a9bc049595d234fbbeaab96ae81a9ec49096bec3365",
+    "apps/office/src/sw/source/core/attr/swatrset.ts": "f8473fcccff7c2800dd6a444e0b5806d7b2a8a6847a559bb5af4c39a21ff7372",
+    "apps/office/src/sw/source/core/attr/cellatr.ts": "b484efa20927084b96d6bfed4270e916a6460d93f778dae4822c931c74feea27",
+    "apps/office/src/sw/source/core/attr/native-format-attribute-notify.test.ts": "0c89f94e5a207685e268ac64647d10061d606adbc0ca71e52c271bc2aaaf5ed2",
+    "apps/office/src/sw/source/core/undo/native-format-attribute-notify-history.test.ts": "e777d272668bcce4501c8719f3df70413aa717fa5b819141bc5dab34c32dd2b0",
+    "apps/office/src/sw/browser/editor/native-format-attribute-notify.test.tsx": "ad8f82cdacf5ce255304c51d83e7e44cf5639a5537424ff6614192c57bae763b",
+    "docs/program/source-provenance.json": "601b8960400ecb6d296cc06ff12c5a4756372fddea3544e195f298b5c03b761b",
+    "docs/program/parity/runtime-inventory.json": "e98a1991d4bf29e686f8da8ecfd677c47a7233c04224d976f988f6bc8032a2bc"
+  },
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1443,
+      "sha256": "0efec1ba274a59fc2036f0684b032a75c7c55670ce86419502f79da0e7187fce",
+      "totals": [],
+      "failedCases": [],
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/source/core/table/native-box-frame-format.test.ts src/sw/source/core/undo/native-box-frame-format-history.test.ts src/sw/browser/editor/native-box-frame-format.test.tsx src/sw/source/core/crsr/native-table-shell-owner.test.ts src/sw/source/core/table/native-column-insertion.test.ts src/sw/browser/editor/native-table-document-row.test.tsx src/sw/source/core/docnode/native-table-border-owner.test.ts src/sw/source/core/docnode/native-table-border-common-state.test.ts src/sw/source/core/docnode/native-box-border-items.test.ts src/sw/source/core/docnode/native-cell-alignment-owner.test.ts src/sw/browser/editor/native-cell-box-render.test.tsx src/sw/browser/presentation/native-cell-alignment-state.test.tsx src/sw/source/filter/xml/native-cell-box-roundtrip.test.ts src/sw/source/filter/xml/native-cell-alignment-roundtrip.test.ts src/sw/source/filter/xml/odt-table-roundtrip.test.ts src/sw/source/filter/xml/native-independent-column-odf.test.ts src/sw/browser/presentation/native-table-border-changed-items.test.tsx src/sw/browser/presentation/native-table-border-owner-history.test.tsx src/sw/browser/presentation/native-table-border-common-state.test.tsx src/sw/browser/presentation/native-border-page.test.tsx src/sw/browser/presentation/native-collapsing-table-borders.test.tsx src/sw/browser/editor/native-collapsing-border-paint.test.tsx src/sw/source/core/layout/native-collapsing-border-painter.test.ts src/sw/source/core/table/native-independent-column-insertion.test.ts src/sw/source/core/table/native-independent-columns.test.ts src/sw/source/core/undo/native-independent-column-insertion-history.test.ts src/sw/browser/editor/native-independent-column-insertion.test.tsx src/sw/browser/editor/native-independent-column-render.test.tsx src/sw/browser/editor/native-table-column-commands.test.tsx src/sw/browser/editor/native-table-column-drag.test.tsx src/sw/source/uibase/docvw/native-table-column-drag.test.ts src/sw/source/core/table/native-numeric-row-insertion.test.ts src/sw/source/core/undo/native-numeric-row-insertion-history.test.ts src/sw/browser/editor/native-numeric-row-insertion.test.tsx src/sw/source/core/table/native-row-frame-format.test.ts src/sw/source/core/undo/native-row-frame-format-history.test.ts src/sw/source/core/undo/native-row-format-client-history.test.ts src/sw/browser/editor/native-row-format-client.test.tsx src/sw/source/uibase/wrtsh/native-table-delete.test.ts src/sw/browser/editor/native-table-delete.test.tsx src/sw/source/core/undo/native-delete-history.test.ts src/sw/source/uibase/wrtsh/native-table-traversal.test.ts src/sw/source/uibase/wrtsh/native-table-properties.test.ts src/sw/source/uibase/wrtsh/native-table-properties-reset-history.test.ts src/sw/browser/presentation/native-table-properties.test.tsx src/sw/browser/presentation/native-table-properties-reset.test.tsx src/sw/browser/presentation/native-independent-table-properties.test.tsx src/sw/source/core/layout/native-table-print-area.test.ts src/sw/source/core/layout/newfrm.test.ts src/sw/inc/fmtornt.test.ts src/sw/source/core/layout/native-cell-format-client.test.ts src/sw/source/core/undo/native-cell-format-client-history.test.ts src/sw/browser/editor/native-cell-format-client.test.tsx src/sw/source/core/layout/native-row-format-client.test.ts src/sw/source/core/attr/native-format-attribute-notify.test.ts src/sw/source/core/undo/native-format-attribute-notify-history.test.ts src/sw/browser/editor/native-format-attribute-notify.test.tsx src/svl/source/items/itemset.test.ts src/svl/source/items/itemset-equality.test.ts src/svl/source/items/itempool-default-registration.test.ts src/svl/source/items/cintitem.test.ts src/svl/source/items/stylepool.test.ts src/sw/source/core/attr/list-restart-default.test.ts src/sw/source/core/txtnode/automatic-itemset-equality.test.ts src/sw/source/core/txtnode/txtedt-stylepool.test.ts src/sw/browser/presentation/writer-style-selector.test.tsx src/sw/source/core/doc/number-format.test.ts src/sw/source/core/doc/number-list-format.test.ts src/sw/source/core/doc/list-invariants.test.ts src/sw/source/core/txtnode/native-format-to-text.test.ts src/sw/source/core/undo/native-format-node-index.test.ts --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/5TDXPQ.app-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 54992,
+      "sha256": "daf61e344ba76395fdf85ef541c995d742b21d36a294f490aef9a55e155a832f",
+      "totals": [
+        "Test Files  4 failed | 67 passed (71)",
+        "Tests  6 failed | 1538 passed (1544)"
+      ],
+      "failedCases": [
+        {
+          "name": "apps/office/src/sw/source/core/attr/native-format-attribute-notify.test.ts > original parent format clients filter every local WhichId and reparent without graph copies",
+          "assertion": [
+            "AssertionError: expected [ AttrSetChangeHint{ …(3) }, { …(2) } ] to have a length of 1 but got 2"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/source/core/docnode/native-box-border-items.test.ts > distributes native outer and inner lines over the endpoint union and preserves the original graph through history",
+          "assertion": [
+            "AssertionError: expected 21 to be 17 // Object.is equality"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/source/core/docnode/native-table-border-owner.test.ts > ordinary direct border application affects only the current cell and records one same-value history action",
+          "assertion": [
+            "AssertionError: expected 43 to be 42 // Object.is equality"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/source/core/table/native-row-frame-format.test.ts > shared row claim clones all attributes while moving only the claiming original client",
+          "assertion": [
+            "AssertionError: expected 4 to be 3 // Object.is equality"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/source/core/table/native-row-frame-format.test.ts > core row mutation reuses one claimed owner for selected original peers selected=false",
+          "assertion": [
+            "AssertionError: expected 10 to be 9 // Object.is equality"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/source/core/table/native-row-frame-format.test.ts > core row mutation reuses one claimed owner for selected original peers selected=true",
+          "assertion": [
+            "AssertionError: expected 10 to be 9 // Object.is equality"
+          ]
+        }
+      ],
+      "caseCounts": {
+        "passed": 1538,
+        "failed": 6,
+        "skipped": 0,
+        "total": 1544
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 17953,
+          "covered": 12262,
+          "skipped": 0,
+          "pct": 68.3
+        },
+        "statements": {
+          "total": 19706,
+          "covered": 13103,
+          "skipped": 0,
+          "pct": 66.49
+        },
+        "functions": {
+          "total": 4515,
+          "covered": 3090,
+          "skipped": 0,
+          "pct": 68.43
+        },
+        "branches": {
+          "total": 14489,
+          "covered": 8564,
+          "skipped": 0,
+          "pct": 59.1
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverage": {
+        "lines": 68.3,
+        "statements": 66.49,
+        "functions": 68.43,
+        "branches": 59.1
+      },
+      "incompleteFileCount": 253,
+      "coverageMapSHA256": "d6b582e351052d708fd00cd611b641c8a64e368488e8659fc61ec47bb6cc4f15",
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts writer-native-cell-alignment.spec.ts writer-native-cell-box.spec.ts writer-style-selector.spec.ts writer-style-reset.spec.ts writer-named-style-history.spec.ts --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 2583,
+      "sha256": "8adead45345d45a89e8b46924d44758961fa385e1ab30b5cfd1c70ad45e0b448",
+      "totals": [
+        "13 passed (9.2s)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "startTime": "2026-10-08T21:16:17.831Z",
+        "duration": 9182.739,
+        "expected": 13,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "unhandledErrorCount": 0
+    }
+  ]
+}

@@ -178,6 +178,16 @@ export class SfxItemSet {
     this.DisableOrInvalidateItem_ForWhichID(true, which);
   }
 
+  /** Removes all local identities present in another native set, including INVALID and DISABLED entries. @param set - Identity source. @returns Nothing. */
+  public Differentiate(set: SfxItemSet): void {
+    if (this.Count() === 0 || set.Count() === 0) return;
+    if (this === set) {
+      this.ClearItem();
+      return;
+    }
+    for (const which of set.poolItemMap.keys()) this.ClearItem(which);
+  }
+
   /** Creates an independent item set, optionally without deltas or in another pool. @param includeItems - Whether direct deltas are copied. @param pool - Destination pool. @returns Cloned item set. */
   public Clone(includeItems = true, pool = this.pool): SfxItemSet {
     const clone = new SfxItemSet(

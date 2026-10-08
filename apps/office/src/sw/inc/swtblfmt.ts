@@ -30,10 +30,6 @@ export class SwTableLineFormat extends SwFrameFormat {
     this.SetDerivedFrom(source.DerivedFrom());
     this.SetAuto(source.IsAuto());
   }
-  /** Publishes native format attribute changes to its clients. @returns Nothing. */
-  protected override NotifyAttributeSet(): void {
-    this.CallSwClientNotify({ kind: "attribute-set-changed", formatId: this.GetName() });
-  }
   /** Publishes row format inheritance changes to its clients. @returns Nothing. */
   protected override NotifyFormatInheritance(): void {
     this.CallSwClientNotify({ kind: "format-inheritance-changed", formatId: this.GetName() });
@@ -84,10 +80,6 @@ export class SwTableBoxFormat extends SwFrameFormat {
       },
     );
     return box;
-  }
-  /** Publishes native cell item changes to registered clients. @returns Nothing. */
-  protected override NotifyAttributeSet(): void {
-    this.CallSwClientNotify({ kind: "attribute-set-changed", formatId: this.GetName() });
   }
   /** Publishes native inheritance changes to registered clients. @returns Nothing. */
   protected override NotifyFormatInheritance(): void {

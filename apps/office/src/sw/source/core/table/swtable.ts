@@ -80,9 +80,14 @@ export class SwTableBox extends SwClient {
       format.GetTableBox() !== undefined
     ) {
       const copy = format.GetDoc().MakeTableBoxFormat();
-      copy.CopyFormatFrom(format);
-      copy.ResetFormatAttr(RES_BOXATR_FORMULA);
-      copy.ResetFormatAttr(RES_BOXATR_VALUE);
+      copy.LockModify();
+      try {
+        copy.CopyFormatFrom(format);
+        copy.ResetFormatAttr(RES_BOXATR_FORMULA);
+        copy.ResetFormatAttr(RES_BOXATR_VALUE);
+      } finally {
+        copy.UnlockModify();
+      }
       return copy;
     }
     return format;
@@ -108,9 +113,14 @@ export class SwTableBox extends SwClient {
     );
     if (!shared) return original;
     const copy = original.GetDoc().MakeTableBoxFormat();
-    copy.CopyFormatFrom(original);
-    copy.ResetFormatAttr(RES_BOXATR_FORMULA);
-    copy.ResetFormatAttr(RES_BOXATR_VALUE);
+    copy.LockModify();
+    try {
+      copy.CopyFormatFrom(original);
+      copy.ResetFormatAttr(RES_BOXATR_FORMULA);
+      copy.ResetFormatAttr(RES_BOXATR_VALUE);
+    } finally {
+      copy.UnlockModify();
+    }
     original.ForAllListeners(
       /** Moves cell frames naming this original box before model registration. @param client - Original listener. @returns Continue flag. */ (
         client,
@@ -222,7 +232,12 @@ export class SwTableLine extends SwClient {
     );
     if (!shared) return original;
     const copy = original.GetDoc().MakeTableLineFormat();
-    copy.CopyFormatFrom(original);
+    copy.LockModify();
+    try {
+      copy.CopyFormatFrom(original);
+    } finally {
+      copy.UnlockModify();
+    }
     original.ForAllListeners(
       /** Moves frame clients bound to this original row before the row registration. @param client - Original format listener. @returns Continue flag. */
       (client) => {
