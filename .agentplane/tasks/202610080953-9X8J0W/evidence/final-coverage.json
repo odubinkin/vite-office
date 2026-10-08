@@ -1,0 +1,215 @@
+{
+  "proof": "Actual counters with complete identical source/maps or complete contiguous declaration/body/enclosing branch/location proofs; focused skips retained as skipped.",
+  "previousVerified": {
+    "app": {
+      "map": "VEQGJS.app-final.json",
+      "proof": "VEQGJS.app-proof.json",
+      "mapHash": "7ef844cb20dd761b4ec03eb8edb942054a5346c088de1c17a9a030e8ede45d99",
+      "proofHash": "5c842bbd32b13c0c5d5efe2f94c2dfdb52b7daca9e1d1c1446f845e2da63ba08"
+    },
+    "inventory": {
+      "map": "VEQGJS.inventory-final.json",
+      "proof": "VEQGJS.inventory-proof.json",
+      "mapHash": "ff1b7dd8408898dce1290a7e3ee2768a0ef4261dc930a6cc7bff4c4494588b8e",
+      "proofHash": "5c43a8f01265876178c73869204175bfde82507529383d6eac361ff12ce0b0b8"
+    }
+  },
+  "app": {
+    "coverage": {
+      "lines": {
+        "total": 16930,
+        "covered": 16930,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 18595,
+        "covered": 18595,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 4307,
+        "covered": 4307,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 14008,
+        "covered": 14008,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "mapSHA256": "13bd6ad0b9511f94f99766999573a0e6c45f85a48cba5787ec17a1db47516db4",
+    "proofSHA256": "16dc8aac0fd9dda3557c6f058085a8f2dd85392b5311d00cd6245dbfbe497f11",
+    "files": 304,
+    "invalidWholeFallbacks": [
+      {
+        "path": "apps/office/src/sw/source/core/layout/paintfrm.ts",
+        "reason": "V8 raw inferred else counter is negative; use entire prior verified current-byte-identical source and entire maps/counters, never sanitize individual counts",
+        "priorMap": "VEQGJS.app-final.json",
+        "priorMapSHA256": "7ef844cb20dd761b4ec03eb8edb942054a5346c088de1c17a9a030e8ede45d99",
+        "discardedInvalidAggregateSHA256": "abf2275c911509da49fa686ab8625cfb93320b48c9a6a4878fd52da5e52179a1",
+        "negativeCounts": [
+          -36
+        ]
+      }
+    ],
+    "priorRegionTransfers": [
+      {
+        "path": "apps/office/src/sw/source/uibase/docvw/edtwin.ts",
+        "priorSourceSHA256": "b793d5d5bf0ebf0d59e5d25f7f6b491444c2ff6311d4de1c01e3a497845d45b4",
+        "currentSourceSHA256": "cbccdd7fb81c345fcb979e29a96e551df3a218a7de11dcc38d0d4968de1a2897",
+        "priorMap": "VEQGJS.app-final.json",
+        "priorMapSHA256": "7ef844cb20dd761b4ec03eb8edb942054a5346c088de1c17a9a030e8ede45d99",
+        "regions": [
+          {
+            "oldStart": 1,
+            "oldEnd": 64,
+            "newStart": 1,
+            "newEnd": 64,
+            "byteLength": 2751,
+            "sha256": "e45b2d0e8944d61a7bf805af970d292fc23202ef2cf0a86b78ecdaece8712c17"
+          },
+          {
+            "oldStart": 65,
+            "oldEnd": 135,
+            "newStart": 66,
+            "newEnd": 136,
+            "byteLength": 2993,
+            "sha256": "eba01584479a3992116c097bc7684f130bf57bf1c5709c003242fc6db7890c92"
+          },
+          {
+            "oldStart": 137,
+            "oldEnd": 253,
+            "newStart": 138,
+            "newEnd": 254,
+            "byteLength": 5125,
+            "sha256": "e806686f6f557373f3c6b02d06539566a7f66e0741d30aebfa05411bef1ece29"
+          },
+          {
+            "oldStart": 254,
+            "oldEnd": 259,
+            "newStart": 256,
+            "newEnd": 261,
+            "byteLength": 107,
+            "sha256": "748df1ac3d95ad87660781e78217388491c2340564e49e750804a6ddf71a2f1c"
+          },
+          {
+            "oldStart": 262,
+            "oldEnd": 288,
+            "newStart": 264,
+            "newEnd": 290,
+            "byteLength": 995,
+            "sha256": "db4bea4115b26d0d0699d75decf2efb1ef100d9e3acb4d50da811f8414afbef6"
+          },
+          {
+            "oldStart": 296,
+            "oldEnd": 296,
+            "newStart": 296,
+            "newEnd": 296,
+            "byteLength": 100,
+            "sha256": "c305b436fe895e3b10715a87068b1ebc69270aefa06c3a2875c43849d03112e4"
+          },
+          {
+            "oldStart": 297,
+            "oldEnd": 314,
+            "newStart": 324,
+            "newEnd": 341,
+            "byteLength": 508,
+            "sha256": "e9f67a6d92de236fafe23ce4464d48634994d120fb13ee22c3b4859f936ab74a"
+          },
+          {
+            "oldStart": 315,
+            "oldEnd": 354,
+            "newStart": 344,
+            "newEnd": 383,
+            "byteLength": 1618,
+            "sha256": "a9779943cba9e75960b623bc5df72fb00e88b76809ef38e96fedc9ed59c47d5b"
+          },
+          {
+            "oldStart": 355,
+            "oldEnd": 356,
+            "newStart": 386,
+            "newEnd": 387,
+            "byteLength": 100,
+            "sha256": "5a535215eeda2ea05e7fee1e41a6968f42b5534d51a1f3ce9e2cee89dceb49c8"
+          },
+          {
+            "oldStart": 357,
+            "oldEnd": 409,
+            "newStart": 402,
+            "newEnd": 454,
+            "byteLength": 2677,
+            "sha256": "d3307daad15c7a8f966182d52dc6a1c99863d529cea579163de1127dce8580c6"
+          },
+          {
+            "oldStart": 411,
+            "oldEnd": 679,
+            "newStart": 456,
+            "newEnd": 724,
+            "byteLength": 12391,
+            "sha256": "82413348004b28318f101bc9e2e7bfe693f48352dbaa771aa972fab21797e2fe"
+          }
+        ],
+        "counts": {
+          "statements": 130,
+          "functions": 42,
+          "branches": 100
+        }
+      }
+    ],
+    "wholeFiles": 304,
+    "transfers": [],
+    "gaps": []
+  },
+  "inventory": {
+    "coverage": {
+      "lines": {
+        "total": 1464,
+        "covered": 1464,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 1523,
+        "covered": 1523,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 384,
+        "covered": 384,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 1081,
+        "covered": 1081,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "mapSHA256": "0068891881e01b5e2721cc414e2c7f5bdc03d21dd737793b2eb9bcdc7e987665",
+    "proofSHA256": "5c43a8f01265876178c73869204175bfde82507529383d6eac361ff12ce0b0b8",
+    "files": 38,
+    "invalidWholeFallbacks": [],
+    "priorRegionTransfers": [],
+    "wholeFiles": 38,
+    "transfers": [],
+    "gaps": []
+  }
+}

@@ -1,0 +1,215 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sources": [
+    {
+      "path": "svx/source/dialog/svxruler.cxx",
+      "sha256": "4289126ba34117e4c8c7b5cee3cba3ab8c7858f9386b93c073ae55c386081f9a",
+      "anchors": [
+        {
+          "identifier": "void SvxRuler::EvalModifier()",
+          "line": 2542,
+          "allMatchingLines": [
+            2542
+          ]
+        },
+        {
+          "identifier": "void SvxRuler::PrepareProportional_Impl",
+          "line": 2415,
+          "allMatchingLines": [
+            2415
+          ]
+        },
+        {
+          "identifier": "void SvxRuler::CalcMinMax",
+          "line": 2646,
+          "allMatchingLines": [
+            2646
+          ]
+        },
+        {
+          "identifier": "void SvxRuler::DragBorders()",
+          "line": 1804,
+          "allMatchingLines": [
+            1804
+          ]
+        },
+        {
+          "identifier": "void SvxRuler::DragMargin2()",
+          "line": 1573,
+          "allMatchingLines": [
+            1573
+          ]
+        },
+        {
+          "identifier": "SfxBoolItem aFlag(SID_RULER_ACT_LINE_ONLY",
+          "line": 2366,
+          "allMatchingLines": [
+            2366
+          ]
+        },
+        {
+          "identifier": "m_nDragType = SvxRulerDragFlags::OBJECT_ACTLINE_ONLY;",
+          "line": 2590,
+          "allMatchingLines": [
+            2590
+          ]
+        },
+        {
+          "identifier": "m_nMaxLeft = (nIdx + 1) * glMinFrame + lNullPix;",
+          "line": 2895,
+          "allMatchingLines": [
+            2895
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sw/source/uibase/docvw/edtwin.cxx",
+      "sha256": "f679baf21d41f78d6494bead35aebf6333eed298a6e24892452a4bb4623b7eb3",
+      "anchors": [
+        {
+          "identifier": "m_rView.SetTabRowFromDoc( true );",
+          "line": 3234,
+          "allMatchingLines": [
+            3234
+          ]
+        },
+        {
+          "identifier": "if (RulerColumnDrag(",
+          "line": 3240,
+          "allMatchingLines": [
+            3240
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sw/source/uibase/uiview/viewtab.cxx",
+      "sha256": "f93e2b889762ab0165db3d1485d3bbae6e9e97794c79870c2299756b4095e7a1",
+      "anchors": [
+        {
+          "identifier": "case SID_RULER_ROWS :",
+          "line": 1043,
+          "allMatchingLines": [
+            1043,
+            2128
+          ]
+        },
+        {
+          "identifier": "SID_RULER_ACT_LINE_ONLY",
+          "line": 929,
+          "allMatchingLines": [
+            929,
+            1091
+          ]
+        },
+        {
+          "identifier": "rSh.SetMouseTabRows( aTabCols, bSingleLine, m_aTabColFromDocPos );",
+          "line": 1100,
+          "allMatchingLines": [
+            1100
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sw/source/core/docnode/ndtbl.cxx",
+      "sha256": "d3220445657cd54a44fc741bebf5d514b4d62f5607fcfb5e0f7ef30700075d8d",
+      "anchors": [
+        {
+          "identifier": "void SwDoc::SetTabRows",
+          "line": 2927,
+          "allMatchingLines": [
+            2927
+          ]
+        },
+        {
+          "identifier": "if ( !bCurColOnly || pFrame == pBoxFrame )",
+          "line": 3010,
+          "allMatchingLines": [
+            3010
+          ]
+        }
+      ]
+    },
+    {
+      "path": "include/vcl/keycodes.hxx",
+      "sha256": "e2cd5d8cfc7230ca1925519e6af103c7adaef6d1ce5a8d05f052bc9c310ef954",
+      "anchors": [
+        {
+          "identifier": "KEY_SHIFT",
+          "line": 29,
+          "allMatchingLines": [
+            29
+          ]
+        },
+        {
+          "identifier": "KEY_MOD1",
+          "line": 30,
+          "allMatchingLines": [
+            30
+          ]
+        },
+        {
+          "identifier": "KEY_MOD2",
+          "line": 31,
+          "allMatchingLines": [
+            31
+          ]
+        },
+        {
+          "identifier": "KEY_MOD3",
+          "line": 32,
+          "allMatchingLines": [
+            32
+          ]
+        }
+      ]
+    }
+  ],
+  "production": [
+    {
+      "path": "apps/office/src/sw/source/uibase/docvw/edtwin.ts",
+      "sha256": "cbccdd7fb81c345fcb979e29a96e551df3a218a7de11dcc38d0d4968de1a2897"
+    }
+  ],
+  "protectedIO": [
+    {
+      "path": "apps/office/src/sw/browser/storage/writer-odt-store.ts",
+      "sha256": "0fb4ebffca5a00fe63ff327379305d64143c7014dace0a7e13edb8c0c241232e",
+      "byteIdenticalToCurrentBaseline": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/workflows/writer-odt-io.ts",
+      "sha256": "7c214afab59dbc5df1087f107e2b7bf2bf01d8623a2995e8eb19a45575361306",
+      "byteIdenticalToCurrentBaseline": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/WriterFileDialog.tsx",
+      "sha256": "50ad125f5a254eb1772b62abe3681e4632df6c7870ea9647622b2268394c88c3",
+      "byteIdenticalToCurrentBaseline": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/writer-view.tsx",
+      "sha256": "5fbe8e47d24a0d03e4f5925e9002ab31a61c140f1ae819cf8805439f4ef253cc",
+      "byteIdenticalToCurrentBaseline": true
+    }
+  ],
+  "unchangedBrowserModifierBridge": {
+    "path": "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts",
+    "sha256": "060a06dd9a77e530de1756b2f4c4384e6b2ddd1ee20c68fb175daab2eeb99ee7"
+  },
+  "sourceBoundContracts": [
+    "Native solitary modifier masks preserved through actual MouseButtonDown; Shift rows remap to ordinary, Ctrl proportional, Ctrl+Shift internal Border active-line-only, excluded on margins.",
+    "PrepareProportional_Impl stores uint16 integer per-thousand preceding-border device shares for horizontal-writing rows on the vertical ruler; zero-width native fences imply zero block sums.",
+    "CalcMinMax uses source proportional Border index+1 minimum then glMinFrame, Margin2 Count*glMinFrame, ordinary native limits and active-line-only previous visible lower border plus glMinFrame; no arbitrary new caps.",
+    "DragBorders redistributes preceding rows, applies absolute selected end and translates following borders/table end; Margin2 uses nIndex0 and retains its post-proportional translation of later borders.",
+    "ApplyBorders OBJECT_ACTLINE_ONLY reaches original Writer SetMouseTabRows bool, native SetTabRows hit-cell-only interval owner, original frame/box/line/cursor/history remain intact."
+  ],
+  "residuals": [
+    "Full SvxRuler/SfxBindings/SfxItemSet slot ownership and StateTabWin page/frame/section contexts remain partial.",
+    "Vertical/RTL document dragging, native snapping/protection and single-row paragraph-indent bottom-margin range remain incomplete; represented row modifier behavior alone is certified.",
+    "Pooled item guards/full uint16 WhichId and nonzero UNO members/default factory/presentation remain partial from prior native value work.",
+    "Registered IO/open/save/recovery/settings preserved byte-identically; no full upstream/module parity promotion."
+  ]
+}

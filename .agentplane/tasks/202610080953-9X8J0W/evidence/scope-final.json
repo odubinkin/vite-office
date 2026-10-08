@@ -1,0 +1,37 @@
+{
+  "base": "5c9fb0c9f315705b5755a275f1471d980558cddd",
+  "semanticPaths": [
+    "apps/office/src/sw/source/uibase/docvw/edtwin.ts",
+    "apps/office/src/sw/source/uibase/docvw/native-row-modifier-drag.test.ts",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/source-provenance.json"
+  ],
+  "scopeCount": 4,
+  "priorAcceptanceFiles": 619,
+  "byteIdenticalAcceptanceFiles": 619,
+  "exactSourceBackedMigrations": [],
+  "newAcceptanceFiles": [
+    "apps/office/src/sw/source/uibase/docvw/native-row-modifier-drag.test.ts"
+  ],
+  "metadata": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "oldRecords": 307,
+      "currentRecords": 307,
+      "allPriorFieldsPrefixesAndStatusesPreserved": true,
+      "extendedPartialModules": [
+        "apps/office/src/sw/source/uibase/docvw/edtwin.ts"
+      ]
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "oldRecords": 307,
+      "currentRecords": 307,
+      "allPriorFieldsPrefixesAndStatusesPreserved": true,
+      "extendedPartialModules": [
+        "apps/office/src/sw/source/uibase/docvw/edtwin.ts"
+      ]
+    }
+  ],
+  "failures": []
+}

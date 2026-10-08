@@ -1,0 +1,13 @@
+{
+  "records": [
+    {
+      "command": "Unchanged JSDoc validator on approved changed code/acceptance paths; actual physical-line count",
+      "exit": 0,
+      "errors": [],
+      "physicalLines": {
+        "apps/office/src/sw/source/uibase/docvw/edtwin.ts": 724,
+        "apps/office/src/sw/source/uibase/docvw/native-row-modifier-drag.test.ts": 278
+      }
+    }
+  ]
+}

@@ -62,6 +62,7 @@ export class SwEditWin {
         readonly minimum: number;
         readonly maximum: number;
         readonly linear: boolean;
+        readonly activeLineOnly: boolean;
         readonly proportional?: Readonly<{ nTotalDist: number; pPercBuf: readonly number[] }>;
         position: number;
       }
@@ -133,7 +134,7 @@ export class SwEditWin {
     const kind = this.WhichMouseTabCol(point);
     if (!this.m_rView.GetWrtShell().IsTableMode()) {
       if (kind === SwTab.COL_HORI) return this.RulerColumnDrag(point, modifier);
-      if (kind === SwTab.ROW_HORI) return this.RulerRowDrag(point);
+      if (kind === SwTab.ROW_HORI) return this.RulerRowDrag(point, modifier);
     }
     if (kind !== SwTab.SEL_HORI && kind !== SwTab.ROWSEL_HORI && kind !== SwTab.COLSEL_HORI)
       return false;
@@ -251,14 +252,15 @@ export class SwEditWin {
       minimum: minimum + (index === -1 ? 0 : 5 * scale),
       maximum: maximum - (index === original.Count() ? 0 : 5 * scale),
       linear,
+      activeLineOnly: false,
       ...(proportional === undefined ? {} : { proportional }),
       position,
     };
     return true;
   }
 
-  /** Starts native horizontal row-border tracking with the source following-row translation policy. @param point - Actual document hit. @returns Whether admitted. */
-  public RulerRowDrag(point: SwTableMousePoint): boolean {
+  /** Starts horizontal-writing row tracking with native exact-mask modifier policy. @param point - Actual document hit. @param modifier - Captured native key mask. @returns Whether admitted. */
+  public RulerRowDrag(point: SwTableMousePoint, modifier = 0): boolean {
     const hit = this.m_rView.GetWrtShell().GetBox(point),
       original = new SwTabCols();
     if (
@@ -286,14 +288,39 @@ export class SwEditWin {
       if (Math.abs(rect.bottom - point.y) > 5 || !original.IsLastRowAllowedToChange()) return false;
       index = original.Count();
     }
-    const minimum =
-        index === original.Count()
-          ? index === 0
-            ? 0
-            : rows.At(index - 1).nEnd + original.GetLeft()
-          : rows.At(index).nEndMin + original.GetLeft(),
-      position =
+    const activeLineOnly = modifier === (KEY_MOD1 | KEY_SHIFT) && index < original.Count();
+    let previousVisible = index - 1;
+    if (activeLineOnly)
+      while (previousVisible >= 0 && !rows.At(previousVisible).bVisible) previousVisible--;
+    const position =
         index === original.Count() ? original.GetRight() : rows.At(index).nEnd + original.GetLeft(),
+      proportional =
+        modifier === KEY_MOD1
+          ? {
+              nTotalDist: Math.round(position / scale),
+              pPercBuf: Array.from(
+                { length: index },
+                /** Stores native preceding-border uint16 per-thousand shares. @param _unused - Empty entry. @param i - Original separator. @returns Source share. */
+                (_unused, i) =>
+                  Math.trunc(
+                    (Math.round((rows.At(i).nEnd + original.GetLeft()) / scale) * 1000) /
+                      Math.round(position / scale),
+                  ) & 0xffff,
+              ),
+            }
+          : undefined,
+      minimum =
+        proportional !== undefined
+          ? (index === original.Count() ? index : index + 1) * 5 * scale
+          : activeLineOnly
+            ? previousVisible < 0
+              ? 0
+              : rows.At(previousVisible).nEnd + original.GetLeft()
+            : index === original.Count()
+              ? index === 0
+                ? 0
+                : rows.At(index - 1).nEnd + original.GetLeft()
+              : rows.At(index).nEndMin + original.GetLeft(),
       maximum =
         index === original.Count()
           ? index === 0
@@ -312,6 +339,8 @@ export class SwEditWin {
       minimum: minimum + 5 * scale,
       maximum,
       linear: false,
+      activeLineOnly,
+      ...(proportional === undefined ? {} : { proportional }),
       position,
     };
     return true;
@@ -352,8 +381,24 @@ export class SwEditWin {
         ),
       );
       if (drag.axis === "row") {
+        if (drag.proportional !== undefined)
+          drag.position = Math.round(Math.round(drag.position / drag.scale) * drag.scale);
         const delta = drag.position - drag.initialPosition;
         drag.next.Assign(drag.original);
+        if (drag.proportional !== undefined) {
+          const total =
+            drag.proportional.nTotalDist +
+            Math.round(drag.position / drag.scale) -
+            Math.round(drag.initialPosition / drag.scale);
+          for (let i = 0; i < drag.index; i++)
+            drag.next.GetEntry(i).nPos = Math.round(
+              Math.trunc((total * (drag.proportional.pPercBuf[i] as number)) / 1000) * drag.scale,
+            );
+          // DragBorders uses nIndex=0 for Margin2; its following-border
+          // translation therefore also visits proportional borders after0.
+          if (drag.index === drag.next.Count())
+            for (let i = 1; i < drag.next.Count(); i++) drag.next.GetEntry(i).nPos += delta;
+        }
         for (let i = drag.index; i < drag.next.Count(); i++)
           drag.next.GetEntry(i).nPos =
             i === drag.index ? drag.position : drag.original.GetEntry(i).nPos + delta;
@@ -407,7 +452,7 @@ export class SwEditWin {
       if (drag.initialPosition !== drag.position)
         this.Complete(
           drag.axis === "row"
-            ? this.m_rView.GetWrtShell().SetMouseTabRows(drag.next, false, drag.start)
+            ? this.m_rView.GetWrtShell().SetMouseTabRows(drag.next, drag.activeLineOnly, drag.start)
             : this.m_rView.GetWrtShell().SetMouseTabCols(drag.next, false, drag.start),
         );
     }

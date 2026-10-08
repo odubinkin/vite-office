@@ -1,0 +1,65 @@
+{
+  "app": {
+    "original": 13749,
+    "current": 13749,
+    "newCases": 0,
+    "resolved": 0,
+    "passed": 13749,
+    "unresolvedCount": 0,
+    "skippedObservationsRetained": 0,
+    "passingReplay": 0,
+    "originalUncaughtErrorCases": 0,
+    "finalUncaughtErrorCases": 0,
+    "inputs": [
+      {
+        "file": "9X8J0W.app-results.json",
+        "sha256": "b969fe817d9ff4104b36cc6a32734d42d2ccf47a7d53c4942ebfec5b511daf60",
+        "passed": 13749,
+        "failed": 0,
+        "skipped": 0
+      }
+    ]
+  },
+  "inventory": {
+    "original": 110,
+    "current": 110,
+    "newCases": 0,
+    "resolved": 0,
+    "passed": 110,
+    "unresolvedCount": 0,
+    "skippedObservationsRetained": 0,
+    "passingReplay": 0,
+    "originalUncaughtErrorCases": 0,
+    "finalUncaughtErrorCases": 0,
+    "inputs": [
+      {
+        "file": "9X8J0W.inventory-results.json",
+        "sha256": "348013a258132a4f827060d59f2ce9d341b2e48383558842af17096bac7fc9a6",
+        "passed": 110,
+        "failed": 0,
+        "skipped": 0
+      }
+    ]
+  },
+  "chromium": {
+    "current": 299,
+    "passed": 299,
+    "unresolvedCount": 0,
+    "passingReplay": 0,
+    "inputs": [
+      {
+        "file": "9X8J0W.chromium-results.json",
+        "sha256": "5c81f68a7c465bd6f8d56dd988bd1718a06e47f318dbc3a5415e871b5cd51376",
+        "counts": {
+          "startTime": "2026-10-08T10:14:08.663Z",
+          "duration": 323262.32300000003,
+          "expected": 299,
+          "skipped": 0,
+          "unexpected": 0,
+          "flaky": 0
+        }
+      }
+    ]
+  },
+  "failures": []
+}

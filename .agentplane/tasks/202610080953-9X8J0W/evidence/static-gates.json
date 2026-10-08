@@ -1,0 +1,50 @@
+{
+  "records": [
+    {
+      "command": "npm run format:check",
+      "exit": 0,
+      "bytes": 122,
+      "sha256": "ac1729f86eee878f5f4d6c948c510d2cc91bb5568f6dd088f70f3885e137d116",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run lint",
+      "exit": 1,
+      "bytes": 300,
+      "sha256": "78fca3281ba7022c3d25995ce8450b2948f696274ec4f34bc2e55669477761a9",
+      "diagnostics": [
+        "> eslint . --max-warnings 0",
+        "  34:14  error  '_height' is assigned a value but never used  @typescript-eslint/no-unused-vars",
+        "✖ 1 problem (1 error, 0 warnings)"
+      ]
+    },
+    {
+      "command": "npm run typecheck",
+      "exit": 0,
+      "bytes": 240,
+      "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:dependencies",
+      "exit": 0,
+      "bytes": 189,
+      "sha256": "642ee4db944b2cf27fbbf4cb23a480e8e035722e55c424c33c9dcbcc22d50aa1",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:docs",
+      "exit": 0,
+      "bytes": 119,
+      "sha256": "000e56d219de6dfda385c31c31d317474e2f4f0132481ec88fada9181405ee45",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:file-size",
+      "exit": 0,
+      "bytes": 4068,
+      "sha256": "69c1c26e045b1199567f73d2ab1b7e6e8d1629b3a64e30ea08f091f51a49d414",
+      "diagnostics": []
+    }
+  ]
+}
