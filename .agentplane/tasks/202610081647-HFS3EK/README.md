@@ -4,7 +4,7 @@ title: "Publish native changed table property items from pages to shell"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 25
+revision: 28
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,30 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-08T17:44:48.636Z"
+  updated_by: "CODER"
+  note: "Verified native table-property item exchange at d8d894a35fc37b51a90775e24707256083406740:412 targeted app/38 Chromium/45 fresh, passing replay0; actual current-source-bound app/inventory all-four100.17 semantic paths;635/639 prior files unchanged with4 exact native migrations;313 metadata records preserve311 originals. Static/build/source/governance/artifact/IO/pin/stash gates pass. No full suite; next247. Same-agent evaluator is not independent. Whole parent/goal parity remains unverified."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-08T17:44:47.725Z"
+  updated_by: "EVALUATOR"
+  note: "Pass bounded native table-property item publication at d8d894a35fc37b51a90775e24707256083406740. Current-agent EVALUATOR is explicitly not independent. Reconstructed actual counters and case/scope/native-source certificates without executing tests;17 committed paths,412 app/38 Chromium/45 fresh, all-four coverage100, no passing replay, user full cadence237/247."
+  evaluated_sha: "d8d894a35fc37b51a90775e24707256083406740"
+  blueprint_digest: "08cc1f3072e9d4ec59c3ea6670e9d2c2362c645754e98176729a8ce5dd058bbc"
+  evidence_refs:
+    - ".agentplane/tasks/202610081647-HFS3EK/README.md"
+    - ".agentplane/tasks/202610081647-HFS3EK/quality/20261008-174447725-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610081647-HFS3EK/quality/20261008-174447725-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610081647-HFS3EK/quality/20261008-174447725-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610081647-HFS3EK/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610081647-HFS3EK/evidence/actual-sha-quality.json"
+    - ".agentplane/tasks/202610081647-HFS3EK/evidence/final-coverage.json"
+    - ".agentplane/tasks/202610081647-HFS3EK/evidence/runtime-census.json"
+    - ".agentplane/tasks/202610081647-HFS3EK/evidence/native-source-review.json"
+  findings:
+    - "Main properties UI sends SfxItemSet directly without DTO fallback; native pointer/explicit SET items, unconditional Columns output, created Borders admission and page-range Reset are source-bound. Four whole-file native expectation/input migrations preserve635 of639 prior files; four new acceptance files and313 metadata records retain311 prior fields/prefixes/states/defaults/classes."
 commit: null
 comments:
   -
@@ -35,8 +54,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement the approved native changed-item publication and actual UI-to-SfxItemSet shell path; one upstream-absent profile and exact-source evidence only."
+  -
+    type: "verify"
+    at: "2026-10-08T17:44:48.636Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified native table-property item exchange at d8d894a35fc37b51a90775e24707256083406740:412 targeted app/38 Chromium/45 fresh, passing replay0; actual current-source-bound app/inventory all-four100.17 semantic paths;635/639 prior files unchanged with4 exact native migrations;313 metadata records preserve311 originals. Static/build/source/governance/artifact/IO/pin/stash gates pass. No full suite; next247. Same-agent evaluator is not independent. Whole parent/goal parity remains unverified."
 doc_version: 3
-doc_updated_at: "2026-10-08T17:41:14.421Z"
+doc_updated_at: "2026-10-08T17:44:48.686Z"
 doc_updated_by: "CODER"
 description: "Iteration238 under ongoing authorized parity goal. Port native SwPtrItem/FN table identities and route mounted properties through SfxItemSet changed items. Empty acceptance must preserve full formats/history/defaults; page/name/spacing/headline/geometry/border/flow changes follow native publication and one grouped history. Keep declared IO deviations, no network or outside access, no upstream/Python/raw evidence in AgentPlane, tests only upstream absent exactly one full profile then failed/new closures."
 sections:
@@ -76,6 +101,40 @@ sections:
     Command: format:check, lint, typecheck, check:dependencies, check:docs, check:file-size, resource generator --check, source-tree, provenance, inventory invariants/parity, final production build/static smoke.
     Result: pass. Inventory path ordering repair preserves311 prior records and inserts2 new partial native identities in lexical order. Current metadata provenance/parity checks pass for313 modules. Final build terminal70393 exit0, relative assets/no backend endpoints; existing large-chunk warning retained.
     Scope:17 semantic files; source pin9bc445578031fecf56086729d8e4940c77e14d65, four protected IO files and all complete writer-view IO regions preserved, native caller only; parent686947-character prefix unchanged and stashc85f4a0e453dfd06d6e199554784f2c286737472 retained. No full suite this leaf; user cadence last237/next247. Raw scripts/source/maps/results remain only ignored cache. Actual implementation SHA and governance/current-agent quality/clean close follow.
+    Actual implementation: d8d894a35fc37b51a90775e24707256083406740. Current-agent EVALUATOR explicitly not independent reconstructed four certificates without tests and verified all17 actual committed byte sequences; structured quality pass recorded. ap doctor/routing/diff checks pass; two pre-existing readiness-shim/immutable-DONE warnings retained.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-08T17:44:48.636Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified native table-property item exchange at d8d894a35fc37b51a90775e24707256083406740:412 targeted app/38 Chromium/45 fresh, passing replay0; actual current-source-bound app/inventory all-four100.17 semantic paths;635/639 prior files unchanged with4 exact native migrations;313 metadata records preserve311 originals. Static/build/source/governance/artifact/IO/pin/stash gates pass. No full suite; next247. Same-agent evaluator is not independent. Whole parent/goal parity remains unverified.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-08T17:44:48.260Z, excerpt_hash=sha256:e72ededff5aa6363c1ceabc92eee52e0158967ae5238635e2189a77ddeb0cef3
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610081647-HFS3EK/blueprint/resolved-snapshot.json
+    - old_digest: 08cc1f3072e9d4ec59c3ea6670e9d2c2362c645754e98176729a8ce5dd058bbc
+    - current_digest: 08cc1f3072e9d4ec59c3ea6670e9d2c2362c645754e98176729a8ce5dd058bbc
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610081647-HFS3EK
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610081647-HFS3EK -m 🧩 HFS3EK task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only the actual implementation commit through a new authorized task; preserve task evidence and completed leaves."
   Findings: |-
     Observation: native Columns DeactivatePage always publishes the borrowed representation, and SfxTabDialog Ok admits only created pages. Fresh draft expectations of empty Columns/visited Borders output were incorrect and were superseded by direct pinned-source evidence. Initial Table OK now has no default-materialization history. Shared exchange output and Reset clearing follow native page item ranges.
@@ -129,6 +188,40 @@ Result: pass for412 current unique app cases,38 Chromium cases,45 fresh cases; p
 Command: format:check, lint, typecheck, check:dependencies, check:docs, check:file-size, resource generator --check, source-tree, provenance, inventory invariants/parity, final production build/static smoke.
 Result: pass. Inventory path ordering repair preserves311 prior records and inserts2 new partial native identities in lexical order. Current metadata provenance/parity checks pass for313 modules. Final build terminal70393 exit0, relative assets/no backend endpoints; existing large-chunk warning retained.
 Scope:17 semantic files; source pin9bc445578031fecf56086729d8e4940c77e14d65, four protected IO files and all complete writer-view IO regions preserved, native caller only; parent686947-character prefix unchanged and stashc85f4a0e453dfd06d6e199554784f2c286737472 retained. No full suite this leaf; user cadence last237/next247. Raw scripts/source/maps/results remain only ignored cache. Actual implementation SHA and governance/current-agent quality/clean close follow.
+Actual implementation: d8d894a35fc37b51a90775e24707256083406740. Current-agent EVALUATOR explicitly not independent reconstructed four certificates without tests and verified all17 actual committed byte sequences; structured quality pass recorded. ap doctor/routing/diff checks pass; two pre-existing readiness-shim/immutable-DONE warnings retained.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-08T17:44:48.636Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified native table-property item exchange at d8d894a35fc37b51a90775e24707256083406740:412 targeted app/38 Chromium/45 fresh, passing replay0; actual current-source-bound app/inventory all-four100.17 semantic paths;635/639 prior files unchanged with4 exact native migrations;313 metadata records preserve311 originals. Static/build/source/governance/artifact/IO/pin/stash gates pass. No full suite; next247. Same-agent evaluator is not independent. Whole parent/goal parity remains unverified.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-08T17:44:48.260Z, excerpt_hash=sha256:e72ededff5aa6363c1ceabc92eee52e0158967ae5238635e2189a77ddeb0cef3
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610081647-HFS3EK/blueprint/resolved-snapshot.json
+- old_digest: 08cc1f3072e9d4ec59c3ea6670e9d2c2362c645754e98176729a8ce5dd058bbc
+- current_digest: 08cc1f3072e9d4ec59c3ea6670e9d2c2362c645754e98176729a8ce5dd058bbc
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610081647-HFS3EK
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610081647-HFS3EK -m 🧩 HFS3EK task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 

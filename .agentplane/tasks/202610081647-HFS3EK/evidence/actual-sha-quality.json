@@ -1,0 +1,164 @@
+{
+  "implementationSHA": "d8d894a35fc37b51a90775e24707256083406740",
+  "reviewer": "Current agent EVALUATOR role; not an independent reviewer",
+  "independent": false,
+  "paths": [
+    {
+      "path": "apps/office/src/sw/inc/cmdid.ts",
+      "sha256": "79ad0035b1d1165ece102812e2ef0867ae470959a41ab873b86060e15cd1db69",
+      "actualCommittedBytes": true,
+      "physicalLines": 9
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/utlui/uiitems.ts",
+      "sha256": "95c8b8676815300537a90b58be95bf093341c54edeab6cfea055e0baf5629eeb",
+      "actualCommittedBytes": true,
+      "physicalLines": 30
+    },
+    {
+      "path": "apps/office/src/sw/inc/hintids.ts",
+      "sha256": "d8b96b5b69293a47477207b5de36eb4e74c8c9c905e33045363c6440787398f4",
+      "actualCommittedBytes": true,
+      "physicalLines": 210
+    },
+    {
+      "path": "apps/office/src/sw/source/ui/table/tabledlg.ts",
+      "sha256": "4b5d1accd7b7de7ae2688feb12435f3ddc1a8627e746b15bb8f2eb469cb53ad5",
+      "actualCommittedBytes": true,
+      "physicalLines": 626
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/shells/tabsh.ts",
+      "sha256": "88d17a667bd6896fa38edb05172bcd4b7b20d0eb32e1ceb00348c00eb2f3c2e4",
+      "actualCommittedBytes": true,
+      "physicalLines": 404
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx",
+      "sha256": "29603da06021772907191aeedfdaaf820701e95a60aa91b41ca6505650d302f4",
+      "actualCommittedBytes": true,
+      "physicalLines": 736
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/writer-view.tsx",
+      "sha256": "782755425f440a2438a2994ee429a6ee7b37e4f65ca8e5f1855c9d18db8f9de1",
+      "actualCommittedBytes": true,
+      "physicalLines": 986
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/utlui/native-pointer-items.test.ts",
+      "sha256": "669bd5188f4e72fb3c78bccb1a89fcf56ee4b8acce1dede0146d30a3b6b58c89",
+      "actualCommittedBytes": true,
+      "physicalLines": 44
+    },
+    {
+      "path": "apps/office/src/sw/source/ui/table/native-table-property-output.test.ts",
+      "sha256": "d73d29d5b06160f73845ed52abaa3c876a2887427dd4f93422588f66e6d10627",
+      "actualCommittedBytes": true,
+      "physicalLines": 136
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/shells/native-table-property-item-input.test.ts",
+      "sha256": "5a3173bcf229f01171949ae257ff4bc894ca89cb7b6b053bd7d7c09ae4ed690a",
+      "actualCommittedBytes": true,
+      "physicalLines": 305
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/native-table-property-output.test.tsx",
+      "sha256": "738a82de2f85e4edfda17f4ce76f0e32691f93ba8c46867e99d237bec52dbc7e",
+      "actualCommittedBytes": true,
+      "physicalLines": 443
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/native-independent-table-properties.test.tsx",
+      "sha256": "29ae455d2d2eca9d3829323c8020780b85242721bf4474d4180283d689de0d30",
+      "actualCommittedBytes": true,
+      "physicalLines": 274
+    },
+    {
+      "path": "apps/office/e2e/writer-native-independent-table-properties.spec.ts",
+      "sha256": "5d72565bd68033825d8a5aeeb29bb361b618862d910cda5b1047dcadab27de85",
+      "actualCommittedBytes": true,
+      "physicalLines": 138
+    },
+    {
+      "path": "docs/program/source-provenance.json",
+      "sha256": "dcbbfd56891ada7d19c55355e123cca66c9593e1107d1587a419ed116fb025ef",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "sha256": "6dc02b0bf8b80152149eca84f72993e8f47ea46d9d5973a521b33b55aec56d94",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/native-table-properties.test.tsx",
+      "sha256": "5598494e9b605f7d7e7b23230fc5168194f1e7edf114f29f5bf355435d1cbb5c",
+      "actualCommittedBytes": true,
+      "physicalLines": 109
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/native-table-alignment.test.tsx",
+      "sha256": "fea2128582dcf3835ce9fece7fed744d05a2da07165bb501b8d52f7dcacc2945",
+      "actualCommittedBytes": true,
+      "physicalLines": 89
+    }
+  ],
+  "reconstructedCertificates": [
+    {
+      "identifier": "final-coverage.json",
+      "sha256": "27ab11b611a9a7850afdbdf0c3e91675ae4157e1d98db1765362b565336543e1"
+    },
+    {
+      "identifier": "runtime-census.json",
+      "sha256": "9eb98623ab498f628d7fab2224028818f0a40be31eeb264a7f65ff04d7c6b90f"
+    },
+    {
+      "identifier": "scope-final.json",
+      "sha256": "2214c4c022b1c06ee4a1788509826c7332d078f441bd82e85720b385d05c0722"
+    },
+    {
+      "identifier": "native-source-review.json",
+      "sha256": "fe877fda00571983a982fb67f6644868f8ace8abf4cc09c029e530c00a2a411c"
+    }
+  ],
+  "reconstructions": [
+    {
+      "identifier": "238proofScript",
+      "exit": 0,
+      "outputSHA256": "fc0a7c49a2811866c3b27995a4481fd2fbc6bc6a17210f07cc158459cd8df4ac",
+      "noTestsExecuted": true
+    },
+    {
+      "identifier": "238censusScript",
+      "exit": 0,
+      "outputSHA256": "bb887040f5aec8ca460e343746eb968112b864a11dfac6f606e2821445f6b058",
+      "noTestsExecuted": true
+    },
+    {
+      "identifier": "238scopeScript",
+      "exit": 0,
+      "outputSHA256": "f768e2eff51bc2df3c63e2225c76ed8460d1fb54bf520231ce627c6ab19dd998",
+      "noTestsExecuted": true
+    },
+    {
+      "identifier": "238sourceReviewScript",
+      "exit": 0,
+      "outputSHA256": "89f7c88dba47fda32d08db88c6a94d44e65a13b581345f8f79ad1bce0cd32c34",
+      "noTestsExecuted": true
+    }
+  ],
+  "coverageAllFour100": true,
+  "scopeCount": 17,
+  "appCases": 412,
+  "chromiumCases": 38,
+  "freshCases": 45,
+  "passingReplay": 0,
+  "fullCadence": {
+    "last": 237,
+    "next": 247
+  },
+  "noSourceOrRawMapsInAgentplane": true,
+  "verdict": "pass",
+  "residual": "Full native item factories, frame formats, layout/page orchestration, legacy non-UI DTO callers and whole core/browser/goal parity remain unverified."
+}
