@@ -1,10 +1,11 @@
 ---
 id: "202610080904-VEQGJS"
 title: "Use native row items and limits at the Writer ruler boundary"
-status: "DOING"
+result_summary: "Native Writer row ruler values and source limits integrated with absolute selected-row application; verified approved seven-file scope without upstream test dependencies or passing replay."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -39,11 +40,16 @@ quality_review:
     - ".agentplane/tasks/202610080904-VEQGJS/evidence/implementation-review.json"
   findings:
     - "Reconstructed four committed evidence reports byte-identically; all7 semantic bytes bound to actual SHA,618 prior acceptance sources unchanged,307 prior metadata records preserved each, all-four source-bound coverage100; sole full absent profile and only original failure/new cases, no passing replay."
-commit: null
+commit:
+  hash: "a94335fd975e6275d718088f55f63f448c2527b0"
+  message: "🧩 VEQGJS parity: use native Writer row items and apply selected bounds"
 comments:
   -
     author: "CODER"
     body: "Start: port source-owned Writer row item conversion and real drag limits under the standing authorized goal, preserving original owners/acceptance and registered IO deviations; one full upstream-absent profile."
+  -
+    author: "CODER"
+    body: "Verified: native Writer row item visibility and limits drive real ruler capture; selected item position is applied directly, original model/history owners preserved. Exact implementation reviewed;13725app/110inventory/16infra/299Chromium PASS with one full upstream-absent profile, original failure/new cases only, all-four coverage100. Committed canonical verification checkpoint1d4702fd68c7; residual full native ruler contexts remain partial."
 events:
   -
     type: "status"
@@ -58,8 +64,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Actual implementation a94335fd975e6275d718088f55f63f448c2527b0: final docs recorded first; exact reviewed seven-file native row scope, sole full upstream-absent profile plus original failed/new cases only;13725app/110inventory/16infra/299Chromium PASS, all-four source-bound coverage100,618 acceptance files unchanged,307 records preserved each, quality PASS explicitly same-current-agent. Residual full ruler/slot/vertical/single-row contexts remain documented; goal ACTIVE."
+  -
+    type: "status"
+    at: "2026-10-08T09:48:54.682Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native Writer row item visibility and limits drive real ruler capture; selected item position is applied directly, original model/history owners preserved. Exact implementation reviewed;13725app/110inventory/16infra/299Chromium PASS with one full upstream-absent profile, original failure/new cases only, all-four coverage100. Committed canonical verification checkpoint1d4702fd68c7; residual full native ruler contexts remain partial."
 doc_version: 3
-doc_updated_at: "2026-10-08T09:48:34.111Z"
+doc_updated_at: "2026-10-08T09:48:54.684Z"
 doc_updated_by: "CODER"
 description: "Iteration230: port the actual StateTabWin row value branch and native row slot constants, route production row drag through SwView/SvxColumnItem visibility/end/min/max, retain original SwTabCols model/apply and row margin/follow guards, verify pinned horizontal/vertical item contracts and real history without touching registered IO deviations."
 sections:
