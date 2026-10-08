@@ -1,10 +1,11 @@
 ---
 id: "202610081436-WEN15R"
 title: "Recreate native inserted rows from numeric history and transfer top borders"
-status: "DOING"
+result_summary: "Recreated inserted native rows through document-owned numeric history, removed retained row graphs and applied source TOP border transfer. Verified13845app/110inventory/19infra/299Chromium passes with one full absent profile, no passing replay, exact-source all-four coverage and actual-SHA current-agent EVALUATOR pass explicitly not independent; source pin/IO/stash and historical acceptance preserved."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 20
+revision: 22
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-08T15:12:46.303Z"
+  updated_at: "2026-10-08T15:13:12.283Z"
   updated_by: "CODER"
-  note: "Verified actual implementation 83412794968661f02031b1b0f57b8fda1a9fecf1: one full upstream-absent profile and only four originally failed-case closures;13845app/110inventory/19infra/299ChromiumPASS, all-four app/inventory100, six static/five source/governance/source pin/scope/IO/stash/AP auditsPASS. Current-agent actual-SHA EVALUATOR pass is explicitly not independent; complete reconstruction repeats no tests."
+  note: "Recreated inserted native rows through document-owned numeric history, removed retained row graphs and applied source TOP border transfer. Verified13845app/110inventory/19infra/299Chromium passes with one full absent profile, no passing replay, exact-source all-four coverage and actual-SHA current-agent EVALUATOR pass explicitly not independent; source pin/IO/stash and historical acceptance preserved."
   attempts: 0
 quality_review:
   state: "pass"
@@ -38,11 +39,16 @@ quality_review:
     - ".agentplane/tasks/202610081436-WEN15R/evidence/quality-actual-sha.json"
   findings:
     - "Fresh reconstruction byte-identically reproduces coverage, unique case and scope reports without tests. All-four app/inventory100,13845/110/19/299 unique passes,11 fresh cases,20 focused skips retained, passingReplay0. Scope16,625/631 prior test files byte-identical with6 native-backed owner fixture migrations;311 metadata records and pin/IO/stash/parent preserved."
-commit: null
+commit:
+  hash: "83412794968661f02031b1b0f57b8fda1a9fecf1"
+  message: "🧩 WEN15R code: recreate native rows by numeric history and transfer top borders"
 comments:
   -
     author: "CODER"
     body: "Start: replace retained row redo with native numeric document insertion/top border mechanics under standing parity authorization, preserve IO and execute one absent full profile only."
+  -
+    author: "CODER"
+    body: "Verified: Recreated inserted native rows through document-owned numeric history, removed retained row graphs and applied source TOP border transfer. Verified13845app/110inventory/19infra/299Chromium passes with one full absent profile, no passing replay, exact-source all-four coverage and actual-SHA current-agent EVALUATOR pass explicitly not independent; source pin/IO/stash and historical acceptance preserved.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -57,8 +63,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified actual implementation 83412794968661f02031b1b0f57b8fda1a9fecf1: one full upstream-absent profile and only four originally failed-case closures;13845app/110inventory/19infra/299ChromiumPASS, all-four app/inventory100, six static/five source/governance/source pin/scope/IO/stash/AP auditsPASS. Current-agent actual-SHA EVALUATOR pass is explicitly not independent; complete reconstruction repeats no tests."
+  -
+    type: "verify"
+    at: "2026-10-08T15:13:12.283Z"
+    author: "CODER"
+    state: "ok"
+    note: "Recreated inserted native rows through document-owned numeric history, removed retained row graphs and applied source TOP border transfer. Verified13845app/110inventory/19infra/299Chromium passes with one full absent profile, no passing replay, exact-source all-four coverage and actual-SHA current-agent EVALUATOR pass explicitly not independent; source pin/IO/stash and historical acceptance preserved."
+  -
+    type: "status"
+    at: "2026-10-08T15:13:12.384Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Recreated inserted native rows through document-owned numeric history, removed retained row graphs and applied source TOP border transfer. Verified13845app/110inventory/19infra/299Chromium passes with one full absent profile, no passing replay, exact-source all-four coverage and actual-SHA current-agent EVALUATOR pass explicitly not independent; source pin/IO/stash and historical acceptance preserved.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-08T15:12:46.628Z"
+doc_updated_at: "2026-10-08T15:13:12.385Z"
 doc_updated_by: "CODER"
 description: "Replace retained row sections with native numeric selected/new-box history and Doc InsertRow redo; move row document transaction to ndtbl with DoesUndo/scoped suppression, source top-border transfer and source-backed old identity migrations. One coherent row insertion/history parity leaf under standing user approval."
 sections:
@@ -94,6 +113,39 @@ sections:
     Command: six final static gates and five source-dependent gates after terminal/restoration. Result: PASS. ap doctor, policy routing and git diff --check PASS; two longstanding doctor warnings remain (hook readiness and historical DONE2Z3962 missing implSHA). Native5 files match exact source pin9bc445578031fecf56086729d8e4940c77e14d65. ProtectedIO5, stash and entire parent677679-character prefix2abc6a8ca5379eda39a8582af468246816c4131acc98114caea52f1c96cb196a unchanged. Semantic scope16;631 prior acceptance files with625 byte-identical and6 explicit source-backed row/cell identity fixture migrations; all unrelated old assertions and all311 metadata records/fields/states/defaults/classes preserved. AP source/Python/raw maps/results audit PASS. Current-agent EVALUATOR actual implementation SHA phase follows this pre-commit checkpoint and will explicitly not claim independence.
 
     Actual implementation: 83412794968661f02031b1b0f57b8fda1a9fecf1. Current-agent EVALUATOR explicitly not independent: PASS at the actual SHA; coverage/case/scope reports reproduced byte-identically without tests and every semantic file equals that commit. Recorded quality report and owner verification PASS. No full goal/module parity claim.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-08T15:13:12.283Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Recreated inserted native rows through document-owned numeric history, removed retained row graphs and applied source TOP border transfer. Verified13845app/110inventory/19infra/299Chromium passes with one full absent profile, no passing replay, exact-source all-four coverage and actual-SHA current-agent EVALUATOR pass explicitly not independent; source pin/IO/stash and historical acceptance preserved.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-08T15:12:46.628Z, excerpt_hash=sha256:eebdc1cc9b7d0c774cc198a688a1a8b3003d0e01e2e231f490a71004f9e2d6a0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610081436-WEN15R/blueprint/resolved-snapshot.json
+    - old_digest: 7e2e4f8f1216e12a62d79754b43f7ff3d11ec8a67f9d524218a356b881846683
+    - current_digest: 7e2e4f8f1216e12a62d79754b43f7ff3d11ec8a67f9d524218a356b881846683
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610081436-WEN15R
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610081436-WEN15R --result verified-202610081436-WEN15R --commit 2f689b00bda5a1c0b7b956f5d202a36060f6a8d3
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Use a new scoped revert task if required; preserve unrelated history, original stash and source pin. Never rewrite DONE artifacts, parent history or Git commits; do not rollback registered IO deviations."
   Findings: |-
     Preflight main/direct clean after235. Native source confirms same numeric row/column redo selection and SaveNewBoxes temporary identity difference; row document insert has DoesUndo/scoped guard; copy removes TOP on inserted boxes behind and source/subsequent boxes before. Current adapter keeps sourceRow/rowIndex/insertionNode/actual row sections and reconnects them. Four known old acceptance files require source-backed new inserted-row identity expectations; other owners remain byte-identical. Read-only guessed native table/tblrwcl.cxx path produced rg exit2; route recomputed and rg --files identified actual doc/tblrwcl.cxx before mutation. Parent235 close-reference truncation parse was corrected through append-only erratum and parent commit ef851816ec55a4d04f40b94fe3d68bfc2249fd02; immutable DONE235 untouched.
@@ -150,6 +202,39 @@ Command: exact-source cumulative coverage reconstruction. Result: PASS all-four 
 Command: six final static gates and five source-dependent gates after terminal/restoration. Result: PASS. ap doctor, policy routing and git diff --check PASS; two longstanding doctor warnings remain (hook readiness and historical DONE2Z3962 missing implSHA). Native5 files match exact source pin9bc445578031fecf56086729d8e4940c77e14d65. ProtectedIO5, stash and entire parent677679-character prefix2abc6a8ca5379eda39a8582af468246816c4131acc98114caea52f1c96cb196a unchanged. Semantic scope16;631 prior acceptance files with625 byte-identical and6 explicit source-backed row/cell identity fixture migrations; all unrelated old assertions and all311 metadata records/fields/states/defaults/classes preserved. AP source/Python/raw maps/results audit PASS. Current-agent EVALUATOR actual implementation SHA phase follows this pre-commit checkpoint and will explicitly not claim independence.
 
 Actual implementation: 83412794968661f02031b1b0f57b8fda1a9fecf1. Current-agent EVALUATOR explicitly not independent: PASS at the actual SHA; coverage/case/scope reports reproduced byte-identically without tests and every semantic file equals that commit. Recorded quality report and owner verification PASS. No full goal/module parity claim.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-08T15:13:12.283Z — VERIFY — ok
+
+By: CODER
+
+Note: Recreated inserted native rows through document-owned numeric history, removed retained row graphs and applied source TOP border transfer. Verified13845app/110inventory/19infra/299Chromium passes with one full absent profile, no passing replay, exact-source all-four coverage and actual-SHA current-agent EVALUATOR pass explicitly not independent; source pin/IO/stash and historical acceptance preserved.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-08T15:12:46.628Z, excerpt_hash=sha256:eebdc1cc9b7d0c774cc198a688a1a8b3003d0e01e2e231f490a71004f9e2d6a0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610081436-WEN15R/blueprint/resolved-snapshot.json
+- old_digest: 7e2e4f8f1216e12a62d79754b43f7ff3d11ec8a67f9d524218a356b881846683
+- current_digest: 7e2e4f8f1216e12a62d79754b43f7ff3d11ec8a67f9d524218a356b881846683
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610081436-WEN15R
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610081436-WEN15R --result verified-202610081436-WEN15R --commit 2f689b00bda5a1c0b7b956f5d202a36060f6a8d3
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
