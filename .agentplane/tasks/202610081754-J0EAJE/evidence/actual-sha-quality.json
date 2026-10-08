@@ -1,0 +1,122 @@
+{
+  "implementationSHA": "85ef4a35e633a39e1d520186992ad00dbe6a28b6",
+  "reviewer": "Current agent EVALUATOR role; not an independent reviewer",
+  "independent": false,
+  "paths": [
+    {
+      "path": "apps/office/src/sw/inc/fmtlsplt.ts",
+      "sha256": "23f7e27f71f7276f5bb6758b2868fbc3a75b74d35b8a607a1eb0a0ed0ce792cf",
+      "actualCommittedBytes": true,
+      "physicalLines": 17
+    },
+    {
+      "path": "apps/office/src/sw/inc/fmtrowsplt.ts",
+      "sha256": "c74e6beb88e2aba18149e9beb15ed2988490a2e4ad382f200d9e91ec942a0888",
+      "actualCommittedBytes": true,
+      "physicalLines": 17
+    },
+    {
+      "path": "apps/office/src/sw/source/core/attr/swatrset.ts",
+      "sha256": "a40ae837ac01c7a3d04830ce93f59859792fda6c2e17fad09aef51c7199f9dd7",
+      "actualCommittedBytes": true,
+      "physicalLines": 450
+    },
+    {
+      "path": "apps/office/src/sw/source/ui/table/tabledlg.ts",
+      "sha256": "b91a32070f3faeb7296fa6f5a80d3188e2719aa54e2263d8a25608734534b645",
+      "actualCommittedBytes": true,
+      "physicalLines": 626
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/shells/tabsh.ts",
+      "sha256": "3cadeac8e0d2aa4c2f06b363c259a99b756a5de0b1580c64e7e1d60711f78d62",
+      "actualCommittedBytes": true,
+      "physicalLines": 406
+    },
+    {
+      "path": "apps/office/src/sw/inc/native-table-split-items.test.ts",
+      "sha256": "eb38d3fc9cfb5a9d4b95b50744b88aa8b4c3d7206685107e413678679d7889c7",
+      "actualCommittedBytes": true,
+      "physicalLines": 86
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/native-table-split-items.test.tsx",
+      "sha256": "ec5355f6976f4ee9e8dc886ac3be601c01043f423b98b52370c1defe900562fa",
+      "actualCommittedBytes": true,
+      "physicalLines": 181
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/shells/native-table-property-item-input.test.ts",
+      "sha256": "d12c9a3f7703254b6029c75d60bfef4bb6436da886849e88d97e6022dde51933",
+      "actualCommittedBytes": true,
+      "physicalLines": 301
+    },
+    {
+      "path": "docs/program/source-provenance.json",
+      "sha256": "23ab2991ad7d0d993d1becd77d2e49b8c5a996c13bad08349fd8c9c9e851d65e",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "sha256": "a3640569b9089c551059693650f7a5b106bbe720f041316afa6a78bf91e2ccee",
+      "actualCommittedBytes": true
+    }
+  ],
+  "reconstructedCertificates": [
+    {
+      "identifier": "final-coverage.json",
+      "sha256": "f06398dd88ded375ad70bfc227b6fa3279a3cdf6615147d557e7ff338c02ed39"
+    },
+    {
+      "identifier": "runtime-census.json",
+      "sha256": "36131f21c4bd5dd6b65bfa19ed9a8f320c280cfbce0c88ff7ec22747b77013c4"
+    },
+    {
+      "identifier": "scope-final.json",
+      "sha256": "7dd448263a7ab61dd20bb3f13475ef7a2fad42e5ca80275dee42f07f01e6e552"
+    },
+    {
+      "identifier": "native-source-review.json",
+      "sha256": "2170dc89f337f961ef7a3861201d3687d579cfb3688ddbe062a1ecfed0e926c1"
+    }
+  ],
+  "reconstructions": [
+    {
+      "identifier": "239proofScript",
+      "exit": 0,
+      "outputSHA256": "f2d5d7603605895b834e93550bdb8e6f74e680edc740df548d4b4a98d815e088",
+      "noTestsExecuted": true
+    },
+    {
+      "identifier": "239censusScript",
+      "exit": 0,
+      "outputSHA256": "ef76e21baf2edf4afc9fcefff205ced327a653bfa58518bbdf1fa77dbc11bda0",
+      "noTestsExecuted": true
+    },
+    {
+      "identifier": "239scopeScript",
+      "exit": 0,
+      "outputSHA256": "3def543d866df35869b6a8dd4c0d2c04dc1795616a901a923c87c4a56ad7bb02",
+      "noTestsExecuted": true
+    },
+    {
+      "identifier": "239sourceReviewScript",
+      "exit": 0,
+      "outputSHA256": "3c742194902bb06d037af3d1a907be8e3232480a41806d08840804f1cf7dd1ac",
+      "noTestsExecuted": true
+    }
+  ],
+  "coverageAllFour100": true,
+  "scopeCount": 10,
+  "appCases": 178,
+  "chromiumCases": 8,
+  "freshCases": 12,
+  "passingReplay": 0,
+  "fullCadence": {
+    "last": 237,
+    "next": 247
+  },
+  "noSourceOrRawMapsInAgentplane": true,
+  "verdict": "pass",
+  "residual": "Full shared frame/item ownership, row keepTogether scalar inversion, table scalar formats, presentation/localization/UNO/item-instance pooling and whole core/browser goal parity remain unverified."
+}

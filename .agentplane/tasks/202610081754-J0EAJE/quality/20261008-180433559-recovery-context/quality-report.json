@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "task_id": "202610081754-J0EAJE",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-08T18:04:33.559Z",
+  "verdict": "pass",
+  "summary": "Current-agent EVALUATOR phase, explicitly not independent: actual85ef4a35e633 native split item contracts satisfy the approved leaf scope.",
+  "evaluated_sha": "85ef4a35e633a39e1d520186992ad00dbe6a28b6",
+  "blueprint_digest": "68895fec8623ffbf358e20806a6ad02ed1193e2fbdfc2150a8f39f0a36f88d01",
+  "findings": [
+    "Ten committed semantic files match actual implementation bytes; four certificates deterministically reconstructed without tests or code edits.",
+    "Twelve fresh cases plus related modules:178app and8Chromium pass once upstream-absent, no passing replay/full run; exact-source all-four100% cumulative proof verified.",
+    "642old acceptance files byte-identical; one exact native construction migration preserves all66assertions; all313prior metadata fields/states/defaults/prefixes retained,315current records partial."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610081754-J0EAJE/README.md",
+    ".agentplane/tasks/202610081754-J0EAJE/evidence/actual-sha-quality.json",
+    ".agentplane/tasks/202610081754-J0EAJE/evidence/final-coverage.json",
+    ".agentplane/tasks/202610081754-J0EAJE/evidence/native-source-review.json",
+    ".agentplane/tasks/202610081754-J0EAJE/evidence/scope-final.json",
+    ".agentplane/tasks/202610081754-J0EAJE/evidence/runtime-census.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Full shared frame ownership, scalar row/table attributes, presentation/localization/UNO/item-instance pooling and whole goal parity remain unverified; no semantic promotion."
+  ]
+}
