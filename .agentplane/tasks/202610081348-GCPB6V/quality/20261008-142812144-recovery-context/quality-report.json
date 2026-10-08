@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202610081348-GCPB6V",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-08T14:28:12.144Z",
+  "verdict": "pass",
+  "summary": "Current-agent EVALUATOR phase, explicitly not independent: actual implementation 6b118e4b228ed67fc393234ac2403a299a5df990 satisfies the bounded native column insertion and numeric redo contract.",
+  "evaluated_sha": "6b118e4b228ed67fc393234ac2403a299a5df990",
+  "blueprint_digest": "91a62712e421217a37c4760831b3a43c41668d936efdbbe4e6d31a6f82e8f544",
+  "findings": [
+    "Actual SHA bytes bind all12 semantic files; exact-source all-four app/inventory100, unique13834app110inventory19infra299Chromium, passingReplay0,12fresh,625 unchanged prior acceptance and3 explicit native-backed migrations. Full coverage/case/scope reports reconstruct byte-identically without tests."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610081348-GCPB6V/README.md",
+    ".agentplane/tasks/202610081348-GCPB6V/evidence/quality-actual-sha.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Retained row redo, full native merged/nested/spanned/protected/redline/autoformat/pooling/frame layout and full goal parity remain unverified; registered IO preserved."
+  ]
+}

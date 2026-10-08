@@ -1,0 +1,148 @@
+{
+  "evaluatedSHA": "6b118e4b228ed67fc393234ac2403a299a5df990",
+  "evaluator": "Current agent EVALUATOR phase, explicitly not independent",
+  "verdict": "pass",
+  "production": [
+    {
+      "path": "apps/office/src/sw/source/core/table/swtable.ts",
+      "sha256": "71cd418e280205e78befc1c57a932dff115bd6621e800c4f0a362e470f733071",
+      "exactActualSHABytes": true,
+      "physicalLines": 798
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/untbl.ts",
+      "sha256": "c01d5f011e525ae845a5106ce9dec847fd0e6b49364c7331b7596bf24263c4c7",
+      "exactActualSHABytes": true,
+      "physicalLines": 384
+    },
+    {
+      "path": "apps/office/src/sw/source/core/doc/doc.ts",
+      "sha256": "3a2a6058d12d74e7ac317d6c09d65511b056463e0c2c861a95cf0f076afc8bce",
+      "exactActualSHABytes": true,
+      "physicalLines": 926
+    },
+    {
+      "path": "apps/office/src/sw/source/core/docnode/ndtbl.ts",
+      "sha256": "e63fc04ef05e2f90ec7fa91020aebf65e0f6f0c3423c79ba9b4f77811aa53a7a",
+      "exactActualSHABytes": true,
+      "physicalLines": 289
+    },
+    {
+      "path": "apps/office/src/sw/source/core/table/native-independent-column-insertion.test.ts",
+      "sha256": "f9c0c66260734d8bbd42d8ff165136dc0ebb976c9b701f445f87c34856f33f4a",
+      "exactActualSHABytes": true,
+      "physicalLines": 181
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/native-independent-column-insertion-history.test.ts",
+      "sha256": "d62668a3ff356f768acf1fd2622c289032c91acdcc539e6720839d039caac329",
+      "exactActualSHABytes": true,
+      "physicalLines": 294
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/native-independent-column-insertion.test.tsx",
+      "sha256": "1990e7dfdfcf6cca6d5263bf8ddc84ae8f1449ec9cc291cba88f017f255429ce",
+      "exactActualSHABytes": true,
+      "physicalLines": 126
+    },
+    {
+      "path": "apps/office/src/sw/source/core/table/native-column-insertion.test.ts",
+      "sha256": "c7eac36db884ce0395ef79a76785480de549c014e599994a0e93f643416307fb",
+      "exactActualSHABytes": true,
+      "physicalLines": 442
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-properties.test.ts",
+      "sha256": "c59fb7ef95312fe7b98ff174e4d0225e21bd43569bcf272fb860c73e71c72bca",
+      "exactActualSHABytes": true,
+      "physicalLines": 292
+    },
+    {
+      "path": "docs/program/source-provenance.json",
+      "sha256": "cc3cee1fdf2af326975749d4908acc51f80e174fbfb6182b821ce117c09e924a",
+      "exactActualSHABytes": true
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "sha256": "8e517260e3a3a13e949bc7b8f61a0dbefb6be746446ae4583c6ce2e65fc9c6e8",
+      "exactActualSHABytes": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/table/native-independent-columns.test.ts",
+      "sha256": "3734164aaa074549b07d1bdf32dc2a50523117e24e21d19f6b051ecdc314c57b",
+      "exactActualSHABytes": true,
+      "physicalLines": 408
+    }
+  ],
+  "records": [
+    {
+      "check": "235proofScript",
+      "exit": 0,
+      "outputSHA256": "7054c7996c1cfeb144c9dc2b630984b5e3bd764597d37d3fd1aee8471799b5a0",
+      "bytes": 715
+    },
+    {
+      "check": "235censusScript",
+      "exit": 0,
+      "outputSHA256": "e88a5b7d0ca8dc9414046083c11163550a98cbee3b44699587fb86640091893f",
+      "bytes": 1401
+    },
+    {
+      "check": "235scopeScript",
+      "exit": 0,
+      "outputSHA256": "5e583f2879506a18ee99398d3f11f949230f202c06a755b64b411b4d39553f3a",
+      "bytes": 3881
+    }
+  ],
+  "reconstructed": [
+    {
+      "path": ".agentplane/tasks/202610081348-GCPB6V/evidence/final-coverage.json",
+      "sha256": "25b83ace35f2fea9a3aeb21a329e85fe7473ddcc79abc18d697bbd9039a0cec2",
+      "currentSHA256": "25b83ace35f2fea9a3aeb21a329e85fe7473ddcc79abc18d697bbd9039a0cec2",
+      "byteIdentical": true
+    },
+    {
+      "path": ".agentplane/tasks/202610081348-GCPB6V/evidence/case-census.json",
+      "sha256": "c239e334a7083819b2aca4b0eb61e9b3b3b4c401c127d8c6f70c115d91ccc8bd",
+      "currentSHA256": "c239e334a7083819b2aca4b0eb61e9b3b3b4c401c127d8c6f70c115d91ccc8bd",
+      "byteIdentical": true
+    },
+    {
+      "path": ".agentplane/tasks/202610081348-GCPB6V/evidence/scope-final.json",
+      "sha256": "d2202a1db0a86f2b20bb86182522ddf9dbc87bf0e824981c4cf5fa95d845a07d",
+      "currentSHA256": "d2202a1db0a86f2b20bb86182522ddf9dbc87bf0e824981c4cf5fa95d845a07d",
+      "byteIdentical": true
+    }
+  ],
+  "uniqueCaseCounts": {
+    "app": 13834,
+    "inventory": 110,
+    "infra": 19,
+    "chromium": 299,
+    "fresh": 12
+  },
+  "passingReplay": 0,
+  "focusedSkipsRetained": 20,
+  "oneFullUpstreamAbsentProfile": true,
+  "noTestsReplayedDuringReview": true,
+  "noIndividualCounterAlteration": true,
+  "scopeCount": 12,
+  "priorAcceptanceByteIdentical": 625,
+  "metadataRecordsPreserved": 311,
+  "sourceAnchorsReviewed": 4,
+  "sourceMatchedContracts": [
+    "Independent selected extremes and row counts follow native lcl_InsertPosition; selected-row averaged width/count and cumulative width rounding conserve reference width.",
+    "Right border stays on original source before insertion; behind transfers it to last new cell while intermediate right lines clear.",
+    "ndtbl owns Doc insertion, DoesUndo and scoped recording suppression. Numeric selected/new starts replace retained column sections and shared positions.",
+    "Column redo resolves numeric originals and re-enters Doc InsertCol creating new sections. SaveTable restores independent frame-size attributes without duplicate widths; original owners/live selection survive."
+  ],
+  "actualFailedCaseResolved": 1,
+  "residuals": [
+    "Merged/nested/spanned/protected graphs and full native layout/pooling/redline/autoformat/signed arithmetic remain unverified.",
+    "Existing retained row redo is unchanged and remains a source-backed follow-up.",
+    "Native cursor/frame/full table SaveTable reconstruction lifetimes and independent physical browser cell layout remain partial.",
+    "Registered IO/open/save/recovery/settings remain byte-identical; no full module/upstream parity promotion."
+  ],
+  "allDeclaredGatesPassed": true,
+  "registeredIOPreserved": true
+}

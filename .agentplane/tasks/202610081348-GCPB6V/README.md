@@ -4,7 +4,7 @@ title: "Insert independent native columns with source-owned redo and borders"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 20
+revision: 23
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,27 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-08T14:28:13.356Z"
+  updated_by: "CODER"
+  note: "Actual 6b118e4b228ed67fc393234ac2403a299a5df990: bounded native independent column insertion/redo verified by one absent full profile and only failed/new closures. Unique13834app110inventory19infra299Chromium, all-four app/inventory100, all gatesPASS,12exact files,625 unchanged acceptance,3 source-backed migrations,311 metadata and registeredIO preserved. Current-agent EVALUATOR PASS explicitly not independent."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-08T14:28:12.144Z"
+  updated_by: "EVALUATOR"
+  note: "Current-agent EVALUATOR phase, explicitly not independent: actual implementation 6b118e4b228ed67fc393234ac2403a299a5df990 satisfies the bounded native column insertion and numeric redo contract."
+  evaluated_sha: "6b118e4b228ed67fc393234ac2403a299a5df990"
+  blueprint_digest: "91a62712e421217a37c4760831b3a43c41668d936efdbbe4e6d31a6f82e8f544"
+  evidence_refs:
+    - ".agentplane/tasks/202610081348-GCPB6V/README.md"
+    - ".agentplane/tasks/202610081348-GCPB6V/quality/20261008-142812144-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610081348-GCPB6V/quality/20261008-142812144-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610081348-GCPB6V/quality/20261008-142812144-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610081348-GCPB6V/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610081348-GCPB6V/evidence/quality-actual-sha.json"
+  findings:
+    - "Actual SHA bytes bind all12 semantic files; exact-source all-four app/inventory100, unique13834app110inventory19infra299Chromium, passingReplay0,12fresh,625 unchanged prior acceptance and3 explicit native-backed migrations. Full coverage/case/scope reports reconstruct byte-identically without tests."
 commit: null
 comments:
   -
@@ -45,8 +61,14 @@ events:
     from: "DOING"
     to: "DOING"
     note: "Start: complete the source-backed original failed assertion and native Redo return contract closure under the standing parity approval; only original failed and genuine new cases execute."
+  -
+    type: "verify"
+    at: "2026-10-08T14:28:13.356Z"
+    author: "CODER"
+    state: "ok"
+    note: "Actual 6b118e4b228ed67fc393234ac2403a299a5df990: bounded native independent column insertion/redo verified by one absent full profile and only failed/new closures. Unique13834app110inventory19infra299Chromium, all-four app/inventory100, all gatesPASS,12exact files,625 unchanged acceptance,3 source-backed migrations,311 metadata and registeredIO preserved. Current-agent EVALUATOR PASS explicitly not independent."
 doc_version: 3
-doc_updated_at: "2026-10-08T14:26:29.168Z"
+doc_updated_at: "2026-10-08T14:28:13.420Z"
 doc_updated_by: "CODER"
 description: "Iteration235 under approved parent202609240501-C9TN6M. Remove shared-column edge/count refusal and global column history position. Match per-row native insertion width arithmetic and right-border transfer. Column redo re-enters original document InsertCol using saved numeric selected-box coordinates and original/new box differences; remove duplicate shared SaveTable width vector. Preserve original surviving node/cursor owners, undo suppression, native attributes and IO deviations. Fresh independent row/core/history/mounted UI cases and two explicit source-backed acceptance migrations only."
 sections:
@@ -84,6 +106,41 @@ sections:
     Command: exact-source cumulative coverage reconstruction; Result: PASS all-four app100 L17295/S18996/F4372/B14161 and inventory100 L1464/S1523/F384/B1081. Entire unchanged source/maps and prior234 certificates or complete contiguous declaration/body/enclosing-branch/all-location proofs; app307 entire files plus4 prior region bindings; no individual counter adjustment.
 
     Command: six static gates on final source plus five source-dependent gates after full terminal/restoration; Result: PASS. ap doctor, policy routing, git diff --check PASS; two longstanding doctor warnings (hook readiness and historical DONE2Z3962 missing implSHA) unchanged. Source native4 files exact pin bytes; protectedIO5, stash, parent672207/d0f82bab preserved. Semantic scope12, prior acceptance628 with625 byte-identical plus3 declared source-backed assertion migrations; every unrelated assertion and311 prior metadata records/fields/states/defaults/classes preserved. AP source/Python/raw artifact audit PASS. Actual implementation SHA quality phase still pending at this pre-commit checkpoint; current-agent EVALUATOR will explicitly not claim independence.
+
+    Actual implementation 6b118e4b228ed67fc393234ac2403a299a5df990 reviewed by current-agent EVALUATOR, explicitly not independent: PASS. All12 actual SHA bytes and physical budgets checked; coverage/census/scope independently reconstructed from stored raw inputs with byte-identical bounded reports and no tests replay. quality-actual-sha.json and quality-report.json record the actual evaluated SHA. All approved leaf criteria pass; overall goal and parent remain active with documented full-native gaps.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-08T14:28:13.356Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Actual 6b118e4b228ed67fc393234ac2403a299a5df990: bounded native independent column insertion/redo verified by one absent full profile and only failed/new closures. Unique13834app110inventory19infra299Chromium, all-four app/inventory100, all gatesPASS,12exact files,625 unchanged acceptance,3 source-backed migrations,311 metadata and registeredIO preserved. Current-agent EVALUATOR PASS explicitly not independent.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-08T14:28:12.939Z, excerpt_hash=sha256:4109364677707708e26fdb85f849605cae6aaeabaa01ce6517b620295f882156
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610081348-GCPB6V/blueprint/resolved-snapshot.json
+    - old_digest: 91a62712e421217a37c4760831b3a43c41668d936efdbbe4e6d31a6f82e8f544
+    - current_digest: 91a62712e421217a37c4760831b3a43c41668d936efdbbe4e6d31a6f82e8f544
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610081348-GCPB6V
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610081348-GCPB6V -m 🧩 GCPB6V task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only the traced implementation in a new approved task if required; preserve historical DONE evidence, original stash and registered IO deviations."
   Findings: |-
     Preflight main/direct clean, only parent active; no live process/commit. Native insertion uses per-row positions and source border transfer, not shared edge equality. Native undo saves numeric original/new starts and redo calls Doc InsertCol; existing column-section reconnect branch is an unregistered partial adapter. SaveTable retains complete per-box frame attributes, making its separate shared widths vector redundant and potentially lossy. Original insertion test has explicit unsupported differing-index refusal/retained new sections; properties payload54 includes duplicated widths. These two declared migrations will preserve unrelated assertions and strengthen source-backed checks. A read-only lookup guessed absent SwUndoManager.ts and exited2; parent route recomputed before mutation, then actual docundo.ts located. Existing row redo/nested/spanned/protected/native item pooling/autoformat/redline/full layout remain partial and are not promoted.
@@ -137,6 +194,41 @@ Command: one full upstream-absent build/app/inventory/infra/Chromium profile; Re
 Command: exact-source cumulative coverage reconstruction; Result: PASS all-four app100 L17295/S18996/F4372/B14161 and inventory100 L1464/S1523/F384/B1081. Entire unchanged source/maps and prior234 certificates or complete contiguous declaration/body/enclosing-branch/all-location proofs; app307 entire files plus4 prior region bindings; no individual counter adjustment.
 
 Command: six static gates on final source plus five source-dependent gates after full terminal/restoration; Result: PASS. ap doctor, policy routing, git diff --check PASS; two longstanding doctor warnings (hook readiness and historical DONE2Z3962 missing implSHA) unchanged. Source native4 files exact pin bytes; protectedIO5, stash, parent672207/d0f82bab preserved. Semantic scope12, prior acceptance628 with625 byte-identical plus3 declared source-backed assertion migrations; every unrelated assertion and311 prior metadata records/fields/states/defaults/classes preserved. AP source/Python/raw artifact audit PASS. Actual implementation SHA quality phase still pending at this pre-commit checkpoint; current-agent EVALUATOR will explicitly not claim independence.
+
+Actual implementation 6b118e4b228ed67fc393234ac2403a299a5df990 reviewed by current-agent EVALUATOR, explicitly not independent: PASS. All12 actual SHA bytes and physical budgets checked; coverage/census/scope independently reconstructed from stored raw inputs with byte-identical bounded reports and no tests replay. quality-actual-sha.json and quality-report.json record the actual evaluated SHA. All approved leaf criteria pass; overall goal and parent remain active with documented full-native gaps.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-08T14:28:13.356Z — VERIFY — ok
+
+By: CODER
+
+Note: Actual 6b118e4b228ed67fc393234ac2403a299a5df990: bounded native independent column insertion/redo verified by one absent full profile and only failed/new closures. Unique13834app110inventory19infra299Chromium, all-four app/inventory100, all gatesPASS,12exact files,625 unchanged acceptance,3 source-backed migrations,311 metadata and registeredIO preserved. Current-agent EVALUATOR PASS explicitly not independent.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-08T14:28:12.939Z, excerpt_hash=sha256:4109364677707708e26fdb85f849605cae6aaeabaa01ce6517b620295f882156
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610081348-GCPB6V/blueprint/resolved-snapshot.json
+- old_digest: 91a62712e421217a37c4760831b3a43c41668d936efdbbe4e6d31a6f82e8f544
+- current_digest: 91a62712e421217a37c4760831b3a43c41668d936efdbbe4e6d31a6f82e8f544
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610081348-GCPB6V
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610081348-GCPB6V -m 🧩 GCPB6V task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
