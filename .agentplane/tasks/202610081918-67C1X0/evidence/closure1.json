@@ -1,0 +1,17 @@
+{
+  "profile": "upstream-absent",
+  "allowedCases": "Exactly four previously failed cases; all already passing cases remain skipped.",
+  "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/browser/editor/native-table-document-row.test.tsx src/sw/source/uibase/wrtsh/native-table-traversal.test.ts src/sw/source/core/undo/native-row-format-client-history.test.ts src/sw/browser/editor/native-row-format-client.test.tsx --testNamePattern=^native table measurement destroys each temporary row frame while retaining its canonical row owner$|^renders default Tab append through document insertion without action replay$|^complete native table deletion releases original row and physical frame registrations$|^native table traversal appends empty sections with native style/direct items and restores their identities through history$ --coverage.reportOnFailure --coverage.reporter=json-summary --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/67C1X0.closure1.app-results.json",
+  "exit": 1,
+  "bytes": 3368,
+  "sha256": "142b02729493e385d0b0ff5701cc3384c57618e94dabb274d289b076aef5981e",
+  "caseCounts": {
+    "passed": 4,
+    "failed": 0,
+    "skipped": 19,
+    "total": 23
+  },
+  "failedCases": [],
+  "coverageMapSHA256": "caa6a413528de91b1577d3fcba10730846d51e973fa47686ff4c3c85912929c8",
+  "vendorRestored": true
+}
