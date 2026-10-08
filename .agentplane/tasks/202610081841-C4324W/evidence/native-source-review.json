@@ -1,0 +1,364 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sources": [
+    {
+      "path": "sw/inc/swtblfmt.hxx",
+      "sha256": "2782894b041d629a56a0c3405c419623fdcdd1d4565d0cd378a83c5bad99151b",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "SwTableLineFormat",
+          "line": 40,
+          "allMatchingLines": [
+            40,
+            44
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sw/source/core/table/swtable.cxx",
+      "sha256": "10c536056498dd001b3a5c75638040ee5daef966ede231c66947da8e704b1206",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "SwTableLine::SwTableLine",
+          "line": 1455,
+          "allMatchingLines": [
+            1455
+          ]
+        },
+        {
+          "identifier": "SwTableLine::ClaimFrameFormat",
+          "line": 1477,
+          "allMatchingLines": [
+            1477
+          ]
+        },
+        {
+          "identifier": "SwTableLine::ChgFrameFormat",
+          "line": 1510,
+          "allMatchingLines": [
+            1510
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sw/source/core/docnode/ndtbl1.cxx",
+      "sha256": "c94a3a78edc61fc2b2a0419371f70cffc5466ceca3d0b8f29160cceff0b37663",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "lcl_ProcessRowAttr",
+          "line": 284,
+          "allMatchingLines": [
+            284,
+            305,
+            345,
+            510,
+            636
+          ]
+        },
+        {
+          "identifier": "FindNewFormat( rFormatCmp, pLine->GetFrameFormat(), 0 )",
+          "line": 287,
+          "allMatchingLines": [
+            287
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sw/source/core/doc/docfmt.cxx",
+      "sha256": "1f4845c5c0221e5a86d0751139245d120ec541b2bb29cceb747b8239b8ab680b",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "SwDoc::MakeTableLineFormat",
+          "line": 1780,
+          "allMatchingLines": [
+            1780
+          ]
+        },
+        {
+          "identifier": "GetAttrPool(), mpDfltFrameFormat.get()",
+          "line": 1774,
+          "allMatchingLines": [
+            1774,
+            1782
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sw/source/core/attr/format.cxx",
+      "sha256": "69f8fcbb4cf0375c74703fc88e53c98e6d11016320513923f4f3a71ff98c281a",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "SwFormat::operator=",
+          "line": 91,
+          "allMatchingLines": [
+            91
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sw/source/core/bastyp/init.cxx",
+      "sha256": "ffc4aeb0518fa5d885ab9a2aa2cd99a21b1613ceedcc27c581407d8f68ca96b3",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "aTableLineSetRange",
+          "line": 211,
+          "allMatchingLines": [
+            211
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sw/inc/hintids.hxx",
+      "sha256": "c69353d16f8f15575a82843880cc016c6033e2f86e91905f999a0cfec8cf398f",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "RES_FRMATR_BEGIN",
+          "line": 344,
+          "allMatchingLines": [
+            344,
+            345,
+            346,
+            347,
+            348,
+            349,
+            350,
+            351,
+            352,
+            353,
+            355,
+            356,
+            357,
+            358,
+            359,
+            360,
+            361,
+            362,
+            363,
+            364,
+            365,
+            366,
+            367,
+            368,
+            369,
+            370,
+            371,
+            372,
+            373,
+            374,
+            375,
+            376,
+            377,
+            378,
+            379,
+            380,
+            381,
+            382,
+            383,
+            384,
+            386,
+            387,
+            388,
+            389,
+            390,
+            392,
+            393,
+            394,
+            395,
+            397,
+            398,
+            399,
+            400,
+            401,
+            403,
+            404,
+            512
+          ]
+        },
+        {
+          "identifier": "RES_ROW_SPLIT",
+          "line": 387,
+          "allMatchingLines": [
+            387
+          ]
+        }
+      ]
+    },
+    {
+      "path": "svl/source/notify/SfxBroadcaster.cxx",
+      "sha256": "470bddb61878ee68fd82add0fca90f1939b72f0b0ab0283d3eac3b49983777f2",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "SfxBroadcaster::ForAllListeners",
+          "line": 137,
+          "allMatchingLines": [
+            137
+          ]
+        }
+      ]
+    },
+    {
+      "path": "include/svl/SfxBroadcaster.hxx",
+      "sha256": "281a9bebad6a468141f3e556e943ba4dce34d0c59dc0ae724006f7e90584cbd2",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "ForAllListeners",
+          "line": 58,
+          "allMatchingLines": [
+            58
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sw/source/core/undo/untbl.cxx",
+      "sha256": "147e1b9f9870416bc83d2b918a0621e810003594b9a95ede372518925b2c245b",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "SaveTable::AddFormat",
+          "line": 906,
+          "allMatchingLines": [
+            906
+          ]
+        },
+        {
+          "identifier": "SaveTable::NewFrameFormatForLine",
+          "line": 1114,
+          "allMatchingLines": [
+            1114
+          ]
+        },
+        {
+          "identifier": "SaveLine::RestoreAttr",
+          "line": 1154,
+          "allMatchingLines": [
+            1154
+          ]
+        }
+      ]
+    }
+  ],
+  "production": [
+    {
+      "path": "apps/office/src/svl/source/notify/SfxBroadcaster.ts",
+      "sha256": "30cf518a903b1f4215155072d7178ed6e5a2f21785aaa6e90d4c4e605cc0ca94",
+      "physicalLines": 76
+    },
+    {
+      "path": "apps/office/src/sw/source/core/attr/format.ts",
+      "sha256": "adf62cb70fa66a90763cdbfac9a49421c02f3304bc80a0a6ae3ee4758d9b01a5",
+      "physicalLines": 117
+    },
+    {
+      "path": "apps/office/src/sw/source/core/layout/atrfrm.ts",
+      "sha256": "e0b43ecbc5e55d87b01474d9a52ef06c2ee0103753b93c0748795b54583dbee2",
+      "physicalLines": 33
+    },
+    {
+      "path": "apps/office/src/sw/source/core/attr/swatrset.ts",
+      "sha256": "58fdaef6fd48471fb604caca543613d79b881d6df57bae4b65ec965ff1a6b414",
+      "physicalLines": 452
+    },
+    {
+      "path": "apps/office/src/sw/source/core/table/swtable.ts",
+      "sha256": "475ab9741d3e755578afef916d0638743c532cd4ca04cdfaed854fe895719551",
+      "physicalLines": 853
+    },
+    {
+      "path": "apps/office/src/sw/source/core/docnode/nodes.ts",
+      "sha256": "c0f1a2957f2f67fa9528eb091a9b7418b451176befa036f7e740a5234b68936e",
+      "physicalLines": 571
+    },
+    {
+      "path": "apps/office/src/sw/source/core/docnode/ndtbl1.ts",
+      "sha256": "93227fccb0bde9c24681bbb79dd6528d58f946e8d7df5494974cb0c1330e7b93",
+      "physicalLines": 428
+    },
+    {
+      "path": "apps/office/src/sw/source/core/doc/doc.ts",
+      "sha256": "f5c8645073f3c2556fc834f3cc75066e1b2445121bb3c31068803e7974e5e562",
+      "physicalLines": 928
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/untbl.ts",
+      "sha256": "f64ed09566d057e7a7683291f67e3868f24c72f09521630430aeb848cbe6fdce",
+      "physicalLines": 359
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/xmltbli.ts",
+      "sha256": "1ddfddc04811f5a0a7cba6a61fbc5c6c0902a37af71f800793d9846bf975f177",
+      "physicalLines": 239
+    },
+    {
+      "path": "apps/office/src/sw/browser/filter/xml/writer-table-item-codec.ts",
+      "sha256": "101359a867c05df95e39222865695e7a577d8caad9a9bab75c6ce19a2a0f7397",
+      "physicalLines": 105
+    },
+    {
+      "path": "apps/office/src/sw/inc/swtblfmt.ts",
+      "sha256": "af4ae9d20bc7ac2f1448b10f307f5bd7a93d9b3c9cb6afc5d52fa4b815ec79b9",
+      "physicalLines": 40
+    }
+  ],
+  "protectedIO": [
+    {
+      "path": "apps/office/src/sw/browser/storage/writer-odt-store.ts",
+      "sha256": "0fb4ebffca5a00fe63ff327379305d64143c7014dace0a7e13edb8c0c241232e",
+      "baselineByteIdentical": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/workflows/writer-odt-io.ts",
+      "sha256": "7c214afab59dbc5df1087f107e2b7bf2bf01d8623a2995e8eb19a45575361306",
+      "baselineByteIdentical": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/WriterFileDialog.tsx",
+      "sha256": "50ad125f5a254eb1772b62abe3681e4632df6c7870ea9647622b2268394c88c3",
+      "baselineByteIdentical": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts",
+      "sha256": "060a06dd9a77e530de1756b2f4c4384e6b2ddd1ee20c68fb175daab2eeb99ee7",
+      "baselineByteIdentical": true
+    }
+  ],
+  "writerUI": {
+    "path": "apps/office/src/sw/browser/presentation/writer-view.tsx",
+    "sha256": "782755425f440a2438a2994ee429a6ee7b37e4f65ca8e5f1855c9d18db8f9de1",
+    "entireSourceByteIdentical": true
+  },
+  "parent": {
+    "characters": 698356,
+    "sha256": "ec8b64039ba56f1496388dfbba48e24de89b5e742fca7e232747b0a30802a1be",
+    "unchanged": true
+  },
+  "stash": {
+    "commit": "c85f4a0e453dfd06d6e199554784f2c286737472",
+    "preserved": true
+  },
+  "sourceBoundContracts": [
+    "Native SwTableLine is a SwClient of SwTableLineFormat; ClaimFrameFormat checks other row clients, copies native attributes before mutation, and moves the claiming row. Exclusive claims reuse the original owner.",
+    "lcl_ProcessRowAttr reuses one new format for rows with the same old format in one operation. Native complete SfxPoolItem enters the row item set directly; the represented document owner emits one revision and retains same-value history.",
+    "Native SwDoc MakeTableLineFormat derives from the default frame format. Exact aTableLineSetRange includes frame size, row split, vertical orientation and border attributes. Existing concrete frame-size and split defaults come from the document pool.",
+    "Native SaveTable AddFormat deduplicates by original format identity, copies direct native items to a standalone item set, stores row indices and reconstructs shared new format owners. The represented history now preserves this sharing topology and complete attributes without retaining text/row graphs.",
+    "Native node insertion constructs rows with the source native format. Mounted direct item publication and repeated document Undo/Redo retain original rows/boxes/text/cursor; 12 fresh literal cases and related modules validate this bounded slice.",
+    "Full native SwRowFrame registration/retargeting, typed TableLineFormatChanged/MoveTableLine hints and client destruction are not implemented here. Current stateless SwRowFrame reads its original line every time; complete frame client lifecycle remains a following task.",
+    "Complete native pooling, all frame attributes, nested/merged table, UNO and model modified flag contracts remain unverified. No whole row/core/browser parity promotion.",
+    "Registered IO/recovery/settings and all prior metadata states/defaults/classes preserved; whole core/browser parity incomplete."
+  ]
+}

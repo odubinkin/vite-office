@@ -1,0 +1,68 @@
+{
+  "base": "bf252f8b92f39e90bebc6711418b06bbedb146d2",
+  "priorAcceptanceFiles": 648,
+  "entireByteIdenticalPriorAcceptanceFiles": 647,
+  "exactNativeConstructorOnlyMigration": [
+    "apps/office/src/sw/source/core/table/native-column-insertion.test.ts"
+  ],
+  "oldAssertionsLiteralsLoopsAndTestBodiesOtherwiseByteIdentical": true,
+  "testHelper": {
+    "path": "apps/office/src/test/table-row-test-helpers.ts",
+    "exactTypeAndAbsentNativeItemMigration": true
+  },
+  "freshAcceptanceFiles": [
+    {
+      "path": "apps/office/src/sw/source/core/table/native-row-frame-format.test.ts",
+      "sha256": "79b36744b155d73cbb72024c9d7f349b7c268acd8707cb85d75c6f0fb4b925b9",
+      "noOnlySkipTodo": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/native-row-frame-format-history.test.ts",
+      "sha256": "4bf5e81bd56af30c9d281ba4c0b586dbb689c2db69984d8181b20788958d87cb",
+      "noOnlySkipTodo": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/native-row-frame-format.test.tsx",
+      "sha256": "59b8c1aa05a06badb8229bcdc753292fec15e050ac57542bdad1e4fe922ca9b1",
+      "noOnlySkipTodo": true
+    }
+  ],
+  "metadata": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "priorRecords": 315,
+      "priorFieldsStatusesDefaultsClassificationAndEvidencePrefixesPreserved": true,
+      "newRecords": 1,
+      "newNativeRowFormatRemainsPartial": true
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "priorRecords": 315,
+      "priorFieldsStatusesDefaultsClassificationAndEvidencePrefixesPreserved": true,
+      "newRecords": 1,
+      "newNativeRowFormatRemainsPartial": true
+    }
+  ],
+  "approvedSemanticPaths": [
+    "apps/office/src/svl/source/notify/SfxBroadcaster.ts",
+    "apps/office/src/sw/source/core/attr/format.ts",
+    "apps/office/src/sw/source/core/layout/atrfrm.ts",
+    "apps/office/src/sw/source/core/attr/swatrset.ts",
+    "apps/office/src/sw/source/core/table/swtable.ts",
+    "apps/office/src/sw/source/core/docnode/nodes.ts",
+    "apps/office/src/sw/source/core/docnode/ndtbl1.ts",
+    "apps/office/src/sw/source/core/doc/doc.ts",
+    "apps/office/src/sw/source/core/undo/untbl.ts",
+    "apps/office/src/sw/source/filter/xml/xmltbli.ts",
+    "apps/office/src/sw/browser/filter/xml/writer-table-item-codec.ts",
+    "apps/office/src/sw/inc/swtblfmt.ts",
+    "apps/office/src/sw/source/core/table/native-column-insertion.test.ts",
+    "apps/office/src/sw/source/core/table/native-row-frame-format.test.ts",
+    "apps/office/src/sw/source/core/undo/native-row-frame-format-history.test.ts",
+    "apps/office/src/sw/browser/presentation/native-row-frame-format.test.tsx",
+    "apps/office/src/test/table-row-test-helpers.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "unexpectedPaths": []
+}
