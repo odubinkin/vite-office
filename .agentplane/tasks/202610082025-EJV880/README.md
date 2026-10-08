@@ -1,10 +1,11 @@
 ---
 id: "202610082025-EJV880"
 title: "Connect native linked cell frame clients to original formats and rendering lifetime"
-status: "DOING"
+result_summary: "Connected original linked native cell frame clients to shared format claims, Undo/Redo, recursive deletion and direct UI/painter lifetimes;1318app/25Chromium and actual100coverage verified."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -47,11 +48,16 @@ quality_review:
   findings:
     - "Eleven semantic paths equal actual committed bytes. Four deterministic coverage, runtime, scope and pinned-source certificates reconstructed byte-identically;1318 unique app cases including12 fresh plus25 Chromium, no passing replay, all-four100 actual source-bound coverage.657 prior test files unchanged;316 prior metadata preserved and one unverified native record added."
     - "Main JSX, collapsing painter and width measurement use actual registered native cell frames; original claims and history retarget matching physical clients before model registration and deletion releases linked and repeated clients."
-commit: null
+commit:
+  hash: "8214d309ac4a7a67cee7724f59c20e49d0aef8c5"
+  message: "🧩 EJV880 code: connect original linked cell frame clients and lifetimes"
 comments:
   -
     author: "CODER"
     body: "Start: Connect original linked native SwCellFrame clients through common frame bases, format claims/history, direct rendering and recursive flat teardown; retain all prior acceptance files and registered deviations."
+  -
+    author: "CODER"
+    body: "Verified: original linked SwFrame/SwLayoutFrame/SwCellFrame clients now follow shared native format claims and history before model registration, with recursive deletion and direct JSX/painter/measurement cleanup.1318unique app cases including12fresh and25Chromium passed without passing replay; app/inventory actual all-four100coverage.657prior tests unchanged; approved scoped implementation8214d309ac4a7a67cee7724f59c20e49d0aef8c5 reviewed explicitly non-independently, whole goal incomplete."
 events:
   -
     type: "status"
@@ -66,8 +72,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified actual implementation8214d309ac4a7a67cee7724f59c20e49d0aef8c5: native linked cell frames, original format client claim/history ordering and recursive lifetime;1318unique app/12fresh/25Chromium, zero passing replay, all-four100actual source-bound coverage,657prior files unchanged. Six statics/build/source/governance/artifact pass. Explicitly non-independent actual-SHA EVALUATOR pass; full cadence237to247; whole parity incomplete."
+  -
+    type: "status"
+    at: "2026-10-08T20:46:47.859Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: original linked SwFrame/SwLayoutFrame/SwCellFrame clients now follow shared native format claims and history before model registration, with recursive deletion and direct JSX/painter/measurement cleanup.1318unique app cases including12fresh and25Chromium passed without passing replay; app/inventory actual all-four100coverage.657prior tests unchanged; approved scoped implementation8214d309ac4a7a67cee7724f59c20e49d0aef8c5 reviewed explicitly non-independently, whole goal incomplete."
 doc_version: 3
-doc_updated_at: "2026-10-08T20:46:28.905Z"
+doc_updated_at: "2026-10-08T20:46:47.861Z"
 doc_updated_by: "CODER"
 description: "Iteration244: replace duplicated flat-row registration with native frame bases and original linked cell clients; retarget native box claims/history, recursive deletion and direct main UI/painter ownership without DTOs. Preserve registered deviations and targeted test cadence."
 sections:
