@@ -254,11 +254,11 @@ function WriterTablePropertiesDialog({
         }
       >
         <WriterDialogHeader title="Table Properties" onClose={onCancel} />
-        <div className="writer-dialog-content">
-          <div className="flex min-w-0 flex-col gap-4 sm:flex-row">
+        <div className="writer-dialog-content writer-dialog-tabbed">
+          <div className="writer-dialog-tabs-layout">
             <div
               aria-label="Table Properties settings"
-              className="flex shrink-0 overflow-x-auto border-b border-slate-300 sm:w-36 sm:flex-col sm:overflow-visible sm:border-b-0 sm:border-r"
+              className="writer-dialog-tablist flex shrink-0 border-b border-slate-300 sm:w-36 sm:flex-col sm:border-b-0 sm:border-r"
               role="tablist"
             >
               {(
@@ -302,7 +302,7 @@ function WriterTablePropertiesDialog({
                 ),
               )}
             </div>
-            <div className="grid min-w-0 flex-1 content-start gap-3" role="tabpanel">
+            <div className="writer-dialog-scroll grid min-w-0 content-start gap-3" role="tabpanel">
               {activeTab === "table" ? (
                 <>
                   <label className="grid gap-1 text-sm font-medium text-slate-700">
@@ -638,7 +638,9 @@ function WriterTablePropertiesDialog({
               ) : null}{" "}
             </div>
           </div>
-          {error === undefined ? null : <p className="text-sm text-red-700">{error}</p>}
+          {error === undefined ? null : (
+            <p className="shrink-0 px-6 py-2 text-sm text-red-700">{error}</p>
+          )}
         </div>
         <div className="writer-dialog-actions">
           <button

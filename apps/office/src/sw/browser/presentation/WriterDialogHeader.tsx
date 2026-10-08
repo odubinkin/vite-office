@@ -13,7 +13,7 @@ export function WriterDialogHeader({
   onClose: () => void;
 }>): React.JSX.Element {
   return (
-    <div className="flex items-start justify-between gap-4 border-b border-slate-200 px-6 py-5">
+    <div className="writer-dialog-header flex items-start justify-between gap-4 border-b border-slate-200 px-6 py-5">
       <div className="min-w-0">
         <h2 className="text-xl font-bold text-slate-950">{title}</h2>
         {description === undefined ? null : (

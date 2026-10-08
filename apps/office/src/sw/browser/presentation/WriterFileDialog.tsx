@@ -248,7 +248,7 @@ interface PendingWriterImport {
             title={importTitle}
           />
         ) : kind === "open" ? (
-          <div className="px-6 pb-6">
+          <div className="writer-dialog-scroll px-6 pb-6">
             <div
               aria-label="Document source"
               className="mt-5 grid grid-cols-2 border-b border-slate-200"
@@ -318,7 +318,7 @@ interface PendingWriterImport {
                     </p>
                   </div>
                 ) : (
-                  <div className="grid max-h-72 gap-2 overflow-auto pr-1">
+                  <div className="writer-dialog-scroll grid max-h-72 content-start gap-2 pr-1">
                     {documents.map(
                       /** Renders one stored document. @param document - Browser document. @returns Open button. */
                       (document) => (
@@ -423,6 +423,7 @@ interface PendingWriterImport {
           </div>
         ) : kind === "save-as" ? (
           <form
+            className="writer-dialog-form"
             onSubmit={
               /**
                * Handles the Writer browser operation.
@@ -471,7 +472,7 @@ interface PendingWriterImport {
             </div>
           </form>
         ) : (
-          <div className="grid grid-cols-2 gap-4 p-6">
+          <div className="writer-dialog-scroll grid grid-cols-2 content-start gap-4 p-6">
             <button
               aria-label="Download ODT"
               className="group flex flex-col items-center rounded-xl border border-slate-200 bg-white px-4 py-6 text-center transition-colors hover:border-indigo-400 hover:bg-indigo-50 focus-visible:outline-2 focus-visible:outline-indigo-600"

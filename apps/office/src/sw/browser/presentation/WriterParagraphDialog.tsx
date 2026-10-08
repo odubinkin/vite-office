@@ -55,11 +55,11 @@ export function WriterParagraphDialog({
               onDialogCancel(dialogRequest.id)
           }
         />
-        <div className="writer-dialog-content">
-          <div className="flex min-w-0 flex-col gap-5 sm:flex-row">
+        <div className="writer-dialog-content writer-dialog-tabbed">
+          <div className="writer-dialog-tabs-layout">
             <div
               aria-label="Paragraph settings"
-              className="flex shrink-0 overflow-x-auto border-b border-slate-300 sm:w-44 sm:flex-col sm:overflow-visible sm:border-b-0 sm:border-r"
+              className="writer-dialog-tablist flex shrink-0 border-b border-slate-300 sm:w-44 sm:flex-col sm:border-b-0 sm:border-r"
               role="tablist"
             >
               {(
@@ -90,7 +90,7 @@ export function WriterParagraphDialog({
               )}
             </div>
             <div
-              className="grid min-h-52 min-w-0 flex-1 grid-cols-1 content-start gap-3 text-sm sm:grid-cols-2"
+              className="writer-dialog-scroll grid min-w-0 grid-cols-1 content-start gap-3 text-sm sm:grid-cols-2"
               role="tabpanel"
             >
               {activeTab === "spacing" ? (

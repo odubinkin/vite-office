@@ -84,7 +84,7 @@ test("sidebar remains reachable and its checked state follows visibility on a to
   await expect(sidebar.getByRole("button", { name: "Start" })).toBeFocused();
 });
 
-test("the page stays within the viewport while the document and modal scroll", /** Checks mobile containment. @param page - Browser page fixture. @returns Nothing. */ async ({
+test("the page stays within the viewport while the document and modal body scroll", /** Checks mobile containment. @param page - Browser page fixture. @returns Nothing. */ async ({
   page,
 }) => {
   await page.goto("/writer");
@@ -113,12 +113,21 @@ test("the page stays within the viewport while the document and modal scroll", /
   const panel = page.locator("[data-writer-modal-panel]");
   await expect(panel).toBeVisible();
   expect(
-    await panel.evaluate(
-      /** Checks dialog overflow. @param element - Modal panel. @returns Whether panel scrolls. */ (
-        element,
-      ) => element.scrollHeight > element.clientHeight,
-    ),
+    await panel
+      .locator('.writer-dialog-scroll[role="tabpanel"]')
+      .evaluate(
+        /** Checks that the dialog body overflows independently. @param element - Modal content. @returns Whether body scrolls. */ (
+          element,
+        ) => element.scrollHeight > element.clientHeight,
+      ),
   ).toBe(true);
+  expect(
+    await panel.evaluate(
+      /** Confirms the outer panel cannot scroll with its body. @param element - Modal panel. @returns Panel scroll contract. */ (
+        element,
+      ) => ({ overflow: getComputedStyle(element).overflowY, scrollTop: element.scrollTop }),
+    ),
+  ).toEqual({ overflow: "clip", scrollTop: 0 });
   expect(
     await page.evaluate(
       /** Reads document height. @returns Height in pixels. */ () =>

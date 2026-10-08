@@ -56,30 +56,142 @@ body:has([aria-label="Writer workspace"]) {
   display: flex;
   align-items: safe center;
   justify-content: center;
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow: clip;
   max-height: 100dvh;
   background: rgb(2 6 23 / 50%);
   backdrop-filter: blur(2px);
 }
 
 [data-writer-modal-panel] {
+  display: flex;
+  flex-direction: column;
   flex-shrink: 0;
   min-width: 0;
   max-height: calc(100dvh - 2rem);
-  overflow: auto;
+  overflow: clip;
   overscroll-behavior: contain;
   border: 1px solid #e2e8f0;
   border-radius: 1rem;
   box-shadow: 0 25px 50px -12px rgb(0 0 0 / 25%);
 }
 
+.writer-dialog-header,
+.writer-dialog-actions {
+  flex-shrink: 0;
+}
+
+.writer-dialog-form {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 0;
+  overflow: clip;
+}
+
+.writer-dialog-content,
+.writer-dialog-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+}
+
+:is(.writer-dialog-content, .writer-dialog-scroll, .writer-dialog-tablist) {
+  scrollbar-width: auto;
+  scrollbar-color: #64748b #f1f5f9;
+}
+
+@supports selector(::-webkit-scrollbar) {
+  :is(.writer-dialog-content, .writer-dialog-scroll, .writer-dialog-tablist) {
+    scrollbar-color: auto;
+  }
+
+  :is(.writer-dialog-content, .writer-dialog-scroll, .writer-dialog-tablist)::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+  }
+
+  :is(
+    .writer-dialog-content,
+    .writer-dialog-scroll,
+    .writer-dialog-tablist
+  )::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 6px;
+  }
+
+  :is(
+    .writer-dialog-content,
+    .writer-dialog-scroll,
+    .writer-dialog-tablist
+  )::-webkit-scrollbar-thumb {
+    border: 3px solid #f1f5f9;
+    border-radius: 6px;
+    background: #64748b;
+  }
+
+  :is(
+      .writer-dialog-content,
+      .writer-dialog-scroll,
+      .writer-dialog-tablist
+    )::-webkit-scrollbar-thumb:hover {
+    background: #475569;
+  }
+}
+
 .writer-dialog-content {
   display: grid;
+  grid-auto-rows: max-content;
+  align-content: start;
   gap: 1rem;
   padding: 1.5rem;
   color: #334155;
   font-size: 0.875rem;
+}
+
+.writer-dialog-content.writer-dialog-tabbed {
+  display: flex;
+  flex-direction: column;
+  overflow: clip;
+  scrollbar-gutter: auto;
+  gap: 0;
+  padding: 0;
+}
+
+.writer-dialog-tabs-layout {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 0;
+  overflow: clip;
+}
+
+.writer-dialog-tablist {
+  min-height: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior: contain;
+  padding: 0.75rem 1.5rem;
+}
+
+.writer-dialog-tabs-layout > [role="tabpanel"] {
+  grid-auto-rows: max-content;
+  padding: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .writer-dialog-tabs-layout {
+    flex-direction: row;
+  }
+
+  .writer-dialog-tablist {
+    overflow-x: hidden;
+    overflow-y: auto;
+    scrollbar-gutter: stable;
+    padding: 1.5rem 0.5rem;
+  }
 }
 
 .writer-dialog-content :where(div, label, fieldset) {
@@ -166,6 +278,15 @@ body:has([aria-label="Writer workspace"]) {
 
 .writer-dialog-actions button:hover {
   background: #f1f5f9;
+}
+
+.writer-dialog-actions .writer-dialog-danger {
+  border-color: #fca5a5;
+  color: #b91c1c;
+}
+
+.writer-dialog-actions .writer-dialog-danger:hover {
+  background: #fef2f2;
 }
 
 .writer-dialog-actions .writer-dialog-primary {
