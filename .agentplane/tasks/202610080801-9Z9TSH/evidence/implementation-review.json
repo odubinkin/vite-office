@@ -1,0 +1,67 @@
+{
+  "evaluatedSHA": "a9b69b581295c980996d31cd0e8ffccdb96bce1c",
+  "baseline": "b5da6bf4c985f88be6aa5bddae6a1957ad10afc6",
+  "reviewer": "Same current agent in EVALUATOR role; explicitly not independent",
+  "reconstructed": [
+    {
+      "path": ".agentplane/tasks/202610080801-9Z9TSH/evidence/final-coverage.json",
+      "sha256": "94082ba9ecc61e3973baad16f2ad6a237ad570c7e46466bf1e34f108483cf658",
+      "byteIdenticalReconstruction": true
+    },
+    {
+      "path": ".agentplane/tasks/202610080801-9Z9TSH/evidence/case-census.json",
+      "sha256": "86f9030f34b1de0b298c72f2dad4c880b236afdb1045eb653ff056b63c0e9e84",
+      "byteIdenticalReconstruction": true
+    },
+    {
+      "path": ".agentplane/tasks/202610080801-9Z9TSH/evidence/scope-final.json",
+      "sha256": "5e79bbf7822d0435b6b22bb6d924eab9a4b7a32da1f48d9b5df67a7a124bba4f",
+      "byteIdenticalReconstruction": true
+    },
+    {
+      "path": ".agentplane/tasks/202610080801-9Z9TSH/evidence/native-source-review.json",
+      "sha256": "208219ead65371a337e23498fcf615e58414cace090ae2164f371535fba8b012",
+      "byteIdenticalReconstruction": true
+    }
+  ],
+  "semanticPaths": [
+    "apps/office/src/svl/source/items/poolitem.ts",
+    "apps/office/src/svx/inc/svxids.ts",
+    "apps/office/src/svx/source/dialog/rulritem.ts",
+    "apps/office/src/sw/source/uibase/uiview/viewtab.ts",
+    "apps/office/src/sw/source/uibase/uiview/view.ts",
+    "apps/office/src/sw/source/uibase/docvw/edtwin.ts",
+    "scripts/check-module-boundaries.mjs",
+    "apps/office/src/svx/source/dialog/native-column-item.test.ts",
+    "apps/office/src/sw/source/uibase/uiview/native-column-item-boundary.test.ts",
+    "scripts/native-column-item-boundary.test.ts",
+    "apps/office/src/sw/browser/presentation/current-dialog-baseline.test.tsx",
+    "apps/office/src/sw/browser/presentation/writer-view-document-key.test.tsx",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "oneFullUpstreamAbsentProfile": true,
+  "noPassingTestReplay": true,
+  "uniquePassingCases": {
+    "app": 13711,
+    "inventory": 110,
+    "infrastructure": 16,
+    "chromium": 299
+  },
+  "allFourExactSourceBoundCoverage100": true,
+  "priorAcceptancePreserved": {
+    "byteIdenticalFiles": 613,
+    "oneSourceBackedSelectorMigration": 21
+  },
+  "protectedIOProductionPreserved": 4,
+  "parentPrefixPreserved": true,
+  "stashPreserved": true,
+  "nativeScope": "Actual SvxColumnItem/Description, Writer StateTabWin column conversion, production drag ingress; no full SvxRuler/slot/StateTabWin promotion",
+  "residuals": [
+    "Full SvxRuler/SfxBindings/SfxItemSet slot dispatch and StateTabWin page/frame/section owners not yet ported.",
+    "Row value conversion and native active-column production selection, vertical/RTL document drag, pooled refcount guard and full uint16 WhichId domain remain partial.",
+    "UNO nonzero member QueryValue/PutValue and GetPresentation/CreateDefault are not represented; default member-zero query has no payload.",
+    "Browser IO/settings/open/save/recovery deviations remain untouched. Two expected current-baseline UI guard rejections are captured at the host Promise boundary with exact error assertions, not claimed as successful ordinary browser flows."
+  ],
+  "failures": []
+}

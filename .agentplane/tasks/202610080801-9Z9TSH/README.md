@@ -4,7 +4,7 @@ title: "Use native column items at the Writer ruler boundary"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 24
+revision: 28
 origin:
   system: "manual"
 depends_on: []
@@ -20,11 +20,29 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-08T08:57:32.402Z"
+  updated_by: "CODER"
+  note: "Final native column item boundary verified at a9b69b581295c980996d31cd0e8ffccdb96bce1c. Exact same-agent review PASS; one upstream-absent full profile,13711 app/110 inventory/16 infrastructure/299 Chromium unique passes, all-four exact-source coverage100 and zero passing replay. Protected IO,613 old acceptance files,original21 migrated assertions,parent prefix and stash preserved; full ruler/slot/row/StateTabWin parity remains partial."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-08T08:56:31.979Z"
+  updated_by: "EVALUATOR"
+  note: "Same-current-agent EVALUATOR, explicitly not independent: exact a9b69b581295 implementation satisfies approved native column boundary scope."
+  evaluated_sha: "a9b69b581295c980996d31cd0e8ffccdb96bce1c"
+  blueprint_digest: "246fb558f43f84d6899218c094d2a7314142bdb70d885fdc15757225dc5f1c48"
+  evidence_refs:
+    - ".agentplane/tasks/202610080801-9Z9TSH/README.md"
+    - ".agentplane/tasks/202610080801-9Z9TSH/quality/20261008-085631979-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610080801-9Z9TSH/quality/20261008-085631979-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610080801-9Z9TSH/quality/20261008-085631979-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610080801-9Z9TSH/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610080801-9Z9TSH/evidence/implementation-review.json"
+    - ".agentplane/tasks/202610080801-9Z9TSH/evidence/native-source-review.json"
+  findings:
+    - "Four committed source-bound evidence reconstructions are byte-identical; scope14,613 prior acceptance files unchanged and original21 selector assertions retained; all-four app/inventory coverage100,13711/110/16/299 unique passes and zero passing replay."
+    - "Native defaults, value copying, signed limits, uint16 constructor/count/index contracts and real Writer drag item ingress are pinned-source backed; protected IO baseline remains identical."
 commit: null
 comments:
   -
@@ -38,8 +56,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement production-used native column item boundary under standing goal authorization, with source-bound verification and one absent runtime profile."
+  -
+    type: "verify"
+    at: "2026-10-08T08:57:32.402Z"
+    author: "CODER"
+    state: "ok"
+    note: "Final native column item boundary verified at a9b69b581295c980996d31cd0e8ffccdb96bce1c. Exact same-agent review PASS; one upstream-absent full profile,13711 app/110 inventory/16 infrastructure/299 Chromium unique passes, all-four exact-source coverage100 and zero passing replay. Protected IO,613 old acceptance files,original21 migrated assertions,parent prefix and stash preserved; full ruler/slot/row/StateTabWin parity remains partial."
 doc_version: 3
-doc_updated_at: "2026-10-08T08:54:17.690Z"
+doc_updated_at: "2026-10-08T08:57:32.458Z"
 doc_updated_by: "CODER"
 description: "Iteration229: production-used SvxColumnItem values and SwView-owned table-column conversion replace direct separator visibility and limits in document drag admission. Preserve original SwTabCols model/apply owners and prior acceptance; generic ruler ownership is the next dependency."
 sections:
@@ -86,13 +110,48 @@ sections:
     Evidence: pin9bc445578031fecf56086729d8e4940c77e14d65,8 native source hashes/anchors,7 actual production hashes; provenance307records218mapped73browser16infra; scope14,613oldbyte-identical plus1 exact footer selector with original assertions/input preserved;305records retained+2partial;4protectedIOsource hashes unchanged. AP0source/Python/raw; doctor0errors2oldwarnings;routing/diff PASS.
     Scope: native contract linkage and local workflow, no IO/recovery deviations changed.
 
-    Exact implementation SHA review and canonical verification checkpoint pending; full SvxRuler/slots/row values/full StateTabWin and whole parity explicitly unverified.
+    Exact implementation SHA review PASS as recorded below; full SvxRuler/slots/row values/full StateTabWin and whole parity explicitly unverified.
     Command: native uint16 constructor/count correction closure2 and changed-input static4/source-closure1.
     Result: PASS.
     Evidence: one genuinely new wrap/copy/consistency case PASS7SKIP; actual changed-production build PASS without upstream; zero passing-case replay. Constructor/Count casts now match sal_uInt16, raw vector Clone/consistency retained across65536 entries. Current-source all4coverage100 reconstructed; total unique13711app.
     Scope: actual native item contract; protected browser IO bytes and299 earlier browser scenarios unchanged.
 
-    Final At argument review: pinned sal_uInt16 index conversion is applied before owned access. One genuinely new index-wrap/mutable-ownership case PASS8SKIP in upstream-absent closure3; changed-input build and static5/source-closure2 PASS. Final unique13711app110inventory16infra299Chromium,20 new app cases beyond initial profile,38 app skip observations retained, no passing replay. All-four exact current-source coverage100 totals unchanged. Constructor/count implementation a6ff43a732eb5641027ccb3ed974a2d239140b3e is followed by the At correction; final implementation SHA review pending.
+    Final At argument review: pinned sal_uInt16 index conversion is applied before owned access. One genuinely new index-wrap/mutable-ownership case PASS8SKIP in upstream-absent closure3; changed-input build and static5/source-closure2 PASS. Final unique13711app110inventory16infra299Chromium,20 new app cases beyond initial profile,38 app skip observations retained, no passing replay. All-four exact current-source coverage100 totals unchanged. Constructor/count implementation a6ff43a732eb5641027ccb3ed974a2d239140b3e is followed by the At correction; final implementation SHA review is recorded below.
+
+    Exact final implementation review PASS for a9b69b581295c980996d31cd0e8ffccdb96bce1c, following acfe8310970925d5106467203d21d8d6b6b2bf3d and a6ff43a732eb5641027ccb3ed974a2d239140b3e. Four committed final coverage/case/scope/native-source evidence reconstructions are byte-identical, all14 semantic files match actual evaluated HEAD, complete current-map source ownership and finite nonnegative counters confirmed. Same-current-agent EVALUATOR is explicitly not independent; quality/20261008-085631979-recovery-context/quality-report.json records PASS at that SHA. Source-bound all-four100 app/inventory; unique13711app110inventory16infra299Chromium, original failures and38/2skip observations retained, zero passing replay. Parent/stash/pin/protected IO checks pass. Canonical verification and its committed checkpoint use these final documents and actual implementation SHA; bounded leaf completion makes no whole-goal completion claim.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-08T08:57:32.402Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Final native column item boundary verified at a9b69b581295c980996d31cd0e8ffccdb96bce1c. Exact same-agent review PASS; one upstream-absent full profile,13711 app/110 inventory/16 infrastructure/299 Chromium unique passes, all-four exact-source coverage100 and zero passing replay. Protected IO,613 old acceptance files,original21 migrated assertions,parent prefix and stash preserved; full ruler/slot/row/StateTabWin parity remains partial.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-08T08:57:16.043Z, excerpt_hash=sha256:d812350c9b1a8e0bae5a706a21ae78afc364016566f9e2feb5b9bb9e04e16bd9
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610080801-9Z9TSH/blueprint/resolved-snapshot.json
+    - old_digest: 246fb558f43f84d6899218c094d2a7314142bdb70d885fdc15757225dc5f1c48
+    - current_digest: 246fb558f43f84d6899218c094d2a7314142bdb70d885fdc15757225dc5f1c48
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610080801-9Z9TSH
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610080801-9Z9TSH -m 🧩 9Z9TSH task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the task implementation commit and rerun affected checks under a new approved task. Preserve native model/history and registered IO deviations."
   Findings: |-
     Iteration229 current baseline is b5da6bf4c985f88be6aa5bddae6a1957ad10afc6 (the stale preloaded546c/612/303 facts in the initial note are superseded). Actual baseline614 acceptance files and305 records includes completed BKYEAC/Q0C52Z/XDXRZG/HA9KH9 browser persistence/dialog work; that production code is byte-identical throughout this task. Goal readback ACTIVE after resumed continuation. The preceding status-only question turn was no progress; this turn implements the next safe architectural dependency.
@@ -107,9 +166,11 @@ sections:
 
     Scope14:7 production/checker paths,4 fresh acceptance files,1 source-backed selector migration,2 metadata. All613 other prior acceptance files byte-identical; all305 prior metadata records/fields/evidence prefixes/status/defaults/classes and registered IO deviations retained plus2 honest partial unverified native modules. Four explicit protected IO production hashes equal current baseline. Physical code maximum667<1000; JSDoc/routing/diff PASS. Whole AP5678 files0forbidden source/Python/raw maps/results/snapshots. Doctor0errors2pre-existing warnings only: managed readiness/fallback shim and historical DONE2Z3962 missing implementation SHA. Entire parent648373char prefix SHA831af71783e10fc16f212c74b179c0c58da3b478c11ee96bb6656a48163276a3 and stashc85f4a0e453dfd06d6e199554784f2c286737472 retained.
 
-    Residual: full SvxRuler/SfxBindings/SfxItemSet slots and complete StateTabWin page/frame/section ownership; row value conversion; production native active-column selection; vertical/RTL document drag; pooled refcount mutation guards/full uint16 WhichId; nonzero member QueryValue/PutValue/CreateDefault/GetPresentation. No complete ruler or whole parity claim. Existing browser item conversion is production-used, not a renamed SwTabCols wrapper. Next architectural work can consume these generic SVX values without a reverse SW dependency. Final exact implementation review and canonical verification checkpoint will follow; same-current-agent EVALUATOR is explicitly not independent. Full goal remains ACTIVE. Final native-contract review adds explicit uint16 casts for constructor active/edges and Count, retaining raw vector size for consistency and deep Clone even when65536 descriptions wrap Count to0. One genuinely new overflow case PASS7SKIP in closure2, actual changed-production rebuild PASS while upstream absent and restored; no full or passing-test replay. Static closure4 PASS; only changed-input provenance/parity source gates repeated and PASS. Initial implementationacfe8310970925d5106467203d21d8d6b6b2bf3d is followed by this correction under the same approved semantic scope. Actual original selector assertions21, not35; scope audit is authoritative.
+    Residual: full SvxRuler/SfxBindings/SfxItemSet slots and complete StateTabWin page/frame/section ownership; row value conversion; production native active-column selection; vertical/RTL document drag; pooled refcount mutation guards/full uint16 WhichId; nonzero member QueryValue/PutValue/CreateDefault/GetPresentation. No complete ruler or whole parity claim. Existing browser item conversion is production-used, not a renamed SwTabCols wrapper. Next architectural work can consume these generic SVX values without a reverse SW dependency. The exact implementation review is recorded below; same-current-agent EVALUATOR is explicitly not independent. Full goal remains ACTIVE. Final native-contract review adds explicit uint16 casts for constructor active/edges and Count, retaining raw vector size for consistency and deep Clone even when65536 descriptions wrap Count to0. One genuinely new overflow case PASS7SKIP in closure2, actual changed-production rebuild PASS while upstream absent and restored; no full or passing-test replay. Static closure4 PASS; only changed-input provenance/parity source gates repeated and PASS. Initial implementationacfe8310970925d5106467203d21d8d6b6b2bf3d is followed by this correction under the same approved semantic scope. Actual original selector assertions21, not35; scope audit is authoritative.
 
-    Final At argument review: pinned sal_uInt16 index conversion is applied before owned access. One genuinely new index-wrap/mutable-ownership case PASS8SKIP in upstream-absent closure3; changed-input build and static5/source-closure2 PASS. Final unique13711app110inventory16infra299Chromium,20 new app cases beyond initial profile,38 app skip observations retained, no passing replay. All-four exact current-source coverage100 totals unchanged. Constructor/count implementation a6ff43a732eb5641027ccb3ed974a2d239140b3e is followed by the At correction; final implementation SHA review pending.
+    Final At argument review: pinned sal_uInt16 index conversion is applied before owned access. One genuinely new index-wrap/mutable-ownership case PASS8SKIP in upstream-absent closure3; changed-input build and static5/source-closure2 PASS. Final unique13711app110inventory16infra299Chromium,20 new app cases beyond initial profile,38 app skip observations retained, no passing replay. All-four exact current-source coverage100 totals unchanged. Constructor/count implementation a6ff43a732eb5641027ccb3ed974a2d239140b3e is followed by the At correction; final implementation SHA review is recorded below.
+
+    Exact final implementation review PASS for a9b69b581295c980996d31cd0e8ffccdb96bce1c, following acfe8310970925d5106467203d21d8d6b6b2bf3d and a6ff43a732eb5641027ccb3ed974a2d239140b3e. Four committed final coverage/case/scope/native-source evidence reconstructions are byte-identical, all14 semantic files match actual evaluated HEAD, complete current-map source ownership and finite nonnegative counters confirmed. Same-current-agent EVALUATOR is explicitly not independent; quality/20261008-085631979-recovery-context/quality-report.json records PASS at that SHA. Source-bound all-four100 app/inventory; unique13711app110inventory16infra299Chromium, original failures and38/2skip observations retained, zero passing replay. Parent/stash/pin/protected IO checks pass. Canonical verification and its committed checkpoint use these final documents and actual implementation SHA; bounded leaf completion makes no whole-goal completion claim.
 id_source: "generated"
 ---
 ## Summary
@@ -166,13 +227,48 @@ Result: PASS.
 Evidence: pin9bc445578031fecf56086729d8e4940c77e14d65,8 native source hashes/anchors,7 actual production hashes; provenance307records218mapped73browser16infra; scope14,613oldbyte-identical plus1 exact footer selector with original assertions/input preserved;305records retained+2partial;4protectedIOsource hashes unchanged. AP0source/Python/raw; doctor0errors2oldwarnings;routing/diff PASS.
 Scope: native contract linkage and local workflow, no IO/recovery deviations changed.
 
-Exact implementation SHA review and canonical verification checkpoint pending; full SvxRuler/slots/row values/full StateTabWin and whole parity explicitly unverified.
+Exact implementation SHA review PASS as recorded below; full SvxRuler/slots/row values/full StateTabWin and whole parity explicitly unverified.
 Command: native uint16 constructor/count correction closure2 and changed-input static4/source-closure1.
 Result: PASS.
 Evidence: one genuinely new wrap/copy/consistency case PASS7SKIP; actual changed-production build PASS without upstream; zero passing-case replay. Constructor/Count casts now match sal_uInt16, raw vector Clone/consistency retained across65536 entries. Current-source all4coverage100 reconstructed; total unique13711app.
 Scope: actual native item contract; protected browser IO bytes and299 earlier browser scenarios unchanged.
 
-Final At argument review: pinned sal_uInt16 index conversion is applied before owned access. One genuinely new index-wrap/mutable-ownership case PASS8SKIP in upstream-absent closure3; changed-input build and static5/source-closure2 PASS. Final unique13711app110inventory16infra299Chromium,20 new app cases beyond initial profile,38 app skip observations retained, no passing replay. All-four exact current-source coverage100 totals unchanged. Constructor/count implementation a6ff43a732eb5641027ccb3ed974a2d239140b3e is followed by the At correction; final implementation SHA review pending.
+Final At argument review: pinned sal_uInt16 index conversion is applied before owned access. One genuinely new index-wrap/mutable-ownership case PASS8SKIP in upstream-absent closure3; changed-input build and static5/source-closure2 PASS. Final unique13711app110inventory16infra299Chromium,20 new app cases beyond initial profile,38 app skip observations retained, no passing replay. All-four exact current-source coverage100 totals unchanged. Constructor/count implementation a6ff43a732eb5641027ccb3ed974a2d239140b3e is followed by the At correction; final implementation SHA review is recorded below.
+
+Exact final implementation review PASS for a9b69b581295c980996d31cd0e8ffccdb96bce1c, following acfe8310970925d5106467203d21d8d6b6b2bf3d and a6ff43a732eb5641027ccb3ed974a2d239140b3e. Four committed final coverage/case/scope/native-source evidence reconstructions are byte-identical, all14 semantic files match actual evaluated HEAD, complete current-map source ownership and finite nonnegative counters confirmed. Same-current-agent EVALUATOR is explicitly not independent; quality/20261008-085631979-recovery-context/quality-report.json records PASS at that SHA. Source-bound all-four100 app/inventory; unique13711app110inventory16infra299Chromium, original failures and38/2skip observations retained, zero passing replay. Parent/stash/pin/protected IO checks pass. Canonical verification and its committed checkpoint use these final documents and actual implementation SHA; bounded leaf completion makes no whole-goal completion claim.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-08T08:57:32.402Z — VERIFY — ok
+
+By: CODER
+
+Note: Final native column item boundary verified at a9b69b581295c980996d31cd0e8ffccdb96bce1c. Exact same-agent review PASS; one upstream-absent full profile,13711 app/110 inventory/16 infrastructure/299 Chromium unique passes, all-four exact-source coverage100 and zero passing replay. Protected IO,613 old acceptance files,original21 migrated assertions,parent prefix and stash preserved; full ruler/slot/row/StateTabWin parity remains partial.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-08T08:57:16.043Z, excerpt_hash=sha256:d812350c9b1a8e0bae5a706a21ae78afc364016566f9e2feb5b9bb9e04e16bd9
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610080801-9Z9TSH/blueprint/resolved-snapshot.json
+- old_digest: 246fb558f43f84d6899218c094d2a7314142bdb70d885fdc15757225dc5f1c48
+- current_digest: 246fb558f43f84d6899218c094d2a7314142bdb70d885fdc15757225dc5f1c48
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610080801-9Z9TSH
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610080801-9Z9TSH -m 🧩 9Z9TSH task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
@@ -192,6 +288,8 @@ Final unique13711app110inventory16infra299Chromium PASS,0unresolved0flaky0uncaug
 
 Scope14:7 production/checker paths,4 fresh acceptance files,1 source-backed selector migration,2 metadata. All613 other prior acceptance files byte-identical; all305 prior metadata records/fields/evidence prefixes/status/defaults/classes and registered IO deviations retained plus2 honest partial unverified native modules. Four explicit protected IO production hashes equal current baseline. Physical code maximum667<1000; JSDoc/routing/diff PASS. Whole AP5678 files0forbidden source/Python/raw maps/results/snapshots. Doctor0errors2pre-existing warnings only: managed readiness/fallback shim and historical DONE2Z3962 missing implementation SHA. Entire parent648373char prefix SHA831af71783e10fc16f212c74b179c0c58da3b478c11ee96bb6656a48163276a3 and stashc85f4a0e453dfd06d6e199554784f2c286737472 retained.
 
-Residual: full SvxRuler/SfxBindings/SfxItemSet slots and complete StateTabWin page/frame/section ownership; row value conversion; production native active-column selection; vertical/RTL document drag; pooled refcount mutation guards/full uint16 WhichId; nonzero member QueryValue/PutValue/CreateDefault/GetPresentation. No complete ruler or whole parity claim. Existing browser item conversion is production-used, not a renamed SwTabCols wrapper. Next architectural work can consume these generic SVX values without a reverse SW dependency. Final exact implementation review and canonical verification checkpoint will follow; same-current-agent EVALUATOR is explicitly not independent. Full goal remains ACTIVE. Final native-contract review adds explicit uint16 casts for constructor active/edges and Count, retaining raw vector size for consistency and deep Clone even when65536 descriptions wrap Count to0. One genuinely new overflow case PASS7SKIP in closure2, actual changed-production rebuild PASS while upstream absent and restored; no full or passing-test replay. Static closure4 PASS; only changed-input provenance/parity source gates repeated and PASS. Initial implementationacfe8310970925d5106467203d21d8d6b6b2bf3d is followed by this correction under the same approved semantic scope. Actual original selector assertions21, not35; scope audit is authoritative.
+Residual: full SvxRuler/SfxBindings/SfxItemSet slots and complete StateTabWin page/frame/section ownership; row value conversion; production native active-column selection; vertical/RTL document drag; pooled refcount mutation guards/full uint16 WhichId; nonzero member QueryValue/PutValue/CreateDefault/GetPresentation. No complete ruler or whole parity claim. Existing browser item conversion is production-used, not a renamed SwTabCols wrapper. Next architectural work can consume these generic SVX values without a reverse SW dependency. The exact implementation review is recorded below; same-current-agent EVALUATOR is explicitly not independent. Full goal remains ACTIVE. Final native-contract review adds explicit uint16 casts for constructor active/edges and Count, retaining raw vector size for consistency and deep Clone even when65536 descriptions wrap Count to0. One genuinely new overflow case PASS7SKIP in closure2, actual changed-production rebuild PASS while upstream absent and restored; no full or passing-test replay. Static closure4 PASS; only changed-input provenance/parity source gates repeated and PASS. Initial implementationacfe8310970925d5106467203d21d8d6b6b2bf3d is followed by this correction under the same approved semantic scope. Actual original selector assertions21, not35; scope audit is authoritative.
 
-Final At argument review: pinned sal_uInt16 index conversion is applied before owned access. One genuinely new index-wrap/mutable-ownership case PASS8SKIP in upstream-absent closure3; changed-input build and static5/source-closure2 PASS. Final unique13711app110inventory16infra299Chromium,20 new app cases beyond initial profile,38 app skip observations retained, no passing replay. All-four exact current-source coverage100 totals unchanged. Constructor/count implementation a6ff43a732eb5641027ccb3ed974a2d239140b3e is followed by the At correction; final implementation SHA review pending.
+Final At argument review: pinned sal_uInt16 index conversion is applied before owned access. One genuinely new index-wrap/mutable-ownership case PASS8SKIP in upstream-absent closure3; changed-input build and static5/source-closure2 PASS. Final unique13711app110inventory16infra299Chromium,20 new app cases beyond initial profile,38 app skip observations retained, no passing replay. All-four exact current-source coverage100 totals unchanged. Constructor/count implementation a6ff43a732eb5641027ccb3ed974a2d239140b3e is followed by the At correction; final implementation SHA review is recorded below.
+
+Exact final implementation review PASS for a9b69b581295c980996d31cd0e8ffccdb96bce1c, following acfe8310970925d5106467203d21d8d6b6b2bf3d and a6ff43a732eb5641027ccb3ed974a2d239140b3e. Four committed final coverage/case/scope/native-source evidence reconstructions are byte-identical, all14 semantic files match actual evaluated HEAD, complete current-map source ownership and finite nonnegative counters confirmed. Same-current-agent EVALUATOR is explicitly not independent; quality/20261008-085631979-recovery-context/quality-report.json records PASS at that SHA. Source-bound all-four100 app/inventory; unique13711app110inventory16infra299Chromium, original failures and38/2skip observations retained, zero passing replay. Parent/stash/pin/protected IO checks pass. Canonical verification and its committed checkpoint use these final documents and actual implementation SHA; bounded leaf completion makes no whole-goal completion claim.
