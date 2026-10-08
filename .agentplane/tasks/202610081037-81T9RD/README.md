@@ -1,10 +1,11 @@
 ---
 id: "202610081037-81T9RD"
 title: "Move native table ruler tracking out of Writer edit window"
-status: "DOING"
+result_summary: "Persistent native horizontal/vertical rulers now own represented table drag lifecycle, modifiers, constraints and transient native values; Writer keeps document apply/history ownership. Unique app13785 inventory110 infra19 Chromium299 passing, exact-source all-four100. Independent per-row column widths/current-line core apply is the next priority; no full ruler/table/module promotion."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -42,11 +43,16 @@ quality_review:
     - ".agentplane/tasks/202610081037-81T9RD/evidence/implementation-review.json"
   findings:
     - "Four committed reports reconstructed byte-identically against actual implementation; all11 semantic paths, all620 prior acceptance sources, app13785 inventory110 infra19 Chromium299, one full absent profile and one original-failure/new-only closure, all-four exact-source-bound coverage100, protected IO pin stash and parent preserved. Independent per-row column widths/current-line apply and full native SFX/VCL ruler state remain explicit partial follow-ups."
-commit: null
+commit:
+  hash: "ab796a27b84c9e14b0dcbb362d137f3ee82ad2b6"
+  message: "🛠 81T9RD code: move native table ruler ownership out of Writer edit window"
 comments:
   -
     author: "CODER"
     body: "Start: execute the standing user-approved native table ruler ownership refactor in the current checkout."
+  -
+    author: "CODER"
+    body: "Verified: native Ruler/SvxRuler ownership delegates represented table capture and geometry from Writer; exact ab796a27b84c reconstructed evidence passes, canonical verify checkpoint9647563721a0 committed. One full absent profile and one failure/new-only closure,620 prior tests and IO/pin/stash/parent preserved; real per-row column and full SFX/VCL gaps remain open under active goal."
 events:
   -
     type: "status"
@@ -61,8 +67,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Approved native Ruler/SvxRuler ownership scope verified at ab796a27b84c; one full absent profile plus original-failure/new-only closure, unique app13785 inventory110 infra19 Chromium299 pass, exact-source all-four100, four byte-identical reconstructed reports,620 prior acceptance sources and307 prior metadata contracts preserved. Same-current-agent EVALUATOR pass, explicitly not independent; per-row column core and full SFX/VCL residuals remain partial and goal active."
+  -
+    type: "status"
+    at: "2026-10-08T11:39:07.065Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native Ruler/SvxRuler ownership delegates represented table capture and geometry from Writer; exact ab796a27b84c reconstructed evidence passes, canonical verify checkpoint9647563721a0 committed. One full absent profile and one failure/new-only closure,620 prior tests and IO/pin/stash/parent preserved; real per-row column and full SFX/VCL gaps remain open under active goal."
 doc_version: 3
-doc_updated_at: "2026-10-08T11:38:47.158Z"
+doc_updated_at: "2026-10-08T11:39:07.068Z"
 doc_updated_by: "CODER"
 description: "Iteration232: establish source-owned Ruler/SvxRuler tracking and SvxColumnItem apply ownership, persistent SwView horizontal/vertical rulers, and remove table geometry algorithms from SwEditWin under the standing approved parity goal."
 sections:
