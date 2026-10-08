@@ -32,13 +32,17 @@
     },
     {
       "command": "npm run check:docs",
-      "exit": 1,
-      "bytes": 3303,
-      "sha256": "16c3fe3539cbbca3b98ef2a654beb286a7739afb24e0c00ff2ef549a59dcb3d3",
-      "diagnostics": [
-        "    throw new Error(`JSDoc validation failed:\\n${errors.join(\"\\n\")}`);",
-        "Error: JSDoc validation failed:"
-      ]
+      "exit": 0,
+      "bytes": 120,
+      "sha256": "c29e30605a03fb377be8bc93e95299fdc415e32e8511e34d61dcecaad9f5fe10",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:file-size",
+      "exit": 0,
+      "bytes": 4069,
+      "sha256": "9727c6ab02adcc7501ee0c100a9fd87ccef46db7339219fb23a37fa7c1175721",
+      "diagnostics": []
     }
   ]
 }

@@ -1,0 +1,156 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/sw/source/core/table/swtable.ts": "099a6e08d48add28d452417719091737ee142342e77898c6dac17df33124caa4",
+    "apps/office/src/sw/source/core/docnode/ndtbl1.ts": "e203be07585284e674fcdb19a2425479ceb53225909c51a278ae0d9c91dae1e4",
+    "apps/office/src/sw/source/core/doc/doc.ts": "20c3856bb377bbbbb3cc65816d133f3fc6c5fa633ab448a7dc35595f795de13c",
+    "apps/office/src/sw/source/core/frmedt/fetab.ts": "21dc2860da202f6e36fe66105c0bb4ba731bd2ef8df95efb1482ddaf52a04468",
+    "apps/office/src/sw/source/uibase/shells/tabsh.ts": "5d4d58d719b36678ca9f9f8ade14c46263225fce0030f45de0e4af44c9e97346",
+    "apps/office/src/sw/source/ui/table/tabledlg.ts": "a605f189b3bc5598796ec7d3660c043131fbc6cec166858d5105f6ee67e5a897",
+    "apps/office/src/sw/source/filter/xml/xmltbli.ts": "6d18b7f0cb1bb0ad5392bd185ee3cf2b50ac91b13199bfd54fdeb9a1f47120fa",
+    "apps/office/src/sw/source/filter/xml/xmlexp.ts": "729e4a37302f8cf01f45f1d1f4dd43205950afe38235600b46df8d4282c20bc0",
+    "apps/office/src/sw/browser/filter/xml/writer-table-item-codec.ts": "e7a852de275fe44b68ebf5806fa8c67ebd94e6e6d750f7041d97879a55fdb78c",
+    "apps/office/src/sw/browser/editor/native-table-document-row.test.tsx": "949b452a1a4a093d87485e6e1066b85e4eaef46896446ca83e38f634a2b7250d",
+    "apps/office/src/sw/browser/presentation/native-table-split-items.test.tsx": "c80d78960a4329eab52709af02c4bb4b6514a42b00b2a220e90b07d1ad9a5deb",
+    "apps/office/src/sw/browser/presentation/native-table-properties-reset.test.tsx": "7100e9b3257affcbe784715e697814d5431cc5fb487b2380c2608cfffb3b87ec",
+    "apps/office/src/sw/browser/presentation/native-table-text-flow-split.test.tsx": "fd0c33a8d7aa441c6abedfb4b8c8a961c68975026d3c8665c78da055859b83e4",
+    "apps/office/src/sw/source/filter/xml/native-row-frame-size-roundtrip.test.ts": "f9c65110a35780590b5194f0eee9f2e3299d7b7cdb9df1374011d9300cb15874",
+    "apps/office/src/sw/source/filter/xml/odt-table-roundtrip.test.ts": "343257e1686f7e5d85eb25f81d2f112290297857a60ae16ba6a5ab656cc3af37",
+    "apps/office/src/sw/source/uibase/wrtsh/native-row-split-owner-history.test.ts": "7f58591c041ea67ce257fe957b9d2621c42f43638d8ea57f3f8f720fc69de2c1",
+    "apps/office/src/sw/source/core/undo/native-numeric-row-insertion-history.test.ts": "b71b4e0dfe9a6679e6e9dca462767ad1a6df0407e983834d3d52afda7706dd02",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-traversal.test.ts": "91352a8f42e0ee0f3693720d3e32567967d616c4d51c8d64b3d4aa08e0d84cfd",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-height-delta.test.ts": "a928e19ceb6be3465b2f65fa62a312598ab1d6f890fb468b3c9392952a880f72",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-layout-split-history.test.ts": "7c6321915e59086623ea7e807966084a2c68a4a2781184a068e807b6cad39ed1",
+    "apps/office/src/sw/source/uibase/wrtsh/native-row-height-owner-history.test.ts": "0bb1df61e3ed4d0ffc3ae2c14de1b561f623f70a65eff73dc62bcf015edcc354",
+    "apps/office/src/sw/source/ui/table/native-table-text-flow-split.test.ts": "11b463270b44a7f1166576a56980e2d5ed3767462aa52ad96941066f44972899",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-properties.test.ts": "8a85a6f2b2f3e054f8b24fa6e24e08701f96a23513b31e51b57dea4c5a49d1af",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-height-command-separation.test.ts": "e0e531ec59694bcf79fe58901e57fd0dde769c92a242a5aa2fd15f65eed265a9",
+    "apps/office/src/sw/source/core/docnode/native-row-height-owner.test.ts": "896ee84e21108a41a9b8fa56ff5748c83b98f92d74ad0f2e5e7c20be80c826b3",
+    "apps/office/src/sw/source/core/table/native-numeric-row-insertion.test.ts": "abbca4c2359ffb1c3f3d7ddd88e2d492c1645f409141fb762414d967fa4c6770",
+    "apps/office/src/sw/source/core/docnode/native-row-split-owner.test.ts": "031fefd5437dd29a395a41ae633bbd63296b154a9d6baebe9292565bebfb0e8e",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-text-flow-split-history.test.ts": "993ca7d9ecac49ac4605e8580737a2a086b05b3b871ff87e69297a6bb0e28fd3",
+    "apps/office/src/sw/source/core/docnode/native-row-frame-size.test.ts": "ea0531b629bab68f890de09884c4b79bba6f322ad0c58b1733e3a12389ebf124",
+    "apps/office/src/sw/browser/presentation/native-table-border-changed-items.test.tsx": "c55dc59e3b8eeb83fd8da4139bda66e5cd49ddb37e65821464d9a054107cc14c",
+    "apps/office/src/sw/source/core/docnode/native-row-split-items.test.ts": "bd9f327e3f17df8b53871c5991eb425f07c85bdb39484cf7d00f8b547c35db48",
+    "apps/office/src/sw/browser/filter/xml/native-row-split-item-transport.test.ts": "a88fee78e14b359d33c0a77407e2877d1aa7c5adda6b5b71b9bbb8b47a484ad5",
+    "apps/office/src/sw/browser/presentation/native-row-split-core-items.test.tsx": "4d2111c45015fe294fb1d8dfa6be9e4bea23ac3d86ae159e1104236d45929faf",
+    "apps/office/src/test/table-row-test-helpers.ts": "dc7f7ebcb818ccb0502a534a0997dca1c711b401460d3d8e955c1b9a0b5078fc",
+    "docs/program/source-provenance.json": "afd645264053b031c8010c5c6450c56c170aad2ee70b65edbcb7873cf1208648",
+    "docs/program/parity/runtime-inventory.json": "b7b5aed3c13b206414bb6317cc3b9416e99d854d66246431347cbfd145134e32",
+    "apps/office/e2e/writer-native-table-text-flow-split.spec.ts": "8a94eee203ae4beaeccd600b14aaa7ea1b7cf1cafe93d66bc95bb69cbd418e31"
+  },
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1443,
+      "sha256": "1344aa3df403cd3ff935362c314fabc45b65e767ef51c6b777d9e3328a33cb83",
+      "totals": [],
+      "failedCases": [],
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/source/core/docnode/native-row-split-items.test.ts src/sw/browser/filter/xml/native-row-split-item-transport.test.ts src/sw/browser/presentation/native-row-split-core-items.test.tsx src/sw/browser/editor/native-table-document-row.test.tsx src/sw/browser/presentation/native-table-split-items.test.tsx src/sw/browser/presentation/native-table-properties-reset.test.tsx src/sw/browser/presentation/native-table-text-flow-split.test.tsx src/sw/source/filter/xml/native-row-frame-size-roundtrip.test.ts src/sw/source/filter/xml/odt-table-roundtrip.test.ts src/sw/source/uibase/wrtsh/native-row-split-owner-history.test.ts src/sw/source/core/undo/native-numeric-row-insertion-history.test.ts src/sw/source/uibase/wrtsh/native-table-traversal.test.ts src/sw/source/uibase/wrtsh/native-table-height-delta.test.ts src/sw/source/uibase/wrtsh/native-table-layout-split-history.test.ts src/sw/source/uibase/wrtsh/native-row-height-owner-history.test.ts src/sw/source/ui/table/native-table-text-flow-split.test.ts src/sw/source/uibase/wrtsh/native-table-properties.test.ts src/sw/source/uibase/wrtsh/native-table-height-command-separation.test.ts src/sw/source/core/docnode/native-row-height-owner.test.ts src/sw/source/core/table/native-numeric-row-insertion.test.ts src/sw/source/core/docnode/native-row-split-owner.test.ts src/sw/source/uibase/wrtsh/native-table-text-flow-split-history.test.ts src/sw/source/core/docnode/native-row-frame-size.test.ts src/sw/browser/presentation/native-table-border-changed-items.test.tsx src/sw/inc/native-table-split-items.test.ts src/sw/source/uibase/shells/native-table-property-item-input.test.ts src/sw/source/core/layout/native-table-layout-split.test.ts src/sw/browser/editor/native-table-layout-split.test.tsx src/sw/browser/editor/native-row-frame-size.test.tsx src/sw/browser/editor/native-numeric-row-insertion.test.tsx src/sw/browser/presentation/native-row-height-dialog.test.tsx src/sw/browser/presentation/native-table-height-delta.test.tsx src/sw/browser/presentation/native-table-property-output.test.tsx src/sw/browser/presentation/native-independent-table-properties.test.tsx src/sw/source/filter/xml/odt-table-alignment.test.ts src/sw/source/filter/xml/odt-table-cell-lists.test.ts src/sw/source/ui/table/native-table-property-output.test.ts src/sw/source/ui/table/native-row-height-dialog.test.ts --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/5Z5D06.app-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 47573,
+      "sha256": "fc48cae8c33547ee59f91ddd68a408431c99a0a93e9b3d0b4dab5baebc6fc683",
+      "totals": [
+        "Test Files  2 failed | 36 passed (38)",
+        "Tests  3 failed | 259 passed (262)"
+      ],
+      "failedCases": [
+        {
+          "name": "apps/office/src/sw/browser/presentation/native-table-border-changed-items.test.tsx > native border controls omit untouched fields mode=untouched",
+          "assertion": [
+            "AssertionError: expected \"SetTabBorders\" to be called once, but got 0 times"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/browser/presentation/native-table-border-changed-items.test.tsx > native untouched acceptance skips temporary selection with nonzero original history endpoints",
+          "assertion": [
+            "AssertionError: expected \"Push\" to be called once, but got 0 times"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/browser/filter/xml/native-row-split-item-transport.test.ts > primitive records reconstruct independent concrete item value=undefined",
+          "assertion": [
+            "AssertionError: expected undefined not to be undefined // Object.is equality"
+          ]
+        }
+      ],
+      "caseCounts": {
+        "passed": 259,
+        "failed": 3,
+        "skipped": 0,
+        "total": 262
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 17473,
+          "covered": 10245,
+          "skipped": 0,
+          "pct": 58.63
+        },
+        "statements": {
+          "total": 19188,
+          "covered": 10836,
+          "skipped": 0,
+          "pct": 56.47
+        },
+        "functions": {
+          "total": 4396,
+          "covered": 2666,
+          "skipped": 0,
+          "pct": 60.64
+        },
+        "branches": {
+          "total": 14287,
+          "covered": 7044,
+          "skipped": 0,
+          "pct": 49.3
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverage": {
+        "lines": 58.63,
+        "statements": 56.47,
+        "functions": 60.64,
+        "branches": 49.3
+      },
+      "incompleteFileCount": 268,
+      "coverageMapSHA256": "3445b72da7fa56b4a500b6bf1bb28203e4ba7ebe829514742ee587e882507230",
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts writer-native-table-text-flow-split.spec.ts writer-native-table-layout-split.spec.ts writer-native-row-frame-size.spec.ts writer-native-document-row.spec.ts writer-native-table-tab.spec.ts --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 2497,
+      "sha256": "63d384a6b48ab450923da61aa3c39c2b64773720bdb513a23519e62318540db2",
+      "totals": [
+        "11 passed (8.9s)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "startTime": "2026-10-08T18:24:35.125Z",
+        "duration": 8855.49,
+        "expected": 11,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "unhandledErrorCount": 0
+    }
+  ]
+}
