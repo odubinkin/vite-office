@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "202610080525-Q0C52Z",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-08T05:35:24.023Z",
+  "verdict": "pass",
+  "summary": "Rename collisions now reuse the shared editable dialog, repeat resolution for occupied user input, and support atomic overwrite.",
+  "evaluated_sha": "4cd46dc80099531591e90d6980f076e142b88a51",
+  "blueprint_digest": "24392a3f0c33fa0fc0fb69c3c1a7d29083c1a64bf5e9113237d9db92a6ccfe0e",
+  "findings": [
+    "Focused tests cover indexed defaults, repeated conflicts, unique rename, overwrite identity adoption, and removal of the prior record."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610080525-Q0C52Z/README.md",
+    "apps/office/src/sw/browser/presentation/writer-view-title-collision.test.tsx",
+    "apps/office/src/sw/browser/presentation/WriterFileDialog.test.tsx",
+    "apps/office/src/sw/browser/storage/writer-odt-store.test.ts"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "IndexedDB transaction behavior is covered by fake-indexeddb and static integration checks; no browser-specific manual UI pass was run."
+  ]
+}
