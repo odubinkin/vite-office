@@ -1,0 +1,17 @@
+{
+  "profile": "upstream-absent",
+  "allowedCases": "One new exception-lifetime case and two previously unexecuted related alignment/headline modules; all passing cases from initial/closure1 remain skipped.",
+  "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/browser/editor/native-row-format-client.test.tsx src/sw/browser/presentation/native-cell-alignment-state.test.tsx src/sw/browser/editor/native-table-headlines.test.tsx --testNamePattern=^render failure releases native temporary row clients before preserving the original model$|^uses common shell alignment and emits only changed valid item |^renders native fixed row vertical alignment |^native repeated table headline UI  --coverage.reportOnFailure --coverage.reporter=json-summary --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/67C1X0.closure2.app-results.json",
+  "exit": 1,
+  "bytes": 2962,
+  "sha256": "ebaff39a074889a2aee53f89cd5a7a6914b25012ca0d4463b7793680467511fc",
+  "caseCounts": {
+    "passed": 15,
+    "failed": 0,
+    "skipped": 2,
+    "total": 17
+  },
+  "failedCases": [],
+  "coverageMapSHA256": "7f7d105e1968b347a7832afee10bdf207204c348ad9f41d0448d0bb1457e2947",
+  "vendorRestored": true
+}
