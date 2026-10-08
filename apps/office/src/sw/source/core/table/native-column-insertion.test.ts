@@ -103,12 +103,34 @@ for (const behind of [false, true])
           expect(f.shell.CaptureCursorState()).toEqual(before);
           expect(f.shell.Redo()).toBe(true);
           expect(f.table.GetColumnWidths()).toEqual(expected);
-          for (const [row, boxes] of inserted.entries())
+          for (const [row, boxes] of inserted.entries()) {
+            const current = required(f.rows[row])
+              .GetTabBoxes()
+              .slice(index, index + 2);
+            expect(
+              current.map(
+                /** Reads full recreated attributes. @param box - New native owner. @returns Complete format. */
+                (box) => box.GetFormat(),
+              ),
+            ).toEqual(
+              boxes.map(
+                /** Reads original inserted attributes. @param box - Prior native owner. @returns Complete format. */
+                (box) => box.GetFormat(),
+              ),
+            );
+            for (const [offset, box] of current.entries()) {
+              expect(box).not.toBe(boxes[offset]);
+              expect(required(box.GetParagraphs()[0]).GetText()).toBe("");
+            }
             expect(
               required(f.rows[row])
                 .GetTabBoxes()
-                .slice(index, index + 2),
-            ).toEqual(boxes);
+                .filter(
+                  /** Preserves all original native survivors. @param box - Actual cell. @returns Whether original. */
+                  (box) => !current.includes(box),
+                ),
+            ).toEqual(originals[row]);
+          }
         }
       } finally {
         f.session.Close();
@@ -272,7 +294,22 @@ it("rejects invalid native column selections and counts without graph or history
     expect(f.doc.InsertCol([required(boxes[0])])).toBe(false);
     expect(
       f.doc.InsertCol([required(boxes[0]), required(required(f.rows[1]).GetTabBoxes()[1])]),
-    ).toBe(false);
+    ).toBe(true);
+    expect(
+      f.rows.map(
+        /** Reads source-owned independent row insertion. @param row - Row. @returns Widths. */
+        (row) =>
+          row.GetTabBoxes().map(
+            /** Reads actual native width. @param box - Cell. @returns Width. */
+            (box) => box.GetFrameSize().GetWidth(),
+          ),
+      ),
+    ).toEqual([
+      [3200, 4800, 6400, 9600],
+      [3200, 6400, 4800, 9600],
+    ]);
+    expect(f.shell.Undo()).toBe(true);
+    f.doc.GetUndoManager().Clear();
     expect(f.doc.InsertCol([...boxes, required(required(other.rows[0]).GetTabBoxes()[0])])).toBe(
       false,
     );

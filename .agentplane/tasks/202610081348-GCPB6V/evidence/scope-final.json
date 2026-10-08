@@ -1,0 +1,100 @@
+{
+  "base": "3d4da3621d73c4764fcb63f32d9540b9af8467ce",
+  "semanticPaths": [
+    "apps/office/src/sw/browser/editor/native-independent-column-insertion.test.tsx",
+    "apps/office/src/sw/source/core/doc/doc.ts",
+    "apps/office/src/sw/source/core/docnode/ndtbl.ts",
+    "apps/office/src/sw/source/core/table/native-column-insertion.test.ts",
+    "apps/office/src/sw/source/core/table/native-independent-column-insertion.test.ts",
+    "apps/office/src/sw/source/core/table/native-independent-columns.test.ts",
+    "apps/office/src/sw/source/core/table/swtable.ts",
+    "apps/office/src/sw/source/core/undo/native-independent-column-insertion-history.test.ts",
+    "apps/office/src/sw/source/core/undo/untbl.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-properties.test.ts",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/source-provenance.json"
+  ],
+  "scopeCount": 12,
+  "priorAcceptanceFiles": 628,
+  "byteIdenticalAcceptanceFiles": 625,
+  "sourceBackedMigrations": [
+    {
+      "path": "apps/office/src/sw/source/core/table/native-column-insertion.test.ts",
+      "oldSHA256": "4296d83dd26cbb72894bfc7fc311c22b707a7c1f92246627fe8e140bdec76e3f",
+      "currentSHA256": "c7eac36db884ce0395ef79a76785480de549c014e599994a0e93f643416307fb",
+      "originalAssertions": 86,
+      "unchangedAssertions": 84,
+      "sourceBackedChangedAssertions": [
+        {
+          "sha256": "b473611296443ef69dcfeed0270988ec7008029f018b1ae7a018aa5fa5d7b5f5"
+        },
+        {
+          "sha256": "61f6b4d5edff8217577c11e915bcf5441b261607f0a479ce63670362197fef75"
+        }
+      ],
+      "newAssertions": 7,
+      "nativeAnchors": [
+        "swnewtable.cxx606-798 per-row extreme insertion positions",
+        "untbl.cxx1840-1880 redo calls Doc InsertCol and creates new boxes"
+      ],
+      "reason": "Rejecting different row positions contradicts native insertion; reconnecting prior inserted identities contradicts native Doc InsertCol redo. Complete recreated formats/text and surviving original identities replace that assertion."
+    },
+    {
+      "path": "apps/office/src/sw/source/core/table/native-independent-columns.test.ts",
+      "oldSHA256": "37d5c473ce14d477c83f6fadb9c2d7d55eba2af6ded7f03847fc175e83320124",
+      "currentSHA256": "3734164aaa074549b07d1bdf32dc2a50523117e24e21d19f6b051ecdc314c57b",
+      "originalAssertions": 67,
+      "unchangedAssertions": 66,
+      "sourceBackedChangedAssertions": [
+        {
+          "sha256": "9d23808dab8e843fd8e7d0193b9e5b9fa18f09b1e676bb6ad58d6da73e0409e8"
+        }
+      ],
+      "newAssertions": 4,
+      "nativeAnchors": [
+        "swnewtable.cxx606-798 per-row extreme insertion positions",
+        "untbl.cxx1840-1880 redo calls Doc InsertCol and creates new boxes"
+      ],
+      "reason": "Rejecting different row positions contradicts native insertion; reconnecting prior inserted identities contradicts native Doc InsertCol redo. Complete recreated formats/text and surviving original identities replace that assertion."
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-properties.test.ts",
+      "oldSHA256": "d6d01e3f38a56fde39ceb56a0bc81917232d801d6a88591b33ed22af8c20ade8",
+      "currentSHA256": "c59fb7ef95312fe7b98ff174e4d0225e21bd43569bcf272fb860c73e71c72bca",
+      "originalAssertions": 43,
+      "unchangedAssertions": 42,
+      "sourceBackedChangedAssertions": [
+        {
+          "sha256": "deadc366468524308e9553f8dab3e99289de455454aed44caca707a5e3ad221f"
+        }
+      ],
+      "newAssertions": 1,
+      "nativeAnchors": [
+        "untbl.cxx SaveTable RestoreAttr saves full box formats without a separate shared width array"
+      ],
+      "reason": "Attribute payload54 becomes42 after removing actual duplicated per-column width units."
+    }
+  ],
+  "newAcceptanceFiles": [
+    "apps/office/src/sw/source/core/table/native-independent-column-insertion.test.ts",
+    "apps/office/src/sw/source/core/undo/native-independent-column-insertion-history.test.ts",
+    "apps/office/src/sw/browser/editor/native-independent-column-insertion.test.tsx"
+  ],
+  "metadata": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "oldRecords": 311,
+      "currentRecords": 311,
+      "priorFieldsPrefixesStatesDefaultsClassesPreserved": true,
+      "newRecords": 0
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "oldRecords": 311,
+      "currentRecords": 311,
+      "priorFieldsPrefixesStatesDefaultsClassesPreserved": true,
+      "newRecords": 0
+    }
+  ],
+  "failures": []
+}

@@ -257,8 +257,20 @@ it("native column insertion conserves each independent row and retains every ori
       [1256, 976, 1256, 2512],
       [837, 976, 1675, 2512],
     ]);
-    for (const [row, box] of inserted.entries())
-      expect(required(f.lines[row]).GetTabBoxes()[1]).toBe(box);
+    for (const [row, box] of inserted.entries()) {
+      const current = required(required(f.lines[row]).GetTabBoxes()[1]);
+      expect(current).not.toBe(box);
+      expect(current.GetFormat()).toEqual(box.GetFormat());
+      expect(required(current.GetParagraphs()[0]).GetText()).toBe("");
+      expect(
+        required(f.lines[row])
+          .GetTabBoxes()
+          .filter(
+            /** Checks all original surviving native owners. @param cell - Connected cell. @returns Whether original. */
+            (cell) => cell !== current,
+          ),
+      ).toEqual(original[row]);
+    }
   }
 });
 

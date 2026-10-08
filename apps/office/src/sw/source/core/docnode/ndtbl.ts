@@ -6,7 +6,8 @@ import { SwTabCols } from "../bastyp/tabcol";
 import { SwFrameSize, type SwFormatFrameSize } from "../../../inc/fmtfsize";
 import { SwPosition } from "../crsr/pam";
 import { SwCursor } from "../crsr/swcrsr";
-import { SwUndoAttrTable } from "../undo/untbl";
+import { SwTableNode } from "../docnode/node";
+import { SwUndoAttrTable, SwUndoTableNdsChg } from "../undo/untbl";
 import type { SwTextNode } from "../txtnode/ndtxt";
 import { createWriterCollapsedCursorState, type SwUndoCursorState } from "../undo/undobj";
 /** Native row-boundary fuzzy distance in twips. */
@@ -229,6 +230,59 @@ export function SetSwTabCols(
         kind: "node-content-changed",
         nodeIndex: table.GetTableNode().GetIndex(),
       });
+      return true;
+    },
+  );
+}
+
+/** Inserts columns with source-owned history gating. @param doc - Actual owner. @param boxes - Original selection. @param count - Native count. @param behind - Trailing edge. @param insertDummy - Native redline flag. @param cursorState - Optional shell cursor. @param afterCursor - Optional preserved selection. @returns Whether inserted. */
+export function InsertSwTableColumns(
+  doc: SwDoc,
+  boxes: readonly SwTableBox[],
+  count: number,
+  behind: boolean,
+  insertDummy: boolean,
+  cursorState?: SwUndoCursorState,
+  afterCursor?: SwUndoCursorState,
+): boolean {
+  if (boxes.length === 0) return false;
+  const tableNode = (boxes[0] as SwTableBox).GetStartNode().StartOfSectionNode();
+  if (!(tableNode instanceof SwTableNode) || tableNode.GetNodes() !== doc.GetNodes()) return false;
+  return doc.RunModelTransaction(
+    /** Publishes history after actual native insertion succeeds. @returns Whether inserted. */
+    () => {
+      const table = tableNode.GetTable(),
+        manager = doc.GetUndoManager();
+      let action: SwUndoTableNdsChg | undefined;
+      let originalBoxes: readonly SwTableBox[] | undefined;
+      if (manager.DoesUndo()) {
+        const last = (boxes.at(-1) as SwTableBox).GetParagraphs().at(-1) as SwTextNode,
+          before =
+            cursorState ??
+            createWriterCollapsedCursorState(
+              last,
+              last.Len(),
+              last.GetCharacterItemsAt(last.Len()),
+            );
+        action = new SwUndoTableNdsChg(table, boxes, before, count, behind, true);
+        originalBoxes = table.GetTabLines().flatMap(
+          /** Captures temporary original identities. @param line - Native row. @returns Actual boxes. */
+          (line) => line.GetTabBoxes(),
+        );
+      }
+      const undoEnabled = manager.DoesUndo();
+      let inserted: boolean;
+      manager.DoUndo(false);
+      try {
+        inserted = table.InsertCol(doc, boxes, count, behind, insertDummy);
+      } finally {
+        manager.DoUndo(undoEnabled);
+      }
+      if (!inserted) return false;
+      if (action !== undefined) {
+        action.SaveNewBoxes(table, afterCursor, originalBoxes);
+        manager.AddUndoAction(action);
+      }
       return true;
     },
   );

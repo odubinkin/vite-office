@@ -18,7 +18,7 @@ import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SwUndoTableNdsChg } from "../undo/untbl";
 import type { SwTabCols } from "../bastyp/tabcol";
 import type { SwTabFrame } from "../layout/tabfrm";
-import { GetSwTabRows, SetSwTabRows, SetSwTabCols } from "../docnode/ndtbl";
+import { GetSwTabRows, SetSwTabRows, SetSwTabCols, InsertSwTableColumns } from "../docnode/ndtbl";
 import {
   GetSwCursorRowSplit,
   SetSwRowSplit,
@@ -830,28 +830,7 @@ export class SwDoc {
     cursorState?: SwUndoCursorState,
     afterCursor?: SwUndoCursorState,
   ): boolean {
-    if (boxes.length === 0) return false;
-    const tableNode = (boxes[0] as SwTableBox).GetStartNode().StartOfSectionNode();
-    if (!(tableNode instanceof SwTableNode) || tableNode.GetNodes() !== this.nodes) return false;
-    return this.RunModelTransaction(
-      /** Publishes history only after native table insertion succeeds. @returns Whether inserted. */
-      () => {
-        const table = tableNode.GetTable(),
-          last = (boxes.at(-1) as SwTableBox).GetParagraphs().at(-1) as SwTextNode,
-          before =
-            cursorState ??
-            createWriterCollapsedCursorState(
-              last,
-              last.Len(),
-              last.GetCharacterItemsAt(last.Len()),
-            ),
-          action = new SwUndoTableNdsChg(table, boxes, before, count, behind, true);
-        if (!table.InsertCol(this, boxes, count, behind, insertDummy)) return false;
-        action.SaveNewBoxes(table, afterCursor);
-        this.undoManager.AddUndoAction(action);
-        return true;
-      },
-    );
+    return InsertSwTableColumns(this, boxes, count, behind, insertDummy, cursorState, afterCursor);
   }
 
   /** Resolves native first-unused table naming. @returns Unoccupied table name. */

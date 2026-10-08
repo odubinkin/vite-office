@@ -636,8 +636,7 @@ export class SwTable {
           }
         },
       );
-      if (selected.length === 0 || line.GetTabBoxes().length !== this.GetColumnWidths().length)
-        return false;
+      if (selected.length === 0) return false;
       positions.push(behind ? Math.max(...selected) : Math.min(...selected));
     }
     if (
@@ -648,13 +647,6 @@ export class SwTable {
             /** Finds a native original owner. @param line - Row. @returns Whether owned. */
             (line) => line.GetTabBoxes().includes(box),
           ),
-      )
-    )
-      return false;
-    if (
-      positions.some(
-        /** Shared-column geometry requires the same native edge in every flat row. @param position - Edge coordinate. @returns Whether nonuniform. */
-        (position) => position !== positions[0],
       )
     )
       return false;
@@ -675,14 +667,21 @@ export class SwTable {
       (line, row) => {
         const sourceColumn = positions[row] as number,
           source = line.GetTabBoxes()[sourceColumn] as SwTableBox,
-          index = sourceColumn + (behind ? 1 : 0);
+          index = sourceColumn + (behind ? 1 : 0),
+          noRightBorder = source.GetBox();
+        const hasRightBorder = noRightBorder.GetRight() !== undefined;
+        if (hasRightBorder) noRightBorder.SetLine(undefined, 3);
         for (let i = 0; i < count; i++) {
           const section = document.GetNodes().PrepareTableBox(this, source),
             size = section.box.GetFrameSize();
           size.SetWidth(newBoxWidth);
           section.box.SetFrameSize(size);
+          if (hasRightBorder && (!behind || i + 1 < count))
+            section.box.SetFormat({ ...section.box.GetFormat(), box: noRightBorder });
           document.GetNodes().InsertTableBox(this, line, section, index + i);
         }
+        if (behind && hasRightBorder)
+          source.SetFormat({ ...source.GetFormat(), box: noRightBorder });
       },
     );
     return true;
@@ -698,6 +697,14 @@ export class SwTable {
   /** Returns ordered rows. @returns Rows. */
   public GetTabLines(): readonly SwTableLine[] {
     return this.lines;
+  }
+
+  /** Resolves a connected native box by its section start index. @param startIndex - Native node coordinate. @returns Actual box or undefined. */
+  public GetTableBox(startIndex: number): SwTableBox | undefined {
+    for (const line of this.lines)
+      for (const box of line.GetTabBoxes())
+        if (box.GetStartNode().GetIndex() === startIndex) return box;
+    return undefined;
   }
 
   /** Collects flat cells by native center and majority overlap. @param line - Original row. @param min - Left search border. @param max - Right search border. @param selected - Native identity set. @returns Nothing. */

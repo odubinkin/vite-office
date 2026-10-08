@@ -1,0 +1,22 @@
+{
+  "profile": "upstream-absent",
+  "vendorRestored": true,
+  "allowedCases": "One genuinely new default document row cursor case after numeric column replay; no passing replay",
+  "files": [
+    "apps/office/src/sw/source/core/undo/native-independent-column-insertion-history.test.ts"
+  ],
+  "pattern": "^native default document row cursor follows numeric column replay$",
+  "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/source/core/undo/native-independent-column-insertion-history.test.ts -t ^native default document row cursor follows numeric column replay$ --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/GCPB6V.closure2.app-results.json",
+  "exit": 1,
+  "outputSHA256": "f0315145fabfa1f642fefdd3ce1f07ec4af750bf6360a095c42fb68a24120df1",
+  "bytes": 31412,
+  "passed": 1,
+  "failed": 0,
+  "skipped": 4,
+  "caseTotals": [
+    "Test Files  1 passed (1)",
+    "Tests  1 passed | 4 skipped (5)"
+  ],
+  "failedCases": [],
+  "unhandledErrorCount": 0
+}

@@ -1,0 +1,164 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "base": "3d4da3621d73c4764fcb63f32d9540b9af8467ce",
+  "sources": [
+    {
+      "path": "sw/source/core/table/swnewtable.cxx",
+      "sha256": "222899c5938f08cf797c5e552ff5a9307a591e173e0708ac6f2efdf4f84a19da",
+      "anchors": [
+        {
+          "identifier": "static tools::Long lcl_InsertPosition(",
+          "line": 610,
+          "allMatchingLines": [
+            610
+          ]
+        },
+        {
+          "identifier": "bool SwTable::NewInsertCol(",
+          "line": 655,
+          "allMatchingLines": [
+            655
+          ]
+        },
+        {
+          "identifier": "pNoRightBorder->SetLine(",
+          "line": 745,
+          "allMatchingLines": [
+            745
+          ]
+        }
+      ],
+      "pinBytesVerified": true
+    },
+    {
+      "path": "sw/source/core/table/swtable.cxx",
+      "sha256": "10c536056498dd001b3a5c75638040ee5daef966ede231c66947da8e704b1206",
+      "anchors": [
+        {
+          "identifier": "SwTableBox* SwTable::GetTableBox( SwNodeOffset",
+          "line": 1391,
+          "allMatchingLines": [
+            1391
+          ]
+        }
+      ],
+      "pinBytesVerified": true
+    },
+    {
+      "path": "sw/source/core/docnode/ndtbl.cxx",
+      "sha256": "d3220445657cd54a44fc741bebf5d514b4d62f5607fcfb5e0f7ef30700075d8d",
+      "anchors": [
+        {
+          "identifier": "bool SwDoc::InsertCol(",
+          "line": 1800,
+          "allMatchingLines": [
+            1800
+          ]
+        }
+      ],
+      "pinBytesVerified": true
+    },
+    {
+      "path": "sw/source/core/undo/untbl.cxx",
+      "sha256": "147e1b9f9870416bc83d2b918a0621e810003594b9a95ede372518925b2c245b",
+      "anchors": [
+        {
+          "identifier": "void SwUndoTableNdsChg::RedoImpl(",
+          "line": 1836,
+          "allMatchingLines": [
+            1836
+          ]
+        },
+        {
+          "identifier": "void SwUndoTableNdsChg::SaveNewBoxes(",
+          "line": 1548,
+          "allMatchingLines": [
+            1548,
+            1598
+          ]
+        },
+        {
+          "identifier": "void SwUndoTableNdsChg::ReNewBoxes(",
+          "line": 1532,
+          "allMatchingLines": [
+            1532
+          ]
+        },
+        {
+          "identifier": "void SaveTable::RestoreAttr(",
+          "line": 937,
+          "allMatchingLines": [
+            937
+          ]
+        }
+      ],
+      "pinBytesVerified": true
+    }
+  ],
+  "production": [
+    {
+      "path": "apps/office/src/sw/source/core/table/swtable.ts",
+      "sha256": "71cd418e280205e78befc1c57a932dff115bd6621e800c4f0a362e470f733071"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/untbl.ts",
+      "sha256": "c01d5f011e525ae845a5106ce9dec847fd0e6b49364c7331b7596bf24263c4c7"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/doc/doc.ts",
+      "sha256": "3a2a6058d12d74e7ac317d6c09d65511b056463e0c2c861a95cf0f076afc8bce"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/docnode/ndtbl.ts",
+      "sha256": "e63fc04ef05e2f90ec7fa91020aebf65e0f6f0c3423c79ba9b4f77811aa53a7a"
+    }
+  ],
+  "protectedIO": [
+    {
+      "path": "apps/office/src/sw/browser/storage/writer-odt-store.ts",
+      "sha256": "0fb4ebffca5a00fe63ff327379305d64143c7014dace0a7e13edb8c0c241232e",
+      "baselineByteIdentical": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/workflows/writer-odt-io.ts",
+      "sha256": "7c214afab59dbc5df1087f107e2b7bf2bf01d8623a2995e8eb19a45575361306",
+      "baselineByteIdentical": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/WriterFileDialog.tsx",
+      "sha256": "50ad125f5a254eb1772b62abe3681e4632df6c7870ea9647622b2268394c88c3",
+      "baselineByteIdentical": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/writer-view.tsx",
+      "sha256": "5fbe8e47d24a0d03e4f5925e9002ab31a61c140f1ae819cf8805439f4ef253cc",
+      "baselineByteIdentical": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts",
+      "sha256": "060a06dd9a77e530de1756b2f4c4384e6b2ddd1ee20c68fb175daab2eeb99ee7",
+      "baselineByteIdentical": true
+    }
+  ],
+  "parent": {
+    "characters": 672207,
+    "sha256": "d0f82bab90026a904fc4fb0dfdadcc626e2dd19111bf3f3d4b0ce41e6b9b1903",
+    "unchanged": true
+  },
+  "stash": {
+    "commit": "c85f4a0e453dfd06d6e199554784f2c286737472",
+    "preserved": true
+  },
+  "sourceBoundContracts": [
+    "Independent selected extremes and row counts follow native lcl_InsertPosition; selected-row averaged width/count and cumulative width rounding conserve reference width.",
+    "Right border stays on original source before insertion; behind transfers it to last new cell while intermediate right lines clear.",
+    "ndtbl owns Doc insertion, DoesUndo and scoped recording suppression. Numeric selected/new starts replace retained column sections and shared positions.",
+    "Column redo resolves numeric originals and re-enters Doc InsertCol creating new sections. SaveTable restores independent frame-size attributes without duplicate widths; original owners/live selection survive."
+  ],
+  "residuals": [
+    "Merged/nested/spanned/protected graphs and full native layout/pooling/redline/autoformat/signed arithmetic remain unverified.",
+    "Existing retained row redo is unchanged and remains a source-backed follow-up.",
+    "Native cursor/frame/full table SaveTable reconstruction lifetimes and independent physical browser cell layout remain partial.",
+    "Registered IO/open/save/recovery/settings remain byte-identical; no full module/upstream parity promotion."
+  ]
+}

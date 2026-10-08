@@ -1,0 +1,23 @@
+{
+  "profile": "upstream-absent",
+  "vendorRestored": true,
+  "allowedCases": "One original failed inserted identity case plus one genuinely new counted-column/right-border/mixed-row/table-recreation case",
+  "files": [
+    "apps/office/src/sw/source/core/table/native-independent-columns.test.ts",
+    "apps/office/src/sw/source/core/undo/native-independent-column-insertion-history.test.ts"
+  ],
+  "pattern": "^(native column insertion conserves each independent row and retains every original box through history|native counted column borders replay with row text and recreated table owners)$",
+  "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/source/core/table/native-independent-columns.test.ts src/sw/source/core/undo/native-independent-column-insertion-history.test.ts -t ^(native column insertion conserves each independent row and retains every original box through history|native counted column borders replay with row text and recreated table owners)$ --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/GCPB6V.closure1.app-results.json",
+  "exit": 1,
+  "outputSHA256": "5b79a208ff251af7f9b12d0bd2a22fb2c3333aa87fe1f05c6a9193aa5928de8e",
+  "bytes": 31862,
+  "passed": 2,
+  "failed": 0,
+  "skipped": 16,
+  "caseTotals": [
+    "Test Files  2 passed (2)",
+    "Tests  2 passed | 16 skipped (18)"
+  ],
+  "failedCases": [],
+  "unhandledErrorCount": 0
+}
