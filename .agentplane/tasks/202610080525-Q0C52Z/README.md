@@ -1,10 +1,12 @@
 ---
 id: "202610080525-Q0C52Z"
 title: "Resolve Writer rename collisions interactively"
-status: "DOING"
+result_summary: "Resolved interactive Writer rename collisions with repeatable indexed suggestions"
+risk_level: "low"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +43,16 @@ quality_review:
     - "apps/office/src/sw/browser/storage/writer-odt-store.test.ts"
   findings:
     - "Focused tests cover indexed defaults, repeated conflicts, unique rename, overwrite identity adoption, and removal of the prior record."
-commit: null
+commit:
+  hash: "0e73edef754ead5443ec8ab54dd068661873520e"
+  message: "🧩 Q0C52Z task: persist quality review"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved reusable rename-collision dialog, atomic overwrite semantics, repeated editable-name conflict resolution, tests, and documentation."
+  -
+    author: "CODER"
+    body: "Verified: interactive rename collisions reuse the shared editable dialog, repeat with the next indexed suggestion for occupied input, and atomically overwrite the selected browser record; all declared checks and evaluator review passed."
 events:
   -
     type: "status"
@@ -60,8 +67,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Focused Writer tests passed (6 files, 57 tests); format, lint, typecheck, dependency, docs, file-size, static build/smoke, routing, doctor, and diff checks passed. Doctor warnings are pre-existing and unrelated."
+  -
+    type: "status"
+    at: "2026-10-08T05:35:37.354Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: interactive rename collisions reuse the shared editable dialog, repeat with the next indexed suggestion for occupied input, and atomically overwrite the selected browser record; all declared checks and evaluator review passed."
 doc_version: 3
-doc_updated_at: "2026-10-08T05:35:07.946Z"
+doc_updated_at: "2026-10-08T05:35:37.356Z"
 doc_updated_by: "CODER"
 description: "Reuse the document-name collision dialog for manual renames, support overwrite or editable indexed alternatives, repeat collision resolution for user-entered occupied names, and document the behavior."
 sections:
@@ -106,6 +120,10 @@ sections:
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the implementation and deterministic close commits. The IndexedDB schema is unchanged, so no data migration rollback is required."
   Findings: "The shared collision panel keeps the alternative title editable. When that value is also occupied, the dialog remains open and advances a trailing numeric suffix instead of nesting suffixes. Rename overwrite uses one IndexedDB transaction to replace the conflicting record and remove the former active record while preserving the live document identity. No schema migration is required."
+extensions:
+  implementation_commit:
+    hash: "4cd46dc80099531591e90d6980f076e142b88a51"
+    message: "🚧 Q0C52Z task: resolve interactive rename collisions"
 id_source: "generated"
 ---
 ## Summary
