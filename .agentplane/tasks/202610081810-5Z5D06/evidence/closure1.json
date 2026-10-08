@@ -1,0 +1,17 @@
+{
+  "profile": "upstream-absent",
+  "allowedCases": "Exactly three previously failed cases and one fresh related compatibility case; all previously passing cases skipped",
+  "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/browser/presentation/native-table-border-changed-items.test.tsx src/sw/browser/filter/xml/native-row-split-item-transport.test.ts src/sw/browser/presentation/native-row-split-core-items.test.tsx --testNamePattern=native border controls omit untouched fields mode=untouched|native untouched acceptance skips temporary selection with nonzero original history endpoints|primitive records reconstruct independent concrete item value=undefined|explicit legacy row split ingress constructs native item and preserves independent row history --coverage.reportOnFailure --coverage.reporter=json-summary --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/5Z5D06.closure1.app-results.json",
+  "exit": 1,
+  "bytes": 3013,
+  "sha256": "4d440a1c6495357c9fd30abb0368c13aad3af066e97a14ab747e5921f77449da",
+  "caseCounts": {
+    "passed": 4,
+    "failed": 0,
+    "skipped": 36,
+    "total": 40
+  },
+  "failedCases": [],
+  "coverageMapSHA256": "ac7a3593c0139fe65d920c58a14f1605548c3c235b653365e400191434b2c01e",
+  "vendorRestored": true
+}
