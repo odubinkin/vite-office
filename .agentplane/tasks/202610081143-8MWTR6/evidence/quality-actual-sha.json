@@ -1,0 +1,296 @@
+{
+  "evaluatedSHA": "4c55ad4f82435345c6cdb20dba41062ffe20ada6",
+  "role": "same current coding agent as EVALUATOR",
+  "independent": false,
+  "verdict": "pass",
+  "scope": 34,
+  "sourceHashes": [
+    {
+      "path": "apps/office/src/sw/source/core/table/swtable.ts",
+      "sha256": "798ea31a363a042dd09f044a1cccf15e9b823efaa330fd4c05dfc2733fccf007"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/docnode/ndtbl.ts",
+      "sha256": "79990a298f5158f6954aa5adc4cebddc6dc863d79bc522c7b27031da0b1f7657"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/doc/doc.ts",
+      "sha256": "b6500cd556252da9778d9f288ee3f24f7f5a8d30191c3ba1858e266116575765"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/docnode/nodes.ts",
+      "sha256": "c71826c4932dc1379727cd2c959157654ef057effac91b139b48e343d03bb8b1"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/untbl.ts",
+      "sha256": "4d5806ef95514bb846350f04a71c7e0f8b9b6726185ae6f68eba96328ead6181"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/frmedt/tblsel.ts",
+      "sha256": "4184d685b3e0dc7e404887393b4de973dc3b5785e6265bf06f1f7b2e754c07e9"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/layout/tabfrm.ts",
+      "sha256": "255b0c08628c109768b007ddad5a0aa989bfd6fa5b9c1abb9c0ccad82c4ff3fc"
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/WriterEditableTable.tsx",
+      "sha256": "45a85f0e381336cccc56d6b0a6cd8c929326e197f61e3bb30cb5e606bd504815"
+    },
+    {
+      "path": "apps/office/src/sw/browser/filter/xml/writer-document-codec.ts",
+      "sha256": "61de74d43923bbbec2c91ca6ddcfe63217720f35f93a4621f3656b91f41f9b55"
+    },
+    {
+      "path": "apps/office/src/sw/browser/filter/xml/writer-table-item-codec.ts",
+      "sha256": "132f6bd381148fda2b6c5a79be4bf0ef93af598b6a98004e93e972f65546d009"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/xmlexp.ts",
+      "sha256": "986f010d9e693e3565ac6da3c46558d11614e07dee2a358f4dac180654bdfb4d"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/xmltbli.ts",
+      "sha256": "84c3f97dc6353607893cde1fe35eec244084b85e9c85004e0a3cb2d98cbf8641"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/xmltble.ts",
+      "sha256": "972cf55b034b9d3b1fb2f3d6031f26544ed2f73b6a645c1f329f1615d8bb7cea"
+    },
+    {
+      "path": "apps/office/src/xmloff/source/table/XMLTableExport.ts",
+      "sha256": "8520963dfe9b2f8699693ba0e2095226222d413b7cfadd58b8a3a669b647cf61"
+    },
+    {
+      "path": "apps/office/src/xmloff/source/table/XMLTableImport.ts",
+      "sha256": "ef8d3652a9938bd1f2fae0cac9a730b28ef18bd7be8cb460ec1626169a1f707d"
+    },
+    {
+      "path": "apps/office/src/xmloff/source/core/xmltoken.ts",
+      "sha256": "ec3587e69963ad85eba6a72a85d639d82e8982162df61be10025f1694f788183"
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/docvw/edtwin.ts",
+      "sha256": "31f0101d2be1cde60d4fdb77ef0385549993e884c6d3636d90e55a7331b74afb"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/table/native-independent-columns.test.ts",
+      "sha256": "37d5c473ce14d477c83f6fadb9c2d7d55eba2af6ded7f03847fc175e83320124"
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/native-independent-column-render.test.tsx",
+      "sha256": "77b27d2d28ee660519170dc92056bcb90a55d7544d3cfcd65fad6aac89863a65"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/native-independent-column-odf.test.ts",
+      "sha256": "1ef3c177290d37dc68e8e6d2e585be95e9c307b3026b5d3eccdcf1d554dd1355"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/table/native-tabcols.test.ts",
+      "sha256": "c48ae7aad4956d4a42e13a3028515a5a96471f8f3c7f9bfa539674630ec307eb"
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/docvw/native-table-linear-drag.test.ts",
+      "sha256": "ff7a0b2cc4a3397774984e1f468de125b5fa12ca19a1ce031982c671b92bf93f"
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/docvw/native-table-proportional-drag.test.ts",
+      "sha256": "cb211e9800be25ddbeb779923aeedea9a9a9182efd55b2cd39a86499ff3593f8"
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/native-table-linear-drag.test.tsx",
+      "sha256": "35d5821b038b860ffe9044073489f85de637501f1cf447fe697cd18d64e33853"
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/docvw/native-ruler-ownership.test.ts",
+      "sha256": "7cd896706aea1882e8d6e48fad58f593e483a81fd5f3fe0c07cf8af597d07fdf"
+    },
+    {
+      "path": "docs/program/source-provenance.json",
+      "sha256": "336db6d2c919380ef820eab3169bd644c3be313750c7323c3e8393041bd69fb0"
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "sha256": "e1542373ff0312d84726db79b8ee49875a6a594ff5d548116a166f835de32c7a"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/docnode/native-cell-alignment-owner.test.ts",
+      "sha256": "8f14e10ccbb7db5e7f0bc4d518a9c6a632f02b6ab2b4c64e5d586f4f8055af64"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/table/native-column-insertion.test.ts",
+      "sha256": "4296d83dd26cbb72894bfc7fc311c22b707a7c1f92246627fe8e140bdec76e3f"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/native-insert-table-history.test.ts",
+      "sha256": "ab688fafe567513e98302068b77273e01fea4a93afce6416fc81913f1c5823a6"
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/docvw/native-table-column-drag.test.ts",
+      "sha256": "feb9c630b8dd32940b250c861184e097fa7a06a6ed5f3b17a314e296dd294e5a"
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-tabcols-history.test.ts",
+      "sha256": "d5bb7d945591b2b6cb392253b7a6fb720fb1eb055a8a7102129de7c67dcfb0b7"
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-properties.test.ts",
+      "sha256": "d6d01e3f38a56fde39ceb56a0bc81917232d801d6a88591b33ed22af8c20ade8"
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-traversal.test.ts",
+      "sha256": "898021cf417177fb26b62428aaffdc27c9774b7d888c227974e1b6326744412f"
+    }
+  ],
+  "rebuilds": [
+    {
+      "name": "coverage",
+      "scriptSHA256": "3cd371b339b031bb80c30533394cb5f1acec745e909ffcfa87f52c258f434589",
+      "outputSHA256": "221fbbb83012833d17725229a83ab349a4c4f7bf2d9f166804c2989d926207f3",
+      "boundReports": [
+        "final-coverage"
+      ],
+      "reportSHA256": [
+        "398b6e42bd84853ff28b3724390af87d3524ccfcb3efd81c1e6cc01b7791e1f7"
+      ],
+      "byteIdenticalReconstructedEvidence": true
+    },
+    {
+      "name": "case census",
+      "scriptSHA256": "b8352455eec3014ce58c77765ce568a98c05a5f9f2dfb9492650952806817608",
+      "outputSHA256": "1dc16832ceb900ca6eb76bc8422c26657f08832747a7cbf2cff6a22a13bbad8a",
+      "boundReports": [
+        "case-census"
+      ],
+      "reportSHA256": [
+        "4123cc0963315e36a5506bdb45eccffd2e71a08ecb73e30e931b371ff5ea81e9"
+      ],
+      "byteIdenticalReconstructedEvidence": true
+    },
+    {
+      "name": "scope",
+      "scriptSHA256": "39210f9df7d3d6f96d7151e9e84a574866f24c18aed3a9bbba4e7cbb0dbf241e",
+      "outputSHA256": "cfe867297491af40324cf895e1a0e3490ebfbd40ceef74ccc48201e87cb74629",
+      "boundReports": [
+        "scope-final"
+      ],
+      "reportSHA256": [
+        "a29a36edaa49cc4589bae0c29d5157d17719c7e82e378bdd426309bff31d5a67"
+      ],
+      "byteIdenticalReconstructedEvidence": true
+    }
+  ],
+  "cases": {
+    "app": 13808,
+    "inventory": 110,
+    "infrastructure": 19,
+    "chromium": 299,
+    "freshAcceptance": 23,
+    "passingReplay": 0,
+    "skippedObservations": 89,
+    "originalFailuresResolved": 15,
+    "newFailedSelectorResolved": 1
+  },
+  "runtime": {
+    "fullProfiles": 1,
+    "focusedClosures": 3,
+    "upstreamAbsent": true,
+    "vendorRestored": true,
+    "rawFailuresAndThresholdExitsPreserved": true
+  },
+  "coverage": {
+    "lines": {
+      "total": 17256,
+      "covered": 17256,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 18947,
+      "covered": 18947,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 4370,
+      "covered": 4370,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 14144,
+      "covered": 14144,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "inventoryCoverage": {
+    "lines": {
+      "total": 1464,
+      "covered": 1464,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 1523,
+      "covered": 1523,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 384,
+      "covered": 384,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 1081,
+      "covered": 1081,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "sourceGates": {
+    "runs": 1,
+    "passed": 5
+  },
+  "nativeSourceFiles": 11,
+  "protectedIOBridgeFiles": 5,
+  "priorAcceptance": {
+    "original": 623,
+    "byteIdentical": 611,
+    "sourceBackedMigrations": 12
+  },
+  "metadata": {
+    "prior": 309,
+    "current": 311,
+    "oldStatusesPreserved": true,
+    "newNativePartialUnverified": true
+  },
+  "qualityBasis": "Exact actual implementation bytes, source-anchored contracts, reconstructed source-bound counters and unique case observations; no testing replay or counter sanitation.",
+  "residualRisks": [
+    "Full merged/row-span/nested table graph propagation and selection, complete native XML styles and border formats remain incomplete.",
+    "Box/line table native item pooling/UNO/format identity and full inherited attributes remain partial.",
+    "Complete SFX bindings, VCL painting/ticks/snapping/protection/page/frame/paragraph/ruler state, RTL/vertical document dragging and collapsed-border pixel geometry remain partial.",
+    "Native uint16 wrapped-delta equality, full VCL pixel-vector ownership/window/null offsets, column-margin modifier state and other full native contexts are not certified.",
+    "Registered IO/open/save/recovery/settings remain byte-identical; no full module/upstream parity promotion."
+  ],
+  "findings": [
+    "Box-owned complete frame sizes and source current-line apply reach actual core, mounted UI, history, union grid and ODF.",
+    "XML native fuzzy20 lower-bound behavior verified at exact tolerance and beyond.",
+    "Registered IO settings and original parent/stash/source pin preserved; whole AgentPlane raw/application/upstream/Python artifact ban passes.",
+    "This review is performed by the same current agent, not independent. Full module parity remains unproven."
+  ]
+}
