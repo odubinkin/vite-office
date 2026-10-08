@@ -1,10 +1,11 @@
 ---
 id: "202610082053-5TDXPQ"
 title: "Restore native format attribute delta notifications and inheritance filtering"
-status: "DOING"
+result_summary: "Restored native format delta notifications, inherited filtering and pooled cell defaults;1575app/13Chromium and actual100coverage verified."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 23
+revision: 24
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +39,16 @@ quality_review:
     - ".agentplane/tasks/202610082053-5TDXPQ/evidence/actual-sha-review.json"
   findings:
     - "Exact native deltas/locking/inherited filtering and pooled cell defaults verified. Existing device invalidation does not add model revisions.3 materially affected fresh revalidations disclosed; raw partial coverage threshold exits/skips retained. Complete native UI registration, formula calculation and frame geometry/invalidation remain partial; whole goal ACTIVE."
-commit: null
+commit:
+  hash: "913bf782799155f0ab7ee9a72d1fd8f13b1733e7"
+  message: "🧩 5TDXPQ code: restore native format deltas and pooled cell defaults"
 comments:
   -
     author: "CODER"
     body: "Start: native exact format change deltas, locking and inheritance filtering under standing upstream parity goal; preserve660prior tests and actual100coverage, one upstream-absent related runtime profile."
+  -
+    author: "CODER"
+    body: "Verified: native format attribute delta descriptors, modify locking, effective defaults and inherited filtering now notify original clients; row/cell generic attribute overrides removed, copied claims locked, native pooled cell defaults restored.1575unique app20fresh13Chromium passed with3 explicitly affected fresh revalidations;app/inventory actual all-four100.660old acceptance/317old metadata preserved;actual implementation913bf782799155f0ab7ee9a72d1fd8f13b1733e7 reviewed explicitly non-independently with4 byte-identical certificate reconstructions. Whole goal incomplete."
 events:
   -
     type: "status"
@@ -57,8 +63,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified actual implementation 913bf782799155f0ab7ee9a72d1fd8f13b1733e7;1575unique app20fresh13Chromium;all-four100actual app/inventory;source/static/build/governance/artifact pass;660old byte-identical;317old metadata preserved;explicitly non-independent actual-SHA EVALUATOR pass. Full245 skipped user cadence237→247, whole goal ACTIVE."
+  -
+    type: "status"
+    at: "2026-10-08T21:30:08.401Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native format attribute delta descriptors, modify locking, effective defaults and inherited filtering now notify original clients; row/cell generic attribute overrides removed, copied claims locked, native pooled cell defaults restored.1575unique app20fresh13Chromium passed with3 explicitly affected fresh revalidations;app/inventory actual all-four100.660old acceptance/317old metadata preserved;actual implementation913bf782799155f0ab7ee9a72d1fd8f13b1733e7 reviewed explicitly non-independently with4 byte-identical certificate reconstructions. Whole goal incomplete."
 doc_version: 3
-doc_updated_at: "2026-10-08T21:29:51.009Z"
+doc_updated_at: "2026-10-08T21:30:08.402Z"
 doc_updated_by: "CODER"
 description: "Iteration245: replace generic row/cell format attribute notification overrides with native SwAttrSetChg and AttrSetChangeHint through SwModify locking, existing Put_BC/ClearItem_BC, original parent registration and native Differentiate filtering. Preserve original clients, document device notifications and registered I/O deviations. Verify actual original frame notification identity, inheritance, locking/reentrancy and real UI/history without upstream runtime; all prior tests byte-identical and actual100coverage, full cadence237to247."
 sections:
