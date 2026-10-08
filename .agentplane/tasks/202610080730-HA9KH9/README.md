@@ -1,10 +1,11 @@
 ---
 id: "202610080730-HA9KH9"
 title: "Keep Writer dialog chrome fixed with independent content scrolling"
-status: "DOING"
+result_summary: "verified-202610080730-HA9KH9"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-08T07:48:36.162Z"
-  updated_by: "TESTER"
-  note: "Verified stationary dialog chrome, independent tab/body scroll ownership, visible scrollbar screenshots and keyboard/wheel reachability across three viewports; 43 component tests and 10 final browser scenarios pass, with all declared quality checks passing."
+  updated_at: "2026-10-08T07:49:24.722Z"
+  updated_by: "CODER"
+  note: "verified-202610080730-HA9KH9"
   attempts: 0
 quality_review:
   state: "pass"
@@ -39,11 +40,16 @@ quality_review:
     - "apps/office/e2e/writer-responsive-sidebar.spec.ts"
   findings:
     - "Reviewed CSS flex/clip constraints, nested form ownership, responsive tablist isolation and native callback preservation. Browser assertions and screenshots verify independent scrolling and visible tracks; no remaining actionable findings in scoped diff."
-commit: null
+commit:
+  hash: "5428c13a4a907720bd7c8c640d231216a0d12eaa"
+  message: "🧪 HA9KH9 task: record verified independent modal scrolling"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved stationary modal chrome and independent visible body and navigation scrolling."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610080730-HA9KH9. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -58,8 +64,21 @@ events:
     author: "TESTER"
     state: "ok"
     note: "Verified stationary dialog chrome, independent tab/body scroll ownership, visible scrollbar screenshots and keyboard/wheel reachability across three viewports; 43 component tests and 10 final browser scenarios pass, with all declared quality checks passing."
+  -
+    type: "verify"
+    at: "2026-10-08T07:49:24.722Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610080730-HA9KH9"
+  -
+    type: "status"
+    at: "2026-10-08T07:49:25.056Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610080730-HA9KH9. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-08T07:48:36.406Z"
+doc_updated_at: "2026-10-08T07:50:02.240Z"
 doc_updated_by: "CODER"
 description: "Follow-up to shared Writer modal styling: keep title/close and action bars visible, independently scroll content and tab navigation, expose visible scrollbars, and verify actual responsive geometry without changing dialog behavior."
 sections:
@@ -131,9 +150,48 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-08T07:49:24.722Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610080730-HA9KH9
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-08T07:48:36.406Z, excerpt_hash=sha256:98d2b62190d6c82a3abb0869310d4eb816df871b4cf59f90a2ef5243b405472a
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610080730-HA9KH9/blueprint/resolved-snapshot.json
+    - old_digest: 763bbae93436df68a4bd4061857ba54635f437817c7a52b34224eee4fd5c3d2a
+    - current_digest: 763bbae93436df68a4bd4061857ba54635f437817c7a52b34224eee4fd5c3d2a
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610080730-HA9KH9
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610080730-HA9KH9 --result verified-202610080730-HA9KH9 --commit 5428c13a4a907720bd7c8c640d231216a0d12eaa
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task implementation commit using a separately approved rollback if necessary; leave prior dialog styling and unrelated task artifacts unchanged."
-  Findings: "Eight scoped code/test files changed, with no native command/storage changes. Initial raced-build browser run and overloaded parallel async component lookup were replaced by ordered build-before-browser verification and a single-worker component suite (43 passing tests). Browser fixtures compare fixed bounds after stress-tab insertion, isolating scroll from intrinsic resizing. Keyboard focus exposed programmatic scrolling of overflow:hidden ancestors; modal chrome and non-scrolling wrappers now use overflow:clip. Responsive-sidebar regression now requires independent body scrolling rather than the obsolete panel-wide scroll contract. Four nested test callbacks received required JSDoc; final documentation and lint checks pass. Chromium omits --hide-scrollbars for screenshot evidence. Destructive replacement retains its red action styling. No external writes or outside-repository access; Safari/Firefox execution and full native parity are not claimed."
+  Findings: |-
+    Eight scoped code/test files changed, with no native command/storage changes. Initial raced-build browser run and overloaded parallel async component lookup were replaced by ordered build-before-browser verification and a single-worker component suite (43 passing tests). Browser fixtures compare fixed bounds after stress-tab insertion, isolating scroll from intrinsic resizing. Keyboard focus exposed programmatic scrolling of overflow:hidden ancestors; modal chrome and non-scrolling wrappers now use overflow:clip. Responsive-sidebar regression now requires independent body scrolling rather than the obsolete panel-wide scroll contract. Four nested test callbacks received required JSDoc; final documentation and lint checks pass. Chromium omits --hide-scrollbars for screenshot evidence. Destructive replacement retains its red action styling. No external writes or outside-repository access; Safari/Firefox execution and full native parity are not claimed.
+
+    - Observation: Task completion marked DONE, but its deterministic close commit subject verified-202610080730-HA9KH9 was rejected by the generic-subject guard.
+      Impact: Verified implementation is complete; only the active task README requires final artifact persistence.
+      Resolution: Persist the scoped closure artifact through guarded ap commit with a descriptive close subject, without force, bypass or unrelated changes.
+extensions:
+  implementation_commit:
+    hash: "7b8890de9985d33591cd70db64cdb27ea628958f"
+    message: "🎨 HA9KH9 code: keep Writer dialog chrome fixed during body scrolling"
 id_source: "generated"
 ---
 ## Summary
@@ -217,6 +275,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-08T07:49:24.722Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610080730-HA9KH9
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-08T07:48:36.406Z, excerpt_hash=sha256:98d2b62190d6c82a3abb0869310d4eb816df871b4cf59f90a2ef5243b405472a
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610080730-HA9KH9/blueprint/resolved-snapshot.json
+- old_digest: 763bbae93436df68a4bd4061857ba54635f437817c7a52b34224eee4fd5c3d2a
+- current_digest: 763bbae93436df68a4bd4061857ba54635f437817c7a52b34224eee4fd5c3d2a
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610080730-HA9KH9
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610080730-HA9KH9 --result verified-202610080730-HA9KH9 --commit 5428c13a4a907720bd7c8c640d231216a0d12eaa
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -226,3 +314,7 @@ Revert only this task implementation commit using a separately approved rollback
 ## Findings
 
 Eight scoped code/test files changed, with no native command/storage changes. Initial raced-build browser run and overloaded parallel async component lookup were replaced by ordered build-before-browser verification and a single-worker component suite (43 passing tests). Browser fixtures compare fixed bounds after stress-tab insertion, isolating scroll from intrinsic resizing. Keyboard focus exposed programmatic scrolling of overflow:hidden ancestors; modal chrome and non-scrolling wrappers now use overflow:clip. Responsive-sidebar regression now requires independent body scrolling rather than the obsolete panel-wide scroll contract. Four nested test callbacks received required JSDoc; final documentation and lint checks pass. Chromium omits --hide-scrollbars for screenshot evidence. Destructive replacement retains its red action styling. No external writes or outside-repository access; Safari/Firefox execution and full native parity are not claimed.
+
+- Observation: Task completion marked DONE, but its deterministic close commit subject verified-202610080730-HA9KH9 was rejected by the generic-subject guard.
+  Impact: Verified implementation is complete; only the active task README requires final artifact persistence.
+  Resolution: Persist the scoped closure artifact through guarded ap commit with a descriptive close subject, without force, bypass or unrelated changes.
