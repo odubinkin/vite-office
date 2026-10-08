@@ -1,10 +1,11 @@
 ---
 id: "202610081953-FT0HZ1"
 title: "Own shared native table box formats and preserve their item sets through history"
-status: "DOING"
+result_summary: "Native cells now register shared document-owned formats; border and vertical commands and attribute history preserve complete item sets, native hint order and deletion lifetime;1301app25Chromium pass upstream absent with all-four100actual coverage."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 20
+revision: 22
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-08T20:18:25.713Z"
+  updated_at: "2026-10-08T20:18:59.785Z"
   updated_by: "CODER"
-  note: "Native cell formats/history/UI verified at actual57b9fda0a195:1301unique app11fresh25Chromium upstream absent/restored, all-four100actual coverage;6statics/source/pin/scope/artifacts/governance pass; non-independent current-agent EVALUATOR pass. Full suite next247; broad parity ACTIVE."
+  note: "Native cells now register shared document-owned formats; border and vertical commands and attribute history preserve complete item sets, native hint order and deletion lifetime;1301app25Chromium pass upstream absent with all-four100actual coverage."
   attempts: 0
 quality_review:
   state: "pass"
@@ -38,7 +39,9 @@ quality_review:
     - ".agentplane/tasks/202610081953-FT0HZ1/evidence/actual-sha-review.json"
   findings:
     - "Actual committed21semantic paths match working bytes;1301app11fresh25Chromium pass with zero passing replay and upstream physically absent/restored; all-four100actual source-bound coverage;654prior acceptance649byte-identical5exact migrations;316metadata statuses/defaults/order/prefixes preserved;7pinned native sources and registered IO/recovery deviations preserved; full goal remains ACTIVE."
-commit: null
+commit:
+  hash: "57b9fda0a19503f9df84fccce914b73f71c44474"
+  message: "🧩 FT0HZ1 code: own native shared cell formats and item-set history"
 comments:
   -
     author: "CODER"
@@ -46,6 +49,9 @@ comments:
   -
     author: "CODER"
     body: "Start: Resume native cell formats with two bounded prior-test expected-value captures before destructive Undo; unchanged acceptance literals and no production scope expansion."
+  -
+    author: "CODER"
+    body: "Verified: Native cells now register shared document-owned formats; border and vertical commands and attribute history preserve complete item sets, native hint order and deletion lifetime;1301app25Chromium pass upstream absent with all-four100actual coverage.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -67,8 +73,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native cell formats/history/UI verified at actual57b9fda0a195:1301unique app11fresh25Chromium upstream absent/restored, all-four100actual coverage;6statics/source/pin/scope/artifacts/governance pass; non-independent current-agent EVALUATOR pass. Full suite next247; broad parity ACTIVE."
+  -
+    type: "verify"
+    at: "2026-10-08T20:18:59.785Z"
+    author: "CODER"
+    state: "ok"
+    note: "Native cells now register shared document-owned formats; border and vertical commands and attribute history preserve complete item sets, native hint order and deletion lifetime;1301app25Chromium pass upstream absent with all-four100actual coverage."
+  -
+    type: "status"
+    at: "2026-10-08T20:18:59.880Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Native cells now register shared document-owned formats; border and vertical commands and attribute history preserve complete item sets, native hint order and deletion lifetime;1301app25Chromium pass upstream absent with all-four100actual coverage.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-08T20:18:25.768Z"
+doc_updated_at: "2026-10-08T20:18:59.880Z"
 doc_updated_by: "CODER"
 description: "Remove canonical cell geometry records and core/UI DTO round trips by registering original SwTableBox owners at native document frame formats, direct item publication, native history sharing and destructive client cleanup."
 sections:
@@ -142,6 +161,36 @@ sections:
     - operator_action: run_exact_argv
     - can_execute_now: true
     - safe_command: agentplane commit 202610081953-FT0HZ1 -m 🧩 FT0HZ1 task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-10-08T20:18:59.785Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Native cells now register shared document-owned formats; border and vertical commands and attribute history preserve complete item sets, native hint order and deletion lifetime;1301app25Chromium pass upstream absent with all-four100actual coverage.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-08T20:18:25.768Z, excerpt_hash=sha256:2aaa03aa0c9b131b425c7acbb1e191989a383769028947d16effb0628aaa6b65
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610081953-FT0HZ1/blueprint/resolved-snapshot.json
+    - old_digest: baba606e658294a363155b0a916e757e847542c6c25216d01c563546c7102f18
+    - current_digest: baba606e658294a363155b0a916e757e847542c6c25216d01c563546c7102f18
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610081953-FT0HZ1
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610081953-FT0HZ1 --result verified-202610081953-FT0HZ1 --commit 193a268373499661c818a26ded39b6c656bed5ad
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -245,6 +294,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane commit 202610081953-FT0HZ1 -m 🧩 FT0HZ1 task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-08T20:18:59.785Z — VERIFY — ok
+
+By: CODER
+
+Note: Native cells now register shared document-owned formats; border and vertical commands and attribute history preserve complete item sets, native hint order and deletion lifetime;1301app25Chromium pass upstream absent with all-four100actual coverage.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-08T20:18:25.768Z, excerpt_hash=sha256:2aaa03aa0c9b131b425c7acbb1e191989a383769028947d16effb0628aaa6b65
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610081953-FT0HZ1/blueprint/resolved-snapshot.json
+- old_digest: baba606e658294a363155b0a916e757e847542c6c25216d01c563546c7102f18
+- current_digest: baba606e658294a363155b0a916e757e847542c6c25216d01c563546c7102f18
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610081953-FT0HZ1
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610081953-FT0HZ1 --result verified-202610081953-FT0HZ1 --commit 193a268373499661c818a26ded39b6c656bed5ad
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
