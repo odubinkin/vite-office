@@ -1,0 +1,106 @@
+{
+  "evaluatedSHA": "9479fd9fbbfe64e01e2f4b478e9e90bc205be11a",
+  "evaluator": "Current agent EVALUATOR phase, explicitly not independent",
+  "verdict": "pass",
+  "production": [
+    {
+      "path": "apps/office/src/sw/source/core/table/swtable.ts",
+      "sha256": "5760faf8351091c280246b585a2923745251a99d7a54deed1587e0cd1392a077",
+      "exactActualSHABytes": true,
+      "physicalLines": 791
+    },
+    {
+      "path": "apps/office/src/sw/source/core/table/native-independent-table-selection.test.ts",
+      "sha256": "412918b7f3e608939a40f3bbc67b813f44b246a22f9fd66a1a42b78816c170ae",
+      "exactActualSHABytes": true,
+      "physicalLines": 299
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/native-independent-table-selection.test.tsx",
+      "sha256": "8f9ab21282bc506773f776e159d8a534821529f51a18b970ecb4d07320261f87",
+      "exactActualSHABytes": true,
+      "physicalLines": 96
+    },
+    {
+      "path": "docs/program/source-provenance.json",
+      "sha256": "b878e4c53358479220fc1114d6d9cb59e456a9ea9e6b00747d492a04d44e12ae",
+      "exactActualSHABytes": true
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "sha256": "5e0f161e3935d00cf509074d2715e53040d6779e6703f8c095ea79b954c8670f",
+      "exactActualSHABytes": true
+    }
+  ],
+  "records": [
+    {
+      "check": "234proofScript",
+      "exit": 0,
+      "outputSHA256": "591bbdf9c0ef8ebc6dd176a0391c2451c5b50a13e0dc46064c4d146d561c4b74",
+      "bytes": 715
+    },
+    {
+      "check": "234censusScript",
+      "exit": 0,
+      "outputSHA256": "3c57e8133f91ad14fb4275e126c76f76676dc163ac95981986186ef640bf9f60",
+      "bytes": 1409
+    },
+    {
+      "check": "234scopeScript",
+      "exit": 0,
+      "outputSHA256": "bde174737ce44726ee4f50a864d259e525a4162d220835e7e3b0b7e1c07be51e",
+      "bytes": 1003
+    }
+  ],
+  "reconstructed": [
+    {
+      "path": ".agentplane/tasks/202610081258-YGP1DS/evidence/final-coverage.json",
+      "sha256": "bd4197d7b45482be286683fbeee53ed09f7c5226d54de755b784c8ca4a804148",
+      "currentSHA256": "bd4197d7b45482be286683fbeee53ed09f7c5226d54de755b784c8ca4a804148",
+      "byteIdentical": true
+    },
+    {
+      "path": ".agentplane/tasks/202610081258-YGP1DS/evidence/case-census.json",
+      "sha256": "1736403aa8c0cc8b96aaca47ce9c8c591617f12ac03a6257bd4495c5eb9f3f13",
+      "currentSHA256": "1736403aa8c0cc8b96aaca47ce9c8c591617f12ac03a6257bd4495c5eb9f3f13",
+      "byteIdentical": true
+    },
+    {
+      "path": ".agentplane/tasks/202610081258-YGP1DS/evidence/scope-final.json",
+      "sha256": "3772353418f3ceff4075e0f30be7eebb3892334b974cafcb1b6570bb7329044f",
+      "currentSHA256": "3772353418f3ceff4075e0f30be7eebb3892334b974cafcb1b6570bb7329044f",
+      "byteIdentical": true
+    }
+  ],
+  "uniqueCaseCounts": {
+    "app": 13822,
+    "inventory": 110,
+    "infra": 19,
+    "chromium": 299,
+    "fresh": 14
+  },
+  "passingReplay": 0,
+  "focusedSkipsRetained": 11,
+  "oneFullUpstreamAbsentProfile": true,
+  "noTestsReplayedDuringReview": true,
+  "noIndividualCounterAlteration": true,
+  "scopeCount": 5,
+  "priorAcceptanceByteIdentical": 626,
+  "metadataRecordsPreserved": 311,
+  "sourceAnchorsReviewed": 3,
+  "sourceMatchedContracts": [
+    "Actual per-box frame-width sums determine endpoint physical borders, not shared indices. Native integer midpoint and strict half-overlap union/majority conditions determine selection.",
+    "Column search uses upper endpoint interval above the first endpoint, union in endpoint rows and lower endpoint interval below the last endpoint unless native half-width rule combines them.",
+    "Original endpoints stay retained, unmatched endpoint result stays partial and output is deduplicated original box order. Row search keeps all original row boxes.",
+    "Actual cursor rings and mounted menu selected-box painting edit original cells through native character attributes/history; no TextRuns or row-width side map introduced."
+  ],
+  "actualFailedCaseResolved": 1,
+  "residuals": [
+    "Merged/nested/row-spanned/protected cell graph/selection and full VCL/layout selection remain unrepresented.",
+    "Native unequal-edge column insertion still rejects different selected row indices or row box counts; no insertion promotion from this selection leaf.",
+    "Complete selection cursor layout/enhanced-table state and width item pooling remain partial.",
+    "Registered IO/open/save/recovery/settings remain byte-identical; no full module/upstream parity promotion."
+  ],
+  "allDeclaredGatesPassed": true,
+  "registeredIOPreserved": true
+}
