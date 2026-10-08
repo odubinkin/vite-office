@@ -217,6 +217,76 @@ describe("WriterFileDialog", /** Registers file dialog interaction tests. @retur
     documentShell.Close();
   });
 
+  it("prefills an indexed name and keeps both documents after an import collision", /** Checks the save-new collision choice. @returns Completion. */ async () => {
+    const documentShell = shell();
+    const store = new IndexedDbWriterOdtStore("dialog-import-copy", new IDBFactory());
+    await store.save({ bytes: new Uint8Array([1]), id: "plan", title: "Plan", version: 1 });
+    await store.save({ bytes: new Uint8Array([2]), id: "plan-1", title: "Plan (1)", version: 1 });
+    const close = vi.fn();
+    render(
+      <WriterFileDialog
+        docShell={documentShell}
+        kind="open"
+        onClose={close}
+        services={services(store)}
+      />,
+    );
+    fireEvent.click(screen.getByRole("tab", { name: "On computer" }));
+    fireEvent.change(screen.getByLabelText("Browse"), {
+      target: { files: [new File(["New plan body"], "Plan.txt")] },
+    });
+    const name = await screen.findByRole("textbox", { name: "New document name" });
+    expect(name).toHaveValue("Plan (2)");
+    expect(screen.getByText(/Replace “Plan” or keep both documents/)).toBeVisible();
+    fireEvent.click(screen.getByRole("button", { name: "Save as new" }));
+    await waitFor(
+      /** Waits for the new browser copy. @returns Nothing. */ () =>
+        expect(close).toHaveBeenCalledTimes(1),
+    );
+    expect(
+      (await store.list())
+        .map(
+          /** Selects the stored title. @param document - Stored record. @returns Title. */ (
+            document,
+          ) => document.title,
+        )
+        .sort(),
+    ).toEqual(["Plan", "Plan (1)", "Plan (2)"]);
+    expect(documentShell.GetTitle()).toBe("Plan (2)");
+    documentShell.Close();
+  });
+
+  it("overwrites the colliding browser identity only after explicit confirmation", /** Checks the replace-existing collision choice. @returns Completion. */ async () => {
+    const documentShell = shell();
+    const store = new IndexedDbWriterOdtStore("dialog-import-overwrite", new IDBFactory());
+    await store.save({ bytes: new Uint8Array([1]), id: "plan", title: "Plan", version: 1 });
+    const close = vi.fn();
+    render(
+      <WriterFileDialog
+        docShell={documentShell}
+        kind="open"
+        onClose={close}
+        services={services(store)}
+      />,
+    );
+    fireEvent.click(screen.getByRole("tab", { name: "On computer" }));
+    fireEvent.change(screen.getByLabelText("Browse"), {
+      target: { files: [new File(["Replacement body"], "Plan.txt")] },
+    });
+    await screen.findByText("A document with this name exists");
+    expect(close).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole("button", { name: "Replace existing" }));
+    await waitFor(
+      /** Waits for the confirmed overwrite. @returns Nothing. */ () =>
+        expect(close).toHaveBeenCalledTimes(1),
+    );
+    expect(await store.list()).toHaveLength(1);
+    expect((await store.load("plan"))?.title).toBe("Plan");
+    expect(documentShell.GetDocumentId()).toBe("plan");
+    expect(documentShell.GetDoc().paragraphs[0]?.GetText()).toBe("Replacement body");
+    documentShell.Close();
+  });
+
   it("reports missing storage from Save As", /** Checks a failed copy leaves the dialog open. @returns Completion. */ async () => {
     const documentShell = shell();
     const close = vi.fn();

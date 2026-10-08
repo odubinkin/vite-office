@@ -5,12 +5,55 @@ import { SwDoc } from "../../source/core/doc/doc";
 import { SwDocShell } from "../../source/uibase/app/docsh";
 import type { BrowserWriterDocument, WriterOdtStore } from "../storage/writer-odt-store";
 
+/** Stable identity selected for a document imported from the computer. */
+export interface ImportedWriterIdentity {
+  readonly id: string;
+  readonly title: string;
+}
+
 /** Reports whether the currently supported Writer body has visible content. @param document - Live Writer model. @returns True when at least one paragraph is nonempty. */
 export function hasWriterContent(document: SwDoc): boolean {
   return document.paragraphs.some(
     /** Checks visible paragraph text. @param paragraph - Candidate paragraph. @returns Whether it has text. */
     (paragraph) => paragraph.GetText().trim().length > 0,
   );
+}
+
+/** Returns the first two whitespace-delimited words, which become an untitled document's first browser name. @param document - Live Writer model. @returns Two-word title or undefined until the threshold is reached. */
+export function getAutomaticWriterTitle(document: SwDoc): string | undefined {
+  const words: string[] = [];
+  for (const paragraph of document.paragraphs) {
+    for (const word of paragraph.GetText().trim().split(/\s+/u)) {
+      if (word.length > 0) words.push(word);
+      if (words.length === 2) return words.join(" ");
+    }
+  }
+  return undefined;
+}
+
+/** Allocates the first unused browser title by appending a one-based parenthesized index. @param baseTitle - Requested display name. @param documents - Existing browser records. @returns Unique normalized title. */
+export function getUniqueWriterTitle(
+  baseTitle: string,
+  documents: readonly BrowserWriterDocument[],
+): string {
+  const normalized = baseTitle.trim();
+  if (normalized.length === 0) throw new Error("Document name is required.");
+  const occupied = new Set(
+    documents.map(
+      /** Selects one occupied browser title. @param document - Stored record. @returns Record title. */ (
+        document,
+      ) => document.title,
+    ),
+  );
+  if (!occupied.has(normalized)) return normalized;
+  let index = 1;
+  while (occupied.has(`${normalized} (${index})`)) index += 1;
+  return `${normalized} (${index})`;
+}
+
+/** Derives the browser title represented by a supported imported filename. @param filename - Computer filename. @returns Extension-free title. */
+export function getImportedWriterTitle(filename: string): string {
+  return filename.replace(/\.(odt|txt)$/i, "") || "Imported document";
 }
 
 /** Saves a dirty Writer model, or immediately persists a newly imported nonempty document. */
@@ -27,6 +70,19 @@ export function hasWriterContent(document: SwDoc): boolean {
 ): Promise<boolean> {
   const state = docShell.GetDocumentState();
   if ((!state.isModified && !imported) || !hasWriterContent(docShell.GetDoc())) return false;
+  const medium = docShell.GetMedium();
+  if (!imported && medium.kind === "untitled") {
+    const automaticTitle = getAutomaticWriterTitle(docShell.GetDoc());
+    if (automaticTitle === undefined) return false;
+    const requestedTitle = state.title === medium.name ? automaticTitle : state.title;
+    const title = getUniqueWriterTitle(requestedTitle, await store.list());
+    const id = globalThis.crypto.randomUUID();
+    const generation = state.contentGeneration;
+    const bytes = await docShell.SerializeOdt(undefined, title);
+    await store.saveAs({ bytes, id, title, version: generation });
+    docShell.AdoptSavedBrowserCopy(id, title, generation);
+    return true;
+  }
   const persist =
     /**
      * Handles the Writer browser operation.
@@ -46,7 +102,6 @@ export function hasWriterContent(document: SwDoc): boolean {
       else await store.save(record);
       return { generation: captured.contentGeneration };
     };
-  const medium = docShell.GetMedium();
   if (
     medium.kind === "primary" &&
     medium.destination.kind === "storage" &&
@@ -118,14 +173,16 @@ export function hasWriterContent(document: SwDoc): boolean {
  * @param docShell - Input value.
  * @param bytes - Input value.
  * @param filename - Input value.
+ * @param identity - Optional collision-resolved browser identity.
  * @returns Operation result.
  */ export function openWriterText(
   docShell: SwDocShell,
   bytes: Uint8Array,
   filename: string,
+  identity?: ImportedWriterIdentity,
 ): void {
   const text = new TextDecoder("utf-8", { fatal: true }).decode(bytes).replace(/\r\n?/g, "\n");
-  const title = filename.replace(/\.txt$/i, "") || "Imported text";
+  const title = identity?.title ?? getImportedWriterTitle(filename);
   const defaultFontDevice = docShell.GetDefaultFontDevice();
   const document = new SwDoc(defaultFontDevice === undefined ? {} : { defaultFontDevice });
   for (const [index, line] of text.split("\n").entries()) {
@@ -134,7 +191,11 @@ export function hasWriterContent(document: SwDoc): boolean {
   }
   docShell.ReplaceDocument(
     document,
-    createDocument({ id: globalThis.crypto.randomUUID(), suiteId: "writer", title }),
-    { kind: "untitled", name: title },
+    createDocument({
+      id: identity?.id ?? globalThis.crypto.randomUUID(),
+      suiteId: "writer",
+      title,
+    }),
+    { kind: "input", name: filename, source: { kind: "external", reference: bytes } },
   );
 }

@@ -27,11 +27,20 @@ it as the current primary document, leaving the previous copy in place. Editing
 the title changes the primary copy's name atomically on the next immediate save;
 an occupied name is rejected without overwriting another document. Export is a
 download-only dialog with ODT and TXT choices. Open is a dialog listing browser
-copies and accepting ODT or TXT from the computer.
-Nonempty imported files are saved to IndexedDB immediately after opening;
-empty documents are never persisted. Save As appears only in the File menu,
-not the toolbar.
+copies and accepting ODT or TXT from the computer. When an imported filename
+matches a browser copy, Open pauses before replacing the active document and
+asks whether to overwrite that exact browser record or save a separate copy.
+The separate-copy field starts with the first available one-based suffix, such
+as `Plan (1)` or `Running tracks (3)`. Nonempty imported files are saved to
+IndexedDB immediately after that choice; empty imports are never persisted.
 
-These differences are approved product behavior. Parity audits must record them
-as intentional browser divergences rather than replacing the scheduler, storage
-format, or file dialogs with LibreOffice's desktop recovery workflow.
+A newly created document remains memory-only until its trimmed body contains at
+least two whitespace-delimited words. Its first browser title is those first two
+words joined by one space, unless the user already renamed it. An occupied title
+receives the same first-available parenthesized suffix. Save As appears only in
+the File menu, not the toolbar.
+
+These naming thresholds, collision choices, and storage differences are approved
+product behavior. Parity audits must record them as intentional browser
+divergences rather than replacing the scheduler, storage format, automatic
+naming, or file dialogs with LibreOffice's desktop recovery workflow.

@@ -11,9 +11,12 @@ import type { WriterAutosaveController } from "../workflows/writer-autosave";
 import type { WriterFileDialogKind } from "../workflows/writer-file-dialog-controller";
 import {
   autosaveWriter,
+  getImportedWriterTitle,
+  getUniqueWriterTitle,
   openBrowserWriterDocument,
   openWriterText,
   saveWriterAsBrowserCopy,
+  type ImportedWriterIdentity,
 } from "../workflows/writer-odt-io";
 import { exportWriterTextToPort, saveWriterOdtToPort } from "../workflows/writer-document-io";
 
@@ -23,6 +26,13 @@ import { exportWriterTextToPort, saveWriterOdtToPort } from "../workflows/writer
   readonly kind: WriterFileDialogKind;
   readonly onClose: () => void;
   readonly services: WriterSessionServices;
+}
+
+/** Imported file waiting for the user to resolve a browser-title collision. */
+interface PendingWriterImport {
+  readonly bytes: Uint8Array;
+  readonly conflicting: BrowserWriterDocument;
+  readonly file: File;
 }
 
 /** Renders file actions without binding browser I/O to Writer's model layer. */
@@ -49,6 +59,8 @@ import { exportWriterTextToPort, saveWriterOdtToPort } from "../workflows/writer
   const [error, setError] = useState<string>();
   const [loading, setLoading] = useState(kind === "open" && services.odtStore !== undefined);
   const [dragging, setDragging] = useState(false);
+  const [pendingImport, setPendingImport] = useState<PendingWriterImport>();
+  const [importTitle, setImportTitle] = useState("");
   const browserTabRef = useRef<HTMLButtonElement>(null);
   const computerTabRef = useRef<HTMLButtonElement>(null);
 
@@ -78,12 +90,12 @@ import { exportWriterTextToPort, saveWriterOdtToPort } from "../workflows/writer
    * Handles the Writer browser operation.
    * @param action - Input value.
    * @returns Operation result.
-   */ async function run(action: () => Promise<void>): Promise<void> {
+   */ async function run(action: () => Promise<unknown>): Promise<void> {
     setBusy(true);
     setError(undefined);
     try {
-      await action();
-      onClose();
+      const shouldClose = await action();
+      if (shouldClose !== false) onClose();
     } catch (reason) {
       setError(message(reason));
     } finally {
@@ -91,36 +103,52 @@ import { exportWriterTextToPort, saveWriterOdtToPort } from "../workflows/writer
     }
   }
 
-  /**
-   * Handles the Writer browser operation.
-   * @param file - Input value.
-   * @returns Operation result.
-   */ async function importFile(file: File): Promise<void> {
+  /** Opens already-read bytes under the identity selected by collision resolution. @param file - Source file. @param bytes - Source bytes. @param identity - Browser identity to persist. @returns Completion. */
+  async function openImportedFile(
+    file: File,
+    bytes: Uint8Array,
+    identity: ImportedWriterIdentity,
+  ): Promise<void> {
+    if (/\.txt$/i.test(file.name)) openWriterText(docShell, bytes, file.name, identity);
+    else
+      await docShell.Open(
+        bytes,
+        createDocument({ id: identity.id, suiteId: "writer", title: identity.title }),
+        {
+          kind: "input",
+          name: file.name,
+          filterId: "writer8",
+          mediaType: SwDocShell.ODT_MEDIA_TYPE,
+          source: { kind: "external", reference: file },
+        },
+      );
+    if (services.odtStore === undefined) throw new Error("Browser storage is unavailable.");
+    await autosaveWriter(docShell, services.odtStore, true);
+  }
+
+  /** Reads one computer file and either imports it or pauses for collision resolution. @param file - Selected browser file. @returns Completion. */
+  async function importFile(file: File): Promise<boolean> {
     if (!/\.(odt|txt)$/i.test(file.name)) throw new Error("Choose an ODT or TXT file.");
     if (services.odtStore === undefined) throw new Error("Browser storage is unavailable.");
     await autosave?.Flush();
     const bytes = await readBrowserFile(file);
-    if (/\.txt$/i.test(file.name)) {
-      openWriterText(docShell, bytes, file.name);
-      await autosaveWriter(docShell, services.odtStore, true);
-      return;
-    }
-    await docShell.Open(
-      bytes,
-      createDocument({
-        id: globalThis.crypto.randomUUID(),
-        suiteId: "writer",
-        title: file.name.replace(/\.odt$/i, ""),
-      }),
-      {
-        kind: "input",
-        name: file.name,
-        filterId: "writer8",
-        mediaType: SwDocShell.ODT_MEDIA_TYPE,
-        source: { kind: "external", reference: file },
-      },
+    const stored = await services.odtStore.list();
+    const importedTitle = getImportedWriterTitle(file.name);
+    const conflicting = stored.find(
+      /** Finds an exact browser-title collision. @param document - Stored record. @returns Whether titles match. */ (
+        document,
+      ) => document.title === importedTitle,
     );
-    await autosaveWriter(docShell, services.odtStore, true);
+    if (conflicting !== undefined) {
+      setImportTitle(getUniqueWriterTitle(importedTitle, stored));
+      setPendingImport({ bytes, conflicting, file });
+      return false;
+    }
+    await openImportedFile(file, bytes, {
+      id: globalThis.crypto.randomUUID(),
+      title: importedTitle,
+    });
+    return true;
   }
 
   /** Selects a source tab with standard keyboard tab navigation. @param event - Tab keyboard event. @returns Nothing. */
@@ -180,7 +208,98 @@ import { exportWriterTextToPort, saveWriterOdtToPort } from "../workflows/writer
             <X aria-hidden="true" className="h-5 w-5" />
           </button>
         </div>
-        {kind === "open" ? (
+        {kind === "open" && pendingImport !== undefined ? (
+          <form
+            className="grid gap-4 p-6"
+            onSubmit={
+              /** Saves the imported file under a new unique browser title. @param event - Form event. @returns Nothing. */ (
+                event,
+              ) => {
+                event.preventDefault();
+                void run(
+                  /** Validates the requested copy name before replacing the live document. @returns Completion. */ async () => {
+                    if (store === undefined) throw new Error("Browser storage is unavailable.");
+                    const normalized = importTitle.trim();
+                    if (normalized.length === 0) throw new Error("Document name is required.");
+                    const latest = await store.list();
+                    if (
+                      latest.some(
+                        /** Detects a newly occupied title while the prompt was open. @param document - Stored record. @returns Whether the title is occupied. */ (
+                          document,
+                        ) => document.title === normalized,
+                      )
+                    )
+                      throw new Error("A document with this name already exists.");
+                    await openImportedFile(pendingImport.file, pendingImport.bytes, {
+                      id: globalThis.crypto.randomUUID(),
+                      title: normalized,
+                    });
+                  },
+                );
+              }
+            }
+          >
+            <div>
+              <h3 className="font-semibold text-slate-950">A document with this name exists</h3>
+              <p className="mt-1 text-sm text-slate-600">
+                Replace “{pendingImport.conflicting.title}” or keep both documents with a new name.
+              </p>
+            </div>
+            <label className="grid gap-1 text-sm font-medium text-slate-700">
+              New document name
+              <input
+                autoFocus
+                className="rounded-lg border border-slate-300 p-2 focus-visible:outline-2 focus-visible:outline-indigo-600"
+                onChange={
+                  /** Updates the proposed imported title. @param event - Input event. @returns Nothing. */ (
+                    event,
+                  ) => setImportTitle(event.target.value)
+                }
+                required
+                value={importTitle}
+              />
+            </label>
+            <div className="flex flex-wrap justify-end gap-2">
+              <button
+                className="rounded-lg px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100"
+                disabled={busy}
+                onClick={
+                  /** Returns to file selection without importing. @returns Nothing. */ () => {
+                    setError(undefined);
+                    setPendingImport(undefined);
+                  }
+                }
+                type="button"
+              >
+                Cancel
+              </button>
+              <button
+                className="rounded-lg border border-red-300 px-3 py-2 text-sm font-semibold text-red-700 hover:bg-red-50"
+                disabled={busy}
+                onClick={
+                  /** Replaces the colliding browser document. @returns Nothing. */ () =>
+                    void run(
+                      /** Imports through the existing record identity. @returns Completion. */ () =>
+                        openImportedFile(pendingImport.file, pendingImport.bytes, {
+                          id: pendingImport.conflicting.id,
+                          title: pendingImport.conflicting.title,
+                        }),
+                    )
+                }
+                type="button"
+              >
+                Replace existing
+              </button>
+              <button
+                className="rounded-lg bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-700"
+                disabled={busy}
+                type="submit"
+              >
+                Save as new
+              </button>
+            </div>
+          </form>
+        ) : kind === "open" ? (
           <div className="px-6 pb-6">
             <div
               aria-label="Document source"

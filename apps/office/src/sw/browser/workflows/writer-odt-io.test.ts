@@ -11,6 +11,8 @@ import { ZipFile } from "../../../package/source/zipapi/ZipFile";
 import { IndexedDbWriterOdtStore } from "../storage/writer-odt-store";
 import {
   autosaveWriter,
+  getAutomaticWriterTitle,
+  getUniqueWriterTitle,
   openBrowserWriterDocument,
   openWriterText,
   saveWriterAsBrowserCopy,
@@ -56,9 +58,12 @@ describe("Writer browser ODT saving", /** Registers ODT persistence assertions. 
     const shell = makeShell();
     const writer = new SwWrtShell(shell);
     writer.Insert("First");
-    expect(await autosaveWriter(shell, store)).toBe(true);
     expect(await autosaveWriter(shell, store)).toBe(false);
     writer.Insert(" second");
+    expect(await autosaveWriter(shell, store)).toBe(true);
+    expect(shell.GetTitle()).toBe("First second");
+    expect(await autosaveWriter(shell, store)).toBe(false);
+    writer.Insert(" third");
     expect(await autosaveWriter(shell, store)).toBe(true);
     shell.RenameDocument("Renamed");
     expect(await autosaveWriter(shell, store)).toBe(true);
@@ -87,12 +92,55 @@ describe("Writer browser ODT saving", /** Registers ODT persistence assertions. 
           ) => item.title,
         )
         .sort(),
-    ).toEqual(["Copy", "Draft"]);
+    ).toEqual(["Copy", "Retained body"]);
     new SwWrtShell(shell).Insert(" changed");
     expect(await openBrowserWriterDocument(shell, store, "absent")).toBe(false);
     expect(await openBrowserWriterDocument(shell, store, copyId)).toBe(true);
     expect(shell.GetTitle()).toBe("Copy");
     expect(shell.GetDoc().paragraphs[0]?.GetText()).toBe("Retained body");
+    shell.Close();
+  });
+
+  it("waits for two trimmed words and allocates a collision-safe automatic title", /** Checks the new-document threshold, whitespace normalization, and indexed naming. @returns Completion. */ async () => {
+    const store = new IndexedDbWriterOdtStore("automatic-title", new IDBFactory());
+    await store.save({
+      bytes: new Uint8Array([1]),
+      id: "existing",
+      title: "Plan work",
+      version: 1,
+    });
+    await store.save({
+      bytes: new Uint8Array([2]),
+      id: "existing-copy",
+      title: "Plan work (1)",
+      version: 1,
+    });
+    const shell = makeShell();
+    const writer = new SwWrtShell(shell);
+    writer.Insert("  Plan\n\twork   continues");
+    expect(getAutomaticWriterTitle(shell.GetDoc())).toBe("Plan work");
+    expect(getUniqueWriterTitle(" Plan work ", await store.list())).toBe("Plan work (2)");
+    expect(await autosaveWriter(shell, store)).toBe(true);
+    expect(shell.GetTitle()).toBe("Plan work (2)");
+    expect(
+      (await store.list())
+        .map(
+          /** Selects one stored title. @param record - Stored record. @returns Record title. */ (
+            record,
+          ) => record.title,
+        )
+        .sort(),
+    ).toEqual(["Plan work", "Plan work (1)", "Plan work (2)"]);
+    shell.Close();
+  });
+
+  it("keeps a manual untitled-document name once the two-word threshold is met", /** Checks explicit user naming wins over automatic content naming. @returns Completion. */ async () => {
+    const store = new IndexedDbWriterOdtStore("manual-first-title", new IDBFactory());
+    const shell = makeShell();
+    shell.RenameDocument("My chosen name");
+    new SwWrtShell(shell).Insert("Two words");
+    expect(await autosaveWriter(shell, store)).toBe(true);
+    expect(shell.GetTitle()).toBe("My chosen name");
     shell.Close();
   });
 
