@@ -4,7 +4,7 @@ title: "Select independent native table cells by physical borders"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 18
+revision: 21
 origin:
   system: "manual"
 depends_on: []
@@ -22,9 +22,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-08T13:29:57.564Z"
+  updated_at: "2026-10-08T13:33:41.565Z"
   updated_by: "CODER"
-  note: "Actual9479fd9fbbfe native physical selection verified:13822 app,110 inventory,19 infra,299 Chromium pass;14 fresh cases, all-four100 exact-source coverage and passingReplay0. Static6/source5/scope/native/artifact/governance pass;626 prior acceptance and311 metadata semantics unchanged,5 semantic files only. Same-current-agent EVALUATOR not independent reconstructed exact reports and PASS. One failed literal resolved; raw focused threshold exit/skips and empty path admission retained. Registered IO/stash/pin/whole parent prefix preserved; residual table insertion and full native graphs/layout explicit."
+  note: "Aligned physical native table selection and preserved original UI history"
   attempts: 0
 quality_review:
   state: "pass"
@@ -63,8 +63,20 @@ events:
     author: "CODER"
     state: "ok"
     note: "Actual9479fd9fbbfe native physical selection verified:13822 app,110 inventory,19 infra,299 Chromium pass;14 fresh cases, all-four100 exact-source coverage and passingReplay0. Static6/source5/scope/native/artifact/governance pass;626 prior acceptance and311 metadata semantics unchanged,5 semantic files only. Same-current-agent EVALUATOR not independent reconstructed exact reports and PASS. One failed literal resolved; raw focused threshold exit/skips and empty path admission retained. Registered IO/stash/pin/whole parent prefix preserved; residual table insertion and full native graphs/layout explicit."
+  -
+    type: "verify"
+    at: "2026-10-08T13:33:03.558Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified: Actual9479fd9fbbfe native physical selection passed declared gates and exact-source100 coverage; recording concrete blueprint details after canonical finish reported missing blueprint verification evidence."
+  -
+    type: "verify"
+    at: "2026-10-08T13:33:41.565Z"
+    author: "CODER"
+    state: "ok"
+    note: "Aligned physical native table selection and preserved original UI history"
 doc_version: 3
-doc_updated_at: "2026-10-08T13:30:34.364Z"
+doc_updated_at: "2026-10-08T13:33:41.648Z"
 doc_updated_by: "CODER"
 description: "Iteration234 of approved parent202609240501-C9TN6M. Replace SwTable CreateSelection shared-index rectangles with pinned swnewtable actual box widths, half-overlap interval combination and native majority/center admission. Preserve original box identities, sorted selection, partial endpoint and row contracts. Verify actual shell rings, formatting undo and mounted menu painting. Existing unequal-edge column insertion remains explicitly unsupported and a separate follow-up."
 sections:
@@ -88,6 +100,74 @@ sections:
     Result: PASS after original failed literal correction; raw full-app/empty-admission/focused threshold exits1 and11 focused skips retained. Unique13822 app PASS,110 inventory PASS,19 infra PASS,299 Chromium PASS,14 new native/mounted cases and passingReplay0. Final cumulative all-four app100 (17283/18982/4371/14160) and inventory100 (1464/1523/384/1081) bound to exact complete source/maps/contiguous declarations/enclosing branches. Original626 acceptance bytes and311 prior metadata semantics unchanged; exact5 semantic files, physical source below1000, pin/stash/protectedIO/full-parent prefix preserved. Current-agent EVALUATOR explicitly not independent actual implementation9479fd9fbbfe64e01e2f4b478e9e90bc205be11a PASS; coverage/case/scope reconstructed byte-identically without tests replay. All implementation verification complete; canonical checkpoint/close and parent append follow, with final clean audit recorded in parent.
     Evidence: bounded evidence JSON in this task; ignored node_modules cache contains actual raw source/maps/results/scripts only. No upstream copies or Python/scripts in AgentPlane.
     Scope: source-shaped physical flat-table selection, original cursor/box/paragraph ownership, mounted UI painting and formatting history. Explicit residual: full merged/nested/spanned/protected/layout mechanics and unequal-edge insertion unsupported; entire goal remains active.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-08T13:33:03.558Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified: Actual9479fd9fbbfe native physical selection passed declared gates and exact-source100 coverage; recording concrete blueprint details after canonical finish reported missing blueprint verification evidence.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-08T13:30:34.364Z, excerpt_hash=sha256:da8dd989245eb18061c685f34abab64016184615c0493d4897bf8bd44bbd548d
+
+    Details:
+
+    Command: static6; one upstream-absent build/app/inventory/infra/Chromium full profile; original failed and genuinely new focused2 cases only; restored source5; scope/native/artifact/governance; current-agent actual-SHA EVALUATOR.
+    Result: pass. App13822,inventory110,infra19,Chromium299; app/inventory all-four100;14 fresh cases,0 passing replay,11 focused skips/raw threshold exit retained.
+    Evidence: .agentplane/tasks/202610081258-YGP1DS/evidence/final-coverage.json; case-census.json; quality-actual-sha.json; quality/20261008-132955749-recovery-context/quality-report.json. Exact implementation9479fd9fbbfe64e01e2f4b478e9e90bc205be11a, snapshot9bc132e7cf1c8cb9f9f6907ef4d22606c1900e6c5a7d2608b94daca840c2e000.
+    Scope: five approved semantic paths,626 prior acceptance and311 metadata semantics preserved; pin/stash/protectedIO intact. Full native graph/layout and unequal-edge insertion remain unsupported; no goal promotion.
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610081258-YGP1DS/blueprint/resolved-snapshot.json
+    - old_digest: 9bc132e7cf1c8cb9f9f6907ef4d22606c1900e6c5a7d2608b94daca840c2e000
+    - current_digest: 9bc132e7cf1c8cb9f9f6907ef4d22606c1900e6c5a7d2608b94daca840c2e000
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610081258-YGP1DS
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610081258-YGP1DS --result verified-202610081258-YGP1DS --commit e90796bb0141e7df60ae0b1f04790440b5354bd0
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-10-08T13:33:41.565Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Aligned physical native table selection and preserved original UI history
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-08T13:33:40.251Z, excerpt_hash=sha256:da8dd989245eb18061c685f34abab64016184615c0493d4897bf8bd44bbd548d
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610081258-YGP1DS/blueprint/resolved-snapshot.json
+    - old_digest: 9bc132e7cf1c8cb9f9f6907ef4d22606c1900e6c5a7d2608b94daca840c2e000
+    - current_digest: 9bc132e7cf1c8cb9f9f6907ef4d22606c1900e6c5a7d2608b94daca840c2e000
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610081258-YGP1DS
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610081258-YGP1DS --result verified-202610081258-YGP1DS --commit e90796bb0141e7df60ae0b1f04790440b5354bd0
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only the traced implementation commit through a new approved task if needed; preserve prior DONE evidence, stash and registered IO deviations."
   Findings: |-
     Read-only native investigation confirms CreateSelection uses box frame widths, not shared cell indices. Source formulas include integer midpoint and strict overlap/majority comparisons. Existing native InsertCol rejects unequal selected edges; this leaf does not promote that separate unsupported path. Earlier two exploratory searches referenced absent guessed paths and exited2; parent route was recomputed before any mutation. Standing user goal authorizes safe parity implementation; no fresh approval pause or new network access.
@@ -102,6 +182,8 @@ sections:
     Resolution: corrected key and recomputed route after terminal restoration. No external incident promotion.
 
     Actual-SHA review: implementation9479fd9fbbfe64e01e2f4b478e9e90bc205be11a; current-agent EVALUATOR explicitly not independent PASS. Exact current code bytes and three fresh coverage/case/scope reconstructions byte-identical without tests replay. Physical source791/299/96 lines. Two existing doctor warnings retained (hook shim readiness and historical DONE implementation hash); no modification to historical DONE tasks. Commit admission first returned E_GIT because semantic files were unstaged; route recomputed and exact approved5 semantic files staged, successful implementation9479fd9fbbfe. No partial commit or test replay for this local admission repair.
+
+    Lifecycle observation: canonical finish rejected with missing recorded blueprint verification despite task verificationOK and qualityPASS. Concrete verification details were recorded through supported ap verify flags without any test replay. The emitted task-complete route is used with the actual implementation SHA and a meaningful result to avoid the previously documented generic-close subject issue. Semantic scope/criteria/source bytes remain unchanged; no manual backend edits or hook bypass.
 id_source: "generated"
 ---
 ## Summary
@@ -136,6 +218,74 @@ Result: PASS after original failed literal correction; raw full-app/empty-admiss
 Evidence: bounded evidence JSON in this task; ignored node_modules cache contains actual raw source/maps/results/scripts only. No upstream copies or Python/scripts in AgentPlane.
 Scope: source-shaped physical flat-table selection, original cursor/box/paragraph ownership, mounted UI painting and formatting history. Explicit residual: full merged/nested/spanned/protected/layout mechanics and unequal-edge insertion unsupported; entire goal remains active.
 
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-08T13:33:03.558Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified: Actual9479fd9fbbfe native physical selection passed declared gates and exact-source100 coverage; recording concrete blueprint details after canonical finish reported missing blueprint verification evidence.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-08T13:30:34.364Z, excerpt_hash=sha256:da8dd989245eb18061c685f34abab64016184615c0493d4897bf8bd44bbd548d
+
+Details:
+
+Command: static6; one upstream-absent build/app/inventory/infra/Chromium full profile; original failed and genuinely new focused2 cases only; restored source5; scope/native/artifact/governance; current-agent actual-SHA EVALUATOR.
+Result: pass. App13822,inventory110,infra19,Chromium299; app/inventory all-four100;14 fresh cases,0 passing replay,11 focused skips/raw threshold exit retained.
+Evidence: .agentplane/tasks/202610081258-YGP1DS/evidence/final-coverage.json; case-census.json; quality-actual-sha.json; quality/20261008-132955749-recovery-context/quality-report.json. Exact implementation9479fd9fbbfe64e01e2f4b478e9e90bc205be11a, snapshot9bc132e7cf1c8cb9f9f6907ef4d22606c1900e6c5a7d2608b94daca840c2e000.
+Scope: five approved semantic paths,626 prior acceptance and311 metadata semantics preserved; pin/stash/protectedIO intact. Full native graph/layout and unequal-edge insertion remain unsupported; no goal promotion.
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610081258-YGP1DS/blueprint/resolved-snapshot.json
+- old_digest: 9bc132e7cf1c8cb9f9f6907ef4d22606c1900e6c5a7d2608b94daca840c2e000
+- current_digest: 9bc132e7cf1c8cb9f9f6907ef4d22606c1900e6c5a7d2608b94daca840c2e000
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610081258-YGP1DS
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610081258-YGP1DS --result verified-202610081258-YGP1DS --commit e90796bb0141e7df60ae0b1f04790440b5354bd0
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-08T13:33:41.565Z — VERIFY — ok
+
+By: CODER
+
+Note: Aligned physical native table selection and preserved original UI history
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-08T13:33:40.251Z, excerpt_hash=sha256:da8dd989245eb18061c685f34abab64016184615c0493d4897bf8bd44bbd548d
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610081258-YGP1DS/blueprint/resolved-snapshot.json
+- old_digest: 9bc132e7cf1c8cb9f9f6907ef4d22606c1900e6c5a7d2608b94daca840c2e000
+- current_digest: 9bc132e7cf1c8cb9f9f6907ef4d22606c1900e6c5a7d2608b94daca840c2e000
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610081258-YGP1DS
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610081258-YGP1DS --result verified-202610081258-YGP1DS --commit e90796bb0141e7df60ae0b1f04790440b5354bd0
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
+
 ## Rollback Plan
 
 Revert only the traced implementation commit through a new approved task if needed; preserve prior DONE evidence, stash and registered IO deviations.
@@ -154,3 +304,5 @@ Impact: no repo/runtime state changed by the in-memory error; full profile was n
 Resolution: corrected key and recomputed route after terminal restoration. No external incident promotion.
 
 Actual-SHA review: implementation9479fd9fbbfe64e01e2f4b478e9e90bc205be11a; current-agent EVALUATOR explicitly not independent PASS. Exact current code bytes and three fresh coverage/case/scope reconstructions byte-identical without tests replay. Physical source791/299/96 lines. Two existing doctor warnings retained (hook shim readiness and historical DONE implementation hash); no modification to historical DONE tasks. Commit admission first returned E_GIT because semantic files were unstaged; route recomputed and exact approved5 semantic files staged, successful implementation9479fd9fbbfe. No partial commit or test replay for this local admission repair.
+
+Lifecycle observation: canonical finish rejected with missing recorded blueprint verification despite task verificationOK and qualityPASS. Concrete verification details were recorded through supported ap verify flags without any test replay. The emitted task-complete route is used with the actual implementation SHA and a meaningful result to avoid the previously documented generic-close subject issue. Semantic scope/criteria/source bytes remain unchanged; no manual backend edits or hook bypass.
