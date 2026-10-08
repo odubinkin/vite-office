@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "202610080656-XDXRZG",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-08T07:18:37.313Z",
+  "verdict": "pass",
+  "summary": "Approved Writer dialog visual contract is implemented and verified in the built Chromium application.",
+  "evaluated_sha": "272b23346ded43aff673d38a76dbf5c8ee0fffc6",
+  "blueprint_digest": "4591aec1ec002772739b53271ec9ccc53e2a21062faae437567230e8116f30f0",
+  "findings": [
+    "Shared modal surfaces, padded content/actions and shrinkable responsive fields match Open/Export; no text/control collisions or horizontal overflow at the three declared viewports. Existing document handlers remain intact.",
+    "Exhaustive inventory now includes the shared heading and the existing collision panel. Source provenance, module boundaries, typecheck, lint, build, static smoke, doctor and policy routing pass."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610080656-XDXRZG/README.md",
+    "apps/office/e2e/writer-dialog-layout.spec.ts",
+    "test-results/dialog-parity.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Chromium at declared viewport sizes is verified; other browser engines and native LibreOffice parity are not claimed."
+  ]
+}
