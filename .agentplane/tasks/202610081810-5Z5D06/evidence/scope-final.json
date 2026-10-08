@@ -1,0 +1,283 @@
+{
+  "base": "b91bc49eb08b4ee0316f1149b708e2e7ccccc640",
+  "scopeCount": 37,
+  "semanticPaths": [
+    "apps/office/e2e/writer-native-table-text-flow-split.spec.ts",
+    "apps/office/src/sw/browser/editor/native-table-document-row.test.tsx",
+    "apps/office/src/sw/browser/filter/xml/native-row-split-item-transport.test.ts",
+    "apps/office/src/sw/browser/filter/xml/writer-table-item-codec.ts",
+    "apps/office/src/sw/browser/presentation/native-row-split-core-items.test.tsx",
+    "apps/office/src/sw/browser/presentation/native-table-border-changed-items.test.tsx",
+    "apps/office/src/sw/browser/presentation/native-table-properties-reset.test.tsx",
+    "apps/office/src/sw/browser/presentation/native-table-split-items.test.tsx",
+    "apps/office/src/sw/browser/presentation/native-table-text-flow-split.test.tsx",
+    "apps/office/src/sw/source/core/doc/doc.ts",
+    "apps/office/src/sw/source/core/docnode/native-row-frame-size.test.ts",
+    "apps/office/src/sw/source/core/docnode/native-row-height-owner.test.ts",
+    "apps/office/src/sw/source/core/docnode/native-row-split-items.test.ts",
+    "apps/office/src/sw/source/core/docnode/native-row-split-owner.test.ts",
+    "apps/office/src/sw/source/core/docnode/ndtbl1.ts",
+    "apps/office/src/sw/source/core/frmedt/fetab.ts",
+    "apps/office/src/sw/source/core/table/native-numeric-row-insertion.test.ts",
+    "apps/office/src/sw/source/core/table/swtable.ts",
+    "apps/office/src/sw/source/core/undo/native-numeric-row-insertion-history.test.ts",
+    "apps/office/src/sw/source/filter/xml/native-row-frame-size-roundtrip.test.ts",
+    "apps/office/src/sw/source/filter/xml/odt-table-roundtrip.test.ts",
+    "apps/office/src/sw/source/filter/xml/xmlexp.ts",
+    "apps/office/src/sw/source/filter/xml/xmltbli.ts",
+    "apps/office/src/sw/source/ui/table/native-table-text-flow-split.test.ts",
+    "apps/office/src/sw/source/ui/table/tabledlg.ts",
+    "apps/office/src/sw/source/uibase/shells/tabsh.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-row-height-owner-history.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-row-split-owner-history.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-height-command-separation.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-height-delta.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-layout-split-history.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-properties.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-text-flow-split-history.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-traversal.test.ts",
+    "apps/office/src/test/table-row-test-helpers.ts",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/source-provenance.json"
+  ],
+  "priorAcceptanceFiles": 645,
+  "byteIdenticalPriorAcceptanceFiles": 623,
+  "migrations": [
+    {
+      "path": "apps/office/e2e/writer-native-table-text-flow-split.spec.ts",
+      "originalSHA256": "dea3efba216bbfc2fc01c7a1bc3587451a54a84ec07c25585b110c3fc2daa185",
+      "currentSHA256": "8a94eee203ae4beaeccd600b14aaa7ea1b7cf1cafe93d66bc95bb69cbd418e31",
+      "wholeFileExactNativeRepresentationMigration": true,
+      "allOriginalAssertionCallsRetained": true,
+      "sourceBackedAdmissionCorrections": 0,
+      "allOtherOriginalExpectedValuesRetained": true,
+      "assertionCalls": 25
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/native-table-document-row.test.tsx",
+      "originalSHA256": "5b36b3aef57e8fc6023dd6a0d8f38624eabd0476548342a7226c924d264ca250",
+      "currentSHA256": "949b452a1a4a093d87485e6e1066b85e4eaef46896446ca83e38f634a2b7250d",
+      "wholeFileExactNativeRepresentationMigration": true,
+      "allOriginalAssertionCallsRetained": true,
+      "sourceBackedAdmissionCorrections": 0,
+      "allOtherOriginalExpectedValuesRetained": true,
+      "assertionCalls": 22
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/native-table-border-changed-items.test.tsx",
+      "originalSHA256": "a367fd42b17bb5c9ce4e5dc74756a33f53337c18707082af4280bb7f16bb2f2b",
+      "currentSHA256": "b22cdaacd27ed488b88159dd27331ccb92f1f5fb3189caa187cab63926104828",
+      "wholeFileExactNativeRepresentationMigration": true,
+      "allOriginalAssertionCallsRetained": true,
+      "sourceBackedAdmissionCorrections": 3,
+      "allOtherOriginalExpectedValuesRetained": true,
+      "assertionCalls": 64
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/native-table-properties-reset.test.tsx",
+      "originalSHA256": "b414a0bee3091c89615eab043764edfbe8f788586eaadca24d187b3d9ef1bc1a",
+      "currentSHA256": "7100e9b3257affcbe784715e697814d5431cc5fb487b2380c2608cfffb3b87ec",
+      "wholeFileExactNativeRepresentationMigration": true,
+      "allOriginalAssertionCallsRetained": true,
+      "sourceBackedAdmissionCorrections": 0,
+      "allOtherOriginalExpectedValuesRetained": true,
+      "assertionCalls": 38
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/native-table-split-items.test.tsx",
+      "originalSHA256": "ec5355f6976f4ee9e8dc886ac3be601c01043f423b98b52370c1defe900562fa",
+      "currentSHA256": "c80d78960a4329eab52709af02c4bb4b6514a42b00b2a220e90b07d1ad9a5deb",
+      "wholeFileExactNativeRepresentationMigration": true,
+      "allOriginalAssertionCallsRetained": true,
+      "sourceBackedAdmissionCorrections": 0,
+      "allOtherOriginalExpectedValuesRetained": true,
+      "assertionCalls": 28
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/native-table-text-flow-split.test.tsx",
+      "originalSHA256": "b5512f83c9ac49f0fea0b9fc4ad6ba0df57e39dbab6eb38ada4151dffd45ecb0",
+      "currentSHA256": "fd0c33a8d7aa441c6abedfb4b8c8a961c68975026d3c8665c78da055859b83e4",
+      "wholeFileExactNativeRepresentationMigration": true,
+      "allOriginalAssertionCallsRetained": true,
+      "sourceBackedAdmissionCorrections": 0,
+      "allOtherOriginalExpectedValuesRetained": true,
+      "assertionCalls": 23
+    },
+    {
+      "path": "apps/office/src/sw/source/core/docnode/native-row-frame-size.test.ts",
+      "originalSHA256": "034cc8eaa268c7f42a9efed4d630d67ca55e4e2f2af570d316ec399a2d9d91a5",
+      "currentSHA256": "ea0531b629bab68f890de09884c4b79bba6f322ad0c58b1733e3a12389ebf124",
+      "wholeFileExactNativeRepresentationMigration": true,
+      "allOriginalAssertionCallsRetained": true,
+      "sourceBackedAdmissionCorrections": 0,
+      "allOtherOriginalExpectedValuesRetained": true,
+      "assertionCalls": 31
+    },
+    {
+      "path": "apps/office/src/sw/source/core/docnode/native-row-height-owner.test.ts",
+      "originalSHA256": "716adc7a673e7daf690d3fdbc00a31747b2faaaaca7198530d5f48bb3a6f3041",
+      "currentSHA256": "896ee84e21108a41a9b8fa56ff5748c83b98f92d74ad0f2e5e7c20be80c826b3",
+      "wholeFileExactNativeRepresentationMigration": true,
+      "allOriginalAssertionCallsRetained": true,
+      "sourceBackedAdmissionCorrections": 0,
+      "allOtherOriginalExpectedValuesRetained": true,
+      "assertionCalls": 30
+    },
+    {
+      "path": "apps/office/src/sw/source/core/docnode/native-row-split-owner.test.ts",
+      "originalSHA256": "c3cf76e6cfb5d4262f04dd7a03b2a59521de411998c8e2fe3dad5811bcf2a484",
+      "currentSHA256": "031fefd5437dd29a395a41ae633bbd63296b154a9d6baebe9292565bebfb0e8e",
+      "wholeFileExactNativeRepresentationMigration": true,
+      "allOriginalAssertionCallsRetained": true,
+      "sourceBackedAdmissionCorrections": 0,
+      "allOtherOriginalExpectedValuesRetained": true,
+      "assertionCalls": 26
+    },
+    {
+      "path": "apps/office/src/sw/source/core/table/native-numeric-row-insertion.test.ts",
+      "originalSHA256": "f1670ab8c8823e2ae4291683119415bfe7619d29e10df8785b612d0aab891c79",
+      "currentSHA256": "abbca4c2359ffb1c3f3d7ddd88e2d492c1645f409141fb762414d967fa4c6770",
+      "wholeFileExactNativeRepresentationMigration": true,
+      "allOriginalAssertionCallsRetained": true,
+      "sourceBackedAdmissionCorrections": 0,
+      "allOtherOriginalExpectedValuesRetained": true,
+      "assertionCalls": 15
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/native-numeric-row-insertion-history.test.ts",
+      "originalSHA256": "bfa159ea3cac617f680b837d334280c3db091e806a2ef731e692db54a16c9fc7",
+      "currentSHA256": "b71b4e0dfe9a6679e6e9dca462767ad1a6df0407e983834d3d52afda7706dd02",
+      "wholeFileExactNativeRepresentationMigration": true,
+      "allOriginalAssertionCallsRetained": true,
+      "sourceBackedAdmissionCorrections": 0,
+      "allOtherOriginalExpectedValuesRetained": true,
+      "assertionCalls": 34
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/native-row-frame-size-roundtrip.test.ts",
+      "originalSHA256": "789f933a5f9ef3339928c92e93f2b611b8b06d3d3d8105596f876889575a1695",
+      "currentSHA256": "f9c65110a35780590b5194f0eee9f2e3299d7b7cdb9df1374011d9300cb15874",
+      "wholeFileExactNativeRepresentationMigration": true,
+      "allOriginalAssertionCallsRetained": true,
+      "sourceBackedAdmissionCorrections": 0,
+      "allOtherOriginalExpectedValuesRetained": true,
+      "assertionCalls": 16
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/odt-table-roundtrip.test.ts",
+      "originalSHA256": "8c27063b737f96de76a6a7d8f6a8a7b6de3ba392afcf1a43414ef225255e1873",
+      "currentSHA256": "343257e1686f7e5d85eb25f81d2f112290297857a60ae16ba6a5ab656cc3af37",
+      "wholeFileExactNativeRepresentationMigration": true,
+      "allOriginalAssertionCallsRetained": true,
+      "sourceBackedAdmissionCorrections": 0,
+      "allOtherOriginalExpectedValuesRetained": true,
+      "assertionCalls": 55
+    },
+    {
+      "path": "apps/office/src/sw/source/ui/table/native-table-text-flow-split.test.ts",
+      "originalSHA256": "ff00259ceb49659228e32867897dee3b7b6c6b4279ca26cfb4a877af7f800c5b",
+      "currentSHA256": "11b463270b44a7f1166576a56980e2d5ed3767462aa52ad96941066f44972899",
+      "wholeFileExactNativeRepresentationMigration": true,
+      "allOriginalAssertionCallsRetained": true,
+      "sourceBackedAdmissionCorrections": 0,
+      "allOtherOriginalExpectedValuesRetained": true,
+      "assertionCalls": 30
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-row-height-owner-history.test.ts",
+      "originalSHA256": "878425182ba002df22098efc8d273926f2972db274a3ecee79914b8006403da2",
+      "currentSHA256": "0bb1df61e3ed4d0ffc3ae2c14de1b561f623f70a65eff73dc62bcf015edcc354",
+      "wholeFileExactNativeRepresentationMigration": true,
+      "allOriginalAssertionCallsRetained": true,
+      "sourceBackedAdmissionCorrections": 0,
+      "allOtherOriginalExpectedValuesRetained": true,
+      "assertionCalls": 22
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-row-split-owner-history.test.ts",
+      "originalSHA256": "869bd96a478cc900bf2282337c7f4f6639f84f7ee436751b625e31a10f5f5e18",
+      "currentSHA256": "7f58591c041ea67ce257fe957b9d2621c42f43638d8ea57f3f8f720fc69de2c1",
+      "wholeFileExactNativeRepresentationMigration": true,
+      "allOriginalAssertionCallsRetained": true,
+      "sourceBackedAdmissionCorrections": 0,
+      "allOtherOriginalExpectedValuesRetained": true,
+      "assertionCalls": 25
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-height-command-separation.test.ts",
+      "originalSHA256": "397d605db013bc1d404069dfe1eae070986b126bff09730b6371b3d0d9801c36",
+      "currentSHA256": "e0e531ec59694bcf79fe58901e57fd0dde769c92a242a5aa2fd15f65eed265a9",
+      "wholeFileExactNativeRepresentationMigration": true,
+      "allOriginalAssertionCallsRetained": true,
+      "sourceBackedAdmissionCorrections": 0,
+      "allOtherOriginalExpectedValuesRetained": true,
+      "assertionCalls": 26
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-height-delta.test.ts",
+      "originalSHA256": "11e29323f29b0f24d497b2c6c7c16d46878f422ae571502202b8da43cdd6125a",
+      "currentSHA256": "a928e19ceb6be3465b2f65fa62a312598ab1d6f890fb468b3c9392952a880f72",
+      "wholeFileExactNativeRepresentationMigration": true,
+      "allOriginalAssertionCallsRetained": true,
+      "sourceBackedAdmissionCorrections": 0,
+      "allOtherOriginalExpectedValuesRetained": true,
+      "assertionCalls": 22
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-layout-split-history.test.ts",
+      "originalSHA256": "e583a59b78a866bf26dd119536873b98cd3ca54a008e8466a8a4cbab52c0ecba",
+      "currentSHA256": "7c6321915e59086623ea7e807966084a2c68a4a2781184a068e807b6cad39ed1",
+      "wholeFileExactNativeRepresentationMigration": true,
+      "allOriginalAssertionCallsRetained": true,
+      "sourceBackedAdmissionCorrections": 0,
+      "allOtherOriginalExpectedValuesRetained": true,
+      "assertionCalls": 21
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-properties.test.ts",
+      "originalSHA256": "c59fb7ef95312fe7b98ff174e4d0225e21bd43569bcf272fb860c73e71c72bca",
+      "currentSHA256": "8a85a6f2b2f3e054f8b24fa6e24e08701f96a23513b31e51b57dea4c5a49d1af",
+      "wholeFileExactNativeRepresentationMigration": true,
+      "allOriginalAssertionCallsRetained": true,
+      "sourceBackedAdmissionCorrections": 0,
+      "allOtherOriginalExpectedValuesRetained": true,
+      "assertionCalls": 43
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-text-flow-split-history.test.ts",
+      "originalSHA256": "530d8d480943d0e011e3ce787c8669ef83e5e6470e8644cdfd4c84849c0d4605",
+      "currentSHA256": "993ca7d9ecac49ac4605e8580737a2a086b05b3b871ff87e69297a6bb0e28fd3",
+      "wholeFileExactNativeRepresentationMigration": true,
+      "allOriginalAssertionCallsRetained": true,
+      "sourceBackedAdmissionCorrections": 0,
+      "allOtherOriginalExpectedValuesRetained": true,
+      "assertionCalls": 25
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-traversal.test.ts",
+      "originalSHA256": "89df9f96c56b691c9a7cc21a1daf656ea40d1012c9f095ff1f15202ac0e8b321",
+      "currentSHA256": "91352a8f42e0ee0f3693720d3e32567967d616c4d51c8d64b3d4aa08e0d84cfd",
+      "wholeFileExactNativeRepresentationMigration": true,
+      "allOriginalAssertionCallsRetained": true,
+      "sourceBackedAdmissionCorrections": 0,
+      "allOtherOriginalExpectedValuesRetained": true,
+      "assertionCalls": 116
+    }
+  ],
+  "freshAcceptanceFiles": 3,
+  "metadata": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "originalRecords": 315,
+      "currentRecords": 315,
+      "allPriorFieldsPrefixesStatesDefaultsClassesPreserved": true
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "originalRecords": 315,
+      "currentRecords": 315,
+      "allPriorFieldsPrefixesStatesDefaultsClassesPreserved": true
+    }
+  ],
+  "allChecksPassed": true
+}
