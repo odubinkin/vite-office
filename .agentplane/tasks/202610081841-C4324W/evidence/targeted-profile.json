@@ -1,0 +1,144 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/svl/source/notify/SfxBroadcaster.ts": "30cf518a903b1f4215155072d7178ed6e5a2f21785aaa6e90d4c4e605cc0ca94",
+    "apps/office/src/sw/source/core/attr/format.ts": "adf62cb70fa66a90763cdbfac9a49421c02f3304bc80a0a6ae3ee4758d9b01a5",
+    "apps/office/src/sw/source/core/layout/atrfrm.ts": "e0b43ecbc5e55d87b01474d9a52ef06c2ee0103753b93c0748795b54583dbee2",
+    "apps/office/src/sw/source/core/attr/swatrset.ts": "58fdaef6fd48471fb604caca543613d79b881d6df57bae4b65ec965ff1a6b414",
+    "apps/office/src/sw/source/core/table/swtable.ts": "475ab9741d3e755578afef916d0638743c532cd4ca04cdfaed854fe895719551",
+    "apps/office/src/sw/source/core/docnode/nodes.ts": "c0f1a2957f2f67fa9528eb091a9b7418b451176befa036f7e740a5234b68936e",
+    "apps/office/src/sw/source/core/docnode/ndtbl1.ts": "93227fccb0bde9c24681bbb79dd6528d58f946e8d7df5494974cb0c1330e7b93",
+    "apps/office/src/sw/source/core/doc/doc.ts": "f5c8645073f3c2556fc834f3cc75066e1b2445121bb3c31068803e7974e5e562",
+    "apps/office/src/sw/source/core/undo/untbl.ts": "f64ed09566d057e7a7683291f67e3868f24c72f09521630430aeb848cbe6fdce",
+    "apps/office/src/sw/source/filter/xml/xmltbli.ts": "1ddfddc04811f5a0a7cba6a61fbc5c6c0902a37af71f800793d9846bf975f177",
+    "apps/office/src/sw/browser/filter/xml/writer-table-item-codec.ts": "101359a867c05df95e39222865695e7a577d8caad9a9bab75c6ce19a2a0f7397",
+    "apps/office/src/sw/inc/swtblfmt.ts": "af4ae9d20bc7ac2f1448b10f307f5bd7a93d9b3c9cb6afc5d52fa4b815ec79b9",
+    "apps/office/src/sw/source/core/table/native-column-insertion.test.ts": "ef114135236288f3f23a10abafb9aa74aae146054f6065861dfb14a5f87f3476",
+    "apps/office/src/sw/source/core/table/native-row-frame-format.test.ts": "79b36744b155d73cbb72024c9d7f349b7c268acd8707cb85d75c6f0fb4b925b9",
+    "apps/office/src/sw/source/core/undo/native-row-frame-format-history.test.ts": "bc2e1d01916cc45dedf67db4f36b7ded095fdee5807510a8f9c6ab8983bc21f3",
+    "apps/office/src/sw/browser/presentation/native-row-frame-format.test.tsx": "9a709d26a9406b477d7e5e986b89ba7bc037dbf70558365c64b88e09637fac0d",
+    "apps/office/src/test/table-row-test-helpers.ts": "c0c3426c3013e448c3b1851d1307fb209665e009a39aad4c73d25227314ff83f",
+    "docs/program/source-provenance.json": "c927bb778955f4865702efb354512fc7bd695ec1385e3c0076e816540f7e7af9",
+    "docs/program/parity/runtime-inventory.json": "0617c773ecb00f05438ccd014b10a063b1a1564f908defd3f81e20e516944f35"
+  },
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1443,
+      "sha256": "aab6ab4ff9a68f092fa9d01751ced57204c2dd4f208ee9323f90cdb40ea54b7d",
+      "totals": [],
+      "failedCases": [],
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/source/core/table/native-row-frame-format.test.ts src/sw/source/core/undo/native-row-frame-format-history.test.ts src/sw/browser/presentation/native-row-frame-format.test.tsx src/sw/source/core/docnode/native-row-split-items.test.ts src/sw/browser/filter/xml/native-row-split-item-transport.test.ts src/sw/browser/presentation/native-row-split-core-items.test.tsx src/sw/browser/editor/native-table-document-row.test.tsx src/sw/browser/presentation/native-table-split-items.test.tsx src/sw/browser/presentation/native-table-properties-reset.test.tsx src/sw/browser/presentation/native-table-text-flow-split.test.tsx src/sw/source/filter/xml/native-row-frame-size-roundtrip.test.ts src/sw/source/filter/xml/odt-table-roundtrip.test.ts src/sw/source/uibase/wrtsh/native-row-split-owner-history.test.ts src/sw/source/core/undo/native-numeric-row-insertion-history.test.ts src/sw/source/uibase/wrtsh/native-table-traversal.test.ts src/sw/source/uibase/wrtsh/native-table-height-delta.test.ts src/sw/source/uibase/wrtsh/native-table-layout-split-history.test.ts src/sw/source/uibase/wrtsh/native-row-height-owner-history.test.ts src/sw/source/ui/table/native-table-text-flow-split.test.ts src/sw/source/uibase/wrtsh/native-table-properties.test.ts src/sw/source/uibase/wrtsh/native-table-height-command-separation.test.ts src/sw/source/core/docnode/native-row-height-owner.test.ts src/sw/source/core/table/native-numeric-row-insertion.test.ts src/sw/source/core/docnode/native-row-split-owner.test.ts src/sw/source/uibase/wrtsh/native-table-text-flow-split-history.test.ts src/sw/source/core/docnode/native-row-frame-size.test.ts src/sw/browser/presentation/native-table-border-changed-items.test.tsx src/sw/inc/native-table-split-items.test.ts src/sw/source/uibase/shells/native-table-property-item-input.test.ts src/sw/source/core/layout/native-table-layout-split.test.ts src/sw/browser/editor/native-table-layout-split.test.tsx src/sw/browser/editor/native-row-frame-size.test.tsx src/sw/browser/editor/native-numeric-row-insertion.test.tsx src/sw/browser/presentation/native-row-height-dialog.test.tsx src/sw/browser/presentation/native-table-height-delta.test.tsx src/sw/browser/presentation/native-table-property-output.test.tsx src/sw/browser/presentation/native-independent-table-properties.test.tsx src/sw/source/filter/xml/odt-table-alignment.test.ts src/sw/source/filter/xml/odt-table-cell-lists.test.ts src/sw/source/ui/table/native-table-property-output.test.ts src/sw/source/ui/table/native-row-height-dialog.test.ts src/svl/source/notify/notify.test.ts src/sw/source/core/table/native-column-insertion.test.ts src/sw/source/core/attr/internet-pool-default.test.ts src/sw/source/core/attr/list-restart-default.test.ts --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/C4324W.app-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 45672,
+      "sha256": "d16ddb2a5462bb887a1083d2546e64104ec3a4695e5c32132f20bceef0e421a2",
+      "totals": [
+        "Test Files  2 failed | 43 passed (45)",
+        "Tests  4 failed | 293 passed (297)"
+      ],
+      "failedCases": [
+        {
+          "name": "apps/office/src/sw/browser/presentation/native-row-frame-format.test.tsx > mounted split dialog mutates native shared row item sets and reconstructs history selected=false",
+          "assertion": [
+            "Error: SwPosition content offset is outside its node."
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/browser/presentation/native-row-frame-format.test.tsx > mounted split dialog mutates native shared row item sets and reconstructs history selected=true",
+          "assertion": [
+            "Error: SwPosition content offset is outside its node."
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/source/core/undo/native-row-frame-format-history.test.ts > undo restores independent complete native attributes and indexed shared topology authored=false",
+          "assertion": [
+            "Error: SwPosition content offset is outside its node."
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/source/core/undo/native-row-frame-format-history.test.ts > undo restores independent complete native attributes and indexed shared topology authored=true",
+          "assertion": [
+            "Error: SwPosition content offset is outside its node."
+          ]
+        }
+      ],
+      "caseCounts": {
+        "passed": 293,
+        "failed": 4,
+        "skipped": 0,
+        "total": 297
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 17541,
+          "covered": 10523,
+          "skipped": 0,
+          "pct": 59.99
+        },
+        "statements": {
+          "total": 19261,
+          "covered": 11164,
+          "skipped": 0,
+          "pct": 57.96
+        },
+        "functions": {
+          "total": 4410,
+          "covered": 2737,
+          "skipped": 0,
+          "pct": 62.06
+        },
+        "branches": {
+          "total": 14299,
+          "covered": 7248,
+          "skipped": 0,
+          "pct": 50.68
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverage": {
+        "lines": 59.99,
+        "statements": 57.96,
+        "functions": 62.06,
+        "branches": 50.68
+      },
+      "incompleteFileCount": 261,
+      "coverageMapSHA256": "132e8c50ebe0f55e71ae77c46758e4b87f1e0049e6980b0a3210653cafb8fe11",
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts writer-native-table-text-flow-split.spec.ts writer-native-table-layout-split.spec.ts writer-native-row-frame-size.spec.ts writer-native-document-row.spec.ts writer-native-table-tab.spec.ts --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 2497,
+      "sha256": "1577f11e0fcfd53447b72324d0c776e99079ad62a3090ddb5453afec339f6e17",
+      "totals": [
+        "11 passed (8.8s)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "startTime": "2026-10-08T18:56:20.591Z",
+        "duration": 8831.946,
+        "expected": 11,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "unhandledErrorCount": 0
+    }
+  ]
+}
