@@ -48,8 +48,8 @@
         "pct": "Unknown"
       }
     },
-    "mapSHA256": "47f8d55494ee3b8327fcfa9374cd7ad5a795c642333bd18b729578021882fda1",
-    "proofSHA256": "5e74f9ed7832e598d32f43665446f26195eda89c484c9716ff1d7a6a755809b9",
+    "mapSHA256": "2e657fd846d9ee3ef055cb6a72e65277b1ea6731b698be7380927724207d0750",
+    "proofSHA256": "2e867b77f005238ce7e2eb3a445a50d50ce68bb41e514c22031262d98a41a1f5",
     "files": 313,
     "invalidWholeFallbacks": [
       {
@@ -57,7 +57,7 @@
         "reason": "V8 raw inferred else counter is negative; use entire prior verified current-byte-identical source and entire maps/counters, never sanitize individual counts",
         "priorMap": "5Z5D06.app-final.json",
         "priorMapSHA256": "08535a6eff692a93c286256dd1d69def34ce2199eeb0fe042c698dc5b9e80bfd",
-        "discardedInvalidAggregateSHA256": "ba6e26d41a29cdbd82c80608fdfe139634baa387f9514dd284ec83b40f3ff738",
+        "discardedInvalidAggregateSHA256": "d8661f561ff54fa8ad7427e1ea5a1337f2ded4ed47eee8d1e0150d7aa6c28bde",
         "negativeCounts": [
           -62
         ]
