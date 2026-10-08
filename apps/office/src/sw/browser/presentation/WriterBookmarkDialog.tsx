@@ -1,5 +1,6 @@
 /** @fileoverview Browser counterpart of pinned Writer insertbookmark.ui and bookmarkmenu.ui. */
 
+import { WriterDialogHeader } from "./WriterDialogHeader";
 import { useEffect, useState } from "react";
 import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
 import type { WriterBookmarkDialogResult } from "../../source/uibase/dialog/writer-dialog-controller";
@@ -49,7 +50,7 @@ export function WriterBookmarkDialog({
     >
       <form
         data-writer-modal-panel="true"
-        className="w-full max-w-md rounded-xl bg-white p-5 shadow-2xl"
+        className="w-full max-w-md bg-white"
         onSubmit={
           /** Creates a unique bookmark from the name field. @param event - Submit event. @returns Nothing. */
           (event) => {
@@ -59,49 +60,52 @@ export function WriterBookmarkDialog({
           }
         }
       >
-        <h2 className="text-lg font-bold text-slate-950">
-          {localization.GetText("writer.bookmark.title", "Bookmark")}
-        </h2>
-        <label className="mt-4 grid gap-1 text-sm font-semibold text-slate-700">
-          {localization.GetText("writer.bookmark.name", "Name")}
-          <input
-            className="rounded-md border border-slate-300 px-3 py-2 font-normal"
-            id="writer-bookmark-name"
-            onChange={
-              /** Updates the proposed bookmark name. @param event - Input event. @returns Nothing. */
-              (event) => setName(event.target.value)
-            }
-            value={name}
-          />
-        </label>
-        <label className="mt-4 grid gap-1 text-sm font-semibold text-slate-700">
-          {localization.GetText("writer.bookmark.existing", "Existing bookmarks")}
-          <select
-            aria-label={localization.GetText("writer.bookmark.existing", "Existing bookmarks")}
-            className="rounded-md border border-slate-300 px-3 py-2 font-normal"
-            onChange={
-              /** Selects one document mark. @param event - Selection event. @returns Nothing. */
-              (event) => {
-                setSelected(event.target.value);
-                setName(event.target.value);
+        <WriterDialogHeader
+          title={localization.GetText("writer.bookmark.title", "Bookmark")}
+          onClose={onCancel}
+        />
+        <div className="writer-dialog-content">
+          <label className="grid gap-1 text-sm font-semibold text-slate-700">
+            {localization.GetText("writer.bookmark.name", "Name")}
+            <input
+              className="rounded-md border border-slate-300 px-3 py-2 font-normal"
+              id="writer-bookmark-name"
+              onChange={
+                /** Updates the proposed bookmark name. @param event - Input event. @returns Nothing. */
+                (event) => setName(event.target.value)
               }
-            }
-            value={selected}
-          >
-            <option value="">
-              {localization.GetText("writer.bookmark.choose", "Choose a bookmark")}
-            </option>
-            {names.map(
-              /** Renders one mark. @param entry - Name. @returns Option. */
-              (entry) => (
-                <option key={entry} value={entry}>
-                  {entry}
-                </option>
-              ),
-            )}
-          </select>
-        </label>
-        <div className="mt-5 flex flex-wrap justify-end gap-2">
+              value={name}
+            />
+          </label>
+          <label className="grid gap-1 text-sm font-semibold text-slate-700">
+            {localization.GetText("writer.bookmark.existing", "Existing bookmarks")}
+            <select
+              aria-label={localization.GetText("writer.bookmark.existing", "Existing bookmarks")}
+              className="rounded-md border border-slate-300 px-3 py-2 font-normal"
+              onChange={
+                /** Selects one document mark. @param event - Selection event. @returns Nothing. */
+                (event) => {
+                  setSelected(event.target.value);
+                  setName(event.target.value);
+                }
+              }
+              value={selected}
+            >
+              <option value="">
+                {localization.GetText("writer.bookmark.choose", "Choose a bookmark")}
+              </option>
+              {names.map(
+                /** Renders one mark. @param entry - Name. @returns Option. */
+                (entry) => (
+                  <option key={entry} value={entry}>
+                    {entry}
+                  </option>
+                ),
+              )}
+            </select>
+          </label>
+        </div>
+        <div className="writer-dialog-actions">
           <button
             className="rounded-md border border-slate-300 px-3 py-2 text-sm"
             onClick={onCancel}
@@ -148,7 +152,7 @@ export function WriterBookmarkDialog({
             {localization.GetText("writer.bookmark.rename", "Rename")}
           </button>
           <button
-            className="rounded-md bg-indigo-700 px-3 py-2 text-sm font-semibold text-white"
+            className="writer-dialog-primary"
             disabled={candidate.length === 0 || names.includes(candidate)}
             type="submit"
           >

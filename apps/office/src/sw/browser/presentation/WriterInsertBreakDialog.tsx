@@ -1,5 +1,6 @@
 /** @fileoverview Browser counterpart of pinned Writer insertbreak.ui for the supported hard page break. */
 
+import { WriterDialogHeader } from "./WriterDialogHeader";
 import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
 
 /** Presents the page-break choice while keeping imported soft hints separate. @param props - Completion callbacks. @returns Accessible modal. */
@@ -27,7 +28,7 @@ export function WriterInsertBreakDialog({
     >
       <form
         data-writer-modal-panel="true"
-        className="w-full max-w-sm rounded-xl bg-white p-5 shadow-2xl"
+        className="w-full max-w-sm bg-white"
         onSubmit={
           /** Accepts the supported page break. @param event - Submit event. @returns Nothing. */
           (event) => {
@@ -36,19 +37,22 @@ export function WriterInsertBreakDialog({
           }
         }
       >
-        <h2 className="text-lg font-bold text-slate-950">
-          {localization.GetText("writer.insert-break.title", "Insert Break")}
-        </h2>
-        <fieldset className="mt-4 rounded-md border border-slate-300 p-3">
-          <legend className="px-1 text-sm font-semibold">
-            {localization.GetText("writer.insert-break.type", "Type")}
-          </legend>
-          <label className="flex items-center gap-2 text-sm">
-            <input checked readOnly type="radio" />
-            {localization.GetText("writer.insert-break.page", "Page break")}
-          </label>
-        </fieldset>
-        <div className="mt-5 flex justify-end gap-2">
+        <WriterDialogHeader
+          title={localization.GetText("writer.insert-break.title", "Insert Break")}
+          onClose={onCancel}
+        />
+        <div className="writer-dialog-content">
+          <fieldset className="rounded-md border border-slate-300 p-3">
+            <legend className="px-1 text-sm font-semibold">
+              {localization.GetText("writer.insert-break.type", "Type")}
+            </legend>
+            <label className="flex items-center gap-2 text-sm">
+              <input checked readOnly type="radio" />
+              {localization.GetText("writer.insert-break.page", "Page break")}
+            </label>
+          </fieldset>
+        </div>
+        <div className="writer-dialog-actions">
           <button
             className="rounded-md border border-slate-300 px-4 py-2 text-sm"
             onClick={onCancel}
@@ -56,10 +60,7 @@ export function WriterInsertBreakDialog({
           >
             {localization.GetText("writer.common.cancel", "Cancel")}
           </button>
-          <button
-            className="rounded-md bg-indigo-700 px-4 py-2 text-sm font-semibold text-white"
-            type="submit"
-          >
+          <button className="writer-dialog-primary" type="submit">
             {localization.GetText("writer.insert-break.insert", "Insert")}
           </button>
         </div>

@@ -1,4 +1,5 @@
 /** @fileoverview Presents the native SwTableHeightDlg controls from Writer rowheight.ui. */
+import { WriterDialogHeader } from "./WriterDialogHeader";
 import { useEffect, useRef, useState } from "react";
 import type { SwTableHeightDlg } from "../../source/ui/table/rowht";
 
@@ -41,7 +42,7 @@ export function WriterRowHeightDialog({
     >
       <form
         data-writer-modal-panel="true"
-        className="w-full max-w-sm space-y-4 rounded-xl bg-white p-5 shadow-2xl"
+        className="w-full max-w-sm bg-white"
         onSubmit={
           /** Accepts the native draft through its owner. @param event - Form event. @returns Nothing. */
           (event) => {
@@ -50,58 +51,60 @@ export function WriterRowHeightDialog({
           }
         }
       >
-        <h2 className="text-lg font-bold">Row Height</h2>
-        <fieldset className="grid gap-3 rounded border p-3">
-          <legend className="px-1 font-bold">Height</legend>
-          <input
-            ref={input}
-            aria-label="Height (cm)"
-            title="Enter the height that you want for the selected row(s)."
-            className="w-28 rounded border px-2 py-1"
-            type="number"
-            min="0.04"
-            max="99"
-            step="0.01"
-            value={Math.round(((draft.height * 2.54) / 1440) * 100) / 100}
-            onChange={
-              /** Dispatches metric input to the native draft. @param event - Height input. @returns Nothing. */
-              (event) => {
-                draft.SetHeight((Number(event.target.value) * 1440) / 2.54);
-                refresh(
-                  /** Presents accepted native metric state. @param version - Previous render. @returns Next render. */ (
-                    version,
-                  ) => version + 1,
-                );
-              }
-            }
-          />
-          <label className="flex items-center gap-2 text-sm">
+        <WriterDialogHeader title="Row Height" onClose={onCancel} />
+        <div className="writer-dialog-content">
+          <fieldset className="grid gap-3 rounded border p-3">
+            <legend className="px-1 font-bold">Height</legend>
             <input
-              type="checkbox"
-              checked={draft.fit}
-              title="Automatically adjusts the row height to match the contents of the cells."
+              ref={input}
+              aria-label="Height (cm)"
+              title="Enter the height that you want for the selected row(s)."
+              className="w-28 rounded border px-2 py-1"
+              type="number"
+              min="0.04"
+              max="99"
+              step="0.01"
+              value={Math.round(((draft.height * 2.54) / 1440) * 100) / 100}
               onChange={
-                /** Updates the native automatic height flag. @param event - Fit toggle. @returns Nothing. */
+                /** Dispatches metric input to the native draft. @param event - Height input. @returns Nothing. */
                 (event) => {
-                  draft.SetFit(event.target.checked);
+                  draft.SetHeight((Number(event.target.value) * 1440) / 2.54);
                   refresh(
-                    /** Presents the native fit state. @param version - Previous render. @returns Next render. */ (
+                    /** Presents accepted native metric state. @param version - Previous render. @returns Next render. */ (
                       version,
                     ) => version + 1,
                   );
                 }
               }
             />
-            Fit to size
-          </label>
-        </fieldset>
-        {help ? (
-          <p role="note" className="text-sm">
-            Changes the height of the selected row(s). Fit to size automatically adjusts the row
-            height to match the contents of the cells.
-          </p>
-        ) : null}
-        <div className="flex gap-2">
+            <label className="flex items-center gap-2 text-sm">
+              <input
+                type="checkbox"
+                checked={draft.fit}
+                title="Automatically adjusts the row height to match the contents of the cells."
+                onChange={
+                  /** Updates the native automatic height flag. @param event - Fit toggle. @returns Nothing. */
+                  (event) => {
+                    draft.SetFit(event.target.checked);
+                    refresh(
+                      /** Presents the native fit state. @param version - Previous render. @returns Next render. */ (
+                        version,
+                      ) => version + 1,
+                    );
+                  }
+                }
+              />
+              Fit to size
+            </label>
+          </fieldset>
+          {help ? (
+            <p role="note" className="text-sm">
+              Changes the height of the selected row(s). Fit to size automatically adjusts the row
+              height to match the contents of the cells.
+            </p>
+          ) : null}
+        </div>
+        <div className="writer-dialog-actions">
           <button
             type="button"
             className="mr-auto rounded border px-3 py-1"
@@ -115,7 +118,7 @@ export function WriterRowHeightDialog({
           <button type="button" className="rounded border px-3 py-1" onClick={onCancel}>
             Cancel
           </button>
-          <button type="submit" className="rounded bg-slate-900 px-3 py-1 text-white">
+          <button type="submit" className="writer-dialog-primary">
             OK
           </button>
         </div>

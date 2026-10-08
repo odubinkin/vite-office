@@ -4955,6 +4955,27 @@
       "evidence": {
         "local": [
           {
+            "marker": "WriterDialogHeader",
+            "path": "apps/office/src/sw/browser/presentation/WriterDialogHeader.tsx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/browser/presentation/WriterDialogHeader.tsx",
+      "rationale": "Shares the Open document visual heading across browser-owned Writer modal panels.",
+      "responsibilities": [
+        "Renders a title, optional description and non-submitting close button."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "React and browser DOM render modal headings in place of native VCL widgets."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
             "marker": "WriterFileDialog",
             "path": "apps/office/src/sw/browser/presentation/WriterFileDialog.tsx"
           }
@@ -5170,6 +5191,27 @@
       "stackDivergence": {
         "kind": "browser-adaptation",
         "rationale": "React and DOM controls replace native VCL widgets."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
+            "marker": "WriterNameCollisionPanel",
+            "path": "apps/office/src/sw/browser/presentation/WriterNameCollisionPanel.tsx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/browser/presentation/WriterNameCollisionPanel.tsx",
+      "rationale": "Presents the existing browser-owned document-title collision choices shared by import and rename.",
+      "responsibilities": [
+        "Collects an alternative title or forwards explicit overwrite and cancel choices to existing browser lifecycle owners."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Browser document identity and storage collision choices follow the registered local lifecycle policy."
       },
       "status": "local-only"
     },

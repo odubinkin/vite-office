@@ -20,6 +20,7 @@ import { WriterRowHeightDialog } from "./WriterRowHeightDialog";
 import { SwTableHeightDlg } from "../../source/ui/table/rowht";
 import { WriterLineNumberingDialog } from "./WriterLineNumberingDialog";
 import { WriterFileDialog } from "./WriterFileDialog";
+import { WriterDialogHeader } from "./WriterDialogHeader";
 import { WriterNameCollisionPanel } from "./WriterNameCollisionPanel";
 import type {
   WriterFileDialogController,
@@ -819,10 +820,20 @@ export function WriterWorkbench({
         <div
           aria-label="Resolve document name"
           aria-modal="true"
+          data-writer-modal="true"
           className="fixed inset-0 z-[70] grid place-items-center bg-slate-950/50 p-4 backdrop-blur-[2px]"
           role="dialog"
         >
-          <div className="w-full max-w-xl overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl">
+          <div data-writer-modal-panel="true" className="w-full max-w-xl bg-white">
+            <WriterDialogHeader
+              title="Resolve document name"
+              onClose={
+                /** Cancels the pending title change from the heading. @returns Nothing. */ () => {
+                  setRenameCollision(undefined);
+                  setRenameError(undefined);
+                }
+              }
+            />
             <WriterNameCollisionPanel
               busy={renameBusy}
               conflictingTitle={renameCollision.conflicting.title}

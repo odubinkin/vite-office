@@ -1,7 +1,8 @@
 /** @fileoverview Browser file dialogs for opening, copying, and exporting Writer documents. */
 
+import { WriterDialogHeader } from "./WriterDialogHeader";
 import { useEffect, useRef, useState, type KeyboardEvent } from "react";
-import { FileText, HardDrive, MonitorUp, Upload, X } from "lucide-react";
+import { FileText, HardDrive, MonitorUp, Upload } from "lucide-react";
 import { createDocument } from "../../../sfx2/source/doc/objsh";
 import { readBrowserFile } from "../../../vcl/browser/browser-file";
 import { SwDocShell } from "../../source/uibase/app/docsh";
@@ -183,32 +184,19 @@ interface PendingWriterImport {
         data-writer-modal-panel="true"
         className="w-full max-w-xl overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl"
       >
-        <div className="flex items-start justify-between border-b border-slate-200 px-6 py-5">
-          <div>
-            <h2 className="text-xl font-bold text-slate-950">
-              {kind === "open"
-                ? "Open document"
-                : kind === "export"
-                  ? "Export document"
-                  : "Save As"}
-            </h2>
-            {kind === "open" ? (
-              <p className="mt-1 text-sm text-slate-500">
-                Choose a saved document or import a file.
-              </p>
-            ) : kind === "export" ? (
-              <p className="mt-1 text-sm text-slate-500">Choose a format to download.</p>
-            ) : null}
-          </div>
-          <button
-            aria-label="Close"
-            className="rounded-lg p-2 text-slate-500 hover:bg-slate-100 hover:text-slate-950 focus-visible:outline-2 focus-visible:outline-indigo-600"
-            onClick={onClose}
-            type="button"
-          >
-            <X aria-hidden="true" className="h-5 w-5" />
-          </button>
-        </div>
+        <WriterDialogHeader
+          title={
+            kind === "open" ? "Open document" : kind === "export" ? "Export document" : "Save As"
+          }
+          description={
+            kind === "open"
+              ? "Choose a saved document or import a file."
+              : kind === "export"
+                ? "Choose a format to download."
+                : "Save a separate copy in this browser."
+          }
+          onClose={onClose}
+        />
         {kind === "open" && pendingImport !== undefined ? (
           <WriterNameCollisionPanel
             busy={busy}
@@ -435,7 +423,6 @@ interface PendingWriterImport {
           </div>
         ) : kind === "save-as" ? (
           <form
-            className="mt-4 grid gap-3"
             onSubmit={
               /**
                * Handles the Writer browser operation.
@@ -456,29 +443,32 @@ interface PendingWriterImport {
               }
             }
           >
-            <label className="grid gap-1">
-              New copy name
-              <input
-                autoFocus
-                className="rounded border p-2"
-                onChange={
-                  /**
-                   * Handles the Writer browser operation.
-                   * @param event - Input value.
-                   * @returns Operation result.
-                   */ (event) => setTitle(event.target.value)
-                }
-                required
-                value={title}
-              />
-            </label>
-            <button
-              className="rounded bg-indigo-600 px-3 py-2 text-white"
-              disabled={busy}
-              type="submit"
-            >
-              Save copy
-            </button>
+            <div className="writer-dialog-content">
+              <label className="grid gap-1 text-sm font-semibold text-slate-700">
+                New copy name
+                <input
+                  autoFocus
+                  className="rounded border p-2"
+                  onChange={
+                    /**
+                     * Handles the Writer browser operation.
+                     * @param event - Input value.
+                     * @returns Operation result.
+                     */ (event) => setTitle(event.target.value)
+                  }
+                  required
+                  value={title}
+                />
+              </label>
+            </div>
+            <div className="writer-dialog-actions">
+              <button onClick={onClose} type="button">
+                Cancel
+              </button>
+              <button className="writer-dialog-primary" disabled={busy} type="submit">
+                Save copy
+              </button>
+            </div>
           </form>
         ) : (
           <div className="grid grid-cols-2 gap-4 p-6">

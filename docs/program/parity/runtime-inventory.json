@@ -3599,6 +3599,33 @@
       }
     },
     {
+      "path": "apps/office/src/sw/browser/presentation/WriterDialogHeader.tsx",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "browser-presentation",
+      "capabilityIds": [
+        "CAP-0101"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/sw/browser/presentation/WriterDialogHeader.tsx#WriterDialogHeader"
+        ],
+        "justification": "Shares the Open document heading and close action across browser-owned Writer dialogs.",
+        "knownViolations": [],
+        "localSymbols": [
+          "WriterDialogHeader"
+        ],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
+    },
+    {
       "path": "apps/office/src/sw/browser/presentation/WriterFileDialog.tsx",
       "classification": "browser-adaptation",
       "state": "active",
@@ -3805,6 +3832,34 @@
         "knownViolations": [],
         "localSymbols": [
           "WriterLineSpacingControl"
+        ],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/WriterNameCollisionPanel.tsx",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "browser-presentation",
+      "capabilityIds": [
+        "CAP-0113",
+        "CAP-0131"
+      ],
+      "semantic": {
+        "behaviorStatus": "divergent",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "divergent",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/sw/browser/presentation/WriterNameCollisionPanel.tsx#WriterNameCollisionPanel"
+        ],
+        "justification": "Presents existing browser document-title collision choices for import and rename, preserving the registered browser document lifecycle divergence.",
+        "knownViolations": [],
+        "localSymbols": [
+          "WriterNameCollisionPanel"
         ],
         "sourceResponsibility": "browser-owned",
         "upstreamFile": null,

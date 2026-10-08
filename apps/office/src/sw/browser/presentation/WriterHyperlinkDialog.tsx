@@ -1,5 +1,6 @@
 /** @fileoverview Renders the browser counterpart of Writer's Hyperlink dialog. */
 
+import { WriterDialogHeader } from "./WriterDialogHeader";
 import { useEffect, useState } from "react";
 
 import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
@@ -40,7 +41,7 @@ export function WriterHyperlinkDialog({
     >
       <form
         data-writer-modal-panel="true"
-        className="w-full max-w-md rounded-xl bg-white p-5 shadow-2xl"
+        className="w-full max-w-md bg-white"
         onSubmit={
           /** Submits normalized hyperlink fields. @param event - Form submit event. @returns Nothing. */ (
             event,
@@ -63,84 +64,86 @@ export function WriterHyperlinkDialog({
           }
         }
       >
-        <h2 className="text-lg font-bold text-slate-950">{title}</h2>
-        <div className="mt-3 border-b border-slate-300 pb-2 text-sm font-semibold text-indigo-700">
-          Internet
-        </div>
-        <fieldset className="mt-4 grid gap-3 border border-slate-300 p-3">
-          <legend className="px-1 text-sm font-semibold">Hyperlink Settings</legend>
-          <label className="grid gap-1 text-sm font-semibold text-slate-700">
-            {localization.GetText("writer.hyperlink.url", "Link")}
-            <input
-              aria-label="URL"
-              className="rounded-md border border-slate-300 px-3 py-2 font-normal"
-              id="writer-hyperlink-url"
-              onChange={
-                /** Updates the destination field. @param event - Input change. @returns Nothing. */
-                (event) => setUrl(event.target.value)
-              }
-              required
-              inputMode="url"
-              type="text"
-              value={url}
-            />
-          </label>
-          {initialHyperlink === undefined ? (
+        <WriterDialogHeader title={title} onClose={onCancel} />
+        <div className="writer-dialog-content">
+          <div className="border-b border-slate-300 pb-2 text-sm font-semibold text-indigo-700">
+            Internet
+          </div>
+          <fieldset className="grid gap-3 border border-slate-300 p-3">
+            <legend className="px-1 text-sm font-semibold">Hyperlink Settings</legend>
             <label className="grid gap-1 text-sm font-semibold text-slate-700">
-              {localization.GetText("writer.hyperlink.text", "Text")}
+              {localization.GetText("writer.hyperlink.url", "Link")}
+              <input
+                aria-label="URL"
+                className="rounded-md border border-slate-300 px-3 py-2 font-normal"
+                id="writer-hyperlink-url"
+                onChange={
+                  /** Updates the destination field. @param event - Input change. @returns Nothing. */
+                  (event) => setUrl(event.target.value)
+                }
+                required
+                inputMode="url"
+                type="text"
+                value={url}
+              />
+            </label>
+            {initialHyperlink === undefined ? (
+              <label className="grid gap-1 text-sm font-semibold text-slate-700">
+                {localization.GetText("writer.hyperlink.text", "Text")}
+                <input
+                  className="rounded-md border border-slate-300 px-3 py-2 font-normal"
+                  onChange={
+                    /** Updates optional inserted text. @param event - Input change. @returns Nothing. */
+                    (event) => setText(event.target.value)
+                  }
+                  placeholder={localization.GetText(
+                    "writer.hyperlink.text-placeholder",
+                    "Uses the URL when empty",
+                  )}
+                  value={text}
+                />
+              </label>
+            ) : null}
+            <label className="grid gap-1 text-sm font-semibold text-slate-700">
+              {localization.GetText("writer.hyperlink.target", "Frame")}
+              <select
+                aria-label="Target"
+                className="rounded-md border border-slate-300 px-3 py-2 font-normal"
+                onChange={
+                  /** Updates the target frame choice. @param event - Selection change. @returns Nothing. */
+                  (event) => setTargetFrame(event.target.value)
+                }
+                value={targetFrame}
+              >
+                <option value="">
+                  {localization.GetText("writer.hyperlink.target-current", "Current frame")}
+                </option>
+                <option value="_blank">
+                  {localization.GetText("writer.hyperlink.target-new", "New window")}
+                </option>
+                <option value="_self">
+                  {localization.GetText("writer.hyperlink.target-same", "Same frame")}
+                </option>
+              </select>
+            </label>
+          </fieldset>
+          <fieldset className="grid gap-3 border border-slate-300 p-3">
+            <legend className="px-1 text-sm font-semibold">Further Settings</legend>
+            <label className="grid gap-1 text-sm font-semibold text-slate-700">
+              Name
               <input
                 className="rounded-md border border-slate-300 px-3 py-2 font-normal"
                 onChange={
-                  /** Updates optional inserted text. @param event - Input change. @returns Nothing. */
-                  (event) => setText(event.target.value)
+                  /** Updates the hyperlink name. @param event - Name input event. @returns Nothing. */ (
+                    event,
+                  ) => setName(event.target.value)
                 }
-                placeholder={localization.GetText(
-                  "writer.hyperlink.text-placeholder",
-                  "Uses the URL when empty",
-                )}
-                value={text}
+                value={name}
               />
             </label>
-          ) : null}
-          <label className="grid gap-1 text-sm font-semibold text-slate-700">
-            {localization.GetText("writer.hyperlink.target", "Frame")}
-            <select
-              aria-label="Target"
-              className="rounded-md border border-slate-300 px-3 py-2 font-normal"
-              onChange={
-                /** Updates the target frame choice. @param event - Selection change. @returns Nothing. */
-                (event) => setTargetFrame(event.target.value)
-              }
-              value={targetFrame}
-            >
-              <option value="">
-                {localization.GetText("writer.hyperlink.target-current", "Current frame")}
-              </option>
-              <option value="_blank">
-                {localization.GetText("writer.hyperlink.target-new", "New window")}
-              </option>
-              <option value="_self">
-                {localization.GetText("writer.hyperlink.target-same", "Same frame")}
-              </option>
-            </select>
-          </label>
-        </fieldset>
-        <fieldset className="mt-4 grid gap-3 border border-slate-300 p-3">
-          <legend className="px-1 text-sm font-semibold">Further Settings</legend>
-          <label className="grid gap-1 text-sm font-semibold text-slate-700">
-            Name
-            <input
-              className="rounded-md border border-slate-300 px-3 py-2 font-normal"
-              onChange={
-                /** Updates the hyperlink name. @param event - Name input event. @returns Nothing. */ (
-                  event,
-                ) => setName(event.target.value)
-              }
-              value={name}
-            />
-          </label>
-        </fieldset>
-        <div className="mt-6 flex justify-end gap-2">
+          </fieldset>
+        </div>
+        <div className="writer-dialog-actions">
           <button
             className="rounded-md border border-slate-300 px-4 py-2 text-sm font-semibold"
             onClick={onCancel}
@@ -148,10 +151,7 @@ export function WriterHyperlinkDialog({
           >
             {localization.GetText("writer.common.cancel", "Cancel")}
           </button>
-          <button
-            className="rounded-md bg-indigo-700 px-4 py-2 text-sm font-semibold text-white"
-            type="submit"
-          >
+          <button className="writer-dialog-primary" type="submit">
             {localization.GetText("writer.common.apply", "Apply")}
           </button>
         </div>

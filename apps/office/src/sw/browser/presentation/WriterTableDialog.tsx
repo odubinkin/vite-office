@@ -1,4 +1,5 @@
 /** @fileoverview Browser Table and Table Properties tabs modeled on pinned Writer table dialogs. */
+import { WriterDialogHeader } from "./WriterDialogHeader";
 import { VertOrientation } from "../../../offapi/com/sun/star/text/VertOrientation";
 
 import { useRef, useState } from "react";
@@ -189,7 +190,7 @@ function WriterTablePropertiesDialog({
     >
       <form
         data-writer-modal-panel="true"
-        className="max-h-[calc(100dvh-2rem)] w-full max-w-lg space-y-4 overflow-auto rounded-xl bg-white p-5 shadow-2xl"
+        className="w-full max-w-2xl bg-white"
         onSubmit={
           /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ (
             event,
@@ -252,100 +253,175 @@ function WriterTablePropertiesDialog({
           }
         }
       >
-        <h2 className="text-lg font-bold">Table Properties</h2>
-        <div className="flex min-w-0 flex-col gap-4 sm:flex-row">
-          <div
-            aria-label="Table Properties settings"
-            className="flex shrink-0 overflow-x-auto border-b border-slate-300 sm:w-32 sm:flex-col sm:overflow-visible sm:border-b-0 sm:border-r"
-            role="tablist"
-          >
-            {(
-              [
-                ["table", "Table"],
-                ["text-flow", "Text Flow"],
-                ["columns", "Columns"],
-                ["borders", "Borders"],
-              ] as const
-            ).map(
-              /** Renders a properties tab. @param entry - Tab identifier and label. @returns Tab button. */ ([
-                id,
-                label,
-              ]) => (
-                <button
-                  aria-selected={activeTab === id}
-                  className={`shrink-0 border-b-2 px-3 py-2 text-left text-sm sm:border-b-0 sm:border-r-2 ${activeTab === id ? "border-indigo-700 font-semibold" : "border-transparent"}`}
-                  key={id}
-                  onClick={
-                    /** Deactivates and activates the shared native pages. @returns Nothing. */ () => {
-                      if (activeTab === "table" && !formatPage.DeactivatePage()) {
-                        setError("The name of the table must not contain spaces.");
-                        nameInput.current?.focus();
-                        return;
-                      }
-                      if (activeTab === "columns") columnPage.DeactivatePage();
-                      if (id === "columns") columnPage.ActivatePage();
-                      if (id === "table") formatPage.ActivatePage();
-                      setActiveTab(id);
-                      refreshPage(
-                        /** Presents accepted shared geometry. @param version - Display version. @returns Next version. */
-                        (version) => version + 1,
-                      );
-                    }
-                  }
-                  role="tab"
-                  type="button"
-                >
-                  {label}
-                </button>
-              ),
-            )}
-          </div>
-          <div className="grid min-w-0 flex-1 content-start gap-3" role="tabpanel">
-            {activeTab === "table" ? (
-              <>
-                <label className="grid gap-1 text-sm font-medium text-slate-700">
-                  Name
-                  <input
-                    aria-label="Name"
-                    ref={nameInput}
-                    value={formatPage.GetName()}
-                    className="rounded border border-slate-300 px-2 py-1"
-                    onChange={
-                      /** Changes the native name widget. @param event - Field event. @returns Nothing. */
-                      (event) => {
-                        formatPage.SetName(event.target.value);
+        <WriterDialogHeader title="Table Properties" onClose={onCancel} />
+        <div className="writer-dialog-content">
+          <div className="flex min-w-0 flex-col gap-4 sm:flex-row">
+            <div
+              aria-label="Table Properties settings"
+              className="flex shrink-0 overflow-x-auto border-b border-slate-300 sm:w-36 sm:flex-col sm:overflow-visible sm:border-b-0 sm:border-r"
+              role="tablist"
+            >
+              {(
+                [
+                  ["table", "Table"],
+                  ["text-flow", "Text Flow"],
+                  ["columns", "Columns"],
+                  ["borders", "Borders"],
+                ] as const
+              ).map(
+                /** Renders a properties tab. @param entry - Tab identifier and label. @returns Tab button. */ ([
+                  id,
+                  label,
+                ]) => (
+                  <button
+                    aria-selected={activeTab === id}
+                    className={`shrink-0 border-b-2 px-3 py-2 text-left text-sm sm:border-b-0 sm:border-r-2 ${activeTab === id ? "border-indigo-700 font-semibold" : "border-transparent"}`}
+                    key={id}
+                    onClick={
+                      /** Deactivates and activates the shared native pages. @returns Nothing. */ () => {
+                        if (activeTab === "table" && !formatPage.DeactivatePage()) {
+                          setError("The name of the table must not contain spaces.");
+                          nameInput.current?.focus();
+                          return;
+                        }
+                        if (activeTab === "columns") columnPage.DeactivatePage();
+                        if (id === "columns") columnPage.ActivatePage();
+                        if (id === "table") formatPage.ActivatePage();
+                        setActiveTab(id);
                         refreshPage(
-                          /** Presents the current draft name. @param version - Prior revision. @returns Next revision. */
+                          /** Presents accepted shared geometry. @param version - Display version. @returns Next version. */
                           (version) => version + 1,
                         );
                       }
                     }
-                  />
-                </label>
-                <fieldset className="grid grid-cols-2 gap-2 rounded border p-3">
-                  <legend className="text-sm font-bold">Alignment</legend>
+                    role="tab"
+                    type="button"
+                  >
+                    {label}
+                  </button>
+                ),
+              )}
+            </div>
+            <div className="grid min-w-0 flex-1 content-start gap-3" role="tabpanel">
+              {activeTab === "table" ? (
+                <>
+                  <label className="grid gap-1 text-sm font-medium text-slate-700">
+                    Name
+                    <input
+                      aria-label="Name"
+                      ref={nameInput}
+                      value={formatPage.GetName()}
+                      className="rounded border border-slate-300 px-2 py-1"
+                      onChange={
+                        /** Changes the native name widget. @param event - Field event. @returns Nothing. */
+                        (event) => {
+                          formatPage.SetName(event.target.value);
+                          refreshPage(
+                            /** Presents the current draft name. @param version - Prior revision. @returns Next revision. */
+                            (version) => version + 1,
+                          );
+                        }
+                      }
+                    />
+                  </label>
+                  <fieldset className="grid grid-cols-1 gap-3 sm:grid-cols-2 rounded border p-3">
+                    <legend className="text-sm font-bold">Alignment</legend>
+                    {(
+                      [
+                        [HoriOrientation.FULL, "Automatic"],
+                        [HoriOrientation.LEFT, "Left"],
+                        [HoriOrientation.LEFT_AND_WIDTH, "From left"],
+                        [HoriOrientation.RIGHT, "Right"],
+                        [HoriOrientation.CENTER, "Center"],
+                        [HoriOrientation.NONE, "Manual"],
+                      ] as const
+                    ).map(
+                      /** Renders a native orientation radio. @param entry - ID and label. @returns Control. */
+                      ([align, label]) => (
+                        <label key={align} className="flex items-center gap-2 text-sm">
+                          <input
+                            type="radio"
+                            name="table-alignment"
+                            checked={formatPage.GetAlign() === align}
+                            onChange={
+                              /** Dispatches the native radio transition. @returns Nothing. */ () => {
+                                formatPage.AutoClickHdl(align);
+                                refreshPage(
+                                  /** Refreshes metric sensitivity and values. @param version - Current version. @returns Next version. */
+                                  (version) => version + 1,
+                                );
+                              }
+                            }
+                          />
+                          {label}
+                        </label>
+                      ),
+                    )}
+                  </fieldset>
+                  {field(
+                    "Table width (cm)",
+                    width,
+                    /** Dispatches native width editing. @param value - Twips. @returns Nothing. */ (
+                      value,
+                    ) => {
+                      formatPage.ValueChangedHdl("width", value);
+                      refreshPage(
+                        /** Refreshes linked native metrics. @param version - Current version. @returns Next version. */
+                        (version) => version + 1,
+                      );
+                    },
+                    !formatPage.IsSensitive("width"),
+                    false,
+                    "width",
+                  )}
+                  <fieldset className="grid grid-cols-1 gap-3 sm:grid-cols-2 rounded border p-3">
+                    <legend className="text-sm font-bold">Spacing</legend>
+                    {(["left", "right", "above", "below"] as const).map(
+                      /** Renders the native metric field. @param metric - Native field. @returns Input. */
+                      (metric) =>
+                        field(
+                          `${metric.charAt(0).toUpperCase()}${metric.slice(1)} (cm)`,
+                          formatPage.GetFieldValue(metric),
+                          /** Dispatches spacing editing. @param value - Twips. @returns Nothing. */ (
+                            value,
+                          ) => {
+                            formatPage.ValueChangedHdl(metric, value);
+                            refreshPage(
+                              /** Refreshes linked geometry. @param version - Current version. @returns Next version. */
+                              (version) => version + 1,
+                            );
+                          },
+                          (metric === "left" || metric === "right") &&
+                            !formatPage.IsSensitive(metric),
+                          metric === "left" || metric === "right",
+                          metric,
+                        ),
+                    )}
+                  </fieldset>
+                </>
+              ) : null}
+              {activeTab === "columns" ? (
+                <fieldset className="grid min-w-0 gap-2 rounded border p-3">
+                  <legend className="text-sm font-bold">Columns</legend>
                   {(
                     [
-                      [HoriOrientation.FULL, "Automatic"],
-                      [HoriOrientation.LEFT, "Left"],
-                      [HoriOrientation.LEFT_AND_WIDTH, "From left"],
-                      [HoriOrientation.RIGHT, "Right"],
-                      [HoriOrientation.CENTER, "Center"],
-                      [HoriOrientation.NONE, "Manual"],
+                      ["adapt", "Adapt table width"],
+                      ["proportional", "Adjust columns proportionally"],
                     ] as const
                   ).map(
-                    /** Renders a native orientation radio. @param entry - ID and label. @returns Control. */
-                    ([align, label]) => (
-                      <label key={align} className="flex items-center gap-2 text-sm">
+                    /** Presents the native checkbox coupling and sensitivity. @param entry - Mode and source label. @returns Control. */
+                    ([mode, label]) => (
+                      <label key={mode} className="flex items-center gap-2 text-sm">
                         <input
-                          type="radio"
-                          name="table-alignment"
-                          checked={formatPage.GetAlign() === align}
+                          type="checkbox"
+                          checked={columnPage.IsChecked(mode)}
+                          disabled={!columnPage.IsSensitive(mode)}
                           onChange={
-                            /** Dispatches the native radio transition. @returns Nothing. */ () => {
-                              formatPage.AutoClickHdl(align);
+                            /** Dispatches the native mode transition. @param event - Checkbox event. @returns Nothing. */
+                            (event) => {
+                              columnPage.ModeHdl(mode, event.target.checked);
                               refreshPage(
-                                /** Refreshes metric sensitivity and values. @param version - Current version. @returns Next version. */
+                                /** Refreshes source mode coupling. @param version - Display version. @returns Next version. */
                                 (version) => version + 1,
                               );
                             }
@@ -355,289 +431,216 @@ function WriterTablePropertiesDialog({
                       </label>
                     ),
                   )}
+                  <div className="text-sm">
+                    Remaining space:{" "}
+                    <output aria-label="Remaining space (cm)">
+                      {toCm(columnPage.GetRemainingSpace())}
+                    </output>{" "}
+                    cm
+                  </div>
+                  <div className="flex gap-2">
+                    {(["back", "next"] as const).map(
+                      /** Presents source one-column paging. @param direction - Window direction. @returns Button. */
+                      (direction) => (
+                        <button
+                          key={direction}
+                          type="button"
+                          aria-label={direction === "back" ? "Previous columns" : "Next columns"}
+                          disabled={!columnPage.CanScroll(direction)}
+                          onClick={
+                            /** Dispatches native field-window navigation. @returns Nothing. */
+                            () => {
+                              columnPage.AutoClickHdl(direction);
+                              refreshPage(
+                                /** Refreshes native field labels and values. @param version - Display version. @returns Next version. */
+                                (version) => version + 1,
+                              );
+                            }
+                          }
+                          className="rounded border px-3 py-1 disabled:opacity-40"
+                        >
+                          {direction === "back" ? "←" : "→"}
+                        </button>
+                      ),
+                    )}
+                  </div>
+                  <div className="grid min-w-0 grid-cols-1 gap-3 sm:grid-cols-2">
+                    {Array.from(
+                      { length: SwTableColumnPage.MET_FIELDS },
+                      /** Renders the native fixed metric slots, including blank disabled fields. @param _unused - Array entry. @param slot - Native field index. @returns Metric input. */
+                      (_unused, slot) => {
+                        const value = columnPage.GetFieldValue(slot),
+                          label = `Column ${columnPage.GetFieldColumn(slot) + 1} width (cm)`;
+                        return (
+                          <label
+                            className="grid min-w-0 gap-1 text-sm font-medium text-slate-700"
+                            key={slot}
+                          >
+                            {label}
+                            <input
+                              type="number"
+                              aria-label={label}
+                              className="min-w-0 rounded border border-slate-300 px-2 py-1"
+                              disabled={value === undefined}
+                              min={toCm(columnPage.GetMinimum())}
+                              max={toCm(columnPage.GetMaximum())}
+                              step="0.01"
+                              value={value === undefined ? "" : toCm(value)}
+                              onChange={
+                                /** Dispatches metric edits directly to the source policy owner. @param event - Input event. @returns Nothing. */
+                                (event) => {
+                                  columnPage.ValueChangedHdl(
+                                    slot,
+                                    toTwips(Number(event.target.value)),
+                                  );
+                                  refreshPage(
+                                    /** Presents native neighbor compensation. @param version - Display version. @returns Next version. */
+                                    (version) => version + 1,
+                                  );
+                                }
+                              }
+                            />
+                          </label>
+                        );
+                      },
+                    )}
+                  </div>
                 </fieldset>
-                {field(
-                  "Table width (cm)",
-                  width,
-                  /** Dispatches native width editing. @param value - Twips. @returns Nothing. */ (
-                    value,
-                  ) => {
-                    formatPage.ValueChangedHdl("width", value);
-                    refreshPage(
-                      /** Refreshes linked native metrics. @param version - Current version. @returns Next version. */
-                      (version) => version + 1,
-                    );
-                  },
-                  !formatPage.IsSensitive("width"),
-                  false,
-                  "width",
-                )}
-                <fieldset className="grid grid-cols-2 gap-2 rounded border p-3">
-                  <legend className="text-sm font-bold">Spacing</legend>
-                  {(["left", "right", "above", "below"] as const).map(
-                    /** Renders the native metric field. @param metric - Native field. @returns Input. */
-                    (metric) =>
-                      field(
-                        `${metric.charAt(0).toUpperCase()}${metric.slice(1)} (cm)`,
-                        formatPage.GetFieldValue(metric),
-                        /** Dispatches spacing editing. @param value - Twips. @returns Nothing. */ (
-                          value,
+              ) : null}
+              {activeTab === "text-flow" ? (
+                <fieldset className="grid gap-2 rounded border p-3">
+                  <legend className="text-sm font-bold">Text Flow</legend>
+                  <label className="flex items-center gap-2 text-sm">
+                    <input
+                      checked={textFlowPage.IsHeadline()}
+                      onChange={
+                        /** Dispatches the source headline checkbox and sensitivity. @param event - Checkbox input. @returns Nothing. */ (
+                          event,
                         ) => {
-                          formatPage.ValueChangedHdl(metric, value);
+                          textFlowPage.HeadLineCBClickHdl(event.target.checked);
                           refreshPage(
-                            /** Refreshes linked geometry. @param version - Current version. @returns Next version. */
+                            /** Presents native headline widgets. @param version - Current version. @returns Next version. */
                             (version) => version + 1,
                           );
-                        },
-                        (metric === "left" || metric === "right") &&
-                          !formatPage.IsSensitive(metric),
-                        metric === "left" || metric === "right",
-                        metric,
-                      ),
-                  )}
+                        }
+                      }
+                      type="checkbox"
+                    />
+                    Repeat header
+                  </label>
+                  <label className="flex items-center gap-2 text-sm">
+                    The first
+                    <input
+                      aria-label="Header rows"
+                      className="w-16 rounded border px-2 py-1"
+                      disabled={!textFlowPage.IsSensitive()}
+                      max="100"
+                      min="1"
+                      onChange={
+                        /** Dispatches source integer editing. @param event - Number input. @returns Nothing. */ (
+                          event,
+                        ) => {
+                          textFlowPage.ValueChangedHdl(Number(event.target.value));
+                          refreshPage(
+                            /** Presents accepted source count. @param version - Current version. @returns Next version. */
+                            (version) => version + 1,
+                          );
+                        }
+                      }
+                      type="number"
+                      value={textFlowPage.GetHeaderRows()}
+                    />
+                    rows
+                  </label>
+                  <label className="flex items-center gap-2 text-sm">
+                    <input
+                      checked={textFlowPage.IsSplit()}
+                      onChange={
+                        /** Dispatches native table split and child sensitivity. @param event - Checkbox event. @returns Nothing. */ (
+                          event,
+                        ) => {
+                          textFlowPage.SplitHdl_Impl(event.target.checked);
+                          refreshPage(
+                            /** Renders native widget state. @param version - Current version. @returns Next version. */ (
+                              version,
+                            ) => version + 1,
+                          );
+                        }
+                      }
+                      type="checkbox"
+                    />
+                    Allow table to split across pages and columns
+                  </label>
+                  <label className="ml-4 flex items-center gap-2 text-sm">
+                    <input
+                      checked={textFlowPage.GetRowSplitState() === true}
+                      aria-checked={
+                        textFlowPage.GetRowSplitState() === undefined
+                          ? "mixed"
+                          : textFlowPage.GetRowSplitState()
+                      }
+                      disabled={!textFlowPage.IsRowSplitSensitive()}
+                      ref={
+                        /** Presents the native mixed state on the browser checkbox. @param element - Mounted native widget. @returns Nothing. */ (
+                          element,
+                        ) => {
+                          if (element !== null)
+                            element.indeterminate = textFlowPage.GetRowSplitState() === undefined;
+                        }
+                      }
+                      onChange={
+                        /** Dispatches an explicit native row item. @param event - Checkbox event. @returns Nothing. */ (
+                          event,
+                        ) => {
+                          textFlowPage.SetRowSplitState(event.target.checked);
+                          refreshPage(
+                            /** Renders the changed native row widget. @param version - Current version. @returns Next version. */ (
+                              version,
+                            ) => version + 1,
+                          );
+                        }
+                      }
+                      type="checkbox"
+                    />
+                    Allow row to break across pages and columns
+                  </label>
+                  <label className="grid gap-1 text-sm">
+                    Vertical alignment
+                    <select
+                      aria-label="Cell vertical alignment"
+                      className="rounded border px-2 py-1"
+                      onChange={
+                        /** Sets cell vertical alignment. @param event - Selection event. @returns Nothing. */ (
+                          event,
+                        ) => setVerticalAlign(Number(event.target.value))
+                      }
+                      value={verticalAlign}
+                    >
+                      <option value={VertOrientation.NONE}>Top</option>
+                      <option value={VertOrientation.CENTER}>Middle</option>
+                      <option value={VertOrientation.BOTTOM}>Bottom</option>
+                    </select>
+                  </label>
                 </fieldset>
-              </>
-            ) : null}
-            {activeTab === "columns" ? (
-              <fieldset className="grid min-w-0 gap-2 rounded border p-3">
-                <legend className="text-sm font-bold">Columns</legend>
-                {(
-                  [
-                    ["adapt", "Adapt table width"],
-                    ["proportional", "Adjust columns proportionally"],
-                  ] as const
-                ).map(
-                  /** Presents the native checkbox coupling and sensitivity. @param entry - Mode and source label. @returns Control. */
-                  ([mode, label]) => (
-                    <label key={mode} className="flex items-center gap-2 text-sm">
-                      <input
-                        type="checkbox"
-                        checked={columnPage.IsChecked(mode)}
-                        disabled={!columnPage.IsSensitive(mode)}
-                        onChange={
-                          /** Dispatches the native mode transition. @param event - Checkbox event. @returns Nothing. */
-                          (event) => {
-                            columnPage.ModeHdl(mode, event.target.checked);
-                            refreshPage(
-                              /** Refreshes source mode coupling. @param version - Display version. @returns Next version. */
-                              (version) => version + 1,
-                            );
-                          }
-                        }
-                      />
-                      {label}
-                    </label>
-                  ),
-                )}
-                <div className="text-sm">
-                  Remaining space:{" "}
-                  <output aria-label="Remaining space (cm)">
-                    {toCm(columnPage.GetRemainingSpace())}
-                  </output>{" "}
-                  cm
-                </div>
-                <div className="flex gap-2">
-                  {(["back", "next"] as const).map(
-                    /** Presents source one-column paging. @param direction - Window direction. @returns Button. */
-                    (direction) => (
-                      <button
-                        key={direction}
-                        type="button"
-                        aria-label={direction === "back" ? "Previous columns" : "Next columns"}
-                        disabled={!columnPage.CanScroll(direction)}
-                        onClick={
-                          /** Dispatches native field-window navigation. @returns Nothing. */
-                          () => {
-                            columnPage.AutoClickHdl(direction);
-                            refreshPage(
-                              /** Refreshes native field labels and values. @param version - Display version. @returns Next version. */
-                              (version) => version + 1,
-                            );
-                          }
-                        }
-                        className="rounded border px-3 py-1 disabled:opacity-40"
-                      >
-                        {direction === "back" ? "←" : "→"}
-                      </button>
-                    ),
-                  )}
-                </div>
-                <div className="grid min-w-0 grid-cols-2 gap-2">
-                  {Array.from(
-                    { length: SwTableColumnPage.MET_FIELDS },
-                    /** Renders the native fixed metric slots, including blank disabled fields. @param _unused - Array entry. @param slot - Native field index. @returns Metric input. */
-                    (_unused, slot) => {
-                      const value = columnPage.GetFieldValue(slot),
-                        label = `Column ${columnPage.GetFieldColumn(slot) + 1} width (cm)`;
-                      return (
-                        <label
-                          className="grid min-w-0 gap-1 text-sm font-medium text-slate-700"
-                          key={slot}
-                        >
-                          {label}
-                          <input
-                            type="number"
-                            aria-label={label}
-                            className="min-w-0 rounded border border-slate-300 px-2 py-1"
-                            disabled={value === undefined}
-                            min={toCm(columnPage.GetMinimum())}
-                            max={toCm(columnPage.GetMaximum())}
-                            step="0.01"
-                            value={value === undefined ? "" : toCm(value)}
-                            onChange={
-                              /** Dispatches metric edits directly to the source policy owner. @param event - Input event. @returns Nothing. */
-                              (event) => {
-                                columnPage.ValueChangedHdl(
-                                  slot,
-                                  toTwips(Number(event.target.value)),
-                                );
-                                refreshPage(
-                                  /** Presents native neighbor compensation. @param version - Display version. @returns Next version. */
-                                  (version) => version + 1,
-                                );
-                              }
-                            }
-                          />
-                        </label>
-                      );
-                    },
-                  )}
-                </div>
-              </fieldset>
-            ) : null}
-            {activeTab === "text-flow" ? (
-              <fieldset className="grid gap-2 rounded border p-3">
-                <legend className="text-sm font-bold">Text Flow</legend>
-                <label className="flex items-center gap-2 text-sm">
-                  <input
-                    checked={textFlowPage.IsHeadline()}
-                    onChange={
-                      /** Dispatches the source headline checkbox and sensitivity. @param event - Checkbox input. @returns Nothing. */ (
-                        event,
-                      ) => {
-                        textFlowPage.HeadLineCBClickHdl(event.target.checked);
-                        refreshPage(
-                          /** Presents native headline widgets. @param version - Current version. @returns Next version. */
-                          (version) => version + 1,
-                        );
-                      }
-                    }
-                    type="checkbox"
-                  />
-                  Repeat header
-                </label>
-                <label className="flex items-center gap-2 text-sm">
-                  The first
-                  <input
-                    aria-label="Header rows"
-                    className="w-16 rounded border px-2 py-1"
-                    disabled={!textFlowPage.IsSensitive()}
-                    max="100"
-                    min="1"
-                    onChange={
-                      /** Dispatches source integer editing. @param event - Number input. @returns Nothing. */ (
-                        event,
-                      ) => {
-                        textFlowPage.ValueChangedHdl(Number(event.target.value));
-                        refreshPage(
-                          /** Presents accepted source count. @param version - Current version. @returns Next version. */
-                          (version) => version + 1,
-                        );
-                      }
-                    }
-                    type="number"
-                    value={textFlowPage.GetHeaderRows()}
-                  />
-                  rows
-                </label>
-                <label className="flex items-center gap-2 text-sm">
-                  <input
-                    checked={textFlowPage.IsSplit()}
-                    onChange={
-                      /** Dispatches native table split and child sensitivity. @param event - Checkbox event. @returns Nothing. */ (
-                        event,
-                      ) => {
-                        textFlowPage.SplitHdl_Impl(event.target.checked);
-                        refreshPage(
-                          /** Renders native widget state. @param version - Current version. @returns Next version. */ (
-                            version,
-                          ) => version + 1,
-                        );
-                      }
-                    }
-                    type="checkbox"
-                  />
-                  Allow table to split across pages and columns
-                </label>
-                <label className="ml-4 flex items-center gap-2 text-sm">
-                  <input
-                    checked={textFlowPage.GetRowSplitState() === true}
-                    aria-checked={
-                      textFlowPage.GetRowSplitState() === undefined
-                        ? "mixed"
-                        : textFlowPage.GetRowSplitState()
-                    }
-                    disabled={!textFlowPage.IsRowSplitSensitive()}
-                    ref={
-                      /** Presents the native mixed state on the browser checkbox. @param element - Mounted native widget. @returns Nothing. */ (
-                        element,
-                      ) => {
-                        if (element !== null)
-                          element.indeterminate = textFlowPage.GetRowSplitState() === undefined;
-                      }
-                    }
-                    onChange={
-                      /** Dispatches an explicit native row item. @param event - Checkbox event. @returns Nothing. */ (
-                        event,
-                      ) => {
-                        textFlowPage.SetRowSplitState(event.target.checked);
-                        refreshPage(
-                          /** Renders the changed native row widget. @param version - Current version. @returns Next version. */ (
-                            version,
-                          ) => version + 1,
-                        );
-                      }
-                    }
-                    type="checkbox"
-                  />
-                  Allow row to break across pages and columns
-                </label>
-                <label className="grid gap-1 text-sm">
-                  Vertical alignment
-                  <select
-                    aria-label="Cell vertical alignment"
-                    className="rounded border px-2 py-1"
-                    onChange={
-                      /** Sets cell vertical alignment. @param event - Selection event. @returns Nothing. */ (
-                        event,
-                      ) => setVerticalAlign(Number(event.target.value))
-                    }
-                    value={verticalAlign}
-                  >
-                    <option value={VertOrientation.NONE}>Top</option>
-                    <option value={VertOrientation.CENTER}>Middle</option>
-                    <option value={VertOrientation.BOTTOM}>Bottom</option>
-                  </select>
-                </label>
-              </fieldset>
-            ) : null}
-            {activeTab === "borders" ? (
-              <WriterBorderPage
-                page={borderPage}
-                onChange={
-                  /** Presents accepted native border widgets. @returns Nothing. */ () =>
-                    refreshPage(
-                      /** Advances the display revision. @param version - Current display version. @returns Next version. */ (
-                        version,
-                      ) => version + 1,
-                    )
-                }
-              />
-            ) : null}{" "}
+              ) : null}
+              {activeTab === "borders" ? (
+                <WriterBorderPage
+                  page={borderPage}
+                  onChange={
+                    /** Presents accepted native border widgets. @returns Nothing. */ () =>
+                      refreshPage(
+                        /** Advances the display revision. @param version - Current display version. @returns Next version. */ (
+                          version,
+                        ) => version + 1,
+                      )
+                  }
+                />
+              ) : null}{" "}
+            </div>
           </div>
+          {error === undefined ? null : <p className="text-sm text-red-700">{error}</p>}
         </div>
-        {error === undefined ? null : <p className="text-sm text-red-700">{error}</p>}
-        <div className="flex justify-end gap-2">
+        <div className="writer-dialog-actions">
           <button
             className="mr-auto rounded border px-3 py-1"
             type="button"
@@ -664,7 +667,7 @@ function WriterTablePropertiesDialog({
           <button className="rounded border px-3 py-1" onClick={onCancel} type="button">
             Cancel
           </button>
-          <button className="rounded bg-indigo-700 px-3 py-1 text-white" type="submit">
+          <button className="writer-dialog-primary" type="submit">
             OK
           </button>
         </div>
