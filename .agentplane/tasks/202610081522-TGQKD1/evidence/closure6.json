@@ -1,0 +1,29 @@
+{
+  "scope": "Targeted current-source rebuild and only the two originally failed independent table-properties Chromium cases; full profile remains exactly one.",
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run build",
+      "exit": 0,
+      "bytes": 1264,
+      "sha256": "7bf10f10b2c7edcad2fc206b5a08379539ac460a1ad3537df082458648032bf3"
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts writer-native-independent-table-properties.spec.ts --reporter=json",
+      "exit": 0,
+      "bytes": 4355,
+      "sha256": "1f16d22cab3e40c96893a5d237e6cbc4c3cf795ff3da260bf7be064f49620247",
+      "counts": {
+        "startTime": "2026-10-08T16:33:41.494Z",
+        "duration": 6154.7699999999995,
+        "expected": 2,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "errors": []
+    }
+  ]
+}

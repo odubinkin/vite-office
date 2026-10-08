@@ -35,7 +35,13 @@ it("native format metrics remain local until source deactivation and flag public
     data.HasWidthChanged(),
     data.HasColsChanged(),
   ]).toEqual([6000, 0, 3000, false, false]);
-  expect(data.columns).toEqual([2000, 2000, 2000]);
+  expect(
+    data.columns.map(
+      /** Reads literal native widths. @param column - Native interval. @returns Width. */ (
+        column,
+      ) => column.nWidth,
+    ),
+  ).toEqual([2000, 2000, 2000]);
   f.page.DeactivatePage();
   expect(f.page.data).toBe(data);
   expect(data.columns).toBe(vector);
@@ -46,7 +52,13 @@ it("native format metrics remain local until source deactivation and flag public
     data.HasWidthChanged(),
     data.HasColsChanged(),
   ]).toEqual([4000, 0, 5000, true, false]);
-  expect(data.columns).toEqual([1334, 1334, 1334]);
+  expect(
+    data.columns.map(
+      /** Reads literal native widths. @param column - Native interval. @returns Width. */ (
+        column,
+      ) => column.nWidth,
+    ),
+  ).toEqual([1334, 1334, 1334]);
   expect(f.table.GetColumnWidths()).toEqual([2000, 2000, 2000]);
   expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(0);
 });
@@ -61,7 +73,13 @@ it("native source focused unchanged width admits modification without a width-ch
     false,
     false,
   ]);
-  expect(f.page.data.columns).toEqual([2000, 2000, 2000]);
+  expect(
+    f.page.data.columns.map(
+      /** Reads literal native widths. @param column - Native interval. @returns Width. */ (
+        column,
+      ) => column.nWidth,
+    ),
+  ).toEqual([2000, 2000, 2000]);
 });
 it("native format side fields publish literal saved-spacing changes and balanced remainder", /** Checks actual native manual arithmetic and staged publication. @returns Nothing. */ () => {
   const f = fixture({ width: 6000, horiOrient: H.NONE, marginLeft: 1000, marginRight: 2000 });
@@ -75,7 +93,13 @@ it("native format side fields publish literal saved-spacing changes and balanced
   expect([f.page.data.width, f.page.data.left, f.page.data.right]).toEqual([6000, 1000, 2000]);
   f.page.DeactivatePage();
   expect([f.page.data.width, f.page.data.left, f.page.data.right]).toEqual([6800, 1200, 1000]);
-  expect(f.page.data.columns).toEqual([2266, 2266, 2266]);
+  expect(
+    f.page.data.columns.map(
+      /** Reads literal native widths. @param column - Native interval. @returns Width. */ (
+        column,
+      ) => column.nWidth,
+    ),
+  ).toEqual([2266, 2266, 2266]);
   expect(f.page.data.HasWidthChanged()).toBe(true);
 });
 it("native vertical metrics mark the page without publishing unrelated width changes", /** Checks top/bottom modification and shared native geometry. @returns Nothing. */ () => {
@@ -86,7 +110,13 @@ it("native vertical metrics mark the page without publishing unrelated width cha
   expect(f.page.FillItemSet("above")).toBe(true);
   f.page.DeactivatePage("below");
   expect(f.page.data.HasWidthChanged()).toBe(false);
-  expect(f.page.data.columns).toEqual([2000, 2000, 2000]);
+  expect(
+    f.page.data.columns.map(
+      /** Reads literal native widths. @param column - Native interval. @returns Width. */ (
+        column,
+      ) => column.nWidth,
+    ),
+  ).toEqual([2000, 2000, 2000]);
   expect([f.table.GetFormat().marginTop, f.table.GetFormat().marginBottom]).toEqual([42, 51]);
 });
 it("native format Reset restores an independent snapshot and preserves shared pointer vector and selection", /** Checks source reset copy, saved values and retained native modified bit. @returns Nothing. */ () => {
@@ -102,13 +132,19 @@ it("native format Reset restores an independent snapshot and preserves shared po
   f.page.ValueChangedHdl("above", 100);
   f.page.ValueChangedHdl("below", 200);
   f.page.DeactivatePage();
-  data.columns[0] = 99;
+  (data.columns[0] as { nWidth: number }).nWidth = 99;
   data.SetLineSelected(false);
   data.SetColsChanged();
   f.page.Reset();
   expect(f.page.data).toBe(data);
   expect(data.columns).toBe(vector);
-  expect(data.columns).toEqual([2000, 2000, 2000]);
+  expect(
+    data.columns.map(
+      /** Reads literal native widths. @param column - Native interval. @returns Width. */ (
+        column,
+      ) => column.nWidth,
+    ),
+  ).toEqual([2000, 2000, 2000]);
   expect([
     data.width,
     data.left,
@@ -170,7 +206,13 @@ it("native automatic format Activate publishes the new available width through s
   expect(f.page.data.width).toBe(9000);
   f.page.DeactivatePage("above");
   expect([f.page.data.width, f.page.data.HasWidthChanged()]).toEqual([10000, true]);
-  expect(f.page.data.columns).toEqual([3333, 3333, 3333]);
+  expect(
+    f.page.data.columns.map(
+      /** Reads literal native widths. @param column - Native interval. @returns Width. */ (
+        column,
+      ) => column.nWidth,
+    ),
+  ).toEqual([3333, 3333, 3333]);
 });
 it("native automatic width sentinel suppresses a redundant change flag", /** Checks the represented table-manager INVALID_TWIPS contract. @returns Nothing. */ () => {
   const maximum = Number(0x7fffffffffffffffn),

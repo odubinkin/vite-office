@@ -219,7 +219,6 @@ export function SetSwTabCols(
             0,
           );
       if (actualWidth !== wishedWidth) {
-        table.AdjustWidths(wishedWidth, actualWidth);
         table.SetFormat({ ...table.GetFormat(), width: actualWidth });
         table.GetTabCols(previous, start);
       }

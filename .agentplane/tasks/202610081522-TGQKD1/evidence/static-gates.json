@@ -1,0 +1,22 @@
+{
+  "records": [
+    {
+      "command": "npm run format:check",
+      "exit": 0,
+      "bytes": 122,
+      "sha256": "ac1729f86eee878f5f4d6c948c510d2cc91bb5568f6dd088f70f3885e137d116",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run lint",
+      "exit": 1,
+      "bytes": 346,
+      "sha256": "3a3fc876ceb159eaa24cd40598b434985bdcd4452862a9e756c8a59aff82ce68",
+      "diagnostics": [
+        "> eslint . --max-warnings 0",
+        "  160:22  error  This overload and the one on line 158 can be combined into one signature taking `SwTabCols | SwTableRep`  @typescript-eslint/unified-signatures",
+        "✖ 1 problem (1 error, 0 warnings)"
+      ]
+    }
+  ]
+}

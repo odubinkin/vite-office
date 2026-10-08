@@ -83,7 +83,12 @@ it.each(["cursor", "row", "table"])(
         horiOrient: data.align,
         marginLeft: data.left,
         marginRight: data.right,
-        columnWidths: data.columns,
+        columnWidths: data.columns.map(
+          /** Reads literal native widths. @param column - Native interval. @returns Width. */ (
+            column,
+          ) => column.nWidth,
+        ),
+        tableRep: data,
         padding: 0,
         border: "none",
         verticalAlign: VertOrientation.NONE,
@@ -131,7 +136,12 @@ it("native adapt/proportional page width applies one history without rebuilding 
     horiOrient: data.align,
     marginLeft: data.left,
     marginRight: data.right,
-    columnWidths: data.columns,
+    columnWidths: data.columns.map(
+      /** Reads literal native widths. @param column - Native interval. @returns Width. */ (
+        column,
+      ) => column.nWidth,
+    ),
+    tableRep: data,
     padding: 0,
     border: "none",
     verticalAlign: VertOrientation.NONE,

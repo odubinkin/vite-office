@@ -67,7 +67,11 @@ function accept(f: ReturnType<typeof fixture>): boolean {
     marginRight: data.right,
     marginTop: f.format.above,
     marginBottom: f.format.below,
-    columnWidths: data.columns,
+    columnWidths: data.columns.map(
+      /** Reads literal native widths. @param column - Native interval. @returns Width. */ (
+        column,
+      ) => column.nWidth,
+    ),
     padding: 0,
     border: "none",
     verticalAlign: VertOrientation.NONE,
@@ -94,7 +98,13 @@ for (const page of ["table", "columns"] as const) {
     expect(f.format.data).toBe(shared);
     expect(shared.columns).toBe(widths);
     expect(shared.width).toBe(6000);
-    expect(shared.columns).toEqual([2000, 2000, 2000]);
+    expect(
+      shared.columns.map(
+        /** Reads literal native widths. @param column - Native interval. @returns Width. */ (
+          column,
+        ) => column.nWidth,
+      ),
+    ).toEqual([2000, 2000, 2000]);
     expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(0);
     f.format.ActivatePage();
     f.format.ValueChangedHdl("width", 3000);

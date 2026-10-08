@@ -230,9 +230,12 @@ export class SwTable {
     }
   }
 
-  /** Replaces table geometry. @param value - New values. @returns Nothing. */
+  /** Publishes represented frame-size changes to row/box width adjustment, as SwClientNotify does. @param value - New values. @returns Nothing. */
   public SetFormat(value: SwTableFormat): void {
+    const oldWidth = this.format.width;
     this.format = { ...value };
+    if (oldWidth !== undefined && value.width !== undefined && oldWidth !== value.width)
+      this.AdjustWidths(oldWidth, value.width);
   }
 
   /** Returns the native headline count capped by actual table lines. @returns Repeated line count. */
@@ -598,7 +601,9 @@ export class SwTable {
       for (const box of line.GetTabBoxes()) {
         const size = box.GetFrameSize();
         originalSum += size.GetWidth();
-        const wished = Math.trunc((originalSum * newWidth) / oldWidth);
+        const wished = Math.trunc(
+          oldWidth === 0 ? originalSum * newWidth : (originalSum * newWidth) / oldWidth,
+        );
         size.SetWidth(wished - sum);
         box.SetFrameSize(size);
         sum = wished;

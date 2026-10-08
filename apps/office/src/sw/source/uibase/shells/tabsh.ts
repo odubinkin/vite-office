@@ -29,6 +29,8 @@ export interface SwTableProperties {
   readonly marginTop?: number;
   readonly marginBottom?: number;
   readonly columnWidths: readonly number[];
+  /** Shared accepted native dialog owner; explicit width-vector ingress remains available. */
+  readonly tableRep?: SwTableRep;
   readonly padding?: number | undefined;
   readonly border?: string | undefined;
   readonly borderItems?: SfxItemSet | undefined;
@@ -90,12 +92,13 @@ export function ItemSetToTableParam(shell: SwFEShell, value: SwTableProperties):
   const table = shell.IsCursorInTable()?.GetTable();
   if (table === undefined) return false;
   if (
-    value.columnWidths.length !== table.GetColumnWidths().length ||
-    value.columnWidths.some(
-      /** Rejects invalid column attributes before any mutation. @param width - Authored width. @returns Whether invalid. */ (
-        width,
-      ) => !Number.isFinite(width) || width <= 0,
-    )
+    value.tableRep === undefined &&
+    (value.columnWidths.length !== table.GetColumnWidths().length ||
+      value.columnWidths.some(
+        /** Rejects invalid column attributes before any mutation. @param width - Authored width. @returns Whether invalid. */ (
+          width,
+        ) => !Number.isFinite(width) || width <= 0,
+      ))
   )
     throw new Error("Writer table column width is invalid.");
   return shell.RunNotificationTransaction(
@@ -166,14 +169,28 @@ export function ItemSetToTableParam(shell: SwFEShell, value: SwTableProperties):
         shell.SetRowsToRepeat(value.headerRows, value.repeatHeaderRows);
         if (value.name !== undefined) shell.SetTableName(table.GetFrameFormat(), value.name);
         if (value.verticalAlign !== undefined) shell.SetBoxAlign(value.verticalAlign);
-        const columns = new SwTabCols();
-        shell.GetTabCols(columns);
-        const representation = new SwTableRep(table, columns.GetRightMax());
-        representation.left = value.marginLeft ?? columns.GetLeft();
-        representation.right = value.marginRight ?? columns.GetRightMax() - columns.GetRight();
-        representation.columns.splice(0, representation.columns.length, ...value.columnWidths);
-        const singleRow = representation.FillTabCols(columns);
-        shell.SetTabCols(columns, singleRow);
+        // Native dialog owners retain hidden intervals and gate separator application.
+        if (value.tableRep === undefined || value.tableRep.HasColsChanged()) {
+          const columns = new SwTabCols();
+          shell.GetTabCols(columns);
+          const representation =
+            value.tableRep ?? new SwTableRep(table, columns.GetRightMax(), columns);
+          if (value.tableRep === undefined) {
+            representation.left = value.marginLeft ?? columns.GetLeft();
+            representation.right = value.marginRight ?? columns.GetRightMax() - columns.GetRight();
+            representation.width = value.width;
+            representation.columns.splice(
+              0,
+              representation.GetAllColCount(),
+              ...value.columnWidths.map(
+                /** Converts explicit legacy width declarations at ingress. @param width - Authored width. @returns Visible native interval. */
+                (width) => ({ nWidth: width, bVisible: true }),
+              ),
+            );
+          }
+          const singleRow = representation.FillTabCols(columns);
+          shell.SetTabCols(columns, singleRow);
+        }
         const merge =
           value.borderItems?.GetItemState(RES_COLLAPSING_BORDERS, false) === SfxItemState.SET
             ? value.borderItems.Get(RES_COLLAPSING_BORDERS)

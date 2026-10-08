@@ -1,0 +1,38 @@
+{
+  "records": [
+    {
+      "command": "npm run format:check",
+      "exit": 0,
+      "bytes": 122,
+      "sha256": "ac1729f86eee878f5f4d6c948c510d2cc91bb5568f6dd088f70f3885e137d116",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run lint",
+      "exit": 0,
+      "bytes": 55,
+      "sha256": "a6172cb57fa696e705408fdc605fba1ae07b852fdf0614d7c2b623349e285b6e",
+      "diagnostics": [
+        "> eslint . --max-warnings 0"
+      ]
+    },
+    {
+      "command": "npm run typecheck",
+      "exit": 2,
+      "bytes": 947,
+      "sha256": "fc3f69b826644803d59d2cdb27853b98ae801a480956e83c48a9b3dd050ea129",
+      "diagnostics": [
+        "src/sw/browser/presentation/native-independent-table-properties.test.tsx(135,11): error TS18046: 'accepted' is of type 'unknown'.",
+        "src/sw/browser/presentation/native-independent-table-properties.test.tsx(135,35): error TS18046: 'accepted' is of type 'unknown'.",
+        "src/sw/browser/presentation/native-independent-table-properties.test.tsx(136,10): error TS18046: 'accepted' is of type 'unknown'.",
+        "npm error Lifecycle script `typecheck` failed with error:",
+        "npm error code 2",
+        "npm error path /Users/odubinkin/Projects/vite-office/apps/office",
+        "npm error workspace @vite-office/office@0.1.0",
+        "npm error location /Users/odubinkin/Projects/vite-office/apps/office",
+        "npm error command failed",
+        "npm error command sh -c tsc --noEmit"
+      ]
+    }
+  ]
+}

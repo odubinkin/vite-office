@@ -1,0 +1,22 @@
+{
+  "scope": "Only the five originally failed cases; previously passing cases in these files retained as skipped.",
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/source/uibase/wrtsh/native-table-format-lifecycle-history.test.ts src/sw/source/uibase/wrtsh/native-table-properties-reset-history.test.ts --testNamePattern ^(native format publication retains graph selectioncursor through3UndoRedo and continued ODT input|native format publication retains graph selectionrow through3UndoRedo and continued ODT input|native format publication retains graph selectiontable through3UndoRedo and continued ODT input|native table Reset retains graph and one grouped acceptance through3UndoRedo and ODT|native columns Reset retains graph and one grouped acceptance through3UndoRedo and ODT)$ --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/TGQKD1.closure1.app-results.json",
+      "exit": 1,
+      "bytes": 32888,
+      "sha256": "781ea6aaf66586422e43656ec646f6b1bf0a6ff600229b088cb6796dc1e7fd9a",
+      "caseCounts": {
+        "passed": 5,
+        "failed": 0,
+        "skipped": 1,
+        "total": 6
+      },
+      "failedCases": [],
+      "unhandledErrorCount": 0,
+      "coverageMapSHA256": "a64c70913da169b16de58779f88d82ea2fdbed4fd22fe04b9839f6442f16ac31"
+    }
+  ]
+}

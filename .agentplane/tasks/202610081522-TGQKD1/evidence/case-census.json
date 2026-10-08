@@ -1,0 +1,117 @@
+{
+  "app": {
+    "original": 13862,
+    "current": 13870,
+    "newCases": 8,
+    "resolved": 6,
+    "passed": 13870,
+    "unresolvedCount": 0,
+    "skippedObservationsRetained": 11,
+    "passingReplay": 0,
+    "originalUncaughtErrorCases": 0,
+    "finalUncaughtErrorCases": 0,
+    "inputs": [
+      {
+        "file": "TGQKD1.app-results.json",
+        "sha256": "1be3b33f6c8d325832047e046bf0f7d099eb3e57587af4872c649f953a75ea8e",
+        "passed": 13857,
+        "failed": 5,
+        "skipped": 0
+      },
+      {
+        "file": "TGQKD1.closure1.app-results.json",
+        "sha256": "52fc7583db05e198b4524a4d36e230756b651e5d79d050e0db6a536cd75af521",
+        "passed": 5,
+        "failed": 0,
+        "skipped": 1
+      },
+      {
+        "file": "TGQKD1.closure2.app-results.json",
+        "sha256": "98b049fed5e9a8584383bccc4a3b71ae2cf492b0d5b0b037b39313cf355a3c26",
+        "passed": 0,
+        "failed": 1,
+        "skipped": 5
+      },
+      {
+        "file": "TGQKD1.closure3.app-results.json",
+        "sha256": "2a0981d988a46a3b7cd5aa8b41b283bce04f018032dc2ae53fa33b450fa7310c",
+        "passed": 1,
+        "failed": 0,
+        "skipped": 5
+      },
+      {
+        "file": "TGQKD1.closure4.app-results.json",
+        "sha256": "ac2c171bfbf0b07156bd6e937e245e39f6cb360202c32cc7391b836ac9e1b876",
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0
+      }
+    ]
+  },
+  "inventory": {
+    "original": 110,
+    "current": 110,
+    "newCases": 0,
+    "resolved": 0,
+    "passed": 110,
+    "unresolvedCount": 0,
+    "skippedObservationsRetained": 0,
+    "passingReplay": 0,
+    "originalUncaughtErrorCases": 0,
+    "finalUncaughtErrorCases": 0,
+    "inputs": [
+      {
+        "file": "TGQKD1.inventory-results.json",
+        "sha256": "606e7ed10b40890993e6510f4717a30de79c580fa370f9cd5cf445dca30c9c74",
+        "passed": 110,
+        "failed": 0,
+        "skipped": 0
+      }
+    ]
+  },
+  "chromium": {
+    "current": 301,
+    "passed": 301,
+    "unresolvedCount": 0,
+    "passingReplay": 0,
+    "inputs": [
+      {
+        "file": "TGQKD1.chromium-results.json",
+        "sha256": "061e77a7a4596557479e8cc1f578a91399107c0f535c4abc80fb185916b9149e",
+        "counts": {
+          "startTime": "2026-10-08T15:59:27.228Z",
+          "duration": 305108.69999999995,
+          "expected": 299,
+          "skipped": 0,
+          "unexpected": 0,
+          "flaky": 0
+        }
+      },
+      {
+        "file": "TGQKD1.closure5.chromium-results.json",
+        "sha256": "ce45f593c8627c5d4bf59fbe97facf6fe582d58d8068038f9dd0e08139ed3270",
+        "counts": {
+          "startTime": "2026-10-08T16:31:51.106Z",
+          "duration": 13872.931999999999,
+          "expected": 0,
+          "skipped": 0,
+          "unexpected": 2,
+          "flaky": 0
+        }
+      },
+      {
+        "file": "TGQKD1.closure6.chromium-results.json",
+        "sha256": "1f16d22cab3e40c96893a5d237e6cbc4c3cf795ff3da260bf7be064f49620247",
+        "counts": {
+          "startTime": "2026-10-08T16:33:41.494Z",
+          "duration": 6154.7699999999995,
+          "expected": 2,
+          "skipped": 0,
+          "unexpected": 0,
+          "flaky": 0
+        }
+      }
+    ]
+  },
+  "failures": []
+}

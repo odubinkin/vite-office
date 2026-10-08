@@ -2,7 +2,8 @@
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import type { SwTable, SwTableBox } from "../../core/table/swtable";
 import { GetSwRowSplit } from "../../core/docnode/ndtbl1";
-import { SwTableRep } from "../../uibase/table/swtablerep";
+import { SwTableRep, type TColumn } from "../../uibase/table/swtablerep";
+import type { SwTabCols } from "../../core/bastyp/tabcol";
 
 /** Native table-manager automatic width sentinel, INVALID_TWIPS/LONG_MAX. */
 const lAutoWidth = Number(0x7fffffffffffffffn);
@@ -131,10 +132,10 @@ export class SwFormatTablePage {
   private full = false;
   private modified = false;
 
-  /** Binds original table parameters before reserving the native reset snapshot. @param table - Original model. @param space - Upper print width. @param lineSelected - Source shell selection flag. @returns Nothing. */
-  public constructor(table: SwTable, space: number, lineSelected = false) {
+  /** Binds original table parameters before reserving the native reset snapshot. @param table - Original model. @param space - Upper print width. @param lineSelected - Source shell selection flag. @param geometry - Current native separators. @returns Nothing. */
+  public constructor(table: SwTable, space: number, lineSelected = false, geometry?: SwTabCols) {
     this.originalName = table.GetName();
-    this.data = new SwTableRep(table, space);
+    this.data = new SwTableRep(table, space, geometry);
     this.data.SetLineSelected(lineSelected);
     this.original = new SwTableRep(this.data);
     this.originalAbove = table.GetFormat().marginTop ?? 0;
@@ -150,7 +151,7 @@ export class SwFormatTablePage {
     this.metrics.left = this.savedLeft = this.data.left;
     this.metrics.right = this.savedRight = this.data.right;
     this.align = this.data.align;
-    this.minTableWidth = Math.min(this.savedWidth, this.data.columns.length * 23);
+    this.minTableWidth = Math.min(this.savedWidth, this.data.GetColCount() * 23);
     this.widthMaximum = 2 * this.data.space;
     this.above = this.originalAbove;
     this.below = this.originalBelow;
@@ -303,7 +304,7 @@ export class SwFormatTablePage {
     if (this.name.includes(" ")) return false;
     if (!this.FillItemSet(focusedField)) return true;
     const data = this.data,
-      count = data.columns.length;
+      count = data.GetColCount();
     if (this.metrics.left !== this.savedLeft || this.metrics.right !== this.savedRight) {
       data.SetWidthChanged();
       data.left = this.metrics.left;
@@ -312,21 +313,21 @@ export class SwFormatTablePage {
     data.width = this.metrics.width;
     if (count !== 0) {
       let diff =
-        data.columns.reduce(
-          /** Sums actual column widths. @param sum - Accumulator. @param width - Column width. @returns New sum. */
-          (sum, width) => sum + width,
+        data.columns.slice(0, count).reduce(
+          /** Sums actual column widths. @param sum - Accumulator. @param column - Native column interval. @returns New sum. */
+          (sum, column) => sum + column.nWidth,
           0,
         ) - data.width;
       const min = Math.min(23, Math.trunc(data.width / count) - 1);
       while (Math.abs(diff) > count + 1) {
         const sub = Math.trunc(diff / count);
         for (let i = 0; i < count; i++) {
-          const width = data.columns[i] as number;
+          const width = (data.columns[i] as TColumn).nWidth;
           if (width - min > sub) {
-            data.columns[i] = width - sub;
+            (data.columns[i] as TColumn).nWidth = width - sub;
             diff -= sub;
           } else {
-            data.columns[i] = min;
+            (data.columns[i] as TColumn).nWidth = min;
             diff -= width - min;
           }
         }
@@ -344,7 +345,7 @@ export class SwFormatTablePage {
   }
 }
 
-/** Native absolute column-page state over a shared flat visible SwTableRep. */
+/** Native absolute column-page state over all shared visible/hidden SwTableRep intervals. */
 export class SwTableColumnPage {
   public static readonly MET_FIELDS = 5;
   private readonly original: SwTableRep;
@@ -371,11 +372,12 @@ export class SwTableColumnPage {
       this.data.align !== HoriOrientation.FULL && this.data.align !== HoriOrientation.LEFT_AND_WIDTH
         ? this.data.width
         : this.data.space;
-    for (const width of this.data.columns) if (width < this.minWidth) this.minWidth = width;
+    for (const column of this.data.columns)
+      if (column.nWidth < this.minWidth) this.minWidth = column.nWidth;
     this.fieldMaximum = this.tableWidth;
     for (let i = 0; i < SwTableColumnPage.MET_FIELDS; i++)
       this.fields[i] =
-        i < this.data.columns.length ? this.Clamp(this.GetVisibleWidth(i)) : undefined;
+        i < this.data.GetColCount() ? this.Clamp(this.GetVisibleWidth(i)) : undefined;
     this.ActivatePage();
   }
   /** Reads the source field-to-column assignment. @param slot - Native metric field index. @returns Zero-based visible column. */
@@ -414,7 +416,7 @@ export class SwTableColumnPage {
   public CanScroll(direction: "back" | "next"): boolean {
     return direction === "back"
       ? this.GetFieldColumn(0) > 0
-      : this.GetFieldColumn(SwTableColumnPage.MET_FIELDS - 1) < this.data.columns.length - 1;
+      : this.GetFieldColumn(SwTableColumnPage.MET_FIELDS - 1) < this.data.GetColCount() - 1;
   }
   /** Couples the native proportional and adapt-table checkboxes. @param mode - Changed checkbox. @param checked - Source active state. @returns Nothing. */
   public ModeHdl(mode: "adapt" | "proportional", checked: boolean): void {
@@ -450,23 +452,38 @@ export class SwTableColumnPage {
   private Clamp(value: number): number {
     return Math.max(this.minWidth, Math.min(this.fieldMaximum, Math.trunc(value)));
   }
-  /** Reads one represented visible flat column. @param position - Visible column. @returns Native width. */
-  private GetVisibleWidth(position: number): number {
-    return this.data.columns[position] as number;
+  /** Aggregates native intervals up to the requested visible separator. @param position - Visible column. @returns Native visible width. */
+  public GetVisibleWidth(position: number): number {
+    let i = 0;
+    while (position > 0) {
+      if ((this.data.columns[i] as TColumn).bVisible) position--;
+      i++;
+    }
+    let width = (this.data.columns[i] as TColumn).nWidth;
+    while (!(this.data.columns[i] as TColumn).bVisible && i + 1 < this.data.GetAllColCount())
+      width += (this.data.columns[++i] as TColumn).nWidth;
+    return width;
   }
-  /** Writes one represented visible flat column in the original draft vector. @param position - Visible column. @param value - Native width. @returns Nothing. */
+  /** Writes a native visible width and clears covered subsequent hidden interval widths. @param position - Visible column. @param value - Native width. @returns Nothing. */
   private SetVisibleWidth(position: number, value: number): void {
-    this.data.columns[position] = value;
+    let i = 0;
+    while (position > 0) {
+      if ((this.data.columns[i] as TColumn).bVisible) position--;
+      i++;
+    }
+    (this.data.columns[i] as TColumn).nWidth = value;
+    while (!(this.data.columns[i] as TColumn).bVisible && i + 1 < this.data.GetAllColCount())
+      (this.data.columns[++i] as TColumn).nWidth = 0;
   }
   /** Reconciles columns using source constant, adapt-table and proportional policies. @param current - Authored visible column. @returns Nothing. */
   private UpdateCols(current: number): void {
     let sum = 0;
-    for (const width of this.data.columns) sum += width;
+    for (const column of this.data.columns) sum += column.nWidth;
     let diff = sum - this.tableWidth;
     if (!this.adaptWidth && !this.proportional) {
       let loops = 0;
       while (diff !== 0) {
-        if (++current === this.data.columns.length) {
+        if (++current === this.data.GetColCount()) {
           current = 0;
           if (++loops > 1) break;
         }
@@ -498,7 +515,7 @@ export class SwTableColumnPage {
         this.GetVisibleWidth(current) / originalWidth,
       );
       let total = 0;
-      for (let i = 0; i < this.data.columns.length; i++) {
+      for (let i = 0; i < this.data.GetColCount(); i++) {
         const width = Math.max(
           23,
           Math.round(percent * (i === current ? originalWidth : this.GetVisibleWidth(i))),
@@ -508,7 +525,7 @@ export class SwTableColumnPage {
       }
       this.tableWidth = total;
     }
-    for (let i = 0; i < SwTableColumnPage.MET_FIELDS && i < this.data.columns.length; i++)
+    for (let i = 0; i < SwTableColumnPage.MET_FIELDS && i < this.data.GetColCount(); i++)
       this.fields[i] = this.Clamp(this.GetVisibleWidth(this.GetFieldColumn(i)));
   }
   /** Reactivates shared table width and source selection-sensitive mode state. @returns Nothing. */

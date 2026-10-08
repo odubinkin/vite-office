@@ -1,0 +1,262 @@
+{
+  "base": "cede4c7fde7da229aa54ff11dcc1ab9370e3bab2",
+  "semanticPaths": [
+    "apps/office/e2e/writer-native-independent-table-properties.spec.ts",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx",
+    "apps/office/src/sw/browser/presentation/native-independent-table-properties.test.tsx",
+    "apps/office/src/sw/browser/presentation/writer-view.tsx",
+    "apps/office/src/sw/source/core/docnode/ndtbl.ts",
+    "apps/office/src/sw/source/core/table/native-tabcols.test.ts",
+    "apps/office/src/sw/source/core/table/native-table-frame-width.test.ts",
+    "apps/office/src/sw/source/core/table/swtable.ts",
+    "apps/office/src/sw/source/ui/table/native-hidden-table-column-page.test.ts",
+    "apps/office/src/sw/source/ui/table/native-table-column-page.test.ts",
+    "apps/office/src/sw/source/ui/table/native-table-format-lifecycle.test.ts",
+    "apps/office/src/sw/source/ui/table/native-table-format-page.test.ts",
+    "apps/office/src/sw/source/ui/table/tabledlg.ts",
+    "apps/office/src/sw/source/uibase/shells/tabsh.ts",
+    "apps/office/src/sw/source/uibase/table/native-hidden-table-representation.test.ts",
+    "apps/office/src/sw/source/uibase/table/swtablerep.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-column-page-history.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-format-lifecycle-history.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-properties-reset-history.test.ts",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/source-provenance.json"
+  ],
+  "scopeCount": 21,
+  "priorAcceptanceFiles": 634,
+  "byteIdenticalAcceptanceFiles": 627,
+  "sourceBackedMigrations": [
+    {
+      "path": "apps/office/src/sw/source/core/table/native-tabcols.test.ts",
+      "oldSHA256": "c48ae7aad4956d4a42e13a3028515a5a96471f8f3c7f9bfa539674630ec307eb",
+      "currentSHA256": "e273117acb85605b3f4625e9f480f7f5ace9a1fe438b25ea144ed227b739784e",
+      "originalAssertions": 48,
+      "preservedLiteralAndOwnerAssertions": 48,
+      "changedAPIAssertions": [
+        {
+          "sha256": "bd6a0ac412dc9bd6798587b2908161fbd556caea17df765ec3770ebf867cb13a"
+        },
+        {
+          "sha256": "be977bf384379e87dc7bfca5d5fccfb5012f4743625b54874c9ab8777e8b34fa"
+        },
+        {
+          "sha256": "2605b49653892435e4877879847d215b7108b0e5faa62bf2f68b1afc39628599"
+        },
+        {
+          "sha256": "0fa69695ad63e915715e7e2d834906f21751fa49f9d2bcad9aa3903bdc234b75"
+        },
+        {
+          "sha256": "48ef9bdd5449ab3ab67b240372735fb367b3c11555c4e3795ec7b5a91da60389"
+        }
+      ],
+      "reason": "Only native TColumn access/writes and one explicit native column-owner DTO ingress change; literal expected widths/counts/styles/text/cursor/geometry and pointer-vector assertions are preserved.",
+      "nativeAnchors": [
+        "swtablerep.cxx32-153 nWidth/bVisible interval ownership",
+        "tabledlg.cxx1191-1230 native visible aggregation",
+        "tabsh.cxx396 native HasColsChanged gate"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/ui/table/native-table-column-page.test.ts",
+      "oldSHA256": "c29573739fb67f367ba9907e456673ed79d685d4130e327c44647c31a3ed5595",
+      "currentSHA256": "3fd339bd7f89972fd4b18a619a39d2c2706622235ccb6050dafd1b2f334d6c72",
+      "originalAssertions": 72,
+      "preservedLiteralAndOwnerAssertions": 72,
+      "changedAPIAssertions": [
+        {
+          "sha256": "e2ac09ecec55f9033e5ecc14bf7a7a5552263fbef99682913e7bc27f81b0a40d"
+        },
+        {
+          "sha256": "f12c3fe2c38ac3c6a3fb239bcecc185f195b0ca1dd02f8269d010e91d01711d8"
+        },
+        {
+          "sha256": "e4ceab2fc500eab57c214130e0d2a95b4bdaaac37bf65f5c8d4f94823ab45d3a"
+        },
+        {
+          "sha256": "dd521550d2f1ef9dfdaf118266da49a14b0e996c4d4f98b667f64aa224f97f64"
+        },
+        {
+          "sha256": "3fb06f06548381a5adec2a3bb3395bb3909104e0a3d6c23f25c7b2924bcf7862"
+        },
+        {
+          "sha256": "cf8a98044cf09093e1208c6126e83176df036ba75d99b5baad6c4839e92e2870"
+        },
+        {
+          "sha256": "5f8b5d76bcbb2ab972fb894e82451d72f581a5d544500bf84fd6092b9cc2a938"
+        },
+        {
+          "sha256": "5f8b5d76bcbb2ab972fb894e82451d72f581a5d544500bf84fd6092b9cc2a938"
+        },
+        {
+          "sha256": "f8738081a9e6d2f23743fc5b9d723bc1054183b830b5f822863c8909a8f74d4f"
+        },
+        {
+          "sha256": "873fc27964aa6f53425d3e6b472a519cf93428ff42c27f927964452e4e6604d6"
+        },
+        {
+          "sha256": "e0ca2eeb96257aedc3a4f4fe565fe015ca432a1c64b4487ff24bd9dfeb171b94"
+        },
+        {
+          "sha256": "238428113ade22429db96a5e63317dd6c9e6aafbfe49f4a4c56d6d313fb28575"
+        },
+        {
+          "sha256": "48a25915afe5e715531864aa81afc62b39c4af3f0b389546b35418c06b99a7a1"
+        },
+        {
+          "sha256": "7bdd181cec87337f3e25441f5a5ad9722552f5f69d4229b72de78b24fa78e688"
+        }
+      ],
+      "reason": "Only native TColumn access/writes and one explicit native column-owner DTO ingress change; literal expected widths/counts/styles/text/cursor/geometry and pointer-vector assertions are preserved.",
+      "nativeAnchors": [
+        "swtablerep.cxx32-153 nWidth/bVisible interval ownership",
+        "tabledlg.cxx1191-1230 native visible aggregation",
+        "tabsh.cxx396 native HasColsChanged gate"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/ui/table/native-table-format-lifecycle.test.ts",
+      "oldSHA256": "a146077b04e81f9ae785d39ea23519877e496e32acced9c3d7b47e612a6666ba",
+      "currentSHA256": "376c8751a543d6183162bd7de43afed1b2a4dd6957b3ede26fe4b54b5ce05c5c",
+      "originalAssertions": 45,
+      "preservedLiteralAndOwnerAssertions": 45,
+      "changedAPIAssertions": [
+        {
+          "sha256": "7fa4626390e24350ea2be79b9058653aeddcebdd87f0fb86e3fcdad3a72c81c7"
+        },
+        {
+          "sha256": "15edf86c297f4d6f26df5d6e310324b94ed81fd607cade7ca59ad3d8f2cf2262"
+        },
+        {
+          "sha256": "435f7aec780a09f8893a728b9bb28af8a9e0f7810f98b0fa5970292e5aacde15"
+        },
+        {
+          "sha256": "1887568aafa42f3fbb847ee1f61dc3cf7eb01accd74b65719e58cba1724ff762"
+        },
+        {
+          "sha256": "435f7aec780a09f8893a728b9bb28af8a9e0f7810f98b0fa5970292e5aacde15"
+        },
+        {
+          "sha256": "7fa4626390e24350ea2be79b9058653aeddcebdd87f0fb86e3fcdad3a72c81c7"
+        },
+        {
+          "sha256": "73ae09ab0e5650ad52d3b479b22a875cf7b5ae2d8749e5ab1ab9b75641363397"
+        }
+      ],
+      "reason": "Only native TColumn access/writes and one explicit native column-owner DTO ingress change; literal expected widths/counts/styles/text/cursor/geometry and pointer-vector assertions are preserved.",
+      "nativeAnchors": [
+        "swtablerep.cxx32-153 nWidth/bVisible interval ownership",
+        "tabledlg.cxx1191-1230 native visible aggregation",
+        "tabsh.cxx396 native HasColsChanged gate"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/ui/table/native-table-format-page.test.ts",
+      "oldSHA256": "5ab8b5f22946637a31e3e02f11ec45b499401ba0ca79ac8cb6190a664d457a22",
+      "currentSHA256": "7822be180c2e8004429a3305df3c6266d7df21581b1d013b3dc48b990851b4b7",
+      "originalAssertions": 36,
+      "preservedLiteralAndOwnerAssertions": 36,
+      "changedAPIAssertions": [
+        {
+          "sha256": "330cbac1341dd628331fda1cabfb728b7b6eedb041e5b2a9abdbc726034fc35a"
+        },
+        {
+          "sha256": "4545151119c9eb131555143dacde52034b916096e11fcf873d60fcb5ecb50020"
+        },
+        {
+          "sha256": "dbf915f5cccb4c9b24d92331425b5eae02b3005b43bbeb76fa31752c93b70207"
+        },
+        {
+          "sha256": "3c4b7240c6130b0fa069c945797c0e9c396ea67c458d4d9477e378c875d51e08"
+        }
+      ],
+      "reason": "Only native TColumn access/writes and one explicit native column-owner DTO ingress change; literal expected widths/counts/styles/text/cursor/geometry and pointer-vector assertions are preserved.",
+      "nativeAnchors": [
+        "swtablerep.cxx32-153 nWidth/bVisible interval ownership",
+        "tabledlg.cxx1191-1230 native visible aggregation",
+        "tabsh.cxx396 native HasColsChanged gate"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-column-page-history.test.ts",
+      "oldSHA256": "e298bd5d8e664e302569cf7cf546f6a1117c1a9bb3bfed19438a5f1eaca8f4f2",
+      "currentSHA256": "fdc438c4a411d3a6aa0415f59bb4467e4ad48c36a7e121270e419429583f61cc",
+      "originalAssertions": 26,
+      "preservedLiteralAndOwnerAssertions": 26,
+      "changedAPIAssertions": [
+        {
+          "sha256": "6efd1a467b5650bf3589e3dac78f44aaf97c59a21f2da18d43c12953994fdf7b"
+        }
+      ],
+      "reason": "Only native TColumn access/writes and one explicit native column-owner DTO ingress change; literal expected widths/counts/styles/text/cursor/geometry and pointer-vector assertions are preserved.",
+      "nativeAnchors": [
+        "swtablerep.cxx32-153 nWidth/bVisible interval ownership",
+        "tabledlg.cxx1191-1230 native visible aggregation",
+        "tabsh.cxx396 native HasColsChanged gate"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-format-lifecycle-history.test.ts",
+      "oldSHA256": "505a80bf7b4d55d738a09b449266948192a1c11d945e44c10531573bcb97652c",
+      "currentSHA256": "e4502f683e6adb9117bb977c544a0027befbd14e2bd60a15f3fd511970321bcf",
+      "originalAssertions": 33,
+      "preservedLiteralAndOwnerAssertions": 33,
+      "changedAPIAssertions": [
+        {
+          "sha256": "c3a328b5a3b7115ec37d09d977442717d4528ccc49d7d38940bef3503c4b4a1a"
+        },
+        {
+          "sha256": "5c715e16d7f408fbb7364c1de9d664f9b9a12b93c98d469b06313f71b0a8e629"
+        }
+      ],
+      "reason": "Only native TColumn access/writes and one explicit native column-owner DTO ingress change; literal expected widths/counts/styles/text/cursor/geometry and pointer-vector assertions are preserved.",
+      "nativeAnchors": [
+        "swtablerep.cxx32-153 nWidth/bVisible interval ownership",
+        "tabledlg.cxx1191-1230 native visible aggregation",
+        "tabsh.cxx396 native HasColsChanged gate"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-properties-reset-history.test.ts",
+      "oldSHA256": "f43ae7ac9161112adefc133de30c76d6a67ba96679427c3bdd3e68150521d59f",
+      "currentSHA256": "f5972d7ca0bbd451cd2a9fe6a321c66579bb2a9ee74b6a2c605192101f2e5b72",
+      "originalAssertions": 22,
+      "preservedLiteralAndOwnerAssertions": 22,
+      "changedAPIAssertions": [
+        {
+          "sha256": "836ef5bb11648970758a4de2e8ad0fc457bccfea28bd0fd9eeead3d74d12aab1"
+        }
+      ],
+      "reason": "Only native TColumn access/writes and one explicit native column-owner DTO ingress change; literal expected widths/counts/styles/text/cursor/geometry and pointer-vector assertions are preserved.",
+      "nativeAnchors": [
+        "swtablerep.cxx32-153 nWidth/bVisible interval ownership",
+        "tabledlg.cxx1191-1230 native visible aggregation",
+        "tabsh.cxx396 native HasColsChanged gate"
+      ]
+    }
+  ],
+  "newAcceptanceFiles": [
+    "apps/office/src/sw/source/uibase/table/native-hidden-table-representation.test.ts",
+    "apps/office/src/sw/source/ui/table/native-hidden-table-column-page.test.ts",
+    "apps/office/src/sw/browser/presentation/native-independent-table-properties.test.tsx",
+    "apps/office/src/sw/source/core/table/native-table-frame-width.test.ts",
+    "apps/office/e2e/writer-native-independent-table-properties.spec.ts"
+  ],
+  "metadata": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "oldRecords": 311,
+      "currentRecords": 311,
+      "priorFieldsPrefixesStatesDefaultsClassesPreserved": true,
+      "newRecords": 0
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "oldRecords": 311,
+      "currentRecords": 311,
+      "priorFieldsPrefixesStatesDefaultsClassesPreserved": true,
+      "newRecords": 0
+    }
+  ],
+  "failures": []
+}

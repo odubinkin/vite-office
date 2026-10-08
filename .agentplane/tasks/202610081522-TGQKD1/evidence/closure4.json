@@ -1,0 +1,22 @@
+{
+  "scope": "Only the genuinely new native core frame-width/normalization file; no previously passed cases replayed.",
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/source/core/table/native-table-frame-width.test.ts --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/TGQKD1.closure4.app-results.json",
+      "exit": 1,
+      "bytes": 32091,
+      "sha256": "6904b295bf33082558468e2a8dfc7ee672d89a53c2c7528f5d68ab47abb74efc",
+      "caseCounts": {
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "total": 7
+      },
+      "failedCases": [],
+      "unhandledErrorCount": 0,
+      "coverageMapSHA256": "06a93a0ee47fcfc04e88f97c7b49edbb892a4e50a35e7950e21c25953194270c"
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "scope": "Targeted current-source rebuild and only the two genuinely new independent table-properties Chromium cases; full profile remains exactly one.",
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run build",
+      "exit": 0,
+      "bytes": 1264,
+      "sha256": "9e1f6e54a7ebd493ed741ff428297b86e7fe41dd77f3f531b188a2165ea05a94"
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts writer-native-independent-table-properties.spec.ts --reporter=json",
+      "exit": 1,
+      "bytes": 16831,
+      "sha256": "ce45f593c8627c5d4bf59fbe97facf6fe582d58d8068038f9dd0e08139ed3270",
+      "counts": {
+        "startTime": "2026-10-08T16:31:51.106Z",
+        "duration": 13872.931999999999,
+        "expected": 0,
+        "skipped": 0,
+        "unexpected": 2,
+        "flaky": 0
+      },
+      "errors": [
+        {
+          "title": "native independent properties columns frame-width and history width=1280",
+          "status": "failed",
+          "errors": [
+            "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeDisabled\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('button', { name: 'Undo', exact: true })\nExpected: disabled\nReceived: enabled\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeDisabled\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'Undo', exact: true })\u001b[22m\n\u001b[2m    14 × locator resolved to <button title=\"Undo\" type=\"button\" aria-label=\"Undo\" aria-keyshortcuts=\"Ctrl+Z\" class=\"grid size-9 place-items-center rounded-lg text-sm font-bold text-slate-700 transition hover:bg-indigo-50 hover:text-indigo-800 disabled:cursor-not-allowed disabled:opacity-50 data-[active=true]:bg-indigo-100 data-[active=true]:text-indigo-900\">…</button>\u001b[22m\n\u001b[2m       - unexpected value \"enabled\"\u001b[22m\n\n\n  94 |     await page.getByRole(\"button\", { name: \"Table Properties\", exact: true }).click();\n  95 |     await page.getByRole(\"button\", { name: \"OK\", exact: true }).click();\n> 96 |     await expect(page.getByRole(\"button\", { name: \"Undo\", exact: true })).toBeDisabled();\n     |                                                                           ^\n  97 |     await page.getByRole(\"button\", { name: \"Table Properties\", exact: true }).click();\n  98 |     await page.getByRole(\"tab\", { name: \"Columns\", exact: true }).click();\n  99 |     await page.getByRole(\"spinbutton\", { name: \"Column 1 width (cm)\", exact: true }).fill(\"2.54\");\n    at /Users/odubinkin/Projects/vite-office/apps/office/e2e/writer-native-independent-table-properties.spec.ts:96:75"
+          ]
+        },
+        {
+          "title": "native independent properties columns frame-width and history width=390",
+          "status": "failed",
+          "errors": [
+            "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeDisabled\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('button', { name: 'Undo', exact: true })\nExpected: disabled\nReceived: enabled\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeDisabled\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'Undo', exact: true })\u001b[22m\n\u001b[2m    14 × locator resolved to <button title=\"Undo\" type=\"button\" aria-label=\"Undo\" aria-keyshortcuts=\"Ctrl+Z\" class=\"grid size-9 place-items-center rounded-lg text-sm font-bold text-slate-700 transition hover:bg-indigo-50 hover:text-indigo-800 disabled:cursor-not-allowed disabled:opacity-50 data-[active=true]:bg-indigo-100 data-[active=true]:text-indigo-900\">…</button>\u001b[22m\n\u001b[2m       - unexpected value \"enabled\"\u001b[22m\n\n\n  94 |     await page.getByRole(\"button\", { name: \"Table Properties\", exact: true }).click();\n  95 |     await page.getByRole(\"button\", { name: \"OK\", exact: true }).click();\n> 96 |     await expect(page.getByRole(\"button\", { name: \"Undo\", exact: true })).toBeDisabled();\n     |                                                                           ^\n  97 |     await page.getByRole(\"button\", { name: \"Table Properties\", exact: true }).click();\n  98 |     await page.getByRole(\"tab\", { name: \"Columns\", exact: true }).click();\n  99 |     await page.getByRole(\"spinbutton\", { name: \"Column 1 width (cm)\", exact: true }).fill(\"2.54\");\n    at /Users/odubinkin/Projects/vite-office/apps/office/e2e/writer-native-independent-table-properties.spec.ts:96:75"
+          ]
+        }
+      ]
+    }
+  ]
+}

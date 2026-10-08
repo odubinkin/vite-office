@@ -1,0 +1,223 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/sw/source/uibase/table/swtablerep.ts": "86dcd3994e8960a615cfb0b14d4e576ab236fc555e4abc064e18f15d37b55ea3",
+    "apps/office/src/sw/source/ui/table/tabledlg.ts": "6f0956ea48ee3bc89b4d6dcfb81f079ead3bc36f66a8d15cba9f71cbcb1cda51",
+    "apps/office/src/sw/source/uibase/shells/tabsh.ts": "b19f029f38ced8fe3f8caf16e8bcff95f151455b842a9f6e7aeecf358eb6ad04",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx": "731bf131b29186810f26c56c3ec6e9e292490d3c0c3a004a3920b0a8c6be9652",
+    "apps/office/src/sw/browser/presentation/writer-view.tsx": "39ab77fd187dacc071bd644ad75f0385b8de0946bc84143e1f688c370d3aaf39",
+    "apps/office/src/sw/source/uibase/table/native-hidden-table-representation.test.ts": "08e726bc9f4094ff2d6451800c0c7c42742b513e9b92bf262aa2b75006fe1431",
+    "apps/office/src/sw/source/ui/table/native-hidden-table-column-page.test.ts": "ef0909a9a6e364f08180c7fd983fee8ddef18751df687dc07982a15dbf4fc908",
+    "apps/office/src/sw/browser/presentation/native-independent-table-properties.test.tsx": "41cd3b1b03dad4c7e090657f18b29f78e197966a4a3aeebc29f851a35383b1a1",
+    "apps/office/src/sw/source/core/table/native-tabcols.test.ts": "e273117acb85605b3f4625e9f480f7f5ace9a1fe438b25ea144ed227b739784e",
+    "apps/office/src/sw/source/ui/table/native-table-column-page.test.ts": "3fd339bd7f89972fd4b18a619a39d2c2706622235ccb6050dafd1b2f334d6c72",
+    "apps/office/src/sw/source/ui/table/native-table-format-page.test.ts": "7822be180c2e8004429a3305df3c6266d7df21581b1d013b3dc48b990851b4b7",
+    "apps/office/src/sw/source/ui/table/native-table-format-lifecycle.test.ts": "376c8751a543d6183162bd7de43afed1b2a4dd6957b3ede26fe4b54b5ce05c5c",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-column-page-history.test.ts": "fdc438c4a411d3a6aa0415f59bb4467e4ad48c36a7e121270e419429583f61cc",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-format-lifecycle-history.test.ts": "25f34272a82be0481b03686f2e941f183b7f380882babe1e3710eed3bbb8363a",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-properties-reset-history.test.ts": "b4bffccaf6e3dfc39c4144a6a1c004ffda73b9709656ce042b6c894a3bd572aa",
+    "docs/program/source-provenance.json": "b34b2ed7d238dd55db857b319c7ed95bb5a8633145ada1c25676ead0fa218100",
+    "docs/program/parity/runtime-inventory.json": "ce7d51c7fe48a96cc810cf583fa91dde45f8e74486d2a0af33437df4e6bb98b6"
+  },
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1443,
+      "sha256": "f8768c5686c80f87ff2b54ee45da8c26f0098ee4d9a8339604f7b735eefde9a7",
+      "totals": [],
+      "failedCases": [],
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/TGQKD1.app-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 91446,
+      "sha256": "98675041c53dfb6716f958f66348cae767456e5d4cfd92e5cab9525f3b9d36d2",
+      "totals": [
+        "Test Files  2 failed | 475 passed (477)",
+        "Tests  5 failed | 13857 passed (13862)"
+      ],
+      "failedCases": [
+        {
+          "name": "apps/office/src/sw/source/uibase/wrtsh/native-table-format-lifecycle-history.test.ts > native format publication retains graph selectioncursor through3UndoRedo and continued ODT input",
+          "assertion": [
+            "AssertionError: expected [ 2000, 2000, 2000 ] to deeply equal [ 1000, 1000, 1000 ]"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/source/uibase/wrtsh/native-table-format-lifecycle-history.test.ts > native format publication retains graph selectionrow through3UndoRedo and continued ODT input",
+          "assertion": [
+            "AssertionError: expected [ 2000, 2000, 2000 ] to deeply equal [ 1000, 1000, 1000 ]"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/source/uibase/wrtsh/native-table-format-lifecycle-history.test.ts > native format publication retains graph selectiontable through3UndoRedo and continued ODT input",
+          "assertion": [
+            "AssertionError: expected [ 2000, 2000, 2000 ] to deeply equal [ 1000, 1000, 1000 ]"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/source/uibase/wrtsh/native-table-properties-reset-history.test.ts > native table Reset retains graph and one grouped acceptance through3UndoRedo and ODT",
+          "assertion": [
+            "AssertionError: expected [ 2000, 2000, 2000 ] to deeply equal [ 1000, 1000, 1000 ]"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/source/uibase/wrtsh/native-table-properties-reset-history.test.ts > native columns Reset retains graph and one grouped acceptance through3UndoRedo and ODT",
+          "assertion": [
+            "AssertionError: expected [ 2000, 2000, 2000 ] to deeply equal [ 1000, 1000, 1000 ]"
+          ]
+        }
+      ],
+      "caseCounts": {
+        "passed": 13857,
+        "failed": 5,
+        "skipped": 0,
+        "total": 13862
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 17362,
+          "covered": 17360,
+          "skipped": 0,
+          "pct": 99.98
+        },
+        "statements": {
+          "total": 19068,
+          "covered": 19066,
+          "skipped": 0,
+          "pct": 99.98
+        },
+        "functions": {
+          "total": 4381,
+          "covered": 4380,
+          "skipped": 0,
+          "pct": 99.97
+        },
+        "branches": {
+          "total": 14184,
+          "covered": 14181,
+          "skipped": 0,
+          "pct": 99.97
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverage": {
+        "lines": 99.98,
+        "statements": 99.98,
+        "functions": 99.97,
+        "branches": 99.97
+      },
+      "incompleteFileCount": 4,
+      "coverageMapSHA256": "54097ba2c5d561ae0b1e78b7bae887068cd17caf9c17d8b44e7f1128b7a863dc",
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "inventory",
+      "command": "npm run test:inventory:coverage -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/TGQKD1.inventory-results.json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 40604,
+      "sha256": "629078dcdeeb16340e1f4b1bf12e53b58e500acc5e1870ca662a8e5e7be505a7",
+      "totals": [
+        "Test Files  36 passed (36)",
+        "Tests  110 passed (110)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "passed": 110,
+        "failed": 0,
+        "skipped": 0,
+        "total": 110
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 1464,
+          "covered": 1464,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 1523,
+          "covered": 1523,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 384,
+          "covered": 384,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 1081,
+          "covered": 1081,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100
+      },
+      "incompleteFileCount": 0,
+      "coverageMapSHA256": "4ee0117af8c892661d80283ce34abc5349ab499d5257db9717906272c9e60704",
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "scripts",
+      "command": "npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts scripts/check-module-boundaries.test.ts scripts/check-legacy-font-boundary.test.ts scripts/native-column-item-boundary.test.ts scripts/native-ruler-boundary.test.ts",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 224,
+      "sha256": "520a3cfcf5c032fd6587654dffcd56fa248ae58072f90bb43b2f5707f9bdf7de",
+      "totals": [
+        "Test Files  6 passed (6)",
+        "Tests  19 passed (19)"
+      ],
+      "failedCases": [],
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 41461,
+      "sha256": "d26eaea272235ccc11a3efb544e512bbece9eb5f4e95a5be7f861e377c8151ce",
+      "totals": [
+        "299 passed (5.1m)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "startTime": "2026-10-08T15:59:27.228Z",
+        "duration": 305108.69999999995,
+        "expected": 299,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "unhandledErrorCount": 0
+    }
+  ]
+}

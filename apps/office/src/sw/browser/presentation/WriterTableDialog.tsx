@@ -12,6 +12,7 @@ import { SfxBoolItem } from "../../../svl/source/items/cenumitm";
 import { SfxItemSet, SfxItemState } from "../../../svl/source/items/itemset";
 import { RES_BOX, RES_COLLAPSING_BORDERS } from "../../inc/hintids";
 import { SID_ATTR_BORDER_INNER } from "../../../svx/inc/svxids";
+import type { SwTabCols } from "../../source/core/bastyp/tabcol";
 import type { SwTableProperties } from "../../source/uibase/shells/tabsh";
 import {
   SwFormatTablePage,
@@ -32,6 +33,7 @@ export interface WriterTableDialogValue extends SwTableProperties {
 export function WriterTableDialog(
   props: Readonly<{
     table?: SwTable;
+    tableColumns?: SwTabCols | undefined;
     selectedBoxes?: readonly SwTableBox[];
     borderItems?: SfxItemSet | undefined;
     boxAlign?: number | undefined;
@@ -53,6 +55,7 @@ export function WriterTableDialog(
 /** Presents native table properties. @param props - Original table and handlers. @returns Properties dialog. */
 function WriterTablePropertiesDialog({
   table,
+  tableColumns,
   selectedBoxes,
   borderItems,
   boxAlign,
@@ -62,6 +65,7 @@ function WriterTablePropertiesDialog({
   onSubmit,
 }: Readonly<{
   table: SwTable;
+  tableColumns?: SwTabCols | undefined;
   selectedBoxes?: readonly SwTableBox[];
   borderItems?: SfxItemSet | undefined;
   boxAlign?: number | undefined;
@@ -73,11 +77,10 @@ function WriterTablePropertiesDialog({
   const rows = table.GetTabLines();
   const nameInput = useRef<HTMLInputElement>(null);
   const rowCount = rows.length;
-  const columnCount = table.GetColumnWidths().length;
   const [formatPage] = useState(
     /** Creates the native draft once per mounted dialog. @returns Format page or insert mode. */
     () => {
-      return new SwFormatTablePage(table, availableWidth, lineSelected);
+      return new SwFormatTablePage(table, availableWidth, lineSelected, tableColumns);
     },
   );
   const [columnPage] = useState(
@@ -125,7 +128,7 @@ function WriterTablePropertiesDialog({
   );
   const [, refreshPage] = useState(0);
   const width = formatPage.GetFieldValue("width");
-  const columnWidths = formatPage.data.columns;
+  const columnCount = formatPage.data.GetColCount();
   const [initial] = useState(
     /** Retains initial input values for the represented Text Flow and Borders pages. @returns Original page values. */
     () => {
@@ -207,6 +210,11 @@ function WriterTablePropertiesDialog({
               }
             }
             if (activeTab === "columns") columnPage.DeactivatePage();
+            const columnWidths = Array.from(
+              { length: columnCount },
+              /** Mirrors accepted visible widths for explicit-value consumers. @param _unused - Array value. @param index - Native visible column. @returns Width. */
+              (_unused, index) => columnPage.GetVisibleWidth(index),
+            );
             if (
               !Number.isInteger(rowCount) ||
               !Number.isInteger(columnCount) ||
@@ -216,7 +224,7 @@ function WriterTablePropertiesDialog({
               columnWidths.some(
                 /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ (
                   value,
-                ) => value <= 0,
+                ) => !Number.isFinite(value) || value < 0,
               )
             ) {
               setError("Enter valid table dimensions and positive column widths.");
@@ -244,6 +252,7 @@ function WriterTablePropertiesDialog({
               marginTop: formatPage.above,
               marginBottom: formatPage.below,
               columnWidths,
+              tableRep: formatPage.data,
               ...(hasChangedBorders ? { borderItems: changedBorders } : {}),
               ...(verticalAlign === initial.verticalAlign ? {} : { verticalAlign }),
               headerRows: textFlowPage.GetRowsToRepeat(),

@@ -57,7 +57,13 @@ for (const [align, left, right, width, sensitive] of [
     ]).toEqual(sensitive);
     expect([f.page.above, f.page.below]).toEqual([40, 50]);
     f.page.DeactivatePage();
-    expect(f.page.data.columns).toEqual([1000, 2000]);
+    expect(
+      f.page.data.columns.map(
+        /** Reads literal native widths. @param column - Native interval. @returns Width. */ (
+          column,
+        ) => column.nWidth,
+      ),
+    ).toEqual([1000, 2000]);
     expect(f.table.GetColumnWidths()).toEqual([1000, 2000]);
     expect(new SwTabFrame(f.table).Format(8000)).toEqual(
       align === H.FULL ? { left: 0, right: 0, width: 8000 } : { left, right, width },
@@ -186,16 +192,34 @@ it("reconciles visible column widths without replacing original graph owners", /
   const f = fixture({ width: 6000, horiOrient: H.LEFT }, [23, 5977]);
   f.page.ValueChangedHdl("width", 3000);
   f.page.DeactivatePage();
-  expect(f.page.data.columns).toEqual([23, 2980]);
+  expect(
+    f.page.data.columns.map(
+      /** Reads literal native widths. @param column - Native interval. @returns Width. */ (
+        column,
+      ) => column.nWidth,
+    ),
+  ).toEqual([23, 2980]);
   expect(f.table.GetColumnWidths()).toEqual([23, 5977]);
   const balanced = fixture();
   balanced.page.ValueChangedHdl("width", 3000);
   balanced.page.DeactivatePage();
-  expect(balanced.page.data.columns).toEqual([1000, 2000]);
+  expect(
+    balanced.page.data.columns.map(
+      /** Reads literal native widths. @param column - Native interval. @returns Width. */ (
+        column,
+      ) => column.nWidth,
+    ),
+  ).toEqual([1000, 2000]);
   const empty = fixture({}, []);
   empty.page.AutoClickHdl(H.LEFT);
   empty.page.DeactivatePage();
-  expect(empty.page.data.columns).toEqual([]);
+  expect(
+    empty.page.data.columns.map(
+      /** Reads literal native widths. @param column - Native interval. @returns Width. */ (
+        column,
+      ) => column.nWidth,
+    ),
+  ).toEqual([]);
 });
 it("retains the Reset minimum through automatic width excursions", /** Checks thin and ordinary initial frame constraints through native transitions. @returns Nothing. */ () => {
   for (const [initial, minimum] of [

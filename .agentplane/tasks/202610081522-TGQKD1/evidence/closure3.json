@@ -1,0 +1,22 @@
+{
+  "scope": "Only the originally failed new native width-only UI/frame-history case; all previously passed cases retained as skipped.",
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/browser/presentation/native-independent-table-properties.test.tsx --testNamePattern ^mounted native width-only acceptance scales every independent row through frame history$ --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/TGQKD1.closure3.app-results.json",
+      "exit": 1,
+      "bytes": 31028,
+      "sha256": "91478ca135f6de63dce8cfb6b7d7d2c4b4999304b69106f6b3d6c26eb6687a9c",
+      "caseCounts": {
+        "passed": 1,
+        "failed": 0,
+        "skipped": 5,
+        "total": 6
+      },
+      "failedCases": [],
+      "unhandledErrorCount": 0,
+      "coverageMapSHA256": "26c2ec0686f1a6fcba979527d99c6c8f32cccb009f724b0029ee84dc74ae7410"
+    }
+  ]
+}

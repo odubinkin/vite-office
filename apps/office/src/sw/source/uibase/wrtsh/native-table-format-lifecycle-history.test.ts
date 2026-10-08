@@ -67,7 +67,11 @@ function accept(f: ReturnType<typeof fixture>): boolean {
     marginRight: data.right,
     marginTop: f.format.above,
     marginBottom: f.format.below,
-    columnWidths: data.columns,
+    columnWidths: data.columns.map(
+      /** Reads literal native widths. @param column - Native interval. @returns Width. */ (
+        column,
+      ) => column.nWidth,
+    ),
     padding: 0,
     border: "none",
     verticalAlign: VertOrientation.NONE,
@@ -93,7 +97,13 @@ it.each(["cursor", "row", "table"])(
     expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(0);
     f.format.DeactivatePage();
     expect(f.format.data.HasWidthChanged()).toBe(true);
-    expect(f.format.data.columns).toEqual([1000, 1000, 1000]);
+    expect(
+      f.format.data.columns.map(
+        /** Reads literal native widths. @param column - Native interval. @returns Width. */ (
+          column,
+        ) => column.nWidth,
+      ),
+    ).toEqual([1000, 1000, 1000]);
     expect(accept(f)).toBe(true);
     expect([f.table.GetFormat().width, f.table.GetFormat().marginTop]).toEqual([3000, 120]);
     expect(f.table.GetColumnWidths()).toEqual([1000, 1000, 1000]);
@@ -139,7 +149,13 @@ it("native format reactivation accepts source Columns width without resetting or
   f.format.AutoClickHdl(H.FULL);
   f.format.AutoClickHdl(H.LEFT);
   f.format.DeactivatePage();
-  expect(f.format.data.columns).toEqual([2500, 2000, 2000]);
+  expect(
+    f.format.data.columns.map(
+      /** Reads literal native widths. @param column - Native interval. @returns Width. */ (
+        column,
+      ) => column.nWidth,
+    ),
+  ).toEqual([2500, 2000, 2000]);
   expect(f.table.GetColumnWidths()).toEqual([2000, 2000, 2000]);
   expect(accept(f)).toBe(true);
   expect(f.table.GetFormat().width).toBe(6500);

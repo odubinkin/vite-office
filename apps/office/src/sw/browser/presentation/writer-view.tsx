@@ -55,6 +55,7 @@ import { WriterViewStore, type WriterViewSnapshot } from "./writer-view-projecti
 import { installWriterEmbeddedFonts } from "../../../vcl/browser/embedded-font-loader";
 import type { SwDoc } from "../../source/core/doc/doc";
 import { ItemSetToTableParam, TableParamToItemSet } from "../../source/uibase/shells/tabsh";
+import { SwTabCols } from "../../source/core/bastyp/tabcol";
 import { SwLineNumberInfo } from "../../inc/lineinfo";
 import { createSfxShell } from "../../../sfx2/source/control/shell";
 import { createWriterInterface } from "../../sdi/swriter";
@@ -129,6 +130,7 @@ export function WriterWorkbench({
   const [tableDialog, setTableDialog] = useState<"insert" | "properties">();
   const [tableBorderItems, setTableBorderItems] =
     useState<ReturnType<typeof TableParamToItemSet>>();
+  const [tableColumns, setTableColumns] = useState<SwTabCols>();
   const [lineNumberingDialog, setLineNumberingDialog] = useState(false);
   const [rowHeightDialog, setRowHeightDialog] = useState<SwTableHeightDlg>();
   const [renameCollision, setRenameCollision] = useState<WriterRenameCollision>();
@@ -160,6 +162,9 @@ export function WriterWorkbench({
             execute:
               /** Opens selected table properties with native input items. @returns Nothing. */ () => {
                 setTableBorderItems(TableParamToItemSet(view.GetWrtShell()));
+                const columns = new SwTabCols();
+                view.GetWrtShell().GetTabCols(columns);
+                setTableColumns(columns);
                 setTableDialog("properties");
               },
             isEnabled: /** Checks table selection. @returns Availability. */ () =>
@@ -695,7 +700,7 @@ export function WriterWorkbench({
           occupiedNames={occupiedTableNames}
           suggestedName={suggestedTableName}
           {...(tableDialog === "properties" && currentTable !== undefined
-            ? { table: currentTable, borderItems: tableBorderItems }
+            ? { table: currentTable, borderItems: tableBorderItems, tableColumns }
             : {})}
           {...(view.GetWrtShell().IsTableMode()
             ? { selectedBoxes: view.GetWrtShell().GetTableSel() }

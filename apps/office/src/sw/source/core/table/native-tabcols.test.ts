@@ -174,13 +174,29 @@ it("validates native geometry before mutations and keeps dialog source edge roun
   const rep = new SwTableRep(f.table, 10000);
   rep.left = 101;
   rep.right = 0;
-  rep.columns.splice(0, 3, 1000, 2000, 3001);
+  rep.columns.splice(
+    0,
+    3,
+    ...[1000, 2000, 3001].map(
+      /** Wraps authored literal widths. @param width - Width. @returns Native visible entry. */ (
+        width,
+      ) => ({ nWidth: width, bVisible: true }),
+    ),
+  );
   expect(rep.FillTabCols(old)).toBe(false);
   expect([old.GetLeft(), old.GetRight(), old.GetEntry(0).nPos, old.GetEntry(1).nPos]).toEqual([
     100, 6100, 1101, 3101,
   ]);
   rep.left = 200;
-  rep.columns.splice(0, 3, 4000, 4000, 4000);
+  rep.columns.splice(
+    0,
+    3,
+    ...[4000, 4000, 4000].map(
+      /** Wraps authored literal widths. @param width - Width. @returns Native visible entry. */ (
+        width,
+      ) => ({ nWidth: width, bVisible: true }),
+    ),
+  );
   rep.FillTabCols(old);
   expect(old.GetRight()).toBe(10000);
   rep.right = -1;
@@ -230,14 +246,20 @@ it.each([
     const f = fixture([3000, 3000], 6000, orient);
     f.table.SetFormat({ ...f.table.GetFormat(), marginLeft: 200, marginRight: 300 });
     const rep = new SwTableRep(f.table, 8000);
-    expect(rep.columns).toEqual(
+    expect(
+      rep.columns.map(
+        /** Reads literal native widths. @param column - Native interval. @returns Width. */ (
+          column,
+        ) => column.nWidth,
+      ),
+    ).toEqual(
       orient === HoriOrientation.FULL
         ? [4000, 4000]
         : orient === HoriOrientation.NONE
           ? [3750, 3750]
           : [3000, 3000],
     );
-    expect(required(rep.columns[0]) + required(rep.columns[1])).toBe(rep.width);
+    expect(required(rep.columns[0]).nWidth + required(rep.columns[1]).nWidth).toBe(rep.width);
     expect(rep.left + rep.right + rep.width).toBe(8000);
   },
 );
@@ -247,11 +269,23 @@ it("retains geometry for an unattached draft while physical relative-width draft
   empty.AddColumnWidth(1000);
   empty.AddColumnWidth(2000);
   const draft = new SwTableRep(empty, 8000);
-  expect(draft.columns).toEqual([1000, 2000]);
+  expect(
+    draft.columns.map(
+      /** Reads literal native widths. @param column - Native interval. @returns Width. */ (
+        column,
+      ) => column.nWidth,
+    ),
+  ).toEqual([1000, 2000]);
   expect(draft.width).toBe(3000);
   const f = fixture([21845, 21845, 21845], 65535, HoriOrientation.FULL),
     rep = new SwTableRep(f.table, 8640);
-  expect(rep.columns).toEqual([2880, 2880, 2880]);
+  expect(
+    rep.columns.map(
+      /** Reads literal native widths. @param column - Native interval. @returns Width. */ (
+        column,
+      ) => column.nWidth,
+    ),
+  ).toEqual([2880, 2880, 2880]);
   expect(rep.width).toBe(8640);
   expect(f.table.GetColumnWidths()).toEqual([21845, 21845, 21845]);
 });
@@ -259,7 +293,13 @@ it("reads an implicit connected single-column frame as physical native geometry"
   const f = fixture([6000]);
   f.table.SetFormat({ horiOrient: HoriOrientation.LEFT });
   const rep = new SwTableRep(f.table, 8000);
-  expect(rep.columns).toEqual([23]);
+  expect(
+    rep.columns.map(
+      /** Reads literal native widths. @param column - Native interval. @returns Width. */ (
+        column,
+      ) => column.nWidth,
+    ),
+  ).toEqual([23]);
   expect(rep.width).toBe(23);
   expect(f.table.GetColumnWidths()).toEqual([6000]);
 });

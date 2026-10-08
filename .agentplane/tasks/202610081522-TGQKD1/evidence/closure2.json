@@ -1,0 +1,29 @@
+{
+  "scope": "Only the genuinely new native width-only UI/frame-history case; prior passed cases retained as skipped.",
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/browser/presentation/native-independent-table-properties.test.tsx --testNamePattern ^mounted native width-only acceptance scales every independent row through frame history$ --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/TGQKD1.closure2.app-results.json",
+      "exit": 1,
+      "bytes": 32464,
+      "sha256": "8323e1f4a9c1bd2e9d2c981cc91e20665fe8d0ee0c48465d4f68d60b26d87d98",
+      "caseCounts": {
+        "passed": 0,
+        "failed": 1,
+        "skipped": 5,
+        "total": 6
+      },
+      "failedCases": [
+        {
+          "name": "apps/office/src/sw/browser/presentation/native-independent-table-properties.test.tsx > mounted native width-only acceptance scales every independent row through frame history",
+          "assertion": [
+            "AssertionError: expected [ [ 1000, 5000 ], …(2) ] to deeply equal [ [ 240, 1200 ], …(2) ]"
+          ]
+        }
+      ],
+      "unhandledErrorCount": 0,
+      "coverageMapSHA256": "7f6439df89990df3bf5cd27c9437e2ead4f977f19daa102aeceb8e87882c9a1e"
+    }
+  ]
+}

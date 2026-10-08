@@ -35,12 +35,18 @@ it("native column Reset keeps shared draft/vector identity and independent copy 
   f.data.width = 7000;
   f.data.align = H.RIGHT;
   f.data.space = 10000;
-  f.data.columns[0] = 3000;
+  (f.data.columns[0] as { nWidth: number }).nWidth = 3000;
   const assigned = new SwTableRep(f.table, 9000),
     assignedVector = assigned.columns;
   expect(assigned.Assign(f.data)).toBe(assigned);
   expect(assigned.columns).toBe(assignedVector);
-  expect(assigned.columns).toEqual([3000, 2000, 2000]);
+  expect(
+    assigned.columns.map(
+      /** Reads literal native widths. @param column - Native interval. @returns Width. */ (
+        column,
+      ) => column.nWidth,
+    ),
+  ).toEqual([3000, 2000, 2000]);
   expect([
     assigned.IsLineSelected(),
     assigned.HasWidthChanged(),
@@ -51,7 +57,13 @@ it("native column Reset keeps shared draft/vector identity and independent copy 
     assigned.space,
     assigned.align,
   ]).toEqual([true, true, true, 123, 456, 7000, 10000, H.RIGHT]);
-  expect(copy.columns).toEqual([2000, 2000, 2000]);
+  expect(
+    copy.columns.map(
+      /** Reads literal native widths. @param column - Native interval. @returns Width. */ (
+        column,
+      ) => column.nWidth,
+    ),
+  ).toEqual([2000, 2000, 2000]);
   expect(copy.columns).not.toBe(vector);
   f.page.Reset();
   expect(f.page.data).toBe(f.data);
@@ -90,7 +102,13 @@ it("native five metric slots retain disabled blanks, source bounds and no-op foc
   expect(f.page.FillItemSet(4)).toBe(false);
   expect(f.data.HasColsChanged()).toBe(false);
   f.page.ValueChangedHdl(0, 2000);
-  expect(f.data.columns).toEqual([1500]);
+  expect(
+    f.data.columns.map(
+      /** Reads literal native widths. @param column - Native interval. @returns Width. */ (
+        column,
+      ) => column.nWidth,
+    ),
+  ).toEqual([1500]);
   expect(f.page.FillItemSet(0)).toBe(true);
   expect(f.data.HasColsChanged()).toBe(true);
 });
@@ -108,7 +126,13 @@ it.each([
   ) => {
     const f = fixture();
     f.page.ValueChangedHdl(slot, value);
-    expect(f.data.columns).toEqual(expected);
+    expect(
+      f.data.columns.map(
+        /** Reads literal native widths. @param column - Native interval. @returns Width. */ (
+          column,
+        ) => column.nWidth,
+      ),
+    ).toEqual(expected);
     expect(f.page.GetTableWidth()).toBe(6000);
     expect(f.page.GetRemainingSpace()).toBe(3000);
     f.page.DeactivatePage();
@@ -120,10 +144,22 @@ it("native inherited narrow minimum and tiny-table two-wrap limit preserve sourc
   const narrow = fixture([10, 20, 30], { width: 60, horiOrient: H.LEFT });
   expect(narrow.page.GetMinimum()).toBe(10);
   narrow.page.ValueChangedHdl(0, 50);
-  expect(narrow.data.columns).toEqual([40, 10, 10]);
+  expect(
+    narrow.data.columns.map(
+      /** Reads literal native widths. @param column - Native interval. @returns Width. */ (
+        column,
+      ) => column.nWidth,
+    ),
+  ).toEqual([40, 10, 10]);
   const tiny = fixture([1, 1, 1], { width: 1, horiOrient: H.LEFT });
   tiny.page.ValueChangedHdl(0, 1);
-  expect(tiny.data.columns).toEqual([1, 1, 1]);
+  expect(
+    tiny.data.columns.map(
+      /** Reads literal native widths. @param column - Native interval. @returns Width. */ (
+        column,
+      ) => column.nWidth,
+    ),
+  ).toEqual([1, 1, 1]);
   expect(tiny.page.GetTableWidth()).toBe(1);
 });
 it.each([
@@ -140,7 +176,13 @@ it.each([
     const f = fixture();
     f.page.ModeHdl("adapt", true);
     f.page.ValueChangedHdl(0, value);
-    expect(f.data.columns).toEqual(columns);
+    expect(
+      f.data.columns.map(
+        /** Reads literal native widths. @param column - Native interval. @returns Width. */ (
+          column,
+        ) => column.nWidth,
+      ),
+    ).toEqual(columns);
     expect(f.page.GetTableWidth()).toBe(width);
     expect(f.page.GetMaximum()).toBe(6000);
     f.page.DeactivatePage();
@@ -167,7 +209,13 @@ it.each([
     expect(f.page.IsChecked("adapt")).toBe(true);
     expect(f.page.IsSensitive("adapt")).toBe(false);
     f.page.ValueChangedHdl(0, value);
-    expect(f.data.columns).toEqual(columns);
+    expect(
+      f.data.columns.map(
+        /** Reads literal native widths. @param column - Native interval. @returns Width. */ (
+          column,
+        ) => column.nWidth,
+      ),
+    ).toEqual(columns);
     expect(f.page.GetTableWidth()).toBe(width);
     f.page.ModeHdl("proportional", false);
     expect(f.page.IsSensitive("adapt")).toBe(true);
@@ -178,14 +226,26 @@ it("native proportional integer rounding and reactivation restore source checkbo
   const f = fixture([1001, 2000, 2999]);
   f.page.ModeHdl("proportional", true);
   f.page.ValueChangedHdl(0, 1101);
-  expect(f.data.columns).toEqual([1101, 2200, 3299]);
+  expect(
+    f.data.columns.map(
+      /** Reads literal native widths. @param column - Native interval. @returns Width. */ (
+        column,
+      ) => column.nWidth,
+    ),
+  ).toEqual([1101, 2200, 3299]);
   expect(f.page.GetTableWidth()).toBe(6600);
   f.page.DeactivatePage();
   f.page.ActivatePage();
   expect(f.page.IsSensitive("adapt")).toBe(true);
   f.page.ModeHdl("adapt", false);
   f.page.ValueChangedHdl(0, 1200);
-  expect(f.data.columns).toEqual([1200, 2200, 3299]);
+  expect(
+    f.data.columns.map(
+      /** Reads literal native widths. @param column - Native interval. @returns Width. */ (
+        column,
+      ) => column.nWidth,
+    ),
+  ).toEqual([1200, 2200, 3299]);
   expect(f.page.GetTableWidth()).toBe(6600);
 });
 it("native one-column window moves all five fields and retains source guards", /** Checks seven actual columns through back/next and reset. @returns Nothing. */ () => {
@@ -201,12 +261,24 @@ it("native one-column window moves all five fields and retains source guards", /
   f.page.AutoClickHdl("next");
   expect(f.page.GetFieldColumn(4)).toBe(6);
   f.page.ValueChangedHdl(4, 800);
-  expect(f.data.columns).toEqual([23, 177, 300, 400, 500, 600, 800]);
+  expect(
+    f.data.columns.map(
+      /** Reads literal native widths. @param column - Native interval. @returns Width. */ (
+        column,
+      ) => column.nWidth,
+    ),
+  ).toEqual([23, 177, 300, 400, 500, 600, 800]);
   f.page.AutoClickHdl("back");
   expect(f.page.GetFieldColumn(0)).toBe(1);
   expect(f.page.GetFieldValue(0)).toBe(177);
   f.page.Reset();
-  expect(f.data.columns).toEqual([100, 200, 300, 400, 500, 600, 700]);
+  expect(
+    f.data.columns.map(
+      /** Reads literal native widths. @param column - Native interval. @returns Width. */ (
+        column,
+      ) => column.nWidth,
+    ),
+  ).toEqual([100, 200, 300, 400, 500, 600, 700]);
   expect(f.page.GetFieldColumn(0)).toBe(1);
   expect(f.page.GetFieldValue(0)).toBe(100);
 });
@@ -236,7 +308,13 @@ it.each([H.FULL, H.LEFT])(
       f.data.width = 6500;
       f.page.ActivatePage();
       expect(f.page.GetTableWidth()).toBe(6500);
-      expect(f.data.columns).toEqual([2000, 2500, 2000]);
+      expect(
+        f.data.columns.map(
+          /** Reads literal native widths. @param column - Native interval. @returns Width. */ (
+            column,
+          ) => column.nWidth,
+        ),
+      ).toEqual([2000, 2500, 2000]);
     }
   },
 );
@@ -271,7 +349,13 @@ it("native automatic column page reconciles changed available page space", /** C
   expect(f.page.GetTableWidth()).toBe(9000);
   f.data.space = 10500;
   f.page.ActivatePage();
-  expect(f.data.columns).toEqual([3000, 4500, 3000]);
+  expect(
+    f.data.columns.map(
+      /** Reads literal native widths. @param column - Native interval. @returns Width. */ (
+        column,
+      ) => column.nWidth,
+    ),
+  ).toEqual([3000, 4500, 3000]);
   expect(f.page.GetTableWidth()).toBe(10500);
   expect(f.page.GetRemainingSpace()).toBe(0);
   expect(f.page.IsSensitive("adapt")).toBe(false);
