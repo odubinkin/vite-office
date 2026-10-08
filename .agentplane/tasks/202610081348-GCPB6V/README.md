@@ -1,10 +1,11 @@
 ---
 id: "202610081348-GCPB6V"
 title: "Insert independent native columns with source-owned redo and borders"
-status: "DOING"
+result_summary: "Native columns insert at independent row edges, transfer right borders and redo through numeric document selection"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 23
+revision: 25
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-08T14:28:13.356Z"
+  updated_at: "2026-10-08T14:28:49.953Z"
   updated_by: "CODER"
-  note: "Actual 6b118e4b228ed67fc393234ac2403a299a5df990: bounded native independent column insertion/redo verified by one absent full profile and only failed/new closures. Unique13834app110inventory19infra299Chromium, all-four app/inventory100, all gatesPASS,12exact files,625 unchanged acceptance,3 source-backed migrations,311 metadata and registeredIO preserved. Current-agent EVALUATOR PASS explicitly not independent."
+  note: "Native columns insert at independent row edges, transfer right borders and redo through numeric document selection"
   attempts: 0
 quality_review:
   state: "pass"
@@ -38,7 +39,9 @@ quality_review:
     - ".agentplane/tasks/202610081348-GCPB6V/evidence/quality-actual-sha.json"
   findings:
     - "Actual SHA bytes bind all12 semantic files; exact-source all-four app/inventory100, unique13834app110inventory19infra299Chromium, passingReplay0,12fresh,625 unchanged prior acceptance and3 explicit native-backed migrations. Full coverage/case/scope reports reconstruct byte-identically without tests."
-commit: null
+commit:
+  hash: "6b118e4b228ed67fc393234ac2403a299a5df990"
+  message: "🧩 GCPB6V code: insert independent native columns and redo by numeric selection"
 comments:
   -
     author: "CODER"
@@ -46,6 +49,9 @@ comments:
   -
     author: "CODER"
     body: "Start: complete the source-backed original failed assertion and native Redo return contract closure under the standing parity approval; only original failed and genuine new cases execute."
+  -
+    author: "CODER"
+    body: "Verified: Native columns insert at independent row edges, transfer right borders and redo through numeric document selection. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -67,8 +73,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Actual 6b118e4b228ed67fc393234ac2403a299a5df990: bounded native independent column insertion/redo verified by one absent full profile and only failed/new closures. Unique13834app110inventory19infra299Chromium, all-four app/inventory100, all gatesPASS,12exact files,625 unchanged acceptance,3 source-backed migrations,311 metadata and registeredIO preserved. Current-agent EVALUATOR PASS explicitly not independent."
+  -
+    type: "verify"
+    at: "2026-10-08T14:28:49.953Z"
+    author: "CODER"
+    state: "ok"
+    note: "Native columns insert at independent row edges, transfer right borders and redo through numeric document selection"
+  -
+    type: "status"
+    at: "2026-10-08T14:28:50.050Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Native columns insert at independent row edges, transfer right borders and redo through numeric document selection. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-08T14:28:13.420Z"
+doc_updated_at: "2026-10-08T14:28:50.050Z"
 doc_updated_by: "CODER"
 description: "Iteration235 under approved parent202609240501-C9TN6M. Remove shared-column edge/count refusal and global column history position. Match per-row native insertion width arithmetic and right-border transfer. Column redo re-enters original document InsertCol using saved numeric selected-box coordinates and original/new box differences; remove duplicate shared SaveTable width vector. Preserve original surviving node/cursor owners, undo suppression, native attributes and IO deviations. Fresh independent row/core/history/mounted UI cases and two explicit source-backed acceptance migrations only."
 sections:
@@ -133,6 +152,36 @@ sections:
     - operator_action: run_exact_argv
     - can_execute_now: true
     - safe_command: agentplane commit 202610081348-GCPB6V -m 🧩 GCPB6V task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-10-08T14:28:49.953Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Native columns insert at independent row edges, transfer right borders and redo through numeric document selection
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-08T14:28:13.420Z, excerpt_hash=sha256:4109364677707708e26fdb85f849605cae6aaeabaa01ce6517b620295f882156
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610081348-GCPB6V/blueprint/resolved-snapshot.json
+    - old_digest: 91a62712e421217a37c4760831b3a43c41668d936efdbbe4e6d31a6f82e8f544
+    - current_digest: 91a62712e421217a37c4760831b3a43c41668d936efdbbe4e6d31a6f82e8f544
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610081348-GCPB6V
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610081348-GCPB6V --result verified-202610081348-GCPB6V --commit 1403b5eca5a696d410cb357acb61b090d8de0946
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -221,6 +270,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane commit 202610081348-GCPB6V -m 🧩 GCPB6V task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-08T14:28:49.953Z — VERIFY — ok
+
+By: CODER
+
+Note: Native columns insert at independent row edges, transfer right borders and redo through numeric document selection
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-08T14:28:13.420Z, excerpt_hash=sha256:4109364677707708e26fdb85f849605cae6aaeabaa01ce6517b620295f882156
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610081348-GCPB6V/blueprint/resolved-snapshot.json
+- old_digest: 91a62712e421217a37c4760831b3a43c41668d936efdbbe4e6d31a6f82e8f544
+- current_digest: 91a62712e421217a37c4760831b3a43c41668d936efdbbe4e6d31a6f82e8f544
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610081348-GCPB6V
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610081348-GCPB6V --result verified-202610081348-GCPB6V --commit 1403b5eca5a696d410cb357acb61b090d8de0946
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
