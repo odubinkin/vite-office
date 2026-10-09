@@ -1,10 +1,11 @@
 ---
 id: "202610090950-7JN228"
 title: "Use the native edit-window layout owner directly in browser rendering"
-status: "DOING"
+result_summary: "Browser formatting uses original native layout owner directly; actual cursor/renderer root identity, remount/current edit-window/document replacement verified.202 unique targeted passes,5 fresh,0 passing replay; changed/app all-four100;4 canonical inventory history prefixes preserved,509 old tests byte-identical,2 native-owner fixture migrations preserve66 assertions. Workbench initial viewStore retention recorded next fix; broad parity active,next full257 then verified errors and goal pause."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -39,11 +40,16 @@ quality_review:
     - ".agentplane/tasks/202610090950-7JN228/evidence/checks.json"
   findings:
     - "Original root identity retained across actual rerender/remount, direct editor edit-window change and shell document replacement; no rendering mutation of document/history. Four canonical records preserve full historical prefixes/status/default/classification;509 old tests byte-identical,2 explicit native-owner fixture migrations preserve66 assertions. Protected I/O/recovery/settings runtime remains unchanged. Whole root/page/body/follows/format lifetime parity is not promoted."
-commit: null
+commit:
+  hash: "6979a9454604bfe37fc9e7f49c792949144c83d4"
+  message: "🧩 7JN228 ui: borrow the original native edit-window layout owner"
 comments:
   -
     author: "CODER"
     body: "Start: Remove the React-owned fallback layout and use the original edit-window view-shell root; preserve all old rendering assertions, native lifecycle and registered deviations."
+  -
+    author: "CODER"
+    body: "Verified: React editor borrows original native edit-window view-shell layout; detached root and duplicate layout prop removed.202 unique related passes,5 fresh, all-four100 source-bound coverage, upstream-absent static and inventory gates pass."
 events:
   -
     type: "status"
@@ -58,8 +64,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "202 unique related passes,5 fresh,0 passing replay; actual native owner shared by renderer/cursor, direct editor owner change and current document replacement; changed/app all-four100 source-bound; static upstream-absent and all inventory gates pass,4 canonical history prefixes preserved. Next full257 then verified failures and goal pause."
+  -
+    type: "status"
+    at: "2026-10-09T10:04:23.159Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: React editor borrows original native edit-window view-shell layout; detached root and duplicate layout prop removed.202 unique related passes,5 fresh, all-four100 source-bound coverage, upstream-absent static and inventory gates pass."
 doc_version: 3
-doc_updated_at: "2026-10-09T10:03:11.477Z"
+doc_updated_at: "2026-10-09T10:04:23.160Z"
 doc_updated_by: "CODER"
 description: "Iteration253 under C9TN6M: remove the production React testLayout root and separate layout prop; resolve the existing shared native layout through actual SwEditWin view/editing shell. Preserve rendering, document lifecycle and registered I/O/recovery/settings deviations."
 sections:
