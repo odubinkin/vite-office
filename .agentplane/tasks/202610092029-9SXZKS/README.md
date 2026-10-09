@@ -4,7 +4,7 @@ title: "Port original shared mdds SoA iterator owners"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,32 @@ verification:
   updated_by: "CODER"
   note: "Original node/SoA iterators:7 native layouts1080 full pairs5916 traversal/pair states plus6 cache-conversion cases; exact raw/binary replay13 hashes2 archives/driver. Calc104 actual1002904/2051/467/2548; shared16 new2 actual100132/49/51/129; portable104/8/19; TS7/static/inventory gates pass. End private fields omitted, CALC-024 preserves distinction; task7/10, no complete MTV/Writer certification."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-09T20:43:21.135Z"
+  updated_by: "EVALUATOR"
+  note: "Reviewed13933d43651e against original node/SoA iterator source contracts, genuine unchanged native observations and scoped actual100 evidence; finish recommended."
+  evaluated_sha: "13933d43651eb06c4ec068bfb86fb62159026611"
+  blueprint_digest: "e59709b684d2d08883ae994dcad0068ccf315a7ae0206ae8ea9b27d58918e7b1"
+  evidence_refs:
+    - ".agentplane/tasks/202610092029-9SXZKS/README.md"
+    - ".agentplane/tasks/202610092029-9SXZKS/quality/20261009-204321135-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610092029-9SXZKS/quality/20261009-204321135-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610092029-9SXZKS/quality/20261009-204321135-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610092029-9SXZKS/blueprint/resolved-snapshot.json"
+    - "output/playwright/task17-integrity.log"
+    - "output/playwright/task17-native-check.log"
+    - "output/playwright/task17-util-check.log"
+    - "output/playwright/task17-shared-final.log"
+    - "output/playwright/task17-portable-inventory.log"
+    - "apps/office/coverage/iterator/coverage-summary.json"
+    - "apps/office/coverage/calc/coverage-summary.json"
+    - "output/playwright/task17-typecheck-final.log"
+    - "output/playwright/task17-format.log"
+  findings:
+    - "Original cached-node defaults/borrowed parent and block identities, six-field comparison/swap, independent copy and in-place assignment, grouped three-array traversal and end-aware equality preserve source responsibility. Forward policy order and reverse no-update remain original; mutable-to-const reconstruction differs deliberately from same-type copy. STL cursors are explicit syntax witnesses, no substitute MTV engine; debug/stream/ABI/invalid-lifetime/broad const qualifications remain disclosed gaps."
+    - "Independent full raw decode and actual binary replay accept7 real layouts/all4 specializations1080 pairs136 forward108 backward records(5916 complete traversal-pair states) plus6 full cache-copy-conversion cases/defaults/singular comparisons. All13 header hashes,2 pinned archives and exact driver digest match. Entire end private part omitted; CALC-024 records a confirmed API distinction without a fix. Original utility golden remains unchanged after shared input verifier extraction."
+    - "Calc104 actual1002904/2051/467/2548 and changed2 shared132/49/51/129 positive actual denominators verified, related16 shared, portable104/8/19 and TS7/tooling14/provenance3/static gates pass. Calc27/152 and shared6/125 report0 semantic violations and unverified whole-module parity. No Writer gap repair/merge/network/full run; task7/10. Reviewed final17 logs and intentional16-file implementation scope; finish can proceed."
 commit: null
 comments:
   -
