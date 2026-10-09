@@ -1,10 +1,11 @@
 ---
 id: "202610092254-YGCB8W"
 title: "Port original shared SoA resize and empty-tail growth contracts"
-status: "DOING"
+result_summary: "verified-202610092254-YGCB8W"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 19
+revision: 23
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-09T23:05:22.464Z"
+  updated_at: "2026-10-09T23:08:44.196Z"
   updated_by: "CODER"
-  note: "Original resize/empty growth verified: native578/24518 with prior350 unchanged, binary/source/archive/raw counter audit; Calc104 and shared21 changed-main actual100; upstream-absent registry19; all14 required gates pass after one provenance reference correction. CALC-028 preserved; cycle2 task3 no full run due."
+  note: "verified-202610092254-YGCB8W"
   attempts: 0
 quality_review:
   state: "pass"
@@ -43,11 +44,16 @@ quality_review:
     - "Independently compared the committed 578-case corpus with plan baseline 1f81d43e0bd4da01b40c0afd9a2d49584c358c22: every prior350 command, complete decoded state and final event remained unchanged."
     - "CALC-028 native seed36 resize5 produces [[0,1,3,5,2],[1,1,3,1],[2,0,2],[3,0,2]]; suspicious global overwrite offset is preserved and documented with managed effects explicitly unverified."
     - "Calc104tests/23files and changed shared21tests/7files have actual100 percent S/B/F/L with positive raw counters. All14 final gates and three portable groups passed; reference symlinks restored exactly, clean Git state and routing/doctor checked."
-commit: null
+commit:
+  hash: "bbd38e29339ef855a3fef688f95376eef0247339"
+  message: "🔍 YGCB8W review: verify shared resize native corpus and focused coverage"
 comments:
   -
     author: "CODER"
     body: "Start: port original owner resize and empty-tail growth with exact callback/overwrite arguments, unchanged350 native prefix, actual forwarding caller observers, scoped100 and portable evidence; cycle2 task3."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610092254-YGCB8W. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -62,8 +68,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Original resize/empty growth verified: native578/24518 with prior350 unchanged, binary/source/archive/raw counter audit; Calc104 and shared21 changed-main actual100; upstream-absent registry19; all14 required gates pass after one provenance reference correction. CALC-028 preserved; cycle2 task3 no full run due."
+  -
+    type: "verify"
+    at: "2026-10-09T23:08:44.196Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610092254-YGCB8W"
+  -
+    type: "status"
+    at: "2026-10-09T23:08:44.327Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610092254-YGCB8W. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-09T23:05:22.515Z"
+doc_updated_at: "2026-10-09T23:09:15.013Z"
 doc_updated_by: "CODER"
 description: "Cycle2 task3/10: original resize/resize_impl/append_empty/push_back_empty over real metadata and block funcs; exact truncation arguments, release/deletion order, native all12 full-state proof, preserve prior350 corpus. Scoped Calc/shared100 and upstream-absent ordinary acceptance; no full suite due."
 sections:
@@ -125,6 +144,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-09T23:08:44.196Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610092254-YGCB8W
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T23:05:22.515Z, excerpt_hash=sha256:34c337253760c473e27cd28fc0d1bf48884a1943ee1e366cfc22ed1f978505f9
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610092254-YGCB8W/blueprint/resolved-snapshot.json
+    - old_digest: e32ce765ae639d703e6c71d903de7f895d25cb80b283d247286ae89e48ee58e2
+    - current_digest: e32ce765ae639d703e6c71d903de7f895d25cb80b283d247286ae89e48ee58e2
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610092254-YGCB8W
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610092254-YGCB8W --result verified-202610092254-YGCB8W --commit bbd38e29339ef855a3fef688f95376eef0247339
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert intentional YGCB8W commits only if requested; retain prior owners/helpers/source references and unrelated task state."
   Findings: |-
@@ -149,6 +198,18 @@ sections:
     - Observation: Source-provenance and both scoped inventory checks reject the new local scripts/mdds-container-native-probe.mjs provenance reference: the installed reader accepts local apps/vendor paths and treats other paths as upstream-relative, producing ENOENT. Actual script exists locally; source links are present.
       Impact: One new provenance evidence path violates the existing reader contract; source implementation/native/coverage remain passing. No source evidence acceptance yet.
       Resolution: Replace only that provenance-local reference with actual apps container.test.ts#observedFuncs, retaining native script evidence in its existing supported capability/runtime channels. Rerun provenance and scoped inventory plus exact record formatting; do not change reader/gates or copy local script into upstream.
+
+    - Observation: Exact route task complete exited5 E_GIT: installed deterministic close subject is too generic; task is DONE pending artifact commit.
+      Impact: Implementation and quality checks remain passed; task artifacts need supported close recovery.
+      Resolution: Recomputed next-action; follow emitted commit --close --unstage-others without changing CLI, hooks or policy.
+
+    - Observation: Exact recovery commit --close --unstage-others also exited5 E_GIT: deterministic subject is too generic.
+      Impact: Only verified task closure artifacts remain dirty; no implementation drift.
+      Resolution: Route recomputed after failure. Use bounded supported ap commit with a specific finalize subject and --allow-tasks; inspect actual amended Git HEAD and terminal route afterward.
+extensions:
+  implementation_commit:
+    hash: "75066c718ef054e51e0083572bb79aa9cfe412f6"
+    message: "✨ YGCB8W shared: port original SoA resize and empty growth"
 id_source: "generated"
 ---
 ## Summary
@@ -222,6 +283,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-09T23:08:44.196Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610092254-YGCB8W
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T23:05:22.515Z, excerpt_hash=sha256:34c337253760c473e27cd28fc0d1bf48884a1943ee1e366cfc22ed1f978505f9
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610092254-YGCB8W/blueprint/resolved-snapshot.json
+- old_digest: e32ce765ae639d703e6c71d903de7f895d25cb80b283d247286ae89e48ee58e2
+- current_digest: e32ce765ae639d703e6c71d903de7f895d25cb80b283d247286ae89e48ee58e2
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610092254-YGCB8W
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610092254-YGCB8W --result verified-202610092254-YGCB8W --commit bbd38e29339ef855a3fef688f95376eef0247339
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -251,3 +342,11 @@ Original main_def.inl4725-4759 append_empty returns true when creating a block a
 - Observation: Source-provenance and both scoped inventory checks reject the new local scripts/mdds-container-native-probe.mjs provenance reference: the installed reader accepts local apps/vendor paths and treats other paths as upstream-relative, producing ENOENT. Actual script exists locally; source links are present.
   Impact: One new provenance evidence path violates the existing reader contract; source implementation/native/coverage remain passing. No source evidence acceptance yet.
   Resolution: Replace only that provenance-local reference with actual apps container.test.ts#observedFuncs, retaining native script evidence in its existing supported capability/runtime channels. Rerun provenance and scoped inventory plus exact record formatting; do not change reader/gates or copy local script into upstream.
+
+- Observation: Exact route task complete exited5 E_GIT: installed deterministic close subject is too generic; task is DONE pending artifact commit.
+  Impact: Implementation and quality checks remain passed; task artifacts need supported close recovery.
+  Resolution: Recomputed next-action; follow emitted commit --close --unstage-others without changing CLI, hooks or policy.
+
+- Observation: Exact recovery commit --close --unstage-others also exited5 E_GIT: deterministic subject is too generic.
+  Impact: Only verified task closure artifacts remain dirty; no implementation drift.
+  Resolution: Route recomputed after failure. Use bounded supported ap commit with a specific finalize subject and --allow-tasks; inspect actual amended Git HEAD and terminal route afterward.
