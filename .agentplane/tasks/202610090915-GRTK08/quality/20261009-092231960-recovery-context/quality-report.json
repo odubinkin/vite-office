@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "task_id": "202610090915-GRTK08",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-09T09:22:31.960Z",
+  "verdict": "pass",
+  "summary": "Original transpose and growth geometry retains source containment, native widths, sheet wrapping and alias ownership.",
+  "evaluated_sha": "7cfa2999f25a851dc42a5980e0d84f55edcc413f",
+  "blueprint_digest": "2d60a203ca87886f40e93189e00a14be567025d26703b9d903c470e2274b5c93",
+  "findings": [
+    "20203 compiled unchanged original outcomes and all prior Calc fixtures pass; actual100 all four metrics, registry zero violations and affected guards clean. Original static owner retains a narrow lint annotation."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610090915-GRTK08/README.md",
+    "apps/office/src/sc/source/core/tool/refupdat.test.ts",
+    "apps/office/coverage/calc/coverage-summary.json",
+    "output/playwright/calc-registry9.json",
+    "7cfa2999f25a"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Other Update overloads and MoveRelWrap, full document/compiler/change tracking, debug checks and undefined domains remain subsequent work. Full suites next milestone10, then explicit user-requested goal pause."
+  ]
+}
