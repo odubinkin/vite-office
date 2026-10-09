@@ -1,10 +1,11 @@
 ---
 id: "202610091638-6W99E8"
 title: "Port Calc multi-selection owner and iterator"
-status: "DOING"
+result_summary: "verified-202610091638-6W99E8"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-09T17:20:13.600Z"
+  updated_at: "2026-10-09T17:21:17.837Z"
   updated_by: "CODER"
-  note: "Passed550 unchanged native sequences and original debug assertion with genuine dependencies/sanitizers;88 Calc tests actual100 in all four Istanbul metrics;5 shared,14 tooling,3 provenance,30 inventory and upstream-absent88+5+30 portable tests; TS7/lint/format/docs/ownership/provenance/size/tree/Calc-shared registry zero violations. CALC-010..013 preserved. Task9/10; Writer coverage untouched."
+  note: "verified-202610091638-6W99E8"
   attempts: 0
 quality_review:
   state: "pass"
@@ -49,11 +50,16 @@ quality_review:
     - "Capacity-dependent immutable-bound transfer required an actual std::vector value adapter. The recorded libc++220106 capacity/insert/erase/copy/move profile agrees with550 complete native sequences. No replacement native interval/range-list/string/document implementation is introduced."
     - "Reviewed492-line owner and517 physical-line native probe as coherent original-owner/extraction units; shared dependency verification is reused. Fixture snapshots intern complete selected observations without reducing commands or either owner comparison. Public array equality and independent copy/reset bounds checks avoid private JavaScript introspection."
     - "All declared deterministic gates passed:88 Calc actual100, shared5/tooling14/provenance3/inventory30; upstream-absent88+5+30; TS7, scoped lint/format/docs/ownership/size/tree/provenance, zero registry violations, routing and doctor. No new exclusions or changes to prior acceptance tests."
-commit: null
+commit:
+  hash: "6e7607ae1e318a15e122f96940341d274dedca64"
+  message: "🧩 6W99E8 review: Record Calc multi-selection verification and bounded native evidence"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610091638-6W99E8. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -68,8 +74,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Passed550 unchanged native sequences and original debug assertion with genuine dependencies/sanitizers;88 Calc tests actual100 in all four Istanbul metrics;5 shared,14 tooling,3 provenance,30 inventory and upstream-absent88+5+30 portable tests; TS7/lint/format/docs/ownership/provenance/size/tree/Calc-shared registry zero violations. CALC-010..013 preserved. Task9/10; Writer coverage untouched."
+  -
+    type: "verify"
+    at: "2026-10-09T17:21:17.837Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610091638-6W99E8"
+  -
+    type: "status"
+    at: "2026-10-09T17:21:17.978Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610091638-6W99E8. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-09T17:20:13.653Z"
+doc_updated_at: "2026-10-09T17:21:51.843Z"
 doc_updated_by: "CODER"
 description: "Task9 of resumed cycle: original ScMultiSel and ScMultiSelIter over existing ScMarkArray, ScFlatBoolRowSegments and ScRangeList; preserve raw Set, row migration, borrowed versus snapshot iteration and shifts with unchanged native evidence."
 sections:
@@ -121,6 +140,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-09T17:21:17.837Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610091638-6W99E8
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T17:20:13.653Z, excerpt_hash=sha256:e46dc62dc7f81f9d70402dd0682e1d8e67042c623a4b3fc333c86c489229bfe8
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610091638-6W99E8/blueprint/resolved-snapshot.json
+    - old_digest: 576a3d7d9498b3480d9ce0ff8b888e60d50e29898eed8052672962d2102b78e4
+    - current_digest: 576a3d7d9498b3480d9ce0ff8b888e60d50e29898eed8052672962d2102b78e4
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610091638-6W99E8
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610091638-6W99E8 --result verified-202610091638-6W99E8 --commit 6e7607ae1e318a15e122f96940341d274dedca64
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task implementation/registry/docs; preserve all existing shared mdds and Calc dependencies."
   Findings: |-
@@ -153,6 +202,18 @@ sections:
     - Observation: check:docs detected that the native case builder documents only three of its four parameters.
       Impact: The required JSDoc check fails; implementation and native comparisons pass.
       Resolution: Document the existing otherLimits parameter without changing behavior or verification criteria.
+
+    - Observation: The exact route-oracle task complete command marks the verified task DONE but its generated deterministic close subject is rejected as too generic by the commit gate (E_GIT).
+      Impact: Implementation9fca9a7bc042 and pass quality6e7607ae1e31 are committed; only task closure metadata remains staged. No implementation or verification failure.
+      Resolution: Recompute route and persist only the active task artifacts using the documented ap commit allow-tasks command with a concrete multi-selection closure subject; keep every gate enabled.
+
+    - Observation: The required deterministic cleanup retry repeats the same generic-subject rejection before creating a commit.
+      Impact: Only active task README metadata remains; native implementation and all checks stay verified.
+      Resolution: Use ap commit --allow-tasks with the concrete approved multi-selection verification subject instead of repeating the failed subject generator; no force flag or policy change.
+extensions:
+  implementation_commit:
+    hash: "9fca9a7bc04262649a9c1d13ec1d16fdc1ea1828"
+    message: "🧩 6W99E8 implement: Port Calc multi-selection owner and iterator with native comparisons"
 id_source: "generated"
 ---
 ## Summary
@@ -216,6 +277,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-09T17:21:17.837Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610091638-6W99E8
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T17:20:13.653Z, excerpt_hash=sha256:e46dc62dc7f81f9d70402dd0682e1d8e67042c623a4b3fc333c86c489229bfe8
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610091638-6W99E8/blueprint/resolved-snapshot.json
+- old_digest: 576a3d7d9498b3480d9ce0ff8b888e60d50e29898eed8052672962d2102b78e4
+- current_digest: 576a3d7d9498b3480d9ce0ff8b888e60d50e29898eed8052672962d2102b78e4
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610091638-6W99E8
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610091638-6W99E8 --result verified-202610091638-6W99E8 --commit 6e7607ae1e318a15e122f96940341d274dedca64
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -253,3 +344,11 @@ Original source distinguishes borrowed single-array iteration from two-array boo
 - Observation: check:docs detected that the native case builder documents only three of its four parameters.
   Impact: The required JSDoc check fails; implementation and native comparisons pass.
   Resolution: Document the existing otherLimits parameter without changing behavior or verification criteria.
+
+- Observation: The exact route-oracle task complete command marks the verified task DONE but its generated deterministic close subject is rejected as too generic by the commit gate (E_GIT).
+  Impact: Implementation9fca9a7bc042 and pass quality6e7607ae1e31 are committed; only task closure metadata remains staged. No implementation or verification failure.
+  Resolution: Recompute route and persist only the active task artifacts using the documented ap commit allow-tasks command with a concrete multi-selection closure subject; keep every gate enabled.
+
+- Observation: The required deterministic cleanup retry repeats the same generic-subject rejection before creating a commit.
+  Impact: Only active task README metadata remains; native implementation and all checks stay verified.
+  Resolution: Use ap commit --allow-tasks with the concrete approved multi-selection verification subject instead of repeating the failed subject generator; no force flag or policy change.
