@@ -1119,7 +1119,14 @@
     "reason": "Standing goal cadence once per10 corrections; previous SZKQTN full success baseline. This is correction1/10."
   },
   "doctor": "0 errors,2 pre-existing warnings: older managed hook shim and historical PJV0JK missing implementation hash",
-  "quality": "Pending same-agent non-independent review of the semantic commit",
+  "quality": {
+    "verdict": "pass",
+    "sameAgent": true,
+    "independent": false,
+    "semanticCommit": "8489ed7632a9e6d8a2dc4d3f4443170cbaf219f7",
+    "report": ".agentplane/tasks/202610091821-KVM0ER/quality/20261009-184522356-recovery-context/quality-report.json",
+    "reportHash": "cf0f2edd7942d06f8779360674c544dc6b768c1196fd5d417ee587f82b7c89c1"
+  },
   "finalStatic": {
     "commands": [
       {
@@ -1191,5 +1198,6 @@
       "final-format-check": "ac1729f86eee878f5f4d6c948c510d2cc91bb5568f6dd088f70f3885e137d116",
       "final-lint": "a6172cb57fa696e705408fdc605fba1ae07b852fdf0614d7c2b623349e285b6e"
     }
-  }
+  },
+  "finalTrackedState": "Deterministic close still pending; source/test/canonical state committed, reference restored. Final both status modes must be clean."
 }
