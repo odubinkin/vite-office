@@ -1,10 +1,11 @@
 ---
 id: "202610091956-H5APAX"
 title: "Port original shared mdds block dispatch and scalar callbacks"
-status: "DOING"
+result_summary: "verified-202610091956-H5APAX"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 21
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-09T20:06:23.186Z"
+  updated_at: "2026-10-09T20:07:34.946Z"
   updated_by: "CODER"
-  note: "Verified original full dispatch and scalar callbacks for12 genuine types3616 native sequences26990 complete steps plus17 unknown overloads/empty-map/early-false and4 isolated assertions. All104 Calc actual100 and3 changed shared owners actual100 four metrics; related8 shared, portable104/3/30, TS7/tooling14/provenance3 and structural gates pass. CALC-022 preserves unknown deletion exception; task5/10, no Writer/full parity claim."
+  note: "verified-202610091956-H5APAX"
   attempts: 0
 quality_review:
   state: "pass"
@@ -44,11 +45,16 @@ quality_review:
     - "Full original discriminator dispatcher retains per-method lazy maps, both erase overloads, null deletion, unequal-ID early false, destination-selected handlers and matching-ID swap assertion. Explicit native value witnesses preserve all12 scalar callback IDs/defaults; actual shared scalar owners/storage reused. Static/free-function namespaces are TS adapters with no fake instances or number heuristics."
     - "Lossless independent decode matches3616 genuine native sequences26990 complete both-owner steps2182 full snapshots;8 source hashes,2 archives and driver hash plus9 mixed native families/17 unknown overloads/empty specialization/early false match actual binary. Four original isolated assertions checked; CALC-022 records unknown deletion throw and original TODO without rewriting behavior or claiming a Calc destructor failure."
     - "Actual positive four Istanbul denominators covered=total: Calc2904/2051/467/2548, changed3 shared owners113/16/46/110. Related8 shared and portable104 Calc/3 new shared/30 inventory pass; TS7/tools14/provenance3/lint/format/docs/boundaries/size/tree/routing/doctor pass. Final Calc25/149 and shared4/122 zero semantic violations; inventory whole-module parity remains unverified."
-commit: null
+commit:
+  hash: "f08ca5853ae611541b61c8fc334fcb6b2bd8667b"
+  message: "🔎 H5APAX review: record native dispatch acceptance evidence"
 comments:
   -
     author: "CODER"
     body: "Start: porting original complete block dispatch and scalar callbacks with native and portable evidence on calc."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610091956-H5APAX. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -63,8 +69,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified original full dispatch and scalar callbacks for12 genuine types3616 native sequences26990 complete steps plus17 unknown overloads/empty-map/early-false and4 isolated assertions. All104 Calc actual100 and3 changed shared owners actual100 four metrics; related8 shared, portable104/3/30, TS7/tooling14/provenance3 and structural gates pass. CALC-022 preserves unknown deletion exception; task5/10, no Writer/full parity claim."
+  -
+    type: "verify"
+    at: "2026-10-09T20:07:34.946Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610091956-H5APAX"
+  -
+    type: "status"
+    at: "2026-10-09T20:07:35.149Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610091956-H5APAX. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-09T20:06:23.256Z"
+doc_updated_at: "2026-10-09T20:08:02.590Z"
 doc_updated_by: "CODER"
 description: "Task5/10 current Calc cycle. Original complete element_block_funcs dispatch methods and scalar MDDS_MTV_DEFINE_ELEMENT_CALLBACKS callback contract, all12 standard explicit registrations. Reuse actual scalar owners/delayed storage; no type guessing or duplicate engine. Genuine unchanged header dispatch/callback native corpus and unknown/assert diagnostics; actual100 Calc and changed shared sources plus portable structural/inventory acceptance."
 sections:
@@ -127,6 +146,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-09T20:07:34.946Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610091956-H5APAX
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T20:06:23.256Z, excerpt_hash=sha256:b911f6b5d667a3a862b91b8ed5a317648aec428678e72fdea3517fd7f65fbe6c
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610091956-H5APAX/blueprint/resolved-snapshot.json
+    - old_digest: 3a1aa7d30e974d78a6ead68236ef94a0acde6e4551ab1ef307c66d9d9bf6d353
+    - current_digest: 3a1aa7d30e974d78a6ead68236ef94a0acde6e4551ab1ef307c66d9d9bf6d353
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610091956-H5APAX
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610091956-H5APAX --result verified-202610091956-H5APAX --commit f08ca5853ae611541b61c8fc334fcb6b2bd8667b
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert task-specific implementation only through approved follow-up on calc; preserve genuine existing shared owners and read-only references."
   Findings: |-
@@ -147,6 +196,18 @@ sections:
     - Observation: Static-only namespace conversion inserted a comma after the helper if block at block_funcs.ts81; formatter/shared/TS7/lint reject that syntax. The prior lint had exactly static-only classes and missing Owner JSDoc, no unused import defect.
       Impact: This local TS syntax error invalidates acceptance until corrected; original native corpus remains unchanged.
       Resolution: Recompute route; remove the helper comma only, retain namespace method commas, rerun final shared actual100/TS7/lint/format. Checker behavior and native algorithm unchanged.
+
+    - Observation: Exact routed task complete reached DONE but generated generic close subject was rejected by existing E_GIT commit hook.
+      Impact: Source and evaluator commits are complete; only task artifact closure tail remains dirty.
+      Resolution: Recompute route and use bounded same-scope concrete close subject recovery if generated --close repeats; do not alter hooks or gates.
+
+    - Observation: Routed commit --close --unstage-others repeated existing generic-subject hook rejection E_GIT.
+      Impact: Only DONE task artifact cleanup remains; implementation/quality are committed and scoped acceptance complete.
+      Resolution: Recompute route then persist artifacts with concrete H5APAX finalize subject via ap commit --allow-tasks; keep original hooks/verification unchanged.
+extensions:
+  implementation_commit:
+    hash: "a7e426bad8fafc7eba45eb9f83e310282e70e1f9"
+    message: "🧮 H5APAX implement: port native block dispatch and scalar callbacks"
 id_source: "generated"
 ---
 ## Summary
@@ -221,6 +282,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-09T20:07:34.946Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610091956-H5APAX
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T20:06:23.256Z, excerpt_hash=sha256:b911f6b5d667a3a862b91b8ed5a317648aec428678e72fdea3517fd7f65fbe6c
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610091956-H5APAX/blueprint/resolved-snapshot.json
+- old_digest: 3a1aa7d30e974d78a6ead68236ef94a0acde6e4551ab1ef307c66d9d9bf6d353
+- current_digest: 3a1aa7d30e974d78a6ead68236ef94a0acde6e4551ab1ef307c66d9d9bf6d353
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610091956-H5APAX
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610091956-H5APAX --result verified-202610091956-H5APAX --commit f08ca5853ae611541b61c8fc334fcb6b2bd8667b
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -246,3 +337,11 @@ Native dispatch has per-method static maps; callback overload selection is compi
 - Observation: Static-only namespace conversion inserted a comma after the helper if block at block_funcs.ts81; formatter/shared/TS7/lint reject that syntax. The prior lint had exactly static-only classes and missing Owner JSDoc, no unused import defect.
   Impact: This local TS syntax error invalidates acceptance until corrected; original native corpus remains unchanged.
   Resolution: Recompute route; remove the helper comma only, retain namespace method commas, rerun final shared actual100/TS7/lint/format. Checker behavior and native algorithm unchanged.
+
+- Observation: Exact routed task complete reached DONE but generated generic close subject was rejected by existing E_GIT commit hook.
+  Impact: Source and evaluator commits are complete; only task artifact closure tail remains dirty.
+  Resolution: Recompute route and use bounded same-scope concrete close subject recovery if generated --close repeats; do not alter hooks or gates.
+
+- Observation: Routed commit --close --unstage-others repeated existing generic-subject hook rejection E_GIT.
+  Impact: Only DONE task artifact cleanup remains; implementation/quality are committed and scoped acceptance complete.
+  Resolution: Recompute route then persist artifacts with concrete H5APAX finalize subject via ap commit --allow-tasks; keep original hooks/verification unchanged.
