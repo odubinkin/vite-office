@@ -4,6 +4,8 @@ import {
   SvxBoxInfoItem,
   SvxBoxInfoItemValidFlags,
 } from "../editeng/source/items/frmitems";
+import { SfxUInt16Item } from "../svl/source/items/intitem";
+import { FN_PARAM_TABLE_HEADLINE } from "../sw/inc/cmdid";
 import { SfxItemSet } from "../svl/source/items/itemset";
 import { SID_ATTR_BORDER_INNER } from "../svx/inc/svxids";
 import { GetSwRowSplit } from "../sw/source/core/docnode/ndtbl1";
@@ -114,6 +116,7 @@ export function nativeTableInputForTest(
       [RES_BOX, RES_BOX],
       [RES_ROW_SPLIT, RES_ROW_SPLIT],
       [SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER],
+      [FN_PARAM_TABLE_HEADLINE, FN_PARAM_TABLE_HEADLINE],
     ]);
   const info = new SvxBoxInfoItem(SID_ATTR_BORDER_INNER);
   info.SetTable(selectedBoxes === undefined || selectedBoxes.length > 1);
@@ -121,6 +124,7 @@ export function nativeTableInputForTest(
   info.SetMinDist(true);
   info.SetDefDist(28);
   result.Put(info);
+  result.Put(new SfxUInt16Item(FN_PARAM_TABLE_HEADLINE, table.GetRowsToRepeat()));
   const rowSplit = GetSwRowSplit(table, selectedBoxes);
   if (rowSplit !== undefined) result.Put(rowSplit);
   const boxes =

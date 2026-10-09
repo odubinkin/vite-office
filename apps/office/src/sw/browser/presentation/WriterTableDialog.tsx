@@ -576,7 +576,7 @@ function WriterTablePropertiesDialog({
                       className="w-16 rounded border px-2 py-1"
                       disabled={!textFlowPage.IsSensitive()}
                       max="100"
-                      min="1"
+                      min={textFlowPage.GetHeaderRowsMinimum()}
                       onChange={
                         /** Dispatches source integer editing. @param event - Number input. @returns Nothing. */ (
                           event,

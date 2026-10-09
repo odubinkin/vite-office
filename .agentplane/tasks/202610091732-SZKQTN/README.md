@@ -4,7 +4,7 @@ title: "Capture native headline ItemSet input for Text Flow"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 20
 origin:
   system: "manual"
 depends_on: []
@@ -13,14 +13,14 @@ tags:
 verify: []
 plan_approval:
   state: "approved"
-  updated_at: "2026-10-09T17:33:29.338Z"
+  updated_at: "2026-10-09T17:48:25.892Z"
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-09T17:59:08.744Z"
+  updated_by: "CODER"
+  note: "Verified: scheduled full14320distinct app cases24fresh after failed/new-only2case closure,122inventory13tooling2resource303browser allpass. Entire three modules627lines687statements123functions485branches and full application19334lines21251statements4843functions15683branches actual Istanbul100/zero-negative. Inventory configuredV8 strict100 zero-negative, no config change/replay. Build/seven statics/nine metadata/final format gates pass, six canonical prefixes600unmodified old test files1854unrelated files retained; three source-proven ODT default-owner assertions only migrated. Source unchanged and complete maps identical, raw failures retained, reference restored, goal active/incomplete new full baselineSZKQTN counter0."
   attempts: 0
 commit: null
 comments:
@@ -35,18 +35,77 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: authorized tenth native dialog correction and scheduled full upstream-absent verification in writer checkout."
+  -
+    type: "verify"
+    at: "2026-10-09T17:59:08.744Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified: scheduled full14320distinct app cases24fresh after failed/new-only2case closure,122inventory13tooling2resource303browser allpass. Entire three modules627lines687statements123functions485branches and full application19334lines21251statements4843functions15683branches actual Istanbul100/zero-negative. Inventory configuredV8 strict100 zero-negative, no config change/replay. Build/seven statics/nine metadata/final format gates pass, six canonical prefixes600unmodified old test files1854unrelated files retained; three source-proven ODT default-owner assertions only migrated. Source unchanged and complete maps identical, raw failures retained, reference restored, goal active/incomplete new full baselineSZKQTN counter0."
 doc_version: 3
-doc_updated_at: "2026-10-09T17:33:30.689Z"
+doc_updated_at: "2026-10-09T17:59:08.905Z"
 doc_updated_by: "CODER"
 description: "Resumed correction10/10 since XJTGF0. Capture source native table headline in shell dialog ItemSet and read authoritative direct input in Text Flow. Preserve saved widgets, native graph/history, old assertions and canonical inventory prefixes. Perform the scheduled full upstream-absent suite using actual Istanbul and repair failures before completion."
 sections:
   Summary: "Capture source headline21150 in the original shell dialog ItemSet and make Text Flow consume direct input rather than reread the table. This is correction10/10 since full XJTGF0; run the scheduled full suite upstream-absent once, then repair failures."
-  Scope: "Production: apps/office/src/sw/source/ui/table/tabledlg.ts, sw/source/uibase/shells/tabsh.ts, sw/browser/presentation/WriterTableDialog.tsx. Three fresh core/page, native history and mounted UI test files named native-headline-dialog-input.test.ts or .tsx in their corresponding directories. Source native headline fixture capture only in apps/office/src/test/table-box-test-helpers.ts; every old assertion retained. Six corresponding canonical runtime/provenance histories and append-only parent C9TN6M Findings. Preserve registered recovery/open/save/settings deviations, native ownership, existing transport/core count semantics. No source copies/helpers/raw logs/maps in AgentPlane, network/publication or new adapters. Raw diagnostics ignored node_modules cache only. Full-suite failures repaired within these criteria; material unrelated implementation changes require a separate scope decision."
-  Plan: "Complete native headline dialog input capture and represented source widget behavior; prove core/history/mounted behavior, update canonical inventory and run scheduled full upstream-absent Istanbul suite with all mandatory gates before semantic binding and closure. Broad goal active/incomplete."
-  Verify Steps: "Read ap task verify-show and route before edits. Prepare formatting, lint and TS7 upstream-absent. Execute one complete app Vitest coverage profile including all fresh and old cases, actual Istanbul with text/json/json-summary reports and current-source hashes, strict100% lines/statements/functions/branches for entire changed production modules and full configured application coverage, zero negative counters. Run inventory coverage with explicit Istanbul provider, all tooling and Writer resource tests, build and all Playwright projects, static-build check, format:check, lint, typecheck, check:dependencies, check:docs and check:file-size physically upstream-absent with finally restoration. Preserve raw failures; failed-only closures when production unchanged, meaningful reruns if code changes. After restoration run resource generation --check, registry build/check, source-tree/provenance, invariants/parity, routing and ap doctor. Append six canonical histories retaining every old scalar/status/default/classification/evidence/responsibility prefix, all old assertions and unrelated file hashes. Record bounded English counts/commands/hashes; semantic SHA binding, same-agent non-independent EVALUATOR and final blueprint verification after final docs. Finish via ap with intentional changes and clean final status; reset correction counter only after full success."
-  Verification: "Pending implementation and scheduled upstream-absent full verification."
+  Scope: "Production remains only tabledlg.ts, tabsh.ts and WriterTableDialog.tsx under apps/office/src/sw. Three fresh native-headline-dialog-input page/history/mounted test files; add one actual original row/cell name-broadcast owner case exposed by scheduled full coverage. Native headline capture fixture only in src/test/table-box-test-helpers.ts. Source-proven default-root expectation migration only in sw/source/filter/xml/odt-font-style-roundtrip.test.ts: Missing/self/cycle parents now assert concrete original document default owner, all other old assertions/cases retained. Six corresponding canonical histories and append-only C9TN6M Findings. No production or source-map changes after initial full profile, no changed tooling config, added facade, upstream copies, network/publication or registered deviation changes."
+  Plan: "Retain native headline production correction; complete source-proven failed old ODT default-root expectations and one fresh original row/cell notification test exposed by required full suite. Revalidate only failed/new cases with actual same-source Istanbul maps, preserve strict100 and all raw failures. Continue remaining full commands using actual configured inventory V8; application and all changed modules actual Istanbul100. Append canonical evidence, bind semantic SHA and close; no goal/module parity promotion or extra production scope."
+  Verify Steps: "Read task verify-show and route. Preparation formatting/lint/TS7 upstream-absent. One full application Istanbul profile includes all old/fresh cases; retain initial14318pass1failure and actual complete maps. Source-proven ODT root-parent expectation migration closes only failed old case; one new row/cell name-broadcast ownership case closes missed complete-module paths, no unchanged passing replay. Actual same-source identical complete-map Istanbul aggregation must pass100 lines/statements/functions/branches across entire changed three modules and full configured application, zero negative counters. Continue unexecuted full commands with configured inventory coverage provider V8, unchanged strict100 thresholds, all tooling/resource/all Playwright projects/build/static-build/format/lint/typecheck/dependencies/docs/file-size tests physically upstream-absent with finally restoration. Preserve raw failures; meaningful failed/new closures only unless production changes. After restoration metadata-only resource generation/registry build/check/source tree/provenance/invariants/parity/routing/doctor. Six original canonical prefixes and all unrelated hashes/old cases retained; exact source-backed ODT default-owner assertion replacements and native-input fixture capture recorded. Bounded English counts/commands/hashes, semantic binding and explicitly same-agent non-independent quality; final blueprint verification after final docs, intentional commits and clean closeout. Full success resets correction counter0; broad goal incomplete."
+  Verification: |-
+    Command: scheduled full root verify responsibilities split into one full application Istanbul profile, failed/new-only closure and twelve continuation commands; tests/build/statics physically upstream-absent, restoration in finally.
+    Result: pass after source-proven ODT expectation repair. Initial14318pass1failure; failed/new-only2pass6deliberate skips yields14320distinct application cases24fresh, no unchanged passing replay. Inventory122/tooling13/resource2/browser303 allpass, browser0skip0flaky; build/static-build/format/lint/TS7/dependencies/docs/file-size pass.
+    Evidence: Actual unchanged complete source maps and current production hashes, standard current-task Istanbul aggregation: three complete changed modules627lines687statements123functions485branches all100, full application19334lines21251statements4843functions15683branches all100, zero negative counters. Raw initial/partial closure failures and maps retained in ignored cache only. Inventory uses enforced legacy V8 config with strict100, unchanged config; accidental unexecuted wrapper override removed before any inventory run.
+    Scope: Native headline ItemSet ownership, saved checkbox/count/source minimum, mounted direct and actual shell path, cursor/selection/ring/graph/frame identities and three real undo/redo cycles. Three stale Missing/self/cycle ODT parent expectations now assert concrete source default owner; all other old assertions/cases retained. One added real row/cell name-broadcast ownership case closes native map misses; existing notification family remains unpromoted.
+
+    Command: registry-build/check, source-tree/provenance, resource-generation--check, invariants/parity, routing, ap doctor; six canonical prefix/exact old migration/unrelated hash/parent Findings preservation and bounded artifact formatting checks.
+    Result: pass, nine metadata-only audits;114required paths33retired roots333runtime modules242mapped74browser17infrastructure, no generated-resource change. Doctor0errors2historical warnings. Six canonical prefixes601old test files600unchanged test files1854unrelated files and original parent Findings prefix retained, exact native-input fixture capture and three source-backed ODT expectations only.
+    Evidence: bounded evidence/results.json contains exact executed commands/counts/current hashes and final preservation, no upstream copies/helper scripts/raw counters/maps/logs. Source audits use restored pinned9bc445578031fecf56086729d8e4940c77e14d65 only; runtime tests invoke no upstream.
+    Scope: Registered recovery/open/save/settings decisions and all old canonical scalar/status/default/classification/evidence/responsibility prefixes preserved. Native core table counter/default1, full master/follow/root/page/section/content/HTML/VCL families remain unverified; no module/goal parity promotion. Broad goal ACTIVE/incomplete; full success becomes new baselineSZKQTN and counter0.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-09T17:59:08.744Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified: scheduled full14320distinct app cases24fresh after failed/new-only2case closure,122inventory13tooling2resource303browser allpass. Entire three modules627lines687statements123functions485branches and full application19334lines21251statements4843functions15683branches actual Istanbul100/zero-negative. Inventory configuredV8 strict100 zero-negative, no config change/replay. Build/seven statics/nine metadata/final format gates pass, six canonical prefixes600unmodified old test files1854unrelated files retained; three source-proven ODT default-owner assertions only migrated. Source unchanged and complete maps identical, raw failures retained, reference restored, goal active/incomplete new full baselineSZKQTN counter0.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T17:59:07.323Z, excerpt_hash=sha256:1f6977d6ec1d0e4865e8721df9b26a2419a130a13e83b1f39eb394b5fc0e6aa8
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610091732-SZKQTN/blueprint/resolved-snapshot.json
+    - old_digest: 32599d0ff1248b5cdd5ec9b44c432ddea841ca74b9f6fad782d1ce4e6b622598
+    - current_digest: 32599d0ff1248b5cdd5ec9b44c432ddea841ca74b9f6fad782d1ce4e6b622598
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610091732-SZKQTN
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610091732-SZKQTN -m 🧩 SZKQTN task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "If needed, revert this leaf semantic commit through a separate authorized correction; preserve existing history and user changes. No destructive reset/publication."
-  Findings: "Pinned tabsh.cxx lcl_TableParamToItemSet puts SfxUInt16Item(FN_PARAM_TABLE_HEADLINE,rSh.GetRowsToRepeat()); tabledlg.cxx Reset reads GetItemIfSet(FN_PARAM_TABLE_HEADLINE,false) and saves checkbox/count, sets minimum1 only for a direct item. Resource adjustment2 has initial lower/value0 and upper100. Local authoritative input omitted21150 and Text Flow reprojected original table even when direct input supplied. Fix represented dialog ownership without claiming native table counter/default parity: swtable.hxx/swtable.cxx uncapped member/default1 and getter cap remain a separate core transport/history correction. Nine resumed corrections DONE, clean writer at9cb2da204c7f, full XJTGF0 prior baseline. Standing iterative user authorization applies; no separate operational task."
+  Findings: |-
+    Pinned tabsh.cxx lcl_TableParamToItemSet puts SfxUInt16Item(FN_PARAM_TABLE_HEADLINE,rSh.GetRowsToRepeat()); tabledlg.cxx Reset reads GetItemIfSet(FN_PARAM_TABLE_HEADLINE,false) and saves checkbox/count, sets minimum1 only for a direct item. Resource adjustment2 has initial lower/value0 and upper100. Local authoritative input omitted21150 and Text Flow reprojected original table even when direct input supplied. Fix represented dialog ownership without claiming native table counter/default parity: swtable.hxx/swtable.cxx uncapped member/default1 and getter cap remain a separate core transport/history correction. Nine resumed corrections DONE, clean writer at9cb2da204c7f, full XJTGF0 prior baseline. Standing iterative user authorization applies; no separate operational task.
+
+    - Observation: Preparation TS7 found that SwFEShell has no GetRowsToRepeat forwarding member. No runtime test started. The original SwTable.GetRowsToRepeat already owns the represented native value.
+      Impact: Use original table owner at the source shell capture point; no new facade or scope expansion.
+      Resolution: Replace the absent convenience getter with tableNode.GetTable().GetRowsToRepeat and observe that actual native owner in the fresh selection-boundary test. Repeat preparation only before first runtime.
+
+    - Observation: Full upstream-absent app profile:14318pass1old ODT parent expectation failure, all23fresh pass. Three changed modules already actual Istanbul100. Full remaining misses are two row/cell broadcast overrides and branches after the failed ODT assertion. Native SetDerivedFrom(nullptr) walks current default root; prstylei resets parent before Finish and rejects cycles. The old ODT undefined-parent expectations predate D694SH root fallback.
+      Impact: Preserve production semantics and migrate exactly invalid/self/cycle ODT expectations to concrete original default owner; retain all other assertions. Add one meaningful original row/cell name-broadcast ownership test for the genuinely missed paths. No production/map/hash change and no whole-app passing replay.
+      Resolution: Repair failed old ODT case and run it plus the one new native owner notification case only with actual Istanbul. Aggregate actual same-source complete maps and re-gate full strict100. Inventory continuation uses its enforced configured V8 provider; forced Istanbul in the unexecuted wrapper was an agent command-selection error, not a repository migration requirement. No inventory test has run yet.
+
+    - SZKQTN scheduled tenth-correction full result: original headline21150 is captured at source shell point before temporary borders selection and passed through the already connected native ItemSet. Text Flow reads direct input, saved checkbox/count, valid-item minimum1 and source resource absence unchecked/value0/minimum0; browser uses native minimum. No new adapter/facade, input-free native owner path remains. Actual shell cursor/selection/ring/row/cell/frame ownership and three real undo/redo cycles verified. Full application initial558files14318pass1old ODT assertion failure, all23initial fresh pass; failed/new-only closure2pass6intentional skips yields14320distinct cases24fresh, no passing replay. Production unchanged, entire complete source maps identical; actual standard current-task Istanbul aggregation only. Entire changed three modules627lines687statements123functions485branches all100; full application19334lines21251statements4843functions15683branches all100, zero negative counters. Source-proven Missing/self/cycle ODT root fallback expectations migrated to concrete original document default owner; all other old assertions/cases retained. One new actual row/cell name-broadcast case covers two genuinely missed existing paths, existing notification shape retained without claiming upstream name-hint completion. Inventory122cases38files configuredV8 strict100; tooling13cases3files, Writer-resource2cases1file, browser303cases0fail0skip0flaky, build and seven statics pass physically upstream-absent with finally restoration. Forced inventory Istanbul wrapper was corrected before any inventory run; no inventory replay/config change. Six canonical histories appended preserving old contracts; native headline fixture capture21150 only, three old ODT assertions migrated with source evidence. No upstream sources/helpers/raw maps/logs in task artifacts. Native core table uncapped member/default1 and full master/follow/root/page/section/content/HTML/VCL remain unverified; broad goal ACTIVE/incomplete. New full baseline202610091732-SZKQTN, correction counter0 after all final metadata/preservation/quality gates. Semantic binding and explicitly same-agent non-independent quality follow.
 id_source: "generated"
 ---
 ## Summary
@@ -55,19 +114,60 @@ Capture source headline21150 in the original shell dialog ItemSet and make Text 
 
 ## Scope
 
-Production: apps/office/src/sw/source/ui/table/tabledlg.ts, sw/source/uibase/shells/tabsh.ts, sw/browser/presentation/WriterTableDialog.tsx. Three fresh core/page, native history and mounted UI test files named native-headline-dialog-input.test.ts or .tsx in their corresponding directories. Source native headline fixture capture only in apps/office/src/test/table-box-test-helpers.ts; every old assertion retained. Six corresponding canonical runtime/provenance histories and append-only parent C9TN6M Findings. Preserve registered recovery/open/save/settings deviations, native ownership, existing transport/core count semantics. No source copies/helpers/raw logs/maps in AgentPlane, network/publication or new adapters. Raw diagnostics ignored node_modules cache only. Full-suite failures repaired within these criteria; material unrelated implementation changes require a separate scope decision.
+Production remains only tabledlg.ts, tabsh.ts and WriterTableDialog.tsx under apps/office/src/sw. Three fresh native-headline-dialog-input page/history/mounted test files; add one actual original row/cell name-broadcast owner case exposed by scheduled full coverage. Native headline capture fixture only in src/test/table-box-test-helpers.ts. Source-proven default-root expectation migration only in sw/source/filter/xml/odt-font-style-roundtrip.test.ts: Missing/self/cycle parents now assert concrete original document default owner, all other old assertions/cases retained. Six corresponding canonical histories and append-only C9TN6M Findings. No production or source-map changes after initial full profile, no changed tooling config, added facade, upstream copies, network/publication or registered deviation changes.
 
 ## Plan
 
-Complete native headline dialog input capture and represented source widget behavior; prove core/history/mounted behavior, update canonical inventory and run scheduled full upstream-absent Istanbul suite with all mandatory gates before semantic binding and closure. Broad goal active/incomplete.
+Retain native headline production correction; complete source-proven failed old ODT default-root expectations and one fresh original row/cell notification test exposed by required full suite. Revalidate only failed/new cases with actual same-source Istanbul maps, preserve strict100 and all raw failures. Continue remaining full commands using actual configured inventory V8; application and all changed modules actual Istanbul100. Append canonical evidence, bind semantic SHA and close; no goal/module parity promotion or extra production scope.
 
 ## Verify Steps
 
-Read ap task verify-show and route before edits. Prepare formatting, lint and TS7 upstream-absent. Execute one complete app Vitest coverage profile including all fresh and old cases, actual Istanbul with text/json/json-summary reports and current-source hashes, strict100% lines/statements/functions/branches for entire changed production modules and full configured application coverage, zero negative counters. Run inventory coverage with explicit Istanbul provider, all tooling and Writer resource tests, build and all Playwright projects, static-build check, format:check, lint, typecheck, check:dependencies, check:docs and check:file-size physically upstream-absent with finally restoration. Preserve raw failures; failed-only closures when production unchanged, meaningful reruns if code changes. After restoration run resource generation --check, registry build/check, source-tree/provenance, invariants/parity, routing and ap doctor. Append six canonical histories retaining every old scalar/status/default/classification/evidence/responsibility prefix, all old assertions and unrelated file hashes. Record bounded English counts/commands/hashes; semantic SHA binding, same-agent non-independent EVALUATOR and final blueprint verification after final docs. Finish via ap with intentional changes and clean final status; reset correction counter only after full success.
+Read task verify-show and route. Preparation formatting/lint/TS7 upstream-absent. One full application Istanbul profile includes all old/fresh cases; retain initial14318pass1failure and actual complete maps. Source-proven ODT root-parent expectation migration closes only failed old case; one new row/cell name-broadcast ownership case closes missed complete-module paths, no unchanged passing replay. Actual same-source identical complete-map Istanbul aggregation must pass100 lines/statements/functions/branches across entire changed three modules and full configured application, zero negative counters. Continue unexecuted full commands with configured inventory coverage provider V8, unchanged strict100 thresholds, all tooling/resource/all Playwright projects/build/static-build/format/lint/typecheck/dependencies/docs/file-size tests physically upstream-absent with finally restoration. Preserve raw failures; meaningful failed/new closures only unless production changes. After restoration metadata-only resource generation/registry build/check/source tree/provenance/invariants/parity/routing/doctor. Six original canonical prefixes and all unrelated hashes/old cases retained; exact source-backed ODT default-owner assertion replacements and native-input fixture capture recorded. Bounded English counts/commands/hashes, semantic binding and explicitly same-agent non-independent quality; final blueprint verification after final docs, intentional commits and clean closeout. Full success resets correction counter0; broad goal incomplete.
 
 ## Verification
 
-Pending implementation and scheduled upstream-absent full verification.
+Command: scheduled full root verify responsibilities split into one full application Istanbul profile, failed/new-only closure and twelve continuation commands; tests/build/statics physically upstream-absent, restoration in finally.
+Result: pass after source-proven ODT expectation repair. Initial14318pass1failure; failed/new-only2pass6deliberate skips yields14320distinct application cases24fresh, no unchanged passing replay. Inventory122/tooling13/resource2/browser303 allpass, browser0skip0flaky; build/static-build/format/lint/TS7/dependencies/docs/file-size pass.
+Evidence: Actual unchanged complete source maps and current production hashes, standard current-task Istanbul aggregation: three complete changed modules627lines687statements123functions485branches all100, full application19334lines21251statements4843functions15683branches all100, zero negative counters. Raw initial/partial closure failures and maps retained in ignored cache only. Inventory uses enforced legacy V8 config with strict100, unchanged config; accidental unexecuted wrapper override removed before any inventory run.
+Scope: Native headline ItemSet ownership, saved checkbox/count/source minimum, mounted direct and actual shell path, cursor/selection/ring/graph/frame identities and three real undo/redo cycles. Three stale Missing/self/cycle ODT parent expectations now assert concrete source default owner; all other old assertions/cases retained. One added real row/cell name-broadcast ownership case closes native map misses; existing notification family remains unpromoted.
+
+Command: registry-build/check, source-tree/provenance, resource-generation--check, invariants/parity, routing, ap doctor; six canonical prefix/exact old migration/unrelated hash/parent Findings preservation and bounded artifact formatting checks.
+Result: pass, nine metadata-only audits;114required paths33retired roots333runtime modules242mapped74browser17infrastructure, no generated-resource change. Doctor0errors2historical warnings. Six canonical prefixes601old test files600unchanged test files1854unrelated files and original parent Findings prefix retained, exact native-input fixture capture and three source-backed ODT expectations only.
+Evidence: bounded evidence/results.json contains exact executed commands/counts/current hashes and final preservation, no upstream copies/helper scripts/raw counters/maps/logs. Source audits use restored pinned9bc445578031fecf56086729d8e4940c77e14d65 only; runtime tests invoke no upstream.
+Scope: Registered recovery/open/save/settings decisions and all old canonical scalar/status/default/classification/evidence/responsibility prefixes preserved. Native core table counter/default1, full master/follow/root/page/section/content/HTML/VCL families remain unverified; no module/goal parity promotion. Broad goal ACTIVE/incomplete; full success becomes new baselineSZKQTN and counter0.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-09T17:59:08.744Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified: scheduled full14320distinct app cases24fresh after failed/new-only2case closure,122inventory13tooling2resource303browser allpass. Entire three modules627lines687statements123functions485branches and full application19334lines21251statements4843functions15683branches actual Istanbul100/zero-negative. Inventory configuredV8 strict100 zero-negative, no config change/replay. Build/seven statics/nine metadata/final format gates pass, six canonical prefixes600unmodified old test files1854unrelated files retained; three source-proven ODT default-owner assertions only migrated. Source unchanged and complete maps identical, raw failures retained, reference restored, goal active/incomplete new full baselineSZKQTN counter0.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T17:59:07.323Z, excerpt_hash=sha256:1f6977d6ec1d0e4865e8721df9b26a2419a130a13e83b1f39eb394b5fc0e6aa8
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610091732-SZKQTN/blueprint/resolved-snapshot.json
+- old_digest: 32599d0ff1248b5cdd5ec9b44c432ddea841ca74b9f6fad782d1ce4e6b622598
+- current_digest: 32599d0ff1248b5cdd5ec9b44c432ddea841ca74b9f6fad782d1ce4e6b622598
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610091732-SZKQTN
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610091732-SZKQTN -m 🧩 SZKQTN task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
@@ -76,3 +176,13 @@ If needed, revert this leaf semantic commit through a separate authorized correc
 ## Findings
 
 Pinned tabsh.cxx lcl_TableParamToItemSet puts SfxUInt16Item(FN_PARAM_TABLE_HEADLINE,rSh.GetRowsToRepeat()); tabledlg.cxx Reset reads GetItemIfSet(FN_PARAM_TABLE_HEADLINE,false) and saves checkbox/count, sets minimum1 only for a direct item. Resource adjustment2 has initial lower/value0 and upper100. Local authoritative input omitted21150 and Text Flow reprojected original table even when direct input supplied. Fix represented dialog ownership without claiming native table counter/default parity: swtable.hxx/swtable.cxx uncapped member/default1 and getter cap remain a separate core transport/history correction. Nine resumed corrections DONE, clean writer at9cb2da204c7f, full XJTGF0 prior baseline. Standing iterative user authorization applies; no separate operational task.
+
+- Observation: Preparation TS7 found that SwFEShell has no GetRowsToRepeat forwarding member. No runtime test started. The original SwTable.GetRowsToRepeat already owns the represented native value.
+  Impact: Use original table owner at the source shell capture point; no new facade or scope expansion.
+  Resolution: Replace the absent convenience getter with tableNode.GetTable().GetRowsToRepeat and observe that actual native owner in the fresh selection-boundary test. Repeat preparation only before first runtime.
+
+- Observation: Full upstream-absent app profile:14318pass1old ODT parent expectation failure, all23fresh pass. Three changed modules already actual Istanbul100. Full remaining misses are two row/cell broadcast overrides and branches after the failed ODT assertion. Native SetDerivedFrom(nullptr) walks current default root; prstylei resets parent before Finish and rejects cycles. The old ODT undefined-parent expectations predate D694SH root fallback.
+  Impact: Preserve production semantics and migrate exactly invalid/self/cycle ODT expectations to concrete original default owner; retain all other assertions. Add one meaningful original row/cell name-broadcast ownership test for the genuinely missed paths. No production/map/hash change and no whole-app passing replay.
+  Resolution: Repair failed old ODT case and run it plus the one new native owner notification case only with actual Istanbul. Aggregate actual same-source complete maps and re-gate full strict100. Inventory continuation uses its enforced configured V8 provider; forced Istanbul in the unexecuted wrapper was an agent command-selection error, not a repository migration requirement. No inventory test has run yet.
+
+- SZKQTN scheduled tenth-correction full result: original headline21150 is captured at source shell point before temporary borders selection and passed through the already connected native ItemSet. Text Flow reads direct input, saved checkbox/count, valid-item minimum1 and source resource absence unchecked/value0/minimum0; browser uses native minimum. No new adapter/facade, input-free native owner path remains. Actual shell cursor/selection/ring/row/cell/frame ownership and three real undo/redo cycles verified. Full application initial558files14318pass1old ODT assertion failure, all23initial fresh pass; failed/new-only closure2pass6intentional skips yields14320distinct cases24fresh, no passing replay. Production unchanged, entire complete source maps identical; actual standard current-task Istanbul aggregation only. Entire changed three modules627lines687statements123functions485branches all100; full application19334lines21251statements4843functions15683branches all100, zero negative counters. Source-proven Missing/self/cycle ODT root fallback expectations migrated to concrete original document default owner; all other old assertions/cases retained. One new actual row/cell name-broadcast case covers two genuinely missed existing paths, existing notification shape retained without claiming upstream name-hint completion. Inventory122cases38files configuredV8 strict100; tooling13cases3files, Writer-resource2cases1file, browser303cases0fail0skip0flaky, build and seven statics pass physically upstream-absent with finally restoration. Forced inventory Istanbul wrapper was corrected before any inventory run; no inventory replay/config change. Six canonical histories appended preserving old contracts; native headline fixture capture21150 only, three old ODT assertions migrated with source evidence. No upstream sources/helpers/raw maps/logs in task artifacts. Native core table uncapped member/default1 and full master/follow/root/page/section/content/HTML/VCL remain unverified; broad goal ACTIVE/incomplete. New full baseline202610091732-SZKQTN, correction counter0 after all final metadata/preservation/quality gates. Semantic binding and explicitly same-agent non-independent quality follow.

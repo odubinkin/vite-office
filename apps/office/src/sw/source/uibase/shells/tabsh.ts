@@ -68,6 +68,7 @@ export function TableParamToItemSet(shell: SwFEShell): SfxItemSet {
     [RES_ROW_SPLIT, RES_ROW_SPLIT],
     [RES_COLLAPSING_BORDERS, RES_COLLAPSING_BORDERS],
     [SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER],
+    [FN_PARAM_TABLE_HEADLINE, FN_PARAM_TABLE_HEADLINE],
   ]);
   const info = new SvxBoxInfoItem(SID_ATTR_BORDER_INNER);
   info.SetDist(true);
@@ -78,6 +79,7 @@ export function TableParamToItemSet(shell: SwFEShell): SfxItemSet {
     value.Put(info);
     return value;
   }
+  value.Put(new SfxUInt16Item(FN_PARAM_TABLE_HEADLINE, tableNode.GetTable().GetRowsToRepeat()));
   value.Put(tableNode.GetTable().GetFrameFormat().GetAttrSet().Get(RES_LAYOUT_SPLIT));
   value.Put(tableNode.GetTable().GetFrameFormat().GetAttrSet().Get(RES_COLLAPSING_BORDERS));
   const selected = shell.IsTableMode();

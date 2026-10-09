@@ -26,7 +26,7 @@ export interface SwTextFlowItems {
 
 /** Owns represented native Text Flow widgets and saved original items. */
 export class SwTextFlowPage {
-  private readonly originalHeadline: number;
+  private readonly originalHeadline: number | undefined;
   private headline = false;
   private headerRows = 1;
   private savedHeadline = false;
@@ -40,7 +40,12 @@ export class SwTextFlowPage {
 
   /** Captures canonical initial items. @param table - Original table owner. @param selectedBoxes - Original selected cells or whole table input. @param input - Authoritative native dialog input, when supplied. @returns Nothing. */
   public constructor(table: SwTable, selectedBoxes?: readonly SwTableBox[], input?: SfxItemSet) {
-    this.originalHeadline = table.GetRowsToRepeat();
+    this.originalHeadline =
+      input === undefined
+        ? table.GetRowsToRepeat()
+        : (
+            input.GetItemIfSet(FN_PARAM_TABLE_HEADLINE, false) as SfxUInt16Item | undefined
+          )?.GetValue();
     this.originalSplit =
       input === undefined
         ? (
@@ -57,8 +62,11 @@ export class SwTextFlowPage {
   }
   /** Restores source checkbox/count widgets and their saved values. @returns Nothing. */
   public Reset(): void {
-    this.headline = this.savedHeadline = this.originalHeadline > 0;
-    this.headerRows = this.savedHeaderRows = Math.max(1, Math.min(100, this.originalHeadline));
+    this.headline = this.savedHeadline = (this.originalHeadline ?? 0) > 0;
+    this.headerRows = this.savedHeaderRows = Math.max(
+      this.GetHeaderRowsMinimum(),
+      Math.min(100, this.originalHeadline ?? 0),
+    );
     this.split = this.savedSplit = this.originalSplit;
     this.rowSplit = this.savedRowSplit = this.originalRowSplit;
   }
@@ -70,6 +78,10 @@ export class SwTextFlowPage {
   public GetHeaderRows(): number {
     return this.headerRows;
   }
+  /** Reads the source numeric minimum after direct-item Reset or initial resource state. @returns Widget minimum. */
+  public GetHeaderRowsMinimum(): number {
+    return this.originalHeadline === undefined ? 0 : 1;
+  }
   /** Reads source numeric-group sensitivity. @returns Whether the count is editable. */
   public IsSensitive(): boolean {
     return this.headline;
@@ -80,7 +92,7 @@ export class SwTextFlowPage {
   }
   /** Admits an integer through the source widget range, independent of table row count. @param value - Authored count. @returns Nothing. */
   public ValueChangedHdl(value: number): void {
-    this.headerRows = Math.max(1, Math.min(100, Math.round(value)));
+    this.headerRows = Math.max(this.GetHeaderRowsMinimum(), Math.min(100, Math.round(value)));
   }
   /** Emits native headline/table/row items only when saved widget values changed. @param output - Optional native changed-item destination. @returns Changed represented native items. */
   public FillItemSet(output?: SfxItemSet): SwTextFlowItems {
@@ -100,7 +112,7 @@ export class SwTextFlowPage {
   }
   /** Resolves the current item over the original native input set. @returns Accepted headline count. */
   public GetRowsToRepeat(): number {
-    return this.FillItemSet().headerRows ?? this.originalHeadline;
+    return this.FillItemSet().headerRows ?? this.originalHeadline ?? 0;
   }
   /** Reads the native table split checkbox. @returns Checked value. */
   public IsSplit(): boolean {
