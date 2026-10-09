@@ -71,16 +71,12 @@ export function TableParamToItemSet(shell: SwFEShell): SfxItemSet {
   info.SetDist(true);
   info.SetMinDist(true);
   info.SetDefDist(28);
-  if (shell.IsCursorInTable() === undefined) {
+  const tableNode = shell.IsCursorInTable();
+  if (tableNode === undefined) {
     value.Put(info);
     return value;
   }
-  value.Put(
-    new SfxBoolItem(
-      RES_COLLAPSING_BORDERS,
-      shell.IsCursorInTable()?.GetTable().GetFormat().borderModel === "collapsing",
-    ),
-  );
+  value.Put(tableNode.GetTable().GetFrameFormat().GetAttrSet().Get(RES_COLLAPSING_BORDERS));
   const selected = shell.IsTableMode();
   return shell.RunNotificationTransaction(
     /** Temporarily selects only for whole-table properties and restores original cursors. @returns Owned native items. */

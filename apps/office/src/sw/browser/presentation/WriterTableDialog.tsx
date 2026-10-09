@@ -8,7 +8,6 @@ import type { SwTable, SwTableBox } from "../../source/core/table/swtable";
 import { SvxBorderTabPage } from "../../../cui/source/tabpages/border";
 import { WriterBorderPage } from "./WriterBorderPage";
 import { SvxBoxInfoItem } from "../../../editeng/source/items/frmitems";
-import { SfxBoolItem } from "../../../svl/source/items/cenumitm";
 import { SfxItemSet, SfxItemState } from "../../../svl/source/items/itemset";
 import {
   RES_BOX,
@@ -141,9 +140,7 @@ function WriterTablePropertiesDialog({
       if (input.GetItemState(RES_COLLAPSING_BORDERS, false) === SfxItemState.DISABLED)
         native.DisableItem(RES_COLLAPSING_BORDERS);
       if (input.GetItemState(RES_COLLAPSING_BORDERS) === SfxItemState.UNKNOWN)
-        native.Put(
-          new SfxBoolItem(RES_COLLAPSING_BORDERS, table.GetFormat().borderModel === "collapsing"),
-        );
+        native.Put(table.GetFrameFormat().GetAttrSet().Get(RES_COLLAPSING_BORDERS));
       return new SvxBorderTabPage(native, RES_BOX, RES_COLLAPSING_BORDERS);
     },
   );

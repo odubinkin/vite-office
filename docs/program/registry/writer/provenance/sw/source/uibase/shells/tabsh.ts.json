@@ -49,7 +49,8 @@
       "Iteration239 replaces generic Text Flow split publication with native SwFormatLayoutSplit and SwFormatRowSplit subclasses, literal WhichIds120/129 and true Writer pool defaults. Clone preserves concrete type/current identity/value independently; browser primitive factories restore concrete items. Native shell consumes explicitly SET concrete items while preserving omitted defaults and original row/table history. Generic row keepTogether and scalar table formats, full native shared frame-format ownership, presentation/localization/UNO completeness and whole core/UI parity remain unverified. Targeted verification pending; full cadence237 to247 and all prior metadata states/defaults/classes/registered IO/recovery deviations remain preserved.",
       "Iteration239 verified closure: twelve fresh literal item/pool and mounted direct native-input cases plus related modules produced178 app passes and8 Chromium passes, with no passing replay or full suite. App and inventory all-four100% coverage is bound to actual current targeted counters and prior238 identical-source/maps or complete mapped-region proof; unchanged inventory/infra runtime was not rerun. The earlier pending statement is historical. Scalar table/row format ownership and full presentation/localization/UNO/shared-pool contracts remain unverified; no parity status promotion.",
       "Iteration240 owns row splitting as optional SwFormatRowSplit items cloned on row input/read/history, with effective true default. Common core and frame-shell getters return independent concrete items or absence for mixed/no-row input; setters accept concrete items. Native UI forwards the item unchanged to the document owner, ODF inverts only at import/export, and browser transport writes direct primitive rowSplit with legacy keepTogether ingestion. Original cursor/selection/history and full frame-size coexistence remain retained. Full native shared row frame-format pooling/ClaimFrameFormat, nested/merged semantics, presentation/localization/UNO completeness and whole core/UI parity remain unverified. Targeted verification pending; last full237,next247; all prior metadata states/defaults/classifications and registered IO/recovery deviations preserved.",
-      "Iteration240 verified closure:33 fresh native item/core/history, transport/legacy/ODF and mounted direct item cases plus related modules produced263 unique app passes and11 Chromium passes. Three initial failed cases were resolved in a four-case failed/new-only closure; all previously passing cases were skipped, no passing replay or full suite. App and inventory all-four100% coverage binds actual current targeted counters to prior239 identical whole source/maps or complete mapped-region proofs; unchanged inventory/infra was not rerun. Native rows now own concrete items, while full shared frame-format pooling/claims/UNO/nested/merged contracts and whole core/UI parity remain unverified. No metadata status/default/classification promotion."
+      "Iteration240 verified closure:33 fresh native item/core/history, transport/legacy/ODF and mounted direct item cases plus related modules produced263 unique app passes and11 Chromium passes. Three initial failed cases were resolved in a four-case failed/new-only closure; all previously passing cases were skipped, no passing replay or full suite. App and inventory all-four100% coverage binds actual current targeted counters to prior239 identical whole source/maps or complete mapped-region proofs; unchanged inventory/infra was not rerun. Native rows now own concrete items, while full shared frame-format pooling/claims/UNO/nested/merged contracts and whole core/UI parity remain unverified. No metadata status/default/classification promotion.",
+      "Resumed correction KHKG45 removes mirrored collapsing-border mode from SwTable stored scalar geometry. Existing RES_COLLAPSING_BORDERS bool132false owns direct construction/reset/transport values; GetFormat emits direct enum values only at ingress/egress, while native table frames, browser painter selection, shell ItemSet and dialog read the original effective owned/inherited/pool item. Native collapsing-mode changes recursively invalidate original linked table/row/cell print and size plus paint. Cell format replacement invalidates the containing collapsing row; RES_BOX deltas invalidate current and next row lowers, and the final row invalidates table print. Separating/detached behavior and original row hint filtering stay intact. Table-specific mode reaction uses the existing represented frame attribute dispatch hook; full native SwTabFrame UpdateAttr_ masks/copied delta forwarding and persistent page/root/content/master/follow/environment/direction/accessibility/VCL families remain unverified. Ten fresh core/default/borrowed/hierarchy/history/mounted UI cases plus related modules accept1167 distinct harness assertions across149files in the final current-source profile and one repaired native border-command history case,0runtime failures0skips. One necessary1167case production revalidation plus1 repaired history-test revalidation follows removal of the obsolete unused WriterTableDialog import rejected by lint; earlier1138initial+1default+27previously unexecuted+1bottom passes and raw partial threshold failures remain superseded evidence, never counter donors. Equal-name parameterized assertion records retain distinct per-file name ordinals. Entire five changed modules actual final-source complete-map Istanbul929lines1033statements187functions802branches is all-four100/0negative; only current and repaired same-source identical-complete-map profile counters used, with no old task/V8 counters or map/counter/location/threshold normalization. Tests run physically upstream-absent with finally restoration; raw logs/maps/helpers remain ignored cache. Canonical evidence task202610091543-KHKG45; preserve all old semantic status/default/classification/responsibility/evidence prefixes and registered recovery/open/save/settings deviations, without module/goal parity promotion. Historical full XJTGF0; correction6/10, next full after ten resumed corrections."
     ],
     "omittedResponsibilities": [
       "Full native item-format,complex-table,frame-cache and UI lifecycle parity remains unverified."
@@ -259,6 +260,22 @@
         {
           "path": "apps/office/src/sw/browser/presentation/native-row-split-core-items.test.tsx",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/layout/native-collapsing-border-notify.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/undo/native-collapsing-border-item.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/native-collapsing-border-item.test.tsx",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/shells/tabsh.ts",
+          "marker": "tableNode.GetTable().GetFrameFormat()"
         }
       ],
       "upstream": [
@@ -397,6 +414,26 @@
         {
           "path": "sw/inc/swtypes.hxx",
           "marker": "MIN_BORDER_DIST"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/tabfrm.cxx",
+          "marker": "SwTabFrame::IsCollapsingBorders"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/tabfrm.cxx",
+          "marker": "lcl_InvalidateAllLowersPrt"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/tabfrm.cxx",
+          "marker": "SwCellFrame::SwClientNotify"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/tabfrm.cxx",
+          "marker": "RES_COLLAPSING_BORDERS"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/shells/tabsh.cxx",
+          "marker": "RES_COLLAPSING_BORDERS"
         }
       ]
     }

@@ -22,6 +22,8 @@ import { RES_FRM_SIZE, RES_ROW_SPLIT } from "../../../inc/hintids";
 import { SvxBoxItem } from "../../../../editeng/source/items/frmitems";
 import { SvxBorderLine } from "../../../../editeng/source/items/borderline";
 import { RES_BOX } from "../../../inc/hintids";
+import { RES_COLLAPSING_BORDERS } from "../../../inc/hintids";
+import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 
 /** Physical table geometry imported from Writer table style properties, in twips. */
 export interface SwTableFormat {
@@ -311,6 +313,7 @@ export class SwTableLine extends SwClient {
 /** Owns ordered rows, columns and a node-array section like upstream SwTable. */
 export class SwTable {
   private readonly frameFormat: SwFrameFormat;
+  private format: Omit<SwTableFormat, "borderModel"> = {};
   public static readonly SEARCH_NONE = 0;
   public static readonly SEARCH_ROW = 1;
   public static readonly SEARCH_COL = 2;
@@ -322,9 +325,10 @@ export class SwTable {
   public constructor(
     private readonly tableNode: SwTableNode,
     name: string,
-    private format: SwTableFormat = {},
+    format: SwTableFormat = {},
   ) {
     this.frameFormat = new SwFrameFormat(tableNode.GetDoc().GetAttrPool(), name);
+    this.SetFormat(format);
   }
 
   /** Returns the native frame-format identity. @returns Original frame owner. */
@@ -344,7 +348,14 @@ export class SwTable {
 
   /** Returns table geometry. @returns Immutable values. */
   public GetFormat(): SwTableFormat {
-    return { ...this.format };
+    const borders = this.frameFormat.GetAttrSet().GetItemIfSet(RES_COLLAPSING_BORDERS, false) as
+      SfxBoolItem | undefined;
+    return {
+      ...this.format,
+      ...(borders === undefined
+        ? {}
+        : { borderModel: borders.GetValue() ? "collapsing" : "separating" }),
+    };
   }
 
   /** Reads native orientation, admitting historical ODF geometry at the table boundary. @returns Frame orientation. */
@@ -375,9 +386,15 @@ export class SwTable {
   /** Publishes represented frame-size changes to row/box width adjustment, as SwClientNotify does. @param value - New values. @returns Nothing. */
   public SetFormat(value: SwTableFormat): void {
     const oldWidth = this.format.width;
-    this.format = { ...value };
+    const { borderModel, ...geometry } = value;
+    this.format = geometry;
     if (oldWidth !== undefined && value.width !== undefined && oldWidth !== value.width)
       this.AdjustWidths(oldWidth, value.width);
+    if (borderModel === undefined) this.frameFormat.ResetFormatAttr(RES_COLLAPSING_BORDERS);
+    else
+      this.frameFormat.SetFormatAttr(
+        new SfxBoolItem(RES_COLLAPSING_BORDERS, borderModel === "collapsing"),
+      );
   }
 
   /** Returns the native headline count capped by actual table lines. @returns Repeated line count. */

@@ -3,10 +3,32 @@ import type { SwTable, SwTableBox, SwTableLine } from "../table/swtable";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { SwFrameSize } from "../../../inc/fmtfsize";
 import { LegacyModifyHint, BroadcastingModify, type SwModify } from "../../../inc/calbck";
-import { SwFrame, SwLayoutFrame, SwFrameType } from "./wsfrm";
+import { SwFrame, SwLayoutFrame, SwFrameType, SwFrameInvFlags } from "./wsfrm";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
-import { RES_FRM_SIZE, RES_ROW_SPLIT, RES_VERT_ORIENT } from "../../../inc/hintids";
+import {
+  RES_FRM_SIZE,
+  RES_ROW_SPLIT,
+  RES_VERT_ORIENT,
+  RES_BOX,
+  RES_COLLAPSING_BORDERS,
+} from "../../../inc/hintids";
 import type { SwModelHint } from "../../../inc/hints";
+import type { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
+
+/** Invalidates original layout lowers for native collapsing-border recalculation. @param frame - Original layout owner. @returns Nothing. */
+function lcl_InvalidateAllLowersPrt(frame: SwLayoutFrame): void {
+  frame.InvalidatePrt_();
+  frame.InvalidateSize_();
+  frame.SetCompletePaint();
+  for (let lower = frame.Lower(); lower !== undefined; lower = lower.GetNext()) {
+    if (lower instanceof SwLayoutFrame) lcl_InvalidateAllLowersPrt(lower);
+    else {
+      lower.InvalidatePrt_();
+      lower.InvalidateSize_();
+      lower.SetCompletePaint();
+    }
+  }
+}
 
 /** Owns represented flat-row height over its original native line. */
 export class SwRowFrame extends SwLayoutFrame {
@@ -117,6 +139,12 @@ export class SwCellFrame extends SwLayoutFrame {
       this.InvalidateSize();
       this.InvalidatePrt_();
       this.SetCompletePaint();
+      const table = this.FindTabFrame();
+      if (table?.IsCollapsingBorders()) {
+        const row = this.GetUpper() as SwLayoutFrame;
+        row.InvalidateSize_();
+        row.InvalidatePrt_();
+      }
     } else if (hint.kind === "move-table-box") {
       if (hint.m_rTableBox !== this.box) return;
       this.RegisterToFormat(hint.m_rNewFormat);
@@ -134,6 +162,25 @@ export class SwCellFrame extends SwLayoutFrame {
       if (orientation) {
         this.SetCompletePaint();
         this.InvalidatePrt();
+      }
+      const box =
+        hint.kind === "legacy-modify"
+          ? hint.m_pNew?.Which() === RES_BOX
+            ? hint.m_pNew
+            : undefined
+          : hint.kind === "attr-set-change"
+            ? hint.m_pNew?.GetChgSet().GetItemIfSet(RES_BOX, false)
+            : undefined;
+      if (box) {
+        let row = this.GetUpper();
+        while (row?.GetUpper() && !row.GetUpper()?.IsTabFrame()) row = row.GetUpper();
+        const table = row?.GetUpper();
+        if (table?.IsTabFrame() && (table as SwTabFrame).IsCollapsingBorders()) {
+          lcl_InvalidateAllLowersPrt(row as SwLayoutFrame);
+          const next = row?.GetNext();
+          if (next) lcl_InvalidateAllLowersPrt(next as SwRowFrame);
+          else table.InvalidatePrt();
+        }
       }
       super.SwClientNotify(source, hint);
     }
@@ -192,6 +239,25 @@ export class SwTabFrame extends SwLayoutFrame {
   /** Releases the complete native table lower hierarchy. @returns Nothing. */
   public override Dispose(): void {
     this.DestroyImpl();
+  }
+
+  /** Reads the native effective collapsing-border item. @returns Owned, inherited or pooled bool. */
+  public IsCollapsingBorders(): boolean {
+    return (this.GetFormat().GetAttrSet().Get(RES_COLLAPSING_BORDERS) as SfxBoolItem).GetValue();
+  }
+
+  /** Applies represented table-specific border-mode recalculation before accumulated frame dispatch. @param oldItem - Original old item. @param newItem - Original new item. @param flags - Accumulated native flags. @returns Updated mask. */
+  protected override UpdateAttrFrame(
+    oldItem: SfxPoolItem | undefined,
+    newItem: SfxPoolItem | undefined,
+    flags: SwFrameInvFlags,
+  ): SwFrameInvFlags {
+    const which = oldItem ? oldItem.Which() : newItem ? newItem.Which() : 0;
+    if (which === RES_COLLAPSING_BORDERS) {
+      lcl_InvalidateAllLowersPrt(this);
+      return flags | SwFrameInvFlags.InvalidatePrt;
+    }
+    return super.UpdateAttrFrame(oldItem, newItem, flags);
   }
 
   /** Returns the canonical table represented by this frame. @returns Actual owner. */

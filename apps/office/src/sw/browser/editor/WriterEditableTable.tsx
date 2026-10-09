@@ -82,8 +82,9 @@ function browserCellBoxStyle(item: SvxBoxItem, fixedGuide: boolean): React.CSSPr
   const nativeTable = new SwTabFrame(table);
   try {
     const format = table.GetFormat();
+    const collapsing = nativeTable.IsCollapsingBorders();
     const resolved = new Map<string, Style>();
-    if (format.borderModel === "collapsing")
+    if (collapsing)
       new SwTabFramePainter(table).PaintLines(
         /** Projects resolved native line ownership onto the existing flat cell paint device. @param line - Native interval. @param horizontal - Native family. @returns Nothing. */
         (line, horizontal) => {
@@ -105,7 +106,7 @@ function browserCellBoxStyle(item: SvxBoxItem, fixedGuide: boolean): React.CSSPr
           ref={retainElement}
           style={{
             tableLayout: "fixed",
-            borderCollapse: format.borderModel === "collapsing" ? "collapse" : "separate",
+            borderCollapse: collapsing ? "collapse" : "separate",
             borderSpacing: 0,
             width: area.width / 15,
             marginLeft: area.left / 15,
@@ -184,7 +185,7 @@ function browserCellBoxStyle(item: SvxBoxItem, fixedGuide: boolean): React.CSSPr
                         const cellFormat = frame.GetFormat(),
                           boxItem = cellFormat.GetBox(),
                           boxStyle = browserCellBoxStyle(boxItem, nativeRow.HasFixSize());
-                        if (format.borderModel === "collapsing") {
+                        if (collapsing) {
                           boxStyle.borderTop = browserBorderLine(
                             resolved.get(`true:${rowIndex}:${cellIndex}`),
                             nativeRow.HasFixSize(),
