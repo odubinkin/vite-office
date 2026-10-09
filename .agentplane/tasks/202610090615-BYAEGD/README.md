@@ -1,10 +1,11 @@
 ---
 id: "202610090615-BYAEGD"
 title: "Isolate application inventory records with UUID capability identities"
-status: "DOING"
+result_summary: "Isolated Writer Calc and shared inventory records with UUID identities and scoped validation"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
     - "Collision tests cover independent Writer/Calc/shared UUID additions, global aliases and operation contracts, module/provenance coverage, orphans, owner/baseline drift and app-scoped command URLs."
     - "Every app scope proves global runtime discovery before checking app/shared evidence; Calc remains explicitly inactive. Shared edits need no mandatory separate task and follow the pinned upstream contract."
     - "All 122 inventory tests and all four 100-percent coverage gates pass; pinned-source parity, provenance, type/lint/docs/boundary/resource/static checks pass without application runtime changes."
-commit: null
+commit:
+  hash: "bcac23433d673315ae3136f9c5454c44fe6f65ab"
+  message: "🧩 BYAEGD code: isolate application records with UUID identities"
 comments:
   -
     author: "CODER"
     body: "Start: Implement user-approved UUID capability identities and canonical per-record application inventory, preserve legacy evidence and validate complete scoped and aggregate ownership."
+  -
+    author: "CODER"
+    body: "Verified: migrated 732 records without changing published IDs or evidence; scoped and global registry checks pass; 122 inventory tests pass at 100 percent coverage; repository checks and quality review pass."
 events:
   -
     type: "status"
@@ -63,8 +69,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "All 122 inventory tests pass at 100 percent coverage; all four migrated projections are byte-identical; scoped and global pinned-evidence gates, provenance, lint, types, docs, boundaries, resources and static build pass. No application runtime or baseline changes."
+  -
+    type: "status"
+    at: "2026-10-09T06:53:34.062Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: migrated 732 records without changing published IDs or evidence; scoped and global registry checks pass; 122 inventory tests pass at 100 percent coverage; repository checks and quality review pass."
 doc_version: 3
-doc_updated_at: "2026-10-09T06:48:02.018Z"
+doc_updated_at: "2026-10-09T06:53:34.064Z"
 doc_updated_by: "CODER"
 description: "Implement user-approved UUID capability allocation and per-record Writer Calc shared inventory storage. Preserve existing CAP and LO identities, baseline, semantic statuses and evidence. Aggregate and validate disjoint canonical records with scoped parity commands and backward-compatible generated views."
 sections:
