@@ -1,10 +1,11 @@
 ---
 id: "202610091517-S6Q035"
 title: "Port shared mdds flat segment tree for Calc row segments"
-status: "DOING"
+result_summary: "Shared mdds segment storage/index prerequisite implemented with genuine pinned native evidence and actual100 scoped coverage; suspicious upstream behavior retained."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 19
+revision: 20
 origin:
   system: "manual"
 depends_on: []
@@ -49,11 +50,16 @@ quality_review:
     - "Review confirms genuine exact archive/header/patch validation and unchanged native header execution;3020 sequences retain every16256 step observation, with snapshot deduplication only. Both actual100 Istanbul gates, TS7, affected lint/format/docs/dependency/provenance/registry tests and upstream-absent portability pass."
     - "Exact external source/test references resolve from vendor dependency roots, avoiding fictitious LibreOffice core paths. Four shared runtime/provenance owners and one capability retain unverified semantic attestations; suspicious CALC-008/009 are preserved and documented."
     - "Coherent591-line native header/definition owner stays below the1000-line failure threshold; splitting its private linked ownership solely for the review threshold would weaken the original module boundary."
-commit: null
+commit:
+  hash: "8219e9f6c4e6a7aa8a0e478ac158d311cef5964b"
+  message: "✨ S6Q035 calc: port shared pinned mdds flat segment tree"
 comments:
   -
     author: "CODER"
     body: "Start: Implement approved shared pinned mdds segment storage prerequisite in calc with exact native source evidence."
+  -
+    author: "CODER"
+    body: "Verified: Shared original pinned mdds flat segment tree, node pool and iterators ported;3020 unchanged native sequences/16256 steps pass, Calc and shared actual100 coverage, TS7, related module/inventory gates and upstream-absent portable tests pass. CALC-008/009 retained in journal; no Writer coverage repair or parity promotion. Task7 of resumed10."
 events:
   -
     type: "status"
@@ -68,8 +74,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Passed3020 genuine native sequences and16256 steps;77 Calc tests and5 shared tests actual100 in all four Istanbul metrics; TS7,14 tooling,30 related inventory,3 provenance tests, upstream-absent portability, both scoped registries zero violations and repository gates pass. Writer coverage untouched; generic native memory/template and undefined domains remain uncertified."
+  -
+    type: "status"
+    at: "2026-10-09T16:06:56.889Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Shared original pinned mdds flat segment tree, node pool and iterators ported;3020 unchanged native sequences/16256 steps pass, Calc and shared actual100 coverage, TS7, related module/inventory gates and upstream-absent portable tests pass. CALC-008/009 retained in journal; no Writer coverage repair or parity promotion. Task7 of resumed10."
 doc_version: 3
-doc_updated_at: "2026-10-09T16:05:39.442Z"
+doc_updated_at: "2026-10-09T16:06:56.890Z"
 doc_updated_by: "CODER"
 description: "Build original pinned mdds3.2.1 flat_segment_tree prerequisite for Calc ScFlatBoolRowSegments and ScMultiSel, preserving storage/tree/iterator contracts and documenting upstream observations. Seventh task of resumed interval."
 sections:
@@ -187,6 +200,10 @@ sections:
     - Observation: The revised first-runtime-ID assertion still included a Writer capability that remains available from the selected Writer mapping manifest even when the injected global registry is empty.
       Impact: Unknown-ID failure is correctly for the first capability outside the Writer slice, now shared external. Earlier wording identifying the old ID as Writer was imprecise; it was the Calc address capability.
       Resolution: Assert the expected unknown-capability diagnostic class independently of incidental runtime ordering; preserve the deliberate missing-global-registry check and all positive report assertions.
+extensions:
+  implementation_commit:
+    hash: "8219e9f6c4e6a7aa8a0e478ac158d311cef5964b"
+    message: "✨ S6Q035 calc: port shared pinned mdds flat segment tree"
 id_source: "generated"
 ---
 ## Summary
