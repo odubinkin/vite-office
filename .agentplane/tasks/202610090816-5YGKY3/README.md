@@ -4,7 +4,7 @@ title: "Port Calc complex formula reference data and native range inheritance"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,28 @@ verification:
   updated_by: "CODER"
   note: "Command: node scripts/calc-refdata-native-probe.mjs --complex-write; node scripts/calc-refdata-native-probe.mjs --complex-check; node scripts/calc-refdata-native-probe.mjs --check Result: pass. Evidence: exact pinned Git blobs and source/body hashes; original complex class,14 complete non-debug definitions and range constructors/order compiled unchanged; ASan/UBSan-clean fixture outputs. Old single fixture remains byte-identical. Scope:3072 property/ordering states,6400 single extensions,1600 complex extensions,300 alias cases,1792 sticky updates,256 mixed-address initializers,36 range/flag initializers and4 equalities. Bounded initialized states, not whole Calc parity. Command: npm run test:coverage:calc Result: pass. Evidence:36 tests across8 files; statements567/567,branches488/488,functions146/146,lines497/497,all100%. Scope: all current Calc core sources and prior acceptance; every saved native output compared through actual TS owners; both original complex testFormulaRefData assertions retained. Command: npm run typecheck; node_modules/.bin/eslint apps/office/src/sc/inc/refdata.ts apps/office/src/sc/source/core/tool/refdata.ts apps/office/src/sc/source/core/tool/complex-refdata.test.ts scripts/calc-refdata-native-probe.mjs; node_modules/.bin/prettier --check apps/office/src/sc/inc/refdata.ts apps/office/src/sc/source/core/tool/refdata.ts apps/office/src/sc/source/core/tool/complex-refdata.test.ts scripts/calc-refdata-native-probe.mjs Result: pass. Evidence: no type/lint diagnostics; all matched files formatted. Scope: static application types and affected source/probe/test paths. Command: npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:source-tree Result: pass. Evidence:326 runtime sources,1558 imports,29 allowed module edges;1074 documented sources;1077 files checked, refdata grouping reviewed;114 required source-tree paths and33 retired roots checked. Scope: declared repository static guards; no changed shared owners or Writer tests. Command: node_modules/.bin/tsx scripts/libreoffice-inventory/registry-cli.ts check --scope calc Result: pass. Evidence:6 capabilities,118 applicable modules (6 Calc and112 shared),0 semantic violations. Existing capability flags preserved; module/default/behavior/contract parity stays unverified. Scope: Calc capability/runtime/provenance records and reused shared ownership. Command: node .agentplane/policy/check-routing.mjs; ap doctor; git diff --check Result: pass. Evidence: routing OK; doctor0 errors,1 pre-existing managed hook readiness warning; no whitespace errors. Scope: task policy and affected diff. Final clean state on calc is required after task closure. Full suite schedule: Calc milestone6 of10; the user requires the full run after milestone10. No cadence change or mandatory check omission."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-09T08:30:30.434Z"
+  updated_by: "EVALUATOR"
+  note: "Complex reference owner retains pinned native boundaries and inheritance; all bounded native outputs match, Calc coverage actual100 and scoped guards pass."
+  evaluated_sha: "8d44cd1a5c5415930ea2a809983406817f3b5554"
+  blueprint_digest: "c06fc6c0f775a153a5493be83e4ffdc8decbb0c292d5703a7b1359f20da6f9f3"
+  evidence_refs:
+    - ".agentplane/tasks/202610090816-5YGKY3/README.md"
+    - ".agentplane/tasks/202610090816-5YGKY3/quality/20261009-083030434-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610090816-5YGKY3/quality/20261009-083030434-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610090816-5YGKY3/quality/20261009-083030434-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610090816-5YGKY3/blueprint/resolved-snapshot.json"
+    - "apps/office/src/sc/source/core/tool/complex-refdata.test.ts"
+    - "apps/office/src/sc/source/core/tool/native-complex-reference-cases.json"
+    - "scripts/calc-refdata-native-probe.mjs"
+    - "output/playwright/calc6-verification.md"
+    - "output/playwright/calc-registry6.json"
+  findings:
+    - "Reviewed original header and14 non-debug complex definitions against TS implementation; reused existing numerical and single-reference owners without shared duplication."
+    - "Reviewed refdata decomposition candidate: keep original two reference owners together in their upstream module; hard1000 line guard passes."
+    - "Original single-reference class and fixture are byte-identical; existing test bodies and semantic status flags preserved."
 commit: null
 comments:
   -
