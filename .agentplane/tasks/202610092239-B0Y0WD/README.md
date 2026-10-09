@@ -1,10 +1,11 @@
 ---
 id: "202610092239-B0Y0WD"
 title: "Port original shared SoA position navigation and typed position reads"
-status: "DOING"
+result_summary: "verified-202610092239-B0Y0WD"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 21
+revision: 25
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-09T22:50:09.240Z"
+  updated_at: "2026-10-09T22:51:40.951Z"
   updated_by: "CODER"
-  note: "Original static SoA positions verified: native350/15734 with prior290 prefix unchanged; actual binary/source/archive/raw counter audit; Calc104/shared21 changed3 actual100; upstream-absent registry19 after bounded property-list correction; all required gates pass, cycle2 task2 no full run due."
+  note: "verified-202610092239-B0Y0WD"
   attempts: 0
 quality_review:
   state: "pass"
@@ -46,11 +47,16 @@ quality_review:
     - "Committed350 complete sequences/15734 operations/16084 full records/7161 snapshots/final350 logs compare actual original headers with ASan/UBSan. Independent driver/header/archive hashes, binary byte replay and positive raw coverage audit passed. Reviewer also compared all290 prior complete states/final events against persisted plan baseline: unchanged."
     - "Calc104/23 and affectedshared21/7 pass actual100 four metrics on17 Calc/3 changedshared files. Ordinary no-upstream Calc/shared and correctedregistry19 pass with exact finally restored symlinks. All14 static/meta gates pass after property name removed from declaration/method API list; field evidence retained, validator/runtime unchanged. Calc32/shared11 capability records remain whole-parity false."
     - "Original file responsibility boundaries reviewed: main517/types575 below1000 hard limit, source-shaped declaration/member groups retained. Doctor0 errors/2 inherited warnings only. No full suite due cycle2 task2/10, prior full cycle in FMVJ21; no Writer-only remediation."
-commit: null
+commit:
+  hash: "3679fa9df2cd4179fcc08d21d3fb73da19b72737"
+  message: "✅ B0Y0WD quality: verify original shared position contracts"
 comments:
   -
     author: "CODER"
     body: "Start: port actual original static position navigation/read group over shared owners, preserve complete290 native prefix and caller validity, scoped100 and portable evidence; cycle2 task2."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610092239-B0Y0WD. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -65,8 +71,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Original static SoA positions verified: native350/15734 with prior290 prefix unchanged; actual binary/source/archive/raw counter audit; Calc104/shared21 changed3 actual100; upstream-absent registry19 after bounded property-list correction; all required gates pass, cycle2 task2 no full run due."
+  -
+    type: "verify"
+    at: "2026-10-09T22:51:40.951Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610092239-B0Y0WD"
+  -
+    type: "status"
+    at: "2026-10-09T22:51:41.149Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610092239-B0Y0WD. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-09T22:50:09.310Z"
+doc_updated_at: "2026-10-09T22:52:05.332Z"
 doc_updated_by: "CODER"
 description: "Cycle2 task2/10: original next_position/advance_position/logical_position/static typed get over real shared iterators, actual advance utility and scalar block owners. Extend existing native full-state corpus while retaining original290 prefix, selected valid navigation boundaries and unchanged source; scoped100 Calc/shared and no-upstream acceptance, no full run due."
 sections:
@@ -128,6 +147,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-09T22:51:40.951Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610092239-B0Y0WD
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T22:50:09.310Z, excerpt_hash=sha256:57161bf92ab690a2124f15943203afd4d6d20d717b64a197c1293819a011df34
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610092239-B0Y0WD/blueprint/resolved-snapshot.json
+    - old_digest: aef74a168d3aea0d9d33d5e9ad22e8f79177b973153c2dc625276d594e4d90c1
+    - current_digest: aef74a168d3aea0d9d33d5e9ad22e8f79177b973153c2dc625276d594e4d90c1
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610092239-B0Y0WD
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610092239-B0Y0WD --result verified-202610092239-B0Y0WD --commit 3679fa9df2cd4179fcc08d21d3fb73da19b72737
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert intentional B0Y0WD commits only if requested; preserve prior source-shaped owners/helpers, exact upstream links, native inputs and unrelated tasks."
   Findings: |-
@@ -160,6 +209,18 @@ sections:
     - Observation: Both scoped inventory checks rejected a new runtime localSymbols entry has_std_vector_bool_store. Actual field exists, but collectDeclaredSymbols intentionally collects declaration/method names and excludes PropertyDeclaration, consistent with existing block_type fields.
       Impact: New registry field-list metadata is inaccurate for the API symbol contract; original implementation and all coverage/native/portable tests remain passing.
       Resolution: Remove only that property name from runtime localSymbols, retain explicit field evidence and provenance; rerun both inventory scopes plus affected provenance/format checks without widening or changing validation.
+
+    - Observation: Exact route task complete with quality SHA3679fa9df2cd exited5 E_GIT generic deterministic close subject, same installed closure behavior as G1RSF6.
+      Impact: Implementation/native/coverage and independent quality phase pass; only task closure metadata remains pending persistence, no source defect or scope drift.
+      Resolution: Recompute live route and follow task-scoped close artifact recovery; preserve all criteria and do not modify CLI/hooks/policy.
+
+    - Observation: Exact close --unstage-others recovery also exited5 E_GIT generic subject; task already DONE, approved scope and implementation unchanged.
+      Impact: Only task-scoped lifecycle artifact persistence pending; no hook bypass or implementation repair required.
+      Resolution: Use supported ap commit with explicit specific policy-compliant B0Y0WD subject and --allow-tasks, then authoritative Git HEAD and clean final status/live done route. Installed generated subject is not changed.
+extensions:
+  implementation_commit:
+    hash: "9a66e0e3beb94ee23f653f8cf7ac52efffbd0fad"
+    message: "✨ B0Y0WD shared: port original position navigation and typed reads"
 id_source: "generated"
 ---
 ## Summary
@@ -233,6 +294,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-09T22:51:40.951Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610092239-B0Y0WD
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T22:50:09.310Z, excerpt_hash=sha256:57161bf92ab690a2124f15943203afd4d6d20d717b64a197c1293819a011df34
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610092239-B0Y0WD/blueprint/resolved-snapshot.json
+- old_digest: aef74a168d3aea0d9d33d5e9ad22e8f79177b973153c2dc625276d594e4d90c1
+- current_digest: aef74a168d3aea0d9d33d5e9ad22e8f79177b973153c2dc625276d594e4d90c1
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610092239-B0Y0WD
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610092239-B0Y0WD --result verified-202610092239-B0Y0WD --commit 3679fa9df2cd4179fcc08d21d3fb73da19b72737
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -270,3 +361,11 @@ Pinned main_def.inl262-324 copies positions before traversal, delegates advance_
 - Observation: Both scoped inventory checks rejected a new runtime localSymbols entry has_std_vector_bool_store. Actual field exists, but collectDeclaredSymbols intentionally collects declaration/method names and excludes PropertyDeclaration, consistent with existing block_type fields.
   Impact: New registry field-list metadata is inaccurate for the API symbol contract; original implementation and all coverage/native/portable tests remain passing.
   Resolution: Remove only that property name from runtime localSymbols, retain explicit field evidence and provenance; rerun both inventory scopes plus affected provenance/format checks without widening or changing validation.
+
+- Observation: Exact route task complete with quality SHA3679fa9df2cd exited5 E_GIT generic deterministic close subject, same installed closure behavior as G1RSF6.
+  Impact: Implementation/native/coverage and independent quality phase pass; only task closure metadata remains pending persistence, no source defect or scope drift.
+  Resolution: Recompute live route and follow task-scoped close artifact recovery; preserve all criteria and do not modify CLI/hooks/policy.
+
+- Observation: Exact close --unstage-others recovery also exited5 E_GIT generic subject; task already DONE, approved scope and implementation unchanged.
+  Impact: Only task-scoped lifecycle artifact persistence pending; no hook bypass or implementation repair required.
+  Resolution: Use supported ap commit with explicit specific policy-compliant B0Y0WD subject and --allow-tasks, then authoritative Git HEAD and clean final status/live done route. Installed generated subject is not changed.
