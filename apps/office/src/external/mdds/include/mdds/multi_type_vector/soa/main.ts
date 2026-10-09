@@ -1,11 +1,12 @@
 /** @fileoverview Original private SoA block_slot_type, blocks_type and blocks_to_transfer owners; no replacement multi_type_vector engine. */
 // SPDX-FileCopyrightText: 2021 - 2025 Kohei Yoshida
 // SPDX-License-Identifier: MIT
-import { integrity_error } from "../../global.ts";
+import { integrity_error, general_error } from "../../global.ts";
 import {
   type base_element_block,
   type element_t,
   get_block_element_at,
+  get_block_type,
   type BlockElementAccess,
 } from "../types.ts";
 import {
@@ -515,6 +516,54 @@ export class multi_type_vector<E extends ContainerEvent = empty_event_func> {
     Blk: BlockElementAccess<T>,
   ): T {
     return get_block_element_at(Blk, pos.first.get().data as base_element_block, pos.second);
+  }
+  /** Original no_trace/nondebug scalar append entry with an explicit erased native overload witness. @param value - Scalar. @param callbacks - Native family. @returns Last block iterator. */
+  public push_back<T extends DelayedVectorValue>(
+    value: T,
+    callbacks: ContainerCallbacks<T>,
+  ): iterator_base<this> {
+    return this.push_back_impl(value, callbacks);
+  }
+  /** Original push_back_impl retains creation/append and metadata ordering over actual shared fields. @param value - Scalar. @param callbacks - Native family. @returns Last block iterator. */
+  private push_back_impl<T extends DelayedVectorValue>(
+    value: T,
+    callbacks: ContainerCallbacks<T>,
+  ): iterator_base<this> {
+    const cat = callbacks.mdds_mtv_get_element_type(value);
+    const last_data =
+      this.m_block_store.element_blocks.size() === 0
+        ? null
+        : this.m_block_store.element_blocks.get(this.m_block_store.element_blocks.size() - 1);
+    if (!last_data || cat !== get_block_type(last_data)) {
+      const block_index = this.m_block_store.positions.size();
+      const start_pos = this.m_cur_size;
+      this.m_block_store.push_back(start_pos, 1, null);
+      this.create_new_block_with_new_cell(block_index, value, callbacks);
+      ++this.m_cur_size;
+      return this.get_iterator(block_index);
+    }
+    const block_index = this.m_block_store.positions.size() - 1;
+    callbacks.mdds_mtv_append_value(last_data, value);
+    this.m_block_store.sizes.set(block_index, this.m_block_store.sizes.get(block_index) + 1);
+    ++this.m_cur_size;
+    return this.get_iterator(block_index);
+  }
+  /** Original new-cell helper releases/deletes prior data, creates empty, installs/acquires then appends; exact null diagnostic retained. @param block_index - Metadata slot. @param cell - Scalar. @param callbacks - Native family. @returns Nothing. */
+  private create_new_block_with_new_cell<T extends DelayedVectorValue>(
+    block_index: number,
+    cell: T,
+    callbacks: ContainerCallbacks<T>,
+  ): void {
+    let data: base_element_block | null = this.m_block_store.element_blocks.get(block_index);
+    if (data) {
+      this.m_hdl_event.element_block_released(data);
+      this.Traits.block_funcs.delete_block(data);
+    }
+    data = callbacks.mdds_mtv_create_new_block(0, cell);
+    if (!data) throw new general_error("Failed to create new block.");
+    this.m_block_store.element_blocks.set(block_index, data);
+    this.m_hdl_event.element_block_acquired(data);
+    callbacks.mdds_mtv_append_value(data, cell);
   }
   /** Original append_empty member updates only actual metadata and logical size. Valid empty metadata requires zero logical size. @param len - Native admitted count. @returns Whether a new block was added. */
   private append_empty(len: number): boolean {

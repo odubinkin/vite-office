@@ -640,3 +640,34 @@ not prove a scalar value defect or a valid managed failure. Complete managed
 consumer reachability/invariants remain unreviewed; no native undefined
 iterator range receives an invented successful result. Decision: preserve
 the exact original global offset and ordering; add no relative-offset repair.
+
+## CALC-029: Failed scalar append retains its new metadata slot
+
+Status: suspicious exception state; custom null-returning native callback
+reproduced. Ordinary standard scalar creation reachability is unverified.
+
+Pinned mdds 3.2.1 `soa/main_def.inl` lines1063-1080 adds a new metadata slot
+before calling `create_new_block_with_new_cell`; logical size increases after
+that helper succeeds. The helper at lines3986-4003 creates a zero-size block
+and throws `general_error("Failed to create new block.")` when its ADL factory
+returns nullptr. That path does not remove the metadata slot. The original
+public declaration at `soa/main.hpp` lines681-698 states append/iterator
+behavior but does not specify a strong exception guarantee.
+
+The unchanged native probe calls actual public `push_back(failure_cell{})`.
+Its explicit custom ADL type has the bool category, a factory returning nullptr,
+and a registered scalar append callback which is never reached. Starting from
+a zero-size owner, the error leaves logical size0, block count1, positions[0],
+sizes[1] and a null payload. Starting from two empty cells, it leaves logical
+size2, block count2, positions[0,2], sizes[2,1] and two null payloads. No owner
+acquisition occurs. Actual `clear` followed by ordinary bool append succeeds;
+complete native states and final lifetime events are retained in the last two
+cases of `soa/native-container-cases.json` and compared by `container.test.ts`.
+
+This caller deliberately exercises the original null guard. The twelve standard
+factories normally return allocated blocks; allocation failure throws instead
+of returning nullptr. This evidence does not prove a normal Calc failure,
+managed/custom consumer reachability or a promised exception guarantee violation.
+No failed replacement with a dangling old pointer is executed or certified.
+Decision: retain metadata-before-creation, exact diagnostic and size update
+ordering; add no rollback or empty-tail coalescing repair.

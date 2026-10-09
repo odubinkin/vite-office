@@ -231,6 +231,64 @@ for (let type = 0; type < 12; ++type) {
     cases.push({ seed: 36 + type, commands });
   }
 }
+for (let type = 0; type < 12; ++type) {
+  for (const n of [0, 1, 2, 5, 17]) {
+    const commands = [
+      ["F", 0, n, type, "2"],
+      ["Q", 1, 0],
+    ];
+    for (let i = 0; i < 19; ++i) commands.push(["a", 0, type, String(i % 4)]);
+    commands.push(["S", 0], ["a", 0, type, "7"], ["y", 0], ["a", 0, type, "3"]);
+    for (let other = 0; other < 12; ++other)
+      commands.push(["a", 0, other, "2"], ["a", 0, other, "0"]);
+    commands.push(
+      ["M", 2, 0],
+      ["C", 0],
+      ["a", 0, type, "1"],
+      ["W", 0, 2],
+      ["a", 0, type, "4"],
+      ["U", 0],
+      ["U", 1],
+      ["U", 2],
+    );
+    cases.push({ seed: -1, commands });
+  }
+  cases.push({
+    seed: 36 + type,
+    commands: [
+      ["Q", 1, 0],
+      ["a", 0, type, "3"],
+      ["a", 0, (type + 1) % 12, "4"],
+      ["y", 0],
+      ["a", 0, type, "5"],
+      ["U", 0],
+      ["U", 1],
+    ],
+  });
+  cases.push({
+    seed: -1,
+    commands: [
+      ["F", 0, 1, type, "2"],
+      ["Q", 1, 0],
+      ["c", 0, 0, (type + 1) % 12, "3"],
+      ["c", 0, 0, type, "4"],
+      ["a", 0, type, "5"],
+      ["U", 0],
+      ["U", 1],
+    ],
+  });
+}
+for (const n of [0, 2])
+  cases.push({
+    seed: -1,
+    commands: [
+      ["Z", 0, n],
+      ["f", 0],
+      ["C", 0],
+      ["a", 0, 0, "1"],
+      ["U", 0],
+    ],
+  });
 const driver =
   String.raw`
 #include <mdds/multi_type_vector/soa/main.hpp>
@@ -254,7 +312,7 @@ struct event_entry{int owner,token,type;size_t size;bool acquired;};
 std::shared_ptr<std::vector<event_entry>> log_entries;
 int id(const base_element_block* p){if(!p)return -1;auto it=ids.find(p);if(it==ids.end())it=ids.emplace(p,next_token++).first;return it->second;}
 struct events{static inline int next=1;int tag=next++;std::shared_ptr<std::vector<event_entry>> log=log_entries;
-void element_block_acquired(const base_element_block* p){if(log)log->push_back({tag,id(p),get_block_type(*p),standard_element_blocks_traits::block_funcs::size(*p),true});}
+void element_block_acquired(const base_element_block* p){trace_call(4,*p);if(log)log->push_back({tag,id(p),get_block_type(*p),standard_element_blocks_traits::block_funcs::size(*p),true});}
 void element_block_released(const base_element_block* p){trace_call(2,*p);if(log)log->push_back({tag,id(p),get_block_type(*p),standard_element_blocks_traits::block_funcs::size(*p),false});ids.erase(p);}
 };
 struct traits:standard_element_blocks_traits{using event_func=events;using block_funcs=observed_funcs;};
@@ -262,6 +320,33 @@ using db_type=soa::multi_type_vector<traits>;
 struct access_tag{};auto& access_store(db_type&,access_tag);
 template<auto Member>struct member_access{friend auto& access_store(db_type& db,access_tag){return db.*Member;}};
 template struct member_access<&db_type::m_block_store>;
+struct failure_cell{};
+element_t mdds_mtv_get_element_type(const failure_cell&){return element_type_boolean;}
+base_element_block* mdds_mtv_create_new_block(size_t,const failure_cell&){return nullptr;}
+void mdds_mtv_append_value(base_element_block& b,failure_cell&&){boolean_element_block::append_value(b,true);}
+template<class T>struct cell_tag{};
+` +
+  kinds
+    .map(
+      /** Declares only native private-helper caller overloads. @param kind - Original family. @returns Declaration. */ (
+        kind,
+      ) =>
+        `void replace_cell(db_type&,size_t,typename ${kind}_element_block::value_type&&,cell_tag<typename ${kind}_element_block::value_type>);`,
+    )
+    .join("\n") +
+  String.raw`
+template<class T,auto Member>struct cell_access{friend void replace_cell(db_type& db,size_t index,T&& cell,cell_tag<T>){(db.*Member)(index,std::move(cell));}};
+` +
+  kinds
+    .map(
+      /** Instantiates the unchanged original helper through a caller-only bridge. @param kind - Original family. @returns Member witness. */ (
+        kind,
+      ) =>
+        `template struct cell_access<typename ${kind}_element_block::value_type,&db_type::template create_new_block_with_new_cell<typename ${kind}_element_block::value_type>>;`,
+    )
+    .join("\n") +
+  String.raw`
+
 template<class T>T value(const std::string& t){if constexpr(std::is_same_v<T,std::string>)return t;else if constexpr(std::is_integral_v<T>)return static_cast<T>(std::stoll(t));else return static_cast<T>(std::stod(t));}
 template<class T>void print(T v){if constexpr(std::is_same_v<T,std::string>||(std::is_integral_v<T>&&sizeof(T)==8))std::cout<<'"'<<v<<'"';else if constexpr(std::is_same_v<T,bool>)std::cout<<(v?"true":"false");else std::cout<<+v;}
 template<class T>std::unique_ptr<db_type> filled(size_t n,const std::string& text){return std::make_unique<db_type>(n,value<T>(text));}
@@ -292,6 +377,33 @@ void set_cell(db_type& db,size_t pos,int type){switch(type){
     .join("\n") +
   String.raw`
 }std::abort();}
+db_type::iterator append_scalar(db_type& db,int type,const std::string& text){switch(type){
+` +
+  kinds
+    .map(
+      /** Emits only actual public scalar append calls. @param kind - Family. @param type - ID. @returns Caller. */ (
+        kind,
+        type,
+      ) =>
+        `case ${type}:return db.push_back(value<typename ${kind}_element_block::value_type>(text));`,
+    )
+    .join("\n") +
+  String.raw`
+}std::abort();}
+void replace_scalar(db_type& db,size_t index,int type,const std::string& text){switch(type){
+` +
+  kinds
+    .map(
+      /** Emits only actual original private new-cell calls. @param kind - Family. @param type - ID. @returns Caller. */ (
+        kind,
+        type,
+      ) =>
+        `case ${type}:replace_cell(db,index,value<typename ${kind}_element_block::value_type>(text),cell_tag<typename ${kind}_element_block::value_type>{});return;`,
+    )
+    .join("\n") +
+  String.raw`
+}std::abort();}
+std::string calls_json(){std::ostringstream os;os<<"[";for(size_t i=0;i<operation_calls.size();++i){if(i)os<<",";os<<"[";for(size_t j=0;j<operation_calls[i].size();++j){if(j)os<<",";os<<operation_calls[i][j];}os<<"]";}os<<"]";return os.str();}
 template<class B>void payload(const base_element_block& b){std::cout<<"["<<get_block_type(b)<<","<<B::size(b)<<","<<B::capacity(b)<<",[";bool comma=false;for(auto it=B::cbegin(b);it!=B::cend(b);++it){if(comma)std::cout<<",";comma=true;print<typename B::value_type>(*it);}std::cout<<"]]";}
 void payload(const base_element_block& b){switch(get_block_type(b)){
 ` +
@@ -341,6 +453,9 @@ else if(op=='Q'||op=='L'||op=='M'||op=='A'||op=='V'||op=='W'){int other;std::cin
 else if(op=='T'||op=='E'||op=='G'||op=='g'||op=='P'||op=='p'||op=='I'||op=='i'||op=='K'||op=='k'){size_t row;std::cin>>row;if(op=='T')result=std::to_string(db[dst]->get_type(row));else if(op=='E')result=db[dst]->is_empty(row)?"true":"false";else if(op=='G'||op=='g'){int type;std::cin>>type;result=scalar(*db[dst],row,type,op=='g');}else if(op=='P')result=position_json(db[dst]->position(row),db[dst]->end(),*db[dst]);else if(op=='p'){const auto& owner=*db[dst];result=position_json(owner.position(row),owner.end(),owner);}else if(op=='I'||op=='i'){int other,index;std::cin>>other>>index;if(op=='I'){auto hint=db[other]->begin();std::advance(hint,index);auto pos=db[dst]->position(hint,row);result=position_json(pos,db[dst]->end(),*db[dst],&hint,index==int(db[other]->block_size()));}else{const auto& owner=*db[dst];const auto& source=*db[other];auto hint=source.begin();std::advance(hint,index);auto pos=owner.position(hint,row);result=position_json(pos,owner.end(),owner,&hint,index==int(source.block_size()));}}else {int slot;std::cin>>slot;if(op=='K'){auto& hint=*hints[slot];result=position_json(db[dst]->position(hint,row),db[dst]->end(),*db[dst],&hint);}else {const auto& owner=*db[dst];auto& hint=*const_hints[slot];result=position_json(owner.position(hint,row),owner.end(),owner,&hint);}}}
 else if(op=='B'||op=='b'||op=='O'||op=='o'||op=='l'||op=='X'){size_t row;std::cin>>row;if(op=='l'){const auto& owner=*db[dst];result=std::to_string(db_type::logical_position(owner.position(row)));}else if(op=='X'){int type;std::cin>>type;result=positioned_scalar(*db[dst],row,type);}else {int steps=0;if(op=='O'||op=='o')std::cin>>steps;if(op=='B'||op=='O'){auto p=db[dst]->position(row);auto ret=op=='B'?db_type::next_position(p):db_type::advance_position(p,steps);result="["+position_json(ret,db[dst]->end(),*db[dst])+","+position_json(p,db[dst]->end(),*db[dst])+"]";}else {const auto& owner=*db[dst];auto p=owner.position(row);auto ret=op=='b'?db_type::next_position(p):db_type::advance_position(p,steps);result="["+position_json(ret,owner.end(),owner)+","+position_json(p,owner.end(),owner)+"]";}}}
 else if(op=='Y'){size_t size;std::cin>>size;operation_calls.clear();trace_enabled=true;db[dst]->resize(size);trace_enabled=false;result=capture([&]{std::cout<<"[";for(size_t i=0;i<operation_calls.size();++i){if(i)std::cout<<",";std::cout<<"[";for(size_t j=0;j<operation_calls[i].size();++j){if(j)std::cout<<",";std::cout<<operation_calls[i][j];}std::cout<<"]";}std::cout<<"]";});}
+else if(op=='a'){int type;std::string text;std::cin>>type>>text;operation_calls.clear();trace_enabled=true;auto it=append_scalar(*db[dst],type,text);trace_enabled=false;result=capture([&]{std::cout<<"[";node(it,db[dst]->end(),*db[dst]);std::cout<<","<<calls_json()<<"]";});}
+else if(op=='c'){size_t index;int type;std::string text;std::cin>>index>>type>>text;operation_calls.clear();trace_enabled=true;replace_scalar(*db[dst],index,type,text);trace_enabled=false;result=calls_json();}
+else if(op=='f'){db[dst]->push_back(failure_cell{});}
 else if(op=='y'){auto it=db[dst]->push_back_empty();result=capture([&]{node(it,db[dst]->end(),*db[dst]);});}
 else if(op=='J'||op=='j'){int other,index;std::cin>>other>>index;if(op=='J'){hints[dst]=db[other]->begin();std::advance(*hints[dst],index);result=capture([&]{hint_node(*hints[dst],*db[other]);});}else{const auto& owner=*db[other];const_hints[dst]=owner.begin();std::advance(*const_hints[dst],index);result=capture([&]{hint_node(*const_hints[dst],owner);});}}
 else if(op=='N'){hints[dst].reset();const_hints[dst].reset();}

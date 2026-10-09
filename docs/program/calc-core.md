@@ -1242,3 +1242,32 @@ trace/debug/SIMD, invalid moved-source growth/lifetimes/overflow and full
 Calc columns/documents/browser remain unverified. Source-shaped main and
 container test files exceed the 500-line review target and retain their
 original responsibilities below the enforced 1000-line limit.
+
+## Shared SoA scalar append and new-cell ownership
+
+Task `202610092310-2H4HBC` ports original `push_back`, `push_back_impl` and
+`create_new_block_with_new_cell` directly in the existing shared owner, using
+actual scalar callback families and metadata/iterator owners. A matching tail
+appends its value before increasing block and logical sizes. An empty or
+different tail gets a new metadata slot, then a newly created empty payload;
+acquisition precedes scalar append, and logical size changes last. The original
+helper releases/deletes old data before creation and retains its exact null
+creation error. No numeric scalar family is inferred from JavaScript values.
+
+Genuine unchanged full-header native comparisons retain all578 prior sequences
+and add public appends, capacity growth, empty/different tails, copy isolation,
+moved destinations, swaps and valid original size-one private helper replacement.
+The caller-only member bridge invokes the original method without rewriting its
+body. A custom native failure-cell ADL returning nullptr proves the exact original
+error and failed metadata state; only clear/destruction follow that failure.
+Forwarding operation observation records acquisition size zero before append.
+Ordinary committed-fixture tests require neither upstream nor native compilation.
+
+Scope remains pinned no_trace/default execution, all12 unmanaged standard scalar
+families and finite initialized metadata. Native rvalue/ADL syntax is an explicit
+existing callback witness. Managed/custom lifetimes, generic throwing allocators
+and events, emplace variadic construction, other segment mutators, trace/debug/SIMD,
+unbounded/invalid metadata and whole Calc columns/documents/browser remain gaps;
+whole-module/default/QA parity flags remain false. CALC-029 records the custom
+null-creation metadata observation without a rollback repair. Cycle2 task4/10 follows the
+full validation in task `202610092130-FMVJ21`.

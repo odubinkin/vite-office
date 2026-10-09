@@ -9,7 +9,7 @@ import {
 } from "./main.ts";
 import { type base_element_block, type default_element_block, get_block_type } from "../types.ts";
 import { delayed_delete_vector, type DelayedVectorValue } from "../delayed_delete_vector.ts";
-import { invalid_arg_error } from "../../global.ts";
+import { invalid_arg_error, general_error } from "../../global.ts";
 import * as standard from "../standard_element_blocks.ts";
 import { type iterator_updater, type iterator_base, type const_iterator_base } from "./iterator.ts";
 import { type BlockPosition } from "../util.ts";
@@ -90,6 +90,7 @@ class Handler {
   }
   /** Original recorded acquisition boundary. @param data - Valid pointer. @returns Nothing. */
   public element_block_acquired(data: base_element_block | null): void {
+    traceCall(4, data as base_element_block);
     if (this.log)
       this.log.push([
         this.tag,
@@ -398,6 +399,35 @@ describe("original SoA container lifetime", /** Declares original native ownersh
             destination.swap(source);
             stable =
               before === destination.event_handler() && otherBefore === source.event_handler();
+          } else if (op === "a" || op === "c") {
+            operationCalls = [];
+            try {
+              const type = args[op === "a" ? 0 : 1] as number;
+              const cell = value(type, args[op === "a" ? 1 : 2] as string);
+              const family = callbacks[type] as ContainerCallbacks;
+              if (op === "a")
+                result = [
+                  node(destination.push_back(cell, family), destination.end(), destination),
+                  operationCalls,
+                ];
+              else {
+                destination["create_new_block_with_new_cell"](args[0] as number, cell, family);
+                result = operationCalls;
+              }
+            } finally {
+              operationCalls = null;
+            }
+          } else if (op === "f") {
+            const failure = {
+              ...standard.boolean_element_callbacks,
+              /** Actual native custom failure-cell ADL returns nullptr; its unused append callback remains the existing scalar owner. @returns Original null creation failure. */
+              mdds_mtv_create_new_block() {
+                return null as unknown as ReturnType<
+                  typeof standard.boolean_element_callbacks.mdds_mtv_create_new_block
+                >;
+              },
+            };
+            destination.push_back(true, failure);
           } else if (op === "Y") {
             operationCalls = [];
             try {
@@ -508,7 +538,9 @@ describe("original SoA container lifetime", /** Declares original native ownersh
             }
           }
         } catch (error) {
-          expect(error).toBeInstanceOf(op === "R" ? invalid_arg_error : RangeError);
+          expect(error).toBeInstanceOf(
+            op === "R" ? invalid_arg_error : op === "f" ? general_error : RangeError,
+          );
           result = (error as Error).message;
         }
         expect(record(owners, result, stable)).toEqual(
