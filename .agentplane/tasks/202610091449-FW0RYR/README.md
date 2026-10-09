@@ -4,7 +4,7 @@ title: "Route Writer object destruction through native ObjectDyingHint"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -22,11 +22,32 @@ verification:
   updated_by: "CODER"
   note: "Pass:335unique49files8fresh; initial334pass1old native-event conflict corrected, onlyfailed closure1pass6skip, no passing replay. Complete4current production modules actual Istanbul100270lines301statements78functions154branches/zero negatives. TS7/build/static and metadata audits pass;8record prefixes582/583oldtests preserved. Broad goal active correction4/10; native linked/cache/assert/name/VCL remain partial."
   attempts: 0
-commit: null
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-09T15:11:43.818Z"
+  updated_by: "EVALUATOR"
+  note: "Explicitly same-agent non-independent review of semantic53f5f9217274: native ObjectDying/CheckRegistration/pre-disposal/fallback and owned item inheritance align with pinned bounded source;335unique cases and actual complete4-module Istanbul100/static/metadata gates pass."
+  evaluated_sha: "53f5f921727467d7cdfaa3f5c28ee98220bc198b"
+  blueprint_digest: "c30d8874377c69880cfa535509160ec8167ad8844484f1e64a162b302c78cffa"
+  evidence_refs:
+    - ".agentplane/tasks/202610091449-FW0RYR/README.md"
+    - ".agentplane/tasks/202610091449-FW0RYR/quality/20261009-151143818-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610091449-FW0RYR/quality/20261009-151143818-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610091449-FW0RYR/quality/20261009-151143818-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610091449-FW0RYR/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610091449-FW0RYR/evidence/results.json"
+  findings:
+    - "One exact source-backed old missing-death event assertion migrated;582/583oldtests and8canonical histories preserved. Native SwFrame correctly excludes ObjectDying rather than inventing physical invalidation. No source/counter/map transfer, production replay, I/O deviation or module-wide/full-suite promotion. Initial1old conflict and raw closure threshold failure retained; helper skip/prose corrections documented. Full linked/ListenerEntry/multilistener/assert/cache/name/VCL/heap/global families remain unverified. Correction4/10, broad goal incomplete."
+commit:
+  hash: "53f5f921727467d7cdfaa3f5c28ee98220bc198b"
+  message: "🔧 FW0RYR writer: dispatch native object death before teardown"
 comments:
   -
     author: "CODER"
     body: "Start: Implement approved native ObjectDying protocol and original item inheritance under existing iterative user authorization; correction4/10."
+  -
+    author: "CODER"
+    body: "Implementation: Native Writer object death and original registration/item-set/UI inheritance are verified;335unique cases/scoped current Istanbul100/TS7/statics/metadata pass. Broad goal active correction4/10; complete linked/cache/assert/name/VCL lifetime remains unverified."
 events:
   -
     type: "status"
@@ -41,8 +62,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Pass:335unique49files8fresh; initial334pass1old native-event conflict corrected, onlyfailed closure1pass6skip, no passing replay. Complete4current production modules actual Istanbul100270lines301statements78functions154branches/zero negatives. TS7/build/static and metadata audits pass;8record prefixes582/583oldtests preserved. Broad goal active correction4/10; native linked/cache/assert/name/VCL remain partial."
+  -
+    type: "status"
+    at: "2026-10-09T15:11:42.518Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+    note: "Implementation: Native Writer object death and original registration/item-set/UI inheritance are verified;335unique cases/scoped current Istanbul100/TS7/statics/metadata pass. Broad goal active correction4/10; complete linked/cache/assert/name/VCL lifetime remains unverified."
 doc_version: 3
-doc_updated_at: "2026-10-09T15:10:46.335Z"
+doc_updated_at: "2026-10-09T15:11:45.033Z"
 doc_updated_by: "CODER"
 description: "Correction4 after full TS7/Istanbul XJTGF0: implement native ObjectDyingHint/ModifyChangedHint and ClientBase CheckRegistration behavior, SwModify pre-destruction Writer notification/fallback cleanup, SwFormat inherited item-set rebind/detach and native browser observer invalidation. Remove duplicated generic death repair, preserve original owners and registered I/O deviations; existing iterative user authorization applies."
 sections:
@@ -111,6 +139,10 @@ sections:
     - Observation: Unique-case evidence helper initially excluded pending status only, but Vitest represents the six intentionally unexecuted closure cases as skipped. Those statuses incorrectly overrode initial passed statuses and the helper rejected its own case merge before writing the result artifact.
       Impact: Only helper acceptance aggregation failed; raw tests still show334initial passes1old conflict plus1closure pass6skips, and all deterministic production gates/actual scoped100 remain unchanged.
       Resolution: Merge only executed passed/failed case statuses; ignore unexecuted skipped/pending records, retain failed initial evidence, and require335 unique final passed IDs. No test replay, counter change or acceptance relaxation.
+
+    - Observation: Semantic53f5f9217274 is bound to the task and explicitly same-agent non-independent quality review passed. All335executed final case IDs and actual same-source complete4-module Istanbul100 are verified; production hashes remain unchanged.
+      Impact: Approved native object-death correction is ready for closure. Full linked-client/ListenerEntry/multilistener/assertion/cache/name/VCL/heap/global families remain individually unverified; no broad parity or fresh full-suite claim.
+      Resolution: Persist quality evidence, finish with bound semantic SHA and concrete native object-death result, prove clean tracked/untracked state; broad goal active with correction4/10 after full XJTGF0.
 id_source: "generated"
 ---
 ## Summary
@@ -195,3 +227,7 @@ Pinned9bc445578031fecf56086729d8e4940c77e14d65: calbck.cxx::ClientBase::CheckReg
 - Observation: Unique-case evidence helper initially excluded pending status only, but Vitest represents the six intentionally unexecuted closure cases as skipped. Those statuses incorrectly overrode initial passed statuses and the helper rejected its own case merge before writing the result artifact.
   Impact: Only helper acceptance aggregation failed; raw tests still show334initial passes1old conflict plus1closure pass6skips, and all deterministic production gates/actual scoped100 remain unchanged.
   Resolution: Merge only executed passed/failed case statuses; ignore unexecuted skipped/pending records, retain failed initial evidence, and require335 unique final passed IDs. No test replay, counter change or acceptance relaxation.
+
+- Observation: Semantic53f5f9217274 is bound to the task and explicitly same-agent non-independent quality review passed. All335executed final case IDs and actual same-source complete4-module Istanbul100 are verified; production hashes remain unchanged.
+  Impact: Approved native object-death correction is ready for closure. Full linked-client/ListenerEntry/multilistener/assertion/cache/name/VCL/heap/global families remain individually unverified; no broad parity or fresh full-suite claim.
+  Resolution: Persist quality evidence, finish with bound semantic SHA and concrete native object-death result, prove clean tracked/untracked state; broad goal active with correction4/10 after full XJTGF0.
