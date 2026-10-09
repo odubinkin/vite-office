@@ -4,7 +4,7 @@ title: "Port shared mdds flat segment tree for Calc row segments"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,38 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-09T16:05:39.384Z"
+  updated_by: "CODER"
+  note: "Passed3020 genuine native sequences and16256 steps;77 Calc tests and5 shared tests actual100 in all four Istanbul metrics; TS7,14 tooling,30 related inventory,3 provenance tests, upstream-absent portability, both scoped registries zero violations and repository gates pass. Writer coverage untouched; generic native memory/template and undefined domains remain uncertified."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-09T16:06:25.709Z"
+  updated_by: "EVALUATOR"
+  note: "Approved shared mdds prerequisite is implemented with original leaf/pool/iterator ownership and evidence-backed native behavior; all scoped gates pass without Writer coverage repair or parity promotion."
+  evaluated_sha: "8219e9f6c4e6a7aa8a0e478ac158d311cef5964b"
+  blueprint_digest: "ef4f8c17f3bad132ef95bcb379cfe8f158b5b2a6e43f79e132ea6b9f226da21b"
+  evidence_refs:
+    - ".agentplane/tasks/202610091517-S6Q035/README.md"
+    - ".agentplane/tasks/202610091517-S6Q035/quality/20261009-160625709-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610091517-S6Q035/quality/20261009-160625709-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610091517-S6Q035/quality/20261009-160625709-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610091517-S6Q035/blueprint/resolved-snapshot.json"
+    - "output/playwright/mdds-verification.md"
+    - "output/playwright/mdds-coverage-final-2.log"
+    - "output/playwright/mdds-calc-coverage.log"
+    - "output/playwright/mdds-inventory-related-final-2.log"
+    - "output/playwright/mdds-upstream-absent-shared.log"
+    - "output/playwright/mdds-upstream-absent-inventory.log"
+    - "output/playwright/mdds-ownership-2.log"
+    - "output/playwright/mdds-typecheck-final-3.log"
+    - "output/playwright/mdds-native/suspected-clipping.log"
+    - "docs/program/registry/shared/capabilities/CAP-f86ce675-1b19-464c-a22d-69ac9c9bb705.json"
+  findings:
+    - "Review confirms genuine exact archive/header/patch validation and unchanged native header execution;3020 sequences retain every16256 step observation, with snapshot deduplication only. Both actual100 Istanbul gates, TS7, affected lint/format/docs/dependency/provenance/registry tests and upstream-absent portability pass."
+    - "Exact external source/test references resolve from vendor dependency roots, avoiding fictitious LibreOffice core paths. Four shared runtime/provenance owners and one capability retain unverified semantic attestations; suspicious CALC-008/009 are preserved and documented."
+    - "Coherent591-line native header/definition owner stays below the1000-line failure threshold; splitting its private linked ownership solely for the review threshold would weaken the original module boundary."
 commit: null
 comments:
   -
@@ -35,8 +62,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: Implement approved shared pinned mdds segment storage prerequisite in calc with exact native source evidence."
+  -
+    type: "verify"
+    at: "2026-10-09T16:05:39.384Z"
+    author: "CODER"
+    state: "ok"
+    note: "Passed3020 genuine native sequences and16256 steps;77 Calc tests and5 shared tests actual100 in all four Istanbul metrics; TS7,14 tooling,30 related inventory,3 provenance tests, upstream-absent portability, both scoped registries zero violations and repository gates pass. Writer coverage untouched; generic native memory/template and undefined domains remain uncertified."
 doc_version: 3
-doc_updated_at: "2026-10-09T16:05:05.887Z"
+doc_updated_at: "2026-10-09T16:05:39.442Z"
 doc_updated_by: "CODER"
 description: "Build original pinned mdds3.2.1 flat_segment_tree prerequisite for Calc ScFlatBoolRowSegments and ScMultiSel, preserving storage/tree/iterator contracts and documenting upstream observations. Seventh task of resumed interval."
 sections:
@@ -78,6 +111,39 @@ sections:
       Evidence:339 runtime sources/1595 imports/29 actual allowed edges;1120 authored source files documented; file size gate passes, original tree owner remains a coherent original header/definition translation above the500-line review threshold and below1000 (review-only size finding). Source tree114 paths/33 retired roots; provenance340 entries/249 mapped/74 browser/17 local. Routing passes; doctor0 errors and2 inherited warnings (managed readiness shim and old PJV0JK missing hash), left unchanged.
       Scope: Approved source/module ownership, documentation and repository gates.
     Residual scope: Wider C++ template/key/value specializations, generic diagnostics/exceptions, native allocation/refcount/deletion timing/dangling pointers, malformed mutation and undefined arithmetic remain uncertified. Finite snapshots are not whole-module/Calc parity. No Writer coverage changes, browser scenarios, native stand-ins, merges or external writes. Full-suite validation remains due at resumed task10; this is task7. All intended implementation files will be committed on calc, with the final clean status recorded after closure.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-09T16:05:39.384Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Passed3020 genuine native sequences and16256 steps;77 Calc tests and5 shared tests actual100 in all four Istanbul metrics; TS7,14 tooling,30 related inventory,3 provenance tests, upstream-absent portability, both scoped registries zero violations and repository gates pass. Writer coverage untouched; generic native memory/template and undefined domains remain uncertified.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T16:05:05.887Z, excerpt_hash=sha256:b4e0ead6e4c89266a1c1b2bce3c309e0b02b44b1ac99dfa2750fd3800db9eb2b
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610091517-S6Q035/blueprint/resolved-snapshot.json
+    - old_digest: ef4f8c17f3bad132ef95bcb379cfe8f158b5b2a6e43f79e132ea6b9f226da21b
+    - current_digest: ef4f8c17f3bad132ef95bcb379cfe8f158b5b2a6e43f79e132ea6b9f226da21b
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610091517-S6Q035
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610091517-S6Q035
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's implementation commits and optional local mdds reference link; existing Calc numerical and row-mark owners remain intact."
   Findings: |-
     LibreOffice pins mdds3.2.1 by exact archive checksum and an original gcc warning patch. The source-only reference has no unpacked external headers/archive. Optional source-discovery path solenv/bin/download-sources was absent; bounded fallback found exact fetch URL in Makefile.fetch. Network reads of upstream are already authorized by the user. No source changes or engine stand-ins have been made in this task yet.
@@ -174,6 +240,39 @@ Verify reference archive SHA256673f5bb94612dbba581fc92b99b5e5dd1a53e29496a5dbc93
   Evidence:339 runtime sources/1595 imports/29 actual allowed edges;1120 authored source files documented; file size gate passes, original tree owner remains a coherent original header/definition translation above the500-line review threshold and below1000 (review-only size finding). Source tree114 paths/33 retired roots; provenance340 entries/249 mapped/74 browser/17 local. Routing passes; doctor0 errors and2 inherited warnings (managed readiness shim and old PJV0JK missing hash), left unchanged.
   Scope: Approved source/module ownership, documentation and repository gates.
 Residual scope: Wider C++ template/key/value specializations, generic diagnostics/exceptions, native allocation/refcount/deletion timing/dangling pointers, malformed mutation and undefined arithmetic remain uncertified. Finite snapshots are not whole-module/Calc parity. No Writer coverage changes, browser scenarios, native stand-ins, merges or external writes. Full-suite validation remains due at resumed task10; this is task7. All intended implementation files will be committed on calc, with the final clean status recorded after closure.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-09T16:05:39.384Z — VERIFY — ok
+
+By: CODER
+
+Note: Passed3020 genuine native sequences and16256 steps;77 Calc tests and5 shared tests actual100 in all four Istanbul metrics; TS7,14 tooling,30 related inventory,3 provenance tests, upstream-absent portability, both scoped registries zero violations and repository gates pass. Writer coverage untouched; generic native memory/template and undefined domains remain uncertified.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T16:05:05.887Z, excerpt_hash=sha256:b4e0ead6e4c89266a1c1b2bce3c309e0b02b44b1ac99dfa2750fd3800db9eb2b
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610091517-S6Q035/blueprint/resolved-snapshot.json
+- old_digest: ef4f8c17f3bad132ef95bcb379cfe8f158b5b2a6e43f79e132ea6b9f226da21b
+- current_digest: ef4f8c17f3bad132ef95bcb379cfe8f158b5b2a6e43f79e132ea6b9f226da21b
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610091517-S6Q035
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610091517-S6Q035
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
