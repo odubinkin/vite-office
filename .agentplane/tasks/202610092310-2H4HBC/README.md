@@ -1,10 +1,11 @@
 ---
 id: "202610092310-2H4HBC"
 title: "Port original shared SoA scalar append and new-cell ownership contracts"
-status: "DOING"
+result_summary: "verified-202610092310-2H4HBC"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 20
+revision: 24
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-09T23:19:56.834Z"
+  updated_at: "2026-10-09T23:21:25.034Z"
   updated_by: "CODER"
-  note: "Verified: original scalar append/new-cell group matches664unchanged native sequences;578prior complete prefix preserved, Calc and changed main.ts actual100percent coverage, all scoped gates and portable checks passed; CALC-029 unchanged behavior documented."
+  note: "verified-202610092310-2H4HBC"
   attempts: 0
 quality_review:
   state: "pass"
@@ -45,11 +46,16 @@ quality_review:
     - "Reviewer independently read actual committed664corpus and all raw native records;578prior complete sequences/states/final events unchanged. Driver and13compiler source hashes match unchanged genuine native ASan/UBSan evidence. Actual2870public appends/24size-one helper replacements/2null failures preserve acquisition size0 and release/delete/acquire order."
     - "Calc104tests/23files actual100 S2904/B2051/F467/L2548; changed main.ts shared21tests/7files actual100 S221/B96/F60/L211, all positive raw counters. All15final gates and3portable groups passed; symlink targets exact, doctor0errors/2inherited warnings, routing pass."
     - "CALC-029 records actual custom-null failure metadata without asserting normal scalar reachability or a strong exception guarantee. Same exact original diagnostic/order retained; honest whole-module capability flags remain false."
-commit: null
+commit:
+  hash: "247f5ca245534bd20209a65917887df042b81929"
+  message: "🔍 2H4HBC review: verify original scalar append and native failure evidence"
 comments:
   -
     author: "CODER"
     body: "Start: port original shared scalar append/new-cell ownership contracts with unchanged genuine native evidence on calc."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610092310-2H4HBC. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -64,8 +70,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: original scalar append/new-cell group matches664unchanged native sequences;578prior complete prefix preserved, Calc and changed main.ts actual100percent coverage, all scoped gates and portable checks passed; CALC-029 unchanged behavior documented."
+  -
+    type: "verify"
+    at: "2026-10-09T23:21:25.034Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610092310-2H4HBC"
+  -
+    type: "status"
+    at: "2026-10-09T23:21:25.168Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610092310-2H4HBC. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-09T23:19:56.891Z"
+doc_updated_at: "2026-10-09T23:21:43.352Z"
 doc_updated_by: "CODER"
 description: "Continue authorized Calc core on calc branch by porting original shared push_back/push_back_impl/create_new_block_with_new_cell with actual scalar callbacks and lossless native evidence; cycle2 task4/10."
 sections:
@@ -155,6 +174,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-09T23:21:25.034Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610092310-2H4HBC
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T23:19:56.891Z, excerpt_hash=sha256:0e7e5c23f797d2104bad8178031b1ffadf5cd036d714a37354b6d82b521c6ef5
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610092310-2H4HBC/blueprint/resolved-snapshot.json
+    - old_digest: f1b497bf9d87b7c6e85ccdd3ed985aa69d480b47e2691cae7d23b8f533444f2a
+    - current_digest: f1b497bf9d87b7c6e85ccdd3ed985aa69d480b47e2691cae7d23b8f533444f2a
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610092310-2H4HBC
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610092310-2H4HBC --result verified-202610092310-2H4HBC --commit 247f5ca245534bd20209a65917887df042b81929
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task implementation commit if required; preserve prior complete native578 corpus and shared ownership/query/resize behavior. User owns merges; do not reset or change branches."
   Findings: |-
@@ -183,6 +232,18 @@ sections:
     - Observation: Independent raw audit passed:664sequences/28116operations/28780complete states/14903lossless snapshots,578previous complete sequences unchanged; actual binary replay byte-identical,13header and2archive hashes match. Callback audit checks2870appends/24replacements/2null failures.
       Impact: Original acquisition size0, replacement release/delete/acquire ordering, exact null diagnostic and metadata captured; CALC-029 documents suspicion without normal scalar failure claim.
       Resolution: Calc104tests/23files actual100 S2904 B2051 F467 L2548; corrected affected shared21tests/7files actual100 S221 B96 F60 L211. Positive raw counts audited. Review main643/test575/probe548 source-shaped owner/observer boundaries, each below1000; no arbitrary split. Portable checks live; final changed-doc inventory/format checks after exact symlink restore.
+
+    - Observation: Exact direct task complete exited5 E_GIT: installed deterministic close subject is too generic; task DONE pending artifact cleanup.
+      Impact: Implementation and independent quality review passed; only task closure artifacts require supported recovery.
+      Resolution: Recomputed route before further mutation; follow emitted commit --close --unstage-others without altering CLI/hooks/policy or implementation.
+
+    - Observation: Exact emitted cleanup commit --close --unstage-others repeated exit5 E_GIT: deterministic subject is too generic.
+      Impact: Only task artifacts remain; verified implementation4143e046a46b and quality247f5ca24553 unchanged.
+      Resolution: Recomputed route; bounded supported ap commit with specific finalize subject and --allow-tasks will persist closure. Confirm actual amended Git HEAD/clean state and terminal route; no CLI/hook/gate changes.
+extensions:
+  implementation_commit:
+    hash: "4143e046a46bb6943874d26129a81a32ad1bc64b"
+    message: "🧮 2H4HBC shared: port original scalar append and new-cell ownership"
 id_source: "generated"
 ---
 ## Summary
@@ -284,6 +345,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-09T23:21:25.034Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610092310-2H4HBC
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T23:19:56.891Z, excerpt_hash=sha256:0e7e5c23f797d2104bad8178031b1ffadf5cd036d714a37354b6d82b521c6ef5
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610092310-2H4HBC/blueprint/resolved-snapshot.json
+- old_digest: f1b497bf9d87b7c6e85ccdd3ed985aa69d480b47e2691cae7d23b8f533444f2a
+- current_digest: f1b497bf9d87b7c6e85ccdd3ed985aa69d480b47e2691cae7d23b8f533444f2a
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610092310-2H4HBC
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610092310-2H4HBC --result verified-202610092310-2H4HBC --commit 247f5ca245534bd20209a65917887df042b81929
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -317,3 +408,11 @@ Pinned original no_trace/default execution libc++ target; explicit scalar family
 - Observation: Independent raw audit passed:664sequences/28116operations/28780complete states/14903lossless snapshots,578previous complete sequences unchanged; actual binary replay byte-identical,13header and2archive hashes match. Callback audit checks2870appends/24replacements/2null failures.
   Impact: Original acquisition size0, replacement release/delete/acquire ordering, exact null diagnostic and metadata captured; CALC-029 documents suspicion without normal scalar failure claim.
   Resolution: Calc104tests/23files actual100 S2904 B2051 F467 L2548; corrected affected shared21tests/7files actual100 S221 B96 F60 L211. Positive raw counts audited. Review main643/test575/probe548 source-shaped owner/observer boundaries, each below1000; no arbitrary split. Portable checks live; final changed-doc inventory/format checks after exact symlink restore.
+
+- Observation: Exact direct task complete exited5 E_GIT: installed deterministic close subject is too generic; task DONE pending artifact cleanup.
+  Impact: Implementation and independent quality review passed; only task closure artifacts require supported recovery.
+  Resolution: Recomputed route before further mutation; follow emitted commit --close --unstage-others without altering CLI/hooks/policy or implementation.
+
+- Observation: Exact emitted cleanup commit --close --unstage-others repeated exit5 E_GIT: deterministic subject is too generic.
+  Impact: Only task artifacts remain; verified implementation4143e046a46b and quality247f5ca24553 unchanged.
+  Resolution: Recomputed route; bounded supported ap commit with specific finalize subject and --allow-tasks will persist closure. Confirm actual amended Git HEAD/clean state and terminal route; no CLI/hook/gate changes.
