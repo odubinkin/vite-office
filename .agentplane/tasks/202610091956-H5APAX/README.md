@@ -4,7 +4,7 @@ title: "Port original shared mdds block dispatch and scalar callbacks"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,28 @@ verification:
   updated_by: "CODER"
   note: "Verified original full dispatch and scalar callbacks for12 genuine types3616 native sequences26990 complete steps plus17 unknown overloads/empty-map/early-false and4 isolated assertions. All104 Calc actual100 and3 changed shared owners actual100 four metrics; related8 shared, portable104/3/30, TS7/tooling14/provenance3 and structural gates pass. CALC-022 preserves unknown deletion exception; task5/10, no Writer/full parity claim."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-09T20:07:23.851Z"
+  updated_by: "EVALUATOR"
+  note: "Reviewed a7e426bad8fa against complete approved primitive dispatch/callback boundary, unchanged original source and recorded portable evidence; finish recommended."
+  evaluated_sha: "a7e426bad8fafc7eba45eb9f83e310282e70e1f9"
+  blueprint_digest: "3a1aa7d30e974d78a6ead68236ef94a0acde6e4551ab1ef307c66d9d9bf6d353"
+  evidence_refs:
+    - ".agentplane/tasks/202610091956-H5APAX/README.md"
+    - ".agentplane/tasks/202610091956-H5APAX/quality/20261009-200723851-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610091956-H5APAX/quality/20261009-200723851-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610091956-H5APAX/quality/20261009-200723851-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610091956-H5APAX/blueprint/resolved-snapshot.json"
+    - "output/playwright/task15-fixture-integrity.log"
+    - "output/playwright/task15-native-check.log"
+    - "output/playwright/task15-portable-inventory.log"
+    - "apps/office/coverage/block-dispatch/coverage-summary.json"
+    - "apps/office/coverage/calc/coverage-summary.json"
+  findings:
+    - "Full original discriminator dispatcher retains per-method lazy maps, both erase overloads, null deletion, unequal-ID early false, destination-selected handlers and matching-ID swap assertion. Explicit native value witnesses preserve all12 scalar callback IDs/defaults; actual shared scalar owners/storage reused. Static/free-function namespaces are TS adapters with no fake instances or number heuristics."
+    - "Lossless independent decode matches3616 genuine native sequences26990 complete both-owner steps2182 full snapshots;8 source hashes,2 archives and driver hash plus9 mixed native families/17 unknown overloads/empty specialization/early false match actual binary. Four original isolated assertions checked; CALC-022 records unknown deletion throw and original TODO without rewriting behavior or claiming a Calc destructor failure."
+    - "Actual positive four Istanbul denominators covered=total: Calc2904/2051/467/2548, changed3 shared owners113/16/46/110. Related8 shared and portable104 Calc/3 new shared/30 inventory pass; TS7/tools14/provenance3/lint/format/docs/boundaries/size/tree/routing/doctor pass. Final Calc25/149 and shared4/122 zero semantic violations; inventory whole-module parity remains unverified."
 commit: null
 comments:
   -
