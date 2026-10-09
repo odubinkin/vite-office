@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 294
+revision: 295
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-09T20:49:31.423Z"
+doc_updated_at: "2026-10-09T20:51:24.699Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -1385,6 +1385,8 @@ sections:
       Resolution: Passed: final affected union257 files/2121 distinct scenarios/14fresh, zero failures/skips; current seven complete production modules actual Istanbul1455lines1592statements276functions916branches100 all-four/zero-negative, current source SHA256 checked. Earlier maps/counters excluded. Upstream physically absent for tests/build/statics with finally restoration. TS CLI7.0.2/compiler API6.0.2; nine statics including current build before smoke/browser pass; seven browser cases zero failures/skips/flaky. Nine restored metadata audits pass, doctor0errors2historicalwarnings. Preservation1519 unrelated original files,597byte-identical old tests,16exact migrated fixtures/18operations,12old canonical histories plus exact two-symbol source-ownership migration and2new source-mapped records. Source/metadata contracts remain unverified overall. Evidence: .agentplane/tasks/202610091947-WGQ894/artifacts/native-table-frame-item-evidence.json. No full due correction4/10 after SZKQTN; goal ACTIVE/incomplete. Semantic commit/exact-SHA same-agent non-independent quality and canonical finish follow.
 
     Correction202610092028-6JYMXQ (5/10 after SZKQTN): original RES_UL_SPACE owns table upper/lower spacing. Scalar mirror and native UL ItemSet-to-scalar replay removed; existing original frame item/native history drives dialog, row-only page budget and mounted UI. Passed final319 affected files/3443 distinct scenarios/11fresh, zero failures/skips. Whole eight current changed production modules actual Istanbul1619lines1773statements294functions1329branches100all-four/zero-negative/exact current-source SHA256 identity. Initial failed related run and repaired partial UI maps/counters excluded. Tests/build/statics physically upstream-absent/finally restored. TS CLI7.0.2/compiler API6.0.2; nine static checks including current build before smoke and7browser pass. Nine restored metadata audits pass; doctor0errors2historicalwarnings. Preservation1559original files,1535unrelated unchanged,616byte-identical oldtests,0migrations,16canonical oldprefix/status/default/classification retained. Evidence: .agentplane/tasks/202610092028-6JYMXQ/artifacts/native-table-ulspace-evidence.json. Correction5/10 after full SZKQTN; full not due, broad goal ACTIVE/incomplete. Semantic commit and same-agent non-independent exact-SHA quality binding follow.
+
+    Correction6JYMXQ reviewed semantic=7429bf32872581e86a831d04afa67e14bdd6d333; same-agent non-independent quality PASS at .agentplane/tasks/202610092028-6JYMXQ/quality/20261009-205053647-recovery-context/quality-report.json; bounded final evidence holds identical source/fresh hashes. Refreshed verification then clean canonical finish; full not due5/10, broad goal ACTIVE.
 id_source: "generated"
 ---
 ## Summary
@@ -2743,3 +2745,5 @@ B575XR Same-agent non-independent quality PASS bound to semantic fe172471e03ebfc
   Resolution: Passed: final affected union257 files/2121 distinct scenarios/14fresh, zero failures/skips; current seven complete production modules actual Istanbul1455lines1592statements276functions916branches100 all-four/zero-negative, current source SHA256 checked. Earlier maps/counters excluded. Upstream physically absent for tests/build/statics with finally restoration. TS CLI7.0.2/compiler API6.0.2; nine statics including current build before smoke/browser pass; seven browser cases zero failures/skips/flaky. Nine restored metadata audits pass, doctor0errors2historicalwarnings. Preservation1519 unrelated original files,597byte-identical old tests,16exact migrated fixtures/18operations,12old canonical histories plus exact two-symbol source-ownership migration and2new source-mapped records. Source/metadata contracts remain unverified overall. Evidence: .agentplane/tasks/202610091947-WGQ894/artifacts/native-table-frame-item-evidence.json. No full due correction4/10 after SZKQTN; goal ACTIVE/incomplete. Semantic commit/exact-SHA same-agent non-independent quality and canonical finish follow.
 
 Correction202610092028-6JYMXQ (5/10 after SZKQTN): original RES_UL_SPACE owns table upper/lower spacing. Scalar mirror and native UL ItemSet-to-scalar replay removed; existing original frame item/native history drives dialog, row-only page budget and mounted UI. Passed final319 affected files/3443 distinct scenarios/11fresh, zero failures/skips. Whole eight current changed production modules actual Istanbul1619lines1773statements294functions1329branches100all-four/zero-negative/exact current-source SHA256 identity. Initial failed related run and repaired partial UI maps/counters excluded. Tests/build/statics physically upstream-absent/finally restored. TS CLI7.0.2/compiler API6.0.2; nine static checks including current build before smoke and7browser pass. Nine restored metadata audits pass; doctor0errors2historicalwarnings. Preservation1559original files,1535unrelated unchanged,616byte-identical oldtests,0migrations,16canonical oldprefix/status/default/classification retained. Evidence: .agentplane/tasks/202610092028-6JYMXQ/artifacts/native-table-ulspace-evidence.json. Correction5/10 after full SZKQTN; full not due, broad goal ACTIVE/incomplete. Semantic commit and same-agent non-independent exact-SHA quality binding follow.
+
+Correction6JYMXQ reviewed semantic=7429bf32872581e86a831d04afa67e14bdd6d333; same-agent non-independent quality PASS at .agentplane/tasks/202610092028-6JYMXQ/quality/20261009-205053647-recovery-context/quality-report.json; bounded final evidence holds identical source/fresh hashes. Refreshed verification then clean canonical finish; full not due5/10, broad goal ACTIVE.

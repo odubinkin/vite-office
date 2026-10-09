@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "202610092028-6JYMXQ",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-09T20:50:53.647Z",
+  "verdict": "pass",
+  "summary": "Same-agent non-independent review of semantic7429bf32872581e86a831d04afa67e14bdd6d333 passes approved native table UL ownership scope and all deterministic evidence gates.",
+  "evaluated_sha": "7429bf32872581e86a831d04afa67e14bdd6d333",
+  "blueprint_digest": "1cde290f0f1960f596a2218e03f6178c65b7bc8c3f35e7256f7b5cee4df53cc2",
+  "findings": [
+    "Reviewed original borrowed effective SwFormat UL contract, native shell ItemSet ownership/application and changed-only saved dialog fields against pinned source. Original native history and mounted owners retain identity; scalar UL mirror/replay removed.",
+    "All eleven source and fresh-test hashes equal actual reviewed commit and current tree. Final319files3443cases11fresh and whole eight modules Istanbul100all-four0negative, nine statics/currentbuild/seven browser/nine metadata pass.616oldtestfiles byte-identical and sixteen canonical prefixes/status/default/classification retained."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610092028-6JYMXQ/README.md",
+    ".agentplane/tasks/202610092028-6JYMXQ/artifacts/native-table-ulspace-evidence.json",
+    "7429bf32872581e86a831d04afa67e14bdd6d333"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "This is the same implementing agent review, not independent. Generic native document attr history, full spacing item/layout/UNO/copy/Repeat and existing orientation/LR boundaries remain unported; no whole-module or goal parity claim."
+  ]
+}
