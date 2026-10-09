@@ -776,9 +776,44 @@
       "rawLogHash": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed"
     }
   ],
-  "semanticCommit": null,
+  "semanticCommit": "7d7f08703e1309ea505f70206d12adedd4c38e2a",
   "quality": {
     "independent": false,
-    "status": "pending semantic binding"
-  }
+    "status": "pass",
+    "evaluatedSha": "7d7f08703e1309ea505f70206d12adedd4c38e2a",
+    "report": ".agentplane/tasks/202610091706-1G4S0C/quality/20261009-172312616-recovery-context/quality-report.json",
+    "reportHash": "c8c2e7e807ec14cb7807ef49b6d1837ddb7ea4bcc0c69e899b720d1b1148f167"
+  },
+  "metadataFinalFormatting": [
+    {
+      "label": "metadata-final-format",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "prettier",
+        "--write",
+        ".agentplane/tasks/202610091706-1G4S0C/evidence/results.json"
+      ],
+      "status": 0,
+      "upstreamAbsent": true
+    },
+    {
+      "label": "metadata-final-format-check",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "prettier",
+        "--check",
+        ".agentplane/tasks/202610091706-1G4S0C/evidence/results.json",
+        "docs/program/registry/writer/runtime/sw/source/ui/table/tabledlg.ts.json",
+        "docs/program/registry/writer/provenance/sw/source/ui/table/tabledlg.ts.json",
+        "docs/program/registry/writer/runtime/sw/source/uibase/shells/tabsh.ts.json",
+        "docs/program/registry/writer/provenance/sw/source/uibase/shells/tabsh.ts.json"
+      ],
+      "status": 0,
+      "upstreamAbsent": true
+    }
+  ]
 }

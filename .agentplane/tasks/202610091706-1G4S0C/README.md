@@ -4,7 +4,7 @@ title: "Pass native row-split dialog input from the source selection"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 21
 origin:
   system: "manual"
 depends_on: []
@@ -18,15 +18,39 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-09T17:21:33.331Z"
+  updated_at: "2026-10-09T17:23:56.991Z"
   updated_by: "CODER"
-  note: "Verified:1227distinct related cases22fresh accepted, no passing replay, both entire current production modules Istanbul484lines537statements71functions370branches all100/zero-negative. Repaired failed fresh UNKNOWN input case only, raw initial/partial closure failures retained. Seven upstream-absent static/seven restored metadata/final formatting gates pass; four canonical prefixes597old tests1854unrelated files and every old assertion preserved, reference restored. Goal active correction9/10, native master/follow/root/page/section/content/HTML/VCL remain unverified."
+  note: "Verified: final binding docs stable at semantic7d7f08703e1309ea505f70206d12adedd4c38e2a and explicitly same-agent non-independent EVALUATOR pass. Same accepted1227distinct related cases22fresh, complete two-module actual Istanbul484lines537statements71functions370branches all100/zero-negative, no passing replay. Seven static/seven metadata/final formatting gates and four canonical prefixes597old tests1854unrelated files/every old assertion preserved. Re-recorded final blueprint evidence only after final docs; no test replay, reference restored, goal active correction9/10."
   attempts: 0
-commit: null
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-09T17:23:12.616Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent non-independent review passes source native row-split dialog input at semantic7d7f08703e1309ea505f70206d12adedd4c38e2a."
+  evaluated_sha: "7d7f08703e1309ea505f70206d12adedd4c38e2a"
+  blueprint_digest: "ee193e960df55e109deb3cffb815c37fb1a1f8de2b71f238a5421080295286f2"
+  evidence_refs:
+    - ".agentplane/tasks/202610091706-1G4S0C/README.md"
+    - ".agentplane/tasks/202610091706-1G4S0C/quality/20261009-172312616-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610091706-1G4S0C/quality/20261009-172312616-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610091706-1G4S0C/quality/20261009-172312616-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610091706-1G4S0C/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610091706-1G4S0C/evidence/results.json"
+    - "7d7f08703e1309ea505f70206d12adedd4c38e2a"
+  findings:
+    - "Reviewed source diff against pinned tabsh GetRowSplit capture after GetTabBorders/before cursor restoration and Text Flow GetItemIfSet129false/indeterminate fallback. Existing original common-item/temporary selection owners retained without new browser adapter or repeated native table projection on authoritative input."
+    - "Actual raw reports accept1227distinct related cases158files22fresh after one fresh UNKNOWN-row fixture repair and failed-only1case closure with8skips,0passing replay. Both entire current production modules actual standard Istanbul484lines537statements71functions370branches all100/zero-negative; production unchanged, complete maps identical, initial coverage already100 and raw partial closure threshold failure retained."
+    - "All committed production/fresh hashes match current-source evidence. Seven final upstream-absent static gates/seven restored metadata/final format gates pass, four canonical prefixes597old test files1854unrelated files and every old assertion preserved. Two exact source native-input fixture captures only, symlink restored and no raw sources/helpers/logs/maps in task artifacts."
+commit:
+  hash: "7d7f08703e1309ea505f70206d12adedd4c38e2a"
+  message: "🐛 1G4S0C writer: pass native row split through dialog input"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Implementation: source native common row input captured in temporary shell selection and authoritative Text Flow ItemSet; verified1227cases22fresh and complete two-module Istanbul100."
 events:
   -
     type: "status"
@@ -41,8 +65,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified:1227distinct related cases22fresh accepted, no passing replay, both entire current production modules Istanbul484lines537statements71functions370branches all100/zero-negative. Repaired failed fresh UNKNOWN input case only, raw initial/partial closure failures retained. Seven upstream-absent static/seven restored metadata/final formatting gates pass; four canonical prefixes597old tests1854unrelated files and every old assertion preserved, reference restored. Goal active correction9/10, native master/follow/root/page/section/content/HTML/VCL remain unverified."
+  -
+    type: "status"
+    at: "2026-10-09T17:22:22.988Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+    note: "Implementation: source native common row input captured in temporary shell selection and authoritative Text Flow ItemSet; verified1227cases22fresh and complete two-module Istanbul100."
+  -
+    type: "verify"
+    at: "2026-10-09T17:23:56.991Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified: final binding docs stable at semantic7d7f08703e1309ea505f70206d12adedd4c38e2a and explicitly same-agent non-independent EVALUATOR pass. Same accepted1227distinct related cases22fresh, complete two-module actual Istanbul484lines537statements71functions370branches all100/zero-negative, no passing replay. Seven static/seven metadata/final formatting gates and four canonical prefixes597old tests1854unrelated files/every old assertion preserved. Re-recorded final blueprint evidence only after final docs; no test replay, reference restored, goal active correction9/10."
 doc_version: 3
-doc_updated_at: "2026-10-09T17:21:33.386Z"
+doc_updated_at: "2026-10-09T17:23:57.043Z"
 doc_updated_by: "CODER"
 description: "Resumed correction9/10 since XJTGF0: shell captures original common row split within native temporary whole-table selection and passes native ItemSet to Text Flow; authoritative direct row item or source indeterminate fallback replaces duplicate table projection. Preserve saved widgets, original cursors/history/native owners, old inventory prefixes and registered deviations."
 sections:
@@ -62,23 +99,23 @@ sections:
 
     Command: npm run format:check; npm run lint; npm run typecheck; npm run check:dependencies; npm run test:static; npm run check:docs; npm run check:file-size.
     Result: pass, seven final upstream-absent gates. Original preparation format/lint/TS7 pass; failed fixture formatting/lint repaired before its isolated closure. No source changes after accepted runtime.
-    Evidence: Actual CLI7.0.2/compiler API6.0.2 and Istanbul; exact commands/status/raw hashes in bounded evidence. Final changed canonical/artifact formatting check follows.
+    Evidence: Actual CLI7.0.2/compiler API6.0.2 and Istanbul; exact commands/status/raw hashes in bounded evidence. Final changed canonical/artifact formatting check passes.
     Scope: Approved two production modules, three fresh files and exact two source-proven native-input fixtures; all old assertions and registered I/O/recovery/settings decisions retained.
 
     Command: npm run inventory:registry:build; npm run check:source-tree; npm run check:source-provenance; npm run inventory:registry:check; node_modules/.bin/tsx scripts/generate-writer-ui-resources.ts --check; node .agentplane/policy/check-routing.mjs; ap doctor.
     Result: pass, seven metadata-only audits after restored reference.114required paths33retired roots333runtime modules242mapped74browser17infrastructure, no derived resource changes; doctor0errors2historical warnings.
     Evidence: Four canonical original scalar/status/default/classification/evidence/responsibility prefixes,597old test files1854unrelated old source/scripts/docs files and original parent Findings prefix preserved. Two exact native-input fixture migrations, every old assertion retained. Sources/helpers/raw maps/logs absent from task artifacts, raw diagnostics only ignored cache.
-    Scope: Native common-row ItemSet capture and source Text Flow direct-input path. Native master/follow/root/page/section/content/HTML/VCL families remain unrepresented/unverified; no whole-module or broad-goal parity promotion. Goal ACTIVE/incomplete correction9/10 since XJTGF0, next full after10. Semantic SHA and same-agent non-independent quality binding follow.
+    Scope: Native common-row ItemSet capture and source Text Flow direct-input path. Native master/follow/root/page/section/content/HTML/VCL families remain unrepresented/unverified; no whole-module or broad-goal parity promotion. Goal ACTIVE/incomplete correction9/10 since XJTGF0, next full after10. Semantic SHA 7d7f08703e1309ea505f70206d12adedd4c38e2a binds all final production/fresh hashes; same-agent non-independent EVALUATOR pass evaluates this exact SHA.
 
     <!-- BEGIN VERIFICATION RESULTS -->
-    ### 2026-10-09T17:21:33.331Z — VERIFY — ok
+    ### 2026-10-09T17:23:56.991Z — VERIFY — ok
 
     By: CODER
 
-    Note: Verified:1227distinct related cases22fresh accepted, no passing replay, both entire current production modules Istanbul484lines537statements71functions370branches all100/zero-negative. Repaired failed fresh UNKNOWN input case only, raw initial/partial closure failures retained. Seven upstream-absent static/seven restored metadata/final formatting gates pass; four canonical prefixes597old tests1854unrelated files and every old assertion preserved, reference restored. Goal active correction9/10, native master/follow/root/page/section/content/HTML/VCL remain unverified.
+    Note: Verified: final binding docs stable at semantic7d7f08703e1309ea505f70206d12adedd4c38e2a and explicitly same-agent non-independent EVALUATOR pass. Same accepted1227distinct related cases22fresh, complete two-module actual Istanbul484lines537statements71functions370branches all100/zero-negative, no passing replay. Seven static/seven metadata/final formatting gates and four canonical prefixes597old tests1854unrelated files/every old assertion preserved. Re-recorded final blueprint evidence only after final docs; no test replay, reference restored, goal active correction9/10.
     Attempts: 0
 
-    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T17:21:08.221Z, excerpt_hash=sha256:361739e58615b893c575e24d71b0c8de8bbd10bafc2b2b9cf70625b4bd0aba2d
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T17:23:55.829Z, excerpt_hash=sha256:361739e58615b893c575e24d71b0c8de8bbd10bafc2b2b9cf70625b4bd0aba2d
 
     Details:
 
@@ -93,7 +130,7 @@ sections:
     DecisionContextRef:
     - operator_action: run_exact_argv
     - can_execute_now: true
-    - safe_command: agentplane commit 202610091706-1G4S0C -m 🧩 1G4S0C task: persist canonical task artifacts --allow-tasks
+    - safe_command: agentplane task complete 202610091706-1G4S0C --result verified-202610091706-1G4S0C --commit 7d7f08703e1309ea505f70206d12adedd4c38e2a
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -109,6 +146,8 @@ sections:
     - Initial upstream-absent related profile:158files1226pass1fresh fixture failure0skip. Only mounted UNKNOWN-row-state case failed before reaching Text Flow because its input range excluded the mandatory border inner-info item10023; border page then requested an undefined pool default through the supplied parent. Keep genuine row129 UNKNOWN while admitting actual border items113/132/10023 and split120. Repair only this fresh input fixture and rerun only its failed parameterized case; retain all raw failures, no production change or passing-case replay. Routine task-local fixture repair within approved scope, no incident promotion/goal blocker.
 
     - 1G4S0C verified correction9/10: original common row-split129 item is captured after native GetTabBorders inside shell temporary whole-table selection, before cursor restoration; selected subsets retain their scope. Authoritative direct Text Flow ItemSet input uses source indeterminate fallback, replacing duplicate row projection on this path; input-free native construction remains. Saved state, Reset, parent sensitivity and changed-only concrete output preserved. Original row/cell/cursor/ring/frame owners and three real undo/redo cycles retained through actual command acceptance/mounted UI. Initial158files1226pass1fresh fixture failure0skip; repaired UNKNOWN-row input case passes alone with8deliberate skips, final1227distinct cases22fresh all accepted,0passing replay. Entire two unchanged current production maps Istanbul484lines537statements71functions370branches all100/zero-negative; initial coverage already100, standard same-source identical-complete-map current-task aggregation only, raw partial closure threshold failure retained. Seven static/seven metadata audits pass. Four canonical old prefixes,597old test files1854unrelated files and all old assertions retained; two exact native-input fixture captures, reference restored. Raw helpers/logs/maps/sources absent from task artifacts. Broad goal ACTIVE/incomplete, next full after10 since XJTGF0; native master/follow/root/page/section/content/HTML/VCL boundaries remain unverified without module/goal promotion. Semantic binding and same-agent non-independent quality follow.
+
+    - 1G4S0C closeout: semantic 7d7f08703e1309ea505f70206d12adedd4c38e2a binds both production and all three final fresh-test hashes to accepted1227case22fresh same-source evidence. Same-agent non-independent EVALUATOR pass evaluates this exact SHA; actual raw test assertions and identical complete Istanbul maps independently checked in the quality phase. Seven static/seven metadata/final formatting gates pass. Four canonical prefixes,597old test files1854unrelated files and original parent Findings prefix retained; two exact source-native input fixture migrations preserve every old assertion. Reference restored, no upstream source copies/helpers/raw logs/maps in task artifacts. Broad goal ACTIVE/incomplete correction9/10 since XJTGF0; next full after10. Native master/follow/root/page/section/content/HTML/VCL boundaries remain unverified without module/goal promotion.
 id_source: "generated"
 ---
 ## Summary
@@ -139,23 +178,23 @@ Scope: Entire two current production modules actual standard Istanbul484lines537
 
 Command: npm run format:check; npm run lint; npm run typecheck; npm run check:dependencies; npm run test:static; npm run check:docs; npm run check:file-size.
 Result: pass, seven final upstream-absent gates. Original preparation format/lint/TS7 pass; failed fixture formatting/lint repaired before its isolated closure. No source changes after accepted runtime.
-Evidence: Actual CLI7.0.2/compiler API6.0.2 and Istanbul; exact commands/status/raw hashes in bounded evidence. Final changed canonical/artifact formatting check follows.
+Evidence: Actual CLI7.0.2/compiler API6.0.2 and Istanbul; exact commands/status/raw hashes in bounded evidence. Final changed canonical/artifact formatting check passes.
 Scope: Approved two production modules, three fresh files and exact two source-proven native-input fixtures; all old assertions and registered I/O/recovery/settings decisions retained.
 
 Command: npm run inventory:registry:build; npm run check:source-tree; npm run check:source-provenance; npm run inventory:registry:check; node_modules/.bin/tsx scripts/generate-writer-ui-resources.ts --check; node .agentplane/policy/check-routing.mjs; ap doctor.
 Result: pass, seven metadata-only audits after restored reference.114required paths33retired roots333runtime modules242mapped74browser17infrastructure, no derived resource changes; doctor0errors2historical warnings.
 Evidence: Four canonical original scalar/status/default/classification/evidence/responsibility prefixes,597old test files1854unrelated old source/scripts/docs files and original parent Findings prefix preserved. Two exact native-input fixture migrations, every old assertion retained. Sources/helpers/raw maps/logs absent from task artifacts, raw diagnostics only ignored cache.
-Scope: Native common-row ItemSet capture and source Text Flow direct-input path. Native master/follow/root/page/section/content/HTML/VCL families remain unrepresented/unverified; no whole-module or broad-goal parity promotion. Goal ACTIVE/incomplete correction9/10 since XJTGF0, next full after10. Semantic SHA and same-agent non-independent quality binding follow.
+Scope: Native common-row ItemSet capture and source Text Flow direct-input path. Native master/follow/root/page/section/content/HTML/VCL families remain unrepresented/unverified; no whole-module or broad-goal parity promotion. Goal ACTIVE/incomplete correction9/10 since XJTGF0, next full after10. Semantic SHA 7d7f08703e1309ea505f70206d12adedd4c38e2a binds all final production/fresh hashes; same-agent non-independent EVALUATOR pass evaluates this exact SHA.
 
 <!-- BEGIN VERIFICATION RESULTS -->
-### 2026-10-09T17:21:33.331Z — VERIFY — ok
+### 2026-10-09T17:23:56.991Z — VERIFY — ok
 
 By: CODER
 
-Note: Verified:1227distinct related cases22fresh accepted, no passing replay, both entire current production modules Istanbul484lines537statements71functions370branches all100/zero-negative. Repaired failed fresh UNKNOWN input case only, raw initial/partial closure failures retained. Seven upstream-absent static/seven restored metadata/final formatting gates pass; four canonical prefixes597old tests1854unrelated files and every old assertion preserved, reference restored. Goal active correction9/10, native master/follow/root/page/section/content/HTML/VCL remain unverified.
+Note: Verified: final binding docs stable at semantic7d7f08703e1309ea505f70206d12adedd4c38e2a and explicitly same-agent non-independent EVALUATOR pass. Same accepted1227distinct related cases22fresh, complete two-module actual Istanbul484lines537statements71functions370branches all100/zero-negative, no passing replay. Seven static/seven metadata/final formatting gates and four canonical prefixes597old tests1854unrelated files/every old assertion preserved. Re-recorded final blueprint evidence only after final docs; no test replay, reference restored, goal active correction9/10.
 Attempts: 0
 
-VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T17:21:08.221Z, excerpt_hash=sha256:361739e58615b893c575e24d71b0c8de8bbd10bafc2b2b9cf70625b4bd0aba2d
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T17:23:55.829Z, excerpt_hash=sha256:361739e58615b893c575e24d71b0c8de8bbd10bafc2b2b9cf70625b4bd0aba2d
 
 Details:
 
@@ -170,7 +209,7 @@ BlueprintSnapshotRef:
 DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
-- safe_command: agentplane commit 202610091706-1G4S0C -m 🧩 1G4S0C task: persist canonical task artifacts --allow-tasks
+- safe_command: agentplane task complete 202610091706-1G4S0C --result verified-202610091706-1G4S0C --commit 7d7f08703e1309ea505f70206d12adedd4c38e2a
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
@@ -191,3 +230,5 @@ Pinned tabledlg.cxx Reset reads direct RES_ROW_SPLIT,false and chooses TRISTATE_
 - Initial upstream-absent related profile:158files1226pass1fresh fixture failure0skip. Only mounted UNKNOWN-row-state case failed before reaching Text Flow because its input range excluded the mandatory border inner-info item10023; border page then requested an undefined pool default through the supplied parent. Keep genuine row129 UNKNOWN while admitting actual border items113/132/10023 and split120. Repair only this fresh input fixture and rerun only its failed parameterized case; retain all raw failures, no production change or passing-case replay. Routine task-local fixture repair within approved scope, no incident promotion/goal blocker.
 
 - 1G4S0C verified correction9/10: original common row-split129 item is captured after native GetTabBorders inside shell temporary whole-table selection, before cursor restoration; selected subsets retain their scope. Authoritative direct Text Flow ItemSet input uses source indeterminate fallback, replacing duplicate row projection on this path; input-free native construction remains. Saved state, Reset, parent sensitivity and changed-only concrete output preserved. Original row/cell/cursor/ring/frame owners and three real undo/redo cycles retained through actual command acceptance/mounted UI. Initial158files1226pass1fresh fixture failure0skip; repaired UNKNOWN-row input case passes alone with8deliberate skips, final1227distinct cases22fresh all accepted,0passing replay. Entire two unchanged current production maps Istanbul484lines537statements71functions370branches all100/zero-negative; initial coverage already100, standard same-source identical-complete-map current-task aggregation only, raw partial closure threshold failure retained. Seven static/seven metadata audits pass. Four canonical old prefixes,597old test files1854unrelated files and all old assertions retained; two exact native-input fixture captures, reference restored. Raw helpers/logs/maps/sources absent from task artifacts. Broad goal ACTIVE/incomplete, next full after10 since XJTGF0; native master/follow/root/page/section/content/HTML/VCL boundaries remain unverified without module/goal promotion. Semantic binding and same-agent non-independent quality follow.
+
+- 1G4S0C closeout: semantic 7d7f08703e1309ea505f70206d12adedd4c38e2a binds both production and all three final fresh-test hashes to accepted1227case22fresh same-source evidence. Same-agent non-independent EVALUATOR pass evaluates this exact SHA; actual raw test assertions and identical complete Istanbul maps independently checked in the quality phase. Seven static/seven metadata/final formatting gates pass. Four canonical prefixes,597old test files1854unrelated files and original parent Findings prefix retained; two exact source-native input fixture migrations preserve every old assertion. Reference restored, no upstream source copies/helpers/raw logs/maps in task artifacts. Broad goal ACTIVE/incomplete correction9/10 since XJTGF0; next full after10. Native master/follow/root/page/section/content/HTML/VCL boundaries remain unverified without module/goal promotion.
