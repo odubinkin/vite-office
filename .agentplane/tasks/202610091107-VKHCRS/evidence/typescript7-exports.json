@@ -1,0 +1,20 @@
+{
+  "exports": {
+    ".": "./lib/version.cjs",
+    "./unstable/fs": "./dist/api/fs.js",
+    "./package.json": "./package.json",
+    "./unstable/ast": "./dist/ast/index.js",
+    "./unstable/sync": "./dist/api/sync/api.js",
+    "./unstable/async": "./dist/api/async/api.js",
+    "./unstable/proto": "./dist/api/proto.js",
+    "./unstable/ast/is": "./dist/ast/is.js",
+    "./unstable/ast/clone": "./dist/ast/clone.js",
+    "./unstable/ast/utils": "./dist/ast/utils.js",
+    "./unstable/ast/factory": "./dist/ast/factory.generated.js",
+    "./unstable/ast/scanner": "./dist/ast/scanner.js",
+    "./unstable/ast/visitor": "./dist/ast/visitor.js"
+  },
+  "bin": {
+    "tsc": "bin/tsc"
+  }
+}

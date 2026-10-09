@@ -1,0 +1,12 @@
+{
+  "version": "7.0.2",
+  "dist-tags": {
+    "dev": "3.9.4",
+    "tag-for-publishing-older-releases": "4.1.6",
+    "insiders": "4.6.2-insiders.20220225",
+    "beta": "6.0.0-beta",
+    "rc": "7.0.1-rc",
+    "latest": "7.0.2",
+    "next": "7.1.0-dev.20261009.1"
+  }
+}

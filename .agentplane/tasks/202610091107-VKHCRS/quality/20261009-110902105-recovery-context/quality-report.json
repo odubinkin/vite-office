@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "task_id": "202610091107-VKHCRS",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-09T11:09:02.105Z",
+  "verdict": "pass",
+  "summary": "The requested feasibility assessment is complete; full TS7 migration is blocked, so the user condition correctly preserves TS6.",
+  "evaluated_sha": "9d766da3e784d17d424cfa70f2374c8acffa54f3",
+  "blueprint_digest": "7e0daf03cda6b2434ee7ed067fb122ac4ad301ac5512a12528de0eb7688e0a05",
+  "findings": [
+    "Stable TS7 exists, but current and latest typescript-eslint exclude it and repository AST tools require TS6 APIs."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610091107-VKHCRS/README.md",
+    ".agentplane/tasks/202610091107-VKHCRS/evidence/",
+    "scripts/check-module-boundaries.mjs",
+    "scripts/check-jsdoc.mjs",
+    "scripts/libreoffice-inventory/runtime-inventory.ts"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
