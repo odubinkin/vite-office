@@ -4,7 +4,7 @@ title: "Port original Calc compressed width and flag arrays"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 19
+revision: 20
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,36 @@ verification:
   updated_by: "CODER"
   note: "All104 Calc tests actual100 Istanbul four metrics; original5272 sequences/640 full snapshots, two assertions and separate A/O non-progress diagnostics pass; portable104+30, tooling14/provenance3, TS7/scoped lint/format/docs/boundaries/size/tree/provenance and zero Calc/shared registry violations pass. CALC-018/019 preserve upstream. No Writer changes, broad parity claim or full-suite rerun; task2/10."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-09T19:03:39.699Z"
+  updated_by: "EVALUATOR"
+  note: "Reviewed dbc4830e71b7b1a0dee0b22bb880ca1564f50661: complete original numeric/CRFlags compressed width/flag owners satisfy approved finite contracts and actual100 Calc/scoped gates, retaining source preconditions and suspicious behavior without broader parity promotion."
+  evaluated_sha: "dbc4830e71b7b1a0dee0b22bb880ca1564f50661"
+  blueprint_digest: "55865968f0fa74bd57103fc230dbd65b96b9302a7d47970c9785424244418da1"
+  evidence_refs:
+    - ".agentplane/tasks/202610091841-PZT40R/README.md"
+    - ".agentplane/tasks/202610091841-PZT40R/quality/20261009-190339699-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610091841-PZT40R/quality/20261009-190339699-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610091841-PZT40R/quality/20261009-190339699-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610091841-PZT40R/blueprint/resolved-snapshot.json"
+    - "output/playwright/task12-review-fixture.log"
+    - "output/playwright/task12-native-borrow-check.log"
+    - "output/playwright/task12-native-assertions.log"
+    - "output/playwright/task12-native-nontermination.log"
+    - "output/playwright/calc-native/compressedarray-self-assertion.log"
+    - "output/playwright/calc-native/compressedarray-flag-assertion.log"
+    - "output/playwright/calc-native/compressedarray-A-nontermination.json"
+    - "output/playwright/calc-native/compressedarray-O-nontermination.json"
+    - "output/playwright/task12-calc-coverage-borrow.log"
+    - "apps/office/coverage/calc/coverage-summary.json"
+    - "output/playwright/task12-portable-calc.log"
+    - "output/playwright/task12-portable-inventory.log"
+    - "output/playwright/task12-registry-calc-final.log"
+    - "output/playwright/task12-provenance-final.log"
+    - "output/playwright/task12-verification.txt"
+  findings:
+    - "Verified all5272 decoded committed native sequences equal raw observations for both real owners;640 lossless snapshots and seven pinned file/three complete mechanism group hashes match. Genuine original final bit owner and o3tl operators remain unchanged; observer only reads protected base-member pointers. Original count/capacity, split/merge, getter fallback/terminal-next, predecessor insertion, removal/size call order, distinct copy/source offsets/mask traversal and borrowed iterator Reset behavior are covered through legitimate public calls. Native self-copy/result-mask assertions and isolated invalid-start And/Or non-progress diagnostics are separate from successful fixtures. Two SetValue guard reductions follow the preceding branch plus ordered Search/integer boundary and active-insertion/count invariants, with proof comments and unchanged native guards; no private-state injection or exclusions. CALC-018/019 record original source/caller limits without clipping or filling repairs. All104 Calc tests actual100 (2904 statements/2051 branches/467 functions/2548 lines), portable104+30, tooling14/provenance3 and declared TS7/static/registry gates pass; original module475 lines remains coherent. Calc22/143 and shared1/116 report zero semantic violations, while semantic/default/contract/module parity remains unverified."
 commit: null
 comments:
   -
