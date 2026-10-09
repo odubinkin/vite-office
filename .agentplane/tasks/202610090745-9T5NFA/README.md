@@ -1,10 +1,11 @@
 ---
 id: "202610090745-9T5NFA"
 title: "Reconcile Calc coordinate inventory after sticky updates"
-status: "DOING"
+result_summary: "Reconciled Calc inventory with completed sticky core and bounded native evidence"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
     - "ap doctor"
   findings:
     - "Only the original coordinate gaps and registry activation prose changed. All flags and shared/Writer records preserved; bounded native evidence accurately attributed to sticky capability."
-commit: null
+commit:
+  hash: "5c714718d5322fd06ecb0e6612ec1fd8b782fb13"
+  message: "📝 9T5NFA docs: reconcile Calc inventory with completed sticky core"
 comments:
   -
     author: "CODER"
     body: "Start: reconcile Calc inventory after verified sticky updates, preserving scoped native evidence and all semantic parity flags."
+  -
+    author: "CODER"
+    body: "Verified: reconciled Calc registry activation and original coordinate gaps, preserved semantic parity flags, passed Calc registry and all fourteen tests with actual100 coverage."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Calc registry passes with 2 capabilities, 115 scoped modules and zero semantic violations; every capability status flag preserved. Prettier, diff check and routing pass; doctor has zero errors and two pre-existing warnings. Calc 14 tests pass; coverage lines211/211 statements245/245 functions53/53 branches219/219. Only registry documentation and original Calc gap text changed; shared/Writer records unchanged."
+  -
+    type: "status"
+    at: "2026-10-09T07:47:49.083Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: reconciled Calc registry activation and original coordinate gaps, preserved semantic parity flags, passed Calc registry and all fourteen tests with actual100 coverage."
 doc_version: 3
-doc_updated_at: "2026-10-09T07:47:22.412Z"
+doc_updated_at: "2026-10-09T07:47:49.084Z"
 doc_updated_by: "CODER"
 description: "Refresh the original coordinate capability with completed sticky movement evidence and cross-reference the separate sticky capability without claiming complete native parity. Keep shared and Writer records unchanged."
 sections:
@@ -106,6 +119,10 @@ sections:
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task implementation commit, preserving existing Calc coordinate code and records."
   Findings: "The original capability still listed sticky updates as future work after the second milestone implemented them. The registry README still described the initial inactive Calc state. Native fixture evidence executes sticky movement, so separate full address API parity remains unverified."
+extensions:
+  implementation_commit:
+    hash: "5c714718d5322fd06ecb0e6612ec1fd8b782fb13"
+    message: "📝 9T5NFA docs: reconcile Calc inventory with completed sticky core"
 id_source: "generated"
 ---
 ## Summary
