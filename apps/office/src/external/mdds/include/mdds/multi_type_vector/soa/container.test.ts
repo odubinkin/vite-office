@@ -459,6 +459,14 @@ describe("original SoA container lifetime", /** Declares original native ownersh
               },
             };
             destination.push_back(true, failure);
+          } else if (op === "r") {
+            operationCalls = [];
+            try {
+              destination.release();
+              result = operationCalls;
+            } finally {
+              operationCalls = null;
+            }
           } else if (op === "e") {
             operationCalls = [];
             try {

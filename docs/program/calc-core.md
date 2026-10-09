@@ -1307,3 +1307,29 @@ trace/debug/SIMD, invalid or overflowing metadata, other segment mutators and
 whole Calc columns/documents/browser remain gaps. Whole-module/default/QA flags
 remain false. CALC-030 records the original invalid-end diagnostic start-row
 argument without changing it. Cycle2 task5/10 follows full validation in taskFMVJ21.
+
+## Shared SoA whole-container release
+
+Task `202610092349-Z4XSP9` ports original `release()` directly in the shared
+SoA owner. It walks actual borrowed block storage in source order, skips
+null pointers, resizes each nonempty payload to zero, then releases and deletes
+that block through existing registered funcs and event handlers. Pointer slots
+are retained until the original metadata clear; logical size resets afterward.
+This differs from clear/destruction, whose callbacks observe the original size.
+The three metadata vectors retain their actual allocated capacity.
+
+Actual unchanged-header public native callers retain all 7360 prior complete
+sequence. Added all 12 standard-family callers cover homogeneous/empty owners,
+compound and 41-block tables, repeat release, copy/clone isolation, swaps, moved
+sources/destinations, release after erase/resize/append, and subsequent scalar or
+empty growth. Complete payload/metadata/capacity/equality/endpoints/events and
+forwarded resize/release/delete calls are compared without generated algorithms.
+Ordinary committed-fixture acceptance requires no native compiler or upstream.
+
+The selected finite unmanaged no_trace/default-execution contract is implemented;
+managed/custom lifetimes, throwing events/allocators, instrumentation, ABI,
+invalid/reentrant inputs, other segment mutation contracts and full Calc columns,
+documents/browser remain gaps. Whole-module/default/QA flags stay false.
+Source-shaped owner, full container observer and native caller files retain their
+original responsibilities below the 1000-line hard limit. Cycle 2, task 6/10 follows
+the full validation in task `202610092130-FMVJ21`.

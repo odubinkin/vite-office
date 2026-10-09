@@ -369,6 +369,20 @@ export class multi_type_vector<E extends ContainerEvent = empty_event_func> {
     this.m_block_store.clear();
     this.m_cur_size = 0;
   }
+  /** Original whole-container release preserves zero-size resize before release/delete, then clears metadata and logical size. @returns Nothing. */
+  public release(): void {
+    const blocks = this.m_block_store.element_blocks.store();
+    const end = blocks.size;
+    for (let i = 0; i < end; ++i) {
+      const data = blocks.values[i];
+      if (!data) continue;
+      this.Traits.block_funcs.resize_block(data, 0);
+      this.m_hdl_event.element_block_released(data);
+      this.Traits.block_funcs.delete_block(data);
+    }
+    this.m_block_store.clear();
+    this.m_cur_size = 0;
+  }
   /** Original event value, logical-size and array swap order. @param other - Owner. @returns Nothing. */
   public swap(other: multi_type_vector<E>): void {
     this.Events.swap(this.m_hdl_event, other.m_hdl_event);
