@@ -1,10 +1,11 @@
 ---
 id: "202610091459-8FSH81"
 title: "Port Calc row mark array and iterator"
-status: "DOING"
+result_summary: "Implemented original compressed Calc row mark array and iterator with native evidence and documented collapsed Shift boundaries"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -42,11 +43,16 @@ quality_review:
     - "output/playwright/markarr-verification.md"
   findings:
     - "Reviewed compressed interval algorithm and two source invariant reductions, signed30-before-clamp Shift behavior, real ScSheetLimits reuse, copy/assignment/move and iterator ownership, private vector equality, original literal Search expectations, scoped verification and exhaustive runtime/provenance mapping. New CALC-007 retains exact native outcomes and consumer uncertainty."
-commit: null
+commit:
+  hash: "326dfe5eb20e81edf48dcc1814989dfd8fa3d072"
+  message: "✨ 8FSH81 calc: port original row mark array and iterator"
 comments:
   -
     author: "CODER"
     body: "Start: Implement approved original row mark array and iterator in calc using existing ScSheetLimits."
+  -
+    author: "CODER"
+    body: "Verified: Original row mark owners match2814 unchanged native sequences;77 Calc tests retain actual100 Istanbul. CALC-007 recorded with preserved upstream behavior."
 events:
   -
     type: "status"
@@ -61,8 +67,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Command: node scripts/calc-markarr-native-probe.mjs --write; node scripts/calc-markarr-native-probe.mjs --check Result: pass. Evidence:2814 initialized sequences; complete unchanged original ScMarkEntry/ScMarkArray/ScMarkArrayIter classes and every out-of-line definition. Six exact pinned Git blobs plus complete-group SHA256 hashes checked; native debug assertions enabled and ASan/UBSan clean. Scope:compressed interval split/shrink/combine/reset, raw Set/empty vectors on defined methods, signed30 assignment, exact signed64 tools::Long displacement before clipping, negative/beyond-bound Search, copy/assignment/explicit move states, receiving limits, equality independent of limits, navigation, single marks and repeated/reset iterators. Portable native comparison checks original private vector equality and all saved public outputs; original mark_test Search expectations also retained literally. Full multi-selection/document/column/UI consumers, vector allocation/capacity/pointer lifetimes, uninitialized/empty-Search/unsafe malformed mutation/undefined signed64 overflow remain uncertified. Native moved-vector outcomes are compared for the probe standard library; unspecified moved state is not claimed across libraries. Logs:output/playwright/markarr-native-write.log and markarr-native-check.log. Command: npm run test:calc -- src/sc/source/core/data/markarr.test.ts; npm run test:coverage:calc Result: pass. Evidence:new five tests pass, all77 Calc tests/17files; actual Istanbul statements1496/1496,branches1315/1315,functions270/270,lines1316/1316 all100. Scope:all Calc runtime owners, native/literal/private-value/state comparisons; no exclusions or threshold/provider changes. New portable test decodes committed fixture via Node fs/NodeURL and explicit wire schema; ordinary tests need neither native compiler nor upstream. Logs:markarr-smoke.log,markarr-coverage.log. Command: npm run typecheck; npm run test:tooling; affected npx eslint and npx prettier --check Result: pass. Evidence:TS7 tools/application;13 tooling tests/3files;new source/header/test/probe lint and code/fixture formatting pass. Missing initial JSDoc declarations/@returns corrected without behavior changes and final checks pass. Scope:no toolchain or Writer changes. Logs:markarr-typecheck.log,markarr-tooling-verified.log,markarr-lint-final.log,markarr-format-final.log. Command: npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:source-tree; npm run check:source-provenance; npm run inventory:parity:calc Result: pass. Evidence:335 runtime sources/1588 imports/29 edges;1114 documented source files;1117 size checks, new owner283lines/test205/probe328;114 required paths/33retired;336 provenance records(245mapped/74browser/17local). Calc registry15capabilities/127modules,zero semantic violations;semantic parity remains unverified. Scope:original markarr header/core-data owner boundaries reuse real ScSheetLimits and existing coordinate types;no shared copies. Pure-header runtime localSymbols empty and runtime class fields/accessors excluded according to established declaration extraction; provenance preserves actual public field/owner contracts. Logs:markarr-dependencies.log,markarr-doccheck-final.log,markarr-size.log,markarr-tree.log,markarr-provenance.log,markarr-inventory-verified.log. Command: Markdown local proof-link existence validation; native snapshots/literal Shift inspection; git diff --exit-code 8366f17a757a for existing address/sheetlimits/rangelst/refupdat/test partition; node .agentplane/policy/check-routing.mjs; ap doctor; git diff --check; git status --short --untracked-files=all Result: pass. Evidence:existing numerical/shared/Writer owners and partition unchanged. New CALC-007 documents exact reversed [1,0] interval after Shift and signed30-before-clamp detail with native source/test links and consumer uncertainty, preserving upstream behavior as user requires. Routing OK;doctor zero errors/two inherited warnings(managed readiness shim and old DONE202610090715-PJV0JK lacks implementation hash). Scope:calc checkout/branch only, task6 of resumed10;full suites due at task10,Writer coverage repair excluded by user. No network, external writes, merge/worktree/global files or unrelated task changes. Final task metadata and close commit must leave clean tracked/untracked status."
+  -
+    type: "status"
+    at: "2026-10-09T15:15:13.620Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Original row mark owners match2814 unchanged native sequences;77 Calc tests retain actual100 Istanbul. CALC-007 recorded with preserved upstream behavior."
 doc_version: 3
-doc_updated_at: "2026-10-09T15:14:32.824Z"
+doc_updated_at: "2026-10-09T15:15:13.622Z"
 doc_updated_by: "CODER"
 description: "Implement original ScMarkArray compressed row-selection owner and ScMarkArrayIter with native comparison, actual100 Calc coverage and inventory. Sixth task of resumed ten-task interval; preserve upstream quirks."
 sections:
@@ -128,6 +141,10 @@ sections:
     - Observation: Final native --check matches2814 initialized sequences with debug assertions and ASan/UBSan. Calc77tests and all four actual Istanbul metrics100; TS7, tooling13tests, affected lint/format, ownership/docs/size/tree/provenance and inventory pass.
       Impact: Original row selection owners reuse ScSheetLimits;15 capabilities/127 scoped modules and zero semantic violations. CALC-007 documents collapsed Shift boundaries with unchanged outcomes.
       Resolution: Record complete bounded evidence, commit approved files and close task6 of10. Full multi-selection/document/UI consumers and native undefined/unspecified domains remain explicitly uncertified; no Writer/full-suite changes.
+extensions:
+  implementation_commit:
+    hash: "326dfe5eb20e81edf48dcc1814989dfd8fa3d072"
+    message: "✨ 8FSH81 calc: port original row mark array and iterator"
 id_source: "generated"
 ---
 ## Summary
