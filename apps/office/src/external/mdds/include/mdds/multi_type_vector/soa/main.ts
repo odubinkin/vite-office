@@ -2,20 +2,14 @@
 // SPDX-FileCopyrightText: 2021 - 2025 Kohei Yoshida
 // SPDX-License-Identifier: MIT
 import { integrity_error } from "../../global.ts";
-import { type base_element_block } from "../types.ts";
+import { type base_element_block, type element_t } from "../types.ts";
 import {
   type DelayedVectorValue,
   type delayed_delete_vector_iterator,
 } from "../delayed_delete_vector.ts";
 import { type MDDS_MTV_DEFINE_ELEMENT_CALLBACKS } from "../macro.ts";
-import { empty_event_func } from "../util.ts";
-import {
-  grouped_iterator_type,
-  vector_iterator,
-  iterator_base,
-  const_iterator_base,
-} from "./iterator.ts";
-import { private_data_forward_update, private_data_no_update } from "../iterator_node.ts";
+import { empty_event_func, type BlockPosition } from "../util.ts";
+import { iterator_base, const_iterator_base } from "./iterator.ts";
 import { std_vector } from "../vector_storage.ts";
 import { clone_construction_type, type default_traits } from "../util.ts";
 import {
@@ -25,6 +19,11 @@ import {
   initialize_element_blocks,
   delete_element_blocks,
   mutate_blocks,
+  make_iterator,
+  get_impl,
+  get_type as get_type_impl,
+  is_empty as is_empty_impl,
+  position_impl,
 } from "./main_def.ts";
 import { type element_block_funcs } from "../block_funcs.ts";
 /** Original enclosing Traits aliases; implemented execution specialization is default_exec_policy. */
@@ -389,97 +388,93 @@ export class multi_type_vector<E extends ContainerEvent = empty_event_func> {
   public empty(): boolean {
     return this.m_block_store.positions.size() === 0;
   }
-  /** Adapts original native begin/end/reverse grouped array cursor syntax. @param index - Native base index. @param reverse - Reverse category. @returns Borrowed group. */
-  private grouped(index: number, reverse = false): grouped_iterator_type {
-    index = reverse ? index - 1 : index;
-    return new grouped_iterator_type(
-      new vector_iterator(this.m_block_store.positions.store().values as number[], index, reverse),
-      new vector_iterator(this.m_block_store.sizes.store().values as number[], index, reverse),
-      new vector_iterator(
-        this.m_block_store.element_blocks.store().values as (base_element_block | null)[],
-        index,
-        reverse,
-      ),
-    );
+  /** Original inline mutable iterator body; reverse is the erased native alias witness. @param index - Native base index. @param reverse - Category. @returns Iterator. */
+  private get_iterator(index: number, reverse = false): iterator_base<this> {
+    return make_iterator(this.m_block_store, this, index, iterator_base<this>, reverse);
+  }
+  /** Original const inline iterator body. @param index - Base index. @param reverse - Category. @returns Const iterator. */
+  private get_const_iterator(index: number, reverse = false): const_iterator_base<this> {
+    return make_iterator(this.m_block_store, this, index, const_iterator_base<this>, reverse);
   }
   /** Original mutable begin factory. @returns Iterator. */
   public begin(): iterator_base<this> {
-    return new iterator_base(
-      { private_data_update: private_data_forward_update },
-      this.grouped(0),
-      this.grouped(this.block_size()),
-      this,
-      0,
-    );
+    return this.get_iterator(0);
   }
   /** Original mutable end factory. @returns Iterator. */
   public end(): iterator_base<this> {
-    return new iterator_base(
-      { private_data_update: private_data_forward_update },
-      this.grouped(this.block_size()),
-      this.grouped(this.block_size()),
-      this,
-      this.block_size(),
-    );
+    return this.get_iterator(this.block_size());
   }
   /** Original const begin factory. @returns Const iterator. */
   public cbegin(): const_iterator_base<this> {
-    return new const_iterator_base(
-      { private_data_update: private_data_forward_update },
-      this.grouped(0),
-      this.grouped(this.block_size()),
-      this,
-      0,
-    );
+    return this.get_const_iterator(0);
   }
   /** Original const end factory. @returns Const iterator. */
   public cend(): const_iterator_base<this> {
-    return new const_iterator_base(
-      { private_data_update: private_data_forward_update },
-      this.grouped(this.block_size()),
-      this.grouped(this.block_size()),
-      this,
-      this.block_size(),
-    );
+    return this.get_const_iterator(this.block_size());
   }
-  /** Original reverse begin uses base-end cursors and no private-index update. @returns Reverse iterator. */
+  /** Original reverse begin factory. @returns Reverse iterator. */
   public rbegin(): iterator_base<this> {
-    return new iterator_base(
-      { private_data_update: private_data_no_update },
-      this.grouped(this.block_size(), true),
-      this.grouped(0, true),
-      this,
-      0,
-    );
+    return this.get_iterator(this.block_size(), true);
   }
-  /** Original reverse end uses base-begin cursors and original zero index witness. @returns Reverse iterator. */
+  /** Original reverse end factory. @returns Reverse iterator. */
   public rend(): iterator_base<this> {
-    return new iterator_base(
-      { private_data_update: private_data_no_update },
-      this.grouped(0, true),
-      this.grouped(0, true),
-      this,
-      0,
-    );
+    return this.get_iterator(0, true);
   }
   /** Original const reverse begin factory. @returns Const reverse iterator. */
   public crbegin(): const_iterator_base<this> {
-    return new const_iterator_base(
-      { private_data_update: private_data_no_update },
-      this.grouped(this.block_size(), true),
-      this.grouped(0, true),
-      this,
-      0,
-    );
+    return this.get_const_iterator(this.block_size(), true);
   }
   /** Original const reverse end factory. @returns Const reverse iterator. */
   public crend(): const_iterator_base<this> {
-    return new const_iterator_base(
-      { private_data_update: private_data_no_update },
-      this.grouped(0, true),
-      this.grouped(0, true),
+    return this.get_const_iterator(0, true);
+  }
+  /** Original mutable position overloads with pinned source lines536/560; size returns end before hint access. @param first - Row or hint. @param last - Hinted row. @returns Position pair. */
+  public position(
+    first: number | bigint | iterator_base<this>,
+    last?: number | bigint,
+  ): BlockPosition<iterator_base<this>> {
+    const hint = typeof first === "object" ? first : undefined;
+    const pos = hint ? (last as number | bigint) : (first as number | bigint);
+    return position_impl(
+      this.m_block_store,
+      this.m_cur_size,
       this,
-      0,
+      pos,
+      iterator_base<this>,
+      hint ? 560 : 536,
+      hint,
     );
+  }
+  /** Original const position overloads with pinned source lines582/606. @param first - Row or const hint. @param last - Hinted row. @returns Const position pair. */
+  public cposition(
+    first: number | bigint | const_iterator_base<this>,
+    last?: number | bigint,
+  ): BlockPosition<const_iterator_base<this>> {
+    const hint = typeof first === "object" ? first : undefined;
+    const pos = hint ? (last as number | bigint) : (first as number | bigint);
+    return position_impl(
+      this.m_block_store,
+      this.m_cur_size,
+      this,
+      pos,
+      const_iterator_base<this>,
+      hint ? 606 : 582,
+      hint,
+    );
+  }
+  /** Original type query delegates its actual member body. @param pos - Row. @returns Type. */
+  public get_type(pos: number | bigint): element_t {
+    return get_type_impl(this.m_block_store, this.m_cur_size, pos);
+  }
+  /** Original empty-cell query delegates its member body. @param pos - Row. @returns Empty. */
+  public is_empty(pos: number | bigint): boolean {
+    return is_empty_impl(this.m_block_store, this.m_cur_size, pos);
+  }
+  /** Original typed result/output-reference scalar get overload body, sharing real scalar macro callbacks. @param pos - Row. @param callbacks - Explicit native type witness. @returns Scalar. */
+  public get<T extends DelayedVectorValue>(
+    pos: number | bigint,
+    callbacks: ContainerCallbacks<T>,
+  ): T {
+    return get_impl(this.m_block_store, this.m_cur_size, pos, callbacks);
   }
 }

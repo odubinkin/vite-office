@@ -1,9 +1,17 @@
 /** @fileoverview Original SoA main_def.inl default-execution block transforms, mutation and equality helpers. */
 // SPDX-FileCopyrightText: 2021 - 2025 Kohei Yoshida
 // SPDX-License-Identifier: MIT
-import { type base_element_block } from "../types.ts";
-import { std_vector } from "../vector_storage.ts";
+import {
+  type base_element_block,
+  type element_t,
+  element_type_empty,
+  get_block_type,
+} from "../types.ts";
+import { std_vector, lower_bound } from "../vector_storage.ts";
 import { invalid_arg_error } from "../../global.ts";
+import { throw_block_position_not_found, type BlockPosition } from "../util.ts";
+import { grouped_iterator_type, vector_iterator, type IteratorTraits } from "./iterator.ts";
+import { private_data_forward_update, private_data_no_update } from "../iterator_node.ts";
 import {
   delayed_delete_vector_iterator,
   type DelayedVectorValue,
@@ -111,4 +119,172 @@ export function delete_element_blocks(
   end: number,
 ): void {
   for (let i = start; i < end; ++i) delete_element_block(store, event, funcs, i);
+}
+/** Original inline iterator member body with explicit erased mutable/const alias; reverse factories retain original base-index adaptation. @param store - Actual fields. @param parent - Borrowed owner. @param index - Native base index. @param Iterator - Native iterator alias. @param reverse - Native category. @returns Original iterator. */
+export function make_iterator<P, I>(
+  store: blocks_type,
+  parent: P,
+  index: number,
+  Iterator: new (
+    traits: IteratorTraits,
+    pos: grouped_iterator_type,
+    end: grouped_iterator_type,
+    parent: P,
+    block_index: number,
+  ) => I,
+  reverse = false,
+): I {
+  /** Borrows actual vector storage without copying it. @param offset - Native base index. @returns Original grouped cursors. */
+  function grouped(offset: number): grouped_iterator_type {
+    offset = reverse ? offset - 1 : offset;
+    return new grouped_iterator_type(
+      new vector_iterator(store.positions.store().values as number[], offset, reverse),
+      new vector_iterator(store.sizes.store().values as number[], offset, reverse),
+      new vector_iterator(
+        store.element_blocks.store().values as (base_element_block | null)[],
+        offset,
+        reverse,
+      ),
+    );
+  }
+  return new Iterator(
+    { private_data_update: reverse ? private_data_no_update : private_data_forward_update },
+    grouped(index),
+    grouped(reverse ? 0 : store.positions.size()),
+    parent,
+    reverse ? 0 : index,
+  );
+}
+/** Original bounded lower-bound lookup and one-block overshoot correction. @param store - Original arrays. @param size - Logical size. @param row - Original size_t witness. @param start_block_index - Admitted start. @returns Block or terminal sentinel. */
+export function get_block_position(
+  store: blocks_type,
+  size: number,
+  row: number | bigint,
+  start_block_index = 0,
+): number {
+  if (row >= size || start_block_index >= store.positions.size()) return store.positions.size();
+  let it = lower_bound(
+    store.positions,
+    start_block_index,
+    store.positions.size(),
+    row,
+    /** Original size_t less-than comparison. @param element - Position. @param value - Row. @returns Less. */ (
+      element,
+      value,
+    ) => element < value,
+  );
+  if (it === store.positions.size() || store.positions.get(it) !== Number(row)) --it;
+  return it;
+}
+/** Original cached-parent/index hint admission, backward threshold walk and reset. Valid native hinted calls require nonempty metadata unless public end-position guard returns first. @param store - Fields. @param size - Logical size. @param parent - Owner identity. @param pos_data - Actual cached hint. @param row - Original row. @returns Block or sentinel. */
+export function get_block_position_hint<P>(
+  store: blocks_type,
+  size: number,
+  parent: P,
+  pos_data: { readonly parent: P | null; readonly block_index: number },
+  row: number | bigint,
+): number {
+  let block_index = 0;
+  if (pos_data.parent === parent && pos_data.block_index < store.positions.size())
+    block_index = pos_data.block_index;
+  let start_row = store.positions.get(block_index);
+  if (row < start_row) {
+    if (row > Math.floor(start_row / 2)) {
+      for (let i = block_index; i > 0;) {
+        --i;
+        start_row = store.positions.get(i);
+        if (row >= start_row) return i;
+      }
+    }
+    block_index = 0;
+  }
+  return get_block_position(store, size, row, block_index);
+}
+/** Original scalar read member body; __LINE__ uses its pinned native source-call witness504. @param store - Fields. @param size - Logical size. @param pos - Native row. @param callbacks - Original typed overloads. @returns Original output-reference result. */
+export function get_impl<T extends DelayedVectorValue>(
+  store: blocks_type,
+  size: number,
+  pos: number | bigint,
+  callbacks: ContainerCallbacks<T>,
+): T {
+  const block_index = get_block_position(store, size, pos);
+  if (block_index === store.positions.size())
+    throw_block_position_not_found(
+      "multi_type_vector::get",
+      504,
+      pos,
+      store.positions.size(),
+      size,
+    );
+  const data = store.element_blocks.get(block_index);
+  if (!data) return callbacks.mdds_mtv_get_empty_value();
+  const start_row = store.positions.get(block_index);
+  return callbacks.mdds_mtv_get_value(data, Number(pos) - start_row);
+}
+
+/** Original mutable/const position member body over erased iterator aliases; end returns before reading cached hint data. @param store - Fields. @param size - Size. @param parent - Owner. @param row - Row. @param Iterator - Native alias. @param line - Pinned native diagnostic source line. @param hint - Original cached iterator. @returns Iterator/offset pair. */
+export function position_impl<P, I>(
+  store: blocks_type,
+  size: number,
+  parent: P,
+  row: number | bigint,
+  Iterator: new (
+    traits: IteratorTraits,
+    pos: grouped_iterator_type,
+    end: grouped_iterator_type,
+    parent: P,
+    block_index: number,
+  ) => I,
+  line: number,
+  hint?: {
+    get_node(): {
+      readonly __private_data: { readonly parent: P | null; readonly block_index: number };
+    };
+  },
+): BlockPosition<I> {
+  if (BigInt(row) === BigInt(size))
+    return { first: make_iterator(store, parent, store.positions.size(), Iterator), second: 0 };
+  const index = hint
+    ? get_block_position_hint(store, size, parent, hint.get_node().__private_data, row)
+    : get_block_position(store, size, row);
+  if (index === store.positions.size())
+    throw_block_position_not_found(
+      "multi_type_vector::position",
+      line,
+      row,
+      store.positions.size(),
+      size,
+    );
+  return {
+    first: make_iterator(store, parent, index, Iterator),
+    second: Number(row) - store.positions.get(index),
+  };
+}
+
+/** Original type query member body with pinned native source-call line1140. @param store - Fields. @param size - Size. @param pos - Row. @returns Type. */
+export function get_type(store: blocks_type, size: number, pos: number | bigint): element_t {
+  const index = get_block_position(store, size, pos);
+  if (index === store.positions.size())
+    throw_block_position_not_found(
+      "multi_type_vector::get_type",
+      1140,
+      pos,
+      store.positions.size(),
+      size,
+    );
+  const data = store.element_blocks.get(index);
+  return data ? get_block_type(data) : element_type_empty;
+}
+/** Original empty query member body with pinned source-call line1157. @param store - Fields. @param size - Size. @param pos - Row. @returns Empty. */
+export function is_empty(store: blocks_type, size: number, pos: number | bigint): boolean {
+  const index = get_block_position(store, size, pos);
+  if (index === store.positions.size())
+    throw_block_position_not_found(
+      "multi_type_vector::is_empty",
+      1157,
+      pos,
+      store.positions.size(),
+      size,
+    );
+  return store.element_blocks.get(index) === null;
 }

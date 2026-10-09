@@ -1145,3 +1145,35 @@ invalid object lifetimes/end dereference, ABI/allocator behavior and complete
 Calc columns/documents/browser UI remain unverified. Inventory retains false
 whole-contract/default/behavior parity flags. CALC-027 records the moved-from
 logical-size distinction without resetting it.
+
+## Shared SoA block lookup and reads
+
+The original read-only container group now implements default/hinted block
+lookup, mutable/const row positions and scalar/type/empty queries. Lookup uses
+the original lower-bound overshoot correction over real shared position vectors.
+Cached hint parent/index admission, integer half-row backward walk and reset
+remain unchanged. Real foreign hints and retained hints after full vector swaps
+are exercised without rebuilding their cached fields.
+
+`position(size)` returns a valid endpoint pair before reading hint private data.
+Scalar get, type and empty queries reject that row using the original diagnostic,
+logical size and block count. The source-call line numbers are explicit pinned
+`__LINE__` witnesses, not browser source locations. Native uint64 maximum rows
+use `bigint` early-outs before metadata indexing. Scalar callbacks carry the
+original type and empty value; numeric families are not inferred from JS values.
+
+Original iterator alias construction bodies are shared in the implementation
+module, while the declaration owner retains its actual original fields and
+public factories. The normal STL adapter supplies standard lower_bound search
+syntax over the existing borrowed vector; it adds no separate container engine.
+The unchanged native probe retains the complete original217 lifetime prefix and
+appends73 query sequences. It now compares290 sequences,8810 operations and9100
+full initial/operation records, losslessly interned as4116 complete snapshots,
+including290 final destruction logs. Ordinary tests need no upstream/compiler.
+
+Scope remains the pinned unmanaged scalar/default-execution/no_trace target.
+End-hint private fields are intentionally omitted. Invalid native hints/lifetimes,
+wrong native scalar types, generic custom blocks, arbitrary values, allocator/ABI,
+compile-time qualifications, static typed-position get/next/advance wrappers,
+segment mutations and complete Calc column/document/browser remain unverified.
+Whole module/behavior/contract/default parity flags remain false/unverified.

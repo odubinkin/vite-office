@@ -597,3 +597,12 @@ logs. This is defined member behavior plus a selected standard-library moved
 vector observation; no promise about all allocators or consumer reuse follows.
 Consumer expectations for moved objects remain unreviewed. Decision: preserve
 original size, metadata and assignment behavior; add no normalization/reset.
+
+Original SoA row positions and scalar queries have different end contracts.
+Pinned `soa/main_def.inl` lines522-610 return a valid iterator/zero-offset pair
+when the row equals logical size, before reading a hint. `get_impl`, `get_type`
+and `is_empty` reject that row with the original out-of-range diagnostic.
+Retained swap-valid hints keep cached parent/index values, and lookup applies
+its original admission and backward-search conditions (lines3925-3985). These
+are reviewed API distinctions, not classified defects. The290-sequence native
+container corpus preserves them and excludes endpoint private-field claims.

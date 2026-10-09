@@ -116,3 +116,22 @@ export class std_vector<T> {
     return true;
   }
 }
+/** Erased standard lower_bound iterator syntax over a valid sorted borrowed vector range. @param values - Real vector. @param first - Begin index. @param last - End index. @param value - Search value. @param less - Original comparison witness. @returns First element not less than value. */
+export function lower_bound<T, V>(
+  values: std_vector<T>,
+  first: number,
+  last: number,
+  value: V,
+  less: (element: T, value: V) => boolean,
+): number {
+  let count = last - first;
+  while (count > 0) {
+    const step = Math.floor(count / 2);
+    const it = first + step;
+    if (less(values.get(it), value)) {
+      first = it + 1;
+      count -= step + 1;
+    } else count = step;
+  }
+  return first;
+}

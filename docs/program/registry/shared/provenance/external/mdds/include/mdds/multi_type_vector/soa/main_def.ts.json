@@ -16,6 +16,10 @@
         {
           "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/container.test.ts",
           "marker": "matches every complete original constructor operator iterator and destructor sequence"
+        },
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/container.test.ts",
+          "marker": "positionResult"
         }
       ],
       "upstream": [
@@ -34,11 +38,19 @@
       "equal_blocks",
       "initialize_element_blocks",
       "delete_element_block",
-      "delete_element_blocks"
+      "delete_element_blocks",
+      "make_iterator",
+      "get_block_position",
+      "get_block_position_hint",
+      "position_impl",
+      "get_impl",
+      "get_type",
+      "is_empty"
     ],
     "omittedResponsibilities": [
       "Original block_slot_type/blocks_type/blocks_to_transfer and default-execution main_def helpers are implemented over three normal vector syntax adapters sharing actual reserved-slot mechanics with the existing delayed vector. Metadata insertion/erase/clear does not delete blocks or synthesize enclosing-container events. Copy/clone invoke actual registered BlockOp aliases; move transfers backing storage with selected host moved-from observations. Native finite libc++ reserved capacities/pointer/value records, exactly representable bounded number indices and initialized unmanaged all12 scalar data are compared. STL adapters are explicit local infrastructure, not an alternate mdds engine. Original nested types export at file scope as TypeScript syntax adaptation. Native custom execution policies, object/allocator/destructor ABI, unbounded size_t/wrap arithmetic, invalid native ranges/self-insertion/dangling iterators, remaining SoA lookup/scalar retrieval/segment mutation groups and Calc column/document/browser remain unverified. No full upstream module/QA-port certification.",
-      "Scope is the original constructor/lifetime/operator/iterator-endpoint group on the selected libc++ host, default execution and no_trace, with initialized unmanaged all12 scalar families and nonthrowing event value witnesses. Native event copy/move/swap operations, scalar overloads and explicit dispose adapt erased C++ syntax; swap exchanges event field contents while preserving borrowed object identity. Compound inputs are prepared using original public set in the native caller and loaded as complete native fixtures in tests; segment set is not ported or certified. Row/block lookup, scalar retrieval and segment mutations, trace/debug instrumentation, throwing native destructors/events, generic custom blocks, allocator/object/ABI/qualifiers, arbitrary input iterator categories, invalid ranges/end dereference/use after dispose and complete Calc column/document/browser remain unverified. No complete original module/default/QA-suite certification."
+      "Scope is the original constructor/lifetime/operator/iterator-endpoint group on the selected libc++ host, default execution and no_trace, with initialized unmanaged all12 scalar families and nonthrowing event value witnesses. Native event copy/move/swap operations, scalar overloads and explicit dispose adapt erased C++ syntax; swap exchanges event field contents while preserving borrowed object identity. Compound inputs are prepared using original public set in the native caller and loaded as complete native fixtures in tests; segment set is not ported or certified. Row/block lookup, scalar retrieval and segment mutations, trace/debug instrumentation, throwing native destructors/events, generic custom blocks, allocator/object/ABI/qualifiers, arbitrary input iterator categories, invalid ranges/end dereference/use after dispose and complete Calc column/document/browser remain unverified. No complete original module/default/QA-suite certification.",
+      "Scope is original default/hinted block lookup, mutable/const row position, scalar get/get_type/is_empty and iterator alias construction on the pinned no_trace/default-execution libc++ size_t64 target. Real non-end same-owner/foreign and retained swap-valid hints are tested; endpoint hint private data is intentionally omitted and no end dereference is certified. Explicit row bigint witnesses retain uint64 maximum early-out without indexing projection; stored metadata remains bounded exactly representable numbers. Native __LINE__ diagnostic source locations remain explicit pinned source witnesses. Scalar family/result/output-reference syntax uses existing actual callback aliases; only matching stored types or native empty values are certified. Wrong native scalar types in release mode, invalid cached hints/empty hinted lookup beyond the admitted public end guard, negative/nonintegral/unsafe rows, generic custom/managed blocks, arbitrary values and object/allocator/ABI/qualifiers, trace/debug, static typed-position get/next/advance wrappers, segment mutations and complete Calc columns/documents/browser remain unverified. No full module, generic default or contextual QA-suite certification."
     ],
     "preservedResponsibilities": [
       "Original SoA metadata stays in three separate position/size/block-pointer vectors with original slot/transfer defaults, synchronized valid insertion/erase/pop/push/clear/reserve and exact length-integrity diagnostics.",
@@ -51,7 +63,12 @@
       "Original copy and move assignments create a temporary, swap and destroy it even on self assignment. Event copy/move/swap witnesses preserve original handler values and stable borrowed event field references.",
       "Original move transfers vectors without resetting the primitive source logical size; size, block_size and empty keep their distinct original contracts.",
       "Original destructor and clear release each nonnull block before registered deletion and pointer nulling, in source order. Clear resets arrays and logical size only afterward.",
-      "Original full swap, default block shrink, self/size/store equality and all mutable/const forward/reverse endpoint factories reuse the existing actual shared ownership and iterator modules."
+      "Original full swap, default block shrink, self/size/store equality and all mutable/const forward/reverse endpoint factories reuse the existing actual shared ownership and iterator modules.",
+      "Original lower-bound search and one-block overshoot correction preserve the original row/start terminal guards, valid sorted metadata and actual shared borrowed vector storage.",
+      "Original hinted lookup admits cached parent/index, applies the original integer half-row backward threshold walk and reset, and retains source swap-valid stale hint behavior without rebuilding cached fields.",
+      "Original mutable/const position returns an endpoint pair for row equal to logical size before accessing hint private data; scalar get/get_type/is_empty reject that row with the original pinned diagnostic and logical/block counts.",
+      "Original scalar reads reuse actual typed callbacks and original empty values for all12 scalar families; no JavaScript numeric-family guessing or replacement value engine.",
+      "Original iterator aliases share their actual three-array constructor body and forward/no-update traits. The original217 complete ownership sequences and final destructor events remain unchanged while additional full query-state/result cases are appended."
     ],
     "status": "mapped",
     "upstreamPath": "vendor/mdds-reference/include/mdds/multi_type_vector/soa/main_def.inl",
@@ -62,7 +79,12 @@
       "bool equal_blocks_pred",
       "struct equal_blocks",
       "multi_type_vector<Traits>::multi_type_vector(size_type init_size)",
-      "multi_type_vector<Traits>::delete_element_block"
+      "multi_type_vector<Traits>::delete_element_block",
+      "multi_type_vector<Traits>::get_block_position",
+      "multi_type_vector<Traits>::get_impl",
+      "multi_type_vector<Traits>::position",
+      "multi_type_vector<Traits>::get_type",
+      "multi_type_vector<Traits>::is_empty"
     ]
   }
 }

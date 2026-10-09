@@ -11,7 +11,8 @@ import { type base_element_block, type default_element_block, get_block_type } f
 import { delayed_delete_vector, type DelayedVectorValue } from "../delayed_delete_vector.ts";
 import { invalid_arg_error } from "../../global.ts";
 import * as standard from "../standard_element_blocks.ts";
-import { type iterator_updater } from "./iterator.ts";
+import { type iterator_updater, type iterator_base, type const_iterator_base } from "./iterator.ts";
+import { type BlockPosition } from "../util.ts";
 /** Erased existing original block type witness. */
 type BlockType = ReturnType<typeof default_element_block<DelayedVectorValue>>;
 /** Full native valid-live payload. */
@@ -162,6 +163,34 @@ function node<K extends "mutable" | "const">(
     atEnd ? null : n.__private_data.block_index,
   ];
 }
+/** Observes a valid retained cached hint without dereferencing its backing storage; endpoint private fields stay outside certification. @param it - Actual hint. @param owner - Query owner. @param atEnd - End witness. @returns Native cached record. */
+function hintNode<K extends "mutable" | "const">(
+  it: iterator_updater<multi_type_vector<Handler>, K>,
+  owner: multi_type_vector<Handler>,
+  atEnd = false,
+): unknown[] {
+  const n = it.get_node();
+  return [
+    n.type,
+    n.position,
+    n.size,
+    id(n.data),
+    atEnd ? null : n.__private_data.parent === owner,
+    atEnd ? null : n.__private_data.block_index,
+  ];
+}
+/** Observes only original returned position and supplied hint values. @param pair - Query result. @param end - Native end. @param owner - Owner. @param hint - Optional used hint. @param atEnd - End hint witness. @returns Full result. */
+function positionResult<K extends "mutable" | "const">(
+  pair: BlockPosition<iterator_updater<multi_type_vector<Handler>, K>>,
+  end: iterator_updater<multi_type_vector<Handler>, K>,
+  owner: multi_type_vector<Handler>,
+  hint?: iterator_updater<multi_type_vector<Handler>, K>,
+  atEnd = false,
+): unknown[] {
+  const result: unknown[] = [node(pair.first, end, owner), pair.second];
+  if (hint) result.push(hintNode(hint, owner, atEnd));
+  return result;
+}
 /** Observes actual original-owned arrays, scalar data and endpoints. @param owner - Live native owner. @returns Complete defined state. */
 function snapshot(owner: multi_type_vector<Handler>): OwnerState {
   const s = owner["m_block_store"];
@@ -257,6 +286,12 @@ describe("original SoA container lifetime", /** Declares original native ownersh
       log = [];
       tokens = new Map();
       const owners: (multi_type_vector<Handler> | null)[] = [null, null, null];
+      const hints: (iterator_base<multi_type_vector<Handler>> | null)[] = [null, null, null];
+      const constHints: (const_iterator_base<multi_type_vector<Handler>> | null)[] = [
+        null,
+        null,
+        null,
+      ];
       const initial = fixture.snapshots[c.states[0] as number] as unknown as State;
       if (c.seed >= 0) owners[0] = loadSeed(initial[2][0] as OwnerState);
       expect(record(owners, null, true)).toEqual(initial);
@@ -333,9 +368,74 @@ describe("original SoA container lifetime", /** Declares original native ownersh
           else if (op === "U") {
             destination.dispose();
             owners[dst] = null;
+          } else if (op === "J" || op === "j") {
+            if (op === "J") {
+              const hint = source.begin().advance(args[1] as number);
+              hints[dst] = hint;
+              result = hintNode(hint, source);
+            } else {
+              const hint = source.cbegin().advance(args[1] as number);
+              constHints[dst] = hint;
+              result = hintNode(hint, source);
+            }
+          } else if (op === "N") {
+            hints[dst] = null;
+            constHints[dst] = null;
+          } else {
+            const row = typeof args[0] === "string" ? BigInt(args[0]) : (args[0] as number);
+            if (op === "T") result = destination.get_type(row);
+            else if (op === "E") result = destination.is_empty(row);
+            else if (op === "G" || op === "g") {
+              const got = destination.get(row, callbacks[args[1] as number] as ContainerCallbacks);
+              result = typeof got === "bigint" ? got.toString() : got;
+            } else if (op === "P")
+              result = positionResult(destination.position(row), destination.end(), destination);
+            else if (op === "p")
+              result = positionResult(destination.cposition(row), destination.cend(), destination);
+            else if (op === "I" || op === "i") {
+              const other = owners[args[1] as number] as multi_type_vector<Handler>;
+              const index = args[2] as number;
+              if (op === "I") {
+                const hint = other.begin().advance(index);
+                result = positionResult(
+                  destination.position(hint, row),
+                  destination.end(),
+                  destination,
+                  hint,
+                  index === other.block_size(),
+                );
+              } else {
+                const hint = other.cbegin().advance(index);
+                result = positionResult(
+                  destination.cposition(hint, row),
+                  destination.cend(),
+                  destination,
+                  hint,
+                  index === other.block_size(),
+                );
+              }
+            } else if (op === "K") {
+              const hint = hints[args[1] as number] as iterator_base<multi_type_vector<Handler>>;
+              result = positionResult(
+                destination.position(hint, row),
+                destination.end(),
+                destination,
+                hint,
+              );
+            } else if (op === "k") {
+              const hint = constHints[args[1] as number] as const_iterator_base<
+                multi_type_vector<Handler>
+              >;
+              result = positionResult(
+                destination.cposition(hint, row),
+                destination.cend(),
+                destination,
+                hint,
+              );
+            }
           }
         } catch (error) {
-          expect(error).toBeInstanceOf(invalid_arg_error);
+          expect(error).toBeInstanceOf(op === "R" ? invalid_arg_error : RangeError);
           result = (error as Error).message;
         }
         expect(record(owners, result, stable)).toEqual(
