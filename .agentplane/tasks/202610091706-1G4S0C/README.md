@@ -1,10 +1,11 @@
 ---
 id: "202610091706-1G4S0C"
 title: "Pass native row-split dialog input from the source selection"
-status: "DOING"
+result_summary: "Native row split reaches Text Flow through source selection input"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 21
+revision: 22
 origin:
   system: "manual"
 depends_on: []
@@ -51,6 +52,9 @@ comments:
   -
     author: "CODER"
     body: "Implementation: source native common row input captured in temporary shell selection and authoritative Text Flow ItemSet; verified1227cases22fresh and complete two-module Istanbul100."
+  -
+    author: "CODER"
+    body: "Verified: source native row-split capture and authoritative Text Flow input retain original rows/cursors/history and mounted behavior;1227related cases22fresh accepted, entire two modules Istanbul100, seven static/seven metadata gates/canonical preservation pass at semantic7d7f08703e1309ea505f70206d12adedd4c38e2a with same-agent non-independent quality."
 events:
   -
     type: "status"
@@ -78,8 +82,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: final binding docs stable at semantic7d7f08703e1309ea505f70206d12adedd4c38e2a and explicitly same-agent non-independent EVALUATOR pass. Same accepted1227distinct related cases22fresh, complete two-module actual Istanbul484lines537statements71functions370branches all100/zero-negative, no passing replay. Seven static/seven metadata/final formatting gates and four canonical prefixes597old tests1854unrelated files/every old assertion preserved. Re-recorded final blueprint evidence only after final docs; no test replay, reference restored, goal active correction9/10."
+  -
+    type: "status"
+    at: "2026-10-09T17:24:58.211Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: source native row-split capture and authoritative Text Flow input retain original rows/cursors/history and mounted behavior;1227related cases22fresh accepted, entire two modules Istanbul100, seven static/seven metadata gates/canonical preservation pass at semantic7d7f08703e1309ea505f70206d12adedd4c38e2a with same-agent non-independent quality."
 doc_version: 3
-doc_updated_at: "2026-10-09T17:23:57.043Z"
+doc_updated_at: "2026-10-09T17:24:58.212Z"
 doc_updated_by: "CODER"
 description: "Resumed correction9/10 since XJTGF0: shell captures original common row split within native temporary whole-table selection and passes native ItemSet to Text Flow; authoritative direct row item or source indeterminate fallback replaces duplicate table projection. Preserve saved widgets, original cursors/history/native owners, old inventory prefixes and registered deviations."
 sections:
