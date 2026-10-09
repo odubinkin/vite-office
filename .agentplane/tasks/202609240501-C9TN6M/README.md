@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 296
+revision: 297
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-09T21:21:13.743Z"
+doc_updated_at: "2026-10-09T21:23:01.498Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -1389,6 +1389,8 @@ sections:
     Correction6JYMXQ reviewed semantic=7429bf32872581e86a831d04afa67e14bdd6d333; same-agent non-independent quality PASS at .agentplane/tasks/202610092028-6JYMXQ/quality/20261009-205053647-recovery-context/quality-report.json; bounded final evidence holds identical source/fresh hashes. Refreshed verification then clean canonical finish; full not due5/10, broad goal ACTIVE.
 
     - Correction7H3CN9 (6/10 after SZKQTN): Original SwFormatHoriOrient owns table horizontal orientation; no mirrored horiOrient/align, native dialog ItemSet carries orientation/width. Full original item history and effective layout/ODT/mounted UI pass.3517 current-source unique cases38 fresh; whole eight modules Istanbul100 all-four/zero negative/map-hash identity.17 exact fixture migrations12 old files,607 untouched/619 total;16 canonical histories retained. LR native ownership and generic native document attr history/layout/UNO/VCL remain separate. Full not due; goalACTIVE/incomplete. Exact semantic/quality binding follows.
+
+    - 7H3CN9 semantic33c4750567c1f043b45ef6d5db2a9caf7c8b6223 exact-SHA qualityPASS same-agent non-independent. All deterministic gates passed; canonical finish pending.
 id_source: "generated"
 ---
 ## Summary
@@ -2751,3 +2753,5 @@ Correction202610092028-6JYMXQ (5/10 after SZKQTN): original RES_UL_SPACE owns ta
 Correction6JYMXQ reviewed semantic=7429bf32872581e86a831d04afa67e14bdd6d333; same-agent non-independent quality PASS at .agentplane/tasks/202610092028-6JYMXQ/quality/20261009-205053647-recovery-context/quality-report.json; bounded final evidence holds identical source/fresh hashes. Refreshed verification then clean canonical finish; full not due5/10, broad goal ACTIVE.
 
 - Correction7H3CN9 (6/10 after SZKQTN): Original SwFormatHoriOrient owns table horizontal orientation; no mirrored horiOrient/align, native dialog ItemSet carries orientation/width. Full original item history and effective layout/ODT/mounted UI pass.3517 current-source unique cases38 fresh; whole eight modules Istanbul100 all-four/zero negative/map-hash identity.17 exact fixture migrations12 old files,607 untouched/619 total;16 canonical histories retained. LR native ownership and generic native document attr history/layout/UNO/VCL remain separate. Full not due; goalACTIVE/incomplete. Exact semantic/quality binding follows.
+
+- 7H3CN9 semantic33c4750567c1f043b45ef6d5db2a9caf7c8b6223 exact-SHA qualityPASS same-agent non-independent. All deterministic gates passed; canonical finish pending.
