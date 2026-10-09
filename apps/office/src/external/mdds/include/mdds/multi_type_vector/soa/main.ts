@@ -3,9 +3,29 @@
 // SPDX-License-Identifier: MIT
 import { integrity_error } from "../../global.ts";
 import { type base_element_block } from "../types.ts";
+import {
+  type DelayedVectorValue,
+  type delayed_delete_vector_iterator,
+} from "../delayed_delete_vector.ts";
+import { type MDDS_MTV_DEFINE_ELEMENT_CALLBACKS } from "../macro.ts";
+import { empty_event_func } from "../util.ts";
+import {
+  grouped_iterator_type,
+  vector_iterator,
+  iterator_base,
+  const_iterator_base,
+} from "./iterator.ts";
+import { private_data_forward_update, private_data_no_update } from "../iterator_node.ts";
 import { std_vector } from "../vector_storage.ts";
 import { clone_construction_type, type default_traits } from "../util.ts";
-import { copy_blocks, equal_blocks, erase } from "./main_def.ts";
+import {
+  copy_blocks,
+  equal_blocks,
+  erase,
+  initialize_element_blocks,
+  delete_element_blocks,
+  mutate_blocks,
+} from "./main_def.ts";
 import { type element_block_funcs } from "../block_funcs.ts";
 /** Original enclosing Traits aliases; implemented execution specialization is default_exec_policy. */
 export interface BlocksTraits {
@@ -188,5 +208,278 @@ export class blocks_to_transfer {
   /** Creates original empty transfer metadata. @param Traits - Enclosing aliases. @returns Transfer group. */
   public constructor(Traits: BlocksTraits) {
     this.blocks = new blocks_type(Traits);
+  }
+}
+/** Original event_func callback contract; event copy/move/swap value operations have explicit erased native witnesses. */
+export interface ContainerEvent {
+  element_block_acquired(block: base_element_block | null): void;
+  element_block_released(block: base_element_block | null): void;
+}
+/** Native event_func constructor alias belongs to the original Traits owner. */
+export interface ContainerTraits<E extends ContainerEvent> extends BlocksTraits {
+  event_func: new () => E;
+}
+/** Erased native event_func value operators; swap mutates stable borrowed fields rather than exchanging JS object references. */
+export interface EventValueOps<E extends ContainerEvent> {
+  copy(value: E): E;
+  move(value: E): E;
+  swap(left: E, right: E): void;
+}
+/** Actual shared empty_event_func has no state; these witnesses adapt its original implicit value operators. */
+export const empty_event_value_ops: EventValueOps<empty_event_func> = {
+  /** Original implicit empty value copy. @param value - Source. @returns Independent value. */
+  copy(value) {
+    void value;
+    return new empty_event_func();
+  },
+  /** Original implicit empty value move. @param value - Source. @returns Independent value. */
+  move(value) {
+    void value;
+    return new empty_event_func();
+  },
+  /** Original empty value swap has no field effects. @param left - Left field. @param right - Right field. @returns Nothing. */
+  swap(left, right) {
+    void left;
+    void right;
+  },
+};
+/** Explicit erased original scalar overload family; numeric native types are never inferred from JS values. */
+export type ContainerCallbacks<T extends DelayedVectorValue = DelayedVectorValue> = ReturnType<
+  typeof MDDS_MTV_DEFINE_ELEMENT_CALLBACKS<T>
+>;
+const move_construction = Symbol("native move construction");
+/** Original SoA multi_type_vector field/lifetime owner; subsequent original segment algorithms are not replaced by a different engine. */
+export class multi_type_vector<E extends ContainerEvent = empty_event_func> {
+  private m_hdl_event: E;
+  private m_block_store: blocks_type;
+  private m_cur_size: number;
+  /** Original default/handler/size/scalar/range/copy/clone constructors with explicit erased type/value witnesses. @param Traits - Original aliases. @param Events - Native event operators. @param init - Native size, handler or copied owner. @param callbacksOrTag - Scalar overload or construction tag. @param valueOrFirst - Scalar value or input begin. @param last - Input end. @returns Owner. */
+  public constructor(
+    public readonly Traits: ContainerTraits<E>,
+    public readonly Events: EventValueOps<E>,
+    init?: number | E | multi_type_vector<E>,
+    callbacksOrTag?: ContainerCallbacks | typeof clone_construction_type | typeof move_construction,
+    valueOrFirst?: DelayedVectorValue | delayed_delete_vector_iterator<DelayedVectorValue>,
+    last?: delayed_delete_vector_iterator<DelayedVectorValue>,
+  ) {
+    if (init instanceof multi_type_vector) {
+      const moving = callbacksOrTag === move_construction;
+      this.m_hdl_event = moving ? Events.move(init.m_hdl_event) : Events.copy(init.m_hdl_event);
+      this.m_block_store = moving
+        ? blocks_type.move(init.m_block_store)
+        : new blocks_type(
+            Traits,
+            init.m_block_store,
+            callbacksOrTag === clone_construction_type ? clone_construction_type : undefined,
+          );
+      this.m_cur_size = init.m_cur_size;
+      if (!moving)
+        for (const data of this.m_block_store.element_blocks.snapshot())
+          if (data) this.m_hdl_event.element_block_acquired(data);
+      return;
+    }
+    this.m_hdl_event =
+      init !== undefined && typeof init !== "number"
+        ? callbacksOrTag === move_construction
+          ? Events.move(init)
+          : Events.copy(init)
+        : new Traits.event_func();
+    this.m_block_store = new blocks_type(Traits);
+    this.m_cur_size = typeof init === "number" ? init : 0;
+    initialize_element_blocks(
+      this.m_block_store,
+      this.m_hdl_event,
+      this.m_cur_size,
+      typeof callbacksOrTag === "object" ? callbacksOrTag : undefined,
+      valueOrFirst,
+      last,
+    );
+  }
+  /** Original move constructor; the moved primitive logical size remains in the source. @param other - Source. @returns Moved owner. */
+  public static move<E extends ContainerEvent>(other: multi_type_vector<E>): multi_type_vector<E> {
+    return new multi_type_vector(other.Traits, other.Events, other, move_construction);
+  }
+  /** Original rvalue handler constructor with explicit erased rvalue witness. @param Traits - Original aliases. @param Events - Native value operations. @param handler - Moved handler. @returns Owner. */
+  public static from_moved_event<E extends ContainerEvent>(
+    Traits: ContainerTraits<E>,
+    Events: EventValueOps<E>,
+    handler: E,
+  ): multi_type_vector<E> {
+    return new multi_type_vector(Traits, Events, handler, move_construction);
+  }
+  /** Original destructor, paired exactly once at the valid native lifetime boundary. @returns Nothing. */
+  public dispose(): void {
+    delete_element_blocks(
+      this.m_block_store,
+      this.m_hdl_event,
+      this.Traits.block_funcs,
+      0,
+      this.m_block_store.positions.size(),
+    );
+  }
+  /** Original clone construction path. @returns Clone. */
+  public clone(): multi_type_vector<E> {
+    return new multi_type_vector(this.Traits, this.Events, this, clone_construction_type);
+  }
+  /** Original copy assignment uses a temporary even on self assignment. @param other - Source. @returns This. */
+  public assign(other: multi_type_vector<E>): this {
+    const assigned = new multi_type_vector(this.Traits, this.Events, other);
+    try {
+      this.swap(assigned);
+    } finally {
+      assigned.dispose();
+    }
+    return this;
+  }
+  /** Original move assignment temporary retains native self-move behavior. @param other - Source. @returns This. */
+  public assign_move(other: multi_type_vector<E>): this {
+    const assigned = multi_type_vector.move(other);
+    try {
+      this.swap(assigned);
+    } finally {
+      assigned.dispose();
+    }
+    return this;
+  }
+  /** Original sequential release/deletion precedes metadata clear and size reset. @returns Nothing. */
+  public clear(): void {
+    delete_element_blocks(
+      this.m_block_store,
+      this.m_hdl_event,
+      this.Traits.block_funcs,
+      0,
+      this.m_block_store.element_blocks.size(),
+    );
+    this.m_block_store.clear();
+    this.m_cur_size = 0;
+  }
+  /** Original event value, logical-size and array swap order. @param other - Owner. @returns Nothing. */
+  public swap(other: multi_type_vector<E>): void {
+    this.Events.swap(this.m_hdl_event, other.m_hdl_event);
+    [this.m_cur_size, other.m_cur_size] = [other.m_cur_size, this.m_cur_size];
+    this.m_block_store.swap(other.m_block_store);
+  }
+  /** Original default execution block shrink helper. @returns Nothing. */
+  public shrink_to_fit(): void {
+    mutate_blocks(this.m_block_store.element_blocks, this.Traits.block_funcs.shrink_to_fit);
+  }
+  /** Original self/size/store equality order. @param other - Owner. @returns Equality. */
+  public equals(other: multi_type_vector<E>): boolean {
+    if (this === other) return true;
+    if (this.m_cur_size !== other.m_cur_size) return false;
+    return this.m_block_store.equals(other.m_block_store);
+  }
+  /** Original operator inequality delegates equality. @param other - Owner. @returns Inequality. */
+  public not_equals(other: multi_type_vector<E>): boolean {
+    return !this.equals(other);
+  }
+  /** Borrows the original stable event field. @returns Handler. */
+  public event_handler(): E {
+    return this.m_hdl_event;
+  }
+  /** Reads original logical size. @returns Size. */
+  public size(): number {
+    return this.m_cur_size;
+  }
+  /** Reads original position-vector size. @returns Block count. */
+  public block_size(): number {
+    return this.m_block_store.positions.size();
+  }
+  /** Original emptiness tests metadata rather than the moved primitive size. @returns Empty. */
+  public empty(): boolean {
+    return this.m_block_store.positions.size() === 0;
+  }
+  /** Adapts original native begin/end/reverse grouped array cursor syntax. @param index - Native base index. @param reverse - Reverse category. @returns Borrowed group. */
+  private grouped(index: number, reverse = false): grouped_iterator_type {
+    index = reverse ? index - 1 : index;
+    return new grouped_iterator_type(
+      new vector_iterator(this.m_block_store.positions.store().values as number[], index, reverse),
+      new vector_iterator(this.m_block_store.sizes.store().values as number[], index, reverse),
+      new vector_iterator(
+        this.m_block_store.element_blocks.store().values as (base_element_block | null)[],
+        index,
+        reverse,
+      ),
+    );
+  }
+  /** Original mutable begin factory. @returns Iterator. */
+  public begin(): iterator_base<this> {
+    return new iterator_base(
+      { private_data_update: private_data_forward_update },
+      this.grouped(0),
+      this.grouped(this.block_size()),
+      this,
+      0,
+    );
+  }
+  /** Original mutable end factory. @returns Iterator. */
+  public end(): iterator_base<this> {
+    return new iterator_base(
+      { private_data_update: private_data_forward_update },
+      this.grouped(this.block_size()),
+      this.grouped(this.block_size()),
+      this,
+      this.block_size(),
+    );
+  }
+  /** Original const begin factory. @returns Const iterator. */
+  public cbegin(): const_iterator_base<this> {
+    return new const_iterator_base(
+      { private_data_update: private_data_forward_update },
+      this.grouped(0),
+      this.grouped(this.block_size()),
+      this,
+      0,
+    );
+  }
+  /** Original const end factory. @returns Const iterator. */
+  public cend(): const_iterator_base<this> {
+    return new const_iterator_base(
+      { private_data_update: private_data_forward_update },
+      this.grouped(this.block_size()),
+      this.grouped(this.block_size()),
+      this,
+      this.block_size(),
+    );
+  }
+  /** Original reverse begin uses base-end cursors and no private-index update. @returns Reverse iterator. */
+  public rbegin(): iterator_base<this> {
+    return new iterator_base(
+      { private_data_update: private_data_no_update },
+      this.grouped(this.block_size(), true),
+      this.grouped(0, true),
+      this,
+      0,
+    );
+  }
+  /** Original reverse end uses base-begin cursors and original zero index witness. @returns Reverse iterator. */
+  public rend(): iterator_base<this> {
+    return new iterator_base(
+      { private_data_update: private_data_no_update },
+      this.grouped(0, true),
+      this.grouped(0, true),
+      this,
+      0,
+    );
+  }
+  /** Original const reverse begin factory. @returns Const reverse iterator. */
+  public crbegin(): const_iterator_base<this> {
+    return new const_iterator_base(
+      { private_data_update: private_data_no_update },
+      this.grouped(this.block_size(), true),
+      this.grouped(0, true),
+      this,
+      0,
+    );
+  }
+  /** Original const reverse end factory. @returns Const reverse iterator. */
+  public crend(): const_iterator_base<this> {
+    return new const_iterator_base(
+      { private_data_update: private_data_no_update },
+      this.grouped(0, true),
+      this.grouped(0, true),
+      this,
+      0,
+    );
   }
 }

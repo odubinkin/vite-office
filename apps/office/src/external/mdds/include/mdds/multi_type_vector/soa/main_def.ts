@@ -3,6 +3,17 @@
 // SPDX-License-Identifier: MIT
 import { type base_element_block } from "../types.ts";
 import { std_vector } from "../vector_storage.ts";
+import { invalid_arg_error } from "../../global.ts";
+import {
+  delayed_delete_vector_iterator,
+  type DelayedVectorValue,
+} from "../delayed_delete_vector.ts";
+import {
+  type blocks_type,
+  type ContainerEvent,
+  type ContainerCallbacks,
+  type BlocksTraits,
+} from "./main.ts";
 /** Original internal vector erase helper. @param arr - Vector. @param index - Start. @param size - Count. @returns Nothing. */
 export function erase<T>(arr: std_vector<T>, index: number, size: number): void {
   arr.erase(index, size);
@@ -50,4 +61,54 @@ export function equal_blocks(
   for (let i = 0; i < lhs.size(); ++i)
     if (!equal_blocks_pred(lhs.get(i), rhs.get(i), BlockOp)) return false;
   return true;
+}
+/** Original size/fill/range constructor element initialization after native member initialization. @param store - Actual metadata. @param event - Native field. @param init_size - Logical size. @param callbacks - Erased original scalar overload. @param valueOrFirst - Value or begin. @param last - Range end. @returns Nothing. */
+export function initialize_element_blocks(
+  store: blocks_type,
+  event: ContainerEvent,
+  init_size: number,
+  callbacks?: ContainerCallbacks,
+  valueOrFirst?: DelayedVectorValue | delayed_delete_vector_iterator<DelayedVectorValue>,
+  last?: delayed_delete_vector_iterator<DelayedVectorValue>,
+): void {
+  if (!init_size) return;
+  if (!callbacks) {
+    store.push_back(0, init_size, null);
+    return;
+  }
+  let data: base_element_block;
+  if (last !== undefined) {
+    const first = valueOrFirst as delayed_delete_vector_iterator<DelayedVectorValue>;
+    const data_len = first.distance_to(last);
+    if (init_size !== data_len)
+      throw new invalid_arg_error(
+        "Specified size does not match the size of the initial data array.",
+      );
+    data = callbacks.mdds_mtv_create_new_block(first.get(), first, last);
+  } else data = callbacks.mdds_mtv_create_new_block(init_size, valueOrFirst as DelayedVectorValue);
+  event.element_block_acquired(data);
+  store.push_back(0, init_size, data);
+}
+/** Original one-block release/deletion/null ordering. @param store - Metadata. @param event - Native field. @param funcs - Actual registered block operations. @param index - Valid block. @returns Nothing. */
+export function delete_element_block(
+  store: blocks_type,
+  event: ContainerEvent,
+  funcs: BlocksTraits["block_funcs"],
+  index: number,
+): void {
+  const data = store.element_blocks.get(index);
+  if (!data) return;
+  event.element_block_released(data);
+  funcs.delete_block(data);
+  store.element_blocks.set(index, null);
+}
+/** Original sequential block deletion range. @param store - Metadata. @param event - Native field. @param funcs - Original aliases. @param start - Begin. @param end - End. @returns Nothing. */
+export function delete_element_blocks(
+  store: blocks_type,
+  event: ContainerEvent,
+  funcs: BlocksTraits["block_funcs"],
+  start: number,
+  end: number,
+): void {
+  for (let i = start; i < end; ++i) delete_element_block(store, event, funcs, i);
 }

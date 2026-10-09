@@ -575,3 +575,25 @@ consumer uncertainty and the preservation decision. Update an entry when
 stronger evidence arrives. A source expression that looks unusual is sufficient
 for an observation, not sufficient for a confirmed defect classification or an
 implementation change.
+
+## CALC-027: Moved-from logical size remains while metadata moves away
+
+Status: confirmed original moved-state distinction; not classified as a defect.
+
+The pinned mdds3.2.1 `soa/main_def.inl` move constructor (lines 450-454) moves
+`m_hdl_event` and `m_block_store`, then initializes `m_cur_size` from the source
+primitive value without resetting the source. `size`, `block_size` and `empty`
+(lines 3580-3600) observe logical size and metadata separately. On the verified
+libc++ target, moving an initialized three-element owner leaves its source with
+`size()==3`, `block_size()==0` and `empty()==true`. Clearing that source resets
+its logical size. Native self-move assignment uses a temporary and swap and
+preserves the original data ownership.
+
+Evidence: unchanged full original headers compiled by
+`scripts/mdds-container-native-probe.mjs`; all217 native lifetime sequences and
+`soa/container.test.ts`, including the actual default empty event owner. The
+corpus retains complete before/after states, event values and final destructor
+logs. This is defined member behavior plus a selected standard-library moved
+vector observation; no promise about all allocators or consumer reuse follows.
+Consumer expectations for moved objects remain unreviewed. Decision: preserve
+original size, metadata and assignment behavior; add no normalization/reset.

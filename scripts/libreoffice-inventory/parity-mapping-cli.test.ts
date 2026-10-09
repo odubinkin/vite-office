@@ -152,6 +152,28 @@ describe("parity mapping CLI" /**
         /** Supplies an explicitly missing global capability registry. @returns Empty known-ID set. */
         async () => new Set<string>(),
       ),
+    ).rejects.toThrow(
+      "shared.internal.insert-storage references unknown capability CAP-fea462db-89f8-4359-a95d-7c253562827f.",
+    );
+    await expect(
+      runParityMappingCli(
+        validArguments,
+        readOwnedEvidence,
+        /** Rejects reports with unknown runtime module capabilities. @returns Never. */
+        () => {
+          throw new Error("Invalid module capability linkage emitted a report.");
+        },
+        undefined,
+        /** Admits declared operation/UI links while leaving module capability validation independently required. @returns Known item IDs. */
+        async () =>
+          new Set<string>(
+            [...runtimeDeclaration.internalOperations, ...runtimeDeclaration.uiBehaviors].map(
+              /** Keeps actual declared item capability IDs. @param item - Registry item. @returns Capability ID. */ (item: {
+                capabilityId: string;
+              }) => item.capabilityId,
+            ),
+          ),
+      ),
     ).rejects.toThrow(/^apps\/office\/src\/.* references unknown capability CAP-/u);
   }, 30_000);
 

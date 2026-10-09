@@ -1111,3 +1111,37 @@ position widths, unsupported primary-template diagnostics, generic ABI/object
 lifetimes, invalid inputs and the full SoA container/Calc column/document/UI
 remain unverified. Inventory records preserve those gaps and unverified parity
 statuses. CALC-026 records an AVX2 comment/code mismatch without changing code.
+
+## Shared SoA container lifetime ownership
+
+The actual `multi_type_vector` field owner now composes the existing original
+`blocks_type`, scalar callbacks, block operations and iterator owners. Default,
+handler, size, typed fill/range, copy, clone and move construction preserve
+original member initialization and event ordering. Native scalar overloads and
+handler value operations use explicit TypeScript witnesses; numeric types are
+not inferred from JavaScript values. The original shared empty handler is reused.
+
+Copy/move assignment retains the original temporary/swap/destructor sequence,
+including self assignment. Event value swap exchanges field contents and retains
+borrowed handler references. Deletion releases each block before deleting it and
+nulling its pointer; clear resets metadata and logical size afterward. Explicit
+`dispose` pairs with a valid native destructor boundary. Full swap, block shrink,
+equality and all eight mutable/const forward/reverse endpoint factories reuse the
+original owners. Reverse cursors adapt native base indices to the existing
+shared iterator's dereference indices.
+
+The portable corpus compares 217 complete original native sequences and 2579
+operations, including all12 scalar families, exact invalid-range diagnostics,
+zero-size early returns, complete metadata/capacities/payloads, pointer tokens,
+handler values, event order, endpoint nodes and final destructor logs. Its 2796
+full initial/operation records are losslessly interned into 1113 snapshots.
+The optional probe compiles unchanged full headers under ASan/UBSan. Compound
+inputs are prepared by original public `set`, then loaded as full test fixtures;
+this does not certify or implement segment mutation.
+
+Row/block lookup, scalar retrieval, segment mutation, trace/debug paths, generic
+custom blocks/events, throwing native destructors, arbitrary input iterators,
+invalid object lifetimes/end dereference, ABI/allocator behavior and complete
+Calc columns/documents/browser UI remain unverified. Inventory retains false
+whole-contract/default/behavior parity flags. CALC-027 records the moved-from
+logical-size distinction without resetting it.

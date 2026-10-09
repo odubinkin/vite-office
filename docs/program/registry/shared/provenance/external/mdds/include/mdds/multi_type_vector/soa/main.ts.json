@@ -12,6 +12,10 @@
         {
           "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/main.test.ts",
           "marker": "matches every unchanged private native block-array sequence"
+        },
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/container.test.ts",
+          "marker": "matches every complete original constructor operator iterator and destructor sequence"
         }
       ],
       "upstream": [
@@ -38,10 +42,35 @@
       "reserve",
       "equals",
       "clear",
-      "check_integrity"
+      "check_integrity",
+      "ContainerEvent",
+      "ContainerTraits",
+      "EventValueOps",
+      "ContainerCallbacks",
+      "empty_event_value_ops",
+      "multi_type_vector",
+      "clone",
+      "assign",
+      "assign_move",
+      "dispose",
+      "event_handler",
+      "size",
+      "block_size",
+      "empty",
+      "begin",
+      "end",
+      "cbegin",
+      "cend",
+      "rbegin",
+      "rend",
+      "crbegin",
+      "crend",
+      "shrink_to_fit",
+      "not_equals"
     ],
     "omittedResponsibilities": [
-      "Original block_slot_type/blocks_type/blocks_to_transfer and default-execution main_def helpers are implemented over three normal vector syntax adapters sharing actual reserved-slot mechanics with the existing delayed vector. Metadata insertion/erase/clear does not delete blocks or synthesize enclosing-container events. Copy/clone invoke actual registered BlockOp aliases; move transfers backing storage with selected host moved-from observations. Native finite libc++ reserved capacities/pointer/value records, exactly representable bounded number indices and initialized unmanaged all12 scalar data are compared. STL adapters are explicit local infrastructure, not an alternate mdds engine. Original nested types export at file scope as TypeScript syntax adaptation. Native custom execution policies, object/allocator/destructor ABI, unbounded size_t/wrap arithmetic, invalid native ranges/self-insertion/dangling iterators, all full SoA multi_type_vector methods and Calc column/document/browser remain unverified. No full upstream module/QA-port certification."
+      "Original block_slot_type/blocks_type/blocks_to_transfer and default-execution main_def helpers are implemented over three normal vector syntax adapters sharing actual reserved-slot mechanics with the existing delayed vector. Metadata insertion/erase/clear does not delete blocks or synthesize enclosing-container events. Copy/clone invoke actual registered BlockOp aliases; move transfers backing storage with selected host moved-from observations. Native finite libc++ reserved capacities/pointer/value records, exactly representable bounded number indices and initialized unmanaged all12 scalar data are compared. STL adapters are explicit local infrastructure, not an alternate mdds engine. Original nested types export at file scope as TypeScript syntax adaptation. Native custom execution policies, object/allocator/destructor ABI, unbounded size_t/wrap arithmetic, invalid native ranges/self-insertion/dangling iterators, remaining SoA lookup/scalar retrieval/segment mutation groups and Calc column/document/browser remain unverified. No full upstream module/QA-port certification.",
+      "Scope is the original constructor/lifetime/operator/iterator-endpoint group on the selected libc++ host, default execution and no_trace, with initialized unmanaged all12 scalar families and nonthrowing event value witnesses. Native event copy/move/swap operations, scalar overloads and explicit dispose adapt erased C++ syntax; swap exchanges event field contents while preserving borrowed object identity. Compound inputs are prepared using original public set in the native caller and loaded as complete native fixtures in tests; segment set is not ported or certified. Row/block lookup, scalar retrieval and segment mutations, trace/debug instrumentation, throwing native destructors/events, generic custom blocks, allocator/object/ABI/qualifiers, arbitrary input iterator categories, invalid ranges/end dereference/use after dispose and complete Calc column/document/browser remain unverified. No complete original module/default/QA-suite certification."
     ],
     "preservedResponsibilities": [
       "Original SoA metadata stays in three separate position/size/block-pointer vectors with original slot/transfer defaults, synchronized valid insertion/erase/pop/push/clear/reserve and exact length-integrity diagnostics.",
@@ -49,14 +78,20 @@
       "Original move and complete-vector/individual-slot swaps preserve actual backing and pointer identity with selected native target capacity observations.",
       "Original default copy_blocks/mutate_blocks null skipping, source ordering, callback exception partial effects and null-aware equal_blocks predicate preserve native results.",
       "Original blocks_type equality checks metadata/lengths before equal_blocks; the internal three-iterator helper alone compares the left range prefix.",
-      "Existing delayed vector delegates the same actual reserved-slot allocation/growth/shift/assignment mechanics, retaining its original front-offset and bool capacity policy."
+      "Existing delayed vector delegates the same actual reserved-slot allocation/growth/shift/assignment mechanics, retaining its original front-offset and bool capacity policy.",
+      "Original default/handler/size/scalar-fill/range/copy/clone/move constructors preserve member initialization, zero-size early return, exact range-size diagnostics and ordered acquired callbacks using genuine shared blocks and metadata.",
+      "Original copy and move assignments create a temporary, swap and destroy it even on self assignment. Event copy/move/swap witnesses preserve original handler values and stable borrowed event field references.",
+      "Original move transfers vectors without resetting the primitive source logical size; size, block_size and empty keep their distinct original contracts.",
+      "Original destructor and clear release each nonnull block before registered deletion and pointer nulling, in source order. Clear resets arrays and logical size only afterward.",
+      "Original full swap, default block shrink, self/size/store equality and all mutable/const forward/reverse endpoint factories reuse the existing actual shared ownership and iterator modules."
     ],
     "status": "mapped",
     "upstreamPath": "vendor/mdds-reference/include/mdds/multi_type_vector/soa/main.hpp",
     "upstreamSymbols": [
       "struct block_slot_type",
       "struct blocks_type",
-      "struct blocks_to_transfer"
+      "struct blocks_to_transfer",
+      "class multi_type_vector"
     ]
   }
 }
