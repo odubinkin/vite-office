@@ -1175,9 +1175,14 @@
     "parentFindingsPrefixRetained": true
   },
   "rawDiagnosticCache": "apps/office/node_modules/.cache/parity-coverage/SZKQTN/",
-  "semanticCommit": null,
+  "semanticCommit": "39ebf53793a00c43ee7db62b35f4920b037e7065",
   "quality": {
     "independent": false,
-    "status": "pending semantic binding"
-  }
+    "status": "pass",
+    "evaluatedSha": "39ebf53793a00c43ee7db62b35f4920b037e7065",
+    "report": ".agentplane/tasks/202610091732-SZKQTN/quality/20261009-181247777-recovery-context/quality-report.json",
+    "reportHash": "e20e812bee241c67fe2e78d248da4f7946ddebe225f8d61212662cefeec080f7",
+    "priorSourceGuardReworkRetained": true
+  },
+  "initialSemanticCommit": "a2ddcbca11976ff4f6009e1dffdd85a1bceba526"
 }
