@@ -30,6 +30,7 @@ import {
   erase,
   initialize_element_blocks,
   delete_element_blocks,
+  delete_element_block,
   mutate_blocks,
   get_block_position,
   make_iterator,
@@ -39,6 +40,7 @@ import {
   is_empty as is_empty_impl,
   position_impl,
 } from "./main_def.ts";
+import { adjust_block_positions, type scalar_lu_factor } from "./block_util.ts";
 import { type element_block_funcs } from "../block_funcs.ts";
 /** Original enclosing Traits aliases; implemented execution specialization is default_exec_policy. */
 export interface BlocksTraits {
@@ -230,6 +232,7 @@ export interface ContainerEvent {
 }
 /** Native event_func constructor alias belongs to the original Traits owner. */
 export interface ContainerTraits<E extends ContainerEvent> extends BlocksTraits {
+  loop_unrolling: scalar_lu_factor;
   event_func: new () => E;
 }
 /** Erased native event_func value operators; swap mutates stable borrowed fields rather than exchanging JS object references. */
@@ -564,6 +567,219 @@ export class multi_type_vector<E extends ContainerEvent = empty_event_func> {
     this.m_block_store.element_blocks.set(block_index, data);
     this.m_hdl_event.element_block_acquired(data);
     callbacks.mdds_mtv_append_value(data, cell);
+  }
+  /** Original nondebug/no_trace erase entry keeps its reversed-range error before lookup. @param start_pos - First inclusive row. @param end_pos - Last inclusive row. @returns Nothing. */
+  public erase(start_pos: number | bigint, end_pos: number | bigint): void {
+    if (start_pos > end_pos) throw new RangeError("Start row is larger than the end row.");
+    this.erase_impl(start_pos, end_pos);
+  }
+  /** Original erase_impl retains both pinned diagnostic calls and exact boundary/metadata/ownership ordering. @param start_row - First row. @param end_row - Last row. @returns Nothing. */
+  private erase_impl(start_row: number | bigint, end_row: number | bigint): void {
+    let block_pos1 = get_block_position(this.m_block_store, this.m_cur_size, start_row);
+    if (block_pos1 === this.m_block_store.positions.size())
+      throw_block_position_not_found(
+        "multi_type_vector::erase_impl",
+        2191,
+        start_row,
+        this.block_size(),
+        this.size(),
+      );
+    const block_pos2 = get_block_position(this.m_block_store, this.m_cur_size, end_row, block_pos1);
+    if (block_pos2 === this.m_block_store.positions.size())
+      throw_block_position_not_found(
+        "multi_type_vector::erase_impl",
+        2196,
+        start_row,
+        this.block_size(),
+        this.size(),
+      );
+    const start = Number(start_row),
+      end = Number(end_row);
+    const start_row_in_block1 = this.m_block_store.positions.get(block_pos1);
+    const start_row_in_block2 = this.m_block_store.positions.get(block_pos2);
+    if (block_pos1 === block_pos2) {
+      this.erase_in_single_block(start, end, block_pos1);
+      return;
+    }
+    let index_erase_begin = block_pos1 + 1;
+    let index_erase_end = block_pos2;
+    if (start_row_in_block1 === start) --index_erase_begin;
+    else {
+      const blk_data = this.m_block_store.element_blocks.get(block_pos1);
+      const new_size = start - start_row_in_block1;
+      if (blk_data) {
+        this.Traits.block_funcs.overwrite_values(
+          blk_data,
+          new_size,
+          this.m_block_store.sizes.get(block_pos1) - new_size,
+        );
+        this.Traits.block_funcs.resize_block(blk_data, new_size);
+      }
+      this.m_block_store.sizes.set(block_pos1, new_size);
+    }
+    let adjust_block_offset = 0;
+    const last_row_in_block = start_row_in_block2 + this.m_block_store.sizes.get(block_pos2) - 1;
+    if (last_row_in_block === end) ++index_erase_end;
+    else {
+      const size_to_erase = end - start_row_in_block2 + 1;
+      this.m_block_store.sizes.set(
+        block_pos2,
+        this.m_block_store.sizes.get(block_pos2) - size_to_erase,
+      );
+      this.m_block_store.positions.set(block_pos2, start);
+      const blk_data = this.m_block_store.element_blocks.get(block_pos2);
+      if (blk_data) {
+        this.Traits.block_funcs.overwrite_values(blk_data, 0, size_to_erase);
+        this.Traits.block_funcs.erase(blk_data, 0, size_to_erase);
+      }
+      adjust_block_offset = 1;
+    }
+    block_pos1 = index_erase_begin;
+    if (block_pos1 > 0) --block_pos1;
+    delete_element_blocks(
+      this.m_block_store,
+      this.m_hdl_event,
+      this.Traits.block_funcs,
+      index_erase_begin,
+      index_erase_end,
+    );
+    this.m_block_store.erase(index_erase_begin, index_erase_end - index_erase_begin);
+    const delta = end - start + 1;
+    this.m_cur_size -= delta;
+    if (this.m_block_store.positions.size() === 0) return;
+    let adjust_pos = index_erase_begin;
+    adjust_pos += adjust_block_offset;
+    adjust_block_positions(this.Traits.loop_unrolling)(this.m_block_store, adjust_pos, -delta);
+    this.merge_with_next_block(block_pos1);
+  }
+  /** Original same-block erase retains scalar overwrite/erase then metadata/delete and neighboring merge order. @param start_pos - First row. @param end_pos - Last row. @param block_index - Located block. @returns Nothing. */
+  private erase_in_single_block(start_pos: number, end_pos: number, block_index: number): void {
+    const blk_data = this.m_block_store.element_blocks.get(block_index);
+    const size_to_erase = end_pos - start_pos + 1;
+    if (blk_data) {
+      const offset = start_pos - this.m_block_store.positions.get(block_index);
+      this.Traits.block_funcs.overwrite_values(blk_data, offset, size_to_erase);
+      this.Traits.block_funcs.erase(blk_data, offset, size_to_erase);
+    }
+    this.m_block_store.sizes.set(
+      block_index,
+      this.m_block_store.sizes.get(block_index) - size_to_erase,
+    );
+    this.m_cur_size -= size_to_erase;
+    if (this.m_block_store.sizes.get(block_index)) {
+      adjust_block_positions(this.Traits.loop_unrolling)(
+        this.m_block_store,
+        block_index + 1,
+        -size_to_erase,
+      );
+      return;
+    }
+    delete_element_block(
+      this.m_block_store,
+      this.m_hdl_event,
+      this.Traits.block_funcs,
+      block_index,
+    );
+    this.m_block_store.erase(block_index);
+    if (block_index === 0) {
+      adjust_block_positions(this.Traits.loop_unrolling)(
+        this.m_block_store,
+        block_index,
+        -size_to_erase,
+      );
+      return;
+    }
+    if (block_index >= this.m_block_store.positions.size()) return;
+    const prev_data = this.m_block_store.element_blocks.get(block_index - 1);
+    const next_data = this.m_block_store.element_blocks.get(block_index);
+    if (prev_data) {
+      if (!next_data) {
+        adjust_block_positions(this.Traits.loop_unrolling)(
+          this.m_block_store,
+          block_index,
+          -size_to_erase,
+        );
+        return;
+      }
+      const cat1 = get_block_type(prev_data),
+        cat2 = get_block_type(next_data);
+      if (cat1 === cat2) {
+        this.Traits.block_funcs.append_block(prev_data, next_data);
+        this.m_block_store.sizes.set(
+          block_index - 1,
+          this.m_block_store.sizes.get(block_index - 1) + this.m_block_store.sizes.get(block_index),
+        );
+        this.Traits.block_funcs.resize_block(next_data, 0);
+        delete_element_block(
+          this.m_block_store,
+          this.m_hdl_event,
+          this.Traits.block_funcs,
+          block_index,
+        );
+        this.m_block_store.erase(block_index);
+      }
+      adjust_block_positions(this.Traits.loop_unrolling)(
+        this.m_block_store,
+        block_index,
+        -size_to_erase,
+      );
+    } else {
+      if (next_data) {
+        adjust_block_positions(this.Traits.loop_unrolling)(
+          this.m_block_store,
+          block_index,
+          -size_to_erase,
+        );
+        return;
+      }
+      this.m_block_store.sizes.set(
+        block_index - 1,
+        this.m_block_store.sizes.get(block_index - 1) + this.m_block_store.sizes.get(block_index),
+      );
+      delete_element_block(
+        this.m_block_store,
+        this.m_hdl_event,
+        this.Traits.block_funcs,
+        block_index,
+      );
+      this.m_block_store.erase(block_index);
+      adjust_block_positions(this.Traits.loop_unrolling)(
+        this.m_block_store,
+        block_index,
+        -size_to_erase,
+      );
+    }
+  }
+  /** Original one-direction merge returns its actual flag and keeps managed-cell-preserving append/zero-size/delete order. @param block_index - Admitted block. @returns Whether merged. */
+  private merge_with_next_block(block_index: number): boolean {
+    if (block_index >= this.m_block_store.positions.size() - 1) return false;
+    const blk_data = this.m_block_store.element_blocks.get(block_index);
+    const next_data = this.m_block_store.element_blocks.get(block_index + 1);
+    if (!blk_data) {
+      if (next_data) return false;
+      this.m_block_store.sizes.set(
+        block_index,
+        this.m_block_store.sizes.get(block_index) + this.m_block_store.sizes.get(block_index + 1),
+      );
+      this.m_block_store.erase(block_index + 1);
+      return true;
+    }
+    if (!next_data) return false;
+    if (get_block_type(blk_data) !== get_block_type(next_data)) return false;
+    this.Traits.block_funcs.append_block(blk_data, next_data);
+    this.Traits.block_funcs.resize_block(next_data, 0);
+    this.m_block_store.sizes.set(
+      block_index,
+      this.m_block_store.sizes.get(block_index) + this.m_block_store.sizes.get(block_index + 1),
+    );
+    delete_element_block(
+      this.m_block_store,
+      this.m_hdl_event,
+      this.Traits.block_funcs,
+      block_index + 1,
+    );
+    this.m_block_store.erase(block_index + 1);
+    return true;
   }
   /** Original append_empty member updates only actual metadata and logical size. Valid empty metadata requires zero logical size. @param len - Native admitted count. @returns Whether a new block was added. */
   private append_empty(len: number): boolean {

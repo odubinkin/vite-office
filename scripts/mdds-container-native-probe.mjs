@@ -289,6 +289,112 @@ for (const n of [0, 2])
       ["U", 0],
     ],
   });
+for (let type = 0; type < 12; ++type) {
+  for (const [seed, n] of [
+    [36 + type, 11],
+    [48 + type, 13],
+    [60 + type, 13],
+    [72 + type, 13],
+  ])
+    for (let start = 0; start < n; ++start)
+      for (let end = start; end < n; ++end)
+        cases.push({
+          seed,
+          commands: [
+            ["Q", 1, 0],
+            ["e", 0, start, end],
+            ["a", 0, type, "3"],
+            ["y", 0],
+            ["U", 0],
+            ["U", 1],
+          ],
+        });
+  for (const n of [0, 1, 2, 5, 17]) {
+    const ranges = n
+      ? [
+          ...new Set(
+            [
+              [0, 0],
+              [n - 1, n - 1],
+              [0, n - 1],
+              [Math.floor(n / 2), Math.floor(n / 2)],
+            ].map(
+              /** Retains distinct actual homogeneous erase callers. @param range - Rows. @returns Key. */ (
+                range,
+              ) => range.join(","),
+            ),
+          ),
+        ].map(
+          /** Decodes caller rows. @param key - Key. @returns Rows. */ (key) =>
+            key.split(",").map(Number),
+        )
+      : [[0, 0]];
+    for (const [start, end] of ranges)
+      for (const op of ["F", "Z"])
+        cases.push({
+          seed: -1,
+          commands: [
+            op === "F" ? [op, 0, n, type, "2"] : [op, 0, n],
+            ["Q", 1, 0],
+            ["e", 0, start, end],
+            ["a", 0, type, "3"],
+            ["y", 0],
+            ["U", 0],
+            ["U", 1],
+          ],
+        });
+    cases.push({
+      seed: -1,
+      commands: [
+        ["F", 0, n, type, "2"],
+        ["e", 0, 1, 0],
+        ["e", 0, n, n],
+        ["e", 0, 0, n],
+        ["e", 0, maxRow, maxRow],
+        ["e", 0, 0, maxRow],
+        ["M", 1, 0],
+        ["e", 0, 0, 0],
+        ["C", 0],
+        ["U", 0],
+        ["U", 1],
+      ],
+    });
+  }
+  for (const [start, end] of [
+    [0, 0],
+    [1, 1],
+    [5, 15],
+    [8, 33],
+    [40, 40],
+    [0, 40],
+  ])
+    cases.push({
+      seed: 84 + type,
+      commands: [
+        ["Q", 1, 0],
+        ["e", 0, start, end],
+        ["a", 0, type, "3"],
+        ["y", 0],
+        ["U", 0],
+        ["U", 1],
+      ],
+    });
+}
+for (let type = 0; type < 12; ++type)
+  for (const seed of [96 + type, 108 + type])
+    for (let start = 0; start < 13; ++start)
+      for (let end = start; end < 13; ++end)
+        cases.push({
+          seed,
+          commands: [
+            ["Q", 1, 0],
+            ["e", 0, start, end],
+            ["a", 0, type, "3"],
+            ["y", 0],
+            ["U", 0],
+            ["U", 1],
+          ],
+        });
 const driver =
   String.raw`
 #include <mdds/multi_type_vector/soa/main.hpp>
@@ -307,6 +413,10 @@ struct observed_funcs:standard_element_blocks_traits::block_funcs{
 static void overwrite_values(base_element_block& data,size_t pos,size_t len){trace_call(0,data,{static_cast<long long>(pos),static_cast<long long>(len)});standard_element_blocks_traits::block_funcs::overwrite_values(data,pos,len);}
 static void resize_block(base_element_block& data,size_t size){trace_call(1,data,{static_cast<long long>(size)});standard_element_blocks_traits::block_funcs::resize_block(data,size);}
 static void delete_block(const base_element_block* data){trace_call(3,*data);standard_element_blocks_traits::block_funcs::delete_block(data);}
+static void erase(base_element_block& data,size_t pos){trace_call(5,data,{static_cast<long long>(pos)});standard_element_blocks_traits::block_funcs::erase(data,pos);}
+static void erase(base_element_block& data,size_t pos,size_t len){trace_call(5,data,{static_cast<long long>(pos),static_cast<long long>(len)});standard_element_blocks_traits::block_funcs::erase(data,pos,len);}
+static void append_block(base_element_block& dest,const base_element_block& src){trace_call(6,dest,{get_block_type(src),static_cast<long long>(standard_element_blocks_traits::block_funcs::size(src))});standard_element_blocks_traits::block_funcs::append_block(dest,src);}
+
 };
 struct event_entry{int owner,token,type;size_t size;bool acquired;};
 std::shared_ptr<std::vector<event_entry>> log_entries;
@@ -446,13 +556,14 @@ template<class It>void hint_node(const It& hint,const db_type& db,bool at_end=fa
 template<class Pair,class It>std::string position_json(const Pair& p,const It& end,const db_type& db,const It* hint=nullptr,bool hint_at_end=false){return capture([&]{std::cout<<"[";node(p.first,end,db);std::cout<<","<<p.second;if(hint){std::cout<<",";hint_node(*hint,db,hint_at_end);}std::cout<<"]";});}
 void state(db_type& db){const auto& s=access_store(db,access_tag{});std::cout<<"["<<db.size()<<","<<db.block_size()<<","<<(db.empty()?"true":"false")<<",["<<db.event_handler().tag<<","<<(db.event_handler().log?"true":"false")<<"],[[";for(size_t i=0;i<s.positions.size();++i){if(i)std::cout<<",";std::cout<<s.positions[i];}std::cout<<"],[";for(size_t i=0;i<s.sizes.size();++i){if(i)std::cout<<",";std::cout<<s.sizes[i];}std::cout<<"],[";for(size_t i=0;i<s.element_blocks.size();++i){if(i)std::cout<<",";std::cout<<id(s.element_blocks[i]);}std::cout<<"],["<<s.positions.capacity()<<","<<s.sizes.capacity()<<","<<s.element_blocks.capacity()<<"]],[";for(size_t i=0;i<s.element_blocks.size();++i){if(i)std::cout<<",";if(s.element_blocks[i])payload(*s.element_blocks[i]);else std::cout<<"null";}std::cout<<"],[";node(db.begin(),db.end(),db);std::cout<<",";node(db.end(),db.end(),db);std::cout<<",";node(db.cbegin(),db.cend(),db);std::cout<<",";node(db.cend(),db.cend(),db);std::cout<<",";node(db.rbegin(),db.rend(),db);std::cout<<",";node(db.rend(),db.rend(),db);std::cout<<",";node(db.crbegin(),db.crend(),db);std::cout<<",";node(db.crend(),db.crend(),db);std::cout<<"]]";}
 void record(std::unique_ptr<db_type>* db,const std::string& result,bool stable){std::cout<<"["<<result<<","<<(stable?"true":"false")<<",[";for(int i=0;i<3;++i){if(i)std::cout<<",";if(db[i])state(*db[i]);else std::cout<<"null";}std::cout<<"],[";bool comma=false;for(int i=0;i<3;++i)for(int j=0;j<3;++j){if(comma)std::cout<<",";comma=true;if(db[i]&&db[j])std::cout<<"["<<(*db[i]==*db[j]?"true":"false")<<","<<(*db[i]!=*db[j]?"true":"false")<<"]";else std::cout<<"null";}std::cout<<"],[";for(size_t i=0;i<log_entries->size();++i){if(i)std::cout<<",";const auto& e=(*log_entries)[i];std::cout<<"["<<e.owner<<","<<e.token<<","<<e.type<<","<<e.size<<","<<(e.acquired?"true":"false")<<"]";}std::cout<<"]]";}
-int main(){std::cout<<std::setprecision(17);int seed,count;while(std::cin>>seed>>count){ids.clear();next_token=0;events::next=1;log_entries=std::make_shared<std::vector<event_entry>>();std::unique_ptr<db_type> db[3];std::optional<db_type::iterator> hints[3];std::optional<db_type::const_iterator> const_hints[3];if(seed>=0){int kind=seed%12,count=seed<12?5:seed<36?9:11;db[0]=std::make_unique<db_type>(count);if(seed<24){for(int row=0;row<count;row+=2)set_cell(*db[0],row,((row/2)%2?kind+1:kind)%12);}else if(seed<36){set_cell(*db[0],0,kind);set_cell(*db[0],3,(kind+1)%12);set_cell(*db[0],7,kind);}else{set_cell(*db[0],0,kind);for(int row=4;row<=6;++row)set_cell(*db[0],row,(kind+1)%12);set_cell(*db[0],9,kind);set_cell(*db[0],10,kind);}ids.clear();next_token=0;for(auto* data:access_store(*db[0],access_tag{}).element_blocks)id(data);log_entries->clear();}std::cout<<"[";record(db,"null",true);
+int main(){std::cout<<std::setprecision(17);int seed,count;while(std::cin>>seed>>count){ids.clear();next_token=0;events::next=1;log_entries=std::make_shared<std::vector<event_entry>>();std::unique_ptr<db_type> db[3];std::optional<db_type::iterator> hints[3];std::optional<db_type::const_iterator> const_hints[3];if(seed>=0){int kind=seed%12,count=seed<12?5:seed<36?9:seed<48?11:seed<84?13:seed<96?41:13;db[0]=std::make_unique<db_type>(count);if(seed<24){for(int row=0;row<count;row+=2)set_cell(*db[0],row,((row/2)%2?kind+1:kind)%12);}else if(seed<36){set_cell(*db[0],0,kind);set_cell(*db[0],3,(kind+1)%12);set_cell(*db[0],7,kind);}else if(seed<48){set_cell(*db[0],0,kind);for(int row=4;row<=6;++row)set_cell(*db[0],row,(kind+1)%12);set_cell(*db[0],9,kind);set_cell(*db[0],10,kind);}else if(seed<60){for(int row=0;row<3;++row)set_cell(*db[0],row,kind);for(int row=6;row<9;++row)set_cell(*db[0],row,kind);for(int row=11;row<13;++row)set_cell(*db[0],row,(kind+1)%12);}else if(seed<72){for(int row=2;row<5;++row)set_cell(*db[0],row,kind);for(int row=8;row<11;++row)set_cell(*db[0],row,(kind+1)%12);}else if(seed<84){for(int row=0;row<3;++row)set_cell(*db[0],row,kind);for(int row=6;row<9;++row)set_cell(*db[0],row,(kind+1)%12);for(int row=11;row<13;++row)set_cell(*db[0],row,kind);}else if(seed<96){for(int row=0;row<count;row+=2)set_cell(*db[0],row,((row/2)%2?kind+1:kind)%12);}else if(seed<108){for(int row=0;row<3;++row)set_cell(*db[0],row,kind);for(int row=3;row<6;++row)set_cell(*db[0],row,(kind+1)%12);for(int row=9;row<13;++row)set_cell(*db[0],row,kind);}else{for(int row=3;row<6;++row)set_cell(*db[0],row,kind);for(int row=6;row<9;++row)set_cell(*db[0],row,(kind+1)%12);}ids.clear();next_token=0;for(auto* data:access_store(*db[0],access_tag{}).element_blocks)id(data);log_entries->clear();}std::cout<<"[";record(db,"null",true);
 for(int step=0;step<count;++step){char op;int dst;std::cin>>op>>dst;std::string result="null";events* before=db[dst]?&db[dst]->event_handler():nullptr;bool stable=true;
 try{if(op=='D')db[dst]=std::make_unique<db_type>();else if(op=='Z'){int n;std::cin>>n;db[dst]=std::make_unique<db_type>(n);}else if(op=='F'||op=='R'){int n,type,length=-1;std::string text;std::cin>>n>>type>>text;if(op=='R')std::cin>>length;db[dst]=create(n,type,text,length);}else if(op=='H'||op=='h'){events h;std::cin>>h.tag;if(op=='H')db[dst]=std::make_unique<db_type>(h);else db[dst]=std::make_unique<db_type>(std::move(h));result=h.log?"true":"false";}
 else if(op=='Q'||op=='L'||op=='M'||op=='A'||op=='V'||op=='W'){int other;std::cin>>other;if(op=='Q')db[dst]=std::make_unique<db_type>(*db[other]);else if(op=='L')db[dst]=std::make_unique<db_type>(db[other]->clone());else if(op=='M')db[dst]=std::make_unique<db_type>(std::move(*db[other]));else if(op=='A'){*db[dst]=*db[other];stable=before==&db[dst]->event_handler();}else if(op=='V'){*db[dst]=std::move(*db[other]);stable=before==&db[dst]->event_handler();}else{events* other_before=&db[other]->event_handler();db[dst]->swap(*db[other]);stable=before==&db[dst]->event_handler()&&other_before==&db[other]->event_handler();}}
 else if(op=='T'||op=='E'||op=='G'||op=='g'||op=='P'||op=='p'||op=='I'||op=='i'||op=='K'||op=='k'){size_t row;std::cin>>row;if(op=='T')result=std::to_string(db[dst]->get_type(row));else if(op=='E')result=db[dst]->is_empty(row)?"true":"false";else if(op=='G'||op=='g'){int type;std::cin>>type;result=scalar(*db[dst],row,type,op=='g');}else if(op=='P')result=position_json(db[dst]->position(row),db[dst]->end(),*db[dst]);else if(op=='p'){const auto& owner=*db[dst];result=position_json(owner.position(row),owner.end(),owner);}else if(op=='I'||op=='i'){int other,index;std::cin>>other>>index;if(op=='I'){auto hint=db[other]->begin();std::advance(hint,index);auto pos=db[dst]->position(hint,row);result=position_json(pos,db[dst]->end(),*db[dst],&hint,index==int(db[other]->block_size()));}else{const auto& owner=*db[dst];const auto& source=*db[other];auto hint=source.begin();std::advance(hint,index);auto pos=owner.position(hint,row);result=position_json(pos,owner.end(),owner,&hint,index==int(source.block_size()));}}else {int slot;std::cin>>slot;if(op=='K'){auto& hint=*hints[slot];result=position_json(db[dst]->position(hint,row),db[dst]->end(),*db[dst],&hint);}else {const auto& owner=*db[dst];auto& hint=*const_hints[slot];result=position_json(owner.position(hint,row),owner.end(),owner,&hint);}}}
 else if(op=='B'||op=='b'||op=='O'||op=='o'||op=='l'||op=='X'){size_t row;std::cin>>row;if(op=='l'){const auto& owner=*db[dst];result=std::to_string(db_type::logical_position(owner.position(row)));}else if(op=='X'){int type;std::cin>>type;result=positioned_scalar(*db[dst],row,type);}else {int steps=0;if(op=='O'||op=='o')std::cin>>steps;if(op=='B'||op=='O'){auto p=db[dst]->position(row);auto ret=op=='B'?db_type::next_position(p):db_type::advance_position(p,steps);result="["+position_json(ret,db[dst]->end(),*db[dst])+","+position_json(p,db[dst]->end(),*db[dst])+"]";}else {const auto& owner=*db[dst];auto p=owner.position(row);auto ret=op=='b'?db_type::next_position(p):db_type::advance_position(p,steps);result="["+position_json(ret,owner.end(),owner)+","+position_json(p,owner.end(),owner)+"]";}}}
 else if(op=='Y'){size_t size;std::cin>>size;operation_calls.clear();trace_enabled=true;db[dst]->resize(size);trace_enabled=false;result=capture([&]{std::cout<<"[";for(size_t i=0;i<operation_calls.size();++i){if(i)std::cout<<",";std::cout<<"[";for(size_t j=0;j<operation_calls[i].size();++j){if(j)std::cout<<",";std::cout<<operation_calls[i][j];}std::cout<<"]";}std::cout<<"]";});}
+else if(op=='e'){size_t start,end;std::cin>>start>>end;operation_calls.clear();trace_enabled=true;db[dst]->erase(start,end);trace_enabled=false;result=calls_json();}
 else if(op=='a'){int type;std::string text;std::cin>>type>>text;operation_calls.clear();trace_enabled=true;auto it=append_scalar(*db[dst],type,text);trace_enabled=false;result=capture([&]{std::cout<<"[";node(it,db[dst]->end(),*db[dst]);std::cout<<","<<calls_json()<<"]";});}
 else if(op=='c'){size_t index;int type;std::string text;std::cin>>index>>type>>text;operation_calls.clear();trace_enabled=true;replace_scalar(*db[dst],index,type,text);trace_enabled=false;result=calls_json();}
 else if(op=='f'){db[dst]->push_back(failure_cell{});}
@@ -492,7 +603,7 @@ const input = cases
 const raw = execFileSync(binary, {
   input,
   encoding: "utf8",
-  maxBuffer: 64 * 1024 * 1024,
+  maxBuffer: 256 * 1024 * 1024,
   timeout: 30000,
 });
 writeFileSync(`${target}/container-output.jsonl`, raw);
@@ -505,7 +616,9 @@ const lines = raw
     ) => JSON.parse(line),
   );
 const snapshots = [],
-  idsByState = new Map();
+  idsByState = new Map(),
+  ownerSnapshots = [],
+  idsByOwner = new Map();
 const document = {
   baselineCommit: pinned,
   archiveHashes,
@@ -528,7 +641,27 @@ const document = {
           if (id === undefined) {
             id = snapshots.length;
             idsByState.set(key, id);
-            snapshots.push(state);
+            snapshots.push([
+              state[0],
+              state[1],
+              state[2].map(
+                /** Losslessly interns the full unchanged native owner, including every payload/metadata/endpoint field. @param owner - Complete owner or absent slot. @returns Stable full-owner ID or null. */ (
+                  owner,
+                ) => {
+                  if (owner === null) return null;
+                  const ownerKey = JSON.stringify(owner);
+                  let ownerId = idsByOwner.get(ownerKey);
+                  if (ownerId === undefined) {
+                    ownerId = ownerSnapshots.length;
+                    idsByOwner.set(ownerKey, ownerId);
+                    ownerSnapshots.push(owner);
+                  }
+                  return ownerId;
+                },
+              ),
+              state[3],
+              state[4],
+            ]);
           }
           return id;
         },
@@ -537,6 +670,7 @@ const document = {
     }),
   ),
   snapshots,
+  ownerSnapshots,
 };
 if (process.argv.includes("--write"))
   writeFileSync(fixture, `${JSON.stringify(document, null, 2)}\n`);

@@ -31,6 +31,27 @@ type OwnerState = [
 type EventEntry = [number, number, number, number, boolean];
 /** Full native result, stable handler fields, owners, equality matrix and event log. */
 type State = [unknown, boolean, (OwnerState | null)[], unknown[], EventEntry[]];
+/** Reconstructs every exact native field from losslessly interned complete owner records. @param index - Full-state ID. @returns Complete original record. */
+function decodeSnapshot(index: number): State {
+  const s = fixture.snapshots[index] as unknown as [
+    unknown,
+    boolean,
+    (number | null)[],
+    unknown[],
+    EventEntry[],
+  ];
+  return [
+    s[0],
+    s[1],
+    s[2].map(
+      /** Resolves a complete owner without summarizing its fields. @param id - Original owner ID. @returns Complete owner or absence. */ (
+        id,
+      ) => (id === null ? null : (fixture.ownerSnapshots[id] as unknown as OwnerState)),
+    ),
+    s[3],
+    s[4],
+  ];
+}
 const aliases = [
   standard.boolean_element_block,
   standard.int8_element_block,
@@ -151,6 +172,16 @@ const observedFuncs = {
   resize_block(data: base_element_block, size: number): void {
     traceCall(1, data, size);
     nativeFuncs.resize_block(data, size);
+  },
+  /** Forwards both original scalar erase overloads while observing original offset/count. @param data - Owner. @param pos - Offset. @param size - Optional count. @returns Nothing. */
+  erase(data: base_element_block, pos: number, size?: number): void {
+    traceCall(5, data, pos, ...(size === undefined ? [] : [size]));
+    nativeFuncs.erase(data, pos, size);
+  },
+  /** Observes actual source type/size before original block append. @param dest - Destination. @param src - Source. @returns Nothing. */
+  append_block(dest: base_element_block, src: base_element_block): void {
+    traceCall(6, dest, get_block_type(src), nativeFuncs.size(src));
+    nativeFuncs.append_block(dest, src);
   },
   /** Observes original delete after release. @param data - Owner. @returns Nothing. */
   delete_block(data: base_element_block): void {
@@ -328,7 +359,7 @@ describe("original SoA container lifetime", /** Declares original native ownersh
         null,
         null,
       ];
-      const initial = fixture.snapshots[c.states[0] as number] as unknown as State;
+      const initial = decodeSnapshot(c.states[0] as number);
       if (c.seed >= 0) owners[0] = loadSeed(initial[2][0] as OwnerState);
       expect(record(owners, null, true)).toEqual(initial);
       for (let step = 0; step < c.commands.length; ++step) {
@@ -428,6 +459,16 @@ describe("original SoA container lifetime", /** Declares original native ownersh
               },
             };
             destination.push_back(true, failure);
+          } else if (op === "e") {
+            operationCalls = [];
+            try {
+              const start = typeof args[0] === "string" ? BigInt(args[0]) : (args[0] as number);
+              const end = typeof args[1] === "string" ? BigInt(args[1]) : (args[1] as number);
+              destination.erase(start, end);
+              result = operationCalls;
+            } finally {
+              operationCalls = null;
+            }
           } else if (op === "Y") {
             operationCalls = [];
             try {
@@ -544,7 +585,7 @@ describe("original SoA container lifetime", /** Declares original native ownersh
           result = (error as Error).message;
         }
         expect(record(owners, result, stable)).toEqual(
-          fixture.snapshots[c.states[step + 1] as number],
+          decodeSnapshot(c.states[step + 1] as number),
         );
       }
       for (const owner of owners) owner?.dispose();

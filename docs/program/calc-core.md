@@ -1271,3 +1271,39 @@ unbounded/invalid metadata and whole Calc columns/documents/browser remain gaps;
 whole-module/default/QA parity flags remain false. CALC-029 records the custom
 null-creation metadata observation without a rollback repair. Cycle2 task4/10 follows the
 full validation in task `202610092130-FMVJ21`.
+
+## Shared SoA range erase and adjacent-tail merge
+
+Task `202610092323-JXAJ9S` ports original `erase`, `erase_impl`,
+`erase_in_single_block` and `merge_with_next_block` directly in the existing
+shared owner. Both lookup diagnostics and the reversed-range guard keep their
+original order and arguments. Single/multiple block deletion preserves actual
+scalar overwrite/resize/erase, metadata reduction, release/delete, position
+adjustment and type/empty adjacency merge responsibilities. A nonempty merge
+appends the source, resizes it to zero before release/deletion, then removes
+its metadata, preserving the original managed-cell intention.
+
+The original trait `loop_unrolling` selects the existing architecture-neutral
+shared adjustment specialization. Actual deletion, registered scalar block
+functions, three metadata vectors and iterator owners are reused. Bigint
+out-of-range row witnesses retain native uint64 guards before exact bounded
+index projection; no generic unbounded metadata certification is asserted.
+
+Unchanged genuine full-header native callers preserve all664 prior complete
+sequences and add every range of several11/13cell input geometries over all12
+standard scalar families, filled/empty owners, contiguous unlike scalar types, adjacent same/different/empty
+blocks and41block position shifts. Actual forwarding erase/block-append
+observers retain offset/count/source type/size, full ownership/capacity/payload
+states, copy isolation, reappend and final destruction. Complete owner snapshots
+are losslessly interned separately to remove repeated storage; ordinary comparisons
+reconstruct every field and raw native output remains complete. Compound input is
+prepared with original public set, then loaded from complete captured fields;
+set itself remains a subsequent group. No original algorithm body is generated
+or rewritten. Ordinary fixture acceptance runs without upstream or a compiler.
+
+Scope remains finite pinned no_trace/default execution and unmanaged standard
+families. Managed/custom outcomes, native ABI and throwing callbacks/allocators,
+trace/debug/SIMD, invalid or overflowing metadata, other segment mutators and
+whole Calc columns/documents/browser remain gaps. Whole-module/default/QA flags
+remain false. CALC-030 records the original invalid-end diagnostic start-row
+argument without changing it. Cycle2 task5/10 follows full validation in taskFMVJ21.

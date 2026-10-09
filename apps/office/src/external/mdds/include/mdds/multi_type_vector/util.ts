@@ -19,7 +19,7 @@ export const default_exec_policy = Symbol("default_exec_policy");
 /** Original default compile-time trait aliases; each witness retains its actual shared owner. */
 export const default_traits = {
   event_func: empty_event_func,
-  loop_unrolling: lu_factor_t.lu16,
+  loop_unrolling: lu_factor_t.lu16 as const,
   exec_policy: default_exec_policy,
   block_funcs: element_block_funcs(),
 };

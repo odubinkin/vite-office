@@ -671,3 +671,30 @@ managed/custom consumer reachability or a promised exception guarantee violation
 No failed replacement with a dangling old pointer is executed or certified.
 Decision: retain metadata-before-creation, exact diagnostic and size update
 ordering; add no rollback or empty-tail coalescing repair.
+
+## CALC-030: Erase end-lookup failure reports the start row
+
+Status: suspicious diagnostic argument; original native error reproduced.
+Range validation and data mutation behavior remain unchanged.
+
+Pinned mdds3.2.1 `soa/main_def.inl` lines2182-2196 first locates `start_row`,
+then locates `end_row` starting at that block. When the second lookup fails,
+the original `throw_block_position_not_found` call at line2196 passes
+`start_row` to the error formatter. A valid start with an invalid end therefore
+reports the valid start as the logical position which could not be found.
+
+The unchanged original native five-cell bool owner rejects `erase(0,5)` with
+`multi_type_vector::erase_impl#2196: block position not found! (logical pos=0,
+block size=1, logical size=5)`. It also rejects an end equal to uint64 maximum
+with the same reported logical pos0. Actual metadata, payload, capacities and
+ownership events are unchanged after each rejected public call. A failed first
+lookup instead uses source line2191 and reports its actual start argument.
+
+Evidence: genuine unchanged full original native container compiled with
+ASan/UBSan by `scripts/mdds-container-native-probe.mjs`; appended filled-five
+bool error sequence in `soa/native-container-cases.json`, compared through
+actual shared `container.test.ts` and both original lookup guards in `main.ts`.
+This is an error-path observation, not evidence of successful out-of-range
+access or an invalid range accepted by Calc. Decision: preserve the exact
+start-row argument, diagnostic source line and pre-mutation guards; do not
+substitute the end row or a locally improved message.
