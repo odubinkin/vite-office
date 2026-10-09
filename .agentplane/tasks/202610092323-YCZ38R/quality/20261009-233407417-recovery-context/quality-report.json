@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "task_id": "202610092323-YCZ38R",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-09T23:34:07.417Z",
+  "verdict": "pass",
+  "summary": "Same-agent non-independent exact-SHA review: original row/cell XML item admission and native orientation contract meet the approved scoped acceptance.",
+  "evaluated_sha": "2cf3f579c22c5004fe80ae79137d8cd5e5f2c63a",
+  "blueprint_digest": "37ea6acf6042ed9be586896023eb4cb13932bc349a94a07d74039aa723a57cae",
+  "findings": [
+    "Semantic production and final test hashes bind519accepted current-source related cases20fresh24Chromium to exactSHA. All3entire modules actual Istanbul100all-four/current-source/complete-map/zero-negative; initial2fresh failures repaired and final7typed context calls rechecked,partial threshold exits recorded honestly.",
+    "Original direct SET item admission and native empty vertical/NONE versus TOP1 follow pinned mapper/i8855 source.636old tests byte-identical and one exact prior R12SRT empty-token migration;6canonical histories preserved. Registered IO exceptions unchanged,statics9restored metadata pass."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610092323-YCZ38R/README.md",
+    ".agentplane/tasks/202610092323-YCZ38R/evidence/verification.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Quality is reviewed by the implementing agent in EVALUATOR role and is explicitly non-independent. Generic import scalar assembly,primitive browser codec legacy top mapping/UI menus,full native mapper/style/nested/shared-format/layout width/UNO/VCL/filter responsibilities remain separately incomplete. No semantic/default/classification whole-module promotion."
+  ]
+}

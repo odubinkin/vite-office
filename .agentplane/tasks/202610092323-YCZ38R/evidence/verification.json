@@ -525,6 +525,11 @@
     "Existing general unsupported-token strict diagnostic policy remains outside this empty-value correction.",
     "No whole-module semantic/contract/default/classification promotion from coverage."
   ],
-  "semanticCommit": null,
-  "quality": null
+  "semanticCommit": "2cf3f579c22c5004fe80ae79137d8cd5e5f2c63a",
+  "quality": {
+    "verdict": "pass",
+    "evaluatedSha": "2cf3f579c22c5004fe80ae79137d8cd5e5f2c63a",
+    "sameAgentNonIndependent": true,
+    "path": ".agentplane/tasks/202610092323-YCZ38R/quality/20261009-233407417-recovery-context/quality-report.json"
+  }
 }

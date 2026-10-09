@@ -4,7 +4,7 @@ title: "Export original row and cell items with native orientation XML contracts
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -18,15 +18,37 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-09T23:33:05.973Z"
+  updated_at: "2026-10-09T23:34:25.235Z"
   updated_by: "CODER"
-  note: "Original row/cell XML and native empty/NONE/TOP verified519related20fresh24Chromium,3whole modules actual Istanbul100all-four zero-negative/current-source/map,9metadata/statics pass and original history preserved."
+  note: "Refreshed after exact-SHA same-agent non-independent quality pass2cf3f579.519related20fresh24Chromium,3whole modules100all-four/current-source/complete-map/zero-negatives,9metadata/statics,preserved637oldcontracts and6histories,reference restored."
   attempts: 0
-commit: null
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-09T23:34:07.417Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent non-independent exact-SHA review: original row/cell XML item admission and native orientation contract meet the approved scoped acceptance."
+  evaluated_sha: "2cf3f579c22c5004fe80ae79137d8cd5e5f2c63a"
+  blueprint_digest: "37ea6acf6042ed9be586896023eb4cb13932bc349a94a07d74039aa723a57cae"
+  evidence_refs:
+    - ".agentplane/tasks/202610092323-YCZ38R/README.md"
+    - ".agentplane/tasks/202610092323-YCZ38R/quality/20261009-233407417-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610092323-YCZ38R/quality/20261009-233407417-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610092323-YCZ38R/quality/20261009-233407417-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610092323-YCZ38R/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610092323-YCZ38R/evidence/verification.json"
+  findings:
+    - "Semantic production and final test hashes bind519accepted current-source related cases20fresh24Chromium to exactSHA. All3entire modules actual Istanbul100all-four/current-source/complete-map/zero-negative; initial2fresh failures repaired and final7typed context calls rechecked,partial threshold exits recorded honestly."
+    - "Original direct SET item admission and native empty vertical/NONE versus TOP1 follow pinned mapper/i8855 source.636old tests byte-identical and one exact prior R12SRT empty-token migration;6canonical histories preserved. Registered IO exceptions unchanged,statics9restored metadata pass."
+commit:
+  hash: "2cf3f579c22c5004fe80ae79137d8cd5e5f2c63a"
+  message: "🚧 YCZ38R writer: export original row and cell native items"
 comments:
   -
     author: "CODER"
     body: "Start: remove row/cell XML scalar projection and restore pinned native empty orientation contract; standing iterative authorization, current writer checkout."
+  -
+    author: "CODER"
+    body: "Start: bind original row and cell XML implementation before exact-SHA quality."
 events:
   -
     type: "status"
@@ -41,8 +63,27 @@ events:
     author: "CODER"
     state: "ok"
     note: "Original row/cell XML and native empty/NONE/TOP verified519related20fresh24Chromium,3whole modules actual Istanbul100all-four zero-negative/current-source/map,9metadata/statics pass and original history preserved."
+  -
+    type: "status"
+    at: "2026-10-09T23:33:38.419Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+    note: "Start: bind original row and cell XML implementation before exact-SHA quality."
+  -
+    type: "verify"
+    at: "2026-10-09T23:33:39.409Z"
+    author: "CODER"
+    state: "ok"
+    note: "Exact semantic verified519related20fresh24Chromium,3whole modules actual Istanbul100all-four/current-source/map/zero-negative,9metadata/statics and historical preservation. Same-agent non-independent quality follows."
+  -
+    type: "verify"
+    at: "2026-10-09T23:34:25.235Z"
+    author: "CODER"
+    state: "ok"
+    note: "Refreshed after exact-SHA same-agent non-independent quality pass2cf3f579.519related20fresh24Chromium,3whole modules100all-four/current-source/complete-map/zero-negatives,9metadata/statics,preserved637oldcontracts and6histories,reference restored."
 doc_version: 3
-doc_updated_at: "2026-10-09T23:33:06.026Z"
+doc_updated_at: "2026-10-09T23:34:25.288Z"
 doc_updated_by: "CODER"
 description: "Correction2/10 after BZQGYC: remove row/cell GetFormat from Writer XML, direct SET height/split/box/orientation, native NONE empty/TOP1 and table unknown empty mapping with self-package import. Preserve registered IO deviations and historical inventory/test contracts except exact source-backed migrations."
 sections:
@@ -88,9 +129,72 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-10-09T23:33:39.409Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Exact semantic verified519related20fresh24Chromium,3whole modules actual Istanbul100all-four/current-source/map/zero-negative,9metadata/statics and historical preservation. Same-agent non-independent quality follows.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T23:33:38.419Z, excerpt_hash=sha256:906a832f01d072e15d4fa1d5d5371b4a28ad80c41f601792194990c595b18678
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610092323-YCZ38R/blueprint/resolved-snapshot.json
+    - old_digest: 37ea6acf6042ed9be586896023eb4cb13932bc349a94a07d74039aa723a57cae
+    - current_digest: 37ea6acf6042ed9be586896023eb4cb13932bc349a94a07d74039aa723a57cae
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610092323-YCZ38R
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610092323-YCZ38R --result verified-202610092323-YCZ38R --commit 2cf3f579c22c5004fe80ae79137d8cd5e5f2c63a
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-10-09T23:34:25.235Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Refreshed after exact-SHA same-agent non-independent quality pass2cf3f579.519related20fresh24Chromium,3whole modules100all-four/current-source/complete-map/zero-negatives,9metadata/statics,preserved637oldcontracts and6histories,reference restored.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T23:34:24.844Z, excerpt_hash=sha256:906a832f01d072e15d4fa1d5d5371b4a28ad80c41f601792194990c595b18678
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610092323-YCZ38R/blueprint/resolved-snapshot.json
+    - old_digest: 37ea6acf6042ed9be586896023eb4cb13932bc349a94a07d74039aa723a57cae
+    - current_digest: 37ea6acf6042ed9be586896023eb4cb13932bc349a94a07d74039aa723a57cae
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610092323-YCZ38R
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610092323-YCZ38R --result verified-202610092323-YCZ38R --commit 2cf3f579c22c5004fe80ae79137d8cd5e5f2c63a
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only the scoped semantic commit if original item XML behavior regresses; preserve existing task histories and unrelated changes. No destructive reset, merge, network, publication or subagents."
-  Findings: "Initial510case85file profile:508pass2freshfail; correct source-defined0.99pt border token and native FULL table initialization after empty enum ignored. Failed-only2/2 closure pass;10 previous passing excluded. Added related txtimp module2cases and new shared contexts7cases,all9pass. Current complete identical-map production aggregation100all-four (362lines382statements76functions469branches),zero negatives. Format/lint pass. TS7 rejects two fresh direct endFastElement calls with an argument where concrete override accepts none; remove unused argument and verify those7 changed fresh call-site cases, then remaining static/browser checks. Production unchanged, old637testfiles preserved except exact one R12SRT token migration. Sixcanonical histories retained; metadata/quality pending."
+  Findings: |-
+    Initial510case85file profile:508pass2freshfail; correct source-defined0.99pt border token and native FULL table initialization after empty enum ignored. Failed-only2/2 closure pass;10 previous passing excluded. Added related txtimp module2cases and new shared contexts7cases,all9pass. Current complete identical-map production aggregation100all-four (362lines382statements76functions469branches),zero negatives. Format/lint pass. TS7 rejects two fresh direct endFastElement calls with an argument where concrete override accepts none; remove unused argument and verify those7 changed fresh call-site cases, then remaining static/browser checks. Production unchanged, old637testfiles preserved except exact one R12SRT token migration. Sixcanonical histories retained; metadata/quality pending.
+
+    Final statics/build and24Chromium pass; final7typed shared call-site cases pass,raw1onlypartial coverage. Restored metadata9/9pass,doctor0errors2historicalwarnings(outside scope). Exact semantic2cf3f579c22c5004fe80ae79137d8cd5e5f2c63a reviewed by same implementing agent in EVALUATOR role,explicitly non-independent,verdictpass; semantic source/final-test hashes match actual current maps/reports. No scope drift,IO changes or whole-module promotion. Canonical finish with concrete result follows refreshed verification persistence; avoids known generic completion-subject failure.
 id_source: "generated"
 ---
 ## Summary
@@ -147,6 +251,66 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-10-09T23:33:39.409Z — VERIFY — ok
+
+By: CODER
+
+Note: Exact semantic verified519related20fresh24Chromium,3whole modules actual Istanbul100all-four/current-source/map/zero-negative,9metadata/statics and historical preservation. Same-agent non-independent quality follows.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T23:33:38.419Z, excerpt_hash=sha256:906a832f01d072e15d4fa1d5d5371b4a28ad80c41f601792194990c595b18678
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610092323-YCZ38R/blueprint/resolved-snapshot.json
+- old_digest: 37ea6acf6042ed9be586896023eb4cb13932bc349a94a07d74039aa723a57cae
+- current_digest: 37ea6acf6042ed9be586896023eb4cb13932bc349a94a07d74039aa723a57cae
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610092323-YCZ38R
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610092323-YCZ38R --result verified-202610092323-YCZ38R --commit 2cf3f579c22c5004fe80ae79137d8cd5e5f2c63a
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-09T23:34:25.235Z — VERIFY — ok
+
+By: CODER
+
+Note: Refreshed after exact-SHA same-agent non-independent quality pass2cf3f579.519related20fresh24Chromium,3whole modules100all-four/current-source/complete-map/zero-negatives,9metadata/statics,preserved637oldcontracts and6histories,reference restored.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T23:34:24.844Z, excerpt_hash=sha256:906a832f01d072e15d4fa1d5d5371b4a28ad80c41f601792194990c595b18678
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610092323-YCZ38R/blueprint/resolved-snapshot.json
+- old_digest: 37ea6acf6042ed9be586896023eb4cb13932bc349a94a07d74039aa723a57cae
+- current_digest: 37ea6acf6042ed9be586896023eb4cb13932bc349a94a07d74039aa723a57cae
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610092323-YCZ38R
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610092323-YCZ38R --result verified-202610092323-YCZ38R --commit 2cf3f579c22c5004fe80ae79137d8cd5e5f2c63a
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -156,3 +320,5 @@ Revert only the scoped semantic commit if original item XML behavior regresses; 
 ## Findings
 
 Initial510case85file profile:508pass2freshfail; correct source-defined0.99pt border token and native FULL table initialization after empty enum ignored. Failed-only2/2 closure pass;10 previous passing excluded. Added related txtimp module2cases and new shared contexts7cases,all9pass. Current complete identical-map production aggregation100all-four (362lines382statements76functions469branches),zero negatives. Format/lint pass. TS7 rejects two fresh direct endFastElement calls with an argument where concrete override accepts none; remove unused argument and verify those7 changed fresh call-site cases, then remaining static/browser checks. Production unchanged, old637testfiles preserved except exact one R12SRT token migration. Sixcanonical histories retained; metadata/quality pending.
+
+Final statics/build and24Chromium pass; final7typed shared call-site cases pass,raw1onlypartial coverage. Restored metadata9/9pass,doctor0errors2historicalwarnings(outside scope). Exact semantic2cf3f579c22c5004fe80ae79137d8cd5e5f2c63a reviewed by same implementing agent in EVALUATOR role,explicitly non-independent,verdictpass; semantic source/final-test hashes match actual current maps/reports. No scope drift,IO changes or whole-module promotion. Canonical finish with concrete result follows refreshed verification persistence; avoids known generic completion-subject failure.
