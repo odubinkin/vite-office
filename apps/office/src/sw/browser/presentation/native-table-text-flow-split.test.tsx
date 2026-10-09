@@ -24,7 +24,7 @@ function fixture(selected = false, split?: boolean) {
   const submit = vi.fn(),
     cancel = vi.fn();
   const input = new SfxItemSet(doc.GetAttrPool(), [[1, 32767]]);
-  input.PutSet(nativeTableInputForTest(table));
+  input.PutSet(nativeTableInputForTest(table, selected ? [box] : undefined));
   input.Put(table.GetFrameFormat().GetAttrSet().Get(120));
   render(
     <WriterTableDialog

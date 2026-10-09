@@ -10,7 +10,7 @@ import { SfxStringItem } from "../../../../svl/source/items/stritem";
 import { SwFormatLayoutSplit } from "../../../inc/fmtlsplt";
 import { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
 import { SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";
-import { RES_UL_SPACE, RES_LAYOUT_SPLIT } from "../../../inc/hintids";
+import { RES_UL_SPACE, RES_LAYOUT_SPLIT, RES_ROW_SPLIT } from "../../../inc/hintids";
 import { FN_TABLE_REP, FN_PARAM_TABLE_NAME, FN_PARAM_TABLE_HEADLINE } from "../../../inc/cmdid";
 import { SwPtrItem } from "../../uibase/utlui/uiitems";
 
@@ -49,7 +49,10 @@ export class SwTextFlowPage {
         : ((
             input.GetItemIfSet(RES_LAYOUT_SPLIT, false) as SwFormatLayoutSplit | undefined
           )?.GetValue() ?? true);
-    this.originalRowSplit = GetSwRowSplit(table, selectedBoxes)?.GetValue();
+    this.originalRowSplit =
+      input === undefined
+        ? GetSwRowSplit(table, selectedBoxes)?.GetValue()
+        : (input.GetItemIfSet(RES_ROW_SPLIT, false) as SwFormatRowSplit | undefined)?.GetValue();
     this.Reset();
   }
   /** Restores source checkbox/count widgets and their saved values. @returns Nothing. */

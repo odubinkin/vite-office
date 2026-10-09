@@ -65,6 +65,7 @@ export function TableParamToItemSet(shell: SwFEShell): SfxItemSet {
   const value = new SfxItemSet(shell.GetDoc().GetAttrPool(), [
     [RES_BOX, RES_BOX],
     [RES_LAYOUT_SPLIT, RES_LAYOUT_SPLIT],
+    [RES_ROW_SPLIT, RES_ROW_SPLIT],
     [RES_COLLAPSING_BORDERS, RES_COLLAPSING_BORDERS],
     [SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER],
   ]);
@@ -93,6 +94,8 @@ export function TableParamToItemSet(shell: SwFEShell): SfxItemSet {
         info.SetValid(SvxBoxInfoItemValidFlags.DISABLE, !selected || !shell.IsTableMode());
         value.Put(info);
         shell.GetTabBorders(value);
+        const rowSplit = shell.GetRowSplit();
+        if (rowSplit !== undefined) value.Put(rowSplit);
         return value;
       } finally {
         if (!selected) {

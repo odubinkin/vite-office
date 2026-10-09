@@ -6,7 +6,8 @@ import {
 } from "../editeng/source/items/frmitems";
 import { SfxItemSet } from "../svl/source/items/itemset";
 import { SID_ATTR_BORDER_INNER } from "../svx/inc/svxids";
-import { RES_BOX } from "../sw/inc/hintids";
+import { GetSwRowSplit } from "../sw/source/core/docnode/ndtbl1";
+import { RES_BOX, RES_ROW_SPLIT } from "../sw/inc/hintids";
 import type { SwTableBoxFormat } from "../sw/source/core/table/swtable";
 import type { SwFormatVertOrient } from "../sw/inc/fmtornt";
 import type { SwDoc } from "../sw/source/core/doc/doc";
@@ -111,6 +112,7 @@ export function nativeTableInputForTest(
   const doc = table.GetTableNode().GetDoc(),
     result = new SfxItemSet(doc.GetAttrPool(), [
       [RES_BOX, RES_BOX],
+      [RES_ROW_SPLIT, RES_ROW_SPLIT],
       [SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER],
     ]);
   const info = new SvxBoxInfoItem(SID_ATTR_BORDER_INNER);
@@ -119,6 +121,8 @@ export function nativeTableInputForTest(
   info.SetMinDist(true);
   info.SetDefDist(28);
   result.Put(info);
+  const rowSplit = GetSwRowSplit(table, selectedBoxes);
+  if (rowSplit !== undefined) result.Put(rowSplit);
   const boxes =
     selectedBoxes ??
     table.GetTabLines().flatMap(
