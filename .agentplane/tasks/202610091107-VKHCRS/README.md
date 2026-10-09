@@ -1,10 +1,11 @@
 ---
 id: "202610091107-VKHCRS"
 title: "Assess complete TypeScript 7 migration before branch synchronization"
-status: "DOING"
+result_summary: "Assessment complete: full TS7 transition blocked by typescript-eslint and legacy compiler API consumers; preserve TS6."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
     - "scripts/libreoffice-inventory/runtime-inventory.ts"
   findings:
     - "Stable TS7 exists, but current and latest typescript-eslint exclude it and repository AST tools require TS6 APIs."
-commit: null
+commit:
+  hash: "b3af6b2a8a16856e2c17fca0c715a12f7dee2812"
+  message: "🧩 VKHCRS task: record complete TypeScript 7 migration blockers"
 comments:
   -
     author: "CODER"
     body: "Start: assess complete TypeScript 7 compatibility before merging main back into Writer and Calc."
+  -
+    author: "CODER"
+    body: "Verified: complete TypeScript 7 feasibility assessed against stable package metadata and required tooling; legacy compiler API and lint peer constraints block complete migration, so dependencies remain unchanged."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Assessment verified using npm metadata, official documentation, repository configs and legacy API consumers. Complete migration blocked by required tooling; dependencies preserved."
+  -
+    type: "status"
+    at: "2026-10-09T11:09:15.903Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: complete TypeScript 7 feasibility assessed against stable package metadata and required tooling; legacy compiler API and lint peer constraints block complete migration, so dependencies remain unchanged."
 doc_version: 3
-doc_updated_at: "2026-10-09T11:09:01.337Z"
+doc_updated_at: "2026-10-09T11:09:15.906Z"
 doc_updated_by: "CODER"
 description: "User requests a complete TypeScript 7 migration on main only if no blockers exist. Assess stable compiler availability, repository configuration, and required tooling API compatibility. Record concrete blockers or perform and fully verify a compatible migration before main is merged back into writer and calc."
 sections:
@@ -136,6 +149,10 @@ sections:
     - Decision: do not change dependencies under the user condition. Continue the original branch synchronization after full verification.
     Sources: https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/ and https://typescript-eslint.io/users/dependency-versions/.
     No runtime or dependency files were modified.
+extensions:
+  implementation_commit:
+    hash: "9d766da3e784d17d424cfa70f2374c8acffa54f3"
+    message: "🧩 E75DEZ integrate: merge Calc development into main"
 id_source: "generated"
 ---
 ## Summary
