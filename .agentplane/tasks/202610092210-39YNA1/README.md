@@ -1,10 +1,11 @@
 ---
 id: "202610092210-39YNA1"
 title: "Normalize native column width through the original frame-size item"
-status: "DOING"
+result_summary: "verified-202610092210-39YNA1"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 20
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-09T22:25:49.421Z"
+  updated_at: "2026-10-09T22:27:19.532Z"
   updated_by: "CODER"
-  note: "Exact semantic SHA7558fc6813581fa0c7a244bcf31f8bd1a8ccd163 same-agent/non-independent qualityPASS.88files/572latest cases including9fresh pass; whole current ndtbl.ts actual Istanbul163lines/179statements/22functions/95branches100,complete identical maps/current hash/zero negatives.9absent statics/currentbuild/7browser(3mouse-column) and9restored metadata pass.629old baseline:627unchanged/2files4precise source-backed migrations/2canonical prefixes. Native frame-only normalization no scalar calls; generic empty history and inherited parent export remain explicit follow-ups. Full not due9of10;goal active."
+  note: "verified-202610092210-39YNA1"
   attempts: 0
 quality_review:
   state: "pass"
@@ -51,6 +52,9 @@ comments:
   -
     author: "CODER"
     body: "Start: verified native frame-only normalization semantic SHA 7558fc6813581fa0c7a244bcf31f8bd1a8ccd163 is bound; exact-SHA quality and final verification persistence precede canonical finish."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610092210-39YNA1. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -72,8 +76,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Exact semantic SHA7558fc6813581fa0c7a244bcf31f8bd1a8ccd163 same-agent/non-independent qualityPASS.88files/572latest cases including9fresh pass; whole current ndtbl.ts actual Istanbul163lines/179statements/22functions/95branches100,complete identical maps/current hash/zero negatives.9absent statics/currentbuild/7browser(3mouse-column) and9restored metadata pass.629old baseline:627unchanged/2files4precise source-backed migrations/2canonical prefixes. Native frame-only normalization no scalar calls; generic empty history and inherited parent export remain explicit follow-ups. Full not due9of10;goal active."
+  -
+    type: "verify"
+    at: "2026-10-09T22:27:19.532Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610092210-39YNA1"
+  -
+    type: "status"
+    at: "2026-10-09T22:27:19.634Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610092210-39YNA1. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-09T22:25:49.474Z"
+doc_updated_at: "2026-10-09T22:28:22.409Z"
 doc_updated_by: "CODER"
 description: "Correction9of10: replace SetSwTabCols scalar table-format normalization with effective original SwFormatFrameSize clone and width-only SetFormatAttr, matching pinned ndtbl.cxx2871..2922. Preserve original direct/inherited table items, frame-size context and original graph/history. One production ndtbl.ts, fresh native/mounted tests, exact stale scalar-call fixture migration only, existing2canonical ndtbl records/parent Findings and bounded English evidence. No upstream copies/helpers in AgentPlane; tests/statics upstream physically absent; final whole changed module Istanbul100 all four dimensions/current maps/zero negatives. Focused and related only; full not due."
 sections:
@@ -119,6 +136,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-10-09T22:27:19.532Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610092210-39YNA1
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T22:25:49.474Z, excerpt_hash=sha256:5c80b4b0e0ef57501c301702952fc06c30fda9aec73be0252e3455bb55fa3251
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610092210-39YNA1/blueprint/resolved-snapshot.json
+    - old_digest: 92791c6ba4ae4e0ec0120b6e10b2e5ec06d942067e6272221201e5f1d7afffa3
+    - current_digest: 92791c6ba4ae4e0ec0120b6e10b2e5ec06d942067e6272221201e5f1d7afffa3
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610092210-39YNA1
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610092210-39YNA1 --result verified-202610092210-39YNA1 --commit 7558fc6813581fa0c7a244bcf31f8bd1a8ccd163
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert this task semantic commit only; retain task traceability and all earlier canonical histories."
   Findings: |-
@@ -141,6 +188,8 @@ sections:
     Final checks: All9 upstream-absent statics/currentbuild/static-smoke/7browser pass; real mouse-column3cases at1280/390/outer-left Enter are included. All9 restored metadata pass;doctor0errors/2existing warnings. Actual final source remains53e16e7e7ad756d093c59c5d20eadb6bbb0455569952e08f03dbda1573465be6; full current module100 all4; original/source-test/canonical/parent prefixes proved. Export projection location xmlexp.ts286 and generic UndoAttrTable.RestoreAttr untbl.ts209 confirm separate follow-up causes. Bounded English evidence contains no upstream sources/helpers/Python/raw maps/logs. No full suite replay9of10.
 
     Semantic commit 7558fc6813581fa0c7a244bcf31f8bd1a8ccd163 exact-SHA same-agent/non-independent qualityPASS. Refreshed APverify, bounded evidence and quality records are persisted before canonical finish. Goal remains active/incomplete; correction9of10.
+
+    Closeout recovery: The route-emitted task complete marked the task DONE but its automatic deterministic commit failed the generic-subject policy. Retrying the emitted close command produced the same failure. The canonical finish fallback rejects an already-DONE task; close and message options are mutually exclusive. Preserve DONE and all verification evidence without force, reopening, or implementation changes; persist the active task artifact with an explicit scoped AgentPlane commit subject, then recompute the route and prove a clean repository.
 id_source: "generated"
 ---
 ## Summary
@@ -198,6 +247,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-10-09T22:27:19.532Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610092210-39YNA1
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T22:25:49.474Z, excerpt_hash=sha256:5c80b4b0e0ef57501c301702952fc06c30fda9aec73be0252e3455bb55fa3251
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610092210-39YNA1/blueprint/resolved-snapshot.json
+- old_digest: 92791c6ba4ae4e0ec0120b6e10b2e5ec06d942067e6272221201e5f1d7afffa3
+- current_digest: 92791c6ba4ae4e0ec0120b6e10b2e5ec06d942067e6272221201e5f1d7afffa3
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610092210-39YNA1
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610092210-39YNA1 --result verified-202610092210-39YNA1 --commit 7558fc6813581fa0c7a244bcf31f8bd1a8ccd163
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -225,3 +304,5 @@ Final runtime closure: Last two failed fresh files9cases all pass. Current-sourc
 Final checks: All9 upstream-absent statics/currentbuild/static-smoke/7browser pass; real mouse-column3cases at1280/390/outer-left Enter are included. All9 restored metadata pass;doctor0errors/2existing warnings. Actual final source remains53e16e7e7ad756d093c59c5d20eadb6bbb0455569952e08f03dbda1573465be6; full current module100 all4; original/source-test/canonical/parent prefixes proved. Export projection location xmlexp.ts286 and generic UndoAttrTable.RestoreAttr untbl.ts209 confirm separate follow-up causes. Bounded English evidence contains no upstream sources/helpers/Python/raw maps/logs. No full suite replay9of10.
 
 Semantic commit 7558fc6813581fa0c7a244bcf31f8bd1a8ccd163 exact-SHA same-agent/non-independent qualityPASS. Refreshed APverify, bounded evidence and quality records are persisted before canonical finish. Goal remains active/incomplete; correction9of10.
+
+Closeout recovery: The route-emitted task complete marked the task DONE but its automatic deterministic commit failed the generic-subject policy. Retrying the emitted close command produced the same failure. The canonical finish fallback rejects an already-DONE task; close and message options are mutually exclusive. Preserve DONE and all verification evidence without force, reopening, or implementation changes; persist the active task artifact with an explicit scoped AgentPlane commit subject, then recompute the route and prove a clean repository.
