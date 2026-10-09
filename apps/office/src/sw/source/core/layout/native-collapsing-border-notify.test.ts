@@ -81,7 +81,7 @@ it("default native table construction and borrowed deltas retain pool and Which 
     f.table
       .GetFrameFormat()
       .CallSwClientNotify(new LegacyModifyHint(new SvxBoxItem(RES_BOX), undefined));
-    expect(state(f.frame)).toEqual([false, false, true, true]);
+    expect(state(f.frame)).toEqual([true, true, true, false]);
     for (const row of f.rows)
       for (const frame of frames(row)) expect(state(frame)).toEqual([true, true, true, false]);
     expect(f.frame.IsCollapsingBorders()).toBe(false);

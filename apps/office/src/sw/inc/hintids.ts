@@ -104,6 +104,9 @@ export const RES_FRM_SIZE = 90 as const;
 /** Vertical frame orientation, RES_FRMATR_BEGIN + 20. */
 export const RES_VERT_ORIENT = 109 as const;
 
+/** Native horizontal frame orientation, RES_FRMATR_BEGIN +21. */
+export const RES_HORI_ORIENT = 110 as const;
+
 /** Native four-sided box item, RES_FRMATR_BEGIN + 24. */
 export const RES_BOX = 113 as const;
 

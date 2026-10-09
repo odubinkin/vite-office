@@ -3,7 +3,7 @@ import type { SwTable, SwTableBox, SwTableLine } from "../table/swtable";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { SwFrameSize } from "../../../inc/fmtfsize";
 import { LegacyModifyHint, BroadcastingModify, type SwModify } from "../../../inc/calbck";
-import { SwFrame, SwLayoutFrame, SwFrameType, SwFrameInvFlags } from "./wsfrm";
+import { SwFrame, SwLayoutFrame, SwFrameType } from "./wsfrm";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import {
   RES_FRM_SIZE,
@@ -11,9 +11,24 @@ import {
   RES_VERT_ORIENT,
   RES_BOX,
   RES_COLLAPSING_BORDERS,
+  RES_HORI_ORIENT,
+  RES_UL_SPACE,
+  RES_BREAK,
 } from "../../../inc/hintids";
-import type { SwModelHint } from "../../../inc/hints";
+import { AttrSetChangeHint, SwAttrSetChg, type SwModelHint } from "../../../inc/hints";
 import type { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
+
+/** Native table invalidation mask from tabfrm.hxx; root browse-width propagation remains unrepresented. */
+export enum SwTabFrameInvFlags {
+  NONE = 0x00,
+  InvalidatePrt = 0x02,
+  InvalidateIndNextPrt = 0x04,
+  InvalidatePrevPrt = 0x08,
+  SetIndNextCompletePaint = 0x10,
+  InvalidateBrowseWidth = 0x20,
+  InvalidatePos = 0x40,
+  InvalidateNextPos = 0x80,
+}
 
 /** Invalidates original layout lowers for native collapsing-border recalculation. @param frame - Original layout owner. @returns Nothing. */
 function lcl_InvalidateAllLowersPrt(frame: SwLayoutFrame): void {
@@ -246,18 +261,82 @@ export class SwTabFrame extends SwLayoutFrame {
     return (this.GetFormat().GetAttrSet().Get(RES_COLLAPSING_BORDERS) as SfxBoolItem).GetValue();
   }
 
-  /** Applies represented table-specific border-mode recalculation before accumulated frame dispatch. @param oldItem - Original old item. @param newItem - Original new item. @param flags - Accumulated native flags. @returns Updated mask. */
-  protected override UpdateAttrFrame(
+  /** Routes native table deltas through copied consumption before generic residual handling. @param source - Original broadcaster. @param hint - Borrowed notification. @returns Nothing. */
+  protected override SwClientNotify(source: SwModify, hint: SwModelHint): void {
+    if (hint.kind === "model-transaction") {
+      for (const nested of hint.hints) this.SwClientNotify(source, nested);
+    } else if (hint.kind === "attr-set-change") {
+      let flags = SwTabFrameInvFlags.NONE;
+      if (hint.m_pOld && hint.m_pNew) {
+        const oldItems = hint.m_pOld.GetChgSet().entries(),
+          newItems = hint.m_pNew.GetChgSet().entries(),
+          oldSet = new SwAttrSetChg(hint.m_pOld),
+          newSet = new SwAttrSetChg(hint.m_pNew);
+        let index = 0;
+        do {
+          flags = this.UpdateAttr_(oldItems[index], newItems[index], flags, oldSet, newSet);
+          index += 1;
+        } while (index < newItems.length);
+        if (oldSet.Count() || newSet.Count())
+          super.SwClientNotify(source, new AttrSetChangeHint(oldSet, newSet));
+      }
+      this.Invalidate(flags);
+    } else if (hint.kind === "legacy-modify") {
+      this.Invalidate(this.UpdateAttr_(hint.m_pOld, hint.m_pNew, SwTabFrameInvFlags.NONE));
+    }
+  }
+
+  /** Accumulates represented native table reactions and consumes only copy-owned deltas. @param oldItem - Original previous item. @param newItem - Original accepted item. @param flags - Table mask. @param oldSet - Optional copied old descriptor. @param newSet - Optional copied new descriptor. @returns Updated table mask. */
+  protected UpdateAttr_(
     oldItem: SfxPoolItem | undefined,
     newItem: SfxPoolItem | undefined,
-    flags: SwFrameInvFlags,
-  ): SwFrameInvFlags {
+    flags: SwTabFrameInvFlags,
+    oldSet?: SwAttrSetChg,
+    newSet?: SwAttrSetChg,
+  ): SwTabFrameInvFlags {
     const which = oldItem ? oldItem.Which() : newItem ? newItem.Which() : 0;
-    if (which === RES_COLLAPSING_BORDERS) {
-      lcl_InvalidateAllLowersPrt(this);
-      return flags | SwFrameInvFlags.InvalidatePrt;
+    switch (which) {
+      case RES_FRM_SIZE:
+      case RES_HORI_ORIENT:
+        flags |= SwTabFrameInvFlags.InvalidatePrt | SwTabFrameInvFlags.InvalidateBrowseWidth;
+        break;
+      case RES_BREAK:
+        flags |= SwTabFrameInvFlags.InvalidatePos | SwTabFrameInvFlags.InvalidateNextPos;
+        break;
+      case RES_COLLAPSING_BORDERS:
+        flags |= SwTabFrameInvFlags.InvalidatePrt;
+        lcl_InvalidateAllLowersPrt(this);
+        break;
+      case RES_UL_SPACE:
+        return (
+          flags |
+          SwTabFrameInvFlags.InvalidateIndNextPrt |
+          SwTabFrameInvFlags.InvalidatePrevPrt |
+          SwTabFrameInvFlags.SetIndNextCompletePaint
+        );
+      default:
+        return flags;
     }
-    return super.UpdateAttrFrame(oldItem, newItem, flags);
+    if (oldSet || newSet) {
+      oldSet?.ClearItem(which);
+      newSet?.ClearItem(which);
+    } else super.SwClientNotify(new BroadcastingModify(), new LegacyModifyHint(oldItem, newItem));
+    return flags;
+  }
+
+  /** Applies native table flags over original flat siblings; page/content/root/section propagation remains unrepresented. @param flags - Native table mask. @returns Nothing. */
+  protected Invalidate(flags: SwTabFrameInvFlags): void {
+    if (flags === SwTabFrameInvFlags.NONE) return;
+    this.InvalidatePage();
+    if (flags & SwTabFrameInvFlags.InvalidatePrt) this.InvalidatePrt_();
+    if (flags & SwTabFrameInvFlags.InvalidatePos) this.InvalidatePos_();
+    const next = this.GetNext();
+    if (next) {
+      if (flags & SwTabFrameInvFlags.InvalidateIndNextPrt) next.InvalidatePrt_();
+      if (flags & SwTabFrameInvFlags.SetIndNextCompletePaint) next.SetCompletePaint();
+    }
+    if (flags & SwTabFrameInvFlags.InvalidatePrevPrt) this.GetPrev()?.InvalidatePrt_();
+    if (flags & SwTabFrameInvFlags.InvalidateNextPos) next?.InvalidatePos();
   }
 
   /** Returns the canonical table represented by this frame. @returns Actual owner. */

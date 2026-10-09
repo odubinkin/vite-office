@@ -14,7 +14,10 @@
       "OnFrameSize",
       "SwClientNotify",
       "IsCollapsingBorders",
-      "lcl_InvalidateAllLowersPrt"
+      "lcl_InvalidateAllLowersPrt",
+      "SwTabFrameInvFlags",
+      "UpdateAttr_",
+      "Invalidate"
     ],
     "upstreamSymbols": [
       "SwTabFrame::Format",
@@ -23,7 +26,10 @@
       "SwCellFrame::SwClientNotify",
       "SwRowFrame::OnFrameSize",
       "SwTabFrame::IsCollapsingBorders",
-      "lcl_InvalidateAllLowersPrt"
+      "lcl_InvalidateAllLowersPrt",
+      "SwTabFrame::SwClientNotify",
+      "SwTabFrame::UpdateAttr_",
+      "SwTabFrame::Invalidate"
     ],
     "preservedResponsibilities": [
       "Iteration175 native represented horizontal table print geometry: SwTabFrame Format owns twip LR/wished-width orientation spacing and minimum23 guard;root supplies actual page upper print width for each master/follow fragment. Browser consumes immutable native print bounds and scales original column reference proportions;hidden measurement uses same owner. Signed left/right margins import/export reuse current table SAX/graph owners. No model clone,TextRuns translation or new adapter. Relative-width,fly/outer-border offsets,multicolumn,vertical/RTL,nested/merged/rowspan/split-row/full layout lifecycle and complete parity remain unverified;registered IO deviations unchanged.",
@@ -47,7 +53,8 @@
       "Iteration251 restores SwTabFrame as a registered SwLayoutFrame with native Tab0x0800 and original linked nonempty SwRowFrame/SwCellFrame lowers. Width queries borrow actual linked cell formats instead of allocating another cell frame. Browser table rendering borrows one table hierarchy rather than reconstructing each row. Flow, shell geometry, split admission and dialog geometry release temporary table clients in finally; browser mouse geometry owns and releases replaced/unmounted samples and failed partial measurements. Native persistent page/root/follows/content/redline layout, native table scalar item ownership and full UI propagation remain unverified; no module or goal promotion. Existing semantic statuses/defaults/classifications and registered recovery/open/save/settings deviations retained. Targeted verification pending; last full247, no full251.",
       "Iteration251 verified closure: 232 unique targeted app cases, including 12 fresh native hierarchy/width/claim/history/empty-row/render/flow/mouse-lifetime/geometry cases, pass with no unresolved runtime failures. One approved recovery repeated 210 passing cases solely because the initial failure suppressed all V8 maps; later closures run only failed/new/previously unexecuted cases. All runtime and build checks run physically upstream absent with restoration in finally. Actual source-bound app and changed-module all-four100 coverage uses current counters plus complete unchanged function declarations/bodies/enclosing conditions/all locations from250; 310 whole unchanged app modules retain their exact maps. 506 previous app test files are byte-identical; one old width measurement case now owns/releases its native table frame while preserving the literal3000 and original-client assertions. Scoped format/lint/type/dependency/docs/size/static build, canonical registry build/scoped/global checks, provenance/tree/routing/doctor pass. Prior status/default/classification and full evidence prefixes remain; native persistent page/root/follows/content/redline/table item propagation and whole core/UI parity stay unverified. Registered recovery/open/save/settings deviations preserved; last full247, no full251.",
       "Resumed correction SV3P04 restores the represented SwRowFrame::OnFrameSize last-sibling containing-table position invalidation before forwarding the exact borrowed size/split item. FindTabFrame traverses original upper links, uses the native table type and destruction guard, and returns the nearest original table without a model or geometry map. Detached admission and uncached represented traversal are bounded; native environment-flag caching, persistent page/root/content geometry and table master/follow/flow-line families remain unrepresented and unverified. Non-last size notifications retain next-original-sibling invalidation and native generic row hint filtering remains unchanged. Seven fresh original hierarchy/destructor/order/filter/default preparation, real command/history and mounted last-row clipping cases plus related modules accept178unique scenarios:177initial passes and1new-only closure pass with4intentional passing skips, followed by178passes in one materially affected current-source revalidation after adapting the native self traversal to the declared no-this-alias lint rule. There are no runtime failures or unresolved skips; initial/closure coverage maps are retained as superseded and supply no current counters. Real Undo/Redo retargets original linked clients without inventing a size notification; node/cursor/table/row identities survive three cycles. Actual entire current-source wsfrm.ts/tabfrm.ts Istanbul274lines313statements70functions197branches is all-four100 with0negative counters from one complete current-source profile; no prior-task/V8 counters or normalization. Tests run physically upstream-absent with finally restoration. Raw superseded initial/closure partial-profile threshold exits and the resolved static lint failure stay retained in ignored cache; evidence is task202610091519-SV3P04. Old status/default/classification/responsibility/evidence prefixes and registered recovery/open/save/settings deviations are retained; no full module/goal parity promotion. Historical full XJTGF0 remains the baseline; correction5/10, next full after ten resumed executable corrections.",
-      "Resumed correction KHKG45 removes mirrored collapsing-border mode from SwTable stored scalar geometry. Existing RES_COLLAPSING_BORDERS bool132false owns direct construction/reset/transport values; GetFormat emits direct enum values only at ingress/egress, while native table frames, browser painter selection, shell ItemSet and dialog read the original effective owned/inherited/pool item. Native collapsing-mode changes recursively invalidate original linked table/row/cell print and size plus paint. Cell format replacement invalidates the containing collapsing row; RES_BOX deltas invalidate current and next row lowers, and the final row invalidates table print. Separating/detached behavior and original row hint filtering stay intact. Table-specific mode reaction uses the existing represented frame attribute dispatch hook; full native SwTabFrame UpdateAttr_ masks/copied delta forwarding and persistent page/root/content/master/follow/environment/direction/accessibility/VCL families remain unverified. Ten fresh core/default/borrowed/hierarchy/history/mounted UI cases plus related modules accept1167 distinct harness assertions across149files in the final current-source profile and one repaired native border-command history case,0runtime failures0skips. One necessary1167case production revalidation plus1 repaired history-test revalidation follows removal of the obsolete unused WriterTableDialog import rejected by lint; earlier1138initial+1default+27previously unexecuted+1bottom passes and raw partial threshold failures remain superseded evidence, never counter donors. Equal-name parameterized assertion records retain distinct per-file name ordinals. Entire five changed modules actual final-source complete-map Istanbul929lines1033statements187functions802branches is all-four100/0negative; only current and repaired same-source identical-complete-map profile counters used, with no old task/V8 counters or map/counter/location/threshold normalization. Tests run physically upstream-absent with finally restoration; raw logs/maps/helpers remain ignored cache. Canonical evidence task202610091543-KHKG45; preserve all old semantic status/default/classification/responsibility/evidence prefixes and registered recovery/open/save/settings deviations, without module/goal parity promotion. Historical full XJTGF0; correction6/10, next full after ten resumed corrections."
+      "Resumed correction KHKG45 removes mirrored collapsing-border mode from SwTable stored scalar geometry. Existing RES_COLLAPSING_BORDERS bool132false owns direct construction/reset/transport values; GetFormat emits direct enum values only at ingress/egress, while native table frames, browser painter selection, shell ItemSet and dialog read the original effective owned/inherited/pool item. Native collapsing-mode changes recursively invalidate original linked table/row/cell print and size plus paint. Cell format replacement invalidates the containing collapsing row; RES_BOX deltas invalidate current and next row lowers, and the final row invalidates table print. Separating/detached behavior and original row hint filtering stay intact. Table-specific mode reaction uses the existing represented frame attribute dispatch hook; full native SwTabFrame UpdateAttr_ masks/copied delta forwarding and persistent page/root/content/master/follow/environment/direction/accessibility/VCL families remain unverified. Ten fresh core/default/borrowed/hierarchy/history/mounted UI cases plus related modules accept1167 distinct harness assertions across149files in the final current-source profile and one repaired native border-command history case,0runtime failures0skips. One necessary1167case production revalidation plus1 repaired history-test revalidation follows removal of the obsolete unused WriterTableDialog import rejected by lint; earlier1138initial+1default+27previously unexecuted+1bottom passes and raw partial threshold failures remain superseded evidence, never counter donors. Equal-name parameterized assertion records retain distinct per-file name ordinals. Entire five changed modules actual final-source complete-map Istanbul929lines1033statements187functions802branches is all-four100/0negative; only current and repaired same-source identical-complete-map profile counters used, with no old task/V8 counters or map/counter/location/threshold normalization. Tests run physically upstream-absent with finally restoration; raw logs/maps/helpers remain ignored cache. Canonical evidence task202610091543-KHKG45; preserve all old semantic status/default/classification/responsibility/evidence prefixes and registered recovery/open/save/settings deviations, without module/goal parity promotion. Historical full XJTGF0; correction6/10, next full after ten resumed corrections.",
+      "Resumed correction BJCYQ3 restores source-shaped SwTabFrame SwClientNotify/UpdateAttr_/Invalidate in place of its generic frame border override. Original table flags retain native numeric values; size/orientation batches clear handled items from copied descriptors and invalidate table print only, while handled legacy items forward the borrowed original items to the generic base. Collapsing changes recursively invalidate original linked lowers, spacing invalidates previous/next flat sibling print and paints the next, and break invalidates current/next position. UL-space remains in copied residual deltas; unrelated legacy/default format hints are ignored by the table, while unconsumed batch attributes forward independent copy-owned deltas without changing original descriptors/items/owners. Canonical RES_HORI_ORIENT110 is declared in hintids, not a private duplicate or fake value. Native page/root browse-width/content-specific page dispatch and master/follow/section traversal, page-description/direction/layout-follow families remain unrepresented/unverified; browse-width flag numeric/generation contract is represented, its native root consumer is not. Actual152file upstream-absent profile1181pass1fresh expected-forwarding failure0skip; failed-only closure1pass12intentional skips. Final1182distinct cases15fresh all pass,0passing replay, both entire current production modules actual identical complete-map Istanbul241lines268statements26functions148branches all-four100/0negative, no old task/V8 counters or map/counter/location/threshold normalization. One old legacy RES_BOX expectation changes only from generic invalidation to native no-forwarding geometry preservation, exactly justified by pinned UpdateAttr_ default bClear=false; all other old assertions retained. Three actual history cycles and mounted native command/item behavior preserve original node/cursor/frame owners. Four canonical old value/status/default/classification/evidence/responsibility prefixes and registered recovery/open/save/settings deviations preserved without module/goal parity promotion. Evidence task202610091623-BJCYQ3 contains only bounded English counts/commands/hashes/IDs; raw initial/fresh fixture failures/maps/logs/helpers stay ignored cache, finally reference restored. Goal active correction7/10 since XJTGF0, next full after10."
     ],
     "omittedResponsibilities": [
       "Complete native layout frame construction,fly/border offsets,vertical/RTL/merged/nested/rowspan/split-row and relative-width semantics remain unverified."
@@ -217,6 +224,22 @@
         {
           "path": "apps/office/src/sw/source/core/layout/tabfrm.ts",
           "marker": "IsCollapsingBorders"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/layout/native-table-attr-notify.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/undo/native-table-attr-notify.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/native-table-attr-notify.test.tsx",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/layout/tabfrm.ts",
+          "marker": "UpdateAttr_"
         }
       ],
       "upstream": [
@@ -307,6 +330,30 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/uibase/shells/tabsh.cxx",
           "marker": "RES_COLLAPSING_BORDERS"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/tabfrm.cxx",
+          "marker": "SwTabFrame::SwClientNotify"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/tabfrm.cxx",
+          "marker": "SwTabFrame::UpdateAttr_"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/tabfrm.cxx",
+          "marker": "SwTabFrame::Invalidate"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/inc/tabfrm.hxx",
+          "marker": "SwTabFrameInvFlags"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/hintids.hxx",
+          "marker": "RES_HORI_ORIENT"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/inc/frame.hxx",
+          "marker": "InvalidateNextPos"
         }
       ]
     },
