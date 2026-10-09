@@ -1,10 +1,11 @@
 ---
 id: "202610091543-KHKG45"
 title: "Make collapsing table borders native item-owned through layout and UI"
-status: "DOING"
+result_summary: "Native collapsing table borders use original item ownership and linked frame invalidation through browser dialog and shell"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 21
+revision: 22
 origin:
   system: "manual"
 depends_on: []
@@ -52,6 +53,9 @@ comments:
   -
     author: "CODER"
     body: "Implementation: native item-owned collapsing borders and original layout/UI reactions committed;1167cases149files10fresh, entire5modules Istanbul100 and static/metadata/preservation gates verified; remaining same-agent quality/closeout."
+  -
+    author: "CODER"
+    body: "Verified: native collapsing table borders now use original item ownership and source-linked layout/UI reactions;1167cases149files10fresh, complete5modules Istanbul100, static/metadata/preservation gates and semantic-bound same-agent non-independent quality pass. Clean tracked state, ignored upstream restored; correction6/10, broad goal active."
 events:
   -
     type: "status"
@@ -73,8 +77,15 @@ events:
     from: "DOING"
     to: "DOING"
     note: "Implementation: native item-owned collapsing borders and original layout/UI reactions committed;1167cases149files10fresh, entire5modules Istanbul100 and static/metadata/preservation gates verified; remaining same-agent quality/closeout."
+  -
+    type: "status"
+    at: "2026-10-09T16:17:34.221Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native collapsing table borders now use original item ownership and source-linked layout/UI reactions;1167cases149files10fresh, complete5modules Istanbul100, static/metadata/preservation gates and semantic-bound same-agent non-independent quality pass. Clean tracked state, ignored upstream restored; correction6/10, broad goal active."
 doc_version: 3
-doc_updated_at: "2026-10-09T16:17:13.451Z"
+doc_updated_at: "2026-10-09T16:17:34.222Z"
 doc_updated_by: "CODER"
 description: "Correction6/10 after XJTGF0: eliminate mirrored collapsing-border mode from SwTable scalar geometry, use existing native RES_COLLAPSING_BORDERS item in table frame and browser/dialog/shell consumers, restore source row/cell border invalidation and verify real history/UI."
 sections:
