@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "task_id": "202610090338-81YWQB",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-09T04:05:30.198Z",
+  "verdict": "pass",
+  "summary": "Current agent non-independent EVALUATOR reviewed actual implementation 1b86332f7b8ffeaef9df78935d6a7d845eda4aca; four source/counter/runtime/scope certificates reconstructed byte-identically.",
+  "evaluated_sha": "1b86332f7b8ffeaef9df78935d6a7d845eda4aca",
+  "blueprint_digest": "b120bb12f8b1fab990855fd601531300bff15a337529007153fbab4a2993a5ae",
+  "findings": [
+    "Native independent Svt format channel preserves original hints, Writer-first order and final Writer-client format lifetime; generic attribute device bridge removed; actual main UI/store/history/cleanup verified.",
+    "1596 unique app cases including18fresh and13Chromium; all-four100 actual source-bound coverage; no unchanged passing replay.662old files exact,1scoped native contract migration;318old metadata semantics retained plus3unverified modules."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610090338-81YWQB/README.md",
+    ".agentplane/tasks/202610090338-81YWQB/evidence/semantic-review.json",
+    ".agentplane/tasks/202610090338-81YWQB/evidence/final-coverage.json",
+    ".agentplane/tasks/202610090338-81YWQB/evidence/runtime-census.json",
+    ".agentplane/tasks/202610090338-81YWQB/evidence/scope-integrity.json",
+    ".agentplane/tasks/202610090338-81YWQB/evidence/native-source-review.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Full native linked/layout/VCL client integration, silent raw shared ClaimFrameFormat before document invalidation and native address/storage/performance boundaries remain unverified. Broad goal active/incomplete; full suite next247."
+  ]
+}

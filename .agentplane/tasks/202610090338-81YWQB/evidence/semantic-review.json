@@ -1,0 +1,131 @@
+{
+  "reviewer": "Current agent sequential EVALUATOR role; explicitly non-independent, no subagent review claimed",
+  "actualImplementationCommit": "1b86332f7b8ffeaef9df78935d6a7d845eda4aca",
+  "actualCommittedPaths": [
+    {
+      "path": "apps/office/src/svl/source/notify/broadcast.ts",
+      "sha256": "f9abe4fa558f44d571f9616f16519c62a1daa054ee5674d27f9ba41f040d4c77",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/svl/source/notify/listener.ts",
+      "sha256": "1a4d397aea1ae7b226a8a45429b4948ba6d904608e7aa830cea1f020fa378a32",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/inc/calbck.ts",
+      "sha256": "bdacd480e4029353683ae35792d83fb2347fdd4d273333f9b3f8198ddc9cdc57",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/attr/format.ts",
+      "sha256": "f148b55ac02e2d3c2e3666f142eec151b91adc50317f6a1e4237e8db5718b168",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/writer-view-projection.ts",
+      "sha256": "b7ddb9d3dc48158d45df78f5b63658fadd46de9cadc572a99c6a6e39542866cc",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/writer-native-format-observer.ts",
+      "sha256": "d031653626f8972b5ce2e3f19fa58830f746bb68a7738a87c1eaf0efe8a151a2",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/layout/tabfrm.ts",
+      "sha256": "1b39ba0ee69a76c91e27e797a7880668e6722771bce69715599353f4394aeb60",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/table/swtable.ts",
+      "sha256": "b0ea03bad983f666eb32fe80ff637daceac0783d62a8ff100e0fe28d0a292866",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/untbl.ts",
+      "sha256": "e41c1c4f77fa0aa6b9c2b5c9c671913a42ba0816cf8145d0b1d8869a8826e7d8",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/attr/native-format-attribute-notify.test.ts",
+      "sha256": "639eea564293d1ec42d63e39be77bbfbe2ddb8ea971ec47b2e1276ebca168acc",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/svl/source/notify/native-svt-notifier.test.ts",
+      "sha256": "6dd0cf8ec5f7afc799b530624ef31365bf0a1f1b4b09b8a2b09ed5f11ecec4db",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/native-format-notifier-store.test.ts",
+      "sha256": "def6ea638894d9fea936c1d9f2c7683bd1b286218f2b6a53192f0b1a32f299c5",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/native-format-notifier.test.tsx",
+      "sha256": "dcb4817f842ce46e292a1d8e1647640c9a0ad31d1d97673e2cf54a1b86a0744e",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "docs/program/source-provenance.json",
+      "sha256": "2db71604e2c6f927957fdbafd98644c1086b1045073d95838ab987d37ad42679",
+      "actualCommittedBytes": true
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "sha256": "16e98f8d684f750b8cd6c3b0a063845b6f8a0b4b428d1447218106befa7ab5b5",
+      "actualCommittedBytes": true
+    }
+  ],
+  "certificateReconstruction": [
+    {
+      "identifier": "final-coverage.json",
+      "sha256": "51d85edc9ce227c043bfd6ea5894324b8656be5e12dab04b28815dd2813cbde8",
+      "byteIdentical": true
+    },
+    {
+      "identifier": "runtime-census.json",
+      "sha256": "e40be85be6dec3633abbdeea27c3fc0f77a1df9fc5175ff7931320683f70fc8e",
+      "byteIdentical": true
+    },
+    {
+      "identifier": "scope-integrity.json",
+      "sha256": "7a77a77cfe87eda3a4bb7db85d7fad61f494389c076bf66fb9b61bce055758a7",
+      "byteIdentical": true
+    },
+    {
+      "identifier": "native-source-review.json",
+      "sha256": "96d01d6638d30e905a88f35007d963439a04dc9c5fe7ceb0a517645cdd909fe9",
+      "byteIdentical": true
+    }
+  ],
+  "reconstructions": [
+    {
+      "identifier": "coverage",
+      "exit": 0,
+      "outputSHA256": "7026845f2079021b87f6c50605a6ea31bfc8a74218e7cd2dddb1879641b8e0c3"
+    },
+    {
+      "identifier": "runtime",
+      "exit": 0,
+      "outputSHA256": "46ab444faf32b0562ac29726d39927960c24a9ba258b0b2deecdd8e5e94afc3d"
+    },
+    {
+      "identifier": "scope",
+      "exit": 0,
+      "outputSHA256": "4fa95ff6eeb01a8be707f69898f5d2873706d4f8a1c145b04fb677e682e28f97"
+    },
+    {
+      "identifier": "source",
+      "exit": 0,
+      "outputSHA256": "05b9569d4a632b30bb7800ff784f7f15fba3122f01146fd927b2c09c1ae6651f"
+    }
+  ],
+  "verdict": "pass",
+  "findings": [
+    "Native independent Svt format notifier channel, original hint ordering and Writer client lifetime match represented source contracts. Generic format attribute device bridge removed. Direct native UI/store updates and original history/deletion/replacement/cleanup verified without upstream runtime.",
+    "1596unique app cases including18fresh,13Chromium,zero unchanged passing replay. Raw threshold exits/skips retained; actual all-four100 coverage with source/map proofs.662old files exact,1scoped native contract migration,3fresh files;318old metadata semantics retained plus3unverified new modules.",
+    "Complete native linked/layout/VCL client infrastructure, silent raw shared ClaimFrameFormat before document invalidation, actual pointer/cache optimizations and full upstream parity remain unverified. Goal remains active/incomplete; full suite next247."
+  ]
+}

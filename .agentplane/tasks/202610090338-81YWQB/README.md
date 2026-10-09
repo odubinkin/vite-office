@@ -4,7 +4,7 @@ title: "Connect Writer UI to native format notifiers and remove generic attribut
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,32 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-09T04:05:31.174Z"
+  updated_by: "CODER"
+  note: "Actual implementation1b86332f7b8ffeaef9df78935d6a7d845eda4aca verified:1596unique app18fresh13Chromium; all-four100 source-bound app/inventory; six statics/build/source/artifact gates; four non-independent EVALUATOR certificates identical. Upstream absent/restored; no unchanged passing replay; full next247."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-09T04:05:30.198Z"
+  updated_by: "EVALUATOR"
+  note: "Current agent non-independent EVALUATOR reviewed actual implementation 1b86332f7b8ffeaef9df78935d6a7d845eda4aca; four source/counter/runtime/scope certificates reconstructed byte-identically."
+  evaluated_sha: "1b86332f7b8ffeaef9df78935d6a7d845eda4aca"
+  blueprint_digest: "b120bb12f8b1fab990855fd601531300bff15a337529007153fbab4a2993a5ae"
+  evidence_refs:
+    - ".agentplane/tasks/202610090338-81YWQB/README.md"
+    - ".agentplane/tasks/202610090338-81YWQB/quality/20261009-040530198-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610090338-81YWQB/quality/20261009-040530198-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610090338-81YWQB/quality/20261009-040530198-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610090338-81YWQB/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610090338-81YWQB/evidence/semantic-review.json"
+    - ".agentplane/tasks/202610090338-81YWQB/evidence/final-coverage.json"
+    - ".agentplane/tasks/202610090338-81YWQB/evidence/runtime-census.json"
+    - ".agentplane/tasks/202610090338-81YWQB/evidence/scope-integrity.json"
+    - ".agentplane/tasks/202610090338-81YWQB/evidence/native-source-review.json"
+  findings:
+    - "Native independent Svt format channel preserves original hints, Writer-first order and final Writer-client format lifetime; generic attribute device bridge removed; actual main UI/store/history/cleanup verified."
+    - "1596 unique app cases including18fresh and13Chromium; all-four100 actual source-bound coverage; no unchanged passing replay.662old files exact,1scoped native contract migration;318old metadata semantics retained plus3unverified modules."
 commit: null
 comments:
   -
@@ -35,8 +56,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: approved native notifier/UI subscription scope under the user's continuing parity goal. Preserve IO/recovery exceptions and old acceptance; remove only generic format attribute-device bridge, verify original native ownership/order/lifetime/main UI without upstream runtime."
+  -
+    type: "verify"
+    at: "2026-10-09T04:05:31.174Z"
+    author: "CODER"
+    state: "ok"
+    note: "Actual implementation1b86332f7b8ffeaef9df78935d6a7d845eda4aca verified:1596unique app18fresh13Chromium; all-four100 source-bound app/inventory; six statics/build/source/artifact gates; four non-independent EVALUATOR certificates identical. Upstream absent/restored; no unchanged passing replay; full next247."
 doc_version: 3
-doc_updated_at: "2026-10-09T04:04:08.323Z"
+doc_updated_at: "2026-10-09T04:05:31.229Z"
 doc_updated_by: "CODER"
 description: "Iteration246: port native Svt broadcaster/listener and BroadcastingModify notifier channel, subscribe original row/cell/style formats at WriterViewStore without keeping writer formats alive, and remove generic SwFormat attribute device signal. Preserve registered IO/recovery/settings deviations; exact native hints/lifetimes, structural rebind, history and main UI verified without upstream runtime. Full cadence237→247."
 sections:
@@ -65,7 +92,51 @@ sections:
     4. Six statics, local build/static, exact new and related notify/format/style/table/list/history/render/ODF/Chromium runtime physically upstream absent/restored finally. No unchanged passing replay. Failed/new/unexecuted-only closures; materially changed production semantics may require explicitly recorded affected-case revalidation. Raw partial coverage threshold exits/skips retained. Full246 skipped user cadence last237,next247.
     5. Actual all-four100 app/inventory coverage reconstruction from245 whole exact source/maps or complete unchanged native declaration/signature/body/enclosing branch/all locations. V8 generated display ordinals may normalize only with complete original source/location proof; no individual counts/threshold weakening. Unchanged inventory/infra runtime not replayed.
     6. Restored generator/source-tree/provenance/inventory invariants/parity; doctor/routing/diff/artifact audits. Source/pin/IO4/whole writer-view/stash/parent717133/hash c6c4cc81526cf58740203fd8131532e46f03ae6f45ef10991cecac95a735bf3a retained. AP bounded English MD/JSON identifiers/hashes/counts only, raw ignored app cache. Actual implementation-SHA explicitly non-independent EVALUATOR reconstructs4certificates byte-identically. Clean meaningful close; DONE immutable; parent exact-prefix append, goal remains incomplete.
-  Verification: "Pending implementation and exact new/related verification; full246 skipped by explicit user cadence237→247."
+  Verification: |-
+    Command: exact selected runtime commands in evidence/targeted-profile.json and closure1.json; final npm run test:static in final-build.json.
+    Result:1596unique app cases pass including18fresh;13Chromium pass. Initial1590pass4freshfail; failure/new-only closure6pass12skip;zero unchanged passing replay. Runtime/build upstream physically absent, restored finally. Raw threshold exit1 and skips retained.
+    Command: complete source/map/native declaration/body/enclosing branch/all-location actual coverage proof.
+    Result:app318sources18105lines19876statements4554functions14568branches;inventory38sources1464/1523/384/1081;all-four100. Prior245 counters bound only to whole unchanged source/maps or complete identical native regions. No individual counter/threshold/skip sanitization. Unchanged inventory/infra runtime not replayed.
+    Command: six statics; UI generator --check;source tree/provenance/invariants/parity;doctor;routing;git diff --check;artifact/scope/source audits.
+    Result:pass.11pinned source files exact9bc445578031fecf56086729d8e4940c77e14d65. IO4/whole writer-view/stash/parent717133 hash c6c4cc81526cf58740203fd8131532e46f03ae6f45ef10991cecac95a735bf3a preserved.662other old acceptance files exact,1native notifier contract migration,3freshfiles666total;318old metadata fields/defaults/statuses/classifications/order/prefixes retained,3newunverified321total. Historical2doctor warnings unchanged. AP bounded English MD/JSON only; raw source/scripts/maps/results ignored appcache.
+    Evidence:actual implementation1b86332f7b8ffeaef9df78935d6a7d845eda4aca,current agent explicitly non-independent EVALUATOR4certificates reproduced byte-identically. Full native linked/layout/VCL client integration and silent raw claim/native address/storage/performance boundaries remain unverified;broader goal active/incomplete.
+    Skipped:full app/inventory/Chromium suite.
+    Reason:explicit user cadence once per10AP leaves,last237,next247,current246.
+    Risk:targeted leaf does not prove whole-project parity.
+    Approval:user active goal.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-09T04:05:31.174Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Actual implementation1b86332f7b8ffeaef9df78935d6a7d845eda4aca verified:1596unique app18fresh13Chromium; all-four100 source-bound app/inventory; six statics/build/source/artifact gates; four non-independent EVALUATOR certificates identical. Upstream absent/restored; no unchanged passing replay; full next247.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T04:05:30.747Z, excerpt_hash=sha256:214591e0c773b1a8c5a82092b14a87f23be59f20f5f1f20cf945836a9d088e44
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610090338-81YWQB/blueprint/resolved-snapshot.json
+    - old_digest: b120bb12f8b1fab990855fd601531300bff15a337529007153fbab4a2993a5ae
+    - current_digest: b120bb12f8b1fab990855fd601531300bff15a337529007153fbab4a2993a5ae
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610090338-81YWQB
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610090338-81YWQB -m 🧩 81YWQB task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only the scoped semantic implementation commit if required; preserve task history, previous DONE leaves and registered IO/recovery/settings deviations."
   Findings: |-
     Source inspection confirms separate native BroadcastingModify/GetNotifier/SvtListener channel and SwFormat inheritance. Svt listeners do not retain writer-client ownership. Existing SwModify transaction representation is a browser adaptation; exact native delivery ordering is preserved at terminal dispatch. Guessed read-only brdcst/rootfrm and TS writer-module paths failed; rg discovery resolved actual SfxBroadcaster/newfrm/TSX paths and route recomputed before mutation.
@@ -114,7 +185,50 @@ Iteration246 ports the native SvtBroadcaster/SvtListener channel with reciprocal
 
 ## Verification
 
-Pending implementation and exact new/related verification; full246 skipped by explicit user cadence237→247.
+Command: exact selected runtime commands in evidence/targeted-profile.json and closure1.json; final npm run test:static in final-build.json.
+Result:1596unique app cases pass including18fresh;13Chromium pass. Initial1590pass4freshfail; failure/new-only closure6pass12skip;zero unchanged passing replay. Runtime/build upstream physically absent, restored finally. Raw threshold exit1 and skips retained.
+Command: complete source/map/native declaration/body/enclosing branch/all-location actual coverage proof.
+Result:app318sources18105lines19876statements4554functions14568branches;inventory38sources1464/1523/384/1081;all-four100. Prior245 counters bound only to whole unchanged source/maps or complete identical native regions. No individual counter/threshold/skip sanitization. Unchanged inventory/infra runtime not replayed.
+Command: six statics; UI generator --check;source tree/provenance/invariants/parity;doctor;routing;git diff --check;artifact/scope/source audits.
+Result:pass.11pinned source files exact9bc445578031fecf56086729d8e4940c77e14d65. IO4/whole writer-view/stash/parent717133 hash c6c4cc81526cf58740203fd8131532e46f03ae6f45ef10991cecac95a735bf3a preserved.662other old acceptance files exact,1native notifier contract migration,3freshfiles666total;318old metadata fields/defaults/statuses/classifications/order/prefixes retained,3newunverified321total. Historical2doctor warnings unchanged. AP bounded English MD/JSON only; raw source/scripts/maps/results ignored appcache.
+Evidence:actual implementation1b86332f7b8ffeaef9df78935d6a7d845eda4aca,current agent explicitly non-independent EVALUATOR4certificates reproduced byte-identically. Full native linked/layout/VCL client integration and silent raw claim/native address/storage/performance boundaries remain unverified;broader goal active/incomplete.
+Skipped:full app/inventory/Chromium suite.
+Reason:explicit user cadence once per10AP leaves,last237,next247,current246.
+Risk:targeted leaf does not prove whole-project parity.
+Approval:user active goal.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-09T04:05:31.174Z — VERIFY — ok
+
+By: CODER
+
+Note: Actual implementation1b86332f7b8ffeaef9df78935d6a7d845eda4aca verified:1596unique app18fresh13Chromium; all-four100 source-bound app/inventory; six statics/build/source/artifact gates; four non-independent EVALUATOR certificates identical. Upstream absent/restored; no unchanged passing replay; full next247.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T04:05:30.747Z, excerpt_hash=sha256:214591e0c773b1a8c5a82092b14a87f23be59f20f5f1f20cf945836a9d088e44
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610090338-81YWQB/blueprint/resolved-snapshot.json
+- old_digest: b120bb12f8b1fab990855fd601531300bff15a337529007153fbab4a2993a5ae
+- current_digest: b120bb12f8b1fab990855fd601531300bff15a337529007153fbab4a2993a5ae
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610090338-81YWQB
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610090338-81YWQB -m 🧩 81YWQB task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
