@@ -64,6 +64,18 @@
         {
           "path": "apps/office/src/sw/source/core/table/native-independent-columns.test.ts",
           "marker": "native separators combine visible current-row"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/native-row-cell-export-items.test.ts",
+          "marker": "native vertical orientation"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/native-row-cell-export-items.test.tsx",
+          "marker": "mounted row height and cell NONE retain original owners across export and native history"
+        },
+        {
+          "path": "apps/office/src/xmloff/source/table/native-empty-orientation.test.ts",
+          "marker": "native cell style publishes distinct orientation"
         }
       ],
       "upstream": [
@@ -118,6 +130,30 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmlimpit.cxx",
           "marker": "MINLAY"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmlexpit.cxx",
+          "marker": "SvXMLExportItemMapper::GetItem"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmlexpit.cxx",
+          "marker": "case RES_VERT_ORIENT:"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmlimpit.cxx",
+          "marker": "//#i8855#"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmlithlp.cxx",
+          "marker": "aXMLTableVAlignMap"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmltble.cxx",
+          "marker": "ExportTableLinesAutoStyles"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmltbli.cxx",
+          "marker": "sal_Int16 eHoriOrient = text::HoriOrientation::FULL;"
         }
       ]
     },
@@ -138,7 +174,8 @@
       "Iteration202 removes scalar row minHeight storage and numeric kernel height contracts. Native SvxSizeItem/SwFormatFrameSize owns both dimensions, both sizing types, both percentages and both relations with native defaults, Which90, full equality, clone and supported default size query. Original rows retain copied items, document getter compares complete items and returns clone; resize uses native document setter with copied full size, preserving Fixed/Minimum and promoting only Variable. Flat layout and mounted cells use native Variable/Minimum/Fixed semantics, fixed content clipped, properties metric from shell common getter. ODT row-height Fixed/min-row-height Minimum/Variable omission and native height clamp1..65535; attributes apply in order. Full percentage/fly/vertical/nested/merged/protection/UNO member IDs/PutValue/pooling/widget/SfxItemSet/full parity remains unverified; all prior contracts/classifications/statuses/exceptions retained.",
       "Iteration206 draft: scalar kernel cell border/padding storage is replaced by owned SvxBoxItem plus the existing vertical item. Represented lines retain native color/style/width/component arithmetic, signed16 distances/default0, cloning, metrics and supported UNO values; SvxBoxInfoItem retains native validity127. SetTabBorders consumes SfxItemSet and distributes flat union outer/inner lines using source validity rules. Insertion defaults55twips/black10twip lines and0/no-border are preserved. Process/storage uses complete primitive native state with legacy scalar ingress only; ODF and browser paint carry four independent sides. Initial static and upstream-absent runtime verification are pending. Complete native color shading/theme/Word/macros/fly/vertical/RTL/follow/shared-format behavior, per-edge/common-state border widgets and full parity remain unverified. All existing statuses/defaults/evidence/registered I/O/recovery exceptions are preserved.",
       "Iteration206 verified closure: the earlier draft pending statement is historical. Native box/info/line ownership, supported values/defaults/metrics, flat source-defined border distribution, original graph and history, complete primitive transport and four-edge ODF/browser paint passed one full upstream-absent profile with failed/new-case-only closures. Current app and inventory actual counters each reach100% lines/statements/functions/branches under complete identical-source/maps or complete contiguous mapped-region proof. All550 prior acceptance contracts are preserved by522 byte-identical files and28 exact native-representation AST migrations; six new acceptance files and two new infrastructure cases are added. Full per-edge/common-state widgets, native themes/shading/Word and RTL/vertical/follow/shared-format completeness remain unverified; no semantic status or registered I/O/recovery exception is promoted.",
-      "Iteration233 moves connected flat-table column geometry into each original SwTableBox SwFormatFrameSize. Native current-row visible/other-row hidden fuzzy separator union and per-line NewSetTabCols adjustments feed original Writer document attribute history; actual Ctrl+Shift current-line columns replace the retained ordinary shared-column fallback. Source XML union grids/spans and browser device colspans preserve independent original cells, with complete native frame-size values in browser codec and declared grid widths only at import/builder ingress. No row-width side map, graph replacement or TextRuns conversion. Flat unspanned source behavior is represented; full row-span propagation/nested/merged graphs, frame item pooling/UNO, RTL/vertical/SFX/VCL/full ruler state remain partial. Registered recovery/open/save/settings untouched, previous statuses/defaults/classes preserved."
+      "Iteration233 moves connected flat-table column geometry into each original SwTableBox SwFormatFrameSize. Native current-row visible/other-row hidden fuzzy separator union and per-line NewSetTabCols adjustments feed original Writer document attribute history; actual Ctrl+Shift current-line columns replace the retained ordinary shared-column fallback. Source XML union grids/spans and browser device colspans preserve independent original cells, with complete native frame-size values in browser codec and declared grid widths only at import/builder ingress. No row-width side map, graph replacement or TextRuns conversion. Flat unspanned source behavior is represented; full row-span propagation/nested/merged graphs, frame item pooling/UNO, RTL/vertical/SFX/VCL/full ruler state remain partial. Registered recovery/open/save/settings untouched, previous statuses/defaults/classes preserved.",
+      "CorrectionYCZ38R (2/10 after BZQGYC) removes row/cell GetFormat projections from original Writer XML export. Borrowed original frame item sets supply direct SET row size/split and cell box/vertical orientation; inherited or pool normal items are omitted. Native Fixed/Minimum heights and split inversion retained, independent box edges exported from original item. Native vertical token table is TOP1/top,CENTER2/middle,BOTTOM3/bottom; NONE and unmapped native orientations emit empty, while absence emits no attribute. Empty vertical imports as original explicit NONE per i8855, top imports as TOP; exported unmapped horizontal emits empty and XML style import leaves alignment unset before native FULL table initialization. The earlier R12SRT unmapped-orientation omission is historical/incomplete and corrected here. Current browser codec legacy top mapping, UI orientation menu completeness, generic invalid token policy, table import scalar assembly, full native shared mapper/style/UNO/VCL/relative/layout widths remain separately partial or unverified. All prior metadata statuses/defaults/classes/historical evidence and registered recovery/open/save/settings/UI deviations retained; no whole-module promotion. Evidence task202610092323-YCZ38R."
     ],
     "status": "mapped",
     "upstreamPath": "xmloff/source/table/XMLTableImport.cxx",

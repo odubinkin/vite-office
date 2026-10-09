@@ -41,7 +41,7 @@ it.each([
   [H.LEFT_AND_WIDTH, "left", true, false],
   [H.CENTER, "center", false, false],
   [H.RIGHT, "right", false, false],
-  [H.INSIDE, undefined, false, false],
+  [H.INSIDE, "", false, false],
 ] as const)(
   "native orientation %s admits only its source-defined margins",
   /** Checks actual XML mapping without reading scalar table projection. @param orient - Native enum. @param token - XML token. @param left - Left admission. @param right - Right admission. @returns Nothing. */ (

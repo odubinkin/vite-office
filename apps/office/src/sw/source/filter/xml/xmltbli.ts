@@ -166,7 +166,9 @@ export class SwXMLTableImport extends SvXMLImport {
                 ? VertOrientation.CENTER
                 : verticalAlign === "bottom"
                   ? VertOrientation.BOTTOM
-                  : VertOrientation.NONE,
+                  : verticalAlign === "top"
+                    ? VertOrientation.TOP
+                    : VertOrientation.NONE,
             ),
           }),
     } as SwTableBoxFormat);

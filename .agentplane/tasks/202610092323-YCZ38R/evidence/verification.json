@@ -1,0 +1,530 @@
+{
+  "taskId": "202610092323-YCZ38R",
+  "parent": "202609240501-C9TN6M",
+  "status": "verified",
+  "previousFullBaseline": "202610092229-BZQGYC",
+  "correctionAfterPreviousFull": 2,
+  "goalComplete": false,
+  "constraints": {
+    "checkout": "/Users/odubinkin/Projects/vite-office-writer",
+    "branch": "writer",
+    "physicallyAbsentUpstreamForAllTestsBuildStatics": true,
+    "restoredUpstreamOnlyMetadata": true,
+    "rawSourcesHelpersLogsMapsOnlyIgnoredCache": true,
+    "upstreamOrPythonInAgentplane": false,
+    "network": false,
+    "merge": false,
+    "publication": false,
+    "subagents": false,
+    "registeredRecoveryOpenSaveSettingsUiDeviationsPreserved": true
+  },
+  "upstream": {
+    "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+    "tag": "libreoffice-26.8.0.2",
+    "anchors": [
+      "sw/source/filter/xml/xmltble.cxx662..717 original row/box ExportFormat",
+      "sw/source/filter/xml/xmlexpit.cxx273..289 direct SET item only",
+      "sw/source/filter/xml/xmlexpit.cxx224..237 QueryXMLValue true/AddAttribute retains empty values",
+      "sw/source/filter/xml/xmlexpit.cxx1065..1106 orientation and Fixed/Minimum height mapping",
+      "sw/source/filter/xml/xmlithlp.cxx318..324 TOP/CENTER/BOTTOM mapping",
+      "sw/source/filter/xml/xmlimpit.cxx907..923 i8855 empty vertical=>NONE",
+      "sw/source/filter/xml/xmltbli.cxx2490 native default FULL"
+    ]
+  },
+  "toolchain": {
+    "applicationCoverage": "actual Istanbul4.1.10",
+    "typescriptCli": "7.0.2",
+    "typescriptCompilerApi": "6.0.2",
+    "inventoryCoverageConfiguration": "unchanged existing V8; no tooling/schema migration"
+  },
+  "behavior": {
+    "removed": "row and cell GetFormat projection/clone from original XML exporter",
+    "owners": "original row/box frame ItemSet direct SET size/split/box/vertical orientation",
+    "absenceAndInheritance": "Normal properties not inherited or fabricated from pool defaults",
+    "height": "Direct Variable omitted,Fixed row-height,Minimum min-row-height",
+    "verticalOrientation": "NONE/unmapped native=>empty;TOP1/top,CENTER2/middle,BOTTOM3/bottom; absent=>omit",
+    "nativeImport": "Authored empty vertical restored to explicit NONE,top restored to TOP; empty table enum leaves XML style alignment unset then native table defaults FULL",
+    "horizontalCorrection": "Prior R12SRT unknown-token omission is incomplete; emits empty per QueryXMLValue/AddAttribute",
+    "primitiveHistory": "Mounted row height/cell orientation and native owner/cursor/text preserve Undo/Redo"
+  },
+  "tests": {
+    "acceptedUniqueCases": 519,
+    "relatedFiles": 87,
+    "freshCases": 20,
+    "initial": {
+      "cases": 510,
+      "passed": 508,
+      "freshFailed": 2
+    },
+    "failedOnlyClosure": {
+      "passed": 2,
+      "previousPassingExcluded": 10
+    },
+    "newRelatedShared": {
+      "passed": 9,
+      "newContexts": 7,
+      "existingDispatcher": 2
+    },
+    "afterTypedFreshCallRepair": {
+      "passed": 7,
+      "failed": 0
+    },
+    "browser": {
+      "cases": 24,
+      "pass": 24,
+      "skip": 0,
+      "flaky": 0,
+      "viewports": [
+        1280,
+        390
+      ],
+      "specs": [
+        "writer-table-properties-history.spec.ts",
+        "writer-native-table-text-flow-headline.spec.ts",
+        "writer-native-table-column-drag.spec.ts",
+        "writer-native-cell-alignment.spec.ts",
+        "writer-table-alignment.spec.ts"
+      ]
+    },
+    "fullRun": "not due2/10 after BZQGYC"
+  },
+  "coverage": {
+    "status": "pass",
+    "sourceHashes": {
+      "apps/office/src/sw/source/filter/xml/xmlexp.ts": "3c7aabc69eecaa27ef2fea3e1a0d0586aa44262c73aebd43acbb95817c6df375",
+      "apps/office/src/sw/source/filter/xml/xmltbli.ts": "096eb01d286721ad3bfd27ce862592ba130848472889b73a5d72dd2fa75b825c",
+      "apps/office/src/xmloff/source/table/XMLTableImport.ts": "1c1b2b350754aeb30b26e928c2e072af45be2e58483afb19bb546714a1a56018"
+    },
+    "actualCoverage": {
+      "lines": {
+        "total": 362,
+        "covered": 362,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 382,
+        "covered": 382,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 76,
+        "covered": 76,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 469,
+        "covered": 469,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "perModule": {
+      "apps/office/src/sw/source/filter/xml/xmlexp.ts": {
+        "lines": {
+          "total": 197,
+          "covered": 197,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 41,
+          "covered": 41,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 210,
+          "covered": 210,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 297,
+          "covered": 297,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "apps/office/src/sw/source/filter/xml/xmltbli.ts": {
+        "lines": {
+          "total": 66,
+          "covered": 66,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 18,
+          "covered": 18,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 72,
+          "covered": 72,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 44,
+          "covered": 44,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "apps/office/src/xmloff/source/table/XMLTableImport.ts": {
+        "lines": {
+          "total": 99,
+          "covered": 99,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 17,
+          "covered": 17,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 100,
+          "covered": 100,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 128,
+          "covered": 128,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    "negativeCounters": 0,
+    "completeCurrentSourceMapIdentity": true,
+    "onlyActualSameTaskCounters": true,
+    "acceptedUniqueCases": 519,
+    "relatedFiles": 87,
+    "freshCases": 20,
+    "initialCases": 510,
+    "initialPassed": 508,
+    "initialFreshFailures": 2,
+    "failedOnlyClosurePassed": 2,
+    "previouslyPassingCasesReplayed": 0,
+    "additionalRelatedCases": 9,
+    "profiles": [
+      {
+        "label": "related-row-cell",
+        "mapSha256": "57378aa1f313af5b7c6f0fda315207898b4a6d94565844cd665dc5e1c600b2da",
+        "reportSha256": "da08fe2722f2aa5cc5cb6693f5b736d17848d6d8cf73b0adc02a70375eaec0c8"
+      },
+      {
+        "label": "fresh-repair",
+        "mapSha256": "da48a6f9e1f0474b93d64265042af3df869616c5f561adfdf03262141af8057c",
+        "reportSha256": "1a1a9f554fa04639614beb23c3906139957b363fa2a2adae41ca1244b449958b"
+      },
+      {
+        "label": "related-shared-closure",
+        "mapSha256": "dfa43c27389ce5b2f578f56877719e4fd8ac9d8222961c2c6d84b9a3475ba3c4",
+        "reportSha256": "a14dfd2b5ce26bc64c4eff26b28ec0ca92abdb14d098f9e66cae6d44b6068871"
+      },
+      {
+        "label": "typed-shared-final",
+        "mapSha256": "281d23b6c32f7aafdc090cac0d5eceb1da69522cb0e96fb409367dc958b4e9ca",
+        "reportSha256": "6d4ea80f39c04f4aedd6bb37b02abe573bdc92a5afac635eec06b3cc9cf0a89d"
+      }
+    ],
+    "rawNarrowClosureExits": "1 partial coverage thresholds; all2+9 assertions pass,complete identical-map strict100 gate passes,unchanged thresholds",
+    "finalTypedSharedTests": {
+      "cases": 7,
+      "pass": 7,
+      "failed": 0,
+      "skip": 0,
+      "reason": "Concrete XML context method takes no close-element argument; final changed fresh call sites rechecked after TS7 error",
+      "sameCompleteMaps": true,
+      "rawExit": 1,
+      "exitReason": "Fresh-only partial coverage thresholds; complete identical whole-module maps100 gate passes"
+    },
+    "finalTestHashes": {
+      "apps/office/src/sw/source/filter/xml/native-row-cell-export-items.test.ts": "6317b8f854dd4d2566b392654d59f764c7245aadb2f8890a6ed9cbbdd2ebb118",
+      "apps/office/src/sw/browser/presentation/native-row-cell-export-items.test.tsx": "3fda225b9493698a79c84e1d32a25c0ca559491faabfc9511e389c09a14050e3",
+      "apps/office/src/xmloff/source/table/native-empty-orientation.test.ts": "7f5d8e602fb916cd7d8946db81646df6b87f3f34871ac4b8425e835d77bca2d1",
+      "apps/office/src/sw/source/filter/xml/native-table-export-items.test.ts": "4b97b52edfb85bf55735c28934efce5489a898ca6aba3ab98176622d02f0094c"
+    }
+  },
+  "preservation": {
+    "status": "pass",
+    "originalPaths": 1845,
+    "unchangedPaths": 1835,
+    "changedPaths": [
+      "apps/office/src/xmloff/source/table/XMLTableImport.ts",
+      "docs/program/registry/writer/provenance/sw/source/filter/xml/xmlexp.ts.json",
+      "docs/program/registry/writer/provenance/sw/source/filter/xml/xmltbli.ts.json",
+      "docs/program/registry/shared/provenance/xmloff/source/table/XMLTableImport.ts.json",
+      "docs/program/registry/writer/runtime/sw/source/filter/xml/xmlexp.ts.json",
+      "docs/program/registry/writer/runtime/sw/source/filter/xml/xmltbli.ts.json",
+      "apps/office/src/sw/source/filter/xml/native-table-export-items.test.ts",
+      "apps/office/src/sw/source/filter/xml/xmlexp.ts",
+      "apps/office/src/sw/source/filter/xml/xmltbli.ts",
+      "docs/program/registry/shared/runtime/xmloff/source/table/XMLTableImport.ts.json"
+    ],
+    "oldUnitTestFiles": 637,
+    "oldTestsByteIdentical": 636,
+    "exactSourceBackedMigrationOperations": 1,
+    "migration": "Prior R12SRT native unmapped horizontal token must export empty string,not omission; pinned QueryXMLValue then AddAttribute emits it",
+    "canonicalHistoricalPrefixes": 6,
+    "parentFindingsPrefixPreserved": true
+  },
+  "checks": [
+    {
+      "label": "format-check",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "format:check"
+      ],
+      "status": 0,
+      "upstreamAbsent": true
+    },
+    {
+      "label": "lint",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "lint"
+      ],
+      "status": 0,
+      "upstreamAbsent": true
+    },
+    {
+      "label": "final-fresh-format",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "prettier",
+        "--check",
+        "apps/office/src/xmloff/source/table/native-empty-orientation.test.ts"
+      ],
+      "status": 0,
+      "upstreamAbsent": true
+    },
+    {
+      "label": "final-fresh-lint",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "eslint",
+        "apps/office/src/xmloff/source/table/native-empty-orientation.test.ts",
+        "--max-warnings",
+        "0"
+      ],
+      "status": 0,
+      "upstreamAbsent": true
+    },
+    {
+      "label": "typecheck",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "typecheck"
+      ],
+      "status": 0,
+      "upstreamAbsent": true
+    },
+    {
+      "label": "check-dependencies",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "check:dependencies"
+      ],
+      "status": 0,
+      "upstreamAbsent": true
+    },
+    {
+      "label": "check-docs",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "check:docs"
+      ],
+      "status": 0,
+      "upstreamAbsent": true
+    },
+    {
+      "label": "check-file-size",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "check:file-size"
+      ],
+      "status": 0,
+      "upstreamAbsent": true
+    },
+    {
+      "label": "current-build",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "build"
+      ],
+      "status": 0,
+      "upstreamAbsent": true
+    },
+    {
+      "label": "static-build",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "node",
+        "scripts/check-static-build.mjs"
+      ],
+      "status": 0,
+      "upstreamAbsent": true
+    },
+    {
+      "label": "review-browser",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "playwright",
+        "test",
+        "--config",
+        "apps/office/playwright.config.ts",
+        "--project=writer",
+        "writer-native-table-column-drag.spec.ts",
+        "writer-native-table-text-flow-headline.spec.ts",
+        "writer-table-properties-history.spec.ts",
+        "writer-native-cell-alignment.spec.ts",
+        "writer-table-alignment.spec.ts",
+        "--reporter=list,json"
+      ],
+      "status": 0,
+      "upstreamAbsent": true
+    }
+  ],
+  "restoredMetadata": [
+    {
+      "label": "registry-build",
+      "bin": "npm",
+      "args": [
+        "run",
+        "inventory:registry:build"
+      ],
+      "status": 0,
+      "rawHash": "f941feea056f9f9125ac8a96978ff0fda711beef74563b36c553fc89490f0209",
+      "metadataOnly": true
+    },
+    {
+      "label": "source-tree",
+      "bin": "npm",
+      "args": [
+        "run",
+        "check:source-tree"
+      ],
+      "status": 0,
+      "rawHash": "6c5bd2e3c84892b8cc26b8b1b5f06a950891f9d5988a8ef1f1496f0c252cd33e",
+      "metadataOnly": true
+    },
+    {
+      "label": "source-provenance",
+      "bin": "npm",
+      "args": [
+        "run",
+        "check:source-provenance"
+      ],
+      "status": 0,
+      "rawHash": "6254cd84ffd0c48086c7f42fd3cd1c4aa2d546fdaf62a670474f9e9aa6a42ac1",
+      "metadataOnly": true
+    },
+    {
+      "label": "registry-check",
+      "bin": "npm",
+      "args": [
+        "run",
+        "inventory:registry:check"
+      ],
+      "status": 0,
+      "rawHash": "c00b40ab07d02f7326706c6062fc827a8ddfbbf6671f0cc18e32727fac564dcf",
+      "metadataOnly": true
+    },
+    {
+      "label": "writer-resources",
+      "bin": "node_modules/.bin/tsx",
+      "args": [
+        "scripts/generate-writer-ui-resources.ts",
+        "--check"
+      ],
+      "status": 0,
+      "rawHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "metadataOnly": true
+    },
+    {
+      "label": "inventory-invariants",
+      "bin": "npm",
+      "args": [
+        "run",
+        "inventory:invariants"
+      ],
+      "status": 0,
+      "rawHash": "693add7e7690a5bf946ae73f534d588cf5fdf854aadd3d6004f252048d0be47b",
+      "metadataOnly": true
+    },
+    {
+      "label": "inventory-parity",
+      "bin": "npm",
+      "args": [
+        "run",
+        "inventory:parity"
+      ],
+      "status": 0,
+      "rawHash": "19c45ecde50fa7ad59fba4e16617474a5fcd30ac422b69ed85cc285a1509896e",
+      "metadataOnly": true
+    },
+    {
+      "label": "routing",
+      "bin": "node",
+      "args": [
+        ".agentplane/policy/check-routing.mjs"
+      ],
+      "status": 0,
+      "rawHash": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9",
+      "metadataOnly": true
+    },
+    {
+      "label": "doctor",
+      "bin": "ap",
+      "args": [
+        "doctor"
+      ],
+      "status": 0,
+      "rawHash": "61abe09b298897059a1d796d58e98cfb46f9b49bc1c52eed7f35bfec4cf55ea0",
+      "metadataOnly": true
+    }
+  ],
+  "chronology": {
+    "initialFreshFailures": "Border20twips uses native mm100 conversion and exports0.99pt; table import FULL default follows ignored empty horizontal enum. Both corrected with source-backed fresh expectations, no production change.",
+    "typedFreshRepair": "TS7 rejects two explicit closing-element arguments on zero-argument concrete context override. Removed unused argument; final seven fresh call-site cases rechecked. Format/lint/types/build pass.",
+    "partialProfileExits": "Initial branch99.78 lacked existing standalone XMLTableContext helper default; add actual related dispatcher tests. Every narrow closure raw exit1 for partial module thresholds; all final assertions pass and full identical-map aggregate100 is gated without changing counters/maps/thresholds.",
+    "rawData": "Ignored cache only, unique per-profile test JSON, no passing replay solely for wrapper repair. Exact current-source map identity and hashes inspected."
+  },
+  "boundaries": [
+    "Generic table XML import scalar assembly, primitive browser codec legacy top mapping and UI orientation menu completeness remain separately incomplete.",
+    "Full native shared item mapper architecture, nested/spanned/shared-format styles, relative/percent/layout-derived widths, UNO/VCL/complete filters remain unverified.",
+    "Existing general unsupported-token strict diagnostic policy remains outside this empty-value correction.",
+    "No whole-module semantic/contract/default/classification promotion from coverage."
+  ],
+  "semanticCommit": null,
+  "quality": null
+}

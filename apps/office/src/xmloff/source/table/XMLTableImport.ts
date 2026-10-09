@@ -29,7 +29,7 @@ export type OdfTableStyle =
     }
   | (OdfBoxProperties & {
       readonly family: "table-cell";
-      readonly verticalAlign?: "top" | "middle" | "bottom" | undefined;
+      readonly verticalAlign?: "" | "top" | "middle" | "bottom" | undefined;
     });
 
 /** Writer-facing streaming table operations; canonical ownership stays in sw. */
@@ -117,7 +117,7 @@ export class XMLTableStyleContext extends SvXMLImportContext {
         ],
         "table properties",
       );
-      const align = attributes.get(XMLToken.TABLE_ALIGN) ?? undefined;
+      const align = attributes.get(XMLToken.TABLE_ALIGN) || undefined;
       if (
         align !== undefined &&
         align !== "left" &&
@@ -220,8 +220,14 @@ export class XMLTableStyleContext extends SvXMLImportContext {
         ],
         "table cell properties",
       );
-      const align = attributes.get(XMLToken.STYLE_VERTICAL_ALIGN) || undefined;
-      if (align !== undefined && align !== "top" && align !== "middle" && align !== "bottom")
+      const align = attributes.get(XMLToken.STYLE_VERTICAL_ALIGN) ?? undefined;
+      if (
+        align !== undefined &&
+        align !== "" &&
+        align !== "top" &&
+        align !== "middle" &&
+        align !== "bottom"
+      )
         throw new Error(`Unsupported ODF cell vertical alignment: ${align}`);
       this.style = {
         family: "table-cell",
