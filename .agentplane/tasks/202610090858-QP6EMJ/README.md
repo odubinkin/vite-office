@@ -4,7 +4,7 @@ title: "Port Calc full signed64 big address and range owners"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,25 @@ verification:
   updated_by: "CODER"
   note: "Command: node scripts/calc-bigrange-native-probe.mjs --write; node scripts/calc-bigrange-native-probe.mjs --check Result: pass. Evidence: exact pinned HEAD and four Git blobs; unchanged complete native big classes/IsValid and ordinary inline constructors/order; ASan/UBSan clean;6552 address states,3468 range relation states,8 address and5 range mutation snapshots, ordinary conversion and8 equality outputs. Fixture recheck exact. Scope: complete defined signed64 numerical ScBigAddress/ScBigRange operations; original raw and converted values, per-axis extrema, exclusive document sheet validity/global sheet clipping and copy ownership. Command: npm run test:coverage:calc Result: pass. Evidence:45 tests in10 files; real V8 statements922/922, branches779/779, functions209/209 and lines818/818; all100%, no exclusions/settings changes. Scope: all current Calc owners and previous native fixtures, including new five acceptance tests comparing every big-coordinate fixture result and literal contracts. Command: npm run typecheck; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:source-tree Result: pass. Evidence: application/tools typecheck passes;330 runtime sources/1565 relative imports/29 dependency edges;1082 authored sources documented;1085 files size checked with prior reviewed owner candidates unchanged;114 required paths and33 retired roots. Scope: new core/data owner and pure header boundary reuse existing ordinary coordinate/getter contracts; no shared/Writer implementations changed. Command: node_modules/.bin/eslint apps/office/src/sc/inc/bigrange.ts apps/office/src/sc/source/core/data/bigrange.ts apps/office/src/sc/source/core/data/bigrange.test.ts scripts/calc-bigrange-native-probe.mjs Result: pass. Evidence: affected source/test/probe lint clean. Scope: all four new authored code files. Command: node_modules/.bin/prettier --check apps/office/src/sc/inc/bigrange.ts apps/office/src/sc/source/core/data/bigrange.ts apps/office/src/sc/source/core/data/bigrange.test.ts scripts/calc-bigrange-native-probe.mjs Result: pass. Evidence: all matched files formatted. Scope: all four new authored code files; native fixture intentionally compact decimal JSON. Command: npm run inventory:parity:calc Result: pass. Evidence:8 capabilities,122 modules (10 Calc/112 shared), zero semantic violations; original header and source evidence mapped in new capability/two runtime/two provenance records. Existing semantic flags unchanged; new parity flags unverified. Scope: complete Calc inventory; numerical cases do not establish full ScDocument/change-tracking/reference-update integration or native lifetime/undefined arithmetic parity. Command: node .agentplane/policy/check-routing.mjs; ap doctor; git diff --check; git rev-parse --abbrev-ref HEAD Result: pass. Evidence: routing OK; doctor zero errors/one pre-existing managed-shim readiness warning; diff clean; branch calc. No merge or outside-checkout mutation. Scope: scoped implementation and task traceability; old hook warning remains outside scope. Full suites follow the user-approved once-per-ten completed Calc tasks cadence. This is milestone8; full run remains required after10, with targeted checks on intervening tasks. Final clean tracked/untracked state is recorded after finish. Signed64 overflow is native UB and outside the defined fixture domain; no wrapping semantics are fabricated. Full document and consumer integration remain subsequent work, so the overall user goal remains active."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-09T09:13:34.654Z"
+  updated_by: "EVALUATOR"
+  note: "Complete defined signed64 big-coordinate owners preserve original numeric contracts and existing ordinary owner boundaries."
+  evaluated_sha: "490f0af9d064f58adb4e7476170d555086f414e8"
+  blueprint_digest: "9a7725a00cf241eb984bdc0035ad6d3b6b6666b834cacba8dd3fcf162f913a02"
+  evidence_refs:
+    - ".agentplane/tasks/202610090858-QP6EMJ/README.md"
+    - ".agentplane/tasks/202610090858-QP6EMJ/quality/20261009-091334654-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610090858-QP6EMJ/quality/20261009-091334654-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610090858-QP6EMJ/quality/20261009-091334654-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610090858-QP6EMJ/blueprint/resolved-snapshot.json"
+    - "apps/office/src/sc/source/core/data/bigrange.test.ts"
+    - "apps/office/coverage/calc/coverage-summary.json"
+    - "output/playwright/calc-registry8.json"
+    - "490f0af9d064"
+  findings:
+    - "All unchanged compiled original big class/source outcomes compare through TS; exact bigint values retain sentinels, raw order, clipped ordinary conversion and independent copies. Existing tests, fixtures, shared code and parity flags remain unchanged."
 commit: null
 comments:
   -
