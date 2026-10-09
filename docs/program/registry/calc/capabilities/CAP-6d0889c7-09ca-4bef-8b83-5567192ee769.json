@@ -87,7 +87,7 @@
     "atomicOperation": "Update ordinary raw range references for insertion/deletion, contained movement and sheet reorder with original expansion clipping sticky/invalid results",
     "scopeLimitations": [
       "full document/compiler/change-tracking/consumer integration, native aliased scalar output-reference storage, debug assertion enforcement and undefined arithmetic domains remain subsequent work; bounded defined native fixtures do not establish whole reference-update or Calc parity.",
-      "The upstream range-list update tests identify the original reference-update consumer responsibility; full range-list UpdateReference and document mutation integration are not certified."
+      "Original range-list UpdateReference is implemented and bounded native pipeline cases are tracked separately by CAP-94d5fea0-8828-433a-bfbd-cc403666ea0d; full document mutation integration remains unverified."
     ],
     "implemented": true,
     "contractParity": false,

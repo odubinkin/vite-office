@@ -185,7 +185,7 @@ bounds, corners, lookup and intersections. Literal numerical examples from
 `node scripts/calc-rangelst-native-probe.mjs --check` to reproduce the committed
 fixture and exact pinned source/body hashes; ordinary tests remain portable.
 
-Document/compiler-dependent parsing, formatting and reference updates, range-pair
+Document/compiler-dependent parsing and formatting, range-pair
 lists, native pointer/iterator/refcount/move lifetime and undefined arithmetic
 remain pending. `SCSIZE` stays at the original address header and represents
 counts/indices within JavaScript exact integer inputs; full pointer-width input
@@ -398,8 +398,8 @@ full-suite verification is task 10. That run is recorded in
 actual100 coverage. The user explicitly left one uncovered Writer painting
 branch for another branch, and requested goal pause after the complete run.
 The user resumed the goal after merging Writer, TS7 and Istanbul. Relative wrapping
-and ordinary/big reference updating are tasks 1, 2 and 3 of the next interval; the full
-cycle is due at task 10.
+and ordinary/big reference updating are tasks 1, 2 and 3 of the next interval;
+range-list reference updating is task 4. The full cycle is due at task 10.
 
 Source research includes the per-file MPL 2.0 and inherited Apache notices in
 `sc/inc/address.hxx`, `sc/inc/sheetlimits.hxx`, `sc/inc/refdata.hxx`,
@@ -410,3 +410,38 @@ Source research includes the per-file MPL 2.0 and inherited Apache notices in
 `sc/source/core/data/bigrange.cxx` and
 `sc/inc/types.hxx`. The TypeScript implementation is independently authored
 from those numerical contracts; the original sources remain research-only.
+
+## Range-list reference updates
+
+Task `202610091404-4QBVYR` connects `ScRangeList::UpdateReference` to the existing
+ordinary `ScRefUpdate::Update` owner. The native public signature and source
+boundary remain intact; the structural document getter contract is reused.
+Pre-deletion applies only to a single-sheet affected area. Column deletion runs
+first, then row deletion overwrites its change result when both deltas are
+negative. Complete deletion returns true; an initially empty list returns false.
+
+Every surviving ordered range delegates the original scalar update. All results
+other than `UR_NOTHING`, including sticky unchanged coordinates, set the changed
+flag and assign the existing endpoints. The maximum-row cache only rises.
+Negative row/column insertion mode then joins backward using borrowed entries,
+repairing the index after multiple merges. Those joins do not independently set
+the change result. No native diagnostic-only logging shim is added to production.
+
+The dedicated native comparison compiles unchanged range-list class/helper/body
+intervals, the complete ordinary update helpers/body and existing inline address
+owners. Seven pinned Git blobs and extracted source hashes are checked under
+ASan/UBSan. Its 14,938 initialized cases compare change results, ordered raw
+ranges, unsigned64 counts and subsequent cache-sensitive joins over all four
+modes, axes, expansion settings, native parameter widths and same/multiple tabs.
+Original `ucalc_rangelst` deletion tests retain their literal cell assertions.
+Run `node scripts/calc-rangelist-update-native-probe.mjs --check`; ordinary tests
+consume portable JSON and need neither upstream nor a compiler.
+
+The existing coherent range-list source grouping was reviewed again after adding
+this upstream method; its class and anonymous helpers remain together, below the
+1000-line hard budget. Existing geometry fixtures/tests and shared/Writer sources
+remain unchanged. Undefined arithmetic and borrowed where references invalidated
+by native vector deletion remain outside certification. Full ScDocument,
+compiler, parsing/formatting, listeners and browser consumers remain subsequent
+work, so inventory semantic parity remains unverified. This is the fourth
+completed task of the resumed ten-task interval; full validation is due at task10.

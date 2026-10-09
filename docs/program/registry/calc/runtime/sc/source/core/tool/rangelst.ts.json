@@ -8,7 +8,8 @@
     "suite": "calc",
     "subsystem": "range-list",
     "capabilityIds": [
-      "CAP-a5dc82db-3863-42b0-a6b2-12710e031292"
+      "CAP-a5dc82db-3863-42b0-a6b2-12710e031292",
+      "CAP-94d5fea0-8828-433a-bfbd-cc403666ea0d"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -19,9 +20,10 @@
         "apps/office/src/sc/source/core/tool/rangelst.ts#ScRangeList",
         "apps/office/src/sc/source/core/tool/rangelst.test.ts#matches all13432 native operation sequences and ordered query outputs",
         "scripts/calc-rangelst-native-probe.mjs#const originals =",
-        "vendor/libreoffice-reference/sc/source/core/tool/rangelst.cxx#ScRangeList"
+        "vendor/libreoffice-reference/sc/source/core/tool/rangelst.cxx#ScRangeList",
+        "apps/office/src/sc/source/core/tool/rangelist-update.test.ts#matches all14938 native pipeline and cache-sensitive join outcomes"
       ],
-      "justification": "Task 202610090833-ERVAK2 ports numerical ScRangeList value ownership, original row-cache semantics, Join restarts, partial combine, insertions, ordered deletion fragments and queries. Existing ScAddress/ScRange owners are reused. Unchanged pinned original class/body intervals, anonymous numerical helpers and address/range inline bodies compile under ASan/UBSan;13432 initialized operation sequences compare every output, including ordered ranges, counts, bounds, corners, containment, intersections, Find and deletion results. Original numeric ucalc_rangelst examples retain literal input and cell assertions. Four logically unreachable guard paths are expressed directly after the original guaranteeing predicates; no native defined result, owner boundary or coverage setting changes. Exact unsigned64 cell counting uses bigint, including native modular accumulation. Document/compiler-dependent Parse, Format and UpdateReference, ScRangePairList and native pointer/iterator/refcount/move lifetime remain subsequent work. Native size_t inputs are represented within JavaScript exact integer domain; full pointer-width arithmetic is not certified. Native fixtures prove bounded defined numerical operations, not whole Calc parity.",
+      "justification": "Task 202610090833-ERVAK2 ports numerical ScRangeList value ownership, original row-cache semantics, Join restarts, partial combine, insertions, ordered deletion fragments and queries. Existing ScAddress/ScRange owners are reused. Unchanged pinned original class/body intervals, anonymous numerical helpers and address/range inline bodies compile under ASan/UBSan;13432 initialized operation sequences compare every output, including ordered ranges, counts, bounds, corners, containment, intersections, Find and deletion results. Original numeric ucalc_rangelst examples retain literal input and cell assertions. Four logically unreachable guard paths are expressed directly after the original guaranteeing predicates; no native defined result, owner boundary or coverage setting changes. Exact unsigned64 cell counting uses bigint, including native modular accumulation. Document/compiler-dependent Parse and Format, ScRangePairList and native pointer/iterator/refcount/move lifetime remain subsequent work. Native size_t inputs are represented within JavaScript exact integer domain; full pointer-width arithmetic is not certified. Native fixtures prove bounded defined numerical operations, not whole Calc parity. Task 202610091404-4QBVYR adds original UpdateReference, retaining pre-deletion ordering and dual-negative changed overwrite, same-tab guard, ordinary ScRefUpdate delegation, non-NOTHING statuses, stable endpoint assignment, monotone cache and backward in-list joins with size repair. All14938 unchanged native pipeline cases and cache-sensitive follow-up joins compare under ASan/UBSan; literal original row/column deletion assertions retained. Borrowed where values invalidated by native vector deletion and undefined signed arithmetic are not certified.",
       "knownViolations": [],
       "localSymbols": [
         "ScRangeList",
@@ -47,7 +49,8 @@
         "handleTwoRanges",
         "checkForThreeRanges",
         "handleThreeRanges",
-        "handleFourRanges"
+        "handleFourRanges",
+        "UpdateReference"
       ],
       "sourceResponsibility": "aligned",
       "upstreamFile": "sc/source/core/tool/rangelst.cxx",
@@ -71,7 +74,8 @@
         "handleOneRange",
         "handleTwoRanges",
         "handleThreeRanges",
-        "handleFourRanges"
+        "handleFourRanges",
+        "ScRangeList::UpdateReference"
       ]
     }
   }

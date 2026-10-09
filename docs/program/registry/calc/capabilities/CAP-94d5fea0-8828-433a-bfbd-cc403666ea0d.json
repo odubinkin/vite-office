@@ -1,0 +1,97 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-94d5fea0-8828-433a-bfbd-cc403666ea0d",
+    "capabilityId": "CAP-94d5fea0-8828-433a-bfbd-cc403666ea0d",
+    "suite": "calc",
+    "subsystem": "range-list",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original deletion-first same-sheet ordering retains changed overwrite when both displacement axes are negative and returns true after complete deletion.",
+      "Each ordered range delegates ordinary ScRefUpdate, assigns stable endpoint owners for every non-NOTHING result and raises the maximum-row cache only when required.",
+      "Negative row/column insertion mode joins backward using borrowed entries, protecting the index after merges without changing the native changed result.",
+      "Existing signed16 column/sheet and signed32 row contracts, document getter policy and cache-sensitive follow-up joins match unchanged native execution."
+    ],
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "Original range-list owner and UpdateReference contract delegate the existing original ScRefUpdate owner; scalar output tuple represents native output references."
+    },
+    "capability": "Calc range-list reference update pipeline",
+    "gaps": [
+      "Document/compiler-dependent Parse and Format, ScRangePairList and native pointer/iterator/refcount/move lifetime remain subsequent work. Native size_t inputs are represented within JavaScript exact integer domain; full pointer-width arithmetic is not certified. Native fixtures prove bounded defined numerical operations, not whole Calc parity."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sc/inc/rangelst.hxx",
+          "marker": "bool            UpdateReference("
+        },
+        {
+          "path": "sc/source/core/tool/rangelst.cxx",
+          "marker": "bool ScRangeList::UpdateReference("
+        },
+        {
+          "path": "sc/source/core/tool/refupdat.cxx",
+          "marker": "ScRefUpdateRes ScRefUpdate::Update( const ScDocument&"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sc/qa/unit/ucalc_rangelst.cxx",
+          "marker": "CPPUNIT_TEST_FIXTURE(Test, testUpdateReference_DeleteRow)"
+        },
+        {
+          "path": "sc/qa/unit/ucalc_rangelst.cxx",
+          "marker": "CPPUNIT_TEST_FIXTURE(Test, testUpdateReference_DeleteCol)"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/README.md",
+          "marker": "formula"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/rangelst.ts",
+          "marker": "public UpdateReference("
+        },
+        {
+          "path": "scripts/calc-rangelist-update-native-probe.mjs",
+          "marker": "originals.listUpdate ="
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/rangelist-update.test.ts",
+          "marker": "matches all14938 native pipeline and cache-sensitive join outcomes"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/rangelist-update.test.ts",
+          "marker": "preserves deletion-result overwrite and native backward joins independent of changed"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Range-list reference updates"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "Update ordered range-list references using native pre-deletion ordinary scalar update and backward in-list joins",
+    "scopeLimitations": [
+      "Document/compiler-dependent Parse and Format, ScRangePairList and native pointer/iterator/refcount/move lifetime remain subsequent work. Native size_t inputs are represented within JavaScript exact integer domain; full pointer-width arithmetic is not certified. Native fixtures prove bounded defined numerical operations, not whole Calc parity.",
+      "Undefined signed arithmetic and where references invalidated by native vector deletion are not certified by bounded initialized comparisons."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

@@ -1,7 +1,10 @@
 /** @fileoverview Numerical ScRangeList contracts and fragment helpers from pinned sc/source/core/tool/rangelst.cxx. */
 import { ScAddress, ScRange } from "../../../inc/address";
 import type { SCSIZE } from "../../../inc/address";
+import { UpdateRefMode } from "../../../inc/global";
 import type { SCCOL, SCROW, SCTAB } from "../../../inc/types";
+import { ScRefUpdate, ScRefUpdateRes } from "../inc/refupdat";
+import type { ScRefUpdateDocument } from "../inc/refupdat";
 
 /** Original ordered range value list with the upstream maximum-row append cache. */
 export class ScRangeList implements Iterable<ScRange> {
@@ -297,6 +300,69 @@ export class ScRangeList implements Iterable<ScRange> {
       }
     }
     this.push_back(newRange);
+  }
+  /** Updates original ordered references after pre-deletion and before backward joins. @param mode - Native update mode. @param document - Existing document getters. @param where - Affected area. @param rawDx - Column displacement. @param rawDy - Row displacement. @param rawDz - Sheet displacement. @returns Original change result, including deletion-result overwrite. */
+  public UpdateReference(
+    mode: UpdateRefMode,
+    document: ScRefUpdateDocument,
+    where: ScRange,
+    rawDx: SCCOL,
+    rawDy: SCROW,
+    rawDz: SCTAB,
+  ): boolean {
+    if (this.maRanges.length === 0) return false;
+    const dx = (rawDx << 16) >> 16,
+      dy = rawDy | 0,
+      dz = (rawDz << 16) >> 16;
+    let changed = false;
+    const [col1, row1, tab1, col2, row2, tab2] = where.GetVars();
+    if (mode === UpdateRefMode.URM_INSDEL) {
+      if (tab1 === tab2) {
+        if (dx < 0)
+          changed = this.DeleteArea(
+            ((col1 + dx) << 16) >> 16,
+            row1,
+            tab1,
+            ((col1 - 1) << 16) >> 16,
+            row2,
+            tab2,
+          );
+        if (dy < 0) changed = this.DeleteArea(col1, row1 + dy, tab1, col2, row1 - 1, tab2);
+      }
+    }
+    if (this.maRanges.length === 0) return true;
+    for (const range of this.maRanges) {
+      const [result, firstCol, firstRow, firstTab, lastCol, lastRow, lastTab] = ScRefUpdate.Update(
+        document,
+        mode,
+        col1,
+        row1,
+        tab1,
+        col2,
+        row2,
+        tab2,
+        dx,
+        dy,
+        dz,
+        ...range.GetVars(),
+      );
+      if (result !== ScRefUpdateRes.UR_NOTHING) {
+        changed = true;
+        range.aStart.Set(firstCol, firstRow, firstTab);
+        range.aEnd.Set(lastCol, lastRow, lastTab);
+        if (this.mnMaxRowUsed < lastRow) this.mnMaxRowUsed = lastRow;
+      }
+    }
+    if (mode === UpdateRefMode.URM_INSDEL) {
+      if (dx < 0 || dy < 0) {
+        for (let index = this.maRanges.length - 1; index > 0;) {
+          this.Join(this.at(index), true);
+          if (index >= this.maRanges.length) index = this.maRanges.length - 1;
+          else --index;
+        }
+      }
+    }
+    return changed;
   }
   /** Extends row ends through the original OR overlap predicate and deferred Join. @param tab - Sheet. @param colStart - First column. @param colEnd - Last column. @param rowPosition - Inserted first row. @param size - Row count. @returns Nothing. */
   public InsertRow(
