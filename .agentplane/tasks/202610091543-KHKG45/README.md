@@ -4,7 +4,7 @@ title: "Make collapsing table borders native item-owned through layout and UI"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 18
+revision: 21
 origin:
   system: "manual"
 depends_on: []
@@ -24,11 +24,34 @@ verification:
   updated_by: "CODER"
   note: "Native collapsed-border item ownership and source-linked invalidation verified:1167accepted149files10fresh; complete5modules actual Istanbul100/0negative/current identical maps;7statics+7metadata+final format/test lint pass, ten prefixes589old tests1838unrelated files retained. Initial lint/TS7 test failures repaired and retained, necessary replay disclosed; same-agent quality pending semantic SHA."
   attempts: 0
-commit: null
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-09T16:16:40.437Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent non-independent quality review: semantic a881c8a2 native collapsing-border item ownership/layout/UI meets approved bounded correction6/10; current source/fresh-test hashes bound to commit, deterministic gates verified, no full-module/goal parity promotion."
+  evaluated_sha: "a881c8a2b4dde01fffa116249f316718c1f7369e"
+  blueprint_digest: "bb9c8b6097f799939e2596262b9bc48cbefaee65cb5c002633f107c320b0ebbf"
+  evidence_refs:
+    - ".agentplane/tasks/202610091543-KHKG45/README.md"
+    - ".agentplane/tasks/202610091543-KHKG45/quality/20261009-161640437-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610091543-KHKG45/quality/20261009-161640437-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610091543-KHKG45/quality/20261009-161640437-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610091543-KHKG45/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610091543-KHKG45/evidence/results.json"
+    - "semantic:a881c8a2b4dde01fffa116249f316718c1f7369e; commit production and fresh-test SHA256 match actual accepted coverage/test source hashes"
+  findings:
+    - "Original native bool132false owns mode through direct/inherited/pool/reset; no mirrored stored scalar enum. Browser/dialog/shell read original effective item; recursive table/current-next-row/final-table print reactions and three history cycles are tested."
+    - "1167accepted cases149files10fresh, entire5modules actual current-source complete-map Istanbul100 all-four0negative; superseded initial counters excluded, necessary1167source replay+1repaired typed-native-border case disclosed. Seven static and seven metadata gates plus final format/test lint pass;589old tests1838unrelated files ten canonical prefixes and parent prefix preserved."
+commit:
+  hash: "a881c8a2b4dde01fffa116249f316718c1f7369e"
+  message: "🐛 KHKG45 writer: own collapsing table borders through native items"
 comments:
   -
     author: "CODER"
     body: "Start: Native collapsing-border item ownership and physical invalidation through core and actual UI; correction6/10, safe iterative approval retained."
+  -
+    author: "CODER"
+    body: "Implementation: native item-owned collapsing borders and original layout/UI reactions committed;1167cases149files10fresh, entire5modules Istanbul100 and static/metadata/preservation gates verified; remaining same-agent quality/closeout."
 events:
   -
     type: "status"
@@ -43,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native collapsed-border item ownership and source-linked invalidation verified:1167accepted149files10fresh; complete5modules actual Istanbul100/0negative/current identical maps;7statics+7metadata+final format/test lint pass, ten prefixes589old tests1838unrelated files retained. Initial lint/TS7 test failures repaired and retained, necessary replay disclosed; same-agent quality pending semantic SHA."
+  -
+    type: "status"
+    at: "2026-10-09T16:16:03.869Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+    note: "Implementation: native item-owned collapsing borders and original layout/UI reactions committed;1167cases149files10fresh, entire5modules Istanbul100 and static/metadata/preservation gates verified; remaining same-agent quality/closeout."
 doc_version: 3
-doc_updated_at: "2026-10-09T16:15:09.008Z"
+doc_updated_at: "2026-10-09T16:17:13.451Z"
 doc_updated_by: "CODER"
 description: "Correction6/10 after XJTGF0: eliminate mirrored collapsing-border mode from SwTable scalar geometry, use existing native RES_COLLAPSING_BORDERS item in table frame and browser/dialog/shell consumers, restore source row/cell border invalidation and verify real history/UI."
 sections:
@@ -129,6 +159,8 @@ sections:
       Resolution: Change only the fresh test to existing native SfxItemSet/SetTabBorders entry point, preserving the same border/history/frame identity assertions. Revalidate only that repaired test, then retry typecheck and remaining static gates. Retain the initial test version as superseded evidence and use current unchanged production maps; no cast or production signature workaround.
 
     - Final verification: Repaired native SetTabBorders history1pass0fail0skip; raw strict partial-profile exit1 retained. Current/repaired complete five-module maps are identical, source hashes unchanged; only these current same-task counters supply final100. Accepted1167 distinct cases149files10fresh, no runtime failures. One necessary1167case production-source revalidation and1 repaired new-test revalidation are disclosed; no gratuitous passing replay. Final all-four Istanbul929lines1033statements187functions802branches100/0negative. Seven statics and seven restored metadata audits pass; final full format and repaired-test lint pass. Ten canonical old value/evidence/responsibility prefixes and589old tests remain unchanged;1838unrelated old source/scripts/docs files unchanged, parent Findings prefix retained. Reference symlink restored. Bounded evidence contains counts/commands/hashes/IDs only. No new whole-module/goal parity claim; historical full XJTGF0 and registered I/O/recovery deviations retained. Same-agent EVALUATOR quality review remains explicitly non-independent, pending semantic SHA binding.
+
+    - KHKG45 closeout: semantic a881c8a2b4dde01fffa116249f316718c1f7369e binds all five production and three fresh-test SHA256 values to accepted evidence. Same-agent non-independent EVALUATOR pass evaluates this exact SHA; final metadata/test format/lint gates pass. Canonical history ten prefixes,589old tests1838unrelated files and original parent Findings prefix remain intact; symlink restored. No source copies/helpers/maps/logs in task artifacts. Broad goal remains ACTIVE/incomplete correction6/10; next full after10, no new full-suite run or parity promotion.
 id_source: "generated"
 ---
 ## Summary
@@ -229,3 +261,5 @@ Pinned9bc445578031fecf56086729d8e4940c77e14d65 tabfrm.cxx::SwTabFrame::IsCollaps
   Resolution: Change only the fresh test to existing native SfxItemSet/SetTabBorders entry point, preserving the same border/history/frame identity assertions. Revalidate only that repaired test, then retry typecheck and remaining static gates. Retain the initial test version as superseded evidence and use current unchanged production maps; no cast or production signature workaround.
 
 - Final verification: Repaired native SetTabBorders history1pass0fail0skip; raw strict partial-profile exit1 retained. Current/repaired complete five-module maps are identical, source hashes unchanged; only these current same-task counters supply final100. Accepted1167 distinct cases149files10fresh, no runtime failures. One necessary1167case production-source revalidation and1 repaired new-test revalidation are disclosed; no gratuitous passing replay. Final all-four Istanbul929lines1033statements187functions802branches100/0negative. Seven statics and seven restored metadata audits pass; final full format and repaired-test lint pass. Ten canonical old value/evidence/responsibility prefixes and589old tests remain unchanged;1838unrelated old source/scripts/docs files unchanged, parent Findings prefix retained. Reference symlink restored. Bounded evidence contains counts/commands/hashes/IDs only. No new whole-module/goal parity claim; historical full XJTGF0 and registered I/O/recovery deviations retained. Same-agent EVALUATOR quality review remains explicitly non-independent, pending semantic SHA binding.
+
+- KHKG45 closeout: semantic a881c8a2b4dde01fffa116249f316718c1f7369e binds all five production and three fresh-test SHA256 values to accepted evidence. Same-agent non-independent EVALUATOR pass evaluates this exact SHA; final metadata/test format/lint gates pass. Canonical history ten prefixes,589old tests1838unrelated files and original parent Findings prefix remain intact; symlink restored. No source copies/helpers/maps/logs in task artifacts. Broad goal remains ACTIVE/incomplete correction6/10; next full after10, no new full-suite run or parity promotion.

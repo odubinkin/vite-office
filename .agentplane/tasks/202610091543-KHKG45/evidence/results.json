@@ -878,5 +878,13 @@
       "hash": "9dd042450ed5b95ac9251bba87340cd2405cab14834fc51dd5130d91a69750e6"
     }
   ],
-  "rawEvidenceLocation": "Ignored apps/office/node_modules/.cache/parity-coverage/KHKG45 only; artifacts contain bounded English counts/commands/hashes/IDs, no source copies/raw maps/logs/helpers."
+  "rawEvidenceLocation": "Ignored apps/office/node_modules/.cache/parity-coverage/KHKG45 only; artifacts contain bounded English counts/commands/hashes/IDs, no source copies/raw maps/logs/helpers.",
+  "semanticCommit": "a881c8a2b4dde01fffa116249f316718c1f7369e",
+  "quality": {
+    "verdict": "pass",
+    "reviewer": "same-agent EVALUATOR; explicitly non-independent",
+    "evaluatedSha": "a881c8a2b4dde01fffa116249f316718c1f7369e",
+    "report": ".agentplane/tasks/202610091543-KHKG45/quality/20261009-161640437-recovery-context/quality-report.json",
+    "reportHash": "03fecfd82b89e68f9f9b43071faa8ebbd6b21c735b293f1a518b11534da250f6"
+  }
 }

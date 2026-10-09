@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 276
+revision: 277
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-09T16:13:22.053Z"
+doc_updated_at: "2026-10-09T16:17:13.704Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -1347,6 +1347,8 @@ sections:
       Resolution: Close SV3P04 with semantic SHA and clean direct state; broad goal active with five completed corrections after XJTGF0. Next atomic correction follows remaining original layout/UI behavior gaps; next full after tenth correction. No native cache/master/follow/page/root/content/VCL or whole-goal promotion.
 
     - Resumed correction6/10 KHKG45: native RES_COLLAPSING_BORDERS bool132false now owns original table mode; SwTable drops stored mirrored enum, preserving direct enum translation only at geometry construction/transport/history boundary. Browser paint, dialog and shell read original effective item. Native recursive table print/size/paint and collapsing cell replacement/current-next-row RES_BOX/final-row table print reactions follow pinned tabfrm.cxx. Final1167 distinct cases149files10fresh all pass; actual entire five production modules Istanbul929lines1033statements187functions802branches all100/0negative. One necessary1167case final-source replay follows lint removal of obsolete production import; one fresh history test repaired to represented SetTabBorders after TS7 rejection and revalidated alone, unchanged production maps. Superseded profiles/raw threshold failures retained only ignored cache; no counter transfer. Seven static gates, seven metadata audits pass; final changed metadata/test formatting/lint gate required. Ten canonical histories append while old statuses/defaults/classes/evidence/responsibility prefixes and589old tests remain unchanged. Native table UpdateAttr_ complete masks/copied-delta forwarding, page/root/content/master/follow/environment/direction/accessibility/VCL still unverified; no whole-module or goal parity promotion. Goal remains active, historical full XJTGF0 unchanged, next full after tenth correction; same-agent quality explicitly non-independent.
+
+    - KHKG45 closeout: semantic a881c8a2b4dde01fffa116249f316718c1f7369e binds all five production and three fresh-test SHA256 values to accepted evidence. Same-agent non-independent EVALUATOR pass evaluates this exact SHA; final metadata/test format/lint gates pass. Canonical history ten prefixes,589old tests1838unrelated files and original parent Findings prefix remain intact; symlink restored. No source copies/helpers/maps/logs in task artifacts. Broad goal remains ACTIVE/incomplete correction6/10; next full after10, no new full-suite run or parity promotion.
 id_source: "generated"
 ---
 ## Summary
@@ -2667,3 +2669,5 @@ Iteration251 / 202610090835-4ZF0N4 verified native table layout ownership. SwTab
   Resolution: Close SV3P04 with semantic SHA and clean direct state; broad goal active with five completed corrections after XJTGF0. Next atomic correction follows remaining original layout/UI behavior gaps; next full after tenth correction. No native cache/master/follow/page/root/content/VCL or whole-goal promotion.
 
 - Resumed correction6/10 KHKG45: native RES_COLLAPSING_BORDERS bool132false now owns original table mode; SwTable drops stored mirrored enum, preserving direct enum translation only at geometry construction/transport/history boundary. Browser paint, dialog and shell read original effective item. Native recursive table print/size/paint and collapsing cell replacement/current-next-row RES_BOX/final-row table print reactions follow pinned tabfrm.cxx. Final1167 distinct cases149files10fresh all pass; actual entire five production modules Istanbul929lines1033statements187functions802branches all100/0negative. One necessary1167case final-source replay follows lint removal of obsolete production import; one fresh history test repaired to represented SetTabBorders after TS7 rejection and revalidated alone, unchanged production maps. Superseded profiles/raw threshold failures retained only ignored cache; no counter transfer. Seven static gates, seven metadata audits pass; final changed metadata/test formatting/lint gate required. Ten canonical histories append while old statuses/defaults/classes/evidence/responsibility prefixes and589old tests remain unchanged. Native table UpdateAttr_ complete masks/copied-delta forwarding, page/root/content/master/follow/environment/direction/accessibility/VCL still unverified; no whole-module or goal parity promotion. Goal remains active, historical full XJTGF0 unchanged, next full after tenth correction; same-agent quality explicitly non-independent.
+
+- KHKG45 closeout: semantic a881c8a2b4dde01fffa116249f316718c1f7369e binds all five production and three fresh-test SHA256 values to accepted evidence. Same-agent non-independent EVALUATOR pass evaluates this exact SHA; final metadata/test format/lint gates pass. Canonical history ten prefixes,589old tests1838unrelated files and original parent Findings prefix remain intact; symlink restored. No source copies/helpers/maps/logs in task artifacts. Broad goal remains ACTIVE/incomplete correction6/10; next full after10, no new full-suite run or parity promotion.
