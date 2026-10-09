@@ -4,7 +4,7 @@ title: "Port Calc mark-data selection owner and validate full cycle"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 25
+revision: 26
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,36 @@ verification:
   updated_by: "CODER"
   note: "Defined mark-data290/1017 and span320 unchanged native comparisons pass with ASan/UBSan; Calc96 has actual100 Istanbul four metrics; portable96+5+30 passes upstream-absent. Full office14245 scenarios have passing initial-run or unchanged focused mdds closure evidence; affected shared5 actual100, inventory123 actual100, browser303, tooling14/provenance3 and all declared static gates pass. Global office coverage report was suppressed by the initial timeout and is not claimed; Writer coverage/implementation remains untouched. CALC-014..016 preserve original behavior. Task10 full-cycle checks completed without assertion/timeout/threshold changes."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-09T18:09:29.307Z"
+  updated_by: "EVALUATOR"
+  note: "Implementation a9c46968e44d satisfies the approved bounded ScMarkData/span owner scope, Calc actual100, portability and task10 full-test cadence with unchanged timeout closures; complete semantic/Writer-global coverage parity is not claimed."
+  evaluated_sha: "a9c46968e44d6d72b84f550fb6d659fbb51bd31b"
+  blueprint_digest: "7410028bb6f3c62674635c7860ec8618613845c47f7f8e5aa2f6f743cae95e88"
+  evidence_refs:
+    - ".agentplane/tasks/202610091723-P9JYX4/README.md"
+    - ".agentplane/tasks/202610091723-P9JYX4/quality/20261009-180929307-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610091723-P9JYX4/quality/20261009-180929307-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610091723-P9JYX4/quality/20261009-180929307-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610091723-P9JYX4/blueprint/resolved-snapshot.json"
+    - "apps/office/src/sc/source/core/data/markdata.ts"
+    - "apps/office/src/sc/source/core/data/markdata.test.ts"
+    - "scripts/calc-markdata-native-probe.mjs"
+    - "output/playwright/task10-native-final-check.log"
+    - "output/playwright/task10-span-native-check.log"
+    - "output/playwright/task10-calc-final.log"
+    - "output/playwright/task10-full-office.log"
+    - "output/playwright/task10-mdds-istanbul-closure.log"
+    - "output/playwright/task10-full-inventory-coverage-retry.log"
+    - "output/playwright/task10-full-browser-scenarios.log"
+    - "output/playwright/task10-portable-calc.log"
+    - "output/playwright/task10-portable-shared.log"
+    - "output/playwright/task10-portable-inventory.log"
+  findings:
+    - "Reviewed original single-class/file ownership:737 physical mark-data lines (checker738) and existing823 range-list lines (checker824) remain coherent original boundaries below1000. Actual ScMultiSel, mark arrays, ranges, bool owners and shared mdds are reused; numerical document/template syntax adapters are explicit. No duplicate interval/document/string engine or Writer change."
+    - "Checked committed290-sequence/1017-snapshot native fixture: every25-field selected observation and command/both-owner result remains retained; five exact pinned full-source hashes independently match. Complete unchanged native groups plus genuine dependencies and ASan/UBSan pass; independent literal mark, post-gap and borrowed-envelope regressions preserve CALC-014..016. Map-row order, selected-tab self-move and generic/lifetime bounds remain explicitly unverified."
+    - "Calc96 actual100 four Istanbul metrics and upstream-absent96+5+30 pass. Full office14244 initially passed and its sole unchanged mdds timeout passes in the5-test Istanbul closure at14.15s with actual100 four-owner coverage. Inventory123 actual100,303 browser/tooling14/provenance3, TS7/full lint/format/docs/boundaries/size/tree/provenance and zero Calc/shared registry violations pass. Full global coverage suppression is transparently recorded, with user-authorized Writer coverage exemption preserved; no assertions, timeouts, thresholds, previous tests or semantic states are relaxed."
 commit: null
 comments:
   -
