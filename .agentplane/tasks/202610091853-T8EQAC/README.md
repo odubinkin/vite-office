@@ -1,10 +1,11 @@
 ---
 id: "202610091853-T8EQAC"
 title: "Use native table headline document commands and dedicated numeric undo"
-status: "DOING"
+result_summary: "Native table headline commands use indexed scalar undo and preserve unrelated table attributes"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -48,6 +49,9 @@ comments:
   -
     author: "CODER"
     body: "Start: Implement native count-only headline document command, numeric undo and original TableHeadingChange publication with actual current-source evidence, correction2/10."
+  -
+    author: "CODER"
+    body: "Verified: Native count-only headline document command and dedicated indexed scalar undo replace whole-table snapshots; original owners/current cursor and unrelated later attributes survive three history cycles; concrete TableHeadingChange updates mounted pages and ODT. Actual2950related10fresh/7browser,entire6module Istanbul100 all-four/zero-negative/current maps,TS7/static/build upstream-absent-finally-restored,nine metadata/twelve canonical prefixes/exact old migrations pass. Same-agent non-independent quality pass evaluated_sha543033191c962e68814528bdb510712f9734ccdf. Full not due2/10; Repeat/follow/copy/full layout unverified; broad goal ACTIVE/incomplete."
 events:
   -
     type: "status"
@@ -74,8 +78,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Final gates pass: quality report pass evaluated_sha543033191c962e68814528bdb510712f9734ccdf same-agent explicitly non-independent;2950related10fresh/7browser/entire6module current-source actual Istanbul100 all-four/zero-negative/identical maps; TS7/static/build physically upstream-absent/finally-restored,9metadata/12canonical prefixes/exact5old migrations/602unchanged old tests. Final artifact/root format pass; no source changes after semantic review. Full not due2/10; Repeat/follow/full layout unverified."
+  -
+    type: "status"
+    at: "2026-10-09T19:17:52.596Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Native count-only headline document command and dedicated indexed scalar undo replace whole-table snapshots; original owners/current cursor and unrelated later attributes survive three history cycles; concrete TableHeadingChange updates mounted pages and ODT. Actual2950related10fresh/7browser,entire6module Istanbul100 all-four/zero-negative/current maps,TS7/static/build upstream-absent-finally-restored,nine metadata/twelve canonical prefixes/exact old migrations pass. Same-agent non-independent quality pass evaluated_sha543033191c962e68814528bdb510712f9734ccdf. Full not due2/10; Repeat/follow/copy/full layout unverified; broad goal ACTIVE/incomplete."
 doc_version: 3
-doc_updated_at: "2026-10-09T19:17:18.295Z"
+doc_updated_at: "2026-10-09T19:17:52.598Z"
 doc_updated_by: "CODER"
 description: "Correction2/10 after fullSZKQTN and KVM0ER. Replace shell headline SetTableAttr snapshot with count-only shell-to-document native operation, dedicated index/old/new SwUndoTableHeadline and TableHeadingChange frame notification, retaining no-op/uint16/source capped old count semantics. Verify original owners and real UI/history/ODT. Native Repeat framework and full master/follow reconstruction remain unrepresented, no synthetic follow flags or broad parity promotion."
 sections:
@@ -160,6 +171,10 @@ sections:
     Resolution: repair29pass0fail; actual closure1526pass0fail, native owners143pass0fail, fresh-final9pass1fail because new numbering guard incorrectly passed node instead of native SwPosition; corrected original registered positions with finally disposal, failed-file6pass0fail. Early TS7 fresh Mock array variance repaired with erased MockInstance[] annotation. Final2950distinct accepted10fresh; entire6module actual Istanbul998lines1096statements247functions664branches100 all-four,zero-negative/current hashes and identical complete maps. Seven browser pass0fail0skip0flaky;8static/browser gate commands pass;9restored metadata pass;12canonical prefixes and602unchanged old test files/exact5migrations/1524unrelated unchanged. No production source changed after first formatted map; no threshold/counter/location edits. Raw failures retained ignored cache. Native Repeat/follow/copy/full layout remain incomplete. Quality and semantic commit pending.
 
     Quality pass on exact semantic commit 543033191c962e68814528bdb510712f9734ccdf; report .agentplane/tasks/202610091853-T8EQAC/quality/20261009-191605066-recovery-context/quality-report.json SHA256 7e7890b561756214ead7640c7f46b1a9501842b482f929cb3b0db8eb17b667eb. Same-agent explicitly non-independent. Verified2950related10fresh/7browser/entire6module current-source actual Istanbul100 all-four/zero-negative, original owners and unrelated later attrs/history3cycles, TS7/static/build upstream-absent and9restored metadata, twelve canonical prefixes/exact5old migrations/602unchanged old tests. Native Repeat/follow/copy/full layout remain separately unverified. Goal ACTIVE/incomplete; correction2/10, full not due. No production/test/canonical changes after exact semantic review. Final artifact-format and deterministic close pending.
+extensions:
+  implementation_commit:
+    hash: "543033191c962e68814528bdb510712f9734ccdf"
+    message: "🧩 T8EQAC table: replace headline snapshots with native numeric history"
 id_source: "generated"
 ---
 ## Summary
