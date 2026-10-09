@@ -4,7 +4,7 @@ title: "Move native table width ownership and reactions to original frame items"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 26
+revision: 29
 origin:
   system: "manual"
 depends_on: []
@@ -22,11 +22,36 @@ verification:
   updated_by: "CODER"
   note: "Passed bounded original table frame-item/client/history/lifetime correction: final257files2121cases14fresh, entire seven current modules Istanbul100 all-four/zero-negative. Nine upstream-absent statics/current-build/smoke and7browser cases pass,9restored metadata audits pass, old-test/canonical/parent preservation passes. Bounded English evidence artifact; full not due4/10; no module/goal promotion."
   attempts: 0
-commit: null
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-09T20:24:04.985Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent non-independent review of semantic 5aeb5f8e3730ec012aa835aae22acaa7c9b93392 passes bounded original native table frame-item/client/history/lifetime correction. Full native parity remains incomplete."
+  evaluated_sha: "5aeb5f8e3730ec012aa835aae22acaa7c9b93392"
+  blueprint_digest: "435e751b711bb8908d12b8c3e69fb15af92ff1354a7f59a7f0e92675ca34bac5"
+  evidence_refs:
+    - ".agentplane/tasks/202610091947-WGQ894/README.md"
+    - ".agentplane/tasks/202610091947-WGQ894/quality/20261009-202404985-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610091947-WGQ894/quality/20261009-202404985-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610091947-WGQ894/quality/20261009-202404985-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610091947-WGQ894/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610091947-WGQ894/artifacts/native-table-frame-item-evidence.json"
+    - "git show 5aeb5f8e3730ec012aa835aae22acaa7c9b93392; committed source/fresh hashes revalidated against current bounded artifact"
+    - "Ignored final current-task maps, static/current-build/browser/audit/preservation/decomposition records checked; reference symlink restored"
+  findings:
+    - "Reviewed actual committed native source diff and unchanged class-body proof: original frame client owns width delta scaling; separator lock excludes general scaling; raw complete SaveTable item restoration invalidates original table frames and original clients are released on deletion. Captured render-time UI keys avoid dead-owner cleanup access."
+    - "Verified committed production and three fresh-test hashes against bounded artifact; final current-source complete seven-file Istanbul1455lines1592statements276functions916branches100 all-four/zero-negative,2121distinct cases14fresh. All earlier task/pre-decomposition/profile counters and maps excluded."
+    - "Actual current build precedes smoke and7browser pass zero failure/skip/flaky; TS7/statics and9restored metadata pass.597old tests byte-identical and16exact old fixture migrations retain every other assertion. Twelve original canonical status/default/classification/evidence/responsibility histories retained; exact two-symbol declaration ownership migration and2new auxiliary records source-backed. Artifact52212bytes contains no upstream source snapshots/scripts/raw maps/logs."
+commit:
+  hash: "5aeb5f8e3730ec012aa835aae22acaa7c9b93392"
+  message: "🧩 WGQ894 fix: own table widths through original frame items"
 comments:
   -
     author: "CODER"
     body: "Start: Move native table width to original frame item/client notifications and verify true history, layout and lifetime without scalar width adapter, correction4/10."
+  -
+    author: "CODER"
+    body: "Implementation committed: original native frame-item ownership and raw native table attribute history verified; exact-SHA same-agent non-independent quality review pending."
 events:
   -
     type: "status"
@@ -41,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Passed bounded original table frame-item/client/history/lifetime correction: final257files2121cases14fresh, entire seven current modules Istanbul100 all-four/zero-negative. Nine upstream-absent statics/current-build/smoke and7browser cases pass,9restored metadata audits pass, old-test/canonical/parent preservation passes. Bounded English evidence artifact; full not due4/10; no module/goal promotion."
+  -
+    type: "status"
+    at: "2026-10-09T20:23:34.452Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+    note: "Implementation committed: original native frame-item ownership and raw native table attribute history verified; exact-SHA same-agent non-independent quality review pending."
 doc_version: 3
-doc_updated_at: "2026-10-09T20:22:50.404Z"
+doc_updated_at: "2026-10-09T20:24:31.603Z"
 doc_updated_by: "CODER"
 description: "Correction4/10 after fullSZKQTN and B575XR. Remove mirrored table width and direct SetFormat width-scaling adapter. SwTable registers as original native SwClient, consumes actual frame-size hints with native modify lock, separator changes avoid double scaling, item-set history restores complete original table frame attrs without replay adapters. Native layout/normalization read effective original width; release client during table deletion. Preserve registered IO/recovery/settings deviations and existing unrepresented flat-builder missing-size boundary, no full-native-layout claims."
 sections:
@@ -64,41 +96,7 @@ sections:
      Final production scope is seven complete files including swtable-boxline.ts. Fresh14 and related affected union tests run upstream-absent. Actual final-source Istanbul100 all four configured metrics and zero negative counters; entire source hashes and complete maps checked. No pre-decomposition swtable counters. File-size gate remains unchanged. Twelve original canonical record prefixes preserved plus two new unverified source-mapped auxiliary records. Precise additional td/th selector changes and explicit headerRows0 only for the non-repeating page-fragment fixture must pass old-test preservation.
 
     Canonical source declaration ownership exception: only the original swtable runtime semantic.localSymbols removes SwTableBox and SwTableLine after their unchanged declarations move to the newly registered auxiliary; original public exports remain intact. All twelve existing record status/default/classification/evidence/responsibility histories are preserved. This exact symbol ownership update is required by the exhaustive runtime AST audit; no synthetic alias or semantic violation is introduced. Preservation proof must admit only this two-symbol metadata migration.
-  Verification: |-
-    Passed: final affected union257 files/2121 distinct scenarios/14fresh, zero failures/skips; current seven complete production modules actual Istanbul1455lines1592statements276functions916branches100 all-four/zero-negative, current source SHA256 checked. Earlier maps/counters excluded. Upstream physically absent for tests/build/statics with finally restoration. TS CLI7.0.2/compiler API6.0.2; nine statics including current build before smoke/browser pass; seven browser cases zero failures/skips/flaky. Nine restored metadata audits pass, doctor0errors2historicalwarnings. Preservation1519 unrelated original files,597byte-identical old tests,16exact migrated fixtures/18operations,12old canonical histories plus exact two-symbol source-ownership migration and2new source-mapped records. Source/metadata contracts remain unverified overall. Evidence: .agentplane/tasks/202610091947-WGQ894/artifacts/native-table-frame-item-evidence.json. No full due correction4/10 after SZKQTN; goal ACTIVE/incomplete. Semantic commit/exact-SHA same-agent non-independent quality and canonical finish follow.
-
-    <!-- BEGIN VERIFICATION RESULTS -->
-    ### 2026-10-09T20:22:50.350Z — VERIFY — ok
-
-    By: CODER
-
-    Note: Passed bounded original table frame-item/client/history/lifetime correction: final257files2121cases14fresh, entire seven current modules Istanbul100 all-four/zero-negative. Nine upstream-absent statics/current-build/smoke and7browser cases pass,9restored metadata audits pass, old-test/canonical/parent preservation passes. Bounded English evidence artifact; full not due4/10; no module/goal promotion.
-    Attempts: 0
-
-    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T20:22:31.383Z, excerpt_hash=sha256:011f01130e245b8801f5392c3d7747ccfb76afe96389c65887daf835bff90442
-
-    Details:
-
-    BlueprintSnapshotRef:
-    - state: current
-    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610091947-WGQ894/blueprint/resolved-snapshot.json
-    - old_digest: 435e751b711bb8908d12b8c3e69fb15af92ff1354a7f59a7f0e92675ca34bac5
-    - current_digest: 435e751b711bb8908d12b8c3e69fb15af92ff1354a7f59a7f0e92675ca34bac5
-    - route_changed: no
-    - safe_command: agentplane blueprint snapshot 202610091947-WGQ894
-
-    DecisionContextRef:
-    - operator_action: run_exact_argv
-    - can_execute_now: true
-    - safe_command: agentplane commit 202610091947-WGQ894 -m 🧩 WGQ894 task: persist canonical task artifacts --allow-tasks
-    - diagnostic_command: none
-    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
-    - freshness: route=computed_local remote=remote_skipped
-    - repeat_allowed: true
-    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
-    - risks: none
-
-    <!-- END VERIFICATION RESULTS -->
+  Verification: "Passed: final affected union257 files/2121 distinct scenarios/14fresh, zero failures/skips; current seven complete production modules actual Istanbul1455lines1592statements276functions916branches100 all-four/zero-negative, current source SHA256 checked. Earlier maps/counters excluded. Upstream physically absent for tests/build/statics with finally restoration. TS CLI7.0.2/compiler API6.0.2; nine statics including current build before smoke/browser pass; seven browser cases zero failures/skips/flaky. Nine restored metadata audits pass, doctor0errors2historicalwarnings. Preservation1519 unrelated original files,597byte-identical old tests,16exact migrated fixtures/18operations,12old canonical histories plus exact two-symbol source-ownership migration and2new source-mapped records. Source/metadata contracts remain unverified overall. Evidence: .agentplane/tasks/202610091947-WGQ894/artifacts/native-table-frame-item-evidence.json. No full due correction4/10 after SZKQTN; goal ACTIVE/incomplete. Semantic implementation 5aeb5f8e3730ec012aa835aae22acaa7c9b93392; same-agent non-independent quality PASS evaluated_sha=5aeb5f8e3730ec012aa835aae22acaa7c9b93392 at .agentplane/tasks/202610091947-WGQ894/quality/20261009-202404985-recovery-context/quality-report.json. Report hash=44e3c86c16320006ee6a28d6ee080185ff6566748fcbec94b965f140d32c84a6. Canonical finish follows; source and fresh-test hashes remain equal to reviewed commit."
   Rollback Plan: "Revert native width client/item ownership plus associated history/layout/lifetime changes and appended canonical histories together, retain evidence and revalidate affected absent consumers; no destructive history or publication."
   Findings: |-
     Previous turn is verified progress: B575XR DONE semanticfe172471e03ebfc613455a574f4e1543a30f6ec1, close2f1db507958a, tree clean. Current SwTable keeps mirrored scalar width and directly calls AdjustWidths, while native source registers SwTable as frame client and reacts to RES_FRM_SIZE hints. Original table frame direct size edits are consequently ignored by core widths/layout. Historical X6VV8G is old rework, not confirmed live; no wait or duplicate runner. Standing iterative user goal authorizes this bounded atomic ownership/refactor scope. Missing-size flat builders, full native orientation/spacing/table frame type/copy/Repeat/master/follow/layout remain unverified separately.
@@ -147,40 +145,7 @@ Canonical source declaration ownership exception: only the original swtable runt
 
 ## Verification
 
-Passed: final affected union257 files/2121 distinct scenarios/14fresh, zero failures/skips; current seven complete production modules actual Istanbul1455lines1592statements276functions916branches100 all-four/zero-negative, current source SHA256 checked. Earlier maps/counters excluded. Upstream physically absent for tests/build/statics with finally restoration. TS CLI7.0.2/compiler API6.0.2; nine statics including current build before smoke/browser pass; seven browser cases zero failures/skips/flaky. Nine restored metadata audits pass, doctor0errors2historicalwarnings. Preservation1519 unrelated original files,597byte-identical old tests,16exact migrated fixtures/18operations,12old canonical histories plus exact two-symbol source-ownership migration and2new source-mapped records. Source/metadata contracts remain unverified overall. Evidence: .agentplane/tasks/202610091947-WGQ894/artifacts/native-table-frame-item-evidence.json. No full due correction4/10 after SZKQTN; goal ACTIVE/incomplete. Semantic commit/exact-SHA same-agent non-independent quality and canonical finish follow.
-
-<!-- BEGIN VERIFICATION RESULTS -->
-### 2026-10-09T20:22:50.350Z — VERIFY — ok
-
-By: CODER
-
-Note: Passed bounded original table frame-item/client/history/lifetime correction: final257files2121cases14fresh, entire seven current modules Istanbul100 all-four/zero-negative. Nine upstream-absent statics/current-build/smoke and7browser cases pass,9restored metadata audits pass, old-test/canonical/parent preservation passes. Bounded English evidence artifact; full not due4/10; no module/goal promotion.
-Attempts: 0
-
-VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T20:22:31.383Z, excerpt_hash=sha256:011f01130e245b8801f5392c3d7747ccfb76afe96389c65887daf835bff90442
-
-Details:
-
-BlueprintSnapshotRef:
-- state: current
-- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610091947-WGQ894/blueprint/resolved-snapshot.json
-- old_digest: 435e751b711bb8908d12b8c3e69fb15af92ff1354a7f59a7f0e92675ca34bac5
-- current_digest: 435e751b711bb8908d12b8c3e69fb15af92ff1354a7f59a7f0e92675ca34bac5
-- route_changed: no
-- safe_command: agentplane blueprint snapshot 202610091947-WGQ894
-
-DecisionContextRef:
-- operator_action: run_exact_argv
-- can_execute_now: true
-- safe_command: agentplane commit 202610091947-WGQ894 -m 🧩 WGQ894 task: persist canonical task artifacts --allow-tasks
-- diagnostic_command: none
-- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
-- freshness: route=computed_local remote=remote_skipped
-- repeat_allowed: true
-- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
-- risks: none
-
-<!-- END VERIFICATION RESULTS -->
+Passed: final affected union257 files/2121 distinct scenarios/14fresh, zero failures/skips; current seven complete production modules actual Istanbul1455lines1592statements276functions916branches100 all-four/zero-negative, current source SHA256 checked. Earlier maps/counters excluded. Upstream physically absent for tests/build/statics with finally restoration. TS CLI7.0.2/compiler API6.0.2; nine statics including current build before smoke/browser pass; seven browser cases zero failures/skips/flaky. Nine restored metadata audits pass, doctor0errors2historicalwarnings. Preservation1519 unrelated original files,597byte-identical old tests,16exact migrated fixtures/18operations,12old canonical histories plus exact two-symbol source-ownership migration and2new source-mapped records. Source/metadata contracts remain unverified overall. Evidence: .agentplane/tasks/202610091947-WGQ894/artifacts/native-table-frame-item-evidence.json. No full due correction4/10 after SZKQTN; goal ACTIVE/incomplete. Semantic implementation 5aeb5f8e3730ec012aa835aae22acaa7c9b93392; same-agent non-independent quality PASS evaluated_sha=5aeb5f8e3730ec012aa835aae22acaa7c9b93392 at .agentplane/tasks/202610091947-WGQ894/quality/20261009-202404985-recovery-context/quality-report.json. Report hash=44e3c86c16320006ee6a28d6ee080185ff6566748fcbec94b965f140d32c84a6. Canonical finish follows; source and fresh-test hashes remain equal to reviewed commit.
 
 ## Rollback Plan
 

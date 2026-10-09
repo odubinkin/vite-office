@@ -1079,5 +1079,15 @@
     "testsAndBuildAndStaticsAbsent": true,
     "restored": true
   },
-  "goal": "ACTIVE/incomplete"
+  "goal": "ACTIVE/incomplete",
+  "quality": {
+    "semanticCommit": "5aeb5f8e3730ec012aa835aae22acaa7c9b93392",
+    "evaluatedSha": "5aeb5f8e3730ec012aa835aae22acaa7c9b93392",
+    "verdict": "pass",
+    "independent": false,
+    "reviewer": "same coding agent in EVALUATOR role",
+    "report": ".agentplane/tasks/202610091947-WGQ894/quality/20261009-202404985-recovery-context/quality-report.json",
+    "reportHash": "44e3c86c16320006ee6a28d6ee080185ff6566748fcbec94b965f140d32c84a6",
+    "semanticEvidenceHash": "425ca810a46e8ce21b05f283f1141a87b4a59829372745a9ec364fbcf7774ccd"
+  }
 }
