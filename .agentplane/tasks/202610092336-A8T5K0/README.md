@@ -4,7 +4,7 @@ title: "Apply imported table formats to original native items without scalar rep
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -18,15 +18,39 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-09T23:48:12.596Z"
+  updated_at: "2026-10-09T23:49:25.752Z"
   updated_by: "CODER"
-  note: "Verified direct original XML table,row,box items and header owner535related16fresh24Chromium; whole final xmltbli actual100all-four,current complete maps/source,zero negatives.593old tests2histories retained,statics9metadata pass; no upstream-backed tests or full replay."
+  note: "Refreshed after exact-SHA same-agent non-independent quality pass6895652f.535related16fresh24Chromium,whole xmltbli100all-four/current complete map/source/zero-negatives,593old tests2histories preserved,statics9metadata pass. Reference restored; full not due3/10."
   attempts: 0
-commit: null
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-09T23:49:01.450Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent non-independent exact-SHA review: XML import applies represented native items and updates only original header counter, meeting scoped acceptance."
+  evaluated_sha: "6895652fd52e283682f533ab503daca3876ed37a"
+  blueprint_digest: "40cd599e5d6decd3cea4cad472437a3f7d5ecd2ee8f2620b764a67a745c3d023"
+  evidence_refs:
+    - ".agentplane/tasks/202610092336-A8T5K0/README.md"
+    - ".agentplane/tasks/202610092336-A8T5K0/quality/20261009-234901450-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610092336-A8T5K0/quality/20261009-234901450-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610092336-A8T5K0/quality/20261009-234901450-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610092336-A8T5K0/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610092336-A8T5K0/evidence/verification.json"
+    - "semantic SHA6895652fd52e283682f533ab503daca3876ed37a source/test and current complete-map hashes checked locally"
+    - "current535accepted related cases16fresh24Chromium with native package/header/mounted owner and history checks"
+  findings:
+    - "Exact6895652f production and final fresh test hashes match current complete Istanbul maps and535accepted16fresh24Chromium reports. Whole xmltbli100all-four zero-negative; failed-only fixture repair and byte-identical type-only emitted JS proof retained, no passing replay."
+    - "Original complete LR/Hori/frame-size fields and connected owners survive header completion and3mounted native history cycles; real ODT import has scalar setters only at original constructor boundaries.593old tests2canonical prefixes/default/status/classification and registered IO deviations preserved; statics9restored metadata pass."
+commit:
+  hash: "6895652fd52e283682f533ab503daca3876ed37a"
+  message: "🚧 A8T5K0 writer: import original table format items directly"
 comments:
   -
     author: "CODER"
     body: "Start: apply XML table styles directly to original items and preserve complete owners through header count; standing iterative user authorization."
+  -
+    author: "CODER"
+    body: "Start: bind direct XML native-item implementation to exact semantic commit before quality."
 events:
   -
     type: "status"
@@ -41,8 +65,27 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified direct original XML table,row,box items and header owner535related16fresh24Chromium; whole final xmltbli actual100all-four,current complete maps/source,zero negatives.593old tests2histories retained,statics9metadata pass; no upstream-backed tests or full replay."
+  -
+    type: "status"
+    at: "2026-10-09T23:49:00.241Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+    note: "Start: bind direct XML native-item implementation to exact semantic commit before quality."
+  -
+    type: "verify"
+    at: "2026-10-09T23:49:00.709Z"
+    author: "CODER"
+    state: "ok"
+    note: "Exact semantic6895652f passes535related16fresh24Chromium; whole final xmltbli100all-four,current complete maps/source and zero negatives.593old tests2histories preserved,statics9metadata pass. Same-agent non-independent quality follows."
+  -
+    type: "verify"
+    at: "2026-10-09T23:49:25.752Z"
+    author: "CODER"
+    state: "ok"
+    note: "Refreshed after exact-SHA same-agent non-independent quality pass6895652f.535related16fresh24Chromium,whole xmltbli100all-four/current complete map/source/zero-negatives,593old tests2histories preserved,statics9metadata pass. Reference restored; full not due3/10."
 doc_version: 3
-doc_updated_at: "2026-10-09T23:48:12.653Z"
+doc_updated_at: "2026-10-09T23:49:25.805Z"
 doc_updated_by: "CODER"
 description: "Correction3/10 after BZQGYC: XML import directly sets original table,row,box typed attributes and original headline counter,removes scalar GetFormat/SetFormat replay and neutral table-format cast. Preserve native defaults/order/full item fields and registered IO deviations. Fresh actual SAX/ODT/mounted history and related current whole xmltbli100 upstream absent."
 sections:
@@ -88,6 +131,66 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-10-09T23:49:00.709Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Exact semantic6895652f passes535related16fresh24Chromium; whole final xmltbli100all-four,current complete maps/source and zero negatives.593old tests2histories preserved,statics9metadata pass. Same-agent non-independent quality follows.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T23:49:00.241Z, excerpt_hash=sha256:6323c6937c953060f300605525280df52f05773b7b0a0dee703e30b4baade13b
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610092336-A8T5K0/blueprint/resolved-snapshot.json
+    - old_digest: 40cd599e5d6decd3cea4cad472437a3f7d5ecd2ee8f2620b764a67a745c3d023
+    - current_digest: 40cd599e5d6decd3cea4cad472437a3f7d5ecd2ee8f2620b764a67a745c3d023
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610092336-A8T5K0
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610092336-A8T5K0 --result verified-202610092336-A8T5K0 --commit 6895652fd52e283682f533ab503daca3876ed37a
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-10-09T23:49:25.752Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Refreshed after exact-SHA same-agent non-independent quality pass6895652f.535related16fresh24Chromium,whole xmltbli100all-four/current complete map/source/zero-negatives,593old tests2histories preserved,statics9metadata pass. Reference restored; full not due3/10.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T23:49:25.359Z, excerpt_hash=sha256:6323c6937c953060f300605525280df52f05773b7b0a0dee703e30b4baade13b
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610092336-A8T5K0/blueprint/resolved-snapshot.json
+    - old_digest: 40cd599e5d6decd3cea4cad472437a3f7d5ecd2ee8f2620b764a67a745c3d023
+    - current_digest: 40cd599e5d6decd3cea4cad472437a3f7d5ecd2ee8f2620b764a67a745c3d023
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610092336-A8T5K0
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610092336-A8T5K0 --result verified-202610092336-A8T5K0 --commit 6895652fd52e283682f533ab503daca3876ed37a
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only the scoped semantic commit if necessary, retaining unrelated work and historical task evidence. No destructive reset, merge, publication, network or subagents."
   Findings: |-
@@ -104,6 +207,10 @@ sections:
     - Observation: Restored registry-build rejected newly appended prose references in provenance evidence.local.
       Impact: Metadata schema requires path/marker objects; narratives belong to preservedResponsibilities. Original histories and actual source/tests unchanged.
       Resolution: Move only new narratives into preservedResponsibilities and encode new native-test/source references as path/marker objects. Retain failed metadata log/report, rerun failed build and pending audits only.
+
+    - Observation: Final535related16fresh24Chromium and9metadata pass; exact semantic6895652f quality pass.
+      Impact: Original XML typed items and headline owner meet scoped acceptance,whole final xmltbli100all-four,current complete maps/source and zero negatives. All593old tests and2canonical histories retained; broad parity remains incomplete.
+      Resolution: Same implementing agent EVALUATOR review explicitly non-independent, report .agentplane/tasks/202610092336-A8T5K0/quality/20261009-234901450-recovery-context/quality-report.json. Source/test hashes unchanged after review. Refresh verification and persist quality/evidence before canonical finish with concrete result; reference restored,writer branch.
 id_source: "generated"
 ---
 ## Summary
@@ -160,6 +267,66 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-10-09T23:49:00.709Z — VERIFY — ok
+
+By: CODER
+
+Note: Exact semantic6895652f passes535related16fresh24Chromium; whole final xmltbli100all-four,current complete maps/source and zero negatives.593old tests2histories preserved,statics9metadata pass. Same-agent non-independent quality follows.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T23:49:00.241Z, excerpt_hash=sha256:6323c6937c953060f300605525280df52f05773b7b0a0dee703e30b4baade13b
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610092336-A8T5K0/blueprint/resolved-snapshot.json
+- old_digest: 40cd599e5d6decd3cea4cad472437a3f7d5ecd2ee8f2620b764a67a745c3d023
+- current_digest: 40cd599e5d6decd3cea4cad472437a3f7d5ecd2ee8f2620b764a67a745c3d023
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610092336-A8T5K0
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610092336-A8T5K0 --result verified-202610092336-A8T5K0 --commit 6895652fd52e283682f533ab503daca3876ed37a
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-09T23:49:25.752Z — VERIFY — ok
+
+By: CODER
+
+Note: Refreshed after exact-SHA same-agent non-independent quality pass6895652f.535related16fresh24Chromium,whole xmltbli100all-four/current complete map/source/zero-negatives,593old tests2histories preserved,statics9metadata pass. Reference restored; full not due3/10.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T23:49:25.359Z, excerpt_hash=sha256:6323c6937c953060f300605525280df52f05773b7b0a0dee703e30b4baade13b
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610092336-A8T5K0/blueprint/resolved-snapshot.json
+- old_digest: 40cd599e5d6decd3cea4cad472437a3f7d5ecd2ee8f2620b764a67a745c3d023
+- current_digest: 40cd599e5d6decd3cea4cad472437a3f7d5ecd2ee8f2620b764a67a745c3d023
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610092336-A8T5K0
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610092336-A8T5K0 --result verified-202610092336-A8T5K0 --commit 6895652fd52e283682f533ab503daca3876ed37a
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -181,3 +348,7 @@ Pinned xmltbli.cxx2498 updates only original headline count;2587 applies origina
 - Observation: Restored registry-build rejected newly appended prose references in provenance evidence.local.
   Impact: Metadata schema requires path/marker objects; narratives belong to preservedResponsibilities. Original histories and actual source/tests unchanged.
   Resolution: Move only new narratives into preservedResponsibilities and encode new native-test/source references as path/marker objects. Retain failed metadata log/report, rerun failed build and pending audits only.
+
+- Observation: Final535related16fresh24Chromium and9metadata pass; exact semantic6895652f quality pass.
+  Impact: Original XML typed items and headline owner meet scoped acceptance,whole final xmltbli100all-four,current complete maps/source and zero negatives. All593old tests and2canonical histories retained; broad parity remains incomplete.
+  Resolution: Same implementing agent EVALUATOR review explicitly non-independent, report .agentplane/tasks/202610092336-A8T5K0/quality/20261009-234901450-recovery-context/quality-report.json. Source/test hashes unchanged after review. Refresh verification and persist quality/evidence before canonical finish with concrete result; reference restored,writer branch.
