@@ -4,7 +4,7 @@ title: "Calc core coordinate and range foundation"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -25,10 +25,28 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-09T07:24:36.219Z"
+  updated_at: "2026-10-09T07:25:11.165Z"
   updated_by: "CODER"
-  note: "Calc numerical foundation passes 9 cases and actual all-four 100% coverage (147 lines,155 statements,46 functions,122 branches), typecheck, module boundaries, scoped registry, lint/format, docs/size, routing and doctor. Full suite deferred to Calc task10 per explicit user cadence; semantic native API parity remains unverified."
+  note: "verified-202610090711-S6VCEJ"
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-09T07:25:04.924Z"
+  updated_by: "EVALUATOR"
+  note: "Approved first Calc numerical foundation is implemented and scoped checks pass; whole upstream/API parity is explicitly unverified."
+  evaluated_sha: "8d41bf2d1bdeeaf24ad5e9e0bb7e75c97d661c8c"
+  blueprint_digest: "783d40424197829c1b899f92dd0a759d4e42d12f5f144d258a0045b06b341bab"
+  evidence_refs:
+    - ".agentplane/tasks/202610090711-S6VCEJ/README.md"
+    - ".agentplane/tasks/202610090711-S6VCEJ/quality/20261009-072504924-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610090711-S6VCEJ/quality/20261009-072504924-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610090711-S6VCEJ/quality/20261009-072504924-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610090711-S6VCEJ/blueprint/resolved-snapshot.json"
+    - "apps/office/coverage/calc/coverage-summary.json"
+    - "apps/office/src/sc/source/core/tool/address.test.ts"
+    - "docs/program/calc-core.md"
+  findings:
+    - "Reviewed exact pinned Move and constructor contracts, inclusive table-count bounds, signed narrowing, independent endpoint identities, branch coverage and absence of browser/Writer imports. No shared owner duplicated."
 commit: null
 comments:
   -
@@ -48,8 +66,14 @@ events:
     author: "CODER"
     state: "ok"
     note: "Calc numerical foundation passes 9 cases and actual all-four 100% coverage (147 lines,155 statements,46 functions,122 branches), typecheck, module boundaries, scoped registry, lint/format, docs/size, routing and doctor. Full suite deferred to Calc task10 per explicit user cadence; semantic native API parity remains unverified."
+  -
+    type: "verify"
+    at: "2026-10-09T07:25:11.165Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610090711-S6VCEJ"
 doc_version: 3
-doc_updated_at: "2026-10-09T07:24:36.389Z"
+doc_updated_at: "2026-10-09T07:25:11.385Z"
 doc_updated_by: "CODER"
 description: "Begin approved Calc implementation on branch calc in this checkout. Reimplement pinned LibreOffice coordinate types, address and range contracts with original defaults, shared-module reuse, source provenance and independent Calc coverage. First of ten Calc tasks before a full-suite run; no branch integration."
 sections:
@@ -92,6 +116,36 @@ sections:
     - freshness: route=computed_local remote=remote_skipped
     - repeat_allowed: false
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-09T07:25:11.165Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610090711-S6VCEJ
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T07:24:36.389Z, excerpt_hash=sha256:85ef2d0760f54c54833a98a677cdcbf7703e278f25a2cd491d2cb844427b9a62
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610090711-S6VCEJ/blueprint/resolved-snapshot.json
+    - old_digest: 783d40424197829c1b899f92dd0a759d4e42d12f5f144d258a0045b06b341bab
+    - current_digest: 783d40424197829c1b899f92dd0a759d4e42d12f5f144d258a0045b06b341bab
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610090711-S6VCEJ
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610090711-S6VCEJ --result verified-202610090711-S6VCEJ --commit 8d41bf2d1bdeeaf24ad5e9e0bb7e75c97d661c8c
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
     <!-- END VERIFICATION RESULTS -->
@@ -150,6 +204,36 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-09T07:25:11.165Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610090711-S6VCEJ
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T07:24:36.389Z, excerpt_hash=sha256:85ef2d0760f54c54833a98a677cdcbf7703e278f25a2cd491d2cb844427b9a62
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610090711-S6VCEJ/blueprint/resolved-snapshot.json
+- old_digest: 783d40424197829c1b899f92dd0a759d4e42d12f5f144d258a0045b06b341bab
+- current_digest: 783d40424197829c1b899f92dd0a759d4e42d12f5f144d258a0045b06b341bab
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610090711-S6VCEJ
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610090711-S6VCEJ --result verified-202610090711-S6VCEJ --commit 8d41bf2d1bdeeaf24ad5e9e0bb7e75c97d661c8c
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->

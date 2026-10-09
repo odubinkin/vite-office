@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "202610090711-S6VCEJ",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-09T07:25:04.924Z",
+  "verdict": "pass",
+  "summary": "Approved first Calc numerical foundation is implemented and scoped checks pass; whole upstream/API parity is explicitly unverified.",
+  "evaluated_sha": "8d41bf2d1bdeeaf24ad5e9e0bb7e75c97d661c8c",
+  "blueprint_digest": "783d40424197829c1b899f92dd0a759d4e42d12f5f144d258a0045b06b341bab",
+  "findings": [
+    "Reviewed exact pinned Move and constructor contracts, inclusive table-count bounds, signed narrowing, independent endpoint identities, branch coverage and absence of browser/Writer imports. No shared owner duplicated."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610090711-S6VCEJ/README.md",
+    "apps/office/coverage/calc/coverage-summary.json",
+    "apps/office/src/sc/source/core/tool/address.test.ts",
+    "docs/program/calc-core.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "No compiled native differential proof or whole Calc API/UI implementation; same-agent review is not independent. Existing unrelated doctor warnings remain."
+  ]
+}
