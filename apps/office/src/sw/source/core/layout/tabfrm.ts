@@ -2,8 +2,10 @@
 import type { SwTable, SwTableBox, SwTableLine } from "../table/swtable";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { SwFrameSize } from "../../../inc/fmtfsize";
-import type { SwModify } from "../../../inc/calbck";
+import { LegacyModifyHint, BroadcastingModify, type SwModify } from "../../../inc/calbck";
 import { SwLayoutFrame, SwFrameType } from "./wsfrm";
+import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
+import { RES_FRM_SIZE, RES_ROW_SPLIT, RES_VERT_ORIENT } from "../../../inc/hintids";
 import type { SwModelHint } from "../../../inc/hints";
 
 /** Owns represented flat-row height over its original native line. */
@@ -30,6 +32,11 @@ export class SwRowFrame extends SwLayoutFrame {
   public override Dispose(): void {
     this.DestroyImpl();
   }
+  /** Forwards the exact native size/split item to the layout frame. @param item - Borrowed accepted pool item. @returns Nothing. */
+  protected OnFrameSize(item: SfxPoolItem): void {
+    const source = new BroadcastingModify();
+    super.SwClientNotify(source, new LegacyModifyHint(undefined, item));
+  }
   /** Follows only original-row change and history movement hints. @param source - Emitting native owner. @param hint - Typed native notification. @returns Nothing. */
   protected override SwClientNotify(source: SwModify, hint: SwModelHint): void {
     if (hint.kind === "model-transaction") {
@@ -46,7 +53,17 @@ export class SwRowFrame extends SwLayoutFrame {
       this.RegisterToFormat(hint.m_rNewFormat);
       this.InvalidateAll();
       this.ReinitializeFrameSizeAttrFlags();
-    } else super.SwClientNotify(source, hint);
+    } else if (hint.kind === "attr-set-change") {
+      const changed = hint.m_pNew?.GetChgSet();
+      const item =
+        changed?.GetItemIfSet(RES_FRM_SIZE, false) ?? changed?.GetItemIfSet(RES_ROW_SPLIT, false);
+      if (item) this.OnFrameSize(item);
+      else super.SwClientNotify(source, hint);
+    } else if (hint.kind === "legacy-modify") {
+      if (!hint.m_pNew) super.SwClientNotify(source, hint);
+      else if (hint.m_pNew.Which() === RES_FRM_SIZE || hint.m_pNew.Which() === RES_ROW_SPLIT)
+        this.OnFrameSize(hint.m_pNew);
+    }
   }
   /** Reads the original row owner. @returns Native line. */
   public GetTabLine(): SwTableLine {
@@ -103,7 +120,21 @@ export class SwCellFrame extends SwLayoutFrame {
       this.RegisterToFormat(hint.m_rNewFormat);
       this.InvalidateAll();
       this.ReinitializeFrameSizeAttrFlags();
-    } else super.SwClientNotify(source, hint);
+    } else {
+      const orientation =
+        hint.kind === "legacy-modify"
+          ? hint.m_pNew?.Which() === RES_VERT_ORIENT
+            ? hint.m_pNew
+            : undefined
+          : hint.kind === "attr-set-change"
+            ? hint.m_pNew?.GetChgSet().GetItemIfSet(RES_VERT_ORIENT, false)
+            : undefined;
+      if (orientation) {
+        this.SetCompletePaint();
+        this.InvalidatePrt();
+      }
+      super.SwClientNotify(source, hint);
+    }
   }
 }
 

@@ -25,3 +25,9 @@ export enum SetAttrMode {
   NO_CURSOR_CHANGE = 512,
   REMOVE_ALL_ATTR = 1024,
 }
+
+/** Represented native frame preparation discriminators from swtypes.hxx. */
+export enum PrepareHint {
+  Clear = 0,
+  FixSizeChanged = 2,
+}

@@ -10,7 +10,11 @@
       "SwFrame",
       "SwLayoutFrame",
       "SwFrameType",
-      "InvalidationType"
+      "InvalidationType",
+      "SwClientNotify",
+      "UpdateAttrFrame",
+      "Prepare",
+      "SwFrameInvFlags"
     ],
     "upstreamSymbols": [
       "SwFrame::SwFrame",
@@ -22,13 +26,20 @@
       "SwFrame::ImplInvalidateSize",
       "SwFrame::ImplInvalidatePrt",
       "SwFrame::ImplInvalidatePos",
-      "SwFrame::ReinitializeFrameSizeAttrFlags"
+      "SwFrame::ReinitializeFrameSizeAttrFlags",
+      "SwFrame::SwClientNotify",
+      "SwFrame::UpdateAttrFrame",
+      "SwFrame::Prepare",
+      "SwFrameInvFlags"
     ],
     "preservedResponsibilities": [
       "Iteration244 connects actual SwFrame and SwLayoutFrame registration and original linked lower/sibling pointers. SwRowFrame constructs SwCellFrame children; native box claims retarget matching physical clients before model registration and history moves original cell frames. Recursive flat layout teardown and actual cell deletion release registrations; JSX, collapsing border paint and width measurement borrow registered native format items and release frames in finally. Full native geometry, flags, invalidation, content, follows, accessibility, fly/root and UNO remain unverified. Targeted verification pending; last full237,next247; prior metadata status/default/classification and registered I/O/recovery deviations preserved.",
       "Iteration244 verified1318 unique app cases including12 fresh linked-frame ownership, claim ordering, transaction/history, deletion and main rendering/lifetime cases, plus25 Chromium cases. All657 prior acceptance files remain byte-identical; no passing runtime replay. Build/runtime upstream physically absent and restored finally; one fresh CSS-unit expectation corrected in a failed-only closure1pass2skip. Actual app/inventory all-four100% coverage binds current source/maps and complete unchanged declarations/bodies/enclosing branches/all locations from243. Invalid focused V8 painter inferred-else counters are retained raw; the entire valid initial current-byte-identical painter maps/counters already all-four100 supply that module, without counter sanitization. Prior316 metadata fields/order/status/default/classification/evidence prefixes retained; new wsfrm module unverified, inserted into required runtime order. Full native geometry/flags/invalidation/content/follows/accessibility/fly/root/UNO and whole project parity remain partial. Registered I/O/recovery deviations preserved; last full237,next247; no full244.",
       "Iteration249 restores represented detached SwFrame geometry validity and complete-paint defaults, native permission/action hooks, public versus local invalidation and complete-versus-partial validity semantics. Original row/cell replacement invalidates size/print and requests complete paint; original history movement invalidates all geometry without adding a paint request. Natural/minimum row reinitialization invalidates linked cell size/print areas; silent shared claims retain their native no-notification behavior. Fixed geometry/ChgSize, actual page/root propagation, content frames, follows/split rows, collapsed-border parent reactions and direction changes remain unverified. TypeScript directly owns the native area-validity fields in SwFrame because it has a single class base; separate native SwFrameAreaDefinition geometry ownership is not claimed. Persistent browser physical-frame integration is next work. Existing semantic statuses, classifications, evidence prefixes and registered I/O/recovery exceptions are preserved. Targeted verification pending; last full247, no full249.",
-      "Iteration249 verified132 unique app cases including19 fresh native validity/replacement/history/reinitialization cases; initial130 passed, then fresh-only1 and1 passed, with no unchanged passing replay. All tests ran with local upstream link absent and restored in finally. Actual changed wsfrm/tabfrm counters188lines211statements61functions114branches are all-four100; application318files retains316 whole byte-identical source/maps after verified246 hashes and exact current complete reinitialization plus unchanged declaration/body/enclosing-branch/all-location region proofs. No counter/threshold/skip sanitization. Final typecheck, scoped format/lint, dependency/JSDoc/file-size and static build checks passed. Partial focused CLI threshold exits and three failed fresh geometry-test scaffolding attempts are retained as raw ignored-cache evidence; final case passed after correcting native listener inspection. Native page/root propagation, fixed geometry, content/follows/direction/collapsed-border behavior and persistent browser physical-frame integration remain unverified. Existing semantic states/defaults/classes and registered I/O/recovery deviations preserved; last full247, no full249 or full-goal promotion."
+      "Iteration249 verified132 unique app cases including19 fresh native validity/replacement/history/reinitialization cases; initial130 passed, then fresh-only1 and1 passed, with no unchanged passing replay. All tests ran with local upstream link absent and restored in finally. Actual changed wsfrm/tabfrm counters188lines211statements61functions114branches are all-four100; application318files retains316 whole byte-identical source/maps after verified246 hashes and exact current complete reinitialization plus unchanged declaration/body/enclosing-branch/all-location region proofs. No counter/threshold/skip sanitization. Final typecheck, scoped format/lint, dependency/JSDoc/file-size and static build checks passed. Partial focused CLI threshold exits and three failed fresh geometry-test scaffolding attempts are retained as raw ignored-cache evidence; final case passed after correcting native listener inspection. Native page/root propagation, fixed geometry, content/follows/direction/collapsed-border behavior and persistent browser physical-frame integration remain unverified. Existing semantic states/defaults/classes and registered I/O/recovery deviations preserved; last full247, no full249 or full-goal promotion.",
+      "Iteration250 restores represented native frame attribute reactions over original borrowed items and ascending old/new deltas, accumulating geometry flags before one page-dispatch point and next-sibling position invalidation. Rows prioritize frame size over row split and forward only that exact item through native LegacyModifyHint; cells with currently empty lowers invalidate print area and request complete paint for orientation changes. LegacyModifyHint stays in calbck and represented PrepareHint Clear0/FixSizeChanged2 stays in swtypes. Current format-inheritance-changed remains the existing bounded notification; native SwFormatChangeHint pointer ownership is not claimed. Persistent page/root/browser physical propagation, background/fill and unsupported item families, actual content arrangement, follows/split rows, collapsed-border parent effects and full module parity remain unverified. Existing classifications, semantic statuses, defaults and registered recovery/open/save/settings deviations are preserved. Targeted verification pending; last full247, no full250.",
+      "Iteration250 verified164 unique app cases including12 fresh native frame attribute cases, once upstream-absent with symlink restored finally. Current changed five-module coverage is all-four100:379lines427statements113functions224branches. Three modules use complete fresh actual counters; calbck/hints transfer only old complete declarations/bodies/enclosing branches and every mapped location after exact reconstruction of the entire old source with additive type/new-class changes, bound to verified249 hashes. The raw focused CLI threshold failure is retained without counter or threshold changes; no unchanged passing test replay. Typecheck, lint and build passed; JSDoc comment-only repair preserves identical emitted test JavaScript. Inventory checks are being finalized. Full native page/root/browser physical propagation, content/follows/collapsed-border and wider native item families remain unverified. Registered recovery/open/save/settings deviations preserved; last full247, no full250.",
+      "Iteration250 final scoped and global registry, source provenance/tree, routing and doctor gates passed; doctor has no errors and only prior hook/no-op warnings. Canonical evidence is recorded in task202610090803-7PRR3B; no whole-module parity promotion."
     ],
     "omittedResponsibilities": [
       "Complete native geometry, flags, invalidation, content, follows, accessibility, fly/root and UNO remain unverified."
@@ -54,6 +65,10 @@
         {
           "path": "apps/office/src/sw/source/core/layout/native-frame-invalidation.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/layout/native-frame-attribute-notify.test.ts",
+          "marker": "native frame attribute dispatch"
         }
       ],
       "upstream": [

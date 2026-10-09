@@ -1,0 +1,109 @@
+{
+  "changed": {
+    "files": 5,
+    "summary": {
+      "lines": {
+        "total": 379,
+        "covered": 379,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 427,
+        "covered": 427,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 113,
+        "covered": 113,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 224,
+        "covered": 224,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "sourceHashes": {
+      "apps/office/src/sw/inc/calbck.ts": "18e7cdaa521f1b3b4a1edc43e301581b36ed7eb8056f4b1a9d9db2707bc9c7d1",
+      "apps/office/src/sw/inc/hints.ts": "dc9473a1c06e772c6be2690093ab94dab1cb28590d9e0dfbf233f9772e285d9a",
+      "apps/office/src/sw/inc/swtypes.ts": "50b4ff3da3bc20ebec82ca08b9240184dda01b5102c8b1e21c21232b5149ce34",
+      "apps/office/src/sw/source/core/layout/wsfrm.ts": "6a0f84b2730cee7314c353d9df8ae6fc67c38eb9ae596f625289eca049e1b012",
+      "apps/office/src/sw/source/core/layout/tabfrm.ts": "c28ff7ca12af6e782d707b61cdc7b0f9766e5435421f4d9cb53bd40a299a1b22"
+    }
+  },
+  "application": {
+    "files": 318,
+    "wholeUnchangedFiles": 313,
+    "summary": {
+      "lines": {
+        "total": 18259,
+        "covered": 18259,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 20047,
+        "covered": 20047,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 4590,
+        "covered": 4590,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 14683,
+        "covered": 14683,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "mapSHA256": "8ac6c3b8a184bd063403fe17789057ece3a1d1dfdf3cfdc0576afa65b7f135fa",
+    "proofSHA256": "023f2723a150af5282430d1772f33130c5598a56486b3ac1d612e32ba71e4b5c"
+  },
+  "transfers": [
+    {
+      "path": "apps/office/src/sw/inc/calbck.ts",
+      "oldSourceSHA256": "bdacd480e4029353683ae35792d83fb2347fdd4d273333f9b3f8198ddc9cdc57",
+      "currentSourceSHA256": "18e7cdaa521f1b3b4a1edc43e301581b36ed7eb8056f4b1a9d9db2707bc9c7d1",
+      "originalSourceCompletelyReconstructed": true,
+      "onlyNewClassOrUninstrumentedTypeImportsAndUnionAdded": true,
+      "allOriginalDeclarationsBodiesAndEnclosingBranchesPreserved": true,
+      "allOldStatementFunctionBranchLocationsMapped": true,
+      "oldStatements": 98,
+      "oldFunctions": 31,
+      "oldBranches": 19
+    },
+    {
+      "path": "apps/office/src/sw/inc/hints.ts",
+      "oldSourceSHA256": "5f5538d2e101ebea3c06cc987ed6b38b486b2785d1aca95e32320dae49b728ed",
+      "currentSourceSHA256": "dc9473a1c06e772c6be2690093ab94dab1cb28590d9e0dfbf233f9772e285d9a",
+      "originalSourceCompletelyReconstructed": true,
+      "onlyNewClassOrUninstrumentedTypeImportsAndUnionAdded": true,
+      "allOriginalDeclarationsBodiesAndEnclosingBranchesPreserved": true,
+      "allOldStatementFunctionBranchLocationsMapped": true,
+      "oldStatements": 25,
+      "oldFunctions": 11,
+      "oldBranches": 2
+    }
+  ],
+  "scope": "Source-bound targeted leaf certificate; not a fresh full suite or whole-goal parity claim."
+}

@@ -4,7 +4,22 @@ import { SfxBroadcaster, type SfxListenerTarget } from "../../svl/source/notify/
 import { SvtBroadcaster } from "../../svl/source/notify/broadcast";
 import { SfxListener } from "../../svl/source/notify/lstner";
 import { AttrSetChangeHint, SwAttrSetChg, type SwAtomicModelHint, type SwModelHint } from "./hints";
+import type { SfxPoolItem } from "../../svl/source/items/poolitem";
 import type { SwAttrSet } from "../source/core/attr/swatrset";
+
+/** Native legacy notification borrows original old and new pool items. */
+export class LegacyModifyHint {
+  public readonly kind = "legacy-modify";
+  /** Borrows original item identities. @param m_pOld - Previous item. @param m_pNew - Accepted item. @returns Nothing. */
+  public constructor(
+    public readonly m_pOld: SfxPoolItem | undefined,
+    public readonly m_pNew: SfxPoolItem | undefined,
+  ) {}
+  /** Uses native old-before-new Which selection. @returns Native item identity or zero. */
+  public GetWhich(): number {
+    return this.m_pOld ? this.m_pOld.Which() : this.m_pNew ? this.m_pNew.Which() : 0;
+  }
+}
 
 /** One Writer client registered at no more than one SwModify. */
 export class SwClient extends SfxListener<SwModelHint> {

@@ -1,5 +1,17 @@
 /** @fileoverview Owns native frame registration and linked layout children from wsfrm.cxx and ssfrm.cxx. */
 import { SwClient, type SwModify } from "../../../inc/calbck";
+import type { SwModelHint } from "../../../inc/hints";
+import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
+import { PrepareHint } from "../../../inc/swtypes";
+import {
+  RES_BOX,
+  RES_MARGIN_FIRSTLINE,
+  RES_MARGIN_TEXTLEFT,
+  RES_MARGIN_RIGHT,
+  RES_UL_SPACE,
+  RES_KEEP,
+  RES_FRM_SIZE,
+} from "../../../inc/hintids";
 import type { SwFormat } from "../attr/format";
 import type { SwFrameFormat } from "./atrfrm";
 import { SwFrameSize } from "../../../inc/fmtfsize";
@@ -17,6 +29,16 @@ export enum InvalidationType {
   INVALID_LINENUM,
   INVALID_ALL,
 }
+/** Native frame invalidation bits from frame.hxx. */
+export enum SwFrameInvFlags {
+  NONE = 0,
+  InvalidatePrt = 1,
+  InvalidateSize = 2,
+  InvalidatePos = 4,
+  SetCompletePaint = 8,
+  NextInvalidatePos = 16,
+  NextSetCompletePaint = 32,
+}
 /** Shared native frame registration and original sibling links. */
 export class SwFrame extends SwClient {
   protected mnFrameType = SwFrameType.None;
@@ -31,6 +53,84 @@ export class SwFrame extends SwClient {
   protected constructor(format: SwModify) {
     super();
     this.RegisterToModify(format);
+  }
+  /** Native base preparation does not require a content-frame action. @param hint - Native preparation kind. @returns False for the base frame. */
+  public Prepare(hint = PrepareHint.Clear): boolean {
+    void hint;
+    return false;
+  }
+  /** Accumulates represented native item reactions. @param oldItem - Original old item. @param newItem - Original accepted item. @param flags - Accumulated flags. @returns Updated native mask. */
+  protected UpdateAttrFrame(
+    oldItem: SfxPoolItem | undefined,
+    newItem: SfxPoolItem | undefined,
+    flags: SwFrameInvFlags,
+  ): SwFrameInvFlags {
+    const which = oldItem ? oldItem.Which() : newItem ? newItem.Which() : 0;
+    switch (which) {
+      case RES_BOX:
+      case RES_MARGIN_FIRSTLINE:
+      case RES_MARGIN_TEXTLEFT:
+      case RES_MARGIN_RIGHT:
+      case RES_UL_SPACE:
+        if (which === RES_BOX) this.Prepare(PrepareHint.FixSizeChanged);
+        return (
+          flags |
+          SwFrameInvFlags.InvalidatePrt |
+          SwFrameInvFlags.InvalidateSize |
+          SwFrameInvFlags.SetCompletePaint
+        );
+      case RES_KEEP:
+        return flags | SwFrameInvFlags.InvalidatePos;
+      case RES_FRM_SIZE:
+        this.ReinitializeFrameSizeAttrFlags();
+        return (
+          flags |
+          SwFrameInvFlags.InvalidatePrt |
+          SwFrameInvFlags.InvalidateSize |
+          SwFrameInvFlags.NextInvalidatePos
+        );
+      default:
+        return flags;
+    }
+  }
+  /** Processes borrowed attribute deltas before native local invalidation. @param source - Original notifying owner. @param hint - Original model notification. @returns Nothing. */
+  protected override SwClientNotify(source: SwModify, hint: SwModelHint): void {
+    let flags = SwFrameInvFlags.NONE;
+    if (hint.kind === "model-transaction") {
+      for (const nested of hint.hints) this.SwClientNotify(source, nested);
+      return;
+    } else if (hint.kind === "legacy-modify") {
+      flags = this.UpdateAttrFrame(hint.m_pOld, hint.m_pNew, flags);
+    } else if (hint.kind === "attr-set-change") {
+      if (hint.m_pOld && hint.m_pNew) {
+        const oldItems = hint.m_pOld.GetChgSet().entries();
+        const newItems = hint.m_pNew.GetChgSet().entries();
+        let index = 0;
+        do {
+          flags = this.UpdateAttrFrame(oldItems[index], newItems[index], flags);
+          index += 1;
+        } while (index < newItems.length);
+      }
+    } else if (hint.kind === "format-inheritance-changed") {
+      flags =
+        SwFrameInvFlags.InvalidatePrt |
+        SwFrameInvFlags.InvalidateSize |
+        SwFrameInvFlags.InvalidatePos |
+        SwFrameInvFlags.SetCompletePaint;
+    } else return;
+    if (flags === SwFrameInvFlags.NONE) return;
+    this.InvalidatePage();
+    if (flags & SwFrameInvFlags.InvalidatePrt) this.InvalidatePrt_();
+    if (flags & SwFrameInvFlags.InvalidateSize) this.InvalidateSize_();
+    if (flags & SwFrameInvFlags.InvalidatePos) this.InvalidatePos_();
+    if (flags & SwFrameInvFlags.SetCompletePaint) this.SetCompletePaint();
+    if (flags & SwFrameInvFlags.NextInvalidatePos) {
+      const next = this.GetNext();
+      if (next) {
+        next.InvalidatePage();
+        next.InvalidatePos_();
+      }
+    }
   }
   /** Reads represented native frame type bits. @returns Frame type. */
   public GetType(): SwFrameType {
