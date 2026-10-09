@@ -4,7 +4,7 @@ title: "Port Calc multi-selection owner and iterator"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,33 @@ verification:
   updated_by: "CODER"
   note: "Passed550 unchanged native sequences and original debug assertion with genuine dependencies/sanitizers;88 Calc tests actual100 in all four Istanbul metrics;5 shared,14 tooling,3 provenance,30 inventory and upstream-absent88+5+30 portable tests; TS7/lint/format/docs/ownership/provenance/size/tree/Calc-shared registry zero violations. CALC-010..013 preserved. Task9/10; Writer coverage untouched."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-09T17:21:00.283Z"
+  updated_by: "EVALUATOR"
+  note: "Approved multi-selection scope passes actual native comparison, portable acceptance and actual100 Calc coverage on implementation9fca9a7bc042; no upstream normalization or Writer changes."
+  evaluated_sha: "9fca9a7bc04262649a9c1d13ec1d16fdc1ea1828"
+  blueprint_digest: "576a3d7d9498b3480d9ce0ff8b888e60d50e29898eed8052672962d2102b78e4"
+  evidence_refs:
+    - ".agentplane/tasks/202610091638-6W99E8/README.md"
+    - ".agentplane/tasks/202610091638-6W99E8/quality/20261009-172100283-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610091638-6W99E8/quality/20261009-172100283-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610091638-6W99E8/quality/20261009-172100283-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610091638-6W99E8/blueprint/resolved-snapshot.json"
+    - "output/playwright/task9-calc-final.log"
+    - "output/playwright/task9-native-check.log"
+    - "output/playwright/calc-native/multi-selection-assertion.log"
+    - "output/playwright/task9-portable-calc.log"
+    - "output/playwright/task9-portable-shared.log"
+    - "output/playwright/task9-portable-inventory.log"
+    - "output/playwright/task9-typecheck-capacity.log"
+    - "output/playwright/task9-docs-final.log"
+    - "output/playwright/task9-registry-calc.log"
+  findings:
+    - "Reviewed full source-shaped owner and iterator: row/column storage uses existing mark arrays, bool segments, sheet limits and range lists; raw Set, OR single-mark predicate, missing-column scan and trailing deletion preserve original outputs. Journal CALC-010..013 retains consumer uncertainty rather than classifying confirmed defects."
+    - "Capacity-dependent immutable-bound transfer required an actual std::vector value adapter. The recorded libc++220106 capacity/insert/erase/copy/move profile agrees with550 complete native sequences. No replacement native interval/range-list/string/document implementation is introduced."
+    - "Reviewed492-line owner and517 physical-line native probe as coherent original-owner/extraction units; shared dependency verification is reused. Fixture snapshots intern complete selected observations without reducing commands or either owner comparison. Public array equality and independent copy/reset bounds checks avoid private JavaScript introspection."
+    - "All declared deterministic gates passed:88 Calc actual100, shared5/tooling14/provenance3/inventory30; upstream-absent88+5+30; TS7, scoped lint/format/docs/ownership/size/tree/provenance, zero registry violations, routing and doctor. No new exclusions or changes to prior acceptance tests."
 commit: null
 comments:
   -
