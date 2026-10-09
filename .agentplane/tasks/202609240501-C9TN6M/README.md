@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 278
+revision: 279
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-09T16:38:15.807Z"
+doc_updated_at: "2026-10-09T16:42:25.735Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -1351,6 +1351,8 @@ sections:
     - KHKG45 closeout: semantic a881c8a2b4dde01fffa116249f316718c1f7369e binds all five production and three fresh-test SHA256 values to accepted evidence. Same-agent non-independent EVALUATOR pass evaluates this exact SHA; final metadata/test format/lint gates pass. Canonical history ten prefixes,589old tests1838unrelated files and original parent Findings prefix remain intact; symlink restored. No source copies/helpers/maps/logs in task artifacts. Broad goal remains ACTIVE/incomplete correction6/10; next full after10, no new full-suite run or parity promotion.
 
     - Resumed correction7/10 BJCYQ3 restores native table notification/copy-consumption routing in SwTabFrame in place of the generic frame override. Source table mask values and canonical horizontal-orientation Which110 own represented size/hori/border/spacing/break reactions; original borrowed descriptors stay untouched, handled batch items clear only from copy-owned deltas and residual generic values remain copy-owned. Handled legacy forwards exact borrowed items; unrelated legacy/default format hints are ignored. Original flat previous/next siblings receive source spacing/break reactions. Native page/root browse-width/content-page and master/follow/section/page-desc/direction/layout-follow families remain unrepresented/unverified; no whole-module or goal promotion. Initial152file profile1181pass1fresh expected-forwarding failure, failed-only1pass12intentional skips; final1182cases15fresh all pass without passing replay. Actual entire two production modules Istanbul241lines268statements26functions148branches all100/0negative, current unchanged complete maps. One old legacy RES_BOX geometry expectation migrates exactly to pinned native no-forwarding; all other assertions retained. Seven static gates pass. Four canonical histories append; initial probe lint/type errors corrected before runtime; raw failures/maps/logs/helpers only ignored cache, reference restored. Semantic SHA/quality/preservation closeout follows; broad goal active, historical full XJTGF0, next full after tenth correction.
+
+    - BJCYQ3 closeout: semantic 207c607a7dc82919ad0703b137fa07d3b341aaf1 binds both production and all three fresh-test hashes to accepted current-source evidence. Same-agent non-independent EVALUATOR pass evaluates this exact SHA. All seven static/seven metadata/final canonical-format gates pass; four canonical prefixes, 591 old tests, 1849 unrelated files and original parent Findings prefix retained; one precise source-proven old expectation migration. Reference symlink restored, no raw source/helpers/logs/maps in artifacts. Broad goal remains ACTIVE/incomplete, correction7/10 since historical full XJTGF0; next full after10. Root browse-width/page/content/section/master/follow/page-desc/direction/layout-follow boundaries remain unverified without whole-module/goal promotion.
 id_source: "generated"
 ---
 ## Summary
@@ -2675,3 +2677,5 @@ Iteration251 / 202610090835-4ZF0N4 verified native table layout ownership. SwTab
 - KHKG45 closeout: semantic a881c8a2b4dde01fffa116249f316718c1f7369e binds all five production and three fresh-test SHA256 values to accepted evidence. Same-agent non-independent EVALUATOR pass evaluates this exact SHA; final metadata/test format/lint gates pass. Canonical history ten prefixes,589old tests1838unrelated files and original parent Findings prefix remain intact; symlink restored. No source copies/helpers/maps/logs in task artifacts. Broad goal remains ACTIVE/incomplete correction6/10; next full after10, no new full-suite run or parity promotion.
 
 - Resumed correction7/10 BJCYQ3 restores native table notification/copy-consumption routing in SwTabFrame in place of the generic frame override. Source table mask values and canonical horizontal-orientation Which110 own represented size/hori/border/spacing/break reactions; original borrowed descriptors stay untouched, handled batch items clear only from copy-owned deltas and residual generic values remain copy-owned. Handled legacy forwards exact borrowed items; unrelated legacy/default format hints are ignored. Original flat previous/next siblings receive source spacing/break reactions. Native page/root browse-width/content-page and master/follow/section/page-desc/direction/layout-follow families remain unrepresented/unverified; no whole-module or goal promotion. Initial152file profile1181pass1fresh expected-forwarding failure, failed-only1pass12intentional skips; final1182cases15fresh all pass without passing replay. Actual entire two production modules Istanbul241lines268statements26functions148branches all100/0negative, current unchanged complete maps. One old legacy RES_BOX geometry expectation migrates exactly to pinned native no-forwarding; all other assertions retained. Seven static gates pass. Four canonical histories append; initial probe lint/type errors corrected before runtime; raw failures/maps/logs/helpers only ignored cache, reference restored. Semantic SHA/quality/preservation closeout follows; broad goal active, historical full XJTGF0, next full after tenth correction.
+
+- BJCYQ3 closeout: semantic 207c607a7dc82919ad0703b137fa07d3b341aaf1 binds both production and all three fresh-test hashes to accepted current-source evidence. Same-agent non-independent EVALUATOR pass evaluates this exact SHA. All seven static/seven metadata/final canonical-format gates pass; four canonical prefixes, 591 old tests, 1849 unrelated files and original parent Findings prefix retained; one precise source-proven old expectation migration. Reference symlink restored, no raw source/helpers/logs/maps in artifacts. Broad goal remains ACTIVE/incomplete, correction7/10 since historical full XJTGF0; next full after10. Root browse-width/page/content/section/master/follow/page-desc/direction/layout-follow boundaries remain unverified without whole-module/goal promotion.

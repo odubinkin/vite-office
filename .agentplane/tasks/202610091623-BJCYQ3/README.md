@@ -4,7 +4,7 @@ title: "Restore native table attribute delta routing and invalidation"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 20
+revision: 23
 origin:
   system: "manual"
 depends_on: []
@@ -22,11 +22,34 @@ verification:
   updated_by: "CODER"
   note: "Native table copied-delta routing verified:1182accepted152files15fresh0passing replay; both entire modules Istanbul100 all-four0negative/current identical maps. Seven statics/seven metadata/final canonical format pass; four prefixes591old tests1849unrelated files and parent prefix intact; one exact source-backed old migration. Same-agent semantic-bound quality pending."
   attempts: 0
-commit: null
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-09T16:41:46.601Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent non-independent quality review: semantic 207c607a restores the approved represented native table copied-delta routing and invalidation; source/test hashes bound to commit, deterministic evidence and explicit native boundaries verified; correction7/10, no parity promotion."
+  evaluated_sha: "207c607a7dc82919ad0703b137fa07d3b341aaf1"
+  blueprint_digest: "660a14188af5073167d1409de78dfee543e1e133d13ba4f20cf43931e9b62cd9"
+  evidence_refs:
+    - ".agentplane/tasks/202610091623-BJCYQ3/README.md"
+    - ".agentplane/tasks/202610091623-BJCYQ3/quality/20261009-164146601-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610091623-BJCYQ3/quality/20261009-164146601-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610091623-BJCYQ3/quality/20261009-164146601-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610091623-BJCYQ3/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610091623-BJCYQ3/evidence/results.json"
+    - "semantic:207c607a7dc82919ad0703b137fa07d3b341aaf1; actual production/fresh-test hashes match committed files"
+  findings:
+    - "Native table numeric masks, canonical Hori Which110, consumed copies/original descriptor identities, residual generic forwarding and legacy/default admission now follow pinned source. Size batch vs legacy, flat original sibling spacing/break, recursive table mode and three real history/UI cycles are accepted."
+    - "1182 accepted cases in 152 files including 15 fresh cases; initially failed fresh RES_BREAK expectation repaired and revalidated alone, zero passing replay. Both complete current modules actual identical-map Istanbul100 all-four/zero negatives; seven statics, seven metadata, final four-record format and preservation pass. Four canonical prefixes, 591 old tests, 1849 unrelated files retained; one exact source-proven old geometry assertion migration."
+commit:
+  hash: "207c607a7dc82919ad0703b137fa07d3b341aaf1"
+  message: "🐛 BJCYQ3 writer: restore native table attribute delta routing"
 comments:
   -
     author: "CODER"
     body: "Start: restore native table copied attribute routing and represented physical reactions under retained iterative approval; correction7/10, one production module, current-source scoped coverage and clean direct closeout."
+  -
+    author: "CODER"
+    body: "Implementation: native table attribute routing committed; 1182 accepted cases, 152 files, 15 fresh cases, complete two-module Istanbul100 and static/metadata/preservation gates verified. Remaining semantic-bound same-agent quality and clean closeout."
 events:
   -
     type: "status"
@@ -41,8 +64,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native table copied-delta routing verified:1182accepted152files15fresh0passing replay; both entire modules Istanbul100 all-four0negative/current identical maps. Seven statics/seven metadata/final canonical format pass; four prefixes591old tests1849unrelated files and parent prefix intact; one exact source-backed old migration. Same-agent semantic-bound quality pending."
+  -
+    type: "status"
+    at: "2026-10-09T16:41:18.536Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+    note: "Implementation: native table attribute routing committed; 1182 accepted cases, 152 files, 15 fresh cases, complete two-module Istanbul100 and static/metadata/preservation gates verified. Remaining semantic-bound same-agent quality and clean closeout."
 doc_version: 3
-doc_updated_at: "2026-10-09T16:40:23.915Z"
+doc_updated_at: "2026-10-09T16:42:25.449Z"
 doc_updated_by: "CODER"
 description: "Correction7/10 after XJTGF0: replace generic table hook with source-shaped SwTabFrame notification, copied consumed deltas, native table mask and represented size/orientation/border/spacing/break reactions; preserve original owners and UI history."
 sections:
@@ -121,6 +151,8 @@ sections:
     - Observation: Final accepted1182distinct cases152files15fresh with0passing replay; failed-only closure1pass12intentional skips. Both entire modules actual Istanbul241lines268statements26functions148branches all100/0negative/current identical maps.
       Impact: Seven final static gates, seven restored metadata audits and four-record formatting gate pass. Four canonical histories retain all old values/evidence/responsibility prefixes;591old tests1849unrelated files unchanged and one exact source-backed RES_BOX expectation migration; parent prefix intact.
       Resolution: Persist bounded English evidence and semantic implementation commit, bind exact source/fresh-test hashes, obtain explicitly same-agent non-independent quality pass and canonical direct finish. Goal remains active correction7/10; full native root/page/section/follow/page-desc/direction/layout-follow families and actual root browse-width consumer unverified, no parity promotion. Ignored symlink restored and no source/helper copies in artifacts.
+
+    - BJCYQ3 closeout: semantic 207c607a7dc82919ad0703b137fa07d3b341aaf1 binds both production and all three fresh-test hashes to accepted current-source evidence. Same-agent non-independent EVALUATOR pass evaluates this exact SHA. All seven static/seven metadata/final canonical-format gates pass; four canonical prefixes, 591 old tests, 1849 unrelated files and original parent Findings prefix retained; one precise source-proven old expectation migration. Reference symlink restored, no raw source/helpers/logs/maps in artifacts. Broad goal remains ACTIVE/incomplete, correction7/10 since historical full XJTGF0; next full after10. Root browse-width/page/content/section/master/follow/page-desc/direction/layout-follow boundaries remain unverified without whole-module/goal promotion.
 id_source: "generated"
 ---
 ## Summary
@@ -215,3 +247,5 @@ Pinned tabfrm.cxx::SwTabFrame::SwClientNotify/UpdateAttr_/Invalidate copies old/
 - Observation: Final accepted1182distinct cases152files15fresh with0passing replay; failed-only closure1pass12intentional skips. Both entire modules actual Istanbul241lines268statements26functions148branches all100/0negative/current identical maps.
   Impact: Seven final static gates, seven restored metadata audits and four-record formatting gate pass. Four canonical histories retain all old values/evidence/responsibility prefixes;591old tests1849unrelated files unchanged and one exact source-backed RES_BOX expectation migration; parent prefix intact.
   Resolution: Persist bounded English evidence and semantic implementation commit, bind exact source/fresh-test hashes, obtain explicitly same-agent non-independent quality pass and canonical direct finish. Goal remains active correction7/10; full native root/page/section/follow/page-desc/direction/layout-follow families and actual root browse-width consumer unverified, no parity promotion. Ignored symlink restored and no source/helper copies in artifacts.
+
+- BJCYQ3 closeout: semantic 207c607a7dc82919ad0703b137fa07d3b341aaf1 binds both production and all three fresh-test hashes to accepted current-source evidence. Same-agent non-independent EVALUATOR pass evaluates this exact SHA. All seven static/seven metadata/final canonical-format gates pass; four canonical prefixes, 591 old tests, 1849 unrelated files and original parent Findings prefix retained; one precise source-proven old expectation migration. Reference symlink restored, no raw source/helpers/logs/maps in artifacts. Broad goal remains ACTIVE/incomplete, correction7/10 since historical full XJTGF0; next full after10. Root browse-width/page/content/section/master/follow/page-desc/direction/layout-follow boundaries remain unverified without whole-module/goal promotion.

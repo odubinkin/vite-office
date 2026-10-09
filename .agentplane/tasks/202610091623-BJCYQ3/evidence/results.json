@@ -764,5 +764,13 @@
       "hash": "cadbe13bb107da6329c45a24dbf561c5c9a7da5cc779ae6c9a00fbf0e3d1d275"
     }
   ],
-  "rawEvidenceLocation": "Ignored apps/office/node_modules/.cache/parity-coverage/BJCYQ3 only; artifacts contain bounded English counts/commands/hashes/IDs, no upstream/source/helper copies/raw logs/maps."
+  "rawEvidenceLocation": "Ignored apps/office/node_modules/.cache/parity-coverage/BJCYQ3 only; artifacts contain bounded English counts/commands/hashes/IDs, no upstream/source/helper copies/raw logs/maps.",
+  "semanticCommit": "207c607a7dc82919ad0703b137fa07d3b341aaf1",
+  "quality": {
+    "verdict": "pass",
+    "review": "same-agent EVALUATOR; explicitly non-independent",
+    "evaluatedSha": "207c607a7dc82919ad0703b137fa07d3b341aaf1",
+    "report": ".agentplane/tasks/202610091623-BJCYQ3/quality/20261009-164146601-recovery-context/quality-report.json",
+    "reportHash": "c1eed71628d729b074b7255fac5bf1173128218629a2b7dddb3a0452c7482831"
+  }
 }
