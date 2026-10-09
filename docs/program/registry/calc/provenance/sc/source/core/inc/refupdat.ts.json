@@ -12,6 +12,10 @@
         {
           "path": "apps/office/src/sc/source/core/tool/refupdat.test.ts",
           "marker": "matches every original native transpose growth and alias outcome"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/refwrap.test.ts",
+          "marker": "matches every original native relative wrap outcome"
         }
       ],
       "upstream": [
@@ -26,13 +30,17 @@
       "ScRefUpdateRes"
     ],
     "omittedResponsibilities": [
-      "Ordinary/big Update overloads, MoveRelWrap, full document/compiler/change-tracking integration, debug assertion enforcement and undefined arithmetic domains remain subsequent work. Bounded numerical fixtures do not establish full reference-update or whole Calc parity."
+      "Ordinary/big Update overloads, full document/compiler/change-tracking integration, debug assertion enforcement and undefined arithmetic domains remain subsequent work. Bounded numerical fixtures do not establish full reference-update or whole Calc parity."
     ],
     "preservedResponsibilities": [
       "Original four-value ScRefUpdateRes domain and static geometry owner at core/inc and core/tool boundaries.",
       "Original signed temporary widths, coordinate transpose and repeated wrapping using positive document sheet count.",
       "Source-contained references only, snapshot-before-assignment including source/destination aliases, stable receiving endpoint owners and UPDATED for contained no-op transforms.",
-      "Both growth predicates before mutation, original column/row containment, header-row allowance and unclipped native assignment widths."
+      "Both growth predicates before mutation, original column/row containment, header-row allowance and unclipped native assignment widths.",
+      "Original MoveRelWrap owner and private lcl_MoveItWrap responsibility reuse existing numerical references and sheet limits.",
+      "Resolve and sort absolute coordinates before wrapping; wrap only each endpoint axis flagged relative and cross each mask only once, with native assignment widths.",
+      "Document table count minus one is the inclusive sheet wrap maximum; independent supplied column/row wrap masks differ from document validity limits.",
+      "Order the wrapped absolute endpoints before SetRange; retain endpoint flags, monotone deletion, stable endpoint identity and independent trim state."
     ],
     "status": "mapped",
     "upstreamPath": "sc/source/core/inc/refupdat.hxx",

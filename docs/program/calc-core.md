@@ -251,9 +251,38 @@ Portable tests compare all 20203 initialized growth/transpose/alias outcomes
 and retain independent literal contracts. Reproduce it with
 `node scripts/calc-refupdat-native-probe.mjs --check`, which checks pinned Git
 blobs and full-source/extracted SHA256 hashes. Ordinary tests need no compiler
-or upstream checkout. Ordinary/big `Update` overloads, `MoveRelWrap`, full
+or upstream checkout. Ordinary/big `Update` overloads, full
 consumer integration, native debug checks and undefined arithmetic remain
 pending; no replacement methods or fake document owners are introduced.
+
+## Relative reference wrapping
+
+Task `202610091325-52SMH5` resumes the core after Writer merge and TS7/Istanbul
+migration. `ScRefUpdate.MoveRelWrap()` reuses existing complex references,
+addresses, range ordering and sheet limits. It resolves and sorts the absolute
+range first, wraps each relative endpoint axis exactly once at its supplied
+column/row mask or document table-count-minus-one sheet mask, sorts the result
+again and writes it back through `SetRange()`. This is not modulo: a coordinate
+can remain above a small wrap mask after the single subtraction. Absolute axes
+are not wrapped; endpoint flags are not exchanged by numerical range sorting.
+Deleted raw values, monotone deletion flags, trim state and endpoint identity
+remain owned by the existing reference data.
+
+`scripts/calc-refwrap-native-probe.mjs` compiles the unchanged original helper,
+complete `MoveRelWrap` body and complete numerical single/complex reference owners
+with original address/range bodies. Its 15,616 initialized states compare mixed
+relative flags, invalid sentinels, custom limits and distinct wrap masks, positive
+table counts, sorted raw outputs and retained flags. ASan/UBSan checks remain
+enabled; `NDEBUG` selects release semantics because native debug validity checks
+restrict sheet maxima to standard/jumbo constants. Debug assertion enforcement,
+undefined arithmetic and full compiler/token/named-range consumers remain
+unverified. Run `node scripts/calc-refwrap-native-probe.mjs --check` for exact
+pinned blob/body hash and fixture reproduction. Ordinary TS tests need neither
+upstream nor C++; format generated JSON with repository Prettier after `--write`.
+
+All 52 Calc tests pass with actual100 Istanbul coverage. This is task 1 of the
+next ten-task interval; the user explicitly resumed the paused goal after merging
+Writer, TS7 and Istanbul. Full-suite validation is due at task 10 of this interval.
 
 JavaScript tuples represent native output reference parameters. Equality and
 ordering methods represent C++ operators. Undefined native uninitialized
@@ -278,7 +307,7 @@ workflow is introduced.
 
 Run `npm run test:coverage:calc`, `npm run typecheck`,
 `npm run check:dependencies` and `npm run inventory:parity:calc` for the foundation.
-All four real V8 coverage metrics must be 100%. Full-suite scheduling starts
+All four real Istanbul coverage metrics must be 100%. Full-suite scheduling starts
 with Calc task 1 of 10 here; run the full suite after task 10, then repeat each
 ten completed Calc agentplane tasks. Targeted affected-module tests run on
 intervening tasks. Writer acceptance files and coverage settings remain intact.
