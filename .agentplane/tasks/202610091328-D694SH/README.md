@@ -1,10 +1,11 @@
 ---
 id: "202610091328-D694SH"
 title: "Align SwFormat parent reset and cycle rejection with LibreOffice"
-status: "DOING"
+result_summary: "verified-202610091328-D694SH"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 20
 origin:
   system: "manual"
 depends_on: []
@@ -18,7 +19,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-09T13:50:45.077Z"
+  updated_at: "2026-10-09T13:51:10.009Z"
   updated_by: "CODER"
   note: "verified-202610091328-D694SH"
   attempts: 0
@@ -51,6 +52,9 @@ comments:
   -
     author: "CODER"
     body: "Implementation: native original-root fallback and false cycle rejection; six fresh cases, three exact source-backed migrations, canonical evidence and scoped current Istanbul100. Semantic commit a2e8c94a6db9."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610091328-D694SH. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -78,8 +82,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202610091328-D694SH"
+  -
+    type: "verify"
+    at: "2026-10-09T13:51:10.009Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610091328-D694SH"
+  -
+    type: "status"
+    at: "2026-10-09T13:51:10.151Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610091328-D694SH. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-09T13:51:06.106Z"
+doc_updated_at: "2026-10-09T13:51:10.151Z"
 doc_updated_by: "CODER"
 description: "Resume Writer parity after merged TS7/Istanbul migration. Restore source SetDerivedFrom default-root fallback and false-return cycle rejection through original parent/client/item-set identities. Preserve explicit I/O/recovery deviations and cross-pool guard; migrate only source-incompatible old expectations, add core/history/mounted UI evidence, update canonical format records and use actual targeted Istanbul100 without old V8 certificates."
 sections:
@@ -144,6 +161,36 @@ sections:
     Attempts: 0
 
     VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T13:50:43.918Z, excerpt_hash=sha256:de56104cdc2aa07662221268fc36a9764997a6a39f5052df86c4f26ff2d6359a
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610091328-D694SH/blueprint/resolved-snapshot.json
+    - old_digest: ba0781499f3718260821baf23ad8ee67b7be2256f4817e4a2df1a9e5e370c32d
+    - current_digest: ba0781499f3718260821baf23ad8ee67b7be2256f4817e4a2df1a9e5e370c32d
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610091328-D694SH
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610091328-D694SH --result verified-202610091328-D694SH --commit a2e8c94a6db9d3b59a7e28bf83fbf7ea16082c26
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-10-09T13:51:10.009Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610091328-D694SH
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T13:51:06.106Z, excerpt_hash=sha256:de56104cdc2aa07662221268fc36a9764997a6a39f5052df86c4f26ff2d6359a
 
     Details:
 
@@ -269,6 +316,36 @@ Note: verified-202610091328-D694SH
 Attempts: 0
 
 VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T13:50:43.918Z, excerpt_hash=sha256:de56104cdc2aa07662221268fc36a9764997a6a39f5052df86c4f26ff2d6359a
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610091328-D694SH/blueprint/resolved-snapshot.json
+- old_digest: ba0781499f3718260821baf23ad8ee67b7be2256f4817e4a2df1a9e5e370c32d
+- current_digest: ba0781499f3718260821baf23ad8ee67b7be2256f4817e4a2df1a9e5e370c32d
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610091328-D694SH
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610091328-D694SH --result verified-202610091328-D694SH --commit a2e8c94a6db9d3b59a7e28bf83fbf7ea16082c26
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-09T13:51:10.009Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610091328-D694SH
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T13:51:06.106Z, excerpt_hash=sha256:de56104cdc2aa07662221268fc36a9764997a6a39f5052df86c4f26ff2d6359a
 
 Details:
 
