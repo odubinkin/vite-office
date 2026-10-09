@@ -1,10 +1,11 @@
 ---
 id: "202610091909-KYNP7H"
 title: "Port original shared mdds delayed delete vector"
-status: "DOING"
+result_summary: "verified-202610091909-KYNP7H"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 20
+revision: 24
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-09T19:22:23.383Z"
+  updated_at: "2026-10-09T19:23:29.311Z"
   updated_by: "CODER"
-  note: "Original985 sequences/6080 steps/502 complete snapshots match unchanged genuine headers; all104 Calc actual100 and new shared owner actual100, related7 shared/30 inventory portable, tooling14/provenance3 and TS7/scoped static checks pass. CALC-020 preserves upstream; Writer unchanged, task3/10, whole-module parity unverified."
+  note: "verified-202610091909-KYNP7H"
   attempts: 0
 quality_review:
   state: "pass"
@@ -42,11 +43,16 @@ quality_review:
     - "output/playwright/task13-verification.txt"
   findings:
     - "Original front offset/clear_removed order and vector-only swap remain intact; 985 sequences retain6080 complete two-owner observations with502 losslessly interned snapshots. Native raw/hash integrity and borrowed swap tests substantiate finite defined behavior. Inventory maps the actual shared source boundary and leaves full module/allocator/value-lifetime parity unverified; no coverage exclusions, fake Calc value owner, Writer repair or scope expansion."
-commit: null
+commit:
+  hash: "6847296cf1faffe4e93646ff4b1cdc4e9bc51b0c"
+  message: "🔎 KYNP7H review: verified original delayed vector evidence and scope"
 comments:
   -
     author: "CODER"
     body: "Start: implementing original shared mdds delayed front deletion primitive owner and genuine native evidence in calc only."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610091909-KYNP7H. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -61,8 +67,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Original985 sequences/6080 steps/502 complete snapshots match unchanged genuine headers; all104 Calc actual100 and new shared owner actual100, related7 shared/30 inventory portable, tooling14/provenance3 and TS7/scoped static checks pass. CALC-020 preserves upstream; Writer unchanged, task3/10, whole-module parity unverified."
+  -
+    type: "verify"
+    at: "2026-10-09T19:23:29.311Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610091909-KYNP7H"
+  -
+    type: "status"
+    at: "2026-10-09T19:23:29.452Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610091909-KYNP7H. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-09T19:22:23.441Z"
+doc_updated_at: "2026-10-09T19:23:49.345Z"
 doc_updated_by: "CODER"
 description: "Task3/10 of current Calc cycle: original mdds delayed_delete_vector prerequisite for multi_type_vector element storage. Preserve front offsets, iterator/range overloads, copy, swap and capacity observations for initialized primitive template families. Genuine unchanged native headers, portable fixtures, actual100 Calc and new shared owner coverage, related registry and quality checks. Keep suspicious behavior, record it without repairs."
 sections:
@@ -127,6 +146,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-09T19:23:29.311Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610091909-KYNP7H
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T19:22:23.441Z, excerpt_hash=sha256:f494e6861806247a06ed1b47dbac380d901152d1241307e007fce232c0040349
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610091909-KYNP7H/blueprint/resolved-snapshot.json
+    - old_digest: ba4dc2da16b8eb613db42e946797ad1ce1f7f996a70ff561c9d61d019f7aa178
+    - current_digest: ba4dc2da16b8eb613db42e946797ad1ce1f7f996a70ff561c9d61d019f7aa178
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610091909-KYNP7H
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610091909-KYNP7H --result verified-202610091909-KYNP7H --commit 6847296cf1faffe4e93646ff4b1cdc4e9bc51b0c
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task commit via separate approved task on calc; keep all prior shared/Calc modules. Research outputs ignored, upstream read-only."
   Findings: |-
@@ -159,6 +208,18 @@ sections:
     - Observation: One replay scalar-construction arrow still lacks directly attached JSDoc; preceding variable declaration comment is not accepted by the documentation checker.
       Impact: Only documentation acceptance remains affected, with no behavior or fixture change.
       Resolution: Recompute route; attach existing comment directly to the arrow and rerun focused documentation gate.
+
+    - Observation: Exact route task complete rejects generated closure subject as too generic (E_GIT); implementation and passing quality evidence are already committed.
+      Impact: Only task closure artifact remains dirty; no production or verification change. Same existing generator and hook incompatibility as previous tasks.
+      Resolution: Recompute route and attempt advertised close cleanup; if generator rejection repeats, persist active task closure artifacts using concrete finalize subject through existing ap commit. Keep hooks and gates unchanged.
+
+    - Observation: Exact advertised close cleanup also rejects its generated generic subject with E_GIT; only task README closure is staged.
+      Impact: No implementation, verification or quality changes; required final clean state needs concrete task-artifact commit subject.
+      Resolution: Persist active task scope with ap commit --allow-tasks using finalize: verified original shared delayed vector subject. Preserve generator/hook policy and all evidence.
+extensions:
+  implementation_commit:
+    hash: "cc7c6700bba401b23130465236aa0935181215e4"
+    message: "🧩 KYNP7H implement: original shared delayed front deletion vector"
 id_source: "generated"
 ---
 ## Summary
@@ -235,6 +296,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-09T19:23:29.311Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610091909-KYNP7H
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T19:22:23.441Z, excerpt_hash=sha256:f494e6861806247a06ed1b47dbac380d901152d1241307e007fce232c0040349
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610091909-KYNP7H/blueprint/resolved-snapshot.json
+- old_digest: ba4dc2da16b8eb613db42e946797ad1ce1f7f996a70ff561c9d61d019f7aa178
+- current_digest: ba4dc2da16b8eb613db42e946797ad1ce1f7f996a70ff561c9d61d019f7aa178
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610091909-KYNP7H
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610091909-KYNP7H --result verified-202610091909-KYNP7H --commit 6847296cf1faffe4e93646ff4b1cdc4e9bc51b0c
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -272,3 +363,11 @@ Read-only source inspection: swap exchanges m_vec only, retaining m_front_offset
 - Observation: One replay scalar-construction arrow still lacks directly attached JSDoc; preceding variable declaration comment is not accepted by the documentation checker.
   Impact: Only documentation acceptance remains affected, with no behavior or fixture change.
   Resolution: Recompute route; attach existing comment directly to the arrow and rerun focused documentation gate.
+
+- Observation: Exact route task complete rejects generated closure subject as too generic (E_GIT); implementation and passing quality evidence are already committed.
+  Impact: Only task closure artifact remains dirty; no production or verification change. Same existing generator and hook incompatibility as previous tasks.
+  Resolution: Recompute route and attempt advertised close cleanup; if generator rejection repeats, persist active task closure artifacts using concrete finalize subject through existing ap commit. Keep hooks and gates unchanged.
+
+- Observation: Exact advertised close cleanup also rejects its generated generic subject with E_GIT; only task README closure is staged.
+  Impact: No implementation, verification or quality changes; required final clean state needs concrete task-artifact commit subject.
+  Resolution: Persist active task scope with ap commit --allow-tasks using finalize: verified original shared delayed vector subject. Preserve generator/hook policy and all evidence.
