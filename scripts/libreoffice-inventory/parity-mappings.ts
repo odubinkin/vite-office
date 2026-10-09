@@ -6,6 +6,7 @@ import type { BaselineManifest } from "./contracts";
 import { isCapabilityId } from "./capability-identity";
 
 import {
+  resolveEvidencePath,
   assertOrderedUniqueRecords,
   isRecord,
   optionalString,
@@ -624,7 +625,7 @@ async function resolveParityClosureReference(
 ): Promise<void> {
   if (reference === undefined)
     throw new Error(`Missing ${dimension} ${side} parity closure evidence.`);
-  const contents = await readEvidence(`${root}/${reference.path}`);
+  const contents = await readEvidence(resolveEvidencePath(root, reference.path, side));
   if (!contents.includes(reference.marker))
     throw new Error(
       `parity closure ${side} ${dimension} marker is absent: ${reference.path} :: ${reference.marker}`,

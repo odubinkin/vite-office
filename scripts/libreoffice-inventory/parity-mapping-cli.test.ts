@@ -152,7 +152,7 @@ describe("parity mapping CLI" /**
         /** Supplies an explicitly missing global capability registry. @returns Empty known-ID set. */
         async () => new Set<string>(),
       ),
-    ).rejects.toThrow("references unknown capability CAP-80646669-70d5-4641-9fe5-29b1639adab9");
+    ).rejects.toThrow(/^apps\/office\/src\/.* references unknown capability CAP-/u);
   }, 30_000);
 
   it("closes the umbrella ODT compatibility record with pinned fixture evidence" /**

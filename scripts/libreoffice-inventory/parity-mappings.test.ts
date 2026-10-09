@@ -6,6 +6,23 @@ import { describe, expect, it } from "vitest";
 
 import type { BaselineManifest } from "./contracts";
 import { parseParityMappingManifest, validateParityMappingEvidence } from "./parity-mappings";
+import { resolveEvidencePath } from "./parity-mapping-support";
+
+it("resolves explicitly pinned external dependency evidence without inventing a LibreOffice source path", /** Keeps direct external sources distinct from paths inside the core checkout. @returns Nothing. */ () => {
+  expect(
+    resolveEvidencePath(
+      "vendor/libreoffice-reference",
+      "vendor/mdds-reference/include/mdds/node.hpp",
+      "upstream",
+    ),
+  ).toBe("vendor/mdds-reference/include/mdds/node.hpp");
+  expect(
+    resolveEvidencePath("vendor/libreoffice-reference", "sc/inc/markarr.hxx", "upstream"),
+  ).toBe("vendor/libreoffice-reference/sc/inc/markarr.hxx");
+  expect(resolveEvidencePath("local-root", "vendor/local-test.ts", "local")).toBe(
+    "local-root/vendor/local-test.ts",
+  );
+});
 
 /** Provides the narrow baseline fields consumed by the mapping parser. */
 const baseline = { commit: "pinned-commit", tag: "pinned-tag" } as BaselineManifest;

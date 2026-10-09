@@ -552,3 +552,59 @@ Source research also includes MPL 2.0 and inherited Apache notices in
 `sc/inc/markarr.hxx` and `sc/source/core/data/markarr.cxx`, and MPL 2.0 in
 `include/tools/long.hxx`. The TypeScript code is independently authored from
 these contracts; native originals remain read-only research input.
+
+## Shared external mdds segment storage
+
+Task7 implements `external/mdds/include/mdds/{node,ref_pair,flat_segment_tree_itr,flat_segment_tree}.ts`
+as shared owners. `ScFlatBoolRowSegments` and `ScMultiSel` need this actual
+dependency before their wrappers can be ported. No Writer storage copy or
+replacement interval union is introduced. The module graph allows `sc -> external`
+and forbids external dependencies on application/browser owners.
+
+The original linked leaf boundaries represent half-open intervals. The terminal
+leaf stores `value_type{}` independently of the tree's initial value. Insertion
+coalesces leaves and returns the original start iterator/change flag. Searches
+preserve failed output parameters. The search index is a separate exact-size
+non-leaf pool, constructed by original bottom-up adjacent pairing; searching
+never builds it implicitly. Copy constructs leaves without an index, move
+transfers ownership, and original shifts retain their ordering/default-tail
+behavior. Forward/reverse iterator types are distinct; `ref_pair` borrows live
+key/value fields, while segment iterators cache values on movement and preserve
+the original end/copy/assignment cache distinctions.
+
+The source-only LibreOffice checkout does not include unpacked external headers.
+Its pinned `download.lst` specifies `mdds-3.2.1.tar.xz` with SHA256
+`673f5bb94612dbba581fc92b99b5e5dd1a53e29496a5dbc936432f6b0687c112`, and
+`boost_1_91_0.tar.xz` with SHA256
+`2f975c10da79511c2f218189fc8a12eef1a92e3bd18206e9841d406296d065eb`.
+For optional native research, obtain these exact archives from the LibreOffice
+`Makefile.fetch` source prefix `https://dev-www.libreoffice.org/src/`, verify
+their hashes, and extract under ignored `output/playwright/mdds-native`.
+Extract genuine Boost headers, apply the exact pinned
+`external/mdds/gcc-12-silence-use-after-free.patch.1` with `patch -p1` to mdds,
+then link ignored `vendor/mdds-reference` to that unpacked mdds directory.
+Network source reads require the existing explicit authorization. Ordinary
+tests do not fetch anything, require that link, or invoke a native compiler.
+
+`scripts/mdds-flat-segment-native-probe.mjs --check` reproduces the portable
+fixture. It checks pinned LibreOffice blobs, both archives, the original patch,
+and every actual mdds/Boost compiler header against freshly extracted verified
+archives. Genuine unchanged headers compile with debug assertions and ASan/UBSan.
+All 3020 initialized sequences compare 16,256 command steps and both full owner
+observations; 490 distinct complete snapshots are shared by index without
+removing observations. Numeric
+and boolean specializations, clipping/rejection, all search families and hints,
+copy/move/self-assignment, clear, interval shifts, forward/reverse boundaries,
+segment ranges and index readiness are covered. Native coordinates from
+`fst_test_shift_right_bool`, `fst_test_shift_right_skip_start_node` and
+`fst_test_leaf_search` merge cases are retained. Suspected native cases are
+recorded as CALC-008/009 in the separate journal, with behavior preserved.
+
+Numeric Calc keys and initialized primitive values are the implemented domain.
+Wider templates/value classes, native allocation/refcount/deletion timing,
+dangling iterators, debug dumps, generic exceptions and undefined border/overflow
+operations remain uncertified. Explicit zero-value context and copy/move/operator
+methods adapt C++ type/runtime features; GC owns references. Proven unreachable
+malformed-tree diagnostics use documented invariants without coverage exclusions.
+Inventory semantic parity remains unverified. Original MIT notices and the exact
+mdds MIT license are retained. The full-suite cycle remains due at task10.

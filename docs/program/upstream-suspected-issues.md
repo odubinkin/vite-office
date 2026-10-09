@@ -170,6 +170,51 @@ for native signed overflow, and do not invent wrap or additional saturation.
 - Decision: retain the original field width, clipping order, duplicate
   boundaries, queries and iterator outputs. Do not normalize or fix upstream.
 
+## CALC-008: Clipping admits a zero-length interval at the minimum border
+
+Status: original debug assertion reproduced; undefined access outside parity
+certification, not a confirmed user-visible defect.
+
+The pinned external mdds3.2.1 `flat_segment_tree_def.inl:838`
+`adjust_segment_range` rejects `end_key < min`, using a strict comparison, before
+clipping the start. For bounds `[0,8)`, `insert_front(-1,0,1)` passes the initial
+`end > start` check, then clips to `[0,0)`. In `insert_to_pos`, start/end positions
+refer to the same left node, but removal starts at its next node. The original
+path eventually dereferences a null intrusive pointer.
+
+Evidence: `scripts/mdds-flat-segment-native-probe.mjs --suspected-clipping`
+executes genuine source-verified mdds/Boost headers with debug assertions and
+sanitizers. Boost reports `Assertion failed: (px != 0)` in `intrusive_ptr.hpp`.
+The optional diagnostic log stays under ignored `output/playwright/mdds-native`.
+The exact archive/patch/header hashes are in the committed native fixture.
+
+Calc callers may already exclude such outside-border intervals; their complete
+invariants remain unreviewed. Decision: preserve the original strict guard and
+clipping order. Do not add a zero-span fix or certify an invented native outcome
+for this undefined path.
+
+## CALC-009: Hinted search overloads handle unusable hints differently
+
+Status: source condition and defined native outputs reproduced; intent uncertain.
+
+In original mdds3.2.1 `flat_segment_tree_def.inl:595-602`, key-only hinted search
+passes `pos.get_pos()` directly to `search_by_key_impl`. The value-output overload
+checks null/foreign hints and a hint positioned past the query, then falls back
+to the first leaf. The key-only overload's header documentation describes the
+same fallback, but its implementation differs.
+
+Example: tree `[0,8)` with initial value9; query2 with a default null iterator.
+Key-only search returns end, while value-output search succeeds with9. With a
+live foreign tree of the same bounds and initial value42, key-only search reads
+42 from that foreign leaf, while value-output search succeeds with9. Both
+examples use initialized live owners; no dangling pointer is involved.
+
+Evidence: every portable native snapshot compares both hinted overload families,
+including default, local, past-query and foreign hints; independent literal
+assertions are in `external/mdds/include/mdds/flat_segment_tree.test.ts`.
+Consumer hint ownership requirements and historical intent remain unreviewed.
+Decision: preserve the overload distinction and foreign-hint observations.
+
 ## Reviewed API distinctions
 
 These distinctions have been discussed but are not classified as defects:

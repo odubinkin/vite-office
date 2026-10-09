@@ -46,6 +46,8 @@ output/playwright/
 vendor/libreoffice-reference/
 # The research checkout may be a symlink to the shared pinned reference.
 /vendor/libreoffice-reference
+# Optional pinned external dependency research; ordinary tests use portable fixtures.
+/vendor/mdds-reference
 .playwright-cli
 
 # Deterministic compatibility views; author docs/program/registry records instead

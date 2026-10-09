@@ -1,0 +1,66 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/flat_segment_tree_itr.ts",
+          "marker": "IteratorOwner"
+        },
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/flat_segment_tree.test.ts",
+          "marker": "matches every unchanged native insertion"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/mdds-reference/include/mdds/flat_segment_tree_itr.hpp",
+          "marker": "class const_iterator_base"
+        },
+        {
+          "path": "vendor/mdds-reference/include/mdds/flat_segment_tree.hpp",
+          "marker": "class const_reverse_iterator"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/external/mdds/include/mdds/flat_segment_tree_itr.ts",
+    "localSymbols": [
+      "IteratorOwner",
+      "IteratorState",
+      "positions",
+      "iterator_state",
+      "const_iterator_base",
+      "assign",
+      "copy",
+      "increment",
+      "decrement",
+      "equals",
+      "value",
+      "const_iterator",
+      "to_segment",
+      "const_reverse_iterator",
+      "SegmentRecord",
+      "const_segment_iterator",
+      "update_node",
+      "const_segment_range_type",
+      "begin",
+      "end"
+    ],
+    "omittedResponsibilities": [
+      "Only numeric Calc keys with initialized boolean/number values and native-defined arithmetic are implemented. Wider C++ templates and value classes, allocation/refcount/deletion timing, dangling iterators, debug dumps, generic exceptions and undefined invalid-border operations remain uncertified. GC references and explicit copy/move/operator methods adapt the language runtime. Finite native snapshots do not establish whole-module or Calc parity."
+    ],
+    "preservedResponsibilities": [
+      "Original linked half-open leaf intervals and terminal value_type{}; insertion coalesces nodes and reports actual changes.",
+      "Original separately built bottom-up pooled search tree, readiness invalidation and no implicit build on search.",
+      "Original copy/move/assignment/clear and shift order; distinct forward/reverse iterator types, live ref_pair aliases and cached segment-iterator copy/end semantics."
+    ],
+    "status": "mapped",
+    "upstreamPath": "vendor/mdds-reference/include/mdds/flat_segment_tree_itr.hpp",
+    "upstreamSymbols": [
+      "class const_iterator_base",
+      "class const_segment_iterator"
+    ]
+  }
+}
