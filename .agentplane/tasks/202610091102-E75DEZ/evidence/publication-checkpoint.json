@@ -1,0 +1,32 @@
+{
+  "check": "all three clean intended branches agree with fetched published refs; original Writer/Calc heads and main are ancestors",
+  "checkouts": [
+    {
+      "root": "/Users/odubinkin/Projects/vite-office",
+      "branch": "main",
+      "head": "4162c046d7f7a98c8929a1ab93152adaf32de53d",
+      "upstream": "origin/main",
+      "remoteTrackingHead": "4162c046d7f7a98c8929a1ab93152adaf32de53d",
+      "status": "",
+      "ancestryVerified": true
+    },
+    {
+      "root": "/Users/odubinkin/Projects/vite-office-writer",
+      "branch": "writer",
+      "head": "4162c046d7f7a98c8929a1ab93152adaf32de53d",
+      "upstream": "origin/writer",
+      "remoteTrackingHead": "4162c046d7f7a98c8929a1ab93152adaf32de53d",
+      "status": "",
+      "ancestryVerified": true
+    },
+    {
+      "root": "/Users/odubinkin/Projects/vite-office-calc",
+      "branch": "calc",
+      "head": "4162c046d7f7a98c8929a1ab93152adaf32de53d",
+      "upstream": "origin/calc",
+      "remoteTrackingHead": "4162c046d7f7a98c8929a1ab93152adaf32de53d",
+      "status": "",
+      "ancestryVerified": true
+    }
+  ]
+}

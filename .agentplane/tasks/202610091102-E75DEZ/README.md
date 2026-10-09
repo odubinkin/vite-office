@@ -4,7 +4,7 @@ title: "Integrate Writer and Calc into main and synchronize development branches
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: execute approved Writer Calc integration and complete verification across the three designated repositories."
 doc_version: 3
-doc_updated_at: "2026-10-09T12:50:37.057Z"
+doc_updated_at: "2026-10-09T12:53:30.964Z"
 doc_updated_by: "CODER"
 description: "User-approved nine-step synchronization across vite-office, vite-office-writer and vite-office-calc. Push development branches, merge into main, resolve conflicts, run complete verification and repair failures, publish main, merge main back and leave all checkouts clean on their intended branches."
 sections:
@@ -53,15 +53,18 @@ sections:
   Verification: |-
     Command: npm run verify.
     Result: pass (exit 0).
-    Evidence: evidence/npm-verify-istanbul.log and evidence/istanbul-final-summary.json; 528 application test files, 14192 tests, 100 percent statements/branches/functions/lines using Istanbul, zero negative counters; inventory 38 files/122 tests with 100 percent coverage; 303 browser scenarios; static build and all formatting/lint/type/dependency/resource/tooling/docs/size/tree/provenance/invariant/parity checks passed.
+    Evidence: evidence/npm-verify-istanbul.log and evidence/istanbul-final-summary.json; application 528 files/14192 tests with all four coverage metrics at 100 percent using Istanbul and no negative counters; inventory 38 files/122 tests with 100 percent coverage; 303 browser scenarios. Formatting, lint, types, dependency boundaries, resources, tooling, static build, docs, file size, source tree, provenance, invariants and parity passed.
     Scope: merged Writer, Calc and shared application.
 
     Command: ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check.
     Result: pass.
-    Evidence: zero doctor errors, two inherited warnings; routing valid; no whitespace errors.
+    Evidence: zero doctor errors and two inherited warnings; policy routing valid; no whitespace errors.
     Scope: repository workflow and intentional changes.
 
-    Publication and development-branch synchronization: in progress; final ancestry, remote-tip and clean-state evidence will be recorded after synchronization.
+    Command: git push main; fetch main in both development checkouts; git merge --ff-only origin/main; push writer and calc; fetch remote refs; compare local/remote tips, clean states and merge-base ancestry.
+    Result: pass.
+    Evidence: evidence/publication-checkpoint.json; all three published branches and clean checkouts agree at 4162c046d7f7a98c8929a1ab93152adaf32de53d. Intended branches remain main/writer/calc, with matching upstreams. Original Writer and Calc heads plus main are ancestors in each checkout. npm ci succeeded in both development directories.
+    Scope: all three user-designated repositories. Only task verification and closure artifacts follow this publication checkpoint; these are synchronized before final delivery.
   Rollback Plan: "Retain original heads main=069279d9, writer=9a64ad49, calc=01d07401. If rollback becomes necessary, propose explicit revert commits; do not reset or force-push published history."
   Findings: "Writer and Calc were published using the explicitly authorized HTTPS URL after SSH authentication failed; both merges were conflict-free. V8 complete runs passed all tests but produced a negative paintfrm.ts branch counter ([1371, -153]); focused layout tests reached 100 percent. The application provider is now Istanbul as requested. Existing justified V8/C8 annotations were translated; no new exclusions or relaxed mandatory thresholds were added. New tests close direct default-argument, nearest-frame, DOM focus lookup, font-argument and imported numbering gaps. Three prior exclusions were removed and replaced with tests. The complete npm run verify now passes: 528 application files/14192 tests, 100 percent statements/branches/functions/lines, zero negative counters, inventory 38 files/122 tests with 100 percent coverage and 303 browser scenarios. A type-only compaction keeps txtparae.ts below the file-size limit and was verified to emit identical JavaScript; documentation, lint and types passed again afterwards. Test logs were normalized only to remove trailing spaces from tool output. TypeScript remains 6.0.3: typescript-eslint and four legacy compiler API consumers block the complete TS7 migration (assessment task 202610091107-VKHCRS). Istanbul is not an identified TS7 blocker; full-stack TS7 compatibility has not been verified. AgentPlane doctor passes with two inherited warnings. Main publication and back-merges are the remaining steps."
 id_source: "generated"
@@ -91,15 +94,18 @@ Integrate and synchronize the three branches. User explicitly expanded approval 
 
 Command: npm run verify.
 Result: pass (exit 0).
-Evidence: evidence/npm-verify-istanbul.log and evidence/istanbul-final-summary.json; 528 application test files, 14192 tests, 100 percent statements/branches/functions/lines using Istanbul, zero negative counters; inventory 38 files/122 tests with 100 percent coverage; 303 browser scenarios; static build and all formatting/lint/type/dependency/resource/tooling/docs/size/tree/provenance/invariant/parity checks passed.
+Evidence: evidence/npm-verify-istanbul.log and evidence/istanbul-final-summary.json; application 528 files/14192 tests with all four coverage metrics at 100 percent using Istanbul and no negative counters; inventory 38 files/122 tests with 100 percent coverage; 303 browser scenarios. Formatting, lint, types, dependency boundaries, resources, tooling, static build, docs, file size, source tree, provenance, invariants and parity passed.
 Scope: merged Writer, Calc and shared application.
 
 Command: ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check.
 Result: pass.
-Evidence: zero doctor errors, two inherited warnings; routing valid; no whitespace errors.
+Evidence: zero doctor errors and two inherited warnings; policy routing valid; no whitespace errors.
 Scope: repository workflow and intentional changes.
 
-Publication and development-branch synchronization: in progress; final ancestry, remote-tip and clean-state evidence will be recorded after synchronization.
+Command: git push main; fetch main in both development checkouts; git merge --ff-only origin/main; push writer and calc; fetch remote refs; compare local/remote tips, clean states and merge-base ancestry.
+Result: pass.
+Evidence: evidence/publication-checkpoint.json; all three published branches and clean checkouts agree at 4162c046d7f7a98c8929a1ab93152adaf32de53d. Intended branches remain main/writer/calc, with matching upstreams. Original Writer and Calc heads plus main are ancestors in each checkout. npm ci succeeded in both development directories.
+Scope: all three user-designated repositories. Only task verification and closure artifacts follow this publication checkpoint; these are synchronized before final delivery.
 
 ## Rollback Plan
 
