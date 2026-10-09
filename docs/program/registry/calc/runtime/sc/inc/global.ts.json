@@ -8,7 +8,8 @@
     "suite": "calc",
     "subsystem": "reference-update",
     "capabilityIds": [
-      "CAP-6d0889c7-09ca-4bef-8b83-5567192ee769"
+      "CAP-6d0889c7-09ca-4bef-8b83-5567192ee769",
+      "CAP-a3a53a8b-3a8b-46c4-b052-e3b7c2c2c210"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -18,9 +19,11 @@
       "evidence": [
         "apps/office/src/sc/inc/global.ts#UpdateRefMode",
         "apps/office/src/sc/source/core/tool/refupdate.test.ts#retains original mode values and copy is an untouched reference",
-        "vendor/libreoffice-reference/sc/inc/global.hxx#enum UpdateRefMode"
+        "vendor/libreoffice-reference/sc/inc/global.hxx#enum UpdateRefMode",
+        "apps/office/src/sc/inc/global.ts#ScGlobal",
+        "vendor/libreoffice-reference/sc/inc/global.hxx#bThreadedGroupCalcInProgress"
       ],
-      "justification": "Only original UpdateRefMode enum is ported from the global header; other global declarations remain absent. Task 202610091335-767ATZ ports ordinary-coordinate Update, original UpdateRefMode and private numeric helper responsibilities. A structural getter view adds only original IsExpandRefs with no fabricated policy default or document owner. Native output reference parameters become a result/six-coordinate tuple. Complete unchanged helper, expansion and ordinary Update source intervals compile with exact pinned blobs/hashes under ASan/UBSan;32704 outcomes cover both expansion policies, clipping/deletion, sticky result precedence, mixed axis ordering, move containment, reordered sheets and signed16 boundaries. Two secondary reorder guards are unreachable after the initial moved-range return and replaced only by their direct native outcomes with proof comments; comparison C++ bodies stay unchanged. All57 Calc tests retain actual100 Istanbul. full document/compiler/change-tracking/consumer integration, native aliased scalar output-reference storage, debug assertion enforcement and undefined arithmetic domains remain subsequent work; bounded defined native fixtures do not establish whole reference-update or Calc parity.",
+      "justification": "Original UpdateRefMode and the actual core-data ScGlobal state-owner re-export are ported at the global header; other declarations remain absent. Task 202610091335-767ATZ ports ordinary-coordinate Update, original UpdateRefMode and private numeric helper responsibilities. A structural getter view adds only original IsExpandRefs with no fabricated policy default or document owner. Native output reference parameters become a result/six-coordinate tuple. Complete unchanged helper, expansion and ordinary Update source intervals compile with exact pinned blobs/hashes under ASan/UBSan;32704 outcomes cover both expansion policies, clipping/deletion, sticky result precedence, mixed axis ordering, move containment, reordered sheets and signed16 boundaries. Two secondary reorder guards are unreachable after the initial moved-range return and replaced only by their direct native outcomes with proof comments; comparison C++ bodies stay unchanged. All57 Calc tests retain actual100 Istanbul. full document/compiler/change-tracking/consumer integration, native aliased scalar output-reference storage, debug assertion enforcement and undefined arithmetic domains remain subsequent work; bounded defined native fixtures do not establish whole reference-update or Calc parity.",
       "knownViolations": [],
       "localSymbols": [
         "UpdateRefMode"
@@ -28,7 +31,8 @@
       "sourceResponsibility": "aligned",
       "upstreamFile": "sc/inc/global.hxx",
       "upstreamSymbols": [
-        "UpdateRefMode"
+        "UpdateRefMode",
+        "bThreadedGroupCalcInProgress"
       ]
     }
   }

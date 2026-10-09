@@ -1,4 +1,5 @@
 /** @fileoverview Original reference update modes from pinned sc/inc/global.hxx. */
+export { ScGlobal } from "../source/core/data/global";
 /** Original insertion/deletion, copy, movement and sheet reorder discriminator. */
 export enum UpdateRefMode {
   URM_INSDEL = 0,

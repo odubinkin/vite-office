@@ -1,0 +1,109 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-a3a53a8b-3a8b-46c4-b052-e3b7c2c2c210",
+    "capabilityId": "CAP-a3a53a8b-3a8b-46c4-b052-e3b7c2c2c210",
+    "suite": "calc",
+    "subsystem": "boolean-segments",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original boolean default false, explicit inclusive maxima, signed32 rows and signed16 columns, header/core-data ownership and independent copies over the actual shared mdds owner.",
+      "Inclusive set/query endpoints, half-open removal, skip-start insertion, original change flags and failed output preservation.",
+      "Original lazily built index, shared search/range iterator hint, forward-only cached iterator values and signed32 maximum findLastTrue sentinel.",
+      "Actual ScGlobal threaded-group flag initialized false at its original owner, original index-readiness preconditions and diagnostic ASCII text."
+    ],
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "Original boolean owner contracts and shared mdds dependency retained with bounded initialized native evidence; explicit JS diagnostic/string/reference adaptations are recorded as limitations."
+    },
+    "capability": "Calc boolean row and column segment owners and row iterators",
+    "gaps": [
+      "Numeric UInt16 segment owners, conditional setters/sums, remaining ScGlobal services, ScMultiSel/document/column/UI consumers, native allocation/refcount/pointer lifetime, uninitialized or malformed iterator states, undefined arithmetic and full Calc parity remain unverified. Diagnostic ASCII text uses JavaScript strings; actual RTL string allocation and native diagnostic dump linkage are not certified. The original debug assertion is adapted to a fail-fast Error; native process abort, release builds and concurrent memory behavior are not represented."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sc/inc/segmenttree.hxx",
+          "marker": "class ScFlatBoolRowSegments"
+        },
+        {
+          "path": "sc/source/core/data/segmenttree.cxx",
+          "marker": "ScFlatBoolRowSegments::RangeIterator::getFirst"
+        },
+        {
+          "path": "sc/source/core/data/global.cxx",
+          "marker": "bool ScGlobal::bThreadedGroupCalcInProgress = false;"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sc/qa/unit/mark_test.cxx",
+          "marker": "#include \"../../source/core/data/segmenttree.cxx\""
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/inc/segmenttree.hxx",
+          "marker": "Builds internal data"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/source/core/data/segmenttree.ts",
+          "marker": "export class ScFlatBoolRowSegments"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/segmenttree.ts",
+          "marker": "export class ScFlatBoolColSegments"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/global.ts",
+          "marker": "bThreadedGroupCalcInProgress"
+        },
+        {
+          "path": "scripts/calc-bool-segments-native-probe.mjs",
+          "marker": "const originals ="
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/source/core/data/segmenttree.test.ts",
+          "marker": "matches all436 unchanged native boolean row/column sequences"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/segmenttree.test.ts",
+          "marker": "preserves shared range cursor interference"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/segmenttree.test.ts",
+          "marker": "retains forward-only positions"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/segmenttree.test.ts",
+          "marker": "uses the original global flag"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Boolean row and column segment owners"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "Own boolean row and column intervals and preserve original query copy shift readiness and iterator contracts",
+    "scopeLimitations": [
+      "Numeric UInt16 segment owners, conditional setters/sums, remaining ScGlobal services, ScMultiSel/document/column/UI consumers, native allocation/refcount/pointer lifetime, uninitialized or malformed iterator states, undefined arithmetic and full Calc parity remain unverified. Diagnostic ASCII text uses JavaScript strings; actual RTL string allocation and native diagnostic dump linkage are not certified. The original debug assertion is adapted to a fail-fast Error; native process abort, release builds and concurrent memory behavior are not represented.",
+      "The upstream mark test includes this owner; this evidence link is consumer context, not a claim that all436 generated sequences are literal upstream unit scenarios. Native dumpAsString bodies are unlinked; only the opaque actual RTL return type is declared. Original global flag declaration and definition are extracted exactly; the rest of ScGlobal is not linked."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

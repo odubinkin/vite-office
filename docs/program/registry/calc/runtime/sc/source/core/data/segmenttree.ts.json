@@ -1,0 +1,66 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/core/data/segmenttree.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "boolean-segments",
+    "capabilityIds": [
+      "CAP-a3a53a8b-3a8b-46c4-b052-e3b7c2c2c210"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sc/source/core/data/segmenttree.ts#ScFlatBoolRowSegments",
+        "apps/office/src/sc/source/core/data/segmenttree.test.ts#matches all436 unchanged native boolean row/column sequences",
+        "scripts/calc-bool-segments-native-probe.mjs#const originals =",
+        "vendor/libreoffice-reference/sc/source/core/data/segmenttree.cxx#ScFlatBoolRowSegments::RangeIterator::getFirst"
+      ],
+      "justification": "Task202610091610-0168S5 ports the original boolean row/column segment owners and row iterators over the already shared mdds owner, retaining needed internal bool specialization. Original declarations and complete needed method groups compile unchanged with genuine source-verified mdds/Boost under ASan/UBSan;436 initialized sequences compare both live owners after every command through copy-isolated observations. Whole-class numeric responsibilities remain absent. A private WeakMap preserves nested-iterator access without adding a public storage API; TS output tuples and mutable aggregates adapt scalar references. The bool search policy stays true because its original API has no setter. One getFirst failure guard is reduced only by the initialized two-border-node invariant, documented at the call; original native bodies remain unchanged. Tests retain cursor interference, stale forward cache, output preservation, scalar dump text and actual global readiness preconditions without coverage exclusions. Numeric UInt16 segment owners, conditional setters/sums, remaining ScGlobal services, ScMultiSel/document/column/UI consumers, native allocation/refcount/pointer lifetime, uninitialized or malformed iterator states, undefined arithmetic and full Calc parity remain unverified. Diagnostic ASCII text uses JavaScript strings; actual RTL string allocation and native diagnostic dump linkage are not certified. The original debug assertion is adapted to a fail-fast Error; native process abort, release builds and concurrent memory behavior are not represented.",
+      "knownViolations": [],
+      "localSymbols": [
+        "RangeData",
+        "ScFlatBoolRowRangeData",
+        "ScFlatBoolColRangeData",
+        "assertIdleCalculation",
+        "ScFlatSegmentsImpl",
+        "ScFlatBoolSegmentsImpl",
+        "implementations",
+        "scratchRange",
+        "ScFlatBoolRowSegmentsForwardIterator",
+        "ScFlatBoolRowSegmentsRangeIterator",
+        "ScFlatBoolRowSegments",
+        "ScFlatBoolColSegments",
+        "setValue",
+        "getRangeData",
+        "getRangeDataLeaf",
+        "removeSegment",
+        "insertSegment",
+        "findLastTrue",
+        "getFirst",
+        "getNext",
+        "makeReady",
+        "setTrue",
+        "setFalse",
+        "getValue",
+        "getLastPos",
+        "dumpAsString"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "sc/source/core/data/segmenttree.cxx",
+      "upstreamSymbols": [
+        "ScFlatSegmentsImpl",
+        "ScFlatBoolSegmentsImpl",
+        "ScFlatBoolRowSegments",
+        "ScFlatBoolColSegments",
+        "ScFlatBoolRowSegments::ForwardIterator",
+        "ScFlatBoolRowSegments::RangeIterator"
+      ]
+    }
+  }
+}

@@ -12,29 +12,40 @@
         {
           "path": "apps/office/src/sc/source/core/tool/refupdate.test.ts",
           "marker": "retains original mode values and copy is an untouched reference"
+        },
+        {
+          "path": "apps/office/src/sc/inc/global.ts",
+          "marker": "ScGlobal"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/sc/inc/global.hxx",
           "marker": "enum UpdateRefMode"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/global.hxx",
+          "marker": "bThreadedGroupCalcInProgress"
         }
       ]
     },
     "localPath": "apps/office/src/sc/inc/global.ts",
     "localSymbols": [
-      "UpdateRefMode"
+      "UpdateRefMode",
+      "ScGlobal"
     ],
     "omittedResponsibilities": [
       "Other global.hxx declarations, document/compiler consumers and whole Calc parity remain unverified."
     ],
     "preservedResponsibilities": [
-      "Original UpdateRefMode names, declaration order and numeric values0..3."
+      "Original UpdateRefMode names, declaration order and numeric values0..3.",
+      "Header boundary re-exports the original ScGlobal process-state owner; false initializer remains at core/data/global."
     ],
     "status": "mapped",
     "upstreamPath": "sc/inc/global.hxx",
     "upstreamSymbols": [
-      "UpdateRefMode"
+      "UpdateRefMode",
+      "bThreadedGroupCalcInProgress"
     ]
   }
 }

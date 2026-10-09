@@ -608,3 +608,54 @@ methods adapt C++ type/runtime features; GC owns references. Proven unreachable
 malformed-tree diagnostics use documented invariants without coverage exclusions.
 Inventory semantic parity remains unverified. Original MIT notices and the exact
 mdds MIT license are retained. The full-suite cycle remains due at task10.
+
+## Boolean row and column segment owners
+
+Task8 (`202610091610-0168S5`) adds `sc/inc/segmenttree.ts` and the original
+`sc/source/core/data/segmenttree.ts` owner. Both boolean facades reuse the shared
+mdds implementation and the original private bool specialization. Defaults are
+false; bounds are explicit inclusive maxima. Rows retain signed32 coordinates,
+columns signed16 coordinates. Setters and range outputs are inclusive; removal
+passes half-open boundaries to mdds, and insertion retains skip-start behavior.
+Copies own new leaves and start with an unbuilt index and default search hint.
+
+The search hint and `RangeIterator` position are the same owner field. Separate
+range iterators and searches therefore affect each other's position. Failed
+public operations preserve caller output fields. `ForwardIterator` retains its
+monotonic position and interval cache even after owner mutation. `findLastTrue`
+returns signed32 maximum when no true interval exists. These original contracts
+are preserved; reviewed distinctions are recorded in the suspicious-case journal.
+
+`ScGlobal` retains its original static state owner in `core/data/global.ts`,
+re-exported through `inc/global.ts`. Its threaded-group-calculation flag starts
+false. Index construction checks that flag; an already prepared query does not.
+`makeReady` checks it even when the index is ready. A narrow lint exception keeps
+the native static class API. The debug assertion becomes a fail-fast JavaScript
+Error; native process abort, release-build diagnostics and concurrent memory
+behavior remain uncertified. `dumpAsString` retains the original ASCII text
+through immutable JavaScript strings; RTL allocation/refcount/capacity is pending.
+
+`node scripts/calc-bool-segments-native-probe.mjs --check` reproduces 436 defined
+sequences using unchanged original declarations and complete needed bool method
+groups, genuine verified mdds/Boost, native coordinate widths and the exact global
+flag declaration/definition. ASan/UBSan checks both owner snapshots after every
+command; observation copies leave live hints and iterator caches untouched.
+`--thread-assertion` diagnoses the original assertion in a separate process.
+Only the actual opaque RTL return type is declared; native diagnostic dump bodies
+are unlinked. No native storage or string engine substitute is introduced.
+Ordinary tests read the committed fixture without upstream, compiler or network.
+
+The bool policy stays enabled because its original facade exposes no setter.
+The initialized owner always retains both border nodes, making the public
+`getFirst` failure guard unreachable. TS expresses that invariant directly;
+the native probe keeps the guard unchanged. No coverage exclusions are used.
+Numeric UInt16 segment owners, conditional setters/sums, other ScGlobal services,
+multi-selection and document/browser consumers remain follow-up work. Native
+allocation/pointer lifetime, malformed/uninitialized iterators and undefined
+arithmetic remain unverified. Finite comparison evidence does not establish whole
+module parity; inventory keeps semantic parity unverified. All82 Calc tests have
+actual100 Istanbul coverage. Full-suite validation remains due at task10.
+
+Source research retains MPL 2.0 and inherited Apache notices in the segmenttree
+and global originals. Independently authored TypeScript preserves those contracts;
+unchanged native originals remain read-only research inputs.

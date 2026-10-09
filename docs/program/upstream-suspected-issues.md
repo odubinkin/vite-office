@@ -229,6 +229,17 @@ These distinctions have been discussed but are not classified as defects:
 - Range construction from two address objects orders axes; numerical
   six-coordinate construction preserves raw order. The overload distinction
   is explicit in the original constructors.
+- `ScFlatBoolRowSegments::RangeIterator` borrows the implementation's `maItr`.
+  Two range iterators share their position, and `getRangeData` searches replace
+  that same hint. A query can therefore change the next interval returned by an
+  existing iterator. `ForwardIterator` separately caches its value/end and does
+  not invalidate the cache on owner mutation. These are confirmed original
+  mechanisms, not classified as defects: pinned `segmenttree.cxx` definitions
+  at lines 140-165, 302-329 and 370-423 retain the state interactions. The
+  portable 436 native sequences and independent cache/cursor tests in
+  `sc/source/core/data/segmenttree.test.ts` preserve them. Complete consumer
+  mutation/iteration requirements still need review; no invalidation or
+  independent-cursor repair is added.
 
 ## Recording future observations
 

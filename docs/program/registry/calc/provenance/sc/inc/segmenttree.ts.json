@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/inc/segmenttree.ts",
+          "marker": "ScFlatBoolRowSegments"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/segmenttree.test.ts",
+          "marker": "matches all436 unchanged native boolean row/column sequences"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/segmenttree.hxx",
+          "marker": "class ScFlatBoolRowSegments"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sc/inc/segmenttree.ts",
+    "localSymbols": [
+      "ScFlatBoolRowSegments",
+      "ScFlatBoolColSegments"
+    ],
+    "omittedResponsibilities": [
+      "Numeric UInt16 segment owners, conditional setters/sums, remaining ScGlobal services, ScMultiSel/document/column/UI consumers, native allocation/refcount/pointer lifetime, uninitialized or malformed iterator states, undefined arithmetic and full Calc parity remain unverified. Diagnostic ASCII text uses JavaScript strings; actual RTL string allocation and native diagnostic dump linkage are not certified. The original debug assertion is adapted to a fail-fast Error; native process abort, release builds and concurrent memory behavior are not represented."
+    ],
+    "preservedResponsibilities": [
+      "Original boolean default false, explicit inclusive maxima, signed32 rows and signed16 columns, header/core-data ownership and independent copies over the actual shared mdds owner.",
+      "Inclusive set/query endpoints, half-open removal, skip-start insertion, original change flags and failed output preservation.",
+      "Original lazily built index, shared search/range iterator hint, forward-only cached iterator values and signed32 maximum findLastTrue sentinel.",
+      "Actual ScGlobal threaded-group flag initialized false at its original owner, original index-readiness preconditions and diagnostic ASCII text."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sc/inc/segmenttree.hxx",
+    "upstreamSymbols": [
+      "ScFlatBoolRowSegments",
+      "ScFlatBoolColSegments",
+      "ForwardIterator",
+      "RangeIterator"
+    ]
+  }
+}
