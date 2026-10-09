@@ -14,8 +14,8 @@ import { SwClient, type SwModify } from "../../../inc/calbck";
 import type { SwModelHint } from "../../../inc/hints";
 import { SwTableBoxFormat as SwNativeTableBoxFormat } from "../../../inc/swtblfmt";
 import type { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
-import { RES_FRM_SIZE } from "../../../inc/hintids";
-import { SvxBoxItem } from "../../../../editeng/source/items/frmitems";
+import { RES_UL_SPACE, RES_FRM_SIZE } from "../../../inc/hintids";
+import { SvxULSpaceItem, SvxBoxItem } from "../../../../editeng/source/items/frmitems";
 import { SvxBorderLine } from "../../../../editeng/source/items/borderline";
 import { RES_BOX } from "../../../inc/hintids";
 import { RES_COLLAPSING_BORDERS, RES_LAYOUT_SPLIT } from "../../../inc/hintids";
@@ -63,7 +63,13 @@ export class SwTable extends SwClient {
   private m_bModifyLocked = false;
   private format: Omit<
     SwTableFormat,
-    "width" | "borderModel" | "layoutSplit" | "headerRows" | "repeatHeaderRows"
+    | "width"
+    | "borderModel"
+    | "layoutSplit"
+    | "headerRows"
+    | "repeatHeaderRows"
+    | "marginTop"
+    | "marginBottom"
   > = {};
   private rowsToRepeat = 1;
   public static readonly SEARCH_NONE = 0;
@@ -137,6 +143,8 @@ export class SwTable extends SwClient {
 
   /** Projects independent native state for construction, transport and history. @returns Detached boundary values. */
   public GetFormat(): SwTableFormat {
+    const spacing = this.GetFrameFormat().GetAttrSet().GetItemIfSet(RES_UL_SPACE, false) as
+      SvxULSpaceItem | undefined;
     const size = this.GetFrameFormat().GetAttrSet().GetItemIfSet(RES_FRM_SIZE, false) as
       SwFormatFrameSize | undefined;
     const borders = this.GetFrameFormat()
@@ -146,6 +154,9 @@ export class SwTable extends SwClient {
       SwFormatLayoutSplit | undefined;
     return {
       ...this.format,
+      ...(spacing === undefined
+        ? {}
+        : { marginTop: spacing.GetUpper(), marginBottom: spacing.GetLower() }),
       ...(size === undefined ? {} : { width: size.GetWidth() }),
       headerRows: this.rowsToRepeat,
       repeatHeaderRows: this.rowsToRepeat !== 0,
@@ -184,11 +195,30 @@ export class SwTable extends SwClient {
 
   /** Publishes represented frame-size changes to row/box width adjustment, as SwClientNotify does. @param value - New values. @returns Nothing. */
   public SetFormat(value: SwTableFormat): void {
-    const { width, borderModel, layoutSplit, headerRows, repeatHeaderRows, ...geometry } = value;
+    const {
+      width,
+      borderModel,
+      layoutSplit,
+      headerRows,
+      repeatHeaderRows,
+      marginTop,
+      marginBottom,
+      ...geometry
+    } = value;
     if (headerRows !== undefined || repeatHeaderRows !== undefined)
       this.SetRowsToRepeat(repeatHeaderRows === false ? 0 : (headerRows ?? this.rowsToRepeat));
     this.format = geometry;
     const format = this.GetFrameFormat();
+    if (marginTop === undefined && marginBottom === undefined) format.ResetFormatAttr(RES_UL_SPACE);
+    else
+      format.SetFormatAttr(
+        new SvxULSpaceItem(
+          marginTop ?? 0,
+          marginBottom ?? 0,
+          RES_UL_SPACE,
+          format.GetULSpace().GetContext(),
+        ),
+      );
     if (width === undefined) format.ResetFormatAttr(RES_FRM_SIZE);
     else {
       const size = format.GetFrameSize().Clone();

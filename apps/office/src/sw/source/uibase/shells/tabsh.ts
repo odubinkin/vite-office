@@ -63,6 +63,7 @@ export interface SwTableProperties {
 /** Captures the represented native table-properties border input over the source selection scope. @param shell - Original editing shell. @returns Owned native input items. */
 export function TableParamToItemSet(shell: SwFEShell): SfxItemSet {
   const value = new SfxItemSet(shell.GetDoc().GetAttrPool(), [
+    [RES_UL_SPACE, RES_UL_SPACE],
     [RES_BOX, RES_BOX],
     [RES_LAYOUT_SPLIT, RES_LAYOUT_SPLIT],
     [RES_ROW_SPLIT, RES_ROW_SPLIT],
@@ -79,6 +80,7 @@ export function TableParamToItemSet(shell: SwFEShell): SfxItemSet {
     value.Put(info);
     return value;
   }
+  value.Put(tableNode.GetTable().GetFrameFormat().GetULSpace());
   value.Put(new SfxUInt16Item(FN_PARAM_TABLE_HEADLINE, tableNode.GetTable().GetRowsToRepeat()));
   value.Put(tableNode.GetTable().GetFrameFormat().GetAttrSet().Get(RES_LAYOUT_SPLIT));
   value.Put(tableNode.GetTable().GetFrameFormat().GetAttrSet().Get(RES_COLLAPSING_BORDERS));
@@ -167,12 +169,11 @@ export function ItemSetToTableParam(
           }
         }
         const spacing = input.GetItemIfSet(RES_UL_SPACE, false);
-        if (spacing instanceof SvxULSpaceItem)
-          attributes = {
-            ...attributes,
-            marginTop: spacing.GetUpper(),
-            marginBottom: spacing.GetLower(),
-          };
+        if (spacing instanceof SvxULSpaceItem) {
+          const spacingSet = new SfxItemSet(input.GetPool(), [[RES_UL_SPACE, RES_UL_SPACE]]);
+          spacingSet.Put(spacing);
+          shell.SetTableAttr(spacingSet);
+        }
         const layoutSplit = input.GetItemIfSet(RES_LAYOUT_SPLIT, false);
         if (layoutSplit instanceof SwFormatLayoutSplit)
           attributes = { ...attributes, layoutSplit: layoutSplit.GetValue() };

@@ -174,8 +174,9 @@ export class SwFormatTablePage {
     this.data = new SwTableRep(table, space, geometry);
     this.data.SetLineSelected(lineSelected);
     this.original = new SwTableRep(this.data);
-    this.originalAbove = table.GetFormat().marginTop ?? 0;
-    this.originalBelow = table.GetFormat().marginBottom ?? 0;
+    const spacing = table.GetFrameFormat().GetULSpace();
+    this.originalAbove = spacing.GetUpper();
+    this.originalBelow = spacing.GetLower();
     this.Reset();
   }
 

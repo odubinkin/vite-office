@@ -153,6 +153,8 @@ class SaveTable {
     delete this.format.width;
     delete this.format.borderModel;
     delete this.format.layoutSplit;
+    delete this.format.marginTop;
+    delete this.format.marginBottom;
     const tableItems = table.GetFrameFormat().GetAttrSet();
     this.tableSet = new SfxItemSet(tableItems.GetPool(), tableItems.GetRanges());
     this.tableSet.PutSet(tableItems);

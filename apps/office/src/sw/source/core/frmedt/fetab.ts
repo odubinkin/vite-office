@@ -12,7 +12,7 @@ import { SwTabCols } from "../bastyp/tabcol";
 import { SwDoc } from "../doc/doc";
 import type { SwFormatFrameSize } from "../../../inc/fmtfsize";
 import type { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
-import type { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { SfxItemSet } from "../../../../svl/source/items/itemset";
 
 /** Native mouse hit over actual measured frame and box owners. */
 interface SwTableMouseHit {
@@ -260,13 +260,15 @@ export abstract class SwFEShell extends SwEditShell {
   }
 
   /** Changes table-frame attributes through native attribute history. @param value - Represented frame attributes. @returns Whether admitted. */
-  public SetTableAttr(value: SwTableFormat): boolean {
+  public SetTableAttr(value: SwTableFormat | SfxItemSet): boolean {
     const table = this.IsCursorInTable()?.GetTable();
     if (table === undefined) return false;
     return this.ChangeTable(
       table,
-      /** Replaces native frame attributes. @returns Nothing. */ () =>
-        table.SetFormat({ ...table.GetFormat(), ...value }),
+      /** Applies native owned items directly, retaining scalar construction input only at its existing boundary. @returns Nothing. */ () => {
+        if (value instanceof SfxItemSet) table.GetFrameFormat().SetFormatAttrSet(value);
+        else table.SetFormat({ ...table.GetFormat(), ...value });
+      },
     );
   }
 

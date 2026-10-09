@@ -82,6 +82,7 @@ function browserCellBoxStyle(item: SvxBoxItem, fixedGuide: boolean): React.CSSPr
   const nativeTable = new SwTabFrame(table);
   try {
     const format = table.GetFormat();
+    const spacing = nativeTable.GetFormat().GetULSpace();
     const collapsing = nativeTable.IsCollapsingBorders();
     const resolved = new Map<string, Style>();
     if (collapsing)
@@ -111,9 +112,8 @@ function browserCellBoxStyle(item: SvxBoxItem, fixedGuide: boolean): React.CSSPr
             width: area.width / 15,
             marginLeft: area.left / 15,
             marginRight: area.right / 15,
-            marginTop: firstRow === 0 ? (format.marginTop ?? 0) / 15 : 0,
-            marginBottom:
-              lastRow === table.GetTabLines().length - 1 ? (format.marginBottom ?? 0) / 15 : 0,
+            marginTop: firstRow === 0 ? spacing.GetUpper() / 15 : 0,
+            marginBottom: lastRow === table.GetTabLines().length - 1 ? spacing.GetLower() / 15 : 0,
           }}
         >
           <colgroup>
