@@ -1,10 +1,11 @@
 ---
 id: "202610090816-5YGKY3"
 title: "Port Calc complex formula reference data and native range inheritance"
-status: "DOING"
+result_summary: "Implemented ScComplexRefData with native extension inheritance, alias semantics and sticky endpoint updates; recorded bounded C++ comparison evidence and Calc inventory."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
     - "Reviewed original header and14 non-debug complex definitions against TS implementation; reused existing numerical and single-reference owners without shared duplication."
     - "Reviewed refdata decomposition candidate: keep original two reference owners together in their upstream module; hard1000 line guard passes."
     - "Original single-reference class and fixture are byte-identical; existing test bodies and semantic status flags preserved."
-commit: null
+commit:
+  hash: "8d44cd1a5c5415930ea2a809983406817f3b5554"
+  message: "✨ 5YGKY3 calc: implement complex formula reference contracts"
 comments:
   -
     author: "CODER"
     body: "Start: port original complex reference inheritance and sticky contracts on existing owners, preserving prior single-reference acceptance."
+  -
+    author: "CODER"
+    body: "Verified: original complex reference contracts and bounded native comparison outputs;36 Calc tests pass with actual100 coverage, scoped inventory and static checks pass."
 events:
   -
     type: "status"
@@ -63,8 +69,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Command: node scripts/calc-refdata-native-probe.mjs --complex-write; node scripts/calc-refdata-native-probe.mjs --complex-check; node scripts/calc-refdata-native-probe.mjs --check Result: pass. Evidence: exact pinned Git blobs and source/body hashes; original complex class,14 complete non-debug definitions and range constructors/order compiled unchanged; ASan/UBSan-clean fixture outputs. Old single fixture remains byte-identical. Scope:3072 property/ordering states,6400 single extensions,1600 complex extensions,300 alias cases,1792 sticky updates,256 mixed-address initializers,36 range/flag initializers and4 equalities. Bounded initialized states, not whole Calc parity. Command: npm run test:coverage:calc Result: pass. Evidence:36 tests across8 files; statements567/567,branches488/488,functions146/146,lines497/497,all100%. Scope: all current Calc core sources and prior acceptance; every saved native output compared through actual TS owners; both original complex testFormulaRefData assertions retained. Command: npm run typecheck; node_modules/.bin/eslint apps/office/src/sc/inc/refdata.ts apps/office/src/sc/source/core/tool/refdata.ts apps/office/src/sc/source/core/tool/complex-refdata.test.ts scripts/calc-refdata-native-probe.mjs; node_modules/.bin/prettier --check apps/office/src/sc/inc/refdata.ts apps/office/src/sc/source/core/tool/refdata.ts apps/office/src/sc/source/core/tool/complex-refdata.test.ts scripts/calc-refdata-native-probe.mjs Result: pass. Evidence: no type/lint diagnostics; all matched files formatted. Scope: static application types and affected source/probe/test paths. Command: npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:source-tree Result: pass. Evidence:326 runtime sources,1558 imports,29 allowed module edges;1074 documented sources;1077 files checked, refdata grouping reviewed;114 required source-tree paths and33 retired roots checked. Scope: declared repository static guards; no changed shared owners or Writer tests. Command: node_modules/.bin/tsx scripts/libreoffice-inventory/registry-cli.ts check --scope calc Result: pass. Evidence:6 capabilities,118 applicable modules (6 Calc and112 shared),0 semantic violations. Existing capability flags preserved; module/default/behavior/contract parity stays unverified. Scope: Calc capability/runtime/provenance records and reused shared ownership. Command: node .agentplane/policy/check-routing.mjs; ap doctor; git diff --check Result: pass. Evidence: routing OK; doctor0 errors,1 pre-existing managed hook readiness warning; no whitespace errors. Scope: task policy and affected diff. Final clean state on calc is required after task closure. Full suite schedule: Calc milestone6 of10; the user requires the full run after milestone10. No cadence change or mandatory check omission."
+  -
+    type: "status"
+    at: "2026-10-09T08:30:54.601Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: original complex reference contracts and bounded native comparison outputs;36 Calc tests pass with actual100 coverage, scoped inventory and static checks pass."
 doc_version: 3
-doc_updated_at: "2026-10-09T08:29:41.164Z"
+doc_updated_at: "2026-10-09T08:30:54.603Z"
 doc_updated_by: "CODER"
 description: "Implement complete initialized ScComplexRefData header/source contracts on original refdata boundaries, including stable copied endpoints, trim defaults, conversion/validation, original extension flag inheritance and sticky endpoint updates. Extend the existing native reference comparison harness while preserving all prior single-reference evidence; update Calc inventory."
 sections:
@@ -116,6 +129,10 @@ sections:
     Native evidence is a bounded four-getter document comparison shell, not production C++ generation, complete ScDocument integration or whole formula/compiler parity. Full document/raw token/compiler/listener ownership, native union/pointer layout, debug-only dumping and undefined/uninitialized arithmetic domains remain unverified in inventory.
 
     ap doctor passes with0 errors and1 pre-existing managed hook readiness warning. It does not prevent scoped implementation verification and is outside this task scope. Calc milestone6 preserves the user cadence: full suites after milestone10, targeted tests plus actual100 Calc coverage between full runs.
+extensions:
+  implementation_commit:
+    hash: "8d44cd1a5c5415930ea2a809983406817f3b5554"
+    message: "✨ 5YGKY3 calc: implement complex formula reference contracts"
 id_source: "generated"
 ---
 ## Summary
