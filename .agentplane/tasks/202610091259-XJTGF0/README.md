@@ -4,7 +4,7 @@ title: "Adopt stable TypeScript 7 compiler with TS6 API compatibility and synchr
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: Implement the user-approved TS7 and TS6 compatibility migration, benchmark it, fully verify it, and synchronize all three branches."
 doc_version: 3
-doc_updated_at: "2026-10-09T13:02:17.524Z"
+doc_updated_at: "2026-10-09T13:04:51.239Z"
 doc_updated_by: "CODER"
 description: "User explicitly authorizes a side-by-side migration on main: use stable TS7 for all compatible compilation and type checking, retain TS6 for required legacy API and lint consumers, measure performance, fully verify and publish main plus reverse synchronization into writer and calc."
 sections:
@@ -46,7 +46,12 @@ sections:
   Verify Steps: "1. Compare repeated baseline and migrated type-check timings plus production build timings; all commands must pass. 2. Confirm tsc uses stable TS7 and legacy compiler API uses TS6; verify compiler diagnostics and existing AST consumers through tests. 3. Run npm run verify and npm run build; all checks pass with unchanged 100% Istanbul thresholds. 4. Run npm ci in development checkouts; confirm remote main/writer/calc contain the migration and local branches are main/writer/calc with clean tracked and untracked states."
   Verification: "Pending implementation and measured verification."
   Rollback Plan: "Revert the migration implementation commit and reinstall dependencies; retain the already merged and verified writer/calc application work. No history rewriting or force pushes."
-  Findings: "The user explicitly authorizes side-by-side TS7/TS6. Microsoft documents the compatibility aliases; @typescript/typescript6@6.0.2 delegates to @typescript/old npm:typescript@^6, preserving current legacy TS6 API availability. Vite transforms and bundles TypeScript independently, so expected speedup mainly affects compiler/type-check stages."
+  Findings: |-
+    The user explicitly authorizes side-by-side TS7/TS6. Microsoft documents the compatibility aliases; @typescript/typescript6@6.0.2 delegates to @typescript/old npm:typescript@^6, preserving current legacy TS6 API availability. Vite transforms and bundles TypeScript independently, so expected speedup mainly affects compiler/type-check stages.
+
+    - Observation: Focused validation found a prohibited non-null assertion in the new test and showed that native TS7 reports a type error with exit code 1 rather than legacy exit code 2.
+      Impact: Only the new integration-test assumptions failed; project type checks and production build already pass on TS7.
+      Resolution: Use a guarded AST assertion and validate a nonzero status plus the specific TS2322 diagnostic without assuming the TS6 exit-code convention.
 id_source: "generated"
 ---
 ## Summary
@@ -76,3 +81,7 @@ Revert the migration implementation commit and reinstall dependencies; retain th
 ## Findings
 
 The user explicitly authorizes side-by-side TS7/TS6. Microsoft documents the compatibility aliases; @typescript/typescript6@6.0.2 delegates to @typescript/old npm:typescript@^6, preserving current legacy TS6 API availability. Vite transforms and bundles TypeScript independently, so expected speedup mainly affects compiler/type-check stages.
+
+- Observation: Focused validation found a prohibited non-null assertion in the new test and showed that native TS7 reports a type error with exit code 1 rather than legacy exit code 2.
+  Impact: Only the new integration-test assumptions failed; project type checks and production build already pass on TS7.
+  Resolution: Use a guarded AST assertion and validate a nonzero status plus the specific TS2322 diagnostic without assuming the TS6 exit-code convention.

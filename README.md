@@ -43,6 +43,14 @@ AgentPlane tasks so scope, verification, and parity evidence stay auditable.
 
 Prerequisites are Node.js 22 or newer and npm.
 
+Compilation and type checking use stable TypeScript 7 through the `tsc` command, including the
+type-check step of `npm run build`. Vite performs the subsequent asset bundling. Tools that need the
+legacy compiler API, including ESLint and the repository's AST checks, retain TypeScript 6. The
+dependencies follow Microsoft's
+[side-by-side installation](https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/):
+`@typescript/native` aliases the TS7 compiler, while `typescript` aliases `@typescript/typescript6`
+for legacy imports. The compatibility compiler is also available as `tsc6`.
+
 ```bash
 npm install
 npm run dev

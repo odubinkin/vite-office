@@ -1,0 +1,41 @@
+{
+  "node": "v24.13.1",
+  "compiler": "7.0.2",
+  "runs": [
+    {
+      "name": "tools-1",
+      "cmd": "npm run typecheck:tools",
+      "cwd": ".",
+      "seconds": 0.396065792,
+      "status": 0
+    },
+    {
+      "name": "office-1",
+      "cmd": "npm run typecheck --workspace @vite-office/office",
+      "cwd": ".",
+      "seconds": 3.448951333,
+      "status": 0
+    },
+    {
+      "name": "tools-2",
+      "cmd": "npm run typecheck:tools",
+      "cwd": ".",
+      "seconds": 0.3969557080000004,
+      "status": 0
+    },
+    {
+      "name": "office-2",
+      "cmd": "npm run typecheck --workspace @vite-office/office",
+      "cwd": ".",
+      "seconds": 3.189928583999999,
+      "status": 0
+    },
+    {
+      "name": "production-build",
+      "cmd": "npm run build",
+      "cwd": ".",
+      "seconds": 4.218214333,
+      "status": 0
+    }
+  ]
+}
