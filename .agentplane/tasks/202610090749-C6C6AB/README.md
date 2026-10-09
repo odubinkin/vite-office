@@ -1,10 +1,11 @@
 ---
 id: "202610090749-C6C6AB"
 title: "Implement Calc reference address and immutable sheet limits"
-status: "DOING"
+result_summary: "Implemented native Calc reference-address values and explicit immutable sheet limits"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -43,11 +44,16 @@ quality_review:
     - "ap doctor"
   findings:
     - "Defaults, signed widths, independent flags, all64 flag equality pairs, copying, stable assignment, both Set overloads, global sheet checks and standard/jumbo/custom bounds pass. Dependency-owned formatting/default factory remain explicitly unimplemented without stubs; native parity statuses unchanged."
-commit: null
+commit:
+  hash: "0a411113750da8bbb14b1e3e014b6fe538d8f676"
+  message: "✨ C6C6AB calc: port native reference address and sheet limits"
 comments:
   -
     author: "CODER"
     body: "Start: implement original reference address and sheet-limit header owners, reusing numerical helpers and documenting actual dependency gaps."
+  -
+    author: "CODER"
+    body: "Verified: native reference-address and explicit immutable sheet-limit owners pass all20 Calc tests with actual100 coverage, static checks and Calc inventory validation without parity promotion."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Commands: npm run test:coverage:calc, npm run typecheck, npm run check:dependencies, npm run check:docs, npm run check:file-size, affected ESLint/Prettier, scoped registry check, source-tree check, routing, ap doctor, git diff --check. Result: all pass. Evidence: 20 tests in6 files; actual100 lines263/263 statements297/297 functions81/81 branches229/229; registry4 capabilities116 scoped modules0 semantic violations; pinned address.hxx/sheetlimits.hxx/documen2.cxx exactly match Git blobs. Scope: initialized ScRefAddress and explicit ScSheetLimits owners, source-derived tests, Calc-owned inventory and docs. Shared/Writer unchanged, flags remain unverified; doctor only2 pre-existing warnings. Full suite due at Calc10."
+  -
+    type: "status"
+    at: "2026-10-09T07:56:05.409Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native reference-address and explicit immutable sheet-limit owners pass all20 Calc tests with actual100 coverage, static checks and Calc inventory validation without parity promotion."
 doc_version: 3
-doc_updated_at: "2026-10-09T07:55:35.767Z"
+doc_updated_at: "2026-10-09T07:56:05.411Z"
 doc_updated_by: "CODER"
 description: "Port the initialized header contracts of ScRefAddress and ScSheetLimits from pinned local LibreOffice, reuse existing address checks and owners, and register source/test provenance. Keep configuration-dependent CreateDefault and GetRefString for their actual ScModule/formatting dependencies without stubs."
 sections:
@@ -113,6 +126,10 @@ sections:
     - Observation: Initial typecheck found unchecked array indexing in new test data tuples; all runtime cases and actual100 Calc coverage already pass.
       Impact: Test fixtures need tuple typing to satisfy the existing strict TypeScript contract; production implementation has no reported type errors.
       Resolution: Use literal readonly tuples for the test tables and rerun typecheck; scope and verification criteria remain unchanged.
+extensions:
+  implementation_commit:
+    hash: "0a411113750da8bbb14b1e3e014b6fe538d8f676"
+    message: "✨ C6C6AB calc: port native reference address and sheet limits"
 id_source: "generated"
 ---
 ## Summary
