@@ -1,10 +1,11 @@
 ---
 id: "202610091947-WGQ894"
 title: "Move native table width ownership and reactions to original frame items"
-status: "DOING"
+result_summary: "Native table width and raw attribute history use original frame items; deletion releases original clients and UI cleanup survives owner death."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 31
+revision: 32
 origin:
   system: "manual"
 depends_on: []
@@ -52,6 +53,9 @@ comments:
   -
     author: "CODER"
     body: "Implementation committed: original native frame-item ownership and raw native table attribute history verified; exact-SHA same-agent non-independent quality review pending."
+  -
+    author: "CODER"
+    body: "Verified: original table frame item owns native width/client notifications; raw full attribute UndoRedo and connected deletion release original owners safely. Final2121cases14fresh,whole7filesIstanbul100all-four/zero-negative,current-build7browser and9metadata pass. Same-agent non-independent PASS evaluated_sha=5aeb5f8e3730ec012aa835aae22acaa7c9b93392. Reference restored; full not due4/10; broad goal active/incomplete."
 events:
   -
     type: "status"
@@ -79,8 +83,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: semantic5aeb5f8e3730ec012aa835aae22acaa7c9b93392 source/fresh hashes remain equal to bounded evidence after metadata-only quality persistence. Final257files2121cases14fresh whole7Istanbul100all-four/0negative,currentbuild7browser9statics9metadata and preservation pass. Same-agent non-independent exact-SHA quality PASS recorded. Reference restored; full not due4/10. Refresh blueprint evidence after semantic DOING commit binding; no repeat tests."
+  -
+    type: "status"
+    at: "2026-10-09T20:25:42.098Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: original table frame item owns native width/client notifications; raw full attribute UndoRedo and connected deletion release original owners safely. Final2121cases14fresh,whole7filesIstanbul100all-four/zero-negative,current-build7browser and9metadata pass. Same-agent non-independent PASS evaluated_sha=5aeb5f8e3730ec012aa835aae22acaa7c9b93392. Reference restored; full not due4/10; broad goal active/incomplete."
 doc_version: 3
-doc_updated_at: "2026-10-09T20:25:14.080Z"
+doc_updated_at: "2026-10-09T20:25:42.100Z"
 doc_updated_by: "CODER"
 description: "Correction4/10 after fullSZKQTN and B575XR. Remove mirrored table width and direct SetFormat width-scaling adapter. SwTable registers as original native SwClient, consumes actual frame-size hints with native modify lock, separator changes avoid double scaling, item-set history restores complete original table frame attrs without replay adapters. Native layout/normalization read effective original width; release client during table deletion. Preserve registered IO/recovery/settings deviations and existing unrepresented flat-builder missing-size boundary, no full-native-layout claims."
 sections:
@@ -158,6 +169,10 @@ sections:
     - Observation: Initial canonical finish was rejected because recording DOING with the semantic commit after verification cleared blueprint verification evidence.
       Impact: Implementation, source hashes, tests, static checks and exact-SHA quality PASS remain valid; only the lifecycle blueprint verification record needs refreshing.
       Resolution: Record the already completed unchanged-source verification again after semantic commit/quality binding, then canonical finish without rerunning passed tests or weakening gates.
+extensions:
+  implementation_commit:
+    hash: "5aeb5f8e3730ec012aa835aae22acaa7c9b93392"
+    message: "🧩 WGQ894 fix: own table widths through original frame items"
 id_source: "generated"
 ---
 ## Summary
