@@ -1,0 +1,41 @@
+
+> vite-office@0.1.0 test:coverage
+> npm run test:coverage --workspace @vite-office/office -- --coverage.reporter=json --coverage.reporter=text --coverage.reporter=json-summary
+
+
+> @vite-office/office@0.1.0 test:coverage
+> vitest run --coverage --coverage.reporter=json --coverage.reporter=text --coverage.reporter=json-summary
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+      Coverage enabled with v8
+
+
+ Test Files  525 passed (525)
+      Tests  14172 passed (14172)
+   Start at  18:28:51
+   Duration  854.70s (transform 23.47s, setup 82.68s, import 187.20s, tests 861.41s, environment 404.73s)
+
+ % Coverage report from v8
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+All files          |     100 |    99.99 |     100 |     100 |                   
+ ...ce/core/layout |     100 |    99.81 |     100 |     100 |                   
+  paintfrm.ts      |     100 |    96.15 |     100 |     100 | 141               
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 100% ( 21052/21052 )
+Branches     : 99.99% ( 15496/15497 )
+Functions    : 100% ( 4802/4802 )
+Lines        : 100% ( 19151/19151 )
+================================================================================
+ERROR: Coverage for branches (99.99%) does not meet global threshold (100%)
+npm error Lifecycle script `test:coverage` failed with error:
+npm error code 1
+npm error path /Users/odubinkin/Projects/vite-office/apps/office
+npm error workspace @vite-office/office@0.1.0
+npm error location /Users/odubinkin/Projects/vite-office/apps/office
+npm error command failed
+npm error command sh -c vitest run --coverage --coverage.reporter=json --coverage.reporter=text --coverage.reporter=json-summary

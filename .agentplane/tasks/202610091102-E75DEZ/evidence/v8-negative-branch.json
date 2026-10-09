@@ -1,0 +1,44 @@
+{
+  "file": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/layout/paintfrm.ts",
+  "negatives": [
+    {
+      "id": "12",
+      "counts": [
+        1371,
+        -153
+      ],
+      "mapping": {
+        "loc": {
+          "start": {
+            "line": 141,
+            "column": 4
+          },
+          "end": {
+            "line": 145,
+            "column": null
+          }
+        },
+        "type": "if",
+        "locations": [
+          {
+            "start": {
+              "line": 141,
+              "column": 4
+            },
+            "end": {
+              "line": 145,
+              "column": null
+            }
+          },
+          {
+            "start": {},
+            "end": {}
+          }
+        ],
+        "line": 141
+      }
+    }
+  ],
+  "issue": "https://github.com/AriPerkkio/ast-v8-to-istanbul/issues/148",
+  "resolution": "Use instrumented Istanbul coverage with unchanged 100 percent thresholds."
+}
