@@ -6,7 +6,7 @@
     "title": "Reparent native format clients before format destruction",
     "description": "Correction 3 after full TS7/Istanbul baseline: port SwFormat::Destr and SwModify::PrepareFormatDeath for original clients, borrowed format-change hints, inherited item-set rebinding and mounted UI invalidation. Preserve root cleanup and defer generic ObjectDying/cache/naming protocol to separate corrections. Existing iterative user authorization applies.",
     "tags": [
-      "parity"
+      "code"
     ],
     "owner": "CODER",
     "workflowMode": "direct",
@@ -18,25 +18,27 @@
       "lifecycleCommentCommitLocation": "current_checkout",
       "finishCommitFromComment": true
     },
-    "mutation": "none",
+    "mutation": "code",
     "touchedPaths": [],
     "recipeHints": [],
     "riskFlags": []
   },
   "selectedBlueprint": {
-    "id": "analysis.light",
+    "id": "code.direct",
     "version": 1,
-    "title": "Lightweight analysis",
+    "title": "Direct code change",
     "taskKinds": [
-      "analysis"
+      "code"
     ],
-    "workflowModes": []
+    "workflowModes": [
+      "direct"
+    ]
   },
   "plan": {
     "schemaVersion": 1,
-    "blueprintId": "analysis.light",
+    "blueprintId": "code.direct",
     "blueprintVersion": 1,
-    "title": "Lightweight analysis",
+    "title": "Direct code change",
     "taskId": "202610091422-KCHP9M",
     "workflowMode": "direct",
     "workflowGitCapabilities": {
@@ -48,12 +50,12 @@
       "finishCommitFromComment": true
     },
     "taskIntent": {
-      "mutationScope": "none"
+      "mutationScope": "code"
     },
     "whySelected": [
-      "task kind resolved to analysis",
+      "task kind resolved to code",
       "workflow mode: direct",
-      "mutation scope: none"
+      "mutation scope: code"
     ],
     "states": [
       {
@@ -79,16 +81,32 @@
         ]
       },
       {
+        "id": "approval_gate",
+        "kind": "approval_gate",
+        "mode": "approval",
+        "required": true,
+        "protected": true,
+        "allowedCommands": [],
+        "policyModules": [],
+        "evidenceKinds": [
+          "approval"
+        ]
+      },
+      {
         "id": "context_resolve",
         "kind": "context_resolve",
         "mode": "deterministic",
         "required": true,
         "protected": false,
         "allowedCommands": [],
-        "policyModules": [],
+        "policyModules": [
+          ".agentplane/policy/security.must.md",
+          ".agentplane/policy/dod.core.md",
+          ".agentplane/policy/dod.code.md",
+          ".agentplane/policy/workflow.direct.md"
+        ],
         "evidenceKinds": [
-          "context_manifest",
-          "sources"
+          "context_manifest"
         ]
       },
       {
@@ -100,20 +118,22 @@
         "allowedCommands": [],
         "policyModules": [],
         "evidenceKinds": [
-          "weak_links",
-          "final_output"
+          "changed_paths"
         ]
       },
       {
-        "id": "artifact_write",
-        "kind": "artifact_write",
+        "id": "deterministic_check",
+        "kind": "deterministic_check",
         "mode": "deterministic",
         "required": true,
         "protected": false,
-        "allowedCommands": [],
+        "allowedCommands": [
+          "agentplane task verify-show <task-id>",
+          "project focused checks"
+        ],
         "policyModules": [],
         "evidenceKinds": [
-          "artifact"
+          "check_result"
         ]
       },
       {
@@ -125,7 +145,7 @@
         "allowedCommands": [],
         "policyModules": [],
         "evidenceKinds": [
-          "final_output"
+          "check_result"
         ]
       },
       {
@@ -134,7 +154,9 @@
         "mode": "agentic",
         "required": true,
         "protected": true,
-        "allowedCommands": [],
+        "allowedCommands": [
+          "agentplane evaluator run <task-id> --verdict pass|rework|blocked|human_review"
+        ],
         "policyModules": [],
         "evidenceKinds": [
           "quality_report"
@@ -149,53 +171,57 @@
         "allowedCommands": [],
         "policyModules": [],
         "evidenceKinds": [
-          "final_output"
+          "commit"
         ]
       }
     ],
     "requiredEvidence": [
       {
-        "id": "analysis.sources",
-        "kind": "sources",
-        "producedBy": "context_resolve",
-        "required": true,
-        "description": "Sources used for analysis."
-      },
-      {
-        "id": "analysis.assumptions",
-        "kind": "assumptions",
-        "producedBy": "scope",
-        "required": true,
-        "description": "Assumptions and constraints."
-      },
-      {
-        "id": "analysis.weak_links",
-        "kind": "weak_links",
+        "id": "code_direct.paths",
+        "kind": "changed_paths",
         "producedBy": "work_unit",
         "required": true,
-        "description": "Weak links or uncertainty."
+        "description": "Changed source paths."
       },
       {
-        "id": "analysis.final",
-        "kind": "final_output",
-        "producedBy": "work_unit",
+        "id": "code_direct.check",
+        "kind": "check_result",
+        "producedBy": "deterministic_check",
         "required": true,
-        "description": "Final answer or report."
+        "description": "Focused checks."
       },
       {
-        "id": "analysis.quality",
+        "id": "code_direct.commit",
+        "kind": "commit",
+        "producedBy": "finish",
+        "required": true,
+        "description": "Close commit."
+      },
+      {
+        "id": "code_direct.quality",
         "kind": "quality_report",
         "producedBy": "quality_gate",
         "required": true,
         "description": "EVALUATOR quality verdict."
       }
     ],
-    "policyModules": [],
-    "allowedCommands": [],
+    "policyModules": [
+      ".agentplane/policy/dod.code.md",
+      ".agentplane/policy/dod.core.md",
+      ".agentplane/policy/security.must.md",
+      ".agentplane/policy/workflow.direct.md"
+    ],
+    "allowedCommands": [
+      "agentplane evaluator run <task-id> --verdict pass|rework|blocked|human_review",
+      "agentplane finish <task-id>",
+      "agentplane task verify-show <task-id>",
+      "agentplane verify <task-id> --ok|--rework",
+      "project focused checks"
+    ],
     "contextBudget": {
-      "maxPolicyModules": 0,
-      "maxPromptBlocks": 6,
-      "rationale": "Lightweight analysis should load sources and task context without policy modules."
+      "maxPolicyModules": 4,
+      "maxPromptBlocks": 12,
+      "rationale": "Direct code work needs code DoD plus the active direct workflow contract."
     },
     "contextManifest": [],
     "acceptedRecipeExtensions": [],
@@ -226,16 +252,32 @@
       ]
     },
     {
+      "id": "approval_gate",
+      "kind": "approval_gate",
+      "mode": "approval",
+      "required": true,
+      "protected": true,
+      "allowedCommands": [],
+      "policyModules": [],
+      "evidenceKinds": [
+        "approval"
+      ]
+    },
+    {
       "id": "context_resolve",
       "kind": "context_resolve",
       "mode": "deterministic",
       "required": true,
       "protected": false,
       "allowedCommands": [],
-      "policyModules": [],
+      "policyModules": [
+        ".agentplane/policy/security.must.md",
+        ".agentplane/policy/dod.core.md",
+        ".agentplane/policy/dod.code.md",
+        ".agentplane/policy/workflow.direct.md"
+      ],
       "evidenceKinds": [
-        "context_manifest",
-        "sources"
+        "context_manifest"
       ]
     },
     {
@@ -247,20 +289,22 @@
       "allowedCommands": [],
       "policyModules": [],
       "evidenceKinds": [
-        "weak_links",
-        "final_output"
+        "changed_paths"
       ]
     },
     {
-      "id": "artifact_write",
-      "kind": "artifact_write",
+      "id": "deterministic_check",
+      "kind": "deterministic_check",
       "mode": "deterministic",
       "required": true,
       "protected": false,
-      "allowedCommands": [],
+      "allowedCommands": [
+        "agentplane task verify-show <task-id>",
+        "project focused checks"
+      ],
       "policyModules": [],
       "evidenceKinds": [
-        "artifact"
+        "check_result"
       ]
     },
     {
@@ -272,7 +316,7 @@
       "allowedCommands": [],
       "policyModules": [],
       "evidenceKinds": [
-        "final_output"
+        "check_result"
       ]
     },
     {
@@ -281,7 +325,9 @@
       "mode": "agentic",
       "required": true,
       "protected": true,
-      "allowedCommands": [],
+      "allowedCommands": [
+        "agentplane evaluator run <task-id> --verdict pass|rework|blocked|human_review"
+      ],
       "policyModules": [],
       "evidenceKinds": [
         "quality_report"
@@ -296,65 +342,69 @@
       "allowedCommands": [],
       "policyModules": [],
       "evidenceKinds": [
-        "final_output"
+        "commit"
       ]
     }
   ],
   "requiredEvidence": [
     {
-      "id": "analysis.sources",
-      "kind": "sources",
-      "producedBy": "context_resolve",
-      "required": true,
-      "description": "Sources used for analysis."
-    },
-    {
-      "id": "analysis.assumptions",
-      "kind": "assumptions",
-      "producedBy": "scope",
-      "required": true,
-      "description": "Assumptions and constraints."
-    },
-    {
-      "id": "analysis.weak_links",
-      "kind": "weak_links",
+      "id": "code_direct.paths",
+      "kind": "changed_paths",
       "producedBy": "work_unit",
       "required": true,
-      "description": "Weak links or uncertainty."
+      "description": "Changed source paths."
     },
     {
-      "id": "analysis.final",
-      "kind": "final_output",
-      "producedBy": "work_unit",
+      "id": "code_direct.check",
+      "kind": "check_result",
+      "producedBy": "deterministic_check",
       "required": true,
-      "description": "Final answer or report."
+      "description": "Focused checks."
     },
     {
-      "id": "analysis.quality",
+      "id": "code_direct.commit",
+      "kind": "commit",
+      "producedBy": "finish",
+      "required": true,
+      "description": "Close commit."
+    },
+    {
+      "id": "code_direct.quality",
       "kind": "quality_report",
       "producedBy": "quality_gate",
       "required": true,
       "description": "EVALUATOR quality verdict."
     }
   ],
-  "policyModules": [],
-  "allowedCommands": [],
+  "policyModules": [
+    ".agentplane/policy/dod.code.md",
+    ".agentplane/policy/dod.core.md",
+    ".agentplane/policy/security.must.md",
+    ".agentplane/policy/workflow.direct.md"
+  ],
+  "allowedCommands": [
+    "agentplane evaluator run <task-id> --verdict pass|rework|blocked|human_review",
+    "agentplane finish <task-id>",
+    "agentplane task verify-show <task-id>",
+    "agentplane verify <task-id> --ok|--rework",
+    "project focused checks"
+  ],
   "contextBudget": {
-    "maxPolicyModules": 0,
-    "maxPromptBlocks": 6,
-    "rationale": "Lightweight analysis should load sources and task context without policy modules."
+    "maxPolicyModules": 4,
+    "maxPromptBlocks": 12,
+    "rationale": "Direct code work needs code DoD plus the active direct workflow contract."
   },
   "contextManifest": [],
   "acceptedRecipeExtensions": [],
   "rejectedRecipeExtensions": [],
   "stopReasons": [],
   "selectionReasons": [
-    "task kind resolved to analysis",
+    "task kind resolved to code",
     "workflow mode: direct",
-    "mutation scope: none"
+    "mutation scope: code"
   ],
   "digest": {
     "algorithm": "sha256",
-    "value": "603f71afb15b616ac8553217398cc62cd47c357d600fe2d40d8169482cad9708"
+    "value": "9b45e58bcc96a357ef125f4c343e758bf77d5129b71611dbf24c88e488a28a41"
   }
 }

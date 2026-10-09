@@ -9,7 +9,7 @@ origin:
   system: "manual"
 depends_on: []
 tags:
-  - "parity"
+  - "code"
 verify: []
 plan_approval:
   state: "approved"
