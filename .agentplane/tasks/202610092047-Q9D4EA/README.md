@@ -1,10 +1,11 @@
 ---
 id: "202610092047-Q9D4EA"
 title: "Port original shared SoA block-array ownership"
-status: "DOING"
+result_summary: "verified-202610092047-Q9D4EA"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-09T21:09:49.452Z"
+  updated_at: "2026-10-09T21:10:42.692Z"
   updated_by: "CODER"
-  note: "Pass: original native888 sequences/8460 complete steps, Calc104 and related shared19 with actual100 four metrics, portable inventory19 and all scoped static gates. Full suites deferred by user to task10; broader generic/ABI/container parity remains unverified."
+  note: "verified-202610092047-Q9D4EA"
   attempts: 0
 quality_review:
   state: "pass"
@@ -45,11 +46,16 @@ quality_review:
     - "Source review preserves original three-array mutation order, metadata-only removal, copy/clone distinction, vector move/swap identity, position arithmetic and equality/integrity early exits. The reused erased STL adapter is explicitly infrastructure and is also consumed by the existing delayed owner."
     - "Independent audit decodes every native state and replays the actual binary identically; all12 payload families, callback ordering/partial exceptions and pool payloads retained. Original full headers unchanged; private observation uses only caller explicit template access bridges."
     - "All Calc104 and related shared19 tests pass with actual100 four metrics and positive denominators. Both upstream links absent during portable Calc/shared/inventory19 checks; scoped inventory exhaustive with zero semantic violations."
-commit: null
+commit:
+  hash: "d3473f15cc1bf9f4923ce3d389bb53d14af7bcdc"
+  message: "🔎 Q9D4EA quality: record native block-array ownership review"
 comments:
   -
     author: "CODER"
     body: "Start: actual original shared SoA block-array ownership and default helpers, reused allocated storage and genuine native private-owner evidence, task8/10."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610092047-Q9D4EA. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -64,8 +70,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Pass: original native888 sequences/8460 complete steps, Calc104 and related shared19 with actual100 four metrics, portable inventory19 and all scoped static gates. Full suites deferred by user to task10; broader generic/ABI/container parity remains unverified."
+  -
+    type: "verify"
+    at: "2026-10-09T21:10:42.692Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610092047-Q9D4EA"
+  -
+    type: "status"
+    at: "2026-10-09T21:10:42.847Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610092047-Q9D4EA. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-09T21:09:49.557Z"
+doc_updated_at: "2026-10-09T21:11:11.527Z"
 doc_updated_by: "CODER"
 description: "Task8/10: actual original blocks_type/block_slot/transfer owners and main_def default execution helpers over three native-vector syntax adapters. Reuse extracted shared reserved-slot mechanics from delayed_delete_vector without duplicating storage. Genuine unchanged private original owner calls via caller-only pointer-member access, full native records, actual100 scoped portable acceptance. No replacement MTV container."
 sections:
@@ -135,6 +154,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-09T21:10:42.692Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610092047-Q9D4EA
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T21:09:49.557Z, excerpt_hash=sha256:cda982b6cf429f25fe9453dd092307a403ded2af2f5c1f23e402180fcb7b6cae
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610092047-Q9D4EA/blueprint/resolved-snapshot.json
+    - old_digest: b0bc4269a1bf2c9afb243e170e20b0c992085b84b9d419861cba49480d19d37e
+    - current_digest: b0bc4269a1bf2c9afb243e170e20b0c992085b84b9d419861cba49480d19d37e
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610092047-Q9D4EA
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610092047-Q9D4EA --result verified-202610092047-Q9D4EA --commit d3473f15cc1bf9f4923ce3d389bb53d14af7bcdc
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only task-specific changes on calc through an approved follow-up; preserve real shared delayed/iterator/block dispatch owners and read-only native references."
   Findings: |-
@@ -151,6 +200,18 @@ sections:
     - Observation: The scoped formatting wrapper appended shell redirection after a heredoc terminator, causing a JavaScript parse failure before Prettier ran.
       Impact: Formatting gate remains unexecuted; source and native results were not changed.
       Resolution: Place redirection on the shell invocation before the heredoc and rerun the same formatting gate.
+
+    - Observation: Exact route task complete reached DONE but deterministic generated close subject was rejected as too generic by the existing commit guard (E_GIT).
+      Impact: Source implementation and quality review are committed; task close artifact remains pending.
+      Resolution: Recompute authoritative close route and follow its task-artifact-only closure command; preserve the commit guard and use a concrete subject if the generated subject repeats the rejection.
+
+    - Observation: Exact task-artifact close route repeated the same generic-subject E_GIT rejection.
+      Impact: Only reviewed task README closure changes remain uncommitted; implementation verification and quality pass are intact.
+      Resolution: Apply bounded task-artifact-only ap commit with a concrete SoA ownership verification subject; no guard, source, criteria or branch changes.
+extensions:
+  implementation_commit:
+    hash: "03de6148603980b1f534b89a97f942b1c329ae5e"
+    message: "🧩 Q9D4EA shared: port original SoA block-array ownership"
 id_source: "generated"
 ---
 ## Summary
@@ -232,6 +293,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-09T21:10:42.692Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610092047-Q9D4EA
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T21:09:49.557Z, excerpt_hash=sha256:cda982b6cf429f25fe9453dd092307a403ded2af2f5c1f23e402180fcb7b6cae
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610092047-Q9D4EA/blueprint/resolved-snapshot.json
+- old_digest: b0bc4269a1bf2c9afb243e170e20b0c992085b84b9d419861cba49480d19d37e
+- current_digest: b0bc4269a1bf2c9afb243e170e20b0c992085b84b9d419861cba49480d19d37e
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610092047-Q9D4EA
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610092047-Q9D4EA --result verified-202610092047-Q9D4EA --commit d3473f15cc1bf9f4923ce3d389bb53d14af7bcdc
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -253,3 +344,11 @@ Original storage insertion/erase/clear owns metadata only; element-block lifetim
 - Observation: The scoped formatting wrapper appended shell redirection after a heredoc terminator, causing a JavaScript parse failure before Prettier ran.
   Impact: Formatting gate remains unexecuted; source and native results were not changed.
   Resolution: Place redirection on the shell invocation before the heredoc and rerun the same formatting gate.
+
+- Observation: Exact route task complete reached DONE but deterministic generated close subject was rejected as too generic by the existing commit guard (E_GIT).
+  Impact: Source implementation and quality review are committed; task close artifact remains pending.
+  Resolution: Recompute authoritative close route and follow its task-artifact-only closure command; preserve the commit guard and use a concrete subject if the generated subject repeats the rejection.
+
+- Observation: Exact task-artifact close route repeated the same generic-subject E_GIT rejection.
+  Impact: Only reviewed task README closure changes remain uncommitted; implementation verification and quality pass are intact.
+  Resolution: Apply bounded task-artifact-only ap commit with a concrete SoA ownership verification subject; no guard, source, criteria or branch changes.
