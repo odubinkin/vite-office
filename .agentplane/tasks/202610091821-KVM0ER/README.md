@@ -1,10 +1,11 @@
 ---
 id: "202610091821-KVM0ER"
 title: "Own the native table headline counter independently of frame geometry"
-status: "DOING"
+result_summary: "verified-202610091821-KVM0ER"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 25
+revision: 29
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-09T18:46:59.826Z"
+  updated_at: "2026-10-09T18:47:11.040Z"
   updated_by: "CODER"
-  note: "Final docs and quality bound: semantic8489ed7632a9, same-agent explicitly non-independent pass. Actual1278related20fresh/7browser; entire3module current-source Istanbul100/zero-negative; TS7/build/static/upstream-absent-finally-restored; nine metadata/six canonical prefixes/exact old migration and parent preservation pass. Final artifact format check pass; no changed source after quality. Correction1/10, full not due; dedicated headline undo/copy and full layout unrepresented."
+  note: "verified-202610091821-KVM0ER"
   attempts: 0
 quality_review:
   state: "pass"
@@ -52,6 +53,9 @@ comments:
   -
     author: "CODER"
     body: "Implementation: native independent headline member/default1, original native UI getter and explicit ODT finalization. Current-source targeted verification accepted; bind semantic commit for same-agent non-independent quality review."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610091821-KVM0ER. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -79,8 +83,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Final docs and quality bound: semantic8489ed7632a9, same-agent explicitly non-independent pass. Actual1278related20fresh/7browser; entire3module current-source Istanbul100/zero-negative; TS7/build/static/upstream-absent-finally-restored; nine metadata/six canonical prefixes/exact old migration and parent preservation pass. Final artifact format check pass; no changed source after quality. Correction1/10, full not due; dedicated headline undo/copy and full layout unrepresented."
+  -
+    type: "verify"
+    at: "2026-10-09T18:47:11.040Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610091821-KVM0ER"
+  -
+    type: "status"
+    at: "2026-10-09T18:47:11.141Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610091821-KVM0ER. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-09T18:46:59.882Z"
+doc_updated_at: "2026-10-09T18:48:54.660Z"
 doc_updated_by: "CODER"
 description: "Correction1/10 after fullSZKQTN. Replace stored headerRows/repeatHeaderRows tuple with independent uint16 counter default1; preserve uncapped setter/capped getter and explicit construction/transport ingress. Browser table cells read original native count. Validate actual owners/history/ODT and migrate only source-proven old default/fixture/transport expectations. Native dedicated headline undo/copy families remain separately unrepresented, no broad parity promotion."
 sections:
@@ -162,6 +179,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-10-09T18:47:11.040Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610091821-KVM0ER
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T18:46:59.882Z, excerpt_hash=sha256:3810b47fa42a28e0aaf8b1a5a31e8e262a9a214d6b7e26284a26226af12c5dc8
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610091821-KVM0ER/blueprint/resolved-snapshot.json
+    - old_digest: 04b6d78a01ddb9c30bdbeaef4088815fc2fe9d0ff77bae7efd43844eb09eb74f
+    - current_digest: 04b6d78a01ddb9c30bdbeaef4088815fc2fe9d0ff77bae7efd43844eb09eb74f
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610091821-KVM0ER
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610091821-KVM0ER --result verified-202610091821-KVM0ER --commit 8489ed7632a9e6d8a2dc4d3f4443170cbaf219f7
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
 
     Quality pass on exact semantic commit 8489ed7632a9e6d8a2dc4d3f4443170cbaf219f7; report .agentplane/tasks/202610091821-KVM0ER/quality/20261009-184522356-recovery-context/quality-report.json SHA256 cf0f2edd7942d06f8779360674c544dc6b768c1196fd5d417ee587f82b7c89c1. Same-agent explicitly non-independent; no independent reviewer claim. Actual1278related20fresh,7browser,entire3module Istanbul100/zero-negative,upstream-absent gates/restored metadata,precise old migrations/six canonical prefixes accepted. Native dedicated headline undo/copy and complete layout remain follow-ups. Correction1/10 after fullSZKQTN; goalACTIVE/incomplete. Final artifact-format and clean deterministic close pending; no production/test changes after exact source review.
@@ -186,6 +233,14 @@ sections:
     - Observation: Exact-head same-agent non-independent semantic quality review passes.
       Impact: Current correction satisfies bounded contract without broad parity promotion.
       Resolution: Quality pass on exact semantic commit 8489ed7632a9e6d8a2dc4d3f4443170cbaf219f7; report .agentplane/tasks/202610091821-KVM0ER/quality/20261009-184522356-recovery-context/quality-report.json SHA256 cf0f2edd7942d06f8779360674c544dc6b768c1196fd5d417ee587f82b7c89c1. Same-agent explicitly non-independent; no independent reviewer claim. Actual1278related20fresh,7browser,entire3module Istanbul100/zero-negative,upstream-absent gates/restored metadata,precise old migrations/six canonical prefixes accepted. Native dedicated headline undo/copy and complete layout remain follow-ups. Correction1/10 after fullSZKQTN; goalACTIVE/incomplete.
+
+    - Observation: Route-oracle task complete used its generated verified-task result. It marked the task DONE, then the deterministic close guard rejected the resulting generic commit subject.
+      Impact: Only task close artifact persistence remains; production/quality verification unchanged. This is a local CLI close-tail failure, no goal blocker or incident promotion.
+      Resolution: Use the canonical finish command with a concrete native headline outcome, same semantic commit and verified evidence; then check both clean status modes.
+
+    - Observation: Canonical finish retry reports already DONE; close check-only confirms the route-generated result creates the same generic subject. Required verification and exact semantic quality remain accepted.
+      Impact: Task state is already complete; only tracked task artifact cleanup is unfinished. No source changes or weakened quality gates.
+      Resolution: Persist the already-DONE verified task subtree with a concrete task-scoped ap commit allowlist, then recompute route and confirm clean status. No force-finish or gate bypass.
 id_source: "generated"
 ---
 ## Summary
@@ -277,6 +332,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-10-09T18:47:11.040Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610091821-KVM0ER
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T18:46:59.882Z, excerpt_hash=sha256:3810b47fa42a28e0aaf8b1a5a31e8e262a9a214d6b7e26284a26226af12c5dc8
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610091821-KVM0ER/blueprint/resolved-snapshot.json
+- old_digest: 04b6d78a01ddb9c30bdbeaef4088815fc2fe9d0ff77bae7efd43844eb09eb74f
+- current_digest: 04b6d78a01ddb9c30bdbeaef4088815fc2fe9d0ff77bae7efd43844eb09eb74f
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610091821-KVM0ER
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610091821-KVM0ER --result verified-202610091821-KVM0ER --commit 8489ed7632a9e6d8a2dc4d3f4443170cbaf219f7
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 Quality pass on exact semantic commit 8489ed7632a9e6d8a2dc4d3f4443170cbaf219f7; report .agentplane/tasks/202610091821-KVM0ER/quality/20261009-184522356-recovery-context/quality-report.json SHA256 cf0f2edd7942d06f8779360674c544dc6b768c1196fd5d417ee587f82b7c89c1. Same-agent explicitly non-independent; no independent reviewer claim. Actual1278related20fresh,7browser,entire3module Istanbul100/zero-negative,upstream-absent gates/restored metadata,precise old migrations/six canonical prefixes accepted. Native dedicated headline undo/copy and complete layout remain follow-ups. Correction1/10 after fullSZKQTN; goalACTIVE/incomplete. Final artifact-format and clean deterministic close pending; no production/test changes after exact source review.
@@ -306,3 +391,11 @@ Planning: pinned native SwTable owns m_nRowsToRepeat default 1 independently of 
 - Observation: Exact-head same-agent non-independent semantic quality review passes.
   Impact: Current correction satisfies bounded contract without broad parity promotion.
   Resolution: Quality pass on exact semantic commit 8489ed7632a9e6d8a2dc4d3f4443170cbaf219f7; report .agentplane/tasks/202610091821-KVM0ER/quality/20261009-184522356-recovery-context/quality-report.json SHA256 cf0f2edd7942d06f8779360674c544dc6b768c1196fd5d417ee587f82b7c89c1. Same-agent explicitly non-independent; no independent reviewer claim. Actual1278related20fresh,7browser,entire3module Istanbul100/zero-negative,upstream-absent gates/restored metadata,precise old migrations/six canonical prefixes accepted. Native dedicated headline undo/copy and complete layout remain follow-ups. Correction1/10 after fullSZKQTN; goalACTIVE/incomplete.
+
+- Observation: Route-oracle task complete used its generated verified-task result. It marked the task DONE, then the deterministic close guard rejected the resulting generic commit subject.
+  Impact: Only task close artifact persistence remains; production/quality verification unchanged. This is a local CLI close-tail failure, no goal blocker or incident promotion.
+  Resolution: Use the canonical finish command with a concrete native headline outcome, same semantic commit and verified evidence; then check both clean status modes.
+
+- Observation: Canonical finish retry reports already DONE; close check-only confirms the route-generated result creates the same generic subject. Required verification and exact semantic quality remain accepted.
+  Impact: Task state is already complete; only tracked task artifact cleanup is unfinished. No source changes or weakened quality gates.
+  Resolution: Persist the already-DONE verified task subtree with a concrete task-scoped ap commit allowlist, then recompute route and confirm clean status. No force-finish or gate bypass.
