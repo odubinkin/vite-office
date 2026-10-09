@@ -20,7 +20,7 @@ import { KEY_SHIFT, KEY_MOD1, KEY_MOD2, KEY_MOD3 } from "../../../vcl/keycodes";
 /** Mounted paragraph lookup retained by the browser edit window. */
 export type BrowserWriterParagraphResolver = (
   paragraphId: string,
-  offset?: number,
+  offset: number,
 ) => HTMLParagraphElement | undefined;
 
 /** Browser surfaces injected for deterministic edit-window tests. */
@@ -52,7 +52,7 @@ export class BrowserWriterEditWindow {
     private readonly resolveParagraph: BrowserWriterParagraphResolver,
   ) {
     this.selectionMapper = new BrowserWriterSelectionMapper(environment, resolveParagraph);
-    /* c8 ignore start -- JSDOM lacks caretRangeFromPoint; geometry has isolated coverage. */
+    /* istanbul ignore start -- JSDOM lacks caretRangeFromPoint; geometry has isolated coverage. */
     const caretRangeFromPoint = environment.document.caretRangeFromPoint?.bind(
       environment.document,
     );
@@ -67,7 +67,7 @@ export class BrowserWriterEditWindow {
       },
       this.selectionMapper.SetBaseAndExtent.bind(this.selectionMapper),
     );
-    /* c8 ignore stop */
+    /* istanbul ignore stop */
   }
 
   /** Installs native event subscriptions not represented faithfully by React synthetic events. @param root - Editing host. @returns Cleanup callback. */
@@ -359,10 +359,10 @@ export class BrowserWriterEditWindow {
           return;
         }
       }
-      /* c8 ignore start -- Native text caret geometry retains its isolated adapter and Chromium checks. */
+      /* istanbul ignore start -- Native text caret geometry retains its isolated adapter and Chromium checks. */
       if (this.pointerSelection.Start(event.button, event.clientX, event.clientY))
         this.SynchronizeSelection();
-      /* c8 ignore stop */
+      /* istanbul ignore stop */
     };
 
   public readonly HandlePointerMove =
@@ -373,9 +373,9 @@ export class BrowserWriterEditWindow {
       this.MeasureTableFrames();
       this.editWindow.changeMousePointer({ x: event.clientX, y: event.clientY });
       event.currentTarget.style.cursor = browserPointerStyle(this.editWindow.GetPointer());
-      /* c8 ignore start -- Text caret extension is covered by isolated geometry and Chromium. */
+      /* istanbul ignore start -- Text caret extension is covered by isolated geometry and Chromium. */
       if (this.pointerSelection.Move(event.clientX, event.clientY)) event.preventDefault();
-      /* c8 ignore stop */
+      /* istanbul ignore stop */
     };
 
   public readonly HandlePointerUp =
@@ -383,9 +383,9 @@ export class BrowserWriterEditWindow {
       event: React.MouseEvent<HTMLElement>,
     ): void => {
       if (this.tableCapture) event.preventDefault();
-      /* c8 ignore start -- Text pointer completion retains isolated geometry and Chromium coverage. */
+      /* istanbul ignore start -- Text pointer completion retains isolated geometry and Chromium coverage. */
       if (this.pointerSelection.End()) event.preventDefault();
-      /* c8 ignore stop */
+      /* istanbul ignore stop */
     };
 
   /** Releases the native draft and its device-only guide together. @param cancelled - Discard the draft. @param point - Final mouse position. @returns Nothing. */

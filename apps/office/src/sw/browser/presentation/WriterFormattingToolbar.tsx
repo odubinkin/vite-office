@@ -92,7 +92,7 @@ export function WriterFormattingToolbar({
           /** Renders Writer selector placements. @param item - Generic special placement. @returns Writer selector. */ (
             item,
           ) => {
-            /* v8 ignore next -- Generated Writer resources call this hook only for the two special placement kinds. */
+            /* istanbul ignore next -- Generated Writer resources call this hook only for the two special placement kinds. */
             if (!isWriterSpecialToolbarPlacement(item)) return null;
             return renderSpecialToolbarItem(
               item,
@@ -279,7 +279,7 @@ function FontNameSelect({
     },
     [],
   );
-  /* v8 ignore next -- Imported fonts outside the device list are retained for round-trip fidelity. */
+  /* istanbul ignore next -- Imported fonts outside the device list are retained for round-trip fidelity. */
   const options = [...new Set([selected, ...embeddedFontFamilies, ...fonts])];
   const unavailable =
     embeddedFontFamilies.includes(selected) && fontAvailability[selected] === false;
@@ -295,7 +295,6 @@ function FontNameSelect({
           ) => {
             const base = resolveArguments(commandId);
             commandSource.Execute(commandId, {
-              /* v8 ignore next -- The Writer view always resolves font arguments to a cursor object. */
               ...(typeof base === "object" && base !== null ? base : {}),
               fontFamily: event.target.value,
             });
@@ -340,7 +339,7 @@ function FontSizeSelect({
   const selected = Number(
     useBrowserCommandPresentation(commandSource, commandId, getCommandResource).selectedValue,
   );
-  /* v8 ignore next -- Imported nonstandard point sizes are retained for round-trip fidelity. */
+  /* istanbul ignore next -- Imported nonstandard point sizes are retained for round-trip fidelity. */
   const options = STANDARD_FONT_SIZES_PT.includes(
     selected as (typeof STANDARD_FONT_SIZES_PT)[number],
   )
@@ -358,7 +357,6 @@ function FontSizeSelect({
           ) => {
             const base = resolveArguments(commandId);
             commandSource.Execute(commandId, {
-              /* v8 ignore next -- The Writer view always resolves font arguments to a cursor object. */
               ...(typeof base === "object" && base !== null ? base : {}),
               fontSizePt: Number(event.target.value),
             });

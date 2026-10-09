@@ -607,7 +607,7 @@ export class SwWrtShell extends SwFEShell {
       return false;
     }
     const changed = InsertAtCursor(this, composition.text, false);
-    /* v8 ignore next -- non-empty composition at a valid registered cursor always inserts. */
+    /* istanbul ignore next -- non-empty composition at a valid registered cursor always inserts. */
     if (!changed) this.NotifySelection();
     return changed;
   }

@@ -108,6 +108,6 @@ export function parseFastXmlStream(
       throw error;
     throw new Error("ODF XML is malformed.", { cause: error });
   }
-  /* v8 ignore next -- saxes rejects empty, multi-root, and unclosed streams before returning. */
+  /* istanbul ignore next -- saxes rejects empty, multi-root, and unclosed streams before returning. */
   if (rootsSeen !== 1 || depth !== 0) throw new Error("ODF XML has no complete root.");
 }

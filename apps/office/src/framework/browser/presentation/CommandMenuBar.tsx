@@ -122,7 +122,7 @@ export function CommandMenuBar({
         item,
       ) => !item.hasAttribute("disabled") && item.closest('[role="menu"]') === container,
     );
-    /* v8 ignore next -- Every declared Writer menu contains an enabled or focusable item. */
+    /* istanbul ignore next -- Every declared Writer menu contains an enabled or focusable item. */
     if (items.length === 0) return;
     const currentIndex = current === undefined ? -1 : items.indexOf(current);
     const index =
@@ -154,7 +154,7 @@ export function CommandMenuBar({
       const menu = rootRef.current?.querySelector<HTMLElement>(
         `#${idPrefix}-${menus[openMenuIndex]?.id}-menu`,
       );
-      if (menu !== null && menu !== undefined) {
+      if (menu != null) {
         if (pendingMenuPreselection.current) focusMenuItem(menu, "first");
         else menu.focus();
       }
@@ -179,7 +179,7 @@ export function CommandMenuBar({
       const submenu = rootRef.current?.querySelector<HTMLElement>(
         `[data-submenu="${openSubmenuId}"]`,
       );
-      if (submenu !== null && submenu !== undefined) {
+      if (submenu != null) {
         if (preselectSubmenuFirst.current) focusMenuItem(submenu, "first");
         else submenu.focus();
       }
@@ -268,7 +268,7 @@ export function CommandMenuBar({
   function handleMenuKeyDown(event: React.KeyboardEvent<HTMLElement>, menuIndex: number): void {
     const target = event.target as HTMLElement;
     const menu = target.closest<HTMLElement>('[role="menu"]');
-    /* v8 ignore next -- This handler is installed only on elements inside a rendered menu. */
+    /* istanbul ignore next -- This handler is installed only on elements inside a rendered menu. */
     if (menu === null) return;
     if (menu !== event.currentTarget) return;
     if (event.key === "Enter" || event.key === " ") {

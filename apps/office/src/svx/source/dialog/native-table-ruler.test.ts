@@ -72,6 +72,14 @@ it("native table ruler owns borrowed values and exact5px hit tolerance", /** Che
   expect(ruler.Tracking({ x: 200, y: 0 })).toBe(false);
   expect(ruler.EndTracking()).toBe(false);
 });
+
+it("requires an exact separator hit when document drag tolerance is omitted", /** Checks the zero tolerance default through a real ruler. @returns Nothing. */ () => {
+  const { ruler } = fixture();
+  expect(ruler.StartDocDrag({ x: 151, y: 0 }, RulerType.Border)).toBe(false);
+  expect(ruler.StartDocDrag({ x: 150, y: 0 }, RulerType.Border)).toBe(true);
+  expect(ruler.EndTracking()).toBe(true);
+  expect(ends(ruler)).toEqual([750, 1500]);
+});
 it.each([
   [0, false, true, false],
   [KEY_SHIFT, false, true, false],

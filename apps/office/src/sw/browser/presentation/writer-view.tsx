@@ -981,6 +981,6 @@ export function presentWriterCommandError(
   for (const candidate of errors) {
     if (candidate.commandId === failure.commandId) return candidate.present(failure);
   }
-  /* v8 ignore next -- an attached SwView dispatcher contains only the exhaustively mapped Writer commands above. */
+  /* istanbul ignore next -- an attached SwView dispatcher contains only the exhaustively mapped Writer commands above. */
   return failure.error;
 }

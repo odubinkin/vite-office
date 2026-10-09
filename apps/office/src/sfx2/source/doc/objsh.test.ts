@@ -40,6 +40,20 @@ import { createDocument, SfxObjectShell, type SfxObjectShellState } from "./objs
 
 const initial = createDocument({ id: "doc", suiteId: "writer", title: "Draft" });
 
+it("uses the protected modified defaults without advancing content generation", /** Checks the default state transition through the original shell. @returns Nothing. */ () => {
+  /** Exposes the protected default invocation without supplying arguments. */
+  class DefaultShell extends SfxObjectShell {
+    /** Marks the shell modified using its defaults. @returns Whether changed. */
+    public modifyDefaults(): boolean {
+      return this.SetModified();
+    }
+  }
+  const shell = new DefaultShell(initial, { kind: "untitled", name: "Draft" });
+  expect(shell.modifyDefaults()).toBe(true);
+  expect(shell.IsModified()).toBe(true);
+  expect(shell.GetContentGeneration()).toBe(0);
+});
+
 describe("SfxObjectShell", /** Groups SfxObjectShell. @returns Test callback result. */ () => {
   // owns modified and persistence generations
   it("keeps identity and lifecycle in a shell with a replaceable medium", /** Checks keeps identity and lifecycle in a shell with a replaceable medium. @returns Test callback result. */ () => {

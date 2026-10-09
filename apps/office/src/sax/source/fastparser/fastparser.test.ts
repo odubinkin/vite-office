@@ -10,6 +10,7 @@ import {
   type SvXMLImportRootFactory as SvXMLImport,
 } from "../../../xmloff/source/core/xmlimp";
 import { ODF_NAMESPACES, XMLToken } from "../../../xmloff/source/core/xmltoken";
+import { parseFastXmlStream } from "./fastparser";
 
 /** Context that records every delivered event. */
 class RecordingContext extends SvXMLImportContext {
@@ -53,6 +54,24 @@ function recordingImport(events: string[]): SvXMLImport {
 }
 
 describe("ODF fast SAX parser", /** Groups fast parser tests. @returns Nothing. */ () => {
+  it("streams namespace-aware events with the default parser options", /** Checks the direct SAX entry point without wrapper-supplied options. @returns Nothing. */ () => {
+    const events: string[] = [];
+    parseFastXmlStream('<root xmlns="urn:test" name="example">text</root>', {
+      /** Records the resolved root and semantic attribute. @param tag - Resolved tag. @param attributes - Semantic attributes. @returns Nothing. */
+      open(tag, attributes): void {
+        events.push(`open:${tag.uri}:${tag.local}:${attributes[0]?.value}`);
+      },
+      /** Records text. @param value - Decoded text. @returns Nothing. */
+      characters(value): void {
+        events.push(value);
+      },
+      /** Records closure. @returns Nothing. */
+      close(): void {
+        events.push("close");
+      },
+    });
+    expect(events).toEqual(["open:urn:test:root:example", "text", "close"]);
+  });
   it("delivers deterministic tokenized start, character, and end callbacks", /** Verifies event order. @returns Nothing. */ () => {
     const events: string[] = [];
     parseOdfXmlStream(

@@ -49,7 +49,7 @@ export class SwXMLTableImport extends SvXMLImport {
     name: string,
     styleName: string,
   ): void {
-    /* v8 ignore next -- SAX table contexts cannot nest under a table context. */
+    /* istanbul ignore next -- SAX table contexts cannot nest under a table context. */
     if (this.activeTable !== undefined) throw new Error("Nested ODF tables are not supported.");
     const style = this.resolveTableStyle(styleName, "table");
     this.activeTable = this.document.nodes.MakeTableNode(
@@ -95,7 +95,7 @@ export class SwXMLTableImport extends SvXMLImport {
     styleName: string,
   ): void {
     const table = this.requireTable();
-    /* v8 ignore next -- SAX row contexts cannot nest under a row context. */
+    /* istanbul ignore next -- SAX row contexts cannot nest under a row context. */
     if (this.activeRow !== undefined) throw new Error("Nested ODF table rows are not supported.");
     const style = this.resolveTableStyle(styleName, "table-row") as Extract<
       OdfTableStyle,
@@ -135,7 +135,7 @@ export class SwXMLTableImport extends SvXMLImport {
     columnSpan = 1,
   ): void {
     const row = this.activeRow;
-    /* v8 ignore next -- SAX cell contexts are created only by an open row and cannot overlap. */
+    /* istanbul ignore next -- SAX cell contexts are created only by an open row and cannot overlap. */
     if (row === undefined || this.activeCell !== undefined)
       throw new Error("ODF table cell is outside a row.");
     if (this.pendingCovered !== 0 || this.rowCellIndex + columnSpan > this.columnWidths.length)
@@ -210,7 +210,7 @@ export class SwXMLTableImport extends SvXMLImport {
 
   /** Requires a currently open table. @returns Canonical table. */
   private requireTable(): SwTable {
-    /* v8 ignore next -- Only descendants of the table SAX context call this method. */
+    /* istanbul ignore next -- Only descendants of the table SAX context call this method. */
     if (this.activeTable === undefined) throw new Error("ODF table content is outside a table.");
     return this.activeTable;
   }

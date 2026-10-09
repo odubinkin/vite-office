@@ -57,8 +57,8 @@ export function createOfficeTestOptions(
             ? "src/sc/**/*.{ts,tsx}"
             : "src/**/*.{ts,tsx}",
       ],
-      provider: "v8",
-      reporter: ["text", "json-summary", "html"],
+      provider: "istanbul",
+      reporter: ["text", "json", "json-summary", "html"],
       reportsDirectory: `./coverage/${scope}`,
       thresholds: { branches: 100, functions: 100, lines: 100, statements: 100 },
     },

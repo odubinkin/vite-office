@@ -181,8 +181,8 @@ function WriterTablePropertiesDialog({
       label: string,
       twips: number,
       change: (value: number) => void,
-      disabled = false,
-      signed = false,
+      disabled: boolean,
+      signed: boolean,
       formatField?: Parameters<SwFormatTablePage["DeactivatePage"]>[0],
     ): React.JSX.Element => (
       <label className="grid gap-1 text-sm font-medium text-slate-700" key={label}>

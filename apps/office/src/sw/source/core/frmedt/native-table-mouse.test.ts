@@ -69,6 +69,25 @@ function selected(f: ReturnType<typeof fixture>): number[] {
   );
 }
 
+it("keeps the nearer master when a farther frame follows it during row drag", /** Checks that later frame candidates cannot replace a closer projection. @returns Nothing. */ () => {
+  const f = fixture();
+  const farther = new SwTabFrame(f.table, {
+    rect: { left: 600, right: 900, top: 100, bottom: 250 },
+    cells: f.geometry.cells.map(
+      /** Moves the same owned boxes to a farther physical frame. @param cell - Source cell. @returns Independent geometry. */
+      (cell) => ({
+        box: cell.box,
+        rect: { ...cell.rect, left: cell.rect.left + 500, right: cell.rect.right + 500 },
+      }),
+    ),
+  });
+  f.edit.SetTableMouseFrames([f.frame, farther]);
+  expect(f.edit.MouseButtonDown({ x: 93, y: 125 })).toBe(true);
+  expect(f.edit.MouseMove({ x: 93, y: 175 })).toBe(true);
+  expect(selected(f)).toEqual([0, 1, 2, 3, 4, 5]);
+  expect(f.edit.MouseButtonUp()).toBe(true);
+});
+
 it.each([
   [93, 125, SwTab.ROWSEL_HORI],
   [90, 125, SwTab.COL_NONE],

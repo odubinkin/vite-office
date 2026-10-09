@@ -478,7 +478,7 @@ function projectNumberingRule(rule: SwNumRule): XMLTextListRuleSource {
 function assertSupportedItems(
   items: readonly { Which(): number }[],
   owner: string,
-  allowListItems = false,
+  allowListItems: boolean,
   allowStyleNumbering = false,
 ): void {
   const supported = new Set<number>([

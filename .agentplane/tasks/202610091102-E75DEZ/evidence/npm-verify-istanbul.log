@@ -39,8 +39,8 @@ Module boundary check passed: 332 runtime sources, 1579 relative imports, 29 all
 
  Test Files  1 passed (1)
       Tests  2 passed (2)
-   Start at  18:46:40
-   Duration  173ms (transform 34ms, setup 0ms, import 45ms, tests 4ms, environment 0ms)
+   Start at  19:16:01
+   Duration  194ms (transform 34ms, setup 0ms, import 46ms, tests 5ms, environment 0ms)
 
 
 > vite-office@0.1.0 test:tooling
@@ -52,8 +52,8 @@ Module boundary check passed: 332 runtime sources, 1579 relative imports, 29 all
 
  Test Files  2 passed (2)
       Tests  11 passed (11)
-   Start at  18:46:42
-   Duration  2.83s (transform 146ms, setup 0ms, import 2.03s, tests 2.23s, environment 0ms)
+   Start at  19:16:03
+   Duration  2.89s (transform 194ms, setup 0ms, import 2.08s, tests 2.29s, environment 0ms)
 
 
 > vite-office@0.1.0 test:coverage
@@ -68,84 +68,35 @@ Module boundary check passed: 332 runtime sources, 1579 relative imports, 29 all
       Coverage enabled with istanbul
 
 
- Test Files  525 passed (525)
-      Tests  14172 passed (14172)
-   Start at  18:46:46
-   Duration  666.48s (transform 42.66s, setup 62.01s, import 342.35s, tests 375.86s, environment 341.16s)
+ Test Files  527 passed (527)
+      Tests  14185 passed (14185)
+   Start at  19:16:07
+   Duration  734.14s (transform 46.73s, setup 71.96s, import 363.02s, tests 430.23s, environment 374.87s)
 
  % Coverage report from istanbul
 -------------------|---------|----------|---------|---------|-------------------
 File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
 -------------------|---------|----------|---------|---------|-------------------
-All files          |   99.86 |    99.62 |   99.97 |   99.94 |                   
- ...r/presentation |   99.22 |    98.29 |     100 |     100 |                   
-  ...ndMenuBar.tsx |   99.06 |    97.98 |     100 |     100 | 126,157,182,272   
- ...rce/fastparser |   98.07 |       92 |     100 |     100 |                   
-  fastparser.ts    |   98.07 |       92 |     100 |     100 | 38,112            
- sfx2/source/doc   |     100 |    97.97 |     100 |     100 |                   
-  objsh.ts         |     100 |       96 |     100 |     100 | 129               
- ...source/control |     100 |    98.52 |     100 |     100 |                   
-  ruler.ts         |     100 |    94.73 |     100 |     100 | 71                
- sw/browser/editor |    99.6 |    99.34 |     100 |   99.85 |                   
+All files          |     100 |    99.94 |     100 |     100 |                   
+ ...r/presentation |     100 |    99.11 |     100 |     100 |                   
+  ...ndMenuBar.tsx |     100 |    98.95 |     100 |     100 | 157,182           
+ sw/browser/editor |     100 |    99.86 |     100 |     100 |                   
   ...Paragraph.tsx |     100 |    99.38 |     100 |     100 | 155               
-  ...extEditor.tsx |     100 |    98.75 |     100 |     100 | 76                
-  ...dit-window.ts |   99.32 |     99.1 |     100 |     100 | 377,387           
-  ...-selection.ts |   98.94 |    99.11 |     100 |   98.82 | 333               
- ...ser/filter/xml |   99.08 |      100 |   98.87 |   99.02 |                   
-  odt-worker.ts    |       0 |      100 |       0 |       0 | 12-17             
- ...r/presentation |   99.84 |    99.29 |     100 |   99.91 |                   
-  ...ngToolbar.tsx |   98.14 |    90.38 |     100 |     100 | 96,299,362        
-  ...bleDialog.tsx |     100 |    98.14 |     100 |     100 | 184-185           
-  writer-view.tsx  |   99.56 |      100 |     100 |   99.54 | 985               
- ...urce/core/crsr |     100 |    99.66 |     100 |     100 |                   
-  trvltbl.ts       |     100 |    99.34 |     100 |     100 | 80                
- ...ource/core/doc |     100 |    99.78 |     100 |     100 |                   
-  ...stsManager.ts |     100 |    97.36 |     100 |     100 | 95                
-  ...t-defaults.ts |     100 |    98.63 |     100 |     100 | 217               
- ...urce/core/edit |   99.75 |    99.28 |     100 |     100 |                   
-  edattr.ts        |     100 |     92.3 |     100 |     100 | 28                
-  editsh.ts        |   98.36 |    97.77 |     100 |     100 | 135               
- ...ce/core/frmedt |     100 |    99.35 |     100 |     100 |                   
-  fetab.ts         |     100 |     99.3 |     100 |     100 | 178               
- ...ce/core/layout |     100 |    99.81 |     100 |     100 |                   
-  wsfrm.ts         |     100 |       99 |     100 |     100 | 59                
- ...rce/core/table |     100 |     99.7 |     100 |     100 |                   
-  swtable.ts       |     100 |     99.7 |     100 |     100 | 325               
- ...e/core/txtnode |   99.93 |    99.81 |     100 |     100 |                   
-  ndhints.ts       |   99.72 |    99.59 |     100 |     100 | 768               
-  ...ist-indent.ts |     100 |    98.87 |     100 |     100 | 24                
- ...rce/filter/xml |    99.4 |    99.13 |     100 |   99.73 |                   
-  xmlexp.ts        |     100 |    99.65 |     100 |     100 | 481               
-  xmlimp.ts        |   99.67 |    99.66 |     100 |   99.63 | 465               
-  xmltbli.ts       |   94.93 |    90.38 |     100 |   98.57 | 140               
- ...rce/uibase/app |     100 |    97.95 |     100 |     100 |                   
-  docsh.ts         |     100 |    96.77 |     100 |     100 | 399,407           
- .../uibase/dochdl |   99.09 |    98.83 |     100 |     100 |                   
-  swdtflvr.ts      |   99.09 |    98.83 |     100 |     100 | 252               
- ...e/uibase/wrtsh |    98.8 |    98.55 |     100 |   99.35 |                   
-  delete.ts        |   85.71 |    83.33 |     100 |     100 | 11                
-  wrtsh-editing.ts |   96.52 |    97.64 |     100 |   97.19 | 31,38,239         
-  wrtsh1.ts        |    99.7 |    99.09 |     100 |     100 | 611,788           
- vcl/browser       |     100 |     94.2 |     100 |     100 |                   
-  ...-clipboard.ts |     100 |    95.23 |     100 |     100 | 50                
-  ...r-download.ts |     100 |    85.71 |     100 |     100 | 63-64             
-  browser-file.ts  |     100 |    85.71 |     100 |     100 | 8                 
- ...ff/source/core |    99.7 |    98.73 |     100 |     100 |                   
-  xmlimp.ts        |   99.02 |    98.27 |     100 |     100 | 283               
- ...ff/source/text |   99.83 |    99.21 |     100 |     100 |                   
-  txtparae.ts      |   99.63 |    98.59 |     100 |     100 | 265,911           
+ ...r/presentation |     100 |    99.59 |     100 |     100 |                   
+  ...ngToolbar.tsx |     100 |    91.66 |     100 |     100 | 299,362           
+ ...rce/filter/xml |     100 |    99.87 |     100 |     100 |                   
+  xmltbli.ts       |     100 |    97.61 |     100 |     100 | 135               
+ ...e/uibase/wrtsh |     100 |     99.7 |     100 |     100 |                   
+  wrtsh1.ts        |     100 |    99.54 |     100 |     100 | 788               
 -------------------|---------|----------|---------|---------|-------------------
 
 =============================== Coverage summary ===============================
-Statements   : 99.86% ( 21101/21129 )
-Branches     : 99.62% ( 15573/15631 )
-Functions    : 99.97% ( 4819/4820 )
-Lines        : 99.94% ( 19200/19211 )
+Statements   : 100% ( 21066/21066 )
+Branches     : 99.94% ( 15534/15543 )
+Functions    : 100% ( 4819/4819 )
+Lines        : 100% ( 19168/19168 )
 ================================================================================
-ERROR: Coverage for lines (99.94%) does not meet global threshold (100%)
-ERROR: Coverage for functions (99.97%) does not meet global threshold (100%)
-ERROR: Coverage for statements (99.86%) does not meet global threshold (100%)
-ERROR: Coverage for branches (99.62%) does not meet global threshold (100%)
+ERROR: Coverage for branches (99.94%) does not meet global threshold (100%)
 npm error Lifecycle script `test:coverage` failed with error:
 npm error code 1
 npm error path /Users/odubinkin/Projects/vite-office/apps/office

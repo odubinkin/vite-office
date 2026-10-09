@@ -75,6 +75,22 @@ function renderGeometryMenu(): ReturnType<typeof render> {
 }
 
 describe("CommandMenuBar", /** Groups generic menubar behavior. @returns Nothing. */ function defineCommandMenuBarTests(): void {
+  it("keeps menu interaction usable when a popup lookup has no mounted result", /** Checks failed DOM focus lookup for both root and nested popups. @returns Nothing. */ () => {
+    const mounted = renderGeometryMenu();
+    const root = screen.getByRole("menubar", { name: "Geometry menus" });
+    const query = vi.spyOn(root, "querySelector").mockReturnValue(null);
+    try {
+      fireEvent.click(screen.getByRole("button", { name: "Format" }));
+      const trigger = screen.getByRole("menuitem", { name: "Numbering" });
+      fireEvent.keyDown(trigger, { key: "ArrowRight" });
+      expect(screen.getByRole("menu", { name: "Numbering menu" })).toBeVisible();
+      expect(query).toHaveBeenCalledWith("#geometry-format-menu");
+      expect(query).toHaveBeenCalledWith('[data-submenu="numbering"]');
+    } finally {
+      query.mockRestore();
+      mounted.unmount();
+    }
+  });
   it("keeps a long menu below or above its trigger and updates without document scrolling", /** Verifies viewport resizing and ancestor scroll placement. @returns Nothing. */ function tracksMenuGeometry(): void {
     vi.stubGlobal("innerWidth", 390);
     vi.stubGlobal("innerHeight", 340);

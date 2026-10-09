@@ -8,7 +8,7 @@ import type { WriterCursorSelection } from "./writer-selection-types";
 /** Resolves a rendered editable paragraph from its stable Writer text-node identity. */
 export type WriterParagraphElementResolver = (
   paragraphId: string,
-  offset?: number,
+  offset: number,
 ) => HTMLParagraphElement | undefined;
 
 /** Replaceable browser selection surface used by the document editor. */
@@ -115,7 +115,7 @@ export function restoreWriterDomSelection(
   browserSelection: Selection | null,
 ): boolean {
   const selection = browserSelection;
-  /* c8 ignore next -- Writer requires browser selection support to mount its editable body. */
+  /* istanbul ignore next -- Writer requires browser selection support to mount its editable body. */
   if (selection === null) return false;
   const pointParagraph = resolveParagraph(cursor.point.paragraphId, cursor.point.offset);
   const markParagraph =
@@ -291,7 +291,7 @@ function getWriterDomPosition(
   const paragraphRange = paragraph.ownerDocument.createRange();
   paragraphRange.selectNodeContents(paragraph);
   const writerOffset = marker == null ? getWriterRangeOffset(paragraphRange, node, offset) : 0;
-  /* v8 ignore next -- A live native Selection endpoint is a valid Range endpoint by construction. */
+  /* istanbul ignore next -- A live native Selection endpoint is a valid Range endpoint by construction. */
   return writerOffset === undefined
     ? undefined
     : {
@@ -313,7 +313,7 @@ function getWriterDomPosition(
 /** Finds the Writer editable paragraph enclosing one selection container. @param node - Browser text or element node from a selection endpoint. @returns Enclosing Writer paragraph, or undefined outside the editor. */
 function getWriterSelectionParagraph(node: Node): HTMLParagraphElement | undefined {
   const element = node instanceof HTMLElement ? node : node.parentElement;
-  /* v8 ignore next -- Native Range endpoint nodes supplied here always expose a parent element. */
+  /* istanbul ignore next -- Native Range endpoint nodes supplied here always expose a parent element. */
   return element?.closest<HTMLParagraphElement>("[data-writer-paragraph-id]") ?? undefined;
 }
 
@@ -327,9 +327,9 @@ function getWriterRangeOffset(
     const prefix = paragraphRange.cloneRange();
     prefix.setEnd(node, offset);
     return prefix.toString().length;
-    /* v8 ignore next -- Browser Range endpoint validation is defensive; selections returned by a live Range cannot otherwise be invalid here. */
+    /* istanbul ignore next -- Browser Range endpoint validation is defensive; selections returned by a live Range cannot otherwise be invalid here. */
   } catch {
-    /* v8 ignore next -- The fallback is only reachable if a browser violates the live Range endpoint contract. */
+    /* istanbul ignore next -- The fallback is only reachable if a browser violates the live Range endpoint contract. */
     return undefined;
   }
 }

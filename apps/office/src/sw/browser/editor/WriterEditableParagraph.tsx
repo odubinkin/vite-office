@@ -151,7 +151,6 @@ export function WriterEditableParagraph({
             style={{
               position: "relative",
               backgroundColor: paragraph.listMarkerBackgroundColor,
-              /* v8 ignore next -- Space-follow numbering is imported but not exposed by the current command surface. */
               marginInlineEnd: listLayout?.labelFollowedBy === "space" ? "0.25em" : undefined,
               width: listLayout?.labelFollowedBy === "listtab" ? `${markerWidthPt}pt` : undefined,
               // SwNumberPortion::Format never reserves less than the measured

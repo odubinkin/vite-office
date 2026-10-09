@@ -460,7 +460,7 @@ class SwXMLImport
         (which) => node.GetAttr(which),
       );
     if (list !== undefined) {
-      /* v8 ignore next -- list contexts only expose rules registered in this same temporary document. */
+      /* istanbul ignore next -- list contexts only expose rules registered in this same temporary document. */
       if (this.document.FindNumRulePtr(list.ruleName) === undefined)
         throw new Error(`Unsupported ODF list rule: ${list.ruleName}`);
       if (forceListRule || node.GetNumRuleName() !== list.ruleName) node.SetNumRule(list.ruleName);

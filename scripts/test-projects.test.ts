@@ -93,6 +93,7 @@ it("partitions every existing unit test exactly once and scoped configs discover
       }
     }
     const coverage = createOfficeTestOptions(owner).coverage;
+    expect(coverage?.provider).toBe("istanbul");
     expect(coverage?.thresholds).toEqual({
       branches: 100,
       functions: 100,

@@ -21,6 +21,32 @@ import { SwDocShell } from "./docsh";
 }
 
 describe("SwDocShell", /** Groups SwDocShell. @returns Test callback result. */ () => {
+  it("uses default modified and save acknowledgements for the current generation", /** Checks the Writer overrides without explicit parameters. @returns Nothing. */ () => {
+    /** Exposes existing protected lifecycle operations for their default contract. */
+    class DefaultShell extends SwDocShell {
+      /** Applies the default modified transition. @returns Whether changed. */
+      public modifyDefaults(): boolean {
+        return this.SetModified();
+      }
+      /** Acknowledges the current generation by default. @returns Whether changed. */
+      public saveDefaults(): boolean {
+        return this.SaveCompleted();
+      }
+    }
+    const shell = new DefaultShell(
+      new SwDoc(),
+      createDocument({ id: "default-lifecycle", suiteId: "writer", title: "Defaults" }),
+    );
+    try {
+      expect(shell.modifyDefaults()).toBe(true);
+      expect(shell.IsModified()).toBe(true);
+      expect(shell.GetContentGeneration()).toBe(0);
+      expect(shell.saveDefaults()).toBe(true);
+      expect(shell.IsModified()).toBe(false);
+    } finally {
+      shell.Close();
+    }
+  });
   it("reports a browser save failure and preserves a newer dirty generation", /** Checks save feedback and concurrent edits. @returns Nothing. */ () => {
     const shell = makeShell();
     shell.GetDoc().paragraphs[0]?.InsertText("Edited", 0);

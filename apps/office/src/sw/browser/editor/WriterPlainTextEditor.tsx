@@ -73,7 +73,7 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
         },
         /** Resolves one mounted render identity. @param paragraphId - Projection key. @param offset - Source-node offset. @returns Mounted fragment. */ (
           paragraphId,
-          offset = 0,
+          offset,
         ) => {
           const fragments = [...paragraphElements.values()].filter(
             /** Matches the source-node identity. @param element - Mounted fragment. @returns Whether the identity matches. */ (

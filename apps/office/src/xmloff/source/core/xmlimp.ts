@@ -279,7 +279,7 @@ export function parseOdfXmlStream(
         /** Closes the current context. @returns Nothing. */
         close(): void {
           const frame = stack.pop();
-          /* v8 ignore next -- saxes never emits an unmatched close callback. */
+          /* istanbul ignore next -- saxes never emits an unmatched close callback. */
           if (frame === undefined) throw new Error("ODF XML context stack is invalid.");
           if (frame.token === XMLToken.UNKNOWN)
             frame.context.endUnknownElement(frame.namespaceURI, frame.localName);

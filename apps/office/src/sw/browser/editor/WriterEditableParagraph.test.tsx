@@ -59,6 +59,29 @@ function paragraph(color?: string, highlight?: string): WriterParagraphProjectio
 }
 
 describe("Writer editable paragraph colors", /** Groups color rendering tests. @returns Nothing. */ () => {
+  it("renders the space separator retained by imported numbering", /** Checks imported space-follow geometry independently of toolbar commands. @returns Nothing. */ () => {
+    render(
+      <WriterEditableParagraph
+        index={0}
+        isActive
+        listMarker="1."
+        paragraph={{
+          ...paragraph(),
+          list: { kind: "numbered", level: 0 },
+          listLayout: {
+            firstLineIndentPt: 0,
+            indentAtPt: 20,
+            labelFollowedBy: "space",
+            listTabPositionPt: 20,
+          },
+        }}
+        retainElement={/** Retains no fixture reference. @returns Nothing. */ () => undefined}
+      />,
+    );
+    expect(screen.getByTestId("writer-list-marker-color-paragraph")).toHaveStyle({
+      marginInlineEnd: "0.25em",
+    });
+  });
   it("projects explicit and substituted font families across bold runs", /** callback handles this value. @returns The result. */ () => {
     const source = paragraph();
     const item: WriterParagraphProjection = {

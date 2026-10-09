@@ -146,6 +146,22 @@ it("retains soft-boundary affinity and excludes hard-break affinity", /** Checks
     pam.Dispose();
   }
 });
+
+it("uses the UI margin default when the shell API flag is omitted", /** Checks the actual shell default against trailing spaces. @returns Nothing. */ () => {
+  const f = fixture("abc   def");
+  f.shell.GetLayout().SetCursorTextFrame(f.node, [{ start: 0, end: 6, height: 240 }], 0, 6);
+  select(f, 1);
+  expect(f.shell.LRMargin(false)).toBe(true);
+  expect(f.shell.getShellCursor().GetPoint().GetContentIndex()).toBe(3);
+  expect(SwTextCursor.IsRightMargin()).toBe(true);
+});
+it("moves a paragraph to the default tab stop when the modulus is omitted", /** Checks the actual shell margin command and undo. @returns Nothing. */ () => {
+  const f = fixture("Indented");
+  expect(f.shell.MoveLeftMargin(true)).toBe(true);
+  expect(f.node.GetParagraphTextLeftMargin()).toBe(1134);
+  expect(f.shell.Undo()).toBe(true);
+  expect(f.node.GetParagraphTextLeftMargin()).toBe(0);
+});
 it.each([false, true])(
   "shell selection, stack, pending input and continued editing cell=%s",
   /** Checks one actual native body or cell graph, original owners and history. @param cell - Cell context. @returns Nothing. */ (

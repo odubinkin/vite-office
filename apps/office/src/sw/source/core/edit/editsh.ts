@@ -131,7 +131,7 @@ function getHyperlinkRangeAtCursor(cursor: SwPaM): WriterTextRange | undefined {
     /** Locates the run whose inherited hyperlink contains the caret. @param range - Run offsets. @returns Whether it contains the caret. */
     (range) => range.start <= offset && offset <= range.end,
   );
-  /* v8 ignore next -- A normalized hyperlink hint always covers one projected run. */
+  /* istanbul ignore next -- A normalized hyperlink hint always covers one projected run. */
   if (containingIndex < 0) return undefined;
   let first = containingIndex;
   let last = containingIndex;

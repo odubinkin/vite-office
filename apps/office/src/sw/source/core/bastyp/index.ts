@@ -105,7 +105,7 @@ export abstract class SwContentIndexRegistry {
     const indices: SwContentIndex[] = [];
     for (const reference of this.indexReferences) {
       const index = reference.deref();
-      /* v8 ignore next -- WeakRef collection timing cannot be made deterministic in unit tests. */
+      /* istanbul ignore next -- WeakRef collection timing cannot be made deterministic in unit tests. */
       if (index === undefined) this.indexReferences.delete(reference);
       else indices.push(index);
     }

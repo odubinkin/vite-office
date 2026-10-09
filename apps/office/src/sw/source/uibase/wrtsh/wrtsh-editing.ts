@@ -27,14 +27,14 @@ function getWriterPreviousGraphemeBoundary(text: string, offset: number): number
     if (boundary >= offset) return previous;
     previous = boundary;
   }
-  /* v8 ignore next -- Boundary enumeration includes text.length for a valid cursor offset. */
+  /* istanbul ignore next -- Boundary enumeration includes text.length for a valid cursor offset. */
   return previous;
 }
 
 /** Finds the grapheme end immediately after a caret. @param text - Paragraph text. @param offset - Current UTF-16 caret offset. @returns Next grapheme boundary. */
 function getWriterNextGraphemeBoundary(text: string, offset: number): number {
   for (const boundary of getWriterGraphemeBoundaries(text)) if (boundary > offset) return boundary;
-  /* v8 ignore next -- Callers handle the text-end cursor before requesting a boundary. */
+  /* istanbul ignore next -- Callers handle the text-end cursor before requesting a boundary. */
   return text.length;
 }
 
@@ -146,7 +146,7 @@ export function DeleteAtCursor(shell: SwWrtShell, direction: SwUndoDeleteDirecti
       : offset;
   const end =
     direction === "backspace" ? offset : getWriterNextGraphemeBoundary(paragraph.GetText(), offset);
-  /* v8 ignore next -- Valid non-boundary cursor offsets still lie inside one grapheme. */
+  /* istanbul ignore next -- Valid non-boundary cursor offsets still lie inside one grapheme. */
   if (start === end) return false;
   const deletedText = paragraph.GetText().slice(start, end);
   const group =
@@ -234,7 +234,7 @@ export function SplitParagraph(shell: SwWrtShell, position: SwPosition): WriterP
   const paragraph = position.GetNode() as WriterParagraph;
   const offset = position.GetContentIndex();
   if (paragraph.GetDoc() !== shell.GetDoc()) throw new Error("Writer split position is foreign.");
-  /* v8 ignore next 2 -- SwPosition validates the same node bounds. */
+  /* istanbul ignore next -- SwPosition validates the same node bounds. */
   if (!Number.isInteger(offset) || offset < 0 || offset > paragraph.Len())
     throw new Error("Split offset is outside the paragraph.");
   shell.ApplyAction(

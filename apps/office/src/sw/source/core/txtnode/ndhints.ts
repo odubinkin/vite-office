@@ -764,7 +764,7 @@ export class SwpHints {
     for (let index = 0; index < ordered.length - 1; index += 1) {
       const start = ordered[index] as number;
       const end = ordered[index + 1] as number;
-      /* v8 ignore next -- Unique sorted hint boundaries always increase. */
+      /* istanbul ignore next -- Unique sorted hint boundaries always increase. */
       if (end <= start) continue;
       const auto = this.findFamilyHint(RES_TXTATR_AUTOFMT, start, end);
       const inet = this.findFamilyHint(RES_TXTATR_INETFMT, start, end);

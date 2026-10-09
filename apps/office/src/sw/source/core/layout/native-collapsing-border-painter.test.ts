@@ -70,6 +70,36 @@ it("native line overlap classification matches every source illustrated arrangem
   expect(OverlapType.OVERLAP3).toBe(3);
 });
 it.each([false, true])(
+  "fully consumed replacement borders leave no tail before a touching border horizontal=%s",
+  /** Checks complete interval consumption followed by admission of a distinct touching interval. @param horizontal - Native family. @returns Nothing. */ (
+    horizontal,
+  ) => {
+    const doc = new SwDoc();
+    try {
+      const painter = new SwTabFramePainter(doc.nodes.MakeTableNode("Consumed borders"));
+      painter.Insert(entry(0, 10, 1, 20), horizontal);
+      painter.Insert(entry(0, 10, 2, 40), horizontal);
+      painter.Insert(entry(0, 10, 3, 10), horizontal);
+      painter.Insert(entry(10, 20, 4, 20), horizontal);
+      const lines: number[][] = [];
+      painter.PaintLines(
+        /** Captures visible intervals after repeated complete replacement. @param line - Painted border. @param family - Native family. @returns Nothing. */
+        (line, family) => {
+          expect(family).toBe(horizontal);
+          expect(line.mnStartPos).toBeLessThan(line.mnEndPos);
+          lines.push([line.mnStartPos, line.mnEndPos, line.maAttribute.GetColorPrim()]);
+        },
+      );
+      expect(lines).toEqual([
+        [0, 10, 2],
+        [10, 20, 4],
+      ]);
+    } finally {
+      doc.Dispose();
+    }
+  },
+);
+it.each([false, true])(
   "native line splitting preserves ordered coverage and new-style ties horizontal=%s",
   /** Checks all native split/restart/final-insertion paths. @param horizontal - Native family. @returns Nothing. */ (
     horizontal,

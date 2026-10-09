@@ -25,7 +25,7 @@ function required<T>(value: T | undefined): T {
 afterEach(/** Releases browser presentation trees. @returns Nothing. */ () => cleanup());
 
 /** Builds actual Writer/frame owners. @param document - Current graph. @returns Attached controls and cleanup. */
-function attach(document = new SwDoc()) {
+function attach(document = new SwDoc(), argumentsValue?: unknown) {
   const metadata = createDocument({ id: "selector", suiteId: "writer", title: "Selector" });
   const shell = new SwDocShell(document, metadata),
     view = new SwView(shell);
@@ -46,7 +46,8 @@ function attach(document = new SwDoc()) {
         commandSource={source}
         paragraphStyleOptions={projection.paragraphStyleOptions}
         resolveArguments={
-          /** No presentation-owned command arguments. @returns Undefined. */ () => undefined
+          /** Supplies the requested presentation-owned arguments. @returns Arguments. */ () =>
+            argumentsValue
         }
       />
     );
@@ -70,6 +71,53 @@ function attach(document = new SwDoc()) {
 }
 
 describe("Writer live style selector", /** Defines actual document contracts. @returns Nothing. */ () => {
+  it.each([undefined, null, { fontFamily: "Overridden", fontSizePt: 10 }])(
+    "merges font selections with optional formatting arguments (%s)",
+    /** Checks toolbar fallback and override payloads reach actual shell commands. @param value - Base arguments. @returns Nothing. */ (
+      value,
+    ) => {
+      const owner = attach(new SwDoc(), value);
+      const execute = vi.spyOn(owner.source, "Execute");
+      try {
+        render(<owner.Toolbar />);
+        const selects = screen.getAllByRole("combobox");
+        const font = selects.find(
+          /** Finds the device-backed font selector. @param select - Candidate selector. @returns Whether it lists the font. */ (
+            select,
+          ) =>
+            [...(select as HTMLSelectElement).options].some(
+              /** Matches the requested font. @param option - Native option. @returns Match. */ (
+                option,
+              ) => option.value === "Liberation Serif",
+            ),
+        );
+        const size = selects.find(
+          /** Finds the point-size selector. @param select - Candidate selector. @returns Whether it lists the size. */ (
+            select,
+          ) =>
+            [...(select as HTMLSelectElement).options].some(
+              /** Matches a standard size option. @param option - Native option. @returns Match. */ (
+                option,
+              ) => option.textContent === "14 pt",
+            ),
+        );
+        if (font === undefined || size === undefined) throw new Error("Missing font selectors");
+        fireEvent.change(font, { target: { value: "Liberation Serif" } });
+        fireEvent.change(size, { target: { value: "14" } });
+        expect(execute).toHaveBeenCalledWith(expect.any(String), {
+          ...(value ?? {}),
+          fontFamily: "Liberation Serif",
+        });
+        expect(execute).toHaveBeenCalledWith(expect.any(String), {
+          ...(value ?? {}),
+          fontSizePt: 14,
+        });
+      } finally {
+        execute.mockRestore();
+        owner.close();
+      }
+    },
+  );
   it("projects ten native defaults and actual used/custom owners without materializing styles", /** Checks independent literal population and regular-node usage. @returns Nothing. */ () => {
     const document = new SwDoc();
     const parent = document.MakeTextFormatColl(

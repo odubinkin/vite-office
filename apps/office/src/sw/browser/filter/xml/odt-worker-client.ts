@@ -236,7 +236,7 @@ export class OdtWorkerClient implements OdtFilterService {
 
   /** Removes timers/listeners for one exact active request. @param id - Request identity. @returns Detached request or undefined. */
   private DetachActive(id: number): PendingRequest | undefined {
-    /* v8 ignore next -- callers detach only a message or cancellation already matched to active.id. */
+    /* istanbul ignore next -- callers detach only a message or cancellation already matched to active.id. */
     if (this.active?.id !== id) return undefined;
     const active = this.active;
     this.active = undefined;

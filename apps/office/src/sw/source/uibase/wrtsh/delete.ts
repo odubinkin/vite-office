@@ -7,7 +7,7 @@
 export function getWriterTypingCharacterClass(text: string): "delimiter" | "word" | undefined {
   const characters = [...text];
   const firstCharacter = characters[0];
-  /* c8 ignore next -- detected insertions and deletions always contain text. */
+  /* istanbul ignore next -- detected insertions and deletions always contain text. */
   if (firstCharacter === undefined) return undefined;
   const firstIsWord = /[\p{L}\p{N}]/u.test(firstCharacter);
   return characters.every(

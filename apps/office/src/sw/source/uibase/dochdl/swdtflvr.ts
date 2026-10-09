@@ -248,7 +248,7 @@ function serializeRuns(runs: readonly WriterTextRun[]): string {
 /** Serializes one Writer highlight for bounded HTML transfer. @param highlight - Effective Writer highlight. @returns CSS declaration or empty text. */
 function getClipboardHighlightStyle(highlight: string | undefined): string {
   if (highlight === undefined) return "";
-  /* v8 ignore next -- Transparent highlight omission is exercised at the ODT and browser-render boundaries; native clipboard selection cannot author this state directly. */
+  /* istanbul ignore next -- Transparent highlight omission is exercised at the ODT and browser-render boundaries; native clipboard selection cannot author this state directly. */
   if (highlight === "transparent") return "";
   return `background-color: ${highlight}`;
 }

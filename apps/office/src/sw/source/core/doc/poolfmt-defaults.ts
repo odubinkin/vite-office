@@ -213,7 +213,7 @@ export function applyWriterParagraphStyleDefaults(collection: SwTextFormatColl):
     collection.SetFormatAttr(
       new SvxULSpaceItem(
         defaults.upperTwips ?? 0,
-        /* v8 ignore next -- Every implemented upper-spacing branch also defines lower spacing. */
+        /* istanbul ignore next -- Every implemented upper-spacing branch also defines lower spacing. */
         defaults.lowerTwips ?? 0,
         RES_UL_SPACE,
       ),

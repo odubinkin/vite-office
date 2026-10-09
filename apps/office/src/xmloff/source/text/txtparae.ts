@@ -261,7 +261,7 @@ export class XMLTextParagraphExport {
             : `<style:text-properties${exportCharacterAttributes(properties, fontFaceName)}/>`;
         if (listRule !== "") {
           const listStyle = listStyleNames.get(listRule);
-          /* v8 ignore next -- The collected paragraph and list-rule maps share one source pass. */
+          /* istanbul ignore next -- The collected paragraph and list-rule maps share one source pass. */
           if (listStyle === undefined) throw new Error(`Missing ODF list style: ${listRule}`);
           const baseName = `${name}Base`;
           namedStyles.push(
@@ -908,8 +908,14 @@ function parseCharacterPropertiesKey(key: string): Partial<OdfCharacterPropertie
     /** Decodes one three-state property. @param value - Key character. @returns Direct property. */
     (value: string | undefined): boolean | undefined =>
       value === "-" || value === undefined ? undefined : value === "1";
-  const [flags = "---", encodedFont = "", fontSize = "", encodedColor = "", encodedHighlight = ""] =
-    key.split("|");
+  // Both internal key encoders always emit these five pipe-delimited fields.
+  const [flags, encodedFont, fontSize, encodedColor, encodedHighlight] = key.split("|") as [
+    string,
+    string,
+    string,
+    string,
+    string,
+  ];
   const bold = decode(flags[0]);
   const italic = decode(flags[1]);
   const underline = decode(flags[2]);
