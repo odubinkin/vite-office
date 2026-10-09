@@ -20,7 +20,7 @@
     },
     "capability": "Calc range-list reference update pipeline",
     "gaps": [
-      "Document/compiler-dependent Parse and Format, ScRangePairList and native pointer/iterator/refcount/move lifetime remain subsequent work. Native size_t inputs are represented within JavaScript exact integer domain; full pointer-width arithmetic is not certified. Native fixtures prove bounded defined numerical operations, not whole Calc parity."
+      "Document/compiler-dependent Parse and Format remain subsequent work. ScRangePairList name sorting awaits actual document sheet names and shared collator ownership; native pointer/iterator/refcount/move lifetime remains unverified. Native size_t inputs are represented within JavaScript exact integer domain; full pointer-width arithmetic is not certified. Native fixtures prove bounded defined numerical operations, not whole Calc parity."
     ],
     "upstream": {
       "implementation": [
@@ -85,7 +85,7 @@
     "aspect": "model-operation",
     "atomicOperation": "Update ordered range-list references using native pre-deletion ordinary scalar update and backward in-list joins",
     "scopeLimitations": [
-      "Document/compiler-dependent Parse and Format, ScRangePairList and native pointer/iterator/refcount/move lifetime remain subsequent work. Native size_t inputs are represented within JavaScript exact integer domain; full pointer-width arithmetic is not certified. Native fixtures prove bounded defined numerical operations, not whole Calc parity.",
+      "Document/compiler-dependent Parse and Format remain subsequent work. ScRangePairList name sorting awaits actual document sheet names and shared collator ownership; native pointer/iterator/refcount/move lifetime remains unverified. Native size_t inputs are represented within JavaScript exact integer domain; full pointer-width arithmetic is not certified. Native fixtures prove bounded defined numerical operations, not whole Calc parity.",
       "Undefined signed arithmetic and where references invalidated by native vector deletion are not certified by bounded initialized comparisons."
     ],
     "implemented": true,

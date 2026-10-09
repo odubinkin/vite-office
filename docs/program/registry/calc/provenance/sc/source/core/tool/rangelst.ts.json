@@ -16,12 +16,20 @@
         {
           "path": "apps/office/src/sc/source/core/tool/rangelist-update.test.ts",
           "marker": "matches all14938 native pipeline and cache-sensitive join outcomes"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/rangepair.test.ts",
+          "marker": "matches all14284 native pair-list sequences and lookup snapshots"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/sc/source/core/tool/rangelst.cxx",
           "marker": "ScRangeList"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/rangelst.hxx",
+          "marker": "Append( const ScRangePair& rRangePair )"
         }
       ]
     },
@@ -51,17 +59,22 @@
       "checkForThreeRanges",
       "handleThreeRanges",
       "handleFourRanges",
-      "UpdateReference"
+      "UpdateReference",
+      "ScRangePairList",
+      "Clone",
+      "Append",
+      "DeleteOnTab"
     ],
     "omittedResponsibilities": [
-      "Document/compiler-dependent Parse and Format, ScRangePairList and native pointer/iterator/refcount/move lifetime remain subsequent work. Native size_t inputs are represented within JavaScript exact integer domain; full pointer-width arithmetic is not certified. Native fixtures prove bounded defined numerical operations, not whole Calc parity."
+      "Document/compiler-dependent Parse and Format remain subsequent work. ScRangePairList name sorting awaits actual document sheet names and shared collator ownership; native pointer/iterator/refcount/move lifetime remains unverified. Native size_t inputs are represented within JavaScript exact integer domain; full pointer-width arithmetic is not certified. Native fixtures prove bounded defined numerical operations, not whole Calc parity."
     ],
     "preservedResponsibilities": [
       "Original ordered range-list owner, independent values and monotone append row cache.",
       "Original containment/adjacency Join restarts, backward partial combining, OR insertion and ordered deletion fragments.",
       "Original first enclosing range, any-range queries, bounds/corner/intersection values and unsigned64 cell counting.",
       "Bounded compiled original C++ comparisons and literal numeric upstream unit cases; private redundant guard implications documented.",
-      "Task 202610091404-4QBVYR adds original UpdateReference, retaining pre-deletion ordering and dual-negative changed overwrite, same-tab guard, ordinary ScRefUpdate delegation, non-NOTHING statuses, stable endpoint assignment, monotone cache and backward in-list joins with size repair. All14938 unchanged native pipeline cases and cache-sensitive follow-up joins compare under ASan/UBSan; literal original row/column deletion assertions retained. Borrowed where values invalidated by native vector deletion and undefined signed arithmetic are not certified."
+      "Task 202610091404-4QBVYR adds original UpdateReference, retaining pre-deletion ordering and dual-negative changed overwrite, same-tab guard, ordinary ScRefUpdate delegation, non-NOTHING statuses, stable endpoint assignment, monotone cache and backward in-list joins with size repair. All14938 unchanged native pipeline cases and cache-sensitive follow-up joins compare under ASan/UBSan; literal original row/column deletion assertions retained. Borrowed where values invalidated by native vector deletion and undefined signed arithmetic are not certified.",
+      "Task 202610091416-KMHKFV adds original initialized ScRangePair inline values and numerical ScRangePairList default/copy/assignment/Clone/Append, identity/index removal, label-only lookup and sheet deletion, both-range scalar updates and paired Join restarts. Existing ScRange and ScRefUpdate owners are reused. All14284 initialized unchanged native release sequences and lookup snapshots compare with pinned source/extracted hashes under ASan/UBSan. Original right-column data predicate uses source end minus one, retaining asymmetric merge/nonmerge behavior. Ascending-scan encountered source positions are strictly below the joined entry, so the guaranteed native decrement is expressed directly with proof. Name sorting, complete document/compiler/UI consumers, native allocation/borrowed pointer lifetime and debug assertions remain uncertified."
     ],
     "status": "mapped",
     "upstreamPath": "sc/source/core/tool/rangelst.cxx",
@@ -86,7 +99,14 @@
       "handleTwoRanges",
       "handleThreeRanges",
       "handleFourRanges",
-      "ScRangeList::UpdateReference"
+      "ScRangeList::UpdateReference",
+      "ScRangePairList",
+      "ScRangePairList::Clone",
+      "ScRangePairList::Remove",
+      "ScRangePairList::Find",
+      "ScRangePairList::DeleteOnTab",
+      "ScRangePairList::UpdateReference",
+      "ScRangePairList::Join"
     ]
   }
 }

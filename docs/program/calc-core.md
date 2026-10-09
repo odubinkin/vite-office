@@ -185,8 +185,8 @@ bounds, corners, lookup and intersections. Literal numerical examples from
 `node scripts/calc-rangelst-native-probe.mjs --check` to reproduce the committed
 fixture and exact pinned source/body hashes; ordinary tests remain portable.
 
-Document/compiler-dependent parsing and formatting, range-pair
-lists, native pointer/iterator/refcount/move lifetime and undefined arithmetic
+Document/compiler-dependent parsing and formatting, pair-list name sorting,
+native pointer/iterator/refcount/move lifetime and undefined arithmetic
 remain pending. `SCSIZE` stays at the original address header and represents
 counts/indices within JavaScript exact integer inputs; full pointer-width input
 arithmetic is unverified. Neither these finite native outputs nor local coverage
@@ -399,7 +399,8 @@ actual100 coverage. The user explicitly left one uncovered Writer painting
 branch for another branch, and requested goal pause after the complete run.
 The user resumed the goal after merging Writer, TS7 and Istanbul. Relative wrapping
 and ordinary/big reference updating are tasks 1, 2 and 3 of the next interval;
-range-list reference updating is task 4. The full cycle is due at task 10.
+range-list reference updating is task 4 and paired range owners are task 5.
+The full cycle is due at task 10.
 
 Source research includes the per-file MPL 2.0 and inherited Apache notices in
 `sc/inc/address.hxx`, `sc/inc/sheetlimits.hxx`, `sc/inc/refdata.hxx`,
@@ -445,3 +446,57 @@ by native vector deletion remain outside certification. Full ScDocument,
 compiler, parsing/formatting, listeners and browser consumers remain subsequent
 work, so inventory semantic parity remains unverified. This is the fourth
 completed task of the resumed ten-task interval; full validation is due at task10.
+
+
+## Paired label and data ranges
+
+Task `202610091416-KMHKFV` adds original inline `ScRangePair` to `sc/inc/address`
+and `ScRangePairList` to its existing `sc/inc/rangelst`/`sc/source/core/tool/rangelst`
+boundary. These values back original document column/row name ranges, compiler
+label references and the label-range dialog. Two-range and copy construction own
+independent ranges; there is no pair default constructor. Assignment retains the
+receiving ranges/endpoints, and `GetRange` applies unsigned16 index conversion.
+
+Pair lists start empty. Implicit value copies/assignment, `Append` and `Clone`
+copy both ranges; access and lookup borrow current entries. Address lookup checks
+label containment, while range lookup requires exact label equality. Data ranges
+do not participate in lookup. Pair removal compares object identity. Sheet
+deletion requires both label endpoints on that sheet, regardless of data sheets.
+Reference updates snapshot the affected area and delegate both ranges to the
+existing ordinary `ScRefUpdate`; they do not pre-delete or merge pairs.
+
+`Join` retains equal-data containment and simultaneous label/data merge
+predicates. Its right-column predicate compares the receiving data end with the
+input data **end minus one**, unlike its label start predicate. Consequently it
+can merge overlapping data ranges while rejecting ordinary parallel adjacency;
+this upstream asymmetry is retained literally. Borrowed-source removal and
+restart order remain original. An already encountered source is strictly before
+the joined entry in the ascending scan, so the guaranteed native index decrement
+is expressed directly with proof. No coverage exclusions are introduced.
+
+The dedicated comparison compiles unchanged original pair/list classes, complete
+numerical pair-list definitions and Join, native inline range owners and ordinary
+reference-update helpers. Its 14,284 initialized sequences compare ordered values
+and both lookup identities after every operation, including source aliases,
+implicit copies, release identity no-ops, unsigned16 indices and parameter
+widths. Pinned source and extracted hashes cover seven original blobs; ASan/UBSan
+remain enabled. `NDEBUG` explicitly selects upstream release behavior: original
+Join diagnoses a later-source removal path with an unconditional assertion even
+after finding its source. Debug assertion enforcement remains unverified. Run
+`node scripts/calc-rangepair-native-probe.mjs --check`; ordinary portable tests
+require neither upstream nor a compiler.
+
+The coherent original range-list/pair-list class and helper grouping was reviewed
+again and stays below the 1000-line hard budget. `CreateNameSortedArray` and the
+original name comparator remain pending actual document sheet-name and shared
+collator owners; no replacement sorting policy is supplied. Complete document,
+compiler, UNO and dialog integration, native vector allocation/refcount/pointer
+lifetimes and undefined arithmetic remain uncertified. Existing range-list and
+reference-update fixtures/tests and shared/Writer source remain unchanged.
+Inventory stays semantically unverified. This is task5 of the resumed interval;
+full verification remains due at task10.
+
+Suspicious source conditions observed during these ports are tracked separately
+in [upstream-suspected-issues.md](upstream-suspected-issues.md). Recording them
+does not authorize changing upstream behavior; the user explicitly reaffirmed
+that preservation requirement.
