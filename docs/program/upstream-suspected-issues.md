@@ -606,3 +606,37 @@ Retained swap-valid hints keep cached parent/index values, and lookup applies
 its original admission and backward-search conditions (lines3925-3985). These
 are reviewed API distinctions, not classified defects. The290-sequence native
 container corpus preserves them and excludes endpoint private-field claims.
+
+## CALC-028: Resize passes a container row to block overwrite
+
+Status: suspicious argument; original scalar calls reproduced, managed
+consumer effects remain unverified.
+
+Pinned mdds 3.2.1 `soa/main_def.inl` lines 4835-4846 computes the retained
+block start and end, then calls `block_funcs::overwrite_values` with
+`new_end_row + 1` and `end_row_in_block - new_end_row`. Its first argument
+is a container row even when the retained block begins at a nonzero row.
+The dispatcher forwards this value unchanged. Original managed block
+`overwrite_values` bodies in `types.hpp` form a block iterator from
+`m_array.begin() + pos`, which makes their indexing convention relevant.
+
+Initialized example: eleven-cell owner with bool at row 0, three int8 cells
+at rows 4..6 and two bool cells at rows 9..10, with empty gaps. Resize to
+five cells retains one int8 cell in the block starting at row 4. The actual
+original overwrite call receives offset 5, count 2 on a three-cell block;
+original block resize then receives size 1. A relative offset for that
+retained block would be 1. Calls then release and delete the lower bool block.
+
+Evidence: unchanged full original headers compiled by
+`scripts/mdds-container-native-probe.mjs`, existing forwarding standard
+`observed_funcs` aliases and `soa/container.test.ts`. The native seed 36,
+resize-to-5 case records overwrite `[0,1,3,5,2]`, resize `[1,1,3,1]`,
+release `[2,0,2]` and delete `[3,0,2]` (operation code, actual scalar type,
+pre-operation block size, remaining arguments). Complete original states,
+capacities and final events are retained in `native-container-cases.json`.
+
+Standard unmanaged overwrite is an original no-op, so this example does
+not prove a scalar value defect or a valid managed failure. Complete managed
+consumer reachability/invariants remain unreviewed; no native undefined
+iterator range receives an invented successful result. Decision: preserve
+the exact original global offset and ordering; add no relative-offset repair.

@@ -168,6 +168,69 @@ for (let type = 0; type < 12; ++type) {
   commands.push(["U", 0], ["U", 1]);
   cases.push({ seed: 24 + type, commands });
 }
+// Original public resize and empty-push calls with complete existing owner observation.
+for (let type = 0; type < 12; ++type) {
+  for (const n of [0, 1, 2, 5, 17]) {
+    const commands = [
+      ["F", 0, n, type, "2"],
+      ["Q", 1, 0],
+      ["Y", 0, n],
+      ["y", 0],
+      ["Y", 0, n],
+      ["Y", 0, n + 5],
+      ["Y", 0, n + 2],
+      ["Y", 0, Math.floor(n / 2)],
+      ["y", 0],
+      ["Y", 0, 0],
+      ["y", 0],
+      ["Y", 0, 6],
+      ["Y", 0, 2],
+      ["M", 2, 1],
+      ["Y", 1, n],
+    ];
+    if (n > 1) commands.push(["Y", 1, n - 1]);
+    commands.push(
+      ["Y", 1, 0],
+      ["Y", 1, 3],
+      ["y", 1],
+      ["W", 0, 2],
+      ["Y", 0, n + 3],
+      ["Y", 2, 0],
+      ["U", 0],
+      ["U", 1],
+      ["U", 2],
+    );
+    cases.push({ seed: -1, commands });
+  }
+  for (let targetSize = 0; targetSize <= 13; ++targetSize) {
+    const commands = [
+      ["Q", 1, 0],
+      ["Y", 0, targetSize],
+    ];
+    for (let row = 0; row < targetSize; ++row) {
+      const category = row >= 4 && row <= 6 ? (type + 1) % 12 : type;
+      commands.push(
+        ["T", 0, row],
+        ["E", 0, row],
+        ["G", 0, row, category],
+        ["P", 0, row],
+        ["p", 0, row],
+      );
+    }
+    commands.push(
+      ["P", 0, targetSize],
+      ["p", 0, targetSize],
+      ["y", 0],
+      ["y", 0],
+      ["S", 0],
+      ["Y", 0, 1],
+      ["Y", 0, 0],
+      ["U", 0],
+      ["U", 1],
+    );
+    cases.push({ seed: 36 + type, commands });
+  }
+}
 const driver =
   String.raw`
 #include <mdds/multi_type_vector/soa/main.hpp>
@@ -180,14 +243,21 @@ const driver =
 #include <optional>
 using namespace mdds::mtv;
 std::map<const base_element_block*,int> ids;int next_token=0;
+bool trace_enabled=false;std::vector<std::vector<long long>> operation_calls;
+void trace_call(int op,const base_element_block& data,std::initializer_list<long long> args={}){if(!trace_enabled)return;std::vector<long long> call{op,get_block_type(data),static_cast<long long>(standard_element_blocks_traits::block_funcs::size(data))};call.insert(call.end(),args.begin(),args.end());operation_calls.push_back(call);}
+struct observed_funcs:standard_element_blocks_traits::block_funcs{
+static void overwrite_values(base_element_block& data,size_t pos,size_t len){trace_call(0,data,{static_cast<long long>(pos),static_cast<long long>(len)});standard_element_blocks_traits::block_funcs::overwrite_values(data,pos,len);}
+static void resize_block(base_element_block& data,size_t size){trace_call(1,data,{static_cast<long long>(size)});standard_element_blocks_traits::block_funcs::resize_block(data,size);}
+static void delete_block(const base_element_block* data){trace_call(3,*data);standard_element_blocks_traits::block_funcs::delete_block(data);}
+};
 struct event_entry{int owner,token,type;size_t size;bool acquired;};
 std::shared_ptr<std::vector<event_entry>> log_entries;
 int id(const base_element_block* p){if(!p)return -1;auto it=ids.find(p);if(it==ids.end())it=ids.emplace(p,next_token++).first;return it->second;}
 struct events{static inline int next=1;int tag=next++;std::shared_ptr<std::vector<event_entry>> log=log_entries;
 void element_block_acquired(const base_element_block* p){if(log)log->push_back({tag,id(p),get_block_type(*p),standard_element_blocks_traits::block_funcs::size(*p),true});}
-void element_block_released(const base_element_block* p){if(log)log->push_back({tag,id(p),get_block_type(*p),standard_element_blocks_traits::block_funcs::size(*p),false});ids.erase(p);}
+void element_block_released(const base_element_block* p){trace_call(2,*p);if(log)log->push_back({tag,id(p),get_block_type(*p),standard_element_blocks_traits::block_funcs::size(*p),false});ids.erase(p);}
 };
-struct traits:standard_element_blocks_traits{using event_func=events;};
+struct traits:standard_element_blocks_traits{using event_func=events;using block_funcs=observed_funcs;};
 using db_type=soa::multi_type_vector<traits>;
 struct access_tag{};auto& access_store(db_type&,access_tag);
 template<auto Member>struct member_access{friend auto& access_store(db_type& db,access_tag){return db.*Member;}};
@@ -264,15 +334,17 @@ template<class It>void hint_node(const It& hint,const db_type& db,bool at_end=fa
 template<class Pair,class It>std::string position_json(const Pair& p,const It& end,const db_type& db,const It* hint=nullptr,bool hint_at_end=false){return capture([&]{std::cout<<"[";node(p.first,end,db);std::cout<<","<<p.second;if(hint){std::cout<<",";hint_node(*hint,db,hint_at_end);}std::cout<<"]";});}
 void state(db_type& db){const auto& s=access_store(db,access_tag{});std::cout<<"["<<db.size()<<","<<db.block_size()<<","<<(db.empty()?"true":"false")<<",["<<db.event_handler().tag<<","<<(db.event_handler().log?"true":"false")<<"],[[";for(size_t i=0;i<s.positions.size();++i){if(i)std::cout<<",";std::cout<<s.positions[i];}std::cout<<"],[";for(size_t i=0;i<s.sizes.size();++i){if(i)std::cout<<",";std::cout<<s.sizes[i];}std::cout<<"],[";for(size_t i=0;i<s.element_blocks.size();++i){if(i)std::cout<<",";std::cout<<id(s.element_blocks[i]);}std::cout<<"],["<<s.positions.capacity()<<","<<s.sizes.capacity()<<","<<s.element_blocks.capacity()<<"]],[";for(size_t i=0;i<s.element_blocks.size();++i){if(i)std::cout<<",";if(s.element_blocks[i])payload(*s.element_blocks[i]);else std::cout<<"null";}std::cout<<"],[";node(db.begin(),db.end(),db);std::cout<<",";node(db.end(),db.end(),db);std::cout<<",";node(db.cbegin(),db.cend(),db);std::cout<<",";node(db.cend(),db.cend(),db);std::cout<<",";node(db.rbegin(),db.rend(),db);std::cout<<",";node(db.rend(),db.rend(),db);std::cout<<",";node(db.crbegin(),db.crend(),db);std::cout<<",";node(db.crend(),db.crend(),db);std::cout<<"]]";}
 void record(std::unique_ptr<db_type>* db,const std::string& result,bool stable){std::cout<<"["<<result<<","<<(stable?"true":"false")<<",[";for(int i=0;i<3;++i){if(i)std::cout<<",";if(db[i])state(*db[i]);else std::cout<<"null";}std::cout<<"],[";bool comma=false;for(int i=0;i<3;++i)for(int j=0;j<3;++j){if(comma)std::cout<<",";comma=true;if(db[i]&&db[j])std::cout<<"["<<(*db[i]==*db[j]?"true":"false")<<","<<(*db[i]!=*db[j]?"true":"false")<<"]";else std::cout<<"null";}std::cout<<"],[";for(size_t i=0;i<log_entries->size();++i){if(i)std::cout<<",";const auto& e=(*log_entries)[i];std::cout<<"["<<e.owner<<","<<e.token<<","<<e.type<<","<<e.size<<","<<(e.acquired?"true":"false")<<"]";}std::cout<<"]]";}
-int main(){std::cout<<std::setprecision(17);int seed,count;while(std::cin>>seed>>count){ids.clear();next_token=0;events::next=1;log_entries=std::make_shared<std::vector<event_entry>>();std::unique_ptr<db_type> db[3];std::optional<db_type::iterator> hints[3];std::optional<db_type::const_iterator> const_hints[3];if(seed>=0){int kind=seed%12,count=seed<12?5:9;db[0]=std::make_unique<db_type>(count);if(seed<24){for(int row=0;row<count;row+=2)set_cell(*db[0],row,((row/2)%2?kind+1:kind)%12);}else{set_cell(*db[0],0,kind);set_cell(*db[0],3,(kind+1)%12);set_cell(*db[0],7,kind);}ids.clear();next_token=0;for(auto* data:access_store(*db[0],access_tag{}).element_blocks)id(data);log_entries->clear();}std::cout<<"[";record(db,"null",true);
+int main(){std::cout<<std::setprecision(17);int seed,count;while(std::cin>>seed>>count){ids.clear();next_token=0;events::next=1;log_entries=std::make_shared<std::vector<event_entry>>();std::unique_ptr<db_type> db[3];std::optional<db_type::iterator> hints[3];std::optional<db_type::const_iterator> const_hints[3];if(seed>=0){int kind=seed%12,count=seed<12?5:seed<36?9:11;db[0]=std::make_unique<db_type>(count);if(seed<24){for(int row=0;row<count;row+=2)set_cell(*db[0],row,((row/2)%2?kind+1:kind)%12);}else if(seed<36){set_cell(*db[0],0,kind);set_cell(*db[0],3,(kind+1)%12);set_cell(*db[0],7,kind);}else{set_cell(*db[0],0,kind);for(int row=4;row<=6;++row)set_cell(*db[0],row,(kind+1)%12);set_cell(*db[0],9,kind);set_cell(*db[0],10,kind);}ids.clear();next_token=0;for(auto* data:access_store(*db[0],access_tag{}).element_blocks)id(data);log_entries->clear();}std::cout<<"[";record(db,"null",true);
 for(int step=0;step<count;++step){char op;int dst;std::cin>>op>>dst;std::string result="null";events* before=db[dst]?&db[dst]->event_handler():nullptr;bool stable=true;
 try{if(op=='D')db[dst]=std::make_unique<db_type>();else if(op=='Z'){int n;std::cin>>n;db[dst]=std::make_unique<db_type>(n);}else if(op=='F'||op=='R'){int n,type,length=-1;std::string text;std::cin>>n>>type>>text;if(op=='R')std::cin>>length;db[dst]=create(n,type,text,length);}else if(op=='H'||op=='h'){events h;std::cin>>h.tag;if(op=='H')db[dst]=std::make_unique<db_type>(h);else db[dst]=std::make_unique<db_type>(std::move(h));result=h.log?"true":"false";}
 else if(op=='Q'||op=='L'||op=='M'||op=='A'||op=='V'||op=='W'){int other;std::cin>>other;if(op=='Q')db[dst]=std::make_unique<db_type>(*db[other]);else if(op=='L')db[dst]=std::make_unique<db_type>(db[other]->clone());else if(op=='M')db[dst]=std::make_unique<db_type>(std::move(*db[other]));else if(op=='A'){*db[dst]=*db[other];stable=before==&db[dst]->event_handler();}else if(op=='V'){*db[dst]=std::move(*db[other]);stable=before==&db[dst]->event_handler();}else{events* other_before=&db[other]->event_handler();db[dst]->swap(*db[other]);stable=before==&db[dst]->event_handler()&&other_before==&db[other]->event_handler();}}
 else if(op=='T'||op=='E'||op=='G'||op=='g'||op=='P'||op=='p'||op=='I'||op=='i'||op=='K'||op=='k'){size_t row;std::cin>>row;if(op=='T')result=std::to_string(db[dst]->get_type(row));else if(op=='E')result=db[dst]->is_empty(row)?"true":"false";else if(op=='G'||op=='g'){int type;std::cin>>type;result=scalar(*db[dst],row,type,op=='g');}else if(op=='P')result=position_json(db[dst]->position(row),db[dst]->end(),*db[dst]);else if(op=='p'){const auto& owner=*db[dst];result=position_json(owner.position(row),owner.end(),owner);}else if(op=='I'||op=='i'){int other,index;std::cin>>other>>index;if(op=='I'){auto hint=db[other]->begin();std::advance(hint,index);auto pos=db[dst]->position(hint,row);result=position_json(pos,db[dst]->end(),*db[dst],&hint,index==int(db[other]->block_size()));}else{const auto& owner=*db[dst];const auto& source=*db[other];auto hint=source.begin();std::advance(hint,index);auto pos=owner.position(hint,row);result=position_json(pos,owner.end(),owner,&hint,index==int(source.block_size()));}}else {int slot;std::cin>>slot;if(op=='K'){auto& hint=*hints[slot];result=position_json(db[dst]->position(hint,row),db[dst]->end(),*db[dst],&hint);}else {const auto& owner=*db[dst];auto& hint=*const_hints[slot];result=position_json(owner.position(hint,row),owner.end(),owner,&hint);}}}
 else if(op=='B'||op=='b'||op=='O'||op=='o'||op=='l'||op=='X'){size_t row;std::cin>>row;if(op=='l'){const auto& owner=*db[dst];result=std::to_string(db_type::logical_position(owner.position(row)));}else if(op=='X'){int type;std::cin>>type;result=positioned_scalar(*db[dst],row,type);}else {int steps=0;if(op=='O'||op=='o')std::cin>>steps;if(op=='B'||op=='O'){auto p=db[dst]->position(row);auto ret=op=='B'?db_type::next_position(p):db_type::advance_position(p,steps);result="["+position_json(ret,db[dst]->end(),*db[dst])+","+position_json(p,db[dst]->end(),*db[dst])+"]";}else {const auto& owner=*db[dst];auto p=owner.position(row);auto ret=op=='b'?db_type::next_position(p):db_type::advance_position(p,steps);result="["+position_json(ret,owner.end(),owner)+","+position_json(p,owner.end(),owner)+"]";}}}
+else if(op=='Y'){size_t size;std::cin>>size;operation_calls.clear();trace_enabled=true;db[dst]->resize(size);trace_enabled=false;result=capture([&]{std::cout<<"[";for(size_t i=0;i<operation_calls.size();++i){if(i)std::cout<<",";std::cout<<"[";for(size_t j=0;j<operation_calls[i].size();++j){if(j)std::cout<<",";std::cout<<operation_calls[i][j];}std::cout<<"]";}std::cout<<"]";});}
+else if(op=='y'){auto it=db[dst]->push_back_empty();result=capture([&]{node(it,db[dst]->end(),*db[dst]);});}
 else if(op=='J'||op=='j'){int other,index;std::cin>>other>>index;if(op=='J'){hints[dst]=db[other]->begin();std::advance(*hints[dst],index);result=capture([&]{hint_node(*hints[dst],*db[other]);});}else{const auto& owner=*db[other];const_hints[dst]=owner.begin();std::advance(*const_hints[dst],index);result=capture([&]{hint_node(*const_hints[dst],owner);});}}
 else if(op=='N'){hints[dst].reset();const_hints[dst].reset();}
-else if(op=='C')db[dst]->clear();else if(op=='S')db[dst]->shrink_to_fit();else if(op=='U')db[dst].reset();else std::abort();}catch(const std::exception& e){result=std::string("\"")+e.what()+"\"";}
+else if(op=='C')db[dst]->clear();else if(op=='S')db[dst]->shrink_to_fit();else if(op=='U')db[dst].reset();else std::abort();}catch(const std::exception& e){trace_enabled=false;result=std::string("\"")+e.what()+"\"";}
 std::cout<<",";record(db,result,stable);}for(auto& owner:db)owner.reset();std::cout<<",[";for(size_t i=0;i<log_entries->size();++i){if(i)std::cout<<",";const auto& e=(*log_entries)[i];std::cout<<"["<<e.owner<<","<<e.token<<","<<e.type<<","<<e.size<<","<<(e.acquired?"true":"false")<<"]";}std::cout<<"]]\n";}}
 `;
 const source = `${target}/container.cpp`,
@@ -325,7 +397,7 @@ const document = {
   sourceHashes,
   driverHash: digest(driver),
   target:
-    "host clang++ libc++ ASan UBSan; unchanged real original SoA container, no_trace/default execution/nonthrowing event value semantics; caller-only private observation bridge; compound inputs prepared by original public set outside the reviewed ownership group",
+    "host clang++ libc++ ASan UBSan; unchanged real original SoA container, no_trace/default execution/nonthrowing event value semantics; caller-only private observation bridge and forwarding original standard block-func operation observer; compound inputs prepared by original public set outside the reviewed ownership group",
   cases: cases.map(
     /** Retains every full state and final destructor log. @param c - Input. @param index - Output. @returns Portable case. */ (
       c,

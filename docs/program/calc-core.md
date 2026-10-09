@@ -1209,3 +1209,36 @@ remain unverified. Source file boundaries remain original; the existing
 `types.ts` and now `soa/main.ts` exceed the 500-line review target but remain
 below the enforced 1000-line limit. Their declarations and original member
 bodies retain their upstream responsibilities rather than an artificial split.
+
+## Shared SoA resize and empty-tail growth
+
+Task `202610092254-YGCB8W` ports original `resize`, `resize_impl`,
+`append_empty` and `push_back_empty` on the existing shared SoA container.
+TypeScript combines its original declaration/member bodies in the same
+owner file, consistent with the existing constructor/clear/lifetime members.
+Actual metadata, search, typed block funcs, deletion helpers and iterators
+are reused. Equal size is a no-op; zero clears; growth extends an empty
+last block or appends a new empty block. Empty push returns the original
+new/extended last block iterator.
+
+Truncation keeps source overwrite and scalar resize order, retained block
+size, lower-block release/deletion and metadata erase before logical size
+assignment. The exact global overwrite offset remains unchanged and is
+recorded in CALC-028; no upstream repair is introduced.
+
+The native corpus now has 578 complete sequences, 24518 operations, 25096
+full initial/operation states, 11463 lossless snapshots and 578 final logs.
+Every prior 350 complete sequence/state/final event is retained. New actual
+public callers cover all 12 unmanaged scalar families, empty/nonempty tails,
+same/zero/grow/shrink, nonzero multi-cell block starts, block edges and lower
+block removal, copy isolation, moved-source same/shrink error/clear and
+read-after-resize. Forwarding original standard funcs and event callbacks
+observe exact overwrite/resize/release/delete arguments without replacing
+native algorithms. Native public set only prepares compound input.
+
+Finite default/no_trace libc++ bounded scalar contracts are implemented;
+whole container/module/default, managed/custom/throwing outcomes,
+trace/debug/SIMD, invalid moved-source growth/lifetimes/overflow and full
+Calc columns/documents/browser remain unverified. Source-shaped main and
+container test files exceed the 500-line review target and retain their
+original responsibilities below the enforced 1000-line limit.

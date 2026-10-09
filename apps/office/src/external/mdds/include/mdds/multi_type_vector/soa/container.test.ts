@@ -109,6 +109,7 @@ class Handler {
         standard.standard_element_blocks_traits.block_funcs.size(data as base_element_block),
         false,
       ]);
+    traceCall(2, data as base_element_block);
     tokens.delete(data as base_element_block);
   }
 }
@@ -127,7 +128,40 @@ const Events: EventValueOps<Handler> = {
     [left.log, right.log] = [right.log, left.log];
   },
 };
-const Traits = { ...standard.standard_element_blocks_traits, event_func: Handler };
+let operationCalls: number[][] | null = null;
+/** Records original caller arguments before forwarding actual registered block operations. @param op - Native operation code. @param data - Actual owner. @param args - Native arguments. @returns Nothing. */
+function traceCall(op: number, data: base_element_block, ...args: number[]): void {
+  operationCalls?.push([
+    op,
+    get_block_type(data),
+    standard.standard_element_blocks_traits.block_funcs.size(data),
+    ...args,
+  ]);
+}
+const nativeFuncs = standard.standard_element_blocks_traits.block_funcs;
+const observedFuncs = {
+  ...nativeFuncs,
+  /** Observes original overwrite arguments. @param data - Owner. @param pos - Offset. @param len - Count. @returns Nothing. */
+  overwrite_values(data: base_element_block, pos: number, len: number): void {
+    traceCall(0, data, pos, len);
+    nativeFuncs.overwrite_values(data, pos, len);
+  },
+  /** Observes original scalar resize. @param data - Owner. @param size - Size. @returns Nothing. */
+  resize_block(data: base_element_block, size: number): void {
+    traceCall(1, data, size);
+    nativeFuncs.resize_block(data, size);
+  },
+  /** Observes original delete after release. @param data - Owner. @returns Nothing. */
+  delete_block(data: base_element_block): void {
+    traceCall(3, data);
+    nativeFuncs.delete_block(data);
+  },
+};
+const Traits = {
+  ...standard.standard_element_blocks_traits,
+  block_funcs: observedFuncs,
+  event_func: Handler,
+};
 /** Supplies an explicit original scalar family, never a JS numeric type guess. @param type - Native type ID. @param text - Decimal/string input. @returns Original scalar. */
 function value(type: number, text: string): DelayedVectorValue {
   if (type === 0) return BigInt(text) !== 0n;
@@ -281,6 +315,7 @@ function loadSeed(initial: OwnerState): multi_type_vector<Handler> {
 describe("original SoA container lifetime", /** Declares original native ownership acceptance. @returns Nothing. */ () => {
   it("matches every complete original constructor operator iterator and destructor sequence", /** Replays all unchanged native outputs through actual shared ownership. @returns Nothing. */ () => {
     for (const c of fixture.cases) {
+      operationCalls = null;
       nextHandler = 1;
       nextToken = 0;
       log = [];
@@ -363,7 +398,17 @@ describe("original SoA container lifetime", /** Declares original native ownersh
             destination.swap(source);
             stable =
               before === destination.event_handler() && otherBefore === source.event_handler();
-          } else if (op === "C") destination.clear();
+          } else if (op === "Y") {
+            operationCalls = [];
+            try {
+              destination.resize(args[0] as number);
+              result = operationCalls;
+            } finally {
+              operationCalls = null;
+            }
+          } else if (op === "y")
+            result = node(destination.push_back_empty(), destination.end(), destination);
+          else if (op === "C") destination.clear();
           else if (op === "S") destination.shrink_to_fit();
           else if (op === "U") {
             destination.dispose();

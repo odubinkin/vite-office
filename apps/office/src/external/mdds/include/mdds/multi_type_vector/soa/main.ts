@@ -14,6 +14,7 @@ import {
 } from "../delayed_delete_vector.ts";
 import { type MDDS_MTV_DEFINE_ELEMENT_CALLBACKS } from "../macro.ts";
 import {
+  throw_block_position_not_found,
   empty_event_func,
   advance_position as advance_position_impl,
   type BlockPositionIterator,
@@ -29,6 +30,7 @@ import {
   initialize_element_blocks,
   delete_element_blocks,
   mutate_blocks,
+  get_block_position,
   make_iterator,
   next_position as next_position_impl,
   get_impl,
@@ -513,5 +515,80 @@ export class multi_type_vector<E extends ContainerEvent = empty_event_func> {
     Blk: BlockElementAccess<T>,
   ): T {
     return get_block_element_at(Blk, pos.first.get().data as base_element_block, pos.second);
+  }
+  /** Original append_empty member updates only actual metadata and logical size. Valid empty metadata requires zero logical size. @param len - Native admitted count. @returns Whether a new block was added. */
+  private append_empty(len: number): boolean {
+    if (this.m_block_store.positions.size() === 0) {
+      this.m_block_store.push_back(0, len, null);
+      this.m_cur_size = len;
+      return true;
+    }
+    let new_block_added = false;
+    const last = this.m_block_store.element_blocks.size() - 1;
+    const last_data = this.m_block_store.element_blocks.get(last);
+    if (!last_data) this.m_block_store.sizes.set(last, this.m_block_store.sizes.get(last) + len);
+    else {
+      this.m_block_store.push_back(this.m_cur_size, len, null);
+      new_block_added = true;
+    }
+    this.m_cur_size += len;
+    return new_block_added;
+  }
+  /** Original public empty append returns the new or extended last block iterator. @returns Last block iterator. */
+  public push_back_empty(): iterator_base<this> {
+    let block_index = this.m_block_store.positions.size();
+    if (!this.append_empty(1)) --block_index;
+    return this.get_iterator(block_index);
+  }
+  /** Original no_trace/nondebug resize entry forwards its actual member implementation. @param new_size - Native size. @returns Nothing. */
+  public resize(new_size: number): void {
+    this.resize_impl(new_size);
+  }
+  /** Original resize_impl retains exact truncation/overwrite and release order; diagnostic uses pinned source line4833. @param new_size - Native admitted size. @returns Nothing. */
+  private resize_impl(new_size: number): void {
+    if (new_size === this.m_cur_size) return;
+    if (!new_size) {
+      this.clear();
+      return;
+    }
+    if (new_size > this.m_cur_size) {
+      this.append_empty(new_size - this.m_cur_size);
+      return;
+    }
+    const new_end_row = new_size - 1;
+    const block_index = get_block_position(this.m_block_store, this.m_cur_size, new_end_row);
+    if (block_index === this.m_block_store.positions.size())
+      throw_block_position_not_found(
+        "multi_type_vector::resize",
+        4833,
+        new_end_row,
+        this.block_size(),
+        this.size(),
+      );
+    const data = this.m_block_store.element_blocks.get(block_index);
+    const start_row_in_block = this.m_block_store.positions.get(block_index);
+    const end_row_in_block = start_row_in_block + this.m_block_store.sizes.get(block_index) - 1;
+    if (new_end_row < end_row_in_block) {
+      const new_block_size = new_end_row - start_row_in_block + 1;
+      if (data) {
+        this.Traits.block_funcs.overwrite_values(
+          data,
+          new_end_row + 1,
+          end_row_in_block - new_end_row,
+        );
+        this.Traits.block_funcs.resize_block(data, new_block_size);
+      }
+      this.m_block_store.sizes.set(block_index, new_block_size);
+    }
+    delete_element_blocks(
+      this.m_block_store,
+      this.m_hdl_event,
+      this.Traits.block_funcs,
+      block_index + 1,
+      this.m_block_store.element_blocks.size(),
+    );
+    const len = this.m_block_store.element_blocks.size() - block_index - 1;
+    this.m_block_store.erase(block_index + 1, len);
+    this.m_cur_size = new_size;
   }
 }
