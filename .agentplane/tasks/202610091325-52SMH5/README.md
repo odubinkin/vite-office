@@ -1,10 +1,11 @@
 ---
 id: "202610091325-52SMH5"
 title: "Port Calc relative reference wrapping"
-status: "DOING"
+result_summary: "Implemented original Calc MoveRelWrap with native single-step wrapping, preserved reference flags/ownership and scoped actual100 coverage"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -39,11 +40,16 @@ quality_review:
     - "output/playwright/calc-resumed-task1-verification.md"
   findings:
     - "No production shared duplication, Writer edits, coverage exclusions or body rewrites. Native release-only custom-limit comparison is explicit; defined bounded arithmetic does not certify full compiler/token ownership."
-commit: null
+commit:
+  hash: "c3f84b4b86141ad9c0a77b53a887ceb21ce0cd22"
+  message: "✨ 52SMH5 calc: port original relative reference wrapping"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved original relative wrapping with native differential evidence and scoped Calc actual100 coverage after resumed goal."
+  -
+    author: "CODER"
+    body: "Verified: original relative-axis wrapping matches all15616 native states;52 Calc tests retain actual100 Istanbul, TS7 checks and inventory zero violations."
 events:
   -
     type: "status"
@@ -58,8 +64,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Command: node scripts/calc-refwrap-native-probe.mjs --write; node scripts/calc-refwrap-native-probe.mjs --check Result: pass after selecting native release semantics with NDEBUG (debug validity assertion recorded in Findings). Evidence: 15616 initialized differential cases; unchanged original wrap helper/MoveRelWrap and complete numerical single/complex reference owners, exact pinned blobs and SHA256 hashes; ASan/UBSan clean. Generated JSON canonical-formatted; check compares parsed values exactly. Scope: original single-step relative-axis wrapping, toAbs-before-wrap, validity masks versus supplied wrap masks, positive table counts, sorted write-back, stable endpoints, monotone deletion/trim/flag semantics; native debug assertions, undefined arithmetic and full compiler/document/token/named-range integration remain unverified. Command: npm run test:coverage:calc Result: pass. Evidence: 52 tests in12 files; actual Istanbul statements980/980, branches818/818, functions215/215, lines866/866 all100; no exclusions, thresholds or shared/Writer test changes. Scope: all Calc numerical owners and saved native outputs. Command: npm run typecheck; npm run test:tooling; affected ESLint/Prettier checks Result: pass. Evidence: TS7 tools/application checks;13 tooling tests/3 files including actual disjoint discovery and native TS7/TS6 API compatibility; three affected authored code files lint clean; code/fixture Prettier clean. Scope: existing merged toolchain, new public wrapping operation and test ownership. Command: npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:source-tree; npm run check:source-provenance Result: pass. Evidence:332 runtime sources/1580 relative imports/29 permitted edges;1101 documented authored files;1104 size checks with existing grouping candidates unchanged;114 required paths/33 retired roots;333 provenance modules (242 mapped,74 browser adaptations,17 local infrastructure). Scope: reuse existing references/limits without duplication or Writer dependencies. Command: npm run inventory:parity:calc Result: pass. Evidence:10 capabilities/124 modules, zero semantic violations. New MoveRelWrap capability and updated source/header runtime/provenance plus older geometry gap reconciliation; semantic parity stays unverified. Command: node .agentplane/policy/check-routing.mjs; ap doctor; git diff --check; git status --short --untracked-files=all Result: pass. Evidence:routing OK;doctor zero errors,two inherited warnings (managed readiness shim and previously DONE task202610090715-PJV0JK without implementation hash);diff clean, only active task README remains for verification closure. Scope: calc branch/current checkout only; no merges, network, global files or unrelated task corrections. Implementation c3f84b4b86141ad9c0a77b53a887ceb21ce0cd22. First resumed task of ten; full suite scheduled at task10 per user instruction, no full Writer/full E2E run here."
+  -
+    type: "status"
+    at: "2026-10-09T13:34:29.563Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: original relative-axis wrapping matches all15616 native states;52 Calc tests retain actual100 Istanbul, TS7 checks and inventory zero violations."
 doc_version: 3
-doc_updated_at: "2026-10-09T13:34:11.365Z"
+doc_updated_at: "2026-10-09T13:34:29.565Z"
 doc_updated_by: "CODER"
 description: "Resume Calc after Writer merge and TS7/Istanbul adoption. Port unchanged MoveRelWrap responsibilities and private wrap helper in original ScRefUpdate owner, reuse existing references/limits, native differential comparison, inventory and actual100 scoped coverage. First task of next ten-task full-suite interval."
 sections:
@@ -113,6 +126,10 @@ sections:
     - Observation: Inventory ID CLI rejects --help; it accepts only id/build/check plus scope.
       Impact: No records changed; capability ID allocation not performed.
       Resolution: Read declared CLI usage and invoke existing npm run inventory:id without extra flags.
+extensions:
+  implementation_commit:
+    hash: "c3f84b4b86141ad9c0a77b53a887ceb21ce0cd22"
+    message: "✨ 52SMH5 calc: port original relative reference wrapping"
 id_source: "generated"
 ---
 ## Summary
