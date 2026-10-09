@@ -4,7 +4,7 @@ title: "Align SwFormat parent reset and cycle rejection with LibreOffice"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -17,16 +17,40 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-09T13:49:50.068Z"
+  updated_by: "CODER"
+  note: "All scoped native contract/history/mounted UI acceptances pass:189unique related cases,39current-source revalidations after lint adjustment. Entire current format.ts Istanbul81lines92statements14functions59branches strict100,0negative, no prior counters; raw whole-app partial threshold failure retained as wrapper scope error. Formatting/lint/TS7/boundaries/build/docs/size/tree/provenance/registry pass. Inventory and parent history preserved. Evidence: results.json; semantic a2e8c94a6db9. Full baseline remains historical XJTGF0; complete native caches/Which/hints and broad parity remain follow-ups."
   attempts: 0
-commit: null
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-09T13:49:52.038Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent non-independent review accepts the bounded native format parent contract against pinned SetDerivedFrom source and current actual Istanbul100; no blanket parity promotion."
+  evaluated_sha: "a2e8c94a6db9d3b59a7e28bf83fbf7ea16082c26"
+  blueprint_digest: "ba0781499f3718260821baf23ad8ee67b7be2256f4817e4a2df1a9e5e370c32d"
+  evidence_refs:
+    - ".agentplane/tasks/202610091328-D694SH/README.md"
+    - ".agentplane/tasks/202610091328-D694SH/quality/20261009-134952038-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610091328-D694SH/quality/20261009-134952038-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610091328-D694SH/quality/20261009-134952038-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610091328-D694SH/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610091328-D694SH/evidence/results.json"
+    - "apps/office/src/sw/source/core/attr/format.ts"
+  findings:
+    - "Default reset walks the actual inherited tree root; all self/transitive cycles reject before original modify/item-set edge changes. Same-pool guard and original direct items remain. Three exact old expectation migrations match source and unrelated assertions remain."
+    - "Six fresh cases cover original core clients, real table attribute history and mounted main UI;189unique initial/closure scenarios pass,39materially affected cases revalidated after final production lint adjustment."
+    - "Current whole-file actual Istanbul81/92/14/59 coverage is100 on all four gates,0negative, no counter transfer. Final wrapper raw whole-app partial threshold failure is explicitly retained and rejected for whole-app100; targeted gate reads entire unaltered actual module entry."
+commit:
+  hash: "a2e8c94a6db9d3b59a7e28bf83fbf7ea16082c26"
+  message: "🛠️ D694SH native: restore format root and reject inheritance cycles"
 comments:
   -
     author: "CODER"
     body: "Start: resumed user-authorized Writer parity; native format parent root/cycle contract, bounded original-owner tests and targeted Istanbul100."
+  -
+    author: "CODER"
+    body: "Implementation: native original-root fallback and false cycle rejection; six fresh cases, three exact source-backed migrations, canonical evidence and scoped current Istanbul100. Semantic commit a2e8c94a6db9."
 events:
   -
     type: "status"
@@ -35,8 +59,21 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: resumed user-authorized Writer parity; native format parent root/cycle contract, bounded original-owner tests and targeted Istanbul100."
+  -
+    type: "status"
+    at: "2026-10-09T13:49:48.842Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+    note: "Implementation: native original-root fallback and false cycle rejection; six fresh cases, three exact source-backed migrations, canonical evidence and scoped current Istanbul100. Semantic commit a2e8c94a6db9."
+  -
+    type: "verify"
+    at: "2026-10-09T13:49:50.068Z"
+    author: "CODER"
+    state: "ok"
+    note: "All scoped native contract/history/mounted UI acceptances pass:189unique related cases,39current-source revalidations after lint adjustment. Entire current format.ts Istanbul81lines92statements14functions59branches strict100,0negative, no prior counters; raw whole-app partial threshold failure retained as wrapper scope error. Formatting/lint/TS7/boundaries/build/docs/size/tree/provenance/registry pass. Inventory and parent history preserved. Evidence: results.json; semantic a2e8c94a6db9. Full baseline remains historical XJTGF0; complete native caches/Which/hints and broad parity remain follow-ups."
 doc_version: 3
-doc_updated_at: "2026-10-09T13:49:07.290Z"
+doc_updated_at: "2026-10-09T13:49:50.141Z"
 doc_updated_by: "CODER"
 description: "Resume Writer parity after merged TS7/Istanbul migration. Restore source SetDerivedFrom default-root fallback and false-return cycle rejection through original parent/client/item-set identities. Preserve explicit I/O/recovery deviations and cross-pool guard; migrate only source-incompatible old expectations, add core/history/mounted UI evidence, update canonical format records and use actual targeted Istanbul100 without old V8 certificates."
 sections:
@@ -61,6 +98,39 @@ sections:
     Command: npm run format:check; npm run lint; npm run typecheck; npm run check:dependencies; npm run test:static; npm run check:docs; npm run check:file-size. Result: pass after bounded no-this-alias adjustment; checks and production build run upstream-absent. Final changed-format and canonical/evidence formatting checks also pass.
     Command: npm run inventory:registry:build; npm run check:source-tree; npm run check:source-provenance; npm run inventory:registry:check; node_modules/.bin/tsx scripts/generate-writer-ui-resources.ts --check. Result: pass with restored upstream for metadata only. Evidence:4deterministic views/0derived tracked changes;114source paths33retired roots;333modules242mapped74browser adaptations17local infrastructure;0semantic violations, overall parityReady=false.
     Command: preservation snapshot comparisons. Result: pass. Evidence:1832/1838tracked source/scripts/docs files unchanged;571/574prior source/tool test files unchanged with exactly3source-backed expectation migrations,3fresh files,2canonical records preserving every prior field/prefix and parent Findings prefix preserved. Full migration XJTGF0 is historical; no fresh full suite is claimed. Final review/semantic commit/clean state pending.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-09T13:49:50.068Z — VERIFY — ok
+
+    By: CODER
+
+    Note: All scoped native contract/history/mounted UI acceptances pass:189unique related cases,39current-source revalidations after lint adjustment. Entire current format.ts Istanbul81lines92statements14functions59branches strict100,0negative, no prior counters; raw whole-app partial threshold failure retained as wrapper scope error. Formatting/lint/TS7/boundaries/build/docs/size/tree/provenance/registry pass. Inventory and parent history preserved. Evidence: results.json; semantic a2e8c94a6db9. Full baseline remains historical XJTGF0; complete native caches/Which/hints and broad parity remain follow-ups.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T13:49:48.842Z, excerpt_hash=sha256:de56104cdc2aa07662221268fc36a9764997a6a39f5052df86c4f26ff2d6359a
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610091328-D694SH/blueprint/resolved-snapshot.json
+    - old_digest: ba0781499f3718260821baf23ad8ee67b7be2256f4817e4a2df1a9e5e370c32d
+    - current_digest: ba0781499f3718260821baf23ad8ee67b7be2256f4817e4a2df1a9e5e370c32d
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610091328-D694SH
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610091328-D694SH
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert this task's semantic implementation commit and its two appended canonical evidence additions together; retain immutable task history. Rerun affected upstream-absent checks. Do not modify existing DONE history or migration commits."
   Findings: |-
     Authorization: continuing the user's explicitly resumed iterative Writer parity goal. Source inspection found omitted parent detaches and self throws in current TypeScript, whereas native SetDerivedFrom walks to the existing root and rejects any cycle with false. Full TS7/Istanbul validation already exists at XJTGF0; this leaf records fresh targeted Istanbul evidence only. Complete native cache invalidation/SwFormatChangeHint remains a bounded follow-up, not a blanket module parity claim.
@@ -115,6 +185,39 @@ Command: node apps/office/node_modules/.cache/parity-coverage/D694SH/current-cov
 Command: npm run format:check; npm run lint; npm run typecheck; npm run check:dependencies; npm run test:static; npm run check:docs; npm run check:file-size. Result: pass after bounded no-this-alias adjustment; checks and production build run upstream-absent. Final changed-format and canonical/evidence formatting checks also pass.
 Command: npm run inventory:registry:build; npm run check:source-tree; npm run check:source-provenance; npm run inventory:registry:check; node_modules/.bin/tsx scripts/generate-writer-ui-resources.ts --check. Result: pass with restored upstream for metadata only. Evidence:4deterministic views/0derived tracked changes;114source paths33retired roots;333modules242mapped74browser adaptations17local infrastructure;0semantic violations, overall parityReady=false.
 Command: preservation snapshot comparisons. Result: pass. Evidence:1832/1838tracked source/scripts/docs files unchanged;571/574prior source/tool test files unchanged with exactly3source-backed expectation migrations,3fresh files,2canonical records preserving every prior field/prefix and parent Findings prefix preserved. Full migration XJTGF0 is historical; no fresh full suite is claimed. Final review/semantic commit/clean state pending.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-09T13:49:50.068Z — VERIFY — ok
+
+By: CODER
+
+Note: All scoped native contract/history/mounted UI acceptances pass:189unique related cases,39current-source revalidations after lint adjustment. Entire current format.ts Istanbul81lines92statements14functions59branches strict100,0negative, no prior counters; raw whole-app partial threshold failure retained as wrapper scope error. Formatting/lint/TS7/boundaries/build/docs/size/tree/provenance/registry pass. Inventory and parent history preserved. Evidence: results.json; semantic a2e8c94a6db9. Full baseline remains historical XJTGF0; complete native caches/Which/hints and broad parity remain follow-ups.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T13:49:48.842Z, excerpt_hash=sha256:de56104cdc2aa07662221268fc36a9764997a6a39f5052df86c4f26ff2d6359a
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610091328-D694SH/blueprint/resolved-snapshot.json
+- old_digest: ba0781499f3718260821baf23ad8ee67b7be2256f4817e4a2df1a9e5e370c32d
+- current_digest: ba0781499f3718260821baf23ad8ee67b7be2256f4817e4a2df1a9e5e370c32d
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610091328-D694SH
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610091328-D694SH
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
