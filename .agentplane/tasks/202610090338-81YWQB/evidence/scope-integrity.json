@@ -1,0 +1,58 @@
+{
+  "base": "84fc47398ae44bd9bf840ba11a83b8037988e276",
+  "priorAcceptanceFiles": 663,
+  "entireByteIdenticalPriorAcceptanceFiles": 662,
+  "exactNativeNotifierContractMigrations": [
+    "apps/office/src/sw/source/core/attr/native-format-attribute-notify.test.ts"
+  ],
+  "otherOldTestBodiesByteIdentical": true,
+  "freshAcceptanceFiles": [
+    {
+      "path": "apps/office/src/svl/source/notify/native-svt-notifier.test.ts",
+      "sha256": "6dd0cf8ec5f7afc799b530624ef31365bf0a1f1b4b09b8a2b09ed5f11ecec4db",
+      "noOnlySkipTodo": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/native-format-notifier-store.test.ts",
+      "sha256": "def6ea638894d9fea936c1d9f2c7683bd1b286218f2b6a53192f0b1a32f299c5",
+      "noOnlySkipTodo": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/native-format-notifier.test.tsx",
+      "sha256": "dcb4817f842ce46e292a1d8e1647640c9a0ad31d1d97673e2cf54a1b86a0744e",
+      "noOnlySkipTodo": true
+    }
+  ],
+  "metadata": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "priorRecords": 318,
+      "newRecords": 3,
+      "priorFieldsStatusesDefaultsClassificationOrderAndEvidencePrefixesPreserved": true
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "priorRecords": 318,
+      "newRecords": 3,
+      "priorFieldsStatusesDefaultsClassificationOrderAndEvidencePrefixesPreserved": true
+    }
+  ],
+  "approvedSemanticPaths": [
+    "apps/office/src/svl/source/notify/broadcast.ts",
+    "apps/office/src/svl/source/notify/listener.ts",
+    "apps/office/src/sw/inc/calbck.ts",
+    "apps/office/src/sw/source/core/attr/format.ts",
+    "apps/office/src/sw/browser/presentation/writer-view-projection.ts",
+    "apps/office/src/sw/browser/presentation/writer-native-format-observer.ts",
+    "apps/office/src/sw/source/core/layout/tabfrm.ts",
+    "apps/office/src/sw/source/core/table/swtable.ts",
+    "apps/office/src/sw/source/core/undo/untbl.ts",
+    "apps/office/src/sw/source/core/attr/native-format-attribute-notify.test.ts",
+    "apps/office/src/svl/source/notify/native-svt-notifier.test.ts",
+    "apps/office/src/sw/browser/presentation/native-format-notifier-store.test.ts",
+    "apps/office/src/sw/browser/editor/native-format-notifier.test.tsx",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "unexpectedPaths": []
+}

@@ -1,0 +1,368 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sources": [
+    {
+      "path": "include/svl/broadcast.hxx",
+      "sha256": "56754e2ec1abe62d31e9d20e062f8abc8027b04196f4c52aa02ac7a94d175506",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "SvtBroadcaster",
+          "line": 28,
+          "allMatchingLines": [
+            28,
+            36,
+            52,
+            55,
+            56
+          ]
+        },
+        {
+          "identifier": "mnListenersFirstUnsorted",
+          "line": 53,
+          "allMatchingLines": [
+            53,
+            91
+          ]
+        }
+      ]
+    },
+    {
+      "path": "include/svl/listener.hxx",
+      "sha256": "5815fa75c320caae799ff9c9ba9ebb5faff97228cd724d4d2efddb834e451d8f",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "SvtListener",
+          "line": 29,
+          "allMatchingLines": [
+            29,
+            35,
+            50,
+            51,
+            52,
+            59
+          ]
+        },
+        {
+          "identifier": "QueryBase",
+          "line": 40,
+          "allMatchingLines": [
+            40,
+            44,
+            45,
+            63
+          ]
+        },
+        {
+          "identifier": "CopyAllBroadcasters",
+          "line": 59,
+          "allMatchingLines": [
+            59
+          ]
+        }
+      ]
+    },
+    {
+      "path": "svl/source/notify/broadcast.cxx",
+      "sha256": "c0906ba3f08dbb0cc8ed83014e9469f4bec58029b73493593154b978c94467da",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "SvtBroadcaster::Normalize",
+          "line": 86,
+          "allMatchingLines": [
+            86
+          ]
+        },
+        {
+          "identifier": "SvtBroadcaster::Broadcast",
+          "line": 207,
+          "allMatchingLines": [
+            207
+          ]
+        },
+        {
+          "identifier": "SvtBroadcaster::~SvtBroadcaster",
+          "line": 185,
+          "allMatchingLines": [
+            185
+          ]
+        }
+      ]
+    },
+    {
+      "path": "svl/source/notify/listener.cxx",
+      "sha256": "275e7b6079391b761cec5755ed777d197e789d0c83fc1267c2b18983fb089a0e",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "SvtListener::StartListening",
+          "line": 31,
+          "allMatchingLines": [
+            31
+          ]
+        },
+        {
+          "identifier": "SvtListener::CopyAllBroadcasters",
+          "line": 74,
+          "allMatchingLines": [
+            74
+          ]
+        },
+        {
+          "identifier": "SvtListener::BroadcasterDying",
+          "line": 56,
+          "allMatchingLines": [
+            56
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sw/inc/calbck.hxx",
+      "sha256": "73ea8d8a37531764eafc158e9caa0a902b84d599b45e15b4a0bcdc5587ebfb43",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "BroadcasterMixin",
+          "line": 102,
+          "allMatchingLines": [
+            102,
+            105,
+            106,
+            107,
+            243,
+            246
+          ]
+        },
+        {
+          "identifier": "BroadcastingModify",
+          "line": 245,
+          "allMatchingLines": [
+            245
+          ]
+        },
+        {
+          "identifier": "HasWriterListeners",
+          "line": 223,
+          "allMatchingLines": [
+            223
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sw/source/core/attr/calbck.cxx",
+      "sha256": "8d07e0396ce1f4f874685604d01af2a75d35a7e01845e4e4561cf86f0891e155",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "sw::BroadcastingModify::CallSwClientNotify",
+          "line": 295,
+          "allMatchingLines": [
+            295
+          ]
+        },
+        {
+          "identifier": "SwModify::SwClientNotify",
+          "line": 143,
+          "allMatchingLines": [
+            143,
+            252
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sw/inc/format.hxx",
+      "sha256": "df433fe1ded3ef36c674cc14dbccc44105f77116fbda41abd82215c7d8455819",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "sw::BroadcastingModify",
+          "line": 50,
+          "allMatchingLines": [
+            50
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sw/source/core/attr/format.cxx",
+      "sha256": "69f8fcbb4cf0375c74703fc88e53c98e6d11016320513923f4f3a71ff98c281a",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "SwFormat::SetFormatAttr",
+          "line": 460,
+          "allMatchingLines": [
+            460,
+            539
+          ]
+        },
+        {
+          "identifier": "SwFormat::ResetFormatAttr",
+          "line": 202,
+          "allMatchingLines": [
+            202,
+            632
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sw/source/core/layout/tabfrm.cxx",
+      "sha256": "d1d616197c6aeac1b1ba075995892b34cfdbea60838e88136f9bf4a52e90970f",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "HasWriterListeners",
+          "line": 4681,
+          "allMatchingLines": [
+            4681,
+            5849
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sw/source/core/table/swtable.cxx",
+      "sha256": "10c536056498dd001b3a5c75638040ee5daef966ede231c66947da8e704b1206",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "SwTableBox::ClaimFrameFormat",
+          "line": 2133,
+          "allMatchingLines": [
+            2133
+          ]
+        },
+        {
+          "identifier": "SwTableLine::ChgFrameFormat",
+          "line": 1510,
+          "allMatchingLines": [
+            1510
+          ]
+        },
+        {
+          "identifier": "HasWriterListeners",
+          "line": 233,
+          "allMatchingLines": [
+            233,
+            1473,
+            1516,
+            2105,
+            2179
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sw/source/core/undo/untbl.cxx",
+      "sha256": "147e1b9f9870416bc83d2b918a0621e810003594b9a95ede372518925b2c245b",
+      "pinBytesVerified": true,
+      "anchors": [
+        {
+          "identifier": "HasWriterListeners",
+          "line": 106,
+          "allMatchingLines": [
+            106,
+            1351
+          ]
+        }
+      ]
+    }
+  ],
+  "production": [
+    {
+      "path": "apps/office/src/svl/source/notify/broadcast.ts",
+      "sha256": "f9abe4fa558f44d571f9616f16519c62a1daa054ee5674d27f9ba41f040d4c77",
+      "physicalLines": 177
+    },
+    {
+      "path": "apps/office/src/svl/source/notify/listener.ts",
+      "sha256": "1a4d397aea1ae7b226a8a45429b4948ba6d904608e7aa830cea1f020fa378a32",
+      "physicalLines": 78
+    },
+    {
+      "path": "apps/office/src/sw/inc/calbck.ts",
+      "sha256": "bdacd480e4029353683ae35792d83fb2347fdd4d273333f9b3f8198ddc9cdc57",
+      "physicalLines": 237
+    },
+    {
+      "path": "apps/office/src/sw/source/core/attr/format.ts",
+      "sha256": "f148b55ac02e2d3c2e3666f142eec151b91adc50317f6a1e4237e8db5718b168",
+      "physicalLines": 155
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/writer-view-projection.ts",
+      "sha256": "b7ddb9d3dc48158d45df78f5b63658fadd46de9cadc572a99c6a6e39542866cc",
+      "physicalLines": 659
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/writer-native-format-observer.ts",
+      "sha256": "d031653626f8972b5ce2e3f19fa58830f746bb68a7738a87c1eaf0efe8a151a2",
+      "physicalLines": 65
+    },
+    {
+      "path": "apps/office/src/sw/source/core/layout/tabfrm.ts",
+      "sha256": "1b39ba0ee69a76c91e27e797a7880668e6722771bce69715599353f4394aeb60",
+      "physicalLines": 198
+    },
+    {
+      "path": "apps/office/src/sw/source/core/table/swtable.ts",
+      "sha256": "b0ea03bad983f666eb32fe80ff637daceac0783d62a8ff100e0fe28d0a292866",
+      "physicalLines": 957
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/untbl.ts",
+      "sha256": "e41c1c4f77fa0aa6b9c2b5c9c671913a42ba0816cf8145d0b1d8869a8826e7d8",
+      "physicalLines": 401
+    }
+  ],
+  "protectedIO": [
+    {
+      "path": "apps/office/src/sw/browser/storage/writer-odt-store.ts",
+      "sha256": "0fb4ebffca5a00fe63ff327379305d64143c7014dace0a7e13edb8c0c241232e",
+      "baselineByteIdentical": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/workflows/writer-odt-io.ts",
+      "sha256": "7c214afab59dbc5df1087f107e2b7bf2bf01d8623a2995e8eb19a45575361306",
+      "baselineByteIdentical": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/WriterFileDialog.tsx",
+      "sha256": "50ad125f5a254eb1772b62abe3681e4632df6c7870ea9647622b2268394c88c3",
+      "baselineByteIdentical": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts",
+      "sha256": "060a06dd9a77e530de1756b2f4c4384e6b2ddd1ee20c68fb175daab2eeb99ee7",
+      "baselineByteIdentical": true
+    }
+  ],
+  "writerUI": {
+    "path": "apps/office/src/sw/browser/presentation/writer-view.tsx",
+    "sha256": "782755425f440a2438a2994ee429a6ee7b37e4f65ca8e5f1855c9d18db8f9de1",
+    "entireSourceByteIdentical": true
+  },
+  "parent": {
+    "characters": 717133,
+    "sha256": "c6c4cc81526cf58740203fd8131532e46f03ae6f45ef10991cecac95a735bf3a",
+    "unchanged": true
+  },
+  "stash": {
+    "commit": "c85f4a0e453dfd06d6e199554784f2c286737472",
+    "preserved": true
+  },
+  "sourceBoundContracts": [
+    "Native Svt listener M:N registration, default shallow declaration copy, CopyAllBroadcasters self-clear and reciprocal copy; broadcaster copies original listeners reciprocally. Snapshot membership retains ordinary removed listeners for current dispatch; normalized allocation-identity pointer ordering and tombstone slot reuse preserve original references.",
+    "PrepareForDestruction only announces destruction. Explicit JS Dispose broadcasts Dying and unregisters original listeners, skipping prepared removals. Packed pointer bits, actual C++ addresses, partial-sort/cache performance, mutable vector and debug assertions remain unverified browser boundaries.",
+    "BroadcasterMixin composition and BroadcastingModify deliver Writer clients first and original exact hints to separate Svt observers. Existing browser transaction terminal flush delivers one original accepted batch; this adaptation is explicit. HasWriterListeners stays independent of Svt registrations; native last-writer row/cell/history cleanup deletes original formats.",
+    "SwFormat derives from BroadcastingModify and removes NotifyAttributeSet and all generic attribute device bridge calls. Browser native observer receives actual original style/table/row/cell notifiers and original replacement hints, invalidating native root and Sfx bindings without document writes or TextRuns conversion; final structure/history/replacement invalidations reconcile actual sources. Silent raw ClaimFrameFormat without document invalidation and full native physical-client layout integration remain unverified.",
+    "Exactly one old device contract migrates to original notifier/order/lock/no-document-signal semantics while preserving native attribute/identity/equality assertions.662other prior acceptance files byte-identical,3fresh files,666total;318old metadata fields/status/default/classification/order/evidence retained,3new unverified records321total.",
+    "Unique1596app cases including18fresh and13Chromium pass upstream physically absent/restored finally. No unchanged passing replays. Actual all-four100 app318files/inventory38files with whole byte-identical source/maps or complete unchanged native declaration/body/enclosing branch/location transfer. Full cadence last237,next247; broad goal incomplete."
+  ]
+}

@@ -140,13 +140,13 @@ export class SwTableBox extends SwClient {
       throw new Error("Writer cell format belongs to another document.");
     if (needToReregister) original.CallSwClientNotify(new TableBoxFormatChanged(format, this));
     this.RegisterToModify(format);
-    if (!original.HasListeners()) original.DisposeModify();
+    if (!original.HasWriterListeners()) original.DisposeModify();
   }
   /** Releases the native box and deletes only a final-client format. @returns Nothing. */
   public override Dispose(): void {
     const format = this.GetRegisteredIn();
     super.Dispose();
-    if (format !== undefined && !format.HasListeners()) format.DisposeModify();
+    if (format !== undefined && !format.HasWriterListeners()) format.DisposeModify();
   }
   /** Reads original native section start. @returns Section start. */
   public GetStartNode(): SwTableBoxStartNode {
@@ -256,13 +256,13 @@ export class SwTableLine extends SwClient {
     const original = this.GetFrameFormat();
     original.CallSwClientNotify(new TableLineFormatChanged(format, this));
     this.RegisterToModify(format);
-    if (!original.HasListeners()) original.DisposeModify();
+    if (!original.HasWriterListeners()) original.DisposeModify();
   }
   /** Ends original row client lifetime without touching surviving format peers. @returns Nothing. */
   public override Dispose(): void {
     const format = this.GetRegisteredIn();
     super.Dispose();
-    if (format !== undefined && !format.HasListeners()) format.DisposeModify();
+    if (format !== undefined && !format.HasWriterListeners()) format.DisposeModify();
   }
   /** Exposes authored row values only at explicit construction and transport boundaries. @returns Independent direct values. */
   public GetFormat(): SwTableLineFormatValue {

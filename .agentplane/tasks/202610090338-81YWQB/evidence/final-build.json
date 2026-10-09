@@ -1,0 +1,9 @@
+{
+  "command": "npm run test:static",
+  "profile": "upstream-absent",
+  "reason": "Rebuild final observer source after removing unsupported disposed-owner fallback; no runtime passing-case replay",
+  "exit": 0,
+  "sha256": "e9e54a2de440e1764d8516ee39366c1ae0e8097b44260fcecc76945691df3b72",
+  "bytes": 1443,
+  "vendorRestored": true
+}

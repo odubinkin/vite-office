@@ -1,0 +1,447 @@
+{
+  "proof": "Actual counters with complete identical source/maps or complete contiguous declaration/body/enclosing branch/location proofs; focused skips retained as skipped.",
+  "previousVerified": {
+    "app": {
+      "map": "5TDXPQ.app-final.json",
+      "proof": "5TDXPQ.app-proof.json",
+      "mapHash": "4611bf9a34452655d4e7af559ca4a067b75e389e9bc8064cd48775f5cbfaf153",
+      "proofHash": "f8cf5860b1a98e4e99d61efbed026c99381889c7ca9345d9396ca98dc2d9eeff"
+    },
+    "inventory": {
+      "map": "5TDXPQ.inventory-final.json",
+      "proof": "5TDXPQ.inventory-proof.json",
+      "mapHash": "ce85b688e2bd5167b3b4d96ac3780553717ec54e0fe7e6574f7d6ee26bb30c41",
+      "proofHash": "5c43a8f01265876178c73869204175bfde82507529383d6eac361ff12ce0b0b8"
+    }
+  },
+  "profile": "Targeted new and related app tests; unchanged inventory uses whole prior actual certificate only after exact current source and maps equality. Full cadence237 to247.",
+  "app": {
+    "coverage": {
+      "lines": {
+        "total": 18105,
+        "covered": 18105,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 19876,
+        "covered": 19876,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 4554,
+        "covered": 4554,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 14568,
+        "covered": 14568,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "mapSHA256": "dd9b77bacab4323defdc7a854c231ead4e180e27f8e24c4517bc2c9841c7726e",
+    "proofSHA256": "a23ea300707fdfaaf62923e64b4e7c29752747540ba4ea6cf74f4330bcadcf68",
+    "files": 318,
+    "invalidWholeFallbacks": [
+      {
+        "path": "apps/office/src/sw/source/core/layout/paintfrm.ts",
+        "reason": "V8 raw inferred else counter is negative; use entire prior verified current-byte-identical source and entire maps/counters, never sanitize individual counts",
+        "priorMap": "5TDXPQ.app-final.json",
+        "priorMapSHA256": "4611bf9a34452655d4e7af559ca4a067b75e389e9bc8064cd48775f5cbfaf153",
+        "discardedInvalidAggregateSHA256": "642c7aef31dbcc64a5b00551be4b0881da608c2a4abff71b6c09a2e6f2af2246",
+        "negativeCounts": [
+          -60
+        ]
+      }
+    ],
+    "priorRegionTransfers": [
+      {
+        "path": "apps/office/src/sw/browser/presentation/writer-view-projection.ts",
+        "priorSourceSHA256": "663bfc2891776fdf5ede2802afd4eb08cd7f959601ef61ea27dfd0a4743bdbde",
+        "currentSourceSHA256": "b7ddb9d3dc48158d45df78f5b63658fadd46de9cadc572a99c6a6e39542866cc",
+        "priorMap": "5TDXPQ.app-final.json",
+        "priorMapSHA256": "4611bf9a34452655d4e7af559ca4a067b75e389e9bc8064cd48775f5cbfaf153",
+        "regions": [
+          {
+            "oldStart": 1,
+            "oldEnd": 1,
+            "newStart": 1,
+            "newEnd": 1,
+            "byteLength": 93,
+            "sha256": "f44b5746c616158af9defe497362d56ab0a1a7a3d13095464bfec32e051db650"
+          },
+          {
+            "oldStart": 2,
+            "oldEnd": 534,
+            "newStart": 3,
+            "newEnd": 535,
+            "byteLength": 24202,
+            "sha256": "864230f348f16c41fe1df1b9c4cc354c575ff6ad7d3df79aa36760e94754197d"
+          },
+          {
+            "oldStart": 535,
+            "oldEnd": 540,
+            "newStart": 537,
+            "newEnd": 542,
+            "byteLength": 288,
+            "sha256": "99b6747ba502f77893dfa0bb762bc88dd0630d2ec736a1c1e74abded4d0dc825"
+          },
+          {
+            "oldStart": 541,
+            "oldEnd": 545,
+            "newStart": 544,
+            "newEnd": 548,
+            "byteLength": 177,
+            "sha256": "c72b6575c722d88de4f314f051d76c4b80882c0bb1557e655a8088575e14a81a"
+          },
+          {
+            "oldStart": 546,
+            "oldEnd": 588,
+            "newStart": 550,
+            "newEnd": 592,
+            "byteLength": 1796,
+            "sha256": "3b1a3764677d7703b663ba7f8d1e27757a1f6d64d342d6705e9be5541b81ba57"
+          },
+          {
+            "oldStart": 589,
+            "oldEnd": 655,
+            "newStart": 594,
+            "newEnd": 660,
+            "byteLength": 2754,
+            "sha256": "bc2218c7dc121d5af2d9b0f531de0d40c5828daaa0d35aa537902ac8f65a8b2d"
+          }
+        ],
+        "counts": {
+          "statements": 96,
+          "functions": 26,
+          "branches": 50
+        },
+        "generatedFunctionDisplayLabels": []
+      },
+      {
+        "path": "apps/office/src/sw/inc/calbck.ts",
+        "priorSourceSHA256": "188ffc870def0d153e7fa988b7f1b4a0535a15ad2d77d9980ae925f49808c317",
+        "currentSourceSHA256": "bdacd480e4029353683ae35792d83fb2347fdd4d273333f9b3f8198ddc9cdc57",
+        "priorMap": "5TDXPQ.app-final.json",
+        "priorMapSHA256": "4611bf9a34452655d4e7af559ca4a067b75e389e9bc8064cd48775f5cbfaf153",
+        "regions": [
+          {
+            "oldStart": 1,
+            "oldEnd": 3,
+            "newStart": 1,
+            "newEnd": 3,
+            "byteLength": 201,
+            "sha256": "4f90c919fb747aae235ce780ac8843ec6e131324237a34ee763f41beda4e8d0c"
+          },
+          {
+            "oldStart": 4,
+            "oldEnd": 122,
+            "newStart": 5,
+            "newEnd": 123,
+            "byteLength": 5170,
+            "sha256": "e8264c24fd71b6b7232f22263ac4c80aa0708863db65998b5ede44a32ae12493"
+          },
+          {
+            "oldStart": 123,
+            "oldEnd": 176,
+            "newStart": 129,
+            "newEnd": 182,
+            "byteLength": 2004,
+            "sha256": "f73316bcac40102cb3f232f9f0045bb6dc484abb716e2be5ed0bd1379bf31072"
+          },
+          {
+            "oldStart": 177,
+            "oldEnd": 199,
+            "newStart": 216,
+            "newEnd": 238,
+            "byteLength": 979,
+            "sha256": "384a6783fcf8e28c02dbb69ef3020856b5549dd173b86bb3180172515515e5ab"
+          }
+        ],
+        "counts": {
+          "statements": 87,
+          "functions": 25,
+          "branches": 18
+        },
+        "generatedFunctionDisplayLabels": [
+          {
+            "prior": "(anonymous_23)",
+            "current": "(anonymous_29)",
+            "fullDeclarationSignatureAndBodySHA256": "5b16c3f891045add8679ad5c71d70e717eb613b863611c854f5d57d4ea563d0e",
+            "allLocationsAndEnclosingBranchesVerified": true
+          }
+        ]
+      },
+      {
+        "path": "apps/office/src/sw/source/core/attr/format.ts",
+        "priorSourceSHA256": "705b7a8b2a8b54c2e216b71caefa477f67ffc1546fe38fe50eec4fa346612dd3",
+        "currentSourceSHA256": "f148b55ac02e2d3c2e3666f142eec151b91adc50317f6a1e4237e8db5718b168",
+        "priorMap": "5TDXPQ.app-final.json",
+        "priorMapSHA256": "4611bf9a34452655d4e7af559ca4a067b75e389e9bc8064cd48775f5cbfaf153",
+        "regions": [
+          {
+            "oldStart": 1,
+            "oldEnd": 4,
+            "newStart": 1,
+            "newEnd": 4,
+            "byteLength": 136,
+            "sha256": "f0a4d222fca32392e20acba4b02c117d051808432a2c0f0d97589b05a70a8b35"
+          },
+          {
+            "oldStart": 6,
+            "oldEnd": 11,
+            "newStart": 6,
+            "newEnd": 11,
+            "byteLength": 379,
+            "sha256": "0b6381fed1d092d33ee4eef24b5270b329f0e7fef85834c9cb8700b0de5b0591"
+          },
+          {
+            "oldStart": 13,
+            "oldEnd": 74,
+            "newStart": 13,
+            "newEnd": 74,
+            "byteLength": 2711,
+            "sha256": "a76fa6b29ef24fd355cb001d95f57f5bff7c4db2948ec88449781911e2a2ffc1"
+          },
+          {
+            "oldStart": 76,
+            "oldEnd": 88,
+            "newStart": 75,
+            "newEnd": 87,
+            "byteLength": 674,
+            "sha256": "8d8f3881fdac394ded0d26d80a1a2b8469be70b5aa6951f93e9cbc2ca86c58be"
+          },
+          {
+            "oldStart": 90,
+            "oldEnd": 107,
+            "newStart": 88,
+            "newEnd": 105,
+            "byteLength": 894,
+            "sha256": "0983dd9cb328a74475921bdf6b447e975e50b2ea677e2ee77031730a0fb89149"
+          },
+          {
+            "oldStart": 109,
+            "oldEnd": 119,
+            "newStart": 106,
+            "newEnd": 116,
+            "byteLength": 628,
+            "sha256": "cc8bf16cd4a2e166458915a416729f463f40a7b7e9c0e54ef233f3cef47148ef"
+          },
+          {
+            "oldStart": 121,
+            "oldEnd": 151,
+            "newStart": 117,
+            "newEnd": 147,
+            "byteLength": 1256,
+            "sha256": "26251314b7baa46b501dbceec32e08baafc9362954251a431efed96497b6fd40"
+          },
+          {
+            "oldStart": 160,
+            "oldEnd": 168,
+            "newStart": 148,
+            "newEnd": 156,
+            "byteLength": 286,
+            "sha256": "962e2d457f462463522ab5e0c6aca3276abdf53097ebce3d75e2d6752428ea04"
+          }
+        ],
+        "counts": {
+          "statements": 40,
+          "functions": 10,
+          "branches": 22
+        },
+        "generatedFunctionDisplayLabels": []
+      },
+      {
+        "path": "apps/office/src/sw/source/core/layout/tabfrm.ts",
+        "priorSourceSHA256": "1d18cfc1cb96ed6555e5d6dc840f54ad92695619353d9eacdc623d01f1e4a895",
+        "currentSourceSHA256": "1b39ba0ee69a76c91e27e797a7880668e6722771bce69715599353f4394aeb60",
+        "priorMap": "5TDXPQ.app-final.json",
+        "priorMapSHA256": "4611bf9a34452655d4e7af559ca4a067b75e389e9bc8064cd48775f5cbfaf153",
+        "regions": [
+          {
+            "oldStart": 1,
+            "oldEnd": 24,
+            "newStart": 1,
+            "newEnd": 24,
+            "byteLength": 1188,
+            "sha256": "b89d35a838d608de42f21c6fb0040d2e2b925f04f4c1b6181c33534b18809532"
+          },
+          {
+            "oldStart": 26,
+            "oldEnd": 73,
+            "newStart": 26,
+            "newEnd": 73,
+            "byteLength": 2408,
+            "sha256": "7ef059cbaedd9bf0bcaa694938cf620a6b3011f0fa982e5c1e4a4c3f94e76383"
+          },
+          {
+            "oldStart": 75,
+            "oldEnd": 199,
+            "newStart": 75,
+            "newEnd": 199,
+            "byteLength": 4753,
+            "sha256": "029e589ddc69cb3fc8e468021c7883225d122ee2c38574d5aa15dbcf155e877e"
+          }
+        ],
+        "counts": {
+          "statements": 68,
+          "functions": 16,
+          "branches": 22
+        },
+        "generatedFunctionDisplayLabels": []
+      },
+      {
+        "path": "apps/office/src/sw/source/core/table/swtable.ts",
+        "priorSourceSHA256": "d980240fd0f0f61a39404b48386e7e3dee6310a4609765be210477a8865fe394",
+        "currentSourceSHA256": "b0ea03bad983f666eb32fe80ff637daceac0783d62a8ff100e0fe28d0a292866",
+        "priorMap": "5TDXPQ.app-final.json",
+        "priorMapSHA256": "4611bf9a34452655d4e7af559ca4a067b75e389e9bc8064cd48775f5cbfaf153",
+        "regions": [
+          {
+            "oldStart": 1,
+            "oldEnd": 142,
+            "newStart": 1,
+            "newEnd": 142,
+            "byteLength": 6357,
+            "sha256": "7fd52a75e7c3ac403106335c5b2761c7cfd6bda4ff9326976768c50f1129e248"
+          },
+          {
+            "oldStart": 144,
+            "oldEnd": 148,
+            "newStart": 144,
+            "newEnd": 148,
+            "byteLength": 194,
+            "sha256": "8eaecb23a21525bd94e56840aaa7e26667c53a40549448e68f2c1eb9d9c71f11"
+          },
+          {
+            "oldStart": 150,
+            "oldEnd": 258,
+            "newStart": 150,
+            "newEnd": 258,
+            "byteLength": 5009,
+            "sha256": "83f66026d7d80482094b14d6b372d428a10847745ef8f2d0db4a40e7e93dcc69"
+          },
+          {
+            "oldStart": 260,
+            "oldEnd": 264,
+            "newStart": 260,
+            "newEnd": 264,
+            "byteLength": 205,
+            "sha256": "e54b8102048386cfc7e2c102ec458b104292bfcc3df89edb77105c01d48f7897"
+          },
+          {
+            "oldStart": 266,
+            "oldEnd": 958,
+            "newStart": 266,
+            "newEnd": 958,
+            "byteLength": 29369,
+            "sha256": "c34138907c6c2ebe8d574b813adcbf1dc48451b91ba6e20f74233a549ec39442"
+          }
+        ],
+        "counts": {
+          "statements": 466,
+          "functions": 74,
+          "branches": 159
+        },
+        "generatedFunctionDisplayLabels": []
+      },
+      {
+        "path": "apps/office/src/sw/source/core/undo/untbl.ts",
+        "priorSourceSHA256": "6401650ca2c3b8bc11e5d95299bde432cb51eb551f419734bf2308cc61271089",
+        "currentSourceSHA256": "e41c1c4f77fa0aa6b9c2b5c9c671913a42ba0816cf8145d0b1d8869a8826e7d8",
+        "priorMap": "5TDXPQ.app-final.json",
+        "priorMapSHA256": "4611bf9a34452655d4e7af559ca4a067b75e389e9bc8064cd48775f5cbfaf153",
+        "regions": [
+          {
+            "oldStart": 1,
+            "oldEnd": 110,
+            "newStart": 1,
+            "newEnd": 110,
+            "byteLength": 5062,
+            "sha256": "40aaca58ed7b650cb78e90d71dbf72fb2b5ea969b403667de6148fff84ebd07c"
+          },
+          {
+            "oldStart": 112,
+            "oldEnd": 402,
+            "newStart": 112,
+            "newEnd": 402,
+            "byteLength": 12757,
+            "sha256": "342e8b6a7daa39d466d9420aa786c056cbe2ac4fd913e276ddf0c54254b54ad8"
+          }
+        ],
+        "counts": {
+          "statements": 150,
+          "functions": 38,
+          "branches": 14
+        },
+        "generatedFunctionDisplayLabels": []
+      }
+    ],
+    "wholeFiles": 317,
+    "transfers": [
+      {
+        "path": "apps/office/src/sw/browser/presentation/writer-native-format-observer.ts",
+        "initialSourceSHA256": "7a693d084a55fc1202c56780c4790c63339159ef7e1a45cbb928e9a41ad10cb5",
+        "currentSourceSHA256": "d031653626f8972b5ce2e3f19fa58830f746bb68a7738a87c1eaf0efe8a151a2",
+        "regionCount": 2,
+        "counts": {
+          "statements": 18,
+          "functions": 4,
+          "branches": 7
+        }
+      }
+    ],
+    "gaps": []
+  },
+  "inventory": {
+    "coverage": {
+      "lines": {
+        "total": 1464,
+        "covered": 1464,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 1523,
+        "covered": 1523,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 384,
+        "covered": 384,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 1081,
+        "covered": 1081,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "mapSHA256": "a0e151c2ecef06fb5b54848945015a70f568780395767cb413ffddc02a8de410",
+    "proofSHA256": "5c43a8f01265876178c73869204175bfde82507529383d6eac361ff12ce0b0b8",
+    "files": 38,
+    "invalidWholeFallbacks": [],
+    "priorRegionTransfers": [],
+    "wholeFiles": 38,
+    "transfers": [],
+    "gaps": []
+  }
+}

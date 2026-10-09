@@ -22,7 +22,7 @@ export class SwRowFrame extends SwLayoutFrame {
   public override DestroyImpl(): void {
     const format = this.GetRegisteredIn();
     super.Dispose();
-    if (format !== undefined && !format.HasListeners()) format.DisposeModify();
+    if (format !== undefined && !format.HasWriterListeners()) format.DisposeModify();
     super.DestroyImpl();
   }
   /** Ends native frame lifetime through the original destruction body. @returns Nothing. */
@@ -71,7 +71,7 @@ export class SwCellFrame extends SwLayoutFrame {
   public override DestroyImpl(): void {
     const format = this.GetRegisteredIn();
     super.Dispose();
-    if (format !== undefined && !format.HasListeners()) format.DisposeModify();
+    if (format !== undefined && !format.HasWriterListeners()) format.DisposeModify();
     super.DestroyImpl();
   }
   /** Ends native frame lifetime through its destruction body. @returns Nothing. */

@@ -108,7 +108,7 @@ export class SwUndoInsTable extends SwUndo {
 
 /** Deletes a native frame format after its final represented client is removed. @param format - Prior native owner. @returns Nothing. */
 function KillEmptyFrameFormat(format: SwFrameFormat): void {
-  if (!format.HasListeners()) format.DisposeModify();
+  if (!format.HasWriterListeners()) format.DisposeModify();
 }
 
 /** Retains table attributes only, corresponding to native SaveTable's represented flat-grid slice. */

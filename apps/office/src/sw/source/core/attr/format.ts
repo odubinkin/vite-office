@@ -2,14 +2,14 @@
  * @fileoverview Reimplements bounded SwFormat attribute ownership and derivation from pinned `sw/source/core/attr/format.cxx`.
  */
 
-import { SwModify, ClientNotifyAttrChg } from "../../../inc/calbck";
+import { SwModify, BroadcastingModify, ClientNotifyAttrChg } from "../../../inc/calbck";
 import type { SfxItemSet, WhichRangesContainer } from "../../../../svl/source/items/itemset";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { AttrSetChangeHint, SwAttrSetChg, type SwModelHint } from "../../../inc/hints";
 import { SwAttrSet, type SwAttrPool } from "./swatrset";
 
 /** Base class for identity-bearing Writer styles and formats. */
-export class SwFormat extends SwModify {
+export class SwFormat extends BroadcastingModify {
   private readonly attributeSet: SwAttrSet;
   private derivedFrom: SwFormat | undefined;
   private autoFormat = true;
@@ -72,7 +72,6 @@ export class SwFormat extends SwModify {
     const changed = this.attributeSet.Put_BC(item, oldSet, newSet);
     if (changed) {
       ClientNotifyAttrChg(this, this.attributeSet, oldSet, newSet);
-      this.NotifyAttributeSet();
     }
     return changed;
   }
@@ -86,7 +85,6 @@ export class SwFormat extends SwModify {
     const changed = this.attributeSet.Put_BC(source, oldSet, newSet);
     if (changed) {
       ClientNotifyAttrChg(this, this.attributeSet, oldSet, newSet);
-      this.NotifyAttributeSet();
     }
     return changed;
   }
@@ -105,7 +103,6 @@ export class SwFormat extends SwModify {
     const changed = this.attributeSet.ClearItem_BC(which, last, oldSet, newSet) !== 0;
     if (changed) {
       ClientNotifyAttrChg(this, this.attributeSet, oldSet, newSet);
-      this.NotifyAttributeSet();
     }
     return changed;
   }
@@ -117,7 +114,6 @@ export class SwFormat extends SwModify {
       newSet = new SwAttrSet(this.attributeSet.GetPool(), this.attributeSet.GetRanges());
     if (this.attributeSet.ClearItem_BC(0, oldSet, newSet) !== 0) {
       ClientNotifyAttrChg(this, this.attributeSet, oldSet, newSet);
-      this.NotifyAttributeSet();
     }
     return newSet.Count();
   }
@@ -147,14 +143,6 @@ export class SwFormat extends SwModify {
   /** Changes the auto-format flag. @param autoFormat - New flag. @returns Nothing. */
   public SetAuto(autoFormat: boolean): void {
     this.autoFormat = autoFormat;
-  }
-
-  /** Invalidates the existing browser device after native clients without recording another document mutation. @returns Nothing. */
-  protected NotifyAttributeSet(): void {
-    this.attributeSet.GetDoc().GetDocumentStateManager().CallSwClientNotify({
-      formatId: this.formatName,
-      kind: "attribute-set-changed",
-    });
   }
 
   /** Emits one format inheritance/name hint through the document broadcaster. @returns Nothing. */

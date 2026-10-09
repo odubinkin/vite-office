@@ -1,5 +1,6 @@
 /** @fileoverview Verifies native original format attribute changes, locking and inherited delta filtering without upstream runtime. */
 import { expect, it, vi } from "vitest";
+import { SvtListener, type SvtDyingHint } from "../../../../svl/source/notify/listener";
 import { SwDoc } from "../doc/doc";
 import { SwAttrSet } from "./swatrset";
 import { SwClient, SwModify, ClientNotifyAttrChg } from "../../../inc/calbck";
@@ -65,7 +66,7 @@ it("native change descriptors borrow originals and copy only independently owned
   expect(copy.Count()).toBe(0);
   expect(borrowed.Count()).toBe(1);
 });
-it("single native item mutation publishes precise effective deltas to original clients before the device notification", /** Checks storage, lock and original hint identity. @returns Nothing. */ () => {
+it("single native item mutation publishes precise effective deltas to original clients before the native notifier", /** Checks storage, lock and original hint identity. @returns Nothing. */ () => {
   const doc = new SwDoc(),
     format = doc.MakeTableBoxFormat(),
     events: unknown[] = [];
@@ -86,18 +87,20 @@ it("single native item mutation publishes precise effective deltas to original c
   a.RegisterToModify(format);
   const b = observe(format);
   const revision = doc.GetDocumentStateManager().GetModelRevision();
-  const device = new SwClient(
-    /** Observes the actual device broadcaster after native clients. @param source - Original broadcaster. @param hint - Original model hint. @returns Nothing. */
-    (source, hint) => {
-      expect(source).toBe(doc.GetDocumentStateManager());
-      if (hint.kind === "attribute-set-changed")
-        events.push(["device", doc, format.IsModifyLocked()]);
-    },
-  );
-  device.RegisterToModify(doc.GetDocumentStateManager());
+  const documentSignal = vi.spyOn(doc.GetDocumentStateManager(), "CallSwClientNotify");
+  /** Original native notifier receiver, independent of Writer clients. */
+  class Observer extends SvtListener<SwModelHint> {
+    /** Observes the same original native hint after Writer clients under the modify lock. @param hint - Original native notification. @returns Nothing. */
+    public override Notify(hint: SwModelHint | SvtDyingHint): void {
+      events.push(["notifier", native(hint as SwModelHint), format.IsModifyLocked()]);
+    }
+  }
+  const device = new Observer();
+  device.StartListening(format.GetNotifier());
   expect(format.SetFormatAttr(new SwFormatVertOrient(720, 3, 7))).toBe(true);
   expect(events[0]).toEqual(["native", format, b.hints[0], true]);
-  expect(events[1]).toEqual(["device", doc, false]);
+  expect(events[1]).toEqual(["notifier", b.hints[0], true]);
+  expect(documentSignal).not.toHaveBeenCalled();
   expect(events).toHaveLength(2);
   expect(doc.GetDocumentStateManager().GetModelRevision()).toBe(revision);
   expect(format.SetFormatAttr(new SwFormatVertOrient(720, 3, 7))).toBe(false);
@@ -106,6 +109,7 @@ it("single native item mutation publishes precise effective deltas to original c
   a.Dispose();
   b.client.Dispose();
   device.Dispose();
+  documentSignal.mockRestore();
 });
 it("native multi-item changes and reset ranges retain inherited old and effective default new values", /** Checks atomic deltas, no-ops, and reset return contracts. @returns Nothing. */ () => {
   const doc = new SwDoc(),

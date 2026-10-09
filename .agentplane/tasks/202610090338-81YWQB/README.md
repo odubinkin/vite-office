@@ -4,7 +4,7 @@ title: "Connect Writer UI to native format notifiers and remove generic attribut
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: approved native notifier/UI subscription scope under the user's continuing parity goal. Preserve IO/recovery exceptions and old acceptance; remove only generic format attribute-device bridge, verify original native ownership/order/lifetime/main UI without upstream runtime."
 doc_version: 3
-doc_updated_at: "2026-10-09T03:40:05.587Z"
+doc_updated_at: "2026-10-09T04:04:08.323Z"
 doc_updated_by: "CODER"
 description: "Iteration246: port native Svt broadcaster/listener and BroadcastingModify notifier channel, subscribe original row/cell/style formats at WriterViewStore without keeping writer formats alive, and remove generic SwFormat attribute device signal. Preserve registered IO/recovery/settings deviations; exact native hints/lifetimes, structural rebind, history and main UI verified without upstream runtime. Full cadence237→247."
 sections:
@@ -67,7 +67,14 @@ sections:
     6. Restored generator/source-tree/provenance/inventory invariants/parity; doctor/routing/diff/artifact audits. Source/pin/IO4/whole writer-view/stash/parent717133/hash c6c4cc81526cf58740203fd8131532e46f03ae6f45ef10991cecac95a735bf3a retained. AP bounded English MD/JSON identifiers/hashes/counts only, raw ignored app cache. Actual implementation-SHA explicitly non-independent EVALUATOR reconstructs4certificates byte-identically. Clean meaningful close; DONE immutable; parent exact-prefix append, goal remains incomplete.
   Verification: "Pending implementation and exact new/related verification; full246 skipped by explicit user cadence237→247."
   Rollback Plan: "Revert only the scoped semantic implementation commit if required; preserve task history, previous DONE leaves and registered IO/recovery/settings deviations."
-  Findings: "Source inspection confirms separate native BroadcastingModify/GetNotifier/SvtListener channel and SwFormat inheritance. Svt listeners do not retain writer-client ownership. Existing SwModify transaction representation is a browser adaptation; exact native delivery ordering is preserved at terminal dispatch. Guessed read-only brdcst/rootfrm and TS writer-module paths failed; rg discovery resolved actual SfxBroadcaster/newfrm/TSX paths and route recomputed before mutation."
+  Findings: |-
+    Source inspection confirms separate native BroadcastingModify/GetNotifier/SvtListener channel and SwFormat inheritance. Svt listeners do not retain writer-client ownership. Existing SwModify transaction representation is a browser adaptation; exact native delivery ordering is preserved at terminal dispatch. Guessed read-only brdcst/rootfrm and TS writer-module paths failed; rg discovery resolved actual SfxBroadcaster/newfrm/TSX paths and route recomputed before mutation.
+
+    Iteration246 implementation and targeted verification complete. Svt observers are separate from native Writer clients; SwFormat uses BroadcastingModify and no generic NotifyAttributeSet bridge remains. Direct row/cell/style native writes refresh original layout/Sfx/browser caches without document signals or revision changes. Native original shared claims/document history/replacement/deletion/close verified. Raw direct silent ClaimFrameFormat without final document invalidation and full native physical frame integration remain unverified, as upstream emits no Svt change on that silent claim. Browser Sync assumes current live native model owners instead of an unsupported disposed-format fallback.
+
+    Observation: read-only guessed upstream path and two script syntax errors occurred before semantic mutations; route revalidated. Initial lint/JSDoc errors repaired within scope. Initial runtime1590passed4freshfailed:two fixtures lacked the native following paragraph needed for table deletion,one retained a detached DOM element after a fixed-height subtree remount,one independent observer expected Sync before calling it. All four corrected without changing old accepted values. Closure1 runs exactly4failed plus2new native Svt lower-bound/shallow-copy release-guard cases;6passed12skipped,no unchanged passing replay. Initial and closure threshold exit1 retained; final actual certificate all-four100. Source parity metadata initially used an invalid new browser divergence enum; corrected only the new record to native inventory B. Recoverable validation errors resolved; no genuine external blocker.
+
+    Evidence:1596unique app cases,18fresh,13Chromium. App318files18105lines19876statements4554functions14568branches;inventory38files1464/1523/384/1081;all-four100. Six statics, final upstream-absent build/static and restored source/provenance/invariants/parity pass. Source pin11files verified against commit9bc445578031fecf56086729d8e4940c77e14d65;IO4/whole writer-view/stash retained.662other old acceptance files byte-identical;1exact original-native notifier contract migration,3newfiles666total.318old metadata fields/order/status/default/classification/evidenceprefixes preserved,3newunverified321total. No source/Python/scripts/raw maps/results in AP; raw cache ignored. Full suite intentionally skipped user cadence:last237,next247. Broad goal remains active/incomplete.
 id_source: "generated"
 ---
 ## Summary
@@ -116,3 +123,9 @@ Revert only the scoped semantic implementation commit if required; preserve task
 ## Findings
 
 Source inspection confirms separate native BroadcastingModify/GetNotifier/SvtListener channel and SwFormat inheritance. Svt listeners do not retain writer-client ownership. Existing SwModify transaction representation is a browser adaptation; exact native delivery ordering is preserved at terminal dispatch. Guessed read-only brdcst/rootfrm and TS writer-module paths failed; rg discovery resolved actual SfxBroadcaster/newfrm/TSX paths and route recomputed before mutation.
+
+Iteration246 implementation and targeted verification complete. Svt observers are separate from native Writer clients; SwFormat uses BroadcastingModify and no generic NotifyAttributeSet bridge remains. Direct row/cell/style native writes refresh original layout/Sfx/browser caches without document signals or revision changes. Native original shared claims/document history/replacement/deletion/close verified. Raw direct silent ClaimFrameFormat without final document invalidation and full native physical frame integration remain unverified, as upstream emits no Svt change on that silent claim. Browser Sync assumes current live native model owners instead of an unsupported disposed-format fallback.
+
+Observation: read-only guessed upstream path and two script syntax errors occurred before semantic mutations; route revalidated. Initial lint/JSDoc errors repaired within scope. Initial runtime1590passed4freshfailed:two fixtures lacked the native following paragraph needed for table deletion,one retained a detached DOM element after a fixed-height subtree remount,one independent observer expected Sync before calling it. All four corrected without changing old accepted values. Closure1 runs exactly4failed plus2new native Svt lower-bound/shallow-copy release-guard cases;6passed12skipped,no unchanged passing replay. Initial and closure threshold exit1 retained; final actual certificate all-four100. Source parity metadata initially used an invalid new browser divergence enum; corrected only the new record to native inventory B. Recoverable validation errors resolved; no genuine external blocker.
+
+Evidence:1596unique app cases,18fresh,13Chromium. App318files18105lines19876statements4554functions14568branches;inventory38files1464/1523/384/1081;all-four100. Six statics, final upstream-absent build/static and restored source/provenance/invariants/parity pass. Source pin11files verified against commit9bc445578031fecf56086729d8e4940c77e14d65;IO4/whole writer-view/stash retained.662other old acceptance files byte-identical;1exact original-native notifier contract migration,3newfiles666total.318old metadata fields/order/status/default/classification/evidenceprefixes preserved,3newunverified321total. No source/Python/scripts/raw maps/results in AP; raw cache ignored. Full suite intentionally skipped user cadence:last237,next247. Broad goal remains active/incomplete.

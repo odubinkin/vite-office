@@ -1,0 +1,17 @@
+{
+  "profile": "upstream-absent",
+  "allowedCases": "Exactly4 previously failed fresh cases plus2 genuinely new native Svt declaration-copy/tombstone cases; every previously passing case skipped. Sync uses original live model-owner contract without an unsupported disposed-owner fallback.",
+  "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/browser/editor/native-format-notifier.test.tsx src/sw/browser/presentation/native-format-notifier-store.test.ts src/svl/source/notify/native-svt-notifier.test.ts --testNamePattern=^(?:mounted native notifier updates original row height cell alignment and inherited fonts without document device signals|mounted native notifier follows shared claims and actual repeated Undo Redo without retaining deleted formats|native format store rebinds original shared claims repeated history and native changes then releases deleted and replaced owners|native browser observer ignores intermediate moves while subscribing to exact original replacement owners and atomic batches|native sorted additions append when an earlier empty slot cannot accept the original listener identity|native default listener copy retains only its declaration set and release removal leaves original reciprocal clients intact)$ --coverage.reportOnFailure --coverage.reporter=json-summary --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/81YWQB.closure1.app-results.json",
+  "exit": 1,
+  "bytes": 3951,
+  "sha256": "2ec6eac00ba4737a783ca5f79c164f5b7e654bfc4e1b852a4ad83d82d14607dc",
+  "caseCounts": {
+    "passed": 6,
+    "failed": 0,
+    "skipped": 12,
+    "total": 18
+  },
+  "failedCases": [],
+  "coverageMapSHA256": "b492b5e070b3106b0191305a19ec1c72faf59d5f26f38c90caa30475395e9fb0",
+  "vendorRestored": true
+}

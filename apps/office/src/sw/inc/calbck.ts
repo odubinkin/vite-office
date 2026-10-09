@@ -1,6 +1,7 @@
 /** @fileoverview Implements bounded SwModify/SwClient registration from pinned `sw/inc/calbck.hxx`. */
 
 import { SfxBroadcaster, type SfxListenerTarget } from "../../svl/source/notify/SfxBroadcaster";
+import { SvtBroadcaster } from "../../svl/source/notify/broadcast";
 import { SfxListener } from "../../svl/source/notify/lstner";
 import { AttrSetChangeHint, SwAttrSetChg, type SwAtomicModelHint, type SwModelHint } from "./hints";
 import type { SwAttrSet } from "../source/core/attr/swatrset";
@@ -120,6 +121,11 @@ export class SwModify
     if (parent !== undefined) this.RegisterToModify(parent);
   }
 
+  /** Reports native Writer clients independently of observer subscriptions. @returns Whether a Writer client remains. */
+  public HasWriterListeners(): boolean {
+    return this.HasListeners();
+  }
+
   /** Locks native modify notifications; the source flag is boolean, not a depth counter. @returns Nothing. */
   public LockModify(): void {
     this.m_bModifyLocked = true;
@@ -171,6 +177,39 @@ export class SwModify
     this.EndListening();
     this.pendingHints = [];
     this.notificationDepth = 0;
+  }
+}
+
+/** Native multiple-inheritance mixin represented by composition in TypeScript. */
+export class BroadcasterMixin {
+  private readonly notifier: SvtBroadcaster<SwModelHint>;
+  /** Creates or natively copies the independent notifier. @param source - Optional mixin copy source. @returns Nothing. */
+  public constructor(source?: BroadcasterMixin) {
+    this.notifier = new SvtBroadcaster(source?.notifier);
+  }
+  /** Returns the original native notifier. @returns Independent observer channel. */
+  public GetNotifier(): SvtBroadcaster<SwModelHint> {
+    return this.notifier;
+  }
+}
+
+/** Writer modify with the independent native Svt observer channel. */
+export class BroadcastingModify extends SwModify {
+  private readonly broadcasterMixin = new BroadcasterMixin();
+  /** Returns the actual original format notifier. @returns Independent observer channel. */
+  public GetNotifier(): SvtBroadcaster<SwModelHint> {
+    return this.broadcasterMixin.GetNotifier();
+  }
+  /** Terminal native CallSwClientNotify dispatch: original Writer clients first, then the same hint to observers. The existing browser transaction flush also terminates here. @param hint - Original hint or browser transaction. @returns Nothing. */
+  public override Broadcast(hint: SwModelHint): void {
+    if (this.IsDisposed()) return;
+    super.Broadcast(hint);
+    this.GetNotifier().Broadcast(hint);
+  }
+  /** Destroys the notifier before the Writer base, matching native base destruction order. @returns Nothing. */
+  public override DisposeModify(): void {
+    this.GetNotifier().Dispose();
+    super.DisposeModify();
   }
 }
 

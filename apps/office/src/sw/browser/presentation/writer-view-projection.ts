@@ -1,4 +1,5 @@
 /** @fileoverview Projects the live Writer graph to immutable browser presentation values. */
+import { WriterNativeFormatObserver } from "./writer-native-format-observer";
 import {
   populateStyleToolbox,
   type StyleToolboxEntry,
@@ -532,17 +533,20 @@ export class WriterViewStore {
   private cachedSnapshot: WriterViewSnapshot | undefined;
   private readonly listeners = new Set<() => void>();
   private readonly unsubscribe: () => void;
+  private readonly formatObserver: WriterNativeFormatObserver;
 
   /** Creates a browser store over one attached Writer view. @param view - Active Writer view. @param projection - Browser identity/projector. @returns Nothing. */
   public constructor(
     private readonly view: SwView,
     public readonly projection = new WriterViewProjection(),
   ) {
+    this.formatObserver = new WriterNativeFormatObserver(view);
     this.unsubscribe = view
       .GetViewFrame()
       .GetBindings()
       .Subscribe(
         /** Invalidates and publishes the browser snapshot. @returns Nothing. */ () => {
+          this.formatObserver.Sync();
           this.cachedSnapshot = undefined;
           for (const listener of this.listeners) listener();
         },
@@ -586,6 +590,7 @@ export class WriterViewStore {
   /** Releases the Sfx subscription and browser listeners. @returns Nothing. */
   public Close(): void {
     this.unsubscribe();
+    this.formatObserver.Close();
     this.listeners.clear();
   }
 }

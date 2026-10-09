@@ -1,0 +1,53 @@
+{
+  "uniqueAppCases": 1596,
+  "passedUniqueAppCases": 1596,
+  "freshCases": 18,
+  "priorAcceptanceFiles": 663,
+  "priorAcceptanceByteIdentical": 662,
+  "exactNativeNotifierContractMigrations": 1,
+  "freshAcceptanceFiles": 3,
+  "acceptanceFiles": 666,
+  "runs": [
+    {
+      "identifier": "app-results.json",
+      "sha256": "bbc02fdce8e78d3dc47ffbf5835788cb6099b2a8207d14c3bbf40bc9c86fa504",
+      "passed": 1590,
+      "failed": 4,
+      "skipped": 0
+    },
+    {
+      "identifier": "closure1.app-results.json",
+      "sha256": "03cfb423292be3acbd6259e6e351206e42e82aa688fad9a5b74a242db9a8a5a4",
+      "passed": 6,
+      "failed": 0,
+      "skipped": 12
+    }
+  ],
+  "materiallyAffectedFreshCaseRevalidations": [],
+  "unchangedPassingReplays": 0,
+  "chromium": {
+    "passed": 13,
+    "unexpected": 0,
+    "skipped": 0,
+    "sha256": "aa44b3c6a5c22cfc296baeb382ad7399a63874bd5270a71d03854552739721e4"
+  },
+  "upstreamAbsentProfiles": [
+    {
+      "identifier": "targeted-profile.json",
+      "vendorRestored": true
+    },
+    {
+      "identifier": "closure1.json",
+      "vendorRestored": true
+    }
+  ],
+  "fullSuite": {
+    "skipped": true,
+    "reason": "Explicit user cadence once per10AgentPlane tasks",
+    "lastFullIteration": 237,
+    "nextFullIteration": 247,
+    "currentIteration": 246
+  },
+  "rawThresholdExitsRetained": true,
+  "noCoverageOrSkipSanitization": true
+}
