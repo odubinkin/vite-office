@@ -128,6 +128,22 @@
         {
           "path": "apps/office/src/sw/browser/editor/native-format-notifier.test.tsx",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/docnode/native-table-headline-command.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/undo/native-table-headline-command-history.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-table-headline-command.test.tsx",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/undo/untbl.ts",
+          "marker": "SwUndoTableHeadline"
         }
       ],
       "upstream": [
@@ -162,6 +178,26 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx",
           "marker": "get_value_changed_from_saved"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl.cxx",
+          "marker": "SwDoc::SetRowsToRepeat"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/frmedt/fetab.cxx",
+          "marker": "SwFEShell::SetRowsToRepeat"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/undo/untbl.cxx",
+          "marker": "SwUndoTableHeadline::SwUndoTableHeadline"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/hints.hxx",
+          "marker": "TableHeadingChange"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/tabfrm.cxx",
+          "marker": "HandleTableHeadlineChange"
         }
       ]
     },
@@ -196,7 +232,8 @@
       "Iteration243 owns native SwTableBoxFormat item sets through registered SwTableBox clients, exact box ranges and default frame inheritance. Cell claims retain complete direct attributes and separate shared calculation items; border and vertical commands reuse operation-local native format owners. SaveTable stores deduplicated complete cell item sets and numeric indices, restoring shared owners with MoveTableBoxHint before model registration. Actual section deletion releases cell clients; native insertion shares source formats; the main JSX table reads native border and orientation items directly. Full SwCellFrame hierarchy, invalidation, calculation, nested/merged tables and UNO remain partial. Targeted verification pending; last full237, next247; existing classifications/defaults and registered I/O/recovery deviations preserved.",
       "Iteration243 verified1301 unique app cases including11 fresh native cell ownership/default/item-set/claim/hint/history/deletion and mounted rendering scenarios, plus25 Chromium cases, all runtime/build physically upstream absent/restored finally. Five old acceptance files capture expected attributes before native destruction or adopt native constructors without weakening literal/identity/history assertions;649 unaffected prior files remain byte-identical. Three initial failures passed failed-only; two new border-sharing/admission cases completed coverage, with zero passing replay. App and inventory all-four100% actual counters are bound to current bytes/maps or complete unchanged declarations/bodies/enclosing branches/all locations from242. Full SwCellFrame hierarchy/invalidation, calculation, numeric formatting, nested/merged/UNO/pooling/modified-state and whole project parity remain partial. Existing316 classifications/defaults/status/evidence prefixes and registered I/O/recovery deviations preserved. Last full237,next247; no full243.",
       "Iteration246 connects existing Writer presentation directly to original SwFormat Svt notifiers through native BroadcasterMixin/BroadcastingModify and removes the generic NotifyAttributeSet device bridge. Separate observer registrations preserve native HasWriterListeners lifetime, original hints and writer-before-observer order including the existing bounded browser transaction. Native Svt snapshot membership, tombstone normalization, reciprocal copies and prepare/destructor semantics are represented. Stable browser object allocation identity represents pointer ordering; actual addresses, bit packing, partial-sort performance, native assertions/mutable vector access and full linked Writer-client infrastructure remain unverified. Browser observer follows current actual document style/table/row/cell owners, original replacement hints and final structural/history bindings invalidation; silent direct ClaimFrameFormat before a document invalidation is not a native observer signal and complete native layout-client integration remains unverified. Targeted verification pending; last full237,next247. Existing statuses/defaults/classifications/evidence and registered I/O/recovery deviations unchanged.",
-      "Iteration246 verified bounded closure:1596unique app cases including18fresh plus13Chromium pass one upstream-absent initial profile and failure/new-only closure;1590initial passed,4fresh failed then6closure passed12skipped,zero unchanged passing replay. Actual app318files18105lines19876statements4554functions14568branches and inventory38files1464/1523/384/1081 all-four100 from actual counters with whole byte-identical source/maps or complete unchanged declaration/body/enclosing branch/all-location proofs; no counter/threshold/skip sanitization. Native Svt notifier tests, direct mounted row/cell/style refresh without document device signal, original format/shared claim/history/replacement/deletion/close behavior and six statics/build/source audits pass. Silent direct ClaimFrameFormat before document invalidation/full native linked/layout/VCL client integration, actual pointer memory/packed storage/partial-sort performance/assertion/mutable vector boundaries remain unverified.318old metadata semantics/defaults/classifications/prefixes and662unchanged old acceptance files retained;1exact old native notifier contract migration,3fresh files,321metadata/666acceptance total. Registered IO/recovery/settings exceptions unchanged; full247next, broad goal active/incomplete."
+      "Iteration246 verified bounded closure:1596unique app cases including18fresh plus13Chromium pass one upstream-absent initial profile and failure/new-only closure;1590initial passed,4fresh failed then6closure passed12skipped,zero unchanged passing replay. Actual app318files18105lines19876statements4554functions14568branches and inventory38files1464/1523/384/1081 all-four100 from actual counters with whole byte-identical source/maps or complete unchanged declaration/body/enclosing branch/all-location proofs; no counter/threshold/skip sanitization. Native Svt notifier tests, direct mounted row/cell/style refresh without document device signal, original format/shared claim/history/replacement/deletion/close behavior and six statics/build/source audits pass. Silent direct ClaimFrameFormat before document invalidation/full native linked/layout/VCL client integration, actual pointer memory/packed storage/partial-sort performance/assertion/mutable vector boundaries remain unverified.318old metadata semantics/defaults/classifications/prefixes and662unchanged old acceptance files retained;1exact old native notifier contract migration,3fresh files,321metadata/666acceptance total. Registered IO/recovery/settings exceptions unchanged; full247next, broad goal active/incomplete.",
+      "Correction T8EQAC2/10 after full SZKQTN and KVM0ER: native count-only shell/doc command delegates to source-owned ndtbl SetSwRowsToRepeat; exact capped getter no-op, uint16 new value and DoesUndo gate. Dedicated SwUndoTableHeadline retains only native table-node index and capped old/authored new counts, resolves original table for Undo/Redo and stores no graph/format/cursor snapshot. Original frame format publishes concrete no-payload TableHeadingChange after storage; same typed hint also advances the represented browser document revision publication boundary, an explicit browser architecture boundary rather than full native document-state/layout parity. Original master SwTabFrame ignores heading hints as upstream master handler returns before follow-row rebuilding. Original table/row/box/frame/node/cursor/ring identities and unrelated later geometry/row-height/numbering state survive actual command and three undo/redo cycles. Mounted Table Properties changes physical repeated occurrences and real ODT headerless reopening. 2950 distinct accepted related cases,10 fresh native/history/mounted cases; all entire six changed production files actual Istanbul998lines1096statements247functions664branches100 all-four,zero-negative and complete-map/current-source-hash identity. Five exact old insert/native normalized-geometry/headline snapshot/payload expectations migrate with every other old assertion retained; native SetTabCols normalizes actual frame print width before attribute history, so dedicated headline undo cannot restore unrelated pre-normalization geometry. Tests/build/statics physically upstream-absent with finally restoration; restored metadata audits. Twelve canonical classification/status/default/history prefixes retained. Native Repeat context/framework and complete original master/follow-row reconstruction remain unrepresented/unverified; capped table-copy/node-copy and full layout/root/page/section/content/HTML/VCL families remain separate, no whole-module or broad-goal parity promotion. Registered recovery/open/save/settings deviations unchanged. Raw source snapshots/helpers/logs/maps only ignored cache; bounded English task evidence. Task202610091853-T8EQAC; goal ACTIVE/incomplete; correction2/10."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/undo/untbl.cxx",

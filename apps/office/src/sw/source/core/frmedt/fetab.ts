@@ -370,9 +370,15 @@ export abstract class SwFEShell extends SwEditShell {
     );
   }
 
-  /** Sets represented headline attributes on the actual table. @param count - Authored headline count. @param repeat - Whether repeated on follow pages. @returns Whether admitted. */
-  public SetRowsToRepeat(count: number, repeat: boolean): boolean {
-    return this.SetTableAttr({ headerRows: count, repeatHeaderRows: repeat });
+  /** Invokes the native count-only headline document operation on the actual current table. @param requested - Authored uint16 count. @returns Whether changed. */
+  public SetRowsToRepeat(requested: number): boolean {
+    const table = this.IsCursorInTable()?.GetTable(),
+      count = requested & 0xffff;
+    if (table === undefined || table.GetRowsToRepeat() === count) return false;
+    return this.RunNotificationTransaction(
+      /** Brackets the native document operation without moving the original cursor. @returns Whether changed. */
+      () => this.GetDoc().SetRowsToRepeat(table, count),
+    );
   }
 
   /** Applies a complete native size to current or selected rows. @param size - Native frame-size item. @returns Whether admitted. */

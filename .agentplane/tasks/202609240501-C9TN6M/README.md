@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 288
+revision: 289
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-09T18:45:57.185Z"
+doc_updated_at: "2026-10-09T19:14:03.503Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -1371,6 +1371,8 @@ sections:
     Correction202610091821-KVM0ER: Verified current correction1/10: independent native uint16 member/default1, native browser getter and source-required ODT finalization0. Actual1278 distinct accepted related cases/20fresh, entire3 modules actual Istanbul564lines629statements111functions493branches100 all-four/zero-negative; failed/new-only/current-XML closures retain raw failures/threshold exits with unchanged strict gates and no stale XML counters. Seven browser cases0fail0skip0flaky; TS7.0.2/compiler API6.0.2, build and static gates pass upstream-absent. Six canonical histories appended without status/default/classification promotion; original1508 scoped unrelated files and577/604 old test files byte-preserved, exact27 source-backed migrations only; parent Findings prefix retained. Nine restored-reference metadata audits pass, doctor0errors2historicalwarnings. Bounded artifact artifacts/native-table-headline-counter-evidence.json contains exact commands/hashes/counts. Dedicated native headline undo/copy families and full layout remain deferred, no broad parity promotion. Goal remains ACTIVE/incomplete; no full suite due at1/10. Same-agent non-independent quality pending semantic commit.
 
     KVM0ER quality binding: Quality pass on exact semantic commit 8489ed7632a9e6d8a2dc4d3f4443170cbaf219f7; report .agentplane/tasks/202610091821-KVM0ER/quality/20261009-184522356-recovery-context/quality-report.json SHA256 cf0f2edd7942d06f8779360674c544dc6b768c1196fd5d417ee587f82b7c89c1. Same-agent explicitly non-independent; no independent reviewer claim. Actual1278related20fresh,7browser,entire3module Istanbul100/zero-negative,upstream-absent gates/restored metadata,precise old migrations/six canonical prefixes accepted. Native dedicated headline undo/copy and complete layout remain follow-ups. Correction1/10 after fullSZKQTN; goalACTIVE/incomplete.
+
+    Correction T8EQAC2/10 after fullSZKQTN and KVM0ER replaces general headline table snapshots with count-only SwDoc/SwFEShell operation, dedicated index/old/new SwUndoTableHeadline, original TableHeadingChange and explicit same-typed browser document revision publication boundary. Original graph/cursor/ring and later unrelated geometry/numbering survive real history3cycles and mounted UI/ODT. Actual2950related10fresh,7browser,entire6module Istanbul100 all-four/zero-negative/current-source-complete-map identity. Twelve canonical prefixes,1524unrelated files/602old test files unchanged/exact5 old fixture migrations, current TS7/static/build/upstream-absent and9restored metadata pass. Native Repeat/follow/copy/full layout remain unverified. Bounded artifact .agentplane/tasks/202610091853-T8EQAC/artifacts/native-table-headline-command-evidence.json; raw data only ignored cache. Same-agent non-independent quality and semantic binding pending. Goal ACTIVE/incomplete; full not due2/10.
 id_source: "generated"
 ---
 ## Summary
@@ -2715,3 +2717,5 @@ Iteration251 / 202610090835-4ZF0N4 verified native table layout ownership. SwTab
 Correction202610091821-KVM0ER: Verified current correction1/10: independent native uint16 member/default1, native browser getter and source-required ODT finalization0. Actual1278 distinct accepted related cases/20fresh, entire3 modules actual Istanbul564lines629statements111functions493branches100 all-four/zero-negative; failed/new-only/current-XML closures retain raw failures/threshold exits with unchanged strict gates and no stale XML counters. Seven browser cases0fail0skip0flaky; TS7.0.2/compiler API6.0.2, build and static gates pass upstream-absent. Six canonical histories appended without status/default/classification promotion; original1508 scoped unrelated files and577/604 old test files byte-preserved, exact27 source-backed migrations only; parent Findings prefix retained. Nine restored-reference metadata audits pass, doctor0errors2historicalwarnings. Bounded artifact artifacts/native-table-headline-counter-evidence.json contains exact commands/hashes/counts. Dedicated native headline undo/copy families and full layout remain deferred, no broad parity promotion. Goal remains ACTIVE/incomplete; no full suite due at1/10. Same-agent non-independent quality pending semantic commit.
 
 KVM0ER quality binding: Quality pass on exact semantic commit 8489ed7632a9e6d8a2dc4d3f4443170cbaf219f7; report .agentplane/tasks/202610091821-KVM0ER/quality/20261009-184522356-recovery-context/quality-report.json SHA256 cf0f2edd7942d06f8779360674c544dc6b768c1196fd5d417ee587f82b7c89c1. Same-agent explicitly non-independent; no independent reviewer claim. Actual1278related20fresh,7browser,entire3module Istanbul100/zero-negative,upstream-absent gates/restored metadata,precise old migrations/six canonical prefixes accepted. Native dedicated headline undo/copy and complete layout remain follow-ups. Correction1/10 after fullSZKQTN; goalACTIVE/incomplete.
+
+Correction T8EQAC2/10 after fullSZKQTN and KVM0ER replaces general headline table snapshots with count-only SwDoc/SwFEShell operation, dedicated index/old/new SwUndoTableHeadline, original TableHeadingChange and explicit same-typed browser document revision publication boundary. Original graph/cursor/ring and later unrelated geometry/numbering survive real history3cycles and mounted UI/ODT. Actual2950related10fresh,7browser,entire6module Istanbul100 all-four/zero-negative/current-source-complete-map identity. Twelve canonical prefixes,1524unrelated files/602old test files unchanged/exact5 old fixture migrations, current TS7/static/build/upstream-absent and9restored metadata pass. Native Repeat/follow/copy/full layout remain unverified. Bounded artifact .agentplane/tasks/202610091853-T8EQAC/artifacts/native-table-headline-command-evidence.json; raw data only ignored cache. Same-agent non-independent quality and semantic binding pending. Goal ACTIVE/incomplete; full not due2/10.

@@ -19,6 +19,32 @@ import {
   type SwUndoRedoContext,
 } from "./undobj";
 
+/** Native headline history retains only the table node index and old/new numeric counts. */
+export class SwUndoTableHeadline extends SwUndo {
+  private readonly tableNodeIndex: number;
+  /** Captures native scalar history without retaining table or cursor snapshots. @param table - Original native table. @param oldCount - Capped original count. @param newCount - Authored uint16 count. @returns Nothing. */
+  public constructor(
+    table: SwTable,
+    private readonly oldCount: number,
+    private readonly newCount: number,
+  ) {
+    super("Table heading");
+    this.tableNodeIndex = table.GetTableNode().GetIndex();
+  }
+  /** Resolves the actual table at the native stored index and invokes the document command. @param context - Original document context. @returns Nothing. */
+  protected override UndoImpl(context: SwUndoRedoContext): void {
+    const doc = context.GetDoc(),
+      node = doc.nodes.at(this.tableNodeIndex) as SwTableNode;
+    doc.SetRowsToRepeat(node.GetTable(), this.oldCount);
+  }
+  /** Replays the original authored count through the same native document command. @param context - Original document context. @returns Nothing. */
+  protected override RedoImpl(context: SwUndoRedoContext): void {
+    const doc = context.GetDoc(),
+      node = doc.nodes.at(this.tableNodeIndex) as SwTableNode;
+    doc.SetRowsToRepeat(node.GetTable(), this.newCount);
+  }
+}
+
 /** Native rename history retains only names and resolves the live frame on replay. */
 export class SwUndoRenameTable extends SwUndo {
   /** Captures names without a cursor or graph. @param oldName - Original name. @param newName - Accepted name. @returns Nothing. */

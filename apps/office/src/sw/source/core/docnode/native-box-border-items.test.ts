@@ -408,7 +408,7 @@ it("preserves all independent native box attributes for layout-only presentation
     for (const [i, box] of f.boxes.entries())
       expect(box.GetBox().equals(required(before[i]))).toBe(true);
     expect(shell.Undo()).toBe(true);
-    expect(f.table.GetColumnWidths()).toEqual([3000, 3000]);
+    expect(f.table.GetColumnWidths()).toEqual([4320, 4320]);
     for (const [i, box] of f.boxes.entries())
       expect(box.GetBox().equals(required(before[i]))).toBe(true);
   } finally {

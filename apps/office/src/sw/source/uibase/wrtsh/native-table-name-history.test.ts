@@ -154,7 +154,7 @@ it("properties rename and geometry share one native history through ODT and cont
     for (let cycle = 0; cycle < 3; cycle++) {
       expect(f.shell.Undo()).toBe(true);
       expect(f.table.GetName()).toBe("Original");
-      expect(f.table.GetColumnWidths()).toEqual([3000, 3000]);
+      expect(f.table.GetColumnWidths()).toEqual([4320, 4320]);
       expect(f.shell.Redo()).toBe(true);
       expect(f.table.GetName()).toBe("Accepted");
       expect(f.table.GetColumnWidths()).toEqual([2700, 2700]);

@@ -63,6 +63,10 @@ export class TableBoxFormatChanged implements SfxHint {
     public readonly m_rTableBox: SwTableBox,
   ) {}
 }
+/** Native table headline change carries no copied table or attribute payload. */
+export class TableHeadingChange implements SfxHint {
+  public readonly kind = "table-heading-change";
+}
 /** Atomic Writer notifications emitted by model and shell boundaries. */
 export type SwAtomicModelHint =
   | LegacyModifyHint
@@ -74,6 +78,7 @@ export type SwAtomicModelHint =
   | TableBoxFormatChanged
   | MoveTableLineHint
   | TableLineFormatChanged
+  | TableHeadingChange
   | Readonly<{
       formatId?: string;
       kind: "attribute-set-changed";

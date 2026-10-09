@@ -140,8 +140,7 @@ export function ItemSetToTableParam(
           }
         }
         const headline = input.GetItemIfSet(FN_PARAM_TABLE_HEADLINE, false);
-        if (headline instanceof SfxUInt16Item)
-          shell.SetRowsToRepeat(headline.GetValue(), headline.GetValue() > 0);
+        if (headline instanceof SfxUInt16Item) shell.SetRowsToRepeat(headline.GetValue());
         const vertical = input.GetItemIfSet(FN_TABLE_SET_VERT_ALIGN, false);
         if (vertical instanceof SfxUInt16Item) shell.SetBoxAlign(vertical.GetValue());
         const name = input.GetItemIfSet(FN_PARAM_TABLE_NAME, false);
@@ -272,7 +271,7 @@ function ApplyExplicitTableProperties(shell: SwFEShell, value: SwTableProperties
             shell.Pop(PopMode.DeleteCurrent);
           }
         }
-        shell.SetRowsToRepeat(value.headerRows, value.repeatHeaderRows);
+        shell.SetRowsToRepeat(value.repeatHeaderRows ? value.headerRows : 0);
         if (value.name !== undefined) shell.SetTableName(table.GetFrameFormat(), value.name);
         if (value.verticalAlign !== undefined) shell.SetBoxAlign(value.verticalAlign);
         // Native dialog owners retain hidden intervals and gate separator application.

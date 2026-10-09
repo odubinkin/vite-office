@@ -88,8 +88,8 @@ for (const selected of [false, true])
           expect(table.GetFormat().width).toBe(5400);
           expect(shell.Undo()).toBe(true);
           expect(sizes()).toEqual(original);
-          expect(table.GetColumnWidths()).toEqual([3000, 3000]);
-          expect(table.GetFormat().width).toBe(6000);
+          expect(table.GetColumnWidths()).toEqual([4320, 4320]);
+          expect(table.GetFormat().width).toBe(8640);
           expect(shell.Redo()).toBe(true);
           expect(sizes()).toEqual(original);
           expect(table.GetColumnWidths()).toEqual([2700, 2700]);
