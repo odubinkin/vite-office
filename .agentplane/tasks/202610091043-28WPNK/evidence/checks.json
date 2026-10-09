@@ -1,0 +1,177 @@
+{
+  "commands": [
+    {
+      "name": "format",
+      "args": [
+        "node_modules/.bin/prettier",
+        "--check",
+        "apps/office/src/sw/source/core/layout/native-table-coverage-closure.test.ts",
+        "docs/program/registry/writer/runtime/sw/inc/swtblfmt.ts.json",
+        "docs/program/registry/writer/provenance/sw/inc/swtblfmt.ts.json",
+        "docs/program/registry/writer/runtime/sw/source/core/layout/paintfrm.ts.json",
+        "docs/program/registry/writer/provenance/sw/source/core/layout/paintfrm.ts.json"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "name": "lint",
+      "args": [
+        "node_modules/.bin/eslint",
+        "apps/office/src/sw/source/core/layout/native-table-coverage-closure.test.ts",
+        "--max-warnings",
+        "0"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "typecheck",
+      "args": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed"
+    },
+    {
+      "name": "dependencies",
+      "args": [
+        "npm",
+        "run",
+        "check:dependencies"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "49df58267de6ad6b7507189e009e8341f0e207801075535c840b5f2eda09e6bb"
+    },
+    {
+      "name": "docs",
+      "args": [
+        "npm",
+        "run",
+        "check:docs"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "07841f62a24a6cf769bb1700e401365dd683dd3fa1d1d1277ef8f1d31c37949e"
+    },
+    {
+      "name": "file-size",
+      "args": [
+        "npm",
+        "run",
+        "check:file-size"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "f164d683f3c7e5b18afe5a5bbbdf466314a57725849d700b32383e57e0046f4a"
+    },
+    {
+      "name": "registry-build",
+      "args": [
+        "npm",
+        "run",
+        "inventory:registry:build"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "f941feea056f9f9125ac8a96978ff0fda711beef74563b36c553fc89490f0209"
+    },
+    {
+      "name": "writer-registry",
+      "args": [
+        "npm",
+        "run",
+        "inventory:parity:writer"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "bae5f257cc0fc7e8b1e869cd411624abaaa94110283ace53052585d35303ca11"
+    },
+    {
+      "name": "global-registry",
+      "args": [
+        "npm",
+        "run",
+        "inventory:registry:check"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "2b002293ebf639c37df74bdf136b1cc6c8fbaf9e4e80c4b790222d4e906d68cf"
+    },
+    {
+      "name": "source-provenance",
+      "args": [
+        "npm",
+        "run",
+        "check:source-provenance"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "65eeaf5fc88ed1e78871c61e7953b96b6b1c0149b9a9413c588c16839ab5f938"
+    },
+    {
+      "name": "source-tree",
+      "args": [
+        "npm",
+        "run",
+        "check:source-tree"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "6c5bd2e3c84892b8cc26b8b1b5f06a950891f9d5988a8ef1f1496f0c252cd33e"
+    },
+    {
+      "name": "routing",
+      "args": [
+        "node",
+        ".agentplane/policy/check-routing.mjs"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    {
+      "name": "doctor",
+      "args": [
+        "ap",
+        "doctor"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "ade77f92aa306fa38cc6276ec71c723aba1f28f4299eedac7d6fa786d3b645a1"
+    },
+    {
+      "name": "diff",
+      "args": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "upstreamRestored": true,
+  "initialDiscovery": {
+    "cases": 0,
+    "wrongRootSelection": true,
+    "rawPreserved": true,
+    "passingReplay": 0
+  },
+  "partialRawGatesPreserved": true,
+  "testProfiles": {
+    "initial": {
+      "exitCode": 1,
+      "upstreamAbsent": true,
+      "restored": true,
+      "outputSHA256": "7adfd9e23adc9bca868bdf61717aedbe67b2ca717053ea552f43f9074fd4d8e8"
+    },
+    "degenerate": {
+      "exitCode": 1,
+      "upstreamAbsent": true,
+      "restored": true,
+      "outputSHA256": "285262b82c4d3bcde2880c72994283fb5ce573a6bb1306a1a0adbfaf55339e52"
+    },
+    "ordering": {
+      "exitCode": 1,
+      "upstreamAbsent": true,
+      "restored": true,
+      "outputSHA256": "feed86b15eb3f19d2e4b2e4f44f397d4bc674e50fe7a54a54b17ef817cd7cdf4"
+    }
+  },
+  "newTestSHA256": "196c6e93d8740811df286435f44cd60d814818dd03c8cbb3cd83339acbf65230",
+  "nonIndependentSameAgentEvaluation": true
+}

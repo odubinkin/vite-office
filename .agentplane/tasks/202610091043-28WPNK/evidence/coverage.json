@@ -1,0 +1,171 @@
+{
+  "fullTask": "202610091030-RAWD0Q",
+  "inputs": [
+    {
+      "profile": "28WPNK-initial-coverage",
+      "mapSHA256": "8530395aedcf07a27a66054ee44a1bf30533e2be61bce6511c0984895beee20c"
+    },
+    {
+      "profile": "28WPNK-degenerate-coverage",
+      "mapSHA256": "d19242b6da89e4fa66f0c59ddba8e37c39c25e01eee89ef3d6333a42b35c24d9"
+    },
+    {
+      "profile": "28WPNK-coverage",
+      "mapSHA256": "860f6b28a56862ff7d663c67403269a2db4afd679609a772ee719c3337c7f4a6"
+    }
+  ],
+  "reports": [
+    {
+      "report": "28WPNK-initial-tests.json",
+      "reportSHA256": "b1cd83b4a83fa19922e06ae95aec410cee9a9509092b0292d1764faf1518f280",
+      "passed": 9,
+      "skipped": 0,
+      "failed": 0
+    },
+    {
+      "report": "28WPNK-degenerate-tests.json",
+      "reportSHA256": "3845ca8c7beb9523e66b695ce6b5d85565e05a2f11edb039bc09d0849b78d8e7",
+      "passed": 2,
+      "skipped": 9,
+      "failed": 0
+    },
+    {
+      "report": "28WPNK-tests.json",
+      "reportSHA256": "05184afccdf5f60a079b75e831c432dafa25014a3d58c13fb6e6d68d39759bb1",
+      "passed": 1,
+      "skipped": 11,
+      "failed": 0
+    }
+  ],
+  "uniquePassed": 12,
+  "passingReplay": 0,
+  "failedAssertions": 0,
+  "focusedSkipObservations": 20,
+  "application": {
+    "files": 318,
+    "fullCompleteUnchangedModules": 316,
+    "closedModules": 2,
+    "summary": {
+      "lines": {
+        "total": 18298,
+        "covered": 18298,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 20093,
+        "covered": 20093,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 4589,
+        "covered": 4589,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 14695,
+        "covered": 14695,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "mapSHA256": "1ec86bce3d31a58729c5690e3353c06181c01d7b8f2e177891239dbb3c793267",
+    "proofSHA256": "e54deac82be993676cedff5c16448a41aeba9f602d66ea0faa8c11216e2fd0b9"
+  },
+  "closure": {
+    "files": 2,
+    "summary": {
+      "lines": {
+        "total": 89,
+        "covered": 89,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 94,
+        "covered": 94,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 17,
+        "covered": 17,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 28,
+        "covered": 28,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "sourceHashes": {
+      "apps/office/src/sw/inc/swtblfmt.ts": "f5b14c62778d31a9a75f61aa3096398516310dc71116c145646535bd7a7a5ab2",
+      "apps/office/src/sw/source/core/layout/paintfrm.ts": "d90d0928ad66a4907e0e512fb19a2fa96c9ac1fee5aceac7b5ec741735e2c79d"
+    }
+  },
+  "inventory": {
+    "files": 42,
+    "summary": {
+      "lines": {
+        "total": 1664,
+        "covered": 1664,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 1730,
+        "covered": 1730,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 434,
+        "covered": 434,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 1287,
+        "covered": 1287,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "mapSHA256": "add499416ee23c44fe6e05a712fa815ac0217181aec65e18ed31c9c94e3d950e",
+    "proofSHA256": "1484960f526dac5d7f47eb95184f378ccb874c07574975447a0060115a5be016",
+    "incomplete": []
+  },
+  "existingProductionAndTestsUnchanged": true,
+  "oldTrackedFilesUnchanged": 2035,
+  "changedCanonicalRecords": [
+    "docs/program/registry/writer/provenance/sw/inc/swtblfmt.ts.json",
+    "docs/program/registry/writer/provenance/sw/source/core/layout/paintfrm.ts.json",
+    "docs/program/registry/writer/runtime/sw/inc/swtblfmt.ts.json",
+    "docs/program/registry/writer/runtime/sw/source/core/layout/paintfrm.ts.json"
+  ],
+  "allHistoricalFieldPrefixesRetained": true,
+  "rawFullNegativeCounterRetained": true,
+  "clampingOrSelectiveCounterPatches": false
+}
