@@ -1,10 +1,11 @@
 ---
 id: "202610092323-YCZ38R"
 title: "Export original row and cell items with native orientation XML contracts"
-status: "DOING"
+result_summary: "Export original row and cell items with native orientation XML contracts"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -49,6 +50,9 @@ comments:
   -
     author: "CODER"
     body: "Start: bind original row and cell XML implementation before exact-SHA quality."
+  -
+    author: "CODER"
+    body: "Verified: original row/cell direct-item XML export and native empty/NONE/TOP contracts pass519related20fresh24Chromium;all3whole production modules actual Istanbul100all-four,current-source/map identity and zero negative.9metadata/statics and exact-SHA same-agent non-independent quality pass;6canonical histories and registered IO deviations preserved,reference restored."
 events:
   -
     type: "status"
@@ -82,8 +86,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Refreshed after exact-SHA same-agent non-independent quality pass2cf3f579.519related20fresh24Chromium,3whole modules100all-four/current-source/complete-map/zero-negatives,9metadata/statics,preserved637oldcontracts and6histories,reference restored."
+  -
+    type: "status"
+    at: "2026-10-09T23:34:46.753Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: original row/cell direct-item XML export and native empty/NONE/TOP contracts pass519related20fresh24Chromium;all3whole production modules actual Istanbul100all-four,current-source/map identity and zero negative.9metadata/statics and exact-SHA same-agent non-independent quality pass;6canonical histories and registered IO deviations preserved,reference restored."
 doc_version: 3
-doc_updated_at: "2026-10-09T23:34:25.288Z"
+doc_updated_at: "2026-10-09T23:34:46.754Z"
 doc_updated_by: "CODER"
 description: "Correction2/10 after BZQGYC: remove row/cell GetFormat from Writer XML, direct SET height/split/box/orientation, native NONE empty/TOP1 and table unknown empty mapping with self-package import. Preserve registered IO deviations and historical inventory/test contracts except exact source-backed migrations."
 sections:
@@ -195,6 +206,10 @@ sections:
     Initial510case85file profile:508pass2freshfail; correct source-defined0.99pt border token and native FULL table initialization after empty enum ignored. Failed-only2/2 closure pass;10 previous passing excluded. Added related txtimp module2cases and new shared contexts7cases,all9pass. Current complete identical-map production aggregation100all-four (362lines382statements76functions469branches),zero negatives. Format/lint pass. TS7 rejects two fresh direct endFastElement calls with an argument where concrete override accepts none; remove unused argument and verify those7 changed fresh call-site cases, then remaining static/browser checks. Production unchanged, old637testfiles preserved except exact one R12SRT token migration. Sixcanonical histories retained; metadata/quality pending.
 
     Final statics/build and24Chromium pass; final7typed shared call-site cases pass,raw1onlypartial coverage. Restored metadata9/9pass,doctor0errors2historicalwarnings(outside scope). Exact semantic2cf3f579c22c5004fe80ae79137d8cd5e5f2c63a reviewed by same implementing agent in EVALUATOR role,explicitly non-independent,verdictpass; semantic source/final-test hashes match actual current maps/reports. No scope drift,IO changes or whole-module promotion. Canonical finish with concrete result follows refreshed verification persistence; avoids known generic completion-subject failure.
+extensions:
+  implementation_commit:
+    hash: "2cf3f579c22c5004fe80ae79137d8cd5e5f2c63a"
+    message: "🚧 YCZ38R writer: export original row and cell native items"
 id_source: "generated"
 ---
 ## Summary
