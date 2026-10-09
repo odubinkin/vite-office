@@ -1,10 +1,11 @@
 ---
 id: "202610090858-QP6EMJ"
 title: "Port Calc full signed64 big address and range owners"
-status: "DOING"
+result_summary: "Implemented ScBigAddress and ScBigRange exact signed64 value ownership, original sentinel validity and clipped ordinary conversions with pinned native comparison fixtures"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
     - "490f0af9d064"
   findings:
     - "All unchanged compiled original big class/source outcomes compare through TS; exact bigint values retain sentinels, raw order, clipped ordinary conversion and independent copies. Existing tests, fixtures, shared code and parity flags remain unchanged."
-commit: null
+commit:
+  hash: "490f0af9d064f58adb4e7476170d555086f414e8"
+  message: "✨ QP6EMJ calc: port signed64 big address and range owners"
 comments:
   -
     author: "CODER"
     body: "Start: port original signed64 big coordinates and ranges with exact sentinel/validity/conversion contracts, reusing ordinary owners."
+  -
+    author: "CODER"
+    body: "Verified: complete defined signed64 big-coordinate owners, native differential fixtures, actual100 Calc coverage and inventory with zero semantic violations."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Command: node scripts/calc-bigrange-native-probe.mjs --write; node scripts/calc-bigrange-native-probe.mjs --check Result: pass. Evidence: exact pinned HEAD and four Git blobs; unchanged complete native big classes/IsValid and ordinary inline constructors/order; ASan/UBSan clean;6552 address states,3468 range relation states,8 address and5 range mutation snapshots, ordinary conversion and8 equality outputs. Fixture recheck exact. Scope: complete defined signed64 numerical ScBigAddress/ScBigRange operations; original raw and converted values, per-axis extrema, exclusive document sheet validity/global sheet clipping and copy ownership. Command: npm run test:coverage:calc Result: pass. Evidence:45 tests in10 files; real V8 statements922/922, branches779/779, functions209/209 and lines818/818; all100%, no exclusions/settings changes. Scope: all current Calc owners and previous native fixtures, including new five acceptance tests comparing every big-coordinate fixture result and literal contracts. Command: npm run typecheck; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:source-tree Result: pass. Evidence: application/tools typecheck passes;330 runtime sources/1565 relative imports/29 dependency edges;1082 authored sources documented;1085 files size checked with prior reviewed owner candidates unchanged;114 required paths and33 retired roots. Scope: new core/data owner and pure header boundary reuse existing ordinary coordinate/getter contracts; no shared/Writer implementations changed. Command: node_modules/.bin/eslint apps/office/src/sc/inc/bigrange.ts apps/office/src/sc/source/core/data/bigrange.ts apps/office/src/sc/source/core/data/bigrange.test.ts scripts/calc-bigrange-native-probe.mjs Result: pass. Evidence: affected source/test/probe lint clean. Scope: all four new authored code files. Command: node_modules/.bin/prettier --check apps/office/src/sc/inc/bigrange.ts apps/office/src/sc/source/core/data/bigrange.ts apps/office/src/sc/source/core/data/bigrange.test.ts scripts/calc-bigrange-native-probe.mjs Result: pass. Evidence: all matched files formatted. Scope: all four new authored code files; native fixture intentionally compact decimal JSON. Command: npm run inventory:parity:calc Result: pass. Evidence:8 capabilities,122 modules (10 Calc/112 shared), zero semantic violations; original header and source evidence mapped in new capability/two runtime/two provenance records. Existing semantic flags unchanged; new parity flags unverified. Scope: complete Calc inventory; numerical cases do not establish full ScDocument/change-tracking/reference-update integration or native lifetime/undefined arithmetic parity. Command: node .agentplane/policy/check-routing.mjs; ap doctor; git diff --check; git rev-parse --abbrev-ref HEAD Result: pass. Evidence: routing OK; doctor zero errors/one pre-existing managed-shim readiness warning; diff clean; branch calc. No merge or outside-checkout mutation. Scope: scoped implementation and task traceability; old hook warning remains outside scope. Full suites follow the user-approved once-per-ten completed Calc tasks cadence. This is milestone8; full run remains required after10, with targeted checks on intervening tasks. Final clean tracked/untracked state is recorded after finish. Signed64 overflow is native UB and outside the defined fixture domain; no wrapping semantics are fabricated. Full document and consumer integration remain subsequent work, so the overall user goal remains active."
+  -
+    type: "status"
+    at: "2026-10-09T09:13:53.043Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: complete defined signed64 big-coordinate owners, native differential fixtures, actual100 Calc coverage and inventory with zero semantic violations."
 doc_version: 3
-doc_updated_at: "2026-10-09T09:12:57.972Z"
+doc_updated_at: "2026-10-09T09:13:53.045Z"
 doc_updated_by: "CODER"
 description: "Implement complete ScBigAddress and ScBigRange numerical header/source contracts for change-tracking/reference-update consumers with exact bigint coordinates, native sentinels, validity and clipped ordinary conversion."
 sections:
@@ -115,6 +128,10 @@ sections:
     - Observation: An inspection shell glob scripts/program* had no matches; a later optional coverage lookup included an absent root-level coverage directory. Neither changed repository state or affected verification.
       Impact: Inspection paths needed correction; all declared implementation checks passed. Doctor retains its pre-existing managed-shim readiness warning with zero errors.
       Resolution: Recomputed next-action after failed lookup and used the actual inventory command and apps/office/coverage/calc/coverage-summary.json. Preserve hook configuration outside approved scope.
+extensions:
+  implementation_commit:
+    hash: "490f0af9d064f58adb4e7476170d555086f414e8"
+    message: "✨ QP6EMJ calc: port signed64 big address and range owners"
 id_source: "generated"
 ---
 ## Summary
