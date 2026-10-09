@@ -1,0 +1,32 @@
+{
+  "node": "v24.13.1",
+  "legacyCompiler": "6.0.3",
+  "nativeCompiler": "7.0.2",
+  "method": "Sequential local wall-clock npm command measurements on the same machine; two typecheck runs and one production build per compiler. Native tooling includes the newly added compiler regression test. These are local observations, not a cross-platform performance guarantee.",
+  "metrics": {
+    "tools": {
+      "baselineSeconds": 2.216129917,
+      "nativeSeconds": 0.39651075000000024,
+      "speedup": 5.589079027491685,
+      "reductionPercent": 82.10796456659178,
+      "baselineSamples": 2,
+      "nativeSamples": 2
+    },
+    "office": {
+      "baselineSeconds": 16.097221520999998,
+      "nativeSeconds": 3.3194399584999994,
+      "speedup": 4.849378727209776,
+      "reductionPercent": 79.37880177538995,
+      "baselineSamples": 2,
+      "nativeSamples": 2
+    },
+    "production-build": {
+      "baselineSeconds": 17.307046166,
+      "nativeSeconds": 4.218214333,
+      "speedup": 4.102931904290222,
+      "reductionPercent": 75.62718506357973,
+      "baselineSamples": 1,
+      "nativeSamples": 1
+    }
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "command": "npm run verify",
+  "status": 0,
+  "logSha256": "b3c501426fc0c56bce82e616a5430fc9ea91645cfb3d9bc44db03fe247fc583a",
+  "rawLogBytes": 4881375,
+  "rawLogCache": "node_modules/.cache/ts7-full-verify.log",
+  "applicationTests": 14192,
+  "applicationTestFiles": 528,
+  "inventoryTests": 122,
+  "inventoryTestFiles": 38,
+  "toolingTests": 13,
+  "toolingTestFiles": 3,
+  "writerResourceTests": 2,
+  "browserTests": 303,
+  "inventoryCommands": [
+    {
+      "command": "npm run inventory:invariants",
+      "status": 0,
+      "reportKeys": [
+        "scope",
+        "applications",
+        "capabilityCount",
+        "moduleCount",
+        "invariantCount",
+        "globalRecordCount",
+        "parity",
+        "provenance",
+        "runtime"
+      ]
+    },
+    {
+      "command": "npm run inventory:parity",
+      "status": 0,
+      "reportKeys": [
+        "scope",
+        "applications",
+        "capabilityCount",
+        "moduleCount",
+        "invariantCount",
+        "globalRecordCount",
+        "parity",
+        "provenance",
+        "runtime"
+      ]
+    }
+  ]
+}
