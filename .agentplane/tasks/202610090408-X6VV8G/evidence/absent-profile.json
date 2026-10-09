@@ -1,0 +1,207 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {},
+  "sourcePreservationManifestSHA256": "7b9fff7803402e85bdba393b93d899ac1dfe2c79c24f4de64acbefb9c1f46648",
+  "noRepairsOrRetries": true,
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1443,
+      "sha256": "421c997694836fb0f061d046c57901160a4b876b4c21371b4b30a68aefaef3ac",
+      "totals": [],
+      "failedCases": [],
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/X6VV8G.app-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 88519,
+      "sha256": "39d39c1e491b3508641f89540fbe86608bb21b3f8cc6f8d116abcb4ad8746779",
+      "totals": [
+        "Test Files  3 failed | 502 passed (505)",
+        "Tests  4 failed | 14040 passed (14044)"
+      ],
+      "failedCases": [
+        {
+          "name": "apps/office/src/sw/browser/editor/native-table-tab.test.tsx > native table Tab UI renders appended empty cells and restores native row/cursor with UndoRedo",
+          "assertion": [
+            "TypeError: Cannot read properties of undefined (reading 'GetAttrSet')"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/source/core/table/native-row-insertion.test.ts > inserts counted rows at selected edge behind=false",
+          "assertion": [
+            "TypeError: Cannot read properties of undefined (reading 'GetAttrSet')"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/source/core/table/native-row-insertion.test.ts > inserts counted rows at selected edge behind=true",
+          "assertion": [
+            "TypeError: Cannot read properties of undefined (reading 'GetAttrSet')"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/source/core/undo/native-insert-table-history.test.ts > replays inserted table, appended native row and later cell typing through one history stack",
+          "assertion": [
+            "TypeError: Cannot read properties of undefined (reading 'GetAttrSet')"
+          ]
+        }
+      ],
+      "caseCounts": {
+        "passed": 14040,
+        "failed": 4,
+        "skipped": 0,
+        "total": 14044
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 18105,
+          "covered": 18103,
+          "skipped": 0,
+          "pct": 99.98
+        },
+        "statements": {
+          "total": 19876,
+          "covered": 19874,
+          "skipped": 0,
+          "pct": 99.98
+        },
+        "functions": {
+          "total": 4554,
+          "covered": 4553,
+          "skipped": 0,
+          "pct": 99.97
+        },
+        "branches": {
+          "total": 14568,
+          "covered": 14564,
+          "skipped": 0,
+          "pct": 99.97
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverage": {
+        "lines": 99.98,
+        "statements": 99.98,
+        "functions": 99.97,
+        "branches": 99.97
+      },
+      "incompleteFileCount": 5,
+      "coverageMapSHA256": "c43c2534c374626c3f9e27b0aa098d3285417c6c53d4f079fcfe0f88f1ae18ff",
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "inventory",
+      "command": "npm run test:inventory:coverage -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/X6VV8G.inventory-results.json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 40596,
+      "sha256": "649a5e8264f760e746421e96c7b56842c741d73316f45614cd76a7f1d70d4808",
+      "totals": [
+        "Test Files  36 passed (36)",
+        "Tests  110 passed (110)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "passed": 110,
+        "failed": 0,
+        "skipped": 0,
+        "total": 110
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 1464,
+          "covered": 1464,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 1523,
+          "covered": 1523,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 384,
+          "covered": 384,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 1081,
+          "covered": 1081,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100
+      },
+      "incompleteFileCount": 0,
+      "coverageMapSHA256": "438ef19e1fa74bd30fad6e8aac30a09ecef9589d9ecf05d1c4e7b6bdd3d059cc",
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "scripts",
+      "command": "npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts scripts/check-module-boundaries.test.ts scripts/check-legacy-font-boundary.test.ts scripts/native-column-item-boundary.test.ts scripts/native-ruler-boundary.test.ts --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/X6VV8G.scripts-results.json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1343,
+      "sha256": "798ee2f48b8e7cba913f9c1a5f2c539141131aad088b83ef1f4bc375af4b1a15",
+      "totals": [
+        "Test Files  6 passed (6)",
+        "Tests  19 passed (19)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "passed": 19,
+        "failed": 0,
+        "skipped": 0,
+        "total": 19
+      },
+      "unhandledErrorCount": 0
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 41817,
+      "sha256": "2ca9929dc61b20dd3f146cd5683e387669dfa8f52940e715b7d4f32f0e3c3d29",
+      "totals": [
+        "301 passed (2.9m)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "startTime": "2026-10-09T04:16:10.626Z",
+        "duration": 172786.633,
+        "expected": 301,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "unhandledErrorCount": 0
+    }
+  ]
+}

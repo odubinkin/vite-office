@@ -1,0 +1,336 @@
+{
+  "testedImplementation": "1b86332f7b8ffeaef9df78935d6a7d845eda4aca",
+  "profileExit": "rework",
+  "passedTests": 14470,
+  "failedTests": 4,
+  "skippedTests": 0,
+  "suites": {
+    "app": {
+      "files": 505,
+      "completePartition": true,
+      "uniqueCases": 14044,
+      "uniqueIdentifiers": 14044,
+      "caseIdentifierStatusSHA256": "df4c52d98743e27e6ab4324ac2286e809561f7eb7ab0a633422aed3dc70c4a7a",
+      "passed": 14040,
+      "failed": 4,
+      "skipped": 0
+    },
+    "inventory": {
+      "files": 36,
+      "completePartition": true,
+      "uniqueCases": 110,
+      "uniqueIdentifiers": 110,
+      "caseIdentifierStatusSHA256": "dd4a135daa079c96363f4a07cce260c6ef2924c13f39b6575026f67da0581cc8",
+      "passed": 110,
+      "failed": 0,
+      "skipped": 0
+    },
+    "scripts": {
+      "files": 6,
+      "completePartition": true,
+      "uniqueCases": 19,
+      "uniqueIdentifiers": 19,
+      "caseIdentifierStatusSHA256": "300c59ce33c373fae6f256a2147723d2353bb64d3f9ad14a29dd8a0ca386434b",
+      "passed": 19,
+      "failed": 0,
+      "skipped": 0
+    },
+    "chromium": {
+      "files": 119,
+      "completePartition": true,
+      "uniqueCases": 301,
+      "uniqueIdentifiers": 301,
+      "caseIdentifierStatusSHA256": "a6fa8cc5566791ccce5d4497581e84ed9a3e0c3829737bcf7a48b3ce65e68408",
+      "stats": {
+        "startTime": "2026-10-09T04:16:10.626Z",
+        "duration": 172786.633,
+        "expected": 301,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "errors": 0,
+      "everyCaseExecutedOnce": true
+    }
+  },
+  "coverage": {
+    "app": {
+      "lines": {
+        "total": 18105,
+        "covered": 18103,
+        "skipped": 0,
+        "pct": 99.98
+      },
+      "statements": {
+        "total": 19876,
+        "covered": 19874,
+        "skipped": 0,
+        "pct": 99.98
+      },
+      "functions": {
+        "total": 4554,
+        "covered": 4553,
+        "skipped": 0,
+        "pct": 99.97
+      },
+      "branches": {
+        "total": 14568,
+        "covered": 14564,
+        "skipped": 0,
+        "pct": 99.97
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "inventory": {
+      "lines": {
+        "total": 1464,
+        "covered": 1464,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 1523,
+        "covered": 1523,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 384,
+        "covered": 384,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 1081,
+        "covered": 1081,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "appIncompleteFiles": [
+      {
+        "path": "apps/office/src/sfx2/source/doc/docfile.ts",
+        "metrics": {
+          "lines": {
+            "total": 43,
+            "covered": 42,
+            "skipped": 0,
+            "pct": 97.67
+          },
+          "statements": {
+            "total": 51,
+            "covered": 50,
+            "skipped": 0,
+            "pct": 98.03
+          },
+          "functions": {
+            "total": 13,
+            "covered": 13,
+            "skipped": 0,
+            "pct": 100
+          },
+          "branches": {
+            "total": 49,
+            "covered": 48,
+            "skipped": 0,
+            "pct": 97.95
+          }
+        }
+      },
+      {
+        "path": "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts",
+        "metrics": {
+          "lines": {
+            "total": 249,
+            "covered": 249,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 276,
+            "covered": 276,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 43,
+            "covered": 43,
+            "skipped": 0,
+            "pct": 100
+          },
+          "branches": {
+            "total": 212,
+            "covered": 211,
+            "skipped": 0,
+            "pct": 99.52
+          }
+        }
+      },
+      {
+        "path": "apps/office/src/sw/source/core/crsr/trvltbl.ts",
+        "metrics": {
+          "lines": {
+            "total": 228,
+            "covered": 227,
+            "skipped": 0,
+            "pct": 99.56
+          },
+          "statements": {
+            "total": 257,
+            "covered": 256,
+            "skipped": 0,
+            "pct": 99.61
+          },
+          "functions": {
+            "total": 39,
+            "covered": 38,
+            "skipped": 0,
+            "pct": 97.43
+          },
+          "branches": {
+            "total": 153,
+            "covered": 153,
+            "skipped": 0,
+            "pct": 100
+          }
+        }
+      },
+      {
+        "path": "apps/office/src/sw/source/core/layout/paintfrm.ts",
+        "metrics": {
+          "lines": {
+            "total": 71,
+            "covered": 71,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 76,
+            "covered": 76,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 9,
+            "covered": 9,
+            "skipped": 0,
+            "pct": 100
+          },
+          "branches": {
+            "total": 26,
+            "covered": 25,
+            "skipped": 0,
+            "pct": 96.15
+          }
+        }
+      },
+      {
+        "path": "apps/office/src/sw/source/uibase/shells/tabsh.ts",
+        "metrics": {
+          "lines": {
+            "total": 152,
+            "covered": 152,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 172,
+            "covered": 172,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 19,
+            "covered": 19,
+            "skipped": 0,
+            "pct": 100
+          },
+          "branches": {
+            "total": 139,
+            "covered": 138,
+            "skipped": 0,
+            "pct": 99.28
+          }
+        }
+      }
+    ]
+  },
+  "preservation": {
+    "trackedFiles": 1274,
+    "changed": [],
+    "protectedIOAndEntireWriterUIByteIdentical": true,
+    "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+    "stashPreserved": true,
+    "allPriorTaskLeavesUnchanged": true
+  },
+  "artifacts": {
+    "inspected": 6133,
+    "forbiddenSourceOrPython": [],
+    "rawTaskPaths": [],
+    "rawLocation": "apps/office/node_modules/.cache/parity-coverage"
+  },
+  "governance": [
+    {
+      "command": "ap doctor",
+      "exit": 0,
+      "sha256": "ab6e8f738ebf968f1aa71d820f556640559a954e15742161953832d7051e023a",
+      "bytes": 1616,
+      "diagnostics": [
+        "doctor (OK)",
+        "doctor: checking workspace",
+        "doctor: checking branch_pr drift",
+        "doctor: checking runtime source",
+        "doctor: checking project-local blueprints",
+        "doctor: checking prompt graph",
+        "doctor: checking recent task archive",
+        "doctor: checking workflow contract",
+        "{\"ts\":\"2026-10-09T04:20:09.590Z\",\"component\":\"workflow-runtime\",\"event\":\"workflow_doctor_check\",\"details\":{\"ok\":true,\"findings\":0}}",
+        "warning: doctor findings: errors=0 warnings=2 info=2",
+        "- [WARN] State: managed AgentPlane hook shim is missing current readiness or fallback branches",
+        "Likely cause: the repository still has an older managed shim that cannot validate runner startup or use current fallback recovery",
+        "Next action: agentplane hooks install (rewrite the shim with the current fallback chain)",
+        "Details: Shim path: .agentplane/bin/agentplane",
+        "  - AGENTPLANE_HOOK_RUNNER fallback: present",
+        "  - AGENTPLANE_HOOK_ALLOW_GLOBAL fallback: present",
+        "  - Runner startup readiness: missing",
+        "- [INFO] State: managed pre-push hook will use installed clean-project fallback checks",
+        "Likely cause: this project does not ship a repository-local scripts/run-pre-push-hook.mjs",
+        "Next action: add project-local package scripts such as format:check or test, or keep the installed fallback (make pre-push behavior explicit when the project needs stricter repository-specific checks)",
+        "Details: Missing repository script: scripts/run-pre-push-hook.mjs",
+        "  - Fallback will consider declared scripts: build, format:check, test",
+        "- [INFO] Project blueprint compatibility: compatible; trusted=0",
+        "- [WARN] DONE task is missing implementation commit hash: 202610031635-2Z3962 (finish with --commit <hash>)."
+      ]
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "exit": 0,
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9",
+      "bytes": 18,
+      "diagnostics": [
+        "policy routing OK"
+      ]
+    },
+    {
+      "command": "git diff --check",
+      "exit": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "diagnostics": []
+    }
+  ],
+  "noRepairsOrRetries": true,
+  "goalIncomplete": true,
+  "userRequestedPauseAfterFullProfile": true
+}

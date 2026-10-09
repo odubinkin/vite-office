@@ -1,0 +1,25 @@
+{
+  "base": "1e3907bdc6bd9def7ad639095810d78490096dea",
+  "testedImplementation": "1b86332f7b8ffeaef9df78935d6a7d845eda4aca",
+  "trackedFiles": 1274,
+  "manifestSHA256": "7b9fff7803402e85bdba393b93d899ac1dfe2c79c24f4de64acbefb9c1f46648",
+  "acceptanceFiles": 666,
+  "partitions": {
+    "app": {
+      "files": 505,
+      "pathsSHA256": "5a31b8b80c76ca2a6ac14ace0bf9790befdd4cc5f6a8ea3cf8d036dfedfe7062"
+    },
+    "inventory": {
+      "files": 36,
+      "pathsSHA256": "e756ed989445d7610f78448a966a3dbb613fae1d63d028e1222c250f6892f5b8"
+    },
+    "scripts": {
+      "files": 6,
+      "pathsSHA256": "c837f8c00fdb9c772780878a377d3dffb2b8621a73c7811b7e43269c6c142934"
+    },
+    "chromium": {
+      "files": 119,
+      "pathsSHA256": "f43d1bfc4a4e0691ae259c2c2cd7e3879b26f02f650b6cb5afb7df7ce16f7c4e"
+    }
+  }
+}

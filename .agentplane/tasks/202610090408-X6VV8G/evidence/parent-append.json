@@ -1,0 +1,9 @@
+{
+  "parent": "202609240501-C9TN6M",
+  "originalCharacters": 720843,
+  "originalSHA256": "f5fce4014e512a386f719d735138dcef87bfaca037eec75e7c2f6044050a9a23",
+  "finalCharacters": 722345,
+  "finalSHA256": "994311e16482df237a133253be4666c0b481cd7938bbd0abbe98879ff1009945",
+  "originalPrefixByteIdentical": true,
+  "onlyExactIteration247Append": true
+}
