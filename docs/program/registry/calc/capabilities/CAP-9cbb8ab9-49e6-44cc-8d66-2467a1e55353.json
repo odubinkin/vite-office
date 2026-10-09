@@ -20,7 +20,7 @@
     },
     "capability": "Calc relative reference wrapping",
     "gaps": [
-      "Big-coordinate Update overload, full document/compiler/token/named-range integration, debug assertion enforcement and undefined arithmetic domains remain subsequent work; bounded initialized release fixtures do not establish full reference-update or whole Calc parity."
+      "full document/compiler/token/named-range integration, debug assertion enforcement and undefined arithmetic domains remain subsequent work; bounded initialized release fixtures do not establish full reference-update or whole Calc parity."
     ],
     "upstream": {
       "implementation": [
@@ -81,7 +81,7 @@
     "aspect": "model-operation",
     "atomicOperation": "Resolve initialized complex references, wrap only relative axes once, sort and write back native raw offsets and flags",
     "scopeLimitations": [
-      "Big-coordinate Update overload, full document/compiler/token/named-range integration, debug assertion enforcement and undefined arithmetic domains remain subsequent work; bounded initialized release fixtures do not establish full reference-update or whole Calc parity.",
+      "full document/compiler/token/named-range integration, debug assertion enforcement and undefined arithmetic domains remain subsequent work; bounded initialized release fixtures do not establish full reference-update or whole Calc parity.",
       "The upstream testFormulaRefData links the reused reference owner. Full formula compiler, named-range/token consumer and browser integration are not certified by the bounded native wrapping fixture."
     ],
     "implemented": true,

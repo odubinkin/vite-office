@@ -251,7 +251,7 @@ Portable tests compare all 20203 initialized growth/transpose/alias outcomes
 and retain independent literal contracts. Reproduce it with
 `node scripts/calc-refupdat-native-probe.mjs --check`, which checks pinned Git
 blobs and full-source/extracted SHA256 hashes. Ordinary tests need no compiler
-or upstream checkout. Big-coordinate `Update`, full
+or upstream checkout. Full
 consumer integration, native debug checks and undefined arithmetic remain
 pending; no replacement methods or fake document owners are introduced.
 
@@ -314,10 +314,51 @@ and result codes across both expansion policies, clipping, sticky references,
 mixed axes, source containment, reversed raw ranges and sheet reorder directions.
 Run `node scripts/calc-refupdate-native-probe.mjs --check` to reproduce them;
 ordinary tests use the saved fixture. Full document/range-list/compiler consumers,
-the big-coordinate overload, native aliased scalar output storage, debug checks
+native aliased scalar output storage, debug checks
 and undefined arithmetic remain unverified. Inventory retains unverified semantic
 parity. All 57 Calc tests retain actual100 Istanbul coverage. This is task 2 of
 the resumed ten-task interval; the next full suite is due at task 10.
+
+## Signed64 big-range reference updates
+
+Task `202610091348-5TZGNC` adds the original big-range `ScRefUpdate.Update`
+overload at the same public owner. Native overload dispatch uses distinct first
+arguments; the ordinary scalar signature and its output tuple remain unchanged.
+The last TS overload retains existing ordinary `Parameters` inference. The big
+overload narrows displacements to native signed32, reuses existing `ScBigRange`
+and `ScBigAddress` values and preserves receiving endpoint identity.
+
+Source and reference coordinates are snapshotted before insertion, including when
+both arguments are the same range. Sequential axis predicates use updated reference
+coordinates and the original source snapshot. No document bound clips these values.
+Each exact signed64 min/max endpoint pair protects its whole axis. Positive insertion
+overflow saturates to signed64 maximum; the saturation result remains UPDATED even
+when the numerical value was already maximum. Defined negative insertion and movement
+use unclipped exact arithmetic. Copy and reorder are untouched by this overload.
+
+The original Move helper checks overflow and then performs signed64 `+=` anyway.
+A true cut flag therefore implies undefined arithmetic in that original branch.
+For every defined Move input both cut flags are false; TS states this remainder
+directly with proof comments, retains the original pre-addition helper flag and
+uses the original final range comparison for UPDATED. No wrapping policy, exception
+or coverage exclusion is invented for native undefined inputs. Unchanged original
+C++ helper/body intervals remain in the sanitizer comparison.
+
+`scripts/calc-bigrefupdate-native-probe.mjs` compiles complete original big classes,
+helpers and the Update overload with original numerical coordinate dependencies.
+All 19,390 initialized defined outcomes compare exact decimal-string values,
+results and source/reference aliases under ASan/UBSan. Cases include signed32
+displacement extrema, signed64 sentinel/extreme coordinates, guarded saturation,
+mixed axes and values beyond JavaScript Number precision. Conservative arithmetic
+admission excludes possible unguarded signed64 overflow; protected whole axes are
+retained. Exact pinned blobs and full/extracted SHA256 hashes are checked by
+`node scripts/calc-bigrefupdate-native-probe.mjs --check`. Ordinary tests remain
+independent of the compiler and upstream checkout. Native undefined/uninitialized
+domains, debug checks and full document/compiler/change-tracking consumers remain
+unverified; finite numerical fixtures do not establish whole Calc parity.
+
+All 62 Calc tests retain actual100 Istanbul coverage. This is task 3 of the resumed
+interval; full validation remains due at task 10.
 
 JavaScript tuples represent native output reference parameters. Equality and
 ordering methods represent C++ operators. Undefined native uninitialized
@@ -357,7 +398,7 @@ full-suite verification is task 10. That run is recorded in
 actual100 coverage. The user explicitly left one uncovered Writer painting
 branch for another branch, and requested goal pause after the complete run.
 The user resumed the goal after merging Writer, TS7 and Istanbul. Relative wrapping
-and ordinary reference updating are tasks 1 and 2 of the next interval; the full
+and ordinary/big reference updating are tasks 1, 2 and 3 of the next interval; the full
 cycle is due at task 10.
 
 Source research includes the per-file MPL 2.0 and inherited Apache notices in

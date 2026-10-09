@@ -1,5 +1,6 @@
 /** @fileoverview Original Calc reference transpose and area-growth geometry, reusing existing coordinate owners. */
 import { ScAddress, ScRange } from "../../../inc/address";
+import { ScBigRange } from "../../../inc/bigrange";
 import { UpdateRefMode } from "../../../inc/global";
 import type { SCCOL, SCROW, SCTAB } from "../../../inc/types";
 import type { ScAddressDocument } from "./address";
@@ -10,6 +11,52 @@ import { ScRefUpdateRes } from "../inc/refupdat";
 export interface ScRefUpdateDocument extends ScAddressDocument {
   /** Reads current document reference expansion policy. @returns Whether insertion expands adjacent references. */
   IsExpandRefs(): boolean;
+}
+
+/** Original ordinary-coordinate scalar argument list for TS overload dispatch. */
+type OrdinaryUpdateArgs = [
+  ScRefUpdateDocument,
+  UpdateRefMode,
+  SCCOL,
+  SCROW,
+  SCTAB,
+  SCCOL,
+  SCROW,
+  SCTAB,
+  SCCOL,
+  SCROW,
+  SCTAB,
+  SCCOL,
+  SCROW,
+  SCTAB,
+  SCCOL,
+  SCROW,
+  SCTAB,
+];
+/** Original big-range argument list, with native signed32 displacement inputs. */
+type BigUpdateArgs = [UpdateRefMode, ScBigRange, number, number, number, ScBigRange];
+
+/** Detects the original signed64 addition boundary before arithmetic. @param ref - Raw signed64 coordinate. @param delta - Signed32 displacement. @returns Whether addition crosses a signed64 boundary. */
+function lcl_IsWrapBig(ref: bigint, delta: number): boolean {
+  if (delta > 0) return ref > ScBigRange.nRangeMax - BigInt(delta);
+  return ref < ScBigRange.nRangeMin - BigInt(delta);
+}
+
+/** Moves a big coordinate at/after a boundary, saturating only native guarded positive overflow. @param ref - Raw coordinate. @param start - Boundary. @param delta - Signed32 displacement. @returns Coordinate and saturation flag. */
+function lcl_MoveBig(ref: bigint, start: bigint, delta: number): [bigint, boolean] {
+  let cut = false;
+  if (ref >= start) {
+    if (delta > 0) cut = lcl_IsWrapBig(ref, delta);
+    if (cut) ref = ScBigRange.nRangeMax;
+    else ref += BigInt(delta);
+  }
+  return [ref, cut];
+}
+
+/** Preserves native defined big movement and its pre-addition boundary flag. @param ref - Raw coordinate. @param delta - Signed32 displacement whose addition must be defined. @returns Coordinate and boundary flag. */
+function lcl_MoveItCutBig(ref: bigint, delta: number): [bigint, boolean] {
+  const cut = lcl_IsWrapBig(ref, delta);
+  return [ref + BigInt(delta), cut];
 }
 
 /** Represents template destination widths for native static casts and compound assignment. @param value - Defined arithmetic result. @param width - Native destination width. @returns Narrowed signed coordinate. */
@@ -108,6 +155,15 @@ function lcl_MoveItWrap(ref: number, mask: number): number {
 /** Original static reference-update owner; numerical methods retain their native source responsibilities. */
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class -- Original ScRefUpdate owns static operations at this public boundary.
 export class ScRefUpdate {
+  /** Updates the original big-range overload in place without document clipping. @param mode - Update mode. @param where - Area. @param dx - Signed32 column displacement. @param dy - Signed32 row displacement. @param dz - Signed32 sheet displacement. @param what - Receiving range. @returns Original update result. */
+  public static Update(
+    mode: UpdateRefMode,
+    where: ScBigRange,
+    dx: number,
+    dy: number,
+    dz: number,
+    what: ScBigRange,
+  ): ScRefUpdateRes;
   /** Updates original raw reference coordinates in axis order with native status precedence. @param doc - Document getter view. @param mode - Original update mode. @param col1 - Area start column. @param row1 - Area start row. @param tab1 - Area start sheet. @param col2 - Area end column. @param row2 - Area end row. @param tab2 - Area end sheet. @param dx - Column displacement. @param dy - Row displacement. @param dz - Sheet displacement. @param refCol1 - Reference start column. @param refRow1 - Reference start row. @param refTab1 - Reference start sheet. @param refCol2 - Reference end column. @param refRow2 - Reference end row. @param refTab2 - Reference end sheet. @returns Original result followed by native output-reference coordinates. */
   public static Update(
     doc: ScRefUpdateDocument,
@@ -127,7 +183,95 @@ export class ScRefUpdate {
     refCol2: SCCOL,
     refRow2: SCROW,
     refTab2: SCTAB,
-  ): [ScRefUpdateRes, SCCOL, SCROW, SCTAB, SCCOL, SCROW, SCTAB] {
+  ): [ScRefUpdateRes, SCCOL, SCROW, SCTAB, SCCOL, SCROW, SCTAB];
+  /** Dispatches the original native overloads by their distinct first argument. @param args - Native ordinary or big-range scalar parameters. @returns Native result or result/output-coordinate tuple. */
+  public static Update(
+    ...args: OrdinaryUpdateArgs | BigUpdateArgs
+  ): ScRefUpdateRes | [ScRefUpdateRes, SCCOL, SCROW, SCTAB, SCCOL, SCROW, SCTAB] {
+    if (typeof args[0] === "number") {
+      const [mode, where, rawDx, rawDy, rawDz, what] = args as BigUpdateArgs;
+      const dx = rawDx | 0,
+        dy = rawDy | 0,
+        dz = rawDz | 0;
+      let result = ScRefUpdateRes.UR_NOTHING;
+      const oldRange = new ScBigRange(what);
+      const [col1, row1, tab1, col2, row2, tab2] = where.GetVars();
+      let [refCol1, refRow1, refTab1, refCol2, refRow2, refTab2] = what.GetVars();
+      let cut1: boolean, cut2: boolean;
+      if (mode === UpdateRefMode.URM_INSDEL) {
+        if (
+          dx &&
+          refRow1 >= row1 &&
+          refRow2 <= row2 &&
+          refTab1 >= tab1 &&
+          refTab2 <= tab2 &&
+          (refCol1 !== ScBigRange.nRangeMin || refCol2 !== ScBigRange.nRangeMax)
+        ) {
+          [refCol1, cut1] = lcl_MoveBig(refCol1, col1, dx);
+          [refCol2, cut2] = lcl_MoveBig(refCol2, col1, dx);
+          if (cut1 || cut2) result = ScRefUpdateRes.UR_UPDATED;
+          what.aStart.SetCol(refCol1);
+          what.aEnd.SetCol(refCol2);
+        }
+        if (
+          dy &&
+          refCol1 >= col1 &&
+          refCol2 <= col2 &&
+          refTab1 >= tab1 &&
+          refTab2 <= tab2 &&
+          (refRow1 !== ScBigRange.nRangeMin || refRow2 !== ScBigRange.nRangeMax)
+        ) {
+          [refRow1, cut1] = lcl_MoveBig(refRow1, row1, dy);
+          [refRow2, cut2] = lcl_MoveBig(refRow2, row1, dy);
+          if (cut1 || cut2) result = ScRefUpdateRes.UR_UPDATED;
+          what.aStart.SetRow(refRow1);
+          what.aEnd.SetRow(refRow2);
+        }
+        if (
+          dz &&
+          refCol1 >= col1 &&
+          refCol2 <= col2 &&
+          refRow1 >= row1 &&
+          refRow2 <= row2 &&
+          (refTab1 !== ScBigRange.nRangeMin || refTab2 !== ScBigRange.nRangeMax)
+        ) {
+          [refTab1, cut1] = lcl_MoveBig(refTab1, tab1, dz);
+          [refTab2, cut2] = lcl_MoveBig(refTab2, tab1, dz);
+          if (cut1 || cut2) result = ScRefUpdateRes.UR_UPDATED;
+          what.aStart.SetTab(refTab1);
+          what.aEnd.SetTab(refTab2);
+        }
+      } else if (mode === UpdateRefMode.URM_MOVE) {
+        if (where.Contains(what)) {
+          // Native cut=true implies signed64 overflow in the following +=, which is undefined.
+          // On every defined Move input both cuts are false; final range comparison supplies UPDATED.
+          if (dx && (refCol1 !== ScBigRange.nRangeMin || refCol2 !== ScBigRange.nRangeMax)) {
+            [refCol1] = lcl_MoveItCutBig(refCol1, dx);
+            [refCol2] = lcl_MoveItCutBig(refCol2, dx);
+            what.aStart.SetCol(refCol1);
+            what.aEnd.SetCol(refCol2);
+          }
+          if (dy && (refRow1 !== ScBigRange.nRangeMin || refRow2 !== ScBigRange.nRangeMax)) {
+            [refRow1] = lcl_MoveItCutBig(refRow1, dy);
+            [refRow2] = lcl_MoveItCutBig(refRow2, dy);
+            what.aStart.SetRow(refRow1);
+            what.aEnd.SetRow(refRow2);
+          }
+          if (dz && (refTab1 !== ScBigRange.nRangeMin || refTab2 !== ScBigRange.nRangeMax)) {
+            [refTab1] = lcl_MoveItCutBig(refTab1, dz);
+            [refTab2] = lcl_MoveItCutBig(refTab2, dz);
+            what.aStart.SetTab(refTab1);
+            what.aEnd.SetTab(refTab2);
+          }
+        }
+      }
+      if (result === ScRefUpdateRes.UR_NOTHING && !what.equals(oldRange))
+        result = ScRefUpdateRes.UR_UPDATED;
+      return result;
+    }
+    const [doc, mode, col1, row1, tab1, col2, row2, tab2, dx, dy, dz] = args as OrdinaryUpdateArgs;
+    let [, , , , , , , , , , , refCol1, refRow1, refTab1, refCol2, refRow2, refTab2] =
+      args as OrdinaryUpdateArgs;
     let result = ScRefUpdateRes.UR_NOTHING;
     const oldCol1 = refCol1,
       oldRow1 = refRow1,

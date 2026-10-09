@@ -1,0 +1,94 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-154232e2-d15a-4a10-8caa-be5c28426680",
+    "capabilityId": "CAP-154232e2-d15a-4a10-8caa-be5c28426680",
+    "suite": "calc",
+    "subsystem": "reference-update",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original public ScRefUpdate Update overloads retain ordinary scalar/result output contract and add big-range in-place result contract at the same source owner.",
+      "Exact bigint signed64 storage, signed32 displacements, coordinates outside document bounds and independent whole-axis min/max sentinels without document clipping.",
+      "Original source/reference snapshots, sequential insertion predicates and source/reference aliases with stable recipient endpoints.",
+      "Only positive insertion overflow is guarded and saturates to signed64 max; negative defined insertion and contained movement use unclipped native arithmetic.",
+      "Defined Move inputs have false cut flags because native cut=true implies undefined signed64 addition; direct remaining outcomes retain final range-equality result and original unchanged native comparison."
+    ],
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "Original overload owner and contracts, exact signed64 values, native defined arithmetic and sentinel logic retained; TS overload dispatch represents C++ static overload resolution."
+    },
+    "capability": "Calc signed64 big-range reference updates",
+    "gaps": [
+      "Full ScDocument/compiler/change-tracking/consumer integration, native debug assertions, uninitialized storage and undefined signed64 arithmetic remain unverified; native defined-input aliases and finite fixtures do not establish whole Calc parity."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sc/source/core/inc/refupdat.hxx",
+          "marker": "static ScRefUpdateRes Update( UpdateRefMode"
+        },
+        {
+          "path": "sc/source/core/tool/refupdat.cxx",
+          "marker": "ScRefUpdateRes ScRefUpdate::Update( UpdateRefMode"
+        },
+        {
+          "path": "sc/source/core/tool/refupdat.cxx",
+          "marker": "static bool lcl_IsWrapBig("
+        }
+      ],
+      "tests": [
+        {
+          "path": "sc/qa/unit/subsequent_export_test3.cxx",
+          "marker": "testTrackChangesSimpleXLS"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/README.md",
+          "marker": "formula"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/refupdat.ts",
+          "marker": "lcl_MoveBig"
+        },
+        {
+          "path": "scripts/calc-bigrefupdate-native-probe.mjs",
+          "marker": "originals.update ="
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/big-refupdate.test.ts",
+          "marker": "matches every original native big update and source alias outcome"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/big-refupdate.test.ts",
+          "marker": "retains guarded saturation results even when raw coordinates remain unchanged"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Signed64 big-range reference updates"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "Update big range references in place using original signed64 sentinel protection source snapshots guarded positive insertion saturation and defined contained movement",
+    "scopeLimitations": [
+      "Full ScDocument/compiler/change-tracking/consumer integration, native debug assertions, uninitialized storage and undefined signed64 arithmetic remain unverified; native defined-input aliases and finite fixtures do not establish whole Calc parity.",
+      "Linked change-tracking export tests identify original consumers, but complete change tracking and document/export behavior is not certified by bounded numerical native comparisons."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

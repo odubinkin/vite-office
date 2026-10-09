@@ -21,7 +21,7 @@
     },
     "capability": "Calc ordinary coordinate reference updates",
     "gaps": [
-      "Big-coordinate Update overload, full document/compiler/change-tracking/consumer integration, native aliased scalar output-reference storage, debug assertion enforcement and undefined arithmetic domains remain subsequent work; bounded defined native fixtures do not establish whole reference-update or Calc parity."
+      "full document/compiler/change-tracking/consumer integration, native aliased scalar output-reference storage, debug assertion enforcement and undefined arithmetic domains remain subsequent work; bounded defined native fixtures do not establish whole reference-update or Calc parity."
     ],
     "upstream": {
       "implementation": [
@@ -86,7 +86,7 @@
     "aspect": "model-operation",
     "atomicOperation": "Update ordinary raw range references for insertion/deletion, contained movement and sheet reorder with original expansion clipping sticky/invalid results",
     "scopeLimitations": [
-      "Big-coordinate Update overload, full document/compiler/change-tracking/consumer integration, native aliased scalar output-reference storage, debug assertion enforcement and undefined arithmetic domains remain subsequent work; bounded defined native fixtures do not establish whole reference-update or Calc parity.",
+      "full document/compiler/change-tracking/consumer integration, native aliased scalar output-reference storage, debug assertion enforcement and undefined arithmetic domains remain subsequent work; bounded defined native fixtures do not establish whole reference-update or Calc parity.",
       "The upstream range-list update tests identify the original reference-update consumer responsibility; full range-list UpdateReference and document mutation integration are not certified."
     ],
     "implemented": true,

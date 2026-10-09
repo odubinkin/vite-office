@@ -20,7 +20,7 @@
     },
     "capability": "Calc reference transpose and area-growth geometry",
     "gaps": [
-      "Big-coordinate Update overload, full document/compiler/change-tracking integration, debug assertion enforcement and undefined arithmetic domains remain subsequent work. Bounded numerical fixtures do not establish full reference-update or whole Calc parity."
+      "full document/compiler/change-tracking integration, debug assertion enforcement and undefined arithmetic domains remain subsequent work. Bounded numerical fixtures do not establish full reference-update or whole Calc parity."
     ],
     "upstream": {
       "implementation": [
@@ -77,7 +77,7 @@
     "aspect": "model-operation",
     "atomicOperation": "Transpose contained references with sheet wrapping and grow exact-area references using original header-row rules",
     "scopeLimitations": [
-      "Big-coordinate Update overload, full document/compiler/change-tracking integration, debug assertion enforcement and undefined arithmetic domains remain subsequent work. Bounded numerical fixtures do not establish full reference-update or whole Calc parity.",
+      "full document/compiler/change-tracking integration, debug assertion enforcement and undefined arithmetic domains remain subsequent work. Bounded numerical fixtures do not establish full reference-update or whole Calc parity.",
       "The upstream transpose copy/paste consumer links establish native responsibility; complete copy/paste integration is not certified by bounded geometric fixtures."
     ],
     "implemented": true,
