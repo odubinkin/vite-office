@@ -4,7 +4,7 @@ title: "Port Calc single formula reference data with native differential proof"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,28 @@ verification:
   updated_by: "CODER"
   note: "Commands: native reference probe --write/--check, npm run test:coverage:calc, typecheck, check:dependencies, check:docs, check:file-size, check:source-tree, affected ESLint/Prettier, Calc registry, routing, doctor, diff check. Result: all pass after recorded local extraction/documentation/header-metadata corrections. Evidence:28 tests in7 files; actual100 lines404/404 statements457/457 functions126/126 branches395/395. Native30 unchanged non-debug definitions, exact pinned Git blobs and ASan/UBSan clean; all2048 flag/domain states1024 updates2048 orderings40 initializers12 mutations5 equality outputs match TS. Registry5 capabilities118 scoped modules0 semantic violations. Scope: initialized single references, portable native fixture, Calc metadata/docs. Existing tests, shared/Writer sources and prior statuses unchanged. Doctor0 errors1 pre-existing hook warning. Full suite due at Calc10."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-09T08:12:36.122Z"
+  updated_by: "EVALUATOR"
+  note: "Initialized ScSingleRefData contracts implemented with original flags, raw value semantics, distinct validation and axis-wise relative-name ordering."
+  evaluated_sha: "b76ddfca615a439667cfae808061063bd48ade7e"
+  blueprint_digest: "cf0cc148ac7bcbaca2874389c790dba86d978455b30b25c780f73c91f5ed8312"
+  evidence_refs:
+    - ".agentplane/tasks/202610090758-MBH4QY/README.md"
+    - ".agentplane/tasks/202610090758-MBH4QY/quality/20261009-081236122-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610090758-MBH4QY/quality/20261009-081236122-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610090758-MBH4QY/quality/20261009-081236122-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610090758-MBH4QY/blueprint/resolved-snapshot.json"
+    - "node scripts/calc-refdata-native-probe.mjs --check"
+    - "npm run test:coverage:calc"
+    - "output/playwright/calc-registry5.json"
+    - "npm run typecheck"
+    - "npm run check:dependencies"
+    - "node .agentplane/policy/check-routing.mjs"
+    - "ap doctor"
+  findings:
+    - "All bounded native reference fixture outputs match TypeScript under ASan/UBSan; source bodies unchanged and pinned Git blobs verified. Original testFormulaRefData initial single-reference assertions retained; all earlier Calc tests unchanged. Header re-export accurately has no local declaration; implementation mapped by core/tool. Full document/token/complex range/compiler integration remains unverified."
 commit: null
 comments:
   -

@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "task_id": "202610090758-MBH4QY",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-09T08:12:36.122Z",
+  "verdict": "pass",
+  "summary": "Initialized ScSingleRefData contracts implemented with original flags, raw value semantics, distinct validation and axis-wise relative-name ordering.",
+  "evaluated_sha": "b76ddfca615a439667cfae808061063bd48ade7e",
+  "blueprint_digest": "cf0cc148ac7bcbaca2874389c790dba86d978455b30b25c780f73c91f5ed8312",
+  "findings": [
+    "All bounded native reference fixture outputs match TypeScript under ASan/UBSan; source bodies unchanged and pinned Git blobs verified. Original testFormulaRefData initial single-reference assertions retained; all earlier Calc tests unchanged. Header re-export accurately has no local declaration; implementation mapped by core/tool. Full document/token/complex range/compiler integration remains unverified."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610090758-MBH4QY/README.md",
+    "node scripts/calc-refdata-native-probe.mjs --check",
+    "npm run test:coverage:calc",
+    "output/playwright/calc-registry5.json",
+    "npm run typecheck",
+    "npm run check:dependencies",
+    "node .agentplane/policy/check-routing.mjs",
+    "ap doctor"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
