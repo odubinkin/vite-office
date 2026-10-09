@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 269
+revision: 270
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-09T14:13:36.575Z"
+doc_updated_at: "2026-10-09T14:34:43.675Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -1321,6 +1321,10 @@ sections:
     - Observation: Resumed parity correction0V80RE ports borrowed SwFormatChangeHint old/new format owners and routes accepted inheritance through original locked Writer clients and Svt observers. SwFormat reads GetRegisteredIn directly and removes mirrored derivedFrom state; native format parent item-set rebinding and frame/browser invalidation accept original hints. Existing separate name/node device paths remain a follow-up.
       Impact: 308unique related cases across40initial files and failed/new-only closure pass, including7fresh native core/real-history/mounted UI cases;306initial passes1fresh expectation failure resolved against pinned SaveTable default-root reconstruction,2closure passes3intentional skips,0passing replay. Whole5changed modules actual same-source/identical-complete-map Istanbul378lines428statements112functions237branches strict100,0negative, no prior-task/V8 transfer. Static TS7/build/docs/size/dependencies and restored metadata resource/tree/provenance/registry checks pass.10canonical records preserve every prior field/prefix;573/577old source/tool tests unchanged with4exact source-backed expectation migrations.
       Resolution: Continue active broad goal. This is correction2after full XJTGF0; next full follows10resumed AgentPlane tasks. Full native caches/Which/assertions, format death/naming hints/content-node/VCL registration and whole core/browser parity remain unverified. Registered recovery/open/save/settings exceptions and immutable DONE history are preserved; same-agent quality evaluation is explicitly non-independent.
+
+    - Observation: Resumed correction3 KCHP9M ports pre-base native SwFormat::Destr/SwModify::PrepareFormatDeath and IsFormatInDTOR. Original Writer clients reparent before the exact borrowed replacement hint, surviving owned item sets/layout/browser follow original native notifications. Root page descriptor base cleanup and independent no-client Svt lifetime are retained.
+      Impact: 314 related scenarios in43 files pass including6fresh original-client/core/history/mounted UI cases; complete2-module current-source Istanbul187lines214statements52functions116branches all100/0negative/no older counters. All7 upstream-absent statics and7 restored metadata audits pass. Four canonical record histories and580 prior tests preserved.
+      Resolution: Semantic commit and explicitly same-agent non-independent review follow. Full XJTGF0 historical; correction3/10, no full replay or overall parity promotion. Complete ObjectDying/check-registration/linked-client/assertion/cache/name/VCL behavior remains separate unverified work; registered recovery/open/save/settings deviations preserved. Evidence .agentplane/tasks/202610091422-KCHP9M/evidence/results.json contains only bounded English commands/counts/hashes/IDs.
 id_source: "generated"
 ---
 ## Summary
@@ -2615,3 +2619,7 @@ Iteration251 / 202610090835-4ZF0N4 verified native table layout ownership. SwTab
 - Observation: Resumed parity correction0V80RE ports borrowed SwFormatChangeHint old/new format owners and routes accepted inheritance through original locked Writer clients and Svt observers. SwFormat reads GetRegisteredIn directly and removes mirrored derivedFrom state; native format parent item-set rebinding and frame/browser invalidation accept original hints. Existing separate name/node device paths remain a follow-up.
   Impact: 308unique related cases across40initial files and failed/new-only closure pass, including7fresh native core/real-history/mounted UI cases;306initial passes1fresh expectation failure resolved against pinned SaveTable default-root reconstruction,2closure passes3intentional skips,0passing replay. Whole5changed modules actual same-source/identical-complete-map Istanbul378lines428statements112functions237branches strict100,0negative, no prior-task/V8 transfer. Static TS7/build/docs/size/dependencies and restored metadata resource/tree/provenance/registry checks pass.10canonical records preserve every prior field/prefix;573/577old source/tool tests unchanged with4exact source-backed expectation migrations.
   Resolution: Continue active broad goal. This is correction2after full XJTGF0; next full follows10resumed AgentPlane tasks. Full native caches/Which/assertions, format death/naming hints/content-node/VCL registration and whole core/browser parity remain unverified. Registered recovery/open/save/settings exceptions and immutable DONE history are preserved; same-agent quality evaluation is explicitly non-independent.
+
+- Observation: Resumed correction3 KCHP9M ports pre-base native SwFormat::Destr/SwModify::PrepareFormatDeath and IsFormatInDTOR. Original Writer clients reparent before the exact borrowed replacement hint, surviving owned item sets/layout/browser follow original native notifications. Root page descriptor base cleanup and independent no-client Svt lifetime are retained.
+  Impact: 314 related scenarios in43 files pass including6fresh original-client/core/history/mounted UI cases; complete2-module current-source Istanbul187lines214statements52functions116branches all100/0negative/no older counters. All7 upstream-absent statics and7 restored metadata audits pass. Four canonical record histories and580 prior tests preserved.
+  Resolution: Semantic commit and explicitly same-agent non-independent review follow. Full XJTGF0 historical; correction3/10, no full replay or overall parity promotion. Complete ObjectDying/check-registration/linked-client/assertion/cache/name/VCL behavior remains separate unverified work; registered recovery/open/save/settings deviations preserved. Evidence .agentplane/tasks/202610091422-KCHP9M/evidence/results.json contains only bounded English commands/counts/hashes/IDs.

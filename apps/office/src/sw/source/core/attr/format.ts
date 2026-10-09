@@ -12,11 +12,13 @@ import {
   type SwModelHint,
 } from "../../../inc/hints";
 import { SwAttrSet, type SwAttrPool } from "./swatrset";
+import { RES_PAGEDESC } from "../../../inc/hintids";
 
 /** Base class for identity-bearing Writer styles and formats. */
 export class SwFormat extends BroadcastingModify {
   private readonly attributeSet: SwAttrSet;
   private autoFormat = true;
+  private formatInDTOR = false;
 
   /** Creates a Writer format and connects its attribute set to the derived-from parent. @param pool - Owning Writer pool. @param formatName - UI format name. @param ranges - Accepted WhichId ranges. @param derivedFrom - Optional parent format. @returns Nothing. */
   public constructor(
@@ -173,6 +175,29 @@ export class SwFormat extends BroadcastingModify {
   /** Changes the auto-format flag. @param autoFormat - New flag. @returns Nothing. */
   public SetAuto(autoFormat: boolean): void {
     this.autoFormat = autoFormat;
+  }
+
+  /** Reads the native dependent-client destruction flag. @returns Whether format death started with Writer clients. */
+  public IsFormatInDTOR(): boolean {
+    return this.formatInDTOR;
+  }
+
+  /** Runs native format destruction before inherited notifier and modify teardown. @returns Nothing. */
+  public override DisposeModify(): void {
+    this.Destr();
+    super.DisposeModify();
+  }
+
+  /** Reparents original dependent clients, retaining native parentless page-descriptor cleanup. @returns Nothing. */
+  private Destr(): void {
+    if (!this.HasWriterListeners()) return;
+    this.formatInDTOR = true;
+    const parent = this.DerivedFrom();
+    if (parent === undefined) {
+      SwFormat.prototype.ResetFormatAttr.call(this, RES_PAGEDESC);
+      return;
+    }
+    this.PrepareFormatDeath(new SwFormatChangeHint(this, parent));
   }
 
   /** Emits one format inheritance/name hint through the document broadcaster. @returns Nothing. */

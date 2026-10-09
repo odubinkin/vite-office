@@ -3,7 +3,13 @@
 import { SfxBroadcaster, type SfxListenerTarget } from "../../svl/source/notify/SfxBroadcaster";
 import { SvtBroadcaster } from "../../svl/source/notify/broadcast";
 import { SfxListener } from "../../svl/source/notify/lstner";
-import { AttrSetChangeHint, SwAttrSetChg, type SwAtomicModelHint, type SwModelHint } from "./hints";
+import {
+  AttrSetChangeHint,
+  SwAttrSetChg,
+  type SwFormatChangeHint,
+  type SwAtomicModelHint,
+  type SwModelHint,
+} from "./hints";
 import type { SfxPoolItem } from "../../svl/source/items/poolitem";
 import type { SwAttrSet } from "../source/core/attr/swatrset";
 
@@ -139,6 +145,19 @@ export class SwModify
   /** Reports native Writer clients independently of observer subscriptions. @returns Whether a Writer client remains. */
   public HasWriterListeners(): boolean {
     return this.HasListeners();
+  }
+
+  /** Moves each original Writer client before delivering the borrowed death replacement hint. @param hint - Native old and surviving format owners. @returns Nothing. */
+  public PrepareFormatDeath(hint: SwFormatChangeHint): void {
+    this.ForAllListeners(
+      /** Reparents the actual registered client before its native callback. @param listener - Original Writer client. @returns Continue flag. */
+      (listener) => {
+        const client = listener as SwModify;
+        client.RegisterToModify(hint.m_pNewFormat as SwModify);
+        client.SwClientNotify(this, hint);
+        return false;
+      },
+    );
   }
 
   /** Locks native modify notifications; the source flag is boolean, not a depth counter. @returns Nothing. */
