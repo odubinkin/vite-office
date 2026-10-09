@@ -1,10 +1,11 @@
 ---
 id: "202610091519-SV3P04"
 title: "Invalidate original table position for last-row frame size changes"
-status: "DOING"
+result_summary: "Native last-row frame size changes invalidate original containing-table position"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 18
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -54,6 +55,9 @@ comments:
   -
     author: "CODER"
     body: "Implementation: Native last-row size/split invalidates original containing-table position before borrowed item dispatch;178cases scoped actual100, static and metadata gates passed; explicit semantic SHA bound before quality."
+  -
+    author: "CODER"
+    body: "Verified: Last-row native size/split invalidates original containing-table position before borrowed item forwarding;178related cases7fresh, complete2module actual Istanbul100, TS7/static/metadata passed, canonical history and old tests preserved; explicit same-agent non-independent quality pass."
 events:
   -
     type: "status"
@@ -75,8 +79,15 @@ events:
     from: "DOING"
     to: "DOING"
     note: "Implementation: Native last-row size/split invalidates original containing-table position before borrowed item dispatch;178cases scoped actual100, static and metadata gates passed; explicit semantic SHA bound before quality."
+  -
+    type: "status"
+    at: "2026-10-09T15:38:44.035Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Last-row native size/split invalidates original containing-table position before borrowed item forwarding;178related cases7fresh, complete2module actual Istanbul100, TS7/static/metadata passed, canonical history and old tests preserved; explicit same-agent non-independent quality pass."
 doc_version: 3
-doc_updated_at: "2026-10-09T15:38:26.633Z"
+doc_updated_at: "2026-10-09T15:38:44.037Z"
 doc_updated_by: "CODER"
 description: "Correction5/10 after XJTGF0: port native SwRowFrame::OnFrameSize containing-table position invalidation through original upper-frame traversal, preserving the upstream row hint filter and represented flat layout boundary."
 sections:
