@@ -1,10 +1,11 @@
 ---
 id: "202610090338-81YWQB"
 title: "Connect Writer UI to native format notifiers and remove generic attribute device bridge"
-status: "DOING"
+result_summary: "Connected Writer presentation to native BroadcastingModify/Svt format notifiers, removed generic attribute device bridge, retained independent last-Writer-client format lifetime and verified original UI/history/deletion/replacement/cleanup. Full native physical layout clients and broader parity remain incomplete; full suite next247."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -43,11 +44,16 @@ quality_review:
   findings:
     - "Native independent Svt format channel preserves original hints, Writer-first order and final Writer-client format lifetime; generic attribute device bridge removed; actual main UI/store/history/cleanup verified."
     - "1596 unique app cases including18fresh and13Chromium; all-four100 actual source-bound coverage; no unchanged passing replay.662old files exact,1scoped native contract migration;318old metadata semantics retained plus3unverified modules."
-commit: null
+commit:
+  hash: "1b86332f7b8ffeaef9df78935d6a7d845eda4aca"
+  message: "🧩 81YWQB code: connect Writer presentation to native format notifiers"
 comments:
   -
     author: "CODER"
     body: "Start: approved native notifier/UI subscription scope under the user's continuing parity goal. Preserve IO/recovery exceptions and old acceptance; remove only generic format attribute-device bridge, verify original native ownership/order/lifetime/main UI without upstream runtime."
+  -
+    author: "CODER"
+    body: "Verified: original native Svt format notifiers now drive Writer UI;1596unique app cases18fresh13Chromium and actual all-four100 coverage; six statics/build/source/artifact gates pass upstream absent/restored; four current-agent non-independent EVALUATOR certificates identical."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Actual implementation1b86332f7b8ffeaef9df78935d6a7d845eda4aca verified:1596unique app18fresh13Chromium; all-four100 source-bound app/inventory; six statics/build/source/artifact gates; four non-independent EVALUATOR certificates identical. Upstream absent/restored; no unchanged passing replay; full next247."
+  -
+    type: "status"
+    at: "2026-10-09T04:05:56.808Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: original native Svt format notifiers now drive Writer UI;1596unique app cases18fresh13Chromium and actual all-four100 coverage; six statics/build/source/artifact gates pass upstream absent/restored; four current-agent non-independent EVALUATOR certificates identical."
 doc_version: 3
-doc_updated_at: "2026-10-09T04:05:31.229Z"
+doc_updated_at: "2026-10-09T04:05:56.809Z"
 doc_updated_by: "CODER"
 description: "Iteration246: port native Svt broadcaster/listener and BroadcastingModify notifier channel, subscribe original row/cell/style formats at WriterViewStore without keeping writer formats alive, and remove generic SwFormat attribute device signal. Preserve registered IO/recovery/settings deviations; exact native hints/lifetimes, structural rebind, history and main UI verified without upstream runtime. Full cadence237→247."
 sections:
