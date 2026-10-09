@@ -1,10 +1,11 @@
 ---
 id: "202610090451-FK9PBM"
 title: "Separate Writer Calc and shared test projects"
-status: "DOING"
+result_summary: "verified-202610090451-FK9PBM"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -18,7 +19,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-09T05:59:25.458Z"
+  updated_at: "2026-10-09T05:59:58.511Z"
   updated_by: "CODER"
   note: "verified-202610090451-FK9PBM"
   attempts: 0
@@ -45,11 +46,16 @@ quality_review:
     - "Every current unit test is selected exactly once; scoped configurations match those owners. Calc is an explicitly empty bootstrap project, and graph rules forbid direct Writer Calc edges and reverse shared dependencies."
     - "All 505 accepted file results equal actual original passing observations from the full run or explicit reruns. Whole isolated source records and scope projections were audited without editing counters; the two disjoint scoped reports cover all 318 eligible sources at 100 percent."
     - "Original desktop timeout and invalid negative V8 counter evidence are retained and openly documented. Browser tests, static build, inventory parity, strict types, docs, format, lint and policy checks pass."
-commit: null
+commit:
+  hash: "2755a3b5ea4db9f93d826f75b8d5a39565981b46"
+  message: "🧪 FK9PBM task: persist verified test isolation evidence"
 comments:
   -
     author: "CODER"
     body: "Start: Implement approved Writer Calc and shared test isolation with scoped coverage, E2E selection and dependency boundaries."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610090451-FK9PBM. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -76,8 +82,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202610090451-FK9PBM"
+  -
+    type: "verify"
+    at: "2026-10-09T05:59:58.511Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610090451-FK9PBM"
+  -
+    type: "status"
+    at: "2026-10-09T05:59:59.375Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610090451-FK9PBM. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-09T05:59:25.548Z"
+doc_updated_at: "2026-10-09T05:59:59.377Z"
 doc_updated_by: "CODER"
 description: "Implement the user-approved application test isolation: Vitest projects and scoped coverage, Playwright projects, per-application scripts, Calc module dependency boundaries, and usage documentation; preserve full-suite verification."
 sections:
@@ -212,9 +231,43 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-10-09T05:59:58.511Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610090451-FK9PBM
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T05:59:25.548Z, excerpt_hash=sha256:e6b5b7d10d8ccf99344eefc02c3727d445b5b5a81462e3ea4c00e1e62ad0fac8
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610090451-FK9PBM/blueprint/resolved-snapshot.json
+    - old_digest: 4e083c4909040e21e88cd32bf3229518e45e30ed0c5e165d218db7e936ccbd46
+    - current_digest: 4e083c4909040e21e88cd32bf3229518e45e30ed0c5e165d218db7e936ccbd46
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610090451-FK9PBM
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610090451-FK9PBM --result verified-202610090451-FK9PBM --commit 2755a3b5ea4db9f93d826f75b8d5a39565981b46
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the task implementation commit to restore unified configuration and commands."
   Findings: "Application discovery is disjoint and exhaustive, existing parity-mapped paths are preserved, and Calc is a guarded empty project ready for src/sc and e2e/calc tests. Five existing test files were strengthened without changing runtime behavior. Early concurrent checks hit resource contention; bounded reruns passed. One desktop storage wait timed out in the full run and passed twice afterward. V8 produced an impossible negative branch count for paintfrm.ts even in a small grouped run; an isolated whole-source measurement gives 100% with nonnegative counters. Final coverage acceptance explicitly reuses actual passing observations and entire valid isolated source records; original failures remain preserved. Residual tooling risk: grouped V8 collection can still emit that invalid counter; this task does not claim to repair the coverage dependency. Shared coverage runs application integration evidence while measuring only shared sources. No coverage thresholds were lowered and no required tests were omitted."
+extensions:
+  implementation_commit:
+    hash: "bd1420fafce2d24008cdbe7ed8659e0e220b1e3a"
+    message: "🧪 FK9PBM code: isolate Writer Calc and shared test projects"
 id_source: "generated"
 ---
 ## Summary
@@ -353,6 +406,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202610090451-FK9PBM --result verified-202610090451-FK9PBM --commit bd1420fafce2d24008cdbe7ed8659e0e220b1e3a
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-09T05:59:58.511Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610090451-FK9PBM
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T05:59:25.548Z, excerpt_hash=sha256:e6b5b7d10d8ccf99344eefc02c3727d445b5b5a81462e3ea4c00e1e62ad0fac8
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610090451-FK9PBM/blueprint/resolved-snapshot.json
+- old_digest: 4e083c4909040e21e88cd32bf3229518e45e30ed0c5e165d218db7e936ccbd46
+- current_digest: 4e083c4909040e21e88cd32bf3229518e45e30ed0c5e165d218db7e936ccbd46
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610090451-FK9PBM
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610090451-FK9PBM --result verified-202610090451-FK9PBM --commit 2755a3b5ea4db9f93d826f75b8d5a39565981b46
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
