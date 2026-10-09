@@ -141,9 +141,11 @@ it("native line and box allocation only links inheritance while later explicit p
     expect(nativeHints).toEqual([{ kind: "format-inheritance-changed", formatId: box.GetName() }]);
     expect(hints).toEqual([]);
     expect(doc.GetDocumentStateManager().GetModelRevision()).toBe(revision);
-    expect(alternate.SetDerivedFrom(undefined)).toBe(true);
-    expect(hints).toEqual([{ kind: "format-inheritance-changed", formatId: "Alternate" }]);
-    expect(doc.GetDocumentStateManager().GetModelRevision()).toBe(revision + 1);
+    expect(alternate.SetDerivedFrom(undefined)).toBe(false);
+    expect(alternate.GetRegisteredIn()).toBe(parent);
+    expect(alternate.GetAttrSet().GetParent()).toBe(parent.GetAttrSet());
+    expect(hints).toEqual([]);
+    expect(doc.GetDocumentStateManager().GetModelRevision()).toBe(revision);
     expect(clients(parent)).not.toContain(box);
     expect(clients(alternate)).toEqual([box]);
   } finally {

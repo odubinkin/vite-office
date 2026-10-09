@@ -204,7 +204,9 @@ describe("Writer attribute ownership" /** Groups SwAttrPool, SwAttrSet, and form
     expect(format.GetName()).toBe("Changed");
     expect(format.DerivedFrom()).toBe(parent);
     expect(format.SetDerivedFrom(parent)).toBe(false);
-    expect(format.SetDerivedFrom(undefined)).toBe(true);
+    expect(format.SetDerivedFrom(undefined)).toBe(false);
+    expect(format.DerivedFrom()).toBe(parent);
+    expect(format.GetAttrSet().GetParent()).toBe(parent.GetAttrSet());
     expect(format.IsAuto()).toBe(true);
     format.SetAuto(false);
     expect(format.IsAuto()).toBe(false);
@@ -223,11 +225,8 @@ describe("Writer attribute ownership" /** Groups SwAttrPool, SwAttrSet, and form
       ),
     ).not.toThrow();
     expect(format.GetName()).toBe(" ");
-    expect(
-      throwing(
-        /** Derives a format from itself. @returns Nothing. */ () => format.SetDerivedFrom(format),
-      ),
-    ).toThrow("itself");
+    expect(format.SetDerivedFrom(format)).toBe(false);
+    expect(format.GetRegisteredIn()).toBe(parent);
     const other = createFixture("writer-other");
     expect(
       throwing(

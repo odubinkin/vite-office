@@ -197,8 +197,8 @@ it("original parent format clients filter every local WhichId and reparent witho
   expect(c.hints).toHaveLength(1);
   expect(p.hints).toHaveLength(2);
   child.SetDerivedFrom(undefined);
-  expect(child.GetRegisteredIn()).toBeUndefined();
-  expect(child.GetAttrSet().GetParent()).toBeUndefined();
+  expect(child.GetRegisteredIn()).toBe(doc.GetDfltFrameFormat());
+  expect(child.GetAttrSet().GetParent()).toBe(doc.GetDfltFrameFormat().GetAttrSet());
   parent.SetFormatAttr(new SwFormatFrameSize(SwFrameSize.Fixed, 8000, 500));
   expect(c.hints).toHaveLength(2);
   expect(c.hints[1]).toEqual({ kind: "format-inheritance-changed", formatId: child.GetName() });
@@ -521,9 +521,9 @@ it("native parent rejection and delegated clear no-op keep original storage and 
   const doc = new SwDoc(),
     other = new SwDoc(),
     format = doc.MakeTableBoxFormat();
-  expect(
-    /** Rejects self inheritance. @returns Never. */ () => format.SetDerivedFrom(format),
-  ).toThrow("derive from itself");
+  expect(format.SetDerivedFrom(format)).toBe(false);
+  expect(format.GetRegisteredIn()).toBe(doc.GetDfltFrameFormat());
+  expect(format.GetAttrSet().GetParent()).toBe(doc.GetDfltFrameFormat().GetAttrSet());
   expect(
     /** Rejects a foreign owning pool. @returns Never. */ () =>
       format.SetDerivedFrom(other.MakeTableBoxFormat()),

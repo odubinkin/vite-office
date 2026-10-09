@@ -53,19 +53,34 @@ export class SwFormat extends BroadcastingModify {
     return this.derivedFrom;
   }
 
-  /** Changes the parent format and attribute-set inheritance. @param derivedFrom - New parent format. @returns True when changed. */
+  /** Changes original parent registration and item inheritance, rejecting cycles. @param derivedFrom - New parent, or omitted to restore the current root. @returns True when changed. */
   public SetDerivedFrom(derivedFrom?: SwFormat): boolean {
-    if (derivedFrom === this) throw new Error("SwFormat cannot derive from itself.");
     if (
       derivedFrom !== undefined &&
       derivedFrom.GetAttrSet().GetPool() !== this.attributeSet.GetPool()
     )
       throw new Error("SwFormat parent belongs to another pool.");
-    if (this.derivedFrom === derivedFrom) return false;
-    this.derivedFrom = derivedFrom;
-    if (derivedFrom !== undefined) this.RegisterToModify(derivedFrom);
-    else this.EndListening();
-    this.attributeSet.SetParent(derivedFrom?.GetAttrSet());
+    let parent = derivedFrom;
+    if (parent !== undefined) {
+      for (
+        let candidate: SwFormat | undefined = parent;
+        candidate !== undefined;
+        candidate = candidate.DerivedFrom()
+      ) {
+        if (candidate === this) return false;
+      }
+    } else {
+      parent = this.DerivedFrom() ?? this;
+      let ancestor = parent.DerivedFrom();
+      while (ancestor !== undefined) {
+        parent = ancestor;
+        ancestor = parent.DerivedFrom();
+      }
+    }
+    if (parent === this.derivedFrom || parent === this) return false;
+    this.derivedFrom = parent;
+    this.RegisterToModify(parent);
+    this.attributeSet.SetParent(parent.GetAttrSet());
     this.NotifyFormatInheritance();
     return true;
   }

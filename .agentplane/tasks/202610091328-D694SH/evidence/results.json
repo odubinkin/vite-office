@@ -1,0 +1,342 @@
+{
+  "task": "202610091328-D694SH",
+  "upstreamCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "upstreamSource": "sw/source/core/attr/format.cxx:333-378",
+  "coverage": {
+    "provider": "istanbul",
+    "scope": "complete current apps/office/src/sw/source/core/attr/format.ts",
+    "sourceHash": "ac1c319e2a28e54b4164bca1bb924848eade1497e3ee905e7369629564c57535",
+    "rawMapHash": "da87012592581265def84e9456555125996c69f7ce53cd769e309264c7563c0a",
+    "completeTargetMapHash": "a616305d9cf8a0330b6265e4fea54be96b7f27e9837adcaa0733ede12aafe0b4",
+    "summary": {
+      "lines": {
+        "total": 81,
+        "covered": 81,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 14,
+        "covered": 14,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 92,
+        "covered": 92,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 59,
+        "covered": 59,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "negativeCounters": 0,
+    "transferFromPriorProfiles": false,
+    "currentRelatedPass": 39,
+    "fullApplicationThresholdPass": false,
+    "strictTargetGatePass": true
+  },
+  "tests": {
+    "initialFiles": 27,
+    "initialPass": 186,
+    "initialFreshFailures": 2,
+    "closurePass": 3,
+    "closureSkippedAlreadyPassed": 2,
+    "uniqueRelatedScenarios": 189,
+    "freshScenarios": 6,
+    "currentSourceRevalidationFiles": 6,
+    "currentSourceRevalidationPass": 39,
+    "unresolvedFailures": 0,
+    "reasonForPassingRevalidation": "Production root initialization changed to satisfy ESLint; current actual Istanbul counters are required."
+  },
+  "checks": [
+    {
+      "label": "targeted-Istanbul",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer/apps/office",
+      "args": [
+        "run",
+        "test:coverage",
+        "--",
+        "src/sw/browser/editor/native-box-frame-format.test.tsx",
+        "src/sw/browser/editor/native-row-format-client.test.tsx",
+        "src/sw/browser/editor/native-format-attribute-notify.test.tsx",
+        "src/sw/browser/editor/native-cell-format-client.test.tsx",
+        "src/sw/browser/editor/native-format-notifier.test.tsx",
+        "src/sw/browser/editor/native-format-construction.test.tsx",
+        "src/sw/browser/editor/native-format-parent.test.tsx",
+        "src/sw/browser/presentation/native-format-notifier-store.test.ts",
+        "src/sw/browser/presentation/writer-view-list-indent-mask.test.tsx",
+        "src/sw/browser/presentation/native-row-frame-format.test.tsx",
+        "src/sw/source/core/undo/native-format-attribute-notify-history.test.ts",
+        "src/sw/source/core/undo/native-row-frame-format-history.test.ts",
+        "src/sw/source/core/undo/native-format-parent-history.test.ts",
+        "src/sw/source/core/undo/native-box-frame-format-history.test.ts",
+        "src/sw/source/core/undo/native-row-format-client-history.test.ts",
+        "src/sw/source/core/undo/native-cell-format-client-history.test.ts",
+        "src/sw/source/core/attr/native-format-attribute-notify.test.ts",
+        "src/sw/source/core/attr/native-format-parent.test.ts",
+        "src/sw/source/core/attr/native-format-construction.test.ts",
+        "src/sw/source/core/layout/native-cell-format-client.test.ts",
+        "src/sw/source/core/layout/native-row-format-client.test.ts",
+        "src/sw/source/core/layout/native-frame-attribute-notify.test.ts",
+        "src/sw/source/core/layout/native-table-coverage-closure.test.ts",
+        "src/sw/source/core/edit/edfcol-reset.test.ts",
+        "src/sw/source/core/doc/writer-attributes.test.ts",
+        "src/sw/source/core/table/native-box-frame-format.test.ts",
+        "src/sw/source/core/table/native-row-frame-format.test.ts",
+        "--coverage.include=src/sw/source/core/attr/format.ts",
+        "--coverage.reporter=text",
+        "--coverage.reporter=json",
+        "--coverage.reporter=json-summary",
+        "--coverage.reportsDirectory=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/D694SH/initial-coverage",
+        "--coverage.reportOnFailure=true",
+        "--reporter=default",
+        "--reporter=json",
+        "--outputFile=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/D694SH/initial-tests.json"
+      ],
+      "status": 1,
+      "milliseconds": 22394,
+      "upstreamAbsent": true,
+      "rawLogHash": "189d5ed646929604136123d4bca2fff66095a81362d7e5bff3e3cc70102d5368"
+    },
+    {
+      "label": "closure-Istanbul",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer/apps/office",
+      "args": [
+        "run",
+        "test:coverage",
+        "--",
+        "src/sw/source/core/attr/native-format-parent.test.ts",
+        "src/sw/source/core/undo/native-format-parent-history.test.ts",
+        "--testNamePattern=self and descendant proposals|restored native roots|explicit base-format name broadcast",
+        "--coverage.include=src/sw/source/core/attr/format.ts",
+        "--coverage.reporter=text",
+        "--coverage.reporter=json",
+        "--coverage.reporter=json-summary",
+        "--coverage.reportsDirectory=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/D694SH/closure-coverage",
+        "--coverage.reportOnFailure=true",
+        "--reporter=default",
+        "--reporter=json",
+        "--outputFile=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/D694SH/closure-tests.json"
+      ],
+      "status": 1,
+      "milliseconds": 4149,
+      "upstreamAbsent": true,
+      "rawLogHash": "d57493d3000bcf6e00717453e36f4a30448b2bc3c71c68cdef0c585bbab431be"
+    },
+    {
+      "label": "format:check",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "format:check"
+      ],
+      "status": 0,
+      "milliseconds": 30208,
+      "upstreamAbsent": true,
+      "rawLogHash": "ac1729f86eee878f5f4d6c948c510d2cc91bb5568f6dd088f70f3885e137d116"
+    },
+    {
+      "label": "lint",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "lint"
+      ],
+      "status": 1,
+      "milliseconds": 19606,
+      "upstreamAbsent": true,
+      "failureEvidence": "Task Findings and tool transcript retain @typescript-eslint/no-this-alias at format.ts:73; ignored same-name lint log was subsequently overwritten by successful lint."
+    },
+    {
+      "label": "final-Istanbul",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer/apps/office",
+      "args": [
+        "run",
+        "test:coverage",
+        "--",
+        "src/sw/source/core/attr/native-format-parent.test.ts",
+        "src/sw/source/core/undo/native-format-parent-history.test.ts",
+        "src/sw/browser/editor/native-format-parent.test.tsx",
+        "src/sw/source/core/attr/native-format-attribute-notify.test.ts",
+        "src/sw/source/core/attr/native-format-construction.test.ts",
+        "src/sw/source/core/doc/writer-attributes.test.ts",
+        "--",
+        "--coverage.include=src/sw/source/core/attr/format.ts",
+        "--coverage.reporter=text",
+        "--coverage.reporter=json",
+        "--coverage.reporter=json-summary",
+        "--coverage.reportsDirectory=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/D694SH/final-coverage",
+        "--coverage.reportOnFailure=true",
+        "--reporter=default",
+        "--reporter=json",
+        "--outputFile=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/D694SH/final-tests.json"
+      ],
+      "status": 1,
+      "milliseconds": 17903,
+      "upstreamAbsent": true,
+      "rawLogHash": "1571d433ca4d433854f23b92b113de6dc966dccfa649249e2abcb3d530119430"
+    },
+    {
+      "label": "changed-format-check",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "prettier",
+        "--check",
+        "apps/office/src/sw/source/core/attr/format.ts"
+      ],
+      "status": 0,
+      "milliseconds": 619,
+      "upstreamAbsent": true,
+      "rawLogHash": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "label": "lint",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "lint"
+      ],
+      "status": 0,
+      "milliseconds": 19860,
+      "upstreamAbsent": true,
+      "rawLogHash": "a6172cb57fa696e705408fdc605fba1ae07b852fdf0614d7c2b623349e285b6e"
+    },
+    {
+      "label": "typecheck",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "typecheck"
+      ],
+      "status": 0,
+      "milliseconds": 5999,
+      "upstreamAbsent": true,
+      "rawLogHash": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed"
+    },
+    {
+      "label": "check:dependencies",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "check:dependencies"
+      ],
+      "status": 0,
+      "milliseconds": 1234,
+      "upstreamAbsent": true,
+      "rawLogHash": "606e3a7926228d856c32b405ce9791919a5362a352fae18a103f48636d4b5d77"
+    },
+    {
+      "label": "test:static",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "test:static"
+      ],
+      "status": 0,
+      "milliseconds": 10009,
+      "upstreamAbsent": true,
+      "rawLogHash": "bcbc7d27c78035d745bb341e93e141e3945b06e286db39029c00fc9a40cafff3"
+    },
+    {
+      "label": "check:docs",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "check:docs"
+      ],
+      "status": 0,
+      "milliseconds": 2093,
+      "upstreamAbsent": true,
+      "rawLogHash": "0455606d097015a5d47b4ac5cfd2e37fb73b8735ebdb08b0952705d6100ad6bd"
+    },
+    {
+      "label": "check:file-size",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "check:file-size"
+      ],
+      "status": 0,
+      "milliseconds": 381,
+      "upstreamAbsent": true,
+      "rawLogHash": "aaff13c445ae0ec7a486449029dd9c6cbb185f68b2ae2656b55a1529f2a12e5d"
+    }
+  ],
+  "metadataChecks": [
+    {
+      "command": "npm run inventory:registry:build",
+      "exitCode": 0,
+      "views": 4,
+      "derivedTrackedChanges": 0
+    },
+    {
+      "command": "npm run check:source-tree",
+      "exitCode": 0,
+      "requiredPaths": 114,
+      "retiredRoots": 33
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "exitCode": 0,
+      "modules": 333,
+      "mapped": 242,
+      "browserAdaptations": 74,
+      "localInfrastructure": 17
+    },
+    {
+      "command": "npm run inventory:registry:check",
+      "exitCode": 0,
+      "modules": 333,
+      "semanticViolationCount": 0,
+      "parityReady": false
+    },
+    {
+      "command": "node_modules/.bin/tsx scripts/generate-writer-ui-resources.ts --check",
+      "exitCode": 0
+    },
+    {
+      "command": "node apps/office/node_modules/.cache/parity-coverage/D694SH/current-coverage-gate.cjs",
+      "exitCode": 0
+    }
+  ],
+  "preservation": {
+    "trackedSourceScriptsDocs": 1838,
+    "unchanged": 1832,
+    "changedTracked": [
+      "apps/office/src/sw/source/core/attr/format.ts",
+      "apps/office/src/sw/source/core/attr/native-format-attribute-notify.test.ts",
+      "apps/office/src/sw/source/core/attr/native-format-construction.test.ts",
+      "apps/office/src/sw/source/core/doc/writer-attributes.test.ts",
+      "docs/program/registry/writer/provenance/sw/source/core/attr/format.ts.json",
+      "docs/program/registry/writer/runtime/sw/source/core/attr/format.ts.json"
+    ],
+    "priorSourceToolTestFiles": 574,
+    "unchangedSourceToolTestFiles": 571,
+    "sourceBackedExpectationMigrations": 3,
+    "canonicalRecordsPreserved": 2,
+    "parentFindingsPrefixPreserved": true,
+    "parentFindingsPrefixHash": "064645aaee3087d719d413df2dd4735127ee7abf52f972b97298cd78364e668b"
+  },
+  "fullSuite": {
+    "lastHistoricalBaseline": "202610091259-XJTGF0",
+    "repeated": false,
+    "resumedTasksSinceFull": 1,
+    "goalActive": true
+  },
+  "review": {
+    "sameAgent": true,
+    "independent": false
+  },
+  "limitations": [
+    "Complete native Which compatibility, cache invalidation and SwFormatChangeHint propagation remain unverified.",
+    "Whole-app partial coverage from the wrapper error remains a raw threshold failure; only the complete current format.ts entry meets this task scoped100 gate.",
+    "Prior V8 and pre-adjustment counters are historical and are not transferred to current source."
+  ]
+}
