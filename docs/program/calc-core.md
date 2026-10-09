@@ -31,11 +31,33 @@ outputs retain the requested narrowed coordinates; an overflowing sheet error
 is always `MAXTAB + 1`. Range movement processes both endpoints after a failure
 and suppresses movement along an axis spanning the entire sheet.
 
+Task `202610090725-D6Z7XD` adds the original sticky reference updates on the
+same `ScRange` owner. `MoveSticky()` retains maximum end anchors only for
+multi-coordinate ranges. When an endpoint first reaches a sheet maximum, it
+can become sticky and its error output is corrected to that maximum. The
+starting endpoint must still be valid; sheet overflow cannot become sticky.
+`IncEndColSticky()` and `IncEndRowSticky()` narrow the addition before limiting
+it and leave already sticky endpoints in place. Reversed and singleton ranges
+use ordinary increments. Conditional insert/delete adjustments apply strictly
+after the supplied boundary and independently limit both endpoint offsets.
+
+`scripts/calc-address-native-probe.mjs` extracts the original inline numerical
+constructors and nine complete movement/update definitions without editing their
+bodies. A small C++ shell supplies native integer types and the three document
+bounds getters. The compiled probe runs 768 sticky movement states with
+ASan/UBSan and records every result and error endpoint in a committed fixture.
+Calc tests compare all of these outputs; ordinary tests need neither the native
+compiler nor an upstream checkout. `node scripts/calc-address-native-probe.mjs
+--check` optionally regenerates and verifies the fixture, including full-source
+and extracted-body SHA-256 hashes. This proves those numeric movement states,
+not full ScDocument integration, the other compiled but unexecuted update
+methods, undefined signed arithmetic domains or whole Calc parity.
+
 JavaScript tuples represent native output reference parameters. Equality and
 ordering methods represent C++ operators. Undefined native uninitialized
 constructors, pointer layout, `size_t` hashing and native debug assertions are
-not represented. Reference parsing/formatting, external links, subtraction and
-sticky update operations remain subsequent tasks. The registry records the
+not represented. Reference parsing/formatting, external links and subtraction
+remain subsequent tasks. The registry records the
 implemented foundation with semantic parity unverified; 100% local coverage
 does not establish whole Calc or whole upstream API parity.
 
@@ -58,6 +80,8 @@ All four real V8 coverage metrics must be 100%. Full-suite scheduling starts
 with Calc task 1 of 10 here; run the full suite after task 10, then repeat each
 ten completed Calc agentplane tasks. Targeted affected-module tests run on
 intervening tasks. Writer acceptance files and coverage settings remain intact.
+The coordinate foundation and sticky reference tasks are Calc tasks 1 and 2 of
+that first ten-task interval.
 
 Source research includes the per-file MPL 2.0 and inherited Apache notices in
 `sc/inc/address.hxx` and `sc/source/core/tool/address.cxx`, and MPL 2.0 in

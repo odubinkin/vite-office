@@ -253,4 +253,107 @@ export class ScRange {
     const endValid = this.aEnd.Move(dx, dy, dz, error.aEnd, doc);
     return startValid && endValid;
   }
+
+  /** Moves while preserving existing or newly reached maximum end anchors. @param doc - Native document bounds. @param dx - Column delta. @param dy - Row delta. @param dz - Sheet delta. @param error - Error range. @returns Whether movement is valid after native sticky correction. */
+  public MoveSticky(
+    doc: ScAddressDocument,
+    dx: SCCOL,
+    dy: SCROW,
+    dz: SCTAB,
+    error: ScRange,
+  ): boolean {
+    const maxCol = doc.MaxCol(),
+      maxRow = doc.MaxRow();
+    let colRange = this.aStart.Col() < this.aEnd.Col();
+    let rowRange = this.aStart.Row() < this.aEnd.Row();
+    if (dy && this.aStart.Row() === 0 && this.aEnd.Row() === maxRow) dy = 0;
+    if (dx && this.aStart.Col() === 0 && this.aEnd.Col() === maxCol) dx = 0;
+    const startValid = this.aStart.Move(dx, dy, dz, error.aStart, doc);
+    if (dx && colRange && this.aEnd.Col() === maxCol) dx = 0;
+    if (dy && rowRange && this.aEnd.Row() === maxRow) dy = 0;
+    const oldTab = this.aEnd.Tab();
+    let endValid = this.aEnd.Move(dx, dy, dz, error.aEnd, doc);
+    if (!endValid) {
+      colRange = !dx || (colRange && this.aEnd.Col() === maxCol);
+      if (dx && colRange) error.aEnd.SetCol(maxCol);
+      rowRange = !dy || (rowRange && this.aEnd.Row() === maxRow);
+      if (dy && rowRange) error.aEnd.SetRow(maxRow);
+      endValid = colRange && rowRange && this.aEnd.Tab() - oldTab === dz;
+    }
+    return startValid && endValid;
+  }
+
+  /** Adjusts columns strictly after the insertion/deletion boundary with native overlap limiting. @param doc - Document bounds. @param startCol - Boundary column. @param delta - Column displacement. @returns Nothing. */
+  public IncColIfNotLessThan(doc: ScAddressDocument, startCol: SCCOL, delta: SCCOL): void {
+    if (this.aStart.Col() > startCol) {
+      let offset = delta;
+      if (startCol + delta > this.aStart.Col()) offset = this.aStart.Col() - startCol;
+      else if (startCol - delta > this.aStart.Col()) offset = -(this.aStart.Col() - startCol);
+      this.aStart.IncCol(offset);
+      if (this.aStart.Col() < 0) this.aStart.SetCol(0);
+      else if (this.aStart.Col() > doc.MaxCol()) this.aStart.SetCol(doc.MaxCol());
+    }
+    if (this.aEnd.Col() > startCol) {
+      let offset = delta;
+      if (startCol + delta > this.aEnd.Col()) offset = this.aEnd.Col() - startCol;
+      else if (startCol - delta > this.aEnd.Col()) offset = -(this.aEnd.Col() - startCol);
+      this.aEnd.IncCol(offset);
+      if (this.aEnd.Col() < 0) this.aEnd.SetCol(0);
+      else if (this.aEnd.Col() > doc.MaxCol()) this.aEnd.SetCol(doc.MaxCol());
+    }
+  }
+
+  /** Adjusts rows strictly after the insertion/deletion boundary with native overlap limiting. @param doc - Document bounds. @param startRow - Boundary row. @param delta - Row displacement. @returns Nothing. */
+  public IncRowIfNotLessThan(doc: ScAddressDocument, startRow: SCROW, delta: SCROW): void {
+    if (this.aStart.Row() > startRow) {
+      let offset = delta;
+      if (startRow + delta > this.aStart.Row()) offset = this.aStart.Row() - startRow;
+      else if (startRow - delta > this.aStart.Row()) offset = -(this.aStart.Row() - startRow);
+      this.aStart.IncRow(offset);
+      if (this.aStart.Row() < 0) this.aStart.SetRow(0);
+      else if (this.aStart.Row() > doc.MaxRow()) this.aStart.SetRow(doc.MaxRow());
+    }
+    if (this.aEnd.Row() > startRow) {
+      let offset = delta;
+      if (startRow + delta > this.aEnd.Row()) offset = this.aEnd.Row() - startRow;
+      else if (startRow - delta > this.aEnd.Row()) offset = -(this.aEnd.Row() - startRow);
+      this.aEnd.IncRow(offset);
+      if (this.aEnd.Row() < 0) this.aEnd.SetRow(0);
+      else if (this.aEnd.Row() > doc.MaxRow()) this.aEnd.SetRow(doc.MaxRow());
+    }
+  }
+
+  /** Tests a true multi-column range ending at the maximum. @param doc - Document bounds. @returns Whether sticky. */
+  public IsEndColSticky(doc: ScAddressDocument): boolean {
+    return this.aEnd.Col() === doc.MaxCol() && this.aStart.Col() < this.aEnd.Col();
+  }
+  /** Tests a true multi-row range ending at the maximum. @param doc - Document bounds. @returns Whether sticky. */
+  public IsEndRowSticky(doc: ScAddressDocument): boolean {
+    return this.aEnd.Row() === doc.MaxRow() && this.aStart.Row() < this.aEnd.Row();
+  }
+
+  /** Increments a column endpoint until sticky, narrowing before limiting. @param doc - Document bounds. @param delta - Displacement. @returns Nothing. */
+  public IncEndColSticky(doc: ScAddressDocument, delta: SCCOL): void {
+    const col = this.aEnd.Col();
+    if (this.aStart.Col() >= col) {
+      this.aEnd.IncCol(delta);
+      return;
+    }
+    const maxCol = doc.MaxCol();
+    if (col === maxCol) return;
+    if (col < maxCol) this.aEnd.SetCol(Math.min(((col + delta) << 16) >> 16, maxCol));
+    else this.aEnd.IncCol(delta);
+  }
+  /** Increments a row endpoint until sticky, narrowing before limiting. @param doc - Document bounds. @param delta - Displacement. @returns Nothing. */
+  public IncEndRowSticky(doc: ScAddressDocument, delta: SCROW): void {
+    const row = this.aEnd.Row();
+    if (this.aStart.Row() >= row) {
+      this.aEnd.IncRow(delta);
+      return;
+    }
+    const maxRow = doc.MaxRow();
+    if (row === maxRow) return;
+    if (row < maxRow) this.aEnd.SetRow(Math.min((row + delta) | 0, maxRow));
+    else this.aEnd.IncRow(delta);
+  }
 }

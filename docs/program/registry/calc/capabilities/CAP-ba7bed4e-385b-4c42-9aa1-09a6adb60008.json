@@ -1,0 +1,82 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-ba7bed4e-385b-4c42-9aa1-09a6adb60008",
+    "capabilityId": "CAP-ba7bed4e-385b-4c42-9aa1-09a6adb60008",
+    "suite": "calc",
+    "subsystem": "coordinate-model",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Only multi-coordinate ranges retain maximum end anchors; singleton ranges move normally and sheet errors cannot become sticky."
+    ],
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "Numerical owners preserve pinned coordinate bounds, signed narrowing and range-specific movement contracts; JS tuples represent output reference parameters."
+    },
+    "capability": "Calc sticky range reference updates",
+    "gaps": [
+      "The compiled native probe proves 768 bounded sticky movement states; full ScDocument/formula integration, other conditional-update differentials and complete API closure remain unverified."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sc/source/core/tool/address.cxx",
+          "marker": "ScRange::MoveSticky"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sc/qa/unit/ucalc_sharedformula.cxx",
+          "marker": "testSharedFormulasRefUpdateMove"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/README.md",
+          "marker": "column"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/address.ts",
+          "marker": "public MoveSticky"
+        },
+        {
+          "path": "scripts/calc-address-native-probe.mjs",
+          "marker": "const functions = interval"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/sticky-range.test.ts",
+          "marker": "preserves existing maximum end anchors"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/native-address.test.ts",
+          "marker": "matches all 768 pinned native sticky movements"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "original sticky reference updates"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "Move a numeric range while retaining or reaching maximum end anchors",
+    "scopeLimitations": [
+      "Formula token/reference data, complete sheet insert/delete updates and listening are subsequent tasks.",
+      "Native memory layout, undefined arithmetic domains and whole Calc parity remain unverified."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}
