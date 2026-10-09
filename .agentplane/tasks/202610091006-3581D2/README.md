@@ -1,10 +1,11 @@
 ---
 id: "202610091006-3581D2"
 title: "Keep workbench presentation bound to the current native view owner"
-status: "DOING"
+result_summary: "Workbench no longer displays first-owner data after native view/store changes. Current text, layout, native cell notification and ownership transitions verified;216 unique passes,6 fresh,0fail0skip0replay.512 old test files byte-identical,2 canonical history prefixes preserved; all-four100 source-bound and static/inventory gates pass. Broad parity active,next full257 then verified failure repairs and requested goal pause."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -39,11 +40,16 @@ quality_review:
     - ".agentplane/tasks/202610091006-3581D2/evidence/checks.json"
   findings:
     - "Actual mounted supplied/local view changes retain current native renderer root, text and original cell notifier updates. Owned stores close on replacement/unmount; borrowed stores remain live. Two canonical full historical field/status/default/classification/evidence prefixes retained;512 prior test files byte-identical. Native projection/observer/core and protected I/O/recovery/settings behavior unchanged."
-commit: null
+commit:
+  hash: "98276be56d86e8ed2905c5054a6a44fef0340e3d"
+  message: "🧩 3581D2 ui: follow current native view and presentation store ownership"
 comments:
   -
     author: "CODER"
     body: "Start: Rebind workbench presentation to its current original native view/store owner, keeping exact borrowed/owned lifetime and registered deviations."
+  -
+    author: "CODER"
+    body: "Verified: Workbench follows current original native view/store identity with exact component-owned versus borrowed lifetime.216 unique related passes including6 fresh, changed/app all-four100 source-bound; static upstream-absent and inventory gates pass."
 events:
   -
     type: "status"
@@ -58,8 +64,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "216 unique related cases including6 fresh pass in one upstream-absent profile;0fail0skip0passing replay. Current original view/store ownership and borrowed/local cleanup verified; source-bound changed/app all-four100, static/inventory gates pass.512 prior tests byte-identical,2 canonical history prefixes preserved. Next full257 then verified repairs and goal pause."
+  -
+    type: "status"
+    at: "2026-10-09T10:16:58.067Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Workbench follows current original native view/store identity with exact component-owned versus borrowed lifetime.216 unique related passes including6 fresh, changed/app all-four100 source-bound; static upstream-absent and inventory gates pass."
 doc_version: 3
-doc_updated_at: "2026-10-09T10:15:52.595Z"
+doc_updated_at: "2026-10-09T10:16:58.068Z"
 doc_updated_by: "CODER"
 description: "Iteration254 under C9TN6M: fix stale useState-captured presentation store when native SwView or injected viewStore changes. Recompute the current store and retain exact borrowed/owned cleanup without model, layout or I/O/recovery/settings changes."
 sections:
