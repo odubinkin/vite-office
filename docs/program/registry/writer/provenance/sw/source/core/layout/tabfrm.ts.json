@@ -41,7 +41,8 @@
       "Iteration250 verified164 unique app cases including12 fresh native frame attribute cases, once upstream-absent with symlink restored finally. Current changed five-module coverage is all-four100:379lines427statements113functions224branches. Three modules use complete fresh actual counters; calbck/hints transfer only old complete declarations/bodies/enclosing branches and every mapped location after exact reconstruction of the entire old source with additive type/new-class changes, bound to verified249 hashes. The raw focused CLI threshold failure is retained without counter or threshold changes; no unchanged passing test replay. Typecheck, lint and build passed; JSDoc comment-only repair preserves identical emitted test JavaScript. Inventory checks are being finalized. Full native page/root/browser physical propagation, content/follows/collapsed-border and wider native item families remain unverified. Registered recovery/open/save/settings deviations preserved; last full247, no full250.",
       "Iteration250 final scoped and global registry, source provenance/tree, routing and doctor gates passed; doctor has no errors and only prior hook/no-op warnings. Canonical evidence is recorded in task202610090803-7PRR3B; no whole-module parity promotion.",
       "Iteration251 restores SwTabFrame as a registered SwLayoutFrame with native Tab0x0800 and original linked nonempty SwRowFrame/SwCellFrame lowers. Width queries borrow actual linked cell formats instead of allocating another cell frame. Browser table rendering borrows one table hierarchy rather than reconstructing each row. Flow, shell geometry, split admission and dialog geometry release temporary table clients in finally; browser mouse geometry owns and releases replaced/unmounted samples and failed partial measurements. Native persistent page/root/follows/content/redline layout, native table scalar item ownership and full UI propagation remain unverified; no module or goal promotion. Existing semantic statuses/defaults/classifications and registered recovery/open/save/settings deviations retained. Targeted verification pending; last full247, no full251.",
-      "Iteration251 verified closure: 232 unique targeted app cases, including 12 fresh native hierarchy/width/claim/history/empty-row/render/flow/mouse-lifetime/geometry cases, pass with no unresolved runtime failures. One approved recovery repeated 210 passing cases solely because the initial failure suppressed all V8 maps; later closures run only failed/new/previously unexecuted cases. All runtime and build checks run physically upstream absent with restoration in finally. Actual source-bound app and changed-module all-four100 coverage uses current counters plus complete unchanged function declarations/bodies/enclosing conditions/all locations from250; 310 whole unchanged app modules retain their exact maps. 506 previous app test files are byte-identical; one old width measurement case now owns/releases its native table frame while preserving the literal3000 and original-client assertions. Scoped format/lint/type/dependency/docs/size/static build, canonical registry build/scoped/global checks, provenance/tree/routing/doctor pass. Prior status/default/classification and full evidence prefixes remain; native persistent page/root/follows/content/redline/table item propagation and whole core/UI parity stay unverified. Registered recovery/open/save/settings deviations preserved; last full247, no full251."
+      "Iteration251 verified closure: 232 unique targeted app cases, including 12 fresh native hierarchy/width/claim/history/empty-row/render/flow/mouse-lifetime/geometry cases, pass with no unresolved runtime failures. One approved recovery repeated 210 passing cases solely because the initial failure suppressed all V8 maps; later closures run only failed/new/previously unexecuted cases. All runtime and build checks run physically upstream absent with restoration in finally. Actual source-bound app and changed-module all-four100 coverage uses current counters plus complete unchanged function declarations/bodies/enclosing conditions/all locations from250; 310 whole unchanged app modules retain their exact maps. 506 previous app test files are byte-identical; one old width measurement case now owns/releases its native table frame while preserving the literal3000 and original-client assertions. Scoped format/lint/type/dependency/docs/size/static build, canonical registry build/scoped/global checks, provenance/tree/routing/doctor pass. Prior status/default/classification and full evidence prefixes remain; native persistent page/root/follows/content/redline/table item propagation and whole core/UI parity stay unverified. Registered recovery/open/save/settings deviations preserved; last full247, no full251.",
+      "Resumed correction SV3P04 restores the represented SwRowFrame::OnFrameSize last-sibling containing-table position invalidation before forwarding the exact borrowed size/split item. FindTabFrame traverses original upper links, uses the native table type and destruction guard, and returns the nearest original table without a model or geometry map. Detached admission and uncached represented traversal are bounded; native environment-flag caching, persistent page/root/content geometry and table master/follow/flow-line families remain unrepresented and unverified. Non-last size notifications retain next-original-sibling invalidation and native generic row hint filtering remains unchanged. Seven fresh original hierarchy/destructor/order/filter/default preparation, real command/history and mounted last-row clipping cases plus related modules accept178unique scenarios:177initial passes and1new-only closure pass with4intentional passing skips, followed by178passes in one materially affected current-source revalidation after adapting the native self traversal to the declared no-this-alias lint rule. There are no runtime failures or unresolved skips; initial/closure coverage maps are retained as superseded and supply no current counters. Real Undo/Redo retargets original linked clients without inventing a size notification; node/cursor/table/row identities survive three cycles. Actual entire current-source wsfrm.ts/tabfrm.ts Istanbul274lines313statements70functions197branches is all-four100 with0negative counters from one complete current-source profile; no prior-task/V8 counters or normalization. Tests run physically upstream-absent with finally restoration. Raw superseded initial/closure partial-profile threshold exits and the resolved static lint failure stay retained in ignored cache; evidence is task202610091519-SV3P04. Old status/default/classification/responsibility/evidence prefixes and registered recovery/open/save/settings deviations are retained; no full module/goal parity promotion. Historical full XJTGF0 remains the baseline; correction5/10, next full after ten resumed executable corrections."
     ],
     "omittedResponsibilities": [
       "Complete native layout frame construction,fly/border offsets,vertical/RTL/merged/nested/rowspan/split-row and relative-width semantics remain unverified."
@@ -179,6 +180,22 @@
         {
           "path": "apps/office/src/sw/source/core/layout/native-table-frame-hierarchy.test.ts",
           "marker": "native table hierarchy"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/layout/native-last-row-frame-size.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/undo/native-last-row-frame-size.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-last-row-frame-size.test.tsx",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/layout/tabfrm.ts",
+          "marker": "OnFrameSize"
         }
       ],
       "upstream": [
@@ -249,6 +266,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/core/layout/tabfrm.cxx",
           "marker": "SwCellFrame::SwClientNotify"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/tabfrm.cxx",
+          "marker": "SwRowFrame::OnFrameSize"
         }
       ]
     },

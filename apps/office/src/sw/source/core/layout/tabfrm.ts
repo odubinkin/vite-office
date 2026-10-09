@@ -34,6 +34,8 @@ export class SwRowFrame extends SwLayoutFrame {
   }
   /** Forwards the exact native size/split item to the layout frame. @param item - Borrowed accepted pool item. @returns Nothing. */
   protected OnFrameSize(item: SfxPoolItem): void {
+    const table = this.FindTabFrame();
+    if (table && !this.GetNext()) table.InvalidatePos();
     const source = new BroadcastingModify();
     super.SwClientNotify(source, new LegacyModifyHint(undefined, item));
   }

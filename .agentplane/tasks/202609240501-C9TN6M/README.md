@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 273
+revision: 274
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-09T15:11:45.658Z"
+doc_updated_at: "2026-10-09T15:32:57.523Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -1337,6 +1337,10 @@ sections:
     - Observation: Correction4 FW0RYR semantic53f5f9217274 is committed and the explicitly same-agent non-independent quality review passes.
       Impact: 335unique cases49files8fresh, actual complete4-module Istanbul100270lines301statements78functions154branches, TS7/static build/metadata audits accepted;8canonical histories preserved and only1exact old native death-event expectation migrated.
       Resolution: Close only FW0RYR. Broad goal active with4completed corrections after full XJTGF0; full suite after correction10. Continue original-client/layout/native hint parity; full linked/cache/assertion/name/VCL lifetime and overall core/browser parity remain incomplete.
+
+    - Observation: Resumed correction5/10 SV3P04 restores native last-row size/split containing-table position invalidation through original destruction-aware upper links. Current178unique related cases27files7fresh pass; entire wsfrm/tabfrm actual single-profile Istanbul274lines313statements70functions197branches100/zero negatives. Initial177plus1new closure pass and superseded maps retained; lint-rejected this alias was adapted without suppressions, requiring one materially affected178case revalidation. All seven TS7/build/static gates pass upstream-absent with finally restoration.
+      Impact: Original hierarchy/nearest table/last-versus-nonlast/order/detached/destructor/filter contracts and real three-cycle height history plus mounted60px clipping are accepted. Native MoveTableLine history keeps its own filter/invalidation behavior, original node/cursor/frame identities retained. Four old canonical histories retain classification/status/default/evidence/responsibility prefixes; uncached lookup and native master/follow/flow-line/page/root/content families remain unverified.
+      Resolution: Finish metadata-only audits and clean direct semantic/quality/close sequence for SV3P04. Broad goal stays active; XJTGF0 historical full, five completed corrections after closure, next full after10. Registered recovery/open/save/settings deviations and all unrelated old tests remain preserved.
 id_source: "generated"
 ---
 ## Summary
@@ -2647,3 +2651,7 @@ Iteration251 / 202610090835-4ZF0N4 verified native table layout ownership. SwTab
 - Observation: Correction4 FW0RYR semantic53f5f9217274 is committed and the explicitly same-agent non-independent quality review passes.
   Impact: 335unique cases49files8fresh, actual complete4-module Istanbul100270lines301statements78functions154branches, TS7/static build/metadata audits accepted;8canonical histories preserved and only1exact old native death-event expectation migrated.
   Resolution: Close only FW0RYR. Broad goal active with4completed corrections after full XJTGF0; full suite after correction10. Continue original-client/layout/native hint parity; full linked/cache/assertion/name/VCL lifetime and overall core/browser parity remain incomplete.
+
+- Observation: Resumed correction5/10 SV3P04 restores native last-row size/split containing-table position invalidation through original destruction-aware upper links. Current178unique related cases27files7fresh pass; entire wsfrm/tabfrm actual single-profile Istanbul274lines313statements70functions197branches100/zero negatives. Initial177plus1new closure pass and superseded maps retained; lint-rejected this alias was adapted without suppressions, requiring one materially affected178case revalidation. All seven TS7/build/static gates pass upstream-absent with finally restoration.
+  Impact: Original hierarchy/nearest table/last-versus-nonlast/order/detached/destructor/filter contracts and real three-cycle height history plus mounted60px clipping are accepted. Native MoveTableLine history keeps its own filter/invalidation behavior, original node/cursor/frame identities retained. Four old canonical histories retain classification/status/default/evidence/responsibility prefixes; uncached lookup and native master/follow/flow-line/page/root/content families remain unverified.
+  Resolution: Finish metadata-only audits and clean direct semantic/quality/close sequence for SV3P04. Broad goal stays active; XJTGF0 historical full, five completed corrections after closure, next full after10. Registered recovery/open/save/settings deviations and all unrelated old tests remain preserved.
