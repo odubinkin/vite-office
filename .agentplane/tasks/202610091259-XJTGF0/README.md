@@ -1,10 +1,11 @@
 ---
 id: "202610091259-XJTGF0"
 title: "Adopt stable TypeScript 7 compiler with TS6 API compatibility and synchronize branches"
-status: "DOING"
+result_summary: "Adopted stable TS7 with TS6 API compatibility; complete verification and branch synchronization passed, with measured production build speedup of 4.1 times."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -45,11 +46,16 @@ quality_review:
     - "The dependency aliases follow Microsoft guidance, avoid CLI collisions, satisfy ESLint peer ranges, and retain the exact previous legacy API version."
     - "Executed compiler regression tests cover actual tsc/tsc6 resolution, legacy AST import parsing, valid native compilation and TS2322 rejection."
     - "No application source or coverage provider/threshold changed. Main, writer and calc were clean, published and synchronized at d5608178471f."
-commit: null
+commit:
+  hash: "5e30c999451264cb3c71fbc4d8576dc0d6439f35"
+  message: "🧩 XJTGF0 code: adopt native TS7 with legacy TS6 API compatibility"
 comments:
   -
     author: "CODER"
     body: "Start: Implement the user-approved TS7 and TS6 compatibility migration, benchmark it, fully verify it, and synchronize all three branches."
+  -
+    author: "CODER"
+    body: "Verified: Stable TS7 compiler migration passed the complete project contract, preserved 100% Istanbul coverage and TS6 API compatibility, reduced the measured production build from 17.3s to 4.2s, and was published and validated in clean main, writer and calc checkouts."
 events:
   -
     type: "status"
@@ -64,8 +70,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "All declared acceptance checks passed: native TS7 compiler and legacy TS6 API integration, local measured build speedup, complete npm run verify with 100% Istanbul and zero negative counters, and published clean main/writer/calc with clean-install tooling/typecheck validation in both development checkouts."
+  -
+    type: "status"
+    at: "2026-10-09T13:20:08.338Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Stable TS7 compiler migration passed the complete project contract, preserved 100% Istanbul coverage and TS6 API compatibility, reduced the measured production build from 17.3s to 4.2s, and was published and validated in clean main, writer and calc checkouts."
 doc_version: 3
-doc_updated_at: "2026-10-09T13:19:39.121Z"
+doc_updated_at: "2026-10-09T13:20:08.339Z"
 doc_updated_by: "CODER"
 description: "User explicitly authorizes a side-by-side migration on main: use stable TS7 for all compatible compilation and type checking, retain TS6 for required legacy API and lint consumers, measure performance, fully verify and publish main plus reverse synchronization into writer and calc."
 sections:
@@ -115,6 +128,10 @@ sections:
     - Observation: Focused validation found a prohibited non-null assertion in the new test and showed that native TS7 reports a type error with exit code 1 rather than legacy exit code 2.
       Impact: Only the new integration-test assumptions failed; project type checks and production build already pass on TS7.
       Resolution: Use a guarded AST assertion and validate a nonzero status plus the specific TS2322 diagnostic without assuming the TS6 exit-code convention.
+extensions:
+  implementation_commit:
+    hash: "5e30c999451264cb3c71fbc4d8576dc0d6439f35"
+    message: "🧩 XJTGF0 code: adopt native TS7 with legacy TS6 API compatibility"
 id_source: "generated"
 ---
 ## Summary
