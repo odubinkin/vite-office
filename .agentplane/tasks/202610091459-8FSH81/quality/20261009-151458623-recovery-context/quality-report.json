@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "task_id": "202610091459-8FSH81",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-09T15:14:58.623Z",
+  "verdict": "pass",
+  "summary": "Original row mark owner and iterator match unchanged native sequences with actual100 Calc coverage and qualified suspicious-case documentation.",
+  "evaluated_sha": "326dfe5eb20e81edf48dcc1814989dfd8fa3d072",
+  "blueprint_digest": "c7c2c8154fd04fad18104ba831a851491d82338a258964fc82d6e1ac5e7267e5",
+  "findings": [
+    "Reviewed compressed interval algorithm and two source invariant reductions, signed30-before-clamp Shift behavior, real ScSheetLimits reuse, copy/assignment/move and iterator ownership, private vector equality, original literal Search expectations, scoped verification and exhaustive runtime/provenance mapping. New CALC-007 retains exact native outcomes and consumer uncertainty."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610091459-8FSH81/README.md",
+    "326dfe5eb20e81edf48dcc1814989dfd8fa3d072",
+    "apps/office/src/sc/source/core/data/markarr.test.ts",
+    "scripts/calc-markarr-native-probe.mjs",
+    "docs/program/upstream-suspected-issues.md",
+    "output/playwright/markarr-verification.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Complete document/multiselection/column/browser consumers, native vector allocation and pointer lifetimes, debug invalid domains and undefined arithmetic remain uncertified; native move states are not guaranteed across standard libraries. Full suites remain due at task10 per user cadence."
+  ]
+}

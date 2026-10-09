@@ -4,7 +4,7 @@ title: "Port Calc row mark array and iterator"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,31 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-09T15:14:32.774Z"
+  updated_by: "CODER"
+  note: "Command: node scripts/calc-markarr-native-probe.mjs --write; node scripts/calc-markarr-native-probe.mjs --check Result: pass. Evidence:2814 initialized sequences; complete unchanged original ScMarkEntry/ScMarkArray/ScMarkArrayIter classes and every out-of-line definition. Six exact pinned Git blobs plus complete-group SHA256 hashes checked; native debug assertions enabled and ASan/UBSan clean. Scope:compressed interval split/shrink/combine/reset, raw Set/empty vectors on defined methods, signed30 assignment, exact signed64 tools::Long displacement before clipping, negative/beyond-bound Search, copy/assignment/explicit move states, receiving limits, equality independent of limits, navigation, single marks and repeated/reset iterators. Portable native comparison checks original private vector equality and all saved public outputs; original mark_test Search expectations also retained literally. Full multi-selection/document/column/UI consumers, vector allocation/capacity/pointer lifetimes, uninitialized/empty-Search/unsafe malformed mutation/undefined signed64 overflow remain uncertified. Native moved-vector outcomes are compared for the probe standard library; unspecified moved state is not claimed across libraries. Logs:output/playwright/markarr-native-write.log and markarr-native-check.log. Command: npm run test:calc -- src/sc/source/core/data/markarr.test.ts; npm run test:coverage:calc Result: pass. Evidence:new five tests pass, all77 Calc tests/17files; actual Istanbul statements1496/1496,branches1315/1315,functions270/270,lines1316/1316 all100. Scope:all Calc runtime owners, native/literal/private-value/state comparisons; no exclusions or threshold/provider changes. New portable test decodes committed fixture via Node fs/NodeURL and explicit wire schema; ordinary tests need neither native compiler nor upstream. Logs:markarr-smoke.log,markarr-coverage.log. Command: npm run typecheck; npm run test:tooling; affected npx eslint and npx prettier --check Result: pass. Evidence:TS7 tools/application;13 tooling tests/3files;new source/header/test/probe lint and code/fixture formatting pass. Missing initial JSDoc declarations/@returns corrected without behavior changes and final checks pass. Scope:no toolchain or Writer changes. Logs:markarr-typecheck.log,markarr-tooling-verified.log,markarr-lint-final.log,markarr-format-final.log. Command: npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:source-tree; npm run check:source-provenance; npm run inventory:parity:calc Result: pass. Evidence:335 runtime sources/1588 imports/29 edges;1114 documented source files;1117 size checks, new owner283lines/test205/probe328;114 required paths/33retired;336 provenance records(245mapped/74browser/17local). Calc registry15capabilities/127modules,zero semantic violations;semantic parity remains unverified. Scope:original markarr header/core-data owner boundaries reuse real ScSheetLimits and existing coordinate types;no shared copies. Pure-header runtime localSymbols empty and runtime class fields/accessors excluded according to established declaration extraction; provenance preserves actual public field/owner contracts. Logs:markarr-dependencies.log,markarr-doccheck-final.log,markarr-size.log,markarr-tree.log,markarr-provenance.log,markarr-inventory-verified.log. Command: Markdown local proof-link existence validation; native snapshots/literal Shift inspection; git diff --exit-code 8366f17a757a for existing address/sheetlimits/rangelst/refupdat/test partition; node .agentplane/policy/check-routing.mjs; ap doctor; git diff --check; git status --short --untracked-files=all Result: pass. Evidence:existing numerical/shared/Writer owners and partition unchanged. New CALC-007 documents exact reversed [1,0] interval after Shift and signed30-before-clamp detail with native source/test links and consumer uncertainty, preserving upstream behavior as user requires. Routing OK;doctor zero errors/two inherited warnings(managed readiness shim and old DONE202610090715-PJV0JK lacks implementation hash). Scope:calc checkout/branch only, task6 of resumed10;full suites due at task10,Writer coverage repair excluded by user. No network, external writes, merge/worktree/global files or unrelated task changes. Final task metadata and close commit must leave clean tracked/untracked status."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-09T15:14:58.623Z"
+  updated_by: "EVALUATOR"
+  note: "Original row mark owner and iterator match unchanged native sequences with actual100 Calc coverage and qualified suspicious-case documentation."
+  evaluated_sha: "326dfe5eb20e81edf48dcc1814989dfd8fa3d072"
+  blueprint_digest: "c7c2c8154fd04fad18104ba831a851491d82338a258964fc82d6e1ac5e7267e5"
+  evidence_refs:
+    - ".agentplane/tasks/202610091459-8FSH81/README.md"
+    - ".agentplane/tasks/202610091459-8FSH81/quality/20261009-151458623-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610091459-8FSH81/quality/20261009-151458623-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610091459-8FSH81/quality/20261009-151458623-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610091459-8FSH81/blueprint/resolved-snapshot.json"
+    - "326dfe5eb20e81edf48dcc1814989dfd8fa3d072"
+    - "apps/office/src/sc/source/core/data/markarr.test.ts"
+    - "scripts/calc-markarr-native-probe.mjs"
+    - "docs/program/upstream-suspected-issues.md"
+    - "output/playwright/markarr-verification.md"
+  findings:
+    - "Reviewed compressed interval algorithm and two source invariant reductions, signed30-before-clamp Shift behavior, real ScSheetLimits reuse, copy/assignment/move and iterator ownership, private vector equality, original literal Search expectations, scoped verification and exhaustive runtime/provenance mapping. New CALC-007 retains exact native outcomes and consumer uncertainty."
 commit: null
 comments:
   -
@@ -35,8 +55,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: Implement approved original row mark array and iterator in calc using existing ScSheetLimits."
+  -
+    type: "verify"
+    at: "2026-10-09T15:14:32.774Z"
+    author: "CODER"
+    state: "ok"
+    note: "Command: node scripts/calc-markarr-native-probe.mjs --write; node scripts/calc-markarr-native-probe.mjs --check Result: pass. Evidence:2814 initialized sequences; complete unchanged original ScMarkEntry/ScMarkArray/ScMarkArrayIter classes and every out-of-line definition. Six exact pinned Git blobs plus complete-group SHA256 hashes checked; native debug assertions enabled and ASan/UBSan clean. Scope:compressed interval split/shrink/combine/reset, raw Set/empty vectors on defined methods, signed30 assignment, exact signed64 tools::Long displacement before clipping, negative/beyond-bound Search, copy/assignment/explicit move states, receiving limits, equality independent of limits, navigation, single marks and repeated/reset iterators. Portable native comparison checks original private vector equality and all saved public outputs; original mark_test Search expectations also retained literally. Full multi-selection/document/column/UI consumers, vector allocation/capacity/pointer lifetimes, uninitialized/empty-Search/unsafe malformed mutation/undefined signed64 overflow remain uncertified. Native moved-vector outcomes are compared for the probe standard library; unspecified moved state is not claimed across libraries. Logs:output/playwright/markarr-native-write.log and markarr-native-check.log. Command: npm run test:calc -- src/sc/source/core/data/markarr.test.ts; npm run test:coverage:calc Result: pass. Evidence:new five tests pass, all77 Calc tests/17files; actual Istanbul statements1496/1496,branches1315/1315,functions270/270,lines1316/1316 all100. Scope:all Calc runtime owners, native/literal/private-value/state comparisons; no exclusions or threshold/provider changes. New portable test decodes committed fixture via Node fs/NodeURL and explicit wire schema; ordinary tests need neither native compiler nor upstream. Logs:markarr-smoke.log,markarr-coverage.log. Command: npm run typecheck; npm run test:tooling; affected npx eslint and npx prettier --check Result: pass. Evidence:TS7 tools/application;13 tooling tests/3files;new source/header/test/probe lint and code/fixture formatting pass. Missing initial JSDoc declarations/@returns corrected without behavior changes and final checks pass. Scope:no toolchain or Writer changes. Logs:markarr-typecheck.log,markarr-tooling-verified.log,markarr-lint-final.log,markarr-format-final.log. Command: npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:source-tree; npm run check:source-provenance; npm run inventory:parity:calc Result: pass. Evidence:335 runtime sources/1588 imports/29 edges;1114 documented source files;1117 size checks, new owner283lines/test205/probe328;114 required paths/33retired;336 provenance records(245mapped/74browser/17local). Calc registry15capabilities/127modules,zero semantic violations;semantic parity remains unverified. Scope:original markarr header/core-data owner boundaries reuse real ScSheetLimits and existing coordinate types;no shared copies. Pure-header runtime localSymbols empty and runtime class fields/accessors excluded according to established declaration extraction; provenance preserves actual public field/owner contracts. Logs:markarr-dependencies.log,markarr-doccheck-final.log,markarr-size.log,markarr-tree.log,markarr-provenance.log,markarr-inventory-verified.log. Command: Markdown local proof-link existence validation; native snapshots/literal Shift inspection; git diff --exit-code 8366f17a757a for existing address/sheetlimits/rangelst/refupdat/test partition; node .agentplane/policy/check-routing.mjs; ap doctor; git diff --check; git status --short --untracked-files=all Result: pass. Evidence:existing numerical/shared/Writer owners and partition unchanged. New CALC-007 documents exact reversed [1,0] interval after Shift and signed30-before-clamp detail with native source/test links and consumer uncertainty, preserving upstream behavior as user requires. Routing OK;doctor zero errors/two inherited warnings(managed readiness shim and old DONE202610090715-PJV0JK lacks implementation hash). Scope:calc checkout/branch only, task6 of resumed10;full suites due at task10,Writer coverage repair excluded by user. No network, external writes, merge/worktree/global files or unrelated task changes. Final task metadata and close commit must leave clean tracked/untracked status."
 doc_version: 3
-doc_updated_at: "2026-10-09T15:13:44.031Z"
+doc_updated_at: "2026-10-09T15:14:32.824Z"
 doc_updated_by: "CODER"
 description: "Implement original ScMarkArray compressed row-selection owner and ScMarkArrayIter with native comparison, actual100 Calc coverage and inventory. Sixth task of resumed ten-task interval; preserve upstream quirks."
 sections:
@@ -44,7 +70,41 @@ sections:
   Scope: "Calc checkout and branch only. New sc/inc/markarr.ts header and sc/source/core/data/markarr.ts owner, colocated tests/native JSON, scripts/calc-markarr-native-probe.mjs, matching Calc runtime/provenance/capability records and calc-core documentation. Add a suspicious-case record only if a concrete source observation is confirmed. Reuse ScSheetLimits, native SCROW and existing numerical contracts. No string/document/formula stand-ins, shared owner duplication, Writer edits or test partition changes. Sixth task of resumed ten-task interval."
   Plan: "Port original compressed row marks and iterator with real ScSheetLimits, unchanged native comparisons, actual100 Calc coverage and inventory; task6 of10."
   Verify Steps: "Run native --write and --check with pinned Git blobs/full and extracted source hashes and ASan/UBSan. Compare Search negative/beyond-limit indices, marking splitting/shrinking/coalescing, raw Set, empty/moved state only on defined operations, copy/assignment with destination limits retained, equality independent of limits, next-mark/end and iterator reset/unchanged output references. Include valid start/end and forward interval callers; do not certify native empty Search, out-of-bounds vector access, reversed unsafe mutations or signed64 overflow. Run npm run test:coverage:calc (all four Istanbul metrics actual100), npm run typecheck, npm run test:tooling, affected ESLint/Prettier, check:dependencies/docs/file-size/source-tree/source-provenance, inventory:parity:calc with zero semantic violations, routing, doctor, diff and final clean status. Full suite remains due at task10; no Writer coverage repair."
-  Verification: "Pending. Prior paired task completed at 5aa36d3e27f0; 72 Calc tests/16files with actual100 coverage. Clean calc checkout, two unrelated active tasks preserved. No independent native manual-refcount string owner exists yet; current selection owner has its real dependency ScSheetLimits."
+  Verification: |-
+    Verified complete unchanged native comparisons2814 sequences;77 Calc tests/17files actual100 four Istanbul metrics;TS7,13 tooling tests,affected lint/format,ownership/docs/size/tree/provenance,Calc inventory15capabilities127modules zero semantic violations,routing and doctor pass. CALC-007 documents original Shift outcome without changing behavior;full validation remains due at task10. Detailed bounded evidence is recorded by verify.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-09T15:14:32.774Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Command: node scripts/calc-markarr-native-probe.mjs --write; node scripts/calc-markarr-native-probe.mjs --check Result: pass. Evidence:2814 initialized sequences; complete unchanged original ScMarkEntry/ScMarkArray/ScMarkArrayIter classes and every out-of-line definition. Six exact pinned Git blobs plus complete-group SHA256 hashes checked; native debug assertions enabled and ASan/UBSan clean. Scope:compressed interval split/shrink/combine/reset, raw Set/empty vectors on defined methods, signed30 assignment, exact signed64 tools::Long displacement before clipping, negative/beyond-bound Search, copy/assignment/explicit move states, receiving limits, equality independent of limits, navigation, single marks and repeated/reset iterators. Portable native comparison checks original private vector equality and all saved public outputs; original mark_test Search expectations also retained literally. Full multi-selection/document/column/UI consumers, vector allocation/capacity/pointer lifetimes, uninitialized/empty-Search/unsafe malformed mutation/undefined signed64 overflow remain uncertified. Native moved-vector outcomes are compared for the probe standard library; unspecified moved state is not claimed across libraries. Logs:output/playwright/markarr-native-write.log and markarr-native-check.log. Command: npm run test:calc -- src/sc/source/core/data/markarr.test.ts; npm run test:coverage:calc Result: pass. Evidence:new five tests pass, all77 Calc tests/17files; actual Istanbul statements1496/1496,branches1315/1315,functions270/270,lines1316/1316 all100. Scope:all Calc runtime owners, native/literal/private-value/state comparisons; no exclusions or threshold/provider changes. New portable test decodes committed fixture via Node fs/NodeURL and explicit wire schema; ordinary tests need neither native compiler nor upstream. Logs:markarr-smoke.log,markarr-coverage.log. Command: npm run typecheck; npm run test:tooling; affected npx eslint and npx prettier --check Result: pass. Evidence:TS7 tools/application;13 tooling tests/3files;new source/header/test/probe lint and code/fixture formatting pass. Missing initial JSDoc declarations/@returns corrected without behavior changes and final checks pass. Scope:no toolchain or Writer changes. Logs:markarr-typecheck.log,markarr-tooling-verified.log,markarr-lint-final.log,markarr-format-final.log. Command: npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:source-tree; npm run check:source-provenance; npm run inventory:parity:calc Result: pass. Evidence:335 runtime sources/1588 imports/29 edges;1114 documented source files;1117 size checks, new owner283lines/test205/probe328;114 required paths/33retired;336 provenance records(245mapped/74browser/17local). Calc registry15capabilities/127modules,zero semantic violations;semantic parity remains unverified. Scope:original markarr header/core-data owner boundaries reuse real ScSheetLimits and existing coordinate types;no shared copies. Pure-header runtime localSymbols empty and runtime class fields/accessors excluded according to established declaration extraction; provenance preserves actual public field/owner contracts. Logs:markarr-dependencies.log,markarr-doccheck-final.log,markarr-size.log,markarr-tree.log,markarr-provenance.log,markarr-inventory-verified.log. Command: Markdown local proof-link existence validation; native snapshots/literal Shift inspection; git diff --exit-code 8366f17a757a for existing address/sheetlimits/rangelst/refupdat/test partition; node .agentplane/policy/check-routing.mjs; ap doctor; git diff --check; git status --short --untracked-files=all Result: pass. Evidence:existing numerical/shared/Writer owners and partition unchanged. New CALC-007 documents exact reversed [1,0] interval after Shift and signed30-before-clamp detail with native source/test links and consumer uncertainty, preserving upstream behavior as user requires. Routing OK;doctor zero errors/two inherited warnings(managed readiness shim and old DONE202610090715-PJV0JK lacks implementation hash). Scope:calc checkout/branch only, task6 of resumed10;full suites due at task10,Writer coverage repair excluded by user. No network, external writes, merge/worktree/global files or unrelated task changes. Final task metadata and close commit must leave clean tracked/untracked status.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T15:14:32.375Z, excerpt_hash=sha256:f6cf0defdef5a03b088e349e2b17e0f9d21750a8bc888361be29c5221475842a
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610091459-8FSH81/blueprint/resolved-snapshot.json
+    - old_digest: c7c2c8154fd04fad18104ba831a851491d82338a258964fc82d6e1ac5e7267e5
+    - current_digest: c7c2c8154fd04fad18104ba831a851491d82338a258964fc82d6e1ac5e7267e5
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610091459-8FSH81
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610091459-8FSH81
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert this implementation commit only; existing address/range/reference owners remain intact."
   Findings: |-
     Pinned header records signed30 row bitfields. Original Shift modifies boundaries individually and does not normalize adjacent or collapsed entries. Search accepts negative rows at its first boundary. Native integer narrowing and reference-output preservation require explicit comparisons; no upstream behavior corrections authorized.
@@ -88,7 +148,40 @@ Run native --write and --check with pinned Git blobs/full and extracted source h
 
 ## Verification
 
-Pending. Prior paired task completed at 5aa36d3e27f0; 72 Calc tests/16files with actual100 coverage. Clean calc checkout, two unrelated active tasks preserved. No independent native manual-refcount string owner exists yet; current selection owner has its real dependency ScSheetLimits.
+Verified complete unchanged native comparisons2814 sequences;77 Calc tests/17files actual100 four Istanbul metrics;TS7,13 tooling tests,affected lint/format,ownership/docs/size/tree/provenance,Calc inventory15capabilities127modules zero semantic violations,routing and doctor pass. CALC-007 documents original Shift outcome without changing behavior;full validation remains due at task10. Detailed bounded evidence is recorded by verify.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-09T15:14:32.774Z — VERIFY — ok
+
+By: CODER
+
+Note: Command: node scripts/calc-markarr-native-probe.mjs --write; node scripts/calc-markarr-native-probe.mjs --check Result: pass. Evidence:2814 initialized sequences; complete unchanged original ScMarkEntry/ScMarkArray/ScMarkArrayIter classes and every out-of-line definition. Six exact pinned Git blobs plus complete-group SHA256 hashes checked; native debug assertions enabled and ASan/UBSan clean. Scope:compressed interval split/shrink/combine/reset, raw Set/empty vectors on defined methods, signed30 assignment, exact signed64 tools::Long displacement before clipping, negative/beyond-bound Search, copy/assignment/explicit move states, receiving limits, equality independent of limits, navigation, single marks and repeated/reset iterators. Portable native comparison checks original private vector equality and all saved public outputs; original mark_test Search expectations also retained literally. Full multi-selection/document/column/UI consumers, vector allocation/capacity/pointer lifetimes, uninitialized/empty-Search/unsafe malformed mutation/undefined signed64 overflow remain uncertified. Native moved-vector outcomes are compared for the probe standard library; unspecified moved state is not claimed across libraries. Logs:output/playwright/markarr-native-write.log and markarr-native-check.log. Command: npm run test:calc -- src/sc/source/core/data/markarr.test.ts; npm run test:coverage:calc Result: pass. Evidence:new five tests pass, all77 Calc tests/17files; actual Istanbul statements1496/1496,branches1315/1315,functions270/270,lines1316/1316 all100. Scope:all Calc runtime owners, native/literal/private-value/state comparisons; no exclusions or threshold/provider changes. New portable test decodes committed fixture via Node fs/NodeURL and explicit wire schema; ordinary tests need neither native compiler nor upstream. Logs:markarr-smoke.log,markarr-coverage.log. Command: npm run typecheck; npm run test:tooling; affected npx eslint and npx prettier --check Result: pass. Evidence:TS7 tools/application;13 tooling tests/3files;new source/header/test/probe lint and code/fixture formatting pass. Missing initial JSDoc declarations/@returns corrected without behavior changes and final checks pass. Scope:no toolchain or Writer changes. Logs:markarr-typecheck.log,markarr-tooling-verified.log,markarr-lint-final.log,markarr-format-final.log. Command: npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:source-tree; npm run check:source-provenance; npm run inventory:parity:calc Result: pass. Evidence:335 runtime sources/1588 imports/29 edges;1114 documented source files;1117 size checks, new owner283lines/test205/probe328;114 required paths/33retired;336 provenance records(245mapped/74browser/17local). Calc registry15capabilities/127modules,zero semantic violations;semantic parity remains unverified. Scope:original markarr header/core-data owner boundaries reuse real ScSheetLimits and existing coordinate types;no shared copies. Pure-header runtime localSymbols empty and runtime class fields/accessors excluded according to established declaration extraction; provenance preserves actual public field/owner contracts. Logs:markarr-dependencies.log,markarr-doccheck-final.log,markarr-size.log,markarr-tree.log,markarr-provenance.log,markarr-inventory-verified.log. Command: Markdown local proof-link existence validation; native snapshots/literal Shift inspection; git diff --exit-code 8366f17a757a for existing address/sheetlimits/rangelst/refupdat/test partition; node .agentplane/policy/check-routing.mjs; ap doctor; git diff --check; git status --short --untracked-files=all Result: pass. Evidence:existing numerical/shared/Writer owners and partition unchanged. New CALC-007 documents exact reversed [1,0] interval after Shift and signed30-before-clamp detail with native source/test links and consumer uncertainty, preserving upstream behavior as user requires. Routing OK;doctor zero errors/two inherited warnings(managed readiness shim and old DONE202610090715-PJV0JK lacks implementation hash). Scope:calc checkout/branch only, task6 of resumed10;full suites due at task10,Writer coverage repair excluded by user. No network, external writes, merge/worktree/global files or unrelated task changes. Final task metadata and close commit must leave clean tracked/untracked status.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T15:14:32.375Z, excerpt_hash=sha256:f6cf0defdef5a03b088e349e2b17e0f9d21750a8bc888361be29c5221475842a
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610091459-8FSH81/blueprint/resolved-snapshot.json
+- old_digest: c7c2c8154fd04fad18104ba831a851491d82338a258964fc82d6e1ac5e7267e5
+- current_digest: c7c2c8154fd04fad18104ba831a851491d82338a258964fc82d6e1ac5e7267e5
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610091459-8FSH81
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610091459-8FSH81
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
