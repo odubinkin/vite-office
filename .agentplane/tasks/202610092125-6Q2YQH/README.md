@@ -1,10 +1,11 @@
 ---
 id: "202610092125-6Q2YQH"
 title: "Own table LR spacing in original native frame item"
-status: "DOING"
+result_summary: "Original SvxLRSpaceItem owns table LR spacing; native geometry ItemSet replaces LR scalar replay, original resize/history/layout/ODT and mounted inheritance verified."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -50,6 +51,9 @@ comments:
   -
     author: "CODER"
     body: "Start: bind verified native LR implementation before final exact-SHA quality and verification."
+  -
+    author: "CODER"
+    body: "Verified: original LR frame item owns table left/right distances and complete context; native dialog LR/width/orientation ItemSet, original resize/history/effective layout/ODT/mounted inheritance pass. Final342files3588cases22fresh, ten whole actual modules Istanbul100all-four0negative/current hash identity; initial counters excluded. Nine statics7browser/nine metadata pass; exact semantic021ea95 same-agent non-independent qualityPASS and refreshed verification persisted before finish. Full not due7/10; broader parity remains incomplete."
 events:
   -
     type: "status"
@@ -71,8 +75,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Actual semantic021ea956fc8a2026bb3bf0a188cddd44e5f90f4f exact-SHA qualityPASS same-agent non-independent; final342files3588cases22fresh, ten complete current production modules Istanbul100all-four0negative, initial source maps/counters excluded. Nine absent statics/currentbuild7browser/nine metadata pass.623 old tests preserved except5 precise migrations3files;20 canonical prefixes/parent retained. Fresh UI formatting AST identical. Full not due7/10."
+  -
+    type: "status"
+    at: "2026-10-09T21:51:03.138Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: original LR frame item owns table left/right distances and complete context; native dialog LR/width/orientation ItemSet, original resize/history/effective layout/ODT/mounted inheritance pass. Final342files3588cases22fresh, ten whole actual modules Istanbul100all-four0negative/current hash identity; initial counters excluded. Nine statics7browser/nine metadata pass; exact semantic021ea95 same-agent non-independent qualityPASS and refreshed verification persisted before finish. Full not due7/10; broader parity remains incomplete."
 doc_version: 3
-doc_updated_at: "2026-10-09T21:49:43.104Z"
+doc_updated_at: "2026-10-09T21:51:03.139Z"
 doc_updated_by: "CODER"
 description: "Replace table marginLeft/marginRight scalar ownership with original SvxLRSpaceItem RES_LR_SPACE98, effective frame getter and native dialog/resize/history/layout/ODT consumption; preserve registered deviations and actual full-file Istanbul100."
 sections:
@@ -126,6 +137,10 @@ sections:
     - Observation: Initial342-file profile3586 cases3526pass60fail; original LR range98 was inserted ahead of90, violating sorted Which ranges and preventing native table dialog application.
       Impact: Failures include actual unchanged dialog behavior, three new mounted/native-dialog cases, and a small set of stale complete LR projection/native payload expectations. Nine production files keep source hashes; tabsh changes to repair range order.
       Resolution: Sort native ranges90,98,110. Revalidate every342 related file against current complete ten-source profile; reject pre-repair tabsh maps and counters. Five exact source-backed fixture operations in3 old files preserve all other assertions. Add2 meaningful native composite-border cases for missing shared-module branches; no source/counter edits for coverage.
+extensions:
+  implementation_commit:
+    hash: "021ea956fc8a2026bb3bf0a188cddd44e5f90f4f"
+    message: "🚧 6Q2YQH table: own LR spacing in native frame item"
 id_source: "generated"
 ---
 ## Summary
