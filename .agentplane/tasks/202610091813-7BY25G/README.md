@@ -1,10 +1,11 @@
 ---
 id: "202610091813-7BY25G"
 title: "Port Calc UInt16 row segments over shared segment storage"
-status: "DOING"
+result_summary: "verified-202610091813-7BY25G"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 19
+revision: 23
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-09T18:37:21.615Z"
+  updated_at: "2026-10-09T18:39:49.915Z"
   updated_by: "CODER"
-  note: "All100 Calc tests actual100 Istanbul four metrics, shared5 actual100, genuine unchanged native706 plus bool436/mdds3020 and five original assertions, portable100+5+30 and declared TS7/static/registry/tooling/provenance gates pass. Lossless62 snapshots retain all observations. CALC-017 preserves upstream. No whole-module parity claim, Writer changes or full-suite rerun; task1/10."
+  note: "verified-202610091813-7BY25G"
   attempts: 0
 quality_review:
   state: "pass"
@@ -50,11 +51,16 @@ quality_review:
     - "output/playwright/task11-verification.txt"
   findings:
     - "Compared numeric source loops and owner declarations to pinned upstream: indexed local-iterator and leaf shared-hint sums, first-policy/later-leaf ForwardIterator, required UInt16 defaults, signed32 narrowing, false skip-start insertion and failed output preservation remain distinct and are exercised. Native probe extracts unchanged complete numeric/template/safeint groups and verifies real mdds/Boost; all 706 decoded committed sequences equal raw native outputs, and all four pinned file hashes match. Existing bool436 fixture/test remain unchanged. The valid UInt16/signed32 invariant bounds sums below2^47; no overflow exclusion, private-state fabrication or acceptance relaxation is introduced. CALC-017 retains ignored lookup/precondition behavior and makes no defined invalid native-result claim. The coherent 542-line original module boundary is reviewed under the size budget. Metadata anchors and 21 Calc/1 shared capabilities report zero semantic violations while all whole-module parity statuses stay unverified."
-commit: null
+commit:
+  hash: "bdaf726bb160e29245c17ff60297e8b8f8fde7cf"
+  message: "🔎 7BY25G review: record numeric segment source and coverage evidence"
 comments:
   -
     author: "CODER"
     body: "Start: implement original UInt16 row segment facade and numeric shared-template methods on calc, preserving upstream conditions with genuine native/portable actual100 evidence; task1 of next10."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610091813-7BY25G. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -69,8 +75,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "All100 Calc tests actual100 Istanbul four metrics, shared5 actual100, genuine unchanged native706 plus bool436/mdds3020 and five original assertions, portable100+5+30 and declared TS7/static/registry/tooling/provenance gates pass. Lossless62 snapshots retain all observations. CALC-017 preserves upstream. No whole-module parity claim, Writer changes or full-suite rerun; task1/10."
+  -
+    type: "verify"
+    at: "2026-10-09T18:39:49.915Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610091813-7BY25G"
+  -
+    type: "status"
+    at: "2026-10-09T18:39:50.055Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610091813-7BY25G. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-09T18:38:58.353Z"
+doc_updated_at: "2026-10-09T18:40:13.941Z"
 doc_updated_by: "CODER"
 description: "Task1 of next10 after completed full cycle: complete original ScFlatUInt16RowSegments and numeric operations in existing segmenttree owner over actual shared mdds; native unchanged comparison, portable tests, actual100 Calc, related shared/inventory checks. Preserve upstream conditions and diagnose suspicious cases without repairs."
 sections:
@@ -105,6 +124,39 @@ sections:
     Scope: source-owned shared-template/numeric facade and registry traceability. The 542 physical/543 checker-line segmenttree module remains one coherent original template plus bool/numeric owner boundary; reviewed decomposition preserves original ownership and stays below the 1000-line hard cap. No Writer changes or coverage repair. Full office/browser/inventory suite was completed at previous task10; this is task1/10 and the full run is not due under the user cadence.
 
     Final metadata follow-up: numeric evidence anchors were added to the existing semantic.evidence arrays, historical numeric-absence wording clarified, all semantic statuses remain unverified. Scoped registry/provenance and unchanged related inventory 30 pass after this edit (task11-inventory-final.log). Authoring/CLI failures and bounded corrections are recorded in Findings.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-09T18:39:49.915Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610091813-7BY25G
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T18:38:58.353Z, excerpt_hash=sha256:8d77fd356d76de668679f22b367924251d0fc8e1a096e786afa17589c4c369fe
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610091813-7BY25G/blueprint/resolved-snapshot.json
+    - old_digest: d8b8fd21dc98c1cf4c329f353a2d2ecaf2d00ac9d24ce49808e75a609a50aee8
+    - current_digest: d8b8fd21dc98c1cf4c329f353a2d2ecaf2d00ac9d24ce49808e75a609a50aee8
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610091813-7BY25G
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610091813-7BY25G --result verified-202610091813-7BY25G --commit bdaf726bb160e29245c17ff60297e8b8f8fde7cf
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task implementation commit in calc through a separately approved task; preserve previous completed core owners, metadata and independent acceptance. Research outputs remain ignored; upstream references read-only."
   Findings: |-
     Initial source inspection: UInt16 exposes the original shared template search-policy switch; first numeric ForwardIterator lookup uses indexed/policy search and later lookups use the cached leaf path. Row insertion does not skip a coinciding start boundary, unlike bool owners. Conditional setter assumes successful valid-row lookup; invalid input could read native uninitialized aggregate and remains outside defined comparisons. Arithmetic overflow branches require a source-width proof before any TS specialization. Preserve all upstream expressions in the native probe.
@@ -128,6 +180,18 @@ sections:
     - Observation: Implementation commit subject omitted the required scope colon and was rejected E_GIT after intentional paths were auto-staged.
       Impact: No commit created; only the 14 intended implementation/task paths are staged. Passing acceptance and policy remain unchanged.
       Resolution: Recompute route, inspect staged names, and commit the same allowlist with concrete implement: subject conforming to the existing hook.
+
+    - Observation: Exact route task complete changed status to DONE but its generated close subject was rejected by existing concrete-summary hook with E_GIT: commit subject is too generic.
+      Impact: Implementation and passing quality review are committed; task artifact closure remains dirty. No implementation or gate change occurred.
+      Resolution: Recompute route and execute exact advertised close cleanup; if the same generator rejection repeats, persist only active task artifacts with a concrete finalize subject and unchanged hook.
+
+    - Observation: Exact advertised commit --close --unstage-others repeats E_GIT: commit subject is too generic.
+      Impact: Only active task README closure remains staged; implementation and quality commits are unchanged.
+      Resolution: Use existing ap commit --allow-tasks with concrete finalize: original numeric row segment contracts wording; preserve all validations, hook and user cadence.
+extensions:
+  implementation_commit:
+    hash: "dd429d4b5b6959adc09438137337811ac295b596"
+    message: "🧩 7BY25G implement: original UInt16 row segments and numeric policy paths"
 id_source: "generated"
 ---
 ## Summary
@@ -175,6 +239,39 @@ Scope: source-owned shared-template/numeric facade and registry traceability. Th
 
 Final metadata follow-up: numeric evidence anchors were added to the existing semantic.evidence arrays, historical numeric-absence wording clarified, all semantic statuses remain unverified. Scoped registry/provenance and unchanged related inventory 30 pass after this edit (task11-inventory-final.log). Authoring/CLI failures and bounded corrections are recorded in Findings.
 
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-09T18:39:49.915Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610091813-7BY25G
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T18:38:58.353Z, excerpt_hash=sha256:8d77fd356d76de668679f22b367924251d0fc8e1a096e786afa17589c4c369fe
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610091813-7BY25G/blueprint/resolved-snapshot.json
+- old_digest: d8b8fd21dc98c1cf4c329f353a2d2ecaf2d00ac9d24ce49808e75a609a50aee8
+- current_digest: d8b8fd21dc98c1cf4c329f353a2d2ecaf2d00ac9d24ce49808e75a609a50aee8
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610091813-7BY25G
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610091813-7BY25G --result verified-202610091813-7BY25G --commit bdaf726bb160e29245c17ff60297e8b8f8fde7cf
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
+
 ## Rollback Plan
 
 Revert only this task implementation commit in calc through a separately approved task; preserve previous completed core owners, metadata and independent acceptance. Research outputs remain ignored; upstream references read-only.
@@ -202,3 +299,11 @@ Initial source inspection: UInt16 exposes the original shared template search-po
 - Observation: Implementation commit subject omitted the required scope colon and was rejected E_GIT after intentional paths were auto-staged.
   Impact: No commit created; only the 14 intended implementation/task paths are staged. Passing acceptance and policy remain unchanged.
   Resolution: Recompute route, inspect staged names, and commit the same allowlist with concrete implement: subject conforming to the existing hook.
+
+- Observation: Exact route task complete changed status to DONE but its generated close subject was rejected by existing concrete-summary hook with E_GIT: commit subject is too generic.
+  Impact: Implementation and passing quality review are committed; task artifact closure remains dirty. No implementation or gate change occurred.
+  Resolution: Recompute route and execute exact advertised close cleanup; if the same generator rejection repeats, persist only active task artifacts with a concrete finalize subject and unchanged hook.
+
+- Observation: Exact advertised commit --close --unstage-others repeats E_GIT: commit subject is too generic.
+  Impact: Only active task README closure remains staged; implementation and quality commits are unchanged.
+  Resolution: Use existing ap commit --allow-tasks with concrete finalize: original numeric row segment contracts wording; preserve all validations, hook and user cadence.
