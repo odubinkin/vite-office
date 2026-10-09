@@ -81,10 +81,10 @@ it.each(["zero", "three", "large", "default", "unknown", "inherited", "invalid",
       fireEvent.click(screen.getByRole("button", { name: "Reset" }));
       expect(screen.getByRole("checkbox", { name: "Repeat header" })).toHaveProperty(
         "checked",
-        (direct ?? 0) > 0,
+        direct === undefined || direct > 0,
       );
       expect(screen.getByRole("spinbutton", { name: "Header rows" })).toHaveValue(
-        direct === undefined ? 0 : Math.max(1, Math.min(100, direct)),
+        direct === undefined ? 1 : Math.max(1, Math.min(100, direct)),
       );
       fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
       expect(cancel).toHaveBeenCalledOnce();

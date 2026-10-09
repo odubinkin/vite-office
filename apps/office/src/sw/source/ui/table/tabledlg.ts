@@ -28,9 +28,9 @@ export interface SwTextFlowItems {
 export class SwTextFlowPage {
   private readonly originalHeadline: number | undefined;
   private headline = false;
-  private headerRows = 1;
+  private headerRows = 0;
   private savedHeadline = false;
-  private savedHeaderRows = 1;
+  private savedHeaderRows = 0;
   private readonly originalSplit: boolean;
   private readonly originalRowSplit: boolean | undefined;
   private split = true;
@@ -62,11 +62,10 @@ export class SwTextFlowPage {
   }
   /** Restores source checkbox/count widgets and their saved values. @returns Nothing. */
   public Reset(): void {
-    this.headline = this.savedHeadline = (this.originalHeadline ?? 0) > 0;
-    this.headerRows = this.savedHeaderRows = Math.max(
-      this.GetHeaderRowsMinimum(),
-      Math.min(100, this.originalHeadline ?? 0),
-    );
+    if (this.originalHeadline !== undefined) {
+      this.headline = this.savedHeadline = this.originalHeadline > 0;
+      this.headerRows = this.savedHeaderRows = Math.max(1, Math.min(100, this.originalHeadline));
+    }
     this.split = this.savedSplit = this.originalSplit;
     this.rowSplit = this.savedRowSplit = this.originalRowSplit;
   }

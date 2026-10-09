@@ -75,6 +75,10 @@ it.each(["default", "unknown", "inherited", "invalid", "disabled"])(
       expect(page.GetHeaderRows()).toBe(0);
       page.ValueChangedHdl(3);
       expect(page.FillItemSet()).toEqual({ headerRows: 3 });
+      page.Reset();
+      expect(page.IsHeadline()).toBe(true);
+      expect(page.GetHeaderRows()).toBe(3);
+      expect(page.FillItemSet()).toEqual({ headerRows: 3 });
       expect(table.GetRowsToRepeat()).toBe(2);
     } finally {
       doc.Dispose();

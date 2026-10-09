@@ -4,7 +4,7 @@ title: "Capture native headline ItemSet input for Text Flow"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 24
+revision: 28
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,11 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "needs_rework"
-  updated_at: "2026-10-09T18:04:21.856Z"
+  state: "ok"
+  updated_at: "2026-10-09T18:11:41.145Z"
   updated_by: "CODER"
-  note: "Rework: same-agent source review found absent-headline Reset must leave edited widgets untouched under pinned direct-item guard. Correct only page/fresh source-lifecycle expectations in original scope; current-source related proof and replacement of obsolete entire page coverage entry required, no full passing replay."
-  attempts: 1
+  note: "Verified:14320distinct application cases24fresh, full122inventory13tooling2resource303browser plus current4related browser and1247related cases160files after actual native Reset guard correction. Entire final three modules628lines688statements123functions483branches actual current Istanbul100; full current application19335lines21252statements4843functions15681branches all100/zero-negative. Obsolete changed-page counters/maps discarded, current entire entry only; unchanged modules original same-source hashes/maps retained. Current build/seven statics/three refreshed metadata/final format/preservation pass, original nine metadata and full gates retained. Six canonical prefixes600unchanged old test files1854unrelated retained, three concrete source-backed ODT default-owner assertions migrated. Raw failures/rework retained, reference restored, goal active/incomplete full baselineSZKQTN counter0."
+  attempts: 0
 quality_review:
   state: "rework"
   updated_at: "2026-10-09T18:03:42.118Z"
@@ -74,8 +74,14 @@ events:
     author: "CODER"
     state: "needs_rework"
     note: "Rework: same-agent source review found absent-headline Reset must leave edited widgets untouched under pinned direct-item guard. Correct only page/fresh source-lifecycle expectations in original scope; current-source related proof and replacement of obsolete entire page coverage entry required, no full passing replay."
+  -
+    type: "verify"
+    at: "2026-10-09T18:11:41.145Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified:14320distinct application cases24fresh, full122inventory13tooling2resource303browser plus current4related browser and1247related cases160files after actual native Reset guard correction. Entire final three modules628lines688statements123functions483branches actual current Istanbul100; full current application19335lines21252statements4843functions15681branches all100/zero-negative. Obsolete changed-page counters/maps discarded, current entire entry only; unchanged modules original same-source hashes/maps retained. Current build/seven statics/three refreshed metadata/final format/preservation pass, original nine metadata and full gates retained. Six canonical prefixes600unchanged old test files1854unrelated retained, three concrete source-backed ODT default-owner assertions migrated. Raw failures/rework retained, reference restored, goal active/incomplete full baselineSZKQTN counter0."
 doc_version: 3
-doc_updated_at: "2026-10-09T18:06:36.333Z"
+doc_updated_at: "2026-10-09T18:11:41.200Z"
 doc_updated_by: "CODER"
 description: "Resumed correction10/10 since XJTGF0. Capture source native table headline in shell dialog ItemSet and read authoritative direct input in Text Flow. Preserve saved widgets, native graph/history, old assertions and canonical inventory prefixes. Perform the scheduled full upstream-absent suite using actual Istanbul and repair failures before completion."
 sections:
@@ -94,15 +100,17 @@ sections:
     Evidence: bounded evidence/results.json contains exact executed commands/counts/current hashes and final preservation, no upstream copies/helper scripts/raw counters/maps/logs. Source audits use restored pinned9bc445578031fecf56086729d8e4940c77e14d65 only; runtime tests invoke no upstream.
     Scope: Registered recovery/open/save/settings decisions and all old canonical scalar/status/default/classification/evidence/responsibility prefixes preserved. Native core table counter/default1, full master/follow/root/page/section/content/HTML/VCL families remain unverified; no module/goal parity promotion. Broad goal ACTIVE/incomplete; full success becomes new baselineSZKQTN and counter0.
 
+    Post-review current-source correction: initial semantic a2ddcbca1197 was rework for absent-headline Reset guard. Final page fields start at resource0 and guarded Reset writes/saves only valid direct input; absent edits preserved.1247cases160related files revalidated,4related actual browser cases current build and seven static gates pass. Entire final three-module profile628lines688statements123functions483branches actual Istanbul100; whole current application19335lines21252statements4843functions15681branches all100/zero-negative. Obsolete changed-page counters/maps entirely discarded; current whole-file entry only, unchanged source/hash/complete-map witnesses retained. Distinct accepted14320cases24fresh; no whole full-suite replay, actual changed-source revalidation explicit. Three post-review metadata audits/preservation final artifacts pass. Full303browser plus current4browser, inventory122/tooling13/resource2 retain successful original source evidence. Playwright variadic project wrapper failure before tests corrected, raw failure retained. Six old canonical prefixes601old test files600unchanged1854unrelated files and original parent Findings retained. Final semantic binding and explicitly same-agent non-independent quality follow.
+
     <!-- BEGIN VERIFICATION RESULTS -->
-    ### 2026-10-09T17:59:08.744Z — VERIFY — ok
+    ### 2026-10-09T18:11:41.145Z — VERIFY — ok
 
     By: CODER
 
-    Note: Verified: scheduled full14320distinct app cases24fresh after failed/new-only2case closure,122inventory13tooling2resource303browser allpass. Entire three modules627lines687statements123functions485branches and full application19334lines21251statements4843functions15683branches actual Istanbul100/zero-negative. Inventory configuredV8 strict100 zero-negative, no config change/replay. Build/seven statics/nine metadata/final format gates pass, six canonical prefixes600unmodified old test files1854unrelated files retained; three source-proven ODT default-owner assertions only migrated. Source unchanged and complete maps identical, raw failures retained, reference restored, goal active/incomplete new full baselineSZKQTN counter0.
+    Note: Verified:14320distinct application cases24fresh, full122inventory13tooling2resource303browser plus current4related browser and1247related cases160files after actual native Reset guard correction. Entire final three modules628lines688statements123functions483branches actual current Istanbul100; full current application19335lines21252statements4843functions15681branches all100/zero-negative. Obsolete changed-page counters/maps discarded, current entire entry only; unchanged modules original same-source hashes/maps retained. Current build/seven statics/three refreshed metadata/final format/preservation pass, original nine metadata and full gates retained. Six canonical prefixes600unchanged old test files1854unrelated retained, three concrete source-backed ODT default-owner assertions migrated. Raw failures/rework retained, reference restored, goal active/incomplete full baselineSZKQTN counter0.
     Attempts: 0
 
-    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T17:59:07.323Z, excerpt_hash=sha256:1f6977d6ec1d0e4865e8721df9b26a2419a130a13e83b1f39eb394b5fc0e6aa8
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T18:11:40.713Z, excerpt_hash=sha256:1f6977d6ec1d0e4865e8721df9b26a2419a130a13e83b1f39eb394b5fc0e6aa8
 
     Details:
 
@@ -117,42 +125,12 @@ sections:
     DecisionContextRef:
     - operator_action: run_exact_argv
     - can_execute_now: true
-    - safe_command: agentplane commit 202610091732-SZKQTN -m 🧩 SZKQTN task: persist canonical task artifacts --allow-tasks
+    - safe_command: agentplane task verify-show 202610091732-SZKQTN
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
-    - repeat_allowed: true
-    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
-    - risks: none
-
-    ### 2026-10-09T18:04:21.856Z — VERIFY — needs_rework
-
-    By: CODER
-
-    Note: Rework: same-agent source review found absent-headline Reset must leave edited widgets untouched under pinned direct-item guard. Correct only page/fresh source-lifecycle expectations in original scope; current-source related proof and replacement of obsolete entire page coverage entry required, no full passing replay.
-    Attempts: 1
-
-    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T18:00:24.902Z, excerpt_hash=sha256:1f6977d6ec1d0e4865e8721df9b26a2419a130a13e83b1f39eb394b5fc0e6aa8
-
-    Details:
-
-    BlueprintSnapshotRef:
-    - state: current
-    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610091732-SZKQTN/blueprint/resolved-snapshot.json
-    - old_digest: 32599d0ff1248b5cdd5ec9b44c432ddea841ca74b9f6fad782d1ce4e6b622598
-    - current_digest: 32599d0ff1248b5cdd5ec9b44c432ddea841ca74b9f6fad782d1ce4e6b622598
-    - route_changed: no
-    - safe_command: agentplane blueprint snapshot 202610091732-SZKQTN
-
-    DecisionContextRef:
-    - operator_action: run_exact_argv
-    - can_execute_now: true
-    - safe_command: agentplane task complete 202610091732-SZKQTN --result verified-202610091732-SZKQTN --commit a2ddcbca11976ff4f6009e1dffdd85a1bceba526
-    - diagnostic_command: none
-    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
-    - freshness: route=computed_local remote=remote_skipped
-    - repeat_allowed: true
-    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
     <!-- END VERIFICATION RESULTS -->
@@ -173,6 +151,12 @@ sections:
     - Observation: Same-agent review of initial semantic a2ddcbca1197 found pinned direct-headline Reset guard leaves edited missing-item widgets untouched, while the implementation reset them to resource defaults.
       Impact: Correct only existing Text Flow page and two fresh absent-input lifecycle expectations. Initial resource count0 retained; valid-item Reset still restores/saves original count/minimum1. Initial full source proof for this whole changed page becomes obsolete.
       Resolution: 160related current-source files revalidated successfully without upstream. Build actual complete current coverage using review-current entire changed module entry only, discard old changed-page counters/maps; unchanged-source modules retain actual same-task complete-map evidence. Material source-change revalidation is recorded explicitly; rerun build, related browser properties/name paths and current statics/metadata, no whole full-suite replay or broad-goal block.
+
+    - Observation: Post-review current-source1247related cases160files pass with entire three modules actual Istanbul100. Browser continuation did not execute tests because Playwright variadic --project consumed the two positional filenames.
+      Impact: Command-only correction: use --project=writer. Successful current build retained; no browser passing replay. Reference restored by finally, raw wrapper failure retained under ignored cache.
+      Resolution: Reformat six appended canonical histories physically upstream-absent, then execute unstarted related browser/static commands with corrected option syntax. Repair one ignored helper Python syntax error; no repository behavior change or incident promotion.
+
+    - Post-review final source lifecycle correction: native Reset saves/restores headline widgets only for captured direct21150 input; with no direct item, initial resource count0 and subsequent edited checkbox/count remain untouched as pinned guard requires. Only tabledlg.ts and two fresh source-lifecycle expectations changed after initial full profile/semantic a2ddcbca1197.1247passing related cases160files materially revalidated against current source,4related browser properties/name cases current build0skip0fail0flaky and seven current static gates pass. The entire final three-module current review profile proves628lines688statements123functions483branches all100; whole current application19335lines21252statements4843functions15681branches all100, zero negative counters. Old changed-page counters/maps excluded completely; current whole page entry only, unchanged modules verified against preserved source hashes/identical complete maps. Actual current-task raw counters only, no changed-source aggregation/normalization or full-suite passing replay. Distinct accepted app cases remain14320,24fresh. Initial full14318pass1stale ODT default-root assertion; failed/new-only closure2pass6intentional skips and three concrete source-backed default-owner expectation migrations retained. Full inventory122/tooling13/resource2/browser303 and original gates retained; current source review adds4browser cases and meaningful1247related revalidation. Playwright wrapper project argument failed before any browser test and was corrected to --project=writer; raw command failure retained, no test replay for it. Six canonical prefixes601old test files600unchanged and1854unrelated original files/parent Findings prefix retained. Current metadata/preservation/semantic binding and same-agent non-independent final quality complete closure; broad goal ACTIVE/incomplete, full baselineSZKQTN/counter0, native core table member/default1 and broader native frame/HTML/VCL/name-hint families remain unverified.
 id_source: "generated"
 ---
 ## Summary
@@ -203,15 +187,17 @@ Result: pass, nine metadata-only audits;114required paths33retired roots333runti
 Evidence: bounded evidence/results.json contains exact executed commands/counts/current hashes and final preservation, no upstream copies/helper scripts/raw counters/maps/logs. Source audits use restored pinned9bc445578031fecf56086729d8e4940c77e14d65 only; runtime tests invoke no upstream.
 Scope: Registered recovery/open/save/settings decisions and all old canonical scalar/status/default/classification/evidence/responsibility prefixes preserved. Native core table counter/default1, full master/follow/root/page/section/content/HTML/VCL families remain unverified; no module/goal parity promotion. Broad goal ACTIVE/incomplete; full success becomes new baselineSZKQTN and counter0.
 
+Post-review current-source correction: initial semantic a2ddcbca1197 was rework for absent-headline Reset guard. Final page fields start at resource0 and guarded Reset writes/saves only valid direct input; absent edits preserved.1247cases160related files revalidated,4related actual browser cases current build and seven static gates pass. Entire final three-module profile628lines688statements123functions483branches actual Istanbul100; whole current application19335lines21252statements4843functions15681branches all100/zero-negative. Obsolete changed-page counters/maps entirely discarded; current whole-file entry only, unchanged source/hash/complete-map witnesses retained. Distinct accepted14320cases24fresh; no whole full-suite replay, actual changed-source revalidation explicit. Three post-review metadata audits/preservation final artifacts pass. Full303browser plus current4browser, inventory122/tooling13/resource2 retain successful original source evidence. Playwright variadic project wrapper failure before tests corrected, raw failure retained. Six old canonical prefixes601old test files600unchanged1854unrelated files and original parent Findings retained. Final semantic binding and explicitly same-agent non-independent quality follow.
+
 <!-- BEGIN VERIFICATION RESULTS -->
-### 2026-10-09T17:59:08.744Z — VERIFY — ok
+### 2026-10-09T18:11:41.145Z — VERIFY — ok
 
 By: CODER
 
-Note: Verified: scheduled full14320distinct app cases24fresh after failed/new-only2case closure,122inventory13tooling2resource303browser allpass. Entire three modules627lines687statements123functions485branches and full application19334lines21251statements4843functions15683branches actual Istanbul100/zero-negative. Inventory configuredV8 strict100 zero-negative, no config change/replay. Build/seven statics/nine metadata/final format gates pass, six canonical prefixes600unmodified old test files1854unrelated files retained; three source-proven ODT default-owner assertions only migrated. Source unchanged and complete maps identical, raw failures retained, reference restored, goal active/incomplete new full baselineSZKQTN counter0.
+Note: Verified:14320distinct application cases24fresh, full122inventory13tooling2resource303browser plus current4related browser and1247related cases160files after actual native Reset guard correction. Entire final three modules628lines688statements123functions483branches actual current Istanbul100; full current application19335lines21252statements4843functions15681branches all100/zero-negative. Obsolete changed-page counters/maps discarded, current entire entry only; unchanged modules original same-source hashes/maps retained. Current build/seven statics/three refreshed metadata/final format/preservation pass, original nine metadata and full gates retained. Six canonical prefixes600unchanged old test files1854unrelated retained, three concrete source-backed ODT default-owner assertions migrated. Raw failures/rework retained, reference restored, goal active/incomplete full baselineSZKQTN counter0.
 Attempts: 0
 
-VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T17:59:07.323Z, excerpt_hash=sha256:1f6977d6ec1d0e4865e8721df9b26a2419a130a13e83b1f39eb394b5fc0e6aa8
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T18:11:40.713Z, excerpt_hash=sha256:1f6977d6ec1d0e4865e8721df9b26a2419a130a13e83b1f39eb394b5fc0e6aa8
 
 Details:
 
@@ -226,42 +212,12 @@ BlueprintSnapshotRef:
 DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
-- safe_command: agentplane commit 202610091732-SZKQTN -m 🧩 SZKQTN task: persist canonical task artifacts --allow-tasks
+- safe_command: agentplane task verify-show 202610091732-SZKQTN
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
-- repeat_allowed: true
-- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
-- risks: none
-
-### 2026-10-09T18:04:21.856Z — VERIFY — needs_rework
-
-By: CODER
-
-Note: Rework: same-agent source review found absent-headline Reset must leave edited widgets untouched under pinned direct-item guard. Correct only page/fresh source-lifecycle expectations in original scope; current-source related proof and replacement of obsolete entire page coverage entry required, no full passing replay.
-Attempts: 1
-
-VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T18:00:24.902Z, excerpt_hash=sha256:1f6977d6ec1d0e4865e8721df9b26a2419a130a13e83b1f39eb394b5fc0e6aa8
-
-Details:
-
-BlueprintSnapshotRef:
-- state: current
-- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610091732-SZKQTN/blueprint/resolved-snapshot.json
-- old_digest: 32599d0ff1248b5cdd5ec9b44c432ddea841ca74b9f6fad782d1ce4e6b622598
-- current_digest: 32599d0ff1248b5cdd5ec9b44c432ddea841ca74b9f6fad782d1ce4e6b622598
-- route_changed: no
-- safe_command: agentplane blueprint snapshot 202610091732-SZKQTN
-
-DecisionContextRef:
-- operator_action: run_exact_argv
-- can_execute_now: true
-- safe_command: agentplane task complete 202610091732-SZKQTN --result verified-202610091732-SZKQTN --commit a2ddcbca11976ff4f6009e1dffdd85a1bceba526
-- diagnostic_command: none
-- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
-- freshness: route=computed_local remote=remote_skipped
-- repeat_allowed: true
-- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
@@ -287,3 +243,9 @@ Pinned tabsh.cxx lcl_TableParamToItemSet puts SfxUInt16Item(FN_PARAM_TABLE_HEADL
 - Observation: Same-agent review of initial semantic a2ddcbca1197 found pinned direct-headline Reset guard leaves edited missing-item widgets untouched, while the implementation reset them to resource defaults.
   Impact: Correct only existing Text Flow page and two fresh absent-input lifecycle expectations. Initial resource count0 retained; valid-item Reset still restores/saves original count/minimum1. Initial full source proof for this whole changed page becomes obsolete.
   Resolution: 160related current-source files revalidated successfully without upstream. Build actual complete current coverage using review-current entire changed module entry only, discard old changed-page counters/maps; unchanged-source modules retain actual same-task complete-map evidence. Material source-change revalidation is recorded explicitly; rerun build, related browser properties/name paths and current statics/metadata, no whole full-suite replay or broad-goal block.
+
+- Observation: Post-review current-source1247related cases160files pass with entire three modules actual Istanbul100. Browser continuation did not execute tests because Playwright variadic --project consumed the two positional filenames.
+  Impact: Command-only correction: use --project=writer. Successful current build retained; no browser passing replay. Reference restored by finally, raw wrapper failure retained under ignored cache.
+  Resolution: Reformat six appended canonical histories physically upstream-absent, then execute unstarted related browser/static commands with corrected option syntax. Repair one ignored helper Python syntax error; no repository behavior change or incident promotion.
+
+- Post-review final source lifecycle correction: native Reset saves/restores headline widgets only for captured direct21150 input; with no direct item, initial resource count0 and subsequent edited checkbox/count remain untouched as pinned guard requires. Only tabledlg.ts and two fresh source-lifecycle expectations changed after initial full profile/semantic a2ddcbca1197.1247passing related cases160files materially revalidated against current source,4related browser properties/name cases current build0skip0fail0flaky and seven current static gates pass. The entire final three-module current review profile proves628lines688statements123functions483branches all100; whole current application19335lines21252statements4843functions15681branches all100, zero negative counters. Old changed-page counters/maps excluded completely; current whole page entry only, unchanged modules verified against preserved source hashes/identical complete maps. Actual current-task raw counters only, no changed-source aggregation/normalization or full-suite passing replay. Distinct accepted app cases remain14320,24fresh. Initial full14318pass1stale ODT default-root assertion; failed/new-only closure2pass6intentional skips and three concrete source-backed default-owner expectation migrations retained. Full inventory122/tooling13/resource2/browser303 and original gates retained; current source review adds4browser cases and meaningful1247related revalidation. Playwright wrapper project argument failed before any browser test and was corrected to --project=writer; raw command failure retained, no test replay for it. Six canonical prefixes601old test files600unchanged and1854unrelated original files/parent Findings prefix retained. Current metadata/preservation/semantic binding and same-agent non-independent final quality complete closure; broad goal ACTIVE/incomplete, full baselineSZKQTN/counter0, native core table member/default1 and broader native frame/HTML/VCL/name-hint families remain unverified.
