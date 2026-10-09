@@ -372,6 +372,11 @@
     "Native arbitrary custom parent preservation, generic browser scalar codec, full UNO/VCL/filter responsibilities remain unverified.",
     "Actual coverage does not promote whole-module semantic/default/classification statuses."
   ],
-  "semanticCommit": null,
-  "quality": null
+  "semanticCommit": "0e02021afe792176ab9069c80aa9454f71023a94",
+  "quality": {
+    "verdict": "pass",
+    "evaluatedSha": "0e02021afe792176ab9069c80aa9454f71023a94",
+    "sameAgentNonIndependent": true,
+    "path": ".agentplane/tasks/202610092308-R12SRT/quality/20261009-232031702-recovery-context/quality-report.json"
+  }
 }
