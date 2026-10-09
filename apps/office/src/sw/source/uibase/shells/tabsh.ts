@@ -4,6 +4,9 @@ import { createWriterInterface } from "../../../sdi/swriter";
 import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
 import type { SwWrtShell } from "../wrtsh/wrtsh1";
 import type { SwFEShell } from "../../core/frmedt/fetab";
+import { SwFormatHoriOrient } from "../../../inc/fmtornt";
+import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
+import { RES_FRM_SIZE, RES_HORI_ORIENT } from "../../../inc/hintids";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { SwTabCols } from "../../core/bastyp/tabcol";
 import { SwTableRep } from "../table/swtablerep";
@@ -151,16 +154,18 @@ export function ItemSetToTableParam(
         const pointer = input.GetItemIfSet(FN_TABLE_REP, false);
         const representation = pointer instanceof SwPtrItem ? pointer.GetValue() : undefined;
         let attributes: SwTableFormat = {};
+        const geometrySet = new SfxItemSet(input.GetPool(), [
+          [RES_FRM_SIZE, RES_FRM_SIZE],
+          [RES_HORI_ORIENT, RES_HORI_ORIENT],
+        ]);
         if (representation instanceof SwTableRep) {
           attributes = {
-            ...(representation.align === HoriOrientation.FULL
-              ? {}
-              : { width: representation.width }),
-            horiOrient: representation.align,
             marginLeft: representation.left,
             marginRight: representation.right,
-            align: undefined,
           };
+          if (representation.align !== HoriOrientation.FULL)
+            geometrySet.Put(new SwFormatFrameSize(SwFrameSize.Variable, representation.width));
+          geometrySet.Put(new SwFormatHoriOrient(0, representation.align));
           if (representation.HasColsChanged()) {
             const columns = new SwTabCols();
             shell.GetTabCols(columns);
@@ -184,6 +189,7 @@ export function ItemSetToTableParam(
             borderModel: merge.GetValue() ? "collapsing" : "separating",
           };
         if (Object.keys(attributes).length !== 0) shell.SetTableAttr(attributes);
+        if (geometrySet.Count() !== 0) shell.SetTableAttr(geometrySet);
         return true;
       } finally {
         undo.EndUndo();

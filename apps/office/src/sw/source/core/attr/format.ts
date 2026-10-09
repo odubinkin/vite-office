@@ -13,7 +13,8 @@ import {
 } from "../../../inc/hints";
 import { SwAttrSet, type SwAttrPool } from "./swatrset";
 import type { SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";
-import { RES_UL_SPACE, RES_PAGEDESC } from "../../../inc/hintids";
+import type { SwFormatHoriOrient } from "../../../inc/fmtornt";
+import { RES_HORI_ORIENT, RES_UL_SPACE, RES_PAGEDESC } from "../../../inc/hintids";
 
 /** Base class for identity-bearing Writer styles and formats. */
 export class SwFormat extends BroadcastingModify {
@@ -57,6 +58,11 @@ export class SwFormat extends BroadcastingModify {
   /** Reads native upper/lower spacing from the original effective item set. @param searchInParent - Whether inherited items participate. @returns Borrowed owned, inherited or pooled item. */
   public GetULSpace(searchInParent = true): SvxULSpaceItem {
     return this.attributeSet.Get(RES_UL_SPACE, searchInParent) as SvxULSpaceItem;
+  }
+
+  /** Reads original effective horizontal orientation. @param searchInParent - Whether inherited items participate. @returns Borrowed original item. */
+  public GetHoriOrient(searchInParent = true): SwFormatHoriOrient {
+    return this.attributeSet.Get(RES_HORI_ORIENT, searchInParent) as SwFormatHoriOrient;
   }
 
   /** Returns the parent format. @returns Derived-from format, when present. */

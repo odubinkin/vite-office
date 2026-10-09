@@ -44,8 +44,15 @@ it.each([undefined, false, true])(
       expect(frame.IsLayoutSplitAllowed()).toBe(value ?? true);
       expect(table.GetFormat()).toEqual(
         value === undefined
-          ? { width: 6000, headerRows: 1, repeatHeaderRows: true }
-          : { width: 6000, layoutSplit: value, headerRows: 1, repeatHeaderRows: true },
+          ? { width: 6000, horiOrient: 6, align: "margins", headerRows: 1, repeatHeaderRows: true }
+          : {
+              width: 6000,
+              horiOrient: 6,
+              align: "margins",
+              layoutSplit: value,
+              headerRows: 1,
+              repeatHeaderRows: true,
+            },
       );
       owner.SetFormatAttr(new SwFormatLayoutSplit(false));
       expect(table.GetFormat().layoutSplit).toBe(false);

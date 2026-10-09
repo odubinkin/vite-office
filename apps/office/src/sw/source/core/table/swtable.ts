@@ -9,12 +9,12 @@ import { SwFrameFormat } from "../layout/atrfrm";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { SwTabCols } from "../bastyp/tabcol";
 import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
-import { SwFormatVertOrient } from "../../../inc/fmtornt";
+import { SwFormatHoriOrient, SwFormatVertOrient } from "../../../inc/fmtornt";
 import { SwClient, type SwModify } from "../../../inc/calbck";
 import type { SwModelHint } from "../../../inc/hints";
 import { SwTableBoxFormat as SwNativeTableBoxFormat } from "../../../inc/swtblfmt";
 import type { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
-import { RES_UL_SPACE, RES_FRM_SIZE } from "../../../inc/hintids";
+import { RES_HORI_ORIENT, RES_UL_SPACE, RES_FRM_SIZE } from "../../../inc/hintids";
 import { SvxULSpaceItem, SvxBoxItem } from "../../../../editeng/source/items/frmitems";
 import { SvxBorderLine } from "../../../../editeng/source/items/borderline";
 import { RES_BOX } from "../../../inc/hintids";
@@ -70,6 +70,8 @@ export class SwTable extends SwClient {
     | "repeatHeaderRows"
     | "marginTop"
     | "marginBottom"
+    | "horiOrient"
+    | "align"
   > = {};
   private rowsToRepeat = 1;
   public static readonly SEARCH_NONE = 0;
@@ -87,7 +89,11 @@ export class SwTable extends SwClient {
   ) {
     super();
     this.RegisterToModify(new SwFrameFormat(tableNode.GetDoc().GetAttrPool(), name));
-    this.SetFormat(format);
+    this.SetFormat({
+      ...format,
+      horiOrient:
+        format.horiOrient ?? (format.align === undefined ? HoriOrientation.FULL : undefined),
+    });
   }
 
   /** Returns the native frame-format identity. @returns Original frame owner. */
@@ -143,6 +149,9 @@ export class SwTable extends SwClient {
 
   /** Projects independent native state for construction, transport and history. @returns Detached boundary values. */
   public GetFormat(): SwTableFormat {
+    const orientation = this.GetFrameFormat().GetAttrSet().GetItemIfSet(RES_HORI_ORIENT, false) as
+      SwFormatHoriOrient | undefined;
+    const orient = orientation?.GetHoriOrient();
     const spacing = this.GetFrameFormat().GetAttrSet().GetItemIfSet(RES_UL_SPACE, false) as
       SvxULSpaceItem | undefined;
     const size = this.GetFrameFormat().GetAttrSet().GetItemIfSet(RES_FRM_SIZE, false) as
@@ -154,6 +163,19 @@ export class SwTable extends SwClient {
       SwFormatLayoutSplit | undefined;
     return {
       ...this.format,
+      ...(orientation === undefined
+        ? {}
+        : {
+            horiOrient: orient as HoriOrientation,
+            align:
+              orient === HoriOrientation.LEFT || orient === HoriOrientation.LEFT_AND_WIDTH
+                ? ("left" as const)
+                : orient === HoriOrientation.CENTER
+                  ? ("center" as const)
+                  : orient === HoriOrientation.RIGHT
+                    ? ("right" as const)
+                    : ("margins" as const),
+          }),
       ...(spacing === undefined
         ? {}
         : { marginTop: spacing.GetUpper(), marginBottom: spacing.GetLower() }),
@@ -167,30 +189,9 @@ export class SwTable extends SwClient {
     };
   }
 
-  /** Reads native orientation, admitting historical ODF geometry at the table boundary. @returns Frame orientation. */
+  /** Reads the original effective native orientation. @returns Native orientation. */
   public GetHoriOrient(): HoriOrientation {
-    const width = this.GetFrameFormat().GetAttrSet().GetItemIfSet(RES_FRM_SIZE, false);
-    if (this.format.horiOrient !== undefined) return this.format.horiOrient;
-    switch (this.format.align) {
-      case "left":
-        return width === undefined
-          ? this.format.marginLeft !== undefined || this.format.marginRight !== undefined
-            ? HoriOrientation.NONE
-            : HoriOrientation.FULL
-          : this.format.marginLeft !== undefined || this.format.marginRight !== undefined
-            ? HoriOrientation.LEFT_AND_WIDTH
-            : HoriOrientation.LEFT;
-      case "center":
-        return width === undefined ? HoriOrientation.FULL : HoriOrientation.CENTER;
-      case "right":
-        return width === undefined ? HoriOrientation.FULL : HoriOrientation.RIGHT;
-      case "margins":
-        return this.format.marginLeft !== undefined || this.format.marginRight !== undefined
-          ? HoriOrientation.NONE
-          : HoriOrientation.FULL;
-      default:
-        return HoriOrientation.FULL;
-    }
+    return this.GetFrameFormat().GetHoriOrient().GetHoriOrient() as HoriOrientation;
   }
 
   /** Publishes represented frame-size changes to row/box width adjustment, as SwClientNotify does. @param value - New values. @returns Nothing. */
@@ -203,12 +204,45 @@ export class SwTable extends SwClient {
       repeatHeaderRows,
       marginTop,
       marginBottom,
+      horiOrient,
+      align,
       ...geometry
     } = value;
     if (headerRows !== undefined || repeatHeaderRows !== undefined)
       this.SetRowsToRepeat(repeatHeaderRows === false ? 0 : (headerRows ?? this.rowsToRepeat));
     this.format = geometry;
     const format = this.GetFrameFormat();
+    let orient = horiOrient;
+    if (orient === undefined && align !== undefined) {
+      const hasMargins = value.marginLeft !== undefined || value.marginRight !== undefined;
+      switch (align) {
+        case "left":
+          orient =
+            width === undefined
+              ? hasMargins
+                ? HoriOrientation.NONE
+                : HoriOrientation.FULL
+              : hasMargins
+                ? HoriOrientation.LEFT_AND_WIDTH
+                : HoriOrientation.LEFT;
+          break;
+        case "center":
+          orient = width === undefined ? HoriOrientation.FULL : HoriOrientation.CENTER;
+          break;
+        case "right":
+          orient = width === undefined ? HoriOrientation.FULL : HoriOrientation.RIGHT;
+          break;
+        case "margins":
+          orient = hasMargins ? HoriOrientation.NONE : HoriOrientation.FULL;
+          break;
+      }
+    }
+    if (orient === undefined) format.ResetFormatAttr(RES_HORI_ORIENT);
+    else {
+      const item = format.GetHoriOrient().Clone();
+      item.SetHoriOrient(orient);
+      format.SetFormatAttr(item);
+    }
     if (marginTop === undefined && marginBottom === undefined) format.ResetFormatAttr(RES_UL_SPACE);
     else
       format.SetFormatAttr(
@@ -439,9 +473,10 @@ export class SwTable extends SwClient {
         ...this.format,
         marginLeft: next.GetLeft(),
         marginRight: next.GetRightMax() - next.GetRight(),
-        horiOrient: orient,
-        align: undefined,
       };
+      const orientation = this.GetFrameFormat().GetHoriOrient().Clone();
+      orientation.SetHoriOrient(orient);
+      this.GetFrameFormat().SetFormatAttr(orientation);
       if (newWish !== oldWish) {
         this.LockModify();
         try {

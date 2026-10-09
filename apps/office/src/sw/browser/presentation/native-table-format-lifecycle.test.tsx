@@ -97,6 +97,7 @@ it("mounted native format cancellation keeps canonical table owners after all ta
   expect(f.table.GetFormat()).toEqual({
     width: 6000,
     horiOrient: H.LEFT,
+    align: "left",
     headerRows: 0,
     repeatHeaderRows: false,
   });

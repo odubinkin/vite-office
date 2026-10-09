@@ -134,6 +134,7 @@ it.each([
     expect(f.table.GetFormat()).toStrictEqual({
       width: 6000,
       horiOrient: H.LEFT,
+      align: "left",
       headerRows: 1,
       repeatHeaderRows: true,
     });

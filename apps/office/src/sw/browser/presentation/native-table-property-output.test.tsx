@@ -261,7 +261,7 @@ it("mounted visited Columns advertises the borrowed native representation even w
     horiOrient: H.LEFT,
     marginLeft: 0,
     marginRight: rep.space - 6000,
-    align: undefined,
+    align: "left",
   });
   expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(1);
   expect(

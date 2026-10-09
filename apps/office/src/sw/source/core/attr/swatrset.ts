@@ -81,7 +81,7 @@ import { SwNumRuleItem } from "../para/paratr";
 import { SwFormatPageDesc } from "./fmtpdsc";
 import { getDefaultFontSelection, getWriterDefaultFontLanguage } from "../doc/default-font";
 import { SwFormatINetFormat } from "../txtnode/fmtatr2";
-import { SwFormatVertOrient } from "../../../inc/fmtornt";
+import { SwFormatHoriOrient, SwFormatVertOrient } from "../../../inc/fmtornt";
 import { SwFormatFrameSize } from "../../../inc/fmtfsize";
 import { SwFormatLayoutSplit } from "../../../inc/fmtlsplt";
 import { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
@@ -121,6 +121,7 @@ export class SwAttrPool extends SfxItemPool {
     );
     this.RegisterDefaultItem(new SwFormatFrameSize());
     this.RegisterDefaultItem(new SwFormatVertOrient());
+    this.RegisterDefaultItem(new SwFormatHoriOrient());
     this.RegisterDefaultItem(
       new SwFormatLayoutSplit(),
       /** Restores the concrete table split item. @param value - Stored boolean. @returns Native item. */

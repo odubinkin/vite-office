@@ -284,30 +284,27 @@ function exportWriterText(
           const table = block.GetTable(),
             grid = new SwXMLTableLines(table);
           const format = table.GetFormat();
-          const orient = format.horiOrient;
+          const orient = table.GetFrameFormat().GetHoriOrient().GetHoriOrient();
           yield {
             kind: "table" as const,
             table: {
               name: table.GetName(),
-              format:
-                orient === undefined
-                  ? format
-                  : {
-                      ...format,
-                      align:
-                        orient === HoriOrientation.LEFT || orient === HoriOrientation.LEFT_AND_WIDTH
-                          ? "left"
-                          : orient === HoriOrientation.RIGHT
-                            ? "right"
-                            : orient === HoriOrientation.CENTER
-                              ? "center"
-                              : "margins",
-                      marginLeft:
-                        orient === HoriOrientation.NONE || orient === HoriOrientation.LEFT_AND_WIDTH
-                          ? format.marginLeft
-                          : undefined,
-                      marginRight: orient === HoriOrientation.NONE ? format.marginRight : undefined,
-                    },
+              format: {
+                ...format,
+                align:
+                  orient === HoriOrientation.LEFT || orient === HoriOrientation.LEFT_AND_WIDTH
+                    ? "left"
+                    : orient === HoriOrientation.RIGHT
+                      ? "right"
+                      : orient === HoriOrientation.CENTER
+                        ? "center"
+                        : "margins",
+                marginLeft:
+                  orient === HoriOrientation.NONE || orient === HoriOrientation.LEFT_AND_WIDTH
+                    ? format.marginLeft
+                    : undefined,
+                marginRight: orient === HoriOrientation.NONE ? format.marginRight : undefined,
+              },
               columnWidths: grid.GetColumnWidths(),
               softPageBreakRows: table.GetSoftPageBreakRows(),
               rows: table.GetTabLines().map(

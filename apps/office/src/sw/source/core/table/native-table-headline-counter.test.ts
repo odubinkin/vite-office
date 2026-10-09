@@ -18,7 +18,12 @@ it("default member survives an empty table, original rows and complete geometry 
   const doc = createWriterDocument(),
     table = doc.nodes.MakeTableNode("NativeDefault");
   expect(table.GetRowsToRepeat()).toBe(0);
-  expect(table.GetFormat()).toEqual({ headerRows: 1, repeatHeaderRows: true });
+  expect(table.GetFormat()).toEqual({
+    horiOrient: 6,
+    align: "margins",
+    headerRows: 1,
+    repeatHeaderRows: true,
+  });
   const row = doc.nodes.AppendTableRow(table, 1),
     box = required(row.GetTabBoxes()[0]),
     node = required(box.GetParagraphs()[0]);
@@ -64,7 +69,12 @@ it.each([
       table = doc.nodes.MakeTableNode("Unsigned");
     table.SetRowsToRepeat(authored);
     expect(table.GetRowsToRepeat()).toBe(0);
-    expect(table.GetFormat()).toEqual({ headerRows: stored, repeatHeaderRows: stored !== 0 });
+    expect(table.GetFormat()).toEqual({
+      horiOrient: 6,
+      align: "margins",
+      headerRows: stored,
+      repeatHeaderRows: stored !== 0,
+    });
     for (let index = 0; index < 3; index++) doc.nodes.AppendTableRow(table, 1);
     expect(table.GetRowsToRepeat()).toBe(Math.min(3, stored));
   },

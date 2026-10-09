@@ -393,7 +393,7 @@ export class SwTabFrame extends SwLayoutFrame {
     );
     let left = 0;
     let right = 0;
-    const orient = this.table.GetHoriOrient();
+    const orient = this.GetFormat().GetHoriOrient().GetHoriOrient();
     if (orient === HoriOrientation.NONE) {
       left = format.marginLeft ?? 0;
       right = format.marginRight ?? 0;

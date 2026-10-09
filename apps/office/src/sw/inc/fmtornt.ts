@@ -1,8 +1,9 @@
-/** @fileoverview Owns native vertical orientation position, orientation and relation from fmtornt.hxx and atrfrm.cxx. */
+/** @fileoverview Owns native vertical and horizontal orientation position, orientation, relation and page-toggle fields from fmtornt.hxx and atrfrm.cxx. */
 import { SfxPoolItem } from "../../svl/source/items/poolitem";
 import { VertOrientation } from "../../offapi/com/sun/star/text/VertOrientation";
 import { RelOrientation } from "../../offapi/com/sun/star/text/RelOrientation";
-import { RES_VERT_ORIENT } from "./hintids";
+import { HoriOrientation } from "../../offapi/com/sun/star/text/HoriOrientation";
+import { RES_HORI_ORIENT, RES_VERT_ORIENT } from "./hintids";
 
 /** Complete native vertical frame orientation item. */
 export class SwFormatVertOrient extends SfxPoolItem {
@@ -84,6 +85,120 @@ export class SwFormatVertOrient extends SfxPoolItem {
             : position;
         break;
       }
+      default:
+        return false;
+    }
+    return true;
+  }
+}
+
+/** Complete native horizontal frame orientation item from fmtornt.hxx. */
+export class SwFormatHoriOrient extends SfxPoolItem {
+  /** Creates original NONE/PRINT_AREA/no-toggle defaults. @param position - Relative twip position. @param orientation - Native orientation. @param relation - Native reference. @param toggle - Flip on even pages. @returns Nothing. */
+  public constructor(
+    private position = 0,
+    private orientation: number = HoriOrientation.NONE,
+    private relation: number = RelOrientation.PRINT_AREA,
+    private toggle = false,
+  ) {
+    super(RES_HORI_ORIENT);
+  }
+  /** Reads relative position. @returns Twips. */
+  public GetPos(): number {
+    return this.position;
+  }
+  /** Replaces relative position. @param value - Twips. @returns Nothing. */
+  public SetPos(value: number): void {
+    this.position = value;
+  }
+  /** Reads native orientation. @returns Native ID. */
+  public GetHoriOrient(): number {
+    return this.orientation;
+  }
+  /** Replaces native orientation. @param value - Native ID. @returns Nothing. */
+  public SetHoriOrient(value: number): void {
+    this.orientation = value;
+  }
+  /** Reads native reference. @returns Native ID. */
+  public GetRelationOrient(): number {
+    return this.relation;
+  }
+  /** Replaces native reference. @param value - Native ID. @returns Nothing. */
+  public SetRelationOrient(value: number): void {
+    this.relation = value;
+  }
+  /** Reads even-page flip. @returns Toggle. */
+  public IsPosToggle(): boolean {
+    return this.toggle;
+  }
+  /** Replaces even-page flip. @param value - Toggle. @returns Nothing. */
+  public SetPosToggle(value: boolean): void {
+    this.toggle = value;
+  }
+  /** Copies all four original fields independently. @returns Original item clone. */
+  public override Clone(): SwFormatHoriOrient {
+    return new SwFormatHoriOrient(this.position, this.orientation, this.relation, this.toggle);
+  }
+  /** Compares original identity and all four fields. @param other - Candidate item. @returns Equality. */
+  public override equals(other: SfxPoolItem): boolean {
+    return (
+      other instanceof SwFormatHoriOrient &&
+      this.Which() === other.Which() &&
+      this.position === other.position &&
+      this.orientation === other.orientation &&
+      this.relation === other.relation &&
+      this.toggle === other.toggle
+    );
+  }
+  /** Queries original members, always converting positions to mm100. @param memberId - Native ID and optional conversion flag. @returns Member or absent. */
+  public override QueryValue(memberId = 0): number | boolean | undefined {
+    switch (memberId & ~0x80) {
+      case 0:
+        return this.orientation;
+      case 1:
+        return this.relation;
+      case 2:
+        return Math.trunc((this.position * 127 + (this.position >= 0 ? 36 : -36)) / 72);
+      case 3:
+        return this.toggle;
+      default:
+        return undefined;
+    }
+  }
+  /** Applies native member extraction/defaults and optional position conversion. @param value - UNO scalar. @param memberId - Native member and flag. @returns Extraction support. */
+  public PutValue(value: unknown, memberId: number): boolean {
+    switch (memberId & ~0x80) {
+      case 0:
+        this.orientation =
+          typeof value === "number" && Number.isInteger(value) && value >= -32768 && value <= 32767
+            ? value
+            : HoriOrientation.NONE;
+        break;
+      case 1:
+        this.relation =
+          typeof value === "number" && Number.isInteger(value) && value >= -32768 && value <= 32767
+            ? value
+            : RelOrientation.FRAME;
+        break;
+      case 2: {
+        const valid =
+          typeof value === "number" &&
+          Number.isInteger(value) &&
+          value >= -2147483648 &&
+          value <= 2147483647;
+        const position = valid ? value : 0;
+        this.SetPos(
+          memberId & 0x80
+            ? Math.trunc((position * 72 + (position >= 0 ? 63 : -63)) / 127)
+            : position,
+        );
+        return valid;
+      }
+      case 3:
+        if (typeof value !== "boolean")
+          throw new TypeError("Native horizontal page toggle requires a boolean.");
+        this.SetPosToggle(value);
+        break;
       default:
         return false;
     }
