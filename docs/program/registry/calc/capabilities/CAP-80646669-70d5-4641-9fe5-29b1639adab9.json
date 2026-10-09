@@ -17,7 +17,7 @@
     },
     "capability": "Calc numeric address and range movement",
     "gaps": [
-      "Compiled native differential evidence and full address API closure are not yet established."
+      "Full address API closure and an independent ordinary-movement native differential remain unverified. The separate sticky capability proves 768 bounded MoveSticky states, including its ScAddress::Move calls."
     ],
     "upstream": {
       "implementation": [
@@ -62,7 +62,7 @@
     "aspect": "model-operation",
     "atomicOperation": "Move a numeric cell range with native bounds and error coordinates",
     "scopeLimitations": [
-      "Reference parsing/formatting, external links, native hashes, range subtraction and sticky reference updates remain subsequent Calc tasks.",
+      "Reference parsing/formatting, external links, native hashes and range subtraction remain subsequent Calc tasks. Implemented sticky reference updates are tracked separately by CAP-ba7bed4e-385b-4c42-9aa1-09a6adb60008.",
       "Undefined uninitialized native constructors, machine pointer storage and debug assertions have no browser implementation."
     ],
     "implemented": true,
