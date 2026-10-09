@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "task_id": "202610090929-2C4JM4",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-09T09:47:14.683Z",
+  "verdict": "pass",
+  "summary": "Non-independent same-agent review: direct native constructor linking matches represented pinned construction mechanism;171 unique passes,7 fresh, failed-only closure; all-four100 source-bound changed/app coverage and static/inventory gates pass.",
+  "evaluated_sha": "0f0eb9a91be7470d49113640da90bc095d14930e",
+  "blueprint_digest": "e2c9459f8897b8374429740f8443fa1c48f3ba71158534ce8b8b3ebff1a55ebd",
+  "findings": [
+    "Original parent/listener/item-set identities and inherited native items are preserved without construction mutation; explicit later channels remain observable. All509 prior test files byte-identical. Two canonical records retain historical fields/status/default/classification/evidence prefixes. Broad native root/page/body/follows and full explicit mutation/undo remain unverified; no whole parity promotion."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610090929-2C4JM4/README.md",
+    ".agentplane/tasks/202610090929-2C4JM4/evidence/coverage.json",
+    ".agentplane/tasks/202610090929-2C4JM4/evidence/checks.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Same-agent evaluation is explicitly not independent. Coverage includes strictly proven unchanged historical counters; no fresh full252. Next full257 must fix failures before goal pause."
+  ]
+}
