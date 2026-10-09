@@ -4,7 +4,7 @@ title: "Run Calc milestone10 full test validation and pause"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 19
+revision: 20
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,26 @@ verification:
   updated_by: "CODER"
   note: "Command: npm run test:all Result:office test execution pass; aggregate command exits1 on explicitly user-exempt Writer-only coverage deficit. Evidence:516 files/14097 tests passed; statements20835/20835, functions4767/4767, lines18958/18958; branches15369/15370 (99.99%), sole missing branch sw/source/core/layout/paintfrm.ts:141. No Writer source/tests or coverage threshold/exclusion changes. Scope:complete application/shared office test stage. User explicitly instructed leaving missing Writer coverage for another branch; remaining stages executed separately instead of rerunning an unchanged exempt failure. Command: npm run test:inventory:coverage Result:pass after common inventory remediation. Evidence:38 files/122 tests pass; actual100 statements1733/1733, branches1288/1288, functions435/435, lines1667/1667. Initial4 failures exposed active Calc assumptions, marker fixture coverage and legacy CLI global known-ID boundary; all resolved. Affected9-case retest passes, including explicit missing-global-registry rejection. Scope:all inventory tooling; canonical registry loader/parser reused, owned collision/inactive/scope tests retain independent inputs and upstream marker evidence remains synthetic, not native parity certification. Command: npm run test:tooling; npm run test:source-provenance; npm run check:writer-resources; node_modules/.bin/vitest run scripts/native-ruler-boundary.test.ts scripts/native-column-item-boundary.test.ts scripts/check-legacy-font-boundary.test.ts Result:pass. Evidence:11 tooling cases/2 files,3 provenance cases/1 file,2 Writer resource model cases/1 file with generation unchanged,5 extra boundary cases/3 files. Scope:all remaining script test files, including those omitted by the aggregate test:all command. Command: npm run test:e2e; npm run test:static Result:pass. Evidence:303 built browser scenarios pass (Writer plus shared launcher/Calc route); static smoke relative assets/two JavaScript bundles/no backend endpoints. Browser runs have no failures. Existing bundle-size advisory retained. Scope:complete current browser suites and static build, without claiming unavailable Calc UI feature coverage. Command: npm run format:check; npm run lint; npm run typecheck; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:source-tree Result:pass after normalizing five generated Calc JSON fixtures; changed inventory code rechecked via scoped ESLint/Prettier, tools typecheck/docs/size after remediation. Evidence:five normalized before/after JSON SHA256 hashes identical, preserving all native inputs/results/source/body hashes;332 runtime sources/1570 imports/29 edges;1086 documented source files/1089 size checks/114 required paths/33 retired roots. All source/test behavior preserved outside the common inventory fixes. Scope:complete repository guards; no new exclusions or thresholds. Fixture generator outputs follow normal formatting before commit. Command: node scripts/calc-bigrange-native-probe.mjs --check; node scripts/calc-refdata-native-probe.mjs --check; node scripts/calc-refdata-native-probe.mjs --complex-check; node scripts/calc-rangelst-native-probe.mjs --check; node scripts/calc-refupdat-native-probe.mjs --check Result:pass. Evidence:all affected regenerated original-output comparisons identical under ASan/UBSan, exact pinned Git/source/body hashes;13432 range-list sequences and20203 reference geometry states included. Scope:all five serialization-adjusted native fixtures; ordinary portable tests require neither compiler nor upstream. Command: npm run inventory:parity:calc; inspect apps/office/coverage/all/coverage-summary.json Calc entries Result:pass. Evidence:9 capabilities/124 modules (12 Calc/112 shared), zero semantic violations; full-run Calc actual100 statements959/959, branches802/802, functions213/213, lines853/853. Existing semantic status flags unchanged. Scope:Calc/shared inventory and all current Calc runtime coverage; numerical evidence does not establish full Calc integration parity. Command: node .agentplane/policy/check-routing.mjs; ap doctor; git diff --check; git diff --name-only -- apps/office/src/sw apps/office/e2e; git rev-parse --abbrev-ref HEAD Result:pass. Evidence:routing OK, doctor zero errors/one pre-existing managed-shim warning, diff clean, no Writer/e2e source/test changes, branch calc. Final tracked/untracked state checked after finish. Scope:active validation task and explicit user stop boundary. Report docs/program/calc-full-test-cycle-1.md and calc-core cadence updated; unrelated tasks untouched. Complete milestone10 and pause goal after closeout. Overall Calc objective remains unfinished; no feature work continues after pause."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-09T09:52:16.499Z"
+  updated_by: "EVALUATOR"
+  note: "Complete full-cycle test stages pass with the explicit user-authorized Writer-only coverage exception; all other observed failures resolved."
+  evaluated_sha: "bbe9afc9790c3b59643dcff5d7fad51687b2d273"
+  blueprint_digest: "20ee2100a2beb410c4342bdf44f740035e47d4f07cf2c7d5861a3ca1a917e6bb"
+  evidence_refs:
+    - ".agentplane/tasks/202610090923-CAPX37/README.md"
+    - ".agentplane/tasks/202610090923-CAPX37/quality/20261009-095216499-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610090923-CAPX37/quality/20261009-095216499-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610090923-CAPX37/quality/20261009-095216499-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610090923-CAPX37/blueprint/resolved-snapshot.json"
+    - "docs/program/calc-full-test-cycle-1.md"
+    - "apps/office/coverage/all/coverage-summary.json"
+    - "output/playwright/calc-full-cycle1-inventory-rerun.log"
+    - "output/playwright/calc-full-cycle1-e2e.log"
+    - "bbe9afc9790c"
+  findings:
+    - "14097 office tests,122 inventory cases and303 browser scenarios pass. Calc and inventory actual100 metrics; strict global capability registry reused by legacy Writer CLI, app-order/inactive/scope/marker fixture assumptions corrected, and five native JSON serialization changes preserve normalized values and pinned comparisons."
 commit: null
 comments:
   -
