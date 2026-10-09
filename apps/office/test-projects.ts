@@ -8,6 +8,7 @@ export type OfficeTestScope = "all" | "writer" | "calc" | "shared";
 /** Writer integration cases colocated with the shared component they exercise; paths remain stable for parity mappings. */
 const writerIntegrationTests = [
   "src/editeng/source/items/{paraitem,textitem,frmitems}.test.ts",
+  "src/editeng/source/items/native-lr-space-item.test.ts",
   "src/svl/source/items/itemset.test.ts",
   "src/svl/source/notify/{notify,native-svt-notifier}.test.ts",
   "src/framework/browser/app/desktop.test.tsx",

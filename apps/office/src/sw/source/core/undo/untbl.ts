@@ -140,25 +140,12 @@ function KillEmptyFrameFormat(format: SwFrameFormat): void {
 
 /** Retains table attributes only, corresponding to native SaveTable's represented flat-grid slice. */
 class SaveTable {
-  private readonly format;
   private readonly tableSet: SfxItemSet;
   private readonly lines;
   private readonly rowFormats: SfxItemSet[] = [];
   private readonly boxFormats: SfxItemSet[] = [];
   /** Captures independent attribute payload without copying text or graph owners. @param table - Original table. @returns Nothing. */
   public constructor(table: SwTable) {
-    this.format = { ...table.GetFormat() };
-    delete this.format.headerRows;
-    delete this.format.repeatHeaderRows;
-    delete this.format.width;
-    delete this.format.borderModel;
-    delete this.format.layoutSplit;
-    delete this.format.marginTop;
-    delete this.format.marginBottom;
-    delete this.format.horiOrient;
-    delete this.format.align;
-    delete this.format.marginLeft;
-    delete this.format.marginRight;
     const tableItems = table.GetFrameFormat().GetAttrSet();
     this.tableSet = new SfxItemSet(tableItems.GetPool(), tableItems.GetRanges());
     this.tableSet.PutSet(tableItems);
@@ -204,14 +191,8 @@ class SaveTable {
   /** Restores attributes on original graph owners. @param table - Connected table. @returns Nothing. */
   public RestoreAttr(table: SwTable): void {
     const tableFormat = table.GetFrameFormat();
-    tableFormat.LockModify();
-    try {
-      table.SetFormat(this.format);
-      tableFormat.GetAttrSet().ClearItem();
-      tableFormat.GetAttrSet().PutSet(this.tableSet);
-    } finally {
-      tableFormat.UnlockModify();
-    }
+    tableFormat.GetAttrSet().ClearItem();
+    tableFormat.GetAttrSet().PutSet(this.tableSet);
     tableFormat.ForAllListeners(
       /** Invalidates each original table frame after native direct-item restoration. @param client - Original format client. @returns Continue flag. */
       (client) => {

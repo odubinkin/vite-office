@@ -220,6 +220,14 @@
         {
           "path": "apps/office/src/sw/browser/editor/native-table-lr-items.test.tsx",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/undo/native-table-itemset-restore.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/native-table-itemset-restore.test.tsx",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -298,7 +306,9 @@
       "SwUndoTableNdsChg"
     ],
     "omittedResponsibilities": [
-      "Full native merged/protected/nested table,selection rings,layout and undo node-array lifetimes remain unverified."
+      "Full native merged/protected/nested table,selection rings,layout and undo node-array lifetimes remain unverified.",
+      "Correction BZQGYC (10/10 after full baseline SZKQTN) removes the SaveTable detached scalar GetFormat snapshot, field deletion list and SetFormat replay. The original table SfxItemSet is captured independently and restored directly with ClearItem/PutSet, as pinned untbl.cxx SaveTable::SaveTable and RestoreAttr. Redundant modify locking around direct item-set restoration is removed; existing original table-frame invalidation and row/box ownership remain. Fresh direct/inherited native and mounted three-cycle history evidence is pending the due full upstream-absent suite. Complete native cache/redline/formula/nested/root/VCL history and inherited ODT attribute transport remain incomplete; no whole-module or goal parity promotion. Existing semantic/default/status/classification and evidence prefixes and registered IO/recovery deviations retained.",
+      "Verified BZQGYC10/10:14468 accepted current-source application cases (14467 final full pass plus1 actual legacy XML boundary closure),15 tooling,122 inventory and2 resources;303 browser cases accepted (283 original plus20 exact failed-case repairs, no passing browser replay). Whole final application actual Istanbul19557lines21492statements4903functions15818branches100 all four/zero negative/current complete-map XML identity. Whole untbl.ts166lines171statements43functions33branches100; existing test-projects configuration7lines7statements3functions12branches100. Remove SaveTable scalar snapshot and empty replay, retain original table items/frame/cursor/list/graph identities across3 native/mounted history cycles. Source-backed2 old unit-file migrations and7 browser locator/plain-split fixture migrations preserve all intended assertions; native header default1 retained. Existing semantic/default/status/classification and all historical prefixes remain; full native cache/redline/formula/nested/VCL/Doc attribute history and inherited ODT transport remain incomplete. Full baseline advances to BZQGYC only after final metadata/quality/closure succeed; broad parity goal remains active."
     ],
     "preservedResponsibilities": [
       "Iteration145 routes unmodified table Tab/ShiftTab through SwEditWin and a persistent SwCursor. Core traverses actual flat SwNodes cell sections and selects first paragraph offset0 while retaining native mark;no DOM sibling/body ordinal/navigation DTO. Shell refreshes active/pending/history grouping after movement;unmarked last-cell Tab prepares an empty source-formatted row and records SwUndoTableNdsChg retaining actual row/cell/node identities. Undo disconnects sections and retargets live indices;Redo reconnects them. List-at-start priority compares represented native numbering types/indent before level change or literal Tab insertion. Owned native,mounted and Chromium evidence covers represented behavior. Full native SwCursorShell/Doc InsertRow,merged/nested/protected/form/formula/autoformat/redline/border/autocorrect,HomeEnd/fulllayout/history/UI remainunverified;existing244semantic states/defaults/classifications and registered I/O/recovery deviations retained.",

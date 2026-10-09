@@ -52,7 +52,7 @@ for (const width of [1280, 390])
       );
       await page.getByRole("button", { name: "Cancel", exact: true }).click();
       await expect(
-        page.getByRole("table", { name: "FocusBrowser", exact: true }).locator("td"),
+        page.getByRole("table", { name: "FocusBrowser", exact: true }).locator("td, th"),
       ).toHaveCSS("border-right-style", "none");
     },
   );

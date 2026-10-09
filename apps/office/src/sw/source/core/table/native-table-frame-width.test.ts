@@ -5,6 +5,7 @@ import { SwTabCols } from "../bastyp/tabcol";
 import { SetSwTabCols } from "../docnode/ndtbl";
 import { HoriOrientation as H } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { createWriterCollapsedCursorState } from "../undo/undobj";
+import { SwFormatHoriOrient } from "../../../inc/fmtornt";
 import type { SwTable } from "./swtable";
 
 afterEach(/** Releases admission spies. @returns Nothing. */ () => vi.restoreAllMocks());
@@ -168,9 +169,9 @@ it("document column normalization delegates one frame reaction and retains singl
   expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(1);
   expect(f.table.GetTabLines()).toEqual(f.lines);
 });
-it("implicit frame normalization sums canonical boxes and accepts an explicit cursor", /** Checks the unrepresented frame fallback and unchanged-width branch. @returns Nothing. */ () => {
-  const f = fixture([[1000, 2000]]);
-  f.table.SetFormat({ horiOrient: H.LEFT });
+it("effective frame normalization retains canonical boxes and accepts an explicit cursor", /** Checks original frame-size preservation and unchanged-width branch. @returns Nothing. */ () => {
+  const f = fixture([[1000, 2000]], 3000);
+  f.table.GetFrameFormat().SetFormatAttr(new SwFormatHoriOrient(0, H.LEFT));
   const previous = geometry(f, 3000),
     next = new SwTabCols(previous);
   next.GetEntry(0).nPos = 1200;

@@ -134,7 +134,7 @@ it.each([
         expect(shell.CaptureCursorState()).toEqual(cursor);
         expect(doc.nodes.entries()).toEqual(nodes);
       }
-      expect(scalar.mock.calls).toEqual([[{}], [{}], [{}], [{}], [{}], [{}]]);
+      expect(scalar).not.toHaveBeenCalled();
       expect(size).toEqual(inputSize);
       if (inherited) expect(parent.GetFrameSize()).toEqual(inputSize);
     } finally {
