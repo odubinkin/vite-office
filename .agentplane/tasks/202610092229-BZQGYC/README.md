@@ -1,10 +1,11 @@
 ---
 id: "202610092229-BZQGYC"
 title: "Restore native table history directly from original item sets"
-status: "DOING"
+result_summary: "Restore table attributes from original native item sets without scalar history replay"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -54,6 +55,9 @@ comments:
   -
     author: "CODER"
     body: "Start: Bind verified native item-set history and due full-gate repairs to exact semantic SHA before final verification and explicitly same-agent non-independent quality."
+  -
+    author: "CODER"
+    body: "Verified: Original native SaveTable item-set capture and restore removes scalar history replay. Exact implementation60eb3177c295f0c20777d089a41e0d11cf9a2a0a has14468application,15tooling,122inventory,2resource and303browser cases accepted; entire app and both changed modules actual Istanbul100 all four with zero negative counters and complete current maps. Real failed full-gate fixtures and ownership classifications repaired with original assertions/history prefixes preserved. TS7/build/statics and9restored metadata gates pass; exact-SHA same-agent non-independent quality PASS and refreshed verification are persisted. Broad native cache/layout and inherited ODT gaps remain; goal stays active."
 events:
   -
     type: "status"
@@ -81,8 +85,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Final exact60eb3177c295f0c20777d089a41e0d11cf9a2a0a with read and validated same-agent non-independent quality PASS;14468app,15tool,122inventory,2resources,303browser accepted. Actual whole app and both changed modules100all-four/zero-negative/complete current maps. Actual exits and failure chronology retained; native direct items/owners/paint and all migration/canonical preservation gates pass.9restored metadata and final TS7/build/static checks pass; reference restored. Persist refreshed verification and quality artifacts before canonical finish."
+  -
+    type: "status"
+    at: "2026-10-09T23:05:35.860Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Original native SaveTable item-set capture and restore removes scalar history replay. Exact implementation60eb3177c295f0c20777d089a41e0d11cf9a2a0a has14468application,15tooling,122inventory,2resource and303browser cases accepted; entire app and both changed modules actual Istanbul100 all four with zero negative counters and complete current maps. Real failed full-gate fixtures and ownership classifications repaired with original assertions/history prefixes preserved. TS7/build/statics and9restored metadata gates pass; exact-SHA same-agent non-independent quality PASS and refreshed verification are persisted. Broad native cache/layout and inherited ODT gaps remain; goal stays active."
 doc_version: 3
-doc_updated_at: "2026-10-09T23:05:08.586Z"
+doc_updated_at: "2026-10-09T23:05:35.862Z"
 doc_updated_by: "CODER"
 description: "Correction10/10 after SZKQTN. Remove SaveTable scalar GetFormat/deletion/replay adapter from untbl.ts, matching pinned untbl.cxx direct item-set capture and restore; preserve native table frame and surviving graph ownership. Add fresh native and mounted behavioral evidence, source-backed migration of the prior empty-replay spy expectation, append canonical inventory without parity promotion. Run full application, tooling, inventory coverage and browser suites once physically upstream absent, repair real failures, then restore source audits. Standing iterative user authorization; local Writer branch only."
 sections:
@@ -178,6 +189,10 @@ sections:
     - Observation: Repaired full application:14467/14467 pass, no skip; actual whole Istanbul19557lines21492statements4903functions100,15817/15818branches99.99. One legacy detached XMLTableExport nullish missing-header-count branch remains. First fresh closure reaches it but its text assertion wrongly expects literal spaces instead of existing ODF text:s; its typed character input also omitted required three boolean fields. Initial browser JSON was overwritten by the next same-helper browser output filename; the original303-case list log remains complete and current20-case repaired JSON is copied to a unique cache filename.
       Impact: No production coverage counter/source changes are warranted. Require final passing XML boundary assertions and actual identical-map coverage merge; preserve explicit failed attempt chronology and original browser case identities from the retained list report.
       Resolution: Fix only the new fixture with complete original character booleans and literal ODF whitespace encoding. Run its one case again with reportOnFailure; merge its actual XML module map with the final full-app map after complete-map/source hash validation. Do not replay passing application/browser cases or use old task maps. Parse original303 list entries and prove exact20 repaired case identity match; final coverage/metadata/quality remain pending.
+extensions:
+  implementation_commit:
+    hash: "60eb3177c295f0c20777d089a41e0d11cf9a2a0a"
+    message: "🚧 BZQGYC writer: restore native table history without scalar replay"
 id_source: "generated"
 ---
 ## Summary
