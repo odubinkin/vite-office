@@ -18,7 +18,6 @@ import {
   SvxBoxInfoItemValidFlags,
 } from "../../../../editeng/source/items/frmitems";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
-import { SwFormatLayoutSplit } from "../../../inc/fmtlsplt";
 import { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
 import { SfxItemSet, SfxItemState } from "../../../../svl/source/items/itemset";
 import { SID_ATTR_BORDER_INNER } from "../../../../svx/inc/svxids";
@@ -38,8 +37,6 @@ import {
 import { SwPtrItem } from "../utlui/uiitems";
 import { SfxStringItem } from "../../../../svl/source/items/stritem";
 import { SfxUInt16Item } from "../../../../svl/source/items/intitem";
-import { SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";
-import type { SwTableFormat } from "../../core/table/swtable";
 import { importBoxProperties } from "../../../../xmloff/source/style/bordrhdl";
 
 /** Represented table-property inputs in native twips; original model owners remain in the shell. */
@@ -154,44 +151,32 @@ export function ItemSetToTableParam(
           shell.SetTableName(table.GetFrameFormat(), name.GetValue());
         const pointer = input.GetItemIfSet(FN_TABLE_REP, false);
         const representation = pointer instanceof SwPtrItem ? pointer.GetValue() : undefined;
-        let attributes: SwTableFormat = {};
-        const geometrySet = new SfxItemSet(input.GetPool(), [
+        const attributeSet = new SfxItemSet(input.GetPool(), [
           [RES_FRM_SIZE, RES_FRM_SIZE],
-          [RES_LR_SPACE, RES_LR_SPACE],
+          [RES_LR_SPACE, RES_UL_SPACE],
           [RES_HORI_ORIENT, RES_HORI_ORIENT],
+          [RES_LAYOUT_SPLIT, RES_LAYOUT_SPLIT],
+          [RES_COLLAPSING_BORDERS, RES_COLLAPSING_BORDERS],
         ]);
         if (representation instanceof SwTableRep) {
           const lr = new SvxLRSpaceItem(RES_LR_SPACE);
           lr.SetLeft(representation.left);
           lr.SetRight(representation.right);
-          geometrySet.Put(lr);
+          attributeSet.Put(lr);
           if (representation.align !== HoriOrientation.FULL)
-            geometrySet.Put(new SwFormatFrameSize(SwFrameSize.Variable, representation.width));
-          geometrySet.Put(new SwFormatHoriOrient(0, representation.align));
-          if (representation.HasColsChanged()) {
-            const columns = new SwTabCols();
-            shell.GetTabCols(columns);
-            const singleRow = representation.FillTabCols(columns);
-            shell.SetTabCols(columns, singleRow);
-          }
+            attributeSet.Put(new SwFormatFrameSize(SwFrameSize.Variable, representation.width));
+          attributeSet.Put(new SwFormatHoriOrient(0, representation.align));
         }
-        const spacing = input.GetItemIfSet(RES_UL_SPACE, false);
-        if (spacing instanceof SvxULSpaceItem) {
-          const spacingSet = new SfxItemSet(input.GetPool(), [[RES_UL_SPACE, RES_UL_SPACE]]);
-          spacingSet.Put(spacing);
-          shell.SetTableAttr(spacingSet);
+        for (const which of [RES_LAYOUT_SPLIT, RES_UL_SPACE, RES_COLLAPSING_BORDERS])
+          if (input.GetItemState(which, false) === SfxItemState.SET)
+            attributeSet.Put(input.Get(which, false));
+        if (representation instanceof SwTableRep && representation.HasColsChanged()) {
+          const columns = new SwTabCols();
+          shell.GetTabCols(columns);
+          const singleRow = representation.FillTabCols(columns);
+          shell.SetTabCols(columns, singleRow);
         }
-        const layoutSplit = input.GetItemIfSet(RES_LAYOUT_SPLIT, false);
-        if (layoutSplit instanceof SwFormatLayoutSplit)
-          attributes = { ...attributes, layoutSplit: layoutSplit.GetValue() };
-        const merge = input.GetItemIfSet(RES_COLLAPSING_BORDERS, false);
-        if (merge instanceof SfxBoolItem)
-          attributes = {
-            ...attributes,
-            borderModel: merge.GetValue() ? "collapsing" : "separating",
-          };
-        if (Object.keys(attributes).length !== 0) shell.SetTableAttr(attributes);
-        if (geometrySet.Count() !== 0) shell.SetTableAttr(geometrySet);
+        if (attributeSet.Count() !== 0) shell.SetTableAttr(attributeSet);
         return true;
       } finally {
         undo.EndUndo();

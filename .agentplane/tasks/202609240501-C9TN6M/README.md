@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 299
+revision: 300
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-09T21:49:42.251Z"
+doc_updated_at: "2026-10-09T22:05:49.405Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -1395,6 +1395,8 @@ sections:
     - Correction6Q2YQH (7/10 after SZKQTN): Original RES_LR_SPACE98 owns table left/right distances and full native context, without mirrored margin scalars. Native resize clones context; geometry dialog sends LR/orientation/width ItemSet; effective native layout/representation/ODT and mounted direct/inherited original history pass. Final342files3588cases22fresh, ten complete production modules Istanbul100all-four0negative/current hashes, initial pre-repair counters excluded. Five exact migrations3old files,620 untouched/623 total;20 canonical prefixes preserved. Nine absent statics/currentbuild7browser and nine restored metadata pass. Font-unit/complete UNO/Shadow/generic Doc attr history/full native layout/VCL/transport remain separately incomplete. Full not due; goalACTIVE/incomplete.
 
     - 6Q2YQH semantic021ea956fc8a2026bb3bf0a188cddd44e5f90f4f exact-SHA qualityPASS same-agent non-independent. Required gates passed; canonical finish pending.
+
+    B3ESQ3: Correction8 since full SZKQTN. Native table-properties UL-space/layout-split/collapsing-border original SET items now share one geometry ItemSet, with separators applied before one SetTableAttr, matching pinned tabsh.cxx408..440. Removed native scalar flags and separate UL dispatch. 56 related files/369 latest cases including9 fresh; actual final whole tabsh.ts Istanbul100% all four dimensions (158/180/20/141),same current hash/complete maps,zero negatives. All627 baseline old tests byte unchanged,2 canonical prefixes retained. Direct/inherited original graph/list/cursor history, mounted Reset/Cancel and ODT verified. Existing SetTabCols scalar geometry, explicit legacy ingress, unsupported source attributes, generic native history/full layout/VCL remain incomplete; broad goal stays active.
 id_source: "generated"
 ---
 ## Summary
@@ -2763,3 +2765,5 @@ Correction6JYMXQ reviewed semantic=7429bf32872581e86a831d04afa67e14bdd6d333; sam
 - Correction6Q2YQH (7/10 after SZKQTN): Original RES_LR_SPACE98 owns table left/right distances and full native context, without mirrored margin scalars. Native resize clones context; geometry dialog sends LR/orientation/width ItemSet; effective native layout/representation/ODT and mounted direct/inherited original history pass. Final342files3588cases22fresh, ten complete production modules Istanbul100all-four0negative/current hashes, initial pre-repair counters excluded. Five exact migrations3old files,620 untouched/623 total;20 canonical prefixes preserved. Nine absent statics/currentbuild7browser and nine restored metadata pass. Font-unit/complete UNO/Shadow/generic Doc attr history/full native layout/VCL/transport remain separately incomplete. Full not due; goalACTIVE/incomplete.
 
 - 6Q2YQH semantic021ea956fc8a2026bb3bf0a188cddd44e5f90f4f exact-SHA qualityPASS same-agent non-independent. Required gates passed; canonical finish pending.
+
+B3ESQ3: Correction8 since full SZKQTN. Native table-properties UL-space/layout-split/collapsing-border original SET items now share one geometry ItemSet, with separators applied before one SetTableAttr, matching pinned tabsh.cxx408..440. Removed native scalar flags and separate UL dispatch. 56 related files/369 latest cases including9 fresh; actual final whole tabsh.ts Istanbul100% all four dimensions (158/180/20/141),same current hash/complete maps,zero negatives. All627 baseline old tests byte unchanged,2 canonical prefixes retained. Direct/inherited original graph/list/cursor history, mounted Reset/Cancel and ODT verified. Existing SetTabCols scalar geometry, explicit legacy ingress, unsupported source attributes, generic native history/full layout/VCL remain incomplete; broad goal stays active.
