@@ -4,7 +4,7 @@ title: "Reparent native format clients before format destruction"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -22,11 +22,32 @@ verification:
   updated_by: "CODER"
   note: "Pass:314/314 cases43files6fresh, complete two-module actual Istanbul100 all four gates/no negatives, seven upstream-absent statics and seven restored metadata audits; old580tests/4canonical histories preserved. Evidence results.json; generic ObjectDying/cache/name still separate; correction3/10, full XJTGF0 historical."
   attempts: 0
-commit: null
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-09T14:38:58.876Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent non-independent review of semantic3bb966ac297c: pinned Destr/PrepareFormatDeath order, borrowed original hints and owned inheritance are represented;314 cases, complete actual Istanbul100, static and metadata gates pass."
+  evaluated_sha: "3bb966ac297c3fd0876bb3e42bf572379cd15161"
+  blueprint_digest: "9b45e58bcc96a357ef125f4c343e758bf77d5129b71611dbf24c88e488a28a41"
+  evidence_refs:
+    - ".agentplane/tasks/202610091422-KCHP9M/README.md"
+    - ".agentplane/tasks/202610091422-KCHP9M/quality/20261009-143858876-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610091422-KCHP9M/quality/20261009-143858876-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610091422-KCHP9M/quality/20261009-143858876-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610091422-KCHP9M/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610091422-KCHP9M/evidence/results.json"
+  findings:
+    - "No scope drift, prior-test weakening, upstream artifact copies, source/map/counter transfer or registered I/O deviation. Complete ObjectDying/check-registration/linked-client/native assertion/cache/name/VCL mechanics remain separate unverified work. This is correction3/10; broad goal incomplete."
+commit:
+  hash: "3bb966ac297c3fd0876bb3e42bf572379cd15161"
+  message: "🔧 KCHP9M writer: reparent native clients before format destruction"
 comments:
   -
     author: "CODER"
     body: "Start: Port approved original-client format destruction stage under existing iterative user authorization; correction 3/10."
+  -
+    author: "CODER"
+    body: "Implementation: Native format clients reparent before borrowed replacement hints and inherited teardown;314 cases and actual complete scoped Istanbul100 pass. Semantic commit3bb966ac297c; generic ObjectDying/cache/name remain bounded follow-up."
 events:
   -
     type: "status"
@@ -41,8 +62,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Pass:314/314 cases43files6fresh, complete two-module actual Istanbul100 all four gates/no negatives, seven upstream-absent statics and seven restored metadata audits; old580tests/4canonical histories preserved. Evidence results.json; generic ObjectDying/cache/name still separate; correction3/10, full XJTGF0 historical."
+  -
+    type: "status"
+    at: "2026-10-09T14:37:56.052Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+    note: "Implementation: Native format clients reparent before borrowed replacement hints and inherited teardown;314 cases and actual complete scoped Istanbul100 pass. Semantic commit3bb966ac297c; generic ObjectDying/cache/name remain bounded follow-up."
 doc_version: 3
-doc_updated_at: "2026-10-09T14:36:36.289Z"
+doc_updated_at: "2026-10-09T14:40:22.063Z"
 doc_updated_by: "CODER"
 description: "Correction 3 after full TS7/Istanbul baseline: port SwFormat::Destr and SwModify::PrepareFormatDeath for original clients, borrowed format-change hints, inherited item-set rebinding and mounted UI invalidation. Preserve root cleanup and defer generic ObjectDying/cache/naming protocol to separate corrections. Existing iterative user authorization applies."
 sections:
@@ -106,6 +134,10 @@ sections:
     - Observation: All declared checks pass on final production:314/314 cases43files6fresh, complete two-module current-source Istanbul100 and seven absent-upstream statics. Seven restored metadata audits pass;580 prior tests and all four canonical record value/evidence/responsibility prefixes preserved.
       Impact: No native owner or item-set substitute, model bridge or registered I/O deviation is introduced. Whole-module semantic parity and ObjectDying/cache/name/assertion/VCL lifecycle remain unverified.
       Resolution: Commit exact approved source/test/inventory/task evidence paths, bind semantic SHA, perform explicitly same-agent non-independent quality and canonical finish; broad goal stays active with correction3/10.
+
+    - Observation: Semantic3bb966ac297c3fd0876bb3e42bf572379cd15161 is bound to the task and explicitly same-agent non-independent EVALUATOR review passed; report quality/20261009-143858876-recovery-context/quality-report.json. All deterministic source/hash/test/coverage/static/metadata/preservation gates pass.
+      Impact: Approved bounded pre-base format destruction fix is ready to finish; full native ObjectDying/cache/name/assertion/VCL and broad parity remain unverified. Tests/source maps stay under ignored cache; AgentPlane has bounded English evidence only.
+      Resolution: Persist quality/task evidence, finish with the bound semantic SHA and concrete behavior result, verify clean tracked/untracked state; broad goal remains active and this is correction3/10.
 id_source: "generated"
 ---
 ## Summary
@@ -185,3 +217,7 @@ Pinned reference 9bc445578031fecf56086729d8e4940c77e14d65: sw/source/core/attr/f
 - Observation: All declared checks pass on final production:314/314 cases43files6fresh, complete two-module current-source Istanbul100 and seven absent-upstream statics. Seven restored metadata audits pass;580 prior tests and all four canonical record value/evidence/responsibility prefixes preserved.
   Impact: No native owner or item-set substitute, model bridge or registered I/O deviation is introduced. Whole-module semantic parity and ObjectDying/cache/name/assertion/VCL lifecycle remain unverified.
   Resolution: Commit exact approved source/test/inventory/task evidence paths, bind semantic SHA, perform explicitly same-agent non-independent quality and canonical finish; broad goal stays active with correction3/10.
+
+- Observation: Semantic3bb966ac297c3fd0876bb3e42bf572379cd15161 is bound to the task and explicitly same-agent non-independent EVALUATOR review passed; report quality/20261009-143858876-recovery-context/quality-report.json. All deterministic source/hash/test/coverage/static/metadata/preservation gates pass.
+  Impact: Approved bounded pre-base format destruction fix is ready to finish; full native ObjectDying/cache/name/assertion/VCL and broad parity remain unverified. Tests/source maps stay under ignored cache; AgentPlane has bounded English evidence only.
+  Resolution: Persist quality/task evidence, finish with the bound semantic SHA and concrete behavior result, verify clean tracked/untracked state; broad goal remains active and this is correction3/10.
