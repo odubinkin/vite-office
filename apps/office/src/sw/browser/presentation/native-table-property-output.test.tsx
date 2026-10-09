@@ -35,7 +35,7 @@ function fixture() {
   sessions.push(session);
   const doc = session.docShell.GetDoc(),
     shell = session.view.GetWrtShell(),
-    table = doc.nodes.MakeTableNode("Original", { width: 6000, horiOrient: H.LEFT });
+    table = doc.nodes.MakeTableNode("Original", { width: 6000, horiOrient: H.LEFT, headerRows: 0 });
   table.AddColumnWidth(1000);
   table.AddColumnWidth(5000);
   for (const values of [

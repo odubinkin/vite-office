@@ -24,7 +24,9 @@ it("native empty box guides preserve column geometry and dialog retains a custom
   try {
     render(<WriterWorkbench isActive view={session.view} />);
     const cell = required(
-      screen.getByRole("textbox", { name: "Row 1 column 1 paragraph 1" }).closest("td"),
+      screen
+        .getByRole("textbox", { name: "Row 1 column 1 paragraph 1" })
+        .closest<HTMLTableCellElement>("td,th"),
     );
     expect(cell.style.borderTopStyle).toBe("none");
     expect(cell).toHaveStyle({
@@ -128,7 +130,7 @@ it("isolates missing-edge guides for every native paint family on natural and fi
         const paragraph = required(
             screen.getAllByText(`GuideFamily${fixed ? "Fixed" : "Natural"}${style}`)[0],
           ),
-          cell = required(paragraph.closest("td")),
+          cell = required(paragraph.closest<HTMLTableCellElement>("td,th")),
           painted = fixed
             ? required(cell.querySelector<HTMLElement>("[data-writer-fixed-row-content]"))
             : cell;
@@ -183,7 +185,7 @@ for (const fixed of [false, true])
     try {
       render(<WriterWorkbench isActive view={session.view} />);
       const paragraph = screen.getByRole("textbox", { name: "Row 1 column 1 paragraph 1" }),
-        cell = required(paragraph.closest("td")),
+        cell = required(paragraph.closest<HTMLTableCellElement>("td,th")),
         painted = fixed ? required(cell.querySelector("[data-writer-fixed-row-content]")) : cell;
       expect(painted).toHaveStyle({
         borderTop: "1pt solid #112233",
@@ -275,7 +277,9 @@ it.each([
     try {
       render(<WriterWorkbench isActive view={session.view} />);
       const cell = required(
-        screen.getByRole("textbox", { name: "Row 1 column 1 paragraph 1" }).closest("td"),
+        screen
+          .getByRole("textbox", { name: "Row 1 column 1 paragraph 1" })
+          .closest<HTMLTableCellElement>("td,th"),
       );
       expect(cell).toHaveStyle({ borderTopStyle: paint, paddingTop: "0px" });
       expect(box.GetBox().GetTop()?.GetBorderLineStyle()).toBe(style);

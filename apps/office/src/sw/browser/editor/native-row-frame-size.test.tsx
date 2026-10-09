@@ -77,7 +77,10 @@ it("fixed native row retains a visible guide for authored border none", /** Chec
     const paragraph = screen.getByRole("textbox", { name: "Row 1 column 1 paragraph 1" }),
       clip = required(paragraph.closest("[data-writer-fixed-row-content]"));
     expect(clip).toHaveStyle({ height: "40px", overflow: "hidden", border: "1px dashed #cbd5e1" });
-    expect(paragraph.closest("td")).toHaveAttribute("data-writer-border-guide", "true");
+    expect(paragraph.closest<HTMLTableCellElement>("td,th")).toHaveAttribute(
+      "data-writer-border-guide",
+      "true",
+    );
   } finally {
     cleanup();
     session.Close();

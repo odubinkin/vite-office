@@ -72,7 +72,7 @@ describe("ODF native table print area", /** Registers native model/filter cases 
   it("retains omitted margins and default FULL without inventing direct properties", /** Checks authored absence remains absent in native model. @returns Nothing. */ () => {
     const table = open('style:width="2in"').GetTables()[0];
     if (table === undefined) throw new Error("Missing native table");
-    expect(table.GetFormat()).toEqual({ width: 2880 });
+    expect(table.GetFormat()).toEqual({ width: 2880, headerRows: 0, repeatHeaderRows: false });
     expect(new SwTabFrame(table).Format(8000)).toEqual({ left: 0, right: 0, width: 8000 });
   });
   it("rejects malformed right lengths rather than silently swallowing admitted geometry", /** Checks current strict filter diagnostics. @returns Nothing. */ () => {

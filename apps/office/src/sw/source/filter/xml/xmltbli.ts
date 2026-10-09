@@ -200,6 +200,7 @@ export class SwXMLTableImport extends SvXMLImport {
 
   /** Closes the current table. */
   /** Projects one canonical Writer table value.  @returns Callback result. */ public endTable(): void {
+    this.requireTable().SetRowsToRepeat(this.headerRowCount);
     this.activeTable = undefined;
   }
 

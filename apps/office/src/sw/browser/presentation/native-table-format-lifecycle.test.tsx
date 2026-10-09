@@ -9,7 +9,12 @@ afterEach(cleanup);
 /** Mounts properties over original document owners. @returns Actual table and acceptance callbacks. */
 function fixture() {
   const doc = new SwDoc(),
-    table = doc.nodes.MakeTableNode("Format", { width: 6000, horiOrient: H.LEFT, headerRows: 0 });
+    table = doc.nodes.MakeTableNode("Format", {
+      width: 6000,
+      horiOrient: H.LEFT,
+      headerRows: 0,
+      repeatHeaderRows: false,
+    });
   for (let c = 0; c < 3; c++) table.AddColumnWidth(2000);
   for (let r = 0; r < 2; r++) doc.nodes.AppendTableRow(table, 3);
   const submit = vi.fn(),
@@ -89,7 +94,12 @@ it("mounted native format cancellation keeps canonical table owners after all ta
   fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
   expect(f.cancel).toHaveBeenCalledOnce();
   expect(f.submit).not.toHaveBeenCalled();
-  expect(f.table.GetFormat()).toEqual({ width: 6000, horiOrient: H.LEFT, headerRows: 0 });
+  expect(f.table.GetFormat()).toEqual({
+    width: 6000,
+    horiOrient: H.LEFT,
+    headerRows: 0,
+    repeatHeaderRows: false,
+  });
   expect(f.table.GetColumnWidths()).toEqual([2000, 2000, 2000]);
   expect(f.table.GetTabLines()[0]).toBe(row);
   expect(row?.GetTabBoxes()[0]).toBe(box);

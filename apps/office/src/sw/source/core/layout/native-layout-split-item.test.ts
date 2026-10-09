@@ -43,7 +43,9 @@ it.each([undefined, false, true])(
       expect(owner.GetAttrSet().Get(RES_LAYOUT_SPLIT)).toBeInstanceOf(SwFormatLayoutSplit);
       expect(frame.IsLayoutSplitAllowed()).toBe(value ?? true);
       expect(table.GetFormat()).toEqual(
-        value === undefined ? { width: 6000 } : { width: 6000, layoutSplit: value },
+        value === undefined
+          ? { width: 6000, headerRows: 1, repeatHeaderRows: true }
+          : { width: 6000, layoutSplit: value, headerRows: 1, repeatHeaderRows: true },
       );
       owner.SetFormatAttr(new SwFormatLayoutSplit(false));
       expect(table.GetFormat().layoutSplit).toBe(false);
@@ -52,7 +54,7 @@ it.each([undefined, false, true])(
       parent.SetFormatAttr(new SwFormatLayoutSplit(false));
       owner.SetDerivedFrom(parent);
       table.SetFormat({ width: 5000 });
-      expect(table.GetFormat()).toEqual({ width: 5000 });
+      expect(table.GetFormat()).toEqual({ width: 5000, headerRows: 1, repeatHeaderRows: true });
       expect(owner.GetAttrSet().GetItemIfSet(RES_LAYOUT_SPLIT, false)).toBeUndefined();
       expect(frame.IsLayoutSplitAllowed()).toBe(false);
       expect(new SwTextFlowPage(table).IsSplit()).toBe(false);

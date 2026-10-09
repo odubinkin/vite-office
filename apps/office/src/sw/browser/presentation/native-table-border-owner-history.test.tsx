@@ -44,8 +44,12 @@ it("thin native shell forwards its actual cursor once and renders only the curre
     const original = f.shell.CaptureCursorState(),
       cursor = f.shell.getShellCursor(),
       setter = vi.spyOn(f.doc, "SetTabBorders"),
-      changed = screen.getByRole("textbox", { name: "Row 2 column 2 paragraph 1" }).closest("td"),
-      untouched = screen.getByRole("textbox", { name: "Row 1 column 1 paragraph 1" }).closest("td");
+      changed = screen
+        .getByRole("textbox", { name: "Row 2 column 2 paragraph 1" })
+        .closest<HTMLTableCellElement>("td,th"),
+      untouched = screen
+        .getByRole("textbox", { name: "Row 1 column 1 paragraph 1" })
+        .closest<HTMLTableCellElement>("td,th");
     act(
       /** Publishes current cell borders to the actual mounted view. @returns Nothing. */ () => {
         expect(

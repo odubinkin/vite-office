@@ -134,7 +134,9 @@ it.each([false, true])(
       /** Reads the current original first-cell device. @returns Actual DOM cell. */
       function cell(): HTMLElement {
         return required(
-          screen.getByRole("textbox", { name: "Row 1 column 1 paragraph 1" }).closest("td"),
+          screen
+            .getByRole("textbox", { name: "Row 1 column 1 paragraph 1" })
+            .closest<HTMLTableCellElement>("td,th"),
         );
       }
       expect(element).toHaveStyle({ borderCollapse: "separate" });

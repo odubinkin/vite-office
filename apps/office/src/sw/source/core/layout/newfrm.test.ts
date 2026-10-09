@@ -42,7 +42,7 @@ describe("Writer text and page frames", /** Groups Writer page-frame tests. @ret
     const document = createWriterDocument();
     const first = document.paragraphs[0];
     if (first === undefined) throw new Error("Writer has no initial paragraph");
-    const table = document.nodes.MakeTableNode("Measured", {}, first);
+    const table = document.nodes.MakeTableNode("Measured", { headerRows: 0 }, first);
     document.nodes.AppendTableRow(table, 1);
     document.nodes.AppendTableRow(table, 1);
     document.nodes.MakeTextNode("after");

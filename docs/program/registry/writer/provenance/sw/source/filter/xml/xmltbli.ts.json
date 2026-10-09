@@ -72,6 +72,22 @@
         {
           "path": "apps/office/src/sw/browser/presentation/native-row-frame-format.test.tsx",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/table/native-table-headline-counter.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/undo/native-table-headline-counter-history.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-table-headline-counter.test.tsx",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/xmltbli.ts",
+          "marker": "this.requireTable().SetRowsToRepeat(this.headerRowCount)"
         }
       ],
       "upstream": [
@@ -110,6 +126,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx",
           "marker": "get_value_changed_from_saved"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmltbli.cxx",
+          "marker": "SetRowsToRepeat( m_nHeaderRows )"
         }
       ]
     },
@@ -131,7 +151,8 @@
       "Iteration240 owns row splitting as optional SwFormatRowSplit items cloned on row input/read/history, with effective true default. Common core and frame-shell getters return independent concrete items or absence for mixed/no-row input; setters accept concrete items. Native UI forwards the item unchanged to the document owner, ODF inverts only at import/export, and browser transport writes direct primitive rowSplit with legacy keepTogether ingestion. Original cursor/selection/history and full frame-size coexistence remain retained. Full native shared row frame-format pooling/ClaimFrameFormat, nested/merged semantics, presentation/localization/UNO completeness and whole core/UI parity remain unverified. Targeted verification pending; last full237,next247; all prior metadata states/defaults/classifications and registered IO/recovery deviations preserved.",
       "Iteration240 verified closure:33 fresh native item/core/history, transport/legacy/ODF and mounted direct item cases plus related modules produced263 unique app passes and11 Chromium passes. Three initial failed cases were resolved in a four-case failed/new-only closure; all previously passing cases were skipped, no passing replay or full suite. App and inventory all-four100% coverage binds actual current targeted counters to prior239 identical whole source/maps or complete mapped-region proofs; unchanged inventory/infra was not rerun. Native rows now own concrete items, while full shared frame-format pooling/claims/UNO/nested/merged contracts and whole core/UI parity remain unverified. No metadata status/default/classification promotion.",
       "Iteration241 replaces per-row canonical value records with native document-owned SwTableLineFormat item sets and original SwClient registration. ClaimFrameFormat clones shared native owners before mutation; operation-local old-to-new reuse keeps selected peers sharing and unselected peers intact. Row insertion shares the source format; SaveTable retains unique direct native item sets and indexed row topology and reconstructs owners for history, matching represented flat-grid source semantics. Value records remain explicit construction/transport boundaries only. Full row frame client movement/destruction, native modify hint types, pooling, merged/nested tables, full frame attributes and UNO remain unverified. Targeted verification pending; last full237,next247; all prior states/defaults/classifications and registered I/O/recovery deviations preserved.",
-      "Iteration241 verified closure:12 fresh literal native registration/claim/sharing, complete item-set history and mounted direct UI cases plus related modules produced297 unique app passes and11 Chromium passes. Four initial fresh fixture failures were resolved in a failed-only four-case closure with the passing insertion test skipped. No passing replay or full suite; cadence last237,next247. All-four100% app and inventory coverage uses actual targeted counters and prior240 only with entire source/maps equality or complete declaration/body/enclosing branch/location proofs. Original rows/boxes/text/cursors survive repeated attribute history while shared formats are reconstructed. Full row layout client movement/destruction, native modify hints/pooling/merged/nested/UNO and whole core/browser parity remain unverified. No prior status/default/classification promotion."
+      "Iteration241 verified closure:12 fresh literal native registration/claim/sharing, complete item-set history and mounted direct UI cases plus related modules produced297 unique app passes and11 Chromium passes. Four initial fresh fixture failures were resolved in a failed-only four-case closure with the passing insertion test skipped. No passing replay or full suite; cadence last237,next247. All-four100% app and inventory coverage uses actual targeted counters and prior240 only with entire source/maps equality or complete declaration/body/enclosing branch/location proofs. Original rows/boxes/text/cursors survive repeated attribute history while shared formats are reconstructed. Full row layout client movement/destruction, native modify hints/pooling/merged/nested/UNO and whole core/browser parity remain unverified. No prior status/default/classification promotion.",
+      "Correction KVM0ER1/10 after full baseline SZKQTN: native SwTable owns an independent uint16 headline member default1 with uncapped setter and actual-line-capped getter, excluded from stored frame geometry. Geometry-only replacement preserves member. Explicit construction/transport/history projection synthesizes raw member and enabled flag; native browser cells read original table.GetRowsToRepeat rather than headerRows projection. ODT finalization assigns actual imported header count including zero from source xmltbli.cxx m_nHeaderRows0/final SetRowsToRepeat. Original table/row/box/frame/node/cursor identities and three real represented geometry undo/redo cycles retained; actual model snapshot retains uncapped count, real ODT exports/reopens capped actual rows. Deliberately stale transport projection cannot choose mounted th/td. 1278 distinct accepted related cases,20 fresh core/history/mounted cases; entire three current-source production modules actual Istanbul564lines629statements111functions493branches100 all-four,zero-negative,complete-map identity checked with no counter/location manipulation. Old native default/count-only/disabled projection expectations and intentionally nonrepeating split/toggle fixtures migrated exactly; native-cell paint selectors admit th and td while all other old assertions retained. Tests/build/statics physically upstream-absent with finally restoration; metadata audits after restoration. Six canonical status/default/classification/history prefixes and recovery/open/save/settings deviations preserved. Dedicated SwUndoTableHeadline, native capped table-copy/node-copy contracts and complete layout/master/follow/root/page/section/HTML/VCL families remain separately unrepresented/unverified; existing generalized raw-count snapshot is only represented transport/history, no whole-module or broad-goal parity promotion. Bounded English evidence only; raw helpers/logs/maps/source snapshots in ignored cache. Task202610091821-KVM0ER; goal ACTIVE/incomplete; correction1/10."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/filter/xml/xmltbli.cxx",

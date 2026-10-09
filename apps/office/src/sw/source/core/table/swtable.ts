@@ -26,7 +26,7 @@ import { RES_COLLAPSING_BORDERS, RES_LAYOUT_SPLIT } from "../../../inc/hintids";
 import { SwFormatLayoutSplit } from "../../../inc/fmtlsplt";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 
-/** Physical table geometry imported from Writer table style properties, in twips. */
+/** Explicit table construction/transport values; geometry is in twips and headlines have a native owner. */
 export interface SwTableFormat {
   readonly headerRows?: number | undefined;
   readonly repeatHeaderRows?: boolean | undefined;
@@ -314,7 +314,11 @@ export class SwTableLine extends SwClient {
 /** Owns ordered rows, columns and a node-array section like upstream SwTable. */
 export class SwTable {
   private readonly frameFormat: SwFrameFormat;
-  private format: Omit<SwTableFormat, "borderModel" | "layoutSplit"> = {};
+  private format: Omit<
+    SwTableFormat,
+    "borderModel" | "layoutSplit" | "headerRows" | "repeatHeaderRows"
+  > = {};
+  private rowsToRepeat = 1;
   public static readonly SEARCH_NONE = 0;
   public static readonly SEARCH_ROW = 1;
   public static readonly SEARCH_COL = 2;
@@ -347,7 +351,7 @@ export class SwTable {
     return this.frameFormat.GetName();
   }
 
-  /** Returns table geometry. @returns Immutable values. */
+  /** Projects independent native state for construction, transport and history. @returns Detached boundary values. */
   public GetFormat(): SwTableFormat {
     const borders = this.frameFormat.GetAttrSet().GetItemIfSet(RES_COLLAPSING_BORDERS, false) as
       SfxBoolItem | undefined;
@@ -355,6 +359,8 @@ export class SwTable {
       SwFormatLayoutSplit | undefined;
     return {
       ...this.format,
+      headerRows: this.rowsToRepeat,
+      repeatHeaderRows: this.rowsToRepeat !== 0,
       ...(borders === undefined
         ? {}
         : { borderModel: borders.GetValue() ? "collapsing" : "separating" }),
@@ -390,7 +396,9 @@ export class SwTable {
   /** Publishes represented frame-size changes to row/box width adjustment, as SwClientNotify does. @param value - New values. @returns Nothing. */
   public SetFormat(value: SwTableFormat): void {
     const oldWidth = this.format.width;
-    const { borderModel, layoutSplit, ...geometry } = value;
+    const { borderModel, layoutSplit, headerRows, repeatHeaderRows, ...geometry } = value;
+    if (headerRows !== undefined || repeatHeaderRows !== undefined)
+      this.SetRowsToRepeat(repeatHeaderRows === false ? 0 : (headerRows ?? this.rowsToRepeat));
     this.format = geometry;
     if (oldWidth !== undefined && value.width !== undefined && oldWidth !== value.width)
       this.AdjustWidths(oldWidth, value.width);
@@ -405,16 +413,12 @@ export class SwTable {
 
   /** Returns the native headline count capped by actual table lines. @returns Repeated line count. */
   public GetRowsToRepeat(): number {
-    return Math.min(
-      this.lines.length,
-      this.format.repeatHeaderRows === true ? (this.format.headerRows ?? 0) & 0xffff : 0,
-    );
+    return Math.min(this.lines.length, this.rowsToRepeat);
   }
 
-  /** Sets the native unsigned headline count in the existing table format. @param count - Authored count. @returns Nothing. */
+  /** Stores the native unsigned headline count independently of frame geometry and line count. @param count - Authored count. @returns Nothing. */
   public SetRowsToRepeat(count: number): void {
-    const rows = count & 0xffff;
-    this.format = { ...this.format, headerRows: rows, repeatHeaderRows: rows !== 0 };
+    this.rowsToRepeat = count & 0xffff;
   }
 
   /** Appends one defined column width. @param twips - Width in twips. @returns Nothing. */

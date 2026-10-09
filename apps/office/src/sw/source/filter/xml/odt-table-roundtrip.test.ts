@@ -90,7 +90,10 @@ describe("Writer canonical ODF tables", /** Verifies the bounded table scenario.
     });
     expect(reopened.document.GetTables()[0]?.GetTabLines()).toHaveLength(1);
     const noHeader = createWriterDocument();
-    const ordinary = noHeader.nodes.MakeTableNode("Ordinary", { repeatHeaderRows: true });
+    const ordinary = noHeader.nodes.MakeTableNode("Ordinary", {
+      headerRows: 0,
+      repeatHeaderRows: true,
+    });
     ordinary.AddColumnWidth(3000);
     noHeader.nodes.AppendTableRow(ordinary, 1);
     const content = await new ZipFile(writeOdtDocument(noHeader, metadata)).readTextEntry(

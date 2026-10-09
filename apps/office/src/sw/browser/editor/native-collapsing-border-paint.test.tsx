@@ -56,7 +56,7 @@ it.each([false, true])(
       function paint(r: number, c: number): HTMLElement {
         const cell = screen
           .getByRole("textbox", { name: `Row ${r + 1} column ${c + 1} paragraph 1` })
-          .closest("td");
+          .closest<HTMLTableCellElement>("td,th");
         if (cell === null) throw Error("Missing native cell device");
         const view = fixed
           ? (cell.querySelector<HTMLElement>("[data-writer-fixed-row-content]") ?? cell)

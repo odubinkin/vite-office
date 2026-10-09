@@ -286,5 +286,5 @@ for (const [format, align] of [
   it(`admits historical ODF orientation ${JSON.stringify(format)}`, /** Checks presence rather than truthiness without rewriting attributes. @returns Nothing. */ () => {
     const f = fixture(format);
     expect(f.table.GetHoriOrient()).toBe(align);
-    expect(f.table.GetFormat()).toEqual(format);
+    expect(f.table.GetFormat()).toEqual({ ...format, headerRows: 1, repeatHeaderRows: true });
   });

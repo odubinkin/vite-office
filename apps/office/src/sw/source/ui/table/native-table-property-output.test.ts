@@ -131,6 +131,11 @@ it.each([
     expect([data.HasWidthChanged(), data.HasColsChanged()]).toEqual([true, true]);
     expect((f.output.Get(FN_TABLE_REP) as SwPtrItem).GetValue()).toBe(data);
     expect(f.output.Count()).toBe(1);
-    expect(f.table.GetFormat()).toStrictEqual({ width: 6000, horiOrient: H.LEFT });
+    expect(f.table.GetFormat()).toStrictEqual({
+      width: 6000,
+      horiOrient: H.LEFT,
+      headerRows: 1,
+      repeatHeaderRows: true,
+    });
   },
 );

@@ -85,7 +85,7 @@ function fixture() {
 }
 it("mounted device grid spans preserve independent original cell owners", /** Checks native geometry reaches actual cell DOM without duplicate text boxes. @returns Nothing. */ () => {
   const f = fixture(),
-    cells = [...document.querySelectorAll<HTMLTableCellElement>("[data-writer-table] td")];
+    cells = [...document.querySelectorAll<HTMLTableCellElement>("[data-writer-table] :is(td,th)")];
   expect(
     cells.map(
       /** Reads source union-grid spans. @param cell - Original mounted cell. @returns Span. */ (
@@ -189,7 +189,9 @@ it("mounted native fuzzy20 union avoids thin duplicate columns and retains actua
       });
     },
   );
-  const cells = [...document.querySelectorAll<HTMLTableCellElement>("[data-writer-table] td")];
+  const cells = [
+    ...document.querySelectorAll<HTMLTableCellElement>("[data-writer-table] :is(td,th)"),
+  ];
   expect(
     cells.map(
       /** Reads actual source spans. @param cell - Mounted original cell. @returns Span. */

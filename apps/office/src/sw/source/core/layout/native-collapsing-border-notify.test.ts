@@ -70,7 +70,7 @@ function fixture(collapsing = true) {
 it("default native table construction and borrowed deltas retain pool and Which contracts", /** Checks omitted geometry and native empty/old-only deltas without changing model items. @returns Nothing. */ () => {
   const f = fixture(false);
   const original = new SwTable(f.table.GetTableNode(), "DefaultNativeGeometry");
-  expect(original.GetFormat()).toEqual({});
+  expect(original.GetFormat()).toEqual({ headerRows: 1, repeatHeaderRows: true });
   expect(
     (original.GetFrameFormat().GetAttrSet().Get(RES_COLLAPSING_BORDERS) as SfxBoolItem).GetValue(),
   ).toBe(false);
@@ -101,7 +101,12 @@ it("native border bool owns explicit construction, direct changes, inheritance a
     expect(format.GetAttrSet().GetItemIfSet(RES_COLLAPSING_BORDERS, false)).toBeUndefined();
     table.SetFormat({ width: 6000, borderModel: "collapsing" });
     expect(frame.IsCollapsingBorders()).toBe(true);
-    expect(table.GetFormat()).toEqual({ width: 6000, borderModel: "collapsing" });
+    expect(table.GetFormat()).toEqual({
+      width: 6000,
+      borderModel: "collapsing",
+      headerRows: 1,
+      repeatHeaderRows: true,
+    });
     format.SetFormatAttr(new SfxBoolItem(RES_COLLAPSING_BORDERS, false));
     expect(table.GetFormat().borderModel).toBe("separating");
     expect(frame.IsCollapsingBorders()).toBe(false);
@@ -115,7 +120,7 @@ it("native border bool owns explicit construction, direct changes, inheritance a
     expect(frame.IsCollapsingBorders()).toBe(false);
     table.SetFormat({ width: 4000 });
     expect(frame.IsCollapsingBorders()).toBe(true);
-    expect(table.GetFormat()).toEqual({ width: 4000 });
+    expect(table.GetFormat()).toEqual({ width: 4000, headerRows: 1, repeatHeaderRows: true });
     parent.ResetFormatAttr(RES_COLLAPSING_BORDERS);
     expect(frame.IsCollapsingBorders()).toBe(false);
     for (const model of ["collapsing", "separating"] as const) {

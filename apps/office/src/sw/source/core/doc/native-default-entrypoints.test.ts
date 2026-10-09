@@ -59,7 +59,8 @@ it("constructs a table with empty geometry when the format is omitted", /** Chec
   try {
     expect(table.GetTableNode()).toBe(node);
     expect(table.GetName()).toBe("Default geometry");
-    expect(table.GetFormat()).toEqual({});
+    expect(table.GetFormat()).toEqual({ headerRows: 1, repeatHeaderRows: true });
+    expect(table.GetRowsToRepeat()).toBe(0);
     expect(table.GetFrameFormat()).not.toBe(owner.GetFrameFormat());
   } finally {
     table.GetFrameFormat().DisposeModify();

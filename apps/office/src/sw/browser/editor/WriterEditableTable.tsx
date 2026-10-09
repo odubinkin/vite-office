@@ -231,7 +231,7 @@ function browserCellBoxStyle(item: SvxBoxItem, fixedGuide: boolean): React.CSSPr
                             );
                           },
                         );
-                        const CellTag = rowIndex < (format.headerRows ?? 0) ? "th" : "td";
+                        const CellTag = rowIndex < table.GetRowsToRepeat() ? "th" : "td";
                         return (
                           <CellTag
                             data-writer-table-box={cell.GetStartNode().GetIndex()}
