@@ -4,7 +4,7 @@ title: "Close native table format and border paint coverage from full profile"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,28 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-09T10:56:30.767Z"
+  updated_by: "CODER"
+  note: "Twelve fresh cases pass once;318 app and42 inventory all-four100 with exact-source whole complete maps; original failed raw/negative maps retained. Production/513old tests unchanged;4canonical prefixes retained. All declared checks pass;20focused skips already have earlier passing evidence. Same-agent review non-independent; checkpoint closure then goal pause."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-09T10:56:32.159Z"
+  updated_by: "EVALUATOR"
+  note: "Non-independent same-agent review:12 unique fresh passes, source-bound318app/42inventory all-four100 and all declared checks pass; no production/old-test edits or semantic promotion."
+  evaluated_sha: "eb9346460b6b9dc62cd9b1463208aba079caa016"
+  blueprint_digest: "94e0901a5e7777bd909b8a80dd184c618cdc8463570636130d00e30162d01642"
+  evidence_refs:
+    - ".agentplane/tasks/202610091043-28WPNK/README.md"
+    - ".agentplane/tasks/202610091043-28WPNK/quality/20261009-105632159-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610091043-28WPNK/quality/20261009-105632159-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610091043-28WPNK/quality/20261009-105632159-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610091043-28WPNK/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610091043-28WPNK/evidence/coverage.json"
+    - ".agentplane/tasks/202610091043-28WPNK/evidence/checks.json"
+  findings:
+    - "Whole fresh full maps are reused only for316 identical complete sources;2identical-source closure modules use entire actual merged maps with every complete location map equal. Failed negative/partial raw profiles retained, no clamp or selective patch. Scope remains coverage verification; native root/frame/follows and whole parity incomplete. Pause after checkpoint finish as requested."
 commit: null
 comments:
   -
@@ -35,8 +52,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: add fresh original table format and border paint acceptance to close both full profile coverage failures; keep production and all old tests unchanged, append canonical inventory and verify actual whole-module coverage before pause."
+  -
+    type: "verify"
+    at: "2026-10-09T10:56:30.767Z"
+    author: "CODER"
+    state: "ok"
+    note: "Twelve fresh cases pass once;318 app and42 inventory all-four100 with exact-source whole complete maps; original failed raw/negative maps retained. Production/513old tests unchanged;4canonical prefixes retained. All declared checks pass;20focused skips already have earlier passing evidence. Same-agent review non-independent; checkpoint closure then goal pause."
 doc_version: 3
-doc_updated_at: "2026-10-09T10:55:54.173Z"
+doc_updated_at: "2026-10-09T10:56:30.829Z"
 doc_updated_by: "CODER"
 description: "Add meaningful original-format inheritance and original-border ordering/lifetime acceptance tests to close the two table coverage failures in full checkpoint RAWD0Q. Preserve all production and old tests; update four canonical inventory records without promotion; use current fresh complete module maps and unchanged full profile source hashes, never normalize raw negative V8 counters."
 sections:
@@ -49,7 +72,41 @@ sections:
     3. Upstream physically absent: run only fresh closure tests with raw JSON and V8 coverage restricted to existing swtblfmt.ts and paintfrm.ts; require both entire modules actual100 lines/statements/functions/branches and all cases pass. Restore finally. No normalization of negative original counters or threshold/exclusion changes.
     4. Bind current complete source hashes and exact full-profile map/proof authority: keep316 original fresh complete maps plus the two actual newer complete whole-module maps; require final318 app all-four100 and inventory full42 all-four100. Retain failed original full raw map and counts. Prove all production and old tests unchanged, four canonical records exact prefix history retained.
     5. Run Prettier/ESLint for new test and metadata, typecheck/dependency/docs/size, canonical registry build/check, source provenance/tree, doctor/routing and git diff --check. Record non-independent same-agent evaluation. Persist semantic code/evidence and clean finish; checkpoint may then pass and goal must pause without starting another feature.
-  Verification: "Pass after source-bound coverage closure. Twelve fresh native row/box inheritance/copy/client, two-by-two border geometry/lifetime/copy, overlap/tie/empty admission/coordinate-order cases passed once;0assertion failures and0passing replays. Focused followups retain20skip observations of already-passed cases; no unresolved cases. Initial wrong-root empty discovery and every partial/negative raw gate retained. Standard actual counter merges with identical complete location maps supply both whole current-byte-identical closure modules:89lines94statements17functions28branches100. Final318 app:18298lines20093statements4589functions14695100;316complete unchanged full-profile modules plus2actual fresh complete modules. Inventory42:1664lines1730statements434functions1287branches100 from current unchanged full evidence. All production and513old app tests unchanged;4canonical records exact field/evidence/justification prefixes retained, no semantic promotion. Format/lint/types/dependencies/docs/size/registry/provenance321/tree114+33/routing/diff pass; doctor0errors2historicalwarnings. Evidence coverage.json/checks.json. No second full run; checkpoint may pass and goal must pause."
+  Verification: |-
+    Pass after source-bound coverage closure. Twelve fresh native row/box inheritance/copy/client, two-by-two border geometry/lifetime/copy, overlap/tie/empty admission/coordinate-order cases passed once;0assertion failures and0passing replays. Focused followups retain20skip observations of already-passed cases; no unresolved cases. Initial wrong-root empty discovery and every partial/negative raw gate retained. Standard actual counter merges with identical complete location maps supply both whole current-byte-identical closure modules:89lines94statements17functions28branches100. Final318 app:18298lines20093statements4589functions14695100;316complete unchanged full-profile modules plus2actual fresh complete modules. Inventory42:1664lines1730statements434functions1287branches100 from current unchanged full evidence. All production and513old app tests unchanged;4canonical records exact field/evidence/justification prefixes retained, no semantic promotion. Format/lint/types/dependencies/docs/size/registry/provenance321/tree114+33/routing/diff pass; doctor0errors2historicalwarnings. Evidence coverage.json/checks.json. No second full run; checkpoint may pass and goal must pause.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-09T10:56:30.767Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Twelve fresh cases pass once;318 app and42 inventory all-four100 with exact-source whole complete maps; original failed raw/negative maps retained. Production/513old tests unchanged;4canonical prefixes retained. All declared checks pass;20focused skips already have earlier passing evidence. Same-agent review non-independent; checkpoint closure then goal pause.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T10:55:54.173Z, excerpt_hash=sha256:cb42db585502002ad87721a61533e581472d30c079c432d961310efffb110ba3
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610091043-28WPNK/blueprint/resolved-snapshot.json
+    - old_digest: 94e0901a5e7777bd909b8a80dd184c618cdc8463570636130d00e30162d01642
+    - current_digest: 94e0901a5e7777bd909b8a80dd184c618cdc8463570636130d00e30162d01642
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610091043-28WPNK
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610091043-28WPNK
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only the new acceptance module and four exact inventory appends if rejected. Keep original full failed coverage evidence and restore renamed upstream in finally. Do not alter production, old assertions, thresholds or historical failed247."
   Findings: |-
     Full RAWD0Q has14556 passes with no failure/skips/retries, but row NotifyFormatInheritance is unexecuted and V8 paintfrm inferred else is -163. This closure requires new meaningful contract evidence and two entire fresh current-module maps; the original raw map remains intact. The goal is incomplete and pauses only after verified closure.
@@ -82,6 +139,39 @@ Close coverage errors from full RAWD0Q with new original-format inheritance/copy
 ## Verification
 
 Pass after source-bound coverage closure. Twelve fresh native row/box inheritance/copy/client, two-by-two border geometry/lifetime/copy, overlap/tie/empty admission/coordinate-order cases passed once;0assertion failures and0passing replays. Focused followups retain20skip observations of already-passed cases; no unresolved cases. Initial wrong-root empty discovery and every partial/negative raw gate retained. Standard actual counter merges with identical complete location maps supply both whole current-byte-identical closure modules:89lines94statements17functions28branches100. Final318 app:18298lines20093statements4589functions14695100;316complete unchanged full-profile modules plus2actual fresh complete modules. Inventory42:1664lines1730statements434functions1287branches100 from current unchanged full evidence. All production and513old app tests unchanged;4canonical records exact field/evidence/justification prefixes retained, no semantic promotion. Format/lint/types/dependencies/docs/size/registry/provenance321/tree114+33/routing/diff pass; doctor0errors2historicalwarnings. Evidence coverage.json/checks.json. No second full run; checkpoint may pass and goal must pause.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-09T10:56:30.767Z — VERIFY — ok
+
+By: CODER
+
+Note: Twelve fresh cases pass once;318 app and42 inventory all-four100 with exact-source whole complete maps; original failed raw/negative maps retained. Production/513old tests unchanged;4canonical prefixes retained. All declared checks pass;20focused skips already have earlier passing evidence. Same-agent review non-independent; checkpoint closure then goal pause.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T10:55:54.173Z, excerpt_hash=sha256:cb42db585502002ad87721a61533e581472d30c079c432d961310efffb110ba3
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610091043-28WPNK/blueprint/resolved-snapshot.json
+- old_digest: 94e0901a5e7777bd909b8a80dd184c618cdc8463570636130d00e30162d01642
+- current_digest: 94e0901a5e7777bd909b8a80dd184c618cdc8463570636130d00e30162d01642
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610091043-28WPNK
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610091043-28WPNK
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
