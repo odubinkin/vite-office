@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "task_id": "202610090725-D6Z7XD",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-09T07:42:05.263Z",
+  "verdict": "pass",
+  "summary": "Native sticky range updates are implemented on the original owner and pass actual100 Calc coverage plus768compiled upstream differential states.",
+  "evaluated_sha": "1d5c43268f11123ae8de64ae01c74e98ae318a09",
+  "blueprint_digest": "2b3b1d9e9907f78c9fe7b139b02044f71c2097f4ae76270585e3f358a88b7f9d",
+  "findings": [
+    "Exact original definitions and source Git blobs are preserved by the probe; native doc/class shell limitations and unexecuted methods are declared. Existing Writer/shared runtime and first Calc acceptance tests are untouched. Inventory records retain unverified broad semantic states."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610090725-D6Z7XD/README.md",
+    "apps/office/coverage/calc/coverage-summary.json",
+    "apps/office/src/sc/source/core/tool/native-range-cases.json",
+    "scripts/calc-address-native-probe.mjs",
+    "output/playwright/calc-registry2.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Full ScDocument/formula integration, API closure and other-method native differentials remain future work. Same-agent quality review is not independent; full suite due after Calc10."
+  ]
+}
