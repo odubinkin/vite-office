@@ -192,6 +192,41 @@ counts/indices within JavaScript exact integer inputs; full pointer-width input
 arithmetic is unverified. Neither these finite native outputs nor local coverage
 establish whole Calc parity.
 
+## Big address and range coordinates
+
+Task `202610090858-QP6EMJ` ports `ScBigAddress` and `ScBigRange` from
+`sc/inc/bigrange.hxx` and `sc/source/core/data/bigrange.cxx`. The header boundary
+re-exports the coherent core/data owner, including the original inline methods
+and out-of-line validity definition. Exact `bigint` values retain signed64
+coordinates, including both extrema and values above the JavaScript integer
+precision limit. Defaults are zero; increments default to one. Copies own
+independent values, assignment retains endpoint identities and getters retain
+raw values. No document, ordinary-coordinate or shared owner is duplicated.
+
+`IsValid()` accepts either signed64 extreme independently on each axis; ordinary
+values use document column/row maxima and an exclusive table-count boundary.
+`MakeAddress()` clips negative values to zero, columns/rows to document maxima
+and sheets to global `MAXTAB`. Raw range construction preserves reversed
+endpoints. `MakeRange()` delegates the existing address-pair constructor and
+therefore sorts the clipped axes without mutating big values. Containment and
+intersection use the original inclusive raw comparisons; equality retains order.
+
+`scripts/calc-bigrange-native-probe.mjs` compiles the unchanged complete original
+big classes and validity body with native ordinary constructors/order under
+ASan/UBSan. The decimal-string fixture preserves exact values and records 6552
+address states, 3468 range relation states, eight address and five range mutation
+snapshots, ordinary conversion and eight equality outcomes. Portable tests compare
+every saved output. Run `node scripts/calc-bigrange-native-probe.mjs --check` to
+reproduce it with exact pinned Git blobs and full-source/extracted-body hashes.
+The compiler and upstream checkout are unnecessary for ordinary tests.
+
+The native document shell supplies only the existing three bounds getters for
+comparison; production uses the existing structural getter view. Full document,
+change-tracking and reference-update integration and native pointer/move lifetime
+remain pending. Signed64 overflow is undefined in native C++; fixtures use defined
+arithmetic and do not establish behavior outside that domain. Inventory retains
+unverified semantic parity, independently of 100% local coverage.
+
 JavaScript tuples represent native output reference parameters. Equality and
 ordering methods represent C++ operators. Undefined native uninitialized
 constructors, pointer layout, `size_t` hashing and native debug assertions are
@@ -222,12 +257,14 @@ intervening tasks. Writer acceptance files and coverage settings remain intact.
 The coordinate foundation and sticky reference tasks are Calc tasks 1 and 2;
 inventory reconciliation is task 3, reference addresses/sheet limits are task 4,
 single formula references are task 5, and complex formula references are task 6
-of that first ten-task interval. Numerical range lists are task 7; the full run
-is still due after task 10.
+of that first ten-task interval. Numerical range lists are task 7 and big
+address/range coordinates are task 8; the full run is still due after task 10.
 
 Source research includes the per-file MPL 2.0 and inherited Apache notices in
 `sc/inc/address.hxx`, `sc/inc/sheetlimits.hxx`, `sc/inc/refdata.hxx`,
 `sc/source/core/tool/refdata.cxx`, `sc/inc/rangelst.hxx`,
-`sc/source/core/tool/rangelst.cxx` and `sc/source/core/tool/address.cxx`, and MPL 2.0 in
+`sc/source/core/tool/rangelst.cxx`, `sc/inc/bigrange.hxx` and
+`sc/source/core/tool/address.cxx`, and MPL 2.0 in
+`sc/source/core/data/bigrange.cxx` and
 `sc/inc/types.hxx`. The TypeScript implementation is independently authored
 from those numerical contracts; the original sources remain research-only.
