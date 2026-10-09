@@ -149,7 +149,12 @@ it("native painter and box print-width measurement release registered cell frame
     const row = doc.nodes.AppendTableRow(table, 2),
       boxes = [...row.GetTabBoxes()],
       first = required(boxes[0]);
-    expect(new SwTabFrame(table).GetBoxPrintWidth(first, 9600)).toBe(3000);
+    const nativeTable = new SwTabFrame(table);
+    try {
+      expect(nativeTable.GetBoxPrintWidth(first, 9600)).toBe(3000);
+    } finally {
+      nativeTable.DestroyImpl();
+    }
     for (const box of boxes) checkClients(box);
     new SwTabFramePainter(table).PaintLines(
       /** Reads actual copied painted lines. @param line - Native paint interval. @returns Nothing. */ (

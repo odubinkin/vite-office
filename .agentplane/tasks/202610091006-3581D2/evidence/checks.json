@@ -1,0 +1,171 @@
+{
+  "upstreamAbsent": true,
+  "restored": true,
+  "commands": [
+    {
+      "label": "format",
+      "argv": [
+        "node_modules/.bin/prettier",
+        "--check",
+        "apps/office/src/sw/browser/presentation/writer-view.tsx",
+        "apps/office/src/sw/browser/presentation/native-workbench-view-owner.test.tsx",
+        "docs/program/registry/writer/runtime/sw/browser/presentation/writer-view.tsx.json",
+        "docs/program/registry/writer/provenance/sw/browser/presentation/writer-view.tsx.json"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "label": "lint",
+      "argv": [
+        "node_modules/.bin/eslint",
+        "apps/office/src/sw/browser/presentation/writer-view.tsx",
+        "apps/office/src/sw/browser/presentation/native-workbench-view-owner.test.tsx",
+        "--max-warnings",
+        "0"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "typecheck",
+      "argv": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed"
+    },
+    {
+      "label": "dependencies",
+      "argv": [
+        "npm",
+        "run",
+        "check:dependencies"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "49df58267de6ad6b7507189e009e8341f0e207801075535c840b5f2eda09e6bb"
+    },
+    {
+      "label": "docs",
+      "argv": [
+        "npm",
+        "run",
+        "check:docs"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "a872ac9ce79fb0cc3e02575fb5c94be7b49023d82088c707e81cc15c8b896180"
+    },
+    {
+      "label": "file-size",
+      "argv": [
+        "npm",
+        "run",
+        "check:file-size"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "8502ad6d6df2682b7bf59f7ea4d874b8c42bb2a736cbc021abd59d2ca0f498be"
+    },
+    {
+      "label": "static",
+      "argv": [
+        "npm",
+        "run",
+        "test:static"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "b06c388fa7ded3fbd75eb55f188521530040a9820f39376d89d7b4c17cc2dcdf"
+    },
+    {
+      "label": "registry-build",
+      "argv": [
+        "npm",
+        "run",
+        "inventory:registry:build"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "f941feea056f9f9125ac8a96978ff0fda711beef74563b36c553fc89490f0209"
+    },
+    {
+      "label": "writer-registry",
+      "argv": [
+        "npm",
+        "run",
+        "inventory:parity:writer"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "ca3eedba9b8bfc505e4566708517cfb161da9c9e4e519721fad80990eb195d25"
+    },
+    {
+      "label": "global-registry",
+      "argv": [
+        "npm",
+        "run",
+        "inventory:registry:check"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "6eb0d1090aae4b06cb81c357fdc3fada19688f95402772fe0983489a785860f8"
+    },
+    {
+      "label": "source-provenance",
+      "argv": [
+        "npm",
+        "run",
+        "check:source-provenance"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "65eeaf5fc88ed1e78871c61e7953b96b6b1c0149b9a9413c588c16839ab5f938"
+    },
+    {
+      "label": "source-tree",
+      "argv": [
+        "npm",
+        "run",
+        "check:source-tree"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "6c5bd2e3c84892b8cc26b8b1b5f06a950891f9d5988a8ef1f1496f0c252cd33e"
+    },
+    {
+      "label": "routing",
+      "argv": [
+        "node",
+        ".agentplane/policy/check-routing.mjs"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    {
+      "label": "doctor",
+      "argv": [
+        "ap",
+        "doctor"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "fa8573602e78452a04882720a806bc83e68ccf615a81b85babce38ecde644e72"
+    }
+  ],
+  "upstreamPin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "upstreamClean": true,
+  "inventory": {
+    "records": 2,
+    "allHistoricalFieldsAndPrefixesPreserved": true,
+    "noSemanticStatusPromotion": true,
+    "beforeSHA256": "5c968e555bada2121d692c3c993423c9b4ef79ed5b696e92bb7bc28ed65d7a37",
+    "currentRecordSHA256": {
+      "docs/program/registry/writer/runtime/sw/browser/presentation/writer-view.tsx.json": "54a28227ddb91f9bd7329f8db2d9ed46ffa9fd7aad4b3216bd4222ad76c1505b",
+      "docs/program/registry/writer/provenance/sw/browser/presentation/writer-view.tsx.json": "1dcf8833784c87c215379f81c16420d02f7c32b85bd1d885c06ecb4fd2a5a665"
+    }
+  },
+  "oldAcceptanceFiles": {
+    "priorCommit": "3a66ae46d1f8",
+    "unchangedByteIdentical": 512,
+    "contractMigrations": [],
+    "listSHA256": "bb3bde2034cf011600ae5baf19ecfc5a7889303ca8f52cc64a8f1b87630b7140"
+  },
+  "limitations": [
+    "Same-agent evaluator is non-independent.",
+    "Doctor zero errors,two pre-existing warnings: hook shim readiness and historical no-op PJV0JK semantic hash."
+  ]
+}

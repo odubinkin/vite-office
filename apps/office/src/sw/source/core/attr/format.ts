@@ -23,7 +23,13 @@ export class SwFormat extends BroadcastingModify {
   ) {
     super();
     this.attributeSet = new SwAttrSet(pool, ranges);
-    this.SetDerivedFrom(derivedFrom);
+    if (derivedFrom !== undefined) {
+      if (derivedFrom.GetAttrSet().GetPool() !== pool)
+        throw new Error("SwFormat parent belongs to another pool.");
+      this.derivedFrom = derivedFrom;
+      this.RegisterToModify(derivedFrom);
+      this.attributeSet.SetParent(derivedFrom.GetAttrSet());
+    }
   }
 
   /** Returns the UI format name. @returns Format name. */

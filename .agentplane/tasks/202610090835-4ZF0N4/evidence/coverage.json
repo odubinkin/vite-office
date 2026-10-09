@@ -1,0 +1,160 @@
+{
+  "changed": {
+    "files": 8,
+    "summary": {
+      "lines": {
+        "total": 1122,
+        "covered": 1122,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 1229,
+        "covered": 1229,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 237,
+        "covered": 237,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 973,
+        "covered": 973,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "sourceHashes": {
+      "apps/office/src/sw/browser/editor/WriterEditableTable.tsx": "e09b839683e9b39ce6f2d9e1604c964b592b971392d3443ac6355295abc6b838",
+      "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts": "fc65c208b4aa175e3c33f7a5801d588d5cf8116aaad6dda5277a61aa6b336f72",
+      "apps/office/src/sw/source/core/frmedt/fetab.ts": "b3ad66b8ed4e978e838213ecb42be015b5c4da0608717d19e15bd6e7a7c69d1a",
+      "apps/office/src/sw/source/core/frmedt/tblsel.ts": "936cdccb0a51d21e2853ab1e23eaf034dd1a4153faabc06ad7d776a07269530d",
+      "apps/office/src/sw/source/core/layout/newfrm.ts": "b511655d75d4b019fd1a28259c89d095e9f3191cb594486872e58fc9064576e0",
+      "apps/office/src/sw/source/uibase/table/swtablerep.ts": "33c29344e78b86622621d916da2cab6ba9f7073b117791a8374cf442161ea10c",
+      "apps/office/src/sw/source/core/layout/wsfrm.ts": "a2b0f41b8ccb47f432686f032449b1f33e9c1ddfe28a967acb044c4dbdc84cc2",
+      "apps/office/src/sw/source/core/layout/tabfrm.ts": "8e33d620369764e33f26bccafc3bc9f7f02f6493d6807ef61bdd4437209de339"
+    }
+  },
+  "application": {
+    "files": 318,
+    "wholeUnchangedFiles": 310,
+    "summary": {
+      "lines": {
+        "total": 18296,
+        "covered": 18296,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 20091,
+        "covered": 20091,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 4591,
+        "covered": 4591,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 14693,
+        "covered": 14693,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "mapSHA256": "670f3bae65c297ff178f8d05962d28c9598e76a449250df3b861d44f2418f33c",
+    "proofSHA256": "a9b2cda732373cd45b159db7be5f3ba12a7957572f706ac57b429cb71871a19a"
+  },
+  "priorMapSHA256": "8ac6c3b8a184bd063403fe17789057ece3a1d1dfdf3cfdc0576afa65b7f135fa",
+  "priorProofSHA256": "023f2723a150af5282430d1772f33130c5598a56486b3ac1d612e32ba71e4b5c",
+  "rawInputs": [
+    {
+      "profile": "recovery",
+      "SHA256": "b6c0f3d86e4823959dc27c9ae9705e73bf13897762eacd6cecdf7c1640b47c53"
+    },
+    {
+      "profile": "width-closure",
+      "SHA256": "81c3f5c58f88cd31204865af2bd90a28d0474b426e436360656400791fcf4164"
+    },
+    {
+      "profile": "corner-closure",
+      "SHA256": "a01571f8ab617c8087b4feeda10ab09b2d2160d2caab76db1047c28d1deece22"
+    },
+    {
+      "profile": "render-closure",
+      "SHA256": "2f340932ff7593788415bcd198ecf67fde1918ab02d21f26b256df7389794a76"
+    }
+  ],
+  "transfers": [
+    {
+      "path": "apps/office/src/sw/browser/editor/WriterEditableTable.tsx",
+      "oldSourceSHA256": "8c9a2e824049037fd506b05f91c598e12beb0504b57f57cace39a4c5d13c7754",
+      "currentSourceSHA256": "e09b839683e9b39ce6f2d9e1604c964b592b971392d3443ac6355295abc6b838",
+      "counts": {
+        "statements": 32,
+        "functions": 11,
+        "branches": 33
+      },
+      "completeUnchangedDeclarationBodyAndEnclosingConditionRegions": 11,
+      "allTransferredLocationsExactMatched": true,
+      "regionProofSHA256": "19255c3c0c2409cedd7f8a8ae6f54af8dfa0fe7984d26725420e317274728278"
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts",
+      "oldSourceSHA256": "060a06dd9a77e530de1756b2f4c4384e6b2ddd1ee20c68fb175daab2eeb99ee7",
+      "currentSourceSHA256": "fc65c208b4aa175e3c33f7a5801d588d5cf8116aaad6dda5277a61aa6b336f72",
+      "counts": {
+        "statements": 235,
+        "functions": 40,
+        "branches": 78
+      },
+      "completeUnchangedDeclarationBodyAndEnclosingConditionRegions": 65,
+      "allTransferredLocationsExactMatched": true,
+      "regionProofSHA256": "c6b2aa7e488d4029a98fd6d21dc92a559461298a21035a861237164f14d7388f"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/frmedt/fetab.ts",
+      "oldSourceSHA256": "21dc2860da202f6e36fe66105c0bb4ba731bd2ef8df95efb1482ddaf52a04468",
+      "currentSourceSHA256": "b3ad66b8ed4e978e838213ecb42be015b5c4da0608717d19e15bd6e7a7c69d1a",
+      "counts": {
+        "statements": 170,
+        "functions": 49,
+        "branches": 70
+      },
+      "completeUnchangedDeclarationBodyAndEnclosingConditionRegions": 46,
+      "allTransferredLocationsExactMatched": true,
+      "regionProofSHA256": "0db86a851967c9b0f8b973eae7cd5cf95dff5bc27e4b7d85d64e10689da5223f"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/layout/newfrm.ts",
+      "oldSourceSHA256": "447346cdcf11103aa414f8f07b51db8683db41dad39b99dcee3df8e6391d72df",
+      "currentSourceSHA256": "b511655d75d4b019fd1a28259c89d095e9f3191cb594486872e58fc9064576e0",
+      "counts": {
+        "statements": 119,
+        "functions": 41,
+        "branches": 47
+      },
+      "completeUnchangedDeclarationBodyAndEnclosingConditionRegions": 49,
+      "allTransferredLocationsExactMatched": true,
+      "regionProofSHA256": "5eba2d8d573ac573a05b2e32956b54c654b4b24724651823463f308889859510"
+    }
+  ],
+  "scope": "Source-bound targeted leaf certificate; not a fresh full suite or whole-goal parity claim. Raw maps and executable audit helpers remain ignored outside AgentPlane."
+}

@@ -1,5 +1,6 @@
 /** @fileoverview Defines bounded typed Writer model hints from pinned `sw/inc/hints.hxx`. */
 
+import type { LegacyModifyHint } from "./calbck";
 import type { SwAttrSet } from "../source/core/attr/swatrset";
 import type { SfxHint } from "../../svl/source/notify/SfxBroadcaster";
 import type { SwFrameFormat } from "../source/core/layout/atrfrm";
@@ -46,6 +47,7 @@ export class TableBoxFormatChanged implements SfxHint {
 }
 /** Atomic Writer notifications emitted by model and shell boundaries. */
 export type SwAtomicModelHint =
+  | LegacyModifyHint
   | AttrSetChangeHint
   | MoveTableBoxHint
   | TableBoxFormatChanged

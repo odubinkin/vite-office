@@ -12,11 +12,7 @@ import { WriterEditableParagraph } from "./WriterEditableParagraph";
 import { WriterEditableTable } from "./WriterEditableTable";
 import type { WriterCursorSelection } from "./writer-selection-types";
 import type { WriterPageDescriptorValue } from "../../source/core/layout/pagedesc";
-import {
-  SwRootFrame,
-  type SwPageDescriptorLayout,
-  type SwTableFrame,
-} from "../../source/core/layout/newfrm";
+import { type SwPageDescriptorLayout, type SwTableFrame } from "../../source/core/layout/newfrm";
 import { SwLineNumberInfo, type SwLineNumberInfoValue } from "../../inc/lineinfo";
 import type { SwTextFrameSettings, SwTextLine } from "../../source/core/text/txtfrm";
 import { createWriterLineMeasurements, measureWriterTextLines } from "./writer-line-measurement";
@@ -28,7 +24,6 @@ export interface WriterPlainTextEditorProps {
   readonly cursorSelection: WriterCursorSelection;
   readonly editWindow: SwEditWin;
   readonly editingHostRef?: RefObject<HTMLElement | null>;
-  readonly layout?: SwRootFrame;
   readonly paragraphs: readonly WriterParagraph[];
   readonly textNodes?: readonly WriterParagraph[];
   readonly pageDescriptor: WriterPageDescriptorValue;
@@ -50,14 +45,6 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
   const measurementRootRef = useRef<ShadowRoot | null>(null);
   const [measurementRoot, setMeasurementRoot] = useState<ShadowRoot | null>(null);
   const [measurementRevision, setMeasurementRevision] = useState(0);
-  const [testLayout] = useState(
-    /** Supplies a persistent layout root when the editor is mounted without a SwView. @returns Layout root. */
-    () =>
-      new SwRootFrame(
-        /** Resolves the detached editor's current document. @returns Canonical document. */ () =>
-          props.editWindow.GetDoc(),
-      ),
-  );
   const [paragraphElements] = useState(
     /** Creates the stable paragraph projection registry. @returns Empty paragraph registry. */ () =>
       new Map<string, HTMLParagraphElement>(),
@@ -127,16 +114,20 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
     }),
   );
   const lineInfo = props.lineNumberInfo ?? new SwLineNumberInfo().QueryValue();
-  const layout = (props.layout ?? testLayout).Format(
-    measurements,
-    props.pageDescriptors === undefined
-      ? props.pageDescriptor
-      : { descriptors: props.pageDescriptors, initialName: props.pageDescriptor.name },
-    props.paragraphSpacingSettings,
-    { ...lineInfo, paintLineNumbers: props.showLineNumbers ?? lineInfo.paintLineNumbers },
-    measurementRevision,
-    tableMeasurements,
-  );
+  const layout = props.editWindow
+    .GetView()
+    .GetWrtShell()
+    .GetLayout()
+    .Format(
+      measurements,
+      props.pageDescriptors === undefined
+        ? props.pageDescriptor
+        : { descriptors: props.pageDescriptors, initialName: props.pageDescriptor.name },
+      props.paragraphSpacingSettings,
+      { ...lineInfo, paintLineNumbers: props.showLineNumbers ?? lineInfo.paintLineNumbers },
+      measurementRevision,
+      tableMeasurements,
+    );
   const pages = layout.pages;
   const paragraphById = new Map(
     props.paragraphs.map(

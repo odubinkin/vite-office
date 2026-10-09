@@ -1,0 +1,351 @@
+{
+  "runtime": {
+    "uniqueCases": 232,
+    "freshCases": 12,
+    "unresolvedFailures": 0,
+    "approvedPassingReplay": 210,
+    "reason": "Initial test failure suppressed every V8 map; one approved recovery solely collected missing actual evidence. Later closures failed/new/unexecuted only.",
+    "profiles": {
+      "ready": {
+        "pass": 210,
+        "fail": 1,
+        "skip": 0
+      },
+      "recovery": {
+        "pass": 210,
+        "fail": 1,
+        "skip": 0
+      },
+      "width-closure": {
+        "pass": 1,
+        "fail": 0,
+        "skip": 4
+      },
+      "corner-closure": {
+        "pass": 19,
+        "fail": 0,
+        "skip": 11
+      },
+      "render-closure": {
+        "pass": 2,
+        "fail": 0,
+        "skip": 10
+      }
+    },
+    "lastFullIteration": 247,
+    "full251": false
+  },
+  "upstream": {
+    "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+    "clean": true,
+    "runtimeAndBuildPhysicallyAbsent": true,
+    "restoredFinally": true
+  },
+  "checks": [
+    {
+      "label": "format",
+      "argv": [
+        "node_modules/.bin/prettier",
+        "--check",
+        "apps/office/src/sw/source/core/layout/wsfrm.ts",
+        "apps/office/src/sw/source/core/layout/tabfrm.ts",
+        "apps/office/src/sw/source/core/layout/newfrm.ts",
+        "apps/office/src/sw/source/core/frmedt/fetab.ts",
+        "apps/office/src/sw/source/core/frmedt/tblsel.ts",
+        "apps/office/src/sw/source/uibase/table/swtablerep.ts",
+        "apps/office/src/sw/browser/editor/WriterEditableTable.tsx",
+        "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts",
+        "apps/office/src/sw/source/core/layout/native-table-frame-hierarchy.test.ts",
+        "apps/office/src/sw/browser/editor/native-table-frame-lifetime.test.tsx",
+        "apps/office/src/sw/browser/editor/native-cell-format-client.test.tsx",
+        "docs/program/registry/writer/runtime/sw/source/core/layout/wsfrm.ts.json",
+        "docs/program/registry/writer/runtime/sw/source/core/layout/tabfrm.ts.json",
+        "docs/program/registry/writer/runtime/sw/source/core/layout/newfrm.ts.json",
+        "docs/program/registry/writer/runtime/sw/source/core/frmedt/fetab.ts.json",
+        "docs/program/registry/writer/runtime/sw/source/core/frmedt/tblsel.ts.json",
+        "docs/program/registry/writer/runtime/sw/source/uibase/table/swtablerep.ts.json",
+        "docs/program/registry/writer/runtime/sw/browser/editor/WriterEditableTable.tsx.json",
+        "docs/program/registry/writer/runtime/sw/browser/editor/browser-writer-edit-window.ts.json",
+        "docs/program/registry/writer/provenance/sw/source/core/layout/wsfrm.ts.json",
+        "docs/program/registry/writer/provenance/sw/source/core/layout/tabfrm.ts.json",
+        "docs/program/registry/writer/provenance/sw/source/core/layout/newfrm.ts.json",
+        "docs/program/registry/writer/provenance/sw/source/core/frmedt/fetab.ts.json",
+        "docs/program/registry/writer/provenance/sw/source/core/frmedt/tblsel.ts.json",
+        "docs/program/registry/writer/provenance/sw/source/uibase/table/swtablerep.ts.json",
+        "docs/program/registry/writer/provenance/sw/browser/editor/WriterEditableTable.tsx.json",
+        "docs/program/registry/writer/provenance/sw/browser/editor/browser-writer-edit-window.ts.json"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "label": "lint",
+      "argv": [
+        "node_modules/.bin/eslint",
+        "apps/office/src/sw/source/core/layout/wsfrm.ts",
+        "apps/office/src/sw/source/core/layout/tabfrm.ts",
+        "apps/office/src/sw/source/core/layout/newfrm.ts",
+        "apps/office/src/sw/source/core/frmedt/fetab.ts",
+        "apps/office/src/sw/source/core/frmedt/tblsel.ts",
+        "apps/office/src/sw/source/uibase/table/swtablerep.ts",
+        "apps/office/src/sw/browser/editor/WriterEditableTable.tsx",
+        "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts",
+        "apps/office/src/sw/source/core/layout/native-table-frame-hierarchy.test.ts",
+        "apps/office/src/sw/browser/editor/native-table-frame-lifetime.test.tsx",
+        "apps/office/src/sw/browser/editor/native-cell-format-client.test.tsx",
+        "--max-warnings",
+        "0"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "typecheck",
+      "argv": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed"
+    },
+    {
+      "label": "dependencies",
+      "argv": [
+        "npm",
+        "run",
+        "check:dependencies"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "49df58267de6ad6b7507189e009e8341f0e207801075535c840b5f2eda09e6bb"
+    },
+    {
+      "label": "docs",
+      "argv": [
+        "npm",
+        "run",
+        "check:docs"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "ef682b637addb6a9fab6f397a9d55356465b4b5507a14045ac74b12ef6e0d48b"
+    },
+    {
+      "label": "file-size",
+      "argv": [
+        "npm",
+        "run",
+        "check:file-size"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "18ae27a681670a19e5cd7854a4ea7031d37ff6ef1de305961c49bddd9704e28c"
+    },
+    {
+      "label": "static",
+      "argv": [
+        "npm",
+        "run",
+        "test:static"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "7911dbf7538e161656087310d7e1fb09842d8ecadb2acc2eb76749b2b946cb6c"
+    },
+    {
+      "label": "registry-build",
+      "argv": [
+        "npm",
+        "run",
+        "inventory:registry:build"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "f941feea056f9f9125ac8a96978ff0fda711beef74563b36c553fc89490f0209"
+    },
+    {
+      "label": "writer-registry",
+      "argv": [
+        "npm",
+        "run",
+        "inventory:parity:writer"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "dd3e6611d6c22fa947137787fbafdcb4120c1ae92271221fa75d86ce8bb1d966"
+    },
+    {
+      "label": "global-registry",
+      "argv": [
+        "npm",
+        "run",
+        "inventory:registry:check"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "7c60b2a42cc19b09f24958c4e7ddb3a2e64bf42cf2b738c207400fead2be7eec"
+    },
+    {
+      "label": "source-provenance",
+      "argv": [
+        "npm",
+        "run",
+        "check:source-provenance"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "65eeaf5fc88ed1e78871c61e7953b96b6b1c0149b9a9413c588c16839ab5f938"
+    },
+    {
+      "label": "source-tree",
+      "argv": [
+        "npm",
+        "run",
+        "check:source-tree"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "6c5bd2e3c84892b8cc26b8b1b5f06a950891f9d5988a8ef1f1496f0c252cd33e"
+    },
+    {
+      "label": "routing",
+      "argv": [
+        "node",
+        ".agentplane/policy/check-routing.mjs"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    {
+      "label": "doctor",
+      "argv": [
+        "ap",
+        "doctor"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "d6b46a17d630f83a4c9e7e0613d42e821a673e126c3f461741591eb272e56c29"
+    }
+  ],
+  "canonicalRegistry": [
+    {
+      "label": "format",
+      "argv": [
+        "node_modules/.bin/prettier",
+        "--check",
+        "docs/program/registry/writer/runtime/sw/source/core/layout/wsfrm.ts.json",
+        "docs/program/registry/writer/provenance/sw/source/core/layout/wsfrm.ts.json",
+        "docs/program/registry/writer/runtime/sw/source/core/layout/tabfrm.ts.json",
+        "docs/program/registry/writer/provenance/sw/source/core/layout/tabfrm.ts.json",
+        "docs/program/registry/writer/runtime/sw/source/core/layout/newfrm.ts.json",
+        "docs/program/registry/writer/provenance/sw/source/core/layout/newfrm.ts.json",
+        "docs/program/registry/writer/runtime/sw/source/core/frmedt/fetab.ts.json",
+        "docs/program/registry/writer/provenance/sw/source/core/frmedt/fetab.ts.json",
+        "docs/program/registry/writer/runtime/sw/source/core/frmedt/tblsel.ts.json",
+        "docs/program/registry/writer/provenance/sw/source/core/frmedt/tblsel.ts.json",
+        "docs/program/registry/writer/runtime/sw/source/uibase/table/swtablerep.ts.json",
+        "docs/program/registry/writer/provenance/sw/source/uibase/table/swtablerep.ts.json",
+        "docs/program/registry/writer/runtime/sw/browser/editor/WriterEditableTable.tsx.json",
+        "docs/program/registry/writer/provenance/sw/browser/editor/WriterEditableTable.tsx.json",
+        "docs/program/registry/writer/runtime/sw/browser/editor/browser-writer-edit-window.ts.json",
+        "docs/program/registry/writer/provenance/sw/browser/editor/browser-writer-edit-window.ts.json"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "label": "registry-build",
+      "argv": [
+        "npm",
+        "run",
+        "inventory:registry:build"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "f941feea056f9f9125ac8a96978ff0fda711beef74563b36c553fc89490f0209"
+    },
+    {
+      "label": "writer-registry",
+      "argv": [
+        "npm",
+        "run",
+        "inventory:parity:writer"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "ede54463c3e03d0e3ac267032a654438e225bd4650fced373ca7c281ed41a5a6"
+    },
+    {
+      "label": "global-registry",
+      "argv": [
+        "npm",
+        "run",
+        "inventory:registry:check"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "e66b60d7cbe3a4ab27ee2499df39425d76d811e1c03b11984640fce074d4ee31"
+    },
+    {
+      "label": "source-provenance",
+      "argv": [
+        "npm",
+        "run",
+        "check:source-provenance"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "65eeaf5fc88ed1e78871c61e7953b96b6b1c0149b9a9413c588c16839ab5f938"
+    },
+    {
+      "label": "source-tree",
+      "argv": [
+        "npm",
+        "run",
+        "check:source-tree"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "6c5bd2e3c84892b8cc26b8b1b5f06a950891f9d5988a8ef1f1496f0c252cd33e"
+    },
+    {
+      "label": "routing",
+      "argv": [
+        "node",
+        ".agentplane/policy/check-routing.mjs"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    {
+      "label": "doctor",
+      "argv": [
+        "ap",
+        "doctor"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "13f6bf449bbcb651601b110b15c0504920e0f61944dbbeb6fdc90deb4b1b6723"
+    }
+  ],
+  "inventory": {
+    "records": 16,
+    "allHistoricalFieldsAndPrefixesPreserved": true,
+    "noSemanticStatusPromotion": true,
+    "beforeSHA256": "12baf0b3092c51c8891d3558b3969be6e1560e6ecb9fa26fcd6fc246b219c0c9",
+    "currentRecordSHA256": {
+      "docs/program/registry/writer/runtime/sw/source/core/layout/wsfrm.ts.json": "dad48156abf8148b844c4af66102316e5063c04286e3aed4e5fa82b06a7a421e",
+      "docs/program/registry/writer/provenance/sw/source/core/layout/wsfrm.ts.json": "802b8b3e63425518f8c843e45bda72d73bfde644c8ef90e883f32d33c725edfc",
+      "docs/program/registry/writer/runtime/sw/source/core/layout/tabfrm.ts.json": "62d9594ba43d7a2e7ccda93ae9ad974afc78077b9b240259d62c6718dd2352a9",
+      "docs/program/registry/writer/provenance/sw/source/core/layout/tabfrm.ts.json": "c7390516db3eb894efd96be5c9dd2f32fa63aed5575bb76fc5bd1a94d4c16f9d",
+      "docs/program/registry/writer/runtime/sw/source/core/layout/newfrm.ts.json": "0e87a6ccfa04f87c98133969c8411a614ee91aed770969fd5d96ad940eef2107",
+      "docs/program/registry/writer/provenance/sw/source/core/layout/newfrm.ts.json": "7ab0697af6a2d248e96b8b0215fb29aa8c1a7700c1741cdb296f2b936c2488ba",
+      "docs/program/registry/writer/runtime/sw/source/core/frmedt/fetab.ts.json": "414059869472122b57e620c4026f85dd050b8464bd52b01420877b9ad3a26456",
+      "docs/program/registry/writer/provenance/sw/source/core/frmedt/fetab.ts.json": "d9aa7586824ffe00ab5306401d48bdddc9521d099fd580f81ae1b697c59e3ce9",
+      "docs/program/registry/writer/runtime/sw/source/core/frmedt/tblsel.ts.json": "50c872ff7a6e8a5c948d9724b4fbd66ab3799459d5f9818f537548eaf712734c",
+      "docs/program/registry/writer/provenance/sw/source/core/frmedt/tblsel.ts.json": "88b1a387dae589cf3e756657275efd42b8a69d3ca60d6b6e4a8ab4ab6318ddc7",
+      "docs/program/registry/writer/runtime/sw/source/uibase/table/swtablerep.ts.json": "1e55a806e063a60eb704c075395f38a7897e462cbe29c318cb7538a1392d555f",
+      "docs/program/registry/writer/provenance/sw/source/uibase/table/swtablerep.ts.json": "afa8e362c54e723247dea4ad1bf186768bec868f7889a704a580b7fecd206b6c",
+      "docs/program/registry/writer/runtime/sw/browser/editor/WriterEditableTable.tsx.json": "658aa462bf40e396b921f96c908772f69674efc76bf72b42b8287bba0bbee437",
+      "docs/program/registry/writer/provenance/sw/browser/editor/WriterEditableTable.tsx.json": "1eefa62f2908b2cbd28163a6e00f5dd96d9cf3b988e2a2a651d59d2dc43975c7",
+      "docs/program/registry/writer/runtime/sw/browser/editor/browser-writer-edit-window.ts.json": "c9775f788154df8a82f0e37b71e08acaef11643cee679378e58011d84ba57ce1",
+      "docs/program/registry/writer/provenance/sw/browser/editor/browser-writer-edit-window.ts.json": "3cbe7a011b884c51c59cdb11bbc092896d2703e23ee1aafdd11d8e101a9a20ba"
+    }
+  },
+  "oldAcceptanceFiles": {
+    "unchangedByteIdentical": 506,
+    "contractMigrations": [
+      "native-cell-format-client.test.tsx: explicit owning native table frame plus finally destruction; literal3000 and original-client assertions retained"
+    ]
+  },
+  "limitations": [
+    "Persistent native page/root/follows/content/redline layout and full native table scalar item ownership remain unverified.",
+    "Same-agent evaluator is explicitly non-independent.",
+    "Doctor retains three pre-existing warnings: legacy managed hook shim and two historical no-op task hashes."
+  ]
+}

@@ -1,0 +1,91 @@
+{
+  "task": "202610091043-28WPNK",
+  "status": "DONE",
+  "semanticCommit": "eb9346460b6b9dc62cd9b1463208aba079caa016",
+  "fullRawGateRemainsFailed": true,
+  "fullProfileCasesPassed": 14556,
+  "freshClosureCasesPassed": 12,
+  "allRequiredCasesHavePassingEvidence": true,
+  "passingReplay": 0,
+  "application": {
+    "files": 318,
+    "fullCompleteUnchangedModules": 316,
+    "closedModules": 2,
+    "summary": {
+      "lines": {
+        "total": 18298,
+        "covered": 18298,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 20093,
+        "covered": 20093,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 4589,
+        "covered": 4589,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 14695,
+        "covered": 14695,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "mapSHA256": "1ec86bce3d31a58729c5690e3353c06181c01d7b8f2e177891239dbb3c793267",
+    "proofSHA256": "e54deac82be993676cedff5c16448a41aeba9f602d66ea0faa8c11216e2fd0b9"
+  },
+  "inventory": {
+    "files": 42,
+    "summary": {
+      "lines": {
+        "total": 1664,
+        "covered": 1664,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 1730,
+        "covered": 1730,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 434,
+        "covered": 434,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 1287,
+        "covered": 1287,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "mapSHA256": "add499416ee23c44fe6e05a712fa815ac0217181aec65e18ed31c9c94e3d950e",
+    "proofSHA256": "1484960f526dac5d7f47eb95184f378ccb874c07574975447a0060115a5be016",
+    "incomplete": []
+  },
+  "existingProductionAndTestsUnchanged": true,
+  "canonicalPrefixesRetained": true,
+  "pauseRequired": true,
+  "overallGoalComplete": false
+}

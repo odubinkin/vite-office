@@ -12,13 +12,17 @@ export function CheckSplitCells(shell: SwFEShell, divisions: number): boolean {
     frame = new SwTabFrame(table),
     upperWidth = page.width - page.leftMargin - page.rightMargin,
     minimum = (divisions * 23) & 0xffff;
-  if (boxes.length === 0 || frame.Format(upperWidth).width <= 0) return false;
-  return table.GetTabLines().every(
-    /** Checks actual selected boxes without replacing layout/model owners. @param line - Native row. @returns Whether admitted. */
-    (line) =>
-      line.GetTabBoxes().every(
-        /** Tests selected cell print width. @param box - Actual box. @param column - Coordinate. @returns Whether wide enough. */
-        (box) => !boxes.includes(box) || frame.GetBoxPrintWidth(box, upperWidth) >= minimum,
-      ),
-  );
+  try {
+    if (boxes.length === 0 || frame.Format(upperWidth).width <= 0) return false;
+    return table.GetTabLines().every(
+      /** Checks actual selected boxes without replacing layout/model owners. @param line - Native row. @returns Whether admitted. */
+      (line) =>
+        line.GetTabBoxes().every(
+          /** Tests selected cell print width. @param box - Actual box. @param column - Coordinate. @returns Whether wide enough. */
+          (box) => !boxes.includes(box) || frame.GetBoxPrintWidth(box, upperWidth) >= minimum,
+        ),
+    );
+  } finally {
+    frame.DestroyImpl();
+  }
 }

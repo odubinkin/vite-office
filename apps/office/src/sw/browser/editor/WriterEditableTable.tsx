@@ -79,79 +79,83 @@ function browserCellBoxStyle(item: SvxBoxItem, fixedGuide: boolean): React.CSSPr
   activeParagraphId?: string;
   retainParagraphElement?: (id: string, element: HTMLParagraphElement | null) => void;
 }>): React.JSX.Element {
-  const format = table.GetFormat();
-  const resolved = new Map<string, Style>();
-  if (format.borderModel === "collapsing")
-    new SwTabFramePainter(table).PaintLines(
-      /** Projects resolved native line ownership onto the existing flat cell paint device. @param line - Native interval. @param horizontal - Native family. @returns Nothing. */
-      (line, horizontal) => {
-        resolved.set(`${horizontal}:${line.mnKey}:${line.mnStartPos}`, line.maAttribute);
-      },
+  const nativeTable = new SwTabFrame(table);
+  try {
+    const format = table.GetFormat();
+    const resolved = new Map<string, Style>();
+    if (format.borderModel === "collapsing")
+      new SwTabFramePainter(table).PaintLines(
+        /** Projects resolved native line ownership onto the existing flat cell paint device. @param line - Native interval. @param horizontal - Native family. @returns Nothing. */
+        (line, horizontal) => {
+          resolved.set(`${horizontal}:${line.mnKey}:${line.mnStartPos}`, line.maAttribute);
+        },
+      );
+    const grid = new SwXMLTableLines(table);
+    const columnWidth = grid.GetColumnWidths().reduce(
+      /** Adds native column reference widths. @param sum - Previous extent. @param width - Column width. @returns Total. */
+      (sum, width) => sum + width,
+      0,
     );
-  const grid = new SwXMLTableLines(table);
-  const columnWidth = grid.GetColumnWidths().reduce(
-    /** Adds native column reference widths. @param sum - Previous extent. @param width - Column width. @returns Total. */
-    (sum, width) => sum + width,
-    0,
-  );
-  const area =
-    printArea ?? new SwTabFrame(table).Format(availableWidth ?? format.width ?? columnWidth);
-  return (
-    <div className="max-w-full" data-writer-table={table.GetName()}>
-      <table
-        aria-label={table.GetName()}
-        className="table-fixed"
-        ref={retainElement}
-        style={{
-          tableLayout: "fixed",
-          borderCollapse: format.borderModel === "collapsing" ? "collapse" : "separate",
-          borderSpacing: 0,
-          width: area.width / 15,
-          marginLeft: area.left / 15,
-          marginRight: area.right / 15,
-          marginTop: firstRow === 0 ? (format.marginTop ?? 0) / 15 : 0,
-          marginBottom:
-            lastRow === table.GetTabLines().length - 1 ? (format.marginBottom ?? 0) / 15 : 0,
-        }}
-      >
-        <colgroup>
-          {grid.GetColumnWidths().map(
-            /** Handles the browser table interaction. @param argument1 - Callback input. @param argument2 - Callback input. @returns Callback result. */ (
-              width,
-              index,
-            ) => (
-              <col
-                key={index}
-                style={{
-                  width: `${columnWidth === 0 ? 100 / grid.GetColumnWidths().length : (width * 100) / columnWidth}%`,
-                }}
-              />
-            ),
-          )}
-        </colgroup>
-        <tbody>
-          {[
-            ...Array.from(
-              { length: repeatedHeaderRows },
-              /** Addresses original rows in repeated headlines. @param _slot - Array slot. @param index - Original row index. @returns Index. */
-              (_slot, index) => index,
-            ),
-            ...Array.from(
-              { length: lastRow - firstRow + 1 },
-              /** Addresses the source rows of this table fragment. @param _slot - Array slot. @param index - Fragment offset. @returns Original index. */
-              (_slot, index) => firstRow + index,
-            ),
-          ].map(
-            /** Handles the browser table interaction. @param argument1 - Callback input. @param argument2 - Callback input. @returns Callback result. */ (
-              rowIndex,
-              frameRowIndex,
-            ) => {
-              const row = table.GetTabLines()[rowIndex] as ReturnType<
-                SwTable["GetTabLines"]
-              >[number];
-              const nativeRow = new SwRowFrame(row);
-              const isRepeatedHeadline = frameRowIndex < repeatedHeaderRows;
-              try {
+    const area = printArea ?? nativeTable.Format(availableWidth ?? format.width ?? columnWidth);
+    return (
+      <div className="max-w-full" data-writer-table={table.GetName()}>
+        <table
+          aria-label={table.GetName()}
+          className="table-fixed"
+          ref={retainElement}
+          style={{
+            tableLayout: "fixed",
+            borderCollapse: format.borderModel === "collapsing" ? "collapse" : "separate",
+            borderSpacing: 0,
+            width: area.width / 15,
+            marginLeft: area.left / 15,
+            marginRight: area.right / 15,
+            marginTop: firstRow === 0 ? (format.marginTop ?? 0) / 15 : 0,
+            marginBottom:
+              lastRow === table.GetTabLines().length - 1 ? (format.marginBottom ?? 0) / 15 : 0,
+          }}
+        >
+          <colgroup>
+            {grid.GetColumnWidths().map(
+              /** Handles the browser table interaction. @param argument1 - Callback input. @param argument2 - Callback input. @returns Callback result. */ (
+                width,
+                index,
+              ) => (
+                <col
+                  key={index}
+                  style={{
+                    width: `${columnWidth === 0 ? 100 / grid.GetColumnWidths().length : (width * 100) / columnWidth}%`,
+                  }}
+                />
+              ),
+            )}
+          </colgroup>
+          <tbody>
+            {[
+              ...Array.from(
+                { length: repeatedHeaderRows },
+                /** Addresses original rows in repeated headlines. @param _slot - Array slot. @param index - Original row index. @returns Index. */
+                (_slot, index) => index,
+              ),
+              ...Array.from(
+                { length: lastRow - firstRow + 1 },
+                /** Addresses the source rows of this table fragment. @param _slot - Array slot. @param index - Fragment offset. @returns Original index. */
+                (_slot, index) => firstRow + index,
+              ),
+            ].map(
+              /** Handles the browser table interaction. @param argument1 - Callback input. @param argument2 - Callback input. @returns Callback result. */ (
+                rowIndex,
+                frameRowIndex,
+              ) => {
+                const row = table.GetTabLines()[rowIndex] as ReturnType<
+                  SwTable["GetTabLines"]
+                >[number];
+                let rowFrame = nativeTable.Lower() as SwRowFrame | undefined;
+                while (rowFrame !== undefined && rowFrame.GetTabLine() !== row)
+                  rowFrame = rowFrame.GetNext() as SwRowFrame | undefined;
+                if (rowFrame === undefined) return null;
+                const nativeRow = rowFrame;
+                const isRepeatedHeadline = frameRowIndex < repeatedHeaderRows;
                 let nativeCell = nativeRow.Lower();
                 return (
                   <tr
@@ -309,13 +313,13 @@ function browserCellBoxStyle(item: SvxBoxItem, fixedGuide: boolean): React.CSSPr
                     )}
                   </tr>
                 );
-              } finally {
-                nativeRow.DestroyImpl();
-              }
-            },
-          )}
-        </tbody>
-      </table>
-    </div>
-  );
+              },
+            )}
+          </tbody>
+        </table>
+      </div>
+    );
+  } finally {
+    nativeTable.DestroyImpl();
+  }
 }

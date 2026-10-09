@@ -1,0 +1,313 @@
+{
+  "profileSHA256": "c40747168eece188e2db15f5e4492fb435a905e47ebd574b11d7432da2551bcf",
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "head": "0d3d84ad9c32ebdd3d97276881ce116b6db0830a",
+  "parentPrefix": {
+    "chars": 734106,
+    "sha256": "5178aca542ddaae5b9199c23f74c601125744acf6d9b177e299132b499d71cf9"
+  },
+  "commands": [
+    {
+      "name": "static",
+      "args": [
+        "npm",
+        "run",
+        "test:static"
+      ],
+      "code": 0,
+      "signal": null,
+      "durationMs": 10199,
+      "outputSha256": "ca5b8846970578b33d626b419cb6e5a09731578afb9a3f32dcaea1cf404a914a"
+    },
+    {
+      "name": "app",
+      "args": [
+        "npm",
+        "run",
+        "test:coverage",
+        "--workspace",
+        "@vite-office/office",
+        "--",
+        "--reporter=default",
+        "--reporter=json",
+        "--outputFile=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/RAWD0Q-app-tests.json",
+        "--coverage.reporter=text",
+        "--coverage.reporter=json",
+        "--coverage.reporter=json-summary",
+        "--coverage.reportsDirectory=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/RAWD0Q-app-coverage",
+        "--coverage.reportOnFailure=true"
+      ],
+      "code": 1,
+      "signal": null,
+      "durationMs": 370987,
+      "outputSha256": "e35eec6e990380b30d8a81bc97112adbb2792e0de2365a94f3715f2dd15d7240"
+    },
+    {
+      "name": "inventory",
+      "args": [
+        "npm",
+        "run",
+        "test:inventory:coverage",
+        "--",
+        "--reporter=default",
+        "--reporter=json",
+        "--outputFile=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/RAWD0Q-inventory-tests.json",
+        "--coverage.reporter=text",
+        "--coverage.reporter=json",
+        "--coverage.reporter=json-summary",
+        "--coverage.reportsDirectory=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/RAWD0Q-inventory-coverage",
+        "--coverage.reportOnFailure=true"
+      ],
+      "code": 0,
+      "signal": null,
+      "durationMs": 31873,
+      "outputSha256": "bad2d542940a8506f18345d8367b235fa8144cedf6f8e2bccc42dffb4cf31bb1"
+    },
+    {
+      "name": "infrastructure",
+      "args": [
+        "/Users/odubinkin/Projects/vite-office-writer/node_modules/.bin/vitest",
+        "run",
+        "scripts/check-legacy-font-boundary.test.ts",
+        "scripts/check-module-boundaries.test.ts",
+        "scripts/check-source-provenance.test.ts",
+        "scripts/native-column-item-boundary.test.ts",
+        "scripts/native-ruler-boundary.test.ts",
+        "scripts/test-projects.test.ts",
+        "scripts/writer-ui-resource-model.test.ts",
+        "--reporter=default",
+        "--reporter=json",
+        "--outputFile=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/RAWD0Q-infrastructure-tests.json"
+      ],
+      "code": 0,
+      "signal": null,
+      "durationMs": 4580,
+      "outputSha256": "d737eb6a1d102988c2743e57022952fc836c19d47b1c4cdcd9225e69a6273915"
+    },
+    {
+      "name": "chromium",
+      "args": [
+        "/Users/odubinkin/Projects/vite-office-writer/node_modules/.bin/playwright",
+        "test",
+        "--config",
+        "apps/office/playwright.config.ts",
+        "--reporter=json"
+      ],
+      "code": 0,
+      "signal": null,
+      "durationMs": 209380,
+      "outputSha256": "81c74cb3009a0651ee6a362044f21cb9097e604219784a855c8cd64e53f5d83a"
+    }
+  ],
+  "upstreamRestored": true,
+  "unchangedTrackedFiles": 2039,
+  "changedTracked": [],
+  "suites": {
+    "application": {
+      "reportSHA256": "5d42c9559690479ee132fcbf4ce0f57c6518cbbfea76cbd22b3469ed9d3c48ef",
+      "files": 513,
+      "expectedFiles": 513,
+      "cases": 14110,
+      "passed": 14110,
+      "failed": 0,
+      "skipped": 0,
+      "missing": [],
+      "extra": [],
+      "repeatedDisplayNames": 9,
+      "caseIdentity": "file plus ordered test position; repeated parameterized display names are distinct test positions"
+    },
+    "inventory": {
+      "reportSHA256": "97bab281eba46f0d3fe3febf7be076404d38706fca84f532beac905945708ce1",
+      "files": 38,
+      "expectedFiles": 38,
+      "cases": 122,
+      "passed": 122,
+      "failed": 0,
+      "skipped": 0,
+      "missing": [],
+      "extra": [],
+      "duplicateCases": 0
+    },
+    "infrastructure": {
+      "reportSHA256": "8863f906fcf645ebb6b66685ef57d9325a8cacc7d23f20fa191be0d07c22dcd3",
+      "files": 7,
+      "expectedFiles": 7,
+      "cases": 21,
+      "passed": 21,
+      "failed": 0,
+      "skipped": 0,
+      "missing": [],
+      "extra": [],
+      "duplicateCases": 0
+    },
+    "chromium": {
+      "reportSHA256": "55ffd35fce3e4de9545bc9ea54592d0df05542f68f4516c7b286cc8a8b5b5ff4",
+      "files": 120,
+      "expectedFiles": 120,
+      "cases": 303,
+      "passed": 303,
+      "failed": 0,
+      "skipped": 0,
+      "flaky": 0,
+      "retries": 0,
+      "missing": [],
+      "extra": [],
+      "globalErrors": []
+    }
+  },
+  "coverage": {
+    "app": {
+      "files": 318,
+      "summary": {
+        "lines": {
+          "total": 18298,
+          "covered": 18297,
+          "skipped": 0,
+          "pct": 99.99
+        },
+        "statements": {
+          "total": 20093,
+          "covered": 20092,
+          "skipped": 0,
+          "pct": 99.99
+        },
+        "functions": {
+          "total": 4589,
+          "covered": 4588,
+          "skipped": 0,
+          "pct": 99.97
+        },
+        "branches": {
+          "total": 14695,
+          "covered": 14694,
+          "skipped": 0,
+          "pct": 99.99
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "mapSHA256": "1de6055fd2984e3784630c873cb9d0c5e71435e16d16ca7e392bbdfe0fbd7a31",
+      "proofSHA256": "55ed1774080b07338fdfeda2cc341b70f5546603895a51066026e70481e907cc",
+      "incomplete": [
+        {
+          "path": "apps/office/src/sw/inc/swtblfmt.ts",
+          "summary": {
+            "lines": {
+              "total": 18,
+              "covered": 17,
+              "skipped": 0,
+              "pct": 94.44
+            },
+            "functions": {
+              "total": 8,
+              "covered": 7,
+              "skipped": 0,
+              "pct": 87.5
+            },
+            "statements": {
+              "total": 18,
+              "covered": 17,
+              "skipped": 0,
+              "pct": 94.44
+            },
+            "branches": {
+              "total": 2,
+              "covered": 2,
+              "skipped": 0,
+              "pct": 100
+            }
+          }
+        },
+        {
+          "path": "apps/office/src/sw/source/core/layout/paintfrm.ts",
+          "summary": {
+            "lines": {
+              "total": 71,
+              "covered": 71,
+              "skipped": 0,
+              "pct": 100
+            },
+            "functions": {
+              "total": 9,
+              "covered": 9,
+              "skipped": 0,
+              "pct": 100
+            },
+            "statements": {
+              "total": 76,
+              "covered": 76,
+              "skipped": 0,
+              "pct": 100
+            },
+            "branches": {
+              "total": 26,
+              "covered": 25,
+              "skipped": 0,
+              "pct": 96.15
+            }
+          }
+        }
+      ],
+      "negativeInferredElseCounter": {
+        "path": "apps/office/src/sw/source/core/layout/paintfrm.ts",
+        "branchId": "12",
+        "arm": 1,
+        "count": -163,
+        "preservedRaw": true
+      }
+    },
+    "inventory": {
+      "files": 42,
+      "summary": {
+        "lines": {
+          "total": 1664,
+          "covered": 1664,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 1730,
+          "covered": 1730,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 434,
+          "covered": 434,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 1287,
+          "covered": 1287,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "mapSHA256": "add499416ee23c44fe6e05a712fa815ac0217181aec65e18ed31c9c94e3d950e",
+      "proofSHA256": "1484960f526dac5d7f47eb95184f378ccb874c07574975447a0060115a5be016",
+      "incomplete": []
+    }
+  },
+  "totals": {
+    "passed": 14556,
+    "failed": 0,
+    "skipped": 0,
+    "files": 678
+  },
+  "green": false,
+  "fullRawGatePassed": false,
+  "closureTask": "202610091043-28WPNK",
+  "rawFilesStored": "ignored application dependency cache only",
+  "auditSHA256": "c926c3d49a316e1cf3dcef376791a088f6e5f29e46e8ad7509ffc8621542e9e3"
+}

@@ -1,0 +1,193 @@
+{
+  "upstreamAbsent": true,
+  "restored": true,
+  "commands": [
+    {
+      "label": "format",
+      "argv": [
+        "node_modules/.bin/prettier",
+        "--check",
+        "apps/office/src/sw/browser/editor/WriterPlainTextEditor.tsx",
+        "apps/office/src/sw/browser/presentation/writer-view.tsx",
+        "apps/office/src/sw/browser/editor/native-editor-layout-owner.test.tsx",
+        "apps/office/src/sw/browser/editor/WriterPlainTextEditor.empty.test.tsx",
+        "apps/office/src/sw/browser/presentation/WriterPageLayout.test.tsx",
+        "docs/program/registry/writer/runtime/sw/browser/editor/WriterPlainTextEditor.tsx.json",
+        "docs/program/registry/writer/runtime/sw/browser/presentation/writer-view.tsx.json",
+        "docs/program/registry/writer/provenance/sw/browser/editor/WriterPlainTextEditor.tsx.json",
+        "docs/program/registry/writer/provenance/sw/browser/presentation/writer-view.tsx.json"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "label": "lint",
+      "argv": [
+        "node_modules/.bin/eslint",
+        "apps/office/src/sw/browser/editor/WriterPlainTextEditor.tsx",
+        "apps/office/src/sw/browser/presentation/writer-view.tsx",
+        "apps/office/src/sw/browser/editor/native-editor-layout-owner.test.tsx",
+        "apps/office/src/sw/browser/editor/WriterPlainTextEditor.empty.test.tsx",
+        "apps/office/src/sw/browser/presentation/WriterPageLayout.test.tsx",
+        "--max-warnings",
+        "0"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "typecheck",
+      "argv": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed"
+    },
+    {
+      "label": "dependencies",
+      "argv": [
+        "npm",
+        "run",
+        "check:dependencies"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "49df58267de6ad6b7507189e009e8341f0e207801075535c840b5f2eda09e6bb"
+    },
+    {
+      "label": "docs",
+      "argv": [
+        "npm",
+        "run",
+        "check:docs"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "62254940c6476afcccc8ec73f27f721ee04bc6f440319a96c32cc2b989cac566"
+    },
+    {
+      "label": "file-size",
+      "argv": [
+        "npm",
+        "run",
+        "check:file-size"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "82c1bf6b44f5f4a84c4c2a64d422089815c51ca656c711cb1715a16f0ea6a550"
+    },
+    {
+      "label": "static",
+      "argv": [
+        "npm",
+        "run",
+        "test:static"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "0999e272085ef75af69056565f075021ad559ebc1a006bd175b8db54fba1e8af"
+    },
+    {
+      "label": "registry-build",
+      "argv": [
+        "npm",
+        "run",
+        "inventory:registry:build"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "f941feea056f9f9125ac8a96978ff0fda711beef74563b36c553fc89490f0209"
+    },
+    {
+      "label": "writer-registry",
+      "argv": [
+        "npm",
+        "run",
+        "inventory:parity:writer"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "f9fe454eb3575f40e6cdbf8262f55f06b82eb8be271789700dceeade59499a90"
+    },
+    {
+      "label": "global-registry",
+      "argv": [
+        "npm",
+        "run",
+        "inventory:registry:check"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "b836330b215e3f4f24ddb27ac2a3b2d07b0d38da723799d677a760950aff15dc"
+    },
+    {
+      "label": "source-provenance",
+      "argv": [
+        "npm",
+        "run",
+        "check:source-provenance"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "65eeaf5fc88ed1e78871c61e7953b96b6b1c0149b9a9413c588c16839ab5f938"
+    },
+    {
+      "label": "source-tree",
+      "argv": [
+        "npm",
+        "run",
+        "check:source-tree"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "6c5bd2e3c84892b8cc26b8b1b5f06a950891f9d5988a8ef1f1496f0c252cd33e"
+    },
+    {
+      "label": "routing",
+      "argv": [
+        "node",
+        ".agentplane/policy/check-routing.mjs"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    {
+      "label": "doctor",
+      "argv": [
+        "ap",
+        "doctor"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "d87888ba47caea63b1a5c78bddc8ea0ac0f0f210af6f859666aca6d66ef3c323"
+    }
+  ],
+  "upstreamPin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "upstreamClean": true,
+  "inventory": {
+    "records": 4,
+    "allHistoricalFieldsAndPrefixesPreserved": true,
+    "noSemanticStatusPromotion": true,
+    "beforeSHA256": "d8b9e077b78f246fe73f819b794d854ee838c99598a1b0052504ea95a82c0dcd",
+    "currentRecordSHA256": {
+      "docs/program/registry/writer/runtime/sw/browser/editor/WriterPlainTextEditor.tsx.json": "9bee6ddbe8c9c9b2dff0b32ce2a04fbe558de769e181567be5ce08bc744b3edc",
+      "docs/program/registry/writer/runtime/sw/browser/presentation/writer-view.tsx.json": "a5d4b3d42dc450a81abad27b36a8148925fadfd60d68b926c4b63d83caab8a42",
+      "docs/program/registry/writer/provenance/sw/browser/editor/WriterPlainTextEditor.tsx.json": "077994ea26e3858d3d5d4010d0452ff8c45b946dd0b7786cb049b0ea621a08da",
+      "docs/program/registry/writer/provenance/sw/browser/presentation/writer-view.tsx.json": "f7a7c31f17a640dc371d4bef1c447aff81f5e8dcca773aeb03f16e8320f9ce8b"
+    }
+  },
+  "oldAcceptanceFiles": {
+    "priorCommit": "50eb4e7426ca",
+    "unchangedByteIdentical": 509,
+    "contractMigrations": [
+      {
+        "path": "apps/office/src/sw/browser/editor/WriterPlainTextEditor.empty.test.tsx",
+        "originalAssertions": 1,
+        "allOriginalAssertionsPreserved": true,
+        "change": "Fixture owns an actual SwView/SwDocShell; renderer borrows original edit-window view-shell layout. Close actual owners after DOM teardown."
+      },
+      {
+        "path": "apps/office/src/sw/browser/presentation/WriterPageLayout.test.tsx",
+        "originalAssertions": 65,
+        "allOriginalAssertionsPreserved": true,
+        "change": "Fixture owns an actual SwView/SwDocShell; renderer borrows original edit-window view-shell layout. Close actual owners after DOM teardown."
+      }
+    ]
+  },
+  "limitations": [
+    "Same-agent evaluator is explicitly non-independent.",
+    "Doctor zero errors,two historical warnings: managed hook shim readiness and no-op PJV0JK missing semantic hash."
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "task_id": "202610091043-28WPNK",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-09T10:56:32.159Z",
+  "verdict": "pass",
+  "summary": "Non-independent same-agent review:12 unique fresh passes, source-bound318app/42inventory all-four100 and all declared checks pass; no production/old-test edits or semantic promotion.",
+  "evaluated_sha": "eb9346460b6b9dc62cd9b1463208aba079caa016",
+  "blueprint_digest": "94e0901a5e7777bd909b8a80dd184c618cdc8463570636130d00e30162d01642",
+  "findings": [
+    "Whole fresh full maps are reused only for316 identical complete sources;2identical-source closure modules use entire actual merged maps with every complete location map equal. Failed negative/partial raw profiles retained, no clamp or selective patch. Scope remains coverage verification; native root/frame/follows and whole parity incomplete. Pause after checkpoint finish as requested."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610091043-28WPNK/README.md",
+    ".agentplane/tasks/202610091043-28WPNK/evidence/coverage.json",
+    ".agentplane/tasks/202610091043-28WPNK/evidence/checks.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}

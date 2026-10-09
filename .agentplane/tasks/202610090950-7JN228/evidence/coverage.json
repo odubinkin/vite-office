@@ -1,0 +1,180 @@
+{
+  "changed": {
+    "files": 2,
+    "summary": {
+      "lines": {
+        "total": 348,
+        "covered": 348,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 368,
+        "covered": 368,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 128,
+        "covered": 128,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 237,
+        "covered": 237,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "sourceHashes": {
+      "apps/office/src/sw/browser/editor/WriterPlainTextEditor.tsx": "565ad55d8b251fae7980dadfea1a15e5de289839b69590cf6cd92f5445a36f99",
+      "apps/office/src/sw/browser/presentation/writer-view.tsx": "702e5104416cb0552de434f04428aaebab504bb3a987476cb1866f0d79a0fea3"
+    }
+  },
+  "application": {
+    "files": 318,
+    "wholeUnchangedFiles": 316,
+    "summary": {
+      "lines": {
+        "total": 18298,
+        "covered": 18298,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 20093,
+        "covered": 20093,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 4589,
+        "covered": 4589,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 14695,
+        "covered": 14695,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "mapSHA256": "8afa4e35b2d2a73fc88b54f845436736f776a5d618fb7c1b2bca32cd9db7bfff",
+    "proofSHA256": "eef3e4f70f4057eb9300682395b16df740ed949293f865f3c601b632e0381491"
+  },
+  "sourceBinding": {
+    "priorTask": "202610090929-2C4JM4",
+    "priorMapSHA256": "b492646f29b2c900b56fb9bfcbb9757145737d9ad6638b7bcd7462aa0758ded1",
+    "priorProofSHA256": "deb96c796f72f5cdf6888d7628270134338f0faf8f2353898f7ca8994b1e00fe",
+    "rawInputs": [
+      {
+        "profile": "initial",
+        "SHA256": "1f06833a4ba37379a476b2d3f350bf78939535e458bc255f80300a7218d09e0a"
+      },
+      {
+        "profile": "failure-closure",
+        "SHA256": "36bd06811f4b1ba543e21646731710000d43cbb470f70e8ed56fce6c0a0765dc"
+      },
+      {
+        "profile": "coverage-closure",
+        "SHA256": "72e2f827c1e26261b15822c91fb60e1925a22e11c8f8efcbc737a8001d62fd76"
+      },
+      {
+        "profile": "focus-closure",
+        "SHA256": "b73f82e12a8f9e73d318e89fc43371f243e392c0ee46c555390b6ac69984d6fd"
+      }
+    ],
+    "completeUnchangedRegions": [
+      {
+        "path": "apps/office/src/sw/browser/editor/WriterPlainTextEditor.tsx",
+        "oldSourceSHA256": "53d8d54363ad531c760afb4eaa73f2e6187d5b7556b8bd538ba242a5d0adc30c",
+        "currentSourceSHA256": "565ad55d8b251fae7980dadfea1a15e5de289839b69590cf6cd92f5445a36f99",
+        "counts": {
+          "statements": 103,
+          "functions": 37,
+          "branches": 27
+        },
+        "regions": 41,
+        "exactCompleteDeclarationBodyEnclosingConditionsAndAllLocations": true,
+        "regionProofSHA256": "e42efe87ac8b869e2bed5cbcc7773676271af8c6b24376baa4f7e82b501ebf1e"
+      },
+      {
+        "path": "apps/office/src/sw/browser/presentation/writer-view.tsx",
+        "oldSourceSHA256": "782755425f440a2438a2994ee429a6ee7b37e4f65ca8e5f1855c9d18db8f9de1",
+        "currentSourceSHA256": "702e5104416cb0552de434f04428aaebab504bb3a987476cb1866f0d79a0fea3",
+        "counts": {
+          "statements": 187,
+          "functions": 70,
+          "branches": 48
+        },
+        "regions": 81,
+        "exactCompleteDeclarationBodyEnclosingConditionsAndAllLocations": true,
+        "regionProofSHA256": "18814e6ce97cd40cbb58201fa4e1719f1a892adb0c20c80bdb3d311db564804f"
+      }
+    ],
+    "changedOuterFunctionTransfer": false,
+    "counterNormalization": false
+  },
+  "targeted": {
+    "profiles": [
+      {
+        "name": "initial",
+        "passed": 155,
+        "failed": 1,
+        "skipped": 0,
+        "reportSHA256": "369b942ed2b1f1f579d0eb1a0afb46a7bae2ef520cfe223746687b7a323c04ab"
+      },
+      {
+        "name": "failure-closure",
+        "passed": 27,
+        "failed": 0,
+        "skipped": 3,
+        "reportSHA256": "33a07970fb8113b3a138ee68f586d7410d0eac753b839ad2634f81d0cb2c543f"
+      },
+      {
+        "name": "coverage-closure",
+        "passed": 19,
+        "failed": 0,
+        "skipped": 4,
+        "reportSHA256": "e463383c75a64ddea8a27de4dc772b2b0a45b5f26d0ca4470164548489c03f73"
+      },
+      {
+        "name": "focus-closure",
+        "passed": 1,
+        "failed": 0,
+        "skipped": 8,
+        "reportSHA256": "907053298262946cd94f6f0dd358007eab1e5cdc42f6e9f576c2c2d0d5bd0cf5"
+      }
+    ],
+    "uniquePassed": 202,
+    "unresolved": 0,
+    "passingReplay": 0,
+    "fresh": 5
+  },
+  "rawThresholdExitsRetained": true,
+  "rawLocation": "Ignored apps/office/node_modules/.cache/parity-coverage; raw reports/maps/helpers remain outside AgentPlane.",
+  "limitations": [
+    "Source-bound coverage uses historical counters only for exactly unchanged sources or complete unchanged declarations and mapped locations; no fresh full253.",
+    "Native root frame-format/page/body/follows and full overall parity remain unverified.",
+    "WriterWorkbench retains initially selected viewStore if session props are replaced: recorded next functional follow-up."
+  ],
+  "cadence": {
+    "lastFull": 247,
+    "nextFull": 257,
+    "pauseAfterNextFullAndVerifiedFailureFixes": true
+  }
+}

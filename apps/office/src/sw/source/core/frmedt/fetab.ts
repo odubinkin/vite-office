@@ -293,7 +293,13 @@ export abstract class SwFEShell extends SwEditShell {
   private GetTabCols_(result: SwTabCols, table: SwTable, start: SwTableBox): boolean {
     const page = this.GetDoc().GetPageDesc().GetValue();
     const upperWidth = page.width - page.leftMargin - page.rightMargin;
-    const area = new SwTabFrame(table).Format(upperWidth);
+    const frame = new SwTabFrame(table);
+    let area;
+    try {
+      area = frame.Format(upperWidth);
+    } finally {
+      frame.DestroyImpl();
+    }
     result.SetLeftMin(page.leftMargin);
     result.SetLeft(area.left);
     result.SetRight(area.left + area.width);

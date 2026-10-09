@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "task_id": "202610090835-4ZF0N4",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-09T09:21:19.353Z",
+  "verdict": "pass",
+  "summary": "Same-agent non-independent review: original registered native table/row/cell hierarchy and deterministic consumer lifetimes satisfy the bounded leaf scope;232 targeted cases and all declared gates pass.",
+  "evaluated_sha": "1b7dd23819577fb36c0f87fda4327efcf4ba801f",
+  "blueprint_digest": "2688b63f96bebdadb203e4d8c0cdf9a6a170a7ac2f3149f69495858b57c698ec",
+  "findings": [
+    "SwTabFrame now inherits SwLayoutFrame, registers the original table format, links nonempty original native row/cell lowers, and borrows cell widths. JSX owns one hierarchy; temporary geometry/flow/split/dialog consumers and retained mouse samples release clients in finally or replacement/unmount.",
+    "Source-bound exact all-four100 uses actual current maps plus complete unchanged declarations/bodies/enclosing conditions/all mapped locations. Initial discarded maps required one approved210 passing recovery replay; raw failures retained, later closures only failed/new/unexecuted.506 old acceptance files byte-identical, one literal-preserving ownership migration.",
+    "All16 canonical runtime/provenance records preserve old status/default/classification and evidence prefixes, without whole module or goal promotion. Registry build/scoped/global/provenance/tree/routing pass;doctor0errors with3 prior warnings."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610090835-4ZF0N4/README.md",
+    ".agentplane/tasks/202610090835-4ZF0N4/evidence/checks.json",
+    ".agentplane/tasks/202610090835-4ZF0N4/evidence/coverage.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "This review is not independent. Persistent native page/root/follows/content/redline/table-item and whole UI/kernel parity remain subsequent work; registered I/O/recovery deviations unchanged. Last full247,no full251."
+  ]
+}

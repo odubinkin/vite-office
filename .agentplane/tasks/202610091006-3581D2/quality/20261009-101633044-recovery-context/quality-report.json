@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "task_id": "202610091006-3581D2",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-09T10:16:33.044Z",
+  "verdict": "pass",
+  "summary": "Explicitly non-independent same-agent evaluation: workbench presentation follows original current view/store identity and exact borrowed versus local lifetime.216 unique related cases including6 fresh pass in one upstream-absent profile; source-bound changed/app all-four100 and static/inventory gates pass.",
+  "evaluated_sha": "98276be56d86e8ed2905c5054a6a44fef0340e3d",
+  "blueprint_digest": "2e7bd6cfb09ea9f65b1212e8588b953f18d827f923368cef3c6d8bb9cdfe3784",
+  "findings": [
+    "Actual mounted supplied/local view changes retain current native renderer root, text and original cell notifier updates. Owned stores close on replacement/unmount; borrowed stores remain live. Two canonical full historical field/status/default/classification/evidence prefixes retained;512 prior test files byte-identical. Native projection/observer/core and protected I/O/recovery/settings behavior unchanged."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610091006-3581D2/README.md",
+    ".agentplane/tasks/202610091006-3581D2/evidence/coverage.json",
+    ".agentplane/tasks/202610091006-3581D2/evidence/checks.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Review is non-independent. Render-time local store creation and native root/frame-format/page/body/follows/lifetime remain unverified. No fresh full254; next full257 then verify failure repairs and pause goal."
+  ]
+}

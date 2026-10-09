@@ -41,6 +41,7 @@ export class BrowserWriterEditWindow {
   private suppressNextCommittedInput = false;
   private root: HTMLElement | undefined;
   private tableCapture = false;
+  private tableFrames: SwTabFrame[] = [];
   private tableBorderGuide: HTMLDivElement | undefined;
   private suppressBorderClick = false;
 
@@ -135,6 +136,8 @@ export class BrowserWriterEditWindow {
       this.suppressBorderClick = false;
       this.root = undefined;
       this.editWindow.SetTableMouseFrames([]);
+      for (const frame of this.tableFrames) frame.DestroyImpl();
+      this.tableFrames = [];
       unsubscribeSelection();
     };
   }
@@ -419,75 +422,84 @@ export class BrowserWriterEditWindow {
   /** Measures live table frames over canonical model boxes; the browser owns only device rectangles. @returns Nothing. */
   private MeasureTableFrames(): void {
     const frames: SwTabFrame[] = [];
-    if (this.root !== undefined)
-      for (const element of this.root.querySelectorAll<HTMLTableElement>("table")) {
-        const table = this.editWindow
-          .GetDoc()
-          .GetTables()
-          .find(
-            /** Resolves the existing mounted owner. @param owner - Canonical table. @returns Whether named by the frame. */
-            (owner) => owner.GetName() === element.getAttribute("aria-label"),
+    let assigned = false;
+    try {
+      if (this.root !== undefined)
+        for (const element of this.root.querySelectorAll<HTMLTableElement>("table")) {
+          const table = this.editWindow
+            .GetDoc()
+            .GetTables()
+            .find(
+              /** Resolves the existing mounted owner. @param owner - Canonical table. @returns Whether named by the frame. */
+              (owner) => owner.GetName() === element.getAttribute("aria-label"),
+            );
+          if (table === undefined) continue;
+          const rect = element.getBoundingClientRect();
+          if (rect.width <= 0 || rect.height <= 0) continue;
+          const boxes = table.GetTabLines().flatMap(
+              /** Reads original box owners. @param row - Native table row. @returns Native cells. */
+              (row) => row.GetTabBoxes(),
+            ),
+            cells: SwTableMouseCell[] = [];
+          for (const cell of element.querySelectorAll<HTMLElement>("[data-writer-table-box]")) {
+            const box = boxes.find(
+              /** Resolves current section identity. @param owner - Actual box. @returns Whether mounted here. */
+              (owner) => owner.GetStartNode().GetIndex() === Number(cell.dataset.writerTableBox),
+            );
+            if (box !== undefined)
+              cells.push({
+                box,
+                rect: cell.getBoundingClientRect(),
+                repeatedHeadline: cell.closest("[data-writer-repeated-headline]") !== null,
+              });
+          }
+          if (cells.length === 0) continue;
+          const printArea = {
+            left: Math.min(
+              ...cells.map(
+                /** Reads physical cell-frame left edges. @param cell - Actual measured frame. @returns Device edge. */
+                (cell) => cell.rect.left,
+              ),
+            ),
+            right: Math.max(
+              ...cells.map(
+                /** Reads physical cell-frame right edges. @param cell - Actual measured frame. @returns Device edge. */
+                (cell) => cell.rect.right,
+              ),
+            ),
+            top: Math.min(
+              ...cells.map(
+                /** Reads physical cell-frame top edges. @param cell - Actual measured frame. @returns Device edge. */
+                (cell) => cell.rect.top,
+              ),
+            ),
+            bottom: Math.max(
+              ...cells.map(
+                /** Reads physical cell-frame bottom edges. @param cell - Actual measured frame. @returns Device edge. */
+                (cell) => cell.rect.bottom,
+              ),
+            ),
+          };
+          const previous = element.parentElement?.previousElementSibling;
+          frames.push(
+            new SwTabFrame(table, {
+              rect: printArea,
+              cells,
+              pageTop: element.closest("[data-writer-page]")?.getBoundingClientRect().top ?? 0,
+              ...(previous === null || previous === undefined
+                ? {}
+                : { previous: previous.getBoundingClientRect() }),
+            }),
           );
-        if (table === undefined) continue;
-        const rect = element.getBoundingClientRect();
-        if (rect.width <= 0 || rect.height <= 0) continue;
-        const boxes = table.GetTabLines().flatMap(
-            /** Reads original box owners. @param row - Native table row. @returns Native cells. */
-            (row) => row.GetTabBoxes(),
-          ),
-          cells: SwTableMouseCell[] = [];
-        for (const cell of element.querySelectorAll<HTMLElement>("[data-writer-table-box]")) {
-          const box = boxes.find(
-            /** Resolves current section identity. @param owner - Actual box. @returns Whether mounted here. */
-            (owner) => owner.GetStartNode().GetIndex() === Number(cell.dataset.writerTableBox),
-          );
-          if (box !== undefined)
-            cells.push({
-              box,
-              rect: cell.getBoundingClientRect(),
-              repeatedHeadline: cell.closest("[data-writer-repeated-headline]") !== null,
-            });
         }
-        if (cells.length === 0) continue;
-        const printArea = {
-          left: Math.min(
-            ...cells.map(
-              /** Reads physical cell-frame left edges. @param cell - Actual measured frame. @returns Device edge. */
-              (cell) => cell.rect.left,
-            ),
-          ),
-          right: Math.max(
-            ...cells.map(
-              /** Reads physical cell-frame right edges. @param cell - Actual measured frame. @returns Device edge. */
-              (cell) => cell.rect.right,
-            ),
-          ),
-          top: Math.min(
-            ...cells.map(
-              /** Reads physical cell-frame top edges. @param cell - Actual measured frame. @returns Device edge. */
-              (cell) => cell.rect.top,
-            ),
-          ),
-          bottom: Math.max(
-            ...cells.map(
-              /** Reads physical cell-frame bottom edges. @param cell - Actual measured frame. @returns Device edge. */
-              (cell) => cell.rect.bottom,
-            ),
-          ),
-        };
-        const previous = element.parentElement?.previousElementSibling;
-        frames.push(
-          new SwTabFrame(table, {
-            rect: printArea,
-            cells,
-            pageTop: element.closest("[data-writer-page]")?.getBoundingClientRect().top ?? 0,
-            ...(previous === null || previous === undefined
-              ? {}
-              : { previous: previous.getBoundingClientRect() }),
-          }),
-        );
-      }
-    this.editWindow.SetTableMouseFrames(frames);
+      const previous = this.tableFrames;
+      this.editWindow.SetTableMouseFrames(frames);
+      this.tableFrames = frames;
+      assigned = true;
+      for (const frame of previous) frame.DestroyImpl();
+    } finally {
+      if (!assigned) for (const frame of frames) frame.DestroyImpl();
+    }
   }
 
   /** Routes one native input intent before browser DOM mutation. @param input - Native input event. @returns Nothing. */

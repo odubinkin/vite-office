@@ -2,8 +2,10 @@
 import type { SwTable, SwTableBox, SwTableLine } from "../table/swtable";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { SwFrameSize } from "../../../inc/fmtfsize";
-import type { SwModify } from "../../../inc/calbck";
-import { SwLayoutFrame } from "./wsfrm";
+import { LegacyModifyHint, BroadcastingModify, type SwModify } from "../../../inc/calbck";
+import { SwFrame, SwLayoutFrame, SwFrameType } from "./wsfrm";
+import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
+import { RES_FRM_SIZE, RES_ROW_SPLIT, RES_VERT_ORIENT } from "../../../inc/hintids";
 import type { SwModelHint } from "../../../inc/hints";
 
 /** Owns represented flat-row height over its original native line. */
@@ -11,6 +13,7 @@ export class SwRowFrame extends SwLayoutFrame {
   /** Binds the actual row owner. @param line - Original native line. @returns Nothing. */
   public constructor(private readonly line: SwTableLine) {
     super(line.GetFrameFormat());
+    this.mnFrameType = SwFrameType.Row;
     let previous: SwCellFrame | undefined;
     for (const box of line.GetTabBoxes()) {
       const frame = new SwCellFrame(box);
@@ -29,15 +32,38 @@ export class SwRowFrame extends SwLayoutFrame {
   public override Dispose(): void {
     this.DestroyImpl();
   }
+  /** Forwards the exact native size/split item to the layout frame. @param item - Borrowed accepted pool item. @returns Nothing. */
+  protected OnFrameSize(item: SfxPoolItem): void {
+    const source = new BroadcastingModify();
+    super.SwClientNotify(source, new LegacyModifyHint(undefined, item));
+  }
   /** Follows only original-row change and history movement hints. @param source - Emitting native owner. @param hint - Typed native notification. @returns Nothing. */
   protected override SwClientNotify(source: SwModify, hint: SwModelHint): void {
     if (hint.kind === "model-transaction") {
       for (const nested of hint.hints) this.SwClientNotify(source, nested);
     } else if (hint.kind === "table-line-format-changed") {
-      if (hint.m_rTabLine === this.line) this.RegisterToFormat(hint.m_rNewFormat);
+      if (hint.m_rTabLine !== this.line) return;
+      this.RegisterToFormat(hint.m_rNewFormat);
+      this.InvalidateSize();
+      this.InvalidatePrt_();
+      this.SetCompletePaint();
+      this.ReinitializeFrameSizeAttrFlags();
     } else if (hint.kind === "move-table-line") {
-      if (hint.m_rTableLine === this.line) this.RegisterToFormat(hint.m_rNewFormat);
-    } else super.SwClientNotify(source, hint);
+      if (hint.m_rTableLine !== this.line) return;
+      this.RegisterToFormat(hint.m_rNewFormat);
+      this.InvalidateAll();
+      this.ReinitializeFrameSizeAttrFlags();
+    } else if (hint.kind === "attr-set-change") {
+      const changed = hint.m_pNew?.GetChgSet();
+      const item =
+        changed?.GetItemIfSet(RES_FRM_SIZE, false) ?? changed?.GetItemIfSet(RES_ROW_SPLIT, false);
+      if (item) this.OnFrameSize(item);
+      else super.SwClientNotify(source, hint);
+    } else if (hint.kind === "legacy-modify") {
+      if (!hint.m_pNew) super.SwClientNotify(source, hint);
+      else if (hint.m_pNew.Which() === RES_FRM_SIZE || hint.m_pNew.Which() === RES_ROW_SPLIT)
+        this.OnFrameSize(hint.m_pNew);
+    }
   }
   /** Reads the original row owner. @returns Native line. */
   public GetTabLine(): SwTableLine {
@@ -62,6 +88,7 @@ export class SwCellFrame extends SwLayoutFrame {
   /** Registers at the original native box format. @param box - Original cell model. @returns Nothing. */
   public constructor(private readonly box: SwTableBox) {
     super(box.GetFrameFormat());
+    this.mnFrameType = SwFrameType.Cell;
   }
   /** Reads the original cell identity. @returns Native box. */
   public GetTabBox(): SwTableBox {
@@ -83,10 +110,31 @@ export class SwCellFrame extends SwLayoutFrame {
     if (hint.kind === "model-transaction") {
       for (const nested of hint.hints) this.SwClientNotify(source, nested);
     } else if (hint.kind === "table-box-format-changed") {
-      if (hint.m_rTableBox === this.box) this.RegisterToFormat(hint.m_rNewFormat);
+      if (hint.m_rTableBox !== this.box) return;
+      this.RegisterToFormat(hint.m_rNewFormat);
+      this.InvalidateSize();
+      this.InvalidatePrt_();
+      this.SetCompletePaint();
     } else if (hint.kind === "move-table-box") {
-      if (hint.m_rTableBox === this.box) this.RegisterToFormat(hint.m_rNewFormat);
-    } else super.SwClientNotify(source, hint);
+      if (hint.m_rTableBox !== this.box) return;
+      this.RegisterToFormat(hint.m_rNewFormat);
+      this.InvalidateAll();
+      this.ReinitializeFrameSizeAttrFlags();
+    } else {
+      const orientation =
+        hint.kind === "legacy-modify"
+          ? hint.m_pNew?.Which() === RES_VERT_ORIENT
+            ? hint.m_pNew
+            : undefined
+          : hint.kind === "attr-set-change"
+            ? hint.m_pNew?.GetChgSet().GetItemIfSet(RES_VERT_ORIENT, false)
+            : undefined;
+      if (orientation) {
+        this.SetCompletePaint();
+        this.InvalidatePrt();
+      }
+      super.SwClientNotify(source, hint);
+    }
   }
 }
 
@@ -122,12 +170,27 @@ export interface SwTableMouseGeometry {
 }
 
 /** Owns horizontal print geometry over the actual canonical table. */
-export class SwTabFrame {
+export class SwTabFrame extends SwLayoutFrame {
   /** Binds this layout frame to its original table. @param table - Canonical table. @param mouseGeometry - Optional live device frames. @returns Nothing. */
   public constructor(
     private readonly table: SwTable,
     public readonly mouseGeometry?: SwTableMouseGeometry,
-  ) {}
+  ) {
+    super(table.GetFrameFormat());
+    this.mnFrameType = SwFrameType.Tab;
+    let previous: SwRowFrame | undefined;
+    for (const line of table.GetTabLines()) {
+      const row = new SwRowFrame(line);
+      if (row.Lower()) {
+        row.InsertBehind(this, previous);
+        previous = row;
+      } else SwFrame.DestroyFrame(row);
+    }
+  }
+  /** Releases the complete native table lower hierarchy. @returns Nothing. */
+  public override Dispose(): void {
+    this.DestroyImpl();
+  }
 
   /** Returns the canonical table represented by this frame. @returns Actual owner. */
   public GetTable(): SwTable {
@@ -147,14 +210,15 @@ export class SwTabFrame {
           ) => sum + width,
           0,
         );
-    const frame = new SwCellFrame(box);
-    try {
-      return wished === 0
-        ? 0
-        : (frame.GetFormat().GetFrameSize().GetWidth() * this.Format(upperWidth).width) / wished;
-    } finally {
-      frame.DestroyImpl();
-    }
+    for (let row = this.Lower(); row !== undefined; row = row.GetNext())
+      for (let lower = (row as SwRowFrame).Lower(); lower !== undefined; lower = lower.GetNext()) {
+        const cell = lower as SwCellFrame;
+        if (cell.GetTabBox() === box)
+          return wished === 0
+            ? 0
+            : (cell.GetFormat().GetFrameSize().GetWidth() * this.Format(upperWidth).width) / wished;
+      }
+    return 0;
   }
 
   /** Reads the native table-frame split item with its true default. @returns Whether table rows may occupy follow frames. */
