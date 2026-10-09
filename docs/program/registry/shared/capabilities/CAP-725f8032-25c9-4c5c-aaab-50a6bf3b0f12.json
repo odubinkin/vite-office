@@ -1,0 +1,80 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-725f8032-25c9-4c5c-aaab-50a6bf3b0f12",
+    "capabilityId": "CAP-725f8032-25c9-4c5c-aaab-50a6bf3b0f12",
+    "suite": "shared",
+    "subsystem": "cell-storage",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original single-front erase defers deletion using m_front_offset; range erase physically removes underlying entries without changing that offset.",
+      "Original clear_removed order before reserve, resize, shrink_to_fit and assign; copy includes hidden entries and front offset; vector-only swap deliberately retains each owner offset.",
+      "Borrowed forward/reverse and data positions follow backing storage through defined swap; scalar/range insert, append, checked access, equality and selected host capacity observations remain distinct."
+    ],
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "Original mdds storage responsibility and algorithms remain in their shared owner; template and STL allocation syntax is adapted with explicit limits."
+    },
+    "capability": "Shared original delayed front deletion vector for mdds element storage",
+    "gaps": [
+      "Only initialized primitive number/boolean/bigint/string T families with defined native index/range operations are implemented. Explicit T{} adapts erased template syntax. Reserved backing slots reproduce finite host libc++ capacity observations, including bool word storage; other STL allocators, object/allocator specializations, allocation failure, native value lifetime, ABI and invalidated/dangling iterators remain unverified. Native vector<bool>::data is not available and is not certified. No complete element blocks, multi_type_vector, ScColumn/ScDocument or module parity claim."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/mdds-reference/include/mdds/multi_type_vector/delayed_delete_vector.hpp",
+          "marker": "class delayed_delete_vector"
+        },
+        {
+          "path": "sc/inc/mtvelements.hxx",
+          "marker": "default_element_block"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/mdds-reference/test/multi_type_vector/element-blocks/test_std_vector_bool.cpp",
+          "marker": "void mtv_test_element_blocks_delayed_delete_vector_bool()"
+        }
+      ],
+      "docs": [
+        {
+          "path": "download.lst",
+          "marker": "mdds-3.2.1.tar.xz"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/delayed_delete_vector.ts",
+          "marker": "delayed_delete_vector"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/delayed_delete_vector.test.ts",
+          "marker": "matches every unchanged native scalar sequence"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Shared delayed element storage"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "Own initialized primitive element storage with original delayed front erasure and borrowed positions",
+    "scopeLimitations": [
+      "Only initialized primitive number/boolean/bigint/string T families with defined native index/range operations are implemented. Explicit T{} adapts erased template syntax. Reserved backing slots reproduce finite host libc++ capacity observations, including bool word storage; other STL allocators, object/allocator specializations, allocation failure, native value lifetime, ABI and invalidated/dangling iterators remain unverified. Native vector<bool>::data is not available and is not certified. No complete element blocks, multi_type_vector, ScColumn/ScDocument or module parity claim.",
+      "The upstream bool element-block QA reference is contextual default-store and trait evidence only; the portable scalar comparison is newly authored against complete original headers. This task does not port or close the upstream element-block QA test. Implicit C++ move construction/assignment and const-correct ABI specialization remain unverified."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

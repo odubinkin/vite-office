@@ -386,9 +386,38 @@ result. No implicit tail-fill or size correction is added. Unusual prior endpoin
 states and broader column consumers are not certified by this observation.
 Decision: preserve upstream behavior and record it for future consumer review.
 
+## CALC-020 — mdds delayed vector swaps storage without front offsets
+
+Pinned dependency: mdds3.2.1 from LibreOffice `download.lst` at the recorded
+baseline. Original `include/mdds/multi_type_vector/delayed_delete_vector.hpp`,
+lines 123-126, exchanges only `m_vec`. Single front erase (lines 159-163)
+increments `m_front_offset`, which is not exchanged by swap.
+
+For original uint16 owners `[1,2,3,4]` and `[7,8,9,10]`, erase the first
+element of the first owner, then swap. The first owner's visible range becomes
+`[8,9,10]`; the second exposes `[1,2,3,4]`, including the previously hidden
+element. A borrowed iterator into the first backing vector follows that vector
+to the second owner and can still mutate its scalar under native swap rules.
+This is reproduced using complete unchanged genuine headers under ASan/UBSan
+in `scripts/mdds-delayed-vector-native-probe.mjs`; the committed fixture and
+independent delayed-vector test retain both results.
+
+If a retained offset exceeds the received vector size, the original unsigned
+size subtraction and iterator arithmetic require separate undefined-state
+review. No successful result is assigned to that family here. Element-block
+and column consumers have not yet been reviewed for equal-offset preconditions.
+Decision: preserve original storage-only swap; do not exchange/reset offsets.
+
 ## Reviewed API distinctions
 
 These distinctions have been discussed but are not classified as defects:
+
+- mdds delayed vector `insert(iterator, const T&)` and
+  `insert(const_iterator, T&&)` make a mutable-iterator/rvalue call ambiguous
+  in the native compiler. The unchanged-header probe explicitly supplies a
+  const value for the first overload and a const iterator for the second;
+  both scalar results are retained. This is a compile-time overload distinction,
+  not a runtime failure or an upstream repair.
 
 - `ScAddress::IsValid` checks only nonnegative coordinates. Document-bound
   helpers perform other validity checks. The different contracts are original.

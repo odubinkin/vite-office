@@ -1,5 +1,30 @@
 # Calc coordinate foundation
 
+## Shared delayed element storage
+
+Task `202610091909-KYNP7H` adds the original mdds3.2.1
+`multi_type_vector/delayed_delete_vector` owner under
+`apps/office/src/external/mdds/include/mdds`, shared by application consumers.
+This is the default backing store in original mdds element blocks referenced
+by `sc/inc/mtvelements.hxx`; complete element blocks, multi_type_vector and
+Calc columns remain the next dependencies, not implemented by this task.
+
+Single erase at logical begin delays physical removal. Range erase keeps its
+distinct original behavior. Reserve, resize, shrink and assign clear hidden
+entries in the original call order. Copy retains hidden entries and offset;
+swap exchanges the backing vector but leaves both offsets unchanged. Borrowed
+iterator positions follow the actual backing vector through defined swap.
+The suspicious offset behavior is recorded as CALC-020 without repair.
+
+Required scalar T{} witnesses replace erased template syntax; initialized
+number, boolean, bigint and string families are supported. Native capacity
+observations use the host libc++ target and allocated backing slots, including
+its vector<bool> word capacity and distinct resize growth. Other allocator/STL
+families, object destruction and exceptions, invalidated iterator lifetime,
+native bool data pointers, full element-store and module parity remain
+unverified. Ordinary tests replay complete portable native results without
+upstream files, network or a compiler.
+
 Calc implementation lives in `apps/office/src/sc`, independently of Writer.
 The first core task is `202610090711-S6VCEJ`, on branch `calc`; branch integration
 belongs to the user. Its baseline is LibreOffice commit
