@@ -16,6 +16,7 @@ const moduleNames = [
   "offapi",
   "package",
   "sax",
+  "sc",
   "sfx2",
   "svl",
   "svtools",
@@ -34,6 +35,25 @@ const allowedEdges = new Map([
   ["offapi", new Set()],
   ["package", new Set()],
   ["sax", new Set()],
+  [
+    "sc",
+    new Set([
+      "cui",
+      "editeng",
+      "framework",
+      "o3tl",
+      "offapi",
+      "package",
+      "sax",
+      "sfx2",
+      "svl",
+      "svtools",
+      "svx",
+      "unotools",
+      "vcl",
+      "xmloff",
+    ]),
+  ],
   ["sfx2", new Set(["svl"])],
   ["svl", new Set()],
   ["svtools", new Set()],
@@ -63,7 +83,7 @@ const allowedEdges = new Map([
 export function isForbiddenModuleEdge(sourceModule, targetModule) {
   return !allowedEdges.get(sourceModule)?.has(targetModule);
 }
-const suiteModules = new Set(["sw"]);
+const suiteModules = new Set(["sw", "sc"]);
 const browserPackageImports = ["lucide-react", "react", "react-dom"];
 const protectedBrowserGlobalSymbols = new Set([
   "ClipboardEvent",

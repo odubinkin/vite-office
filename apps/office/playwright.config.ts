@@ -10,8 +10,18 @@ export default defineConfig({
   },
   fullyParallel: false,
   outputDir: "../../test-results/e2e",
+  projects: [
+    {
+      name: "writer",
+      testMatch: "**/*.spec.ts",
+      testIgnore: ["**/shared/**", "**/calc/**"],
+    },
+    { name: "calc", testMatch: "**/calc/**/*.spec.ts" },
+    { name: "shared", testMatch: "**/shared/**/*.spec.ts" },
+  ],
   reporter: [["list"], ["html", { open: "never", outputFolder: "../../playwright-report" }]],
   retries: 0,
+  workers: 2,
   testDir: "./e2e",
   use: {
     ...devices["Desktop Chrome"],

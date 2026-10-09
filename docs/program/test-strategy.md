@@ -28,6 +28,48 @@ to the exact upstream SHA. Manually summarized counts are not sufficient proof.
 
 ## Local test layers
 
+### Application test selection
+
+Vitest projects follow source ownership: `writer` discovers tests under `src/sw`,
+`calc` under `src/sc`, and `shared` discovers the remaining `src` tests. Writer
+also owns the explicitly listed integration tests colocated with shared components
+that import the Writer model or workspace. Their paths remain unchanged for parity
+mappings, and shared discovery excludes them. Every unit
+test belongs to exactly one project. The scoped configuration files select both
+tests and coverage ownership; selecting `--project` alone in the full configuration
+does not narrow its whole-suite coverage gate.
+
+Use `npm run test:writer`, `npm run test:calc`, or `npm run test:shared` for unit
+tests. Their `test:coverage:<scope>` counterparts retain 100% line, branch,
+function and statement thresholds and produce separate reports in
+`apps/office/coverage/<scope>`. Whole-suite `test:coverage` includes all authored
+runtime sources and writes to `apps/office/coverage/all`.
+
+Shared coverage additionally runs application integration tests, because some
+shared ODF and item-pool branches are covered through real document operations.
+It still measures only shared sources. The ordinary `test:shared` command selects
+only shared tests; Writer and Calc unit and coverage commands select only their
+respective application. This preserves the coverage ratchet without pretending
+that application-owned integration evidence is a standalone shared unit test.
+
+Playwright projects preserve existing test paths: `writer` owns existing root
+specifications (including the historical cross-application `foundation.spec.ts`),
+`calc` owns `e2e/calc/**/*.spec.ts`, and `shared` owns `e2e/shared/**/*.spec.ts`.
+The shared launcher checks do not exercise Writer editing. Use
+`npm run test:e2e:<scope>`; browser commands build the office bundle first.
+Calc unit and browser commands explicitly accept an empty suite while Calc has
+no implementation. Writer, shared, and full-suite commands still reject empty
+selection. Add new application tests under their ownership roots, without renaming
+existing files referenced by parity mappings.
+
+`npm run test:all` runs full application coverage, inventory coverage, tooling
+regressions and all browser projects. `npm run verify` retains the wider quality
+contract. `npm run test:tooling` checks actual Vitest discovery against the source
+tree and the enforced module graph. Application code may use shared contracts;
+shared modules must not import `sw` or `sc`, and direct application-to-application
+imports are forbidden. When editing a shared module, run its shared tests plus
+the affected application's integration tests before the complete merge gate.
+
 | Layer | Primary evidence |
 | --- | --- |
 | Type and static checks | Public contracts, impossible states, dependency boundaries, JSDoc and size policies |

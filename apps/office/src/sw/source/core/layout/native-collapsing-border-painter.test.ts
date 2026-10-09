@@ -8,6 +8,47 @@ import { OverlapType, SwLineEntry, SwTabFramePainter } from "./paintfrm";
 function entry(start: number, end: number, color = 1, width = 20): SwLineEntry {
   return new SwLineEntry(4, start, end, false, new Style(new SvxBorderLine(color, width)));
 }
+it("paints all four outer boundaries of an original single cell", /** Checks the constructor's original row and cell traversal through the paint boundary. @returns Nothing. */ () => {
+  const doc = new SwDoc();
+  const table = doc.nodes.MakeTableNode("Single cell", { width: 3000 });
+  table.AddColumnWidth(3000);
+  doc.nodes.AppendTableRow(table, 1);
+  const lines: (boolean | number)[][] = [];
+  new SwTabFramePainter(table).PaintLines(
+    /** Captures original grid coordinates and outer-boundary flags. @param line - Painted border. @param horizontal - Border family. @returns Nothing. */ (
+      line,
+      horizontal,
+    ) => {
+      lines.push([horizontal, line.mnKey, line.mnStartPos, line.mnEndPos, line.mbOuter]);
+    },
+  );
+  expect(lines).toEqual([
+    [false, 0, 0, 1, true],
+    [false, 1, 0, 1, true],
+    [true, 0, 0, 1, true],
+    [true, 1, 0, 1, true],
+  ]);
+});
+it("omits a zero-length first border and retains a later visible interval", /** Checks empty border admission independently of populated table geometry. @returns Nothing. */ () => {
+  const painter = new SwTabFramePainter(new SwDoc().nodes.MakeTableNode("Empty borders"));
+  painter.Insert(entry(3, 3), true);
+  const lines: number[][] = [];
+  painter.PaintLines(
+    /** Captures visible intervals. @param line - Painted border. @returns Nothing. */ (line) => {
+      lines.push([line.mnStartPos, line.mnEndPos]);
+    },
+  );
+  expect(lines).toEqual([]);
+  painter.Insert(entry(3, 6), true);
+  painter.PaintLines(
+    /** Captures the later visible border. @param line - Painted border. @returns Nothing. */ (
+      line,
+    ) => {
+      lines.push([line.mnStartPos, line.mnEndPos]);
+    },
+  );
+  expect(lines).toEqual([[3, 6]]);
+});
 it("native line overlap classification matches every source illustrated arrangement and touching ends", /** Checks source enum cases directly. @returns Nothing. */ () => {
   const cases = [
     [0, 10, 5, 15, 1],

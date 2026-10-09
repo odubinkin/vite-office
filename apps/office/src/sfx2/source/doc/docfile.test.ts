@@ -4,6 +4,18 @@ import { describe, expect, it } from "vitest";
 import { acquireSfxMedium, SfxMedium } from "./docfile";
 
 describe("SfxMedium", /** Groups SfxMedium. @returns Test callback result. */ () => {
+  it("preserves a new document origin when adopting a primary destination", /** Checks that destination assignment does not invent an open source. @returns Nothing. */ () => {
+    const source = { kind: "none" as const };
+    const medium = new SfxMedium({
+      kind: "primary",
+      name: "New document",
+      storageKey: "new-document",
+      source,
+    });
+    expect(medium.origin).toBe("new");
+    expect(medium.source).toBe(source);
+    expect(medium.destination).toEqual({ kind: "storage", key: "new-document" });
+  });
   it("retains source and operation state across a primary destination", /** Checks retains source and operation state across a primary destination. @returns Test callback result. */ () => {
     const external = { kind: "external" as const, reference: {} };
     const medium = new SfxMedium({

@@ -4,6 +4,7 @@ import { afterEach, expect, it, vi } from "vitest";
 import { createWriterDocumentSession } from "../composition/writer-module";
 import { WriterWorkbench } from "../presentation/writer-view";
 import { HoriOrientation } from "../../../offapi/com/sun/star/text/HoriOrientation";
+import { BrowserWriterSelectionMapper } from "./writer-selection";
 const sessions: ReturnType<typeof createWriterDocumentSession>[] = [];
 afterEach(
   /** Removes browser capture before view lifetime. @returns Nothing. */ () => {
@@ -60,6 +61,7 @@ function fixture() {
   return { session, doc, table, host, paragraph, shell: session.view.GetWrtShell() };
 }
 it("mounted row capture blocks browser drag/selection/click while release off-host commits one native height", /** Reproduces physical row border over editable text. @returns Nothing. */ () => {
+  const subscription = vi.spyOn(BrowserWriterSelectionMapper.prototype, "Subscribe");
   const f = fixture(),
     cursor = f.shell.CaptureCursorState(),
     selection = document.getSelection(),
@@ -77,6 +79,10 @@ it("mounted row capture blocks browser drag/selection/click while release off-ho
   expect(document.querySelector("[data-writer-table-column-guide]")).toBeNull();
   expect(fireEvent.dragStart(f.paragraph, { dataTransfer: { setData: vi.fn() } })).toBe(false);
   fireEvent(document, new Event("selectionchange"));
+  // A late selection publication must not replace the native cursor during border capture.
+  required(subscription.mock.calls[0]?.[0])({
+    point: { paragraphId: String(f.shell.GetActiveParagraph().GetIndex()), offset: 0 },
+  });
   expect(f.shell.CaptureCursorState().point).toEqual(cursor.point);
   fireEvent.mouseMove(document, { clientX: 1000, clientY: 183 });
   expect(document.querySelector("[data-writer-table-row-guide]")).toHaveStyle({ top: "180px" });

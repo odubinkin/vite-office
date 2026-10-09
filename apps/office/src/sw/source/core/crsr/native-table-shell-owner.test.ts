@@ -42,6 +42,9 @@ it("inherits native cell traversal and publishes already executed row history in
   const f = fixture();
   try {
     expect(f.shell).toBeInstanceOf(SwCursorShell);
+    const layout = f.shell.GetLayout();
+    expect(layout.GetCursorTextFrame(f.cell)).toBeUndefined();
+    expect(f.shell.GetLayout()).toBe(layout);
     expect(Object.hasOwn(SwWrtShell.prototype, "GoNextCell")).toBe(false);
     f.shell.ToggleCharacterFormat("bold");
     f.doc.GetUndoManager().Clear();

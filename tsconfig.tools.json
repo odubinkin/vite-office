@@ -8,6 +8,7 @@
   "include": [
     "scripts/generate-writer-ui-resources.ts",
     "scripts/libreoffice-inventory/**/*.ts",
+    "scripts/test-projects.test.ts",
     "scripts/writer-ui-resource-model.ts"
   ]
 }

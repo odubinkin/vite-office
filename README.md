@@ -61,6 +61,26 @@ Run the complete bootstrap quality contract with:
 npm run verify
 ```
 
+Application development has independent unit and browser test commands:
+
+| Scope                 | Unit tests            | Unit coverage                  | Browser tests             |
+| --------------------- | --------------------- | ------------------------------ | ------------------------- |
+| Writer                | `npm run test:writer` | `npm run test:coverage:writer` | `npm run test:e2e:writer` |
+| Calc                  | `npm run test:calc`   | `npm run test:coverage:calc`   | `npm run test:e2e:calc`   |
+| Shared infrastructure | `npm run test:shared` | `npm run test:coverage:shared` | `npm run test:e2e:shared` |
+
+To select one file or directory, append a filter, for example
+`npm run test:writer -- src/sw/source/core/table`. Each coverage command requires 100% coverage only
+for its owner and writes to `apps/office/coverage/<scope>`. Calc commands currently report no tests
+successfully; they discover tests under `src/sc` and `e2e/calc` automatically when implementation
+begins. Shared coverage also runs application integration tests that exercise shared code;
+`test:shared` itself runs only shared unit tests. Writer and Calc coverage runs are independent.
+
+Run `npm run test:all` for all unit, inventory, test-tooling and browser tests; `npm run verify`
+additionally runs the complete quality contract. Shared-module changes require shared tests and
+affected application tests. See the
+[test strategy](docs/program/test-strategy.md#application-test-selection) for ownership details.
+
 Playwright requires the task-approved Chromium download before the first E2E run:
 
 ```bash

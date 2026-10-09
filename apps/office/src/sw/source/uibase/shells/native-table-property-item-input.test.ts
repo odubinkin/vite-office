@@ -87,6 +87,28 @@ function widths(f: ReturnType<typeof fixture>) {
           ),
     );
 }
+it.each([true, false])(
+  "explicit table dialog preserves collapsing-border choice %s",
+  /** Checks both choices through accepted dialog ingress. @param collapsing - Accepted checkbox state. @returns Nothing. */ (
+    collapsing,
+  ) => {
+    const f = fixture();
+    const columns = new SwTabCols();
+    f.shell.GetTabCols(columns);
+    f.input.Put(new SfxBoolItem(RES_COLLAPSING_BORDERS, collapsing));
+    expect(
+      ItemSetToTableParam(f.shell, {
+        width: 6000,
+        columnWidths: [1000, 5000],
+        tableRep: new SwTableRep(f.table, 6000, columns),
+        headerRows: 0,
+        repeatHeaderRows: false,
+        borderItems: f.input,
+      }),
+    ).toBe(true);
+    expect(f.table.GetFormat().borderModel).toBe(collapsing ? "collapsing" : "separating");
+  },
+);
 it("empty native input does not materialize defaults or create table history", /** Checks the exact original format and cursor. @returns Nothing. */ () => {
   const f = fixture(),
     format = f.table.GetFormat(),

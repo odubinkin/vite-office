@@ -11,6 +11,16 @@ import {
 } from "./check-module-boundaries.mjs";
 
 describe("runtime ownership boundaries", /** Registers runtime ownership boundary cases. @returns Nothing. */ function defineRuntimeBoundaryTests(): void {
+  it("isolates Calc and Writer while admitting shared dependencies", /** Verifies independent application owners. @returns Nothing. */ () => {
+    for (const dependency of ["framework", "sfx2", "svl", "svx", "editeng", "vcl", "xmloff"])
+      expect(isForbiddenModuleEdge("sc", dependency)).toBe(false);
+    expect(isForbiddenModuleEdge("sc", "sw")).toBe(true);
+    expect(isForbiddenModuleEdge("sw", "sc")).toBe(true);
+    for (const shared of ["framework", "sfx2", "svl", "svx", "editeng", "vcl", "xmloff"]) {
+      expect(isForbiddenModuleEdge(shared, "sc")).toBe(true);
+      expect(isForbiddenModuleEdge(shared, "sw")).toBe(true);
+    }
+  });
   it("admits source-owned cui border pages and svx line selection with no reverse or browser edges", /** Checks the native dialog owner graph. @returns Nothing. */ () => {
     expect(isForbiddenModuleEdge("sw", "cui")).toBe(false);
     for (const module of ["editeng", "svl", "svx"])
