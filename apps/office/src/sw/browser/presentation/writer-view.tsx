@@ -105,9 +105,10 @@ export function WriterWorkbench({
   const localization = useBrowserLocalization();
   const editingHostRef = useRef<HTMLElement | null>(null);
   const documentRuler = useRef<WriterRulerDocumentDrag | null>(null);
-  const [presentationStore] = useState(
-    /** Reuses the session store or owns one browser-local store for an injected view. @returns Presentation store. */ () =>
+  const presentationStore = useMemo(
+    /** Borrows the current session store or owns a store for this exact native view. @returns Current presentation store. */ () =>
       viewStore ?? new WriterViewStore(view),
+    [view, viewStore],
   );
   useEffect(
     /** Releases only a store created by this component. @returns Optional cleanup. */ () =>
