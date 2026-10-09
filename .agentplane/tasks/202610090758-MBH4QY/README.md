@@ -1,10 +1,11 @@
 ---
 id: "202610090758-MBH4QY"
 title: "Port Calc single formula reference data with native differential proof"
-status: "DOING"
+result_summary: "Implemented native initialized Calc single formula references with bounded differential proof"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
     - "ap doctor"
   findings:
     - "All bounded native reference fixture outputs match TypeScript under ASan/UBSan; source bodies unchanged and pinned Git blobs verified. Original testFormulaRefData initial single-reference assertions retained; all earlier Calc tests unchanged. Header re-export accurately has no local declaration; implementation mapped by core/tool. Full document/token/complex range/compiler integration remains unverified."
-commit: null
+commit:
+  hash: "b76ddfca615a439667cfae808061063bd48ade7e"
+  message: "✨ MBH4QY calc: port single formula references with native comparison"
 comments:
   -
     author: "CODER"
     body: "Start: port original single-reference numerical/flag contracts and compare bounded states against unchanged pinned native definitions."
+  -
+    author: "CODER"
+    body: "Verified: initialized single formula references match every bounded native flag/domain/update/order/initializer/mutation/equality fixture; all28 Calc tests pass with actual100 coverage and inventory validation."
 events:
   -
     type: "status"
@@ -63,8 +69,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Commands: native reference probe --write/--check, npm run test:coverage:calc, typecheck, check:dependencies, check:docs, check:file-size, check:source-tree, affected ESLint/Prettier, Calc registry, routing, doctor, diff check. Result: all pass after recorded local extraction/documentation/header-metadata corrections. Evidence:28 tests in7 files; actual100 lines404/404 statements457/457 functions126/126 branches395/395. Native30 unchanged non-debug definitions, exact pinned Git blobs and ASan/UBSan clean; all2048 flag/domain states1024 updates2048 orderings40 initializers12 mutations5 equality outputs match TS. Registry5 capabilities118 scoped modules0 semantic violations. Scope: initialized single references, portable native fixture, Calc metadata/docs. Existing tests, shared/Writer sources and prior statuses unchanged. Doctor0 errors1 pre-existing hook warning. Full suite due at Calc10."
+  -
+    type: "status"
+    at: "2026-10-09T08:12:53.326Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: initialized single formula references match every bounded native flag/domain/update/order/initializer/mutation/equality fixture; all28 Calc tests pass with actual100 coverage and inventory validation."
 doc_version: 3
-doc_updated_at: "2026-10-09T08:12:10.238Z"
+doc_updated_at: "2026-10-09T08:12:53.327Z"
 doc_updated_by: "CODER"
 description: "Implement all initialized ScSingleRefData contracts from pinned refdata.hxx/refdata.cxx: eight-bit flags, raw value copying, address initialization and conversion, validity/deletion semantics and per-axis ordering with relative-name provenance. Reuse native address/sheet limit owners; add bounded compiled native comparison and Calc-owned inventory."
 sections:
@@ -122,6 +135,10 @@ sections:
     - Observation: The explicit import/export still does not count as a local declaration: the registry inventories class/function/type declarations, not imported or re-exported bindings. Previous proposed binding resolution was insufficient.
       Impact: The header runtime record incorrectly claimed a locally declared class; its exported owner is implemented and mapped separately in core/tool.
       Resolution: Restore the direct header re-export and accurately leave header localSymbols empty, as used by existing pure boundary records. Keep precise exported-symbol provenance, core/tool class symbols and all parity checks unchanged.
+extensions:
+  implementation_commit:
+    hash: "b76ddfca615a439667cfae808061063bd48ade7e"
+    message: "✨ MBH4QY calc: port single formula references with native comparison"
 id_source: "generated"
 ---
 ## Summary
