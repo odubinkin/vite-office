@@ -1,0 +1,127 @@
+{
+  "changed": {
+    "files": 1,
+    "summary": {
+      "lines": {
+        "total": 217,
+        "covered": 217,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 229,
+        "covered": 229,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 83,
+        "covered": 83,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 164,
+        "covered": 164,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "sourceHashes": {
+      "apps/office/src/sw/browser/presentation/writer-view.tsx": "793c26bc2e6a2c791b9af3c3f01d9c64ab5c0546ada770755efd2a1731ac7385"
+    }
+  },
+  "application": {
+    "files": 318,
+    "wholeUnchangedFiles": 317,
+    "summary": {
+      "lines": {
+        "total": 18298,
+        "covered": 18298,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 20093,
+        "covered": 20093,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 4589,
+        "covered": 4589,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 14695,
+        "covered": 14695,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "mapSHA256": "8ce6e8ad09a17ca46aa5c43da0aa5d402dc6db0f98a714d6295814633bc80a91",
+    "proofSHA256": "012aa28db44cda9dcb16b4a74ee26dbb855c2fe98698b1f14a018d942cf7255f"
+  },
+  "sourceBinding": {
+    "priorTask": "202610090950-7JN228",
+    "priorMapSHA256": "8afa4e35b2d2a73fc88b54f845436736f776a5d618fb7c1b2bca32cd9db7bfff",
+    "priorProofSHA256": "eef3e4f70f4057eb9300682395b16df740ed949293f865f3c601b632e0381491",
+    "rawInputs": [
+      {
+        "profile": "initial",
+        "SHA256": "955e34bd13c7a6ee7ec6c140ff6bc07ddbc8deb02cdb8033e5841e81969c1071"
+      }
+    ],
+    "completeUnchangedRegions": [
+      {
+        "path": "apps/office/src/sw/browser/presentation/writer-view.tsx",
+        "oldSourceSHA256": "702e5104416cb0552de434f04428aaebab504bb3a987476cb1866f0d79a0fea3",
+        "currentSourceSHA256": "793c26bc2e6a2c791b9af3c3f01d9c64ab5c0546ada770755efd2a1731ac7385",
+        "counts": {
+          "statements": 187,
+          "functions": 70,
+          "branches": 48
+        },
+        "regions": 81,
+        "exactCompleteDeclarationBodyEnclosingConditionsAndAllLocations": true,
+        "regionProofSHA256": "a7a7578c0ef61abc3065af7f30a2cbf105c7092d2f34f65b73231a34ccfc3897"
+      }
+    ],
+    "changedOuterFunctionTransfer": false,
+    "counterNormalization": false
+  },
+  "targeted": {
+    "files": 26,
+    "uniquePassed": 216,
+    "fresh": 6,
+    "failed": 0,
+    "skipped": 0,
+    "passingReplay": 0,
+    "profiles": 1,
+    "rawTestReportSHA256": "bbb10cfd1edb260c20893fb95c6925b46a53dddd9dc0387b36a39ea78638467a",
+    "rawCoverageThresholdExitRetained": true
+  },
+  "rawLocation": "Ignored apps/office/node_modules/.cache/parity-coverage; raw maps/reports/helpers remain outside AgentPlane.",
+  "limitations": [
+    "Coverage uses historical counters only for whole byte-identical sources or complete unchanged declarations and all exact mapped locations; no fresh full254.",
+    "Render-time local store construction, native root frame-format/page/body/follows/lifetime and overall parity remain unverified."
+  ],
+  "cadence": {
+    "lastFull": 247,
+    "nextFull": 257,
+    "pauseAfterNextFullAndVerifiedFailureFixes": true
+  }
+}
