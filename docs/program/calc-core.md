@@ -104,10 +104,46 @@ states, 1024 updates, 2048 reorderings, 40 initializers, 12 mutation snapshots a
 five equality outputs. `node scripts/calc-refdata-native-probe.mjs --check`
 reproduces the fixture under ASan/UBSan and checks exact pinned Git blobs plus
 source/extracted SHA-256 hashes. Debug-only dumping, undefined/uninitialized
-domains, token storage, complete document/compiler/listener ownership and complex
-range references remain subsequent work; module and whole Calc parity stay
+domains, token storage and complete document/compiler/listener ownership
+remain subsequent work; module and whole Calc parity stay
 unverified. The upstream `testFormulaRefData` initial single-reference assertions
-are retained; its complex extension assertions belong to the next owner.
+are retained; its complex extension assertions are retained by the owner below.
+
+## Complex formula reference data
+
+Task `202610090816-5YGKY3` adds `ScComplexRefData` beside the original single
+reference owner. Its two endpoints retain their identity through assignment and
+initialization. The independent trim flag defaults to false, survives initializers
+and is omitted from equality. `toAbs()` constructs an address-pair `ScRange`, so
+it independently orders resolved axes even when raw endpoints are reversed.
+External validity compares masked sheet getters and accepts the first endpoint's
+external cache domain; it does not impose a second local sheet-validity check.
+
+`Extend()` retains the original single/complex overloads and their relative,
+3D and relative-name inheritance, including references to its own endpoints or
+itself. `SetRange()` delegates monotone deletion to existing single references.
+Whole-row/column detection requires absolute axis flags. The complex sticky
+methods use masked endpoint getters and resolve relative offsets against the
+formula position before signed narrowing. They belong to the reference owner
+and have distinct contracts from the numerical `ScRange` updates.
+
+The same test comparison probe compiles the original complex class, all 14
+unchanged non-debug definitions and original range constructors/order. The saved
+fixture covers 3072 property/ordering states, 6400 single extensions, 1600 complex
+extensions, 300 aliased extensions, 1792 sticky updates, 256 mixed-address
+initializers, 36 range/flag initializers and four equality outputs. Portable tests
+compare every output and retain both original complex extension assertions from
+`testFormulaRefData`. `node scripts/calc-refdata-native-probe.mjs --complex-check`
+reproduces those states with ASan/UBSan and pinned full-source/extracted-body
+hashes. The existing single-reference body and fixture remain unchanged.
+
+The combined implementation retains both classes in the original `refdata`
+module. Its grouping was reviewed against the upstream owner boundary; splitting
+these owners would move native responsibilities without improving that boundary.
+No production C++ or generated application code is introduced. Native comparison
+runs are optional during ordinary portable tests. Full document, raw token,
+compiler and listener integration, debug-only dumping and undefined native domains
+remain unverified.
 
 JavaScript tuples represent native output reference parameters. Equality and
 ordering methods represent C++ operators. Undefined native uninitialized
@@ -138,7 +174,8 @@ ten completed Calc agentplane tasks. Targeted affected-module tests run on
 intervening tasks. Writer acceptance files and coverage settings remain intact.
 The coordinate foundation and sticky reference tasks are Calc tasks 1 and 2;
 inventory reconciliation is task 3, reference addresses/sheet limits are task 4,
-and single formula references are task 5 of that first ten-task interval.
+single formula references are task 5, and complex formula references are task 6
+of that first ten-task interval.
 
 Source research includes the per-file MPL 2.0 and inherited Apache notices in
 `sc/inc/address.hxx`, `sc/inc/sheetlimits.hxx`, `sc/inc/refdata.hxx`,

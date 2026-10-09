@@ -12,33 +12,46 @@
         {
           "path": "apps/office/src/sc/source/core/tool/refdata.test.ts",
           "marker": "matches all2048 native axis and relative-name reorderings"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/complex-refdata.test.ts",
+          "marker": "matches all6400 native single-reference extensions and flag inheritance"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/sc/inc/refdata.hxx",
           "marker": "ScSingleRefData"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/refdata.hxx",
+          "marker": "ScComplexRefData"
         }
       ]
     },
     "localPath": "apps/office/src/sc/inc/refdata.ts",
     "localSymbols": [
-      "ScSingleRefData"
+      "ScSingleRefData",
+      "ScComplexRefData"
     ],
     "omittedResponsibilities": [
-      "Full ScDocument, ScRawToken, formula compiler/listening and ScComplexRefData integration remain subsequent work. Native union/pointer storage, debug-only Dump and uninitialized/undefined arithmetic domains are not certified. Native fixture proves bounded numerical and flag states, not whole Calc parity."
+      "Full ScDocument, ScRawToken and formula compiler/listening integration remain subsequent work. Native union/pointer storage, debug-only Dump and uninitialized/undefined arithmetic domains are not certified. Native fixtures prove bounded numerical and flag states, not whole Calc parity."
     ],
     "preservedResponsibilities": [
       "Original initialized raw coordinate and flag owner; no fabricated zero default storage.",
       "Eight-bit independent flags, raw value copy/equality, signed widths and masked deletion getters.",
       "Distinct local/external validity, independent raw absolute conversion and monotone deletion on SetAddress.",
       "Original axis-wise ordering, relative-name provenance and retained endpoint 3D flags.",
-      "Bounded native differential acceptance with exact original source/body hashes; upstream test initial single-reference assertions retained."
+      "Bounded native differential acceptance with exact original source/body hashes; upstream test initial single-reference assertions retained.",
+      "Original complex range endpoint and trim owner, extension flag inheritance and alias semantics.",
+      "Masked external ordering, sorted absolute conversion, whole-axis detection and relative/deleted sticky updates.",
+      "Original testFormulaRefData complex extension assertions and bounded compiled native differential outputs."
     ],
     "status": "mapped",
     "upstreamPath": "sc/inc/refdata.hxx",
     "upstreamSymbols": [
-      "ScSingleRefData"
+      "ScSingleRefData",
+      "ScComplexRefData"
     ]
   }
 }

@@ -1,5 +1,5 @@
 /** @fileoverview Initialized ScSingleRefData contracts from pinned refdata.hxx/refdata.cxx; token-union storage and full document/compiler ownership remain separate. */
-import { MAXTAB, ScAddress, ValidTab } from "../../../inc/address";
+import { MAXTAB, ScAddress, ScRange, ValidTab } from "../../../inc/address";
 import type { ScRefAddress } from "../../../inc/address";
 import { ScSheetLimits } from "../../../inc/sheetlimits";
 import type { SCCOL, SCROW, SCTAB } from "../../../inc/types";
@@ -316,5 +316,208 @@ export class ScSingleRefData {
       this.mnRow === other.mnRow &&
       this.mnTab === other.mnTab
     );
+  }
+}
+
+/** Original range reference with independent endpoint values and trim state. */
+export class ScComplexRefData {
+  public readonly Ref1 = new ScSingleRefData();
+  public readonly Ref2 = new ScSingleRefData();
+  public bTrimToData = false;
+
+  /** Represents native member storage or implicit value copying. @param source - Initialized source if copying. @returns New complex reference. */
+  public constructor(source?: ScComplexRefData) {
+    if (source) this.assign(source);
+  }
+  /** Copies into existing endpoint owners, including trim state. @param source - Initialized source. @returns Recipient. */
+  public assign(source: ScComplexRefData): this {
+    this.Ref1.assign(source.Ref1);
+    this.Ref2.assign(source.Ref2);
+    this.bTrimToData = source.bTrimToData;
+    return this;
+  }
+  /** Clears endpoint flags without changing coordinates or trim. @returns Nothing. */
+  public InitFlags(): void {
+    this.Ref1.InitFlags();
+    this.Ref2.InitFlags();
+  }
+  /** Initializes supplied endpoint values without reordering or changing trim. @param args - Range or six native coordinates. @returns Nothing. */
+  public InitRange(...args: [ScRange] | [SCCOL, SCROW, SCTAB, SCCOL, SCROW, SCTAB]): void {
+    if (args[0] instanceof ScRange) {
+      this.Ref1.InitAddress(args[0].aStart);
+      this.Ref2.InitAddress(args[0].aEnd);
+    } else {
+      const [col1, row1, tab1, col2, row2, tab2] = args as [
+        SCCOL,
+        SCROW,
+        SCTAB,
+        SCCOL,
+        SCROW,
+        SCTAB,
+      ];
+      this.Ref1.InitAddress(col1, row1, tab1);
+      this.Ref2.InitAddress(col2, row2, tab2);
+    }
+  }
+  /** Initializes both endpoints relative to the formula position, retaining trim. @param doc - Native document getter view. @param range - Absolute range. @param position - Formula position. @returns Nothing. */
+  public InitRangeRel(doc: ScReferenceDocument, range: ScRange, position: ScAddress): void {
+    this.Ref1.InitAddressRel(doc, range.aStart, position);
+    this.Ref2.InitAddressRel(doc, range.aEnd, position);
+  }
+  /** Initializes original endpoint flags and 3D inheritance through sorted absolute range construction. @param doc - Document. @param first - First reference address. @param second - Second reference address. @param position - Formula position. @returns Nothing. */
+  public InitFromRefAddresses(
+    doc: ScReferenceDocument,
+    first: ScRefAddress,
+    second: ScRefAddress,
+    position: ScAddress,
+  ): void {
+    this.InitFlags();
+    this.Ref1.SetColRel(first.IsRelCol());
+    this.Ref1.SetRowRel(first.IsRelRow());
+    this.Ref1.SetTabRel(first.IsRelTab());
+    this.Ref1.SetFlag3D(first.Tab() !== position.Tab() || first.Tab() !== second.Tab());
+    this.Ref2.SetColRel(second.IsRelCol());
+    this.Ref2.SetRowRel(second.IsRelRow());
+    this.Ref2.SetTabRel(second.IsRelTab());
+    this.Ref2.SetFlag3D(first.Tab() !== second.Tab());
+    this.SetRange(
+      doc.GetSheetLimits(),
+      new ScRange(first.GetAddress(), second.GetAddress()),
+      position,
+    );
+  }
+  /** Checks both endpoint local domains. @param doc - Document. @returns Validity. */
+  public Valid(doc: ScReferenceDocument): boolean {
+    return this.Ref1.Valid(doc) && this.Ref2.Valid(doc);
+  }
+  /** Checks original external cache domains and masked sheet ordering. @param doc - Document. @returns External validity. */
+  public ValidExternal(doc: ScReferenceDocument): boolean {
+    return (
+      this.Ref1.ValidExternal(doc) &&
+      this.Ref2.ColValid(doc) &&
+      this.Ref2.RowValid(doc) &&
+      this.Ref1.Tab() <= this.Ref2.Tab()
+    );
+  }
+  /** Resolves endpoints with the original independently sorted address-pair constructor. @param bounds - Limits or document. @param position - Formula position. @returns Independent absolute range. */
+  public toAbs(bounds: ScSheetLimits | ScReferenceDocument, position: ScAddress): ScRange {
+    const limits = bounds instanceof ScSheetLimits ? bounds : bounds.GetSheetLimits();
+    return new ScRange(this.Ref1.toAbs(limits, position), this.Ref2.toAbs(limits, position));
+  }
+  /** Sets endpoint values using the existing flags and supplied ordering. @param limits - Sheet limits. @param range - Ordered absolute range. @param position - Formula position. @returns Nothing. */
+  public SetRange(limits: ScSheetLimits, range: ScRange, position: ScAddress): void {
+    this.Ref1.SetAddress(limits, range.aStart, position);
+    this.Ref2.SetAddress(limits, range.aEnd, position);
+  }
+  /** Orders through the original single-reference provenance owner. @param position - Formula position. @returns Nothing. */
+  public PutInOrder(position: ScAddress): void {
+    ScSingleRefData.PutInOrder(this.Ref1, this.Ref2, position);
+  }
+  /** Compares raw endpoints; original trim state is excluded. @param other - Range reference. @returns Equality. */
+  public equals(other: ScComplexRefData): boolean {
+    return this.Ref1.equals(other.Ref1) && this.Ref2.equals(other.Ref2);
+  }
+  /** Extends with original sheet, relativity, 3D and relative-name inheritance. @param limits - Sheet limits. @param value - Single or complex reference, including aliases. @param position - Formula position. @returns Recipient. */
+  public Extend(
+    limits: ScSheetLimits,
+    value: ScSingleRefData | ScComplexRefData,
+    position: ScAddress,
+  ): this {
+    if (value instanceof ScComplexRefData)
+      return this.Extend(limits, value.Ref1, position).Extend(limits, value.Ref2, position);
+    const inherit3D = this.Ref1.IsFlag3D() && !this.Ref2.IsFlag3D() && !value.IsFlag3D();
+    const absoluteRange = this.toAbs(limits, position);
+    const reference = new ScSingleRefData(value);
+    if (!value.IsFlag3D()) {
+      if (this.Ref2.IsTabRel()) reference.SetRelTab(this.Ref2.Tab());
+      else reference.SetAbsTab(this.Ref2.Tab());
+    }
+    const absolute = reference.toAbs(limits, position);
+    if (absolute.Col() < absoluteRange.aStart.Col()) absoluteRange.aStart.SetCol(absolute.Col());
+    if (absolute.Row() < absoluteRange.aStart.Row()) absoluteRange.aStart.SetRow(absolute.Row());
+    if (absolute.Tab() < absoluteRange.aStart.Tab()) absoluteRange.aStart.SetTab(absolute.Tab());
+    if (absoluteRange.aEnd.Col() < absolute.Col()) absoluteRange.aEnd.SetCol(absolute.Col());
+    if (absoluteRange.aEnd.Row() < absolute.Row()) absoluteRange.aEnd.SetRow(absolute.Row());
+    if (absoluteRange.aEnd.Tab() < absolute.Tab()) absoluteRange.aEnd.SetTab(absolute.Tab());
+    if (absoluteRange.aEnd.Col() === absolute.Col()) this.Ref2.SetColRel(value.IsColRel());
+    if (absoluteRange.aEnd.Row() === absolute.Row()) this.Ref2.SetRowRel(value.IsRowRel());
+    if (absoluteRange.aStart.Tab() === absolute.Tab() && value.IsFlag3D())
+      this.Ref1.SetTabRel(value.IsTabRel());
+    if (absoluteRange.aEnd.Tab() === absolute.Tab())
+      this.Ref2.SetTabRel(inherit3D ? this.Ref1.IsTabRel() : value.IsTabRel());
+    if (
+      absoluteRange.aStart.Tab() !== position.Tab() ||
+      absoluteRange.aStart.Tab() !== absoluteRange.aEnd.Tab()
+    )
+      this.Ref1.SetFlag3D(true);
+    if (absoluteRange.aStart.Tab() !== absoluteRange.aEnd.Tab()) this.Ref2.SetFlag3D(true);
+    if (value.IsFlag3D()) this.Ref1.SetFlag3D(true);
+    if (value.IsRelName()) this.Ref2.SetRelName(true);
+    this.SetRange(limits, absoluteRange, position);
+    return this;
+  }
+  /** Checks absolute full-row anchors for an entire-column reference. @param limits - Sheet limits. @returns Whether entire columns. */
+  public IsEntireCol(limits: ScSheetLimits): boolean {
+    return (
+      this.Ref1.Row() === 0 &&
+      this.Ref2.Row() === limits.MaxRow() &&
+      !this.Ref1.IsRowRel() &&
+      !this.Ref2.IsRowRel()
+    );
+  }
+  /** Checks absolute full-column anchors for an entire-row reference. @param limits - Sheet limits. @returns Whether entire rows. */
+  public IsEntireRow(limits: ScSheetLimits): boolean {
+    return (
+      this.Ref1.Col() === 0 &&
+      this.Ref2.Col() === limits.MaxCol() &&
+      !this.Ref1.IsColRel() &&
+      !this.Ref2.IsColRel()
+    );
+  }
+  /** Updates a masked absolute/relative column endpoint with native sticky semantics. @param doc - Document. @param delta - Column displacement. @param position - Formula position. @returns Native change result, which can be true for zero delta. */
+  public IncEndColSticky(doc: ScReferenceDocument, delta: SCCOL, position: ScAddress): boolean {
+    const col1 =
+      ((this.Ref1.IsColRel() ? this.Ref1.Col() + position.Col() : this.Ref1.Col()) << 16) >> 16;
+    const col2 =
+      ((this.Ref2.IsColRel() ? this.Ref2.Col() + position.Col() : this.Ref2.Col()) << 16) >> 16;
+    if (col1 >= col2) {
+      this.Ref2.IncCol(delta);
+      return true;
+    }
+    if (col2 === doc.MaxCol()) return false;
+    if (col2 < doc.MaxCol()) {
+      const col = Math.min(((col2 + delta) << 16) >> 16, doc.MaxCol());
+      if (this.Ref2.IsColRel()) this.Ref2.SetRelCol(col - position.Col());
+      else this.Ref2.SetAbsCol(col);
+    } else this.Ref2.IncCol(delta);
+    return true;
+  }
+  /** Updates a masked absolute/relative row endpoint with native sticky semantics. @param doc - Document. @param delta - Row displacement. @param position - Formula position. @returns Native change result, which can be true for zero delta. */
+  public IncEndRowSticky(doc: ScReferenceDocument, delta: SCROW, position: ScAddress): boolean {
+    const row1 = (this.Ref1.IsRowRel() ? this.Ref1.Row() + position.Row() : this.Ref1.Row()) | 0;
+    const row2 = (this.Ref2.IsRowRel() ? this.Ref2.Row() + position.Row() : this.Ref2.Row()) | 0;
+    if (row1 >= row2) {
+      this.Ref2.IncRow(delta);
+      return true;
+    }
+    if (row2 === doc.MaxRow()) return false;
+    if (row2 < doc.MaxRow()) {
+      const row = Math.min((row2 + delta) | 0, doc.MaxRow());
+      if (this.Ref2.IsRowRel()) this.Ref2.SetRelRow(row - position.Row());
+      else this.Ref2.SetAbsRow(row);
+    } else this.Ref2.IncRow(delta);
+    return true;
+  }
+  /** Checks deletion on either endpoint. @returns Whether deleted. */
+  public IsDeleted(): boolean {
+    return this.Ref1.IsDeleted() || this.Ref2.IsDeleted();
+  }
+  /** Reads trim state independently of reference equality. @returns Trim state. */
+  public IsTrimToData(): boolean {
+    return this.bTrimToData;
+  }
+  /** Sets trim state without altering endpoint values. @param value - Trim state. @returns Nothing. */
+  public SetTrimToData(value: boolean): void {
+    this.bTrimToData = value;
   }
 }

@@ -18,7 +18,7 @@
     },
     "capability": "Calc initialized single formula reference data",
     "gaps": [
-      "Full ScDocument, ScRawToken, formula compiler/listening and ScComplexRefData integration remain subsequent work. Native union/pointer storage, debug-only Dump and uninitialized/undefined arithmetic domains are not certified. Native fixture proves bounded numerical and flag states, not whole Calc parity."
+      "Full ScDocument, ScRawToken and formula compiler/listening integration remain subsequent work. Native union/pointer storage, debug-only Dump and uninitialized/undefined arithmetic domains are not certified. Native fixtures prove bounded numerical and flag states, not whole Calc parity."
     ],
     "upstream": {
       "implementation": [
@@ -79,8 +79,8 @@
     "aspect": "model-operation",
     "atomicOperation": "Resolve and reorder initialized single formula references with original flag provenance",
     "scopeLimitations": [
-      "Full ScDocument, ScRawToken, formula compiler/listening and ScComplexRefData integration remain subsequent work. Native union/pointer storage, debug-only Dump and uninitialized/undefined arithmetic domains are not certified. Native fixture proves bounded numerical and flag states, not whole Calc parity.",
-      "The upstream test also exercises complex range extension; only its initial single-reference assertions are represented in this task."
+      "Full ScDocument, ScRawToken and formula compiler/listening integration remain subsequent work. Native union/pointer storage, debug-only Dump and uninitialized/undefined arithmetic domains are not certified. Native fixtures prove bounded numerical and flag states, not whole Calc parity.",
+      "Complex range ownership and the remaining upstream testFormulaRefData extension assertions are now represented by CAP-fbe57efc-3ea4-433c-b323-013b7fc07e4a; full formula/compiler integration remains unverified."
     ],
     "implemented": true,
     "contractParity": false,

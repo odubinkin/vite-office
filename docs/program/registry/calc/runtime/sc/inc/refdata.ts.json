@@ -8,7 +8,8 @@
     "suite": "calc",
     "subsystem": "formula-reference",
     "capabilityIds": [
-      "CAP-19d5edf7-1cbb-4520-88a4-00aea84128c1"
+      "CAP-19d5edf7-1cbb-4520-88a4-00aea84128c1",
+      "CAP-fbe57efc-3ea4-433c-b323-013b7fc07e4a"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -19,15 +20,18 @@
         "apps/office/src/sc/inc/refdata.ts#ScSingleRefData",
         "apps/office/src/sc/source/core/tool/refdata.test.ts#matches all2048 native axis and relative-name reorderings",
         "vendor/libreoffice-reference/sc/inc/refdata.hxx#ScSingleRefData",
-        "scripts/calc-refdata-native-probe.mjs#const definitions = interval"
+        "scripts/calc-refdata-native-probe.mjs#const definitions = interval",
+        "apps/office/src/sc/source/core/tool/complex-refdata.test.ts#matches all6400 native single-reference extensions and flag inheritance",
+        "scripts/calc-refdata-native-probe.mjs#const complexDefinitions = interval"
       ],
-      "justification": "Task 202610090758-MBH4QY ports all initialized non-debug single-reference header/source contracts using existing ScAddress, ScRefAddress and ScSheetLimits. Exact eight-bit flags, signed raw values, copy/assignment, initialization, setters/increments, raw equality, deletion masking, validity, conversion and original per-axis relative-name ordering are covered. The native probe compiles all30 unchanged non-debug definitions and original class/inline numerical owners in a bounded four-getter document shell. Every2048 flag/domain state,1024 address update,2048 ordering state,40 initializer,12 mutation snapshot and5 equality outcomes matches actual TS owners under ASan/UBSan with pinned Git blobs and full/extracted SHA256 evidence. All prior statuses/records and shared/Writer sources preserved. Full ScDocument, ScRawToken, formula compiler/listening and ScComplexRefData integration remain subsequent work. Native union/pointer storage, debug-only Dump and uninitialized/undefined arithmetic domains are not certified. Native fixture proves bounded numerical and flag states, not whole Calc parity. This header only re-exports the existing core/tool class and document getter type; it declares no local owner symbol. Implementation symbols are mapped by the separate core/tool runtime record.",
+      "justification": "Task 202610090758-MBH4QY ports all initialized non-debug single-reference header/source contracts using existing ScAddress, ScRefAddress and ScSheetLimits. Exact eight-bit flags, signed raw values, copy/assignment, initialization, setters/increments, raw equality, deletion masking, validity, conversion and original per-axis relative-name ordering are covered. The native probe compiles all30 unchanged non-debug definitions and original class/inline numerical owners in a bounded four-getter document shell. Every2048 flag/domain state,1024 address update,2048 ordering state,40 initializer,12 mutation snapshot and5 equality outcomes matches actual TS owners under ASan/UBSan with pinned Git blobs and full/extracted SHA256 evidence. All prior statuses/records and shared/Writer sources preserved. Full ScDocument, ScRawToken, formula compiler/listening integration remain subsequent work. Native union/pointer storage, debug-only Dump and uninitialized/undefined arithmetic domains are not certified. Native fixture proves bounded numerical and flag states, not whole Calc parity. This header only re-exports the existing core/tool classes and document getter type; it declares no local owner symbol. Implementation symbols are mapped by the separate core/tool runtime record. Task 202610090816-5YGKY3 adds ScComplexRefData at the original header/source boundary, reusing ScSingleRefData, ScAddress, ScRange, ScRefAddress and ScSheetLimits. Stable endpoint owners, trim ownership, original extension and flag inheritance, masked external ordering, sorted conversion, whole-axis detection and relative/deleted sticky updates are retained. The probe additionally compiles the original complex class, all14 unchanged non-debug source definitions and range constructors/order. ASan/UBSan-clean acceptance compares3072 property/ordering states,6400 single extensions,1600 complex extensions,300 aliased extensions,1792 sticky updates,256 mixed-address initializers,36 range/flag initializers and4 equality outputs. Both literal upstream testFormulaRefData complex extension assertions are retained. Existing single-reference class and fixture are unchanged. Full ScDocument, ScRawToken and formula compiler/listening integration remain subsequent work. Native union/pointer storage, debug-only Dump and uninitialized/undefined arithmetic domains are not certified. Native fixtures prove bounded numerical and flag states, not whole Calc parity.",
       "knownViolations": [],
       "localSymbols": [],
       "sourceResponsibility": "aligned",
       "upstreamFile": "sc/inc/refdata.hxx",
       "upstreamSymbols": [
-        "ScSingleRefData"
+        "ScSingleRefData",
+        "ScComplexRefData"
       ]
     }
   }

@@ -6,7 +6,11 @@ import path from "node:path";
 
 const upstream = "vendor/libreoffice-reference";
 const pinned = "9bc445578031fecf56086729d8e4940c77e14d65";
-const fixture = "apps/office/src/sc/source/core/tool/native-single-reference-cases.json";
+const mode = process.argv[2];
+const complexMode = mode === "--complex-write" || mode === "--complex-check";
+const fixture = complexMode
+  ? "apps/office/src/sc/source/core/tool/native-complex-reference-cases.json"
+  : "apps/office/src/sc/source/core/tool/native-single-reference-cases.json";
 const target = "output/playwright/calc-native";
 if (
   execFileSync("git", ["-C", upstream, "rev-parse", "HEAD"], { encoding: "utf8" }).trim() !== pinned
@@ -69,6 +73,19 @@ const refAddressClass = interval(
   "// Global functions",
 );
 const limitsClass = interval(limits, "struct ScSheetLimits final", "/* vim:set");
+const complexClass = interval(header, "struct ScComplexRefData", "/* vim:set");
+const complexDefinitions = interval(
+  source,
+  "void ScComplexRefData::InitFromRefAddresses(",
+  "#if DEBUG_FORMULA_COMPILER",
+);
+if (
+  [...complexDefinitions.matchAll(/^(?:void|bool|ScRange|ScComplexRefData&) ScComplexRefData::/gm)]
+    .length !== 14
+)
+  throw new Error("Expected all fourteen complete non-debug complex-reference definitions.");
+const rangeInline = interval(address, "    ScRange() :", "    inline bool Contains(");
+const rangeOrder = interval(address, "    void PutInOrder() { aStart.PutInOrder(aEnd); }", "\n\n");
 const driver = `
 ${header.slice(0, header.indexOf("#pragma once"))}
 #include <algorithm>
@@ -95,7 +112,10 @@ class ScAddress { SCROW nRow; SCCOL nCol; SCTAB nTab; public:
  ${addressEquality}
 };
 ${interval(address, "[[nodiscard]] constexpr bool ValidAddress(", "//  ScRange")}
-struct ScRange { ScAddress aStart, aEnd; };
+struct ScRange { ScAddress aStart, aEnd;
+ ${rangeInline}
+ ${rangeOrder}
+};
 ${interval(address, "[[nodiscard]] inline bool ValidRange(", "//  ScRangePair")}
 ${refAddressClass}
 ${limitsClass}
@@ -104,7 +124,9 @@ class ScDocument { ScSheetLimits limits{MAXCOL,MAXROW}; public:
  SCTAB GetTableCount() const { return 3; } const ScSheetLimits& GetSheetLimits() const { return limits; }
 };
 ${referenceClass}
+${complexClass}
 ${definitions}
+${complexDefinitions}
 void flags(ScSingleRefData& r, unsigned f) {
  r.SetColRel(f&1); r.SetColDeleted(f&2); r.SetRowRel(f&4); r.SetRowDeleted(f&8);
  r.SetTabRel(f&16); r.SetTabDeleted(f&32); r.SetFlag3D(f&64); r.SetRelName(f&128);
@@ -114,6 +136,93 @@ void raw(const ScSingleRefData& r) {
  std::cout << v.Col() << ',' << v.Row() << ',' << v.Tab() << ',' << unsigned(r.FlagValue());
 }
 void addr(const ScAddress& p) { std::cout << p.Col() << ',' << p.Row() << ',' << p.Tab(); }
+
+void range(const ScRange& r) { addr(r.aStart); std::cout << ','; addr(r.aEnd); }
+void complex(const ScComplexRefData& r) { raw(r.Ref1); std::cout << ','; raw(r.Ref2); std::cout << ',' << r.IsTrimToData(); }
+ScSingleRefData at(const ScAddress& p, unsigned f, const ScAddress& pos) {
+ ScSingleRefData r; r.InitAddress((f&1)?p.Col()-pos.Col():p.Col(),(f&4)?p.Row()-pos.Row():p.Row(),(f&16)?p.Tab()-pos.Tab():p.Tab()); flags(r,f); return r;
+}
+void complexCases(const ScDocument& doc, const ScAddress& pos) {
+ const auto& limits=doc.GetSheetLimits();
+ const unsigned allFlags[]={0,1,4,16,21,64,128,42,2,8,32,255,192,80,132,129};
+ const unsigned extensionFlags[]={0,21,16,64,80,85,128,149,42,255};
+ const ScRange profiles[]={ScRange(2,3,1,4,5,2),ScRange(8,9,2,1,2,0),
+  ScRange(0,0,-1,1,1,-1),ScRange(0,0,-1,1,1,0),ScRange(0,0,0,1,1,-1),
+  ScRange(0,0,0,MAXCOL+1,1,1),ScRange(0,-1,0,1,1,1),ScRange(0,0,MAXTAB,1,MAXROW+1,MAXTAB+1),
+  ScRange(2,0,0,4,MAXROW,0),ScRange(0,3,0,MAXCOL,5,0),ScRange(0,0,0,MAXCOL,MAXROW,0),ScRange(2,3,1,2,3,1)};
+ bool first=true; std::cout << "{\\"properties\\":[";
+ for(const auto& p:profiles) for(unsigned f1:allFlags) for(unsigned f2:allFlags) {
+  ScComplexRefData r; r.InitRange(p); flags(r.Ref1,f1); flags(r.Ref2,f2); r.SetTrimToData(f1&128);
+  if(!first) std::cout << ','; first=false;
+  std::cout << '['; complex(r); std::cout << ','; range(r.toAbs(doc,pos));
+  std::cout << ',' << r.Valid(doc) << ',' << r.ValidExternal(doc) << ',' << r.IsEntireCol(limits) << ',' << r.IsEntireRow(limits) << ',' << r.IsDeleted() << ',';
+  r.PutInOrder(pos); complex(r); std::cout << ']';
+ }
+ const ScAddress points[]={ScAddress(1,2,0),ScAddress(3,4,1),ScAddress(6,7,3),ScAddress(4,5,2)};
+ first=true; std::cout << "],\\"extensions\\":[";
+ for(unsigned f1:extensionFlags) for(unsigned f2:extensionFlags) for(unsigned f:allFlags) for(const auto& p:points) {
+  ScComplexRefData r; r.Ref1=at(ScAddress(2,3,1),f1,pos); r.Ref2=at(ScAddress(4,5,2),f2,pos); r.SetTrimToData(f&128);
+  ScSingleRefData extra=at(p,f,pos);
+  if(!first) std::cout << ','; first=false;
+  std::cout << '['; complex(r); std::cout << ','; raw(extra);
+  r.Extend(limits,extra,pos); std::cout << ','; complex(r); std::cout << ']';
+ }
+ first=true; std::cout << "],\\"rangeExtensions\\":[";
+ for(unsigned f1:extensionFlags) for(unsigned f2:extensionFlags) for(unsigned f:allFlags) {
+  ScComplexRefData r,extra; r.Ref1=at(ScAddress(2,3,1),f1,pos); r.Ref2=at(ScAddress(4,5,2),f2,pos); r.SetTrimToData(f1&128);
+  extra.Ref1=at(ScAddress(1,2,0),f,pos); extra.Ref2=at(ScAddress(6,7,3),f2,pos); extra.SetTrimToData(f&128);
+  if(!first) std::cout << ','; first=false;
+  std::cout << '['; complex(r); std::cout << ','; complex(extra);
+  r.Extend(limits,extra,pos); std::cout << ','; complex(r); std::cout << ']';
+ }
+ const ScRange stickyProfiles[]={ScRange(2,3,0,4,5,1),ScRange(2,3,0,MAXCOL,MAXROW,1),
+  ScRange(MAXCOL,MAXROW,0,MAXCOL,MAXROW,0),ScRange(2,3,0,MAXCOL+1,MAXROW+1,1),
+  ScRange(4,5,1,2,3,0),ScRange(0,0,0,MAXCOL,MAXROW,0),ScRange(2,3,0,32766,MAXROW-1,1)};
+ first=true; std::cout << "],\\"sticky\\":[";
+ for(const auto& p:stickyProfiles) for(unsigned m1=0;m1<4;++m1) for(unsigned m2=0;m2<4;++m2) for(unsigned deleted:{0,42}) for(unsigned axis:{0,1}) for(int delta:{-3,0,1,3}) {
+  ScComplexRefData r; const unsigned f1=((m1&1)?1:0)|((m1&2)?4:0), f2=((m2&1)?1:0)|((m2&2)?4:0)|deleted;
+  r.Ref1=at(p.aStart,f1,pos); r.Ref2=at(p.aEnd,f2,pos); r.SetTrimToData(m1&1);
+  if(!first) std::cout << ','; first=false;
+  std::cout << '['; complex(r); std::cout << ',' << axis << ',' << delta << ',';
+  bool changed=axis?r.IncEndRowSticky(doc,delta,pos):r.IncEndColSticky(doc,delta,pos);
+  std::cout << changed << ','; complex(r); std::cout << ']';
+ }
+ const ScRange initializers[]={profiles[0],profiles[1],profiles[7],ScRange(10,20,12,10,20,12)};
+ first=true; std::cout << "],\\"initializers\\":[";
+ for(const auto& p:initializers) for(unsigned m1=0;m1<8;++m1) for(unsigned m2=0;m2<8;++m2) {
+  ScRefAddress a(p.aStart.Col(),p.aStart.Row(),p.aStart.Tab()),b(p.aEnd.Col(),p.aEnd.Row(),p.aEnd.Tab());
+  a.SetRelCol(m1&1); a.SetRelRow(m1&2); a.SetRelTab(m1&4);
+  b.SetRelCol(m2&1); b.SetRelRow(m2&2); b.SetRelTab(m2&4);
+  ScComplexRefData r; r.SetTrimToData(m1&1);
+  if(!first) std::cout << ','; first=false;
+  std::cout << '['; range(p); std::cout << ',' << m1 << ',' << m2 << ',' << r.IsTrimToData() << ',';
+  r.InitFromRefAddresses(doc,a,b,pos); complex(r); std::cout << ']';
+ }
+ first=true; std::cout << "],\\"rangeInitializers\\":[";
+ for(const auto& p:profiles) for(unsigned mode:{0,1,2}) {
+  ScComplexRefData r; r.SetTrimToData(true);
+  if(!first) std::cout << ','; first=false;
+  std::cout << '['; range(p); std::cout << ',' << mode << ',';
+  if(mode==0) r.InitRange(p.aStart.Col(),p.aStart.Row(),p.aStart.Tab(),p.aEnd.Col(),p.aEnd.Row(),p.aEnd.Tab());
+  else if(mode==1) r.InitRangeRel(doc,p,pos);
+  else {r.InitRange(p); flags(r.Ref1,255); flags(r.Ref2,255); r.InitFlags();}
+  complex(r); std::cout << ']';
+ }
+ first=true; std::cout << "],\\"aliasing\\":[";
+ for(unsigned f1:extensionFlags) for(unsigned f2:extensionFlags) for(unsigned mode:{0,1,2}) {
+  ScComplexRefData r; r.Ref1=at(ScAddress(2,3,1),f1,pos); r.Ref2=at(ScAddress(4,5,2),f2,pos); r.SetTrimToData(true);
+  if(!first) std::cout << ','; first=false;
+  std::cout << '['; complex(r); std::cout << ',' << mode << ',';
+  if(mode==0) r.Extend(limits,r,pos); else if(mode==1) r.Extend(limits,r.Ref1,pos); else r.Extend(limits,r.Ref2,pos);
+  complex(r); std::cout << ']';
+ }
+ ScComplexRefData r; r.InitRange(2,3,1,4,5,2); ScComplexRefData copy=r;
+ std::cout << "],\\"equalities\\":[" << (copy==r) << ',';
+ copy.SetTrimToData(true); std::cout << (copy==r) << ',';
+ copy.Ref1.IncCol(1); std::cout << (copy==r) << ',';
+ copy=r; copy.Ref2.IncRow(1); std::cout << (copy==r) << "]}";
+}
+
 int main() {
  ScDocument doc; const ScAddress pos(10,20,12);
  const ScAddress profiles[] = { ScAddress(0,0,0), ScAddress(MAXCOL,MAXROW,2),
@@ -176,7 +285,7 @@ int main() {
  copy.SetFlag3D(true); std::cout << (copy==r) << ',';
  copy=r; copy.IncCol(1); std::cout << (copy==r) << ',';
  copy=r; copy.IncRow(1); std::cout << (copy==r) << ',';
- copy=r; copy.IncTab(1); std::cout << (copy==r) << "]}";
+ copy=r; copy.IncTab(1); std::cout << (copy==r) << "],\\"complex\\":"; complexCases(doc,pos); std::cout << "}";
 }
 `;
 mkdirSync(target, { recursive: true });
@@ -215,17 +324,39 @@ const result = {
     addressEquality: digest(addressEquality),
     refAddressClass: digest(refAddressClass),
     limitsClass: digest(limitsClass),
+    ...(complexMode
+      ? {
+          complexClass: digest(complexClass),
+          complexDefinitions: digest(complexDefinitions),
+          rangeInline: digest(rangeInline),
+          rangeOrder: digest(rangeOrder),
+        }
+      : {}),
   },
   bounds: [16383, 1048575, 3],
   position: [10, 20, 12],
-  ...cases,
+  ...(complexMode
+    ? cases.complex
+    : {
+        values: cases.values,
+        addressUpdates: cases.addressUpdates,
+        ordering: cases.ordering,
+        initializers: cases.initializers,
+        mutations: cases.mutations,
+        equalities: cases.equalities,
+      }),
 };
-const mode = process.argv[2];
-if (mode === "--write") writeFileSync(fixture, `${JSON.stringify(result, null, 2)}\n`);
-else if (mode === "--check") {
+if (mode === "--write" || mode === "--complex-write")
+  writeFileSync(fixture, `${JSON.stringify(result, null, 2)}\n`);
+else if (mode === "--check" || mode === "--complex-check") {
   if (JSON.stringify(JSON.parse(readFileSync(fixture, "utf8"))) !== JSON.stringify(result))
     throw new Error("Calc single-reference fixture differs from pinned native execution.");
-} else throw new Error("Usage: node scripts/calc-refdata-native-probe.mjs --write|--check");
+} else
+  throw new Error(
+    "Usage: node scripts/calc-refdata-native-probe.mjs --write|--check|--complex-write|--complex-check",
+  );
 console.log(
-  `Pinned Calc single-reference probe: ${cases.values.length} flag/domain states, ${cases.addressUpdates.length} address updates, ${cases.ordering.length} ordering states; ASan/UBSan clean; ${mode}.`,
+  complexMode
+    ? `Pinned Calc complex-reference probe: ${cases.complex.properties.length} properties, ${cases.complex.extensions.length} extensions, ${cases.complex.rangeExtensions.length} range extensions, ${cases.complex.sticky.length} sticky cases; ASan/UBSan clean; ${mode}.`
+    : `Pinned Calc single-reference probe: ${cases.values.length} flag/domain states, ${cases.addressUpdates.length} address updates, ${cases.ordering.length} ordering states; ASan/UBSan clean; ${mode}.`,
 );
