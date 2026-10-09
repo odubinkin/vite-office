@@ -22,7 +22,8 @@ import { RES_FRM_SIZE, RES_ROW_SPLIT } from "../../../inc/hintids";
 import { SvxBoxItem } from "../../../../editeng/source/items/frmitems";
 import { SvxBorderLine } from "../../../../editeng/source/items/borderline";
 import { RES_BOX } from "../../../inc/hintids";
-import { RES_COLLAPSING_BORDERS } from "../../../inc/hintids";
+import { RES_COLLAPSING_BORDERS, RES_LAYOUT_SPLIT } from "../../../inc/hintids";
+import { SwFormatLayoutSplit } from "../../../inc/fmtlsplt";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 
 /** Physical table geometry imported from Writer table style properties, in twips. */
@@ -313,7 +314,7 @@ export class SwTableLine extends SwClient {
 /** Owns ordered rows, columns and a node-array section like upstream SwTable. */
 export class SwTable {
   private readonly frameFormat: SwFrameFormat;
-  private format: Omit<SwTableFormat, "borderModel"> = {};
+  private format: Omit<SwTableFormat, "borderModel" | "layoutSplit"> = {};
   public static readonly SEARCH_NONE = 0;
   public static readonly SEARCH_ROW = 1;
   public static readonly SEARCH_COL = 2;
@@ -350,11 +351,14 @@ export class SwTable {
   public GetFormat(): SwTableFormat {
     const borders = this.frameFormat.GetAttrSet().GetItemIfSet(RES_COLLAPSING_BORDERS, false) as
       SfxBoolItem | undefined;
+    const split = this.frameFormat.GetAttrSet().GetItemIfSet(RES_LAYOUT_SPLIT, false) as
+      SwFormatLayoutSplit | undefined;
     return {
       ...this.format,
       ...(borders === undefined
         ? {}
         : { borderModel: borders.GetValue() ? "collapsing" : "separating" }),
+      ...(split === undefined ? {} : { layoutSplit: split.GetValue() }),
     };
   }
 
@@ -386,7 +390,7 @@ export class SwTable {
   /** Publishes represented frame-size changes to row/box width adjustment, as SwClientNotify does. @param value - New values. @returns Nothing. */
   public SetFormat(value: SwTableFormat): void {
     const oldWidth = this.format.width;
-    const { borderModel, ...geometry } = value;
+    const { borderModel, layoutSplit, ...geometry } = value;
     this.format = geometry;
     if (oldWidth !== undefined && value.width !== undefined && oldWidth !== value.width)
       this.AdjustWidths(oldWidth, value.width);
@@ -395,6 +399,8 @@ export class SwTable {
       this.frameFormat.SetFormatAttr(
         new SfxBoolItem(RES_COLLAPSING_BORDERS, borderModel === "collapsing"),
       );
+    if (layoutSplit === undefined) this.frameFormat.ResetFormatAttr(RES_LAYOUT_SPLIT);
+    else this.frameFormat.SetFormatAttr(new SwFormatLayoutSplit(layoutSplit));
   }
 
   /** Returns the native headline count capped by actual table lines. @returns Repeated line count. */

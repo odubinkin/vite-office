@@ -64,6 +64,7 @@ export interface SwTableProperties {
 export function TableParamToItemSet(shell: SwFEShell): SfxItemSet {
   const value = new SfxItemSet(shell.GetDoc().GetAttrPool(), [
     [RES_BOX, RES_BOX],
+    [RES_LAYOUT_SPLIT, RES_LAYOUT_SPLIT],
     [RES_COLLAPSING_BORDERS, RES_COLLAPSING_BORDERS],
     [SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER],
   ]);
@@ -76,6 +77,7 @@ export function TableParamToItemSet(shell: SwFEShell): SfxItemSet {
     value.Put(info);
     return value;
   }
+  value.Put(tableNode.GetTable().GetFrameFormat().GetAttrSet().Get(RES_LAYOUT_SPLIT));
   value.Put(tableNode.GetTable().GetFrameFormat().GetAttrSet().Get(RES_COLLAPSING_BORDERS));
   const selected = shell.IsTableMode();
   return shell.RunNotificationTransaction(

@@ -108,7 +108,7 @@ function WriterTablePropertiesDialog({
   );
   const [textFlowPage] = useState(
     /** Captures the native initial headline item once per dialog. @returns Native Text Flow headline owner. */
-    () => new SwTextFlowPage(table, selectedBoxes),
+    () => new SwTextFlowPage(table, selectedBoxes, borderItems),
   );
   const borderPageActivated = useRef(false);
   const [borderPage] = useState(

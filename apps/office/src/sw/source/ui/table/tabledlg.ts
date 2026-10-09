@@ -10,7 +10,7 @@ import { SfxStringItem } from "../../../../svl/source/items/stritem";
 import { SwFormatLayoutSplit } from "../../../inc/fmtlsplt";
 import { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
 import { SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";
-import { RES_UL_SPACE } from "../../../inc/hintids";
+import { RES_UL_SPACE, RES_LAYOUT_SPLIT } from "../../../inc/hintids";
 import { FN_TABLE_REP, FN_PARAM_TABLE_NAME, FN_PARAM_TABLE_HEADLINE } from "../../../inc/cmdid";
 import { SwPtrItem } from "../../uibase/utlui/uiitems";
 
@@ -38,10 +38,17 @@ export class SwTextFlowPage {
   private rowSplit: boolean | undefined;
   private savedRowSplit: boolean | undefined;
 
-  /** Captures canonical initial items. @param table - Original table owner. @param selectedBoxes - Original selected cells or whole table input. @returns Nothing. */
-  public constructor(table: SwTable, selectedBoxes?: readonly SwTableBox[]) {
+  /** Captures canonical initial items. @param table - Original table owner. @param selectedBoxes - Original selected cells or whole table input. @param input - Authoritative native dialog input, when supplied. @returns Nothing. */
+  public constructor(table: SwTable, selectedBoxes?: readonly SwTableBox[], input?: SfxItemSet) {
     this.originalHeadline = table.GetRowsToRepeat();
-    this.originalSplit = table.GetFormat().layoutSplit ?? true;
+    this.originalSplit =
+      input === undefined
+        ? (
+            table.GetFrameFormat().GetAttrSet().Get(RES_LAYOUT_SPLIT) as SwFormatLayoutSplit
+          ).GetValue()
+        : ((
+            input.GetItemIfSet(RES_LAYOUT_SPLIT, false) as SwFormatLayoutSplit | undefined
+          )?.GetValue() ?? true);
     this.originalRowSplit = GetSwRowSplit(table, selectedBoxes)?.GetValue();
     this.Reset();
   }

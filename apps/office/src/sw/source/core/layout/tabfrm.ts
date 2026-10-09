@@ -14,8 +14,10 @@ import {
   RES_HORI_ORIENT,
   RES_UL_SPACE,
   RES_BREAK,
+  RES_LAYOUT_SPLIT,
 } from "../../../inc/hintids";
 import { AttrSetChangeHint, SwAttrSetChg, type SwModelHint } from "../../../inc/hints";
+import type { SwFormatLayoutSplit } from "../../../inc/fmtlsplt";
 import type { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 
 /** Native table invalidation mask from tabfrm.hxx; root browse-width propagation remains unrepresented. */
@@ -303,6 +305,10 @@ export class SwTabFrame extends SwLayoutFrame {
       case RES_BREAK:
         flags |= SwTabFrameInvFlags.InvalidatePos | SwTabFrameInvFlags.InvalidateNextPos;
         break;
+      case RES_LAYOUT_SPLIT:
+        // Represented table frames are masters; native follow identity remains unrepresented.
+        flags |= SwTabFrameInvFlags.InvalidatePos;
+        break;
       case RES_COLLAPSING_BORDERS:
         flags |= SwTabFrameInvFlags.InvalidatePrt;
         lcl_InvalidateAllLowersPrt(this);
@@ -370,7 +376,7 @@ export class SwTabFrame extends SwLayoutFrame {
 
   /** Reads the native table-frame split item with its true default. @returns Whether table rows may occupy follow frames. */
   public IsLayoutSplitAllowed(): boolean {
-    return this.table.GetFormat().layoutSplit ?? true;
+    return (this.GetFormat().GetAttrSet().Get(RES_LAYOUT_SPLIT) as SwFormatLayoutSplit).GetValue();
   }
 
   /** Resolves native orientation spacing without fly or outer-border offsets. @param upperWidth - Actual upper print width. @returns Table print area. */
