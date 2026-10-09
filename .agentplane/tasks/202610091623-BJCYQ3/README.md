@@ -1,10 +1,11 @@
 ---
 id: "202610091623-BJCYQ3"
 title: "Restore native table attribute delta routing and invalidation"
-status: "DOING"
+result_summary: "Native table attribute routing consumes copied deltas and applies original linked-frame invalidation"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 23
+revision: 24
 origin:
   system: "manual"
 depends_on: []
@@ -50,6 +51,9 @@ comments:
   -
     author: "CODER"
     body: "Implementation: native table attribute routing committed; 1182 accepted cases, 152 files, 15 fresh cases, complete two-module Istanbul100 and static/metadata/preservation gates verified. Remaining semantic-bound same-agent quality and clean closeout."
+  -
+    author: "CODER"
+    body: "Verified: native table attribute routing now consumes copied deltas and applies original linked-frame reactions. 1182 accepted cases, 152 files, 15 fresh cases, complete two-module Istanbul100, seven statics/seven metadata/preservation and semantic-bound same-agent non-independent quality pass. Clean checkout and restored reference; goal active correction7/10."
 events:
   -
     type: "status"
@@ -71,8 +75,15 @@ events:
     from: "DOING"
     to: "DOING"
     note: "Implementation: native table attribute routing committed; 1182 accepted cases, 152 files, 15 fresh cases, complete two-module Istanbul100 and static/metadata/preservation gates verified. Remaining semantic-bound same-agent quality and clean closeout."
+  -
+    type: "status"
+    at: "2026-10-09T16:43:03.321Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native table attribute routing now consumes copied deltas and applies original linked-frame reactions. 1182 accepted cases, 152 files, 15 fresh cases, complete two-module Istanbul100, seven statics/seven metadata/preservation and semantic-bound same-agent non-independent quality pass. Clean checkout and restored reference; goal active correction7/10."
 doc_version: 3
-doc_updated_at: "2026-10-09T16:42:25.449Z"
+doc_updated_at: "2026-10-09T16:43:03.323Z"
 doc_updated_by: "CODER"
 description: "Correction7/10 after XJTGF0: replace generic table hook with source-shaped SwTabFrame notification, copied consumed deltas, native table mask and represented size/orientation/border/spacing/break reactions; preserve original owners and UI history."
 sections:
