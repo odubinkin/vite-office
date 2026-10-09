@@ -4,7 +4,7 @@ title: "Port Calc numerical range list geometry and edit operations"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,28 @@ verification:
   updated_by: "CODER"
   note: "Command: node scripts/calc-rangelst-native-probe.mjs --write; node scripts/calc-rangelst-native-probe.mjs --check Result: pass. Evidence: exact pinned Git blobs and full/source interval hashes; original class, numerical definition/helper intervals and address/range inline bodies unchanged; ASan/UBSan clean. Scope:13432 initialized operation sequences with17391 native snapshots, including joins, partial combining, deletion fragments, insertion overloads, cache-sensitive follow-ups, ownership/copy/swap, queries and unsigned64 modular counts. Portable tests compare every public output and retain original numerical ucalc_rangelst examples. Command: npm run test:coverage:calc Result: pass. Evidence:40 tests across9 files; statements860/860,branches712/712,functions184/184,lines762/762,all100%; no coverage exclusions or configuration changes. Scope: all current Calc core owners and prior acceptance. Four redundant guard paths are expressed from original preceding finite-integer predicates with proof comments; original C++ probe bodies remain unchanged. No defined native output or public owner boundary changes. Command: npm run typecheck; node_modules/.bin/eslint apps/office/src/sc/inc/address.ts apps/office/src/sc/inc/rangelst.ts apps/office/src/sc/source/core/tool/rangelst.ts apps/office/src/sc/source/core/tool/rangelst.test.ts scripts/calc-rangelst-native-probe.mjs; node_modules/.bin/prettier --check apps/office/src/sc/inc/address.ts apps/office/src/sc/inc/rangelst.ts apps/office/src/sc/source/core/tool/rangelst.ts apps/office/src/sc/source/core/tool/rangelst.test.ts scripts/calc-rangelst-native-probe.mjs Result: pass. Evidence: no type/lint diagnostics; all matched files formatted. Final corrections use the native at valid-index boundary, with no fabricated fallback values or disabled enforcement. Scope: complete application/tool static types and affected source/tests/probe. Command: npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:source-tree Result: pass. Evidence:328 runtime sources,1562 relative imports,29 allowed cross-module edges;1078 documented sources;1081 authored files checked, rangelst grouping reviewed;114 required paths and33 retired roots. Scope: static module, documentation, size and tree guards. Existing shared/Writer implementation, previous test bodies/native fixtures and all prior capability flags are unchanged. Command: node_modules/.bin/tsx scripts/libreoffice-inventory/registry-cli.ts check --scope calc Result: pass. Evidence:7 capabilities,120 applicable modules (8 Calc and112 shared),0 semantic violations. Actual100 local coverage does not promote parity statuses. Scope: new range-list capability/header/tool provenance/runtime and existing address SCSIZE mapping; full document/compiler/lifetime/pointer-width/undefined domains remain unverified. Command: node .agentplane/policy/check-routing.mjs; ap doctor; git diff --check Result: pass. Evidence: routing OK; doctor0 errors,1 pre-existing managed hook readiness warning; no whitespace errors. Scope: task policy and reviewed diff. Final clean tracked/untracked state on calc is required after closure. Full suite cadence: Calc milestone7 of10. Full test suites run after milestone10 under the user instruction; affected/shared tests are required when shared implementations change, which this task does not do."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-09T08:55:07.370Z"
+  updated_by: "EVALUATOR"
+  note: "Numerical range-list owner retains native storage, join/cache and edit fragment behavior with exact bounded comparison; all declared checks pass at actual100 Calc coverage."
+  evaluated_sha: "50cc72277bb69f9e27cfb51c1807eac86c73f525"
+  blueprint_digest: "9a7c0c7172edd29655ba86e0b6f571583640587e2748ef3155e8cdf543d6c856"
+  evidence_refs:
+    - ".agentplane/tasks/202610090833-ERVAK2/README.md"
+    - ".agentplane/tasks/202610090833-ERVAK2/quality/20261009-085507370-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610090833-ERVAK2/quality/20261009-085507370-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610090833-ERVAK2/quality/20261009-085507370-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610090833-ERVAK2/blueprint/resolved-snapshot.json"
+    - "apps/office/src/sc/source/core/tool/rangelst.test.ts"
+    - "apps/office/src/sc/source/core/tool/native-range-list-cases.json"
+    - "scripts/calc-rangelst-native-probe.mjs"
+    - "output/playwright/calc7-verification.md"
+    - "output/playwright/calc-registry7.json"
+  findings:
+    - "Reviewed original numerical source/body intervals against TS owner and helper order; existing address/range owners are reused and shared/Writer implementation paths are unchanged."
+    - "Four unreachable guard paths are expressed directly after original numeric implications, documented with proof comments; native probe definitions remain unchanged, without coverage exclusions."
+    - "Soft541-line review retains original range-list and anonymous helper grouping; hard1000 guard passes. Existing test bodies, native fixtures and semantic status flags are preserved."
 commit: null
 comments:
   -
