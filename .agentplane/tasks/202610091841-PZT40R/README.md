@@ -1,10 +1,11 @@
 ---
 id: "202610091841-PZT40R"
 title: "Port original Calc compressed width and flag arrays"
-status: "DOING"
+result_summary: "verified-202610091841-PZT40R"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 20
+revision: 24
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-09T19:02:26.068Z"
+  updated_at: "2026-10-09T19:03:51.614Z"
   updated_by: "CODER"
-  note: "All104 Calc tests actual100 Istanbul four metrics; original5272 sequences/640 full snapshots, two assertions and separate A/O non-progress diagnostics pass; portable104+30, tooling14/provenance3, TS7/scoped lint/format/docs/boundaries/size/tree/provenance and zero Calc/shared registry violations pass. CALC-018/019 preserve upstream. No Writer changes, broad parity claim or full-suite rerun; task2/10."
+  note: "verified-202610091841-PZT40R"
   attempts: 0
 quality_review:
   state: "pass"
@@ -52,11 +53,16 @@ quality_review:
     - "output/playwright/task12-verification.txt"
   findings:
     - "Verified all5272 decoded committed native sequences equal raw observations for both real owners;640 lossless snapshots and seven pinned file/three complete mechanism group hashes match. Genuine original final bit owner and o3tl operators remain unchanged; observer only reads protected base-member pointers. Original count/capacity, split/merge, getter fallback/terminal-next, predecessor insertion, removal/size call order, distinct copy/source offsets/mask traversal and borrowed iterator Reset behavior are covered through legitimate public calls. Native self-copy/result-mask assertions and isolated invalid-start And/Or non-progress diagnostics are separate from successful fixtures. Two SetValue guard reductions follow the preceding branch plus ordered Search/integer boundary and active-insertion/count invariants, with proof comments and unchanged native guards; no private-state injection or exclusions. CALC-018/019 record original source/caller limits without clipping or filling repairs. All104 Calc tests actual100 (2904 statements/2051 branches/467 functions/2548 lines), portable104+30, tooling14/provenance3 and declared TS7/static/registry gates pass; original module475 lines remains coherent. Calc22/143 and shared1/116 report zero semantic violations, while semantic/default/contract/module parity remains unverified."
-commit: null
+commit:
+  hash: "1f443c6c62a84c531dba7a3a07a2dfe1051bf480"
+  message: "🔎 PZT40R review: record original compressed array evidence and limits"
 comments:
   -
     author: "CODER"
     body: "Start: implement original complete compressed width and flag owners with explicit native template descriptors, unchanged native and portable actual100 evidence on calc; task2/10."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610091841-PZT40R. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -71,8 +77,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "All104 Calc tests actual100 Istanbul four metrics; original5272 sequences/640 full snapshots, two assertions and separate A/O non-progress diagnostics pass; portable104+30, tooling14/provenance3, TS7/scoped lint/format/docs/boundaries/size/tree/provenance and zero Calc/shared registry violations pass. CALC-018/019 preserve upstream. No Writer changes, broad parity claim or full-suite rerun; task2/10."
+  -
+    type: "verify"
+    at: "2026-10-09T19:03:51.614Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610091841-PZT40R"
+  -
+    type: "status"
+    at: "2026-10-09T19:03:51.758Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610091841-PZT40R. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-09T19:02:26.133Z"
+doc_updated_at: "2026-10-09T19:04:12.848Z"
 doc_updated_by: "CODER"
 description: "Task2 of next10 cadence: complete ScCompressedArray and ScBitMaskCompressedArray core for actual row/column flags and column widths, original CRFlags and explicit erased-template scalar descriptors, pinned unchanged native comparison and portable actual100 acceptance. Preserve original conditions and journal suspicious cases."
 sections:
@@ -132,6 +151,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-09T19:03:51.614Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610091841-PZT40R
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T19:02:26.133Z, excerpt_hash=sha256:535b177dce9a8e758d74400eac515e8f21d45e76c0753db11a0e13528ecf54db
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610091841-PZT40R/blueprint/resolved-snapshot.json
+    - old_digest: 55865968f0fa74bd57103fc230dbd65b96b9302a7d47970c9785424244418da1
+    - current_digest: 55865968f0fa74bd57103fc230dbd65b96b9302a7d47970c9785424244418da1
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610091841-PZT40R
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610091841-PZT40R --result verified-202610091841-PZT40R --commit 1f443c6c62a84c531dba7a3a07a2dfe1051bf480
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task implementation commit through a separately approved task on calc; preserve completed selection/numeric/shared core. Ignored native outputs are research evidence; upstream copies remain read-only."
   Findings: |-
@@ -164,6 +213,18 @@ sections:
     - Observation: Read-only registry log summarizer assumed a manifest wrapper and raised KeyError after unnecessarily broad output; actual CLI report exposes capabilityCount/moduleCount directly. Production checks remain passing.
       Impact: No repo or report changes; do not infer registry counts from nonexistent wrapper or rerun production checks for this read error.
       Resolution: Recompute route and read only actual top-level counts/runtime violation summary, keeping output bounded.
+
+    - Observation: Exact route task complete marks DONE but generated closure subject is rejected E_GIT: commit subject is too generic, as in the prior cycle.
+      Impact: Original compressed-array implementation and passing quality evidence are committed; only active task closure artifact remains dirty. No production or validation change occurred.
+      Resolution: Recompute route and try exact advertised close cleanup, then persist the same task artifact scope with a concrete finalize subject if the generator rejection repeats. Keep existing hook/gates unchanged.
+
+    - Observation: Exact cleanup commit --close --unstage-others repeats generic-subject E_GIT; only active task README closure is staged.
+      Impact: No new implementation or quality changes; deterministic generator subject remains incompatible with the existing hook.
+      Resolution: Persist active task artifacts via existing ap commit --allow-tasks using concrete finalize: verified original compressed widths and flags subject; do not modify hook or validators.
+extensions:
+  implementation_commit:
+    hash: "dbc4830e71b7b1a0dee0b22bb880ca1564f50661"
+    message: "🧩 PZT40R implement: original compressed width and row column flag arrays"
 id_source: "generated"
 ---
 ## Summary
@@ -235,6 +296,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-09T19:03:51.614Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610091841-PZT40R
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T19:02:26.133Z, excerpt_hash=sha256:535b177dce9a8e758d74400eac515e8f21d45e76c0753db11a0e13528ecf54db
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610091841-PZT40R/blueprint/resolved-snapshot.json
+- old_digest: 55865968f0fa74bd57103fc230dbd65b96b9302a7d47970c9785424244418da1
+- current_digest: 55865968f0fa74bd57103fc230dbd65b96b9302a7d47970c9785424244418da1
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610091841-PZT40R
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610091841-PZT40R --result verified-202610091841-PZT40R --commit 1f443c6c62a84c531dba7a3a07a2dfe1051bf480
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -272,3 +363,11 @@ Original source inspection confirms ScTable column widths/flags construct maxima
 - Observation: Read-only registry log summarizer assumed a manifest wrapper and raised KeyError after unnecessarily broad output; actual CLI report exposes capabilityCount/moduleCount directly. Production checks remain passing.
   Impact: No repo or report changes; do not infer registry counts from nonexistent wrapper or rerun production checks for this read error.
   Resolution: Recompute route and read only actual top-level counts/runtime violation summary, keeping output bounded.
+
+- Observation: Exact route task complete marks DONE but generated closure subject is rejected E_GIT: commit subject is too generic, as in the prior cycle.
+  Impact: Original compressed-array implementation and passing quality evidence are committed; only active task closure artifact remains dirty. No production or validation change occurred.
+  Resolution: Recompute route and try exact advertised close cleanup, then persist the same task artifact scope with a concrete finalize subject if the generator rejection repeats. Keep existing hook/gates unchanged.
+
+- Observation: Exact cleanup commit --close --unstage-others repeats generic-subject E_GIT; only active task README closure is staged.
+  Impact: No new implementation or quality changes; deterministic generator subject remains incompatible with the existing hook.
+  Resolution: Persist active task artifacts via existing ap commit --allow-tasks using concrete finalize: verified original compressed widths and flags subject; do not modify hook or validators.
