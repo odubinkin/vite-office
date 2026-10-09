@@ -500,3 +500,55 @@ Suspicious source conditions observed during these ports are tracked separately
 in [upstream-suspected-issues.md](upstream-suspected-issues.md). Recording them
 does not authorize changing upstream behavior; the user explicitly reaffirmed
 that preservation requirement.
+
+## Compressed selected-row arrays
+
+Task `202610091459-8FSH81` adds original `ScMarkEntry`, `ScMarkArray` and
+`ScMarkArrayIter` at the `sc/inc/markarr`/`sc/source/core/data/markarr` boundary.
+The array retains the real immutable `ScSheetLimits` reference. It starts with
+one unmarked terminal boundary; entries describe inclusive intervals from the
+previous boundary plus one. Entry rows retain the original signed30 bitfield,
+including narrowing before Shift clipping. No document or shared string stand-in
+is introduced while building the document prerequisites.
+
+Binary Search keeps the original negative-row first-interval result and resets
+its output index to zero on failure. Marking retains the complete native
+split/shrink/combine algorithm. Two unreachable insertion guards are expressed
+directly with invariant proofs; the native probe retains them unchanged. `Set`
+takes initialized entries without normalization. Equality compares only entries;
+copy/assignment owns independent values and assignment keeps receiving limits.
+Explicit `move`/`moveAssign` adapts native move-overload syntax. Moved-vector states
+compare the probe's native standard library; unspecified C++ moved-from states
+are not a guarantee across standard libraries.
+
+Navigation, single-interval detection and iterator outputs preserve caller
+reference values on failure. The iterator borrows the array and reads its current
+entries after mutation/reset. Module-private storage allows the original array
+and iterator friend access without exposing a new public vector getter.
+`Shift` modifies each eligible boundary separately, applying signed64 offset and
+signed30 assignment before clipping, without coalescing collapsed boundaries.
+One native case yields a selected interval `[1,0]`; it is recorded as CALC-007 in
+the suspicious-case journal and deliberately retained.
+
+`scripts/calc-markarr-native-probe.mjs` compiles complete unchanged original
+classes and every out-of-line definition with native integer types and the three
+needed sheet-limits fields/getters. Six original pinned blobs and complete group
+hashes are checked under ASan/UBSan. All 2814 initialized sequences compare
+stored vector equality, marking, lookup, navigation, single marks, both owner
+states and repeated/reset iterator outputs. Original `mark_test.cxx` Search
+assertions retain literal standard-bound expectations. Run the probe with
+`--check` to reproduce the committed fixture; normal tests require neither
+upstream nor a compiler. Native debug assertions remain enabled in these defined
+cases.
+
+Full multi-selection/document/column/UI consumers, native allocation/capacity
+and pointer lifetimes, uninitialized entries, empty Search, malformed unsafe
+mutation and undefined signed64 overflow remain uncertified. No coverage
+exclusions or replacement normalization are added; inventory semantic parity
+remains unverified. All 77 Calc tests retain actual100 Istanbul coverage. This is
+task6 of the resumed interval; full-suite validation remains due at task10.
+
+Source research also includes MPL 2.0 and inherited Apache notices in
+`sc/inc/markarr.hxx` and `sc/source/core/data/markarr.cxx`, and MPL 2.0 in
+`include/tools/long.hxx`. The TypeScript code is independently authored from
+these contracts; native originals remain read-only research input.

@@ -142,6 +142,34 @@ Overflowing calls are excluded from its native differential certification.
 Decision: retain defined native arithmetic and guards, do not claim a result
 for native signed overflow, and do not invent wrap or additional saturation.
 
+## CALC-007: row-mark Shift retains collapsed boundaries and reversed intervals
+
+- Source: [`ScMarkArray::Shift`](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sc/source/core/data/markarr.cxx)
+  and `ScMarkArrayIter::Next` in the same file; original `ScMarkEntry` signed30
+  boundary is declared in `sc/inc/markarr.hxx`.
+- Observation: Shift modifies each boundary independently and clamps it after
+  signed30 assignment. It does not remove duplicate boundaries or normalize
+  alternating marked/unmarked entries.
+- Reproduction: with inclusive maximum row 7, mark rows 2 through 4, then call
+  `Shift(0, -20)`. Original stored entries become `(0,false)`, `(0,true)`,
+  `(0,false)`. `HasMarks()` remains true, `HasOneMark()` returns `[1,0]`, and the
+  iterator yields the reversed selected interval `[1,0]`.
+- Related boundary detail: starting with all rows selected and shifting by
+  `536870912`, the signed30 field narrows before the clamp and the ending row
+  becomes 0. This field-width behavior is source-defined on the compared native
+  compiler; it is not a normalization repair opportunity.
+- Evidence: complete unchanged original classes/methods compile with debug
+  assertions and ASan/UBSan. Portable [native sequences](../../apps/office/src/sc/source/core/data/native-mark-array-cases.json),
+  [comparison and literal Shift test](../../apps/office/src/sc/source/core/data/markarr.test.ts)
+  and [native probe](../../scripts/calc-markarr-native-probe.mjs) preserve these
+  results. `ScMultiSel::ShiftRows` is an original caller in
+  `sc/source/core/data/markmulti.cxx`.
+- Assessment: confirmed source outcome, suspected edge case. Whether consumers
+  prevent these displacements or tolerate collapsed intervals is not yet
+  established; this is not a confirmed user-visible defect.
+- Decision: retain the original field width, clipping order, duplicate
+  boundaries, queries and iterator outputs. Do not normalize or fix upstream.
+
 ## Reviewed API distinctions
 
 These distinctions have been discussed but are not classified as defects:

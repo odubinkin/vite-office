@@ -1,0 +1,58 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/core/data/markarr.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "row-marks",
+    "capabilityIds": [
+      "CAP-2990572a-4f1e-4f5d-853a-7121c6abc6d5"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sc/source/core/data/markarr.ts#ScMarkArray",
+        "apps/office/src/sc/source/core/data/markarr.test.ts#matches all2814 unchanged native initialized row-mark sequences",
+        "scripts/calc-markarr-native-probe.mjs#const originals =",
+        "vendor/libreoffice-reference/sc/source/core/data/markarr.cxx#ScMarkArray::Search"
+      ],
+      "justification": "Task202610091459-8FSH81 ports the original initialized compressed row-mark owner and iterator, retaining header/core-data boundaries and reusing actual ScSheetLimits. Default unmarked terminal boundary, signed30 entry narrowing, original binary Search (including negative inputs), split/shrink/coalesce interval algorithm, raw Set, copy/assignment receiving limits, equality independent of limits, navigation, output-reference preservation and borrowed iterator pointer behavior are retained. Shift applies signed64 displacement to each eligible boundary, narrows its signed30 bitfield before clipping and does not normalize collapsed ranges. Explicit move/moveAssign syntax adapts C++ move overloads; module-private WeakMap gives the original two owners friend access without exposing the vector in public API. Unchanged complete native classes and every out-of-line method compile under ASan/UBSan with six pinned source blobs and group hashes;2814 initialized sequences compare stored entry equality and public outputs. Original mark_test Search cases retained literally. Two proven unreachable interval guards are expressed directly with source-invariant comments, without coverage exclusions or native-body rewrites. Full ScMultiSel/ScMarkData, document/column and browser consumers, native vector allocation/capacity/pointer lifetimes, debug diagnostics, uninitialized entries, empty Search, out-of-bounds malformed mutation and signed64 overflow remain unverified. Move-from/self-move states compare the probe native standard library; C++ unspecified moved-vector state is not a cross-library guarantee. Finite snapshots do not establish whole Calc parity.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ScMarkEntry",
+        "ScMarkArray",
+        "ScMarkArrayIter",
+        "Reset",
+        "Search",
+        "GetMark",
+        "SetMarkArea",
+        "Set",
+        "IsAllMarked",
+        "HasOneMark",
+        "HasMarks",
+        "assign",
+        "move",
+        "moveAssign",
+        "equals",
+        "GetNextMarked",
+        "GetMarkEnd",
+        "Shift",
+        "Next",
+        "reset"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "sc/source/core/data/markarr.cxx",
+      "upstreamSymbols": [
+        "ScMarkArray::Search",
+        "ScMarkArray::SetMarkArea",
+        "ScMarkArray::Shift",
+        "ScMarkArrayIter::Next"
+      ]
+    }
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/inc/markarr.ts",
+          "marker": "ScMarkArray"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/markarr.test.ts",
+          "marker": "matches all2814 unchanged native initialized row-mark sequences"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/markarr.hxx",
+          "marker": "ScMarkEntry"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sc/inc/markarr.ts",
+    "localSymbols": [
+      "ScMarkEntry",
+      "ScMarkArray",
+      "ScMarkArrayIter"
+    ],
+    "omittedResponsibilities": [
+      "Full ScMultiSel/ScMarkData, document/column and browser consumers, native vector allocation/capacity/pointer lifetimes, debug diagnostics, uninitialized entries, empty Search, out-of-bounds malformed mutation and signed64 overflow remain unverified. Move-from/self-move states compare the probe native standard library; C++ unspecified moved-vector state is not a cross-library guarantee. Finite snapshots do not establish whole Calc parity."
+    ],
+    "preservedResponsibilities": [
+      "Original explicit limits reference, default unmarked terminal boundary, signed30 row/boolean entry fields and independent value copies.",
+      "Original binary interval Search, negative first-interval rows, bounded marking split/shrink/combine and raw vector replacement.",
+      "Original equality independent of sheet limits, receiving assignment limits, typed output preservation and selected interval iteration.",
+      "Original per-boundary Shift narrowing before clipping without coalescing; actual ScSheetLimits reused."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sc/inc/markarr.hxx",
+    "upstreamSymbols": [
+      "ScMarkEntry",
+      "ScMarkArray",
+      "ScMarkArrayIter"
+    ]
+  }
+}

@@ -1,0 +1,102 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-2990572a-4f1e-4f5d-853a-7121c6abc6d5",
+    "capabilityId": "CAP-2990572a-4f1e-4f5d-853a-7121c6abc6d5",
+    "suite": "calc",
+    "subsystem": "row-marks",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original explicit limits reference, default unmarked terminal boundary, signed30 row/boolean entry fields and independent value copies.",
+      "Original binary interval Search, negative first-interval rows, bounded marking split/shrink/combine and raw vector replacement.",
+      "Original equality independent of sheet limits, receiving assignment limits, typed output preservation and selected interval iteration.",
+      "Original per-boundary Shift narrowing before clipping without coalescing; actual ScSheetLimits reused."
+    ],
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "Original row-mark owner and iterator boundaries preserve initialized defined native contracts, reusing real ScSheetLimits; complete unchanged native classes/methods provide comparisons."
+    },
+    "capability": "Calc compressed selected-row array and iterator",
+    "gaps": [
+      "Full ScMultiSel/ScMarkData, document/column and browser consumers, native vector allocation/capacity/pointer lifetimes, debug diagnostics, uninitialized entries, empty Search, out-of-bounds malformed mutation and signed64 overflow remain unverified. Move-from/self-move states compare the probe native standard library; C++ unspecified moved-vector state is not a cross-library guarantee. Finite snapshots do not establish whole Calc parity."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sc/inc/markarr.hxx",
+          "marker": "class ScMarkArray"
+        },
+        {
+          "path": "sc/source/core/data/markarr.cxx",
+          "marker": "void ScMarkArray::SetMarkArea"
+        },
+        {
+          "path": "sc/source/core/data/markarr.cxx",
+          "marker": "bool ScMarkArrayIter::Next"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sc/qa/unit/mark_test.cxx",
+          "marker": "void Test::testScMarkArraySearch()"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/inc/markarr.hxx",
+          "marker": "This is a rather odd datastructure."
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/source/core/data/markarr.ts",
+          "marker": "export class ScMarkArray"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/markarr.ts",
+          "marker": "export class ScMarkArrayIter"
+        },
+        {
+          "path": "scripts/calc-markarr-native-probe.mjs",
+          "marker": "const originals ="
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/source/core/data/markarr.test.ts",
+          "marker": "matches all2814 unchanged native initialized row-mark sequences"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/markarr.test.ts",
+          "marker": "retains original mark_test Search indices and negative first-interval rows"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/markarr.test.ts",
+          "marker": "preserves signed30 narrowing before Shift clipping and collapsed intervals"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Compressed selected-row arrays"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "Own compressed selected-row intervals and update copy query navigate or iterate original boundary values",
+    "scopeLimitations": [
+      "Full ScMultiSel/ScMarkData, document/column and browser consumers, native vector allocation/capacity/pointer lifetimes, debug diagnostics, uninitialized entries, empty Search, out-of-bounds malformed mutation and signed64 overflow remain unverified. Move-from/self-move states compare the probe native standard library; C++ unspecified moved-vector state is not a cross-library guarantee. Finite snapshots do not establish whole Calc parity.",
+      "Native output-reference parameters use fresh TS tuples; native move overloads use explicit move/moveAssign syntax. JavaScript GC storage replaces native vector allocation and friend storage without exposing a public vector getter.",
+      "Only initialized, native-defined arithmetic and vector-access states are compared; safe sorted marking callers and Shift/raw Set observations are bounded separately."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}
