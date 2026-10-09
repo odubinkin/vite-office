@@ -1,10 +1,11 @@
 ---
 id: "202610092336-A8T5K0"
 title: "Apply imported table formats to original native items without scalar replay"
-status: "DOING"
+result_summary: "Apply imported table formats directly to original native items and preserve header attributes"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -51,6 +52,9 @@ comments:
   -
     author: "CODER"
     body: "Start: bind direct XML native-item implementation to exact semantic commit before quality."
+  -
+    author: "CODER"
+    body: "Verified: XML table import now applies original typed frame items and updates only native header count;535related16fresh24Chromium pass,whole final xmltbli actual Istanbul100all-four,current complete map/source and zero negatives.593old tests2canonical histories retained,statics9metadata and exact-SHA explicitly same-agent non-independent quality pass;reference restored,writer branch. Broad parity incomplete,full not due3/10."
 events:
   -
     type: "status"
@@ -84,8 +88,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Refreshed after exact-SHA same-agent non-independent quality pass6895652f.535related16fresh24Chromium,whole xmltbli100all-four/current complete map/source/zero-negatives,593old tests2histories preserved,statics9metadata pass. Reference restored; full not due3/10."
+  -
+    type: "status"
+    at: "2026-10-09T23:49:38.577Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: XML table import now applies original typed frame items and updates only native header count;535related16fresh24Chromium pass,whole final xmltbli actual Istanbul100all-four,current complete map/source and zero negatives.593old tests2canonical histories retained,statics9metadata and exact-SHA explicitly same-agent non-independent quality pass;reference restored,writer branch. Broad parity incomplete,full not due3/10."
 doc_version: 3
-doc_updated_at: "2026-10-09T23:49:25.805Z"
+doc_updated_at: "2026-10-09T23:49:38.578Z"
 doc_updated_by: "CODER"
 description: "Correction3/10 after BZQGYC: XML import directly sets original table,row,box typed attributes and original headline counter,removes scalar GetFormat/SetFormat replay and neutral table-format cast. Preserve native defaults/order/full item fields and registered IO deviations. Fresh actual SAX/ODT/mounted history and related current whole xmltbli100 upstream absent."
 sections:
@@ -211,6 +222,10 @@ sections:
     - Observation: Final535related16fresh24Chromium and9metadata pass; exact semantic6895652f quality pass.
       Impact: Original XML typed items and headline owner meet scoped acceptance,whole final xmltbli100all-four,current complete maps/source and zero negatives. All593old tests and2canonical histories retained; broad parity remains incomplete.
       Resolution: Same implementing agent EVALUATOR review explicitly non-independent, report .agentplane/tasks/202610092336-A8T5K0/quality/20261009-234901450-recovery-context/quality-report.json. Source/test hashes unchanged after review. Refresh verification and persist quality/evidence before canonical finish with concrete result; reference restored,writer branch.
+extensions:
+  implementation_commit:
+    hash: "6895652fd52e283682f533ab503daca3876ed37a"
+    message: "🚧 A8T5K0 writer: import original table format items directly"
 id_source: "generated"
 ---
 ## Summary
