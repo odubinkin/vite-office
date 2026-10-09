@@ -1,10 +1,11 @@
 ---
 id: "202610090835-4ZF0N4"
 title: "Restore native table frame layout ownership"
-status: "DOING"
+result_summary: "Native table frame ownership restored with232 targeted cases, all-four100 source-bound coverage and16 verified canonical inventory records; persistent page/root parity remains open."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 19
+revision: 20
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
     - "SwTabFrame now inherits SwLayoutFrame, registers the original table format, links nonempty original native row/cell lowers, and borrows cell widths. JSX owns one hierarchy; temporary geometry/flow/split/dialog consumers and retained mouse samples release clients in finally or replacement/unmount."
     - "Source-bound exact all-four100 uses actual current maps plus complete unchanged declarations/bodies/enclosing conditions/all mapped locations. Initial discarded maps required one approved210 passing recovery replay; raw failures retained, later closures only failed/new/unexecuted.506 old acceptance files byte-identical, one literal-preserving ownership migration."
     - "All16 canonical runtime/provenance records preserve old status/default/classification and evidence prefixes, without whole module or goal promotion. Registry build/scoped/global/provenance/tree/routing pass;doctor0errors with3 prior warnings."
-commit: null
+commit:
+  hash: "1b7dd23819577fb36c0f87fda4327efcf4ba801f"
+  message: "🛠️ 4ZF0N4 layout: restore native table frame ownership"
 comments:
   -
     author: "CODER"
     body: "Start: Restore original native table layout ownership and deterministic temporary-client lifetimes, preserving existing documented I/O/recovery deviations and explicit persistent root/page gaps."
+  -
+    author: "CODER"
+    body: "Verified: Native table hierarchy and deterministic production lifetimes pass232 unique targeted cases and all declared source-bound coverage/static/inventory gates; sixteen canonical records retain historical metadata and registered deviations."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native table frame ownership verified:232 unique targeted cases,12 fresh,0 unresolved; approved coverage-recovery210 passing replay explicitly recorded, later failed/new/unexecuted-only closures. Source-bound all-four100 app318/changed8; all scoped static and16 canonical inventory gates pass. Upstream-absent runtime/build restored finally; persistent page/root/full parity remains unverified."
+  -
+    type: "status"
+    at: "2026-10-09T09:22:16.540Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Native table hierarchy and deterministic production lifetimes pass232 unique targeted cases and all declared source-bound coverage/static/inventory gates; sixteen canonical records retain historical metadata and registered deviations."
 doc_version: 3
-doc_updated_at: "2026-10-09T09:21:15.578Z"
+doc_updated_at: "2026-10-09T09:22:16.541Z"
 doc_updated_by: "CODER"
 description: "Iteration251 under C9TN6M: replace the standalone SwTabFrame geometry object with native SwLayoutFrame registration and linked original row/cell ownership, including deterministic lifetime at all temporary production consumers. This is the required table hierarchy prerequisite for persistent page/root/UI integration; preserve documented recovery/open/save/settings deviations."
 sections:
