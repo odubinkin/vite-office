@@ -1168,7 +1168,25 @@
   },
   "goal": "ACTIVE/incomplete",
   "quality": {
-    "status": "Pending exact semantic commit review",
-    "independent": false
+    "status": "PASS",
+    "independent": false,
+    "evaluated_sha": "021ea956fc8a2026bb3bf0a188cddd44e5f90f4f",
+    "report": ".agentplane/tasks/202610092125-6Q2YQH/quality/20261009-214913154-recovery-context/quality-report.json"
+  },
+  "semanticCommit": "021ea956fc8a2026bb3bf0a188cddd44e5f90f4f",
+  "checkedCommitHashProof": {
+    "evaluated_sha": "021ea956fc8a2026bb3bf0a188cddd44e5f90f4f",
+    "independent": false,
+    "checkedSourceAndFresh": 14,
+    "migratedFixtures": 3,
+    "sourceHashMatches": true,
+    "freshUiAstIdentical": true,
+    "oldCanonicalPrefixProof": true
+  },
+  "verification": {
+    "state": "ok",
+    "by": "CODER",
+    "scope": "Actual semantic commit and exact-SHA same-agent quality PASS; refreshed after DOING semantic binding and quality record.",
+    "persistBeforeFinish": true
   }
 }
