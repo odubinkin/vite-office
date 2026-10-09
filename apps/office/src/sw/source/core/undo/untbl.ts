@@ -145,7 +145,9 @@ class SaveTable {
   private readonly boxFormats: SfxItemSet[] = [];
   /** Captures independent attribute payload without copying text or graph owners. @param table - Original table. @returns Nothing. */
   public constructor(table: SwTable) {
-    this.format = table.GetFormat();
+    this.format = { ...table.GetFormat() };
+    delete this.format.headerRows;
+    delete this.format.repeatHeaderRows;
     const formats = new Map<SwTableLineFormat, number>(),
       boxFormats = new Map<SwNativeTableBoxFormat, number>();
     this.lines = table.GetTabLines().map(
