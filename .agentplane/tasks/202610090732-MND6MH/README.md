@@ -4,7 +4,7 @@ title: "Restore native table frame validity on format replacement and history"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,29 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-09T07:57:54.687Z"
+  updated_by: "CODER"
+  note: "132 unique app cases including19 fresh passed upstream-absent with finally restoration. Current changed wsfrm/tabfrm actual counters188/211/61/114 all-four100;318file application certificate retains316 exact whole sources/maps and complete unchanged regions with current changed function counters. Final type/lint/format/build/dependency/docs/size/source/provenance/scoped+global registry/routing/doctor gates pass. Implementation d4ebd1f5fa81; broad physical root/UI integration remains incomplete."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-09T07:57:56.115Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent non-independent review: iteration249 bounded native detached frame validity and exact replacement/history state transitions satisfy declared evidence on implementation d4ebd1f5fa81."
+  evaluated_sha: "d4ebd1f5fa81202aaceb2fcb3abf01fb160aac15"
+  blueprint_digest: "3ecef8a55349efbd44710d9d55a7f864ea9bf7418cf319293bf831703a5bf0dd"
+  evidence_refs:
+    - ".agentplane/tasks/202610090732-MND6MH/README.md"
+    - ".agentplane/tasks/202610090732-MND6MH/quality/20261009-075756115-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610090732-MND6MH/quality/20261009-075756115-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610090732-MND6MH/quality/20261009-075756115-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610090732-MND6MH/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610090732-MND6MH/evidence/verification.json"
+    - ".agentplane/tasks/202610090732-MND6MH/evidence/coverage.json"
+    - "d4ebd1f5fa81"
+  findings:
+    - "Reviewed native pinned flags/hooks and row/cell handler order, independent state/owner/real-history cases,132 unique tests and source-bound actual all-four100 coverage. Final command gates and four canonical registry records preserve prior semantic fields and evidence prefixes. Raw failed attempts and partial threshold exits remain retained; no goal or whole-module promotion."
 commit: null
 comments:
   -
@@ -35,8 +53,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: Implement approved iteration249 native frame validity and replacement/history invalidation in Writer only; preserve silent shared claims and document remaining persistent UI frame integration."
+  -
+    type: "verify"
+    at: "2026-10-09T07:57:54.687Z"
+    author: "CODER"
+    state: "ok"
+    note: "132 unique app cases including19 fresh passed upstream-absent with finally restoration. Current changed wsfrm/tabfrm actual counters188/211/61/114 all-four100;318file application certificate retains316 exact whole sources/maps and complete unchanged regions with current changed function counters. Final type/lint/format/build/dependency/docs/size/source/provenance/scoped+global registry/routing/doctor gates pass. Implementation d4ebd1f5fa81; broad physical root/UI integration remains incomplete."
 doc_version: 3
-doc_updated_at: "2026-10-09T07:56:31.323Z"
+doc_updated_at: "2026-10-09T07:57:54.747Z"
 doc_updated_by: "CODER"
 description: "Iteration249 under C9TN6M: port represented SwFrame validity and paint state and exact row/cell replacement versus history invalidation from pinned LibreOffice. Keep silent shared claims unchanged; prepare native physical-frame invalidation foundation without claiming persistent browser frame integration."
 sections:
@@ -60,6 +84,39 @@ sections:
     Result: pass; four compatibility views generated;321 module records,732 registry records,114 source paths and33 retired roots validated. Four matching canonical runtime/provenance records preserve old semantic fields/evidence prefixes and add exact local/upstream symbols plus bounded tests. Native subtree pin9bc445578031fecf56086729d8e4940c77e14d65 clean.
     Scope: registry schema/identities/source evidence integrity, not whole-project parity. Doctor0errors,3 pre-existing warnings; no hook upgrade or immutable no-op history rewrite.
     Last full247; no full249. Whole goal remains incomplete.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-09T07:57:54.687Z — VERIFY — ok
+
+    By: CODER
+
+    Note: 132 unique app cases including19 fresh passed upstream-absent with finally restoration. Current changed wsfrm/tabfrm actual counters188/211/61/114 all-four100;318file application certificate retains316 exact whole sources/maps and complete unchanged regions with current changed function counters. Final type/lint/format/build/dependency/docs/size/source/provenance/scoped+global registry/routing/doctor gates pass. Implementation d4ebd1f5fa81; broad physical root/UI integration remains incomplete.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T07:56:31.323Z, excerpt_hash=sha256:e5859cc6e115c2421774c60c71488ab5127d3ac48b8688d721c20f82f43629db
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610090732-MND6MH/blueprint/resolved-snapshot.json
+    - old_digest: 3ecef8a55349efbd44710d9d55a7f864ea9bf7418cf319293bf831703a5bf0dd
+    - current_digest: 3ecef8a55349efbd44710d9d55a7f864ea9bf7418cf319293bf831703a5bf0dd
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610090732-MND6MH
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610090732-MND6MH
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert this leaf's implementation commit with normal git revert if requested; do not reset user commits or remove environment symlink/dependencies."
   Findings: |-
     Read-only source audit confirmed existing SwRowFrame and SwCellFrame only retarget clients on replacement/history, omitting native validity and painting state. Full geometry, follows, native page/root invalidation and persistent browser physical-frame integration remain unverified.
@@ -101,6 +158,39 @@ Command: npm run inventory:registry:build; npm run inventory:parity:writer; npm 
 Result: pass; four compatibility views generated;321 module records,732 registry records,114 source paths and33 retired roots validated. Four matching canonical runtime/provenance records preserve old semantic fields/evidence prefixes and add exact local/upstream symbols plus bounded tests. Native subtree pin9bc445578031fecf56086729d8e4940c77e14d65 clean.
 Scope: registry schema/identities/source evidence integrity, not whole-project parity. Doctor0errors,3 pre-existing warnings; no hook upgrade or immutable no-op history rewrite.
 Last full247; no full249. Whole goal remains incomplete.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-09T07:57:54.687Z — VERIFY — ok
+
+By: CODER
+
+Note: 132 unique app cases including19 fresh passed upstream-absent with finally restoration. Current changed wsfrm/tabfrm actual counters188/211/61/114 all-four100;318file application certificate retains316 exact whole sources/maps and complete unchanged regions with current changed function counters. Final type/lint/format/build/dependency/docs/size/source/provenance/scoped+global registry/routing/doctor gates pass. Implementation d4ebd1f5fa81; broad physical root/UI integration remains incomplete.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T07:56:31.323Z, excerpt_hash=sha256:e5859cc6e115c2421774c60c71488ab5127d3ac48b8688d721c20f82f43629db
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610090732-MND6MH/blueprint/resolved-snapshot.json
+- old_digest: 3ecef8a55349efbd44710d9d55a7f864ea9bf7418cf319293bf831703a5bf0dd
+- current_digest: 3ecef8a55349efbd44710d9d55a7f864ea9bf7418cf319293bf831703a5bf0dd
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610090732-MND6MH
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610090732-MND6MH
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
