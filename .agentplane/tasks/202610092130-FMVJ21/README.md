@@ -1,10 +1,11 @@
 ---
 id: "202610092130-FMVJ21"
 title: "Port original shared SoA container lifetime and iterator ownership"
-status: "DOING"
+result_summary: "verified-202610092130-FMVJ21"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 23
+revision: 27
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-09T22:06:42.284Z"
+  updated_at: "2026-10-09T22:08:29.708Z"
   updated_by: "CODER"
-  note: "All declared checks pass: original native217 sequences/2579 operations/2796 states and sibling888/8460; scoped Calc104 and shared21 actual100; full office14276/549 actual100, inventory123/38 actual100 after strict operation/module validation test correction, tooling14, browser303, build/static, TS7/lint/format/docs/source-tree/provenance/Calc-shared inventory/routing/doctor/diff. Data-identical formatting of six prior corpora fulfills original approved Calc/shared full-run repairs. Both upstream links absent during portable/full suites and restored exactly. Full raw hashes/binary/counter audits pass; whole-container/Calc/UI parity remains unverified."
+  note: "verified-202610092130-FMVJ21"
   attempts: 0
 quality_review:
   state: "pass"
@@ -48,11 +49,16 @@ quality_review:
     - "Original constructor/delete/assignment/swap member order is preserved; move retains source primitive size and stable event_handler object identity.217 complete unchanged native sequences include all12 scalar families, full live payload/metadata/events/endpoints and final destruction. Independent actual binary byte replay and13 source/2 archive hashes match."
     - "Actual100 scoped Calc/shared and full office14276/549 plus inventory123/38 raw positive counters/denominators support bounded acceptance. Browser303 scenarios cover301 Writer and2 shared; Calc has no dedicated UI cases. Both upstream links were absent during portable/full suites and restored exactly."
     - "Full-run repairs stay within the approved Calc/shared remediation responsibility: six native JSON corpus changes are ordered-value identical versus parent commit, and registry test separately rejects unknown operation and module capabilities. Production runtime/validation/coverage policy, Writer behavior and source compiler inputs remain unchanged by those repairs."
-commit: null
+commit:
+  hash: "c79a5feff59a6e6360ff1e65e6d3bb3d805d1d5b"
+  message: "✅ FMVJ21 review: verify original container ownership and full-cycle acceptance"
 comments:
   -
     author: "CODER"
     body: "Start: port actual original container lifetime/value/iterator ownership over existing shared arrays and callbacks, then execute the due full suites under the resumed Calc goal."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610092130-FMVJ21. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -67,8 +73,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "All declared checks pass: original native217 sequences/2579 operations/2796 states and sibling888/8460; scoped Calc104 and shared21 actual100; full office14276/549 actual100, inventory123/38 actual100 after strict operation/module validation test correction, tooling14, browser303, build/static, TS7/lint/format/docs/source-tree/provenance/Calc-shared inventory/routing/doctor/diff. Data-identical formatting of six prior corpora fulfills original approved Calc/shared full-run repairs. Both upstream links absent during portable/full suites and restored exactly. Full raw hashes/binary/counter audits pass; whole-container/Calc/UI parity remains unverified."
+  -
+    type: "verify"
+    at: "2026-10-09T22:08:29.708Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610092130-FMVJ21"
+  -
+    type: "status"
+    at: "2026-10-09T22:08:29.860Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610092130-FMVJ21. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-09T22:06:42.339Z"
+doc_updated_at: "2026-10-09T22:08:57.073Z"
 doc_updated_by: "CODER"
 description: "Task10/10: port the actual original multi_type_vector ownership/constructor lifecycle, value-semantic event witness and iterator/size access over existing shared blocks_type/block funcs; original behavior and defaults including moved-from logical size. Full office/inventory/browser checks due in this task; no Writer-only coverage repairs."
 sections:
@@ -127,6 +146,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-09T22:08:29.708Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610092130-FMVJ21
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T22:06:42.339Z, excerpt_hash=sha256:441d455c756681d14b531b160b8e4fe6e8e36b4c10b7adc63f444a801bbef5ce
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610092130-FMVJ21/blueprint/resolved-snapshot.json
+    - old_digest: e1a6f2d278a4b1403d92373b789e6e64175e73d68c93a2b1966b6abee584710e
+    - current_digest: e1a6f2d278a4b1403d92373b789e6e64175e73d68c93a2b1966b6abee584710e
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610092130-FMVJ21
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610092130-FMVJ21 --result verified-202610092130-FMVJ21 --commit c79a5feff59a6e6360ff1e65e6d3bb3d805d1d5b
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only deliberate task implementation/docs/registry commits on calc if requested. Preserve prior original shared modules, compiler inputs, exact local reference links and unrelated tasks."
   Findings: |-
@@ -179,6 +228,18 @@ sections:
     - Observation: Revalidated original approved task plan at48155adf6e4a: Scope explicitly includes Full-run failure corrections only within Calc/shared scope; user goal also authorizes implementation and correction of full-run errors. The prior formatting approval question incorrectly treated six anticipated Calc/shared verification repairs as expansion beyond that approved remediation scope.
       Impact: No new responsibility, risk, verification criterion, external write or network is introduced. Formatting existing native JSON inputs is already-authorized full-run remediation; all parsed values remain identical. Waiting for an additional answer was unnecessary.
       Resolution: Apply only the six prepared formatting corrections under the original approved Calc/shared full-run repair scope, assert parsed JSON equality before and after every write, rerun unchanged full format gate and finish remaining lifecycle. Do not infer approval from elapsed time or the automatic continuation; authority is the preexisting approved scope.
+
+    - Observation: Exact route-oracle task complete command exited5 E_GIT commit subject is too generic after verified/quality-reviewed closure. This repeats the known installed AgentPlane generic deterministic subject mismatch, not a source/test failure.
+      Impact: Task status may already be DONE while the closure artifact commit is still pending; final tracked state must be checked and deliberately closed.
+      Resolution: Recompute next-action and use its installed bounded closure recovery, retaining task status, recorded implementation, verification and quality evidence; do not alter hooks/policy or rerun passing suites.
+
+    - Observation: Exact installed recovery ap commit --close --unstage-others also exits5 E_GIT commit subject is too generic; generated subject cannot pass existing unchanged commit policy.
+      Impact: Only deterministic closure subject generation remains inconsistent; verified source and quality review pass and task status is DONE.
+      Resolution: After route recomputation use installed ap commit with an explicit policy-valid concrete finalize subject and active --allow-tasks only. This bounded fallback preserves source, lifecycle, evidence and unchanged policy; no direct tasks.json edit or hook bypass.
+extensions:
+  implementation_commit:
+    hash: "a6f3b14e292deea493f09acdf2c46d544d49196d"
+    message: "🧩 FMVJ21 shared: port original SoA container lifetime and iterator ownership"
 id_source: "generated"
 ---
 ## Summary
@@ -249,6 +310,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-09T22:08:29.708Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610092130-FMVJ21
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T22:06:42.339Z, excerpt_hash=sha256:441d455c756681d14b531b160b8e4fe6e8e36b4c10b7adc63f444a801bbef5ce
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610092130-FMVJ21/blueprint/resolved-snapshot.json
+- old_digest: e1a6f2d278a4b1403d92373b789e6e64175e73d68c93a2b1966b6abee584710e
+- current_digest: e1a6f2d278a4b1403d92373b789e6e64175e73d68c93a2b1966b6abee584710e
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610092130-FMVJ21
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610092130-FMVJ21 --result verified-202610092130-FMVJ21 --commit c79a5feff59a6e6360ff1e65e6d3bb3d805d1d5b
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -306,3 +397,11 @@ Preflight branch calc clean; previous task9 completed. Original move constructor
 - Observation: Revalidated original approved task plan at48155adf6e4a: Scope explicitly includes Full-run failure corrections only within Calc/shared scope; user goal also authorizes implementation and correction of full-run errors. The prior formatting approval question incorrectly treated six anticipated Calc/shared verification repairs as expansion beyond that approved remediation scope.
   Impact: No new responsibility, risk, verification criterion, external write or network is introduced. Formatting existing native JSON inputs is already-authorized full-run remediation; all parsed values remain identical. Waiting for an additional answer was unnecessary.
   Resolution: Apply only the six prepared formatting corrections under the original approved Calc/shared full-run repair scope, assert parsed JSON equality before and after every write, rerun unchanged full format gate and finish remaining lifecycle. Do not infer approval from elapsed time or the automatic continuation; authority is the preexisting approved scope.
+
+- Observation: Exact route-oracle task complete command exited5 E_GIT commit subject is too generic after verified/quality-reviewed closure. This repeats the known installed AgentPlane generic deterministic subject mismatch, not a source/test failure.
+  Impact: Task status may already be DONE while the closure artifact commit is still pending; final tracked state must be checked and deliberately closed.
+  Resolution: Recompute next-action and use its installed bounded closure recovery, retaining task status, recorded implementation, verification and quality evidence; do not alter hooks/policy or rerun passing suites.
+
+- Observation: Exact installed recovery ap commit --close --unstage-others also exits5 E_GIT commit subject is too generic; generated subject cannot pass existing unchanged commit policy.
+  Impact: Only deterministic closure subject generation remains inconsistent; verified source and quality review pass and task status is DONE.
+  Resolution: After route recomputation use installed ap commit with an explicit policy-valid concrete finalize subject and active --allow-tasks only. This bounded fallback preserves source, lifecycle, evidence and unchanged policy; no direct tasks.json edit or hook bypass.
