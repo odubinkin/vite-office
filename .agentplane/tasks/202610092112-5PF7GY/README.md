@@ -1,10 +1,11 @@
 ---
 id: "202610092112-5PF7GY"
 title: "Port original shared SoA position adjustment specializations"
-status: "DOING"
+result_summary: "verified-202610092112-5PF7GY"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-09T21:23:54.514Z"
+  updated_at: "2026-10-09T21:24:52.441Z"
   updated_by: "CODER"
-  note: "Pass: original scalar adjustment native1465 cases/7325 calls, actual100 four metrics for all Calc104 and new shared runtime, related13 and portable inventory19 plus scoped static gates. Currenttask9/10; full suites nexttask under user cadence, broad SIMD/OpenMP/container parity still unverified."
+  note: "verified-202610092112-5PF7GY"
   attempts: 0
 quality_review:
   state: "pass"
@@ -45,11 +46,16 @@ quality_review:
     - "Each of none/lu4/lu8/lu16/lu32 is a separate original ordered implementation with exact original guard/mask/group/tail logic; default remains16. Factory is an explicit template syntax adapter and does not fallback for disabled SSE2/AVX2 values."
     - "Native actual private owner and unchanged complete headers produce1465 cases/7325 calls. Independent all8790 full-state decode and byte-identical actual binary replay verify positions, all other metadata, aliases, capacities and complete payloads. Exact number projections audited; signed64 maximum start retained only as bigint evidence."
     - "All104 Calc and13 related shared tests pass with actual100 four metrics and positive denominators. Both links absent throughout portable Calc/shared/inventory19 tests and restored exactly. Scoped inventory has zero semantic violations and no unsupported whole-parity/default claims."
-commit: null
+commit:
+  hash: "472a55c43219df31b6351ccc58553304916f619e"
+  message: "🔎 5PF7GY quality: record original scalar adjustment evidence review"
 comments:
   -
     author: "CODER"
     body: "Start: port original five scalar SoA position-adjustment specializations, reusing shared owners and preserving default/native behavior under the resumed Calc goal."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610092112-5PF7GY. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -64,8 +70,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Pass: original scalar adjustment native1465 cases/7325 calls, actual100 four metrics for all Calc104 and new shared runtime, related13 and portable inventory19 plus scoped static gates. Currenttask9/10; full suites nexttask under user cadence, broad SIMD/OpenMP/container parity still unverified."
+  -
+    type: "verify"
+    at: "2026-10-09T21:24:52.441Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610092112-5PF7GY"
+  -
+    type: "status"
+    at: "2026-10-09T21:24:52.581Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610092112-5PF7GY. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-09T21:23:54.570Z"
+doc_updated_at: "2026-10-09T21:25:23.020Z"
 doc_updated_by: "CODER"
 description: "Task9/10: implement original none/lu4/lu8/lu16/lu32 SoA block position adjustment over reused shared real vectors, preserving default lu16 and unchanged original native observations. No alternate container or SIMD fallback; inventory explicit architecture/generic gaps. Active user goal authorizes local Calc branch work."
 sections:
@@ -135,6 +154,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-09T21:24:52.441Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610092112-5PF7GY
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T21:23:54.570Z, excerpt_hash=sha256:f74d62e3c2f5852dda55fa496b43306524baa7c6a5416f11d887e1e1bcf94d26
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610092112-5PF7GY/blueprint/resolved-snapshot.json
+    - old_digest: 74f7e17c9a2820b0130fbcc136d5ef98c99536105363ece6c8b506253d53938e
+    - current_digest: 74f7e17c9a2820b0130fbcc136d5ef98c99536105363ece6c8b506253d53938e
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610092112-5PF7GY
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610092112-5PF7GY --result verified-202610092112-5PF7GY --commit 472a55c43219df31b6351ccc58553304916f619e
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only intentional task source/docs/registry commits on calc if requested. Preserve existing common owners, local upstream references, original compiler sources and all unrelated task state."
   Findings: |-
@@ -151,6 +200,18 @@ sections:
     - Observation: Repository JSDoc gate requires comments on three new test suite/case callbacks. Evidence review also found the signed64 maximum start marked numberExact despite rounding when projected to number.
       Impact: Documentation gate remains pending; the large-index native result is valid, but its number projection must not be certified as exact.
       Resolution: Document only the three test callbacks and mark that existing large-index case bigint-only. Regenerate the same native corpus, preserve all original cases/states and factors, rerun native equality and scoped acceptance. No criteria or source behavior changes.
+
+    - Observation: Exact direct task complete route reached DONE but generated close subject was rejected by the existing commit guard as too generic (E_GIT).
+      Impact: Source and quality evidence committed; reviewed task closure artifact remains pending.
+      Resolution: Recompute authoritative task-artifact closure route, retain the commit guard and use bounded concrete task-only subject if the generated rejection repeats.
+
+    - Observation: Exact close-artifact command repeats the known generic generated subject E_GIT rejection.
+      Impact: Only the task README closure tail remains; implementation and quality review pass are unchanged.
+      Resolution: Use task-only ap commit with a concrete original scalar adjustment verification subject, preserving all guards and scope.
+extensions:
+  implementation_commit:
+    hash: "794028f24ab5703de338057b5908789943204e5f"
+    message: "🧩 5PF7GY shared: port original SoA scalar position adjustment"
 id_source: "generated"
 ---
 ## Summary
@@ -232,6 +293,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-09T21:24:52.441Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610092112-5PF7GY
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T21:23:54.570Z, excerpt_hash=sha256:f74d62e3c2f5852dda55fa496b43306524baa7c6a5416f11d887e1e1bcf94d26
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610092112-5PF7GY/blueprint/resolved-snapshot.json
+- old_digest: 74f7e17c9a2820b0130fbcc136d5ef98c99536105363ece6c8b506253d53938e
+- current_digest: 74f7e17c9a2820b0130fbcc136d5ef98c99536105363ece6c8b506253d53938e
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610092112-5PF7GY
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610092112-5PF7GY --result verified-202610092112-5PF7GY --commit 472a55c43219df31b6351ccc58553304916f619e
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -253,3 +344,11 @@ Previous task8 completed with clean branch. Native host is arm64, size_t64; __SS
 - Observation: Repository JSDoc gate requires comments on three new test suite/case callbacks. Evidence review also found the signed64 maximum start marked numberExact despite rounding when projected to number.
   Impact: Documentation gate remains pending; the large-index native result is valid, but its number projection must not be certified as exact.
   Resolution: Document only the three test callbacks and mark that existing large-index case bigint-only. Regenerate the same native corpus, preserve all original cases/states and factors, rerun native equality and scoped acceptance. No criteria or source behavior changes.
+
+- Observation: Exact direct task complete route reached DONE but generated close subject was rejected by the existing commit guard as too generic (E_GIT).
+  Impact: Source and quality evidence committed; reviewed task closure artifact remains pending.
+  Resolution: Recompute authoritative task-artifact closure route, retain the commit guard and use bounded concrete task-only subject if the generated rejection repeats.
+
+- Observation: Exact close-artifact command repeats the known generic generated subject E_GIT rejection.
+  Impact: Only the task README closure tail remains; implementation and quality review pass are unchanged.
+  Resolution: Use task-only ap commit with a concrete original scalar adjustment verification subject, preserving all guards and scope.
