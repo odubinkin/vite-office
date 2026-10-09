@@ -211,8 +211,14 @@ export class SwTableRep {
         ),
       );
     else {
-      const area = new SwTabFrame(table).Format(space),
-        geometry = new SwTabCols();
+      const frame = new SwTabFrame(table);
+      let area;
+      try {
+        area = frame.Format(space);
+      } finally {
+        frame.DestroyImpl();
+      }
+      const geometry = new SwTabCols();
       this.left = area.left;
       this.right = area.right;
       this.width = area.width;

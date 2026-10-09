@@ -565,96 +565,104 @@ export function createSwPageFrames(
       if (input.afterParagraphIndex !== afterParagraphIndex) continue;
       const format = input.table.GetFormat();
       const nativeFrame = new SwTabFrame(input.table);
-      if (!nativeFrame.IsLayoutSplitAllowed() && input.rowHeights.length > 0 && hasContent()) {
-        const bodyHeight =
-          activeDescriptor.value.height -
-          activeDescriptor.value.topMargin -
-          activeDescriptor.value.bottomMargin;
-        const wholeHeight = input.rowHeights.reduce(
-          /** Adds original measured rows to the native upper frame spacing. @param sum - Current height. @param height - Row height. @returns Whole frame height. */
-          (sum, height) => sum + height,
-          format.marginTop ?? 0,
-        );
-        // CalcHeightOfFirstContentLine takes the whole master when splitting
-        // is disabled. On an empty page MakeAll permits the no-predecessor
-        // oversized escape, without changing the authored split item.
-        if (used + wholeHeight > bodyHeight) startFollowPage();
-      }
-      let repeat = input.table.GetRowsToRepeat();
-      let headlineHeight = input.rowHeights.slice(0, repeat).reduce(
-        /** Adds measured original headline heights. @param sum - Prior height. @param height - Row height. @returns Total. */
-        (sum, height) => sum + height,
-        0,
-      );
-      const initialPage = pageDescriptors[pageDescriptors.length - 1] as WriterPageDescriptorValue;
-      const initialBodyHeight =
-        initialPage.height - initialPage.topMargin - initialPage.bottomMargin;
-      if (repeat > 0 && headlineHeight > initialBodyHeight) {
-        input.table.SetRowsToRepeat(0);
-        repeat = 0;
-        headlineHeight = 0;
-      }
-      if (
-        repeat > 0 &&
-        hasContent() &&
-        used + (format.marginTop ?? 0) + headlineHeight + (input.rowHeights[repeat] ?? 0) >
-          initialBodyHeight
-      )
-        startFollowPage();
-      const tableStartPage = pageDescriptors[
-        pageDescriptors.length - 1
-      ] as WriterPageDescriptorValue;
-      if (
-        repeat > 0 &&
-        headlineHeight >
-          tableStartPage.height - tableStartPage.topMargin - tableStartPage.bottomMargin
-      ) {
-        input.table.SetRowsToRepeat(0);
-        repeat = 0;
-        headlineHeight = 0;
-      }
-      for (let row = 0; row < input.rowHeights.length; row += 1) {
-        const height = input.rowHeights[row] as number;
-        const descriptor = pageDescriptors[pageDescriptors.length - 1] as WriterPageDescriptorValue;
-        const bodyHeight = descriptor.height - descriptor.topMargin - descriptor.bottomMargin;
-        const spacing = row === 0 ? (format.marginTop ?? 0) : 0;
-        if (
-          hasContent() &&
-          used + spacing + height > bodyHeight &&
-          (repeat === 0 || row > repeat)
-        ) {
-          startFollowPage();
-          const follow = pageDescriptors[pageDescriptors.length - 1] as WriterPageDescriptorValue;
-          if (
-            repeat > 0 &&
-            headlineHeight > follow.height - follow.topMargin - follow.bottomMargin
-          ) {
-            input.table.SetRowsToRepeat(0);
-            repeat = 0;
-            headlineHeight = 0;
-          }
-          if (row > 0) used += headlineHeight;
+      try {
+        if (!nativeFrame.IsLayoutSplitAllowed() && input.rowHeights.length > 0 && hasContent()) {
+          const bodyHeight =
+            activeDescriptor.value.height -
+            activeDescriptor.value.topMargin -
+            activeDescriptor.value.bottomMargin;
+          const wholeHeight = input.rowHeights.reduce(
+            /** Adds original measured rows to the native upper frame spacing. @param sum - Current height. @param height - Row height. @returns Whole frame height. */
+            (sum, height) => sum + height,
+            format.marginTop ?? 0,
+          );
+          // CalcHeightOfFirstContentLine takes the whole master when splitting
+          // is disabled. On an empty page MakeAll permits the no-predecessor
+          // oversized escape, without changing the authored split item.
+          if (used + wholeHeight > bodyHeight) startFollowPage();
         }
-        const frames = pageTables[pageTables.length - 1] as SwTableFrame[];
-        const previous = frames[frames.length - 1];
-        if (previous?.table === input.table && previous.lastRow === row - 1)
-          frames[frames.length - 1] = { ...previous, lastRow: row };
-        else
-          frames.push({
-            table: input.table,
-            printArea: nativeFrame.Format(
-              activeDescriptor.value.width -
-                activeDescriptor.value.leftMargin -
-                activeDescriptor.value.rightMargin,
-            ),
-            firstRow: row,
-            lastRow: row,
-            afterParagraphIndex,
-            ...(row > 0 && repeat > 0 ? { repeatedHeaderRows: repeat } : {}),
-          });
-        used += (row === 0 ? (format.marginTop ?? 0) : 0) + height;
+        let repeat = input.table.GetRowsToRepeat();
+        let headlineHeight = input.rowHeights.slice(0, repeat).reduce(
+          /** Adds measured original headline heights. @param sum - Prior height. @param height - Row height. @returns Total. */
+          (sum, height) => sum + height,
+          0,
+        );
+        const initialPage = pageDescriptors[
+          pageDescriptors.length - 1
+        ] as WriterPageDescriptorValue;
+        const initialBodyHeight =
+          initialPage.height - initialPage.topMargin - initialPage.bottomMargin;
+        if (repeat > 0 && headlineHeight > initialBodyHeight) {
+          input.table.SetRowsToRepeat(0);
+          repeat = 0;
+          headlineHeight = 0;
+        }
+        if (
+          repeat > 0 &&
+          hasContent() &&
+          used + (format.marginTop ?? 0) + headlineHeight + (input.rowHeights[repeat] ?? 0) >
+            initialBodyHeight
+        )
+          startFollowPage();
+        const tableStartPage = pageDescriptors[
+          pageDescriptors.length - 1
+        ] as WriterPageDescriptorValue;
+        if (
+          repeat > 0 &&
+          headlineHeight >
+            tableStartPage.height - tableStartPage.topMargin - tableStartPage.bottomMargin
+        ) {
+          input.table.SetRowsToRepeat(0);
+          repeat = 0;
+          headlineHeight = 0;
+        }
+        for (let row = 0; row < input.rowHeights.length; row += 1) {
+          const height = input.rowHeights[row] as number;
+          const descriptor = pageDescriptors[
+            pageDescriptors.length - 1
+          ] as WriterPageDescriptorValue;
+          const bodyHeight = descriptor.height - descriptor.topMargin - descriptor.bottomMargin;
+          const spacing = row === 0 ? (format.marginTop ?? 0) : 0;
+          if (
+            hasContent() &&
+            used + spacing + height > bodyHeight &&
+            (repeat === 0 || row > repeat)
+          ) {
+            startFollowPage();
+            const follow = pageDescriptors[pageDescriptors.length - 1] as WriterPageDescriptorValue;
+            if (
+              repeat > 0 &&
+              headlineHeight > follow.height - follow.topMargin - follow.bottomMargin
+            ) {
+              input.table.SetRowsToRepeat(0);
+              repeat = 0;
+              headlineHeight = 0;
+            }
+            if (row > 0) used += headlineHeight;
+          }
+          const frames = pageTables[pageTables.length - 1] as SwTableFrame[];
+          const previous = frames[frames.length - 1];
+          if (previous?.table === input.table && previous.lastRow === row - 1)
+            frames[frames.length - 1] = { ...previous, lastRow: row };
+          else
+            frames.push({
+              table: input.table,
+              printArea: nativeFrame.Format(
+                activeDescriptor.value.width -
+                  activeDescriptor.value.leftMargin -
+                  activeDescriptor.value.rightMargin,
+              ),
+              firstRow: row,
+              lastRow: row,
+              afterParagraphIndex,
+              ...(row > 0 && repeat > 0 ? { repeatedHeaderRows: repeat } : {}),
+            });
+          used += (row === 0 ? (format.marginTop ?? 0) : 0) + height;
+        }
+        used += format.marginBottom ?? 0;
+      } finally {
+        nativeFrame.DestroyImpl();
       }
-      used += format.marginBottom ?? 0;
     }
   }
   placeTables(-1);

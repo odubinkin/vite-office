@@ -18,6 +18,7 @@ import { SwFrameSize } from "../../../inc/fmtfsize";
 /** Native represented frame type bits from frame.hxx. */
 export enum SwFrameType {
   None = 0,
+  Tab = 0x0800,
   Row = 0x1000,
   Cell = 0x2000,
 }

@@ -3,7 +3,7 @@ import type { SwTable, SwTableBox, SwTableLine } from "../table/swtable";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { SwFrameSize } from "../../../inc/fmtfsize";
 import { LegacyModifyHint, BroadcastingModify, type SwModify } from "../../../inc/calbck";
-import { SwLayoutFrame, SwFrameType } from "./wsfrm";
+import { SwFrame, SwLayoutFrame, SwFrameType } from "./wsfrm";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { RES_FRM_SIZE, RES_ROW_SPLIT, RES_VERT_ORIENT } from "../../../inc/hintids";
 import type { SwModelHint } from "../../../inc/hints";
@@ -170,12 +170,27 @@ export interface SwTableMouseGeometry {
 }
 
 /** Owns horizontal print geometry over the actual canonical table. */
-export class SwTabFrame {
+export class SwTabFrame extends SwLayoutFrame {
   /** Binds this layout frame to its original table. @param table - Canonical table. @param mouseGeometry - Optional live device frames. @returns Nothing. */
   public constructor(
     private readonly table: SwTable,
     public readonly mouseGeometry?: SwTableMouseGeometry,
-  ) {}
+  ) {
+    super(table.GetFrameFormat());
+    this.mnFrameType = SwFrameType.Tab;
+    let previous: SwRowFrame | undefined;
+    for (const line of table.GetTabLines()) {
+      const row = new SwRowFrame(line);
+      if (row.Lower()) {
+        row.InsertBehind(this, previous);
+        previous = row;
+      } else SwFrame.DestroyFrame(row);
+    }
+  }
+  /** Releases the complete native table lower hierarchy. @returns Nothing. */
+  public override Dispose(): void {
+    this.DestroyImpl();
+  }
 
   /** Returns the canonical table represented by this frame. @returns Actual owner. */
   public GetTable(): SwTable {
@@ -195,14 +210,15 @@ export class SwTabFrame {
           ) => sum + width,
           0,
         );
-    const frame = new SwCellFrame(box);
-    try {
-      return wished === 0
-        ? 0
-        : (frame.GetFormat().GetFrameSize().GetWidth() * this.Format(upperWidth).width) / wished;
-    } finally {
-      frame.DestroyImpl();
-    }
+    for (let row = this.Lower(); row !== undefined; row = row.GetNext())
+      for (let lower = (row as SwRowFrame).Lower(); lower !== undefined; lower = lower.GetNext()) {
+        const cell = lower as SwCellFrame;
+        if (cell.GetTabBox() === box)
+          return wished === 0
+            ? 0
+            : (cell.GetFormat().GetFrameSize().GetWidth() * this.Format(upperWidth).width) / wished;
+      }
+    return 0;
   }
 
   /** Reads the native table-frame split item with its true default. @returns Whether table rows may occupy follow frames. */
