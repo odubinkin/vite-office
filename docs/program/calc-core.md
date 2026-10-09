@@ -1042,3 +1042,37 @@ lifetimes, unbounded size_t indices, complete SoA container and Calc document/UI
 remain unverified. The arrays in tests are populated from genuine observed
 metadata; they do not certify a replacement container. Whole-module inventory
 parity remains unverified.
+
+## Shared SoA block-array ownership
+
+Task 202610092047-Q9D4EA (task8/10) adds original private block_slot_type,
+blocks_type and blocks_to_transfer owners in soa/main.ts, with original default
+copy/mutate/equality helpers in soa/main_def.ts. Each metadata owner keeps three
+separate normal vectors. Slot/transfer defaults, synchronized push/pop/insert/
+erase/clear/reserve, position arithmetic and exact integrity diagnostics remain
+original. Insertion/erase/clear affect metadata without deleting blocks or
+adding enclosing-container event behavior. Copy/clone call the distinct actual
+shared block_funcs aliases; move/vector/slot swaps retain storage/pointer identity.
+
+vector_storage.ts is explicit shared language infrastructure for reserved slots
+and constructed unmanaged scalar/pointer prefixes. Existing delayed vector
+allocation/growth/insert/erase/assignment delegate to the same mechanics, while
+its front deletion offset and bool capacity policy stay in their original owner.
+Reserve allocates actual slots and leaves constructed size unchanged. This
+adapter has no alternate block segmentation, column or document engine.
+
+The genuine native probe compiles the full unchanged headers and accesses the
+original private storage through caller-only explicit template pointer-member
+bridges. No original class body or access token changes. All888 sequences/8460
+complete two-owner steps compare full arrays, selected host capacities, stable
+pointer tokens, complete all12 scalar payload pools and results after every
+command. All1753 complete states are losslessly interned for portable tests.
+Default helpers retain null skipping, callback order/exception partial effects
+and internal left-prefix equality. The metadata owner checks lengths before
+that equality helper. CALC-025 records the distinction without a fix.
+
+Native custom execution policies, object/destructor/allocator ABI, unbounded
+size_t arithmetic, invalid ranges/self-insertion/dangling cursors and every full
+multi_type_vector/Calc column/document/browser method remain unverified.
+Original nested types export at file scope as TypeScript syntax adaptation;
+this increment certifies no substitute enclosing container or whole-module parity.

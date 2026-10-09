@@ -1,0 +1,12 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "shared.internal.insert-storage",
+    "modulePath": "apps/office/src/external/mdds/include/mdds/multi_type_vector/vector_storage.ts",
+    "symbol": "insert_storage",
+    "classification": "local-infrastructure",
+    "capabilityId": "CAP-fea462db-89f8-4359-a95d-7c253562827f",
+    "description": "Shared erased STL backing-slot insertion infrastructure reused by the delayed vector and original SoA metadata arrays; no block segmentation or document behavior."
+  }
+}

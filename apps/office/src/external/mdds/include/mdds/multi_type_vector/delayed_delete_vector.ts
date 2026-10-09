@@ -2,13 +2,16 @@
 // SPDX-FileCopyrightText: 2025 Kohei Yoshida
 // SPDX-License-Identifier: MIT
 
+import {
+  type vector_storage,
+  allocate_storage,
+  grow_storage,
+  insert_storage,
+  erase_storage,
+  assign_storage,
+} from "./vector_storage.ts";
 /** Initialized unmanaged native scalar families; object copy/destruction policies are not implemented. */
 export type DelayedVectorValue = number | boolean | bigint | string;
-/** Actual reserved slots and constructed prefix of the adapted native vector. */
-interface vector_storage<T extends DelayedVectorValue> {
-  values: (T | undefined)[];
-  size: number;
-}
 /** Borrows a native vector position; valid iterator lifetime and owner/range preconditions apply. */
 export class delayed_delete_vector_iterator<T extends DelayedVectorValue> {
   /** Borrows backing storage independently of the delayed owner, including after swap. @param storage - Native vector. @param position - Absolute base position. @param reverse - Reverse iterator. @returns Iterator. */
@@ -130,11 +133,12 @@ export class delayed_delete_vector<T extends DelayedVectorValue> {
         )
       : [valueOrFirst as T];
     const index = position.position;
-    this.grow(this.m_vec.size + values.length);
-    for (let i = this.m_vec.size - 1; i >= index; --i)
-      this.m_vec.values[i + values.length] = this.m_vec.values[i];
-    for (let i = 0; i < values.length; ++i) this.m_vec.values[index + i] = values[i];
-    this.m_vec.size += values.length;
+    insert_storage(
+      this.m_vec,
+      index,
+      values,
+      this.aligned_capacity(this.m_vec.size + values.length),
+    );
     if (!isRange) return new delayed_delete_vector_iterator(this.m_vec, index);
   }
   /** Clears delayed entries then resizes native constructed storage. @param count - New logical size. @returns Nothing. */
@@ -158,11 +162,7 @@ export class delayed_delete_vector<T extends DelayedVectorValue> {
     }
     const index = first.position;
     const count = last === undefined ? 1 : last.position - index;
-    for (let i = index; i < this.m_vec.size - count; ++i)
-      this.m_vec.values[i] = this.m_vec.values[i + count];
-    for (let i = this.m_vec.size - count; i < this.m_vec.size; ++i)
-      this.m_vec.values[i] = undefined;
-    this.m_vec.size -= count;
+    erase_storage(this.m_vec, index, count);
     return new delayed_delete_vector_iterator(this.m_vec, index);
   }
   /** Returns reserved backing slots, including delayed entries. @returns Capacity. */
@@ -222,20 +222,14 @@ export class delayed_delete_vector<T extends DelayedVectorValue> {
   }
   /** Allocates actual backing slots retaining constructed scalars. @param capacity - Reserved slots. @returns Nothing. */
   private allocate(capacity: number): void {
-    const values = Array<T | undefined>(capacity);
-    for (let i = 0; i < this.m_vec.size; ++i) values[i] = this.m_vec.values[i];
-    this.m_vec.values = values;
+    allocate_storage(this.m_vec, capacity);
   }
   /** Uses the selected native geometric growth rule for primitive vectors. @param count - Required constructed size. @returns Nothing. */
   private grow(count: number): void {
-    if (count > this.capacity())
-      this.allocate(this.aligned_capacity(Math.max(count, this.capacity() * 2)));
+    grow_storage(this.m_vec, count, this.aligned_capacity(count));
   }
   /** Assigns the underlying vector independently of front-offset management. @param values - Input scalars. @returns Nothing. */
   private assign_vector(values: readonly T[]): void {
-    if (values.length > this.capacity()) this.allocate(this.aligned_capacity(values.length));
-    for (let i = 0; i < values.length; ++i) this.m_vec.values[i] = values[i];
-    for (let i = values.length; i < this.m_vec.size; ++i) this.m_vec.values[i] = undefined;
-    this.m_vec.size = values.length;
+    assign_storage(this.m_vec, values, this.aligned_capacity(values.length));
   }
 }

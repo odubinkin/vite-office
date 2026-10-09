@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/vector_storage.ts",
+    "classification": "local-infrastructure",
+    "state": "internal",
+    "suite": "shared",
+    "subsystem": "cell-storage",
+    "capabilityIds": [],
+    "infrastructureExemption": "Explicit erased STL backing-slot syntax infrastructure extracted from the existing delayed vector and reused for original three-vector SoA metadata. It allocates real slots and shifts constructed unmanaged scalar/pointer entries; it has no mdds block segmentation, interval, column or document behavior. Native libc++ finite capacity observations are witnesses, not generic allocator/ABI or object-lifetime certification. No single LibreOffice source owner is claimed for this language adapter.",
+    "semantic": {
+      "behaviorStatus": "not-applicable",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "A",
+      "evidence": [
+        "apps/office/src/external/mdds/include/mdds/multi_type_vector/vector_storage.ts#allocate_storage",
+        "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/main.test.ts#retains original slot transfer and shared reserved-vector defaults"
+      ],
+      "justification": "Explicit erased STL backing-slot syntax infrastructure extracted from the existing delayed vector and reused for original three-vector SoA metadata. It allocates real slots and shifts constructed unmanaged scalar/pointer entries; it has no mdds block segmentation, interval, column or document behavior. Native libc++ finite capacity observations are witnesses, not generic allocator/ABI or object-lifetime certification. No single LibreOffice source owner is claimed for this language adapter.",
+      "knownViolations": [],
+      "localSymbols": [
+        "vector_storage",
+        "allocate_storage",
+        "grow_storage",
+        "insert_storage",
+        "erase_storage",
+        "assign_storage",
+        "std_vector",
+        "store",
+        "size",
+        "capacity",
+        "get",
+        "set",
+        "snapshot",
+        "reserve",
+        "insert",
+        "push_back",
+        "pop_back",
+        "erase",
+        "clear",
+        "swap",
+        "equals"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

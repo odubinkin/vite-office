@@ -485,6 +485,24 @@ comparison. Consumer intent for mutable cache changes still needs review.
 Decision: preserve copy/conversion/end distinctions; do not synchronize caches,
 clear reached-end nodes or define the end private data.
 
+## CALC-025 — internal block equality compares the left range prefix
+
+Status: confirmed internal API distinction, not classified as a defect.
+Pinned mdds3.2.1 soa/main_def.inl, default equal_blocks specialization, calls
+the three-iterator std::equal overload. It compares lhs.begin..lhs.end against
+the prefix starting at rhs.begin, and does not independently compare lengths.
+An empty left block-pointer vector therefore compares equal to a nonempty right
+vector. The original blocks_type::equals first checks positions, sizes and
+element-block vector lengths; that owner still returns false for different
+metadata lengths. A right range at least as long as the left is the helper
+caller precondition; shorter invalid ranges receive no successful fixture result.
+
+Evidence: unchanged private original owners and helper calls in
+scripts/mdds-block-store-native-probe.mjs, complete native-block-store-cases.json
+and shared soa/main.test.ts. Helper equality after clearing the left owner
+returns true while blocks_type::equals returns false. Decision: preserve both
+contracts and caller length checks; do not add an extra length guard or a fix.
+
 ## Reviewed API distinctions
 
 These distinctions have been discussed but are not classified as defects:
