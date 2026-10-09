@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 307
+revision: 309
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-09T23:33:05.130Z"
+doc_updated_at: "2026-10-09T23:48:12.104Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -1411,6 +1411,14 @@ sections:
     CorrectionYCZ38R (2/10 after BZQGYC) removes row/cell GetFormat projections from original Writer XML export. Borrowed original frame item sets supply direct SET row size/split and cell box/vertical orientation; inherited or pool normal items are omitted. Native Fixed/Minimum heights and split inversion retained, independent box edges exported from original item. Native vertical token table is TOP1/top,CENTER2/middle,BOTTOM3/bottom; NONE and unmapped native orientations emit empty, while absence emits no attribute. Empty vertical imports as original explicit NONE per i8855, top imports as TOP; exported unmapped horizontal emits empty and XML style import leaves alignment unset before native FULL table initialization. The earlier R12SRT unmapped-orientation omission is historical/incomplete and corrected here. Current browser codec legacy top mapping, UI orientation menu completeness, generic invalid token policy, table import scalar assembly, full native shared mapper/style/UNO/VCL/relative/layout widths remain separately partial or unverified. All prior metadata statuses/defaults/classes/historical evidence and registered recovery/open/save/settings/UI deviations retained; no whole-module promotion. Evidence task202610092323-YCZ38R.
 
     VerificationYCZ38R:519 unique current-source related cases87files and20fresh pass after2fresh failed-only repairs and7changed typed-context call-site rechecks.24Chromium cases pass1280/390,no skips/flaky. Entire final xmlexp.ts/xmltbli.ts/XMLTableImport.ts actual Istanbul100 lines/statements/functions/branches (362/382/76/469),zero negatives and complete current source/map identity. One exact source-backed R12SRT empty-token migration,636other old tests byte-identical;6canonical histories preserved;9restored metadata and current statics/build pass. Full not due2/10 after BZQGYC; whole core/UI/filter goal remains incomplete,no metadata promotion.
+
+    - Observation: Correction A8T5K0 3/10 removes XML table format replay.
+      Impact: Original native table,row,box items and header count retain ownership; unrelated complete LR/Hori/frame fields no longer round-trip through scalar projections.
+      Resolution: One xmltbli production module; actual new native/header/package/mounted and related current-source Istanbul100 checks underway. Registered IO deviations and metadata history retained. Generic shared mapper/pooling/full layout/filter remain incomplete; goal active.
+
+    - Observation: Verified A8T5K0 correction3/10:535related89files16fresh24Chromium; XML-layer scalar replay removed.
+      Impact: Original native table,row,box attributes and header counter retain full item fields and original owners through3mounted history cycles; whole final xmltbli actual101lines108statements16functions84branches100all-four,current source/map identity and zero negatives.
+      Resolution: Initial1fresh assertion repaired failed-only; TS7 type-only repair emits identical runtime JS.593old tests and2canonical history prefixes unchanged,statics/build and9restored metadata pass. Reference restored,IO exceptions unchanged,general mapper/pooling/full layout/filter/UI/UNO/VCL incomplete. Goal remains active; full not due3/10. Exact-SHA non-independent quality follows.
 id_source: "generated"
 ---
 ## Summary
@@ -2795,3 +2803,11 @@ VerificationR12SRT:493 unique related current-source cases81files pass after4fre
 CorrectionYCZ38R (2/10 after BZQGYC) removes row/cell GetFormat projections from original Writer XML export. Borrowed original frame item sets supply direct SET row size/split and cell box/vertical orientation; inherited or pool normal items are omitted. Native Fixed/Minimum heights and split inversion retained, independent box edges exported from original item. Native vertical token table is TOP1/top,CENTER2/middle,BOTTOM3/bottom; NONE and unmapped native orientations emit empty, while absence emits no attribute. Empty vertical imports as original explicit NONE per i8855, top imports as TOP; exported unmapped horizontal emits empty and XML style import leaves alignment unset before native FULL table initialization. The earlier R12SRT unmapped-orientation omission is historical/incomplete and corrected here. Current browser codec legacy top mapping, UI orientation menu completeness, generic invalid token policy, table import scalar assembly, full native shared mapper/style/UNO/VCL/relative/layout widths remain separately partial or unverified. All prior metadata statuses/defaults/classes/historical evidence and registered recovery/open/save/settings/UI deviations retained; no whole-module promotion. Evidence task202610092323-YCZ38R.
 
 VerificationYCZ38R:519 unique current-source related cases87files and20fresh pass after2fresh failed-only repairs and7changed typed-context call-site rechecks.24Chromium cases pass1280/390,no skips/flaky. Entire final xmlexp.ts/xmltbli.ts/XMLTableImport.ts actual Istanbul100 lines/statements/functions/branches (362/382/76/469),zero negatives and complete current source/map identity. One exact source-backed R12SRT empty-token migration,636other old tests byte-identical;6canonical histories preserved;9restored metadata and current statics/build pass. Full not due2/10 after BZQGYC; whole core/UI/filter goal remains incomplete,no metadata promotion.
+
+- Observation: Correction A8T5K0 3/10 removes XML table format replay.
+  Impact: Original native table,row,box items and header count retain ownership; unrelated complete LR/Hori/frame fields no longer round-trip through scalar projections.
+  Resolution: One xmltbli production module; actual new native/header/package/mounted and related current-source Istanbul100 checks underway. Registered IO deviations and metadata history retained. Generic shared mapper/pooling/full layout/filter remain incomplete; goal active.
+
+- Observation: Verified A8T5K0 correction3/10:535related89files16fresh24Chromium; XML-layer scalar replay removed.
+  Impact: Original native table,row,box attributes and header counter retain full item fields and original owners through3mounted history cycles; whole final xmltbli actual101lines108statements16functions84branches100all-four,current source/map identity and zero negatives.
+  Resolution: Initial1fresh assertion repaired failed-only; TS7 type-only repair emits identical runtime JS.593old tests and2canonical history prefixes unchanged,statics/build and9restored metadata pass. Reference restored,IO exceptions unchanged,general mapper/pooling/full layout/filter/UI/UNO/VCL incomplete. Goal remains active; full not due3/10. Exact-SHA non-independent quality follows.

@@ -3,19 +3,17 @@ import { SwFormatVertOrient } from "../../../inc/fmtornt";
 import { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
 import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
 import { importBoxProperties } from "../../../../xmloff/source/style/bordrhdl";
-import { RES_BOX } from "../../../inc/hintids";
+import { RES_BOX, RES_UL_SPACE, RES_COLLAPSING_BORDERS } from "../../../inc/hintids";
+import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
+import { SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";
+import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
+import { SwFormatLayoutSplit } from "../../../inc/fmtlsplt";
 import { SvXMLImport } from "../../../../xmloff/source/core/xmlimp";
 
 import type { OdfTableStyle } from "../../../../xmloff/source/table/XMLTableImport";
 import type { SwDoc } from "../../core/doc/doc";
 import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
-import {
-  type SwTable,
-  type SwTableBox,
-  SwTableLine,
-  type SwTableFormat,
-  type SwTableBoxFormat,
-} from "../../core/table/swtable";
+import { type SwTable, type SwTableBox, SwTableLine } from "../../core/table/swtable";
 
 /** Keeps table import state scoped to one Writer XML stream coordinator. */
 export class SwXMLTableImport extends SvXMLImport {
@@ -51,11 +49,69 @@ export class SwXMLTableImport extends SvXMLImport {
   ): void {
     /* istanbul ignore next -- SAX table contexts cannot nest under a table context. */
     if (this.activeTable !== undefined) throw new Error("Nested ODF tables are not supported.");
-    const style = this.resolveTableStyle(styleName, "table");
-    this.activeTable = this.document.nodes.MakeTableNode(
-      name,
-      tableStyleValues(style) as SwTableFormat,
-    );
+    const style = this.resolveTableStyle(styleName, "table") as Extract<
+      OdfTableStyle,
+      { family: "table" }
+    >;
+    this.activeTable = this.document.nodes.MakeTableNode(name);
+    const frameFormat = this.activeTable.GetFrameFormat();
+    const hasMargins = style.marginLeft !== undefined || style.marginRight !== undefined;
+    if (hasMargins) {
+      const item = frameFormat.GetLRSpace().Clone();
+      item.SetLeft(style.marginLeft ?? 0);
+      item.SetRight(style.marginRight ?? 0);
+      frameFormat.SetFormatAttr(item);
+    }
+    if (style.align !== undefined) {
+      const item = frameFormat.GetHoriOrient().Clone();
+      switch (style.align) {
+        case "left":
+          item.SetHoriOrient(
+            style.width === undefined
+              ? hasMargins
+                ? HoriOrientation.NONE
+                : HoriOrientation.FULL
+              : hasMargins
+                ? HoriOrientation.LEFT_AND_WIDTH
+                : HoriOrientation.LEFT,
+          );
+          break;
+        case "center":
+          item.SetHoriOrient(
+            style.width === undefined ? HoriOrientation.FULL : HoriOrientation.CENTER,
+          );
+          break;
+        case "right":
+          item.SetHoriOrient(
+            style.width === undefined ? HoriOrientation.FULL : HoriOrientation.RIGHT,
+          );
+          break;
+        case "margins":
+          item.SetHoriOrient(hasMargins ? HoriOrientation.NONE : HoriOrientation.FULL);
+          break;
+      }
+      frameFormat.SetFormatAttr(item);
+    }
+    if (style.marginTop !== undefined || style.marginBottom !== undefined)
+      frameFormat.SetFormatAttr(
+        new SvxULSpaceItem(
+          style.marginTop ?? 0,
+          style.marginBottom ?? 0,
+          RES_UL_SPACE,
+          frameFormat.GetULSpace().GetContext(),
+        ),
+      );
+    if (style.width !== undefined) {
+      const item = frameFormat.GetFrameSize().Clone();
+      item.SetWidth(style.width);
+      frameFormat.SetFormatAttr(item);
+    }
+    if (style.borderModel !== undefined)
+      frameFormat.SetFormatAttr(
+        new SfxBoolItem(RES_COLLAPSING_BORDERS, style.borderModel === "collapsing"),
+      );
+    if (style.layoutSplit !== undefined)
+      frameFormat.SetFormatAttr(new SwFormatLayoutSplit(style.layoutSplit));
     this.columnWidths.length = 0;
     this.headerRowCount = 0;
     this.inHeaderRows = false;
@@ -70,11 +126,7 @@ export class SwXMLTableImport extends SvXMLImport {
   public endTableHeaderRows(): void {
     this.inHeaderRows = false;
     const table = this.requireTable();
-    table.SetFormat({
-      ...table.GetFormat(),
-      headerRows: this.headerRowCount,
-      repeatHeaderRows: true,
-    });
+    table.SetRowsToRepeat(this.headerRowCount);
   }
 
   /** Appends one physical table column. */
@@ -105,24 +157,20 @@ export class SwXMLTableImport extends SvXMLImport {
     if (count === 0) throw new Error("ODF table has no declared columns.");
     const frameFormat = table.GetTableNode().GetDoc().MakeTableLineFormat();
     this.activeRow = new SwTableLine(frameFormat);
-    this.activeRow.SetFormat({
-      rowSplit:
-        style.keepTogether === undefined ? undefined : new SwFormatRowSplit(!style.keepTogether),
-      frameSize:
-        style.minHeight !== undefined
-          ? new SwFormatFrameSize(
-              SwFrameSize.Minimum,
-              0,
-              Math.min(65535, Math.max(1, style.minHeight)),
-            )
-          : style.height !== undefined
-            ? new SwFormatFrameSize(
-                SwFrameSize.Fixed,
-                0,
-                Math.min(65535, Math.max(1, style.height)),
-              )
-            : undefined,
-    });
+    if (style.keepTogether !== undefined)
+      frameFormat.SetFormatAttr(new SwFormatRowSplit(!style.keepTogether));
+    if (style.minHeight !== undefined)
+      frameFormat.SetFormatAttr(
+        new SwFormatFrameSize(
+          SwFrameSize.Minimum,
+          0,
+          Math.min(65535, Math.max(1, style.minHeight)),
+        ),
+      );
+    else if (style.height !== undefined)
+      frameFormat.SetFormatAttr(
+        new SwFormatFrameSize(SwFrameSize.Fixed, 0, Math.min(65535, Math.max(1, style.height))),
+      );
     table.AddLine(this.activeRow);
     this.pendingCovered = 0;
     if (this.inHeaderRows) this.headerRowCount += 1;
@@ -152,26 +200,26 @@ export class SwXMLTableImport extends SvXMLImport {
       cell = this.document.nodes.AppendTableBox(this.requireTable(), row, {
         frameSize: new SwFormatFrameSize(SwFrameSize.Variable, width, 0),
       });
-    const style = this.resolveTableStyle(styleName, "table-cell");
-    const { verticalAlign, ...format } = tableStyleValues(style);
-    cell.SetFormat({
-      ...cell.GetFormat(),
-      box: importBoxProperties(format, RES_BOX),
-      ...(verticalAlign === undefined
-        ? {}
-        : {
-            vertOrient: new SwFormatVertOrient(
-              0,
-              verticalAlign === "middle"
-                ? VertOrientation.CENTER
-                : verticalAlign === "bottom"
-                  ? VertOrientation.BOTTOM
-                  : verticalAlign === "top"
-                    ? VertOrientation.TOP
-                    : VertOrientation.NONE,
-            ),
-          }),
-    } as SwTableBoxFormat);
+    const style = this.resolveTableStyle(styleName, "table-cell") as Extract<
+      OdfTableStyle,
+      { family: "table-cell" }
+    >;
+    const frameFormat = cell.GetFrameFormat(),
+      box = importBoxProperties(style, RES_BOX);
+    if (box !== undefined) frameFormat.SetFormatAttr(box);
+    if (style.verticalAlign !== undefined)
+      frameFormat.SetFormatAttr(
+        new SwFormatVertOrient(
+          0,
+          style.verticalAlign === "middle"
+            ? VertOrientation.CENTER
+            : style.verticalAlign === "bottom"
+              ? VertOrientation.BOTTOM
+              : style.verticalAlign === "top"
+                ? VertOrientation.TOP
+                : VertOrientation.NONE,
+        ),
+      );
     this.activeCell = cell;
     this.cellParagraphCount = 0;
     this.rowCellIndex += columnSpan;
@@ -227,16 +275,4 @@ export class SwXMLTableImport extends SvXMLImport {
       throw new Error(`ODF ${family} style has the wrong family: ${name}`);
     return style;
   }
-}
-
-/** Removes the ODF style-family tag and absent optional values before assigning canonical geometry. @param style - Parsed table style. @returns Physical values. */
-function tableStyleValues(style: OdfTableStyle): Record<string, unknown> {
-  return Object.fromEntries(
-    Object.entries(style).filter(
-      /** Projects one canonical Writer table value. @param argument1 - Callback input. @returns Callback result. */ ([
-        key,
-        value,
-      ]) => key !== "family" && value !== undefined,
-    ),
-  );
 }
