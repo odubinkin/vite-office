@@ -1,0 +1,98 @@
+
+> vite-office@0.1.0 verify
+> npm run format:check && npm run lint && npm run typecheck && npm run check:dependencies && npm run check:writer-resources && npm run test:tooling && npm run test:coverage && npm run test:inventory:coverage && npm run test:e2e && npm run test:static && npm run check:docs && npm run check:file-size && npm run check:source-tree && npm run check:source-provenance && npm run inventory:invariants && npm run inventory:parity
+
+
+> vite-office@0.1.0 format:check
+> prettier --check .
+
+Checking formatting...
+All matched files use Prettier code style!
+
+> vite-office@0.1.0 lint
+> eslint . --max-warnings 0
+
+
+> vite-office@0.1.0 typecheck
+> npm run typecheck:tools && npm run typecheck --workspace @vite-office/office
+
+
+> vite-office@0.1.0 typecheck:tools
+> tsc --project tsconfig.tools.json
+
+
+> @vite-office/office@0.1.0 typecheck
+> tsc --noEmit
+
+
+> vite-office@0.1.0 check:dependencies
+> node scripts/check-module-boundaries.mjs
+
+Module boundary check passed: 332 runtime sources, 1579 relative imports, 29 allowed cross-module edges.
+
+> vite-office@0.1.0 check:writer-resources
+> tsx scripts/generate-writer-ui-resources.ts --check && vitest run scripts/writer-ui-resource-model.test.ts
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office
+
+
+ Test Files  1 passed (1)
+      Tests  2 passed (2)
+   Start at  18:05:05
+   Duration  118ms (transform 24ms, setup 0ms, import 32ms, tests 3ms, environment 0ms)
+
+
+> vite-office@0.1.0 test:tooling
+> vitest run scripts/test-projects.test.ts scripts/check-module-boundaries.test.ts
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office
+
+
+ Test Files  2 passed (2)
+      Tests  11 passed (11)
+   Start at  18:05:06
+   Duration  1.74s (transform 116ms, setup 0ms, import 1.17s, tests 1.35s, environment 0ms)
+
+
+> vite-office@0.1.0 test:coverage
+> npm run test:coverage --workspace @vite-office/office --
+
+
+> @vite-office/office@0.1.0 test:coverage
+> vitest run --coverage
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+      Coverage enabled with v8
+
+
+ Test Files  525 passed (525)
+      Tests  14170 passed (14170)
+   Start at  18:05:08
+   Duration  608.57s (transform 16.87s, setup 74.12s, import 149.35s, tests 485.96s, environment 349.84s)
+
+ % Coverage report from v8
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+All files          |     100 |    99.99 |     100 |     100 |                   
+ ...ce/core/layout |     100 |    99.81 |     100 |     100 |                   
+  paintfrm.ts      |     100 |    96.15 |     100 |     100 | 141               
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 100% ( 21052/21052 )
+Branches     : 99.99% ( 15496/15497 )
+Functions    : 100% ( 4802/4802 )
+Lines        : 100% ( 19151/19151 )
+================================================================================
+ERROR: Coverage for branches (99.99%) does not meet global threshold (100%)
+npm error Lifecycle script `test:coverage` failed with error:
+npm error code 1
+npm error path /Users/odubinkin/Projects/vite-office/apps/office
+npm error workspace @vite-office/office@0.1.0
+npm error location /Users/odubinkin/Projects/vite-office/apps/office
+npm error command failed
+npm error command sh -c vitest run --coverage
