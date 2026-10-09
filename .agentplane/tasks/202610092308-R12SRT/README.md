@@ -1,10 +1,11 @@
 ---
 id: "202610092308-R12SRT"
 title: "Export original native table items with upstream direct-state admission"
-status: "DOING"
+result_summary: "Export original native table items with upstream direct-state admission"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -49,6 +50,9 @@ comments:
   -
     author: "CODER"
     body: "Start: bind current native table XML implementation before exact-SHA quality."
+  -
+    author: "CODER"
+    body: "Verified: original native table XML direct-item admission replaces scalar projection;493 related app cases14fresh7Chromium and whole-module Istanbul100all-four pass.635 old tests and registered IO deviations preserved,9metadata/static gates pass,reference restored and exact-SHA same-agent non-independent quality recorded."
 events:
   -
     type: "status"
@@ -82,8 +86,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Refreshed after exact-SHA non-independent same-agent quality pass0e02021a.493app/14fresh/7Chromium,whole xmlexp100all-four zero-negative/current maps/source,9metadata/statics pass,635oldtests preserved,reference restored. Concrete canonical closure follows."
+  -
+    type: "status"
+    at: "2026-10-09T23:21:11.982Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: original native table XML direct-item admission replaces scalar projection;493 related app cases14fresh7Chromium and whole-module Istanbul100all-four pass.635 old tests and registered IO deviations preserved,9metadata/static gates pass,reference restored and exact-SHA same-agent non-independent quality recorded."
 doc_version: 3
-doc_updated_at: "2026-10-09T23:21:00.213Z"
+doc_updated_at: "2026-10-09T23:21:11.983Z"
 doc_updated_by: "CODER"
 description: "Correction1/10 after full baseline BZQGYC. Remove table GetFormat scalar export in xmlexp.ts; port original direct-item admission from SvXMLExportItemMapper GetItem(false) and original table format/margin guards, preserving represented fields and native headline counters. Source rejects arbitrary nondefault table format parents; do not flatten inheritance or fake a parent-style persistence feature. Add native XML/ODT and mounted history roundtrip cases, preserve old tests and canonical histories, targeted actual whole-module Istanbul100 upstream absent then static/browser/restored metadata audits. Keep all registered IO/recovery deviations and branch writer; no full run due."
 sections:
@@ -195,6 +206,10 @@ sections:
     Initial related profile493cases81files:489passed4freshfailed; old contracts all pass. Absence fixtures cleared constructor-owned horizontal items; ODT assertions inspect original ItemSet instead of nonexistent frame getters. Four failed-only closure assertions passed,9 passing cases excluded; exit1 partial coverage only. Initial lint rejects16 fresh non-null assertions; first repair leaves2 multiline assertions, second repair uses explicit required-owner checks. Final lint/TS7/build/statics pass; final two changed fresh files14/14 pass. Fresh-only exit1 partial coverage only; complete identical current-production maps100all-four/zero-negatives. Old635unit files byte-identical; no upstream-backed tests/copies/helpers in AgentPlane. Raw logs/helpers/maps solely ignored cache. Final metadata and exact-SHA quality pending. Broad row/cell projection, width/parent/browser-codec/UNO/VCL/full-parity responsibilities remain separately incomplete; no status promotion.
 
     Restored metadata9/9pass after replacing invalid expression evidence with the actual source method symbol. Source-tree/registry/provenance/resources/invariants/parity/routing/doctor pass,doctor0errors2historicalwarnings. Exact semantic0e02021afe792176ab9069c80aa9454f71023a94 reviewed by same implementing agent in EVALUATOR role, explicitly non-independent, verdictpass and source/final-test hashes verified. Final counters/maps100all-four; no scope drift or whole-module promotion. Canonical finish with concrete result avoids known generic completion-subject failure; persist refreshed verification before finish.
+extensions:
+  implementation_commit:
+    hash: "0e02021afe792176ab9069c80aa9454f71023a94"
+    message: "🚧 R12SRT writer: export original native table items directly"
 id_source: "generated"
 ---
 ## Summary
