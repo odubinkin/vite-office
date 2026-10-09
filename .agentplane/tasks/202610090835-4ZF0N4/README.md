@@ -4,7 +4,7 @@ title: "Restore native table frame layout ownership"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,30 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-09T09:21:15.487Z"
+  updated_by: "CODER"
+  note: "Native table frame ownership verified:232 unique targeted cases,12 fresh,0 unresolved; approved coverage-recovery210 passing replay explicitly recorded, later failed/new/unexecuted-only closures. Source-bound all-four100 app318/changed8; all scoped static and16 canonical inventory gates pass. Upstream-absent runtime/build restored finally; persistent page/root/full parity remains unverified."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-09T09:21:19.353Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent non-independent review: original registered native table/row/cell hierarchy and deterministic consumer lifetimes satisfy the bounded leaf scope;232 targeted cases and all declared gates pass."
+  evaluated_sha: "1b7dd23819577fb36c0f87fda4327efcf4ba801f"
+  blueprint_digest: "2688b63f96bebdadb203e4d8c0cdf9a6a170a7ac2f3149f69495858b57c698ec"
+  evidence_refs:
+    - ".agentplane/tasks/202610090835-4ZF0N4/README.md"
+    - ".agentplane/tasks/202610090835-4ZF0N4/quality/20261009-092119353-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610090835-4ZF0N4/quality/20261009-092119353-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610090835-4ZF0N4/quality/20261009-092119353-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610090835-4ZF0N4/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610090835-4ZF0N4/evidence/checks.json"
+    - ".agentplane/tasks/202610090835-4ZF0N4/evidence/coverage.json"
+  findings:
+    - "SwTabFrame now inherits SwLayoutFrame, registers the original table format, links nonempty original native row/cell lowers, and borrows cell widths. JSX owns one hierarchy; temporary geometry/flow/split/dialog consumers and retained mouse samples release clients in finally or replacement/unmount."
+    - "Source-bound exact all-four100 uses actual current maps plus complete unchanged declarations/bodies/enclosing conditions/all mapped locations. Initial discarded maps required one approved210 passing recovery replay; raw failures retained, later closures only failed/new/unexecuted.506 old acceptance files byte-identical, one literal-preserving ownership migration."
+    - "All16 canonical runtime/provenance records preserve old status/default/classification and evidence prefixes, without whole module or goal promotion. Registry build/scoped/global/provenance/tree/routing pass;doctor0errors with3 prior warnings."
 commit: null
 comments:
   -
@@ -35,8 +54,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: Restore original native table layout ownership and deterministic temporary-client lifetimes, preserving existing documented I/O/recovery deviations and explicit persistent root/page gaps."
+  -
+    type: "verify"
+    at: "2026-10-09T09:21:15.487Z"
+    author: "CODER"
+    state: "ok"
+    note: "Native table frame ownership verified:232 unique targeted cases,12 fresh,0 unresolved; approved coverage-recovery210 passing replay explicitly recorded, later failed/new/unexecuted-only closures. Source-bound all-four100 app318/changed8; all scoped static and16 canonical inventory gates pass. Upstream-absent runtime/build restored finally; persistent page/root/full parity remains unverified."
 doc_version: 3
-doc_updated_at: "2026-10-09T09:19:57.870Z"
+doc_updated_at: "2026-10-09T09:21:15.578Z"
 doc_updated_by: "CODER"
 description: "Iteration251 under C9TN6M: replace the standalone SwTabFrame geometry object with native SwLayoutFrame registration and linked original row/cell ownership, including deterministic lifetime at all temporary production consumers. This is the required table hierarchy prerequisite for persistent page/root/UI integration; preserve documented recovery/open/save/settings deviations."
 sections:
@@ -49,6 +74,39 @@ sections:
     Result: pass.
     Evidence: 232 unique cases,12 fresh,0 unresolved. Approved recovery210 passing replay solely for discarded maps; subsequent failed/new/unexecuted-only closures. Exact all-four100 app318 and changed8 source-bound coverage; all declared static and inventory gates exit0.16 canonical records preserve old fields/prefixes/status/default/classification.
     Scope: registered native SwTabFrame lower hierarchy and deterministic production lifetime/width borrowing, not full native page/root/follows/content/redlines/table-item/UI parity. Same-agent evaluator explicitly non-independent. Last full247,no full251. Raw maps/results/helper code remain ignored outside AgentPlane; bounded English identifiers/counts/hashes only committed.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-09T09:21:15.487Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Native table frame ownership verified:232 unique targeted cases,12 fresh,0 unresolved; approved coverage-recovery210 passing replay explicitly recorded, later failed/new/unexecuted-only closures. Source-bound all-four100 app318/changed8; all scoped static and16 canonical inventory gates pass. Upstream-absent runtime/build restored finally; persistent page/root/full parity remains unverified.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T09:19:57.870Z, excerpt_hash=sha256:892ddc163ae8e8587f97b51a9b615fd91c7ceb497620a57b73be3d1672c46697
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610090835-4ZF0N4/blueprint/resolved-snapshot.json
+    - old_digest: 2688b63f96bebdadb203e4d8c0cdf9a6a170a7ac2f3149f69495858b57c698ec
+    - current_digest: 2688b63f96bebdadb203e4d8c0cdf9a6a170a7ac2f3149f69495858b57c698ec
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610090835-4ZF0N4
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610090835-4ZF0N4
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Normal revert of the scoped implementation if requested; no reset, checkout/dependency change, upstream modification or user merge."
   Findings: |-
     Read-only audit: current SwTabFrame is a standalone geometry facade with no native registration or linked rows. Native inherits SwLayoutFrame and creates SwRowFrame lowers, retaining only nonempty rows. Current production geometry consumers rely on resource-free construction; all must release newly represented native registrations. UI separately reconstructs each row and width query separately constructs a cell; those redundant temporary clients can be removed by borrowing the new table lower hierarchy. Persistent root/page owners and full follow/content layout remain later work.
@@ -88,6 +146,39 @@ Command: declared upstream-absent targeted Vitest coverage profiles, npm run typ
 Result: pass.
 Evidence: 232 unique cases,12 fresh,0 unresolved. Approved recovery210 passing replay solely for discarded maps; subsequent failed/new/unexecuted-only closures. Exact all-four100 app318 and changed8 source-bound coverage; all declared static and inventory gates exit0.16 canonical records preserve old fields/prefixes/status/default/classification.
 Scope: registered native SwTabFrame lower hierarchy and deterministic production lifetime/width borrowing, not full native page/root/follows/content/redlines/table-item/UI parity. Same-agent evaluator explicitly non-independent. Last full247,no full251. Raw maps/results/helper code remain ignored outside AgentPlane; bounded English identifiers/counts/hashes only committed.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-09T09:21:15.487Z — VERIFY — ok
+
+By: CODER
+
+Note: Native table frame ownership verified:232 unique targeted cases,12 fresh,0 unresolved; approved coverage-recovery210 passing replay explicitly recorded, later failed/new/unexecuted-only closures. Source-bound all-four100 app318/changed8; all scoped static and16 canonical inventory gates pass. Upstream-absent runtime/build restored finally; persistent page/root/full parity remains unverified.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T09:19:57.870Z, excerpt_hash=sha256:892ddc163ae8e8587f97b51a9b615fd91c7ceb497620a57b73be3d1672c46697
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610090835-4ZF0N4/blueprint/resolved-snapshot.json
+- old_digest: 2688b63f96bebdadb203e4d8c0cdf9a6a170a7ac2f3149f69495858b57c698ec
+- current_digest: 2688b63f96bebdadb203e4d8c0cdf9a6a170a7ac2f3149f69495858b57c698ec
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610090835-4ZF0N4
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610090835-4ZF0N4
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
