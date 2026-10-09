@@ -232,6 +232,14 @@
         {
           "path": "apps/office/src/sw/browser/editor/native-table-lr-items.test.tsx",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/native-table-export-items.test.ts",
+          "marker": "native orientation"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/native-table-export-items.test.tsx",
+          "marker": "mounted direct items paint, export and reopen across native Undo and Redo"
         }
       ],
       "upstream": [
@@ -386,6 +394,22 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx",
           "marker": "get_value_changed_from_saved"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmlexpit.cxx",
+          "marker": "SvXMLExportItemMapper::GetItem"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmliteme.cxx",
+          "marker": "RES_HORI_ORIENT"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmlfmte.cxx",
+          "marker": "unexpected parent"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmlithlp.cxx",
+          "marker": "aXMLTableAlignMap"
         }
       ]
     },
@@ -423,7 +447,8 @@
       "Correction7H3CN9 (6/10 after SZKQTN) ports original SwFormatHoriOrient with position/orientation/relation/page-toggle, native NONE/PRINT_AREA/false defaults, independent Clone/equality and represented UNO member extraction/conversion. Original SwAttrPool registers the typed item and SwFormat returns borrowed effective horizontal orientation. Table owns no mirrored horiOrient/align scalars: explicit builder aliases translate once, direct transport projects native values, and SaveTable relies on whole original item-set history. Original frame layout and ODT export use effective native orientation, including inheritance. Native table representation delivers orientation/size ItemSet without changed scalar orientation/width; SetTabCols clones the complete original orientation as pinned swtable.cxx869..895. LR scalar spacing remains separate pending native ownership, as do full proportional/relative width/native layout/Doc SetAttr/UNO presentation/hash/assertion/VCL/copy/Repeat. Historical source statuses/default/classifications/evidence retained, no whole-module parity promotion. Evidence task202610092055-7H3CN9.",
       "Verification7H3CN9:3517 unique accepted current-source cases across333 related files,38 fresh native cases. Entire eight final production modules actual Istanbul100 lines/statements/functions/branches (1418/1559/271/1186), zero negative counters, complete map and source hash identity. Native dialog width change, original direct/inherited history and mounted ODT behaviors pass. Source-backed17 fixture operations in12 old files;607 other old tests and16 canonical historical prefixes retained. Full not due6/10. No whole-module parity promotion.",
       "Correction6Q2YQH (7/10 after SZKQTN) ports original SvxLRSpaceItem RES_LR_SPACE98 with eleven native context fields, zero/100/false defaults, independent Clone/equality and represented signed twip layout/proportion/hanging-text/sticky-zero behavior. Borrowed SwFormat.GetLRSpace and typed original pool item replace table mirrored left/right margins. Direct transport projects original direct LR; effective frame layout/SwTableRep/ODT use original inherited/pool values. SetTabCols clones full original context, and native dialog orientation/size/LR ItemSet replaces changed scalar LR replay. SaveTable excludes margin scalars and retains original complete ItemSet history. Font-unit SvxIndentValue/complete UNO member PutValue/presentation/metric scaling, generic native Doc attribute history/full layout/VCL/master-follow/copy/Repeat remain separately incomplete. Existing semantic/default/classification/evidence/history and registered IO/recovery/UI deviations retained; no whole-module promotion. Evidence task202610092125-6Q2YQH, current-source verification pending.",
-      "Verification6Q2YQH: final342 related files3588 unique accepted current-source cases22fresh (20 native LR and2 shared composite-border guards); ten actual whole production modules Istanbul100 lines/statements/functions/branches,zero negative/current source and complete-map identity. Initial pre-repair source maps/counters excluded entirely. Five exact fixture operations in3 historical files;620 other old tests byte identical,623 total. Twenty canonical historical prefixes retained. Full not due7/10; broad goal remains incomplete."
+      "Verification6Q2YQH: final342 related files3588 unique accepted current-source cases22fresh (20 native LR and2 shared composite-border guards); ten actual whole production modules Istanbul100 lines/statements/functions/branches,zero negative/current source and complete-map identity. Initial pre-repair source maps/counters excluded entirely. Five exact fixture operations in3 historical files;620 other old tests byte identical,623 total. Twenty canonical historical prefixes retained. Full not due7/10; broad goal remains incomplete.",
+      "CorrectionR12SRT (1/10 after full BZQGYC) removes SwTable.GetFormat scalar assembly from Writer table XML export. Original frame ItemSet supplies represented size, horizontal orientation, LR/UL spacing, layout split and collapsing borders with native direct SET admission (no inherited/pool normal items). LR special guard alone searches SET parent orientation; absent guard does not fabricate pool-default margins. Native six orientation XML tokens and unsupported-token omission are retained; original headline counter is read directly. Row/cell projection and neutral xmloff boundary remain separately incomplete, as do layout-derived/percent/relative widths, native arbitrary-parent format preservation, generic browser codec, UNO/VCL/full filter responsibilities. Prior statuses/defaults/classes/historical evidence and registered recovery/open/save/settings/UI deviations retained; no whole-module parity promotion. Task202610092308-R12SRT."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/filter/xml/xmlexp.cxx",

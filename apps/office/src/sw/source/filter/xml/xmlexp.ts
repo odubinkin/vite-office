@@ -7,7 +7,7 @@ import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrient
 import { exportBoxProperties } from "../../../../xmloff/source/style/bordrhdl";
 
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
-import { SwFrameSize } from "../../../inc/fmtfsize";
+import { SwFrameSize, type SwFormatFrameSize } from "../../../inc/fmtfsize";
 
 import {
   SvxAdjust,
@@ -21,6 +21,7 @@ import {
   SvxRightMarginItem,
   SvxTextLeftMarginItem,
   SvxULSpaceItem,
+  type SvxLRSpaceItem,
 } from "../../../../editeng/source/items/frmitems";
 import {
   SvxFontItem,
@@ -88,9 +89,16 @@ import {
   RES_PARATR_NUMRULE,
   RES_PARATR_OUTLINELEVEL,
   RES_UL_SPACE,
+  RES_FRM_SIZE,
+  RES_LR_SPACE,
+  RES_HORI_ORIENT,
+  RES_LAYOUT_SPLIT,
+  RES_COLLAPSING_BORDERS,
   RES_KEEP,
   RES_LINENUMBER,
 } from "../../../inc/hintids";
+import type { SwFormatHoriOrient } from "../../../inc/fmtornt";
+import type { SwFormatLayoutSplit } from "../../../inc/fmtlsplt";
 import { WRITER_MAX_LIST_LEVEL } from "../../core/doc/list";
 import { SwXNumberingRules } from "../../core/unocore/unosett";
 import type { SwDoc } from "../../core/doc/doc";
@@ -283,15 +291,38 @@ function exportWriterText(
           }
           const table = block.GetTable(),
             grid = new SwXMLTableLines(table);
-          const format = table.GetFormat();
-          const orient = table.GetFrameFormat().GetHoriOrient().GetHoriOrient();
-          const lr = table.GetFrameFormat().GetLRSpace();
+          const items = table.GetFrameFormat().GetAttrSet();
+          const size = items.GetItemIfSet(RES_FRM_SIZE, false) as SwFormatFrameSize | undefined;
+          const orientation = items.GetItemIfSet(RES_HORI_ORIENT, false) as
+            SwFormatHoriOrient | undefined;
+          const orient = orientation?.GetHoriOrient();
+          // Normal items require direct SET state; the native LR special handler searches parents for its orientation guard.
+          const marginOrient = (
+            items.GetItemIfSet(RES_HORI_ORIENT) as SwFormatHoriOrient | undefined
+          )?.GetHoriOrient();
+          const lr = items.GetItemIfSet(RES_LR_SPACE, false) as SvxLRSpaceItem | undefined;
+          const ul = items.GetItemIfSet(RES_UL_SPACE, false) as SvxULSpaceItem | undefined;
+          const split = items.GetItemIfSet(RES_LAYOUT_SPLIT, false) as
+            SwFormatLayoutSplit | undefined;
+          const borders = items.GetItemIfSet(RES_COLLAPSING_BORDERS, false) as
+            SfxBoolItem | undefined;
           yield {
             kind: "table" as const,
             table: {
               name: table.GetName(),
               format: {
-                ...format,
+                width: size?.GetWidth(),
+                marginTop: ul?.GetUpper(),
+                marginBottom: ul?.GetLower(),
+                layoutSplit: split?.GetValue(),
+                borderModel:
+                  borders === undefined
+                    ? undefined
+                    : borders.GetValue()
+                      ? "collapsing"
+                      : "separating",
+                headerRows: table.GetRowsToRepeat(),
+                repeatHeaderRows: table.GetRowsToRepeat() !== 0,
                 align:
                   orient === HoriOrientation.LEFT || orient === HoriOrientation.LEFT_AND_WIDTH
                     ? "left"
@@ -299,12 +330,15 @@ function exportWriterText(
                       ? "right"
                       : orient === HoriOrientation.CENTER
                         ? "center"
-                        : "margins",
+                        : orient === HoriOrientation.FULL || orient === HoriOrientation.NONE
+                          ? "margins"
+                          : undefined,
                 marginLeft:
-                  orient === HoriOrientation.NONE || orient === HoriOrientation.LEFT_AND_WIDTH
-                    ? lr.ResolveLeft()
+                  marginOrient === HoriOrientation.NONE ||
+                  marginOrient === HoriOrientation.LEFT_AND_WIDTH
+                    ? lr?.ResolveLeft()
                     : undefined,
-                marginRight: orient === HoriOrientation.NONE ? lr.ResolveRight() : undefined,
+                marginRight: marginOrient === HoriOrientation.NONE ? lr?.ResolveRight() : undefined,
               },
               columnWidths: grid.GetColumnWidths(),
               softPageBreakRows: table.GetSoftPageBreakRows(),
