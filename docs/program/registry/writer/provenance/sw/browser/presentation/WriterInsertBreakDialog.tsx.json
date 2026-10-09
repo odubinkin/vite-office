@@ -1,0 +1,26 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "evidence": {
+      "local": [
+        {
+          "marker": "WriterInsertBreakDialog",
+          "path": "apps/office/src/sw/browser/presentation/WriterInsertBreakDialog.tsx"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/browser/presentation/WriterInsertBreakDialog.tsx",
+    "rationale": "Adapts the pinned insertbreak.ui to an accessible browser dialog for hard page breaks while retaining the authoritative break item in the Writer document model.",
+    "responsibilities": [
+      "Renders WriterInsertBreakDialog and forwards accepted commands to Writer shell ownership."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "React and DOM controls replace native VCL dialog widgets."
+    },
+    "status": "local-only"
+  },
+  "legacyOrder": 104
+}

@@ -1,0 +1,503 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "evidence": {
+      "local": [
+        {
+          "marker": "WriterWorkbenchProps",
+          "path": "apps/office/src/sw/browser/presentation/writer-view.tsx"
+        },
+        {
+          "path": "apps/office/src/framework/browser/presentation/CommandMenuBar-document-focus.test.tsx",
+          "marker": "defaultsToDocument"
+        },
+        {
+          "path": "apps/office/src/framework/browser/presentation/CommandMenuBar-document-focus.test.tsx",
+          "marker": "defaultsAfterDisposal"
+        },
+        {
+          "path": "apps/office/src/framework/browser/presentation/CommandMenuBar-document-focus.test.tsx",
+          "marker": "restoresLiveOwner"
+        },
+        {
+          "path": "apps/office/e2e/writer-menu-document-focus.spec.ts",
+          "marker": "unopened menu Escape without a saved owner"
+        },
+        {
+          "path": "apps/office/src/framework/browser/presentation/CommandMenuBar-document-focus.test.tsx",
+          "marker": "routesWriterClient"
+        },
+        {
+          "path": "apps/office/src/framework/browser/presentation/CommandMenuBar-menu-key.test.tsx",
+          "marker": "togglesMenuCycle"
+        },
+        {
+          "path": "apps/office/src/framework/browser/presentation/CommandMenuBar-menu-key.test.tsx",
+          "marker": "closesPopupCycle"
+        },
+        {
+          "path": "apps/office/src/framework/browser/presentation/CommandMenuBar-menu-key.test.tsx",
+          "marker": "routesEligibleFrame"
+        },
+        {
+          "path": "apps/office/src/framework/browser/presentation/CommandMenuBar-menu-key.test.tsx",
+          "marker": "activatesWriterMenu"
+        },
+        {
+          "path": "apps/office/e2e/writer-menu-key.spec.ts",
+          "marker": "F10 activates the first Writer root without opening"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-view-document-key.test.tsx",
+          "marker": "focusesDocumentClient"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-view-document-key.test.tsx",
+          "marker": "closesMenuToDocument"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-view-document-key.test.tsx",
+          "marker": "routesActiveFrame"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-view-document-key.test.tsx",
+          "marker": "preservesModalFocus"
+        },
+        {
+          "path": "apps/office/e2e/writer-document-key.spec.ts",
+          "marker": "Ctrl-F6 from the Writer"
+        },
+        {
+          "path": "apps/office/src/sfx2/browser/presentation/SidebarDeck.test.tsx",
+          "marker": "retainsDeckContent"
+        },
+        {
+          "path": "apps/office/src/sfx2/browser/presentation/SidebarDeck.test.tsx",
+          "marker": "togglesSelectedDeck"
+        },
+        {
+          "path": "apps/office/src/sfx2/browser/presentation/SidebarDeck.test.tsx",
+          "marker": "cancelsDeckFocus"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-view-sidebar-deck.test.tsx",
+          "marker": "retainsWriterDeck"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-view-sidebar-deck.test.tsx",
+          "marker": "recreatesSidebarDeck"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-view-sidebar-deck.test.tsx",
+          "marker": "focusesOwningWriter"
+        },
+        {
+          "path": "apps/office/e2e/writer-sidebar-deck.spec.ts",
+          "marker": "Properties deck closes and reopens with document focus"
+        },
+        {
+          "path": "apps/office/src/sfx2/browser/presentation/SidebarPanel-escape.test.tsx",
+          "marker": "cancelsPanelHeader"
+        },
+        {
+          "path": "apps/office/src/sfx2/browser/presentation/SidebarPanel-escape.test.tsx",
+          "marker": "cancelsPanelContent"
+        },
+        {
+          "path": "apps/office/src/sfx2/browser/presentation/SidebarPanel-escape.test.tsx",
+          "marker": "respectsChildCancellation"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-view-sidebar-escape.test.tsx",
+          "marker": "cancelsParagraphContent"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-view-sidebar-escape.test.tsx",
+          "marker": "cancelsParagraphHeader"
+        },
+        {
+          "path": "apps/office/e2e/writer-sidebar-escape.spec.ts",
+          "marker": "Paragraph panel Escape returns to title then document"
+        },
+        {
+          "path": "apps/office/src/svx/browser/tbxctrls/StyleToolboxSelect.tsx",
+          "marker": "StyleToolboxSelect"
+        },
+        {
+          "path": "apps/office/src/svx/browser/tbxctrls/StyleToolboxSelect.test.tsx",
+          "marker": "native style-box acceptance"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-view-style-focus.test.tsx",
+          "marker": "Writer style-box focus"
+        },
+        {
+          "path": "apps/office/e2e/writer-style-focus.spec.ts",
+          "marker": "Writer keyboard style choice focus"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-editing.test.ts",
+          "marker": "native table cell editing owners"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-table-editing.test.tsx",
+          "marker": "native table DOM editing"
+        },
+        {
+          "path": "apps/office/e2e/writer-native-table-editing.spec.ts",
+          "marker": "Writer table cell typing, split, join and formatting use document history"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-selection.test.ts",
+          "marker": "native table selection"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-table-selection.test.tsx",
+          "marker": "row gesture paints actual selected boxes and body cursor removes stale row and properties"
+        },
+        {
+          "path": "apps/office/e2e/writer-native-table-selection.spec.ts",
+          "marker": "Writer row selection paints core boxes and typing after caret kill preserves neighbors"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-cursor-rings.test.ts",
+          "marker": "native table character ring history"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-table-cursor-rings.test.tsx",
+          "marker": "mounted %s uses complete per-cell ranges and preserves painted rows through history"
+        },
+        {
+          "path": "apps/office/e2e/writer-native-table-cursor-rings.spec.ts",
+          "marker": "Writer selected row character formatting covers full cells and survives Undo Redo"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterRulers-document-drag.test.tsx",
+          "marker": "native document ruler indent drag"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-view-list-label-drag.test.tsx",
+          "marker": "acceptsLabel"
+        },
+        {
+          "path": "apps/office/e2e/writer-list-label-drag.spec.ts",
+          "marker": "Writer native label document ruler width="
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-properties.test.ts",
+          "marker": "native table property application"
+        },
+        {
+          "path": "apps/office/src/sw/source/ui/table/tabledlg.ts",
+          "marker": "SwTableColumnPage"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/table/swtablerep.ts",
+          "marker": "Assign"
+        },
+        {
+          "path": "apps/office/src/sw/source/ui/table/native-table-column-page.test.ts",
+          "marker": "native column Reset"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/native-table-column-page.test.tsx",
+          "marker": "mounted native default column"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-column-page-history.test.ts",
+          "marker": "native column-page constant edit"
+        },
+        {
+          "path": "apps/office/e2e/writer-native-table-column-page.spec.ts",
+          "marker": "native column page modes"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/docnode/ndtbl1.ts",
+          "marker": "GetSwRowSplit"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/doc.ts",
+          "marker": "GetRowSplit"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/frmedt/fetab.ts",
+          "marker": "GetRowSplit"
+        },
+        {
+          "path": "apps/office/src/sw/source/ui/table/tabledlg.ts",
+          "marker": "SplitHdl_Impl"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/shells/tabsh.ts",
+          "marker": "value.rowSplit"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx",
+          "marker": "Allow row to break across pages and columns"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-view.tsx",
+          "marker": "selectedBoxes:"
+        },
+        {
+          "path": "apps/office/src/sw/inc/fmtfsize.ts",
+          "marker": "SwFormatFrameSize"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/docnode/ndtbl1.ts",
+          "marker": "GetSwRowHeight"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/docnode/ndtbl.ts",
+          "marker": "doc.SetRowHeight"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/layout/tabfrm.ts",
+          "marker": "SwRowFrame"
+        },
+        {
+          "path": "apps/office/src/sw/inc/fmtornt.ts",
+          "marker": "SwFormatVertOrient"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/docnode/ndtbl1.ts",
+          "marker": "GetBoxSelection"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/doc.ts",
+          "marker": "SetBoxAlign"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx",
+          "marker": "boxAlign"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-cell-box-render.test.tsx",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/e2e/writer-native-cell-box.spec.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/docnode/ndtbl1.ts",
+          "marker": "GetSwTabBorders"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/doc.ts",
+          "marker": "GetTabBorders"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/frmedt/fetab.ts",
+          "marker": "GetTabBorders"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/shells/tabsh.ts",
+          "marker": "TableParamToItemSet"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx",
+          "marker": "borderItems"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-view.tsx",
+          "marker": "TableParamToItemSet"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/docnode/native-table-border-common-state.test.ts",
+          "marker": "common"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/native-table-border-common-state.test.tsx",
+          "marker": "native"
+        },
+        {
+          "path": "apps/office/e2e/writer-table-border-common-state.spec.ts",
+          "marker": "native"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/table/native-hidden-table-representation.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/ui/table/native-hidden-table-column-page.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/native-independent-table-properties.test.tsx",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/utlui/native-pointer-items.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/ui/table/native-table-property-output.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/shells/native-table-property-item-input.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/native-table-property-output.test.tsx",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx",
+          "marker": "SwTableColumnPage::UpdateCols"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx",
+          "marker": "SwTableColumnPage::Reset"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx",
+          "marker": "SwTableColumnPage::ActivatePage"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx",
+          "marker": "SwTableColumnPage::DeactivatePage"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/table/swtablerep.cxx",
+          "marker": "SwTableRep::SwTableRep"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/shells/tabsh.cxx",
+          "marker": "pRep->SetLineSelected"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/uiconfig/swriter/ui/tablecolumnpage.ui",
+          "marker": "Adapt table _width"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl1.cxx",
+          "marker": "SwDoc::GetRowSplit"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/frmedt/fetab.cxx",
+          "marker": "SwFEShell::GetRowSplit"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx",
+          "marker": "SwTextFlowPage::Reset"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx",
+          "marker": "SwTextFlowPage::FillItemSet"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx",
+          "marker": "SwTextFlowPage, SplitHdl_Impl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/shells/tabsh.cxx",
+          "marker": "RES_LAYOUT_SPLIT"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/uiconfig/swriter/ui/tabletextflowpage.ui",
+          "marker": "id=\"splitrow\""
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/fmtrowsplt.hxx",
+          "marker": "SwFormatRowSplit"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/vcl/weld/CheckButton.hxx",
+          "marker": "TRISTATE_TRUE"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/fmtfsize.hxx",
+          "marker": "SwFormatFrameSize"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/atrfrm.cxx",
+          "marker": "SwFormatFrameSize::operator=="
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl.cxx",
+          "marker": "SetHeightSizeType"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmlimpit.cxx",
+          "marker": "MINLAY"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/fmtornt.hxx",
+          "marker": "SwFormatVertOrient"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/atrfrm.cxx",
+          "marker": "SwFormatVertOrient::operator=="
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl1.cxx",
+          "marker": "lcl_GetBoxSel"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx",
+          "marker": "get_value_changed_from_saved"
+        },
+        {
+          "path": "sw/source/core/docnode/ndtbl1.cxx",
+          "marker": "SwDoc::GetTabBorders"
+        },
+        {
+          "path": "sw/source/core/frmedt/fetab.cxx",
+          "marker": "SwFEShell::GetTabBorders"
+        },
+        {
+          "path": "sw/source/uibase/shells/tabsh.cxx",
+          "marker": "lcl_TableParamToItemSet"
+        },
+        {
+          "path": "cui/source/tabpages/border.cxx",
+          "marker": "SvxBorderTabPage::Reset"
+        },
+        {
+          "path": "sw/inc/swtypes.hxx",
+          "marker": "MIN_BORDER_DIST"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/browser/presentation/writer-view.tsx",
+    "rationale": "Renders the persistent SwView as a browser React projection and submits primitive paragraph drafts and ruler gestures to Writer shell methods. No native LibreOffice source file is claimed as its owner. Iteration104 adapts the bounded ordinary SvxStyleBox client acceptance contract: direct picks and Enter resolve actual entries then focus the owning active Writer document before existing StyleApply dispatch; closed Arrow/Page travel is tentative, Tab accepts without focus release, Escape cancels and releases focus, and blur or replaced bindings/options invalidate drafts. Actual frame cursor/mark, raw custom names, history/no-op, document replacement and modal/inactive eligibility are covered by independent owned widget/frame tests and desktop/mobile ODT scenarios. Editable/new style creation, Clear/More actions, previews/context menus, full popup/platform behavior and wider native/widget/parent parity remain unverified. No status/default/exception promotion; registered save/open/recovery deviations unchanged. Iteration206 draft: scalar kernel cell border/padding storage is replaced by owned SvxBoxItem plus the existing vertical item. Represented lines retain native color/style/width/component arithmetic, signed16 distances/default0, cloning, metrics and supported UNO values; SvxBoxInfoItem retains native validity127. SetTabBorders consumes SfxItemSet and distributes flat union outer/inner lines using source validity rules. Insertion defaults55twips/black10twip lines and0/no-border are preserved. Process/storage uses complete primitive native state with legacy scalar ingress only; ODF and browser paint carry four independent sides. Initial static and upstream-absent runtime verification are pending. Complete native color shading/theme/Word/macros/fly/vertical/RTL/follow/shared-format behavior, per-edge/common-state border widgets and full parity remain unverified. All existing statuses/defaults/evidence/registered I/O/recovery exceptions are preserved.",
+    "responsibilities": [
+      "Renders the Writer view as a browser-owned React projection of the upstream-shaped SwView shell.",
+      "Unopened activated menubar Escape defaults to its Writer frame client when no connected external owner is saved; a live saved owner takes precedence. The browser view supplies its own mounted editing-host reference, keeping DOM out of core and avoiding document-wide selectors. Owned per-frame/disconnected-owner cases and Chromium focus-plus-editing checks cover this branch only; no-owner popup cleanup, frame/global native flags and full menu parity remain unverified.",
+      "Unmodified F10 activates the first root without opening a popup, and repeats to deactivate an active menubar or popup with saved-owner/default-client focus restoration and no command dispatch. An explicit activation flag follows the inspected native highlight-valid cycle. The Writer view grants this browser key route only to an active input-enabled frame outside its existing modal dialogs; detached presenters require explicit eligibility. Owned cycle/frame/modifier cases and actual Chromium editing, toolbar-owner and modal focus checks cover this bounded contract. Modified keys remain on their existing command/browser route (native Ctrl-F10 belongs to .uno:ControlCodes). Complete accelerator priority, Alt/mnemonics, F6, platform/system menus, no-owner popup fallback and the full native focus graph remain unverified.",
+      "Ctrl-F6 without Shift routes the active input-enabled Writer browser frame directly to its own mounted editing host, independently of a saved toolbar focus owner. Existing menu focus-loss teardown closes root/child popups and consumes the old saved cycle without dispatch. One shared active/modal eligibility value gates both this frame route and F10. Owned actual-session cases cover frame changes, disposal, already-consumed/nonmatching keys, the inspected Ctrl/non-Shift condition with additional modifiers, and all existing modal request owners; Chromium checks focus plus actual editing and a fresh F10 cycle. Full plain/Shift-F6 pane traversal, platform modifier mapping, native focus flags and the complete focus graph remain unverified.",
+      "Existing Properties deck close/reopen follows inspected sfx2 SidebarController RequestCloseDeck/RequestOpenDeck/OpenThenToggleDeck, TabBar activation and FocusManager Escape: close retains mounted content and an unselected rail independently of whole Sidebar visibility, activation first returns to the owning document, cancellation does not toggle. Owned lifecycle/mount/state/frame/no-dispatch and rebuilt desktop/mobile browser checks cover only this contract. Whole F6/Sidebar panel focus, Help/settings/floating/other decks/default sizing and complete native composition remain open.",
+      "Existing visible Paragraph panel Escape follows pinned FocusManager: unconsumed content cancellation focuses the expanded panel title; title/toolbar cancellation returns to its own document without closing or dispatch. Child-consumed keys remain owned by that child and a detached header without document ownership leaves Escape unconsumed. Owned retained-draft/controls/modifier/frame/model checks and rebuilt desktop/mobile focus-plus-editing cases cover this branch only. Full Tab/arrows/F6/other panels/hidden-title fallback/Help/settings/native sizing/context-profile persistence remain unverified.",
+      "Iteration138 removes the table-cell post-DOM diff/direct text mutation, imperative innerHTML synchronization and event isolation. Cell paragraphs use shared DOM selection identities and BrowserWriterEditWindow -> SwEditWin -> actual SwWrtShell input/history. Connected cell text is admitted by SwNodes ownership; active/all-text identities come from native nodes while body layout stays separate. SwTableBox derives text from its start/end section instead of a duplicate paragraph array; boundary joins require adjacent text in the same section. Real-owner core, mounted DOM and Chromium tests cover this bounded path. React text-run display, body ordinal sidebar context, table-wide selection/navigation, nested or merged cells, native table layout/text portions and list UI remain unverified. All existing semantic states/defaults/exceptions and registered I/O/recovery deviations remain unchanged; no whole-module or goal promotion.",
+      "Iteration172 restores native document-origin list-label ruler admission through the existing browser ruler tracking owner. Actual label identity resolves an actual SwTextNode only while copying StateTabWin geometry; pinned edtwin clears this borrowed node immediately after StartDocDrag. Signed-short offset and native SetLeft negative-first adjustment feed bottom-indent document hit testing with explicit tab precedence and right-before-left order. Accepted changed copied geometry applies to current paragraph selection through existing SetParagraphRulerIndents and real item UndoRedo, not a retained label rule update. Native mouse admission preserves cursor and label rule/list ownership; cancellation, zero movement, hide/inactive/unmount/document replacement discard preview and history. No synthetic handle event, text-run conversion, new DTO/model or competing gesture owner. Prior contracts/evidence and conscious IO exceptions retained. Full native RTL/vertical/table-column/protection/style-autoupdate/modifier-clipping/platform/framework/ruler/list/table/core/UI behavior remains unverified.",
+      "Iteration176 removes React table-property writes through inherited SwFEShell and native ItemSetToTableParam. Existing document history groups seven attribute operations into one Table Properties Undo; SwUndoAttrTable swaps attribute-only table/column/row/box payload at the numeric table index while retaining original graph/text/cursor owners. Borders/row-split without selection apply to the whole table; selected-cell alignment and current/selected-row height use native cursor rings. New native owners remain unverified. Native Sfx frame-format item model,change-only dialog items,distinct native per-format undo classes,layout-cache lifetime,merged/nested/protected selection,full alignment/spacing/relative-width controls,insertion and complete UI/core parity remain unverified. Prior259semantic states/defaults/classes/IOexceptions/evidence preserved;conscious save/open/recovery deviations unchanged.",
+      "Iteration178 moves represented Insert Table defaults, filtered/collision-sensitive names, native spin limits/nonblocking warning, header/repeat sensitivity and manual repeat-row restoration into SwInsTableDlg. React renders one native input owner and properties has a separate draft. Full autoformat,HTML/LOK,selection conversion,insertion kernel/history and complete UI/core parity remain unverified. All prior264 protected semantic fields and evidence prefixes and registered IO/recovery deviations are preserved."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser DOM, React, Worker, storage, or lifecycle APIs replace the corresponding native platform boundary."
+    },
+    "status": "local-only",
+    "preservedResponsibilities": [
+      "Iteration179 removes direct React grid/dialog table graph mutation. The inherited table editing shell groups the existing paragraph split and numeric SwUndoInsTable; native sections insert before body cursor and Redo reconstructs a new graph. SwDoc owns naming, FULL65535 reference geometry and represented flags/styles, preserving header styling independently of repetition. Actual core/mounted/Chromium acceptance covers collapsed direct-body0/middle/end and history. Single-inheritance source-unit split adds native table operations to existing numbering shell without forwarding. Browser border choices remain a bounded autoformat argument; native full frame/item formats, per-edge border objects, context font propagation, table split layout/ODT persistence, selection-to-table,nested tables,redlines,frames,Repeat and complete core/UI parity remain unverified. Prior267 semantic states/defaults/classifications/evidence and registered I/O/recovery exceptions preserved.",
+      "Resumed iteration191 after user-priority192/193/194 ports existing absolute column editing through source-owned SwTableColumnPage and shared native SwTableRep. Native Reset retains shared draft/vector identity and independent original copies; five field slots and one-column navigation, source inherited MINLAY23/min/max, constant-width neighbor compensation/wrap/tiny-table loop bound, adapt-table width cap, proportional integer rounding and checkbox coupling/activation sensitivity, selected-row versus whole-table modes and native LR deactivation are represented. Browser page events call native handlers instead of replacing width-array entries; actual canonical graph remains read-only until existing ItemSetToTableParam acceptance and grouped native history. Native percentages, hidden/per-row graph, full SfxItemSet/frame-format notifications and adaptive preferred-width SizeHdl remain unverified, as do complete module/UI/core/parent parity. Registered filename/save/open/recovery exceptions unchanged.",
+      "Iteration199 ports native Text Flow table/row split controls and removes conflated properties dontSplit and React first-row state. Native ndtbl1 aggregate reads original selected boxes/lines, true row default and no item for empty/mixed. SwDoc.GetRowSplit and SwFEShell.GetRowSplit retain source cursor/document ownership. SwTextFlowPage Reset saves original split/headline values; table child sensitivity does not clear row tristate; FillItemSet publishes only changed headline/table/row items. Browser source labels and mixed HTML checkbox use actual selected boxes, native page handlers/Reset/Cancel/OK, independent table and row setters. Insertion-only dontSplit remains separate. Original graph/list/cursor/grouped3UndoRedo/ODT/continued input and Chromium1280/390 covered. Full row-content splitting/nested/merged/fly/columns/protection/full item classes/SfxItemSet/widget suite and whole parity remain unverified; old contracts/classifications/registered exceptions retained.",
+      "Iteration202 removes scalar row minHeight storage and numeric kernel height contracts. Native SvxSizeItem/SwFormatFrameSize owns both dimensions, both sizing types, both percentages and both relations with native defaults, Which90, full equality, clone and supported default size query. Original rows retain copied items, document getter compares complete items and returns clone; resize uses native document setter with copied full size, preserving Fixed/Minimum and promoting only Variable. Flat layout and mounted cells use native Variable/Minimum/Fixed semantics, fixed content clipped, properties metric from shell common getter. ODT row-height Fixed/min-row-height Minimum/Variable omission and native height clamp1..65535; attributes apply in order. Full percentage/fly/vertical/nested/merged/protection/UNO member IDs/PutValue/pooling/widget/SfxItemSet/full parity remains unverified; all prior contracts/classifications/statuses/exceptions retained.",
+      "Iteration203 replaces scalar cell vertical alignment with complete SwFormatVertOrient Which109 position0/NONE/PRINT_AREA defaults, native numeric enum values and three-field clone/equality/represented UNO member query/update. Original boxes and insertion undo own independent copied items. SwDoc SetBoxAttr owns native selection/history/notifications; setters traverse ordinary ring points while getters use current point or native table selected boxes. Common full-item getter and orientation-only getter retain mixed/no-item state. Shell delegates; properties reads common shell state and emits only a changed alignment item, native mixed widget fallback top. CSS handles native alignments and safe fixed-row content; ODT maps NONE/CENTER/BOTTOM, process/storage codec restores full primitive items, old scalar only storage ingress. Full pooling/shared frame formats/direct-formatting/HTML resizing/fly/nested/merged/protection/vertical writing and overall parity remain unverified; prior classifications/defaults/contracts/evidence/exceptions retained.",
+      "Iteration206 draft: scalar kernel cell border/padding storage is replaced by owned SvxBoxItem plus the existing vertical item. Represented lines retain native color/style/width/component arithmetic, signed16 distances/default0, cloning, metrics and supported UNO values; SvxBoxInfoItem retains native validity127. SetTabBorders consumes SfxItemSet and distributes flat union outer/inner lines using source validity rules. Insertion defaults55twips/black10twip lines and0/no-border are preserved. Process/storage uses complete primitive native state with legacy scalar ingress only; ODF and browser paint carry four independent sides. Initial static and upstream-absent runtime verification are pending. Complete native color shading/theme/Word/macros/fly/vertical/RTL/follow/shared-format behavior, per-edge/common-state border widgets and full parity remain unverified. All existing statuses/defaults/evidence/registered I/O/recovery exceptions are preserved.",
+      "Iteration206 verified closure: the earlier draft pending statement is historical. Native box/info/line ownership, supported values/defaults/metrics, flat source-defined border distribution, original graph and history, complete primitive transport and four-edge ODF/browser paint passed one full upstream-absent profile with failed/new-case-only closures. Current app and inventory actual counters each reach100% lines/statements/functions/branches under complete identical-source/maps or complete contiguous mapped-region proof. All550 prior acceptance contracts are preserved by522 byte-identical files and28 exact native-representation AST migrations; six new acceptance files and two new infrastructure cases are added. Full per-edge/common-state widgets, native themes/shading/Word and RTL/vertical/follow/shared-format completeness remain unverified; no semantic status or registered I/O/recovery exception is promoted.",
+      "Iteration207 ports represented native common table-border input: SwDoc.GetTabBorders compares original point/mark flat-union outer and inner native lines, first-set/equality/absence/mixed component flags, all four distances jointly, source ResetFlags127 and cloned caller policies. Shell TableParamToItemSet captures current selected or temporary whole-table input with min/default distance28 and restores original native cursors without document/history changes. React reads owned SfxItemSet input and emits cloned native box/info items only for changed represented border widgets; no first-cell scalar reconstruction in the properties path. Mixed distance input uses native zero values; unknown lines and four distances survive untouched or border-only edits. Initial static/runtime verification is pending. Full six-edge/distance/style/color arrangement widgets, RTL/vertical/follow/shared-format unions and whole parity remain unverified. Every previous semantic status, contract/default/evidence prefix and registered I/O/recovery exception is retained.",
+      "Iteration207 verified closure: the earlier pending statement is historical. Native common flat-union border reads, cloned caller policies and default28, selected/temporary whole-table command input, original cursor/document/history preservation and owned native changed-border output passed one full upstream-absent profile plus failed/new-case-only closure. Sidebar and menu execute the same registered native dialog slot. Current actual acceptance union13376 app110inventory13infrastructure254Chromium; actual100 app/inventory counters under complete identical-source/maps or complete contiguous mapped-range proof. All556 prior acceptance files are preserved by546 byte-identical files and10 exact source-backed fixture/item-output/common-state/guide migrations; three new acceptance files are added. Every old metadata field/prefix/status/default/registered I/O/recovery exception is preserved without promotion. Full six-edge/distance/style/color widgets and native SvxBorderTabPage info-only FillItemSet, RTL/vertical/follow/shared-format unions and whole parity remain unverified.",
+      "Iteration237 retains all native TColumn nWidth/bVisible intervals and visible/all counts in the shared table-properties draft. The browser captures current-cursor SwTabCols after temporary border-selection restoration, renders native visible-width aggregation, and passes the accepted SwTableRep directly to tabsh. Hidden separators are merged with accepted visible positions using the native order, tie and rounding rules; HasColsChanged alone gates separator application and preserves the current-line operation. Seven prior numeric-vector fixtures migrate only their TColumn API access while retaining literal numeric expectations and original owner/style/history assertions. Literal representation/page and mounted unequal-row properties evidence is added. Full percentage/RTL/vertical/merged/nested/frame behavior remains partial and unverified. Registered save/open/recovery deviations, metadata states, defaults and classifications remain preserved.",
+      "Iteration238 publishes only changed native table property items from pages and mounted UI to the shell. SwPtrItem borrows the original SwTableRep through SfxItemSet clone and equality. Native item IDs and explicitly SET-only consumption preserve untouched frame defaults and empty history, isolate name and spacing, and group geometry, flow and border edits with original owners and cursor. Separate explicit legacy ingress remains for existing callers; complete native item factories, full SfxTabPage orchestration and complex layout remain unverified. Verification pending; all prior metadata states, defaults, classes and registered IO/recovery deviations remain preserved.",
+      "Iteration238 verified closure supersedes the earlier pending draft. Native borrowed SwPtrItem and exact WhichIds, format/flow changed-item publication, unconditional Columns representation publication, created Borders admission, persistent native exchange output and page-scoped Reset are verified against the pinned source. Main properties UI sends SfxItemSet directly with no DTO fallback; explicitly SET-only shell writes retain original graph/cursor and grouped history, unchanged Table OK has empty history, FULL retains stored width while layout uses automatic width. 412 unique targeted app and38 related Chromium cases pass, including45 fresh cases; passing replay0. Current app17457/19171/4389/14267 and inventory1464/1523/384/1081 actual counters reach100 in all four metrics using current targeted runs and whole identical-source/maps or complete contiguous declaration/body/enclosing branch/location proof from237. No full suite this leaf; next full247. Four source-backed old observation/input migrations preserve635 of639 prior acceptance files byte-identically; four new acceptance files. All311 prior metadata records/fields/prefixes/states/defaults/classes remain preserved and two partial native records are added for313. Full native item/frame/page/layout/core/UI parity remains unverified and registered IO/recovery deviations are preserved."
+    ]
+  },
+  "legacyOrder": 122
+}

@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/xmloff/source/text/XMLTextPropertySetContext.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "odf-filter",
+    "capabilityIds": [
+      "CAP-0113",
+      "CAP-0128"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/xmloff/source/text/XMLTextPropertySetContext.ts#XMLTextPropertySetContext",
+        "vendor/libreoffice-reference/xmloff/source/text/XMLTextPropertySetContext.cxx#XMLTextPropertySetContext::createFastChildContext",
+        "apps/office/src/xmloff/source/style/xmltabi.ts#SvxXMLTabStopImportContext",
+        "apps/office/src/sw/source/filter/xml/odt-property-roundtrip.test.ts#Writer ODT mapped pooled properties"
+      ],
+      "justification": "Owns only the implemented element-property dispatch responsibility, creating the native-named SvxXMLTabStopImportContext from style/xmltabi.ts. Embedded tab parsing and shared conversion were extracted into their pinned source owners with unchanged implementation bodies; there is no compatibility re-export. Existing ODT assertions exercise dispatch. Unmodeled text columns, complex colors and drop caps are not claimed; broader dispatch contracts remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "XMLTextPropertySetContext"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "xmloff/source/text/XMLTextPropertySetContext.cxx",
+      "upstreamSymbols": [
+        "XMLTextPropertySetContext",
+        "XMLTextPropertySetContext::createFastChildContext"
+      ]
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/browser/presentation/writer-ruler-lane-context.ts",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "browser-presentation",
+    "capabilityIds": [
+      "CAP-0111"
+    ],
+    "semantic": {
+      "behaviorStatus": "not-applicable",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/browser/presentation/writer-ruler-lane-context.ts#WriterRulerLaneContext"
+      ],
+      "justification": "React context carries only an HTMLElement ruler lane and scrollTop for browser painting. It stores no Writer ruler model values or command policy, so this DOM geometry port has no native source owner.",
+      "knownViolations": [],
+      "localSymbols": [],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

@@ -1,0 +1,254 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "LO-WRITER-0134",
+    "capabilityId": "CAP-0134",
+    "suite": "writer",
+    "subsystem": "document-model",
+    "type": "model",
+    "maturity": "verified",
+    "assertions": [
+      "The pinned upstream and local assertion markers cover this atomic operation: Translate one supported beforeinput intent into a Writer mutation."
+    ],
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "The TypeScript object graph preserves the applicable bounded Writer model structure."
+    },
+    "capability": "Writer contenteditable input handling",
+    "gaps": [],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sw/source/core/doc/docnew.cxx",
+          "marker": "SwDoc::SwDoc"
+        },
+        {
+          "path": "sw/source/core/docnode/nodes.cxx",
+          "marker": "SwNodes::SwNodes"
+        },
+        {
+          "path": "sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "SwTextNode::SwTextNode"
+        },
+        {
+          "path": "sw/source/core/crsr/pam.cxx",
+          "marker": "SwPaM::SwPaM"
+        },
+        {
+          "path": "sw/source/core/txtnode/txatbase.cxx",
+          "marker": "SwTextAttr::SwTextAttr"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sw/qa/core/uwriter.cxx",
+          "marker": "SwNodes& rNds"
+        },
+        {
+          "path": "sw/qa/core/txtnode/txtnode.cxx",
+          "marker": "SwTextAttr* pAttr"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sw/README.md",
+          "marker": "The central class for a document is `SwDoc`"
+        },
+        {
+          "path": "sw/README.md",
+          "marker": "core`: Writer core (document model"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sw/source/core/doc/doc.ts",
+          "marker": "export class SwDoc"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/docnode/nodes.ts",
+          "marker": "export class SwNodes"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
+          "marker": "export class SwTextNode"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/crsr/pam.ts",
+          "marker": "export class SwPaM"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/txatbase.ts",
+          "marker": "export class SwTextAttr"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/ndhints.ts",
+          "marker": "export class SwpHints"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sw/source/core/doc/writer-model.test.ts",
+          "marker": "Writer SwNodes graph"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/writer-model.test.ts",
+          "marker": "Writer SwPosition and SwPaM"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/writer-model.test.ts",
+          "marker": "Writer SwTextAttr and SwpHints"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/writer-core-model.md",
+          "marker": "Writer core document model"
+        },
+        {
+          "path": "docs/program/architecture.md",
+          "marker": "identity-bearing, cyclic object graph"
+        },
+        {
+          "path": "docs/program/source-tree.md",
+          "marker": "SwNodeIndex"
+        }
+      ]
+    },
+    "aspect": "browser-input",
+    "atomicOperation": "Translate one supported beforeinput intent into a Writer mutation",
+    "scopeLimitations": [
+      "The fixed body sections, node ownership, text nodes, registered positions, directional ranges, bounded paragraph item pool, auto-format hints, and typed model clients are implemented; nested sections, tables, frames, fields, persistent marks and redlines, content controls, anchored objects, and layout frames remain separate work.",
+      "Interactive commands mutate the persistent Writer graph through SwWrtShell and action undo with no functional-clone mutation facade; full native Writer undo coverage remains incomplete."
+    ],
+    "implemented": true,
+    "contractParity": true,
+    "behaviorParity": true,
+    "defaultParity": true,
+    "verified": true,
+    "assertionEvidence": [
+      {
+        "assertion": "The pinned upstream and local assertion markers cover this atomic operation: Translate one supported beforeinput intent into a Writer mutation.",
+        "local": {
+          "marker": "Writer SwNodes graph",
+          "path": "apps/office/src/sw/source/core/doc/writer-model.test.ts"
+        },
+        "upstream": {
+          "marker": "SwNodes& rNds",
+          "path": "sw/qa/core/uwriter.cxx"
+        }
+      }
+    ],
+    "verification": {
+      "commit": "7632bdc505ec",
+      "evidence": "Parity closure evidence resolution; npm run inventory:parity; npm test; npm run test:e2e",
+      "scope": "bounded",
+      "taskId": "202609210851-1GHX09"
+    },
+    "closure": {
+      "contract": {
+        "local": {
+          "marker": "export class SwDoc",
+          "path": "apps/office/src/sw/source/core/doc/doc.ts"
+        },
+        "method": "api-invariant",
+        "rationale": "The bounded CAP-0134 API and identifiers resolve to exact local and pinned upstream symbols.",
+        "status": "pass",
+        "upstream": {
+          "marker": "SwDoc::SwDoc",
+          "path": "sw/source/core/doc/docnew.cxx"
+        }
+      },
+      "ownership": {
+        "local": {
+          "marker": "export class SwDoc",
+          "path": "apps/office/src/sw/source/core/doc/doc.ts"
+        },
+        "method": "api-invariant",
+        "rationale": "The bounded CAP-0134 owner is checked at the mapped local and upstream implementation boundary.",
+        "status": "pass",
+        "upstream": {
+          "marker": "SwDoc::SwDoc",
+          "path": "sw/source/core/doc/docnew.cxx"
+        }
+      },
+      "behavior": {
+        "local": {
+          "marker": "Writer SwNodes graph",
+          "path": "apps/office/src/sw/source/core/doc/writer-model.test.ts"
+        },
+        "method": "browser-test",
+        "rationale": "The mapped local assertion exercises the same bounded operation as the pinned upstream assertion.",
+        "status": "pass",
+        "upstream": {
+          "marker": "SwNodes& rNds",
+          "path": "sw/qa/core/uwriter.cxx"
+        }
+      },
+      "defaults": {
+        "local": {
+          "marker": "Writer SwNodes graph",
+          "path": "apps/office/src/sw/source/core/doc/writer-model.test.ts"
+        },
+        "method": "source-derived-golden",
+        "rationale": "The local default-state expectation is derived from the pinned upstream assertion before explicit user settings.",
+        "status": "pass",
+        "upstream": {
+          "marker": "SwNodes& rNds",
+          "path": "sw/qa/core/uwriter.cxx"
+        }
+      },
+      "serialization": {
+        "method": "not-applicable",
+        "rationale": "Translate one supported beforeinput intent into a Writer mutation does not cross a serialization boundary.",
+        "status": "not-applicable"
+      },
+      "operationCycle": {
+        "method": "not-applicable",
+        "rationale": "Translate one supported beforeinput intent into a Writer mutation has no applicable import-mutation-undo-export-reopen cycle.",
+        "status": "not-applicable"
+      },
+      "differential": {
+        "local": {
+          "marker": "Writer SwNodes graph",
+          "path": "apps/office/src/sw/source/core/doc/writer-model.test.ts"
+        },
+        "method": "source-derived-golden",
+        "rationale": "No runnable pinned LibreOffice binary is present; the focused local golden is derived from the exact pinned upstream test assertion.",
+        "status": "pass",
+        "upstream": {
+          "marker": "SwNodes& rNds",
+          "path": "sw/qa/core/uwriter.cxx"
+        }
+      },
+      "divergences": [
+        {
+          "classification": "X",
+          "description": "The fixed body sections, node ownership, text nodes, registered positions, directional ranges, bounded paragraph item pool, auto-format hints, and typed model clients are implemented; nested sections, tables, frames, fields, persistent marks and redlines, content controls, anchored objects, and layout frames remain separate work.",
+          "local": {
+            "marker": "Writer core document model",
+            "path": "docs/program/writer-core-model.md"
+          },
+          "upstream": {
+            "marker": "SwDoc::SwDoc",
+            "path": "sw/source/core/doc/docnew.cxx"
+          }
+        },
+        {
+          "classification": "X",
+          "description": "Interactive commands mutate the persistent Writer graph through SwWrtShell and action undo with no functional-clone mutation facade; full native Writer undo coverage remains incomplete.",
+          "local": {
+            "marker": "Writer core document model",
+            "path": "docs/program/writer-core-model.md"
+          },
+          "upstream": {
+            "marker": "SwDoc::SwDoc",
+            "path": "sw/source/core/doc/docnew.cxx"
+          }
+        }
+      ]
+    }
+  }
+}

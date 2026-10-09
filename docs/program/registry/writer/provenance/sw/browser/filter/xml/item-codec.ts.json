@@ -1,0 +1,27 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "local-infrastructure",
+    "evidence": {
+      "local": [
+        {
+          "marker": "encodeSfxPoolItem",
+          "path": "apps/office/src/sw/browser/filter/xml/item-codec.ts"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/browser/filter/xml/item-codec.ts",
+    "rationale": "Encodes pooled item values only for the browser Worker structured-clone boundary.",
+    "responsibilities": [
+      "Encodes and restores the bounded pooled-item and item-set graph.",
+      "Iteration127 preserves native normal/visited style IDs through a single browser-owned internet record codec reused by pooled JSON snapshots and canonical Worker16 graph hints. Optional nonzero IDs retain exact unsigned16 values;omitted fields restore ZERO under the existing portable DTO contract. Native item name/ID paired setters restore owned fields without a text backlink;MakeTextAttr attaches actual graph hints normally. Core QueryValue/GetHyperlink projection and default-only pool54 generic decode boundary remain unchanged. All existing runtime states/defaults/exceptions and registered save/open/recovery deviations preserved. Native active styled constructor routing,DTO style identity lookup,ODF programmatic/UI conversion,full localized/custom style families/clients/visited behavior/UNO/macros/broadcaster/lifetimes/global pools/full core/UI remain unverified;no module or goal promotion."
+    ],
+    "stackDivergence": {
+      "kind": "local-infrastructure",
+      "rationale": "Dedicated Worker structured-clone encoding is a browser execution boundary and is not part of the native SfxPoolItem value contract."
+    },
+    "status": "local-only"
+  },
+  "legacyOrder": 88
+}

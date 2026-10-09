@@ -1,0 +1,52 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/svx/source/dialog/rulritem.ts",
+    "upstreamPath": "svx/source/dialog/rulritem.cxx",
+    "localSymbols": [
+      "SvxColumnDescription",
+      "SvxColumnItem"
+    ],
+    "upstreamSymbols": [
+      "SvxColumnItem::Clone",
+      "SvxColumnItem::CalcOrtho",
+      "SvxColumnDescription::GetWidth"
+    ],
+    "preservedResponsibilities": [
+      "Iteration229 introduces actual production-used SvxColumnItem ownership at the SwView table-column conversion boundary from StateTabWin. Native visibility/end/min/max descriptions replace direct SwTabCols interpretation during document column drag admission, while original SwTabCols remains model/preview/apply data. Native defaults, upper-only65535 description clamp, copied Append/Clone and equality excluding ortho are retained. The svx->svl edge is native Library_svx-owned, with no SW/browser reverse dependency. Full SvxRuler/SfxBindings slots, complete StateTabWin frames/rows, pooled refcount mutability and UNO member queries/PutValue remain partial or unverified. Registered IO deviations and all semantic states/defaults/classes remain unchanged."
+    ],
+    "omittedResponsibilities": [
+      "Full SvxRuler and native slot/frame ownership, row state conversion, member QueryValue/PutValue and SfxPoolItem refcount guards."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svx/source/dialog/rulritem.ts",
+          "marker": "SvxColumnDescription"
+        },
+        {
+          "path": "apps/office/src/svx/source/dialog/native-column-item.test.ts",
+          "marker": "native item defaults"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svx/source/dialog/rulritem.cxx",
+          "marker": "SvxColumnItem::Clone"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svx/source/dialog/rulritem.cxx",
+          "marker": "SvxColumnItem::CalcOrtho"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svx/source/dialog/rulritem.cxx",
+          "marker": "SvxColumnDescription::GetWidth"
+        }
+      ]
+    }
+  },
+  "legacyOrder": 74
+}

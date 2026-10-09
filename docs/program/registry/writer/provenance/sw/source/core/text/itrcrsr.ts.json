@@ -1,0 +1,102 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/text/itrcrsr.ts",
+          "marker": "resolveSwTextFirstLineIndent"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
+          "marker": "GetParagraphFirstLineIndent"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-view-projection.ts",
+          "marker": "resolvedFirstLineIndentPt"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx",
+          "marker": "resolvedFirstLineIndentPt"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-view-auto-first-layout.test.tsx",
+          "marker": "resolvesAutomaticLayout"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-view-auto-first-layout.test.tsx",
+          "marker": "tracksAutomaticFontLayout"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-view-auto-first-layout.test.tsx",
+          "marker": "drawsFirstLineAndFollow"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-view-auto-first-layout.test.tsx",
+          "marker": "togglesAuthoredAndResolvedLayout"
+        },
+        {
+          "path": "apps/office/e2e/writer-auto-first-layout.spec.ts",
+          "marker": "Writer automatic body layout"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-view-manual-first-layout.test.tsx",
+          "marker": "resolvesNativeShort"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-view-manual-first-layout.test.tsx",
+          "marker": "preservesTransportAndHistory"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-view-manual-first-layout.test.tsx",
+          "marker": "retainsAutomaticLong"
+        },
+        {
+          "path": "apps/office/e2e/writer-manual-first-layout.spec.ts",
+          "marker": "Writer manual signed-short layout"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/text/itrcrsr.cxx",
+          "marker": "SwTextMargin::CtorInitTextMargin"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "SwTextNode::GetFirstLineOfsWithNum"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentSettingManager.cxx",
+          "marker": "mbAutoFirstLineIndentDisregardLineSpace(true)"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svx/source/dialog/svxruler.cxx",
+          "marker": "SvxRuler::UpdatePara"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/uiview/viewtab.cxx",
+          "marker": "SwView::StateTabWin"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/core/text/itrcrsr.ts",
+    "localSymbols": [
+      "resolveSwTextFirstLineIndent"
+    ],
+    "omittedResponsibilities": [
+      "Native active script/language/device font selection, combined line-space groups outside the existing four modes, complete numbering/RTL/table/redline/font-relative margin/frame layout remain separately unverified."
+    ],
+    "preservedResponsibilities": [
+      "Iteration99 separates authored raw first-line item values from existing automatic paragraph layout. The font-height calculation moves from the text-node convenience getter to the native core text-margin responsibility itrcrsr, where supported Western automatic values obey the existing true-default disregard-line-space setting and false-compatibility proportional/fixed/minimum/leading rules, including zero percent, minimum50percent and integer truncation. Native rule-present numbering bypass keeps raw/list geometry separate. Frozen resolvedFirstLineIndentPt is populated on actual projections while firstLineIndentPt and automatic mode retain authored ruler/dialog contracts; older detached DTOs fall back to raw values. The shared visible/device-measurement paragraph component uses resolved text indentation for unnumbered master frames and zero on follow fragments, keeping existing list marker precedence intact. Owned actual-session evidence checks independent literal twips, direct/inherited raw item ownership, complete values, formatting/Undo/Redo/no-op, retained snapshots, follow/detached/ruler/dialog behavior; Chromium1280/390 product ODT default cases and explicitly controlled existing Worker graph-setting compatibility cases check actual first-glyph Range geometry, raw authoring, history, independent paragraph and later editing. No false-setting ODT persistence claim is made. All300 prior tests remain byte-identical. Native script/language/device font selection, combined rule groups outside the four local modes, font-relative units/RTL/tables/redlines/full numbering/layout and parent parity remain separately unverified. Registered save/open/recovery deviations unchanged; no promotion.",
+      "Iteration100 restores the native signed16 unnumbered manual first-line layout boundary: GetFirstLineOfsWithNum writes the raw item offset through short, and SwTextMargin widens the signed result for placement. Authored pooled values, dialog/ruler projection and supported codec/ODT transport retain the full integer; automatic font-derived layout remains long and existing numbered geometry is unchanged. Independent literal signed boundaries, direct/style ownership, frozen snapshots, clone destination inheritance, full graph transport, raw ODT values, no-op/mode Undo/Redo and first/follow CSS are covered. Chromium1280/390 opens real product ODT with raw plus/minus65537, checks first-glyph placement at plus/minus1twip, raw dialog/ruler state, an explicitly valid new authoring draft, Undo restoring the full imported item, Redo, untouched paragraph and later editing. All302 prior test/spec files remain unchanged. Native active script/font/language/bidi selection and independent list-indent masks are source-confirmed separate unverified obligations; complete numbering/RTL/table/redline/font-relative/frame layout and parent parity remain unverified. No module/status/default/exception promotion or registered save/open/recovery change."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/text/itrcrsr.cxx",
+    "upstreamSymbols": [
+      "SwTextMargin::CtorInitTextMargin"
+    ]
+  },
+  "legacyOrder": 200
+}

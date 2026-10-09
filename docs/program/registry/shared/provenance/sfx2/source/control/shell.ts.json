@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "createSfxShell",
+          "path": "apps/office/src/sfx2/source/control/shell.ts"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "SfxShell::ExecuteSlot",
+          "path": "vendor/libreoffice-reference/sfx2/source/control/shell.cxx"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sfx2/source/control/shell.ts",
+    "localSymbols": [
+      "SfxShell",
+      "createSfxShell"
+    ],
+    "omittedResponsibilities": [
+      "Native item-pool ownership, broadcasters, verbs, frames, and sub-shell management remain outside the bounded slice."
+    ],
+    "preservedResponsibilities": [
+      "Binds one SfxInterface to its shell context and resolves Execute/GetState by numeric slot."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sfx2/source/control/shell.cxx",
+    "upstreamSymbols": [
+      "SfxShell::ExecuteSlot",
+      "SfxShell::GetSlotState"
+    ]
+  },
+  "legacyOrder": 47
+}

@@ -1,0 +1,26 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "evidence": {
+      "local": [
+        {
+          "marker": "selectWriterCommandResource",
+          "path": "apps/office/src/sw/browser/presentation/writer-command-presentation.ts"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/browser/presentation/writer-command-presentation.ts",
+    "rationale": "Projects pinned Writer command metadata through the browser localization service without changing the generated command identity or Writer model behavior.",
+    "responsibilities": [
+      "Localizes generated Writer command presentation labels for browser UI surfaces."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "React and browser localization replace native VCL command presentation."
+    },
+    "status": "local-only"
+  },
+  "legacyOrder": 119
+}

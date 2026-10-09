@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/edit/edattr.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "editing-view",
+    "capabilityIds": [
+      "CAP-0107",
+      "CAP-0125"
+    ],
+    "semantic": {
+      "behaviorStatus": "parity",
+      "contractStatus": "parity",
+      "defaultStatus": "parity",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/edit/edattr.ts#createMoveLeftMarginAction",
+        "vendor/libreoffice-reference/sw/source/core/edit/edattr.cxx#SwEditShell::MoveLeftMargin",
+        "apps/office/src/sw/source/uibase/wrtsh/wrtsh-indent.test.ts#uses document-default tabs across the selected paragraph range as one undo action",
+        "apps/office/src/sw/source/uibase/wrtsh/wrtsh-indent.test.ts#honors unsnapped indent requests and the upstream frame-width guard"
+      ],
+      "justification": "Bounded indent calculation, selected text-node traversal, default tab distance, undo and page-body width guard are asserted against pinned upstream symbols; native selection rings and table frames remain outside scope.",
+      "knownViolations": [],
+      "localSymbols": [
+        "getMoveLeftMarginNodes",
+        "isMoveLeftMargin",
+        "createMoveLeftMarginAction"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "sw/source/core/edit/edattr.cxx",
+      "upstreamSymbols": [
+        "SwEditShell::IsMoveLeftMargin",
+        "SwEditShell::MoveLeftMargin"
+      ]
+    }
+  }
+}

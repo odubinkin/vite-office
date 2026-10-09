@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "SfxControllerItem",
+          "path": "apps/office/src/sfx2/source/control/ctrlitem.ts"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "SfxControllerItem::SfxControllerItem",
+          "path": "vendor/libreoffice-reference/sfx2/source/control/ctrlitem.cxx"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sfx2/source/control/ctrlitem.ts",
+    "localSymbols": [
+      "SfxControllerItem"
+    ],
+    "omittedResponsibilities": [
+      "UNO controller dispatch, native status listeners, and VCL control ownership remain outside the bounded browser implementation."
+    ],
+    "preservedResponsibilities": [
+      "Preserves one persistent bindings subscription and stable slot-specific state publication per visible control."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sfx2/source/control/ctrlitem.cxx",
+    "upstreamSymbols": [
+      "SfxControllerItem::SfxControllerItem"
+    ]
+  },
+  "legacyOrder": 42
+}

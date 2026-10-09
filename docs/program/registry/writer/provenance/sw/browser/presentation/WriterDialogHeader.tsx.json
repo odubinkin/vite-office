@@ -1,0 +1,26 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "evidence": {
+      "local": [
+        {
+          "marker": "WriterDialogHeader",
+          "path": "apps/office/src/sw/browser/presentation/WriterDialogHeader.tsx"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/browser/presentation/WriterDialogHeader.tsx",
+    "rationale": "Shares the Open document visual heading across browser-owned Writer modal panels.",
+    "responsibilities": [
+      "Renders a title, optional description and non-submitting close button."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "React and browser DOM render modal headings in place of native VCL widgets."
+    },
+    "status": "local-only"
+  },
+  "legacyOrder": 100
+}

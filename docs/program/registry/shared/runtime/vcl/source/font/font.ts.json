@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/vcl/source/font/font.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "formatting-model",
+    "capabilityIds": [
+      "CAP-0112"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/vcl/source/font/font.ts#Font",
+        "vendor/libreoffice-reference/vcl/source/font/font.cxx#Font::Font",
+        "apps/office/src/sw/source/core/doc/number-format.test.ts#matches native optional font copies and value equality"
+      ],
+      "justification": "Iteration44 restores SvxNumberType -> SvxNumberFormat -> SwNumFormat constructor/copy/state ownership, native numeric type IDs, standalone SVX_DEF_BULLET U+F095, unsigned32 glyph, show-symbol state and optional copied const Font family values. SwClient is composed because JavaScript has one superclass; the currently exposed registration remains null. Explicit browser format assembly/projection replaces kind/string-glyph constructor overloads. Worker graph16 preserves font presence (including present-empty), raw glyph and visibility with historical omissions supported. Complete unchanged native bodies compare 21 format-value states and144 type/format traces under ASan/UBSan, using named null-client, family-only Font/COW, decimal-provider, string/property/locale/platform adapters. Full native service initialization/static destruction, registered style clients, other Font attributes/equality, graphics, legal-rule state and wider numbering families remain unverified. No whole-module/status or goal promotion; registered I/O deviations unchanged. Only the existing font-family scalar, default-empty, copy/COW and family equality adapter are represented. Native full Font attributes/equality/metrics/global lifetime remain unimplemented or unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "Font",
+        "ConstFont"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "vcl/source/font/font.cxx",
+      "upstreamSymbols": [
+        "Font::Font",
+        "Font::SetFamilyName",
+        "Font::GetFamilyName"
+      ]
+    }
+  }
+}

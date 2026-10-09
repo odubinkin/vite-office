@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/o3tl/inc/sorted_vector.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "core-container",
+    "capabilityIds": [
+      "CAP-0112",
+      "CAP-0127"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/o3tl/inc/sorted_vector.ts#SortedVector",
+        "apps/office/src/o3tl/inc/sorted_vector.test.ts",
+        "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-container.test.ts",
+        "vendor/libreoffice-reference/include/o3tl/sorted_vector.hxx#class sorted_vector"
+      ],
+      "justification": "Iteration56 replaces raw child arrays and push-based transfers with a source-owned o3tl SortedVector using private vector storage, injected strict ordering, binary lower/upper bounds, comparator-equivalent lookup/single insert and destination-preserving sorted bulk union. Core creation/insertion/suffix transfer/removal/lookup/traversal use the container; MoveChildren clears it without replacing identity. Writer counted-child traversal uses native iteration and dynamic type guard. Nine existing diagnostic suites observe iterable snapshots with prior expected values retained. Owned generic union matrices and actual document-record tests cover ordering/equivalence, retained destination object, native parent assignment before duplicate rejection, phantom recursion, raw counters and factory rejection. Fresh native manual file/symbol hashes only; no compiled native or whole-header certification. Numeric index/end-minus-one, nullable out-of-range read and injected comparator bind the ECMAScript container representation. Unused initializer/copy/partial-order policies/native iterator-const/destructor/lifetime and wider tree API/context/range/redline/UI obligations stay unverified. No project test accesses upstream; no helper/source bodies in Agentplane; no whole-module/status/default/deviation/IO/recovery/coverage promotion.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SortedVector"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "include/o3tl/sorted_vector.hxx",
+      "upstreamSymbols": [
+        "sorted_vector",
+        "find_unique"
+      ]
+    }
+  }
+}

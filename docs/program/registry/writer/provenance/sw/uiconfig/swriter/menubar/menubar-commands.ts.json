@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "writerMenuPlacements",
+          "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": ".uno:PickList",
+          "path": "vendor/libreoffice-reference/sw/uiconfig/swriter/menubar/menubar.xml"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
+    "localSymbols": [
+      "writerMenuPlacements",
+      "WRITER_COMMAND_IDS",
+      "writerMenuCommandIds",
+      "writerUserCommands"
+    ],
+    "omittedResponsibilities": [
+      "Upstream obligations outside .uno:PickList, .uno:AddDirect, .uno:OpenFromWriter, .uno:OpenRemote and the bounded WriterTopLevelMenu, WriterMenuPlacement, WriterBulletsAndNumberingMenuCommand contract remain intentionally omitted."
+    ],
+    "preservedResponsibilities": [
+      "Declares the browser Writer top-level menu order from the LibreOffice Writer `sw/uiconfig/swriter/menubar` ownership boundary without reproducing native XML resources."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/uiconfig/swriter/menubar/menubar.xml",
+    "upstreamSymbols": [
+      ".uno:PickList",
+      ".uno:AddDirect",
+      ".uno:OpenFromWriter",
+      ".uno:OpenRemote"
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
+      "rationale": "The pinned menubar.xml command identities are emitted as typed TypeScript constants for static imports by the browser bundle; XML cannot be imported as that contract.",
+      "stackNecessity": "generated-resource-boundary"
+    }
+  },
+  "legacyOrder": 272,
+  "filenameOrder": 6
+}

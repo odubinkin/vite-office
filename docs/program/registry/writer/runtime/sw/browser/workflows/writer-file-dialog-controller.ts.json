@@ -1,0 +1,31 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/browser/workflows/writer-file-dialog-controller.ts",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "browser-workflows",
+    "capabilityIds": [
+      "CAP-0113",
+      "CAP-0114",
+      "CAP-0131"
+    ],
+    "semantic": {
+      "behaviorStatus": "divergent",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "divergent",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/browser/workflows/writer-file-dialog-controller.ts#WriterFileDialogController"
+      ],
+      "justification": "Coordinates browser Open, Save As, and Export dialogs. This browser policy is an intentional upstream divergence and must not be rewritten by parity work.",
+      "knownViolations": [],
+      "localSymbols": [],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

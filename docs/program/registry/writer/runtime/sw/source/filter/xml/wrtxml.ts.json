@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/filter/xml/wrtxml.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "odf-filter",
+    "capabilityIds": [
+      "CAP-0113",
+      "CAP-0129",
+      "CAP-0136",
+      "CAP-0137"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/filter/xml/wrtxml.ts#ODT_EXPORT_BYTE_LIMIT",
+        "apps/office/src/sw/source/filter/xml/odt-roundtrip.test.ts#roundTripsWriterOdt",
+        "vendor/libreoffice-reference/sw/source/filter/xml/wrtxml.cxx#SwXMLWriter"
+      ],
+      "justification": "Owns deterministic STORE-only export of mimetype, manifest, styles.xml, content.xml, and meta.xml with a complete-output ceiling. Compression choice is a browser adaptation; unsupported Writer state is rejected before package emission.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ODT_EXPORT_BYTE_LIMIT",
+        "OdtExportProgressStage",
+        "OdtExportControl",
+        "SwXMLWriter",
+        "writeOdtDocument"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "sw/source/filter/xml/wrtxml.cxx",
+      "upstreamSymbols": [
+        "SwXMLWriter",
+        "SwXMLWriter::SwXMLWriter",
+        "SwXMLWriter::~SwXMLWriter",
+        "SwXMLWriter::Write_"
+      ]
+    }
+  }
+}

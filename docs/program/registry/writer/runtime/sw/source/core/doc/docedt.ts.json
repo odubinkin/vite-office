@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/doc/docedt.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "document-model",
+    "capabilityIds": [
+      "CAP-0110",
+      "CAP-0111",
+      "CAP-0124"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/doc/docedt.ts#sw_GetJoinFlags",
+        "apps/office/src/sw/source/uibase/wrtsh/native-cross-node-deletion.test.ts#native join flags and body-text kernel",
+        "vendor/libreoffice-reference/sw/source/core/doc/docedt.cxx#sw_GetJoinFlags",
+        "vendor/libreoffice-reference/sw/source/core/doc/docedt.cxx#sw_JoinText"
+      ],
+      "justification": "Iteration137 restores body-text cross-node selection flags and JoinPrev/JoinNext survivor choice through source-owned docedt helpers and actual SwPaM Exchange. DeleteAndJoin erases raw first-tail/last-head strings and removes intact middle nodes before joining. One SwUndoDelete retains both boundary whole-hint/direct-item/live-collection history and middle content; Undo reconstructs fresh native hints with NOHINTEXPAND, Redo resets temporary history end. Cross-node Undo direction follows the normalized native join flag. Selected Insert/Replace/composition use the deletion result and actual survivor for FORCEHINTEXPAND plus EMPTYEXPAND mode5 inside the common Replace list. Existing boundary object identity/cursor references, AppendTextNode cloning and zero-length CopyAttr remain bounded adapters requiring subsequent refactoring; full native node-index/ring/bookmark/redline/field/layout and structural section history remain unverified. SwNodes insertion accepts an actual SwNode predecessor, including the body start sentinel, without a temporary paragraph. Literal real-owner boundary/direction/middle-node/family/history/survivor/input tests exercise the registered profile. Existing243 semantic states/defaults/exceptions and registered I/O/recovery deviations are unchanged; new docedt module remains wholly unverified, no whole-module or goal promotion.",
+      "knownViolations": [],
+      "localSymbols": [
+        "sw_GetJoinFlags",
+        "sw_JoinText"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/core/doc/docedt.cxx",
+      "upstreamSymbols": [
+        "sw_GetJoinFlags",
+        "sw_JoinText"
+      ]
+    }
+  }
+}

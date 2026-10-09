@@ -1,0 +1,26 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "evidence": {
+      "local": [
+        {
+          "marker": "readBrowserWriterClipboardPaste",
+          "path": "apps/office/src/sw/browser/editor/writer-clipboard-events.ts"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/browser/editor/writer-clipboard-events.ts",
+    "rationale": "Parses DataTransfer MIME values at the single browser edit-window boundary; no native LibreOffice source file is claimed as its owner.",
+    "responsibilities": [
+      "Parses native HTML/plain-text clipboard values into the bounded Writer transfer filter record."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser ClipboardEvent and DataTransfer replace native VCL clipboard event delivery."
+    },
+    "status": "local-only"
+  },
+  "legacyOrder": 81
+}

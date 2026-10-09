@@ -1,0 +1,19 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "divergenceClass": "none",
+    "id": "writer.command-url.orderedList",
+    "kind": "command-url",
+    "local": {
+      "marker": "\"orderedList\": \".uno:DefaultNumbering\"",
+      "path": "apps/office/src/sw/uiconfig/swriter/writer-ui.generated.json",
+      "value": ".uno:DefaultNumbering"
+    },
+    "upstream": {
+      "marker": "menu:id=\".uno:DefaultNumbering\"",
+      "path": "sw/uiconfig/swriter/menubar/menubar.xml",
+      "value": ".uno:DefaultNumbering"
+    }
+  }
+}

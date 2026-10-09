@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "getWriterParagraphStyleDefaults",
+          "path": "apps/office/src/sw/source/core/doc/poolfmt-defaults.ts"
+        },
+        {
+          "marker": "materializes source-derived item defaults and script slots",
+          "path": "apps/office/src/sw/inc/poolfmt.test.ts"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "lcl_SetHeadline",
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentStylePoolManager.cxx"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/core/doc/poolfmt-defaults.ts",
+    "localSymbols": [
+      "getWriterParagraphStyleDefaults",
+      "applyWriterParagraphStyleDefaults"
+    ],
+    "omittedResponsibilities": [
+      "HTML-mode variants and style branches requiring unimplemented Writer item classes remain explicit and unavailable."
+    ],
+    "preservedResponsibilities": [
+      "Applies exact supported twip sizes, paragraph spacing, alignment, indents, and synchronized Western/CJK/CTL defaults from the upstream pool-style switch.",
+      "Iteration179 removes direct React grid/dialog table graph mutation. The inherited table editing shell groups the existing paragraph split and numeric SwUndoInsTable; native sections insert before body cursor and Redo reconstructs a new graph. SwDoc owns naming, FULL65535 reference geometry and represented flags/styles, preserving header styling independently of repetition. Actual core/mounted/Chromium acceptance covers collapsed direct-body0/middle/end and history. Single-inheritance source-unit split adds native table operations to existing numbering shell without forwarding. Browser border choices remain a bounded autoformat argument; native full frame/item formats, per-edge border objects, context font propagation, table split layout/ODT persistence, selection-to-table,nested tables,redlines,frames,Repeat and complete core/UI parity remain unverified. Prior267 semantic states/defaults/classifications/evidence and registered I/O/recovery exceptions preserved."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/doc/DocumentStylePoolManager.cxx",
+    "upstreamSymbols": [
+      "DocumentStylePoolManager::GetTextCollFromPool",
+      "lcl_SetHeadline",
+      "lcl_SetDfltFont"
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/core/doc/poolfmt-defaults.ts",
+      "rationale": "This TypeScript module builds the supported style-pool item sets from editeng and svl classes while default-font.ts independently defines the injectable device-resolution policy; fmtcol.ts consumes the constructed defaults.",
+      "stackNecessity": "responsibility-split"
+    }
+  },
+  "legacyOrder": 173,
+  "filenameOrder": 1
+}

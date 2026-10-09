@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svl/source/items/intitem.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "formatting-model",
+    "capabilityIds": [
+      "CAP-0112"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/svl/source/items/intitem.ts#SfxInt16Item",
+        "vendor/libreoffice-reference/svl/source/items/intitem.cxx#SfxInt16Item::Clone",
+        "vendor/libreoffice-reference/include/svl/intitem.hxx#SfxInt16Item",
+        "apps/office/src/svl/source/items/itemset.test.ts#validates, clones, compares, and serializes string and integer items",
+        "vendor/libreoffice-reference/svl/source/items/intitem.cxx#SfxInt16Item::QueryValue",
+        "vendor/libreoffice-reference/svl/source/items/intitem.cxx#SfxInt16Item::operator ==",
+        "apps/office/src/svl/source/items/cintitem.test.ts#owns unsigned values and preserves concrete item type through independent clones",
+        "vendor/libreoffice-reference/include/svl/intitem.hxx#class SVL_DLLPUBLIC SfxUInt16Item",
+        "apps/office/src/sw/source/core/attr/native-format-attribute-notify.test.ts#@fileoverview",
+        "apps/office/src/sw/source/core/undo/native-format-attribute-notify-history.test.ts#@fileoverview",
+        "apps/office/src/sw/browser/editor/native-format-attribute-notify.test.tsx#@fileoverview"
+      ],
+      "justification": "The implemented signed-16-bit item constructor default and bounds, GetValue, QueryValue, Clone and equality match the pinned SfxInt16Item source and header. Native mutation, presentation and pooling methods outside this implemented subset are omitted. Bounded CntUInt16Item owns immutable unsigned values,scalar QueryValue,concrete-type equality and base cloning;SfxUInt16Item retains native zero constructor defaults and concrete subclass cloning. Native UNO PutValue,mutable refcount policy,presentation,hashing and pool lifetime remain separately unverified. Iteration245 ports precise native AttrSetChangeHint old/new effective values, modify locking and inherited Differentiate filtering to original registered clients. Row/cell generic attribute overrides are removed and copying claims are locked. Native default items127/157/158/159 supply actual protection flags, numeric format100/locale normalization, detached non-shareable formula and zero double. Browser snapshot restoration stays a bounded boundary. Full SwTableFormula inheritance/parser/calculation/name conversion, presentation/UNO and native frame invalidation/geometry remain unverified. Targeted verification pending; last full237,next247; no semantic promotion. Iteration245 verified1575 unique app cases including20 fresh native format notification/default/ownership/history/UI cases and13 Chromium cases. Initial1538pass6fail; closure1 resolves6failures and explicitly revalidates3 materially affected fresh device/UI scenarios,9pass30skip; closure2 only new/unexecuted related cases31pass14skip. All660 prior acceptance files byte-identical. Actual app/inventory all-four100 binds current complete sources/maps and complete unchanged native declarations/signatures/bodies/enclosing branches/all locations from244; generated V8 duplicate method display ordinal changes are documented with full source hashes, no individual counter sanitization. Browser paint notification follows native clients without adding a document mutation. Existing317 metadata fields/order/status/default/classification/evidence prefixes preserved, one new cellatr record unverified. Full SwTableFormula second-base/calculation/name conversion/UNO, native frame invalidation/geometry and direct native UI registration remain partial. Registered IO/recovery/settings deviations preserved; last full237,next247; no full245.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SfxInt16Item",
+        "SfxUInt16Item"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "svl/source/items/intitem.cxx",
+      "upstreamSymbols": [
+        "SfxInt16Item",
+        "SfxInt16Item::Clone"
+      ]
+    }
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/inc/SwNumberTreeTypes.ts",
+          "marker": "tSwNumTreeNumber"
+        },
+        {
+          "path": "apps/office/src/sw/inc/SwNumberTreeTypes.ts",
+          "marker": "tNumberVector"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-vector-ownership.test.ts",
+          "marker": "exposes mutable source-owned vector aliases and exact shown getter contracts"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-vector-ownership.test.ts",
+          "marker": "returns separate mutable empty values for roots, orphans and paragraphs without records"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-vector-ownership.test.ts",
+          "marker": "obtains the shown record through GetNum and delegates once without changing its returned value"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-vector-ownership.test.ts",
+          "marker": "keeps each returned vector independent through phantom depth nine, continuous policy, restarts and reading transitions"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/SwNumberTreeTypes.hxx",
+          "marker": "typedef tools::Long tSwNumTreeNumber;"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/SwNumberTreeTypes.hxx",
+          "marker": "typedef std::vector<tSwNumTreeNumber> tNumberVector;"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/inc/SwNumberTreeTypes.ts",
+    "localSymbols": [
+      "tNumberVector",
+      "tSwNumTreeNumber"
+    ],
+    "omittedResponsibilities": [
+      "Native tools::Long machine range/precision and std::vector allocator/iterator/lifetime contracts are not represented by the existing JavaScript number/array primitives."
+    ],
+    "preservedResponsibilities": [
+      "Owns the source numbering scalar alias and mutable caller-owned by-value vector alias; separates vector ownership from const getter execution."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/inc/SwNumberTreeTypes.hxx",
+    "upstreamSymbols": [
+      "tSwNumTreeNumber",
+      "tNumberVector"
+    ]
+  },
+  "legacyOrder": 130
+}

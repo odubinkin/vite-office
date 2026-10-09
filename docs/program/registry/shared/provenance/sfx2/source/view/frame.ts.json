@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "SfxUnoAnyItem",
+          "path": "apps/office/src/sfx2/source/view/frame.ts"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "SfxUnoAnyItem::operator==",
+          "path": "vendor/libreoffice-reference/sfx2/source/view/frame.cxx"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sfx2/source/view/frame.ts",
+    "localSymbols": [
+      "SfxUnoAnyItem"
+    ],
+    "omittedResponsibilities": [
+      "Native pooling, UNO mutation and presentation paths outside the bounded SfxUnoAnyItem request value contract remain unimplemented."
+    ],
+    "preservedResponsibilities": [
+      "Implements bounded SfxUnoAnyItem construction, value, always-unequal comparison and clone behavior at the pinned sfx2/source/view/frame.cxx owner."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sfx2/source/view/frame.cxx",
+    "upstreamSymbols": [
+      "SfxUnoAnyItem",
+      "SfxUnoAnyItem::Clone",
+      "SfxUnoAnyItem::operator=="
+    ]
+  },
+  "legacyOrder": 52
+}

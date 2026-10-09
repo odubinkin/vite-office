@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/editeng/source/uno/unofdesc.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "numbering",
+    "capabilityIds": [
+      "CAP-0111"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/editeng/source/uno/unofdesc.ts#fontFromUnoDescriptorName",
+        "apps/office/src/sw/source/filter/xml/native-bullet-font-roundtrip.test.ts",
+        "vendor/libreoffice-reference/editeng/source/uno/unofdesc.cxx#SvxUnoFontDescriptor::ConvertToFont"
+      ],
+      "justification": "Iteration221 ports only SvxUnoFontDescriptor::ConvertToFont represented Name conversion through the actual native Font constructor and SetFamilyName. The Writer numbering owner validates a represented descriptor and ignores empty Name before conversion, then applies the copied Font. Full descriptor members/style/pitch/charset/metrics remain unrepresented and unverified; no additional font owner or core-to-VCL dependency is introduced.",
+      "knownViolations": [],
+      "localSymbols": [
+        "fontFromUnoDescriptorName"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "editeng/source/uno/unofdesc.cxx",
+      "upstreamSymbols": [
+        "SvxUnoFontDescriptor::ConvertToFont"
+      ]
+    }
+  }
+}

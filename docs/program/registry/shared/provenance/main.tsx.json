@@ -1,0 +1,26 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "local-infrastructure",
+    "evidence": {
+      "local": [
+        {
+          "marker": "Boots the static browser entrypoint by connecting the HTML root to the documented React mount adapter.",
+          "path": "apps/office/src/main.tsx"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/main.tsx",
+    "rationale": "Boots the static browser entrypoint by connecting the HTML root to the documented React mount adapter. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
+    "responsibilities": [
+      "Boots the static browser entrypoint by connecting the HTML root to the documented React mount adapter."
+    ],
+    "stackDivergence": {
+      "kind": "local-infrastructure",
+      "rationale": "The local composition boundary has no single native implementation unit and therefore remains explicit infrastructure."
+    },
+    "status": "local-only"
+  },
+  "legacyOrder": 25
+}

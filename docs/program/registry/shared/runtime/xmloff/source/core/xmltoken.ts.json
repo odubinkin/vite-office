@@ -1,0 +1,81 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/xmloff/source/core/xmltoken.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "odf-filter",
+    "capabilityIds": [
+      "CAP-0113",
+      "CAP-0128"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/xmloff/source/core/xmltoken.ts#getXMLToken",
+        "vendor/libreoffice-reference/xmloff/source/core/xmltoken.cxx#GetXMLToken",
+        "apps/office/src/xmloff/source/style/xmlnumi.test.ts#uses native MM100 grammar, failed-value retention and SHRT field bounds",
+        "apps/office/src/xmloff/source/style/xmlnume.test.ts#emits label-alignment mode even for zero or default command geometry",
+        "apps/office/src/sw/source/core/unocore/unosett.test.ts#uses native integer ratios in both directions and retains only present properties",
+        "apps/office/src/sw/source/filter/xml/odt-list-label-alignment-roundtrip.test.ts#round-trips native MM100 defaults, parsing bounds and conditional list attributes",
+        "apps/office/src/sw/source/filter/xml/odt-list-label-alignment-roundtrip.test.ts#exports the default Writer list geometry at every supported level",
+        "apps/office/src/xmloff/source/core/xmluconv.test.ts#delegates native core measure export to the supported CM unit",
+        "vendor/libreoffice-reference/xmloff/source/style/xmlnumi.cxx#SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl::SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl",
+        "vendor/libreoffice-reference/xmloff/source/style/xmlnume.cxx#SvxXMLNumRuleExport::exportLevelStyle",
+        "vendor/libreoffice-reference/sw/source/core/unocore/unosett.cxx#SwXNumberingRules::SetNumberingRuleByIndex",
+        "vendor/libreoffice-reference/sw/source/core/unocore/unosett.cxx#GetPropertiesForNumFormat",
+        "vendor/libreoffice-reference/xmloff/source/core/xmluconv.cxx#SvXMLUnitConverter::convertMeasureToXML",
+        "vendor/libreoffice-reference/sax/source/tools/converter.cxx#void Converter::convertMeasure( OUStringBuffer&",
+        "apps/office/src/sw/source/filter/xml/odt-list-continuation.test.ts#imports native root continuation and default IDs through common and automatic ODT cycles",
+        "apps/office/src/xmloff/source/text/txtlists.test.ts#retains processed roots, first style defaults and independent paragraph identity projection",
+        "apps/office/src/xmloff/source/text/txtlists.test.ts#generates native time date random IDs and tests collisions only against processed roots",
+        "vendor/libreoffice-reference/xmloff/source/text/XMLTextListBlockContext.cxx#XMLTextListBlockContext::XMLTextListBlockContext",
+        "vendor/libreoffice-reference/xmloff/source/text/txtlists.cxx#XMLTextListsHelper::KeepListAsProcessed",
+        "vendor/libreoffice-reference/xmloff/source/text/txtlists.cxx#XMLTextListsHelper::GetListIdForListBlock",
+        "vendor/libreoffice-reference/xmloff/source/text/txtlists.cxx#XMLTextListsHelper::GenerateNewListId",
+        "vendor/libreoffice-reference/sw/source/core/unocore/unosett.cxx#pRule->GetDefaultListId()",
+        "apps/office/src/sw/source/core/layout/newfrm.ts#IsLayoutSplitAllowed",
+        "apps/office/src/sw/source/core/layout/tabfrm.ts#IsLayoutSplitAllowed",
+        "apps/office/src/xmloff/source/table/XMLTableImport.ts#STYLE_MAY_BREAK_BETWEEN_ROWS",
+        "apps/office/src/xmloff/source/table/XMLTableExport.ts#may-break-between-rows",
+        "apps/office/src/xmloff/source/core/xmltoken.ts#may-break-between-rows",
+        "vendor/libreoffice-reference/sw/inc/fmtlsplt.hxx#SwFormatLayoutSplit",
+        "vendor/libreoffice-reference/sw/source/core/layout/tabfrm.cxx#SwTabFrame::IsLayoutSplitAllowed",
+        "vendor/libreoffice-reference/sw/source/core/layout/tabfrm.cxx#!bDontSplit || !pIndPrev",
+        "vendor/libreoffice-reference/sw/source/filter/xml/xmlitemm.cxx#MAY_BREAK_BETWEEN_ROWS",
+        "vendor/libreoffice-reference/sw/source/filter/xml/xmlimpit.cxx#case RES_LAYOUT_SPLIT",
+        "vendor/libreoffice-reference/sw/source/filter/xml/xmlexpit.cxx#case RES_LAYOUT_SPLIT",
+        "apps/office/src/sw/inc/fmtfsize.ts#SwFormatFrameSize",
+        "apps/office/src/sw/source/core/docnode/ndtbl1.ts#GetSwRowHeight",
+        "apps/office/src/sw/source/core/docnode/ndtbl.ts#doc.SetRowHeight",
+        "apps/office/src/sw/source/core/layout/tabfrm.ts#SwRowFrame",
+        "vendor/libreoffice-reference/sw/inc/fmtfsize.hxx#SwFormatFrameSize",
+        "vendor/libreoffice-reference/sw/source/core/layout/atrfrm.cxx#SwFormatFrameSize::operator==",
+        "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl.cxx#SetHeightSizeType",
+        "vendor/libreoffice-reference/sw/source/filter/xml/xmlimpit.cxx#MINLAY",
+        "apps/office/src/sw/source/filter/xml/native-cell-box-roundtrip.test.ts",
+        "apps/office/src/sw/source/core/table/native-independent-columns.test.ts",
+        "apps/office/src/sw/source/filter/xml/native-independent-column-odf.test.ts",
+        "apps/office/src/sw/browser/editor/native-independent-column-render.test.tsx"
+      ],
+      "justification": "Mapped provenance remains semantically unverified against xmloff/source/core/xmltoken.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity. For the existing LABEL_ALIGNMENT mode and LISTTAB/SPACE/NOTHING separators, source-owned xmlnumi parsing now retains zero defaults and MM100 fields with native Converter grammar/failure and SHRT bounds. The MM100 import port now carries both independent native geometry groups; the earlier legacy-to-alignment Twip emulation is removed. Writer numbering property conversion follows unosett.cxx signed MM100/Twip ratios; export projects native MM100 and delegates CM serialization to XML/SAX. ODF 1.3 XML emits explicit label-alignment mode and retains standard command geometry; indents are nonzero-only and tab position is exported only for LISTTAB with a positive value. Context/core assertions and eleven literal common/automatic ODT cases plus both default command marker families verify native quantization, conditional XML and manual reopen state. Full numbering/UNO, legacy position mode/property ownership, NEWLINE extensions, other XML units/versions, defaults and wider obligations remain unverified; no whole-module promotion. Source-owned XMLTextListsHelper replaces stream aliases and rule-counter IDs with processed root style/continuation records, last-root/per-style state, first-style DefaultListId mapping and native paragraph identity projection. Block contexts retain independent own/master IDs, inherit them at nested levels and accept identity attributes only at root. Exact true continue-numbering overrides pending restart at every level; modern root implicit continuation selects only the last matching raw style/different ID. Unknown targets clear, known chains resolve to the master and duplicate roots retain prior records. Writer exposes its existing SwNumRule.GetDefaultListId through the typed import bridge. Native time/date/random list IDs and processed collision suffixes use JS Date milliseconds and uniform31bit browser RNG adapters. Unmodified pinned block constructor/end/getters and processed/default/generator bodies match3082 actual context sequences/15392 raw/effective identity/restart/query states,including fixed RNG1/INT_MAX. Explicit ASCII/string/platform/raw-reference/typed-property/resolved-rule/modern-no-build-id/no-MSO/fixed-clock-RNG adapters;no full native/UNO/factory/legacy/MSO/stable-environment build or lifetime claim.112 genuine common/automatic Arabic/bullet package scenarios assert literal states,counters/vectors/labels,owned rules/items,Worker16,selected XML and independent native reopen projections. Existing source-stale literal identities now follow first-style default mapping. Complete export helper identity/style overrides,missing-rule factories,old build-id/MSO defaults,numbered-paragraph/full UNO/native ownership and deferred SwList insertion/validation architecture remain unverified. No whole-module/default promotion or registered save/open/recovery change. Iteration198 preserves native SwFormatLayoutSplit default true and explicit false through canonical table frames and ODT. IsLayoutSplitAllowed reads the original table item; page placement moves an unsplittable master from occupied body when its full rows plus upper spacing overflow, while empty oversized masters use the native no-predecessor escape. Row split policy remains independent. SAX may-break-between-rows accepts true/auto and false/always, ignores unrecognized values, and exports explicit booleans without materializing absent defaults. Native layout, grouped3UndoRedo/ODT/input, mounted original cells and Chromium1280/390 physical row ranges covered. Full row splitting/rowspan/fly/columns/nested layout, Text Flow controls/full SfxItemSet and whole parity remain unverified; prior contracts/classifications/registered exceptions preserved. Iteration202 removes scalar row minHeight storage and numeric kernel height contracts. Native SvxSizeItem/SwFormatFrameSize owns both dimensions, both sizing types, both percentages and both relations with native defaults, Which90, full equality, clone and supported default size query. Original rows retain copied items, document getter compares complete items and returns clone; resize uses native document setter with copied full size, preserving Fixed/Minimum and promoting only Variable. Flat layout and mounted cells use native Variable/Minimum/Fixed semantics, fixed content clipped, properties metric from shell common getter. ODT row-height Fixed/min-row-height Minimum/Variable omission and native height clamp1..65535; attributes apply in order. Full percentage/fly/vertical/nested/merged/protection/UNO member IDs/PutValue/pooling/widget/SfxItemSet/full parity remains unverified; all prior contracts/classifications/statuses/exceptions retained. Iteration206 draft: scalar kernel cell border/padding storage is replaced by owned SvxBoxItem plus the existing vertical item. Represented lines retain native color/style/width/component arithmetic, signed16 distances/default0, cloning, metrics and supported UNO values; SvxBoxInfoItem retains native validity127. SetTabBorders consumes SfxItemSet and distributes flat union outer/inner lines using source validity rules. Insertion defaults55twips/black10twip lines and0/no-border are preserved. Process/storage uses complete primitive native state with legacy scalar ingress only; ODF and browser paint carry four independent sides. Initial static and upstream-absent runtime verification are pending. Complete native color shading/theme/Word/macros/fly/vertical/RTL/follow/shared-format behavior, per-edge/common-state border widgets and full parity remain unverified. All existing statuses/defaults/evidence/registered I/O/recovery exceptions are preserved. Iteration206 verified closure: the earlier draft pending statement is historical. Native box/info/line ownership, supported values/defaults/metrics, flat source-defined border distribution, original graph and history, complete primitive transport and four-edge ODF/browser paint passed one full upstream-absent profile with failed/new-case-only closures. Current app and inventory actual counters each reach100% lines/statements/functions/branches under complete identical-source/maps or complete contiguous mapped-region proof. All550 prior acceptance contracts are preserved by522 byte-identical files and28 exact native-representation AST migrations; six new acceptance files and two new infrastructure cases are added. Full per-edge/common-state widgets, native themes/shading/Word and RTL/vertical/follow/shared-format completeness remain unverified; no semantic status or registered I/O/recovery exception is promoted. Iteration233 moves connected flat-table column geometry into each original SwTableBox SwFormatFrameSize. Native current-row visible/other-row hidden fuzzy separator union and per-line NewSetTabCols adjustments feed original Writer document attribute history; actual Ctrl+Shift current-line columns replace the retained ordinary shared-column fallback. Source XML union grids/spans and browser device colspans preserve independent original cells, with complete native frame-size values in browser codec and declared grid widths only at import/builder ingress. No row-width side map, graph replacement or TextRuns conversion. Flat unspanned source behavior is represented; full row-span propagation/nested/merged graphs, frame item pooling/UNO, RTL/vertical/SFX/VCL/full ruler state remain partial. Registered recovery/open/save/settings untouched, previous statuses/defaults/classes preserved.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ODF_NAMESPACES",
+        "XMLToken",
+        "getXMLToken"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "xmloff/source/core/xmltoken.cxx",
+      "upstreamSymbols": [
+        "XMLTokenEntry",
+        "GetXMLToken"
+      ]
+    }
+  }
+}

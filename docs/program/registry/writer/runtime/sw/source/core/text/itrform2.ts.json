@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/text/itrform2.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "page-layout",
+    "capabilityIds": [
+      "CAP-0111"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/text/itrform2.ts#projectWriterLineHeightItem",
+        "apps/office/src/sw/browser/presentation/writer-view.test.tsx#projects fixed, minimum, and extra Writer line spacing",
+        "vendor/libreoffice-reference/sw/source/core/text/itrform2.cxx#SwTextFormatter::CalcRealHeight"
+      ],
+      "justification": "Places supported proportional, fixed, minimum, and leading line-height policy in the pinned core text responsibility while browser font measurement remains a device approximation.",
+      "knownViolations": [],
+      "localSymbols": [
+        "projectWriterLineHeight",
+        "projectWriterLineHeightItem"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "sw/source/core/text/itrform2.cxx",
+      "upstreamSymbols": [
+        "SwTextFormatter::CalcRealHeight"
+      ]
+    }
+  }
+}

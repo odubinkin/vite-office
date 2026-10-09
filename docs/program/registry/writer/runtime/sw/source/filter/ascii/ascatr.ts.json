@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/filter/ascii/ascatr.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "odf-filter",
+    "capabilityIds": [
+      "CAP-0113"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/filter/ascii/ascatr.ts#serializeWriterClipboardPlainText",
+        "vendor/libreoffice-reference/sw/source/filter/ascii/ascatr.cxx#SwASC_AttrIter::SwASC_AttrIter",
+        "apps/office/src/sw/source/filter/ascii/native-ascii-range.test.ts#original native node span",
+        "vendor/libreoffice-reference/sw/source/filter/ascii/ascatr.cxx#OutASC_SwTextNode"
+      ],
+      "justification": "Mapped provenance remains semantically unverified against sw/source/filter/ascii/ascatr.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity. Iteration187 removes synthetic ASCII selection DTOs, complete-list-item counting and invented marker fallback. Actual SwASCWriter iterates SwPaM/SwNodes and OutASC_SwTextNode uses native original-node span, start offsets, export-numbering flag, GetNumString, visibility, numbering margin/tab and default bullet configuration. One list plus ordinary paragraph and partial last paragraph labels now follow native selection behavior; same-node and later-start labels remain suppressed. Native numbering defaults and supported twip calculations are covered on actual core owners, mounted body/cell UI and Chromium copy/history. HTML ownership is retained. Full ASCII attributes/fields/redlines/copied table topology/rings/options, compatibility flag beyond native false default, desktop environment overrides and broad core/UI parity remain unverified; all prior states/defaults/classes/evidence/responsibilities and conscious save/open/recovery deviations are preserved.",
+      "knownViolations": [],
+      "localSymbols": [
+        "OutASC_SwTextNode"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/filter/ascii/ascatr.cxx",
+      "upstreamSymbols": [
+        "SwASC_AttrIter::SwASC_AttrIter",
+        "SwASC_AttrIter::SearchNext",
+        "SwASC_AttrIter::OutAttr",
+        "std::make_pair",
+        "OutASC_SwTextNode"
+      ]
+    }
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/bastyp/tabcol.ts",
+          "marker": "SwTabCols"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/bastyp/tabcol.test.ts",
+          "marker": "preserves native edge defaults"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/bastyp/tabcol.cxx",
+          "marker": "SwTabCols"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/tabcol.hxx",
+          "marker": "SwTabColsEntry"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/core/bastyp/tabcol.ts",
+    "localSymbols": [
+      "SwTabCols",
+      "SwTabColsEntry"
+    ],
+    "omittedResponsibilities": [
+      "Exact wide native Long values and full hidden/nested row geometry remain unverified."
+    ],
+    "preservedResponsibilities": [
+      "Iteration190 replaces shell width-array mutation with native SwTabCols: shell GetTabCols, SwTableRep FillTabCols, document SetTabCols and native flat SwTable separator adjustment. Document normalizes frame print width with existing AdjustWidths before attribute Undo, as ndtbl.cxx, retains actual table/row/box/text owners and publishes model changes. Source integer scaling, COLFUZZY20, edge orientation and visible draft rounding are represented. Shared flat horizontal widths only; independent row writes reject without mutation. Hidden/nested/span graphs, shadow/protection/RTL/vertical frames, complete native notifications, wide native Long precision, ruler border drag and full table behavior remain unverified. No parity promotion or registered save/open/recovery deviation changes."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/bastyp/tabcol.cxx",
+    "upstreamSymbols": [
+      "SwTabCols"
+    ]
+  },
+  "legacyOrder": 152
+}

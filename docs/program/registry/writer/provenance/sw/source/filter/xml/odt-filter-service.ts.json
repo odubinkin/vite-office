@@ -1,0 +1,26 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "local-infrastructure",
+    "evidence": {
+      "local": [
+        {
+          "marker": "OdtFilterProgressStage",
+          "path": "apps/office/src/sw/source/filter/xml/odt-filter-service.ts"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/filter/xml/odt-filter-service.ts",
+    "rationale": "Defines the asynchronous ODT filter contract over canonical SwDoc and title; browser Worker transport owns clone conversion separately.",
+    "responsibilities": [
+      "Provides asynchronous ODT import/export over the canonical SwDoc graph with progress and cancellation."
+    ],
+    "stackDivergence": {
+      "kind": "local-infrastructure",
+      "rationale": "Browser DOM, React, Worker, storage, or lifecycle APIs replace the corresponding native platform boundary."
+    },
+    "status": "local-only"
+  },
+  "legacyOrder": 240
+}

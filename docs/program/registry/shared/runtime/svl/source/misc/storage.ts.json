@@ -1,0 +1,30 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svl/source/misc/storage.ts",
+    "classification": "local-infrastructure",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "storage-contract",
+    "capabilityIds": [
+      "CAP-0114",
+      "CAP-0131"
+    ],
+    "semantic": {
+      "behaviorStatus": "not-applicable",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "A",
+      "evidence": [
+        "apps/office/src/svl/source/misc/storage.ts#DocumentOpenPort"
+      ],
+      "justification": "Defines only shell-neutral browser file open and export ports. Retired JSON snapshot contracts were removed.",
+      "knownViolations": [],
+      "localSymbols": [],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

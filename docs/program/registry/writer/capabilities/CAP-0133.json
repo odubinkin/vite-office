@@ -1,0 +1,92 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "LO-WRITER-0133",
+    "capabilityId": "CAP-0133",
+    "suite": "writer",
+    "subsystem": "document-lifecycle",
+    "type": "lifecycle",
+    "maturity": "exception-approved",
+    "assertions": [],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser persistence uses confirmed primary save/load; native temporary recovery and process/session restoration are excluded by product decision."
+    },
+    "capability": "Writer AutoRecovery scheduling",
+    "gaps": [
+      "Native recovery behavior is intentionally not implemented in the browser product."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sfx2/source/doc/objmisc.cxx",
+          "marker": "void SfxObjectShell::SetModified"
+        },
+        {
+          "path": "sfx2/source/doc/objstor.cxx",
+          "marker": "SetModified( !bSaved )"
+        },
+        {
+          "path": "sfx2/source/doc/sfxbasemodel.cxx",
+          "marker": "storeToRecoveryFile"
+        },
+        {
+          "path": "sw/source/core/undo/docundo.cxx",
+          "marker": "HasTopUndoActionMark"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sw/qa/core/undo/undo.cxx",
+          "marker": "testImagePropsCreateUndoAndModifyDoc"
+        },
+        {
+          "path": "sw/qa/python/check_xmodifiable2.py",
+          "marker": "test_XModifiable2_setModified"
+        }
+      ],
+      "docs": [
+        {
+          "path": "offapi/com/sun/star/util/XModifiable.idl",
+          "marker": "boolean isModified()"
+        },
+        {
+          "path": "offapi/com/sun/star/document/XDocumentRecovery.idl",
+          "marker": "wasModifiedSinceLastSave"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [],
+      "tests": [],
+      "docs": [
+        {
+          "path": "docs/program/autosave-recovery.md",
+          "marker": "Browser persistence decision"
+        }
+      ]
+    },
+    "aspect": "persistence-filter",
+    "atomicOperation": "Schedule and retain one changed AutoRecovery generation",
+    "scopeLimitations": [],
+    "implemented": false,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "verification": {
+      "commit": "b64dddf8177d8a160a09dff4ea1fd8d1f54c4d54",
+      "evidence": "Removal task verification; docs/program/autosave-recovery.md",
+      "scope": "bounded",
+      "taskId": "202609221113-N9GZ47"
+    },
+    "manualContract": "Native LibreOffice recovery is intentionally outside the Vite Office browser product lifecycle; no local recovery implementation is required.",
+    "exception": {
+      "approvedBy": "User decision reaffirming 202609221113-N9GZ47",
+      "disposition": "not-implementable",
+      "reason": "browser-runtime-inapplicable",
+      "rationale": "Native crash/session recovery depends on desktop process and backup-file lifecycle not used by this browser document workflow."
+    }
+  }
+}

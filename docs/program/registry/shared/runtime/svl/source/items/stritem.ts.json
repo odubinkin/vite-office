@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svl/source/items/stritem.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "formatting-model",
+    "capabilityIds": [
+      "CAP-0112"
+    ],
+    "semantic": {
+      "behaviorStatus": "parity",
+      "contractStatus": "parity",
+      "defaultStatus": "parity",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/svl/source/items/stritem.ts#SfxStringItem",
+        "vendor/libreoffice-reference/svl/source/items/stritem.cxx#SfxStringItem::Clone",
+        "vendor/libreoffice-reference/include/svl/stritem.hxx#SfxStringItem",
+        "apps/office/src/svl/source/items/itemset.test.ts#validates, clones, compares, and serializes string and integer items",
+        "vendor/libreoffice-reference/svl/source/items/stritem.cxx#SfxStringItem::QueryValue",
+        "vendor/libreoffice-reference/svl/source/items/stritem.cxx#SfxStringItem::operator =="
+      ],
+      "justification": "The implemented string item constructor default, GetValue, QueryValue, Clone and equality match the pinned SfxStringItem source and header. Native mutation, presentation and pooling methods outside this implemented subset are omitted.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SfxStringItem"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "svl/source/items/stritem.cxx",
+      "upstreamSymbols": [
+        "SfxStringItem",
+        "SfxStringItem::Clone"
+      ]
+    }
+  }
+}

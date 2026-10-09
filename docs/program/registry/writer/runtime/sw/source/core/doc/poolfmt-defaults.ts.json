@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/doc/poolfmt-defaults.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "formatting-model",
+    "capabilityIds": [
+      "CAP-0112"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/doc/poolfmt-defaults.ts#RES_PARATR_TABSTOP",
+        "vendor/libreoffice-reference/sw/source/core/bastyp/init.cxx#SvxTabStopItem"
+      ],
+      "justification": "Paragraph style defaults now materialize the pinned SvxTabStopItem including ten generated default stops and the style's explicit zero stop. Other style defaults retain narrow source-derived assertions and remain unverified at module level. Iteration179 removes direct React grid/dialog table graph mutation. The inherited table editing shell groups the existing paragraph split and numeric SwUndoInsTable; native sections insert before body cursor and Redo reconstructs a new graph. SwDoc owns naming, FULL65535 reference geometry and represented flags/styles, preserving header styling independently of repetition. Actual core/mounted/Chromium acceptance covers collapsed direct-body0/middle/end and history. Single-inheritance source-unit split adds native table operations to existing numbering shell without forwarding. Browser border choices remain a bounded autoformat argument; native full frame/item formats, per-edge border objects, context font propagation, table split layout/ODT persistence, selection-to-table,nested tables,redlines,frames,Repeat and complete core/UI parity remain unverified. Prior267 semantic states/defaults/classifications/evidence and registered I/O/recovery exceptions preserved.",
+      "knownViolations": [],
+      "localSymbols": [
+        "getWriterParagraphStyleDefaults",
+        "applyWriterParagraphStyleDefaults"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/core/doc/DocumentStylePoolManager.cxx",
+      "upstreamSymbols": [
+        "DocumentStylePoolManager::GetTextCollFromPool",
+        "lcl_SetHeadline",
+        "lcl_SetDfltFont"
+      ]
+    }
+  }
+}

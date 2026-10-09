@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sfx2/source/view/viewfrm.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "dispatch",
+    "capabilityIds": [
+      "CAP-0101",
+      "CAP-0102",
+      "CAP-0103",
+      "CAP-0104",
+      "CAP-0105",
+      "CAP-0106",
+      "CAP-0107",
+      "CAP-0109",
+      "CAP-0110",
+      "CAP-0112",
+      "CAP-0113",
+      "CAP-0114",
+      "CAP-0115",
+      "CAP-0135"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sfx2/source/view/viewfrm.ts#SfxViewFrame",
+        "vendor/libreoffice-reference/sfx2/source/view/viewfrm.cxx#SfxViewFrame"
+      ],
+      "justification": "Owns the active view, dispatcher, bindings, and shell-stack lifetime at the upstream SfxViewFrame boundary; native window/controller responsibilities are not implemented.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SfxViewFrame"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "sfx2/source/view/viewfrm.cxx",
+      "upstreamSymbols": [
+        "SfxViewFrame",
+        "SfxViewFrame::GetDispatcher",
+        "SfxViewFrame::GetBindings"
+      ]
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/doc/docbm.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "document-model",
+    "capabilityIds": [
+      "CAP-0113"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/doc/docbm.ts#DocumentMarkAccess",
+        "vendor/libreoffice-reference/sw/source/core/doc/docbm.cxx#MarkManager::makeMark"
+      ],
+      "justification": "Owns the bounded collapsed-bookmark and retained soft-page-position slice; broader upstream MarkManager behavior remains unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SwBookmark",
+        "DocumentMarkAccess"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/core/doc/docbm.cxx",
+      "upstreamSymbols": [
+        "MarkManager::makeMark",
+        "MarkManager::renameMark"
+      ]
+    }
+  }
+}

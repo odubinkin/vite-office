@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/ui/table/instable.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "editing-view",
+    "capabilityIds": [
+      "CAP-0137"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/ui/table/instable.ts#SwInsTableDlg",
+        "vendor/libreoffice-reference/sw/source/ui/table/instable.cxx#SwInsTableDlg"
+      ],
+      "justification": "Iteration178 moves represented Insert Table defaults, filtered/collision-sensitive names, native spin limits/nonblocking warning, header/repeat sensitivity and manual repeat-row restoration into SwInsTableDlg. React renders one native input owner and properties has a separate draft. Full autoformat,HTML/LOK,selection conversion,insertion kernel/history and complete UI/core parity remain unverified. All prior264 protected semantic fields and evidence prefixes and registered IO/recovery deviations are preserved.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SwInsTableDlg"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/ui/table/instable.cxx",
+      "upstreamSymbols": [
+        "SwInsTableDlg"
+      ]
+    }
+  }
+}

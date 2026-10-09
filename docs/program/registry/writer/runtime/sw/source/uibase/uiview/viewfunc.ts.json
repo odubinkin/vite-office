@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/uibase/uiview/viewfunc.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "workbench-session",
+    "capabilityIds": [
+      "CAP-0101"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/uibase/uiview/viewfunc.ts#createWriterWorkbenchDocument",
+        "vendor/libreoffice-reference/sw/source/uibase/uiview/viewfunc.hxx#Point"
+      ],
+      "justification": "Mapped provenance remains semantically unverified against sw/source/uibase/uiview/viewfunc.hxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+      "knownViolations": [],
+      "localSymbols": [
+        "createWriterWorkbenchDocument",
+        "getActiveWriterParagraph",
+        "getActiveWriterParagraph"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/uibase/uiview/viewfunc.hxx",
+      "upstreamSymbols": [
+        "Point",
+        "SfxPrinter",
+        "Size",
+        "SvxRuler"
+      ]
+    }
+  }
+}

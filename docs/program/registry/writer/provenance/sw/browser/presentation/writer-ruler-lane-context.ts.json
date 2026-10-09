@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "evidence": {
+      "local": [
+        {
+          "marker": "WriterRulerLaneContext",
+          "path": "apps/office/src/sw/browser/presentation/writer-ruler-lane-context.ts"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/browser/presentation/writer-ruler-lane-context.ts",
+    "localSymbols": [
+      "WriterRulerLaneContext"
+    ],
+    "rationale": "React context carries the ruler HTMLElement lane and document scroll position for browser painting; it owns no Writer document or ruler command policy.",
+    "responsibilities": [
+      "Share ruler lane DOM element and scroll position with paged Writer presentation."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "The DOM lane and React context are browser presentation machinery without a native source-file counterpart."
+    },
+    "status": "local-only"
+  },
+  "legacyOrder": 120
+}

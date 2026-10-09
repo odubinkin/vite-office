@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sax/source/fastparser/fastparser.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "odf-filter",
+    "capabilityIds": [
+      "CAP-0113",
+      "CAP-0128"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sax/source/fastparser/fastparser.ts#parseFastXmlStream",
+        "vendor/libreoffice-reference/sax/source/fastparser/fastparser.cxx#FastSaxParserImpl::parseStream",
+        "apps/office/src/sax/source/fastparser/fastparser.test.ts#ignores comments and processing instructions as the upstream import does"
+      ],
+      "justification": "Pinned SAX fast parser owns bounded event delivery and resource ceilings; browser SAX dependency replaces expat. Broader SAX behavior remains unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "DEFAULT_FAST_XML_LIMITS",
+        "parseFastXmlStream"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "sax/source/fastparser/fastparser.cxx",
+      "upstreamSymbols": [
+        "FastSaxParserImpl",
+        "FastSaxParserImpl::parseStream"
+      ]
+    }
+  }
+}

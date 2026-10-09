@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "serializeWriterClipboardPlainText",
+          "path": "apps/office/src/sw/source/filter/ascii/ascatr.ts"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ascii/native-ascii-range.test.ts",
+          "marker": "original native node span"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "SwASC_AttrIter::SwASC_AttrIter",
+          "path": "vendor/libreoffice-reference/sw/source/filter/ascii/ascatr.cxx"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ascii/ascatr.cxx",
+          "marker": "OutASC_SwTextNode"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/filter/ascii/ascatr.ts",
+    "localSymbols": [
+      "OutASC_SwTextNode"
+    ],
+    "omittedResponsibilities": [
+      "Upstream obligations outside SwASC_AttrIter::SwASC_AttrIter, SwASC_AttrIter::SearchNext, SwASC_AttrIter::OutAttr, std::make_pair and the bounded serializeWriterClipboardPlainText contract remain intentionally omitted."
+    ],
+    "preservedResponsibilities": [
+      "Serializes prepared Writer selections to readable plain text, following LibreOffice Writer's `sw/source/filter/ascii/ascatr.cxx` ownership boundary.",
+      "Iteration187 removes synthetic ASCII selection DTOs, complete-list-item counting and invented marker fallback. Actual SwASCWriter iterates SwPaM/SwNodes and OutASC_SwTextNode uses native original-node span, start offsets, export-numbering flag, GetNumString, visibility, numbering margin/tab and default bullet configuration. One list plus ordinary paragraph and partial last paragraph labels now follow native selection behavior; same-node and later-start labels remain suppressed. Native numbering defaults and supported twip calculations are covered on actual core owners, mounted body/cell UI and Chromium copy/history. HTML ownership is retained. Full ASCII attributes/fields/redlines/copied table topology/rings/options, compatibility flag beyond native false default, desktop environment overrides and broad core/UI parity remain unverified; all prior states/defaults/classes/evidence/responsibilities and conscious save/open/recovery deviations are preserved."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/filter/ascii/ascatr.cxx",
+    "upstreamSymbols": [
+      "SwASC_AttrIter::SwASC_AttrIter",
+      "SwASC_AttrIter::SearchNext",
+      "SwASC_AttrIter::OutAttr",
+      "std::make_pair",
+      "OutASC_SwTextNode"
+    ]
+  },
+  "legacyOrder": 234
+}

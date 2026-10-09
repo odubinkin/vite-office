@@ -1,0 +1,33 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/browser/presentation/WriterFileDialog.tsx",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "browser-workflows",
+    "capabilityIds": [
+      "CAP-0113",
+      "CAP-0114",
+      "CAP-0131"
+    ],
+    "semantic": {
+      "behaviorStatus": "divergent",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "divergent",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/browser/presentation/WriterFileDialog.tsx#WriterFileDialog"
+      ],
+      "justification": "Presents browser document selection, computer ODT/TXT import, browser copy creation, and ODT/TXT export. This browser policy is an intentional upstream divergence and must not be rewritten by parity work.",
+      "knownViolations": [],
+      "localSymbols": [
+        "WriterFileDialog"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

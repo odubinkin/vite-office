@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sfx2/browser/presentation/SidebarDockingWindow.tsx",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "browser-presentation",
+    "capabilityIds": [
+      "CAP-0101",
+      "CAP-0115"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sfx2/browser/presentation/SidebarDockingWindow.tsx#SidebarDockingWindow",
+        "apps/office/src/sfx2/browser/presentation/SidebarDockingWindow.tsx#EventNotify",
+        "apps/office/src/sfx2/browser/presentation/SidebarDockingWindow.test.tsx#isolatesLocalKey",
+        "apps/office/src/sfx2/browser/presentation/SidebarDockingWindow.test.tsx#retainsWidgetDefault",
+        "apps/office/src/sw/browser/presentation/writer-view-sidebar-key-isolation.test.tsx#isolatesClipboardShortcut",
+        "apps/office/src/sw/browser/presentation/writer-view-sidebar-key-isolation.test.tsx#retainsGlobalFallback",
+        "apps/office/e2e/writer-sidebar-key-isolation.spec.ts#Sidebar docking key isolation at width"
+      ],
+      "justification": "The existing Sidebar root now owns the 13 local key codes inspected in SidebarDockingWindow::EventNotify after child widget handling, regardless of modifiers. It stops document accelerator lookup and cancels unhandled browser defaults while retaining editable widget defaults and button Enter activation. Literal owned key/modifier cases and actual Writer clipboard-port/model/no-dispatch checks cover this bounded routing contract; desktop/mobile browser cases cover selected-document safety, real local editing and activation. Other keys retain the existing frame fallback. Native DesignerDialog/styles handling, complete accelerator precedence/platform/LOK/input eligibility, floating/mouse docking, other decks and full Sidebar/native parity remain unverified. Save/open/recovery exceptions are unchanged.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SidebarDockingWindow",
+        "SidebarDockingWindowProps"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

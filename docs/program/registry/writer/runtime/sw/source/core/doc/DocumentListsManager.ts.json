@@ -1,0 +1,59 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/doc/DocumentListsManager.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "document-model",
+    "capabilityIds": [
+      "CAP-0114"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/doc/DocumentListsManager.ts#DocumentListsManager",
+        "vendor/libreoffice-reference/sw/source/core/doc/DocumentListsManager.cxx#DocumentListsManager::DocumentListsManager",
+        "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-lifecycle.test.ts#attaches items at insertion and validates reverse-order reads without replacing their root",
+        "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-lifecycle.test.ts#reparents retained items and moves descendants through native predecessor phantoms",
+        "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-lifecycle.test.ts#moves canonical paragraphs with retained list records and independent copied trees",
+        "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx#SwNumberTreeNode::GetNumber",
+        "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx#SwNumberTreeNode::RemoveMe",
+        "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx#SwNumberTreeNode::RemoveChild",
+        "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx#SwNumberTreeNode::SetLevelInListTree",
+        "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx#SwNumberTreeNode::SetLastValid",
+        "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx#SwNumberTreeNode::InvalidateTree",
+        "apps/office/src/sw/source/core/txtnode/node-numbering-lifecycle.test.ts#owns records in text nodes and validates insertion notifications before prefix reads",
+        "apps/office/src/sw/source/core/txtnode/node-numbering-lifecycle.test.ts#removes old clients before changing list attributes and preserves native registration order",
+        "apps/office/src/sw/source/core/doc/DocumentListItemsManager.test.ts#sorts independent of insertion order, suppresses equivalent positions and filters bullets and uncounted items",
+        "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx#SwTextNode::GetNum(",
+        "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx#SwTextNode::GetNumberVector(",
+        "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx#SwTextNode::AddToList()",
+        "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx#SwTextNode::RemoveFromList()",
+        "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx#HandleSetAttrAtTextNode::HandleSetAttrAtTextNode",
+        "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx#SwNodeNum::PreAdd()",
+        "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx#SwNodeNum::PostRemove()",
+        "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx#SwNodeNum::ChangeNumRule(",
+        "vendor/libreoffice-reference/sw/source/core/doc/number.cxx#SwNumRule::GetTextNodeList(",
+        "vendor/libreoffice-reference/sw/source/core/doc/number.cxx#SwNumRule::RemoveTextNode(",
+        "vendor/libreoffice-reference/sw/source/core/doc/number.cxx#SwNumRule::Validate(",
+        "vendor/libreoffice-reference/sw/source/core/doc/DocumentListItemsManager.cxx#DocumentListItemsManager::addListItem(",
+        "vendor/libreoffice-reference/sw/source/core/doc/DocumentListItemsManager.cxx#DocumentListItemsManager::getNumItems("
+      ],
+      "justification": "Iteration36 makes the shown number record SwTextNode-owned: SwList inserts/removes records without allocation or a text-node map. SwNodeNum binds/clears its rule in PreAdd/PostRemove and transfers rule clients in ChangeNumRule; rule clients retain insertion order and suppress identity duplicates. DocumentListItemsManager maintains native position ordering and filters counted enumeration records. Attribute rule/list changes detach before mutation; canonical node moves retain records,copy/restore attach independent records. Reads validate the requested prefix rather than unrelated tails. Compiled20 additional unmodified pinned owner/registry definitions alongside37 tree/list definitions compare120 sequences/8976 actual owner states including raw prefix caches,reverse vectors,bound rules,client order and numbered registry. Literal tests cover orphan binding,default1 after removal,duplicate add,disconnected/foreign arrays,rule copies and disposal. Single shown/document-node/hierarchical Arabic and bullet slice only;native layout expansion,redline/original arrays,complete callbacks/word-count/lifetime and legacy/default factories remain unverified. No whole-module/default/goal promotion;registered document IO deviations unchanged. Iteration43 restores sparse owned const formats, effective shared Get, reference Set equality and native four-family defaults.22 complete unchanged definitions/constants, plus default-config source identities, compare40 base states,19 ownership/equality states and16 valid NONE marker states under ASan/UBSan. Worker v16 preserves presence/default selectors with historical explicit-format fallback. Source-shaped rule constructor no longer conflates browser command assembly. The native non-progress trailing NONE placeholder profile is measured by timeout and explicitly rejected as a browser guard; it is not claimed equivalent. Pointer-overload in-place/reset behavior, full SvxNumberType hierarchy, live registered style/font/graphics and native static destruction remain unverified. No status or goal promotion; registered I/O deviations unchanged.",
+      "knownViolations": [],
+      "localSymbols": [
+        "DocumentListsManager"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/core/doc/DocumentListsManager.cxx",
+      "upstreamSymbols": [
+        "DocumentListsManager::DocumentListsManager"
+      ]
+    }
+  }
+}

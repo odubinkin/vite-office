@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/editeng/inc/svxenum.ts",
+          "marker": "SvxNumType"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/number-format.test.ts",
+          "marker": "matches native standalone defaults and unsigned glyph copies"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/include/editeng/svxenum.hxx",
+          "marker": "SvxNumType"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/editeng/inc/svxenum.ts",
+    "localSymbols": [
+      "SvxNumType"
+    ],
+    "omittedResponsibilities": [
+      "Only existing numeric family IDs (ARABIC4, NONE5, CHAR_SPECIAL6 and bitmap8 predicate) are represented; wider native enum families remain unimplemented."
+    ],
+    "preservedResponsibilities": [
+      "Iteration44 restores SvxNumberType -> SvxNumberFormat -> SwNumFormat constructor/copy/state ownership, native numeric type IDs, standalone SVX_DEF_BULLET U+F095, unsigned32 glyph, show-symbol state and optional copied const Font family values. SwClient is composed because JavaScript has one superclass; the currently exposed registration remains null. Explicit browser format assembly/projection replaces kind/string-glyph constructor overloads. Worker graph16 preserves font presence (including present-empty), raw glyph and visibility with historical omissions supported. Complete unchanged native bodies compare 21 format-value states and144 type/format traces under ASan/UBSan, using named null-client, family-only Font/COW, decimal-provider, string/property/locale/platform adapters. Full native service initialization/static destruction, registered style clients, other Font attributes/equality, graphics, legal-rule state and wider numbering families remain unverified. No whole-module/status or goal promotion; registered I/O deviations unchanged."
+    ],
+    "status": "mapped",
+    "upstreamPath": "include/editeng/svxenum.hxx",
+    "upstreamSymbols": [
+      "SvxNumType"
+    ]
+  },
+  "legacyOrder": 1
+}

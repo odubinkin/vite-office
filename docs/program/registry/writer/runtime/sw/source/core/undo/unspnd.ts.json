@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/undo/unspnd.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "undo-redo",
+    "capabilityIds": [
+      "CAP-0102"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/undo/unspnd.ts#SwUndoSplitNode",
+        "vendor/libreoffice-reference/sw/source/core/undo/unspnd.cxx#SwUndoSplitNode",
+        "apps/office/src/sw/source/core/undo/native-split-history.test.ts#native table cell Enter restores original ranged history and leaves adjacent cells intact",
+        "vendor/libreoffice-reference/sw/source/core/undo/unspnd.cxx#SwUndoSplitNode::SwUndoSplitNode",
+        "vendor/libreoffice-reference/sw/source/core/undo/unspnd.cxx#void SwUndoSplitNode::UndoImpl",
+        "vendor/libreoffice-reference/sw/source/core/undo/unspnd.cxx#void SwUndoSplitNode::RedoImpl",
+        "vendor/libreoffice-reference/sw/source/core/undo/rolbck.cxx#void SwHistory::CopyAttr"
+      ],
+      "justification": "Mapped provenance remains semantically unverified against sw/source/core/undo/unspnd.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity. Iteration155 restores native represented SwUndoSplitNode conditional whole-node ranged SwHistory capture, empty history discard, Undo full represented ranged reset and forward TmpRollback(doc,0,false), Redo SetTmpEnd(Count) and destructor history release. History records native items/coordinates/format-ignore flags and restores constructor expansion defaults. Existing source-owned SwHistory and txtedt reset responsibility reused; no blanket direct paragraph/list snapshot because native split action does not promise that restoration. Existing provisional redo identity bridge now uses actual fresh core collection/direct items/native hint maps and existing node replacement, removing two CaptureTextFragment snapshots and obsolete full hint-equality comparison; ownership/text mismatch guards preserved. Native metadata/flags may change through reconstruction legitimately. Portable retained identities remain necessary for existing pointer-based undo actions, not full native fresh-node parity or a conscious exception. All250 module states/defaults/classifications/exceptions/prior evidence preserved, additive only. Full physical split/CutImpl/paragraph item/heading list history/table/redline/RSID/field/Repeat and broad native/UI parity remain unverified; conscious IO/recovery deviations preserved.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SwUndoSplitNode"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/core/undo/unspnd.cxx",
+      "upstreamSymbols": [
+        "SwUndoSplitNode",
+        "SwUndoSplitNode::SwUndoSplitNode",
+        "SwUndoSplitNode::~SwUndoSplitNode",
+        "SwUndoSplitNode::UndoImpl",
+        "SwUndoSplitNode::RedoImpl"
+      ]
+    }
+  }
+}

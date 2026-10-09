@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/browser/presentation/WriterFormattingToolbar.tsx",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "browser-presentation",
+    "capabilityIds": [
+      "CAP-0101",
+      "CAP-0105",
+      "CAP-0107",
+      "CAP-0109",
+      "CAP-0112",
+      "CAP-0115"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/browser/presentation/WriterFormattingToolbar.tsx#WriterFormattingToolbar",
+        "apps/office/src/svx/browser/tbxctrls/style-toolbox-control.ts#populateStyleToolbox",
+        "apps/office/src/sw/source/core/doc/doc.ts#IsUsed",
+        "apps/office/src/sw/browser/presentation/writer-style-selector.test.tsx#Writer live style selector",
+        "apps/office/src/svx/browser/tbxctrls/style-toolbox-control.test.ts#native style toolbox population",
+        "apps/office/e2e/writer-style-selector.spec.ts#Writer live style selector width",
+        "apps/office/src/svx/browser/tbxctrls/StyleToolboxSelect.tsx#StyleToolboxSelect",
+        "apps/office/src/svx/browser/tbxctrls/StyleToolboxSelect.test.tsx#native style-box acceptance",
+        "apps/office/src/sw/browser/presentation/writer-view-style-focus.test.tsx#Writer style-box focus",
+        "apps/office/e2e/writer-style-focus.spec.ts#Writer keyboard style choice focus"
+      ],
+      "justification": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner. Iteration103 restores the Writer toolbar style population inspected in SvxStyleToolBoxControl InitializeStyles/FillStyleBox: ten flat native defaults precede actual used and user-defined collections, with exact-name deduplication and four true Common configuration defaults. The generic detached population adapter accepts favourite vectors, while actual favourite storage remains unimplemented. SwDoc.IsUsed supplies bounded regular paragraph-node identity and derived-owner usage, including table nodes and excluding detached/foreign/undo-only nodes. Projection reads never materialize unused defaults and retain only immutable primitive identities/names; actual custom and renamed names dispatch through existing StyleApply and update on model/bindings invalidation, document replacement and Undo/Redo. Unchanged builtins retain existing localized resources. Independent owned population/actual-frame tests and desktop/mobile ODT browser history evidence cover the bounded correction; all306 other prior tests stay byte-identical; one existing selector test expects ten initial styles and admits non-default choices through the unchanged Styles menu while retaining all nine font-size literals. Complete native broadcaster/EE/comment usage, favourite/hidden storage, editable creation, previews/context menus, Clear/More actions, keyboard/focus style control and full native/widget/parent parity remain unverified. No status/default/exception promotion; registered save/open/recovery deviations unchanged. Iteration104 adapts the bounded ordinary SvxStyleBox client acceptance contract: direct picks and Enter resolve actual entries then focus the owning active Writer document before existing StyleApply dispatch; closed Arrow/Page travel is tentative, Tab accepts without focus release, Escape cancels and releases focus, and blur or replaced bindings/options invalidate drafts. Actual frame cursor/mark, raw custom names, history/no-op, document replacement and modal/inactive eligibility are covered by independent owned widget/frame tests and desktop/mobile ODT scenarios. Editable/new style creation, Clear/More actions, previews/context menus, full popup/platform behavior and wider native/widget/parent parity remain unverified. No status/default/exception promotion; registered save/open/recovery deviations unchanged.",
+      "knownViolations": [],
+      "localSymbols": [
+        "WriterFormattingToolbar"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

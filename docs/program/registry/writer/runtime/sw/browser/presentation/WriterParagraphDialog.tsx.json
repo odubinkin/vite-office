@@ -1,0 +1,32 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/browser/presentation/WriterParagraphDialog.tsx",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "browser-presentation",
+    "capabilityIds": [
+      "CAP-0125"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/browser/presentation/WriterParagraphDialog.tsx#WriterParagraphDialog",
+        "vendor/libreoffice-reference/sw/source/uibase/shells/textsh1.cxx#SID_PARA_DLG"
+      ],
+      "justification": "React owns only transient paragraph dialog fields and accessible interactions; accepted values pass through the shell-owned request. Exact full upstream dialog defaults remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "WriterParagraphDialog"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

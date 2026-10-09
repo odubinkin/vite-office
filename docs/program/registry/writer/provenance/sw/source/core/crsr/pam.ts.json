@@ -1,0 +1,104 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "SwNodeIndex",
+          "path": "apps/office/src/sw/source/core/crsr/pam.ts"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/wrtsh/native-cross-node-deletion.test.ts",
+          "marker": "native cross-node selected deletion"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-editing.test.ts",
+          "marker": "native table cell editing owners"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-cursor-rings.test.ts",
+          "marker": "native table character ring history"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-table-cursor-rings.test.tsx",
+          "marker": "mounted %s uses complete per-cell ranges and preserves painted rows through history"
+        },
+        {
+          "path": "apps/office/e2e/writer-native-table-cursor-rings.spec.ts",
+          "marker": "Writer selected row character formatting covers full cells and survives Undo Redo"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/edit/native-list-continuation-ring.test.ts",
+          "marker": "native generic positions and clones keep structural node identity"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "SwNodeIndex",
+          "path": "vendor/libreoffice-reference/sw/source/core/crsr/pam.cxx"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/docedt.cxx",
+          "marker": "sw_GetJoinFlags"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/pam.hxx",
+          "marker": "void Exchange()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/crsr/crsrsh.cxx",
+          "marker": "SwCursorShell::GetCursor"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/crsr/crsrsh.cxx",
+          "marker": "SwCursorShell::getShellCursor"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/crsr/swcrsr.cxx",
+          "marker": "SwTableCursor::MakeBoxSels"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/edit/edattr.cxx",
+          "marker": "GetRingContainer"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/crsr/pam.cxx",
+          "marker": "SwPosition::Assign( const SwNode&"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/core/crsr/pam.ts",
+    "localSymbols": [
+      "SwNodeIndex",
+      "SwPosition",
+      "SwPaM",
+      "WriterTextRange",
+      "getWriterSelectedTextRange",
+      "isWriterCursorOffset",
+      "getWriterSelectedTextRanges"
+    ],
+    "omittedResponsibilities": [
+      "Upstream obligations outside SwNodeIndex, SwPosition, SwPaM, SwPosition::SwPosition and the bounded SwNodeIndex, SwPosition, SwPaM contract remain intentionally omitted."
+    ],
+    "preservedResponsibilities": [
+      "Implements Writer model positions and point-and-mark selections from the pinned LibreOffice `sw/source/core/crsr/pam.cxx` boundary.",
+      "Iteration137 restores body-text cross-node selection flags and JoinPrev/JoinNext survivor choice through source-owned docedt helpers and actual SwPaM Exchange. DeleteAndJoin erases raw first-tail/last-head strings and removes intact middle nodes before joining. One SwUndoDelete retains both boundary whole-hint/direct-item/live-collection history and middle content; Undo reconstructs fresh native hints with NOHINTEXPAND, Redo resets temporary history end. Cross-node Undo direction follows the normalized native join flag. Selected Insert/Replace/composition use the deletion result and actual survivor for FORCEHINTEXPAND plus EMPTYEXPAND mode5 inside the common Replace list. Existing boundary object identity/cursor references, AppendTextNode cloning and zero-length CopyAttr remain bounded adapters requiring subsequent refactoring; full native node-index/ring/bookmark/redline/field/layout and structural section history remain unverified. SwNodes insertion accepts an actual SwNode predecessor, including the body start sentinel, without a temporary paragraph. Literal real-owner boundary/direction/middle-node/family/history/survivor/input tests exercise the registered profile. Existing243 semantic states/defaults/exceptions and registered I/O/recovery deviations are unchanged; new docedt module remains wholly unverified, no whole-module or goal promotion.",
+      "Iteration138 first-profile failures expose the remaining body-only section deletion and selected-range traversal. SwNodes.removeTextNode now derives actual same-section text owners and retains one paragraph per section;SwPaM selected ranges iterate the actual node span and omit non-text sentinels. This enables same-cell split/join Undo and formatting without changing structural table-wide selection policy. First failure names and coverage counts are persisted;only failing cases and newly added section/range cases are replayed. Full native structural lifetime/rings/table navigation and rendering remain unverified;all semantic states/defaults/exceptions and registered I/O deviations remain unchanged.",
+      "Iteration148 ports actual SwPaM circular range owners/traversal/disposal, SwCursor.Create and SwTableCursor change/movement state plus full-cell MakeBoxSels reconciliation. Native default GetCursor(makeTableCursor=true) returns ordinary editing ring; getShellCursor owns displayed table endpoints. Shared selected-text traversal reads each actual PaM so represented Bold/Italic/font family/size/color/highlight cover entire selected cells and all nonempty cell paragraphs, excluding unselected columns. Native history state retains table endpoint mode and rebuilds selected boxes/rings through formatting Undo/Redo. Existing display/navigation tests only switch owner API calls and keep assertion values; no projected text editing. Full ring insertion/deletion/paste/list/paragraph operations, native shellcursor geometry/protection/redlines/complex cells remain unverified. Existing246semanticstates/defaults/classifications and conscious I/O/recovery exceptions preserved; broad goalactive.",
+      "Iteration163 recovery represents generic native structural positions and nullable content-index ownership from pam.cxx and index.cxx; constructor,Assign,clone and zero-content mark detach/register actual owners without table-specific skips. Existing validation,owner/affinity,callback and disposed getter guard retained; full native overloads/comparison/intrusive registry remain unverified. Native restart initial mutation now executes document primitive directly so ordinary history cursor restore cannot destroy the still-live ring;original six failed newcases and genuinelynew generic positions/index/groupedinitialcursor only afterwards,no passing replay. Actual unchanged contiguous hashed source map counters only,changed/crossing/new locations require actual execution.",
+      "Iteration216 pending: label affinity relocated to native SwPaM (pam.hxx192,225-226), preserving default false and constructor/assignment contracts. Browser roundtrip and native Insert2 clearing are under verification; full Move/marked-list/RTL/layout behavior remains unverified.",
+      "Iteration216 verified bounded label-affinity roundtrip: native SwPaM owns defaultfalse state, shell SetPaM/UpdateCursor distinguish label from identical text0 and publish final owners; ordinary Insert clears affinity as Insert2. Browser restores stable editable DOM boundary after the noneditable decoration with distinct native BEFORE-label affinity, keeps marker glyphs out of model offsets and paints caret at label edge; pointer label admission and native history covered. Whole marked-list-level shading/ruler/RTL/bidi/layout and kernel/browser parity remain individually unverified; prior states/defaults/registered exceptions unchanged."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/crsr/pam.cxx",
+    "upstreamSymbols": [
+      "SwNodeIndex",
+      "SwPosition",
+      "SwPaM",
+      "SwPosition::SwPosition"
+    ]
+  },
+  "legacyOrder": 153
+}

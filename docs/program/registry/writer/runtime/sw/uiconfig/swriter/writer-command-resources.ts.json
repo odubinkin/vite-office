@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/uiconfig/swriter/writer-command-resources.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "writer-ui",
+    "capabilityIds": [
+      "CAP-0101",
+      "CAP-0115"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/uiconfig/swriter/writer-command-resources.ts#getWriterCommandResource",
+        "vendor/libreoffice-reference/sw/uiconfig/swriter/menubar/menubar.xml"
+      ],
+      "justification": "Loads generated command labels, placement context, semantics, shortcuts, and filtered X entries from the pinned Writer UI resources.",
+      "knownViolations": [],
+      "localSymbols": [
+        "getWriterCommandResource",
+        "WRITER_FILTERED_X_COMMANDS"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/uiconfig/swriter/menubar/menubar.xml",
+      "upstreamSymbols": [
+        ".uno:AddDirect",
+        ".uno:OpenFromWriter"
+      ]
+    }
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svl/source/items/stylepool.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "document-model",
+    "capabilityIds": [
+      "CAP-0111",
+      "CAP-0126"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/svl/source/items/stylepool.ts#StylePool",
+        "vendor/libreoffice-reference/svl/source/items/stylepool.cxx#StylePool::insertItemSet",
+        "apps/office/src/svl/source/items/stylepool.test.ts#automatic character StylePool insertion"
+      ],
+      "justification": "Iteration113 introduces the document-owned automatic character StylePool and IStyleAccess/SwStyleManager owner. Concrete SET-only parent-root/item-child/leaf-clone insertion shares handles for shareable items and retains fresh leaves for non-shareable items. Ordinary character creation and browser snapshot decode now use the document pool. SwFormatAutoFormat is non-shareable, retains explicitly supplied handles, copies the shared reference and compares pointer identity rather than item-set value equality. Independent real-owner regressions cover insertion/parent/input/copy/adjacent-range/codec contracts; one obsolete raw-value merge expectation is corrected. Selective reset pool interning, sentinel-bearing style insertion, native unordered iterator order/collisions, paragraph/ignorable families, unused-style enumeration, name/cache/lifetime semantics, native null default constructor and UNO name QueryValue remain unverified. Browser item-record persistence remains the existing adapter; full modules/model/layout/notification/filter/UI parity is not certified. Registered save/open/recovery deviations and existing semantic statuses/defaults/exceptions remain unchanged.",
+      "knownViolations": [],
+      "localSymbols": [
+        "StylePool"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "svl/source/items/stylepool.cxx",
+      "upstreamSymbols": [
+        "StylePool::insertItemSet",
+        "StylePoolImpl::insertItemSet"
+      ]
+    }
+  }
+}

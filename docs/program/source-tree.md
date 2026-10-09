@@ -47,10 +47,10 @@ entrypoints rather than implementations of an upstream C++ module.
 
 This mapping is architectural provenance, not a parity claim. Capability-level
 source, test, and Help evidence remains in the machine-readable
-[Writer command mappings](parity/writer-command-slice.json).
+[Writer command mappings](registry/writer/capabilities).
 
 Stage 0 additionally maintains an exhaustive
-[`runtime-inventory.json`](parity/runtime-inventory.json). It classifies every
+[application runtime records](registry/README.md). It classifies every
 production runtime module and its exported operations as an upstream mechanism,
 browser adaptation, local infrastructure, overly broad mapping, or explicitly
 out of parity scope. The same validation covers visible command IDs, UI-only
@@ -64,7 +64,8 @@ set: an unrecorded defect or a stale resolved finding both fail the inventory.
 
 ## Complete current runtime provenance
 
-[`source-provenance.json`](source-provenance.json) is the authoritative,
+The application-local `provenance/` records described in the
+[registry contract](registry/README.md) form the authoritative,
 machine-readable exhaustive mapping for every current non-test TypeScript or
 TSX runtime module in `apps/office/src`. Each entry is either `mapped`, with an
 existing concrete path in the pinned LibreOffice checkout, or `browser-only`,
@@ -82,7 +83,7 @@ documentation have dedicated parity evidence.
 ## Intentional mapped filename divergences
 
 Mapped modules ordinarily use the exact LibreOffice filename. The exhaustive
-`filenameDivergences` array in `source-provenance.json` is the authoritative
+`filenameDivergence` fields in the provenance records form the authoritative
 machine-checked list of intentional responsibility splits, browser boundaries,
 generated-resource modules, and ECMAScript module-resolution names. The current
 Writer edit-window owner uses the exact `sw/source/uibase/docvw/edtwin` identity;

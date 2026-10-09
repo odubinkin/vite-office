@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "AttrSetHandleHelper",
+          "path": "apps/office/src/sw/source/core/docnode/node-attribute-handle.ts"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "namespace AttrSetHandleHelper",
+          "path": "vendor/libreoffice-reference/sw/source/core/docnode/node.cxx"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/core/docnode/node-attribute-handle.ts",
+    "localSymbols": [
+      "SwAttrSetHandle",
+      "AttrSetHandleHelper"
+    ],
+    "omittedResponsibilities": [
+      "Native shared automatic-style pooling,modify locks,cache,refcount,surrogates,conditional/style-name/RES_AUTO_STYLE and full client lifetime remain unimplemented or unverified."
+    ],
+    "preservedResponsibilities": [
+      "Ports registered-item native AttrSetHandleHelper copy-before-write and commit-only-on-change ownership using the existing fresh-handle browser style-access adapter."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/docnode/node.cxx",
+    "upstreamSymbols": [
+      "AttrSetHandleHelper",
+      "GetNewAutoStyle",
+      "Put_BC",
+      "ClearItem_BC"
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/core/docnode/node-attribute-handle.ts",
+      "rationale": "Ports the native AttrSetHandleHelper namespace as a separate source-owner module so stable by-reference handles and copy/commit mutation remain distinct from node structure in TypeScript. Both retain node.cxx ownership;the browser adapter still lacks native automatic-style pooling and full client lifetime.",
+      "stackNecessity": "responsibility-split"
+    }
+  },
+  "legacyOrder": 178,
+  "filenameOrder": 10
+}

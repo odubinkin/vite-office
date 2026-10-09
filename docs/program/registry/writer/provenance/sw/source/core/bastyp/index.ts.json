@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "SwContentIndex",
+          "path": "apps/office/src/sw/source/core/bastyp/index.ts"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/edit/native-list-continuation-ring.test.ts",
+          "marker": "native nullable content index detaches and re-registers"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "SwContentIndexReg::Update",
+          "path": "vendor/libreoffice-reference/sw/source/core/bastyp/index.cxx"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/bastyp/index.cxx",
+          "marker": "SwContentIndex::Assign("
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/core/bastyp/index.ts",
+    "localSymbols": [
+      "SwContentIndexOwnerKind",
+      "SwContentIndexUpdateMode",
+      "SwContentIndexRegistry",
+      "SwContentIndex"
+    ],
+    "omittedResponsibilities": [
+      "Native intrusive sorted-list storage, debug owner discovery, fieldmark correction, and every owner subtype remain outside the bounded implementation."
+    ],
+    "preservedResponsibilities": [
+      "Preserves registered content-position correction for insertion, deletion, replacement, split, merge, removal, and node transfer.",
+      "Iteration163 recovery represents generic native structural positions and nullable content-index ownership from pam.cxx and index.cxx; constructor,Assign,clone and zero-content mark detach/register actual owners without table-specific skips. Existing validation,owner/affinity,callback and disposed getter guard retained; full native overloads/comparison/intrusive registry remain unverified. Native restart initial mutation now executes document primitive directly so ordinary history cursor restore cannot destroy the still-live ring;original six failed newcases and genuinelynew generic positions/index/groupedinitialcursor only afterwards,no passing replay. Actual unchanged contiguous hashed source map counters only,changed/crossing/new locations require actual execution."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/bastyp/index.cxx",
+    "upstreamSymbols": [
+      "SwContentIndex",
+      "SwContentIndexReg::Update",
+      "SwContentIndexReg::MoveTo"
+    ]
+  },
+  "legacyOrder": 151
+}

@@ -1,0 +1,70 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/layout/atrfrm.ts",
+          "marker": "SwFrameFormat"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-name-history.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/table/native-row-frame-format.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/undo/native-row-frame-format-history.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/native-row-frame-format.test.tsx",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/table/native-box-frame-format.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/undo/native-box-frame-format-history.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-box-frame-format.test.tsx",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/atrfrm.cxx",
+          "marker": "SwFrameFormat::SetFormatName"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/core/layout/atrfrm.ts",
+    "localSymbols": [
+      "SwFrameFormat"
+    ],
+    "omittedResponsibilities": [
+      "Full native frame formats, chart/formula/mail-merge and whole parity remain unverified."
+    ],
+    "preservedResponsibilities": [
+      "Iteration214 pending: native frame-format identity owns table names; SwDoc rename assigns unique names for empty/colliding input, emits native name-only lookup history with replay suppression and no cursor restoration. Properties native Name widget retains raw saved values, emits changed items only and keeps the Table page for ASCII spaces with Name focus. Full frame attributes, formula/OLE/chart references, mail merge and overall parity remain unverified; prior semantic fields/statuses/defaults and registered save/open/recovery exceptions are preserved.",
+      "Iteration214 verified closure: earlier pending prose is historical. Actual13509app110inventory14infrastructure274Chromium PASS through ONE full upstream-absent profile plus only original failures and one genuinely new geometry-guard case;0unresolved0passing replay. Native frame name identity, broadcast=false default, raw document rename, unique-name admission, cursor-free name lookup history/recreation/replay suppression, grouped Properties geometry/name, saved Name item, ASCII-space focus/page guard, Reset/Cancel, three history cycles, ODT and continued editing passed. All12 production paths remain byte-identical to sole full build/runtime/Chromium and closure. Actual current-source100 app/inventory counters are bound to whole source/maps or complete contiguous mapped declarations/bodies/enclosing branches/all locations. Ten prior app region certificates verify only complete unchanged units; one invalid raw V8 painter aggregate is retained/rejected and its entire unchanged prior source/map/counter certificate used, with no individual clamp. All577 old acceptance files preserve573 byte-identical bodies and four exact source-backed migrations, every unrelated assertion retained; three new files,580current. Every293 prior metadata record/field/prefix/status/default and registered save/open/recovery exception is preserved without promotion. Full frame attribute ownership/notification granularity, formula/OLE/chart references, native numeric suffix/default/unused/mail-merge collections, full modal/widget and Home/End/browser keyboard behavior and complete parity remain unverified. Chromium End caret setup yielded XCell; new name fixture now uses established explicit DOM end caret while preserving CellX assertion. Same-agent EVALUATOR is explicitly not independent.",
+      "Iteration241 replaces per-row canonical value records with native document-owned SwTableLineFormat item sets and original SwClient registration. ClaimFrameFormat clones shared native owners before mutation; operation-local old-to-new reuse keeps selected peers sharing and unselected peers intact. Row insertion shares the source format; SaveTable retains unique direct native item sets and indexed row topology and reconstructs owners for history, matching represented flat-grid source semantics. Value records remain explicit construction/transport boundaries only. Full row frame client movement/destruction, native modify hint types, pooling, merged/nested tables, full frame attributes and UNO remain unverified. Targeted verification pending; last full237,next247; all prior states/defaults/classifications and registered I/O/recovery deviations preserved.",
+      "Iteration241 verified closure:12 fresh literal native registration/claim/sharing, complete item-set history and mounted direct UI cases plus related modules produced297 unique app passes and11 Chromium passes. Four initial fresh fixture failures were resolved in a failed-only four-case closure with the passing insertion test skipped. No passing replay or full suite; cadence last237,next247. All-four100% app and inventory coverage uses actual targeted counters and prior240 only with entire source/maps equality or complete declaration/body/enclosing branch/location proofs. Original rows/boxes/text/cursors survive repeated attribute history while shared formats are reconstructed. Full row layout client movement/destruction, native modify hints/pooling/merged/nested/UNO and whole core/browser parity remain unverified. No prior status/default/classification promotion.",
+      "Iteration243 owns native SwTableBoxFormat item sets through registered SwTableBox clients, exact box ranges and default frame inheritance. Cell claims retain complete direct attributes and separate shared calculation items; border and vertical commands reuse operation-local native format owners. SaveTable stores deduplicated complete cell item sets and numeric indices, restoring shared owners with MoveTableBoxHint before model registration. Actual section deletion releases cell clients; native insertion shares source formats; the main JSX table reads native border and orientation items directly. Full SwCellFrame hierarchy, invalidation, calculation, nested/merged tables and UNO remain partial. Targeted verification pending; last full237, next247; existing classifications/defaults and registered I/O/recovery deviations preserved.",
+      "Iteration243 verified1301 unique app cases including11 fresh native cell ownership/default/item-set/claim/hint/history/deletion and mounted rendering scenarios, plus25 Chromium cases, all runtime/build physically upstream absent/restored finally. Five old acceptance files capture expected attributes before native destruction or adopt native constructors without weakening literal/identity/history assertions;649 unaffected prior files remain byte-identical. Three initial failures passed failed-only; two new border-sharing/admission cases completed coverage, with zero passing replay. App and inventory all-four100% actual counters are bound to current bytes/maps or complete unchanged declarations/bodies/enclosing branches/all locations from242. Full SwCellFrame hierarchy/invalidation, calculation, numeric formatting, nested/merged/UNO/pooling/modified-state and whole project parity remain partial. Existing316 classifications/defaults/status/evidence prefixes and registered I/O/recovery deviations preserved. Last full237,next247; no full243."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/layout/atrfrm.cxx",
+    "upstreamSymbols": [
+      "SwFrameFormat::SetFormatName"
+    ]
+  },
+  "legacyOrder": 189
+}

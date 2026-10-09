@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svx/browser/tbxctrls/StyleToolboxSelect.tsx",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "browser-presentation",
+    "capabilityIds": [
+      "CAP-0112"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/svx/browser/tbxctrls/StyleToolboxSelect.tsx#StyleToolboxSelect",
+        "apps/office/src/svx/browser/tbxctrls/StyleToolboxSelect.test.tsx#native style-box acceptance",
+        "apps/office/src/sw/browser/presentation/writer-view-style-focus.test.tsx#Writer style-box focus",
+        "apps/office/e2e/writer-style-focus.spec.ts#Writer keyboard style choice focus",
+        "vendor/libreoffice-reference/svx/source/tbxctrls/tbcontrl.cxx#SvxStyleBox_Base::ReleaseFocus",
+        "vendor/libreoffice-reference/vcl/source/app/salvtables.cxx#changed_by_direct_pick",
+        "vendor/libreoffice-reference/vcl/unx/gtk3/gtkinst.cxx#signalKeyPress"
+      ],
+      "justification": "Iteration104 adapts the bounded ordinary SvxStyleBox client acceptance contract: direct picks and Enter resolve actual entries then focus the owning active Writer document before existing StyleApply dispatch; closed Arrow/Page travel is tentative, Tab accepts without focus release, Escape cancels and releases focus, and blur or replaced bindings/options invalidate drafts. Actual frame cursor/mark, raw custom names, history/no-op, document replacement and modal/inactive eligibility are covered by independent owned widget/frame tests and desktop/mobile ODT scenarios. Editable/new style creation, Clear/More actions, previews/context menus, full popup/platform behavior and wider native/widget/parent parity remain unverified. No status/default/exception promotion; registered save/open/recovery deviations unchanged.",
+      "knownViolations": [],
+      "localSymbols": [
+        "StyleToolboxSelect"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

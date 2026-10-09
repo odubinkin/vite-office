@@ -1,0 +1,71 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sfx2/browser/presentation/SidebarFocusManager.ts",
+          "marker": "SidebarFocusManager"
+        },
+        {
+          "path": "apps/office/src/sfx2/browser/presentation/SidebarFocusManager.test.tsx",
+          "marker": "traversesPanel"
+        },
+        {
+          "path": "apps/office/src/sfx2/browser/presentation/SidebarFocusManager.test.tsx",
+          "marker": "movesPanels"
+        },
+        {
+          "path": "apps/office/src/sfx2/browser/presentation/SidebarFocusManager.test.tsx",
+          "marker": "reordersPanels"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-view-sidebar-navigation.test.tsx",
+          "marker": "Writer Sidebar managed traversal"
+        },
+        {
+          "path": "apps/office/e2e/writer-sidebar-navigation.spec.ts",
+          "marker": "Sidebar managed Tab and arrow navigation"
+        },
+        {
+          "path": "apps/office/src/sfx2/browser/presentation/SidebarDeck.tsx",
+          "marker": "showPanel"
+        },
+        {
+          "path": "apps/office/src/sfx2/browser/presentation/SidebarFocusManager.ts",
+          "marker": "GetPanelIndex"
+        },
+        {
+          "path": "apps/office/src/sfx2/browser/presentation/SidebarDeck-scroll.test.tsx",
+          "marker": "adjustsPanelExtent"
+        },
+        {
+          "path": "apps/office/src/sfx2/browser/presentation/SidebarDeck-scroll.test.tsx",
+          "marker": "adjusts only the panel and scrollport belonging to its own deck"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-view-sidebar-scroll.test.tsx",
+          "marker": "showsWriterPanel"
+        },
+        {
+          "path": "apps/office/e2e/writer-sidebar-scroll.spec.ts",
+          "marker": "Sidebar ShowPanel reveals an oversized Paragraph panel"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sfx2/browser/presentation/SidebarFocusManager.ts",
+    "rationale": "Owned React/DOM adaptation of inspected Sfx2 panel registration and the currently implemented focus graph; complete native focus parity remains unverified.",
+    "responsibilities": [
+      "Managed traversal of the implemented deck toolbox, single Properties activation button and visible titled panels follows inspected FocusManager Tab/arrows/FocusPanel and SidebarController ShowPanel: forward title Tab enters existing toolbar before expanded content, toolbox Tab enters rail regardless of Shift, rail forward Tab enters/expands first panel and opens a closed deck, panel arrows traverse actual display order with toolbox/rail boundaries, rail vertical arrows wrap without activation. Registered DOM references and cleanup preserve deck ownership, keyed reorder/removal and isolated clients. Backward panel Tab, horizontal rail arrows and content keys retain child/browser ownership. Application and rebuilt desktop/mobile tests use only local code. Browser deck visibility must be flushed before DOM focus; native ShowPanel follows the focus request. Settings menu, other decks, F6, hidden/titleless fallbacks, native visibility/sensitivity and focus flags, scroll geometry, contexts and complete Sidebar/native parity remain unverified.",
+      "Existing Deck ShowPanel now adjusts its owning browser scrollport after registered panel expansion/title focus, including managed content Escape through FocusPanel. Content-coordinate top comes from scoped DOM extents, border offset and current scroll; native closed Rectangle Bottom and the additional ShowPanel minus-one are preserved, fitting panels reveal bottom and oversized panels prioritize top. Nonoverflow browser viewport skips adjustment. Optional post-focus callback preserves existing standalone manager clients; opening browser visibility remains before DOM focus. Literal source-coordinate/empty/boundary/oversized/expansion/ownership tests, actual Writer no-dispatch/model tests and measured desktop/mobile DOM focus/scroll/editing cover this operation. Toolkit failed extents/scrollbar absence/DPI and rounding/full native sizing/context/F6/settings/other decks and complete Sidebar/native parity remain unverified."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Mounted panel refs, DOM display order, event ownership and scoped React context replace native window key listeners and shared panel containers."
+    },
+    "status": "local-only"
+  },
+  "legacyOrder": 39
+}

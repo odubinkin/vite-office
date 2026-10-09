@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/edit/eddel.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "editing-view",
+    "capabilityIds": [
+      "CAP-0102"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/edit/eddel.ts#createWriterDeleteSelectionOperation",
+        "apps/office/src/sw/source/core/edit/eddel.test.ts#native DeleteSel ignores an unmarked or collapsed owner",
+        "apps/office/src/sw/source/uibase/wrtsh/native-table-delete.test.ts#native table %s deletes every selected cell in one reversible history unit",
+        "apps/office/src/sw/browser/editor/native-table-delete.test.tsx#mounted %s deletes selected row cells and reconstructs one Undo boundary",
+        "apps/office/e2e/writer-native-table-delete.spec.ts#Writer native table deletion",
+        "vendor/libreoffice-reference/sw/source/core/edit/eddel.cxx#SwEditShell::DeleteSel",
+        "vendor/libreoffice-reference/sw/source/core/edit/eddel.cxx#SwEditShell::Delete(",
+        "vendor/libreoffice-reference/sw/source/uibase/wrtsh/delete.cxx#SwWrtShell::DelRight",
+        "vendor/libreoffice-reference/sw/source/core/crsr/crsrsh.cxx#SwCursorShell::ClearMark",
+        "apps/office/src/sw/browser/editor/native-table-delete.test.tsx#deletes selected row cells and reconstructs one Undo boundary",
+        "vendor/libreoffice-reference/sw/source/core/edit/eddel.cxx#SwEditShell::DeleteSel",
+        "apps/office/src/sw/source/uibase/wrtsh/native-table-delete.test.ts#native reversed table point exits at its own surviving cell rather than ring order",
+        "vendor/libreoffice-reference/sw/source/core/edit/eddel.cxx#SwEditShell::DeleteSel"
+      ],
+      "justification": "Iteration149 moves selected text deletion into native core eddel ownership. Actual SwPaM rings and temporary flat-table section ranges delete each selected box without joining cells. Multi-range initial history is captured sequentially after preceding structural mutations, retaining correct SwHistory node indices, then recorded as one Sfx list undo unit; redo reuses the recorded children. Existing wrtsh applyAction forwards the actual undo context for initial execution. Full-cell and partial cross-cell deletion, empty selected cells, native caret/table-mode exit, hints/list/paragraph history, DOM input and Chromium Undo/Redo/continued input have source-independent tests. Full native history recreated boundary identities, insertion/paste/ring paragraph commands, protected/redline/layout/nested/merged/general structural select-all behavior remain unverified. Existing semantic statuses/defaults/classifications and conscious I/O/recovery deviations preserved. Iteration156 integration records numeric cursor coordinates at actual completed native mutations: selected deletion captures live collapsed post-delete point once, sequential per-cell children use local current active nodes and final native outer point instead of removed forecast references. Table row history saves original numeric point and owns only after offset/items until new cells are connected, then records live first cell. Split Redo uses native new-paragraph content0. Original155failed app and3Chromium cases are retried only,408prior test files unchanged. Full physical split/payload node identity, native full table SaveTable/SwNodes sections and complete native action/shell cursor lifetimes remain unverified;250states/defaults/classifications/exceptions/prior evidence preserved. Iteration157 removes shell activeParagraph cached object ownership; active paragraph resolves from actual persistent native displayed cursor, including physical node replacement, table movement and document replacement. Sequential selected deletion carries the chosen final registered SwPosition across real mutations and records completed numeric after point; reversed own-cell and partial backspace direction remain correct without ignored tests or copied node coordinates. Full native cursor/ViewShell ownership and complete UI/table semantics remain unverified;409prior tests/250states/defaults/exceptions/prior evidence preserved.",
+      "knownViolations": [],
+      "localSymbols": [
+        "createWriterDeleteSelectionOperation",
+        "WriterDeleteSelectionOperation"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "sw/source/core/edit/eddel.cxx",
+      "upstreamSymbols": [
+        "SwEditShell::Delete",
+        "SwEditShell::DeleteSel"
+      ]
+    }
+  }
+}

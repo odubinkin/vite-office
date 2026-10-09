@@ -1,0 +1,222 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "LO-WRITER-0104",
+    "capabilityId": "CAP-0104",
+    "suite": "writer",
+    "subsystem": "writer-ui",
+    "type": "command",
+    "maturity": "verified",
+    "assertions": [
+      "The pinned upstream and local assertion markers cover this atomic operation: Toggle and query one bounded view visibility flag."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "React visibility state adapts native docked UI regions."
+    },
+    "capability": "Writer view visibility command state",
+    "gaps": [],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sw/uiconfig/swriter/menubar/menubar.xml",
+          "marker": ".uno:StatusBarVisible"
+        },
+        {
+          "path": "sw/uiconfig/swriter/menubar/menubar.xml",
+          "marker": ".uno:Sidebar"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sw/qa/extras/tiledrendering/tiledrendering2.cxx",
+          "marker": "testStatusBarPageNumber"
+        }
+      ],
+      "docs": [
+        {
+          "path": "helpcontent2/source/text/swriter/01/05150000.xhp",
+          "marker": "<helpdocument"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sw/source/uibase/uiview/view.ts",
+          "marker": "IsSidebarVisible"
+        },
+        {
+          "path": "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx",
+          "marker": "CommandMenuBar"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-view.test.tsx",
+          "marker": "executes domain commands without DOM through the top Writer shell"
+        },
+        {
+          "path": "apps/office/e2e/foundation.spec.ts",
+          "marker": "Status Bar"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/writer-ui-shell.md",
+          "marker": "View → Sidebar"
+        },
+        {
+          "path": "docs/program/writer-command-placement.md",
+          "marker": ".uno:StatusBarVisible"
+        }
+      ]
+    },
+    "aspect": "command-state",
+    "atomicOperation": "Toggle and query one bounded view visibility flag",
+    "scopeLimitations": [
+      "The browser state controls the implemented paged workspace and horizontal and vertical ruler chrome; it does not model native Writer layout frames, multiple view modes, panels, per-document preferences, or all View commands.",
+      "The upstream status-bar test asserts page-number behavior, while the local status bar remains static placement chrome."
+    ],
+    "implemented": true,
+    "contractParity": true,
+    "behaviorParity": true,
+    "defaultParity": true,
+    "verified": true,
+    "assertionEvidence": [
+      {
+        "assertion": "The pinned upstream and local assertion markers cover this atomic operation: Toggle and query one bounded view visibility flag.",
+        "local": {
+          "marker": "executes domain commands without DOM through the top Writer shell",
+          "path": "apps/office/src/sw/browser/presentation/writer-view.test.tsx"
+        },
+        "upstream": {
+          "marker": "testStatusBarPageNumber",
+          "path": "sw/qa/extras/tiledrendering/tiledrendering2.cxx"
+        }
+      }
+    ],
+    "verification": {
+      "commit": "7632bdc505ec",
+      "evidence": "Parity closure evidence resolution; npm run inventory:parity; npm test; npm run test:e2e",
+      "scope": "bounded",
+      "taskId": "202609210851-1GHX09"
+    },
+    "closure": {
+      "contract": {
+        "local": {
+          "marker": "IsSidebarVisible",
+          "path": "apps/office/src/sw/source/uibase/uiview/view.ts"
+        },
+        "method": "api-invariant",
+        "rationale": "The bounded CAP-0104 API and identifiers resolve to exact local and pinned upstream symbols.",
+        "status": "pass",
+        "upstream": {
+          "marker": ".uno:StatusBarVisible",
+          "path": "sw/uiconfig/swriter/menubar/menubar.xml"
+        }
+      },
+      "ownership": {
+        "local": {
+          "marker": "IsSidebarVisible",
+          "path": "apps/office/src/sw/source/uibase/uiview/view.ts"
+        },
+        "method": "api-invariant",
+        "rationale": "The bounded CAP-0104 owner is checked at the mapped local and upstream implementation boundary.",
+        "status": "pass",
+        "upstream": {
+          "marker": ".uno:StatusBarVisible",
+          "path": "sw/uiconfig/swriter/menubar/menubar.xml"
+        }
+      },
+      "behavior": {
+        "local": {
+          "marker": "executes domain commands without DOM through the top Writer shell",
+          "path": "apps/office/src/sw/browser/presentation/writer-view.test.tsx"
+        },
+        "method": "unit-test",
+        "rationale": "The mapped local assertion exercises the same bounded operation as the pinned upstream assertion.",
+        "status": "pass",
+        "upstream": {
+          "marker": "testStatusBarPageNumber",
+          "path": "sw/qa/extras/tiledrendering/tiledrendering2.cxx"
+        }
+      },
+      "defaults": {
+        "local": {
+          "marker": "executes domain commands without DOM through the top Writer shell",
+          "path": "apps/office/src/sw/browser/presentation/writer-view.test.tsx"
+        },
+        "method": "source-derived-golden",
+        "rationale": "The local default-state expectation is derived from the pinned upstream assertion before explicit user settings.",
+        "status": "pass",
+        "upstream": {
+          "marker": "testStatusBarPageNumber",
+          "path": "sw/qa/extras/tiledrendering/tiledrendering2.cxx"
+        }
+      },
+      "serialization": {
+        "method": "not-applicable",
+        "rationale": "Toggle and query one bounded view visibility flag does not cross a serialization boundary.",
+        "status": "not-applicable"
+      },
+      "operationCycle": {
+        "method": "not-applicable",
+        "rationale": "Toggle and query one bounded view visibility flag has no applicable import-mutation-undo-export-reopen cycle.",
+        "status": "not-applicable"
+      },
+      "differential": {
+        "local": {
+          "marker": "executes domain commands without DOM through the top Writer shell",
+          "path": "apps/office/src/sw/browser/presentation/writer-view.test.tsx"
+        },
+        "method": "source-derived-golden",
+        "rationale": "No runnable pinned LibreOffice binary is present; the focused local golden is derived from the exact pinned upstream test assertion.",
+        "status": "pass",
+        "upstream": {
+          "marker": "testStatusBarPageNumber",
+          "path": "sw/qa/extras/tiledrendering/tiledrendering2.cxx"
+        }
+      },
+      "divergences": [
+        {
+          "classification": "B",
+          "description": "React visibility state adapts native docked UI regions.",
+          "local": {
+            "marker": "View → Sidebar",
+            "path": "docs/program/writer-ui-shell.md"
+          },
+          "upstream": {
+            "marker": ".uno:StatusBarVisible",
+            "path": "sw/uiconfig/swriter/menubar/menubar.xml"
+          }
+        },
+        {
+          "classification": "X",
+          "description": "The browser state controls the implemented paged workspace and horizontal and vertical ruler chrome; it does not model native Writer layout frames, multiple view modes, panels, per-document preferences, or all View commands.",
+          "local": {
+            "marker": "View → Sidebar",
+            "path": "docs/program/writer-ui-shell.md"
+          },
+          "upstream": {
+            "marker": ".uno:StatusBarVisible",
+            "path": "sw/uiconfig/swriter/menubar/menubar.xml"
+          }
+        },
+        {
+          "classification": "X",
+          "description": "The upstream status-bar test asserts page-number behavior, while the local status bar remains static placement chrome.",
+          "local": {
+            "marker": "View → Sidebar",
+            "path": "docs/program/writer-ui-shell.md"
+          },
+          "upstream": {
+            "marker": ".uno:StatusBarVisible",
+            "path": "sw/uiconfig/swriter/menubar/menubar.xml"
+          }
+        }
+      ]
+    }
+  }
+}

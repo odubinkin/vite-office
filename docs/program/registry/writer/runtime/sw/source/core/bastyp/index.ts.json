@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/bastyp/index.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "document-model",
+    "capabilityIds": [
+      "CAP-0111"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/bastyp/index.ts#SwContentIndex",
+        "vendor/libreoffice-reference/sw/source/core/bastyp/index.cxx#SwContentIndexReg::Update",
+        "apps/office/src/sw/source/core/edit/native-list-continuation-ring.test.ts#native nullable content index detaches and re-registers",
+        "vendor/libreoffice-reference/sw/source/core/bastyp/index.cxx#SwContentIndex::Assign("
+      ],
+      "justification": "Mapped provenance remains semantically unverified against sw/source/core/bastyp/index.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity. Iteration163 recovery represents generic native structural positions and nullable content-index ownership from pam.cxx and index.cxx; constructor,Assign,clone and zero-content mark detach/register actual owners without table-specific skips. Existing validation,owner/affinity,callback and disposed getter guard retained; full native overloads/comparison/intrusive registry remain unverified. Native restart initial mutation now executes document primitive directly so ordinary history cursor restore cannot destroy the still-live ring;original six failed newcases and genuinelynew generic positions/index/groupedinitialcursor only afterwards,no passing replay. Actual unchanged contiguous hashed source map counters only,changed/crossing/new locations require actual execution.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SwContentIndexOwnerKind",
+        "SwContentIndexUpdateMode",
+        "SwContentIndexRegistry",
+        "SwContentIndex"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/core/bastyp/index.cxx",
+      "upstreamSymbols": [
+        "SwContentIndex",
+        "SwContentIndexReg::Update",
+        "SwContentIndexReg::MoveTo"
+      ]
+    }
+  }
+}

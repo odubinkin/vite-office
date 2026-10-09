@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "SwPageDesc",
+          "path": "apps/office/src/sw/source/core/layout/pagedesc.ts"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "SwPageDesc::SwPageDesc",
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/pagedesc.cxx"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/core/layout/pagedesc.ts",
+    "localSymbols": [
+      "SwPageDesc",
+      "createDefaultWriterPageDescriptor"
+    ],
+    "omittedResponsibilities": [
+      "Native printer integration and page-frame features beyond supported paragraphs remain outside the browser Writer slice."
+    ],
+    "preservedResponsibilities": [
+      "Owns bounded physical page size, margin, orientation, and descriptor copy semantics."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/layout/pagedesc.cxx",
+    "upstreamSymbols": [
+      "SwPageDesc::SwPageDesc"
+    ]
+  },
+  "legacyOrder": 191
+}

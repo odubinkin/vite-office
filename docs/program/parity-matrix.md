@@ -8,9 +8,9 @@ suite table remains a planning inventory; machine-readable JSON records are the
 source of truth for atomic capability delivery and parity status.
 
 The first authored atomic records live in
-[`parity/writer-command-slice.json`](parity/writer-command-slice.json). Its 45
+[Writer capability records](registry/writer/capabilities). Its 45
 bounded Writer records are machine-validated together with the exhaustive
-[`parity/runtime-inventory.json`](parity/runtime-inventory.json) by
+[application runtime registry](registry/README.md) by
 `npm run inventory:parity`. Verification is promoted per atomic operation only
 after its assertion-level upstream/local evidence and task result are recorded;
 every unresolved parity gap remains visible and does not count as parity.

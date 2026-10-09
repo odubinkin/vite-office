@@ -1,0 +1,19 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "divergenceClass": "none",
+    "id": "svl.default.max-undo-action-count",
+    "kind": "default",
+    "local": {
+      "marker": "DEFAULT_MAX_UNDO_ACTION_COUNT = 20",
+      "path": "apps/office/src/svl/source/undo/undo.ts",
+      "value": 20
+    },
+    "upstream": {
+      "marker": "SfxUndoManager( size_t nMaxUndoActionCount = 20 )",
+      "path": "include/svl/undo.hxx",
+      "value": 20
+    }
+  }
+}

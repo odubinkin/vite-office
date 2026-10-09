@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "serializeWriterClipboardHtml",
+          "path": "apps/office/src/sw/source/filter/html/htmlnumwriter.ts"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "SwHTMLWriter::FillNextNumInfo",
+          "path": "vendor/libreoffice-reference/sw/source/filter/html/htmlnumwriter.cxx"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/filter/html/htmlnumwriter.ts",
+    "localSymbols": [
+      "serializeWriterClipboardHtml"
+    ],
+    "omittedResponsibilities": [
+      "Upstream obligations outside SwHTMLWriter::FillNextNumInfo, SwHTMLWriter::ClearNextNumInfo, SwHTMLWriter::SetNextNumInfo, std::move and the bounded serializeWriterClipboardHtml contract remain intentionally omitted."
+    ],
+    "preservedResponsibilities": [
+      "Serializes prepared Writer list paragraphs as portable HTML, following LibreOffice Writer's `sw/source/filter/html/htmlnumwriter.cxx` format-writer ownership."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/filter/html/htmlnumwriter.cxx",
+    "upstreamSymbols": [
+      "SwHTMLWriter::FillNextNumInfo",
+      "SwHTMLWriter::ClearNextNumInfo",
+      "SwHTMLWriter::SetNextNumInfo",
+      "std::move"
+    ]
+  },
+  "legacyOrder": 239
+}

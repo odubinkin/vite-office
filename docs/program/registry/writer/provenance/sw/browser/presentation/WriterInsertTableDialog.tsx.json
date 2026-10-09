@@ -1,0 +1,62 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "localPath": "apps/office/src/sw/browser/presentation/WriterInsertTableDialog.tsx",
+    "status": "local-only",
+    "rationale": "Iteration178 moves represented Insert Table defaults, filtered/collision-sensitive names, native spin limits/nonblocking warning, header/repeat sensitivity and manual repeat-row restoration into SwInsTableDlg. React renders one native input owner and properties has a separate draft. Full autoformat,HTML/LOK,selection conversion,insertion kernel/history and complete UI/core parity remain unverified. All prior264 protected semantic fields and evidence prefixes and registered IO/recovery deviations are preserved. Iteration203 replaces scalar cell vertical alignment with complete SwFormatVertOrient Which109 position0/NONE/PRINT_AREA defaults, native numeric enum values and three-field clone/equality/represented UNO member query/update. Original boxes and insertion undo own independent copied items. SwDoc SetBoxAttr owns native selection/history/notifications; setters traverse ordinary ring points while getters use current point or native table selected boxes. Common full-item getter and orientation-only getter retain mixed/no-item state. Shell delegates; properties reads common shell state and emits only a changed alignment item, native mixed widget fallback top. CSS handles native alignments and safe fixed-row content; ODT maps NONE/CENTER/BOTTOM, process/storage codec restores full primitive items, old scalar only storage ingress. Full pooling/shared frame formats/direct-formatting/HTML resizing/fly/nested/merged/protection/vertical writing and overall parity remain unverified; prior classifications/defaults/contracts/evidence/exceptions retained.",
+    "responsibilities": [
+      "Iteration178 moves represented Insert Table defaults, filtered/collision-sensitive names, native spin limits/nonblocking warning, header/repeat sensitivity and manual repeat-row restoration into SwInsTableDlg. React renders one native input owner and properties has a separate draft. Full autoformat,HTML/LOK,selection conversion,insertion kernel/history and complete UI/core parity remain unverified. All prior264 protected semantic fields and evidence prefixes and registered IO/recovery deviations are preserved.",
+      "Iteration213 pending verification: obsolete scalar minRowHeight removed from table-properties ingress and insertion presentation. Source tabsh.cxx ItemSetToTableParam does not set row height; separate rowht.cxx SwTableHeightDlg and native SetRowHeight own height. Native properties preserve mixed row types and distinct height history. Full native Help/unit preferences/modal lifecycle/other size slots and whole parity remain unverified; registered save/open/recovery exceptions preserved.",
+      "Iteration213 verified: obsolete minRowHeight property removed; table properties no longer invoke native SetRowHeight and insertion presentation omits fabricated zero height. Height editing uses source SwTableHeightDlg or native complete frame-size API. Mixed current/selected original row types, independent properties/height undo groups, cursor/pending input, three Undo/Redo, original graph, ODT and continued editing pass. Actual13497app110inventory14infrastructure272Chromium resolved via ONE upstream-absent full profile and original two failed property payload cases only; exact63-to54 expectation accounts for removed9unit row-height action, every unrelated assertion retained,5focused skips remain skipped,0passing replay. Strict actual current-source100 app/inventory coverage uses whole byte-identical source/maps, no partial transfers; raw invalid negative V8 painter counters retained and complete prior verified identical file/map/counters selected. All293prior records/fields/prefixes/statuses/defaults/registered save/open/recovery exceptions preserved, no blanket promotion. Full Help/unit preferences/modal lifecycle/other size slots/insertion autoformat/default completeness and whole parity remain unverified."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "React DOM renders the native insert-dialog draft."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterInsertTableDialog.tsx",
+          "marker": "WriterInsertTableDialog"
+        },
+        {
+          "path": "apps/office/src/sw/inc/fmtornt.ts",
+          "marker": "SwFormatVertOrient"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/docnode/ndtbl1.ts",
+          "marker": "GetBoxSelection"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/doc.ts",
+          "marker": "SetBoxAlign"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx",
+          "marker": "boxAlign"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/fmtornt.hxx",
+          "marker": "SwFormatVertOrient"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/atrfrm.cxx",
+          "marker": "SwFormatVertOrient::operator=="
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl1.cxx",
+          "marker": "lcl_GetBoxSel"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx",
+          "marker": "get_value_changed_from_saved"
+        }
+      ]
+    }
+  },
+  "legacyOrder": 105
+}

@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sfx2/source/control/dispatch.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "dispatch",
+    "capabilityIds": [
+      "CAP-0101",
+      "CAP-0115"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sfx2/source/control/dispatch.ts#GetSlots",
+        "apps/office/src/sfx2/source/control/dispatch.test.ts#GetSlots",
+        "vendor/libreoffice-reference/sfx2/source/control/dispatch.cxx#SfxDispatcher::GetSlot",
+        "apps/office/src/sw/source/uibase/app/docst.ts#execStyleSheet",
+        "apps/office/src/sw/source/uibase/app/docsh.ts#ApplyStyles",
+        "apps/office/src/sw/source/uibase/app/docst.test.ts#SwDocShell native paragraph StyleApply",
+        "apps/office/src/sfx2/source/control/unoctitm.test.ts#explicit UNO key modifiers",
+        "apps/office/src/sw/source/core/edit/edfcol-modifier.test.ts#native Ctrl paragraph StyleApply",
+        "apps/office/src/sw/browser/presentation/writer-style-modifier.test.tsx#Writer explicit style modifier commands"
+      ],
+      "justification": "Removed the unused GetCommands alias; active slot discovery remains in SfxDispatcher.GetSlots with a source-backed assertion. Broader dispatch behavior remains unverified. Iteration105 restores the existing paragraph StyleApply slot5552 to the stable SwDocShell owner with active SwView/GetWrtShell lifecycle, retaining the text-shell paragraph primitive. Caller-owned typed Template5552/Family5553 and Style6703/FamilyName5566 arguments and ordinary UNO/URL payloads preserve paragraph family2 defaults and recognized family-name precedence, paired programmatic-to-display conversion, actual custom or renamed style ownership, missing-name rejection, no-op family success and unsigned owner completion. Dispatcher preserves completed owner return items. Independent real model/view/frame/session tests cover current-style ID state, point/mark, history, graph replacement and instance isolation. Other style families, StyleDesigner, API-mode returns, modifier/reset/list/full-selection handling, the complete native style pool and native state itemset remain unverified; no status/default/exception promotion or registered save/open/recovery changes. Iteration109 carries explicit unsigned UNO KeyModifier metadata separately from slot arguments to zero-default SfxRequest and document-owned paragraph StyleApply. Only native KEY_MOD1 triggers initial full-character/list reset. The existing content-manager owner constructs the registered native deletion set excluding list83..87; docfmt uses selective node reset with protected nonempty numbering/page/non-NONE break and Ctrl repeated-list eligibility. txtedt removes common automatic-style items while retaining unrelated items, exact flags and internet hints. Collection history owns hints before initial selective reset; the separate exact-reset owner captures after collection processing. Native redo retains list eligibility but omits the initial full-character flag and uses default non-exact hint reset, including repeated-style level asymmetry. Actual request/core/frame/mounted UI/ODT tests cover mask literals, filtering, ordinary/URL separation, protected defaults, inclusive empty/end-zero spans, untouched neighbors, partial/whole hints, history ownership, three cycles and continued input/export. Every prior test is byte-identical. Language/direction/fields/marks/layout/redlines/rings/inline headings, full UNO transforms/style families/native defaults/history and complete UI parity remain unverified; no status/default/exception promotion or registered save/open/recovery change. Older missing-modifier/deletion-set claims are superseded only for this bounded registered operation.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SfxDispatcher",
+        "isPromiseLike"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "sfx2/source/control/dispatch.cxx",
+      "upstreamSymbols": [
+        "SfxDispatcher",
+        "SfxDispatcher::Push",
+        "SfxDispatcher::Pop",
+        "SfxDispatcher::Execute"
+      ]
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "evidence": {
+      "local": [
+        {
+          "marker": "WriterRecoveryPresentationController",
+          "path": "apps/office/src/sw/browser/presentation/WriterRecoveryPrompt.tsx"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/browser/presentation/WriterRecoveryPrompt.tsx",
+    "rationale": "Presents browser recovery candidates and requires an explicit restore, discard, or clean-continue choice; no native dialog implementation is claimed.",
+    "responsibilities": [
+      "Coordinates recovery candidate presentation without owning recovery storage or Writer document mutation.",
+      "Delays AutoRecovery scheduling until candidate inspection and any required user choice complete."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "React and browser interaction replace the native recovery dialog presentation boundary."
+    },
+    "status": "local-only"
+  },
+  "legacyOrder": 112
+}

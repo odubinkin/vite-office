@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "SfxSlot",
+          "path": "apps/office/src/sfx2/source/control/msg.ts"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "class SfxSlot",
+          "path": "vendor/libreoffice-reference/include/sfx2/msg.hxx"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sfx2/source/control/msg.ts",
+    "localSymbols": [
+      "SfxSlot"
+    ],
+    "omittedResponsibilities": [
+      "Native slot modes, UNO type metadata, linked-list siblings, and recording flags remain outside the bounded browser slice."
+    ],
+    "preservedResponsibilities": [
+      "Preserves numeric slot identity, command URL, and shell-owned Execute/GetState callbacks."
+    ],
+    "status": "mapped",
+    "upstreamPath": "include/sfx2/msg.hxx",
+    "upstreamSymbols": [
+      "SfxSlot"
+    ]
+  },
+  "legacyOrder": 44
+}

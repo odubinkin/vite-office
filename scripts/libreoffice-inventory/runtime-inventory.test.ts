@@ -64,6 +64,10 @@ function source(overrides: Readonly<Record<string, unknown>> = {}): string {
 
 describe("runtime inventory" /** Groups strict parser and complete-coverage checks. @returns Nothing. */, function defineRuntimeInventoryTests(): void {
   it("classifies every module, exported operation, command, and non-only surface" /** Verifies the deterministic success report. @returns A fulfilled assertion promise. */, async function validatesRuntimeSurface(): Promise<void> {
+    expect(
+      parseRuntimeInventoryManifest(source({ modules: [moduleRecord({ suite: "calc" })] }))
+        .modules[0]?.suite,
+    ).toBe("calc");
     const manifest = parseRuntimeInventoryManifest(source());
     const report = await validateRuntimeInventory(
       manifest,
@@ -143,7 +147,7 @@ describe("runtime inventory" /** Groups strict parser and complete-coverage chec
     expectInvalid(source({ modules: duplicateModules() }));
     expectInvalid(source({ modules: [moduleRecord({ classification: "bad" })] }));
     expectInvalid(source({ modules: [moduleRecord({ state: "bad" })] }));
-    expectInvalid(source({ modules: [moduleRecord({ suite: "calc" })] }));
+    expectInvalid(source({ modules: [moduleRecord({ suite: "impress" })] }));
     expectInvalid(source({ modules: [moduleRecord({ subsystem: "" })] }));
     expectInvalid(source({ modules: [moduleRecord({ capabilityIds: [""] })] }));
     expectInvalid(source({ modules: [moduleRecord({ infrastructureExemption: "" })] }));

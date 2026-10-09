@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "SfxObjectShell",
+          "path": "apps/office/src/sfx2/source/doc/objsh.ts"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "class SfxObjectShell",
+          "path": "vendor/libreoffice-reference/include/sfx2/objsh.hxx"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sfx2/source/doc/objsh.ts",
+    "localSymbols": [
+      "SfxObjectShell",
+      "SetModified",
+      "SaveCompleted",
+      "SetHistorySavePosition"
+    ],
+    "omittedResponsibilities": [
+      "UNO model integration, native storage, signing, macro, printer, and desktop UI obligations remain outside the bounded browser object-shell layer."
+    ],
+    "preservedResponsibilities": [
+      "Directly owns document identity, title, modified/save-position/close state, and the retained primary SfxMedium. Browser recovery is intentionally unsupported."
+    ],
+    "status": "mapped",
+    "upstreamPath": "include/sfx2/objsh.hxx",
+    "upstreamSymbols": [
+      "SfxObjectShell"
+    ]
+  },
+  "legacyOrder": 51
+}

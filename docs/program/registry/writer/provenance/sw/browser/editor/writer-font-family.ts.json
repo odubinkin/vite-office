@@ -1,0 +1,26 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "evidence": {
+      "local": [
+        {
+          "marker": "browserFontFamily",
+          "path": "apps/office/src/sw/browser/editor/writer-font-family.ts"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/browser/editor/writer-font-family.ts",
+    "rationale": "Projects imported ODF generic font metadata into browser font-family values while the physical face selection remains in the DOM font engine.",
+    "responsibilities": [
+      "Presents an explicit font family followed by a packaged generic-family fallback for browser text rendering."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "The browser font engine replaces LibreOffice VCL physical font collection lookup; full font scoring is not implemented here."
+    },
+    "status": "local-only"
+  },
+  "legacyOrder": 82
+}

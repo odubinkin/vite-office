@@ -1,0 +1,209 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "LO-WRITER-0143",
+    "capabilityId": "CAP-0143",
+    "suite": "writer",
+    "subsystem": "odf-filter",
+    "type": "filter",
+    "maturity": "verified",
+    "assertions": [
+      "Local tests exercise the bounded operation: Map decimal and bullet list levels, identities, and continuation."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser bytes and worker scheduling adapt native stream execution without changing the declared XML/package subset."
+    },
+    "capability": "Import and export ODF list rules",
+    "gaps": [],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sw/source/filter/xml/xmlimp.cxx",
+          "marker": "SwXMLDocContext_Impl::SwXMLDocContext_Impl"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sw/qa/extras/odfimport/odffeatures.cxx",
+          "marker": "testFeatureText"
+        }
+      ],
+      "docs": [
+        {
+          "path": "helpcontent2/source/text/shared/00/00000021.xhp",
+          "marker": "ODF Text"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sw/source/core/unocore/unosett.ts",
+          "marker": "SetNumberingRuleByIndex"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-roundtrip.test.ts",
+          "marker": "Unsupported ODF numbering format"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/writer-odt-format.md",
+          "marker": "Writer ODF 1.3 package slice"
+        }
+      ]
+    },
+    "aspect": "persistence-filter",
+    "atomicOperation": "Map decimal and bullet list levels, identities, and continuation",
+    "scopeLimitations": [
+      "Only the named package stream, XML element, or property is covered; unrelated ODF content remains outside this record."
+    ],
+    "implemented": true,
+    "contractParity": true,
+    "behaviorParity": true,
+    "defaultParity": true,
+    "verified": true,
+    "assertionEvidence": [
+      {
+        "assertion": "Local tests exercise the bounded operation: Map decimal and bullet list levels, identities, and continuation.",
+        "local": {
+          "path": "apps/office/src/sw/source/filter/xml/odt-roundtrip.test.ts",
+          "marker": "Unsupported ODF numbering format"
+        },
+        "upstream": {
+          "path": "sw/qa/extras/odfimport/odffeatures.cxx",
+          "marker": "testFeatureText"
+        }
+      }
+    ],
+    "verification": {
+      "commit": "b013dcabae6e",
+      "evidence": "Pinned LibreOffice ODT fixtures and atomic source-derived tests; npm run inventory:parity; npm run test; npm run test:e2e",
+      "scope": "bounded",
+      "taskId": "202609220025-Q5N3H0"
+    },
+    "closure": {
+      "contract": {
+        "local": {
+          "path": "apps/office/src/sw/source/core/unocore/unosett.ts",
+          "marker": "SetNumberingRuleByIndex"
+        },
+        "method": "api-invariant",
+        "rationale": "The bounded CAP-0143 contract resolves to the mapped local and pinned upstream symbols.",
+        "status": "pass",
+        "upstream": {
+          "path": "sw/source/filter/xml/xmlimp.cxx",
+          "marker": "SwXMLDocContext_Impl::SwXMLDocContext_Impl"
+        }
+      },
+      "ownership": {
+        "local": {
+          "path": "apps/office/src/sw/source/core/unocore/unosett.ts",
+          "marker": "SetNumberingRuleByIndex"
+        },
+        "method": "api-invariant",
+        "rationale": "The bounded CAP-0143 owner is checked at the mapped filter implementation boundary.",
+        "status": "pass",
+        "upstream": {
+          "path": "sw/source/filter/xml/xmlimp.cxx",
+          "marker": "SwXMLDocContext_Impl::SwXMLDocContext_Impl"
+        }
+      },
+      "behavior": {
+        "local": {
+          "path": "apps/office/src/sw/source/filter/xml/odt-roundtrip.test.ts",
+          "marker": "Unsupported ODF numbering format"
+        },
+        "method": "unit-test",
+        "rationale": "The mapped local assertion exercises the same bounded ODF operation as the pinned upstream assertion.",
+        "status": "pass",
+        "upstream": {
+          "path": "sw/qa/extras/odfimport/odffeatures.cxx",
+          "marker": "testFeatureText"
+        }
+      },
+      "defaults": {
+        "local": {
+          "path": "apps/office/src/sw/source/filter/xml/odt-roundtrip.test.ts",
+          "marker": "Unsupported ODF numbering format"
+        },
+        "method": "source-derived-golden",
+        "rationale": "The local pre-user-setting expectation is derived from the mapped pinned upstream ODF assertion.",
+        "status": "pass",
+        "upstream": {
+          "path": "sw/qa/extras/odfimport/odffeatures.cxx",
+          "marker": "testFeatureText"
+        }
+      },
+      "serialization": {
+        "local": {
+          "path": "apps/office/src/sw/source/filter/xml/odt-roundtrip.test.ts",
+          "marker": "Unsupported ODF numbering format"
+        },
+        "method": "pinned-fixture",
+        "rationale": "The bounded package/XML operation is exercised across serialization with checked-in pinned LibreOffice fixtures or an atomic format test.",
+        "status": "pass",
+        "upstream": {
+          "path": "sw/qa/extras/odfimport/odffeatures.cxx",
+          "marker": "testFeatureText"
+        }
+      },
+      "operationCycle": {
+        "local": {
+          "path": "apps/office/src/sw/source/filter/xml/odt-roundtrip.test.ts",
+          "marker": "Unsupported ODF numbering format"
+        },
+        "method": "pinned-fixture",
+        "rationale": "The applicable import, export, and reopen stages are exercised by the mapped bounded ODF test.",
+        "status": "pass",
+        "upstream": {
+          "path": "sw/qa/extras/odfimport/odffeatures.cxx",
+          "marker": "testFeatureText"
+        }
+      },
+      "differential": {
+        "local": {
+          "path": "apps/office/src/sw/source/filter/xml/odt-roundtrip.test.ts",
+          "marker": "Unsupported ODF numbering format"
+        },
+        "method": "pinned-fixture",
+        "rationale": "The local result is compared through checked-in pinned LibreOffice fixtures or a golden derived from the exact upstream assertion.",
+        "status": "pass",
+        "upstream": {
+          "path": "sw/qa/extras/odfimport/odffeatures.cxx",
+          "marker": "testFeatureText"
+        }
+      },
+      "divergences": [
+        {
+          "classification": "B",
+          "description": "Browser bytes and worker scheduling adapt native stream execution without changing the declared XML/package subset.",
+          "local": {
+            "path": "docs/program/writer-odt-format.md",
+            "marker": "Writer ODF 1.3 package slice"
+          },
+          "upstream": {
+            "path": "sw/source/filter/xml/xmlimp.cxx",
+            "marker": "SwXMLDocContext_Impl::SwXMLDocContext_Impl"
+          }
+        },
+        {
+          "classification": "X",
+          "description": "Only the named package stream, XML element, or property is covered; unrelated ODF content remains outside this record.",
+          "local": {
+            "path": "docs/program/writer-odt-format.md",
+            "marker": "Writer ODF 1.3 package slice"
+          },
+          "upstream": {
+            "path": "sw/source/filter/xml/xmlimp.cxx",
+            "marker": "SwXMLDocContext_Impl::SwXMLDocContext_Impl"
+          }
+        }
+      ]
+    }
+  }
+}

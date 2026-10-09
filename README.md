@@ -17,6 +17,7 @@ the parity matrix.
 - [Program charter](docs/program/README.md)
 - [LibreOffice baseline](docs/program/libreoffice-baseline.md)
 - [Parity matrix](docs/program/parity-matrix.md)
+- [Application inventory registry](docs/program/registry/README.md)
 - [Architecture](docs/program/architecture.md)
 - [Test strategy](docs/program/test-strategy.md)
 - [Documentation strategy](docs/program/documentation-strategy.md)
@@ -91,3 +92,10 @@ npm run test:e2e
 The complete LibreOffice parity target is not yet achieved. See the
 [parity matrix](docs/program/parity-matrix.md) for the authoritative status and the
 [roadmap](docs/program/roadmap.md) for the delivery sequence.
+
+Inventory records are independently authored under `docs/program/registry/{writer,calc,shared}`. Use
+`npm run inventory:id` for new UUID capability IDs and `npm run inventory:parity:writer`,
+`inventory:parity:calc`, or `inventory:parity:shared` for scoped evidence checks. The complete
+registry gate is `npm run inventory:registry:check`; it also detects collisions and orphan
+references across applications. See the [registry contract](docs/program/registry/README.md) for
+record ownership and shared-contract coordination.

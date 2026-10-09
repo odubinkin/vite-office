@@ -1,0 +1,68 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svl/source/items/itemset.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "formatting-model",
+    "capabilityIds": [
+      "CAP-0112"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/svl/source/items/itemset.ts#SfxItemState",
+        "vendor/libreoffice-reference/svl/source/items/itemset.cxx#SfxItemState",
+        "vendor/libreoffice-reference/svl/source/items/itemset.cxx#SfxItemSet::PutImpl",
+        "vendor/libreoffice-reference/svl/source/items/itemset.cxx#SfxItemSet::Put(const SfxItemSet&",
+        "apps/office/src/svl/source/items/itemset.test.ts#filters unsupported Put values and copies supported entries from wider sets",
+        "vendor/libreoffice-reference/svl/source/items/itemset.cxx#SfxItemSet::SfxItemSet( const SfxItemSet&",
+        "vendor/libreoffice-reference/svl/source/items/itemset.cxx#SfxItemSet::Clone",
+        "apps/office/src/svl/source/items/itemset.test.ts#clones parents and direct states only under the pinned pool and item rules",
+        "vendor/libreoffice-reference/include/svl/itemset.hxx#bInvalidAsDefault = true",
+        "vendor/libreoffice-reference/svl/source/items/itemset.cxx#IsDisabledItem(&rItem)",
+        "apps/office/src/svl/source/items/itemset.test.ts#clears invalid targets by default and ignores disabled source entries",
+        "apps/office/src/sw/source/core/doc/writer-attributes.test.ts#restores Writer node and format inheritance when copying invalid default entries",
+        "vendor/libreoffice-reference/svl/source/items/itemset.cxx#SfxItemSet::DisableOrInvalidateItem_ForWhichID",
+        "apps/office/src/svl/source/items/itemset.test.ts#ignores unsupported explicit state IDs while preserving valid transitions",
+        "vendor/libreoffice-reference/include/svl/itemset.hxx#SetParent",
+        "vendor/libreoffice-reference/svl/source/items/itemset.cxx#SfxItemSet::Get",
+        "apps/office/src/svl/source/items/itemset.test.ts#assigns parent references without imposing additional ownership restrictions",
+        "apps/office/src/svl/source/items/itemset.test.ts#resolves inherited defaults through each parent own pool",
+        "vendor/libreoffice-reference/svl/source/items/itemset.cxx#SfxItemSet::Get",
+        "vendor/libreoffice-reference/svl/source/items/itemset.cxx#SfxItemSet::PutImpl",
+        "apps/office/src/svl/source/items/itemset.test.ts#returns one disabled sentinel across direct, inherited, and cloned states",
+        "vendor/libreoffice-reference/include/svl/itemset.hxx#PoolItemMap",
+        "vendor/libreoffice-reference/include/svl/itemset.hxx#m_aPoolItemMap",
+        "apps/office/src/svl/source/items/itemset.test.ts#replaces each explicit state with values and copies mixed entries without sentinel equality",
+        "apps/office/src/sw/source/core/docnode/node-attribute-handle.test.ts#matches unchanged native handle owners over300 sequences and1815 states",
+        "apps/office/src/svl/source/items/itemset-equality.test.ts#native item-set equality",
+        "vendor/libreoffice-reference/svl/source/items/itemset.cxx#SfxItemSet::Equals",
+        "apps/office/src/sw/source/core/attr/native-format-attribute-notify.test.ts#@fileoverview",
+        "apps/office/src/sw/source/core/undo/native-format-attribute-notify-history.test.ts#@fileoverview",
+        "apps/office/src/sw/browser/editor/native-format-attribute-notify.test.tsx#@fileoverview"
+      ],
+      "justification": "Mapped provenance remains semantically unverified against svl/source/items/itemset.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity. Put now ignores items outside the accepted WhichId ranges, including zero, matching PutImpl; focused assertions cover unchanged local/inherited state and supported entries copied from wider source sets. Other item-set contracts remain unverified. Focused clone assertions now verify independent direct values/states and parent preservation for full same-pool clones; empty clones discard inheritance. SfxItemSet cross-pool clones copy directly SET values only. Item copying follows copy-constructor semantics independently of PutSet. Other module contracts remain unverified. PutSet now follows the pinned invalid-as-default flag (true): INVALID removes a direct target value, DISABLED source values are ignored, and explicit false copies invalid state without independently marking the returned change flag. Writer style/node fallback and complete clone state preservation have focused assertions; other module operations remain unverified. Explicit InvalidateItem and DisableItem now ignore out-of-range IDs instead of throwing, with focused assertions for unchanged direct/inherited state, count, ranges and parent plus supported idempotent transitions. Other operations remain unverified. Parent assignment now follows the pinned inline reference assignment. Missing Get values delegate to the parent Get so each parent/default or INVALID fallback uses that level own pool; local values and disabled parent search retain precedence. Focused tests cover constructor/explicit/reset assignment and distinct child/parent/grandparent defaults. Broader contracts remain unverified. Get now returns the unique DISABLED_POOL_ITEM for disabled entries, including inherited states and IDs without defaults; INVALID still resolves a pool default. Put ignores the singleton, same-pool state clones retain identity without cloning the sentinel, and state-only entries remain absent from browser persistence. These bounded assertions do not establish whole-module parity. The temporary separate value/state maps are replaced by one WhichId-to-item map, matching PoolItemMap architecture. Distinct INVALID and DISABLED entries retain their zero-WhichId singleton identity under the original map key. Get, Count, Clear, state transitions and copying use that map; Put excludes sentinel equality before comparing ordinary values. Full same-pool copies retain states while PutSet skips DISABLED and cross-pool copies retain SET only. Sorted SET-only entries remain a browser projection. Focused mixed-entry tests preserve counts, replacements and snapshot filtering; broader module parity remains unverified. Iteration39 restores registered-item handle copy/commit and Changed broadcast deltas before storage mutation. Unchanged complete native owners/helpers/storage bodies (24 definitions,300 sequences,1815 states) compare actual SwDoc/SwTextNode base-owner calls,retained handles,return counts and observer delta counts. Independent literal tests assert inherited/pool-default delta values,slot/sentinel exclusions,no-op overload retention and nested set/reset notifications. Full native IStyleAccess pooling/dedup,modify locks,cache,refcount,surrogates,conditional/RES_AUTO_STYLE items and client lifetime remain unimplemented or unverified. This fresh-handle/unlocked browser observer profile does not establish whole-module or native defaults parity. A destructive callback deleting the final handle crashed the unchanged native raw observer adapter;the trace is preserved as unresolved client-lifetime evidence and is not assigned fabricated parity expectations. Iteration112 restores the base SfxItemSet::Equals contract with explicit comparePool: self shortcut, conditional pool/parent identity, direct Count, empty equality without range comparison, keyed direct SET/INVALID/DISABLED state and SET item value equality. The existing Writer automatic-style value comparison delegates to this owner instead of a SET-only projection helper, preventing loss of marker distinctions and parent-owned formatting when adjacent hints normalize. Independent actual-owner/map/item/hint/clone/projection tests cover this bounded correction. Native automatic-style equality itself requires shared handles from document-owned StylePool; handle interning and pointer equality remain open architectural work and are not certified by this leaf. Complete module/notification/layout/filter/UI contracts remain unverified; no status/default/exception promotion or registered I/O/recovery change. Iteration245 ports precise native AttrSetChangeHint old/new effective values, modify locking and inherited Differentiate filtering to original registered clients. Row/cell generic attribute overrides are removed and copying claims are locked. Native default items127/157/158/159 supply actual protection flags, numeric format100/locale normalization, detached non-shareable formula and zero double. Browser snapshot restoration stays a bounded boundary. Full SwTableFormula inheritance/parser/calculation/name conversion, presentation/UNO and native frame invalidation/geometry remain unverified. Targeted verification pending; last full237,next247; no semantic promotion. Iteration245 verified1575 unique app cases including20 fresh native format notification/default/ownership/history/UI cases and13 Chromium cases. Initial1538pass6fail; closure1 resolves6failures and explicitly revalidates3 materially affected fresh device/UI scenarios,9pass30skip; closure2 only new/unexecuted related cases31pass14skip. All660 prior acceptance files byte-identical. Actual app/inventory all-four100 binds current complete sources/maps and complete unchanged native declarations/signatures/bodies/enclosing branches/all locations from244; generated V8 duplicate method display ordinal changes are documented with full source hashes, no individual counter sanitization. Browser paint notification follows native clients without adding a document mutation. Existing317 metadata fields/order/status/default/classification/evidence prefixes preserved, one new cellatr record unverified. Full SwTableFormula second-base/calculation/name conversion/UNO, native frame invalidation/geometry and direct native UI registration remain partial. Registered IO/recovery/settings deviations preserved; last full237,next247; no full245.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SfxItemState",
+        "WhichRange",
+        "WhichRangesContainer",
+        "SfxItemSet"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "svl/source/items/itemset.cxx",
+      "upstreamSymbols": [
+        "SfxItemState",
+        "WhichRange",
+        "WhichRangesContainer",
+        "SfxItemSet"
+      ]
+    }
+  }
+}

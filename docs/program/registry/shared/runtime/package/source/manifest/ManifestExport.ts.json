@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/package/source/manifest/ManifestExport.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "odf-filter",
+    "capabilityIds": [
+      "CAP-0113"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/package/source/manifest/ManifestExport.ts#ODT_MIMETYPE",
+        "vendor/libreoffice-reference/package/source/manifest/ManifestExport.cxx#ManifestExport::ManifestExport"
+      ],
+      "justification": "Mapped provenance remains semantically unverified against package/source/manifest/ManifestExport.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ODT_MIMETYPE",
+        "createOdtManifestXml",
+        "validateOdtManifestXml"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "package/source/manifest/ManifestExport.cxx",
+      "upstreamSymbols": [
+        "ManifestExport::ManifestExport",
+        "Base64::encode",
+        "OUString::number",
+        "uno::RuntimeException"
+      ]
+    }
+  }
+}

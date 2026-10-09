@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "CRC32",
+          "path": "apps/office/src/package/source/zipapi/CRC32.ts"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "CRC32::CRC32",
+          "path": "vendor/libreoffice-reference/package/source/zipapi/CRC32.cxx"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/package/source/zipapi/CRC32.ts",
+    "localSymbols": [
+      "CRC32"
+    ],
+    "omittedResponsibilities": [
+      "Upstream obligations outside CRC32::CRC32, CRC32::reset, CRC32::getValue, CRC32::updateSegment and the bounded CRC32 contract remain intentionally omitted."
+    ],
+    "preservedResponsibilities": [
+      "Reimplements the ZIP CRC-32 accumulator from pinned LibreOffice `package/source/zipapi/CRC32.cxx`."
+    ],
+    "status": "mapped",
+    "upstreamPath": "package/source/zipapi/CRC32.cxx",
+    "upstreamSymbols": [
+      "CRC32::CRC32",
+      "CRC32::reset",
+      "CRC32::getValue",
+      "CRC32::updateSegment"
+    ]
+  },
+  "legacyOrder": 32
+}

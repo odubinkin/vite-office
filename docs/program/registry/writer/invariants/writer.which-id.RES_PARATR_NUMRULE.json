@@ -1,0 +1,19 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "divergenceClass": "none",
+    "id": "writer.which-id.RES_PARATR_NUMRULE",
+    "kind": "which-id",
+    "local": {
+      "marker": "export const RES_PARATR_NUMRULE = 73 as const;",
+      "path": "apps/office/src/sw/inc/hintids.ts",
+      "value": 73
+    },
+    "upstream": {
+      "marker": "RES_PARATR_NUMRULE(RES_PARATR_BEGIN + 9)",
+      "path": "sw/inc/hintids.hxx",
+      "value": 73
+    }
+  }
+}

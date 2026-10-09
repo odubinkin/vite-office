@@ -1,0 +1,69 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "SwNumRuleItem",
+          "path": "apps/office/src/sw/source/core/para/paratr.ts"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/ndtxt-list-indent.ts",
+          "marker": "resolveSwListLevelIndents"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/ndtxt-list-indent.ts",
+          "marker": "resolveSwListParagraphIndents"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-view-list-indent-mask.test.tsx",
+          "marker": "selectsIndependentMask"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-view-list-indent-mask.test.tsx",
+          "marker": "tracksLiveMaskHistory"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-view-list-indent-mask.test.tsx",
+          "marker": "selectsStyleHierarchy"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/para/paratr.ts",
+          "marker": "ListLevelIndents"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "SwNumRuleItem",
+          "path": "vendor/libreoffice-reference/sw/source/core/para/paratr.cxx"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/paratr.hxx",
+          "marker": "enum class ListLevelIndents"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/core/para/paratr.ts",
+    "localSymbols": [
+      "SwNumRuleItem"
+    ],
+    "omittedResponsibilities": [
+      "Upstream obligations outside SwNumRuleItem, SwFormatDrop::CreateDefault, SwRegisterItem::CreateDefault, SwNumRuleItem::CreateDefault and the bounded SwNumRuleItem contract remain intentionally omitted."
+    ],
+    "preservedResponsibilities": [
+      "Reimplements the bounded Writer paragraph pool items from pinned `sw/source/core/para/paratr.cxx`.",
+      "Iteration101 restores native sw::ListLevelIndents0/1/2 flags and live text-node applicability per axis: actual GetNum-bound rule presence, direct margin-before-direct-rule priority, and nearest style indent-before-rule traversal with native true fallthrough. A source-owned ndtxt split keeps the node under the unchanged1000-line limit. The selected alignment-value reader independently resolves supported text-left and counted signed16 first-line inputs with the existing ignore-first-line flag. Independent literal ownership/zero/signed boundaries, style/direct override, graph/clone destination and actual Writer history/no-op/direct absence are covered. Existing print bounds, frozen projection, rendering, filters and serialized listGeometryWins sideband remain byte-identical; native consumer migration requires imported custom-style hierarchy restoration after the initial failed absent application gate exposed flattened-style and exact DTO contracts. All304prior tests unchanged. Native complete import/style/tab/device/RTL/table/redline/list/frame layout and parent parity remain unverified. No module/status/default/exception or registered I/O/recovery promotion."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/para/paratr.cxx",
+    "upstreamSymbols": [
+      "SwNumRuleItem",
+      "SwFormatDrop::CreateDefault",
+      "SwRegisterItem::CreateDefault",
+      "SwNumRuleItem::CreateDefault"
+    ]
+  },
+  "legacyOrder": 194
+}

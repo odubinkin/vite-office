@@ -6,6 +6,13 @@ import { readdir, readFile } from "node:fs/promises";
 import { basename, dirname, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
+import {
+  loadInventoryRegistry,
+  projectRegistryViews,
+} from "./libreoffice-inventory/registry-storage";
+
+import { selectRuntimeModulePaths } from "./libreoffice-inventory/runtime-inventory";
+
 /** Strict source-provenance JSON schema version. */
 export const SOURCE_PROVENANCE_SCHEMA_VERSION = 3;
 
@@ -671,11 +678,22 @@ async function main(): Promise<void> {
   const baseline = JSON.parse(
     await readFile(resolve(repositoryRoot, "docs/program/libreoffice-baseline.json"), "utf8"),
   ) as { commit: string; tag: string };
-  const runtime = JSON.parse(
-    await readFile(resolve(repositoryRoot, "docs/program/parity/runtime-inventory.json"), "utf8"),
-  ) as { modules: SourceProvenanceRuntimeModule[] };
+  const views = projectRegistryViews(
+    await loadInventoryRegistry(resolve(repositoryRoot, "docs/program/registry")),
+  );
+  const runtime = views["docs/program/parity/runtime-inventory.json"] as {
+    modules: SourceProvenanceRuntimeModule[];
+  };
+  assertSamePaths(
+    selectRuntimeModulePaths(
+      "apps/office/src",
+      await readdir(resolve(repositoryRoot, "apps/office/src"), { recursive: true }),
+    ),
+    runtime.modules.map(selectRuntimePath),
+    "Registry runtime discovery",
+  );
   const manifest = parseSourceProvenanceManifest(
-    await readFile(resolve(repositoryRoot, "docs/program/source-provenance.json"), "utf8"),
+    JSON.stringify(views["docs/program/source-provenance.json"]),
     baseline,
   );
   const report = await validateSourceProvenanceManifest(

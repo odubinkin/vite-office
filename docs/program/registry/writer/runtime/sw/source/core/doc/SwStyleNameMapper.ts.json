@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/doc/SwStyleNameMapper.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "document-model",
+    "capabilityIds": [
+      "CAP-0113",
+      "CAP-0135"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/doc/SwStyleNameMapper.ts#SwStyleNameMapper",
+        "vendor/libreoffice-reference/sw/source/core/doc/SwStyleNameMapper.cxx#SwStyleNameMapper::GetUIName",
+        "apps/office/src/sw/source/core/attr/internet-pool-default.test.ts#native document-pool internet default"
+      ],
+      "justification": "Iteration126 restores the styled RES_TXTATR_INETFMT pool default and two native style IDs,distinct from CreateDefault zero item. Copy/equality preserve both IDs;paired setters retain independent style names/IDs. Default registration no longer requires browser restore factory;unregistered snapshot decode still rejects. English two-entry pool-name mapping is bounded;localized/all-family/custom style resolution,active DTO styled-constructor migration,ODF programmatic/UI conversion,UNO/macros/visited-style clients/lifetime and whole core/UI remain unverified. All pre-existing semantic statuses/defaults/exceptions and registered save/open/recovery deviations remain unchanged.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SwStyleNameMapper"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/core/doc/SwStyleNameMapper.cxx",
+      "upstreamSymbols": [
+        "SwStyleNameMapper::GetUIName"
+      ]
+    }
+  }
+}

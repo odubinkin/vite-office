@@ -1,0 +1,26 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "evidence": {
+      "local": [
+        {
+          "marker": "saveWriterOdtToPort",
+          "path": "apps/office/src/sw/browser/workflows/writer-document-io.ts"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/browser/workflows/writer-document-io.ts",
+    "rationale": "Owns browser ODT and TXT download workflows while the Writer document graph and filters remain in the shell and filter modules.",
+    "responsibilities": [
+      "Adapts Writer ODT and TXT exports to browser download ports."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser file and IndexedDB APIs replace native file dialogs and storage implementations."
+    },
+    "status": "local-only"
+  },
+  "legacyOrder": 125
+}

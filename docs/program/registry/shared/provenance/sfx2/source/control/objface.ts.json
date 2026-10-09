@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "SfxInterface",
+          "path": "apps/office/src/sfx2/source/control/objface.ts"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "SfxInterface::GetSlot",
+          "path": "vendor/libreoffice-reference/sfx2/source/control/objface.cxx"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sfx2/source/control/objface.ts",
+    "localSymbols": [
+      "SfxInterface"
+    ],
+    "omittedResponsibilities": [
+      "Native object bars, child windows, popup menus, status bars, and interface inheritance remain outside the supported slice."
+    ],
+    "preservedResponsibilities": [
+      "Preserves immutable generated slot maps and lookup by numeric slot or command URL."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sfx2/source/control/objface.cxx",
+    "upstreamSymbols": [
+      "SfxInterface::GetSlot",
+      "SfxInterface::SetSlotMap"
+    ]
+  },
+  "legacyOrder": 45
+}

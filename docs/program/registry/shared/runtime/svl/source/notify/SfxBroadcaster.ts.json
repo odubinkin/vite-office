@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svl/source/notify/SfxBroadcaster.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "document-model",
+    "capabilityIds": [
+      "CAP-0111"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/svl/source/notify/SfxBroadcaster.ts#SfxBroadcaster",
+        "vendor/libreoffice-reference/svl/source/notify/SfxBroadcaster.cxx#SfxBroadcaster::Broadcast",
+        "vendor/libreoffice-reference/svl/source/notify/SfxBroadcaster.cxx#SfxBroadcaster::AddListener",
+        "vendor/libreoffice-reference/svl/source/notify/SfxBroadcaster.cxx#SfxBroadcaster::RemoveListener",
+        "apps/office/src/svl/source/notify/notify.test.ts#notifies a listener reusing a future vacant slot during broadcast",
+        "apps/office/src/sw/source/core/table/native-row-frame-format.test.ts#@fileoverview",
+        "apps/office/src/sw/source/core/undo/native-row-frame-format-history.test.ts#@fileoverview",
+        "apps/office/src/sw/browser/presentation/native-row-frame-format.test.tsx#@fileoverview"
+      ],
+      "justification": "Broadcast now keeps the pinned initial slot count and reuses removal slots, so a newly registered listener in a future vacant slot receives the current hint. The wider lifetime, duplicate and dying-hint contracts remain unverified for this browser subset. Iteration241 replaces per-row canonical value records with native document-owned SwTableLineFormat item sets and original SwClient registration. ClaimFrameFormat clones shared native owners before mutation; operation-local old-to-new reuse keeps selected peers sharing and unselected peers intact. Row insertion shares the source format; SaveTable retains unique direct native item sets and indexed row topology and reconstructs owners for history, matching represented flat-grid source semantics. Value records remain explicit construction/transport boundaries only. Full row frame client movement/destruction, native modify hint types, pooling, merged/nested tables, full frame attributes and UNO remain unverified. Targeted verification pending; last full237,next247; all prior states/defaults/classifications and registered I/O/recovery deviations preserved. Iteration241 verified closure:12 fresh literal native registration/claim/sharing, complete item-set history and mounted direct UI cases plus related modules produced297 unique app passes and11 Chromium passes. Four initial fresh fixture failures were resolved in a failed-only four-case closure with the passing insertion test skipped. No passing replay or full suite; cadence last237,next247. All-four100% app and inventory coverage uses actual targeted counters and prior240 only with entire source/maps equality or complete declaration/body/enclosing branch/location proofs. Original rows/boxes/text/cursors survive repeated attribute history while shared formats are reconstructed. Full row layout client movement/destruction, native modify hints/pooling/merged/nested/UNO and whole core/browser parity remain unverified. No prior status/default/classification promotion.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SfxHint",
+        "SfxListenerTarget",
+        "SfxBroadcaster"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "svl/source/notify/SfxBroadcaster.cxx",
+      "upstreamSymbols": [
+        "SfxBroadcaster::AddListener",
+        "SfxBroadcaster::RemoveListener",
+        "SfxBroadcaster::Broadcast",
+        "SfxBroadcaster::~SfxBroadcaster"
+      ]
+    }
+  }
+}

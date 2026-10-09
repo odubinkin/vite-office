@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sfx2/source/control/request.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "dispatch",
+    "capabilityIds": [
+      "CAP-0101"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sfx2/source/control/request.ts#SfxRequest",
+        "vendor/libreoffice-reference/sfx2/source/control/request.cxx#SfxRequest",
+        "apps/office/src/sfx2/source/control/unoctitm.test.ts#explicit UNO key modifiers",
+        "apps/office/src/sw/source/core/edit/edfcol-modifier.test.ts#native Ctrl paragraph StyleApply",
+        "apps/office/src/sw/browser/presentation/writer-style-modifier.test.tsx#Writer explicit style modifier commands"
+      ],
+      "justification": "Ports the bounded slot, item-argument, completion, and return-item request contract while exposing browser payloads only at the adapter boundary. Iteration109 carries explicit unsigned UNO KeyModifier metadata separately from slot arguments to zero-default SfxRequest and document-owned paragraph StyleApply. Only native KEY_MOD1 triggers initial full-character/list reset. The existing content-manager owner constructs the registered native deletion set excluding list83..87; docfmt uses selective node reset with protected nonempty numbering/page/non-NONE break and Ctrl repeated-list eligibility. txtedt removes common automatic-style items while retaining unrelated items, exact flags and internet hints. Collection history owns hints before initial selective reset; the separate exact-reset owner captures after collection processing. Native redo retains list eligibility but omits the initial full-character flag and uses default non-exact hint reset, including repeated-style level asymmetry. Actual request/core/frame/mounted UI/ODT tests cover mask literals, filtering, ordinary/URL separation, protected defaults, inclusive empty/end-zero spans, untouched neighbors, partial/whole hints, history ownership, three cycles and continued input/export. Every prior test is byte-identical. Language/direction/fields/marks/layout/redlines/rings/inline headings, full UNO transforms/style families/native defaults/history and complete UI parity remain unverified; no status/default/exception promotion or registered save/open/recovery change. Older missing-modifier/deletion-set claims are superseded only for this bounded registered operation.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SfxRequest",
+        "createRequestArguments",
+        "createRequestReturnItem",
+        "parseCommandUrlArguments"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sfx2/source/control/request.cxx",
+      "upstreamSymbols": [
+        "SfxRequest"
+      ]
+    }
+  }
+}

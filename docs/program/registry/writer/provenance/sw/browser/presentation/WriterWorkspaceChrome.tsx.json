@@ -1,0 +1,55 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "evidence": {
+      "local": [
+        {
+          "marker": "WriterWorkspaceChrome",
+          "path": "apps/office/src/sw/browser/presentation/WriterWorkspaceChrome.tsx"
+        },
+        {
+          "path": "apps/office/src/sfx2/browser/presentation/SidebarDeck.test.tsx",
+          "marker": "retainsDeckContent"
+        },
+        {
+          "path": "apps/office/src/sfx2/browser/presentation/SidebarDeck.test.tsx",
+          "marker": "togglesSelectedDeck"
+        },
+        {
+          "path": "apps/office/src/sfx2/browser/presentation/SidebarDeck.test.tsx",
+          "marker": "cancelsDeckFocus"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-view-sidebar-deck.test.tsx",
+          "marker": "retainsWriterDeck"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-view-sidebar-deck.test.tsx",
+          "marker": "recreatesSidebarDeck"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-view-sidebar-deck.test.tsx",
+          "marker": "focusesOwningWriter"
+        },
+        {
+          "path": "apps/office/e2e/writer-sidebar-deck.spec.ts",
+          "marker": "Properties deck closes and reopens with document focus"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/browser/presentation/WriterWorkspaceChrome.tsx",
+    "rationale": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner.",
+    "responsibilities": [
+      "Renders the browser Writer workspace chrome and presentation regions.",
+      "Existing Properties deck close/reopen follows inspected sfx2 SidebarController RequestCloseDeck/RequestOpenDeck/OpenThenToggleDeck, TabBar activation and FocusManager Escape: close retains mounted content and an unselected rail independently of whole Sidebar visibility, activation first returns to the owning document, cancellation does not toggle. Owned lifecycle/mount/state/frame/no-dispatch and rebuilt desktop/mobile browser checks cover only this contract. Whole F6/Sidebar panel focus, Help/settings/floating/other decks/default sizing and complete native composition remain open."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser DOM and React replace the native VCL presentation boundary."
+    },
+    "status": "local-only"
+  },
+  "legacyOrder": 117
+}

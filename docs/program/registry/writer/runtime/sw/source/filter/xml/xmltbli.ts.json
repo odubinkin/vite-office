@@ -1,0 +1,64 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/filter/xml/xmltbli.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "odf-filter",
+    "capabilityIds": [
+      "CAP-0113",
+      "CAP-0128"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/filter/xml/xmltbli.ts#SwXMLTableImport",
+        "vendor/libreoffice-reference/sw/source/filter/xml/xmltbli.cxx#SwXMLTableContext",
+        "apps/office/src/sw/inc/fmtfsize.ts#SwFormatFrameSize",
+        "apps/office/src/sw/source/core/docnode/ndtbl1.ts#GetSwRowHeight",
+        "apps/office/src/sw/source/core/docnode/ndtbl.ts#doc.SetRowHeight",
+        "apps/office/src/sw/source/core/layout/tabfrm.ts#SwRowFrame",
+        "vendor/libreoffice-reference/sw/inc/fmtfsize.hxx#SwFormatFrameSize",
+        "vendor/libreoffice-reference/sw/source/core/layout/atrfrm.cxx#SwFormatFrameSize::operator==",
+        "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl.cxx#SetHeightSizeType",
+        "vendor/libreoffice-reference/sw/source/filter/xml/xmlimpit.cxx#MINLAY",
+        "apps/office/src/sw/inc/fmtornt.ts#SwFormatVertOrient",
+        "apps/office/src/sw/source/core/docnode/ndtbl1.ts#GetBoxSelection",
+        "apps/office/src/sw/source/core/doc/doc.ts#SetBoxAlign",
+        "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx#boxAlign",
+        "vendor/libreoffice-reference/sw/inc/fmtornt.hxx#SwFormatVertOrient",
+        "vendor/libreoffice-reference/sw/source/core/layout/atrfrm.cxx#SwFormatVertOrient::operator==",
+        "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl1.cxx#lcl_GetBoxSel",
+        "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx#get_value_changed_from_saved",
+        "apps/office/src/sw/source/filter/xml/native-cell-box-roundtrip.test.ts",
+        "apps/office/src/xmloff/source/style/native-legacy-bullet-symbol.test.ts",
+        "apps/office/e2e/native-legacy-bullet-symbol.spec.ts",
+        "scripts/check-legacy-font-boundary.test.ts",
+        "apps/office/src/sw/source/core/table/native-independent-columns.test.ts",
+        "apps/office/src/sw/source/filter/xml/native-independent-column-odf.test.ts",
+        "apps/office/src/sw/browser/editor/native-independent-column-render.test.tsx",
+        "apps/office/src/sw/source/core/docnode/native-row-split-items.test.ts#@fileoverview",
+        "apps/office/src/sw/browser/filter/xml/native-row-split-item-transport.test.ts#@fileoverview",
+        "apps/office/src/sw/browser/presentation/native-row-split-core-items.test.tsx#@fileoverview",
+        "apps/office/src/sw/source/core/table/native-row-frame-format.test.ts#@fileoverview",
+        "apps/office/src/sw/source/core/undo/native-row-frame-format-history.test.ts#@fileoverview",
+        "apps/office/src/sw/browser/presentation/native-row-frame-format.test.tsx#@fileoverview"
+      ],
+      "justification": "Delegates SAX table events into canonical Writer rows, cells, styles and page hints while retaining the pinned XML table import ownership boundary. Iteration202 removes scalar row minHeight storage and numeric kernel height contracts. Native SvxSizeItem/SwFormatFrameSize owns both dimensions, both sizing types, both percentages and both relations with native defaults, Which90, full equality, clone and supported default size query. Original rows retain copied items, document getter compares complete items and returns clone; resize uses native document setter with copied full size, preserving Fixed/Minimum and promoting only Variable. Flat layout and mounted cells use native Variable/Minimum/Fixed semantics, fixed content clipped, properties metric from shell common getter. ODT row-height Fixed/min-row-height Minimum/Variable omission and native height clamp1..65535; attributes apply in order. Full percentage/fly/vertical/nested/merged/protection/UNO member IDs/PutValue/pooling/widget/SfxItemSet/full parity remains unverified; all prior contracts/classifications/statuses/exceptions retained. Iteration203 replaces scalar cell vertical alignment with complete SwFormatVertOrient Which109 position0/NONE/PRINT_AREA defaults, native numeric enum values and three-field clone/equality/represented UNO member query/update. Original boxes and insertion undo own independent copied items. SwDoc SetBoxAttr owns native selection/history/notifications; setters traverse ordinary ring points while getters use current point or native table selected boxes. Common full-item getter and orientation-only getter retain mixed/no-item state. Shell delegates; properties reads common shell state and emits only a changed alignment item, native mixed widget fallback top. CSS handles native alignments and safe fixed-row content; ODT maps NONE/CENTER/BOTTOM, process/storage codec restores full primitive items, old scalar only storage ingress. Full pooling/shared frame formats/direct-formatting/HTML resizing/fly/nested/merged/protection/vertical writing and overall parity remain unverified; prior classifications/defaults/contracts/evidence/exceptions retained. Iteration206 draft: scalar kernel cell border/padding storage is replaced by owned SvxBoxItem plus the existing vertical item. Represented lines retain native color/style/width/component arithmetic, signed16 distances/default0, cloning, metrics and supported UNO values; SvxBoxInfoItem retains native validity127. SetTabBorders consumes SfxItemSet and distributes flat union outer/inner lines using source validity rules. Insertion defaults55twips/black10twip lines and0/no-border are preserved. Process/storage uses complete primitive native state with legacy scalar ingress only; ODF and browser paint carry four independent sides. Initial static and upstream-absent runtime verification are pending. Complete native color shading/theme/Word/macros/fly/vertical/RTL/follow/shared-format behavior, per-edge/common-state border widgets and full parity remain unverified. All existing statuses/defaults/evidence/registered I/O/recovery exceptions are preserved. Iteration206 verified closure: the earlier draft pending statement is historical. Native box/info/line ownership, supported values/defaults/metrics, flat source-defined border distribution, original graph and history, complete primitive transport and four-edge ODF/browser paint passed one full upstream-absent profile with failed/new-case-only closures. Current app and inventory actual counters each reach100% lines/statements/functions/branches under complete identical-source/maps or complete contiguous mapped-region proof. All550 prior acceptance contracts are preserved by522 byte-identical files and28 exact native-representation AST migrations; six new acceptance files and two new infrastructure cases are added. Full per-edge/common-state widgets, native themes/shading/Word and RTL/vertical/follow/shared-format completeness remain unverified; no semantic status or registered I/O/recovery exception is promoted. Iteration222 ports the existing StarBats/StarMath bullet import conversion: immutable native224slot tables, uint16 alias arithmetic, hole substitution U+E12C, exact ASCII family match and source repeated GetProperties glyph mutation with only published descriptor renamed StarSymbol. Actual SvXMLImport owns independent lazy handles and production list contexts borrow it through the original Writer importer; SAX root factories retain a separate explicit structural port. The isolated existing constructor fallback uses that same implemented native conversion owner. Native-related StarSymbol/OpenSymbol browser face fallback preserves stored family. Complete physical glyph coverage, other converters/fonts/functions, full native importer/FontDescriptor/VCL and generic empty bullet publication remain unverified; existing Writer table-import adapter remains explicitly partial. Registered I/O/recovery deviations and all prior statuses/defaults preserved. Iteration233 moves connected flat-table column geometry into each original SwTableBox SwFormatFrameSize. Native current-row visible/other-row hidden fuzzy separator union and per-line NewSetTabCols adjustments feed original Writer document attribute history; actual Ctrl+Shift current-line columns replace the retained ordinary shared-column fallback. Source XML union grids/spans and browser device colspans preserve independent original cells, with complete native frame-size values in browser codec and declared grid widths only at import/builder ingress. No row-width side map, graph replacement or TextRuns conversion. Flat unspanned source behavior is represented; full row-span propagation/nested/merged graphs, frame item pooling/UNO, RTL/vertical/SFX/VCL/full ruler state remain partial. Registered recovery/open/save/settings untouched, previous statuses/defaults/classes preserved. Iteration240 owns row splitting as optional SwFormatRowSplit items cloned on row input/read/history, with effective true default. Common core and frame-shell getters return independent concrete items or absence for mixed/no-row input; setters accept concrete items. Native UI forwards the item unchanged to the document owner, ODF inverts only at import/export, and browser transport writes direct primitive rowSplit with legacy keepTogether ingestion. Original cursor/selection/history and full frame-size coexistence remain retained. Full native shared row frame-format pooling/ClaimFrameFormat, nested/merged semantics, presentation/localization/UNO completeness and whole core/UI parity remain unverified. Targeted verification pending; last full237,next247; all prior metadata states/defaults/classifications and registered IO/recovery deviations preserved. Iteration240 verified closure:33 fresh native item/core/history, transport/legacy/ODF and mounted direct item cases plus related modules produced263 unique app passes and11 Chromium passes. Three initial failed cases were resolved in a four-case failed/new-only closure; all previously passing cases were skipped, no passing replay or full suite. App and inventory all-four100% coverage binds actual current targeted counters to prior239 identical whole source/maps or complete mapped-region proofs; unchanged inventory/infra was not rerun. Native rows now own concrete items, while full shared frame-format pooling/claims/UNO/nested/merged contracts and whole core/UI parity remain unverified. No metadata status/default/classification promotion. Iteration241 replaces per-row canonical value records with native document-owned SwTableLineFormat item sets and original SwClient registration. ClaimFrameFormat clones shared native owners before mutation; operation-local old-to-new reuse keeps selected peers sharing and unselected peers intact. Row insertion shares the source format; SaveTable retains unique direct native item sets and indexed row topology and reconstructs owners for history, matching represented flat-grid source semantics. Value records remain explicit construction/transport boundaries only. Full row frame client movement/destruction, native modify hint types, pooling, merged/nested tables, full frame attributes and UNO remain unverified. Targeted verification pending; last full237,next247; all prior states/defaults/classifications and registered I/O/recovery deviations preserved. Iteration241 verified closure:12 fresh literal native registration/claim/sharing, complete item-set history and mounted direct UI cases plus related modules produced297 unique app passes and11 Chromium passes. Four initial fresh fixture failures were resolved in a failed-only four-case closure with the passing insertion test skipped. No passing replay or full suite; cadence last237,next247. All-four100% app and inventory coverage uses actual targeted counters and prior240 only with entire source/maps equality or complete declaration/body/enclosing branch/location proofs. Original rows/boxes/text/cursors survive repeated attribute history while shared formats are reconstructed. Full row layout client movement/destruction, native modify hints/pooling/merged/nested/UNO and whole core/browser parity remain unverified. No prior status/default/classification promotion.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SwXMLTableImport"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/filter/xml/xmltbli.cxx",
+      "upstreamSymbols": [
+        "SwXMLTableContext"
+      ]
+    }
+  }
+}

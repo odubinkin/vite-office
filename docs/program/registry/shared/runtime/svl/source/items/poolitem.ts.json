@@ -1,0 +1,61 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svl/source/items/poolitem.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "formatting-model",
+    "capabilityIds": [
+      "CAP-0112"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/svl/source/items/poolitem.ts#SfxPoolItemValue",
+        "vendor/libreoffice-reference/svl/source/items/poolitem.cxx#SfxPoolItem",
+        "vendor/libreoffice-reference/svl/source/items/poolitem.cxx#SfxPoolItem::SfxPoolItem",
+        "apps/office/src/svl/source/items/itemset.test.ts#validates, clones, compares, and serializes string and integer items",
+        "apps/office/src/svl/source/items/poolitem.ts#DisabledItem",
+        "vendor/libreoffice-reference/svl/source/items/poolitem.cxx#class DisabledItem",
+        "vendor/libreoffice-reference/include/svl/poolitem.hxx#IsDisabledItem",
+        "vendor/libreoffice-reference/svl/source/items/poolitem.cxx#SfxPoolItem::QueryValue",
+        "apps/office/src/svl/source/items/itemset.test.ts#implements the pinned disabled singleton clone and value contracts",
+        "apps/office/src/svl/source/items/poolitem.ts#InvalidItem",
+        "vendor/libreoffice-reference/svl/source/items/poolitem.cxx#class InvalidItem",
+        "vendor/libreoffice-reference/include/svl/poolitem.hxx#IsInvalidItem",
+        "apps/office/src/svl/source/items/itemset.test.ts#distinguishes the invalid sentinel from disabled and ordinary items",
+        "apps/office/src/svx/source/dialog/native-column-item.test.ts",
+        "apps/office/src/sw/source/uibase/uiview/native-column-item-boundary.test.ts",
+        "scripts/native-column-item-boundary.test.ts"
+      ],
+      "justification": "Pinned SfxPoolItem accepts WhichId zero for transient/request values and asserts the SHRT_MAX ceiling; source-backed tests now distinguish that from SfxItemSet storage ranges. Broader pool-item behavior remains unverified. The module now owns DISABLED_POOL_ITEM and its identity helper, with WhichId zero, null Clone and the pinned trivial equality operator. QueryValue exposes no payload, reflecting the unsupported base UNO value query; browser codec rejects serialization. Focused assertions cover this sentinel and ordinary item contracts; broader behavior remains unverified. The module also owns the distinct INVALID_POOL_ITEM and IsInvalidItem identity helper, matching the pinned InvalidItem class with zero WhichId, null Clone, trivial equality and no value payload. Tests distinguish both static sentinel classes and reject them at the browser serialization boundary. Broader pool-item behavior remains unverified. Iteration113 introduces the document-owned automatic character StylePool and IStyleAccess/SwStyleManager owner. Concrete SET-only parent-root/item-child/leaf-clone insertion shares handles for shareable items and retains fresh leaves for non-shareable items. Ordinary character creation and browser snapshot decode now use the document pool. SwFormatAutoFormat is non-shareable, retains explicitly supplied handles, copies the shared reference and compares pointer identity rather than item-set value equality. Independent real-owner regressions cover insertion/parent/input/copy/adjacent-range/codec contracts; one obsolete raw-value merge expectation is corrected. Selective reset pool interning, sentinel-bearing style insertion, native unordered iterator order/collisions, paragraph/ignorable families, unused-style enumeration, name/cache/lifetime semantics, native null default constructor and UNO name QueryValue remain unverified. Browser item-record persistence remains the existing adapter; full modules/model/layout/notification/filter/UI parity is not certified. Registered save/open/recovery deviations and existing semantic statuses/defaults/exceptions remain unchanged. Iteration229 introduces actual production-used SvxColumnItem ownership at the SwView table-column conversion boundary from StateTabWin. Native visibility/end/min/max descriptions replace direct SwTabCols interpretation during document column drag admission, while original SwTabCols remains model/preview/apply data. Native defaults, upper-only65535 description clamp, copied Append/Clone and equality excluding ortho are retained. The svx->svl edge is native Library_svx-owned, with no SW/browser reverse dependency. Full SvxRuler/SfxBindings slots, complete StateTabWin frames/rows, pooled refcount mutability and UNO member queries/PutValue remain partial or unverified. Registered IO deviations and all semantic states/defaults/classes remain unchanged.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SfxPoolItemValue",
+        "SfxPoolItemSnapshot",
+        "SfxPoolItem",
+        "DISABLED_POOL_ITEM",
+        "IsDisabledItem",
+        "INVALID_POOL_ITEM",
+        "IsInvalidItem"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "svl/source/items/poolitem.cxx",
+      "upstreamSymbols": [
+        "SfxPoolItem",
+        "DefaultItemInstanceManager::find",
+        "SfxPoolItem::getItemInstanceManager",
+        "SfxPoolItem::SfxPoolItem",
+        "DisabledItem",
+        "DISABLED_POOL_ITEM",
+        "InvalidItem",
+        "INVALID_POOL_ITEM"
+      ]
+    }
+  }
+}

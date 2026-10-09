@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/txtnode/ndtxt-hint-update.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "document-model",
+    "capabilityIds": [
+      "CAP-0111",
+      "CAP-0126"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/txtnode/ndtxt-hint-update.ts#UpdateTextHints",
+        "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx#SwTextNode::Update",
+        "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx#SwTextNode::InsertText"
+      ],
+      "justification": "Iteration122 excludes INET54 from adjacent value merging per native MergePortions and updates ordinary insert/pure-erase coordinates on actual owned attributes per SwTextNode::Update/default InsertText. Source-owned ndtxt-hint-update decomposition preserves existing1000-line gates. Supported positive/negative ranges,paragraph-start DontExpandStart,end DontExpand reset,INET-first end suppression/AUTO fresh collector and ignored DontMoveAttr match the bounded native non-overlapping AUTO/INET slice. Continuous links keep item/object/map identity;equal adjacent links remain distinct through construction/copy/cut/transfer/history/graph16,even after deleting a gap.322 new literal cases cover both families,eight flags,all boundary relations and mixed end flags. Two old hyperlink expectations correct adjacent Count/comment2 to3 and post-gap-cut Count/end1/6 to2/3;341 other prior tests stay byte-identical. First absent app run2597pass/2fail retained100%coverage;only2failedcases replayed after test-only corrections,no production/full suite/build replay. Explicit formatted insertion/fragment/undo adapters retain their existing contracts.234 existing runtime rows retain statuses/defaults/exceptions except two bounded appendices;one new extracted native helper remains unverified. Native empty-hint retention,full Insert modes/ignore-expand locks/families/BuildPortions/nesting,explicit replacement/copy destination/same-node move/split/join/refcounts/destruction/listeners and broad core/UI parity remain unverified. Registered save/open/recovery deviations preserved;no module/goal promotion. Iteration123 restores SwTextAttr's protected start-only base and optional end,SwTextAttrEnd's ranged end notifications without range-order rejection,and twelve private native flags/accessors. SwTextAttrNesting initializes DontExpand/LockExpandFlag/DontExpandStart/Nesting true;SwTextINetFormat additionally sets CharFormatAttr and its item's GetTextINetFormat backlink. MakeTextAttr and production hyperlink creation now construct concrete internet attributes;fresh copied AUTO flags are false while INET nesting/char-format defaults are true. This supersedes prior generic false-INET constructor/copy/reset claims in iterations114-122;native locked DontExpand reset remains blocked. Portable snapshots preserve concrete ranged kind and independent supported flags,distinct from native deleted copy construction. Existing generic range fixtures use SwTextAttrEnd;fresh concrete factory expectations and native temporary crossed-end write expectations are corrected without weakening range/value/ownership checks. JavaScript integer guards and public internal friend-storage/projection adapters remain bounded language boundaries. Native item holders/refcounts/destruction/listeners,full ChgTextNode/style clients/visited behavior,empty-hint retention/full nesting insertion/modes,nondefault unsupported graph flags and other attribute families remain unverified. Existing semantic statuses/defaults/exceptions and registered save/open/recovery deviations remain unchanged;one new source-owned txtatr2 module remains unverified,no module or goal promotion. Iteration130 retains meaningful zero AUTO53/INET54 ranges in actual native maps. Native CanBeDeleted releases only count-empty maps;zero-count node erasure preserves nonempty ownership. EraseTextHints performs bounded no-dummy interior GC before negative Update,retaining exact-end attributes as zero ranges. Generic negative Update remains coordinate-only. Default InsertText restores DontExpand empty points and leaves other empty points at insertion end before nonempty paragraph-start expansion. Zero AUTO ranges never merge or conceal positive overlap. Existing assertTextRange moves unchanged to the existing range helper under the1000-line gate. Literal two-family/eight-flag erasure and insertion matrices plus actual values/backlinks/inactivity/copies/graph16/Worker5/history cover this bounded path. All356 prior tests and241 runtime states/defaults/exceptions retained. Native Insert flags/EMPTY/FORCE/NOHINT/selection replacement,GCAttr invocation/full zero slicing/COPY/BuildPortions/dummy/endless/other families/style clients/UNO/refcounts/full core/UI remain unverified;registered I/O deviations preserved,no module/goal promotion. Iteration131 restores private SwNode IgnoreDontExpand=false with silent native accessors. Bound positive SwpHints.Update reads its own node state and becomes coordinate-only; DEFAULT insertion applies separate AdjustInsertTextHints end-equal and paragraph-prefix adjustment on actual attributes after Update. Ignore expands end-equal ranges without resetting locked or unlocked flags; DEFAULT postprocessing can restore both nonempty ends and empty points. Existing comparator moves unchanged into the range helper under the1000-line gate. Literal two-family/eight-mask/lock/ignore/boundary tests cover actual ownership and fresh false clone/graph16/Worker5 node state. All357 prior tests and241 runtime states/defaults/exceptions remain unchanged. Native Insert flags/temporary FORCE toggles/manager defaults/callers/selection replacement,full GCAttr/COPY/BuildPortions/families/style clients/UNO/refcounts/full core/UI remain unverified; registered I/O deviations preserved,no module or goal promotion. Iteration132 restores native SwInsertFlags DEFAULT0/EMPTYEXPAND1/NOHINTEXPAND2/FORCEHINTEXPAND4 at IDocumentContentOperations.hxx ownership and the native third-mode InsertText signature;portable explicit items/link move to fourth/fifth positions. Manager InsertString defaults EMPTYEXPAND and forwards explicit modes. Bound node FORCE temporarily overrides Ignore during coordinate Update and restores old state before mode postprocessing;NOHINT wins end-equal restoration,EMPTY expands eligible zero hints and continues,NOHINT blocks paragraph-prefix. Source-owned insertion preparation and unchanged comparator extraction retain1000-line gates. Literal mode/mask/family/lock/oldIgnore/boundary matrices cover actual objects/maps/items/backlinks/7INETvalues/IDs and manager defaults/temporary restoration/adapters. Five prior fixtures and existing typed undo receive syntax-only DEFAULT positional migration;353other prior tests remain byte-identical. Existing241runtime states/defaults/exceptions and registered I/O deviations preserved;new enum module remains wholly unverified. Native collapsed EMPTY/selection FORCE shell callers and stored undo flags are next dependent work;full manager undo/grouping/redline/multicursor/native SwContentIndex arguments/GCAttr/COPY/BuildPortions/families/style clients/UNO/refcounts/full core/UI remain unverified,no module or goal promotion.",
+      "knownViolations": [],
+      "localSymbols": [
+        "UpdateTextHints",
+        "EraseTextHints",
+        "AdjustInsertTextHints"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/core/txtnode/ndtxt.cxx",
+      "upstreamSymbols": [
+        "SwTextNode::Update",
+        "SwTextNode::InsertText"
+      ]
+    }
+  }
+}

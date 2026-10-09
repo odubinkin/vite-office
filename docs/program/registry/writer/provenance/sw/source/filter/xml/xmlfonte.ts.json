@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "createWriterFontAutoStylePool",
+          "path": "apps/office/src/sw/source/filter/xml/xmlfonte.ts"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "SwXMLFontAutoStylePool_Impl::SwXMLFontAutoStylePool_Impl",
+          "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmlfonte.cxx"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/filter/xml/xmlfonte.ts",
+    "localSymbols": [
+      "createWriterFontAutoStylePool"
+    ],
+    "omittedResponsibilities": [
+      "Font style-name, family, pitch, charset, and embedding metadata remain outside the bounded browser font item model."
+    ],
+    "preservedResponsibilities": [
+      "Collects Writer pool defaults and document font items into a deterministic document-wide XML font auto-style pool."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/filter/xml/xmlfonte.cxx",
+    "upstreamSymbols": [
+      "SwXMLFontAutoStylePool_Impl",
+      "SwXMLFontAutoStylePool_Impl::SwXMLFontAutoStylePool_Impl",
+      "SwXMLExport::CreateFontAutoStylePool"
+    ]
+  },
+  "legacyOrder": 244
+}

@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/ui/table/rowht.ts",
+    "status": "mapped",
+    "upstreamPath": "sw/source/ui/table/rowht.cxx",
+    "localSymbols": [
+      "SwTableHeightDlg"
+    ],
+    "upstreamSymbols": [
+      "SwTableHeightDlg"
+    ],
+    "preservedResponsibilities": [
+      "Iteration212 pending verification: represented row-height draft captures original shell GetRowHeight, MINLAY23 and Fixed/non-Fixed Fit to size defaults; Apply creates Fixed/Minimum item via SetRowHeight. Separate generated SetRowHeight slot20507 at Table > Size replaces extra Text Flow minimum-height field. Browser Help presents source resource contextual text; full native Help service/unit preferences/accessibility/modal focus lifecycle and other size commands remain unverified. All prior291 metadata fields/prefixes/defaults/statuses/registered IO/recovery exceptions retained, no blanket promotion.",
+      "Iteration212 verified: source SwTableHeightDlg controls and SetRowHeight slot20507/menu Table > Size replace misplaced Table Properties height ingress. Native MINLAY23, Fixed/Minimum/Variable capture, Fit to size, current/selected row owners, Cancel/Escape/Enter, repeated Undo/Redo, ODT first edited row reopen and continued editing pass. Menu focus return now preserves native cursor/row selection as SwEditWin::GetFocus; ordinary paragraph input still resolves its coordinate. ONE full upstream-absent profile plus original-failure/genuinely-new-only closures resolves actual13495 app/110 inventory/14 infrastructure/272 Chromium cases, zero passing replay; focused35app/4inventory skip observations retained. Strict source-bound actual100app L16257/S17843/F4138/B13341 and inventory L1464/S1523/F384/B1081: app289 whole current-byte-identical files and one complete contiguous controller transfer; inventory38whole files; invalid V8 inferred negative else uses entire prior verified identical paintfrm map/counters, no individual counter sanitizing or exclusions. Prior291 complete records/statuses/defaults/registered exceptions preserved; native Help/unit preferences/full dialog lifecycle/other size slots and obsolete direct minRowHeight API compatibility remain unverified follow-up, no deliberate exception or whole-parity claim."
+    ],
+    "omittedResponsibilities": [
+      "Native unit preferences, full Help service and complete dialog/core parity remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/ui/table/rowht.ts",
+          "marker": "SwTableHeightDlg"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/ui/table/rowht.cxx",
+          "marker": "SwTableHeightDlg"
+        }
+      ]
+    }
+  },
+  "legacyOrder": 250
+}

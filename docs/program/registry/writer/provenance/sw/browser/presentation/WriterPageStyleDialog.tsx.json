@@ -1,0 +1,26 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "evidence": {
+      "local": [
+        {
+          "marker": "WriterPageStyleDialog",
+          "path": "apps/office/src/sw/browser/presentation/WriterPageStyleDialog.tsx"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/browser/presentation/WriterPageStyleDialog.tsx",
+    "rationale": "Presents the bounded Writer page-format settings through accessible React controls and forwards changes to the document model instead of retaining independent page state.",
+    "responsibilities": [
+      "Presents the bounded page-format controls and validates page settings."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "React controls replace the native PageFormatPage dialog."
+    },
+    "status": "local-only"
+  },
+  "legacyOrder": 109
+}

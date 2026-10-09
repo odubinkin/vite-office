@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sfx2/source/dialog/basedlgs.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "dispatch",
+    "capabilityIds": [
+      "CAP-0135"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sfx2/source/dialog/basedlgs.ts#SfxDialogController",
+        "vendor/libreoffice-reference/sfx2/source/dialog/basedlgs.cxx#SfxDialogController"
+      ],
+      "justification": "Ports the bounded asynchronous dialog-controller lifecycle while leaving rendering to the browser adapter.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SfxDialogController"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sfx2/source/dialog/basedlgs.cxx",
+      "upstreamSymbols": [
+        "SfxDialogController"
+      ]
+    }
+  }
+}

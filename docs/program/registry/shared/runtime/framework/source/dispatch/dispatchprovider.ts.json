@@ -1,0 +1,32 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/framework/source/dispatch/dispatchprovider.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "dispatch",
+    "capabilityIds": [
+      "CAP-0101"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/framework/source/dispatch/dispatchprovider.ts#FrameworkDispatchProvider",
+        "vendor/libreoffice-reference/framework/source/dispatch/dispatchprovider.cxx#DispatchProvider"
+      ],
+      "justification": "Keeps framework as the outer dispatch-provider facade and delegates shell-stack resolution to sfx2 without owning dispatcher, frame, bindings, or slot state.",
+      "knownViolations": [],
+      "localSymbols": [],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "framework/source/dispatch/dispatchprovider.cxx",
+      "upstreamSymbols": [
+        "DispatchProvider"
+      ]
+    }
+  }
+}

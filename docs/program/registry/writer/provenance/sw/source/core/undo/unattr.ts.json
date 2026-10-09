@@ -1,0 +1,96 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "SwUndoAttr",
+          "path": "apps/office/src/sw/source/core/undo/unattr.ts"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/edit/edfcol.ts",
+          "marker": "TextFormatCollOperation"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/undo/unattr.ts",
+          "marker": "SwUndoResetAttr"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/txtedt.ts",
+          "marker": "resetParagraphTextAttributes"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/edit/edfcol-history.test.ts",
+          "marker": "native paired StyleApply history"
+        },
+        {
+          "path": "apps/office/e2e/writer-style-redo.spec.ts",
+          "marker": "Writer native paired style history"
+        },
+        {
+          "path": "apps/office/src/sfx2/source/control/unoctitm.test.ts",
+          "marker": "explicit UNO key modifiers"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/edit/edfcol-modifier.test.ts",
+          "marker": "native Ctrl paragraph StyleApply"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-style-modifier.test.tsx",
+          "marker": "Writer explicit style modifier commands"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/undo/native-format-node-index.test.ts",
+          "marker": "numeric direct formatting history targets current slots %s/%s/%s"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "SwUndoAttr",
+          "path": "vendor/libreoffice-reference/sw/source/core/undo/unattr.cxx"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/undo/unattr.cxx",
+          "marker": "SwUndoAttr::SwUndoAttr"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/undo/unattr.cxx",
+          "marker": "SwUndoAttr::UndoImpl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/undo/unattr.cxx",
+          "marker": "SwUndoResetAttr::SwUndoResetAttr"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/undo/unattr.cxx",
+          "marker": "SwUndoResetAttr::RedoImpl"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/core/undo/unattr.ts",
+    "localSymbols": [
+      "SwUndoAttr",
+      "SwUndoParagraphFormat"
+    ],
+    "omittedResponsibilities": [
+      "Upstream obligations outside SwUndoAttr, SwUndoFormatAttrHelper::SwUndoFormatAttrHelper, SwUndoFormatAttrHelper::SwClientNotify, SwDocModifyAndUndoGuard::SwDocModifyAndUndoGuard and the bounded SwUndoAttr, SwUndoParagraphFormat contract remain intentionally omitted."
+    ],
+    "preservedResponsibilities": [
+      "Implements direct character and paragraph attribute undo from pinned LibreOffice unattr.cxx.",
+      "Iteration108 replaces the fused ordinary StyleApply history with native ordered SwUndoFormatColl and SwUndoResetAttr inside one SfxListUndoAction. Collection history retains only collection/direct items/list suppression; independent text-reset history retains original hints. Initial execution explicitly uses exact whole-AUTOFMT cleanup and retains original selection, partial formatting and internet hints. Reset redo follows native RES_CHRFMT default non-exact full-node processing and removes supported partial/full AUTOFMT and internet hints even when the captured style name disappears. Undo returns sorted original range or collapsed caret; redo restores expanded full-node selection with point at end and mark at start. Initial operations execute through existing model/shell transactions rather than first-redo flags. Actual node/ODT/desktop/mobile history, focus, expanded DOM selection, continued typing and export evidence covers this bounded correction. Modifier/delete-set/fields/marks/layout/redlines/rings and full native defaults/API/history and UI parity remain unverified. Prior native claims in earlier descriptions are superseded where this source-backed pair/redo/cursor correction applies. No status/default/exception promotion or registered save/open/recovery change.",
+      "Iteration109 carries explicit unsigned UNO KeyModifier metadata separately from slot arguments to zero-default SfxRequest and document-owned paragraph StyleApply. Only native KEY_MOD1 triggers initial full-character/list reset. The existing content-manager owner constructs the registered native deletion set excluding list83..87; docfmt uses selective node reset with protected nonempty numbering/page/non-NONE break and Ctrl repeated-list eligibility. txtedt removes common automatic-style items while retaining unrelated items, exact flags and internet hints. Collection history owns hints before initial selective reset; the separate exact-reset owner captures after collection processing. Native redo retains list eligibility but omits the initial full-character flag and uses default non-exact hint reset, including repeated-style level asymmetry. Actual request/core/frame/mounted UI/ODT tests cover mask literals, filtering, ordinary/URL separation, protected defaults, inclusive empty/end-zero spans, untouched neighbors, partial/whole hints, history ownership, three cycles and continued input/export. Every prior test is byte-identical. Language/direction/fields/marks/layout/redlines/rings/inline headings, full UNO transforms/style families/native defaults/history and complete UI parity remain unverified; no status/default/exception promotion or registered save/open/recovery change. Older missing-modifier/deletion-set claims are superseded only for this bounded registered operation.",
+      "Iteration159 removes retained paragraph-object ownership from represented direct character/item/alignment/margin/reset/style history. Actions resolve current numeric native SwNodes targets while preserving existing document ownership guards; ResetAttr owns numeric range/entry indices and captures current hint owners at ApplyExact. FormatColl retains numeric rollback entries and native SwUndRng, rebuilds current PaM/inclusive nodes for named style redo as pinned unfmco.cxx.45new body/cell section-preserving replacement, actual shell direct/composite/standalone history and cursor/payload cases;411prior testfiles/250states/defaults/classifications/exceptions/prior evidence preserved. No new adapter/module/DTO/TextRuns. Existing whole native-fragment/direct-item/fullhint snapshots, stored style identifier and original-document guard adjuncts remain portable contracts, not complete native SwHistory/registered delta/client/text reset/undo payload architecture. Other action node references and retained split physical bridge remain unverified, no fullmodule/broad promotion."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/undo/unattr.cxx",
+    "upstreamSymbols": [
+      "SwUndoAttr",
+      "SwUndoFormatAttrHelper::SwUndoFormatAttrHelper",
+      "SwUndoFormatAttrHelper::SwClientNotify",
+      "SwDocModifyAndUndoGuard::SwDocModifyAndUndoGuard"
+    ]
+  },
+  "legacyOrder": 223
+}

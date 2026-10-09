@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/filter/basflt/writer-transfer.ts",
+    "classification": "local-infrastructure",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "clipboard-transfer",
+    "capabilityIds": [
+      "CAP-0106",
+      "CAP-0110"
+    ],
+    "semantic": {
+      "behaviorStatus": "not-applicable",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/source/filter/basflt/writer-transfer.ts#normalizeWriterTextRuns",
+        "apps/office/src/sw/source/filter/basflt/writer-transfer.ts#WriterTransferParagraph"
+      ],
+      "justification": "Browser-neutral filter boundary validates transfer run DTOs and shares serializer input records; canonical text and hints live in SwTextNode and SwpHints.",
+      "knownViolations": [],
+      "localSymbols": [
+        "WriterTextRun",
+        "DEFAULT_WRITER_CHARACTER_ATTRIBUTES",
+        "createWriterTextRuns",
+        "getWriterTextFromRuns",
+        "createWriterTextFragment",
+        "normalizeWriterTextRuns",
+        "normalizeWriterCharacterAttributes",
+        "splitWriterTextRuns",
+        "WriterTransferParagraph"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

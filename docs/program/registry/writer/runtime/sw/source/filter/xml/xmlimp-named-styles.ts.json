@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/filter/xml/xmlimp-named-styles.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "writer-filter",
+    "capabilityIds": [
+      "CAP-0111",
+      "CAP-0112"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/filter/xml/xmlimp-named-styles.ts#applyNamedParagraphStyles",
+        "apps/office/src/sw/source/core/doc/doc.ts#CopyTextColl",
+        "apps/office/src/sw/source/core/doc/doc.ts#FindTextFormatCollByName",
+        "apps/office/src/sw/source/filter/xml/odt-named-paragraph-ownership.test.ts#retainsNamedOwnership",
+        "apps/office/src/sw/source/filter/xml/odt-named-paragraph-ownership.test.ts#transportsCustomNames",
+        "apps/office/src/sw/source/filter/xml/odt-named-paragraph-ownership.test.ts#restoresNamedHistory",
+        "apps/office/src/sw/source/filter/xml/odt-named-paragraph-ownership.test.ts#copiesNamedStyle",
+        "apps/office/e2e/writer-named-style-history.spec.ts#Writer named-style history",
+        "vendor/libreoffice-reference/sw/source/core/doc/docfmt.cxx#SwDoc::CopyTextColl",
+        "vendor/libreoffice-reference/sw/inc/doc.hxx#FindTextFormatCollByName",
+        "vendor/libreoffice-reference/xmloff/source/style/prstylei.cxx#XMLPropStyleContext::CreateAndInsert",
+        "vendor/libreoffice-reference/xmloff/source/text/txtstyli.cxx#XMLTextStyleContext::Finish",
+        "vendor/libreoffice-reference/xmloff/source/text/txtimp.cxx#XMLTextImportHelper::SetStyleAndAttrs"
+      ],
+      "justification": "Iteration102 materializes document-owned named paragraph collections instead of flattening common styles into direct node items. Supported own paragraph/character/list fields, raw names, parent/follow links and automatic deltas survive graph16, ODT cycles and actual history. Native name lookup and bounded custom CopyTextColl preserve destination ownership and manual rule handling; the prior builtin copy adapter remains unchanged. Literal zero/per-axis list masks and the project tdf114287 fixture distinguish inherited margins from hard rule overrides. Writer export retains original named parents and emits actual direct numbering items; generic legacy export remains compatible. Default paragraph items are retained on the existing Standard root adapter only. All303other prior tests remain unchanged; one inherited common-style XML assertion moves to styles.xml and one existing project fixture now asserts its actual custom owner/parent, with numeric literals unchanged. Native list display-name resolution, invalid/cyclic parent detachment, direct empty rule suppression and supported composite item subfield inheritance are retained. Full native global default pools, conditional styles, pool/help IDs, creation undo, complete UNO/style UI, collisions and geometry consumers remain separately unverified. No existing status/default/exception or registered I/O/recovery promotion.",
+      "knownViolations": [],
+      "localSymbols": [
+        "applyNamedParagraphStyles"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "xmloff/source/style/prstylei.cxx",
+      "upstreamSymbols": [
+        "XMLPropStyleContext::CreateAndInsert",
+        "XMLPropStyleContext::Finish"
+      ]
+    }
+  }
+}

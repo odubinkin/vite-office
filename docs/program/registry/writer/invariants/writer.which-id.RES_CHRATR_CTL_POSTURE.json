@@ -1,0 +1,19 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "divergenceClass": "none",
+    "id": "writer.which-id.RES_CHRATR_CTL_POSTURE",
+    "kind": "which-id",
+    "local": {
+      "marker": "export const RES_CHRATR_CTL_POSTURE = 30 as const;",
+      "path": "apps/office/src/sw/inc/hintids.ts",
+      "value": 30
+    },
+    "upstream": {
+      "marker": "RES_CHRATR_CTL_POSTURE(RES_CHRATR_BEGIN + 29)",
+      "path": "sw/inc/hintids.hxx",
+      "value": 30
+    }
+  }
+}

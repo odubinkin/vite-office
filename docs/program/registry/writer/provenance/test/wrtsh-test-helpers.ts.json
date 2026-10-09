@@ -1,0 +1,26 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "local-infrastructure",
+    "evidence": {
+      "local": [
+        {
+          "marker": "setTestSelection",
+          "path": "apps/office/src/test/wrtsh-test-helpers.ts"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/test/wrtsh-test-helpers.ts",
+    "rationale": "Keeps fixture string-ID adapters confined to test infrastructure after production Writer contracts moved to node references, SwPosition, and SwPaM.",
+    "responsibilities": [
+      "Converts legacy test fixture coordinates to canonical Writer operation arguments."
+    ],
+    "stackDivergence": {
+      "kind": "local-infrastructure",
+      "rationale": "Fixture IDs are test harness conveniences and do not represent an upstream runtime responsibility."
+    },
+    "status": "local-only"
+  },
+  "legacyOrder": 278
+}

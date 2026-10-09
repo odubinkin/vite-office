@@ -1,0 +1,323 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/ui/table/tabledlg.ts",
+    "status": "mapped",
+    "upstreamPath": "sw/source/ui/table/tabledlg.cxx",
+    "localSymbols": [
+      "SwFormatTablePage",
+      "SwTableColumnPage",
+      "SwTextFlowPage"
+    ],
+    "upstreamSymbols": [
+      "SwFormatTablePage::SwFormatTablePage",
+      "SwTableColumnPage::UpdateCols",
+      "SwTableColumnPage::Reset",
+      "SwTableColumnPage::ActivatePage",
+      "SwTableColumnPage::DeactivatePage",
+      "SwFormatTablePage::Reset",
+      "SwFormatTablePage::ActivatePage",
+      "SwFormatTablePage::FillItemSet",
+      "SwFormatTablePage::DeactivatePage",
+      "SwTextFlowPage::Reset",
+      "SwTextFlowPage::FillItemSet",
+      "SwTextFlowPage, HeadLineCBClickHdl"
+    ],
+    "preservedResponsibilities": [
+      "Iteration177 represents native absolute table formatting through SwFormatTablePage and SwTableRep, six numeric orientations, linked metric fields, sensitivity, automatic-width restoration and visible-column reconciliation. React displays the native draft and the existing shell group applies accepted frame attributes. Worker retains orientation and ODF projects native alignment and conditional LR margins. Full native item/relative-width/complex-table/RTL/fly/cache/protection and UI/core parity remain unverified. All prior261 semantic statuses/defaults/classes and registered IO deviations are preserved.",
+      "Resumed iteration191 after user-priority192/193/194 ports existing absolute column editing through source-owned SwTableColumnPage and shared native SwTableRep. Native Reset retains shared draft/vector identity and independent original copies; five field slots and one-column navigation, source inherited MINLAY23/min/max, constant-width neighbor compensation/wrap/tiny-table loop bound, adapt-table width cap, proportional integer rounding and checkbox coupling/activation sensitivity, selected-row versus whole-table modes and native LR deactivation are represented. Browser page events call native handlers instead of replacing width-array entries; actual canonical graph remains read-only until existing ItemSetToTableParam acceptance and grouped native history. Native percentages, hidden/per-row graph, full SfxItemSet/frame-format notifications and adaptive preferred-width SizeHdl remain unverified, as do complete module/UI/core/parent parity. Registered filename/save/open/recovery exceptions unchanged.",
+      "Iteration195 ports the native absolute SwFormatTablePage lifecycle: metric/radio values are page-local until DeactivatePage publishes the shared SwTableRep; Reset retains original independent data, shared pointer/vector and selection, saved metric state and vertical spacing; ActivatePage refreshes width/LR and saved values only when source absolute width differs; FillItemSet admits a still-focused metric; source saved-spacing/orientation/automatic-width flags and existing native column redistribution are retained. React reads native fields/radio state and activates Table on tab entry. Historical literal geometry expectations are preserved through a field-state accessor migration; original model graph/history remains canonical. Native percentages, hidden/per-row graphs, full SfxItemSet/frame-format notifications, adaptive preferred-width SizeHdl, complete name/text-direction/Reset UI and full native widget unit/range semantics remain unverified, as does whole module/UI/core/parent parity. Registered exceptions unchanged.",
+      "Iteration197 ports the represented SwTextFlowPage headline subset: Reset reads canonical GetRowsToRepeat, saves checkbox/count values, clamps displayed count to source range1..100 independent of physical row count, and numeric sensitivity follows one Repeat header checkbox. FillItemSet emits only changed headline widgets; disabled publication is0 and unchanged bounded fields retain inherited original count. Properties removes the artificial Header control and raw-format fallback1/true; Insert Table remains unchanged. Original graph/list/cursor, grouped3UndoRedo, ODT and production Chromium1280/390 covered. Full Text Flow break/split/keep/text-direction, full SfxItemSet notification/ranges, other widget bounds and whole parity remain unverified; existing storage contracts/classifications/registered exceptions preserved.",
+      "Iteration199 ports native Text Flow table/row split controls and removes conflated properties dontSplit and React first-row state. Native ndtbl1 aggregate reads original selected boxes/lines, true row default and no item for empty/mixed. SwDoc.GetRowSplit and SwFEShell.GetRowSplit retain source cursor/document ownership. SwTextFlowPage Reset saves original split/headline values; table child sensitivity does not clear row tristate; FillItemSet publishes only changed headline/table/row items. Browser source labels and mixed HTML checkbox use actual selected boxes, native page handlers/Reset/Cancel/OK, independent table and row setters. Insertion-only dontSplit remains separate. Original graph/list/cursor/grouped3UndoRedo/ODT/continued input and Chromium1280/390 covered. Full row-content splitting/nested/merged/fly/columns/protection/full item classes/SfxItemSet/widget suite and whole parity remain unverified; old contracts/classifications/registered exceptions retained.",
+      "Iteration214 pending: native frame-format identity owns table names; SwDoc rename assigns unique names for empty/colliding input, emits native name-only lookup history with replay suppression and no cursor restoration. Properties native Name widget retains raw saved values, emits changed items only and keeps the Table page for ASCII spaces with Name focus. Full frame attributes, formula/OLE/chart references, mail merge and overall parity remain unverified; prior semantic fields/statuses/defaults and registered save/open/recovery exceptions are preserved.",
+      "Iteration214 verified closure: earlier pending prose is historical. Actual13509app110inventory14infrastructure274Chromium PASS through ONE full upstream-absent profile plus only original failures and one genuinely new geometry-guard case;0unresolved0passing replay. Native frame name identity, broadcast=false default, raw document rename, unique-name admission, cursor-free name lookup history/recreation/replay suppression, grouped Properties geometry/name, saved Name item, ASCII-space focus/page guard, Reset/Cancel, three history cycles, ODT and continued editing passed. All12 production paths remain byte-identical to sole full build/runtime/Chromium and closure. Actual current-source100 app/inventory counters are bound to whole source/maps or complete contiguous mapped declarations/bodies/enclosing branches/all locations. Ten prior app region certificates verify only complete unchanged units; one invalid raw V8 painter aggregate is retained/rejected and its entire unchanged prior source/map/counter certificate used, with no individual clamp. All577 old acceptance files preserve573 byte-identical bodies and four exact source-backed migrations, every unrelated assertion retained; three new files,580current. Every293 prior metadata record/field/prefix/status/default and registered save/open/recovery exception is preserved without promotion. Full frame attribute ownership/notification granularity, formula/OLE/chart references, native numeric suffix/default/unused/mail-merge collections, full modal/widget and Home/End/browser keyboard behavior and complete parity remain unverified. Chromium End caret setup yielded XCell; new name fixture now uses established explicit DOM end caret while preserving CellX assertion. Same-agent EVALUATOR is explicitly not independent.",
+      "Iteration237 retains all native TColumn nWidth/bVisible intervals and visible/all counts in the shared table-properties draft. The browser captures current-cursor SwTabCols after temporary border-selection restoration, renders native visible-width aggregation, and passes the accepted SwTableRep directly to tabsh. Hidden separators are merged with accepted visible positions using the native order, tie and rounding rules; HasColsChanged alone gates separator application and preserves the current-line operation. Seven prior numeric-vector fixtures migrate only their TColumn API access while retaining literal numeric expectations and original owner/style/history assertions. Literal representation/page and mounted unequal-row properties evidence is added. Full percentage/RTL/vertical/merged/nested/frame behavior remains partial and unverified. Registered save/open/recovery deviations, metadata states, defaults and classifications remain preserved.",
+      "Iteration238 publishes only changed native table property items from pages and mounted UI to the shell. SwPtrItem borrows the original SwTableRep through SfxItemSet clone and equality. Native item IDs and explicitly SET-only consumption preserve untouched frame defaults and empty history, isolate name and spacing, and group geometry, flow and border edits with original owners and cursor. Separate explicit legacy ingress remains for existing callers; complete native item factories, full SfxTabPage orchestration and complex layout remain unverified. Verification pending; all prior metadata states, defaults, classes and registered IO/recovery deviations remain preserved.",
+      "Iteration238 verified closure supersedes the earlier pending draft. Native borrowed SwPtrItem and exact WhichIds, format/flow changed-item publication, unconditional Columns representation publication, created Borders admission, persistent native exchange output and page-scoped Reset are verified against the pinned source. Main properties UI sends SfxItemSet directly with no DTO fallback; explicitly SET-only shell writes retain original graph/cursor and grouped history, unchanged Table OK has empty history, FULL retains stored width while layout uses automatic width. 412 unique targeted app and38 related Chromium cases pass, including45 fresh cases; passing replay0. Current app17457/19171/4389/14267 and inventory1464/1523/384/1081 actual counters reach100 in all four metrics using current targeted runs and whole identical-source/maps or complete contiguous declaration/body/enclosing branch/location proof from237. No full suite this leaf; next full247. Four source-backed old observation/input migrations preserve635 of639 prior acceptance files byte-identically; four new acceptance files. All311 prior metadata records/fields/prefixes/states/defaults/classes remain preserved and two partial native records are added for313. Full native item/frame/page/layout/core/UI parity remains unverified and registered IO/recovery deviations are preserved.",
+      "Iteration239 replaces generic Text Flow split publication with native SwFormatLayoutSplit and SwFormatRowSplit subclasses, literal WhichIds120/129 and true Writer pool defaults. Clone preserves concrete type/current identity/value independently; browser primitive factories restore concrete items. Native shell consumes explicitly SET concrete items while preserving omitted defaults and original row/table history. Generic row keepTogether and scalar table formats, full native shared frame-format ownership, presentation/localization/UNO completeness and whole core/UI parity remain unverified. Targeted verification pending; full cadence237 to247 and all prior metadata states/defaults/classes/registered IO/recovery deviations remain preserved.",
+      "Iteration239 verified closure: twelve fresh literal item/pool and mounted direct native-input cases plus related modules produced178 app passes and8 Chromium passes, with no passing replay or full suite. App and inventory all-four100% coverage is bound to actual current targeted counters and prior238 identical-source/maps or complete mapped-region proof; unchanged inventory/infra runtime was not rerun. The earlier pending statement is historical. Scalar table/row format ownership and full presentation/localization/UNO/shared-pool contracts remain unverified; no parity status promotion.",
+      "Iteration240 owns row splitting as optional SwFormatRowSplit items cloned on row input/read/history, with effective true default. Common core and frame-shell getters return independent concrete items or absence for mixed/no-row input; setters accept concrete items. Native UI forwards the item unchanged to the document owner, ODF inverts only at import/export, and browser transport writes direct primitive rowSplit with legacy keepTogether ingestion. Original cursor/selection/history and full frame-size coexistence remain retained. Full native shared row frame-format pooling/ClaimFrameFormat, nested/merged semantics, presentation/localization/UNO completeness and whole core/UI parity remain unverified. Targeted verification pending; last full237,next247; all prior metadata states/defaults/classifications and registered IO/recovery deviations preserved.",
+      "Iteration240 verified closure:33 fresh native item/core/history, transport/legacy/ODF and mounted direct item cases plus related modules produced263 unique app passes and11 Chromium passes. Three initial failed cases were resolved in a four-case failed/new-only closure; all previously passing cases were skipped, no passing replay or full suite. App and inventory all-four100% coverage binds actual current targeted counters to prior239 identical whole source/maps or complete mapped-region proofs; unchanged inventory/infra was not rerun. Native rows now own concrete items, while full shared frame-format pooling/claims/UNO/nested/merged contracts and whole core/UI parity remain unverified. No metadata status/default/classification promotion."
+    ],
+    "omittedResponsibilities": [
+      "Full native contracts remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/ui/table/tabledlg.ts",
+          "marker": "SwFormatTablePage"
+        },
+        {
+          "path": "apps/office/src/sw/source/ui/table/tabledlg.ts",
+          "marker": "SwTableColumnPage"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/table/swtablerep.ts",
+          "marker": "Assign"
+        },
+        {
+          "path": "apps/office/src/sw/source/ui/table/native-table-column-page.test.ts",
+          "marker": "native column Reset"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/native-table-column-page.test.tsx",
+          "marker": "mounted native default column"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-column-page-history.test.ts",
+          "marker": "native column-page constant edit"
+        },
+        {
+          "path": "apps/office/e2e/writer-native-table-column-page.spec.ts",
+          "marker": "native column page modes"
+        },
+        {
+          "path": "apps/office/src/sw/source/ui/table/tabledlg.ts",
+          "marker": "public ActivatePage"
+        },
+        {
+          "path": "apps/office/src/sw/source/ui/table/native-table-format-lifecycle.test.ts",
+          "marker": "native format metrics remain local"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/native-table-format-lifecycle.test.tsx",
+          "marker": "mounted native format reactivation"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-format-lifecycle-history.test.ts",
+          "marker": "native format publication"
+        },
+        {
+          "path": "apps/office/e2e/writer-native-table-format-lifecycle.spec.ts",
+          "marker": "native format page local metrics"
+        },
+        {
+          "path": "apps/office/src/sw/source/ui/table/tabledlg.ts",
+          "marker": "export class SwTextFlowPage"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx",
+          "marker": "Repeat header"
+        },
+        {
+          "path": "apps/office/src/sw/source/ui/table/native-table-text-flow-headline.test.ts",
+          "marker": "native headline"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/native-table-text-flow-headline.test.tsx",
+          "marker": "native headline"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-text-flow-headline-history.test.ts",
+          "marker": "native headline acceptance"
+        },
+        {
+          "path": "apps/office/e2e/writer-native-table-text-flow-headline.spec.ts",
+          "marker": "native Table Properties headline"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/docnode/ndtbl1.ts",
+          "marker": "GetSwRowSplit"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/doc.ts",
+          "marker": "GetRowSplit"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/frmedt/fetab.ts",
+          "marker": "GetRowSplit"
+        },
+        {
+          "path": "apps/office/src/sw/source/ui/table/tabledlg.ts",
+          "marker": "SplitHdl_Impl"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/shells/tabsh.ts",
+          "marker": "value.rowSplit"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx",
+          "marker": "Allow row to break across pages and columns"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-view.tsx",
+          "marker": "selectedBoxes:"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/table/native-hidden-table-representation.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/ui/table/native-hidden-table-column-page.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/native-independent-table-properties.test.tsx",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/utlui/native-pointer-items.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/ui/table/native-table-property-output.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/shells/native-table-property-item-input.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/native-table-property-output.test.tsx",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/inc/native-table-split-items.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/native-table-split-items.test.tsx",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/docnode/native-row-split-items.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/filter/xml/native-row-split-item-transport.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/native-row-split-core-items.test.tsx",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx",
+          "marker": "SwFormatTablePage::SwFormatTablePage"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx",
+          "marker": "SwTableColumnPage::UpdateCols"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx",
+          "marker": "SwTableColumnPage::Reset"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx",
+          "marker": "SwTableColumnPage::ActivatePage"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx",
+          "marker": "SwTableColumnPage::DeactivatePage"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/table/swtablerep.cxx",
+          "marker": "SwTableRep::SwTableRep"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/shells/tabsh.cxx",
+          "marker": "pRep->SetLineSelected"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/uiconfig/swriter/ui/tablecolumnpage.ui",
+          "marker": "Adapt table _width"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx",
+          "marker": "SwFormatTablePage::Reset"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx",
+          "marker": "SwFormatTablePage::ActivatePage"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx",
+          "marker": "SwFormatTablePage::FillItemSet"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx",
+          "marker": "SwFormatTablePage::DeactivatePage"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/inc/tablemgr.hxx",
+          "marker": "lAutoWidth"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/swtypes.hxx",
+          "marker": "INVALID_TWIPS"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx",
+          "marker": "SwTextFlowPage::Reset"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx",
+          "marker": "SwTextFlowPage::FillItemSet"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx",
+          "marker": "SwTextFlowPage, HeadLineCBClickHdl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/shells/tabsh.cxx",
+          "marker": "rSh.GetRowsToRepeat()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/uiconfig/swriter/ui/tabletextflowpage.ui",
+          "marker": "id=\"adjustment2\""
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/vcl/weld/SpinButton.hxx",
+          "marker": "convert_double_to_value"
+        },
+        {
+          "path": "vendor/libreoffice-reference/vcl/source/weld/SpinButton.cxx",
+          "marker": "basegfx::fround64"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl1.cxx",
+          "marker": "SwDoc::GetRowSplit"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/frmedt/fetab.cxx",
+          "marker": "SwFEShell::GetRowSplit"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx",
+          "marker": "SwTextFlowPage::Reset"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx",
+          "marker": "SwTextFlowPage::FillItemSet"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx",
+          "marker": "SwTextFlowPage, SplitHdl_Impl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/shells/tabsh.cxx",
+          "marker": "RES_LAYOUT_SPLIT"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/uiconfig/swriter/ui/tabletextflowpage.ui",
+          "marker": "id=\"splitrow\""
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/fmtrowsplt.hxx",
+          "marker": "SwFormatRowSplit"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/vcl/weld/CheckButton.hxx",
+          "marker": "TRISTATE_TRUE"
+        }
+      ]
+    }
+  },
+  "legacyOrder": 251
+}

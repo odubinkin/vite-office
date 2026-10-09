@@ -1,0 +1,26 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "evidence": {
+      "local": [
+        {
+          "marker": "WriterNameCollisionPanel",
+          "path": "apps/office/src/sw/browser/presentation/WriterNameCollisionPanel.tsx"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/browser/presentation/WriterNameCollisionPanel.tsx",
+    "rationale": "Presents the existing browser-owned document-title collision choices shared by import and rename.",
+    "responsibilities": [
+      "Collects an alternative title or forwards explicit overwrite and cancel choices to existing browser lifecycle owners."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser document identity and storage collision choices follow the registered local lifecycle policy."
+    },
+    "status": "local-only"
+  },
+  "legacyOrder": 108
+}

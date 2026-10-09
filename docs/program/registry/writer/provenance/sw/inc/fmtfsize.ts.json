@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/inc/fmtfsize.ts",
+          "marker": "SwFormatFrameSize"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/fmtfsize.hxx",
+          "marker": "SwFormatFrameSize"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/atrfrm.cxx",
+          "marker": "SwFormatFrameSize::operator=="
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/inc/fmtfsize.ts",
+    "localSymbols": [
+      "SwFrameSize",
+      "SwFormatFrameSize"
+    ],
+    "omittedResponsibilities": [
+      "Full native UNO member IDs/PutValue/percent sizing/layout/pool lifecycle remain unverified."
+    ],
+    "preservedResponsibilities": [
+      "Iteration202 removes scalar row minHeight storage and numeric kernel height contracts. Native SvxSizeItem/SwFormatFrameSize owns both dimensions, both sizing types, both percentages and both relations with native defaults, Which90, full equality, clone and supported default size query. Original rows retain copied items, document getter compares complete items and returns clone; resize uses native document setter with copied full size, preserving Fixed/Minimum and promoting only Variable. Flat layout and mounted cells use native Variable/Minimum/Fixed semantics, fixed content clipped, properties metric from shell common getter. ODT row-height Fixed/min-row-height Minimum/Variable omission and native height clamp1..65535; attributes apply in order. Full percentage/fly/vertical/nested/merged/protection/UNO member IDs/PutValue/pooling/widget/SfxItemSet/full parity remains unverified; all prior contracts/classifications/statuses/exceptions retained."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/inc/fmtfsize.hxx",
+    "upstreamSymbols": [
+      "SwFrameSize",
+      "SwFormatFrameSize"
+    ]
+  },
+  "legacyOrder": 133
+}

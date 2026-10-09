@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/filter/xml/swxml.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "odf-filter",
+    "capabilityIds": [
+      "CAP-0113",
+      "CAP-0128",
+      "CAP-0136",
+      "CAP-0137"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/filter/xml/swxml.ts#ODT_XML_STREAM_BYTE_LIMIT",
+        "apps/office/src/sw/source/filter/xml/odt-roundtrip.test.ts#rejectsMalformedPackages",
+        "vendor/libreoffice-reference/sw/source/filter/xml/swxml.cxx#XMLReader::XMLReader"
+      ],
+      "justification": "Owns ODT package-stream import ordering for the required mimetype, manifest, styles.xml, content.xml, and meta.xml streams with ZIP/XML resource ceilings. Encryption, ZIP64, signatures, and absent or malformed mandatory streams are rejected before document replacement.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ODT_XML_STREAM_BYTE_LIMIT",
+        "OdtImportProgressStage",
+        "OdtImportControl",
+        "SwXMLReader",
+        "readOdtDocument"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "sw/source/filter/xml/swxml.cxx",
+      "upstreamSymbols": [
+        "XMLReader::XMLReader",
+        "XMLReader::GetReaderType",
+        "OUString::createFromAscii",
+        "Parser::create"
+      ]
+    }
+  }
+}

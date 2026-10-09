@@ -106,11 +106,13 @@ explicit tooling rule. File-level exemptions require a documented rationale.
 The following documents form the program control plane:
 
 - [Parity matrix](parity-matrix.md): status and traceability source of truth.
-- [Writer command parity mappings](parity/writer-command-slice.json):
-  machine-validated upstream-to-local evidence for 35 bounded Writer
+- [Writer command parity mappings](registry/writer/capabilities):
+  machine-validated upstream-to-local evidence for 45 bounded Writer
   capabilities, with independent implementation, contract, behavior, default,
   and verification status plus explicit unresolved gaps and approved exceptions.
-- [Runtime parity inventory](parity/runtime-inventory.json): exhaustive
+- [Application registry](registry/README.md): UUID identities, per-record ownership,
+  shared contracts, scoped checks, and deterministic compatibility views.
+- [Runtime parity inventory](registry/README.md): exhaustive
   classification of production modules, exported operations, visible command
   IDs, UI-only behavior, internal operations, and placeholder suites.
 - [Writer hyperlinks](writer-hyperlinks.md): ranged hyperlink model, upstream ODT fixture provenance,

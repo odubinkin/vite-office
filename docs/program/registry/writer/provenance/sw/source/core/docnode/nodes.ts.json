@@ -1,0 +1,304 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "SwNodes",
+          "path": "apps/office/src/sw/source/core/docnode/nodes.ts"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-lifecycle.test.ts",
+          "marker": "attaches items at insertion and validates reverse-order reads without replacing their root"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-lifecycle.test.ts",
+          "marker": "reparents retained items and moves descendants through native predecessor phantoms"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-lifecycle.test.ts",
+          "marker": "moves canonical paragraphs with retained list records and independent copied trees"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/node-numbering-lifecycle.test.ts",
+          "marker": "owns records in text nodes and validates insertion notifications before prefix reads"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/node-numbering-lifecycle.test.ts",
+          "marker": "removes old clients before changing list attributes and preserves native registration order"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/DocumentListItemsManager.test.ts",
+          "marker": "sorts independent of insertion order, suppresses equivalent positions and filters bullets and uncounted items"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/docnode/nodes.ts",
+          "marker": "UpdateOutlineNode"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-document-context.test.ts",
+          "marker": "requires explicit document arguments across rule list and tree APIs and hides traversal"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-document-context.test.ts",
+          "marker": "forwards the rule caller document through invalidation and list validation instead of its first client"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-document-context.test.ts",
+          "marker": "forwards an explicit insertion context while preserving text-owner policy and retained list topology"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-document-context.test.ts",
+          "marker": "forwards removal context without borrowing the text document and retains remaining raw counters"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-document-context.test.ts",
+          "marker": "passes the operation context through protected root and phantom traversal before text-owner notification"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/wrtsh/native-cross-node-deletion.test.ts",
+          "marker": "native cross-node selected deletion"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-editing.test.ts",
+          "marker": "native table cell editing owners"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-table-editing.test.tsx",
+          "marker": "native table DOM editing"
+        },
+        {
+          "path": "apps/office/e2e/writer-native-table-editing.spec.ts",
+          "marker": "Writer table cell typing, split, join and formatting use document history"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-traversal.test.ts",
+          "marker": "native table traversal"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-table-tab.test.tsx",
+          "marker": "native table Tab UI"
+        },
+        {
+          "path": "apps/office/e2e/writer-native-table-tab.spec.ts",
+          "marker": "Writer Tab traverses native cell sections and appends one row with history"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/table/native-independent-columns.test.ts",
+          "marker": "native separators combine visible current-row"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/table/native-numeric-row-insertion.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/undo/native-numeric-row-insertion-history.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-numeric-row-insertion.test.tsx",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/table/native-row-frame-format.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/undo/native-row-frame-format-history.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/native-row-frame-format.test.tsx",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/layout/native-row-format-client.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/undo/native-row-format-client-history.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-row-format-client.test.tsx",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/table/native-box-frame-format.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/undo/native-box-frame-format-history.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-box-frame-format.test.tsx",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/layout/native-cell-format-client.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/undo/native-cell-format-client-history.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-cell-format-client.test.tsx",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "SwNodes",
+          "path": "vendor/libreoffice-reference/sw/source/core/docnode/nodes.cxx"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::GetNumber"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::RemoveMe"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::RemoveChild"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::SetLevelInListTree"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::SetLastValid"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::InvalidateTree"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "SwTextNode::GetNum("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "SwTextNode::GetNumberVector("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "SwTextNode::AddToList()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "SwTextNode::RemoveFromList()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "HandleSetAttrAtTextNode::HandleSetAttrAtTextNode"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx",
+          "marker": "SwNodeNum::PreAdd()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx",
+          "marker": "SwNodeNum::PostRemove()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx",
+          "marker": "SwNodeNum::ChangeNumRule("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/number.cxx",
+          "marker": "SwNumRule::GetTextNodeList("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/number.cxx",
+          "marker": "SwNumRule::RemoveTextNode("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/number.cxx",
+          "marker": "SwNumRule::Validate("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentListItemsManager.cxx",
+          "marker": "DocumentListItemsManager::addListItem("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentListItemsManager.cxx",
+          "marker": "DocumentListItemsManager::getNumItems("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndnum.cxx",
+          "marker": "SwNodes::UpdateOutlineNode"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/docedt.cxx",
+          "marker": "sw_GetJoinFlags"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/crsr/swcrsr.cxx",
+          "marker": "SwCursor::GoPrevNextCell"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/crsr/trvltbl.cxx",
+          "marker": "SwCursorShell::GoNextCell"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/table/swtable.cxx",
+          "marker": "void InsTableBox"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/undo/untbl.cxx",
+          "marker": "SwUndoTableNdsChg::UndoImpl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/docvw/edtwin.cxx",
+          "marker": "case KEY_TAB:"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/core/docnode/nodes.ts",
+    "localSymbols": [
+      "SwNodes",
+      "SwTableRowSection"
+    ],
+    "omittedResponsibilities": [
+      "Native layout expansion,redline/original/undo arrays,continuous trees,configurable phantom policy,complete callbacks/reading suppression,word-count/native lifetime machinery and legacy/default factories remain unverified."
+    ],
+    "preservedResponsibilities": [
+      "Iteration36 makes the shown number record SwTextNode-owned: SwList inserts/removes records without allocation or a text-node map. SwNodeNum binds/clears its rule in PreAdd/PostRemove and transfers rule clients in ChangeNumRule; rule clients retain insertion order and suppress identity duplicates. DocumentListItemsManager maintains native position ordering and filters counted enumeration records. Attribute rule/list changes detach before mutation; canonical node moves retain records,copy/restore attach independent records. Reads validate the requested prefix rather than unrelated tails. Compiled20 additional unmodified pinned owner/registry definitions alongside37 tree/list definitions compare120 sequences/8976 actual owner states including raw prefix caches,reverse vectors,bound rules,client order and numbered registry. Literal tests cover orphan binding,default1 after removal,duplicate add,disconnected/foreign arrays,rule copies and disposal. Single shown/document-node/hierarchical Arabic and bullet slice only;native layout expansion,redline/original arrays,complete callbacks/word-count/lifetime and legacy/default factories remain unverified. No whole-module/default/goal promotion;registered document IO deviations unchanged.",
+      "Iteration38 restores independent source set/reset pre/post flags, native prefix notification/validation ordering, direct outline suppression/return and normal-document sorted outline ownership.40 unchanged added native definitions compare60 sequences/2130 actual pre-vector cache,notification,item,rule,registry and outline-index states. Explicit dependency adapters retain source reading flag/shown/pool/raw-callback/layout-event/field boundaries;full native platform lifetime,dtor/redline/inline/fields/background/fill/live-style/default factories remain separate unverified obligations. No whole-module/default/goal promotion or IO change.",
+      "Iteration63 restores mandatory operation document context across existing numbering tree mutations and notifications, SwList insert/remove/validate and SwNumRule.Validate, with protected Notify traversal. Text insertion/removal and node moves pass their owned document explicitly; first-client/text-derived operation fallbacks are removed while real-record reading policy retains text-owner precedence. Five owned tests and16 exact type/visibility checks cover empty/clientless roots, distinct owner/operation reading flags, rule invalidate-before-validate forwarding, actual insertion/removal, retained topology/raw caches and protected root/phantom traversal. Three new runtime cases and baseline type assertions fail before correction and pass afterward; old test matcher arguments are unchanged. Fresh pinned manual declaration/body/call-site hashes only; no native execution, helper/source artifacts or upstream access by project tests. Native text notification ownership/temporary blockers, dtor/client lifetimes, redline/range roots, complete access/const/final architecture, layout and browser obligations remain separately unverified. No whole-module/status/default/goal, registered IO/recovery or gate promotion.",
+      "Iteration137 restores body-text cross-node selection flags and JoinPrev/JoinNext survivor choice through source-owned docedt helpers and actual SwPaM Exchange. DeleteAndJoin erases raw first-tail/last-head strings and removes intact middle nodes before joining. One SwUndoDelete retains both boundary whole-hint/direct-item/live-collection history and middle content; Undo reconstructs fresh native hints with NOHINTEXPAND, Redo resets temporary history end. Cross-node Undo direction follows the normalized native join flag. Selected Insert/Replace/composition use the deletion result and actual survivor for FORCEHINTEXPAND plus EMPTYEXPAND mode5 inside the common Replace list. Existing boundary object identity/cursor references, AppendTextNode cloning and zero-length CopyAttr remain bounded adapters requiring subsequent refactoring; full native node-index/ring/bookmark/redline/field/layout and structural section history remain unverified. SwNodes insertion accepts an actual SwNode predecessor, including the body start sentinel, without a temporary paragraph. Literal real-owner boundary/direction/middle-node/family/history/survivor/input tests exercise the registered profile. Existing243 semantic states/defaults/exceptions and registered I/O/recovery deviations are unchanged; new docedt module remains wholly unverified, no whole-module or goal promotion.",
+      "Iteration138 removes the table-cell post-DOM diff/direct text mutation, imperative innerHTML synchronization and event isolation. Cell paragraphs use shared DOM selection identities and BrowserWriterEditWindow -> SwEditWin -> actual SwWrtShell input/history. Connected cell text is admitted by SwNodes ownership; active/all-text identities come from native nodes while body layout stays separate. SwTableBox derives text from its start/end section instead of a duplicate paragraph array; boundary joins require adjacent text in the same section. Real-owner core, mounted DOM and Chromium tests cover this bounded path. React text-run display, body ordinal sidebar context, table-wide selection/navigation, nested or merged cells, native table layout/text portions and list UI remain unverified. All existing semantic states/defaults/exceptions and registered I/O/recovery deviations remain unchanged; no whole-module or goal promotion.",
+      "Iteration138 first-profile failures expose the remaining body-only section deletion and selected-range traversal. SwNodes.removeTextNode now derives actual same-section text owners and retains one paragraph per section;SwPaM selected ranges iterate the actual node span and omit non-text sentinels. This enables same-cell split/join Undo and formatting without changing structural table-wide selection policy. First failure names and coverage counts are persisted;only failing cases and newly added section/range cases are replayed. Full native structural lifetime/rings/table navigation and rendering remain unverified;all semantic states/defaults/exceptions and registered I/O deviations remain unchanged.",
+      "Iteration145 routes unmodified table Tab/ShiftTab through SwEditWin and a persistent SwCursor. Core traverses actual flat SwNodes cell sections and selects first paragraph offset0 while retaining native mark;no DOM sibling/body ordinal/navigation DTO. Shell refreshes active/pending/history grouping after movement;unmarked last-cell Tab prepares an empty source-formatted row and records SwUndoTableNdsChg retaining actual row/cell/node identities. Undo disconnects sections and retargets live indices;Redo reconnects them. List-at-start priority compares represented native numbering types/indent before level change or literal Tab insertion. Owned native,mounted and Chromium evidence covers represented behavior. Full native SwCursorShell/Doc InsertRow,merged/nested/protected/form/formula/autoformat/redline/border/autocorrect,HomeEnd/fulllayout/history/UI remainunverified;existing244semantic states/defaults/classifications and registered I/O/recovery deviations retained.",
+      "Iteration179 removes direct React grid/dialog table graph mutation. The inherited table editing shell groups the existing paragraph split and numeric SwUndoInsTable; native sections insert before body cursor and Redo reconstructs a new graph. SwDoc owns naming, FULL65535 reference geometry and represented flags/styles, preserving header styling independently of repetition. Actual core/mounted/Chromium acceptance covers collapsed direct-body0/middle/end and history. Single-inheritance source-unit split adds native table operations to existing numbering shell without forwarding. Browser border choices remain a bounded autoformat argument; native full frame/item formats, per-edge border objects, context font propagation, table split layout/ODT persistence, selection-to-table,nested tables,redlines,frames,Repeat and complete core/UI parity remain unverified. Prior267 semantic states/defaults/classifications/evidence and registered I/O/recovery exceptions preserved.",
+      "Iteration181 routes counted flat InsertRowsBefore/After through contextual SwTableShell, inherited SwFEShell, SwDoc document history and SwTable selected-edge insertion. Original selection is preserved; numeric table and insertion coordinates support mixed/recreated-table history. Complex merged/nested tables, row spans, redline/layout/formula/protection/repeated-headline state, full native undo section reconstruction and complete UI/core parity remain unverified. All prior269 semantic states/defaults/classes/evidence and registered I/O deviations remain unchanged.",
+      "Iteration182 ports native counted flat InsertCol/NewInsertCol and cumulative AdjustWidths rounding, expands column search across actual rows and represents CheckSplitCells MINLAY using table/page print geometry. Native table shell exposes InsertColumnsBefore/After; shared document-owned SwUndoTableNdsChg retains actual box sections, numeric insertion coordinates and width attributes, preserving selection through mixed and recreated-table history. Prior269 semantic states/defaults/classes/evidence and registered I/O deviations preserved. Full merged/nested/rowspan/RTL/redline/per-edge-border/formula/protection/repeated-headline/frame/undo reconstruction and complete UI/core parity remain unverified.",
+      "Iteration233 moves connected flat-table column geometry into each original SwTableBox SwFormatFrameSize. Native current-row visible/other-row hidden fuzzy separator union and per-line NewSetTabCols adjustments feed original Writer document attribute history; actual Ctrl+Shift current-line columns replace the retained ordinary shared-column fallback. Source XML union grids/spans and browser device colspans preserve independent original cells, with complete native frame-size values in browser codec and declared grid widths only at import/builder ingress. No row-width side map, graph replacement or TextRuns conversion. Flat unspanned source behavior is represented; full row-span propagation/nested/merged graphs, frame item pooling/UNO, RTL/vertical/SFX/VCL/full ruler state remain partial. Registered recovery/open/save/settings untouched, previous statuses/defaults/classes preserved.",
+      "Iteration236 replaces retained inserted-row sections with native numeric selected/new box starts. SaveNewBoxes accepts the native table and temporary original box identity list, undo resolves current actual sections, and redo re-enters Doc InsertRow or InsertCol to create new owners. Doc InsertRow is owned by ndtbl, honors DoesUndo, and scopes recording suppression/restoration. Connected unspanned rows copy their complete independent frame/box formats; before insertion retains TOP only on the first new row, while after insertion retains TOP on the original row. Six explicitly declared old retained-row identity fixtures now require freshly recreated owners and preserve complete geometry/style/cursor assertions. Literal core, history and mounted unequal-row menu evidence is added. Full merged/nested/spanned/protected/autoformat/redline/pooling/signed-overflow/frame behavior remains partial and unverified. Existing states, defaults, classifications and registered I/O/recovery deviations are preserved.",
+      "Iteration241 replaces per-row canonical value records with native document-owned SwTableLineFormat item sets and original SwClient registration. ClaimFrameFormat clones shared native owners before mutation; operation-local old-to-new reuse keeps selected peers sharing and unselected peers intact. Row insertion shares the source format; SaveTable retains unique direct native item sets and indexed row topology and reconstructs owners for history, matching represented flat-grid source semantics. Value records remain explicit construction/transport boundaries only. Full row frame client movement/destruction, native modify hint types, pooling, merged/nested tables, full frame attributes and UNO remain unverified. Targeted verification pending; last full237,next247; all prior states/defaults/classifications and registered I/O/recovery deviations preserved.",
+      "Iteration241 verified closure:12 fresh literal native registration/claim/sharing, complete item-set history and mounted direct UI cases plus related modules produced297 unique app passes and11 Chromium passes. Four initial fresh fixture failures were resolved in a failed-only four-case closure with the passing insertion test skipped. No passing replay or full suite; cadence last237,next247. All-four100% app and inventory coverage uses actual targeted counters and prior240 only with entire source/maps equality or complete declaration/body/enclosing branch/location proofs. Original rows/boxes/text/cursors survive repeated attribute history while shared formats are reconstructed. Full row layout client movement/destruction, native modify hints/pooling/merged/nested/UNO and whole core/browser parity remain unverified. No prior status/default/classification promotion.",
+      "Iteration242 registers original SwRowFrame clients at native row formats. ClaimFrameFormat directly retargets matching physical row clients before row registration; ChgFrameFormat and SaveTable history use distinct native TableLineFormatChanged and MoveTableLineHint notifications. Flat row/table deletion releases row frames before the model row and destroys formats only after their last represented client. Temporary JSX rendering and layout measurement release frames in finally while retaining direct native item reads. Full layout invalidation, frame hierarchy/follows, pooling, merged/nested tables and UNO remain unverified. Targeted checks pending; last full237, next247; previous classifications, defaults and registered I/O/recovery deviations preserved.",
+      "Iteration242 verified targeted closure:11 fresh native registration/hint/claim/history/deletion and main UI measurement/render/exception-lifetime cases plus related modules passed1293 unique app cases and11 Chromium cases. Two old cases now capture expected attributes before native destruction; literal attributes, original/new identities and history assertions remain intact.649 unaffected old acceptance files are byte-identical. Initial four failed cases passed in a failed-only closure; an additional new exception case and previously unexecuted related alignment/headline modules completed coverage, with zero passing replay. App and inventory all-four100% coverage uses actual counters and prior241 only for whole identical source/maps or complete unchanged declaration/body/enclosing branch/all locations. Full native hierarchy/invalidation/follows/pooling/nested/merged/UNO and whole core/browser parity remain unverified; previous metadata status/default/classification and registered deviations preserved. Last full237,next247; no full242.",
+      "Iteration243 owns native SwTableBoxFormat item sets through registered SwTableBox clients, exact box ranges and default frame inheritance. Cell claims retain complete direct attributes and separate shared calculation items; border and vertical commands reuse operation-local native format owners. SaveTable stores deduplicated complete cell item sets and numeric indices, restoring shared owners with MoveTableBoxHint before model registration. Actual section deletion releases cell clients; native insertion shares source formats; the main JSX table reads native border and orientation items directly. Full SwCellFrame hierarchy, invalidation, calculation, nested/merged tables and UNO remain partial. Targeted verification pending; last full237, next247; existing classifications/defaults and registered I/O/recovery deviations preserved.",
+      "Iteration243 verified1301 unique app cases including11 fresh native cell ownership/default/item-set/claim/hint/history/deletion and mounted rendering scenarios, plus25 Chromium cases, all runtime/build physically upstream absent/restored finally. Five old acceptance files capture expected attributes before native destruction or adopt native constructors without weakening literal/identity/history assertions;649 unaffected prior files remain byte-identical. Three initial failures passed failed-only; two new border-sharing/admission cases completed coverage, with zero passing replay. App and inventory all-four100% actual counters are bound to current bytes/maps or complete unchanged declarations/bodies/enclosing branches/all locations from242. Full SwCellFrame hierarchy/invalidation, calculation, numeric formatting, nested/merged/UNO/pooling/modified-state and whole project parity remain partial. Existing316 classifications/defaults/status/evidence prefixes and registered I/O/recovery deviations preserved. Last full237,next247; no full243.",
+      "Iteration244 connects actual SwFrame and SwLayoutFrame registration and original linked lower/sibling pointers. SwRowFrame constructs SwCellFrame children; native box claims retarget matching physical clients before model registration and history moves original cell frames. Recursive flat layout teardown and actual cell deletion release registrations; JSX, collapsing border paint and width measurement borrow registered native format items and release frames in finally. Full native geometry, flags, invalidation, content, follows, accessibility, fly/root and UNO remain unverified. Targeted verification pending; last full237,next247; prior metadata status/default/classification and registered I/O/recovery deviations preserved.",
+      "Iteration244 verified1318 unique app cases including12 fresh linked-frame ownership, claim ordering, transaction/history, deletion and main rendering/lifetime cases, plus25 Chromium cases. All657 prior acceptance files remain byte-identical; no passing runtime replay. Build/runtime upstream physically absent and restored finally; one fresh CSS-unit expectation corrected in a failed-only closure1pass2skip. Actual app/inventory all-four100% coverage binds current source/maps and complete unchanged declarations/bodies/enclosing branches/all locations from243. Invalid focused V8 painter inferred-else counters are retained raw; the entire valid initial current-byte-identical painter maps/counters already all-four100 supply that module, without counter sanitization. Prior316 metadata fields/order/status/default/classification/evidence prefixes retained; new wsfrm module unverified, inserted into required runtime order. Full native geometry/flags/invalidation/content/follows/accessibility/fly/root/UNO and whole project parity remain partial. Registered I/O/recovery deviations preserved; last full237,next247; no full244."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/docnode/nodes.cxx",
+    "upstreamSymbols": [
+      "SwNodes",
+      "SwNodes::SwNodes",
+      "SwNodes::~SwNodes",
+      "SwNodes::ChgNode"
+    ]
+  },
+  "legacyOrder": 180
+}

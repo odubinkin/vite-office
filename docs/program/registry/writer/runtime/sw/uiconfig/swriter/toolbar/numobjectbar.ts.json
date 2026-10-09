@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/uiconfig/swriter/toolbar/numobjectbar.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "numbering",
+    "capabilityIds": [
+      "CAP-0107"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/uiconfig/swriter/toolbar/numobjectbar.ts#writerNumObjectBarItems",
+        "vendor/libreoffice-reference/sw/uiconfig/swriter/toolbar/numobjectbar.xml#.uno:DecrementLevel"
+      ],
+      "justification": "Mapped provenance remains semantically unverified against sw/uiconfig/swriter/toolbar/numobjectbar.xml; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+      "knownViolations": [],
+      "localSymbols": [
+        "writerNumObjectBarItems"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/uiconfig/swriter/toolbar/numobjectbar.xml",
+      "upstreamSymbols": [
+        ".uno:DecrementLevel",
+        ".uno:IncrementLevel",
+        ".uno:DecrementSubLevels",
+        ".uno:IncrementSubLevels"
+      ]
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/browser/filter/xml/odt-worker-client.ts",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "odf-filter",
+    "capabilityIds": [
+      "CAP-0113",
+      "CAP-0130"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/browser/filter/xml/odt-worker-client.ts#ODT_WORKER_TIMEOUT_MS"
+      ],
+      "justification": "Adapts the versioned ODT protocol to a reusable browser Dedicated Worker with transferables, stale-result rejection, cancellation, timeout, and deterministic termination. The implementation depends on browser or React execution semantics, so no native LibreOffice source file is claimed as its owner.",
+      "knownViolations": [],
+      "localSymbols": [
+        "createBrowserOdtFilterService"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

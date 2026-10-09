@@ -1,0 +1,140 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "SvxTextLeftMarginItem",
+          "path": "apps/office/src/editeng/source/items/frmitems.ts"
+        },
+        {
+          "marker": "SvxFirstLineIndentItem",
+          "path": "apps/office/src/editeng/source/items/frmitems.ts"
+        },
+        {
+          "marker": "SvxRightMarginItem",
+          "path": "apps/office/src/editeng/source/items/frmitems.ts"
+        },
+        {
+          "marker": "SvxULSpaceItem",
+          "path": "apps/office/src/editeng/source/items/frmitems.ts"
+        },
+        {
+          "path": "apps/office/src/sw/inc/fmtfsize.ts",
+          "marker": "SwFormatFrameSize"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/docnode/ndtbl1.ts",
+          "marker": "GetSwRowHeight"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/docnode/ndtbl.ts",
+          "marker": "doc.SetRowHeight"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/layout/tabfrm.ts",
+          "marker": "SwRowFrame"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/docnode/native-box-border-items.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/editeng/source/items/boxitem.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/attr/native-format-attribute-notify.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/undo/native-format-attribute-notify-history.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-format-attribute-notify.test.tsx",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "SvxTextLeftMarginItem::SvxTextLeftMarginItem",
+          "path": "vendor/libreoffice-reference/editeng/source/items/frmitems.cxx"
+        },
+        {
+          "marker": "SvxFirstLineIndentItem::SvxFirstLineIndentItem",
+          "path": "vendor/libreoffice-reference/editeng/source/items/frmitems.cxx"
+        },
+        {
+          "marker": "SvxRightMarginItem::SvxRightMarginItem",
+          "path": "vendor/libreoffice-reference/editeng/source/items/frmitems.cxx"
+        },
+        {
+          "marker": "SvxULSpaceItem::SvxULSpaceItem",
+          "path": "vendor/libreoffice-reference/editeng/source/items/frmitems.cxx"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/fmtfsize.hxx",
+          "marker": "SwFormatFrameSize"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/atrfrm.cxx",
+          "marker": "SwFormatFrameSize::operator=="
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl.cxx",
+          "marker": "SetHeightSizeType"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmlimpit.cxx",
+          "marker": "MINLAY"
+        },
+        {
+          "path": "vendor/libreoffice-reference/editeng/source/items/frmitems.cxx",
+          "marker": "SvxBoxItem::SetLine"
+        },
+        {
+          "path": "vendor/libreoffice-reference/editeng/source/items/frmitems.cxx",
+          "marker": "SvxBoxInfoItem::ResetFlags"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/editeng/source/items/frmitems.ts",
+    "localSymbols": [
+      "SvxTextLeftMarginItem",
+      "SvxFirstLineIndentItem",
+      "SvxRightMarginItem",
+      "SvxULSpaceItem",
+      "SvxBoxItem",
+      "SvxBoxInfoItem",
+      "SvxBoxItemLine",
+      "SvxBoxInfoItemLine",
+      "SvxBoxInfoItemValidFlags",
+      "BorderLine2"
+    ],
+    "omittedResponsibilities": [
+      "Native UNO property mapping and presentation, mutable percentage and font-relative metric APIs, and frame items outside the implemented paragraph subset remain omitted."
+    ],
+    "preservedResponsibilities": [
+      "Owns the implemented text-left margin, first-line indent, right margin and upper/lower paragraph spacing values, clone/equality contracts and browser persistence values in the module corresponding to pinned frmitems.cxx.",
+      "Iteration202 removes scalar row minHeight storage and numeric kernel height contracts. Native SvxSizeItem/SwFormatFrameSize owns both dimensions, both sizing types, both percentages and both relations with native defaults, Which90, full equality, clone and supported default size query. Original rows retain copied items, document getter compares complete items and returns clone; resize uses native document setter with copied full size, preserving Fixed/Minimum and promoting only Variable. Flat layout and mounted cells use native Variable/Minimum/Fixed semantics, fixed content clipped, properties metric from shell common getter. ODT row-height Fixed/min-row-height Minimum/Variable omission and native height clamp1..65535; attributes apply in order. Full percentage/fly/vertical/nested/merged/protection/UNO member IDs/PutValue/pooling/widget/SfxItemSet/full parity remains unverified; all prior contracts/classifications/statuses/exceptions retained.",
+      "Iteration206 draft: scalar kernel cell border/padding storage is replaced by owned SvxBoxItem plus the existing vertical item. Represented lines retain native color/style/width/component arithmetic, signed16 distances/default0, cloning, metrics and supported UNO values; SvxBoxInfoItem retains native validity127. SetTabBorders consumes SfxItemSet and distributes flat union outer/inner lines using source validity rules. Insertion defaults55twips/black10twip lines and0/no-border are preserved. Process/storage uses complete primitive native state with legacy scalar ingress only; ODF and browser paint carry four independent sides. Initial static and upstream-absent runtime verification are pending. Complete native color shading/theme/Word/macros/fly/vertical/RTL/follow/shared-format behavior, per-edge/common-state border widgets and full parity remain unverified. All existing statuses/defaults/evidence/registered I/O/recovery exceptions are preserved.",
+      "Iteration206 verified closure: the earlier draft pending statement is historical. Native box/info/line ownership, supported values/defaults/metrics, flat source-defined border distribution, original graph and history, complete primitive transport and four-edge ODF/browser paint passed one full upstream-absent profile with failed/new-case-only closures. Current app and inventory actual counters each reach100% lines/statements/functions/branches under complete identical-source/maps or complete contiguous mapped-region proof. All550 prior acceptance contracts are preserved by522 byte-identical files and28 exact native-representation AST migrations; six new acceptance files and two new infrastructure cases are added. Full per-edge/common-state widgets, native themes/shading/Word and RTL/vertical/follow/shared-format completeness remain unverified; no semantic status or registered I/O/recovery exception is promoted.",
+      "Iteration245 ports precise native AttrSetChangeHint old/new effective values, modify locking and inherited Differentiate filtering to original registered clients. Row/cell generic attribute overrides are removed and copying claims are locked. Native default items127/157/158/159 supply actual protection flags, numeric format100/locale normalization, detached non-shareable formula and zero double. Browser snapshot restoration stays a bounded boundary. Full SwTableFormula inheritance/parser/calculation/name conversion, presentation/UNO and native frame invalidation/geometry remain unverified. Targeted verification pending; last full237,next247; no semantic promotion.",
+      "Iteration245 verified1575 unique app cases including20 fresh native format notification/default/ownership/history/UI cases and13 Chromium cases. Initial1538pass6fail; closure1 resolves6failures and explicitly revalidates3 materially affected fresh device/UI scenarios,9pass30skip; closure2 only new/unexecuted related cases31pass14skip. All660 prior acceptance files byte-identical. Actual app/inventory all-four100 binds current complete sources/maps and complete unchanged native declarations/signatures/bodies/enclosing branches/all locations from244; generated V8 duplicate method display ordinal changes are documented with full source hashes, no individual counter sanitization. Browser paint notification follows native clients without adding a document mutation. Existing317 metadata fields/order/status/default/classification/evidence prefixes preserved, one new cellatr record unverified. Full SwTableFormula second-base/calculation/name conversion/UNO, native frame invalidation/geometry and direct native UI registration remain partial. Registered IO/recovery/settings deviations preserved; last full237,next247; no full245."
+    ],
+    "status": "mapped",
+    "upstreamPath": "editeng/source/items/frmitems.cxx",
+    "upstreamSymbols": [
+      "SvxTextLeftMarginItem",
+      "SvxFirstLineIndentItem",
+      "SvxRightMarginItem",
+      "SvxULSpaceItem",
+      "SvxBoxItem",
+      "SvxBoxInfoItem"
+    ]
+  },
+  "legacyOrder": 3
+}

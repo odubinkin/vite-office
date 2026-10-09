@@ -1,0 +1,12 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "writer.internal.split-writer-text-runs",
+    "modulePath": "apps/office/src/sw/source/filter/basflt/writer-transfer.ts",
+    "symbol": "splitWriterTextRuns",
+    "classification": "local-infrastructure",
+    "capabilityId": "CAP-0124",
+    "description": "Filter-boundary transfer-run split helper over normalized Writer runs."
+  }
+}

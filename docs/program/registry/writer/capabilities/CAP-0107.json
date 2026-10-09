@@ -1,0 +1,258 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "LO-WRITER-0107",
+    "capabilityId": "CAP-0107",
+    "suite": "writer",
+    "subsystem": "numbering",
+    "type": "command",
+    "maturity": "verified",
+    "assertions": [
+      "The pinned upstream and local assertion markers cover this atomic operation: Promote or demote one active list paragraph."
+    ],
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "The bounded list-level transitions preserve the applicable upstream command semantics."
+    },
+    "capability": "Writer list-level mutation",
+    "gaps": [],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sw/source/uibase/shells/listsh.cxx",
+          "marker": "FN_NUM_BULLET_DOWN"
+        },
+        {
+          "path": "sw/sdi/swriter.sdi",
+          "marker": "DecrementLevel FN_NUM_BULLET_DOWN"
+        },
+        {
+          "path": "sw/uiconfig/swriter/menubar/menubar.xml",
+          "marker": ".uno:DecrementLevel"
+        },
+        {
+          "path": "sw/uiconfig/swriter/toolbar/numobjectbar.xml",
+          "marker": ".uno:IncrementLevel"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sw/qa/uitest/writer_tests2/formatBulletsNumbering.py",
+          "marker": "test_bullets_and_numbering_button_move"
+        }
+      ],
+      "docs": [
+        {
+          "path": "helpcontent2/source/text/shared/02/06050000.xhp",
+          "marker": ".uno:DecrementLevel"
+        },
+        {
+          "path": "helpcontent2/source/text/shared/02/06060000.xhp",
+          "marker": ".uno:IncrementLevel"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sw/source/uibase/shells/listsh.ts",
+          "marker": "WriterListLevelCommand"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+          "marker": "ChangeParagraphListLevel"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/undo/unnum.ts",
+          "marker": "class SwUndoNumUpDown"
+        },
+        {
+          "path": "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx",
+          "marker": "CommandMenuBar"
+        },
+        {
+          "path": "apps/office/src/sw/uiconfig/swriter/toolbar/numobjectbar.ts",
+          "marker": "writerNumObjectBarItems"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx",
+          "marker": "data-list-level"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.test.ts",
+          "marker": "routes formatting and list commands"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/list.test.ts",
+          "marker": "normalizes malformed command metadata"
+        },
+        {
+          "path": "apps/office/src/framework/browser/app/desktop.test.tsx",
+          "marker": "applies and toggles Writer list commands"
+        },
+        {
+          "path": "apps/office/e2e/writer-lists.spec.ts",
+          "marker": "Writer bullets and numbering"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/writer-paragraph-lists.md",
+          "marker": "DecrementLevel"
+        },
+        {
+          "path": "docs/program/writer-command-placement.md",
+          "marker": "toolbar/numobjectbar.xml"
+        },
+        {
+          "path": "docs/program/source-tree.md",
+          "marker": "listsh.ts"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "Promote or demote one active list paragraph",
+    "scopeLimitations": [
+      "The browser supports one active root-to-level-nine paragraph transition only; range, table-cell, multi-level selection, and native Writer outline behavior remain unmapped.",
+      "Complete nested rendering semantics, numbering prefixes and suffixes, explicit restart values, named-style editing, RTF, Paste, and DOCX interchange remain separate capabilities; levels zero through nine round-trip through bounded ODT."
+    ],
+    "implemented": true,
+    "contractParity": true,
+    "behaviorParity": true,
+    "defaultParity": true,
+    "verified": true,
+    "assertionEvidence": [
+      {
+        "assertion": "The pinned upstream and local assertion markers cover this atomic operation: Promote or demote one active list paragraph.",
+        "local": {
+          "marker": "routes formatting and list commands",
+          "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.test.ts"
+        },
+        "upstream": {
+          "marker": "test_bullets_and_numbering_button_move",
+          "path": "sw/qa/uitest/writer_tests2/formatBulletsNumbering.py"
+        }
+      }
+    ],
+    "verification": {
+      "commit": "7632bdc505ec",
+      "evidence": "Parity closure evidence resolution; npm run inventory:parity; npm test; npm run test:e2e",
+      "scope": "bounded",
+      "taskId": "202609210851-1GHX09"
+    },
+    "closure": {
+      "contract": {
+        "local": {
+          "marker": "WriterListLevelCommand",
+          "path": "apps/office/src/sw/source/uibase/shells/listsh.ts"
+        },
+        "method": "api-invariant",
+        "rationale": "The bounded CAP-0107 API and identifiers resolve to exact local and pinned upstream symbols.",
+        "status": "pass",
+        "upstream": {
+          "marker": "FN_NUM_BULLET_DOWN",
+          "path": "sw/source/uibase/shells/listsh.cxx"
+        }
+      },
+      "ownership": {
+        "local": {
+          "marker": "WriterListLevelCommand",
+          "path": "apps/office/src/sw/source/uibase/shells/listsh.ts"
+        },
+        "method": "api-invariant",
+        "rationale": "The bounded CAP-0107 owner is checked at the mapped local and upstream implementation boundary.",
+        "status": "pass",
+        "upstream": {
+          "marker": "FN_NUM_BULLET_DOWN",
+          "path": "sw/source/uibase/shells/listsh.cxx"
+        }
+      },
+      "behavior": {
+        "local": {
+          "marker": "routes formatting and list commands",
+          "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.test.ts"
+        },
+        "method": "unit-test",
+        "rationale": "The mapped local assertion exercises the same bounded operation as the pinned upstream assertion.",
+        "status": "pass",
+        "upstream": {
+          "marker": "test_bullets_and_numbering_button_move",
+          "path": "sw/qa/uitest/writer_tests2/formatBulletsNumbering.py"
+        }
+      },
+      "defaults": {
+        "local": {
+          "marker": "routes formatting and list commands",
+          "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.test.ts"
+        },
+        "method": "source-derived-golden",
+        "rationale": "The local default-state expectation is derived from the pinned upstream assertion before explicit user settings.",
+        "status": "pass",
+        "upstream": {
+          "marker": "test_bullets_and_numbering_button_move",
+          "path": "sw/qa/uitest/writer_tests2/formatBulletsNumbering.py"
+        }
+      },
+      "serialization": {
+        "method": "not-applicable",
+        "rationale": "Promote or demote one active list paragraph does not cross a serialization boundary.",
+        "status": "not-applicable"
+      },
+      "operationCycle": {
+        "local": {
+          "marker": "routes formatting and list commands",
+          "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.test.ts"
+        },
+        "method": "source-derived-golden",
+        "rationale": "The applicable mutation, undo/redo, export, or reopen stages are exercised by the mapped bounded test.",
+        "status": "pass",
+        "upstream": {
+          "marker": "test_bullets_and_numbering_button_move",
+          "path": "sw/qa/uitest/writer_tests2/formatBulletsNumbering.py"
+        }
+      },
+      "differential": {
+        "local": {
+          "marker": "routes formatting and list commands",
+          "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.test.ts"
+        },
+        "method": "source-derived-golden",
+        "rationale": "No runnable pinned LibreOffice binary is present; the focused local golden is derived from the exact pinned upstream test assertion.",
+        "status": "pass",
+        "upstream": {
+          "marker": "test_bullets_and_numbering_button_move",
+          "path": "sw/qa/uitest/writer_tests2/formatBulletsNumbering.py"
+        }
+      },
+      "divergences": [
+        {
+          "classification": "X",
+          "description": "The browser supports one active root-to-level-nine paragraph transition only; range, table-cell, multi-level selection, and native Writer outline behavior remain unmapped.",
+          "local": {
+            "marker": "DecrementLevel",
+            "path": "docs/program/writer-paragraph-lists.md"
+          },
+          "upstream": {
+            "marker": "FN_NUM_BULLET_DOWN",
+            "path": "sw/source/uibase/shells/listsh.cxx"
+          }
+        },
+        {
+          "classification": "X",
+          "description": "Complete nested rendering semantics, numbering prefixes and suffixes, explicit restart values, named-style editing, RTF, Paste, and DOCX interchange remain separate capabilities; levels zero through nine round-trip through bounded ODT.",
+          "local": {
+            "marker": "DecrementLevel",
+            "path": "docs/program/writer-paragraph-lists.md"
+          },
+          "upstream": {
+            "marker": "FN_NUM_BULLET_DOWN",
+            "path": "sw/source/uibase/shells/listsh.cxx"
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,274 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "LO-WRITER-0120",
+    "capabilityId": "CAP-0120",
+    "suite": "writer",
+    "subsystem": "clipboard-transfer",
+    "type": "command",
+    "maturity": "verified",
+    "assertions": [
+      "The pinned upstream and local assertion markers cover this atomic operation: Intercept one native Copy, Cut, or Paste event."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser clipboard reads and writes replace native clipboard services."
+    },
+    "capability": "Writer browser clipboard-event handling",
+    "gaps": [],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sw/source/uibase/dochdl/swdtflvr.cxx",
+          "marker": "SwTransferable::Cut"
+        },
+        {
+          "path": "sw/source/uibase/dochdl/swdtflvr.cxx",
+          "marker": "SwTransferable::Paste"
+        },
+        {
+          "path": "sw/source/core/doc/DocumentContentOperationsManager.cxx",
+          "marker": "DocumentContentOperationsManager::ReplaceRange"
+        },
+        {
+          "path": "sw/uiconfig/swriter/menubar/menubar.xml",
+          "marker": ".uno:Paste"
+        },
+        {
+          "path": "sw/uiconfig/swriter/toolbar/standardbar.xml",
+          "marker": ".uno:Cut"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sw/qa/extras/uiwriter/uiwriter8.cxx",
+          "marker": "dispatchCommand(mxComponent, u\".uno:Cut\""
+        },
+        {
+          "path": "sw/qa/uitest/writer_tests2/tdf133299.py",
+          "marker": ".uno:Paste"
+        }
+      ],
+      "docs": [
+        {
+          "path": "helpcontent2/source/text/shared/01/02040000.xhp",
+          "marker": ".uno:Cut"
+        },
+        {
+          "path": "helpcontent2/source/text/shared/01/02060000.xhp",
+          "marker": ".uno:Paste"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+          "marker": "public ReplaceRange"
+        },
+        {
+          "path": "apps/office/src/sw/browser/filter/html/swhtml.ts",
+          "marker": "parseWriterClipboardPaste"
+        },
+        {
+          "path": "apps/office/src/sw/browser/workflows/writer-workflows.ts",
+          "marker": "pasteWriterClipboard"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/writer-clipboard-events.ts",
+          "marker": "readBrowserWriterClipboardPaste"
+        },
+        {
+          "path": "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx",
+          "marker": "CommandMenuBar"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterCommandToolbar.tsx",
+          "marker": "WriterCommandToolbar"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.test.ts",
+          "marker": "pastes structured list paragraphs"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/swhtml.test.ts",
+          "marker": "imports only bounded direct formats"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/WriterPlainTextEditor.test.tsx",
+          "marker": "intercepts native Cut and Paste"
+        },
+        {
+          "path": "apps/office/src/vcl/browser/browser-clipboard.test.ts",
+          "marker": "reads the first text-capable"
+        },
+        {
+          "path": "apps/office/e2e/writer-cut-paste.spec.ts",
+          "marker": "Writer Cut and Paste"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/writer-clipboard.md",
+          "marker": "Browser Writer clipboard"
+        },
+        {
+          "path": "docs/program/writer-command-placement.md",
+          "marker": ".uno:Cut"
+        },
+        {
+          "path": "docs/program/source-tree.md",
+          "marker": "DocumentContentOperationsManager.ts"
+        }
+      ]
+    },
+    "aspect": "browser-input",
+    "atomicOperation": "Intercept one native Copy, Cut, or Paste event",
+    "scopeLimitations": [
+      "The browser supports a single same-paragraph range for Cut and Paste; cross-paragraph, multi-range, table, object, and tracked-change transfer remain unmapped.",
+      "Paste accepts only visible plain text and the bounded strong/em/single-underline HTML subset. RTF, images, embedded objects, list or paragraph reconstruction, Paste Special, and ODT/DOCX transfer filters are explicitly unsupported."
+    ],
+    "implemented": true,
+    "contractParity": true,
+    "behaviorParity": true,
+    "defaultParity": true,
+    "verified": true,
+    "assertionEvidence": [
+      {
+        "assertion": "The pinned upstream and local assertion markers cover this atomic operation: Intercept one native Copy, Cut, or Paste event.",
+        "local": {
+          "marker": "pastes structured list paragraphs",
+          "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.test.ts"
+        },
+        "upstream": {
+          "marker": "dispatchCommand(mxComponent, u\".uno:Cut\"",
+          "path": "sw/qa/extras/uiwriter/uiwriter8.cxx"
+        }
+      }
+    ],
+    "verification": {
+      "commit": "7632bdc505ec",
+      "evidence": "Parity closure evidence resolution; npm run inventory:parity; npm test; npm run test:e2e",
+      "scope": "bounded",
+      "taskId": "202609210851-1GHX09"
+    },
+    "closure": {
+      "contract": {
+        "local": {
+          "marker": "public ReplaceRange",
+          "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts"
+        },
+        "method": "api-invariant",
+        "rationale": "The bounded CAP-0120 API and identifiers resolve to exact local and pinned upstream symbols.",
+        "status": "pass",
+        "upstream": {
+          "marker": "SwTransferable::Cut",
+          "path": "sw/source/uibase/dochdl/swdtflvr.cxx"
+        }
+      },
+      "ownership": {
+        "local": {
+          "marker": "public ReplaceRange",
+          "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts"
+        },
+        "method": "api-invariant",
+        "rationale": "The bounded CAP-0120 owner is checked at the mapped local and upstream implementation boundary.",
+        "status": "pass",
+        "upstream": {
+          "marker": "SwTransferable::Cut",
+          "path": "sw/source/uibase/dochdl/swdtflvr.cxx"
+        }
+      },
+      "behavior": {
+        "local": {
+          "marker": "pastes structured list paragraphs",
+          "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.test.ts"
+        },
+        "method": "browser-test",
+        "rationale": "The mapped local assertion exercises the same bounded operation as the pinned upstream assertion.",
+        "status": "pass",
+        "upstream": {
+          "marker": "dispatchCommand(mxComponent, u\".uno:Cut\"",
+          "path": "sw/qa/extras/uiwriter/uiwriter8.cxx"
+        }
+      },
+      "defaults": {
+        "local": {
+          "marker": "pastes structured list paragraphs",
+          "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.test.ts"
+        },
+        "method": "source-derived-golden",
+        "rationale": "The local default-state expectation is derived from the pinned upstream assertion before explicit user settings.",
+        "status": "pass",
+        "upstream": {
+          "marker": "dispatchCommand(mxComponent, u\".uno:Cut\"",
+          "path": "sw/qa/extras/uiwriter/uiwriter8.cxx"
+        }
+      },
+      "serialization": {
+        "method": "not-applicable",
+        "rationale": "Intercept one native Copy, Cut, or Paste event does not cross a serialization boundary.",
+        "status": "not-applicable"
+      },
+      "operationCycle": {
+        "method": "not-applicable",
+        "rationale": "Intercept one native Copy, Cut, or Paste event has no applicable import-mutation-undo-export-reopen cycle.",
+        "status": "not-applicable"
+      },
+      "differential": {
+        "local": {
+          "marker": "pastes structured list paragraphs",
+          "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.test.ts"
+        },
+        "method": "source-derived-golden",
+        "rationale": "No runnable pinned LibreOffice binary is present; the focused local golden is derived from the exact pinned upstream test assertion.",
+        "status": "pass",
+        "upstream": {
+          "marker": "dispatchCommand(mxComponent, u\".uno:Cut\"",
+          "path": "sw/qa/extras/uiwriter/uiwriter8.cxx"
+        }
+      },
+      "divergences": [
+        {
+          "classification": "B",
+          "description": "Browser clipboard reads and writes replace native clipboard services.",
+          "local": {
+            "marker": "Browser Writer clipboard",
+            "path": "docs/program/writer-clipboard.md"
+          },
+          "upstream": {
+            "marker": "SwTransferable::Cut",
+            "path": "sw/source/uibase/dochdl/swdtflvr.cxx"
+          }
+        },
+        {
+          "classification": "X",
+          "description": "The browser supports a single same-paragraph range for Cut and Paste; cross-paragraph, multi-range, table, object, and tracked-change transfer remain unmapped.",
+          "local": {
+            "marker": "Browser Writer clipboard",
+            "path": "docs/program/writer-clipboard.md"
+          },
+          "upstream": {
+            "marker": "SwTransferable::Cut",
+            "path": "sw/source/uibase/dochdl/swdtflvr.cxx"
+          }
+        },
+        {
+          "classification": "X",
+          "description": "Paste accepts only visible plain text and the bounded strong/em/single-underline HTML subset. RTF, images, embedded objects, list or paragraph reconstruction, Paste Special, and ODT/DOCX transfer filters are explicitly unsupported.",
+          "local": {
+            "marker": "Browser Writer clipboard",
+            "path": "docs/program/writer-clipboard.md"
+          },
+          "upstream": {
+            "marker": "SwTransferable::Cut",
+            "path": "sw/source/uibase/dochdl/swdtflvr.cxx"
+          }
+        }
+      ]
+    }
+  }
+}

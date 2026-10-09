@@ -1,0 +1,26 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "local-infrastructure",
+    "evidence": {
+      "local": [
+        {
+          "marker": "WriterDialogController",
+          "path": "apps/office/src/sw/source/uibase/dialog/writer-dialog-controller.ts"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/uibase/dialog/writer-dialog-controller.ts",
+    "rationale": "Composes the SfxDialogController request lifecycle with Writer hyperlink, page-style, and paragraph-dialog data so an external presenter can complete one shell-owned request; the pinned shell slots own execution.",
+    "responsibilities": [
+      "Composes the SfxDialogController request lifecycle with Writer hyperlink, page-style, and paragraph-dialog data so an external presenter can complete one shell-owned request; the pinned shell slots own execution."
+    ],
+    "stackDivergence": {
+      "kind": "local-infrastructure",
+      "rationale": "The TypeScript command composition has no single native implementation unit."
+    },
+    "status": "local-only"
+  },
+  "legacyOrder": 254
+}

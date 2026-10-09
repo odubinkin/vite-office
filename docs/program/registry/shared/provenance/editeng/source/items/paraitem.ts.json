@@ -1,0 +1,61 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "SvxAdjust",
+          "path": "apps/office/src/editeng/source/items/paraitem.ts"
+        },
+        {
+          "path": "apps/office/src/editeng/source/items/paraitem.ts",
+          "marker": "SetDefaultDistance"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "SvxAdjust",
+          "path": "vendor/libreoffice-reference/editeng/source/items/paraitem.cxx"
+        },
+        {
+          "path": "vendor/libreoffice-reference/editeng/source/items/paraitem.cxx",
+          "marker": "SvxTabStop::SvxTabStop( const sal_Int32"
+        },
+        {
+          "path": "vendor/libreoffice-reference/editeng/source/items/paraitem.cxx",
+          "marker": "SvxTabStopItem::SetDefaultDistance"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/editeng/source/items/paraitem.ts",
+    "localSymbols": [
+      "SvxAdjust",
+      "SvxAdjustItem",
+      "SvxTabAdjust",
+      "SvxTabStop",
+      "SvxTabStopItem",
+      "SvxLineSpacingItem"
+    ],
+    "omittedResponsibilities": [
+      "Native UNO presentation, full line-spacing mutation APIs and paragraph item contracts outside the implemented subset remain omitted."
+    ],
+    "preservedResponsibilities": [
+      "Reimplements bounded paragraph alignment, tab-stop ordering and replacement, and line-spacing values from pinned editeng/source/items/paraitem.cxx.",
+      "Preserves signed sal_Int32 tab positions and direct default-distance setter storage, including clone and browser value restoration; this direct API is distinct from UNO PutValue validation."
+    ],
+    "status": "mapped",
+    "upstreamPath": "editeng/source/items/paraitem.cxx",
+    "upstreamSymbols": [
+      "SvxAdjust",
+      "SvxAdjustItem",
+      "SvxTabStop",
+      "SvxTabStopItem",
+      "SvxTabStopItem::Insert",
+      "SvxLineSpacingItem::CreateDefault",
+      "SvxAdjustItem::CreateDefault"
+    ]
+  },
+  "legacyOrder": 5
+}

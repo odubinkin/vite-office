@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/test/wrtsh-test-helpers.ts",
+    "classification": "local-infrastructure",
+    "state": "internal",
+    "suite": "writer",
+    "subsystem": "test-infrastructure",
+    "capabilityIds": [],
+    "infrastructureExemption": "Test-only adapters preserve legacy fixture IDs outside production Writer shell contracts.",
+    "semantic": {
+      "behaviorStatus": "not-applicable",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "A",
+      "evidence": [
+        "apps/office/src/test/wrtsh-test-helpers.ts#setTestSelection"
+      ],
+      "justification": "Resolves fixture identifiers only in tests and converts them immediately to canonical SwPosition, SwPaM, and node-reference operations.",
+      "knownViolations": [],
+      "localSymbols": [
+        "getTestParagraph",
+        "setTestCursor",
+        "setTestSelection",
+        "getTestSelection",
+        "handleTestInput",
+        "fixtureReplaceRange",
+        "toggleTestFormat",
+        "setTestHyperlink",
+        "fixtureSplitParagraph",
+        "fixtureMergeParagraphWithPrevious",
+        "fixtureMergeParagraphWithNext",
+        "pasteTestSelection",
+        "getNodeId"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

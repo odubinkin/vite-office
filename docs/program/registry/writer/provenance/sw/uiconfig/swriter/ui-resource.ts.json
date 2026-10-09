@@ -1,0 +1,26 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "local-infrastructure",
+    "evidence": {
+      "local": [
+        {
+          "marker": "WriterMenuPlacement",
+          "path": "apps/office/src/sw/uiconfig/swriter/ui-resource.ts"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/uiconfig/swriter/ui-resource.ts",
+    "rationale": "Defines local typed composition data without claiming a LibreOffice implementation source.",
+    "responsibilities": [
+      "Defines presentation-free menu and toolbar placement record types."
+    ],
+    "status": "local-only",
+    "stackDivergence": {
+      "kind": "local-infrastructure",
+      "rationale": "Typed local composition contract with no single native LibreOffice implementation unit."
+    }
+  },
+  "legacyOrder": 276
+}

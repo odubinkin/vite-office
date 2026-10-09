@@ -1,0 +1,57 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/filter/basflt/shellio.ts",
+    "upstreamPath": "sw/source/filter/basflt/shellio.cxx",
+    "localSymbols": [
+      "createWriterReadFragmentAction"
+    ],
+    "upstreamSymbols": [
+      "SwReader::Read"
+    ],
+    "preservedResponsibilities": [
+      "Iteration150 routes a single non-block non-list clipboard paragraph in table mode through native SwReader cursor-ring point ownership. Existing content and earlier paragraphs remain intact, the explicit imported text/hint fragment is cloned independently into every selected cell at its last-paragraph end, and one grouped native insertion history retains table selection through Undo/Redo. This bounded fragment payload reuses existing SwUndoInsert; complete native SwUndoInsDoc and ASCII/filter-default formatting, multiline/list/table transfer, nested/merged/protected/redline behavior and native history lifetimes remain unverified. Existing semantic states/defaults/classifications and conscious I/O/recovery deviations are unchanged."
+    ],
+    "omittedResponsibilities": [
+      "Full import and SwUndoInsDoc, ASCII defaults and structural clipboard insertion remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/basflt/shellio.ts",
+          "marker": "createWriterReadFragmentAction"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-paste.test.ts",
+          "marker": "native clipboard preserves selected cell content and repeated history"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-table-paste.test.tsx",
+          "marker": "mounted %s paste appends to every selected row cell in one native Undo"
+        },
+        {
+          "path": "apps/office/e2e/writer-native-table-paste.spec.ts",
+          "marker": "Writer selected row paste appends in every cell and retains native Undo selection"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/basflt/shellio.cxx",
+          "marker": "SwReader::Read"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/dochdl/swdtflvr.cxx",
+          "marker": "SwTransferable::PasteFileContent"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/crsr/swcrsr.cxx",
+          "marker": "SwTableCursor::MakeBoxSels"
+        }
+      ]
+    }
+  },
+  "legacyOrder": 237
+}

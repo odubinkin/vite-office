@@ -1,0 +1,33 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/framework/browser/localization/messages.ts",
+    "classification": "browser-adaptation",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "application-services",
+    "capabilityIds": [
+      "CAP-0101"
+    ],
+    "semantic": {
+      "behaviorStatus": "not-applicable",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/framework/browser/localization/messages.ts#MessageCatalog"
+      ],
+      "justification": "Browser-owned keyboard, Intl locale, or Worker adaptation with no direct native source mapping.",
+      "knownViolations": [],
+      "localSymbols": [
+        "normalizeLocale",
+        "resolveMessage",
+        "interpolateMessage"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

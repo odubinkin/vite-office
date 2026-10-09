@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "AutoRecoverySaveReason",
+          "path": "apps/office/src/framework/source/services/autorecovery.ts"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "cppu::supportsService",
+          "path": "vendor/libreoffice-reference/framework/source/services/autorecovery.cxx"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/framework/source/services/autorecovery.ts",
+    "localSymbols": [
+      "AutoRecoverySaveReason",
+      "AutoRecoverySaveResult",
+      "AutoRecoveryRestoreResult",
+      "AutoRecoveryCandidate",
+      "AutoRecoveryEnvironment",
+      "AutoRecoveryOptions"
+    ],
+    "omittedResponsibilities": [
+      "Upstream obligations outside cppu::supportsService, OWeakObject::acquire, OWeakObject::release, svtools::ConfigItems and the bounded AutoRecoverySaveReason, AutoRecoverySaveResult, AutoRecoveryRestoreResult contract remain intentionally omitted."
+    ],
+    "preservedResponsibilities": [
+      "Implements the browser application AutoRecovery owner corresponding to LibreOffice `framework/source/services/autorecovery.cxx` over injected document and storage contracts."
+    ],
+    "status": "mapped",
+    "upstreamPath": "framework/source/services/autorecovery.cxx",
+    "upstreamSymbols": [
+      "cppu::supportsService",
+      "OWeakObject::acquire",
+      "OWeakObject::release",
+      "svtools::ConfigItems"
+    ]
+  },
+  "legacyOrder": 24
+}

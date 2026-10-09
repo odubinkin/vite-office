@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sfx2/source/control/ctrlitem.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "dispatch",
+    "capabilityIds": [
+      "CAP-0101",
+      "CAP-0115"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sfx2/source/control/ctrlitem.ts#SfxControllerItem",
+        "vendor/libreoffice-reference/sfx2/source/control/ctrlitem.cxx#SfxControllerItem::SfxControllerItem"
+      ],
+      "justification": "Ports one persistent slot-specific SfxControllerItem subscription per visible browser control.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SfxControllerItem"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sfx2/source/control/ctrlitem.cxx",
+      "upstreamSymbols": [
+        "SfxControllerItem::SfxControllerItem"
+      ]
+    }
+  }
+}

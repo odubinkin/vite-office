@@ -1,0 +1,68 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/core/text/txttab.ts",
+    "upstreamPath": "sw/source/core/text/txttab.cxx",
+    "localSymbols": [
+      "SwNumberingTabSettings",
+      "resolveSwNumberingTabPosition"
+    ],
+    "upstreamSymbols": [
+      "SwLineInfo::GetTabStop",
+      "SwTextFormatter::NewTabPortion"
+    ],
+    "preservedResponsibilities": [
+      "Strict next-stop lookup after occupied label advance, default spacing arithmetic, native compatibility minimum and bounded hanging-indent rule.",
+      "List-tab insert/replace and preceding-default removal with primitive borrowed projection inputs."
+    ],
+    "omittedResponsibilities": [
+      "Full SwLineInfo/SwTextFormatter ownership, frame boundaries, RTL/vertical, right/center/decimal/fill, multi/last-tab, fly and tab-over-margin/spacing/overflow."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/text/txttab.ts",
+          "marker": "resolveSwNumberingTabPosition"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/text/native-numbering-tab.test.ts",
+          "marker": "equal edge exhausts tab strictly"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-numbering-tab.test.tsx",
+          "marker": "measured native label tab follows glyph"
+        },
+        {
+          "path": "apps/office/e2e/writer-native-numbering-tab.spec.ts",
+          "marker": "Writer exhausted bullet tab"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/text/txttab.cxx",
+          "marker": "SwLineInfo::GetTabStop"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/text/txttab.cxx",
+          "marker": "SwTextFormatter::NewTabPortion"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/text/inftxt.cxx",
+          "marker": "SwLineInfo::InitLineInfo"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "SwTextNode::GetListTabStopPosition"
+        }
+      ]
+    },
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Measured browser glyph advance and immutable primitive inputs represent the bounded native LTR numbering tab search without claiming a complete formatter/portion hierarchy."
+    }
+  },
+  "legacyOrder": 205
+}

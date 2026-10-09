@@ -1,0 +1,80 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "SfxItemState",
+          "path": "apps/office/src/svl/source/items/itemset.ts"
+        },
+        {
+          "marker": "poolItemMap",
+          "path": "apps/office/src/svl/source/items/itemset.ts"
+        },
+        {
+          "path": "apps/office/src/svl/source/items/itemset-equality.test.ts",
+          "marker": "native item-set equality"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/attr/native-format-attribute-notify.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/undo/native-format-attribute-notify-history.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-format-attribute-notify.test.tsx",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "SfxItemState",
+          "path": "vendor/libreoffice-reference/svl/source/items/itemset.cxx"
+        },
+        {
+          "marker": "PoolItemMap",
+          "path": "vendor/libreoffice-reference/include/svl/itemset.hxx"
+        },
+        {
+          "marker": "SfxItemSet::DisableOrInvalidateItem_ForWhichID",
+          "path": "vendor/libreoffice-reference/svl/source/items/itemset.cxx"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svl/source/items/itemset.cxx",
+          "marker": "SfxItemSet::Equals"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/svl/source/items/itemset.ts",
+    "localSymbols": [
+      "SfxItemState",
+      "WhichRange",
+      "WhichRangesContainer",
+      "SfxItemSet"
+    ],
+    "omittedResponsibilities": [
+      "Upstream obligations outside SfxItemState, WhichRange, WhichRangesContainer, SfxItemSet and the bounded SfxItemState, WhichRange, WhichRangesContainer contract remain intentionally omitted."
+    ],
+    "preservedResponsibilities": [
+      "Reimplements bounded SfxItemSet delta storage, parent lookup, and item state from pinned `svl/source/items/itemset.cxx`.",
+      "Stores ordinary values and distinct INVALID/DISABLED singleton pointers in one native-style PoolItemMap keyed by WhichId; state transitions follow DisableOrInvalidateItem_ForWhichID.",
+      "Iteration39 restores registered-item handle copy/commit and Changed broadcast deltas before storage mutation. Unchanged complete native owners/helpers/storage bodies (24 definitions,300 sequences,1815 states) compare actual SwDoc/SwTextNode base-owner calls,retained handles,return counts and observer delta counts. Independent literal tests assert inherited/pool-default delta values,slot/sentinel exclusions,no-op overload retention and nested set/reset notifications. Full native IStyleAccess pooling/dedup,modify locks,cache,refcount,surrogates,conditional/RES_AUTO_STYLE items and client lifetime remain unimplemented or unverified. This fresh-handle/unlocked browser observer profile does not establish whole-module or native defaults parity. A destructive callback deleting the final handle crashed the unchanged native raw observer adapter;the trace is preserved as unresolved client-lifetime evidence and is not assigned fabricated parity expectations.",
+      "Iteration112 restores the base SfxItemSet::Equals contract with explicit comparePool: self shortcut, conditional pool/parent identity, direct Count, empty equality without range comparison, keyed direct SET/INVALID/DISABLED state and SET item value equality. The existing Writer automatic-style value comparison delegates to this owner instead of a SET-only projection helper, preventing loss of marker distinctions and parent-owned formatting when adjacent hints normalize. Independent actual-owner/map/item/hint/clone/projection tests cover this bounded correction. Native automatic-style equality itself requires shared handles from document-owned StylePool; handle interning and pointer equality remain open architectural work and are not certified by this leaf. Complete module/notification/layout/filter/UI contracts remain unverified; no status/default/exception promotion or registered I/O/recovery change.",
+      "Iteration245 ports precise native AttrSetChangeHint old/new effective values, modify locking and inherited Differentiate filtering to original registered clients. Row/cell generic attribute overrides are removed and copying claims are locked. Native default items127/157/158/159 supply actual protection flags, numeric format100/locale normalization, detached non-shareable formula and zero double. Browser snapshot restoration stays a bounded boundary. Full SwTableFormula inheritance/parser/calculation/name conversion, presentation/UNO and native frame invalidation/geometry remain unverified. Targeted verification pending; last full237,next247; no semantic promotion.",
+      "Iteration245 verified1575 unique app cases including20 fresh native format notification/default/ownership/history/UI cases and13 Chromium cases. Initial1538pass6fail; closure1 resolves6failures and explicitly revalidates3 materially affected fresh device/UI scenarios,9pass30skip; closure2 only new/unexecuted related cases31pass14skip. All660 prior acceptance files byte-identical. Actual app/inventory all-four100 binds current complete sources/maps and complete unchanged native declarations/signatures/bodies/enclosing branches/all locations from244; generated V8 duplicate method display ordinal changes are documented with full source hashes, no individual counter sanitization. Browser paint notification follows native clients without adding a document mutation. Existing317 metadata fields/order/status/default/classification/evidence prefixes preserved, one new cellatr record unverified. Full SwTableFormula second-base/calculation/name conversion/UNO, native frame invalidation/geometry and direct native UI registration remain partial. Registered IO/recovery/settings deviations preserved; last full237,next247; no full245."
+    ],
+    "status": "mapped",
+    "upstreamPath": "svl/source/items/itemset.cxx",
+    "upstreamSymbols": [
+      "SfxItemState",
+      "WhichRange",
+      "WhichRangesContainer",
+      "SfxItemSet"
+    ]
+  },
+  "legacyOrder": 58
+}

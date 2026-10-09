@@ -1,0 +1,55 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/doc/DocumentListItemsManager.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "document-model",
+    "capabilityIds": [
+      "CAP-0114"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/doc/DocumentListItemsManager.ts#DocumentListItemsManager",
+        "apps/office/src/sw/source/core/txtnode/node-numbering-lifecycle.test.ts#owns records in text nodes and validates insertion notifications before prefix reads",
+        "apps/office/src/sw/source/core/txtnode/node-numbering-lifecycle.test.ts#removes old clients before changing list attributes and preserves native registration order",
+        "apps/office/src/sw/source/core/doc/DocumentListItemsManager.test.ts#sorts independent of insertion order, suppresses equivalent positions and filters bullets and uncounted items",
+        "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx#SwTextNode::GetNum(",
+        "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx#SwTextNode::GetNumberVector(",
+        "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx#SwTextNode::AddToList()",
+        "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx#SwTextNode::RemoveFromList()",
+        "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx#HandleSetAttrAtTextNode::HandleSetAttrAtTextNode",
+        "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx#SwNodeNum::PreAdd()",
+        "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx#SwNodeNum::PostRemove()",
+        "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx#SwNodeNum::ChangeNumRule(",
+        "vendor/libreoffice-reference/sw/source/core/doc/number.cxx#SwNumRule::GetTextNodeList(",
+        "vendor/libreoffice-reference/sw/source/core/doc/number.cxx#SwNumRule::RemoveTextNode(",
+        "vendor/libreoffice-reference/sw/source/core/doc/number.cxx#SwNumRule::Validate(",
+        "vendor/libreoffice-reference/sw/source/core/doc/DocumentListItemsManager.cxx#DocumentListItemsManager::addListItem(",
+        "vendor/libreoffice-reference/sw/source/core/doc/DocumentListItemsManager.cxx#DocumentListItemsManager::getNumItems(",
+        "apps/office/src/sw/source/core/txtnode/number-classification.test.ts#matches native format enumeration itemize copy and type-change predicates",
+        "apps/office/src/sw/source/core/txtnode/number-classification.test.ts#matches all native effective classification raw-layout counting and registry profiles",
+        "apps/office/src/sw/source/core/txtnode/number-classification.test.ts#matches native root phantom and counted numbered-registry filtering",
+        "apps/office/src/sw/source/core/txtnode/number-classification.test.ts#retains existing supported classifications and sparse ownership through Worker16"
+      ],
+      "justification": "Iteration36 makes the shown number record SwTextNode-owned: SwList inserts/removes records without allocation or a text-node map. SwNodeNum binds/clears its rule in PreAdd/PostRemove and transfers rule clients in ChangeNumRule; rule clients retain insertion order and suppress identity duplicates. DocumentListItemsManager maintains native position ordering and filters counted enumeration records. Attribute rule/list changes detach before mutation; canonical node moves retain records,copy/restore attach independent records. Reads validate the requested prefix rather than unrelated tails. Compiled20 additional unmodified pinned owner/registry definitions alongside37 tree/list definitions compare120 sequences/8976 actual owner states including raw prefix caches,reverse vectors,bound rules,client order and numbered registry. Literal tests cover orphan binding,default1 after removal,duplicate add,disconnected/foreign arrays,rule copies and disposal. Single shown/document-node/hierarchical Arabic and bullet slice only;native layout expansion,redline/original arrays,complete callbacks/word-count/lifetime and legacy/default factories remain unverified. No whole-module/default/goal promotion;registered document IO deviations unchanged. Iteration45 restores native SwNumFormat.IsItemize (CHAR_SPECIAL/BITMAP) and IsEnumeration (!IsItemize, including NONE), and actual SwTextNode HasNumber/HasBullet use of the bounded effective const format. The distinct ndtxt.cxx layout-update predicate reads raw owned GetNumFormat and rejects absent/NONE/CHAR_SPECIAL/BITMAP formats. Native source bodies plus actual native rule constructor/Get/GetNumFormat/Set/default profile execute1032 cases under ASan/UBSan:4 format classifications/copies,1008 node/ownership/count/registry profiles,4 root/phantom cases and16 registry masks. Real local document/record/registry methods match the literal results; diagnostic record, bounded actual-level, counted/phantom, null-layout, ordered-container and platform/font/graphics aliases are named. Scalar bitmap classification is not bitmap rendering or wider formatting support. Native full layout/redline/graphics/style/font/service/global lifetimes and full counter algorithm profiles remain individually unverified. Existing Worker16 classification/ownership survives for ARABIC/NONE/CHAR_SPECIAL; original numbering/UNO/ODT/browser assertions and the measured malformed-NONE browser guard are preserved. No module/status or goal promotion and no registered I/O/recovery deviation changes.",
+      "knownViolations": [],
+      "localSymbols": [
+        "DocumentListItemsManager"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/core/doc/DocumentListItemsManager.cxx",
+      "upstreamSymbols": [
+        "DocumentListItemsManager::addListItem",
+        "DocumentListItemsManager::removeListItem",
+        "DocumentListItemsManager::getNumItems"
+      ]
+    }
+  }
+}

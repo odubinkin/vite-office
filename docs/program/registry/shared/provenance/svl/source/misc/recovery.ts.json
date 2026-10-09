@@ -1,0 +1,26 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "local-infrastructure",
+    "evidence": {
+      "local": [
+        {
+          "marker": "RecoverySavePort",
+          "path": "apps/office/src/svl/source/misc/recovery.ts"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/svl/source/misc/recovery.ts",
+    "rationale": "Coordinates deterministic browser recovery storage over an injected versioned-storage contract. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
+    "responsibilities": [
+      "Coordinates deterministic browser recovery storage over an injected versioned-storage contract."
+    ],
+    "stackDivergence": {
+      "kind": "local-infrastructure",
+      "rationale": "The local composition boundary has no single native implementation unit and therefore remains explicit infrastructure."
+    },
+    "status": "local-only"
+  },
+  "legacyOrder": 62
+}

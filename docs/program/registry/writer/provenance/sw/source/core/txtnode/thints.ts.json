@@ -1,0 +1,101 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/thints.ts",
+          "marker": "MakeTextAttr"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/thints.test.ts",
+          "marker": "native MakeTextAttr construction"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/txtedt-stylepool.test.ts",
+          "marker": "pooled selective automatic hint reconstruction"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/native-format-to-text.test.ts",
+          "marker": "native paragraph character conversion"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/ndtxt-hints.ts",
+          "marker": "AppendTextNodeHints"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/thints.ts",
+          "marker": "copyEmpty"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-delete.test.ts",
+          "marker": "native empty append merges copied automatic items without retaining duplicate boundaries"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/thints.cxx",
+          "marker": "SwTextAttr* MakeTextAttr"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/txtedt.cxx",
+          "marker": "lcl_HaveCommonAttributes"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/thints.cxx",
+          "marker": "SwpHints::MergePortions"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/thints.cxx",
+          "marker": "SwTextNode::impl_FormatToTextAttr"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/thints.cxx",
+          "marker": "SwTextNode::FormatToTextAttr"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "void SwTextNode::CopyAttr"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "void SwTextNode::CutImpl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/thints.cxx",
+          "marker": "void SwpHints::BuildPortions"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/core/txtnode/thints.ts",
+    "localSymbols": [
+      "MakeTextAttr",
+      "InsertTextNodeItem",
+      "ClearTextNodeHints",
+      "MergeTextNodePortions",
+      "ConvertTextNodeItemsToHints",
+      "FormatTextNodeToTextAttr"
+    ],
+    "omittedResponsibilities": [
+      "Only the registered concrete character set and automatic/internet hint construction branches are implemented; native holders/reference counts, other hint classes, copy/new flags and associated annotations/fields/marks/fly nodes remain unimplemented. Iteration114 restores the registered MakeTextAttr owner for item-set insertion, character WhichId wrapping, same-pool automatic/internet item copies and foreign automatic-style Clone(true,destinationPool) conversion. Selective reset now interns a nonempty remaining set and constructs a fresh hint through MakeTextAttr, reusing native document-owned handles so equivalent adjacent remnants merge. Internet items are non-shareable. Snapshot decoding uses the same factory while retaining browser item records. Independent real-owner factory/reset/retained-undo/adjacent-range tests cover these bounded contracts. Two earlier synthetic sentinel replacement assumptions are corrected to the existing concrete-pool excluded-domain guard; valid concrete flag fixtures preserve core fresh defaults and actual Ctrl deletion/undo/redo. No-common raw state handling remains independently tested. This supersedes older positive sentinel-pooling and missing selective handle-routing claims only in the registered operation. Sentinel style insertion, native unordered iteration/collisions, paragraph/ignorable/cache/name/usage/lifetime/null constructor/UNO name QueryValue, other hint types and actual cross-document SwpHints copy ingestion remain unverified. Whole-module/model/filter/UI parity stays unverified; all existing statuses/defaults/exceptions and registered I/O/recovery deviations unchanged."
+    ],
+    "preservedResponsibilities": [
+      "Iteration114 restores the registered MakeTextAttr owner for item-set insertion, character WhichId wrapping, same-pool automatic/internet item copies and foreign automatic-style Clone(true,destinationPool) conversion. Selective reset now interns a nonempty remaining set and constructs a fresh hint through MakeTextAttr, reusing native document-owned handles so equivalent adjacent remnants merge. Internet items are non-shareable. Snapshot decoding uses the same factory while retaining browser item records. Independent real-owner factory/reset/retained-undo/adjacent-range tests cover these bounded contracts. Two earlier synthetic sentinel replacement assumptions are corrected to the existing concrete-pool excluded-domain guard; valid concrete flag fixtures preserve core fresh defaults and actual Ctrl deletion/undo/redo. No-common raw state handling remains independently tested. This supersedes older positive sentinel-pooling and missing selective handle-routing claims only in the registered operation. Sentinel style insertion, native unordered iteration/collisions, paragraph/ignorable/cache/name/usage/lifetime/null constructor/UNO name QueryValue, other hint types and actual cross-document SwpHints copy ingestion remain unverified. Whole-module/model/filter/UI parity stays unverified; all existing statuses/defaults/exceptions and registered I/O/recovery deviations unchanged.",
+      "Iteration123 restores SwTextAttr's protected start-only base and optional end,SwTextAttrEnd's ranged end notifications without range-order rejection,and twelve private native flags/accessors. SwTextAttrNesting initializes DontExpand/LockExpandFlag/DontExpandStart/Nesting true;SwTextINetFormat additionally sets CharFormatAttr and its item's GetTextINetFormat backlink. MakeTextAttr and production hyperlink creation now construct concrete internet attributes;fresh copied AUTO flags are false while INET nesting/char-format defaults are true. This supersedes prior generic false-INET constructor/copy/reset claims in iterations114-122;native locked DontExpand reset remains blocked. Portable snapshots preserve concrete ranged kind and independent supported flags,distinct from native deleted copy construction. Existing generic range fixtures use SwTextAttrEnd;fresh concrete factory expectations and native temporary crossed-end write expectations are corrected without weakening range/value/ownership checks. JavaScript integer guards and public internal friend-storage/projection adapters remain bounded language boundaries. Native item holders/refcounts/destruction/listeners,full ChgTextNode/style clients/visited behavior,empty-hint retention/full nesting insertion/modes,nondefault unsupported graph flags and other attribute families remain unverified. Existing semantic statuses/defaults/exceptions and registered save/open/recovery deviations remain unchanged;one new source-owned txtatr2 module remains unverified,no module or goal promotion.",
+      "Iteration134 restores same-node delete undo as raw m_aSttStr plus native whole-node SwHistory old AUTO/INET item history. SwHistorySetText clones item/index/range and FormatIgnore only;undo clears hints,inserts NOHINTEXPAND2 and forward temporary rollback reconstructs fresh constructor flags/actual maps/backlinks/7INETvalues/IDs/shared AUTO handles. Grouping retains original history,redo resetsTmpEnd,disposal releases text/history. Native NOHINTADJUST12 insertion bypasses portion merging;ordinary InsertItem/BuildPortions,new-attribute and other history variants remain unimplemented/unverified. Two binary-search and three node projection/fragment bodies move unchanged to existing helpers under1000-line gates. Selection adapters,all semantic statuses/defaults/exceptions and registered I/O deviations preserved;new history module whollyunverified,no promotion.",
+      "Iteration136 restores registered direct character FormatToTextAttr: five source/main SET pairs,duplicate clearing,AUTO span/gap conversion with old ranged items winning,MakeTextAttr insertion and adjacent equal pooled AUTO merging/FormatIgnore normalization. INET and zero portions retain owners;inherited collections and paragraph items are not converted. JoinTextNodes now applies nonempty-leading conversion or empty-leading character-only clear/copy. SwHistorySetFormat clones explicit items and releases destructive rollback;SwHistoryChangeFormatColl checks live text collection pointer/type. Join history records both boundaries' hints/direct items/collections;undo reconstructs fresh native hints,redo resets temporary end. This supersedes earlier absent format/coll conversion claims only for registered text/AUTO/INET paths. Undo clears only mutated character items before direct-item history rather than resetting unrelated paragraph items. Live assigned heading collection restoration uses native default SetListLevel=true and can add direct level0 even for the same collection. Two exact first-profile source-contradicted old expectations are corrected: fresh INET history owner and heading direct level0;all other old test cases are untouched. Full unpooled equal-value AUTO/CHARFMT/RSID/overlapping-family/notification/lifetime/layout history,table format variants,retained structural identity/AppendTextNode cloning,and cross-node selected deletion survivor/force/adapter remain unverified and require dependent work. Existing semantic states/defaults/exceptions and registered I/O/recovery deviations unchanged;whole-module and overall parity unverified,no promotion.",
+      "Iteration149 source-confirmed continued-input failure exposed raw empty-source hint concatenation after multi-paragraph deletion. Native CutImpl zero length calls CopyAttr, which inserts copied items at one boundary. Bounded AUTO equal-boundary automatic item merge and INET equal-empty overwrite now run through native InsertItem(IS_COPY); NOHINTADJUST priority and explicit nonempty-copy guard remain. Existing ndtxt-hints owns the split within1000-line node limit. Nonempty full CutImpl/BuildPortions and general nesting/layout/history lifetimes remain unverified."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/txtnode/thints.cxx",
+    "upstreamSymbols": [
+      "MakeTextAttr",
+      "SwpHints::MergePortions",
+      "SwTextNode::impl_FormatToTextAttr",
+      "SwTextNode::FormatToTextAttr"
+    ]
+  },
+  "legacyOrder": 216
+}

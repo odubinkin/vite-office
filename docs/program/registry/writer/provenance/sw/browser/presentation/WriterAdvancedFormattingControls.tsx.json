@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "evidence": {
+      "local": [
+        {
+          "marker": "WriterAdvancedFormattingControls",
+          "path": "apps/office/src/sw/browser/presentation/WriterAdvancedFormattingControls.tsx"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/browser/presentation/WriterAdvancedFormattingControls.tsx",
+    "localSymbols": [
+      "WriterAdvancedFormattingControls"
+    ],
+    "rationale": "Composes bindings-backed Writer color, line-spacing and paragraph commands; the dialog draft and palette interactions are isolated in browser presenters.",
+    "responsibilities": [
+      "Composes bindings-backed Writer color, line-spacing and paragraph commands; the dialog draft and palette interactions are isolated in browser presenters."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "React and DOM presentation replace native VCL controls and dialogs."
+    },
+    "status": "local-only"
+  },
+  "legacyOrder": 95
+}

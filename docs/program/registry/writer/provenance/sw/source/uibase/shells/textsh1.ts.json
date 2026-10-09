@@ -1,0 +1,216 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "SwTextShell",
+          "path": "apps/office/src/sw/source/uibase/shells/textsh1.ts"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+          "marker": "SetParagraphRulerIndents"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/shells/textsh1.ts",
+          "marker": "GetpSwAttrSet"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/undo/SwUndoPageDesc.ts",
+          "marker": "SwUndoPageDesc"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-view-ruler-indent-items.test.tsx",
+          "marker": "preservesRulerItems"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-view-ruler-indent-items.test.tsx",
+          "marker": "setsCompleteIndentItems"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-view-ruler-indent-items.test.tsx",
+          "marker": "appliesSelectedIndentItems"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-view-ruler-indent-items.test.tsx",
+          "marker": "tracksAutomaticIndent"
+        },
+        {
+          "path": "apps/office/e2e/writer-ruler-indent-items.spec.ts",
+          "marker": "Writer automatic ruler item history at width"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/xmlimp-named-styles.ts",
+          "marker": "applyNamedParagraphStyles"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/doc.ts",
+          "marker": "CopyTextColl"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/doc.ts",
+          "marker": "FindTextFormatCollByName"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-named-paragraph-ownership.test.ts",
+          "marker": "retainsNamedOwnership"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-named-paragraph-ownership.test.ts",
+          "marker": "transportsCustomNames"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-named-paragraph-ownership.test.ts",
+          "marker": "restoresNamedHistory"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-named-paragraph-ownership.test.ts",
+          "marker": "copiesNamedStyle"
+        },
+        {
+          "path": "apps/office/e2e/writer-named-style-history.spec.ts",
+          "marker": "Writer named-style history"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/app/docst.ts",
+          "marker": "execStyleSheet"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/app/docsh.ts",
+          "marker": "ApplyStyles"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/app/docst.test.ts",
+          "marker": "SwDocShell native paragraph StyleApply"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/edit/edfcol.ts",
+          "marker": "createTextFormatCollAction"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/docfmt.ts",
+          "marker": "getTextFormatCollNodes"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/undo/unfmco.ts",
+          "marker": "SwUndoFormatColl"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/edit/edfcol.test.ts",
+          "marker": "SwEditShell inclusive paragraph collection range"
+        },
+        {
+          "path": "apps/office/e2e/writer-style-selection.spec.ts",
+          "marker": "Writer inclusive paragraph style range"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/edit/native-list-ring.test.ts",
+          "marker": "native table ring list commands own every selected cell"
+        },
+        {
+          "path": "apps/office/e2e/writer-table-row-lists.spec.ts",
+          "marker": "Writer table row native list commands"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/shells/native-list-context.test.ts",
+          "marker": "native list context"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-list-context.test.tsx",
+          "marker": "native list context UI"
+        },
+        {
+          "path": "apps/office/e2e/writer-native-list-context.spec.ts",
+          "marker": "Writer native list context and point state"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "SwTextShell::Execute",
+          "path": "vendor/libreoffice-reference/sw/source/uibase/shells/textsh1.cxx"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svx/source/dialog/svxruler.cxx",
+          "marker": "SvxRuler::ApplyIndents"
+        },
+        {
+          "path": "vendor/libreoffice-reference/editeng/source/items/frmitems.cxx",
+          "marker": "SvxLRSpaceItem::SetTextFirstLineOffset"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/uiview/viewtab.cxx",
+          "marker": "SwView::ExecTabWin"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/edit/edatmisc.cxx",
+          "marker": "SwEditShell::SetAttrItem"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/undo/unattr.cxx",
+          "marker": "SwUndoAttr::SwUndoAttr"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/undo/unattr.cxx",
+          "marker": "SwUndoAttr::UndoImpl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/undo/unattr.cxx",
+          "marker": "SwUndoAttr::RedoImpl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/shells/textsh1.cxx",
+          "marker": "SelectionHasNumber"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/edit/ednumber.cxx",
+          "marker": "sal_uInt8 SwEditShell::GetNumLevel"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/shells/listsh.cxx",
+          "marker": "void SwListShell::GetState"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/shells/textsh1.cxx",
+          "marker": "case FN_NUM_CONTINUE:"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/wrtsh/wrtsh1.cxx",
+          "marker": "SelectionType SwWrtShell::GetSelectionType"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/uiview/view.cxx",
+          "marker": "void SwView::SelectShell"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/inc/wrtsh.hxx",
+          "marker": "enum class SelectionType"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/uibase/shells/textsh1.ts",
+    "localSymbols": [
+      "SwTextShell"
+    ],
+    "omittedResponsibilities": [
+      "Native-only text-shell slots and unsupported Writer feature families remain omitted."
+    ],
+    "preservedResponsibilities": [
+      "Owns supported character, paragraph, hyperlink, indent, and history execute/state semantics; converts accepted paragraph drafts to pooled items and groups selected-paragraph undo actions while SwWrtShell supplies cursor and action primitives.",
+      "Iteration98 applies the existing ruler tuple as typed paragraph margin items through the reusable selected paragraph-item history path, retaining effective SvxFirstLineIndentItem automatic mode as inspected in SvxRuler ApplyIndents and Writer ExecTabWin. The numeric-only SwUndoRulerIndent and helper are removed from page-descriptor undo; the browser tuple belongs to the shell boundary. Direct-only before-item capture uses the optional node set so Undo restores fully inherited attributes instead of copying style items into direct formatting. Existing no-op filtering, grouped history, model/notification transactions and selected range application are reused, with independent nodes untouched. Owned actual Writer evidence covers manual/automatic and direct/inherited states for all three margins, complete signed tuple application, retained frozen projections, no-motion/cancel/accepted gestures, range/cursor state and precise Undo/Redo; Chromium1280/390 checks automatic left/right moves, actual hits, hidden first-line mode, dialog values/history, untouched paragraph and later editing. One obsolete constructor payload assertion is retained against the actual generic applied action; 297 of 298 prior tests remain byte-identical. This bounded item/history correction does not certify whole native SwUndoAttr, SwWrtShell, numbering/style auto-update/range edge semantics, automatic layout or ruler/parent parity. Registered save/open/recovery deviations remain preserved; no status promotion.",
+      "Iteration102 materializes document-owned named paragraph collections instead of flattening common styles into direct node items. Supported own paragraph/character/list fields, raw names, parent/follow links and automatic deltas survive graph16, ODT cycles and actual history. Native name lookup and bounded custom CopyTextColl preserve destination ownership and manual rule handling; the prior builtin copy adapter remains unchanged. Literal zero/per-axis list masks and the project tdf114287 fixture distinguish inherited margins from hard rule overrides. Writer export retains original named parents and emits actual direct numbering items; generic legacy export remains compatible. Default paragraph items are retained on the existing Standard root adapter only. All303other prior tests remain unchanged; one inherited common-style XML assertion moves to styles.xml and one existing project fixture now asserts its actual custom owner/parent, with numeric literals unchanged. Native list display-name resolution, invalid/cyclic parent detachment, direct empty rule suppression and supported composite item subfield inheritance are retained. Full native global default pools, conditional styles, pool/help IDs, creation undo, complete UNO/style UI, collisions and geometry consumers remain separately unverified. No existing status/default/exception or registered I/O/recovery promotion.",
+      "Iteration105 restores the existing paragraph StyleApply slot5552 to the stable SwDocShell owner with active SwView/GetWrtShell lifecycle, retaining the text-shell paragraph primitive. Caller-owned typed Template5552/Family5553 and Style6703/FamilyName5566 arguments and ordinary UNO/URL payloads preserve paragraph family2 defaults and recognized family-name precedence, paired programmatic-to-display conversion, actual custom or renamed style ownership, missing-name rejection, no-op family success and unsigned owner completion. Dispatcher preserves completed owner return items. Independent real model/view/frame/session tests cover current-style ID state, point/mark, history, graph replacement and instance isolation. Other style families, StyleDesigner, API-mode returns, modifier/reset/list/full-selection handling, the complete native style pool and native state itemset remain unverified; no status/default/exception promotion or registered save/open/recovery changes.",
+      "Iteration106 restores inclusive text-node traversal for the current single SwPaM paragraph collection range, including empty/end-offset-zero paragraphs and table-cell text, with the supported editing primitive delegated to core edfcol instead of SwTextShell. One SwUndoFormatColl captures each original collection/list-item/suppression state and retains point/mark orientation; redo resolves the captured native collection display name and safely leaves nodes unchanged if absent. Actual document/view/frame tests and desktop/mobile ODT UI scenarios cover mixed active-endpoint styles, untouched neighbors, one history unit, repeated UndoRedo, owner guards, toolbar/sidebar/focus, continued editing and exported ownership. The existing whole-range no-op history remains a local contract and unverified against native repeated requests. Direct attribute and full-node hint resets, modifier/list resets, cursor rings, read-only/layout/redline/inline-heading handling, complete native history/defaults/style API and whole core/UI parity remain unverified. No status/default/exception promotion or registered save/open/recovery change.",
+      "Iteration162 moves existing list state, rule application, deletion and level editing to inherited SwEditShell instead of functional command adapters and a cyclic UI shell route. Actual SwPaM rings include every selected table box. SelectionHasNumber/SelectionHasBullet preserve native empty-node, per-ring break and reserved Outline counted policy. SetCurNumRule reuses first created list identity across rings; DelNumRules and NumUpDown retain displayed table cursor and one grouped numeric history. SwPamRanges preserves native sorted same-start, adjacency, containment and partial-overlap policy; unreachable successor containment guard is omitted with lower-bound proof. Actual row/column/disjoint state, listID/count/indents/neighbors/current-slot replacement/atomic UndoRedo tests and Chromium real row selector assertions added. Full SwCursorShell hierarchy, document-owned undo/SwHistory/client/layout/merged/Repeat/rule factory and per-ring ContinueNumbering remain unverified. No module/state/default/IO exception promotion.",
+      "Iteration168 gives list-kind and continuation operations to existing SwTextShell, retaining their bounded semantics while removing the old list-owner forwarding. SwListShell current-point GetNumLevel state preserves native MAXLEVEL10 sentinel and independent whole-range execution rejection. Represented SwWrtShell SelectionType requires actual rule, list membership and non-NONE level format; SwView conditionally places list shell below text shell using cached selection flags and TableCell masking. Source-owned registry/query splits retain the1000-line gate without compatibility wrappers or new models. Actual native, mounted DOM and Chromium cases cover the bounded flow. Other selection contexts, table row-column subtypes, native framework/layout/readonly gates and full core/UI/list/table behavior remain unverified; prior semantic/default/classification/IO deviations and evidence are preserved."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/uibase/shells/textsh1.cxx",
+    "upstreamSymbols": [
+      "SwTextShell::Execute",
+      "SwTextShell::GetState"
+    ]
+  },
+  "legacyOrder": 261
+}

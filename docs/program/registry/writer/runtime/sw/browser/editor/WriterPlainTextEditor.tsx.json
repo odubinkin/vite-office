@@ -1,0 +1,73 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/browser/editor/WriterPlainTextEditor.tsx",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "editing-view",
+    "capabilityIds": [
+      "CAP-0103",
+      "CAP-0111",
+      "CAP-0117",
+      "CAP-0118",
+      "CAP-0119",
+      "CAP-0120",
+      "CAP-0134"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/browser/editor/WriterPlainTextEditor.tsx#showLineNumbers",
+        "apps/office/src/sw/browser/editor/WriterPlainTextEditor.tsx#createWriterLineMeasurements",
+        "vendor/libreoffice-reference/sw/source/core/doc/lineinfo.cxx#SwLineNumberInfo::SwLineNumberInfo",
+        "vendor/libreoffice-reference/sw/source/core/text/txtfrm.cxx#SwTextFrame",
+        "apps/office/src/framework/browser/presentation/CommandMenuBar-document-focus.test.tsx#defaultsToDocument",
+        "apps/office/src/framework/browser/presentation/CommandMenuBar-document-focus.test.tsx#defaultsAfterDisposal",
+        "apps/office/src/framework/browser/presentation/CommandMenuBar-document-focus.test.tsx#restoresLiveOwner",
+        "apps/office/e2e/writer-menu-document-focus.spec.ts#unopened menu Escape without a saved owner",
+        "apps/office/src/framework/browser/presentation/CommandMenuBar-document-focus.test.tsx#routesWriterClient",
+        "apps/office/src/sw/browser/presentation/writer-view-style-focus.test.tsx#Writer style-box focus",
+        "apps/office/src/sw/source/uibase/wrtsh/native-table-editing.test.ts#native table cell editing owners",
+        "apps/office/src/sw/browser/editor/native-table-editing.test.tsx#native table DOM editing",
+        "apps/office/e2e/writer-native-table-editing.spec.ts#Writer table cell typing, split, join and formatting use document history",
+        "apps/office/src/sw/browser/editor/cell-paragraph-rendering.test.tsx#shared native cell paragraph display",
+        "apps/office/e2e/writer-cell-paragraph-format.spec.ts#Writer cell paragraph alignment and native list display survive history and ODT reopen",
+        "apps/office/src/sw/source/uibase/wrtsh/native-table-selection.test.ts#native table selection",
+        "apps/office/src/sw/browser/editor/native-table-selection.test.tsx",
+        "apps/office/e2e/writer-native-table-selection.spec.ts",
+        "vendor/libreoffice-reference/sw/source/core/crsr/swcrsr.cxx#SwTableCursor::ActualizeSelection",
+        "vendor/libreoffice-reference/sw/source/core/crsr/swcrsr.cxx#SwTableCursor::NewTableSelection",
+        "vendor/libreoffice-reference/sw/source/core/table/swnewtable.cxx#SwTable::CreateSelection",
+        "vendor/libreoffice-reference/sw/source/core/crsr/trvltbl.cxx#SwCursorShell::SelTableRowOrCol",
+        "vendor/libreoffice-reference/sw/source/uibase/wrtsh/select.cxx#SwWrtShell::SelectTableRow",
+        "vendor/libreoffice-reference/sw/source/core/crsr/crsrsh.cxx#SwCursorShell::IsCursorInTable",
+        "apps/office/src/sw/browser/presentation/WriterRulers-document-drag.test.tsx#native document ruler indent drag",
+        "apps/office/src/sw/browser/presentation/writer-view-list-label-drag.test.tsx#acceptsLabel",
+        "apps/office/e2e/writer-list-label-drag.spec.ts#Writer native label document ruler width=",
+        "apps/office/src/sw/source/core/layout/native-table-headlines.test.ts#native repeated table headlines",
+        "apps/office/src/sw/browser/editor/native-table-headlines.test.tsx#native repeated table headline UI",
+        "apps/office/e2e/writer-table-headlines.spec.ts#Writer repeated table headlines edit the original native header",
+        "vendor/libreoffice-reference/sw/source/core/layout/tabfrm.cxx#SwTabFrame::HandleTableHeadlineChange",
+        "vendor/libreoffice-reference/sw/source/core/layout/tabfrm.cxx#Repeat the headlines.",
+        "vendor/libreoffice-reference/sw/inc/swtable.hxx#GetRowsToRepeat",
+        "apps/office/src/sw/source/core/layout/native-table-print-area.test.ts#native table print area",
+        "apps/office/src/sw/source/core/frmedt/native-table-mouse.test.ts",
+        "apps/office/src/sw/browser/editor/native-table-mouse.test.tsx",
+        "apps/office/e2e/writer-native-table-mouse.spec.ts"
+      ],
+      "justification": "React supplies measured line geometry and a browser device revision to the persistent Writer root; document layout values and frame identity remain in core. Unopened activated menubar Escape defaults to its Writer frame client when no connected external owner is saved; a live saved owner takes precedence. The browser view supplies its own mounted editing-host reference, keeping DOM out of core and avoiding document-wide selectors. Owned per-frame/disconnected-owner cases and Chromium focus-plus-editing checks cover this branch only; no-owner popup cleanup, frame/global native flags and full menu parity remain unverified. Iteration104 projects canonical DOM selection while preserving toolbar field focus, defers restoration while another editing client owns focus, and restores that deferred selection when this host regains focus. This prevents Tab style acceptance from stealing toolbar focus; source cursor and paragraph ownership stay unchanged. Owned real-frame and ODT keyboard focus/history cases cover the bounded correction. Full native/widget and wider parity remain unverified. Iteration138 removes the table-cell post-DOM diff/direct text mutation, imperative innerHTML synchronization and event isolation. Cell paragraphs use shared DOM selection identities and BrowserWriterEditWindow -> SwEditWin -> actual SwWrtShell input/history. Connected cell text is admitted by SwNodes ownership; active/all-text identities come from native nodes while body layout stays separate. SwTableBox derives text from its start/end section instead of a duplicate paragraph array; boundary joins require adjacent text in the same section. Real-owner core, mounted DOM and Chromium tests cover this bounded path. React text-run display, body ordinal sidebar context, table-wide selection/navigation, nested or merged cells, native table layout/text portions and list UI remain unverified. All existing semantic states/defaults/exceptions and registered I/O/recovery deviations remain unchanged; no whole-module or goal promotion. Iteration139 removes the partial table-cell font/spacing/text-run assembler and synthetic node-index identity fallback. Visible cells and closed-shadow measurement use the common WriterEditableParagraph over the same actual native text-node projections,including effective alignment,style,font,color,indent and native GetListLabel/list-layout inputs. One actual-node map is built at the editor boundary;only cell position,editable island and cell block spacing are platform context. Stable paragraph IDs make accessibility descriptions unique and native identities key DOM reuse. Independent owned core-value/DOM/Chromium cases cover the bounded display/history/ODT path. Full native table frame pagination,spacing collapse,Home/navigation,wide selection,nested/merged cells,portion engine and list structural operations remain unverified;all244existing semantic states/defaults/exceptions and registered I/O/recovery deviations remain unchanged,no promotion. Iteration147 removes React selectedTable/selectedTableRow and editor selected-row props. Native SwTableCursor owns a sorted deduplicated actual SwTableBox set, reconciles identity differences and NewTableSelection from actual point/mark sections. SwTable::CreateSelection supports represented flat shared-column rectangle and row expansion. Shell SelectTableRow uses last content endpoints (point first box,mark last), clears ordinary mark and creates no content history; table context follows selected boxes or actual point. SwEditWin converts a row hit to native node coordinates. Immutable selected-box start indices paint cells/whole rows; insert focuses first cell and properties use native cursor context. New actual native,mounted and Chromium assertions cover the bounded flow. Native rings,per-box edit cursor ranges,merged/nested/protected/hidden/unequal-row geometry,drag selection/column selection and full layout/history remain unverified. Existing246semantic statuses/classifications/defaults and registered I/O/recovery deviations preserved; no whole-module/goal promotion. Iteration172 restores native document-origin list-label ruler admission through the existing browser ruler tracking owner. Actual label identity resolves an actual SwTextNode only while copying StateTabWin geometry; pinned edtwin clears this borrowed node immediately after StartDocDrag. Signed-short offset and native SetLeft negative-first adjustment feed bottom-indent document hit testing with explicit tab precedence and right-before-left order. Accepted changed copied geometry applies to current paragraph selection through existing SetParagraphRulerIndents and real item UndoRedo, not a retained label rule update. Native mouse admission preserves cursor and label rule/list ownership; cancellation, zero movement, hide/inactive/unmount/document replacement discard preview and history. No synthetic handle event, text-run conversion, new DTO/model or competing gesture owner. Prior contracts/evidence and conscious IO exceptions retained. Full native RTL/vertical/table-column/protection/style-autoupdate/modifier-clipping/platform/framework/ruler/list/table/core/UI behavior remains unverified. Iteration173 restores existing repeated table headline functionality through native SwTable count/unsigned/capped ownership and original-row follow-frame state. Existing row-only formatter accounts measured repeated height, keeps master headlines with first nonsplittable body row, disables ordinary oversized headers to prevent loops, and retains unchanged frame identity. Browser reuses actual original cell/text projections and one edit window/history,distinct DOM descriptions,frame-local registration/current occurrence resolution; repeated headline row-selection gutter omitted as native table-mode restriction. Full nested/merged/rowspan/row splitting,cross-box repeated table selection,vertical/RTL/fly/multicolumn/protection/native frame/core/UI parity remains unverified; prior semantic states/defaults/classes/IO exceptions and registered save/open/recovery deviations preserved. Iteration175 native represented horizontal table print geometry: SwTabFrame Format owns twip LR/wished-width orientation spacing and minimum23 guard;root supplies actual page upper print width for each master/follow fragment. Browser consumes immutable native print bounds and scales original column reference proportions;hidden measurement uses same owner. Signed left/right margins import/export reuse current table SAX/graph owners. No model clone,TextRuns translation or new adapter. Relative-width,fly/outer-border offsets,multicolumn,vertical/RTL,nested/merged/rowspan/split-row/full layout lifecycle and complete parity remain unverified;registered IO deviations unchanged. Iteration188 removes the synthetic row arrow/onSelectRow/SelectTableRow node-index adapter. Source-shaped GetBox, WhichMouseTabCol, SelTableRowCol and persistent native edit-window mouse capture operate over measured actual SwTabFrame/SwTableBox owners, native10px enhanced selection, live-device5px IsSame tolerance with3px frame search, resize-before-selection priority and previous-frame overlap. Actual native/mounted/Chromium cases exercise horizontal LTR row/column/table selection and master/follow edge projection, full-cell rings and edit history. Browser supplies physical device rectangles only and captures drags outside the root. Full native layout hierarchy, RTL/vertical/nested/merged/protected/resize operations and broad core/UI parity remain unverified; prior semantic states/defaults/classes/IO exceptions and complete historical evidence prefixes retained.",
+      "knownViolations": [],
+      "localSymbols": [
+        "WriterPlainTextEditor"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

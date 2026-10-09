@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/inc/poolfmt.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "formatting-model",
+    "capabilityIds": [
+      "CAP-0112"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/inc/poolfmt.ts#WRITER_PARAGRAPH_STYLE_POOL",
+        "vendor/libreoffice-reference/sw/source/core/doc/poolfmt.cxx#GetPoolParent",
+        "apps/office/src/sw/source/core/doc/number-rule-lifecycle.test.ts#matches native constructors assignment self reset copy and all ten owned slots",
+        "apps/office/src/sw/source/core/doc/number-rule-lifecycle.test.ts#matches complete native rule equality selected and ignored fields",
+        "apps/office/src/sw/source/core/doc/number-rule-lifecycle.test.ts#matches native unknown default and exact ushort byte narrowing without invalidation",
+        "apps/office/src/sw/source/core/doc/number-rule-lifecycle.test.ts#retains actual document clients list and registry across same name assignment and reset",
+        "apps/office/src/sw/source/core/doc/number-rule-lifecycle.test.ts#preserves native scalar state on the actual Worker document owner with strict legacy domains",
+        "vendor/libreoffice-reference/sw/source/core/doc/number.cxx#SwNumRule& SwNumRule::operator=",
+        "vendor/libreoffice-reference/sw/source/core/doc/number.cxx#void SwNumRule::Reset(",
+        "vendor/libreoffice-reference/sw/source/core/doc/number.cxx#bool SwNumRule::operator==(",
+        "vendor/libreoffice-reference/sw/inc/numrule.hxx#SetPoolHelpId(",
+        "vendor/libreoffice-reference/sw/inc/poolfmt.hxx#UNKNOWN = USHRT_MAX"
+      ],
+      "justification": "Mapped provenance remains semantically unverified against sw/source/core/doc/poolfmt.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity. Iteration47 restores the complete selected SwNumRule copy/operator=/Reset/operator== lifecycle and native scalar defaults/accessors. Copy constructs independent owned formats and resets phantom-count/redline flags to true/false with no clients. Assignment uses pointer Set for all10 raw slots, retains recipient mode/default-list/client containers/countPhantoms/usedByRedline and copies source name/type/automatic/continuous/absSpaces/hidden/pool metadata, invalidating nonself even for equal values. Reset clears all10 slots, accepts empty/repeated names and restores exact UNKNOWN65535/help65535/helpfile255 while retaining recipient-only state. Equality compares the native selected metadata and effective formats, ignoring hidden/validity/countPhantoms/redline/list ID/raw presence directly. Native ushort/byte narrowing is preserved. Optional graph16 scalarState validates exact booleans/unsigned ranges and restores the actual document owner after native copy construction; legacy omissions use native defaults. Complete unchanged pinned source bodies and inline definitions emit432 states,18 equality branches and7 narrowing profiles under ASan/UBSan, with full hashes and prior native format profiles. Source client/style-container vector inputs,invalid-flag inputs,ASCII UIName,family-only Font/COW and platform/graphics/null-style/service aliases explicitly limit proof. Actual same-name document client/list/registry,Worker16 and supported genuine ODT fields are exercised; no invented native name-map rebind. Full native name-map/paragraph-style/GrabBag/grf links/client destruction/Font/graphics/service lifetime,nondefault continuous/phantom counter/rendering consumers and wider enum/style families remain individually unverified. Scalar metadata restoration does not certify those consumers or full ODT rule metadata. No whole-module/status/goal promotion or registered IO/recovery/dependency/policy/coverage change. Iteration126 restores the styled RES_TXTATR_INETFMT pool default and two native style IDs,distinct from CreateDefault zero item. Copy/equality preserve both IDs;paired setters retain independent style names/IDs. Default registration no longer requires browser restore factory;unregistered snapshot decode still rejects. English two-entry pool-name mapping is bounded;localized/all-family/custom style resolution,active DTO styled-constructor migration,ODF programmatic/UI conversion,UNO/macros/visited-style clients/lifetime and whole core/UI remain unverified. All pre-existing semantic statuses/defaults/exceptions and registered save/open/recovery deviations remain unchanged. Iteration179 removes direct React grid/dialog table graph mutation. The inherited table editing shell groups the existing paragraph split and numeric SwUndoInsTable; native sections insert before body cursor and Redo reconstructs a new graph. SwDoc owns naming, FULL65535 reference geometry and represented flags/styles, preserving header styling independently of repetition. Actual core/mounted/Chromium acceptance covers collapsed direct-body0/middle/end and history. Single-inheritance source-unit split adds native table operations to existing numbering shell without forwarding. Browser border choices remain a bounded autoformat argument; native full frame/item formats, per-edge border objects, context font propagation, table split layout/ODT persistence, selection-to-table,nested tables,redlines,frames,Repeat and complete core/UI parity remain unverified. Prior267 semantic states/defaults/classifications/evidence and registered I/O/recovery exceptions preserved.",
+      "knownViolations": [],
+      "localSymbols": [
+        "WRITER_PARAGRAPH_STYLE_POOL",
+        "getWriterOdfStyleName",
+        "getWriterParagraphStyleDefinition",
+        "getWriterParagraphStyleId",
+        "getWriterStyleIdFromOdfName",
+        "getWriterAvailableParagraphStyleDefinition",
+        "encodeWriterOdfStyleName",
+        "SwPoolFormatId"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/core/doc/poolfmt.cxx",
+      "upstreamSymbols": [
+        "GetPoolParent"
+      ]
+    }
+  }
+}

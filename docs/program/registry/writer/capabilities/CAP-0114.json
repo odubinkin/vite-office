@@ -1,0 +1,245 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "LO-WRITER-0114",
+    "capabilityId": "CAP-0114",
+    "suite": "writer",
+    "subsystem": "document-lifecycle",
+    "type": "lifecycle",
+    "maturity": "verified",
+    "assertions": [
+      "The pinned upstream and local assertion markers cover this atomic operation: Advance and acknowledge one document lifecycle generation."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "LibreOffice tracks modified state and undo save position; the browser uses contentGeneration to reject stale asynchronous primary saves."
+    },
+    "capability": "Writer lifecycle generation state",
+    "gaps": [],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sfx2/source/doc/objmisc.cxx",
+          "marker": "void SfxObjectShell::SetModified"
+        },
+        {
+          "path": "sfx2/source/doc/objstor.cxx",
+          "marker": "SetModified( !bSaved )"
+        },
+        {
+          "path": "sfx2/source/doc/sfxbasemodel.cxx",
+          "marker": "storeToRecoveryFile"
+        },
+        {
+          "path": "sw/source/core/undo/docundo.cxx",
+          "marker": "HasTopUndoActionMark"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sw/qa/core/undo/undo.cxx",
+          "marker": "testImagePropsCreateUndoAndModifyDoc"
+        },
+        {
+          "path": "sw/qa/python/check_xmodifiable2.py",
+          "marker": "test_XModifiable2_setModified"
+        }
+      ],
+      "docs": [
+        {
+          "path": "offapi/com/sun/star/util/XModifiable.idl",
+          "marker": "boolean isModified()"
+        },
+        {
+          "path": "offapi/com/sun/star/document/XDocumentRecovery.idl",
+          "marker": "wasModifiedSinceLastSave"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sfx2/source/doc/objsh.ts",
+          "marker": "contentGeneration"
+        },
+        {
+          "path": "apps/office/src/sw/browser/workflows/writer-odt-io.ts",
+          "marker": "autosaveWriter"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sfx2/source/doc/objsh.test.ts",
+          "marker": "owns modified and persistence generations"
+        },
+        {
+          "path": "apps/office/src/framework/browser/app/desktop.test.tsx",
+          "marker": "keeps named browser copies available from Open"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/undo/undobj.test.ts",
+          "marker": "moved save mark across action navigation"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/document-lifecycle.md",
+          "marker": "contentGeneration"
+        },
+        {
+          "path": "docs/program/transaction-history.md",
+          "marker": "save position"
+        }
+      ]
+    },
+    "aspect": "persistence-filter",
+    "atomicOperation": "Advance and acknowledge one document lifecycle generation",
+    "scopeLimitations": [
+      "Native crash/session recovery is intentionally excluded from the browser lifecycle."
+    ],
+    "implemented": true,
+    "contractParity": true,
+    "behaviorParity": true,
+    "defaultParity": true,
+    "verified": true,
+    "assertionEvidence": [
+      {
+        "assertion": "The pinned upstream and local assertion markers cover this atomic operation: Advance and acknowledge one document lifecycle generation.",
+        "local": {
+          "marker": "owns modified and persistence generations",
+          "path": "apps/office/src/sfx2/source/doc/objsh.test.ts"
+        },
+        "upstream": {
+          "marker": "testImagePropsCreateUndoAndModifyDoc",
+          "path": "sw/qa/core/undo/undo.cxx"
+        }
+      }
+    ],
+    "verification": {
+      "commit": "7632bdc505ec",
+      "evidence": "Parity closure evidence resolution; npm run inventory:parity; npm test; npm run test:e2e",
+      "scope": "bounded",
+      "taskId": "202609210851-1GHX09"
+    },
+    "closure": {
+      "contract": {
+        "local": {
+          "marker": "contentGeneration",
+          "path": "apps/office/src/sfx2/source/doc/objsh.ts"
+        },
+        "method": "api-invariant",
+        "rationale": "The bounded CAP-0114 API and identifiers resolve to exact local and pinned upstream symbols.",
+        "status": "pass",
+        "upstream": {
+          "marker": "void SfxObjectShell::SetModified",
+          "path": "sfx2/source/doc/objmisc.cxx"
+        }
+      },
+      "ownership": {
+        "local": {
+          "marker": "contentGeneration",
+          "path": "apps/office/src/sfx2/source/doc/objsh.ts"
+        },
+        "method": "api-invariant",
+        "rationale": "The bounded CAP-0114 owner is checked at the mapped local and upstream implementation boundary.",
+        "status": "pass",
+        "upstream": {
+          "marker": "void SfxObjectShell::SetModified",
+          "path": "sfx2/source/doc/objmisc.cxx"
+        }
+      },
+      "behavior": {
+        "local": {
+          "marker": "owns modified and persistence generations",
+          "path": "apps/office/src/sfx2/source/doc/objsh.test.ts"
+        },
+        "method": "unit-test",
+        "rationale": "The mapped local assertion exercises the same bounded operation as the pinned upstream assertion.",
+        "status": "pass",
+        "upstream": {
+          "marker": "testImagePropsCreateUndoAndModifyDoc",
+          "path": "sw/qa/core/undo/undo.cxx"
+        }
+      },
+      "defaults": {
+        "local": {
+          "marker": "owns modified and persistence generations",
+          "path": "apps/office/src/sfx2/source/doc/objsh.test.ts"
+        },
+        "method": "source-derived-golden",
+        "rationale": "The local default-state expectation is derived from the pinned upstream assertion before explicit user settings.",
+        "status": "pass",
+        "upstream": {
+          "marker": "testImagePropsCreateUndoAndModifyDoc",
+          "path": "sw/qa/core/undo/undo.cxx"
+        }
+      },
+      "serialization": {
+        "local": {
+          "marker": "owns modified and persistence generations",
+          "path": "apps/office/src/sfx2/source/doc/objsh.test.ts"
+        },
+        "method": "source-derived-golden",
+        "rationale": "The relevant bounded serialization or persistence representation is compared with pinned upstream evidence.",
+        "status": "pass",
+        "upstream": {
+          "marker": "testImagePropsCreateUndoAndModifyDoc",
+          "path": "sw/qa/core/undo/undo.cxx"
+        }
+      },
+      "operationCycle": {
+        "local": {
+          "marker": "owns modified and persistence generations",
+          "path": "apps/office/src/sfx2/source/doc/objsh.test.ts"
+        },
+        "method": "source-derived-golden",
+        "rationale": "The applicable mutation, undo/redo, export, or reopen stages are exercised by the mapped bounded test.",
+        "status": "pass",
+        "upstream": {
+          "marker": "testImagePropsCreateUndoAndModifyDoc",
+          "path": "sw/qa/core/undo/undo.cxx"
+        }
+      },
+      "differential": {
+        "local": {
+          "marker": "owns modified and persistence generations",
+          "path": "apps/office/src/sfx2/source/doc/objsh.test.ts"
+        },
+        "method": "source-derived-golden",
+        "rationale": "No runnable pinned LibreOffice binary is present; the focused local golden is derived from the exact pinned upstream test assertion.",
+        "status": "pass",
+        "upstream": {
+          "marker": "testImagePropsCreateUndoAndModifyDoc",
+          "path": "sw/qa/core/undo/undo.cxx"
+        }
+      },
+      "divergences": [
+        {
+          "classification": "B",
+          "description": "LibreOffice tracks modified state and undo save position; the browser uses contentGeneration to reject stale asynchronous primary saves.",
+          "local": {
+            "marker": "contentGeneration",
+            "path": "docs/program/document-lifecycle.md"
+          },
+          "upstream": {
+            "marker": "void SfxObjectShell::SetModified",
+            "path": "sfx2/source/doc/objmisc.cxx"
+          }
+        },
+        {
+          "classification": "X",
+          "description": "Native crash/session recovery is intentionally excluded from the browser lifecycle.",
+          "local": {
+            "marker": "contentGeneration",
+            "path": "docs/program/document-lifecycle.md"
+          },
+          "upstream": {
+            "marker": "void SfxObjectShell::SetModified",
+            "path": "sfx2/source/doc/objmisc.cxx"
+          }
+        }
+      ]
+    }
+  }
+}

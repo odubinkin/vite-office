@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/browser/filter/html/swhtml.ts",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "clipboard-transfer",
+    "capabilityIds": [
+      "CAP-0110"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/browser/filter/html/swhtml.ts#parseWriterClipboardPaste",
+        "vendor/libreoffice-reference/sw/source/filter/html/swhtml.cxx#SwHTMLParser::CallParser"
+      ],
+      "justification": "Browser DOM parsing and clipboard DTOs remain at the explicit browser HTML boundary.",
+      "knownViolations": [],
+      "localSymbols": [
+        "parseWriterClipboardPaste",
+        "WriterClipboardPasteParagraph",
+        "WriterClipboardPaste"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

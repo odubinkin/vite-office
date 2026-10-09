@@ -1,0 +1,133 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sfx2/browser/presentation/SidebarDeck.tsx",
+          "marker": "SidebarDeck"
+        },
+        {
+          "path": "apps/office/src/sfx2/browser/presentation/SidebarDeck.test.tsx",
+          "marker": "retainsDeckContent"
+        },
+        {
+          "path": "apps/office/src/sfx2/browser/presentation/SidebarDeck.test.tsx",
+          "marker": "togglesSelectedDeck"
+        },
+        {
+          "path": "apps/office/src/sfx2/browser/presentation/SidebarDeck.test.tsx",
+          "marker": "cancelsDeckFocus"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-view-sidebar-deck.test.tsx",
+          "marker": "retainsWriterDeck"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-view-sidebar-deck.test.tsx",
+          "marker": "recreatesSidebarDeck"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-view-sidebar-deck.test.tsx",
+          "marker": "focusesOwningWriter"
+        },
+        {
+          "path": "apps/office/e2e/writer-sidebar-deck.spec.ts",
+          "marker": "Properties deck closes and reopens with document focus"
+        },
+        {
+          "path": "apps/office/src/sfx2/browser/presentation/SidebarFocusManager.ts",
+          "marker": "SidebarFocusManager"
+        },
+        {
+          "path": "apps/office/src/sfx2/browser/presentation/SidebarFocusManager.test.tsx",
+          "marker": "traversesPanel"
+        },
+        {
+          "path": "apps/office/src/sfx2/browser/presentation/SidebarFocusManager.test.tsx",
+          "marker": "movesPanels"
+        },
+        {
+          "path": "apps/office/src/sfx2/browser/presentation/SidebarFocusManager.test.tsx",
+          "marker": "reordersPanels"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-view-sidebar-navigation.test.tsx",
+          "marker": "Writer Sidebar managed traversal"
+        },
+        {
+          "path": "apps/office/e2e/writer-sidebar-navigation.spec.ts",
+          "marker": "Sidebar managed Tab and arrow navigation"
+        },
+        {
+          "path": "apps/office/src/sfx2/browser/presentation/SidebarDeck.tsx",
+          "marker": "showPanel"
+        },
+        {
+          "path": "apps/office/src/sfx2/browser/presentation/SidebarFocusManager.ts",
+          "marker": "GetPanelIndex"
+        },
+        {
+          "path": "apps/office/src/sfx2/browser/presentation/SidebarDeck-scroll.test.tsx",
+          "marker": "adjustsPanelExtent"
+        },
+        {
+          "path": "apps/office/src/sfx2/browser/presentation/SidebarDeck-scroll.test.tsx",
+          "marker": "adjusts only the panel and scrollport belonging to its own deck"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-view-sidebar-scroll.test.tsx",
+          "marker": "showsWriterPanel"
+        },
+        {
+          "path": "apps/office/e2e/writer-sidebar-scroll.spec.ts",
+          "marker": "Sidebar ShowPanel reveals an oversized Paragraph panel"
+        },
+        {
+          "path": "apps/office/src/sfx2/browser/presentation/SidebarDockingWindow.tsx",
+          "marker": "SidebarDockingWindow"
+        },
+        {
+          "path": "apps/office/src/sfx2/browser/presentation/SidebarDockingWindow.tsx",
+          "marker": "EventNotify"
+        },
+        {
+          "path": "apps/office/src/sfx2/browser/presentation/SidebarDockingWindow.test.tsx",
+          "marker": "isolatesLocalKey"
+        },
+        {
+          "path": "apps/office/src/sfx2/browser/presentation/SidebarDockingWindow.test.tsx",
+          "marker": "retainsWidgetDefault"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-view-sidebar-key-isolation.test.tsx",
+          "marker": "isolatesClipboardShortcut"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-view-sidebar-key-isolation.test.tsx",
+          "marker": "retainsGlobalFallback"
+        },
+        {
+          "path": "apps/office/e2e/writer-sidebar-key-isolation.spec.ts",
+          "marker": "Sidebar docking key isolation at width"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sfx2/browser/presentation/SidebarDeck.tsx",
+    "rationale": "React/DOM projection of the existing Sidebar Properties deck lifecycle inspected in pinned sfx2 sidebar sources; native window ownership, Help/settings/floating/other decks and complete focus graph remain unverified.",
+    "responsibilities": [
+      "Existing Properties deck close/reopen follows inspected sfx2 SidebarController RequestCloseDeck/RequestOpenDeck/OpenThenToggleDeck, TabBar activation and FocusManager Escape: close retains mounted content and an unselected rail independently of whole Sidebar visibility, activation first returns to the owning document, cancellation does not toggle. Owned lifecycle/mount/state/frame/no-dispatch and rebuilt desktop/mobile browser checks cover only this contract. Whole F6/Sidebar panel focus, Help/settings/floating/other decks/default sizing and complete native composition remain open.",
+      "Managed traversal of the implemented deck toolbox, single Properties activation button and visible titled panels follows inspected FocusManager Tab/arrows/FocusPanel and SidebarController ShowPanel: forward title Tab enters existing toolbar before expanded content, toolbox Tab enters rail regardless of Shift, rail forward Tab enters/expands first panel and opens a closed deck, panel arrows traverse actual display order with toolbox/rail boundaries, rail vertical arrows wrap without activation. Registered DOM references and cleanup preserve deck ownership, keyed reorder/removal and isolated clients. Backward panel Tab, horizontal rail arrows and content keys retain child/browser ownership. Application and rebuilt desktop/mobile tests use only local code. Browser deck visibility must be flushed before DOM focus; native ShowPanel follows the focus request. Settings menu, other decks, F6, hidden/titleless fallbacks, native visibility/sensitivity and focus flags, scroll geometry, contexts and complete Sidebar/native parity remain unverified.",
+      "Existing Deck ShowPanel now adjusts its owning browser scrollport after registered panel expansion/title focus, including managed content Escape through FocusPanel. Content-coordinate top comes from scoped DOM extents, border offset and current scroll; native closed Rectangle Bottom and the additional ShowPanel minus-one are preserved, fitting panels reveal bottom and oversized panels prioritize top. Nonoverflow browser viewport skips adjustment. Optional post-focus callback preserves existing standalone manager clients; opening browser visibility remains before DOM focus. Literal source-coordinate/empty/boundary/oversized/expansion/ownership tests, actual Writer no-dispatch/model tests and measured desktop/mobile DOM focus/scroll/editing cover this operation. Toolkit failed extents/scrollbar absence/DPI and rounding/full native sizing/context/F6/settings/other decks and complete Sidebar/native parity remain unverified.",
+      "The existing Sidebar root now owns the 13 local key codes inspected in SidebarDockingWindow::EventNotify after child widget handling, regardless of modifiers. It stops document accelerator lookup and cancels unhandled browser defaults while retaining editable widget defaults and button Enter activation. Literal owned key/modifier cases and actual Writer clipboard-port/model/no-dispatch checks cover this bounded routing contract; desktop/mobile browser cases cover selected-document safety, real local editing and activation. Other keys retain the existing frame fallback. Native DesignerDialog/styles handling, complete accelerator precedence/platform/LOK/input eligibility, floating/mouse docking, other decks and full Sidebar/native parity remain unverified. Save/open/recovery exceptions are unchanged."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "React hidden mounted content and browser focus replace native child window width/visibility and document client focus."
+    },
+    "status": "local-only"
+  },
+  "legacyOrder": 37
+}

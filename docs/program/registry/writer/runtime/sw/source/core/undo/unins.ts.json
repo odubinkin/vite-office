@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/undo/unins.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "undo-redo",
+    "capabilityIds": [
+      "CAP-0102"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/undo/unins.ts#SwUndoInsertGroup",
+        "vendor/libreoffice-reference/sw/source/core/undo/unins.cxx#SwUndoInsert",
+        "apps/office/src/sw/source/core/undo/native-insert-node-index.test.ts#numeric insertion mutates current native slot after replacement %s/%s",
+        "vendor/libreoffice-reference/sw/source/core/undo/unins.cxx#SwUndoInsert::CanGrouping"
+      ],
+      "justification": "Mapped provenance remains semantically unverified against sw/source/core/undo/unins.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity. Iteration129 restores collapsed typing and SwUndoInsert text-mode redo through SwTextNode.InsertText/owned Update. Character-items-only insertion overlays existing automatic portions while retaining actual internet attribute/item/map/backlinks,seven native fields and Update boundary flags;no inherited hyperlink DTO reconstruction. Typed actions clone pending items,capture inserted native fragments for bounded grouping payload and reject grouping with explicit fragment mode;legacy fragment/link adapters retained. Existing range clipping is extracted unchanged to ndhints-range under the1000-line gate. Literal flag/boundary,real shell/undo/redo/grouping/live item/composition/Worker and pending ownership checks cover this bounded path. All355 prior tests and240 existing runtime states/defaults/exceptions and I/O deviations retained;new range helper whollyunverified. Selection FORCE/EMPTY/native Insert flags,empty hints,full BuildPortions/other families/style clients/UNO/refcounts/full core/UI remain unverified;no module/goal promotion. Iteration133 restores collapsed SwEditShell Insert2 EMPTYEXPAND1 and forced5 factory policy,stored required SwUndoInsert flags reused by typed redo,and current FORCE candidate grouping barrier. Normal input after forced input may group under retained bounded payload guards and replays first mode. Literal source-independent shell/mode/lock/oldIgnore/empty boundary and actual INET ownership/history tests cover this path. Selection adapters remain pending native SwHistory rollback;full native grouping/redline/multicursor/index overloads/BuildPortions/core/UI remain unverified. No semantic status/default/exception promotion;registered I/O deviations preserved. Iteration157 resolves represented insertion targets through native m_nNode and m_rDoc from pinned unins.cxx, removing retained paragraph-object payload ownership. Undo/Redo target current actual SwNodes slots, grouping compares numeric node index/document and resolves current cursor boundaries; physical replacement no longer edits detached originals or breaks typing grouping. Actual body/cell native and explicit formatted insertion paths, pending/fragment ownership, repeated native replacement and real shell evidence. Existing fragment/start-offset/native insertion flags behavior is preserved; complete native maText/MoveToUndoNds/RSID/redline/nontext/append ownership, other action payload node identities and retained split node bridge remain unverified.409prior test files and250states/defaults/classifications/exceptions/prior evidence preserved; no whole-module/broad promotion.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SwUndoInsertGroup",
+        "SwUndoInsert"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/core/undo/unins.cxx",
+      "upstreamSymbols": [
+        "SwUndoInsert",
+        "SwUndoInsert::GetTextFromDoc",
+        "SwUndoInsert::Init",
+        "SwUndoInsert::SwUndoInsert"
+      ]
+    }
+  }
+}

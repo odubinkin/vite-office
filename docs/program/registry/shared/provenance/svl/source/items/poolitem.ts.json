@@ -1,0 +1,82 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "SfxPoolItemValue",
+          "path": "apps/office/src/svl/source/items/poolitem.ts"
+        },
+        {
+          "marker": "DisabledItem",
+          "path": "apps/office/src/svl/source/items/poolitem.ts"
+        },
+        {
+          "marker": "InvalidItem",
+          "path": "apps/office/src/svl/source/items/poolitem.ts"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/uiview/native-column-item-boundary.test.ts",
+          "marker": "document column drag consumes native view item"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "SfxPoolItem",
+          "path": "vendor/libreoffice-reference/svl/source/items/poolitem.cxx"
+        },
+        {
+          "marker": "class DisabledItem",
+          "path": "vendor/libreoffice-reference/svl/source/items/poolitem.cxx"
+        },
+        {
+          "marker": "IsDisabledItem",
+          "path": "vendor/libreoffice-reference/include/svl/poolitem.hxx"
+        },
+        {
+          "marker": "class InvalidItem",
+          "path": "vendor/libreoffice-reference/svl/source/items/poolitem.cxx"
+        },
+        {
+          "marker": "IsInvalidItem",
+          "path": "vendor/libreoffice-reference/include/svl/poolitem.hxx"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/svl/source/items/poolitem.ts",
+    "localSymbols": [
+      "SfxPoolItemValue",
+      "SfxPoolItemSnapshot",
+      "SfxPoolItem",
+      "DISABLED_POOL_ITEM",
+      "IsDisabledItem",
+      "INVALID_POOL_ITEM",
+      "IsInvalidItem"
+    ],
+    "omittedResponsibilities": [
+      "Upstream obligations outside SfxPoolItem, DefaultItemInstanceManager::find, SfxPoolItem::getItemInstanceManager, SfxPoolItem::SfxPoolItem and the bounded SfxPoolItemValue, SfxPoolItemSnapshot, SfxPoolItem contract remain intentionally omitted."
+    ],
+    "preservedResponsibilities": [
+      "Ports bounded SfxPoolItem value and WhichId construction semantics, including zero-valued request items and the SHRT_MAX ceiling, from pinned poolitem.cxx.",
+      "Owns the pinned disabled-state singleton and pointer-identity helper, including its zero WhichId, null Clone result, trivial equality and lack of UNO value payload.",
+      "Owns the separate pinned invalid-state singleton and identity helper, including its zero WhichId, null Clone result, trivial equality and lack of UNO value payload.",
+      "Iteration113 introduces the document-owned automatic character StylePool and IStyleAccess/SwStyleManager owner. Concrete SET-only parent-root/item-child/leaf-clone insertion shares handles for shareable items and retains fresh leaves for non-shareable items. Ordinary character creation and browser snapshot decode now use the document pool. SwFormatAutoFormat is non-shareable, retains explicitly supplied handles, copies the shared reference and compares pointer identity rather than item-set value equality. Independent real-owner regressions cover insertion/parent/input/copy/adjacent-range/codec contracts; one obsolete raw-value merge expectation is corrected. Selective reset pool interning, sentinel-bearing style insertion, native unordered iterator order/collisions, paragraph/ignorable families, unused-style enumeration, name/cache/lifetime semantics, native null default constructor and UNO name QueryValue remain unverified. Browser item-record persistence remains the existing adapter; full modules/model/layout/notification/filter/UI parity is not certified. Registered save/open/recovery deviations and existing semantic statuses/defaults/exceptions remain unchanged.",
+      "Iteration229 introduces actual production-used SvxColumnItem ownership at the SwView table-column conversion boundary from StateTabWin. Native visibility/end/min/max descriptions replace direct SwTabCols interpretation during document column drag admission, while original SwTabCols remains model/preview/apply data. Native defaults, upper-only65535 description clamp, copied Append/Clone and equality excluding ortho are retained. The svx->svl edge is native Library_svx-owned, with no SW/browser reverse dependency. Full SvxRuler/SfxBindings slots, complete StateTabWin frames/rows, pooled refcount mutability and UNO member queries/PutValue remain partial or unverified. Registered IO deviations and all semantic states/defaults/classes remain unchanged."
+    ],
+    "status": "mapped",
+    "upstreamPath": "svl/source/items/poolitem.cxx",
+    "upstreamSymbols": [
+      "SfxPoolItem",
+      "DefaultItemInstanceManager::find",
+      "SfxPoolItem::getItemInstanceManager",
+      "SfxPoolItem::SfxPoolItem",
+      "DisabledItem",
+      "DISABLED_POOL_ITEM",
+      "InvalidItem",
+      "INVALID_POOL_ITEM"
+    ]
+  },
+  "legacyOrder": 59
+}

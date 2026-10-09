@@ -1,0 +1,31 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/framework/browser/app/desktop.tsx",
+    "classification": "local-infrastructure",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "application-services",
+    "capabilityIds": [
+      "CAP-0101"
+    ],
+    "semantic": {
+      "behaviorStatus": "not-applicable",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "A",
+      "evidence": [
+        "apps/office/src/framework/browser/app/desktop.tsx#Desktop"
+      ],
+      "justification": "Composes the pathname-routed browser-office launcher and full-page suite workspaces at the LibreOffice `framework/source/services/desktop.cxx` ownership boundary. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
+      "knownViolations": [],
+      "localSymbols": [
+        "Desktop"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

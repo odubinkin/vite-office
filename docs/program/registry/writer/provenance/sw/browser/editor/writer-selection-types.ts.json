@@ -1,0 +1,59 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "evidence": {
+      "local": [
+        {
+          "marker": "WriterCursorSelection",
+          "path": "apps/office/src/sw/browser/editor/writer-selection-types.ts"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/docvw/native-headline-selection.test.ts",
+          "marker": "native"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-headline-selection.test.tsx",
+          "marker": "native"
+        },
+        {
+          "path": "apps/office/e2e/writer-headline-selection.spec.ts",
+          "marker": "Writer native table range"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/crsr/crsrsh.cxx",
+          "marker": "No table cursor in repeated headlines:"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/crsr/viscrs.cxx",
+          "marker": "void SwShellTableCursor::FillRects()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/findfrm.cxx",
+          "marker": "SwLayoutFrame* SwFrame::GetNextCellLeaf()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/trvlfrm.cxx",
+          "marker": "pTab->IsFollow() && pTab->IsInHeadline"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/browser/editor/writer-selection-types.ts",
+    "rationale": "Keeps immutable DOM selection values outside Writer shell and core contracts; current SwNodes indexes are consumed only by the edit-window adapter.",
+    "responsibilities": [
+      "Defines render-keyed restoration coordinates plus current edit-window node coordinates without retaining mutable nodes.",
+      "Iteration174 restores represented flat same-table cross-cell cursor admission and repeated headline restrictions through existing owners. Native moving/fixed endpoints, selected boxes and ordinary cell history are preserved; selected original boxes do not paint on repeated headline copies. Actual native, mounted and Chromium cases cover bounded behavior. Full nested/merged/rowspan/split rows/cross-table/vertical/RTL/protection/frame/core/UI parity remains unverified; states/defaults/classes/IO exceptions and prior evidence preserved.",
+      "Iteration216 pending: native before-label affinity is distinct from text offset0 through SwEditWin and shell publication, browser DOM Selection before marker and caret painting. Seven changed boundaries under verification; marked-list-level shading, ruler/RTL/bidi/full geometry and whole parity remain unverified. Existing statuses/defaults/registered save/open/recovery exceptions retained.",
+      "Iteration216 verified bounded label-affinity roundtrip: native SwPaM owns defaultfalse state, shell SetPaM/UpdateCursor distinguish label from identical text0 and publish final owners; ordinary Insert clears affinity as Insert2. Browser restores stable editable DOM boundary after the noneditable decoration with distinct native BEFORE-label affinity, keeps marker glyphs out of model offsets and paints caret at label edge; pointer label admission and native history covered. Whole marked-list-level shading/ruler/RTL/bidi/layout and kernel/browser parity remain individually unverified; prior states/defaults/registered exceptions unchanged."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "DOM selection endpoints require view keys while canonical Writer operations use SwPosition and SwPaM."
+    },
+    "status": "local-only"
+  },
+  "legacyOrder": 85
+}

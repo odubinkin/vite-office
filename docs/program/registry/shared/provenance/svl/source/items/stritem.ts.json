@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "SfxStringItem",
+          "path": "apps/office/src/svl/source/items/stritem.ts"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "SfxStringItem::Clone",
+          "path": "vendor/libreoffice-reference/svl/source/items/stritem.cxx"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/svl/source/items/stritem.ts",
+    "localSymbols": [
+      "SfxStringItem"
+    ],
+    "omittedResponsibilities": [
+      "Native pooling, UNO mutation and presentation paths outside the bounded SfxStringItem value contract remain unimplemented."
+    ],
+    "preservedResponsibilities": [
+      "Implements bounded SfxStringItem construction, value, equality and clone behavior at the pinned svl/source/items/stritem.cxx owner."
+    ],
+    "status": "mapped",
+    "upstreamPath": "svl/source/items/stritem.cxx",
+    "upstreamSymbols": [
+      "SfxStringItem",
+      "SfxStringItem::Clone"
+    ]
+  },
+  "legacyOrder": 60
+}

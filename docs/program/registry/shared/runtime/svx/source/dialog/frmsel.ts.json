@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svx/source/dialog/frmsel.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "editing-view",
+    "capabilityIds": [
+      "CAP-0102"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/svx/source/dialog/frmsel.ts#FrameSelector",
+        "apps/office/src/svx/source/dialog/native-frame-selector.test.ts#native",
+        "vendor/libreoffice-reference/svx/source/dialog/frmsel.cxx#FrameSelector::MouseButtonDown"
+      ],
+      "justification": "Iteration208 represents source-owned six-line FrameSelector and SvxBorderTabPage: native tri-state/selection/cache/mouse/modifier/keyboard adjacency, presets and enabled inner lines; Reset owns original box/info and saved four distances, Synchronize and automatic defaults; native style/color/predefined/custom thickness transitions; fresh FillItemSet publishes separate box/info deltas including source info-only changes. React displays this owner and removes aggregate border/padding draft controls. Initial static/runtime verification is pending. Full SfxTabPage infrastructure, shadow/merge/diagonal/theme controls, exact device hit regions, full widget units, RTL/vertical/follow/shared-format and whole parity remain unverified. Existing semantic statuses/defaults/contracts/evidence prefixes and registered save/open/recovery exceptions remain unchanged. Iteration208 verified closure: earlier pending prose is historical. Native six-line selection/cache/tri-state/mouse/modifier/keyboard behavior, separate four metrics and Synchronize, presets/style/color/thickness/custom transitions and native fresh separate box/info FillItemSet passed one full upstream-absent profile plus original-failure and genuinely-new-case-only closures. Browser device dispatches all overlapping hit regions and suppresses mouse focus auto-selection like SilentGrabFocus; empty selectors leave arrows unhandled. Current actual union13451 app110inventory14infrastructure258Chromium, no passing runtime replay, actual100 app/inventory counters bound to whole identical source/maps or complete contiguous declaration/body/enclosing branch/all-location proofs. All559 prior acceptance files preserve547 byte-identical bodies,11 exact source-backed native control/delta/metric migrations and one infrastructure file with one genuinely new case; four new acceptance files. Every286 prior metadata record and registered save/open/recovery exception is retained without semantic promotion. Exact VCL pixel/arrow/diagonal geometry, shadow/merge/theme controls, full SfxTabPage/SfxItemSet infrastructure/widget units and RTL/vertical/follow/shared-format/full kernel/browser parity remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "FrameSelector",
+        "FrameBorderType",
+        "FrameBorderState",
+        "FrameSelFlags"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "svx/source/dialog/frmsel.cxx",
+      "upstreamSymbols": [
+        "FrameSelector::MouseButtonDown",
+        "FrameSelector::KeyInput",
+        "FrameSelector::SetStyleToSelection",
+        "FrameSelector::SetColorToSelection"
+      ]
+    }
+  }
+}

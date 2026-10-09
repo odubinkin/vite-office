@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/doc/fmtcol.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "formatting-model",
+    "capabilityIds": [
+      "CAP-0112"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/doc/fmtcol.ts#WRITER_PARAGRAPH_STYLES",
+        "vendor/libreoffice-reference/sw/source/core/doc/fmtcol.cxx#SwFormatColl",
+        "apps/office/src/sw/source/core/txtnode/text-collection-numbering.test.ts#attaches initial inherited rules, rebinds owned records and retains native list attributes",
+        "apps/office/src/sw/source/core/txtnode/text-collection-numbering.test.ts#restores exact direct list-item history and suppression through repeated style undo and redo",
+        "apps/office/src/sw/source/filter/xml/odt-text-collection-numbering.test.ts#uses the newly selected rule in genuine ODT and preserves style attributes through Worker transfer",
+        "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx#SwTextNode::ChgFormatColl"
+      ],
+      "justification": "Mapped provenance remains semantically unverified against sw/source/core/doc/fmtcol.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity. Iteration37 ports the anonymous-namespace collection numbering transition helpers. Initial inherited attachment,retained record rebinding,five-attribute removal reset,Outline exclusion/assignment and synthesized empty-rule return match16 unchanged extracted native definitions over277 sequences/10394 actual states. Native footnotes,conditional/inline styles,outline index,platform flags/cache,live format callbacks and full history/attribute lifetime remain separate unverified obligations.",
+      "knownViolations": [],
+      "localSymbols": [
+        "WRITER_PARAGRAPH_STYLES",
+        "WriterParagraphStyle",
+        "SwFormatColl",
+        "SwTextFormatColl",
+        "isWriterParagraphStyle",
+        "createWriterTextFormatColl"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/core/doc/fmtcol.cxx",
+      "upstreamSymbols": [
+        "SwFormatColl",
+        "SwTextFormatColl",
+        "SwTextFormatColl::SwTextFormatColl",
+        "SwTextFormatColl::~SwTextFormatColl"
+      ]
+    }
+  }
+}

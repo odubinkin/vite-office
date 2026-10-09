@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/edit/editsh.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "editing-view",
+    "capabilityIds": [
+      "CAP-0135"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/edit/editsh.ts#createWriterHyperlinkAction",
+        "vendor/libreoffice-reference/sw/source/core/edit/editsh.cxx#SwEditShell::InsertURL",
+        "apps/office/src/sw/source/core/edit/editsh.ts#createWriterInsertTextAction",
+        "vendor/libreoffice-reference/sw/source/core/edit/editsh.cxx#SwEditShell::Insert2"
+      ],
+      "justification": "Supported SwEditShell hyperlink action and cursor lookup now reside under the pinned editsh.cxx owner; extended native URL and field behavior remains unverified. Iteration133 restores collapsed SwEditShell Insert2 EMPTYEXPAND1 and forced5 factory policy,stored required SwUndoInsert flags reused by typed redo,and current FORCE candidate grouping barrier. Normal input after forced input may group under retained bounded payload guards and replays first mode. Literal source-independent shell/mode/lock/oldIgnore/empty boundary and actual INET ownership/history tests cover this path. Selection adapters remain pending native SwHistory rollback;full native grouping/redline/multicursor/index overloads/BuildPortions/core/UI remain unverified. No semantic status/default/exception promotion;registered I/O deviations preserved.",
+      "knownViolations": [],
+      "localSymbols": [
+        "getWriterHyperlinkAtCursor",
+        "createWriterHyperlinkAction",
+        "createWriterInsertTextAction"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "sw/source/core/edit/editsh.cxx",
+      "upstreamSymbols": [
+        "SwEditShell::InsertURL",
+        "SwEditShell::Insert2"
+      ]
+    }
+  }
+}

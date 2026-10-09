@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/browser/editor/writer-geometry.ts",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "browser-editor",
+    "capabilityIds": [
+      "CAP-0117"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/browser/editor/writer-geometry.ts#getBrowserWriterCaretFromPoint",
+        "apps/office/src/sw/browser/editor/native-table-pointer.test.tsx#mounted table pointer",
+        "apps/office/src/sw/browser/editor/writer-table-geometry.test.ts#actual table cell containment",
+        "apps/office/e2e/writer-native-table-pointer.spec.ts#Writer native table interior and gutter pointer",
+        "vendor/libreoffice-reference/sw/source/uibase/docvw/edtwin.cxx#void SwEditWin::MouseButtonDown",
+        "vendor/libreoffice-reference/sw/source/core/frmedt/fetab.cxx#SwTab SwFEShell::WhichMouseTabCol",
+        "vendor/libreoffice-reference/sw/source/core/frmedt/fetab.cxx#const SwFrame* SwFEShell::GetBox",
+        "vendor/libreoffice-reference/sw/source/uibase/wrtsh/select.cxx#bool SwWrtShell::SelectTableRow"
+      ],
+      "justification": "Contains the optional browser caretRangeFromPoint geometry fallback behind an injected surface; no native LibreOffice source file is claimed as its owner. Iteration170 removes blanket row click inference so table interior padding uses the existing BrowserWriterPointerSelectionController/selection mapper/SwEditWin/native cursor rather than selecting a whole row. Removing the row handler also removes synthetic row inference from list-marker hits. Native number labels instead invoke RulerMarginDrag/StartDocDrag(Indent); that label/ruler behavior remains unverified. The mounted injected marker caret test proves browser geometry only. Initial real-browser MKeep expectations were source-confirmed incorrect and are excluded; marker checks retain no synthetic row selection and unchanged text. The existing explicit row selector is placed in an absolute left gutter with hover/focus arrow, outside cell text and measurement flow. Actual element hit and native caret range are authoritative within the hit cell; otherwise bounded nearest paragraph and clipped native hit resolution reuse existing text-caret helper for empty/formatted boundary fallback. Browser geometry remains an explicit DOM adaptation, not full VCL layout. Existing helper is exported directly for reuse without a duplicate walker, manager, model, DTO or compatibility wrapper. New owned geometry/mounted DOM/Chromium cases verify the represented flat LTR table pointer, actual native box/caret/history and neighbor behavior. RTL/vertical/nested/merged/protected/column/resizing/full layout/portion/core/UI/list/table remain unverified; prior states/defaults/classes/IO exceptions and evidence prefixes are retained.",
+      "knownViolations": [],
+      "localSymbols": [
+        "getBrowserWriterCaretFromPoint"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

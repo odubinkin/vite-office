@@ -1,0 +1,19 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "divergenceClass": "none",
+    "id": "editeng.enum.FontItalic",
+    "kind": "enum",
+    "local": {
+      "marker": "export enum FontItalic {",
+      "path": "apps/office/src/editeng/source/items/textitem.ts",
+      "value": "NONE,OBLIQUE,NORMAL,DONTKNOW"
+    },
+    "upstream": {
+      "marker": "enum FontItalic { ITALIC_NONE, ITALIC_OBLIQUE, ITALIC_NORMAL, ITALIC_DONTKNOW",
+      "path": "include/tools/fontenum.hxx",
+      "value": "NONE,OBLIQUE,NORMAL,DONTKNOW"
+    }
+  }
+}

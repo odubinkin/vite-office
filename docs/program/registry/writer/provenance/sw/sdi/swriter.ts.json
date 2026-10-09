@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "createWriterInterface",
+          "path": "apps/office/src/sw/sdi/swriter.ts"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "SfxVoidItem",
+          "path": "vendor/libreoffice-reference/sw/sdi/swriter.sdi"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/sdi/swriter.ts",
+    "localSymbols": [
+      "getWriterSlotId",
+      "WRITER_UPSTREAM_SLOT_IDS",
+      "createWriterInterface",
+      "getWriterCommandArguments"
+    ],
+    "omittedResponsibilities": [
+      "Slots outside the implemented browser command subset remain explicitly filtered."
+    ],
+    "preservedResponsibilities": [
+      "Exposes exact supported numeric slot identities and assembles generated Writer SfxInterface metadata while concrete shells own execution and state."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/sdi/swriter.sdi",
+    "upstreamSymbols": [
+      "SfxVoidItem"
+    ]
+  },
+  "legacyOrder": 145
+}

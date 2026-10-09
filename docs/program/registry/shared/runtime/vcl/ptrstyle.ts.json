@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/vcl/ptrstyle.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "input",
+    "capabilityIds": [
+      "CAP-0112"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/vcl/ptrstyle.ts#PointerStyle",
+        "apps/office/src/vcl/browser/pointer.test.ts#preserves exact represented native pointer IDs"
+      ],
+      "justification": "Iteration189 moves table pointer policy to native SwEditWin::changeMousePointer/GetPointer and actual SwCursorShell::IsTableMode instead of a browser SwTab switch. Resize hints are HSizeBar/VSizeBar with native table-mode suppression; enhanced selection retains five native TabSelect glyphs. VCL browser projection owns CSS only and static16x16 X11 source/mask pixels with native hotspots. Literal native enum/switch/owner/asset tests, mounted pointer and real Chromium1280/390 cover represented behavior. Object-selectable arbitration, LibreOfficeKit, remaining pointer families, physical RTL/vertical layout, actual resize drag and complete native window contracts remain unverified; no semantic promotion or registered save/open/recovery changes.",
+      "knownViolations": [],
+      "localSymbols": [
+        "PointerStyle"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "include/vcl/ptrstyle.hxx",
+      "upstreamSymbols": [
+        "PointerStyle"
+      ]
+    }
+  }
+}

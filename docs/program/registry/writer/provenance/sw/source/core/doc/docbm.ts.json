@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "DocumentMarkAccess",
+          "path": "apps/office/src/sw/source/core/doc/docbm.ts"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "MarkManager::makeMark",
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/docbm.cxx"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/core/doc/docbm.ts",
+    "localSymbols": [
+      "SwBookmark",
+      "DocumentMarkAccess"
+    ],
+    "omittedResponsibilities": [
+      "Ranged bookmarks, fieldmarks, UNO marks and native layout-derived pagination are outside this bounded slice."
+    ],
+    "preservedResponsibilities": [
+      "Owns named collapsed Writer marks and registered zero-width positions through document edits."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/doc/docbm.cxx",
+    "upstreamSymbols": [
+      "MarkManager::makeMark",
+      "MarkManager::renameMark"
+    ]
+  },
+  "legacyOrder": 165
+}

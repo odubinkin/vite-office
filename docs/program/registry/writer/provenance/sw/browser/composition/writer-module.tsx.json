@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "evidence": {
+      "local": [
+        {
+          "marker": "WriterDocumentSession",
+          "path": "apps/office/src/sw/browser/composition/writer-module.tsx"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/app/docst.ts",
+          "marker": "execStyleSheet"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/app/docsh.ts",
+          "marker": "ApplyStyles"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/app/docst.test.ts",
+          "marker": "SwDocShell native paragraph StyleApply"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/browser/composition/writer-module.tsx",
+    "status": "local-only",
+    "rationale": "Composes the browser Writer session outside upstream implementation paths; no native LibreOffice source file is claimed as its owner. Iteration105 restores the existing paragraph StyleApply slot5552 to the stable SwDocShell owner with active SwView/GetWrtShell lifecycle, retaining the text-shell paragraph primitive. Caller-owned typed Template5552/Family5553 and Style6703/FamilyName5566 arguments and ordinary UNO/URL payloads preserve paragraph family2 defaults and recognized family-name precedence, paired programmatic-to-display conversion, actual custom or renamed style ownership, missing-name rejection, no-op family success and unsigned owner completion. Dispatcher preserves completed owner return items. Independent real model/view/frame/session tests cover current-style ID state, point/mark, history, graph replacement and instance isolation. Other style families, StyleDesigner, API-mode returns, modifier/reset/list/full-selection handling, the complete native style pool and native state itemset remain unverified; no status/default/exception promotion or registered save/open/recovery changes.",
+    "responsibilities": [
+      "Creates and disposes the browser Writer document session from document, shell, frame, persistence, and presentation adapters."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser composition and React replace native module bootstrap at the outer application boundary."
+    }
+  },
+  "legacyOrder": 76
+}

@@ -1,0 +1,226 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "LO-WRITER-0115",
+    "capabilityId": "CAP-0115",
+    "suite": "writer",
+    "subsystem": "writer-ui",
+    "type": "command",
+    "maturity": "verified",
+    "assertions": [
+      "The pinned upstream and local assertion markers cover this atomic operation: Place one registered command in a menu, toolbar, or shortcut surface."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser menu and toolbar controls adapt native configuration to accessible React UI."
+    },
+    "capability": "Writer menu, toolbar, and shortcut placement",
+    "gaps": [],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sw/uiconfig/swriter/menubar/menubar.xml",
+          "marker": ".uno:Copy"
+        },
+        {
+          "path": "sw/uiconfig/swriter/toolbar/standardbar.xml",
+          "marker": ".uno:Copy"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sw/qa/extras/tiledrendering/tiledrendering.cxx",
+          "marker": "testTdf115088"
+        }
+      ],
+      "docs": [
+        {
+          "path": "helpcontent2/source/text/swriter/01/04060100.xhp",
+          "marker": "<helpdocument"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx",
+          "marker": "export function CommandMenuBar"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterCommandToolbar.tsx",
+          "marker": "WriterCommandToolbar"
+        },
+        {
+          "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
+          "marker": "writerMenuPlacements"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterMenuBar.test.tsx",
+          "marker": "places implemented Writer commands"
+        },
+        {
+          "path": "apps/office/e2e/foundation.spec.ts",
+          "marker": "File menu"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/writer-command-placement.md",
+          "marker": "Browser Writer command placement"
+        },
+        {
+          "path": "docs/program/writer-ui-shell.md",
+          "marker": "Every visible top-level menu"
+        }
+      ]
+    },
+    "aspect": "command-placement",
+    "atomicOperation": "Place one registered command in a menu, toolbar, or shortcut surface",
+    "scopeLimitations": [
+      "The browser shell provides only implemented commands and an explicit unavailable state; LibreOffice menu groups and command enablement remain much broader.",
+      "Native Writer menus, accelerators, dialogs, extensions, and UNO dispatch are not equivalent browser features."
+    ],
+    "implemented": true,
+    "contractParity": true,
+    "behaviorParity": true,
+    "defaultParity": true,
+    "verified": true,
+    "assertionEvidence": [
+      {
+        "assertion": "The pinned upstream and local assertion markers cover this atomic operation: Place one registered command in a menu, toolbar, or shortcut surface.",
+        "local": {
+          "marker": "places implemented Writer commands",
+          "path": "apps/office/src/sw/browser/presentation/WriterMenuBar.test.tsx"
+        },
+        "upstream": {
+          "marker": "testTdf115088",
+          "path": "sw/qa/extras/tiledrendering/tiledrendering.cxx"
+        }
+      }
+    ],
+    "verification": {
+      "commit": "7632bdc505ec",
+      "evidence": "Parity closure evidence resolution; npm run inventory:parity; npm test; npm run test:e2e",
+      "scope": "bounded",
+      "taskId": "202609210851-1GHX09"
+    },
+    "closure": {
+      "contract": {
+        "local": {
+          "marker": "export function CommandMenuBar",
+          "path": "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx"
+        },
+        "method": "api-invariant",
+        "rationale": "The bounded CAP-0115 API and identifiers resolve to exact local and pinned upstream symbols.",
+        "status": "pass",
+        "upstream": {
+          "marker": ".uno:Copy",
+          "path": "sw/uiconfig/swriter/menubar/menubar.xml"
+        }
+      },
+      "ownership": {
+        "local": {
+          "marker": "export function CommandMenuBar",
+          "path": "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx"
+        },
+        "method": "api-invariant",
+        "rationale": "The bounded CAP-0115 owner is checked at the mapped local and upstream implementation boundary.",
+        "status": "pass",
+        "upstream": {
+          "marker": ".uno:Copy",
+          "path": "sw/uiconfig/swriter/menubar/menubar.xml"
+        }
+      },
+      "behavior": {
+        "local": {
+          "marker": "places implemented Writer commands",
+          "path": "apps/office/src/sw/browser/presentation/WriterMenuBar.test.tsx"
+        },
+        "method": "unit-test",
+        "rationale": "The mapped local assertion exercises the same bounded operation as the pinned upstream assertion.",
+        "status": "pass",
+        "upstream": {
+          "marker": "testTdf115088",
+          "path": "sw/qa/extras/tiledrendering/tiledrendering.cxx"
+        }
+      },
+      "defaults": {
+        "local": {
+          "marker": "places implemented Writer commands",
+          "path": "apps/office/src/sw/browser/presentation/WriterMenuBar.test.tsx"
+        },
+        "method": "source-derived-golden",
+        "rationale": "The local default-state expectation is derived from the pinned upstream assertion before explicit user settings.",
+        "status": "pass",
+        "upstream": {
+          "marker": "testTdf115088",
+          "path": "sw/qa/extras/tiledrendering/tiledrendering.cxx"
+        }
+      },
+      "serialization": {
+        "method": "not-applicable",
+        "rationale": "Place one registered command in a menu, toolbar, or shortcut surface does not cross a serialization boundary.",
+        "status": "not-applicable"
+      },
+      "operationCycle": {
+        "method": "not-applicable",
+        "rationale": "Place one registered command in a menu, toolbar, or shortcut surface has no applicable import-mutation-undo-export-reopen cycle.",
+        "status": "not-applicable"
+      },
+      "differential": {
+        "local": {
+          "marker": "places implemented Writer commands",
+          "path": "apps/office/src/sw/browser/presentation/WriterMenuBar.test.tsx"
+        },
+        "method": "source-derived-golden",
+        "rationale": "No runnable pinned LibreOffice binary is present; the focused local golden is derived from the exact pinned upstream test assertion.",
+        "status": "pass",
+        "upstream": {
+          "marker": "testTdf115088",
+          "path": "sw/qa/extras/tiledrendering/tiledrendering.cxx"
+        }
+      },
+      "divergences": [
+        {
+          "classification": "B",
+          "description": "Browser menu and toolbar controls adapt native configuration to accessible React UI.",
+          "local": {
+            "marker": "Browser Writer command placement",
+            "path": "docs/program/writer-command-placement.md"
+          },
+          "upstream": {
+            "marker": ".uno:Copy",
+            "path": "sw/uiconfig/swriter/menubar/menubar.xml"
+          }
+        },
+        {
+          "classification": "X",
+          "description": "The browser shell provides only implemented commands and an explicit unavailable state; LibreOffice menu groups and command enablement remain much broader.",
+          "local": {
+            "marker": "Browser Writer command placement",
+            "path": "docs/program/writer-command-placement.md"
+          },
+          "upstream": {
+            "marker": ".uno:Copy",
+            "path": "sw/uiconfig/swriter/menubar/menubar.xml"
+          }
+        },
+        {
+          "classification": "X",
+          "description": "Native Writer menus, accelerators, dialogs, extensions, and UNO dispatch are not equivalent browser features.",
+          "local": {
+            "marker": "Browser Writer command placement",
+            "path": "docs/program/writer-command-placement.md"
+          },
+          "upstream": {
+            "marker": ".uno:Copy",
+            "path": "sw/uiconfig/swriter/menubar/menubar.xml"
+          }
+        }
+      ]
+    }
+  }
+}

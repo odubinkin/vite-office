@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "SfxViewFrame",
+          "path": "apps/office/src/sfx2/source/view/viewfrm.ts"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "SfxViewFrame::Construct_Impl",
+          "path": "vendor/libreoffice-reference/sfx2/source/view/viewfrm.cxx"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sfx2/source/view/viewfrm.ts",
+    "localSymbols": [
+      "SfxViewFrame"
+    ],
+    "omittedResponsibilities": [
+      "Native windows, UNO controllers, view factories, and frame registry services remain outside the supported browser slice."
+    ],
+    "preservedResponsibilities": [
+      "Owns the active view together with its dispatcher, bindings, and bottom-to-top shell stack."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sfx2/source/view/viewfrm.cxx",
+    "upstreamSymbols": [
+      "SfxViewFrame::Construct_Impl",
+      "SfxViewFrame::Close"
+    ]
+  },
+  "legacyOrder": 53
+}

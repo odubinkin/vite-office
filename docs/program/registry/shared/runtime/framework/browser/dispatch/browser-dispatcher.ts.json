@@ -1,0 +1,30 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/framework/browser/dispatch/browser-dispatcher.ts",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "browser-dispatch",
+    "capabilityIds": [
+      "CAP-0101",
+      "CAP-0115"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/framework/browser/dispatch/browser-dispatcher.ts#BrowserSfxDispatcher"
+      ],
+      "justification": "Observes Promise completion, pending state, and browser-facing failures outside the upstream-shaped Sfx dispatcher contract.",
+      "knownViolations": [],
+      "localSymbols": [],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

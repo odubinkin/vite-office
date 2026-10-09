@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/text/itrtxt.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "page-layout",
+    "capabilityIds": [
+      "CAP-0111"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/text/itrtxt.ts#SwTextCursor",
+        "apps/office/src/sw/source/uibase/wrtsh/native-line-margin.test.ts#native",
+        "vendor/libreoffice-reference/sw/source/core/text/itrtxt.cxx#SwTextCursor::CharCursorToLine"
+      ],
+      "justification": "Iteration215 pending: native text-frame/cursor/shell Home End replaces browser default movement using measured device lines only; frame margin and iterator affinity, hard-break and nonAPI spaces, selection/label lifecycle remain under verification. Whole frame/bidi/readonly/merged-text and kernel/browser parity unverified; existing fields/defaults/exceptions retained. Iteration215 verified bounded Home End closure: native text frames, cursor and shell execute visual-line margins from browser device lines; right-margin affinity, hard-break exclusion, interactive/API spaces, Shift marks, source native label state, cursor stack/pending input/history and body/cell Chromium1280/390 pass.13532app110inventory14infrastructure276Chromium; ONE upstream-absent full profile and3genuinely new port cases plus1original-failure retry only,0passing replay; strict current-source actual100 app/inventory. Nullable text tested by explicit device port fault injection, not normal-browser parity. Full frame graph/bidi/RTL/readonly/fly/merged paragraphs and DOM label painting/marked-list-level integration remain unverified; all prior fields/statuses/defaults/registered deviations retained.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SwTextCursor"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "sw/source/core/text/itrtxt.cxx",
+      "upstreamSymbols": [
+        "SwTextCursor::CharCursorToLine"
+      ]
+    }
+  }
+}

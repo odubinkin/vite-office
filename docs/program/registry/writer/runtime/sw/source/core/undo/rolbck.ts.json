@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/undo/rolbck.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "undo-redo",
+    "capabilityIds": [
+      "CAP-0102"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/undo/rolbck.ts#SwHistorySetText",
+        "vendor/libreoffice-reference/sw/source/core/undo/rolbck.cxx#SwHistorySetText",
+        "apps/office/src/sw/source/core/undo/native-delete-history.test.ts#native delete attribute history",
+        "vendor/libreoffice-reference/sw/source/core/undo/rolbck.cxx#SwHistorySetFormat::SwHistorySetFormat",
+        "vendor/libreoffice-reference/sw/source/core/undo/rolbck.cxx#SwHistoryChangeFormatColl::SetInDoc",
+        "vendor/libreoffice-reference/sw/source/core/undo/rolbck.cxx#SwHistory::CopyFormatAttr",
+        "apps/office/src/sw/source/core/txtnode/native-format-to-text.test.ts#native direct format and collection history"
+      ],
+      "justification": "Iteration134 restores same-node delete undo as raw m_aSttStr plus native whole-node SwHistory old AUTO/INET item history. SwHistorySetText clones item/index/range and FormatIgnore only;undo clears hints,inserts NOHINTEXPAND2 and forward temporary rollback reconstructs fresh constructor flags/actual maps/backlinks/7INETvalues/IDs/shared AUTO handles. Grouping retains original history,redo resetsTmpEnd,disposal releases text/history. Native NOHINTADJUST12 insertion bypasses portion merging;ordinary InsertItem/BuildPortions,new-attribute and other history variants remain unimplemented/unverified. Two binary-search and three node projection/fragment bodies move unchanged to existing helpers under1000-line gates. Selection adapters,all semantic statuses/defaults/exceptions and registered I/O deviations preserved;new history module whollyunverified,no promotion. Iteration136 restores registered direct character FormatToTextAttr: five source/main SET pairs,duplicate clearing,AUTO span/gap conversion with old ranged items winning,MakeTextAttr insertion and adjacent equal pooled AUTO merging/FormatIgnore normalization. INET and zero portions retain owners;inherited collections and paragraph items are not converted. JoinTextNodes now applies nonempty-leading conversion or empty-leading character-only clear/copy. SwHistorySetFormat clones explicit items and releases destructive rollback;SwHistoryChangeFormatColl checks live text collection pointer/type. Join history records both boundaries' hints/direct items/collections;undo reconstructs fresh native hints,redo resets temporary end. This supersedes earlier absent format/coll conversion claims only for registered text/AUTO/INET paths. Undo clears only mutated character items before direct-item history rather than resetting unrelated paragraph items. Live assigned heading collection restoration uses native default SetListLevel=true and can add direct level0 even for the same collection. Two exact first-profile source-contradicted old expectations are corrected: fresh INET history owner and heading direct level0;all other old test cases are untouched. Full unpooled equal-value AUTO/CHARFMT/RSID/overlapping-family/notification/lifetime/layout history,table format variants,retained structural identity/AppendTextNode cloning,and cross-node selected deletion survivor/force/adapter remain unverified and require dependent work. Existing semantic states/defaults/exceptions and registered I/O/recovery deviations unchanged;whole-module and overall parity unverified,no promotion.",
+      "knownViolations": [],
+      "localSymbols": [
+        "HISTORY_HINT",
+        "SwHistoryHint",
+        "SwHistorySetText",
+        "SwHistory",
+        "SwHistorySetFormat",
+        "SwHistoryChangeFormatColl"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/core/undo/rolbck.cxx",
+      "upstreamSymbols": [
+        "SwHistoryHint",
+        "SwHistorySetText",
+        "SwHistory",
+        "SwHistorySetFormat::SwHistorySetFormat",
+        "SwHistoryChangeFormatColl::SetInDoc",
+        "SwHistory::CopyFormatAttr"
+      ]
+    }
+  }
+}

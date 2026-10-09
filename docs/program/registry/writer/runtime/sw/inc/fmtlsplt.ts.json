@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/inc/fmtlsplt.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "writer-model",
+    "capabilityIds": [
+      "CAP-0111"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/inc/fmtlsplt.ts#SwFormatLayoutSplit",
+        "vendor/libreoffice-reference/sw/inc/fmtlsplt.hxx#SwFormatLayoutSplit",
+        "apps/office/src/sw/inc/native-table-split-items.test.ts#@fileoverview",
+        "apps/office/src/sw/browser/presentation/native-table-split-items.test.tsx#@fileoverview"
+      ],
+      "justification": "Iteration239 replaces generic Text Flow split publication with native SwFormatLayoutSplit and SwFormatRowSplit subclasses, literal WhichIds120/129 and true Writer pool defaults. Clone preserves concrete type/current identity/value independently; browser primitive factories restore concrete items. Native shell consumes explicitly SET concrete items while preserving omitted defaults and original row/table history. Generic row keepTogether and scalar table formats, full native shared frame-format ownership, presentation/localization/UNO completeness and whole core/UI parity remain unverified. Targeted verification pending; full cadence237 to247 and all prior metadata states/defaults/classes/registered IO/recovery deviations remain preserved. Iteration239 verified closure: twelve fresh literal item/pool and mounted direct native-input cases plus related modules produced178 app passes and8 Chromium passes, with no passing replay or full suite. App and inventory all-four100% coverage is bound to actual current targeted counters and prior238 identical-source/maps or complete mapped-region proof; unchanged inventory/infra runtime was not rerun. The earlier pending statement is historical. Scalar table/row format ownership and full presentation/localization/UNO/shared-pool contracts remain unverified; no parity status promotion.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SwFormatLayoutSplit",
+        "Clone"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "sw/inc/fmtlsplt.hxx",
+      "upstreamSymbols": [
+        "SwFormatLayoutSplit",
+        "Clone"
+      ]
+    }
+  }
+}

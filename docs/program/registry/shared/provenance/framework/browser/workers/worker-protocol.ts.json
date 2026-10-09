@@ -1,0 +1,26 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "evidence": {
+      "local": [
+        {
+          "marker": "WORKER_PROTOCOL_VERSION",
+          "path": "apps/office/src/framework/browser/workers/worker-protocol.ts"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/framework/browser/workers/worker-protocol.ts",
+    "rationale": "Defines structured-clone browser worker request sequencing, cancellation, progress, typed failure, and stale-result classification without suite coupling. This is a browser-owned adaptation without a direct native source mapping.",
+    "responsibilities": [
+      "Defines structured-clone browser worker request sequencing, cancellation, progress, typed failure, and stale-result classification without suite coupling."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser keyboard, Intl locale, and Worker APIs replace native framework services."
+    },
+    "status": "local-only"
+  },
+  "legacyOrder": 22
+}

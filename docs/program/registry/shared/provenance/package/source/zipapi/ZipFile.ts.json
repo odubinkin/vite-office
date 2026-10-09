@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "ZipFileLimits",
+          "path": "apps/office/src/package/source/zipapi/ZipFile.ts"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "ZipFile::ZipFile",
+          "path": "vendor/libreoffice-reference/package/source/zipapi/ZipFile.cxx"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/package/source/zipapi/ZipFile.ts",
+    "localSymbols": [
+      "ZipFileLimits",
+      "DEFAULT_ZIP_FILE_LIMITS",
+      "ZipFile",
+      "assertSafeZipEntryName"
+    ],
+    "omittedResponsibilities": [
+      "Upstream obligations outside ZipFile::ZipFile, std::move, ZipFile::~ZipFile, ZipFile::setInputStream and the bounded ZipFileLimits, DEFAULT_ZIP_FILE_LIMITS, ZipFile contract remain intentionally omitted."
+    ],
+    "preservedResponsibilities": [
+      "Reimplements bounded ZIP32 central-directory and local-record validation from pinned LibreOffice `package/source/zipapi/ZipFile.cxx`."
+    ],
+    "status": "mapped",
+    "upstreamPath": "package/source/zipapi/ZipFile.cxx",
+    "upstreamSymbols": [
+      "ZipFile::ZipFile",
+      "std::move",
+      "ZipFile::~ZipFile",
+      "ZipFile::setInputStream"
+    ]
+  },
+  "legacyOrder": 33
+}

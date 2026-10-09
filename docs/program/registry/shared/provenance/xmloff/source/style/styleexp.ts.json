@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/xmloff/source/style/styleexp.ts",
+          "marker": "exportParagraphStyleNumberingAttributes"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/style/styleexp.cxx",
+          "marker": "XML_DEFAULT_OUTLINE_LEVEL"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/style/styleexp.cxx",
+          "marker": "XML_LIST_STYLE_NAME"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/xmloff/source/style/styleexp.ts",
+    "localSymbols": [
+      "exportParagraphStyleNumberingAttributes"
+    ],
+    "omittedResponsibilities": [
+      "Full UNO/native style export,inheritance fallback,normal-outline export,special style-name encoding and lifetime machinery remain unverified."
+    ],
+    "preservedResponsibilities": [
+      "Iteration37 admits the existing named paragraph list/outline items after source-owned heading level restoration. The xmloff helper emits direct positive outline levels,ODF1.3 empty zero values,explicit empty numbering and normal names while suppressing the reserved Outline rule. Writer emits referenced common numbering definitions through the existing level exporter so styles whose rules are absent from current body retain resolvable references. Named style parsing preserves supported outline values and list-style names. Existing assigned heading levels without numbering do not trigger the no-rule/list-level export diagnostic. Literal native attribute predicates and real ODT/Worker/reopen/undo tests cover this dependency slice;full XMLStyleExport inheritance fallback,UNO style machinery,style-name encoding,outline export,automatic/direct-outline properties and native lifetime/compatibility remain separately unverified. IO settings and Worker16/ODF1.3 remain unchanged."
+    ],
+    "status": "mapped",
+    "upstreamPath": "xmloff/source/style/styleexp.cxx",
+    "upstreamSymbols": [
+      "XMLStyleExport",
+      "XML_DEFAULT_OUTLINE_LEVEL",
+      "XML_LIST_STYLE_NAME"
+    ]
+  },
+  "legacyOrder": 296
+}

@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/xmloff/source/style/XMLFontAutoStylePool.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "odf-filter",
+    "capabilityIds": [
+      "CAP-0113",
+      "CAP-0129"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/xmloff/source/style/XMLFontAutoStylePool.ts#XMLFontAutoStylePool",
+        "vendor/libreoffice-reference/xmloff/source/style/XMLFontAutoStylePool.cxx#XMLFontAutoStylePool::Add",
+        "apps/office/src/sw/source/filter/xml/native-bullet-font-roundtrip.test.ts",
+        "apps/office/src/xmloff/source/style/native-bullet-font.test.ts",
+        "apps/office/e2e/native-bullet-font-roundtrip.spec.ts"
+      ],
+      "justification": "Mapped provenance remains semantically unverified against xmloff/source/style/XMLFontAutoStylePool.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity. Iteration221 restores the represented optional bullet Font family ODT path through actual Writer UNO/xmloff owners: nonempty CHAR_SPECIAL family uses existing font pool Find or direct quoted fo:font-family fallback without artificial font registration; import resolves existing declaration then applies nonempty direct-family override, publishes represented BulletFont descriptor and copy/applies/commits with native empty-Name ignore and malformed descriptor rejection. Common/automatic/body/cell/Worker/custom Chromium cases exercise the slice. Existing family handlers shared without a new font owner or cyclic export dependency. Native admitted tight-tab ruler drag consumes label click intentionally, no pointer-affinity patch. Full FontDescriptor style/family/pitch/charset/metrics and StarBats/StarMath glyph recoding remain unrepresented/unverified; all prior statuses/defaults/registered I/O/recovery deviations preserved.",
+      "knownViolations": [],
+      "localSymbols": [
+        "XMLFontAutoStylePool"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "xmloff/source/style/XMLFontAutoStylePool.cxx",
+      "upstreamSymbols": [
+        "XMLFontAutoStylePool",
+        "XMLFontAutoStylePool::Add",
+        "XMLFontAutoStylePool::Find",
+        "XMLFontAutoStylePool::exportXML"
+      ]
+    }
+  }
+}

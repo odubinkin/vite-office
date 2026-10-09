@@ -1,0 +1,246 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "LO-WRITER-0117",
+    "capabilityId": "CAP-0117",
+    "suite": "writer",
+    "subsystem": "selection-clipboard",
+    "type": "command",
+    "maturity": "verified",
+    "assertions": [
+      "The pinned upstream and local assertion markers cover this atomic operation: Extend a Writer selection across rendered paragraphs with the pointer."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "DOM selection and the Clipboard API replace native Writer window and clipboard services."
+    },
+    "capability": "Writer pointer-selection extension",
+    "gaps": [],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sw/uiconfig/swriter/menubar/menubar.xml",
+          "marker": ".uno:SelectAll"
+        },
+        {
+          "path": "sw/uiconfig/swriter/toolbar/standardbar.xml",
+          "marker": ".uno:Copy"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sw/qa/extras/uiwriter/uiwriter6.cxx",
+          "marker": "testNestedGroupTextBoxCopyCrash"
+        }
+      ],
+      "docs": [
+        {
+          "path": "helpcontent2/source/text/swriter/01/select_text.xhp",
+          "marker": "<helpdocument"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/vcl/browser/browser-clipboard.ts",
+          "marker": "copyRichText"
+        },
+        {
+          "path": "apps/office/src/sw/browser/workflows/writer-workflows.ts",
+          "marker": "copyWriterSelection"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts",
+          "marker": "export class SwTransferable"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/writer-selection.ts",
+          "marker": "BrowserWriterSelectionMapper"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterMenuBar.test.tsx",
+          "marker": "replaces native keyboard Copy data"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/WriterPlainTextEditor.test.tsx",
+          "marker": "keeps the typing caret stable"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.test.ts",
+          "marker": "serializes only SwPaM model data"
+        },
+        {
+          "path": "apps/office/e2e/writer-clipboard.spec.ts",
+          "marker": "copies visible formatted Writer content"
+        },
+        {
+          "path": "apps/office/e2e/writer-document-selection.spec.ts",
+          "marker": "supports document-wide selection"
+        },
+        {
+          "path": "apps/office/e2e/foundation.spec.ts",
+          "marker": "Document has unsaved changes"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/writer-clipboard.md",
+          "marker": "Browser Writer clipboard"
+        },
+        {
+          "path": "docs/program/writer-command-placement.md",
+          "marker": "Select All"
+        }
+      ]
+    },
+    "aspect": "browser-input",
+    "atomicOperation": "Extend a Writer selection across rendered paragraphs with the pointer",
+    "scopeLimitations": [
+      "Copy preserves only the browser text/plain and bounded paragraph-level text/html representations; objects, tables, tracked changes, and full Writer transfer semantics beyond the bounded Cut and Paste slice are not implemented.",
+      "Select All covers the bounded rendered document body, not every Writer document object or selection mode."
+    ],
+    "implemented": true,
+    "contractParity": true,
+    "behaviorParity": true,
+    "defaultParity": true,
+    "verified": true,
+    "assertionEvidence": [
+      {
+        "assertion": "The pinned upstream and local assertion markers cover this atomic operation: Extend a Writer selection across rendered paragraphs with the pointer.",
+        "local": {
+          "marker": "replaces native keyboard Copy data",
+          "path": "apps/office/src/sw/browser/presentation/WriterMenuBar.test.tsx"
+        },
+        "upstream": {
+          "marker": "testNestedGroupTextBoxCopyCrash",
+          "path": "sw/qa/extras/uiwriter/uiwriter6.cxx"
+        }
+      }
+    ],
+    "verification": {
+      "commit": "7632bdc505ec",
+      "evidence": "Parity closure evidence resolution; npm run inventory:parity; npm test; npm run test:e2e",
+      "scope": "bounded",
+      "taskId": "202609210851-1GHX09"
+    },
+    "closure": {
+      "contract": {
+        "local": {
+          "marker": "copyRichText",
+          "path": "apps/office/src/vcl/browser/browser-clipboard.ts"
+        },
+        "method": "api-invariant",
+        "rationale": "The bounded CAP-0117 API and identifiers resolve to exact local and pinned upstream symbols.",
+        "status": "pass",
+        "upstream": {
+          "marker": ".uno:SelectAll",
+          "path": "sw/uiconfig/swriter/menubar/menubar.xml"
+        }
+      },
+      "ownership": {
+        "local": {
+          "marker": "copyRichText",
+          "path": "apps/office/src/vcl/browser/browser-clipboard.ts"
+        },
+        "method": "api-invariant",
+        "rationale": "The bounded CAP-0117 owner is checked at the mapped local and upstream implementation boundary.",
+        "status": "pass",
+        "upstream": {
+          "marker": ".uno:SelectAll",
+          "path": "sw/uiconfig/swriter/menubar/menubar.xml"
+        }
+      },
+      "behavior": {
+        "local": {
+          "marker": "replaces native keyboard Copy data",
+          "path": "apps/office/src/sw/browser/presentation/WriterMenuBar.test.tsx"
+        },
+        "method": "browser-test",
+        "rationale": "The mapped local assertion exercises the same bounded operation as the pinned upstream assertion.",
+        "status": "pass",
+        "upstream": {
+          "marker": "testNestedGroupTextBoxCopyCrash",
+          "path": "sw/qa/extras/uiwriter/uiwriter6.cxx"
+        }
+      },
+      "defaults": {
+        "local": {
+          "marker": "replaces native keyboard Copy data",
+          "path": "apps/office/src/sw/browser/presentation/WriterMenuBar.test.tsx"
+        },
+        "method": "source-derived-golden",
+        "rationale": "The local default-state expectation is derived from the pinned upstream assertion before explicit user settings.",
+        "status": "pass",
+        "upstream": {
+          "marker": "testNestedGroupTextBoxCopyCrash",
+          "path": "sw/qa/extras/uiwriter/uiwriter6.cxx"
+        }
+      },
+      "serialization": {
+        "method": "not-applicable",
+        "rationale": "Extend a Writer selection across rendered paragraphs with the pointer does not cross a serialization boundary.",
+        "status": "not-applicable"
+      },
+      "operationCycle": {
+        "method": "not-applicable",
+        "rationale": "Extend a Writer selection across rendered paragraphs with the pointer has no applicable import-mutation-undo-export-reopen cycle.",
+        "status": "not-applicable"
+      },
+      "differential": {
+        "local": {
+          "marker": "replaces native keyboard Copy data",
+          "path": "apps/office/src/sw/browser/presentation/WriterMenuBar.test.tsx"
+        },
+        "method": "source-derived-golden",
+        "rationale": "No runnable pinned LibreOffice binary is present; the focused local golden is derived from the exact pinned upstream test assertion.",
+        "status": "pass",
+        "upstream": {
+          "marker": "testNestedGroupTextBoxCopyCrash",
+          "path": "sw/qa/extras/uiwriter/uiwriter6.cxx"
+        }
+      },
+      "divergences": [
+        {
+          "classification": "B",
+          "description": "DOM selection and the Clipboard API replace native Writer window and clipboard services.",
+          "local": {
+            "marker": "Browser Writer clipboard",
+            "path": "docs/program/writer-clipboard.md"
+          },
+          "upstream": {
+            "marker": ".uno:SelectAll",
+            "path": "sw/uiconfig/swriter/menubar/menubar.xml"
+          }
+        },
+        {
+          "classification": "X",
+          "description": "Copy preserves only the browser text/plain and bounded paragraph-level text/html representations; objects, tables, tracked changes, and full Writer transfer semantics beyond the bounded Cut and Paste slice are not implemented.",
+          "local": {
+            "marker": "Browser Writer clipboard",
+            "path": "docs/program/writer-clipboard.md"
+          },
+          "upstream": {
+            "marker": ".uno:SelectAll",
+            "path": "sw/uiconfig/swriter/menubar/menubar.xml"
+          }
+        },
+        {
+          "classification": "X",
+          "description": "Select All covers the bounded rendered document body, not every Writer document object or selection mode.",
+          "local": {
+            "marker": "Browser Writer clipboard",
+            "path": "docs/program/writer-clipboard.md"
+          },
+          "upstream": {
+            "marker": ".uno:SelectAll",
+            "path": "sw/uiconfig/swriter/menubar/menubar.xml"
+          }
+        }
+      ]
+    }
+  }
+}

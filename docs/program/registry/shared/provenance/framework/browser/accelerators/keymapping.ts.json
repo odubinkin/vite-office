@@ -1,0 +1,26 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "evidence": {
+      "local": [
+        {
+          "marker": "BrowserShortcutEvent",
+          "path": "apps/office/src/framework/browser/accelerators/keymapping.ts"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/framework/browser/accelerators/keymapping.ts",
+    "rationale": "Adapts browser keyboard events to canonical command-registry shortcut strings at the LibreOffice `framework/source/accelerators/keymapping.cxx` ownership boundary. This is a browser-owned adaptation without a direct native source mapping.",
+    "responsibilities": [
+      "Adapts browser keyboard events to canonical command-registry shortcut strings at the LibreOffice `framework/source/accelerators/keymapping.cxx` ownership boundary."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser keyboard, Intl locale, and Worker APIs replace native framework services."
+    },
+    "status": "local-only"
+  },
+  "legacyOrder": 8
+}

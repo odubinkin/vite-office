@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/o3tl/inc/sorted_vector.ts",
+          "marker": "SortedVector"
+        },
+        {
+          "path": "apps/office/src/o3tl/inc/sorted_vector.test.ts",
+          "marker": "matches all small sorted unions while keeping the destination object on equal keys"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/include/o3tl/sorted_vector.hxx",
+          "marker": "class sorted_vector"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/o3tl/sorted_vector.hxx",
+          "marker": "insert_internal"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/o3tl/inc/sorted_vector.ts",
+    "localSymbols": [
+      "SortedVector"
+    ],
+    "omittedResponsibilities": [
+      "Only the strict-unique operations consumed by existing Writer trees are ported; initializer-list/copy/move/reserve/swap/value erase/extraction/contains/resort/destruction and partial-order lookup policies are unimplemented.",
+      "Native pointer iterator and template comparator types use bounded ECMAScript indices/iteration and injected ordering; values at missing indices are undefined. Whole-header, generic overload ambiguity when values themselves are containers, native const/destructor/lifetime equivalence remains unverified."
+    ],
+    "preservedResponsibilities": [
+      "Iteration56 replaces raw child arrays and push-based transfers with a source-owned o3tl SortedVector using private vector storage, injected strict ordering, binary lower/upper bounds, comparator-equivalent lookup/single insert and destination-preserving sorted bulk union. Core creation/insertion/suffix transfer/removal/lookup/traversal use the container; MoveChildren clears it without replacing identity. Writer counted-child traversal uses native iteration and dynamic type guard. Nine existing diagnostic suites observe iterable snapshots with prior expected values retained. Owned generic union matrices and actual document-record tests cover ordering/equivalence, retained destination object, native parent assignment before duplicate rejection, phantom recursion, raw counters and factory rejection. Fresh native manual file/symbol hashes only; no compiled native or whole-header certification. Numeric index/end-minus-one, nullable out-of-range read and injected comparator bind the ECMAScript container representation. Unused initializer/copy/partial-order policies/native iterator-const/destructor/lifetime and wider tree API/context/range/redline/UI obligations stay unverified. No project test accesses upstream; no helper/source bodies in Agentplane; no whole-module/status/default/deviation/IO/recovery/coverage promotion."
+    ],
+    "status": "mapped",
+    "upstreamPath": "include/o3tl/sorted_vector.hxx",
+    "upstreamSymbols": [
+      "sorted_vector",
+      "find_unique"
+    ]
+  },
+  "legacyOrder": 26
+}

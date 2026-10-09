@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/doc/default-font.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "formatting-model",
+    "capabilityIds": [
+      "CAP-0112"
+    ],
+    "semantic": {
+      "behaviorStatus": "parity",
+      "contractStatus": "parity",
+      "defaultStatus": "parity",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/doc/default-font.ts#getDefaultFont",
+        "vendor/libreoffice-reference/sw/source/core/doc/DocumentStylePoolManager.cxx#lcl_SetDfltFont"
+      ],
+      "justification": "Ports the supported Writer script/language default-font decision and keeps output-device resolution behind an injected contract.",
+      "knownViolations": [],
+      "localSymbols": [
+        "WriterFontScript",
+        "WriterDefaultFontType",
+        "DefaultFontDevice",
+        "getDefaultFont",
+        "getWriterFontScript",
+        "getDefaultFontSelection",
+        "getWriterDefaultFontLanguage"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "sw/source/core/doc/DocumentStylePoolManager.cxx",
+      "upstreamSymbols": [
+        "lcl_SetDfltFont",
+        "OutputDevice::GetDefaultFont"
+      ]
+    }
+  }
+}

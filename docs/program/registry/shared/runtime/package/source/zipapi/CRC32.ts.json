@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/package/source/zipapi/CRC32.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "odf-filter",
+    "capabilityIds": [
+      "CAP-0113"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/package/source/zipapi/CRC32.ts#CRC32",
+        "vendor/libreoffice-reference/package/source/zipapi/CRC32.cxx#CRC32::CRC32"
+      ],
+      "justification": "Mapped provenance remains semantically unverified against package/source/zipapi/CRC32.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+      "knownViolations": [],
+      "localSymbols": [
+        "CRC32"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "package/source/zipapi/CRC32.cxx",
+      "upstreamSymbols": [
+        "CRC32::CRC32",
+        "CRC32::reset",
+        "CRC32::getValue",
+        "CRC32::updateSegment"
+      ]
+    }
+  }
+}

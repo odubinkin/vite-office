@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "XMLTextPropertySetContext",
+          "path": "apps/office/src/xmloff/source/text/XMLTextPropertySetContext.ts"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "XMLTextPropertySetContext::createFastChildContext",
+          "path": "vendor/libreoffice-reference/xmloff/source/text/XMLTextPropertySetContext.cxx"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/xmloff/source/text/XMLTextPropertySetContext.ts",
+    "localSymbols": [
+      "XMLTextPropertySetContext"
+    ],
+    "omittedResponsibilities": [
+      "Text columns, complex colors, drop caps, and other element-valued properties without current Writer model owners remain intentionally omitted."
+    ],
+    "preservedResponsibilities": [
+      "Dispatches the implemented tab-stop element property to the native-named context in its separate style/xmltabi owner."
+    ],
+    "status": "mapped",
+    "upstreamPath": "xmloff/source/text/XMLTextPropertySetContext.cxx",
+    "upstreamSymbols": [
+      "XMLTextPropertySetContext",
+      "XMLTextPropertySetContext::createFastChildContext"
+    ]
+  },
+  "legacyOrder": 308
+}

@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/editeng/source/items/textitem.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "formatting-model",
+    "capabilityIds": [
+      "CAP-0112"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/editeng/source/items/textitem.ts#FontWeight",
+        "vendor/libreoffice-reference/editeng/source/items/textitem.cxx#FontWeight"
+      ],
+      "justification": "Mapped provenance remains semantically unverified against editeng/source/items/textitem.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+      "knownViolations": [],
+      "localSymbols": [
+        "FontWeight",
+        "FontItalic",
+        "FontLineStyle",
+        "SvxFontItem",
+        "SvxFontHeightItem",
+        "SvxWeightItem",
+        "SvxPostureItem",
+        "SvxUnderlineItem"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "editeng/source/items/textitem.cxx",
+      "upstreamSymbols": [
+        "FontWeight",
+        "FontItalic",
+        "FontLineStyle",
+        "SvxFontItem",
+        "SvxFontHeightItem",
+        "SvxWeightItem"
+      ]
+    }
+  }
+}

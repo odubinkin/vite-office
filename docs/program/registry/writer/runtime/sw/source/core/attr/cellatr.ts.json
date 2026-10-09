@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/attr/cellatr.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "attr",
+    "capabilityIds": [
+      "CAP-0113"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/attr/cellatr.ts#SwTableBoxFormula",
+        "apps/office/src/sw/source/core/attr/native-format-attribute-notify.test.ts#@fileoverview",
+        "apps/office/src/sw/source/core/undo/native-format-attribute-notify-history.test.ts#@fileoverview",
+        "apps/office/src/sw/browser/editor/native-format-attribute-notify.test.tsx#@fileoverview",
+        "vendor/libreoffice-reference/sw/source/core/attr/cellatr.cxx#SwTableBoxNumFormat::SwTableBoxNumFormat",
+        "vendor/libreoffice-reference/sw/source/core/attr/cellatr.cxx#SwTableBoxFormula::SwTableBoxFormula",
+        "vendor/libreoffice-reference/sw/source/core/attr/cellatr.cxx#SwTableBoxValue::SwTableBoxValue",
+        "vendor/libreoffice-reference/sw/source/core/bastyp/init.cxx#new SwTableBoxNumFormat",
+        "vendor/libreoffice-reference/sw/inc/cellatr.hxx#getSwDefaultTextFormat"
+      ],
+      "justification": "Iteration245 ports precise native AttrSetChangeHint old/new effective values, modify locking and inherited Differentiate filtering to original registered clients. Row/cell generic attribute overrides are removed and copying claims are locked. Native default items127/157/158/159 supply actual protection flags, numeric format100/locale normalization, detached non-shareable formula and zero double. Browser snapshot restoration stays a bounded boundary. Full SwTableFormula inheritance/parser/calculation/name conversion, presentation/UNO and native frame invalidation/geometry remain unverified. Targeted verification pending; last full237,next247; no semantic promotion. Iteration245 verified1575 unique app cases including20 fresh native format notification/default/ownership/history/UI cases and13 Chromium cases. Initial1538pass6fail; closure1 resolves6failures and explicitly revalidates3 materially affected fresh device/UI scenarios,9pass30skip; closure2 only new/unexecuted related cases31pass14skip. All660 prior acceptance files byte-identical. Actual app/inventory all-four100 binds current complete sources/maps and complete unchanged native declarations/signatures/bodies/enclosing branches/all locations from244; generated V8 duplicate method display ordinal changes are documented with full source hashes, no individual counter sanitization. Browser paint notification follows native clients without adding a document mutation. Existing317 metadata fields/order/status/default/classification/evidence prefixes preserved, one new cellatr record unverified. Full SwTableFormula second-base/calculation/name conversion/UNO, native frame invalidation/geometry and direct native UI registration remain partial. Registered IO/recovery/settings deviations preserved; last full237,next247; no full245.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SwTableBoxNumFormat",
+        "SwTableBoxFormula",
+        "SwTableBoxValue"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/core/attr/cellatr.cxx",
+      "upstreamSymbols": [
+        "SwTableBoxNumFormat::SwTableBoxNumFormat",
+        "SwTableBoxFormula::SwTableBoxFormula",
+        "SwTableBoxValue::SwTableBoxValue"
+      ]
+    }
+  }
+}

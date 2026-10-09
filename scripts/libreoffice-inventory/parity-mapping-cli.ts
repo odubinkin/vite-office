@@ -2,8 +2,9 @@
  * @fileoverview Provides a strict read-only command-line validator for authored parity mapping manifests and their pinned upstream and local evidence paths.
  */
 
-import { readFile, readdir } from "node:fs/promises";
+import { readdir } from "node:fs/promises";
 
+import { readInventoryCompatibilityText } from "./registry-storage";
 import { isDirectModule } from "./cli";
 import { parseBaselineManifest } from "./manifest";
 import { parseParityMappingManifest, validateParityMappingEvidence } from "./parity-mappings";
@@ -147,7 +148,7 @@ function selectCapabilityId(record: { readonly capabilityId: string }): string {
  * @returns A promise resolving to full UTF-8 file contents.
  */
 export async function readUtf8File(path: string): Promise<string> {
-  return readFile(path, "utf8");
+  return readInventoryCompatibilityText(path);
 }
 
 /**

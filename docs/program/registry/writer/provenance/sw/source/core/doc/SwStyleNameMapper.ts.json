@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/doc/SwStyleNameMapper.ts",
+          "marker": "SwStyleNameMapper"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/SwStyleNameMapper.cxx",
+          "marker": "SwStyleNameMapper::GetUIName"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/strings.hrc",
+          "marker": "STR_POOLCHR_INET_NORMAL"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/core/doc/SwStyleNameMapper.ts",
+    "localSymbols": [
+      "SwStyleNameMapper"
+    ],
+    "omittedResponsibilities": [
+      "All other style families,localization,UI/programmatic conversions,custom style disambiguation and full native mapper architecture remain unverified."
+    ],
+    "preservedResponsibilities": [
+      "Bounded pool-ID GetUIName maps native1030/1031 to two English UI resources and retains fallback for unsupported IDs. Iteration126 restores the styled RES_TXTATR_INETFMT pool default and two native style IDs,distinct from CreateDefault zero item. Copy/equality preserve both IDs;paired setters retain independent style names/IDs. Default registration no longer requires browser restore factory;unregistered snapshot decode still rejects. English two-entry pool-name mapping is bounded;localized/all-family/custom style resolution,active DTO styled-constructor migration,ODF programmatic/UI conversion,UNO/macros/visited-style clients/lifetime and whole core/UI remain unverified. All pre-existing semantic statuses/defaults/exceptions and registered save/open/recovery deviations remain unchanged."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/doc/SwStyleNameMapper.cxx",
+    "upstreamSymbols": [
+      "SwStyleNameMapper::GetUIName"
+    ]
+  },
+  "legacyOrder": 162
+}

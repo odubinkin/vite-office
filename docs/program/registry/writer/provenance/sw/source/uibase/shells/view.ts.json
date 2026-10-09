@@ -1,0 +1,26 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "local-infrastructure",
+    "evidence": {
+      "local": [
+        {
+          "marker": "SwViewCommandShell",
+          "path": "apps/office/src/sw/source/uibase/shells/view.ts"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/uibase/shells/view.ts",
+    "rationale": "Composes a Writer view command registry with the generic SfxShell dispatcher; the persistent SwView implementation is separately mapped at sw/source/uibase/uiview/view.ts.",
+    "responsibilities": [
+      "Composes a Writer view command registry with the generic SfxShell dispatcher; the persistent SwView implementation is separately mapped at sw/source/uibase/uiview/view.ts."
+    ],
+    "stackDivergence": {
+      "kind": "local-infrastructure",
+      "rationale": "The TypeScript command composition has no single native implementation unit."
+    },
+    "status": "local-only"
+  },
+  "legacyOrder": 262
+}

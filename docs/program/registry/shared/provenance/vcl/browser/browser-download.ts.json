@@ -1,0 +1,26 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "evidence": {
+      "local": [
+        {
+          "marker": "DownloadAnchor",
+          "path": "apps/office/src/vcl/browser/browser-download.ts"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/vcl/browser/browser-download.ts",
+    "rationale": "Implements a browser-only text Blob download adapter with injectable DOM and object-URL capabilities for deterministic tests. The implementation depends on browser or React execution semantics, so no native LibreOffice source file is claimed as its owner.",
+    "responsibilities": [
+      "Implements a browser-only text Blob download adapter with injectable DOM and object-URL capabilities for deterministic tests."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser DOM, React, Worker, storage, or lifecycle APIs replace the corresponding native platform boundary."
+    },
+    "status": "local-only"
+  },
+  "legacyOrder": 281
+}

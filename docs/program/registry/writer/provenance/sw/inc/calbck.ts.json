@@ -1,0 +1,95 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "SwModify",
+          "path": "apps/office/src/sw/inc/calbck.ts"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/number-pointer.test.ts",
+          "marker": "matches native pointer and reference Set identity validity and every implemented field"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/number-pointer.test.ts",
+          "marker": "matches native absent pointer defaults and protects stable const references"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/number-pointer.test.ts",
+          "marker": "matches native base Writer assignment self alias and optional font copies"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/number-pointer.test.ts",
+          "marker": "matches native same modify assignment copy and detach responsibilities"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/number-pointer.test.ts",
+          "marker": "keeps pointer assigned live rule reads and sparse ownership through actual document and Worker paths"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/attr/native-format-attribute-notify.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/undo/native-format-attribute-notify-history.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-format-attribute-notify.test.tsx",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/svl/source/notify/native-svt-notifier.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/native-format-notifier-store.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-format-notifier.test.tsx",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "SwModify::CallSwClientNotify",
+          "path": "vendor/libreoffice-reference/sw/source/core/attr/calbck.cxx"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/attr/calbck.cxx",
+          "marker": "void sw::ClientBase<T>::StartListeningToSameModifyAs"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/inc/calbck.ts",
+    "localSymbols": [
+      "SwClient",
+      "SwModify",
+      "subscribeToSwModify"
+    ],
+    "omittedResponsibilities": [
+      "The complete native format-death, type-filtered client, and layout-client families remain outside the bounded implementation."
+    ],
+    "preservedResponsibilities": [
+      "Preserves one-parent SwClient registration, SwModify propagation, safe disposal, and bounded transaction aggregation.",
+      "Iteration46 restores the native pointer Set overload as explicit JS SetByPointer, distinct from reference Set replacement. Mutable owned SwNumFormat values and cached protected JS const views retain identity/live reads on pointer assignment; null resets the owned slot and restores the exact shared default. Source-owned base/Writer Assign copies every implemented raw marker/position/type/show/optional-family-Font field without ListFormat regeneration and transfers same-modify registration; copy construction preserves that source registration. Complete unchanged pinned pointer/ref Set,assignment/copy/rule-get/default and same-modify bodies emit639 profiles under ASan/UBSan:600 mixed traces,8 sparse defaults,23 assignment/self-alias profiles,6 actual registration recipient counts and2 format registration states. Exact hashes and prior full native format/default profile retained; named native SwModify Add/Remove container,invalid-flag,platform/family-only Font/COW/graphics/style/service aliases explicitly bound the proof. Original source-native ref/classification assertions remain intact. Actual document-owned rule,Worker16 and supported genuine ODT export/reopen fields are checked; native const view is a JS boundary and retained detached JS reads do not certify native deleted-pointer/destructor/global lifetime. Native complete Font/graphics/legal/style/layout/redline/UNO/service/global/client destruction and wider families remain individually unverified. No module/status/goal promotion,policy/dependency/coverage weakening or registered IO/recovery change.",
+      "Iteration245 ports precise native AttrSetChangeHint old/new effective values, modify locking and inherited Differentiate filtering to original registered clients. Row/cell generic attribute overrides are removed and copying claims are locked. Native default items127/157/158/159 supply actual protection flags, numeric format100/locale normalization, detached non-shareable formula and zero double. Browser snapshot restoration stays a bounded boundary. Full SwTableFormula inheritance/parser/calculation/name conversion, presentation/UNO and native frame invalidation/geometry remain unverified. Targeted verification pending; last full237,next247; no semantic promotion.",
+      "Iteration245 verified1575 unique app cases including20 fresh native format notification/default/ownership/history/UI cases and13 Chromium cases. Initial1538pass6fail; closure1 resolves6failures and explicitly revalidates3 materially affected fresh device/UI scenarios,9pass30skip; closure2 only new/unexecuted related cases31pass14skip. All660 prior acceptance files byte-identical. Actual app/inventory all-four100 binds current complete sources/maps and complete unchanged native declarations/signatures/bodies/enclosing branches/all locations from244; generated V8 duplicate method display ordinal changes are documented with full source hashes, no individual counter sanitization. Browser paint notification follows native clients without adding a document mutation. Existing317 metadata fields/order/status/default/classification/evidence prefixes preserved, one new cellatr record unverified. Full SwTableFormula second-base/calculation/name conversion/UNO, native frame invalidation/geometry and direct native UI registration remain partial. Registered IO/recovery/settings deviations preserved; last full237,next247; no full245.",
+      "Iteration246 connects existing Writer presentation directly to original SwFormat Svt notifiers through native BroadcasterMixin/BroadcastingModify and removes the generic NotifyAttributeSet device bridge. Separate observer registrations preserve native HasWriterListeners lifetime, original hints and writer-before-observer order including the existing bounded browser transaction. Native Svt snapshot membership, tombstone normalization, reciprocal copies and prepare/destructor semantics are represented. Stable browser object allocation identity represents pointer ordering; actual addresses, bit packing, partial-sort performance, native assertions/mutable vector access and full linked Writer-client infrastructure remain unverified. Browser observer follows current actual document style/table/row/cell owners, original replacement hints and final structural/history bindings invalidation; silent direct ClaimFrameFormat before a document invalidation is not a native observer signal and complete native layout-client integration remains unverified. Targeted verification pending; last full237,next247. Existing statuses/defaults/classifications/evidence and registered I/O/recovery deviations unchanged.",
+      "Iteration246 verified bounded closure:1596unique app cases including18fresh plus13Chromium pass one upstream-absent initial profile and failure/new-only closure;1590initial passed,4fresh failed then6closure passed12skipped,zero unchanged passing replay. Actual app318files18105lines19876statements4554functions14568branches and inventory38files1464/1523/384/1081 all-four100 from actual counters with whole byte-identical source/maps or complete unchanged declaration/body/enclosing branch/all-location proofs; no counter/threshold/skip sanitization. Native Svt notifier tests, direct mounted row/cell/style refresh without document device signal, original format/shared claim/history/replacement/deletion/close behavior and six statics/build/source audits pass. Silent direct ClaimFrameFormat before document invalidation/full native linked/layout/VCL client integration, actual pointer memory/packed storage/partial-sort performance/assertion/mutable vector boundaries remain unverified.318old metadata semantics/defaults/classifications/prefixes and662unchanged old acceptance files retained;1exact old native notifier contract migration,3fresh files,321metadata/666acceptance total. Registered IO/recovery/settings exceptions unchanged; full247next, broad goal active/incomplete."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/attr/calbck.cxx",
+    "upstreamSymbols": [
+      "SwModify::CallSwClientNotify",
+      "SwModify::SwClientNotify",
+      "SwModify::RemoveAllWriterListeners",
+      "void sw::ClientBase<T>::StartListeningToSameModifyAs"
+    ]
+  },
+  "legacyOrder": 131
+}

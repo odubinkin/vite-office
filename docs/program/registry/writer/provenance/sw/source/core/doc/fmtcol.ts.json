@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "WRITER_PARAGRAPH_STYLES",
+          "path": "apps/office/src/sw/source/core/doc/fmtcol.ts"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "SwFormatColl",
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/fmtcol.cxx"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/core/doc/fmtcol.ts",
+    "localSymbols": [
+      "WRITER_PARAGRAPH_STYLES",
+      "WriterParagraphStyle",
+      "SwFormatColl",
+      "SwTextFormatColl",
+      "isWriterParagraphStyle"
+    ],
+    "omittedResponsibilities": [
+      "Upstream obligations outside SwFormatColl, SwTextFormatColl, SwTextFormatColl::SwTextFormatColl, SwTextFormatColl::~SwTextFormatColl and the bounded WRITER_PARAGRAPH_STYLES, WriterParagraphStyle, SwTextFormatCollSnapshot contract remain intentionally omitted.",
+      "Collection switch parity is bounded to the existing shown/list/heading slice;derived-style assignment cleanup iterators,native outline index,footnote/conditional/inline styles,live format callbacks,full history and factories remain unverified."
+    ],
+    "preservedResponsibilities": [
+      "Reimplements bounded SwFormatColl and SwTextFormatColl hierarchy from pinned `sw/source/core/doc/fmtcol.cxx`.",
+      "Iteration37 ports the anonymous-namespace collection numbering transition helpers. Initial inherited attachment,retained record rebinding,five-attribute removal reset,Outline exclusion/assignment and synthesized empty-rule return match16 unchanged extracted native definitions over277 sequences/10394 actual states. Native footnotes,conditional/inline styles,outline index,platform flags/cache,live format callbacks and full history/attribute lifetime remain separate unverified obligations."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/doc/fmtcol.cxx",
+    "upstreamSymbols": [
+      "SwFormatColl",
+      "SwTextFormatColl",
+      "SwTextFormatColl::SwTextFormatColl",
+      "SwTextFormatColl::~SwTextFormatColl"
+    ]
+  },
+  "legacyOrder": 170
+}

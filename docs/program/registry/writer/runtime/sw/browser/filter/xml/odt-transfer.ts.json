@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/browser/filter/xml/odt-transfer.ts",
+    "classification": "local-infrastructure",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "odf-filter",
+    "capabilityIds": [
+      "CAP-0113",
+      "CAP-0130"
+    ],
+    "semantic": {
+      "behaviorStatus": "not-applicable",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/browser/filter/xml/odt-transfer.ts#OdtWriterTransferRecord",
+        "apps/office/src/sw/browser/filter/xml/odt-worker-client.ts#createBrowserOdtFilterService",
+        "vendor/libreoffice-reference/sw/source/filter/xml/swxml.cxx#XMLReader::Read"
+      ],
+      "justification": "Worker-only envelope and graph conversion live in sw/browser/filter/xml; the ODT filter and SwDocShell consume canonical SwDoc graphs.",
+      "knownViolations": [],
+      "localSymbols": [
+        "createOdtWriterTransfer",
+        "restoreOdtWriterTransfer"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

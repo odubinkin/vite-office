@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "createMoveLeftMarginAction",
+          "path": "apps/office/src/sw/source/core/edit/edattr.ts"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "SwEditShell::MoveLeftMargin",
+          "path": "vendor/libreoffice-reference/sw/source/core/edit/edattr.cxx"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/core/edit/edattr.ts",
+    "localSymbols": [
+      "getMoveLeftMarginNodes",
+      "isMoveLeftMargin",
+      "createMoveLeftMarginAction"
+    ],
+    "omittedResponsibilities": [
+      "Native table and multiple-selection-ring layout operations are outside the implemented browser slice."
+    ],
+    "preservedResponsibilities": [
+      "Traverses selected text nodes, guards the frame width and groups margin undo transitions."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/edit/edattr.cxx",
+    "upstreamSymbols": [
+      "SwEditShell::IsMoveLeftMargin",
+      "SwEditShell::MoveLeftMargin"
+    ]
+  },
+  "legacyOrder": 181
+}

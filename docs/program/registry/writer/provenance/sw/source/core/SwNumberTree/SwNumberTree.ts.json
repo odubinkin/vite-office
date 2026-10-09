@@ -1,0 +1,636 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.test.ts",
+          "marker": "initializes structurally and advances counted siblings after zero"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.test.ts",
+          "marker": "retains native first uncounted descendant and nested sibling rules"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.test.ts",
+          "marker": "continues a subtree only below native uncounted parents"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.test.ts",
+          "marker": "revalidates zero restarts, counted changes and phantom ancestors"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-list-counters-roundtrip.test.ts",
+          "marker": "round-trips zero starts and restarts through native list trees"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts",
+          "marker": "SwNumberTreeNode"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.test.ts",
+          "marker": "constructs rule-start phantom chains and retains them through removal"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-lifecycle.test.ts",
+          "marker": "attaches items at insertion and validates reverse-order reads without replacing their root"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-lifecycle.test.ts",
+          "marker": "reparents retained items and moves descendants through native predecessor phantoms"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-lifecycle.test.ts",
+          "marker": "moves canonical paragraphs with retained list records and independent copied trees"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/node-numbering-lifecycle.test.ts",
+          "marker": "owns records in text nodes and validates insertion notifications before prefix reads"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/node-numbering-lifecycle.test.ts",
+          "marker": "removes old clients before changing list attributes and preserves native registration order"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/DocumentListItemsManager.test.ts",
+          "marker": "sorts independent of insertion order, suppresses equivalent positions and filters bullets and uncounted items"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-policy.test.ts",
+          "marker": "matches native bound orphan and inherited continuous phantom policies"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-policy.test.ts",
+          "marker": "matches native complete policy counter cache notification and traversal sequences"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-policy.test.ts",
+          "marker": "matches native continuous legacy marker selection without changing explicit list patterns"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-policy.test.ts",
+          "marker": "retains continuous and phantom policy on real Worker document owners and native copy reset boundaries"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-policy.test.ts",
+          "marker": "retains native empty and end sentinel validation with protected traversal"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-contract.test.ts",
+          "marker": "keeps both validators protected and requires explicit nullable child arguments"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-contract.test.ts",
+          "marker": "matches native null foreign owned-prefix and deferred descendant cache observations"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-removal.test.ts",
+          "marker": "releases only the supplied missing record and leaves phantom arguments untouched"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-vector.test.ts",
+          "marker": "keeps the vector helper protected with a true-default optional boolean"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-root.test.ts",
+          "marker": "keeps native root access protected without a public subclass re-export"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-children.test.ts",
+          "marker": "keeps child storage protected and exposes only the native direct count contract"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-counting-contract.test.ts",
+          "marker": "requires protected zero-argument boolean counting policies without public exports"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-container.test.ts",
+          "marker": "merges children in comparator order and retains destination identity for equivalent keys"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-insertion-order.test.ts",
+          "marker": "uses direct unique insertion and skips first-child cleanup, duplicate policies and invalid guards"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-insertion-order.test.ts",
+          "marker": "captures the bound sibling policy before descendant transfer and child cleanup"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-insertion-order.test.ts",
+          "marker": "retains both captured notification decisions when reading changes during suffix comparison"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-insertion-order.test.ts",
+          "marker": "reserves upper-bound lookup for deeper insertion and binds a first child below its phantom"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-validity.test.ts",
+          "marker": "provides protected zero and required nullable-child overloads to subclasses"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-validity.test.ts",
+          "marker": "observes owned prefixes through restart and removal without validating raw caches"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-validity.test.ts",
+          "marker": "looks up the stored valid boundary only for guarded owned children"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-validity.test.ts",
+          "marker": "retains hierarchical and continuous phantom validity across reading and invalidation"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-state.test.ts",
+          "marker": "retains protected mutable native field types, declaration order and constructor defaults without aliases"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-state.test.ts",
+          "marker": "shares native parent counter phantom and prefix fields through actual hierarchical and continuous list lifecycles"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-state.test.ts",
+          "marker": "retains the native continuation flag through invalidation and clears it for an explicit restart"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-prefix.test.ts",
+          "marker": "provides protected required-position prefix and child invalidation contracts without public exports"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-prefix.test.ts",
+          "marker": "retains native false-default prefix guards rewind validation and end semantics without counter reads"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-prefix.test.ts",
+          "marker": "dispatches the native following-uncounted invalidation helper while retaining hierarchical counters and later prefixes"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-prefix.test.ts",
+          "marker": "invalidates continuous suffixes and propagates parent iterator positions without changing raw counters"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-prefix.test.ts",
+          "marker": "rewinds direct child invalidation to first middle and last predecessor positions and ignores unattached records"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-destination.test.ts",
+          "marker": "selects real-child parent and empty destinations in native count order with retained reading and notification behavior"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-destination.test.ts",
+          "marker": "retains an existing destination phantom at an explicit comparator diagnostic boundary"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-destination.test.ts",
+          "marker": "stops destination selection when transfer empties the predecessor and creates no additional phantom"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-helper-contracts.test.ts",
+          "marker": "inherits all six protected helpers with required pointer and reference arguments"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-helper-contracts.test.ts",
+          "marker": "dispatches explicit-null validation through the actual hierarchical and continuous engines"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-helper-contracts.test.ts",
+          "marker": "queries one child before the empty case and recursively dispatches through phantom owners"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-helper-contracts.test.ts",
+          "marker": "checks a real parent phantom flag before counted policy including the uncounted branch"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-helper-contracts.test.ts",
+          "marker": "recurses through counted phantom parents after their phantom branch and stops at the root or uncounted policy"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-helper-contracts.test.ts",
+          "marker": "moves actual phantom descendants through empty or retained destination tails with inherited transfer access"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-document-context.test.ts",
+          "marker": "requires explicit document arguments across rule list and tree APIs and hides traversal"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-document-context.test.ts",
+          "marker": "forwards the rule caller document through invalidation and list validation instead of its first client"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-document-context.test.ts",
+          "marker": "forwards an explicit insertion context while preserving text-owner policy and retained list topology"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-document-context.test.ts",
+          "marker": "forwards removal context without borrowing the text document and retains remaining raw counters"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-document-context.test.ts",
+          "marker": "passes the operation context through protected root and phantom traversal before text-owner notification"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-vector-ownership.test.ts",
+          "marker": "exposes mutable source-owned vector aliases and exact shown getter contracts"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-vector-ownership.test.ts",
+          "marker": "returns separate mutable empty values for roots, orphans and paragraphs without records"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-vector-ownership.test.ts",
+          "marker": "obtains the shown record through GetNum and delegates once without changing its returned value"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-vector-ownership.test.ts",
+          "marker": "keeps each returned vector independent through phantom depth nine, continuous policy, restarts and reading transitions"
+        },
+        {
+          "path": "apps/office/src/sw/inc/SwNumberTreeTypes.ts",
+          "marker": "tNumberVector"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-parent-lookup.test.ts",
+          "marker": "retains public predecessor defaults and protected nullable lookup and prefix contracts"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-parent-lookup.test.ts",
+          "marker": "looks up predecessors through parent helpers while retaining root exclusion and deepest descendants"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-parent-lookup.test.ts",
+          "marker": "retains comparator-equivalent lookup after an actual unique child transfer"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-parent-lookup.test.ts",
+          "marker": "queries parent helpers after children and before the following uncounted notification subtree"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-parent-lookup.test.ts",
+          "marker": "looks up the next uncounted subtree only when the selected prefix guard changes its boundary"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-parent-lookup.test.ts",
+          "marker": "retains continuous parent propagation after helper lookup and invalidates suffix prefixes only"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-hierarchical-policy.test.ts",
+          "marker": "keeps protected required nullable targets and returns before policies for null or missing keys"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-hierarchical-policy.test.ts",
+          "marker": "clears actual retained continuation before virtual start counted and descendant policies"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-hierarchical-policy.test.ts",
+          "marker": "uses parent lookup and preceding child-count policy while skipping empty uncounted siblings"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-hierarchical-policy.test.ts",
+          "marker": "stops backward continuation at a counted empty sibling and retains the owned start"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-hierarchical-policy.test.ts",
+          "marker": "short-circuits previous lookup for restarted children counted parents and first-position parents"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-hierarchical-policy.test.ts",
+          "marker": "retains ordered-equivalent targets cached prefixes signed starts restarts and phantom profiles"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-continuous-policy.test.ts",
+          "marker": "keeps protected nullable targets and owner starts for first counted uncounted and restart branches"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-continuous-policy.test.ts",
+          "marker": "uses parent helpers for shared-owner predecessor counters and skips them on counted restarts"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-continuous-policy.test.ts",
+          "marker": "validates predecessor owners when the first nested child has a different parent"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-continuous-policy.test.ts",
+          "marker": "uses the deepest predecessor and validates its distinct owner before incrementing"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-continuous-policy.test.ts",
+          "marker": "resumes after a valid prefix and uses target identity with end sentinel clearing"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-continuous-policy.test.ts",
+          "marker": "retains genuine hierarchical continuation when continuous policy revalidates the subtree"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-reparent-policy.test.ts",
+          "marker": "requires explicit void contracts and retains negative and unattached no-op branches"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-reparent-policy.test.ts",
+          "marker": "checks attached parent before same-level comparison without removal or root lookup"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-reparent-policy.test.ts",
+          "marker": "climbs every phantom owner through GetParent after removal and before cleanup"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-reparent-policy.test.ts",
+          "marker": "stops at a real owner and preserves its remaining child and list membership"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-reparent-policy.test.ts",
+          "marker": "captures root before removal and reinserts the same record after phantom cleanup"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-reparent-policy.test.ts",
+          "marker": "retains reading suppression and normal notifications through text-owned level changes"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-reparent-policy.test.ts",
+          "marker": "terminates the nullable parent release boundary without invoking cleanup"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/native-numbering-indent.test.ts",
+          "marker": "native numbering indent values"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/edit/native-numbering-indent.test.ts",
+          "marker": "native label-indent shell policy"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::ValidateHierarchical"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::GetNumberVector_"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx",
+          "marker": "SwNodeNum::IsCounted"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx",
+          "marker": "SwNodeNum::IsRestart"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx",
+          "marker": "SwNodeNum::GetStartValue"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/list.cxx",
+          "marker": "SwList::ValidateListTree"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::AddChild"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::CreatePhantom"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::HasPhantomCountedParent"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::GetNumber"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::RemoveMe"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::RemoveChild"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::SetLevelInListTree"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::SetLastValid"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::InvalidateTree"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "SwTextNode::GetNum("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "SwTextNode::GetNumberVector("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "SwTextNode::AddToList()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "SwTextNode::RemoveFromList()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "HandleSetAttrAtTextNode::HandleSetAttrAtTextNode"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx",
+          "marker": "SwNodeNum::PreAdd()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx",
+          "marker": "SwNodeNum::PostRemove()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx",
+          "marker": "SwNodeNum::ChangeNumRule("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/number.cxx",
+          "marker": "SwNumRule::GetTextNodeList("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/number.cxx",
+          "marker": "SwNumRule::RemoveTextNode("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/number.cxx",
+          "marker": "SwNumRule::Validate("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentListItemsManager.cxx",
+          "marker": "DocumentListItemsManager::addListItem("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentListItemsManager.cxx",
+          "marker": "DocumentListItemsManager::getNumItems("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx",
+          "marker": "SwNodeNum::IsContinuous()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx",
+          "marker": "SwNodeNum::IsCountPhantoms()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::ValidateContinuous("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::GetPred("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::GetLastDescendant()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::NotifyInvalidChildren("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/list.cxx",
+          "marker": "SwList::ValidateListTree("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/number.cxx",
+          "marker": "SwNumRule::MakeNumString("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/SwNumberTree.hxx",
+          "marker": "ValidateHierarchical"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/SwNumberTree.hxx",
+          "marker": "ValidateContinuous"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/SwNumberTree.hxx",
+          "marker": "GetIterator"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::GetIterator"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNodeLessThan"
+        },
+        {
+          "path": "sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::IsValid"
+        },
+        {
+          "path": "sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::Validate"
+        },
+        {
+          "path": "sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::HasOnlyPhantoms"
+        },
+        {
+          "path": "sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::GetFirstNonPhantomChild"
+        },
+        {
+          "path": "sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::MoveChildren"
+        },
+        {
+          "path": "sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::MoveGreaterChildren"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::GetPred"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::NotifyInvalidChildren"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::SetLastValid"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::ValidateHierarchical"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/SwNumberTree.hxx",
+          "marker": "void ValidateHierarchical"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::ValidateContinuous"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/SwNumberTree.hxx",
+          "marker": "void ValidateContinuous"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/SwNumberTree.hxx",
+          "marker": "void RemoveMe"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/SwNumberTree.hxx",
+          "marker": "void SetLevelInListTree"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts",
+    "localSymbols": [
+      "SwNumberTreeNode"
+    ],
+    "omittedResponsibilities": [
+      "Native layout expansion,redline/original/undo arrays,wider numbering families and full native nonshown tree lifetimes,complete callbacks/reading suppression,word-count/native lifetime machinery and legacy/default factories remain unverified."
+    ],
+    "preservedResponsibilities": [
+      "Iteration36 makes the shown number record SwTextNode-owned: SwList inserts/removes records without allocation or a text-node map. SwNodeNum binds/clears its rule in PreAdd/PostRemove and transfers rule clients in ChangeNumRule; rule clients retain insertion order and suppress identity duplicates. DocumentListItemsManager maintains native position ordering and filters counted enumeration records. Attribute rule/list changes detach before mutation; canonical node moves retain records,copy/restore attach independent records. Reads validate the requested prefix rather than unrelated tails. Compiled20 additional unmodified pinned owner/registry definitions alongside37 tree/list definitions compare120 sequences/8976 actual owner states including raw prefix caches,reverse vectors,bound rules,client order and numbered registry. Literal tests cover orphan binding,default1 after removal,duplicate add,disconnected/foreign arrays,rule copies and disposal. Single shown/document-node/hierarchical Arabic and bullet slice only;native layout expansion,redline/original arrays,complete callbacks/word-count/lifetime and legacy/default factories remain unverified. No whole-module/default/goal promotion;registered document IO deviations unchanged.",
+      "Iteration38 restores independent source set/reset pre/post flags, native prefix notification/validation ordering, direct outline suppression/return and normal-document sorted outline ownership.40 unchanged added native definitions compare60 sequences/2130 actual pre-vector cache,notification,item,rule,registry and outline-index states. Explicit dependency adapters retain source reading flag/shown/pool/raw-callback/layout-event/field boundaries;full native platform lifetime,dtor/redline/inline/fields/background/fill/live-style/default factories remain separate unverified obligations. No whole-module/default/goal promotion or IO change.",
+      "Iteration48 restores complete selected native continuous/phantom tree policy: bound rule flags, parent continuous fallback and orphan defaults, protected continuous prefix validation/last-descendant traversal, public predecessor modes excluding the root, continuous suffix invalidation and upward cache/notification propagation. SwList validation follows NotifyInvalidChildren under actual document reading policy rather than eager hierarchical recursion; legacy callers resolve client document context. Continuous legacy numeric markers select the current level, while explicit ListFormat behavior and measured NONE guards remain unchanged.42 complete unchanged pinned native definitions produce960 sequences/69120 record states,5 policy profiles and64 full marker states under ASan/UBSan. Literal project tests compare real connected attributes,raw prefix caches,ordered reads,notifications,client lists and numbered registry through insertion,restart,count/reparent/removal/flag changes and reading transitions; source-body hashes and literal result integrity revalidated after deletion of source copies. Native bound start/type/raw format presence,pool,string/document-position/range/style,shown/no-layout/no-redline/dtor/fuzz/field/raw callback/broadcaster/static-service/decimal formatter aliases explicitly limit the proof;prior complete selected rule/format defaults remain separately supported. Actual Worker owners retain continuous/phantom flags and nested counters;copy/reset retain native scalar boundaries and supported genuine ODT level fields. No upstream code is invoked by project tests or persisted in task artifacts;manual probes generate only ignored scratch source. Full native layout/redline/original root arrays,live style/Font/graphics/other numeric families,service/global/destructor/name-map/GrabBag/UNO/full ODT metadata/UI lifetimes remain individually unverified. No whole-module,status,goal or registered IO/recovery/dependency/policy/coverage promotion.",
+      "Iteration49 restores the protected required explicit nullable-target contracts of both validators and protected ordered-child GetIterator equivalence. Hierarchical null/distinct-key foreign targets leave raw caches untouched; comparator-equivalent nonmember objects resolve the stored child and owned targets validate only their direct prefix. The public eager no-argument recursive hierarchy bridge is removed. Existing phantom timing diagnostics now request the exact native last-child group prefix; every prior expected vector/state is retained. Complete unchanged pinned header/type declarations and all native core implementation bodies produce128 profiles/1792 snapshots/7168 raw record states under ASan/UBSan, including null/foreign/equivalent/owned prefix, deferred descendants, public reads,invalidation and suppressed/normal notifications. Four expected native compiler failures prove protected access and mandatory arguments; project typechecking independently rejects the preceding public/optional contracts. Explicit std::set ordered-child/bulk-insert,Long/pointer,nonfatal diagnostic,Arabic numbering/owned start/count/restart/phantom/order/reading/event and omitted registration policy adapters bound this core-only proof; prior actual owner/lifecycle profiles remain independent unchanged evidence. Project tests decode stored literal data only and never read/compile/invoke upstream; source exists only in ignored scratch and no source copies are stored in Agentplane artifacts. Wider container lookup consumers,other native API access/constness,layout/redline/root arrays/style/Font/graphics/service/global/destructor/UNO/full ODT/UI lifetime remain separately unverified. No whole-module,status,goal,registered IO/recovery,dependency,policy or gate promotion.",
+      "Iteration50 matches comparator-equivalent RemoveChild selection: detach/move the stored record, reacquire its position after phantom creation, preserve predecessor-prefix and notification ordering, and invoke PostRemove on the supplied argument after success or miss. Thirteen source-audited project-owned document tests cover first/middle/last equivalent and identity arguments under normal/reading policies, retained argument trees, stored descendants, raw prefixes/counters, callback timing and distinct rule-client/document-registry effects, plus missing real and phantom contracts. Fresh hashes for four pinned files and nine symbols support manual control-flow inspection; no new compiled-native execution or complete native ownership/layout/destructor/redline lifetime certification is claimed. Tests do not read/compile/invoke upstream; Agentplane stores no helper or native source bodies. Wider lookup/access/lifetime obligations remain unverified; no status,whole-module,goal,registered IO/recovery or gate promotion.",
+      "Iteration51 restores protected GetNumberVector_(output,validate=true), forwarding the flag to parent recursion and GetNumber. Six project-owned document/type tests cover exact optional boolean/protected contracts, caller-owned append output, root/orphan no-entry, hierarchical/continuous vectors and skipped phantom ancestors through level9. Explicit false retains complete raw value/prefix/continuation snapshots before and after restart invalidation; omitted/undefined/true and public default reads validate. Fresh native header declaration and three core symbol/file hashes support manual source inspection only, with no new compiled native owner/lifetime parity claim. Tests never read/compile/invoke upstream; Agentplane stores no helper or source bodies. Other access/container/lifetime obligations remain separately unverified; no status,whole-module,goal,registered IO/recovery or gate promotion.",
+      "Iteration52 restores protected GetRoot access without changing its body or zero-argument nullable result. The existing browser SwList.GetListItem projection now checks the exact highest parent identity through native public GetParent links, without a public root surrogate, cast, text-node mapping or cache read. Six existing diagnostic files preserve177 matcher/expected-argument records while using test-only protected observers. New type/root/list tests cover protected base/subclass access, skipped phantoms through level9, root/orphan absence, owned/foreign/missing/different-document membership and explicit remove/re-add allocation plus list moves. Four fresh pinned file hashes and seven declaration/body hashes support manual source inspection only; no new compiled native range/redline/owner/destructor lifetime parity claim. Project tests never access upstream; no helper/native source bodies in task artifacts. Other child-container/count/access and wider lifetime obligations remain separately unverified; no status,whole-module,goal,registered IO/recovery or gate promotion.",
+      "Iteration53 restores protected mChildren storage and native public zero-argument numeric GetChildCount, removes invented public GetChildren, and adapts SwList.HasNodes to the count. SwNodeNum scans protected children and retains the native dynamic type guard before Writer counting/recursive calls. Eight existing observer suites preserve249 matcher argument AST records through32 test-only protected storage observations. Three new tests cover exact visibility/arity/result, subclass storage, direct real/phantom/orphan counts through level9 removal and nonvalidating list membership, plus non-Writer child rejection. Five fresh pinned file hashes and six declaration/body hashes support manual inspection only; no new compiled native or full multi-root section/redline/lifetime claim. Existing policy method access and ordered-set container architecture remain separate measured obligations. No project test accesses upstream; no helper/native source bodies stored as task artifacts; no status/default/whole-module/goal or registered IO/recovery/gate promotion.",
+      "Iteration54 restores protected abstract HasCountedChildren, IsCountedForNumbering and IsCountPhantoms in the base, and removes all three from the public SwNodeNum surface. Concrete overrides stay protected because TypeScript rejects private narrowing of an inherited protected method; an owned virtual compiler fixture proves2415 for private and no diagnostics for protected, with no helper/source file saved. This is the narrowest valid inherited TypeScript contract, no private-C++ equivalence or new registered deviation claim. All55production method bodies are unchanged; six old suites retain249literal/dynamic matcher argument AST records through15test-only protected observations, normalizing only equivalent observation syntax. ForeignNode now fulfills the mandatory numbered-policy contract with true while Writer type rejection remains false. Three new tests cover exact zero-argument boolean signatures/public keys, required abstract numbered override, subtype virtual dispatch and real connected root/phantom/descendant/orphan policies with raw caches unchanged. Fresh pinned declaration/body hashes support manual inspection only; no fresh compiled native/platform lifetime claim. Project tests never access upstream; no helper/native source bodies in task artifacts; no whole-module/status/default/goal, registered IO/recovery or gate promotion. Ordered-container and other native API/lifetime obligations remain separately unverified.",
+      "Iteration56 replaces raw child arrays and push-based transfers with a source-owned o3tl SortedVector using private vector storage, injected strict ordering, binary lower/upper bounds, comparator-equivalent lookup/single insert and destination-preserving sorted bulk union. Core creation/insertion/suffix transfer/removal/lookup/traversal use the container; MoveChildren clears it without replacing identity. Writer counted-child traversal uses native iteration and dynamic type guard. Nine existing diagnostic suites observe iterable snapshots with prior expected values retained. Owned generic union matrices and actual document-record tests cover ordering/equivalence, retained destination object, native parent assignment before duplicate rejection, phantom recursion, raw counters and factory rejection. Fresh native manual file/symbol hashes only; no compiled native or whole-header certification. Numeric index/end-minus-one, nullable out-of-range read and injected comparator bind the ECMAScript container representation. Unused initializer/copy/partial-order policies/native iterator-const/destructor/lifetime and wider tree API/context/range/redline/UI obligations stay unverified. No project test accesses upstream; no helper/source bodies in Agentplane; no whole-module/status/default/deviation/IO/recovery/coverage promotion.",
+      "Iteration57 restores AddChild evaluation order: deeper insertion alone performs upper_bound; direct unique insertion binds parent then captures notification enablement before transferring descendants. Inserted-child cleanup is confined to the predecessor branch; first child resets the prefix directly; final notifications use the captured flag. Four owned-document trace tests cover first/sibling/deeper/duplicate/guard paths and both reading-mode changes during actual transfer comparison, retaining literal topology and raw caches. All other production methods and old tests remain unchanged. Fresh pinned file and declaration/body hashes support manual inspection only, with no new compiled native or full context/destructor/redline/layout/lifetime certification. Tests never read, compile or invoke upstream; Agentplane stores no helper/source bodies. No status/default/whole-module/goal, registered IO/recovery or gate promotion.",
+      "Iteration58 restores both protected IsValid overloads: omitted self query delegates to its attached parent, while an explicit nullable-child query checks saved prefix/exact parent then finds the retained boundary in sorted storage before LessThan. Native predecessor/self calls in insertion and child invalidation use the self overload. Four owned type/document tests cover protected subclass access/public absence, zero and required nullable-child boolean contracts, explicit-null/self distinction, root/orphan/foreign/owned boundaries, exact guarded lookup keys, reading/raw caches, restart and rule-client removal invalidation, hierarchical/continuous phantom ancestors and normal-mode removal. Only3method bodies change; all other runtime methods and old tests remain unchanged. Narrow unified-signatures annotations preserve distinct required overload contracts, with no gate change; a non-null boundary assertion reflects the native retained-container invariant rather than invented fallback behavior. Fresh pinned declaration/body/file hashes support manual inspection only; no new compiled native or full layout/redline/dtor/client/context/lifetime certification. No project test accesses upstream and no helper/source bodies are saved anywhere in Agentplane. No status/default/whole-module/goal/registered IO/recovery or gate promotion.",
+      "Iteration59 restores protected native state names and declaration order: mpParent, mnNumber, mbContinueingPreviousSubTree, mbPhantom and mpLastValid, retaining mutable undefined/0/false/false/undefined defaults and shared field storage. All55existing method bodies are unchanged after exact field-name normalization;5old cache observers preserve127matcher records and210other old test files remain byte-identical. Three owned type/document tests cover inherited protected read/write contracts and public absence, field order/defaults without legacy aliases, hierarchical/continuous phantom/prefix states through reading/validation/invalidation/removal, and actual continuation through invalidation and explicit restart. Fresh pinned field/constructor/body hashes support manual inspection only; native pointer/integer/const-mutable/destructor and full lifetime equivalence remain unverified. Project tests never read, compile or invoke upstream; Agentplane stores no helper or source bodies. Other helper access/context/client/dtor/redline/layout/range/iterator/browser obligations remain separately unverified. No module/status/default/goal, registered IO/recovery or gate promotion.",
+      "Iteration60 restores complete selected protected prefix API: SetLastValid takes a required child-container position and optional false-default validation flag, InvalidateChildren forwards native end with omitted validation, and Invalidate retains a required child. Existing numeric index/-1 end representation maps native iterators; all insertion/cleanup/transfer/validation/removal callers now forward their corresponding positions. Retained-boundary comparison resolves saved storage through find, following uncounted nodes receive InvalidateChildren, and continuous invalidation propagates parent GetIterator positions. Five owned type/document tests cover exact inherited access/arity/void/defaults, guards/rewinds/forward validation/end/empty, following-uncounted helper dispatch, continuous suffix/upward propagation and direct first/middle/last invalidation. Old tests and literals remain unchanged. Fresh pinned manual declaration/body/call-site hashes only; no compiled native/full iterator/const/dtor/context lifetime certification. No project test reads, compiles or invokes upstream; Agentplane contains no helper/source copies. Other helper/context/client/redline/layout/range/browser/lifetime obligations remain separately unverified. No module/status/default/goal, registered IO/recovery or gate promotion.",
+      "Iteration61 removes invented protected GetDestinationPhantom and restores source-owned inline AddChild destination selection. Orphan/count guards and predecessor/destination child-count reads follow native contracts; transfer retains last predecessor child, reuses a first phantom or invokes its parent factory, creates under empty destinations and stops immediately after predecessor exhaustion. Earlier notification capture, prefix updates and cleanup order remain intact. Three owned trace tests cover real/empty/retained-phantom destinations, exact count/transfer/factory order, deep topology/raw caches, both reading notification gates, removed-helper absence and transfer stop. Existing-phantom branch uses explicit comparator-bound diagnostic insertion of an actual factory phantom, not certified native Writer final-class reentrancy. One old test now creates/observes phantom directly with expected matcher arguments unchanged; all other old tests/literals and54other core method bodies unchanged. Fresh pinned manual source hashes only, no compiled native/full iterator/context/layout/redline/dtor lifetime claim. No project test accesses upstream and no helper/source files are stored in Agentplane. Other native topology/helper/Validate/Notify access and required context/client/range/browser/lifetime remain unverified. No module/status/default/goal, registered IO/recovery or gate promotion.",
+      "Iteration62 restores all six selected native protected helpers: Validate, HasOnlyPhantoms, HasPhantomCountedParent, GetFirstNonPhantomChild, MoveChildren and MoveGreaterChildren. Validate and MoveChildren retain required nullable pointer arguments; transfer comparison/destination references remain required and nonnullable. HasOnlyPhantoms calls GetChildCount for one-child then empty branches, counted phantom ancestry checks parent phantom policy before counting and recursion, and MoveChildren selects an empty destination factory or retained tail. Six owned inherited-type/trace/document tests cover exact arity/returns/public absence, null hierarchical versus continuous engine dispatch and raw prefix/counters, actual phantom-only recursion, real/phantom parent call order and short circuit, first real descendant identity and transfer ownership/factory/tail/storage. Three new runtime traces and inherited type checks fail before correction and pass afterward. Two old tests use protected diagnostics with matcher arguments unchanged; other old tests unchanged. Fresh manual pinned declaration/body hashes only; no compiled native evidence, const/debug destructor/empty-phantom or nonempty-null undefined-behavior certification. Empty-source null transfer follows native release body only; DBG_UTIL sanity still requires a destination. No project test reads, compiles or invokes upstream, and no helper/source copies are saved in Agentplane. Remaining full context/client/range/layout/redline/browser/lifetime and other access contracts stay unverified; no module/status/default/goal, registered IO/recovery or gate promotion.",
+      "Iteration63 restores mandatory operation document context across existing numbering tree mutations and notifications, SwList insert/remove/validate and SwNumRule.Validate, with protected Notify traversal. Text insertion/removal and node moves pass their owned document explicitly; first-client/text-derived operation fallbacks are removed while real-record reading policy retains text-owner precedence. Five owned tests and16 exact type/visibility checks cover empty/clientless roots, distinct owner/operation reading flags, rule invalidate-before-validate forwarding, actual insertion/removal, retained topology/raw caches and protected root/phantom traversal. Three new runtime cases and baseline type assertions fail before correction and pass afterward; old test matcher arguments are unchanged. Fresh pinned manual declaration/body/call-site hashes only; no native execution, helper/source artifacts or upstream access by project tests. Native text notification ownership/temporary blockers, dtor/client lifetimes, redline/range roots, complete access/const/final architecture, layout and browser obligations remain separately unverified. No whole-module/status/default/goal, registered IO/recovery or gate promotion.",
+      "Iteration68 restores the native parent GetIterator/GetParent paths in the complete existing GetPred,NotifyInvalidChildren and SetLastValid bodies. Predecessor lookup retains root exclusion,first nested parent,optional sibling false default,deepest descendant and ordered equivalent-key identity. Shown notification and accepted prefix updates obtain the following sibling through parent helpers before counted policy;continuous prefix invalidation preserves native upward iterator forwarding. Six owned cases/seven exact type checks cover all selected helper traces,counter/topology/client/registry preservation,reading suppression,next counted and uncounted notifications,prefix no-op/validation/rollback/end and continuous suffix invalidation. Five final authored cases fail baseline only on missing source helper paths;existing signatures and observed counter values are retained. Existing tests and unrelated method bodies unchanged. Manual pinned hashes/inspection only,no native execution/source/helper artifacts or upstream access by project tests. Native helper methods are nonvirtual;test spies observe source call paths and do not certify an extension ABI. Native missing parent-child iterator domain,debug diagnostics,full allocator/integer/const/final/destructor/client/redline/layout/browser lifetimes and other method architecture remain individually unverified. No whole-module/status/default/goal or registered IO/recovery promotion.",
+      "Iteration69 restores the complete existing ValidateHierarchical first-child state and native policy ordering. Retained continuation is reset before virtual GetStartValue/IsCounted/HasCountedChildren/IsPhantom calls,then may be established after finding a preceding subtree. Existing cached-prefix state bypasses first-child policies. Special start traversal uses parent GetParent/GetIterator and preceding GetChildCount,while default GetNumber validation,empty uncounted skips,counted barriers,first/restart/counted-parent short circuits,signed zero starts,restarts,phantom and ordered-equivalent target behavior remain intact. Six owned cases/four exact types and13profiles cover stale pre-policy continuation,actual source call paths,prefix/caches/ownership/client/registry preservation and branch values. Four final authored baseline cases fail,including actual stale state before policies;corrected cases/types pass. All prior tests and50other tree methods unchanged. Manual pinned hashes/inspection only,no native execution/source/helper artifacts or upstream test access. Nonvirtual parent helper calls are source architecture evidence;the native constant begin position is represented by index0. Native invalid iterator/debug,full machine integer/allocator/const/final/destructor/client/redline/layout/browser and other method obligations remain individually unverified. No whole-module/status/default/goal or registered IO/recovery promotion.",
+      "Iteration70 restores the complete existing ValidateContinuous explicit counted/restart/no-predecessor branches, local counter assignment and predecessor/child GetParent comparison path. Six owned cases and four exact types cover shared/distinct/deepest predecessor owners, signed owner starts, ignored uncounted restarts, counted restart short circuits, retained prefixes, target identity/end clearing and genuine retained continuation after mode transition. Three baseline cases fail only on missing source helper paths; corrected runtime/types pass. Other tree methods and prior tests remain unchanged. Manual pin inspection/hashes only; no native execution or upstream access by tests and no source/helper artifacts. GetParent/GetNumber are nonvirtual native helpers, so spies evidence source paths rather than an extension ABI. Whole-module/default/status parity, machine integer/allocator/const/debug/destructor/layout/redline/browser obligations and other method architecture remain unverified. Registered IO/recovery deviations unchanged.",
+      "Iteration71 restores complete existing RemoveMe and SetLevelInListTree release branches: saved phantom ancestors ascend via GetParent after real RemoveChild and before cleanup; nonnegative attached level changes call GetParent before comparison, retain the root before removal and reinsert the same record. Seven owned cases/four exact public required void types cover negative/orphan/same-level no-ops, three-phantom ascent, real-owner stop, cleanup and identity/membership, root/remove/add order, reading suppression and normal paragraph notifications. Five final baseline cases fail only on missing source helper paths; corrected runtime/types pass. Rule client order follows native unregister/reappend, while numbered-item order/membership remain owned. All prior tests and49 other tree methods unchanged; no source/helper/Python artifacts, native execution or upstream access by tests. Nonvirtual helpers evidence source architecture, not an extension ABI; debug OSL extra calls, machine integer/allocator/const/destructor/redline/layout/browser obligations and other methods remain individually unverified. No whole-module/default/status/goal promotion; registered IO/recovery deviations preserved. The nullable-parent final guard is checked with an isolated owned phantom helper spy; this is release branch evidence, not a claim that ordinary Writer topology reaches a null phantom ancestor. Initial full verify found this uncovered branch; the 100% coverage gate was preserved.",
+      "Iteration171 restores native ChangeIndent and first-level anchor shifts across all10effective formats, modern active LISTTAB versus legacy clipping, inactive geometry and owned font/client/marker state. Pinned level SetIndent retains its local copy without committing fields and only invalidates; no invented Set call. Actual number-tree IsFirst self/child policy includes phantom ancestry and earlier real descendants. SwEditShell SetIndent resolves the explicit target rule while testing the actual current cursor first/multiselection gate, then uses DontSetItem without changing paragraph items/list IDs/count/start/cursor. SwUndoInsNum owns independent old/new rule copies within its existing constructor family; represented rule-format UndoRedo reuses the existing document DontSetItem primitive. Full ChgNumRuleFormats/character-style/history and merged/redline framework remain unverified. Native document-label StartDocDrag/ruler/UI integration remains a separately identified next obligation; no implemented UI promotion, new manager/model/DTO/TextRuns or compatibility wrapper. All prior semantic states/defaults/classes/IO exceptions and evidence retained; conscious save/open/recovery deviations unchanged.",
+      "Iteration217 native marked-level owner/query/notification restoration pending verification: SwList MAXLEVEL sentinel and exact old/new depth notification order; SwNumberTree root/depth traversal; SwDoc existing-list delegate and SwTextNode HasMarkedLabel membership query. Single represented tree only; cursor/view-option shading/ruler and redline/original-range tree variants remain unverified; no prior status/default/exception promotion.",
+      "Iteration217 verified native list marking: MAXLEVEL10 sentinel, exact former-before-state/new-after-state notification order, same-depth noop and unconditional clearing; depth dispatch uses actual tree root, visits phantoms without generic notification/reading policy gates and does not clamp native levels. SwDoc routes existing list identity only; SwTextNode HasMarkedLabel queries original membership/derived depth. Native history/item ownership/vectors retained. Indexed paragraph NumRuleChgd layout invalidation remains observable without marking shell content dirty or advancing serialized generation; rule-bearing and unqualified numbering mutations retain existing content semantics. Scope is the existing represented tree; cursor/view-option shading/ruler and redline/original-range variants remain unverified, with all prior statuses/defaults/exceptions preserved."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/SwNumberTree/SwNumberTree.cxx",
+    "upstreamSymbols": [
+      "SwNumberTreeNode::SwNumberTreeNode",
+      "SwNumberTreeNode::ValidateHierarchical",
+      "SwNumberTreeNode::GetNumberVector_",
+      "SwNumberTreeNode::Validate",
+      "SwNumberTreeNode::HasOnlyPhantoms",
+      "SwNumberTreeNode::HasPhantomCountedParent",
+      "SwNumberTreeNode::GetFirstNonPhantomChild",
+      "SwNumberTreeNode::MoveChildren",
+      "SwNumberTreeNode::MoveGreaterChildren"
+    ]
+  },
+  "legacyOrder": 147
+}

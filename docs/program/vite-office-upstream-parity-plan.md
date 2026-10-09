@@ -12,7 +12,7 @@ Populate existing inventory records as work is verified. **Do not change invento
 
 ## Audit basis and current inventory
 
-The audit uses `docs/program/libreoffice-baseline.json`, `docs/program/parity/runtime-inventory.json`, `docs/program/parity/writer-command-slice.json`, `docs/program/source-provenance.json`, production source under `apps/office/src`, and the ignored pinned tree under `vendor/libreoffice-reference`. The existing inventory is exhaustive at the production-module/path level, but its semantic statuses must be read literally.
+The audit originally used the aggregate manifests below. Current authored entries live in `docs/program/registry/{writer,calc,shared}`; the four historic JSON paths are ignored compatibility views generated with `npm run inventory:registry:build`. Update the per-record files described in [the registry contract](registry/README.md). The audit uses `docs/program/libreoffice-baseline.json`, `docs/program/parity/runtime-inventory.json`, `docs/program/parity/writer-command-slice.json`, `docs/program/source-provenance.json`, production source under `apps/office/src`, and the ignored pinned tree under `vendor/libreoffice-reference`. The existing inventory is exhaustive at the production-module/path level, but its semantic statuses must be read literally.
 
 | Inventory slice | Current count | Assessment |
 | --- | ---: | --- |
@@ -79,7 +79,7 @@ Review `package`, SAX, `xmloff`, Writer XML/HTML/ASCII filters, `SwTransferable`
 
 ### 6. Close evidence and remove residue (P2)
 
-Finish the remaining 175-module ledger, not just visible commands. Populate existing `runtime-inventory.json`, `source-provenance.json` and `writer-command-slice.json` entries with exact local/upstream paths, symbols, contracts, default values, divergence reasons and tests. Review inert recovery provenance markers (`framework/source/services/autorecovery.ts`, `svl/source/misc/recovery.ts`, `sw/browser/presentation/WriterRecoveryPrompt.tsx`) for misleading source placement; if they are removed, update only their inventory **data** and preserve the deliberate absence of recovery. Remove stale facades/adapters and unused resources only after references, tests and provenance are corrected. Re-run source-tree, provenance, inventory, type, lint, unit, browser, fixture and static-build checks appropriate to each task.
+Finish the remaining 175-module ledger, not just visible commands. Populate the corresponding `runtime/`, `provenance/` and `capabilities/` records under `docs/program/registry/` with exact local/upstream paths, symbols, contracts, default values, divergence reasons and tests. Review inert recovery provenance markers (`framework/source/services/autorecovery.ts`, `svl/source/misc/recovery.ts`, `sw/browser/presentation/WriterRecoveryPrompt.tsx`) for misleading source placement; if they are removed, update only their inventory **data** and preserve the deliberate absence of recovery. Remove stale facades/adapters and unused resources only after references, tests and provenance are corrected. Re-run source-tree, provenance, inventory, type, lint, unit, browser, fixture and static-build checks appropriate to each task.
 
 **Gate:** no unreviewed active operation, stale file mapping, unsupported native operation masquerading as implemented, or unjustified divergence remains. All required existing checks pass, and each closed task has traceable verification evidence.
 

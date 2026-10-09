@@ -1,0 +1,19 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "divergenceClass": "none",
+    "id": "editeng.enum.FontWeight",
+    "kind": "enum",
+    "local": {
+      "marker": "export enum FontWeight {",
+      "path": "apps/office/src/editeng/source/items/textitem.ts",
+      "value": "DONTKNOW,THIN,ULTRALIGHT,LIGHT,SEMILIGHT,NORMAL,MEDIUM,SEMIBOLD,BOLD,ULTRABOLD,BLACK"
+    },
+    "upstream": {
+      "marker": "enum FontWeight { WEIGHT_DONTKNOW, WEIGHT_THIN, WEIGHT_ULTRALIGHT,",
+      "path": "include/tools/fontenum.hxx",
+      "value": "DONTKNOW,THIN,ULTRALIGHT,LIGHT,SEMILIGHT,NORMAL,MEDIUM,SEMIBOLD,BOLD,ULTRABOLD,BLACK"
+    }
+  }
+}

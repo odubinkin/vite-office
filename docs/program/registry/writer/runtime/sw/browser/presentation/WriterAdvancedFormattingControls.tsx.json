@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/browser/presentation/WriterAdvancedFormattingControls.tsx",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "browser-presentation",
+    "capabilityIds": [
+      "CAP-0109",
+      "CAP-0125"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/browser/presentation/WriterAdvancedFormattingControls.tsx#WriterAdvancedFormattingControls",
+        "apps/office/src/sw/browser/presentation/WriterParagraphDialog.tsx#WriterParagraphDialog",
+        "vendor/libreoffice-reference/sw/source/uibase/shells/textsh1.cxx#SvxTabStopItem"
+      ],
+      "justification": "React composes bindings-backed color, line-spacing and paragraph slots. The dialog draft lives only in its browser presenter and accepted values pass to SwTextShell. Exact full upstream dialog defaults remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "WriterAdvancedFormattingControls"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

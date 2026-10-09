@@ -1,0 +1,26 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "evidence": {
+      "local": [
+        {
+          "marker": "WriterBookmarkDialog",
+          "path": "apps/office/src/sw/browser/presentation/WriterBookmarkDialog.tsx"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/browser/presentation/WriterBookmarkDialog.tsx",
+    "rationale": "Adapts pinned insertbookmark.ui and bookmarkmenu.ui to accessible browser controls; marks remain in SwDoc.",
+    "responsibilities": [
+      "Renders WriterBookmarkDialog and forwards accepted commands to Writer shell ownership."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "React and DOM controls replace native VCL dialog widgets."
+    },
+    "status": "local-only"
+  },
+  "legacyOrder": 96
+}

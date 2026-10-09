@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "ZipOutputStream",
+          "path": "apps/office/src/package/source/zipapi/ZipOutputStream.ts"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "ZipOutputStream::ZipOutputStream",
+          "path": "vendor/libreoffice-reference/package/source/zipapi/ZipOutputStream.cxx"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/package/source/zipapi/ZipOutputStream.ts",
+    "localSymbols": [
+      "ZipOutputStream"
+    ],
+    "omittedResponsibilities": [
+      "Upstream obligations outside ZipOutputStream::ZipOutputStream, ThreadPool::createThreadTaskTag, ZipOutputStream::~ZipOutputStream, ZipOutputStream::setEntry and the bounded ZipOutputStream contract remain intentionally omitted."
+    ],
+    "preservedResponsibilities": [
+      "Reimplements the deterministic ZIP record writer boundary from pinned LibreOffice `package/source/zipapi/ZipOutputStream.cxx`."
+    ],
+    "status": "mapped",
+    "upstreamPath": "package/source/zipapi/ZipOutputStream.cxx",
+    "upstreamSymbols": [
+      "ZipOutputStream::ZipOutputStream",
+      "ThreadPool::createThreadTaskTag",
+      "ZipOutputStream::~ZipOutputStream",
+      "ZipOutputStream::setEntry"
+    ]
+  },
+  "legacyOrder": 34
+}

@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sfx2/source/doc/docfile.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "document-lifecycle",
+    "capabilityIds": [
+      "CAP-0114",
+      "CAP-0131"
+    ],
+    "semantic": {
+      "behaviorStatus": "parity",
+      "contractStatus": "parity",
+      "defaultStatus": "parity",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sfx2/source/doc/docfile.ts#SfxMedium",
+        "vendor/libreoffice-reference/sfx2/source/doc/docfile.cxx#SfxMedium::SfxMedium()"
+      ],
+      "justification": "The bounded browser medium now preserves object identity and owns load/save/filter operation state; native stream and UCB mechanics remain explicitly excluded.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SfxMedium",
+        "SfxMediumKind",
+        "SfxMediumOrigin",
+        "SfxMediumSource",
+        "SfxMediumDestination",
+        "SfxMediumOperation",
+        "acquireSfxMedium"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "sfx2/source/doc/docfile.cxx",
+      "upstreamSymbols": [
+        "SfxMedium::SfxMedium",
+        "SfxMedium::GetName",
+        "SfxMedium::GetOrigURL",
+        "SfxMedium::SetName",
+        "SfxMedium::IsReadOnly",
+        "SfxMedium::Transfer_Impl"
+      ]
+    }
+  }
+}

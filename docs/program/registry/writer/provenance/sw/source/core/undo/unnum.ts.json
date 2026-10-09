@@ -1,0 +1,178 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "SwUndoInsNum",
+          "path": "apps/office/src/sw/source/core/undo/unnum.ts"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/native-list-level-range.test.ts",
+          "marker": "native list-level node ranges"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-cell-list-level.test.tsx",
+          "marker": "native cell list level UI"
+        },
+        {
+          "path": "apps/office/e2e/writer-cell-list-level.spec.ts",
+          "marker": "Writer cell list levels use native commands and survive history and ODT reopen"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/docvw/native-list-enter.test.ts",
+          "marker": "native list Enter"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-cell-list-enter.test.tsx",
+          "marker": "native cell list Enter UI"
+        },
+        {
+          "path": "apps/office/e2e/writer-cell-list-enter.spec.ts",
+          "marker": "Writer Enter ends an empty cell list without inserting a paragraph"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/docvw/native-list-backspace.test.ts",
+          "marker": "native list Backspace"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-cell-list-backspace.test.tsx",
+          "marker": "native cell Backspace UI"
+        },
+        {
+          "path": "apps/office/e2e/writer-cell-list-backspace.spec.ts",
+          "marker": "Writer Backspace hides a cell marker and ShiftBackspace restores native numbering"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/undo/native-numbering-node-index.test.ts",
+          "marker": "numeric list-level history targets current native slots %s/%s/%s"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/undo/native-list-continuation.test.ts",
+          "marker": "numeric continuation history owns independent tuples and rejects foreign replay"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/undo/native-list-rule-range.test.ts",
+          "marker": "native rule ranges and numeric InsNum reject foreign owners while retaining independent payloads"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/edit/native-list-ring.test.ts",
+          "marker": "native table ring list commands own every selected cell"
+        },
+        {
+          "path": "apps/office/e2e/writer-table-row-lists.spec.ts",
+          "marker": "Writer table row native list commands"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/edit/native-list-continuation-ring.test.ts",
+          "marker": "native continuation owns every table ring"
+        },
+        {
+          "path": "apps/office/e2e/writer-table-ring-continue.spec.ts",
+          "marker": "Writer table row Add to List"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/native-numbering-indent.test.ts",
+          "marker": "native numbering indent values"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/edit/native-numbering-indent.test.ts",
+          "marker": "native label-indent shell policy"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "SwUndoInsNum",
+          "path": "vendor/libreoffice-reference/sw/source/core/undo/unnum.cxx"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/undo/unnum.cxx",
+          "marker": "SwUndoNumUpDown::SwUndoNumUpDown"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/docvw/edtwin.cxx",
+          "marker": "case SwKeyState::NumOff:"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/docnum.cxx",
+          "marker": "void SwDoc::DelNumRules"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/undo/unnum.cxx",
+          "marker": "SwUndoDelNum::RedoImpl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/docvw/edtwin.cxx",
+          "marker": "case KEY_BACKSPACE:"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/docnum.cxx",
+          "marker": "bool SwDoc::NumOrNoNum"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/undo/unnum.cxx",
+          "marker": "SwUndoNumOrNoNum::UndoImpl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/undo/unnum.cxx",
+          "marker": "SwUndoNumUpDown::UndoImpl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/undo/unnum.cxx",
+          "marker": "SwUndoDelNum::UndoImpl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/undo/unnum.cxx",
+          "marker": "SwUndoInsNum::UndoImpl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/undo/unnum.cxx",
+          "marker": "SwUndoInsNum::RedoImpl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/undo/unnum.cxx",
+          "marker": "SwUndoNumUpDown::"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/undo/unnum.cxx",
+          "marker": "SwUndoNumRuleStart::UndoImpl"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/core/undo/unnum.ts",
+    "localSymbols": [
+      "SwUndoInsNum",
+      "SwUndoNumUpDown",
+      "SwUndoDelNum",
+      "SwUndoNumOrNoNum",
+      "SwUndoNumRuleStart"
+    ],
+    "omittedResponsibilities": [
+      "Upstream obligations outside SwUndoInsNum, SwUndoInsNum::SwUndoInsNum, std::move, SwUndoInsNum::~SwUndoInsNum and the bounded SwUndoInsNum, SwUndoNumUpDown contract remain intentionally omitted."
+    ],
+    "preservedResponsibilities": [
+      "Implements bounded numbering and list-level undo from pinned LibreOffice unnum.cxx.",
+      "Iteration140 replaces body-only list-level traversal and whole-list-item recreation with document-owned inclusive SwPaM/SwNodes range validation and SetAttrListLevel mutation,including table cells and structural gaps. ednumber delegates shared list and indent state/execution to the native document range. One SwUndoNumUpDown retains range and signed direction instead of per-node list tuples/group adapters;inverse and forward history invoke the same document operation and preserve unrelated list metadata. Owned core,mounted bindings/geometry and real Chromium/ODT cases cover the represented ordinary-list branch and zero/nine limits. Native OutlineUpDown style reassignment,mixed outline ranges,merged/redline paragraph expansion,selection rings and complete native undo/lifetime/layout/UI remain unverified. Existing244states/defaults/exceptions and registered I/O/recovery choices unchanged;no whole-module promotion.",
+      "Iteration141 moves ordinary Enter empty-list termination into SwEditWin using the actual unmarked PaM,empty node and non-outline rule,then native shell/document DelNumRules. Numbering deletion traverses actual inclusive SwNodes,including cells,resets native list attributes and respects inherited rules;SwUndoDelNum retains direct list history and replays the document operation. Browser input translates insertParagraph intent only;React contains no list editing decision. Owned native,mounted cell and Chromium cases cover termination without split,history,metadata and followup ordinary Enter. ShiftEnter,Backspace,full outline,redline/merged paragraph expansion,selection rings and full native undo/layout/UI remain unverified;existing states/defaults/exceptions unchanged.",
+      "Iteration142 aligns Backspace at a native paragraph start with edit-window indent/count ordering:TryRemoveIndent for ordinary or uncounted nodes,NumOrNoNum counted flag by Shift direction,empty ordinary uncounted removal,and final native text deletion. Browser keyboard and virtual beforeinput share SwEditWin;plain and ShiftBackspace modifiers remain distinct,no React list decision. SwUndoNumOrNoNum stores one node/two flags and UndoRedo changes only counted state;actual metadata survives. Doc.NumOrNoNum and native direct-rule fallback retain actual nodes. Owned body/cell/history/indent and Chromium cases cover represented behavior. RecentTab state counters,label-caret,zero-length marked PaM equivalence,full outline/redline/rings/history/layout/UI remain unverified;existing244states/defaults/deviations unchanged.",
+      "Iteration158 removes retained paragraph identity from represented SwUndoNumUpDown, SwUndoNumOrNoNum and SwUndoDelNum payloads. Pinned unnum.cxx uses SwUndRng coordinates for level/deletion replay, m_nIndex for counted-only flags and numeric m_aNodes index/level entries for deletion restoration. Existing native numeric range infrastructure resolves current SwNodes targets, direction/delta and unrelated metadata contracts remain intact; structural counted-state payload is skipped as native. Actual repeated body/cell section-preserving replacement and shell UndoRedo tests preserve reversed/collapsed endpoints and independent direct list history.410prior tests and250states/defaults/classifications/exceptions/prior evidence preserved. Portable DelNum direct-item snapshots still differ from complete native SwHistory; InsNum/ContinueNumbering payloads, split node identity bridge and broad UI behavior remain unverified. No whole-module/broad promotion.",
+      "Iteration160 repairs represented Continue Numbering across actual inclusive native body/cell ranges. SwDoc.SearchNumRule follows pinned native backward/forward,start-excluded/default,nearest-rule-stop,enumeration/itemization/outline,nonempty allowance and document section policy; native layout/merged/redline/margin propagation remains unverified. Shell numbered-first/bullet fallback and enabled state use native selection start; every selected text node adopts rule/list ID,counted flag resets to native default,restart flag removed only when restarting and rule differs,restart value retained. Continue history stores numeric index/original-document guard/independent direct-item tuples rather than retained paragraph objects. Body-only slice/filter/reverse/current-kind adapter removed. Full native SetNumRule/SwHistory/undo classification/client architecture not claimed; other InsNum abstraction remains. New native body/cell/mixed/plain/rule/count/restart/search/current-slot history and Chromium cell menu/label/history assertions;source-confirmed old ODT continuation expectations may be updated narrowly.250states/defaults/classifications/IO exceptions/prior evidence preserved,no fullmodule or broadUI promotion.",
+      "Iteration161 adds bounded native document SetNumRule/SetCounted operations and SetNumRuleMode0/1/2/4/8 flags. Selected body/cell/mixed list toggles use document-owned rule lookup/add/assignment, native previous-rule search from point, explicit new/continued list identity, collapsed current/style direct-item policy, count reset and label-alignment-only indent reset. Shell toggle and continue record actual execution in shared SfxListUndoAction/SwUndoInsNum numeric original-document targets; retained paragraph base, separate ContinueNumbering action/item interface and direct shell list DTO builder removed. Actual selected native range consensus drives toggle/checked state. Existing public single-node InsNum API and independent item snapshots remain portable; full native SwHistory,document-owned undo,rule rollback/Repeat,client/layout/merged/margin propagation,outline/font/leading whitespace factory nuances and broad UI remain unverified. New exact flag/style/count/indent/native replacement/cursor/history/neighbors/foreign guard and selected body/table Chromium menu/marker/atomic UndoRedo assertions. Six prior test files migrate source-confirmed action-group/API, label-alignment reset-indent and unique level-item expectations;408 prior files byte-identical. Original4failed app/3failed Chromium only and1new explicit-empty style suppression case pass; final production unchanged, no passing replay.250 states/defaults/classifications/IO exceptions/prior evidence preserved;no full module promotion.",
+      "Iteration162 moves existing list state, rule application, deletion and level editing to inherited SwEditShell instead of functional command adapters and a cyclic UI shell route. Actual SwPaM rings include every selected table box. SelectionHasNumber/SelectionHasBullet preserve native empty-node, per-ring break and reserved Outline counted policy. SetCurNumRule reuses first created list identity across rings; DelNumRules and NumUpDown retain displayed table cursor and one grouped numeric history. SwPamRanges preserves native sorted same-start, adjacency, containment and partial-overlap policy; unreachable successor containment guard is omitted with lower-bound proof. Actual row/column/disjoint state, listID/count/indents/neighbors/current-slot replacement/atomic UndoRedo tests and Chromium real row selector assertions added. Full SwCursorShell hierarchy, document-owned undo/SwHistory/client/layout/merged/Repeat/rule factory and per-ring ContinueNumbering remain unverified. No module/state/default/IO exception promotion.",
+      "Iteration163 removes duplicated direct rule/count/item history from UI ContinueNumbering. Source-shaped core SearchNumRule and restart state/flag commands use actual native positions; document SetNumRuleStart guards text/rule/changed flags. Native boolean SwUndoNumRuleStart retains index and flag only and replays the same document primitive, preserving start value,list identity,level,count and indents. UI prepass visits every actual selected ring and clears restart only for a changed rule before shared inherited SetCurNumRule(rule,false,foundID), native default no-indent-reset. Existing document Sfx manager groups restart deltas and common rule history into one Undo preserving displayed table cursor/current slots/neighbors.418prior testfiles417unchanged1bounded native restart payload correction;actual row/column/sparse/search/restart/structural/flag history and real Chromium row Add to List assertions. API/macro,numeric restart-value overload,Repeat,full native history/hierarchy/client/layout/factory remain unverified;250states/defaults/classes/consciousIOexceptions preserved,no broad promotion.",
+      "Iteration171 restores native ChangeIndent and first-level anchor shifts across all10effective formats, modern active LISTTAB versus legacy clipping, inactive geometry and owned font/client/marker state. Pinned level SetIndent retains its local copy without committing fields and only invalidates; no invented Set call. Actual number-tree IsFirst self/child policy includes phantom ancestry and earlier real descendants. SwEditShell SetIndent resolves the explicit target rule while testing the actual current cursor first/multiselection gate, then uses DontSetItem without changing paragraph items/list IDs/count/start/cursor. SwUndoInsNum owns independent old/new rule copies within its existing constructor family; represented rule-format UndoRedo reuses the existing document DontSetItem primitive. Full ChgNumRuleFormats/character-style/history and merged/redline framework remain unverified. Native document-label StartDocDrag/ruler/UI integration remains a separately identified next obligation; no implemented UI promotion, new manager/model/DTO/TextRuns or compatibility wrapper. All prior semantic states/defaults/classes/IO exceptions and evidence retained; conscious save/open/recovery deviations unchanged."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/undo/unnum.cxx",
+    "upstreamSymbols": [
+      "SwUndoInsNum",
+      "SwUndoInsNum::SwUndoInsNum",
+      "std::move",
+      "SwUndoInsNum::~SwUndoInsNum",
+      "SwUndoNumRuleStart"
+    ]
+  },
+  "legacyOrder": 228
+}

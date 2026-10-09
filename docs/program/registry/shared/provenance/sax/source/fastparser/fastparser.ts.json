@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "parseFastXmlStream",
+          "path": "apps/office/src/sax/source/fastparser/fastparser.ts"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "FastSaxParserImpl::parseStream",
+          "path": "vendor/libreoffice-reference/sax/source/fastparser/fastparser.cxx"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sax/source/fastparser/fastparser.ts",
+    "localSymbols": [
+      "DEFAULT_FAST_XML_LIMITS",
+      "parseFastXmlStream"
+    ],
+    "omittedResponsibilities": [
+      "Upstream expat integration, UNO services, and thread-local parser state remain omitted."
+    ],
+    "preservedResponsibilities": [
+      "Preserves bounded namespace-aware SAX event delivery, DTD rejection, inert comments and processing instructions, cancellation, and resource ceilings from the pinned fast parser."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sax/source/fastparser/fastparser.cxx",
+    "upstreamSymbols": [
+      "FastSaxParserImpl",
+      "FastSaxParserImpl::parseStream"
+    ]
+  },
+  "legacyOrder": 35
+}

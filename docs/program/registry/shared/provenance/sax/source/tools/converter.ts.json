@@ -1,0 +1,102 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "Converter",
+          "path": "apps/office/src/sax/source/tools/converter.ts"
+        },
+        {
+          "marker": "SAX native measure conversion",
+          "path": "apps/office/src/sax/source/tools/converter.test.ts"
+        },
+        {
+          "path": "apps/office/src/xmloff/source/style/xmlnumi.test.ts",
+          "marker": "uses native MM100 grammar, failed-value retention and SHRT field bounds"
+        },
+        {
+          "path": "apps/office/src/xmloff/source/style/xmlnume.test.ts",
+          "marker": "emits label-alignment mode even for zero or default command geometry"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/unocore/unosett.test.ts",
+          "marker": "uses native integer ratios in both directions and retains only present properties"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-list-label-alignment-roundtrip.test.ts",
+          "marker": "round-trips native MM100 defaults, parsing bounds and conditional list attributes"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-list-label-alignment-roundtrip.test.ts",
+          "marker": "exports the default Writer list geometry at every supported level"
+        },
+        {
+          "path": "apps/office/src/xmloff/source/core/xmluconv.test.ts",
+          "marker": "delegates native core measure export to the supported CM unit"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "lcl_convertMeasure",
+          "path": "vendor/libreoffice-reference/sax/source/tools/converter.cxx"
+        },
+        {
+          "marker": "std::string_view toView() const",
+          "path": "vendor/libreoffice-reference/include/sax/fastattribs.hxx"
+        },
+        {
+          "marker": "ConverterTest::testMeasure",
+          "path": "vendor/libreoffice-reference/sax/qa/cppunit/test_converter.cxx"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/style/xmlnumi.cxx",
+          "marker": "SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl::SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/style/xmlnume.cxx",
+          "marker": "SvxXMLNumRuleExport::exportLevelStyle"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/unocore/unosett.cxx",
+          "marker": "SwXNumberingRules::SetNumberingRuleByIndex"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/unocore/unosett.cxx",
+          "marker": "GetPropertiesForNumFormat"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/core/xmluconv.cxx",
+          "marker": "SvXMLUnitConverter::convertMeasureToXML"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sax/source/tools/converter.cxx",
+          "marker": "void Converter::convertMeasure( OUStringBuffer&"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sax/source/tools/converter.ts",
+    "localSymbols": [
+      "CoreMeasureUnit",
+      "Converter",
+      "convertMeasureToXML"
+    ],
+    "omittedResponsibilities": [
+      "Remaining measure targets/overloads and XML output units beyond CM, broader converter APIs and unaudited legacy caller policies remain unimplemented or unverified."
+    ],
+    "preservedResponsibilities": [
+      "Owns native UTF-8-view measure parsing, supported unit ratios for Twip/MM100 targets, nullable failure, signed rounding and configurable int32 bounds; 95 compiled-native differential cases and focused source-derived assertions cover the implemented contract.",
+      "For the existing LABEL_ALIGNMENT mode and LISTTAB/SPACE/NOTHING separators, source-owned xmlnumi parsing now retains zero defaults and MM100 fields with native Converter grammar/failure and SHRT bounds. The MM100 import port now carries both independent native geometry groups; the earlier legacy-to-alignment Twip emulation is removed. Writer numbering property conversion follows unosett.cxx signed MM100/Twip ratios; export projects native MM100 and delegates CM serialization to XML/SAX. ODF 1.3 XML emits explicit label-alignment mode and retains standard command geometry; indents are nonzero-only and tab position is exported only for LISTTAB with a positive value. Context/core assertions and eleven literal common/automatic ODT cases plus both default command marker families verify native quantization, conditional XML and manual reopen state. Full numbering/UNO, legacy position mode/property ownership, NEWLINE extensions, other XML units/versions, defaults and wider obligations remain unverified; no whole-module promotion."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sax/source/tools/converter.cxx",
+    "upstreamSymbols": [
+      "Converter::convertMeasure",
+      "lcl_parseMeasure",
+      "lcl_convertMeasure"
+    ]
+  },
+  "legacyOrder": 36
+}

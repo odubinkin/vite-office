@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/text/inftxt.ts",
+          "marker": "resolveSwNumberPortionBackground"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/text/native-marked-list-paint.test.ts",
+          "marker": "native Number shading"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/text/inftxt.cxx",
+          "marker": "SwTextPaintInfo::DrawViewOpt"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/text/porfld.cxx",
+          "marker": "SwNumberPortion::Paint"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/core/text/inftxt.ts",
+    "localSymbols": [
+      "resolveSwNumberPortionBackground"
+    ],
+    "omittedResponsibilities": [
+      "Full SwTextPaintInfo frame/portion constructors, all non-Number DrawViewOpt branches, native VCL rectangle/line-height/clip/RTL/bidi/redline/device geometry remain unrepresented. The browser measures and paints the existing marker slot; no full native painter claim."
+    ],
+    "preservedResponsibilities": [
+      "Iteration219 bounded marked-number painting: native SwViewColors owns represented color/appearance members with raw NONE/lightgray defaults, stable copy/borrow and copied initial values; configured desktop25 bits retained. Source Number DrawViewOpt guards and DrawBackground color admission use original HasMarkedLabel, actual shell view options and shared master marker painting, including sibling levels and print suppression. Full native color/config/theme/LOKit pipeline and VCL frame/portion/clip/bidi geometry remain unverified; all prior statuses/defaults/registered I/O/recovery exceptions retained."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/text/inftxt.cxx",
+    "upstreamSymbols": [
+      "SwTextPaintInfo::DrawViewOpt",
+      "SwTextPaintInfo::DrawBackground"
+    ]
+  },
+  "legacyOrder": 198
+}

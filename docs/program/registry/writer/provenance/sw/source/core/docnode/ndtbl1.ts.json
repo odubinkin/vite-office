@@ -1,0 +1,370 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/docnode/ndtbl1.ts",
+          "marker": "GetSwRowSplit"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/doc.ts",
+          "marker": "GetRowSplit"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/frmedt/fetab.ts",
+          "marker": "GetRowSplit"
+        },
+        {
+          "path": "apps/office/src/sw/source/ui/table/tabledlg.ts",
+          "marker": "SplitHdl_Impl"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/shells/tabsh.ts",
+          "marker": "value.rowSplit"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx",
+          "marker": "Allow row to break across pages and columns"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-view.tsx",
+          "marker": "selectedBoxes:"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/docnode/ndtbl1.ts",
+          "marker": "SetSwRowSplit"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/doc.ts",
+          "marker": "SetRowSplit"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/frmedt/fetab.ts",
+          "marker": "this.GetDoc().SetRowSplit"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/crsr/trvltbl.ts",
+          "marker": "public Push"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/shells/tabsh.ts",
+          "marker": "shell.Push"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+          "marker": "PopMode.DeleteStack"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/docnode/ndtbl1.ts",
+          "marker": "SetSwRowHeight"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/doc.ts",
+          "marker": "SetRowHeight"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/frmedt/fetab.ts",
+          "marker": "this.GetDoc().SetRowHeight"
+        },
+        {
+          "path": "apps/office/src/sw/inc/fmtfsize.ts",
+          "marker": "SwFormatFrameSize"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/docnode/ndtbl1.ts",
+          "marker": "GetSwRowHeight"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/docnode/ndtbl.ts",
+          "marker": "doc.SetRowHeight"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/layout/tabfrm.ts",
+          "marker": "SwRowFrame"
+        },
+        {
+          "path": "apps/office/src/sw/inc/fmtornt.ts",
+          "marker": "SwFormatVertOrient"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/docnode/ndtbl1.ts",
+          "marker": "GetBoxSelection"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/doc.ts",
+          "marker": "SetBoxAlign"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx",
+          "marker": "boxAlign"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/docnode/native-table-border-owner.test.ts",
+          "marker": "native point/mark rectangle ignores ordinary rings"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/native-table-border-owner-history.test.tsx",
+          "marker": "thin native shell forwards its actual cursor"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/docnode/native-box-border-items.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/editeng/source/items/boxitem.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/docnode/ndtbl1.ts",
+          "marker": "GetSwTabBorders"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/doc.ts",
+          "marker": "GetTabBorders"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/frmedt/fetab.ts",
+          "marker": "GetTabBorders"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/shells/tabsh.ts",
+          "marker": "TableParamToItemSet"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx",
+          "marker": "borderItems"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-view.tsx",
+          "marker": "TableParamToItemSet"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/docnode/native-table-border-common-state.test.ts",
+          "marker": "common"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/native-table-border-common-state.test.tsx",
+          "marker": "native"
+        },
+        {
+          "path": "apps/office/e2e/writer-table-border-common-state.spec.ts",
+          "marker": "native"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/docnode/native-row-split-items.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/filter/xml/native-row-split-item-transport.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/native-row-split-core-items.test.tsx",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/table/native-row-frame-format.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/undo/native-row-frame-format-history.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/native-row-frame-format.test.tsx",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/table/native-box-frame-format.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/undo/native-box-frame-format-history.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-box-frame-format.test.tsx",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl1.cxx",
+          "marker": "SwDoc::GetRowSplit"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/frmedt/fetab.cxx",
+          "marker": "SwFEShell::GetRowSplit"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx",
+          "marker": "SwTextFlowPage::Reset"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx",
+          "marker": "SwTextFlowPage::FillItemSet"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx",
+          "marker": "SwTextFlowPage, SplitHdl_Impl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/shells/tabsh.cxx",
+          "marker": "RES_LAYOUT_SPLIT"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/uiconfig/swriter/ui/tabletextflowpage.ui",
+          "marker": "id=\"splitrow\""
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/fmtrowsplt.hxx",
+          "marker": "SwFormatRowSplit"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/vcl/weld/CheckButton.hxx",
+          "marker": "TRISTATE_TRUE"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl1.cxx",
+          "marker": "SwDoc::SetRowSplit"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl1.cxx",
+          "marker": "lcl_CollectLines"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/frmedt/fetab.cxx",
+          "marker": "SwFEShell::SetRowSplit"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/shells/tabsh.cxx",
+          "marker": "rSh.Push()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/crsr/crsrsh.cxx",
+          "marker": "SwCursorShell::Push"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/crsr/crsrsh.cxx",
+          "marker": "SwCursorShell::Pop"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/crsr/crsrsh.cxx",
+          "marker": "SwCursorShell::ClearMark"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/crsrsh.hxx",
+          "marker": "enum class PopMode"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl1.cxx",
+          "marker": "SwDoc::SetRowHeight"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl1.cxx",
+          "marker": "SwDoc::GetRowHeight"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/frmedt/fetab.cxx",
+          "marker": "SwFEShell::SetRowHeight"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/fmtfsize.hxx",
+          "marker": "SwFormatFrameSize"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/atrfrm.cxx",
+          "marker": "SwFormatFrameSize::operator=="
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl.cxx",
+          "marker": "SetHeightSizeType"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmlimpit.cxx",
+          "marker": "MINLAY"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/fmtornt.hxx",
+          "marker": "SwFormatVertOrient"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/atrfrm.cxx",
+          "marker": "SwFormatVertOrient::operator=="
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl1.cxx",
+          "marker": "lcl_GetBoxSel"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx",
+          "marker": "get_value_changed_from_saved"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl1.cxx",
+          "marker": "SwDoc::SetTabBorders"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/frmedt/fetab.cxx",
+          "marker": "SwFEShell::SetTabBorders"
+        },
+        {
+          "path": "sw/source/core/docnode/ndtbl1.cxx",
+          "marker": "SwDoc::GetTabBorders"
+        },
+        {
+          "path": "sw/source/core/frmedt/fetab.cxx",
+          "marker": "SwFEShell::GetTabBorders"
+        },
+        {
+          "path": "sw/source/uibase/shells/tabsh.cxx",
+          "marker": "lcl_TableParamToItemSet"
+        },
+        {
+          "path": "cui/source/tabpages/border.cxx",
+          "marker": "SvxBorderTabPage::Reset"
+        },
+        {
+          "path": "sw/inc/swtypes.hxx",
+          "marker": "MIN_BORDER_DIST"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/core/docnode/ndtbl1.ts",
+    "localSymbols": [
+      "GetSwRowSplit",
+      "GetSwTabBorders"
+    ],
+    "omittedResponsibilities": [
+      "Full native ndtbl1 mutations/row sizing/background/redlines/nested/merged and full parity unverified."
+    ],
+    "preservedResponsibilities": [
+      "Iteration199 ports native Text Flow table/row split controls and removes conflated properties dontSplit and React first-row state. Native ndtbl1 aggregate reads original selected boxes/lines, true row default and no item for empty/mixed. SwDoc.GetRowSplit and SwFEShell.GetRowSplit retain source cursor/document ownership. SwTextFlowPage Reset saves original split/headline values; table child sensitivity does not clear row tristate; FillItemSet publishes only changed headline/table/row items. Browser source labels and mixed HTML checkbox use actual selected boxes, native page handlers/Reset/Cancel/OK, independent table and row setters. Insertion-only dontSplit remains separate. Original graph/list/cursor/grouped3UndoRedo/ODT/continued input and Chromium1280/390 covered. Full row-content splitting/nested/merged/fly/columns/protection/full item classes/SfxItemSet/widget suite and whole parity remain unverified; old contracts/classifications/registered exceptions retained.",
+      "Iteration200 ports native current-or-table-selected row split mutation to SwDoc/ndtbl1, original line collection, document-owned SwUndoAttrTable/history/notification and same-value requests. SwFEShell brackets and forwards; obsolete whole=true split SetRowAttr adapter removed. Properties caller uses source Push/temporary select-all/ClearMark/finally Pop; native registered cursor stack DeleteCurrent/DeleteStack retains original displayed endpoints and releases on shell Close. Existing selected scope, original graph/list/pending/cursor, grouped3UndoRedo/ODT/continued input and all prior browser controls retained. Full nested/merged/fly/columns/protection/row-content splitting/full crsrsh selection/widget/SfxItemSet/full parity remains unverified; prior contracts/classifications/registered exceptions retained.",
+      "Iteration201 moves represented minimum-row-height selection, mutation and history into native SwDoc/ndtbl1 shared original row attributes. Ordinary current cursor ignores mark/ring; actual table-selected boxes select original flat rows once. Shell brackets and forwards; obsolete shell SetRowAttr removed. Common represented numeric height getter keeps default0/mixed-or-empty no item. Same-value history, unrelated row items, original graph/list/pending/cursor, grouped3UndoRedo/ODT/continued input retained. Full SwFormatFrameSize/fixed/relative/nested proportional heights/layout/full parity remain unverified; prior contracts/classifications/registered exceptions retained.",
+      "Iteration202 removes scalar row minHeight storage and numeric kernel height contracts. Native SvxSizeItem/SwFormatFrameSize owns both dimensions, both sizing types, both percentages and both relations with native defaults, Which90, full equality, clone and supported default size query. Original rows retain copied items, document getter compares complete items and returns clone; resize uses native document setter with copied full size, preserving Fixed/Minimum and promoting only Variable. Flat layout and mounted cells use native Variable/Minimum/Fixed semantics, fixed content clipped, properties metric from shell common getter. ODT row-height Fixed/min-row-height Minimum/Variable omission and native height clamp1..65535; attributes apply in order. Full percentage/fly/vertical/nested/merged/protection/UNO member IDs/PutValue/pooling/widget/SfxItemSet/full parity remains unverified; all prior contracts/classifications/statuses/exceptions retained.",
+      "Iteration203 replaces scalar cell vertical alignment with complete SwFormatVertOrient Which109 position0/NONE/PRINT_AREA defaults, native numeric enum values and three-field clone/equality/represented UNO member query/update. Original boxes and insertion undo own independent copied items. SwDoc SetBoxAttr owns native selection/history/notifications; setters traverse ordinary ring points while getters use current point or native table selected boxes. Common full-item getter and orientation-only getter retain mixed/no-item state. Shell delegates; properties reads common shell state and emits only a changed alignment item, native mixed widget fallback top. CSS handles native alignments and safe fixed-row content; ODT maps NONE/CENTER/BOTTOM, process/storage codec restores full primitive items, old scalar only storage ingress. Full pooling/shared frame formats/direct-formatting/HTML resizing/fly/nested/merged/protection/vertical writing and overall parity remain unverified; prior classifications/defaults/contracts/evidence/exceptions retained.",
+      "Iteration205 moves represented border mutation/history/publication from SwFEShell to SwDoc/ndtbl1. Point/mark cell rectangle scope follows lcl_GetStartEndCell/MakeSelUnions for flat shared-column tables; direct no-mark request changes current cell, ignores ordinary PaM rings and unrelated box lists, and rejects foreign/disconnected/cross-table endpoints. Original cells, supplied attributes, same-value history and properties caller temporary whole-table/selected scope retained. Full SvxBoxItem/SvxBoxInfoItem validity, per-edge outer/inner distribution, split/follow/RTL/vertical layout unions remain unverified; no parity/default/classification promotion or registered I/O changes.",
+      "Iteration206 draft: scalar kernel cell border/padding storage is replaced by owned SvxBoxItem plus the existing vertical item. Represented lines retain native color/style/width/component arithmetic, signed16 distances/default0, cloning, metrics and supported UNO values; SvxBoxInfoItem retains native validity127. SetTabBorders consumes SfxItemSet and distributes flat union outer/inner lines using source validity rules. Insertion defaults55twips/black10twip lines and0/no-border are preserved. Process/storage uses complete primitive native state with legacy scalar ingress only; ODF and browser paint carry four independent sides. Initial static and upstream-absent runtime verification are pending. Complete native color shading/theme/Word/macros/fly/vertical/RTL/follow/shared-format behavior, per-edge/common-state border widgets and full parity remain unverified. All existing statuses/defaults/evidence/registered I/O/recovery exceptions are preserved.",
+      "Iteration206 verified closure: the earlier draft pending statement is historical. Native box/info/line ownership, supported values/defaults/metrics, flat source-defined border distribution, original graph and history, complete primitive transport and four-edge ODF/browser paint passed one full upstream-absent profile with failed/new-case-only closures. Current app and inventory actual counters each reach100% lines/statements/functions/branches under complete identical-source/maps or complete contiguous mapped-region proof. All550 prior acceptance contracts are preserved by522 byte-identical files and28 exact native-representation AST migrations; six new acceptance files and two new infrastructure cases are added. Full per-edge/common-state widgets, native themes/shading/Word and RTL/vertical/follow/shared-format completeness remain unverified; no semantic status or registered I/O/recovery exception is promoted.",
+      "Iteration207 ports represented native common table-border input: SwDoc.GetTabBorders compares original point/mark flat-union outer and inner native lines, first-set/equality/absence/mixed component flags, all four distances jointly, source ResetFlags127 and cloned caller policies. Shell TableParamToItemSet captures current selected or temporary whole-table input with min/default distance28 and restores original native cursors without document/history changes. React reads owned SfxItemSet input and emits cloned native box/info items only for changed represented border widgets; no first-cell scalar reconstruction in the properties path. Mixed distance input uses native zero values; unknown lines and four distances survive untouched or border-only edits. Initial static/runtime verification is pending. Full six-edge/distance/style/color arrangement widgets, RTL/vertical/follow/shared-format unions and whole parity remain unverified. Every previous semantic status, contract/default/evidence prefix and registered I/O/recovery exception is retained.",
+      "Iteration207 verified closure: the earlier pending statement is historical. Native common flat-union border reads, cloned caller policies and default28, selected/temporary whole-table command input, original cursor/document/history preservation and owned native changed-border output passed one full upstream-absent profile plus failed/new-case-only closure. Sidebar and menu execute the same registered native dialog slot. Current actual acceptance union13376 app110inventory13infrastructure254Chromium; actual100 app/inventory counters under complete identical-source/maps or complete contiguous mapped-range proof. All556 prior acceptance files are preserved by546 byte-identical files and10 exact source-backed fixture/item-output/common-state/guide migrations; three new acceptance files are added. Every old metadata field/prefix/status/default/registered I/O/recovery exception is preserved without promotion. Full six-edge/distance/style/color widgets and native SvxBorderTabPage info-only FillItemSet, RTL/vertical/follow/shared-format unions and whole parity remain unverified.",
+      "Iteration240 owns row splitting as optional SwFormatRowSplit items cloned on row input/read/history, with effective true default. Common core and frame-shell getters return independent concrete items or absence for mixed/no-row input; setters accept concrete items. Native UI forwards the item unchanged to the document owner, ODF inverts only at import/export, and browser transport writes direct primitive rowSplit with legacy keepTogether ingestion. Original cursor/selection/history and full frame-size coexistence remain retained. Full native shared row frame-format pooling/ClaimFrameFormat, nested/merged semantics, presentation/localization/UNO completeness and whole core/UI parity remain unverified. Targeted verification pending; last full237,next247; all prior metadata states/defaults/classifications and registered IO/recovery deviations preserved.",
+      "Iteration240 verified closure:33 fresh native item/core/history, transport/legacy/ODF and mounted direct item cases plus related modules produced263 unique app passes and11 Chromium passes. Three initial failed cases were resolved in a four-case failed/new-only closure; all previously passing cases were skipped, no passing replay or full suite. App and inventory all-four100% coverage binds actual current targeted counters to prior239 identical whole source/maps or complete mapped-region proofs; unchanged inventory/infra was not rerun. Native rows now own concrete items, while full shared frame-format pooling/claims/UNO/nested/merged contracts and whole core/UI parity remain unverified. No metadata status/default/classification promotion.",
+      "Iteration241 replaces per-row canonical value records with native document-owned SwTableLineFormat item sets and original SwClient registration. ClaimFrameFormat clones shared native owners before mutation; operation-local old-to-new reuse keeps selected peers sharing and unselected peers intact. Row insertion shares the source format; SaveTable retains unique direct native item sets and indexed row topology and reconstructs owners for history, matching represented flat-grid source semantics. Value records remain explicit construction/transport boundaries only. Full row frame client movement/destruction, native modify hint types, pooling, merged/nested tables, full frame attributes and UNO remain unverified. Targeted verification pending; last full237,next247; all prior states/defaults/classifications and registered I/O/recovery deviations preserved.",
+      "Iteration241 verified closure:12 fresh literal native registration/claim/sharing, complete item-set history and mounted direct UI cases plus related modules produced297 unique app passes and11 Chromium passes. Four initial fresh fixture failures were resolved in a failed-only four-case closure with the passing insertion test skipped. No passing replay or full suite; cadence last237,next247. All-four100% app and inventory coverage uses actual targeted counters and prior240 only with entire source/maps equality or complete declaration/body/enclosing branch/location proofs. Original rows/boxes/text/cursors survive repeated attribute history while shared formats are reconstructed. Full row layout client movement/destruction, native modify hints/pooling/merged/nested/UNO and whole core/browser parity remain unverified. No prior status/default/classification promotion.",
+      "Iteration243 owns native SwTableBoxFormat item sets through registered SwTableBox clients, exact box ranges and default frame inheritance. Cell claims retain complete direct attributes and separate shared calculation items; border and vertical commands reuse operation-local native format owners. SaveTable stores deduplicated complete cell item sets and numeric indices, restoring shared owners with MoveTableBoxHint before model registration. Actual section deletion releases cell clients; native insertion shares source formats; the main JSX table reads native border and orientation items directly. Full SwCellFrame hierarchy, invalidation, calculation, nested/merged tables and UNO remain partial. Targeted verification pending; last full237, next247; existing classifications/defaults and registered I/O/recovery deviations preserved.",
+      "Iteration243 verified1301 unique app cases including11 fresh native cell ownership/default/item-set/claim/hint/history/deletion and mounted rendering scenarios, plus25 Chromium cases, all runtime/build physically upstream absent/restored finally. Five old acceptance files capture expected attributes before native destruction or adopt native constructors without weakening literal/identity/history assertions;649 unaffected prior files remain byte-identical. Three initial failures passed failed-only; two new border-sharing/admission cases completed coverage, with zero passing replay. App and inventory all-four100% actual counters are bound to current bytes/maps or complete unchanged declarations/bodies/enclosing branches/all locations from242. Full SwCellFrame hierarchy/invalidation, calculation, numeric formatting, nested/merged/UNO/pooling/modified-state and whole project parity remain partial. Existing316 classifications/defaults/status/evidence prefixes and registered I/O/recovery deviations preserved. Last full237,next247; no full243."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/docnode/ndtbl1.cxx",
+    "upstreamSymbols": [
+      "SwDoc::GetRowSplit",
+      "SwDoc::GetTabBorders"
+    ]
+  },
+  "legacyOrder": 177
+}

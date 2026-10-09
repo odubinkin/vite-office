@@ -1,0 +1,175 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "XMLStylesContext",
+          "path": "apps/office/src/xmloff/source/style/xmlstyle.ts"
+        },
+        {
+          "path": "apps/office/src/xmloff/source/style/xmlstyle.test.ts",
+          "marker": "retains the created leaf reference in its own family and container"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-style-container-roundtrip.test.ts",
+          "marker": "applies automatic styles directly and resolves every parent only in common styles"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-style-container-roundtrip.test.ts",
+          "marker": "replaces the active automatic context while retaining independent common styles"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-layout-parity.test.ts",
+          "marker": "preserves tdf114287 exact print bounds across ODT export"
+        },
+        {
+          "path": "apps/office/src/xmloff/source/style/xmlnumi.test.ts",
+          "marker": "uses native MM100 grammar, failed-value retention and SHRT field bounds"
+        },
+        {
+          "path": "apps/office/src/xmloff/source/style/xmlnume.test.ts",
+          "marker": "emits label-alignment mode even for zero or default command geometry"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/unocore/unosett.test.ts",
+          "marker": "uses native integer ratios in both directions and retains only present properties"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-list-label-alignment-roundtrip.test.ts",
+          "marker": "round-trips native MM100 defaults, parsing bounds and conditional list attributes"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-list-label-alignment-roundtrip.test.ts",
+          "marker": "exports the default Writer list geometry at every supported level"
+        },
+        {
+          "path": "apps/office/src/xmloff/source/core/xmluconv.test.ts",
+          "marker": "delegates native core measure export to the supported CM unit"
+        },
+        {
+          "path": "apps/office/src/editeng/source/items/numitem.test.ts",
+          "marker": "initializes independent zero geometry in legacy mode"
+        },
+        {
+          "path": "apps/office/src/editeng/source/items/numitem.test.ts",
+          "marker": "switches native legacy getters without rewriting either geometry group"
+        },
+        {
+          "path": "apps/office/src/editeng/source/items/numitem.test.ts",
+          "marker": "retains native signed getter widths at integer boundaries"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-list-position-mode-roundtrip.test.ts",
+          "marker": "selects native mode independently of child geometry through common and automatic ODT cycles"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-list-position-mode-roundtrip.test.ts",
+          "marker": "retains pre-existing browser snapshots with absent inactive legacy fields"
+        },
+        {
+          "path": "apps/office/src/xmloff/source/style/xmlnume.test.ts",
+          "marker": "exports only the native legacy group with nonzero and positive attribute predicates"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "SvXMLStylesContext::createFastChildContext",
+          "path": "vendor/libreoffice-reference/xmloff/source/style/xmlstyle.cxx"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmlfmt.cxx",
+          "marker": "SwXMLImport::CreateStylesContext"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/core/xmlimp.cxx",
+          "marker": "SvXMLImport::SetAutoStyles"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/txtimp.cxx",
+          "marker": "XMLTextImportHelper::SetStyleAndAttrs"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/style/xmlnumi.cxx",
+          "marker": "SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl::SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/style/xmlnume.cxx",
+          "marker": "SvxXMLNumRuleExport::exportLevelStyle"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/unocore/unosett.cxx",
+          "marker": "SwXNumberingRules::SetNumberingRuleByIndex"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/unocore/unosett.cxx",
+          "marker": "GetPropertiesForNumFormat"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/core/xmluconv.cxx",
+          "marker": "SvXMLUnitConverter::convertMeasureToXML"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sax/source/tools/converter.cxx",
+          "marker": "void Converter::convertMeasure( OUStringBuffer&"
+        },
+        {
+          "path": "vendor/libreoffice-reference/editeng/source/items/numitem.cxx",
+          "marker": "SvxNumberFormat::SvxNumberFormat"
+        },
+        {
+          "path": "vendor/libreoffice-reference/editeng/source/items/numitem.cxx",
+          "marker": "SvxNumberFormat::GetAbsLSpace"
+        },
+        {
+          "path": "vendor/libreoffice-reference/editeng/source/items/numitem.cxx",
+          "marker": "SvxNumberFormat::GetFirstLineOffset"
+        },
+        {
+          "path": "vendor/libreoffice-reference/editeng/source/items/numitem.cxx",
+          "marker": "SvxNumberFormat::GetCharTextDistance"
+        },
+        {
+          "path": "vendor/libreoffice-reference/editeng/source/items/numitem.cxx",
+          "marker": "SvxNumberFormat::SetPositionAndSpaceMode"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/style/xmlnumi.cxx",
+          "marker": "SvxXMLListLevelStyleContext_Impl::SvxXMLListLevelStyleContext_Impl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/style/xmlnumi.cxx",
+          "marker": "SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/txtstyli.cxx",
+          "marker": "XMLTextStyleContext::SetAttribute"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/xmloff/source/style/xmlstyle.ts",
+    "localSymbols": [
+      "XMLStyleImportTarget",
+      "XMLStylesContext"
+    ],
+    "omittedResponsibilities": [
+      "Display-name mappings, same-container duplicate selection, full document named-style ownership, cycles, global null-context handling and remaining defaults/contracts are individually unverified. The named export list-base bridge is validly container-scoped but is not a claim of complete native named-style architecture."
+    ],
+    "preservedResponsibilities": [
+      "Creates style child contexts and publishes completed style definitions before document references.",
+      "XMLStylesContext retains style leaf references per container; Writer retains independent common and active automatic references and replaces the automatic context when a new container is encountered. Direct lookup checks the active automatic family/name first; automatic and common parents resolve only through common definitions. Found automatic deltas survive missing parents; missing paragraph references keep the default paragraph. Context ownership assertions and fifteen literal real ODT cases verify legal common/automatic collisions, same-name parents, independent families, named-only chains, empty/missing parents, stream replacement and common-only default publication through export/reimport. The previously source-invalid automatic-parent list export chain now puts its inherited base in common styles; exact pinned tdf114287 geometry remains unchanged across package cycles. This export bridge and broader named document-model ownership still require separate architecture audit; no whole-module parity promotion.",
+      "For the existing LABEL_ALIGNMENT mode and LISTTAB/SPACE/NOTHING separators, source-owned xmlnumi parsing now retains zero defaults and MM100 fields with native Converter grammar/failure and SHRT bounds. The MM100 import port now carries both independent native geometry groups; the earlier legacy-to-alignment Twip emulation is removed. Writer numbering property conversion follows unosett.cxx signed MM100/Twip ratios; export projects native MM100 and delegates CM serialization to XML/SAX. ODF 1.3 XML emits explicit label-alignment mode and retains standard command geometry; indents are nonzero-only and tab position is exported only for LISTTAB with a positive value. Context/core assertions and eleven literal common/automatic ODT cases plus both default command marker families verify native quantization, conditional XML and manual reopen state. Full numbering/UNO, legacy position mode/property ownership, NEWLINE extensions, other XML units/versions, defaults and wider obligations remain unverified; no whole-module promotion.",
+      "Declared levels retain independent native legacy and alignment geometry with zero defaults; only exact label-alignment selects modern mode. SvxNumberFormat in editeng owns positional state, signed widths and mode-dependent getters; Writer inherits and copies all fields. xmlnumi owns level/property contexts and MM100 legacy parsing/assembly. Writer conversion precedes core application, and xmlnume emits the selected group with native signs and omission predicates. Thirteen literal common/automatic ODT cases verify mode spellings/absence, child presence, independent state, signed/bounded/partial/invalid legacy fields, exact XML and reopen. Clone and browser snapshots preserve inactive fields; primitive browser geometry selects the active group. Full line layout, numbering families, omitted-level construction, native UNO replacement failures (including signed SymbolTextDistance narrowing), extensions and wider contracts/defaults remain separately unverified. No whole-module promotion.",
+      "Iteration37 admits the existing named paragraph list/outline items after source-owned heading level restoration. The xmloff helper emits direct positive outline levels,ODF1.3 empty zero values,explicit empty numbering and normal names while suppressing the reserved Outline rule. Writer emits referenced common numbering definitions through the existing level exporter so styles whose rules are absent from current body retain resolvable references. Named style parsing preserves supported outline values and list-style names. Existing assigned heading levels without numbering do not trigger the no-rule/list-level export diagnostic. Literal native attribute predicates and real ODT/Worker/reopen/undo tests cover this dependency slice;full XMLStyleExport inheritance fallback,UNO style machinery,style-name encoding,outline export,automatic/direct-outline properties and native lifetime/compatibility remain separately unverified. IO settings and Worker16/ODF1.3 remain unchanged."
+    ],
+    "status": "mapped",
+    "upstreamPath": "xmloff/source/style/xmlstyle.cxx",
+    "upstreamSymbols": [
+      "SvXMLStylesContext",
+      "SvXMLStylesContext::createFastChildContext"
+    ]
+  },
+  "legacyOrder": 299
+}

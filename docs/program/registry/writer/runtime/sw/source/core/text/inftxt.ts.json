@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/text/inftxt.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "page-layout",
+    "capabilityIds": [
+      "CAP-0111"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/text/inftxt.ts#resolveSwNumberPortionBackground",
+        "apps/office/src/sw/source/core/text/native-marked-list-paint.test.ts",
+        "apps/office/src/sw/browser/editor/native-marked-list-paint.test.tsx",
+        "apps/office/e2e/native-marked-list-paint.spec.ts",
+        "vendor/libreoffice-reference/sw/source/core/text/inftxt.cxx#SwTextPaintInfo::DrawViewOpt"
+      ],
+      "justification": "Iteration219 bounded marked-number painting: native SwViewColors owns represented color/appearance members with raw NONE/lightgray defaults, stable copy/borrow and copied initial values; configured desktop25 bits retained. Source Number DrawViewOpt guards and DrawBackground color admission use original HasMarkedLabel, actual shell view options and shared master marker painting, including sibling levels and print suppression. Full native color/config/theme/LOKit pipeline and VCL frame/portion/clip/bidi geometry remain unverified; all prior statuses/defaults/registered I/O/recovery exceptions retained.",
+      "knownViolations": [],
+      "localSymbols": [
+        "resolveSwNumberPortionBackground"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "sw/source/core/text/inftxt.cxx",
+      "upstreamSymbols": [
+        "SwTextPaintInfo::DrawViewOpt",
+        "SwTextPaintInfo::DrawBackground"
+      ]
+    }
+  }
+}

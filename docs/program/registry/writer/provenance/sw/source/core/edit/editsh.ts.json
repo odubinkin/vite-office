@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "createWriterHyperlinkAction",
+          "path": "apps/office/src/sw/source/core/edit/editsh.ts"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/edit/editsh.ts",
+          "marker": "createWriterInsertTextAction"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "SwEditShell::InsertURL",
+          "path": "vendor/libreoffice-reference/sw/source/core/edit/editsh.cxx"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/edit/editsh.cxx",
+          "marker": "SwEditShell::Insert2"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/core/edit/editsh.ts",
+    "localSymbols": [
+      "getWriterHyperlinkAtCursor",
+      "createWriterHyperlinkAction",
+      "createWriterInsertTextAction"
+    ],
+    "omittedResponsibilities": [
+      "Native field selection, macro events, and URL execution outside bounded same-paragraph text links remain intentionally omitted."
+    ],
+    "preservedResponsibilities": [
+      "Owns supported selection-aware SwEditShell hyperlink editing and undo actions.",
+      "Iteration133 restores collapsed SwEditShell Insert2 EMPTYEXPAND1 and forced5 factory policy,stored required SwUndoInsert flags reused by typed redo,and current FORCE candidate grouping barrier. Normal input after forced input may group under retained bounded payload guards and replays first mode. Literal source-independent shell/mode/lock/oldIgnore/empty boundary and actual INET ownership/history tests cover this path. Selection adapters remain pending native SwHistory rollback;full native grouping/redline/multicursor/index overloads/BuildPortions/core/UI remain unverified. No semantic status/default/exception promotion;registered I/O deviations preserved."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/edit/editsh.cxx",
+    "upstreamSymbols": [
+      "SwEditShell::InsertURL",
+      "SwEditShell::Insert2"
+    ]
+  },
+  "legacyOrder": 184
+}

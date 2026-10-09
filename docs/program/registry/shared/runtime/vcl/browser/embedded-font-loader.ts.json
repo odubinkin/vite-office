@@ -1,0 +1,32 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/vcl/browser/embedded-font-loader.ts",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "browser-platform",
+    "capabilityIds": [
+      "CAP-0109"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/vcl/browser/embedded-font-loader.ts#installWriterEmbeddedFonts",
+        "apps/office/src/vcl/browser/embedded-font-loader.test.ts#installs a loaded face and revokes it when its document leaves the browser"
+      ],
+      "justification": "Browser FontFace installation and revocation are covered by focused lifecycle and fallback tests.",
+      "knownViolations": [],
+      "localSymbols": [
+        "installWriterEmbeddedFonts"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

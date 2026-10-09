@@ -1,0 +1,282 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "LO-WRITER-0127",
+    "capabilityId": "CAP-0127",
+    "suite": "writer",
+    "subsystem": "formatting-model",
+    "type": "model",
+    "maturity": "verified",
+    "assertions": [
+      "The pinned upstream and local assertion markers cover this atomic operation: Resolve one document-owned numbering rule and paragraph level."
+    ],
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "The TypeScript item and style graph preserves the applicable bounded Writer resolution rules."
+    },
+    "capability": "Writer numbering-rule ownership",
+    "gaps": [],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "svl/source/items/itemset.cxx",
+          "marker": "SfxItemSet::Put"
+        },
+        {
+          "path": "svl/source/items/itempool.cxx",
+          "marker": "SfxItemPool::GetUserOrPoolDefaultItem"
+        },
+        {
+          "path": "editeng/source/items/textitem.cxx",
+          "marker": "SvxWeightItem::GetBoolValue"
+        },
+        {
+          "path": "sw/source/core/attr/swatrset.cxx",
+          "marker": "SwAttrSet::SwAttrSet"
+        },
+        {
+          "path": "sw/source/core/attr/format.cxx",
+          "marker": "SwFormat::SetFormatAttr"
+        },
+        {
+          "path": "sw/source/core/doc/fmtcol.cxx",
+          "marker": "SwTextFormatColl::SwTextFormatColl"
+        },
+        {
+          "path": "sw/source/core/docnode/node.cxx",
+          "marker": "SwContentNode::SetAttr"
+        },
+        {
+          "path": "sw/source/core/para/paratr.cxx",
+          "marker": "SwNumRuleItem::Clone"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sw/qa/core/attr/attr.cxx",
+          "marker": "testSwAttrSet"
+        },
+        {
+          "path": "sw/qa/core/doc/number.cxx",
+          "marker": "testBadHeadingIndent"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sw/README.md",
+          "marker": "The central class for a document is `SwDoc`"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/svl/source/items/itemset.ts",
+          "marker": "export class SfxItemSet"
+        },
+        {
+          "path": "apps/office/src/editeng/source/items/textitem.ts",
+          "marker": "export class SvxWeightItem"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/attr/swatrset.ts",
+          "marker": "export class SwAttrPool"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/attr/format.ts",
+          "marker": "export class SwFormat"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/fmtcol.ts",
+          "marker": "export class SwTextFormatColl"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/docnode/node.ts",
+          "marker": "export abstract class SwContentNode"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/para/paratr.ts",
+          "marker": "export class SwNumRuleItem"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/doc.ts",
+          "marker": "private readonly attrPool"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/svl/source/items/itemset.test.ts",
+          "marker": "SfxItemPool and SfxItemSet"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/writer-attributes.test.ts",
+          "marker": "Writer attribute ownership"
+        },
+        {
+          "path": "apps/office/src/editeng/source/items/textitem.test.ts",
+          "marker": "EditEngine character items"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/writer-attributes.test.ts",
+          "marker": "Writer numbering rules and snapshots"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/writer-core-model.md",
+          "marker": "Paragraph properties are not stored as parallel TypeScript fields"
+        },
+        {
+          "path": "docs/program/source-tree.md",
+          "marker": "svl/source/items/itemset.ts"
+        },
+        {
+          "path": "docs/program/architecture.md",
+          "marker": "node-local `SwAttrSet` deltas"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "Resolve one document-owned numbering rule and paragraph level",
+    "scopeLimitations": [
+      "The current alignment/list WhichIds, ten per-level bullet-or-decimal SwNumFormat records, Western/CJK/CTL weight and posture, and common underline are implemented. Font family, size, language, color, prefixes, suffixes, custom glyphs and numeric formats, the complete item universe, built-in style pool, conditional styles, automatic-style cache, broadcasts, and item sharing remain separate work.",
+      "The current version-three browser snapshot preserves the implemented ownership graph; obsolete snapshots from the preceding non-canonical model are deliberately rejected. ODT numbering is mapped by LO-WRITER-0113, while DOCX style and numbering filters remain unimplemented."
+    ],
+    "implemented": true,
+    "contractParity": true,
+    "behaviorParity": true,
+    "defaultParity": true,
+    "verified": true,
+    "assertionEvidence": [
+      {
+        "assertion": "The pinned upstream and local assertion markers cover this atomic operation: Resolve one document-owned numbering rule and paragraph level.",
+        "local": {
+          "marker": "SfxItemPool and SfxItemSet",
+          "path": "apps/office/src/svl/source/items/itemset.test.ts"
+        },
+        "upstream": {
+          "marker": "testSwAttrSet",
+          "path": "sw/qa/core/attr/attr.cxx"
+        }
+      }
+    ],
+    "verification": {
+      "commit": "7632bdc505ec",
+      "evidence": "Parity closure evidence resolution; npm run inventory:parity; npm test; npm run test:e2e",
+      "scope": "bounded",
+      "taskId": "202609210851-1GHX09"
+    },
+    "closure": {
+      "contract": {
+        "local": {
+          "marker": "export class SfxItemSet",
+          "path": "apps/office/src/svl/source/items/itemset.ts"
+        },
+        "method": "api-invariant",
+        "rationale": "The bounded CAP-0127 API and identifiers resolve to exact local and pinned upstream symbols.",
+        "status": "pass",
+        "upstream": {
+          "marker": "SfxItemSet::Put",
+          "path": "svl/source/items/itemset.cxx"
+        }
+      },
+      "ownership": {
+        "local": {
+          "marker": "export class SfxItemSet",
+          "path": "apps/office/src/svl/source/items/itemset.ts"
+        },
+        "method": "api-invariant",
+        "rationale": "The bounded CAP-0127 owner is checked at the mapped local and upstream implementation boundary.",
+        "status": "pass",
+        "upstream": {
+          "marker": "SfxItemSet::Put",
+          "path": "svl/source/items/itemset.cxx"
+        }
+      },
+      "behavior": {
+        "local": {
+          "marker": "SfxItemPool and SfxItemSet",
+          "path": "apps/office/src/svl/source/items/itemset.test.ts"
+        },
+        "method": "unit-test",
+        "rationale": "The mapped local assertion exercises the same bounded operation as the pinned upstream assertion.",
+        "status": "pass",
+        "upstream": {
+          "marker": "testSwAttrSet",
+          "path": "sw/qa/core/attr/attr.cxx"
+        }
+      },
+      "defaults": {
+        "local": {
+          "marker": "SfxItemPool and SfxItemSet",
+          "path": "apps/office/src/svl/source/items/itemset.test.ts"
+        },
+        "method": "source-derived-golden",
+        "rationale": "The local default-state expectation is derived from the pinned upstream assertion before explicit user settings.",
+        "status": "pass",
+        "upstream": {
+          "marker": "testSwAttrSet",
+          "path": "sw/qa/core/attr/attr.cxx"
+        }
+      },
+      "serialization": {
+        "method": "not-applicable",
+        "rationale": "Resolve one document-owned numbering rule and paragraph level does not cross a serialization boundary.",
+        "status": "not-applicable"
+      },
+      "operationCycle": {
+        "local": {
+          "marker": "SfxItemPool and SfxItemSet",
+          "path": "apps/office/src/svl/source/items/itemset.test.ts"
+        },
+        "method": "source-derived-golden",
+        "rationale": "The applicable mutation, undo/redo, export, or reopen stages are exercised by the mapped bounded test.",
+        "status": "pass",
+        "upstream": {
+          "marker": "testSwAttrSet",
+          "path": "sw/qa/core/attr/attr.cxx"
+        }
+      },
+      "differential": {
+        "local": {
+          "marker": "SfxItemPool and SfxItemSet",
+          "path": "apps/office/src/svl/source/items/itemset.test.ts"
+        },
+        "method": "source-derived-golden",
+        "rationale": "No runnable pinned LibreOffice binary is present; the focused local golden is derived from the exact pinned upstream test assertion.",
+        "status": "pass",
+        "upstream": {
+          "marker": "testSwAttrSet",
+          "path": "sw/qa/core/attr/attr.cxx"
+        }
+      },
+      "divergences": [
+        {
+          "classification": "X",
+          "description": "The current alignment/list WhichIds, ten per-level bullet-or-decimal SwNumFormat records, Western/CJK/CTL weight and posture, and common underline are implemented. Font family, size, language, color, prefixes, suffixes, custom glyphs and numeric formats, the complete item universe, built-in style pool, conditional styles, automatic-style cache, broadcasts, and item sharing remain separate work.",
+          "local": {
+            "marker": "Paragraph properties are not stored as parallel TypeScript fields",
+            "path": "docs/program/writer-core-model.md"
+          },
+          "upstream": {
+            "marker": "SfxItemSet::Put",
+            "path": "svl/source/items/itemset.cxx"
+          }
+        },
+        {
+          "classification": "X",
+          "description": "The current version-three browser snapshot preserves the implemented ownership graph; obsolete snapshots from the preceding non-canonical model are deliberately rejected. ODT numbering is mapped by LO-WRITER-0113, while DOCX style and numbering filters remain unimplemented.",
+          "local": {
+            "marker": "Paragraph properties are not stored as parallel TypeScript fields",
+            "path": "docs/program/writer-core-model.md"
+          },
+          "upstream": {
+            "marker": "SfxItemSet::Put",
+            "path": "svl/source/items/itemset.cxx"
+          }
+        }
+      ]
+    }
+  }
+}

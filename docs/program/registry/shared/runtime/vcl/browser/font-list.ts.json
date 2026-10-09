@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/vcl/browser/font-list.ts",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "browser-platform",
+    "capabilityIds": [
+      "CAP-0109"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/vcl/browser/font-list.ts#export class FontList"
+      ],
+      "justification": "Adapts LibreOffice FontList device enumeration to the browser Local Font Access API with deterministic metric-compatible fallbacks when access is unavailable.",
+      "knownViolations": [],
+      "localSymbols": [],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

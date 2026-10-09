@@ -1,0 +1,274 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "LO-WRITER-0106",
+    "capabilityId": "CAP-0106",
+    "suite": "writer",
+    "subsystem": "clipboard-transfer",
+    "type": "command",
+    "maturity": "verified",
+    "assertions": [
+      "The pinned upstream and local assertion markers cover this atomic operation: Serialize one complete list selection for clipboard transfer."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "The Clipboard API replaces native transferable plumbing while preserving semantic output."
+    },
+    "capability": "Writer list clipboard serialization",
+    "gaps": [],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sw/source/uibase/dochdl/swdtflvr.cxx",
+          "marker": "PrepareForCopyTextRange"
+        },
+        {
+          "path": "sw/source/filter/html/htmlnumwriter.cxx",
+          "marker": "OutHTML_NumberBulletListStart"
+        },
+        {
+          "path": "sw/source/filter/ascii/ascatr.cxx",
+          "marker": "GetNumString"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sw/qa/extras/uiwriter/uiwriter9.cxx",
+          "marker": "testTdf135083"
+        },
+        {
+          "path": "sw/qa/filter/html/html.cxx",
+          "marker": "testMailmergeCopy"
+        },
+        {
+          "path": "sw/qa/extras/htmlimport/htmlimport.cxx",
+          "marker": "testNestedListMixedType"
+        }
+      ],
+      "docs": [
+        {
+          "path": "helpcontent2/source/text/shared/01/02050000.xhp",
+          "marker": ".uno:Copy"
+        },
+        {
+          "path": "helpcontent2/source/text/swriter/02/02110000.xhp",
+          "marker": ".uno:DefaultNumbering"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts",
+          "marker": "export class SwTransferable"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/htmlnumwriter.ts",
+          "marker": "serializeWriterClipboardHtml"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ascii/ascatr.ts",
+          "marker": "OutASC_SwTextNode"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/writer-clipboard-events.ts",
+          "marker": "readBrowserWriterClipboardPaste"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.test.ts",
+          "marker": "serializes only SwPaM model data"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/htmlnumwriter.test.ts",
+          "marker": "separates ordinary paragraphs"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ascii/ascatr.test.ts",
+          "marker": "exports actual numbering"
+        },
+        {
+          "path": "apps/office/e2e/writer-clipboard.spec.ts",
+          "marker": "Writer list clipboard"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/writer-clipboard.md",
+          "marker": "complete adjacent list paragraphs"
+        },
+        {
+          "path": "docs/program/writer-paragraph-lists.md",
+          "marker": "semantic nested-HTML"
+        },
+        {
+          "path": "docs/program/source-tree.md",
+          "marker": "htmlnumwriter.ts"
+        }
+      ]
+    },
+    "aspect": "compatibility",
+    "atomicOperation": "Serialize one complete list selection for clipboard transfer",
+    "scopeLimitations": [
+      "The browser implementation serializes complete contiguous list fragments; multi-range selection, custom list styles, restarts, and non-text Writer objects remain unmapped.",
+      "RTF, Paste, ODT/DOCX import/export, and the full Writer transfer-flavor matrix are not implemented by this static browser slice."
+    ],
+    "implemented": true,
+    "contractParity": true,
+    "behaviorParity": true,
+    "defaultParity": true,
+    "verified": true,
+    "assertionEvidence": [
+      {
+        "assertion": "The pinned upstream and local assertion markers cover this atomic operation: Serialize one complete list selection for clipboard transfer.",
+        "local": {
+          "marker": "serializes only SwPaM model data",
+          "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.test.ts"
+        },
+        "upstream": {
+          "marker": "testTdf135083",
+          "path": "sw/qa/extras/uiwriter/uiwriter9.cxx"
+        }
+      }
+    ],
+    "verification": {
+      "commit": "7632bdc505ec",
+      "evidence": "Parity closure evidence resolution; npm run inventory:parity; npm test; npm run test:e2e",
+      "scope": "bounded",
+      "taskId": "202609210851-1GHX09"
+    },
+    "closure": {
+      "contract": {
+        "local": {
+          "marker": "export class SwTransferable",
+          "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts"
+        },
+        "method": "api-invariant",
+        "rationale": "The bounded CAP-0106 API and identifiers resolve to exact local and pinned upstream symbols.",
+        "status": "pass",
+        "upstream": {
+          "marker": "PrepareForCopyTextRange",
+          "path": "sw/source/uibase/dochdl/swdtflvr.cxx"
+        }
+      },
+      "ownership": {
+        "local": {
+          "marker": "export class SwTransferable",
+          "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts"
+        },
+        "method": "api-invariant",
+        "rationale": "The bounded CAP-0106 owner is checked at the mapped local and upstream implementation boundary.",
+        "status": "pass",
+        "upstream": {
+          "marker": "PrepareForCopyTextRange",
+          "path": "sw/source/uibase/dochdl/swdtflvr.cxx"
+        }
+      },
+      "behavior": {
+        "local": {
+          "marker": "serializes only SwPaM model data",
+          "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.test.ts"
+        },
+        "method": "unit-test",
+        "rationale": "The mapped local assertion exercises the same bounded operation as the pinned upstream assertion.",
+        "status": "pass",
+        "upstream": {
+          "marker": "testTdf135083",
+          "path": "sw/qa/extras/uiwriter/uiwriter9.cxx"
+        }
+      },
+      "defaults": {
+        "local": {
+          "marker": "serializes only SwPaM model data",
+          "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.test.ts"
+        },
+        "method": "source-derived-golden",
+        "rationale": "The local default-state expectation is derived from the pinned upstream assertion before explicit user settings.",
+        "status": "pass",
+        "upstream": {
+          "marker": "testTdf135083",
+          "path": "sw/qa/extras/uiwriter/uiwriter9.cxx"
+        }
+      },
+      "serialization": {
+        "local": {
+          "marker": "serializes only SwPaM model data",
+          "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.test.ts"
+        },
+        "method": "source-derived-golden",
+        "rationale": "The relevant bounded serialization or persistence representation is compared with pinned upstream evidence.",
+        "status": "pass",
+        "upstream": {
+          "marker": "testTdf135083",
+          "path": "sw/qa/extras/uiwriter/uiwriter9.cxx"
+        }
+      },
+      "operationCycle": {
+        "local": {
+          "marker": "serializes only SwPaM model data",
+          "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.test.ts"
+        },
+        "method": "source-derived-golden",
+        "rationale": "The applicable mutation, undo/redo, export, or reopen stages are exercised by the mapped bounded test.",
+        "status": "pass",
+        "upstream": {
+          "marker": "testTdf135083",
+          "path": "sw/qa/extras/uiwriter/uiwriter9.cxx"
+        }
+      },
+      "differential": {
+        "local": {
+          "marker": "serializes only SwPaM model data",
+          "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.test.ts"
+        },
+        "method": "source-derived-golden",
+        "rationale": "No runnable pinned LibreOffice binary is present; the focused local golden is derived from the exact pinned upstream test assertion.",
+        "status": "pass",
+        "upstream": {
+          "marker": "testTdf135083",
+          "path": "sw/qa/extras/uiwriter/uiwriter9.cxx"
+        }
+      },
+      "divergences": [
+        {
+          "classification": "B",
+          "description": "The Clipboard API replaces native transferable plumbing while preserving semantic output.",
+          "local": {
+            "marker": "complete adjacent list paragraphs",
+            "path": "docs/program/writer-clipboard.md"
+          },
+          "upstream": {
+            "marker": "PrepareForCopyTextRange",
+            "path": "sw/source/uibase/dochdl/swdtflvr.cxx"
+          }
+        },
+        {
+          "classification": "X",
+          "description": "The browser implementation serializes complete contiguous list fragments; multi-range selection, custom list styles, restarts, and non-text Writer objects remain unmapped.",
+          "local": {
+            "marker": "complete adjacent list paragraphs",
+            "path": "docs/program/writer-clipboard.md"
+          },
+          "upstream": {
+            "marker": "PrepareForCopyTextRange",
+            "path": "sw/source/uibase/dochdl/swdtflvr.cxx"
+          }
+        },
+        {
+          "classification": "X",
+          "description": "RTF, Paste, ODT/DOCX import/export, and the full Writer transfer-flavor matrix are not implemented by this static browser slice.",
+          "local": {
+            "marker": "complete adjacent list paragraphs",
+            "path": "docs/program/writer-clipboard.md"
+          },
+          "upstream": {
+            "marker": "PrepareForCopyTextRange",
+            "path": "sw/source/uibase/dochdl/swdtflvr.cxx"
+          }
+        }
+      ]
+    }
+  }
+}

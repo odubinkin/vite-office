@@ -1,0 +1,83 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/core/undo/untblk.ts",
+    "upstreamPath": "sw/source/core/undo/untblk.cxx",
+    "localSymbols": [
+      "SwUndoInserts",
+      "SwUndoInsDoc"
+    ],
+    "upstreamSymbols": [
+      "SwUndoInserts::SwUndoInserts",
+      "SwUndoInserts::SetInsertRange",
+      "SwUndoInserts::UndoImpl",
+      "SwUndoInserts::RedoImpl",
+      "SwUndoInsDoc::SwUndoInsDoc"
+    ],
+    "preservedResponsibilities": [
+      "Iteration151 preserves plain clipboard source into SwTransferable and dispatches selected-cell ordinary text before explicit TextRuns fragment conversion. Native ASCII default EMPTYEXPAND inserts inherited text at every actual editing ring point and splits only inside each cell, with native trailing-newline omission and paragraph/control/wrap rules. Reader captures each SwUndoInsDoc sequentially at current indices, records actual inserted node/fragment ownership and original SwHistory/collection, groups one Sfx undo unit, and uses tracked native display positions. Undo restores old target text/items/hints/table selection; redo reconnects retained inserted nodes. No shell paste/split/caret/list callback replay or whole-document snapshots. Complete reader options/encodings/page-break import, native SwUndoInserts non-end/suffix/fly/redline/index lifetimes, rich/internal/structured table transfer and rendering remain unverified. Existing statuses/defaults/classifications/conscious I/O/recovery deviations unchanged.",
+      "Iteration152 replaces eager SetInsertRange content snapshots/live-node retention with native SwUndRng absolute numeric coordinates and SwUndoSaveContent append-only cut/move/consume lifecycle. SetInsertRange records coordinates only, Undo resolves current indices and removes actual text/hints/nodes into storage, Redo reconnects/consumes native owned content and releases storage. Existing RetainText copy=true default preserved; native move alone consumes actual cut hints with copy=false and native transferHints=true. Applied storage0, only removed content while undone; original SwHistory attributes/collection restored, current table browser behavior preserved. Complete native undo SwNodes sections, non-end/suffix/redline/fly/protection/conditional/style and registered index ownership remain unverified; numeric content correction at nontext sentinels omitted. No whole-module/status/classification/default promotion, conscious I/O/recovery exceptions unchanged."
+    ],
+    "omittedResponsibilities": [
+      "Complete ASCII options/encoding/page-break import and SwUndoInserts non-end/suffix/redline/fly/native index/lifetime mechanics remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/undo/untblk.ts",
+          "marker": "SwUndoInserts"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/basflt/shellio.ts",
+          "marker": "createWriterReadTextOperation"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-plain-paste.test.ts",
+          "marker": "native ASCII selected column preserves inherited content and history"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-table-plain-paste.test.tsx",
+          "marker": "mounted plain clipboard %j reads all selected cells through native document undo"
+        },
+        {
+          "path": "apps/office/e2e/writer-native-table-plain-paste.spec.ts",
+          "marker": "Writer native plain table clipboard"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/undo/native-insert-storage.test.ts",
+          "marker": "native imported content occupies storage only while undone"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/undo/untblk.cxx",
+          "marker": "SwUndoInserts::SwUndoInserts"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/basflt/shellio.cxx",
+          "marker": "SwReader::Read"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/dochdl/swdtflvr.cxx",
+          "marker": "SwTransferable::PasteFileContent"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/IDocumentContentOperations.hxx",
+          "marker": "SwInsertFlags::EMPTYEXPAND"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/undo/untblk.cxx",
+          "marker": "SwUndoInserts::SetInsertRange"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/undo/untblk.cxx",
+          "marker": "MoveFromUndoNds"
+        }
+      ]
+    }
+  },
+  "legacyOrder": 232
+}

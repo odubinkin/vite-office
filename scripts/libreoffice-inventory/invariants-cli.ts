@@ -1,7 +1,8 @@
 /** @fileoverview Checks the committed Writer invariant manifest against local and pinned LibreOffice evidence. */
 
-import { readFile, writeFile } from "node:fs/promises";
+import { writeFile } from "node:fs/promises";
 
+import { readInventoryCompatibilityText } from "./registry-storage";
 import { isDirectModule } from "./cli";
 import {
   createUpstreamInvariantManifest,
@@ -47,7 +48,7 @@ if (isDirectModule(import.meta.url, process.argv[1])) {
     process.argv.slice(2),
     /** Reads one CLI file. @param path - Repository-relative path. @returns File contents. */ (
       path,
-    ) => readFile(path, "utf8"),
+    ) => readInventoryCompatibilityText(path),
     process.stdout.write.bind(process.stdout),
   );
 }

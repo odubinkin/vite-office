@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/docnode/node-attribute-handle.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "document-model",
+    "capabilityIds": [
+      "CAP-0111",
+      "CAP-0123"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/docnode/node-attribute-handle.ts#AttrSetHandleHelper",
+        "vendor/libreoffice-reference/sw/source/core/docnode/node.cxx#namespace AttrSetHandleHelper",
+        "apps/office/src/sw/source/core/docnode/node-attribute-handle.test.ts#matches unchanged native handle owners over300 sequences and1815 states"
+      ],
+      "justification": "Iteration39 restores registered-item handle copy/commit and Changed broadcast deltas before storage mutation. Unchanged complete native owners/helpers/storage bodies (24 definitions,300 sequences,1815 states) compare actual SwDoc/SwTextNode base-owner calls,retained handles,return counts and observer delta counts. Independent literal tests assert inherited/pool-default delta values,slot/sentinel exclusions,no-op overload retention and nested set/reset notifications. Full native IStyleAccess pooling/dedup,modify locks,cache,refcount,surrogates,conditional/RES_AUTO_STYLE items and client lifetime remain unimplemented or unverified. This fresh-handle/unlocked browser observer profile does not establish whole-module or native defaults parity. A destructive callback deleting the final handle crashed the unchanged native raw observer adapter;the trace is preserved as unresolved client-lifetime evidence and is not assigned fabricated parity expectations.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SwAttrSetHandle",
+        "AttrSetHandleHelper"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/core/docnode/node.cxx",
+      "upstreamSymbols": [
+        "AttrSetHandleHelper",
+        "GetNewAutoStyle",
+        "Put_BC",
+        "ClearItem_BC"
+      ]
+    }
+  }
+}

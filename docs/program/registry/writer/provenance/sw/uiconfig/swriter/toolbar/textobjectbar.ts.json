@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "writerTextObjectBarItems",
+          "path": "apps/office/src/sw/uiconfig/swriter/toolbar/textobjectbar.ts"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": ".uno:DesignerDialog",
+          "path": "vendor/libreoffice-reference/sw/uiconfig/swriter/toolbar/textobjectbar.xml"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/uiconfig/swriter/toolbar/textobjectbar.ts",
+    "localSymbols": [
+      "writerTextObjectBarItems"
+    ],
+    "omittedResponsibilities": [
+      "Upstream obligations outside .uno:DesignerDialog, .uno:StyleApply, .uno:StyleUpdateByExample, .uno:StyleNewByExample and the bounded WriterTextObjectBarListCommand, writerTextObjectBarListCommands contract remain intentionally omitted."
+    ],
+    "preservedResponsibilities": [
+      "Declares the initial browser Writer list controls at the pinned `sw/uiconfig/swriter/toolbar/textobjectbar` ownership boundary."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/uiconfig/swriter/toolbar/textobjectbar.xml",
+    "upstreamSymbols": [
+      ".uno:DesignerDialog",
+      ".uno:StyleApply",
+      ".uno:StyleUpdateByExample",
+      ".uno:StyleNewByExample"
+    ]
+  },
+  "legacyOrder": 275
+}

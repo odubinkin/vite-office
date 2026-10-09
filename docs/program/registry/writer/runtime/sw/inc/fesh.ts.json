@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/inc/fesh.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "table-selection",
+    "capabilityIds": [
+      "CAP-0111"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/inc/fesh.ts#SwTab",
+        "apps/office/src/sw/source/core/frmedt/native-table-mouse.test.ts",
+        "apps/office/src/sw/browser/editor/native-table-mouse.test.tsx",
+        "apps/office/e2e/writer-native-table-mouse.spec.ts"
+      ],
+      "justification": "Iteration188 declares native SwTab values and device point contract. Represented horizontal LTR native mouse owners use these values; full source shell/frame/mouse contract, RTL/vertical/protection/resizing and broad parity remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SwTab",
+        "SwTableMousePoint"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/inc/fesh.hxx",
+      "upstreamSymbols": [
+        "SwTab"
+      ]
+    }
+  }
+}

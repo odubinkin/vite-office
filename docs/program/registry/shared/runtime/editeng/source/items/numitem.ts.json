@@ -1,0 +1,80 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/editeng/source/items/numitem.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "formatting-model",
+    "capabilityIds": [
+      "CAP-0112"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/editeng/source/items/numitem.test.ts#initializes independent zero geometry in legacy mode",
+        "apps/office/src/editeng/source/items/numitem.test.ts#switches native legacy getters without rewriting either geometry group",
+        "apps/office/src/editeng/source/items/numitem.test.ts#retains native signed getter widths at integer boundaries",
+        "apps/office/src/sw/source/filter/xml/odt-list-position-mode-roundtrip.test.ts#selects native mode independently of child geometry through common and automatic ODT cycles",
+        "apps/office/src/sw/source/filter/xml/odt-list-position-mode-roundtrip.test.ts#retains pre-existing browser snapshots with absent inactive legacy fields",
+        "apps/office/src/xmloff/source/style/xmlnume.test.ts#exports only the native legacy group with nonzero and positive attribute predicates",
+        "vendor/libreoffice-reference/editeng/source/items/numitem.cxx#SvxNumberFormat::SvxNumberFormat",
+        "vendor/libreoffice-reference/editeng/source/items/numitem.cxx#SvxNumberFormat::GetAbsLSpace",
+        "vendor/libreoffice-reference/editeng/source/items/numitem.cxx#SvxNumberFormat::GetFirstLineOffset",
+        "vendor/libreoffice-reference/editeng/source/items/numitem.cxx#SvxNumberFormat::GetCharTextDistance",
+        "vendor/libreoffice-reference/editeng/source/items/numitem.cxx#SvxNumberFormat::SetPositionAndSpaceMode",
+        "vendor/libreoffice-reference/xmloff/source/style/xmlnumi.cxx#SvxXMLListLevelStyleContext_Impl::SvxXMLListLevelStyleContext_Impl",
+        "vendor/libreoffice-reference/xmloff/source/style/xmlnumi.cxx#SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl",
+        "vendor/libreoffice-reference/xmloff/source/style/xmlnume.cxx#SvxXMLNumRuleExport::exportLevelStyle",
+        "apps/office/src/editeng/source/items/numitem.test.ts#owns native marker defaults, unsigned values and ListFormat invalidation",
+        "apps/office/src/editeng/source/items/numitem.test.ts#derives compatibility fields literally from native percent scanning",
+        "apps/office/src/sw/source/core/doc/number-list-format.test.ts#substitutes requested Arabic levels literally and retains unavailable placeholders",
+        "apps/office/src/sw/source/core/doc/number-list-format.test.ts#preserves independent ListFormat state in owned clones and Worker transfer",
+        "vendor/libreoffice-reference/editeng/source/items/numitem.cxx#SvxNumberFormat::SetListFormat",
+        "apps/office/src/sw/source/core/doc/number-format.test.ts#matches native standalone defaults and unsigned glyph copies",
+        "apps/office/src/sw/source/core/doc/number-pointer.test.ts#matches native pointer and reference Set identity validity and every implemented field",
+        "apps/office/src/sw/source/core/doc/number-pointer.test.ts#matches native absent pointer defaults and protects stable const references",
+        "apps/office/src/sw/source/core/doc/number-pointer.test.ts#matches native base Writer assignment self alias and optional font copies",
+        "apps/office/src/sw/source/core/doc/number-pointer.test.ts#matches native same modify assignment copy and detach responsibilities",
+        "apps/office/src/sw/source/core/doc/number-pointer.test.ts#keeps pointer assigned live rule reads and sparse ownership through actual document and Worker paths",
+        "apps/office/src/sw/source/filter/xml/native-none-numbering.test.ts#native NONE",
+        "apps/office/src/sw/browser/editor/native-none-numbering.test.tsx#freshly opened NONE",
+        "apps/office/e2e/writer-native-none-numbering.spec.ts#Writer native NONE numbering roundtrip",
+        "vendor/libreoffice-reference/include/editeng/numitem.hxx#SetAbsLSpace",
+        "vendor/libreoffice-reference/editeng/source/items/numitem.cxx#void SvxNumberFormat::SetListtabPos",
+        "vendor/libreoffice-reference/xmloff/source/core/xmluconv.cxx#bool SvXMLUnitConverter::convertNumFormat",
+        "vendor/libreoffice-reference/xmloff/source/style/xmlnume.cxx#NumberingType::NUMBER_NONE",
+        "vendor/libreoffice-reference/xmloff/source/style/xmlnumi.cxx#convertNumFormat",
+        "vendor/libreoffice-reference/sw/source/core/unocore/unosett.cxx#SwNumFormat aFormat(rNumRule.Get("
+      ],
+      "justification": "Declared levels retain independent native legacy and alignment geometry with zero defaults; only exact label-alignment selects modern mode. SvxNumberFormat in editeng owns positional state, signed widths and mode-dependent getters; Writer inherits and copies all fields. xmlnumi owns level/property contexts and MM100 legacy parsing/assembly. Writer conversion precedes core application, and xmlnume emits the selected group with native signs and omission predicates. Thirteen literal common/automatic ODT cases verify mode spellings/absence, child presence, independent state, signed/bounded/partial/invalid legacy fields, exact XML and reopen. Clone and browser snapshots preserve inactive fields; primitive browser geometry selects the active group. Full line layout, numbering families, omitted-level construction, native UNO replacement failures (including signed SymbolTextDistance narrowing), extensions and wider contracts/defaults remain separately unverified. No whole-module promotion. Marker prefix/suffix/start/include-upper state now belongs to SvxNumberFormat. Both pinned SetListFormat overloads, native unsigned fields, optional-empty distinction, affix invalidation and compatibility derivation are source-compared. Writer standalone numeric suffix is empty; modern base levels store %level%. patterns. Writer MakeNumString substitutes requested levels in order, retains future and malformed references, formats zero and character-special substitutions like the native supported subset, and preserves its native dot fallback. SwTextNode owns visible bullet glyph projection. Owned copies and Worker graph v16 preserve raw pattern and independent compatibility state. A bounded extracted C++ harness compares 188 marker states/labels and 83 owned-clone labels; full native build, additional numbering families, continuous/outline/NONE/bitmap rules, font machinery, include-strings/hidden-nonnumerical variants and XML marker/ListFormat attributes remain separate unverified obligations. Iteration43 restores sparse owned const formats, effective shared Get, reference Set equality and native four-family defaults.22 complete unchanged definitions/constants, plus default-config source identities, compare40 base states,19 ownership/equality states and16 valid NONE marker states under ASan/UBSan. Worker v16 preserves presence/default selectors with historical explicit-format fallback. Source-shaped rule constructor no longer conflates browser command assembly. The native non-progress trailing NONE placeholder profile is measured by timeout and explicitly rejected as a browser guard; it is not claimed equivalent. Pointer-overload in-place/reset behavior, full SvxNumberType hierarchy, live registered style/font/graphics and native static destruction remain unverified. No status or goal promotion; registered I/O deviations unchanged. Iteration44 restores SvxNumberType -> SvxNumberFormat -> SwNumFormat constructor/copy/state ownership, native numeric type IDs, standalone SVX_DEF_BULLET U+F095, unsigned32 glyph, show-symbol state and optional copied const Font family values. SwClient is composed because JavaScript has one superclass; the currently exposed registration remains null. Explicit browser format assembly/projection replaces kind/string-glyph constructor overloads. Worker graph16 preserves font presence (including present-empty), raw glyph and visibility with historical omissions supported. Complete unchanged native bodies compare 21 format-value states and144 type/format traces under ASan/UBSan, using named null-client, family-only Font/COW, decimal-provider, string/property/locale/platform adapters. Full native service initialization/static destruction, registered style clients, other Font attributes/equality, graphics, legal-rule state and wider numbering families remain unverified. No whole-module/status or goal promotion; registered I/O deviations unchanged. Iteration46 restores the native pointer Set overload as explicit JS SetByPointer, distinct from reference Set replacement. Mutable owned SwNumFormat values and cached protected JS const views retain identity/live reads on pointer assignment; null resets the owned slot and restores the exact shared default. Source-owned base/Writer Assign copies every implemented raw marker/position/type/show/optional-family-Font field without ListFormat regeneration and transfers same-modify registration; copy construction preserves that source registration. Complete unchanged pinned pointer/ref Set,assignment/copy/rule-get/default and same-modify bodies emit639 profiles under ASan/UBSan:600 mixed traces,8 sparse defaults,23 assignment/self-alias profiles,6 actual registration recipient counts and2 format registration states. Exact hashes and prior full native format/default profile retained; named native SwModify Add/Remove container,invalid-flag,platform/family-only Font/COW/graphics/style/service aliases explicitly bound the proof. Original source-native ref/classification assertions remain intact. Actual document-owned rule,Worker16 and supported genuine ODT export/reopen fields are checked; native const view is a JS boundary and retained detached JS reads do not certify native deleted-pointer/destructor/global lifetime. Native complete Font/graphics/legal/style/layout/redline/UNO/service/global/client destruction and wider families remain individually unverified. No module/status/goal promotion,policy/dependency/coverage weakening or registered IO/recovery change. Native base copy construction now delegates to its own nonvirtual Assign responsibility after default initialization,matching the pinned constructor rather than duplicating raw field-copy code. Iteration169 preserves native NumberingType NONE through represented XML conversion and numeric property propagation into UNO/core and fresh ODT reopening. Empty num-format imports NUMBER_NONE with native permission; absent format retains ARABIC. Actual native export writes empty NONE format and suppresses display-levels while preserving independent start/affixes. SwXNumberingRules now copy constructs SwNumFormat and applies supported native setters, removing raw-field/factory reconstruction and preserving inactive geometry, font/glyph/symbol/client fields with invalid-property atomicity. Existing kind input remains an optional bounded caller boundary; actual XML uses numeric type. Native mounted DOM and ordinary Chromium Open/typing/history cases verify this slice. Unrepresented letters/Roman/custom/bitmap types, full native UNO/XML families and full core/UI/list/table remain unverified; prior semantic/default/classification/IO deviations/evidence are preserved.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SvxNumberFormat",
+        "SvxNumPositionAndSpaceMode",
+        "NumberingPositionProperties",
+        "NumberingMarkerProperties",
+        "SvxNumberType"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "editeng/source/items/numitem.cxx",
+      "upstreamSymbols": [
+        "SvxNumberFormat::SvxNumberFormat",
+        "SvxNumberFormat::GetAbsLSpace",
+        "SvxNumberFormat::GetFirstLineOffset",
+        "SvxNumberFormat::GetCharTextDistance",
+        "SvxNumberFormat::SetPositionAndSpaceMode",
+        "SvxNumberFormat::SetPrefix",
+        "SvxNumberFormat::SetSuffix",
+        "SvxNumberFormat::SetListFormat",
+        "SvxNumberFormat::GetListFormat",
+        "SvxNumberType",
+        "SvxNumberFormat& SvxNumberFormat::operator="
+      ]
+    }
+  }
+}

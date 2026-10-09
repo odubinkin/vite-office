@@ -1,0 +1,266 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "LO-WRITER-0132",
+    "capabilityId": "CAP-0132",
+    "suite": "writer",
+    "subsystem": "document-lifecycle",
+    "type": "lifecycle",
+    "maturity": "verified",
+    "assertions": [
+      "The pinned upstream and local assertion markers cover this atomic operation: Acknowledge one completed primary save at the undo save position."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "LibreOffice uses modified flags, an undo save mark, and an autosave-dirty timestamp; the browser model adds explicit generations so asynchronous IndexedDB recovery writes cannot miss consecutive dirty mutations."
+    },
+    "capability": "Writer primary-save acknowledgement",
+    "gaps": [],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sfx2/source/doc/objmisc.cxx",
+          "marker": "void SfxObjectShell::SetModified"
+        },
+        {
+          "path": "sfx2/source/doc/objstor.cxx",
+          "marker": "SetModified( !bSaved )"
+        },
+        {
+          "path": "sfx2/source/doc/sfxbasemodel.cxx",
+          "marker": "storeToRecoveryFile"
+        },
+        {
+          "path": "sw/source/core/undo/docundo.cxx",
+          "marker": "HasTopUndoActionMark"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sw/qa/core/undo/undo.cxx",
+          "marker": "testImagePropsCreateUndoAndModifyDoc"
+        },
+        {
+          "path": "sw/qa/python/check_xmodifiable2.py",
+          "marker": "test_XModifiable2_setModified"
+        }
+      ],
+      "docs": [
+        {
+          "path": "offapi/com/sun/star/util/XModifiable.idl",
+          "marker": "boolean isModified()"
+        },
+        {
+          "path": "offapi/com/sun/star/document/XDocumentRecovery.idl",
+          "marker": "wasModifiedSinceLastSave"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sfx2/source/doc/objsh.ts",
+          "marker": "contentGeneration"
+        },
+        {
+          "path": "apps/office/src/svl/source/misc/recovery.ts",
+          "marker": "recoveryGeneration"
+        },
+        {
+          "path": "apps/office/src/sw/browser/workflows/writer-odt-io.ts",
+          "marker": "autosaveWriter"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/app/docsh.ts",
+          "marker": "SerializeOdt"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sfx2/source/doc/objsh.test.ts",
+          "marker": "owns modified and persistence generations"
+        },
+        {
+          "path": "apps/office/src/svl/source/misc/recovery.test.ts",
+          "marker": "saves each changed generation"
+        },
+        {
+          "path": "apps/office/src/framework/browser/app/desktop.test.tsx",
+          "marker": "keeps named browser copies available from Open"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/undo/undobj.test.ts",
+          "marker": "moved save mark across action navigation"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/document-lifecycle.md",
+          "marker": "contentGeneration"
+        },
+        {
+          "path": "docs/program/autosave-recovery.md",
+          "marker": "Deliberate divergence from LibreOffice"
+        },
+        {
+          "path": "docs/program/transaction-history.md",
+          "marker": "save position"
+        }
+      ]
+    },
+    "aspect": "undo-redo",
+    "atomicOperation": "Acknowledge one completed primary save at the undo save position",
+    "scopeLimitations": [
+      "AutoRecovery scheduling and startup recovery prompts are wired; cross-tab arbitration, encryption, quota recovery, and native lock-file semantics remain unsupported.",
+      "The generation counters are a browser-specific concurrency aid; LibreOffice upstream represents equivalent save and recovery decisions through modified flags, an undo save mark, and recovery dirty-state bookkeeping."
+    ],
+    "implemented": true,
+    "contractParity": true,
+    "behaviorParity": true,
+    "defaultParity": true,
+    "verified": true,
+    "assertionEvidence": [
+      {
+        "assertion": "The pinned upstream and local assertion markers cover this atomic operation: Acknowledge one completed primary save at the undo save position.",
+        "local": {
+          "marker": "owns modified and persistence generations",
+          "path": "apps/office/src/sfx2/source/doc/objsh.test.ts"
+        },
+        "upstream": {
+          "marker": "testImagePropsCreateUndoAndModifyDoc",
+          "path": "sw/qa/core/undo/undo.cxx"
+        }
+      }
+    ],
+    "verification": {
+      "commit": "7632bdc505ec",
+      "evidence": "Parity closure evidence resolution; npm run inventory:parity; npm test; npm run test:e2e",
+      "scope": "bounded",
+      "taskId": "202609210851-1GHX09"
+    },
+    "closure": {
+      "contract": {
+        "local": {
+          "marker": "contentGeneration",
+          "path": "apps/office/src/sfx2/source/doc/objsh.ts"
+        },
+        "method": "api-invariant",
+        "rationale": "The bounded CAP-0132 API and identifiers resolve to exact local and pinned upstream symbols.",
+        "status": "pass",
+        "upstream": {
+          "marker": "void SfxObjectShell::SetModified",
+          "path": "sfx2/source/doc/objmisc.cxx"
+        }
+      },
+      "ownership": {
+        "local": {
+          "marker": "contentGeneration",
+          "path": "apps/office/src/sfx2/source/doc/objsh.ts"
+        },
+        "method": "api-invariant",
+        "rationale": "The bounded CAP-0132 owner is checked at the mapped local and upstream implementation boundary.",
+        "status": "pass",
+        "upstream": {
+          "marker": "void SfxObjectShell::SetModified",
+          "path": "sfx2/source/doc/objmisc.cxx"
+        }
+      },
+      "behavior": {
+        "local": {
+          "marker": "owns modified and persistence generations",
+          "path": "apps/office/src/sfx2/source/doc/objsh.test.ts"
+        },
+        "method": "unit-test",
+        "rationale": "The mapped local assertion exercises the same bounded operation as the pinned upstream assertion.",
+        "status": "pass",
+        "upstream": {
+          "marker": "testImagePropsCreateUndoAndModifyDoc",
+          "path": "sw/qa/core/undo/undo.cxx"
+        }
+      },
+      "defaults": {
+        "local": {
+          "marker": "owns modified and persistence generations",
+          "path": "apps/office/src/sfx2/source/doc/objsh.test.ts"
+        },
+        "method": "source-derived-golden",
+        "rationale": "The local default-state expectation is derived from the pinned upstream assertion before explicit user settings.",
+        "status": "pass",
+        "upstream": {
+          "marker": "testImagePropsCreateUndoAndModifyDoc",
+          "path": "sw/qa/core/undo/undo.cxx"
+        }
+      },
+      "serialization": {
+        "method": "not-applicable",
+        "rationale": "Acknowledge one completed primary save at the undo save position does not cross a serialization boundary.",
+        "status": "not-applicable"
+      },
+      "operationCycle": {
+        "local": {
+          "marker": "owns modified and persistence generations",
+          "path": "apps/office/src/sfx2/source/doc/objsh.test.ts"
+        },
+        "method": "source-derived-golden",
+        "rationale": "The applicable mutation, undo/redo, export, or reopen stages are exercised by the mapped bounded test.",
+        "status": "pass",
+        "upstream": {
+          "marker": "testImagePropsCreateUndoAndModifyDoc",
+          "path": "sw/qa/core/undo/undo.cxx"
+        }
+      },
+      "differential": {
+        "local": {
+          "marker": "owns modified and persistence generations",
+          "path": "apps/office/src/sfx2/source/doc/objsh.test.ts"
+        },
+        "method": "source-derived-golden",
+        "rationale": "No runnable pinned LibreOffice binary is present; the focused local golden is derived from the exact pinned upstream test assertion.",
+        "status": "pass",
+        "upstream": {
+          "marker": "testImagePropsCreateUndoAndModifyDoc",
+          "path": "sw/qa/core/undo/undo.cxx"
+        }
+      },
+      "divergences": [
+        {
+          "classification": "B",
+          "description": "LibreOffice uses modified flags, an undo save mark, and an autosave-dirty timestamp; the browser model adds explicit generations so asynchronous IndexedDB recovery writes cannot miss consecutive dirty mutations.",
+          "local": {
+            "marker": "contentGeneration",
+            "path": "docs/program/document-lifecycle.md"
+          },
+          "upstream": {
+            "marker": "void SfxObjectShell::SetModified",
+            "path": "sfx2/source/doc/objmisc.cxx"
+          }
+        },
+        {
+          "classification": "X",
+          "description": "AutoRecovery scheduling and startup recovery prompts are wired; cross-tab arbitration, encryption, quota recovery, and native lock-file semantics remain unsupported.",
+          "local": {
+            "marker": "contentGeneration",
+            "path": "docs/program/document-lifecycle.md"
+          },
+          "upstream": {
+            "marker": "void SfxObjectShell::SetModified",
+            "path": "sfx2/source/doc/objmisc.cxx"
+          }
+        },
+        {
+          "classification": "X",
+          "description": "The generation counters are a browser-specific concurrency aid; LibreOffice upstream represents equivalent save and recovery decisions through modified flags, an undo save mark, and recovery dirty-state bookkeeping.",
+          "local": {
+            "marker": "contentGeneration",
+            "path": "docs/program/document-lifecycle.md"
+          },
+          "upstream": {
+            "marker": "void SfxObjectShell::SetModified",
+            "path": "sfx2/source/doc/objmisc.cxx"
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "SfxDialogController",
+          "path": "apps/office/src/sfx2/source/dialog/basedlgs.ts"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "SfxDialogController",
+          "path": "vendor/libreoffice-reference/sfx2/source/dialog/basedlgs.cxx"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sfx2/source/dialog/basedlgs.ts",
+    "localSymbols": [
+      "SfxDialogController"
+    ],
+    "omittedResponsibilities": [
+      "Upstream obligations outside SfxDialogController and the bounded SfxDialogController contract remain intentionally omitted."
+    ],
+    "preservedResponsibilities": [
+      "Ports the bounded asynchronous Sfx dialog-controller lifecycle while leaving rendering to the browser adapter."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sfx2/source/dialog/basedlgs.cxx",
+    "upstreamSymbols": [
+      "SfxDialogController"
+    ]
+  },
+  "legacyOrder": 49
+}

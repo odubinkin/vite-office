@@ -1,0 +1,61 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/doc/docnum.ts",
+          "marker": "OutlineUpDown"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/native-outline-movement.test.ts",
+          "marker": "native outline movement"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-outline-tab.test.tsx",
+          "marker": "native outline Tab UI"
+        },
+        {
+          "path": "apps/office/e2e/writer-native-outline-tab.spec.ts",
+          "marker": "Writer native heading Tab retains styles and history"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/docnum.cxx",
+          "marker": "bool SwDoc::OutlineUpDown"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/undo/unoutl.cxx",
+          "marker": "SwUndoOutlineLeftRight::UndoImpl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/edit/ednumber.cxx",
+          "marker": "bool SwEditShell::OutlineUpDown"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/docvw/edtwin.cxx",
+          "marker": "case SwKeyState::OutlineDown:"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/core/doc/docnum.ts",
+    "localSymbols": [
+      "OutlineUpDown"
+    ],
+    "omittedResponsibilities": [
+      "Native merged paragraph props/layout/conditional collections/direct document auto-history/framework Repeat/failed-operation dirty flag and full module behavior remain unrepresented and unverified."
+    ],
+    "preservedResponsibilities": [
+      "Iteration167 implements the represented nonmerged native docnum outline move-table using actual sorted outline index/predecessor range, creation-order assigned styles, lazy adjacent pool styles, occupied-level signed steps, whole-range rejection and actual collection/direct-outline mutation. Matching unoutl SwUndoOutlineLeftRight retains numeric range and signed offset, reuses the same primitive inversely for Undo and identically for Redo. SwEditShell retains native normalized ring order and short-circuit after failure with grouped successful delta history; default displacement one. SwEditWin eligible heading-at-start Tab/ShiftTab calls this native operation and owns the key, replacing unsupported fallback while retaining numbering/table priority and text/limit cases. Core primitive and portable shell history registration remain separated as existing runtime architecture; no snapshot/model/preparation/no-op callback/browser heuristic. Actual core/mounted DOM/production Chromium tests prove bounded behavior. Direct document auto-history, framework Repeat, failed-operation dirty flag, native StartAllAction layout batching, merged para props and conditional collections remain unrepresented/unverified. Full KeyInput/core/UI/list/table parity unverified.253 prior semantic states/defaults/classes/IO exceptions/evidence preserved;2 new partial owners stay unverified,255 modules.429 prior tests428 byte-identical with only exact old unsupported outline-case source-confirmed expectations corrected. Conscious save/open/recovery deviations unchanged."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/doc/docnum.cxx",
+    "upstreamSymbols": [
+      "SwDoc::OutlineUpDown"
+    ]
+  },
+  "legacyOrder": 169
+}

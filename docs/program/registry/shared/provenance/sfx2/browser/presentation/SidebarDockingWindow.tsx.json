@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sfx2/browser/presentation/SidebarDockingWindow.tsx",
+          "marker": "SidebarDockingWindow"
+        },
+        {
+          "path": "apps/office/src/sfx2/browser/presentation/SidebarDockingWindow.tsx",
+          "marker": "EventNotify"
+        },
+        {
+          "path": "apps/office/src/sfx2/browser/presentation/SidebarDockingWindow.test.tsx",
+          "marker": "isolatesLocalKey"
+        },
+        {
+          "path": "apps/office/src/sfx2/browser/presentation/SidebarDockingWindow.test.tsx",
+          "marker": "retainsWidgetDefault"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-view-sidebar-key-isolation.test.tsx",
+          "marker": "isolatesClipboardShortcut"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-view-sidebar-key-isolation.test.tsx",
+          "marker": "retainsGlobalFallback"
+        },
+        {
+          "path": "apps/office/e2e/writer-sidebar-key-isolation.spec.ts",
+          "marker": "Sidebar docking key isolation at width"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sfx2/browser/presentation/SidebarDockingWindow.tsx",
+    "rationale": "Owned React/DOM boundary for the existing Sidebar root, informed by read-only pinned docking event routing; complete native docking and accelerator parity remain unverified.",
+    "responsibilities": [
+      "The existing Sidebar root now owns the 13 local key codes inspected in SidebarDockingWindow::EventNotify after child widget handling, regardless of modifiers. It stops document accelerator lookup and cancels unhandled browser defaults while retaining editable widget defaults and button Enter activation. Literal owned key/modifier cases and actual Writer clipboard-port/model/no-dispatch checks cover this bounded routing contract; desktop/mobile browser cases cover selected-document safety, real local editing and activation. Other keys retain the existing frame fallback. Native DesignerDialog/styles handling, complete accelerator precedence/platform/LOK/input eligibility, floating/mouse docking, other decks and full Sidebar/native parity remain unverified. Save/open/recovery exceptions are unchanged."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "React bubbling and HTML local defaults project native docking-window event ownership onto the existing Sidebar DOM."
+    },
+    "status": "local-only"
+  },
+  "legacyOrder": 38
+}

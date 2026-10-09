@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/core/frmedt/tblsel.ts",
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/frmedt/tblsel.cxx",
+    "localSymbols": [
+      "CheckSplitCells"
+    ],
+    "upstreamSymbols": [
+      "bool CheckSplitCells"
+    ],
+    "preservedResponsibilities": [
+      "Iteration182 ports native counted flat InsertCol/NewInsertCol and cumulative AdjustWidths rounding, expands column search across actual rows and represents CheckSplitCells MINLAY using table/page print geometry. Native table shell exposes InsertColumnsBefore/After; shared document-owned SwUndoTableNdsChg retains actual box sections, numeric insertion coordinates and width attributes, preserving selection through mixed and recreated-table history. Prior269 semantic states/defaults/classes/evidence and registered I/O deviations preserved. Full merged/nested/rowspan/RTL/redline/per-edge-border/formula/protection/repeated-headline/frame/undo reconstruction and complete UI/core parity remain unverified.",
+      "Iteration233 moves connected flat-table column geometry into each original SwTableBox SwFormatFrameSize. Native current-row visible/other-row hidden fuzzy separator union and per-line NewSetTabCols adjustments feed original Writer document attribute history; actual Ctrl+Shift current-line columns replace the retained ordinary shared-column fallback. Source XML union grids/spans and browser device colspans preserve independent original cells, with complete native frame-size values in browser codec and declared grid widths only at import/builder ingress. No row-width side map, graph replacement or TextRuns conversion. Flat unspanned source behavior is represented; full row-span propagation/nested/merged graphs, frame item pooling/UNO, RTL/vertical/SFX/VCL/full ruler state remain partial. Registered recovery/open/save/settings untouched, previous statuses/defaults/classes preserved."
+    ],
+    "omittedResponsibilities": [
+      "Full native layout-frame unions,vertical/RTL/fly/merged/nested/protection and CheckSplitCells hierarchy remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/frmedt/tblsel.ts",
+          "marker": "CheckSplitCells"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/table/native-column-insertion.test.ts",
+          "marker": "refuses narrow selected columns"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/table/native-independent-columns.test.ts",
+          "marker": "native separators combine visible current-row"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/frmedt/tblsel.cxx",
+          "marker": "bool CheckSplitCells"
+        }
+      ]
+    }
+  },
+  "legacyOrder": 188
+}

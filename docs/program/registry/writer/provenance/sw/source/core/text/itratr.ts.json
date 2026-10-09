@@ -1,0 +1,52 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/text/itratr.ts",
+          "marker": "SwAttrIter"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/text/native-attribute-iteration.test.ts",
+          "marker": "native attribute stacks compose independent items"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/native-attribute-portions.test.tsx",
+          "marker": "native display composes overlapping attributes"
+        },
+        {
+          "path": "apps/office/e2e/writer-native-attribute-portions.spec.ts",
+          "marker": "Writer native body and cell portions"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/text/itratr.cxx",
+          "marker": "SwAttrIter::SeekFwd"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/core/text/itratr.ts",
+    "localSymbols": [
+      "SwAttrIter"
+    ],
+    "omittedResponsibilities": [
+      "Full SwFont/device change reporting,script/cache/font shaping,redline/merged paragraph/field/paragraph-mark and INET character-style/visited-color ownership are unrepresented and unverified."
+    ],
+    "preservedResponsibilities": [
+      "Iteration165 removes filter WriterTextRun/projectWriterTextRuns dependency from UI display. Native SwAttrIter/SwAttrHandler owners traverse actual unmerged node start/end maps and borrow per-item automatic priority stacks/defaults. Browser primitive display portions are projected directly from native pooled items and existing INET query,retaining physical/generic font metadata,stable IDs and shared body/cell/measurement rendering. Literal overlapping different-Which/priority/equal-start/backward/zero/ignore/end/default cases and actual body/cell DOM,editing/history/Worker/production Chromium prove the bounded slice. No broad native status promotion;full SwFont/device/scripts/redline/fields/merged paragraphs/INET styles/visited-color/paragraph-mark effects and broad list/table/UI parity remain unverified.251prior states/defaults/classes/IOexceptions/evidence and423prior testfiles preserved;2new partial native owners stayunverified;conscioussave/open/recovery deviations unchanged."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/text/itratr.cxx",
+    "upstreamSymbols": [
+      "SwAttrIter::Seek",
+      "SwAttrIter::SeekFwd",
+      "SwAttrIter::GetNextAttr",
+      "GetNextAttrImpl"
+    ]
+  },
+  "legacyOrder": 199
+}

@@ -1,0 +1,56 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/browser/presentation/WriterPropertiesPanel.tsx",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "browser-presentation",
+    "capabilityIds": [
+      "CAP-0101",
+      "CAP-0105",
+      "CAP-0107",
+      "CAP-0109",
+      "CAP-0112",
+      "CAP-0115"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/browser/presentation/WriterPropertiesPanel.tsx#WriterParagraphProperties",
+        "apps/office/src/sfx2/browser/presentation/SidebarDeck.test.tsx#retainsDeckContent",
+        "apps/office/src/sfx2/browser/presentation/SidebarDeck.test.tsx#togglesSelectedDeck",
+        "apps/office/src/sfx2/browser/presentation/SidebarDeck.test.tsx#cancelsDeckFocus",
+        "apps/office/src/sw/browser/presentation/writer-view-sidebar-deck.test.tsx#retainsWriterDeck",
+        "apps/office/src/sw/browser/presentation/writer-view-sidebar-deck.test.tsx#recreatesSidebarDeck",
+        "apps/office/src/sw/browser/presentation/writer-view-sidebar-deck.test.tsx#focusesOwningWriter",
+        "apps/office/e2e/writer-sidebar-deck.spec.ts#Properties deck closes and reopens with document focus",
+        "apps/office/src/sfx2/browser/presentation/SidebarPanel.test.tsx#retainsPanelContent",
+        "apps/office/src/sfx2/browser/presentation/SidebarPanel.test.tsx#entersPanelContent",
+        "apps/office/src/sw/browser/presentation/WriterPropertiesPanel-controls.test.tsx#retainsParagraphPanel",
+        "apps/office/src/sw/browser/presentation/WriterPropertiesPanel-controls.test.tsx#opensParagraphOptions",
+        "apps/office/src/sw/browser/presentation/WriterPropertiesPanel-controls.test.tsx#focusesEligibleContent",
+        "apps/office/e2e/writer-sidebar-panel.spec.ts#Paragraph panel expansion and More Options",
+        "apps/office/src/sfx2/browser/presentation/SidebarPanel-escape.test.tsx#cancelsPanelHeader",
+        "apps/office/src/sfx2/browser/presentation/SidebarPanel-escape.test.tsx#cancelsPanelContent",
+        "apps/office/src/sfx2/browser/presentation/SidebarPanel-escape.test.tsx#respectsChildCancellation",
+        "apps/office/src/sw/browser/presentation/writer-view-sidebar-escape.test.tsx#cancelsParagraphContent",
+        "apps/office/src/sw/browser/presentation/writer-view-sidebar-escape.test.tsx#cancelsParagraphHeader",
+        "apps/office/e2e/writer-sidebar-escape.spec.ts#Paragraph panel Escape returns to title then document"
+      ],
+      "justification": "Renders immutable current paragraph values together with alignment and list controls backed by generated commands and persistent bindings state. Existing Properties deck close/reopen follows inspected sfx2 SidebarController RequestCloseDeck/RequestOpenDeck/OpenThenToggleDeck, TabBar activation and FocusManager Escape: close retains mounted content and an unselected rail independently of whole Sidebar visibility, activation first returns to the owning document, cancellation does not toggle. Owned lifecycle/mount/state/frame/no-dispatch and rebuilt desktop/mobile browser checks cover only this contract. Whole F6/Sidebar panel focus, Help/settings/floating/other decks/default sizing and complete native composition remain open. Paragraph panel header follows inspected Panel::SetExpanded/PanelTitleBar and FocusManager Return: initial expanded state, collapse retains mounted content, More Options remains available and dispatches existing ParagraphDialog, and Return expands before first eligible content focus. Owned lifecycle/bindings/dialog/keyboard and rebuilt desktop/mobile checks cover this bounded contract. Complete panel/deck focus graph, F6, Help/settings/other panels, context/profile expansion persistence and native sizing remain open. Existing visible Paragraph panel Escape follows pinned FocusManager: unconsumed content cancellation focuses the expanded panel title; title/toolbar cancellation returns to its own document without closing or dispatch. Child-consumed keys remain owned by that child and a detached header without document ownership leaves Escape unconsumed. Owned retained-draft/controls/modifier/frame/model checks and rebuilt desktop/mobile focus-plus-editing cases cover this branch only. Full Tab/arrows/F6/other panels/hidden-title fallback/Help/settings/native sizing/context-profile persistence remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "getSidebarIcon",
+        "WriterParagraphProperties"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

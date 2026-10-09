@@ -1,0 +1,553 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "SwNodeNum",
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum.ts"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.test.ts",
+          "marker": "initializes structurally and advances counted siblings after zero"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.test.ts",
+          "marker": "retains native first uncounted descendant and nested sibling rules"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.test.ts",
+          "marker": "continues a subtree only below native uncounted parents"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.test.ts",
+          "marker": "revalidates zero restarts, counted changes and phantom ancestors"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-list-counters-roundtrip.test.ts",
+          "marker": "round-trips zero starts and restarts through native list trees"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.test.ts",
+          "marker": "constructs rule-start phantom chains and retains them through removal"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-lifecycle.test.ts",
+          "marker": "attaches items at insertion and validates reverse-order reads without replacing their root"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-lifecycle.test.ts",
+          "marker": "reparents retained items and moves descendants through native predecessor phantoms"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-lifecycle.test.ts",
+          "marker": "moves canonical paragraphs with retained list records and independent copied trees"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/node-numbering-lifecycle.test.ts",
+          "marker": "owns records in text nodes and validates insertion notifications before prefix reads"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/node-numbering-lifecycle.test.ts",
+          "marker": "removes old clients before changing list attributes and preserves native registration order"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/DocumentListItemsManager.test.ts",
+          "marker": "sorts independent of insertion order, suppresses equivalent positions and filters bullets and uncounted items"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/number-classification.test.ts",
+          "marker": "matches native format enumeration itemize copy and type-change predicates"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/number-classification.test.ts",
+          "marker": "matches all native effective classification raw-layout counting and registry profiles"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/number-classification.test.ts",
+          "marker": "matches native root phantom and counted numbered-registry filtering"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/number-classification.test.ts",
+          "marker": "retains existing supported classifications and sparse ownership through Worker16"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-policy.test.ts",
+          "marker": "matches native bound orphan and inherited continuous phantom policies"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-policy.test.ts",
+          "marker": "matches native complete policy counter cache notification and traversal sequences"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-policy.test.ts",
+          "marker": "matches native continuous legacy marker selection without changing explicit list patterns"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-policy.test.ts",
+          "marker": "retains continuous and phantom policy on real Worker document owners and native copy reset boundaries"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-policy.test.ts",
+          "marker": "retains native empty and end sentinel validation with protected traversal"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-children.test.ts",
+          "marker": "ignores non-Writer children under the native counted-descendant type guard"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-counting-contract.test.ts",
+          "marker": "requires protected zero-argument boolean counting policies without public exports"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-notification-access.test.ts",
+          "marker": "exposes the Writer notification policy publicly while retaining the protected base contract"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-container.test.ts",
+          "marker": "merges children in comparator order and retains destination identity for equivalent keys"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-document-context.test.ts",
+          "marker": "requires explicit document arguments across rule list and tree APIs and hides traversal"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-document-context.test.ts",
+          "marker": "forwards the rule caller document through invalidation and list validation instead of its first client"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-document-context.test.ts",
+          "marker": "forwards an explicit insertion context while preserving text-owner policy and retained list topology"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-document-context.test.ts",
+          "marker": "forwards removal context without borrowing the text document and retains remaining raw counters"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-document-context.test.ts",
+          "marker": "passes the operation context through protected root and phantom traversal before text-owner notification"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/numbering-notification-policy.test.ts",
+          "marker": "owns zero-argument text policies and destruction query with native private defaults"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/numbering-notification-policy.test.ts",
+          "marker": "checks reading before destruction for text and caller-context root policy"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/numbering-notification-policy.test.ts",
+          "marker": "delegates the two real-record predicates independently to the text owner"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/numbering-notification-policy.test.ts",
+          "marker": "keeps the private temporary blocker independent of global notification enablement"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/numbering-notification-policy.test.ts",
+          "marker": "skips a blocked owned paragraph notification while preserving validated prefix and topology"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/numbering-notification-policy.test.ts",
+          "marker": "suppresses numbering callbacks and counter validation during actual document disposal"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/numbering-notification-policy.test.ts",
+          "marker": "sets destruction before list removal and retains existing undo and state disposal order"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/numbering-notification-policy.test.ts",
+          "marker": "uses destruction context for roots and phantoms while real records retain their live owner"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum-start-value.test.ts",
+          "marker": "keeps the public zero-argument numeric start contract"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum-start-value.test.ts",
+          "marker": "returns owned starts through depth nine and defaults beyond the format range without validation"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum-start-value.test.ts",
+          "marker": "short-circuits missing rules before parent and level lookup and uses level zero for detached bound records"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum-start-value.test.ts",
+          "marker": "reads restart before rule, then parent, level, optional owned format and start"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum-start-value.test.ts",
+          "marker": "preserves zero and explicit restart ahead of tree-level bounds or rule lookup"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum-start-value.test.ts",
+          "marker": "defaults to one for absent owned formats instead of querying effective formats"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum-construction.test.ts",
+          "marker": "keeps distinct required native constructors and private mode defaults"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum-construction.test.ts",
+          "marker": "binds hidden records while preserving the actual shown client and numbered registry"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum-construction.test.ts",
+          "marker": "creates shown production records and registers rule before registry, removing in reverse order"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum-construction.test.ts",
+          "marker": "uses the rule-only factory with false mode for roots and records of either text mode"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum-construction.test.ts",
+          "marker": "retains native no-rule, no-text and non-document registration branches"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum-construction.test.ts",
+          "marker": "leaves existing ChangeNumRule policy independent of the hidden constructor flag"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum-policy-branches.test.ts",
+          "marker": "retains nullary boolean and local protected contracts with unbound root defaults"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum-policy-branches.test.ts",
+          "marker": "prefers the bound rule including false and never queries parent fallback"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum-policy-branches.test.ts",
+          "marker": "uses parent guard and delegation lookups for an attached unbound release record"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum-policy-branches.test.ts",
+          "marker": "queries text guard and counted delegation without invoking the base policy"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum-policy-branches.test.ts",
+          "marker": "delegates no-text roots and real phantoms to the complete base counted policy"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum-policy-branches.test.ts",
+          "marker": "uses text guard and restart delegation while keeping no-text restart false"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum-policy-branches.test.ts",
+          "marker": "retains counted number bullet and disabled-format short circuits through text helpers"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum-policy-branches.test.ts",
+          "marker": "retains null-text root and counted phantom presence short circuits"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum-owner-references.test.ts",
+          "marker": "retains exact comparator and protected phantom contracts with the unbound true default"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum-owner-references.test.ts",
+          "marker": "reads bound private rules with continuous short circuit for actual roots phantoms and text"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum-owner-references.test.ts",
+          "marker": "retains the true unbound policy after real detachment without querying text or old rule"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum-owner-references.test.ts",
+          "marker": "compares direct text pointers for every root phantom ordered text and equal-index pair"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum-owner-references.test.ts",
+          "marker": "keeps the first comparator-equivalent identity in the actual sorted container"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum-rule-transfer.test.ts",
+          "marker": "retains the required public rule reference and void transfer contract"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum-rule-transfer.test.ts",
+          "marker": "removes the old client before rebinding and appends it after new rule guard lookups"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum-rule-transfer.test.ts",
+          "marker": "retains same-rule removal and reappend order without duplicate clients"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum-rule-transfer.test.ts",
+          "marker": "short circuits absent old rule then registers the retained detached text after assignment"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum-rule-transfer.test.ts",
+          "marker": "retains bound and unbound no-text root and actual phantom release guard paths"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum-rule-transfer.test.ts",
+          "marker": "uses the same explicit client transfer for a bound hidden record without altering shown ownership"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "SwNodeNum",
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::ValidateHierarchical"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::GetNumberVector_"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx",
+          "marker": "SwNodeNum::IsCounted"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx",
+          "marker": "SwNodeNum::IsRestart"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx",
+          "marker": "SwNodeNum::GetStartValue"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/list.cxx",
+          "marker": "SwList::ValidateListTree"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::AddChild"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::CreatePhantom"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::HasPhantomCountedParent"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::GetNumber"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::RemoveMe"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::RemoveChild"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::SetLevelInListTree"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::SetLastValid"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::InvalidateTree"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "SwTextNode::GetNum("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "SwTextNode::GetNumberVector("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "SwTextNode::AddToList()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "SwTextNode::RemoveFromList()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "HandleSetAttrAtTextNode::HandleSetAttrAtTextNode"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx",
+          "marker": "SwNodeNum::PreAdd()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx",
+          "marker": "SwNodeNum::PostRemove()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx",
+          "marker": "SwNodeNum::ChangeNumRule("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/number.cxx",
+          "marker": "SwNumRule::GetTextNodeList("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/number.cxx",
+          "marker": "SwNumRule::RemoveTextNode("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/number.cxx",
+          "marker": "SwNumRule::Validate("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentListItemsManager.cxx",
+          "marker": "DocumentListItemsManager::addListItem("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentListItemsManager.cxx",
+          "marker": "DocumentListItemsManager::getNumItems("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx",
+          "marker": "SwNodeNum::IsContinuous()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx",
+          "marker": "SwNodeNum::IsCountPhantoms()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::ValidateContinuous("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::GetPred("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::GetLastDescendant()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::NotifyInvalidChildren("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/list.cxx",
+          "marker": "SwList::ValidateListTree("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/number.cxx",
+          "marker": "SwNumRule::MakeNumString("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx",
+          "marker": "SwNodeNum::IsNotifiable"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx",
+          "marker": "SwNodeNum::IsNotificationEnabled"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx",
+          "marker": "SwNodeNum::GetStartValue() const"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/swtypes.hxx",
+          "marker": "constexpr sal_uInt8 MAXLEVEL = 10;"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/SwNodeNum.hxx",
+          "marker": "bool m_isHiddenRedlines;"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx",
+          "marker": "SwNodeNum::PreAdd"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx",
+          "marker": "SwNodeNum::IsContinuous"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/SwNodeNum.hxx",
+          "marker": "virtual bool IsContinuous"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/SwNodeNum.hxx",
+          "marker": "virtual bool IsCounted"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/SwNodeNum.hxx",
+          "marker": "virtual bool IsRestart"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx",
+          "marker": "SwNodeNum::IsCountedForNumbering"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/SwNodeNum.hxx",
+          "marker": "virtual bool IsCountedForNumbering"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx",
+          "marker": "SwNodeNum::IsCountPhantoms"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx",
+          "marker": "SwNodeNum::LessThan"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/SwNodeNum.hxx",
+          "marker": "virtual bool IsCountPhantoms"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/SwNodeNum.hxx",
+          "marker": "virtual bool LessThan"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx",
+          "marker": "SwNodeNum::ChangeNumRule"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/SwNodeNum.hxx",
+          "marker": "void ChangeNumRule"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/number.cxx",
+          "marker": "SwNumRule::AddTextNode"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/number.cxx",
+          "marker": "SwNumRule::RemoveTextNode"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum.ts",
+    "localSymbols": [
+      "SwNodeNum"
+    ],
+    "omittedResponsibilities": [
+      "Native layout expansion,redline/original/undo arrays,wider numbering families and full native nonshown tree lifetimes,complete callbacks/reading suppression,word-count/native lifetime machinery and legacy/default factories remain unverified."
+    ],
+    "preservedResponsibilities": [
+      "Iteration36 makes the shown number record SwTextNode-owned: SwList inserts/removes records without allocation or a text-node map. SwNodeNum binds/clears its rule in PreAdd/PostRemove and transfers rule clients in ChangeNumRule; rule clients retain insertion order and suppress identity duplicates. DocumentListItemsManager maintains native position ordering and filters counted enumeration records. Attribute rule/list changes detach before mutation; canonical node moves retain records,copy/restore attach independent records. Reads validate the requested prefix rather than unrelated tails. Compiled20 additional unmodified pinned owner/registry definitions alongside37 tree/list definitions compare120 sequences/8976 actual owner states including raw prefix caches,reverse vectors,bound rules,client order and numbered registry. Literal tests cover orphan binding,default1 after removal,duplicate add,disconnected/foreign arrays,rule copies and disposal. Single shown/document-node/hierarchical Arabic and bullet slice only;native layout expansion,redline/original arrays,complete callbacks/word-count/lifetime and legacy/default factories remain unverified. No whole-module/default/goal promotion;registered document IO deviations unchanged.",
+      "Iteration38 restores independent source set/reset pre/post flags, native prefix notification/validation ordering, direct outline suppression/return and normal-document sorted outline ownership.40 unchanged added native definitions compare60 sequences/2130 actual pre-vector cache,notification,item,rule,registry and outline-index states. Explicit dependency adapters retain source reading flag/shown/pool/raw-callback/layout-event/field boundaries;full native platform lifetime,dtor/redline/inline/fields/background/fill/live-style/default factories remain separate unverified obligations. No whole-module/default/goal promotion or IO change.",
+      "Iteration45 restores native SwNumFormat.IsItemize (CHAR_SPECIAL/BITMAP) and IsEnumeration (!IsItemize, including NONE), and actual SwTextNode HasNumber/HasBullet use of the bounded effective const format. The distinct ndtxt.cxx layout-update predicate reads raw owned GetNumFormat and rejects absent/NONE/CHAR_SPECIAL/BITMAP formats. Native source bodies plus actual native rule constructor/Get/GetNumFormat/Set/default profile execute1032 cases under ASan/UBSan:4 format classifications/copies,1008 node/ownership/count/registry profiles,4 root/phantom cases and16 registry masks. Real local document/record/registry methods match the literal results; diagnostic record, bounded actual-level, counted/phantom, null-layout, ordered-container and platform/font/graphics aliases are named. Scalar bitmap classification is not bitmap rendering or wider formatting support. Native full layout/redline/graphics/style/font/service/global lifetimes and full counter algorithm profiles remain individually unverified. Existing Worker16 classification/ownership survives for ARABIC/NONE/CHAR_SPECIAL; original numbering/UNO/ODT/browser assertions and the measured malformed-NONE browser guard are preserved. No module/status or goal promotion and no registered I/O/recovery deviation changes.",
+      "Iteration48 restores complete selected native continuous/phantom tree policy: bound rule flags, parent continuous fallback and orphan defaults, protected continuous prefix validation/last-descendant traversal, public predecessor modes excluding the root, continuous suffix invalidation and upward cache/notification propagation. SwList validation follows NotifyInvalidChildren under actual document reading policy rather than eager hierarchical recursion; legacy callers resolve client document context. Continuous legacy numeric markers select the current level, while explicit ListFormat behavior and measured NONE guards remain unchanged.42 complete unchanged pinned native definitions produce960 sequences/69120 record states,5 policy profiles and64 full marker states under ASan/UBSan. Literal project tests compare real connected attributes,raw prefix caches,ordered reads,notifications,client lists and numbered registry through insertion,restart,count/reparent/removal/flag changes and reading transitions; source-body hashes and literal result integrity revalidated after deletion of source copies. Native bound start/type/raw format presence,pool,string/document-position/range/style,shown/no-layout/no-redline/dtor/fuzz/field/raw callback/broadcaster/static-service/decimal formatter aliases explicitly limit the proof;prior complete selected rule/format defaults remain separately supported. Actual Worker owners retain continuous/phantom flags and nested counters;copy/reset retain native scalar boundaries and supported genuine ODT level fields. No upstream code is invoked by project tests or persisted in task artifacts;manual probes generate only ignored scratch source. Full native layout/redline/original root arrays,live style/Font/graphics/other numeric families,service/global/destructor/name-map/GrabBag/UNO/full ODT metadata/UI lifetimes remain individually unverified. No whole-module,status,goal or registered IO/recovery/dependency/policy/coverage promotion.",
+      "Iteration53 restores protected mChildren storage and native public zero-argument numeric GetChildCount, removes invented public GetChildren, and adapts SwList.HasNodes to the count. SwNodeNum scans protected children and retains the native dynamic type guard before Writer counting/recursive calls. Eight existing observer suites preserve249 matcher argument AST records through32 test-only protected storage observations. Three new tests cover exact visibility/arity/result, subclass storage, direct real/phantom/orphan counts through level9 removal and nonvalidating list membership, plus non-Writer child rejection. Five fresh pinned file hashes and six declaration/body hashes support manual inspection only; no new compiled native or full multi-root section/redline/lifetime claim. Existing policy method access and ordered-set container architecture remain separate measured obligations. No project test accesses upstream; no helper/native source bodies stored as task artifacts; no status/default/whole-module/goal or registered IO/recovery/gate promotion.",
+      "Iteration54 restores protected abstract HasCountedChildren, IsCountedForNumbering and IsCountPhantoms in the base, and removes all three from the public SwNodeNum surface. Concrete overrides stay protected because TypeScript rejects private narrowing of an inherited protected method; an owned virtual compiler fixture proves2415 for private and no diagnostics for protected, with no helper/source file saved. This is the narrowest valid inherited TypeScript contract, no private-C++ equivalence or new registered deviation claim. All55production method bodies are unchanged; six old suites retain249literal/dynamic matcher argument AST records through15test-only protected observations, normalizing only equivalent observation syntax. ForeignNode now fulfills the mandatory numbered-policy contract with true while Writer type rejection remains false. Three new tests cover exact zero-argument boolean signatures/public keys, required abstract numbered override, subtype virtual dispatch and real connected root/phantom/descendant/orphan policies with raw caches unchanged. Fresh pinned declaration/body hashes support manual inspection only; no fresh compiled native/platform lifetime claim. Project tests never access upstream; no helper/native source bodies in task artifacts; no whole-module/status/default/goal, registered IO/recovery or gate promotion. Ordered-container and other native API/lifetime obligations remain separately unverified.",
+      "Iteration55 restores native public SwNodeNum.IsNotificationEnabled access while preserving the protected base contract and all55production method bodies. Two project-owned tests verify public keys, supplied SwDoc parameter type, boolean result and actual item/root/phantom normal-reading dispatch, text-owner precedence over foreign context, retained detached owner and nonvalidating raw counters/topology. All old test files are unchanged. Four fresh pinned file hashes and four declaration/body hashes support manual source inspection only; no new compiled native or lifetime certification. Native mandatory document reference and dtor/client/notifiable/redline/layout predicates remain separately unverified; no signature/default/full-module claim. Project tests never access upstream; no helper/source bodies in Agentplane. One metadata row only, no status/default/goal/deviation/IO/recovery/gate promotion.",
+      "Iteration56 replaces raw child arrays and push-based transfers with a source-owned o3tl SortedVector using private vector storage, injected strict ordering, binary lower/upper bounds, comparator-equivalent lookup/single insert and destination-preserving sorted bulk union. Core creation/insertion/suffix transfer/removal/lookup/traversal use the container; MoveChildren clears it without replacing identity. Writer counted-child traversal uses native iteration and dynamic type guard. Nine existing diagnostic suites observe iterable snapshots with prior expected values retained. Owned generic union matrices and actual document-record tests cover ordering/equivalence, retained destination object, native parent assignment before duplicate rejection, phantom recursion, raw counters and factory rejection. Fresh native manual file/symbol hashes only; no compiled native or whole-header certification. Numeric index/end-minus-one, nullable out-of-range read and injected comparator bind the ECMAScript container representation. Unused initializer/copy/partial-order policies/native iterator-const/destructor/lifetime and wider tree API/context/range/redline/UI obligations stay unverified. No project test accesses upstream; no helper/source bodies in Agentplane; no whole-module/status/default/deviation/IO/recovery/coverage promotion.",
+      "Iteration63 restores mandatory operation document context across existing numbering tree mutations and notifications, SwList insert/remove/validate and SwNumRule.Validate, with protected Notify traversal. Text insertion/removal and node moves pass their owned document explicitly; first-client/text-derived operation fallbacks are removed while real-record reading policy retains text-owner precedence. Five owned tests and16 exact type/visibility checks cover empty/clientless roots, distinct owner/operation reading flags, rule invalidate-before-validate forwarding, actual insertion/removal, retained topology/raw caches and protected root/phantom traversal. Three new runtime cases and baseline type assertions fail before correction and pass afterward; old test matcher arguments are unchanged. Fresh pinned manual declaration/body/call-site hashes only; no native execution, helper/source artifacts or upstream access by project tests. Native text notification ownership/temporary blockers, dtor/client lifetimes, redline/range roots, complete access/const/final architecture, layout and browser obligations remain separately unverified. No whole-module/status/default/goal, registered IO/recovery or gate promotion.",
+      "Iteration64 restores text-owned numbering notification policy: SwTextNode private true-default m_bNotifiable and independent public zero-argument IsNotifiable/IsNotificationEnabled; real SwNodeNum records delegate separately to the owner, while roots/phantoms short-circuit required caller reading then destruction. SwDoc private mbDtor defaults false and is set before existing document list/undo/state teardown,with public zero-argument IsInDtor and no public flag setters. Eight owned tests/type checks cover constructor/clone defaults,reading/dtor call order,independent owner predicates versus foreign context,private diagnostic blocker short circuit,actual blocked traversal/prefix/topology,teardown suppression/raw counters/detachment and exact existing manager order. All eight final authored tests fail baseline,including independent-owner,blocked callback,Dispose callback and phantom-dtor runtime mismatches; old tests/literals unchanged. Fresh six-file/manual span hashes only, no native execution or source/helper artifacts. Project tests never read/compile/invoke upstream. Full native temporary suppressor/autoattribute constructor,complete client/destructor/undo/nonshown/redline/range/word-count/layout/final-private-const/browser lifetimes remain separately unverified. Retained browser object flag queries do not certify native post-destruction object lifetime. No whole-module/status/default/goal,registered IO/recovery or gate promotion.",
+      "Iteration67 restores the required nullable text-pointer plus hidden-redlines boolean constructor and the distinct required nullable rule-pointer constructor. Text records start unbound; roots and factory records have false mode. PreAdd binds the text rule, registers shown rule clients before document items, and suppresses both registrations for hidden records. PostRemove releases shown document items before rule clients and clears the bound rule; ChangeNumRule retains its existing flag-independent policy. SwTextNode uses explicit false mode and SwList/factory use rule-only construction. Six project-owned cases cover overload/private contracts, shown/hidden insertion/removal, no-rule/no-text/non-document branches, factory defaults, counters/topology and independent ChangeNumRule behavior. Existing constructor fixtures preserve their expected values. Manual pinned inspection/hashes only; no native execution, source/helper artifacts or upstream access by project tests. Full redline/original root selection, undo-array/debug diagnostics, native pointer/destructor/client/layout/final/const/browser lifetimes remain individually unverified. No whole-module/status/default/goal or registered IO/recovery promotion.",
+      "Iteration72 restores complete existing IsContinuous/IsCounted/IsRestart/IsCountedForNumbering policy source branches and owner accessor paths. Bound-rule false stays authoritative; unbound parent guard/delegation calls GetParent twice, absent parent returns false. Real counted/restart policies use GetTextNode guard/delegation, no-text counted delegates to base, no-text restart remains false. Presence preserves counted/phantom/null-text/number/bullet short circuits, including native NUMBER_NONE enumeration=true and absent-bound-format=false. Eight owned cases/ten exact local nullary boolean/access types cover actual root/phantom/number/bullet/disabled/detached and release fallback profiles with membership/identity/raw caches preserved. Six final baseline cases fail only on missing helpers; corrected runtime/types pass. Prior tests and13 other methods unchanged; no source/helper/Python artifacts, native execution or upstream access by tests. Native accessors are nonvirtual; release fallback fixture does not certify ordinary creation/debug lifetimes. Native final/private-derived/const differences and machine integer/allocator/destructor/redline/layout/browser obligations remain individually unverified; local protected access unchanged. No whole-module/default/status/goal promotion; registered IO/recovery exceptions preserved.",
+      "Iteration73 restores complete IsCountPhantoms and LessThan private owner-reference branches: default true when unbound, bound continuous suppression/count flag short circuit; default false ordering, null-text before real and strict actual document index comparison. Five owned cases/five exact local protected/public types cover real roots/source-created phantoms/text/detached records, all four bound flag profiles,25 pointer/index pairs, distinct equal-index identity and sorted container equivalence/retention. Four baseline failures expose added GetNumRule/GetTextNode paths; corrected runtime/types pass without existing test changes. Native helpers are nonvirtual; getter spies evidence source architecture only. Complete source outside two methods and15 other methods unchanged. Manual pinned source/hashes only, no native execution or source/helper/Python artifacts; tests never access upstream. Native final/private-derived/const/debug/allocator/destructor/redline/layout/browser and generic base address ordering remain individually unverified. No module/default/status/goal or registered IO/recovery promotion.",
+      "Iteration74 restores complete existing ChangeNumRule guarded owner-helper transfer: old guard/action through GetNumRule/GetTextNode, private binding assignment, new guard/action through the same helpers; public required rule/void contract and hidden-flag independence retained. Six owned cases/four exact local types cover actual old/new clients, same-rule removal/reappend ordinal, detached retained-text no-old-rule, bound/unbound no-text roots/source-created phantom release branches and explicit hidden transfer without changing shown owner/registry/topology/raw counters. Five baseline failures expose missing source helper paths; corrected runtime/types pass, previous tests and16 other methods unchanged. Manual pinned complete method/client dependency hashes only; no native execution/source/helper/Python artifacts or upstream access by project tests. Native release guards/helper spies do not certify debug creation, final/private/const/nonvirtual extension ABI, destructor/redline/layout/browser lifetimes. No whole-module/default/status/goal or registered IO/recovery promotion."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/SwNumberTree/SwNodeNum.cxx",
+    "upstreamSymbols": [
+      "SwNodeNum::SwNodeNum",
+      "SwNodeNum::GetStartValue",
+      "SwNodeNum::IsCounted",
+      "SwNodeNum::IsRestart"
+    ]
+  },
+  "legacyOrder": 146
+}

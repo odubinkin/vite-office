@@ -1,0 +1,150 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "XMLTableStyleContext",
+          "path": "apps/office/src/xmloff/source/table/XMLTableImport.ts"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-table-cell-lists.test.ts",
+          "marker": "imports native table cell list roots"
+        },
+        {
+          "path": "apps/office/e2e/writer-imported-table-lists.spec.ts",
+          "marker": "Writer imported restarted table row Add to List"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/layout/native-table-print-area.test.ts",
+          "marker": "native table print area"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/layout/newfrm.ts",
+          "marker": "IsLayoutSplitAllowed"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/layout/tabfrm.ts",
+          "marker": "IsLayoutSplitAllowed"
+        },
+        {
+          "path": "apps/office/src/xmloff/source/table/XMLTableImport.ts",
+          "marker": "STYLE_MAY_BREAK_BETWEEN_ROWS"
+        },
+        {
+          "path": "apps/office/src/xmloff/source/table/XMLTableExport.ts",
+          "marker": "may-break-between-rows"
+        },
+        {
+          "path": "apps/office/src/xmloff/source/core/xmltoken.ts",
+          "marker": "may-break-between-rows"
+        },
+        {
+          "path": "apps/office/src/sw/inc/fmtfsize.ts",
+          "marker": "SwFormatFrameSize"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/docnode/ndtbl1.ts",
+          "marker": "GetSwRowHeight"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/docnode/ndtbl.ts",
+          "marker": "doc.SetRowHeight"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/layout/tabfrm.ts",
+          "marker": "SwRowFrame"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/native-cell-box-roundtrip.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/table/native-independent-columns.test.ts",
+          "marker": "native separators combine visible current-row"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "XMLTableImportContext::ImportRow",
+          "path": "vendor/libreoffice-reference/xmloff/source/table/XMLTableImport.cxx"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmltbli.cxx",
+          "marker": "SwXMLTableCellContext_Impl::createFastChildContext"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/txtimp.cxx",
+          "marker": "XMLTextImportHelper::CreateTextChildContext"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/fmtlsplt.hxx",
+          "marker": "SwFormatLayoutSplit"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/tabfrm.cxx",
+          "marker": "SwTabFrame::IsLayoutSplitAllowed"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/tabfrm.cxx",
+          "marker": "!bDontSplit || !pIndPrev"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmlitemm.cxx",
+          "marker": "MAY_BREAK_BETWEEN_ROWS"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmlimpit.cxx",
+          "marker": "case RES_LAYOUT_SPLIT"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmlexpit.cxx",
+          "marker": "case RES_LAYOUT_SPLIT"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/fmtfsize.hxx",
+          "marker": "SwFormatFrameSize"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/atrfrm.cxx",
+          "marker": "SwFormatFrameSize::operator=="
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl.cxx",
+          "marker": "SetHeightSizeType"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmlimpit.cxx",
+          "marker": "MINLAY"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/xmloff/source/table/XMLTableImport.ts",
+    "localSymbols": [
+      "XMLTableStyleContext",
+      "XMLTableContext",
+      "XMLTableImportTarget"
+    ],
+    "omittedResponsibilities": [
+      "Full LibreOffice table features outside the bounded certification table slice remain pending."
+    ],
+    "preservedResponsibilities": [
+      "Imports bounded ODF table style, column, row, cell and paragraph SAX contexts.",
+      "Iteration164 replaces duplicated body/cell paragraph dispatch and unsupported cell-list rejection with one source-shaped XMLTextImportHelper in native txtimp.ts. Existing XMLParaContext/list block/item and SwXMLImport actual cell owner are reused; one stream-wide processed-root catalogue crosses body/cells. Existing export list identity/used-ID catalogues now span the full XMLTextParagraphExport pass rather than each cell paragraph run, preventing duplicate XML IDs and lost continuation without changing local open-item stacks. Literal common/automatic numbered/bullet nested/header/direct restart/plain tails and explicit/implicit body-cell-cell-body continuations assert native graph/sections/default IDs/labels,owned rule/item copies,Worker16 and three export/reopen cycles. Real Chromium imported restarted-row Add to List and Enter history verify UI execution.419of420prior testfiles unchanged;one obsolete cell-list rejection correction only.250existingstates/defaults/classes/consciousIOexceptions preserved;new helper partial/unverified,no broad paritypromotion. Full native dispatcher/types/numberedparagraph/sections/nestedtable/UNO/list identity suppression/random/last-continuation/style/cursor/layout contracts remainunverified.",
+      "Iteration175 native represented horizontal table print geometry: SwTabFrame Format owns twip LR/wished-width orientation spacing and minimum23 guard;root supplies actual page upper print width for each master/follow fragment. Browser consumes immutable native print bounds and scales original column reference proportions;hidden measurement uses same owner. Signed left/right margins import/export reuse current table SAX/graph owners. No model clone,TextRuns translation or new adapter. Relative-width,fly/outer-border offsets,multicolumn,vertical/RTL,nested/merged/rowspan/split-row/full layout lifecycle and complete parity remain unverified;registered IO deviations unchanged.",
+      "Iteration198 preserves native SwFormatLayoutSplit default true and explicit false through canonical table frames and ODT. IsLayoutSplitAllowed reads the original table item; page placement moves an unsplittable master from occupied body when its full rows plus upper spacing overflow, while empty oversized masters use the native no-predecessor escape. Row split policy remains independent. SAX may-break-between-rows accepts true/auto and false/always, ignores unrecognized values, and exports explicit booleans without materializing absent defaults. Native layout, grouped3UndoRedo/ODT/input, mounted original cells and Chromium1280/390 physical row ranges covered. Full row splitting/rowspan/fly/columns/nested layout, Text Flow controls/full SfxItemSet and whole parity remain unverified; prior contracts/classifications/registered exceptions preserved.",
+      "Iteration202 removes scalar row minHeight storage and numeric kernel height contracts. Native SvxSizeItem/SwFormatFrameSize owns both dimensions, both sizing types, both percentages and both relations with native defaults, Which90, full equality, clone and supported default size query. Original rows retain copied items, document getter compares complete items and returns clone; resize uses native document setter with copied full size, preserving Fixed/Minimum and promoting only Variable. Flat layout and mounted cells use native Variable/Minimum/Fixed semantics, fixed content clipped, properties metric from shell common getter. ODT row-height Fixed/min-row-height Minimum/Variable omission and native height clamp1..65535; attributes apply in order. Full percentage/fly/vertical/nested/merged/protection/UNO member IDs/PutValue/pooling/widget/SfxItemSet/full parity remains unverified; all prior contracts/classifications/statuses/exceptions retained.",
+      "Iteration206 draft: scalar kernel cell border/padding storage is replaced by owned SvxBoxItem plus the existing vertical item. Represented lines retain native color/style/width/component arithmetic, signed16 distances/default0, cloning, metrics and supported UNO values; SvxBoxInfoItem retains native validity127. SetTabBorders consumes SfxItemSet and distributes flat union outer/inner lines using source validity rules. Insertion defaults55twips/black10twip lines and0/no-border are preserved. Process/storage uses complete primitive native state with legacy scalar ingress only; ODF and browser paint carry four independent sides. Initial static and upstream-absent runtime verification are pending. Complete native color shading/theme/Word/macros/fly/vertical/RTL/follow/shared-format behavior, per-edge/common-state border widgets and full parity remain unverified. All existing statuses/defaults/evidence/registered I/O/recovery exceptions are preserved.",
+      "Iteration206 verified closure: the earlier draft pending statement is historical. Native box/info/line ownership, supported values/defaults/metrics, flat source-defined border distribution, original graph and history, complete primitive transport and four-edge ODF/browser paint passed one full upstream-absent profile with failed/new-case-only closures. Current app and inventory actual counters each reach100% lines/statements/functions/branches under complete identical-source/maps or complete contiguous mapped-region proof. All550 prior acceptance contracts are preserved by522 byte-identical files and28 exact native-representation AST migrations; six new acceptance files and two new infrastructure cases are added. Full per-edge/common-state widgets, native themes/shading/Word and RTL/vertical/follow/shared-format completeness remain unverified; no semantic status or registered I/O/recovery exception is promoted.",
+      "Iteration233 moves connected flat-table column geometry into each original SwTableBox SwFormatFrameSize. Native current-row visible/other-row hidden fuzzy separator union and per-line NewSetTabCols adjustments feed original Writer document attribute history; actual Ctrl+Shift current-line columns replace the retained ordinary shared-column fallback. Source XML union grids/spans and browser device colspans preserve independent original cells, with complete native frame-size values in browser codec and declared grid widths only at import/builder ingress. No row-width side map, graph replacement or TextRuns conversion. Flat unspanned source behavior is represented; full row-span propagation/nested/merged graphs, frame item pooling/UNO, RTL/vertical/SFX/VCL/full ruler state remain partial. Registered recovery/open/save/settings untouched, previous statuses/defaults/classes preserved."
+    ],
+    "status": "mapped",
+    "upstreamPath": "xmloff/source/table/XMLTableImport.cxx",
+    "upstreamSymbols": [
+      "XMLTableImportContext::ImportRow"
+    ]
+  },
+  "legacyOrder": 302
+}

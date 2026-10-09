@@ -1,0 +1,26 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "local-infrastructure",
+    "evidence": {
+      "local": [
+        {
+          "marker": "DocumentOpenPort",
+          "path": "apps/office/src/svl/source/misc/storage.ts"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/svl/source/misc/storage.ts",
+    "rationale": "Defines shell-neutral browser document open and export ports without a document shell or JSON snapshot persistence contract. These ports adapt platform file selection and downloads while Writer owns its document lifecycle.",
+    "responsibilities": [
+      "Defines external document open and export ports for browser adapters."
+    ],
+    "stackDivergence": {
+      "kind": "local-infrastructure",
+      "rationale": "The local composition boundary has no single native implementation unit and therefore remains explicit infrastructure."
+    },
+    "status": "local-only"
+  },
+  "legacyOrder": 63
+}

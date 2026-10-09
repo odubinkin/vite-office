@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "evidence": {
+      "local": [
+        {
+          "marker": "useCommandShortcuts",
+          "path": "apps/office/src/framework/browser/presentation/use-command-shortcuts.ts"
+        },
+        {
+          "path": "apps/office/src/framework/browser/presentation/use-command-shortcuts-ownership.test.tsx",
+          "marker": "preservesLocalOwner"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-view-accelerator-ownership.test.tsx",
+          "marker": "selectsOnce"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-view-accelerator-ownership.test.tsx",
+          "marker": "preservesConsumedCommand"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-view-accelerator-ownership.test.tsx",
+          "marker": "dispatchesUnconsumedCommand"
+        },
+        {
+          "path": "apps/office/e2e/writer-accelerator-ownership.spec.ts",
+          "marker": "Writer consumed accelerator ownership"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/framework/browser/presentation/use-command-shortcuts.ts",
+    "rationale": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner.",
+    "responsibilities": [
+      "Adapts browser keyboard events to registered Writer command dispatch.",
+      "Already-consumed browser key events now return before accelerator normalization,command lookup,argument resolution and execution, matching inspected SfxDockingWindow local dialog-key-before-global fallback. Actual Writer Ctrl/Meta+A invokes its local SelectAll exactly once without a second registered dispatch. Unconsumed enabled/disabled/unmapped keys and mounted active/disposal behavior retain their existing contracts. Owned native/React-event boundary spies,real Writer model/no-dispatch cases and measured Chromium selection/consumed-versus-unconsumed formatting/editing prove this priority only. Full native accelerator hierarchy,modal/input eligibility,pane F6,platform mapping and complete browser/native parity remain unverified."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser DOM and React replace the native VCL presentation boundary."
+    },
+    "status": "local-only"
+  },
+  "legacyOrder": 21
+}

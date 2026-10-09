@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "XMLFontStylesContext",
+          "path": "apps/office/src/xmloff/source/style/XMLFontStylesContext.ts"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "XMLFontStylesContext::CreateStyleChildContext",
+          "path": "vendor/libreoffice-reference/xmloff/source/style/XMLFontStylesContext.cxx"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/xmloff/source/style/XMLFontStylesContext.ts",
+    "localSymbols": [
+      "XMLFontStylesImportTarget",
+      "XMLFontStylesContext"
+    ],
+    "omittedResponsibilities": [
+      "Embedded font-face source URIs and font metadata beyond family names remain intentionally omitted."
+    ],
+    "preservedResponsibilities": [
+      "Imports style:font-face declarations and resolves ODF font-face names to model family names.",
+      "Iteration221 restores the represented optional bullet Font family ODT path through actual Writer UNO/xmloff owners: nonempty CHAR_SPECIAL family uses existing font pool Find or direct quoted fo:font-family fallback without artificial font registration; import resolves existing declaration then applies nonempty direct-family override, publishes represented BulletFont descriptor and copy/applies/commits with native empty-Name ignore and malformed descriptor rejection. Common/automatic/body/cell/Worker/custom Chromium cases exercise the slice. Existing family handlers shared without a new font owner or cyclic export dependency. Native admitted tight-tab ruler drag consumes label click intentionally, no pointer-affinity patch. Full FontDescriptor style/family/pitch/charset/metrics and StarBats/StarMath glyph recoding remain unrepresented/unverified; all prior statuses/defaults/registered I/O/recovery deviations preserved."
+    ],
+    "status": "mapped",
+    "upstreamPath": "xmloff/source/style/XMLFontStylesContext.cxx",
+    "upstreamSymbols": [
+      "XMLFontStyleContextFontFace",
+      "XMLFontStylesContext",
+      "XMLFontStylesContext::CreateStyleChildContext",
+      "XMLFontStylesContext::FillProperties"
+    ]
+  },
+  "legacyOrder": 294
+}

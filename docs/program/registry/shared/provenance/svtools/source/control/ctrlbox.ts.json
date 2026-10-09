@@ -1,0 +1,58 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svtools/source/control/ctrlbox.ts",
+          "marker": "BorderWidthImpl"
+        },
+        {
+          "path": "apps/office/src/svtools/source/control/ctrlbox.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svtools/source/control/ctrlbox.cxx",
+          "marker": "BorderWidthImpl::GetLine1"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svtools/source/control/ctrlbox.cxx",
+          "marker": "BorderWidthImpl::GetLine2"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svtools/source/control/ctrlbox.cxx",
+          "marker": "BorderWidthImpl::GetGap"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svtools/source/control/ctrlbox.cxx",
+          "marker": "BorderWidthImpl::GuessWidth"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/svtools/source/control/ctrlbox.ts",
+    "localSymbols": [
+      "BorderWidthImpl",
+      "BorderWidthImplFlags"
+    ],
+    "omittedResponsibilities": [
+      "Full source-module obligations remain unverified; Iteration206 draft: scalar kernel cell border/padding storage is replaced by owned SvxBoxItem plus the existing vertical item. Represented lines retain native color/style/width/component arithmetic, signed16 distances/default0, cloning, metrics and supported UNO values; SvxBoxInfoItem retains native validity127. SetTabBorders consumes SfxItemSet and distributes flat union outer/inner lines using source validity rules. Insertion defaults55twips/black10twip lines and0/no-border are preserved. Process/storage uses complete primitive native state with legacy scalar ingress only; ODF and browser paint carry four independent sides. Initial static and upstream-absent runtime verification are pending. Complete native color shading/theme/Word/macros/fly/vertical/RTL/follow/shared-format behavior, per-edge/common-state border widgets and full parity remain unverified. All existing statuses/defaults/evidence/registered I/O/recovery exceptions are preserved."
+    ],
+    "preservedResponsibilities": [
+      "Owns the represented native source responsibility and explicit browser transport/filter boundary. Verification pending.",
+      "Iteration206 verified closure: the earlier draft pending statement is historical. Native box/info/line ownership, supported values/defaults/metrics, flat source-defined border distribution, original graph and history, complete primitive transport and four-edge ODF/browser paint passed one full upstream-absent profile with failed/new-case-only closures. Current app and inventory actual counters each reach100% lines/statements/functions/branches under complete identical-source/maps or complete contiguous mapped-region proof. All550 prior acceptance contracts are preserved by522 byte-identical files and28 exact native-representation AST migrations; six new acceptance files and two new infrastructure cases are added. Full per-edge/common-state widgets, native themes/shading/Word and RTL/vertical/follow/shared-format completeness remain unverified; no semantic status or registered I/O/recovery exception is promoted."
+    ],
+    "status": "mapped",
+    "upstreamPath": "svtools/source/control/ctrlbox.cxx",
+    "upstreamSymbols": [
+      "BorderWidthImpl::GetLine1",
+      "BorderWidthImpl::GetLine2",
+      "BorderWidthImpl::GetGap",
+      "BorderWidthImpl::GuessWidth"
+    ]
+  },
+  "legacyOrder": 67
+}

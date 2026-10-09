@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "DocumentStateManager",
+          "path": "apps/office/src/sw/source/core/doc/DocumentStateManager.ts"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "DocumentStateManager::YrsGenNewCommentId",
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentStateManager.cxx"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/core/doc/DocumentStateManager.ts",
+    "localSymbols": [
+      "DocumentStateManager"
+    ],
+    "omittedResponsibilities": [
+      "Upstream responsibilities beyond the bounded DocumentStateManager implementation remain intentionally omitted."
+    ],
+    "preservedResponsibilities": [
+      "Owns Writer model revision state and batched SwModify notifications."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/doc/DocumentStateManager.cxx",
+    "upstreamSymbols": [
+      "DocumentStateManager::YrsGenNewCommentId"
+    ]
+  },
+  "legacyOrder": 160
+}

@@ -1,0 +1,31 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/vcl/browser/default-font-device.ts",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "browser-platform",
+    "capabilityIds": [
+      "CAP-0109"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/vcl/browser/default-font-device.ts#createBrowserDefaultFontDevice"
+      ],
+      "justification": "Adapts synchronous CSS Font Loading availability checks to Writer's narrow VCL-like default-font device contract.",
+      "knownViolations": [],
+      "localSymbols": [
+        "createBrowserDefaultFontDevice"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

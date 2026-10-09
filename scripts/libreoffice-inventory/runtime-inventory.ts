@@ -44,7 +44,7 @@ export interface RuntimeModuleRecord {
   readonly semantic: RuntimeSemanticProvenance;
   readonly state: RuntimeModuleState;
   readonly subsystem: string;
-  readonly suite: "shared" | "writer";
+  readonly suite: "calc" | "shared" | "writer";
 }
 
 /** One non-module item that must remain visible in the reinventory. */
@@ -72,6 +72,8 @@ export interface RuntimeInventoryManifest {
 
 /** Minimal command registry shape consumed without importing React or browser code. */
 export interface RuntimeCommandRecord {
+  /** Command URL namespace; legacy callers default to Writer. */
+  readonly suite?: "writer" | "calc" | "shared";
   readonly capabilityId: string;
   readonly id: string;
   readonly label: string;
@@ -122,7 +124,7 @@ export function parseRuntimeInventoryManifest(sourceText: string): RuntimeInvent
  * @param manifest - Parsed authored runtime inventory.
  * @param discoveredModulePaths - Production module paths discovered from the runtime tree.
  * @param readModule - Source reader used to inventory exported operations.
- * @param commands - Complete visible Writer command registry.
+ * @param commands - Complete visible command registries with application ownership.
  * @param knownCapabilityIds - Capability IDs declared by the parity manifest.
  * @returns Deterministic complete runtime report.
  */
@@ -641,12 +643,12 @@ function parseState(candidate: unknown): RuntimeModuleState {
 }
 
 /**
- * Parses the only currently executable/shared suite ownership values.
+ * Parses supported Writer, Calc, and shared runtime ownership values.
  * @param candidate - Unknown authored suite.
  * @returns Validated runtime suite.
  */
 function parseRuntimeSuite(candidate: unknown): RuntimeModuleRecord["suite"] {
-  if (candidate !== "shared" && candidate !== "writer")
+  if (candidate !== "shared" && candidate !== "writer" && candidate !== "calc")
     throw new Error("Invalid runtime module suite.");
   return candidate;
 }
@@ -776,7 +778,7 @@ function selectId(record: RuntimeInventoryItem): string {
  * @returns Stable command identity.
  */
 function selectCommandId(record: RuntimeCommandRecord): string {
-  return record.id;
+  return `${record.suite ?? "writer"}:${record.id}`;
 }
 /**
  * Selects exported operations for aggregate counting.

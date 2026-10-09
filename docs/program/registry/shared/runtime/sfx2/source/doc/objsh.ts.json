@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sfx2/source/doc/objsh.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "document-lifecycle",
+    "capabilityIds": [
+      "CAP-0114",
+      "CAP-0132"
+    ],
+    "semantic": {
+      "behaviorStatus": "parity",
+      "contractStatus": "parity",
+      "defaultStatus": "parity",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sfx2/source/doc/objsh.ts#SfxObjectShell",
+        "vendor/libreoffice-reference/sfx2/source/doc/objmisc.cxx#void SfxObjectShell::SetModified"
+      ],
+      "justification": "SfxObjectShell directly owns identity, title, modified/save-position/close state, and its retained primary medium. Browser recovery is intentionally unsupported.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SfxObjectShell",
+        "SetModified",
+        "SaveCompleted",
+        "SetHistorySavePosition",
+        "createDocument"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "include/sfx2/objsh.hxx",
+      "upstreamSymbols": [
+        "SfxObjectShell"
+      ]
+    }
+  }
+}

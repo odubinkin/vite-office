@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/text/txtfld.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "page-layout",
+    "capabilityIds": [
+      "CAP-0111"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/text/txtfld.ts#resolveSwNumberPortionFont",
+        "apps/office/src/sw/source/core/text/native-numbering-font.test.ts",
+        "apps/office/src/sw/browser/editor/native-numbering-font.test.tsx",
+        "apps/office/e2e/native-numbering-font.spec.ts",
+        "vendor/libreoffice-reference/sw/source/core/text/txtfld.cxx#SwTextFormatter::NewNumberPortion"
+      ],
+      "justification": "Iteration220 represented native numbering-font policy: txtfld NewNumberPortion starts from the original paragraph attr owner, optional bullet font overrides face, false-default DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT resets bullet weight/posture and both labels underline; number weight/posture and inherited height/color remain native. Frozen values feed shared body/cell marker device, existing width/minimum distance/background retained. Older graph records missing only new flag defaultfalse, prior fields remain strict. Full SwFont hierarchy/scripts/face metadata/character-style/paragraph-mark/redline/graphics/device shaping and ink/theme/decoration variants remain unverified; all prior statuses/defaults/registered I/O/recovery exceptions preserved.",
+      "knownViolations": [],
+      "localSymbols": [
+        "resolveSwNumberPortionFont"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "sw/source/core/text/txtfld.cxx",
+      "upstreamSymbols": [
+        "SwTextFormatter::NewNumberPortion"
+      ]
+    }
+  }
+}

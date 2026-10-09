@@ -1,0 +1,142 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "DocumentListsManager",
+          "path": "apps/office/src/sw/source/core/doc/DocumentListsManager.ts"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-lifecycle.test.ts",
+          "marker": "attaches items at insertion and validates reverse-order reads without replacing their root"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-lifecycle.test.ts",
+          "marker": "reparents retained items and moves descendants through native predecessor phantoms"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-lifecycle.test.ts",
+          "marker": "moves canonical paragraphs with retained list records and independent copied trees"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/node-numbering-lifecycle.test.ts",
+          "marker": "owns records in text nodes and validates insertion notifications before prefix reads"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/node-numbering-lifecycle.test.ts",
+          "marker": "removes old clients before changing list attributes and preserves native registration order"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/DocumentListItemsManager.test.ts",
+          "marker": "sorts independent of insertion order, suppresses equivalent positions and filters bullets and uncounted items"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "DocumentListsManager::DocumentListsManager",
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentListsManager.cxx"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::GetNumber"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::RemoveMe"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::RemoveChild"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::SetLevelInListTree"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::SetLastValid"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::InvalidateTree"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "SwTextNode::GetNum("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "SwTextNode::GetNumberVector("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "SwTextNode::AddToList()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "SwTextNode::RemoveFromList()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "HandleSetAttrAtTextNode::HandleSetAttrAtTextNode"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx",
+          "marker": "SwNodeNum::PreAdd()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx",
+          "marker": "SwNodeNum::PostRemove()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx",
+          "marker": "SwNodeNum::ChangeNumRule("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/number.cxx",
+          "marker": "SwNumRule::GetTextNodeList("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/number.cxx",
+          "marker": "SwNumRule::RemoveTextNode("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/number.cxx",
+          "marker": "SwNumRule::Validate("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentListItemsManager.cxx",
+          "marker": "DocumentListItemsManager::addListItem("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentListItemsManager.cxx",
+          "marker": "DocumentListItemsManager::getNumItems("
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/core/doc/DocumentListsManager.ts",
+    "localSymbols": [
+      "DocumentListsManager"
+    ],
+    "omittedResponsibilities": [
+      "Native layout expansion,redline/original/undo arrays,continuous trees,configurable phantom policy,complete callbacks/reading suppression,word-count/native lifetime machinery and legacy/default factories remain unverified."
+    ],
+    "preservedResponsibilities": [
+      "Iteration36 makes the shown number record SwTextNode-owned: SwList inserts/removes records without allocation or a text-node map. SwNodeNum binds/clears its rule in PreAdd/PostRemove and transfers rule clients in ChangeNumRule; rule clients retain insertion order and suppress identity duplicates. DocumentListItemsManager maintains native position ordering and filters counted enumeration records. Attribute rule/list changes detach before mutation; canonical node moves retain records,copy/restore attach independent records. Reads validate the requested prefix rather than unrelated tails. Compiled20 additional unmodified pinned owner/registry definitions alongside37 tree/list definitions compare120 sequences/8976 actual owner states including raw prefix caches,reverse vectors,bound rules,client order and numbered registry. Literal tests cover orphan binding,default1 after removal,duplicate add,disconnected/foreign arrays,rule copies and disposal. Single shown/document-node/hierarchical Arabic and bullet slice only;native layout expansion,redline/original arrays,complete callbacks/word-count/lifetime and legacy/default factories remain unverified. No whole-module/default/goal promotion;registered document IO deviations unchanged.",
+      "Iteration43 separates native const effective Get from raw optional GetNumFormat, uses shared NUM_RULE/OUTLINE_RULE tables in both position modes, copies only present levels, and preserves owned pointer/validity for equal reference Set. Source-shaped constructor retains native empty DefaultListId and AutoRule=true; established browser list command/import assembly uses explicit manager-owned metadata and Set. Base field equality lives in SvxNumberFormat, with SwNumFormat adding its currently implemented numbering/bullet fields. Twenty unchanged pinned constructor/copy/equality/accessor/reference-Set/constants definitions under ASan/UBSan supply 40 default and19 ownership/equality states, matched by literal local differential tests. Getter type removes setters and JS freeze enforces the const boundary; graph-v16 optional ownership/mode/type metadata preserves sparse levels while historical records retain explicit formats. Raw restart/tree start readers remain optional. Native pointer Set overload, live char-style registration, full graphic/font/color/adjustment/legal/show-symbol state, static refcount destruction, global bullet configuration and complete SvxNumberType hierarchy remain unverified. Browser-only mode accessor transports the native private selector; no corresponding native member getter is claimed. No whole-module/status or goal promotion; registered I/O/recovery deviations are unchanged."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/doc/DocumentListsManager.cxx",
+    "upstreamSymbols": [
+      "DocumentListsManager::DocumentListsManager"
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "createWriterNumRule explicitly assembles the established browser command/import kind-or-array inputs using source-shaped SwNumRule metadata setters and owned Set levels. Its deterministic IDs and bounded command formats remain browser assembly; no complete native factory, UNO or document insertion behavior is claimed."
+    }
+  },
+  "legacyOrder": 158
+}

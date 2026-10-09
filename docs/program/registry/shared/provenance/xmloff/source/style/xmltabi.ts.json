@@ -1,0 +1,82 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "SvxXMLTabStopImportContext",
+          "path": "apps/office/src/xmloff/source/style/xmltabi.ts"
+        },
+        {
+          "marker": "imports native tab position and alignment defaults through direct and inherited ODT styles",
+          "path": "apps/office/src/sw/source/filter/xml/odt-property-roundtrip.test.ts"
+        },
+        {
+          "marker": "imports native MM100 tab measures and conversion failure through ODT",
+          "path": "apps/office/src/sw/source/filter/xml/odt-property-roundtrip.test.ts"
+        },
+        {
+          "marker": "SvxXMLTabStopContext_Impl",
+          "path": "apps/office/src/xmloff/source/style/xmltabi.ts"
+        },
+        {
+          "marker": "keeps tab leaf values independent from ignored descendant subtrees",
+          "path": "apps/office/src/sw/source/filter/xml/odt-property-roundtrip.test.ts"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "SvxXMLTabStopImportContext::createFastChildContext",
+          "path": "vendor/libreoffice-reference/xmloff/source/style/xmltabi.cxx"
+        },
+        {
+          "marker": "SvxXMLTabStopImportContext::endFastElement",
+          "path": "vendor/libreoffice-reference/xmloff/source/style/xmltabi.cxx"
+        },
+        {
+          "marker": "aTabStop.Position = 0;",
+          "path": "vendor/libreoffice-reference/xmloff/source/style/xmltabi.cxx"
+        },
+        {
+          "marker": "GetMM100UnitConverter",
+          "path": "vendor/libreoffice-reference/xmloff/source/style/xmltabi.cxx"
+        },
+        {
+          "marker": "const style::TabStop& getTabStop() const",
+          "path": "vendor/libreoffice-reference/xmloff/source/style/xmltabi.cxx"
+        },
+        {
+          "marker": "SvXMLImportContext::createFastChildContext",
+          "path": "vendor/libreoffice-reference/xmloff/source/core/xmlictxt.cxx"
+        },
+        {
+          "marker": "if( !pParentContext )",
+          "path": "vendor/libreoffice-reference/sax/source/fastparser/fastparser.cxx"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/xmloff/source/style/xmltabi.ts",
+    "localSymbols": [
+      "XMLTabStop",
+      "SvxXMLTabStopImportContext",
+      "SvxXMLTabStopContext_Impl"
+    ],
+    "omittedResponsibilities": [
+      "Native UNO/property-state plumbing, global null-context dispatch and exact base-class contracts remain individually unverified. The existing ignore-context base currently adapts native null-subtree skipping to the bounded dispatcher and is not a registered intentional deviation."
+    ],
+    "preservedResponsibilities": [
+      "Owns native per-tab construction/parsing and the MM100 property in SvxXMLTabStopContext_Impl. Container references own returned leaf contexts and select values via getTabStop. Moved initialization and Default-selection predicates are AST-identical; source-derived package cycles cover metrics/defaults, sibling selection and ignored known/unknown leaf descendants."
+    ],
+    "status": "mapped",
+    "upstreamPath": "xmloff/source/style/xmltabi.cxx",
+    "upstreamSymbols": [
+      "SvxXMLTabStopImportContext",
+      "SvxXMLTabStopImportContext::createFastChildContext",
+      "SvxXMLTabStopImportContext::endFastElement",
+      "SvxXMLTabStopContext_Impl"
+    ]
+  },
+  "legacyOrder": 300
+}

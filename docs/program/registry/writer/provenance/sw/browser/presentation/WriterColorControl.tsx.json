@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "evidence": {
+      "local": [
+        {
+          "marker": "WriterColorControl",
+          "path": "apps/office/src/sw/browser/presentation/WriterColorControl.tsx"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/browser/presentation/WriterColorControl.tsx",
+    "localSymbols": [
+      "WriterColorControl"
+    ],
+    "rationale": "Presents DOM color input and swatch interactions for bindings-backed Writer color commands; no model color state is owned here.",
+    "responsibilities": [
+      "Presents DOM color input and swatch interactions for bindings-backed Writer color commands; no model color state is owned here."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "React and DOM presentation replace native VCL controls and dialogs."
+    },
+    "status": "local-only"
+  },
+  "legacyOrder": 98
+}

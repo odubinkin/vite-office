@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/txtnode/ndtxt-format-change.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "writer-model",
+    "capabilityIds": [
+      "CAP-0112"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/txtnode/ndtxt-format-change.ts#HandleApplyTextNodeFormatChange",
+        "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx#HandleApplyTextNodeFormatChange",
+        "apps/office/src/sw/source/core/txtnode/native-split-list-defaults.test.ts#native shell Enter continues a restarted list through repeated Undo and Redo",
+        "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx#SwTextNode *SwTextNode::SplitContentNode",
+        "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx#bool CopyDirectListLevel",
+        "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx#SwTextNode* SwTextNode::MakeNewTextNode"
+      ],
+      "justification": "Iteration37 ports the anonymous-namespace collection numbering transition helpers. Initial inherited attachment,retained record rebinding,five-attribute removal reset,Outline exclusion/assignment and synthesized empty-rule return match16 unchanged extracted native definitions over277 sequences/10394 actual states. Native footnotes,conditional/inline styles,outline index,platform flags/cache,live format callbacks and full history/attribute lifetime remain separate unverified obligations. Iteration154 represents native logical split paragraph list/style defaults: interior/start split retains collection; follow collection applies only at original end; CopyDirectListLevel preserves explicit outline level only for self-follow assigned collection. Leading native items retain restart/counting, continuation resets restart/restart-value/counting and conditionally identity/level when no rule or outline departure. Actual hard outline numbering clears only on follow collection change. Existing core numbering owners serve UI Enter without TextRuns/DTO callbacks. All prior semantic states/defaults/classifications/exceptions and evidence preserved. Portable original-prefix/new-suffix physical identity, native page/break/keep/split/auto-frame resets, complete CutImpl and native undo-area/frame/client lifetimes, heading split Undo attribute restoration and broad UI/table behavior remain unverified; conscious IO/recovery deviations preserved.",
+      "knownViolations": [],
+      "localSymbols": [
+        "HandleApplyTextNodeFormatChange",
+        "HandleModifyAtTextNodeFormatChange",
+        "CopyDirectListLevel",
+        "PrepareSplitTextNodeFormat"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "sw/source/core/txtnode/ndtxt.cxx",
+      "upstreamSymbols": [
+        "HandleApplyTextNodeFormatChange",
+        "HandleModifyAtTextNodeFormatChange",
+        "lcl_ResetParAttrs",
+        "SwTextNode::MakeNewTextNode",
+        "CopyDirectListLevel"
+      ]
+    }
+  }
+}

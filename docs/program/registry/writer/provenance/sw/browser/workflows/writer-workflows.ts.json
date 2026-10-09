@@ -1,0 +1,28 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "evidence": {
+      "local": [
+        {
+          "marker": "WriterWorkflowCommandShell",
+          "path": "apps/office/src/sw/browser/workflows/writer-workflows.ts"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/browser/workflows/writer-workflows.ts",
+    "rationale": "Adapts browser file, clipboard, download, and IndexedDB ports while document operations remain owned by SwDocShell and transfer creation remains owned by SwTransferable/SwWrtShell.",
+    "responsibilities": [
+      "Binds browser ports to shell-owned file/storage operations.",
+      "Owns the Sfx command shell that terminates browser-only file, storage, and clipboard commands outside SwView.",
+      "Surfaces platform failures through Sfx asynchronous command completion instead of a parallel workflow status model."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser APIs and React presentation replace native VCL, system clipboard, file dialog, and desktop storage boundaries."
+    },
+    "status": "local-only"
+  },
+  "legacyOrder": 128
+}

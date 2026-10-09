@@ -1,0 +1,48 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "localPath": "apps/office/src/sw/inc/cmdid.ts",
+    "upstreamPath": "sw/inc/cmdid.h",
+    "localSymbols": [
+      "FN_TABLE_REP",
+      "FN_TABLE_SET_VERT_ALIGN",
+      "FN_PARAM_TABLE_NAME",
+      "FN_PARAM_TABLE_HEADLINE"
+    ],
+    "upstreamSymbols": [
+      "FN_TABLE_REP",
+      "FN_TABLE_SET_VERT_ALIGN",
+      "FN_PARAM_TABLE_NAME",
+      "FN_PARAM_TABLE_HEADLINE"
+    ],
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "preservedResponsibilities": [
+      "Iteration238 publishes only changed native table property items from pages and mounted UI to the shell. SwPtrItem borrows the original SwTableRep through SfxItemSet clone and equality. Native item IDs and explicitly SET-only consumption preserve untouched frame defaults and empty history, isolate name and spacing, and group geometry, flow and border edits with original owners and cursor. Separate explicit legacy ingress remains for existing callers; complete native item factories, full SfxTabPage orchestration and complex layout remain unverified. Verification pending; all prior metadata states, defaults, classes and registered IO/recovery deviations remain preserved.",
+      "Iteration238 verified closure supersedes the earlier pending draft. Native borrowed SwPtrItem and exact WhichIds, format/flow changed-item publication, unconditional Columns representation publication, created Borders admission, persistent native exchange output and page-scoped Reset are verified against the pinned source. Main properties UI sends SfxItemSet directly with no DTO fallback; explicitly SET-only shell writes retain original graph/cursor and grouped history, unchanged Table OK has empty history, FULL retains stored width while layout uses automatic width. 412 unique targeted app and38 related Chromium cases pass, including45 fresh cases; passing replay0. Current app17457/19171/4389/14267 and inventory1464/1523/384/1081 actual counters reach100 in all four metrics using current targeted runs and whole identical-source/maps or complete contiguous declaration/body/enclosing branch/location proof from237. No full suite this leaf; next full247. Four source-backed old observation/input migrations preserve635 of639 prior acceptance files byte-identically; four new acceptance files. All311 prior metadata records/fields/prefixes/states/defaults/classes remain preserved and two partial native records are added for313. Full native item/frame/page/layout/core/UI parity remains unverified and registered IO/recovery deviations are preserved."
+    ],
+    "omittedResponsibilities": [
+      "Full native item and command contracts remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/inc/cmdid.ts",
+          "marker": "FN_TABLE_REP"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/utlui/native-pointer-items.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/cmdid.h",
+          "marker": "FN_TABLE_REP"
+        }
+      ]
+    }
+  },
+  "legacyOrder": 313
+}

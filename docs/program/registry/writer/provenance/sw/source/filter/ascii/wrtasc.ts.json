@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/ascii/wrtasc.ts",
+          "marker": "SwASCWriter"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ascii/native-ascii-range.test.ts",
+          "marker": "native clipboard breaks"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ascii/wrtasc.cxx",
+          "marker": "SwASCWriter::WriteStream"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/writer/writer.cxx",
+          "marker": "m_bExportParagraphNumbering"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/filter/ascii/wrtasc.ts",
+    "localSymbols": [
+      "SwASCWriter"
+    ],
+    "omittedResponsibilities": [
+      "Complete native ASCII options, fields, attribute iteration, redlines, tables, clipboard rings, all file export modes and browser platform configuration remain unverified."
+    ],
+    "preservedResponsibilities": [
+      "Iteration187 removes synthetic ASCII selection DTOs, complete-list-item counting and invented marker fallback. Actual SwASCWriter iterates SwPaM/SwNodes and OutASC_SwTextNode uses native original-node span, start offsets, export-numbering flag, GetNumString, visibility, numbering margin/tab and default bullet configuration. One list plus ordinary paragraph and partial last paragraph labels now follow native selection behavior; same-node and later-start labels remain suppressed. Native numbering defaults and supported twip calculations are covered on actual core owners, mounted body/cell UI and Chromium copy/history. HTML ownership is retained. Full ASCII attributes/fields/redlines/copied table topology/rings/options, compatibility flag beyond native false default, desktop environment overrides and broad core/UI parity remain unverified; all prior states/defaults/classes/evidence/responsibilities and conscious save/open/recovery deviations are preserved."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/filter/ascii/wrtasc.cxx",
+    "upstreamSymbols": [
+      "SwASCWriter",
+      "SwASCWriter::WriteStream"
+    ]
+  },
+  "legacyOrder": 236
+}

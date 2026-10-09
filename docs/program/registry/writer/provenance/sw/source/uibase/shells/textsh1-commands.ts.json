@@ -1,0 +1,76 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/uibase/shells/textsh1-commands.ts",
+          "marker": "createWriterTextCommandRegistry"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/shells/native-list-context.test.ts",
+          "marker": "native list context"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-list-context.test.tsx",
+          "marker": "native list context UI"
+        },
+        {
+          "path": "apps/office/e2e/writer-native-list-context.spec.ts",
+          "marker": "Writer native list context and point state"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/edit/ednumber.cxx",
+          "marker": "sal_uInt8 SwEditShell::GetNumLevel"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/shells/listsh.cxx",
+          "marker": "void SwListShell::GetState"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/shells/textsh1.cxx",
+          "marker": "case FN_NUM_CONTINUE:"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/wrtsh/wrtsh1.cxx",
+          "marker": "SelectionType SwWrtShell::GetSelectionType"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/uiview/view.cxx",
+          "marker": "void SwView::SelectShell"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/inc/wrtsh.hxx",
+          "marker": "enum class SelectionType"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/uibase/shells/textsh1-commands.ts",
+    "localSymbols": [
+      "createWriterTextCommandRegistry"
+    ],
+    "omittedResponsibilities": [
+      "Full native shell contexts, framework gates, layout and list/table behavior remain unrepresented and unverified."
+    ],
+    "preservedResponsibilities": [
+      "Iteration168 gives list-kind and continuation operations to existing SwTextShell, retaining their bounded semantics while removing the old list-owner forwarding. SwListShell current-point GetNumLevel state preserves native MAXLEVEL10 sentinel and independent whole-range execution rejection. Represented SwWrtShell SelectionType requires actual rule, list membership and non-NONE level format; SwView conditionally places list shell below text shell using cached selection flags and TableCell masking. Source-owned registry/query splits retain the1000-line gate without compatibility wrappers or new models. Actual native, mounted DOM and Chromium cases cover the bounded flow. Other selection contexts, table row-column subtypes, native framework/layout/readonly gates and full core/UI/list/table behavior remain unverified; prior semantic/default/classification/IO deviations and evidence are preserved."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/uibase/shells/textsh1.cxx",
+    "upstreamSymbols": [
+      "SwTextShell::Execute",
+      "SwTextShell::GetState"
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/uibase/shells/textsh1-commands.ts",
+      "rationale": "Native source responsibility is split into a source-owned module to retain the unchanged1000-line limit without compatibility forwarding. Full native behavior remains unverified.",
+      "stackNecessity": "responsibility-split"
+    }
+  },
+  "legacyOrder": 260,
+  "filenameOrder": 14
+}

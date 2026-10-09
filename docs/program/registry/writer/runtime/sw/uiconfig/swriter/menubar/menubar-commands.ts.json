@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "writer-ui",
+    "capabilityIds": [
+      "CAP-0101",
+      "CAP-0115",
+      "CAP-0135"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts#writerMenuPlacements",
+        "vendor/libreoffice-reference/sw/uiconfig/swriter/menubar/menubar.xml#.uno:PickList"
+      ],
+      "justification": "Mapped provenance remains semantically unverified against sw/uiconfig/swriter/menubar/menubar.xml; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+      "knownViolations": [],
+      "localSymbols": [
+        "writerMenuPlacements",
+        "WRITER_COMMAND_IDS",
+        "writerMenuCommandIds",
+        "writerUserCommands",
+        "getWriterParagraphStyleCommandId"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/uiconfig/swriter/menubar/menubar.xml",
+      "upstreamSymbols": [
+        ".uno:PickList",
+        ".uno:AddDirect",
+        ".uno:OpenFromWriter",
+        ".uno:OpenRemote"
+      ]
+    }
+  }
+}

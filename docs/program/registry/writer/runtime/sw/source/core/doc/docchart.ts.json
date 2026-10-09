@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/doc/docchart.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "document-model",
+    "capabilityIds": [
+      "CAP-0112"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/doc/docchart.ts#SetTableName",
+        "apps/office/src/sw/source/uibase/wrtsh/native-table-name-history.test.ts#native",
+        "vendor/libreoffice-reference/sw/source/core/doc/docchart.cxx#SwDoc::SetTableName"
+      ],
+      "justification": "Iteration214 pending: native frame-format identity owns table names; SwDoc rename assigns unique names for empty/colliding input, emits native name-only lookup history with replay suppression and no cursor restoration. Properties native Name widget retains raw saved values, emits changed items only and keeps the Table page for ASCII spaces with Name focus. Full frame attributes, formula/OLE/chart references, mail merge and overall parity remain unverified; prior semantic fields/statuses/defaults and registered save/open/recovery exceptions are preserved. Iteration214 verified closure: earlier pending prose is historical. Actual13509app110inventory14infrastructure274Chromium PASS through ONE full upstream-absent profile plus only original failures and one genuinely new geometry-guard case;0unresolved0passing replay. Native frame name identity, broadcast=false default, raw document rename, unique-name admission, cursor-free name lookup history/recreation/replay suppression, grouped Properties geometry/name, saved Name item, ASCII-space focus/page guard, Reset/Cancel, three history cycles, ODT and continued editing passed. All12 production paths remain byte-identical to sole full build/runtime/Chromium and closure. Actual current-source100 app/inventory counters are bound to whole source/maps or complete contiguous mapped declarations/bodies/enclosing branches/all locations. Ten prior app region certificates verify only complete unchanged units; one invalid raw V8 painter aggregate is retained/rejected and its entire unchanged prior source/map/counter certificate used, with no individual clamp. All577 old acceptance files preserve573 byte-identical bodies and four exact source-backed migrations, every unrelated assertion retained; three new files,580current. Every293 prior metadata record/field/prefix/status/default and registered save/open/recovery exception is preserved without promotion. Full frame attribute ownership/notification granularity, formula/OLE/chart references, native numeric suffix/default/unused/mail-merge collections, full modal/widget and Home/End/browser keyboard behavior and complete parity remain unverified. Chromium End caret setup yielded XCell; new name fixture now uses established explicit DOM end caret while preserving CellX assertion. Same-agent EVALUATOR is explicitly not independent.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SetTableName"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/core/doc/docchart.cxx",
+      "upstreamSymbols": [
+        "SwDoc::SetTableName"
+      ]
+    }
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/xmloff/source/text/XMLTextNumRuleInfo.ts",
+          "marker": "XMLTextNumRuleInfo"
+        },
+        {
+          "path": "apps/office/src/xmloff/source/text/XMLTextNumRuleInfo.test.ts",
+          "marker": "retains native absent sentinels and independent numbered restart/start fields"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-list-implicit-restart.test.ts",
+          "marker": "exports native implicit restart positions and direct starts through genuine ODT"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/XMLTextNumRuleInfo.cxx",
+          "marker": "XMLTextNumRuleInfo::Set"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/XMLTextNumRuleInfo.hxx",
+          "marker": "inline void XMLTextNumRuleInfo::Reset()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/txtparae.cxx",
+          "marker": "XMLTextParagraphExport::exportListChange"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/unocore/unocrsrhelper.cxx",
+          "marker": "sal_Int16 IsNodeNumStart"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/xmloff/source/text/XMLTextNumRuleInfo.ts",
+    "localSymbols": [
+      "XMLTextNumRuleInfo"
+    ],
+    "omittedResponsibilities": [
+      "Full UNO query/Set, outline/pool factories, rule identity/continuation/style overrides, numbered-paragraph and complete native lifecycle/architecture/defaults remain unverified."
+    ],
+    "preservedResponsibilities": [
+      "XMLTextNumRuleInfo now owns independent numbered/restart/direct-start/format-start metadata with native absent-1 and Reset retention. Writer projects direct start only when restart and the direct item exist; actual format start no longer substitutes for absence. Same/decreasing nested implicit restart closes/reopens text:list without item start; root restart and newly opened/re-entered levels follow native conditional fallback, while first unprocessed root can omit restart. Uncounted restart/start are omitted. Unmodified pinned exportListChange and metadata excerpts match 2403 structural/start sequences and 288 metadata states with explicit typed-property/platform/string/export/identity/style adapters; 12 valid Writer projections match the primary raw getter against 48 normative native states. Fifty-two genuine common/automatic numbered/bullet ODT scenarios and thirty-two repeated-sublist cases assert literal state, vectors/labels, owned copies, Worker16, selected XML and manually specified native reopen omissions/gains. Full UNO Set/lifetimes, processed-list identity/continue-numbering/style overrides, missing-rule factories, numbered-paragraph and wider architecture/defaults remain unverified. No whole-module promotion or registered save/open/recovery change."
+    ],
+    "status": "mapped",
+    "upstreamPath": "xmloff/source/text/XMLTextNumRuleInfo.cxx",
+    "upstreamSymbols": [
+      "XMLTextNumRuleInfo::XMLTextNumRuleInfo",
+      "XMLTextNumRuleInfo::Set"
+    ]
+  },
+  "legacyOrder": 307
+}

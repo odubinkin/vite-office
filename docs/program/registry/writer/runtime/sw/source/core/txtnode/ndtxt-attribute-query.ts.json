@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/txtnode/ndtxt-attribute-query.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "document-model",
+    "capabilityIds": [
+      "CAP-0111",
+      "CAP-0126"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/txtnode/ndtxt-attribute-query.ts#GetTextAttrAt",
+        "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx#lcl_GetTextAttrs",
+        "apps/office/src/sw/source/core/txtnode/text-attribute-lookup.test.ts#native ranged pointer query ownership"
+      ],
+      "justification": "Iteration128 restores GetTextAttrMode Default0/Expand1/Parent2 and SwTextNode.GetTextAttrAt for existing ranged AUTO53/INET54. Native Which/start traversal returns the last matching actual owned attribute without allocation,cloning or DTO authority. Existing internet metadata and partitioned run projection share the native Default query. Direct owned-range mutation tests exercise overwrite behavior;valid adjacent links exercise shell/copy/graph/Worker paths. Native thints.cxx forbids nested hyperlinks,so the existing same-family normalization rejection is preserved. All354 prior tests and238 runtime states/defaults/exceptions remain unchanged;two extracted native modules remain wholly unverified. Full vector/dummy/other-family lookup,same-start native tie ordering,insertion/nesting validation,input inheritance/native caller modes/style clients/UNO/full core/UI parity remain unverified;registered save/open/recovery deviations preserved.",
+      "knownViolations": [],
+      "localSymbols": [
+        "GetTextAttrAt",
+        "RangedTextAttribute"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/core/txtnode/ndtxt.cxx",
+      "upstreamSymbols": [
+        "lcl_GetTextAttrs",
+        "SwTextNode::GetTextAttrAt"
+      ]
+    }
+  }
+}

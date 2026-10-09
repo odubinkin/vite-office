@@ -1,0 +1,53 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/unotools/source/misc/fontcvt.ts",
+          "marker": "ConvertChar"
+        },
+        {
+          "path": "apps/office/src/xmloff/source/style/native-legacy-bullet-symbol.test.ts",
+          "marker": "native224slot"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/unotools/source/misc/fontcvt.cxx",
+          "marker": "ConvertChar::RecodeChar"
+        },
+        {
+          "path": "vendor/libreoffice-reference/unotools/source/misc/fontcvt.cxx",
+          "marker": "aStarBatsTab"
+        },
+        {
+          "path": "vendor/libreoffice-reference/unotools/source/misc/fontcvt.cxx",
+          "marker": "aStarMathTab"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/unotools/source/misc/fontcvt.ts",
+    "localSymbols": [
+      "ConvertChar",
+      "createLegacySymbolImportConverter"
+    ],
+    "omittedResponsibilities": [
+      "Other source recode tables/functions/strings and export conversion; full converter/factory/search-name contracts remain unrepresented."
+    ],
+    "preservedResponsibilities": [
+      "Iteration222 ports the existing StarBats/StarMath bullet import conversion: immutable native224slot tables, uint16 alias arithmetic, hole substitution U+E12C, exact ASCII family match and source repeated GetProperties glyph mutation with only published descriptor renamed StarSymbol. Actual SvXMLImport owns independent lazy handles and production list contexts borrow it through the original Writer importer; SAX root factories retain a separate explicit structural port. The isolated existing constructor fallback uses that same implemented native conversion owner. Native-related StarSymbol/OpenSymbol browser face fallback preserves stored family. Complete physical glyph coverage, other converters/fonts/functions, full native importer/FontDescriptor/VCL and generic empty bullet publication remain unverified; existing Writer table-import adapter remains explicitly partial. Registered I/O/recovery deviations and all prior statuses/defaults preserved."
+    ],
+    "status": "mapped",
+    "upstreamPath": "unotools/source/misc/fontcvt.cxx",
+    "upstreamSymbols": [
+      "ConvertChar::RecodeChar",
+      "CreateFontToSubsFontConverter",
+      "aStarBatsTab",
+      "aStarMathTab"
+    ]
+  },
+  "legacyOrder": 279
+}

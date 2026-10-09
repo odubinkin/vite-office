@@ -1,0 +1,52 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "SwNodeType",
+          "path": "apps/office/src/sw/source/core/docnode/node.ts"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "SwNodeType",
+          "path": "vendor/libreoffice-reference/sw/source/core/docnode/node.cxx"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/core/docnode/node.ts",
+    "localSymbols": [
+      "SwNodeType",
+      "SwNode",
+      "SwStartNode",
+      "SwEndNode",
+      "SwContentNode",
+      "SetAttr",
+      "ResetAttr",
+      "ResetAllAttr"
+    ],
+    "omittedResponsibilities": [
+      "Upstream obligations outside SwNodeType, SwNode, SwStartNode, SwEndNode and the bounded SwNodeType, SwNode, SwStartNode contract remain intentionally omitted."
+    ],
+    "preservedResponsibilities": [
+      "Implements Writer document model nodes from the pinned LibreOffice `sw/source/core/docnode/node.cxx` boundary.",
+      "Iteration39 restores registered-item handle copy/commit and Changed broadcast deltas before storage mutation. Unchanged complete native owners/helpers/storage bodies (24 definitions,300 sequences,1815 states) compare actual SwDoc/SwTextNode base-owner calls,retained handles,return counts and observer delta counts. Independent literal tests assert inherited/pool-default delta values,slot/sentinel exclusions,no-op overload retention and nested set/reset notifications. Full native IStyleAccess pooling/dedup,modify locks,cache,refcount,surrogates,conditional/RES_AUTO_STYLE items and client lifetime remain unimplemented or unverified. This fresh-handle/unlocked browser observer profile does not establish whole-module or native defaults parity. A destructive callback deleting the final handle crashed the unchanged native raw observer adapter;the trace is preserved as unresolved client-lifetime evidence and is not assigned fabricated parity expectations.",
+      "Iteration131 restores private SwNode IgnoreDontExpand=false with silent native accessors. Bound positive SwpHints.Update reads its own node state and becomes coordinate-only; DEFAULT insertion applies separate AdjustInsertTextHints end-equal and paragraph-prefix adjustment on actual attributes after Update. Ignore expands end-equal ranges without resetting locked or unlocked flags; DEFAULT postprocessing can restore both nonempty ends and empty points. Existing comparator moves unchanged into the range helper under the1000-line gate. Literal two-family/eight-mask/lock/ignore/boundary tests cover actual ownership and fresh false clone/graph16/Worker5 node state. All357 prior tests and241 runtime states/defaults/exceptions remain unchanged. Native Insert flags/temporary FORCE toggles/manager defaults/callers/selection replacement,full GCAttr/COPY/BuildPortions/families/style clients/UNO/refcounts/full core/UI remain unverified; registered I/O deviations preserved,no module or goal promotion."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/docnode/node.cxx",
+    "upstreamSymbols": [
+      "SwNodeType",
+      "SwNode",
+      "SwStartNode",
+      "SwEndNode",
+      "SwContentNode::SetAttr",
+      "SwContentNode::ResetAttr",
+      "SwContentNode::ResetAllAttr"
+    ]
+  },
+  "legacyOrder": 179
+}

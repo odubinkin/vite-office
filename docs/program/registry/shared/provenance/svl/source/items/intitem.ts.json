@@ -1,0 +1,63 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "SfxInt16Item",
+          "path": "apps/office/src/svl/source/items/intitem.ts"
+        },
+        {
+          "path": "apps/office/src/svl/source/items/intitem.ts",
+          "marker": "SfxUInt16Item"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/attr/native-format-attribute-notify.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/undo/native-format-attribute-notify-history.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-format-attribute-notify.test.tsx",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "SfxInt16Item::Clone",
+          "path": "vendor/libreoffice-reference/svl/source/items/intitem.cxx"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/svl/intitem.hxx",
+          "marker": "class SVL_DLLPUBLIC SfxUInt16Item"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/svl/source/items/intitem.ts",
+    "localSymbols": [
+      "SfxInt16Item",
+      "SfxUInt16Item"
+    ],
+    "omittedResponsibilities": [
+      "Native pooling, UNO mutation and presentation paths outside the bounded SfxInt16Item value contract remain unimplemented.",
+      "Native unsigned UNO signed-width coercion and mutable refcount/pool lifetime remain unverified."
+    ],
+    "preservedResponsibilities": [
+      "Implements bounded SfxInt16Item construction, value, equality and clone behavior at the pinned svl/source/items/intitem.cxx owner.",
+      "Bounded CntUInt16Item owns immutable unsigned values,scalar QueryValue,concrete-type equality and base cloning;SfxUInt16Item retains native zero constructor defaults and concrete subclass cloning. Native UNO PutValue,mutable refcount policy,presentation,hashing and pool lifetime remain separately unverified.",
+      "Iteration245 ports precise native AttrSetChangeHint old/new effective values, modify locking and inherited Differentiate filtering to original registered clients. Row/cell generic attribute overrides are removed and copying claims are locked. Native default items127/157/158/159 supply actual protection flags, numeric format100/locale normalization, detached non-shareable formula and zero double. Browser snapshot restoration stays a bounded boundary. Full SwTableFormula inheritance/parser/calculation/name conversion, presentation/UNO and native frame invalidation/geometry remain unverified. Targeted verification pending; last full237,next247; no semantic promotion.",
+      "Iteration245 verified1575 unique app cases including20 fresh native format notification/default/ownership/history/UI cases and13 Chromium cases. Initial1538pass6fail; closure1 resolves6failures and explicitly revalidates3 materially affected fresh device/UI scenarios,9pass30skip; closure2 only new/unexecuted related cases31pass14skip. All660 prior acceptance files byte-identical. Actual app/inventory all-four100 binds current complete sources/maps and complete unchanged native declarations/signatures/bodies/enclosing branches/all locations from244; generated V8 duplicate method display ordinal changes are documented with full source hashes, no individual counter sanitization. Browser paint notification follows native clients without adding a document mutation. Existing317 metadata fields/order/status/default/classification/evidence prefixes preserved, one new cellatr record unverified. Full SwTableFormula second-base/calculation/name conversion/UNO, native frame invalidation/geometry and direct native UI registration remain partial. Registered IO/recovery/settings deviations preserved; last full237,next247; no full245."
+    ],
+    "status": "mapped",
+    "upstreamPath": "svl/source/items/intitem.cxx",
+    "upstreamSymbols": [
+      "SfxInt16Item",
+      "SfxInt16Item::Clone"
+    ]
+  },
+  "legacyOrder": 56
+}

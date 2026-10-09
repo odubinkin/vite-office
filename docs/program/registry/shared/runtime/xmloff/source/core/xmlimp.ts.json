@@ -1,0 +1,59 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/xmloff/source/core/xmlimp.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "odf-filter",
+    "capabilityIds": [
+      "CAP-0113",
+      "CAP-0128"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/xmloff/source/core/xmlimp.ts#parseOdfXmlStream",
+        "vendor/libreoffice-reference/xmloff/source/core/xmlimp.cxx#SvXMLImport::processingInstruction",
+        "apps/office/src/sax/source/fastparser/fastparser.test.ts#ignores comments and processing instructions as the upstream import does",
+        "apps/office/src/xmloff/source/core/xmlimp.test.ts#matches native inert known children and reused unknown parent event traces",
+        "apps/office/src/xmloff/source/core/xmlimp.test.ts#delivers unknown callbacks to explicit contexts and supported unknown roots",
+        "apps/office/src/sw/source/filter/xml/odt-list-declaration-defaults.test.ts#retains native declaration defaults and skips invalid indices before reading properties",
+        "vendor/libreoffice-reference/xmloff/source/core/xmlimp.cxx#SvXMLImport::startFastElement",
+        "vendor/libreoffice-reference/xmloff/source/core/xmlimp.cxx#SvXMLImport::startUnknownElement",
+        "vendor/libreoffice-reference/xmloff/source/core/xmlictxt.cxx#SvXMLImportContext::startUnknownElement",
+        "apps/office/src/sw/source/filter/xml/odt-list-start-normalization.test.ts#normalizes native ordinary starts and ignores header starts across document boundaries",
+        "apps/office/src/xmloff/source/core/xmlimp.test.ts#converts native decimal byte-view attributes with distinct absence and zero",
+        "vendor/libreoffice-reference/include/sax/fastattribs.hxx#getAsIntegerByIndex",
+        "vendor/libreoffice-reference/include/o3tl/string_view.hxx#toInt32",
+        "vendor/libreoffice-reference/sal/rtl/strtmpl.hxx#HandleSignChar",
+        "vendor/libreoffice-reference/sal/rtl/strtmpl.hxx#DivMod",
+        "vendor/libreoffice-reference/sal/rtl/strtmpl.hxx#toInt",
+        "vendor/libreoffice-reference/xmloff/source/text/XMLTextListItemContext.cxx#XMLTextListItemContext::XMLTextListItemContext",
+        "apps/office/src/xmloff/source/style/native-legacy-bullet-symbol.test.ts",
+        "apps/office/e2e/native-legacy-bullet-symbol.spec.ts",
+        "scripts/check-legacy-font-boundary.test.ts"
+      ],
+      "justification": "Pinned xmloff import contexts own tokenized attributes and context dispatch; the SAX event engine now lives under sax. Broader XML import behavior remains unverified. Known-null child fallback now creates a concrete inert SvXMLImportContext; unknown-null fallback reuses the actual parent reference. Unknown start/end dispatch uses independent hooks, preventing premature list/style/URI publication through known end callbacks. The old list known-child ignore adapters are removed. Three compiled traces / 37 reference/event entries from unmodified pinned dispatch bodies verify nested parent reuse, inert subtrees, explicit unknown contexts and sibling continuation. Direct context and literal ODT font/property/table/style/list cases verify native unrelated-child ignoring and supported descendants inside unknown wrappers; explicit cell list/section/nested-table errors remain until those native features are implemented. Root severe-error timing, namespace rewind, token completeness, remaining ignore adapters and wider import contracts remain unverified; no whole-module promotion. Shared FastAttributeList.getAsInteger now owns the bounded decimal byte-view conversion formerly private to list-style import. Nullable absence adapts native getAsInteger bool/out-value; declaration consumers preserve absent defaults and index/start/display normalization. Ordinary item import accepts converted0..32767, ignores negative/out-of-range values and retains native zero on no digits/int32 overflow; headers never convert start. Signed zero is canonical integer0. Compiled unmodified rtl/o3tl integer bodies and exact native item range branch match115 conversions/170 real ordinary/header SAX contexts with platform/view/iterator adapters. Twenty-two literal start spellings in common/automatic numbered/bullet ODT packages verify text,count,levels,restarts,starts,counters,vectors,labels,independent rule/item copies,Worker16,conditional XML and reopen. Complete native scalar/radix/UTF16/token/container/UNO ownership and repeated-sublist restart remain separately unverified; the local FastAttributeList is still an xmloff adapter rather than a native sax-owned class. No whole-module parity promotion or registered save/open/recovery change. Iteration222 ports the existing StarBats/StarMath bullet import conversion: immutable native224slot tables, uint16 alias arithmetic, hole substitution U+E12C, exact ASCII family match and source repeated GetProperties glyph mutation with only published descriptor renamed StarSymbol. Actual SvXMLImport owns independent lazy handles and production list contexts borrow it through the original Writer importer; SAX root factories retain a separate explicit structural port. The isolated existing constructor fallback uses that same implemented native conversion owner. Native-related StarSymbol/OpenSymbol browser face fallback preserves stored family. Complete physical glyph coverage, other converters/fonts/functions, full native importer/FontDescriptor/VCL and generic empty bullet publication remain unverified; existing Writer table-import adapter remains explicitly partial. Registered I/O/recovery deviations and all prior statuses/defaults preserved.",
+      "knownViolations": [],
+      "localSymbols": [
+        "FastAttributeList",
+        "SvXMLImportContext",
+        "parseOdfXmlStream"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "xmloff/source/core/xmlimp.cxx",
+      "upstreamSymbols": [
+        "SvXMLImport::processingInstruction",
+        "SvXMLImport::startFastElement",
+        "SvXMLImport::startUnknownElement",
+        "SvXMLImport::endFastElement",
+        "SvXMLImport::endUnknownElement"
+      ]
+    }
+  }
+}

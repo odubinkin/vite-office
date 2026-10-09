@@ -1,0 +1,60 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "clipboard-transfer",
+    "capabilityIds": [
+      "CAP-0103",
+      "CAP-0106",
+      "CAP-0108",
+      "CAP-0110",
+      "CAP-0120"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "divergent",
+      "defaultStatus": "unverified",
+      "divergenceClass": "A",
+      "evidence": [
+        "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts#SwTransferable",
+        "vendor/libreoffice-reference/sw/source/uibase/dochdl/swdtflvr.cxx#SwTransferable::SwTransferable",
+        "vendor/libreoffice-reference/sw/source/uibase/dochdl/swdtflvr.cxx#SwTransferable::PrepareForCopyTextRange",
+        "vendor/libreoffice-reference/sw/source/uibase/dochdl/swdtflvr.cxx#SwTransferable::Cut",
+        "apps/office/src/sw/browser/editor/browser-writer-edit-window.test.ts#writes HTML before plain text for Writer copy and drag",
+        "apps/office/src/sw/source/uibase/dochdl/swdtflvr.test.ts#keeps selected content when transfer writing fails or the selection changes",
+        "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts#pasteWriterTransfer",
+        "vendor/libreoffice-reference/sw/source/uibase/dochdl/swdtflvr.cxx#SwTransferable::Paste",
+        "vendor/libreoffice-reference/sw/source/uibase/dochdl/swdtflvr.cxx#SwTransferable::PrepareForCopyTextRange",
+        "apps/office/src/sw/browser/editor/native-paragraph-text-surface.test.tsx#native paragraph text surface",
+        "apps/office/e2e/writer-native-paragraph-text-surface.spec.ts#Writer native text surface cell=",
+        "apps/office/src/sw/source/filter/ascii/native-ascii-range.test.ts#original native node span",
+        "vendor/libreoffice-reference/sw/source/uibase/dochdl/swdtflvr.cxx#SwTransferable::WriteObject"
+      ],
+      "justification": "The bounded transfer owner consumes canonical SwDoc/SwPaM state and copies before deleting, matching upstream ownership and Cut order. The browser adapter writes HTML before STRING and leaves foreign DOM selections to the browser. Upstream also advertises RTF, desktop RICHTEXT/MARKDOWN, embedded sources and selection-dependent native object formats; this implementation remains limited to its existing HTML/STRING text slice. Iteration184 removes SwWrtShellEditingPort/SwWrtShellEditingOperations and WriterPasteOperations callback layers. Split shell algorithms accept the actual SwWrtShell identity via erased type-only imports and invoke native cursor/document/history/notification methods directly. Transfer insertion and imported list history call the same actual shell directly; no synthetic editing object, callback port, runtime cycle or new DTO projection. The shell alone supplies its native undo context for sequential initial operations. Existing482 test files and represented algorithm ordering/admission/grouping/attributes/table sections/composition and registered I/O deviations are preserved. No native clipboard/layout/mode/default or semantic-status promotion. Iteration186 removes existing body-only document.paragraphs transfer ordering/slicing and its local orderPositions helper after real cell-copy acceptance proved the adapter rejects actual cell PaMs. SwPaM.Start/End and SwNodes connected text spans now own native ordering and offsets, preserving empty selected paragraphs and foreign-document/collapsed rejection. Existing HTML/ASCII writers retain MIME ownership. Actual forward/reverse partial and full cell selection, mixed body/cell graph excluding structural nodes, empty paragraph, foreign/collapsed and selected replacement/history cases provide bounded evidence. Upstream PrepareForCopyTextRange owns source PaM document and delegates CopyRange. This is bounded text transfer, not complete native copied table topology, cursor rings/box MIME, fields/redlines/embedded content or rich clipboard parity; prior semantic statuses/defaults/classes/evidence and conscious I/O/recovery deviations remain unchanged. Iteration187 removes synthetic ASCII selection DTOs, complete-list-item counting and invented marker fallback. Actual SwASCWriter iterates SwPaM/SwNodes and OutASC_SwTextNode uses native original-node span, start offsets, export-numbering flag, GetNumString, visibility, numbering margin/tab and default bullet configuration. One list plus ordinary paragraph and partial last paragraph labels now follow native selection behavior; same-node and later-start labels remain suppressed. Native numbering defaults and supported twip calculations are covered on actual core owners, mounted body/cell UI and Chromium copy/history. HTML ownership is retained. Full ASCII attributes/fields/redlines/copied table topology/rings/options, compatibility flag beyond native false default, desktop environment overrides and broad core/UI parity remain unverified; all prior states/defaults/classes/evidence/responsibilities and conscious save/open/recovery deviations are preserved.",
+      "knownViolations": [],
+      "localSymbols": [
+        "WriterClipboardSelection",
+        "SwTransferable",
+        "WriterTransferDocument",
+        "WriterTransferError",
+        "WriterPasteParagraph",
+        "WriterPasteDocument",
+        "pasteWriterTransfer",
+        "applyPastedParagraphList"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "sw/source/uibase/dochdl/swdtflvr.cxx",
+      "upstreamSymbols": [
+        "o3tl::convert",
+        "UITestLogger::getInstance",
+        "SwTransferable::SwTransferable",
+        "URIHelper::removePassword",
+        "SwTransferable::WriteObject"
+      ]
+    }
+  }
+}

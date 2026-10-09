@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "SfxListener",
+          "path": "apps/office/src/svl/source/notify/lstner.ts"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "SfxListener::StartListening",
+          "path": "vendor/libreoffice-reference/svl/source/notify/lstner.cxx"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/svl/source/notify/lstner.ts",
+    "localSymbols": [
+      "SfxListener"
+    ],
+    "omittedResponsibilities": [
+      "Native copy-construction helpers and untyped hint families remain outside the bounded listener implementation."
+    ],
+    "preservedResponsibilities": [
+      "Preserves M:N reciprocal registration, explicit unregistration, and broadcaster-destruction detachment."
+    ],
+    "status": "mapped",
+    "upstreamPath": "svl/source/notify/lstner.cxx",
+    "upstreamSymbols": [
+      "SfxListener::StartListening",
+      "SfxListener::EndListening",
+      "SfxListener::EndListeningAll",
+      "SfxListener::RemoveBroadcaster_Impl"
+    ]
+  },
+  "legacyOrder": 65
+}

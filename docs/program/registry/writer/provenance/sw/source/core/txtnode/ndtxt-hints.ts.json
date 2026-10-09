@@ -1,0 +1,106 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/ndtxt-hints.ts",
+          "marker": "ReplaceTextNodeHints"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/internet-node-ownership.test.ts",
+          "marker": "internet text node ownership"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/internet-node-transitions.test.ts",
+          "marker": "internet node transition ownership"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/ndtxt-hints.ts",
+          "marker": "AppendTextNodeHints"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/thints.ts",
+          "marker": "copyEmpty"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-delete.test.ts",
+          "marker": "native empty append merges copied automatic items without retaining duplicate boundaries"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/native-split-attributes.test.ts",
+          "marker": "native ASCII read retains boundary paragraph character items through repeated undo and redo"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "SwTextNode::CopyText"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/thints.cxx",
+          "marker": "SwTextINetFormat::InitINetFormat"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "void SwTextNode::CopyAttr"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "void SwTextNode::CutImpl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/thints.cxx",
+          "marker": "void SwpHints::BuildPortions"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "void SwTextNode::MoveTextAttr_To_AttrSet()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "SwTextNode *SwTextNode::SplitContentNode"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/core/txtnode/ndtxt-hints.ts",
+    "localSymbols": [
+      "ReplaceTextNodeHints",
+      "CopyTextNodeHints",
+      "CreateTextNodeFragment",
+      "copyWriterTextRangeRuns",
+      "projectWriterTextRuns",
+      "InsertTextNodeHints",
+      "GetTextNodeCharacterItems",
+      "CreateTextNodeToggledFragment",
+      "CreateTextNodeHyperlinkFragment",
+      "MoveTextAttrToAttrSet",
+      "AssertTextNodeRange"
+    ],
+    "omittedResponsibilities": [
+      "Full native style registration,visited/client/listener/refcount/destruction,all families and insertion modes remain unverified. Portable map binding is a friend-boundary adapter."
+    ],
+    "preservedResponsibilities": [
+      "Iteration124 restores the native null internet text-node backlink and GetpTextNode/GetTextNode/ChgTextNode contracts. Existing text-node hint assignment binds concrete internet attributes; portable map replacement, removal and consumption detach obsolete backlinks while retaining actual map/item identities during ordinary text updates and owned transfers. Detached snapshots/fragments have no node owner; retained undo paragraph objects still own their live hints through split/join/undo/redo. Source-owned ndtxt-hints decomposition keeps the unchanged1000-line gates and re-exports existing projection APIs. Native InitINetFormat also registers a char style, so pointer binding is not claimed as its full implementation. Full char-style/client/visited/protection/refcount/physical destruction,empty hints,all families and broader core/UI parity remain unverified. Existing runtime statuses/defaults/exceptions and registered save/open/recovery deviations remain unchanged;the new extracted helper is unverified,no module or goal promotion.",
+      "Iteration132 restores native SwInsertFlags DEFAULT0/EMPTYEXPAND1/NOHINTEXPAND2/FORCEHINTEXPAND4 at IDocumentContentOperations.hxx ownership and the native third-mode InsertText signature;portable explicit items/link move to fourth/fifth positions. Manager InsertString defaults EMPTYEXPAND and forwards explicit modes. Bound node FORCE temporarily overrides Ignore during coordinate Update and restores old state before mode postprocessing;NOHINT wins end-equal restoration,EMPTY expands eligible zero hints and continues,NOHINT blocks paragraph-prefix. Source-owned insertion preparation and unchanged comparator extraction retain1000-line gates. Literal mode/mask/family/lock/oldIgnore/boundary matrices cover actual objects/maps/items/backlinks/7INETvalues/IDs and manager defaults/temporary restoration/adapters. Five prior fixtures and existing typed undo receive syntax-only DEFAULT positional migration;353other prior tests remain byte-identical. Existing241runtime states/defaults/exceptions and registered I/O deviations preserved;new enum module remains wholly unverified. Native collapsed EMPTY/selection FORCE shell callers and stored undo flags are next dependent work;full manager undo/grouping/redline/multicursor/native SwContentIndex arguments/GCAttr/COPY/BuildPortions/families/style clients/UNO/refcounts/full core/UI remain unverified,no module or goal promotion.",
+      "Iteration134 restores same-node delete undo as raw m_aSttStr plus native whole-node SwHistory old AUTO/INET item history. SwHistorySetText clones item/index/range and FormatIgnore only;undo clears hints,inserts NOHINTEXPAND2 and forward temporary rollback reconstructs fresh constructor flags/actual maps/backlinks/7INETvalues/IDs/shared AUTO handles. Grouping retains original history,redo resetsTmpEnd,disposal releases text/history. Native NOHINTADJUST12 insertion bypasses portion merging;ordinary InsertItem/BuildPortions,new-attribute and other history variants remain unimplemented/unverified. Two binary-search and three node projection/fragment bodies move unchanged to existing helpers under1000-line gates. Selection adapters,all semantic statuses/defaults/exceptions and registered I/O deviations preserved;new history module whollyunverified,no promotion.",
+      "Iteration149 source-confirmed continued-input failure exposed raw empty-source hint concatenation after multi-paragraph deletion. Native CutImpl zero length calls CopyAttr, which inserts copied items at one boundary. Bounded AUTO equal-boundary automatic item merge and INET equal-empty overwrite now run through native InsertItem(IS_COPY); NOHINTADJUST priority and explicit nonempty-copy guard remain. Existing ndtxt-hints owns the split within1000-line node limit. Nonempty full CutImpl/BuildPortions and general nesting/layout/history lifetimes remain unverified.",
+      "Iteration153 restores represented native MoveTextAttr_To_AttrSet traversal for both split paragraphs: start-map stop at nonzero/partial/char-format ranges, DontMove continuation, AUTO style-handle or represented item SetAttr and removal only after changed direct items. Empty-end equal-boundary preparation now retains native hints and delegates to this shared operation instead of an AUTO-only direct mutation. Existing range validation is delegated unchanged under1000-line gate. Native read undo now retains removed nonempty boundary as actual disconnected SwTextNode with registered direct character items, original collection and consumed cut hints; Redo uses existing native FormatToTextAttr self and consumes actual cut hints, preserving character values without TextRuns/DTO projection. This resolves premature bare-fragment character-item loss caused by first-prefix conversion. Portable Map storage and original node-array ownership remain, no complete CutImpl/MoveRange or paragraph/list item move claim. All250 module states/defaults/classifications/exceptions and prior evidence preserved. Full zero-prefix CopyAttr/native cut identity/index/frame/style clients/list split resets/physical undo sections and broad UI/core parity remain unverified; conscious IO/recovery deviations preserved."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/txtnode/ndtxt.cxx",
+    "upstreamSymbols": [
+      "SwTextNode::CopyText",
+      "SwTextNode::MoveTextAttr_To_AttrSet"
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/core/txtnode/ndtxt-hints.ts",
+      "rationale": "Existing hint snapshot validation,fragment creation and projection are split from SwTextNode to keep native node ownership centralized under the unchanged1000-line file limit. Portable map binding corresponds to native insertion/copy node backlink responsibility; complete style/client/destruction integration remains unverified.",
+      "stackNecessity": "responsibility-split"
+    }
+  },
+  "legacyOrder": 213,
+  "filenameOrder": 2
+}

@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svl/source/undo/undo.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "undo-redo",
+    "capabilityIds": [
+      "CAP-0102",
+      "CAP-0132"
+    ],
+    "semantic": {
+      "behaviorStatus": "parity",
+      "contractStatus": "parity",
+      "defaultStatus": "parity",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/svl/source/undo/undo.ts#DEFAULT_MAX_UNDO_ACTION_COUNT",
+        "vendor/libreoffice-reference/svl/source/undo/undo.cxx#SfxUndoAction"
+      ],
+      "justification": "The bounded SfxUndoManager preserves action grouping, compound actions, save marks, cursor-safe failure handling, redo truncation, and the pinned SfxUndoManager constructor default of 20 actions.",
+      "knownViolations": [],
+      "localSymbols": [
+        "DEFAULT_MAX_UNDO_ACTION_COUNT",
+        "SfxUndoAction",
+        "SfxListUndoAction",
+        "SfxUndoManager"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "svl/source/undo/undo.cxx",
+      "upstreamSymbols": [
+        "SfxUndoAction",
+        "SfxListUndoAction",
+        "SfxUndoManager",
+        "SfxRepeatTarget::~SfxRepeatTarget"
+      ]
+    }
+  }
+}

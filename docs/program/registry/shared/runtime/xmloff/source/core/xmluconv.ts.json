@@ -1,0 +1,65 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/xmloff/source/core/xmluconv.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "odf-filter",
+    "capabilityIds": [
+      "CAP-0113",
+      "CAP-0128"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/xmloff/source/core/xmluconv.ts#importOdfLength",
+        "vendor/libreoffice-reference/xmloff/source/core/xmluconv.cxx#SvXMLUnitConverter::convertMeasureToCore",
+        "vendor/libreoffice-reference/include/xmloff/xmluconv.hxx#convertMeasureToCore",
+        "apps/office/src/sw/source/filter/xml/odt-paragraph-indent-roundtrip.test.ts",
+        "apps/office/src/sw/source/filter/xml/odt-line-numbering.test.ts",
+        "apps/office/src/sw/source/filter/xml/odt-table-roundtrip.test.ts",
+        "apps/office/src/sax/source/tools/converter.ts#Converter",
+        "apps/office/src/sw/source/filter/xml/odt-property-roundtrip.test.ts#imports native MM100 tab measures and conversion failure through ODT",
+        "apps/office/src/xmloff/source/core/xmluconv.test.ts#XML native core measure delegation",
+        "apps/office/src/xmloff/source/style/xmlnumi.test.ts#uses native MM100 grammar, failed-value retention and SHRT field bounds",
+        "apps/office/src/xmloff/source/style/xmlnume.test.ts#emits label-alignment mode even for zero or default command geometry",
+        "apps/office/src/sw/source/core/unocore/unosett.test.ts#uses native integer ratios in both directions and retains only present properties",
+        "apps/office/src/sw/source/filter/xml/odt-list-label-alignment-roundtrip.test.ts#round-trips native MM100 defaults, parsing bounds and conditional list attributes",
+        "apps/office/src/sw/source/filter/xml/odt-list-label-alignment-roundtrip.test.ts#exports the default Writer list geometry at every supported level",
+        "apps/office/src/xmloff/source/core/xmluconv.test.ts#delegates native core measure export to the supported CM unit",
+        "vendor/libreoffice-reference/xmloff/source/style/xmlnumi.cxx#SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl::SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl",
+        "vendor/libreoffice-reference/xmloff/source/style/xmlnume.cxx#SvxXMLNumRuleExport::exportLevelStyle",
+        "vendor/libreoffice-reference/sw/source/core/unocore/unosett.cxx#SwXNumberingRules::SetNumberingRuleByIndex",
+        "vendor/libreoffice-reference/sw/source/core/unocore/unosett.cxx#GetPropertiesForNumFormat",
+        "vendor/libreoffice-reference/xmloff/source/core/xmluconv.cxx#SvXMLUnitConverter::convertMeasureToXML",
+        "vendor/libreoffice-reference/sax/source/tools/converter.cxx#void Converter::convertMeasure( OUStringBuffer&",
+        "apps/office/src/sw/source/filter/xml/native-none-numbering.test.ts#native NONE",
+        "apps/office/src/sw/browser/editor/native-none-numbering.test.tsx#freshly opened NONE",
+        "apps/office/e2e/writer-native-none-numbering.spec.ts#Writer native NONE numbering roundtrip",
+        "vendor/libreoffice-reference/include/editeng/numitem.hxx#SetAbsLSpace",
+        "vendor/libreoffice-reference/editeng/source/items/numitem.cxx#void SvxNumberFormat::SetListtabPos",
+        "vendor/libreoffice-reference/xmloff/source/core/xmluconv.cxx#bool SvXMLUnitConverter::convertNumFormat",
+        "vendor/libreoffice-reference/xmloff/source/style/xmlnume.cxx#NumberingType::NUMBER_NONE",
+        "vendor/libreoffice-reference/xmloff/source/style/xmlnumi.cxx#convertNumFormat",
+        "vendor/libreoffice-reference/sw/source/core/unocore/unosett.cxx#SwNumFormat aFormat(rNumRule.Get("
+      ],
+      "justification": "SvXMLUnitConverter delegates configured Twip/MM100 conversion and nullable failure/default bounds to the SAX owner. Existing helper callers retain their unaudited strict syntax/error policy while their numeric conversion now delegates to SAX. Focused delegation and source-derived numeric evidence cover implemented targets; other APIs/configuration and caller failure policies remain unverified. For the existing LABEL_ALIGNMENT mode and LISTTAB/SPACE/NOTHING separators, source-owned xmlnumi parsing now retains zero defaults and MM100 fields with native Converter grammar/failure and SHRT bounds. The MM100 import port now carries both independent native geometry groups; the earlier legacy-to-alignment Twip emulation is removed. Writer numbering property conversion follows unosett.cxx signed MM100/Twip ratios; export projects native MM100 and delegates CM serialization to XML/SAX. ODF 1.3 XML emits explicit label-alignment mode and retains standard command geometry; indents are nonzero-only and tab position is exported only for LISTTAB with a positive value. Context/core assertions and eleven literal common/automatic ODT cases plus both default command marker families verify native quantization, conditional XML and manual reopen state. Full numbering/UNO, legacy position mode/property ownership, NEWLINE extensions, other XML units/versions, defaults and wider obligations remain unverified; no whole-module promotion. Iteration169 preserves native NumberingType NONE through represented XML conversion and numeric property propagation into UNO/core and fresh ODT reopening. Empty num-format imports NUMBER_NONE with native permission; absent format retains ARABIC. Actual native export writes empty NONE format and suppresses display-levels while preserving independent start/affixes. SwXNumberingRules now copy constructs SwNumFormat and applies supported native setters, removing raw-field/factory reconstruction and preserving inactive geometry, font/glyph/symbol/client fields with invalid-property atomicity. Existing kind input remains an optional bounded caller boundary; actual XML uses numeric type. Native mounted DOM and ordinary Chromium Open/typing/history cases verify this slice. Unrepresented letters/Roman/custom/bitmap types, full native UNO/XML families and full core/UI/list/table remain unverified; prior semantic/default/classification/IO deviations/evidence are preserved.",
+      "knownViolations": [],
+      "localSymbols": [
+        "importOdfLength",
+        "SvXMLUnitConverter",
+        "convertMeasureToXML"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "xmloff/source/core/xmluconv.cxx",
+      "upstreamSymbols": [
+        "SvXMLUnitConverter::convertMeasureToCore"
+      ]
+    }
+  }
+}

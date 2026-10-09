@@ -1,0 +1,104 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-selection.ts",
+          "marker": "GetSelectionType"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/shells/native-list-context.test.ts",
+          "marker": "native list context"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-list-context.test.tsx",
+          "marker": "native list context UI"
+        },
+        {
+          "path": "apps/office/e2e/writer-native-list-context.spec.ts",
+          "marker": "Writer native list context and point state"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/docvw/native-headline-selection.test.ts",
+          "marker": "native"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-headline-selection.test.tsx",
+          "marker": "native"
+        },
+        {
+          "path": "apps/office/e2e/writer-headline-selection.spec.ts",
+          "marker": "Writer native table range"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/edit/ednumber.cxx",
+          "marker": "sal_uInt8 SwEditShell::GetNumLevel"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/shells/listsh.cxx",
+          "marker": "void SwListShell::GetState"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/shells/textsh1.cxx",
+          "marker": "case FN_NUM_CONTINUE:"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/wrtsh/wrtsh1.cxx",
+          "marker": "SelectionType SwWrtShell::GetSelectionType"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/uiview/view.cxx",
+          "marker": "void SwView::SelectShell"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/inc/wrtsh.hxx",
+          "marker": "enum class SelectionType"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/crsr/crsrsh.cxx",
+          "marker": "No table cursor in repeated headlines:"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/crsr/viscrs.cxx",
+          "marker": "void SwShellTableCursor::FillRects()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/findfrm.cxx",
+          "marker": "SwLayoutFrame* SwFrame::GetNextCellLeaf()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/trvlfrm.cxx",
+          "marker": "pTab->IsFollow() && pTab->IsInHeadline"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-selection.ts",
+    "localSymbols": [
+      "GetSelectionType"
+    ],
+    "omittedResponsibilities": [
+      "Full native shell contexts, framework gates, layout and list/table behavior remain unrepresented and unverified."
+    ],
+    "preservedResponsibilities": [
+      "Iteration168 gives list-kind and continuation operations to existing SwTextShell, retaining their bounded semantics while removing the old list-owner forwarding. SwListShell current-point GetNumLevel state preserves native MAXLEVEL10 sentinel and independent whole-range execution rejection. Represented SwWrtShell SelectionType requires actual rule, list membership and non-NONE level format; SwView conditionally places list shell below text shell using cached selection flags and TableCell masking. Source-owned registry/query splits retain the1000-line gate without compatibility wrappers or new models. Actual native, mounted DOM and Chromium cases cover the bounded flow. Other selection contexts, table row-column subtypes, native framework/layout/readonly gates and full core/UI/list/table behavior remain unverified; prior semantic/default/classification/IO deviations and evidence are preserved.",
+      "Iteration174 restores represented flat same-table cross-cell cursor admission and repeated headline restrictions through existing owners. Native moving/fixed endpoints, selected boxes and ordinary cell history are preserved; selected original boxes do not paint on repeated headline copies. Actual native, mounted and Chromium cases cover bounded behavior. Full nested/merged/rowspan/split rows/cross-table/vertical/RTL/protection/frame/core/UI parity remains unverified; states/defaults/classes/IO exceptions and prior evidence preserved."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/uibase/wrtsh/wrtsh1.cxx",
+    "upstreamSymbols": [
+      "SwWrtShell::GetSelectionType"
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-selection.ts",
+      "rationale": "Native source responsibility is split into a source-owned module to retain the unchanged1000-line limit without compatibility forwarding. Full native behavior remains unverified.",
+      "stackNecessity": "responsibility-split"
+    }
+  },
+  "legacyOrder": 270,
+  "filenameOrder": 15
+}

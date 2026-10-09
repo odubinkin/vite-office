@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/inc/IDocumentContentOperations.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "document-model",
+    "capabilityIds": [
+      "CAP-0111",
+      "CAP-0126"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/inc/IDocumentContentOperations.ts#SwInsertFlags",
+        "vendor/libreoffice-reference/sw/inc/IDocumentContentOperations.hxx#SwInsertFlags",
+        "apps/office/src/sw/source/core/txtnode/native-insert-flags.test.ts#native insertion mode contract"
+      ],
+      "justification": "Iteration132 restores native SwInsertFlags DEFAULT0/EMPTYEXPAND1/NOHINTEXPAND2/FORCEHINTEXPAND4 at IDocumentContentOperations.hxx ownership and the native third-mode InsertText signature;portable explicit items/link move to fourth/fifth positions. Manager InsertString defaults EMPTYEXPAND and forwards explicit modes. Bound node FORCE temporarily overrides Ignore during coordinate Update and restores old state before mode postprocessing;NOHINT wins end-equal restoration,EMPTY expands eligible zero hints and continues,NOHINT blocks paragraph-prefix. Source-owned insertion preparation and unchanged comparator extraction retain1000-line gates. Literal mode/mask/family/lock/oldIgnore/boundary matrices cover actual objects/maps/items/backlinks/7INETvalues/IDs and manager defaults/temporary restoration/adapters. Five prior fixtures and existing typed undo receive syntax-only DEFAULT positional migration;353other prior tests remain byte-identical. Existing241runtime states/defaults/exceptions and registered I/O deviations preserved;new enum module remains wholly unverified. Native collapsed EMPTY/selection FORCE shell callers and stored undo flags are next dependent work;full manager undo/grouping/redline/multicursor/native SwContentIndex arguments/GCAttr/COPY/BuildPortions/families/style clients/UNO/refcounts/full core/UI remain unverified,no module or goal promotion.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SwInsertFlags"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/inc/IDocumentContentOperations.hxx",
+      "upstreamSymbols": [
+        "SwInsertFlags"
+      ]
+    }
+  }
+}

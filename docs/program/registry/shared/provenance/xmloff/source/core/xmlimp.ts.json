@@ -1,0 +1,66 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "parseOdfXmlStream",
+          "path": "apps/office/src/xmloff/source/core/xmlimp.ts"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "SvXMLImport::processingInstruction",
+          "path": "vendor/libreoffice-reference/xmloff/source/core/xmlimp.cxx"
+        },
+        {
+          "marker": "getAsIntegerByIndex",
+          "path": "vendor/libreoffice-reference/include/sax/fastattribs.hxx"
+        },
+        {
+          "marker": "toInt32",
+          "path": "vendor/libreoffice-reference/include/o3tl/string_view.hxx"
+        },
+        {
+          "marker": "HandleSignChar",
+          "path": "vendor/libreoffice-reference/sal/rtl/strtmpl.hxx"
+        },
+        {
+          "marker": "DivMod",
+          "path": "vendor/libreoffice-reference/sal/rtl/strtmpl.hxx"
+        },
+        {
+          "marker": "toInt",
+          "path": "vendor/libreoffice-reference/sal/rtl/strtmpl.hxx"
+        },
+        {
+          "marker": "XMLTextListItemContext::XMLTextListItemContext",
+          "path": "vendor/libreoffice-reference/xmloff/source/text/XMLTextListItemContext.cxx"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/xmloff/source/core/xmlimp.ts",
+    "localSymbols": [
+      "FastAttributeList",
+      "SvXMLImportContext",
+      "parseOdfXmlStream"
+    ],
+    "omittedResponsibilities": [
+      "The complete LibreOffice XML import vocabulary and UNO services remain omitted in the supported Writer subset.",
+      "Full native SAX FastAttributeList class ownership, storage/token iteration and other scalar/radix APIs remain unverified; nullable integer access is the explicit local bool/out-value adapter."
+    ],
+    "preservedResponsibilities": [
+      "Preserves tokenized attributes, fast import context creation, stack ownership, unknown-element policy, and ordered callbacks at the xmloff import boundary.",
+      "Shared FastAttributeList.getAsInteger now owns the bounded decimal byte-view conversion formerly private to list-style import. Nullable absence adapts native getAsInteger bool/out-value; declaration consumers preserve absent defaults and index/start/display normalization. Ordinary item import accepts converted0..32767, ignores negative/out-of-range values and retains native zero on no digits/int32 overflow; headers never convert start. Signed zero is canonical integer0. Compiled unmodified rtl/o3tl integer bodies and exact native item range branch match115 conversions/170 real ordinary/header SAX contexts with platform/view/iterator adapters. Twenty-two literal start spellings in common/automatic numbered/bullet ODT packages verify text,count,levels,restarts,starts,counters,vectors,labels,independent rule/item copies,Worker16,conditional XML and reopen. Complete native scalar/radix/UTF16/token/container/UNO ownership and repeated-sublist restart remain separately unverified; the local FastAttributeList is still an xmloff adapter rather than a native sax-owned class. No whole-module parity promotion or registered save/open/recovery change.",
+      "Iteration222 ports the existing StarBats/StarMath bullet import conversion: immutable native224slot tables, uint16 alias arithmetic, hole substitution U+E12C, exact ASCII family match and source repeated GetProperties glyph mutation with only published descriptor renamed StarSymbol. Actual SvXMLImport owns independent lazy handles and production list contexts borrow it through the original Writer importer; SAX root factories retain a separate explicit structural port. The isolated existing constructor fallback uses that same implemented native conversion owner. Native-related StarSymbol/OpenSymbol browser face fallback preserves stored family. Complete physical glyph coverage, other converters/fonts/functions, full native importer/FontDescriptor/VCL and generic empty bullet publication remain unverified; existing Writer table-import adapter remains explicitly partial. Registered I/O/recovery deviations and all prior statuses/defaults preserved."
+    ],
+    "status": "mapped",
+    "upstreamPath": "xmloff/source/core/xmlimp.cxx",
+    "upstreamSymbols": [
+      "SvXMLImport::processingInstruction"
+    ]
+  },
+  "legacyOrder": 290
+}

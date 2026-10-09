@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/inc/fesh.ts",
+          "marker": "SwTab"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/fesh.hxx",
+          "marker": "enum class SwTab"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/inc/fesh.ts",
+    "localSymbols": [
+      "SwTab",
+      "SwTableMousePoint"
+    ],
+    "omittedResponsibilities": [
+      "Wider native frame shell contract, vertical/RTL/protection/resizing remain unverified."
+    ],
+    "preservedResponsibilities": [
+      "Declares source-native table mouse kinds in the matching declaration owner."
+    ],
+    "browserResponsibilities": [
+      "Device coordinates are measured by the browser over actual native owners."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/inc/fesh.hxx",
+    "upstreamSymbols": [
+      "SwTab"
+    ]
+  },
+  "legacyOrder": 132
+}

@@ -1,0 +1,84 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/core/layout/wsfrm.ts",
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/layout/wsfrm.cxx",
+    "localSymbols": [
+      "SwFrame",
+      "SwLayoutFrame"
+    ],
+    "upstreamSymbols": [
+      "SwFrame::SwFrame",
+      "SwFrame::KnowsFormat",
+      "SwFrame::RegisterToFormat",
+      "SwFrame::InsertBehind",
+      "SwFrame::RemoveFromLayout",
+      "SwLayoutFrame::SwLayoutFrame"
+    ],
+    "preservedResponsibilities": [
+      "Iteration244 connects actual SwFrame and SwLayoutFrame registration and original linked lower/sibling pointers. SwRowFrame constructs SwCellFrame children; native box claims retarget matching physical clients before model registration and history moves original cell frames. Recursive flat layout teardown and actual cell deletion release registrations; JSX, collapsing border paint and width measurement borrow registered native format items and release frames in finally. Full native geometry, flags, invalidation, content, follows, accessibility, fly/root and UNO remain unverified. Targeted verification pending; last full237,next247; prior metadata status/default/classification and registered I/O/recovery deviations preserved.",
+      "Iteration244 verified1318 unique app cases including12 fresh linked-frame ownership, claim ordering, transaction/history, deletion and main rendering/lifetime cases, plus25 Chromium cases. All657 prior acceptance files remain byte-identical; no passing runtime replay. Build/runtime upstream physically absent and restored finally; one fresh CSS-unit expectation corrected in a failed-only closure1pass2skip. Actual app/inventory all-four100% coverage binds current source/maps and complete unchanged declarations/bodies/enclosing branches/all locations from243. Invalid focused V8 painter inferred-else counters are retained raw; the entire valid initial current-byte-identical painter maps/counters already all-four100 supply that module, without counter sanitization. Prior316 metadata fields/order/status/default/classification/evidence prefixes retained; new wsfrm module unverified, inserted into required runtime order. Full native geometry/flags/invalidation/content/follows/accessibility/fly/root/UNO and whole project parity remain partial. Registered I/O/recovery deviations preserved; last full237,next247; no full244."
+    ],
+    "omittedResponsibilities": [
+      "Complete native geometry, flags, invalidation, content, follows, accessibility, fly/root and UNO remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/layout/wsfrm.ts",
+          "marker": "SwLayoutFrame"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/layout/native-cell-format-client.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/undo/native-cell-format-client-history.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-cell-format-client.test.tsx",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/wsfrm.cxx",
+          "marker": "SwFrame::SwFrame"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/wsfrm.cxx",
+          "marker": "SwFrame::KnowsFormat"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/wsfrm.cxx",
+          "marker": "SwFrame::RegisterToFormat"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/wsfrm.cxx",
+          "marker": "SwFrame::InsertBehind"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/wsfrm.cxx",
+          "marker": "SwFrame::RemoveFromLayout"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/wsfrm.cxx",
+          "marker": "SwLayoutFrame::SwLayoutFrame"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/ssfrm.cxx",
+          "marker": "SwLayoutFrame::GetFormat"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/ssfrm.cxx",
+          "marker": "SwLayoutFrame::DestroyImpl"
+        }
+      ]
+    }
+  },
+  "legacyOrder": 316
+}

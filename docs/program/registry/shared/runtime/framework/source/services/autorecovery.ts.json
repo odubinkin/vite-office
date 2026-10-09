@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/framework/source/services/autorecovery.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "recovery",
+    "capabilityIds": [
+      "CAP-0114",
+      "CAP-0122",
+      "CAP-0133"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "docs/program/autosave-recovery.md#Browser-persistence-decision"
+      ],
+      "justification": "Intentional browser product decision: recovery is unsupported and must not be reintroduced. Future loss protection will be frequent full autosave through primary storage.",
+      "knownViolations": [],
+      "localSymbols": [],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "framework/source/services/autorecovery.cxx",
+      "upstreamSymbols": [
+        "cppu::supportsService",
+        "OWeakObject::acquire",
+        "OWeakObject::release",
+        "svtools::ConfigItems"
+      ]
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "projectWriterLineHeightItem",
+          "path": "apps/office/src/sw/source/core/text/itrform2.ts"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "SwTextFormatter::CalcRealHeight",
+          "path": "vendor/libreoffice-reference/sw/source/core/text/itrform2.cxx"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/core/text/itrform2.ts",
+    "localSymbols": [
+      "projectWriterLineHeight",
+      "projectWriterLineHeightItem"
+    ],
+    "omittedResponsibilities": [
+      "Native VCL ascent/descent shaping remains a browser device measurement rather than a TypeScript text formatter."
+    ],
+    "preservedResponsibilities": [
+      "Resolves the supported Writer line-spacing item modes before the browser measures glyph lines."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/text/itrform2.cxx",
+    "upstreamSymbols": [
+      "SwTextFormatter::CalcRealHeight"
+    ]
+  },
+  "legacyOrder": 201
+}

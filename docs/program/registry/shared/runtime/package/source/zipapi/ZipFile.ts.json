@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/package/source/zipapi/ZipFile.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "odf-filter",
+    "capabilityIds": [
+      "CAP-0113"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/package/source/zipapi/ZipFile.ts#ZipFileLimits",
+        "vendor/libreoffice-reference/package/source/zipapi/ZipFile.cxx#ZipFile::ZipFile"
+      ],
+      "justification": "Mapped provenance remains semantically unverified against package/source/zipapi/ZipFile.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ZipFileLimits",
+        "DEFAULT_ZIP_FILE_LIMITS",
+        "ZipFile",
+        "assertSafeZipEntryName"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "package/source/zipapi/ZipFile.cxx",
+      "upstreamSymbols": [
+        "ZipFile::ZipFile",
+        "std::move",
+        "ZipFile::~ZipFile",
+        "ZipFile::setInputStream"
+      ]
+    }
+  }
+}

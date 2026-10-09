@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/inc/lineinfo.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "document-model",
+    "capabilityIds": [
+      "CAP-0111"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/inc/lineinfo.ts#SwLineNumberInfo",
+        "vendor/libreoffice-reference/sw/inc/lineinfo.hxx#SwLineNumberInfo"
+      ],
+      "justification": "Bounded Stage 2 line-number behavior has focused tests; the full upstream contract remains unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "LineNumberPosition",
+        "SwLineNumberInfo"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/inc/lineinfo.hxx",
+      "upstreamSymbols": [
+        "SwLineNumberInfo"
+      ]
+    }
+  }
+}

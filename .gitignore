@@ -45,3 +45,9 @@ test-results/
 output/playwright/
 vendor/libreoffice-reference/
 .playwright-cli
+
+# Deterministic compatibility views; author docs/program/registry records instead
+/docs/program/parity/writer-command-slice.json
+/docs/program/parity/runtime-inventory.json
+/docs/program/source-provenance.json
+/docs/program/parity/upstream-invariants.json

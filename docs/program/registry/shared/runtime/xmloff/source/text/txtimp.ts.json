@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/xmloff/source/text/txtimp.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "odf-filter",
+    "capabilityIds": [
+      "CAP-0113",
+      "CAP-0128"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/xmloff/source/text/txtimp.ts#XMLTextImportHelper",
+        "apps/office/src/xmloff/source/text/txtimp.test.ts#shares native list roots across body cells and later body contexts",
+        "apps/office/src/sw/source/filter/xml/odt-table-cell-lists.test.ts#imports native table cell list roots",
+        "vendor/libreoffice-reference/xmloff/source/text/txtimp.cxx#XMLTextImportHelper::CreateTextChildContext"
+      ],
+      "justification": "Iteration164 replaces duplicated body/cell paragraph dispatch and unsupported cell-list rejection with one source-shaped XMLTextImportHelper in native txtimp.ts. Existing XMLParaContext/list block/item and SwXMLImport actual cell owner are reused; one stream-wide processed-root catalogue crosses body/cells. Existing export list identity/used-ID catalogues now span the full XMLTextParagraphExport pass rather than each cell paragraph run, preventing duplicate XML IDs and lost continuation without changing local open-item stacks. Literal common/automatic numbered/bullet nested/header/direct restart/plain tails and explicit/implicit body-cell-cell-body continuations assert native graph/sections/default IDs/labels,owned rule/item copies,Worker16 and three export/reopen cycles. Real Chromium imported restarted-row Add to List and Enter history verify UI execution.419of420prior testfiles unchanged;one obsolete cell-list rejection correction only.250existingstates/defaults/classes/consciousIOexceptions preserved;new helper partial/unverified,no broad paritypromotion. Full native dispatcher/types/numberedparagraph/sections/nestedtable/UNO/list identity suppression/random/last-continuation/style/cursor/layout contracts remainunverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "XMLTextImportHelper",
+        "XMLTextType"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "xmloff/source/text/txtimp.cxx",
+      "upstreamSymbols": [
+        "XMLTextImportHelper::CreateTextChildContext"
+      ]
+    }
+  }
+}

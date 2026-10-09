@@ -1,0 +1,168 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "local-infrastructure",
+    "evidence": {
+      "local": [
+        {
+          "marker": "WriterDocumentRecord",
+          "path": "apps/office/src/sw/browser/filter/xml/writer-document-codec.ts"
+        },
+        {
+          "path": "apps/office/src/editeng/source/items/numitem.test.ts",
+          "marker": "initializes independent zero geometry in legacy mode"
+        },
+        {
+          "path": "apps/office/src/editeng/source/items/numitem.test.ts",
+          "marker": "switches native legacy getters without rewriting either geometry group"
+        },
+        {
+          "path": "apps/office/src/editeng/source/items/numitem.test.ts",
+          "marker": "retains native signed getter widths at integer boundaries"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-list-position-mode-roundtrip.test.ts",
+          "marker": "selects native mode independently of child geometry through common and automatic ODT cycles"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-list-position-mode-roundtrip.test.ts",
+          "marker": "retains pre-existing browser snapshots with absent inactive legacy fields"
+        },
+        {
+          "path": "apps/office/src/xmloff/source/style/xmlnume.test.ts",
+          "marker": "exports only the native legacy group with nonzero and positive attribute predicates"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/number-format.test.ts",
+          "marker": "matches native NumberType formatting visibility legal coercion and signed32 input"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/number-rule-lifecycle.test.ts",
+          "marker": "matches native constructors assignment self reset copy and all ten owned slots"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/number-rule-lifecycle.test.ts",
+          "marker": "matches complete native rule equality selected and ignored fields"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/number-rule-lifecycle.test.ts",
+          "marker": "matches native unknown default and exact ushort byte narrowing without invalidation"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/number-rule-lifecycle.test.ts",
+          "marker": "retains actual document clients list and registry across same name assignment and reset"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/number-rule-lifecycle.test.ts",
+          "marker": "preserves native scalar state on the actual Worker document owner with strict legacy domains"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/xmlimp-named-styles.ts",
+          "marker": "applyNamedParagraphStyles"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/doc.ts",
+          "marker": "CopyTextColl"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/doc.ts",
+          "marker": "FindTextFormatCollByName"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-named-paragraph-ownership.test.ts",
+          "marker": "retainsNamedOwnership"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-named-paragraph-ownership.test.ts",
+          "marker": "transportsCustomNames"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-named-paragraph-ownership.test.ts",
+          "marker": "restoresNamedHistory"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-named-paragraph-ownership.test.ts",
+          "marker": "copiesNamedStyle"
+        },
+        {
+          "path": "apps/office/e2e/writer-named-style-history.spec.ts",
+          "marker": "Writer named-style history"
+        },
+        {
+          "path": "apps/office/src/sw/browser/filter/xml/writer-document-codec.ts",
+          "marker": "encodeRowFormat"
+        },
+        {
+          "path": "apps/office/src/sw/browser/filter/xml/writer-document-codec.ts",
+          "marker": "decodeRowFormat"
+        },
+        {
+          "path": "apps/office/src/sw/inc/fmtornt.ts",
+          "marker": "SwFormatVertOrient"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/docnode/ndtbl1.ts",
+          "marker": "GetBoxSelection"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/doc.ts",
+          "marker": "SetBoxAlign"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx",
+          "marker": "boxAlign"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/native-cell-box-roundtrip.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/table/native-independent-columns.test.ts",
+          "marker": "native separators combine visible current-row"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/fmtornt.hxx",
+          "marker": "SwFormatVertOrient"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/atrfrm.cxx",
+          "marker": "SwFormatVertOrient::operator=="
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl1.cxx",
+          "marker": "lcl_GetBoxSel"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx",
+          "marker": "get_value_changed_from_saved"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/browser/filter/xml/writer-document-codec.ts",
+    "rationale": "Defines a browser Worker graph transfer representation; ODT filter and SwDocShell retain canonical SwDoc contracts. Iteration102 materializes document-owned named paragraph collections instead of flattening common styles into direct node items. Supported own paragraph/character/list fields, raw names, parent/follow links and automatic deltas survive graph16, ODT cycles and actual history. Native name lookup and bounded custom CopyTextColl preserve destination ownership and manual rule handling; the prior builtin copy adapter remains unchanged. Literal zero/per-axis list masks and the project tdf114287 fixture distinguish inherited margins from hard rule overrides. Writer export retains original named parents and emits actual direct numbering items; generic legacy export remains compatible. Default paragraph items are retained on the existing Standard root adapter only. All303other prior tests remain unchanged; one inherited common-style XML assertion moves to styles.xml and one existing project fixture now asserts its actual custom owner/parent, with numeric literals unchanged. Native list display-name resolution, invalid/cyclic parent detachment, direct empty rule suppression and supported composite item subfield inheritance are retained. Full native global default pools, conditional styles, pool/help IDs, creation undo, complete UNO/style UI, collisions and geometry consumers remain separately unverified. No existing status/default/exception or registered I/O/recovery promotion. Iteration202 native row frame sizes cross Worker/storage boundary as eight public native values, restored as SwFormatFrameSize before document ownership; class prototypes never transferred. Existing v16 scalar minimum-height ingress migrates only at this process/storage boundary with no scalar kernel alias. Structured clone/JSON native item semantics and original row flags independently covered; registered save/open/recovery settings and UI unchanged. Entire prior contracts/classifications/statuses retained; full parity remains unverified. Iteration203 replaces scalar cell vertical alignment with complete SwFormatVertOrient Which109 position0/NONE/PRINT_AREA defaults, native numeric enum values and three-field clone/equality/represented UNO member query/update. Original boxes and insertion undo own independent copied items. SwDoc SetBoxAttr owns native selection/history/notifications; setters traverse ordinary ring points while getters use current point or native table selected boxes. Common full-item getter and orientation-only getter retain mixed/no-item state. Shell delegates; properties reads common shell state and emits only a changed alignment item, native mixed widget fallback top. CSS handles native alignments and safe fixed-row content; ODT maps NONE/CENTER/BOTTOM, process/storage codec restores full primitive items, old scalar only storage ingress. Full pooling/shared frame formats/direct-formatting/HTML resizing/fly/nested/merged/protection/vertical writing and overall parity remain unverified; prior classifications/defaults/contracts/evidence/exceptions retained. Iteration206 draft: scalar kernel cell border/padding storage is replaced by owned SvxBoxItem plus the existing vertical item. Represented lines retain native color/style/width/component arithmetic, signed16 distances/default0, cloning, metrics and supported UNO values; SvxBoxInfoItem retains native validity127. SetTabBorders consumes SfxItemSet and distributes flat union outer/inner lines using source validity rules. Insertion defaults55twips/black10twip lines and0/no-border are preserved. Process/storage uses complete primitive native state with legacy scalar ingress only; ODF and browser paint carry four independent sides. Initial static and upstream-absent runtime verification are pending. Complete native color shading/theme/Word/macros/fly/vertical/RTL/follow/shared-format behavior, per-edge/common-state border widgets and full parity remain unverified. All existing statuses/defaults/evidence/registered I/O/recovery exceptions are preserved. Iteration233 moves connected flat-table column geometry into each original SwTableBox SwFormatFrameSize. Native current-row visible/other-row hidden fuzzy separator union and per-line NewSetTabCols adjustments feed original Writer document attribute history; actual Ctrl+Shift current-line columns replace the retained ordinary shared-column fallback. Source XML union grids/spans and browser device colspans preserve independent original cells, with complete native frame-size values in browser codec and declared grid widths only at import/builder ingress. No row-width side map, graph replacement or TextRuns conversion. Flat unspanned source behavior is represented; full row-span propagation/nested/merged graphs, frame item pooling/UNO, RTL/vertical/SFX/VCL/full ruler state remain partial. Registered recovery/open/save/settings untouched, previous statuses/defaults/classes preserved.",
+    "responsibilities": [
+      "Encodes and decodes the Writer graph for the ODT Worker message boundary.",
+      "Declared levels retain independent native legacy and alignment geometry with zero defaults; only exact label-alignment selects modern mode. SvxNumberFormat in editeng owns positional state, signed widths and mode-dependent getters; Writer inherits and copies all fields. xmlnumi owns level/property contexts and MM100 legacy parsing/assembly. Writer conversion precedes core application, and xmlnume emits the selected group with native signs and omission predicates. Thirteen literal common/automatic ODT cases verify mode spellings/absence, child presence, independent state, signed/bounded/partial/invalid legacy fields, exact XML and reopen. Clone and browser snapshots preserve inactive fields; primitive browser geometry selects the active group. Full line layout, numbering families, omitted-level construction, native UNO replacement failures (including signed SymbolTextDistance narrowing), extensions and wider contracts/defaults remain separately unverified. No whole-module promotion.",
+      "The shared marker fields and both native SetListFormat overloads now belong to SvxNumberFormat. Native optional/empty state, compatibility percent scanning, affix invalidation and unsigned widths are preserved. Writer standalone suffix is empty; base rule patterns are level-specific. Pinned MakeNumString pattern replacement and legacy fallback are covered for Arabic/character-special levels, zeros, repeated/noncontiguous/tenth/future references. SwTextNode separately projects visible bullet glyphs. Owned clones and Worker graph v16 preserve raw patterns and independently changed compatibility fields. A bounded extracted C++ oracle compares 188 states/labels and 83 clone labels; native full build, other number families/fonts, continuous/outline/NONE/bitmap rules, formatter variants and XML marker attributes remain unverified.",
+      "Iteration37 preserves explicit outline assignment independently from direct outline items through an optional boolean field in graph v16. Absent legacy assignment retains pool-factory heading defaults only when the direct item is absent; explicit false, zero and assigned-without-item snapshots remain exact. Paragraph restore suppresses collection defaults before replacing direct items. Iteration37 preserves the model-owned synthesized empty-list marker with an optional true-only emptyListStyle field in existing graph v16. False is omitted;older absent records remain false,so explicitly empty rule items are not heuristically converted into synthesized intent. CloneTo copies the actual marker independently;tests verify subsequent numbered style transitions,Worker restore and legacy records. This browser transfer state does not claim native serialization/copy callback parity or full attribute/history lifetime;registered IO settings are unchanged.",
+      "Iteration38 restores native document reading suppression for the existing shown-list notification path. SwDoc owns mbInReading=false and native IsInReading/SetInReading accessors; SwXMLImport brackets the existing parse lifetime and clears the flag on success or failure. List/tree operations propagate the actual document context. Worker graph16 restores direct text-node items in one complete text-node-range batch before attachment, retaining counted/restart/list identity and explicit rule type. Forty unchanged added native definitions compare60 sequences/2130 states including true/false reading, raw caches and notifications; literal genuine ODT/Worker/reopen expectations remain intact. Full native destructor/temporary notification blockers/layout/UNO/history/fields/live-style/serialization lifetime remain unverified; no whole-module promotion or registered IO change.",
+      "Iteration44 restores SvxNumberType -> SvxNumberFormat -> SwNumFormat constructor/copy/state ownership, native numeric type IDs, standalone SVX_DEF_BULLET U+F095, unsigned32 glyph, show-symbol state and optional copied const Font family values. SwClient is composed because JavaScript has one superclass; the currently exposed registration remains null. Explicit browser format assembly/projection replaces kind/string-glyph constructor overloads. Worker graph16 preserves font presence (including present-empty), raw glyph and visibility with historical omissions supported. Complete unchanged native bodies compare 21 format-value states and144 type/format traces under ASan/UBSan, using named null-client, family-only Font/COW, decimal-provider, string/property/locale/platform adapters. Full native service initialization/static destruction, registered style clients, other Font attributes/equality, graphics, legal-rule state and wider numbering families remain unverified. No whole-module/status or goal promotion; registered I/O deviations unchanged.",
+      "Iteration47 restores the complete selected SwNumRule copy/operator=/Reset/operator== lifecycle and native scalar defaults/accessors. Copy constructs independent owned formats and resets phantom-count/redline flags to true/false with no clients. Assignment uses pointer Set for all10 raw slots, retains recipient mode/default-list/client containers/countPhantoms/usedByRedline and copies source name/type/automatic/continuous/absSpaces/hidden/pool metadata, invalidating nonself even for equal values. Reset clears all10 slots, accepts empty/repeated names and restores exact UNKNOWN65535/help65535/helpfile255 while retaining recipient-only state. Equality compares the native selected metadata and effective formats, ignoring hidden/validity/countPhantoms/redline/list ID/raw presence directly. Native ushort/byte narrowing is preserved. Optional graph16 scalarState validates exact booleans/unsigned ranges and restores the actual document owner after native copy construction; legacy omissions use native defaults. Complete unchanged pinned source bodies and inline definitions emit432 states,18 equality branches and7 narrowing profiles under ASan/UBSan, with full hashes and prior native format profiles. Source client/style-container vector inputs,invalid-flag inputs,ASCII UIName,family-only Font/COW and platform/graphics/null-style/service aliases explicitly limit proof. Actual same-name document client/list/registry,Worker16 and supported genuine ODT fields are exercised; no invented native name-map rebind. Full native name-map/paragraph-style/GrabBag/grf links/client destruction/Font/graphics/service lifetime,nondefault continuous/phantom counter/rendering consumers and wider enum/style families remain individually unverified. Scalar metadata restoration does not certify those consumers or full ODT rule metadata. No whole-module/status/goal promotion or registered IO/recovery/dependency/policy/coverage change.",
+      "Iteration114 restores the registered MakeTextAttr owner for item-set insertion, character WhichId wrapping, same-pool automatic/internet item copies and foreign automatic-style Clone(true,destinationPool) conversion. Selective reset now interns a nonempty remaining set and constructs a fresh hint through MakeTextAttr, reusing native document-owned handles so equivalent adjacent remnants merge. Internet items are non-shareable. Snapshot decoding uses the same factory while retaining browser item records. Independent real-owner factory/reset/retained-undo/adjacent-range tests cover these bounded contracts. Two earlier synthetic sentinel replacement assumptions are corrected to the existing concrete-pool excluded-domain guard; valid concrete flag fixtures preserve core fresh defaults and actual Ctrl deletion/undo/redo. No-common raw state handling remains independently tested. This supersedes older positive sentinel-pooling and missing selective handle-routing claims only in the registered operation. Sentinel style insertion, native unordered iteration/collisions, paragraph/ignorable/cache/name/usage/lifetime/null constructor/UNO name QueryValue, other hint types and actual cross-document SwpHints copy ingestion remain unverified. Whole-module/model/filter/UI parity stays unverified; all existing statuses/defaults/exceptions and registered I/O/recovery deviations unchanged.",
+      "Iteration127 preserves native normal/visited style IDs through a single browser-owned internet record codec reused by pooled JSON snapshots and canonical Worker16 graph hints. Optional nonzero IDs retain exact unsigned16 values;omitted fields restore ZERO under the existing portable DTO contract. Native item name/ID paired setters restore owned fields without a text backlink;MakeTextAttr attaches actual graph hints normally. Core QueryValue/GetHyperlink projection and default-only pool54 generic decode boundary remain unchanged. All existing runtime states/defaults/exceptions and registered save/open/recovery deviations preserved. Native active styled constructor routing,DTO style identity lookup,ODF programmatic/UI conversion,full localized/custom style families/clients/visited behavior/UNO/macros/broadcaster/lifetimes/global pools/full core/UI remain unverified;no module or goal promotion.",
+      "Iteration206 draft: scalar kernel cell border/padding storage is replaced by owned SvxBoxItem plus the existing vertical item. Represented lines retain native color/style/width/component arithmetic, signed16 distances/default0, cloning, metrics and supported UNO values; SvxBoxInfoItem retains native validity127. SetTabBorders consumes SfxItemSet and distributes flat union outer/inner lines using source validity rules. Insertion defaults55twips/black10twip lines and0/no-border are preserved. Process/storage uses complete primitive native state with legacy scalar ingress only; ODF and browser paint carry four independent sides. Initial static and upstream-absent runtime verification are pending. Complete native color shading/theme/Word/macros/fly/vertical/RTL/follow/shared-format behavior, per-edge/common-state border widgets and full parity remain unverified. All existing statuses/defaults/evidence/registered I/O/recovery exceptions are preserved.",
+      "Iteration206 verified closure: the earlier draft pending statement is historical. Native box/info/line ownership, supported values/defaults/metrics, flat source-defined border distribution, original graph and history, complete primitive transport and four-edge ODF/browser paint passed one full upstream-absent profile with failed/new-case-only closures. Current app and inventory actual counters each reach100% lines/statements/functions/branches under complete identical-source/maps or complete contiguous mapped-region proof. All550 prior acceptance contracts are preserved by522 byte-identical files and28 exact native-representation AST migrations; six new acceptance files and two new infrastructure cases are added. Full per-edge/common-state widgets, native themes/shading/Word and RTL/vertical/follow/shared-format completeness remain unverified; no semantic status or registered I/O/recovery exception is promoted.",
+      "Iteration220 represented native numbering-font policy: txtfld NewNumberPortion starts from the original paragraph attr owner, optional bullet font overrides face, false-default DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT resets bullet weight/posture and both labels underline; number weight/posture and inherited height/color remain native. Frozen values feed shared body/cell marker device, existing width/minimum distance/background retained. Older graph records missing only new flag defaultfalse, prior fields remain strict. Full SwFont hierarchy/scripts/face metadata/character-style/paragraph-mark/redline/graphics/device shaping and ink/theme/decoration variants remain unverified; all prior statuses/defaults/registered I/O/recovery exceptions preserved.",
+      "Iteration233 moves connected flat-table column geometry into each original SwTableBox SwFormatFrameSize. Native current-row visible/other-row hidden fuzzy separator union and per-line NewSetTabCols adjustments feed original Writer document attribute history; actual Ctrl+Shift current-line columns replace the retained ordinary shared-column fallback. Source XML union grids/spans and browser device colspans preserve independent original cells, with complete native frame-size values in browser codec and declared grid widths only at import/builder ingress. No row-width side map, graph replacement or TextRuns conversion. Flat unspanned source behavior is represented; full row-span propagation/nested/merged graphs, frame item pooling/UNO, RTL/vertical/SFX/VCL/full ruler state remain partial. Registered recovery/open/save/settings untouched, previous statuses/defaults/classes preserved."
+    ],
+    "stackDivergence": {
+      "kind": "local-infrastructure",
+      "rationale": "The browser-specific WriterDocumentRecord boundary has no single native LibreOffice implementation unit and therefore remains explicit."
+    },
+    "status": "local-only"
+  },
+  "legacyOrder": 93
+}

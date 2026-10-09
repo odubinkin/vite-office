@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/browser/presentation/use-ruler-tracking.ts",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "browser-presentation",
+    "capabilityIds": [
+      "CAP-0104",
+      "CAP-0112"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/browser/presentation/use-ruler-tracking.ts#useRulerTracking",
+        "apps/office/src/sw/browser/presentation/use-ruler-tracking.ts#StartTracking",
+        "apps/office/src/sw/browser/presentation/use-ruler-tracking.test.tsx#ownsPointer",
+        "apps/office/src/sw/browser/presentation/use-ruler-tracking.test.tsx#ownsKeys",
+        "apps/office/src/sw/browser/presentation/use-ruler-tracking.test.tsx#replacesOwner",
+        "apps/office/src/sw/browser/presentation/WriterRulers-tracking.test.tsx#acceptsPreview",
+        "apps/office/src/sw/browser/presentation/WriterRulers-tracking.test.tsx#removesTabHandle",
+        "apps/office/src/sw/browser/presentation/writer-view-ruler-tracking.test.tsx#cancelsWriterDrag",
+        "apps/office/src/sw/browser/presentation/writer-view-ruler-tracking.test.tsx#removesWriterDrag",
+        "apps/office/src/sw/browser/presentation/writer-view-ruler-tracking.test.tsx#acceptsWriterDrag",
+        "apps/office/e2e/writer-ruler-tracking.spec.ts#Writer ruler tracking at width",
+        "apps/office/src/sw/browser/presentation/WriterRulers-tracking.test.tsx#admitsTabPress",
+        "apps/office/src/sw/browser/presentation/WriterRulers-tracking.test.tsx#cancelsNewTab",
+        "apps/office/src/sw/browser/presentation/WriterRulers-tracking.test.tsx#acceptsNewTab",
+        "apps/office/src/sw/browser/presentation/writer-view-ruler-tracking.test.tsx#tracksNewWriterTab",
+        "apps/office/src/sw/browser/presentation/WriterRulers-document-drag.test.tsx#native document ruler indent drag",
+        "apps/office/src/sw/browser/presentation/writer-view-list-label-drag.test.tsx#acceptsLabel",
+        "apps/office/e2e/writer-list-label-drag.spec.ts#Writer native label document ruler width="
+      ],
+      "justification": "Existing ruler gestures now project inspected Ruler left-single-click/nontracking admission,VCL owner replacement and all-key tracking priority:initiating pointer owns movement/termination,Escape cancels,Return accepts the last painted position,and other keys cannot reach widget/document dispatch. All cancellation paths release listeners and discard preview without application changes;accepted termination releases ownership before one callback. Temporary tabs begin on a free-surface press as in SvxRuler Click and Ruler MouseButtonDown,and remain browser preview until accepted pointer/Return termination;cancel/hide/unmount never inserts a model tab and trailing clicks cannot add a second undo entry. Zero-motion termination preserves its initial position. Existing nonzero snapping,coordinate conversion,ticks/guides,page/paragraph/tab callbacks and core undo ownership remain unchanged. Six old tab fixture triggers in two files use pointer-down plus matched pointer-up,with every assertion and all other bytes retained;278of280prior test files byte-identical. Browser teardown cancels DOM callbacks without claiming identical native disposal flags. Owned boundary/handle/actual Writer and rebuilt desktop/mobile tests cover this bounded tracking contract only. Full native hit testing,RTL/tab types,double-click dialogs,modifier snapping,deletion,mouse capture,platform/LOK/input and complete ruler/Writer/native parity remain unverified;intentional save/open/recovery exceptions are preserved. Iteration172 restores native document-origin list-label ruler admission through the existing browser ruler tracking owner. Actual label identity resolves an actual SwTextNode only while copying StateTabWin geometry; pinned edtwin clears this borrowed node immediately after StartDocDrag. Signed-short offset and native SetLeft negative-first adjustment feed bottom-indent document hit testing with explicit tab precedence and right-before-left order. Accepted changed copied geometry applies to current paragraph selection through existing SetParagraphRulerIndents and real item UndoRedo, not a retained label rule update. Native mouse admission preserves cursor and label rule/list ownership; cancellation, zero movement, hide/inactive/unmount/document replacement discard preview and history. No synthetic handle event, text-run conversion, new DTO/model or competing gesture owner. Prior contracts/evidence and conscious IO exceptions retained. Full native RTL/vertical/table-column/protection/style-autoupdate/modifier-clipping/platform/framework/ruler/list/table/core/UI behavior remains unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "useRulerTracking",
+        "RulerTracking",
+        "RulerTrackingCallbacks"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

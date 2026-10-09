@@ -1,0 +1,53 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/browser/editor/writer-selection.ts",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "browser-editor",
+    "capabilityIds": [
+      "CAP-0103",
+      "CAP-0117",
+      "CAP-0118"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/browser/editor/writer-selection.ts#getWriterDomSelection",
+        "apps/office/src/sw/browser/presentation/writer-view-style-focus.test.tsx#Writer style-box focus",
+        "apps/office/src/sw/browser/editor/native-table-pointer.test.tsx#mounted table pointer",
+        "apps/office/src/sw/browser/editor/writer-table-geometry.test.ts#actual table cell containment",
+        "apps/office/e2e/writer-native-table-pointer.spec.ts#Writer native table interior and gutter pointer",
+        "vendor/libreoffice-reference/sw/source/uibase/docvw/edtwin.cxx#void SwEditWin::MouseButtonDown",
+        "vendor/libreoffice-reference/sw/source/core/frmedt/fetab.cxx#SwTab SwFEShell::WhichMouseTabCol",
+        "vendor/libreoffice-reference/sw/source/core/frmedt/fetab.cxx#const SwFrame* SwFEShell::GetBox",
+        "vendor/libreoffice-reference/sw/source/uibase/wrtsh/select.cxx#bool SwWrtShell::SelectTableRow",
+        "apps/office/src/sw/source/uibase/docvw/native-headline-selection.test.ts#native",
+        "apps/office/src/sw/browser/editor/native-headline-selection.test.tsx#native",
+        "apps/office/e2e/writer-headline-selection.spec.ts#Writer native table range",
+        "vendor/libreoffice-reference/sw/source/core/crsr/crsrsh.cxx#No table cursor in repeated headlines:",
+        "vendor/libreoffice-reference/sw/source/core/crsr/viscrs.cxx#void SwShellTableCursor::FillRects()",
+        "vendor/libreoffice-reference/sw/source/core/layout/findfrm.cxx#SwLayoutFrame* SwFrame::GetNextCellLeaf()",
+        "vendor/libreoffice-reference/sw/source/core/layout/trvlfrm.cxx#pTab->IsFollow() && pTab->IsInHeadline"
+      ],
+      "justification": "Renders immutable current paragraph values together with alignment and list controls backed by generated commands and persistent bindings state. Iteration104 preserves focus of the editing host itself when restoring a collapsed DOM selection; paragraph-focused editing still follows the target paragraph, including Enter into an adjacent node. This keeps explicit document-container focus contracts and canonical cursor offsets while toolbar Tab remains outside the client. Source cursor ownership remains unchanged; full native/widget and wider parity remain unverified. Iteration170 removes blanket row click inference so table interior padding uses the existing BrowserWriterPointerSelectionController/selection mapper/SwEditWin/native cursor rather than selecting a whole row. Removing the row handler also removes synthetic row inference from list-marker hits. Native number labels instead invoke RulerMarginDrag/StartDocDrag(Indent); that label/ruler behavior remains unverified. The mounted injected marker caret test proves browser geometry only. Initial real-browser MKeep expectations were source-confirmed incorrect and are excluded; marker checks retain no synthetic row selection and unchanged text. The existing explicit row selector is placed in an absolute left gutter with hover/focus arrow, outside cell text and measurement flow. Actual element hit and native caret range are authoritative within the hit cell; otherwise bounded nearest paragraph and clipped native hit resolution reuse existing text-caret helper for empty/formatted boundary fallback. Browser geometry remains an explicit DOM adaptation, not full VCL layout. Existing helper is exported directly for reuse without a duplicate walker, manager, model, DTO or compatibility wrapper. New owned geometry/mounted DOM/Chromium cases verify the represented flat LTR table pointer, actual native box/caret/history and neighbor behavior. RTL/vertical/nested/merged/protected/column/resizing/full layout/portion/core/UI/list/table remain unverified; prior states/defaults/classes/IO exceptions and evidence prefixes are retained. Iteration174 restores represented flat same-table cross-cell cursor admission and repeated headline restrictions through existing owners. Native moving/fixed endpoints, selected boxes and ordinary cell history are preserved; selected original boxes do not paint on repeated headline copies. Actual native, mounted and Chromium cases cover bounded behavior. Full nested/merged/rowspan/split rows/cross-table/vertical/RTL/protection/frame/core/UI parity remains unverified; states/defaults/classes/IO exceptions and prior evidence preserved. Iteration216 pending: native before-label affinity is distinct from text offset0 through SwEditWin and shell publication, browser DOM Selection before marker and caret painting. Seven changed boundaries under verification; marked-list-level shading, ruler/RTL/bidi/full geometry and whole parity remain unverified. Existing statuses/defaults/registered save/open/recovery exceptions retained. Iteration216 verified bounded label-affinity roundtrip: native SwPaM owns defaultfalse state, shell SetPaM/UpdateCursor distinguish label from identical text0 and publish final owners; ordinary Insert clears affinity as Insert2. Browser restores stable editable DOM boundary after the noneditable decoration with distinct native BEFORE-label affinity, keeps marker glyphs out of model offsets and paints caret at label edge; pointer label admission and native history covered. Whole marked-list-level shading/ruler/RTL/bidi/layout and kernel/browser parity remain individually unverified; prior states/defaults/registered exceptions unchanged.",
+      "knownViolations": [],
+      "localSymbols": [
+        "getWriterDomSelection",
+        "restoreWriterDomSelection",
+        "getWriterCollapsedCaretOffset",
+        "restoreWriterCollapsedCaret",
+        "getWriterSameParagraphSelection",
+        "getWriterCollapsedParagraphCaret"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "writerNumObjectBarItems",
+          "path": "apps/office/src/sw/uiconfig/swriter/toolbar/numobjectbar.ts"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": ".uno:DecrementLevel",
+          "path": "vendor/libreoffice-reference/sw/uiconfig/swriter/toolbar/numobjectbar.xml"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/uiconfig/swriter/toolbar/numobjectbar.ts",
+    "localSymbols": [
+      "writerNumObjectBarItems"
+    ],
+    "omittedResponsibilities": [
+      "Upstream obligations outside .uno:DecrementLevel, .uno:IncrementLevel, .uno:DecrementSubLevels, .uno:IncrementSubLevels and the bounded WriterNumObjectBarListLevelCommand, writerNumObjectBarListLevelCommands contract remain intentionally omitted."
+    ],
+    "preservedResponsibilities": [
+      "Declares browser Writer list-level controls at the pinned LibreOffice `sw/uiconfig/swriter/toolbar/numobjectbar.xml` ownership boundary."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/uiconfig/swriter/toolbar/numobjectbar.xml",
+    "upstreamSymbols": [
+      ".uno:DecrementLevel",
+      ".uno:IncrementLevel",
+      ".uno:DecrementSubLevels",
+      ".uno:IncrementSubLevels"
+    ]
+  },
+  "legacyOrder": 273
+}

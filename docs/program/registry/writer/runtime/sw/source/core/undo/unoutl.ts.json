@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/undo/unoutl.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "undo-redo",
+    "capabilityIds": [
+      "CAP-0102"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/undo/unoutl.ts#SwUndoOutlineLeftRight",
+        "apps/office/src/sw/source/core/doc/native-outline-movement.test.ts#native outline movement",
+        "apps/office/src/sw/browser/editor/native-outline-tab.test.tsx#native outline Tab UI",
+        "apps/office/e2e/writer-native-outline-tab.spec.ts#Writer native heading Tab retains styles and history",
+        "vendor/libreoffice-reference/sw/source/core/doc/docnum.cxx#bool SwDoc::OutlineUpDown",
+        "vendor/libreoffice-reference/sw/source/core/undo/unoutl.cxx#SwUndoOutlineLeftRight::UndoImpl",
+        "vendor/libreoffice-reference/sw/source/core/edit/ednumber.cxx#bool SwEditShell::OutlineUpDown",
+        "vendor/libreoffice-reference/sw/source/uibase/docvw/edtwin.cxx#case SwKeyState::OutlineDown:"
+      ],
+      "justification": "Iteration167 implements the represented nonmerged native docnum outline move-table using actual sorted outline index/predecessor range, creation-order assigned styles, lazy adjacent pool styles, occupied-level signed steps, whole-range rejection and actual collection/direct-outline mutation. Matching unoutl SwUndoOutlineLeftRight retains numeric range and signed offset, reuses the same primitive inversely for Undo and identically for Redo. SwEditShell retains native normalized ring order and short-circuit after failure with grouped successful delta history; default displacement one. SwEditWin eligible heading-at-start Tab/ShiftTab calls this native operation and owns the key, replacing unsupported fallback while retaining numbering/table priority and text/limit cases. Core primitive and portable shell history registration remain separated as existing runtime architecture; no snapshot/model/preparation/no-op callback/browser heuristic. Actual core/mounted DOM/production Chromium tests prove bounded behavior. Direct document auto-history, framework Repeat, failed-operation dirty flag, native StartAllAction layout batching, merged para props and conditional collections remain unrepresented/unverified. Full KeyInput/core/UI/list/table parity unverified.253 prior semantic states/defaults/classes/IO exceptions/evidence preserved;2 new partial owners stay unverified,255 modules.429 prior tests428 byte-identical with only exact old unsupported outline-case source-confirmed expectations corrected. Conscious save/open/recovery deviations unchanged.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SwUndoOutlineLeftRight"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/core/undo/unoutl.cxx",
+      "upstreamSymbols": [
+        "SwUndoOutlineLeftRight::SwUndoOutlineLeftRight",
+        "SwUndoOutlineLeftRight::UndoImpl",
+        "SwUndoOutlineLeftRight::RedoImpl"
+      ]
+    }
+  }
+}

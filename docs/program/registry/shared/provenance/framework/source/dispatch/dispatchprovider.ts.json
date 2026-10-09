@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "FrameworkDispatchProvider",
+          "path": "apps/office/src/framework/source/dispatch/dispatchprovider.ts"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "DispatchProvider::queryDispatch(",
+          "path": "vendor/libreoffice-reference/framework/source/dispatch/dispatchprovider.cxx"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/framework/source/dispatch/dispatchprovider.ts",
+    "localSymbols": [
+      "FrameworkDispatchProvider"
+    ],
+    "omittedResponsibilities": [
+      "UNO frame search, interception, and native dispatch objects remain outside the supported browser slice."
+    ],
+    "preservedResponsibilities": [
+      "Provides the outer framework command-URL lookup facade while Sfx owns shell-stack resolution."
+    ],
+    "rationale": "Restores framework as an outer dispatch-provider facade and delegates command resolution to the active Sfx dispatcher.",
+    "responsibilities": [
+      "Delegates command URL lookup without owning Sfx dispatcher or frame state."
+    ],
+    "status": "mapped",
+    "upstreamPath": "framework/source/dispatch/dispatchprovider.cxx",
+    "upstreamSymbols": [
+      "DispatchProvider::queryDispatch"
+    ]
+  },
+  "legacyOrder": 23
+}

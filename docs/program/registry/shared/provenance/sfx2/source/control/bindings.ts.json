@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "SfxBindings",
+          "path": "apps/office/src/sfx2/source/control/bindings.ts"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "SfxBindings::SfxBindings",
+          "path": "vendor/libreoffice-reference/sfx2/source/control/bindings.cxx"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sfx2/source/control/bindings.ts",
+    "localSymbols": [
+      "SfxBindings"
+    ],
+    "omittedResponsibilities": [
+      "Native timers, dispatch-result listeners, and UNO state conversion remain outside the bounded browser dispatcher."
+    ],
+    "preservedResponsibilities": [
+      "Preserves frame-owned command state queries and invalidation."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sfx2/source/control/bindings.cxx",
+    "upstreamSymbols": [
+      "SfxBindings::SfxBindings"
+    ]
+  },
+  "legacyOrder": 41
+}

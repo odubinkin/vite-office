@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svx/source/dialog/svxruler.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "table-editing",
+    "capabilityIds": [
+      "CAP-0117",
+      "CAP-0118"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/svx/source/dialog/native-table-ruler.test.ts",
+        "apps/office/src/sw/source/uibase/docvw/native-ruler-ownership.test.ts",
+        "scripts/native-ruler-boundary.test.ts",
+        "apps/office/src/svx/source/dialog/svxruler.ts#SvxRuler",
+        "vendor/libreoffice-reference/svx/source/dialog/svxruler.cxx#SvxRuler::UpdateColumns"
+      ],
+      "justification": "Iteration232 moves represented document table ruler tracking from SwEditWin into source-owned SVTOOLS Ruler lifecycle and SVX SvxRuler geometry over independent SvxColumnItem values. SwView owns persistent horizontal/vertical rulers; SwEditWin delegates actual Border/Margin hits with5px tolerance and physical tracking, retaining only original Writer carrier/document start for ExecuteTabWin-shaped native value apply. SVX owns exact modifier/snapping flags, uint16 share/width-block buffers, native represented limits, linear/proportional/row geometry and cancel/apply decisions without importing SW/browser code. Source SVX->SVTOOLS/VCL and SW->SVTOOLS native library edges are explicit. New source owners remain partial and unverified: full SFX bindings/slot state, VCL ruler drawing/ticks/snapping, protection, paragraph/frame margin state, column-margin modifier geometry, vertical/RTL document writing and frame-column/object/tab/indent contexts are not claimed. Existing ordinary column-margin geometry and registered IO deviations remain; prior semantic states/defaults/classes are unchanged. Iteration232 verification exposed a pre-existing unsupported core branch: SwDoc::SetTabCols and SwTable::SetTabCols explicitly reject currentRowOnly independent column-row geometry. Native SvxRuler EvalModifier retains its source current-line flag, but Writer column apply preserves the existing ordinary shared-column contract; native row apply forwards the flag as before. Independent per-row box widths, history/layout/ODT ownership and native current-line column apply require a subsequent core correction; this retained gap is not an intentional upstream exception or a parity claim. Remove unreachable proportional Margin1 skeleton branches from the represented border-only column preparation/limiter; full column-margin modifier contexts remain omitted. Four new unequal/hidden native geometry and cross-axis history cases cover changed complete functions without replaying passing cases.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SvxRuler",
+        "SvxRulerDragFlags"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "svx/source/dialog/svxruler.cxx",
+      "upstreamSymbols": [
+        "SvxRuler::UpdateColumns",
+        "SvxRuler::EvalModifier",
+        "SvxRuler::PrepareProportional_Impl",
+        "SvxRuler::CalcMinMax",
+        "SvxRuler::DragBorders",
+        "SvxRuler::ApplyBorders"
+      ]
+    }
+  }
+}

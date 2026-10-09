@@ -1,0 +1,133 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/ndtxt-list-indent.ts",
+          "marker": "resolveSwListLevelIndents"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/ndtxt-list-indent.ts",
+          "marker": "resolveSwListParagraphIndents"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-view-list-indent-mask.test.tsx",
+          "marker": "selectsIndependentMask"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-view-list-indent-mask.test.tsx",
+          "marker": "tracksLiveMaskHistory"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-view-list-indent-mask.test.tsx",
+          "marker": "selectsStyleHierarchy"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-view-uncounted-list-layout.test.tsx",
+          "marker": "native uncounted list text geometry"
+        },
+        {
+          "path": "apps/office/e2e/writer-uncounted-list-layout.spec.ts",
+          "marker": "Writer uncounted list keeps native text-left through history"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-view-counted-list-layout.test.tsx",
+          "marker": "native counted list axes"
+        },
+        {
+          "path": "apps/office/e2e/writer-counted-list-layout.spec.ts",
+          "marker": "Writer counted axes stay independent through paragraph history"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ascii/native-ascii-range.test.ts",
+          "marker": "original native node span"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "SwTextNode::AreListLevelIndentsApplicable"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/ndtxt.hxx",
+          "marker": "AreListLevelIndentsApplicable"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/paratr.hxx",
+          "marker": "enum class ListLevelIndents"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "SwTextNode::GetLeftMarginWithNum"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "SwTextNode::GetFirstLineOfsWithNum"
+        },
+        {
+          "path": "vendor/libreoffice-reference/editeng/source/items/frmitems.cxx",
+          "marker": "SvxTextLeftMarginItem::ResolveLeft"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "SwTextNode::GetLeftMarginWithNum"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "SwTextNode::GetFirstLineOfsWithNum"
+        },
+        {
+          "path": "vendor/libreoffice-reference/editeng/source/items/frmitems.cxx",
+          "marker": "SvxTextLeftMarginItem::ResolveLeft"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "SwTextNode::GetLeftMarginForTabCalculation"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/core/txtnode/ndtxt-list-indent.ts",
+    "localSymbols": [
+      "resolveSwListLevelIndents",
+      "resolveSwListParagraphIndents",
+      "SwListParagraphIndents",
+      "resolveSwListTextLeftMargin",
+      "resolveSwListFirstLineIndent",
+      "resolveSwLeftMarginWithNum",
+      "resolveSwLeftMarginForTabCalculation",
+      "GetSwTextNodeNumString",
+      "HasSwTextNodeVisibleNumbering",
+      "CaptureSwTextNodeListItems",
+      "GetSwTextNodeListLabel"
+    ],
+    "omittedResponsibilities": [
+      "Complete imported custom-style/sideband/legacy/tab/device/RTL/table/redline/frame layout and native const/out-parameter lifetime remain separately unverified."
+    ],
+    "preservedResponsibilities": [
+      "Iteration101 restores native sw::ListLevelIndents0/1/2 flags and live text-node applicability per axis: actual GetNum-bound rule presence, direct margin-before-direct-rule priority, and nearest style indent-before-rule traversal with native true fallthrough. A source-owned ndtxt split keeps the node under the unchanged1000-line limit. The selected alignment-value reader independently resolves supported text-left and counted signed16 first-line inputs with the existing ignore-first-line flag. Independent literal ownership/zero/signed boundaries, style/direct override, graph/clone destination and actual Writer history/no-op/direct absence are covered. Existing print bounds, frozen projection, rendering, filters and serialized listGeometryWins sideband remain byte-identical; native consumer migration requires imported custom-style hierarchy restoration after the initial failed absent application gate exposed flattened-style and exact DTO contracts. All304prior tests unchanged. Native complete import/style/tab/device/RTL/table/redline/list/frame layout and parent parity remain unverified. No module/status/default/exception or registered I/O/recovery promotion.",
+      "Iteration143 retains native text-left for uncounted bound list nodes independently of marker visibility. Core resolver reuses independent alignment-axis ownership;legacy relative spacing adds paragraph text-left and absolute spacing subtracts ResolveLeft including hanging first-line contribution. Native uncounted first-line offset is zero. Immutable projection feeds shared body/cell rendering without marker/tab spacer or listGeometryWins heuristics;print bounds consume the same native primitive. Actual count UndoRedo,body/cell geometry,zero/negative/direct/style and legacy/follow cases provide bounded evidence. Counted marker/tab layout,RTL/font-relative/large-indent cell clamping,fullnativeframes/navigation/history/UI and broad parity remainunverified;all244existingstates/defaults/deviations unchanged.",
+      "Iteration144 projects native independent list text-left and first-line axes into shared body/cell presentation and print bounds. Counted alignment uses existing live mask;legacy firstline includes authored offset unless numbering compatibility ignores it,with native signed-short wrap;uncounted offset0 and ordinary paragraph fallback retain prior ownership. Renderer removes paragraphIndentWins and no longer gives legacy listGeometryWins metadata behavioral authority. Existing immutable listLayout receives resolved native axes;persisted/imported flag remains metadata only. Actual body/cell literal and Chromium paragraph/history marker measurements cover represented axes. Full label/tab/space/nothing follower widths,legacy minimum gap,wrapping,RTL/fontrelative/cellclamping and fullframes/UI remainunverified;all244existingstates/defaults/deviations unchanged.",
+      "Iteration187 removes synthetic ASCII selection DTOs, complete-list-item counting and invented marker fallback. Actual SwASCWriter iterates SwPaM/SwNodes and OutASC_SwTextNode uses native original-node span, start offsets, export-numbering flag, GetNumString, visibility, numbering margin/tab and default bullet configuration. One list plus ordinary paragraph and partial last paragraph labels now follow native selection behavior; same-node and later-start labels remain suppressed. Native numbering defaults and supported twip calculations are covered on actual core owners, mounted body/cell UI and Chromium copy/history. HTML ownership is retained. Full ASCII attributes/fields/redlines/copied table topology/rings/options, compatibility flag beyond native false default, desktop environment overrides and broad core/UI parity remain unverified; all prior states/defaults/classes/evidence/responsibilities and conscious save/open/recovery deviations are preserved.",
+      "Physical-line decomposition also moves existing CaptureListItems and GetListLabel bodies without behavioral changes; new numbering text/visibility bodies use the same actual SwTextNode owner via type-only imports."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/txtnode/ndtxt.cxx",
+    "upstreamSymbols": [
+      "SwTextNode::AreListLevelIndentsApplicable",
+      "SwTextNode::AreListLevelIndentsApplicableImpl",
+      "SwTextNode::GetLeftMarginWithNum",
+      "SwTextNode::GetFirstLineOfsWithNum",
+      "SwTextNode::GetLeftMarginForTabCalculation"
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/core/txtnode/ndtxt-list-indent.ts",
+      "rationale": "Native text-node independent list-indent applicability and selected alignment inputs are split from SwTextNode to retain the mandatory1000-line limit and ndtxt.cxx source ownership.",
+      "stackNecessity": "responsibility-split"
+    }
+  },
+  "legacyOrder": 214,
+  "filenameOrder": 3
+}

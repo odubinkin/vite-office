@@ -1,0 +1,286 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "LO-WRITER-0105",
+    "capabilityId": "CAP-0105",
+    "suite": "writer",
+    "subsystem": "numbering",
+    "type": "command",
+    "maturity": "verified",
+    "assertions": [
+      "The pinned upstream and local assertion markers cover this atomic operation: Apply or remove one default list kind."
+    ],
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "The bounded numbering transitions preserve the applicable upstream command semantics."
+    },
+    "capability": "Writer default list-kind mutation",
+    "gaps": [],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sw/source/core/doc/list.cxx",
+          "marker": "SwList"
+        },
+        {
+          "path": "sw/source/core/doc/number.cxx",
+          "marker": "DefaultBulletList"
+        },
+        {
+          "path": "sw/source/uibase/shells/txtnum.cxx",
+          "marker": "FN_NUM_BULLET_ON"
+        },
+        {
+          "path": "sw/uiconfig/swriter/menubar/menubar.xml",
+          "marker": ".uno:FormatBulletsMenu"
+        },
+        {
+          "path": "sw/uiconfig/swriter/toolbar/textobjectbar.xml",
+          "marker": ".uno:DefaultNumbering"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sw/qa/extras/uiwriter/uiwriter8.cxx",
+          "marker": "testTdf97899"
+        },
+        {
+          "path": "sw/qa/extras/uiwriter/uiwriter10.cxx",
+          "marker": ".uno:DefaultNumbering"
+        },
+        {
+          "path": "sw/qa/uitest/writer_tests2/formatBulletsNumbering.py",
+          "marker": "test_bullets_and_numbering_document_bullet_list"
+        }
+      ],
+      "docs": [
+        {
+          "path": "helpcontent2/source/text/swriter/02/02110000.xhp",
+          "marker": ".uno:DefaultNumbering"
+        },
+        {
+          "path": "helpcontent2/source/text/swriter/02/06040000.xhp",
+          "marker": ".uno:RemoveBullets"
+        },
+        {
+          "path": "helpcontent2/source/text/swriter/guide/using_numbered_lists.xhp",
+          "marker": "Adding Bullets"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sw/source/core/doc/list.ts",
+          "marker": "WriterParagraphList"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/number.ts",
+          "marker": "getWriterParagraphListMarker"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+          "marker": "SetParagraphListKind"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx",
+          "marker": "data-writer-list-marker"
+        },
+        {
+          "path": "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx",
+          "marker": "CommandMenuBar"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterFormattingToolbar.tsx",
+          "marker": "WriterFormattingToolbar"
+        },
+        {
+          "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
+          "marker": "writerMenuPlacements"
+        },
+        {
+          "path": "apps/office/src/sw/uiconfig/swriter/toolbar/textobjectbar.ts",
+          "marker": "writerTextObjectBarItems"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sw/source/core/doc/list.test.ts",
+          "marker": "normalizes malformed command metadata"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/number.test.ts",
+          "marker": "renders bullets"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.test.ts",
+          "marker": "routes formatting and list commands"
+        },
+        {
+          "path": "apps/office/src/framework/browser/app/desktop.test.tsx",
+          "marker": "applies and toggles Writer list commands"
+        },
+        {
+          "path": "apps/office/e2e/writer-lists.spec.ts",
+          "marker": "Writer bullets and numbering"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/writer-paragraph-lists.md",
+          "marker": "Browser Writer paragraph lists"
+        },
+        {
+          "path": "docs/program/writer-command-placement.md",
+          "marker": "FormatBulletsMenu"
+        },
+        {
+          "path": "docs/program/source-tree.md",
+          "marker": "File-level provenance in active Writer list"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "Apply or remove one default list kind",
+    "scopeLimitations": [
+      "This first command layer applies to the active paragraph only; multi-paragraph, range, and table-cell selection remain separate mapped work.",
+      "Complete numbering semantics, named-style editing, explicit restart values, outline numbering, automatic lists, RTF transfer, and DOCX import/export remain separate mapped work; bounded ODT list interchange is implemented by LO-WRITER-0113."
+    ],
+    "implemented": true,
+    "contractParity": true,
+    "behaviorParity": true,
+    "defaultParity": true,
+    "verified": true,
+    "assertionEvidence": [
+      {
+        "assertion": "The pinned upstream and local assertion markers cover this atomic operation: Apply or remove one default list kind.",
+        "local": {
+          "marker": "normalizes malformed command metadata",
+          "path": "apps/office/src/sw/source/core/doc/list.test.ts"
+        },
+        "upstream": {
+          "marker": "testTdf97899",
+          "path": "sw/qa/extras/uiwriter/uiwriter8.cxx"
+        }
+      }
+    ],
+    "verification": {
+      "commit": "7632bdc505ec",
+      "evidence": "Parity closure evidence resolution; npm run inventory:parity; npm test; npm run test:e2e",
+      "scope": "bounded",
+      "taskId": "202609210851-1GHX09"
+    },
+    "closure": {
+      "contract": {
+        "local": {
+          "marker": "WriterParagraphList",
+          "path": "apps/office/src/sw/source/core/doc/list.ts"
+        },
+        "method": "api-invariant",
+        "rationale": "The bounded CAP-0105 API and identifiers resolve to exact local and pinned upstream symbols.",
+        "status": "pass",
+        "upstream": {
+          "marker": "SwList",
+          "path": "sw/source/core/doc/list.cxx"
+        }
+      },
+      "ownership": {
+        "local": {
+          "marker": "WriterParagraphList",
+          "path": "apps/office/src/sw/source/core/doc/list.ts"
+        },
+        "method": "api-invariant",
+        "rationale": "The bounded CAP-0105 owner is checked at the mapped local and upstream implementation boundary.",
+        "status": "pass",
+        "upstream": {
+          "marker": "SwList",
+          "path": "sw/source/core/doc/list.cxx"
+        }
+      },
+      "behavior": {
+        "local": {
+          "marker": "normalizes malformed command metadata",
+          "path": "apps/office/src/sw/source/core/doc/list.test.ts"
+        },
+        "method": "unit-test",
+        "rationale": "The mapped local assertion exercises the same bounded operation as the pinned upstream assertion.",
+        "status": "pass",
+        "upstream": {
+          "marker": "testTdf97899",
+          "path": "sw/qa/extras/uiwriter/uiwriter8.cxx"
+        }
+      },
+      "defaults": {
+        "local": {
+          "marker": "normalizes malformed command metadata",
+          "path": "apps/office/src/sw/source/core/doc/list.test.ts"
+        },
+        "method": "source-derived-golden",
+        "rationale": "The local default-state expectation is derived from the pinned upstream assertion before explicit user settings.",
+        "status": "pass",
+        "upstream": {
+          "marker": "testTdf97899",
+          "path": "sw/qa/extras/uiwriter/uiwriter8.cxx"
+        }
+      },
+      "serialization": {
+        "method": "not-applicable",
+        "rationale": "Apply or remove one default list kind does not cross a serialization boundary.",
+        "status": "not-applicable"
+      },
+      "operationCycle": {
+        "local": {
+          "marker": "normalizes malformed command metadata",
+          "path": "apps/office/src/sw/source/core/doc/list.test.ts"
+        },
+        "method": "source-derived-golden",
+        "rationale": "The applicable mutation, undo/redo, export, or reopen stages are exercised by the mapped bounded test.",
+        "status": "pass",
+        "upstream": {
+          "marker": "testTdf97899",
+          "path": "sw/qa/extras/uiwriter/uiwriter8.cxx"
+        }
+      },
+      "differential": {
+        "local": {
+          "marker": "normalizes malformed command metadata",
+          "path": "apps/office/src/sw/source/core/doc/list.test.ts"
+        },
+        "method": "source-derived-golden",
+        "rationale": "No runnable pinned LibreOffice binary is present; the focused local golden is derived from the exact pinned upstream test assertion.",
+        "status": "pass",
+        "upstream": {
+          "marker": "testTdf97899",
+          "path": "sw/qa/extras/uiwriter/uiwriter8.cxx"
+        }
+      },
+      "divergences": [
+        {
+          "classification": "X",
+          "description": "This first command layer applies to the active paragraph only; multi-paragraph, range, and table-cell selection remain separate mapped work.",
+          "local": {
+            "marker": "Browser Writer paragraph lists",
+            "path": "docs/program/writer-paragraph-lists.md"
+          },
+          "upstream": {
+            "marker": "SwList",
+            "path": "sw/source/core/doc/list.cxx"
+          }
+        },
+        {
+          "classification": "X",
+          "description": "Complete numbering semantics, named-style editing, explicit restart values, outline numbering, automatic lists, RTF transfer, and DOCX import/export remain separate mapped work; bounded ODT list interchange is implemented by LO-WRITER-0113.",
+          "local": {
+            "marker": "Browser Writer paragraph lists",
+            "path": "docs/program/writer-paragraph-lists.md"
+          },
+          "upstream": {
+            "marker": "SwList",
+            "path": "sw/source/core/doc/list.cxx"
+          }
+        }
+      ]
+    }
+  }
+}

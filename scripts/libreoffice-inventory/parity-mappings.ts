@@ -3,6 +3,8 @@
  */
 
 import type { BaselineManifest } from "./contracts";
+import { isCapabilityId } from "./capability-identity";
+
 import {
   assertOrderedUniqueRecords,
   isRecord,
@@ -641,10 +643,13 @@ async function resolveParityClosureReference(
 function parseRecord(candidate: unknown, index: number): ParityMappingRecord {
   if (!isRecord(candidate)) throw new Error(`Parity mapping records[${index}] must be an object.`);
   const id = requireString(candidate, "id");
-  if (!/^LO-(?:BASE|CALC|CHART|DRAW|IMPRESS|MATH|SHARED|WRITER)-\d{4}$/.test(id))
+  if (
+    !/^LO-(?:BASE|CALC|CHART|DRAW|IMPRESS|MATH|SHARED|WRITER)-\d{4}$/.test(id) &&
+    id !== candidate.capabilityId
+  )
     throw new Error(`Invalid parity ID: ${id}`);
   const capabilityId = requireString(candidate, "capabilityId");
-  if (!/^CAP-\d{4}$/.test(capabilityId))
+  if (!isCapabilityId(capabilityId))
     throw new Error(`Invalid domain-agnostic capability ID: ${capabilityId}`);
   const implemented = requireBoolean(candidate, "implemented");
   const contractParity = requireBoolean(candidate, "contractParity");

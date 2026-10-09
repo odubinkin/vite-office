@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "DocumentSettingManager",
+          "path": "apps/office/src/sw/source/core/doc/DocumentSettingManager.ts"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "DocumentSettingManager::DocumentSettingManager",
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentSettingManager.cxx"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/core/doc/DocumentSettingManager.ts",
+    "localSymbols": [
+      "DocumentSettingManager"
+    ],
+    "omittedResponsibilities": [
+      "Upstream responsibilities beyond the bounded DocumentSettingManager implementation remain intentionally omitted."
+    ],
+    "preservedResponsibilities": [
+      "Owns bounded document settings at the upstream manager boundary.",
+      "Iteration220 represented native numbering-font policy: txtfld NewNumberPortion starts from the original paragraph attr owner, optional bullet font overrides face, false-default DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT resets bullet weight/posture and both labels underline; number weight/posture and inherited height/color remain native. Frozen values feed shared body/cell marker device, existing width/minimum distance/background retained. Older graph records missing only new flag defaultfalse, prior fields remain strict. Full SwFont hierarchy/scripts/face metadata/character-style/paragraph-mark/redline/graphics/device shaping and ink/theme/decoration variants remain unverified; all prior statuses/defaults/registered I/O/recovery exceptions preserved."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/doc/DocumentSettingManager.cxx",
+    "upstreamSymbols": [
+      "DocumentSettingManager::DocumentSettingManager"
+    ]
+  },
+  "legacyOrder": 159
+}

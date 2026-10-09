@@ -1,0 +1,418 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "MakeNumString(numbers",
+          "path": "apps/office/src/sw/source/core/doc/number.ts"
+        },
+        {
+          "path": "apps/office/src/editeng/source/items/numitem.test.ts",
+          "marker": "initializes independent zero geometry in legacy mode"
+        },
+        {
+          "path": "apps/office/src/editeng/source/items/numitem.test.ts",
+          "marker": "switches native legacy getters without rewriting either geometry group"
+        },
+        {
+          "path": "apps/office/src/editeng/source/items/numitem.test.ts",
+          "marker": "retains native signed getter widths at integer boundaries"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-list-position-mode-roundtrip.test.ts",
+          "marker": "selects native mode independently of child geometry through common and automatic ODT cycles"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-list-position-mode-roundtrip.test.ts",
+          "marker": "retains pre-existing browser snapshots with absent inactive legacy fields"
+        },
+        {
+          "path": "apps/office/src/xmloff/source/style/xmlnume.test.ts",
+          "marker": "exports only the native legacy group with nonzero and positive attribute predicates"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/node-numbering-lifecycle.test.ts",
+          "marker": "owns records in text nodes and validates insertion notifications before prefix reads"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/node-numbering-lifecycle.test.ts",
+          "marker": "removes old clients before changing list attributes and preserves native registration order"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/DocumentListItemsManager.test.ts",
+          "marker": "sorts independent of insertion order, suppresses equivalent positions and filters bullets and uncounted items"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/number-ownership.test.ts",
+          "marker": "matches all four shared native default tables and optional owned levels"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/number-format.test.ts",
+          "marker": "matches native NumberType formatting visibility legal coercion and signed32 input"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/number-classification.test.ts",
+          "marker": "matches native format enumeration itemize copy and type-change predicates"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/number-classification.test.ts",
+          "marker": "matches all native effective classification raw-layout counting and registry profiles"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/number-classification.test.ts",
+          "marker": "matches native root phantom and counted numbered-registry filtering"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/number-classification.test.ts",
+          "marker": "retains existing supported classifications and sparse ownership through Worker16"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/number-pointer.test.ts",
+          "marker": "matches native pointer and reference Set identity validity and every implemented field"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/number-pointer.test.ts",
+          "marker": "matches native absent pointer defaults and protects stable const references"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/number-pointer.test.ts",
+          "marker": "matches native base Writer assignment self alias and optional font copies"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/number-pointer.test.ts",
+          "marker": "matches native same modify assignment copy and detach responsibilities"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/number-pointer.test.ts",
+          "marker": "keeps pointer assigned live rule reads and sparse ownership through actual document and Worker paths"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/number-rule-lifecycle.test.ts",
+          "marker": "matches native constructors assignment self reset copy and all ten owned slots"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/number-rule-lifecycle.test.ts",
+          "marker": "matches complete native rule equality selected and ignored fields"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/number-rule-lifecycle.test.ts",
+          "marker": "matches native unknown default and exact ushort byte narrowing without invalidation"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/number-rule-lifecycle.test.ts",
+          "marker": "retains actual document clients list and registry across same name assignment and reset"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/number-rule-lifecycle.test.ts",
+          "marker": "preserves native scalar state on the actual Worker document owner with strict legacy domains"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-policy.test.ts",
+          "marker": "matches native bound orphan and inherited continuous phantom policies"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-policy.test.ts",
+          "marker": "matches native complete policy counter cache notification and traversal sequences"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-policy.test.ts",
+          "marker": "matches native continuous legacy marker selection without changing explicit list patterns"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-policy.test.ts",
+          "marker": "retains continuous and phantom policy on real Worker document owners and native copy reset boundaries"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-policy.test.ts",
+          "marker": "retains native empty and end sentinel validation with protected traversal"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-document-context.test.ts",
+          "marker": "requires explicit document arguments across rule list and tree APIs and hides traversal"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-document-context.test.ts",
+          "marker": "forwards the rule caller document through invalidation and list validation instead of its first client"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-document-context.test.ts",
+          "marker": "forwards an explicit insertion context while preserving text-owner policy and retained list topology"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-document-context.test.ts",
+          "marker": "forwards removal context without borrowing the text document and retains remaining raw counters"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-document-context.test.ts",
+          "marker": "passes the operation context through protected root and phantom traversal before text-owner notification"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/docvw/native-list-tab.test.ts",
+          "marker": "native ordinary paragraph Tab"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-list-tab.test.tsx",
+          "marker": "native ordinary paragraph Tab UI"
+        },
+        {
+          "path": "apps/office/e2e/writer-native-list-tab.spec.ts",
+          "marker": "Writer body list and table Tab retain editing focus"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/native-outline-movement.test.ts",
+          "marker": "preserves tenth-level NONE equal-indent literal Tab without demoting"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/native-numbering-indent.test.ts",
+          "marker": "native numbering indent values"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/edit/native-numbering-indent.test.ts",
+          "marker": "native label-indent shell policy"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ascii/native-ascii-range.test.ts",
+          "marker": "original native node span"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "SwNumFormat",
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/number.cxx"
+        },
+        {
+          "path": "vendor/libreoffice-reference/editeng/source/items/numitem.cxx",
+          "marker": "SvxNumberFormat::SvxNumberFormat"
+        },
+        {
+          "path": "vendor/libreoffice-reference/editeng/source/items/numitem.cxx",
+          "marker": "SvxNumberFormat::GetAbsLSpace"
+        },
+        {
+          "path": "vendor/libreoffice-reference/editeng/source/items/numitem.cxx",
+          "marker": "SvxNumberFormat::GetFirstLineOffset"
+        },
+        {
+          "path": "vendor/libreoffice-reference/editeng/source/items/numitem.cxx",
+          "marker": "SvxNumberFormat::GetCharTextDistance"
+        },
+        {
+          "path": "vendor/libreoffice-reference/editeng/source/items/numitem.cxx",
+          "marker": "SvxNumberFormat::SetPositionAndSpaceMode"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/style/xmlnumi.cxx",
+          "marker": "SvxXMLListLevelStyleContext_Impl::SvxXMLListLevelStyleContext_Impl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/style/xmlnumi.cxx",
+          "marker": "SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/style/xmlnume.cxx",
+          "marker": "SvxXMLNumRuleExport::exportLevelStyle"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "SwTextNode::GetNum("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "SwTextNode::GetNumberVector("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "SwTextNode::AddToList()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "SwTextNode::RemoveFromList()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "HandleSetAttrAtTextNode::HandleSetAttrAtTextNode"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx",
+          "marker": "SwNodeNum::PreAdd()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx",
+          "marker": "SwNodeNum::PostRemove()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx",
+          "marker": "SwNodeNum::ChangeNumRule("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/number.cxx",
+          "marker": "SwNumRule::GetTextNodeList("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/number.cxx",
+          "marker": "SwNumRule::RemoveTextNode("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/number.cxx",
+          "marker": "SwNumRule::Validate("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentListItemsManager.cxx",
+          "marker": "DocumentListItemsManager::addListItem("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentListItemsManager.cxx",
+          "marker": "DocumentListItemsManager::getNumItems("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/number.cxx",
+          "marker": "const SwNumFormat& SwNumRule::Get( sal_uInt16 i ) const"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/number.cxx",
+          "marker": "const SwNumFormat* SwNumRule::GetNumFormat( sal_uInt16 i ) const"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/number.cxx",
+          "marker": "void SwNumRule::Set( sal_uInt16 i, const SwNumFormat& rNumFormat )"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/number.cxx",
+          "marker": "SwNumFormat::IsEnumeration"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/number.cxx",
+          "marker": "SwNumFormat::IsItemize"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/number.cxx",
+          "marker": "void SwNumRule::Set( sal_uInt16 i, const SwNumFormat*"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/number.cxx",
+          "marker": "SwNumFormat& SwNumFormat::operator="
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/number.cxx",
+          "marker": "SwNumRule& SwNumRule::operator="
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/number.cxx",
+          "marker": "void SwNumRule::Reset("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/number.cxx",
+          "marker": "bool SwNumRule::operator==("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/numrule.hxx",
+          "marker": "SetPoolHelpId("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/poolfmt.hxx",
+          "marker": "UNKNOWN = USHRT_MAX"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx",
+          "marker": "SwNodeNum::IsContinuous()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx",
+          "marker": "SwNodeNum::IsCountPhantoms()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::ValidateContinuous("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::GetPred("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::GetLastDescendant()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::SetLastValid"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::NotifyInvalidChildren("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/list.cxx",
+          "marker": "SwList::ValidateListTree("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/number.cxx",
+          "marker": "SwNumRule::MakeNumString("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/number.cxx",
+          "marker": "bool NumDownChangesIndent"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/docvw/edtwin.cxx",
+          "marker": "case KEY_TAB:"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/swtypes.hxx",
+          "marker": "MAXLEVEL = 10"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/number.cxx",
+          "marker": "GetBulletChar"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/core/doc/number.ts",
+    "localSymbols": [
+      "SwNumFormat",
+      "SwNumRule",
+      "NumDownChangesIndent",
+      "GetBulletChar"
+    ],
+    "omittedResponsibilities": [
+      "Native layout expansion,redline/original/undo arrays,wider numbering families and full native nonshown tree lifetimes,complete callbacks/reading suppression,word-count/native lifetime machinery and legacy/default factories remain unverified.",
+      "Collection switch parity is bounded to the existing shown/list/heading slice;derived-style assignment cleanup iterators,native outline index,footnote/conditional/inline styles,live format callbacks,full history and factories remain unverified."
+    ],
+    "preservedResponsibilities": [
+      "Iteration36 makes the shown number record SwTextNode-owned: SwList inserts/removes records without allocation or a text-node map. SwNodeNum binds/clears its rule in PreAdd/PostRemove and transfers rule clients in ChangeNumRule; rule clients retain insertion order and suppress identity duplicates. DocumentListItemsManager maintains native position ordering and filters counted enumeration records. Attribute rule/list changes detach before mutation; canonical node moves retain records,copy/restore attach independent records. Reads validate the requested prefix rather than unrelated tails. Compiled20 additional unmodified pinned owner/registry definitions alongside37 tree/list definitions compare120 sequences/8976 actual owner states including raw prefix caches,reverse vectors,bound rules,client order and numbered registry. Literal tests cover orphan binding,default1 after removal,duplicate add,disconnected/foreign arrays,rule copies and disposal. Single shown/document-node/hierarchical Arabic and bullet slice only;native layout expansion,redline/original arrays,complete callbacks/word-count/lifetime and legacy/default factories remain unverified. No whole-module/default/goal promotion;registered document IO deviations unchanged.",
+      "Iteration37 ports the anonymous-namespace collection numbering transition helpers. Initial inherited attachment,retained record rebinding,five-attribute removal reset,Outline exclusion/assignment and synthesized empty-rule return match16 unchanged extracted native definitions over277 sequences/10394 actual states. Native footnotes,conditional/inline styles,outline index,platform flags/cache,live format callbacks and full history/attribute lifetime remain separate unverified obligations.",
+      "Iteration38 restores independent source set/reset pre/post flags, native prefix notification/validation ordering, direct outline suppression/return and normal-document sorted outline ownership.40 unchanged added native definitions compare60 sequences/2130 actual pre-vector cache,notification,item,rule,registry and outline-index states. Explicit dependency adapters retain source reading flag/shown/pool/raw-callback/layout-event/field boundaries;full native platform lifetime,dtor/redline/inline/fields/background/fill/live-style/default factories remain separate unverified obligations. No whole-module/default/goal promotion or IO change.",
+      "Iteration43 separates native const effective Get from raw optional GetNumFormat, uses shared NUM_RULE/OUTLINE_RULE tables in both position modes, copies only present levels, and preserves owned pointer/validity for equal reference Set. Source-shaped constructor retains native empty DefaultListId and AutoRule=true; established browser list command/import assembly uses explicit manager-owned metadata and Set. Base field equality lives in SvxNumberFormat, with SwNumFormat adding its currently implemented numbering/bullet fields. Twenty unchanged pinned constructor/copy/equality/accessor/reference-Set/constants definitions under ASan/UBSan supply 40 default and19 ownership/equality states, matched by literal local differential tests. Getter type removes setters and JS freeze enforces the const boundary; graph-v16 optional ownership/mode/type metadata preserves sparse levels while historical records retain explicit formats. Raw restart/tree start readers remain optional. Native pointer Set overload, live char-style registration, full graphic/font/color/adjustment/legal/show-symbol state, static refcount destruction, global bullet configuration and complete SvxNumberType hierarchy remain unverified. Browser-only mode accessor transports the native private selector; no corresponding native member getter is claimed. No whole-module/status or goal promotion; registered I/O/recovery deviations are unchanged.",
+      "Iteration44 restores SvxNumberType -> SvxNumberFormat -> SwNumFormat constructor/copy/state ownership, native numeric type IDs, standalone SVX_DEF_BULLET U+F095, unsigned32 glyph, show-symbol state and optional copied const Font family values. SwClient is composed because JavaScript has one superclass; the currently exposed registration remains null. Explicit browser format assembly/projection replaces kind/string-glyph constructor overloads. Worker graph16 preserves font presence (including present-empty), raw glyph and visibility with historical omissions supported. Complete unchanged native bodies compare 21 format-value states and144 type/format traces under ASan/UBSan, using named null-client, family-only Font/COW, decimal-provider, string/property/locale/platform adapters. Full native service initialization/static destruction, registered style clients, other Font attributes/equality, graphics, legal-rule state and wider numbering families remain unverified. No whole-module/status or goal promotion; registered I/O deviations unchanged.",
+      "Iteration45 restores native SwNumFormat.IsItemize (CHAR_SPECIAL/BITMAP) and IsEnumeration (!IsItemize, including NONE), and actual SwTextNode HasNumber/HasBullet use of the bounded effective const format. The distinct ndtxt.cxx layout-update predicate reads raw owned GetNumFormat and rejects absent/NONE/CHAR_SPECIAL/BITMAP formats. Native source bodies plus actual native rule constructor/Get/GetNumFormat/Set/default profile execute1032 cases under ASan/UBSan:4 format classifications/copies,1008 node/ownership/count/registry profiles,4 root/phantom cases and16 registry masks. Real local document/record/registry methods match the literal results; diagnostic record, bounded actual-level, counted/phantom, null-layout, ordered-container and platform/font/graphics aliases are named. Scalar bitmap classification is not bitmap rendering or wider formatting support. Native full layout/redline/graphics/style/font/service/global lifetimes and full counter algorithm profiles remain individually unverified. Existing Worker16 classification/ownership survives for ARABIC/NONE/CHAR_SPECIAL; original numbering/UNO/ODT/browser assertions and the measured malformed-NONE browser guard are preserved. No module/status or goal promotion and no registered I/O/recovery deviation changes.",
+      "Iteration46 restores the native pointer Set overload as explicit JS SetByPointer, distinct from reference Set replacement. Mutable owned SwNumFormat values and cached protected JS const views retain identity/live reads on pointer assignment; null resets the owned slot and restores the exact shared default. Source-owned base/Writer Assign copies every implemented raw marker/position/type/show/optional-family-Font field without ListFormat regeneration and transfers same-modify registration; copy construction preserves that source registration. Complete unchanged pinned pointer/ref Set,assignment/copy/rule-get/default and same-modify bodies emit639 profiles under ASan/UBSan:600 mixed traces,8 sparse defaults,23 assignment/self-alias profiles,6 actual registration recipient counts and2 format registration states. Exact hashes and prior full native format/default profile retained; named native SwModify Add/Remove container,invalid-flag,platform/family-only Font/COW/graphics/style/service aliases explicitly bound the proof. Original source-native ref/classification assertions remain intact. Actual document-owned rule,Worker16 and supported genuine ODT export/reopen fields are checked; native const view is a JS boundary and retained detached JS reads do not certify native deleted-pointer/destructor/global lifetime. Native complete Font/graphics/legal/style/layout/redline/UNO/service/global/client destruction and wider families remain individually unverified. No module/status/goal promotion,policy/dependency/coverage weakening or registered IO/recovery change.",
+      "Iteration47 restores the complete selected SwNumRule copy/operator=/Reset/operator== lifecycle and native scalar defaults/accessors. Copy constructs independent owned formats and resets phantom-count/redline flags to true/false with no clients. Assignment uses pointer Set for all10 raw slots, retains recipient mode/default-list/client containers/countPhantoms/usedByRedline and copies source name/type/automatic/continuous/absSpaces/hidden/pool metadata, invalidating nonself even for equal values. Reset clears all10 slots, accepts empty/repeated names and restores exact UNKNOWN65535/help65535/helpfile255 while retaining recipient-only state. Equality compares the native selected metadata and effective formats, ignoring hidden/validity/countPhantoms/redline/list ID/raw presence directly. Native ushort/byte narrowing is preserved. Optional graph16 scalarState validates exact booleans/unsigned ranges and restores the actual document owner after native copy construction; legacy omissions use native defaults. Complete unchanged pinned source bodies and inline definitions emit432 states,18 equality branches and7 narrowing profiles under ASan/UBSan, with full hashes and prior native format profiles. Source client/style-container vector inputs,invalid-flag inputs,ASCII UIName,family-only Font/COW and platform/graphics/null-style/service aliases explicitly limit proof. Actual same-name document client/list/registry,Worker16 and supported genuine ODT fields are exercised; no invented native name-map rebind. Full native name-map/paragraph-style/GrabBag/grf links/client destruction/Font/graphics/service lifetime,nondefault continuous/phantom counter/rendering consumers and wider enum/style families remain individually unverified. Scalar metadata restoration does not certify those consumers or full ODT rule metadata. No whole-module/status/goal promotion or registered IO/recovery/dependency/policy/coverage change.",
+      "Iteration48 restores complete selected native continuous/phantom tree policy: bound rule flags, parent continuous fallback and orphan defaults, protected continuous prefix validation/last-descendant traversal, public predecessor modes excluding the root, continuous suffix invalidation and upward cache/notification propagation. SwList validation follows NotifyInvalidChildren under actual document reading policy rather than eager hierarchical recursion; legacy callers resolve client document context. Continuous legacy numeric markers select the current level, while explicit ListFormat behavior and measured NONE guards remain unchanged.42 complete unchanged pinned native definitions produce960 sequences/69120 record states,5 policy profiles and64 full marker states under ASan/UBSan. Literal project tests compare real connected attributes,raw prefix caches,ordered reads,notifications,client lists and numbered registry through insertion,restart,count/reparent/removal/flag changes and reading transitions; source-body hashes and literal result integrity revalidated after deletion of source copies. Native bound start/type/raw format presence,pool,string/document-position/range/style,shown/no-layout/no-redline/dtor/fuzz/field/raw callback/broadcaster/static-service/decimal formatter aliases explicitly limit the proof;prior complete selected rule/format defaults remain separately supported. Actual Worker owners retain continuous/phantom flags and nested counters;copy/reset retain native scalar boundaries and supported genuine ODT level fields. No upstream code is invoked by project tests or persisted in task artifacts;manual probes generate only ignored scratch source. Full native layout/redline/original root arrays,live style/Font/graphics/other numeric families,service/global/destructor/name-map/GrabBag/UNO/full ODT metadata/UI lifetimes remain individually unverified. No whole-module,status,goal or registered IO/recovery/dependency/policy/coverage promotion.",
+      "Iteration63 restores mandatory operation document context across existing numbering tree mutations and notifications, SwList insert/remove/validate and SwNumRule.Validate, with protected Notify traversal. Text insertion/removal and node moves pass their owned document explicitly; first-client/text-derived operation fallbacks are removed while real-record reading policy retains text-owner precedence. Five owned tests and16 exact type/visibility checks cover empty/clientless roots, distinct owner/operation reading flags, rule invalidate-before-validate forwarding, actual insertion/removal, retained topology/raw caches and protected root/phantom traversal. Three new runtime cases and baseline type assertions fail before correction and pass afterward; old test matcher arguments are unchanged. Fresh pinned manual declaration/body/call-site hashes only; no native execution, helper/source artifacts or upstream access by project tests. Native text notification ownership/temporary blockers, dtor/client lifetimes, redline/range roots, complete access/const/final architecture, layout and browser obligations remain separately unverified. No whole-module/status/default/goal, registered IO/recovery or gate promotion.",
+      "Iteration166 unifies represented ordinary body/list/table Tab in SwEditWin.HandleTab instead of browser table-only routing. Native numfunc::NumDownChangesIndent now belongs to number.ts and reads actual shell cursor/rule/current and next formats/NUMBER_NONE/indent/max-level decision. Paragraph-start list priority uses native NumUpDown/history, equal NONE indent inserts literal tab; cells retain native traversal; ordinary body Tab inserts literal text and ShiftTab consumes End no-op. Browser translates actual DOM selections/unmodified noncomposing keys through the same owner with no compatibility wrapper. Eligible assigned-outline-at-start operations remain explicitly unsupported pending native OutlineUpDown, not substituted by text insertion. Typed nonnull text cursors only; native null/nontext fallback, forms/input/contentcontrols/graphics/read-only/WebView/modified Tab/config/autocorrect/NumDown counter and full KeyInput remain unverified. Real core/DOM/production Chromium cases prove bounded behavior;253 existing semantic states/defaults/classes/IOexceptions/evidence and424 prior testfiles preserved,2 prior tests source-confirmed obsolete body refusal/method-name corrections only. No full-module or broad parity promotion; conscious save/open/recovery deviations unchanged.",
+      " Iteration167 corrects native NumDownChangesIndent maximum level guard: upstream MAXLEVEL10 is a count while local WRITER_MAX_LIST_LEVEL9 is the maximum zero-based index. Level8 NONE/equal-indent must retain literal Tab rather than demotion. New actual native regression and tenth-level outline boundary cases; no semantic/default/classification promotion or IO changes.",
+      "Iteration171 restores native ChangeIndent and first-level anchor shifts across all10effective formats, modern active LISTTAB versus legacy clipping, inactive geometry and owned font/client/marker state. Pinned level SetIndent retains its local copy without committing fields and only invalidates; no invented Set call. Actual number-tree IsFirst self/child policy includes phantom ancestry and earlier real descendants. SwEditShell SetIndent resolves the explicit target rule while testing the actual current cursor first/multiselection gate, then uses DontSetItem without changing paragraph items/list IDs/count/start/cursor. SwUndoInsNum owns independent old/new rule copies within its existing constructor family; represented rule-format UndoRedo reuses the existing document DontSetItem primitive. Full ChgNumRuleFormats/character-style/history and merged/redline framework remain unverified. Native document-label StartDocDrag/ruler/UI integration remains a separately identified next obligation; no implemented UI promotion, new manager/model/DTO/TextRuns or compatibility wrapper. All prior semantic states/defaults/classes/IO exceptions and evidence retained; conscious save/open/recovery deviations unchanged.",
+      "Iteration187 removes synthetic ASCII selection DTOs, complete-list-item counting and invented marker fallback. Actual SwASCWriter iterates SwPaM/SwNodes and OutASC_SwTextNode uses native original-node span, start offsets, export-numbering flag, GetNumString, visibility, numbering margin/tab and default bullet configuration. One list plus ordinary paragraph and partial last paragraph labels now follow native selection behavior; same-node and later-start labels remain suppressed. Native numbering defaults and supported twip calculations are covered on actual core owners, mounted body/cell UI and Chromium copy/history. HTML ownership is retained. Full ASCII attributes/fields/redlines/copied table topology/rings/options, compatibility flag beyond native false default, desktop environment overrides and broad core/UI parity remain unverified; all prior states/defaults/classes/evidence/responsibilities and conscious save/open/recovery deviations are preserved."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/doc/number.cxx",
+    "upstreamSymbols": [
+      "SwNumFormat::SwNumFormat",
+      "SwNumRule::MakeNumString",
+      "SwNumRule::SwNumRule",
+      "SwNumFormat::IsEnumeration",
+      "SwNumFormat::IsItemize",
+      "void SwNumRule::Set( sal_uInt16 i, const SwNumFormat*",
+      "SwNumFormat& SwNumFormat::operator=",
+      "NumDownChangesIndent",
+      "GetBulletChar"
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "JS const-format references remove setter methods from the getter type and freeze stored copies/shared defaults, implementing the native const boundary without C++ ownership qualifiers. The private default-mode selector is exposed only for the Worker graph adapter. Complete unchanged native MakeNumString stalls for a NONE reference with no following placeholder (measured timeout); this previously unsupported non-progress input is explicitly rejected in the browser, is not equivalent or certified, and remains a recorded residual gap. Native static refcount destruction and full font/graphic/char-style lifetime are unverified."
+    }
+  },
+  "legacyOrder": 172
+}

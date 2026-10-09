@@ -1,0 +1,121 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "export class SwListShell",
+          "path": "apps/office/src/sw/source/uibase/shells/listsh.ts"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/undo/native-list-continuation.test.ts",
+          "marker": "native continuation adopts every current selected slot %s/%s/%s"
+        },
+        {
+          "path": "apps/office/e2e/writer-cell-list-continue.spec.ts",
+          "marker": "Writer Continue Numbering joins a "
+        },
+        {
+          "path": "apps/office/src/sw/source/core/undo/native-list-rule-range.test.ts",
+          "marker": "native selected list toggle and numeric history cover actual range %s/%s/%s"
+        },
+        {
+          "path": "apps/office/e2e/writer-selected-list-toggle.spec.ts",
+          "marker": "Writer selected "
+        },
+        {
+          "path": "apps/office/src/sw/source/core/edit/native-list-ring.test.ts",
+          "marker": "native table ring list commands own every selected cell"
+        },
+        {
+          "path": "apps/office/e2e/writer-table-row-lists.spec.ts",
+          "marker": "Writer table row native list commands"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/edit/native-list-continuation-ring.test.ts",
+          "marker": "native continuation owns every table ring"
+        },
+        {
+          "path": "apps/office/e2e/writer-table-ring-continue.spec.ts",
+          "marker": "Writer table row Add to List"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/shells/native-list-context.test.ts",
+          "marker": "native list context"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-list-context.test.tsx",
+          "marker": "native list context UI"
+        },
+        {
+          "path": "apps/office/e2e/writer-native-list-context.spec.ts",
+          "marker": "Writer native list context and point state"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "SwListShell::InitInterface_Impl",
+          "path": "vendor/libreoffice-reference/sw/source/uibase/shells/listsh.cxx"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/shells/textsh1.cxx",
+          "marker": "case FN_NUM_CONTINUE:"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/shells/textsh1.cxx",
+          "marker": "SelectionHasNumber"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/edit/ednumber.cxx",
+          "marker": "sal_uInt8 SwEditShell::GetNumLevel"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/shells/listsh.cxx",
+          "marker": "void SwListShell::GetState"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/shells/textsh1.cxx",
+          "marker": "case FN_NUM_CONTINUE:"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/wrtsh/wrtsh1.cxx",
+          "marker": "SelectionType SwWrtShell::GetSelectionType"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/uiview/view.cxx",
+          "marker": "void SwView::SelectShell"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/inc/wrtsh.hxx",
+          "marker": "enum class SelectionType"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/uibase/shells/listsh.ts",
+    "localSymbols": [
+      "SwListShell"
+    ],
+    "omittedResponsibilities": [
+      "Upstream obligations outside SwListShell::InitInterface_Impl, SwListShell::Execute, SwListShell::GetState, SwListShell::SwListShell and the bounded WriterListLevelCommand identity remain intentionally omitted."
+    ],
+    "preservedResponsibilities": [
+      "Implements bounded SwListShell execution and state for list-kind and promote/demote commands through generated Sfx slots and canonical Writer undo actions.",
+      "Iteration160 repairs represented Continue Numbering across actual inclusive native body/cell ranges. SwDoc.SearchNumRule follows pinned native backward/forward,start-excluded/default,nearest-rule-stop,enumeration/itemization/outline,nonempty allowance and document section policy; native layout/merged/redline/margin propagation remains unverified. Shell numbered-first/bullet fallback and enabled state use native selection start; every selected text node adopts rule/list ID,counted flag resets to native default,restart flag removed only when restarting and rule differs,restart value retained. Continue history stores numeric index/original-document guard/independent direct-item tuples rather than retained paragraph objects. Body-only slice/filter/reverse/current-kind adapter removed. Full native SetNumRule/SwHistory/undo classification/client architecture not claimed; other InsNum abstraction remains. New native body/cell/mixed/plain/rule/count/restart/search/current-slot history and Chromium cell menu/label/history assertions;source-confirmed old ODT continuation expectations may be updated narrowly.250states/defaults/classifications/IO exceptions/prior evidence preserved,no fullmodule or broadUI promotion.",
+      "Iteration161 adds bounded native document SetNumRule/SetCounted operations and SetNumRuleMode0/1/2/4/8 flags. Selected body/cell/mixed list toggles use document-owned rule lookup/add/assignment, native previous-rule search from point, explicit new/continued list identity, collapsed current/style direct-item policy, count reset and label-alignment-only indent reset. Shell toggle and continue record actual execution in shared SfxListUndoAction/SwUndoInsNum numeric original-document targets; retained paragraph base, separate ContinueNumbering action/item interface and direct shell list DTO builder removed. Actual selected native range consensus drives toggle/checked state. Existing public single-node InsNum API and independent item snapshots remain portable; full native SwHistory,document-owned undo,rule rollback/Repeat,client/layout/merged/margin propagation,outline/font/leading whitespace factory nuances and broad UI remain unverified. New exact flag/style/count/indent/native replacement/cursor/history/neighbors/foreign guard and selected body/table Chromium menu/marker/atomic UndoRedo assertions. Six prior test files migrate source-confirmed action-group/API, label-alignment reset-indent and unique level-item expectations;408 prior files byte-identical. Original4failed app/3failed Chromium only and1new explicit-empty style suppression case pass; final production unchanged, no passing replay.250 states/defaults/classifications/IO exceptions/prior evidence preserved;no full module promotion.",
+      "Iteration162 moves existing list state, rule application, deletion and level editing to inherited SwEditShell instead of functional command adapters and a cyclic UI shell route. Actual SwPaM rings include every selected table box. SelectionHasNumber/SelectionHasBullet preserve native empty-node, per-ring break and reserved Outline counted policy. SetCurNumRule reuses first created list identity across rings; DelNumRules and NumUpDown retain displayed table cursor and one grouped numeric history. SwPamRanges preserves native sorted same-start, adjacency, containment and partial-overlap policy; unreachable successor containment guard is omitted with lower-bound proof. Actual row/column/disjoint state, listID/count/indents/neighbors/current-slot replacement/atomic UndoRedo tests and Chromium real row selector assertions added. Full SwCursorShell hierarchy, document-owned undo/SwHistory/client/layout/merged/Repeat/rule factory and per-ring ContinueNumbering remain unverified. No module/state/default/IO exception promotion.",
+      "Iteration163 removes duplicated direct rule/count/item history from UI ContinueNumbering. Source-shaped core SearchNumRule and restart state/flag commands use actual native positions; document SetNumRuleStart guards text/rule/changed flags. Native boolean SwUndoNumRuleStart retains index and flag only and replays the same document primitive, preserving start value,list identity,level,count and indents. UI prepass visits every actual selected ring and clears restart only for a changed rule before shared inherited SetCurNumRule(rule,false,foundID), native default no-indent-reset. Existing document Sfx manager groups restart deltas and common rule history into one Undo preserving displayed table cursor/current slots/neighbors.418prior testfiles417unchanged1bounded native restart payload correction;actual row/column/sparse/search/restart/structural/flag history and real Chromium row Add to List assertions. API/macro,numeric restart-value overload,Repeat,full native history/hierarchy/client/layout/factory remain unverified;250states/defaults/classes/consciousIOexceptions preserved,no broad promotion.",
+      "Iteration168 gives list-kind and continuation operations to existing SwTextShell, retaining their bounded semantics while removing the old list-owner forwarding. SwListShell current-point GetNumLevel state preserves native MAXLEVEL10 sentinel and independent whole-range execution rejection. Represented SwWrtShell SelectionType requires actual rule, list membership and non-NONE level format; SwView conditionally places list shell below text shell using cached selection flags and TableCell masking. Source-owned registry/query splits retain the1000-line gate without compatibility wrappers or new models. Actual native, mounted DOM and Chromium cases cover the bounded flow. Other selection contexts, table row-column subtypes, native framework/layout/readonly gates and full core/UI/list/table behavior remain unverified; prior semantic/default/classification/IO deviations and evidence are preserved."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/uibase/shells/listsh.cxx",
+    "upstreamSymbols": [
+      "SwListShell::InitInterface_Impl",
+      "SwListShell::Execute",
+      "SwListShell::GetState",
+      "SwListShell::SwListShell"
+    ]
+  },
+  "legacyOrder": 258
+}

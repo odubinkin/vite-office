@@ -1,0 +1,26 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "local-infrastructure",
+    "evidence": {
+      "local": [
+        {
+          "marker": "WriterTransferParagraph",
+          "path": "apps/office/src/sw/source/filter/basflt/writer-transfer.ts"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/filter/basflt/writer-transfer.ts",
+    "rationale": "The browser HTML and clipboard adapters need a narrow, browser-neutral filter boundary for transfer DTO validation; canonical SwTextNode and SwpHints retain only text and hint ownership.",
+    "responsibilities": [
+      "Defines shared filter transfer records and normalizes untrusted browser/clipboard run DTOs before they enter canonical Writer text and hints."
+    ],
+    "stackDivergence": {
+      "kind": "local-infrastructure",
+      "rationale": "Structured browser transfer records have no native Writer model counterpart and remain in the filter boundary."
+    },
+    "status": "local-only"
+  },
+  "legacyOrder": 238
+}

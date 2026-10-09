@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/doc/DocumentStateManager.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "document-model",
+    "capabilityIds": [
+      "CAP-0111"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/doc/DocumentStateManager.ts#DocumentStateManager",
+        "vendor/libreoffice-reference/sw/source/core/doc/DocumentStateManager.cxx#DocumentStateManager::YrsGenNewCommentId"
+      ],
+      "justification": "Mapped provenance remains semantically unverified against sw/source/core/doc/DocumentStateManager.cxx; Phase 2 preserves the bounded upstream manager boundary.",
+      "knownViolations": [],
+      "localSymbols": [
+        "DocumentStateManager"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/core/doc/DocumentStateManager.cxx",
+      "upstreamSymbols": [
+        "DocumentStateManager::YrsGenNewCommentId"
+      ]
+    }
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "export class SfxMedium",
+          "path": "apps/office/src/sfx2/source/doc/docfile.ts"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "SfxMedium::SfxMedium()",
+          "path": "vendor/libreoffice-reference/sfx2/source/doc/docfile.cxx"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sfx2/source/doc/docfile.ts",
+    "localSymbols": [
+      "SfxMedium",
+      "SfxMediumKind",
+      "SfxMediumOrigin",
+      "SfxMediumSource",
+      "SfxMediumDestination",
+      "SfxMediumOperation",
+      "acquireSfxMedium"
+    ],
+    "omittedResponsibilities": [
+      "Native streams, UCB content, lock files, item sets, interaction handlers, temporary files, and protocol-specific transfer mechanics remain outside the bounded browser medium."
+    ],
+    "preservedResponsibilities": [
+      "Preserves one stable SfxMedium object identity, distinct original source and current destination, filter metadata, read-only routing, close state, and in-place operation completion without duplicating document lifecycle state."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sfx2/source/doc/docfile.cxx",
+    "upstreamSymbols": [
+      "SfxMedium::SfxMedium",
+      "SfxMedium::GetName",
+      "SfxMedium::GetOrigURL",
+      "SfxMedium::SetName",
+      "SfxMedium::IsReadOnly",
+      "SfxMedium::Transfer_Impl"
+    ]
+  },
+  "legacyOrder": 50
+}

@@ -1,0 +1,26 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "evidence": {
+      "local": [
+        {
+          "marker": "WriterFileDialog",
+          "path": "apps/office/src/sw/browser/presentation/WriterFileDialog.tsx"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/browser/presentation/WriterFileDialog.tsx",
+    "rationale": "Presents browser document selection, computer ODT/TXT import, browser copy creation, and ODT/TXT export. This boundary is browser-owned and has no direct native LibreOffice counterpart; Writer model semantics stay in the core modules.",
+    "responsibilities": [
+      "Presents browser document selection, computer ODT/TXT import, browser copy creation, and ODT/TXT export."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Deliberate browser document lifecycle policy differs from upstream AutoRecovery and native file menus."
+    },
+    "status": "local-only"
+  },
+  "legacyOrder": 101
+}

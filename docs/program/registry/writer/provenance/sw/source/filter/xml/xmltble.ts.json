@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/filter/xml/xmltble.ts",
+    "upstreamPath": "sw/source/filter/xml/xmltble.cxx",
+    "localSymbols": [
+      "SwXMLTableLines"
+    ],
+    "upstreamSymbols": [
+      "SwXMLTableLines_Impl::SwXMLTableLines_Impl"
+    ],
+    "preservedResponsibilities": [
+      "Iteration233 moves connected flat-table column geometry into each original SwTableBox SwFormatFrameSize. Native current-row visible/other-row hidden fuzzy separator union and per-line NewSetTabCols adjustments feed original Writer document attribute history; actual Ctrl+Shift current-line columns replace the retained ordinary shared-column fallback. Source XML union grids/spans and browser device colspans preserve independent original cells, with complete native frame-size values in browser codec and declared grid widths only at import/builder ingress. No row-width side map, graph replacement or TextRuns conversion. Flat unspanned source behavior is represented; full row-span propagation/nested/merged graphs, frame item pooling/UNO, RTL/vertical/SFX/VCL/full ruler state remain partial. Registered recovery/open/save/settings untouched, previous statuses/defaults/classes preserved."
+    ],
+    "omittedResponsibilities": [
+      "Full nested tables, row-span/merged-cell ownership, frame and complete XML style export."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/xml/xmltble.ts",
+          "marker": "SwXMLTableLines"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/native-independent-column-odf.test.ts",
+          "marker": "ODF union grid emits literal spans"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmltble.cxx",
+          "marker": "SwXMLTableLines_Impl::SwXMLTableLines_Impl"
+        }
+      ]
+    }
+  },
+  "legacyOrder": 247
+}

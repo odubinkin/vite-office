@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/vcl/browser/browser-clipboard.ts",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "browser-platform",
+    "capabilityIds": [
+      "CAP-0106",
+      "CAP-0110",
+      "CAP-0120"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/vcl/browser/browser-clipboard.ts#BrowserClipboardEnvironment"
+      ],
+      "justification": "Copies plain and bounded rich text through browser Clipboard APIs with a local plain-text fallback for static browser deployments. The implementation depends on browser or React execution semantics, so no native LibreOffice source file is claimed as its owner.",
+      "knownViolations": [],
+      "localSymbols": [
+        "copyPlainText",
+        "copyRichText",
+        "readRichClipboard"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

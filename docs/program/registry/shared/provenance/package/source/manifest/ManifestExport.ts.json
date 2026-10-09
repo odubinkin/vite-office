@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "ODT_MIMETYPE",
+          "path": "apps/office/src/package/source/manifest/ManifestExport.ts"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "ManifestExport::ManifestExport",
+          "path": "vendor/libreoffice-reference/package/source/manifest/ManifestExport.cxx"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/package/source/manifest/ManifestExport.ts",
+    "localSymbols": [
+      "ODT_MIMETYPE",
+      "createOdtManifestXml",
+      "validateOdtManifestXml"
+    ],
+    "omittedResponsibilities": [
+      "Upstream obligations outside ManifestExport::ManifestExport, Base64::encode, OUString::number, uno::RuntimeException and the bounded ODT_MIMETYPE, createOdtManifestXml, validateOdtManifestXml contract remain intentionally omitted."
+    ],
+    "preservedResponsibilities": [
+      "Reimplements the bounded ODF package manifest exporter from pinned LibreOffice `package/source/manifest/ManifestExport.cxx`."
+    ],
+    "status": "mapped",
+    "upstreamPath": "package/source/manifest/ManifestExport.cxx",
+    "upstreamSymbols": [
+      "ManifestExport::ManifestExport",
+      "Base64::encode",
+      "OUString::number",
+      "uno::RuntimeException"
+    ]
+  },
+  "legacyOrder": 31
+}

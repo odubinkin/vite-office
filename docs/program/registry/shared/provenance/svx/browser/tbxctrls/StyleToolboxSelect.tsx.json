@@ -1,0 +1,52 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svx/browser/tbxctrls/StyleToolboxSelect.tsx",
+          "marker": "StyleToolboxSelect"
+        },
+        {
+          "path": "apps/office/src/svx/browser/tbxctrls/StyleToolboxSelect.test.tsx",
+          "marker": "native style-box acceptance"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-view-style-focus.test.tsx",
+          "marker": "Writer style-box focus"
+        },
+        {
+          "path": "apps/office/e2e/writer-style-focus.spec.ts",
+          "marker": "Writer keyboard style choice focus"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svx/source/tbxctrls/tbcontrl.cxx",
+          "marker": "SvxStyleBox_Base::ReleaseFocus"
+        },
+        {
+          "path": "vendor/libreoffice-reference/vcl/source/app/salvtables.cxx",
+          "marker": "changed_by_direct_pick"
+        },
+        {
+          "path": "vendor/libreoffice-reference/vcl/unx/gtk3/gtkinst.cxx",
+          "marker": "signalKeyPress"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/svx/browser/tbxctrls/StyleToolboxSelect.tsx",
+    "rationale": "Iteration104 adapts the bounded ordinary SvxStyleBox client acceptance contract: direct picks and Enter resolve actual entries then focus the owning active Writer document before existing StyleApply dispatch; closed Arrow/Page travel is tentative, Tab accepts without focus release, Escape cancels and releases focus, and blur or replaced bindings/options invalidate drafts. Actual frame cursor/mark, raw custom names, history/no-op, document replacement and modal/inactive eligibility are covered by independent owned widget/frame tests and desktop/mobile ODT scenarios. Editable/new style creation, Clear/More actions, previews/context menus, full popup/platform behavior and wider native/widget/parent parity remain unverified. No status/default/exception promotion; registered save/open/recovery deviations unchanged.",
+    "responsibilities": [
+      "Tentative keyboard travel, native ordinary acceptance and owning client focus ports."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser primitives replace the native welded style box presentation; source-owned frame retains command dispatch and actual style ownership."
+    },
+    "status": "local-only"
+  },
+  "legacyOrder": 69
+}

@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/para/paratr.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "formatting-model",
+    "capabilityIds": [
+      "CAP-0112",
+      "CAP-0125",
+      "CAP-0127"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/para/paratr.ts#SwNumRuleItem",
+        "vendor/libreoffice-reference/sw/source/core/para/paratr.cxx#SwNumRuleItem",
+        "apps/office/src/sw/source/core/txtnode/ndtxt-list-indent.ts#resolveSwListLevelIndents",
+        "apps/office/src/sw/source/core/txtnode/ndtxt-list-indent.ts#resolveSwListParagraphIndents",
+        "apps/office/src/sw/browser/presentation/writer-view-list-indent-mask.test.tsx#selectsIndependentMask",
+        "apps/office/src/sw/browser/presentation/writer-view-list-indent-mask.test.tsx#tracksLiveMaskHistory",
+        "apps/office/src/sw/browser/presentation/writer-view-list-indent-mask.test.tsx#selectsStyleHierarchy",
+        "apps/office/src/sw/source/core/para/paratr.ts#ListLevelIndents",
+        "vendor/libreoffice-reference/sw/inc/paratr.hxx#enum class ListLevelIndents"
+      ],
+      "justification": "Mapped provenance remains semantically unverified against sw/source/core/para/paratr.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity. Iteration101 restores native sw::ListLevelIndents0/1/2 flags and live text-node applicability per axis: actual GetNum-bound rule presence, direct margin-before-direct-rule priority, and nearest style indent-before-rule traversal with native true fallthrough. A source-owned ndtxt split keeps the node under the unchanged1000-line limit. The selected alignment-value reader independently resolves supported text-left and counted signed16 first-line inputs with the existing ignore-first-line flag. Independent literal ownership/zero/signed boundaries, style/direct override, graph/clone destination and actual Writer history/no-op/direct absence are covered. Existing print bounds, frozen projection, rendering, filters and serialized listGeometryWins sideband remain byte-identical; native consumer migration requires imported custom-style hierarchy restoration after the initial failed absent application gate exposed flattened-style and exact DTO contracts. All304prior tests unchanged. Native complete import/style/tab/device/RTL/table/redline/list/frame layout and parent parity remain unverified. No module/status/default/exception or registered I/O/recovery promotion.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SwNumRuleItem"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/core/para/paratr.cxx",
+      "upstreamSymbols": [
+        "SwNumRuleItem",
+        "SwFormatDrop::CreateDefault",
+        "SwRegisterItem::CreateDefault",
+        "SwNumRuleItem::CreateDefault"
+      ]
+    }
+  }
+}

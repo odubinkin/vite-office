@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/uibase/wrtsh/delete.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "writer-shell",
+    "capabilityIds": [
+      "CAP-0102",
+      "CAP-0105",
+      "CAP-0107",
+      "CAP-0132"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/uibase/wrtsh/delete.ts#getWriterTypingCharacterClass",
+        "vendor/libreoffice-reference/sw/source/uibase/wrtsh/delete.cxx#SwWrtShell::DelLeft"
+      ],
+      "justification": "Mapped provenance remains semantically unverified against sw/source/uibase/wrtsh/delete.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+      "knownViolations": [],
+      "localSymbols": [
+        "getWriterTypingCharacterClass"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/uibase/wrtsh/delete.cxx",
+      "upstreamSymbols": [
+        "SwWrtShell::DelLeft",
+        "SwWrtShell::DelRight"
+      ]
+    }
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/uiconfig/swriter/toolbar/textobjectbar.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "numbering",
+    "capabilityIds": [
+      "CAP-0105"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/uiconfig/swriter/toolbar/textobjectbar.ts#writerTextObjectBarItems",
+        "vendor/libreoffice-reference/sw/uiconfig/swriter/toolbar/textobjectbar.xml#.uno:DesignerDialog"
+      ],
+      "justification": "Mapped provenance remains semantically unverified against sw/uiconfig/swriter/toolbar/textobjectbar.xml; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+      "knownViolations": [],
+      "localSymbols": [
+        "writerTextObjectBarItems"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/uiconfig/swriter/toolbar/textobjectbar.xml",
+      "upstreamSymbols": [
+        ".uno:DesignerDialog",
+        ".uno:StyleApply",
+        ".uno:StyleUpdateByExample",
+        ".uno:StyleNewByExample"
+      ]
+    }
+  }
+}

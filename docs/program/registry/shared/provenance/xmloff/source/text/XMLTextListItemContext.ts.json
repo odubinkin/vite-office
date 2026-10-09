@@ -1,0 +1,93 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/xmloff/source/text/XMLTextListItemContext.ts",
+          "marker": "XMLTextListItemContext"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-list-sublist-restart.test.ts",
+          "marker": "imports native repeated-sublist restart and pending return through real packages"
+        },
+        {
+          "path": "apps/office/src/xmloff/source/text/XMLTextListBlockContext.test.ts",
+          "marker": "retains native block references and returns pending restart from empty sublists"
+        },
+        {
+          "path": "apps/office/src/xmloff/source/text/XMLTextListBlockContext.test.ts",
+          "marker": "narrows repeated-sublist count to the native signed16 field"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-list-continuation.test.ts",
+          "marker": "imports native root continuation and default IDs through common and automatic ODT cycles"
+        },
+        {
+          "path": "apps/office/src/xmloff/source/text/txtlists.test.ts",
+          "marker": "retains processed roots, first style defaults and independent paragraph identity projection"
+        },
+        {
+          "path": "apps/office/src/xmloff/source/text/txtlists.test.ts",
+          "marker": "generates native time date random IDs and tests collisions only against processed roots"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/XMLTextListItemContext.cxx",
+          "marker": "XMLTextListItemContext::XMLTextListItemContext"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/XMLTextListItemContext.cxx",
+          "marker": "XMLTextListItemContext::createFastChildContext"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/XMLTextListItemContext.cxx",
+          "marker": "XMLTextListItemContext::endFastElement"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/XMLTextListBlockContext.cxx",
+          "marker": "XMLTextListBlockContext::XMLTextListBlockContext"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/txtlists.cxx",
+          "marker": "XMLTextListsHelper::KeepListAsProcessed"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/txtlists.cxx",
+          "marker": "XMLTextListsHelper::GetListIdForListBlock"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/txtlists.cxx",
+          "marker": "XMLTextListsHelper::GenerateNewListId"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/unocore/unosett.cxx",
+          "marker": "pRule->GetDefaultListId()"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/xmloff/source/text/XMLTextListItemContext.ts",
+    "localSymbols": [
+      "XMLTextListItemContext"
+    ],
+    "omittedResponsibilities": [
+      "Continue-numbering and processed root identity, unresolved-rule MakeNumRule factories/defaults, style overrides, numbered-paragraph/full UNO lifetimes and complete upstream architecture remain unverified."
+    ],
+    "preservedResponsibilities": [
+      "Source-owned XMLTextListBlockContext and XMLTextListItemContext now hold actual parent/helper block references, per-item sublist counts and pending restart inheritance/consumption/return. Existing resolved-rule nested lists restart on the second/later sublist; the first paragraph consumes the flag even when uncounted, and empty lists return it to their parent. Compiled unmodified pinned item child factory, block inheritance/end/getter/reset and txtimp restart-consumption bodies match1536 actual SAX trees/10752 paragraph states with explicit platform/token/reference/helper/property adapters. Thirty-two genuine numbered/bullet common/automatic ODT packages verify literal text,count,levels,restart,direct/effective starts,counters,vectors,labels,owned rule/item copies,Worker16 and bounded reopen. Native conditional implicit-restart export is now bounded by independent metadata and selected structural/start evidence. Native uncounted restart omission is retained. Continue-numbering/processed root identity, missing-rule MakeNumRule defaults, style overrides, numbered-paragraph and full UNO/helper/native architecture remain unverified; no whole-module promotion or registered save/open/recovery change.",
+      "The item sublist count now follows its native sal_Int16 assignment narrowing; compiled unmodified item factory with the actual field and a real-context test match9 boundary states over65538 child lists,including32768 and65538. This is bounded Clang signed16 narrowing evidence,not a general native overflow-policy claim.",
+      "Source-owned XMLTextListsHelper replaces stream aliases and rule-counter IDs with processed root style/continuation records, last-root/per-style state, first-style DefaultListId mapping and native paragraph identity projection. Block contexts retain independent own/master IDs, inherit them at nested levels and accept identity attributes only at root. Exact true continue-numbering overrides pending restart at every level; modern root implicit continuation selects only the last matching raw style/different ID. Unknown targets clear, known chains resolve to the master and duplicate roots retain prior records. Writer exposes its existing SwNumRule.GetDefaultListId through the typed import bridge. Native time/date/random list IDs and processed collision suffixes use JS Date milliseconds and uniform31bit browser RNG adapters. Unmodified pinned block constructor/end/getters and processed/default/generator bodies match3082 actual context sequences/15392 raw/effective identity/restart/query states,including fixed RNG1/INT_MAX. Explicit ASCII/string/platform/raw-reference/typed-property/resolved-rule/modern-no-build-id/no-MSO/fixed-clock-RNG adapters;no full native/UNO/factory/legacy/MSO/stable-environment build or lifetime claim.112 genuine common/automatic Arabic/bullet package scenarios assert literal states,counters/vectors/labels,owned rules/items,Worker16,selected XML and independent native reopen projections. Existing source-stale literal identities now follow first-style default mapping. Complete export helper identity/style overrides,missing-rule factories,old build-id/MSO defaults,numbered-paragraph/full UNO/native ownership and deferred SwList insertion/validation architecture remain unverified. No whole-module/default promotion or registered save/open/recovery change."
+    ],
+    "status": "mapped",
+    "upstreamPath": "xmloff/source/text/XMLTextListItemContext.cxx",
+    "upstreamSymbols": [
+      "XMLTextListItemContext::XMLTextListItemContext",
+      "XMLTextListItemContext::createFastChildContext",
+      "XMLTextListItemContext::endFastElement"
+    ]
+  },
+  "legacyOrder": 306
+}

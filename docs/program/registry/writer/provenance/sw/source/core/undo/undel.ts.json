@@ -1,0 +1,72 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "SwUndoDeleteDirection",
+          "path": "apps/office/src/sw/source/core/undo/undel.ts"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/native-format-to-text.test.ts",
+          "marker": "native paragraph join preparation and history"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/wrtsh/native-cross-node-deletion.test.ts",
+          "marker": "native cross-node selected deletion"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/wrtsh/native-cross-node-deletion.test.ts",
+          "marker": "native cross-node selected deletion"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "SwUndoDelete",
+          "path": "vendor/libreoffice-reference/sw/source/core/undo/undel.cxx"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/undo/undel.cxx",
+          "marker": "SwUndoDelete::SaveContent"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/docedt.cxx",
+          "marker": "sw_GetJoinFlags"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/undo/undel.cxx",
+          "marker": "SwUndoDelete::RedoImpl"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/core/undo/undel.ts",
+    "localSymbols": [
+      "SwUndoDeleteDirection",
+      "SwUndoDeleteGroup",
+      "SwUndoDelete",
+      "SwUndoReplace",
+      "SwUndoJoinParagraphs"
+    ],
+    "omittedResponsibilities": [
+      "Upstream obligations outside SwUndoDelete, SwUndoDelete::SwUndoDelete, SwUndoDelete::SaveContent, SwUndoDelete::CanGrouping and the bounded SwUndoDeleteDirection, SwUndoDeleteGroup, SwUndoDelete contract remain intentionally omitted."
+    ],
+    "preservedResponsibilities": [
+      "Implements bounded Writer delete, replace, and join undo payloads from pinned undel.cxx.",
+      "Iteration134 restores same-node delete undo as raw m_aSttStr plus native whole-node SwHistory old AUTO/INET item history. SwHistorySetText clones item/index/range and FormatIgnore only;undo clears hints,inserts NOHINTEXPAND2 and forward temporary rollback reconstructs fresh constructor flags/actual maps/backlinks/7INETvalues/IDs/shared AUTO handles. Grouping retains original history,redo resetsTmpEnd,disposal releases text/history. Native NOHINTADJUST12 insertion bypasses portion merging;ordinary InsertItem/BuildPortions,new-attribute and other history variants remain unimplemented/unverified. Two binary-search and three node projection/fragment bodies move unchanged to existing helpers under1000-line gates. Selection adapters,all semantic statuses/defaults/exceptions and registered I/O deviations preserved;new history module whollyunverified,no promotion.",
+      "Iteration136 restores registered direct character FormatToTextAttr: five source/main SET pairs,duplicate clearing,AUTO span/gap conversion with old ranged items winning,MakeTextAttr insertion and adjacent equal pooled AUTO merging/FormatIgnore normalization. INET and zero portions retain owners;inherited collections and paragraph items are not converted. JoinTextNodes now applies nonempty-leading conversion or empty-leading character-only clear/copy. SwHistorySetFormat clones explicit items and releases destructive rollback;SwHistoryChangeFormatColl checks live text collection pointer/type. Join history records both boundaries' hints/direct items/collections;undo reconstructs fresh native hints,redo resets temporary end. This supersedes earlier absent format/coll conversion claims only for registered text/AUTO/INET paths. Undo clears only mutated character items before direct-item history rather than resetting unrelated paragraph items. Live assigned heading collection restoration uses native default SetListLevel=true and can add direct level0 even for the same collection. Two exact first-profile source-contradicted old expectations are corrected: fresh INET history owner and heading direct level0;all other old test cases are untouched. Full unpooled equal-value AUTO/CHARFMT/RSID/overlapping-family/notification/lifetime/layout history,table format variants,retained structural identity/AppendTextNode cloning,and cross-node selected deletion survivor/force/adapter remain unverified and require dependent work. Existing semantic states/defaults/exceptions and registered I/O/recovery deviations unchanged;whole-module and overall parity unverified,no promotion.",
+      "Iteration137 restores body-text cross-node selection flags and JoinPrev/JoinNext survivor choice through source-owned docedt helpers and actual SwPaM Exchange. DeleteAndJoin erases raw first-tail/last-head strings and removes intact middle nodes before joining. One SwUndoDelete retains both boundary whole-hint/direct-item/live-collection history and middle content; Undo reconstructs fresh native hints with NOHINTEXPAND, Redo resets temporary history end. Cross-node Undo direction follows the normalized native join flag. Selected Insert/Replace/composition use the deletion result and actual survivor for FORCEHINTEXPAND plus EMPTYEXPAND mode5 inside the common Replace list. Existing boundary object identity/cursor references, AppendTextNode cloning and zero-length CopyAttr remain bounded adapters requiring subsequent refactoring; full native node-index/ring/bookmark/redline/field/layout and structural section history remain unverified. SwNodes insertion accepts an actual SwNode predecessor, including the body start sentinel, without a temporary paragraph. Literal real-owner boundary/direction/middle-node/family/history/survivor/input tests exercise the registered profile. Existing243 semantic states/defaults/exceptions and registered I/O/recovery deviations are unchanged; new docedt module remains wholly unverified, no whole-module or goal promotion.",
+      "Iteration156 integration records numeric cursor coordinates at actual completed native mutations: selected deletion captures live collapsed post-delete point once, sequential per-cell children use local current active nodes and final native outer point instead of removed forecast references. Table row history saves original numeric point and owns only after offset/items until new cells are connected, then records live first cell. Split Redo uses native new-paragraph content0. Original155failed app and3Chromium cases are retried only,408prior test files unchanged. Full physical split/payload node identity, native full table SaveTable/SwNodes sections and complete native action/shell cursor lifetimes remain unverified;250states/defaults/classifications/exceptions/prior evidence preserved."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/undo/undel.cxx",
+    "upstreamSymbols": [
+      "SwUndoDelete",
+      "SwUndoDelete::SwUndoDelete",
+      "SwUndoDelete::SaveContent",
+      "SwUndoDelete::CanGrouping"
+    ]
+  },
+  "legacyOrder": 224
+}

@@ -1,0 +1,128 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/doc/DocumentListItemsManager.ts",
+          "marker": "DocumentListItemsManager"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/node-numbering-lifecycle.test.ts",
+          "marker": "owns records in text nodes and validates insertion notifications before prefix reads"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/node-numbering-lifecycle.test.ts",
+          "marker": "removes old clients before changing list attributes and preserves native registration order"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/DocumentListItemsManager.test.ts",
+          "marker": "sorts independent of insertion order, suppresses equivalent positions and filters bullets and uncounted items"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/number-classification.test.ts",
+          "marker": "matches native format enumeration itemize copy and type-change predicates"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/number-classification.test.ts",
+          "marker": "matches all native effective classification raw-layout counting and registry profiles"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/number-classification.test.ts",
+          "marker": "matches native root phantom and counted numbered-registry filtering"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/number-classification.test.ts",
+          "marker": "retains existing supported classifications and sparse ownership through Worker16"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentListItemsManager.cxx",
+          "marker": "DocumentListItemsManager::addListItem"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentListItemsManager.cxx",
+          "marker": "DocumentListItemsManager::removeListItem"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentListItemsManager.cxx",
+          "marker": "DocumentListItemsManager::getNumItems"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "SwTextNode::GetNum("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "SwTextNode::GetNumberVector("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "SwTextNode::AddToList()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "SwTextNode::RemoveFromList()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "HandleSetAttrAtTextNode::HandleSetAttrAtTextNode"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx",
+          "marker": "SwNodeNum::PreAdd()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx",
+          "marker": "SwNodeNum::PostRemove()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx",
+          "marker": "SwNodeNum::ChangeNumRule("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/number.cxx",
+          "marker": "SwNumRule::GetTextNodeList("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/number.cxx",
+          "marker": "SwNumRule::RemoveTextNode("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/number.cxx",
+          "marker": "SwNumRule::Validate("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentListItemsManager.cxx",
+          "marker": "DocumentListItemsManager::addListItem("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentListItemsManager.cxx",
+          "marker": "DocumentListItemsManager::getNumItems("
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/core/doc/DocumentListItemsManager.ts",
+    "localSymbols": [
+      "DocumentListItemsManager"
+    ],
+    "omittedResponsibilities": [
+      "Native layout expansion,redline/original/undo arrays,continuous trees,configurable phantom policy,complete callbacks/reading suppression,word-count/native lifetime machinery and legacy/default factories remain unverified."
+    ],
+    "preservedResponsibilities": [
+      "Iteration36 makes the shown number record SwTextNode-owned: SwList inserts/removes records without allocation or a text-node map. SwNodeNum binds/clears its rule in PreAdd/PostRemove and transfers rule clients in ChangeNumRule; rule clients retain insertion order and suppress identity duplicates. DocumentListItemsManager maintains native position ordering and filters counted enumeration records. Attribute rule/list changes detach before mutation; canonical node moves retain records,copy/restore attach independent records. Reads validate the requested prefix rather than unrelated tails. Compiled20 additional unmodified pinned owner/registry definitions alongside37 tree/list definitions compare120 sequences/8976 actual owner states including raw prefix caches,reverse vectors,bound rules,client order and numbered registry. Literal tests cover orphan binding,default1 after removal,duplicate add,disconnected/foreign arrays,rule copies and disposal. Single shown/document-node/hierarchical Arabic and bullet slice only;native layout expansion,redline/original arrays,complete callbacks/word-count/lifetime and legacy/default factories remain unverified. No whole-module/default/goal promotion;registered document IO deviations unchanged.",
+      "Iteration45 restores native SwNumFormat.IsItemize (CHAR_SPECIAL/BITMAP) and IsEnumeration (!IsItemize, including NONE), and actual SwTextNode HasNumber/HasBullet use of the bounded effective const format. The distinct ndtxt.cxx layout-update predicate reads raw owned GetNumFormat and rejects absent/NONE/CHAR_SPECIAL/BITMAP formats. Native source bodies plus actual native rule constructor/Get/GetNumFormat/Set/default profile execute1032 cases under ASan/UBSan:4 format classifications/copies,1008 node/ownership/count/registry profiles,4 root/phantom cases and16 registry masks. Real local document/record/registry methods match the literal results; diagnostic record, bounded actual-level, counted/phantom, null-layout, ordered-container and platform/font/graphics aliases are named. Scalar bitmap classification is not bitmap rendering or wider formatting support. Native full layout/redline/graphics/style/font/service/global lifetimes and full counter algorithm profiles remain individually unverified. Existing Worker16 classification/ownership survives for ARABIC/NONE/CHAR_SPECIAL; original numbering/UNO/ODT/browser assertions and the measured malformed-NONE browser guard are preserved. No module/status or goal promotion and no registered I/O/recovery deviation changes."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/doc/DocumentListItemsManager.cxx",
+    "upstreamSymbols": [
+      "DocumentListItemsManager::addListItem",
+      "DocumentListItemsManager::removeListItem",
+      "DocumentListItemsManager::getNumItems"
+    ]
+  },
+  "legacyOrder": 157
+}

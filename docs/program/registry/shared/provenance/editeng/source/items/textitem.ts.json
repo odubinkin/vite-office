@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "FontWeight",
+          "path": "apps/office/src/editeng/source/items/textitem.ts"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "FontWeight",
+          "path": "vendor/libreoffice-reference/editeng/source/items/textitem.cxx"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/editeng/source/items/textitem.ts",
+    "localSymbols": [
+      "FontWeight",
+      "FontItalic",
+      "FontLineStyle",
+      "SvxFontItem",
+      "SvxWeightItem",
+      "SvxPostureItem",
+      "SvxUnderlineItem"
+    ],
+    "omittedResponsibilities": [
+      "Upstream obligations outside FontWeight, FontItalic, FontLineStyle, SvxFontItem, SvxWeightItem and the bounded font-family, weight, posture, and underline contract remain intentionally omitted."
+    ],
+    "preservedResponsibilities": [
+      "Reimplements bounded EditEngine font-family, weight, posture, and underline items from pinned `editeng/source/items/textitem.cxx`."
+    ],
+    "status": "mapped",
+    "upstreamPath": "editeng/source/items/textitem.cxx",
+    "upstreamSymbols": [
+      "FontWeight",
+      "FontItalic",
+      "FontLineStyle",
+      "SvxFontItem",
+      "SvxWeightItem"
+    ]
+  },
+  "legacyOrder": 6
+}

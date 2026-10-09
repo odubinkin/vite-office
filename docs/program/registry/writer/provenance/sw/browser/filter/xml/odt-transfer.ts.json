@@ -1,0 +1,26 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "local-infrastructure",
+    "evidence": {
+      "local": [
+        {
+          "marker": "OdtWriterTransferRecord",
+          "path": "apps/office/src/sw/browser/filter/xml/odt-transfer.ts"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/browser/filter/xml/odt-transfer.ts",
+    "rationale": "Defines the versioned ODT Worker structured-clone envelope around the internal Writer graph representation, independent of IndexedDB ODT bytes.",
+    "responsibilities": [
+      "Versions and validates the Worker envelope while delegating graph encoding and decoding to writer-document-codec.ts."
+    ],
+    "stackDivergence": {
+      "kind": "local-infrastructure",
+      "rationale": "Dedicated Worker structured-clone transport is a browser-only filter execution boundary."
+    },
+    "status": "local-only"
+  },
+  "legacyOrder": 89
+}

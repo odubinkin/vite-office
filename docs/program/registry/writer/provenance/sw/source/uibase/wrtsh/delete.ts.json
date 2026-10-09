@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "getWriterTypingCharacterClass",
+          "path": "apps/office/src/sw/source/uibase/wrtsh/delete.ts"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "SwWrtShell::DelLeft",
+          "path": "vendor/libreoffice-reference/sw/source/uibase/wrtsh/delete.cxx"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/uibase/wrtsh/delete.ts",
+    "localSymbols": [
+      "getWriterTypingCharacterClass"
+    ],
+    "omittedResponsibilities": [
+      "Upstream deletion modes outside the bounded browser text-edit and SwUndo grouping contract remain intentionally omitted."
+    ],
+    "preservedResponsibilities": [
+      "Preserves Writer deletion direction and consecutive-edit grouping rules used by SwWrtShell."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/uibase/wrtsh/delete.cxx",
+    "upstreamSymbols": [
+      "SwWrtShell::DelLeft",
+      "SwWrtShell::DelRight"
+    ]
+  },
+  "legacyOrder": 267
+}

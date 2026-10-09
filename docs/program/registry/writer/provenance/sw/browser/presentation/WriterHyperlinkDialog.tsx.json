@@ -1,0 +1,30 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "evidence": {
+      "local": [
+        {
+          "marker": "WriterHyperlinkDialog",
+          "path": "apps/office/src/sw/browser/presentation/WriterHyperlinkDialog.tsx"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/browser/presentation/WriterHyperlinkDialog.tsx",
+    "localSymbols": [
+      "WriterHyperlinkDialogProps",
+      "WriterHyperlinkDialog"
+    ],
+    "rationale": "Contains React and browser DOM adaptation behind Writer hyperlink command and model boundaries; no native LibreOffice source file is claimed as its owner.",
+    "responsibilities": [
+      "Renders the accessible browser counterpart of LibreOffice Writer's hyperlink create and edit dialog."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser DOM and React replace the native VCL presentation boundary."
+    },
+    "status": "local-only"
+  },
+  "legacyOrder": 103
+}

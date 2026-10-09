@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/browser/filter/xml/item-codec.ts",
+    "classification": "local-infrastructure",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "storage-contract",
+    "capabilityIds": [
+      "CAP-0112",
+      "CAP-0131"
+    ],
+    "semantic": {
+      "behaviorStatus": "not-applicable",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/browser/filter/xml/item-codec.ts#encodeSfxPoolItem"
+      ],
+      "justification": "Worker-only pooled-item graph codec outside SfxPoolItem; canonical pool items remain in svl and editeng. Iteration127 preserves native normal/visited style IDs through a single browser-owned internet record codec reused by pooled JSON snapshots and canonical Worker16 graph hints. Optional nonzero IDs retain exact unsigned16 values;omitted fields restore ZERO under the existing portable DTO contract. Native item name/ID paired setters restore owned fields without a text backlink;MakeTextAttr attaches actual graph hints normally. Core QueryValue/GetHyperlink projection and default-only pool54 generic decode boundary remain unchanged. All existing runtime states/defaults/exceptions and registered save/open/recovery deviations preserved. Native active styled constructor routing,DTO style identity lookup,ODF programmatic/UI conversion,full localized/custom style families/clients/visited behavior/UNO/macros/broadcaster/lifetimes/global pools/full core/UI remain unverified;no module or goal promotion.",
+      "knownViolations": [],
+      "localSymbols": [
+        "encodeSfxPoolItem",
+        "encodeSfxItemSet",
+        "decodeSfxPoolItem",
+        "decodeSfxItemSet",
+        "decodeSwFormatINetFormat"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

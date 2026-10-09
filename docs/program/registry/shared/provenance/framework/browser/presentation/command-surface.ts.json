@@ -1,0 +1,26 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "evidence": {
+      "local": [
+        {
+          "marker": "BrowserCommandSource",
+          "path": "apps/office/src/framework/browser/presentation/command-surface.ts"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/framework/browser/presentation/command-surface.ts",
+    "rationale": "Adapts frame-owned Sfx bindings to persistent browser controller items and React external-store subscriptions.",
+    "responsibilities": [
+      "Defines the controller-item and dispatch port consumed by browser presenters without render-time state queries."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser DOM and React replace the native VCL presentation boundary."
+    },
+    "status": "local-only"
+  },
+  "legacyOrder": 20
+}

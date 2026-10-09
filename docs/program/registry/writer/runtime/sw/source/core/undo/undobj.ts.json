@@ -1,0 +1,70 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/undo/undobj.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "undo-redo",
+    "capabilityIds": [
+      "CAP-0102"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/undo/undobj.ts#SwUndoCursorPosition",
+        "vendor/libreoffice-reference/sw/source/core/undo/undobj.cxx#SwUndo",
+        "apps/office/src/sw/source/uibase/wrtsh/native-table-cursor-rings.test.ts#native table character ring history",
+        "apps/office/src/sw/browser/editor/native-table-cursor-rings.test.tsx",
+        "apps/office/e2e/writer-native-table-cursor-rings.spec.ts",
+        "vendor/libreoffice-reference/sw/source/core/crsr/crsrsh.cxx#SwCursorShell::GetCursor",
+        "vendor/libreoffice-reference/sw/source/core/crsr/crsrsh.cxx#SwCursorShell::getShellCursor",
+        "vendor/libreoffice-reference/sw/source/core/crsr/swcrsr.cxx#SwTableCursor::MakeBoxSels",
+        "vendor/libreoffice-reference/sw/source/core/edit/edattr.cxx#GetRingContainer",
+        "apps/office/src/sw/source/core/undo/native-insert-storage.test.ts#native imported content occupies storage only while undone",
+        "vendor/libreoffice-reference/sw/source/core/undo/undobj.cxx#SwUndRng::SetPaM",
+        "vendor/libreoffice-reference/sw/source/core/undo/undobj.cxx#SwUndoSaveContent::MoveToUndoNds",
+        "vendor/libreoffice-reference/sw/source/core/undo/undobj.cxx#SwUndoSaveContent::MoveFromUndoNds",
+        "apps/office/src/sw/source/core/txtnode/native-split-attributes.test.ts#native ASCII read retains boundary paragraph character items through repeated undo and redo",
+        "vendor/libreoffice-reference/sw/source/core/undo/undobj.cxx#SwUndoSaveContent::MoveToUndoNds",
+        "vendor/libreoffice-reference/sw/source/core/docnode/nodes.cxx#void SwNodes::MoveRange",
+        "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx#void SwTextNode::CutImpl",
+        "apps/office/src/sw/source/core/undo/native-cursor-range-history.test.ts#numeric undo cursor resolves replaced nodes and selection direction %s/%s",
+        "vendor/libreoffice-reference/sw/source/core/undo/undobj.cxx#SwUndRng::SetValues"
+      ],
+      "justification": "Mapped provenance remains semantically unverified against sw/source/core/undo/undobj.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity. Iteration148 ports actual SwPaM circular range owners/traversal/disposal, SwCursor.Create and SwTableCursor change/movement state plus full-cell MakeBoxSels reconciliation. Native default GetCursor(makeTableCursor=true) returns ordinary editing ring; getShellCursor owns displayed table endpoints. Shared selected-text traversal reads each actual PaM so represented Bold/Italic/font family/size/color/highlight cover entire selected cells and all nonempty cell paragraphs, excluding unselected columns. Native history state retains table endpoint mode and rebuilds selected boxes/rings through formatting Undo/Redo. Existing display/navigation tests only switch owner API calls and keep assertion values; no projected text editing. Full ring insertion/deletion/paste/list/paragraph operations, native shellcursor geometry/protection/redlines/complex cells remain unverified. Existing246semanticstates/defaults/classifications and conscious I/O/recovery exceptions preserved; broad goalactive. Iteration152 replaces eager SetInsertRange content snapshots/live-node retention with native SwUndRng absolute numeric coordinates and SwUndoSaveContent append-only cut/move/consume lifecycle. SetInsertRange records coordinates only, Undo resolves current indices and removes actual text/hints/nodes into storage, Redo reconnects/consumes native owned content and releases storage. Existing RetainText copy=true default preserved; native move alone consumes actual cut hints with copy=false and native transferHints=true. Applied storage0, only removed content while undone; original SwHistory attributes/collection restored, current table browser behavior preserved. Complete native undo SwNodes sections, non-end/suffix/redline/fly/protection/conditional/style and registered index ownership remain unverified; numeric content correction at nontext sentinels omitted. No whole-module/status/classification/default promotion, conscious I/O/recovery exceptions unchanged. Iteration153 restores represented native MoveTextAttr_To_AttrSet traversal for both split paragraphs: start-map stop at nonzero/partial/char-format ranges, DontMove continuation, AUTO style-handle or represented item SetAttr and removal only after changed direct items. Empty-end equal-boundary preparation now retains native hints and delegates to this shared operation instead of an AUTO-only direct mutation. Existing range validation is delegated unchanged under1000-line gate. Native read undo now retains removed nonempty boundary as actual disconnected SwTextNode with registered direct character items, original collection and consumed cut hints; Redo uses existing native FormatToTextAttr self and consumes actual cut hints, preserving character values without TextRuns/DTO projection. This resolves premature bare-fragment character-item loss caused by first-prefix conversion. Portable Map storage and original node-array ownership remain, no complete CutImpl/MoveRange or paragraph/list item move claim. All250 module states/defaults/classifications/exceptions and prior evidence preserved. Full zero-prefix CopyAttr/native cut identity/index/frame/style clients/list split resets/physical undo sections and broad UI/core parity remain unverified; conscious IO/recovery deviations preserved. Iteration156 replaces shared SwUndo cursor node-reference history with existing native SwUndRng numeric coordinates and current-context SetPaM reconstruction. Absolute node/content coordinates are captured without live positions so predicted post-action content offsets do not mutate/register in current text. Direction, active native node index, table-mode flag and independently owned pending items remain portable shell adjuncts; current body/cell node replacement now resolves fresh owners at Undo/Redo/grouping boundaries. Removes cloneCursorState node retention; three callers pass current document explicitly. Native base does not own these complete portable shell adjuncts, and action payload pointers, retained split physical identity, native undo sections/redline/view-shell lifetimes remain unverified.250states/defaults/classifications/exceptions and prior evidence preserved; no broad/module promotion. Iteration214 pending: native frame-format identity owns table names; SwDoc rename assigns unique names for empty/colliding input, emits native name-only lookup history with replay suppression and no cursor restoration. Properties native Name widget retains raw saved values, emits changed items only and keeps the Table page for ASCII spaces with Name focus. Full frame attributes, formula/OLE/chart references, mail merge and overall parity remain unverified; prior semantic fields/statuses/defaults and registered save/open/recovery exceptions are preserved. Iteration214 verified closure: earlier pending prose is historical. Actual13509app110inventory14infrastructure274Chromium PASS through ONE full upstream-absent profile plus only original failures and one genuinely new geometry-guard case;0unresolved0passing replay. Native frame name identity, broadcast=false default, raw document rename, unique-name admission, cursor-free name lookup history/recreation/replay suppression, grouped Properties geometry/name, saved Name item, ASCII-space focus/page guard, Reset/Cancel, three history cycles, ODT and continued editing passed. All12 production paths remain byte-identical to sole full build/runtime/Chromium and closure. Actual current-source100 app/inventory counters are bound to whole source/maps or complete contiguous mapped declarations/bodies/enclosing branches/all locations. Ten prior app region certificates verify only complete unchanged units; one invalid raw V8 painter aggregate is retained/rejected and its entire unchanged prior source/map/counter certificate used, with no individual clamp. All577 old acceptance files preserve573 byte-identical bodies and four exact source-backed migrations, every unrelated assertion retained; three new files,580current. Every293 prior metadata record/field/prefix/status/default and registered save/open/recovery exception is preserved without promotion. Full frame attribute ownership/notification granularity, formula/OLE/chart references, native numeric suffix/default/unused/mail-merge collections, full modal/widget and Home/End/browser keyboard behavior and complete parity remain unverified. Chromium End caret setup yielded XCell; new name fixture now uses established explicit DOM end caret while preserving CellX assertion. Same-agent EVALUATOR is explicitly not independent.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SwUndoCursorPosition",
+        "SwUndoCursorState",
+        "SwUndoRedoContext",
+        "SwUndo",
+        "GetUndoTextNode",
+        "CopyTextFragment",
+        "CopyUndoFragment",
+        "GetUndoFragmentLength",
+        "ReplaceUndoRange",
+        "DeleteUndoRange",
+        "GetFragmentPayloadSize",
+        "createWriterUndoCursorState",
+        "createWriterCollapsedCursorState",
+        "SwUndRng",
+        "SwUndoSaveContent"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/core/undo/undobj.cxx",
+      "upstreamSymbols": [
+        "SwUndo",
+        "SwUndRng::SwUndRng",
+        "SwUndRng::SetValues",
+        "SwUndRng::SetPaM",
+        "SwUndoSaveContent::MoveToUndoNds",
+        "SwUndoSaveContent::MoveFromUndoNds"
+      ]
+    }
+  }
+}

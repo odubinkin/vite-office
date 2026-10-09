@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/browser/workflows/writer-document-io.ts",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "browser-workflows",
+    "capabilityIds": [
+      "CAP-0113",
+      "CAP-0114",
+      "CAP-0131"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/browser/workflows/writer-document-io.ts#saveWriterOdtToPort"
+      ],
+      "justification": "Exports ODT and TXT through browser download ports; native Save is intentionally absent.",
+      "knownViolations": [],
+      "localSymbols": [
+        "saveWriterOdtToPort",
+        "exportWriterTextToPort"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

@@ -97,14 +97,17 @@ export function isRecord(value: unknown): value is Record<string, unknown> {
 export function assertOrderedUniqueRecords(
   records: readonly Readonly<{ capabilityId: string; id: string }>[],
 ): void {
+  const aliases = new Set<string>();
+  for (const record of records) {
+    if (aliases.has(record.id)) throw new Error("Parity mapping records must have unique IDs.");
+    aliases.add(record.id);
+  }
   for (let index = 1; index < records.length; index += 1) {
     const previous = records[index - 1];
     const current = records[index];
     /* v8 ignore next 2 -- loop bounds prove both indexed records exist. */
     if (previous === undefined || current === undefined)
       throw new Error("Parity mapping record ordering could not be determined.");
-    if (previous.id >= current.id)
-      throw new Error("Parity mapping records must have unique lexicographically ordered IDs.");
     if (previous.capabilityId >= current.capabilityId)
       throw new Error("Parity records must have unique ordered capability IDs.");
   }

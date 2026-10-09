@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "getWriterCommandResource",
+          "path": "apps/office/src/sw/uiconfig/swriter/writer-command-resources.ts"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": ".uno:AddDirect",
+          "path": "vendor/libreoffice-reference/sw/uiconfig/swriter/menubar/menubar.xml"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/uiconfig/swriter/writer-command-resources.ts",
+    "localSymbols": [
+      "WriterCommandResource",
+      "getWriterCommandResource",
+      "WRITER_FILTERED_X_COMMANDS"
+    ],
+    "omittedResponsibilities": [
+      "Unsupported desktop resource entries are recorded as filtered X entries instead of receiving local replacement commands."
+    ],
+    "preservedResponsibilities": [
+      "Loads generated labels, placement context, semantics, shortcuts, and slot identities from the pinned Writer resources."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/uiconfig/swriter/menubar/menubar.xml",
+    "upstreamSymbols": [
+      ".uno:AddDirect"
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/uiconfig/swriter/writer-command-resources.ts",
+      "rationale": "The resource generator combines pinned menu, toolbar, accelerator and XCU inputs into one typed TypeScript loader for browser command metadata; no single upstream XML file contains this composite.",
+      "stackNecessity": "generated-resource-boundary"
+    }
+  },
+  "legacyOrder": 277,
+  "filenameOrder": 7
+}

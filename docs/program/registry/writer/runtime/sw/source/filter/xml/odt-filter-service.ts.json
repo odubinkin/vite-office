@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/filter/xml/odt-filter-service.ts",
+    "classification": "local-infrastructure",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "odf-filter",
+    "capabilityIds": [
+      "CAP-0113",
+      "CAP-0130"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/source/filter/xml/odt-filter-service.ts#OdtFilterProgressStage"
+      ],
+      "justification": "Shell and filter service exchange canonical SwDoc and title; only sw/browser/filter/xml adapts that graph to Worker clone records. Async cancellation remains a browser execution concern.",
+      "knownViolations": [],
+      "localSymbols": [
+        "createOdtFilterDocument",
+        "restoreOdtFilterDocument",
+        "createInlineOdtFilterService",
+        "normalizeOdtFilterError"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

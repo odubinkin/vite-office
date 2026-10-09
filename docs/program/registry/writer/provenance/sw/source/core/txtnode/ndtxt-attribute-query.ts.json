@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "localPath": "apps/office/src/sw/source/core/txtnode/ndtxt-attribute-query.ts",
+    "upstreamPath": "sw/source/core/txtnode/ndtxt.cxx",
+    "localSymbols": [
+      "GetTextAttrAt",
+      "RangedTextAttribute"
+    ],
+    "upstreamSymbols": [
+      "lcl_GetTextAttrs",
+      "SwTextNode::GetTextAttrAt"
+    ],
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/ndtxt-attribute-query.ts",
+          "marker": "GetTextAttrAt"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/text-attribute-lookup.test.ts",
+          "marker": "native ranged pointer query ownership"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "lcl_GetTextAttrs"
+        }
+      ]
+    },
+    "preservedResponsibilities": [
+      "Iteration128 restores GetTextAttrMode Default0/Expand1/Parent2 and SwTextNode.GetTextAttrAt for existing ranged AUTO53/INET54. Native Which/start traversal returns the last matching actual owned attribute without allocation,cloning or DTO authority. Existing internet metadata and partitioned run projection share the native Default query. Direct owned-range mutation tests exercise overwrite behavior;valid adjacent links exercise shell/copy/graph/Worker paths. Native thints.cxx forbids nested hyperlinks,so the existing same-family normalization rejection is preserved. All354 prior tests and238 runtime states/defaults/exceptions remain unchanged;two extracted native modules remain wholly unverified. Full vector/dummy/other-family lookup,same-start native tie ordering,insertion/nesting validation,input inheritance/native caller modes/style clients/UNO/full core/UI parity remain unverified;registered save/open/recovery deviations preserved."
+    ],
+    "omittedResponsibilities": [
+      "Only existing ranged pointer lookup contracts are covered;all other native obligations remain unverified."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/core/txtnode/ndtxt-attribute-query.ts",
+      "rationale": "The native ndtxt.cxx pointer-query predicates and traversal are split into a type-import-only module to share the existing node and internet projection lookup without a runtime cycle or exceeding the unchanged1000-line node gate. Vector,dummy and other-family branches remain unverified.",
+      "stackNecessity": "responsibility-split"
+    }
+  },
+  "legacyOrder": 210,
+  "filenameOrder": 12
+}

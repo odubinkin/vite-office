@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sfx2/source/control/msg.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "dispatch",
+    "capabilityIds": [
+      "CAP-0101",
+      "CAP-0115"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sfx2/source/control/msg.ts#SfxSlot",
+        "vendor/libreoffice-reference/include/sfx2/msg.hxx#class SfxSlot"
+      ],
+      "justification": "Ports the bounded immutable SfxSlot identity and Execute/GetState callback metadata used by the supported command slice.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SfxSlot"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "include/sfx2/msg.hxx",
+      "upstreamSymbols": [
+        "SfxSlot"
+      ]
+    }
+  }
+}

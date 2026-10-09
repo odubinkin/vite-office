@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "ODT_XML_STREAM_BYTE_LIMIT",
+          "path": "apps/office/src/sw/source/filter/xml/swxml.ts"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "XMLReader::XMLReader",
+          "path": "vendor/libreoffice-reference/sw/source/filter/xml/swxml.cxx"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/filter/xml/swxml.ts",
+    "localSymbols": [
+      "ODT_XML_STREAM_BYTE_LIMIT",
+      "OdtImportProgressStage",
+      "OdtImportControl",
+      "SwXMLReader",
+      "readOdtDocument"
+    ],
+    "omittedResponsibilities": [
+      "Upstream obligations outside XMLReader::XMLReader, XMLReader::GetReaderType, OUString::createFromAscii, Parser::create and the bounded ODT_XML_STREAM_BYTE_LIMIT, OdtImportProgressStage, OdtImportControl contract remain intentionally omitted."
+    ],
+    "preservedResponsibilities": [
+      "Reimplements the bounded SwXMLReader package orchestration from pinned LibreOffice `sw/source/filter/xml/swxml.cxx`."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/filter/xml/swxml.cxx",
+    "upstreamSymbols": [
+      "XMLReader::XMLReader",
+      "XMLReader::GetReaderType",
+      "OUString::createFromAscii",
+      "Parser::create"
+    ]
+  },
+  "legacyOrder": 241
+}

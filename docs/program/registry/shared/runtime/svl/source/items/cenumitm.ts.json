@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svl/source/items/cenumitm.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "formatting-model",
+    "capabilityIds": [
+      "CAP-0112"
+    ],
+    "semantic": {
+      "behaviorStatus": "parity",
+      "contractStatus": "parity",
+      "defaultStatus": "parity",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/svl/source/items/cenumitm.ts#SfxBoolItem",
+        "vendor/libreoffice-reference/svl/source/items/cenumitm.cxx#SfxBoolItem::Clone",
+        "vendor/libreoffice-reference/include/svl/eitem.hxx#SfxBoolItem",
+        "vendor/libreoffice-reference/svl/source/items/cenumitm.cxx#SfxBoolItem::QueryValue",
+        "vendor/libreoffice-reference/svl/source/items/cenumitm.cxx#SfxBoolItem::operator ==",
+        "apps/office/src/svl/source/items/itemset.test.ts#implements the boolean request and state item value contract",
+        "apps/office/src/cui/source/tabpages/native-collapsing-border-page.test.ts#native",
+        "apps/office/src/sw/browser/presentation/native-collapsing-table-borders.test.tsx#native"
+      ],
+      "justification": "The implemented boolean item constructor default, GetValue, QueryValue, Clone and equality match the pinned SfxBoolItem source and header. Native mutation, presentation and pooling methods outside this implemented subset are omitted. Iteration209 restores the existing table collapsing/separating model: native RES_COLLAPSING_BORDERS132 false pool default, mutable owned SfxBoolItem, saved tri-state SvxBorderTabPage Reset/FillItemSet and mapped table-only checkbox. Shell captures original format into native items and applies changed table attributes through existing grouped history without requesting cell-border writes for table-only items. Browser paints actual borderModel with source false default and zero gap. Verification pending; full native competing-line pixel arbitration, shadow/diagonal/theme and complete Sfx/layout/core/UI parity remain unverified. Prior semantic statuses/defaults/evidence prefixes and registered save/open/recovery exceptions are preserved. Iteration209 verified closure: earlier pending prose is historical. Source RES_COLLAPSING_BORDERS132 pooled false, owned native boolean Reset/FillItemSet clone/changed-only/indeterminate/missing-original behavior, original SET/DEFAULT/INVALID/DISABLED/parent input authority and UNKNOWN-only legacy admission now drive the Writer Merge adjacent line styles control. Native table attributes apply separately from cell-box deltas in one history action; browser reads existing collapsing/separating format with contiguous zero spacing. One full upstream-absent profile and original-failure/genuinely-new-case-only closures establish actual13465 app110inventory14infrastructure266Chromium cases, no passing replay; actual100 app/inventory source-bound counters use whole identical source/maps or complete contiguous declaration/body/enclosing branch/all mapped locations. One unchanged browser menu timeout passed its failure-only closure; two new coupled border/merge drafts corrected baseline capture to wait for actual imported text and passed failure-only closure. All563 prior acceptance files are byte-identical; three new acceptance files. All289 prior metadata records, fields, prefixes, statuses, defaults and registered save/open/recovery deviations are preserved. Full native competing-line pixel arbitration, widget units, shadow/diagonal/theme/SfxTabPage orchestration, RTL/vertical/follow/shared-format and whole kernel/browser parity remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SfxBoolItem"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "svl/source/items/cenumitm.cxx",
+      "upstreamSymbols": [
+        "SfxBoolItem",
+        "SfxBoolItem::Clone"
+      ]
+    }
+  }
+}

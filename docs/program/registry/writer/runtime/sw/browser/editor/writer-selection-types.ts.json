@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/browser/editor/writer-selection-types.ts",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "browser-editor",
+    "capabilityIds": [
+      "CAP-0103",
+      "CAP-0117",
+      "CAP-0118"
+    ],
+    "semantic": {
+      "behaviorStatus": "not-applicable",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/browser/editor/writer-selection-types.ts#WriterCursorSelection",
+        "apps/office/src/sw/source/uibase/docvw/native-headline-selection.test.ts#native",
+        "apps/office/src/sw/browser/editor/native-headline-selection.test.tsx#native",
+        "apps/office/e2e/writer-headline-selection.spec.ts#Writer native table range",
+        "vendor/libreoffice-reference/sw/source/core/crsr/crsrsh.cxx#No table cursor in repeated headlines:",
+        "vendor/libreoffice-reference/sw/source/core/crsr/viscrs.cxx#void SwShellTableCursor::FillRects()",
+        "vendor/libreoffice-reference/sw/source/core/layout/findfrm.cxx#SwLayoutFrame* SwFrame::GetNextCellLeaf()",
+        "vendor/libreoffice-reference/sw/source/core/layout/trvlfrm.cxx#pTab->IsFollow() && pTab->IsInHeadline"
+      ],
+      "justification": "Defines immutable DOM selection values; render IDs restore DOM selection while current SwNodes indexes are consumed only by the edit-window adapter for SwPaM conversion. Iteration174 restores represented flat same-table cross-cell cursor admission and repeated headline restrictions through existing owners. Native moving/fixed endpoints, selected boxes and ordinary cell history are preserved; selected original boxes do not paint on repeated headline copies. Actual native, mounted and Chromium cases cover bounded behavior. Full nested/merged/rowspan/split rows/cross-table/vertical/RTL/protection/frame/core/UI parity remains unverified; states/defaults/classes/IO exceptions and prior evidence preserved. Iteration216 pending: native before-label affinity is distinct from text offset0 through SwEditWin and shell publication, browser DOM Selection before marker and caret painting. Seven changed boundaries under verification; marked-list-level shading, ruler/RTL/bidi/full geometry and whole parity remain unverified. Existing statuses/defaults/registered save/open/recovery exceptions retained. Iteration216 verified bounded label-affinity roundtrip: native SwPaM owns defaultfalse state, shell SetPaM/UpdateCursor distinguish label from identical text0 and publish final owners; ordinary Insert clears affinity as Insert2. Browser restores stable editable DOM boundary after the noneditable decoration with distinct native BEFORE-label affinity, keeps marker glyphs out of model offsets and paints caret at label edge; pointer label admission and native history covered. Whole marked-list-level shading/ruler/RTL/bidi/layout and kernel/browser parity remain individually unverified; prior states/defaults/registered exceptions unchanged.",
+      "knownViolations": [],
+      "localSymbols": [],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

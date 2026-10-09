@@ -1,0 +1,26 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "evidence": {
+      "local": [
+        {
+          "marker": "export class FontList",
+          "path": "apps/office/src/vcl/browser/font-list.ts"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/vcl/browser/font-list.ts",
+    "rationale": "Adapts LibreOffice FontList device enumeration to the browser Local Font Access API with deterministic metric-compatible fallbacks when access is unavailable.",
+    "responsibilities": [
+      "Enumerates, deduplicates, sorts, and exposes font families available to the active browser environment."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "The Local Font Access API replaces LibreOffice OutputDevice font enumeration."
+    },
+    "status": "local-only"
+  },
+  "legacyOrder": 285
+}

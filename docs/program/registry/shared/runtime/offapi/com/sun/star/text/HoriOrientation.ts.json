@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/offapi/com/sun/star/text/HoriOrientation.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "editing-view",
+    "capabilityIds": [
+      "CAP-0102"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/offapi/com/sun/star/text/HoriOrientation.ts#HoriOrientation",
+        "vendor/libreoffice-reference/offapi/com/sun/star/text/HoriOrientation.idl#const short LEFT_AND_WIDTH"
+      ],
+      "justification": "Iteration177 represents native absolute table formatting through SwFormatTablePage and SwTableRep, six numeric orientations, linked metric fields, sensitivity, automatic-width restoration and visible-column reconciliation. React displays the native draft and the existing shell group applies accepted frame attributes. Worker retains orientation and ODF projects native alignment and conditional LR margins. Full native item/relative-width/complex-table/RTL/fly/cache/protection and UI/core parity remain unverified. All prior261 semantic statuses/defaults/classes and registered IO deviations are preserved.",
+      "knownViolations": [],
+      "localSymbols": [
+        "HoriOrientation"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "offapi/com/sun/star/text/HoriOrientation.idl",
+      "upstreamSymbols": [
+        "const short LEFT_AND_WIDTH"
+      ]
+    }
+  }
+}

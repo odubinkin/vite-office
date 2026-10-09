@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/browser/presentation/WriterWorkspaceChrome.tsx",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "browser-presentation",
+    "capabilityIds": [
+      "CAP-0101",
+      "CAP-0115"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/browser/presentation/WriterWorkspaceChrome.tsx#WriterWorkspaceChrome",
+        "apps/office/src/sfx2/browser/presentation/SidebarDeck.test.tsx#retainsDeckContent",
+        "apps/office/src/sfx2/browser/presentation/SidebarDeck.test.tsx#togglesSelectedDeck",
+        "apps/office/src/sfx2/browser/presentation/SidebarDeck.test.tsx#cancelsDeckFocus",
+        "apps/office/src/sw/browser/presentation/writer-view-sidebar-deck.test.tsx#retainsWriterDeck",
+        "apps/office/src/sw/browser/presentation/writer-view-sidebar-deck.test.tsx#recreatesSidebarDeck",
+        "apps/office/src/sw/browser/presentation/writer-view-sidebar-deck.test.tsx#focusesOwningWriter",
+        "apps/office/e2e/writer-sidebar-deck.spec.ts#Properties deck closes and reopens with document focus"
+      ],
+      "justification": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner. Existing Properties deck close/reopen follows inspected sfx2 SidebarController RequestCloseDeck/RequestOpenDeck/OpenThenToggleDeck, TabBar activation and FocusManager Escape: close retains mounted content and an unselected rail independently of whole Sidebar visibility, activation first returns to the owning document, cancellation does not toggle. Owned lifecycle/mount/state/frame/no-dispatch and rebuilt desktop/mobile browser checks cover only this contract. Whole F6/Sidebar panel focus, Help/settings/floating/other decks/default sizing and complete native composition remain open.",
+      "knownViolations": [],
+      "localSymbols": [
+        "WriterWorkspaceChrome"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

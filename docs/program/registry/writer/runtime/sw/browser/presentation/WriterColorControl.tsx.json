@@ -1,0 +1,32 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/browser/presentation/WriterColorControl.tsx",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "browser-presentation",
+    "capabilityIds": [
+      "CAP-0109"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/browser/presentation/WriterColorControl.tsx#WriterColorControl",
+        "vendor/libreoffice-reference/sw/source/uibase/shells/textsh1.cxx#SID_ATTR_CHAR_COLOR2"
+      ],
+      "justification": "DOM swatches and color input adapt the bindings-backed Writer color commands; full upstream palette defaults remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "WriterColorControl"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

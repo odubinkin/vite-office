@@ -1,0 +1,26 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "evidence": {
+      "local": [
+        {
+          "marker": "createBrowserDefaultFontDevice",
+          "path": "apps/office/src/vcl/browser/default-font-device.ts"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/vcl/browser/default-font-device.ts",
+    "rationale": "Adapts synchronous CSS Font Loading availability checks to the narrow output-device contract used for locale- and script-specific Writer defaults.",
+    "responsibilities": [
+      "Selects the first browser-available default font family for a role and script request."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "CSS Font Loading replaces native VCL output-device font enumeration in the browser runtime."
+    },
+    "status": "local-only"
+  },
+  "legacyOrder": 283
+}

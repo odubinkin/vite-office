@@ -1,0 +1,26 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "evidence": {
+      "local": [
+        {
+          "marker": "BrowserSfxDispatcher",
+          "path": "apps/office/src/framework/browser/dispatch/browser-dispatcher.ts"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/framework/browser/dispatch/browser-dispatcher.ts",
+    "rationale": "Promise lifecycle, pending state, and browser-facing failure normalization have no native Sfx dispatcher ownership and remain explicit browser adaptation.",
+    "responsibilities": [
+      "Observes asynchronous browser command completion without changing core Sfx dispatch semantics."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser Promise operations replace native asynchronous dispatch-result listeners."
+    },
+    "status": "local-only"
+  },
+  "legacyOrder": 13
+}

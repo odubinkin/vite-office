@@ -1,0 +1,432 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "SwEditWin",
+          "path": "apps/office/src/sw/source/uibase/docvw/edtwin.ts"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-editing.test.ts",
+          "marker": "native table cell editing owners"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-table-editing.test.tsx",
+          "marker": "native table DOM editing"
+        },
+        {
+          "path": "apps/office/e2e/writer-native-table-editing.spec.ts",
+          "marker": "Writer table cell typing, split, join and formatting use document history"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/docvw/native-list-enter.test.ts",
+          "marker": "native list Enter"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-cell-list-enter.test.tsx",
+          "marker": "native cell list Enter UI"
+        },
+        {
+          "path": "apps/office/e2e/writer-cell-list-enter.spec.ts",
+          "marker": "Writer Enter ends an empty cell list without inserting a paragraph"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/docvw/native-list-backspace.test.ts",
+          "marker": "native list Backspace"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-cell-list-backspace.test.tsx",
+          "marker": "native cell Backspace UI"
+        },
+        {
+          "path": "apps/office/e2e/writer-cell-list-backspace.spec.ts",
+          "marker": "Writer Backspace hides a cell marker and ShiftBackspace restores native numbering"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-traversal.test.ts",
+          "marker": "native table traversal"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-table-tab.test.tsx",
+          "marker": "native table Tab UI"
+        },
+        {
+          "path": "apps/office/e2e/writer-native-table-tab.spec.ts",
+          "marker": "Writer Tab traverses native cell sections and appends one row with history"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/wrtsh/native-section-navigation.test.ts",
+          "marker": "native section navigation"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-section-navigation.test.tsx",
+          "marker": "native section navigation UI"
+        },
+        {
+          "path": "apps/office/e2e/writer-native-section-navigation.spec.ts",
+          "marker": "Writer Ctrl Home End follows native cell and table boundaries"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-selection.test.ts",
+          "marker": "native table selection"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-table-selection.test.tsx",
+          "marker": "row gesture paints actual selected boxes and body cursor removes stale row and properties"
+        },
+        {
+          "path": "apps/office/e2e/writer-native-table-selection.spec.ts",
+          "marker": "Writer row selection paints core boxes and typing after caret kill preserves neighbors"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-cursor-rings.test.ts",
+          "marker": "native table character ring history"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-table-cursor-rings.test.tsx",
+          "marker": "mounted %s uses complete per-cell ranges and preserves painted rows through history"
+        },
+        {
+          "path": "apps/office/e2e/writer-native-table-cursor-rings.spec.ts",
+          "marker": "Writer selected row character formatting covers full cells and survives Undo Redo"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/docvw/native-list-tab.test.ts",
+          "marker": "native ordinary paragraph Tab"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-list-tab.test.tsx",
+          "marker": "native ordinary paragraph Tab UI"
+        },
+        {
+          "path": "apps/office/e2e/writer-native-list-tab.spec.ts",
+          "marker": "Writer body list and table Tab retain editing focus"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/native-outline-movement.test.ts",
+          "marker": "native outline movement"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-outline-tab.test.tsx",
+          "marker": "native outline Tab UI"
+        },
+        {
+          "path": "apps/office/e2e/writer-native-outline-tab.spec.ts",
+          "marker": "Writer native heading Tab retains styles and history"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/docvw/native-headline-selection.test.ts",
+          "marker": "native"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-headline-selection.test.tsx",
+          "marker": "native"
+        },
+        {
+          "path": "apps/office/e2e/writer-headline-selection.spec.ts",
+          "marker": "Writer native table range"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/frmedt/native-table-mouse.test.ts",
+          "marker": "classifies native physical mouse point"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-table-mouse.test.tsx",
+          "marker": "mounted source edge"
+        },
+        {
+          "path": "apps/office/e2e/writer-native-table-mouse.spec.ts",
+          "marker": "Writer native table mouse edge and drag"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/docvw/native-table-column-drag.test.ts",
+          "marker": "native no-motion and cancelled releases leave no history and reject stale motion"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/doc.ts",
+          "marker": "GetTabRows"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/docnode/ndtbl.ts",
+          "marker": "GetSwTabRows"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/layout/tabfrm.ts",
+          "marker": "SwTableMouseGeometry"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/frmedt/fetab.ts",
+          "marker": "GetMouseTabRows"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/docvw/edtwin.ts",
+          "marker": "RulerRowDrag"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts",
+          "marker": "PaintColumnGuide"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/uiview/native-column-item-boundary.test.ts",
+          "marker": "document column drag consumes native view item"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/uiview/native-row-item-boundary.test.ts",
+          "marker": "native row value"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/docvw/native-row-modifier-drag.test.ts",
+          "marker": "native row exact modifier"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/docvw/native-ruler-ownership.test.ts",
+          "marker": "Writer view owns two persistent native rulers"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/table/native-independent-columns.test.ts",
+          "marker": "native separators combine visible current-row"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "SwEditWin::KeyInput",
+          "path": "vendor/libreoffice-reference/sw/source/uibase/docvw/edtwin.cxx"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/docvw/edtwin.cxx",
+          "marker": "case SwKeyState::NumOff:"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/docnum.cxx",
+          "marker": "void SwDoc::DelNumRules"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/undo/unnum.cxx",
+          "marker": "SwUndoDelNum::RedoImpl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/docvw/edtwin.cxx",
+          "marker": "case KEY_BACKSPACE:"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/docnum.cxx",
+          "marker": "bool SwDoc::NumOrNoNum"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/undo/unnum.cxx",
+          "marker": "SwUndoNumOrNoNum::UndoImpl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/crsr/swcrsr.cxx",
+          "marker": "SwCursor::GoPrevNextCell"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/crsr/trvltbl.cxx",
+          "marker": "SwCursorShell::GoNextCell"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/table/swtable.cxx",
+          "marker": "void InsTableBox"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/undo/untbl.cxx",
+          "marker": "SwUndoTableNdsChg::UndoImpl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/docvw/edtwin.cxx",
+          "marker": "case KEY_TAB:"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/wrtsh/move.cxx",
+          "marker": "SwWrtShell::GoStart"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/crsr/pam.cxx",
+          "marker": "GoCurrSection"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/crsr/trvltbl.cxx",
+          "marker": "SwCursorShell::MoveTable"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/crsr/crsrsh.cxx",
+          "marker": "SwCursorShell::SttEndDoc"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/crsr/swcrsr.cxx",
+          "marker": "SwTableCursor::ActualizeSelection"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/crsr/swcrsr.cxx",
+          "marker": "SwTableCursor::NewTableSelection"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/table/swnewtable.cxx",
+          "marker": "SwTable::CreateSelection"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/crsr/trvltbl.cxx",
+          "marker": "SwCursorShell::SelTableRowOrCol"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/wrtsh/select.cxx",
+          "marker": "SwWrtShell::SelectTableRow"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/crsr/crsrsh.cxx",
+          "marker": "SwCursorShell::IsCursorInTable"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/crsr/crsrsh.cxx",
+          "marker": "SwCursorShell::GetCursor"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/crsr/crsrsh.cxx",
+          "marker": "SwCursorShell::getShellCursor"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/crsr/swcrsr.cxx",
+          "marker": "SwTableCursor::MakeBoxSels"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/edit/edattr.cxx",
+          "marker": "GetRingContainer"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/number.cxx",
+          "marker": "bool NumDownChangesIndent"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/docvw/edtwin.cxx",
+          "marker": "case KEY_TAB:"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/docnum.cxx",
+          "marker": "bool SwDoc::OutlineUpDown"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/undo/unoutl.cxx",
+          "marker": "SwUndoOutlineLeftRight::UndoImpl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/edit/ednumber.cxx",
+          "marker": "bool SwEditShell::OutlineUpDown"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/docvw/edtwin.cxx",
+          "marker": "case SwKeyState::OutlineDown:"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/crsr/crsrsh.cxx",
+          "marker": "No table cursor in repeated headlines:"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/crsr/viscrs.cxx",
+          "marker": "void SwShellTableCursor::FillRects()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/findfrm.cxx",
+          "marker": "SwLayoutFrame* SwFrame::GetNextCellLeaf()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/trvlfrm.cxx",
+          "marker": "pTab->IsFollow() && pTab->IsInHeadline"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/docvw/edtwin.cxx",
+          "marker": "SwEditWin::MouseButtonDown"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/docvw/edtwin3.cxx",
+          "marker": "SwEditWin::RulerColumnDrag"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svx/source/dialog/svxruler.cxx",
+          "marker": "SvxRuler::CalcMinMax"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl.cxx",
+          "marker": "SwDoc::GetTabRows"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl.cxx",
+          "marker": "SwDoc::SetTabRows"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/frmedt/fetab.cxx",
+          "marker": "SwFEShell::GetMouseTabRows"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svx/source/dialog/svxruler.cxx",
+          "marker": "SvxRuler::DragBorders"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/uiview/viewtab.cxx",
+          "marker": "const int nLft = aTabCols.GetLeftMin();"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/uiview/viewtab.cxx",
+          "marker": "aTabCols[i] = rCol.nEnd + aTabCols.GetLeft();"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svx/source/dialog/svxruler.cxx",
+          "marker": "void SvxRuler::EvalModifier()"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/uibase/docvw/edtwin.ts",
+    "localSymbols": [
+      "SwEditWin",
+      "RulerColumnDrag",
+      "GetTableColumnDragPosition",
+      "RulerRowDrag"
+    ],
+    "omittedResponsibilities": [
+      "Native VCL painting, accessibility, drag services, and platform event classes remain in the browser adapter."
+    ],
+    "preservedResponsibilities": [
+      "Owns platform-neutral edit, selection, composition, transfer, and history operations over one persistent SwWrtShell.",
+      "Iteration138 removes the table-cell post-DOM diff/direct text mutation, imperative innerHTML synchronization and event isolation. Cell paragraphs use shared DOM selection identities and BrowserWriterEditWindow -> SwEditWin -> actual SwWrtShell input/history. Connected cell text is admitted by SwNodes ownership; active/all-text identities come from native nodes while body layout stays separate. SwTableBox derives text from its start/end section instead of a duplicate paragraph array; boundary joins require adjacent text in the same section. Real-owner core, mounted DOM and Chromium tests cover this bounded path. React text-run display, body ordinal sidebar context, table-wide selection/navigation, nested or merged cells, native table layout/text portions and list UI remain unverified. All existing semantic states/defaults/exceptions and registered I/O/recovery deviations remain unchanged; no whole-module or goal promotion.",
+      "Iteration141 moves ordinary Enter empty-list termination into SwEditWin using the actual unmarked PaM,empty node and non-outline rule,then native shell/document DelNumRules. Numbering deletion traverses actual inclusive SwNodes,including cells,resets native list attributes and respects inherited rules;SwUndoDelNum retains direct list history and replays the document operation. Browser input translates insertParagraph intent only;React contains no list editing decision. Owned native,mounted cell and Chromium cases cover termination without split,history,metadata and followup ordinary Enter. ShiftEnter,Backspace,full outline,redline/merged paragraph expansion,selection rings and full native undo/layout/UI remain unverified;existing states/defaults/exceptions unchanged.",
+      "Iteration142 aligns Backspace at a native paragraph start with edit-window indent/count ordering:TryRemoveIndent for ordinary or uncounted nodes,NumOrNoNum counted flag by Shift direction,empty ordinary uncounted removal,and final native text deletion. Browser keyboard and virtual beforeinput share SwEditWin;plain and ShiftBackspace modifiers remain distinct,no React list decision. SwUndoNumOrNoNum stores one node/two flags and UndoRedo changes only counted state;actual metadata survives. Doc.NumOrNoNum and native direct-rule fallback retain actual nodes. Owned body/cell/history/indent and Chromium cases cover represented behavior. RecentTab state counters,label-caret,zero-length marked PaM equivalence,full outline/redline/rings/history/layout/UI remain unverified;existing244states/defaults/deviations unchanged.",
+      "Iteration145 routes unmodified table Tab/ShiftTab through SwEditWin and a persistent SwCursor. Core traverses actual flat SwNodes cell sections and selects first paragraph offset0 while retaining native mark;no DOM sibling/body ordinal/navigation DTO. Shell refreshes active/pending/history grouping after movement;unmarked last-cell Tab prepares an empty source-formatted row and records SwUndoTableNdsChg retaining actual row/cell/node identities. Undo disconnects sections and retargets live indices;Redo reconnects them. List-at-start priority compares represented native numbering types/indent before level change or literal Tab insertion. Owned native,mounted and Chromium evidence covers represented behavior. Full native SwCursorShell/Doc InsertRow,merged/nested/protected/form/formula/autoformat/redline/border/autocorrect,HomeEnd/fulllayout/history/UI remainunverified;existing244semantic states/defaults/classifications and registered I/O/recovery deviations retained.",
+      "Iteration146 routes Ctrl/Meta HomeEnd through SwEditWin and native shell section movement. SwCursor resolves actual cell,table and document sentinel endpoints,first0/lastLen;MoveSection reports unchanged false,raw MoveTable accepts unchanged but rejects marked ordinary cursors,SttEndDoc accepts current document boundary. Shell owns cell then table then document order,independent bounded SwTableCursor conversion using current cell boundary as native table mark,ordinary cursor mark deletion,selection setup and pending/history refresh. DOM translates intent and direction only,no ordinal,sibling,TextRuns or navigation DTO decisions. Native,mounted and Chromium cases cover represented flat-table behavior. Full selected-box painting,cursor rings,protected/merged/nested/redline/layout selection and visual-line HomeEnd remain unverified;all existing246states/defaults/classifications and registered save/open/recovery deviations preserved.",
+      "Iteration147 removes React selectedTable/selectedTableRow and editor selected-row props. Native SwTableCursor owns a sorted deduplicated actual SwTableBox set, reconciles identity differences and NewTableSelection from actual point/mark sections. SwTable::CreateSelection supports represented flat shared-column rectangle and row expansion. Shell SelectTableRow uses last content endpoints (point first box,mark last), clears ordinary mark and creates no content history; table context follows selected boxes or actual point. SwEditWin converts a row hit to native node coordinates. Immutable selected-box start indices paint cells/whole rows; insert focuses first cell and properties use native cursor context. New actual native,mounted and Chromium assertions cover the bounded flow. Native rings,per-box edit cursor ranges,merged/nested/protected/hidden/unequal-row geometry,drag selection/column selection and full layout/history remain unverified. Existing246semantic statuses/classifications/defaults and registered I/O/recovery deviations preserved; no whole-module/goal promotion.",
+      "Iteration148 ports actual SwPaM circular range owners/traversal/disposal, SwCursor.Create and SwTableCursor change/movement state plus full-cell MakeBoxSels reconciliation. Native default GetCursor(makeTableCursor=true) returns ordinary editing ring; getShellCursor owns displayed table endpoints. Shared selected-text traversal reads each actual PaM so represented Bold/Italic/font family/size/color/highlight cover entire selected cells and all nonempty cell paragraphs, excluding unselected columns. Native history state retains table endpoint mode and rebuilds selected boxes/rings through formatting Undo/Redo. Existing display/navigation tests only switch owner API calls and keep assertion values; no projected text editing. Full ring insertion/deletion/paste/list/paragraph operations, native shellcursor geometry/protection/redlines/complex cells remain unverified. Existing246semanticstates/defaults/classifications and conscious I/O/recovery exceptions preserved; broad goalactive.",
+      "Iteration166 unifies represented ordinary body/list/table Tab in SwEditWin.HandleTab instead of browser table-only routing. Native numfunc::NumDownChangesIndent now belongs to number.ts and reads actual shell cursor/rule/current and next formats/NUMBER_NONE/indent/max-level decision. Paragraph-start list priority uses native NumUpDown/history, equal NONE indent inserts literal tab; cells retain native traversal; ordinary body Tab inserts literal text and ShiftTab consumes End no-op. Browser translates actual DOM selections/unmodified noncomposing keys through the same owner with no compatibility wrapper. Eligible assigned-outline-at-start operations remain explicitly unsupported pending native OutlineUpDown, not substituted by text insertion. Typed nonnull text cursors only; native null/nontext fallback, forms/input/contentcontrols/graphics/read-only/WebView/modified Tab/config/autocorrect/NumDown counter and full KeyInput remain unverified. Real core/DOM/production Chromium cases prove bounded behavior;253 existing semantic states/defaults/classes/IOexceptions/evidence and424 prior testfiles preserved,2 prior tests source-confirmed obsolete body refusal/method-name corrections only. No full-module or broad parity promotion; conscious save/open/recovery deviations unchanged.",
+      "Iteration167 implements the represented nonmerged native docnum outline move-table using actual sorted outline index/predecessor range, creation-order assigned styles, lazy adjacent pool styles, occupied-level signed steps, whole-range rejection and actual collection/direct-outline mutation. Matching unoutl SwUndoOutlineLeftRight retains numeric range and signed offset, reuses the same primitive inversely for Undo and identically for Redo. SwEditShell retains native normalized ring order and short-circuit after failure with grouped successful delta history; default displacement one. SwEditWin eligible heading-at-start Tab/ShiftTab calls this native operation and owns the key, replacing unsupported fallback while retaining numbering/table priority and text/limit cases. Core primitive and portable shell history registration remain separated as existing runtime architecture; no snapshot/model/preparation/no-op callback/browser heuristic. Actual core/mounted DOM/production Chromium tests prove bounded behavior. Direct document auto-history, framework Repeat, failed-operation dirty flag, native StartAllAction layout batching, merged para props and conditional collections remain unrepresented/unverified. Full KeyInput/core/UI/list/table parity unverified.253 prior semantic states/defaults/classes/IO exceptions/evidence preserved;2 new partial owners stay unverified,255 modules.429 prior tests428 byte-identical with only exact old unsupported outline-case source-confirmed expectations corrected. Conscious save/open/recovery deviations unchanged.",
+      "Iteration174 restores represented flat same-table cross-cell cursor admission and repeated headline restrictions through existing owners. Native moving/fixed endpoints, selected boxes and ordinary cell history are preserved; selected original boxes do not paint on repeated headline copies. Actual native, mounted and Chromium cases cover bounded behavior. Full nested/merged/rowspan/split rows/cross-table/vertical/RTL/protection/frame/core/UI parity remains unverified; states/defaults/classes/IO exceptions and prior evidence preserved.",
+      "Iteration188: source-shaped horizontal LTR native edge selection and master/follow drag ownership; wider unsupported layout/protection/resize remains unverified.",
+      "Iteration189 moves table pointer policy to native SwEditWin::changeMousePointer/GetPointer and actual SwCursorShell::IsTableMode instead of a browser SwTab switch. Resize hints are HSizeBar/VSizeBar with native table-mode suppression; enhanced selection retains five native TabSelect glyphs. VCL browser projection owns CSS only and static16x16 X11 source/mask pixels with native hotspots. Literal native enum/switch/owner/asset tests, mounted pointer and real Chromium1280/390 cover represented behavior. Object-selectable arbitration, LibreOfficeKit, remaining pointer families, physical RTL/vertical layout, actual resize drag and complete native window contracts remain unverified; no semantic promotion or registered save/open/recovery changes.",
+      "Iteration194 ports horizontal native GetTabRows fuzzy25twip boundaries and SetTabRows interval-height deltas over connected original cell/row owners. The shared edit-window axis capture shifts subsequent row borders and the table bottom, previews without content/history, and records one SwUndoAttrTable on acceptance. Browser device capture protects editable text selection/drag and preserves cursor/list ownership through cancellation, Enter and Undo/Redo. Flat horizontal LTR and whole-row master/follow measurements are represented; native modifiers/proportional/vertical/RTL/merged/nested/protected/split-row layout and full module/parent parity remain unverified. Registered save/open/recovery deviations unchanged.",
+      "Iteration215 pending: native text-frame/cursor/shell Home End replaces browser default movement using measured device lines only; frame margin and iterator affinity, hard-break and nonAPI spaces, selection/label lifecycle remain under verification. Whole frame/bidi/readonly/merged-text and kernel/browser parity unverified; existing fields/defaults/exceptions retained.",
+      "Iteration215 verified bounded Home End closure: native text frames, cursor and shell execute visual-line margins from browser device lines; right-margin affinity, hard-break exclusion, interactive/API spaces, Shift marks, source native label state, cursor stack/pending input/history and body/cell Chromium1280/390 pass.13532app110inventory14infrastructure276Chromium; ONE upstream-absent full profile and3genuinely new port cases plus1original-failure retry only,0passing replay; strict current-source actual100 app/inventory. Nullable text tested by explicit device port fault injection, not normal-browser parity. Full frame graph/bidi/RTL/readonly/fly/merged paragraphs and DOM label painting/marked-list-level integration remain unverified; all prior fields/statuses/defaults/registered deviations retained.",
+      "Iteration216 pending: native before-label affinity is distinct from text offset0 through SwEditWin and shell publication, browser DOM Selection before marker and caret painting. Seven changed boundaries under verification; marked-list-level shading, ruler/RTL/bidi/full geometry and whole parity remain unverified. Existing statuses/defaults/registered save/open/recovery exceptions retained.",
+      "Iteration216 verified bounded label-affinity roundtrip: native SwPaM owns defaultfalse state, shell SetPaM/UpdateCursor distinguish label from identical text0 and publish final owners; ordinary Insert clears affinity as Insert2. Browser restores stable editable DOM boundary after the noneditable decoration with distinct native BEFORE-label affinity, keeps marker glyphs out of model offsets and paints caret at label edge; pointer label admission and native history covered. Whole marked-list-level shading/ruler/RTL/bidi/layout and kernel/browser parity remain individually unverified; prior states/defaults/registered exceptions unchanged.",
+      "Iteration225 restores exact native keyboard modifier mask at browser table MouseButtonDown ingress. Solitary Shift on horizontal LTR internal column borders selects source SvxRuler EvalModifier OBJECT_SIZE_LINEAR, translating following separators right-to-left with five-device-pixel constraints and visible CalcPropMaxRight limit. Each preview starts from original SwTabCols; original document/shell/history ownership, row solitary-Shift ignore, mouse/Enter/Escape and3UndoRedo/ODT/Chromium geometry retained. This ports only that existing drag branch; full SvxRuler owner, proportional/current-line/snapping/margin modifier/vertical/RTL/merged/nested/protection behavior remain partial or unverified. All classifications/statuses/defaults and registered IO deviations unchanged.",
+      "Iteration226 ports exact solitary KEY_MOD1 internal horizontal LTR table-column dragging from pinned SvxRuler EvalModifier, PrepareProportional_Impl, DragBorders and CalcPropMaxRight. Following separators use native uint16 per-thousand shares, integer device-pixel division and float minimum-width reserve. Ordinary, solitary Shift, row and margin branches retain existing ownership and semantics; original shell cursor, list marker, ODT and repeated history retained. One original mounted pure-Ctrl expectation migrates after its actual failure; every other prior acceptance input and assertion remains unchanged. Full SvxRuler/SfxColumnItem ownership, current-line/snapping/margin modifiers, vertical/RTL/merged/nested/protection behavior remain partial or unverified. All classifications, statuses, defaults and registered IO deviations preserved.",
+      "Iteration227 aligns native view ownership: SwEditWin retains required m_rView and GetView, resolves every shell operation through that exact source view; SwView binds itself to both persistent edit window and SwWrtShell, whose GetView retains its creation owner rather than another currently active DocShell view. Direct shell injection into SwEditWin is removed, no legacy overload/default/fake view. Detached core SwWrtShell remains an explicit model-port construction boundary and rejects GetView without an attached real view. Exactly41 prior fixtures migrate actual owner construction/imports/formatter with every original assertion and input retained. Cross-document/shared-shell-view/lifecycle/layout/cursor/typing/history native tests and real browser suite validate ownership. This is a prerequisite; full SvxRuler/SvxColumnItem/slot geometry ownership and exhaustive parity remain partial. All prior defaults/status/classes and registered IO deviations retained.",
+      "Iteration229 introduces actual production-used SvxColumnItem ownership at the SwView table-column conversion boundary from StateTabWin. Native visibility/end/min/max descriptions replace direct SwTabCols interpretation during document column drag admission, while original SwTabCols remains model/preview/apply data. Native defaults, upper-only65535 description clamp, copied Append/Clone and equality excluding ortho are retained. The svx->svl edge is native Library_svx-owned, with no SW/browser reverse dependency. Full SvxRuler/SfxBindings slots, complete StateTabWin frames/rows, pooled refcount mutability and UNO member queries/PutValue remain partial or unverified. Registered IO deviations and all semantic states/defaults/classes remain unchanged.",
+      "Iteration230 adds the actual StateTabWin row value branch and source SID_RULER_ROWS/ROWS_VERTICAL constants. Source row edges use LeftMin and page extent, active0, clamped uint16 frame distances, same-index vertical orientation with zero-clamped limits and the source invisible constrained tail. SwView supplies production horizontal-writing row items; document row capture consumes their separator visibility/end/min/max, internal glMinFrame maximum guard and previous-separator bottom-margin bounds instead of unrestricted RightMax. Native SwTabCols remains original model/preview/apply and follow-flow/last-row guard owner. Full ruler/slot/page-frame state, vertical document dragging, snapping/protection/modifier rows and single-row paragraph-indent margin-range context remain partial; no broad promotion, old statuses/defaults/classes and registered IO deviations remain unchanged.",
+      "Iteration230 original new native-boundary test exposed stale selected-row translation: the item end was admitted but the old carrier position was incremented. Source ExecuteTabWin sets row separators from rCol.nEnd plus Left. Selected row preview now assigns that absolute native position; only following separators and table end translate by the captured delta. The original failed case closes with native item position/min/max, original graph and undo/redo. Five genuinely new three-by-three row-to-column handoffs cover independent items and ordinary/Shift/Ctrl/separate margins after cancellation, without passing-case replay.",
+      "Iteration231 preserves actual mouse row modifier masks and represented native SvxRuler EvalModifier/PrepareProportional_Impl/CalcMinMax/DragBorders/ApplyBorders policies in horizontal-writing document ingress: Shift remains ordinary; exact Ctrl uses captured uint16 per-thousand preceding-row integer-device shares, source minimum-space limits and Margin2 nIndex0 following-border translation; exact Ctrl+Shift internal Border uses the previous visible lower bound and original active-line-only SetMouseTabRows flag, excluded at margins. Original SwTabCols/model/frame/cursor/box/line/history ownership remains unchanged. Tests use independent literal geometry and original-failure/new-case-only closures, never upstream. Full native ruler/slot/page-frame state, vertical/RTL document drag, snapping/protection and single-row indent ranges remain partial; no module/status/default/class/IO promotion.",
+      "Iteration232 moves represented document table ruler tracking from SwEditWin into source-owned SVTOOLS Ruler lifecycle and SVX SvxRuler geometry over independent SvxColumnItem values. SwView owns persistent horizontal/vertical rulers; SwEditWin delegates actual Border/Margin hits with5px tolerance and physical tracking, retaining only original Writer carrier/document start for ExecuteTabWin-shaped native value apply. SVX owns exact modifier/snapping flags, uint16 share/width-block buffers, native represented limits, linear/proportional/row geometry and cancel/apply decisions without importing SW/browser code. Source SVX->SVTOOLS/VCL and SW->SVTOOLS native library edges are explicit. New source owners remain partial and unverified: full SFX bindings/slot state, VCL ruler drawing/ticks/snapping, protection, paragraph/frame margin state, column-margin modifier geometry, vertical/RTL document writing and frame-column/object/tab/indent contexts are not claimed. Existing ordinary column-margin geometry and registered IO deviations remain; prior semantic states/defaults/classes are unchanged.",
+      "Iteration232 verification exposed a pre-existing unsupported core branch: SwDoc::SetTabCols and SwTable::SetTabCols explicitly reject currentRowOnly independent column-row geometry. Native SvxRuler EvalModifier retains its source current-line flag, but Writer column apply preserves the existing ordinary shared-column contract; native row apply forwards the flag as before. Independent per-row box widths, history/layout/ODT ownership and native current-line column apply require a subsequent core correction; this retained gap is not an intentional upstream exception or a parity claim. Remove unreachable proportional Margin1 skeleton branches from the represented border-only column preparation/limiter; full column-margin modifier contexts remain omitted. Four new unequal/hidden native geometry and cross-axis history cases cover changed complete functions without replaying passing cases.",
+      "Iteration233 moves connected flat-table column geometry into each original SwTableBox SwFormatFrameSize. Native current-row visible/other-row hidden fuzzy separator union and per-line NewSetTabCols adjustments feed original Writer document attribute history; actual Ctrl+Shift current-line columns replace the retained ordinary shared-column fallback. Source XML union grids/spans and browser device colspans preserve independent original cells, with complete native frame-size values in browser codec and declared grid widths only at import/builder ingress. No row-width side map, graph replacement or TextRuns conversion. Flat unspanned source behavior is represented; full row-span propagation/nested/merged graphs, frame item pooling/UNO, RTL/vertical/SFX/VCL/full ruler state remain partial. Registered recovery/open/save/settings untouched, previous statuses/defaults/classes preserved."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/uibase/docvw/edtwin.cxx",
+    "upstreamSymbols": [
+      "SwEditWin::KeyInput",
+      "SwEditWin::Command",
+      "SwEditWin::MouseButtonDown"
+    ],
+    "browserResponsibilities": [
+      "Iteration188: device rectangles and mouse events are supplied by the browser; actual table/box/cursor selection belongs to native shell owners."
+    ]
+  },
+  "legacyOrder": 256
+}

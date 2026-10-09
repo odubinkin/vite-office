@@ -1,0 +1,48 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "getDefaultFont",
+          "path": "apps/office/src/sw/source/core/doc/default-font.ts"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "lcl_SetDfltFont",
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentStylePoolManager.cxx"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/core/doc/default-font.ts",
+    "localSymbols": [
+      "WriterFontScript",
+      "WriterDefaultFontType",
+      "DefaultFontDevice",
+      "getDefaultFont",
+      "getWriterFontScript"
+    ],
+    "omittedResponsibilities": [
+      "Native font configuration and physical-device enumeration remain behind the injected output-device contract."
+    ],
+    "preservedResponsibilities": [
+      "Selects stable Western, CJK, and CTL Writer defaults by language and font role."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/doc/DocumentStylePoolManager.cxx",
+    "upstreamSymbols": [
+      "lcl_SetDfltFont",
+      "OutputDevice::GetDefaultFont"
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/core/doc/default-font.ts",
+      "rationale": "The injected DefaultFontDevice contract keeps Writer default-font selection in core while vcl/browser owns font enumeration; poolfmt-defaults.ts consumes this policy without importing a browser device.",
+      "stackNecessity": "browser-boundary"
+    }
+  },
+  "legacyOrder": 163,
+  "filenameOrder": 0
+}

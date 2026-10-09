@@ -1,0 +1,8 @@
+{
+  "suite": "writer",
+  "active": true,
+  "commands": {
+    "module": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
+    "export": "writerUserCommands"
+  }
+}

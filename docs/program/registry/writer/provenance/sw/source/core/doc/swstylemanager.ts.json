@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/doc/swstylemanager.ts",
+          "marker": "createStyleManager"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/automatic-style-handles.test.ts",
+          "marker": "document-owned automatic character handles"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/swstylemanager.cxx",
+          "marker": "SwStyleManager::getAutomaticStyle"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/core/doc/swstylemanager.ts",
+    "localSymbols": [
+      "createStyleManager"
+    ],
+    "omittedResponsibilities": [
+      "Only the currently implemented concrete-item automatic character insertion branch is ported. Iteration113 introduces the document-owned automatic character StylePool and IStyleAccess/SwStyleManager owner. Concrete SET-only parent-root/item-child/leaf-clone insertion shares handles for shareable items and retains fresh leaves for non-shareable items. Ordinary character creation and browser snapshot decode now use the document pool. SwFormatAutoFormat is non-shareable, retains explicitly supplied handles, copies the shared reference and compares pointer identity rather than item-set value equality. Independent real-owner regressions cover insertion/parent/input/copy/adjacent-range/codec contracts; one obsolete raw-value merge expectation is corrected. Selective reset pool interning, sentinel-bearing style insertion, native unordered iterator order/collisions, paragraph/ignorable families, unused-style enumeration, name/cache/lifetime semantics, native null default constructor and UNO name QueryValue remain unverified. Browser item-record persistence remains the existing adapter; full modules/model/layout/notification/filter/UI parity is not certified. Registered save/open/recovery deviations and existing semantic statuses/defaults/exceptions remain unchanged."
+    ],
+    "preservedResponsibilities": [
+      "Iteration113 introduces the document-owned automatic character StylePool and IStyleAccess/SwStyleManager owner. Concrete SET-only parent-root/item-child/leaf-clone insertion shares handles for shareable items and retains fresh leaves for non-shareable items. Ordinary character creation and browser snapshot decode now use the document pool. SwFormatAutoFormat is non-shareable, retains explicitly supplied handles, copies the shared reference and compares pointer identity rather than item-set value equality. Independent real-owner regressions cover insertion/parent/input/copy/adjacent-range/codec contracts; one obsolete raw-value merge expectation is corrected. Selective reset pool interning, sentinel-bearing style insertion, native unordered iterator order/collisions, paragraph/ignorable families, unused-style enumeration, name/cache/lifetime semantics, native null default constructor and UNO name QueryValue remain unverified. Browser item-record persistence remains the existing adapter; full modules/model/layout/notification/filter/UI parity is not certified. Registered save/open/recovery deviations and existing semantic statuses/defaults/exceptions remain unchanged.",
+      "Iteration114 restores the registered MakeTextAttr owner for item-set insertion, character WhichId wrapping, same-pool automatic/internet item copies and foreign automatic-style Clone(true,destinationPool) conversion. Selective reset now interns a nonempty remaining set and constructs a fresh hint through MakeTextAttr, reusing native document-owned handles so equivalent adjacent remnants merge. Internet items are non-shareable. Snapshot decoding uses the same factory while retaining browser item records. Independent real-owner factory/reset/retained-undo/adjacent-range tests cover these bounded contracts. Two earlier synthetic sentinel replacement assumptions are corrected to the existing concrete-pool excluded-domain guard; valid concrete flag fixtures preserve core fresh defaults and actual Ctrl deletion/undo/redo. No-common raw state handling remains independently tested. This supersedes older positive sentinel-pooling and missing selective handle-routing claims only in the registered operation. Sentinel style insertion, native unordered iteration/collisions, paragraph/ignorable/cache/name/usage/lifetime/null constructor/UNO name QueryValue, other hint types and actual cross-document SwpHints copy ingestion remain unverified. Whole-module/model/filter/UI parity stays unverified; all existing statuses/defaults/exceptions and registered I/O/recovery deviations unchanged."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/doc/swstylemanager.cxx",
+    "upstreamSymbols": [
+      "createStyleManager",
+      "SwStyleManager::getAutomaticStyle"
+    ]
+  },
+  "legacyOrder": 174
+}

@@ -1,0 +1,26 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "evidence": {
+      "local": [
+        {
+          "marker": "MessageCatalog",
+          "path": "apps/office/src/framework/browser/localization/messages.ts"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/framework/browser/localization/messages.ts",
+    "rationale": "Defines pure browser locale normalization, message catalog fallback, and placeholder interpolation without UI or translation-corpus coupling. This is a browser-owned adaptation without a direct native source mapping.",
+    "responsibilities": [
+      "Defines pure browser locale normalization, message catalog fallback, and placeholder interpolation without UI or translation-corpus coupling."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser keyboard, Intl locale, and Worker APIs replace native framework services."
+    },
+    "status": "local-only"
+  },
+  "legacyOrder": 17
+}

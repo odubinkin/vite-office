@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/text/txttab.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "page-layout",
+    "capabilityIds": [
+      "CAP-0111"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/text/native-numbering-tab.test.ts",
+        "apps/office/src/sw/browser/editor/native-numbering-tab.test.tsx",
+        "apps/office/e2e/writer-native-numbering-tab.spec.ts",
+        "apps/office/src/sw/source/core/text/txttab.ts#resolveSwNumberingTabPosition",
+        "vendor/libreoffice-reference/sw/source/core/text/txttab.cxx#SwTextFormatter::NewTabPortion"
+      ],
+      "justification": "Iteration228 ports bounded horizontal LTR numbering tab selection from txttab/inftxt: list tab replaces its item position, preceding defaults are removed, lookup is strictly beyond actual glyph advance; next explicit/default stop, tabs-relative origin and hanging/TAB_COMPAT flags retain native arithmetic. Browser glyph advance is measured before paint and refreshed after fonts/resize with transformed device normalization; authored four-field layout, legacy minimum distance, immutable model/history and IO deviations retained. Full RTL/vertical/right-center-decimal/fill/overflow/native portion layout remain partial or unverified; no complete-module promotion.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SwNumberingTabSettings",
+        "resolveSwNumberingTabPosition"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "sw/source/core/text/txttab.cxx",
+      "upstreamSymbols": [
+        "SwLineInfo::GetTabStop",
+        "SwTextFormatter::NewTabPortion"
+      ]
+    }
+  }
+}

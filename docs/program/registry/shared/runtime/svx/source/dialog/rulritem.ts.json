@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svx/source/dialog/rulritem.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "table-editing",
+    "capabilityIds": [
+      "CAP-0117",
+      "CAP-0118"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/svx/source/dialog/native-column-item.test.ts",
+        "scripts/native-column-item-boundary.test.ts",
+        "apps/office/src/svx/source/dialog/rulritem.ts#SvxColumnDescription",
+        "vendor/libreoffice-reference/svx/source/dialog/rulritem.cxx#SvxColumnItem::Clone"
+      ],
+      "justification": "Iteration229 introduces actual production-used SvxColumnItem ownership at the SwView table-column conversion boundary from StateTabWin. Native visibility/end/min/max descriptions replace direct SwTabCols interpretation during document column drag admission, while original SwTabCols remains model/preview/apply data. Native defaults, upper-only65535 description clamp, copied Append/Clone and equality excluding ortho are retained. The svx->svl edge is native Library_svx-owned, with no SW/browser reverse dependency. Full SvxRuler/SfxBindings slots, complete StateTabWin frames/rows, pooled refcount mutability and UNO member queries/PutValue remain partial or unverified. Registered IO deviations and all semantic states/defaults/classes remain unchanged.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SvxColumnDescription",
+        "SvxColumnItem"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "svx/source/dialog/rulritem.cxx",
+      "upstreamSymbols": [
+        "SvxColumnItem::Clone",
+        "SvxColumnItem::CalcOrtho",
+        "SvxColumnDescription::GetWidth"
+      ]
+    }
+  }
+}

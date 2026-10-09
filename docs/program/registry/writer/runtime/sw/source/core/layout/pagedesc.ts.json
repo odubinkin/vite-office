@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/layout/pagedesc.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "page-layout",
+    "capabilityIds": [
+      "CAP-0111",
+      "CAP-0113"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/layout/pagedesc.ts#SwPageDesc",
+        "vendor/libreoffice-reference/sw/source/core/layout/pagedesc.cxx#SwPageDesc"
+      ],
+      "justification": "Implements the bounded Standard page descriptor, locale defaults, physical dimensions, orientation, margins, and copy semantics at the pinned SwPageDesc ownership boundary.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SwPageDesc",
+        "WriterPageDescriptorValue",
+        "createDefaultWriterPageDescriptor",
+        "equalWriterPageDescriptors",
+        "applyWriterPaperFormat",
+        "validateWriterPageDescriptor"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/core/layout/pagedesc.cxx",
+      "upstreamSymbols": [
+        "SwPageDesc"
+      ]
+    }
+  }
+}

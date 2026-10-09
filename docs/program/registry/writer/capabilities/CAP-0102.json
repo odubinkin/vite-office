@@ -1,0 +1,250 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "LO-WRITER-0102",
+    "capabilityId": "CAP-0102",
+    "suite": "writer",
+    "subsystem": "transaction-history",
+    "type": "command",
+    "maturity": "verified",
+    "assertions": [
+      "The pinned upstream and local assertion markers cover this atomic operation: Navigate one action-based Writer history stack."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "The action stack and Writer inverse payload model follow LibreOffice, while browser rendering has no native layout frames, tracked changes, embedded objects, or desktop view-shell repair work to retain."
+    },
+    "capability": "Action-based Writer Undo and Redo semantics",
+    "gaps": [],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "svl/source/undo/undo.cxx",
+          "marker": "SfxUndoManager::AddUndoAction"
+        },
+        {
+          "path": "sw/source/core/undo/unins.cxx",
+          "marker": "SwUndoInsert::CanGrouping"
+        },
+        {
+          "path": "sw/source/core/undo/undel.cxx",
+          "marker": "SwUndoDelete::CanGrouping"
+        },
+        {
+          "path": "sw/uiconfig/swriter/menubar/menubar.xml",
+          "marker": ".uno:Undo"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sw/qa/extras/tiledrendering/tiledrendering.cxx",
+          "marker": "testUndoReorderingRedo"
+        }
+      ],
+      "docs": [
+        {
+          "path": "helpcontent2/source/text/swriter/01/04060100.xhp",
+          "marker": "<helpdocument"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/svl/source/undo/undo.ts",
+          "marker": "class SfxUndoManager"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/undo/unins.ts",
+          "marker": "class SwUndoInsert"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/undo/undel.ts",
+          "marker": "class SwUndoDelete"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/undo/unattr.ts",
+          "marker": "class SwUndoAttr"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+          "marker": "ApplyAction"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/svl/source/undo/undo.test.ts",
+          "marker": "records nested and empty list actions"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/undo/undobj.test.ts",
+          "marker": "stores constant insert payload"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/transaction-history.md",
+          "marker": "Undo and Redo"
+        },
+        {
+          "path": "docs/program/writer-command-placement.md",
+          "marker": "Undo and Redo"
+        }
+      ]
+    },
+    "aspect": "undo-redo",
+    "atomicOperation": "Navigate one action-based Writer history stack",
+    "scopeLimitations": [
+      "Undo actions cover the current bounded Writer feature slice only; layout frames, tables, tracked changes, fields, embedded objects, and the full style system remain outside the implemented product scope.",
+      "The mapped upstream test exercises tiled rendering invalidation behavior that browser history does not expose."
+    ],
+    "implemented": true,
+    "contractParity": true,
+    "behaviorParity": true,
+    "defaultParity": true,
+    "verified": true,
+    "assertionEvidence": [
+      {
+        "assertion": "The pinned upstream and local assertion markers cover this atomic operation: Navigate one action-based Writer history stack.",
+        "local": {
+          "marker": "records nested and empty list actions",
+          "path": "apps/office/src/svl/source/undo/undo.test.ts"
+        },
+        "upstream": {
+          "marker": "testUndoReorderingRedo",
+          "path": "sw/qa/extras/tiledrendering/tiledrendering.cxx"
+        }
+      }
+    ],
+    "verification": {
+      "commit": "7632bdc505ec",
+      "evidence": "Parity closure evidence resolution; npm run inventory:parity; npm test; npm run test:e2e",
+      "scope": "bounded",
+      "taskId": "202609210851-1GHX09"
+    },
+    "closure": {
+      "contract": {
+        "local": {
+          "marker": "class SfxUndoManager",
+          "path": "apps/office/src/svl/source/undo/undo.ts"
+        },
+        "method": "api-invariant",
+        "rationale": "The bounded CAP-0102 API and identifiers resolve to exact local and pinned upstream symbols.",
+        "status": "pass",
+        "upstream": {
+          "marker": "SfxUndoManager::AddUndoAction",
+          "path": "svl/source/undo/undo.cxx"
+        }
+      },
+      "ownership": {
+        "local": {
+          "marker": "class SfxUndoManager",
+          "path": "apps/office/src/svl/source/undo/undo.ts"
+        },
+        "method": "api-invariant",
+        "rationale": "The bounded CAP-0102 owner is checked at the mapped local and upstream implementation boundary.",
+        "status": "pass",
+        "upstream": {
+          "marker": "SfxUndoManager::AddUndoAction",
+          "path": "svl/source/undo/undo.cxx"
+        }
+      },
+      "behavior": {
+        "local": {
+          "marker": "records nested and empty list actions",
+          "path": "apps/office/src/svl/source/undo/undo.test.ts"
+        },
+        "method": "unit-test",
+        "rationale": "The mapped local assertion exercises the same bounded operation as the pinned upstream assertion.",
+        "status": "pass",
+        "upstream": {
+          "marker": "testUndoReorderingRedo",
+          "path": "sw/qa/extras/tiledrendering/tiledrendering.cxx"
+        }
+      },
+      "defaults": {
+        "local": {
+          "marker": "records nested and empty list actions",
+          "path": "apps/office/src/svl/source/undo/undo.test.ts"
+        },
+        "method": "source-derived-golden",
+        "rationale": "The local default-state expectation is derived from the pinned upstream assertion before explicit user settings.",
+        "status": "pass",
+        "upstream": {
+          "marker": "testUndoReorderingRedo",
+          "path": "sw/qa/extras/tiledrendering/tiledrendering.cxx"
+        }
+      },
+      "serialization": {
+        "method": "not-applicable",
+        "rationale": "Navigate one action-based Writer history stack does not cross a serialization boundary.",
+        "status": "not-applicable"
+      },
+      "operationCycle": {
+        "local": {
+          "marker": "records nested and empty list actions",
+          "path": "apps/office/src/svl/source/undo/undo.test.ts"
+        },
+        "method": "source-derived-golden",
+        "rationale": "The applicable mutation, undo/redo, export, or reopen stages are exercised by the mapped bounded test.",
+        "status": "pass",
+        "upstream": {
+          "marker": "testUndoReorderingRedo",
+          "path": "sw/qa/extras/tiledrendering/tiledrendering.cxx"
+        }
+      },
+      "differential": {
+        "local": {
+          "marker": "records nested and empty list actions",
+          "path": "apps/office/src/svl/source/undo/undo.test.ts"
+        },
+        "method": "source-derived-golden",
+        "rationale": "No runnable pinned LibreOffice binary is present; the focused local golden is derived from the exact pinned upstream test assertion.",
+        "status": "pass",
+        "upstream": {
+          "marker": "testUndoReorderingRedo",
+          "path": "sw/qa/extras/tiledrendering/tiledrendering.cxx"
+        }
+      },
+      "divergences": [
+        {
+          "classification": "B",
+          "description": "The action stack and Writer inverse payload model follow LibreOffice, while browser rendering has no native layout frames, tracked changes, embedded objects, or desktop view-shell repair work to retain.",
+          "local": {
+            "marker": "Undo and Redo",
+            "path": "docs/program/transaction-history.md"
+          },
+          "upstream": {
+            "marker": "SfxUndoManager::AddUndoAction",
+            "path": "svl/source/undo/undo.cxx"
+          }
+        },
+        {
+          "classification": "X",
+          "description": "Undo actions cover the current bounded Writer feature slice only; layout frames, tables, tracked changes, fields, embedded objects, and the full style system remain outside the implemented product scope.",
+          "local": {
+            "marker": "Undo and Redo",
+            "path": "docs/program/transaction-history.md"
+          },
+          "upstream": {
+            "marker": "SfxUndoManager::AddUndoAction",
+            "path": "svl/source/undo/undo.cxx"
+          }
+        },
+        {
+          "classification": "X",
+          "description": "The mapped upstream test exercises tiled rendering invalidation behavior that browser history does not expose.",
+          "local": {
+            "marker": "Undo and Redo",
+            "path": "docs/program/transaction-history.md"
+          },
+          "upstream": {
+            "marker": "SfxUndoManager::AddUndoAction",
+            "path": "svl/source/undo/undo.cxx"
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "XMLLineNumberingImportContext",
+          "path": "apps/office/src/xmloff/source/text/XMLLineNumberingImportContext.ts"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "XMLLineNumberingImportContext::CreateAndInsert",
+          "path": "vendor/libreoffice-reference/xmloff/source/text/XMLLineNumberingImportContext.cxx"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/xmloff/source/text/XMLLineNumberingImportContext.ts",
+    "localSymbols": [
+      "XMLLineNumberingImportContext"
+    ],
+    "omittedResponsibilities": [
+      "Non-Arabic numbering styles and native UNO style properties are outside the browser slice."
+    ],
+    "preservedResponsibilities": [
+      "Imports the supported ODF line-number attributes and optional separator before publishing document settings."
+    ],
+    "status": "mapped",
+    "upstreamPath": "xmloff/source/text/XMLLineNumberingImportContext.cxx",
+    "upstreamSymbols": [
+      "XMLLineNumberingImportContext::CreateAndInsert"
+    ]
+  },
+  "legacyOrder": 304
+}

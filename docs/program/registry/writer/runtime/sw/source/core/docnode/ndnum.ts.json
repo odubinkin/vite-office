@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/docnode/ndnum.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "writer-model",
+    "capabilityIds": [
+      "CAP-0112"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/docnode/ndnum.ts#SwOutlineNodes",
+        "vendor/libreoffice-reference/sw/source/core/docnode/ndnum.cxx#SwOutlineNodes::Seek_Entry"
+      ],
+      "justification": "Iteration38 restores independent source set/reset pre/post flags, native prefix notification/validation ordering, direct outline suppression/return and normal-document sorted outline ownership.40 unchanged added native definitions compare60 sequences/2130 actual pre-vector cache,notification,item,rule,registry and outline-index states. Explicit dependency adapters retain source reading flag/shown/pool/raw-callback/layout-event/field boundaries;full native platform lifetime,dtor/redline/inline/fields/background/fill/live-style/default factories remain separate unverified obligations. No whole-module/default/goal promotion or IO change.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SwOutlineNodes"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "sw/source/core/docnode/ndnum.cxx",
+      "upstreamSymbols": [
+        "SwOutlineNodes::Seek_Entry",
+        "CompareSwOutlineNodes::operator()"
+      ]
+    }
+  }
+}

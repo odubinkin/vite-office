@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "DEFAULT_MAX_UNDO_ACTION_COUNT",
+          "path": "apps/office/src/svl/source/undo/undo.ts"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "SfxUndoAction",
+          "path": "vendor/libreoffice-reference/svl/source/undo/undo.cxx"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/svl/source/undo/undo.ts",
+    "localSymbols": [
+      "DEFAULT_MAX_UNDO_ACTION_COUNT",
+      "SfxUndoAction",
+      "SfxListUndoAction",
+      "SfxUndoManager"
+    ],
+    "omittedResponsibilities": [
+      "Upstream obligations outside SfxUndoAction, SfxListUndoAction, SfxUndoManager, SfxRepeatTarget::~SfxRepeatTarget and the bounded DEFAULT_MAX_UNDO_ACTION_COUNT, SfxUndoAction, SfxListUndoAction contract remain intentionally omitted."
+    ],
+    "preservedResponsibilities": [
+      "Implements the document-facing Sfx undo manager with action stacks, list actions, save-position tracking, merging, redo truncation, and bounded retention."
+    ],
+    "status": "mapped",
+    "upstreamPath": "svl/source/undo/undo.cxx",
+    "upstreamSymbols": [
+      "SfxUndoAction",
+      "SfxListUndoAction",
+      "SfxUndoManager",
+      "SfxRepeatTarget::~SfxRepeatTarget"
+    ]
+  },
+  "legacyOrder": 66
+}

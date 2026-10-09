@@ -1,0 +1,30 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/framework/browser/app/SuiteCard.tsx",
+    "classification": "local-infrastructure",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "application-services",
+    "capabilityIds": [],
+    "infrastructureExemption": "This composition or bootstrap module exports no document capability and is retained as explicit local infrastructure.",
+    "semantic": {
+      "behaviorStatus": "not-applicable",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "A",
+      "evidence": [
+        "apps/office/src/framework/browser/app/SuiteCard.tsx#SuiteCardProps"
+      ],
+      "justification": "Renders one accessible suite link for the office application launcher. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SuiteCard"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

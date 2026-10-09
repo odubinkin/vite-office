@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/text/txtfld.ts",
+          "marker": "resolveSwNumberPortionFont"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/text/native-numbering-font.test.ts",
+          "marker": "native number font"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/text/txtfld.cxx",
+          "marker": "SwTextFormatter::NewNumberPortion"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/text/inftxt.hxx",
+          "marker": "GetTextFrame()->GetTextNodeForParaProps()->GetSwAttrSet()"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/core/text/txtfld.ts",
+    "localSymbols": [
+      "resolveSwNumberPortionFont"
+    ],
+    "omittedResponsibilities": [
+      "Full SwFont/SwTextFormatter/portion graph, CJK/CTL script selection and all bullet Font metadata beyond family; numbering character styles, paragraph-mark autoformat, redlines, graphics, VCL shaping and native decoration/color/theme/device variants remain unrepresented. Immutable policy values are an explicit browser paint-device projection, not a duplicate font owner."
+    ],
+    "preservedResponsibilities": [
+      "Iteration220 represented native numbering-font policy: txtfld NewNumberPortion starts from the original paragraph attr owner, optional bullet font overrides face, false-default DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT resets bullet weight/posture and both labels underline; number weight/posture and inherited height/color remain native. Frozen values feed shared body/cell marker device, existing width/minimum distance/background retained. Older graph records missing only new flag defaultfalse, prior fields remain strict. Full SwFont hierarchy/scripts/face metadata/character-style/paragraph-mark/redline/graphics/device shaping and ink/theme/decoration variants remain unverified; all prior statuses/defaults/registered I/O/recovery exceptions preserved."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/text/txtfld.cxx",
+    "upstreamSymbols": [
+      "SwTextFormatter::NewNumberPortion"
+    ]
+  },
+  "legacyOrder": 203
+}

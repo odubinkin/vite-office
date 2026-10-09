@@ -103,15 +103,15 @@ Every inventoried upstream test receives one of these outcomes:
    apply to a whole feature or one `upstream.tests` reference only; the parity
    report lists it separately from implementation coverage.
 
-The first executable surface is
-[`parity/writer-command-slice.json`](parity/writer-command-slice.json). Run
-`npm run inventory:parity -- --baseline docs/program/libreoffice-baseline.json
---mappings docs/program/parity/writer-command-slice.json --local-root .
---runtime-inventory docs/program/parity/runtime-inventory.json --runtime-root
-apps/office/src --upstream-root vendor/libreoffice-reference` to verify its exact paths and
-markers. The current bounded mapping reports `gapCount: 0` and
-`parityReady: true`; those values mean its 45 declared records have complete
-evidence, not that the rest of LibreOffice Writer is implemented.
+The first executable surface is the set of
+[Writer capability records](registry/writer/capabilities). Run
+`npm run inventory:parity:writer` to verify their exact paths and markers plus
+shared dependencies. Use `inventory:parity:calc` and `inventory:parity:shared`
+for the other scopes, and `npm run inventory:registry:check` for full evidence.
+Every scope retains global collision, reference, and runtime discovery checks.
+The current Writer slice contains 45 bounded records, including two approved
+exceptions; its result does not establish full Writer or Calc parity. See the
+[registry contract](registry/README.md) for UUID allocation and record ownership.
 
 Deletion, disablement, quarantine, or weakened assertions require matrix updates
 and review. An upstream test is not covered by an unrelated local test that only

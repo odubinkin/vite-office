@@ -1,0 +1,10 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "writer.ui.menu-navigation",
+    "capabilityId": "CAP-0116",
+    "classification": "browser-adaptation",
+    "description": "Opens, traverses, and dismisses Writer menus through browser input."
+  }
+}

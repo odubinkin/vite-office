@@ -1,0 +1,55 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svx/source/dialog/framelink.ts",
+          "marker": "Style"
+        },
+        {
+          "path": "apps/office/src/svx/source/dialog/native-frame-style.test.ts",
+          "marker": "native integer frame priority differs from browser dashed and color tie rules"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svx/source/dialog/framelink.cxx",
+          "marker": "Style::Style"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svx/source/dialog/framelink.cxx",
+          "marker": "Style::operator<"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svx/source/dialog/framelink.cxx",
+          "marker": "GetWordTableCellBorderWeight"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/svx/source/dialog/framelink.ts",
+    "localSymbols": [
+      "Style",
+      "GetWordTableCellBorderWeight"
+    ],
+    "omittedResponsibilities": [
+      "Full scaled floating-point API/approximation, primitive colors/gap color/shading/theme/ref modes/drawing and hash/equality responsibilities remain unverified.",
+      "Whole source module parity remains unverified; this is a represented existing border paint mechanism."
+    ],
+    "preservedResponsibilities": [
+      "Source-owned integer-twip Style normalization/copy/mirror and complete source priority clauses, with represented optional Word border number weighting. Original border values remain owned and immutable under paint.",
+      "Iteration210 pending verification: existing collapsing table boundaries now use source-owned integer frame Style component ordering and SwLineEntry/SwTabFramePainter overlap splitting before browser paint. Both shared sides receive the native winner; separate mode and original box owners remain independent. Source new-on-equal priority differs from browser CSS conflict selection. Full physical VCL primitives/junctions/shading/theme/scaled Style API/Word frame compatibility/RTL/vertical/span/follow behavior and whole parity remain unverified; every prior field/status/default/evidence/registered I/O/recovery deviation is preserved.",
+      "Iteration210 verified closure: represented integer-twip svx Style owns normalized components/defaults, copy/mirror, native width/single-double/gap/one-unit ordering and optional Word weights. SwLineEntry/SwTabFramePainter retain ordered interval classification, splitting/restart and new-on-equal winner. Existing flat native table cells feed source-owned arbitration; browser paints the same resolved shared edge on adjacent cells while separating mode retains their own lines. Original cell attributes and native owners/history/ODT remain. One full upstream-absent profile and original-failure-only closures establish actual13473app110inventory14infrastructure268Chromium cases,0unresolved0passing replay;1app and7inventory focused skip observations remain skipped. Actual100 app/inventory coverage uses current whole-identical source and entire-map certificates; final timeout-only Cppunit closure disabled coverage, preserved 30000ms timeout/all8072 assertions and contributes no coverage counters. Fixed-row new draft fixture now observes actual existing paint device after properties apply and explicitly checks original Fixed wrappers on initial/Undo states; existing shell unconditionally converts unchanged row height to Minimum on OK, reserved for next leaf. Runtime inventory canonical ASCII ordering corrected without changing prior record fields. All566 prior acceptance contracts retained except one source-winner shared-edge color conditional; four new acceptance files. All289 prior metadata fields/prefixes/statuses/defaults/registered save/open/recovery exceptions preserved;291 modules after two new bounded native modules, no whole semantic promotion. Native physical frame geometry/primitives/junctions/shading/theme/scaled/refmode/Word limited ends/RTL/vertical/spans/follow and whole parity remain unverified."
+    ],
+    "status": "mapped",
+    "upstreamPath": "svx/source/dialog/framelink.cxx",
+    "upstreamSymbols": [
+      "Style::Style",
+      "Style::operator<",
+      "GetWordTableCellBorderWeight"
+    ]
+  },
+  "legacyOrder": 72
+}

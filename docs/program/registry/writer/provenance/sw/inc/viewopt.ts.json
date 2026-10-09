@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "export class SwViewOption",
+          "path": "apps/office/src/sw/inc/viewopt.ts"
+        },
+        {
+          "path": "apps/office/src/sw/inc/viewopt.ts",
+          "marker": "export class SwViewColors"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "class SwViewOption",
+          "path": "vendor/libreoffice-reference/sw/inc/viewopt.hxx"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/config/viewopt.cxx",
+          "marker": "SwViewColors::SwViewColors()"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/inc/viewopt.ts",
+    "localSymbols": [
+      "SwViewOption",
+      "SwViewColors"
+    ],
+    "omittedResponsibilities": [
+      "Layout, zoom, field shading, formatting marks, browse mode, and native window flags remain outside the bounded browser view-visibility slice."
+    ],
+    "preservedResponsibilities": [
+      "Owns per-view visibility flags and publishes changes without storing them in browser workflow DTOs.",
+      "Iteration218 native cursor marked-list integration pending verification: cursor ID/depth bookkeeping, source field-shading gate, counted-rule query and forced label-to-label refresh; existing actual view options shared without duplicate presentation state. Marker painting/ruler/config persistence and hidden-redline tree variants remain unverified; no prior status/default/exception promotion.",
+      "Iteration218 verified native cursor-mark ownership: empty list ID/level0 defaults, exact pair noop, field-shading-gated former clear/new mark with bookkeeping retained while disabled; original counted-rule/membership query and nontext early return; SetInFrontOfLabel update plus forced refresh on label-to-label admission. Existing actual view-option identity shared through cursor-shell ancestor; native appearance bits and configured desktop defaults retained, setters do not implicitly redraw. SwCallLink-shaped SetPaM transaction publishes repaint and final cursor state together; original587 acceptance untouched. Full color/config persistence, marker painting/ruler and hidden-redline property/tree variants remain unverified. All prior states/defaults/exceptions preserved.",
+      "Iteration219 bounded marked-number painting: native SwViewColors owns represented color/appearance members with raw NONE/lightgray defaults, stable copy/borrow and copied initial values; configured desktop25 bits retained. Source Number DrawViewOpt guards and DrawBackground color admission use original HasMarkedLabel, actual shell view options and shared master marker painting, including sibling levels and print suppression. Full native color/config/theme/LOKit pipeline and VCL frame/portion/clip/bidi geometry remain unverified; all prior statuses/defaults/registered I/O/recovery exceptions retained."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/inc/viewopt.hxx",
+    "upstreamSymbols": [
+      "SwViewOption",
+      "SwViewColors"
+    ]
+  },
+  "legacyOrder": 144
+}

@@ -1,0 +1,26 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "evidence": {
+      "local": [
+        {
+          "marker": "parseWriterClipboardPaste",
+          "path": "apps/office/src/sw/browser/filter/html/swhtml.ts"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/browser/filter/html/swhtml.ts",
+    "rationale": "Parses detached browser DOM into neutral Writer clipboard records while keeping DOM APIs outside the upstream-shaped Writer source tree and shell contracts.",
+    "responsibilities": [
+      "Parses detached browser HTML into bounded Writer clipboard records and owns the browser-only transfer DTO."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "The browser DOM parser replaces LibreOffice's native SvParser token source at an explicit platform boundary."
+    },
+    "status": "local-only"
+  },
+  "legacyOrder": 87
+}

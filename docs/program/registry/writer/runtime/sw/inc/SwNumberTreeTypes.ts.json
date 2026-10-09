@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/inc/SwNumberTreeTypes.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "formatting-model",
+    "capabilityIds": [
+      "CAP-0112",
+      "CAP-0127"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/inc/SwNumberTreeTypes.ts#tNumberVector",
+        "apps/office/src/sw/inc/SwNumberTreeTypes.ts#tSwNumTreeNumber",
+        "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-vector-ownership.test.ts#exposes mutable source-owned vector aliases and exact shown getter contracts",
+        "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-vector-ownership.test.ts#returns separate mutable empty values for roots, orphans and paragraphs without records",
+        "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-vector-ownership.test.ts#obtains the shown record through GetNum and delegates once without changing its returned value",
+        "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-vector-ownership.test.ts#keeps each returned vector independent through phantom depth nine, continuous policy, restarts and reading transitions",
+        "vendor/libreoffice-reference/sw/inc/SwNumberTreeTypes.hxx#tNumberVector"
+      ],
+      "justification": "Iteration66 restores source-owned tSwNumTreeNumber/tNumberVector aliases and mutable by-value results for existing shown number-tree/text getters and SwList adapter. Tree recursion/counter bodies remain unchanged; text getter obtains its record via native GetNum delegation. Four owned cases/ten exact type checks and12rule/depth/restart profiles cover root/orphan/no-record arrays, independent result mutation,phantom depth9,hierarchical/continuous/restart0/nonzero/reading transitions and unchanged raw caches/clients/topology. Baseline rejects mutable assignments and getter contracts, and one owned delegation trace fails; corrected runtime and typechecks pass. Fresh pinned manual hashes/inspection only, no native execution or source/helper artifacts, no upstream project test access. Native machine integer precision,full layout/redline selector contracts,allocator/const/final/destructor/client/browser lifetimes remain individually unverified. No broader module/status/default/goal or registered IO/recovery promotion.",
+      "knownViolations": [],
+      "localSymbols": [
+        "tNumberVector",
+        "tSwNumTreeNumber"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/inc/SwNumberTreeTypes.hxx",
+      "upstreamSymbols": [
+        "tSwNumTreeNumber",
+        "tNumberVector"
+      ]
+    }
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/package/source/zipapi/ZipOutputStream.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "odf-filter",
+    "capabilityIds": [
+      "CAP-0113"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/package/source/zipapi/ZipOutputStream.ts#ZipOutputStream",
+        "vendor/libreoffice-reference/package/source/zipapi/ZipOutputStream.cxx#ZipOutputStream::ZipOutputStream"
+      ],
+      "justification": "Mapped provenance remains semantically unverified against package/source/zipapi/ZipOutputStream.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ZipOutputStream"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "package/source/zipapi/ZipOutputStream.cxx",
+      "upstreamSymbols": [
+        "ZipOutputStream::ZipOutputStream",
+        "ThreadPool::createThreadTaskTag",
+        "ZipOutputStream::~ZipOutputStream",
+        "ZipOutputStream::setEntry"
+      ]
+    }
+  }
+}
