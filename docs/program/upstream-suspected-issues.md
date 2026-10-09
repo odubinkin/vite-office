@@ -408,9 +408,41 @@ review. No successful result is assigned to that family here. Element-block
 and column consumers have not yet been reviewed for equal-offset preconditions.
 Decision: preserve original storage-only swap; do not exchange/reset offsets.
 
+## CALC-021 — mdds bool block at reference cannot represent vector<bool> results
+
+Pinned dependency: original mdds3.2.1 `multi_type_vector/types.hpp`, the const
+and mutable `element_block::at` overloads. Both declare value_type references;
+the default delayed bool store delegates to `std::vector<bool>::at`, whose
+const result is a bool value and whose mutable result is a proxy.
+
+Instantiating the original mutable bool overload is rejected by clang because
+its bool lvalue reference cannot bind to the proxy conversion. The original
+const overload returns a reference to a temporary; taking that address and
+reading it after return reproduces ASan stack-use-after-return with genuine
+unchanged headers. `scripts/mdds-element-block-native-probe.mjs --bool-at`
+keeps the compiler rejection, compiler warning and sanitizer diagnostics in
+separate ignored research logs. No successful result is assigned to either
+family, and no native header/signature is changed.
+
+Original `detail::get_block_element_at` detects vector<bool> stores and reads
+via cbegin instead of at. Its actual container callers still require review.
+Defined bool comparison therefore uses original iterators/get_value and leaves
+the at reference and bool data-pointer families uncertified. The TS scalar
+projection does not prove native reference/lifetime parity. Decision: retain
+the original source responsibility and call boundaries; do not add a native
+safe-reference rewrite or claim a value for the undefined call.
+
 ## Reviewed API distinctions
 
 These distinctions have been discussed but are not classified as defects:
+
+- Original mdds `swap_values` exchanges each pair in forward order. For a
+  single `[2,3,4]` block, swapping two elements starting at positions 0 and 1
+  yields `[3,4,2]`; it does not snapshot overlapping whole ranges first.
+  The unchanged native corpus and independent scalar-block test preserve this
+  ordered alias behavior. Segment append/prepend acquire source iterators
+  before reserving the destination; self-reserve can invalidate native source
+  iterators and remains outside certified lifetime preconditions.
 
 - mdds delayed vector `insert(iterator, const T&)` and
   `insert(const_iterator, T&&)` make a mutable-iterator/rvalue call ambiguous

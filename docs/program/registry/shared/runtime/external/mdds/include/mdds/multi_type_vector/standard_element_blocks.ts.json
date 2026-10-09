@@ -1,0 +1,74 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/standard_element_blocks.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "cell-storage",
+    "capabilityIds": [
+      "CAP-50a831bc-fda9-4d27-84f4-3661001f4574"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/external/mdds/include/mdds/multi_type_vector/standard_element_blocks.ts#element_type_boolean",
+        "apps/office/src/external/mdds/include/mdds/multi_type_vector/types.test.ts#matches every unchanged native scalar block sequence",
+        "scripts/mdds-element-block-native-probe.mjs#verifyDirectory",
+        "vendor/mdds-reference/include/mdds/multi_type_vector/standard_element_blocks.hpp#using boolean_element_block"
+      ],
+      "justification": "Task202610091926-N4ZGYX ports original shared mdds unmanaged element/copyable/default owners and all12 standard aliases, with real shared global runtime exception dependency. All original operations use actual shared delayed store. Genuine full unchanged headers are byte-checked against pinned archives and original LibreOffice patch before ASan/UBSan comparisons; complete3616 sequences/26990 steps/2182 interned full snapshots plus9 mixed ranges retain source behavior. Isolated original bool at compiler/lifetime diagnostics have no successful-result parity claim; original debug message and bounds assertions are reproduced separately. Only original initialized unmanaged primitive scalar blocks over delayed_delete_vector and original global runtime errors are implemented. Erased template/static specialization, explicit scalar conversion, optional original debug compile witness(default false), GC disposal and mutable iterator/scalar-reference adaptation retain defined source responsibilities. Original native mutable bool at fails compilation and const bool at returns a dangling reference, reproduced separately with ASan; no successful result or repair is certified. Other StoreT/allocators, object lifetimes/exceptions, true const/reference ABI, native bool data pointers, invalidated/self-reserve source iterators, managed/noncopyable/clone_value owners, callback macros/dispatcher/traits, complete MTV/Calc columns/browser and whole-module parity remain unverified. Mixed numeric InputIt conversions for9 scalar families are compared; mixed bigint-source conversions and undefined arithmetic remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "element_type_boolean",
+        "element_type_int8",
+        "element_type_uint8",
+        "element_type_int16",
+        "element_type_uint16",
+        "element_type_int32",
+        "element_type_uint32",
+        "element_type_int64",
+        "element_type_uint64",
+        "element_type_float",
+        "element_type_double",
+        "element_type_string",
+        "boolean_element_block",
+        "int8_element_block",
+        "uint8_element_block",
+        "int16_element_block",
+        "uint16_element_block",
+        "int32_element_block",
+        "uint32_element_block",
+        "int64_element_block",
+        "uint64_element_block",
+        "float_element_block",
+        "double_element_block",
+        "string_element_block",
+        "boolean_value",
+        "int8_value",
+        "uint8_value",
+        "int16_value",
+        "uint16_value",
+        "int32_value",
+        "uint32_value",
+        "int64_value",
+        "uint64_value",
+        "float_value",
+        "double_value",
+        "string_value"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "vendor/mdds-reference/include/mdds/multi_type_vector/standard_element_blocks.hpp",
+      "upstreamSymbols": [
+        "using boolean_element_block",
+        "using uint16_element_block",
+        "using double_element_block",
+        "using string_element_block"
+      ]
+    }
+  }
+}

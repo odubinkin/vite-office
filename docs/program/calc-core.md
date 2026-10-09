@@ -1,5 +1,33 @@
 # Calc coordinate foundation
 
+## Shared scalar element blocks
+
+Task `202610091926-N4ZGYX` adds original mdds `types.hpp` unmanaged
+element/copyable/default block owners and all twelve standard scalar aliases,
+plus their real shared `global.hpp` runtime exception parent. All operations
+reuse the existing `delayed_delete_vector`; standard double and uint16 blocks
+are the original aliases required by Calc `mtvelements.hxx`.
+
+Template specialization becomes an explicit TS class factory carrying the
+native type ID, T{}, conversion and optional original debug build witness
+(default false). Scalar/reference and const qualification use explicit borrowed
+store/iterator adapters. All primitive static operations, copy/clone, live ranges,
+forward pairwise swaps and original reserve/source-iterator order remain.
+Resize compares against integer `capacity / 2`. Unmanaged overwrite and
+production print remain no-ops. The coherent types header remains one owner
+above the 500-line review target and below the 1000-line hard limit; it does
+not duplicate the separately owned native store or arbitrary module fragments.
+
+Genuine unchanged native headers compare 3616 sequences with 26990 complete
+two-owner step records and 2182 losslessly interned snapshots. Nine scalar
+families also compare original mixed double InputIt conversion. Original bool
+`at` diagnostics are isolated and recorded as CALC-021 without assigning a
+successful native result. Native bool data, mixed bigint source conversions,
+alternate StoreT/allocators, object lifetimes/exception guarantees, invalidated
+source iterators, managed/noncopyable/clone_value owners, callback macros,
+dispatcher/default traits, complete multi_type_vector and Calc columns remain
+unverified. Those are actual following dependencies, not placeholder engines.
+
 ## Shared delayed element storage
 
 Task `202610091909-KYNP7H` adds the original mdds3.2.1
