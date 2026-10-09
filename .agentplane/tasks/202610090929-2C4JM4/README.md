@@ -1,10 +1,11 @@
 ---
 id: "202610090929-2C4JM4"
 title: "Preserve native format construction without document mutation"
-status: "DOING"
+result_summary: "Native format construction links original inheritance silently; later supported mutation notifications remain observable.171 unique targeted passes,7 fresh, failed-only closure,0 passing replay; all-four100 source-bound coverage,509 prior tests byte-identical,2 canonical records preserve historical metadata. Broad parity active; next full257 followed by verified failure repairs and goal pause."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -39,11 +40,16 @@ quality_review:
     - ".agentplane/tasks/202610090929-2C4JM4/evidence/checks.json"
   findings:
     - "Original parent/listener/item-set identities and inherited native items are preserved without construction mutation; explicit later channels remain observable. All509 prior test files byte-identical. Two canonical records retain historical fields/status/default/classification/evidence prefixes. Broad native root/page/body/follows and full explicit mutation/undo remain unverified; no whole parity promotion."
-commit: null
+commit:
+  hash: "0f0eb9a91be7470d49113640da90bc095d14930e"
+  message: "🧩 2C4JM4 core: construct native format inheritance without document mutation"
 comments:
   -
     author: "CODER"
     body: "Start: Restore native construction-only parent registration without document mutation, preserving later explicit mutations and all registered I/O/recovery/settings deviations."
+  -
+    author: "CODER"
+    body: "Verified: Direct native SwFormat constructor registration/item-set linking preserves original ownership without document mutation;171 unique related passes including7 fresh, source-bound changed/app all-four100, static upstream-absent and inventory gates pass."
 events:
   -
     type: "status"
@@ -58,8 +64,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "171 unique targeted passes including 7 fresh; failed-only closure, zero passing replay; source-bound changed/application all-four100; static upstream-absent, inventory/provenance/tree/routing pass; two canonical history prefixes preserved,509 old acceptance files identical. Next full257 then verified fixes and goal pause."
+  -
+    type: "status"
+    at: "2026-10-09T09:48:07.139Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Direct native SwFormat constructor registration/item-set linking preserves original ownership without document mutation;171 unique related passes including7 fresh, source-bound changed/app all-four100, static upstream-absent and inventory gates pass."
 doc_version: 3
-doc_updated_at: "2026-10-09T09:46:59.854Z"
+doc_updated_at: "2026-10-09T09:48:07.140Z"
 doc_updated_by: "CODER"
 description: "Iteration252 under C9TN6M: native SwFormat constructor registers the original parent and links its item set directly; current constructor incorrectly delegates to mutation SetDerivedFrom and broadcasts a document mutation during initial creation. Correct this functional prerequisite for native root ownership, preserving explicit later parent-change behavior and registered I/O/recovery/settings deviations."
 sections:
