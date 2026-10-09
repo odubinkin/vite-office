@@ -1,10 +1,11 @@
 ---
 id: "202610091732-SZKQTN"
 title: "Capture native headline ItemSet input for Text Flow"
-status: "DOING"
+result_summary: "Native headline ItemSet and Reset ownership aligned; scheduled full suite verified"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 33
+revision: 34
 origin:
   system: "manual"
 depends_on: []
@@ -54,6 +55,9 @@ comments:
   -
     author: "CODER"
     body: "Implementation: final source headline Reset guard and original-owner native input verified by full suite plus meaningful current-source related revalidation; actual full current application Istanbul100."
+  -
+    author: "CODER"
+    body: "Verified: final native headline ItemSet/reset ownership at39ebf53793a00c43ee7db62b35f4920b037e7065, scheduled full14320app122inventory13tooling2resource303browser plus meaningful1247current related cases4current browser. Entire changed modules/full current app Istanbul100 zero-negative, current/source metadata/preservation gates and same-agent non-independent quality pass. Broad goal remains active/incomplete, new full baselineSZKQTN counter0."
 events:
   -
     type: "status"
@@ -100,8 +104,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: final binding/docs stable at39ebf53793a00c43ee7db62b35f4920b037e7065 with explicit same-agent non-independent EVALUATOR pass, initial guard rework resolved. Same14320distinct app24fresh1247current related cases4current browser, full122inventory13tooling2resource303browser. Entire current3module and current full application actual Istanbul100/zero-negative; obsolete changed-page counters excluded, source/hash/map acceptance unchanged. Current/full build/static/metadata/preservation/format gates pass, original six canonical prefixes600old tests1854unrelated retained; three source-backed ODT root-owner assertions migrated. Reference restored and no raw upstream sources/helper scripts/maps/logs in task artifacts; broad goal active/incomplete full baselineSZKQTN counter0."
+  -
+    type: "status"
+    at: "2026-10-09T18:14:47.974Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: final native headline ItemSet/reset ownership at39ebf53793a00c43ee7db62b35f4920b037e7065, scheduled full14320app122inventory13tooling2resource303browser plus meaningful1247current related cases4current browser. Entire changed modules/full current app Istanbul100 zero-negative, current/source metadata/preservation gates and same-agent non-independent quality pass. Broad goal remains active/incomplete, new full baselineSZKQTN counter0."
 doc_version: 3
-doc_updated_at: "2026-10-09T18:13:41.515Z"
+doc_updated_at: "2026-10-09T18:14:47.976Z"
 doc_updated_by: "CODER"
 description: "Resumed correction10/10 since XJTGF0. Capture source native table headline in shell dialog ItemSet and read authoritative direct input in Text Flow. Preserve saved widgets, native graph/history, old assertions and canonical inventory prefixes. Perform the scheduled full upstream-absent suite using actual Istanbul and repair failures before completion."
 sections:
