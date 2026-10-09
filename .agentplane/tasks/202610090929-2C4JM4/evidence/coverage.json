@@ -1,0 +1,138 @@
+{
+  "changed": {
+    "files": 1,
+    "summary": {
+      "lines": {
+        "total": 73,
+        "covered": 73,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 85,
+        "covered": 85,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 14,
+        "covered": 14,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 55,
+        "covered": 55,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "sourceHashes": {
+      "apps/office/src/sw/source/core/attr/format.ts": "43d18fcd1edc4f53140013603a595b0da46331e17942b286a445c44d187f4d04"
+    }
+  },
+  "application": {
+    "files": 318,
+    "wholeUnchangedFiles": 317,
+    "summary": {
+      "lines": {
+        "total": 18301,
+        "covered": 18301,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 20096,
+        "covered": 20096,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 4591,
+        "covered": 4591,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 14697,
+        "covered": 14697,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "mapSHA256": "b492646f29b2c900b56fb9bfcbb9757145737d9ad6638b7bcd7462aa0758ded1",
+    "proofSHA256": "deb96c796f72f5cdf6888d7628270134338f0faf8f2353898f7ca8994b1e00fe"
+  },
+  "sourceBinding": {
+    "priorTask": "202610090835-4ZF0N4",
+    "priorMapSHA256": "670f3bae65c297ff178f8d05962d28c9598e76a449250df3b861d44f2418f33c",
+    "priorProofSHA256": "a9b2cda732373cd45b159db7be5f3ba12a7957572f706ac57b429cb71871a19a",
+    "rawInputs": [
+      {
+        "profile": "initial",
+        "SHA256": "131507300ff7eb986067501725db66281b194f0645b24dafa07b91ad12732e85"
+      },
+      {
+        "profile": "failure-closure",
+        "SHA256": "79b25ced33bfe0528ce13fe87b1c468d7b47e810663b279c1429a63a93db1810"
+      }
+    ],
+    "completeUnchangedRegions": [
+      {
+        "path": "apps/office/src/sw/source/core/attr/format.ts",
+        "oldSourceSHA256": "f148b55ac02e2d3c2e3666f142eec151b91adc50317f6a1e4237e8db5718b168",
+        "currentSourceSHA256": "43d18fcd1edc4f53140013603a595b0da46331e17942b286a445c44d187f4d04",
+        "counts": {
+          "statements": 76,
+          "functions": 13,
+          "branches": 26
+        },
+        "regions": 14,
+        "regionProofSHA256": "8bbfb6e19dd577f81701e10c3731e9d31acb91631825956d14d072dd8be2a9c4",
+        "exactCompleteDeclarationBodyEnclosingConditionsAndAllLocations": true
+      }
+    ],
+    "constructorTransfer": false,
+    "counterNormalization": false
+  },
+  "targeted": {
+    "files": 26,
+    "initial": {
+      "passed": 170,
+      "failed": 1,
+      "skipped": 0
+    },
+    "failedOnlyClosure": {
+      "passed": 1,
+      "failed": 0,
+      "skipped": 3
+    },
+    "uniquePassed": 171,
+    "fresh": 7,
+    "passingReplay": 0,
+    "unresolved": 0,
+    "rawThresholdExitsRetained": true
+  },
+  "rawLocation": "Ignored apps/office/node_modules/.cache/parity-coverage; no raw source/helper/maps in AgentPlane artifacts",
+  "limitations": [
+    "Coverage includes verified historical counters for exactly unchanged code; it is not a fresh full-suite run.",
+    "Root/page/body/follows, full explicit format mutation/undo and overall core/browser parity remain unverified."
+  ],
+  "cadence": {
+    "lastFull": 247,
+    "nextFull": 257,
+    "pauseAfterNextFullAndVerifiedFailureFixes": true
+  }
+}
