@@ -1,6 +1,7 @@
-/** @fileoverview Original mdds3.2.1 standard scalar block type IDs and unmanaged aliases; callbacks and traits are separate dependencies. */
+/** @fileoverview Original mdds3.2.1 standard scalar block type IDs and unmanaged aliases; scalar callbacks retain explicit native type witnesses; traits are a separate dependency. */
 // SPDX-FileCopyrightText: 2022 - 2025 Kohei Yoshida
 // SPDX-License-Identifier: MIT
+import { MDDS_MTV_DEFINE_ELEMENT_CALLBACKS } from "./macro.ts";
 import { default_element_block, element_type_reserved_start } from "./types.ts";
 export const element_type_boolean = element_type_reserved_start;
 export const element_type_int8 = element_type_reserved_start + 1;
@@ -117,4 +118,88 @@ export const string_element_block = default_element_block<string>(
   element_type_string,
   "",
   string_value,
+);
+
+/** Original boolean value-type callback specialization, explicit because TS erases native overload types. */
+export const boolean_element_callbacks = MDDS_MTV_DEFINE_ELEMENT_CALLBACKS(
+  element_type_boolean,
+  false,
+  boolean_element_block,
+);
+
+/** Original int8 value-type callback specialization, explicit because TS erases native overload types. */
+export const int8_element_callbacks = MDDS_MTV_DEFINE_ELEMENT_CALLBACKS(
+  element_type_int8,
+  0,
+  int8_element_block,
+);
+
+/** Original uint8 value-type callback specialization, explicit because TS erases native overload types. */
+export const uint8_element_callbacks = MDDS_MTV_DEFINE_ELEMENT_CALLBACKS(
+  element_type_uint8,
+  0,
+  uint8_element_block,
+);
+
+/** Original int16 value-type callback specialization, explicit because TS erases native overload types. */
+export const int16_element_callbacks = MDDS_MTV_DEFINE_ELEMENT_CALLBACKS(
+  element_type_int16,
+  0,
+  int16_element_block,
+);
+
+/** Original uint16 value-type callback specialization, explicit because TS erases native overload types. */
+export const uint16_element_callbacks = MDDS_MTV_DEFINE_ELEMENT_CALLBACKS(
+  element_type_uint16,
+  0,
+  uint16_element_block,
+);
+
+/** Original int32 value-type callback specialization, explicit because TS erases native overload types. */
+export const int32_element_callbacks = MDDS_MTV_DEFINE_ELEMENT_CALLBACKS(
+  element_type_int32,
+  0,
+  int32_element_block,
+);
+
+/** Original uint32 value-type callback specialization, explicit because TS erases native overload types. */
+export const uint32_element_callbacks = MDDS_MTV_DEFINE_ELEMENT_CALLBACKS(
+  element_type_uint32,
+  0,
+  uint32_element_block,
+);
+
+/** Original int64 value-type callback specialization, explicit because TS erases native overload types. */
+export const int64_element_callbacks = MDDS_MTV_DEFINE_ELEMENT_CALLBACKS(
+  element_type_int64,
+  0n,
+  int64_element_block,
+);
+
+/** Original uint64 value-type callback specialization, explicit because TS erases native overload types. */
+export const uint64_element_callbacks = MDDS_MTV_DEFINE_ELEMENT_CALLBACKS(
+  element_type_uint64,
+  0n,
+  uint64_element_block,
+);
+
+/** Original float value-type callback specialization, explicit because TS erases native overload types. */
+export const float_element_callbacks = MDDS_MTV_DEFINE_ELEMENT_CALLBACKS(
+  element_type_float,
+  0,
+  float_element_block,
+);
+
+/** Original double value-type callback specialization, explicit because TS erases native overload types. */
+export const double_element_callbacks = MDDS_MTV_DEFINE_ELEMENT_CALLBACKS(
+  element_type_double,
+  0,
+  double_element_block,
+);
+
+/** Original string value-type callback specialization, explicit because TS erases native overload types. */
+export const string_element_callbacks = MDDS_MTV_DEFINE_ELEMENT_CALLBACKS(
+  element_type_string,
+  "",
+  string_element_block,
 );

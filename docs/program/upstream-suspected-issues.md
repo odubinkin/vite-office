@@ -432,6 +432,21 @@ projection does not prove native reference/lifetime parity. Decision: retain
 the original source responsibility and call boundaries; do not add a native
 safe-reference rewrite or claim a value for the undefined call.
 
+## CALC-022 — unknown block deletion can throw from a destructor path
+
+Pinned mdds3.2.1 `multi_type_vector/block_funcs.hpp` keeps a TODO in
+`element_block_funcs::delete_block`: the method is called from destructors
+and should not throw, but its actual unknown-type lookup throws the same
+`general_error` as the other dispatch methods. Null pointers return before
+lookup. An actual original `default_element_block<77,double>` with a standard
+registered dispatcher reproduces the exact original unknown-delete message;
+no fake native class or destructor catch/suppression is added.
+
+This establishes the dispatcher behavior, not a demonstrated Calc destructor
+failure: valid registered block lifetime is its caller precondition, and actual
+Calc/MTV destructor paths still require review. Decision: preserve the original
+exception and null fast path; record the TODO without changing the contract.
+
 ## Reviewed API distinctions
 
 These distinctions have been discussed but are not classified as defects:

@@ -1,5 +1,26 @@
 # Calc coordinate foundation
 
+## Shared block dispatch and scalar callbacks
+
+Task `202610091956-H5APAX` ports original `block_funcs.hpp` static dispatch
+and the scalar `MDDS_MTV_DEFINE_ELEMENT_CALLBACKS` owner, with all twelve
+standard value registrations. Per-method maps retain native discriminator
+selection, both erase overloads, null deletion and unequal-ID early false.
+Unknown-handler diagnostics and matching-type swap assertions remain.
+Explicit type witnesses replace native ADL/overload selection; JS number
+values never select float/double/integer type IDs heuristically.
+
+All operations reuse actual shared scalar owners and their delayed store.
+Unchanged genuine headers compare 3616 sequences/26990 complete steps/2182
+full snapshots, including scalar callback IDs/defaults and dispatcher
+mutations, plus all17 unknown-handler method calls and empty specialization.
+Scalar output references and single-scalar forwarding have explicit TS
+adapters. Pointer callbacks, managed values, nonprimitive variadic
+constructors, native reference/allocator/destructor semantics,
+util/default traits/trace/complete MTV and Calc document/UI remain unverified.
+Unknown non-null deletion still throws as original; CALC-022 records its
+upstream destructor TODO without a behavior repair.
+
 ## Shared scalar element blocks
 
 Task `202610091926-N4ZGYX` adds original mdds `types.hpp` unmanaged
