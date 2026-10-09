@@ -4,7 +4,8 @@
 
 import { readdir } from "node:fs/promises";
 
-import { readInventoryCompatibilityText } from "./registry-storage";
+import { loadInventoryRegistry, readInventoryCompatibilityText } from "./registry-storage";
+import { parseInventoryRegistry } from "./registry-validation";
 import { isDirectModule } from "./cli";
 import { parseBaselineManifest } from "./manifest";
 import { parseParityMappingManifest, validateParityMappingEvidence } from "./parity-mappings";
@@ -96,6 +97,7 @@ export function parseParityMappingCliOptions(
  * @param readTextFile - Injected UTF-8 reader for manifests and referenced evidence.
  * @param writeOutput - Output boundary receiving canonical report JSON with a trailing newline.
  * @param readDirectory - Injected recursive runtime-directory reader.
+ * @param readGlobalCapabilityIds - Strict canonical capability registry boundary for all runtime owners.
  * @returns A promise resolving after successful read-only validation.
  */
 export async function runParityMappingCli(
@@ -103,6 +105,7 @@ export async function runParityMappingCli(
   readTextFile: (path: string) => Promise<string>,
   writeOutput: (output: string) => void,
   readDirectory: (path: string) => Promise<readonly string[]> = readRuntimeDirectory,
+  readGlobalCapabilityIds: () => Promise<ReadonlySet<string>> = readRegistryCapabilityIds,
 ): Promise<void> {
   const options = parseParityMappingCliOptions(argumentsList);
   const baseline = parseBaselineManifest(await readTextFile(options.baselinePath));
@@ -126,9 +129,19 @@ export async function runParityMappingCli(
       return readTextFile(`${options.localRoot}/${path}`);
     },
     writerUserCommands,
-    new Set(manifest.records.map(selectCapabilityId)),
+    new Set([...manifest.records.map(selectCapabilityId), ...(await readGlobalCapabilityIds())]),
   );
   writeOutput(`${JSON.stringify({ ...report, runtime }, null, 2)}\n`);
+}
+
+/** Loads strictly parsed global capability identities while retaining the Writer-only parity evidence scope. @returns Known canonical IDs from all owners. */
+async function readRegistryCapabilityIds(): Promise<ReadonlySet<string>> {
+  const registry = await loadInventoryRegistry();
+  const parsed = parseInventoryRegistry(
+    registry,
+    await readInventoryCompatibilityText("docs/program/libreoffice-baseline.json"),
+  );
+  return new Set(parsed.capabilities.records.map(selectCapabilityId));
 }
 
 /**

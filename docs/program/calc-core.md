@@ -287,8 +287,13 @@ inventory reconciliation is task 3, reference addresses/sheet limits are task 4,
 single formula references are task 5, and complex formula references are task 6
 of that first ten-task interval. Numerical range lists are task 7 and big
 address/range coordinates are task 8. Reference transpose/growth is task 9;
-full-suite verification is task 10. The user requested pausing the goal after
-that full run succeeds, including any error remediation.
+full-suite verification is task 10. That run is recorded in
+[calc-full-test-cycle-1.md](calc-full-test-cycle-1.md): 14,097 office tests,
+122 inventory tests and 303 browser scenarios pass. Calc and inventory retain
+actual100 coverage. The user explicitly left one uncovered Writer painting
+branch for another branch, and requested goal pause after the complete run.
+The next full cycle is due after ten more completed Calc agentplane tasks upon
+resumption.
 
 Source research includes the per-file MPL 2.0 and inherited Apache notices in
 `sc/inc/address.hxx`, `sc/inc/sheetlimits.hxx`, `sc/inc/refdata.hxx`,

@@ -81,17 +81,22 @@ describe("parity mapping CLI" /**
     const evidence = createMarkerEvidenceFixture(
       JSON.parse(await readUtf8File("docs/program/parity/writer-command-slice.json")),
     );
+    const runtimeDeclaration = JSON.parse(
+      await readUtf8File("docs/program/parity/runtime-inventory.json"),
+    );
+    expect(runtimeDeclaration.placeholderSuites).not.toContain("calc");
+    /** Reads local project files and supplies owned upstream marker text. @param file - Requested evidence path. @returns Local source or synthetic marker contents. */
+    async function readOwnedEvidence(file: string): Promise<string> {
+      if (file.startsWith("fixture-upstream/")) {
+        const text = evidence.get(file.slice("fixture-upstream/".length));
+        if (text === undefined) throw new Error(`Undeclared fixture evidence: ${file}`);
+        return text;
+      }
+      return readUtf8File(file);
+    }
     await runParityMappingCli(
       validArguments,
-      /** Reads local project files and supplies owned upstream marker text. @param file - Requested evidence path. @returns Local source or synthetic marker contents. */
-      async function readOwnedEvidence(file: string): Promise<string> {
-        if (file.startsWith("fixture-upstream/")) {
-          const text = evidence.get(file.slice("fixture-upstream/".length));
-          if (text === undefined) throw new Error(`Undeclared fixture evidence: ${file}`);
-          return text;
-        }
-        return readUtf8File(file);
-      },
+      readOwnedEvidence,
       /**
        * Captures the canonical report emitted by the read-only CLI.
        *
@@ -117,7 +122,7 @@ describe("parity mapping CLI" /**
       recordCount: 45,
       runtime: {
         commandCount: 56,
-        placeholderSuiteCount: 6,
+        placeholderSuiteCount: runtimeDeclaration.placeholderSuites.length,
         schemaVersion: 3,
         semanticViolationCount: 0,
       },
@@ -128,6 +133,26 @@ describe("parity mapping CLI" /**
       unresolvedParityCount: 0,
       verifiedCount: 43,
     });
+    expect(JSON.parse(output).runtime.modules).toContainEqual(
+      expect.objectContaining({
+        path: "apps/office/src/sc/inc/address.ts",
+        suite: "calc",
+        capabilityIds: expect.arrayContaining(["CAP-80646669-70d5-4641-9fe5-29b1639adab9"]),
+      }),
+    );
+    await expect(
+      runParityMappingCli(
+        validArguments,
+        readOwnedEvidence,
+        /** Rejects unexpected output from invalid capability linkage. @returns Never. */
+        () => {
+          throw new Error("Invalid global capability linkage emitted a report.");
+        },
+        undefined,
+        /** Supplies an explicitly missing global capability registry. @returns Empty known-ID set. */
+        async () => new Set<string>(),
+      ),
+    ).rejects.toThrow("references unknown capability CAP-80646669-70d5-4641-9fe5-29b1639adab9");
   }, 30_000);
 
   it("closes the umbrella ODT compatibility record with pinned fixture evidence" /**
