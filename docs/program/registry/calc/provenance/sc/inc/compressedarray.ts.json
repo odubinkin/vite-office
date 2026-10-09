@@ -1,0 +1,52 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/inc/compressedarray.ts",
+          "marker": "ScCompressedArray"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/compressedarray.test.ts",
+          "marker": "matches all unchanged native numeric and flag array sequences"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/compressedarray.hxx",
+          "marker": "ScCompressedArray"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sc/inc/compressedarray.ts",
+    "localSymbols": [
+      "ScCompressedArray",
+      "ScBitMaskCompressedArray",
+      "ScCompressedArrayIterator",
+      "ScCompressedArrayTypes",
+      "ScCompressedArrayDataEntry",
+      "ScCompressedArrayRangeData"
+    ],
+    "omittedResponsibilities": [
+      "Finite row/column UInt16 and CRFlags evidence does not establish whole-module/browser parity. Generic object value copy/equality, native allocation/ABI/references/dangling iterator lifetime, undefined arithmetic and invalid-index states are uncertified. Required scalar witnesses adapt erased native template arguments; output-reference tuples, independent POD entry copies and fail-fast assertion adapters retain finite numerical contracts, not native process abort. Out-of-domain changed range bit operations may not terminate; separate original diagnostics assign no successful result and no repair is introduced. Ordered-entry/valid-region and copy-progress preconditions remain required. Genuine o3tl mask operators are used in native comparison; TypeScript adapts only the original CRFlags result-mask assertion. Table/document/column/browser consumers and broader global.hxx remain unimplemented."
+    ],
+    "preservedResponsibilities": [
+      "Original explicit maximum/default, SCROW/SCCOL and UInt16/UInt8 conversions, one initial entry and exact nCount/nLimit capacity growth through original split/shrink/combine algorithms.",
+      "Original binary Search first/last fallback, scalar/range/output-reference getters and repeated terminal GetNextValue behavior.",
+      "Original predecessor insertion, removal adjacent-value merge, terminal maximum and preserving-size call order, distinct CopyFrom offsets/inline overload and self-copy assertion.",
+      "Original scalar/range CRFlags AND/OR traversal, CopyFromAnded, reverse bit search/access-type sentinel and borrowed iterator increment/add/value behavior."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sc/inc/compressedarray.hxx",
+    "upstreamSymbols": [
+      "ScCompressedArray",
+      "ScBitMaskCompressedArray",
+      "Iterator",
+      "DataEntry",
+      "RangeData"
+    ]
+  }
+}

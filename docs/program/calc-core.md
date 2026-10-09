@@ -853,3 +853,64 @@ hard limit. CALC-017 records the ignored failed lookup in the conditional setter
 without assigning a defined native result or repairing the original expression.
 This is task 1 of the next 10-task validation cycle; the full suite is not due.
 No semantic status is promoted and Writer remains untouched.
+
+## Compressed widths and row/column flags
+
+Task 12 (`202610091841-PZT40R`), task 2 of the next 10-task cycle, adds complete
+numeric `ScCompressedArray`, `ScBitMaskCompressedArray` and the borrowed iterator
+at the original compressedarray header/core-data boundaries, with original
+`CRFlags` at the global header. ScTable uses these owners for column widths and
+row/column flags; its column owners use MaxCol()+1 and row flags use MaxRow().
+No table/document stand-in is introduced. The bit-mask specialization reuses
+one actual base owner rather than a separate interval engine.
+
+Required scalar witnesses represent erased native access/data template arguments:
+SCROW/SCCOL use signed 32/16 bits; UInt16/CRFlags use unsigned 16/8 bits.
+They are syntax adapters with no invented defaults. Numerical POD entries are
+copied independently during original memmove/reallocation operations. The
+original nCount/nLimit and capacity-growth algorithm remain observable through
+public mutation, and native observations read protected state without modifying
+it or deriving from the original final bit-mask owner.
+
+Search retains the first/last fallback for out-of-domain input. SetValue keeps
+original inclusive bounds, temporary numerical value copy, split/shrink/combine
+and capacity behavior. Two redundant guards are specialized with source proofs:
+ordered Search plus the preceding failed branch implies the previous endpoint
+is exactly start-1; active insertion is 0/Search/Search+1 and every preceding
+combination/removal disables insertion, so its index cannot exceed nCount.
+Native bodies retain both guards unchanged. No unreachable-state injection,
+coverage exclusion or alternative storage algorithm is used.
+
+Insertion extends the preceding entry at an exact boundary. Removal combines
+identical adjacent entries and resets the terminal endpoint to nMaxAccess.
+Both preserving-size methods retain their original call order, including the
+observed unused fill value for ordinary RemovePreservingSize owners. Distinct
+CopyFrom, source offsets, repeated terminal GetNextValue, source AND copies and
+borrowed iterator cache/position behavior remain original. Iterator dereference
+and addition require a valid entry/region. Numerical output-reference tuples
+and fail-fast errors adapt native syntax; native process abortion is uncertified.
+
+All 5272 defined sequences of four numeric/flag row/column specializations
+compare both complete native owners after every command under ASan/UBSan.
+640 losslessly interned complete snapshots preserve entries, count/capacity,
+queries, terminal next behavior and reverse mask results. Complete original
+header/definition groups and genuine original o3tl typed-flag/config headers are
+used with exact pinned file/group hashes. Separate native processes reproduce
+self-copy and typed-mask assertions. Invalid-start range AND/OR loops are
+reproduced as bounded nontermination diagnostics, with no successful result
+assigned and no guard added. CALC-018/019 record these observations.
+
+Generic object values/equality/copy, allocation/ABI/native references, dangling
+iterators, undefined arithmetic, malformed entry/index states, complete module
+parity and table/document/browser consumers remain unverified. All 104 Calc tests pass
+with actual 100% Istanbul coverage: 2904 statements, 2051 branches,
+467 functions and 2548 lines. With both upstream links temporarily detached,
+104 Calc and 30 related inventory tests pass; the original links are restored.
+Tooling 14, provenance 3, TS7, scoped lint/formatting, documentation, boundaries,
+file size/source tree, provenance, routing and doctor checks pass. Doctor retains
+two previously recorded warnings and no errors. The coherent compressedarray
+module is 475 physical lines and stays below both source size budgets.
+
+Calc 22 capabilities/143 modules and shared 1/116 report zero runtime semantic
+violations. Whole-module parity remains unverified. Writer remains untouched;
+a full suite is not due at task 2/10.

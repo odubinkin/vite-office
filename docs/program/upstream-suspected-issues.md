@@ -346,6 +346,46 @@ invalid native inputs are not certified. Decision: preserve the original
 precondition and ignored result; do not add clipping, lookup fallback or guard
 behavior without a separate explicit upstream-deviation decision.
 
+## CALC-018: Out-of-domain range bit update can make no cursor progress
+
+Status: reproducible original non-progress loop; caller preconditions unreviewed,
+no complete Calc consumer defect classification or successful result assigned.
+
+Pinned `compressedarray.cxx:314` AndValue and `:340` OrValue use Search's last
+entry fallback for a starting position after the maximum. On an array max7,
+AndValue(8,8,NONE) with tail3 or OrValue(8,8,Hidden) with tail0 enters the changed
+value branch, computes start8/end7, and calls SetValue(8,7,...). SetValue rejects
+that range, then Search(end+1), Search(8), returns the same entry. No state or
+cursor advances, so the loop repeats indefinitely. This source condition is
+preserved in TypeScript and in the complete unchanged native groups.
+
+Each genuine original call is isolated in a separate process; a 1000ms timeout
+terminates the owned diagnostic process and records ETIMEDOUT/SIGTERM. The source
+trace establishes non-progress; the timeout alone is not a general termination
+proof. Defined successful fixtures use valid initial positions or vacuous ranges.
+Decision: retain the original precondition and loop; no clipping, bailout or
+fallback guard is added. Wider caller validation remains to be reviewed.
+
+## CALC-019: Ordinary preserving-size removal leaves its fill argument unused
+
+Status: source observation confirmed by defined unchanged native sequences;
+caller intent and user-visible defect classification unreviewed.
+
+Pinned `compressedarray.cxx:283` RemovePreservingSize records GetLastPos, calls
+Remove, then passes the endpoint difference into InsertPreservingSize. Remove
+always restores the terminal endpoint to nMaxAccess (`:279`). For ordinary
+initialized owners whose previous endpoint equals nMaxAccess, that difference
+is zero. InsertPreservingSize's fill loop is empty, so rFillValue is unused.
+For max7/default3 with rows2..4 set8 and row5 set1, removing rows2..4
+with fill0 leaves row2 as1 and rows3..7, including the tail, as3. The nominal
+fill0 does not replace the tail. The independent test also retains the analogous
+default1/fill15 result.
+
+The complete native corpus and independent test retain that call order and exact
+result. No implicit tail-fill or size correction is added. Unusual prior endpoint
+states and broader column consumers are not certified by this observation.
+Decision: preserve upstream behavior and record it for future consumer review.
+
 ## Reviewed API distinctions
 
 These distinctions have been discussed but are not classified as defects:
