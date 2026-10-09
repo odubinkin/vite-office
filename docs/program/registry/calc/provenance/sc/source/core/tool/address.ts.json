@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/address.ts",
+          "marker": "ScAddress"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/address.test.ts",
+          "marker": "moves and clamps with native error outputs"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/address.cxx",
+          "marker": "ScAddress::Move"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sc/source/core/tool/address.ts",
+    "localSymbols": [
+      "ScAddress",
+      "ScRange",
+      "Move",
+      "Intersection"
+    ],
+    "omittedResponsibilities": [
+      "Reference parsing/formatting, external links, native hashes, range subtraction and sticky reference updates remain subsequent Calc tasks.",
+      "Undefined uninitialized native constructors, machine pointer storage and debug assertions have no browser implementation."
+    ],
+    "preservedResponsibilities": [
+      "Native zero/invalid coordinates, exact standard/jumbo capacities and signed 16/32-bit assignments.",
+      "Original numeric constructor ordering, inclusive coordinate operations and movement error contracts; no browser-specific state."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sc/source/core/tool/address.cxx",
+    "upstreamSymbols": [
+      "ScAddress::Move",
+      "ScRange::Move",
+      "ScRange::Intersection"
+    ]
+  }
+}

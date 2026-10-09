@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/inc/address.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "coordinate-model",
+    "capabilityIds": [
+      "CAP-80646669-70d5-4641-9fe5-29b1639adab9"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sc/inc/address.ts#MAXROWCOUNT",
+        "apps/office/src/sc/source/core/tool/address.test.ts#moves and clamps with native error outputs",
+        "docs/program/calc-core.md#Calc coordinate foundation",
+        "vendor/libreoffice-reference/sc/inc/address.hxx#MAXROWCOUNT"
+      ],
+      "justification": "Calc task 202610090711-S6VCEJ implements the bounded numerical coordinate foundation from the exact pinned local source. Defaults, signed widths, copies, ordering, inclusive containment/intersection and ordinary movement are tested independently with real V8 coverage. Header-declared inline numerical owners are implemented in core/tool and re-exported through the original header boundary. No browser, storage, undo, notification or Writer ownership is duplicated. Whole native API and compiled differential parity remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "MAXROWCOUNT",
+        "ScRefFlags",
+        "ValidAddress",
+        "applyStartToEndFlags"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "sc/inc/address.hxx",
+      "upstreamSymbols": [
+        "MAXROWCOUNT",
+        "ScRefFlags",
+        "ValidAddress",
+        "applyStartToEndFlags"
+      ]
+    }
+  }
+}

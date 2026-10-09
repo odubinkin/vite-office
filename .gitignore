@@ -44,6 +44,8 @@ playwright-report/
 test-results/
 output/playwright/
 vendor/libreoffice-reference/
+# The research checkout may be a symlink to the shared pinned reference.
+/vendor/libreoffice-reference
 .playwright-cli
 
 # Deterministic compatibility views; author docs/program/registry records instead
