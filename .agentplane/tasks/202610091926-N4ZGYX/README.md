@@ -1,10 +1,11 @@
 ---
 id: "202610091926-N4ZGYX"
 title: "Port original shared mdds scalar element block owners"
-status: "DOING"
+result_summary: "verified-202610091926-N4ZGYX"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 22
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-09T19:54:26.360Z"
+  updated_at: "2026-10-09T19:54:59.457Z"
   updated_by: "CODER"
-  note: "Verified original12 scalar block aliases3616 native sequences26990 complete steps plus9 mixed families; all104 Calc and3 changed shared owners actual100 four Istanbul metrics; related10 shared, portable104/3/30, tooling14/provenance3, TS7 and structural gates pass. CALC-021 preserves original bool reference diagnostic without a successful result. Task4/10; no Writer or full parity claim."
+  note: "verified-202610091926-N4ZGYX"
   attempts: 0
 quality_review:
   state: "pass"
@@ -45,11 +46,16 @@ quality_review:
     - "Original discriminator/global error owner and element/copyable/default static responsibility reuse actual shared delayed storage; all12 native aliases/defaults and integer resize threshold are source-shaped. types554 checker lines is coherent original header responsibility with documented decomposition review below1000; no fake MTV/value/column engine."
     - "Lossless independent decode verifies3616 native sequences26990 complete two-owner steps2182 snapshots,8 complete source hashes/2 pinned archives/driver hash and9 mixed native families. Bool mutable at compile rejection and const lifetime ASan diagnostics are separately retained as CALC-021; no successful undefined result or native rewrite."
     - "Actual four positive Istanbul denominators equal covered: Calc2904/2051/467/2548, changed3 shared owners181/25/73/173. Related10 shared and portable104 Calc/3 shared/30 inventory pass; TS7, tooling14/provenance3, scoped static/provenance gates pass; Calc24/147 and shared3/120 semanticViolationCount0. Capability whole-module parity remains false."
-commit: null
+commit:
+  hash: "2e0660d85c47bffdd7151245e7a3d4b470dc3a44"
+  message: "🔎 N4ZGYX review: record scalar block acceptance evidence"
 comments:
   -
     author: "CODER"
     body: "Start: implementing original shared scalar element block owners over existing delayed vector with native/portable acceptance."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610091926-N4ZGYX. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -64,8 +70,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified original12 scalar block aliases3616 native sequences26990 complete steps plus9 mixed families; all104 Calc and3 changed shared owners actual100 four Istanbul metrics; related10 shared, portable104/3/30, tooling14/provenance3, TS7 and structural gates pass. CALC-021 preserves original bool reference diagnostic without a successful result. Task4/10; no Writer or full parity claim."
+  -
+    type: "verify"
+    at: "2026-10-09T19:54:59.457Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610091926-N4ZGYX"
+  -
+    type: "status"
+    at: "2026-10-09T19:54:59.630Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610091926-N4ZGYX. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-09T19:54:26.416Z"
+doc_updated_at: "2026-10-09T19:55:25.767Z"
 doc_updated_by: "CODER"
 description: "Task4/10 of Calc cycle: complete original element_block/copyable/default unmanaged scalar owner operations and all twelve standard aliases, reusing delayed_delete_vector. Explicit erased template types and callback-free static block specialization, genuine unchanged native comparisons, actual100 Calc and changed shared owners, portable inventory/static checks. Preserve original alias/copy/reserve/swap semantics; no fake managed Calc values or MTV engine."
 sections:
@@ -131,6 +150,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-09T19:54:59.457Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610091926-N4ZGYX
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T19:54:26.416Z, excerpt_hash=sha256:12378000d8a0b3681f723baff8a9a0fe982fd247b3b72dc07e68fb77caa173ca
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610091926-N4ZGYX/blueprint/resolved-snapshot.json
+    - old_digest: 7f5deb59736edbe949edeb351d37cc7e1fb865adc1d2a32bebe7f8ae41d7b5b9
+    - current_digest: 7f5deb59736edbe949edeb351d37cc7e1fb865adc1d2a32bebe7f8ae41d7b5b9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610091926-N4ZGYX
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610091926-N4ZGYX --result verified-202610091926-N4ZGYX --commit 2e0660d85c47bffdd7151245e7a3d4b470dc3a44
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task implementation through separately approved task on calc; retain actual shared delayed vector and prior Calc core. Original dependencies remain read-only; native outputs ignored."
   Findings: |-
@@ -151,6 +200,18 @@ sections:
     - Observation: All new shared owners now have actual100 four metrics and native/TS7/lint/registry/provenance pass. Documentation gate counts explicit TypeScript static this witnesses as parameters and requires annotations, plus newly authored native-probe callbacks.
       Impact: Documentation acceptance is incomplete; no runtime, threshold or native source change is needed.
       Resolution: Recompute route; document each explicit erased static specialization receiver and probe callback, then rerun docs/lint/format. Preserve checker behavior and original module boundaries.
+
+    - Observation: Exact routed task complete marked the task DONE but its generated close subject was rejected by existing commit hook E_GIT: commit subject is too generic.
+      Impact: Implementation and quality commits are persisted; close task artifact tail remains dirty.
+      Resolution: Recompute exact route and use permitted bounded close-commit recovery with concrete subject if generated --close repeats rejection; do not modify hook or gate.
+
+    - Observation: Routed commit --close --unstage-others repeated existing generic-subject hook rejection E_GIT.
+      Impact: Only DONE task artifact cleanup remains; acceptance and source commits are complete.
+      Resolution: Bounded same-scope recovery: persist task artifacts with concrete N4ZGYX finalize subject via ap commit --allow-tasks, preserving original validators and task verification.
+extensions:
+  implementation_commit:
+    hash: "c5bd25cf7c3738cfc27bfa7bb331067abf3ec422"
+    message: "🧮 N4ZGYX implement: port shared native scalar element block owners"
 id_source: "generated"
 ---
 ## Summary
@@ -227,6 +288,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-09T19:54:59.457Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610091926-N4ZGYX
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T19:54:26.416Z, excerpt_hash=sha256:12378000d8a0b3681f723baff8a9a0fe982fd247b3b72dc07e68fb77caa173ca
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610091926-N4ZGYX/blueprint/resolved-snapshot.json
+- old_digest: 7f5deb59736edbe949edeb351d37cc7e1fb865adc1d2a32bebe7f8ae41d7b5b9
+- current_digest: 7f5deb59736edbe949edeb351d37cc7e1fb865adc1d2a32bebe7f8ae41d7b5b9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610091926-N4ZGYX
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610091926-N4ZGYX --result verified-202610091926-N4ZGYX --commit 2e0660d85c47bffdd7151245e7a3d4b470dc3a44
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -252,3 +343,11 @@ Original resize compares new_size < capacity / 2 with integer division. Original
 - Observation: All new shared owners now have actual100 four metrics and native/TS7/lint/registry/provenance pass. Documentation gate counts explicit TypeScript static this witnesses as parameters and requires annotations, plus newly authored native-probe callbacks.
   Impact: Documentation acceptance is incomplete; no runtime, threshold or native source change is needed.
   Resolution: Recompute route; document each explicit erased static specialization receiver and probe callback, then rerun docs/lint/format. Preserve checker behavior and original module boundaries.
+
+- Observation: Exact routed task complete marked the task DONE but its generated close subject was rejected by existing commit hook E_GIT: commit subject is too generic.
+  Impact: Implementation and quality commits are persisted; close task artifact tail remains dirty.
+  Resolution: Recompute exact route and use permitted bounded close-commit recovery with concrete subject if generated --close repeats rejection; do not modify hook or gate.
+
+- Observation: Routed commit --close --unstage-others repeated existing generic-subject hook rejection E_GIT.
+  Impact: Only DONE task artifact cleanup remains; acceptance and source commits are complete.
+  Resolution: Bounded same-scope recovery: persist task artifacts with concrete N4ZGYX finalize subject via ap commit --allow-tasks, preserving original validators and task verification.
