@@ -4,7 +4,7 @@ title: "Use native table headline document commands and dedicated numeric undo"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -18,11 +18,32 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-09T19:14:19.197Z"
+  updated_at: "2026-10-09T19:17:18.222Z"
   updated_by: "CODER"
-  note: "Actual2950related10fresh/7browser pass; entire6module current-source Istanbul100 all-four/zero-negative/identical complete maps; TS7/static/build upstream-absent/finally-restored; nine metadata/twelve canonical prefixes/exact5old migrations and602unchanged tests. Full not due2/10, Repeat/follow/copy families unverified; quality pending."
+  note: "Final gates pass: quality report pass evaluated_sha543033191c962e68814528bdb510712f9734ccdf same-agent explicitly non-independent;2950related10fresh/7browser/entire6module current-source actual Istanbul100 all-four/zero-negative/identical maps; TS7/static/build physically upstream-absent/finally-restored,9metadata/12canonical prefixes/exact5old migrations/602unchanged old tests. Final artifact/root format pass; no source changes after semantic review. Full not due2/10; Repeat/follow/full layout unverified."
   attempts: 0
-commit: null
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-09T19:16:05.066Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent explicitly non-independent review passes exact semantic543033191c962e68814528bdb510712f9734ccdf against approved native headline command/history contract and current-source evidence."
+  evaluated_sha: "543033191c962e68814528bdb510712f9734ccdf"
+  blueprint_digest: "b853d7a5b2358708dcd5b5dbf9a8d9e7f4f62d1a9c948271a1a5ec3d917e441e"
+  evidence_refs:
+    - ".agentplane/tasks/202610091853-T8EQAC/README.md"
+    - ".agentplane/tasks/202610091853-T8EQAC/quality/20261009-191605066-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610091853-T8EQAC/quality/20261009-191605066-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610091853-T8EQAC/quality/20261009-191605066-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610091853-T8EQAC/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610091853-T8EQAC/artifacts/native-table-headline-command-evidence.json"
+    - "Current strict coverage/preservation gates and exact source hash comparison pass on semantic543033191c962e68814528bdb510712f9734ccdf"
+  findings:
+    - "Six production changes match bounded native count/no-op/uint16/DoesUndo/indexed old-new history and original TableHeadingChange contracts; no table/row/box/cursor snapshot on headline path. Three actual history cycles preserve later unrelated attributes and original graph/cursor/ring; mounted UI and real ODT accepted."
+    - "Actual2950distinct accepted related10fresh and7browser; all six entire current-source Istanbul modules100 all-four,zero-negative,identical complete maps/source hashes; TS7/current static/build/upstream-absent-finally-restored and nine restored metadata pass. Incomplete profile threshold exits retained, actual aggregation unchanged100 gate. Five exact old snapshot/fixture/payload migrations retain all other assertions and602oldtestfiles unchanged; twelve canonical prefixes and1524unrelated files unchanged."
+    - "No network/global/publication/merge/upstream-source artifact copy; bounded English54KiB command/count/hash/identity evidence only, raw data ignored. Broad goal ACTIVE/incomplete; correction2/10, full intentionally not due."
+commit:
+  hash: "543033191c962e68814528bdb510712f9734ccdf"
+  message: "🧩 T8EQAC table: replace headline snapshots with native numeric history"
 comments:
   -
     author: "CODER"
@@ -41,8 +62,20 @@ events:
     author: "CODER"
     state: "ok"
     note: "Actual2950related10fresh/7browser pass; entire6module current-source Istanbul100 all-four/zero-negative/identical complete maps; TS7/static/build upstream-absent/finally-restored; nine metadata/twelve canonical prefixes/exact5old migrations and602unchanged tests. Full not due2/10, Repeat/follow/copy families unverified; quality pending."
+  -
+    type: "status"
+    at: "2026-10-09T19:15:34.061Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+  -
+    type: "verify"
+    at: "2026-10-09T19:17:18.222Z"
+    author: "CODER"
+    state: "ok"
+    note: "Final gates pass: quality report pass evaluated_sha543033191c962e68814528bdb510712f9734ccdf same-agent explicitly non-independent;2950related10fresh/7browser/entire6module current-source actual Istanbul100 all-four/zero-negative/identical maps; TS7/static/build physically upstream-absent/finally-restored,9metadata/12canonical prefixes/exact5old migrations/602unchanged old tests. Final artifact/root format pass; no source changes after semantic review. Full not due2/10; Repeat/follow/full layout unverified."
 doc_version: 3
-doc_updated_at: "2026-10-09T19:14:19.249Z"
+doc_updated_at: "2026-10-09T19:17:18.295Z"
 doc_updated_by: "CODER"
 description: "Correction2/10 after fullSZKQTN and KVM0ER. Replace shell headline SetTableAttr snapshot with count-only shell-to-document native operation, dedicated index/old/new SwUndoTableHeadline and TableHeadingChange frame notification, retaining no-op/uint16/source capped old count semantics. Verify original owners and real UI/history/ODT. Native Repeat framework and full master/follow reconstruction remain unrepresented, no synthetic follow flags or broad parity promotion."
 sections:
@@ -87,6 +120,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-10-09T19:17:18.222Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Final gates pass: quality report pass evaluated_sha543033191c962e68814528bdb510712f9734ccdf same-agent explicitly non-independent;2950related10fresh/7browser/entire6module current-source actual Istanbul100 all-four/zero-negative/identical maps; TS7/static/build physically upstream-absent/finally-restored,9metadata/12canonical prefixes/exact5old migrations/602unchanged old tests. Final artifact/root format pass; no source changes after semantic review. Full not due2/10; Repeat/follow/full layout unverified.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T19:16:23.163Z, excerpt_hash=sha256:fcdd20d67a0588db4de3b568374c08c97a674e689ae47cb573c951a45f5174f1
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610091853-T8EQAC/blueprint/resolved-snapshot.json
+    - old_digest: b853d7a5b2358708dcd5b5dbf9a8d9e7f4f62d1a9c948271a1a5ec3d917e441e
+    - current_digest: b853d7a5b2358708dcd5b5dbf9a8d9e7f4f62d1a9c948271a1a5ec3d917e441e
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610091853-T8EQAC
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610091853-T8EQAC --result verified-202610091853-T8EQAC --commit 543033191c962e68814528bdb510712f9734ccdf
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert semantic headline command and corresponding canonical append histories together; retain historical task evidence and run affected upstream-absent tests. No destructive Git operations or publication."
   Findings: |-
@@ -95,6 +158,8 @@ sections:
     Command: targeted actual Istanbul fresh/related command in ignored T8EQAC commands.json, upstream physically absent. Result: fail; 1271 passed,9 failed of1280. Scope: six entire production modules. Routine local repairs: fresh ring fixture moved actual point directly because FocusNode intentionally clears old ring; five exact old fixture/snapshot/payload expectations migrated using native insert mnRowsToRepeat and SetTabCols print-width normalization BEFORE attribute history. Dedicated headline numeric undo cannot restore unrelated old geometry. Configured100 thresholds unchanged; related document/undo/hint closure remains pending. Initial helper constructed41 additional paths without sw prefix; these did not execute and corrected additional closure executes exact existing files. Raw logs/maps/original bytes/exact migration operations remain ignored cache; no incident promotion or external blocker.
 
     Resolution: repair29pass0fail; actual closure1526pass0fail, native owners143pass0fail, fresh-final9pass1fail because new numbering guard incorrectly passed node instead of native SwPosition; corrected original registered positions with finally disposal, failed-file6pass0fail. Early TS7 fresh Mock array variance repaired with erased MockInstance[] annotation. Final2950distinct accepted10fresh; entire6module actual Istanbul998lines1096statements247functions664branches100 all-four,zero-negative/current hashes and identical complete maps. Seven browser pass0fail0skip0flaky;8static/browser gate commands pass;9restored metadata pass;12canonical prefixes and602unchanged old test files/exact5migrations/1524unrelated unchanged. No production source changed after first formatted map; no threshold/counter/location edits. Raw failures retained ignored cache. Native Repeat/follow/copy/full layout remain incomplete. Quality and semantic commit pending.
+
+    Quality pass on exact semantic commit 543033191c962e68814528bdb510712f9734ccdf; report .agentplane/tasks/202610091853-T8EQAC/quality/20261009-191605066-recovery-context/quality-report.json SHA256 7e7890b561756214ead7640c7f46b1a9501842b482f929cb3b0db8eb17b667eb. Same-agent explicitly non-independent. Verified2950related10fresh/7browser/entire6module current-source actual Istanbul100 all-four/zero-negative, original owners and unrelated later attrs/history3cycles, TS7/static/build upstream-absent and9restored metadata, twelve canonical prefixes/exact5old migrations/602unchanged old tests. Native Repeat/follow/copy/full layout remain separately unverified. Goal ACTIVE/incomplete; correction2/10, full not due. No production/test/canonical changes after exact semantic review. Final artifact-format and deterministic close pending.
 id_source: "generated"
 ---
 ## Summary
@@ -151,6 +216,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-10-09T19:17:18.222Z — VERIFY — ok
+
+By: CODER
+
+Note: Final gates pass: quality report pass evaluated_sha543033191c962e68814528bdb510712f9734ccdf same-agent explicitly non-independent;2950related10fresh/7browser/entire6module current-source actual Istanbul100 all-four/zero-negative/identical maps; TS7/static/build physically upstream-absent/finally-restored,9metadata/12canonical prefixes/exact5old migrations/602unchanged old tests. Final artifact/root format pass; no source changes after semantic review. Full not due2/10; Repeat/follow/full layout unverified.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T19:16:23.163Z, excerpt_hash=sha256:fcdd20d67a0588db4de3b568374c08c97a674e689ae47cb573c951a45f5174f1
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610091853-T8EQAC/blueprint/resolved-snapshot.json
+- old_digest: b853d7a5b2358708dcd5b5dbf9a8d9e7f4f62d1a9c948271a1a5ec3d917e441e
+- current_digest: b853d7a5b2358708dcd5b5dbf9a8d9e7f4f62d1a9c948271a1a5ec3d917e441e
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610091853-T8EQAC
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610091853-T8EQAC --result verified-202610091853-T8EQAC --commit 543033191c962e68814528bdb510712f9734ccdf
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -164,3 +259,5 @@ Source confirms current shell headline call is a general SetTableAttr snapshot, 
 Command: targeted actual Istanbul fresh/related command in ignored T8EQAC commands.json, upstream physically absent. Result: fail; 1271 passed,9 failed of1280. Scope: six entire production modules. Routine local repairs: fresh ring fixture moved actual point directly because FocusNode intentionally clears old ring; five exact old fixture/snapshot/payload expectations migrated using native insert mnRowsToRepeat and SetTabCols print-width normalization BEFORE attribute history. Dedicated headline numeric undo cannot restore unrelated old geometry. Configured100 thresholds unchanged; related document/undo/hint closure remains pending. Initial helper constructed41 additional paths without sw prefix; these did not execute and corrected additional closure executes exact existing files. Raw logs/maps/original bytes/exact migration operations remain ignored cache; no incident promotion or external blocker.
 
 Resolution: repair29pass0fail; actual closure1526pass0fail, native owners143pass0fail, fresh-final9pass1fail because new numbering guard incorrectly passed node instead of native SwPosition; corrected original registered positions with finally disposal, failed-file6pass0fail. Early TS7 fresh Mock array variance repaired with erased MockInstance[] annotation. Final2950distinct accepted10fresh; entire6module actual Istanbul998lines1096statements247functions664branches100 all-four,zero-negative/current hashes and identical complete maps. Seven browser pass0fail0skip0flaky;8static/browser gate commands pass;9restored metadata pass;12canonical prefixes and602unchanged old test files/exact5migrations/1524unrelated unchanged. No production source changed after first formatted map; no threshold/counter/location edits. Raw failures retained ignored cache. Native Repeat/follow/copy/full layout remain incomplete. Quality and semantic commit pending.
+
+Quality pass on exact semantic commit 543033191c962e68814528bdb510712f9734ccdf; report .agentplane/tasks/202610091853-T8EQAC/quality/20261009-191605066-recovery-context/quality-report.json SHA256 7e7890b561756214ead7640c7f46b1a9501842b482f929cb3b0db8eb17b667eb. Same-agent explicitly non-independent. Verified2950related10fresh/7browser/entire6module current-source actual Istanbul100 all-four/zero-negative, original owners and unrelated later attrs/history3cycles, TS7/static/build upstream-absent and9restored metadata, twelve canonical prefixes/exact5old migrations/602unchanged old tests. Native Repeat/follow/copy/full layout remain separately unverified. Goal ACTIVE/incomplete; correction2/10, full not due. No production/test/canonical changes after exact semantic review. Final artifact-format and deterministic close pending.

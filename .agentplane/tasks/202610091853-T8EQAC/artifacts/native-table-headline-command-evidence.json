@@ -1139,5 +1139,12 @@
     "reason": "Standing goal cadence once per10 corrections; previous SZKQTN full success baseline. This is correction2/10."
   },
   "doctor": "0errors2pre-existingwarnings: older managed hook shim and historical PJV0JK missing implementation hash",
-  "quality": "Pending same-agent non-independent exact semantic-commit review"
+  "quality": {
+    "verdict": "pass",
+    "independent": false,
+    "evaluatedSha": "543033191c962e68814528bdb510712f9734ccdf",
+    "reportPath": ".agentplane/tasks/202610091853-T8EQAC/quality/20261009-191605066-recovery-context/quality-report.json",
+    "reportHash": "7e7890b561756214ead7640c7f46b1a9501842b482f929cb3b0db8eb17b667eb"
+  },
+  "semanticCommit": "543033191c962e68814528bdb510712f9734ccdf"
 }
