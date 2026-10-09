@@ -1,0 +1,200 @@
+{
+  "upstreamAbsent": true,
+  "restored": true,
+  "upstreamPin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "upstreamClean": true,
+  "initialCommands": [
+    {
+      "label": "format",
+      "argv": [
+        "node_modules/.bin/prettier",
+        "--check",
+        "apps/office/src/sw/source/core/attr/format.ts",
+        "apps/office/src/sw/source/core/attr/native-format-construction.test.ts",
+        "apps/office/src/sw/browser/editor/native-format-construction.test.tsx",
+        "docs/program/registry/writer/runtime/sw/source/core/attr/format.ts.json",
+        "docs/program/registry/writer/provenance/sw/source/core/attr/format.ts.json"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "label": "lint",
+      "argv": [
+        "node_modules/.bin/eslint",
+        "apps/office/src/sw/source/core/attr/format.ts",
+        "apps/office/src/sw/source/core/attr/native-format-construction.test.ts",
+        "apps/office/src/sw/browser/editor/native-format-construction.test.tsx",
+        "--max-warnings",
+        "0"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "typecheck",
+      "argv": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed"
+    },
+    {
+      "label": "dependencies",
+      "argv": [
+        "npm",
+        "run",
+        "check:dependencies"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "49df58267de6ad6b7507189e009e8341f0e207801075535c840b5f2eda09e6bb"
+    },
+    {
+      "label": "docs",
+      "argv": [
+        "npm",
+        "run",
+        "check:docs"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "76853bf80fa77a8176d71642d0ec352e1eb0747117989ecfe366a1f30724fb8d"
+    },
+    {
+      "label": "file-size",
+      "argv": [
+        "npm",
+        "run",
+        "check:file-size"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "6e1762d8ffe408b634a5090b68ea88875e87662b22efe8b8e6b6ae9d8afb74ed"
+    },
+    {
+      "label": "static",
+      "argv": [
+        "npm",
+        "run",
+        "test:static"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "02ee2532a932f542600b945c9aa3aed0b40820323846bee4dd22d75e61b4d3ef"
+    },
+    {
+      "label": "registry-build",
+      "argv": [
+        "npm",
+        "run",
+        "inventory:registry:build"
+      ],
+      "exitCode": 1,
+      "outputSHA256": "5a97ab92372a3190c6af795a474f5ad89bad0d398d15cadd64f169a8b72baea5"
+    }
+  ],
+  "finalRegistryCommands": [
+    {
+      "label": "format",
+      "argv": [
+        "node_modules/.bin/prettier",
+        "--check",
+        "apps/office/src/sw/source/core/attr/format.ts",
+        "apps/office/src/sw/source/core/attr/native-format-construction.test.ts",
+        "apps/office/src/sw/browser/editor/native-format-construction.test.tsx",
+        "docs/program/registry/writer/runtime/sw/source/core/attr/format.ts.json",
+        "docs/program/registry/writer/provenance/sw/source/core/attr/format.ts.json"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "label": "registry-build",
+      "argv": [
+        "npm",
+        "run",
+        "inventory:registry:build"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "f941feea056f9f9125ac8a96978ff0fda711beef74563b36c553fc89490f0209"
+    },
+    {
+      "label": "writer-registry",
+      "argv": [
+        "npm",
+        "run",
+        "inventory:parity:writer"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "c7dbde1bebd5f8fb54c3a68c23fe35cef647ac75416630b571d1c6c70faae893"
+    },
+    {
+      "label": "global-registry",
+      "argv": [
+        "npm",
+        "run",
+        "inventory:registry:check"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "b5dc93e153fb5586ed378f4c3e755885de4449a967d8d3bd7fdd355eec286442"
+    },
+    {
+      "label": "source-provenance",
+      "argv": [
+        "npm",
+        "run",
+        "check:source-provenance"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "65eeaf5fc88ed1e78871c61e7953b96b6b1c0149b9a9413c588c16839ab5f938"
+    },
+    {
+      "label": "source-tree",
+      "argv": [
+        "npm",
+        "run",
+        "check:source-tree"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "6c5bd2e3c84892b8cc26b8b1b5f06a950891f9d5988a8ef1f1496f0c252cd33e"
+    },
+    {
+      "label": "routing",
+      "argv": [
+        "node",
+        ".agentplane/policy/check-routing.mjs"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    {
+      "label": "doctor",
+      "argv": [
+        "ap",
+        "doctor"
+      ],
+      "exitCode": 0,
+      "outputSHA256": "e93bc12a4f06615edf78b4af36c910a66ca64edd60ac6e482fef6a021481ecad"
+    }
+  ],
+  "inventory": {
+    "records": 2,
+    "allHistoricalFieldsAndPrefixesPreserved": true,
+    "noSemanticStatusPromotion": true,
+    "beforeSHA256": "7982f72b2c1a6c8a68500596af2245d9445e333ac0bb64d3aeeb77ac71e535d7",
+    "currentRecordSHA256": {
+      "docs/program/registry/writer/runtime/sw/source/core/attr/format.ts.json": "1f1d7c628a07c87c6f20958d33826ebc7e2da54059e97aeb5872d04de7f16e6e",
+      "docs/program/registry/writer/provenance/sw/source/core/attr/format.ts.json": "0309827355d347a98712ed735a17d4b5224eafd6e8096820b228a162811e0327"
+    }
+  },
+  "oldAcceptanceFiles": {
+    "unchangedByteIdentical": 509,
+    "contractMigrations": [],
+    "priorCommit": "5faffdbbd743",
+    "listSHA256": "75e1cbf329f942687163a747c398f37a0e70ddf0e2300c4f038457a2a54c859c"
+  },
+  "limitations": [
+    "Initial registry build rejected two new provenance references written as strings; corrected to required path/marker objects, final build/checks pass.",
+    "Same-agent evaluator is explicitly non-independent.",
+    "Doctor has zero errors and two pre-existing warnings: legacy managed hook shim and historical no-op PJV0JK missing implementation hash."
+  ]
+}
