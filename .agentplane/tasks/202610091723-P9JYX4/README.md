@@ -1,10 +1,11 @@
 ---
 id: "202610091723-P9JYX4"
 title: "Port Calc mark-data selection owner and validate full cycle"
-status: "DOING"
+result_summary: "verified-202610091723-P9JYX4"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 26
+revision: 30
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-09T18:07:28.531Z"
+  updated_at: "2026-10-09T18:09:43.749Z"
   updated_by: "CODER"
-  note: "Defined mark-data290/1017 and span320 unchanged native comparisons pass with ASan/UBSan; Calc96 has actual100 Istanbul four metrics; portable96+5+30 passes upstream-absent. Full office14245 scenarios have passing initial-run or unchanged focused mdds closure evidence; affected shared5 actual100, inventory123 actual100, browser303, tooling14/provenance3 and all declared static gates pass. Global office coverage report was suppressed by the initial timeout and is not claimed; Writer coverage/implementation remains untouched. CALC-014..016 preserve original behavior. Task10 full-cycle checks completed without assertion/timeout/threshold changes."
+  note: "verified-202610091723-P9JYX4"
   attempts: 0
 quality_review:
   state: "pass"
@@ -52,11 +53,16 @@ quality_review:
     - "Reviewed original single-class/file ownership:737 physical mark-data lines (checker738) and existing823 range-list lines (checker824) remain coherent original boundaries below1000. Actual ScMultiSel, mark arrays, ranges, bool owners and shared mdds are reused; numerical document/template syntax adapters are explicit. No duplicate interval/document/string engine or Writer change."
     - "Checked committed290-sequence/1017-snapshot native fixture: every25-field selected observation and command/both-owner result remains retained; five exact pinned full-source hashes independently match. Complete unchanged native groups plus genuine dependencies and ASan/UBSan pass; independent literal mark, post-gap and borrowed-envelope regressions preserve CALC-014..016. Map-row order, selected-tab self-move and generic/lifetime bounds remain explicitly unverified."
     - "Calc96 actual100 four Istanbul metrics and upstream-absent96+5+30 pass. Full office14244 initially passed and its sole unchanged mdds timeout passes in the5-test Istanbul closure at14.15s with actual100 four-owner coverage. Inventory123 actual100,303 browser/tooling14/provenance3, TS7/full lint/format/docs/boundaries/size/tree/provenance and zero Calc/shared registry violations pass. Full global coverage suppression is transparently recorded, with user-authorized Writer coverage exemption preserved; no assertions, timeouts, thresholds, previous tests or semantic states are relaxed."
-commit: null
+commit:
+  hash: "da7b4c674c30e95be2eacec86b5e9deab8421c0e"
+  message: "🔎 P9JYX4 review: Calc selection fidelity and full-cycle evidence"
 comments:
   -
     author: "CODER"
     body: "Start: port complete original mark-data selection owner and span dependencies on calc, then validate native and full-cycle evidence."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610091723-P9JYX4. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -71,8 +77,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Defined mark-data290/1017 and span320 unchanged native comparisons pass with ASan/UBSan; Calc96 has actual100 Istanbul four metrics; portable96+5+30 passes upstream-absent. Full office14245 scenarios have passing initial-run or unchanged focused mdds closure evidence; affected shared5 actual100, inventory123 actual100, browser303, tooling14/provenance3 and all declared static gates pass. Global office coverage report was suppressed by the initial timeout and is not claimed; Writer coverage/implementation remains untouched. CALC-014..016 preserve original behavior. Task10 full-cycle checks completed without assertion/timeout/threshold changes."
+  -
+    type: "verify"
+    at: "2026-10-09T18:09:43.749Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610091723-P9JYX4"
+  -
+    type: "status"
+    at: "2026-10-09T18:09:43.895Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610091723-P9JYX4. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-09T18:07:28.587Z"
+doc_updated_at: "2026-10-09T18:10:30.450Z"
 doc_updated_by: "CODER"
 description: "Task10 of resumed cycle: complete original ScMarkData using actual ScMultiSel/range/bool/shared mdds owners; port original fstalgorithm span conversions and RowSpan/ColRowSpan values as needed; unchanged native comparison, actual100 Calc and full suite with Writer coverage left unchanged."
 sections:
@@ -147,6 +166,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-09T18:09:43.749Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610091723-P9JYX4
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T18:07:28.587Z, excerpt_hash=sha256:70750a07c861cc9046ae9d0b2bf8895d2400dc6c81eaa1035f466f8047821e9c
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610091723-P9JYX4/blueprint/resolved-snapshot.json
+    - old_digest: 7410028bb6f3c62674635c7860ec8618613845c47f7f8e5aa2f6f743cae95e88
+    - current_digest: 7410028bb6f3c62674635c7860ec8618613845c47f7f8e5aa2f6f743cae95e88
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610091723-P9JYX4
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610091723-P9JYX4 --result verified-202610091723-P9JYX4 --commit da7b4c674c30e95be2eacec86b5e9deab8421c0e
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert this task source/tests/probes/fixtures/registry/docs only; preserve existing common dependencies and prior selection work."
   Findings: |-
@@ -199,6 +248,18 @@ sections:
     - Observation: Full application Istanbul run terminated: 14244 passed/1 failed across539 files in816.51s. The sole failure is the unchanged shared mdds native snapshot replay, which exceeded the existing30000ms timeout under initial concurrent native/lint/inventory load; no assertion mismatch was reported. Vitest default reportOnFailure=false suppressed the full application coverage report. Browser scenarios303/303 passed; inventory retry123/123 passed with actual100 all four metrics.
       Impact: Full application scenario coverage has one unresolved timeout. Calc actual100 is separately verified; no full Writer/global coverage claim can be made from the suppressed report.
       Resolution: Run the affected mdds module with unchanged Istanbul instrumentation and100% thresholds after all heavy jobs have ended, collecting only its four production source owners. Keep all original assertions and30000ms timeout. Preserve Writer coverage exemption; record the global-report limitation explicitly.
+
+    - Observation: The exact route-oracle task complete command marked this task DONE but its generated cleanup subject was rejected with E_GIT: commit subject is too generic. Implementation a9c46968e44d and pass review da7b4c674c30 are already committed; only active-task closure metadata remains staged.
+      Impact: No implementation/check failure. Final tracked state still needs a valid active-task artifact commit; message-validation criteria must remain unchanged.
+      Resolution: Follow the recomputed exact artifact-cleanup route once. If the same generated subject is rejected again, persist only this task subtree through ap commit --allow-tasks with a concrete selection/full-cycle closure subject, then verify final route and clean calc status.
+
+    - Observation: The exact recomputed ap commit --close --unstage-others retry also rejects its generated subject as too generic (E_GIT). Task remains DONE with only its own closure artifact pending; code/review/test evidence is unchanged.
+      Impact: The installed automatic subject generator cannot satisfy this repository message validator. Repeating the same generator would not progress; no gate may be weakened.
+      Resolution: Persist the active task artifacts using the existing approved ap commit --allow-tasks path and a concrete Calc-selection/full-cycle finalization subject; then confirm done_direct and clean calc checkout.
+extensions:
+  implementation_commit:
+    hash: "a9c46968e44d6d72b84f550fb6d659fbb51bd31b"
+    message: "🧩 P9JYX4 port: Calc mark-data selection and span owners"
 id_source: "generated"
 ---
 ## Summary
@@ -285,6 +346,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-09T18:09:43.749Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610091723-P9JYX4
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T18:07:28.587Z, excerpt_hash=sha256:70750a07c861cc9046ae9d0b2bf8895d2400dc6c81eaa1035f466f8047821e9c
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610091723-P9JYX4/blueprint/resolved-snapshot.json
+- old_digest: 7410028bb6f3c62674635c7860ec8618613845c47f7f8e5aa2f6f743cae95e88
+- current_digest: 7410028bb6f3c62674635c7860ec8618613845c47f7f8e5aa2f6f743cae95e88
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610091723-P9JYX4
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610091723-P9JYX4 --result verified-202610091723-P9JYX4 --commit da7b4c674c30e95be2eacec86b5e9deab8421c0e
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -342,3 +433,11 @@ ScMarkData is an original948-line owner. Marked row/column spans depend on origi
 - Observation: Full application Istanbul run terminated: 14244 passed/1 failed across539 files in816.51s. The sole failure is the unchanged shared mdds native snapshot replay, which exceeded the existing30000ms timeout under initial concurrent native/lint/inventory load; no assertion mismatch was reported. Vitest default reportOnFailure=false suppressed the full application coverage report. Browser scenarios303/303 passed; inventory retry123/123 passed with actual100 all four metrics.
   Impact: Full application scenario coverage has one unresolved timeout. Calc actual100 is separately verified; no full Writer/global coverage claim can be made from the suppressed report.
   Resolution: Run the affected mdds module with unchanged Istanbul instrumentation and100% thresholds after all heavy jobs have ended, collecting only its four production source owners. Keep all original assertions and30000ms timeout. Preserve Writer coverage exemption; record the global-report limitation explicitly.
+
+- Observation: The exact route-oracle task complete command marked this task DONE but its generated cleanup subject was rejected with E_GIT: commit subject is too generic. Implementation a9c46968e44d and pass review da7b4c674c30 are already committed; only active-task closure metadata remains staged.
+  Impact: No implementation/check failure. Final tracked state still needs a valid active-task artifact commit; message-validation criteria must remain unchanged.
+  Resolution: Follow the recomputed exact artifact-cleanup route once. If the same generated subject is rejected again, persist only this task subtree through ap commit --allow-tasks with a concrete selection/full-cycle closure subject, then verify final route and clean calc status.
+
+- Observation: The exact recomputed ap commit --close --unstage-others retry also rejects its generated subject as too generic (E_GIT). Task remains DONE with only its own closure artifact pending; code/review/test evidence is unchanged.
+  Impact: The installed automatic subject generator cannot satisfy this repository message validator. Repeating the same generator would not progress; no gate may be weakened.
+  Resolution: Persist the active task artifacts using the existing approved ap commit --allow-tasks path and a concrete Calc-selection/full-cycle finalization subject; then confirm done_direct and clean calc checkout.
