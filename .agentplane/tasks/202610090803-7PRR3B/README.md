@@ -1,10 +1,11 @@
 ---
 id: "202610090803-7PRR3B"
 title: "Handle native frame attribute change invalidation"
-status: "DOING"
+result_summary: "Native frame attribute invalidation restored with164 targeted cases and all-four100 coverage"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
   findings:
     - "Original borrowed item identities, ascending delta accumulation, page-before-local ordering, row size/split priority, empty-lower cell orientation and actual shared/reset/lock/parent/history behavior pass targeted checks."
     - "Three current modules have complete fresh maps; calbck/hints retain only all unchanged original source regions and exact mapped locations after old-source SHA reconstruction; prior249 certificate digests and313 whole identical files verified. Raw threshold failure retained, no counter or gate weakening."
-commit: null
+commit:
+  hash: "66e1e0626548059dcb738a092e320185bc0761e9"
+  message: "🧩 7PRR3B code: restore native frame attribute reactions"
 comments:
   -
     author: "CODER"
     body: "Start: Restore approved native attribute callbacks on original detached table frames; preserve silent claims and typed history, test upstream-absent and retain explicit root/UI integration gaps."
+  -
+    author: "CODER"
+    body: "Verified: Native detached frame attribute callbacks restored;164 targeted cases and exact source-bound all-four100 coverage pass upstream-absent. Ten canonical inventory records and all declared scoped gates pass; broader page/root/UI hierarchy remains unverified."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified represented detached native frame attribute dispatch against pinned source.164 unique targeted cases,12 fresh,0 failures, upstream absent and restored. Changed5 modules and source-bound application certificate all-four100 without threshold/counter sanitization or passing replay. Scoped statics/build and final canonical registry/source/routing/doctor gates pass; original module states/defaults/classes and registered I/O/recovery deviations preserved. Native page/root/UI hierarchy remains unverified; no full250."
+  -
+    type: "status"
+    at: "2026-10-09T08:30:04.677Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Native detached frame attribute callbacks restored;164 targeted cases and exact source-bound all-four100 coverage pass upstream-absent. Ten canonical inventory records and all declared scoped gates pass; broader page/root/UI hierarchy remains unverified."
 doc_version: 3
-doc_updated_at: "2026-10-09T08:29:10.586Z"
+doc_updated_at: "2026-10-09T08:30:04.678Z"
 doc_updated_by: "CODER"
 description: "Iteration250 under C9TN6M: restore original SwFrame attribute delta dispatch and row size/cell vertical orientation invalidation from pinned LibreOffice, preserving silent shared claims. This required physical-frame callback replaces inherited no-op behavior before persistent page/root/UI frame integration."
 sections:
