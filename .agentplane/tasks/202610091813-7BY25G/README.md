@@ -4,7 +4,7 @@ title: "Port Calc UInt16 row segments over shared segment storage"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,34 @@ verification:
   updated_by: "CODER"
   note: "All100 Calc tests actual100 Istanbul four metrics, shared5 actual100, genuine unchanged native706 plus bool436/mdds3020 and five original assertions, portable100+5+30 and declared TS7/static/registry/tooling/provenance gates pass. Lossless62 snapshots retain all observations. CALC-017 preserves upstream. No whole-module parity claim, Writer changes or full-suite rerun; task1/10."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-09T18:39:36.587Z"
+  updated_by: "EVALUATOR"
+  note: "Reviewed dd429d4b5b6959adc09438137337811ac295b596: source-shaped complete UInt16 facade and shared-template operations satisfy approved finite contracts, actual100 Calc and declared checks; preserve original suspicious behavior and unverified broader parity."
+  evaluated_sha: "dd429d4b5b6959adc09438137337811ac295b596"
+  blueprint_digest: "d8b8fd21dc98c1cf4c329f353a2d2ecaf2d00ac9d24ce49808e75a609a50aee8"
+  evidence_refs:
+    - ".agentplane/tasks/202610091813-7BY25G/README.md"
+    - ".agentplane/tasks/202610091813-7BY25G/quality/20261009-183936587-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610091813-7BY25G/quality/20261009-183936587-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610091813-7BY25G/quality/20261009-183936587-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610091813-7BY25G/blueprint/resolved-snapshot.json"
+    - "output/playwright/task11-review-fixture.log"
+    - "output/playwright/task11-native-intern-check.log"
+    - "output/playwright/task11-native-assertions.log"
+    - "output/playwright/task11-calc-coverage-intern.log"
+    - "apps/office/coverage/calc/coverage-summary.json"
+    - "output/playwright/task11-shared-coverage.log"
+    - "output/playwright/task11-portable-calc-intern.log"
+    - "output/playwright/task11-portable-shared-intern.log"
+    - "output/playwright/task11-portable-inventory-intern.log"
+    - "output/playwright/task11-inventory-final.log"
+    - "output/playwright/task11-registry-calc-final.log"
+    - "output/playwright/task11-provenance-final.log"
+    - "output/playwright/task11-verification.txt"
+  findings:
+    - "Compared numeric source loops and owner declarations to pinned upstream: indexed local-iterator and leaf shared-hint sums, first-policy/later-leaf ForwardIterator, required UInt16 defaults, signed32 narrowing, false skip-start insertion and failed output preservation remain distinct and are exercised. Native probe extracts unchanged complete numeric/template/safeint groups and verifies real mdds/Boost; all 706 decoded committed sequences equal raw native outputs, and all four pinned file hashes match. Existing bool436 fixture/test remain unchanged. The valid UInt16/signed32 invariant bounds sums below2^47; no overflow exclusion, private-state fabrication or acceptance relaxation is introduced. CALC-017 retains ignored lookup/precondition behavior and makes no defined invalid native-result claim. The coherent 542-line original module boundary is reviewed under the size budget. Metadata anchors and 21 Calc/1 shared capabilities report zero semantic violations while all whole-module parity statuses stay unverified."
 commit: null
 comments:
   -
