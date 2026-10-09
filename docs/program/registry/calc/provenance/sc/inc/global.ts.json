@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/inc/global.ts",
+          "marker": "UpdateRefMode"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/refupdate.test.ts",
+          "marker": "retains original mode values and copy is an untouched reference"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/global.hxx",
+          "marker": "enum UpdateRefMode"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sc/inc/global.ts",
+    "localSymbols": [
+      "UpdateRefMode"
+    ],
+    "omittedResponsibilities": [
+      "Other global.hxx declarations, document/compiler consumers and whole Calc parity remain unverified."
+    ],
+    "preservedResponsibilities": [
+      "Original UpdateRefMode names, declaration order and numeric values0..3."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sc/inc/global.hxx",
+    "upstreamSymbols": [
+      "UpdateRefMode"
+    ]
+  }
+}

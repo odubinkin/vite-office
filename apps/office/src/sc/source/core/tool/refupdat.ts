@@ -1,9 +1,102 @@
 /** @fileoverview Original Calc reference transpose and area-growth geometry, reusing existing coordinate owners. */
 import { ScAddress, ScRange } from "../../../inc/address";
+import { UpdateRefMode } from "../../../inc/global";
 import type { SCCOL, SCROW, SCTAB } from "../../../inc/types";
 import type { ScAddressDocument } from "./address";
 import type { ScComplexRefData, ScReferenceDocument } from "./refdata";
 import { ScRefUpdateRes } from "../inc/refupdat";
+
+/** Existing numerical document getter view plus the original expansion policy getter. */
+export interface ScRefUpdateDocument extends ScAddressDocument {
+  /** Reads current document reference expansion policy. @returns Whether insertion expands adjacent references. */
+  IsExpandRefs(): boolean;
+}
+
+/** Represents template destination widths for native static casts and compound assignment. @param value - Defined arithmetic result. @param width - Native destination width. @returns Narrowed signed coordinate. */
+function narrowCoordinate(value: number, width: 16 | 32): number {
+  return width === 16 ? (value << 16) >> 16 : value | 0;
+}
+
+/** Moves a starting coordinate with the original deletion shrink and clipping order. @param ref - Raw coordinate. @param start - Insertion/deletion boundary. @param delta - Displacement. @param mask - Inclusive maximum. @param width - Native template destination width. @param shrink - Whether deletion shrinks this axis. @returns Updated coordinate and clipping flag. */
+function lcl_MoveStart(
+  ref: number,
+  start: number,
+  delta: number,
+  mask: number,
+  width: 16 | 32,
+  shrink = true,
+): [number, boolean] {
+  if (ref >= start) ref = narrowCoordinate(ref + delta, width);
+  else if (delta < 0 && shrink && ref >= start + delta)
+    ref = narrowCoordinate(start + delta, width);
+  if (ref < 0) return [0, true];
+  if (ref > mask) return [mask, true];
+  return [ref, false];
+}
+
+/** Moves an ending coordinate with the original one-before-boundary deletion shrink. @param ref - Raw coordinate. @param start - Insertion/deletion boundary. @param delta - Displacement. @param mask - Inclusive maximum. @param width - Native template destination width. @param shrink - Whether deletion shrinks this axis. @returns Updated coordinate and clipping flag. */
+function lcl_MoveEnd(
+  ref: number,
+  start: number,
+  delta: number,
+  mask: number,
+  width: 16 | 32,
+  shrink = true,
+): [number, boolean] {
+  if (ref >= start) ref = narrowCoordinate(ref + delta, width);
+  else if (delta < 0 && shrink && ref >= start + delta)
+    ref = narrowCoordinate(start + delta - 1, width);
+  if (ref < 0) return [0, true];
+  if (ref > mask) return [mask, true];
+  return [ref, false];
+}
+
+/** Reorders a sheet coordinate and intervening sheets in original movement direction. @param ref - Raw sheet. @param start - Moved start sheet. @param end - Moved end sheet. @param delta - Sheet displacement. @returns Updated coordinate and changed flag. */
+function lcl_MoveReorder(ref: SCTAB, start: SCTAB, end: SCTAB, delta: SCTAB): [SCTAB, boolean] {
+  if (ref >= start && ref <= end) return [narrowCoordinate(ref + delta, 16), true];
+  if (delta > 0) {
+    if (ref >= start && ref <= end + delta) {
+      // Initial return excludes ref <= end here; native inner moved-range branch cannot execute.
+      return [narrowCoordinate(ref - (end - start + 1), 16), true];
+    }
+  } else if (ref >= start + delta && ref <= end) {
+    // Initial return excludes ref >= start here; only the native intervening-sheet branch remains.
+    return [narrowCoordinate(ref + end - start + 1, 16), true];
+  }
+  return [ref, false];
+}
+
+/** Moves and clips a raw coordinate. @param ref - Raw coordinate. @param delta - Displacement. @param mask - Inclusive maximum. @param width - Native destination width. @returns Updated coordinate and clipping flag. */
+function lcl_MoveItCut(
+  ref: number,
+  delta: number,
+  mask: number,
+  width: 16 | 32,
+): [number, boolean] {
+  ref = narrowCoordinate(ref + delta, width);
+  if (ref < 0) return [0, true];
+  if (ref > mask) return [mask, true];
+  return [ref, false];
+}
+
+/** Checks the original insertion expansion predicate before movement. @param first - Starting coordinate. @param last - Ending coordinate. @param start - Insertion boundary. @param delta - Displacement. @returns Whether insertion expands this range. */
+function IsExpand(first: number, last: number, start: number, delta: number): boolean {
+  return (
+    delta > 0 && first < last && ((start <= first && first < start + delta) || last + 1 === start)
+  );
+}
+
+/** Expands the original selected endpoint after movement. @param first - Moved start coordinate. @param last - Moved end coordinate. @param start - Insertion boundary. @param delta - Displacement. @param width - Native destination width. @returns Expanded endpoint pair. */
+function Expand(
+  first: number,
+  last: number,
+  start: number,
+  delta: number,
+  width: 16 | 32,
+): [number, number] {
+  if (last + 1 === start) return [first, narrowCoordinate(last + delta, width)];
+  return [narrowCoordinate(first - delta, width), last];
+}
 
 /** Wraps once at the original mask; callers retain native coordinate widths through address assignment. @param ref - Already narrowed native coordinate. @param mask - Inclusive wrap maximum. @returns Coordinate after a single boundary crossing. */
 function lcl_MoveItWrap(ref: number, mask: number): number {
@@ -15,6 +108,151 @@ function lcl_MoveItWrap(ref: number, mask: number): number {
 /** Original static reference-update owner; numerical methods retain their native source responsibilities. */
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class -- Original ScRefUpdate owns static operations at this public boundary.
 export class ScRefUpdate {
+  /** Updates original raw reference coordinates in axis order with native status precedence. @param doc - Document getter view. @param mode - Original update mode. @param col1 - Area start column. @param row1 - Area start row. @param tab1 - Area start sheet. @param col2 - Area end column. @param row2 - Area end row. @param tab2 - Area end sheet. @param dx - Column displacement. @param dy - Row displacement. @param dz - Sheet displacement. @param refCol1 - Reference start column. @param refRow1 - Reference start row. @param refTab1 - Reference start sheet. @param refCol2 - Reference end column. @param refRow2 - Reference end row. @param refTab2 - Reference end sheet. @returns Original result followed by native output-reference coordinates. */
+  public static Update(
+    doc: ScRefUpdateDocument,
+    mode: UpdateRefMode,
+    col1: SCCOL,
+    row1: SCROW,
+    tab1: SCTAB,
+    col2: SCCOL,
+    row2: SCROW,
+    tab2: SCTAB,
+    dx: SCCOL,
+    dy: SCROW,
+    dz: SCTAB,
+    refCol1: SCCOL,
+    refRow1: SCROW,
+    refTab1: SCTAB,
+    refCol2: SCCOL,
+    refRow2: SCROW,
+    refTab2: SCTAB,
+  ): [ScRefUpdateRes, SCCOL, SCROW, SCTAB, SCCOL, SCROW, SCTAB] {
+    let result = ScRefUpdateRes.UR_NOTHING;
+    const oldCol1 = refCol1,
+      oldRow1 = refRow1,
+      oldTab1 = refTab1,
+      oldCol2 = refCol2,
+      oldRow2 = refRow2,
+      oldTab2 = refTab2;
+    let cut1: boolean, cut2: boolean;
+    if (mode === UpdateRefMode.URM_INSDEL) {
+      const expand = doc.IsExpandRefs();
+      if (dx && refRow1 >= row1 && refRow2 <= row2 && refTab1 >= tab1 && refTab2 <= tab2) {
+        const exp = expand && IsExpand(refCol1, refCol2, col1, dx);
+        [refCol1, cut1] = lcl_MoveStart(refCol1, col1, dx, doc.MaxCol(), 16);
+        [refCol2, cut2] = lcl_MoveEnd(refCol2, col1, dx, doc.MaxCol(), 16);
+        if (refCol2 < refCol1) {
+          result = ScRefUpdateRes.UR_INVALID;
+          refCol2 = refCol1;
+        } else if (cut2 && refCol2 === 0) result = ScRefUpdateRes.UR_INVALID;
+        else if (cut1 || cut2) result = ScRefUpdateRes.UR_UPDATED;
+        if (exp) {
+          [refCol1, refCol2] = Expand(refCol1, refCol2, col1, dx, 16);
+          result = ScRefUpdateRes.UR_UPDATED;
+        }
+        if (result !== ScRefUpdateRes.UR_NOTHING && oldCol1 === 0 && oldCol2 === doc.MaxCol()) {
+          result = ScRefUpdateRes.UR_STICKY;
+          refCol1 = oldCol1;
+          refCol2 = oldCol2;
+        } else if (oldCol2 === doc.MaxCol() && oldCol1 < doc.MaxCol()) {
+          refCol2 = oldCol2;
+          if (result === ScRefUpdateRes.UR_NOTHING) result = ScRefUpdateRes.UR_STICKY;
+        }
+      }
+      if (dy && refCol1 >= col1 && refCol2 <= col2 && refTab1 >= tab1 && refTab2 <= tab2) {
+        const exp = expand && IsExpand(refRow1, refRow2, row1, dy);
+        [refRow1, cut1] = lcl_MoveStart(refRow1, row1, dy, doc.MaxRow(), 32);
+        [refRow2, cut2] = lcl_MoveEnd(refRow2, row1, dy, doc.MaxRow(), 32);
+        if (refRow2 < refRow1) {
+          result = ScRefUpdateRes.UR_INVALID;
+          refRow2 = refRow1;
+        } else if (cut2 && refRow2 === 0) result = ScRefUpdateRes.UR_INVALID;
+        else if (cut1 || cut2) result = ScRefUpdateRes.UR_UPDATED;
+        if (exp) {
+          [refRow1, refRow2] = Expand(refRow1, refRow2, row1, dy, 32);
+          result = ScRefUpdateRes.UR_UPDATED;
+        }
+        if (result !== ScRefUpdateRes.UR_NOTHING && oldRow1 === 0 && oldRow2 === doc.MaxRow()) {
+          result = ScRefUpdateRes.UR_STICKY;
+          refRow1 = oldRow1;
+          refRow2 = oldRow2;
+        } else if (oldRow2 === doc.MaxRow() && oldRow1 < doc.MaxRow()) {
+          refRow2 = oldRow2;
+          if (result === ScRefUpdateRes.UR_NOTHING) result = ScRefUpdateRes.UR_STICKY;
+        }
+      }
+      if (dz && refCol1 >= col1 && refCol2 <= col2 && refRow1 >= row1 && refRow2 <= row2) {
+        let maxTab = narrowCoordinate(doc.GetTableCount() - 1, 16);
+        maxTab = narrowCoordinate(maxTab + dz, 16);
+        const exp = expand && IsExpand(refTab1, refTab2, tab1, dz);
+        [refTab1, cut1] = lcl_MoveStart(refTab1, tab1, dz, maxTab, 16, false);
+        [refTab2, cut2] = lcl_MoveEnd(refTab2, tab1, dz, maxTab, 16, false);
+        if (refTab2 < refTab1) {
+          result = ScRefUpdateRes.UR_INVALID;
+          refTab2 = refTab1;
+        } else if (cut1 || cut2) result = ScRefUpdateRes.UR_UPDATED;
+        if (exp) {
+          [refTab1, refTab2] = Expand(refTab1, refTab2, tab1, dz, 16);
+          result = ScRefUpdateRes.UR_UPDATED;
+        }
+      }
+    } else if (mode === UpdateRefMode.URM_MOVE) {
+      if (
+        refCol1 >= col1 - dx &&
+        refRow1 >= row1 - dy &&
+        refTab1 >= tab1 - dz &&
+        refCol2 <= col2 - dx &&
+        refRow2 <= row2 - dy &&
+        refTab2 <= tab2 - dz
+      ) {
+        if (dx) {
+          [refCol1, cut1] = lcl_MoveItCut(refCol1, dx, doc.MaxCol(), 16);
+          [refCol2, cut2] = lcl_MoveItCut(refCol2, dx, doc.MaxCol(), 16);
+          if (cut1 || cut2) result = ScRefUpdateRes.UR_UPDATED;
+          if (result !== ScRefUpdateRes.UR_NOTHING && oldCol1 === 0 && oldCol2 === doc.MaxCol()) {
+            result = ScRefUpdateRes.UR_STICKY;
+            refCol1 = oldCol1;
+            refCol2 = oldCol2;
+          }
+        }
+        if (dy) {
+          [refRow1, cut1] = lcl_MoveItCut(refRow1, dy, doc.MaxRow(), 32);
+          [refRow2, cut2] = lcl_MoveItCut(refRow2, dy, doc.MaxRow(), 32);
+          if (cut1 || cut2) result = ScRefUpdateRes.UR_UPDATED;
+          if (result !== ScRefUpdateRes.UR_NOTHING && oldRow1 === 0 && oldRow2 === doc.MaxRow()) {
+            result = ScRefUpdateRes.UR_STICKY;
+            refRow1 = oldRow1;
+            refRow2 = oldRow2;
+          }
+        }
+        if (dz) {
+          const maxTab = narrowCoordinate(doc.GetTableCount() - 1, 16);
+          [refTab1, cut1] = lcl_MoveItCut(refTab1, dz, maxTab, 16);
+          [refTab2, cut2] = lcl_MoveItCut(refTab2, dz, maxTab, 16);
+          if (cut1 || cut2) result = ScRefUpdateRes.UR_UPDATED;
+        }
+      }
+    } else if (mode === UpdateRefMode.URM_REORDER) {
+      if (dz && refCol1 >= col1 && refCol2 <= col2 && refRow1 >= row1 && refRow2 <= row2) {
+        [refTab1, cut1] = lcl_MoveReorder(refTab1, tab1, tab2, dz);
+        [refTab2, cut2] = lcl_MoveReorder(refTab2, tab1, tab2, dz);
+        if (cut1 || cut2) result = ScRefUpdateRes.UR_UPDATED;
+      }
+    }
+    if (
+      result === ScRefUpdateRes.UR_NOTHING &&
+      (oldCol1 !== refCol1 ||
+        oldRow1 !== refRow1 ||
+        oldTab1 !== refTab1 ||
+        oldCol2 !== refCol2 ||
+        oldRow2 !== refRow2 ||
+        oldTab2 !== refTab2)
+    )
+      result = ScRefUpdateRes.UR_UPDATED;
+    return [result, refCol1, refRow1, refTab1, refCol2, refRow2, refTab2];
+  }
+
   /** Wraps only relative axes after absolute resolution, then orders and writes back both endpoints. @param doc - Existing document getter view. @param position - Formula position. @param maxCol - Inclusive wrap column maximum. @param maxRow - Inclusive wrap row maximum. @param ref - Initialized receiving complex reference. @returns Nothing. */
   public static MoveRelWrap(
     doc: ScReferenceDocument,

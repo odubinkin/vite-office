@@ -9,7 +9,8 @@
     "subsystem": "reference-update",
     "capabilityIds": [
       "CAP-c8827eb9-bcb3-47ca-91cc-a632fb0f9153",
-      "CAP-9cbb8ab9-49e6-44cc-8d66-2467a1e55353"
+      "CAP-9cbb8ab9-49e6-44cc-8d66-2467a1e55353",
+      "CAP-6d0889c7-09ca-4bef-8b83-5567192ee769"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -22,9 +23,11 @@
         "scripts/calc-refupdat-native-probe.mjs#const originals =",
         "vendor/libreoffice-reference/sc/source/core/tool/refupdat.cxx#ScRefUpdate::DoTranspose",
         "apps/office/src/sc/source/core/tool/refwrap.test.ts#matches every original native relative wrap outcome",
-        "scripts/calc-refwrap-native-probe.mjs#const originalMove ="
+        "scripts/calc-refwrap-native-probe.mjs#const originalMove =",
+        "apps/office/src/sc/source/core/tool/refupdate.test.ts#matches every original native ordinary update outcome",
+        "scripts/calc-refupdate-native-probe.mjs#const originals ="
       ],
-      "justification": "Task 202610090915-GRTK08 ports DoTranspose, UpdateTranspose and UpdateGrow using existing ScAddress/ScRange and document getters. Output tuple represents native coordinate reference parameters; original static class owner retained with a narrow lint annotation. Complete original method interval, original header/result enum and unchanged coordinate constructors/ordering/Contains compile under ASan/UBSan;20203 states compare every native result and raw output, including source/ref and destination/endpoint aliases. Native debug checks are not release behavior and remain uncertified. Ordinary/big Update overloads, full document/compiler/change-tracking integration, debug assertion enforcement and undefined arithmetic domains remain subsequent work. Bounded numerical fixtures do not establish full reference-update or whole Calc parity. Task 202610091325-52SMH5 adds original MoveRelWrap and lcl_MoveItWrap. Existing ScComplexRefData, ScAddress, ScRange and ScSheetLimits are reused. Unchanged helper, method, complete native numerical single/complex owners and address ordering compile with NDEBUG plus ASan/UBSan. All15616 initialized states compare every raw endpoint and eight-bit flag, mixed relative axes, custom limits/masks, positive table counts, invalid sentinels, one-step wrap, trim and TS endpoint identity. 52 Calc tests retain actual100 Istanbul coverage after TS7 migration. Ordinary/big Update overloads, full document/compiler/token/named-range integration, debug assertion enforcement and undefined arithmetic domains remain subsequent work; bounded initialized release fixtures do not establish full reference-update or whole Calc parity.",
+      "justification": "Task 202610090915-GRTK08 ports DoTranspose, UpdateTranspose and UpdateGrow using existing ScAddress/ScRange and document getters. Output tuple represents native coordinate reference parameters; original static class owner retained with a narrow lint annotation. Complete original method interval, original header/result enum and unchanged coordinate constructors/ordering/Contains compile under ASan/UBSan;20203 states compare every native result and raw output, including source/ref and destination/endpoint aliases. Native debug checks are not release behavior and remain uncertified. Big-coordinate Update overload, full document/compiler/change-tracking integration, debug assertion enforcement and undefined arithmetic domains remain subsequent work. Bounded numerical fixtures do not establish full reference-update or whole Calc parity. Task 202610091325-52SMH5 adds original MoveRelWrap and lcl_MoveItWrap. Existing ScComplexRefData, ScAddress, ScRange and ScSheetLimits are reused. Unchanged helper, method, complete native numerical single/complex owners and address ordering compile with NDEBUG plus ASan/UBSan. All15616 initialized states compare every raw endpoint and eight-bit flag, mixed relative axes, custom limits/masks, positive table counts, invalid sentinels, one-step wrap, trim and TS endpoint identity. 52 Calc tests retain actual100 Istanbul coverage after TS7 migration. Big-coordinate Update overload, full document/compiler/token/named-range integration, debug assertion enforcement and undefined arithmetic domains remain subsequent work; bounded initialized release fixtures do not establish full reference-update or whole Calc parity. Task 202610091335-767ATZ ports ordinary-coordinate Update, original UpdateRefMode and private numeric helper responsibilities. A structural getter view adds only original IsExpandRefs with no fabricated policy default or document owner. Native output reference parameters become a result/six-coordinate tuple. Complete unchanged helper, expansion and ordinary Update source intervals compile with exact pinned blobs/hashes under ASan/UBSan;32704 outcomes cover both expansion policies, clipping/deletion, sticky result precedence, mixed axis ordering, move containment, reordered sheets and signed16 boundaries. Two secondary reorder guards are unreachable after the initial moved-range return and replaced only by their direct native outcomes with proof comments; comparison C++ bodies stay unchanged. All57 Calc tests retain actual100 Istanbul. Big-coordinate Update overload, full document/compiler/change-tracking/consumer integration, native aliased scalar output-reference storage, debug assertion enforcement and undefined arithmetic domains remain subsequent work; bounded defined native fixtures do not establish whole reference-update or Calc parity.",
       "knownViolations": [],
       "localSymbols": [
         "ScRefUpdate",
@@ -32,7 +35,16 @@
         "UpdateTranspose",
         "UpdateGrow",
         "MoveRelWrap",
-        "lcl_MoveItWrap"
+        "lcl_MoveItWrap",
+        "ScRefUpdateDocument",
+        "Update",
+        "narrowCoordinate",
+        "lcl_MoveStart",
+        "lcl_MoveEnd",
+        "lcl_MoveReorder",
+        "lcl_MoveItCut",
+        "IsExpand",
+        "Expand"
       ],
       "sourceResponsibility": "aligned",
       "upstreamFile": "sc/source/core/tool/refupdat.cxx",
@@ -41,7 +53,16 @@
         "ScRefUpdate::UpdateTranspose",
         "ScRefUpdate::UpdateGrow",
         "ScRefUpdate::MoveRelWrap",
-        "lcl_MoveItWrap"
+        "lcl_MoveItWrap",
+        "ScRefUpdate::Update",
+        "lcl_MoveStart",
+        "lcl_MoveEnd",
+        "lcl_MoveReorder",
+        "lcl_MoveItCut",
+        "IsExpand",
+        "Expand",
+        "IsExpandRefs",
+        "sal::static_int_cast"
       ]
     }
   }

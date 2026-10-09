@@ -251,7 +251,7 @@ Portable tests compare all 20203 initialized growth/transpose/alias outcomes
 and retain independent literal contracts. Reproduce it with
 `node scripts/calc-refupdat-native-probe.mjs --check`, which checks pinned Git
 blobs and full-source/extracted SHA256 hashes. Ordinary tests need no compiler
-or upstream checkout. Ordinary/big `Update` overloads, full
+or upstream checkout. Big-coordinate `Update`, full
 consumer integration, native debug checks and undefined arithmetic remain
 pending; no replacement methods or fake document owners are introduced.
 
@@ -283,6 +283,41 @@ upstream nor C++; format generated JSON with repository Prettier after `--write`
 All 52 Calc tests pass with actual100 Istanbul coverage. This is task 1 of the
 next ten-task interval; the user explicitly resumed the paused goal after merging
 Writer, TS7 and Istanbul. Full-suite validation is due at task 10 of this interval.
+
+## Ordinary coordinate reference updates
+
+Task `202610091335-767ATZ` adds original `UpdateRefMode` at `sc/inc/global` and
+the ordinary `ScRefUpdate.Update()` scalar parameter contract. Its output tuple
+contains the original result followed by six native mutable-reference coordinates.
+The document getter view adds only `IsExpandRefs()`; the caller supplies the real
+policy and no replacement document or default setting is introduced.
+
+Insertion/deletion processes columns, rows then sheets with each subsequent
+predicate using the coordinates already updated. Reference expansion retains
+the before-movement test and after-movement endpoint adjustment. Start and end
+deletion shrinking differ by one coordinate; sheets disable shrinking and adjust
+their inclusive maximum to the new table count. Clipping, collapsed ends,
+whole-axis and end-only sticky restoration preserve native result replacement
+order. Movement tests containment in destination minus displacement. Reordering
+affects sheets and intervening sheets only. Copy leaves raw coordinates untouched.
+
+Native template destination casts and compound assignments use explicit signed16
+column/sheet and signed32 row narrowing. Two secondary moved-range guards in
+`lcl_MoveReorder` cannot execute after the initial moved-range return; TS states
+the remaining native outcomes directly with proof comments. The original C++
+helper bodies remain unchanged in the comparison probe.
+
+`scripts/calc-refupdate-native-probe.mjs` compiles complete original helper,
+expansion and ordinary Update intervals with exact pinned Git blobs and SHA256
+hashes under ASan/UBSan. All 32,704 saved native outcomes compare raw coordinates
+and result codes across both expansion policies, clipping, sticky references,
+mixed axes, source containment, reversed raw ranges and sheet reorder directions.
+Run `node scripts/calc-refupdate-native-probe.mjs --check` to reproduce them;
+ordinary tests use the saved fixture. Full document/range-list/compiler consumers,
+the big-coordinate overload, native aliased scalar output storage, debug checks
+and undefined arithmetic remain unverified. Inventory retains unverified semantic
+parity. All 57 Calc tests retain actual100 Istanbul coverage. This is task 2 of
+the resumed ten-task interval; the next full suite is due at task 10.
 
 JavaScript tuples represent native output reference parameters. Equality and
 ordering methods represent C++ operators. Undefined native uninitialized
@@ -321,8 +356,9 @@ full-suite verification is task 10. That run is recorded in
 122 inventory tests and 303 browser scenarios pass. Calc and inventory retain
 actual100 coverage. The user explicitly left one uncovered Writer painting
 branch for another branch, and requested goal pause after the complete run.
-The next full cycle is due after ten more completed Calc agentplane tasks upon
-resumption.
+The user resumed the goal after merging Writer, TS7 and Istanbul. Relative wrapping
+and ordinary reference updating are tasks 1 and 2 of the next interval; the full
+cycle is due at task 10.
 
 Source research includes the per-file MPL 2.0 and inherited Apache notices in
 `sc/inc/address.hxx`, `sc/inc/sheetlimits.hxx`, `sc/inc/refdata.hxx`,

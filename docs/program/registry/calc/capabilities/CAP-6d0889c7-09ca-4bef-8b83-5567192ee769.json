@@ -1,0 +1,98 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-6d0889c7-09ca-4bef-8b83-5567192ee769",
+    "capabilityId": "CAP-6d0889c7-09ca-4bef-8b83-5567192ee769",
+    "suite": "calc",
+    "subsystem": "reference-update",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original UpdateRefMode four-value domain and ordinary ScRefUpdate Update scalar parameter/result contract; native mutable coordinate outputs use a result/coordinate tuple.",
+      "Original sequential column/row/sheet predicates, raw ordering, explicit document IsExpandRefs policy and insertion expansion helpers; deletion shrink disabled only for sheets.",
+      "Native signed16 column/sheet and signed32 row destination widths, clipping, invalid collapsed ends, whole-axis/end sticky restoration and status replacement precedence.",
+      "Move source containment derives from destination minus displacement; sheet-only reorder updates both moved and intervening sheets in original direction.",
+      "Final raw coordinate comparison returns UPDATED only when no earlier result exists; copy remains untouched; native unreachable reorder guards are expressed directly with proofs."
+    ],
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "Original owner, scalar parameter order, mode values, sequential axis logic, helper responsibilities and defined native-width outcomes retained; native mutable outputs are explicit tuples."
+    },
+    "capability": "Calc ordinary coordinate reference updates",
+    "gaps": [
+      "Big-coordinate Update overload, full document/compiler/change-tracking/consumer integration, native aliased scalar output-reference storage, debug assertion enforcement and undefined arithmetic domains remain subsequent work; bounded defined native fixtures do not establish whole reference-update or Calc parity."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sc/inc/global.hxx",
+          "marker": "enum UpdateRefMode"
+        },
+        {
+          "path": "sc/source/core/tool/refupdat.cxx",
+          "marker": "ScRefUpdateRes ScRefUpdate::Update( const ScDocument&"
+        },
+        {
+          "path": "sc/source/core/inc/refupdat.hxx",
+          "marker": "static ScRefUpdateRes Update"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sc/qa/unit/ucalc_rangelst.cxx",
+          "marker": "testUpdateReference"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/README.md",
+          "marker": "formula"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/inc/global.ts",
+          "marker": "UpdateRefMode"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/refupdat.ts",
+          "marker": "public static Update("
+        },
+        {
+          "path": "scripts/calc-refupdate-native-probe.mjs",
+          "marker": "const originals ="
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/refupdate.test.ts",
+          "marker": "matches every original native ordinary update outcome"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/refupdate.test.ts",
+          "marker": "expands adjacent multi-coordinate references only when document policy permits"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Ordinary coordinate reference updates"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "Update ordinary raw range references for insertion/deletion, contained movement and sheet reorder with original expansion clipping sticky/invalid results",
+    "scopeLimitations": [
+      "Big-coordinate Update overload, full document/compiler/change-tracking/consumer integration, native aliased scalar output-reference storage, debug assertion enforcement and undefined arithmetic domains remain subsequent work; bounded defined native fixtures do not establish whole reference-update or Calc parity.",
+      "The upstream range-list update tests identify the original reference-update consumer responsibility; full range-list UpdateReference and document mutation integration are not certified."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

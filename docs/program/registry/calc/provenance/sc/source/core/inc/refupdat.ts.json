@@ -16,6 +16,10 @@
         {
           "path": "apps/office/src/sc/source/core/tool/refwrap.test.ts",
           "marker": "matches every original native relative wrap outcome"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/refupdate.test.ts",
+          "marker": "matches every original native ordinary update outcome"
         }
       ],
       "upstream": [
@@ -30,7 +34,7 @@
       "ScRefUpdateRes"
     ],
     "omittedResponsibilities": [
-      "Ordinary/big Update overloads, full document/compiler/change-tracking integration, debug assertion enforcement and undefined arithmetic domains remain subsequent work. Bounded numerical fixtures do not establish full reference-update or whole Calc parity."
+      "Big-coordinate Update overload, full document/compiler/change-tracking integration, debug assertion enforcement and undefined arithmetic domains remain subsequent work. Bounded numerical fixtures do not establish full reference-update or whole Calc parity."
     ],
     "preservedResponsibilities": [
       "Original four-value ScRefUpdateRes domain and static geometry owner at core/inc and core/tool boundaries.",
@@ -40,7 +44,12 @@
       "Original MoveRelWrap owner and private lcl_MoveItWrap responsibility reuse existing numerical references and sheet limits.",
       "Resolve and sort absolute coordinates before wrapping; wrap only each endpoint axis flagged relative and cross each mask only once, with native assignment widths.",
       "Document table count minus one is the inclusive sheet wrap maximum; independent supplied column/row wrap masks differ from document validity limits.",
-      "Order the wrapped absolute endpoints before SetRange; retain endpoint flags, monotone deletion, stable endpoint identity and independent trim state."
+      "Order the wrapped absolute endpoints before SetRange; retain endpoint flags, monotone deletion, stable endpoint identity and independent trim state.",
+      "Original UpdateRefMode four-value domain and ordinary ScRefUpdate Update scalar parameter/result contract; native mutable coordinate outputs use a result/coordinate tuple.",
+      "Original sequential column/row/sheet predicates, raw ordering, explicit document IsExpandRefs policy and insertion expansion helpers; deletion shrink disabled only for sheets.",
+      "Native signed16 column/sheet and signed32 row destination widths, clipping, invalid collapsed ends, whole-axis/end sticky restoration and status replacement precedence.",
+      "Move source containment derives from destination minus displacement; sheet-only reorder updates both moved and intervening sheets in original direction.",
+      "Final raw coordinate comparison returns UPDATED only when no earlier result exists; copy remains untouched; native unreachable reorder guards are expressed directly with proofs."
     ],
     "status": "mapped",
     "upstreamPath": "sc/source/core/inc/refupdat.hxx",
