@@ -4,7 +4,7 @@ title: "Invalidate original table position for last-row frame size changes"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 15
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -24,11 +24,36 @@ verification:
   updated_by: "CODER"
   note: "Pass178unique27files7fresh; current complete wsfrm/tabfrm actual Istanbul100274lines313statements70functions197branches/0negative. One materially affected revalidation after no-this-alias lint correction; no old-source/V8 counters. Seven TS7/build/static plus7metadata gates and final metadata format pass, upstream-absent runtime with finally restore. Four canonical histories and all586oldtests preserved; master/follow/cache/page/root/content remain unverified. Goal active correction5/10."
   attempts: 0
-commit: null
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-09T15:37:52.655Z"
+  updated_by: "EVALUATOR"
+  note: "Explicit same-agent non-independent review: approved represented native last-row frame-size correction accepted on semantic 7dd792fa61f003e246a392f74060b42be1a52066;178current cases, whole2module actual Istanbul100, static and metadata gates pass. Broad goal remains active correction5/10."
+  evaluated_sha: "7dd792fa61f003e246a392f74060b42be1a52066"
+  blueprint_digest: "ae5ba9e393d6a489073f451ee3a3ea0974add0fe74ff0cee5f355dcbe6505e39"
+  evidence_refs:
+    - ".agentplane/tasks/202610091519-SV3P04/README.md"
+    - ".agentplane/tasks/202610091519-SV3P04/quality/20261009-153752655-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610091519-SV3P04/quality/20261009-153752655-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610091519-SV3P04/quality/20261009-153752655-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610091519-SV3P04/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610091519-SV3P04/evidence/results.json"
+    - "7dd792fa61f003e246a392f74060b42be1a52066"
+  findings:
+    - "Source comparison: native OnFrameSize last-sibling table position invalidation precedes borrowed size/split forwarding. Original upper links, exact table type and destructor guard used; non-last next-sibling behavior and native generic row filter unchanged. No document/geometry adapter or browser-inferred follow state added."
+    - "Fresh core tests cover nearest/nested/detached hierarchy, self and ancestor destruction guard, callback ordering, split and legacy size, format-change filtering and Clear default. Real height command/history3cycles and mounted60px clipping retain original node/cursor/frame clients and cleanup. History MoveTableLine keeps its distinct native notification path."
+    - "Current27file178pass0fail0skip profile alone supplies entire wsfrm/tabfrm Istanbul274lines313statements70functions197branches100 with0negative counters and current hashes. Superseded177initial plus1new-only closure passes/raw thresholds retained; one materially affected revalidation required after lint alias correction. No old-source/V8 counters, map/counter/threshold normalization or acceptance rewrite."
+    - "All seven TS7/build/static gates and final metadata format passed physically upstream-absent with finally restore. Seven metadata gates pass; failed primary-file symbol anchor corrected using alternate-source evidence, preserving all4old canonical values/prefixes. All586oldtests and1844of1850source/scripts/docs unchanged; append-only parent retained. Same agent review is not independent."
+commit:
+  hash: "7dd792fa61f003e246a392f74060b42be1a52066"
+  message: "🐛 SV3P04 writer: invalidate original table position for last-row size"
 comments:
   -
     author: "CODER"
     body: "Start: Restore original containing-table last-row size invalidation with source-bounded traversal and real history/UI verification; correction5/10."
+  -
+    author: "CODER"
+    body: "Implementation: Native last-row size/split invalidates original containing-table position before borrowed item dispatch;178cases scoped actual100, static and metadata gates passed; explicit semantic SHA bound before quality."
 events:
   -
     type: "status"
@@ -43,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Pass178unique27files7fresh; current complete wsfrm/tabfrm actual Istanbul100274lines313statements70functions197branches/0negative. One materially affected revalidation after no-this-alias lint correction; no old-source/V8 counters. Seven TS7/build/static plus7metadata gates and final metadata format pass, upstream-absent runtime with finally restore. Four canonical histories and all586oldtests preserved; master/follow/cache/page/root/content remain unverified. Goal active correction5/10."
+  -
+    type: "status"
+    at: "2026-10-09T15:37:51.391Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+    note: "Implementation: Native last-row size/split invalidates original containing-table position before borrowed item dispatch;178cases scoped actual100, static and metadata gates passed; explicit semantic SHA bound before quality."
 doc_version: 3
-doc_updated_at: "2026-10-09T15:36:54.658Z"
+doc_updated_at: "2026-10-09T15:38:26.633Z"
 doc_updated_by: "CODER"
 description: "Correction5/10 after XJTGF0: port native SwRowFrame::OnFrameSize containing-table position invalidation through original upper-frame traversal, preserving the upstream row hint filter and represented flat layout boundary."
 sections:
@@ -109,6 +141,10 @@ sections:
     - Observation: Current27file revalidation178pass0fail0skip, complete actual Istanbul274lines313statements70functions197branches100/zero negatives. All seven static gates pass. Registry build and source-tree pass; source-provenance rejects two newly appended upstreamSymbols because its symbol list is validated only against primary wsfrm.cxx, whereas native ImplFindTabFrame and DestroyImpl are in findfrm.cxx and ssfrm.cxx.
       Impact: Runtime/code/static acceptances remain valid; metadata anchoring needs a precise correction. Correct cross-file upstream evidence paths already point at actual defining sources, and all old provenance fields/prefixes remain intact.
       Resolution: Remove only the two new cross-file upstreamSymbols from the primary wsfrm.cxx list, retain their exact alternate-source evidence and local symbols. Retry only failed/remaining metadata checks, preserve failure log and prior successful gates; verify final metadata formatting and field prefixes. No policy or primary upstreamPath change.
+
+    - Observation: Semantic7dd792fa61f003e246a392f74060b42be1a52066 is bound; explicit same-agent non-independent EVALUATOR verdict pass. Current178accepted27files7fresh and actual complete2module Istanbul100274lines313statements70functions197branches/0negative verified. All seven final static plus7metadata gates pass; final formatting and field/source/test preservation proved.
+      Impact: Approved last-row native table position correction is ready for direct closure. Initial/closure coverage and lint/provenance failures remain retained as superseded/resolved raw evidence; no old-source counters or broader parity promotion. All586oldtests and four old canonical histories unchanged in their values/prefixes.
+      Resolution: Persist quality artifacts, finish with bound semantic SHA and concrete native behavior result, prove clean tracked/untracked tree. Goal remains active correction5/10 after historical full XJTGF0; native cache/master/follow/flow-line/page/root/content/VCL remain unverified.
 id_source: "generated"
 ---
 ## Summary
@@ -189,3 +225,7 @@ Pinned9bc445578031fecf56086729d8e4940c77e14d65 tabfrm.cxx::SwRowFrame::OnFrameSi
 - Observation: Current27file revalidation178pass0fail0skip, complete actual Istanbul274lines313statements70functions197branches100/zero negatives. All seven static gates pass. Registry build and source-tree pass; source-provenance rejects two newly appended upstreamSymbols because its symbol list is validated only against primary wsfrm.cxx, whereas native ImplFindTabFrame and DestroyImpl are in findfrm.cxx and ssfrm.cxx.
   Impact: Runtime/code/static acceptances remain valid; metadata anchoring needs a precise correction. Correct cross-file upstream evidence paths already point at actual defining sources, and all old provenance fields/prefixes remain intact.
   Resolution: Remove only the two new cross-file upstreamSymbols from the primary wsfrm.cxx list, retain their exact alternate-source evidence and local symbols. Retry only failed/remaining metadata checks, preserve failure log and prior successful gates; verify final metadata formatting and field prefixes. No policy or primary upstreamPath change.
+
+- Observation: Semantic7dd792fa61f003e246a392f74060b42be1a52066 is bound; explicit same-agent non-independent EVALUATOR verdict pass. Current178accepted27files7fresh and actual complete2module Istanbul100274lines313statements70functions197branches/0negative verified. All seven final static plus7metadata gates pass; final formatting and field/source/test preservation proved.
+  Impact: Approved last-row native table position correction is ready for direct closure. Initial/closure coverage and lint/provenance failures remain retained as superseded/resolved raw evidence; no old-source counters or broader parity promotion. All586oldtests and four old canonical histories unchanged in their values/prefixes.
+  Resolution: Persist quality artifacts, finish with bound semantic SHA and concrete native behavior result, prove clean tracked/untracked tree. Goal remains active correction5/10 after historical full XJTGF0; native cache/master/follow/flow-line/page/root/content/VCL remain unverified.

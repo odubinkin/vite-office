@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 274
+revision: 275
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-09T15:32:57.523Z"
+doc_updated_at: "2026-10-09T15:38:27.255Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -1341,6 +1341,10 @@ sections:
     - Observation: Resumed correction5/10 SV3P04 restores native last-row size/split containing-table position invalidation through original destruction-aware upper links. Current178unique related cases27files7fresh pass; entire wsfrm/tabfrm actual single-profile Istanbul274lines313statements70functions197branches100/zero negatives. Initial177plus1new closure pass and superseded maps retained; lint-rejected this alias was adapted without suppressions, requiring one materially affected178case revalidation. All seven TS7/build/static gates pass upstream-absent with finally restoration.
       Impact: Original hierarchy/nearest table/last-versus-nonlast/order/detached/destructor/filter contracts and real three-cycle height history plus mounted60px clipping are accepted. Native MoveTableLine history keeps its own filter/invalidation behavior, original node/cursor/frame identities retained. Four old canonical histories retain classification/status/default/evidence/responsibility prefixes; uncached lookup and native master/follow/flow-line/page/root/content families remain unverified.
       Resolution: Finish metadata-only audits and clean direct semantic/quality/close sequence for SV3P04. Broad goal stays active; XJTGF0 historical full, five completed corrections after closure, next full after10. Registered recovery/open/save/settings deviations and all unrelated old tests remain preserved.
+
+    - Observation: Correction5/10 SV3P04 semantic7dd792fa61f003e246a392f74060b42be1a52066 verified and explicitly same-agent non-independent quality pass. Current178cases27files7fresh, entire2module actual Istanbul100274lines313statements70functions197branches, seven TS7/build/static and seven metadata gates pass; all586oldtests and four canonical old values/history prefixes preserved.
+      Impact: Native last-row size/split containing-table invalidation is accepted; no general row filter changes, no geometry/model bridge or invented follow state. Previously pending source-provenance gate now passes after removing only new cross-file primary symbol-list additions; exact alternate-source evidence retained. Doctor0errors2historicalwarnings, derived views0changes.
+      Resolution: Close SV3P04 with semantic SHA and clean direct state; broad goal active with five completed corrections after XJTGF0. Next atomic correction follows remaining original layout/UI behavior gaps; next full after tenth correction. No native cache/master/follow/page/root/content/VCL or whole-goal promotion.
 id_source: "generated"
 ---
 ## Summary
@@ -2655,3 +2659,7 @@ Iteration251 / 202610090835-4ZF0N4 verified native table layout ownership. SwTab
 - Observation: Resumed correction5/10 SV3P04 restores native last-row size/split containing-table position invalidation through original destruction-aware upper links. Current178unique related cases27files7fresh pass; entire wsfrm/tabfrm actual single-profile Istanbul274lines313statements70functions197branches100/zero negatives. Initial177plus1new closure pass and superseded maps retained; lint-rejected this alias was adapted without suppressions, requiring one materially affected178case revalidation. All seven TS7/build/static gates pass upstream-absent with finally restoration.
   Impact: Original hierarchy/nearest table/last-versus-nonlast/order/detached/destructor/filter contracts and real three-cycle height history plus mounted60px clipping are accepted. Native MoveTableLine history keeps its own filter/invalidation behavior, original node/cursor/frame identities retained. Four old canonical histories retain classification/status/default/evidence/responsibility prefixes; uncached lookup and native master/follow/flow-line/page/root/content families remain unverified.
   Resolution: Finish metadata-only audits and clean direct semantic/quality/close sequence for SV3P04. Broad goal stays active; XJTGF0 historical full, five completed corrections after closure, next full after10. Registered recovery/open/save/settings deviations and all unrelated old tests remain preserved.
+
+- Observation: Correction5/10 SV3P04 semantic7dd792fa61f003e246a392f74060b42be1a52066 verified and explicitly same-agent non-independent quality pass. Current178cases27files7fresh, entire2module actual Istanbul100274lines313statements70functions197branches, seven TS7/build/static and seven metadata gates pass; all586oldtests and four canonical old values/history prefixes preserved.
+  Impact: Native last-row size/split containing-table invalidation is accepted; no general row filter changes, no geometry/model bridge or invented follow state. Previously pending source-provenance gate now passes after removing only new cross-file primary symbol-list additions; exact alternate-source evidence retained. Doctor0errors2historicalwarnings, derived views0changes.
+  Resolution: Close SV3P04 with semantic SHA and clean direct state; broad goal active with five completed corrections after XJTGF0. Next atomic correction follows remaining original layout/UI behavior gaps; next full after tenth correction. No native cache/master/follow/page/root/content/VCL or whole-goal promotion.
