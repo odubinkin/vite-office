@@ -1,8 +1,8 @@
 /** @fileoverview Verifies the browser page dialog, rulers, pagination, and paged workspace chrome. */
 
 import { SwFormatFrameSize, SwFrameSize } from "../../inc/fmtfsize";
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { createSwPageFrames } from "../../source/core/layout/newfrm";
 import { getSwTextFrameGap, type SwTextFrameSettings } from "../../source/core/text/txtfrm";
@@ -22,6 +22,28 @@ import { WriterViewProjection } from "./writer-view-projection";
 import { SwPaM, SwPosition } from "../../source/core/crsr/pam";
 import { createDocument } from "../../../sfx2/source/doc/objsh";
 
+import { SwDocShell } from "../../source/uibase/app/docsh";
+import { SwView } from "../../source/uibase/uiview/view";
+
+const owners: SwView[] = [];
+/** Creates an original native view over a fixture document. @param document - Original model. @returns Owning view. */
+function layoutView(document: ReturnType<typeof createWriterDocument>): SwView {
+  const view = new SwView(
+    new SwDocShell(
+      document,
+      createDocument({ id: "page-layout", suiteId: "writer", title: "Page" }),
+    ),
+  );
+  owners.push(view);
+  return view;
+}
+afterEach(
+  /** Releases UI before actual native fixture owners. @returns Nothing. */ () => {
+    cleanup();
+    for (const view of owners.splice(0)) view.Close();
+  },
+);
+
 const page = createDefaultWriterPageDescriptor("en-GB").GetValue();
 
 /** Gives detached browser fixtures canonical text nodes for layout ownership. @param paragraphs - Rendered paragraph fixtures. @returns Edit-window port. */
@@ -39,7 +61,9 @@ function layoutEditWindow(paragraphs: readonly WriterParagraphProjection[]): SwE
         node.SetAttr(new SfxBoolItem(RES_LINENUMBER, false));
     },
   );
+  const view = layoutView(document);
   return {
+    GetView: /** Returns the original native view owner. @returns Fixture view. */ () => view,
     FocusNode: vi.fn(),
     MouseButtonUp: vi.fn(),
     SetTableMouseFrames: vi.fn(),
@@ -340,7 +364,9 @@ describe("Writer physical page browser UI", /** Registers page-layout UI cases. 
       { ...paragraph("before", "Before"), nodeIndex: first.GetIndex() },
       { ...paragraph("after", "After"), nodeIndex: after.GetIndex() },
     ];
+    const view = layoutView(document);
     const editWindow = {
+      GetView: /** Returns the original native view owner. @returns Fixture view. */ () => view,
       FocusNode: vi.fn(),
       MouseButtonUp: vi.fn(),
       SetTableMouseFrames: vi.fn(),

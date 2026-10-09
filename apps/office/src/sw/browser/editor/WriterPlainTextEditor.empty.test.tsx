@@ -1,16 +1,36 @@
 /** @fileoverview Keeps a physical Writer page visible before paragraphs are projected. */
 /* eslint-disable @typescript-eslint/no-non-null-assertion -- Test fixture documents provide the first paragraph. */
 
-import { render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { cleanup, render, screen } from "@testing-library/react";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { createDocument } from "../../../sfx2/source/doc/objsh";
 import { createWriterDocument } from "../../source/core/doc/doc";
 import { SwPaM, SwPosition } from "../../source/core/crsr/pam";
 import { createDefaultWriterPageDescriptor } from "../../source/core/layout/pagedesc";
-import type { SwEditWin } from "../../source/uibase/docvw/edtwin";
+import { SwDocShell } from "../../source/uibase/app/docsh";
+import { SwView } from "../../source/uibase/uiview/view";
 import { WriterViewProjection } from "../presentation/writer-view-projection";
 import { WriterPlainTextEditor } from "./WriterPlainTextEditor";
+
+const owners: SwView[] = [];
+/** Creates an actual native view for the editor fixture. @param document - Original fixture document. @returns Actual native edit window. */
+function editWindow(document = createWriterDocument()) {
+  const view = new SwView(
+    new SwDocShell(
+      document,
+      createDocument({ id: "empty-page", suiteId: "writer", title: "Empty" }),
+    ),
+  );
+  owners.push(view);
+  return view.GetEditWin();
+}
+afterEach(
+  /** Releases mounted UI before the owning native session. @returns Nothing. */ () => {
+    cleanup();
+    for (const view of owners.splice(0)) view.Close();
+  },
+);
 
 describe("empty Writer page", /** Groups empty Writer page. @returns Test callback result. */ () => {
   it("renders the initial physical page without an editable paragraph", /** Checks renders the initial physical page without an editable paragraph. @returns Test callback result. */ () => {
@@ -18,15 +38,7 @@ describe("empty Writer page", /** Groups empty Writer page. @returns Test callba
       <WriterPlainTextEditor
         activeParagraphId=""
         cursorSelection={{ point: { paragraphId: "", offset: 0 } }}
-        editWindow={
-          {
-            FocusNode: vi.fn(),
-            MouseButtonUp: vi.fn(),
-            SetTableMouseFrames: vi.fn(),
-            GetDoc: /** Resolves the empty-page document. @returns Canonical document. */ () =>
-              createWriterDocument(),
-          } as unknown as SwEditWin
-        }
+        editWindow={editWindow()}
         pageDescriptor={createDefaultWriterPageDescriptor("en-US").GetValue()}
         paragraphs={[]}
       />,
@@ -50,15 +62,7 @@ describe("empty Writer page", /** Groups empty Writer page. @returns Test callba
       <WriterPlainTextEditor
         activeParagraphId={projected.activeParagraph.id}
         cursorSelection={projected.cursorSelection}
-        editWindow={
-          {
-            FocusNode: vi.fn(),
-            MouseButtonUp: vi.fn(),
-            SetTableMouseFrames: vi.fn(),
-            GetDoc: /** Resolves the measurement document. @returns Canonical document. */ () =>
-              document,
-          } as unknown as SwEditWin
-        }
+        editWindow={editWindow(document)}
         pageDescriptor={projected.pageDescriptor}
         paragraphs={projected.paragraphs}
       />,

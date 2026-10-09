@@ -673,7 +673,6 @@ export function WriterWorkbench({
           cursorSelection={snapshot.cursorSelection}
           editWindow={view.GetEditWin()}
           editingHostRef={editingHostRef}
-          layout={view.GetLayout()}
           pageDescriptor={snapshot.pageDescriptor}
           pageDescriptors={snapshot.pageDescriptors}
           paragraphSpacingSettings={snapshot.paragraphSpacingSettings}
