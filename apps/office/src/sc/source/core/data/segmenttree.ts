@@ -1,4 +1,4 @@
-/** @fileoverview Original segmenttree.cxx boolean row/column owners and iterators over the shared mdds leaf/index implementation. */
+/** @fileoverview Original segmenttree.cxx boolean and UInt16 segment owners over the shared mdds leaf/index implementation. */
 import { flat_segment_tree } from "../../../../external/mdds/include/mdds/flat_segment_tree";
 import { const_iterator } from "../../../../external/mdds/include/mdds/flat_segment_tree_itr";
 import type { SegmentValue } from "../../../../external/mdds/include/mdds/node";
@@ -23,17 +23,23 @@ export interface ScFlatBoolColRangeData {
   mnCol2: SCCOL;
   mbValue: boolean;
 }
+/** Original UInt16 row range aggregate. */
+export interface ScFlatUInt16RowRangeData {
+  mnRow1: SCROW;
+  mnRow2: SCROW;
+  mnValue: number;
+}
 
 /** Adapts the original debug assertion to JavaScript fail-fast diagnostics; release/process-abort policy is not certified. @returns Nothing. */
 function assertIdleCalculation(): void {
   if (ScGlobal.bThreadedGroupCalcInProgress)
     throw new Error("Assertion failed: !ScGlobal::bThreadedGroupCalcInProgress");
 }
-/** Original anonymous-namespace template storage used by boolean owners; numeric-specific methods are separate follow-up work. */
+/** Original anonymous-namespace template storage shared by boolean and UInt16 owners. */
 class ScFlatSegmentsImpl<Value extends SegmentValue> {
   private readonly maSegments: flat_segment_tree<Value>;
   private maItr = new const_iterator<Value>();
-  private readonly mbTreeSearchEnabled: boolean;
+  private mbTreeSearchEnabled: boolean;
   /** Initializes [0,max+1) or copies leaves/default/search policy while default-constructing the hint. @param source - Maximum or copy source. @param value - Original explicit default. @returns Owner. */
   public constructor(source: SCCOLROW | ScFlatSegmentsImpl<Value>, value?: Value) {
     if (source instanceof ScFlatSegmentsImpl) {
@@ -50,11 +56,93 @@ class ScFlatSegmentsImpl<Value extends SegmentValue> {
     this.maItr = result[0];
     return result[1];
   }
+  /** Preserves original per-current-segment predicate order and lookup precondition. @param first - Valid first row. @param last - Last row. @param value - New value. @param predicate - Original condition. @returns Nothing. */
+  public setValueIf(
+    first: SCCOLROW,
+    last: SCCOLROW,
+    value: Value,
+    predicate: (value: Value) => boolean,
+  ): void {
+    let current = first;
+    while (current <= last) {
+      // Scratch zeros select the shared mutable-output overload; successful
+      // native lookup supplies all fields. Invalid rows violate the original
+      // conditional-setter precondition and remain outside defined comparison.
+      const data: RangeData<Value> = { mnPos1: 0, mnPos2: 0, mnValue: 0 as Value };
+      this.getRangeData(current, data);
+      if (predicate(data.mnValue)) this.setValue(current, Math.min(last, data.mnPos2), value);
+      current = data.mnPos2 + 1;
+    }
+  }
+  /** Reads original numeric zero on failed search without changing the owner hint. @param position - Row. @returns UInt16 value. */
+  public getValue(position: SCCOLROW): Value {
+    if (!this.mbTreeSearchEnabled) return this.maSegments.search(position, 0 as Value)[2];
+    if (!this.maSegments.valid_tree()) {
+      assertIdleCalculation();
+      this.maSegments.build_tree();
+    }
+    return this.maSegments.search_tree(position, 0 as Value)[2];
+  }
+  /** Sums original inclusive numeric spans with distinct indexed/local and leaf/shared hint paths. @param first - First row. @param last - Last row. @returns Exact UInt64 sum. */
+  public getSumValue(first: SCCOLROW, last: SCCOLROW): bigint {
+    // Only the UInt16 facade calls this method: successful row positions are
+    // nonnegative signed32 and values are narrowed to UInt16. Total interval
+    // length is at most INT32_MAX; sum <= 65535*INT32_MAX < 2^47. Original
+    // checked-multiply overflow/SAL_MAX_INT64 and saturating-add overflow paths
+    // therefore cannot fire for defined owners. Exact bigint expresses this
+    // invariant without changing native probe guards or adding exclusions.
+    if (this.mbTreeSearchEnabled) {
+      if (!this.maSegments.valid_tree()) {
+        assertIdleCalculation();
+        this.maSegments.build_tree();
+      }
+      let result = this.maSegments.search_tree(first, 0 as Value, 0, 0);
+      if (!result[1]) return 0n;
+      let iterator = result[0],
+        value = result[2] as number,
+        total = 0n,
+        current = first,
+        end = (result[4] as number) - 1;
+      while (end <= last) {
+        total += BigInt(value) * BigInt(end - current + 1);
+        current = end + 1;
+        result = this.maSegments.search(iterator, current, result[2], result[3], result[4]);
+        if (!result[1]) break;
+        iterator = result[0];
+        value = result[2] as number;
+        end = (result[4] as number) - 1;
+      }
+      if (current <= last) {
+        end = Math.min(end, last);
+        total += BigInt(value) * BigInt(end - current + 1);
+      }
+      return total;
+    } else {
+      const data: RangeData<Value> = { mnPos1: 0, mnPos2: 0, mnValue: 0 as Value };
+      if (!this.getRangeDataLeaf(first, data)) return 0n;
+      let total = 0n,
+        current = first,
+        end = data.mnPos2;
+      while (end <= last) {
+        total += BigInt(data.mnValue as number) * BigInt(end - current + 1);
+        current = end + 1;
+        if (!this.getRangeDataLeaf(current, data)) break;
+        end = data.mnPos2;
+      }
+      if (current <= last) {
+        end = Math.min(end, last);
+        total += BigInt(data.mnValue as number) * BigInt(end - current + 1);
+      }
+      return total;
+    }
+  }
+  /** Sets the original shared-template indexed-search policy. @param enabled - Policy. @returns Nothing. */
+  public enableTreeSearch(enabled: boolean): void {
+    this.mbTreeSearchEnabled = enabled;
+  }
   /** Builds an invalid tree, then searches and caches the result; output fields remain unchanged on failure. @param position - Query. @param data - Output aggregate. @returns Found. */
   public getRangeData(position: SCCOLROW, data: RangeData<Value>): boolean {
-    // The bool specialization's policy is initialized true and has no public
-    // enableTreeSearch caller. The numeric specialization will add that original
-    // path with its actual setter, rather than a currently unreachable branch.
+    if (!this.mbTreeSearchEnabled) return this.getRangeDataLeaf(position, data);
     if (!this.maSegments.valid_tree()) {
       assertIdleCalculation();
       this.maSegments.build_tree();
@@ -325,6 +413,129 @@ export class ScFlatBoolColSegments {
       if (!column) text += (data.mbValue ? "1" : "0") + ":";
       text += data.mnCol2 + " ";
       column = data.mnCol2 + 1;
+    }
+    return text;
+  }
+}
+/** Original UInt16 specialization; the extended UInt32 alias does not alter stored values. */
+class ScFlatUInt16SegmentsImpl extends ScFlatSegmentsImpl<number> {
+  /** Initializes original explicit default or copies the implementation. @param source - Maximum or copied owner. @param value - Original default. @returns Owner. */
+  public constructor(source: SCCOLROW | ScFlatUInt16SegmentsImpl, value?: number) {
+    super(source, value);
+  }
+}
+/** Original private numeric owner accessible to its nested iterator friend. */
+const numericImplementations = new WeakMap<ScFlatUInt16RowSegments, ScFlatUInt16SegmentsImpl>();
+/** Original numeric forward iterator, indexed first and cached-leaf thereafter. */
+export class ScFlatUInt16RowSegmentsForwardIterator {
+  private readonly mrSegs: ScFlatUInt16RowSegments;
+  private mnCurPos = 0;
+  private mnLastPos = -1;
+  private mnCurValue = 0;
+  /** Borrows the original owner. @param segments - Owner. @returns Iterator. */
+  public constructor(segments: ScFlatUInt16RowSegments) {
+    this.mrSegs = segments;
+  }
+  /** Preserves monotonic position, stale interval cache and caller output on failure. @param position - Row. @param value - Existing UInt16 output. @returns Found/value. */
+  public getValue(position: SCROW, value: number): [boolean, number] {
+    position |= 0;
+    if (position >= this.mnCurPos) this.mnCurPos = position;
+    if (this.mnCurPos > this.mnLastPos) {
+      const data: RangeData<number> = { mnPos1: 0, mnPos2: 0, mnValue: 0 },
+        impl = numericImplementations.get(this.mrSegs) as ScFlatUInt16SegmentsImpl;
+      if (this.mnLastPos === -1) {
+        if (!impl.getRangeData(this.mnCurPos, data)) return [false, value];
+      } else if (!impl.getRangeDataLeaf(this.mnCurPos, data)) return [false, value];
+      this.mnCurValue = data.mnValue;
+      this.mnLastPos = data.mnPos2;
+    }
+    return [true, this.mnCurValue];
+  }
+  /** Reads the original cached inclusive last row. @returns Row. */
+  public getLastPos(): SCROW {
+    return this.mnLastPos;
+  }
+}
+/** Original row-height UInt16 segment facade over the actual shared template. */
+export class ScFlatUInt16RowSegments {
+  /** Original nested iterator constructor. */
+  public static readonly ForwardIterator = ScFlatUInt16RowSegmentsForwardIterator;
+  /** Copies original leaf/default/policy values, default-constructing the hint. @param source - Copied owner. @returns Owner. */
+  public constructor(source: ScFlatUInt16RowSegments);
+  /** Initializes explicit original row maximum and UInt16 default. @param source - Maximum. @param value - Required default. @returns Owner. */
+  public constructor(source: SCROW, value: number);
+  /** Implements original constructor overloads with native numerical widths. @param source - Maximum or owner. @param value - Explicit default. @returns Owner. */
+  public constructor(source: SCROW | ScFlatUInt16RowSegments, value?: number) {
+    numericImplementations.set(
+      this,
+      new ScFlatUInt16SegmentsImpl(
+        source instanceof ScFlatUInt16RowSegments ? source.mpImpl : source | 0,
+        (value as number) & 65535,
+      ),
+    );
+  }
+  /** Reads original privately owned implementation. @returns Implementation. */
+  private get mpImpl(): ScFlatUInt16SegmentsImpl {
+    return numericImplementations.get(this) as ScFlatUInt16SegmentsImpl;
+  }
+  /** Sets original inclusive UInt16 values, discarding the internal change flag. @param first - First row. @param last - Last row. @param value - UInt16 value. @returns Nothing. */
+  public setValue(first: SCROW, last: SCROW, value: number): void {
+    this.mpImpl.setValue(first | 0, last | 0, value & 65535);
+  }
+  /** Visits original current segments and conditionally replaces them. @param first - Valid first row. @param last - Last row. @param value - New UInt16 value. @param predicate - Original value predicate. @returns Nothing. */
+  public setValueIf(
+    first: SCROW,
+    last: SCROW,
+    value: number,
+    predicate: (value: number) => boolean,
+  ): void {
+    this.mpImpl.setValueIf(first | 0, last | 0, value & 65535, predicate);
+  }
+  /** Returns original UInt16 value or zero on failed search. @param position - Row. @returns Value. */
+  public getValue(position: SCROW): number {
+    return this.mpImpl.getValue(position | 0);
+  }
+  /** Sums inclusive rows using original search-policy paths. @param first - First row. @param last - Last row. @returns Exact UInt64 sum. */
+  public getSumValue(first: SCROW, last: SCROW): bigint {
+    return this.mpImpl.getSumValue(first | 0, last | 0);
+  }
+  /** Publishes original range fields only on success. @param position - Row. @param data - Caller output. @returns Found. */
+  public getRangeData(position: SCROW, data: ScFlatUInt16RowRangeData): boolean {
+    const range: RangeData<number> = { mnPos1: 0, mnPos2: 0, mnValue: 0 };
+    if (!this.mpImpl.getRangeData(position | 0, range)) return false;
+    data.mnRow1 = range.mnPos1;
+    data.mnRow2 = range.mnPos2;
+    data.mnValue = range.mnValue;
+    return true;
+  }
+  /** Removes the original half-open row interval. @param first - First row. @param end - Exclusive end. @returns Nothing. */
+  public removeSegment(first: SCROW, end: SCROW): void {
+    this.mpImpl.removeSegment(first | 0, end | 0);
+  }
+  /** Inserts rows without skipping the coinciding start boundary. @param position - Row. @param size - Count. @returns Nothing. */
+  public insertSegment(position: SCROW, size: SCROW): void {
+    this.mpImpl.insertSegment(position | 0, size | 0, false);
+  }
+  /** Finds the last row differing from the supplied UInt16 value. @param value - Skipped value. @returns Row or signed32 maximum. */
+  public findLastTrue(value: number): SCROW {
+    return this.mpImpl.findLastTrue(value & 65535);
+  }
+  /** Sets original search policy without constructing or invalidating the index. @param enabled - Policy. @returns Nothing. */
+  public enableTreeSearch(enabled: boolean): void {
+    this.mpImpl.enableTreeSearch(enabled);
+  }
+  /** Prepares the index even when indexed lookup is disabled. @returns Nothing. */
+  public makeReady(): void {
+    this.mpImpl.makeReady();
+  }
+  /** Preserves original numeric ASCII diagnostics; RTL allocation remains unverified. @returns Text. */
+  public dumpAsString(): string {
+    let text = "",
+      row = 0;
+    const data = {} as ScFlatUInt16RowRangeData;
+    while (this.getRangeData(row, data)) {
+      text += data.mnValue + ":" + data.mnRow2 + " ";
+      row = data.mnRow2 + 1;
     }
     return text;
   }

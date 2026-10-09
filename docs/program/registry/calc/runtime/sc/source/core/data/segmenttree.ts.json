@@ -8,7 +8,8 @@
     "suite": "calc",
     "subsystem": "boolean-segments",
     "capabilityIds": [
-      "CAP-a3a53a8b-3a8b-46c4-b052-e3b7c2c2c210"
+      "CAP-a3a53a8b-3a8b-46c4-b052-e3b7c2c2c210",
+      "CAP-f0d99a24-a281-4d2b-91ed-0eafb948cb03"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -19,9 +20,12 @@
         "apps/office/src/sc/source/core/data/segmenttree.ts#ScFlatBoolRowSegments",
         "apps/office/src/sc/source/core/data/segmenttree.test.ts#matches all436 unchanged native boolean row/column sequences",
         "scripts/calc-bool-segments-native-probe.mjs#const originals =",
-        "vendor/libreoffice-reference/sc/source/core/data/segmenttree.cxx#ScFlatBoolRowSegments::RangeIterator::getFirst"
+        "vendor/libreoffice-reference/sc/source/core/data/segmenttree.cxx#ScFlatBoolRowSegments::RangeIterator::getFirst",
+        "apps/office/src/sc/source/core/data/numeric-segments.test.ts#matches every unchanged native UInt16 sequence",
+        "scripts/calc-numeric-segments-native-probe.mjs#const groups",
+        "vendor/libreoffice-reference/sc/source/core/data/segmenttree.cxx#ScFlatUInt16RowSegments"
       ],
-      "justification": "Task202610091610-0168S5 ports the original boolean row/column segment owners and row iterators over the already shared mdds owner, retaining needed internal bool specialization. Original declarations and complete needed method groups compile unchanged with genuine source-verified mdds/Boost under ASan/UBSan;436 initialized sequences compare both live owners after every command through copy-isolated observations. Whole-class numeric responsibilities remain absent. A private WeakMap preserves nested-iterator access without adding a public storage API; TS output tuples and mutable aggregates adapt scalar references. The bool search policy stays true because its original API has no setter. One getFirst failure guard is reduced only by the initialized two-border-node invariant, documented at the call; original native bodies remain unchanged. Tests retain cursor interference, stale forward cache, output preservation, scalar dump text and actual global readiness preconditions without coverage exclusions. Numeric UInt16 segment owners, conditional setters/sums, remaining ScGlobal services, ScMultiSel/document/column/UI consumers, native allocation/refcount/pointer lifetime, uninitialized or malformed iterator states, undefined arithmetic and full Calc parity remain unverified. Diagnostic ASCII text uses JavaScript strings; actual RTL string allocation and native diagnostic dump linkage are not certified. The original debug assertion is adapted to a fail-fast Error; native process abort, release builds and concurrent memory behavior are not represented.",
+      "justification": "Task202610091610-0168S5 ports the original boolean row/column segment owners and row iterators over the already shared mdds owner, retaining needed internal bool specialization. Original declarations and complete needed method groups compile unchanged with genuine source-verified mdds/Boost under ASan/UBSan;436 initialized sequences compare both live owners after every command through copy-isolated observations. At the original boolean-only task, numeric responsibilities were deferred; the subsequent numeric implementation is described below. A private WeakMap preserves nested-iterator access without adding a public storage API; TS output tuples and mutable aggregates adapt scalar references. The bool search policy stays true because its original API has no setter. One getFirst failure guard is reduced only by the initialized two-border-node invariant, documented at the call; original native bodies remain unchanged. Tests retain cursor interference, stale forward cache, output preservation, scalar dump text and actual global readiness preconditions without coverage exclusions. Remaining ScGlobal services, ScMultiSel/document/column/UI consumers, native allocation/refcount/pointer lifetime, uninitialized or malformed iterator states, undefined arithmetic and full Calc parity remain unverified. Diagnostic ASCII text uses JavaScript strings; actual RTL string allocation and native diagnostic dump linkage are not certified. The original debug assertion is adapted to a fail-fast Error; native process abort, release builds and concurrent memory behavior are not represented. Task202610091813-7BY25G adds the complete original UInt16 owner and numeric methods in the same template:706 unchanged native sequences with genuine mdds/Boost and original safeint groups pass ASan/UBSan. Original bool436 fixture/tests remain unchanged. Mutable-output scratch carriers select the existing JS overloads; they are not native defaults and wrappers publish only successful fields. Finite initialized native comparison is not complete module/browser parity. Native allocation/ABI/dangling pointers, undefined signed arithmetic, conditional-setter invalid-row/uninitialized aggregate inputs, arbitrary reentrant predicates, compiler/runtime threading and native process-abort/release semantics remain unverified. RTL dump allocation/refcount and SAL logging are unlinked; diagnostic ASCII text uses JS strings. Current UInt16/signed32 facade proves sums below2^47, so generic checked-multiply/saturating-add overflow paths cannot fire; other native template value families are unimplemented. Document/table/column/row-height/browser consumers and broader ScGlobal remain follow-up work.",
       "knownViolations": [],
       "localSymbols": [
         "RangeData",
@@ -49,7 +53,15 @@
         "setFalse",
         "getValue",
         "getLastPos",
-        "dumpAsString"
+        "dumpAsString",
+        "ScFlatUInt16RowRangeData",
+        "ScFlatUInt16SegmentsImpl",
+        "numericImplementations",
+        "ScFlatUInt16RowSegmentsForwardIterator",
+        "ScFlatUInt16RowSegments",
+        "setValueIf",
+        "getSumValue",
+        "enableTreeSearch"
       ],
       "sourceResponsibility": "aligned",
       "upstreamFile": "sc/source/core/data/segmenttree.cxx",
@@ -59,7 +71,10 @@
         "ScFlatBoolRowSegments",
         "ScFlatBoolColSegments",
         "ScFlatBoolRowSegments::ForwardIterator",
-        "ScFlatBoolRowSegments::RangeIterator"
+        "ScFlatBoolRowSegments::RangeIterator",
+        "ScFlatUInt16RowSegments",
+        "ScFlatUInt16RowSegments::ForwardIterator",
+        "ScFlatUInt16SegmentsImpl"
       ]
     }
   }

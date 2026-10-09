@@ -324,6 +324,28 @@ Repeated calls are retained in the complete native sequences and an independent
 borrowed-envelope test. Decision: preserve accumulation and original reset
 responsibilities; no implicit clear is added to cover generation.
 
+## CALC-017: Conditional numerical update ignores failed range lookup
+
+Status: source observation only; caller preconditions unreviewed, no defined
+native outcome or confirmed user-visible defect classification.
+
+Pinned `segmenttree.cxx:105` `ScFlatSegmentsImpl::setValueIf` constructs a local
+uninitialized RangeData and ignores the boolean result of `getRangeData` before
+reading its value and last-position fields. For an initial row outside the
+owner domain, lookup can return false without initializing those fields. The
+subsequent predicate and cursor advance would read uninitialized native data.
+The loop also uses the original cached segment endpoint after a predicate call;
+arbitrary reentrant mutation requirements have not been established.
+
+The unchanged source groups and numeric probe retain the original condition.
+Defined comparisons use valid initial lookup positions or a vacuous reversed
+interval; predicate call order is retained and compared. No sanitizer result is
+claimed for uninitialized reads, and no successful malformed-input result is
+invented. JS scratch fields only select mutable-output reference overloads;
+invalid native inputs are not certified. Decision: preserve the original
+precondition and ignored result; do not add clipping, lookup fallback or guard
+behavior without a separate explicit upstream-deviation decision.
+
 ## Reviewed API distinctions
 
 These distinctions have been discussed but are not classified as defects:
@@ -349,6 +371,15 @@ These distinctions have been discussed but are not classified as defects:
   `sc/source/core/data/segmenttree.test.ts` preserve them. Complete consumer
   mutation/iteration requirements still need review; no invalidation or
   independent-cursor repair is added.
+
+The numerical row owner's `ForwardIterator` first calls policy/indexed
+`getRangeData`, then uses `getRangeDataLeaf` for later cache misses. Its later
+lookup can therefore succeed after mutation invalidates the index while the
+threaded-group flag forbids rebuilding. The bool iterator continues using the
+policy lookup on cache misses. Numeric insertion also passes false for
+skip-start-boundary, while bool insertion passes true. These are original API
+distinctions, not defect classifications; all 706 unchanged numeric sequences
+and independent policy/thread/insertion tests retain them.
 
 ## Recording future observations
 

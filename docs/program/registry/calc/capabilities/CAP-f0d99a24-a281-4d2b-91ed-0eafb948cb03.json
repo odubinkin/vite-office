@@ -1,0 +1,81 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-f0d99a24-a281-4d2b-91ed-0eafb948cb03",
+    "capabilityId": "CAP-f0d99a24-a281-4d2b-91ed-0eafb948cb03",
+    "suite": "calc",
+    "subsystem": "numeric-row-segments",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original explicit UInt16 defaults, signed32 row inputs, independent copy/default/search-policy ownership over the existing shared mdds/template.",
+      "Original inclusive setValue and segment-by-segment conditional predicate calls; failed getValue zero and range/output preservation under both search policies.",
+      "Original indexed local-iterator versus leaf owner-hint sum paths, exact UInt64 totals and source-proven unreachable arithmetic overflow for defined UInt16/signed32 owners.",
+      "Original false skip-start insertion, half-open removal, value-specific findLastTrue, and numeric ForwardIterator first policy lookup/later cached-leaf lookup with stale values and failure preservation."
+    ],
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "Complete original numeric owner reuses the existing source-owned template and shared mdds, with scalar/reference/bigint runtime adaptations and finite defined-state evidence."
+    },
+    "capability": "Calc UInt16 row segments and numeric forward iterator",
+    "gaps": [
+      "Finite initialized native comparison is not complete module/browser parity. Native allocation/ABI/dangling pointers, undefined signed arithmetic, conditional-setter invalid-row/uninitialized aggregate inputs, arbitrary reentrant predicates, compiler/runtime threading and native process-abort/release semantics remain unverified. RTL dump allocation/refcount and SAL logging are unlinked; diagnostic ASCII text uses JS strings. Current UInt16/signed32 facade proves sums below2^47, so generic checked-multiply/saturating-add overflow paths cannot fire; other native template value families are unimplemented. Document/table/column/row-height/browser consumers and broader ScGlobal remain follow-up work."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sc/source/core/data/segmenttree.cxx",
+          "marker": "ScFlatUInt16RowSegments::getSumValue"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sc/qa/unit/mark_test.cxx",
+          "marker": "#include \"../../source/core/data/segmenttree.cxx\""
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/inc/segmenttree.hxx",
+          "marker": "Builds internal data"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/source/core/data/segmenttree.ts",
+          "marker": "export class ScFlatUInt16RowSegments"
+        },
+        {
+          "path": "scripts/calc-numeric-segments-native-probe.mjs",
+          "marker": "const groups"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/source/core/data/numeric-segments.test.ts",
+          "marker": "matches every unchanged native UInt16 sequence"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "UInt16 row segment owner"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "Own numeric row-height intervals and original conditional updates searches sums shifts and iterator policy",
+    "scopeLimitations": [
+      "Finite initialized native comparison is not complete module/browser parity. Native allocation/ABI/dangling pointers, undefined signed arithmetic, conditional-setter invalid-row/uninitialized aggregate inputs, arbitrary reentrant predicates, compiler/runtime threading and native process-abort/release semantics remain unverified. RTL dump allocation/refcount and SAL logging are unlinked; diagnostic ASCII text uses JS strings. Current UInt16/signed32 facade proves sums below2^47, so generic checked-multiply/saturating-add overflow paths cannot fire; other native template value families are unimplemented. Document/table/column/row-height/browser consumers and broader ScGlobal remain follow-up work.",
+      "Upstream mark_test includes the original numeric owner as dependency context;706 generated sequences are not claimed as literal upstream unit cases."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

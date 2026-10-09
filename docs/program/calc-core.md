@@ -793,3 +793,63 @@ static build, documentation, ownership, file-size/source-tree and provenance
 checks pass. Calc20 capabilities/141 modules and shared1/116 report zero
 semantic violations; semantic parity remains unverified. This completes the
 full-validation cadence at task10 of the resumed cycle.
+
+## UInt16 row segment owner
+
+Task 11 (`202610091813-7BY25G`), task 1 of the next 10-task cadence, extends the
+existing `sc/inc/segmenttree` and `sc/source/core/data/segmenttree` owners with
+`ScFlatUInt16RowSegments`, its `ForwardIterator` and original numeric operations
+in `ScFlatSegmentsImpl`. Existing bool owners, mdds and ScGlobal are reused.
+Explicit defaults and writes narrow to UInt16; row inputs narrow to signed 32-bit.
+No independent interval engine or document/table stand-in is introduced.
+
+Original indexed search and leaf-only policy retain different cursor behavior.
+Value-only search and indexed sums use local iterators; leaf sums change the
+owner hint. The numeric forward iterator uses the policy lookup first and leaf
+lookup on subsequent cache misses, retaining original stale cache and failed
+caller-output behavior. Copies retain default/policy but reset the hint.
+Conditional setters visit current segments with original predicate call order
+and require a successful valid-row lookup. Native invalid/uninitialized inputs
+and arbitrary reentrant predicates remain uncertified. JS scratch output fields
+select the existing mutable-output overload; these placeholders are not native
+default values and range wrappers publish nothing on failure.
+
+Numeric row insertion passes false for skip-start, unlike the bool owner. Sums
+retain both original loops, failure/boundary conditions and hint ownership.
+For every defined UInt16 facade, values <= 65535 and disjoint row lengths total
+at most INT32_MAX: sum <= 65535 * 2147483647 < 2^47. The constructor maximum+1 and
+loop arithmetic must stay within defined signed 32-bit arithmetic. Original checked
+multiply/SAL_MAX_INT64 and saturating-add overflow branches cannot execute in
+this specialization. Exact bigint products/additions express that proven domain
+in TypeScript; native bodies and original safeint groups retain every guard.
+Other generic value families are unimplemented and are not covered by the proof.
+
+The native probe compares 706 defined sequences, both owners after every command,
+all original numeric/template methods, conditional predicate traces, numerical
+search/sum results, shifts/copies and iterator behavior under ASan/UBSan. It
+reuses original bool 436/mdds 3020 verification, exact pinned/group hashes and
+genuine patched mdds/Boost; observations query copies with leaf policy and leave
+live hints/indexes untouched. Native RTL dump and logging allocation are unlinked;
+TS diagnostics preserve original ASCII text through immutable strings. Full
+allocator/ABI/pointer/thread/process lifetime and complete module parity remain
+unverified. Complete snapshots are losslessly interned into 62 records: every
+command result and both owner observations remain compared, and raw native
+outputs remain available in the ignored research output directory. Five isolated
+native thread-assertion processes reproduce the original checks.
+
+All 100 Calc tests pass with actual 100% Istanbul coverage: 2623 statements,
+1892 branches, 433 functions and 2301 lines. The affected shared mdds module has
+5 passing tests and actual 100% coverage: 486 statements, 284 branches,
+86 functions and 433 lines. With both upstream links temporarily detached,
+100 Calc, 5 shared and 30 related inventory scenarios pass; the original links
+are restored. Tooling 14, provenance 3, TS7, scoped lint/formatting, documentation,
+boundaries, file size, source tree, provenance and routing checks pass. Calc
+21 capabilities/141 modules and shared 1/116 report zero semantic violations.
+Doctor retains two previously recorded warnings and reports no errors.
+
+The 542-line segmenttree source (543 by the size checker) retains the original
+coherent shared template and boolean/numeric owner boundary, below the 1000-line
+hard limit. CALC-017 records the ignored failed lookup in the conditional setter
+without assigning a defined native result or repairing the original expression.
+This is task 1 of the next 10-task validation cycle; the full suite is not due.
+No semantic status is promoted and Writer remains untouched.
