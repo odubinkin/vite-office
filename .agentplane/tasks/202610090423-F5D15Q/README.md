@@ -1,10 +1,11 @@
 ---
 id: "202610090423-F5D15Q"
 title: "Repair table Undo acceptance tests for native row lifetime"
-status: "DOING"
+result_summary: "Repaired four native table Undo acceptance failures in three files without production changes;111related cases pass, old registrations released, historical full report retained; stopping for requested work-format change."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
   findings:
     - "Pre-Undo snapshots retain complete format comparisons and original identity/content/cursor/history/DOM assertions; released row/cell registrations are explicitly checked. Three acceptance migrations only; production/metadata and663other acceptance files unchanged."
     - "Recomputed whole246map/proof digests and current source hashes, and derived summaries agree100/all-four. Targeted CLI global threshold exit1/raw partial coverage remains recorded; historical247failed profile is not claimedgreen or rewritten."
-commit: null
+commit:
+  hash: "1dc9e0dc2cbb18fc8d50b6b88663dde219a0d9b5"
+  message: "🧩 F5D15Q code: capture native table values before Undo destruction"
 comments:
   -
     author: "CODER"
     body: "Start: repair four full247 acceptance failures using pre-Undo value snapshots and native released-registration assertions; validate related tests once upstream absent, retain exact-source coverage evidence then pause under updated human instruction."
+  -
+    author: "CODER"
+    body: "Verified: four full247 failures resolved by native lifetime acceptance snapshots;111related cases and6static checks pass upstream absent, complete unchanged-source coverage certificates all-four100; pause after repair under updated human instruction."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified111/111targeted related cases, all4full247failed identifiers now pass. Six upstream-absent static checks pass and upstream restored; unchanged production retains entire exact-source246app/inventory all-four100certificates. Partial global-threshold CLI exit1 and full247 historical failures remain recorded. Same-agent non-independent EVALUATOR pass at actualtest-fix1dc9e0dc2cbb18fc8d50b6b88663dde219a0d9b5; pause after repair closure."
+  -
+    type: "status"
+    at: "2026-10-09T04:32:31.994Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: four full247 failures resolved by native lifetime acceptance snapshots;111related cases and6static checks pass upstream absent, complete unchanged-source coverage certificates all-four100; pause after repair under updated human instruction."
 doc_version: 3
-doc_updated_at: "2026-10-09T04:31:52.879Z"
+doc_updated_at: "2026-10-09T04:32:31.996Z"
 doc_updated_by: "CODER"
 description: "Resolve four full247 failures by comparing live Redo rows/cells with values captured before native destruction; assert old registrations are released, retain all existing behavior assertions, validate targeted native table history tests once upstream absent and pause after remediation."
 sections:
