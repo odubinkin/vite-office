@@ -4,7 +4,7 @@ title: "Port original shared SoA container lifetime and iterator ownership"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 22
+revision: 23
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,32 @@ verification:
   updated_by: "CODER"
   note: "All declared checks pass: original native217 sequences/2579 operations/2796 states and sibling888/8460; scoped Calc104 and shared21 actual100; full office14276/549 actual100, inventory123/38 actual100 after strict operation/module validation test correction, tooling14, browser303, build/static, TS7/lint/format/docs/source-tree/provenance/Calc-shared inventory/routing/doctor/diff. Data-identical formatting of six prior corpora fulfills original approved Calc/shared full-run repairs. Both upstream links absent during portable/full suites and restored exactly. Full raw hashes/binary/counter audits pass; whole-container/Calc/UI parity remains unverified."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-09T22:07:54.512Z"
+  updated_by: "EVALUATOR"
+  note: "Reviewed implementation a6f3b14e292d against original ownership scope and every Verify Steps entry. Genuine shared fields/blocks/callbacks/iterators retained; full required suites and static gates pass, with no whole-container parity promotion."
+  evaluated_sha: "a6f3b14e292deea493f09acdf2c46d544d49196d"
+  blueprint_digest: "e1a6f2d278a4b1403d92373b789e6e64175e73d68c93a2b1966b6abee584710e"
+  evidence_refs:
+    - ".agentplane/tasks/202610092130-FMVJ21/README.md"
+    - ".agentplane/tasks/202610092130-FMVJ21/quality/20261009-220754512-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610092130-FMVJ21/quality/20261009-220754512-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610092130-FMVJ21/quality/20261009-220754512-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610092130-FMVJ21/blueprint/resolved-snapshot.json"
+    - "output/playwright/task20-audit.json"
+    - "output/playwright/task20-full-coverage-audit.json"
+    - "output/playwright/task20-full-results.json"
+    - "output/playwright/task20-inventory-recheck-results.json"
+    - "output/playwright/task20-format-proposal/applied.json"
+    - "output/playwright/task20-format-final.log"
+    - "output/playwright/task20-evaluator-doctor.log"
+    - "output/playwright/task20-evaluator-routing.log"
+    - "git show a6f3b14e292d: intentional20 paths; ordered JavaScript JSON equality versus parent for the six formatting-only corpora"
+  findings:
+    - "Original constructor/delete/assignment/swap member order is preserved; move retains source primitive size and stable event_handler object identity.217 complete unchanged native sequences include all12 scalar families, full live payload/metadata/events/endpoints and final destruction. Independent actual binary byte replay and13 source/2 archive hashes match."
+    - "Actual100 scoped Calc/shared and full office14276/549 plus inventory123/38 raw positive counters/denominators support bounded acceptance. Browser303 scenarios cover301 Writer and2 shared; Calc has no dedicated UI cases. Both upstream links were absent during portable/full suites and restored exactly."
+    - "Full-run repairs stay within the approved Calc/shared remediation responsibility: six native JSON corpus changes are ordered-value identical versus parent commit, and registry test separately rejects unknown operation and module capabilities. Production runtime/validation/coverage policy, Writer behavior and source compiler inputs remain unchanged by those repairs."
 commit: null
 comments:
   -
