@@ -4,7 +4,7 @@ title: "Capture native headline ItemSet input for Text Flow"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 20
+revision: 24
 origin:
   system: "manual"
 depends_on: []
@@ -17,16 +17,36 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "ok"
-  updated_at: "2026-10-09T17:59:08.744Z"
+  state: "needs_rework"
+  updated_at: "2026-10-09T18:04:21.856Z"
   updated_by: "CODER"
-  note: "Verified: scheduled full14320distinct app cases24fresh after failed/new-only2case closure,122inventory13tooling2resource303browser allpass. Entire three modules627lines687statements123functions485branches and full application19334lines21251statements4843functions15683branches actual Istanbul100/zero-negative. Inventory configuredV8 strict100 zero-negative, no config change/replay. Build/seven statics/nine metadata/final format gates pass, six canonical prefixes600unmodified old test files1854unrelated files retained; three source-proven ODT default-owner assertions only migrated. Source unchanged and complete maps identical, raw failures retained, reference restored, goal active/incomplete new full baselineSZKQTN counter0."
-  attempts: 0
+  note: "Rework: same-agent source review found absent-headline Reset must leave edited widgets untouched under pinned direct-item guard. Correct only page/fresh source-lifecycle expectations in original scope; current-source related proof and replacement of obsolete entire page coverage entry required, no full passing replay."
+  attempts: 1
+quality_review:
+  state: "rework"
+  updated_at: "2026-10-09T18:03:42.118Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent non-independent review found source Reset guard mismatch for absent headline input at a2ddcbca11976ff4f6009e1dffdd85a1bceba526."
+  evaluated_sha: "a2ddcbca11976ff4f6009e1dffdd85a1bceba526"
+  blueprint_digest: "32599d0ff1248b5cdd5ec9b44c432ddea841ca74b9f6fad782d1ce4e6b622598"
+  evidence_refs:
+    - ".agentplane/tasks/202610091732-SZKQTN/README.md"
+    - ".agentplane/tasks/202610091732-SZKQTN/quality/20261009-180342118-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610091732-SZKQTN/quality/20261009-180342118-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610091732-SZKQTN/quality/20261009-180342118-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610091732-SZKQTN/blueprint/resolved-snapshot.json"
+    - "a2ddcbca11976ff4f6009e1dffdd85a1bceba526"
+    - ".agentplane/tasks/202610091732-SZKQTN/evidence/results.json"
+  findings:
+    - "Pinned tabledlg Reset updates and saves headline widgets only inside direct GetItemIfSet21150false guard. Current Reset clears absent-input widgets on later Reset. Normal shell input always supplies concrete21150, but native page lifecycle still needs the guarded behavior; preserve initial resource0 and edited absent widgets. Correct within declared native headline/reset scope, migrate only fresh absent-input Reset assertions and materially revalidate related current-source modules, no full passing replay."
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: authorized tenth native dialog correction and scheduled full upstream-absent verification in writer checkout."
+  -
+    author: "CODER"
+    body: "Implementation: native headline ItemSet ownership verified by scheduled full14320app122inventory13tooling2resource303browser cases, full actual application Istanbul100 and preserved source/canonical owners."
 events:
   -
     type: "status"
@@ -41,8 +61,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: scheduled full14320distinct app cases24fresh after failed/new-only2case closure,122inventory13tooling2resource303browser allpass. Entire three modules627lines687statements123functions485branches and full application19334lines21251statements4843functions15683branches actual Istanbul100/zero-negative. Inventory configuredV8 strict100 zero-negative, no config change/replay. Build/seven statics/nine metadata/final format gates pass, six canonical prefixes600unmodified old test files1854unrelated files retained; three source-proven ODT default-owner assertions only migrated. Source unchanged and complete maps identical, raw failures retained, reference restored, goal active/incomplete new full baselineSZKQTN counter0."
+  -
+    type: "status"
+    at: "2026-10-09T18:00:24.902Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+    note: "Implementation: native headline ItemSet ownership verified by scheduled full14320app122inventory13tooling2resource303browser cases, full actual application Istanbul100 and preserved source/canonical owners."
+  -
+    type: "verify"
+    at: "2026-10-09T18:04:21.856Z"
+    author: "CODER"
+    state: "needs_rework"
+    note: "Rework: same-agent source review found absent-headline Reset must leave edited widgets untouched under pinned direct-item guard. Correct only page/fresh source-lifecycle expectations in original scope; current-source related proof and replacement of obsolete entire page coverage entry required, no full passing replay."
 doc_version: 3
-doc_updated_at: "2026-10-09T17:59:08.905Z"
+doc_updated_at: "2026-10-09T18:06:36.333Z"
 doc_updated_by: "CODER"
 description: "Resumed correction10/10 since XJTGF0. Capture source native table headline in shell dialog ItemSet and read authoritative direct input in Text Flow. Preserve saved widgets, native graph/history, old assertions and canonical inventory prefixes. Perform the scheduled full upstream-absent suite using actual Istanbul and repair failures before completion."
 sections:
@@ -92,6 +125,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-10-09T18:04:21.856Z — VERIFY — needs_rework
+
+    By: CODER
+
+    Note: Rework: same-agent source review found absent-headline Reset must leave edited widgets untouched under pinned direct-item guard. Correct only page/fresh source-lifecycle expectations in original scope; current-source related proof and replacement of obsolete entire page coverage entry required, no full passing replay.
+    Attempts: 1
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T18:00:24.902Z, excerpt_hash=sha256:1f6977d6ec1d0e4865e8721df9b26a2419a130a13e83b1f39eb394b5fc0e6aa8
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610091732-SZKQTN/blueprint/resolved-snapshot.json
+    - old_digest: 32599d0ff1248b5cdd5ec9b44c432ddea841ca74b9f6fad782d1ce4e6b622598
+    - current_digest: 32599d0ff1248b5cdd5ec9b44c432ddea841ca74b9f6fad782d1ce4e6b622598
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610091732-SZKQTN
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610091732-SZKQTN --result verified-202610091732-SZKQTN --commit a2ddcbca11976ff4f6009e1dffdd85a1bceba526
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "If needed, revert this leaf semantic commit through a separate authorized correction; preserve existing history and user changes. No destructive reset/publication."
   Findings: |-
@@ -106,6 +169,10 @@ sections:
       Resolution: Repair failed old ODT case and run it plus the one new native owner notification case only with actual Istanbul. Aggregate actual same-source complete maps and re-gate full strict100. Inventory continuation uses its enforced configured V8 provider; forced Istanbul in the unexecuted wrapper was an agent command-selection error, not a repository migration requirement. No inventory test has run yet.
 
     - SZKQTN scheduled tenth-correction full result: original headline21150 is captured at source shell point before temporary borders selection and passed through the already connected native ItemSet. Text Flow reads direct input, saved checkbox/count, valid-item minimum1 and source resource absence unchecked/value0/minimum0; browser uses native minimum. No new adapter/facade, input-free native owner path remains. Actual shell cursor/selection/ring/row/cell/frame ownership and three real undo/redo cycles verified. Full application initial558files14318pass1old ODT assertion failure, all23initial fresh pass; failed/new-only closure2pass6intentional skips yields14320distinct cases24fresh, no passing replay. Production unchanged, entire complete source maps identical; actual standard current-task Istanbul aggregation only. Entire changed three modules627lines687statements123functions485branches all100; full application19334lines21251statements4843functions15683branches all100, zero negative counters. Source-proven Missing/self/cycle ODT root fallback expectations migrated to concrete original document default owner; all other old assertions/cases retained. One new actual row/cell name-broadcast case covers two genuinely missed existing paths, existing notification shape retained without claiming upstream name-hint completion. Inventory122cases38files configuredV8 strict100; tooling13cases3files, Writer-resource2cases1file, browser303cases0fail0skip0flaky, build and seven statics pass physically upstream-absent with finally restoration. Forced inventory Istanbul wrapper was corrected before any inventory run; no inventory replay/config change. Six canonical histories appended preserving old contracts; native headline fixture capture21150 only, three old ODT assertions migrated with source evidence. No upstream sources/helpers/raw maps/logs in task artifacts. Native core table uncapped member/default1 and full master/follow/root/page/section/content/HTML/VCL remain unverified; broad goal ACTIVE/incomplete. New full baseline202610091732-SZKQTN, correction counter0 after all final metadata/preservation/quality gates. Semantic binding and explicitly same-agent non-independent quality follow.
+
+    - Observation: Same-agent review of initial semantic a2ddcbca1197 found pinned direct-headline Reset guard leaves edited missing-item widgets untouched, while the implementation reset them to resource defaults.
+      Impact: Correct only existing Text Flow page and two fresh absent-input lifecycle expectations. Initial resource count0 retained; valid-item Reset still restores/saves original count/minimum1. Initial full source proof for this whole changed page becomes obsolete.
+      Resolution: 160related current-source files revalidated successfully without upstream. Build actual complete current coverage using review-current entire changed module entry only, discard old changed-page counters/maps; unchanged-source modules retain actual same-task complete-map evidence. Material source-change revalidation is recorded explicitly; rerun build, related browser properties/name paths and current statics/metadata, no whole full-suite replay or broad-goal block.
 id_source: "generated"
 ---
 ## Summary
@@ -167,6 +234,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-10-09T18:04:21.856Z — VERIFY — needs_rework
+
+By: CODER
+
+Note: Rework: same-agent source review found absent-headline Reset must leave edited widgets untouched under pinned direct-item guard. Correct only page/fresh source-lifecycle expectations in original scope; current-source related proof and replacement of obsolete entire page coverage entry required, no full passing replay.
+Attempts: 1
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T18:00:24.902Z, excerpt_hash=sha256:1f6977d6ec1d0e4865e8721df9b26a2419a130a13e83b1f39eb394b5fc0e6aa8
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610091732-SZKQTN/blueprint/resolved-snapshot.json
+- old_digest: 32599d0ff1248b5cdd5ec9b44c432ddea841ca74b9f6fad782d1ce4e6b622598
+- current_digest: 32599d0ff1248b5cdd5ec9b44c432ddea841ca74b9f6fad782d1ce4e6b622598
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610091732-SZKQTN
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610091732-SZKQTN --result verified-202610091732-SZKQTN --commit a2ddcbca11976ff4f6009e1dffdd85a1bceba526
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -186,3 +283,7 @@ Pinned tabsh.cxx lcl_TableParamToItemSet puts SfxUInt16Item(FN_PARAM_TABLE_HEADL
   Resolution: Repair failed old ODT case and run it plus the one new native owner notification case only with actual Istanbul. Aggregate actual same-source complete maps and re-gate full strict100. Inventory continuation uses its enforced configured V8 provider; forced Istanbul in the unexecuted wrapper was an agent command-selection error, not a repository migration requirement. No inventory test has run yet.
 
 - SZKQTN scheduled tenth-correction full result: original headline21150 is captured at source shell point before temporary borders selection and passed through the already connected native ItemSet. Text Flow reads direct input, saved checkbox/count, valid-item minimum1 and source resource absence unchecked/value0/minimum0; browser uses native minimum. No new adapter/facade, input-free native owner path remains. Actual shell cursor/selection/ring/row/cell/frame ownership and three real undo/redo cycles verified. Full application initial558files14318pass1old ODT assertion failure, all23initial fresh pass; failed/new-only closure2pass6intentional skips yields14320distinct cases24fresh, no passing replay. Production unchanged, entire complete source maps identical; actual standard current-task Istanbul aggregation only. Entire changed three modules627lines687statements123functions485branches all100; full application19334lines21251statements4843functions15683branches all100, zero negative counters. Source-proven Missing/self/cycle ODT root fallback expectations migrated to concrete original document default owner; all other old assertions/cases retained. One new actual row/cell name-broadcast case covers two genuinely missed existing paths, existing notification shape retained without claiming upstream name-hint completion. Inventory122cases38files configuredV8 strict100; tooling13cases3files, Writer-resource2cases1file, browser303cases0fail0skip0flaky, build and seven statics pass physically upstream-absent with finally restoration. Forced inventory Istanbul wrapper was corrected before any inventory run; no inventory replay/config change. Six canonical histories appended preserving old contracts; native headline fixture capture21150 only, three old ODT assertions migrated with source evidence. No upstream sources/helpers/raw maps/logs in task artifacts. Native core table uncapped member/default1 and full master/follow/root/page/section/content/HTML/VCL remain unverified; broad goal ACTIVE/incomplete. New full baseline202610091732-SZKQTN, correction counter0 after all final metadata/preservation/quality gates. Semantic binding and explicitly same-agent non-independent quality follow.
+
+- Observation: Same-agent review of initial semantic a2ddcbca1197 found pinned direct-headline Reset guard leaves edited missing-item widgets untouched, while the implementation reset them to resource defaults.
+  Impact: Correct only existing Text Flow page and two fresh absent-input lifecycle expectations. Initial resource count0 retained; valid-item Reset still restores/saves original count/minimum1. Initial full source proof for this whole changed page becomes obsolete.
+  Resolution: 160related current-source files revalidated successfully without upstream. Build actual complete current coverage using review-current entire changed module entry only, discard old changed-page counters/maps; unchanged-source modules retain actual same-task complete-map evidence. Material source-change revalidation is recorded explicitly; rerun build, related browser properties/name paths and current statics/metadata, no whole full-suite replay or broad-goal block.
