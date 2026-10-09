@@ -1,10 +1,11 @@
 ---
 id: "202610090711-S6VCEJ"
 title: "Calc core coordinate and range foundation"
-status: "DOING"
+result_summary: "verified-202610090711-S6VCEJ"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -25,7 +26,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-09T07:25:11.165Z"
+  updated_at: "2026-10-09T07:25:52.521Z"
   updated_by: "CODER"
   note: "verified-202610090711-S6VCEJ"
   attempts: 0
@@ -47,11 +48,16 @@ quality_review:
     - "docs/program/calc-core.md"
   findings:
     - "Reviewed exact pinned Move and constructor contracts, inclusive table-count bounds, signed narrowing, independent endpoint identities, branch coverage and absence of browser/Writer imports. No shared owner duplicated."
-commit: null
+commit:
+  hash: "7786397e3ecefceb6d8ada3e0934ee489e9f11d6"
+  message: "🧩 S6VCEJ task: persist verification and quality evidence"
 comments:
   -
     author: "CODER"
     body: "Start: implement the approved pinned Calc coordinate and range foundation with isolated Calc tests, shared-module reuse and exact source evidence on branch calc."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610090711-S6VCEJ. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -72,8 +78,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202610090711-S6VCEJ"
+  -
+    type: "verify"
+    at: "2026-10-09T07:25:52.521Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610090711-S6VCEJ"
+  -
+    type: "status"
+    at: "2026-10-09T07:25:52.720Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610090711-S6VCEJ. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-09T07:25:11.385Z"
+doc_updated_at: "2026-10-09T07:25:52.721Z"
 doc_updated_by: "CODER"
 description: "Begin approved Calc implementation on branch calc in this checkout. Reimplement pinned LibreOffice coordinate types, address and range contracts with original defaults, shared-module reuse, source provenance and independent Calc coverage. First of ten Calc tasks before a full-suite run; no branch integration."
 sections:
@@ -148,9 +167,43 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-10-09T07:25:52.521Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610090711-S6VCEJ
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T07:25:11.385Z, excerpt_hash=sha256:85ef2d0760f54c54833a98a677cdcbf7703e278f25a2cd491d2cb844427b9a62
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610090711-S6VCEJ/blueprint/resolved-snapshot.json
+    - old_digest: 783d40424197829c1b899f92dd0a759d4e42d12f5f144d258a0045b06b341bab
+    - current_digest: 783d40424197829c1b899f92dd0a759d4e42d12f5f144d258a0045b06b341bab
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610090711-S6VCEJ
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610090711-S6VCEJ --result verified-202610090711-S6VCEJ --commit 7786397e3ecefceb6d8ada3e0934ee489e9f11d6
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task implementation commit and its Calc foundation files; keep prior Writer/shared changes and other task records intact. No branch merge or history rewriting."
   Findings: "Pinned reference verified locally at exact baseline commit through an ignored symlink to the user-authorized vite-office checkout. npm ci installed locked versions inside this checkout using a repo-local ignored npm cache; package-lock unchanged. A root gitignore entry now excludes the symlink itself because the existing directory-only entry did not. No shared runtime duplication or changes. Source headers reviewed for MPL2/Apache inherited notices; TypeScript independently authored from numerical contracts. JS output tuples/operator methods and relocated header-inline class definitions are declared adaptations; native uninitialized constructors/assertions/hashing/parser/format/external/sticky/subtraction remain unrepresented. Coverage is executable completeness only, never a whole-native parity claim. Initial static checks identified native overload lint/docs requirements and local-only provenance-path routing; fixed task-owned tests/signatures/records without modifying shared validation. Same-agent quality review is not independent. Full suite cadence starts Calc1/10; no task247 Writer state changes or merges."
+extensions:
+  implementation_commit:
+    hash: "8d41bf2d1bdeeaf24ad5e9e0bb7e75c97d661c8c"
+    message: "🧩 S6VCEJ code: implement Calc coordinate and range foundation"
 id_source: "generated"
 ---
 ## Summary
@@ -229,6 +282,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202610090711-S6VCEJ --result verified-202610090711-S6VCEJ --commit 8d41bf2d1bdeeaf24ad5e9e0bb7e75c97d661c8c
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-09T07:25:52.521Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610090711-S6VCEJ
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T07:25:11.385Z, excerpt_hash=sha256:85ef2d0760f54c54833a98a677cdcbf7703e278f25a2cd491d2cb844427b9a62
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610090711-S6VCEJ/blueprint/resolved-snapshot.json
+- old_digest: 783d40424197829c1b899f92dd0a759d4e42d12f5f144d258a0045b06b341bab
+- current_digest: 783d40424197829c1b899f92dd0a759d4e42d12f5f144d258a0045b06b341bab
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610090711-S6VCEJ
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610090711-S6VCEJ --result verified-202610090711-S6VCEJ --commit 7786397e3ecefceb6d8ada3e0934ee489e9f11d6
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
