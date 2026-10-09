@@ -4,7 +4,7 @@ title: "Port Calc boolean row and column segment owners"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,33 @@ verification:
   updated_by: "CODER"
   note: "Passed436 unchanged native bool sequences and isolated debug assertion with genuine mdds/sanitizers;82 Calc tests actual100 in all four Istanbul metrics;5 shared,14 tooling,3 provenance,30 inventory tests; upstream-absent82+5+30 portable tests; TS7/lint/format/docs/ownership/size/tree/provenance and Calc/shared registry zero violations. Task8/10; Writer coverage untouched."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-09T16:34:27.284Z"
+  updated_by: "EVALUATOR"
+  note: "Approved boolean segment scope is implemented at original Calc boundaries on shared mdds; deterministic native, portable, coverage and ownership gates pass for f0e1b674913c7cd31b73d811aaa0f56e6b682825."
+  evaluated_sha: "f0e1b674913c7cd31b73d811aaa0f56e6b682825"
+  blueprint_digest: "ccb85850e5b0e3c01b18982c8d5e4391b40654b550d763ad031850eea8482c65"
+  evidence_refs:
+    - ".agentplane/tasks/202610091610-0168S5/README.md"
+    - ".agentplane/tasks/202610091610-0168S5/quality/20261009-163427284-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610091610-0168S5/quality/20261009-163427284-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610091610-0168S5/quality/20261009-163427284-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610091610-0168S5/blueprint/resolved-snapshot.json"
+    - "output/playwright/task8-native-final.log"
+    - "output/playwright/task8-native-thread.log"
+    - "output/playwright/task8-calc-final.log"
+    - "output/playwright/task8-portable-calc.log"
+    - "output/playwright/task8-portable-shared.log"
+    - "output/playwright/task8-portable-inventory.log"
+    - "output/playwright/task8-inventory-tests.log"
+    - "output/playwright/task8-typecheck-final.log"
+    - "output/playwright/task8-registry-calc-final.log"
+    - "output/playwright/task8-registry-shared.log"
+  findings:
+    - "Reviewed 331-line core owner against unchanged original bool methods: inclusive setters/query outputs, half-open removal, skip-start insertion, hint/range cursor sharing, monotonic stale forward cache, copy index invalidation and global readiness conditions are retained. getFirst guard reduction follows initialized border-node invariant; no coverage exclusions."
+    - "Native probe checks pinned source blobs and extracted group hashes, reuses genuine archive/header verification, observes copies to avoid perturbing live cursors, and keeps actual opaque RTL declarations without substituting native string bodies.436 cases and isolated assertion pass under ASan/UBSan. Ordinary82+5+30 tests pass with both upstream references absent."
+    - "Registry adds original header/core and ScGlobal owners with explicit bounded responsibilities and unverified semantic parity; Calc17 capabilities/134modules and shared1/116 have zero semantic violations. Source/capability/test references resolve; Writer code and coverage unchanged."
 commit: null
 comments:
   -
