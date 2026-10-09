@@ -77,10 +77,31 @@ for (const behind of [false, true])
             },
           );
         }
+        const expected = inserted.map(
+          /** Captures independent attributes while the inserted owners are live. @param row - Inserted row. @returns Saved row and cell values. */
+          (row) => ({
+            format: row.GetFormat(),
+            boxes: row.GetTabBoxes().map(
+              /** Saves cell identity and values before native destruction. @param box - Inserted cell. @returns Original identity and independent values. */
+              (box) => ({ owner: box, format: box.GetFormat() }),
+            ),
+          }),
+        );
         expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(1);
         for (let cycle = 0; cycle < 3; cycle++) {
           expect(f.shell.CaptureCursorState()).toEqual(before);
+          const removed = f.table
+            .GetTabLines()
+            .slice(index, index + 2)
+            .map(
+              /** Retains identities solely to check released registrations. @param row - Live row about to be removed. @returns Row and cell identities. */
+              (row) => ({ owner: row, boxes: [...row.GetTabBoxes()] }),
+            );
           expect(f.shell.Undo()).toBe(true);
+          for (const row of removed) {
+            expect(row.owner.GetRegisteredIn()).toBeUndefined();
+            for (const box of row.boxes) expect(box.GetRegisteredIn()).toBeUndefined();
+          }
           expect(f.table.GetTabLines()).toEqual(f.rows);
           expect(f.shell.CaptureCursorState()).toEqual(before);
           expect(f.shell.Redo()).toBe(true);
@@ -91,18 +112,17 @@ for (const behind of [false, true])
               (row) => row.GetFormat(),
             ),
           ).toEqual(
-            inserted.map(
-              /** Reads original insertion attributes. @param row - Prior owner. @returns Format. */
-              (row) => row.GetFormat(),
+            expected.map(
+              /** Reads values captured before the original row was destroyed. @param row - Saved values. @returns Format. */
+              (row) => row.format,
             ),
           );
           for (const [offset, row] of current.entries()) {
             expect(row).not.toBe(inserted[offset]);
             for (const [column, box] of row.GetTabBoxes().entries()) {
-              expect(box).not.toBe(required(inserted[offset]).GetTabBoxes()[column]);
-              expect(box.GetFormat()).toEqual(
-                required(required(inserted[offset]).GetTabBoxes()[column]).GetFormat(),
-              );
+              const original = required(required(expected[offset]).boxes[column]);
+              expect(box).not.toBe(original.owner);
+              expect(box.GetFormat()).toEqual(original.format);
               expect(required(box.GetParagraphs()[0]).GetText()).toBe("");
             }
           }

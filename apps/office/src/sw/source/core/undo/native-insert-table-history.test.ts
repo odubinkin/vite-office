@@ -36,27 +36,30 @@ it("replays inserted table, appended native row and later cell typing through on
     expect(o.shell.GoNextCell()).toBe(true);
     expect(table.GetTabLines()).toHaveLength(3);
     const appended = required(table.GetTabLines()[2]),
-      cell = o.shell.GetActiveParagraph();
+      cell = o.shell.GetActiveParagraph(),
+      appendedFormat = appended.GetFormat(),
+      appendedBoxes = [...appended.GetTabBoxes()],
+      appendedBoxFormats = appendedBoxes.map(
+        /** Captures complete cell values before Undo destroys their owners. @param box - Live original cell. @returns Independent format. */
+        (box) => box.GetFormat(),
+      );
     o.shell.Insert("fresh");
     expect(o.shell.Undo()).toBe(true);
     expect(o.shell.Undo()).toBe(true);
+    expect(appended.GetRegisteredIn()).toBeUndefined();
+    for (const box of appendedBoxes) expect(box.GetRegisteredIn()).toBeUndefined();
     expect(o.shell.Redo()).toBe(true);
     const currentRow = required(table.GetTabLines()[2]),
       currentCell = required(required(currentRow.GetTabBoxes()[0]).GetParagraphs()[0]);
     expect(currentRow).not.toBe(appended);
     expect(currentCell).not.toBe(cell);
-    expect(currentRow.GetFormat()).toEqual(appended.GetFormat());
+    expect(currentRow.GetFormat()).toEqual(appendedFormat);
     expect(
       currentRow.GetTabBoxes().map(
         /** Reads complete newly recreated attributes. @param box - Current cell. @returns Format. */
         (box) => box.GetFormat(),
       ),
-    ).toEqual(
-      appended.GetTabBoxes().map(
-        /** Reads originally accepted attributes. @param box - Prior cell. @returns Format. */
-        (box) => box.GetFormat(),
-      ),
-    );
+    ).toEqual(appendedBoxFormats);
     expect(o.shell.GetActiveParagraph()).toBe(currentCell);
     expect(currentCell.GetText()).toBe("");
     expect(o.shell.Redo()).toBe(true);

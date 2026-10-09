@@ -1,0 +1,179 @@
+{
+  "result": "pass",
+  "resolvedFailures": [
+    {
+      "file": "apps/office/src/sw/browser/editor/native-table-tab.test.tsx",
+      "name": "native table Tab UI renders appended empty cells and restores native row/cursor with UndoRedo",
+      "status": "passed"
+    },
+    {
+      "file": "apps/office/src/sw/source/core/table/native-row-insertion.test.ts",
+      "name": "inserts counted rows at selected edge behind=false",
+      "status": "passed"
+    },
+    {
+      "file": "apps/office/src/sw/source/core/table/native-row-insertion.test.ts",
+      "name": "inserts counted rows at selected edge behind=true",
+      "status": "passed"
+    },
+    {
+      "file": "apps/office/src/sw/source/core/undo/native-insert-table-history.test.ts",
+      "name": "replays inserted table, appended native row and later cell typing through one history stack",
+      "status": "passed"
+    }
+  ],
+  "selectedFiles": 21,
+  "passedCases": 111,
+  "failedCases": 0,
+  "skippedCases": 0,
+  "caseIdentifierStatusSHA256": "2d9ab331ef2b999a1887deac149884929bb4f2de417bd820e67ad55bfd0946b6",
+  "coverage": {
+    "app": {
+      "files": 318,
+      "mapSHA256": "dd9b77bacab4323defdc7a854c231ead4e180e27f8e24c4517bc2c9841c7726e",
+      "proofSHA256": "a23ea300707fdfaaf62923e64b4e7c29752747540ba4ea6cf74f4330bcadcf68",
+      "currentSourceBindingSHA256": "49e66d5889e6bce734e50d885df7367b2e4d9ab8576b4a3085cc7da8f45ca52c",
+      "entirePriorMapsAndCountersRetainedUnchanged": true,
+      "summary": {
+        "lines": {
+          "total": 18105,
+          "covered": 18105,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 19876,
+          "covered": 19876,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 4554,
+          "covered": 4554,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 14568,
+          "covered": 14568,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      }
+    },
+    "inventory": {
+      "files": 38,
+      "mapSHA256": "a0e151c2ecef06fb5b54848945015a70f568780395767cb413ffddc02a8de410",
+      "proofSHA256": "5c43a8f01265876178c73869204175bfde82507529383d6eac361ff12ce0b0b8",
+      "currentSourceBindingSHA256": "1bb8eed12a56d79d12e1f5e7a74eb6cebf77d8a08902e3c8a8ca4478331cd998",
+      "entirePriorMapsAndCountersRetainedUnchanged": true,
+      "summary": {
+        "lines": {
+          "total": 1464,
+          "covered": 1464,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 1523,
+          "covered": 1523,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 384,
+          "covered": 384,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 1081,
+          "covered": 1081,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      }
+    }
+  },
+  "coverageEvidence": "Production unchanged. Entire246 verified actual maps/counters retained after exact source-by-source hashes and whole map/proof digests match. Targeted raw profile remains partial and global threshold exit1 is retained, not claimed100. No counter edits or schema transfers. Historical full247 raw failures/coverage remain unchanged.",
+  "preservation": {
+    "baselineFiles": 1274,
+    "changed": [
+      "apps/office/src/sw/browser/editor/native-table-tab.test.tsx",
+      "apps/office/src/sw/source/core/table/native-row-insertion.test.ts",
+      "apps/office/src/sw/source/core/undo/native-insert-table-history.test.ts"
+    ],
+    "otherAcceptanceFilesByteIdentical": 663,
+    "noProductionOrMetadataChanges": true,
+    "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+    "stashPreserved": true
+  },
+  "artifacts": {
+    "inspected": 6139,
+    "forbiddenSourceOrPython": [],
+    "rawLocation": "apps/office/node_modules/.cache/parity-coverage"
+  },
+  "checks": [
+    {
+      "command": "ap doctor",
+      "exit": 0,
+      "bytes": 1616,
+      "sha256": "0c92a84379397ba067aa9f1b644760d11c2f3a84c64e769ec644181dacc6fc6c",
+      "diagnostics": [
+        "doctor (OK)",
+        "doctor: checking workspace",
+        "doctor: checking branch_pr drift",
+        "doctor: checking runtime source",
+        "doctor: checking project-local blueprints",
+        "doctor: checking prompt graph",
+        "doctor: checking recent task archive",
+        "doctor: checking workflow contract",
+        "{\"ts\":\"2026-10-09T04:29:23.878Z\",\"component\":\"workflow-runtime\",\"event\":\"workflow_doctor_check\",\"details\":{\"ok\":true,\"findings\":0}}",
+        "warning: doctor findings: errors=0 warnings=2 info=2",
+        "- [WARN] State: managed AgentPlane hook shim is missing current readiness or fallback branches",
+        "Likely cause: the repository still has an older managed shim that cannot validate runner startup or use current fallback recovery",
+        "Next action: agentplane hooks install (rewrite the shim with the current fallback chain)",
+        "Details: Shim path: .agentplane/bin/agentplane",
+        "  - AGENTPLANE_HOOK_RUNNER fallback: present",
+        "  - AGENTPLANE_HOOK_ALLOW_GLOBAL fallback: present",
+        "  - Runner startup readiness: missing",
+        "- [INFO] State: managed pre-push hook will use installed clean-project fallback checks",
+        "Likely cause: this project does not ship a repository-local scripts/run-pre-push-hook.mjs",
+        "Next action: add project-local package scripts such as format:check or test, or keep the installed fallback (make pre-push behavior explicit when the project needs stricter repository-specific checks)",
+        "Details: Missing repository script: scripts/run-pre-push-hook.mjs",
+        "  - Fallback will consider declared scripts: build, format:check, test",
+        "- [INFO] Project blueprint compatibility: compatible; trusted=0",
+        "- [WARN] DONE task is missing implementation commit hash: 202610031635-2Z3962 (finish with --commit <hash>)."
+      ]
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "exit": 0,
+      "bytes": 18,
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9",
+      "diagnostics": [
+        "policy routing OK"
+      ]
+    },
+    {
+      "command": "git diff --check",
+      "exit": 0,
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnostics": []
+    }
+  ],
+  "fullReplay": false
+}

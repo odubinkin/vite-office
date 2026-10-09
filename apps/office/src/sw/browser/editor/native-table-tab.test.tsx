@@ -104,7 +104,10 @@ describe("native table Tab UI", /** Registers actual mounted cell traversal cont
     expect(fireEvent.keyDown(last, { key: "Tab" })).toBe(false);
     const fresh = screen.getByLabelText("Row 3 column 1 paragraph 1"),
       row = required(f.table.GetTabLines()[2]),
-      node = required(required(row.GetTabBoxes()[0]).GetParagraphs()[0]);
+      node = required(required(row.GetTabBoxes()[0]).GetParagraphs()[0]),
+      rowFormat = row.GetFormat(),
+      boxes = [...row.GetTabBoxes()],
+      textFormatColl = node.GetTextFormatColl();
     expect(fresh).toHaveTextContent("");
     expect(f.shell.GetCursor().GetPoint().GetNode()).toBe(node);
     expect(fresh.contains(window.getSelection()?.focusNode ?? null)).toBe(true);
@@ -113,6 +116,8 @@ describe("native table Tab UI", /** Registers actual mounted cell traversal cont
         expect(f.shell.Undo()).toBe(true);
       },
     );
+    expect(row.GetRegisteredIn()).toBeUndefined();
+    for (const box of boxes) expect(box.GetRegisteredIn()).toBeUndefined();
     expect(screen.queryByLabelText("Row 3 column 1 paragraph 1")).toBeNull();
     expect(f.shell.GetCursor().GetPoint().GetNode()).toBe(f.cells[3]);
     expect(f.shell.GetCursor().GetPoint().GetContentIndex()).toBe(3);
@@ -125,8 +130,8 @@ describe("native table Tab UI", /** Registers actual mounted cell traversal cont
       currentNode = required(required(currentRow.GetTabBoxes()[0]).GetParagraphs()[0]);
     expect(currentRow).not.toBe(row);
     expect(currentNode).not.toBe(node);
-    expect(currentRow.GetFormat()).toEqual(row.GetFormat());
-    expect(currentNode.GetTextFormatColl()).toBe(node.GetTextFormatColl());
+    expect(currentRow.GetFormat()).toEqual(rowFormat);
+    expect(currentNode.GetTextFormatColl()).toBe(textFormatColl);
     expect(f.shell.GetCursor().GetPoint().GetNode()).toBe(currentNode);
     expect(
       screen

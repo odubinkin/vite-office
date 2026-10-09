@@ -1,0 +1,26 @@
+{
+  "base": "939c9b0d897b8ee99ebdd5ce9ffcd2974a698c6a",
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sources": [
+    {
+      "path": "sw/source/core/table/swtable.cxx",
+      "sha256": "10c536056498dd001b3a5c75638040ee5daef966ede231c66947da8e704b1206",
+      "identifier": "SwTableLine::~SwTableLine",
+      "line": 1464
+    },
+    {
+      "path": "sw/source/core/undo/untbl.cxx",
+      "sha256": "147e1b9f9870416bc83d2b918a0621e810003594b9a95ede372518925b2c245b",
+      "identifier": "void KillEmptyFrameFormat",
+      "line": 104
+    }
+  ],
+  "trackedBaselineFiles": 1274,
+  "baselineSHA256": "0d7c92da6b83557d444c854f0d2d71ddf642cae476ecd8f506819ce52e2ef337",
+  "scope": [
+    "apps/office/src/sw/browser/editor/native-table-tab.test.tsx",
+    "apps/office/src/sw/source/core/table/native-row-insertion.test.ts",
+    "apps/office/src/sw/source/core/undo/native-insert-table-history.test.ts"
+  ],
+  "nativeContract": "Undo destroys row/box clients and releases last Writer-client format; Redo recreates owners. Acceptance must snapshot complete independent values before destruction and verify both reconstructed attributes and released registrations."
+}

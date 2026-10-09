@@ -1,0 +1,125 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/sw/browser/editor/native-table-tab.test.tsx": "d9aae9f33954c0b0f72bd991848946556e70f28e24a67a15c767c9a9cd6f8016",
+    "apps/office/src/sw/source/core/table/native-row-insertion.test.ts": "30ad32a1956b14fb471830e7cbd79c353deeb2da4de95a6e0a31f824925efd97",
+    "apps/office/src/sw/source/core/undo/native-insert-table-history.test.ts": "618a9df9c3235c47e7699a4e7d8329b51583498a147802d35e79681b90a96628"
+  },
+  "selectedFiles": 21,
+  "selectedPathsSHA256": "48c462460f3410488387e5b0270e7810f0ca9e1b601717445ad0287de7cd8891",
+  "records": [
+    {
+      "kind": "format",
+      "command": "npm exec -- prettier --check apps/office/src/sw/browser/editor/native-table-tab.test.tsx apps/office/src/sw/source/core/table/native-row-insertion.test.ts apps/office/src/sw/source/core/undo/native-insert-table-history.test.ts",
+      "exit": 0,
+      "outputBytes": 66,
+      "outputSHA256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+      "profile": "upstream-absent",
+      "totals": []
+    },
+    {
+      "kind": "lint",
+      "command": "npm exec -- eslint apps/office/src/sw/browser/editor/native-table-tab.test.tsx apps/office/src/sw/source/core/table/native-row-insertion.test.ts apps/office/src/sw/source/core/undo/native-insert-table-history.test.ts --max-warnings 0",
+      "exit": 0,
+      "outputBytes": 0,
+      "outputSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "profile": "upstream-absent",
+      "totals": []
+    },
+    {
+      "kind": "typecheck",
+      "command": "npm run typecheck",
+      "exit": 0,
+      "outputBytes": 240,
+      "outputSHA256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed",
+      "profile": "upstream-absent",
+      "totals": []
+    },
+    {
+      "kind": "build-static",
+      "command": "npm run test:static",
+      "exit": 0,
+      "outputBytes": 1443,
+      "outputSHA256": "ea69ee6ef9ecd0d19c57235ec1ddd96df04f73a3fb88bccdb202bf0272c6d6f9",
+      "profile": "upstream-absent",
+      "totals": []
+    },
+    {
+      "kind": "docs",
+      "command": "npm run check:docs",
+      "exit": 0,
+      "outputBytes": 120,
+      "outputSHA256": "e442ebfaa6c210e43ad4572bff08c13d2231523bddf85b9a00c71b09999253ff",
+      "profile": "upstream-absent",
+      "totals": []
+    },
+    {
+      "kind": "file-size",
+      "command": "npm run check:file-size",
+      "exit": 0,
+      "outputBytes": 4155,
+      "outputSHA256": "6420a30bedb3f54fb83bd9025aac0963194a77ac3fee4abf246329f4a63651d0",
+      "profile": "upstream-absent",
+      "totals": []
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/browser/editor/native-table-tab.test.tsx src/sw/source/core/table/native-row-insertion.test.ts src/sw/source/core/undo/native-insert-table-history.test.ts src/sw/source/core/undo/native-numeric-row-insertion-history.test.ts src/sw/source/core/table/native-numeric-row-insertion.test.ts src/sw/browser/editor/native-numeric-row-insertion.test.tsx src/sw/source/core/table/native-row-frame-format.test.ts src/sw/source/core/undo/native-row-frame-format-history.test.ts src/sw/source/core/undo/native-row-format-client-history.test.ts src/sw/source/core/layout/native-row-format-client.test.ts src/sw/browser/editor/native-row-format-client.test.tsx src/sw/source/core/table/native-box-frame-format.test.ts src/sw/source/core/undo/native-box-frame-format-history.test.ts src/sw/source/core/undo/native-cell-format-client-history.test.ts src/sw/source/core/layout/native-cell-format-client.test.ts src/sw/browser/editor/native-cell-format-client.test.tsx src/sw/browser/presentation/native-table-format-lifecycle.test.tsx src/sw/source/core/attr/native-format-attribute-notify.test.ts src/sw/source/core/undo/native-format-attribute-notify-history.test.ts src/sw/browser/presentation/native-format-notifier-store.test.ts src/sw/browser/editor/native-format-notifier.test.tsx --coverage.reportOnFailure --coverage.reporter=json-summary --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/F5D15Q.app-results.json",
+      "exit": 1,
+      "outputBytes": 6610,
+      "outputSHA256": "8e6f7c798ce59b614b423c0c92bad737ba5afe8891ca3d7e6d0c82eac16ae447",
+      "profile": "upstream-absent",
+      "totals": [
+        "Test Files  21 passed (21)",
+        "Tests  111 passed (111)",
+        "ERROR: Coverage for lines (42.47%) does not meet global threshold (100%)",
+        "ERROR: Coverage for functions (45.87%) does not meet global threshold (100%)",
+        "ERROR: Coverage for statements (40.77%) does not meet global threshold (100%)",
+        "ERROR: Coverage for branches (29.42%) does not meet global threshold (100%)"
+      ],
+      "cases": {
+        "passed": 111,
+        "failed": 0,
+        "skipped": 0,
+        "total": 111
+      },
+      "failedCases": [],
+      "errors": [],
+      "unhandledErrorCount": 0,
+      "rawCoverageMapSHA256": "4a0f844aa77e4a2d29d01934f497c1b75618cc508480d3631f89392d9312bc75",
+      "rawPartialCoverage": {
+        "lines": {
+          "total": 18105,
+          "covered": 7690,
+          "skipped": 0,
+          "pct": 42.47
+        },
+        "statements": {
+          "total": 19876,
+          "covered": 8104,
+          "skipped": 0,
+          "pct": 40.77
+        },
+        "functions": {
+          "total": 4554,
+          "covered": 2089,
+          "skipped": 0,
+          "pct": 45.87
+        },
+        "branches": {
+          "total": 14568,
+          "covered": 4287,
+          "skipped": 0,
+          "pct": 29.42
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "globalThresholdResultIsPartialProfile": true
+    }
+  ]
+}
