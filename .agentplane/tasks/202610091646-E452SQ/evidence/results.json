@@ -766,9 +766,50 @@
       "rawLogHash": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed"
     }
   ],
-  "semanticCommit": null,
+  "semanticCommit": "37c5510fe83c73c1a205a40dc9812152ca8721cf",
   "quality": {
     "independent": false,
-    "status": "pending semantic binding"
-  }
+    "status": "pass",
+    "evaluatedSha": "37c5510fe83c73c1a205a40dc9812152ca8721cf",
+    "report": ".agentplane/tasks/202610091646-E452SQ/quality/20261009-170236033-recovery-context/quality-report.json",
+    "reportHash": "8ad0626e608eceb1e438a9d9165a4f1a367385e355b7b9539c00a333cf954420"
+  },
+  "metadataFinalFormatting": [
+    {
+      "label": "metadata-final-format",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "prettier",
+        "--write",
+        ".agentplane/tasks/202610091646-E452SQ/evidence/results.json"
+      ],
+      "status": 0,
+      "upstreamAbsent": true
+    },
+    {
+      "label": "metadata-final-format-check",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "prettier",
+        "--check",
+        ".agentplane/tasks/202610091646-E452SQ/evidence/results.json",
+        "docs/program/registry/writer/runtime/sw/source/core/table/swtable.ts.json",
+        "docs/program/registry/writer/provenance/sw/source/core/table/swtable.ts.json",
+        "docs/program/registry/writer/runtime/sw/source/core/layout/tabfrm.ts.json",
+        "docs/program/registry/writer/provenance/sw/source/core/layout/tabfrm.ts.json",
+        "docs/program/registry/writer/runtime/sw/source/ui/table/tabledlg.ts.json",
+        "docs/program/registry/writer/provenance/sw/source/ui/table/tabledlg.ts.json",
+        "docs/program/registry/writer/runtime/sw/source/uibase/shells/tabsh.ts.json",
+        "docs/program/registry/writer/provenance/sw/source/uibase/shells/tabsh.ts.json",
+        "docs/program/registry/writer/runtime/sw/browser/presentation/WriterTableDialog.tsx.json",
+        "docs/program/registry/writer/provenance/sw/browser/presentation/WriterTableDialog.tsx.json"
+      ],
+      "status": 0,
+      "upstreamAbsent": true
+    }
+  ]
 }
