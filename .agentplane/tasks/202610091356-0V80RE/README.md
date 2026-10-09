@@ -1,10 +1,11 @@
 ---
 id: "202610091356-0V80RE"
 title: "Route format inheritance through native SwFormatChangeHint clients"
-status: "DOING"
+result_summary: "Native inheritance now uses original format hints and registration"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -51,6 +52,9 @@ comments:
   -
     author: "CODER"
     body: "Implementation: native inheritance dispatch uses original format hints and registration; borrowed pointers, locked descendants and actual UI refresh verified. Semantic commit0d970ddd360e."
+  -
+    author: "CODER"
+    body: "Verified: native inheritance now follows original SwFormatChangeHint clients, original registrations, locked forwarding and direct UI invalidation;308related scenarios and current five-module Istanbul100 pass; inventory history and registered deviations preserved."
 events:
   -
     type: "status"
@@ -72,8 +76,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "308unique related scenarios including7fresh original-owner/core/history/mounted UI cases pass; initial306pass1fresh SaveTable expectation corrected from pinned source,2failed/new-only closure passes3deliberate skips,0passing replay. Five complete current production modules actual same-source/identical-map Istanbul378lines428statements112functions237branches all-four100,0negative,no prior counter transfer. All static/TS7/build/docs/size/tree/provenance/registry/resource/routing/doctor gates pass;10canonical history prefixes and573unchanged prior tests preserved. Source contracts reviewed; registered deviations untouched. Evidence results.json and semantic0d970ddd360e."
+  -
+    type: "status"
+    at: "2026-10-09T14:15:50.555Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native inheritance now follows original SwFormatChangeHint clients, original registrations, locked forwarding and direct UI invalidation;308related scenarios and current five-module Istanbul100 pass; inventory history and registered deviations preserved."
 doc_version: 3
-doc_updated_at: "2026-10-09T14:15:18.509Z"
+doc_updated_at: "2026-10-09T14:15:50.558Z"
 doc_updated_by: "CODER"
 description: "Remove the document-device parent-change notification and duplicated derivedFrom pointer. Port borrowed old/new format hints and locked original-client/notifier forwarding, parent-item-set rebinding, native frame/browser invalidation. Preserve separate existing name/node notification paths and all registered deviations; add core/history/mounted UI evidence and append canonical inventory evidence. User-authorized parity correction2 after XJTGF0 full baseline."
 sections:
