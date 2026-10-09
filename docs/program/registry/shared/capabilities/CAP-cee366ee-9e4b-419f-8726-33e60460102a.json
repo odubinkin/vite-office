@@ -1,0 +1,94 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-cee366ee-9e4b-419f-8726-33e60460102a",
+    "capabilityId": "CAP-cee366ee-9e4b-419f-8726-33e60460102a",
+    "suite": "shared",
+    "subsystem": "cell-storage",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original default lu16/event/exec/empty-dispatch aliases and all12 standard dispatcher registration are preserved over actual shared owners.",
+      "Original input-end empty-before-bound behavior and exact native UInt64 arithmetic, including wrap before comparison, retain original result/diagnostic.",
+      "Original forward/back/zero/end block position movement copies the source pair and preserves borrowed node identity and signed32 step casts.",
+      "Original optional trace increments/decrements borrowed depth, suppresses nested calls and preserves scope unwind; empty event callbacks remain no-ops.",
+      "Actual shared delayed iterator gains original random-access forward/reverse std::distance without a duplicate store."
+    ],
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "Original mdds storage responsibility and algorithms remain in their shared owner; template and STL allocation syntax is adapted with explicit limits."
+    },
+    "capability": "Shared original container utility traits position input and trace ownership",
+    "gaps": [
+      "Original util events/default trait aliases, explicit empty type identities, optional trace scope depth/lifetime, standard native64 unsigned input-end arithmetic and valid borrowed position movement are implemented. Native static types/RAII/reference/std::distance/category syntax use explicit TS witnesses; callers dispose trace exactly once in finally. Bigint preserves UInt64 wrap; number projections require exact bounded logical indices. Native int32 steps/casts retained for valid logical block positions. Full compile-time types_util traits, trace call-site macros, alternative signed/size widths, arbitrary input iterator categories, invalid iterator lifetimes, native const/reference/allocator/destructor ABI and actual TS soa iterator/container/Calc document/browser remain unverified. The native soa container produces observations only; the TS test iterator borrows its committed node projections and is not a replacement runtime engine. No complete upstream module certification."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/mdds-reference/include/mdds/multi_type_vector/util.hpp",
+          "marker": "struct default_traits"
+        },
+        {
+          "path": "vendor/mdds-reference/include/mdds/multi_type_vector/standard_element_blocks.hpp",
+          "marker": "struct standard_element_blocks_traits"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/mdds-reference/test/multi_type_vector/default/tc/position.inl",
+          "marker": "void mtv_test_position_advance()"
+        }
+      ],
+      "docs": [
+        {
+          "path": "download.lst",
+          "marker": "mdds-3.2.1.tar.xz"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/util.ts",
+          "marker": "default_traits"
+        },
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/standard_element_blocks.ts",
+          "marker": "standard_element_blocks_traits"
+        },
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/delayed_delete_vector.ts",
+          "marker": "distance_to"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/util.test.ts",
+          "marker": "matches complete mutable and const original soa position movement"
+        },
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/util.test.ts",
+          "marker": "matches original trace scope depth nesting and exception unwind"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Shared container utilities and traits"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "Apply original default traits trace lifetime and native position utility contracts over real shared owners",
+    "scopeLimitations": [
+      "Original util events/default trait aliases, explicit empty type identities, optional trace scope depth/lifetime, standard native64 unsigned input-end arithmetic and valid borrowed position movement are implemented. Native static types/RAII/reference/std::distance/category syntax use explicit TS witnesses; callers dispose trace exactly once in finally. Bigint preserves UInt64 wrap; number projections require exact bounded logical indices. Native int32 steps/casts retained for valid logical block positions. Full compile-time types_util traits, trace call-site macros, alternative signed/size widths, arbitrary input iterator categories, invalid iterator lifetimes, native const/reference/allocator/destructor ABI and actual TS soa iterator/container/Calc document/browser remain unverified. The native soa container produces observations only; the TS test iterator borrows its committed node projections and is not a replacement runtime engine. No complete upstream module certification.",
+      "Contextual original upstream position QA is source evidence only; genuine new driver calls unchanged actual headers, no upstream QA execution/port certification."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

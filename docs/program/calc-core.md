@@ -1,5 +1,29 @@
 # Calc coordinate foundation
 
+## Shared container utilities and traits
+
+Task `202610092012-8RZCZ1` ports original mdds `util.hpp`: empty events,
+lu16/default execution/empty dispatcher traits, clone tag type witness,
+optional trace depth scope and logical position utilities. Standard traits
+register the existing twelve shared block owners. Actual delayed iterators
+provide original forward/reverse random-access distance without another store.
+
+Input-end calculation preserves empty-before-bound and UInt64 wrap before
+comparison; bigint is exact, number projections require exact bounded indices.
+Position movement copies the borrowed iterator/offset pair and follows original
+signed32 casts and forward/back block traversal. Trace cleanup pairs one
+construction/disposal in finally to adapt original RAII exception unwind;
+absent trace is a sink and nested callbacks are suppressed. Compile-time empty
+policy/clone types are explicit identity witnesses, not scheduler behavior.
+
+Native comparisons use unchanged real soa containers and iterators. Portable
+TS tests borrow complete original node projections only as generic iterator
+syntax; no TS soa container is certified or synthesized. Full types_util
+compile traits, call-site tracing macros, alternate size/iterator categories,
+native reference/const/allocator/destructor ABI and actual MTV/Calc document/UI
+remain subsequent real dependencies. CALC-023 records the original arithmetic
+preconditions without adding a bounds/overflow repair.
+
 ## Shared block dispatch and scalar callbacks
 
 Task `202610091956-H5APAX` ports original `block_funcs.hpp` static dispatch

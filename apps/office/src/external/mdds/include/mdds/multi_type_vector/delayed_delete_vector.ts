@@ -26,6 +26,10 @@ export class delayed_delete_vector_iterator<T extends DelayedVectorValue> {
     this.position += this.reverse ? -count : count;
     return this;
   }
+  /** Retains original native random-access std::distance for one valid borrowed vector range. @param other - Terminal iterator. @returns Signed distance. */
+  public distance_to(other: delayed_delete_vector_iterator<T>): number {
+    return this.reverse ? this.position - other.position : other.position - this.position;
+  }
   /** Reads the referenced scalar. @returns Native dereference. */
   public get(): T {
     return this.storage.values[this.position - (this.reverse ? 1 : 0)] as T;

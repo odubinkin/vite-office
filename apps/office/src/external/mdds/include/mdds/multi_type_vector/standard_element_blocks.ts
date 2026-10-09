@@ -1,6 +1,8 @@
-/** @fileoverview Original mdds3.2.1 standard scalar block type IDs and unmanaged aliases; scalar callbacks retain explicit native type witnesses; traits are a separate dependency. */
+/** @fileoverview Original mdds3.2.1 standard scalar block type IDs and unmanaged aliases; scalar callbacks retain explicit native type witnesses; standard traits reuse the original default owner. */
 // SPDX-FileCopyrightText: 2022 - 2025 Kohei Yoshida
 // SPDX-License-Identifier: MIT
+import { default_traits } from "./util.ts";
+import { element_block_funcs } from "./block_funcs.ts";
 import { MDDS_MTV_DEFINE_ELEMENT_CALLBACKS } from "./macro.ts";
 import { default_element_block, element_type_reserved_start } from "./types.ts";
 export const element_type_boolean = element_type_reserved_start;
@@ -203,3 +205,22 @@ export const string_element_callbacks = MDDS_MTV_DEFINE_ELEMENT_CALLBACKS(
   "",
   string_element_block,
 );
+
+/** Original standard trait specialization; only block_funcs replaces the inherited default. */
+export const standard_element_blocks_traits = {
+  ...default_traits,
+  block_funcs: element_block_funcs(
+    boolean_element_block,
+    int8_element_block,
+    uint8_element_block,
+    int16_element_block,
+    uint16_element_block,
+    int32_element_block,
+    uint32_element_block,
+    int64_element_block,
+    uint64_element_block,
+    float_element_block,
+    double_element_block,
+    string_element_block,
+  ),
+};

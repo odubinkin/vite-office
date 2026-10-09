@@ -447,6 +447,22 @@ failure: valid registered block lifetime is its caller precondition, and actual
 Calc/MTV destructor paths still require review. Decision: preserve the original
 exception and null fast path; record the TODO without changing the contract.
 
+## CALC-023 — input-end bounds follow unsigned arithmetic without overflow checks
+
+Pinned mdds3.2.1 `multi_type_vector/util.hpp`, `calc_input_end_position`, assigns
+std::distance to the supplied size type and calculates pos + length - 1 before
+checking the result against total_size. With UInt64, pos=UINT64_MAX, length=2,
+total_size=1 wraps to end_pos=0 and returns 0,true. A reversed original random
+access range has a negative signed distance; assigning it to UInt64 can also
+wrap into an apparently in-range end position. Empty input returns 0,false
+before inspecting even an out-of-range insertion position.
+
+The genuine unchanged native helper and borrowed iterators reproduce these
+results. This documents helper arithmetic, not a demonstrated Calc corruption:
+normal forward ranges and bounded logical positions are caller preconditions,
+and actual Calc/MTV consumers still require review. Decision: preserve UInt64
+wrap and empty-input ordering; do not introduce overflow/reversed-range guards.
+
 ## Reviewed API distinctions
 
 These distinctions have been discussed but are not classified as defects:
