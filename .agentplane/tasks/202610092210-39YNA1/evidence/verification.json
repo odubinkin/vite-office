@@ -1,6 +1,6 @@
 {
   "taskId": "202610092210-39YNA1",
-  "status": "checks-passed-pending-exact-SHA-quality",
+  "status": "checks-passed-exact-SHA-quality-pass",
   "scope": "One native frame-only column print-width normalization in ndtbl.ts. Two fresh test files, two precise old fixture migrations and two existing canonical records. Source normalization remains before table attribute history.",
   "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
   "baselineTag": "libreoffice-26.8.0.2",
@@ -729,5 +729,11 @@
     "Registered recovery/open/save/settings/UI deviations preserved."
   ],
   "fullSuite": "Not due correction9of10 after SZKQTN. Broad goal active/incomplete.",
-  "quality": "Pending exact semantic SHA; same-agent non-independent quality review required."
+  "quality": {
+    "verdict": "pass",
+    "evaluatedSha": "7558fc6813581fa0c7a244bcf31f8bd1a8ccd163",
+    "report": ".agentplane/tasks/202610092210-39YNA1/quality/20261009-222517818-recovery-context/quality-report.json",
+    "independence": "Same-agent, non-independent local review explicitly recorded."
+  },
+  "semanticCommit": "7558fc6813581fa0c7a244bcf31f8bd1a8ccd163"
 }

@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "task_id": "202610092210-39YNA1",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-09T22:25:17.818Z",
+  "verdict": "pass",
+  "summary": "Same-agent, non-independent review of exact semantic SHA 7558fc6813581fa0c7a244bcf31f8bd1a8ccd163: approved original effective complete frame-size width-only normalization matches pinned ndtbl.cxx2871..2922 before native attribute history; final whole ndtbl.ts actual current-map Istanbul100 all four metrics and572latest related cases pass.",
+  "evaluated_sha": "7558fc6813581fa0c7a244bcf31f8bd1a8ccd163",
+  "blueprint_digest": "92791c6ba4ae4e0ec0120b6e10b2e5ec06d942067e6272221201e5f1d7afffa3",
+  "findings": [
+    "Effective original frame item clone preserves all context; scalar table.GetFormat/SetFormat and detached summed-width guessing removed from native normalization. Original separator recollection and pre-history order retained.",
+    "Original complete LR/UL/Hori/split/collapse values/direct-inherited states and parent owners, graph/list/cursor persist through3actual cycles; mounted Columns/ResetCancel and ODT normalized width/columns/direct attrs verified. Native actual mutation no scalar call; existing empty generic history calls explicitly identified.",
+    "629baseline tests:2files/4precise source-backed fixture operations;627others byte unchanged;2canonical/parent prefixes retained.9absent statics/currentbuild/7browser including3real mouse-column cases and9restored metadata pass."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610092210-39YNA1/README.md",
+    ".agentplane/tasks/202610092210-39YNA1/evidence/verification.json",
+    "7558fc6813581fa0c7a244bcf31f8bd1a8ccd163"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Generic UndoAttrTable empty scalar calls and inherited-parent ODT GetFormat projection loss remain explicitly unported follow-ups; this review does not claim complete history/transport/upstream parity.",
+    "Source shadow/vertical/full layout/VCL and explicit legacy ingress remain incomplete; registered I/O/recovery deviations preserved. Same-agent non-independent local review."
+  ]
+}
