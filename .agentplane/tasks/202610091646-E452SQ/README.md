@@ -4,7 +4,7 @@ title: "Make table layout splitting native item-owned through core and UI"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 17
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +18,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-09T17:01:16.826Z"
+  updated_at: "2026-10-09T17:04:01.153Z"
   updated_by: "CODER"
-  note: "Verified: one upstream-absent profile accepts1205cases in155related files including23fresh, complete five current production modules Istanbul1255lines1399statements226functions971branches all100/zero-negative. Seven final static and seven restored-reference metadata gates pass; original canonical/test/file/parent prefixes preserved with one exact native-input fixture migration. Native master/follow/root/page/section/content/full split-row flow remains unrepresented/unverified, goal active correction8/10."
+  note: "Verified: final semantic37c5510fe83c73c1a205a40dc9812152ca8721cf binding docs now stable. Same accepted single upstream-absent1205case23fresh current-source profile and entire five-module Istanbul100/zero-negative, seven static/seven metadata/final formatting gates and ten canonical prefixes594old tests1843unrelated files pass. Quality explicitly same-agent non-independent pass; only lifecycle verification re-recorded after docs, no tests replayed."
   attempts: 0
 quality_review:
   state: "pass"
@@ -72,8 +72,14 @@ events:
     from: "DOING"
     to: "DOING"
     note: "Implementation: native split item ownership through physical layout, shell and Text Flow, verified1205cases and entire five-module Istanbul100; semantic commit bound."
+  -
+    type: "verify"
+    at: "2026-10-09T17:04:01.153Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified: final semantic37c5510fe83c73c1a205a40dc9812152ca8721cf binding docs now stable. Same accepted single upstream-absent1205case23fresh current-source profile and entire five-module Istanbul100/zero-negative, seven static/seven metadata/final formatting gates and ten canonical prefixes594old tests1843unrelated files pass. Quality explicitly same-agent non-independent pass; only lifecycle verification re-recorded after docs, no tests replayed."
 doc_version: 3
-doc_updated_at: "2026-10-09T17:03:15.824Z"
+doc_updated_at: "2026-10-09T17:04:01.213Z"
 doc_updated_by: "CODER"
 description: "Correction8/10 after XJTGF0: remove mirrored scalar layoutSplit from SwTable, read original effective SwFormatLayoutSplit in physical layout and native table dialog input, capture native shell item and restore represented master position reaction; verify original history/page/UI owners."
 sections:
@@ -100,6 +106,39 @@ sections:
     Result: pass, seven metadata-only audits after restored reference.114required paths33retired roots333runtime modules242mapped74browser17infrastructure,4views0derived changes; doctor0errors2historical warnings.
     Evidence: Ten canonical original scalar/evidence/responsibility/status/default/classification prefixes and original parent Findings prefix preserved; unrelated old tests/files intact except exact source-proven native-input fixture migration with all assertions retained. Raw logs/maps/helpers only ignored cache; artifacts bounded commands/counts/hashes/IDs.
     Scope: Native effective split owner and represented master position branch. Full native master/follow/page/root/section/content/full split-row/direction/VCL families remain unrepresented/unverified; no device-geometry follow flags or whole-module/goal promotion. Broad goal ACTIVE/incomplete correction8/10 since XJTGF0, next full after10. Semantic SHA 37c5510fe83c73c1a205a40dc9812152ca8721cf is bound to all production/fresh hashes; same-agent non-independent EVALUATOR pass evaluates this exact SHA.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-09T17:04:01.153Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified: final semantic37c5510fe83c73c1a205a40dc9812152ca8721cf binding docs now stable. Same accepted single upstream-absent1205case23fresh current-source profile and entire five-module Istanbul100/zero-negative, seven static/seven metadata/final formatting gates and ten canonical prefixes594old tests1843unrelated files pass. Quality explicitly same-agent non-independent pass; only lifecycle verification re-recorded after docs, no tests replayed.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T17:04:00.747Z, excerpt_hash=sha256:20e392b2882a40bc11fbd4257dc990c63b612430bb964f7b914acfd39e41e302
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610091646-E452SQ/blueprint/resolved-snapshot.json
+    - old_digest: 995f9d557fa75695cd63508d0d2d1d42bd33f66fe00910c4780ac52130432bee
+    - current_digest: 995f9d557fa75695cd63508d0d2d1d42bd33f66fe00910c4780ac52130432bee
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610091646-E452SQ
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610091646-E452SQ --result verified-202610091646-E452SQ --commit 37c5510fe83c73c1a205a40dc9812152ca8721cf
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this leaf code/test/evidence through a new task; preserve immutable completed artifacts, original canonical histories/parent prefixes and registered recovery/open/save/settings deviations."
   Findings: |-
     Pinned fmtlsplt.hxx defines SwFormatLayoutSplit120true, already registered in local native pool. tabfrm.cxx::IsLayoutSplitAllowed reads original format GetLayoutSplit; table UpdateAttr_ consumes the layout item and invalidates master position. Current SwTable stores scalar layoutSplit; physical table frame and Text Flow page read that duplicate, shell input lacks original split item, and native dialog input cannot override its scalar table draft. Remove stored scalar, capture effective native item for physical/page/shell consumers, use native direct dialog ItemSet with true fallback, preserve boundary direct-only egress and original history. Existing SwTabFrame clients represent masters without native follow chains; only represented master invalidation is restored, no IsFollow flag inferred from device rectangles. Full native follow/root/page/section/content/table-row splitting remains unverified. Authoritative clean writer checkout, seven corrections since XJTGF0; previous semantic207c607a DONE, no blocker.
@@ -107,6 +146,8 @@ sections:
     - E452SQ verified correction8/10: original SwFormatLayoutSplit120true now owns table split state without mirrored SwTable scalar storage. Effective original items drive physical split/page budget and shell properties input; source properties request captures native table attributes through GetTableAttr after lcl_TableParamToItemSet. Direct authoritative Text Flow ItemSet input uses source true fallback, saved changed-only output and Reset. Represented master position invalidation consumes copied deltas and preserves borrowed originals. 1205cases in155related files,23fresh all pass on one physically upstream-absent current-source profile; complete five modules actual Istanbul1255lines1399statements226functions971branches all100/0negative, no replay/aggregation/old counters. Seven final static gates and seven restored-reference metadata audits pass. One old mounted fixture adds native effective120 while retaining every old assertion; all unrelated old tests/files and ten canonical prefixes remain preserved. Native master/follow/root/page/section/content/full split-row and wider VCL families remain unrepresented/unverified, no browser-inferred follow flags. Raw sources/helpers/logs/maps absent from task artifacts. Broad goal remains ACTIVE/incomplete, next full after10; semantic binding and same-agent non-independent quality follow.
 
     - E452SQ closeout: semantic 37c5510fe83c73c1a205a40dc9812152ca8721cf binds all five production and three fresh test hashes to the accepted single-profile1205case/23fresh complete-module Istanbul100 evidence. Same-agent non-independent EVALUATOR pass evaluates this exact SHA. Seven static/seven metadata/final canonical-format gates pass; ten canonical prefixes,594old tests1843unrelated files and original parent Findings prefix retained, one exact source-proven fixture input migration with every old assertion unchanged. Symlink restored; no upstream source copies/helpers/raw logs/maps in task artifacts. Broad goal ACTIVE/incomplete correction8/10 since historical full XJTGF0, next full after10. Native master/follow/root/page/section/content/full split-row/direction/VCL boundaries remain unverified without module/goal promotion.
+
+    - Closeout bookkeeping: first ap finish rejected E_VALIDATION because recorded blueprint verification evidence had been invalidated by the final Verification-section semantic-binding update. No implementation/test/profile/source changed. Re-record the same completed deterministic evidence after final docs, persist task metadata, then canonical finish; no test replay or threshold/approval change. This is task-local lifecycle bookkeeping, not an external incident or goal blocker.
 id_source: "generated"
 ---
 ## Summary
@@ -145,6 +186,39 @@ Result: pass, seven metadata-only audits after restored reference.114required pa
 Evidence: Ten canonical original scalar/evidence/responsibility/status/default/classification prefixes and original parent Findings prefix preserved; unrelated old tests/files intact except exact source-proven native-input fixture migration with all assertions retained. Raw logs/maps/helpers only ignored cache; artifacts bounded commands/counts/hashes/IDs.
 Scope: Native effective split owner and represented master position branch. Full native master/follow/page/root/section/content/full split-row/direction/VCL families remain unrepresented/unverified; no device-geometry follow flags or whole-module/goal promotion. Broad goal ACTIVE/incomplete correction8/10 since XJTGF0, next full after10. Semantic SHA 37c5510fe83c73c1a205a40dc9812152ca8721cf is bound to all production/fresh hashes; same-agent non-independent EVALUATOR pass evaluates this exact SHA.
 
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-09T17:04:01.153Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified: final semantic37c5510fe83c73c1a205a40dc9812152ca8721cf binding docs now stable. Same accepted single upstream-absent1205case23fresh current-source profile and entire five-module Istanbul100/zero-negative, seven static/seven metadata/final formatting gates and ten canonical prefixes594old tests1843unrelated files pass. Quality explicitly same-agent non-independent pass; only lifecycle verification re-recorded after docs, no tests replayed.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T17:04:00.747Z, excerpt_hash=sha256:20e392b2882a40bc11fbd4257dc990c63b612430bb964f7b914acfd39e41e302
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610091646-E452SQ/blueprint/resolved-snapshot.json
+- old_digest: 995f9d557fa75695cd63508d0d2d1d42bd33f66fe00910c4780ac52130432bee
+- current_digest: 995f9d557fa75695cd63508d0d2d1d42bd33f66fe00910c4780ac52130432bee
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610091646-E452SQ
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610091646-E452SQ --result verified-202610091646-E452SQ --commit 37c5510fe83c73c1a205a40dc9812152ca8721cf
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
+
 ## Rollback Plan
 
 Revert only this leaf code/test/evidence through a new task; preserve immutable completed artifacts, original canonical histories/parent prefixes and registered recovery/open/save/settings deviations.
@@ -156,3 +230,5 @@ Pinned fmtlsplt.hxx defines SwFormatLayoutSplit120true, already registered in lo
 - E452SQ verified correction8/10: original SwFormatLayoutSplit120true now owns table split state without mirrored SwTable scalar storage. Effective original items drive physical split/page budget and shell properties input; source properties request captures native table attributes through GetTableAttr after lcl_TableParamToItemSet. Direct authoritative Text Flow ItemSet input uses source true fallback, saved changed-only output and Reset. Represented master position invalidation consumes copied deltas and preserves borrowed originals. 1205cases in155related files,23fresh all pass on one physically upstream-absent current-source profile; complete five modules actual Istanbul1255lines1399statements226functions971branches all100/0negative, no replay/aggregation/old counters. Seven final static gates and seven restored-reference metadata audits pass. One old mounted fixture adds native effective120 while retaining every old assertion; all unrelated old tests/files and ten canonical prefixes remain preserved. Native master/follow/root/page/section/content/full split-row and wider VCL families remain unrepresented/unverified, no browser-inferred follow flags. Raw sources/helpers/logs/maps absent from task artifacts. Broad goal remains ACTIVE/incomplete, next full after10; semantic binding and same-agent non-independent quality follow.
 
 - E452SQ closeout: semantic 37c5510fe83c73c1a205a40dc9812152ca8721cf binds all five production and three fresh test hashes to the accepted single-profile1205case/23fresh complete-module Istanbul100 evidence. Same-agent non-independent EVALUATOR pass evaluates this exact SHA. Seven static/seven metadata/final canonical-format gates pass; ten canonical prefixes,594old tests1843unrelated files and original parent Findings prefix retained, one exact source-proven fixture input migration with every old assertion unchanged. Symlink restored; no upstream source copies/helpers/raw logs/maps in task artifacts. Broad goal ACTIVE/incomplete correction8/10 since historical full XJTGF0, next full after10. Native master/follow/root/page/section/content/full split-row/direction/VCL boundaries remain unverified without module/goal promotion.
+
+- Closeout bookkeeping: first ap finish rejected E_VALIDATION because recorded blueprint verification evidence had been invalidated by the final Verification-section semantic-binding update. No implementation/test/profile/source changed. Re-record the same completed deterministic evidence after final docs, persist task metadata, then canonical finish; no test replay or threshold/approval change. This is task-local lifecycle bookkeeping, not an external incident or goal blocker.
