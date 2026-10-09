@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/inc/refupdat.ts",
+          "marker": "ScRefUpdateRes"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/refupdat.test.ts",
+          "marker": "matches every original native transpose growth and alias outcome"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/inc/refupdat.hxx",
+          "marker": "ScRefUpdateRes"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sc/source/core/inc/refupdat.ts",
+    "localSymbols": [
+      "ScRefUpdateRes"
+    ],
+    "omittedResponsibilities": [
+      "Ordinary/big Update overloads, MoveRelWrap, full document/compiler/change-tracking integration, debug assertion enforcement and undefined arithmetic domains remain subsequent work. Bounded numerical fixtures do not establish full reference-update or whole Calc parity."
+    ],
+    "preservedResponsibilities": [
+      "Original four-value ScRefUpdateRes domain and static geometry owner at core/inc and core/tool boundaries.",
+      "Original signed temporary widths, coordinate transpose and repeated wrapping using positive document sheet count.",
+      "Source-contained references only, snapshot-before-assignment including source/destination aliases, stable receiving endpoint owners and UPDATED for contained no-op transforms.",
+      "Both growth predicates before mutation, original column/row containment, header-row allowance and unclipped native assignment widths."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sc/source/core/inc/refupdat.hxx",
+    "upstreamSymbols": [
+      "ScRefUpdateRes",
+      "ScRefUpdate"
+    ]
+  }
+}

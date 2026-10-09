@@ -227,6 +227,34 @@ remain pending. Signed64 overflow is undefined in native C++; fixtures use defin
 arithmetic and do not establish behavior outside that domain. Inventory retains
 unverified semantic parity, independently of 100% local coverage.
 
+## Reference transpose and growth
+
+Task `202610090915-GRTK08` ports `ScRefUpdateRes` at the original
+`sc/source/core/inc/refupdat` boundary and three static operations at
+`sc/source/core/tool/refupdat`. Existing `ScAddress`, `ScRange` and document
+getters are reused. `DoTranspose()` retains signed16 column/sheet temporaries,
+signed32 row/SCCOLROW arithmetic and repeated sheet wrapping with positive
+table counts. Output tuples represent native mutable coordinate references.
+
+`UpdateTranspose()` affects only references wholly contained by the source.
+Both transformed endpoints are calculated before assignment, preserving native
+alias behavior and receiving endpoint identity. A contained reference returns
+`UR_UPDATED` even when the coordinates remain equal. `UpdateGrow()` calculates
+both predicates before mutation, permits a one-row header offset and assigns
+native-width endpoints without document clipping. Source/ref and destination/
+endpoint aliases retain the original outcomes. The all-static class remains the
+original public owner; its targeted lint annotation does not change behavior.
+
+The native probe compiles the complete unchanged three-method interval and
+original header, constructors, ordering and containment under ASan/UBSan.
+Portable tests compare all 20203 initialized growth/transpose/alias outcomes
+and retain independent literal contracts. Reproduce it with
+`node scripts/calc-refupdat-native-probe.mjs --check`, which checks pinned Git
+blobs and full-source/extracted SHA256 hashes. Ordinary tests need no compiler
+or upstream checkout. Ordinary/big `Update` overloads, `MoveRelWrap`, full
+consumer integration, native debug checks and undefined arithmetic remain
+pending; no replacement methods or fake document owners are introduced.
+
 JavaScript tuples represent native output reference parameters. Equality and
 ordering methods represent C++ operators. Undefined native uninitialized
 constructors, pointer layout, `size_t` hashing and native debug assertions are
@@ -258,13 +286,16 @@ The coordinate foundation and sticky reference tasks are Calc tasks 1 and 2;
 inventory reconciliation is task 3, reference addresses/sheet limits are task 4,
 single formula references are task 5, and complex formula references are task 6
 of that first ten-task interval. Numerical range lists are task 7 and big
-address/range coordinates are task 8; the full run is still due after task 10.
+address/range coordinates are task 8. Reference transpose/growth is task 9;
+full-suite verification is task 10. The user requested pausing the goal after
+that full run succeeds, including any error remediation.
 
 Source research includes the per-file MPL 2.0 and inherited Apache notices in
 `sc/inc/address.hxx`, `sc/inc/sheetlimits.hxx`, `sc/inc/refdata.hxx`,
 `sc/source/core/tool/refdata.cxx`, `sc/inc/rangelst.hxx`,
 `sc/source/core/tool/rangelst.cxx`, `sc/inc/bigrange.hxx` and
-`sc/source/core/tool/address.cxx`, and MPL 2.0 in
+`sc/source/core/tool/address.cxx`, `sc/source/core/inc/refupdat.hxx` and
+`sc/source/core/tool/refupdat.cxx`, and MPL 2.0 in
 `sc/source/core/data/bigrange.cxx` and
 `sc/inc/types.hxx`. The TypeScript implementation is independently authored
 from those numerical contracts; the original sources remain research-only.

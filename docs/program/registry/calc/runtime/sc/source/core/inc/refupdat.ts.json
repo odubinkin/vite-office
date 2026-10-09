@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/core/inc/refupdat.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "reference-update",
+    "capabilityIds": [
+      "CAP-c8827eb9-bcb3-47ca-91cc-a632fb0f9153"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sc/source/core/inc/refupdat.ts#ScRefUpdateRes",
+        "apps/office/src/sc/source/core/tool/refupdat.test.ts#matches every original native transpose growth and alias outcome",
+        "scripts/calc-refupdat-native-probe.mjs#const originals =",
+        "vendor/libreoffice-reference/sc/source/core/inc/refupdat.hxx#ScRefUpdateRes"
+      ],
+      "justification": "Task 202610090915-GRTK08 ports DoTranspose, UpdateTranspose and UpdateGrow using existing ScAddress/ScRange and document getters. Output tuple represents native coordinate reference parameters; original static class owner retained with a narrow lint annotation. Complete original method interval, original header/result enum and unchanged coordinate constructors/ordering/Contains compile under ASan/UBSan;20203 states compare every native result and raw output, including source/ref and destination/endpoint aliases. Native debug checks are not release behavior and remain uncertified. Ordinary/big Update overloads, MoveRelWrap, full document/compiler/change-tracking integration, debug assertion enforcement and undefined arithmetic domains remain subsequent work. Bounded numerical fixtures do not establish full reference-update or whole Calc parity.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ScRefUpdateRes"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "sc/source/core/inc/refupdat.hxx",
+      "upstreamSymbols": [
+        "ScRefUpdateRes",
+        "ScRefUpdate"
+      ]
+    }
+  }
+}

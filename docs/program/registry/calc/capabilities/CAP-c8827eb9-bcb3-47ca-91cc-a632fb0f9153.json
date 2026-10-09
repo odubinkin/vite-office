@@ -1,0 +1,89 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-c8827eb9-bcb3-47ca-91cc-a632fb0f9153",
+    "capabilityId": "CAP-c8827eb9-bcb3-47ca-91cc-a632fb0f9153",
+    "suite": "calc",
+    "subsystem": "reference-update",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original four-value ScRefUpdateRes domain and static geometry owner at core/inc and core/tool boundaries.",
+      "Original signed temporary widths, coordinate transpose and repeated wrapping using positive document sheet count.",
+      "Source-contained references only, snapshot-before-assignment including source/destination aliases, stable receiving endpoint owners and UPDATED for contained no-op transforms.",
+      "Both growth predicates before mutation, original column/row containment, header-row allowance and unclipped native assignment widths."
+    ],
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "Original static owner, source/header boundaries, numeric widths and predicates retained; native references become output tuples and existing owner assignment."
+    },
+    "capability": "Calc reference transpose and area-growth geometry",
+    "gaps": [
+      "Ordinary/big Update overloads, MoveRelWrap, full document/compiler/change-tracking integration, debug assertion enforcement and undefined arithmetic domains remain subsequent work. Bounded numerical fixtures do not establish full reference-update or whole Calc parity."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sc/source/core/inc/refupdat.hxx",
+          "marker": "ScRefUpdateRes"
+        },
+        {
+          "path": "sc/source/core/tool/refupdat.cxx",
+          "marker": "void ScRefUpdate::DoTranspose("
+        }
+      ],
+      "tests": [
+        {
+          "path": "sc/qa/unit/ucalc_copypaste.cxx",
+          "marker": "testReferencedCutTransposedRangesRowTab3To1"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/README.md",
+          "marker": "formula"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/refupdat.ts",
+          "marker": "ScRefUpdate"
+        },
+        {
+          "path": "scripts/calc-refupdat-native-probe.mjs",
+          "marker": "const originals ="
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/refupdat.test.ts",
+          "marker": "matches every original native transpose growth and alias outcome"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/refupdat.test.ts",
+          "marker": "retains growth headers pre-mutation predicates and unclipped signed narrowing"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Reference transpose and growth"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "Transpose contained references with sheet wrapping and grow exact-area references using original header-row rules",
+    "scopeLimitations": [
+      "Ordinary/big Update overloads, MoveRelWrap, full document/compiler/change-tracking integration, debug assertion enforcement and undefined arithmetic domains remain subsequent work. Bounded numerical fixtures do not establish full reference-update or whole Calc parity.",
+      "The upstream transpose copy/paste consumer links establish native responsibility; complete copy/paste integration is not certified by bounded geometric fixtures."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}
