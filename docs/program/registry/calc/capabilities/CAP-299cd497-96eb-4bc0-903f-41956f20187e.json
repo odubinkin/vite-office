@@ -1,0 +1,74 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-299cd497-96eb-4bc0-903f-41956f20187e",
+    "capabilityId": "CAP-299cd497-96eb-4bc0-903f-41956f20187e",
+    "suite": "calc",
+    "subsystem": "coordinate-model",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Immutable explicit row/column maxima delegate the existing header validity/sanitize helpers; sheet validation remains global, counts retain signed widths and custom maxima keep the original fixed column string choice."
+    ],
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "Native initialized value contracts and module boundaries are preserved; JavaScript object ownership and named equality/assignment methods represent C++ lifetime and value operators."
+    },
+    "capability": "Calc immutable explicit sheet limits",
+    "gaps": [
+      "CreateDefault requires the unported ScModule/configuration-dependent jumbo default in sc/source/core/data/documen2.cxx. Native reference counting is represented by JavaScript ownership; complete document integration and compiled sheet-limit differential evidence remain unverified."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sc/inc/sheetlimits.hxx",
+          "marker": "ScSheetLimits"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sc/qa/unit/mark_test.cxx",
+          "marker": "void Test::testSimpleMark_Simple()"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/README.md",
+          "marker": "column"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/inc/sheetlimits.ts",
+          "marker": "ScSheetLimits"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/inc/sheetlimits.test.ts",
+          "marker": "uses document-sized column/row bounds and the native global sheet bound"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Reference address and sheet limits"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "Validate and sanitize coordinates using immutable explicit sheet maxima",
+    "scopeLimitations": [
+      "CreateDefault requires the unported ScModule/configuration-dependent jumbo default in sc/source/core/data/documen2.cxx. Native reference counting is represented by JavaScript ownership; complete document integration and compiled sheet-limit differential evidence remain unverified.",
+      "Upstream test references establish consumer provenance; their full formula/selection behavior is not implemented or claimed by these header-owner tests."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

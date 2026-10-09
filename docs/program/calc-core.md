@@ -53,6 +53,29 @@ and extracted-body SHA-256 hashes. This proves those numeric movement states,
 not full ScDocument integration, the other compiled but unexecuted update
 methods, undefined signed arithmetic domains or whole Calc parity.
 
+## Reference address and sheet limits
+
+Task `202610090749-C6C6AB` adds `ScRefAddress` at its original `sc/inc/address`
+boundary. Its default coordinates are zero and all three relative flags are
+false. Numeric construction retains signed coordinate widths. Copies own an
+independent address; assignment and both `Set()` overloads retain the receiving
+address identity. The flags are independent of coordinates. Equality compares
+the address and each flag; `GetAddress()` returns the stable owner corresponding
+to the native const reference. C++ const-method enforcement is not represented
+by JavaScript object references. Formatting is pending the real document and
+address-convention owners; there is no replacement formatter.
+
+`sc/inc/sheetlimits.ts` owns immutable explicit `ScSheetLimits` maxima and delegates
+the existing numerical helpers. Row/column checks use those maxima, while sheet
+checks use the global `MAXTAB`. Ranges are checked without sorting or changing
+endpoints. Counts add one with native return widths. `MaxColAsString()` retains
+the original standard/jumbo constant choice, including for custom maxima.
+JavaScript references preserve the object lifetime independently of a document;
+no native reference-count shim is introduced. `CreateDefault()` remains absent
+until the real `ScModule` and jumbo-default options from `documen2.cxx` exist.
+Source-derived header tests do not establish compiled differential parity or the
+full formula/selection behavior of upstream consumer tests linked in inventory.
+
 JavaScript tuples represent native output reference parameters. Equality and
 ordering methods represent C++ operators. Undefined native uninitialized
 constructors, pointer layout, `size_t` hashing and native debug assertions are
@@ -80,10 +103,11 @@ All four real V8 coverage metrics must be 100%. Full-suite scheduling starts
 with Calc task 1 of 10 here; run the full suite after task 10, then repeat each
 ten completed Calc agentplane tasks. Targeted affected-module tests run on
 intervening tasks. Writer acceptance files and coverage settings remain intact.
-The coordinate foundation and sticky reference tasks are Calc tasks 1 and 2 of
-that first ten-task interval.
+The coordinate foundation and sticky reference tasks are Calc tasks 1 and 2;
+inventory reconciliation is task 3 and reference addresses/sheet limits are task 4
+of that first ten-task interval.
 
 Source research includes the per-file MPL 2.0 and inherited Apache notices in
-`sc/inc/address.hxx` and `sc/source/core/tool/address.cxx`, and MPL 2.0 in
+`sc/inc/address.hxx`, `sc/inc/sheetlimits.hxx` and `sc/source/core/tool/address.cxx`, and MPL 2.0 in
 `sc/inc/types.hxx`. The TypeScript implementation is independently authored
 from those numerical contracts; the original sources remain research-only.

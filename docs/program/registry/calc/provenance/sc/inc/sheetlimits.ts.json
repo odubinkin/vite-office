@@ -1,0 +1,52 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/inc/sheetlimits.ts",
+          "marker": "ScSheetLimits"
+        },
+        {
+          "path": "apps/office/src/sc/inc/sheetlimits.test.ts",
+          "marker": "uses document-sized column/row bounds and the native global sheet bound"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/sheetlimits.hxx",
+          "marker": "ScSheetLimits"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/documen2.cxx",
+          "marker": "ScSheetLimits ScSheetLimits::CreateDefault()"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sc/inc/sheetlimits.ts",
+    "localSymbols": [
+      "ScSheetLimits",
+      "ValidAddress",
+      "ValidRange",
+      "GetMaxColCount",
+      "MaxColAsString"
+    ],
+    "omittedResponsibilities": [
+      "CreateDefault requires the unported ScModule/configuration-dependent jumbo default in sc/source/core/data/documen2.cxx. Native reference counting is represented by JavaScript ownership; complete document integration and compiled sheet-limit differential evidence remain unverified."
+    ],
+    "preservedResponsibilities": [
+      "Immutable explicit row/column maxima delegate the existing header validity/sanitize helpers; sheet validation remains global, counts retain signed widths and custom maxima keep the original fixed column string choice."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sc/inc/sheetlimits.hxx",
+    "upstreamSymbols": [
+      "ScSheetLimits",
+      "ValidAddress",
+      "ValidRange",
+      "GetMaxColCount",
+      "MaxColAsString"
+    ]
+  }
+}

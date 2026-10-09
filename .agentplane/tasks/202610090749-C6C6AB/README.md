@@ -4,7 +4,7 @@ title: "Implement Calc reference address and immutable sheet limits"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -17,10 +17,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-09T07:55:35.702Z"
+  updated_by: "CODER"
+  note: "Commands: npm run test:coverage:calc, npm run typecheck, npm run check:dependencies, npm run check:docs, npm run check:file-size, affected ESLint/Prettier, scoped registry check, source-tree check, routing, ap doctor, git diff --check. Result: all pass. Evidence: 20 tests in6 files; actual100 lines263/263 statements297/297 functions81/81 branches229/229; registry4 capabilities116 scoped modules0 semantic violations; pinned address.hxx/sheetlimits.hxx/documen2.cxx exactly match Git blobs. Scope: initialized ScRefAddress and explicit ScSheetLimits owners, source-derived tests, Calc-owned inventory and docs. Shared/Writer unchanged, flags remain unverified; doctor only2 pre-existing warnings. Full suite due at Calc10."
   attempts: 0
 commit: null
 comments:
@@ -35,8 +35,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement original reference address and sheet-limit header owners, reusing numerical helpers and documenting actual dependency gaps."
+  -
+    type: "verify"
+    at: "2026-10-09T07:55:35.702Z"
+    author: "CODER"
+    state: "ok"
+    note: "Commands: npm run test:coverage:calc, npm run typecheck, npm run check:dependencies, npm run check:docs, npm run check:file-size, affected ESLint/Prettier, scoped registry check, source-tree check, routing, ap doctor, git diff --check. Result: all pass. Evidence: 20 tests in6 files; actual100 lines263/263 statements297/297 functions81/81 branches229/229; registry4 capabilities116 scoped modules0 semantic violations; pinned address.hxx/sheetlimits.hxx/documen2.cxx exactly match Git blobs. Scope: initialized ScRefAddress and explicit ScSheetLimits owners, source-derived tests, Calc-owned inventory and docs. Shared/Writer unchanged, flags remain unverified; doctor only2 pre-existing warnings. Full suite due at Calc10."
 doc_version: 3
-doc_updated_at: "2026-10-09T07:49:36.697Z"
+doc_updated_at: "2026-10-09T07:55:35.767Z"
 doc_updated_by: "CODER"
 description: "Port the initialized header contracts of ScRefAddress and ScSheetLimits from pinned local LibreOffice, reuse existing address checks and owners, and register source/test provenance. Keep configuration-dependent CreateDefault and GetRefString for their actual ScModule/formatting dependencies without stubs."
 sections:
@@ -44,9 +50,48 @@ sections:
   Scope: "sc/inc/address.ts ScRefAddress; new sc/inc/sheetlimits.ts; reference-address and sheetlimits tests; two new Calc capabilities; existing address runtime/provenance; new sheetlimits runtime/provenance; calc-core and registry README descriptions. Preserve shared/Writer sources and records. Exactly this checkout on calc, no merges. This is Calc milestone4; full suite due after milestone10."
   Plan: "Implement native reference-address default/numeric/copy constructors, stable-owner assignment, both Set overloads, independent flags, getters and equality. Implement explicit immutable native sheet limits with original widths, validity and sanitize delegation, counts and max-column string. Reuse existing ScAddress and helpers. Test ownership, signed widths, all flag combinations and each bounded validity axis for standard/jumbo/custom limits. Record exact local/upstream evidence and omissions without parity promotion. Validate actual100 Calc coverage, typecheck, boundaries, JSDoc, size, affected lint/format, scoped registry, routing and doctor. Leave CreateDefault and GetRefString absent until real native dependencies exist, no replacement factory or stub. Existing user goal authorizes this core progression."
   Verify Steps: "Run npm run test:coverage:calc and require actual100 lines/statements/functions/branches; retain all existing tests. Run npm run typecheck, npm run check:dependencies, npm run check:docs, npm run check:file-size; affected ESLint and Prettier; Calc scoped registry gate with zero semantic violations. Verify source markers against pinned local headers and factory dependency, no shared duplication. Run node .agentplane/policy/check-routing.mjs and ap doctor. Run git diff --check and final git status --short --untracked-files=all; branch must be calc. Full suite intentionally scheduled at Calc task10."
-  Verification: "Pending implementation and scoped acceptance checks."
+  Verification: |-
+    Pending implementation and scoped acceptance checks.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-09T07:55:35.702Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Commands: npm run test:coverage:calc, npm run typecheck, npm run check:dependencies, npm run check:docs, npm run check:file-size, affected ESLint/Prettier, scoped registry check, source-tree check, routing, ap doctor, git diff --check. Result: all pass. Evidence: 20 tests in6 files; actual100 lines263/263 statements297/297 functions81/81 branches229/229; registry4 capabilities116 scoped modules0 semantic violations; pinned address.hxx/sheetlimits.hxx/documen2.cxx exactly match Git blobs. Scope: initialized ScRefAddress and explicit ScSheetLimits owners, source-derived tests, Calc-owned inventory and docs. Shared/Writer unchanged, flags remain unverified; doctor only2 pre-existing warnings. Full suite due at Calc10.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T07:52:59.677Z, excerpt_hash=sha256:d9807e48ca2cdb02602ead613cd8b836ae2fbf1f45aa7404f3acae5f27d348eb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610090749-C6C6AB/blueprint/resolved-snapshot.json
+    - old_digest: 74f873340168a33435c4289ff9746cdb7be619490280bb999dd099f0b7d1b102
+    - current_digest: 74f873340168a33435c4289ff9746cdb7be619490280bb999dd099f0b7d1b102
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610090749-C6C6AB
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610090749-C6C6AB
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task implementation commit; keep earlier numerical coordinates and sticky movements intact."
-  Findings: "ScSheetLimits owns only max row/column and delegates native header helpers; its native SimpleReferenceObject lifetime is represented by JavaScript object ownership, not a second reference-count implementation. CreateDefault in documen2.cxx depends on compile feature and ScModule defaults; configuration owner is not yet ported. ScRefAddress formatting depends on future address convention/document ownership. No default factory or formatter fallback will be invented."
+  Findings: |-
+    ScSheetLimits owns only max row/column and delegates native header helpers; its native SimpleReferenceObject lifetime is represented by JavaScript object ownership, not a second reference-count implementation. CreateDefault in documen2.cxx depends on compile feature and ScModule defaults; configuration owner is not yet ported. ScRefAddress formatting depends on future address convention/document ownership. No default factory or formatter fallback will be invented.
+
+    - Observation: Initial typecheck found unchecked array indexing in new test data tuples; all runtime cases and actual100 Calc coverage already pass.
+      Impact: Test fixtures need tuple typing to satisfy the existing strict TypeScript contract; production implementation has no reported type errors.
+      Resolution: Use literal readonly tuples for the test tables and rerun typecheck; scope and verification criteria remain unchanged.
 id_source: "generated"
 ---
 ## Summary
@@ -69,6 +114,39 @@ Run npm run test:coverage:calc and require actual100 lines/statements/functions/
 
 Pending implementation and scoped acceptance checks.
 
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-09T07:55:35.702Z — VERIFY — ok
+
+By: CODER
+
+Note: Commands: npm run test:coverage:calc, npm run typecheck, npm run check:dependencies, npm run check:docs, npm run check:file-size, affected ESLint/Prettier, scoped registry check, source-tree check, routing, ap doctor, git diff --check. Result: all pass. Evidence: 20 tests in6 files; actual100 lines263/263 statements297/297 functions81/81 branches229/229; registry4 capabilities116 scoped modules0 semantic violations; pinned address.hxx/sheetlimits.hxx/documen2.cxx exactly match Git blobs. Scope: initialized ScRefAddress and explicit ScSheetLimits owners, source-derived tests, Calc-owned inventory and docs. Shared/Writer unchanged, flags remain unverified; doctor only2 pre-existing warnings. Full suite due at Calc10.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T07:52:59.677Z, excerpt_hash=sha256:d9807e48ca2cdb02602ead613cd8b836ae2fbf1f45aa7404f3acae5f27d348eb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610090749-C6C6AB/blueprint/resolved-snapshot.json
+- old_digest: 74f873340168a33435c4289ff9746cdb7be619490280bb999dd099f0b7d1b102
+- current_digest: 74f873340168a33435c4289ff9746cdb7be619490280bb999dd099f0b7d1b102
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610090749-C6C6AB
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610090749-C6C6AB
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
+
 ## Rollback Plan
 
 Revert only this task implementation commit; keep earlier numerical coordinates and sticky movements intact.
@@ -76,3 +154,7 @@ Revert only this task implementation commit; keep earlier numerical coordinates 
 ## Findings
 
 ScSheetLimits owns only max row/column and delegates native header helpers; its native SimpleReferenceObject lifetime is represented by JavaScript object ownership, not a second reference-count implementation. CreateDefault in documen2.cxx depends on compile feature and ScModule defaults; configuration owner is not yet ported. ScRefAddress formatting depends on future address convention/document ownership. No default factory or formatter fallback will be invented.
+
+- Observation: Initial typecheck found unchecked array indexing in new test data tuples; all runtime cases and actual100 Calc coverage already pass.
+  Impact: Test fixtures need tuple typing to satisfy the existing strict TypeScript contract; production implementation has no reported type errors.
+  Resolution: Use literal readonly tuples for the test tables and rerun typecheck; scope and verification criteria remain unchanged.

@@ -1,6 +1,7 @@
 /** @fileoverview Calc address limits and reference flags from pinned sc/inc/address.hxx. Header-level exports share the original address owners with core/tool. */
 import type { SCCOL, SCROW, SCTAB } from "./types";
-import type { ScAddress, ScRange } from "../source/core/tool/address";
+import { ScAddress } from "../source/core/tool/address";
+import type { ScRange } from "../source/core/tool/address";
 export { ScAddress, ScRange } from "../source/core/tool/address";
 
 /** Native integer-domain maxima, distinct from spreadsheet bounds. */
@@ -113,4 +114,106 @@ export function ValidAddress(address: ScAddress, maxCol: SCCOL, maxRow: SCROW): 
 /** Checks both range endpoints without sorting them. @param range - Range. @param maxCol - Maximum column. @param maxRow - Maximum row. @returns Whether within bounds. */
 export function ValidRange(range: ScRange, maxCol: SCCOL, maxRow: SCROW): boolean {
   return ValidAddress(range.aStart, maxCol, maxRow) && ValidAddress(range.aEnd, maxCol, maxRow);
+}
+
+/** Native address value with independent relative-coordinate flags. */
+export class ScRefAddress {
+  private readonly aAdr: ScAddress;
+  private bRelCol = false;
+  private bRelRow = false;
+  private bRelTab = false;
+
+  /** Constructs the original zero, explicit or copied reference. @param args - Native constructor arguments. @returns New reference address. */
+  public constructor(...args: [] | [ScRefAddress] | [SCCOL, SCROW, SCTAB]) {
+    const [source, row, tab] = args;
+    if (source instanceof ScRefAddress) {
+      this.aAdr = new ScAddress(source.aAdr);
+      this.bRelCol = source.bRelCol;
+      this.bRelRow = source.bRelRow;
+      this.bRelTab = source.bRelTab;
+    } else this.aAdr = new ScAddress(source, row, tab);
+  }
+  /** Assigns without replacing the owned address. @param other - Source. @returns Recipient. */
+  public assign(other: ScRefAddress): this {
+    this.aAdr.assign(other.aAdr);
+    this.bRelCol = other.bRelCol;
+    this.bRelRow = other.bRelRow;
+    this.bRelTab = other.bRelTab;
+    return this;
+  }
+  /** Reads column relativity. @returns Relative column flag. */
+  public IsRelCol(): boolean {
+    return this.bRelCol;
+  }
+  /** Reads row relativity. @returns Relative row flag. */
+  public IsRelRow(): boolean {
+    return this.bRelRow;
+  }
+  /** Reads sheet relativity. @returns Relative sheet flag. */
+  public IsRelTab(): boolean {
+    return this.bRelTab;
+  }
+  /** Sets only column relativity. @param value - Flag. @returns Nothing. */
+  public SetRelCol(value: boolean): void {
+    this.bRelCol = value;
+  }
+  /** Sets only row relativity. @param value - Flag. @returns Nothing. */
+  public SetRelRow(value: boolean): void {
+    this.bRelRow = value;
+  }
+  /** Sets only sheet relativity. @param value - Flag. @returns Nothing. */
+  public SetRelTab(value: boolean): void {
+    this.bRelTab = value;
+  }
+  /** Assigns coordinates and all three flags through either native overload. @param args - Address/flags or coordinates/flags. @returns Nothing. */
+  public Set(
+    ...args:
+      [ScAddress, boolean, boolean, boolean] | [SCCOL, SCROW, SCTAB, boolean, boolean, boolean]
+  ): void {
+    if (args[0] instanceof ScAddress) {
+      const [address, colRel, rowRel, tabRel] = args as [ScAddress, boolean, boolean, boolean];
+      this.aAdr.assign(address);
+      this.bRelCol = colRel;
+      this.bRelRow = rowRel;
+      this.bRelTab = tabRel;
+    } else {
+      const [col, row, tab, colRel, rowRel, tabRel] = args as [
+        SCCOL,
+        SCROW,
+        SCTAB,
+        boolean,
+        boolean,
+        boolean,
+      ];
+      this.aAdr.Set(col, row, tab);
+      this.bRelCol = colRel;
+      this.bRelRow = rowRel;
+      this.bRelTab = tabRel;
+    }
+  }
+  /** Exposes the stable owned value, corresponding to a native const reference. @returns Address owner. */
+  public GetAddress(): ScAddress {
+    return this.aAdr;
+  }
+  /** Reads column. @returns Column. */
+  public Col(): SCCOL {
+    return this.aAdr.Col();
+  }
+  /** Reads row. @returns Row. */
+  public Row(): SCROW {
+    return this.aAdr.Row();
+  }
+  /** Reads sheet. @returns Sheet. */
+  public Tab(): SCTAB {
+    return this.aAdr.Tab();
+  }
+  /** Compares coordinates and each independent flag. @param other - Reference. @returns Equality. */
+  public equals(other: ScRefAddress): boolean {
+    return (
+      this.aAdr.equals(other.aAdr) &&
+      this.bRelCol === other.bRelCol &&
+      this.bRelRow === other.bRelRow &&
+      this.bRelTab === other.bRelTab
+    );
+  }
 }

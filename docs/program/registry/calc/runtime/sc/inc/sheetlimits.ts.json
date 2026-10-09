@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/inc/sheetlimits.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "coordinate-model",
+    "capabilityIds": [
+      "CAP-299cd497-96eb-4bc0-903f-41956f20187e"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sc/inc/sheetlimits.ts#ScSheetLimits",
+        "apps/office/src/sc/inc/sheetlimits.test.ts#uses document-sized column/row bounds and the native global sheet bound",
+        "vendor/libreoffice-reference/sc/inc/sheetlimits.hxx#ScSheetLimits"
+      ],
+      "justification": "Task 202610090749-C6C6AB implements the initialized header owner. Immutable explicit row/column maxima delegate the existing header validity/sanitize helpers; sheet validation remains global, counts retain signed widths and custom maxima keep the original fixed column string choice. Source-derived standard/jumbo/custom limit cases cover each axis, reversed endpoints, sanitization and counts with actual V8 coverage. CreateDefault requires the unported ScModule/configuration-dependent jumbo default in sc/source/core/data/documen2.cxx. Native reference counting is represented by JavaScript ownership; complete document integration and compiled sheet-limit differential evidence remain unverified. No shared mechanism is duplicated; no semantic promotion.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ScSheetLimits",
+        "ValidAddress",
+        "ValidRange",
+        "GetMaxColCount",
+        "MaxColAsString"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "sc/inc/sheetlimits.hxx",
+      "upstreamSymbols": [
+        "ScSheetLimits",
+        "ValidAddress",
+        "ValidRange",
+        "GetMaxColCount",
+        "MaxColAsString"
+      ]
+    }
+  }
+}

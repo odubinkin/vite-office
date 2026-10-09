@@ -57,8 +57,8 @@ Writer and Calc work can add records in their own directories independently.
 Activate Calc through `calc/application.json` before adding its first records;
 set its app-owned command module and exported registry when commands exist.
 This automatically removes Calc from the generated placeholder list. Calc is
-active with numerical address and range runtime records and two implemented
-capabilities. Its command registry remains unset until browser commands exist;
+active with numerical address, range, reference-address and sheet-limit records.
+Its command registry remains unset until browser commands exist;
 semantic parity remains unverified.
 
 Shared components have one canonical record per module or contract under `shared/`.

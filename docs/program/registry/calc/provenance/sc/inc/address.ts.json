@@ -12,12 +12,24 @@
         {
           "path": "apps/office/src/sc/source/core/tool/address.test.ts",
           "marker": "moves and clamps with native error outputs"
+        },
+        {
+          "path": "apps/office/src/sc/inc/address.ts",
+          "marker": "ScRefAddress"
+        },
+        {
+          "path": "apps/office/src/sc/inc/ref-address.test.ts",
+          "marker": "copies values independently while assignment retains the recipient address"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/sc/inc/address.hxx",
           "marker": "MAXROWCOUNT"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/address.hxx",
+          "marker": "ScRefAddress"
         }
       ]
     },
@@ -26,15 +38,17 @@
       "MAXROWCOUNT",
       "ScRefFlags",
       "ValidAddress",
-      "applyStartToEndFlags"
+      "applyStartToEndFlags",
+      "ScRefAddress"
     ],
     "omittedResponsibilities": [
-      "Reference parsing/formatting, external links, native hashes, range subtraction and sticky reference updates remain subsequent Calc tasks.",
-      "Undefined uninitialized native constructors, machine pointer storage and debug assertions have no browser implementation."
+      "Reference parsing/formatting including ScRefAddress::GetRefString, external links, native hashes and range subtraction remain subsequent Calc tasks.",
+      "Undefined native constructors, memory layout, C++ const enforcement and debug assertions are not represented. Sticky updates are already implemented on the original ScRange owner."
     ],
     "preservedResponsibilities": [
       "Native zero/invalid coordinates, exact standard/jumbo capacities and signed 16/32-bit assignments.",
-      "Original numeric constructor ordering, inclusive coordinate operations and movement error contracts; no browser-specific state."
+      "Original numeric constructor ordering, inclusive coordinate operations and movement error contracts; no browser-specific state.",
+      "Zero/numeric/copy construction, independent three flags and stable owned address assignment follow the pinned header; coordinate widths are retained by the existing ScAddress owner."
     ],
     "status": "mapped",
     "upstreamPath": "sc/inc/address.hxx",
@@ -42,7 +56,8 @@
       "MAXROWCOUNT",
       "ScRefFlags",
       "ValidAddress",
-      "applyStartToEndFlags"
+      "applyStartToEndFlags",
+      "ScRefAddress"
     ]
   }
 }

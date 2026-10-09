@@ -1,0 +1,74 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-cfba8ad3-225c-4f7d-9e59-2faa2b2ac908",
+    "capabilityId": "CAP-cfba8ad3-225c-4f7d-9e59-2faa2b2ac908",
+    "suite": "calc",
+    "subsystem": "coordinate-model",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Zero/numeric/copy construction, independent three flags and stable owned address assignment follow the pinned header; coordinate widths are retained by the existing ScAddress owner."
+    ],
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "Native initialized value contracts and module boundaries are preserved; JavaScript object ownership and named equality/assignment methods represent C++ lifetime and value operators."
+    },
+    "capability": "Calc reference address values and relative flags",
+    "gaps": [
+      "GetRefString and complete document/address-convention integration remain subsequent work. Native const-reference enforcement and compiled reference-address differential evidence remain unverified."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sc/inc/address.hxx",
+          "marker": "ScRefAddress"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sc/qa/unit/ucalc_formula.cxx",
+          "marker": "aParam.aRefFormulaCell = ScRefAddress(1,0,0)"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/README.md",
+          "marker": "column"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/inc/address.ts",
+          "marker": "ScRefAddress"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/inc/ref-address.test.ts",
+          "marker": "copies values independently while assignment retains the recipient address"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Reference address and sheet limits"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "Copy and assign an address with independent column, row and sheet relativity",
+    "scopeLimitations": [
+      "GetRefString and complete document/address-convention integration remain subsequent work. Native const-reference enforcement and compiled reference-address differential evidence remain unverified.",
+      "Upstream test references establish consumer provenance; their full formula/selection behavior is not implemented or claimed by these header-owner tests."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}
