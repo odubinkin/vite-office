@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "task_id": "202610090749-C6C6AB",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-09T07:55:55.362Z",
+  "verdict": "pass",
+  "summary": "Native initialized ScRefAddress and explicit immutable ScSheetLimits are implemented at original header boundaries using existing coordinate ownership/helpers.",
+  "evaluated_sha": "0a411113750da8bbb14b1e3e014b6fe538d8f676",
+  "blueprint_digest": "74f873340168a33435c4289ff9746cdb7be619490280bb999dd099f0b7d1b102",
+  "findings": [
+    "Defaults, signed widths, independent flags, all64 flag equality pairs, copying, stable assignment, both Set overloads, global sheet checks and standard/jumbo/custom bounds pass. Dependency-owned formatting/default factory remain explicitly unimplemented without stubs; native parity statuses unchanged."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610090749-C6C6AB/README.md",
+    "npm run test:coverage:calc",
+    "output/playwright/calc-registry4.json",
+    "npm run typecheck",
+    "npm run check:dependencies",
+    "node .agentplane/policy/check-routing.mjs",
+    "ap doctor"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}

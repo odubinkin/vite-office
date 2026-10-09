@@ -4,7 +4,7 @@ title: "Implement Calc reference address and immutable sheet limits"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,27 @@ verification:
   updated_by: "CODER"
   note: "Commands: npm run test:coverage:calc, npm run typecheck, npm run check:dependencies, npm run check:docs, npm run check:file-size, affected ESLint/Prettier, scoped registry check, source-tree check, routing, ap doctor, git diff --check. Result: all pass. Evidence: 20 tests in6 files; actual100 lines263/263 statements297/297 functions81/81 branches229/229; registry4 capabilities116 scoped modules0 semantic violations; pinned address.hxx/sheetlimits.hxx/documen2.cxx exactly match Git blobs. Scope: initialized ScRefAddress and explicit ScSheetLimits owners, source-derived tests, Calc-owned inventory and docs. Shared/Writer unchanged, flags remain unverified; doctor only2 pre-existing warnings. Full suite due at Calc10."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-09T07:55:55.362Z"
+  updated_by: "EVALUATOR"
+  note: "Native initialized ScRefAddress and explicit immutable ScSheetLimits are implemented at original header boundaries using existing coordinate ownership/helpers."
+  evaluated_sha: "0a411113750da8bbb14b1e3e014b6fe538d8f676"
+  blueprint_digest: "74f873340168a33435c4289ff9746cdb7be619490280bb999dd099f0b7d1b102"
+  evidence_refs:
+    - ".agentplane/tasks/202610090749-C6C6AB/README.md"
+    - ".agentplane/tasks/202610090749-C6C6AB/quality/20261009-075555362-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610090749-C6C6AB/quality/20261009-075555362-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610090749-C6C6AB/quality/20261009-075555362-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610090749-C6C6AB/blueprint/resolved-snapshot.json"
+    - "npm run test:coverage:calc"
+    - "output/playwright/calc-registry4.json"
+    - "npm run typecheck"
+    - "npm run check:dependencies"
+    - "node .agentplane/policy/check-routing.mjs"
+    - "ap doctor"
+  findings:
+    - "Defaults, signed widths, independent flags, all64 flag equality pairs, copying, stable assignment, both Set overloads, global sheet checks and standard/jumbo/custom bounds pass. Dependency-owned formatting/default factory remain explicitly unimplemented without stubs; native parity statuses unchanged."
 commit: null
 comments:
   -
