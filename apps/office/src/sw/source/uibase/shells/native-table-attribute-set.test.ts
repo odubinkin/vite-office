@@ -149,13 +149,7 @@ it("combined geometry and original frame attributes apply once after native sepa
     expect(required(separators.mock.invocationCallOrder[0])).toBeLessThan(
       required(attrs.mock.invocationCallOrder[0]),
     );
-    expect(scalar).toHaveBeenCalledTimes(1);
-    expect(required(scalar.mock.invocationCallOrder[0])).toBeLessThan(
-      required(attrs.mock.invocationCallOrder[0]),
-    );
-    expect(scalar.mock.calls[0]?.[0]).not.toHaveProperty("layoutSplit");
-    expect(scalar.mock.calls[0]?.[0]).not.toHaveProperty("borderModel");
-    expect(scalar.mock.calls[0]?.[0]).not.toHaveProperty("marginTop");
+    expect(scalar).not.toHaveBeenCalled();
     const applied = required(attrs.mock.calls[0]?.[0]);
     if (!(applied instanceof SfxItemSet)) throw Error("Scalar table geometry dispatch");
     expect(applied.Count()).toBe(6);

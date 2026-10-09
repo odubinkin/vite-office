@@ -10,6 +10,7 @@ import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { writeOdtDocument } from "../../filter/xml/wrtxml";
 import { readOdtDocument } from "../../filter/xml/swxml";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
+import { SwFormatHoriOrient } from "../../../inc/fmtornt";
 import { SwView } from "../uiview/view";
 /** Requires a connected fixture owner. @param value - Actual optional owner. @returns Owner. */
 function required<T>(value: T | undefined): T {
@@ -163,13 +164,13 @@ it("rejects foreign tables and invalid geometry before admitting native current-
   f.shell.Close();
   foreign.shell.Close();
 });
-it("admits native implicit widths and rejects missing cell/frame references at ingress", /** Checks document and shell admission boundaries. @returns Nothing. */ () => {
+it("admits native effective frame width and rejects missing cell/frame references at ingress", /** Checks document and shell admission boundaries. @returns Nothing. */ () => {
   const f = fixture(),
     old = new SwTabCols();
   f.shell.GetTabCols(old);
   const next = new SwTabCols(old);
   next.GetEntry(0).nPos = 2000;
-  f.table.SetFormat({ horiOrient: HoriOrientation.LEFT });
+  f.table.GetFrameFormat().SetFormatAttr(new SwFormatHoriOrient(0, HoriOrientation.LEFT));
   expect(f.doc.SetTabCols(f.table, next, old, required(f.boxes[0]), false)).toBe(true);
   expect(f.table.GetColumnWidths()).toEqual([2000, 4000]);
   const spy = vi.spyOn(required(f.boxes[0]), "GetParagraphs").mockReturnValue([]);
