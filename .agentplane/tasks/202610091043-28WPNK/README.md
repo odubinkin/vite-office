@@ -1,10 +1,11 @@
 ---
 id: "202610091043-28WPNK"
 title: "Close native table format and border paint coverage from full profile"
-status: "DOING"
+result_summary: "Closed native table inheritance and border paint verification gaps from RAWD0Q with12fresh passing original-owner/ordering/lifetime cases; current whole-source coverage app318/inventory42all-four100, no counter normalization or production/old-test changes. Four canonical records append evidence without promotion. Checkpoint closure may now pause the incomplete goal."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -39,11 +40,16 @@ quality_review:
     - ".agentplane/tasks/202610091043-28WPNK/evidence/checks.json"
   findings:
     - "Whole fresh full maps are reused only for316 identical complete sources;2identical-source closure modules use entire actual merged maps with every complete location map equal. Failed negative/partial raw profiles retained, no clamp or selective patch. Scope remains coverage verification; native root/frame/follows and whole parity incomplete. Pause after checkpoint finish as requested."
-commit: null
+commit:
+  hash: "eb9346460b6b9dc62cd9b1463208aba079caa016"
+  message: "🧪 28WPNK tests: close native table ownership and border coverage"
 comments:
   -
     author: "CODER"
     body: "Start: add fresh original table format and border paint acceptance to close both full profile coverage failures; keep production and all old tests unchanged, append canonical inventory and verify actual whole-module coverage before pause."
+  -
+    author: "CODER"
+    body: "Verified:12 unique fresh native table cases, exact-source318app/42inventory all-four100 and all declared checks; production/old tests unchanged, canonical inventory prefixes retained and raw failed counters preserved."
 events:
   -
     type: "status"
@@ -58,8 +64,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Twelve fresh cases pass once;318 app and42 inventory all-four100 with exact-source whole complete maps; original failed raw/negative maps retained. Production/513old tests unchanged;4canonical prefixes retained. All declared checks pass;20focused skips already have earlier passing evidence. Same-agent review non-independent; checkpoint closure then goal pause."
+  -
+    type: "status"
+    at: "2026-10-09T10:56:59.533Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified:12 unique fresh native table cases, exact-source318app/42inventory all-four100 and all declared checks; production/old tests unchanged, canonical inventory prefixes retained and raw failed counters preserved."
 doc_version: 3
-doc_updated_at: "2026-10-09T10:56:30.829Z"
+doc_updated_at: "2026-10-09T10:56:59.535Z"
 doc_updated_by: "CODER"
 description: "Add meaningful original-format inheritance and original-border ordering/lifetime acceptance tests to close the two table coverage failures in full checkpoint RAWD0Q. Preserve all production and old tests; update four canonical inventory records without promotion; use current fresh complete module maps and unchanged full profile source hashes, never normalize raw negative V8 counters."
 sections:
