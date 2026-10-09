@@ -4,7 +4,7 @@ title: "Run next full upstream-absent profile and pause after verified repairs"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,11 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "needs_rework"
-  updated_at: "2026-10-09T10:43:53.704Z"
+  state: "ok"
+  updated_at: "2026-10-09T10:58:13.200Z"
   updated_by: "CODER"
-  note: "Complete upstream-absent full profile:14556 cases passed,0failed,0skipped across678 acceptance files (app14110/513files,inventory122/38,root21/7,Chromium303/120). No Chromium flaky cases or retries; every discovered file included;2039 tracked non-AgentPlane files unchanged; upstream restored. Raw app gate remains failed: lines18297/18298,statements20092/20093,functions4588/4589,branches14694/14695. Native row inheritance notification is unexecuted; paintfrm inferred-else V8 counter is -163 (not zero), retained raw. Inventory all-four100. Verify rework pending targeted tests and valid complete actual coverage evidence; no overall parity completion or premature pause."
-  attempts: 1
+  note: "Full14556cases allpass, all678files included, no skips/retries. Verified DONE28WPNK adds12fresh passes and closes coverage to318app/42inventory all-four100; original failed raw full map preserved. Production/old tests unchanged;4canonical prefixes retained; all declared checks green. Pause incomplete goal after clean checkpoint finish."
+  attempts: 0
 commit: null
 comments:
   -
@@ -41,8 +41,14 @@ events:
     author: "CODER"
     state: "needs_rework"
     note: "Complete upstream-absent full profile:14556 cases passed,0failed,0skipped across678 acceptance files (app14110/513files,inventory122/38,root21/7,Chromium303/120). No Chromium flaky cases or retries; every discovered file included;2039 tracked non-AgentPlane files unchanged; upstream restored. Raw app gate remains failed: lines18297/18298,statements20092/20093,functions4588/4589,branches14694/14695. Native row inheritance notification is unexecuted; paintfrm inferred-else V8 counter is -163 (not zero), retained raw. Inventory all-four100. Verify rework pending targeted tests and valid complete actual coverage evidence; no overall parity completion or premature pause."
+  -
+    type: "verify"
+    at: "2026-10-09T10:58:13.200Z"
+    author: "CODER"
+    state: "ok"
+    note: "Full14556cases allpass, all678files included, no skips/retries. Verified DONE28WPNK adds12fresh passes and closes coverage to318app/42inventory all-four100; original failed raw full map preserved. Production/old tests unchanged;4canonical prefixes retained; all declared checks green. Pause incomplete goal after clean checkpoint finish."
 doc_version: 3
-doc_updated_at: "2026-10-09T10:43:53.758Z"
+doc_updated_at: "2026-10-09T10:58:13.252Z"
 doc_updated_by: "CODER"
 description: "Execute the next complete test profile now as the user-requested stopping checkpoint after iteration254; repair each discovered error in a separate functional task with inventory and meaningful tests, verify all failures and coverage, then pause the still-incomplete goal. Preserve historical failed247 evidence."
 sections:
@@ -56,17 +62,17 @@ sections:
     4. Confirm unchanged tracked source/test/inventory during the profile; record doctor, policy routing, git diff --check, exact parent prefix preservation and final clean repository. Raw reports/helpers remain ignored cache, AP only bounded English counts/hashes/IDs.
     5. After full profile and verified repairs, pause the still-incomplete goal under the human instruction and stop. Preserve failed247 history.
   Verification: |-
-    Complete upstream-absent full profile:14556 cases passed,0failed,0skipped across678 acceptance files (app14110/513files,inventory122/38,root21/7,Chromium303/120). No Chromium flaky cases or retries; every discovered file included;2039 tracked non-AgentPlane files unchanged; upstream restored. Raw app gate remains failed: lines18297/18298,statements20092/20093,functions4588/4589,branches14694/14695. Native row inheritance notification is unexecuted; paintfrm inferred-else V8 counter is -163 (not zero), retained raw. Inventory all-four100. Verify rework pending targeted tests and valid complete actual coverage evidence; no overall parity completion or premature pause.
+    Pass after verified closure28WPNK (DONE,semantic eb9346460b6b9dc62cd9b1463208aba079caa016). Sole full profile14556passed/0failed/0skipped,678files all discovered included;Chromium303/0flaky/0retries. Full raw app threshold failure and negative inferred-else counter remain preserved in full-profile.json; they are not relabeled raw green. Closure adds12fresh passing tests with0passingreplay and20focused skip observations of cases already passed. Current318app coverage18298lines20093statements4589functions14695branches100 uses316whole fresh full modules and2complete current whole-module maps from actual closure counters with identical locations; inventory42all-four100 current unchanged full evidence. All production/513old tests unchanged;4canonical inventory history prefixes preserved. All declared static/type/dependency/docs/size/registry/provenance/tree/routing/doctor/diff checks pass;doctor0errors2historicalwarnings. Raw scripts/reports/maps stay ignored dependency cache; AP bounded counts/hashes only. Goal must now pause at explicit human request; overall parity remains incomplete.
 
     <!-- BEGIN VERIFICATION RESULTS -->
-    ### 2026-10-09T10:43:53.704Z — VERIFY — needs_rework
+    ### 2026-10-09T10:58:13.200Z — VERIFY — ok
 
     By: CODER
 
-    Note: Complete upstream-absent full profile:14556 cases passed,0failed,0skipped across678 acceptance files (app14110/513files,inventory122/38,root21/7,Chromium303/120). No Chromium flaky cases or retries; every discovered file included;2039 tracked non-AgentPlane files unchanged; upstream restored. Raw app gate remains failed: lines18297/18298,statements20092/20093,functions4588/4589,branches14694/14695. Native row inheritance notification is unexecuted; paintfrm inferred-else V8 counter is -163 (not zero), retained raw. Inventory all-four100. Verify rework pending targeted tests and valid complete actual coverage evidence; no overall parity completion or premature pause.
-    Attempts: 1
+    Note: Full14556cases allpass, all678files included, no skips/retries. Verified DONE28WPNK adds12fresh passes and closes coverage to318app/42inventory all-four100; original failed raw full map preserved. Production/old tests unchanged;4canonical prefixes retained; all declared checks green. Pause incomplete goal after clean checkpoint finish.
+    Attempts: 0
 
-    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T10:43:52.804Z, excerpt_hash=sha256:edbaceb8a9060d61a26bdfb82a5c0a974d8bc90b8bab1d0c540e8dd4a081ec3c
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T10:58:11.278Z, excerpt_hash=sha256:edbaceb8a9060d61a26bdfb82a5c0a974d8bc90b8bab1d0c540e8dd4a081ec3c
 
     Details:
 
@@ -81,17 +87,22 @@ sections:
     DecisionContextRef:
     - operator_action: run_exact_argv
     - can_execute_now: true
-    - safe_command: agentplane task verify-show 202610091030-RAWD0Q
+    - safe_command: agentplane commit 202610091030-RAWD0Q -m 🧩 RAWD0Q task: persist canonical task artifacts --allow-tasks
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
-    - repeat_allowed: false
-    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Restore the temporarily renamed upstream symlink in finally. Do not discard failed raw evidence, edit historical DONE tasks, lower thresholds or mark failed results green. Functional repairs are individually reviewable commits in separate tasks."
-  Findings: "User explicitly requires pausing only after the next complete test profile and verified fixes for all errors it exposes. The current checkpoint intentionally advances the next full run before starting another native layout feature; no claim of overall parity completion."
+  Findings: |-
+    User explicitly requires pausing only after the next complete test profile and verified fixes for all errors it exposes. The current checkpoint intentionally advances the next full run before starting another native layout feature; no claim of overall parity completion.
+
+    - Observation: Verified closure28WPNK is DONE with semantic commit eb9346460b6b9dc62cd9b1463208aba079caa016. All14556full cases and12new closure cases have passing outcomes; current318app/42inventory all-four100 whole-source evidence is stored in28WPNK/evidence/coverage.json. Original full threshold failure and negative count remain intact.
+      Impact: No test assertion failed, no original production or old acceptance contract changed, and no full passing suite was repeated. Focused skip observations cover only previously passed new cases. Four canonical metadata records append evidence and preserve history/status/default/classification; registered I/O/recovery deviations remain.
+      Resolution: All required full-profile and repair verification is complete. Final checkpoint artifacts cite the finished correction and actual current-source complete maps. Persist checkpoint, verify clean state and pause the incomplete goal under the latest human request; do not start another native layout feature. Evaluation is same-agent and non-independent.
 id_source: "generated"
 ---
 ## Summary
@@ -116,17 +127,17 @@ Advance the next complete profile from the cadence checkpoint to the current use
 
 ## Verification
 
-Complete upstream-absent full profile:14556 cases passed,0failed,0skipped across678 acceptance files (app14110/513files,inventory122/38,root21/7,Chromium303/120). No Chromium flaky cases or retries; every discovered file included;2039 tracked non-AgentPlane files unchanged; upstream restored. Raw app gate remains failed: lines18297/18298,statements20092/20093,functions4588/4589,branches14694/14695. Native row inheritance notification is unexecuted; paintfrm inferred-else V8 counter is -163 (not zero), retained raw. Inventory all-four100. Verify rework pending targeted tests and valid complete actual coverage evidence; no overall parity completion or premature pause.
+Pass after verified closure28WPNK (DONE,semantic eb9346460b6b9dc62cd9b1463208aba079caa016). Sole full profile14556passed/0failed/0skipped,678files all discovered included;Chromium303/0flaky/0retries. Full raw app threshold failure and negative inferred-else counter remain preserved in full-profile.json; they are not relabeled raw green. Closure adds12fresh passing tests with0passingreplay and20focused skip observations of cases already passed. Current318app coverage18298lines20093statements4589functions14695branches100 uses316whole fresh full modules and2complete current whole-module maps from actual closure counters with identical locations; inventory42all-four100 current unchanged full evidence. All production/513old tests unchanged;4canonical inventory history prefixes preserved. All declared static/type/dependency/docs/size/registry/provenance/tree/routing/doctor/diff checks pass;doctor0errors2historicalwarnings. Raw scripts/reports/maps stay ignored dependency cache; AP bounded counts/hashes only. Goal must now pause at explicit human request; overall parity remains incomplete.
 
 <!-- BEGIN VERIFICATION RESULTS -->
-### 2026-10-09T10:43:53.704Z — VERIFY — needs_rework
+### 2026-10-09T10:58:13.200Z — VERIFY — ok
 
 By: CODER
 
-Note: Complete upstream-absent full profile:14556 cases passed,0failed,0skipped across678 acceptance files (app14110/513files,inventory122/38,root21/7,Chromium303/120). No Chromium flaky cases or retries; every discovered file included;2039 tracked non-AgentPlane files unchanged; upstream restored. Raw app gate remains failed: lines18297/18298,statements20092/20093,functions4588/4589,branches14694/14695. Native row inheritance notification is unexecuted; paintfrm inferred-else V8 counter is -163 (not zero), retained raw. Inventory all-four100. Verify rework pending targeted tests and valid complete actual coverage evidence; no overall parity completion or premature pause.
-Attempts: 1
+Note: Full14556cases allpass, all678files included, no skips/retries. Verified DONE28WPNK adds12fresh passes and closes coverage to318app/42inventory all-four100; original failed raw full map preserved. Production/old tests unchanged;4canonical prefixes retained; all declared checks green. Pause incomplete goal after clean checkpoint finish.
+Attempts: 0
 
-VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T10:43:52.804Z, excerpt_hash=sha256:edbaceb8a9060d61a26bdfb82a5c0a974d8bc90b8bab1d0c540e8dd4a081ec3c
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T10:58:11.278Z, excerpt_hash=sha256:edbaceb8a9060d61a26bdfb82a5c0a974d8bc90b8bab1d0c540e8dd4a081ec3c
 
 Details:
 
@@ -141,12 +152,12 @@ BlueprintSnapshotRef:
 DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
-- safe_command: agentplane task verify-show 202610091030-RAWD0Q
+- safe_command: agentplane commit 202610091030-RAWD0Q -m 🧩 RAWD0Q task: persist canonical task artifacts --allow-tasks
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
-- repeat_allowed: false
-- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
@@ -158,3 +169,7 @@ Restore the temporarily renamed upstream symlink in finally. Do not discard fail
 ## Findings
 
 User explicitly requires pausing only after the next complete test profile and verified fixes for all errors it exposes. The current checkpoint intentionally advances the next full run before starting another native layout feature; no claim of overall parity completion.
+
+- Observation: Verified closure28WPNK is DONE with semantic commit eb9346460b6b9dc62cd9b1463208aba079caa016. All14556full cases and12new closure cases have passing outcomes; current318app/42inventory all-four100 whole-source evidence is stored in28WPNK/evidence/coverage.json. Original full threshold failure and negative count remain intact.
+  Impact: No test assertion failed, no original production or old acceptance contract changed, and no full passing suite was repeated. Focused skip observations cover only previously passed new cases. Four canonical metadata records append evidence and preserve history/status/default/classification; registered I/O/recovery deviations remain.
+  Resolution: All required full-profile and repair verification is complete. Final checkpoint artifacts cite the finished correction and actual current-source complete maps. Persist checkpoint, verify clean state and pause the incomplete goal under the latest human request; do not start another native layout feature. Evaluation is same-agent and non-independent.
