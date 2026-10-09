@@ -1,6 +1,6 @@
 {
   "taskId": "202610092152-B3ESQ3",
-  "status": "checks-passed-pending-exact-SHA-quality",
+  "status": "checks-passed-exact-SHA-quality-pass",
   "scope": "Single production tabsh.ts native table dialog attribute bundle; two fresh tests and two existing canonical records. Explicit legacy ingress and existing SetTabCols geometry remain separate.",
   "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
   "baselineTag": "libreoffice-26.8.0.2",
@@ -684,5 +684,11 @@
     "Registered recovery/open/save/settings/UI deviations preserved."
   ],
   "fullSuite": "Not due: atomic correction8of10 after SZKQTN; broad goal active and incomplete.",
-  "quality": "Pending exact semantic SHA; same-agent, non-independent review required."
+  "quality": {
+    "verdict": "pass",
+    "report": ".agentplane/tasks/202610092152-B3ESQ3/quality/20261009-220805146-recovery-context/quality-report.json",
+    "evaluatedSha": "eebc5feb8a9aefd7a6f5ba357a868c00271587b7",
+    "independence": "Same-agent, non-independent local review explicitly recorded."
+  },
+  "semanticCommit": "eebc5feb8a9aefd7a6f5ba357a868c00271587b7"
 }

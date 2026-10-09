@@ -4,7 +4,7 @@ title: "Apply native table dialog attributes in one original ItemSet"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -17,16 +17,40 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-09T22:08:32.483Z"
+  updated_by: "CODER"
+  note: "Semantic eebc5feb8a9aefd7a6f5ba357a868c00271587b7 exact-SHA same-agent non-independent qualityPASS. 56files/369latest cases including9fresh pass; final complete tabsh.ts actual current-hash identical-map Istanbul158lines/180statements/20functions/141branches all100,zero negatives. All9absent statics/currentbuild/7browser and9restored metadata pass;627old tests byte unchanged/2canonical prefixes retained. English bounded evidence/verification.json; full not due8of10; broad goal active/incomplete."
   attempts: 0
-commit: null
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-09T22:08:05.146Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent, non-independent review of exact semantic SHA eebc5feb8a9aefd7a6f5ba357a868c00271587b7: approved native table attribute bundle matches pinned original SET copy/separator/one-SetTableAttr order; actual whole current module Istanbul100 all four dimensions and all369 latest cases pass."
+  evaluated_sha: "eebc5feb8a9aefd7a6f5ba357a868c00271587b7"
+  blueprint_digest: "c4998b27f3fc38c343a1a85d853e9c58331e13cf14a0f53b99e7c8bd07a0a1b1"
+  evidence_refs:
+    - ".agentplane/tasks/202610092152-B3ESQ3/README.md"
+    - ".agentplane/tasks/202610092152-B3ESQ3/quality/20261009-220805146-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610092152-B3ESQ3/quality/20261009-220805146-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610092152-B3ESQ3/quality/20261009-220805146-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610092152-B3ESQ3/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610092152-B3ESQ3/evidence/verification.json"
+    - "eebc5feb8a9aefd7a6f5ba357a868c00271587b7"
+  findings:
+    - "Removed native scalar flag replay and separate UL dispatch; retained complete original item copy/context, explicit SET admission and one grouped original history. Sorted original Which ranges verified."
+    - "Fresh native and mounted checks retain original inherited/direct state, graph/list/cursor, three UndoRedo cycles, Reset/Cancel and real ODT; separator writes precede one native attribute dispatch."
+    - "627 baseline old test files byte unchanged;2 canonical old prefixes and parent Findings history retained. Nine absent statics including current build/7browser and nine restored metadata pass."
+commit:
+  hash: "eebc5feb8a9aefd7a6f5ba357a868c00271587b7"
+  message: "🚧 B3ESQ3 writer: apply native table attributes in one ItemSet"
 comments:
   -
     author: "CODER"
     body: "Start: remove remaining scalar native dialog flag replay and combine represented source items into one original attribute set under standing goal approval; full not due8/10."
+  -
+    author: "CODER"
+    body: "Start: semantic implementation eebc5feb8a9aefd7a6f5ba357a868c00271587b7 is bound; all approved focused verification passed, exact-SHA quality and refreshed persistence precede finish."
 events:
   -
     type: "status"
@@ -35,8 +59,21 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: remove remaining scalar native dialog flag replay and combine represented source items into one original attribute set under standing goal approval; full not due8/10."
+  -
+    type: "status"
+    at: "2026-10-09T22:08:03.012Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+    note: "Start: semantic implementation eebc5feb8a9aefd7a6f5ba357a868c00271587b7 is bound; all approved focused verification passed, exact-SHA quality and refreshed persistence precede finish."
+  -
+    type: "verify"
+    at: "2026-10-09T22:08:32.483Z"
+    author: "CODER"
+    state: "ok"
+    note: "Semantic eebc5feb8a9aefd7a6f5ba357a868c00271587b7 exact-SHA same-agent non-independent qualityPASS. 56files/369latest cases including9fresh pass; final complete tabsh.ts actual current-hash identical-map Istanbul158lines/180statements/20functions/141branches all100,zero negatives. All9absent statics/currentbuild/7browser and9restored metadata pass;627old tests byte unchanged/2canonical prefixes retained. English bounded evidence/verification.json; full not due8of10; broad goal active/incomplete."
 doc_version: 3
-doc_updated_at: "2026-10-09T22:07:29.277Z"
+doc_updated_at: "2026-10-09T22:08:32.538Z"
 doc_updated_by: "CODER"
 description: "Remove remaining native table dialog split/collapsing scalar replay and separate UL application; copy explicitly SET original supported items into source-shaped native attribute set, apply once after separator operations."
 sections:
@@ -49,7 +86,40 @@ sections:
     Result: pass.
     Evidence: 56files/369latest passing cases including9fresh; final complete tabsh.ts Istanbul158lines/180statements/20functions/141branches all100%; current SHA2561cdd67209f70af89472e35d247bd663d406f4b6233cf9b847e71e47a24a76a54,identical complete maps,zero negatives. Build and7browser pass; TS7.0.2; metadata all9pass;627oldtests byte unchanged/2canonical prefixes retained.
     Scope: Original SET item copy, one native table attr dispatch after separators, full UL context/direct-inherited history, mounted Reset/Cancel/three cycles/real ODT, whole changed production module. Upstream physically absent for all runtime/statics and restored finally; metadata after restore.
-    Full suite not due8of10. Broad goal remains active and incomplete; exact-SHA same-agent non-independent quality and final persistence follow the semantic commit.
+    Full suite not due8of10. Broad goal remains active and incomplete; exact-SHA eebc5feb8a9aefd7a6f5ba357a868c00271587b7 qualityPASS is explicitly same-agent/non-independent; refreshed verification and quality evidence are persisted before canonical finish.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-09T22:08:32.483Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Semantic eebc5feb8a9aefd7a6f5ba357a868c00271587b7 exact-SHA same-agent non-independent qualityPASS. 56files/369latest cases including9fresh pass; final complete tabsh.ts actual current-hash identical-map Istanbul158lines/180statements/20functions/141branches all100,zero negatives. All9absent statics/currentbuild/7browser and9restored metadata pass;627old tests byte unchanged/2canonical prefixes retained. English bounded evidence/verification.json; full not due8of10; broad goal active/incomplete.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T22:08:31.699Z, excerpt_hash=sha256:f667b6b104ab945ffc0648a157ff08dee4356794a3b25cd08e4921a0fa74a9f2
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610092152-B3ESQ3/blueprint/resolved-snapshot.json
+    - old_digest: c4998b27f3fc38c343a1a85d853e9c58331e13cf14a0f53b99e7c8bd07a0a1b1
+    - current_digest: c4998b27f3fc38c343a1a85d853e9c58331e13cf14a0f53b99e7c8bd07a0a1b1
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610092152-B3ESQ3
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610092152-B3ESQ3 -m 🧩 B3ESQ3 task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task semantic implementation and canonical append; preserve native LR/orientation/UL/width ownership corrections. Restore ignored reference finally."
   Findings: |-
     Previous turn6Q2YQH made authoritative progress: DONE semantic021ea956fc8a2026bb3bf0a188cddd44e5f90f4f, close5ba339d644cd, clean checkout/reference. Standing iterative goal approval covers this bounded removal of remaining scalar native attribute replay. Current native input converts layout split and collapsing items into a scalar object, dispatches UL separately, then sends geometry; pinned source copies original explicitly SET items into one owned aSet and applies once after separators. Native document attr history/full native layout/VCL/all source fields remain incomplete. No network/global/publication/merge/delegated agents; no historical process restart.
@@ -61,6 +131,8 @@ sections:
     Runtime attempt: 52 files/324 cases,322 passed. Two fresh assertions incorrectly used the scalar inherited projection and included existing SetTabCols geometry calls in a no-scalar attribute assertion. Corrected to effective original item values and invocation order; column geometry migration remains a separate residual. Related insertion/selection tests close whole-file coverage. Production unchanged; initial profile retained only as partial same-source evidence, failed cases require fresh passing results.
 
     Coverage closure: Six related files/48 cases and final fresh selection file/7 cases passed; standalone focused-profile processes retained strict100 thresholds and exited1 for their partial coverage. The current-source complete-map aggregation gate passed all four100% totals:158lines/180statements/20functions/141branches. Latest per-file evidence overrides earlier failed fresh cases;56files/369cases including9fresh are all passing. No production repair, pre-change map, artificial counter or earlier-task coverage was used.
+
+    Final verification: All9 absent statics/build/browser checks pass (7browser cases), refreshed6test-sensitive statics pass after selection coverage tests, and all9 restored metadata checks pass. Doctor0errors/2existing warnings (old hook shim and historical PJV0JK missing implementation hash). Compiler CLI7.0.2/API6.0.2 and Istanbul4.1.10 verified from installed packages; obsolete native-preview package discovery was corrected. Reference restored; all627old tests byte unchanged;2canonical histories preserved. Exact semantic SHA eebc5feb8a9aefd7a6f5ba357a868c00271587b7 reviewedPASS by same agent, explicitly non-independent. Bounded English evidence26.5KiB contains no upstream sources/helpers/Python/raw maps/logs. Refreshed AP verification/quality persistence precedes canonical finish.
 id_source: "generated"
 ---
 ## Summary
@@ -85,7 +157,40 @@ Command: New/related Istanbul runtime commands and final current-map gate in evi
 Result: pass.
 Evidence: 56files/369latest passing cases including9fresh; final complete tabsh.ts Istanbul158lines/180statements/20functions/141branches all100%; current SHA2561cdd67209f70af89472e35d247bd663d406f4b6233cf9b847e71e47a24a76a54,identical complete maps,zero negatives. Build and7browser pass; TS7.0.2; metadata all9pass;627oldtests byte unchanged/2canonical prefixes retained.
 Scope: Original SET item copy, one native table attr dispatch after separators, full UL context/direct-inherited history, mounted Reset/Cancel/three cycles/real ODT, whole changed production module. Upstream physically absent for all runtime/statics and restored finally; metadata after restore.
-Full suite not due8of10. Broad goal remains active and incomplete; exact-SHA same-agent non-independent quality and final persistence follow the semantic commit.
+Full suite not due8of10. Broad goal remains active and incomplete; exact-SHA eebc5feb8a9aefd7a6f5ba357a868c00271587b7 qualityPASS is explicitly same-agent/non-independent; refreshed verification and quality evidence are persisted before canonical finish.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-09T22:08:32.483Z — VERIFY — ok
+
+By: CODER
+
+Note: Semantic eebc5feb8a9aefd7a6f5ba357a868c00271587b7 exact-SHA same-agent non-independent qualityPASS. 56files/369latest cases including9fresh pass; final complete tabsh.ts actual current-hash identical-map Istanbul158lines/180statements/20functions/141branches all100,zero negatives. All9absent statics/currentbuild/7browser and9restored metadata pass;627old tests byte unchanged/2canonical prefixes retained. English bounded evidence/verification.json; full not due8of10; broad goal active/incomplete.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T22:08:31.699Z, excerpt_hash=sha256:f667b6b104ab945ffc0648a157ff08dee4356794a3b25cd08e4921a0fa74a9f2
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610092152-B3ESQ3/blueprint/resolved-snapshot.json
+- old_digest: c4998b27f3fc38c343a1a85d853e9c58331e13cf14a0f53b99e7c8bd07a0a1b1
+- current_digest: c4998b27f3fc38c343a1a85d853e9c58331e13cf14a0f53b99e7c8bd07a0a1b1
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610092152-B3ESQ3
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610092152-B3ESQ3 -m 🧩 B3ESQ3 task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
@@ -102,3 +207,5 @@ Discovery: Three guessed historical fixture/config paths were absent; bounded rg
 Runtime attempt: 52 files/324 cases,322 passed. Two fresh assertions incorrectly used the scalar inherited projection and included existing SetTabCols geometry calls in a no-scalar attribute assertion. Corrected to effective original item values and invocation order; column geometry migration remains a separate residual. Related insertion/selection tests close whole-file coverage. Production unchanged; initial profile retained only as partial same-source evidence, failed cases require fresh passing results.
 
 Coverage closure: Six related files/48 cases and final fresh selection file/7 cases passed; standalone focused-profile processes retained strict100 thresholds and exited1 for their partial coverage. The current-source complete-map aggregation gate passed all four100% totals:158lines/180statements/20functions/141branches. Latest per-file evidence overrides earlier failed fresh cases;56files/369cases including9fresh are all passing. No production repair, pre-change map, artificial counter or earlier-task coverage was used.
+
+Final verification: All9 absent statics/build/browser checks pass (7browser cases), refreshed6test-sensitive statics pass after selection coverage tests, and all9 restored metadata checks pass. Doctor0errors/2existing warnings (old hook shim and historical PJV0JK missing implementation hash). Compiler CLI7.0.2/API6.0.2 and Istanbul4.1.10 verified from installed packages; obsolete native-preview package discovery was corrected. Reference restored; all627old tests byte unchanged;2canonical histories preserved. Exact semantic SHA eebc5feb8a9aefd7a6f5ba357a868c00271587b7 reviewedPASS by same agent, explicitly non-independent. Bounded English evidence26.5KiB contains no upstream sources/helpers/Python/raw maps/logs. Refreshed AP verification/quality persistence precedes canonical finish.
