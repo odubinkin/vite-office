@@ -1,0 +1,44 @@
+{
+  "checkpoint": "Verified migration published to all branches before final task-closure metadata.",
+  "checkouts": [
+    {
+      "directory": "/Users/odubinkin/Projects/vite-office",
+      "expectedBranch": "main",
+      "actualBranch": "main",
+      "head": "d5608178471fe3964eee424a6c7a198e32430a2d",
+      "upstream": "origin/main",
+      "upstreamHead": "d5608178471fe3964eee424a6c7a198e32430a2d",
+      "status": ""
+    },
+    {
+      "directory": "/Users/odubinkin/Projects/vite-office-writer",
+      "expectedBranch": "writer",
+      "actualBranch": "writer",
+      "head": "d5608178471fe3964eee424a6c7a198e32430a2d",
+      "upstream": "origin/writer",
+      "upstreamHead": "d5608178471fe3964eee424a6c7a198e32430a2d",
+      "status": ""
+    },
+    {
+      "directory": "/Users/odubinkin/Projects/vite-office-calc",
+      "expectedBranch": "calc",
+      "actualBranch": "calc",
+      "head": "d5608178471fe3964eee424a6c7a198e32430a2d",
+      "upstream": "origin/calc",
+      "upstreamHead": "d5608178471fe3964eee424a6c7a198e32430a2d",
+      "status": ""
+    }
+  ],
+  "developmentValidation": {
+    "writer": [
+      "npm ci: pass",
+      "npm run test:tooling: 13 tests pass",
+      "npm run typecheck: pass"
+    ],
+    "calc": [
+      "npm ci: pass",
+      "npm run test:tooling: 13 tests pass",
+      "npm run typecheck: pass"
+    ]
+  }
+}
