@@ -4,6 +4,9 @@ import { ScAddress } from "../source/core/tool/address";
 import type { ScRange } from "../source/core/tool/address";
 export { ScAddress, ScRange } from "../source/core/tool/address";
 
+/** Native size_t count/index, represented within JavaScript's exact integer domain. */
+export type SCSIZE = number;
+
 /** Native integer-domain maxima, distinct from spreadsheet bounds. */
 export const SCROW_MAX = 0x7fffffff;
 export const SCCOL_MAX = 0x7fff;

@@ -9,7 +9,8 @@
     "subsystem": "coordinate-model",
     "capabilityIds": [
       "CAP-80646669-70d5-4641-9fe5-29b1639adab9",
-      "CAP-cfba8ad3-225c-4f7d-9e59-2faa2b2ac908"
+      "CAP-cfba8ad3-225c-4f7d-9e59-2faa2b2ac908",
+      "CAP-a5dc82db-3863-42b0-a6b2-12710e031292"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -23,16 +24,18 @@
         "vendor/libreoffice-reference/sc/inc/address.hxx#MAXROWCOUNT",
         "apps/office/src/sc/inc/address.ts#ScRefAddress",
         "apps/office/src/sc/inc/ref-address.test.ts#copies values independently while assignment retains the recipient address",
-        "vendor/libreoffice-reference/sc/inc/address.hxx#ScRefAddress"
+        "vendor/libreoffice-reference/sc/inc/address.hxx#ScRefAddress",
+        "vendor/libreoffice-reference/sc/inc/address.hxx#typedef size_t SCSIZE;"
       ],
-      "justification": "Calc task 202610090711-S6VCEJ implements the bounded numerical coordinate foundation from the exact pinned local source. Defaults, signed widths, copies, ordering, inclusive containment/intersection and ordinary movement are tested independently with real V8 coverage. Header-declared inline numerical owners are implemented in core/tool and re-exported through the original header boundary. No browser, storage, undo, notification or Writer ownership is duplicated. Whole native API and compiled differential parity remain unverified. Task 202610090749-C6C6AB adds original initialized ScRefAddress owners, all three flags, Set overloads and stable copy assignment. All8 flag combinations,64 equality pairs and literal ownership/signed-width cases are tested. GetRefString and native const enforcement remain unverified; no parity promotion.",
+      "justification": "Calc task 202610090711-S6VCEJ implements the bounded numerical coordinate foundation from the exact pinned local source. Defaults, signed widths, copies, ordering, inclusive containment/intersection and ordinary movement are tested independently with real V8 coverage. Header-declared inline numerical owners are implemented in core/tool and re-exported through the original header boundary. No browser, storage, undo, notification or Writer ownership is duplicated. Whole native API and compiled differential parity remain unverified. Task 202610090749-C6C6AB adds original initialized ScRefAddress owners, all three flags, Set overloads and stable copy assignment. All8 flag combinations,64 equality pairs and literal ownership/signed-width cases are tested. GetRefString and native const enforcement remain unverified; no parity promotion. Task 202610090833-ERVAK2 adds original SCSIZE count/index type for range-list consumers, within JavaScript exact integer domain; full pointer-width unsigned input arithmetic remains unverified.",
       "knownViolations": [],
       "localSymbols": [
         "MAXROWCOUNT",
         "ScRefFlags",
         "ValidAddress",
         "applyStartToEndFlags",
-        "ScRefAddress"
+        "ScRefAddress",
+        "SCSIZE"
       ],
       "sourceResponsibility": "aligned",
       "upstreamFile": "sc/inc/address.hxx",
@@ -41,7 +44,8 @@
         "ScRefFlags",
         "ValidAddress",
         "applyStartToEndFlags",
-        "ScRefAddress"
+        "ScRefAddress",
+        "SCSIZE"
       ]
     }
   }

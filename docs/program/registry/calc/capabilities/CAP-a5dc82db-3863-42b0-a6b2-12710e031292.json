@@ -1,0 +1,100 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-a5dc82db-3863-42b0-a6b2-12710e031292",
+    "capabilityId": "CAP-a5dc82db-3863-42b0-a6b2-12710e031292",
+    "suite": "calc",
+    "subsystem": "range-list",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Owned vector values, ordered equality and queries retain original defaults, independent copies and unsigned64 cell counts.",
+      "Join and partial combining preserve original restart order, two-row backward scan and native maximum-row cache behavior.",
+      "Row/column insertion retains OR predicates; deletion preserves original containment-first and one/two/three/four-fragment order and values."
+    ],
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "Original numerical owner and helper boundaries are retained. TS iteration/index access represents native vector operations and bigint represents unsigned64 counts. TypeScript expresses four unreachable guard paths directly after their guaranteeing native predicates; outcomes remain identical for defined native inputs."
+    },
+    "capability": "Calc numerical range list geometry and edits",
+    "gaps": [
+      "Document/compiler-dependent Parse, Format and UpdateReference, ScRangePairList and native pointer/iterator/refcount/move lifetime remain subsequent work. Native size_t inputs are represented within JavaScript exact integer domain; full pointer-width arithmetic is not certified. Native fixtures prove bounded defined numerical operations, not whole Calc parity."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sc/inc/rangelst.hxx",
+          "marker": "ScRangeList"
+        },
+        {
+          "path": "sc/source/core/tool/rangelst.cxx",
+          "marker": "void ScRangeList::Join("
+        }
+      ],
+      "tests": [
+        {
+          "path": "sc/qa/unit/ucalc_rangelst.cxx",
+          "marker": "CPPUNIT_TEST_FIXTURE(Test, testDeleteArea_4Ranges)"
+        },
+        {
+          "path": "sc/qa/unit/ucalc_rangelst.cxx",
+          "marker": "CPPUNIT_TEST_FIXTURE(Test, testJoin_Case2)"
+        },
+        {
+          "path": "sc/qa/unit/ucalc_rangelst.cxx",
+          "marker": "CPPUNIT_TEST_FIXTURE(Test, testInsertRow)"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/README.md",
+          "marker": "formula"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/rangelst.ts",
+          "marker": "ScRangeList"
+        },
+        {
+          "path": "scripts/calc-rangelst-native-probe.mjs",
+          "marker": "const originals ="
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/rangelst.test.ts",
+          "marker": "matches all13432 native operation sequences and ordered query outputs"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/rangelst.test.ts",
+          "marker": "retains original ucalc_rangelst one through four fragment deletion cases"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/rangelst.test.ts",
+          "marker": "retains original ucalc_rangelst join cases and insertion intersections"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Numerical range lists"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "Join, extend and subtract ordered range-list values with original append cache and fragment ownership",
+    "scopeLimitations": [
+      "Document/compiler-dependent Parse, Format and UpdateReference, ScRangePairList and native pointer/iterator/refcount/move lifetime remain subsequent work. Native size_t inputs are represented within JavaScript exact integer domain; full pointer-width arithmetic is not certified. Native fixtures prove bounded defined numerical operations, not whole Calc parity.",
+      "Internal guard simplification expresses implications of earlier predicates for native finite integer values; original C++ probe bodies remain unchanged."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

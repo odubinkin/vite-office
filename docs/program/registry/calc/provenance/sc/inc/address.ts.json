@@ -20,6 +20,10 @@
         {
           "path": "apps/office/src/sc/inc/ref-address.test.ts",
           "marker": "copies values independently while assignment retains the recipient address"
+        },
+        {
+          "path": "apps/office/src/sc/inc/address.ts",
+          "marker": "SCSIZE"
         }
       ],
       "upstream": [
@@ -30,6 +34,10 @@
         {
           "path": "vendor/libreoffice-reference/sc/inc/address.hxx",
           "marker": "ScRefAddress"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/address.hxx",
+          "marker": "typedef size_t SCSIZE;"
         }
       ]
     },
@@ -39,16 +47,19 @@
       "ScRefFlags",
       "ValidAddress",
       "applyStartToEndFlags",
-      "ScRefAddress"
+      "ScRefAddress",
+      "SCSIZE"
     ],
     "omittedResponsibilities": [
       "Reference parsing/formatting including ScRefAddress::GetRefString, external links, native hashes and range subtraction remain subsequent Calc tasks.",
-      "Undefined native constructors, memory layout, C++ const enforcement and debug assertions are not represented. Sticky updates are already implemented on the original ScRange owner."
+      "Undefined native constructors, memory layout, C++ const enforcement and debug assertions are not represented. Sticky updates are already implemented on the original ScRange owner.",
+      "Full native pointer-width SCSIZE arithmetic is not certified by the numerical range-list acceptance."
     ],
     "preservedResponsibilities": [
       "Native zero/invalid coordinates, exact standard/jumbo capacities and signed 16/32-bit assignments.",
       "Original numeric constructor ordering, inclusive coordinate operations and movement error contracts; no browser-specific state.",
-      "Zero/numeric/copy construction, independent three flags and stable owned address assignment follow the pinned header; coordinate widths are retained by the existing ScAddress owner."
+      "Zero/numeric/copy construction, independent three flags and stable owned address assignment follow the pinned header; coordinate widths are retained by the existing ScAddress owner.",
+      "Original SCSIZE count/index ownership at address header, bounded to exact JavaScript input integers."
     ],
     "status": "mapped",
     "upstreamPath": "sc/inc/address.hxx",
@@ -57,7 +68,8 @@
       "ScRefFlags",
       "ValidAddress",
       "applyStartToEndFlags",
-      "ScRefAddress"
+      "ScRefAddress",
+      "SCSIZE"
     ]
   }
 }

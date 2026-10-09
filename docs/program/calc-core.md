@@ -145,6 +145,53 @@ runs are optional during ordinary portable tests. Full document, raw token,
 compiler and listener integration, debug-only dumping and undefined native domains
 remain unverified.
 
+## Numerical range lists
+
+Task `202610090833-ERVAK2` ports numerical `ScRangeList` through its original
+`sc/inc/rangelst` header and `sc/source/core/tool/rangelst` source boundary.
+It reuses `ScAddress` and `ScRange`. Appending and copying own independent values;
+accessors and iteration borrow mutable values. Equality compares vector order.
+`Find()` returns the first enclosing range, and `Contains()` tests one enclosing
+range rather than the union of the list. Empty combined bounds and corners are
+zero. Cell counting adds each range independently, including overlapping entries,
+and uses exact unsigned 64-bit modular accumulation through `bigint`.
+
+`Join()` retains matching-axis adjacency, containment, source ownership and
+restart order. The append cache starts at -1; appending raises it, while removal,
+direct vector insertion and borrowed mutation do not recalculate it. `RemoveAll()`
+resets it, and copy/swap retain it. Partial combining scans backward only while
+start rows lie within the original two-row window. Insertion retains the native
+OR overlap predicates and defers joining constructed ranges. Deletion removes
+contained entries first, then applies the original one/two/three/four-fragment
+helpers and ordered deferred joins. The original top-edge one-fragment trim uses
+the deleting start row plus one. The upstream equal-sheet deletion assumption and
+existing multitab behavior are retained; no general 3D subtraction is invented.
+
+Four redundant native guard paths cannot be false after their preceding numeric
+conditions: the two trailing one-fragment conditions, the encountered Join source
+index comparison, and the final interior-fragment guard. TS expresses those
+implications directly, with proof comments; native source bodies remain unchanged
+in the comparison probe. This preserves defined native outcomes and enables real
+100% branch coverage without exclusions or fabricated non-native input values.
+The coherent range-list owner and original anonymous helper grouping remain in
+one source file after reviewing its 500-line decomposition threshold.
+
+`scripts/calc-rangelst-native-probe.mjs` compiles the original class, complete
+selected numerical definition/helper intervals and native inline address/range
+bodies under ASan/UBSan. Its 13,432 sequences compare public outcomes after every
+operation, including ordered fragments, cache-sensitive follow-ups, counts,
+bounds, corners, lookup and intersections. Literal numerical examples from
+`ucalc_rangelst.cxx` retain original coordinates and cell assertions. Run
+`node scripts/calc-rangelst-native-probe.mjs --check` to reproduce the committed
+fixture and exact pinned source/body hashes; ordinary tests remain portable.
+
+Document/compiler-dependent parsing, formatting and reference updates, range-pair
+lists, native pointer/iterator/refcount/move lifetime and undefined arithmetic
+remain pending. `SCSIZE` stays at the original address header and represents
+counts/indices within JavaScript exact integer inputs; full pointer-width input
+arithmetic is unverified. Neither these finite native outputs nor local coverage
+establish whole Calc parity.
+
 JavaScript tuples represent native output reference parameters. Equality and
 ordering methods represent C++ operators. Undefined native uninitialized
 constructors, pointer layout, `size_t` hashing and native debug assertions are
@@ -175,10 +222,12 @@ intervening tasks. Writer acceptance files and coverage settings remain intact.
 The coordinate foundation and sticky reference tasks are Calc tasks 1 and 2;
 inventory reconciliation is task 3, reference addresses/sheet limits are task 4,
 single formula references are task 5, and complex formula references are task 6
-of that first ten-task interval.
+of that first ten-task interval. Numerical range lists are task 7; the full run
+is still due after task 10.
 
 Source research includes the per-file MPL 2.0 and inherited Apache notices in
 `sc/inc/address.hxx`, `sc/inc/sheetlimits.hxx`, `sc/inc/refdata.hxx`,
-`sc/source/core/tool/refdata.cxx` and `sc/source/core/tool/address.cxx`, and MPL 2.0 in
+`sc/source/core/tool/refdata.cxx`, `sc/inc/rangelst.hxx`,
+`sc/source/core/tool/rangelst.cxx` and `sc/source/core/tool/address.cxx`, and MPL 2.0 in
 `sc/inc/types.hxx`. The TypeScript implementation is independently authored
 from those numerical contracts; the original sources remain research-only.
