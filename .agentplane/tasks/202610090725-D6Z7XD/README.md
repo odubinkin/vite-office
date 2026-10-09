@@ -1,10 +1,11 @@
 ---
 id: "202610090725-D6Z7XD"
 title: "Calc native sticky range reference updates"
-status: "DOING"
+result_summary: "Implemented native sticky Calc range updates with compiled differential proof"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on:
@@ -49,11 +50,16 @@ quality_review:
     - "output/playwright/calc-registry2.json"
   findings:
     - "Exact original definitions and source Git blobs are preserved by the probe; native doc/class shell limitations and unexecuted methods are declared. Existing Writer/shared runtime and first Calc acceptance tests are untouched. Inventory records retain unverified broad semantic states."
-commit: null
+commit:
+  hash: "1d5c43268f11123ae8de64ae01c74e98ae318a09"
+  message: "🧩 D6Z7XD code: preserve native Calc sticky range updates"
 comments:
   -
     author: "CODER"
     body: "Start: continue the approved Calc core by implementing the pinned native sticky range movement and insert/delete coordinate updates with focused acceptance coverage."
+  -
+    author: "CODER"
+    body: "Verified: original Calc sticky range updates match768compiled upstream states, with actual100 percent Calc coverage and passing scoped static and registry checks."
 events:
   -
     type: "status"
@@ -68,8 +74,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Calc14cases including768actual native movement states pass; ASan/UBSan and pinned source/blob hashes checked. Real V8 211lines245statements53functions219branches all100; typecheck,boundaries,lint,format,docs,scoped registry,routing,doctor pass. Full suite deferred until Calc10; broad API/integration parity unverified."
+  -
+    type: "status"
+    at: "2026-10-09T07:42:09.794Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: original Calc sticky range updates match768compiled upstream states, with actual100 percent Calc coverage and passing scoped static and registry checks."
 doc_version: 3
-doc_updated_at: "2026-10-09T07:41:29.242Z"
+doc_updated_at: "2026-10-09T07:42:09.796Z"
 doc_updated_by: "CODER"
 description: "Continue the approved Calc core goal with original sticky end-anchor movement and insert/delete coordinate adjustment from pinned address.cxx. Reuse ScAddress/ScRange and shared ownership, change only calc files, task2/10 before full-suite cadence."
 sections:
@@ -117,6 +130,10 @@ sections:
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task implementation and task-owned acceptance/metadata; preserve completed Calc1 and prior Writer/shared owners. No merge, reset or reference checkout modifications."
   Findings: "Seven original methods live directly on the existing ScRange owner; no generic browser axis abstraction or duplicated shared module. Sticky identity excludes singleton/reversed ranges; newly sticky error output correction does not forgive starting-endpoint or sheet failures. Both conditional endpoints use strict boundary comparisons and original overlap limiting, with narrowing before max clamping. Existing foundation tests remain byte-identical. Native proof extracts complete unchanged constructors and9numerical definitions; only MoveSticky/Move paths are executed in the768state profile. Native doc/class shells, default capacities and GetTableCount3 are explicit; full ScDocument, other compiled-method differentials and undefined signed arithmetic domains are not certified. Runtime semantic statuses remain unverified; capability has bounded implementation and declared integration gaps, with native evidence appended without broad promotion. Canonical Calc records are authored independently and app-scoped validator includes existing shared owners. Ordinary fixture tests are portable without compiler/upstream; original reference is read-only via ignored symlink. Same-agent EVALUATOR review is not independent. Full suite next after Calc10; no merge or Writer/shared changes."
+extensions:
+  implementation_commit:
+    hash: "1d5c43268f11123ae8de64ae01c74e98ae318a09"
+    message: "🧩 D6Z7XD code: preserve native Calc sticky range updates"
 id_source: "generated"
 ---
 ## Summary
