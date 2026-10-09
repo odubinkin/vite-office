@@ -1,0 +1,286 @@
+{
+  "taskId": "202610090732-MND6MH",
+  "iteration": 249,
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceAudit": [
+    {
+      "path": "sw/source/core/inc/frame.hxx",
+      "sha256": "81b9bd0cfa717d3b499ee3da640a02738e754609bb57607ca584621978f1b8b0"
+    },
+    {
+      "path": "sw/source/core/layout/wsfrm.cxx",
+      "sha256": "68b33e1acaf748e65210b8856f8b094368459565446b7ab5c386684fcae0aeb1"
+    },
+    {
+      "path": "sw/source/core/layout/tabfrm.cxx",
+      "sha256": "d1d616197c6aeac1b1ba075995892b34cfdbea60838e88136f9bf4a52e90970f"
+    }
+  ],
+  "tests": [
+    {
+      "profile": "initial",
+      "passed": 130,
+      "failed": 0,
+      "filtered": 0,
+      "reportSHA256": "d5ffae69a5c6980f3f4c34fc39c51a1618434818f6073438bd79de5714ab3813"
+    },
+    {
+      "profile": "closure",
+      "passed": 1,
+      "failed": 0,
+      "filtered": 17,
+      "reportSHA256": "b1a96b69b6efbab3d275c65ca4e396c97308e774a38d0d5815e8ab5f19e89301"
+    },
+    {
+      "profile": "typefix",
+      "passed": 1,
+      "failed": 0,
+      "filtered": 18,
+      "reportSHA256": "ecad9d6c5b8ad26a07db52c6b5a45c9017e0fa5848951c06de7f99adf5fb1be7"
+    }
+  ],
+  "uniqueCases": 132,
+  "freshCases": 19,
+  "profiles": [
+    {
+      "prefix": "initial",
+      "upstreamAbsent": true,
+      "restored": true,
+      "commands": [
+        {
+          "label": "coverage",
+          "argv": [
+            "../../node_modules/.bin/vitest",
+            "run",
+            "--config",
+            "vitest.writer.config.ts",
+            "src/sw/source/core/layout/native-frame-invalidation.test.ts",
+            "src/sw/source/core/layout/native-row-format-client.test.ts",
+            "src/sw/source/core/layout/native-cell-format-client.test.ts",
+            "src/sw/source/core/undo/native-row-format-client-history.test.ts",
+            "src/sw/source/core/undo/native-cell-format-client-history.test.ts",
+            "src/sw/browser/editor/native-row-format-client.test.tsx",
+            "src/sw/browser/editor/native-cell-format-client.test.tsx",
+            "src/sw/source/core/table/native-row-frame-format.test.ts",
+            "src/sw/source/core/undo/native-row-frame-format-history.test.ts",
+            "src/sw/browser/presentation/native-row-frame-format.test.tsx",
+            "src/sw/source/core/table/native-box-frame-format.test.ts",
+            "src/sw/source/core/undo/native-box-frame-format-history.test.ts",
+            "src/sw/browser/editor/native-box-frame-format.test.tsx",
+            "src/sw/source/core/layout/newfrm.test.ts",
+            "src/sw/source/core/layout/native-table-print-area.test.ts",
+            "src/sw/source/core/layout/native-table-layout-split.test.ts",
+            "src/sw/source/core/layout/native-table-headlines.test.ts",
+            "src/sw/source/core/layout/native-collapsing-border-painter.test.ts",
+            "src/sw/browser/editor/native-format-notifier.test.tsx",
+            "src/sw/browser/presentation/native-format-notifier-store.test.ts",
+            "--coverage",
+            "--coverage.include=src/sw/source/core/layout/wsfrm.ts",
+            "--coverage.include=src/sw/source/core/layout/tabfrm.ts",
+            "--coverage.reporter=text",
+            "--coverage.reporter=json",
+            "--coverage.reporter=json-summary",
+            "--coverage.reportsDirectory=./node_modules/.cache/parity-coverage/MND6MH-initial-coverage",
+            "--reporter=json",
+            "--outputFile=./node_modules/.cache/parity-coverage/MND6MH-initial-tests.json"
+          ],
+          "exitCode": 1,
+          "elapsedMs": 23059,
+          "outputSHA256": "e7923c0da2dca8da8023710fc700176d0c989de88414a74a84d934f55af781aa"
+        }
+      ]
+    },
+    {
+      "prefix": "closure",
+      "upstreamAbsent": true,
+      "restored": true,
+      "commands": [
+        {
+          "label": "coverage",
+          "argv": [
+            "../../node_modules/.bin/vitest",
+            "run",
+            "--config",
+            "vitest.writer.config.ts",
+            "src/sw/source/core/layout/native-frame-invalidation.test.ts",
+            "-t",
+            "native print frame",
+            "--coverage",
+            "--coverage.include=src/sw/source/core/layout/wsfrm.ts",
+            "--coverage.include=src/sw/source/core/layout/tabfrm.ts",
+            "--coverage.reporter=json",
+            "--coverage.reporter=json-summary",
+            "--coverage.reportsDirectory=./node_modules/.cache/parity-coverage/MND6MH-closure-coverage",
+            "--reporter=json",
+            "--outputFile=./node_modules/.cache/parity-coverage/MND6MH-closure-tests.json"
+          ],
+          "exitCode": 1,
+          "elapsedMs": 4628,
+          "outputSHA256": "a699622a189dd8221a61f30c0e7a6c9e7745a619a9c69cfb2d098788d5691017"
+        }
+      ]
+    },
+    {
+      "prefix": "typefix",
+      "upstreamAbsent": true,
+      "restored": true,
+      "commands": [
+        {
+          "label": "coverage",
+          "argv": [
+            "../../node_modules/.bin/vitest",
+            "run",
+            "--config",
+            "vitest.writer.config.ts",
+            "src/sw/source/core/layout/native-frame-invalidation.test.ts",
+            "-t",
+            "native reinitialization",
+            "--coverage",
+            "--coverage.include=src/sw/source/core/layout/wsfrm.ts",
+            "--coverage.include=src/sw/source/core/layout/tabfrm.ts",
+            "--coverage.reporter=json",
+            "--coverage.reporter=json-summary",
+            "--coverage.reportsDirectory=./node_modules/.cache/parity-coverage/MND6MH-typefix-coverage",
+            "--reporter=json",
+            "--outputFile=./node_modules/.cache/parity-coverage/MND6MH-typefix-tests.json"
+          ],
+          "exitCode": 1,
+          "elapsedMs": 3462,
+          "outputSHA256": "e2f7223b3a5e5b8120e35765d352f79e5ba382f85c47992e5d6c857dd1d829b3"
+        }
+      ]
+    },
+    {
+      "prefix": "checks",
+      "upstreamAbsent": true,
+      "restored": true,
+      "commands": [
+        {
+          "label": "format",
+          "argv": [
+            "node_modules/.bin/prettier",
+            "--check",
+            "apps/office/src/sw/source/core/layout/wsfrm.ts",
+            "apps/office/src/sw/source/core/layout/tabfrm.ts",
+            "apps/office/src/sw/source/core/layout/native-frame-invalidation.test.ts",
+            "docs/program/registry/writer/provenance/sw/source/core/layout/wsfrm.ts.json",
+            "docs/program/registry/writer/provenance/sw/source/core/layout/tabfrm.ts.json",
+            "docs/program/registry/writer/runtime/sw/source/core/layout/wsfrm.ts.json",
+            "docs/program/registry/writer/runtime/sw/source/core/layout/tabfrm.ts.json"
+          ],
+          "exitCode": 0,
+          "elapsedMs": 206,
+          "outputSHA256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+        },
+        {
+          "label": "lint",
+          "argv": [
+            "node_modules/.bin/eslint",
+            "apps/office/src/sw/source/core/layout/wsfrm.ts",
+            "apps/office/src/sw/source/core/layout/tabfrm.ts",
+            "apps/office/src/sw/source/core/layout/native-frame-invalidation.test.ts",
+            "--max-warnings",
+            "0"
+          ],
+          "exitCode": 0,
+          "elapsedMs": 1011,
+          "outputSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "label": "dependencies",
+          "argv": [
+            "npm",
+            "run",
+            "check:dependencies"
+          ],
+          "exitCode": 0,
+          "elapsedMs": 841,
+          "outputSHA256": "ea44c136b2ac84f96577fceabc09325bf83047ec1eeea7b6463b102ec1b7eaf4"
+        },
+        {
+          "label": "docs",
+          "argv": [
+            "npm",
+            "run",
+            "check:docs"
+          ],
+          "exitCode": 0,
+          "elapsedMs": 1460,
+          "outputSHA256": "755bbf77031ece262d541754a5ba657356dec48cfa8e40b53aa34ee47ecb2324"
+        },
+        {
+          "label": "file-size",
+          "argv": [
+            "npm",
+            "run",
+            "check:file-size"
+          ],
+          "exitCode": 0,
+          "elapsedMs": 258,
+          "outputSHA256": "ca5c7030800afe1c97675923e8fb784a2a32417190e7a29d1617b7106b101564"
+        },
+        {
+          "label": "static",
+          "argv": [
+            "npm",
+            "run",
+            "test:static"
+          ],
+          "exitCode": 0,
+          "elapsedMs": 9924,
+          "outputSHA256": "aed25d487379d1e50ae0b5c13cf85a9ea516e4d0d0c536b730eaa1e6eb7166cf"
+        }
+      ]
+    }
+  ],
+  "typecheck": {
+    "command": "npm run typecheck",
+    "exitCode": 0,
+    "buildTypecheckAlsoPassed": true
+  },
+  "audits": {
+    "registryBuild": true,
+    "writerRegistry": true,
+    "globalRegistry": true,
+    "sourceProvenance": true,
+    "sourceTree": true,
+    "routing": true,
+    "doctor": {
+      "exitCode": 0,
+      "errors": 0,
+      "warnings": 3,
+      "note": "Pre-existing managed hook shim and two no-op historical missing implementation hash warnings; unchanged."
+    }
+  },
+  "metadata": [
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/core/layout/wsfrm.ts.json",
+      "oldSemanticFieldsAndPrefixesRetained": true,
+      "currentSHA256": "5c88d136f5be829e9f71e3f86c538b9ecfe5356dad70bcb1f4de5d5a86db6edf"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/core/layout/wsfrm.ts.json",
+      "oldSemanticFieldsAndPrefixesRetained": true,
+      "currentSHA256": "7d0f0447e7244879d77199221878f7569ced04111c7e9ec25ab524ec9f4edf4b"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/core/layout/tabfrm.ts.json",
+      "oldSemanticFieldsAndPrefixesRetained": true,
+      "currentSHA256": "f7a437c074e455791236ba9b3ae353cc9dc5a9be279724bc1423368047c9c615"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/core/layout/tabfrm.ts.json",
+      "oldSemanticFieldsAndPrefixesRetained": true,
+      "currentSHA256": "2788d11cf1751eb51d2039938802774bd768b5dc8ad9fdb769dfd63940b712da"
+    }
+  ],
+  "failedAttempts": {
+    "discovery": "Wrong tool cwd produced no tests; corrected before acceptance run.",
+    "initialCoverageThreshold": "Raw initial changed-module coverage below100; new-case closure completed missing old geometry paths.",
+    "freshGeometryTestScaffolding": 3,
+    "typecheck": "Static row cast required unknown intermediate; current full changed function remeasured.",
+    "rawPartialThresholdExitsRetained": true,
+    "unchangedPassingReplay": 0
+  },
+  "remaining": "Actual native page/root propagation, fixed geometry/content/follows/direction/collapsed-border behavior, SwFrameAreaDefinition base split and persistent browser physical-frame integration remain unverified. Broad goal incomplete."
+}

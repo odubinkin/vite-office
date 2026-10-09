@@ -3,7 +3,7 @@ import type { SwTable, SwTableBox, SwTableLine } from "../table/swtable";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { SwFrameSize } from "../../../inc/fmtfsize";
 import type { SwModify } from "../../../inc/calbck";
-import { SwLayoutFrame } from "./wsfrm";
+import { SwLayoutFrame, SwFrameType } from "./wsfrm";
 import type { SwModelHint } from "../../../inc/hints";
 
 /** Owns represented flat-row height over its original native line. */
@@ -11,6 +11,7 @@ export class SwRowFrame extends SwLayoutFrame {
   /** Binds the actual row owner. @param line - Original native line. @returns Nothing. */
   public constructor(private readonly line: SwTableLine) {
     super(line.GetFrameFormat());
+    this.mnFrameType = SwFrameType.Row;
     let previous: SwCellFrame | undefined;
     for (const box of line.GetTabBoxes()) {
       const frame = new SwCellFrame(box);
@@ -34,9 +35,17 @@ export class SwRowFrame extends SwLayoutFrame {
     if (hint.kind === "model-transaction") {
       for (const nested of hint.hints) this.SwClientNotify(source, nested);
     } else if (hint.kind === "table-line-format-changed") {
-      if (hint.m_rTabLine === this.line) this.RegisterToFormat(hint.m_rNewFormat);
+      if (hint.m_rTabLine !== this.line) return;
+      this.RegisterToFormat(hint.m_rNewFormat);
+      this.InvalidateSize();
+      this.InvalidatePrt_();
+      this.SetCompletePaint();
+      this.ReinitializeFrameSizeAttrFlags();
     } else if (hint.kind === "move-table-line") {
-      if (hint.m_rTableLine === this.line) this.RegisterToFormat(hint.m_rNewFormat);
+      if (hint.m_rTableLine !== this.line) return;
+      this.RegisterToFormat(hint.m_rNewFormat);
+      this.InvalidateAll();
+      this.ReinitializeFrameSizeAttrFlags();
     } else super.SwClientNotify(source, hint);
   }
   /** Reads the original row owner. @returns Native line. */
@@ -62,6 +71,7 @@ export class SwCellFrame extends SwLayoutFrame {
   /** Registers at the original native box format. @param box - Original cell model. @returns Nothing. */
   public constructor(private readonly box: SwTableBox) {
     super(box.GetFrameFormat());
+    this.mnFrameType = SwFrameType.Cell;
   }
   /** Reads the original cell identity. @returns Native box. */
   public GetTabBox(): SwTableBox {
@@ -83,9 +93,16 @@ export class SwCellFrame extends SwLayoutFrame {
     if (hint.kind === "model-transaction") {
       for (const nested of hint.hints) this.SwClientNotify(source, nested);
     } else if (hint.kind === "table-box-format-changed") {
-      if (hint.m_rTableBox === this.box) this.RegisterToFormat(hint.m_rNewFormat);
+      if (hint.m_rTableBox !== this.box) return;
+      this.RegisterToFormat(hint.m_rNewFormat);
+      this.InvalidateSize();
+      this.InvalidatePrt_();
+      this.SetCompletePaint();
     } else if (hint.kind === "move-table-box") {
-      if (hint.m_rTableBox === this.box) this.RegisterToFormat(hint.m_rNewFormat);
+      if (hint.m_rTableBox !== this.box) return;
+      this.RegisterToFormat(hint.m_rNewFormat);
+      this.InvalidateAll();
+      this.ReinitializeFrameSizeAttrFlags();
     } else super.SwClientNotify(source, hint);
   }
 }

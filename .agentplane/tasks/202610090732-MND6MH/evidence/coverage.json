@@ -1,0 +1,104 @@
+{
+  "changed": {
+    "files": 2,
+    "summary": {
+      "lines": {
+        "total": 188,
+        "covered": 188,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 211,
+        "covered": 211,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 61,
+        "covered": 61,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 114,
+        "covered": 114,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "sourceHashes": {
+      "apps/office/src/sw/source/core/layout/wsfrm.ts": "24c4a30ef0b4c128e2bbd39e0b5128bcf594a87a59635ffcb9dae85bd2550ce4",
+      "apps/office/src/sw/source/core/layout/tabfrm.ts": "1fd23bb9f65692678267e00baca77c6a0f55f541a3bbbc7d9367fb16b1825737"
+    },
+    "unchangedRegionTransfer": {
+      "path": "apps/office/src/sw/source/core/layout/wsfrm.ts",
+      "priorSourceSHA256": "1d8f537188bca8785e0bb496a3fb3badc97850b3f77fc27d50d98dd96b039668",
+      "currentSourceSHA256": "24c4a30ef0b4c128e2bbd39e0b5128bcf594a87a59635ffcb9dae85bd2550ce4",
+      "currentFreshFunction": "ReinitializeFrameSizeAttrFlags",
+      "regions": [
+        {
+          "kind": "complete prefix",
+          "sha256": "f6fb1091ee2b6753d30f5112d1a7ec4503a3156c7811d4da0e004f10c4af12ea",
+          "bytes": 7393
+        },
+        {
+          "kind": "complete suffix",
+          "sha256": "d239d944c38bb2ec09982fc816913825f45f583dcee92c93d15f28113131f68a",
+          "bytes": 3422
+        }
+      ],
+      "counts": {
+        "statements": 110,
+        "functions": 42,
+        "branches": 26
+      },
+      "allMappedLocationsExact": true
+    }
+  },
+  "application": {
+    "files": 318,
+    "retainedWholeFiles": 316,
+    "summary": {
+      "lines": {
+        "total": 18192,
+        "covered": 18192,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 19971,
+        "covered": 19971,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 4582,
+        "covered": 4582,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 14616,
+        "covered": 14616,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "mapSHA256": "53e41e0ea467fd750a70640bf408b8a39b2a5024266cb3167cf7ce29ecefb326",
+    "proofSHA256": "d334ba39478a56bb3ca6db84631a4a20eb03e733b25cf08b01b26f7b5777c083"
+  },
+  "scope": "Leaf coverage certificate; not fresh full tests or current inventory tooling coverage."
+}
