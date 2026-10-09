@@ -1,10 +1,11 @@
 ---
 id: "202610090833-ERVAK2"
 title: "Port Calc numerical range list geometry and edit operations"
-status: "DOING"
+result_summary: "Implemented numerical ScRangeList value ownership, joining, insertion, deletion fragments and queries with bounded original C++ comparison and inventory traceability."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 19
+revision: 20
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
     - "Reviewed original numerical source/body intervals against TS owner and helper order; existing address/range owners are reused and shared/Writer implementation paths are unchanged."
     - "Four unreachable guard paths are expressed directly after original numeric implications, documented with proof comments; native probe definitions remain unchanged, without coverage exclusions."
     - "Soft541-line review retains original range-list and anonymous helper grouping; hard1000 guard passes. Existing test bodies, native fixtures and semantic status flags are preserved."
-commit: null
+commit:
+  hash: "50cc72277bb69f9e27cfb51c1807eac86c73f525"
+  message: "✨ ERVAK2 calc: implement numerical range list edit geometry"
 comments:
   -
     author: "CODER"
     body: "Start: port numerical range list ownership and native join/insertion/deletion contracts, retaining original ordering and bounded native evidence."
+  -
+    author: "CODER"
+    body: "Verified:40 Calc tests with actual100 coverage and13432 native range-list operation sequences; scoped inventory/static guards pass and shared ownership is preserved."
 events:
   -
     type: "status"
@@ -63,8 +69,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Command: node scripts/calc-rangelst-native-probe.mjs --write; node scripts/calc-rangelst-native-probe.mjs --check Result: pass. Evidence: exact pinned Git blobs and full/source interval hashes; original class, numerical definition/helper intervals and address/range inline bodies unchanged; ASan/UBSan clean. Scope:13432 initialized operation sequences with17391 native snapshots, including joins, partial combining, deletion fragments, insertion overloads, cache-sensitive follow-ups, ownership/copy/swap, queries and unsigned64 modular counts. Portable tests compare every public output and retain original numerical ucalc_rangelst examples. Command: npm run test:coverage:calc Result: pass. Evidence:40 tests across9 files; statements860/860,branches712/712,functions184/184,lines762/762,all100%; no coverage exclusions or configuration changes. Scope: all current Calc core owners and prior acceptance. Four redundant guard paths are expressed from original preceding finite-integer predicates with proof comments; original C++ probe bodies remain unchanged. No defined native output or public owner boundary changes. Command: npm run typecheck; node_modules/.bin/eslint apps/office/src/sc/inc/address.ts apps/office/src/sc/inc/rangelst.ts apps/office/src/sc/source/core/tool/rangelst.ts apps/office/src/sc/source/core/tool/rangelst.test.ts scripts/calc-rangelst-native-probe.mjs; node_modules/.bin/prettier --check apps/office/src/sc/inc/address.ts apps/office/src/sc/inc/rangelst.ts apps/office/src/sc/source/core/tool/rangelst.ts apps/office/src/sc/source/core/tool/rangelst.test.ts scripts/calc-rangelst-native-probe.mjs Result: pass. Evidence: no type/lint diagnostics; all matched files formatted. Final corrections use the native at valid-index boundary, with no fabricated fallback values or disabled enforcement. Scope: complete application/tool static types and affected source/tests/probe. Command: npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:source-tree Result: pass. Evidence:328 runtime sources,1562 relative imports,29 allowed cross-module edges;1078 documented sources;1081 authored files checked, rangelst grouping reviewed;114 required paths and33 retired roots. Scope: static module, documentation, size and tree guards. Existing shared/Writer implementation, previous test bodies/native fixtures and all prior capability flags are unchanged. Command: node_modules/.bin/tsx scripts/libreoffice-inventory/registry-cli.ts check --scope calc Result: pass. Evidence:7 capabilities,120 applicable modules (8 Calc and112 shared),0 semantic violations. Actual100 local coverage does not promote parity statuses. Scope: new range-list capability/header/tool provenance/runtime and existing address SCSIZE mapping; full document/compiler/lifetime/pointer-width/undefined domains remain unverified. Command: node .agentplane/policy/check-routing.mjs; ap doctor; git diff --check Result: pass. Evidence: routing OK; doctor0 errors,1 pre-existing managed hook readiness warning; no whitespace errors. Scope: task policy and reviewed diff. Final clean tracked/untracked state on calc is required after closure. Full suite cadence: Calc milestone7 of10. Full test suites run after milestone10 under the user instruction; affected/shared tests are required when shared implementations change, which this task does not do."
+  -
+    type: "status"
+    at: "2026-10-09T08:55:15.706Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified:40 Calc tests with actual100 coverage and13432 native range-list operation sequences; scoped inventory/static guards pass and shared ownership is preserved."
 doc_version: 3
-doc_updated_at: "2026-10-09T08:54:04.627Z"
+doc_updated_at: "2026-10-09T08:55:15.707Z"
 doc_updated_by: "CODER"
 description: "Implement ScRangeList value ownership, joining, partial combining, insertion, area deletion and numerical queries at original rangelst boundaries; compare unchanged native implementations and preserve existing Calc/shared evidence."
 sections:
@@ -138,6 +151,10 @@ sections:
     - Observation: Final scoped validation passes; rangelst.ts is a541-line decomposition review candidate including final empty line, with40 tests and all13432 native sequences matching.
       Impact: Original range-list/anonymous fragment helper grouping exceeds the soft500 review threshold but remains below hard1000. Full ScDocument/compiler work and native lifetime/pointer-width inputs remain unverified.
       Resolution: Retain the coherent upstream rangelst grouping and record bounded proof in capability/runtime/provenance. Exact unsigned64 count accumulation uses bigint; unchanged shared/Writer paths and prior fixtures/tests/status flags are verified. doctor0 errors and1 pre-existing managed-hook readiness warning; full suite remains due after Calc10.
+extensions:
+  implementation_commit:
+    hash: "50cc72277bb69f9e27cfb51c1807eac86c73f525"
+    message: "✨ ERVAK2 calc: implement numerical range list edit geometry"
 id_source: "generated"
 ---
 ## Summary
