@@ -1,10 +1,11 @@
 ---
 id: "202610091449-FW0RYR"
 title: "Route Writer object destruction through native ObjectDyingHint"
-status: "DOING"
+result_summary: "Dispatch native Writer object death before teardown"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 19
+revision: 20
 origin:
   system: "manual"
 depends_on: []
@@ -48,6 +49,9 @@ comments:
   -
     author: "CODER"
     body: "Implementation: Native Writer object death and original registration/item-set/UI inheritance are verified;335unique cases/scoped current Istanbul100/TS7/statics/metadata pass. Broad goal active correction4/10; complete linked/cache/assert/name/VCL lifetime remains unverified."
+  -
+    author: "CODER"
+    body: "Verified: Native Writer ObjectDyingHint/CheckRegistration and original owned item-set/UI inheritance pass335unique related cases8fresh with complete4-module actual Istanbul100. TS7/static/metadata audits pass;8record histories and582/583oldtests preserved with1exact native event migration. Same-agent non-independent quality pass; bound semantic53f5f9217274. Broad goal remains active correction4/10."
 events:
   -
     type: "status"
@@ -69,8 +73,15 @@ events:
     from: "DOING"
     to: "DOING"
     note: "Implementation: Native Writer object death and original registration/item-set/UI inheritance are verified;335unique cases/scoped current Istanbul100/TS7/statics/metadata pass. Broad goal active correction4/10; complete linked/cache/assert/name/VCL lifetime remains unverified."
+  -
+    type: "status"
+    at: "2026-10-09T15:12:30.933Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Native Writer ObjectDyingHint/CheckRegistration and original owned item-set/UI inheritance pass335unique related cases8fresh with complete4-module actual Istanbul100. TS7/static/metadata audits pass;8record histories and582/583oldtests preserved with1exact native event migration. Same-agent non-independent quality pass; bound semantic53f5f9217274. Broad goal remains active correction4/10."
 doc_version: 3
-doc_updated_at: "2026-10-09T15:11:45.033Z"
+doc_updated_at: "2026-10-09T15:12:30.935Z"
 doc_updated_by: "CODER"
 description: "Correction4 after full TS7/Istanbul XJTGF0: implement native ObjectDyingHint/ModifyChangedHint and ClientBase CheckRegistration behavior, SwModify pre-destruction Writer notification/fallback cleanup, SwFormat inherited item-set rebind/detach and native browser observer invalidation. Remove duplicated generic death repair, preserve original owners and registered I/O deviations; existing iterative user authorization applies."
 sections:
