@@ -1,10 +1,10 @@
 ---
 id: "202610091638-6W99E8"
 title: "Port Calc multi-selection owner and iterator"
-status: "TODO"
+status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 4
+revision: 5
 origin:
   system: "manual"
 depends_on: []
@@ -23,11 +23,21 @@ verification:
   note: null
   attempts: 0
 commit: null
-comments: []
-events: []
+comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
+events:
+  -
+    type: "status"
+    at: "2026-10-09T16:40:12.928Z"
+    author: "CODER"
+    from: "TODO"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-09T16:39:42.977Z"
-doc_updated_by: "PLANNER"
+doc_updated_at: "2026-10-09T16:40:12.928Z"
+doc_updated_by: "CODER"
 description: "Task9 of resumed cycle: original ScMultiSel and ScMultiSelIter over existing ScMarkArray, ScFlatBoolRowSegments and ScRangeList; preserve raw Set, row migration, borrowed versus snapshot iteration and shifts with unchanged native evidence."
 sections:
   Summary: "Port original ScMultiSel and ScMultiSelIter using existing actual Calc row-mark, bool segment, range-list and sheet-limit owners."
