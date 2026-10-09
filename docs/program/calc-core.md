@@ -1076,3 +1076,38 @@ size_t arithmetic, invalid ranges/self-insertion/dangling cursors and every full
 multi_type_vector/Calc column/document/browser method remain unverified.
 Original nested types export at file scope as TypeScript syntax adaptation;
 this increment certifies no substitute enclosing container or whole-module parity.
+
+## Shared SoA position adjustment
+
+`external/mdds/include/mdds/multi_type_vector/soa/block_util.ts` retains the
+original architecture-neutral `adjust_block_positions` specializations for
+`none`, `lu4`, `lu8`, `lu16` and `lu32`. Each keeps the original early return,
+explicit unrolled lanes, remainder mask and scalar tail. The callable factory
+adapts C++ template-specialization syntax. The existing original default trait
+still selects `lu16`; disabled SIMD values have no scalar fallback.
+
+The helper borrows real `std_vector` positions from the shared SoA owner.
+Only positions change. Sizes, block aliases, payloads, capacities and backing
+identities stay intact. The original iterator cache remains a cache: position
+writes are observed on its next original update, without forced synchronization.
+Unsigned64 position plus signed64 delta uses exact `bigint` modulo arithmetic;
+number witnesses require exactly representable inputs and outputs. Valid large
+start indices return before index projection. Invalid negative indices retain
+the original caller precondition and receive no successful fixture result.
+
+The optional native probe compiles unchanged complete original headers and
+observes the real private array owner through a standard caller-only template
+access bridge. The portable corpus includes 1465 full cases, 7325 original scalar
+calls and 8790 full before/after records, losslessly interned as 852 complete
+snapshots. It retains all three metadata arrays, borrowed pointer identities,
+reserved capacities and complete scalar payloads, including uint64 wrapping and
+large signed64 index early returns. Ordinary tests require no upstream checkout,
+compiler or network. Contextual original loop-unrolling QA is read as source;
+it is not claimed as an executed or ported suite.
+
+The pinned native target is arm64 with size_t64, absent SSE2/AVX2 and OpenMP0.
+Architecture-specific vector instructions, OpenMP scheduling, other native
+position widths, unsupported primary-template diagnostics, generic ABI/object
+lifetimes, invalid inputs and the full SoA container/Calc column/document/UI
+remain unverified. Inventory records preserve those gaps and unverified parity
+statuses. CALC-026 records an AVX2 comment/code mismatch without changing code.

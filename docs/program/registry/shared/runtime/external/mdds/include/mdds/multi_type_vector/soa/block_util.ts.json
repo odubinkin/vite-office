@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/block_util.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "cell-storage",
+    "capabilityIds": [
+      "CAP-42ac8589-9c3c-4803-ab2c-8b0c9bf03783"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/block_util.ts#adjust_block_positions",
+        "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/block_util.test.ts#matches every full unchanged native scalar specialization state",
+        "scripts/mdds-position-adjustment-native-probe.mjs#verifyMddsSources",
+        "vendor/mdds-reference/include/mdds/multi_type_vector/soa/block_util.hpp#struct adjust_block_positions<Blks, lu_factor_t::lu16>"
+      ],
+      "justification": "Task202610092112-5PF7GY retains the original architecture-neutral helper dependency without an alternate storage/container owner. Scope is the original five architecture-neutral scalar specializations on the pinned native arm64 size_t64/default OpenMP0 target, using uint64 position vectors. Factory dispatch adapts native callable template instantiation syntax; it accepts only original scalar factors and has no fallback for unavailable SIMD values. SIMD SSE2/AVX2 specializations, OpenMP scheduling/concurrency, unsupported primary-template compile diagnostics, compile-time qualifiers/ABI, other native numeric vector widths, invalid negative/range/lifetime inputs, generic object/allocator behavior and complete SoA/Calc container/document/UI remain unverified. Number projections outside exact input/output representability are not certified. Full contextual upstream loop-unrolling QA remains source evidence, not a ported/executed suite.",
+      "knownViolations": [],
+      "localSymbols": [
+        "scalar_lu_factor",
+        "PositionBlockStore",
+        "PositionAdjuster",
+        "add_position",
+        "none",
+        "lu4",
+        "lu8",
+        "lu16",
+        "lu32",
+        "adjust_block_positions"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "vendor/mdds-reference/include/mdds/multi_type_vector/soa/block_util.hpp",
+      "upstreamSymbols": [
+        "struct adjust_block_positions<Blks, lu_factor_t::none>",
+        "struct adjust_block_positions<Blks, lu_factor_t::lu4>",
+        "struct adjust_block_positions<Blks, lu_factor_t::lu8>",
+        "struct adjust_block_positions<Blks, lu_factor_t::lu16>",
+        "struct adjust_block_positions<Blks, lu_factor_t::lu32>"
+      ]
+    }
+  }
+}

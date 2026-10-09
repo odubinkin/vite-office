@@ -503,6 +503,20 @@ and shared soa/main.test.ts. Helper equality after clearing the left owner
 returns true while blocks_type::equals returns false. Decision: preserve both
 contracts and caller length checks; do not add an extra length guard or a fix.
 
+## CALC-026 — AVX2 eight-way alignment comment names sixteen positions
+
+Status: confirmed source comment/code mismatch; behavior defect not established.
+Pinned mdds3.2.1 soa/block_util.hpp, adjust_block_positions specialization
+avx2_x64_lu8, says the section length is divisible by 16. Its actual mask 31,
+stride 32 and eight four-lane SIMD operations process groups of 32 positions.
+The code and lane grouping agree; the explanatory comment differs.
+
+Evidence: unchanged full source block_util.hpp in the verified pinned archive,
+avx2_x64_lu8 specialization. This arm64 native probe does not enable AVX2,
+and no successful AVX2 runtime result is claimed. Decision: retain original
+executable behavior; do not change its mask, stride or lanes to match the
+comment. The browser SIMD specialization remains an explicit inventory gap.
+
 ## Reviewed API distinctions
 
 These distinctions have been discussed but are not classified as defects:

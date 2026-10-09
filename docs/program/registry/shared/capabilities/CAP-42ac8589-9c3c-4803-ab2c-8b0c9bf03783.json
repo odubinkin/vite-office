@@ -1,0 +1,83 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-42ac8589-9c3c-4803-ab2c-8b0c9bf03783",
+    "capabilityId": "CAP-42ac8589-9c3c-4803-ab2c-8b0c9bf03783",
+    "suite": "shared",
+    "subsystem": "cell-storage",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original none/lu4/lu8/lu16/lu32 specializations preserve the exact early return, unrolled lane ordering, bit-mask remainder and scalar tail logic; default_traits remains original lu16.",
+      "Only position values mutate; real shared backing arrays, sizes, block-pointer aliases, scalar payloads and reserved capacities are retained. Existing SoA owner and iterator storage mechanics are reused, with cached iterator nodes refreshed only by their original iterator operations.",
+      "Original unsigned64 position plus signed64 delta arithmetic is retained exactly through bigint; number syntax witnesses require exactly representable inputs and outputs. Large native start indices return before any number/index projection."
+    ],
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "Original scalar adjustment dependency over shared real position vectors; no replacement engine or architecture fallback."
+    },
+    "capability": "Shared original SoA scalar block position adjustment specializations",
+    "gaps": [
+      "Scope is the original five architecture-neutral scalar specializations on the pinned native arm64 size_t64/default OpenMP0 target, using uint64 position vectors. Factory dispatch adapts native callable template instantiation syntax; it accepts only original scalar factors and has no fallback for unavailable SIMD values. SIMD SSE2/AVX2 specializations, OpenMP scheduling/concurrency, unsupported primary-template compile diagnostics, compile-time qualifiers/ABI, other native numeric vector widths, invalid negative/range/lifetime inputs, generic object/allocator behavior and complete SoA/Calc container/document/UI remain unverified. Number projections outside exact input/output representability are not certified. Full contextual upstream loop-unrolling QA remains source evidence, not a ported/executed suite."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/mdds-reference/include/mdds/multi_type_vector/soa/block_util.hpp",
+          "marker": "struct adjust_block_positions<Blks, lu_factor_t::lu16>"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/mdds-reference/test/multi_type_vector/custom-trait/tc/loop_unrolling.inl",
+          "marker": "void mtv_test_loop_unrolling_16()"
+        }
+      ],
+      "docs": [
+        {
+          "path": "download.lst",
+          "marker": "mdds-3.2.1.tar.xz"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/block_util.ts",
+          "marker": "adjust_block_positions"
+        },
+        {
+          "path": "scripts/mdds-position-adjustment-native-probe.mjs",
+          "marker": "verifyMddsSources"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/block_util.test.ts",
+          "marker": "matches every full unchanged native scalar specialization state"
+        },
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/block_util.test.ts",
+          "marker": "borrows the genuine default owner and preserves iterator cache boundaries"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Shared SoA position adjustment"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "Adjust original SoA uint64 block positions using the original scalar unrolling specialization and unchanged shared ownership",
+    "scopeLimitations": [
+      "Scope is the original five architecture-neutral scalar specializations on the pinned native arm64 size_t64/default OpenMP0 target, using uint64 position vectors. Factory dispatch adapts native callable template instantiation syntax; it accepts only original scalar factors and has no fallback for unavailable SIMD values. SIMD SSE2/AVX2 specializations, OpenMP scheduling/concurrency, unsupported primary-template compile diagnostics, compile-time qualifiers/ABI, other native numeric vector widths, invalid negative/range/lifetime inputs, generic object/allocator behavior and complete SoA/Calc container/document/UI remain unverified. Number projections outside exact input/output representability are not certified. Full contextual upstream loop-unrolling QA remains source evidence, not a ported/executed suite."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}
