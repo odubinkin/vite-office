@@ -1,0 +1,91 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-19d5edf7-1cbb-4520-88a4-00aea84128c1",
+    "capabilityId": "CAP-19d5edf7-1cbb-4520-88a4-00aea84128c1",
+    "suite": "calc",
+    "subsystem": "formula-reference",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Initialized single-reference flags retain the original eight-bit layout, raw copying/equality, monotone deletion and distinct local/external coordinate domains.",
+      "Absolute conversion checks each raw axis independently; ordering transfers axis relativity/deletion and relative-name provenance while retaining endpoint 3D flags."
+    ],
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "Native initialized numerical contracts, source/header boundaries and document getter dependencies are retained. JavaScript explicit copying and bit operations represent implicit C++ value copying and its eight-bit flag union."
+    },
+    "capability": "Calc initialized single formula reference data",
+    "gaps": [
+      "Full ScDocument, ScRawToken, formula compiler/listening and ScComplexRefData integration remain subsequent work. Native union/pointer storage, debug-only Dump and uninitialized/undefined arithmetic domains are not certified. Native fixture proves bounded numerical and flag states, not whole Calc parity."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sc/inc/refdata.hxx",
+          "marker": "ScSingleRefData"
+        },
+        {
+          "path": "sc/source/core/tool/refdata.cxx",
+          "marker": "void ScSingleRefData::PutInOrder"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sc/qa/unit/ucalc_formula.cxx",
+          "marker": "CPPUNIT_TEST_FIXTURE(TestFormula, testFormulaRefData)"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/README.md",
+          "marker": "formula"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/refdata.ts",
+          "marker": "ScSingleRefData"
+        },
+        {
+          "path": "scripts/calc-refdata-native-probe.mjs",
+          "marker": "const definitions = interval"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/refdata.test.ts",
+          "marker": "matches the original testFormulaRefData initialized single-reference assertions"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/refdata.test.ts",
+          "marker": "matches all2048 native flag and coordinate-domain states"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/refdata.test.ts",
+          "marker": "matches all2048 native axis and relative-name reorderings"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Single formula reference data"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "Resolve and reorder initialized single formula references with original flag provenance",
+    "scopeLimitations": [
+      "Full ScDocument, ScRawToken, formula compiler/listening and ScComplexRefData integration remain subsequent work. Native union/pointer storage, debug-only Dump and uninitialized/undefined arithmetic domains are not certified. Native fixture proves bounded numerical and flag states, not whole Calc parity.",
+      "The upstream test also exercises complex range extension; only its initial single-reference assertions are represented in this task."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

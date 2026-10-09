@@ -1,0 +1,54 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/core/tool/refdata.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "formula-reference",
+    "capabilityIds": [
+      "CAP-19d5edf7-1cbb-4520-88a4-00aea84128c1"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sc/source/core/tool/refdata.ts#ScSingleRefData",
+        "apps/office/src/sc/source/core/tool/refdata.test.ts#matches all2048 native axis and relative-name reorderings",
+        "vendor/libreoffice-reference/sc/source/core/tool/refdata.cxx#ScSingleRefData",
+        "scripts/calc-refdata-native-probe.mjs#const definitions = interval"
+      ],
+      "justification": "Task 202610090758-MBH4QY ports all initialized non-debug single-reference header/source contracts using existing ScAddress, ScRefAddress and ScSheetLimits. Exact eight-bit flags, signed raw values, copy/assignment, initialization, setters/increments, raw equality, deletion masking, validity, conversion and original per-axis relative-name ordering are covered. The native probe compiles all30 unchanged non-debug definitions and original class/inline numerical owners in a bounded four-getter document shell. Every2048 flag/domain state,1024 address update,2048 ordering state,40 initializer,12 mutation snapshot and5 equality outcomes matches actual TS owners under ASan/UBSan with pinned Git blobs and full/extracted SHA256 evidence. All prior statuses/records and shared/Writer sources preserved. Full ScDocument, ScRawToken, formula compiler/listening and ScComplexRefData integration remain subsequent work. Native union/pointer storage, debug-only Dump and uninitialized/undefined arithmetic domains are not certified. Native fixture proves bounded numerical and flag states, not whole Calc parity.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ScSingleRefData",
+        "InitAddress",
+        "InitFlags",
+        "InitAddressRel",
+        "InitFromRefAddress",
+        "FlagValue",
+        "toAbs",
+        "SetAddress",
+        "Valid",
+        "ValidExternal",
+        "PutInOrder"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "sc/source/core/tool/refdata.cxx",
+      "upstreamSymbols": [
+        "ScSingleRefData::InitAddress",
+        "ScSingleRefData::InitAddressRel",
+        "ScSingleRefData::InitFromRefAddress",
+        "ScSingleRefData::toAbs",
+        "ScSingleRefData::SetAddress",
+        "ScSingleRefData::Valid",
+        "ScSingleRefData::ValidExternal",
+        "ScSingleRefData::PutInOrder",
+        "ScSingleRefData::operator=="
+      ]
+    }
+  }
+}

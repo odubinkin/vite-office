@@ -76,6 +76,39 @@ until the real `ScModule` and jumbo-default options from `documen2.cxx` exist.
 Source-derived header tests do not establish compiled differential parity or the
 full formula/selection behavior of upstream consumer tests linked in inventory.
 
+## Single formula reference data
+
+Task `202610090758-MBH4QY` ports initialized `ScSingleRefData` through its original
+`sc/inc/refdata` boundary and `sc/source/core/tool/refdata` implementation. Storage
+has no fabricated zero defaults: callers must initialize flags and coordinates as
+required by upstream's raw token union. Native implicit copies are represented by
+explicit copying/assignment of all raw fields. The eight flag bits retain their
+original relative/deleted column, row and sheet order, followed by 3D and relative
+name markers. Deleted getters return -1; raw equality retains hidden coordinates.
+
+Relative column/row validity uses signed document maxima, relative sheet validity
+uses the global signed `MAXTAB` domain, and absolute sheet validity excludes the
+document's table count. `ValidExternal()` ignores deleted flags and accepts raw
+sheet -1 for the external cache. `toAbs()` ignores deletion, narrows resolved
+coordinates, checks axes independently and applies global sheet bounds.
+`SetAddress()` updates raw offsets and adds invalid-axis deletion flags without
+clearing old deletion. `PutInOrder()` retains the original per-axis operations,
+transferring relative/deleted axis flags and relative-name provenance while
+retaining each endpoint's 3D flag.
+
+The structural document view adds only `GetSheetLimits()` to the existing movement
+getter boundary; it does not replace `ScDocument`. The native probe compiles all
+30 unchanged non-debug single-reference definitions and original inline value
+owners with four document getters. Portable acceptance compares 2048 flag/domain
+states, 1024 updates, 2048 reorderings, 40 initializers, 12 mutation snapshots and
+five equality outputs. `node scripts/calc-refdata-native-probe.mjs --check`
+reproduces the fixture under ASan/UBSan and checks exact pinned Git blobs plus
+source/extracted SHA-256 hashes. Debug-only dumping, undefined/uninitialized
+domains, token storage, complete document/compiler/listener ownership and complex
+range references remain subsequent work; module and whole Calc parity stay
+unverified. The upstream `testFormulaRefData` initial single-reference assertions
+are retained; its complex extension assertions belong to the next owner.
+
 JavaScript tuples represent native output reference parameters. Equality and
 ordering methods represent C++ operators. Undefined native uninitialized
 constructors, pointer layout, `size_t` hashing and native debug assertions are
@@ -104,10 +137,11 @@ with Calc task 1 of 10 here; run the full suite after task 10, then repeat each
 ten completed Calc agentplane tasks. Targeted affected-module tests run on
 intervening tasks. Writer acceptance files and coverage settings remain intact.
 The coordinate foundation and sticky reference tasks are Calc tasks 1 and 2;
-inventory reconciliation is task 3 and reference addresses/sheet limits are task 4
-of that first ten-task interval.
+inventory reconciliation is task 3, reference addresses/sheet limits are task 4,
+and single formula references are task 5 of that first ten-task interval.
 
 Source research includes the per-file MPL 2.0 and inherited Apache notices in
-`sc/inc/address.hxx`, `sc/inc/sheetlimits.hxx` and `sc/source/core/tool/address.cxx`, and MPL 2.0 in
+`sc/inc/address.hxx`, `sc/inc/sheetlimits.hxx`, `sc/inc/refdata.hxx`,
+`sc/source/core/tool/refdata.cxx` and `sc/source/core/tool/address.cxx`, and MPL 2.0 in
 `sc/inc/types.hxx`. The TypeScript implementation is independently authored
 from those numerical contracts; the original sources remain research-only.

@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/inc/refdata.ts",
+          "marker": "ScSingleRefData"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/refdata.test.ts",
+          "marker": "matches all2048 native axis and relative-name reorderings"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/refdata.hxx",
+          "marker": "ScSingleRefData"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sc/inc/refdata.ts",
+    "localSymbols": [
+      "ScSingleRefData"
+    ],
+    "omittedResponsibilities": [
+      "Full ScDocument, ScRawToken, formula compiler/listening and ScComplexRefData integration remain subsequent work. Native union/pointer storage, debug-only Dump and uninitialized/undefined arithmetic domains are not certified. Native fixture proves bounded numerical and flag states, not whole Calc parity."
+    ],
+    "preservedResponsibilities": [
+      "Original initialized raw coordinate and flag owner; no fabricated zero default storage.",
+      "Eight-bit independent flags, raw value copy/equality, signed widths and masked deletion getters.",
+      "Distinct local/external validity, independent raw absolute conversion and monotone deletion on SetAddress.",
+      "Original axis-wise ordering, relative-name provenance and retained endpoint 3D flags.",
+      "Bounded native differential acceptance with exact original source/body hashes; upstream test initial single-reference assertions retained."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sc/inc/refdata.hxx",
+    "upstreamSymbols": [
+      "ScSingleRefData"
+    ]
+  }
+}
