@@ -4,7 +4,7 @@ title: "Integrate Writer and Calc into main and synchronize development branches
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: execute approved Writer Calc integration and complete verification across the three designated repositories."
 doc_version: 3
-doc_updated_at: "2026-10-09T12:32:21.335Z"
+doc_updated_at: "2026-10-09T12:50:37.057Z"
 doc_updated_by: "CODER"
 description: "User-approved nine-step synchronization across vite-office, vite-office-writer and vite-office-calc. Push development branches, merge into main, resolve conflicts, run complete verification and repair failures, publish main, merge main back and leave all checkouts clean on their intended branches."
 sections:
@@ -50,9 +50,20 @@ sections:
     - git status --short --untracked-files=all in all three checkouts must be empty.
     - Confirm main contains original writer and calc heads; both resulting development branches contain published main.
     - Confirm local and remote heads agree for main, writer and calc.
-  Verification: "Pending execution."
+  Verification: |-
+    Command: npm run verify.
+    Result: pass (exit 0).
+    Evidence: evidence/npm-verify-istanbul.log and evidence/istanbul-final-summary.json; 528 application test files, 14192 tests, 100 percent statements/branches/functions/lines using Istanbul, zero negative counters; inventory 38 files/122 tests with 100 percent coverage; 303 browser scenarios; static build and all formatting/lint/type/dependency/resource/tooling/docs/size/tree/provenance/invariant/parity checks passed.
+    Scope: merged Writer, Calc and shared application.
+
+    Command: ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check.
+    Result: pass.
+    Evidence: zero doctor errors, two inherited warnings; routing valid; no whitespace errors.
+    Scope: repository workflow and intentional changes.
+
+    Publication and development-branch synchronization: in progress; final ancestry, remote-tip and clean-state evidence will be recorded after synchronization.
   Rollback Plan: "Retain original heads main=069279d9, writer=9a64ad49, calc=01d07401. If rollback becomes necessary, propose explicit revert commits; do not reset or force-push published history."
-  Findings: "Writer and Calc were published using the authorized HTTPS URL after SSH authentication failed; both merges were conflict-free. V8 full runs passed all tests but produced a negative paintfrm.ts branch counter ([1371, -153]), while focused layout tests reached 100 percent. Istanbul is retained as requested. Its initial run exposed inherited V8/C8 annotations and missing default-entry-point coverage. Existing justified annotations were translated; no new exclusions or relaxed project thresholds were added. The next complete run passed 527 files and 14185 tests with 100 percent statements/functions/lines and 99.94 percent branches (nine remaining branches). New targeted tests now exercise imported space-follow numbering, null/undefined font-selector arguments, absent DOM popup lookup, single-column import defaults and default shell margin snapping. Two old font fallback exclusions and the old imported-space exclusion were removed because these are now explicitly tested. A diagnostic run restricted to five test files confirms the previously missing branches execute; diagnostic-only threshold overrides do not alter the mandatory full 100 percent gate. Full verification is being repeated. TypeScript remains 6.0.3 because required typescript-eslint and four legacy compiler API consumers block the complete TS7 migration (task 202610091107-VKHCRS). Istanbul is not an identified TS7 blocker, but a full TS7 stack has not been verified. AgentPlane doctor passes with two inherited warnings."
+  Findings: "Writer and Calc were published using the explicitly authorized HTTPS URL after SSH authentication failed; both merges were conflict-free. V8 complete runs passed all tests but produced a negative paintfrm.ts branch counter ([1371, -153]); focused layout tests reached 100 percent. The application provider is now Istanbul as requested. Existing justified V8/C8 annotations were translated; no new exclusions or relaxed mandatory thresholds were added. New tests close direct default-argument, nearest-frame, DOM focus lookup, font-argument and imported numbering gaps. Three prior exclusions were removed and replaced with tests. The complete npm run verify now passes: 528 application files/14192 tests, 100 percent statements/branches/functions/lines, zero negative counters, inventory 38 files/122 tests with 100 percent coverage and 303 browser scenarios. A type-only compaction keeps txtparae.ts below the file-size limit and was verified to emit identical JavaScript; documentation, lint and types passed again afterwards. Test logs were normalized only to remove trailing spaces from tool output. TypeScript remains 6.0.3: typescript-eslint and four legacy compiler API consumers block the complete TS7 migration (assessment task 202610091107-VKHCRS). Istanbul is not an identified TS7 blocker; full-stack TS7 compatibility has not been verified. AgentPlane doctor passes with two inherited warnings. Main publication and back-merges are the remaining steps."
 id_source: "generated"
 ---
 ## Summary
@@ -78,7 +89,17 @@ Integrate and synchronize the three branches. User explicitly expanded approval 
 
 ## Verification
 
-Pending execution.
+Command: npm run verify.
+Result: pass (exit 0).
+Evidence: evidence/npm-verify-istanbul.log and evidence/istanbul-final-summary.json; 528 application test files, 14192 tests, 100 percent statements/branches/functions/lines using Istanbul, zero negative counters; inventory 38 files/122 tests with 100 percent coverage; 303 browser scenarios; static build and all formatting/lint/type/dependency/resource/tooling/docs/size/tree/provenance/invariant/parity checks passed.
+Scope: merged Writer, Calc and shared application.
+
+Command: ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check.
+Result: pass.
+Evidence: zero doctor errors, two inherited warnings; routing valid; no whitespace errors.
+Scope: repository workflow and intentional changes.
+
+Publication and development-branch synchronization: in progress; final ancestry, remote-tip and clean-state evidence will be recorded after synchronization.
 
 ## Rollback Plan
 
@@ -86,4 +107,4 @@ Retain original heads main=069279d9, writer=9a64ad49, calc=01d07401. If rollback
 
 ## Findings
 
-Writer and Calc were published using the authorized HTTPS URL after SSH authentication failed; both merges were conflict-free. V8 full runs passed all tests but produced a negative paintfrm.ts branch counter ([1371, -153]), while focused layout tests reached 100 percent. Istanbul is retained as requested. Its initial run exposed inherited V8/C8 annotations and missing default-entry-point coverage. Existing justified annotations were translated; no new exclusions or relaxed project thresholds were added. The next complete run passed 527 files and 14185 tests with 100 percent statements/functions/lines and 99.94 percent branches (nine remaining branches). New targeted tests now exercise imported space-follow numbering, null/undefined font-selector arguments, absent DOM popup lookup, single-column import defaults and default shell margin snapping. Two old font fallback exclusions and the old imported-space exclusion were removed because these are now explicitly tested. A diagnostic run restricted to five test files confirms the previously missing branches execute; diagnostic-only threshold overrides do not alter the mandatory full 100 percent gate. Full verification is being repeated. TypeScript remains 6.0.3 because required typescript-eslint and four legacy compiler API consumers block the complete TS7 migration (task 202610091107-VKHCRS). Istanbul is not an identified TS7 blocker, but a full TS7 stack has not been verified. AgentPlane doctor passes with two inherited warnings.
+Writer and Calc were published using the explicitly authorized HTTPS URL after SSH authentication failed; both merges were conflict-free. V8 complete runs passed all tests but produced a negative paintfrm.ts branch counter ([1371, -153]); focused layout tests reached 100 percent. The application provider is now Istanbul as requested. Existing justified V8/C8 annotations were translated; no new exclusions or relaxed mandatory thresholds were added. New tests close direct default-argument, nearest-frame, DOM focus lookup, font-argument and imported numbering gaps. Three prior exclusions were removed and replaced with tests. The complete npm run verify now passes: 528 application files/14192 tests, 100 percent statements/branches/functions/lines, zero negative counters, inventory 38 files/122 tests with 100 percent coverage and 303 browser scenarios. A type-only compaction keeps txtparae.ts below the file-size limit and was verified to emit identical JavaScript; documentation, lint and types passed again afterwards. Test logs were normalized only to remove trailing spaces from tool output. TypeScript remains 6.0.3: typescript-eslint and four legacy compiler API consumers block the complete TS7 migration (assessment task 202610091107-VKHCRS). Istanbul is not an identified TS7 blocker; full-stack TS7 compatibility has not been verified. AgentPlane doctor passes with two inherited warnings. Main publication and back-merges are the remaining steps.
