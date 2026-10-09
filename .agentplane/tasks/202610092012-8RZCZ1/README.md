@@ -1,10 +1,11 @@
 ---
 id: "202610092012-8RZCZ1"
 title: "Port original shared mdds container utilities and traits"
-status: "DOING"
+result_summary: "verified-202610092012-8RZCZ1"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 20
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-09T20:23:58.104Z"
+  updated_at: "2026-10-09T20:25:25.997Z"
   updated_by: "CODER"
-  note: "Verified genuine util694 mutable/const position pairs1270 input results3 trace scopes/defaults,13 source hashes/full binary replay. Calc104 actual100 and changed3 shared211/71/56/178 actual100; related12 shared, portable104/4/30, TS7/tooling14/provenance3 and structural gates pass. CALC-023 preserves native wrap; task6/10, no complete MTV/Writer coverage claim."
+  note: "verified-202610092012-8RZCZ1"
   attempts: 0
 quality_review:
   state: "pass"
@@ -44,11 +45,16 @@ quality_review:
     - "Original util default lu16/event/exec/empty-dispatch and clone tag identities, standard all12 dispatch aliases and real shared delayed random-access distances preserve responsibility without duplicate store. Input-end UInt64 wrap and empty-before-bound, copied borrowed position movement/int32 casts and trace depth/sink/nesting/unwind are source-shaped; TS type/reference/lifetime witnesses remain explicit."
     - "Independent lossless raw decode and actual binary replay verify6 real unchanged native soa layouts694 complete mutable/const pairs(1388 movements),1270 full input records,3 trace scopes/defaults/diagnostics,13 full header hashes/2 verified archives/driver hash. Portable test iterator is only syntax over committed native nodes, no TS container certification. CALC-023 preserves arithmetic/preconditions without a fix."
     - "Actual four positive coverage denominators covered=total: Calc2904/2051/467/2548 and changed3 shared211/71/56/178. Related12 shared, portable104 Calc/4 shared/30 inventory, TS7/tooling14/provenance3/lint/format/docs/boundaries/size/tree/routing/doctor pass. Calc26/150 and shared5/123 semanticViolationCount0, all module parity remains unverified."
-commit: null
+commit:
+  hash: "3713744b106386b21010f2896f1cfc1ea96a8ef2"
+  message: "🔎 8RZCZ1 review: record original utility acceptance evidence"
 comments:
   -
     author: "CODER"
     body: "Start: original shared container utilities/traits with genuine soa utility observations and actual100 portable acceptance."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610092012-8RZCZ1. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -63,8 +69,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified genuine util694 mutable/const position pairs1270 input results3 trace scopes/defaults,13 source hashes/full binary replay. Calc104 actual100 and changed3 shared211/71/56/178 actual100; related12 shared, portable104/4/30, TS7/tooling14/provenance3 and structural gates pass. CALC-023 preserves native wrap; task6/10, no complete MTV/Writer coverage claim."
+  -
+    type: "verify"
+    at: "2026-10-09T20:25:25.997Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610092012-8RZCZ1"
+  -
+    type: "status"
+    at: "2026-10-09T20:25:26.139Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610092012-8RZCZ1. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-09T20:23:58.157Z"
+doc_updated_at: "2026-10-09T20:26:09.937Z"
 doc_updated_by: "CODER"
 description: "Task6/10 Calc cycle: original util.hpp event/default traits, clone construction witness, optional trace depth lifetime, exact input-end UInt64 arithmetic and borrowed block position advance; original standard traits and actual delayed iterator distance. Genuine unchanged native utility calls on real soa multi_type_vector and native iterators, actual100 changed shared/Calc and portable scoped acceptance. No fake MTV engine."
 sections:
@@ -127,6 +146,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-09T20:25:25.997Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610092012-8RZCZ1
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T20:23:58.157Z, excerpt_hash=sha256:d44a737b7f2f273ac0e3799a552c31627e3d0ffda1c7dc2b063ea68d72916686
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610092012-8RZCZ1/blueprint/resolved-snapshot.json
+    - old_digest: 54f21935449b646a7231079abf3d82e935f8889cf246828ab9a5b10bd4254d0e
+    - current_digest: 54f21935449b646a7231079abf3d82e935f8889cf246828ab9a5b10bd4254d0e
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610092012-8RZCZ1
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610092012-8RZCZ1 --result verified-202610092012-8RZCZ1 --commit 3713744b106386b21010f2896f1cfc1ea96a8ef2
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert task-specific changes through approved follow-up on calc; keep real shared scalar/dispatch/store owners and read-only original source references."
   Findings: |-
@@ -143,6 +192,18 @@ sections:
     - Observation: Genuine fixture/check, related12 shared actual100, Calc104 actual100, TS7/docs/provenance/inventory pass. Scoped lint rejects optional trace non-null assertion and unused spawnSync probe import.
       Impact: Only typed trace presence narrowing/import cleanup remains before static acceptance; original trace branch and native driver unchanged.
       Resolution: Recompute route; make has_trace an explicit TypeScript predicate preserving the same boolean body, remove non-null assertion and unused import, rerun focused shared/TS7/lint/format. No checker suppression or runtime guards added.
+
+    - Observation: Exact routed task complete reached DONE but existing hook rejected generated generic close subject E_GIT.
+      Impact: Implementation/evaluator commits are persisted; task artifact cleanup tail remains dirty.
+      Resolution: Recompute route; run exact generated --close and bounded concrete subject recovery if it repeats. Preserve original hooks and verification gates.
+
+    - Observation: Routed commit --close --unstage-others repeated generic-subject rejection E_GIT.
+      Impact: Only DONE task artifact cleanup remains; source/quality and all scoped acceptance are complete.
+      Resolution: Recompute route then bounded recovery ap commit --allow-tasks with concrete 8RZCZ1 finalize subject. Do not alter hook, verification or unrelated files.
+extensions:
+  implementation_commit:
+    hash: "1925e1d634ca364e6853b93c0cbb00a7a4d329de"
+    message: "🧮 8RZCZ1 implement: port original container utilities and traits"
 id_source: "generated"
 ---
 ## Summary
@@ -217,6 +278,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-09T20:25:25.997Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610092012-8RZCZ1
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T20:23:58.157Z, excerpt_hash=sha256:d44a737b7f2f273ac0e3799a552c31627e3d0ffda1c7dc2b063ea68d72916686
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610092012-8RZCZ1/blueprint/resolved-snapshot.json
+- old_digest: 54f21935449b646a7231079abf3d82e935f8889cf246828ab9a5b10bd4254d0e
+- current_digest: 54f21935449b646a7231079abf3d82e935f8889cf246828ab9a5b10bd4254d0e
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610092012-8RZCZ1
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610092012-8RZCZ1 --result verified-202610092012-8RZCZ1 --commit 3713744b106386b21010f2896f1cfc1ea96a8ef2
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -238,3 +329,11 @@ Original empty input returns zero,false before any position validation. Original
 - Observation: Genuine fixture/check, related12 shared actual100, Calc104 actual100, TS7/docs/provenance/inventory pass. Scoped lint rejects optional trace non-null assertion and unused spawnSync probe import.
   Impact: Only typed trace presence narrowing/import cleanup remains before static acceptance; original trace branch and native driver unchanged.
   Resolution: Recompute route; make has_trace an explicit TypeScript predicate preserving the same boolean body, remove non-null assertion and unused import, rerun focused shared/TS7/lint/format. No checker suppression or runtime guards added.
+
+- Observation: Exact routed task complete reached DONE but existing hook rejected generated generic close subject E_GIT.
+  Impact: Implementation/evaluator commits are persisted; task artifact cleanup tail remains dirty.
+  Resolution: Recompute route; run exact generated --close and bounded concrete subject recovery if it repeats. Preserve original hooks and verification gates.
+
+- Observation: Routed commit --close --unstage-others repeated generic-subject rejection E_GIT.
+  Impact: Only DONE task artifact cleanup remains; source/quality and all scoped acceptance are complete.
+  Resolution: Recompute route then bounded recovery ap commit --allow-tasks with concrete 8RZCZ1 finalize subject. Do not alter hook, verification or unrelated files.
