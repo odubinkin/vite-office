@@ -1,10 +1,12 @@
 ---
 id: "202610091920-B575XR"
 title: "Exclude independent headline state from native table attribute history"
-status: "DOING"
+result_summary: "Native table attribute UndoRedo preserves independently authored headline counts and original table owners."
+risk_level: "low"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 20
+revision: 21
 origin:
   system: "manual"
 depends_on: []
@@ -52,6 +54,9 @@ comments:
   -
     author: "CODER"
     body: "Progress: Persisted verified semantic correction and bounded evidence; exact-sha same-agent quality review pending before canonical finish."
+  -
+    author: "CODER"
+    body: "Verified: Independent SwTable headline count excluded from native attribute mementos;150 current-source cases10fresh,entire untbl Istanbul100all/zero-negative,current build7browserTS7statics9metadata pass upstream-absent.610oldtests unchanged,2canonical prefixes retained,exact-sha same-agent non-independent quality PASS;full not due3/10 and broad goal ACTIVE."
 events:
   -
     type: "status"
@@ -79,8 +84,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Final quality PASS is explicitly same-agent/non-independent and bound to semantic fe172471e03ebfc613455a574f4e1543a30f6ec1; report hash validated. Final format/preservation/current source hashes pass.150accepted10fresh,entire untbl Istanbul100all/zero-negative,610oldtests unchanged,TS7/current build/7browser9metadata pass;goal active3/10."
+  -
+    type: "status"
+    at: "2026-10-09T19:41:39.558Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Independent SwTable headline count excluded from native attribute mementos;150 current-source cases10fresh,entire untbl Istanbul100all/zero-negative,current build7browserTS7statics9metadata pass upstream-absent.610oldtests unchanged,2canonical prefixes retained,exact-sha same-agent non-independent quality PASS;full not due3/10 and broad goal ACTIVE."
 doc_version: 3
-doc_updated_at: "2026-10-09T19:41:17.133Z"
+doc_updated_at: "2026-10-09T19:41:39.559Z"
 doc_updated_by: "CODER"
 description: "Correction3/10 after fullSZKQTN,KVM0ER,T8EQAC. SaveTable currently captures transport headerRows/repeatHeaderRows although upstream owns only table frame attributes and independent SwTable count. Remove count from attribute mementos, preserving native scalar headline history, unrelated original owners, disabled-undo changes, real UI/ODT and source-backed generic history expectations. No new unused copy framework or broad parity promotion."
 sections:
@@ -170,6 +182,10 @@ sections:
     Final evidence: 150distinct current-source cases including10fresh accepted with actual Istanbul159lines164statements42functions29branches100all/zero-negative/identical complete maps and current production SHA256d9b8dd787dc9ad07e5ab706ceaf3a16d7a17063df660dba34ade973600535397. Repair3cases accepted. Current npm build, smoke and7browser scenarios pass with0skip/fail/flaky; all declared static gates pass TS7.0.2/compilerAPI6.0.2. Nine restored metadata checks pass, doctor0errors2historicalwarnings. Preservation1550originalfiles/1547unrelatedunchanged,610oldtests byte-identical,zero migrations,2canonical prefixes and parentFindings prefix. No full due3/10; no broad parity claim or incidents promotion.
 
     Same-agent non-independent quality PASS bound to semantic fe172471e03ebfc613455a574f4e1543a30f6ec1, report.agentplane/tasks/202610091920-B575XR/quality/20261009-193959334-recovery-context/quality-report.json, SHA2560c6a936ee96a4a64360a3faf11ceb53b59185925ddc901fa1152c4fdd4b7e325. Actual semantic production/fresh hashes checked against committed source, current-source proof150/10fresh whole untbl100all/zero-negative,610oldtests unchanged,2canonical prefixes and current build/7browser9metadata validated. No independent evaluator, broad parity promotion or incidents promotion claimed. Goal ACTIVE/incomplete3/10.
+extensions:
+  implementation_commit:
+    hash: "fe172471e03ebfc613455a574f4e1543a30f6ec1"
+    message: "🧩 B575XR fix: preserve independent table headlines across attribute undo"
 id_source: "generated"
 ---
 ## Summary
