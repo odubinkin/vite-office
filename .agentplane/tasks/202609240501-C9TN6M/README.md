@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 271
+revision: 272
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-09T14:40:39.003Z"
+doc_updated_at: "2026-10-09T15:10:46.969Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -1329,6 +1329,10 @@ sections:
     - Observation: Correction3 KCHP9M semantic3bb966ac297c3fd0876bb3e42bf572379cd15161 is committed and the explicitly same-agent non-independent quality review passes.
       Impact: 314/314 related cases6fresh, actual complete scoped Istanbul100, TS7/static build and metadata audits accepted;580 prior test files preserved. No fresh full-suite or overall parity claim.
       Resolution: Close only KCHP9M; broad goal continues active with3 completed corrections after full XJTGF0. Next correction targets original ObjectDying/check-registration lifetime; full suite after correction10.
+
+    - Observation: Resumed correction4 FW0RYR ports native ObjectDyingHint/ModifyChangedHint and shared ClientBase CheckRegistration. Writer death is sent under original modify lock before destruction/fallback cleanup; duplicated generic death parent repair is removed. Original SwFormat owned item-set inheritance rebinds or detaches, and original Svt/browser layout/bindings react without document bridge. Native SwFrame filtering deliberately keeps geometry valid on ObjectDying; no invented physical action.
+      Impact: 335unique related scenarios49files8fresh accepted:334initial passes1source-backed old missing-death-event conflict,1failed-case-only closure pass6intentional skips0passing replay. Whole4changed modules current same-source/identical-complete-map Istanbul270lines301statements78functions154branches strict100/0negative/no old counters. Native TS7/build/statics plus restored inventory/tree/provenance/resources/routing/doctor audits pass. Eight canonical records retain historical fields/prefixes;582/583oldtests unchanged, onlyexact ObjectDyingHint(second) event migration.
+      Resolution: Semantic commit and explicitly same-agent non-independent quality follow. Full XJTGF0 historical, correction4/10; no full replay, overall/module semantic promotion or registered recovery/open/save/settings change. Complete linked iterators/ListenerEntry/WriterMultiListener/assertions/cache/name/VCL/heap/global lifetime and bounded JS callback/batching/idempotent boundaries remain individually unverified. Evidence FW0RYR/evidence/results.json is bounded English commands/counts/hashes/IDs; raw logs/maps/helpers ignored.
 id_source: "generated"
 ---
 ## Summary
@@ -2631,3 +2635,7 @@ Iteration251 / 202610090835-4ZF0N4 verified native table layout ownership. SwTab
 - Observation: Correction3 KCHP9M semantic3bb966ac297c3fd0876bb3e42bf572379cd15161 is committed and the explicitly same-agent non-independent quality review passes.
   Impact: 314/314 related cases6fresh, actual complete scoped Istanbul100, TS7/static build and metadata audits accepted;580 prior test files preserved. No fresh full-suite or overall parity claim.
   Resolution: Close only KCHP9M; broad goal continues active with3 completed corrections after full XJTGF0. Next correction targets original ObjectDying/check-registration lifetime; full suite after correction10.
+
+- Observation: Resumed correction4 FW0RYR ports native ObjectDyingHint/ModifyChangedHint and shared ClientBase CheckRegistration. Writer death is sent under original modify lock before destruction/fallback cleanup; duplicated generic death parent repair is removed. Original SwFormat owned item-set inheritance rebinds or detaches, and original Svt/browser layout/bindings react without document bridge. Native SwFrame filtering deliberately keeps geometry valid on ObjectDying; no invented physical action.
+  Impact: 335unique related scenarios49files8fresh accepted:334initial passes1source-backed old missing-death-event conflict,1failed-case-only closure pass6intentional skips0passing replay. Whole4changed modules current same-source/identical-complete-map Istanbul270lines301statements78functions154branches strict100/0negative/no old counters. Native TS7/build/statics plus restored inventory/tree/provenance/resources/routing/doctor audits pass. Eight canonical records retain historical fields/prefixes;582/583oldtests unchanged, onlyexact ObjectDyingHint(second) event migration.
+  Resolution: Semantic commit and explicitly same-agent non-independent quality follow. Full XJTGF0 historical, correction4/10; no full replay, overall/module semantic promotion or registered recovery/open/save/settings change. Complete linked iterators/ListenerEntry/WriterMultiListener/assertions/cache/name/VCL/heap/global lifetime and bounded JS callback/batching/idempotent boundaries remain individually unverified. Evidence FW0RYR/evidence/results.json is bounded English commands/counts/hashes/IDs; raw logs/maps/helpers ignored.

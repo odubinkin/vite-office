@@ -51,6 +51,7 @@ export class WriterNativeFormatObserver extends SvtListener<SwModelHint> {
         (nested) =>
           nested.kind === "attr-set-change" ||
           nested.kind === "format-change" ||
+          nested.kind === "object-dying" ||
           nested.kind === "format-inheritance-changed",
       )
     )

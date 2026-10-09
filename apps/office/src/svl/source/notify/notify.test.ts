@@ -3,7 +3,7 @@
 import { describe, expect, it } from "vitest";
 
 import { SwClient, SwModify } from "../../../sw/inc/calbck";
-import { hasSwModelHintKind, type SwModelHint } from "../../../sw/inc/hints";
+import { ObjectDyingHint, hasSwModelHintKind, type SwModelHint } from "../../../sw/inc/hints";
 import { SfxBroadcaster, type SfxHint, type SfxListenerTarget } from "./SfxBroadcaster";
 import { SfxListener } from "./lstner";
 
@@ -180,7 +180,8 @@ describe("Sfx notification graph", /** Registers notification tests. @returns No
           hint,
         ) => hint.kind,
       ),
-    ).toEqual(["node-content-changed", "model-transaction", "model-transaction"]);
+    ).toEqual(["node-content-changed", "model-transaction", "model-transaction", "object-dying"]);
+    expect(hints[3]).toEqual(new ObjectDyingHint(second));
     child.DisposeModify();
     expect(client.GetRegisteredIn()).toBeUndefined();
     client.Dispose();

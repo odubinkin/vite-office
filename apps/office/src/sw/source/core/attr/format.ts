@@ -144,6 +144,20 @@ export class SwFormat extends BroadcastingModify {
   }
   /** Filters inherited native deltas by every locally-present WhichId. @param source - Original notifying parent. @param hint - Native change. @returns Nothing. */
   public override SwClientNotify(source: SwModify, hint: SwModelHint): void {
+    if (hint.kind === "object-dying") {
+      if (this.GetRegisteredIn() !== undefined && this.GetRegisteredIn() === hint.m_pDying) {
+        const parent = hint.m_pDying.GetRegisteredIn() as SwFormat | undefined;
+        if (parent !== undefined) {
+          this.RegisterToModify(parent);
+          this.attributeSet.SetParent(this.DerivedFrom()?.GetAttrSet());
+        } else {
+          this.EndListeningAll();
+          this.attributeSet.SetParent(undefined);
+        }
+      }
+      super.SwClientNotify(this, hint);
+      return;
+    }
     if (hint.kind === "format-change") {
       if (hint.m_pOldFormat !== this && hint.m_pNewFormat === this.GetRegisteredIn()) {
         this.attributeSet.SetParent(this.DerivedFrom()?.GetAttrSet());

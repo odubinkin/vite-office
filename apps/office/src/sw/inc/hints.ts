@@ -1,12 +1,19 @@
 /** @fileoverview Defines bounded typed Writer model hints from pinned `sw/inc/hints.hxx`. */
 
-import type { LegacyModifyHint } from "./calbck";
+import type { LegacyModifyHint, ModifyChangedHint, SwModify } from "./calbck";
 import type { SwAttrSet } from "../source/core/attr/swatrset";
 import type { SfxHint } from "../../svl/source/notify/SfxBroadcaster";
 import type { SwFrameFormat } from "../source/core/layout/atrfrm";
 import type { SwFormat } from "../source/core/attr/format";
 import type { SwTableLineFormat, SwTableBoxFormat } from "./swtblfmt";
 import type { SwTableLine, SwTableBox } from "../source/core/table/swtable";
+
+/** Native Writer death notification borrows the original dying modify. */
+export class ObjectDyingHint implements SfxHint {
+  public readonly kind = "object-dying";
+  /** Borrows the dying native owner. @param m_pDying - Original modify being destroyed. @returns Nothing. */
+  public constructor(public readonly m_pDying: SwModify) {}
+}
 
 /** Native inheritance notification borrows exact old and new format owners. */
 export class SwFormatChangeHint implements SfxHint {
@@ -59,6 +66,8 @@ export class TableBoxFormatChanged implements SfxHint {
 /** Atomic Writer notifications emitted by model and shell boundaries. */
 export type SwAtomicModelHint =
   | LegacyModifyHint
+  | ModifyChangedHint
+  | ObjectDyingHint
   | AttrSetChangeHint
   | SwFormatChangeHint
   | MoveTableBoxHint

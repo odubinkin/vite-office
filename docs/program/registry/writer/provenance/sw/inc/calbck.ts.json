@@ -80,6 +80,18 @@
         {
           "path": "apps/office/src/sw/browser/editor/native-format-death.test.tsx",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/attr/native-object-dying.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/undo/native-object-dying.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-object-dying.test.tsx",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -98,6 +110,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/core/attr/calbck.cxx",
           "marker": "void SwModify::PrepareFormatDeath"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/attr/calbck.cxx",
+          "marker": "std::optional<sw::ModifyChangedHint> sw::ClientBase<T>::CheckRegistration"
         }
       ]
     },
@@ -107,7 +123,8 @@
       "SwModify",
       "subscribeToSwModify",
       "LegacyModifyHint",
-      "GetWhich"
+      "GetWhich",
+      "ModifyChangedHint"
     ],
     "omittedResponsibilities": [
       "The complete native format-death, type-filtered client, and layout-client families remain outside the bounded implementation."
@@ -123,7 +140,8 @@
       "Iteration250 verified164 unique app cases including12 fresh native frame attribute cases, once upstream-absent with symlink restored finally. Current changed five-module coverage is all-four100:379lines427statements113functions224branches. Three modules use complete fresh actual counters; calbck/hints transfer only old complete declarations/bodies/enclosing branches and every mapped location after exact reconstruction of the entire old source with additive type/new-class changes, bound to verified249 hashes. The raw focused CLI threshold failure is retained without counter or threshold changes; no unchanged passing test replay. Typecheck, lint and build passed; JSDoc comment-only repair preserves identical emitted test JavaScript. Inventory checks are being finalized. Full native page/root/browser physical propagation, content/follows/collapsed-border and wider native item families remain unverified. Registered recovery/open/save/settings deviations preserved; last full247, no full250.",
       "Iteration250 final scoped and global registry, source provenance/tree, routing and doctor gates passed; doctor has no errors and only prior hook/no-op warnings. Canonical evidence is recorded in task202610090803-7PRR3B; no whole-module parity promotion.",
       "Resumed correction0V80RE removes the document-device inheritance bridge: SetDerivedFrom now dispatches SwFormatChangeHint(this,this) through original locked Writer clients and the native Svt notifier. DerivedFrom reads actual GetRegisteredIn rather than a separate mirrored parent pointer. Inherited format-change hints preserve original old/new owners and rebind the owned item-set parent under the pinned pointer conditions; native frame invalidation and existing React presentation observe format-change directly. Generic naming/node signals remain separate existing boundaries, not evidence of complete parity. Seven fresh original-owner/core/real-history/mounted UI cases plus related formats/notifiers/layout/style modules accept308 unique cases:306initial passes1fresh source-incompatible history expectation corrected,2failed/new-only closure passes3deliberate passing skips,0passing replay. Pinned SaveTable reconstructs document-default box formats with direct saved items, as the corrected new history fixture asserts; original nodes/cursor/frame clients survive three undo-redo cycles. Entire five changed production modules meet actual same-source/identical-complete-map Istanbul100:378lines428statements112functions237branches,0negative; no older task/V8 counters, counter/location/threshold normalization or module-wide promotion. Initial and closure partial-profile threshold failures are retained. Full baseline XJTGF0 is historical; this is resumed task2 after that full and the next full follows ten-task cadence. Prior semantic fields/defaults/status/classification/history and registered recovery/open/save/settings exceptions remain preserved. Complete native cache/Which/assertions, format death, naming hints, full content-node/VCL registration and overall core/browser parity remain unverified.",
-      "Resumed correction KCHP9M ports SwFormat::Destr and SwModify::PrepareFormatDeath: each original Writer client registers at the surviving parent before receiving the same borrowed SwFormatChangeHint(old dying format,new parent), before independent Svt/base destruction. Original child attribute-set parents update through the native hint and existing layout/browser subscriptions, without document model signals or detached values. Native dependent-client formatInDTOR flag and parentless base RES_PAGEDESC cleanup are represented; no-client formats retain direct attributes even with an independent Svt observer. Six fresh core/real-history/mounted UI scenarios and all related cases pass:314 tests in43 files, no failures or passing replay. Complete two changed production modules have actual Istanbul100:187lines214statements52functions116branches, zero negative counters and no older-task/V8 transfer. Last full XJTGF0 remains historical; resumed correction3/10. Complete ObjectDying/check-registration/linked-client/assertion/cache/name/VCL and overall core/browser parity remain individually unverified; no module-wide/status/default/classification promotion or registered recovery/open/save/settings change."
+      "Resumed correction KCHP9M ports SwFormat::Destr and SwModify::PrepareFormatDeath: each original Writer client registers at the surviving parent before receiving the same borrowed SwFormatChangeHint(old dying format,new parent), before independent Svt/base destruction. Original child attribute-set parents update through the native hint and existing layout/browser subscriptions, without document model signals or detached values. Native dependent-client formatInDTOR flag and parentless base RES_PAGEDESC cleanup are represented; no-client formats retain direct attributes even with an independent Svt observer. Six fresh core/real-history/mounted UI scenarios and all related cases pass:314 tests in43 files, no failures or passing replay. Complete two changed production modules have actual Istanbul100:187lines214statements52functions116branches, zero negative counters and no older-task/V8 transfer. Last full XJTGF0 remains historical; resumed correction3/10. Complete ObjectDying/check-registration/linked-client/assertion/cache/name/VCL and overall core/browser parity remain individually unverified; no module-wide/status/default/classification promotion or registered recovery/open/save/settings change.",
+      "Resumed correction FW0RYR ports borrowed ObjectDyingHint/ModifyChangedHint and shared ClientBase CheckRegistration to original Writer clients. Native registration checks return the surviving owner only for the exact dying pointer; EndListeningAll clears reciprocal and single-owner state together. SwModify destruction sends the original locked death hint before teardown, then applies native fallback registration cleanup to overrides that did not detach. Duplicated generic broadcaster-parent repair is removed in favor of the same native operation. SwFormat rebinds or clears its owned item-set parent under the exact dying-parent condition and forwards the original hint; independent original Svt observers invalidate native browser layout/bindings directly. Native object death is immediate across the existing browser transaction boundary and disposed batches do not emit stale queued work. Native physical SwFrame intentionally ignores ObjectDying, as wsfrm.cxx specifies; the actual cell frame keeps valid geometry on this hint and original format/node/cursor identities survive three real undo-redo cycles. Eight fresh core/real-history/mounted UI cases plus related49files accept335unique scenarios:334initial passes1old missing-death-event conflict,1failed-case-only closure pass6intentional skips0passing replay. One old notification expectation now asserts the exact original ObjectDyingHint(second); unrelated old tests remain unchanged. Complete4changed production modules actual same-source/identical-complete-map Istanbul270lines301statements78functions154branches meet all four100 gates, zero negative counters/no older-task/V8 transfer. Raw initial test failure and partial closure threshold exit remain retained. Native TS7/build/static gates pass upstream-absent. Full XJTGF0 historical; correction4/10. Existing statuses/defaults/classifications/history and registered recovery/open/save/settings deviations are preserved. Native linked-client iterators, ListenerEntry/WriterMultiListener families, assertions/cache/name/VCL and full heap/global lifetime remain unverified; browser callback/batching/idempotent teardown retain explicit bounded adaptations. No overall or module-wide semantic parity promotion."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/attr/calbck.cxx",
@@ -132,7 +150,8 @@
       "SwModify::SwClientNotify",
       "SwModify::RemoveAllWriterListeners",
       "void sw::ClientBase<T>::StartListeningToSameModifyAs",
-      "LegacyModifyHint"
+      "LegacyModifyHint",
+      "ModifyChangedHint"
     ]
   },
   "legacyOrder": 131

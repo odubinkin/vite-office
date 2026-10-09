@@ -4,7 +4,7 @@ title: "Route Writer object destruction through native ObjectDyingHint"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -17,10 +17,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-09T15:10:46.278Z"
+  updated_by: "CODER"
+  note: "Pass:335unique49files8fresh; initial334pass1old native-event conflict corrected, onlyfailed closure1pass6skip, no passing replay. Complete4current production modules actual Istanbul100270lines301statements78functions154branches/zero negatives. TS7/build/static and metadata audits pass;8record prefixes582/583oldtests preserved. Broad goal active correction4/10; native linked/cache/assert/name/VCL remain partial."
   attempts: 0
 commit: null
 comments:
@@ -35,8 +35,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: Implement approved native ObjectDying protocol and original item inheritance under existing iterative user authorization; correction4/10."
+  -
+    type: "verify"
+    at: "2026-10-09T15:10:46.278Z"
+    author: "CODER"
+    state: "ok"
+    note: "Pass:335unique49files8fresh; initial334pass1old native-event conflict corrected, onlyfailed closure1pass6skip, no passing replay. Complete4current production modules actual Istanbul100270lines301statements78functions154branches/zero negatives. TS7/build/static and metadata audits pass;8record prefixes582/583oldtests preserved. Broad goal active correction4/10; native linked/cache/assert/name/VCL remain partial."
 doc_version: 3
-doc_updated_at: "2026-10-09T14:51:29.446Z"
+doc_updated_at: "2026-10-09T15:10:46.335Z"
 doc_updated_by: "CODER"
 description: "Correction4 after full TS7/Istanbul XJTGF0: implement native ObjectDyingHint/ModifyChangedHint and ClientBase CheckRegistration behavior, SwModify pre-destruction Writer notification/fallback cleanup, SwFormat inherited item-set rebind/detach and native browser observer invalidation. Remove duplicated generic death repair, preserve original owners and registered I/O deviations; existing iterative user authorization applies."
 sections:
@@ -49,10 +55,62 @@ sections:
     3. Run npm run format:check,lint,typecheck (nativeTS7),check:dependencies,test:static,check:docs,check:file-size upstream-absent and restore reference in finally. Then metadata-only inventory:registry:build/check,check:source-tree/provenance,writer resource generator --check,routing validator and ap doctor.
     4. Prove old canonical8records value/responsibility/evidence prefixes, append-only parent Findings and unrelated source/scripts/docs/tests preserved; migrate only specifically conflicting native death event assertions. Bind semantic SHA, record verification and explicit same-agent non-independent quality, finish and prove clean git status. Last full XJTGF0 historical; correction4/10, next full after10resumed corrections.
   Verification: |-
+    Command: node apps/office/node_modules/.cache/parity-coverage/FW0RYR/run.cjs; node apps/office/node_modules/.cache/parity-coverage/FW0RYR/run.cjs closure-commands.json closure-results.json (exact npm arguments in evidence/results.json, upstream physically unavailable/restored in finally). Result: initial fail334pass1source-backed old death-event conflict; failed-case-only closure1pass0fail6intentional skips, raw exit1 retained for partial coverage threshold. Final semantic tests pass335unique cases49files8fresh,0unresolved/0passing replay. Scope: original borrowed ObjectDying/ModifyChanged owners, exact CheckRegistration/default/no-op, native pre-disposal lock/order/fallback, reciprocal EndListeningAll, independent Svt death before Writer base death, immediate nested-browser-batch teardown and no stale post-disposal flush, owned format parent rebind/detach, native frame hint filtering, original node/cursor/frame3undo-redo cycles and mounted style/cell pool defaults without model bridge.
+    Command: node (stdin standard istanbul-lib-coverage complete-file merge/gate); node apps/office/node_modules/.cache/parity-coverage/FW0RYR/evidence.cjs. Result: pass. Evidence: entire4production modules actual same-source/identical-complete-map Istanbul270lines301statements78functions154branches all100/0negative/no prior-task or V8 transfer; all335 executed final case IDs accepted, unexecuted skip statuses do not overwrite initial passes. Raw failures/maps/helpers remain ignored cache, no counter/location/threshold edits.
+    Command: npm run format:check; npm run lint; npm run typecheck; npm run check:dependencies; npm run test:static; npm run check:docs; npm run check:file-size; npm exec -- prettier --check <8changed records> (exact record paths in evidence/results.json). Result: pass, upstream physically absent. Scope: final nativeTS7/staticbuild/source and final metadata formatting. Reference restored in finally.
+    Command: npm run inventory:registry:build/check; npm run check:source-tree/provenance; node_modules/.bin/tsx scripts/generate-writer-ui-resources.ts --check; node .agentplane/policy/check-routing.mjs; ap doctor (separate exact argv in evidence/results.json, restored upstream metadata-only). Result: pass all7;4derived views/0changes,114source paths33retired roots333provenance modules;doctor0errors2historicalwarnings. Scope:8canonical histories preserved;1834/1847old source/scripts/docs and582/583old tests unchanged, only1source-backed exact notification migration. Parent Findings prefix retained. Full XJTGF0 historical;correction4/10, no full replay or overall parity promotion.
+
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-09T15:10:46.278Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Pass:335unique49files8fresh; initial334pass1old native-event conflict corrected, onlyfailed closure1pass6skip, no passing replay. Complete4current production modules actual Istanbul100270lines301statements78functions154branches/zero negatives. TS7/build/static and metadata audits pass;8record prefixes582/583oldtests preserved. Broad goal active correction4/10; native linked/cache/assert/name/VCL remain partial.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T15:10:45.192Z, excerpt_hash=sha256:946c381f58d306e9a4ce69f27236f9d45185d800b14b12b54f9f40912f108a47
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610091449-FW0RYR/blueprint/resolved-snapshot.json
+    - old_digest: c30d8874377c69880cfa535509160ec8167ad8844484f1e64a162b302c78cffa
+    - current_digest: c30d8874377c69880cfa535509160ec8167ad8844484f1e64a162b302c78cffa
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610091449-FW0RYR
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610091449-FW0RYR -m 🧩 FW0RYR task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this leaf source/test and appended inventory evidence via a new task. Preserve immutable DONE artifacts, parent Findings history and registered I/O exceptions."
-  Findings: "Pinned9bc445578031fecf56086729d8e4940c77e14d65: calbck.cxx::ClientBase::CheckRegistration/SwModify destructor/SwClientNotify, hints.hxx::ObjectDyingHint, calbck.hxx::ModifyChangedHint, format.cxx::SwFormat::SwClientNotify ObjectDying branch. Current generic broadcaster callback skips original Writer death hint and leaves root-dependent item-set inheritance stale. Native wsfrm.cxx::SwFrame::SwClientNotify excludes ObjectDying, so no invented physical invalidation is added. Writer browser batching and callback-backed SwClient are bounded existing adaptations; linked iterator/assertion/cache/name/VCL families remain unverified. Previous goal turn made concrete progress: KCHP9M DONE semantic3bb966ac297c,314cases/scoped100; no blocker."
+  Findings: |-
+    Pinned9bc445578031fecf56086729d8e4940c77e14d65: calbck.cxx::ClientBase::CheckRegistration/SwModify destructor/SwClientNotify, hints.hxx::ObjectDyingHint, calbck.hxx::ModifyChangedHint, format.cxx::SwFormat::SwClientNotify ObjectDying branch. Current generic broadcaster callback skips original Writer death hint and leaves root-dependent item-set inheritance stale. Native wsfrm.cxx::SwFrame::SwClientNotify excludes ObjectDying, so no invented physical invalidation is added. Writer browser batching and callback-backed SwClient are bounded existing adaptations; linked iterator/assertion/cache/name/VCL families remain unverified. Previous goal turn made concrete progress: KCHP9M DONE semantic3bb966ac297c,314cases/scoped100; no blocker.
+
+    - Observation: Initial49-file upstream-absent profile334pass1old expectation failure0skip. All8fresh original-client/core/real-history/mounted UI scenarios pass; entire4changed modules actual Istanbul100/zero negatives. notify.test.ts parent propagation expected only3generic events, whereas pinned SwModify destructor now adds original ObjectDyingHint(second).
+      Impact: Only one source-backed old death-notification expectation conflicts. Production behavior and all other334 acceptances pass; raw initial failure/maps/log retained in ignored cache.
+      Resolution: Append exactly the native object-dying event and borrowed second-owner identity assertion to that old test, rerun only that failed case with unchanged production and complete maps; no passing replay or policy promotion. Then statics and metadata gates.
+
+    - Observation: Failed-case-only closure accepts the exact native ObjectDyingHint(second) migration:1pass0fail12intentional skips, no passing replay. Initial334pass1old conflict retained; all335unique related cases now accepted including8fresh. Standard Istanbul whole-file aggregation on identical complete current-source maps is strict100 for4modules/zero negative counters.
+      Impact: Closure raw exit1 is the expected partial-profile coverage threshold failure, retained unchanged. The current-source aggregate uses no prior-task/V8 counter or map normalization; production remains unchanged since initial collection.
+      Resolution: Proceed with seven upstream-absent static checks and eight-record-preserving inventory updates; then restored metadata audits, semantic commit and explicit same-agent non-independent quality.
+
+    - Observation: Correction to the preceding closure prose: authoritative closure-tests.json reports1pass0fail6skips, not12skips.335 unique accepted scenarios and8fresh cases remain correct.
+      Impact: Only the prose skip count was misstated; exact raw JSON/commands/maps and coverage270lines301statements78functions154branches strict100 are unchanged.
+      Resolution: Use the actual6skip count in inventory, bounded result JSON, final verification and review. Preserve this explicit correction and all raw failure evidence.
+
+    - Observation: Unique-case evidence helper initially excluded pending status only, but Vitest represents the six intentionally unexecuted closure cases as skipped. Those statuses incorrectly overrode initial passed statuses and the helper rejected its own case merge before writing the result artifact.
+      Impact: Only helper acceptance aggregation failed; raw tests still show334initial passes1old conflict plus1closure pass6skips, and all deterministic production gates/actual scoped100 remain unchanged.
+      Resolution: Merge only executed passed/failed case statuses; ignore unexecuted skipped/pending records, retain failed initial evidence, and require335 unique final passed IDs. No test replay, counter change or acceptance relaxation.
 id_source: "generated"
 ---
 ## Summary
@@ -76,7 +134,42 @@ Snapshot source/scripts/docs hashes,4 production paths,8 canonical records and p
 
 ## Verification
 
+Command: node apps/office/node_modules/.cache/parity-coverage/FW0RYR/run.cjs; node apps/office/node_modules/.cache/parity-coverage/FW0RYR/run.cjs closure-commands.json closure-results.json (exact npm arguments in evidence/results.json, upstream physically unavailable/restored in finally). Result: initial fail334pass1source-backed old death-event conflict; failed-case-only closure1pass0fail6intentional skips, raw exit1 retained for partial coverage threshold. Final semantic tests pass335unique cases49files8fresh,0unresolved/0passing replay. Scope: original borrowed ObjectDying/ModifyChanged owners, exact CheckRegistration/default/no-op, native pre-disposal lock/order/fallback, reciprocal EndListeningAll, independent Svt death before Writer base death, immediate nested-browser-batch teardown and no stale post-disposal flush, owned format parent rebind/detach, native frame hint filtering, original node/cursor/frame3undo-redo cycles and mounted style/cell pool defaults without model bridge.
+Command: node (stdin standard istanbul-lib-coverage complete-file merge/gate); node apps/office/node_modules/.cache/parity-coverage/FW0RYR/evidence.cjs. Result: pass. Evidence: entire4production modules actual same-source/identical-complete-map Istanbul270lines301statements78functions154branches all100/0negative/no prior-task or V8 transfer; all335 executed final case IDs accepted, unexecuted skip statuses do not overwrite initial passes. Raw failures/maps/helpers remain ignored cache, no counter/location/threshold edits.
+Command: npm run format:check; npm run lint; npm run typecheck; npm run check:dependencies; npm run test:static; npm run check:docs; npm run check:file-size; npm exec -- prettier --check <8changed records> (exact record paths in evidence/results.json). Result: pass, upstream physically absent. Scope: final nativeTS7/staticbuild/source and final metadata formatting. Reference restored in finally.
+Command: npm run inventory:registry:build/check; npm run check:source-tree/provenance; node_modules/.bin/tsx scripts/generate-writer-ui-resources.ts --check; node .agentplane/policy/check-routing.mjs; ap doctor (separate exact argv in evidence/results.json, restored upstream metadata-only). Result: pass all7;4derived views/0changes,114source paths33retired roots333provenance modules;doctor0errors2historicalwarnings. Scope:8canonical histories preserved;1834/1847old source/scripts/docs and582/583old tests unchanged, only1source-backed exact notification migration. Parent Findings prefix retained. Full XJTGF0 historical;correction4/10, no full replay or overall parity promotion.
+
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-09T15:10:46.278Z — VERIFY — ok
+
+By: CODER
+
+Note: Pass:335unique49files8fresh; initial334pass1old native-event conflict corrected, onlyfailed closure1pass6skip, no passing replay. Complete4current production modules actual Istanbul100270lines301statements78functions154branches/zero negatives. TS7/build/static and metadata audits pass;8record prefixes582/583oldtests preserved. Broad goal active correction4/10; native linked/cache/assert/name/VCL remain partial.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T15:10:45.192Z, excerpt_hash=sha256:946c381f58d306e9a4ce69f27236f9d45185d800b14b12b54f9f40912f108a47
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610091449-FW0RYR/blueprint/resolved-snapshot.json
+- old_digest: c30d8874377c69880cfa535509160ec8167ad8844484f1e64a162b302c78cffa
+- current_digest: c30d8874377c69880cfa535509160ec8167ad8844484f1e64a162b302c78cffa
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610091449-FW0RYR
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610091449-FW0RYR -m 🧩 FW0RYR task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -86,3 +179,19 @@ Revert only this leaf source/test and appended inventory evidence via a new task
 ## Findings
 
 Pinned9bc445578031fecf56086729d8e4940c77e14d65: calbck.cxx::ClientBase::CheckRegistration/SwModify destructor/SwClientNotify, hints.hxx::ObjectDyingHint, calbck.hxx::ModifyChangedHint, format.cxx::SwFormat::SwClientNotify ObjectDying branch. Current generic broadcaster callback skips original Writer death hint and leaves root-dependent item-set inheritance stale. Native wsfrm.cxx::SwFrame::SwClientNotify excludes ObjectDying, so no invented physical invalidation is added. Writer browser batching and callback-backed SwClient are bounded existing adaptations; linked iterator/assertion/cache/name/VCL families remain unverified. Previous goal turn made concrete progress: KCHP9M DONE semantic3bb966ac297c,314cases/scoped100; no blocker.
+
+- Observation: Initial49-file upstream-absent profile334pass1old expectation failure0skip. All8fresh original-client/core/real-history/mounted UI scenarios pass; entire4changed modules actual Istanbul100/zero negatives. notify.test.ts parent propagation expected only3generic events, whereas pinned SwModify destructor now adds original ObjectDyingHint(second).
+  Impact: Only one source-backed old death-notification expectation conflicts. Production behavior and all other334 acceptances pass; raw initial failure/maps/log retained in ignored cache.
+  Resolution: Append exactly the native object-dying event and borrowed second-owner identity assertion to that old test, rerun only that failed case with unchanged production and complete maps; no passing replay or policy promotion. Then statics and metadata gates.
+
+- Observation: Failed-case-only closure accepts the exact native ObjectDyingHint(second) migration:1pass0fail12intentional skips, no passing replay. Initial334pass1old conflict retained; all335unique related cases now accepted including8fresh. Standard Istanbul whole-file aggregation on identical complete current-source maps is strict100 for4modules/zero negative counters.
+  Impact: Closure raw exit1 is the expected partial-profile coverage threshold failure, retained unchanged. The current-source aggregate uses no prior-task/V8 counter or map normalization; production remains unchanged since initial collection.
+  Resolution: Proceed with seven upstream-absent static checks and eight-record-preserving inventory updates; then restored metadata audits, semantic commit and explicit same-agent non-independent quality.
+
+- Observation: Correction to the preceding closure prose: authoritative closure-tests.json reports1pass0fail6skips, not12skips.335 unique accepted scenarios and8fresh cases remain correct.
+  Impact: Only the prose skip count was misstated; exact raw JSON/commands/maps and coverage270lines301statements78functions154branches strict100 are unchanged.
+  Resolution: Use the actual6skip count in inventory, bounded result JSON, final verification and review. Preserve this explicit correction and all raw failure evidence.
+
+- Observation: Unique-case evidence helper initially excluded pending status only, but Vitest represents the six intentionally unexecuted closure cases as skipped. Those statuses incorrectly overrode initial passed statuses and the helper rejected its own case merge before writing the result artifact.
+  Impact: Only helper acceptance aggregation failed; raw tests still show334initial passes1old conflict plus1closure pass6skips, and all deterministic production gates/actual scoped100 remain unchanged.
+  Resolution: Merge only executed passed/failed case statuses; ignore unexecuted skipped/pending records, retain failed initial evidence, and require335 unique final passed IDs. No test replay, counter change or acceptance relaxation.
