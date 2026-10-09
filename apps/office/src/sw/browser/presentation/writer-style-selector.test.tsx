@@ -24,7 +24,7 @@ function required<T>(value: T | undefined): T {
 
 afterEach(/** Releases browser presentation trees. @returns Nothing. */ () => cleanup());
 
-/** Builds actual Writer/frame owners. @param document - Current graph. @returns Attached controls and cleanup. */
+/** Builds actual Writer/frame owners. @param document - Current graph. @param argumentsValue - Optional formatting arguments. @returns Attached controls and cleanup. */
 function attach(document = new SwDoc(), argumentsValue?: unknown) {
   const metadata = createDocument({ id: "selector", suiteId: "writer", title: "Selector" });
   const shell = new SwDocShell(document, metadata),

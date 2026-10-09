@@ -889,7 +889,6 @@ function equalCharacterProperties(
 function characterPropertiesKey(properties: OdfCharacterProperties): string {
   return `${Number(properties.bold)}${Number(properties.italic)}${Number(properties.underline)}|${encodeURIComponent(properties.fontFamily ?? "")}|${properties.fontSizeTwips ?? ""}|${encodeURIComponent(properties.color ?? "")}|${encodeURIComponent(properties.highlight ?? "")}`;
 }
-
 /** Creates a three-state character key for automatic paragraph styles. @param properties - Optional direct deltas. @returns Stable key. */
 function partialCharacterPropertiesKey(properties?: Partial<OdfCharacterProperties>): string {
   return `${[properties?.bold, properties?.italic, properties?.underline]
@@ -901,21 +900,17 @@ function partialCharacterPropertiesKey(properties?: Partial<OdfCharacterProperti
       "",
     )}|${encodeURIComponent(properties?.fontFamily ?? "")}|${properties?.fontSizeTwips ?? ""}|${encodeURIComponent(properties?.color ?? "")}|${encodeURIComponent(properties?.highlight ?? "")}`;
 }
-
 /** Restores properties from an internal key. @param key - Three-bit key. @returns Character properties. */
 function parseCharacterPropertiesKey(key: string): Partial<OdfCharacterProperties> {
   const decode =
     /** Decodes one three-state property. @param value - Key character. @returns Direct property. */
     (value: string | undefined): boolean | undefined =>
       value === "-" || value === undefined ? undefined : value === "1";
-  // Both internal key encoders always emit these five pipe-delimited fields.
-  const [flags, encodedFont, fontSize, encodedColor, encodedHighlight] = key.split("|") as [
-    string,
-    string,
-    string,
-    string,
-    string,
-  ];
+  /** Five pipe-delimited fields emitted by both internal key encoders. */
+  type KeyFields = [string, string, string, string, string];
+  const [flags, encodedFont, fontSize, encodedColor, encodedHighlight] = key.split(
+    "|",
+  ) as KeyFields;
   const bold = decode(flags[0]);
   const italic = decode(flags[1]);
   const underline = decode(flags[2]);
