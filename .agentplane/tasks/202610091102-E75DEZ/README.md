@@ -1,10 +1,11 @@
 ---
 id: "202610091102-E75DEZ"
 title: "Integrate Writer and Calc into main and synchronize development branches"
-status: "DOING"
+result_summary: "verified-202610091102-E75DEZ"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-09T12:54:11.417Z"
+  updated_at: "2026-10-09T12:55:01.340Z"
   updated_by: "CODER"
-  note: "Full npm run verify passes: 14192 application tests and 122 inventory tests, all four coverage metrics at 100 percent, zero negative Istanbul counters, 303 browser scenarios, all remaining gates. Three clean intended checkouts and published branches agree; original development heads and main ancestry verified. TS7 feasibility completed with concrete blockers and TS6 preserved."
+  note: "verified-202610091102-E75DEZ"
   attempts: 0
 quality_review:
   state: "pass"
@@ -41,11 +42,16 @@ quality_review:
     - ".agentplane/tasks/202610091107-VKHCRS/README.md"
   findings:
     - "All application and inventory tests plus 303 browser cases pass. No new coverage exclusions or threshold reductions; three inherited exclusions were removed and explicitly tested. All three checkouts are clean on their intended branches with matching published tips and verified ancestry."
-commit: null
+commit:
+  hash: "05f0a282f303dc1b070d3e78c08a8a0901ea3341"
+  message: "🧩 E75DEZ task: persist canonical task artifacts"
 comments:
   -
     author: "CODER"
     body: "Start: execute approved Writer Calc integration and complete verification across the three designated repositories."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610091102-E75DEZ. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -60,8 +66,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Full npm run verify passes: 14192 application tests and 122 inventory tests, all four coverage metrics at 100 percent, zero negative Istanbul counters, 303 browser scenarios, all remaining gates. Three clean intended checkouts and published branches agree; original development heads and main ancestry verified. TS7 feasibility completed with concrete blockers and TS6 preserved."
+  -
+    type: "verify"
+    at: "2026-10-09T12:55:01.340Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610091102-E75DEZ"
+  -
+    type: "status"
+    at: "2026-10-09T12:55:01.484Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610091102-E75DEZ. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-09T12:54:11.470Z"
+doc_updated_at: "2026-10-09T12:55:01.484Z"
 doc_updated_by: "CODER"
 description: "User-approved nine-step synchronization across vite-office, vite-office-writer and vite-office-calc. Push development branches, merge into main, resolve conflicts, run complete verification and repair failures, publish main, merge main back and leave all checkouts clean on their intended branches."
 sections:
@@ -122,9 +141,43 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-09T12:55:01.340Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610091102-E75DEZ
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T12:54:11.470Z, excerpt_hash=sha256:018eba414106bcf2f48855c7b8cf71b2ccd342377d0d6ea21cd22609c9139be9
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610091102-E75DEZ/blueprint/resolved-snapshot.json
+    - old_digest: 66d671f0e71cdbbba31f6ff0e555b3cd552bf9ae13493688c4e4e797b1be9677
+    - current_digest: 66d671f0e71cdbbba31f6ff0e555b3cd552bf9ae13493688c4e4e797b1be9677
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610091102-E75DEZ
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610091102-E75DEZ --result verified-202610091102-E75DEZ --commit 05f0a282f303dc1b070d3e78c08a8a0901ea3341
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Retain original heads main=069279d9, writer=9a64ad49, calc=01d07401. If rollback becomes necessary, propose explicit revert commits; do not reset or force-push published history."
   Findings: "Integration and reverse synchronization completed without conflicts. The original Writer and Calc heads and published main are ancestors of both development branches; all three designated repositories are clean on their intended branches with matching upstreams. Explicit HTTPS publication succeeded after SSH authentication failed, and development dependencies were refreshed with npm ci. V8 full runs produced a negative paintfrm.ts branch counter ([1371, -153]), despite successful tests and 100 percent focused layout coverage. Istanbul is retained as requested, with all four mandatory metrics at 100 percent and zero negative counters. Existing justified coverage annotations were translated; no new exclusions or relaxed mandatory thresholds were added. Added tests cover default entry points, nearest table-frame selection, popup focus fallback, font argument preservation/overrides and imported space-follow numbering. Three old exclusions were removed and replaced with tests. Type-only compaction preserves identical JavaScript and the source-file budget; documentation, lint and types were rechecked. Complete TypeScript 7 migration remains blocked by typescript-eslint and four legacy compiler API consumers, as recorded in 202610091107-VKHCRS; TypeScript stays 6.0.3. Istanbul is not an identified TS7 blocker, but full-stack TS7 compatibility has not been verified. AgentPlane doctor has zero errors and two inherited warnings."
+extensions:
+  implementation_commit:
+    hash: "d3cad38ed6d589a544e983329f9f8a9a52e6bdbb"
+    message: "🧩 E75DEZ code: keep export key typing within source budget"
 id_source: "generated"
 ---
 ## Summary
@@ -194,6 +247,36 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-09T12:55:01.340Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610091102-E75DEZ
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T12:54:11.470Z, excerpt_hash=sha256:018eba414106bcf2f48855c7b8cf71b2ccd342377d0d6ea21cd22609c9139be9
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610091102-E75DEZ/blueprint/resolved-snapshot.json
+- old_digest: 66d671f0e71cdbbba31f6ff0e555b3cd552bf9ae13493688c4e4e797b1be9677
+- current_digest: 66d671f0e71cdbbba31f6ff0e555b3cd552bf9ae13493688c4e4e797b1be9677
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610091102-E75DEZ
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610091102-E75DEZ --result verified-202610091102-E75DEZ --commit 05f0a282f303dc1b070d3e78c08a8a0901ea3341
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
