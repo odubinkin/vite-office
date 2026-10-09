@@ -1,10 +1,11 @@
 ---
 id: "202610091404-4QBVYR"
 title: "Port Calc range-list reference updates"
-status: "DOING"
+result_summary: "Implemented original Calc range-list reference update pipeline with deletion ordering native change result cache and backward joins"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
     - "output/playwright/rangelist-update-verification.md"
   findings:
     - "Reviewed original deletion-first ordering, dual-negative change overwrite, native typed arguments, stable endpoints, monotone cache and backward borrowed-entry joins; source grouping remains aligned."
-commit: null
+commit:
+  hash: "505cb3156e0dea433b8cfa6f53c94bdd84894c0d"
+  message: "✨ 4QBVYR calc: port original range-list reference update pipeline"
 comments:
   -
     author: "CODER"
     body: "Start: Implement approved native range-list update pipeline in calc checkout."
+  -
+    author: "CODER"
+    body: "Verified: Original range-list reference update pipeline matches14938 unchanged native cases and all67 Calc tests retain actual100 Istanbul coverage."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Command: node scripts/calc-rangelist-update-native-probe.mjs --write; node scripts/calc-rangelist-update-native-probe.mjs --check Result: pass. Evidence:14938 defined initialized cases; unchanged full ScRangeList class, numeric helpers/Join/edits/UpdateReference, ordinary ScRefUpdate helpers/body and address/range inlines. Seven pinned Git blobs, exact HEAD and extracted SHA256 verified; ASan/UBSan clean. Driver reads displacement inputs as signed64 before original typed argument conversion and checks stream validity; fixture canonical formatted. Scope:deletion-first ordering, same-tab guard, empty/complete deletion, all modes, signed16/signed32 conversion, ordered raw outputs, native changed overwrite and backward joins with index repair, counts and cache-sensitive follow-up joins. Undefined arithmetic or borrowed where references invalidated by deletion remain uncertified. Command: npm run test:coverage:calc Result: pass. Evidence:67 tests/15 files; actual Istanbul statements1222/1222,branches1110/1110,functions228/228,lines1075/1075 all100. Every native pipeline output compared; literal original testUpdateReference_DeleteRow/DeleteLastRow/DeleteCol cell/count assertions retained. Stable existing range/endpoints and independent native quirks verified. Scope:all Calc runtime owners; no coverage exclusions or threshold/provider/settings changes. Existing range-list geometry tests/fixtures/native probe and ScRefUpdate source unchanged, confirmed by git diff --exit-code 00508595e78e for those four paths. Command: npm run typecheck; npm run test:tooling; affected ESLint/Prettier Result: pass. Evidence:TS7 tools/application checks,13 tooling tests/3 files, three authored source/probe/test files lint clean; source/test/probe/native JSON formatted. Scope:existing ScRefUpdateDocument getter contract reused, native scalar output tuple consumed through original module boundary, no new document wrapper or shared/Writer source duplication. Command: npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:source-tree; npm run check:source-provenance Result: pass. Evidence:333 runtime sources/1586 imports/29 permitted edges;1108 documented authored files;1111 size checks;114 required paths/33 retired roots;334 provenance entries(243mapped,74browser adaptations,17local infrastructure). Scope:original numerical class and anonymous helpers retained in coherent606line range-list owner; reviewed decomposition candidate below1000line hard limit. Existing owners consumed, no shared/Writer changes. Command: npm run inventory:parity:calc Result: pass. Evidence:13 capabilities/125 modules; zero semantic violations. New pipeline capability, source/header runtime/provenance and prior range-list/ordinary-update gaps reconciled. Initial normalized header marker was rejected and corrected to exact pinned spelling; subsequent validation passed. Scope:Calc/shared registry scope, finite numerical evidence with semantic parity intentionally unverified; full document/compiler/consumer/native lifetime integration remains pending. Command: node .agentplane/policy/check-routing.mjs; ap doctor; git diff --check; git status --short --untracked-files=all Result: pass. Evidence:routing OK,doctor zero errors/two inherited warnings(managed readiness shim and old DONE task202610090715-PJV0JK without implementation hash);diff clean, active task files only. Scope:calc branch/current checkout, fourth resumed task of ten. Full Writer/full E2E deferred to task10 under user cadence; no Writer coverage repairs, merges, network/global file changes or unrelated task edits."
+  -
+    type: "status"
+    at: "2026-10-09T14:15:35.258Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Original range-list reference update pipeline matches14938 unchanged native cases and all67 Calc tests retain actual100 Istanbul coverage."
 doc_version: 3
-doc_updated_at: "2026-10-09T14:15:23.282Z"
+doc_updated_at: "2026-10-09T14:15:35.259Z"
 doc_updated_by: "CODER"
 description: "Connect original ScRangeList UpdateReference deletion, update and join ordering to the existing ScRefUpdate owner, with native comparisons, 100 percent Calc coverage and inventory."
 sections:
@@ -115,6 +128,10 @@ sections:
     - Observation: inventory:parity:calc rejected an upstream header marker with normalized spacing: bool UpdateReference( is absent.
       Impact: Evidence marker only; native execution and runtime tests passed. No scope or verification criterion change.
       Resolution: Use the exact pinned declaration spelling and rerun scoped registry validation.
+extensions:
+  implementation_commit:
+    hash: "505cb3156e0dea433b8cfa6f53c94bdd84894c0d"
+    message: "✨ 4QBVYR calc: port original range-list reference update pipeline"
 id_source: "generated"
 ---
 ## Summary
