@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202610091030-RAWD0Q",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-09T10:59:36.443Z",
+  "verdict": "pass",
+  "summary": "Non-independent same-agent review of committed full profile999c96d7c4a8 and verified closure28WPNK:14556full passes plus12fresh closure passes, current318app/42inventory exact-source all-four100 and declared checks pass.",
+  "evaluated_sha": "a187ff23d182bf36456948775605779a2e5fb012",
+  "blueprint_digest": "05efcbaf0f403a04e8251adaa74a12f8cce990a64c5a7abced9086f7c7a6402f",
+  "findings": [
+    "The failed original full raw coverage is preserved, with actual negative counters untouched. Finished closure uses12new original-owner/ordering/lifetime cases and whole complete exact-source actual maps. No production/old-test edits or full passing replay. All678full files covered,0full skip/flaky/retry. Incomplete parity goal must pause now after clean checkpoint finish."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610091030-RAWD0Q/README.md",
+    ".agentplane/tasks/202610091030-RAWD0Q/evidence/full-profile.json",
+    ".agentplane/tasks/202610091030-RAWD0Q/evidence/verified-closure.json",
+    ".agentplane/tasks/202610091043-28WPNK/evidence/checks.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
