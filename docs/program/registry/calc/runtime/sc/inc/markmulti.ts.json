@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/inc/markmulti.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "multi-selection",
+    "capabilityIds": [
+      "CAP-926a9602-35bb-4554-aa6e-46a03a013aa9"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sc/inc/markmulti.ts#ScMultiSel",
+        "apps/office/src/sc/source/core/data/markmulti.test.ts#matches every unchanged native multi-selection sequence",
+        "scripts/calc-markmulti-native-probe.mjs#const originals =",
+        "vendor/libreoffice-reference/sc/inc/markmulti.hxx#class SC_DLLPUBLIC ScMultiSel"
+      ],
+      "justification": "Task202610091638-6W99E8 ports complete ScMultiSel/ScMultiSelIter public mechanisms at original header/core-data boundaries, reusing actual ScMarkArray, ScFlatBoolRowSegments, ScRangeList, ScSheetLimits and shared mdds. Native comparison compiles unchanged complete original selection classes/methods and real dependency groups, including actual ScRangeList and SvRefBase with genuine source-verified mdds/Boost. Source blobs and extraction hashes are saved;550 initialized sequences compare every command, both complete selected public observations and raw entry/bound references under ASan/UBSan. Private WeakMaps adapt original friend storage and vector capacity without adding public engine APIs. Capacity is behaviorally observable because ScMarkArray assignment preserves receiving limits while construction copies source limits; actual vector growth/copy/clear/insert/erase/self-move profile is independently recorded. ScMultiSel Set keeps the original row comparator and unnormalized entries. Scalar output references use tuples/mutable aggregates, move/assignment syntax is explicit, and native guards retain their source outcomes. Original mark_test coordinates/expectations are retained literally. Custom explicit-bounds comparisons compile unchanged ValidRow with NDEBUG because its temporary debug guard allows only standard/jumbo maxima; the GetRangeData assertion is separately compiled/executed with debug assertions and standard limits. Full ScMarkData/document/column/UI consumers, generic native vector ABI/allocation/refcount/pointer lifetimes, dangling or reallocated borrowed pointers, negative/out-of-range column indices, malformed/uninitialized storage and undefined arithmetic remain uncertified. The private value-vector adapter follows the recorded libc++220106 capacity/slot-transfer profile; other standard-library capacity policies and moved-from states are implementation-dependent. std::sort equal-start-row permutation is unspecified; JavaScript stable row sorting preserves the comparator but cross-library raw tie order is uncertified. Debug assertions become explicit fail-fast Errors; native process abort/release diagnostics and complete ScSheetLimits intrusive lifetime services remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "sc/inc/markmulti.hxx",
+      "upstreamSymbols": [
+        "ScMultiSel",
+        "ScMultiSelIter"
+      ]
+    }
+  }
+}

@@ -659,3 +659,64 @@ actual100 Istanbul coverage. Full-suite validation remains due at task10.
 Source research retains MPL 2.0 and inherited Apache notices in the segmenttree
 and global originals. Independently authored TypeScript preserves those contracts;
 unchanged native originals remain read-only research inputs.
+
+## Multi-selection owner and iterator
+
+Task9 (`202610091638-6W99E8`) ports `sc/inc/markmulti.ts` and the original
+`sc/source/core/data/markmulti.ts` owner. `ScMultiSel` owns independent column
+arrays and a shared row array, reusing actual `ScMarkArray`, bool row segments,
+range lists and sheet limits. Full-row updates use the row owner; partial
+deselection first migrates intersecting row marks into columns. Counts report
+marked column arrays only. Allocated unmarked columns make `IsEmpty` false even
+when `HasAnyMarks` is false. Raw equality/start-column predicates and original
+row/column shift expressions are retained.
+
+`Set` copies and sorts the range list by first row, then stores the original raw
+entries without adding a terminal unmarked boundary. Equal-key permutations in
+native `std::sort` are unspecified; JS stable sorting preserves its row comparator,
+while platform-specific raw tie order remains uncertified. `HasOneMark` keeps
+its independent source predicates, including suspicious bounds documented as
+CALC-010..013 in the journal. No normalization or upstream repair is added.
+
+The iterator borrows an existing array when only one source has marks. With two
+sources it creates the original bool-segment snapshot, so subsequent owner
+mutation affects the borrowed mode but does not alter the snapshot. Failed
+iteration preserves output rows. `GetRangeData` requires segment mode; its debug
+assertion is adapted to a fail-fast Error, with native abort/release behavior
+explicitly uncertified. Public accessors retain original borrowed array ownership;
+`GetMarkArray` creates the original independent normalized value.
+
+Native vector capacity affects logical results because array assignment retains
+destination limits, while construction copies source limits. The private value
+adapter therefore distinguishes reallocation, reused slots, tail construction,
+copy/move assignment and clear-with-capacity retention. It reuses actual mark
+array methods rather than recreating their storage. The compared libc++220106
+profile records capacity growth, exact copy-assignment reallocation, retained
+clear capacity, insertion/erase and self-move. Other standard-library policies,
+native allocation/ABI and dangling/reallocated borrowed pointers remain
+uncertified. Scalar output references and native move syntax use the existing
+tuple/aggregate and explicit method adaptations.
+
+`node scripts/calc-markmulti-native-probe.mjs --check` compares 550 initialized
+sequences with unchanged complete selection classes/methods and real dependency
+groups, including original `ScRangeList` and `SvRefBase`. It reuses the existing
+bool/mdds verification, exact pinned blobs and group hashes, and ASan/UBSan.
+Whole selected observations are interned without dropping commands or either
+owner's comparison. Ordinary tests verify exact raw arrays through public value
+equality and retained bounds by independently copying/resetting the actual array;
+they require neither upstream nor a compiler/network.
+
+The unchanged `ValidRow` has a temporary debug guard allowing only standard/jumbo
+maxima. Custom explicit-bounds comparison therefore uses original release
+semantics with `NDEBUG`; `--debug-assertion` separately diagnoses the original
+iterator precondition with debug assertions enabled and standard bounds. Needed
+bounds fields/constructor/methods are extracted exactly; full intrusive lifetime
+services and unlinked RTL declarations are not replaced by engine stand-ins.
+Literal standard-bound coordinates/expectations from both upstream multi-mark
+tests are retained. Full `ScMarkData`, document/column/UI consumers, undefined
+arithmetic, malformed storage and unsafe vector indices remain subsequent work.
+Inventory semantic parity remains unverified; full-suite validation is due at
+task10. Original research inputs retain their MPL 2.0/inherited Apache notices.
+
+All88 Calc tests pass with actual100 Istanbul coverage: 1988 statements,
+1546 branches, 346 functions and 1733 lines. No coverage exclusions are added.

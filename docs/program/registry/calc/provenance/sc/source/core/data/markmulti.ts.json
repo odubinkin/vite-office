@@ -1,0 +1,81 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/data/markmulti.ts",
+          "marker": "ScMultiSel"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/markmulti.test.ts",
+          "marker": "matches every unchanged native multi-selection sequence"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/markmulti.cxx",
+          "marker": "ScMultiSel::Set("
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sc/source/core/data/markmulti.ts",
+    "localSymbols": [
+      "MultiSelectionState",
+      "states",
+      "capacities",
+      "stateOf",
+      "resize",
+      "insertColumns",
+      "eraseColumns",
+      "ScMultiSel",
+      "ScMultiSelIter",
+      "move",
+      "assign",
+      "moveAssign",
+      "Clear",
+      "GetMultiSelectionCount",
+      "HasMarks",
+      "HasOneMark",
+      "GetMark",
+      "IsAllMarked",
+      "HasEqualRowsMarked",
+      "GetStartOfEqualColumns",
+      "GetNextMarked",
+      "MarkAllCols",
+      "SetMarkArea",
+      "Set",
+      "IsRowMarked",
+      "IsRowRangeMarked",
+      "IsEmpty",
+      "GetMarkArray",
+      "HasAnyMarks",
+      "ShiftCols",
+      "ShiftRows",
+      "GetRowSelArray",
+      "GetMultiSelArray",
+      "Next",
+      "GetRangeData"
+    ],
+    "omittedResponsibilities": [
+      "Full ScMarkData/document/column/UI consumers, generic native vector ABI/allocation/refcount/pointer lifetimes, dangling or reallocated borrowed pointers, negative/out-of-range column indices, malformed/uninitialized storage and undefined arithmetic remain uncertified. The private value-vector adapter follows the recorded libc++220106 capacity/slot-transfer profile; other standard-library capacity policies and moved-from states are implementation-dependent. std::sort equal-start-row permutation is unspecified; JavaScript stable row sorting preserves the comparator but cross-library raw tie order is uncertified. Debug assertions become explicit fail-fast Errors; native process abort/release diagnostics and complete ScSheetLimits intrusive lifetime services remain unverified."
+    ],
+    "preservedResponsibilities": [
+      "Original independent per-column ScMarkArray values and shared aRowSel, explicit immutable limits, copy/assignment receiving references and moved value ownership.",
+      "Original row-to-column migration before partial deselection, raw range-list Set without added terminal boundaries, row/column union queries and output preservation.",
+      "Original single-source borrowed iterator versus two-source bool-segment snapshot, next-range state and GetRangeData segment-mode precondition.",
+      "Original raw HasOneMark/equal-column predicates, missing-column start comparison, navigation, allocated emptiness and row/column shift expressions.",
+      "Capacity-dependent native value construction/assignment, clear capacity retention and destination-slot bounds during insertion/erase, on the recorded native runtime profile."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sc/source/core/data/markmulti.cxx",
+    "upstreamSymbols": [
+      "ScMultiSel::Set",
+      "ScMultiSel::ShiftCols",
+      "ScMultiSelIter::Next",
+      "ScMultiSelIter::GetRangeData"
+    ]
+  }
+}

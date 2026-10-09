@@ -215,6 +215,67 @@ assertions are in `external/mdds/include/mdds/flat_segment_tree.test.ts`.
 Consumer hint ownership requirements and historical intent remain unreviewed.
 Decision: preserve the overload distinction and foreign-hint observations.
 
+## CALC-010: A single source can hide multiple intervals in the other source
+
+Status: original defined output reproduced; consumer intent unreviewed.
+
+Pinned `sc/source/core/data/markmulti.cxx:72` `HasOneMark` tests each source
+independently and enters its success path when either source has one mark. It
+does not require an unsuccessful source to have no marks. With maximum row7,
+global rows2..3 and separate column1 marks at rows0 and6, it returns true with
+rows2..3, although `GetMark(1,0)` and `GetMark(1,6)` are also true.
+
+The native fixture and independent `retains raw Set bounds and HasOneMark source
+distinctions` test in `markmulti.test.ts` retain all results. Whether upstream
+callers exclude mixed single/multiple sources remains unknown. Decision: preserve
+the original OR predicate and output rows.
+
+## CALC-011: Missing-column start scanning compares existing arrays with row marks
+
+Status: original defined distinction reproduced; intended meaning uncertain.
+
+`GetStartOfEqualColumns` in pinned `markmulti.cxx:157` compares an existing
+column against `aRowSel` when the last column has no storage. `HasEqualRowsMarked`
+instead compares a missing column with the existing column's absent marks.
+Allocate unmarked columns0..2 by deselecting columns1..2, then mark global
+rows2..3. `HasEqualRowsMarked(2,3)` is true, while
+`GetStartOfEqualColumns(3,0)` returns3. Existing and missing columns have the same
+visible global row marks, but their raw comparison paths differ.
+
+Native observations and the independent missing-column test retain this case.
+Complete consumer requirements and historical intent remain unreviewed.
+Decision: preserve both original comparison paths.
+
+## CALC-012: Bulk Set single-mark bounds can exceed the stored marked interval
+
+Status: original defined output reproduced; not a confirmed user-visible defect.
+
+`ScMultiSel::Set` in pinned `markmulti.cxx:264` omits an unmarked terminal
+entry. With maximum row7 and a range selecting column1 rows2..4, raw entries
+are `(1,false),(4,true)`. `ScMarkArray::HasOneMark` interprets that two-entry
+shape as ending at the sheet maximum and reports `[2,7]`. The multi-selection
+iterator reports `[2,4]`, and `GetMark(1,5)` is false.
+
+The native fixture and independent raw-Set test retain these differing outputs.
+Consumer assumptions after the optimized initializer need review. Decision:
+retain original raw storage and predicates; do not append a terminal or repair
+`HasOneMark`.
+
+## CALC-013: Column deletion extending past storage retains its last entry
+
+Status: original defined boundary reproduced; caller restrictions unreviewed.
+
+Pinned `markmulti.cxx:354` `ShiftCols` limits a deletion reaching the vector
+end to `size - start - 1`. With maximum column5, mark columns1..3 at rows2..4,
+then `ShiftCols(1,-20)`. The vector loses two entries and retains original
+column3 at column1. Selection count becomes1, `GetMark(1,3)` stays true, and
+`GetMultiSelArray(2)` is null.
+
+Unchanged native shift bodies and the independent trailing-deletion test retain
+this case. A trailing reserved-entry convention or restrictions on deletion
+offsets have not been established. Decision: preserve the count and trailing
+value; do not change the native expression.
+
 ## Reviewed API distinctions
 
 These distinctions have been discussed but are not classified as defects:
