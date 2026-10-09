@@ -2,13 +2,23 @@
 // SPDX-FileCopyrightText: 2021 - 2025 Kohei Yoshida
 // SPDX-License-Identifier: MIT
 import { integrity_error } from "../../global.ts";
-import { type base_element_block, type element_t } from "../types.ts";
+import {
+  type base_element_block,
+  type element_t,
+  get_block_element_at,
+  type BlockElementAccess,
+} from "../types.ts";
 import {
   type DelayedVectorValue,
   type delayed_delete_vector_iterator,
 } from "../delayed_delete_vector.ts";
 import { type MDDS_MTV_DEFINE_ELEMENT_CALLBACKS } from "../macro.ts";
-import { empty_event_func, type BlockPosition } from "../util.ts";
+import {
+  empty_event_func,
+  advance_position as advance_position_impl,
+  type BlockPositionIterator,
+  type BlockPosition,
+} from "../util.ts";
 import { iterator_base, const_iterator_base } from "./iterator.ts";
 import { std_vector } from "../vector_storage.ts";
 import { clone_construction_type, type default_traits } from "../util.ts";
@@ -20,6 +30,7 @@ import {
   delete_element_blocks,
   mutate_blocks,
   make_iterator,
+  next_position as next_position_impl,
   get_impl,
   get_type as get_type_impl,
   is_empty as is_empty_impl,
@@ -476,5 +487,31 @@ export class multi_type_vector<E extends ContainerEvent = empty_event_func> {
     callbacks: ContainerCallbacks<T>,
   ): T {
     return get_impl(this.m_block_store, this.m_cur_size, pos, callbacks);
+  }
+  /** Original mutable/const static next-position overloads. @param pos - Valid source. @returns Independent pair. */
+  public static next_position<I extends BlockPositionIterator<I>>(
+    pos: BlockPosition<I>,
+  ): BlockPosition<I> {
+    return next_position_impl(pos);
+  }
+  /** Original mutable/const static advancement forwards the shared native utility. @param pos - Valid source. @param steps - Original signed32 steps. @returns Independent pair. */
+  public static advance_position<I extends BlockPositionIterator<I>>(
+    pos: BlockPosition<I>,
+    steps: number,
+  ): BlockPosition<I> {
+    return advance_position_impl(pos, steps);
+  }
+  /** Original const-position logical number reads the cached node without owner lookup. @param pos - Valid position. @returns Logical number. */
+  public static logical_position<I extends { get(): { readonly position: number } }>(
+    pos: BlockPosition<I>,
+  ): number {
+    return pos.first.get().position + pos.second;
+  }
+  /** Original static typed-position get delegates actual types.hpp helper. @param pos - Valid nonempty matching position. @param Blk - Erased original block template witness. @returns Scalar. */
+  public static get<T extends DelayedVectorValue>(
+    pos: BlockPosition<{ get(): { readonly data: base_element_block | null } }>,
+    Blk: BlockElementAccess<T>,
+  ): T {
+    return get_block_element_at(Blk, pos.first.get().data as base_element_block, pos.second);
   }
 }

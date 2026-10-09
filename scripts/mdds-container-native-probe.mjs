@@ -145,6 +145,29 @@ for (const row of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, maxRow]) {
 }
 longHints.push(["U", 0], ["U", 1]);
 cases.push({ seed: 12, commands: longHints });
+// Append actual static position API callers after every unchanged ownership/query case.
+for (let type = 0; type < 12; ++type) {
+  for (const n of [1, 2, 5, 17]) {
+    const commands = [["F", 0, n, type, "2"]];
+    for (let row = 0; row < n; ++row) {
+      for (const op of ["B", "b", "l", "X"])
+        commands.push([op, 0, row, ...(op === "X" ? [type] : [])]);
+      for (const steps of [...new Set([0, -row, Math.max(-row, -1), 1, n - row - 1, n - row])])
+        for (const op of ["O", "o"]) commands.push([op, 0, row, steps]);
+    }
+    commands.push(["U", 0]);
+    cases.push({ seed: -1, commands });
+  }
+  const commands = [["Q", 1, 0]];
+  for (let row = 0; row < 9; ++row) {
+    for (const op of ["B", "b", "l"]) commands.push([op, 0, row]);
+    if ([0, 3, 7].includes(row)) commands.push(["X", 0, row, row === 3 ? (type + 1) % 12 : type]);
+    for (let steps = -row; steps <= 9 - row; ++steps)
+      for (const op of ["O", "o"]) commands.push([op, 0, row, steps]);
+  }
+  commands.push(["U", 0], ["U", 1]);
+  cases.push({ seed: 24 + type, commands });
+}
 const driver =
   String.raw`
 #include <mdds/multi_type_vector/soa/main.hpp>
@@ -225,16 +248,28 @@ std::string scalar(db_type& db,size_t row,int type,bool output){switch(type){
     .join("\n") +
   String.raw`
 }std::abort();}
+std::string positioned_scalar(const db_type& db,size_t row,int type){auto p=db.position(row);switch(type){
+` +
+  kinds
+    .map(
+      /** Calls unchanged native static get with its explicit block template. @param kind - Alias. @param type - Discriminator. @returns Native caller. */
+      (kind, type) =>
+        `case ${type}:{auto v=db_type::get<${kind}_element_block>(p);return capture([&]{print(v);});}`,
+    )
+    .join("\n") +
+  String.raw`
+}std::abort();}
 template<class It>void node(const It& it,const It& end,const db_type& db){const auto& n=it.get_node();const bool at_end=it==end;std::cout<<"["<<n.type<<","<<n.position<<","<<n.size<<","<<id(n.data)<<",";if(at_end)std::cout<<"null,null";else std::cout<<(n.__private_data.parent==&db?"true":"false")<<","<<n.__private_data.block_index;std::cout<<"]";}
 template<class It>void hint_node(const It& hint,const db_type& db,bool at_end=false){const auto& n=hint.get_node();std::cout<<"["<<n.type<<","<<n.position<<","<<n.size<<","<<id(n.data)<<",";if(at_end)std::cout<<"null,null";else std::cout<<(n.__private_data.parent==&db?"true":"false")<<","<<n.__private_data.block_index;std::cout<<"]";}
 template<class Pair,class It>std::string position_json(const Pair& p,const It& end,const db_type& db,const It* hint=nullptr,bool hint_at_end=false){return capture([&]{std::cout<<"[";node(p.first,end,db);std::cout<<","<<p.second;if(hint){std::cout<<",";hint_node(*hint,db,hint_at_end);}std::cout<<"]";});}
 void state(db_type& db){const auto& s=access_store(db,access_tag{});std::cout<<"["<<db.size()<<","<<db.block_size()<<","<<(db.empty()?"true":"false")<<",["<<db.event_handler().tag<<","<<(db.event_handler().log?"true":"false")<<"],[[";for(size_t i=0;i<s.positions.size();++i){if(i)std::cout<<",";std::cout<<s.positions[i];}std::cout<<"],[";for(size_t i=0;i<s.sizes.size();++i){if(i)std::cout<<",";std::cout<<s.sizes[i];}std::cout<<"],[";for(size_t i=0;i<s.element_blocks.size();++i){if(i)std::cout<<",";std::cout<<id(s.element_blocks[i]);}std::cout<<"],["<<s.positions.capacity()<<","<<s.sizes.capacity()<<","<<s.element_blocks.capacity()<<"]],[";for(size_t i=0;i<s.element_blocks.size();++i){if(i)std::cout<<",";if(s.element_blocks[i])payload(*s.element_blocks[i]);else std::cout<<"null";}std::cout<<"],[";node(db.begin(),db.end(),db);std::cout<<",";node(db.end(),db.end(),db);std::cout<<",";node(db.cbegin(),db.cend(),db);std::cout<<",";node(db.cend(),db.cend(),db);std::cout<<",";node(db.rbegin(),db.rend(),db);std::cout<<",";node(db.rend(),db.rend(),db);std::cout<<",";node(db.crbegin(),db.crend(),db);std::cout<<",";node(db.crend(),db.crend(),db);std::cout<<"]]";}
 void record(std::unique_ptr<db_type>* db,const std::string& result,bool stable){std::cout<<"["<<result<<","<<(stable?"true":"false")<<",[";for(int i=0;i<3;++i){if(i)std::cout<<",";if(db[i])state(*db[i]);else std::cout<<"null";}std::cout<<"],[";bool comma=false;for(int i=0;i<3;++i)for(int j=0;j<3;++j){if(comma)std::cout<<",";comma=true;if(db[i]&&db[j])std::cout<<"["<<(*db[i]==*db[j]?"true":"false")<<","<<(*db[i]!=*db[j]?"true":"false")<<"]";else std::cout<<"null";}std::cout<<"],[";for(size_t i=0;i<log_entries->size();++i){if(i)std::cout<<",";const auto& e=(*log_entries)[i];std::cout<<"["<<e.owner<<","<<e.token<<","<<e.type<<","<<e.size<<","<<(e.acquired?"true":"false")<<"]";}std::cout<<"]]";}
-int main(){std::cout<<std::setprecision(17);int seed,count;while(std::cin>>seed>>count){ids.clear();next_token=0;events::next=1;log_entries=std::make_shared<std::vector<event_entry>>();std::unique_ptr<db_type> db[3];std::optional<db_type::iterator> hints[3];std::optional<db_type::const_iterator> const_hints[3];if(seed>=0){int kind=seed%12,count=seed<12?5:9;db[0]=std::make_unique<db_type>(count);for(int row=0;row<count;row+=2)set_cell(*db[0],row,((row/2)%2?kind+1:kind)%12);ids.clear();next_token=0;for(auto* data:access_store(*db[0],access_tag{}).element_blocks)id(data);log_entries->clear();}std::cout<<"[";record(db,"null",true);
+int main(){std::cout<<std::setprecision(17);int seed,count;while(std::cin>>seed>>count){ids.clear();next_token=0;events::next=1;log_entries=std::make_shared<std::vector<event_entry>>();std::unique_ptr<db_type> db[3];std::optional<db_type::iterator> hints[3];std::optional<db_type::const_iterator> const_hints[3];if(seed>=0){int kind=seed%12,count=seed<12?5:9;db[0]=std::make_unique<db_type>(count);if(seed<24){for(int row=0;row<count;row+=2)set_cell(*db[0],row,((row/2)%2?kind+1:kind)%12);}else{set_cell(*db[0],0,kind);set_cell(*db[0],3,(kind+1)%12);set_cell(*db[0],7,kind);}ids.clear();next_token=0;for(auto* data:access_store(*db[0],access_tag{}).element_blocks)id(data);log_entries->clear();}std::cout<<"[";record(db,"null",true);
 for(int step=0;step<count;++step){char op;int dst;std::cin>>op>>dst;std::string result="null";events* before=db[dst]?&db[dst]->event_handler():nullptr;bool stable=true;
 try{if(op=='D')db[dst]=std::make_unique<db_type>();else if(op=='Z'){int n;std::cin>>n;db[dst]=std::make_unique<db_type>(n);}else if(op=='F'||op=='R'){int n,type,length=-1;std::string text;std::cin>>n>>type>>text;if(op=='R')std::cin>>length;db[dst]=create(n,type,text,length);}else if(op=='H'||op=='h'){events h;std::cin>>h.tag;if(op=='H')db[dst]=std::make_unique<db_type>(h);else db[dst]=std::make_unique<db_type>(std::move(h));result=h.log?"true":"false";}
 else if(op=='Q'||op=='L'||op=='M'||op=='A'||op=='V'||op=='W'){int other;std::cin>>other;if(op=='Q')db[dst]=std::make_unique<db_type>(*db[other]);else if(op=='L')db[dst]=std::make_unique<db_type>(db[other]->clone());else if(op=='M')db[dst]=std::make_unique<db_type>(std::move(*db[other]));else if(op=='A'){*db[dst]=*db[other];stable=before==&db[dst]->event_handler();}else if(op=='V'){*db[dst]=std::move(*db[other]);stable=before==&db[dst]->event_handler();}else{events* other_before=&db[other]->event_handler();db[dst]->swap(*db[other]);stable=before==&db[dst]->event_handler()&&other_before==&db[other]->event_handler();}}
 else if(op=='T'||op=='E'||op=='G'||op=='g'||op=='P'||op=='p'||op=='I'||op=='i'||op=='K'||op=='k'){size_t row;std::cin>>row;if(op=='T')result=std::to_string(db[dst]->get_type(row));else if(op=='E')result=db[dst]->is_empty(row)?"true":"false";else if(op=='G'||op=='g'){int type;std::cin>>type;result=scalar(*db[dst],row,type,op=='g');}else if(op=='P')result=position_json(db[dst]->position(row),db[dst]->end(),*db[dst]);else if(op=='p'){const auto& owner=*db[dst];result=position_json(owner.position(row),owner.end(),owner);}else if(op=='I'||op=='i'){int other,index;std::cin>>other>>index;if(op=='I'){auto hint=db[other]->begin();std::advance(hint,index);auto pos=db[dst]->position(hint,row);result=position_json(pos,db[dst]->end(),*db[dst],&hint,index==int(db[other]->block_size()));}else{const auto& owner=*db[dst];const auto& source=*db[other];auto hint=source.begin();std::advance(hint,index);auto pos=owner.position(hint,row);result=position_json(pos,owner.end(),owner,&hint,index==int(source.block_size()));}}else {int slot;std::cin>>slot;if(op=='K'){auto& hint=*hints[slot];result=position_json(db[dst]->position(hint,row),db[dst]->end(),*db[dst],&hint);}else {const auto& owner=*db[dst];auto& hint=*const_hints[slot];result=position_json(owner.position(hint,row),owner.end(),owner,&hint);}}}
+else if(op=='B'||op=='b'||op=='O'||op=='o'||op=='l'||op=='X'){size_t row;std::cin>>row;if(op=='l'){const auto& owner=*db[dst];result=std::to_string(db_type::logical_position(owner.position(row)));}else if(op=='X'){int type;std::cin>>type;result=positioned_scalar(*db[dst],row,type);}else {int steps=0;if(op=='O'||op=='o')std::cin>>steps;if(op=='B'||op=='O'){auto p=db[dst]->position(row);auto ret=op=='B'?db_type::next_position(p):db_type::advance_position(p,steps);result="["+position_json(ret,db[dst]->end(),*db[dst])+","+position_json(p,db[dst]->end(),*db[dst])+"]";}else {const auto& owner=*db[dst];auto p=owner.position(row);auto ret=op=='b'?db_type::next_position(p):db_type::advance_position(p,steps);result="["+position_json(ret,owner.end(),owner)+","+position_json(p,owner.end(),owner)+"]";}}}
 else if(op=='J'||op=='j'){int other,index;std::cin>>other>>index;if(op=='J'){hints[dst]=db[other]->begin();std::advance(*hints[dst],index);result=capture([&]{hint_node(*hints[dst],*db[other]);});}else{const auto& owner=*db[other];const_hints[dst]=owner.begin();std::advance(*const_hints[dst],index);result=capture([&]{hint_node(*const_hints[dst],owner);});}}
 else if(op=='N'){hints[dst].reset();const_hints[dst].reset();}
 else if(op=='C')db[dst]->clear();else if(op=='S')db[dst]->shrink_to_fit();else if(op=='U')db[dst].reset();else std::abort();}catch(const std::exception& e){result=std::string("\"")+e.what()+"\"";}

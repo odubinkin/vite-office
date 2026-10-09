@@ -9,7 +9,11 @@ import {
 } from "../types.ts";
 import { std_vector, lower_bound } from "../vector_storage.ts";
 import { invalid_arg_error } from "../../global.ts";
-import { throw_block_position_not_found, type BlockPosition } from "../util.ts";
+import {
+  throw_block_position_not_found,
+  type BlockPositionIterator,
+  type BlockPosition,
+} from "../util.ts";
 import { grouped_iterator_type, vector_iterator, type IteratorTraits } from "./iterator.ts";
 import { private_data_forward_update, private_data_no_update } from "../iterator_node.ts";
 import {
@@ -287,4 +291,17 @@ export function is_empty(store: blocks_type, size: number, pos: number | bigint)
       size,
     );
   return store.element_blocks.get(index) === null;
+}
+
+/** Original mutable/const next_position body copies the pair before within-block or next-block movement. @param pos - Valid non-end source position. @returns Independent position. */
+export function next_position<I extends BlockPositionIterator<I>>(
+  pos: BlockPosition<I>,
+): BlockPosition<I> {
+  const ret = { first: pos.first.copy(), second: pos.second };
+  if (pos.second + 1 < pos.first.get().size) ++ret.second;
+  else {
+    ret.first.advance(1);
+    ret.second = 0;
+  }
+  return ret;
 }

@@ -8,7 +8,8 @@
     "suite": "shared",
     "subsystem": "cell-storage",
     "capabilityIds": [
-      "CAP-50a831bc-fda9-4d27-84f4-3661001f4574"
+      "CAP-50a831bc-fda9-4d27-84f4-3661001f4574",
+      "CAP-693e727b-d071-4612-bb1f-e1511d5fa477"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -19,9 +20,12 @@
         "apps/office/src/external/mdds/include/mdds/multi_type_vector/types.ts#element_t",
         "apps/office/src/external/mdds/include/mdds/multi_type_vector/types.test.ts#matches every unchanged native scalar block sequence",
         "scripts/mdds-element-block-native-probe.mjs#verifyDirectory",
-        "vendor/mdds-reference/include/mdds/multi_type_vector/types.hpp#class base_element_block"
+        "vendor/mdds-reference/include/mdds/multi_type_vector/types.hpp#class base_element_block",
+        "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/container.test.ts#matches every complete original constructor operator iterator and destructor sequence",
+        "apps/office/src/external/mdds/include/mdds/multi_type_vector/types.ts#get_block_element_at",
+        "apps/office/src/external/mdds/include/mdds/multi_type_vector/types.ts#has_std_vector_bool_store"
       ],
-      "justification": "Task202610091926-N4ZGYX ports original shared mdds unmanaged element/copyable/default owners and all12 standard aliases, with real shared global runtime exception dependency. All original operations use actual shared delayed store. Genuine full unchanged headers are byte-checked against pinned archives and original LibreOffice patch before ASan/UBSan comparisons; complete3616 sequences/26990 steps/2182 interned full snapshots plus9 mixed ranges retain source behavior. Isolated original bool at compiler/lifetime diagnostics have no successful-result parity claim; original debug message and bounds assertions are reproduced separately. Only original initialized unmanaged primitive scalar blocks over delayed_delete_vector and original global runtime errors are implemented. Erased template/static specialization, explicit scalar conversion, optional original debug compile witness(default false), GC disposal and mutable iterator/scalar-reference adaptation retain defined source responsibilities. Original native mutable bool at fails compilation and const bool at returns a dangling reference, reproduced separately with ASan; no successful result or repair is certified. Other StoreT/allocators, object lifetimes/exceptions, true const/reference ABI, native bool data pointers, invalidated/self-reserve source iterators, managed/noncopyable/clone_value owners, callback macros/dispatcher/traits, complete MTV/Calc columns/browser and whole-module parity remain unverified. Mixed numeric InputIt conversions for9 scalar families are compared; mixed bigint-source conversions and undefined arithmetic remain unverified.",
+      "justification": "Task202610091926-N4ZGYX ports original shared mdds unmanaged element/copyable/default owners and all12 standard aliases, with real shared global runtime exception dependency. All original operations use actual shared delayed store. Genuine full unchanged headers are byte-checked against pinned archives and original LibreOffice patch before ASan/UBSan comparisons; complete3616 sequences/26990 steps/2182 interned full snapshots plus9 mixed ranges retain source behavior. Isolated original bool at compiler/lifetime diagnostics have no successful-result parity claim; original debug message and bounds assertions are reproduced separately. Only original initialized unmanaged primitive scalar blocks over delayed_delete_vector and original global runtime errors are implemented. Erased template/static specialization, explicit scalar conversion, optional original debug compile witness(default false), GC disposal and mutable iterator/scalar-reference adaptation retain defined source responsibilities. Original native mutable bool at fails compilation and const bool at returns a dangling reference, reproduced separately with ASan; no successful result or repair is certified. Other StoreT/allocators, object lifetimes/exceptions, true const/reference ABI, native bool data pointers, invalidated/self-reserve source iterators, managed/noncopyable/clone_value owners, callback macros/dispatcher/traits, complete MTV/Calc columns/browser and whole-module parity remain unverified. Mixed numeric InputIt conversions for9 scalar families are compared; mixed bigint-source conversions and undefined arithmetic remain unverified. Task202610092239-B0Y0WD implements the finite original static position API group. Selected pinned no_trace/default-execution libc++ target, valid initialized mutable/const positions and signed32 steps remaining inside the owner or reaching end. Copies preserve source iterators/offsets. Logical extraction is checked on non-end positions; final end transition records cached node state without dereference/private-field claims. Static typed get covers all12 matching nonempty unmanaged standard scalar families; original bool-store cbegin/advance and nonbool at remain distinct. default_element_block supplies the erased types_util has_std_vector_bool_store trait for actual delayed_delete_vector<T>. Custom StoreT/managed blocks, empty or mismatching static get, invalidated/source-beyond/end dereference, negative/unsafe row metadata, unbounded integer overflow, native ABI/const qualifiers and arbitrary values remain unverified. Segment mutators, trace/debug/SIMD and full Calc column/document/browser remain gaps. No whole-module/default/QA-suite certification.",
       "knownViolations": [],
       "localSymbols": [
         "element_t",
@@ -89,7 +93,9 @@
         "convert",
         "create_block_with_value",
         "create_block_with_values",
-        "overwrite_values"
+        "overwrite_values",
+        "BlockElementAccess",
+        "get_block_element_at"
       ],
       "sourceResponsibility": "aligned",
       "upstreamFile": "vendor/mdds-reference/include/mdds/multi_type_vector/types.hpp",
@@ -97,7 +103,8 @@
         "class base_element_block",
         "class element_block",
         "class copyable_element_block",
-        "struct default_element_block"
+        "struct default_element_block",
+        "get_block_element_at"
       ]
     }
   }

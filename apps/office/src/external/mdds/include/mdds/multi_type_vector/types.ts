@@ -508,6 +508,8 @@ export function default_element_block<T extends DelayedVectorValue>(
   /** Original default_element_block specialization over actual shared storage. */
   class default_element_block extends copyable_element_block<T> {
     public static readonly block_type = TypeId;
+    /** Erased original types_util bool-store trait for the actual default delayed_delete_vector<T>. */
+    public static readonly has_std_vector_bool_store = typeof zero === "boolean";
     public static readonly debug = debug;
     /** Retains original scalar type conversion at call boundaries. @param value - Scalar. @returns Native T. */
     public static convert(value: T): T {
@@ -550,4 +552,24 @@ export function default_element_block<T extends DelayedVectorValue>(
     }
   }
   return default_element_block;
+}
+
+/** Original erased Blk static access and compile-time store trait, borrowing actual scalar ownership. */
+export interface BlockElementAccess<T extends DelayedVectorValue> {
+  readonly has_std_vector_bool_store: boolean;
+  at(data: base_element_block, offset: number): T;
+  cbegin(data: base_element_block): delayed_delete_vector_iterator<T>;
+}
+/** Original types.hpp bool-store dispatch: proxy-safe iterator read or checked at. @param Blk - Original template alias and store trait. @param data - Actual owned block. @param offset - Caller offset. @returns Native scalar value. */
+export function get_block_element_at<T extends DelayedVectorValue>(
+  Blk: BlockElementAccess<T>,
+  data: base_element_block,
+  offset: number,
+): T {
+  if (Blk.has_std_vector_bool_store) {
+    const it = Blk.cbegin(data);
+    it.advance(offset);
+    return it.get();
+  }
+  return Blk.at(data, offset);
 }

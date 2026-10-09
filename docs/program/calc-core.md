@@ -1177,3 +1177,35 @@ wrong native scalar types, generic custom blocks, arbitrary values, allocator/AB
 compile-time qualifications, static typed-position get/next/advance wrappers,
 segment mutations and complete Calc column/document/browser remain unverified.
 Whole module/behavior/contract/default parity flags remain false/unverified.
+
+## Shared SoA position navigation and typed reads
+
+Task `202610092239-B0Y0WD` ports original `next_position`,
+`advance_position`, `logical_position` and static typed position `get` on
+`soa/multi_type_vector`. Mutable and const navigation copy the original
+iterator/offset pair. Within-block movement and boundary crossing retain
+source order; advancement forwards the existing shared `util.advance_position`
+implementation. Logical extraction reads the cached node directly.
+
+The original `types.hpp` `get_block_element_at` uses its bool-store trait to
+read via `cbegin` and iterator advancement; other stores use `at`. The actual
+shared default block supplies that erased compile-time trait for its original
+`delayed_delete_vector<T>`, and typed reads retain the existing block owners.
+No replacement position or scalar engine is introduced.
+
+The unchanged-header native corpus now has 350 complete sequences, 15734
+operations, 16084 complete initial/operation records and 7161 lossless
+snapshots. Every prior 290 sequence and its complete states/final events is
+retained. Appended actual public callers cover all 12 scalar families,
+mutable/const copies, within/across blocks, zero/forward/backward movement,
+multiple-cell empty blocks, and final transition to end without endpoint
+dereference. Native public `set` only prepares compound input; it is not a
+ported or certified mutator.
+
+The finite group is recorded as implemented; complete container/default,
+custom/managed storage, invalid positions/lifetimes, ABI/qualifiers,
+trace/debug/SIMD, arbitrary values and Calc column/document/browser behavior
+remain unverified. Source file boundaries remain original; the existing
+`types.ts` and now `soa/main.ts` exceed the 500-line review target but remain
+below the enforced 1000-line limit. Their declarations and original member
+bodies retain their upstream responsibilities rather than an artificial split.

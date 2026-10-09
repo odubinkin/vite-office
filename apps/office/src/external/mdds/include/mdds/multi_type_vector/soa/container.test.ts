@@ -383,7 +383,35 @@ describe("original SoA container lifetime", /** Declares original native ownersh
             constHints[dst] = null;
           } else {
             const row = typeof args[0] === "string" ? BigInt(args[0]) : (args[0] as number);
-            if (op === "T") result = destination.get_type(row);
+            if (op === "B" || op === "O") {
+              const pos = destination.position(row);
+              const ret =
+                op === "B"
+                  ? multi_type_vector.next_position(pos)
+                  : multi_type_vector.advance_position(pos, args[1] as number);
+              result = [
+                positionResult(ret, destination.end(), destination),
+                positionResult(pos, destination.end(), destination),
+              ];
+            } else if (op === "b" || op === "o") {
+              const pos = destination.cposition(row);
+              const ret =
+                op === "b"
+                  ? multi_type_vector.next_position(pos)
+                  : multi_type_vector.advance_position(pos, args[1] as number);
+              result = [
+                positionResult(ret, destination.cend(), destination),
+                positionResult(pos, destination.cend(), destination),
+              ];
+            } else if (op === "l")
+              result = multi_type_vector.logical_position(destination.cposition(row));
+            else if (op === "X") {
+              const got = multi_type_vector.get(
+                destination.cposition(row),
+                aliases[args[1] as number] as BlockType,
+              );
+              result = typeof got === "bigint" ? got.toString() : got;
+            } else if (op === "T") result = destination.get_type(row);
             else if (op === "E") result = destination.is_empty(row);
             else if (op === "G" || op === "g") {
               const got = destination.get(row, callbacks[args[1] as number] as ContainerCallbacks);
