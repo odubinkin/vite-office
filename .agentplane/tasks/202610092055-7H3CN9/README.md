@@ -1,10 +1,11 @@
 ---
 id: "202610092055-7H3CN9"
 title: "Own table horizontal orientation in original native frame item"
-status: "DOING"
+result_summary: "Original SwFormatHoriOrient owns table orientation; native dialog orientation/width ItemSet replaces changed scalar replay, original layout/ODT/history verified."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -50,6 +51,9 @@ comments:
   -
     author: "CODER"
     body: "Start: bind verified native horizontal ownership implementation before final quality and verification."
+  -
+    author: "CODER"
+    body: "Verified: original native horizontal frame item owns orientation; native dialog orientation and width use ItemSet, effective layout/ODT and original direct/inherited history pass.3517 accepted cases38fresh; eight whole-file Istanbul100all-four0negative/maphash identity, nine statics7browser/nine metadata. Exact semantic33c4750 same-agent non-independent qualityPASS and refreshed verification persisted before finish. Full not due6/10; LR native ownership and broader parity remain incomplete."
 events:
   -
     type: "status"
@@ -71,8 +75,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Current semantic33c4750567c1f043b45ef6d5db2a9caf7c8b6223 exact-SHA qualityPASS same-agent non-independent;3517 accepted cases38fresh, eight whole Istanbul100 all-four0negative/maphash identities, nine absent statics7browser/nine restored metadata,619 old tests and16 canonical prefixes preserved with17 precise migrations12files. Bounded English evidence; full not due6/10."
+  -
+    type: "status"
+    at: "2026-10-09T21:23:30.475Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: original native horizontal frame item owns orientation; native dialog orientation and width use ItemSet, effective layout/ODT and original direct/inherited history pass.3517 accepted cases38fresh; eight whole-file Istanbul100all-four0negative/maphash identity, nine statics7browser/nine metadata. Exact semantic33c4750 same-agent non-independent qualityPASS and refreshed verification persisted before finish. Full not due6/10; LR native ownership and broader parity remain incomplete."
 doc_version: 3
-doc_updated_at: "2026-10-09T21:23:02.003Z"
+doc_updated_at: "2026-10-09T21:23:30.476Z"
 doc_updated_by: "CODER"
 description: "Port original SwFormatHoriOrient and native item/getter/default ownership, remove mirrored table orientation/align storage and native dialog width-orientation scalar replay. Original layout/UI/history and ODT read effective native orientation; LR spacing remains explicitly separate. Entire final changed-module Istanbul100 and upstream-absent related tests preserve registered deviations and canonical histories."
 sections:
@@ -129,6 +140,10 @@ sections:
 
     - Observation: Targeted closure50 cases and existing Outside exporter1 case passed; partial profile strict100 threshold exits retained. Aggregate original current source maps/hash identities verified100 all-four, zero negatives.
       Resolution:3517 unique accepted cases,38 fresh. Routine JSDoc check caught one new callback comment, fixed without behavior change. Actual baseline619 old tests (the approved Verify Steps inherited616 from prior turn); all619 preserved except17 exact source-backed operations in12 files,607 byte identical. This count correction does not reduce acceptance scope. Eight production hashes remain identical to initial current task profile.
+extensions:
+  implementation_commit:
+    hash: "33c4750567c1f043b45ef6d5db2a9caf7c8b6223"
+    message: "🚧 7H3CN9 table: own horizontal orientation in native frame item"
 id_source: "generated"
 ---
 ## Summary
