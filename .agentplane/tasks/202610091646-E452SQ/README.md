@@ -1,10 +1,11 @@
 ---
 id: "202610091646-E452SQ"
 title: "Make table layout splitting native item-owned through core and UI"
-status: "DOING"
+result_summary: "Native table split item owns core layout and Text Flow input"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 19
+revision: 20
 origin:
   system: "manual"
 depends_on: []
@@ -51,6 +52,9 @@ comments:
   -
     author: "CODER"
     body: "Implementation: native split item ownership through physical layout, shell and Text Flow, verified1205cases and entire five-module Istanbul100; semantic commit bound."
+  -
+    author: "CODER"
+    body: "Verified: native table split item owns physical layout and authoritative Text Flow input;1205related cases23fresh all pass, complete five-module Istanbul100 and seven static/seven metadata gates pass, canonical prefixes preserved, semantic37c5510fe83c73c1a205a40dc9812152ca8721cf with same-agent non-independent quality."
 events:
   -
     type: "status"
@@ -78,8 +82,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: final semantic37c5510fe83c73c1a205a40dc9812152ca8721cf binding docs now stable. Same accepted single upstream-absent1205case23fresh current-source profile and entire five-module Istanbul100/zero-negative, seven static/seven metadata/final formatting gates and ten canonical prefixes594old tests1843unrelated files pass. Quality explicitly same-agent non-independent pass; only lifecycle verification re-recorded after docs, no tests replayed."
+  -
+    type: "status"
+    at: "2026-10-09T17:04:26.067Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native table split item owns physical layout and authoritative Text Flow input;1205related cases23fresh all pass, complete five-module Istanbul100 and seven static/seven metadata gates pass, canonical prefixes preserved, semantic37c5510fe83c73c1a205a40dc9812152ca8721cf with same-agent non-independent quality."
 doc_version: 3
-doc_updated_at: "2026-10-09T17:04:01.213Z"
+doc_updated_at: "2026-10-09T17:04:26.068Z"
 doc_updated_by: "CODER"
 description: "Correction8/10 after XJTGF0: remove mirrored scalar layoutSplit from SwTable, read original effective SwFormatLayoutSplit in physical layout and native table dialog input, capture native shell item and restore represented master position reaction; verify original history/page/UI owners."
 sections:
