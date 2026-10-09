@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "task_id": "202610091909-KYNP7H",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-09T19:23:14.965Z",
+  "verdict": "pass",
+  "summary": "Reviewed original shared delayed vector storage against unchanged genuine mdds bytes and approved primitive scope; Calc and changed shared owner actual100, portable and all declared checks pass.",
+  "evaluated_sha": "cc7c6700bba401b23130465236aa0935181215e4",
+  "blueprint_digest": "ba4dc2da16b8eb613db42e946797ad1ce1f7f996a70ff561c9d61d019f7aa178",
+  "findings": [
+    "Original front offset/clear_removed order and vector-only swap remain intact; 985 sequences retain6080 complete two-owner observations with502 losslessly interned snapshots. Native raw/hash integrity and borrowed swap tests substantiate finite defined behavior. Inventory maps the actual shared source boundary and leaves full module/allocator/value-lifetime parity unverified; no coverage exclusions, fake Calc value owner, Writer repair or scope expansion."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610091909-KYNP7H/README.md",
+    "output/playwright/task13-fixture-integrity.log",
+    "output/playwright/task13-native-check.log",
+    "output/playwright/task13-calc-coverage.log",
+    "output/playwright/task13-shared-final.log",
+    "output/playwright/task13-verification.txt"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Native other-STL capacity, generic object/allocator/lifetime/exception families, implicit moves, invalidated iterators, bool data pointers, full element blocks/MTV/columns and UI remain unverified; upstream bool QA mapping is context only. Full suite next due task10; task3/10."
+  ]
+}
