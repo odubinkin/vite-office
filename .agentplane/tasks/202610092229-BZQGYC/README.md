@@ -4,7 +4,7 @@ title: "Restore native table history directly from original item sets"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -17,16 +17,43 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-09T23:05:08.533Z"
+  updated_by: "CODER"
+  note: "Final exact60eb3177c295f0c20777d089a41e0d11cf9a2a0a with read and validated same-agent non-independent quality PASS;14468app,15tool,122inventory,2resources,303browser accepted. Actual whole app and both changed modules100all-four/zero-negative/complete current maps. Actual exits and failure chronology retained; native direct items/owners/paint and all migration/canonical preservation gates pass.9restored metadata and final TS7/build/static checks pass; reference restored. Persist refreshed verification and quality artifacts before canonical finish."
   attempts: 0
-commit: null
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-09T23:04:36.344Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent non-independent exact-SHA review of60eb3177c295f0c20777d089a41e0d11cf9a2a0a: source-shaped native SaveTable restoration, real repaired full suites, actual complete current coverage and retained migration/inventory histories pass; broad parity remains incomplete."
+  evaluated_sha: "60eb3177c295f0c20777d089a41e0d11cf9a2a0a"
+  blueprint_digest: "7b6305bd329e9a51d23eff053b482f48b4d9919b75bd25d8f2f6ad3abb0e60f6"
+  evidence_refs:
+    - ".agentplane/tasks/202610092229-BZQGYC/README.md"
+    - ".agentplane/tasks/202610092229-BZQGYC/quality/20261009-230436344-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610092229-BZQGYC/quality/20261009-230436344-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610092229-BZQGYC/quality/20261009-230436344-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610092229-BZQGYC/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610092229-BZQGYC/evidence/verification.json"
+    - "apps/office/node_modules/.cache/parity-coverage/BZQGYC/coverage-proof.json"
+    - "apps/office/node_modules/.cache/parity-coverage/BZQGYC/browser-proof.json"
+    - "apps/office/node_modules/.cache/parity-coverage/BZQGYC/preservation-proof.json"
+    - "git semantic60eb3177c295f0c20777d089a41e0d11cf9a2a0a; current native source hash6121b945828e2d3ab8f92c3c03ca079eff9ad41af350f8e74479f99f54d9c5f2"
+  findings:
+    - "Read pinned SaveTable capture/restoration and native table default1 anchors; inspect exact semantic diff and actual source/case evidence. Scalar SaveTable snapshot/deletion/replay and redundant direct-set lock are removed without new production facade; original direct/inherited native context, owners, cursor/list and paint survive3actual cycles."
+    - "Actual14468app/15tool/122inventory/2resource and303browser cases accepted;20browser exact failed IDs match original303case retained list,283passing cases not replayed. Initial failure chronology, coverage map omission, JSON overwrite and fresh fixture errors are explicit. Final full app and XML closure complete maps are identical/current; actual cumulative100all-four and zero negatives. Whole changed untbl/configuration gates100, configuration classification retains single ownership. No fabricated counters or prior-task maps."
+    - "Review preservation:629of631old unit files byte-identical; source-backed6operations in2files and8browser migration groups across7files retain original geometry/paint/admission/history assertions. Native default header1 retained; only plain-split fixtures set0explicitly.2canonical scalar/status/default/classification/array histories and parent Findings prefix retained. Exact scoped source/fixture/config repairs required by approved full acceptance; registeredIO/recovery deviations unchanged."
+commit:
+  hash: "60eb3177c295f0c20777d089a41e0d11cf9a2a0a"
+  message: "🚧 BZQGYC writer: restore native table history without scalar replay"
 comments:
   -
     author: "CODER"
     body: "Start: Execute the approved tenth native Writer parity correction and due full upstream-absent suites, preserving original item sets, historical tests and inventory prefixes."
+  -
+    author: "CODER"
+    body: "Start: Bind verified native item-set history and due full-gate repairs to exact semantic SHA before final verification and explicitly same-agent non-independent quality."
 events:
   -
     type: "status"
@@ -35,8 +62,27 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: Execute the approved tenth native Writer parity correction and due full upstream-absent suites, preserving original item sets, historical tests and inventory prefixes."
+  -
+    type: "status"
+    at: "2026-10-09T23:04:34.182Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+    note: "Start: Bind verified native item-set history and due full-gate repairs to exact semantic SHA before final verification and explicitly same-agent non-independent quality."
+  -
+    type: "verify"
+    at: "2026-10-09T23:04:35.004Z"
+    author: "CODER"
+    state: "ok"
+    note: "Exact semantic60eb3177c295f0c20777d089a41e0d11cf9a2a0a:14468app,15tooling,122inventory,2resource and303browser accepted; whole final app and both changed modules actual Istanbul100all-four/zero-negative/current complete-map merge. Strict focused/full99.99 exits retained honestly, final independent cumulative counter gate passes. Native history removes scalar capture/replay; source-backed fixtures and ownership repair; final TS7/static/build and9restored metadata pass. Canonical/test preservation proved; known native/ODT gaps remain. Same-agent exact-SHA quality pending."
+  -
+    type: "verify"
+    at: "2026-10-09T23:05:08.533Z"
+    author: "CODER"
+    state: "ok"
+    note: "Final exact60eb3177c295f0c20777d089a41e0d11cf9a2a0a with read and validated same-agent non-independent quality PASS;14468app,15tool,122inventory,2resources,303browser accepted. Actual whole app and both changed modules100all-four/zero-negative/complete current maps. Actual exits and failure chronology retained; native direct items/owners/paint and all migration/canonical preservation gates pass.9restored metadata and final TS7/build/static checks pass; reference restored. Persist refreshed verification and quality artifacts before canonical finish."
 doc_version: 3
-doc_updated_at: "2026-10-09T23:03:46.463Z"
+doc_updated_at: "2026-10-09T23:05:08.586Z"
 doc_updated_by: "CODER"
 description: "Correction10/10 after SZKQTN. Remove SaveTable scalar GetFormat/deletion/replay adapter from untbl.ts, matching pinned untbl.cxx direct item-set capture and restore; preserve native table frame and surviving graph ownership. Add fresh native and mounted behavioral evidence, source-backed migration of the prior empty-replay spy expectation, append canonical inventory without parity promotion. Run full application, tooling, inventory coverage and browser suites once physically upstream absent, repair real failures, then restore source audits. Standing iterative user authorization; local Writer branch only."
 sections:
@@ -53,7 +99,70 @@ sections:
 
     Initial full14465pass2fail; final revalidation fixes source-backed malformed fixture and fresh parent assumption, actual discovery config and invalid inventory note field. Raw final full branch gate99.99 and focused partial-map processes return1; retained honest chronology, actual same-task identical-map cumulative100 gate passes. Initial fresh XML fixture failed its own type/space expectation; final1case passes with complete characters and original ODF text:s. Browser locators now admit source default1 native th cells;2plain-split fixtures explicitly disable repeating rows; all original geometry/border/selection/history assertions retained. Initial browser JSON overwrite recovered from complete original303case list log and20unique repaired JSON with exact identity proof.
 
-    Static format/lint/TS7/dependency/docs/file-size/build/static-smoke pass upstream absent. Restored source registry build/source-tree/provenance/registry/resources/invariants/parity/routing/doctor9allpass. Doctor0errors,2existing warnings for older managed hookshim and historical PJV0JK implementation hash; unchanged outside this scope. Preservation:1839original source/script/registry paths1834unchanged,631old unit files629unchanged with6exact operations in2files;7browser files8operation groups;2canonical historical prefixes and parent Findings prefix retained. Reference restored. Exact semantic SHA and explicitly same-agent non-independent quality and clean DONE proof pending.
+    Static format/lint/TS7/dependency/docs/file-size/build/static-smoke pass upstream absent. Restored source registry build/source-tree/provenance/registry/resources/invariants/parity/routing/doctor9allpass. Doctor0errors,2existing warnings for older managed hookshim and historical PJV0JK implementation hash; unchanged outside this scope. Preservation:1839original source/script/registry paths1834unchanged,631old unit files629unchanged with6exact operations in2files;7browser files8operation groups;2canonical historical prefixes and parent Findings prefix retained. Reference restored. Exact semantic60eb3177c295f0c20777d089a41e0d11cf9a2a0a and same-agent non-independent quality PASS recorded at quality/20261009-230436344-recovery-context/quality-report.json; evaluated SHA read and validated. Final clean DONE/reference proof follows canonical closure.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-09T23:04:35.004Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Exact semantic60eb3177c295f0c20777d089a41e0d11cf9a2a0a:14468app,15tooling,122inventory,2resource and303browser accepted; whole final app and both changed modules actual Istanbul100all-four/zero-negative/current complete-map merge. Strict focused/full99.99 exits retained honestly, final independent cumulative counter gate passes. Native history removes scalar capture/replay; source-backed fixtures and ownership repair; final TS7/static/build and9restored metadata pass. Canonical/test preservation proved; known native/ODT gaps remain. Same-agent exact-SHA quality pending.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T23:04:34.182Z, excerpt_hash=sha256:4cf519286367c35275cad367510ba4fb790766c272418db724c6cefdeeb36498
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610092229-BZQGYC/blueprint/resolved-snapshot.json
+    - old_digest: 7b6305bd329e9a51d23eff053b482f48b4d9919b75bd25d8f2f6ad3abb0e60f6
+    - current_digest: 7b6305bd329e9a51d23eff053b482f48b4d9919b75bd25d8f2f6ad3abb0e60f6
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610092229-BZQGYC
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610092229-BZQGYC
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-09T23:05:08.533Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Final exact60eb3177c295f0c20777d089a41e0d11cf9a2a0a with read and validated same-agent non-independent quality PASS;14468app,15tool,122inventory,2resources,303browser accepted. Actual whole app and both changed modules100all-four/zero-negative/complete current maps. Actual exits and failure chronology retained; native direct items/owners/paint and all migration/canonical preservation gates pass.9restored metadata and final TS7/build/static checks pass; reference restored. Persist refreshed verification and quality artifacts before canonical finish.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T23:05:08.154Z, excerpt_hash=sha256:4cf519286367c35275cad367510ba4fb790766c272418db724c6cefdeeb36498
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610092229-BZQGYC/blueprint/resolved-snapshot.json
+    - old_digest: 7b6305bd329e9a51d23eff053b482f48b4d9919b75bd25d8f2f6ad3abb0e60f6
+    - current_digest: 7b6305bd329e9a51d23eff053b482f48b4d9919b75bd25d8f2f6ad3abb0e60f6
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610092229-BZQGYC
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610092229-BZQGYC --result verified-202610092229-BZQGYC --commit 60eb3177c295f0c20777d089a41e0d11cf9a2a0a
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only the task semantic commit if native item-set behavior regresses; preserve verification history and unrelated user work. No reset, merge, publication or network access."
   Findings: |-
     Previous goal turn completed verified correction39YNA1 with a clean DONE repository; progress. Read-only current source confirms SaveTable retains a scalar GetFormat object after deleting all represented fields, then replays SetFormat on restore before restoring the original SfxItemSet. Pinned untbl.cxx saves and restores native direct sets without this adapter. Existing source-shaped frame invalidation remains; full native cache/redline/formula/nested ownership and inherited XML attribute export remain explicit residuals. No source snapshots, Python files, raw maps, logs or helper programs will be stored in AgentPlane artifacts.
@@ -96,7 +205,70 @@ Command: All40 exact upstream-absent command attempts and9 restored metadata com
 
 Initial full14465pass2fail; final revalidation fixes source-backed malformed fixture and fresh parent assumption, actual discovery config and invalid inventory note field. Raw final full branch gate99.99 and focused partial-map processes return1; retained honest chronology, actual same-task identical-map cumulative100 gate passes. Initial fresh XML fixture failed its own type/space expectation; final1case passes with complete characters and original ODF text:s. Browser locators now admit source default1 native th cells;2plain-split fixtures explicitly disable repeating rows; all original geometry/border/selection/history assertions retained. Initial browser JSON overwrite recovered from complete original303case list log and20unique repaired JSON with exact identity proof.
 
-Static format/lint/TS7/dependency/docs/file-size/build/static-smoke pass upstream absent. Restored source registry build/source-tree/provenance/registry/resources/invariants/parity/routing/doctor9allpass. Doctor0errors,2existing warnings for older managed hookshim and historical PJV0JK implementation hash; unchanged outside this scope. Preservation:1839original source/script/registry paths1834unchanged,631old unit files629unchanged with6exact operations in2files;7browser files8operation groups;2canonical historical prefixes and parent Findings prefix retained. Reference restored. Exact semantic SHA and explicitly same-agent non-independent quality and clean DONE proof pending.
+Static format/lint/TS7/dependency/docs/file-size/build/static-smoke pass upstream absent. Restored source registry build/source-tree/provenance/registry/resources/invariants/parity/routing/doctor9allpass. Doctor0errors,2existing warnings for older managed hookshim and historical PJV0JK implementation hash; unchanged outside this scope. Preservation:1839original source/script/registry paths1834unchanged,631old unit files629unchanged with6exact operations in2files;7browser files8operation groups;2canonical historical prefixes and parent Findings prefix retained. Reference restored. Exact semantic60eb3177c295f0c20777d089a41e0d11cf9a2a0a and same-agent non-independent quality PASS recorded at quality/20261009-230436344-recovery-context/quality-report.json; evaluated SHA read and validated. Final clean DONE/reference proof follows canonical closure.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-09T23:04:35.004Z — VERIFY — ok
+
+By: CODER
+
+Note: Exact semantic60eb3177c295f0c20777d089a41e0d11cf9a2a0a:14468app,15tooling,122inventory,2resource and303browser accepted; whole final app and both changed modules actual Istanbul100all-four/zero-negative/current complete-map merge. Strict focused/full99.99 exits retained honestly, final independent cumulative counter gate passes. Native history removes scalar capture/replay; source-backed fixtures and ownership repair; final TS7/static/build and9restored metadata pass. Canonical/test preservation proved; known native/ODT gaps remain. Same-agent exact-SHA quality pending.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T23:04:34.182Z, excerpt_hash=sha256:4cf519286367c35275cad367510ba4fb790766c272418db724c6cefdeeb36498
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610092229-BZQGYC/blueprint/resolved-snapshot.json
+- old_digest: 7b6305bd329e9a51d23eff053b482f48b4d9919b75bd25d8f2f6ad3abb0e60f6
+- current_digest: 7b6305bd329e9a51d23eff053b482f48b4d9919b75bd25d8f2f6ad3abb0e60f6
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610092229-BZQGYC
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610092229-BZQGYC
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-09T23:05:08.533Z — VERIFY — ok
+
+By: CODER
+
+Note: Final exact60eb3177c295f0c20777d089a41e0d11cf9a2a0a with read and validated same-agent non-independent quality PASS;14468app,15tool,122inventory,2resources,303browser accepted. Actual whole app and both changed modules100all-four/zero-negative/complete current maps. Actual exits and failure chronology retained; native direct items/owners/paint and all migration/canonical preservation gates pass.9restored metadata and final TS7/build/static checks pass; reference restored. Persist refreshed verification and quality artifacts before canonical finish.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T23:05:08.154Z, excerpt_hash=sha256:4cf519286367c35275cad367510ba4fb790766c272418db724c6cefdeeb36498
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610092229-BZQGYC/blueprint/resolved-snapshot.json
+- old_digest: 7b6305bd329e9a51d23eff053b482f48b4d9919b75bd25d8f2f6ad3abb0e60f6
+- current_digest: 7b6305bd329e9a51d23eff053b482f48b4d9919b75bd25d8f2f6ad3abb0e60f6
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610092229-BZQGYC
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610092229-BZQGYC --result verified-202610092229-BZQGYC --commit 60eb3177c295f0c20777d089a41e0d11cf9a2a0a
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 

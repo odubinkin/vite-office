@@ -1,7 +1,7 @@
 {
   "taskId": "202610092229-BZQGYC",
   "parent": "202609240501-C9TN6M",
-  "status": "checks-passed-quality-pending",
+  "status": "checks-passed-exact-SHA-quality-pass",
   "goal": "active/incomplete",
   "previousFullBaseline": "202610091732-SZKQTN",
   "correctionAfterPreviousFull": 10,
@@ -757,5 +757,14 @@
     "An upstream-absence formatter guard raced the completed wrapper restoration and rejected work before any test/format command; recovered through owned absence wrapper. No test ran with pinned upstream present.",
     "Tooling/inventory/resources and final static gates pass. Inventory keeps its existing enforced V8 provider100; changed production/configuration and full app actual Istanbul100/zero-negative.",
     "Quality must bind the exact semantic commit and explicitly disclose same-agent non-independent evaluation. No force/reopen/threshold weakening permitted."
-  ]
+  ],
+  "semanticCommit": "60eb3177c295f0c20777d089a41e0d11cf9a2a0a",
+  "quality": {
+    "verdict": "pass",
+    "evaluatedSha": "60eb3177c295f0c20777d089a41e0d11cf9a2a0a",
+    "sameAgentNonIndependent": true,
+    "path": ".agentplane/tasks/202610092229-BZQGYC/quality/20261009-230436344-recovery-context/quality-report.json"
+  },
+  "newFullBaseline": "202610092229-BZQGYC",
+  "correctionsSinceNewFull": 0
 }
