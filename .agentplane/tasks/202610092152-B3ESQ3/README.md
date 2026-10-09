@@ -1,10 +1,11 @@
 ---
 id: "202610092152-B3ESQ3"
 title: "Apply native table dialog attributes in one original ItemSet"
-status: "DOING"
+result_summary: "Native table properties copy complete original SET UL/layout-split/collapsing items into one geometry ItemSet and dispatch SetTableAttr once after separators; removes scalar native flag replay/separate UL writes. Verified current whole-module Istanbul100 and369related passing cases, mounted history/reset/ODT, unchanged627old tests and inventory. Existing geometry scalar/legacy and broader parity gaps remain explicit."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -51,6 +52,9 @@ comments:
   -
     author: "CODER"
     body: "Start: semantic implementation eebc5feb8a9aefd7a6f5ba357a868c00271587b7 is bound; all approved focused verification passed, exact-SHA quality and refreshed persistence precede finish."
+  -
+    author: "CODER"
+    body: "Verified: Native table dialog represented original SET frame items and geometry now use one ItemSet after changed separators, matching pinned tabsh.cxx408..440. 369latest related cases/9fresh and whole final tabsh Istanbul100 all four dimensions pass;9absent statics/currentbuild/7browser and9restored metadata pass. Exact semantic SHA same-agent non-independent qualityPASS and refreshed verification persisted. All627old tests unchanged/2canonical prefixes retained; reference restored; full not due8of10; broad goal remains active."
 events:
   -
     type: "status"
@@ -72,8 +76,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Semantic eebc5feb8a9aefd7a6f5ba357a868c00271587b7 exact-SHA same-agent non-independent qualityPASS. 56files/369latest cases including9fresh pass; final complete tabsh.ts actual current-hash identical-map Istanbul158lines/180statements/20functions/141branches all100,zero negatives. All9absent statics/currentbuild/7browser and9restored metadata pass;627old tests byte unchanged/2canonical prefixes retained. English bounded evidence/verification.json; full not due8of10; broad goal active/incomplete."
+  -
+    type: "status"
+    at: "2026-10-09T22:08:54.526Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Native table dialog represented original SET frame items and geometry now use one ItemSet after changed separators, matching pinned tabsh.cxx408..440. 369latest related cases/9fresh and whole final tabsh Istanbul100 all four dimensions pass;9absent statics/currentbuild/7browser and9restored metadata pass. Exact semantic SHA same-agent non-independent qualityPASS and refreshed verification persisted. All627old tests unchanged/2canonical prefixes retained; reference restored; full not due8of10; broad goal remains active."
 doc_version: 3
-doc_updated_at: "2026-10-09T22:08:32.538Z"
+doc_updated_at: "2026-10-09T22:08:54.527Z"
 doc_updated_by: "CODER"
 description: "Remove remaining native table dialog split/collapsing scalar replay and separate UL application; copy explicitly SET original supported items into source-shaped native attribute set, apply once after separator operations."
 sections:
@@ -133,6 +144,10 @@ sections:
     Coverage closure: Six related files/48 cases and final fresh selection file/7 cases passed; standalone focused-profile processes retained strict100 thresholds and exited1 for their partial coverage. The current-source complete-map aggregation gate passed all four100% totals:158lines/180statements/20functions/141branches. Latest per-file evidence overrides earlier failed fresh cases;56files/369cases including9fresh are all passing. No production repair, pre-change map, artificial counter or earlier-task coverage was used.
 
     Final verification: All9 absent statics/build/browser checks pass (7browser cases), refreshed6test-sensitive statics pass after selection coverage tests, and all9 restored metadata checks pass. Doctor0errors/2existing warnings (old hook shim and historical PJV0JK missing implementation hash). Compiler CLI7.0.2/API6.0.2 and Istanbul4.1.10 verified from installed packages; obsolete native-preview package discovery was corrected. Reference restored; all627old tests byte unchanged;2canonical histories preserved. Exact semantic SHA eebc5feb8a9aefd7a6f5ba357a868c00271587b7 reviewedPASS by same agent, explicitly non-independent. Bounded English evidence26.5KiB contains no upstream sources/helpers/Python/raw maps/logs. Refreshed AP verification/quality persistence precedes canonical finish.
+extensions:
+  implementation_commit:
+    hash: "eebc5feb8a9aefd7a6f5ba357a868c00271587b7"
+    message: "🚧 B3ESQ3 writer: apply native table attributes in one ItemSet"
 id_source: "generated"
 ---
 ## Summary
