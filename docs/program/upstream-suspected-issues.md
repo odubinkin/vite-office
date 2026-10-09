@@ -276,6 +276,54 @@ this case. A trailing reserved-entry convention or restrictions on deletion
 offsets have not been established. Decision: preserve the count and trailing
 value; do not change the native expression.
 
+## CALC-014: Selected-tab self-move aborts inside the compared native library
+
+Status: native libc++220106 sanitizer failure; not a portable LibreOffice defect
+classification or a defined-outcome parity claim.
+
+Pinned `markdata.cxx:62` move assignment assigns `maTabMarked` from its moved
+source. Construct a selection with explicit bounds, select sheet0, then assign
+it from `std::move` of itself. On the compared libc++220106 runtime, ASan reports
+heap-use-after-free in `std::__tree::__move_assign`, called by original
+`ScMarkData::operator=(ScMarkData&&)`. The original owner and library methods are
+unchanged. This concerns self-aliasing and library implementation; caller use
+and results on other standard libraries remain unreviewed.
+
+The research probe provides a separate `--self-move-diagnostic` mode. Defined
+portable fixtures use distinct-owner moves; the sanitizer diagnostic is retained
+separately instead of inventing a successful native result. Decision: retain the
+original move expressions; no upstream self-move guard or library repair is added.
+
+## CALC-015: A previous empty column can affect later occupied-column envelopes
+
+Status: original initialized output reproduced; consumer intent unreviewed.
+
+Pinned `markdata.cxx:701` `GetSelectionCover` sets `bPrevColUnMarked` true at
+line853 and does not reset it when subsequent columns are marked. With explicit
+maximum column5/row7, mark column1 rows2..4 and columns3..4 rows2..4. The left
+envelope contains column3 rows2..4 even though those cells are selected. The
+right envelope also contains selected column4 rows2..4: the skipped previous-row
+comparison leaves its cursor at the original start for the final scan.
+
+The complete unchanged native fixture retains cover `[0,1,0,5,5,0]`, left ranges
+at columns0,2,3 and right ranges at columns2,4,5, all at rows2..4. The independent
+portable test also checks actual cell marks. Decision: preserve original flag
+lifetime and scan conditions; no reset or envelope normalization is introduced.
+
+## CALC-016: Repeated cover generation appends existing envelopes
+
+Status: original repeated-call output reproduced; caller lifecycle unreviewed.
+
+`GetSelectionCover` in pinned `markdata.cxx:701` appends envelope ranges without
+clearing its four list owners. With simple columns1..3/rows2..4, calling it twice
+stores the same top range twice. `ResetMark` clears the envelope lists while
+retaining selected sheets and stored rectangle values. The original consumers
+may ensure a reset before each cover; that requirement has not been established.
+
+Repeated calls are retained in the complete native sequences and an independent
+borrowed-envelope test. Decision: preserve accumulation and original reset
+responsibilities; no implicit clear is added to cover generation.
+
 ## Reviewed API distinctions
 
 These distinctions have been discussed but are not classified as defects:

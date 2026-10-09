@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/inc/markdata.ts",
+          "marker": "ScMarkData"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/markdata.test.ts",
+          "marker": "matches complete unchanged native selection sequences"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/markdata.hxx",
+          "marker": "class ScMarkData"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sc/inc/markdata.ts",
+    "localSymbols": [
+      "ScMarkData"
+    ],
+    "omittedResponsibilities": [
+      "Finite selected evidence does not establish full native or browser parity. Complete document/column storage, native intrusive lifetime/ABI/pointer invalidation and diagnostics are unverified. Original unordered_map top/bottom row permutation is unspecified and compared as full multisets while raw native observations remain retained. Selected-tab self-move triggers a recorded libc++220106 ASan failure and has no certified defined native outcome. Invalid ranges/arithmetic and malformed/dangling states remain outside the defined comparison. Existing numerical document getter views are explicit source adapters, not document engines."
+    ],
+    "preservedResponsibilities": [
+      "Original simple/multi/marking/negative flags, retained range values, ordered selected-sheet membership and empty replacement preservation.",
+      "Original recursive simple-to-multi setup, reduction predicates, raw expanding bounds, range-list export/import and native full-width global-row query shortcuts.",
+      "Original row/column spans through actual mdds/fstalgorithm and source-shaped range, mark-array and bool segment dependencies.",
+      "Original shifts and all four envelope mechanisms, accumulation across calls, preserved failed cover output and borrowed owner access."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sc/inc/markdata.hxx",
+    "upstreamSymbols": [
+      "ScMarkData"
+    ]
+  }
+}

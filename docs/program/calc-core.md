@@ -720,3 +720,76 @@ task10. Original research inputs retain their MPL 2.0/inherited Apache notices.
 
 All88 Calc tests pass with actual100 Istanbul coverage: 1988 statements,
 1546 branches, 346 functions and 1733 lines. No coverage exclusions are added.
+
+## Mark-data selection owner and span conversions
+
+Task10 (`202610091723-P9JYX4`) implements the complete original `ScMarkData`
+owner at `sc/inc/markdata.ts` and `sc/source/core/data/markdata.ts`, reusing actual
+multi-selection, mark arrays, ranges, bool segments and shared mdds. Original
+flags, ordered selected sheets, simple/multi conversion, range-list import/export,
+queries, shifts and all four selection envelopes retain their source conditions.
+`ResetMark` preserves selected sheets and stored rectangles; empty replacement
+also preserves current selected sheets. Repeated cover generation appends to
+existing envelope lists. Native default list moves are added to the existing
+`ScRangeList` owner so envelope moves reuse its actual storage and scalar cache.
+
+Original `fstalgorithm.hxx` templates live in `sc/inc/fstalgorithm.ts`; explicit
+span constructor arguments adapt template syntax. They iterate actual mdds leaves
+or use the already-valid search index for the start-key overload. No rebuild or
+alternate interval engine is introduced. Original `RowSpan`/`ColRowSpan` values
+live at the `columnspanset` header/core-data boundaries; full column span-set scan
+and action services remain separate unimplemented owners.
+
+The unchanged complete native mark-data class/methods reproduce290
+initialized sequences and1017 complete interned selected observations with real
+range-list/ref-base/multi/bool mechanisms, actual span templates and genuine
+verified mdds/Boost under ASan/UBSan. Original numerical document getter bodies
+are linked through an explicit borrowed-bounds comparison carrier; this is not
+a document/cell engine or full lifecycle implementation. Custom bounds use
+original `NDEBUG` semantics because of the existing standard/jumbo debug guard.
+Raw native top/bottom envelope lists remain saved; their unspecified unordered-map
+row permutation is compared as complete multisets, with duplicates retained.
+Left/right and other ordered outputs compare exactly. Full native map ordering,
+allocation/ABI/pointer lifetime and selected-tab self-move behavior remain
+uncertified. The isolated selected-tab self-move diagnostic retains the original
+libc++220106 ASan heap-use-after-free report without assigning a defined result.
+CALC-014..016 record self-move, the persistent previous-unmarked flag after a
+column gap and repeated-envelope accumulation; all original expressions remain.
+
+A separate unchanged-template probe compares256 boolean patterns and64 numerical
+owners through every span overload, with genuine verified mdds/Boost and
+ASan/UBSan. Current shared value types are boolean/number with numerical keys;
+custom bool conversion, object/move-only values and non-numerical key families
+remain unverified. The original terminal leaf is excluded by iterator-end
+semantics; failed indexed search leaves output empty and never rebuilds the tree.
+
+The complete737-line TypeScript mark-data owner is kept at the original class
+boundary: flags, selected tabs and envelopes form one upstream-owned state. It
+remains below the1000-line hard limit and is reviewed as one coherent owner,
+rather than splitting its original state across invented modules.
+
+All96 Calc tests pass with actual100 Istanbul coverage:2519 statements,
+1854 branches,412 functions and2208 lines. No exclusions are added. With both upstream symlinks temporarily detached,
+all96 Calc,5 affected shared and30 related inventory scenarios pass; the links
+are restored by an EXIT trap. Ordinary acceptance needs no upstream/compiler or
+network.
+
+The task10 full application run executes14245 scenarios across539 files:
+14244 pass, while the unchanged shared mdds native replay exceeds its existing
+30000ms timeout during initial concurrent native/lint/inventory work. After all
+heavy jobs finish, its complete5-test module passes unchanged under Istanbul in
+14.15s, with actual100 coverage of all four mdds source owners:486 statements,
+284 branches,86 functions and433 lines. No timeout/assertion/threshold changes
+are introduced. Vitest reportOnFailure=false suppresses the failed full
+application coverage report; global/Writer coverage is not certified from it,
+and Writer coverage/implementation remains untouched per user instruction.
+
+Full inventory coverage passes123 scenarios across38 files after its one
+similar filesystem-test timeout is reproduced as a passing isolated test:
+1734 statements,1292 branches,436 functions and1668 lines, all100%. Tooling14,
+source-provenance3 and all303 browser scenarios pass (301 Writer,2 shared;
+Calc has no dedicated browser scenarios yet). TS7, full lint, scoped formatting,
+static build, documentation, ownership, file-size/source-tree and provenance
+checks pass. Calc20 capabilities/141 modules and shared1/116 report zero
+semantic violations; semantic parity remains unverified. This completes the
+full-validation cadence at task10 of the resumed cycle.

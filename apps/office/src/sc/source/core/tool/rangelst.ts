@@ -25,6 +25,18 @@ export class ScRangeList implements Iterable<ScRange> {
     this.mnMaxRowUsed = source.mnMaxRowUsed;
     return this;
   }
+  /** Adapts the original default move constructor, transferring values while copying the scalar cache. @param source - Original moved owner. @returns New owner. */
+  public static move(source: ScRangeList): ScRangeList {
+    return new ScRangeList().moveAssign(source);
+  }
+  /** Adapts the original default move assignment; moved-from vector state follows the compared native runtime. @param source - Moved owner. @returns Recipient. */
+  public moveAssign(source: ScRangeList): this {
+    const ranges = source.maRanges;
+    source.maRanges = [];
+    this.maRanges = source === this ? source.maRanges : ranges;
+    this.mnMaxRowUsed = source.mnMaxRowUsed;
+    return this;
+  }
   /** Reads native emptiness. @returns Whether empty. */
   public empty(): boolean {
     return this.maRanges.length === 0;

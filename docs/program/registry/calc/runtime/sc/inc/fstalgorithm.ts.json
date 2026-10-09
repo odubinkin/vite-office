@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/inc/fstalgorithm.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "span-conversion",
+    "capabilityIds": [
+      "CAP-47f1d037-0539-48db-adb5-244d6fdeac21"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sc/inc/fstalgorithm.ts#toSpanArray",
+        "apps/office/src/sc/inc/fstalgorithm.test.ts#original flat segment span algorithms",
+        "vendor/libreoffice-reference/sc/inc/fstalgorithm.hxx#toSpanArray"
+      ],
+      "justification": "Task202610091723-P9JYX4 ports all original span-conversion overloads over the actual shared mdds owner; complete unchanged templates and genuine patched mdds/Boost are compared under ASan/UBSan. No whole-module status promotion. Native comparison covers numerical keys with boolean and integer values through all original overloads: 256 boolean patterns and 64 numerical owners. The current shared mdds value contract admits boolean/number only. Custom native bool conversion, object or move-only value types, non-numerical key types, arbitrary template consumers, allocation/ABI and malformed/dangling states remain unverified. Complete ColumnSpanSet scan/action owners and browser consumers remain unimplemented; finite evidence does not establish whole-module parity.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SpanConstructor",
+        "ValueSpanConstructor",
+        "buildSpan",
+        "buildSpanWithValue",
+        "toSpanArray",
+        "toSpanArrayWithValue"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "sc/inc/fstalgorithm.hxx",
+      "upstreamSymbols": [
+        "buildSpan",
+        "buildSpanWithValue",
+        "toSpanArray",
+        "toSpanArrayWithValue"
+      ]
+    }
+  }
+}
