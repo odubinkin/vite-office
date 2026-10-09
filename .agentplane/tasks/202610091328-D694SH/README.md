@@ -4,7 +4,7 @@ title: "Align SwFormat parent reset and cycle rejection with LibreOffice"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +18,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-09T13:49:50.068Z"
+  updated_at: "2026-10-09T13:50:45.077Z"
   updated_by: "CODER"
-  note: "All scoped native contract/history/mounted UI acceptances pass:189unique related cases,39current-source revalidations after lint adjustment. Entire current format.ts Istanbul81lines92statements14functions59branches strict100,0negative, no prior counters; raw whole-app partial threshold failure retained as wrapper scope error. Formatting/lint/TS7/boundaries/build/docs/size/tree/provenance/registry pass. Inventory and parent history preserved. Evidence: results.json; semantic a2e8c94a6db9. Full baseline remains historical XJTGF0; complete native caches/Which/hints and broad parity remain follow-ups."
+  note: "verified-202610091328-D694SH"
   attempts: 0
 quality_review:
   state: "pass"
@@ -72,8 +72,14 @@ events:
     author: "CODER"
     state: "ok"
     note: "All scoped native contract/history/mounted UI acceptances pass:189unique related cases,39current-source revalidations after lint adjustment. Entire current format.ts Istanbul81lines92statements14functions59branches strict100,0negative, no prior counters; raw whole-app partial threshold failure retained as wrapper scope error. Formatting/lint/TS7/boundaries/build/docs/size/tree/provenance/registry pass. Inventory and parent history preserved. Evidence: results.json; semantic a2e8c94a6db9. Full baseline remains historical XJTGF0; complete native caches/Which/hints and broad parity remain follow-ups."
+  -
+    type: "verify"
+    at: "2026-10-09T13:50:45.077Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610091328-D694SH"
 doc_version: 3
-doc_updated_at: "2026-10-09T13:49:50.141Z"
+doc_updated_at: "2026-10-09T13:51:06.106Z"
 doc_updated_by: "CODER"
 description: "Resume Writer parity after merged TS7/Istanbul migration. Restore source SetDerivedFrom default-root fallback and false-return cycle rejection through original parent/client/item-set identities. Preserve explicit I/O/recovery deviations and cross-pool guard; migrate only source-incompatible old expectations, add core/history/mounted UI evidence, update canonical format records and use actual targeted Istanbul100 without old V8 certificates."
 sections:
@@ -130,6 +136,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-09T13:50:45.077Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610091328-D694SH
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T13:50:43.918Z, excerpt_hash=sha256:de56104cdc2aa07662221268fc36a9764997a6a39f5052df86c4f26ff2d6359a
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610091328-D694SH/blueprint/resolved-snapshot.json
+    - old_digest: ba0781499f3718260821baf23ad8ee67b7be2256f4817e4a2df1a9e5e370c32d
+    - current_digest: ba0781499f3718260821baf23ad8ee67b7be2256f4817e4a2df1a9e5e370c32d
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610091328-D694SH
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610091328-D694SH --result verified-202610091328-D694SH --commit a2e8c94a6db9d3b59a7e28bf83fbf7ea16082c26
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert this task's semantic implementation commit and its two appended canonical evidence additions together; retain immutable task history. Rerun affected upstream-absent checks. Do not modify existing DONE history or migration commits."
   Findings: |-
@@ -152,6 +188,14 @@ sections:
       Resolution: Retain and hash the raw whole-app Istanbul map and its failing command. Independently gate all four configured100 metrics on the entire unchanged format.ts entry using istanbul-lib-coverage without editing any counter/location/map; use that current-source evidence only. Do not replay the39 passing cases again for a wrapper-only correction. Continue pending static checks upstream-absent.
       Promotion: incident-candidate
       Fixability: repo-fixable
+
+    - Observation: Final closure: prior Verification pending wording is historical and resolved. Semantic implementation a2e8c94a6db9d3b59a7e28bf83fbf7ea16082c26, quality persistence a494f5d1c7b7; same-agent non-independent quality verdict pass is bound to the semantic SHA. Pre-close git status --short --untracked-files=all is empty.
+      Impact: Approved atomic scope and all declared checks are satisfied. Inventory remains unverified/mapped at whole-module level, broad parityReady=false and goal remains active.
+      Resolution: Close this leaf through the direct route with the semantic implementation hash; retain raw failures and bounded evidence. Continue the next atomic Writer parity correction without pausing or claiming the broad goal complete.
+
+    - Observation: First close command refused dirty tracked task README created by the final closure finding; task remained DOING and no implementation changed.
+      Impact: Direct deterministic close requires all preceding tracked lifecycle changes committed.
+      Resolution: Persist the final task-local findings in a separate artifact commit, recompute route, then repeat the exact semantic-hash close. No tests or source changes are needed.
 id_source: "generated"
 ---
 ## Summary
@@ -217,6 +261,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-09T13:50:45.077Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610091328-D694SH
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T13:50:43.918Z, excerpt_hash=sha256:de56104cdc2aa07662221268fc36a9764997a6a39f5052df86c4f26ff2d6359a
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610091328-D694SH/blueprint/resolved-snapshot.json
+- old_digest: ba0781499f3718260821baf23ad8ee67b7be2256f4817e4a2df1a9e5e370c32d
+- current_digest: ba0781499f3718260821baf23ad8ee67b7be2256f4817e4a2df1a9e5e370c32d
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610091328-D694SH
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610091328-D694SH --result verified-202610091328-D694SH --commit a2e8c94a6db9d3b59a7e28bf83fbf7ea16082c26
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -244,3 +318,11 @@ Authorization: continuing the user's explicitly resumed iterative Writer parity 
   Resolution: Retain and hash the raw whole-app Istanbul map and its failing command. Independently gate all four configured100 metrics on the entire unchanged format.ts entry using istanbul-lib-coverage without editing any counter/location/map; use that current-source evidence only. Do not replay the39 passing cases again for a wrapper-only correction. Continue pending static checks upstream-absent.
   Promotion: incident-candidate
   Fixability: repo-fixable
+
+- Observation: Final closure: prior Verification pending wording is historical and resolved. Semantic implementation a2e8c94a6db9d3b59a7e28bf83fbf7ea16082c26, quality persistence a494f5d1c7b7; same-agent non-independent quality verdict pass is bound to the semantic SHA. Pre-close git status --short --untracked-files=all is empty.
+  Impact: Approved atomic scope and all declared checks are satisfied. Inventory remains unverified/mapped at whole-module level, broad parityReady=false and goal remains active.
+  Resolution: Close this leaf through the direct route with the semantic implementation hash; retain raw failures and bounded evidence. Continue the next atomic Writer parity correction without pausing or claiming the broad goal complete.
+
+- Observation: First close command refused dirty tracked task README created by the final closure finding; task remained DOING and no implementation changed.
+  Impact: Direct deterministic close requires all preceding tracked lifecycle changes committed.
+  Resolution: Persist the final task-local findings in a separate artifact commit, recompute route, then repeat the exact semantic-hash close. No tests or source changes are needed.
