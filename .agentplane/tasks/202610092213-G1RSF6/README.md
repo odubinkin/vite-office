@@ -1,10 +1,11 @@
 ---
 id: "202610092213-G1RSF6"
 title: "Port original shared SoA block lookup and scalar read contracts"
-status: "DOING"
+result_summary: "verified-202610092213-G1RSF6"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-09T22:37:10.172Z"
+  updated_at: "2026-10-09T22:38:07.495Z"
   updated_by: "CODER"
-  note: "Approved original SoA query group verified: native290/8810 with all217 ownership prefixes unchanged, sibling native888, independently decoded/replayed bytes/hashes and positive raw scoped100, Calc104/shared22/portable registry19, all14 static/meta gates pass. Scope gaps explicit; cycle2 task1/10 no full run due."
+  note: "verified-202610092213-G1RSF6"
   attempts: 0
 quality_review:
   state: "pass"
@@ -45,11 +46,16 @@ quality_review:
     - "Original get_block_position lower_bound/overshoot and cached-parent/index hint admission/backward threshold match pinned main_def.inl; position(size) returns before hint access, typed empty/read/type/errors use actual shared callbacks and exact source diagnostics. Iterator refactor preserves every217 original ownership sequence/state/final events."
     - "Independent raw audit verifies all290 cases/8810 operations/9100 full states/4116 snapshots, original binary byte replay,13 source/2 archive hashes and positive raw coverage counters. Original sibling block store888-sequence check passes. No synthetic native algorithm or duplicate runtime owner added."
     - "Calc104 and selectedshared22 pass with actual100 four metrics on17 Calc/3 changedshared runtime files; no-upstream Calc/shared/affectedregistry19 pass and exact symlinks restored. Static/meta14 gates pass; doctor0 errors/2 inherited warnings. Inventory records selected group as implemented while all whole-parity flags stay false; suspected API distinctions preserve source behavior."
-commit: null
+commit:
+  hash: "f5fc61b8b304c07aa1499994a3e85b2e00492b40"
+  message: "✅ G1RSF6 quality: verify original shared SoA query contracts"
 comments:
   -
     author: "CODER"
     body: "Start: port original block search/positions/scalar reads over actual shared metadata/callback/iterator owners, extend unchanged native callers and preserve every original lifetime sequence; cycle2 scoped acceptance only."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610092213-G1RSF6. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -64,8 +70,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Approved original SoA query group verified: native290/8810 with all217 ownership prefixes unchanged, sibling native888, independently decoded/replayed bytes/hashes and positive raw scoped100, Calc104/shared22/portable registry19, all14 static/meta gates pass. Scope gaps explicit; cycle2 task1/10 no full run due."
+  -
+    type: "verify"
+    at: "2026-10-09T22:38:07.495Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610092213-G1RSF6"
+  -
+    type: "status"
+    at: "2026-10-09T22:38:07.682Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610092213-G1RSF6. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-09T22:37:10.239Z"
+doc_updated_at: "2026-10-09T22:38:36.676Z"
 doc_updated_by: "CODER"
 description: "Cycle2 task1/10. Extend the actual original shared container with default/hinted block lookup, mutable/const positions, scalar reads/type/empty queries and original forward iterator construction over existing shared metadata/callback/iterator owners. Preserve upstream end-position, hint parent/cache and exact diagnostics. Reuse unchanged native lifetime observer/corpus with query cases; scoped actual100 and no-upstream ordinary acceptance, no full run due."
 sections:
@@ -124,6 +143,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-09T22:38:07.495Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610092213-G1RSF6
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T22:37:10.239Z, excerpt_hash=sha256:406cabd60833aed7cbfe72b5e6d81656e382d103ad6379814cbbca9838746eb1
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610092213-G1RSF6/blueprint/resolved-snapshot.json
+    - old_digest: 8f2cafe4952147cd046e2b5918483de186e691b3115b3dcbfb1c60905e53c2f6
+    - current_digest: 8f2cafe4952147cd046e2b5918483de186e691b3115b3dcbfb1c60905e53c2f6
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610092213-G1RSF6
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610092213-G1RSF6 --result verified-202610092213-G1RSF6 --commit f5fc61b8b304c07aa1499994a3e85b2e00492b40
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only intentional G1RSF6 commits on calc if requested; preserve prior original ownership/helpers, exact upstream links, native source inputs and unrelated tasks."
   Findings: |-
@@ -136,6 +185,18 @@ sections:
     - Observation: Resolved initial TS7 and endpoint observer findings: unused get_block_position_hint import removed; native endpoint hint observer excludes private data not guaranteed initialized by the original constructor. Added valid nine-cell hint geometry to exercise original multi-step backward walk.
       Impact: No native algorithm or contract changed; source query lines, original endpoint guard and all217 lifetime sequences remain intact. Invalid endpoint/private-data and native dangling-lifetime outputs are excluded from certification.
       Resolution: Final TS7, native write/check and independent binary/source/raw coverage audits passed. Corpus has290 sequences/8810 operations/9100 full states/4116 snapshots/290 final logs; all217 original sequences/2796 states and final events equal committed baseline. Whole-capability parity remains false.
+
+    - Observation: Exact route task complete with quality SHA f5fc61b8b304 exited5 E_GIT: installed deterministic close subject is too generic. Implementation/query acceptance and quality review passed; no source failure.
+      Impact: Task closure artifact must be committed through supported CLI recovery before clean final state; no changes to hooks/policy/verification criteria.
+      Resolution: Recompute live next-action and use its precise task-scoped close recovery; retain all evidence and keep implementation unchanged.
+
+    - Observation: Exact oracle recovery ap commit --close --unstage-others also exited5 E_GIT generic deterministic subject, matching installed task20 closure behavior.
+      Impact: Task is DONE but its verified closure metadata remains uncommitted; implementation and passing quality SHA unchanged.
+      Resolution: Use bounded supported ap commit with explicit policy-compliant specific subject and --allow-tasks, then inspect authoritative Git HEAD/live route/clean final status; do not change installed CLI or repository gates.
+extensions:
+  implementation_commit:
+    hash: "318fff1c907a4c75fccf08ed17971a212063a61c"
+    message: "✨ G1RSF6 shared: port original SoA positions and scalar reads"
 id_source: "generated"
 ---
 ## Summary
@@ -206,6 +267,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-09T22:38:07.495Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610092213-G1RSF6
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T22:37:10.239Z, excerpt_hash=sha256:406cabd60833aed7cbfe72b5e6d81656e382d103ad6379814cbbca9838746eb1
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610092213-G1RSF6/blueprint/resolved-snapshot.json
+- old_digest: 8f2cafe4952147cd046e2b5918483de186e691b3115b3dcbfb1c60905e53c2f6
+- current_digest: 8f2cafe4952147cd046e2b5918483de186e691b3115b3dcbfb1c60905e53c2f6
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610092213-G1RSF6
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610092213-G1RSF6 --result verified-202610092213-G1RSF6 --commit f5fc61b8b304c07aa1499994a3e85b2e00492b40
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -223,3 +314,11 @@ Read source confirms position(size) returns a valid endpoint pair before lookup;
 - Observation: Resolved initial TS7 and endpoint observer findings: unused get_block_position_hint import removed; native endpoint hint observer excludes private data not guaranteed initialized by the original constructor. Added valid nine-cell hint geometry to exercise original multi-step backward walk.
   Impact: No native algorithm or contract changed; source query lines, original endpoint guard and all217 lifetime sequences remain intact. Invalid endpoint/private-data and native dangling-lifetime outputs are excluded from certification.
   Resolution: Final TS7, native write/check and independent binary/source/raw coverage audits passed. Corpus has290 sequences/8810 operations/9100 full states/4116 snapshots/290 final logs; all217 original sequences/2796 states and final events equal committed baseline. Whole-capability parity remains false.
+
+- Observation: Exact route task complete with quality SHA f5fc61b8b304 exited5 E_GIT: installed deterministic close subject is too generic. Implementation/query acceptance and quality review passed; no source failure.
+  Impact: Task closure artifact must be committed through supported CLI recovery before clean final state; no changes to hooks/policy/verification criteria.
+  Resolution: Recompute live next-action and use its precise task-scoped close recovery; retain all evidence and keep implementation unchanged.
+
+- Observation: Exact oracle recovery ap commit --close --unstage-others also exited5 E_GIT generic deterministic subject, matching installed task20 closure behavior.
+  Impact: Task is DONE but its verified closure metadata remains uncommitted; implementation and passing quality SHA unchanged.
+  Resolution: Use bounded supported ap commit with explicit policy-compliant specific subject and --allow-tasks, then inspect authoritative Git HEAD/live route/clean final status; do not change installed CLI or repository gates.
