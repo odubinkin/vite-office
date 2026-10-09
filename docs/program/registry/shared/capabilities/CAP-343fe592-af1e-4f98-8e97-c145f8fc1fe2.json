@@ -1,0 +1,90 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-343fe592-af1e-4f98-8e97-c145f8fc1fe2",
+    "capabilityId": "CAP-343fe592-af1e-4f98-8e97-c145f8fc1fe2",
+    "suite": "shared",
+    "subsystem": "cell-storage",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original iterator_value_node initializes empty type/zero position and size/null data, retains parent/data identity and swaps/compares all six native fields.",
+      "Original SoA updater synchronizes three separate borrowed arrays and preserves independent cached-node value/reference identity during copy, assignment and swap.",
+      "Original forward policy changes private index in original increment/decrement order; original reverse policy deliberately performs no private index updates.",
+      "Original end comparison skips cached-node equality; increment reaching end retains cache while mutable-to-const construction reconstructs it from current arrays or original empty defaults.",
+      "Actual original utility movement replays all694 mutable/const native position pairs over the real shared iterator owners."
+    ],
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "Original shared SoA iterator/node responsibility and algorithms are preserved; explicit TypeScript borrowing/const syntax witnesses do not replace the storage engine."
+    },
+    "capability": "Shared original SoA grouped iterator cached-node traversal ownership",
+    "gaps": [
+      "Implemented original node/private policies and SoA cached-node/grouped traversal, copy/assignment/swap/equality and mutable-to-const reconstruction over three borrowed arrays and actual shared blocks. STL vector iterator syntax uses explicit borrowed array identity/category witnesses and bounded exactly representable indices. TypeScript const nodes expose readonly fields; template qualifications, ABI/allocation/native pointer stream formatting and optional debug instrumentation, invalid/dangling/singular traversal, unbounded size_t arithmetic, cross-category comparisons and actual entire SoA container/Calc document/browser remain unverified. Tests populate native observed block metadata, not a runtime replacement MTV engine. End cache is inspected diagnostically through get_node only; end private data is deliberately omitted as explicitly undefined by upstream. No complete original module or QA port certification."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/mdds-reference/include/mdds/multi_type_vector/iterator_node.hpp",
+          "marker": "struct iterator_value_node"
+        },
+        {
+          "path": "vendor/mdds-reference/include/mdds/multi_type_vector/soa/iterator.hpp",
+          "marker": "class iterator_updater"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/mdds-reference/test/multi_type_vector/default/tc/iterators.inl",
+          "marker": "void mtv_test_iterators_private_data()"
+        }
+      ],
+      "docs": [
+        {
+          "path": "download.lst",
+          "marker": "mdds-3.2.1.tar.xz"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/iterator_node.ts",
+          "marker": "iterator_value_node"
+        },
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/iterator.ts",
+          "marker": "vector_iterator"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/iterator.test.ts",
+          "marker": "matches complete native mutable const forward reverse iterator states"
+        },
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/iterator.test.ts",
+          "marker": "replays native position utilities through actual shared SoA iterators"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Shared SoA iterator owners"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "Traverse original three-array SoA block nodes preserving cached identity and native private update policies",
+    "scopeLimitations": [
+      "Implemented original node/private policies and SoA cached-node/grouped traversal, copy/assignment/swap/equality and mutable-to-const reconstruction over three borrowed arrays and actual shared blocks. STL vector iterator syntax uses explicit borrowed array identity/category witnesses and bounded exactly representable indices. TypeScript const nodes expose readonly fields; template qualifications, ABI/allocation/native pointer stream formatting and optional debug instrumentation, invalid/dangling/singular traversal, unbounded size_t arithmetic, cross-category comparisons and actual entire SoA container/Calc document/browser remain unverified. Tests populate native observed block metadata, not a runtime replacement MTV engine. End cache is inspected diagnostically through get_node only; end private data is deliberately omitted as explicitly undefined by upstream. No complete original module or QA port certification.",
+      "Original QA is contextual source evidence, not executed or certified as a port."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

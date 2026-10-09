@@ -1012,3 +1012,33 @@ module is 475 physical lines and stays below both source size budgets.
 Calc 22 capabilities/143 modules and shared 1/116 report zero runtime semantic
 violations. Whole-module parity remains unverified. Writer remains untouched;
 a full suite is not due at task 2/10.
+
+## Shared SoA iterator owners
+
+Task 202610092029-9SXZKS (task7/10) adds the original shared
+iterator_node and soa/iterator owners over three separate borrowed position,
+size and block arrays. Actual shared scalar blocks remain the data owners.
+Each iterator owns its cached node, copies its value independently and keeps
+borrowed parent/block pointer identity. Assignment and swap mutate cached
+values in place, retaining existing node and grouped-cursor references.
+Forward private index updates and reverse no-update policy keep source order.
+End comparison skips cached-node equality; reaching end retains the previous
+cache. Mutable-to-const construction reconstructs the node from its arrays,
+while same-type copy preserves the cache. End private data is intentionally
+undefined by upstream and is omitted from native observations.
+
+The complete unchanged native headers are compiled on real SoA containers
+under ASan/UBSan for seven layouts, all four iterator specializations, complete
+forward/backward/pairwise assignment/swap/equality and mutable cache/conversion
+states. The shared input verifier checks the complete compiler dependencies
+against pinned archives and original LibreOffice patch. Ordinary tests consume
+portable records without a compiler or original source checkout. Actual
+advance_position also replays all694 original mutable/const position pairs
+over the new runtime iterator owners.
+
+STL cursor borrowing and const/static template syntax have explicit TypeScript
+witnesses. Native debug instrumentation, pointer stream formatting, invalid
+lifetimes, unbounded size_t indices, complete SoA container and Calc document/UI
+remain unverified. The arrays in tests are populated from genuine observed
+metadata; they do not certify a replacement container. Whole-module inventory
+parity remains unverified.

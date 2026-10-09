@@ -18,7 +18,7 @@
       "evidence": [
         "apps/office/src/external/mdds/include/mdds/multi_type_vector/util.ts#default_traits",
         "apps/office/src/external/mdds/include/mdds/multi_type_vector/util.test.ts#matches complete mutable and const original soa position movement",
-        "scripts/mdds-util-native-probe.mjs#verifyDirectory",
+        "scripts/mdds-native-source.mjs#verifyDirectory",
         "vendor/mdds-reference/include/mdds/multi_type_vector/util.hpp#struct default_traits"
       ],
       "justification": "Task202610092012-8RZCZ1 ports original shared util boundaries/defaults; genuine real soa observations and native64 input/trace/defaults preserve source behavior. Original util events/default trait aliases, explicit empty type identities, optional trace scope depth/lifetime, standard native64 unsigned input-end arithmetic and valid borrowed position movement are implemented. Native static types/RAII/reference/std::distance/category syntax use explicit TS witnesses; callers dispose trace exactly once in finally. Bigint preserves UInt64 wrap; number projections require exact bounded logical indices. Native int32 steps/casts retained for valid logical block positions. Full compile-time types_util traits, trace call-site macros, alternative signed/size widths, arbitrary input iterator categories, invalid iterator lifetimes, native const/reference/allocator/destructor ABI and actual TS soa iterator/container/Calc document/browser remain unverified. The native soa container produces observations only; the TS test iterator borrows its committed node projections and is not a replacement runtime engine. No complete upstream module certification.",

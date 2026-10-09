@@ -463,6 +463,28 @@ normal forward ranges and bounded logical positions are caller preconditions,
 and actual Calc/MTV consumers still require review. Decision: preserve UInt64
 wrap and empty-input ordering; do not introduce overflow/reversed-range guards.
 
+## CALC-024 — mutable-to-const iterator construction reconstructs the cache
+
+Status: confirmed original API distinction, not classified as a defect.
+Pinned mdds3.2.1 `multi_type_vector/soa/iterator.hpp` lines324-328 converts
+a mutable iterator by constructing the updater from the three borrowed array
+cursors, parent and private index. It does not copy the mutable cached node.
+The implicit same-type copy constructor does copy that cached node.
+
+The unchanged native probe on real SoA containers modifies the mutable cached
+node's type, position and size to42,99,55. Mutable copy retains those fields;
+conversion reads the original array values. Original increment at end retains
+the previous cache, while conversion at end starts with empty/zero/null public
+fields. Equality at end ignores cached nodes. Native observations use get_node
+for diagnostics; they do not assert legal end dereference or a defined end
+private data, which iterator_node.hpp explicitly leaves undefined.
+
+Evidence: scripts/mdds-iterator-native-probe.mjs, complete
+soa/native-iterator-cases.json and the shared iterator.test.ts native-state
+comparison. Consumer intent for mutable cache changes still needs review.
+Decision: preserve copy/conversion/end distinctions; do not synchronize caches,
+clear reached-end nodes or define the end private data.
+
 ## Reviewed API distinctions
 
 These distinctions have been discussed but are not classified as defects:
