@@ -1,10 +1,10 @@
 ---
 id: "202610091723-P9JYX4"
 title: "Port Calc mark-data selection owner and validate full cycle"
-status: "TODO"
+status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -23,11 +23,21 @@ verification:
   note: null
   attempts: 0
 commit: null
-comments: []
-events: []
+comments:
+  -
+    author: "CODER"
+    body: "Start: port complete original mark-data selection owner and span dependencies on calc, then validate native and full-cycle evidence."
+events:
+  -
+    type: "status"
+    at: "2026-10-09T17:24:25.241Z"
+    author: "CODER"
+    from: "TODO"
+    to: "DOING"
+    note: "Start: port complete original mark-data selection owner and span dependencies on calc, then validate native and full-cycle evidence."
 doc_version: 3
-doc_updated_at: "2026-10-09T17:24:05.943Z"
-doc_updated_by: "PLANNER"
+doc_updated_at: "2026-10-09T17:24:25.241Z"
+doc_updated_by: "CODER"
 description: "Task10 of resumed cycle: complete original ScMarkData using actual ScMultiSel/range/bool/shared mdds owners; port original fstalgorithm span conversions and RowSpan/ColRowSpan values as needed; unchanged native comparison, actual100 Calc and full suite with Writer coverage left unchanged."
 sections:
   Summary: "Port complete original ScMarkData selection owner over actual source-shaped dependencies; validate task10 full resumed cycle."
