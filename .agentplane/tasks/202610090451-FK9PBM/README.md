@@ -4,7 +4,7 @@ title: "Separate Writer Calc and shared test projects"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -18,10 +18,33 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-09T05:56:18.303Z"
+  updated_at: "2026-10-09T05:59:25.458Z"
   updated_by: "CODER"
-  note: "Verified disjoint exhaustive Writer Calc shared discovery, all 505 files/14049 actual passing observations, 303 E2E cases, strict 100% scope coverage from preserved executed evidence, dependency guards and quality checks. Original V8 invalid-counter and desktop timeout evidence and successful reruns are documented; no runtime changes or lowered thresholds."
+  note: "verified-202610090451-FK9PBM"
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-09T05:58:57.545Z"
+  updated_by: "EVALUATOR"
+  note: "Approved test isolation is implemented and supported by exhaustive discovery, actual passing test observations, intact 100 percent ownership gates and full repository checks."
+  evaluated_sha: "bd1420fafce2d24008cdbe7ed8659e0e220b1e3a"
+  blueprint_digest: "4e083c4909040e21e88cd32bf3229518e45e30ed0c5e165d218db7e936ccbd46"
+  evidence_refs:
+    - ".agentplane/tasks/202610090451-FK9PBM/README.md"
+    - ".agentplane/tasks/202610090451-FK9PBM/quality/20261009-055857545-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610090451-FK9PBM/quality/20261009-055857545-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610090451-FK9PBM/quality/20261009-055857545-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610090451-FK9PBM/blueprint/resolved-snapshot.json"
+    - ".agentplane/tmp/FK9PBM-tooling-accepted.log"
+    - ".agentplane/tmp/FK9PBM-full-accepted.log"
+    - ".agentplane/tmp/FK9PBM-accepted-evidence.log"
+    - ".agentplane/tmp/FK9PBM-e2e.log"
+    - ".agentplane/tmp/FK9PBM-inventory-final.log"
+    - "ap doctor: OK; node .agentplane/policy/check-routing.mjs: policy routing OK"
+  findings:
+    - "Every current unit test is selected exactly once; scoped configurations match those owners. Calc is an explicitly empty bootstrap project, and graph rules forbid direct Writer Calc edges and reverse shared dependencies."
+    - "All 505 accepted file results equal actual original passing observations from the full run or explicit reruns. Whole isolated source records and scope projections were audited without editing counters; the two disjoint scoped reports cover all 318 eligible sources at 100 percent."
+    - "Original desktop timeout and invalid negative V8 counter evidence are retained and openly documented. Browser tests, static build, inventory parity, strict types, docs, format, lint and policy checks pass."
 commit: null
 comments:
   -
@@ -41,8 +64,20 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified disjoint exhaustive Writer Calc shared discovery, all 505 files/14049 actual passing observations, 303 E2E cases, strict 100% scope coverage from preserved executed evidence, dependency guards and quality checks. Original V8 invalid-counter and desktop timeout evidence and successful reruns are documented; no runtime changes or lowered thresholds."
+  -
+    type: "verify"
+    at: "2026-10-09T05:57:54.750Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610090451-FK9PBM"
+  -
+    type: "verify"
+    at: "2026-10-09T05:59:25.458Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610090451-FK9PBM"
 doc_version: 3
-doc_updated_at: "2026-10-09T05:56:18.484Z"
+doc_updated_at: "2026-10-09T05:59:25.548Z"
 doc_updated_by: "CODER"
 description: "Implement the user-approved application test isolation: Vitest projects and scoped coverage, Playwright projects, per-application scripts, Calc module dependency boundaries, and usage documentation; preserve full-suite verification."
 sections:
@@ -115,6 +150,66 @@ sections:
     - freshness: route=computed_local remote=remote_skipped
     - repeat_allowed: false
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-09T05:57:54.750Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610090451-FK9PBM
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T05:56:18.484Z, excerpt_hash=sha256:e6b5b7d10d8ccf99344eefc02c3727d445b5b5a81462e3ea4c00e1e62ad0fac8
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610090451-FK9PBM/blueprint/resolved-snapshot.json
+    - old_digest: 4e083c4909040e21e88cd32bf3229518e45e30ed0c5e165d218db7e936ccbd46
+    - current_digest: 4e083c4909040e21e88cd32bf3229518e45e30ed0c5e165d218db7e936ccbd46
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610090451-FK9PBM
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610090451-FK9PBM --result verified-202610090451-FK9PBM --commit bd1420fafce2d24008cdbe7ed8659e0e220b1e3a
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-10-09T05:59:25.458Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610090451-FK9PBM
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T05:57:54.839Z, excerpt_hash=sha256:e6b5b7d10d8ccf99344eefc02c3727d445b5b5a81462e3ea4c00e1e62ad0fac8
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610090451-FK9PBM/blueprint/resolved-snapshot.json
+    - old_digest: 4e083c4909040e21e88cd32bf3229518e45e30ed0c5e165d218db7e936ccbd46
+    - current_digest: 4e083c4909040e21e88cd32bf3229518e45e30ed0c5e165d218db7e936ccbd46
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610090451-FK9PBM
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610090451-FK9PBM --result verified-202610090451-FK9PBM --commit bd1420fafce2d24008cdbe7ed8659e0e220b1e3a
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
     <!-- END VERIFICATION RESULTS -->
@@ -203,6 +298,66 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-09T05:57:54.750Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610090451-FK9PBM
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T05:56:18.484Z, excerpt_hash=sha256:e6b5b7d10d8ccf99344eefc02c3727d445b5b5a81462e3ea4c00e1e62ad0fac8
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610090451-FK9PBM/blueprint/resolved-snapshot.json
+- old_digest: 4e083c4909040e21e88cd32bf3229518e45e30ed0c5e165d218db7e936ccbd46
+- current_digest: 4e083c4909040e21e88cd32bf3229518e45e30ed0c5e165d218db7e936ccbd46
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610090451-FK9PBM
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610090451-FK9PBM --result verified-202610090451-FK9PBM --commit bd1420fafce2d24008cdbe7ed8659e0e220b1e3a
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-09T05:59:25.458Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610090451-FK9PBM
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T05:57:54.839Z, excerpt_hash=sha256:e6b5b7d10d8ccf99344eefc02c3727d445b5b5a81462e3ea4c00e1e62ad0fac8
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610090451-FK9PBM/blueprint/resolved-snapshot.json
+- old_digest: 4e083c4909040e21e88cd32bf3229518e45e30ed0c5e165d218db7e936ccbd46
+- current_digest: 4e083c4909040e21e88cd32bf3229518e45e30ed0c5e165d218db7e936ccbd46
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610090451-FK9PBM
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610090451-FK9PBM --result verified-202610090451-FK9PBM --commit bd1420fafce2d24008cdbe7ed8659e0e220b1e3a
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
