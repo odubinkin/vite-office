@@ -285,6 +285,7 @@ function exportWriterText(
             grid = new SwXMLTableLines(table);
           const format = table.GetFormat();
           const orient = table.GetFrameFormat().GetHoriOrient().GetHoriOrient();
+          const lr = table.GetFrameFormat().GetLRSpace();
           yield {
             kind: "table" as const,
             table: {
@@ -301,9 +302,9 @@ function exportWriterText(
                         : "margins",
                 marginLeft:
                   orient === HoriOrientation.NONE || orient === HoriOrientation.LEFT_AND_WIDTH
-                    ? format.marginLeft
+                    ? lr.ResolveLeft()
                     : undefined,
-                marginRight: orient === HoriOrientation.NONE ? format.marginRight : undefined,
+                marginRight: orient === HoriOrientation.NONE ? lr.ResolveRight() : undefined,
               },
               columnWidths: grid.GetColumnWidths(),
               softPageBreakRows: table.GetSoftPageBreakRows(),

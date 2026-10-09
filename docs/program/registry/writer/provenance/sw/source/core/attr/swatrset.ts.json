@@ -88,6 +88,22 @@
         {
           "path": "apps/office/src/sw/browser/editor/native-table-hori-items.test.tsx",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/editeng/source/items/native-lr-space-item.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/table/native-table-lr-item.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/undo/native-table-lr-history.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-table-lr-items.test.tsx",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -129,7 +145,9 @@
       "Iteration245 ports precise native AttrSetChangeHint old/new effective values, modify locking and inherited Differentiate filtering to original registered clients. Row/cell generic attribute overrides are removed and copying claims are locked. Native default items127/157/158/159 supply actual protection flags, numeric format100/locale normalization, detached non-shareable formula and zero double. Browser snapshot restoration stays a bounded boundary. Full SwTableFormula inheritance/parser/calculation/name conversion, presentation/UNO and native frame invalidation/geometry remain unverified. Targeted verification pending; last full237,next247; no semantic promotion.",
       "Iteration245 verified1575 unique app cases including20 fresh native format notification/default/ownership/history/UI cases and13 Chromium cases. Initial1538pass6fail; closure1 resolves6failures and explicitly revalidates3 materially affected fresh device/UI scenarios,9pass30skip; closure2 only new/unexecuted related cases31pass14skip. All660 prior acceptance files byte-identical. Actual app/inventory all-four100 binds current complete sources/maps and complete unchanged native declarations/signatures/bodies/enclosing branches/all locations from244; generated V8 duplicate method display ordinal changes are documented with full source hashes, no individual counter sanitization. Browser paint notification follows native clients without adding a document mutation. Existing317 metadata fields/order/status/default/classification/evidence prefixes preserved, one new cellatr record unverified. Full SwTableFormula second-base/calculation/name conversion/UNO, native frame invalidation/geometry and direct native UI registration remain partial. Registered IO/recovery/settings deviations preserved; last full237,next247; no full245.",
       "Correction7H3CN9 (6/10 after SZKQTN) ports original SwFormatHoriOrient with position/orientation/relation/page-toggle, native NONE/PRINT_AREA/false defaults, independent Clone/equality and represented UNO member extraction/conversion. Original SwAttrPool registers the typed item and SwFormat returns borrowed effective horizontal orientation. Table owns no mirrored horiOrient/align scalars: explicit builder aliases translate once, direct transport projects native values, and SaveTable relies on whole original item-set history. Original frame layout and ODT export use effective native orientation, including inheritance. Native table representation delivers orientation/size ItemSet without changed scalar orientation/width; SetTabCols clones the complete original orientation as pinned swtable.cxx869..895. LR scalar spacing remains separate pending native ownership, as do full proportional/relative width/native layout/Doc SetAttr/UNO presentation/hash/assertion/VCL/copy/Repeat. Historical source statuses/default/classifications/evidence retained, no whole-module parity promotion. Evidence task202610092055-7H3CN9.",
-      "Verification7H3CN9:3517 unique accepted current-source cases across333 related files,38 fresh native cases. Entire eight final production modules actual Istanbul100 lines/statements/functions/branches (1418/1559/271/1186), zero negative counters, complete map and source hash identity. Native dialog width change, original direct/inherited history and mounted ODT behaviors pass. Source-backed17 fixture operations in12 old files;607 other old tests and16 canonical historical prefixes retained. Full not due6/10. No whole-module parity promotion."
+      "Verification7H3CN9:3517 unique accepted current-source cases across333 related files,38 fresh native cases. Entire eight final production modules actual Istanbul100 lines/statements/functions/branches (1418/1559/271/1186), zero negative counters, complete map and source hash identity. Native dialog width change, original direct/inherited history and mounted ODT behaviors pass. Source-backed17 fixture operations in12 old files;607 other old tests and16 canonical historical prefixes retained. Full not due6/10. No whole-module parity promotion.",
+      "Correction6Q2YQH (7/10 after SZKQTN) ports original SvxLRSpaceItem RES_LR_SPACE98 with eleven native context fields, zero/100/false defaults, independent Clone/equality and represented signed twip layout/proportion/hanging-text/sticky-zero behavior. Borrowed SwFormat.GetLRSpace and typed original pool item replace table mirrored left/right margins. Direct transport projects original direct LR; effective frame layout/SwTableRep/ODT use original inherited/pool values. SetTabCols clones full original context, and native dialog orientation/size/LR ItemSet replaces changed scalar LR replay. SaveTable excludes margin scalars and retains original complete ItemSet history. Font-unit SvxIndentValue/complete UNO member PutValue/presentation/metric scaling, generic native Doc attribute history/full layout/VCL/master-follow/copy/Repeat remain separately incomplete. Existing semantic/default/classification/evidence/history and registered IO/recovery/UI deviations retained; no whole-module promotion. Evidence task202610092125-6Q2YQH, current-source verification pending.",
+      "Verification6Q2YQH: final342 related files3588 unique accepted current-source cases22fresh (20 native LR and2 shared composite-border guards); ten actual whole production modules Istanbul100 lines/statements/functions/branches,zero negative/current source and complete-map identity. Initial pre-repair source maps/counters excluded entirely. Five exact fixture operations in3 historical files;620 other old tests byte identical,623 total. Twenty canonical historical prefixes retained. Full not due7/10; broad goal remains incomplete."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/attr/swatrset.cxx",

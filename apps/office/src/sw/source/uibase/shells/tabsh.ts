@@ -6,7 +6,8 @@ import type { SwWrtShell } from "../wrtsh/wrtsh1";
 import type { SwFEShell } from "../../core/frmedt/fetab";
 import { SwFormatHoriOrient } from "../../../inc/fmtornt";
 import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
-import { RES_FRM_SIZE, RES_HORI_ORIENT } from "../../../inc/hintids";
+import { SvxLRSpaceItem } from "../../../../editeng/source/items/frmitems";
+import { RES_LR_SPACE, RES_FRM_SIZE, RES_HORI_ORIENT } from "../../../inc/hintids";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { SwTabCols } from "../../core/bastyp/tabcol";
 import { SwTableRep } from "../table/swtablerep";
@@ -156,13 +157,14 @@ export function ItemSetToTableParam(
         let attributes: SwTableFormat = {};
         const geometrySet = new SfxItemSet(input.GetPool(), [
           [RES_FRM_SIZE, RES_FRM_SIZE],
+          [RES_LR_SPACE, RES_LR_SPACE],
           [RES_HORI_ORIENT, RES_HORI_ORIENT],
         ]);
         if (representation instanceof SwTableRep) {
-          attributes = {
-            marginLeft: representation.left,
-            marginRight: representation.right,
-          };
+          const lr = new SvxLRSpaceItem(RES_LR_SPACE);
+          lr.SetLeft(representation.left);
+          lr.SetRight(representation.right);
+          geometrySet.Put(lr);
           if (representation.align !== HoriOrientation.FULL)
             geometrySet.Put(new SwFormatFrameSize(SwFrameSize.Variable, representation.width));
           geometrySet.Put(new SwFormatHoriOrient(0, representation.align));

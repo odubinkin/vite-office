@@ -14,8 +14,12 @@ import { SwClient, type SwModify } from "../../../inc/calbck";
 import type { SwModelHint } from "../../../inc/hints";
 import { SwTableBoxFormat as SwNativeTableBoxFormat } from "../../../inc/swtblfmt";
 import type { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
-import { RES_HORI_ORIENT, RES_UL_SPACE, RES_FRM_SIZE } from "../../../inc/hintids";
-import { SvxULSpaceItem, SvxBoxItem } from "../../../../editeng/source/items/frmitems";
+import { RES_LR_SPACE, RES_HORI_ORIENT, RES_UL_SPACE, RES_FRM_SIZE } from "../../../inc/hintids";
+import {
+  SvxULSpaceItem,
+  SvxLRSpaceItem,
+  SvxBoxItem,
+} from "../../../../editeng/source/items/frmitems";
 import { SvxBorderLine } from "../../../../editeng/source/items/borderline";
 import { RES_BOX } from "../../../inc/hintids";
 import { RES_COLLAPSING_BORDERS, RES_LAYOUT_SPLIT } from "../../../inc/hintids";
@@ -72,6 +76,8 @@ export class SwTable extends SwClient {
     | "marginBottom"
     | "horiOrient"
     | "align"
+    | "marginLeft"
+    | "marginRight"
   > = {};
   private rowsToRepeat = 1;
   public static readonly SEARCH_NONE = 0;
@@ -149,6 +155,8 @@ export class SwTable extends SwClient {
 
   /** Projects independent native state for construction, transport and history. @returns Detached boundary values. */
   public GetFormat(): SwTableFormat {
+    const lr = this.GetFrameFormat().GetAttrSet().GetItemIfSet(RES_LR_SPACE, false) as
+      SvxLRSpaceItem | undefined;
     const orientation = this.GetFrameFormat().GetAttrSet().GetItemIfSet(RES_HORI_ORIENT, false) as
       SwFormatHoriOrient | undefined;
     const orient = orientation?.GetHoriOrient();
@@ -163,6 +171,7 @@ export class SwTable extends SwClient {
       SwFormatLayoutSplit | undefined;
     return {
       ...this.format,
+      ...(lr === undefined ? {} : { marginLeft: lr.ResolveLeft(), marginRight: lr.ResolveRight() }),
       ...(orientation === undefined
         ? {}
         : {
@@ -206,12 +215,21 @@ export class SwTable extends SwClient {
       marginBottom,
       horiOrient,
       align,
+      marginLeft,
+      marginRight,
       ...geometry
     } = value;
     if (headerRows !== undefined || repeatHeaderRows !== undefined)
       this.SetRowsToRepeat(repeatHeaderRows === false ? 0 : (headerRows ?? this.rowsToRepeat));
     this.format = geometry;
     const format = this.GetFrameFormat();
+    if (marginLeft === undefined && marginRight === undefined) format.ResetFormatAttr(RES_LR_SPACE);
+    else {
+      const lr = format.GetLRSpace().Clone();
+      lr.SetLeft(marginLeft ?? 0);
+      lr.SetRight(marginRight ?? 0);
+      format.SetFormatAttr(lr);
+    }
     let orient = horiOrient;
     if (orient === undefined && align !== undefined) {
       const hasMargins = value.marginLeft !== undefined || value.marginRight !== undefined;
@@ -469,11 +487,10 @@ export class SwTable extends SwClient {
         else if (orient !== HoriOrientation.FULL || Math.abs(oldWidth - newWidth) > 20)
           orient = HoriOrientation.LEFT_AND_WIDTH;
       }
-      this.format = {
-        ...this.format,
-        marginLeft: next.GetLeft(),
-        marginRight: next.GetRightMax() - next.GetRight(),
-      };
+      const lr = this.GetFrameFormat().GetLRSpace().Clone();
+      lr.SetLeft(next.GetLeft());
+      lr.SetRight(next.GetRightMax() - next.GetRight());
+      this.GetFrameFormat().SetFormatAttr(lr);
       const orientation = this.GetFrameFormat().GetHoriOrient().Clone();
       orientation.SetHoriOrient(orient);
       this.GetFrameFormat().SetFormatAttr(orientation);

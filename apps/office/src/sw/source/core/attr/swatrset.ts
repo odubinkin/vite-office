@@ -14,6 +14,7 @@ import {
   SvxRightMarginItem,
   SvxTextLeftMarginItem,
   SvxULSpaceItem,
+  SvxLRSpaceItem,
   SvxBoxItem,
   SvxProtectItem,
 } from "../../../../editeng/source/items/frmitems";
@@ -64,6 +65,7 @@ import {
   RES_MARGIN_RIGHT,
   RES_MARGIN_TEXTLEFT,
   RES_UL_SPACE,
+  RES_LR_SPACE,
   RES_PARATR_LIST_ID,
   RES_PARATR_LIST_LEVEL,
   RES_PARATR_LIST_ISCOUNTED,
@@ -119,6 +121,7 @@ export class SwAttrPool extends SfxItemPool {
       /** Restores the represented double. @param value - Stored scalar. @returns Native item. */
       (value) => new SwTableBoxValue(Number(value)),
     );
+    this.RegisterDefaultItem(new SvxLRSpaceItem(RES_LR_SPACE));
     this.RegisterDefaultItem(new SwFormatFrameSize());
     this.RegisterDefaultItem(new SwFormatVertOrient());
     this.RegisterDefaultItem(new SwFormatHoriOrient());

@@ -288,6 +288,9 @@ for (const [format, align] of [
     expect(f.table.GetHoriOrient()).toBe(align);
     expect(f.table.GetFormat()).toEqual({
       ...format,
+      ...(format.marginLeft === undefined && format.marginRight === undefined
+        ? {}
+        : { marginLeft: format.marginLeft ?? 0, marginRight: format.marginRight ?? 0 }),
       horiOrient: align,
       align: (
         {

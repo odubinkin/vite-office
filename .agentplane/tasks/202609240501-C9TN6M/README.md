@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 297
+revision: 298
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-09T21:23:01.498Z"
+doc_updated_at: "2026-10-09T21:47:33.123Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -1391,6 +1391,8 @@ sections:
     - Correction7H3CN9 (6/10 after SZKQTN): Original SwFormatHoriOrient owns table horizontal orientation; no mirrored horiOrient/align, native dialog ItemSet carries orientation/width. Full original item history and effective layout/ODT/mounted UI pass.3517 current-source unique cases38 fresh; whole eight modules Istanbul100 all-four/zero negative/map-hash identity.17 exact fixture migrations12 old files,607 untouched/619 total;16 canonical histories retained. LR native ownership and generic native document attr history/layout/UNO/VCL remain separate. Full not due; goalACTIVE/incomplete. Exact semantic/quality binding follows.
 
     - 7H3CN9 semantic33c4750567c1f043b45ef6d5db2a9caf7c8b6223 exact-SHA qualityPASS same-agent non-independent. All deterministic gates passed; canonical finish pending.
+
+    - Correction6Q2YQH (7/10 after SZKQTN): Original RES_LR_SPACE98 owns table left/right distances and full native context, without mirrored margin scalars. Native resize clones context; geometry dialog sends LR/orientation/width ItemSet; effective native layout/representation/ODT and mounted direct/inherited original history pass. Final342files3588cases22fresh, ten complete production modules Istanbul100all-four0negative/current hashes, initial pre-repair counters excluded. Five exact migrations3old files,620 untouched/623 total;20 canonical prefixes preserved. Nine absent statics/currentbuild7browser and nine restored metadata pass. Font-unit/complete UNO/Shadow/generic Doc attr history/full native layout/VCL/transport remain separately incomplete. Full not due; goalACTIVE/incomplete.
 id_source: "generated"
 ---
 ## Summary
@@ -2755,3 +2757,5 @@ Correction6JYMXQ reviewed semantic=7429bf32872581e86a831d04afa67e14bdd6d333; sam
 - Correction7H3CN9 (6/10 after SZKQTN): Original SwFormatHoriOrient owns table horizontal orientation; no mirrored horiOrient/align, native dialog ItemSet carries orientation/width. Full original item history and effective layout/ODT/mounted UI pass.3517 current-source unique cases38 fresh; whole eight modules Istanbul100 all-four/zero negative/map-hash identity.17 exact fixture migrations12 old files,607 untouched/619 total;16 canonical histories retained. LR native ownership and generic native document attr history/layout/UNO/VCL remain separate. Full not due; goalACTIVE/incomplete. Exact semantic/quality binding follows.
 
 - 7H3CN9 semantic33c4750567c1f043b45ef6d5db2a9caf7c8b6223 exact-SHA qualityPASS same-agent non-independent. All deterministic gates passed; canonical finish pending.
+
+- Correction6Q2YQH (7/10 after SZKQTN): Original RES_LR_SPACE98 owns table left/right distances and full native context, without mirrored margin scalars. Native resize clones context; geometry dialog sends LR/orientation/width ItemSet; effective native layout/representation/ODT and mounted direct/inherited original history pass. Final342files3588cases22fresh, ten complete production modules Istanbul100all-four0negative/current hashes, initial pre-repair counters excluded. Five exact migrations3old files,620 untouched/623 total;20 canonical prefixes preserved. Nine absent statics/currentbuild7browser and nine restored metadata pass. Font-unit/complete UNO/Shadow/generic Doc attr history/full native layout/VCL/transport remain separately incomplete. Full not due; goalACTIVE/incomplete.

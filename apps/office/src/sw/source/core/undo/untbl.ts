@@ -157,6 +157,8 @@ class SaveTable {
     delete this.format.marginBottom;
     delete this.format.horiOrient;
     delete this.format.align;
+    delete this.format.marginLeft;
+    delete this.format.marginRight;
     const tableItems = table.GetFrameFormat().GetAttrSet();
     this.tableSet = new SfxItemSet(tableItems.GetPool(), tableItems.GetRanges());
     this.tableSet.PutSet(tableItems);

@@ -383,7 +383,7 @@ export class SwTabFrame extends SwLayoutFrame {
 
   /** Resolves native orientation spacing without fly or outer-border offsets. @param upperWidth - Actual upper print width. @returns Table print area. */
   public Format(upperWidth: number): SwTablePrintArea {
-    const format = this.table.GetFormat();
+    const lr = this.GetFormat().GetLRSpace();
     const wished = Math.min(
       65535,
       Math.max(
@@ -395,12 +395,12 @@ export class SwTabFrame extends SwLayoutFrame {
     let right = 0;
     const orient = this.GetFormat().GetHoriOrient().GetHoriOrient();
     if (orient === HoriOrientation.NONE) {
-      left = format.marginLeft ?? 0;
-      right = format.marginRight ?? 0;
+      left = lr.ResolveLeft();
+      right = lr.ResolveRight();
     } else {
       switch (orient) {
         case HoriOrientation.LEFT_AND_WIDTH:
-          left = format.marginLeft ?? 0;
+          left = lr.ResolveLeft();
           right = upperWidth - left - wished;
           break;
         case HoriOrientation.LEFT:

@@ -49,7 +49,7 @@ describe("ODF native table print area", /** Registers native model/filter cases 
           cycle === 0 || align === "left" || align === "margins" ? left : undefined,
         );
         expect(table.GetFormat().marginRight).toBe(
-          cycle === 0 || align === "margins" ? right : undefined,
+          cycle === 0 || align === "margins" ? right : align === "left" ? 0 : undefined,
         );
         expect(new SwTabFrame(table).Format(8000).width).toBe(width);
         expect(table.GetColumnWidths()).toEqual([1440, 1440]);
