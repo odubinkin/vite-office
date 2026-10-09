@@ -1,7 +1,7 @@
 /** @fileoverview Formats represented horizontal table print areas from native SwTabFrame::Format. */
 import type { SwTable, SwTableBox, SwTableLine } from "../table/swtable";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
-import { SwFrameSize } from "../../../inc/fmtfsize";
+import { SwFrameSize, type SwFormatFrameSize } from "../../../inc/fmtfsize";
 import { LegacyModifyHint, BroadcastingModify, type SwModify } from "../../../inc/calbck";
 import { SwFrame, SwLayoutFrame, SwFrameType } from "./wsfrm";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
@@ -353,7 +353,9 @@ export class SwTabFrame extends SwLayoutFrame {
   /** Resolves an actual box reference width against this table's print area. @param box - Original box. @param upperWidth - Upper print width. @returns Device-neutral print width in twips. */
   public GetBoxPrintWidth(box: SwTableBox, upperWidth: number): number {
     const wished =
-      this.table.GetFormat().width ??
+      (
+        this.GetFormat().GetAttrSet().GetItemIfSet(RES_FRM_SIZE) as SwFormatFrameSize | undefined
+      )?.GetWidth() ??
       this.table
         .GetColumnWidths()
         .reduce(
@@ -384,7 +386,10 @@ export class SwTabFrame extends SwLayoutFrame {
     const format = this.table.GetFormat();
     const wished = Math.min(
       65535,
-      Math.max(this.table.GetColumnWidths().length * 23, format.width ?? 0),
+      Math.max(
+        this.table.GetColumnWidths().length * 23,
+        this.GetFormat().GetFrameSize().GetWidth(),
+      ),
     );
     let left = 0;
     let right = 0;

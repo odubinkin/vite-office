@@ -92,7 +92,7 @@ it("frame-size replacement scales every independent original line once", /** Che
   ]);
   expect(f.table.GetFormat().marginTop).toBe(300);
 });
-it("frame-size replacement preserves unrepresented widths until both frame sizes exist", /** Checks absent old and new frame attributes. @returns Nothing. */ () => {
+it("frame-size reset preserves boxes and subsequent size scales from native pooled zero", /** Checks native zero-size reset and release zero-divisor scaling. @returns Nothing. */ () => {
   const f = fixture();
   f.table.SetFormat({ horiOrient: H.LEFT });
   expect(widths(f.table)).toEqual([
@@ -102,15 +102,15 @@ it("frame-size replacement preserves unrepresented widths until both frame sizes
   ]);
   f.table.SetFormat({ width: 3000, horiOrient: H.LEFT });
   expect(widths(f.table)).toEqual([
-    [1000, 5000],
-    [1000, 1000, 4000],
-    [4000, 2000],
+    [3000000, 15000000],
+    [3000000, 3000000, 12000000],
+    [12000000, 6000000],
   ]);
   f.table.SetFormat({ width: 1500, horiOrient: H.LEFT });
   expect(widths(f.table)).toEqual([
-    [500, 2500],
-    [500, 500, 2000],
-    [2000, 1000],
+    [1500000, 7500000],
+    [1500000, 1500000, 6000000],
+    [6000000, 3000000],
   ]);
 });
 it.each([

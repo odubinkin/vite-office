@@ -351,7 +351,7 @@ describe("Writer physical page browser UI", /** Registers page-layout UI cases. 
     const first = document.paragraphs[0];
     if (first === undefined) throw new Error("Writer has no first paragraph.");
     first.SetText("Before");
-    const table = document.nodes.MakeTableNode("Paged", { width: 1500 }, first);
+    const table = document.nodes.MakeTableNode("Paged", { width: 1500, headerRows: 0 }, first);
     table.AddColumnWidth(1500);
     document.nodes.AppendTableRow(table, 1, {
       frameSize: new SwFormatFrameSize(SwFrameSize.Minimum, 0, 450),

@@ -7,6 +7,7 @@ import type {
 } from "../../../inc/swtblfmt";
 import { MoveTableLineHint, MoveTableBoxHint } from "../../../inc/hints";
 import type { SwFrameFormat } from "../layout/atrfrm";
+import { SwTabFrame } from "../layout/tabfrm";
 import { SwTableNode } from "../docnode/node";
 import type { SwDoc } from "../doc/doc";
 import type { SwInsertTableOptions } from "../../../inc/itabenum";
@@ -140,6 +141,7 @@ function KillEmptyFrameFormat(format: SwFrameFormat): void {
 /** Retains table attributes only, corresponding to native SaveTable's represented flat-grid slice. */
 class SaveTable {
   private readonly format;
+  private readonly tableSet: SfxItemSet;
   private readonly lines;
   private readonly rowFormats: SfxItemSet[] = [];
   private readonly boxFormats: SfxItemSet[] = [];
@@ -148,6 +150,12 @@ class SaveTable {
     this.format = { ...table.GetFormat() };
     delete this.format.headerRows;
     delete this.format.repeatHeaderRows;
+    delete this.format.width;
+    delete this.format.borderModel;
+    delete this.format.layoutSplit;
+    const tableItems = table.GetFrameFormat().GetAttrSet();
+    this.tableSet = new SfxItemSet(tableItems.GetPool(), tableItems.GetRanges());
+    this.tableSet.PutSet(tableItems);
     const formats = new Map<SwTableLineFormat, number>(),
       boxFormats = new Map<SwNativeTableBoxFormat, number>();
     this.lines = table.GetTabLines().map(
@@ -189,7 +197,25 @@ class SaveTable {
   }
   /** Restores attributes on original graph owners. @param table - Connected table. @returns Nothing. */
   public RestoreAttr(table: SwTable): void {
-    table.SetFormat(this.format);
+    const tableFormat = table.GetFrameFormat();
+    tableFormat.LockModify();
+    try {
+      table.SetFormat(this.format);
+      tableFormat.GetAttrSet().ClearItem();
+      tableFormat.GetAttrSet().PutSet(this.tableSet);
+    } finally {
+      tableFormat.UnlockModify();
+    }
+    tableFormat.ForAllListeners(
+      /** Invalidates each original table frame after native direct-item restoration. @param client - Original format client. @returns Continue flag. */
+      (client) => {
+        if (client instanceof SwTabFrame && client.GetTable() === table) {
+          client.InvalidateAll();
+          client.SetCompletePaint();
+        }
+        return false;
+      },
+    );
     const formats = this.rowFormats.map(
       /** Recreates one native owner for each saved item set. @param saved - Independent direct items. @returns New shared format. */
       (saved) => {

@@ -70,7 +70,9 @@ it("mounted main table renders native linked cell formats and history without bo
       mounted = render(<WriterWorkbench isActive view={session.view} />);
     expect(native).toHaveBeenCalled();
     expect(
-      required(screen.getByRole("textbox", { name: "Row 1 column 1 paragraph 1" }).closest("td")),
+      required(
+        screen.getByRole("textbox", { name: "Row 1 column 1 paragraph 1" }).closest(":is(td,th)"),
+      ),
     ).toHaveStyle({ borderLeft: "1.5pt solid #112233", paddingLeft: "4px" });
     const before = shell.CaptureCursorState();
     act(
@@ -81,7 +83,9 @@ it("mounted main table renders native linked cell formats and history without bo
     for (let cycle = 0; cycle < 3; cycle++) {
       mounted.rerender(<WriterWorkbench isActive view={session.view} />);
       expect(
-        required(screen.getByRole("textbox", { name: "Row 1 column 1 paragraph 1" }).closest("td")),
+        required(
+          screen.getByRole("textbox", { name: "Row 1 column 1 paragraph 1" }).closest(":is(td,th)"),
+        ),
       ).toHaveStyle({ verticalAlign: "middle" });
       checkClients(first);
       checkClients(second);
@@ -91,7 +95,9 @@ it("mounted main table renders native linked cell formats and history without bo
         },
       );
       expect(
-        required(screen.getByRole("textbox", { name: "Row 1 column 1 paragraph 1" }).closest("td")),
+        required(
+          screen.getByRole("textbox", { name: "Row 1 column 1 paragraph 1" }).closest(":is(td,th)"),
+        ),
       ).toHaveStyle({ verticalAlign: "top" });
       act(
         /** Reapplies actual native history. @returns Nothing. */ () => {

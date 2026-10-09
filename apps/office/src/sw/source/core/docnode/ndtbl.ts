@@ -11,6 +11,7 @@ import { SwTableNode } from "../docnode/node";
 import { SwUndoAttrTable, SwUndoTableNdsChg, SwUndoTableHeadline } from "../undo/untbl";
 import type { SwTextNode } from "../txtnode/ndtxt";
 import { createWriterCollapsedCursorState, type SwUndoCursorState } from "../undo/undobj";
+import { RES_FRM_SIZE } from "../../../inc/hintids";
 /** Applies the native headline command without a table-format snapshot. @param doc - Original document. @param table - Original table. @param requested - Authored uint16 count. @returns Whether the native effective-count guard admitted a change. */
 export function SetSwRowsToRepeat(doc: SwDoc, table: SwTable, requested: number): boolean {
   const count = requested & 0xffff,
@@ -228,7 +229,10 @@ export function SetSwTabCols(
         cursorState ?? createWriterCollapsedCursorState(node, 0, node.GetCharacterItemsAt(0));
       const actualWidth = previous.GetRight() - previous.GetLeft();
       const wishedWidth =
-        table.GetFormat().width ??
+        (
+          table.GetFrameFormat().GetAttrSet().GetItemIfSet(RES_FRM_SIZE) as
+            SwFormatFrameSize | undefined
+        )?.GetWidth() ??
         table
           .GetColumnWidths()
           .reduce(

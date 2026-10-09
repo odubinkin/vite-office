@@ -2,7 +2,7 @@
  * @fileoverview Implements the Writer SwNodes array and fixed sections from the pinned LibreOffice `sw/source/core/docnode/nodes.cxx` boundary.
  */
 
-import { SwRowFrame, SwCellFrame } from "../layout/tabfrm";
+import { SwRowFrame, SwCellFrame, SwTabFrame } from "../layout/tabfrm";
 import { SwOutlineNodes } from "./ndnum";
 import type { SwDoc } from "../doc/doc";
 import { SwEndNode, SwStartNode, SwTableBoxStartNode, SwTableNode, type SwNode } from "./node";
@@ -198,6 +198,17 @@ export class SwNodes {
         this.m_aOutlineNodes.erase(node);
         node.RemoveFromList();
       }
+    tableNode
+      .GetTable()
+      .GetFrameFormat()
+      .ForAllListeners(
+        /** Removes original table frames before releasing their model client. @param client - Original format listener. @returns Continue flag. */
+        (client) => {
+          if (client instanceof SwTabFrame && client.GetTable() === tableNode.GetTable())
+            client.DestroyImpl();
+          return false;
+        },
+      );
     for (const row of tableNode.GetTable().GetTabLines()) {
       row.GetFrameFormat().ForAllListeners(
         /** Destroys actual flat row frames before their model line, as native DelFrames does. @param client - Original format client. @returns Continue flag. */
@@ -209,6 +220,7 @@ export class SwNodes {
       for (const box of row.GetTabBoxes()) this.DestroyTableBox(box);
       row.Dispose();
     }
+    tableNode.GetTable().Dispose();
     this.nodeArray.splice(index, end - index + 1);
     this.document.NotifyModelChange({ index, kind: "node-removed" });
   }

@@ -65,7 +65,7 @@ it("mounted original cell inheritance updates through native format hints and re
     parent.SetFormatAttr(new SwFormatVertOrient(720, 2, 7));
     render(<WriterWorkbench isActive view={session.view} />);
     const editor = screen.getByRole("textbox", { name: "Row 1 column 1 paragraph 1" }),
-      cell = editor.closest("td"),
+      cell = editor.closest(":is(td,th)"),
       model = vi.spyOn(doc, "NotifyModelChange");
     act(
       /** Accepts actual parent inheritance through the original native notifier. @returns Nothing. */ () => {

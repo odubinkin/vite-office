@@ -132,7 +132,7 @@ it("rename lookup resolves a recreated insertion frame instead of the old graph"
     expect(recreated).not.toBe(frame);
     expect(f.shell.Redo()).toBe(true);
     expect(recreated?.GetName()).toBe("Renamed");
-    expect(inserted.GetName()).toBe("Inserted");
+    expect(inserted.GetRegisteredIn()).toBeUndefined();
   } finally {
     f.shell.Close();
   }

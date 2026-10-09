@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/table/swtable-boxline.ts",
+          "marker": "SwTableBox"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/table/swtable-boxline.ts",
+          "marker": "SwTableLine"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/table/swtable.cxx",
+          "marker": "SwTableBox::SwTableBox"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/table/swtable.cxx",
+          "marker": "SwTableLine::SwTableLine"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/core/table/swtable-boxline.ts",
+    "localSymbols": [
+      "SwTableBox",
+      "SwTableLine"
+    ],
+    "omittedResponsibilities": [
+      "Full LibreOffice table features, nested/merged cells, formula/redline/copy/Repeat and full native model/layout/VCL parity remain unverified."
+    ],
+    "preservedResponsibilities": [
+      "Correction WGQ8944/10 after full baseline SZKQTN moves native width ownership to original RES_FRM_SIZE items and registers SwTable as an original SwClient. Direct, inherited, legacy and existing batched deltas resize original independent boxes with source cumulative integer rounding; paired native table lock prevents separator adjustment from general double-scaling. Complete new cell sizes use Variable width/zero-height as swtable.cxx. SaveTable owns/restores direct original frame item sets under native locks and invalidates actual original frames instead of replaying a scalar width adapter. Connected deletion releases original physical and model clients; React captures render-time table keys before native owner death. Native frame formatting/document separator normalization read effective original size, ignoring stale transport width. Existing SwTableBox and SwTableLine class bodies are physically separated into swtable-boxline.ts to honor the unchanged authored-file size gate, with original class identities and exports retained and no forwarding adapter. Full orientation/spacing/frame-type/default/copy/Repeat/master/follow/nested/merged/root/VCL families remain unrepresented/unverified; missing-size flat-builder fallback remains an explicit unverified boundary. All prior status/default/classification/evidence/responsibility prefixes and registered recovery/open/save/settings deviations preserved; no whole-module or goal promotion. Actual final-source targeted verification is recorded in task202610091947-WGQ894."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/table/swtable.cxx",
+    "upstreamSymbols": [
+      "SwTableBox::SwTableBox",
+      "SwTableLine::SwTableLine"
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/core/table/swtable-boxline.ts",
+      "rationale": "Original SwTableBox and SwTableLine classes from swtable.cxx are physically separated under the unchanged 1,000-line authored-file limit; original class bodies, identities and public exports remain intact without compatibility forwarding. Full native parity remains unverified.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

@@ -34,7 +34,7 @@ it("direct native format item writes refresh the main UI through original docume
       notify = vi.spyOn(frame, "Notify");
     render(<WriterWorkbench isActive view={session.view} />);
     const cell = required(
-      screen.getByRole("textbox", { name: "Row 1 column 1 paragraph 1" }).closest("td"),
+      screen.getByRole("textbox", { name: "Row 1 column 1 paragraph 1" }).closest(":is(td,th)"),
     );
     expect(cell).toHaveStyle({ verticalAlign: "top" });
     act(
@@ -50,7 +50,9 @@ it("direct native format item writes refresh the main UI through original docume
     expect(node.GetText()).toBe("Native updates");
     expect(second.GetFrameFormat()).not.toBe(original);
     expect(
-      required(screen.getByRole("textbox", { name: "Row 1 column 2 paragraph 1" }).closest("td")),
+      required(
+        screen.getByRole("textbox", { name: "Row 1 column 2 paragraph 1" }).closest(":is(td,th)"),
+      ),
     ).toHaveStyle({ verticalAlign: "top" });
     act(
       /** Restores direct native orientation to pooled default. @returns Nothing. */ () => {
@@ -90,7 +92,7 @@ it("native row item deltas drive mounted fixed height and original cell alignmen
       },
     );
     const cell = required(
-      screen.getByRole("textbox", { name: "Row 1 column 1 paragraph 1" }).closest("td"),
+      screen.getByRole("textbox", { name: "Row 1 column 1 paragraph 1" }).closest(":is(td,th)"),
     );
     expect(required(cell.closest("tr"))).toHaveStyle({ height: "48px" });
     expect(required(cell.querySelector("[data-writer-fixed-row-content]"))).toHaveStyle({

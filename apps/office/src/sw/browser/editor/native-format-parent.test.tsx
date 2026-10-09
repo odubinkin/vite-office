@@ -25,7 +25,7 @@ it("original cell parent reset refreshes inherited root alignment and rejected c
     format.SetDerivedFrom(parent);
     render(<WriterWorkbench isActive view={session.view} />);
     const editor = screen.getByRole("textbox", { name: "Row 1 column 1 paragraph 1" }),
-      cell = editor.closest("td");
+      cell = editor.closest(":is(td,th)");
     expect(cell).toHaveStyle({ verticalAlign: "middle" });
     const revision = doc.GetDocumentStateManager().GetModelRevision();
     act(

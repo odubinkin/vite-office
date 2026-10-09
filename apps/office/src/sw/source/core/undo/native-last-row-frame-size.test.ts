@@ -46,11 +46,11 @@ it("last-row height commands invalidate the original table position and history 
       expect(lastFrame.GetFormat()).toBe(last.GetFrameFormat());
       expect(lastFrame.Format(1200)).toBe(1200);
       expect(lastFrame.HasFixSize()).toBe(false);
-      expect(frame.isFrameAreaPositionValid()).toBe(true);
+      expect(frame.isFrameAreaPositionValid()).toBe(false);
       expect(shell.Redo()).toBe(true);
       expect(lastFrame.GetFormat()).toBe(last.GetFrameFormat());
       expect(lastFrame.Format(1200)).toBe(900);
-      expect(frame.isFrameAreaPositionValid()).toBe(true);
+      expect(frame.isFrameAreaPositionValid()).toBe(false);
       expect(firstFrame.GetFormat()).toBe(first.GetFrameFormat());
       expect(lastFrame.FindTabFrame()).toBe(frame);
       expect(lastFrame.GetPrev()).toBe(firstFrame);

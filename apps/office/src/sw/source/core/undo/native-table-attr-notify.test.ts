@@ -46,12 +46,12 @@ it("native table properties history invalidates original linked frames without r
       expect(shell.Undo()).toBe(true);
       expect(frame.IsCollapsingBorders()).toBe(false);
       expect(frame.isFramePrintAreaValid()).toBe(false);
-      expect(frame.isFrameAreaPositionValid()).toBe(true);
+      expect(frame.isFrameAreaPositionValid()).toBe(false);
       ready(frame);
       expect(shell.Redo()).toBe(true);
       expect(frame.IsCollapsingBorders()).toBe(true);
       expect(frame.isFramePrintAreaValid()).toBe(false);
-      expect(frame.isFrameAreaPositionValid()).toBe(true);
+      expect(frame.isFrameAreaPositionValid()).toBe(false);
       expect(table.GetFrameFormat()).toBe(owner);
       expect(frame.GetFormat()).toBe(owner);
       expect(row.GetTabLine()).toBe(line);

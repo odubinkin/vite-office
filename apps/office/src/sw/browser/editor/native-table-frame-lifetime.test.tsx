@@ -145,14 +145,14 @@ it("browser mouse geometry retains exactly one table hierarchy and destroys repl
     broken.remove();
     root.replaceChildren();
     hover();
-    expect(clients(table.GetFrameFormat())).toEqual([]);
+    expect(clients(table.GetFrameFormat())).toEqual([table]);
     expect(clients(row.GetFrameFormat())).toEqual([row]);
     expect(clients(box.GetFrameFormat())).toEqual([box]);
     root.append(element);
     hover();
     expect(clients(row.GetFrameFormat())).toHaveLength(2);
     unsubscribe();
-    expect(clients(table.GetFrameFormat())).toEqual([]);
+    expect(clients(table.GetFrameFormat())).toEqual([table]);
     expect(clients(row.GetFrameFormat())).toEqual([row]);
     expect(clients(box.GetFrameFormat())).toEqual([box]);
   } finally {
@@ -198,21 +198,21 @@ it("browser mouse frame admission skips unknown, empty and detached samples and 
     unknown.setAttribute("aria-label", "Missing");
     root.append(unknown);
     hover();
-    expect(clients(table.GetFrameFormat())).toEqual([]);
+    expect(clients(table.GetFrameFormat())).toEqual([table]);
     unknown.remove();
     const element = document.createElement("table");
     element.setAttribute("aria-label", table.GetName());
     root.append(element);
     hover();
-    expect(clients(table.GetFrameFormat())).toEqual([]);
+    expect(clients(table.GetFrameFormat())).toEqual([table]);
     vi.spyOn(element, "getBoundingClientRect").mockReturnValue(new DOMRect(0, 0, 200, 100));
     hover();
-    expect(clients(table.GetFrameFormat())).toEqual([]);
+    expect(clients(table.GetFrameFormat())).toEqual([table]);
     const cell = document.createElement("td");
     cell.dataset.writerTableBox = "-1";
     element.append(cell);
     hover();
-    expect(clients(table.GetFrameFormat())).toEqual([]);
+    expect(clients(table.GetFrameFormat())).toEqual([table]);
     cell.dataset.writerTableBox = String(box.GetStartNode().GetIndex());
     vi.spyOn(cell, "getBoundingClientRect").mockReturnValue(new DOMRect(0, 0, 200, 100));
     hover();
@@ -268,7 +268,7 @@ it("native owned table rendering preserves centered cells and zero-width column 
       expect(clients(row.GetFrameFormat())).toEqual([row]);
       for (const box of row.GetTabBoxes()) expect(clients(box.GetFrameFormat())).toEqual([box]);
     }
-    expect(clients(table.GetFrameFormat())).toEqual([]);
+    expect(clients(table.GetFrameFormat())).toEqual([table]);
   } finally {
     session.Close();
   }
