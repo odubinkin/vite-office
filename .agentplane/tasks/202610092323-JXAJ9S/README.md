@@ -1,10 +1,11 @@
 ---
 id: "202610092323-JXAJ9S"
 title: "Port original shared SoA range erase and adjacent-tail merge contracts"
-status: "DOING"
+result_summary: "verified-202610092323-JXAJ9S"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 26
+revision: 30
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-09T23:42:34.440Z"
+  updated_at: "2026-10-09T23:47:13.825Z"
   updated_by: "CODER"
-  note: "Verified: original shared erase/single-block/next-merge group matches7360native sequences and unchanged664full prefix; Calc and2changedshared modules actual100percent positive coverage,15gates and3portable groups passed, default formatting restored losslessly, CALC-030 original behavior preserved."
+  note: "verified-202610092323-JXAJ9S"
   attempts: 0
 quality_review:
   state: "pass"
@@ -46,7 +47,9 @@ quality_review:
     - "Lossless owner-table storage retains all native fields and permits ordinary default-heap formatting; no permanent heap override, source-body rewriting or behavioral repair."
     - "Calc 17 source files and both changed shared owners have actual 100 percent S/B/F/L with positive raw counters; 15 final gates and three portable groups passed with exact upstream links restored."
     - "Shared lu16 constexpr literal narrowing preserves runtime defaults. Inventory truth flags remain bounded; CALC-030 preserves the original suspicious end-range diagnostic argument."
-commit: null
+commit:
+  hash: "81f2789e786de67a3aa55f7818c08db4c4e8249c"
+  message: "🔍 JXAJ9S review: record native erase and merge parity evidence"
 comments:
   -
     author: "CODER"
@@ -54,6 +57,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue authorized bounded shared default trait type/fixture encoding corrections, exact native evidence and focused100 coverage retained."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610092323-JXAJ9S. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -75,8 +81,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: original shared erase/single-block/next-merge group matches7360native sequences and unchanged664full prefix; Calc and2changedshared modules actual100percent positive coverage,15gates and3portable groups passed, default formatting restored losslessly, CALC-030 original behavior preserved."
+  -
+    type: "verify"
+    at: "2026-10-09T23:47:13.825Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610092323-JXAJ9S"
+  -
+    type: "status"
+    at: "2026-10-09T23:47:13.960Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610092323-JXAJ9S. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-09T23:42:34.493Z"
+doc_updated_at: "2026-10-09T23:47:41.092Z"
 doc_updated_by: "CODER"
 description: "Continue authorized Calc core on calc branch with original erase/erase_impl/erase_in_single_block/merge_with_next_block group, shared actual deletion/adjustment/block funcs, complete native finite evidence; cycle2 task5/10."
 sections:
@@ -166,6 +185,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-09T23:47:13.825Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610092323-JXAJ9S
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T23:42:34.493Z, excerpt_hash=sha256:831e729e0cdc3f3cbdbe473d2ff3beae3cdf07dcb0e553a77100c0d3a7100763
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610092323-JXAJ9S/blueprint/resolved-snapshot.json
+    - old_digest: cfded3147b64b94035b13d7a539c2cb90d2780440201e63647897ff9723e9092
+    - current_digest: cfded3147b64b94035b13d7a539c2cb90d2780440201e63647897ff9723e9092
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610092323-JXAJ9S
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610092323-JXAJ9S --result verified-202610092323-JXAJ9S --commit 81f2789e786de67a3aa55f7818c08db4c4e8249c
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only active implementation commit, preserving original664 prior full cases and previous query/resize/append owners. No reset/branch or merge action."
   Findings: |-
@@ -198,6 +247,18 @@ sections:
     - Observation: Final native7360sequences/68904operations/76264complete records/34877full snapshots/17146complete owner snapshots passed write/check, complete raw decode/actual binary byte replay/13header/2archive/driver hashes and prior664full prefix unchanged. Callback audit6612successful erase/384defined errors, exact scalar and merge call order.
       Impact: Contiguous unlike-type native geometries cover both previously missing ownership branches. Final shared21tests/7files includes two actual changed modules and reaches100 S370/B160/F73/L348 with positive raw counts; Calc104/23 reaches100 S2904/B2051/F467/L2548.
       Resolution: Normal default-heap format write and whole format:check now pass after lossless owner interning; no permanent heap/gate bypass or evidence reduction. Original shared constexpr lu16 literal witness retained. CALC-030 preserves original invalid-end diagnostic arg. Source-shaped main859/test616/probe681 under1000hardlimit reviewed; finish remaining gates and portable groups before commit/review.
+
+    - Observation: Exact routed task complete marked DONE but exited5 E_GIT: installed deterministic close subject is too generic.
+      Impact: Verified implementation and quality review remain intact; task artifact closure needs the routed recovery.
+      Resolution: Recomputed next-action; execute its exact commit --close --unstage-others recovery before using a supported specific-subject fallback.
+
+    - Observation: Exact routed commit --close --unstage-others also exited5 E_GIT with the same generic deterministic subject.
+      Impact: Only task artifact commit remains; no implementation, test or policy issue is introduced.
+      Resolution: After recomputing the route, use supported ap commit with a specific erase/merge closure subject and --allow-tasks. Confirm actual amended HEAD, terminal route, branch and clean tracked/untracked state.
+extensions:
+  implementation_commit:
+    hash: "235d7c8e19b24dd9993211508391f2e547a28fa5"
+    message: "🧮 JXAJ9S shared: port original range erase and adjacent-tail merging"
 id_source: "generated"
 ---
 ## Summary
@@ -299,6 +360,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-09T23:47:13.825Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610092323-JXAJ9S
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T23:42:34.493Z, excerpt_hash=sha256:831e729e0cdc3f3cbdbe473d2ff3beae3cdf07dcb0e553a77100c0d3a7100763
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610092323-JXAJ9S/blueprint/resolved-snapshot.json
+- old_digest: cfded3147b64b94035b13d7a539c2cb90d2780440201e63647897ff9723e9092
+- current_digest: cfded3147b64b94035b13d7a539c2cb90d2780440201e63647897ff9723e9092
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610092323-JXAJ9S
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610092323-JXAJ9S --result verified-202610092323-JXAJ9S --commit 81f2789e786de67a3aa55f7818c08db4c4e8249c
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -336,3 +427,11 @@ Selected pinned no_trace/default-execution libc++ size_t64, actual initialized a
 - Observation: Final native7360sequences/68904operations/76264complete records/34877full snapshots/17146complete owner snapshots passed write/check, complete raw decode/actual binary byte replay/13header/2archive/driver hashes and prior664full prefix unchanged. Callback audit6612successful erase/384defined errors, exact scalar and merge call order.
   Impact: Contiguous unlike-type native geometries cover both previously missing ownership branches. Final shared21tests/7files includes two actual changed modules and reaches100 S370/B160/F73/L348 with positive raw counts; Calc104/23 reaches100 S2904/B2051/F467/L2548.
   Resolution: Normal default-heap format write and whole format:check now pass after lossless owner interning; no permanent heap/gate bypass or evidence reduction. Original shared constexpr lu16 literal witness retained. CALC-030 preserves original invalid-end diagnostic arg. Source-shaped main859/test616/probe681 under1000hardlimit reviewed; finish remaining gates and portable groups before commit/review.
+
+- Observation: Exact routed task complete marked DONE but exited5 E_GIT: installed deterministic close subject is too generic.
+  Impact: Verified implementation and quality review remain intact; task artifact closure needs the routed recovery.
+  Resolution: Recomputed next-action; execute its exact commit --close --unstage-others recovery before using a supported specific-subject fallback.
+
+- Observation: Exact routed commit --close --unstage-others also exited5 E_GIT with the same generic deterministic subject.
+  Impact: Only task artifact commit remains; no implementation, test or policy issue is introduced.
+  Resolution: After recomputing the route, use supported ap commit with a specific erase/merge closure subject and --allow-tasks. Confirm actual amended HEAD, terminal route, branch and clean tracked/untracked state.
