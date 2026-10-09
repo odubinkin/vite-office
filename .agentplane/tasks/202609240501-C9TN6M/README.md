@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 261
+revision: 262
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-09T07:58:40.586Z"
+doc_updated_at: "2026-10-09T08:29:13.671Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -1291,6 +1291,10 @@ sections:
     - Observation: Iteration249 MND6MH DONE-bound result: implementation d4ebd1f5fa81 restores detached native SwFrame validity and row/cell replacement versus history invalidation;19 fresh and132 unique app cases pass. Silent shared claims remain unchanged.
       Impact: Current changed wsfrm/tabfrm actual188lines211statements61functions114branches all-four100. Application318files certificate retains316 byte-identical whole sources/maps after source/proof hashes plus complete unchanged declaration/body/enclosing-branch/location regions and actual current changed function counters. Tests/build upstream absent and symlink restored. Four canonical Writer runtime/provenance records updated, registry views generated and scoped/global/source audits pass. No full249; last full247.
       Resolution: Same-agent explicitly non-independent evaluator passes bounded leaf. Existing statuses/defaults/classes/evidence prefixes and registered I/O/recovery exceptions preserved. Real native page/root propagation, full geometry and area-definition base split, attribute/direction/follow/collapsed-border handling and persistent browser physical-frame integration remain next tasks; parent and broad goal stay active and incomplete.
+
+    - Observation: Iteration250 completed native frame attribute callback implementation, task202610090803-7PRR3B, semantic66e1e0626548059dcb738a092e320185bc0761e9.
+      Impact: Original detached frames now process represented native deltas with ascending borrowed old/new items and native size/print/position/paint ordering. Rows prioritize frame size over split and forward the original pool item; empty-lower cells handle vertical orientation. LegacyModifyHint and PrepareHint have native module ownership; no synthetic document signal or TextRuns translation.
+      Resolution: Verified164 unique cases including12 fresh across24files once upstream-absent, restored finally; changed5 modules all-four100379lines427statements113functions224branches. Three fresh complete maps plus exact unchanged calbck/hints source/declaration/body/enclosing-branch/all-location proofs bind verified249 digests;313 whole identical app files retained. Type/lint/format/dependency/docs/size/static and final registry/source/routing/doctor pass. Ten canonical records preserve prior states/defaults/classes/evidence and documented recovery/open/save/settings deviations. Same-agent evaluator explicitly non-independent. Full247 remains last full; no full250. Persistent page/root/browser physical propagation, content/follows/collapsed-border/item-family and broad goal parity remain unverified.
 id_source: "generated"
 ---
 ## Summary
@@ -2555,3 +2559,7 @@ Iteration248 202610090423-F5D15Q remediation after updated human stop instructio
 - Observation: Iteration249 MND6MH DONE-bound result: implementation d4ebd1f5fa81 restores detached native SwFrame validity and row/cell replacement versus history invalidation;19 fresh and132 unique app cases pass. Silent shared claims remain unchanged.
   Impact: Current changed wsfrm/tabfrm actual188lines211statements61functions114branches all-four100. Application318files certificate retains316 byte-identical whole sources/maps after source/proof hashes plus complete unchanged declaration/body/enclosing-branch/location regions and actual current changed function counters. Tests/build upstream absent and symlink restored. Four canonical Writer runtime/provenance records updated, registry views generated and scoped/global/source audits pass. No full249; last full247.
   Resolution: Same-agent explicitly non-independent evaluator passes bounded leaf. Existing statuses/defaults/classes/evidence prefixes and registered I/O/recovery exceptions preserved. Real native page/root propagation, full geometry and area-definition base split, attribute/direction/follow/collapsed-border handling and persistent browser physical-frame integration remain next tasks; parent and broad goal stay active and incomplete.
+
+- Observation: Iteration250 completed native frame attribute callback implementation, task202610090803-7PRR3B, semantic66e1e0626548059dcb738a092e320185bc0761e9.
+  Impact: Original detached frames now process represented native deltas with ascending borrowed old/new items and native size/print/position/paint ordering. Rows prioritize frame size over split and forward the original pool item; empty-lower cells handle vertical orientation. LegacyModifyHint and PrepareHint have native module ownership; no synthetic document signal or TextRuns translation.
+  Resolution: Verified164 unique cases including12 fresh across24files once upstream-absent, restored finally; changed5 modules all-four100379lines427statements113functions224branches. Three fresh complete maps plus exact unchanged calbck/hints source/declaration/body/enclosing-branch/all-location proofs bind verified249 digests;313 whole identical app files retained. Type/lint/format/dependency/docs/size/static and final registry/source/routing/doctor pass. Ten canonical records preserve prior states/defaults/classes/evidence and documented recovery/open/save/settings deviations. Same-agent evaluator explicitly non-independent. Full247 remains last full; no full250. Persistent page/root/browser physical propagation, content/follows/collapsed-border/item-family and broad goal parity remain unverified.

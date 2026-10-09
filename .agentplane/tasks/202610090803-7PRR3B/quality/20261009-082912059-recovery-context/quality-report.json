@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "202610090803-7PRR3B",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-09T08:29:12.059Z",
+  "verdict": "pass",
+  "summary": "Same-agent non-independent scoped review: original native frame attribute callbacks are restored and verified; broad goal remains incomplete.",
+  "evaluated_sha": "66e1e0626548059dcb738a092e320185bc0761e9",
+  "blueprint_digest": "761448d181f8a23cec7f73d8ad19095285ef2dbf0416e533e928f268f13fed29",
+  "findings": [
+    "Original borrowed item identities, ascending delta accumulation, page-before-local ordering, row size/split priority, empty-lower cell orientation and actual shared/reset/lock/parent/history behavior pass targeted checks.",
+    "Three current modules have complete fresh maps; calbck/hints retain only all unchanged original source regions and exact mapped locations after old-source SHA reconstruction; prior249 certificate digests and313 whole identical files verified. Raw threshold failure retained, no counter or gate weakening."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610090803-7PRR3B/README.md",
+    ".agentplane/tasks/202610090803-7PRR3B/evidence/verification.json",
+    ".agentplane/tasks/202610090803-7PRR3B/evidence/coverage.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Persistent native page/root/browser physical propagation, content arrangement, follows/split rows, collapsed-border parent effects and unsupported item families are still unverified; no whole-module or whole-goal promotion."
+  ]
+}
