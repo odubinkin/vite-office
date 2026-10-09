@@ -1,10 +1,11 @@
 ---
 id: "202610090732-MND6MH"
 title: "Restore native table frame validity on format replacement and history"
-status: "DOING"
+result_summary: "verified-202610090732-MND6MH"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-09T07:57:54.687Z"
+  updated_at: "2026-10-09T07:59:15.307Z"
   updated_by: "CODER"
-  note: "132 unique app cases including19 fresh passed upstream-absent with finally restoration. Current changed wsfrm/tabfrm actual counters188/211/61/114 all-four100;318file application certificate retains316 exact whole sources/maps and complete unchanged regions with current changed function counters. Final type/lint/format/build/dependency/docs/size/source/provenance/scoped+global registry/routing/doctor gates pass. Implementation d4ebd1f5fa81; broad physical root/UI integration remains incomplete."
+  note: "verified-202610090732-MND6MH"
   attempts: 0
 quality_review:
   state: "pass"
@@ -40,11 +41,16 @@ quality_review:
     - "d4ebd1f5fa81"
   findings:
     - "Reviewed native pinned flags/hooks and row/cell handler order, independent state/owner/real-history cases,132 unique tests and source-bound actual all-four100 coverage. Final command gates and four canonical registry records preserve prior semantic fields and evidence prefixes. Raw failed attempts and partial threshold exits remain retained; no goal or whole-module promotion."
-commit: null
+commit:
+  hash: "d4ebd1f5fa81202aaceb2fcb3abf01fb160aac15"
+  message: "🧩 MND6MH code: restore native table frame validity"
 comments:
   -
     author: "CODER"
     body: "Start: Implement approved iteration249 native frame validity and replacement/history invalidation in Writer only; preserve silent shared claims and document remaining persistent UI frame integration."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610090732-MND6MH. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -59,8 +65,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "132 unique app cases including19 fresh passed upstream-absent with finally restoration. Current changed wsfrm/tabfrm actual counters188/211/61/114 all-four100;318file application certificate retains316 exact whole sources/maps and complete unchanged regions with current changed function counters. Final type/lint/format/build/dependency/docs/size/source/provenance/scoped+global registry/routing/doctor gates pass. Implementation d4ebd1f5fa81; broad physical root/UI integration remains incomplete."
+  -
+    type: "verify"
+    at: "2026-10-09T07:59:15.307Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610090732-MND6MH"
+  -
+    type: "status"
+    at: "2026-10-09T07:59:15.404Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610090732-MND6MH. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-09T07:57:54.747Z"
+doc_updated_at: "2026-10-09T07:59:15.404Z"
 doc_updated_by: "CODER"
 description: "Iteration249 under C9TN6M: port represented SwFrame validity and paint state and exact row/cell replacement versus history invalidation from pinned LibreOffice. Keep silent shared claims unchanged; prepare native physical-frame invalidation foundation without claiming persistent browser frame integration."
 sections:
@@ -114,6 +133,36 @@ sections:
     - freshness: route=computed_local remote=remote_skipped
     - repeat_allowed: false
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-09T07:59:15.307Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610090732-MND6MH
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T07:57:54.747Z, excerpt_hash=sha256:e5859cc6e115c2421774c60c71488ab5127d3ac48b8688d721c20f82f43629db
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610090732-MND6MH/blueprint/resolved-snapshot.json
+    - old_digest: 3ecef8a55349efbd44710d9d55a7f864ea9bf7418cf319293bf831703a5bf0dd
+    - current_digest: 3ecef8a55349efbd44710d9d55a7f864ea9bf7418cf319293bf831703a5bf0dd
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610090732-MND6MH
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610090732-MND6MH --result verified-202610090732-MND6MH --commit fd4ebb79ab255cf22ddbcfda883d8da8eb880997
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
     <!-- END VERIFICATION RESULTS -->
@@ -188,6 +237,36 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-09T07:59:15.307Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610090732-MND6MH
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T07:57:54.747Z, excerpt_hash=sha256:e5859cc6e115c2421774c60c71488ab5127d3ac48b8688d721c20f82f43629db
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610090732-MND6MH/blueprint/resolved-snapshot.json
+- old_digest: 3ecef8a55349efbd44710d9d55a7f864ea9bf7418cf319293bf831703a5bf0dd
+- current_digest: 3ecef8a55349efbd44710d9d55a7f864ea9bf7418cf319293bf831703a5bf0dd
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610090732-MND6MH
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610090732-MND6MH --result verified-202610090732-MND6MH --commit fd4ebb79ab255cf22ddbcfda883d8da8eb880997
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
