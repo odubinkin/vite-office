@@ -1,10 +1,11 @@
 ---
 id: "202610091422-KCHP9M"
 title: "Reparent native format clients before format destruction"
-status: "DOING"
+result_summary: "Reparent native clients before format destruction"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -48,6 +49,9 @@ comments:
   -
     author: "CODER"
     body: "Implementation: Native format clients reparent before borrowed replacement hints and inherited teardown;314 cases and actual complete scoped Istanbul100 pass. Semantic commit3bb966ac297c; generic ObjectDying/cache/name remain bounded follow-up."
+  -
+    author: "CODER"
+    body: "Verified: Original native format clients reparent before exact borrowed replacement hints and inherited teardown;314/314 related cases6fresh, complete two-module actual Istanbul100, TS7/statics and metadata audits pass. Four inventory histories580oldtests preserved; same-agent non-independent quality pass, bound semantic3bb966ac297c. Broad goal active, correction3/10."
 events:
   -
     type: "status"
@@ -69,8 +73,15 @@ events:
     from: "DOING"
     to: "DOING"
     note: "Implementation: Native format clients reparent before borrowed replacement hints and inherited teardown;314 cases and actual complete scoped Istanbul100 pass. Semantic commit3bb966ac297c; generic ObjectDying/cache/name remain bounded follow-up."
+  -
+    type: "status"
+    at: "2026-10-09T14:42:37.380Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Original native format clients reparent before exact borrowed replacement hints and inherited teardown;314/314 related cases6fresh, complete two-module actual Istanbul100, TS7/statics and metadata audits pass. Four inventory histories580oldtests preserved; same-agent non-independent quality pass, bound semantic3bb966ac297c. Broad goal active, correction3/10."
 doc_version: 3
-doc_updated_at: "2026-10-09T14:40:22.063Z"
+doc_updated_at: "2026-10-09T14:42:37.420Z"
 doc_updated_by: "CODER"
 description: "Correction 3 after full TS7/Istanbul baseline: port SwFormat::Destr and SwModify::PrepareFormatDeath for original clients, borrowed format-change hints, inherited item-set rebinding and mounted UI invalidation. Preserve root cleanup and defer generic ObjectDying/cache/naming protocol to separate corrections. Existing iterative user authorization applies."
 sections:
