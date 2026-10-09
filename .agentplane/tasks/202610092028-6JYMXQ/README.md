@@ -1,10 +1,11 @@
 ---
 id: "202610092028-6JYMXQ"
 title: "Own table upper and lower spacing in original native frame items"
-status: "DOING"
+result_summary: "Original native RES_UL_SPACE owns table spacing; scalar mirror and native ItemSet replay removed.3443cases11fresh/whole8Istanbul100/7browser and required statics/inventory pass."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 19
+revision: 20
 origin:
   system: "manual"
 depends_on: []
@@ -50,6 +51,9 @@ comments:
   -
     author: "CODER"
     body: "Start: final implementation and upstream-absent verification complete. Bind actual semantic7429bf32872581e86a831d04afa67e14bdd6d333 before exact-SHA quality and refreshed verification; source/fresh hashes unchanged, full not due5/10."
+  -
+    author: "CODER"
+    body: "Verified: Original native table UL spacing now owns upper/lower values for dialog, page budgets and mounted UI; native ItemSet applies without scalar replay. Final319files3443cases11fresh whole eight modules Istanbul100all-four0negative and nine statics/currentbuild/seven browser/nine metadata pass.616oldtests unchanged16canonical prefixes preserved; same-agent non-independent exact-SHA quality PASS, reference restored, clean tracked/untracked. Full not due5/10; broad goal ACTIVE/incomplete."
 events:
   -
     type: "status"
@@ -71,8 +75,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified semantic7429bf32872581e86a831d04afa67e14bdd6d333: final319files3443cases11fresh whole eight current modules Istanbul100all-four0negative, upstream-absent nine statics/currentbuild/seven browser and restored nine metadata pass.616oldtests unchanged16canonical prefixes preserved. Same-agent non-independent exact-SHA quality PASS; reference restored, full not due5/10. Persist refreshed verification before canonical finish."
+  -
+    type: "status"
+    at: "2026-10-09T20:52:06.190Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Original native table UL spacing now owns upper/lower values for dialog, page budgets and mounted UI; native ItemSet applies without scalar replay. Final319files3443cases11fresh whole eight modules Istanbul100all-four0negative and nine statics/currentbuild/seven browser/nine metadata pass.616oldtests unchanged16canonical prefixes preserved; same-agent non-independent exact-SHA quality PASS, reference restored, clean tracked/untracked. Full not due5/10; broad goal ACTIVE/incomplete."
 doc_version: 3
-doc_updated_at: "2026-10-09T20:51:25.623Z"
+doc_updated_at: "2026-10-09T20:52:06.191Z"
 doc_updated_by: "CODER"
 description: "Remove mirrored table marginTop/marginBottom storage and native spacing ItemSet-to-scalar conversion. Original RES_UL_SPACE owns direct/effective spacing for layout, shell/dialog and mounted UI with complete native history. Preserve registered deviations, canonical histories and exact source-backed old fixtures; final changed-file Istanbul100 and upstream-absent related verification."
 sections:
@@ -127,6 +138,10 @@ sections:
     - Observation: Initial319+8 related files ran12712 cases; all old cases and nine fresh native/core/history cases passed, while two fresh mounted cases used stale accessible labels without their existing centimeter unit suffix.
       Impact: No production defect or old assertion migration; Vitest did not emit coverage after runtime failure.
       Resolution: Correct fresh queries to Above (cm) and Below (cm). Both repaired mounted cases pass including three actual undo/redo cycles and ODT; their partial eight-file coverage correctly retains strict100 threshold failure. Revalidate319 related table/frame/format/shell/UI files with reportOnFailure enabled to obtain complete final-source maps; previously passed large text matrices remain test-result evidence only.
+extensions:
+  implementation_commit:
+    hash: "7429bf32872581e86a831d04afa67e14bdd6d333"
+    message: "🚧 6JYMXQ table: Own original native upper and lower spacing"
 id_source: "generated"
 ---
 ## Summary
