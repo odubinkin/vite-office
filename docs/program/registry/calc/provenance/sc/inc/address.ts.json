@@ -1,0 +1,75 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/inc/address.ts",
+          "marker": "MAXROWCOUNT"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/address.test.ts",
+          "marker": "moves and clamps with native error outputs"
+        },
+        {
+          "path": "apps/office/src/sc/inc/address.ts",
+          "marker": "ScRefAddress"
+        },
+        {
+          "path": "apps/office/src/sc/inc/ref-address.test.ts",
+          "marker": "copies values independently while assignment retains the recipient address"
+        },
+        {
+          "path": "apps/office/src/sc/inc/address.ts",
+          "marker": "SCSIZE"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/address.hxx",
+          "marker": "MAXROWCOUNT"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/address.hxx",
+          "marker": "ScRefAddress"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/address.hxx",
+          "marker": "typedef size_t SCSIZE;"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sc/inc/address.ts",
+    "localSymbols": [
+      "MAXROWCOUNT",
+      "ScRefFlags",
+      "ValidAddress",
+      "applyStartToEndFlags",
+      "ScRefAddress",
+      "SCSIZE"
+    ],
+    "omittedResponsibilities": [
+      "Reference parsing/formatting including ScRefAddress::GetRefString, external links, native hashes and range subtraction remain subsequent Calc tasks.",
+      "Undefined native constructors, memory layout, C++ const enforcement and debug assertions are not represented. Sticky updates are already implemented on the original ScRange owner.",
+      "Full native pointer-width SCSIZE arithmetic is not certified by the numerical range-list acceptance."
+    ],
+    "preservedResponsibilities": [
+      "Native zero/invalid coordinates, exact standard/jumbo capacities and signed 16/32-bit assignments.",
+      "Original numeric constructor ordering, inclusive coordinate operations and movement error contracts; no browser-specific state.",
+      "Zero/numeric/copy construction, independent three flags and stable owned address assignment follow the pinned header; coordinate widths are retained by the existing ScAddress owner.",
+      "Original SCSIZE count/index ownership at address header, bounded to exact JavaScript input integers."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sc/inc/address.hxx",
+    "upstreamSymbols": [
+      "MAXROWCOUNT",
+      "ScRefFlags",
+      "ValidAddress",
+      "applyStartToEndFlags",
+      "ScRefAddress",
+      "SCSIZE"
+    ]
+  }
+}

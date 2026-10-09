@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/inc/bigrange.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "big-range",
+    "capabilityIds": [
+      "CAP-5e60adf6-3fc8-4bab-9cb8-815689968ec5"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sc/inc/bigrange.ts#ScBigAddress",
+        "apps/office/src/sc/source/core/data/bigrange.test.ts#matches all6552 original native address validity and conversion states",
+        "scripts/calc-bigrange-native-probe.mjs#const originals =",
+        "vendor/libreoffice-reference/sc/inc/bigrange.hxx#ScBigRange",
+        "vendor/libreoffice-reference/sc/source/core/data/bigrange.cxx#ScBigAddress::IsValid"
+      ],
+      "justification": "Task 202610090858-QP6EMJ ports all defined numerical ScBigAddress/ScBigRange contracts from the original header and out-of-line validity definition. bigint retains exact signed64 coordinates and both extrema without Number rounding. Existing ScAddress, ScRange and ScAddressDocument getters are reused. Raw six-coordinate construction retains order; MakeRange delegates the existing sorting address-pair constructor. Per-axis sentinel validity and exclusive document sheet count remain distinct from conversion clipping to global MAXTAB. Copies own independent endpoints, assignment keeps recipient identities, and output tuples represent native reference parameters. The unchanged original complete class definitions, IsValid body and ordinary inline constructors/order compile under ASan/UBSan with exact pinned Git blobs and source/body hashes. All6552 address states,3468 range relation states and every saved initializer/setter/increment/copy/equality output compare through actual TS owners. Header inline definitions and source validity belong to one core/data owner with a pure header re-export, matching the existing Calc boundary pattern. Full ScDocument, change tracking and reference-update integration, native pointer/move lifetime and undefined signed64 overflow remain unverified. Fixtures cover bounded defined native states, not whole Calc parity. Header only re-exports the core/data owner and declares no local symbols.",
+      "knownViolations": [],
+      "localSymbols": [],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "sc/inc/bigrange.hxx",
+      "upstreamSymbols": [
+        "ScBigAddress",
+        "ScBigRange"
+      ]
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "task_id": "202610090745-9T5NFA",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-09T07:47:35.634Z",
+  "verdict": "pass",
+  "summary": "Calc registry descriptions now match completed numerical milestones without semantic parity promotion.",
+  "evaluated_sha": "5c714718d5322fd06ecb0e6612ec1fd8b782fb13",
+  "blueprint_digest": "4fc122fe9bfba44626e8ba0bac1324bc9844574f1d5c9c9528c958a172f3862f",
+  "findings": [
+    "Only the original coordinate gaps and registry activation prose changed. All flags and shared/Writer records preserved; bounded native evidence accurately attributed to sticky capability."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610090745-9T5NFA/README.md",
+    "output/playwright/calc-registry3.json",
+    "npm run test:coverage:calc",
+    "node .agentplane/policy/check-routing.mjs",
+    "ap doctor"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}

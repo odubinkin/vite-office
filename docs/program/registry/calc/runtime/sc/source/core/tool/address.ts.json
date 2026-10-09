@@ -1,0 +1,60 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/core/tool/address.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "coordinate-model",
+    "capabilityIds": [
+      "CAP-80646669-70d5-4641-9fe5-29b1639adab9",
+      "CAP-ba7bed4e-385b-4c42-9aa1-09a6adb60008"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sc/source/core/tool/address.ts#ScAddress",
+        "apps/office/src/sc/source/core/tool/address.test.ts#moves and clamps with native error outputs",
+        "docs/program/calc-core.md#Calc coordinate foundation",
+        "vendor/libreoffice-reference/sc/source/core/tool/address.cxx#ScAddress::Move",
+        "apps/office/src/sc/source/core/tool/sticky-range.test.ts#preserves existing maximum end anchors",
+        "vendor/libreoffice-reference/sc/source/core/tool/address.cxx#ScRange::MoveSticky",
+        "apps/office/src/sc/source/core/tool/native-address.test.ts#matches all 768 pinned native sticky movements",
+        "scripts/calc-address-native-probe.mjs#const functions = interval"
+      ],
+      "justification": "Calc task 202610090711-S6VCEJ implements the bounded numerical coordinate foundation from the exact pinned local source. Defaults, signed widths, copies, ordering, inclusive containment/intersection and ordinary movement are tested independently with real V8 coverage. Header-declared inline numerical owners are implemented in core/tool and re-exported through the original header boundary. No browser, storage, undo, notification or Writer ownership is duplicated. Whole native API and compiled differential parity remain unverified. Task 202610090725-D6Z7XD adds source-owned sticky range movement and independent conditional row/column adjustments; original semantic statuses remain unverified. Literal endpoint/error cases cover pre-existing and newly sticky anchors, full axes, singleton/reversed ranges, narrowing and strict boundary/overlap limits. Shared owners remain unchanged. Native probe compiles unchanged numerical definitions in a bounded class shell with three document getters and exact signed widths. All768 native sticky result/error tuples match actual TypeScript owners under ASan/UBSan; source and body SHA256 hashes are checked. Full ScDocument integration, other compiled but unexecuted methods and undefined arithmetic domains remain unverified; no whole-module semantic promotion.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ScAddress",
+        "ScRange",
+        "Move",
+        "Intersection",
+        "MoveSticky",
+        "IsEndColSticky",
+        "IsEndRowSticky",
+        "IncEndColSticky",
+        "IncEndRowSticky",
+        "IncColIfNotLessThan",
+        "IncRowIfNotLessThan"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "sc/source/core/tool/address.cxx",
+      "upstreamSymbols": [
+        "ScAddress::Move",
+        "ScRange::Move",
+        "ScRange::Intersection",
+        "ScRange::MoveSticky",
+        "ScRange::IsEndColSticky",
+        "ScRange::IsEndRowSticky",
+        "ScRange::IncEndColSticky",
+        "ScRange::IncEndRowSticky",
+        "ScRange::IncColIfNotLessThan",
+        "ScRange::IncRowIfNotLessThan"
+      ]
+    }
+  }
+}

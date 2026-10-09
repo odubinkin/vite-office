@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "task_id": "202610090816-5YGKY3",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-09T08:30:30.434Z",
+  "verdict": "pass",
+  "summary": "Complex reference owner retains pinned native boundaries and inheritance; all bounded native outputs match, Calc coverage actual100 and scoped guards pass.",
+  "evaluated_sha": "8d44cd1a5c5415930ea2a809983406817f3b5554",
+  "blueprint_digest": "c06fc6c0f775a153a5493be83e4ffdc8decbb0c292d5703a7b1359f20da6f9f3",
+  "findings": [
+    "Reviewed original header and14 non-debug complex definitions against TS implementation; reused existing numerical and single-reference owners without shared duplication.",
+    "Reviewed refdata decomposition candidate: keep original two reference owners together in their upstream module; hard1000 line guard passes.",
+    "Original single-reference class and fixture are byte-identical; existing test bodies and semantic status flags preserved."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610090816-5YGKY3/README.md",
+    "apps/office/src/sc/source/core/tool/complex-refdata.test.ts",
+    "apps/office/src/sc/source/core/tool/native-complex-reference-cases.json",
+    "scripts/calc-refdata-native-probe.mjs",
+    "output/playwright/calc6-verification.md",
+    "output/playwright/calc-registry6.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Bounded initialized states do not establish full ScDocument, raw token storage, compiler/listener or whole Calc parity; inventory remains unverified.",
+    "Pre-existing managed hook readiness warning is outside this implementation scope; doctor reports0 errors."
+  ]
+}

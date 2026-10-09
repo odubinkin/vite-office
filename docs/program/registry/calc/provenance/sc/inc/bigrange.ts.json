@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/inc/bigrange.ts",
+          "marker": "ScBigAddress"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/bigrange.test.ts",
+          "marker": "matches all6552 original native address validity and conversion states"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/bigrange.hxx",
+          "marker": "ScBigRange"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/bigrange.cxx",
+          "marker": "ScBigAddress::IsValid"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sc/inc/bigrange.ts",
+    "localSymbols": [
+      "ScBigAddress",
+      "ScBigRange"
+    ],
+    "omittedResponsibilities": [
+      "Full ScDocument, change tracking and reference-update integration, native pointer/move lifetime and undefined signed64 overflow remain unverified. Fixtures cover bounded defined native states, not whole Calc parity."
+    ],
+    "preservedResponsibilities": [
+      "Exact signed64 coordinates, zero defaults, explicit copy ownership, raw setters and default one-unit increments.",
+      "Original independent INT64 extrema validity on each axis and exclusive document sheet count.",
+      "Original document column/row clipping and global MAXTAB conversion, raw range order and sorted ordinary conversion.",
+      "Inclusive raw containment/intersection, equality, stable endpoint assignment and fresh output-reference tuples."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sc/inc/bigrange.hxx",
+    "upstreamSymbols": [
+      "ScBigAddress",
+      "ScBigRange"
+    ]
+  }
+}

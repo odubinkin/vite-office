@@ -58,7 +58,12 @@ function capability(
   suite: "writer" | "calc" | "shared",
   identity = "CAP-12345678-1234-4234-8234-123456789abc",
 ): OwnedRegistryRecord {
-  const source = first(registry, "capabilities");
+  const source = required(
+    registry.records.find(
+      /** Selects an explicit Writer template independently of app directory order. @param record - Owned record. @returns Whether Writer capability. */
+      (record) => record.kind === "capabilities" && record.owner === "writer",
+    ),
+  );
   const result = {
     ...source,
     owner: suite,
@@ -82,7 +87,10 @@ function activateCalc(registry: InventoryRegistry): void {
 /** Creates injected CLI boundaries using local source and synthetic upstream declarations. @param registry - Canonical registry. @param baseline - Baseline JSON. @returns Test-owned CLI boundaries. */
 function dependencies(registry: InventoryRegistry, baseline: string): RegistryCliDependencies {
   const markers = new Map<string, string>();
-  for (const [path, text] of createMarkerEvidenceFixture(projectRegistryViews(registry))) {
+  for (const [path, text] of createMarkerEvidenceFixture([
+    projectRegistryViews(registry),
+    registry.records,
+  ])) {
     const normalized = path.replace(/^vendor\/libreoffice-reference\//u, "");
     markers.set(normalized, `${markers.get(normalized) ?? ""}\n${text}`);
   }
@@ -127,7 +135,12 @@ describe("global and scoped registry gates", /** Registers inventory concurrency
     const writer = capability(registry, "writer", "CAP-32345678-1234-4234-8234-123456789abc");
     writer.record.atomicOperation = "Independent Writer atomic contract.";
     const parsed = parseInventoryRegistry(registry, baseline);
-    expect(parsed.capabilities.records).toHaveLength(48);
+    expect(parsed.capabilities.records).toHaveLength(
+      registry.records.filter(
+        /** Counts explicit capability records. @param record - Owned record. @returns Whether capability. */
+        (record) => record.kind === "capabilities",
+      ).length,
+    );
     expect(parsed.runtime.placeholderSuites).not.toContain("calc");
     const reverse = { ...registry, records: [...registry.records].reverse() };
     expect(parseInventoryRegistry(reverse, baseline)).toEqual(parsed);
@@ -170,7 +183,18 @@ describe("global and scoped registry gates", /** Registers inventory concurrency
           1,
         );
       if (failure === "orphan") first(registry, "runtime").record.capabilityIds = ["CAP-9999"];
-      if (failure === "inactive") capability(registry, "calc");
+      if (failure === "inactive") {
+        capability(registry, "calc");
+        Object.assign(
+          required(
+            registry.applications.find(
+              /** Explicitly deactivates the test-owned app. @param app - App config. @returns Whether Calc. */
+              (app) => app.suite === "calc",
+            ),
+          ),
+          { active: false },
+        );
+      }
       expect(
         /** Parses the merged invalid registry. @returns Parsed manifests or error. */ () =>
           parseInventoryRegistry(registry, baseline),
@@ -325,7 +349,13 @@ describe("global and scoped registry gates", /** Registers inventory concurrency
       const report = JSON.parse(output);
       expect(report.scope).toBe(scope);
       expect(report.moduleCount).toBeGreaterThan(0);
-      expect(report.capabilityCount).toBe(scope === "all" || scope === "writer" ? 45 : 0);
+      const expectedCapabilities = registry.records.filter(
+        /** Derives independent scope expectations from owned inputs, including shared records. @param record - Owned record. @returns Whether expected in this scope. */
+        (record) =>
+          record.kind === "capabilities" &&
+          (scope === "all" || record.owner === scope || record.owner === "shared"),
+      );
+      expect(report.capabilityCount).toBe(expectedCapabilities.length);
     }
     const parsed = parseInventoryRegistry(registry, baseline);
     await expect(

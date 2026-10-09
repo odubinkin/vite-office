@@ -1,0 +1,98 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/refdata.ts",
+          "marker": "ScSingleRefData"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/refdata.test.ts",
+          "marker": "matches all2048 native axis and relative-name reorderings"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/complex-refdata.test.ts",
+          "marker": "matches all6400 native single-reference extensions and flag inheritance"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/refdata.cxx",
+          "marker": "ScSingleRefData"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/refdata.cxx",
+          "marker": "ScComplexRefData"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sc/source/core/tool/refdata.ts",
+    "localSymbols": [
+      "ScSingleRefData",
+      "InitAddress",
+      "InitFlags",
+      "InitAddressRel",
+      "InitFromRefAddress",
+      "FlagValue",
+      "toAbs",
+      "SetAddress",
+      "Valid",
+      "ValidExternal",
+      "PutInOrder",
+      "ScComplexRefData",
+      "SetRange",
+      "InitRange",
+      "InitRangeRel",
+      "InitFromRefAddresses",
+      "Extend",
+      "IsEntireCol",
+      "IsEntireRow",
+      "IncEndColSticky",
+      "IncEndRowSticky",
+      "IsDeleted",
+      "IsTrimToData",
+      "SetTrimToData"
+    ],
+    "omittedResponsibilities": [
+      "Full ScDocument, ScRawToken and formula compiler/listening integration remain subsequent work. Native union/pointer storage, debug-only Dump and uninitialized/undefined arithmetic domains are not certified. Native fixtures prove bounded numerical and flag states, not whole Calc parity."
+    ],
+    "preservedResponsibilities": [
+      "Original initialized raw coordinate and flag owner; no fabricated zero default storage.",
+      "Eight-bit independent flags, raw value copy/equality, signed widths and masked deletion getters.",
+      "Distinct local/external validity, independent raw absolute conversion and monotone deletion on SetAddress.",
+      "Original axis-wise ordering, relative-name provenance and retained endpoint 3D flags.",
+      "Bounded native differential acceptance with exact original source/body hashes; upstream test initial single-reference assertions retained.",
+      "Original complex range endpoint and trim owner, extension flag inheritance and alias semantics.",
+      "Masked external ordering, sorted absolute conversion, whole-axis detection and relative/deleted sticky updates.",
+      "Original testFormulaRefData complex extension assertions and bounded compiled native differential outputs."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sc/source/core/tool/refdata.cxx",
+    "upstreamSymbols": [
+      "ScSingleRefData::InitAddress",
+      "ScSingleRefData::InitAddressRel",
+      "ScSingleRefData::InitFromRefAddress",
+      "ScSingleRefData::toAbs",
+      "ScSingleRefData::SetAddress",
+      "ScSingleRefData::Valid",
+      "ScSingleRefData::ValidExternal",
+      "ScSingleRefData::PutInOrder",
+      "ScSingleRefData::operator==",
+      "ScComplexRefData::InitFromRefAddresses",
+      "ScComplexRefData::Extend",
+      "ScComplexRefData::Valid",
+      "ScComplexRefData::ValidExternal",
+      "ScComplexRefData::toAbs",
+      "ScComplexRefData::SetRange",
+      "ScComplexRefData::PutInOrder",
+      "ScComplexRefData::IsEntireCol",
+      "ScComplexRefData::IsEntireRow",
+      "ScComplexRefData::IncEndColSticky",
+      "ScComplexRefData::IncEndRowSticky",
+      "ScComplexRefData::IsDeleted"
+    ]
+  }
+}

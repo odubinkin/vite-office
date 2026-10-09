@@ -1,5 +1,5 @@
 {
   "suite": "calc",
-  "active": false,
+  "active": true,
   "commands": null
 }

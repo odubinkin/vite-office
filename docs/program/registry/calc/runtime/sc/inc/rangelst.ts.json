@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/inc/rangelst.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "range-list",
+    "capabilityIds": [
+      "CAP-a5dc82db-3863-42b0-a6b2-12710e031292"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sc/inc/rangelst.ts#ScRangeList",
+        "apps/office/src/sc/source/core/tool/rangelst.test.ts#matches all13432 native operation sequences and ordered query outputs",
+        "scripts/calc-rangelst-native-probe.mjs#const originals =",
+        "vendor/libreoffice-reference/sc/inc/rangelst.hxx#ScRangeList"
+      ],
+      "justification": "Task 202610090833-ERVAK2 ports numerical ScRangeList value ownership, original row-cache semantics, Join restarts, partial combine, insertions, ordered deletion fragments and queries. Existing ScAddress/ScRange owners are reused. Unchanged pinned original class/body intervals, anonymous numerical helpers and address/range inline bodies compile under ASan/UBSan;13432 initialized operation sequences compare every output, including ordered ranges, counts, bounds, corners, containment, intersections, Find and deletion results. Original numeric ucalc_rangelst examples retain literal input and cell assertions. Four logically unreachable guard paths are expressed directly after the original guaranteeing predicates; no native defined result, owner boundary or coverage setting changes. Exact unsigned64 cell counting uses bigint, including native modular accumulation. Document/compiler-dependent Parse, Format and UpdateReference, ScRangePairList and native pointer/iterator/refcount/move lifetime remain subsequent work. Native size_t inputs are represented within JavaScript exact integer domain; full pointer-width arithmetic is not certified. Native fixtures prove bounded defined numerical operations, not whole Calc parity. Header only re-exports the core/tool owner; it declares no local symbol.",
+      "knownViolations": [],
+      "localSymbols": [],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "sc/inc/rangelst.hxx",
+      "upstreamSymbols": [
+        "ScRangeList"
+      ]
+    }
+  }
+}

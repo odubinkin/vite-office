@@ -1,0 +1,74 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-80646669-70d5-4641-9fe5-29b1639adab9",
+    "capabilityId": "CAP-80646669-70d5-4641-9fe5-29b1639adab9",
+    "suite": "calc",
+    "subsystem": "coordinate-model",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Numeric movement clamps the address while preserving unclamped error coordinates and the native inclusive table-count bound."
+    ],
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "Numerical owners preserve pinned coordinate bounds, signed narrowing and range-specific movement contracts; JS tuples represent output reference parameters."
+    },
+    "capability": "Calc numeric address and range movement",
+    "gaps": [
+      "Full address API closure and an independent ordinary-movement native differential remain unverified. The separate sticky capability proves 768 bounded MoveSticky states, including its ScAddress::Move calls."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sc/source/core/tool/address.cxx",
+          "marker": "ScAddress::Move"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sc/qa/unit/ucalc.cxx",
+          "marker": "testRangeList"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/README.md",
+          "marker": "column"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/address.ts",
+          "marker": "public Move"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/address.test.ts",
+          "marker": "moves and clamps with native error outputs"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Calc coordinate foundation"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "Move a numeric cell range with native bounds and error coordinates",
+    "scopeLimitations": [
+      "Reference parsing/formatting, external links, native hashes and range subtraction remain subsequent Calc tasks. Implemented sticky reference updates are tracked separately by CAP-ba7bed4e-385b-4c42-9aa1-09a6adb60008.",
+      "Undefined uninitialized native constructors, machine pointer storage and debug assertions have no browser implementation."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

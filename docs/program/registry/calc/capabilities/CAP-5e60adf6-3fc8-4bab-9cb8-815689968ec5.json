@@ -1,0 +1,101 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-5e60adf6-3fc8-4bab-9cb8-815689968ec5",
+    "capabilityId": "CAP-5e60adf6-3fc8-4bab-9cb8-815689968ec5",
+    "suite": "calc",
+    "subsystem": "big-range",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Exact signed64 coordinates, zero defaults, explicit copy ownership, raw setters and default one-unit increments.",
+      "Original independent INT64 extrema validity on each axis and exclusive document sheet count.",
+      "Original document column/row clipping and global MAXTAB conversion, raw range order and sorted ordinary conversion.",
+      "Inclusive raw containment/intersection, equality, stable endpoint assignment and fresh output-reference tuples."
+    ],
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "Original big-coordinate value owners and module boundaries are retained. bigint represents defined sal_Int64 values, explicit copying represents native value operations and tuples represent output references; no signed-overflow behavior is invented."
+    },
+    "capability": "Calc signed64 big address and range values",
+    "gaps": [
+      "Full ScDocument, change tracking and reference-update integration, native pointer/move lifetime and undefined signed64 overflow remain unverified. Fixtures cover bounded defined native states, not whole Calc parity."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sc/inc/bigrange.hxx",
+          "marker": "ScBigAddress"
+        },
+        {
+          "path": "sc/inc/bigrange.hxx",
+          "marker": "ScBigRange"
+        },
+        {
+          "path": "sc/source/core/data/bigrange.cxx",
+          "marker": "ScBigAddress::IsValid"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sc/qa/unit/subsequent_export_test3.cxx",
+          "marker": "bool checkRange("
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/README.md",
+          "marker": "formula"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/source/core/data/bigrange.ts",
+          "marker": "ScBigAddress"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/bigrange.ts",
+          "marker": "ScBigRange"
+        },
+        {
+          "path": "scripts/calc-bigrange-native-probe.mjs",
+          "marker": "const originals ="
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/source/core/data/bigrange.test.ts",
+          "marker": "matches all6552 original native address validity and conversion states"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/bigrange.test.ts",
+          "marker": "matches all3468 original native range relations and sorted clipped outputs"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/bigrange.test.ts",
+          "marker": "owns independent copied endpoints and retains receiving identities"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Big address and range coordinates"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "Retain exact signed64 reference coordinates, validate sentinels and convert into existing ordinary address/range owners",
+    "scopeLimitations": [
+      "Full ScDocument, change tracking and reference-update integration, native pointer/move lifetime and undefined signed64 overflow remain unverified. Fixtures cover bounded defined native states, not whole Calc parity.",
+      "The linked upstream export/change-tracking consumer is evidence of native ownership; its complete integration test is not ported or certified by these numerical fixtures."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

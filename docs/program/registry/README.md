@@ -57,7 +57,9 @@ Writer and Calc work can add records in their own directories independently.
 Activate Calc through `calc/application.json` before adding its first records;
 set its app-owned command module and exported registry when commands exist.
 This automatically removes Calc from the generated placeholder list. Calc is
-currently inactive, with no capability or runtime implementation records.
+active with numerical address, range, reference-address and sheet-limit records.
+Its command registry remains unset until browser commands exist;
+semantic parity remains unverified.
 
 Shared components have one canonical record per module or contract under `shared/`.
 Applications reference a shared capability's existing ID rather than copying the
@@ -93,9 +95,9 @@ npm run test:inventory:coverage
 Scoped checks validate the selected app and shared evidence. Every scope first
 checks identities and references globally and proves exact coverage of the current
 production source tree. Shared records may retain references to legacy Writer IDs;
-reference lookup always uses the complete capability registry. Calc checks currently
-validate shared dependencies and explicitly report its inactive status; successful
-validation is not a claim that Calc has been implemented.
+reference lookup always uses the complete capability registry. Calc checks validate
+its numerical core records and shared dependencies; successful validation does not
+establish semantic parity or complete application implementation.
 
 `npm run inventory:parity` and `npm run inventory:invariants` run the full registry
 gate against the pinned checkout. Full checks remain part of `npm run verify`.

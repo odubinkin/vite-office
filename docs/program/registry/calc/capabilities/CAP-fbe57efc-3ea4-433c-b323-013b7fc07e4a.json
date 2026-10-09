@@ -1,0 +1,96 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-fbe57efc-3ea4-433c-b323-013b7fc07e4a",
+    "capabilityId": "CAP-fbe57efc-3ea4-433c-b323-013b7fc07e4a",
+    "suite": "calc",
+    "subsystem": "formula-reference",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Complex ranges retain original endpoint identity, independent trim ownership, initialized copies and sorted absolute conversion.",
+      "Range extension preserves native relativity, 3D and relative-name inheritance, including aliased endpoint and self extensions.",
+      "External validity uses masked sheet ordering; whole-axis recognition and sticky end updates retain original raw/relative/deleted coordinate behavior."
+    ],
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "Original initialized numerical contracts and shared reference/address/limits owners are retained at the upstream refdata boundary. Explicit copy/assignment and TypeScript methods represent native value copies and operators."
+    },
+    "capability": "Calc initialized complex formula reference data",
+    "gaps": [
+      "Full ScDocument, ScRawToken and formula compiler/listening integration remain subsequent work. Native union/pointer storage, debug-only Dump and uninitialized/undefined arithmetic domains are not certified. Native fixtures prove bounded numerical and flag states, not whole Calc parity."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sc/inc/refdata.hxx",
+          "marker": "ScComplexRefData"
+        },
+        {
+          "path": "sc/source/core/tool/refdata.cxx",
+          "marker": "ScComplexRefData& ScComplexRefData::Extend"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sc/qa/unit/ucalc_formula.cxx",
+          "marker": "CPPUNIT_TEST_FIXTURE(TestFormula, testFormulaRefData)"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/README.md",
+          "marker": "formula"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/refdata.ts",
+          "marker": "ScComplexRefData"
+        },
+        {
+          "path": "scripts/calc-refdata-native-probe.mjs",
+          "marker": "const complexDefinitions = interval"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/complex-refdata.test.ts",
+          "marker": "retains the original testFormulaRefData complex extension assertions"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/complex-refdata.test.ts",
+          "marker": "matches all6400 native single-reference extensions and flag inheritance"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/complex-refdata.test.ts",
+          "marker": "matches all1792 native masked and relative sticky endpoint updates"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/complex-refdata.test.ts",
+          "marker": "matches all1600 native complex extensions and all300 aliased extensions"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Complex formula reference data"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "Extend and update initialized complex formula references with original range and flag inheritance",
+    "scopeLimitations": [
+      "Full ScDocument, ScRawToken and formula compiler/listening integration remain subsequent work. Native union/pointer storage, debug-only Dump and uninitialized/undefined arithmetic domains are not certified. Native fixtures prove bounded numerical and flag states, not whole Calc parity.",
+      "Differential evidence covers the committed finite initialized states; it does not certify full token layout, ScDocument or all native arithmetic domains."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

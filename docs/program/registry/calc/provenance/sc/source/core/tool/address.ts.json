@@ -1,0 +1,75 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/address.ts",
+          "marker": "ScAddress"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/address.test.ts",
+          "marker": "moves and clamps with native error outputs"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/sticky-range.test.ts",
+          "marker": "preserves existing maximum end anchors"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/native-address.test.ts",
+          "marker": "matches all 768 pinned native sticky movements"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/address.cxx",
+          "marker": "ScAddress::Move"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/address.cxx",
+          "marker": "ScRange::MoveSticky"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sc/source/core/tool/address.ts",
+    "localSymbols": [
+      "ScAddress",
+      "ScRange",
+      "Move",
+      "Intersection",
+      "MoveSticky",
+      "IsEndColSticky",
+      "IsEndRowSticky",
+      "IncEndColSticky",
+      "IncEndRowSticky",
+      "IncColIfNotLessThan",
+      "IncRowIfNotLessThan"
+    ],
+    "omittedResponsibilities": [
+      "Full reference parsing/formatting, external links, native hashes and range subtraction remain outside this module implementation.",
+      "Undefined uninitialized constructors, pointer layout, native debug assertions, full ScDocument integration and native undefined arithmetic domains are not certified."
+    ],
+    "preservedResponsibilities": [
+      "Native zero/invalid coordinates, exact standard/jumbo capacities and signed 16/32-bit assignments.",
+      "Original numeric constructor ordering, inclusive coordinate operations and movement error contracts; no browser-specific state.",
+      "Original seven sticky movement and conditional insertion/deletion adjustment methods on the same ScRange owner, with native narrowing before limit checks.",
+      "Native differential acceptance proves all 768 configured sticky result/error outputs against unchanged extracted C++ definitions; ASan/UBSan clean and full source/body hashes recorded."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sc/source/core/tool/address.cxx",
+    "upstreamSymbols": [
+      "ScAddress::Move",
+      "ScRange::Move",
+      "ScRange::Intersection",
+      "ScRange::MoveSticky",
+      "ScRange::IsEndColSticky",
+      "ScRange::IsEndRowSticky",
+      "ScRange::IncEndColSticky",
+      "ScRange::IncEndRowSticky",
+      "ScRange::IncColIfNotLessThan",
+      "ScRange::IncRowIfNotLessThan"
+    ]
+  }
+}

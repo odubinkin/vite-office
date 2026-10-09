@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "task_id": "202610090923-CAPX37",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-09T09:52:16.499Z",
+  "verdict": "pass",
+  "summary": "Complete full-cycle test stages pass with the explicit user-authorized Writer-only coverage exception; all other observed failures resolved.",
+  "evaluated_sha": "bbe9afc9790c3b59643dcff5d7fad51687b2d273",
+  "blueprint_digest": "20ee2100a2beb410c4342bdf44f740035e47d4f07cf2c7d5861a3ca1a917e6bb",
+  "findings": [
+    "14097 office tests,122 inventory cases and303 browser scenarios pass. Calc and inventory actual100 metrics; strict global capability registry reused by legacy Writer CLI, app-order/inactive/scope/marker fixture assumptions corrected, and five native JSON serialization changes preserve normalized values and pinned comparisons."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610090923-CAPX37/README.md",
+    "docs/program/calc-full-test-cycle-1.md",
+    "apps/office/coverage/all/coverage-summary.json",
+    "output/playwright/calc-full-cycle1-inventory-rerun.log",
+    "output/playwright/calc-full-cycle1-e2e.log",
+    "bbe9afc9790c"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Office global branches remain15369/15370 because the user explicitly reserved Writer paintfrm.ts:141 coverage for another branch. No Writer source/tests or thresholds were changed. Overall Calc implementation remains incomplete; pause goal after clean task closeout on explicit user request."
+  ]
+}
