@@ -6,7 +6,7 @@ import { SwFrameFormat } from "../layout/atrfrm";
 import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
 import { SwFormatVertOrient } from "../../../inc/fmtornt";
 import { SwClient, type SwModify } from "../../../inc/calbck";
-import type { SwModelHint } from "../../../inc/hints";
+import { SwFormatChangeHint, type SwModelHint } from "../../../inc/hints";
 /** Reads actual registered original clients. @param format - Native broadcaster. @returns Original client identities. */
 function clients(format: SwModify): unknown[] {
   const result: unknown[] = [];
@@ -138,7 +138,7 @@ it("native line and box allocation only links inheritance while later explicit p
     expect(box.GetRegisteredIn()).toBe(alternate);
     expect(box.GetAttrSet().GetParent()).toBe(alternate.GetAttrSet());
     expect(box.GetVertOrient()).toBe(alternate.GetVertOrient());
-    expect(nativeHints).toEqual([{ kind: "format-inheritance-changed", formatId: box.GetName() }]);
+    expect(nativeHints).toEqual([new SwFormatChangeHint(box, box)]);
     expect(hints).toEqual([]);
     expect(doc.GetDocumentStateManager().GetModelRevision()).toBe(revision);
     expect(alternate.SetDerivedFrom(undefined)).toBe(false);

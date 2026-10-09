@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 268
+revision: 269
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-09T13:48:14.761Z"
+doc_updated_at: "2026-10-09T14:13:36.575Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -1317,6 +1317,10 @@ sections:
     - Observation: Resumed parity correction D694SH after the user's calc/TS7/Istanbul merge: native SetDerivedFrom omitted-parent fallback now restores the actual root, self/descendant cycles return false without changing original clients/item sets. Three old source-incompatible expectation migrations preserve unrelated assertions; six fresh core/history/mounted UI cases verify original owners and values.
       Impact: 189 unique related scenarios resolve all observed fixture failures; a later lint-required production root-initialization adjustment is revalidated by39 passing cases in6 affected files. Current complete-module actual Istanbul81lines92statements14functions59branches is100, zero negative counts, no old-map transfer. The mistaken second-- wrapper's raw whole-app partial threshold failure is retained and cannot support whole-app100. Actual current file entry independently passes all four strict100 gates. All static/build/TS7/tree/provenance/registry checks pass; canonical statuses/defaults/classifications/history and registered I/O/recovery/settings exceptions preserved.
       Resolution: Continue active user-resumed goal one atomic leaf at a time. Last complete TS7/Istanbul full baseline XJTGF0; D694SH is correction1 after that full checkpoint and next full is due after ten resumed AgentPlane tasks. Earlier requested pause was already satisfied and the new resume revokes it. Full native Which compatibility/cache invalidation/SwFormatChangeHint and overall parity remain unverified. Same-agent evaluator is explicitly non-independent; no network/publication/upstream-source artifact copies.
+
+    - Observation: Resumed parity correction0V80RE ports borrowed SwFormatChangeHint old/new format owners and routes accepted inheritance through original locked Writer clients and Svt observers. SwFormat reads GetRegisteredIn directly and removes mirrored derivedFrom state; native format parent item-set rebinding and frame/browser invalidation accept original hints. Existing separate name/node device paths remain a follow-up.
+      Impact: 308unique related cases across40initial files and failed/new-only closure pass, including7fresh native core/real-history/mounted UI cases;306initial passes1fresh expectation failure resolved against pinned SaveTable default-root reconstruction,2closure passes3intentional skips,0passing replay. Whole5changed modules actual same-source/identical-complete-map Istanbul378lines428statements112functions237branches strict100,0negative, no prior-task/V8 transfer. Static TS7/build/docs/size/dependencies and restored metadata resource/tree/provenance/registry checks pass.10canonical records preserve every prior field/prefix;573/577old source/tool tests unchanged with4exact source-backed expectation migrations.
+      Resolution: Continue active broad goal. This is correction2after full XJTGF0; next full follows10resumed AgentPlane tasks. Full native caches/Which/assertions, format death/naming hints/content-node/VCL registration and whole core/browser parity remain unverified. Registered recovery/open/save/settings exceptions and immutable DONE history are preserved; same-agent quality evaluation is explicitly non-independent.
 id_source: "generated"
 ---
 ## Summary
@@ -2607,3 +2611,7 @@ Iteration251 / 202610090835-4ZF0N4 verified native table layout ownership. SwTab
 - Observation: Resumed parity correction D694SH after the user's calc/TS7/Istanbul merge: native SetDerivedFrom omitted-parent fallback now restores the actual root, self/descendant cycles return false without changing original clients/item sets. Three old source-incompatible expectation migrations preserve unrelated assertions; six fresh core/history/mounted UI cases verify original owners and values.
   Impact: 189 unique related scenarios resolve all observed fixture failures; a later lint-required production root-initialization adjustment is revalidated by39 passing cases in6 affected files. Current complete-module actual Istanbul81lines92statements14functions59branches is100, zero negative counts, no old-map transfer. The mistaken second-- wrapper's raw whole-app partial threshold failure is retained and cannot support whole-app100. Actual current file entry independently passes all four strict100 gates. All static/build/TS7/tree/provenance/registry checks pass; canonical statuses/defaults/classifications/history and registered I/O/recovery/settings exceptions preserved.
   Resolution: Continue active user-resumed goal one atomic leaf at a time. Last complete TS7/Istanbul full baseline XJTGF0; D694SH is correction1 after that full checkpoint and next full is due after ten resumed AgentPlane tasks. Earlier requested pause was already satisfied and the new resume revokes it. Full native Which compatibility/cache invalidation/SwFormatChangeHint and overall parity remain unverified. Same-agent evaluator is explicitly non-independent; no network/publication/upstream-source artifact copies.
+
+- Observation: Resumed parity correction0V80RE ports borrowed SwFormatChangeHint old/new format owners and routes accepted inheritance through original locked Writer clients and Svt observers. SwFormat reads GetRegisteredIn directly and removes mirrored derivedFrom state; native format parent item-set rebinding and frame/browser invalidation accept original hints. Existing separate name/node device paths remain a follow-up.
+  Impact: 308unique related cases across40initial files and failed/new-only closure pass, including7fresh native core/real-history/mounted UI cases;306initial passes1fresh expectation failure resolved against pinned SaveTable default-root reconstruction,2closure passes3intentional skips,0passing replay. Whole5changed modules actual same-source/identical-complete-map Istanbul378lines428statements112functions237branches strict100,0negative, no prior-task/V8 transfer. Static TS7/build/docs/size/dependencies and restored metadata resource/tree/provenance/registry checks pass.10canonical records preserve every prior field/prefix;573/577old source/tool tests unchanged with4exact source-backed expectation migrations.
+  Resolution: Continue active broad goal. This is correction2after full XJTGF0; next full follows10resumed AgentPlane tasks. Full native caches/Which/assertions, format death/naming hints/content-node/VCL registration and whole core/browser parity remain unverified. Registered recovery/open/save/settings exceptions and immutable DONE history are preserved; same-agent quality evaluation is explicitly non-independent.

@@ -3,7 +3,7 @@ import { expect, it } from "vitest";
 import { SwDoc } from "../doc/doc";
 import { SwFrameFormat } from "../layout/atrfrm";
 import { SwClient, type SwModify } from "../../../inc/calbck";
-import type { SwModelHint } from "../../../inc/hints";
+import { SwFormatChangeHint, type SwModelHint } from "../../../inc/hints";
 import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
 import { SwFormatVertOrient } from "../../../inc/fmtornt";
 
@@ -61,7 +61,7 @@ it("omitted parent returns to the existing root while retaining direct items and
     expect(clients(parent)).not.toContain(child);
     expect(clients(parent)).toContain(peer);
     expect(clients(root)).toContain(child);
-    expect(hints).toEqual([{ kind: "format-inheritance-changed", formatId: child.GetName() }]);
+    expect(hints).toEqual([new SwFormatChangeHint(child, child)]);
     expect(child.SetDerivedFrom(undefined)).toBe(false);
     expect(child.SetDerivedFrom(root)).toBe(false);
     expect(hints).toHaveLength(1);
@@ -168,10 +168,7 @@ it("explicit base-format name broadcast and parent reset retain distinct accepte
     expect(child.GetAttrSet().GetParent()).toBe(root.GetAttrSet());
     expect(child.SetDerivedFrom()).toBe(false);
     expect(root.SetDerivedFrom(child)).toBe(false);
-    expect(hints).toEqual([
-      { kind: "format-inheritance-changed", formatId: "Renamed child" },
-      { kind: "format-inheritance-changed", formatId: "Renamed child" },
-    ]);
+    expect(hints).toEqual([{ kind: "format-inheritance-changed", formatId: "Renamed child" }]);
   } finally {
     observer.Dispose();
     child.DisposeModify();
@@ -198,9 +195,9 @@ it("parentless default reset is a silent no-op and fallback resolves the actual 
     expect(child.GetRegisteredIn()).toBe(root);
     expect(child.GetAttrSet().GetParent()).toBe(root.GetAttrSet());
     expect(child.DerivedFrom()).not.toBe(doc.GetDfltFrameFormat());
-    expect(doc.GetDocumentStateManager().GetModelRevision()).toBe(revision + 1);
+    expect(doc.GetDocumentStateManager().GetModelRevision()).toBe(revision);
     expect(child.SetDerivedFrom()).toBe(false);
-    expect(doc.GetDocumentStateManager().GetModelRevision()).toBe(revision + 1);
+    expect(doc.GetDocumentStateManager().GetModelRevision()).toBe(revision);
   } finally {
     child.DisposeModify();
     parent.DisposeModify();

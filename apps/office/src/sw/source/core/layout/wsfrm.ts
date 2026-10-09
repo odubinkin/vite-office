@@ -112,7 +112,7 @@ export class SwFrame extends SwClient {
           index += 1;
         } while (index < newItems.length);
       }
-    } else if (hint.kind === "format-inheritance-changed") {
+    } else if (hint.kind === "format-change" || hint.kind === "format-inheritance-changed") {
       flags =
         SwFrameInvFlags.InvalidatePrt |
         SwFrameInvFlags.InvalidateSize |

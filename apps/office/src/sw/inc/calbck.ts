@@ -109,13 +109,13 @@ export class SwModify
   /** Receives and propagates one parent notification. @param broadcaster - Parent source. @param hint - Typed hint. @returns Nothing. */
   public Notify(broadcaster: SfxBroadcaster<SwModelHint>, hint: SwModelHint): void {
     if (broadcaster !== this.registeredIn) return;
-    if (hint.kind === "attr-set-change") {
+    if (hint.kind === "attr-set-change" || hint.kind === "format-change") {
       this.SwClientNotify(broadcaster as SwModify, hint);
     } else if (hint.kind === "model-transaction") {
       if (
         hint.hints.some(
           /** Identifies native attribute deltas requiring parent filtering. @param nested - Atomic hint. @returns Whether native. */
-          (nested) => nested.kind === "attr-set-change",
+          (nested) => nested.kind === "attr-set-change" || nested.kind === "format-change",
         )
       )
         this.RunNotificationTransaction(
@@ -156,7 +156,8 @@ export class SwModify
   /** Dispatches native attribute changes while preventing recursive modify calls. @param source - Native emitting owner. @param hint - Native notification. @returns Nothing. */
   public SwClientNotify(source: SwModify, hint: SwModelHint): void {
     void source;
-    if (hint.kind !== "attr-set-change" || this.IsModifyLocked()) return;
+    if ((hint.kind !== "attr-set-change" && hint.kind !== "format-change") || this.IsModifyLocked())
+      return;
     this.LockModify();
     try {
       this.CallSwClientNotify(hint);

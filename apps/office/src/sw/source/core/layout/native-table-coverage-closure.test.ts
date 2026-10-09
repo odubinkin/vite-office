@@ -2,7 +2,7 @@
 import { expect, it } from "vitest";
 import { SwDoc } from "../doc/doc";
 import { SwClient, type SwModify } from "../../../inc/calbck";
-import type { SwModelHint } from "../../../inc/hints";
+import { SwFormatChangeHint, type SwModelHint } from "../../../inc/hints";
 import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
 import { SvxBorderLine } from "../../../../editeng/source/items/borderline";
 import { Style } from "../../../../svx/source/dialog/framelink";
@@ -49,7 +49,7 @@ it("row parent replacement and copying notify the original clients without repla
     expect(format.GetRegisteredIn()).toBe(parent);
     expect(format.GetAttrSet().GetParent()).toBe(parent.GetAttrSet());
     expect(format.GetFrameSize()).toBe(parent.GetFrameSize());
-    expect(hints).toEqual([{ kind: "format-inheritance-changed", formatId: name }]);
+    expect(hints).toEqual([new SwFormatChangeHint(format, format)]);
     expect(format.SetDerivedFrom(parent)).toBe(false);
     expect(hints).toHaveLength(1);
     format.CopyFormatFrom(source);

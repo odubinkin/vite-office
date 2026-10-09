@@ -4,8 +4,19 @@ import type { LegacyModifyHint } from "./calbck";
 import type { SwAttrSet } from "../source/core/attr/swatrset";
 import type { SfxHint } from "../../svl/source/notify/SfxBroadcaster";
 import type { SwFrameFormat } from "../source/core/layout/atrfrm";
+import type { SwFormat } from "../source/core/attr/format";
 import type { SwTableLineFormat, SwTableBoxFormat } from "./swtblfmt";
 import type { SwTableLine, SwTableBox } from "../source/core/table/swtable";
+
+/** Native inheritance notification borrows exact old and new format owners. */
+export class SwFormatChangeHint implements SfxHint {
+  public readonly kind = "format-change";
+  /** Borrows original native format pointers. @param m_pOldFormat - Previous owner or absent. @param m_pNewFormat - New owner or absent. @returns Nothing. */
+  public constructor(
+    public readonly m_pOldFormat: SwFormat | undefined,
+    public readonly m_pNewFormat: SwFormat | undefined,
+  ) {}
+}
 
 /** Native history hint moves the original line frame clients to a reconstructed owner. */
 export class MoveTableLineHint implements SfxHint {
@@ -49,6 +60,7 @@ export class TableBoxFormatChanged implements SfxHint {
 export type SwAtomicModelHint =
   | LegacyModifyHint
   | AttrSetChangeHint
+  | SwFormatChangeHint
   | MoveTableBoxHint
   | TableBoxFormatChanged
   | MoveTableLineHint

@@ -4,7 +4,12 @@ import { SvtListener, type SvtDyingHint } from "../../../../svl/source/notify/li
 import { SwDoc } from "../doc/doc";
 import { SwAttrSet } from "./swatrset";
 import { SwClient, SwModify, ClientNotifyAttrChg } from "../../../inc/calbck";
-import { AttrSetChangeHint, SwAttrSetChg, type SwModelHint } from "../../../inc/hints";
+import {
+  SwFormatChangeHint,
+  AttrSetChangeHint,
+  SwAttrSetChg,
+  type SwModelHint,
+} from "../../../inc/hints";
 import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
 import { SwFormatVertOrient } from "../../../inc/fmtornt";
 import { SvxBoxItem, SvxProtectItem } from "../../../../editeng/source/items/frmitems";
@@ -201,7 +206,7 @@ it("original parent format clients filter every local WhichId and reparent witho
   expect(child.GetAttrSet().GetParent()).toBe(doc.GetDfltFrameFormat().GetAttrSet());
   parent.SetFormatAttr(new SwFormatFrameSize(SwFrameSize.Fixed, 8000, 500));
   expect(c.hints).toHaveLength(2);
-  expect(c.hints[1]).toEqual({ kind: "format-inheritance-changed", formatId: child.GetName() });
+  expect(c.hints[1]).toEqual(new SwFormatChangeHint(child, child));
   expect(p.hints).toHaveLength(3);
   c.client.Dispose();
   p.client.Dispose();
