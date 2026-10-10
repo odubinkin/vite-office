@@ -4,7 +4,7 @@ title: "Publish original cursor frame chains from mounted Writer fragments"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 20
 origin:
   system: "manual"
 depends_on: []
@@ -17,16 +17,45 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-10T21:22:59.509Z"
+  updated_by: "CODER"
+  note: "7160related/306 plus24Chromium/13 and9fresh core/React+1fresh browser pass. Entire4modules758lines831statements142functions727branches100,1700nonnegative counters1284currentTS/TSX/MJS hashes.822oldfiles818same/4literal-preserving API migrations2real-follow fixtures;8canonical histories9metadata gates. Initial fresh static/format/helper-only repairs documented; explicit final browser AST equality and no acceptance replay. Native query/formatter/geometry/table-follow and duplicate cursor registry remain unverified. Full next task10 then pause after repairs."
   attempts: 0
-commit: null
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-10T21:23:00.085Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent non-independent exact semantic 1b3be0438b363c43e23c54131ab7a03b097f1786: actual mounted body device fragments create original reciprocal native cursor follows, native margin removes text-length proxy and old singular API; approved scope/current acceptance/whole4coverage100/history/metadata satisfied, remaining architecture explicitly unverified."
+  evaluated_sha: "1b3be0438b363c43e23c54131ab7a03b097f1786"
+  blueprint_digest: "4e544814b8ef1ae0e5bbb8a42ae799dae3d867745f23f6b1dbb03d334fdf67b1"
+  evidence_refs:
+    - ".agentplane/tasks/202610102109-06E9V7/README.md"
+    - ".agentplane/tasks/202610102109-06E9V7/quality/20261010-212300085-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610102109-06E9V7/quality/20261010-212300085-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610102109-06E9V7/quality/20261010-212300085-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610102109-06E9V7/blueprint/resolved-snapshot.json"
+    - "git:1b3be0438b363c43e23c54131ab7a03b097f1786"
+    - ".agentplane/tasks/202610102109-06E9V7/README.md#Verification"
+    - "apps/office/node_modules/.cache/parity-coverage/06E9V7/coverage-proof.json"
+    - "apps/office/node_modules/.cache/parity-coverage/06E9V7/browser-proof.json"
+    - "apps/office/node_modules/.cache/parity-coverage/06E9V7/preservation-proof.json"
+    - "apps/office/node_modules/.cache/parity-coverage/06E9V7/source-audit-proof.json"
+    - "apps/office/node_modules/.cache/parity-coverage/06E9V7/format-equivalence-proof.json"
+    - "apps/office/node_modules/.cache/parity-coverage/06E9V7/audit-final-results.json"
+  findings:
+    - "Inspected actual source GetFollow RightMargin and original SetFollow/FindMaster/model-view adjacency. Native root creates and explicitly releases every original client, body DOM chain physical order admitted at browser device boundary, current cell/header occurrence isolated. No fake native formatter/query or synthetic continuation flag."
+    - "Actual7160related/306+24Chromium/13,9fresh core/React+1browser;whole4modules100allfour1700nonnegative complete raw counters/1284current hashes.822priorfiles818byte-identical/4inverse-AST migrations2actual-follow fixtures;8canonical histories and9metadata gates. Fresh browser final formatting proven every AST leaf equal; no passing acceptance replay."
+commit:
+  hash: "1b3be0438b363c43e23c54131ab7a03b097f1786"
+  message: "🧩 06E9V7 code: Publish native cursor follows and remove length proxy"
 comments:
   -
     author: "CODER"
     body: "Start: Publish actual complete body device fragments as original native frame chains and remove length proxy; preserve original cell/header occurrence and historical acceptance, verify current whole-module100 upstream-absent."
+  -
+    author: "CODER"
+    body: "Implementation: Actual mounted body cursor chains and original native follows replace standalone API/text-length proxy; scoped current evidence/inventory retained."
 events:
   -
     type: "status"
@@ -35,8 +64,21 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: Publish actual complete body device fragments as original native frame chains and remove length proxy; preserve original cell/header occurrence and historical acceptance, verify current whole-module100 upstream-absent."
+  -
+    type: "status"
+    at: "2026-10-10T21:22:59.039Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+    note: "Implementation: Actual mounted body cursor chains and original native follows replace standalone API/text-length proxy; scoped current evidence/inventory retained."
+  -
+    type: "verify"
+    at: "2026-10-10T21:22:59.509Z"
+    author: "CODER"
+    state: "ok"
+    note: "7160related/306 plus24Chromium/13 and9fresh core/React+1fresh browser pass. Entire4modules758lines831statements142functions727branches100,1700nonnegative counters1284currentTS/TSX/MJS hashes.822oldfiles818same/4literal-preserving API migrations2real-follow fixtures;8canonical histories9metadata gates. Initial fresh static/format/helper-only repairs documented; explicit final browser AST equality and no acceptance replay. Native query/formatter/geometry/table-follow and duplicate cursor registry remain unverified. Full next task10 then pause after repairs."
 doc_version: 3
-doc_updated_at: "2026-10-10T21:22:39.364Z"
+doc_updated_at: "2026-10-10T21:22:59.563Z"
 doc_updated_by: "CODER"
 description: "Correction9 after BZ14P4: replace standalone cursor-frame device publication with full actual body fragment chain, isolate repeated cell occurrences, remove end-versus-node-length continuation proxy and retain native model/view adjacency. Then full checkpoint as task10 and pause after repairs."
 sections:
@@ -99,6 +141,39 @@ sections:
     Residual gaps: measured cursor-frame registry and duplicate device cursor versus body formatting clients, native hierarchy/GetFrameOfModify/query/absolute geometry/full formatter/re-entrant stabilization/scroll/merged/vertical/empty flags, table text follow chains/portion/font/script/root/Doc factory/Undo and full core/UI parity remain unported or unverified. No broad native architecture/module/goal certification. Original IO/recovery/settings deviations retained. Raw logs/maps/helpers remain only ignored cache, no upstream/helper/Python artifacts in AgentPlane. Same-agent non-independent quality review at exact semantic SHA and clean writer/restored refs required for closure.
 
     Evidence files: apps/office/node_modules/.cache/parity-coverage/06E9V7/coverage-proof.json, browser-proof.json, preservation-proof.json, source-audit-proof.json, format-equivalence-proof.json, audit-final-results.json and executed/current-runtime-hashes.json.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-10T21:22:59.509Z — VERIFY — ok
+
+    By: CODER
+
+    Note: 7160related/306 plus24Chromium/13 and9fresh core/React+1fresh browser pass. Entire4modules758lines831statements142functions727branches100,1700nonnegative counters1284currentTS/TSX/MJS hashes.822oldfiles818same/4literal-preserving API migrations2real-follow fixtures;8canonical histories9metadata gates. Initial fresh static/format/helper-only repairs documented; explicit final browser AST equality and no acceptance replay. Native query/formatter/geometry/table-follow and duplicate cursor registry remain unverified. Full next task10 then pause after repairs.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T21:22:59.039Z, excerpt_hash=sha256:e8fabdb0969920477647d612811dc5bd7bd550ee00b6df8536cf4549b53da189
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610102109-06E9V7/blueprint/resolved-snapshot.json
+    - old_digest: 4e544814b8ef1ae0e5bbb8a42ae799dae3d867745f23f6b1dbb03d334fdf67b1
+    - current_digest: 4e544814b8ef1ae0e5bbb8a42ae799dae3d867745f23f6b1dbb03d334fdf67b1
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610102109-06E9V7
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610102109-06E9V7
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only task-scoped semantic commit through a separately authorized task, preserving other checkout/history."
   Findings: |-
     Baseline a6f796fd846b; eight accepted tasks since BZ14P4. Current UI publishes only selected physical paragraph, root owns one cursor frame; native margins still infer continuation from frame.end < node.Len. Current table cells are full text DOM occurrences, including repeated headers; do not force them into body follow chains. A read-only discovery guessed nonexistent presentation filenames; bounded rg --files corrected location and parent route recomputed before mutation.
@@ -191,6 +266,39 @@ Evidence:822old acceptance files818byte-identical,4native API migrations. Invers
 Residual gaps: measured cursor-frame registry and duplicate device cursor versus body formatting clients, native hierarchy/GetFrameOfModify/query/absolute geometry/full formatter/re-entrant stabilization/scroll/merged/vertical/empty flags, table text follow chains/portion/font/script/root/Doc factory/Undo and full core/UI parity remain unported or unverified. No broad native architecture/module/goal certification. Original IO/recovery/settings deviations retained. Raw logs/maps/helpers remain only ignored cache, no upstream/helper/Python artifacts in AgentPlane. Same-agent non-independent quality review at exact semantic SHA and clean writer/restored refs required for closure.
 
 Evidence files: apps/office/node_modules/.cache/parity-coverage/06E9V7/coverage-proof.json, browser-proof.json, preservation-proof.json, source-audit-proof.json, format-equivalence-proof.json, audit-final-results.json and executed/current-runtime-hashes.json.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-10T21:22:59.509Z — VERIFY — ok
+
+By: CODER
+
+Note: 7160related/306 plus24Chromium/13 and9fresh core/React+1fresh browser pass. Entire4modules758lines831statements142functions727branches100,1700nonnegative counters1284currentTS/TSX/MJS hashes.822oldfiles818same/4literal-preserving API migrations2real-follow fixtures;8canonical histories9metadata gates. Initial fresh static/format/helper-only repairs documented; explicit final browser AST equality and no acceptance replay. Native query/formatter/geometry/table-follow and duplicate cursor registry remain unverified. Full next task10 then pause after repairs.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T21:22:59.039Z, excerpt_hash=sha256:e8fabdb0969920477647d612811dc5bd7bd550ee00b6df8536cf4549b53da189
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610102109-06E9V7/blueprint/resolved-snapshot.json
+- old_digest: 4e544814b8ef1ae0e5bbb8a42ae799dae3d867745f23f6b1dbb03d334fdf67b1
+- current_digest: 4e544814b8ef1ae0e5bbb8a42ae799dae3d867745f23f6b1dbb03d334fdf67b1
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610102109-06E9V7
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610102109-06E9V7
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
