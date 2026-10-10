@@ -10,7 +10,8 @@ import { SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
 import { SwFormatPageDesc } from "../attr/fmtpdsc";
-import type { SwPaM } from "../crsr/pam";
+import type { SwPaM, SwPosition } from "../crsr/pam";
+import { SwTextCursor } from "./itrtxt";
 import { MoveTextFrameMargin } from "./frmcrsr";
 import {
   RES_BREAK,
@@ -161,13 +162,12 @@ export const DEFAULT_SW_TEXT_FRAME_SETTINGS: SwTextFrameSettings = Object.freeze
 /** A master or follow frame; offsets always refer to the same source text node. */
 export class SwTextFrame extends SwContentFrame {
   readonly #lines: readonly SwTextLine[];
-  /** Registers the original node and retains the browser device fragment fields. @param node - Original text owner. @param nodeId - Device projection identity. @param start - Frame start. @param end - Frame end. @param follow - Follow classification. @param topSpacing - Frame spacing. @param lines - Device-shaped lines. @returns Frame. */
+  /** Registers the original node and retains the browser device fragment fields. @param node - Original text owner. @param nodeId - Device projection identity. @param start - Frame start. @param end - Frame end. @param topSpacing - Frame spacing. @param lines - Device-shaped lines. @returns Frame. */
   public constructor(
     node: SwTextNode,
     public readonly nodeId: string,
     public readonly start: number,
     public readonly end: number,
-    public readonly follow: boolean,
     public readonly topSpacing: number,
     lines: readonly SwTextLine[],
   ) {
@@ -178,6 +178,25 @@ export class SwTextFrame extends SwContentFrame {
   /** Resolves the original first node in the represented unmerged frame. @returns Original registered text owner. */
   public GetTextNodeFirst(): SwTextNode {
     return this.GetDep() as SwTextNode;
+  }
+  /** Reads the native fragment offset in represented unmerged node coordinates. @returns Original text offset. */
+  public GetOffset(): number {
+    return this.start;
+  }
+  /** Resolves the original follow at an unmerged position using native right-margin affinity. @param position - Actual native text position. @returns Original frame owning the boundary. */
+  public GetFrameAtPos(position: SwPosition): SwTextFrame {
+    const offset = position.GetContentIndex();
+    let frame = this.flow.m_rThis as SwTextFrame;
+    while (frame.GetFollow() !== undefined) {
+      const follow = frame.GetFollow() as SwTextFrame;
+      if (
+        offset > follow.GetOffset() ||
+        (offset === follow.GetOffset() && !SwTextCursor.IsRightMargin())
+      )
+        frame = follow;
+      else break;
+    }
+    return frame;
   }
   /** Moves to the current visual line start. @param pam - Native cursor. @returns Admission result. */
   public LeftMargin(pam: SwPaM): boolean {
@@ -220,7 +239,6 @@ export function makeSwTextFrame(
     input.id,
     first.start,
     last.end,
-    firstLine > 0,
     topSpacing,
     input.lines.slice(firstLine, lastLine + 1),
   );

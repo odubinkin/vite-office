@@ -20,12 +20,23 @@
         "vendor/libreoffice-reference/sw/source/core/layout/ssfrm.cxx#SwContentFrame::SwContentFrame",
         "apps/office/src/sw/source/core/layout/native-text-frame-owner.test.ts#@fileoverview",
         "apps/office/src/sw/browser/editor/native-text-frame-owner.test.tsx#@fileoverview",
-        "apps/office/e2e/writer-native-text-frame-owner.spec.ts#@fileoverview"
+        "apps/office/e2e/writer-native-text-frame-owner.spec.ts#@fileoverview",
+        "apps/office/src/sw/source/core/layout/native-text-frame-follow.test.ts#@fileoverview",
+        "apps/office/src/sw/browser/editor/native-text-frame-follow.test.tsx#@fileoverview",
+        "apps/office/e2e/writer-native-text-frame-follow.spec.ts#@fileoverview",
+        "vendor/libreoffice-reference/sw/source/core/inc/cntfrm.hxx#GetFollow",
+        "vendor/libreoffice-reference/sw/source/core/inc/flowfrm.hxx#IsFollow"
       ],
-      "justification": "Task202610101854-FSYVCZ restores original-node content-frame registration: SwTextFrame extends SwContentFrame/SwFrame, has the native Txt discriminator and obtains the represented unmerged first text node from its original modify owner. Actual frame clients remain mutable for native pooled attribute invalidation. Cursor measurement replacement, pagination reconciliation, discarded or failed partial pagination and per-view root close release original clients; geometry candidates are destroyed when original frames are reused. Required native-node inputs replace detached old fixture owners without changing cases, device inputs or expected matcher arguments. The browser still supplies fragment geometry and the root remains a per-view browser-owned layout object; complete native SwFlowFrame mixin/follow links, root/page/content hierarchy, redlines, text Prepare/callbacks, merged/vertical/native geometry and per-node frame-width guards remain unverified. Original global Repeat/rich units and registered recovery/open/save/settings deviations remain unchanged. No full module or goal parity promotion.",
+      "justification": "Task202610101854-FSYVCZ restores original-node content-frame registration: SwTextFrame extends SwContentFrame/SwFrame, has the native Txt discriminator and obtains the represented unmerged first text node from its original modify owner. Actual frame clients remain mutable for native pooled attribute invalidation. Cursor measurement replacement, pagination reconciliation, discarded or failed partial pagination and per-view root close release original clients; geometry candidates are destroyed when original frames are reused. Required native-node inputs replace detached old fixture owners without changing cases, device inputs or expected matcher arguments. The browser still supplies fragment geometry and the root remains a per-view browser-owned layout object; complete native SwFlowFrame mixin/follow links, root/page/content hierarchy, redlines, text Prepare/callbacks, merged/vertical/native geometry and per-node frame-width guards remain unverified. Original global Repeat/rich units and registered recovery/open/save/settings deviations remain unchanged. No full module or goal parity promotion. Task202610101929-ECR55T replaces stored text-frame follow classification with actual original SwFlowFrame preceding/follow links. TypeScript composition represents the native C++ multiple-inheritance owner; SetFollow replacement/re-chaining and destruction follow source order without stitching. Original SwContentFrame clients delegate typed links and release them on destruction. Represented unmerged SwTextFrame GetOffset/GetFrameAtPos follows native boundary ties and existing SwTextCursor right-margin affinity. Pagination and retained-frame reconciliation repair actual same-node chains after candidate/discarded frame cleanup; React renders IsFollow rather than a detached boolean. Actual native owners, mounted edit/history and Chromium physical bullet continuation/reformat/edit/undo/redo/reopen checks cover this bounded correction. Cursor motion still uses the measured cursor map and MoveTextFrameMargin; native GetFrameOfModify/GetAdjFrameAtPos, root/page/content hierarchy, merged/vertical/native geometry, flow lock/undersize/fly flags/placement, redlines and text Prepare/callbacks, rich units/global Repeat remain unrepresented or unverified. Browser device fragment fields remain. All historical statuses/defaults/classifications/responsibility/evidence and registered recovery/open/save/settings deviations are retained; no whole-module or goal parity promotion.",
       "knownViolations": [],
       "localSymbols": [
-        "SwContentFrame"
+        "SwContentFrame",
+        "GetFollow",
+        "GetPrecede",
+        "HasFollow",
+        "IsFollow",
+        "SetFollow",
+        "DestroyImpl"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sw/source/core/layout/ssfrm.cxx",

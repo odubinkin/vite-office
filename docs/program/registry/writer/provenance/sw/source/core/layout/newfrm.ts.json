@@ -144,6 +144,22 @@
         {
           "path": "apps/office/src/sw/source/core/layout/newfrm.ts",
           "marker": "DestroyImpl"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/layout/native-text-frame-follow.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-text-frame-follow.test.tsx",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/e2e/writer-native-text-frame-follow.spec.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/layout/newfrm.ts",
+          "marker": "linkTextFrameFollows"
         }
       ],
       "upstream": [
@@ -266,6 +282,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/core/layout/newfrm.cxx",
           "marker": "SwRootFrame::DestroyImpl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/flowfrm.cxx",
+          "marker": "SwFlowFrame::SetFollow"
         }
       ]
     },
@@ -275,7 +295,8 @@
       "createSwPageFrames",
       "SwRootFrame",
       "SwRootFrameSnapshot",
-      "DestroyImpl"
+      "DestroyImpl",
+      "linkTextFrameFollows"
     ],
     "omittedResponsibilities": [
       "Native frames for tables, anchored objects, footnotes, and page-style families beyond the supported Standard page remain outside this slice."
@@ -297,7 +318,8 @@
       "Iteration251 verified closure: 232 unique targeted app cases, including 12 fresh native hierarchy/width/claim/history/empty-row/render/flow/mouse-lifetime/geometry cases, pass with no unresolved runtime failures. One approved recovery repeated 210 passing cases solely because the initial failure suppressed all V8 maps; later closures run only failed/new/previously unexecuted cases. All runtime and build checks run physically upstream absent with restoration in finally. Actual source-bound app and changed-module all-four100 coverage uses current counters plus complete unchanged function declarations/bodies/enclosing conditions/all locations from250; 310 whole unchanged app modules retain their exact maps. 506 previous app test files are byte-identical; one old width measurement case now owns/releases its native table frame while preserving the literal3000 and original-client assertions. Scoped format/lint/type/dependency/docs/size/static build, canonical registry build/scoped/global checks, provenance/tree/routing/doctor pass. Prior status/default/classification and full evidence prefixes remain; native persistent page/root/follows/content/redline/table item propagation and whole core/UI parity stay unverified. Registered recovery/open/save/settings deviations preserved; last full247, no full251.",
       "Correction6JYMXQ5/10 after full baseline SZKQTN removes mirrored table marginTop/marginBottom storage. Original RES_UL_SPACE99 owns upper/lower spacing and represented contextual state; SwFormat GetULSpace returns the borrowed effective original item with native parent-search contract. Construction/transport projects only direct native values; omitted pairs reset the original item, while geometry-only updates retain represented contextual state. SaveTable excludes scalar UL projection because original full direct table item set owns native history. Existing SwFEShell SetTableAttr accepts native SfxItemSet and writes original frame items without scalar SetFormat replay, retaining represented generalized attribute history; table properties copy effective original UL into native input and apply complete UL output through this native path. Native row-only page budget, dialog saved/reset capture and mounted table margins read effective original spacing rather than stale projection. Original owners and registered recovery/open/save/settings deviations preserved. Existing scalar orientation/LR construction input, generic native Doc SetAttr/SwUndoFormatAttr, full proportional SvxULSpace setters/UNO members, CalcUpperSpace/collapsed/content/section/root/master/follow/VCL/copy/Repeat families remain separately incomplete/unverified; no whole-module/goal parity promotion. Task202610092028-6JYMXQ records current-source evidence; all prior semantic status/default/classification/evidence/responsibility histories retained.",
       "Verified correction6JYMXQ:319 related files/3443 distinct cases/11fresh, no failures or skips. Entire eight final changed modules actual Istanbul1619lines1773statements294functions1329branches100all-four/zero-negative/current source hashes; no earlier maps/counters.616oldtestfiles byte-identical;16canonical prefixes/status/default/classification retained. Tests/build/statics run physically upstream-absent with finally restoration. Full not due5/10 after SZKQTN. Native table UL item ownership is bounded; all previously stated residual native geometry/layout/history/UNO families and overall module parity remain unverified.",
-      "Task202610101854-FSYVCZ restores original-node content-frame registration: SwTextFrame extends SwContentFrame/SwFrame, has the native Txt discriminator and obtains the represented unmerged first text node from its original modify owner. Actual frame clients remain mutable for native pooled attribute invalidation. Cursor measurement replacement, pagination reconciliation, discarded or failed partial pagination and per-view root close release original clients; geometry candidates are destroyed when original frames are reused. Required native-node inputs replace detached old fixture owners without changing cases, device inputs or expected matcher arguments. The browser still supplies fragment geometry and the root remains a per-view browser-owned layout object; complete native SwFlowFrame mixin/follow links, root/page/content hierarchy, redlines, text Prepare/callbacks, merged/vertical/native geometry and per-node frame-width guards remain unverified. Original global Repeat/rich units and registered recovery/open/save/settings deviations remain unchanged. No full module or goal parity promotion."
+      "Task202610101854-FSYVCZ restores original-node content-frame registration: SwTextFrame extends SwContentFrame/SwFrame, has the native Txt discriminator and obtains the represented unmerged first text node from its original modify owner. Actual frame clients remain mutable for native pooled attribute invalidation. Cursor measurement replacement, pagination reconciliation, discarded or failed partial pagination and per-view root close release original clients; geometry candidates are destroyed when original frames are reused. Required native-node inputs replace detached old fixture owners without changing cases, device inputs or expected matcher arguments. The browser still supplies fragment geometry and the root remains a per-view browser-owned layout object; complete native SwFlowFrame mixin/follow links, root/page/content hierarchy, redlines, text Prepare/callbacks, merged/vertical/native geometry and per-node frame-width guards remain unverified. Original global Repeat/rich units and registered recovery/open/save/settings deviations remain unchanged. No full module or goal parity promotion.",
+      "Task202610101929-ECR55T replaces stored text-frame follow classification with actual original SwFlowFrame preceding/follow links. TypeScript composition represents the native C++ multiple-inheritance owner; SetFollow replacement/re-chaining and destruction follow source order without stitching. Original SwContentFrame clients delegate typed links and release them on destruction. Represented unmerged SwTextFrame GetOffset/GetFrameAtPos follows native boundary ties and existing SwTextCursor right-margin affinity. Pagination and retained-frame reconciliation repair actual same-node chains after candidate/discarded frame cleanup; React renders IsFollow rather than a detached boolean. Actual native owners, mounted edit/history and Chromium physical bullet continuation/reformat/edit/undo/redo/reopen checks cover this bounded correction. Cursor motion still uses the measured cursor map and MoveTextFrameMargin; native GetFrameOfModify/GetAdjFrameAtPos, root/page/content hierarchy, merged/vertical/native geometry, flow lock/undersize/fly flags/placement, redlines and text Prepare/callbacks, rich units/global Repeat remain unrepresented or unverified. Browser device fragment fields remain. All historical statuses/defaults/classifications/responsibility/evidence and registered recovery/open/save/settings deviations are retained; no whole-module or goal parity promotion."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/layout/newfrm.cxx",

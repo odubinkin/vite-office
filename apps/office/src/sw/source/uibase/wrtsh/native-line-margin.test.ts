@@ -137,7 +137,7 @@ it("retains soft-boundary affinity and excludes hard-break affinity", /** Checks
   expect(cursor.GetPoint().GetContentIndex()).toBe(3);
   const iterator = new SwTextCursor([], "");
   expect(iterator.CharCursorToLine(0)).toBeUndefined();
-  const emptyFrame = new SwTextFrame(f.node, "empty", 0, 0, false, 0, []),
+  const emptyFrame = new SwTextFrame(f.node, "empty", 0, 0, 0, []),
     pam = new SwPaM(cursor.GetPoint());
   try {
     expect(emptyFrame.LeftMargin(pam)).toBe(false);

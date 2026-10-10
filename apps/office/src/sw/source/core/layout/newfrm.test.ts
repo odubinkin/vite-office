@@ -297,7 +297,7 @@ describe("Writer text and page frames", /** Groups Writer page-frame tests. @ret
           frame.textFrames.map(
             /** Projects one source range. @param part - Text fragment. @returns Start, end, and follow flag. */ (
               part,
-            ) => [part.start, part.end, part.follow],
+            ) => [part.start, part.end, part.IsFollow()],
           ),
       ),
     ).toEqual([[[0, 15, false]], [[15, 30, true]], [[30, 40, true]]]);
@@ -533,7 +533,7 @@ describe("persistent Writer layout root", /** Checks core layout identity over d
       wide.pages.map(
         /** Reads follow status. @param page - Physical page. @returns First frame follow status. */ (
           page,
-        ) => page.textFrames[0]?.follow,
+        ) => page.textFrames[0]?.IsFollow(),
       ),
     ).toEqual([false, true, true]);
     expect(wide.lineNumbers[1]?.[0]).toEqual([{ number: 5, topTwips: 300 }]);

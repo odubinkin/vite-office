@@ -70,12 +70,9 @@ it.each([false, true])(
       : f.node;
     if (node === undefined) throw Error("Missing native text");
     node.SetText("abcdef");
-    const master = new SwTextFrame(node, "device", 0, 3, false, 0, [
-      { start: 0, end: 3, height: 300 },
-    ]);
-    const follow = new SwTextFrame(node, "device", 3, 6, true, 0, [
-      { start: 3, end: 6, height: 300 },
-    ]);
+    const master = new SwTextFrame(node, "device", 0, 3, 0, [{ start: 0, end: 3, height: 300 }]);
+    const follow = new SwTextFrame(node, "device", 3, 6, 0, [{ start: 3, end: 6, height: 300 }]);
+    master.SetFollow(follow);
     expect(master).toBeInstanceOf(SwContentFrame);
     expect(master).toBeInstanceOf(SwFrame);
     expect(master.GetRegisteredIn()).toBe(node);

@@ -114,7 +114,7 @@ export class SwRootFrame {
     if (previous !== undefined) SwFrame.DestroyFrame(previous.frame);
     this.cursorFrames.set(node, {
       text: node.GetText(),
-      frame: new SwTextFrame(node, String(node.GetIndex()), start, end, start > 0, 0, lines),
+      frame: new SwTextFrame(node, String(node.GetIndex()), start, end, 0, lines),
     });
   }
   /** Resolves the current native cursor's measured frame without stale text geometry. @param node - Existing model text owner. @returns Current frame, or no valid measurement. */
@@ -273,6 +273,13 @@ export class SwRootFrame {
     );
     for (const page of [...created, ...previous])
       for (const frame of page.textFrames) if (!retained.has(frame)) SwFrame.DestroyFrame(frame);
+    linkTextFrameFollows(
+      pages.map(
+        /** Reads retained original fragments. @param page - Physical page. @returns Native frames. */ (
+          page,
+        ) => page.textFrames,
+      ),
+    );
     const lineNumbers = Object.freeze(
       projectSwLineNumbers(pages, paragraphs, lineInfo).map(
         /** Freezes marks on one page. @param page - Page marks. @returns Immutable marks. */
@@ -305,6 +312,19 @@ export class SwRootFrame {
     this.snapshot = Object.freeze({ revision: this.revision, pages, lineNumbers });
     return this.snapshot;
   }
+}
+
+/** Links original node fragments after pagination or native identity reconciliation. @param pages - Ordered original physical fragments. @returns Nothing. */
+function linkTextFrameFollows(pages: readonly (readonly SwTextFrame[])[]): void {
+  for (const page of pages) for (const frame of page) frame.SetFollow(undefined);
+  const previous = new Map<SwTextNode, SwTextFrame>();
+  for (const page of pages)
+    for (const frame of page) {
+      const node = frame.GetTextNodeFirst(),
+        predecessor = previous.get(node);
+      if (predecessor !== undefined) predecessor.SetFollow(frame);
+      previous.set(node, frame);
+    }
 }
 
 /** Compares physical page geometry without serializing layout state. @param left - Previous page. @param right - Current page. @returns Whether equal. */
@@ -453,7 +473,7 @@ function textFrameEqual(left: SwTextFrame, right: SwTextFrame | undefined): bool
     left.nodeId === right.nodeId &&
     left.start === right.start &&
     left.end === right.end &&
-    left.follow === right.follow &&
+    left.IsFollow() === right.IsFollow() &&
     left.topSpacing === right.topSpacing
   );
 }
@@ -816,6 +836,7 @@ export function createSwPageFrames(
       }
       placeTables(paragraphIndex);
     }
+    linkTextFrameFollows(pages);
     let numberedPage = 0;
     return Object.freeze(
       pages.map(

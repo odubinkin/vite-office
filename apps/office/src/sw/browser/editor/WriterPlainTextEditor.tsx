@@ -529,7 +529,7 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
                           fragmentStart={frame.start}
                           fragmentEnd={frame.end}
                           topSpacingPt={frame.topSpacing / 20}
-                          isFollow={frame.follow}
+                          isFollow={frame.IsFollow()}
                           lineNumbers={lineNumbers}
                           retainElement={
                             /** Retains the DOM identity used by SwEditWin. @param paragraphId - Projection identity. @param element - Mounted paragraph or null. @returns Nothing. */ (
