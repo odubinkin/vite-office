@@ -4,7 +4,7 @@ title: "Run full upstream-absent checkpoint after native cursor tasks and pause"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: One complete current upstream-absent static/app/tooling/inventory/resource/Chromium checkpoint after nine corrections, repair failures before human-requested goal pause; preserve original100 gates and actual hashes/clients/deviations."
 doc_version: 3
-doc_updated_at: "2026-10-10T21:24:49.955Z"
+doc_updated_at: "2026-10-10T21:41:28.123Z"
 doc_updated_by: "CODER"
 description: "Task10 after BZ14P4: execute one complete current static/application/tooling/inventory/resource/Chromium profile without either reference, retain actual100 complete maps and discovery/hash evidence, repair failures before requested pause. Start no further parity task."
 sections:
@@ -49,9 +49,51 @@ sections:
     3. Require every discovered file executed, all assertions pass with0skip/flaky/retry, all actual configured app/inventory/tooling target modules100 lines/statements/functions/branches, complete current raw maps/counter IDs/nonnegative integer counters and original source hashes. On failure retain actual result and repair before pause; no fabricated certificates or threshold relaxation.
     4. After refs restored run source-tree/provenance/registry/resource generation/invariants/parity/routing/doctor/diff-check9metadata gates and verify original non-AgentPlane hashes/link targets/pin/deviations. Keep raw data/helpers only ignored cache.
     5. Persist bounded English task/parent evidence, exact semantic same-agent non-independent quality review, record verification and close clean writer. Then call goal paused for the explicit human request and stop all goal work; broader parity remains incomplete.
-  Verification: "Pending one current full checkpoint. Pause only after all failures repaired and checks pass."
+  Verification: |-
+    Result: pass. Task10 after full BZ14P4 and nine accepted native cursor/layout corrections. One current full upstream-absent checkpoint passed after nine accepted corrections. 15446Vitest scenarios and308Chromium scenarios (15754total),825/825discovered files,0failures/skips/flaky/retries/todo/errors. Actual configured application355modules and inventory42modules plus tooling1module100 all four gated metrics, complete current maps/53970nonnegative integer counters. All2454original non-AgentPlane tracked paths byte-identical; original reference link targets restored, source pin unchanged. No production/test/coverage config/inventory classification/default/registered IO deviation changes; no full replay or causal production repair needed. Full objective remains incomplete. Human requires goal paused after closure; no further parity tasks.
+
+    Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm run format:check
+    Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm run lint
+    Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm run typecheck
+    Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm run check:dependencies
+    Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm run check:docs
+    Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm run check:file-size
+    Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm run build
+    Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm exec -- node scripts/check-static-build.mjs
+    Command: cwd /Users/odubinkin/Projects/vite-office-writer/apps/office; npm run test:coverage -- --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/A77JR3/full-app-tests.json --coverage.reportsDirectory=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/A77JR3/full-app-coverage --coverage.reportOnFailure
+    Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm exec -- vitest run scripts/check-legacy-font-boundary.test.ts scripts/check-module-boundaries.test.ts scripts/check-source-provenance.test.ts scripts/native-column-item-boundary.test.ts scripts/native-ruler-boundary.test.ts scripts/native-writer-test-ownership.test.ts scripts/test-projects.test.ts scripts/typescript-toolchain.test.ts --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/A77JR3/full-tooling-tests.json --coverage --coverage.provider=istanbul --coverage.include=apps/office/test-projects.ts --coverage.exclude=**/*.test.ts --coverage.reportOnFailure --coverage.reporter=json --coverage.reporter=json-summary --coverage.reportsDirectory=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/A77JR3/full-tooling-coverage --coverage.thresholds.lines=100 --coverage.thresholds.statements=100 --coverage.thresholds.functions=100 --coverage.thresholds.branches=100
+    Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm run test:inventory:coverage -- --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/A77JR3/full-inventory-tests.json --coverage.reportsDirectory=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/A77JR3/full-inventory-coverage --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json --coverage.reporter=json-summary
+    Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm exec -- vitest run scripts/writer-ui-resource-model.test.ts --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/A77JR3/full-resource-tests.json
+    Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm exec -- playwright test --config apps/office/playwright.config.ts --reporter=list,json
+    Result: all13upstream-absent current static/build/app/tooling/inventory/resource/browser commands exit0. Both reference symlinks physically absent throughout every runtime/static/browser command and restored in finally. Full tests executed once only; no upstream-present runtime or repeated suite.
+
+    Command: npm run check:source-tree
+    Command: npm run check:source-provenance
+    Command: npm run inventory:registry:check
+    Command: node_modules/.bin/tsx scripts/generate-writer-ui-resources.ts --check
+    Command: npm run inventory:invariants
+    Command: npm run inventory:parity
+    Command: node .agentplane/policy/check-routing.mjs
+    Command: ap doctor
+    Command: git diff --check
+    Result: all9restored-source metadata audits pass. No native source execution; pinned9bc445578031fecf56086729d8e4940c77e14d65 unchanged. References restored to original relative targets.
+
+    Evidence: app15297/654files;tooling24/8files;inventory123/38files;resources2/1file;Chromium308/124files. All825discovered acceptance files executed with no missing/extra/duplicate files and no failed/pending/todo/skipped/flaky/retried cases or browser errors.
+
+    Evidence: complete actual current application355module raw map:23741/23741lines26182/26182statements5715/5715functions18589/18589branches. Inventory42modules1668lines1734statements436functions1292branches100%;tools test-projects.ts7lines7statements3functions12branches100%. Every module complete all-four, no uncovered entries. Raw counters50486app3462inventory22tools (53970total), all integer nonnegative; statement/function/branch IDs and every branch location/count width match, no filtering/editing/older-map reuse. All source hashes and original2454tracked non-AgentPlane files match pre-run capture. Original application Istanbul and inventory V8 providers/thresholds/includes/excludes preserved; only four configured metrics gated, nongated branchesTrue Unknown is not a failure or substituted metric.
+
+    Evidence: appmapSHA256 7a3d3bae55dfddc042abb251cedb5417e4dcb1bc7f019a08727bfcf6d729c543;inventorymapSHA256 8d378be307b05cf8356f05a454f21608fd2596bba896248897ff22ea4161b242;toolingmapSHA256 5d1467e6e34a812bcff4f55fb17ed17a66c0a4a6e9ab1e97c72c2ca25fd528c0. AppreportSHA256 f1b2999ee212bf85583edc7c438dcb30fb20a9ae61a43de6988808ef795652be;ChromiumreportSHA256 2c3805f84e285cf136724a52cd428a7fb81f829a938b16f2fd98589fd05c2240. Current raw JSON/maps/commands/logs/discovery/hash manifest/integrity and proof files remain only ignored apps/office/node_modules/.cache/parity-coverage/A77JR3/. No upstream sources/helpers/Python/raw maps/logs added to AgentPlane.
+
+    Findings: no runtime/static/browser failure or production repair. Read-only config path guess corrected via route/discovery before task execution. Cache-only integrity helper initially had a newline escape syntax error, then repaired without source/counter/map/criteria changes; current actual same raw maps pass integrity, no acceptance replay.
+
+    Residual gaps: regression completeness and current100 coverage do not certify full upstream architecture/contracts/defaults or every UI behavior. Native full paragraph/font/script/formatter/cache/merged/geometry/GetFrameOfModify/layout hierarchy/Doc factory/Undo, duplicate measured cursor registry and table text follows and other existing unverified inventory responsibilities remain unported or unverified. Preserve registered recovery/open/save/settings differences and historical inventory statuses. Exact semantic same-agent non-independent review, clean writer closeout and human-requested goal pause remain final steps.
   Rollback Plan: "No production change planned. Restore original reference symlink names and targets in finally. Preserve failed raw evidence; revert only task-scoped causal repair through a separately authorized task if needed."
-  Findings: "Clean baseline7713ccde842f4e4f84f741a44f2672741127bde2 after ninth accepted task06E9V7. Prior goal turn was progress: native cursor chain implemented/verified/inventory/semantic1b3be043 and closed. Human requires next full checkpoint then repair errors and pause; do not start another parity correction. Read-only discovery guessed absent apps/office/vitest.config.ts; route recomputed and rg discovered actual apps/office/vite.config.ts delegating test-projects.ts. App Istanbul and inventory V8 original100 gates retained."
+  Findings: |-
+    Clean baseline7713ccde842f4e4f84f741a44f2672741127bde2 after ninth accepted task06E9V7. Prior goal turn was progress: native cursor chain implemented/verified/inventory/semantic1b3be043 and closed. Human requires next full checkpoint then repair errors and pause; do not start another parity correction. Read-only discovery guessed absent apps/office/vitest.config.ts; route recomputed and rg discovered actual apps/office/vite.config.ts delegating test-projects.ts. App Istanbul and inventory V8 original100 gates retained.
+
+    - Observation: All full runtime suites and13commands passed. Cache-only integrity helper failed once on newline quoting after tests completed; no production or test failure.
+      Impact: One current full upstream-absent checkpoint passed after nine accepted corrections. 15446Vitest scenarios and308Chromium scenarios (15754total),825/825discovered files,0failures/skips/flaky/retries/todo/errors. Actual configured application355modules and inventory42modules plus tooling1module100 all four gated metrics, complete current maps/53970nonnegative integer counters. All2454original non-AgentPlane tracked paths byte-identical; original reference link targets restored, source pin unchanged. No production/test/coverage config/inventory classification/default/registered IO deviation changes; no full replay or causal production repair needed. Full objective remains incomplete. Human requires goal paused after closure; no further parity tasks.
+      Resolution: Corrected only ignored helper newline parsing, inspected all original raw maps/counters and825file execution and2454hashes, completed9restored-source metadata gates. No acceptance replay, threshold/config change, source artifacts or further parity task. Close exact reviewed result, confirm clean writer and pause goal.
 id_source: "generated"
 ---
 ## Summary
@@ -76,7 +118,43 @@ Capture clean current hashes/discovery/refs; run one complete current upstream-a
 
 ## Verification
 
-Pending one current full checkpoint. Pause only after all failures repaired and checks pass.
+Result: pass. Task10 after full BZ14P4 and nine accepted native cursor/layout corrections. One current full upstream-absent checkpoint passed after nine accepted corrections. 15446Vitest scenarios and308Chromium scenarios (15754total),825/825discovered files,0failures/skips/flaky/retries/todo/errors. Actual configured application355modules and inventory42modules plus tooling1module100 all four gated metrics, complete current maps/53970nonnegative integer counters. All2454original non-AgentPlane tracked paths byte-identical; original reference link targets restored, source pin unchanged. No production/test/coverage config/inventory classification/default/registered IO deviation changes; no full replay or causal production repair needed. Full objective remains incomplete. Human requires goal paused after closure; no further parity tasks.
+
+Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm run format:check
+Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm run lint
+Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm run typecheck
+Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm run check:dependencies
+Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm run check:docs
+Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm run check:file-size
+Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm run build
+Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm exec -- node scripts/check-static-build.mjs
+Command: cwd /Users/odubinkin/Projects/vite-office-writer/apps/office; npm run test:coverage -- --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/A77JR3/full-app-tests.json --coverage.reportsDirectory=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/A77JR3/full-app-coverage --coverage.reportOnFailure
+Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm exec -- vitest run scripts/check-legacy-font-boundary.test.ts scripts/check-module-boundaries.test.ts scripts/check-source-provenance.test.ts scripts/native-column-item-boundary.test.ts scripts/native-ruler-boundary.test.ts scripts/native-writer-test-ownership.test.ts scripts/test-projects.test.ts scripts/typescript-toolchain.test.ts --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/A77JR3/full-tooling-tests.json --coverage --coverage.provider=istanbul --coverage.include=apps/office/test-projects.ts --coverage.exclude=**/*.test.ts --coverage.reportOnFailure --coverage.reporter=json --coverage.reporter=json-summary --coverage.reportsDirectory=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/A77JR3/full-tooling-coverage --coverage.thresholds.lines=100 --coverage.thresholds.statements=100 --coverage.thresholds.functions=100 --coverage.thresholds.branches=100
+Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm run test:inventory:coverage -- --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/A77JR3/full-inventory-tests.json --coverage.reportsDirectory=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/A77JR3/full-inventory-coverage --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json --coverage.reporter=json-summary
+Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm exec -- vitest run scripts/writer-ui-resource-model.test.ts --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/A77JR3/full-resource-tests.json
+Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm exec -- playwright test --config apps/office/playwright.config.ts --reporter=list,json
+Result: all13upstream-absent current static/build/app/tooling/inventory/resource/browser commands exit0. Both reference symlinks physically absent throughout every runtime/static/browser command and restored in finally. Full tests executed once only; no upstream-present runtime or repeated suite.
+
+Command: npm run check:source-tree
+Command: npm run check:source-provenance
+Command: npm run inventory:registry:check
+Command: node_modules/.bin/tsx scripts/generate-writer-ui-resources.ts --check
+Command: npm run inventory:invariants
+Command: npm run inventory:parity
+Command: node .agentplane/policy/check-routing.mjs
+Command: ap doctor
+Command: git diff --check
+Result: all9restored-source metadata audits pass. No native source execution; pinned9bc445578031fecf56086729d8e4940c77e14d65 unchanged. References restored to original relative targets.
+
+Evidence: app15297/654files;tooling24/8files;inventory123/38files;resources2/1file;Chromium308/124files. All825discovered acceptance files executed with no missing/extra/duplicate files and no failed/pending/todo/skipped/flaky/retried cases or browser errors.
+
+Evidence: complete actual current application355module raw map:23741/23741lines26182/26182statements5715/5715functions18589/18589branches. Inventory42modules1668lines1734statements436functions1292branches100%;tools test-projects.ts7lines7statements3functions12branches100%. Every module complete all-four, no uncovered entries. Raw counters50486app3462inventory22tools (53970total), all integer nonnegative; statement/function/branch IDs and every branch location/count width match, no filtering/editing/older-map reuse. All source hashes and original2454tracked non-AgentPlane files match pre-run capture. Original application Istanbul and inventory V8 providers/thresholds/includes/excludes preserved; only four configured metrics gated, nongated branchesTrue Unknown is not a failure or substituted metric.
+
+Evidence: appmapSHA256 7a3d3bae55dfddc042abb251cedb5417e4dcb1bc7f019a08727bfcf6d729c543;inventorymapSHA256 8d378be307b05cf8356f05a454f21608fd2596bba896248897ff22ea4161b242;toolingmapSHA256 5d1467e6e34a812bcff4f55fb17ed17a66c0a4a6e9ab1e97c72c2ca25fd528c0. AppreportSHA256 f1b2999ee212bf85583edc7c438dcb30fb20a9ae61a43de6988808ef795652be;ChromiumreportSHA256 2c3805f84e285cf136724a52cd428a7fb81f829a938b16f2fd98589fd05c2240. Current raw JSON/maps/commands/logs/discovery/hash manifest/integrity and proof files remain only ignored apps/office/node_modules/.cache/parity-coverage/A77JR3/. No upstream sources/helpers/Python/raw maps/logs added to AgentPlane.
+
+Findings: no runtime/static/browser failure or production repair. Read-only config path guess corrected via route/discovery before task execution. Cache-only integrity helper initially had a newline escape syntax error, then repaired without source/counter/map/criteria changes; current actual same raw maps pass integrity, no acceptance replay.
+
+Residual gaps: regression completeness and current100 coverage do not certify full upstream architecture/contracts/defaults or every UI behavior. Native full paragraph/font/script/formatter/cache/merged/geometry/GetFrameOfModify/layout hierarchy/Doc factory/Undo, duplicate measured cursor registry and table text follows and other existing unverified inventory responsibilities remain unported or unverified. Preserve registered recovery/open/save/settings differences and historical inventory statuses. Exact semantic same-agent non-independent review, clean writer closeout and human-requested goal pause remain final steps.
 
 ## Rollback Plan
 
@@ -85,3 +163,7 @@ No production change planned. Restore original reference symlink names and targe
 ## Findings
 
 Clean baseline7713ccde842f4e4f84f741a44f2672741127bde2 after ninth accepted task06E9V7. Prior goal turn was progress: native cursor chain implemented/verified/inventory/semantic1b3be043 and closed. Human requires next full checkpoint then repair errors and pause; do not start another parity correction. Read-only discovery guessed absent apps/office/vitest.config.ts; route recomputed and rg discovered actual apps/office/vite.config.ts delegating test-projects.ts. App Istanbul and inventory V8 original100 gates retained.
+
+- Observation: All full runtime suites and13commands passed. Cache-only integrity helper failed once on newline quoting after tests completed; no production or test failure.
+  Impact: One current full upstream-absent checkpoint passed after nine accepted corrections. 15446Vitest scenarios and308Chromium scenarios (15754total),825/825discovered files,0failures/skips/flaky/retries/todo/errors. Actual configured application355modules and inventory42modules plus tooling1module100 all four gated metrics, complete current maps/53970nonnegative integer counters. All2454original non-AgentPlane tracked paths byte-identical; original reference link targets restored, source pin unchanged. No production/test/coverage config/inventory classification/default/registered IO deviation changes; no full replay or causal production repair needed. Full objective remains incomplete. Human requires goal paused after closure; no further parity tasks.
+  Resolution: Corrected only ignored helper newline parsing, inspected all original raw maps/counters and825file execution and2454hashes, completed9restored-source metadata gates. No acceptance replay, threshold/config change, source artifacts or further parity task. Close exact reviewed result, confirm clean writer and pause goal.

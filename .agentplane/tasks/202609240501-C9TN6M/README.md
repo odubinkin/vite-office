@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 330
+revision: 331
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-10T21:22:39.630Z"
+doc_updated_at: "2026-10-10T21:41:28.438Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -1476,6 +1476,8 @@ sections:
       Resolution: Native full formatting/re-entrant stabilization/forced scrolling/merged/vertical/absolute geometry/full margins/query and UI cursor-chain publication/end proxy remain explicit next work, alongside full paragraph/portion/root/Doc factory/Undo/hierarchy. Registered IO/recovery boundaries preserved. After next full repair any errors then pause goal; no new tasks after checkpoint.
 
     Task202610102109-06E9V7 correction9: actual mounted body cursor master/follow publication replaces singular device-frame API and text-length continuation proxy. Original root/client/follow ownership and native adjacency/RightMargin verified by7160related/306,9fresh core/React and24Chromium/13 including1fresh. Entire4modules758lines831statements142functions727branches100,1700nonnegative counters/1284current TS/TSX/MJS hashes; explicit formatting-only fresh browser AST proof, no acceptance replay.822oldfiles818same/4literal-preserving migrations,2actual-follow fixtures;8canonical histories/9metadata gates retained. Measured cursor registry/duplicate clients/native query/formatter/geometry/table follows remain explicit. Next task10 full checkpoint and repairs then human-requested pause.
+
+    Task202610102124-A77JR3 full checkpoint after nine native cursor/layout corrections: One current full upstream-absent checkpoint passed after nine accepted corrections. 15446Vitest scenarios and308Chromium scenarios (15754total),825/825discovered files,0failures/skips/flaky/retries/todo/errors. Actual configured application355modules and inventory42modules plus tooling1module100 all four gated metrics, complete current maps/53970nonnegative integer counters. All2454original non-AgentPlane tracked paths byte-identical; original reference link targets restored, source pin unchanged. No production/test/coverage config/inventory classification/default/registered IO deviation changes; no full replay or causal production repair needed. Full objective remains incomplete. Human requires goal paused after closure; no further parity tasks. Maps and reports in ignored parity-coverage/A77JR3; same-agent exact semantic review required before close and explicit requested pause.
 id_source: "generated"
 ---
 ## Summary
@@ -2925,3 +2927,5 @@ Task202610101959-1ZNFNB (sixth correction after BZ14P4) makes current native SwR
   Resolution: Native full formatting/re-entrant stabilization/forced scrolling/merged/vertical/absolute geometry/full margins/query and UI cursor-chain publication/end proxy remain explicit next work, alongside full paragraph/portion/root/Doc factory/Undo/hierarchy. Registered IO/recovery boundaries preserved. After next full repair any errors then pause goal; no new tasks after checkpoint.
 
 Task202610102109-06E9V7 correction9: actual mounted body cursor master/follow publication replaces singular device-frame API and text-length continuation proxy. Original root/client/follow ownership and native adjacency/RightMargin verified by7160related/306,9fresh core/React and24Chromium/13 including1fresh. Entire4modules758lines831statements142functions727branches100,1700nonnegative counters/1284current TS/TSX/MJS hashes; explicit formatting-only fresh browser AST proof, no acceptance replay.822oldfiles818same/4literal-preserving migrations,2actual-follow fixtures;8canonical histories/9metadata gates retained. Measured cursor registry/duplicate clients/native query/formatter/geometry/table follows remain explicit. Next task10 full checkpoint and repairs then human-requested pause.
+
+Task202610102124-A77JR3 full checkpoint after nine native cursor/layout corrections: One current full upstream-absent checkpoint passed after nine accepted corrections. 15446Vitest scenarios and308Chromium scenarios (15754total),825/825discovered files,0failures/skips/flaky/retries/todo/errors. Actual configured application355modules and inventory42modules plus tooling1module100 all four gated metrics, complete current maps/53970nonnegative integer counters. All2454original non-AgentPlane tracked paths byte-identical; original reference link targets restored, source pin unchanged. No production/test/coverage config/inventory classification/default/registered IO deviation changes; no full replay or causal production repair needed. Full objective remains incomplete. Human requires goal paused after closure; no further parity tasks. Maps and reports in ignored parity-coverage/A77JR3; same-agent exact semantic review required before close and explicit requested pause.
