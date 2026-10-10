@@ -4,7 +4,7 @@ title: "Port original OUString comparison and SharedStringPool hashed-key owners
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 19
+revision: 20
 origin:
   system: "manual"
 depends_on: []
@@ -23,6 +23,31 @@ verification:
   updated_by: "CODER"
   note: "All task36 original native and unchanged prior native captures, portable Calc106/shared8/tooling28, strict S/B/F/L100 positive complete sources and declared scoped gates passed; independent source/raw-state audit retained."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-10T16:15:30.863Z"
+  updated_by: "EVALUATOR"
+  note: "Reviewed implementation2e23eb26970ae92a197c663b2af639db56dee172 against pinned original source, approved task36 contracts and complete native/portable evidence; scoped implementation is ready for closure."
+  evaluated_sha: "2e23eb26970ae92a197c663b2af639db56dee172"
+  blueprint_digest: "3cd0ecd8b1cc9af393dfba30c17a6539ccfc0f3ffa758a87f4cd5673445073cc"
+  evidence_refs:
+    - ".agentplane/tasks/202610101555-J73K9F/README.md"
+    - ".agentplane/tasks/202610101555-J73K9F/quality/20261010-161530863-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610101555-J73K9F/quality/20261010-161530863-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610101555-J73K9F/quality/20261010-161530863-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610101555-J73K9F/blueprint/resolved-snapshot.json"
+    - "output/playwright/task36-audit.json"
+    - "output/playwright/task36-checks/manifest.json"
+    - "output/playwright/task36-final/manifest.json"
+    - "output/playwright/rtl-string-key-native/output.json"
+    - "output/playwright/rtl-string-key-native/invalid.stderr"
+    - "apps/office/src/svl/source/misc/native-string-key-cases.json"
+    - "docs/program/registry/shared/capabilities/CAP-964432b0-3954-4bba-8b5c-c58d4038a982.json"
+  findings:
+    - "Actual original OUString normal/reverse comparison, equality length/pointer/reverse order, six friend operator bodies and signed hash delegate match the single shared SAL owner. Selected native64-bit size_t casts use lossless BigInt. Complete StringWithHash by-value/rvalue construction and implicit memberwise copy/move/assignment/destruction preserve str-before-cache order; equality checks cache before actual str. No fake pool or CharClass, duplicate string owner or Writer change."
+    - "All32 full original blobs independently match git-show pinned SHA. Entire raw native output equals8143 committed complete snapshots, with driverce4f99e0/states2970e51a. Actual collision call2353 returns0,5243,5243; genuine negative hash witness exceeds Number precision after unsigned64 cast. ASan/UBSan defined output is identical; invalid null-field hashing remains diagnosed without post-UB golden values. Unchanged prior drivers164be221/44ad48ef retain4424/3336 full observations and all original guards."
+    - "Inspected portable source sets and every actual s/f/b counter: Calc19 sources S2920 B2055 F474 L2564; affected shared9 sources S434 B214 F99 L353, all positive and allfour100. Both upstream links absent during Calc106/shared8/tooling28 runs and restored before native/provenance gates. Recorded bounded failed caller/import/audit/marker checks have specific successful same-scope corrections; no acceptance weakening."
+    - "All15 committed paths are intentional approved runtime/native fixture/test/helper/inventory/core/journal/task artifacts. Calc48 capabilities174 modules and shared25 capabilities144 modules report0 semantic violations while broad parity flags remain unverified. CALC-035 is clearly source-only awaiting native locale service reproduction. Source-tree/provenance/format/types/lint/docs/size/boundaries/routing/doctor/diff gates pass; doctor has0 errors/two inherited warnings. Full run remains due at41."
 commit: null
 comments:
   -
