@@ -4,7 +4,7 @@ title: "Restore native typed paragraph text-left margin item"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -17,16 +17,41 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-10T17:16:38.346Z"
+  updated_by: "CODER"
+  note: "Native typed left margin accepted:14251related cases505files63fresh, actual100all-four ten full modules,27Chromium and all declared static/metadata gates. References absent in runtime/static and restored; exact source hashes and preserved fixtures/inventory recorded in evidence/verification.json. Semantic 88b0a100251a22b8380830b604fcc9bf43b048d9"
   attempts: 0
-commit: null
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-10T17:17:05.177Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent non-independent review of semantic 88b0a100251a22b8380830b604fcc9bf43b048d9: native typed text-left margin satisfies approved represented contracts and declared validation. Broader native range/history/UI wire parity remains incomplete."
+  evaluated_sha: "88b0a100251a22b8380830b604fcc9bf43b048d9"
+  blueprint_digest: "3ec43420ade3809daf8dfe93998d8caeca28f008ab19cf1b061012c346f334e3"
+  evidence_refs:
+    - ".agentplane/tasks/202610101650-7RCNDA/README.md"
+    - ".agentplane/tasks/202610101650-7RCNDA/quality/20261010-171705177-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610101650-7RCNDA/quality/20261010-171705177-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610101650-7RCNDA/quality/20261010-171705177-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610101650-7RCNDA/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610101650-7RCNDA/evidence/verification.json"
+    - "88b0a100251a22b8380830b604fcc9bf43b048d9"
+  findings:
+    - "Exact semantic SHA binds every ten production hashes to accepted complete Istanbul maps100all-four;14251app cases505files63fresh and27Chromium12files pass upstream-absent. No counter/filter/threshold changes or earlier-map reuse."
+    - "Owned typed measure/proportion, separate hanging rounding, original UNO admission/status quirks and direct mutable caller history reviewed; native class identity reexport is preserved. Browser scalar boundary explicitly rejects unsupported rich states."
+    - "Historical802testfiles:780byte-identical,22source-backed native migrations preserve acceptance apart from one fractional native constructor admission. Twenty canonical histories/status/defaults preserved except truthful declaration owner retirement. Registered I/O/recovery deviations untouched."
+    - "Initial fixture/static/helper/metadata/commit-subject failures are recorded and repaired within scope. All required final checks pass; runtime evidence has not been replayed for metadata/helper repairs."
+commit:
+  hash: "88b0a100251a22b8380830b604fcc9bf43b048d9"
+  message: "🧩 7RCNDA code: restore native typed paragraph text-left margin"
 comments:
   -
     author: "CODER"
     body: "Start: restore original typed TextLeft item and represented native authors, preserve scalar boundary compatibility and admitted fixtures, synchronize inventory and verify entire changed modules without references. Cadence1/10 after BZ14P4; no compiled native differential claim."
+  -
+    author: "CODER"
+    body: "Start: Native typed text-left item implemented and current-source validation accepted; exact semantic commit recorded."
 events:
   -
     type: "status"
@@ -35,8 +60,21 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: restore original typed TextLeft item and represented native authors, preserve scalar boundary compatibility and admitted fixtures, synchronize inventory and verify entire changed modules without references. Cadence1/10 after BZ14P4; no compiled native differential claim."
+  -
+    type: "status"
+    at: "2026-10-10T17:16:37.902Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+    note: "Start: Native typed text-left item implemented and current-source validation accepted; exact semantic commit recorded."
+  -
+    type: "verify"
+    at: "2026-10-10T17:16:38.346Z"
+    author: "CODER"
+    state: "ok"
+    note: "Native typed left margin accepted:14251related cases505files63fresh, actual100all-four ten full modules,27Chromium and all declared static/metadata gates. References absent in runtime/static and restored; exact source hashes and preserved fixtures/inventory recorded in evidence/verification.json. Semantic 88b0a100251a22b8380830b604fcc9bf43b048d9"
 doc_version: 3
-doc_updated_at: "2026-10-10T17:16:21.620Z"
+doc_updated_at: "2026-10-10T17:16:38.400Z"
 doc_updated_by: "CODER"
 description: "Replace immutable numeric TextLeft adapter with original typed lrspitem.hxx declaration and represented Cxx constructors, ownership, hanging-component resolution, UNO/status and metrics. Migrate native authors and scoped acceptance fixtures, preserve legacy wire through browser codec, synchronize inventory without blanket promotion. Leave range MoveLeftMargin history for its separate atomic task."
 sections:
@@ -61,6 +99,39 @@ sections:
     Cadence: First correction since accepted full BZ14P4; no full run due now. Goal remains active after explicit human resume.
 
     Review: Same coding agent, non-independent; exact implementation SHA will be recorded by lifecycle after the semantic commit.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-10T17:16:38.346Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Native typed left margin accepted:14251related cases505files63fresh, actual100all-four ten full modules,27Chromium and all declared static/metadata gates. References absent in runtime/static and restored; exact source hashes and preserved fixtures/inventory recorded in evidence/verification.json. Semantic 88b0a100251a22b8380830b604fcc9bf43b048d9
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T17:16:37.902Z, excerpt_hash=sha256:7ef12a9752807512467abff3cd4ad4bbcbfb6b3dbde12fa5a99048292a06e3a4
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610101650-7RCNDA/blueprint/resolved-snapshot.json
+    - old_digest: 3ec43420ade3809daf8dfe93998d8caeca28f008ab19cf1b061012c346f334e3
+    - current_digest: 3ec43420ade3809daf8dfe93998d8caeca28f008ab19cf1b061012c346f334e3
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610101650-7RCNDA
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610101650-7RCNDA
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Restore both temporary reference links finally. Revert only this scoped correction by a forward commit if required; retain raw failure evidence in ignored cache. Do not reset shared history."
   Findings: |-
     No network/subagents or new setup tasks. Compiled native differential, general pooling/lifetime/UNO/VCL are not claimed. Rich left/right/first wire and original MoveLeftMargin range/history remain separate required work.
@@ -123,6 +194,39 @@ Scope: Native typed left item, declared ten production modules and represented n
 Cadence: First correction since accepted full BZ14P4; no full run due now. Goal remains active after explicit human resume.
 
 Review: Same coding agent, non-independent; exact implementation SHA will be recorded by lifecycle after the semantic commit.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-10T17:16:38.346Z — VERIFY — ok
+
+By: CODER
+
+Note: Native typed left margin accepted:14251related cases505files63fresh, actual100all-four ten full modules,27Chromium and all declared static/metadata gates. References absent in runtime/static and restored; exact source hashes and preserved fixtures/inventory recorded in evidence/verification.json. Semantic 88b0a100251a22b8380830b604fcc9bf43b048d9
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T17:16:37.902Z, excerpt_hash=sha256:7ef12a9752807512467abff3cd4ad4bbcbfb6b3dbde12fa5a99048292a06e3a4
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610101650-7RCNDA/blueprint/resolved-snapshot.json
+- old_digest: 3ec43420ade3809daf8dfe93998d8caeca28f008ab19cf1b061012c346f334e3
+- current_digest: 3ec43420ade3809daf8dfe93998d8caeca28f008ab19cf1b061012c346f334e3
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610101650-7RCNDA
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610101650-7RCNDA
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
