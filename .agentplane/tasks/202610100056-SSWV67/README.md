@@ -1,10 +1,11 @@
 ---
 id: "202610100056-SSWV67"
 title: "Preserve original native table UL spacing across browser transport"
-status: "DOING"
+result_summary: "Preserve complete native table UL spacing across browser transport and restored history"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -53,6 +54,9 @@ comments:
   -
     author: "CODER"
     body: "Start: semantic40160f2d4046 full native table UL transport landed; record exact-SHA current source verification and non-independent quality before canonical finish."
+  -
+    author: "CODER"
+    body: "Verified: original native table UL five-field item now lossless across existing browser pool/graph/JSON/Worker, explicit nativeabsence/new state overrides scalars while oldrecords retain ingress.1746related20fresh24Chromium first-attempt,2wholemodule Istanbul100,9static9metadata andexact-SHA same-agent quality pass;649oldtests/inventory/deviations preserved. Goalactive8/10."
 events:
   -
     type: "status"
@@ -86,8 +90,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Exact40160f2d4046 same-agent/non-independent quality pass,current evidence refreshed;1746related20fresh24Chromium first-attempt;2actualwholemodule Istanbul100,9statics9metadata,649oldtests4histories unchanged,goalactive8/10."
+  -
+    type: "status"
+    at: "2026-10-10T01:04:46.521Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: original native table UL five-field item now lossless across existing browser pool/graph/JSON/Worker, explicit nativeabsence/new state overrides scalars while oldrecords retain ingress.1746related20fresh24Chromium first-attempt,2wholemodule Istanbul100,9static9metadata andexact-SHA same-agent quality pass;649oldtests/inventory/deviations preserved. Goalactive8/10."
 doc_version: 3
-doc_updated_at: "2026-10-10T01:04:38.601Z"
+doc_updated_at: "2026-10-10T01:04:46.523Z"
 doc_updated_by: "CODER"
 description: "Atomic8/10 after BZQGYC. Replace outgoing table upper/lower scalar projection with complete original SvxULSpaceItem snapshot using existing item codec/pool. Separate nativeSpacing marker preserves old geometry-only records and legacy scalar admission. Native direct absence and full state take precedence over conflicts; no private field/inverse arithmetic adapters, LR/shared inheritance and IO deviations untouched."
 sections:
@@ -196,6 +207,10 @@ sections:
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert semantic commit without rewriting history; restore ignored reference in finally."
   Findings: "Current table transport projects original native UL to marginTop/marginBottom and loses context/bothproportions. Existing pooled item codec now preserves all5nativefields; reuse it. Independent nativeSpacing presence marker distinguishes native direct absence from earlier geometry-only/scalar legacy records, avoiding retroactive reinterpretation. WQ0NE8 completed7/10 at8a5e0bd90d14/eee954666434; goalactive."
+extensions:
+  implementation_commit:
+    hash: "40160f2d40468987ce314e39d440fdaf4a041ab0"
+    message: "🧩 SSWV67 writer: preserve complete native table UL state across browser transport"
 id_source: "generated"
 ---
 ## Summary
