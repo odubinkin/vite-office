@@ -1,0 +1,76 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-1a8923ce-4bb5-4d86-b83f-78cc139b4895",
+    "capabilityId": "CAP-1a8923ce-4bb5-4d86-b83f-78cc139b4895",
+    "suite": "shared",
+    "subsystem": "shared-string",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original frozen16 trie/property/data/signed delta and exception slot mappings preserve original upper/title/simple fold, including Turkic low3 option mask.",
+      "All1114112 complete native16-field rows, signed boundaries,669 actual exception slots and2048 generic1/2-word slot observations match portably and retain full native SHA.",
+      "Native simple-lowercase scalar adapter matches all Unicode codepoints in Node24/Chrome154; complete native-first mismatch report proves upper/title/fold replacements do not match."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "User-directed native-first selection; retain only proven scalar lowercase native adaptation and original implementations for failed native contracts."
+    },
+    "capability": "Pinned ICU scalar casing dependency with demonstrated native lowercase reuse",
+    "gaps": [
+      "Only the demonstrated scalar dependency closure is implemented. Native lowercase is certified only for measured Node24/Chrome154; exhaustive pinned replay detects other-engine mismatches but no universal engine or Unicode-version guarantee is claimed. Complete original locale-aware string mapping, UNO CharClass service and SharedStringPool remain missing. No whole-library parity, physical const/pointer ABI, invalid memory or literal full upstream QA claim."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/icu-reference/source/common/ucase.cpp",
+          "marker": "ucase_fold"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/icu-reference/source/test/cintltst/cucdtst.c",
+          "marker": "TestCaseFolding"
+        }
+      ],
+      "docs": [
+        {
+          "path": "vendor/icu-reference/source/common/unicode/uchar.h",
+          "marker": "u_foldCase"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/external/icu/source/common/ucase.ts",
+          "marker": "ucase_fold"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/external/icu/source/common/ucase.test.ts",
+          "marker": "matches every unchanged native Unicode codepoint and complete initialized trie observation"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Native JavaScript Unicode correspondence before ICU implementation"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "Map one original signed32 codepoint through source scalar upper/title/fold and exhaustively proven native lowercase",
+    "scopeLimitations": [
+      "Only the demonstrated scalar dependency closure is implemented. Native lowercase is certified only for measured Node24/Chrome154; exhaustive pinned replay detects other-engine mismatches but no universal engine or Unicode-version guarantee is claimed. Complete original locale-aware string mapping, UNO CharClass service and SharedStringPool remain missing. No whole-library parity, physical const/pointer ABI, invalid memory or literal full upstream QA claim.",
+      "Native capture callers are independent full-domain reference experiments; literal original QA is linked for source traceability and is not claimed as ported."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

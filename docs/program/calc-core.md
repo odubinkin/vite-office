@@ -1858,3 +1858,59 @@ inputs, native ABI/template/constant-evaluation enforcement and complete origina
 consumer QA remain unverified. Actual CharClass/UNO/i18npool/i18nutil/ICU78.3,
 SharedStringPool and Calc cell/column/document/editable UI owners remain required.
 This is task6/10 since full task31; the next scheduled full run is task41.
+
+
+## Native JavaScript Unicode correspondence before ICU implementation
+
+Task38 first compares the actual pinned ICU78.3 scalar dependency with native
+JavaScript, following the explicit native-first user requirement. The complete
+[comparison report](calc-native-unicode-conformance.json) retains both measured
+engines, every mismatch, original source/archive/driver/output hashes and the
+original LibreOffice table-mask predicate determining fallback reachability.
+
+All1,114,112 codepoints are tested, including surrogate codepoints. Node24.13.1
+(ICU78.2, Unicode17) and real Chrome154 give identical observations. Native
+`toLowerCase()` plus conversion to its first complete result codepoint agrees
+with original scalar lowercase everywhere in those engines. Unadapted lowercase
+expands U+0130 and has one mismatch; original LibreOffice tables intercept it
+before either lower fallback. Native whole-string uppercase has102 mismatches,
+including27 actual LowerToUpper fallback cases. Uppercase as a titlecase
+candidate has160 mismatches, including77 actual ToTitle fallback cases.
+Lowercase as a case-fold candidate has198 mismatches, including184 actual
+SimpleFolding and181 actual FullFolding fallback cases. The standard native
+interfaces have no direct scalar titlecase or Unicode case-fold mapping API.
+
+The scalar lowercase adapter now uses native JavaScript after signed32 conversion
+and original invalid-input identity handling. The uppercase, titlecase and fold
+contracts retain the actual source algorithms, frozen UTrie2 and exception slots. No whole
+ICU library is required by this evidence. Other engine/Unicode versions and
+actual complete locale-aware string services remain unverified; the selected
+native implementation must keep exhaustive pinned source-free replay tests.
+The native capture includes71,303,168 raw bytes, original trie/exception index
+observations,669 populated exception-slot values and pointer positions, signed
+out-of-range inputs, folding option masks and all original generated data.
+ASan/UBSan outputs agree completely. Another2,048 valid generic slot callers
+verify both single- and double-word macro contracts without modifying original
+generated data. Complete generated arrays, singleton fields and shared array
+offsets remain in their original owners. Header modules retain their native
+header discriminator for separate browser module resolution.
+
+Portable checks run with all original-source links absent: Calc106 tests
+pass with100% Istanbul coverage (2,920 statements,2,055 branches,474 functions,
+2,564 lines). The affected shared dependency passes3 exhaustive tests with100%
+coverage (116 statements,64 branches,20 functions,106 lines); every raw counter
+is positive, including all executable source owners. The public header module
+only reexports original delegates and has no executable coverage statements.
+Twenty-eight affected tooling tests and type, documentation, lint, dependency,
+source-tree, source-provenance and scoped inventory checks pass. Calc inventory
+contains50 capabilities/181 modules including shared dependencies; shared has
+27 capabilities/151 modules, both with zero semantic violations. Broad contract,
+behavior, default and ownership parity remain unverified. The full run remains
+scheduled for task41.
+
+This closes a scalar dependency, not the real locale-aware string service or
+SharedStringPool. The remaining UI prerequisite path is actual string mapping
+and pool, typed cell storage in ScColumn/ScTable/ScDocument, document edits with
+notifications and undo, then the Calc view/input adapter. Existing Writer/shared
+owners are reused wherever upstream shares them; editable sheet UI is not yet
+ready to connect.

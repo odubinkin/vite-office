@@ -1,0 +1,72 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/external/icu/source/common/ucase.h.ts",
+    "status": "mapped",
+    "upstreamPath": "vendor/icu-reference/source/common/ucase.h",
+    "localSymbols": [
+      "UCASE_DELTA_SHIFT",
+      "UCASE_EXCEPTION",
+      "UCASE_EXC_CONDITIONAL_FOLD",
+      "UCASE_EXC_DELTA",
+      "UCASE_EXC_DELTA_IS_NEGATIVE",
+      "UCASE_EXC_DOUBLE_SLOTS",
+      "UCASE_EXC_FOLD",
+      "UCASE_EXC_LOWER",
+      "UCASE_EXC_NO_SIMPLE_CASE_FOLDING",
+      "UCASE_EXC_SHIFT",
+      "UCASE_EXC_TITLE",
+      "UCASE_EXC_UPPER",
+      "UCASE_GET_DELTA",
+      "UCASE_GET_TYPE",
+      "UCASE_HAS_EXCEPTION",
+      "UCASE_IS_UPPER_OR_TITLE",
+      "UCASE_LOWER",
+      "UCASE_NONE",
+      "UCASE_TITLE",
+      "UCASE_TYPE_MASK",
+      "UCASE_UPPER",
+      "UCaseProps",
+      "_FOLD_CASE_OPTIONS_MASK"
+    ],
+    "upstreamSymbols": [
+      "UCaseProps",
+      "_FOLD_CASE_OPTIONS_MASK",
+      "UCASE_GET_TYPE",
+      "UCASE_IS_UPPER_OR_TITLE",
+      "UCASE_HAS_EXCEPTION",
+      "UCASE_GET_DELTA"
+    ],
+    "preservedResponsibilities": [
+      "Original ICU78.3 scalar uppercase/title/fold retain frozen UTrie2 stage/index/high/error lookup, original exception slots/population-count data/signed deltas and conditional Turkic option behavior. Public scalar delegates remain in the actual ucase.cpp owner; uchar declarations reexport them. Full generated Unicode17 arrays and singleton fields remain source data, with typed-array index/data16 shared backing offsets preserved. Per explicit user native-first instruction, simple lowercase uses String.fromCodePoint(c).toLowerCase().codePointAt(0) after original signed32 conversion and explicit out-of-range identity; this matches all1114112 original codepoints in measured Node24.13.1 and real Chrome154. Complete comparison report retains every native mismatch and original LibreOffice table-filter reachability; native upper/title/fold are not equivalent. Complete unchanged original scalar scopes and29 full original files compile from the exact pinned archive; native/sanitized complete71,303,168-byte rows and all ancillary data agree. Portable replay restores every16-field row and full raw SHA,669 populated original data slots and2048 valid generic single/double macro callers. Broad ICU/library, arbitrary browser versions/native Unicode data, C++ physical const/pointer ABI, invalid memory, original full-string/locale/context APIs/UnicodeSets, literal upstream QA and actual CharClass/SharedStringPool/Calc cells/UI remain unverified. No JavaScript fold proxy or fake service/data/document substitutes those missing owners."
+    ],
+    "omittedResponsibilities": [
+      "Only the demonstrated scalar dependency closure is implemented. Native lowercase is certified only for measured Node24/Chrome154; exhaustive pinned replay detects other-engine mismatches but no universal engine or Unicode-version guarantee is claimed. Complete original locale-aware string mapping, UNO CharClass service and SharedStringPool remain missing. No whole-library parity, physical const/pointer ABI, invalid memory or literal full upstream QA claim."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/ucase.h.ts",
+          "marker": "UCaseProps"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/ucase.test.ts",
+          "marker": "matches every unchanged native Unicode codepoint and complete initialized trie observation"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/ucase.h",
+          "marker": "UCaseProps"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/external/icu/source/common/ucase.h.ts",
+      "stackNecessity": "module-resolution",
+      "rationale": "Retain the original .h header discriminator before the TypeScript extension so browser ESM resolves the native type/constant/macro header separately from its original implementation owner. This preserves source file responsibilities instead of merging native header and implementation modules with the same normalized stem."
+    }
+  }
+}
