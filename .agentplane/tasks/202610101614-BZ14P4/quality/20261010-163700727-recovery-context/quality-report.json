@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "task_id": "202610101614-BZ14P4",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-10T16:37:00.727Z",
+  "verdict": "pass",
+  "summary": "Same-agent non-independent exact-SHA review of6875a991d922: complete current checkpoint passes all15556 cases and all-four100 coverage, all802 discovered files executed, no source/test/inventory changes, references absent at runtime and restored. Explicit pause boundary follows closure.",
+  "evaluated_sha": "6875a991d922179716770c6b6ba12e9f634c1ebe",
+  "blueprint_digest": "251eff15a93534f714910251226559122d17b9dd7aa84959dce48625c55ce2d4",
+  "findings": [
+    "Current raw reporters and full maps independently recounted by local analysis, without old map reuse or counter/threshold/filter edits; analysis done by the same agent, not an independent reviewer."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610101614-BZ14P4/README.md",
+    ".agentplane/tasks/202610101614-BZ14P4/evidence/verification.json",
+    "ap doctor:0errors/2existing warnings; policy routing pass; git diff --check pass"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Broad upstream parity remains incomplete; no compiled native differential is claimed. Historical X6VV8G failures/evidence retained unchanged."
+  ]
+}
