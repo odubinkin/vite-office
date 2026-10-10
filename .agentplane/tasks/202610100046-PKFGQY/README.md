@@ -1,10 +1,11 @@
 ---
 id: "202610100046-PKFGQY"
 title: "Port original shared SoA range emptying and middle-block split"
-status: "DOING"
+result_summary: "verified-202610100046-PKFGQY"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 22
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-10T01:06:16.069Z"
+  updated_at: "2026-10-10T01:07:25.897Z"
   updated_by: "CODER"
-  note: "Actual original28204sequences/227296fullstates and all15076priorprefix preserved; Calc104/23 and relatedshared21/7 actual100fourmetrics with positive raw counters, exact callback/guard audit, 14staticgates/3upstream-absent portablegroups allpass and exactlinksrestored. Defaultheap lossless fixture pass; implemented scope only, wholeflagsfalse. Cycle2task9/10."
+  note: "verified-202610100046-PKFGQY"
   attempts: 0
 quality_review:
   state: "pass"
@@ -50,11 +51,16 @@ quality_review:
     - "Read-only committedfixture audit decodes all28204sequences/227296complete states and199092operations, full69995snapshots/30779owners plus all complete nested metadata2433/payload16625/endpoints14434; all15076prior sequences/136144states/final logs unchanged. Actual binary byte replay anddriver/13headers/2archives hashes pass; caller bridges invoke unchanged original private bodies. Callback audit q5400/u5112/z720/s720/m480, all1416exactguardphases, upper864/lower408 split and240emptyMiddle calls; all complete fields/callback ordering preserved."
     - "Actual raw Istanbul positive s/f/b counters in17Calcowners and2changedsharedowners,100allfourmetrics. Calc104/23/shared21/7; all14requiredstaticgates and3upstream-absent portablegroups pass (registry19/3), exactlinks restored. Defaultheap fixture formatter passes28MiB losslessstorage; initialOOM/parser/TS18048 corrections retain criteria/allobservations. Erased decoder tuple annotation adds no runtime branch/default/suppression."
     - "Reviewed13committedpaths with matchingcleanworkingfiles. Source-shaped main996/main_def629/observer761/probe961/input99 below1000; inputmodule onlyenumeratescallers. Inventory Calc39/156/shared18/129; new capability implementedtrue with wholecontract/behavior/default/verifiedfalse and contextual gaps. No newlyestablishedupstream suspicion, Writer-only edit, gate/heap/criteria change or fullsuiteclaim atcycle2task9/10."
-commit: null
+commit:
+  hash: "796649c98f92e1138bce18e2d5e000fcc2be6356"
+  message: "🔎 PKFGQY review: verify native range emptying and complete observations"
 comments:
   -
     author: "CODER"
     body: "Start: Implement approved original range-empty and middle-split group using actual shared fields and unchanged native callers, cycle2task9/10 on calc."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610100046-PKFGQY. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -69,8 +75,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Actual original28204sequences/227296fullstates and all15076priorprefix preserved; Calc104/23 and relatedshared21/7 actual100fourmetrics with positive raw counters, exact callback/guard audit, 14staticgates/3upstream-absent portablegroups allpass and exactlinksrestored. Defaultheap lossless fixture pass; implemented scope only, wholeflagsfalse. Cycle2task9/10."
+  -
+    type: "verify"
+    at: "2026-10-10T01:07:25.897Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610100046-PKFGQY"
+  -
+    type: "status"
+    at: "2026-10-10T01:07:26.031Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610100046-PKFGQY. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-10T01:06:16.121Z"
+doc_updated_at: "2026-10-10T01:07:47.228Z"
 doc_updated_by: "CODER"
 description: "Cycle2task9/10. Implement original public plain/hinted set_empty with complete set_empty_impl/single/multi/middle member bodies over actual shared fields and existing ownership helpers. Retain original source diagnostics/order, overwrite true and actual private overwrite false witnesses; full native comparison preserving all15076previous sequences. Exact main/header versus main_def body convention, reused common modules, honest inventory and suspected-case journal. User ongoing implementation approval applies."
 sections:
@@ -215,6 +234,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-10T01:07:25.897Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610100046-PKFGQY
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T01:06:16.121Z, excerpt_hash=sha256:1af023ae489d17ae9d4c69d33abea5b1a654e0135961716e9157f28acb26cb43
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610100046-PKFGQY/blueprint/resolved-snapshot.json
+    - old_digest: eba3dd6c7d9065ef4aa2808fd79922f31545c1905760ba4690b8bd24516579f4
+    - current_digest: eba3dd6c7d9065ef4aa2808fd79922f31545c1905760ba4690b8bd24516579f4
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610100046-PKFGQY
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610100046-PKFGQY --result verified-202610100046-PKFGQY --commit 796649c98f92e1138bce18e2d5e000fcc2be6356
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only active task implementation/registry/docs commits via ordinary user-approved Git recovery if requested; no history rewrite, merges or unrelated task changes."
   Findings: |-
@@ -235,6 +284,18 @@ sections:
     - Observation: Required typecheck reported TS18048 for fixture.ownerSnapshots[id] possibly undefined under checked indexing; actual native/raw prefix/fullstate/sharedcoverage checks pass and every admitted fixture ID resolves.
       Impact: Decoder needs explicit existing serialized tuple witness; no runtime or core algorithm defect. Keep checked-index compiler policy unchanged.
       Resolution: After current static run ends, annotate the complete encoded owner tuple with existing erased native-fixture syntax convention. No added branch/default/suppression, public API or observation change. Re-run typecheck and relevant formatting/docs; passing runtime shared coverage remains applicable because annotation erases. Also document whole metadata/payload/endpoint interning in existing core doc.
+
+    - Observation: Exact route task complete exited5 E_GIT commit subject is too generic after marking taskDONE; installed deterministicclose subject conflicts with existing subject validator. Actual quality796649c98f92 and implementation71ab990ece30 recorded.
+      Impact: Local taskclosure commit remains unrecorded; no source/evidence failure.
+      Resolution: Recompute route and execute exact supported recovery once; preserve validator/CLI/policy, then supported explicit specific-subject taskcommit if deterministicrecovery fails.
+
+    - Observation: Exact supported commit --close --unstage-others recovery also exited5 E_GIT generic deterministicsubject; no implementation change.
+      Impact: Only active task cleanup artifact remains dirty.
+      Resolution: Use documented explicit ap commit specific finalize subject with --allow-tasks; unchanged validator/policy/CLI. Read actualamendedHEAD and recompute final route/clean status.
+extensions:
+  implementation_commit:
+    hash: "71ab990ece3078689e84c5368e596c6512758079"
+    message: "🧮 PKFGQY shared: preserve original range emptying and middle splits"
 id_source: "generated"
 ---
 ## Summary
@@ -391,6 +452,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-10T01:07:25.897Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610100046-PKFGQY
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T01:06:16.121Z, excerpt_hash=sha256:1af023ae489d17ae9d4c69d33abea5b1a654e0135961716e9157f28acb26cb43
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610100046-PKFGQY/blueprint/resolved-snapshot.json
+- old_digest: eba3dd6c7d9065ef4aa2808fd79922f31545c1905760ba4690b8bd24516579f4
+- current_digest: eba3dd6c7d9065ef4aa2808fd79922f31545c1905760ba4690b8bd24516579f4
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610100046-PKFGQY
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610100046-PKFGQY --result verified-202610100046-PKFGQY --commit 796649c98f92e1138bce18e2d5e000fcc2be6356
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -416,3 +507,11 @@ Existing explicit borrowed-store/body convention and shared ownership/event/iter
 - Observation: Required typecheck reported TS18048 for fixture.ownerSnapshots[id] possibly undefined under checked indexing; actual native/raw prefix/fullstate/sharedcoverage checks pass and every admitted fixture ID resolves.
   Impact: Decoder needs explicit existing serialized tuple witness; no runtime or core algorithm defect. Keep checked-index compiler policy unchanged.
   Resolution: After current static run ends, annotate the complete encoded owner tuple with existing erased native-fixture syntax convention. No added branch/default/suppression, public API or observation change. Re-run typecheck and relevant formatting/docs; passing runtime shared coverage remains applicable because annotation erases. Also document whole metadata/payload/endpoint interning in existing core doc.
+
+- Observation: Exact route task complete exited5 E_GIT commit subject is too generic after marking taskDONE; installed deterministicclose subject conflicts with existing subject validator. Actual quality796649c98f92 and implementation71ab990ece30 recorded.
+  Impact: Local taskclosure commit remains unrecorded; no source/evidence failure.
+  Resolution: Recompute route and execute exact supported recovery once; preserve validator/CLI/policy, then supported explicit specific-subject taskcommit if deterministicrecovery fails.
+
+- Observation: Exact supported commit --close --unstage-others recovery also exited5 E_GIT generic deterministicsubject; no implementation change.
+  Impact: Only active task cleanup artifact remains dirty.
+  Resolution: Use documented explicit ap commit specific finalize subject with --allow-tasks; unchanged validator/policy/CLI. Read actualamendedHEAD and recompute final route/clean status.
