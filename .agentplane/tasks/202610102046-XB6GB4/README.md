@@ -4,7 +4,7 @@ title: "Restore native text-frame position mapping and adjacent-frame cursor sel
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -17,16 +17,44 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-10T21:04:56.978Z"
+  updated_by: "CODER"
+  note: "7158related/306 and23Chromium/12 pass with16fresh native core/React cases. Entire4modules135lines150statements37functions118branches100,305nonnegative raw counters/current1246hashes;820old acceptance files byte-identical,8canonical prefixes/9metadata gates retained. Initial local edit/JSDoc/pre-runtime defensive-fixture fixes only; no runtime failures or acceptance replay, refs restored. Native formatting/scroll/merged/geometry/query/full UI-chain and end proxy remain explicit gaps; exact semantic same-agent review follows."
   attempts: 0
-commit: null
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-10T21:04:57.544Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent non-independent review of exact semantic 997737073ca8ce94142e00bb33d374093c77b753: original native unmerged frame positions and represented default-no-scroll adjacency are integrated into actual margins; approved scope verified, native formatter/scroll/query/UI-chain/geometry remain explicit omissions."
+  evaluated_sha: "997737073ca8ce94142e00bb33d374093c77b753"
+  blueprint_digest: "f55f4fddeba10b5efd8181744bdbe9a02244ff95df1e7fb99b1b4c437bba137c"
+  evidence_refs:
+    - ".agentplane/tasks/202610102046-XB6GB4/README.md"
+    - ".agentplane/tasks/202610102046-XB6GB4/quality/20261010-210457544-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610102046-XB6GB4/quality/20261010-210457544-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610102046-XB6GB4/quality/20261010-210457544-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610102046-XB6GB4/blueprint/resolved-snapshot.json"
+    - "git:997737073ca8ce94142e00bb33d374093c77b753"
+    - ".agentplane/tasks/202610102046-XB6GB4/README.md#Verification"
+    - "apps/office/node_modules/.cache/parity-coverage/XB6GB4/coverage-proof.json"
+    - "apps/office/node_modules/.cache/parity-coverage/XB6GB4/browser-proof.json"
+    - "apps/office/node_modules/.cache/parity-coverage/XB6GB4/preservation-proof.json"
+    - "apps/office/node_modules/.cache/parity-coverage/XB6GB4/audit-final-results.json"
+    - "apps/office/node_modules/.cache/parity-coverage/XB6GB4/source-audit-proof.json"
+  findings:
+    - "Original FindMaster reciprocal predecessor guards, native frame text/model/view mappings and temporary position lifetimes match inspected source for the represented unmerged, already device-formatted no-scroll profile. Actual margin consumers select original follows/masters and preserve owner-aware right-margin ties, zero-length follow backwalk and lost-link fallback; no synthetic owner/follow or fake formatter."
+    - "7158related/306 plus23Chromium/12 with16fresh core/React cases pass;actual whole4modules100 all-four/305nonnegative current counters/current1246hashes.820old acceptance files byte-identical,8historical canonical prefixes/status/default/class/responsibilities retained,9metadata gates pass. Exact maps/current hashes and explicit defensive corrupt-state scope checked by this same agent."
+commit:
+  hash: "997737073ca8ce94142e00bb33d374093c77b753"
+  message: "🧩 XB6GB4 code: Restore original frame position and adjacency"
 comments:
   -
     author: "CODER"
     body: "Start: Restore original native frame model/view positions, predecessor master lookup and represented default no-scroll adjacent-frame margin selection; retain explicit native formatting/UI-chain gaps and verify current100 upstream-absent scope."
+  -
+    author: "CODER"
+    body: "Implementation: Original native frame position mapping and represented default no-scroll adjacent-frame selection integrated with visual-line margins; current targeted evidence and historical inventory retained."
 events:
   -
     type: "status"
@@ -35,8 +63,21 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: Restore original native frame model/view positions, predecessor master lookup and represented default no-scroll adjacent-frame margin selection; retain explicit native formatting/UI-chain gaps and verify current100 upstream-absent scope."
+  -
+    type: "status"
+    at: "2026-10-10T21:04:56.513Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+    note: "Implementation: Original native frame position mapping and represented default no-scroll adjacent-frame selection integrated with visual-line margins; current targeted evidence and historical inventory retained."
+  -
+    type: "verify"
+    at: "2026-10-10T21:04:56.978Z"
+    author: "CODER"
+    state: "ok"
+    note: "7158related/306 and23Chromium/12 pass with16fresh native core/React cases. Entire4modules135lines150statements37functions118branches100,305nonnegative raw counters/current1246hashes;820old acceptance files byte-identical,8canonical prefixes/9metadata gates retained. Initial local edit/JSDoc/pre-runtime defensive-fixture fixes only; no runtime failures or acceptance replay, refs restored. Native formatting/scroll/merged/geometry/query/full UI-chain and end proxy remain explicit gaps; exact semantic same-agent review follows."
 doc_version: 3
-doc_updated_at: "2026-10-10T21:03:46.341Z"
+doc_updated_at: "2026-10-10T21:04:57.032Z"
 doc_updated_by: "CODER"
 description: "Correction8/10 after BZ14P4: connect actual visual-line margin movement to original SwContentFrame FindMaster, unmerged SwTextFrame text/model/view position mapping and source no-scroll adjacent-frame selection; retain explicit native formatting and browser chain-publication gaps, pause after next full and repairs."
 sections:
@@ -95,6 +136,39 @@ sections:
     Result: all9 restored-source metadata gates pass.820prior acceptance files all byte-identical, all cases/matrices/device inputs/matcher values retained. Eight canonical historical prefixes/status/default/classification/responsibilities/evidence preserved, no new mapping or broad promotion. Registered recovery/open/save/settings boundaries untouched.
 
     Residual gaps: Native GetFormatted/re-entrant format stabilization, forced scrolling/sw_ChangeOffset, merged/vertical/absolute geometry and complete empty/scroll margins, original GetFrameOfModify and UI publication of complete cursor-follow measurements; measured cursor map/end-less-than-node-length proxy still present as explicit next integration work. No synthetic follow or fake formatter introduced. Full paragraph/portion/cache-lock/font/register/scripts/intermediate cursor classes/root/Doc factory/Undo/hierarchy and overall parity remain incomplete or unverified. No upstream sources/helpers/Python/raw logs/maps in AgentPlane artifacts; no network/publication/subagents. Same-agent non-independent exact semantic quality review and clean writer/restored refs are required for closure.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-10T21:04:56.978Z — VERIFY — ok
+
+    By: CODER
+
+    Note: 7158related/306 and23Chromium/12 pass with16fresh native core/React cases. Entire4modules135lines150statements37functions118branches100,305nonnegative raw counters/current1246hashes;820old acceptance files byte-identical,8canonical prefixes/9metadata gates retained. Initial local edit/JSDoc/pre-runtime defensive-fixture fixes only; no runtime failures or acceptance replay, refs restored. Native formatting/scroll/merged/geometry/query/full UI-chain and end proxy remain explicit gaps; exact semantic same-agent review follows.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T21:04:56.513Z, excerpt_hash=sha256:68366fce6dfcaf584c7df31b0acc3315911cd6527a54e44d5533abba59b27540
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610102046-XB6GB4/blueprint/resolved-snapshot.json
+    - old_digest: f55f4fddeba10b5efd8181744bdbe9a02244ff95df1e7fb99b1b4c437bba137c
+    - current_digest: f55f4fddeba10b5efd8181744bdbe9a02244ff95df1e7fb99b1b4c437bba137c
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610102046-XB6GB4
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610102046-XB6GB4
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the semantic scoped commit and inventory through a separately authorized task; preserve unrelated checkout and history."
   Findings: |-
     Current writer clean baselineb218f08e5b0f9486018a1e4ee7ac6b2fa341360d, seventh accepted correction after BZ14P4. Existing margin helper still receives one measured cursor frame and does not call native adjacent-frame or model/view mapping. Follow end proxy needs actual UI chain publication; no boolean/synthetic follow will substitute for that source mechanism. This atomic correction connects original mapping and source default no-scroll adjacency first; full formatter and forced-scroll APIs remain unrepresented.
@@ -179,6 +253,39 @@ Command: ap doctor
 Result: all9 restored-source metadata gates pass.820prior acceptance files all byte-identical, all cases/matrices/device inputs/matcher values retained. Eight canonical historical prefixes/status/default/classification/responsibilities/evidence preserved, no new mapping or broad promotion. Registered recovery/open/save/settings boundaries untouched.
 
 Residual gaps: Native GetFormatted/re-entrant format stabilization, forced scrolling/sw_ChangeOffset, merged/vertical/absolute geometry and complete empty/scroll margins, original GetFrameOfModify and UI publication of complete cursor-follow measurements; measured cursor map/end-less-than-node-length proxy still present as explicit next integration work. No synthetic follow or fake formatter introduced. Full paragraph/portion/cache-lock/font/register/scripts/intermediate cursor classes/root/Doc factory/Undo/hierarchy and overall parity remain incomplete or unverified. No upstream sources/helpers/Python/raw logs/maps in AgentPlane artifacts; no network/publication/subagents. Same-agent non-independent exact semantic quality review and clean writer/restored refs are required for closure.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-10T21:04:56.978Z — VERIFY — ok
+
+By: CODER
+
+Note: 7158related/306 and23Chromium/12 pass with16fresh native core/React cases. Entire4modules135lines150statements37functions118branches100,305nonnegative raw counters/current1246hashes;820old acceptance files byte-identical,8canonical prefixes/9metadata gates retained. Initial local edit/JSDoc/pre-runtime defensive-fixture fixes only; no runtime failures or acceptance replay, refs restored. Native formatting/scroll/merged/geometry/query/full UI-chain and end proxy remain explicit gaps; exact semantic same-agent review follows.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T21:04:56.513Z, excerpt_hash=sha256:68366fce6dfcaf584c7df31b0acc3315911cd6527a54e44d5533abba59b27540
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610102046-XB6GB4/blueprint/resolved-snapshot.json
+- old_digest: f55f4fddeba10b5efd8181744bdbe9a02244ff95df1e7fb99b1b4c437bba137c
+- current_digest: f55f4fddeba10b5efd8181744bdbe9a02244ff95df1e7fb99b1b4c437bba137c
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610102046-XB6GB4
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610102046-XB6GB4
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
