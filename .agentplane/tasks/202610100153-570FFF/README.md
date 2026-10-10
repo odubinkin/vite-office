@@ -4,7 +4,7 @@ title: "Port original shared SoA scalar release overloads and output reference"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 40
+revision: 41
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,31 @@ verification:
   updated_by: "CODER"
   note: "Original scalar release native43732/full states339160 and exact byte replay passed; Calc/shared actual100%, full five-check run completed, sole flat native timeout fixed and focused32/8 passed; full office346/raw counters100%, inventory42/allfour100%, browser303 and static passed. Final9checks and original14gates pass; Writer untouched. Goal pause requested after closure."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-10T03:01:39.306Z"
+  updated_by: "EVALUATOR"
+  note: "Committed original scalar release overloads preserve source responsibility and output/mutation/guard ordering; complete native byte/callback evidence and final scoped/full checks satisfy the approved slice."
+  evaluated_sha: "3665e66f79947596cdb4ee665f935b71e5f528ac"
+  blueprint_digest: "f6838375b9afb8aad6aa475f23c78a79ca1d67d717d816fecc4850983edea123"
+  evidence_refs:
+    - ".agentplane/tasks/202610100153-570FFF/README.md"
+    - ".agentplane/tasks/202610100153-570FFF/quality/20261010-030139306-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610100153-570FFF/quality/20261010-030139306-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610100153-570FFF/quality/20261010-030139306-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610100153-570FFF/blueprint/resolved-snapshot.json"
+    - "output/playwright/task31-full-audit.json"
+    - "output/playwright/task31-audit.json"
+    - "output/playwright/task31-byte-replay.json"
+    - "output/playwright/task31-callback-audit.json"
+    - "output/playwright/task31-final-recheck-results.json"
+    - "output/playwright/task31-flat-group-audit.json"
+    - "output/playwright/task31-js-group-audit.json"
+    - "output/playwright/task31-portable-results.json"
+  findings:
+    - "Exact original release_impl/get_block_position order verified against pinned full source; original logical-size owner and borrowed template/output adapters preserved. All43732complete native cases/339160states and original35740prefix retained; no synthesized algorithm or expected-output model."
+    - "Initial full office14281pass/1flat timeout is retained; source-specialization regrouping keeps3020cases/16256states and identical replay body, final covered32/8 passes. Office346actual raw counters and inventory42actual source metrics reach100%;303Writer/shared browser scenarios, static and tooling pass. No Writer mutation."
+    - "Both complete data corpora format/import at ordinary heap; actual14initial and9final gates and3portable checks pass. Shared inventory adds scalar operation and exhaustive original insert/merge records; all whole parity flags remain false. Branchcalc clean at reviewed implementation SHA3665e66f79947596cdb4ee665f935b71e5f528ac."
 commit: null
 comments:
   -
