@@ -1,10 +1,11 @@
 ---
 id: "202610101643-NQM1TG"
 title: "Port original pinned ICU scalar case-mapping dependencies"
-status: "DOING"
+result_summary: "verified-202610101643-NQM1TG"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 31
+revision: 35
 origin:
   system: "manual"
 depends_on: []
@@ -22,9 +23,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-10T17:22:53.162Z"
+  updated_at: "2026-10-10T17:24:51.808Z"
   updated_by: "CODER"
-  note: "Complete native-first scalar gate and unchanged ICU reference pass; portable Calc106/shared3/tooling28 and strict raw-positive100 coverage pass; all declared static/provenance/inventory gates pass. Scope and broad parity limits recorded; independent EVALUATOR and clean direct closure follow."
+  note: "verified-202610101643-NQM1TG"
   attempts: 0
 quality_review:
   state: "pass"
@@ -47,11 +48,16 @@ quality_review:
     - "apps/office/src/external/icu/source/common/ucase.test.ts"
   findings:
     - "All29 changed paths are intentional calc-branch task artifacts. Five executable runtime owners are present in coverage; uchar.ts is a genuine declaration-only reexport. Every raw s/f/b counter is positive, complete native71MB output reconstructed with matching SHA, archive29 original full files verified. Native lower is chosen only after exhaustive Node/Chrome agreement; upper/title/fold mismatches justify source algorithms. No fake pool/document, Writer changes, threshold exemptions or false broad parity flags."
-commit: null
+commit:
+  hash: "bf937bfcd05f79e87eda219b261c329f09c6ef0f"
+  message: "✅ NQM1TG quality: record reviewed scalar casing evidence and limits"
 comments:
   -
     author: "CODER"
     body: "Start: Preserve the pinned ICU scalar algorithms and source data for the shared locale-aware Calc string dependency; use authorized official upstream reading, exhaustive native evidence and portable scoped100 verification."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610101643-NQM1TG. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -66,8 +72,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Complete native-first scalar gate and unchanged ICU reference pass; portable Calc106/shared3/tooling28 and strict raw-positive100 coverage pass; all declared static/provenance/inventory gates pass. Scope and broad parity limits recorded; independent EVALUATOR and clean direct closure follow."
+  -
+    type: "verify"
+    at: "2026-10-10T17:24:51.808Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610101643-NQM1TG"
+  -
+    type: "status"
+    at: "2026-10-10T17:24:51.955Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610101643-NQM1TG. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-10T17:22:53.217Z"
+doc_updated_at: "2026-10-10T17:25:33.002Z"
 doc_updated_by: "CODER"
 description: "Task38 UI prerequisite: actual ICU78.3 scalar lowercase/uppercase/title/fold functions used by original LibreOffice casefolding fallback, their exact property-trie/exception algorithms and original generated Unicode17 data. Preserve source/header boundaries and unsigned/signed defaults; exhaustive actual original native captures and strict portable scoped100 coverage with shared reuse. Acquire only official LibreOffice-declared source archive under ignored local output using existing upstream-reading authorization and original SHA. No host ICU, JS Unicode casing, fake locale/pool/document or whole-ICU parity claim."
 sections:
@@ -140,6 +159,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-10T17:24:51.808Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610101643-NQM1TG
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T17:22:53.217Z, excerpt_hash=sha256:ffc08de723a1bb455ea16db91849ea21dda56fd8a4e928c41f12d86377cb0d78
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610101643-NQM1TG/blueprint/resolved-snapshot.json
+    - old_digest: d255be3e79fa962ae38fe4df1404e4ac5421aeeef6ab2c6c4e9ccbaac08f57be
+    - current_digest: d255be3e79fa962ae38fe4df1404e4ac5421aeeef6ab2c6c4e9ccbaac08f57be
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610101643-NQM1TG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610101643-NQM1TG --result verified-202610101643-NQM1TG --commit bf937bfcd05f79e87eda219b261c329f09c6ef0f
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only task38 implementation and metadata commits if needed; remove only task38 ignored local acquisition/probe artifacts and symlink. Re-run scoped checks. Do not reset unrelated user work or alter main/Writer/upstream originals."
   Findings: |-
@@ -198,6 +247,18 @@ sections:
     - Observation: Supplemental raw-audit caller decoded all complete native rows successfully, then guessed fixture key archiveSHA256 and stopped with KeyError; the actual schema uses its declared archive field.
       Impact: Supplemental audit is not claimed complete; original native --check passes with the authoritative archive digest. No source changes are implicated.
       Resolution: Inspect actual fixture schema, use the existing declared digest field and rerun the supplemental read-only archive/raw-counter audit.
+
+    - Observation: The exact route-emitted task complete command records DONE then exits5 because its generated close subject is too generic, matching the previously inherited CLI behavior.
+      Impact: Implementation fceeb82b and EVALUATOR quality bf937bfc are committed; only final task artifact closure remains. No acceptance criteria or application code changes are needed.
+      Resolution: Recompute route, try the exact guarded close command, and if the same subject rejection persists, use a descriptive task-artifact-only commit through ap. Do not modify CLI, policies, task storage manually or unrelated work.
+
+    - Observation: The exact guarded ap commit --close --unstage-others also exits5 for the same generic generated subject.
+      Impact: Only the active DONE task README is staged/modified; implementation and quality assessment remain unchanged and passing.
+      Resolution: Finalize the task-artifact tail with a specific descriptive ap commit subject and --allow-tasks, then verify DONE route and clean calc checkout. No CLI/policy workaround or manual task-store edit.
+extensions:
+  implementation_commit:
+    hash: "fceeb82bda623fa9be52e5afbe35f9503a12e07d"
+    message: "✨ NQM1TG implement: preserve scalar casing with proven native lowercase"
 id_source: "generated"
 ---
 ## Summary
@@ -280,6 +341,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-10T17:24:51.808Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610101643-NQM1TG
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T17:22:53.217Z, excerpt_hash=sha256:ffc08de723a1bb455ea16db91849ea21dda56fd8a4e928c41f12d86377cb0d78
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610101643-NQM1TG/blueprint/resolved-snapshot.json
+- old_digest: d255be3e79fa962ae38fe4df1404e4ac5421aeeef6ab2c6c4e9ccbaac08f57be
+- current_digest: d255be3e79fa962ae38fe4df1404e4ac5421aeeef6ab2c6c4e9ccbaac08f57be
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610101643-NQM1TG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610101643-NQM1TG --result verified-202610101643-NQM1TG --commit bf937bfcd05f79e87eda219b261c329f09c6ef0f
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -343,3 +434,11 @@ Revert only task38 implementation and metadata commits if needed; remove only ta
 - Observation: Supplemental raw-audit caller decoded all complete native rows successfully, then guessed fixture key archiveSHA256 and stopped with KeyError; the actual schema uses its declared archive field.
   Impact: Supplemental audit is not claimed complete; original native --check passes with the authoritative archive digest. No source changes are implicated.
   Resolution: Inspect actual fixture schema, use the existing declared digest field and rerun the supplemental read-only archive/raw-counter audit.
+
+- Observation: The exact route-emitted task complete command records DONE then exits5 because its generated close subject is too generic, matching the previously inherited CLI behavior.
+  Impact: Implementation fceeb82b and EVALUATOR quality bf937bfc are committed; only final task artifact closure remains. No acceptance criteria or application code changes are needed.
+  Resolution: Recompute route, try the exact guarded close command, and if the same subject rejection persists, use a descriptive task-artifact-only commit through ap. Do not modify CLI, policies, task storage manually or unrelated work.
+
+- Observation: The exact guarded ap commit --close --unstage-others also exits5 for the same generic generated subject.
+  Impact: Only the active DONE task README is staged/modified; implementation and quality assessment remain unchanged and passing.
+  Resolution: Finalize the task-artifact tail with a specific descriptive ap commit subject and --allow-tasks, then verify DONE route and clean calc checkout. No CLI/policy workaround or manual task-store edit.
