@@ -33,8 +33,8 @@ it.each([
     try {
       const item = f.format.GetAttrSet().GetItemIfSet(RES_UL_SPACE, false) as
         SvxULSpaceItem | undefined;
-      expect(item?.QueryValue()).toEqual(direct);
-      expect(f.format.GetULSpace().QueryValue()).toEqual(effective);
+      expect(ulValues(item)).toEqual(direct);
+      expect(ulValues(f.format.GetULSpace())).toEqual(effective);
       expect(f.table.GetFormat().marginTop).toBe(direct?.[0]);
       expect(f.table.GetFormat().marginBottom).toBe(direct?.[1]);
     } finally {
@@ -60,7 +60,7 @@ it("effective parent spacing drives original dialog and page budgets despite sta
   );
   try {
     expect(f.format.GetULSpace()).toBe(parent.GetULSpace());
-    expect(f.format.GetULSpace(false).QueryValue()).toEqual([0, 0]);
+    expect(ulValues(f.format.GetULSpace(false))).toEqual([0, 0]);
     expect(f.format.GetULSpace().GetContext()).toBe(true);
     const draft = new SwFormatTablePage(f.table, 8000);
     expect([draft.above, draft.below]).toEqual([100, 700]);
@@ -69,7 +69,7 @@ it("effective parent spacing drives original dialog and page budgets despite sta
     expect(output.Count()).toBe(0);
     draft.ValueChangedHdl("above", 240);
     expect(draft.FillItemSet(undefined, output)).toBe(true);
-    expect((output.Get(RES_UL_SPACE) as SvxULSpaceItem).QueryValue()).toEqual([240, 700]);
+    expect(ulValues(output.Get(RES_UL_SPACE) as SvxULSpaceItem)).toEqual([240, 700]);
     draft.Reset();
     expect([draft.above, draft.below]).toEqual([100, 700]);
     const page = {
@@ -127,10 +127,10 @@ it("table boundary keeps original complete native spacing and resets to inherite
   f.format.SetFormatAttr(item);
   try {
     expect(f.format.GetULSpace()).not.toBe(item);
-    expect(f.format.GetULSpace().QueryValue()).toEqual([150, 300, 1]);
+    expect(ulValues(f.format.GetULSpace())).toEqual([150, 300, 1]);
     f.table.SetFormat({ ...f.table.GetFormat(), width: 4500 });
-    expect(f.format.GetULSpace().QueryValue()).toEqual([150, 300, 1]);
-    expect(item.QueryValue()).toEqual([150, 300, 1]);
+    expect(ulValues(f.format.GetULSpace())).toEqual([150, 300, 1]);
+    expect(ulValues(item)).toEqual([150, 300, 1]);
     f.table.SetFormat({ width: 4500 });
     expect(f.table.GetFormat().marginTop).toBeUndefined();
     expect(f.table.GetFormat().marginBottom).toBeUndefined();
@@ -140,3 +140,10 @@ it("table boundary keeps original complete native spacing and resets to inherite
     parent.DisposeModify();
   }
 });
+
+/** Observes unchanged native measure/context acceptance through explicit UNO members after removing the core browser tuple. @param item - Original native spacing or direct absence. @returns Native member values for historical acceptance. */
+function ulValues(item: SvxULSpaceItem | undefined): readonly unknown[] | undefined {
+  if (item === undefined) return undefined;
+  const values = [item.QueryValue(3), item.QueryValue(4)];
+  return item.QueryValue(7) === true ? [...values, 1] : values;
+}

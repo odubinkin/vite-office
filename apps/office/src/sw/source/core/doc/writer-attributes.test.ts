@@ -642,7 +642,7 @@ describe("Writer numbering rules and snapshots" /** Groups document tables and c
     );
     const restored = decodeWriterDocument(encodeWriterDocument(writer))
       .paragraphs[0] as typeof node;
-    expect((restored.GetAttr(RES_UL_SPACE) as SvxULSpaceItem).QueryValue()).toEqual([240, 120, 1]);
+    expect(ulValues(restored.GetAttr(RES_UL_SPACE) as SvxULSpaceItem)).toEqual([240, 120, 1]);
     expect((restored.GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem).QueryValue()).toEqual([
       1, 360, 1,
     ]);
@@ -720,3 +720,10 @@ describe("Writer numbering rules and snapshots" /** Groups document tables and c
       ).toThrow("schema is unsupported");
   });
 });
+
+/** Observes unchanged native measure/context acceptance through explicit UNO members after removing the core browser tuple. @param item - Original native spacing or direct absence. @returns Native member values for historical acceptance. */
+function ulValues(item: SvxULSpaceItem | undefined): readonly unknown[] | undefined {
+  if (item === undefined) return undefined;
+  const values = [item.QueryValue(3), item.QueryValue(4)];
+  return item.QueryValue(7) === true ? [...values, 1] : values;
+}

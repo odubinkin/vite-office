@@ -103,7 +103,7 @@ it.each([false, true])(
         );
         expect(table.GetColumnWidths()).toEqual([1701, 6939]);
         expect(format.GetFrameSize()).toEqual(normalized);
-        expect(format.GetULSpace().QueryValue()).toEqual([120, 240, 1]);
+        expect(ulValues(format.GetULSpace())).toEqual([120, 240, 1]);
         expect((format.GetAttrSet().Get(RES_LAYOUT_SPLIT) as SwFormatLayoutSplit).GetValue()).toBe(
           false,
         );
@@ -136,7 +136,7 @@ it.each([false, true])(
         expect(restored.GetFrameFormat().GetFrameSize().GetWidth()).toBe(8640);
         // Inherited parent export remains a separate unported transport responsibility.
         if (!inherited) {
-          expect(restored.GetFrameFormat().GetULSpace().QueryValue()).toEqual([120, 240]);
+          expect(ulValues(restored.GetFrameFormat().GetULSpace())).toEqual([120, 240]);
           expect(
             (
               restored.GetFrameFormat().GetAttrSet().Get(RES_LAYOUT_SPLIT) as SwFormatLayoutSplit
@@ -159,3 +159,10 @@ it.each([false, true])(
     }
   },
 );
+
+/** Observes unchanged native measure/context acceptance through explicit UNO members after removing the core browser tuple. @param item - Original native spacing or direct absence. @returns Native member values for historical acceptance. */
+function ulValues(item: SvxULSpaceItem | undefined): readonly unknown[] | undefined {
+  if (item === undefined) return undefined;
+  const values = [item.QueryValue(3), item.QueryValue(4)];
+  return item.QueryValue(7) === true ? [...values, 1] : values;
+}

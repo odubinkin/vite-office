@@ -736,56 +736,8 @@ export class SvxRightMarginItem extends SfxPoolItem {
   }
 }
 
-/** Stores upper and lower paragraph spacing in twips. */
-export class SvxULSpaceItem extends SfxPoolItem {
-  /** Creates a spacing item. @param upper - Space above. @param lower - Space below. @param which - Item identity. @param contextual - Suppress adjacent spacing for identical styles. @returns Nothing. */
-  public constructor(
-    private readonly upper: number,
-    private readonly lower: number,
-    which: number,
-    private readonly contextual = false,
-  ) {
-    super(which);
-    if (
-      ![upper, lower].every(
-        /** Validates one spacing component. @param value - Twip value. @returns Whether valid. */ (
-          value,
-        ) => Number.isInteger(value) && value >= 0,
-      )
-    )
-      throw new Error("SvxULSpaceItem value is invalid.");
-  }
-  /** Returns space above. @returns Twips. */
-  public GetUpper(): number {
-    return this.upper;
-  }
-  /** Returns space below. @returns Twips. */
-  public GetLower(): number {
-    return this.lower;
-  }
-  /** Reports Writer's contextual paragraph-spacing flag. @returns Whether matching styles suppress spacing. */
-  public GetContext(): boolean {
-    return this.contextual;
-  }
-  /** Creates an independent item. @returns Clone. */
-  public Clone(): SvxULSpaceItem {
-    return new SvxULSpaceItem(this.upper, this.lower, this.Which(), this.contextual);
-  }
-  /** Compares identity and values. @param other - Candidate. @returns Whether equal. */
-  public equals(other: SfxPoolItem): boolean {
-    return (
-      other instanceof SvxULSpaceItem &&
-      other.Which() === this.Which() &&
-      other.upper === this.upper &&
-      other.lower === this.lower &&
-      other.contextual === this.contextual
-    );
-  }
-  /** Serializes spacing. @returns Upper/lower tuple. */
-  public QueryValue(): readonly [number, number] | readonly [number, number, number] {
-    return this.contextual ? [this.upper, this.lower, 1] : [this.upper, this.lower];
-  }
-}
+/** Native UL declaration is owned by the matching ulspitem.hxx module. */
+export { SvxULSpaceItem } from "../../inc/ulspitem";
 
 /** Native LR declaration is owned by the matching lrspitem.hxx module. */
 export { SvxLRSpaceItem } from "../../inc/lrspitem";

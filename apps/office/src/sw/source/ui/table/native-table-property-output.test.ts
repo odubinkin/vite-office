@@ -46,7 +46,7 @@ it("native upper-lower publication emits the complete changed pair without frame
   f.page.ValueChangedHdl("above", 240);
   f.page.DeactivatePage(undefined, f.output);
   expect(f.output.Count()).toBe(1);
-  expect((f.output.Get(RES_UL_SPACE) as SvxULSpaceItem).QueryValue()).toEqual([240, 0]);
+  expect(ulValues(f.output.Get(RES_UL_SPACE) as SvxULSpaceItem)).toEqual([240, 0]);
   expect(f.output.GetItemIfSet(FN_TABLE_REP, false)).toBeUndefined();
   f.page.Reset();
   const reset = new SfxItemSet(f.doc.GetAttrPool(), [[1, 32767]]);
@@ -140,3 +140,10 @@ it.each([
     });
   },
 );
+
+/** Observes unchanged native measure/context acceptance through explicit UNO members after removing the core browser tuple. @param item - Original native spacing or direct absence. @returns Native member values for historical acceptance. */
+function ulValues(item: SvxULSpaceItem | undefined): readonly unknown[] | undefined {
+  if (item === undefined) return undefined;
+  const values = [item.QueryValue(3), item.QueryValue(4)];
+  return item.QueryValue(7) === true ? [...values, 1] : values;
+}

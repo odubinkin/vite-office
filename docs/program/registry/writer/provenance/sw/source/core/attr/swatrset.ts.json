@@ -104,6 +104,18 @@
         {
           "path": "apps/office/src/sw/browser/editor/native-table-lr-items.test.tsx",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/editeng/source/items/native-ul-space-value.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/filter/xml/native-ul-space-item-transport.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-ul-space-complete-history.test.tsx",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -114,6 +126,18 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/core/bastyp/init.cxx",
           "marker": "new SfxInt16Item( RES_PARATR_LIST_RESTARTVALUE, 1 )"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/editeng/ulspitem.hxx",
+          "marker": "SvxULSpaceItem"
+        },
+        {
+          "path": "vendor/libreoffice-reference/editeng/source/items/frmitems.cxx",
+          "marker": "SvxULSpaceItem::QueryValue"
+        },
+        {
+          "path": "vendor/libreoffice-reference/editeng/source/items/frmitems.cxx",
+          "marker": "SvxULSpaceItem::PutValue"
         }
       ]
     },
@@ -147,7 +171,9 @@
       "Correction7H3CN9 (6/10 after SZKQTN) ports original SwFormatHoriOrient with position/orientation/relation/page-toggle, native NONE/PRINT_AREA/false defaults, independent Clone/equality and represented UNO member extraction/conversion. Original SwAttrPool registers the typed item and SwFormat returns borrowed effective horizontal orientation. Table owns no mirrored horiOrient/align scalars: explicit builder aliases translate once, direct transport projects native values, and SaveTable relies on whole original item-set history. Original frame layout and ODT export use effective native orientation, including inheritance. Native table representation delivers orientation/size ItemSet without changed scalar orientation/width; SetTabCols clones the complete original orientation as pinned swtable.cxx869..895. LR scalar spacing remains separate pending native ownership, as do full proportional/relative width/native layout/Doc SetAttr/UNO presentation/hash/assertion/VCL/copy/Repeat. Historical source statuses/default/classifications/evidence retained, no whole-module parity promotion. Evidence task202610092055-7H3CN9.",
       "Verification7H3CN9:3517 unique accepted current-source cases across333 related files,38 fresh native cases. Entire eight final production modules actual Istanbul100 lines/statements/functions/branches (1418/1559/271/1186), zero negative counters, complete map and source hash identity. Native dialog width change, original direct/inherited history and mounted ODT behaviors pass. Source-backed17 fixture operations in12 old files;607 other old tests and16 canonical historical prefixes retained. Full not due6/10. No whole-module parity promotion.",
       "Correction6Q2YQH (7/10 after SZKQTN) ports original SvxLRSpaceItem RES_LR_SPACE98 with eleven native context fields, zero/100/false defaults, independent Clone/equality and represented signed twip layout/proportion/hanging-text/sticky-zero behavior. Borrowed SwFormat.GetLRSpace and typed original pool item replace table mirrored left/right margins. Direct transport projects original direct LR; effective frame layout/SwTableRep/ODT use original inherited/pool values. SetTabCols clones full original context, and native dialog orientation/size/LR ItemSet replaces changed scalar LR replay. SaveTable excludes margin scalars and retains original complete ItemSet history. Font-unit SvxIndentValue/complete UNO member PutValue/presentation/metric scaling, generic native Doc attribute history/full layout/VCL/master-follow/copy/Repeat remain separately incomplete. Existing semantic/default/classification/evidence/history and registered IO/recovery/UI deviations retained; no whole-module promotion. Evidence task202610092125-6Q2YQH, current-source verification pending.",
-      "Verification6Q2YQH: final342 related files3588 unique accepted current-source cases22fresh (20 native LR and2 shared composite-border guards); ten actual whole production modules Istanbul100 lines/statements/functions/branches,zero negative/current source and complete-map identity. Initial pre-repair source maps/counters excluded entirely. Five exact fixture operations in3 historical files;620 other old tests byte identical,623 total. Twenty canonical historical prefixes retained. Full not due7/10; broad goal remains incomplete."
+      "Verification6Q2YQH: final342 related files3588 unique accepted current-source cases22fresh (20 native LR and2 shared composite-border guards); ten actual whole production modules Istanbul100 lines/statements/functions/branches,zero negative/current source and complete-map identity. Initial pre-repair source maps/counters excluded entirely. Five exact fixture operations in3 historical files;620 other old tests byte identical,623 total. Twenty canonical historical prefixes retained. Full not due7/10; broad goal remains incomplete.",
+      "CorrectionWQ0NE8 (7/10 after BZQGYC): complete original UL state upper/lower/context/propUpper/propLower and native constructors/setters/QueryValue/PutValue/clone/equality are owned by matching include/editeng/ulspitem.hxx declaration at editeng/inc/ulspitem.ts; frmitems retains original export identity. Core no longer returns browser tuples. Native aggregate unconverted Lower=nPropUpper and aggregate ScaleLower overwrite of nPropUpper are preserved literally. Browser item codec reads raw native getters and preserves full proportion fields in extended tuple only when authored; legacy2/3tuples keep prior numeric coercion/context/defaults via registered pool boundary. Exactly27compiler-resolved old UL Query expressions in12tests become explicit native3/4/7 observers retaining every original expected measure/context/sibling assertion;1constructor negative input assertion records native uint16 conversion. Presentation/ScaleMetrics/full general UNO and native LR/UL table-format transport remain incomplete; no whole-module semantic/default/status/classification or registeredIO/recovery promotion. Verification pending task202610100036-WQ0NE8.",
+      "VerificationWQ0NE8: 367related files3936unique cases accepted after a new-test-only parameterization repair22/22;64fresh cases. Entire4changed production modules actual Istanbul100lines529/statements589/functions178/branches479, complete maps and zero negative counters; no previous-task maps. Two constructor overload JSDoc tags have identical transpiled runtime and all228instrumented source ranges unchanged; no passing test replay. Nine upstream-absent static/build/TS7/Chromium gates including24browser cases pass. Preservation proof confirms26native query-expression migrations plus1uint16 constructor expectation in12old files;634of646old testfiles byte-identical and all sibling metrics/context acceptance preserved. Original statuses/defaults/classifications retain history; literal native quirks retained. Goalactive-incomplete7/10; full table LR/UL transport pending. Bounded English task evidence: .agentplane/tasks/202610100036-WQ0NE8/evidence/verification.json."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/attr/swatrset.cxx",

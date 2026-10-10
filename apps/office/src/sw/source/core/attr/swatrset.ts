@@ -261,12 +261,33 @@ export class SwAttrPool extends SfxItemPool {
         new SvxRightMarginItem(Number(value), RES_MARGIN_RIGHT),
     );
     this.RegisterDefaultItem(
-      new SvxULSpaceItem(0, 0, RES_UL_SPACE),
+      new SvxULSpaceItem(RES_UL_SPACE),
       /** Restores paragraph spacing. @param value - Persisted tuple. @returns Spacing item. */ (
         value,
       ) => {
-        const tuple = value as unknown as readonly [number, number, number?];
-        return new SvxULSpaceItem(Number(tuple[0]), Number(tuple[1]), RES_UL_SPACE, tuple[2] === 1);
+        if (!Array.isArray(value)) throw new Error("SvxULSpaceItem value is invalid.");
+        const upper = Number(value[0]),
+          lower = Number(value[1]);
+        if (
+          ![upper, lower].every(
+            /** Preserves prior tuple numeric coercion and integer/nonnegative admission at the browser boundary. @param field - Spacing field. @returns Whether admitted. */
+            (field) => Number.isInteger(field) && field >= 0,
+          )
+        )
+          throw new Error("SvxULSpaceItem value is invalid.");
+        const item = new SvxULSpaceItem(upper, lower, RES_UL_SPACE);
+        item.SetContextValue(value[2] === 1);
+        for (const index of [3, 4]) {
+          const field = value[index];
+          if (
+            field !== undefined &&
+            (typeof field !== "number" || !Number.isInteger(field) || field < 0 || field > 65535)
+          )
+            throw new Error("SvxULSpaceItem proportion is invalid.");
+        }
+        if (value[3] !== undefined) item.SetPropUpper(value[3] as number);
+        if (value[4] !== undefined) item.SetPropLower(value[4] as number);
+        return item;
       },
     );
     this.RegisterDefaultItem(

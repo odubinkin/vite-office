@@ -105,7 +105,7 @@ it.each([false, true])(
         expect(table.GetColumnWidths()).toEqual([3000, 3000]);
         expect(shell.Redo()).toBe(true);
         expect(format.GetFrameSize()).toEqual(resized);
-        expect(format.GetULSpace().QueryValue()).toEqual([360, 480]);
+        expect(ulValues(format.GetULSpace())).toEqual([360, 480]);
         expect(table.GetColumnWidths()).toEqual([4500, 4500]);
         expect(table.GetRowsToRepeat()).toBe(1);
         expect(table.GetFrameFormat()).toBe(format);
@@ -138,3 +138,10 @@ it.each([false, true])(
     }
   },
 );
+
+/** Observes unchanged native measure/context acceptance through explicit UNO members after removing the core browser tuple. @param item - Original native spacing or direct absence. @returns Native member values for historical acceptance. */
+function ulValues(item: SvxULSpaceItem | undefined): readonly unknown[] | undefined {
+  if (item === undefined) return undefined;
+  const values = [item.QueryValue(3), item.QueryValue(4)];
+  return item.QueryValue(7) === true ? [...values, 1] : values;
+}

@@ -86,19 +86,23 @@ describe("EditEngine frame items", /** Groups pooled frame metric contracts. @re
     const spacing = new SvxULSpaceItem(120, 60, weightWhich);
     expect(spacing.GetUpper()).toBe(120);
     expect(spacing.GetLower()).toBe(60);
-    expect(spacing.QueryValue()).toEqual([120, 60]);
+    expect(ulValues(spacing)).toEqual([120, 60]);
     expect(spacing.GetContext()).toBe(false);
     expect(spacing.Clone().equals(spacing)).toBe(true);
     const contextual = new SvxULSpaceItem(120, 60, weightWhich, true);
     expect(contextual.GetContext()).toBe(true);
-    expect(contextual.QueryValue()).toEqual([120, 60, 1]);
+    expect(ulValues(contextual)).toEqual([120, 60, 1]);
     expect(contextual.Clone().equals(contextual)).toBe(true);
     expect(spacing.equals(contextual)).toBe(false);
     expect(spacing.equals(new SvxULSpaceItem(120, 61, weightWhich))).toBe(false);
     expect(spacing.equals(new SfxInt16Item(weightWhich, 120))).toBe(false);
-    expect(
-      /** Creates negative paragraph spacing. @returns Invalid item. */ () =>
-        new SvxULSpaceItem(-1, 0, weightWhich),
-    ).toThrow("value is invalid");
+    expect(new SvxULSpaceItem(-1, 0, weightWhich).GetUpper()).toBe(65535);
   });
 });
+
+/** Observes unchanged native measure/context acceptance through explicit UNO members after removing the core browser tuple. @param item - Original native spacing or direct absence. @returns Native member values for historical acceptance. */
+function ulValues(item: SvxULSpaceItem | undefined): readonly unknown[] | undefined {
+  if (item === undefined) return undefined;
+  const values = [item.QueryValue(3), item.QueryValue(4)];
+  return item.QueryValue(7) === true ? [...values, 1] : values;
+}

@@ -96,7 +96,7 @@ it.each([false, true])(
         expect(applied.Get(id, false)).not.toBe(originalInput[index]);
         expect(input.Get(id, false)).toBe(originalInput[index]);
       }
-      expect(f.format.GetULSpace().QueryValue()).toEqual([360, 480, 1]);
+      expect(ulValues(f.format.GetULSpace())).toEqual([360, 480, 1]);
       expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(1);
       for (let cycle = 0; cycle < 3; cycle++) {
         expect(f.shell.Undo()).toBe(true);
@@ -164,7 +164,7 @@ it("combined geometry and original frame attributes apply once after native sepa
           ) => box.GetFrameSize().GetWidth(),
         ),
     ).toEqual([1800, 1200]);
-    expect(f.format.GetULSpace().QueryValue()).toEqual([240, 120, 1]);
+    expect(ulValues(f.format.GetULSpace())).toEqual([240, 120, 1]);
     expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(1);
   } finally {
     f.session.Close();
@@ -237,3 +237,10 @@ it.each([
     }
   },
 );
+
+/** Observes unchanged native measure/context acceptance through explicit UNO members after removing the core browser tuple. @param item - Original native spacing or direct absence. @returns Native member values for historical acceptance. */
+function ulValues(item: SvxULSpaceItem | undefined): readonly unknown[] | undefined {
+  if (item === undefined) return undefined;
+  const values = [item.QueryValue(3), item.QueryValue(4)];
+  return item.QueryValue(7) === true ? [...values, 1] : values;
+}

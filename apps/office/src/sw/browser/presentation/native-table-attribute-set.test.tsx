@@ -143,7 +143,7 @@ it.each([false, true])(
       });
       try {
         const restored = required(reopened.document.GetTables()[0]);
-        expect(restored.GetFrameFormat().GetULSpace().QueryValue()).toEqual([567, 300]);
+        expect(ulValues(restored.GetFrameFormat().GetULSpace())).toEqual([567, 300]);
         expect(restored.GetFormat().layoutSplit).toBe(false);
         expect(restored.GetFormat().borderModel).toBe("collapsing");
       } finally {
@@ -157,3 +157,10 @@ it.each([false, true])(
     }
   },
 );
+
+/** Observes unchanged native measure/context acceptance through explicit UNO members after removing the core browser tuple. @param item - Original native spacing or direct absence. @returns Native member values for historical acceptance. */
+function ulValues(item: SvxULSpaceItem | undefined): readonly unknown[] | undefined {
+  if (item === undefined) return undefined;
+  const values = [item.QueryValue(3), item.QueryValue(4)];
+  return item.QueryValue(7) === true ? [...values, 1] : values;
+}
