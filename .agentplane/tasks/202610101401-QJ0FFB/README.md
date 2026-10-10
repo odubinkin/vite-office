@@ -1,10 +1,11 @@
 ---
 id: "202610101401-QJ0FFB"
 title: "Restore native typed right paragraph margin item"
-status: "DOING"
+result_summary: "Replaced the numeric right-margin adapter with original typed value/unit/proportion/UNO/metric/copy ownership, fixed paragraph history mutable caller aliases through native Clone values, preserved legacy integer graph and registered IO exceptions, updated18canonical histories and documented preserved WRITER-002.14117/14117 cases50fresh,whole nine modules actual100all-four,32Chromium and nine metadata pass. Broad goal incomplete;2/10 and pause after next accepted full."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 22
+revision: 23
 origin:
   system: "manual"
 depends_on: []
@@ -48,6 +49,9 @@ comments:
   -
     author: "CODER"
     body: "Start: associate verified native right ownership and independent paragraph history with exact semantic commit."
+  -
+    author: "CODER"
+    body: "Verified: native typed right margin and independent paragraph history satisfy approved source-backed scope;14117cases,whole nine-module100all-four,32Chromium,nine metadata and exact-SHA same-agent quality pass."
 events:
   -
     type: "status"
@@ -75,8 +79,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Exact semantic d2e3db825259d7b4dce0c4ae4aa2c637c7adde9f current nine-source100all-four14117/14117+32Chromium+nine metadata; source/preservation proof pass, same-agent non-independent evaluator pass recorded. No required current task work remains; broad goal incomplete, latest pause follows accepted full."
+  -
+    type: "status"
+    at: "2026-10-10T15:05:22.825Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native typed right margin and independent paragraph history satisfy approved source-backed scope;14117cases,whole nine-module100all-four,32Chromium,nine metadata and exact-SHA same-agent quality pass."
 doc_version: 3
-doc_updated_at: "2026-10-10T15:04:29.195Z"
+doc_updated_at: "2026-10-10T15:05:22.826Z"
 doc_updated_by: "CODER"
 description: "Atomic2/10 after N337G1; replace numeric right paragraph item with original lrspitem.hxx measure/proportion/default/value/copy/getter/setter/resolution/scaling/represented UNO5/7/14/0 contracts. Native pool/paragraph/style/ODF/shell ingress authors explicit twips; frmitems retains export alias. Existing legacy scalar persistence stays browser-owned and admits only its old integer-TWIP/default-proportion domain, rejects newly unrepresented state instead of loss; full native right/LR graph transport remains incomplete. Eight production modules, seven exact old-test migrations, two fresh native item/history files, sixteen canonical append records, parent/task facts; suspected-source doc if a new questionable original condition is found. Related/new entire changed-module100 upstream absent including both ignored references, static/browser, restored metadata/source hashes, exact-SHA non-independent quality clean close. No network/delegation/full run/IO deviations."
 sections:
@@ -193,6 +204,10 @@ sections:
     Result: pass.
     Evidence: five exact pinned source hashes, native history clone/value responsibility, WRITER-002 original setter behavior; eighteen canonical histories and exact unit/browser migrations; compilerAPI6.0.3 validates two current TSX observer compiled runtime AST/token equivalence.
     Scope: source/metadata/preservation facts only, helpers/raw/maps remain ignored.
+extensions:
+  implementation_commit:
+    hash: "d2e3db825259d7b4dce0c4ae4aa2c637c7adde9f"
+    message: "🧩 QJ0FFB writer: restore native right margin ownership"
 id_source: "generated"
 ---
 ## Summary
