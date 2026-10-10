@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 311
+revision: 312
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-10T00:01:23.994Z"
+doc_updated_at: "2026-10-10T00:29:41.938Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -1427,6 +1427,10 @@ sections:
     - Observation: Verified WHACNF correction4/10:1703related115files28fresh24Chromium all first attempt,zero failures/skips.
       Impact: Entire final two transport modules actual Istanbul264lines283statements48functions354branches100all-four,current complete source/map identity and zero negatives. Original complete size/orientation survive structured-clone/JSON/Worker,direct absence/native precedence/legacy admission;raw header9 and3mounted original owner/cursor history cycles retained.
       Resolution: 595old tests4canonical prefixes unchanged,statics/current build and9restored metadata pass,IO deviations preserved. Remaining raw-headline/spacing/flags/LR/inherited/shared/row-box/general mapper/full UI/layout/filter/UNO/VCL incomplete;goal active,full not due4/10. Exact-SHA non-independent quality follows.
+
+    - Observation: Completed atomic acceptance leaf ZJJ73M after WHACNF (5/10) and final native LR leaf HM2YX4 pending exact-SHA close (6/10). Pinned direct SET/default-only frame parent and FULL ODF import corrected2historical inherited-export assertions; all direct/native UI/layout/dialog/history siblings preserved. Native LR twip-backed QueryValue/PutValue includes source order, signed measures/units, relative metadata bounds and native bool/uint casts; original class partition under matching lrspitem.hxx owner meets1000-line gate with unchanged frmitems export API.
+      Impact: Original full LR value contract prerequisite removes need for inverse percentage arithmetic/private-field adapters in later browser transport work. Final1089cases81direct-related57fresh and24Chromium pass; two whole final modules actual Istanbul100all-four396lines440statements144functions381branches,zero negatives/current complete maps.642old tests byte-identical,2exactsource-backed migrations,1native declaration ownership metadata migration; no whole semantic promotion or registered IO/recovery drift.
+      Resolution: Source/check hashes match current native modules;9upstream-absent TS7/static/build/browser gates and9restored metadata gates pass. Initial3851-case2failure profile retained and excluded from final coverage; no passing replay for helper repairs or full run. Broader goal active/incomplete, cadence6/10 after HM2YX4 close; continue complete native LR/UL table transport next; do not pause at full cadence. No upstream/helper/raw maps in AgentPlane; same-agent non-independent exact-SHA review disclosed.
 id_source: "generated"
 ---
 ## Summary
@@ -2827,3 +2831,7 @@ VerificationYCZ38R:519 unique current-source related cases87files and20fresh pas
 - Observation: Verified WHACNF correction4/10:1703related115files28fresh24Chromium all first attempt,zero failures/skips.
   Impact: Entire final two transport modules actual Istanbul264lines283statements48functions354branches100all-four,current complete source/map identity and zero negatives. Original complete size/orientation survive structured-clone/JSON/Worker,direct absence/native precedence/legacy admission;raw header9 and3mounted original owner/cursor history cycles retained.
   Resolution: 595old tests4canonical prefixes unchanged,statics/current build and9restored metadata pass,IO deviations preserved. Remaining raw-headline/spacing/flags/LR/inherited/shared/row-box/general mapper/full UI/layout/filter/UNO/VCL incomplete;goal active,full not due4/10. Exact-SHA non-independent quality follows.
+
+- Observation: Completed atomic acceptance leaf ZJJ73M after WHACNF (5/10) and final native LR leaf HM2YX4 pending exact-SHA close (6/10). Pinned direct SET/default-only frame parent and FULL ODF import corrected2historical inherited-export assertions; all direct/native UI/layout/dialog/history siblings preserved. Native LR twip-backed QueryValue/PutValue includes source order, signed measures/units, relative metadata bounds and native bool/uint casts; original class partition under matching lrspitem.hxx owner meets1000-line gate with unchanged frmitems export API.
+  Impact: Original full LR value contract prerequisite removes need for inverse percentage arithmetic/private-field adapters in later browser transport work. Final1089cases81direct-related57fresh and24Chromium pass; two whole final modules actual Istanbul100all-four396lines440statements144functions381branches,zero negatives/current complete maps.642old tests byte-identical,2exactsource-backed migrations,1native declaration ownership metadata migration; no whole semantic promotion or registered IO/recovery drift.
+  Resolution: Source/check hashes match current native modules;9upstream-absent TS7/static/build/browser gates and9restored metadata gates pass. Initial3851-case2failure profile retained and excluded from final coverage; no passing replay for helper repairs or full run. Broader goal active/incomplete, cadence6/10 after HM2YX4 close; continue complete native LR/UL table transport next; do not pause at full cadence. No upstream/helper/raw maps in AgentPlane; same-agent non-independent exact-SHA review disclosed.

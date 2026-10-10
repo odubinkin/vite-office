@@ -4,7 +4,7 @@ title: "Restore native LR margin UNO value contracts"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,11 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "needs_rework"
-  updated_at: "2026-10-10T00:17:26.058Z"
+  state: "ok"
+  updated_at: "2026-10-10T00:30:27.951Z"
   updated_by: "CODER"
-  note: "Initial3851cases3849pass2 historical inherited-table failures; all fresh and initial complete frmitems actual100. Native LR moved unchanged into matching header-owned module to meet1000-line gate. Final two-module current coverage pending separate native geometry regression repair. Raw initial evidence retained in ignored cache."
-  attempts: 1
+  note: "Final current two native modules actual Istanbul100all-four1089related57fresh24Chromium9statics9restored metadata pass; initial old source maps excluded. Original e829330 source hashes preserved;642old tests and separate2source-backed ODF migrations,1declaration metadata relocation retained. Native font-relative/complete UNO and browser LR/UL transport remain incomplete; full cadence6/10."
+  attempts: 0
 commit: null
 comments:
   -
@@ -41,8 +41,14 @@ events:
     author: "CODER"
     state: "needs_rework"
     note: "Initial3851cases3849pass2 historical inherited-table failures; all fresh and initial complete frmitems actual100. Native LR moved unchanged into matching header-owned module to meet1000-line gate. Final two-module current coverage pending separate native geometry regression repair. Raw initial evidence retained in ignored cache."
+  -
+    type: "verify"
+    at: "2026-10-10T00:30:27.951Z"
+    author: "CODER"
+    state: "ok"
+    note: "Final current two native modules actual Istanbul100all-four1089related57fresh24Chromium9statics9restored metadata pass; initial old source maps excluded. Original e829330 source hashes preserved;642old tests and separate2source-backed ODF migrations,1declaration metadata relocation retained. Native font-relative/complete UNO and browser LR/UL transport remain incomplete; full cadence6/10."
 doc_version: 3
-doc_updated_at: "2026-10-10T00:24:51.746Z"
+doc_updated_at: "2026-10-10T00:30:28.001Z"
 doc_updated_by: "CODER"
 description: "Atomic task5/10 after BZQGYC: port pinned SvxLRSpaceItem twip-backed QueryValue/PutValue members including complete margin scale, relative metadata, signed conversion, native input admission and hanging-indent ordering; preserve unsupported font-unit scope. Enables later lossless native LR table transport without private-field adapters. Existing approval continues writer parity goal."
 sections:
@@ -55,17 +61,17 @@ sections:
     3. npm run format:check, lint, typecheck (TS7), check:dependencies, check:docs, check:file-size, build and static-build plus related Chromium table regressions pass upstream absent. Preserve old test source hashes except separately documented source-backed contract changes if necessary.
     4. With reference restored, registry build/check, source-tree/provenance, writer resource generation --check, inventory invariants/parity, routing and doctor pass; append canonical evidence retaining statuses/defaults/classifications/old evidence. Record bounded English evidence only; same-agent exact-SHA evaluation disclosed. Finish clean writer checkout with restored reference symlink and recorded semantic commit.
   Verification: |-
-    Pending current-source native value tests, whole-module actual coverage, static/build/browser checks and restored metadata audits.
+    Pass on final native sources:1089cases81direct-related57fresh,24Chromium0failure/skip/flaky. Entire frmitems.ts and header-owned lrspitem.ts actual Istanbul100all-four396lines440statements144functions381branches; complete current source/maps and zero negative counters, no earlier-map reuse. Source code checkpointe8293302965a equals current production hashes.642historical test files byte-identical; separate ZJJ73M owns2exactnative ODF migrations.4historical canonical prefixes retained across both leaves with exactly1necessary declaration-owner list migration;2new native LR records, parent findings prefix retained.9upstream-absent TS7/static/build/browser and9restored metadata checks pass. Physical class partition meets1000-line gate without adapter; full goal remains incomplete6/10. Bounded evidence/evaluation pending exact semantic-SHA close.
 
     <!-- BEGIN VERIFICATION RESULTS -->
-    ### 2026-10-10T00:17:26.058Z — VERIFY — needs_rework
+    ### 2026-10-10T00:30:27.951Z — VERIFY — ok
 
     By: CODER
 
-    Note: Initial3851cases3849pass2 historical inherited-table failures; all fresh and initial complete frmitems actual100. Native LR moved unchanged into matching header-owned module to meet1000-line gate. Final two-module current coverage pending separate native geometry regression repair. Raw initial evidence retained in ignored cache.
-    Attempts: 1
+    Note: Final current two native modules actual Istanbul100all-four1089related57fresh24Chromium9statics9restored metadata pass; initial old source maps excluded. Original e829330 source hashes preserved;642old tests and separate2source-backed ODF migrations,1declaration metadata relocation retained. Native font-relative/complete UNO and browser LR/UL transport remain incomplete; full cadence6/10.
+    Attempts: 0
 
-    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T00:16:58.349Z, excerpt_hash=sha256:6021adec62af234fff303fc0107453c866c912a5e6977a7227c75c4e1c6a6cb9
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T00:30:27.013Z, excerpt_hash=sha256:6021adec62af234fff303fc0107453c866c912a5e6977a7227c75c4e1c6a6cb9
 
     Details:
 
@@ -80,12 +86,12 @@ sections:
     DecisionContextRef:
     - operator_action: run_exact_argv
     - can_execute_now: true
-    - safe_command: agentplane task verify-show 202610100007-HM2YX4
+    - safe_command: agentplane commit 202610100007-HM2YX4 -m 🧩 HM2YX4 task: persist canonical task artifacts --allow-tasks
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
-    - repeat_allowed: false
-    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
     <!-- END VERIFICATION RESULTS -->
@@ -123,17 +129,17 @@ Port pinned signed twip-backed LR QueryValue/PutValue and partition native LR de
 
 ## Verification
 
-Pending current-source native value tests, whole-module actual coverage, static/build/browser checks and restored metadata audits.
+Pass on final native sources:1089cases81direct-related57fresh,24Chromium0failure/skip/flaky. Entire frmitems.ts and header-owned lrspitem.ts actual Istanbul100all-four396lines440statements144functions381branches; complete current source/maps and zero negative counters, no earlier-map reuse. Source code checkpointe8293302965a equals current production hashes.642historical test files byte-identical; separate ZJJ73M owns2exactnative ODF migrations.4historical canonical prefixes retained across both leaves with exactly1necessary declaration-owner list migration;2new native LR records, parent findings prefix retained.9upstream-absent TS7/static/build/browser and9restored metadata checks pass. Physical class partition meets1000-line gate without adapter; full goal remains incomplete6/10. Bounded evidence/evaluation pending exact semantic-SHA close.
 
 <!-- BEGIN VERIFICATION RESULTS -->
-### 2026-10-10T00:17:26.058Z — VERIFY — needs_rework
+### 2026-10-10T00:30:27.951Z — VERIFY — ok
 
 By: CODER
 
-Note: Initial3851cases3849pass2 historical inherited-table failures; all fresh and initial complete frmitems actual100. Native LR moved unchanged into matching header-owned module to meet1000-line gate. Final two-module current coverage pending separate native geometry regression repair. Raw initial evidence retained in ignored cache.
-Attempts: 1
+Note: Final current two native modules actual Istanbul100all-four1089related57fresh24Chromium9statics9restored metadata pass; initial old source maps excluded. Original e829330 source hashes preserved;642old tests and separate2source-backed ODF migrations,1declaration metadata relocation retained. Native font-relative/complete UNO and browser LR/UL transport remain incomplete; full cadence6/10.
+Attempts: 0
 
-VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T00:16:58.349Z, excerpt_hash=sha256:6021adec62af234fff303fc0107453c866c912a5e6977a7227c75c4e1c6a6cb9
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T00:30:27.013Z, excerpt_hash=sha256:6021adec62af234fff303fc0107453c866c912a5e6977a7227c75c4e1c6a6cb9
 
 Details:
 
@@ -148,12 +154,12 @@ BlueprintSnapshotRef:
 DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
-- safe_command: agentplane task verify-show 202610100007-HM2YX4
+- safe_command: agentplane commit 202610100007-HM2YX4 -m 🧩 HM2YX4 task: persist canonical task artifacts --allow-tasks
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
-- repeat_allowed: false
-- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
