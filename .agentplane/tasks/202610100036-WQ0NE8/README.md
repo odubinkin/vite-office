@@ -4,7 +4,7 @@ title: "Restore native UL spacing contracts and complete browser item state"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -18,15 +18,41 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-10T00:53:36.103Z"
+  updated_at: "2026-10-10T00:54:55.909Z"
   updated_by: "CODER"
-  note: "Complete native UL five-field state/value contracts and browser boundary verified;3936unique related,64fresh24Chromium; whole4module actual Istanbul100all-four;9statics9metadata; preserved history/deviations;bounded evidence/evaluation follows."
+  note: "Exact-SHA8a5e0bd90d14 same-agent/non-independent quality passes;bounded evidence refreshed.3936related64fresh24Chromium all accepted;Istanbul4wholemodules100all-four;9statics9metadata,original acceptance/inventory preserved,goalactive7/10."
   attempts: 0
-commit: null
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-10T00:54:47.490Z"
+  updated_by: "EVALUATOR"
+  note: "Same implementing agent, explicitly non-independent, reviewed exact SHA8a5e0bd90d14179a711e3b543e3856b6f13e7fc4 against native UL sources and current deterministic evidence; approved atomic scope passes."
+  evaluated_sha: "8a5e0bd90d14179a711e3b543e3856b6f13e7fc4"
+  blueprint_digest: "76c107133efbfe70d47fcae2c88ba9fd79767456d25abab618a0099761109fab"
+  evidence_refs:
+    - ".agentplane/tasks/202610100036-WQ0NE8/README.md"
+    - ".agentplane/tasks/202610100036-WQ0NE8/quality/20261010-005447490-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610100036-WQ0NE8/quality/20261010-005447490-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610100036-WQ0NE8/quality/20261010-005447490-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610100036-WQ0NE8/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610100036-WQ0NE8/evidence/verification.json"
+    - "apps/office/src/editeng/inc/ulspitem.ts"
+    - "apps/office/src/sw/browser/filter/xml/item-codec.ts"
+    - "apps/office/node_modules/.cache/parity-coverage/WQ0NE8/preservation-proof.json"
+  findings:
+    - "Pinned native five fields/defaults/member routing/unsigned scaling/aggregate quirks match; tuple serialization owned by existing browser boundary, complete clone/history/Worker state tested. No inverse/private-field shim or declared IO deviation drift."
+    - "3936unique related64fresh24Chromium accepted; initial5new failures repaired through actual whole-array test parameterization. Repair22/22assertions pass; exit1 solely partial-profile globalcoverage thresholds. Initial actual unchanged-source four-module coverage100529/589/178/479 with complete zero-negative maps;228mappedranges and transpiled runtime preserved through JSDoc-only tags. No passing replay."
+    - "634of646old files byte-identical; exact26query+1constructor source migrations preserve all original sibling acceptance;8canonical histories/owned declaration relocation accurate;9statics9metadata pass; no upstream/helper/raw map AgentPlane artifacts."
+commit:
+  hash: "8a5e0bd90d14179a711e3b543e3856b6f13e7fc4"
+  message: "🧩 WQ0NE8 writer: restore native UL spacing contracts and complete browser state"
 comments:
   -
     author: "CODER"
     body: "Start: complete original UL native state and value contracts under matching header, move tuple encoding to browser boundary, preserve all27historical metric/context assertions with source-backed native observers. Atomic7/10; no unrelated behavior changes."
+  -
+    author: "CODER"
+    body: "Start: semantic8a5e0bd90d14 complete native UL state landed; record exact-SHA verification and non-independent quality before canonical finish."
 events:
   -
     type: "status"
@@ -41,8 +67,27 @@ events:
     author: "CODER"
     state: "ok"
     note: "Complete native UL five-field state/value contracts and browser boundary verified;3936unique related,64fresh24Chromium; whole4module actual Istanbul100all-four;9statics9metadata; preserved history/deviations;bounded evidence/evaluation follows."
+  -
+    type: "status"
+    at: "2026-10-10T00:54:30.753Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+    note: "Start: semantic8a5e0bd90d14 complete native UL state landed; record exact-SHA verification and non-independent quality before canonical finish."
+  -
+    type: "verify"
+    at: "2026-10-10T00:54:31.202Z"
+    author: "CODER"
+    state: "ok"
+    note: "Exact semantic8a5e0bd90d14:3936related64fresh24Chromium accepted;4whole-module Istanbul100529/589/178/479zero negatives;source/JSDoc mapped ranges and all preservation/9static9metadata evidence pass."
+  -
+    type: "verify"
+    at: "2026-10-10T00:54:55.909Z"
+    author: "CODER"
+    state: "ok"
+    note: "Exact-SHA8a5e0bd90d14 same-agent/non-independent quality passes;bounded evidence refreshed.3936related64fresh24Chromium all accepted;Istanbul4wholemodules100all-four;9statics9metadata,original acceptance/inventory preserved,goalactive7/10."
 doc_version: 3
-doc_updated_at: "2026-10-10T00:53:36.153Z"
+doc_updated_at: "2026-10-10T00:54:55.963Z"
 doc_updated_by: "CODER"
 description: "Atomic task7/10 after BZQGYC. Native SvxULSpaceItem lacks source-owned proportion fields, setters, native constructor/default QueryValue/PutValue and complete clone/equality. Port exact pinned five-field native state and value quirks; move old tuple representation into existing browser item codec and preserve old tuple admission while transporting full proportions through registered pool boundary. Preserve table/paragraph original ItemSet/history/UI and conscious I/O deviations. Native LR/UL table-format transport follows in another atomic task; no inverse/private field adapters."
 sections:
@@ -81,6 +126,66 @@ sections:
     - operator_action: run_exact_argv
     - can_execute_now: true
     - safe_command: agentplane commit 202610100036-WQ0NE8 -m 🧩 WQ0NE8 task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-10-10T00:54:31.202Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Exact semantic8a5e0bd90d14:3936related64fresh24Chromium accepted;4whole-module Istanbul100529/589/178/479zero negatives;source/JSDoc mapped ranges and all preservation/9static9metadata evidence pass.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T00:54:30.753Z, excerpt_hash=sha256:e445866de5c2e89e86bab40bdfff64be8b9a6bae2142cfa3c54fb922a8c8ee9d
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610100036-WQ0NE8/blueprint/resolved-snapshot.json
+    - old_digest: 76c107133efbfe70d47fcae2c88ba9fd79767456d25abab618a0099761109fab
+    - current_digest: 76c107133efbfe70d47fcae2c88ba9fd79767456d25abab618a0099761109fab
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610100036-WQ0NE8
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610100036-WQ0NE8 --result verified-202610100036-WQ0NE8 --commit 8a5e0bd90d14179a711e3b543e3856b6f13e7fc4
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-10-10T00:54:55.909Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Exact-SHA8a5e0bd90d14 same-agent/non-independent quality passes;bounded evidence refreshed.3936related64fresh24Chromium all accepted;Istanbul4wholemodules100all-four;9statics9metadata,original acceptance/inventory preserved,goalactive7/10.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T00:54:31.257Z, excerpt_hash=sha256:e445866de5c2e89e86bab40bdfff64be8b9a6bae2142cfa3c54fb922a8c8ee9d
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610100036-WQ0NE8/blueprint/resolved-snapshot.json
+    - old_digest: 76c107133efbfe70d47fcae2c88ba9fd79767456d25abab618a0099761109fab
+    - current_digest: 76c107133efbfe70d47fcae2c88ba9fd79767456d25abab618a0099761109fab
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610100036-WQ0NE8
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610100036-WQ0NE8 --result verified-202610100036-WQ0NE8 --commit 8a5e0bd90d14179a711e3b543e3856b6f13e7fc4
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -140,6 +245,66 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane commit 202610100036-WQ0NE8 -m 🧩 WQ0NE8 task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-10T00:54:31.202Z — VERIFY — ok
+
+By: CODER
+
+Note: Exact semantic8a5e0bd90d14:3936related64fresh24Chromium accepted;4whole-module Istanbul100529/589/178/479zero negatives;source/JSDoc mapped ranges and all preservation/9static9metadata evidence pass.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T00:54:30.753Z, excerpt_hash=sha256:e445866de5c2e89e86bab40bdfff64be8b9a6bae2142cfa3c54fb922a8c8ee9d
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610100036-WQ0NE8/blueprint/resolved-snapshot.json
+- old_digest: 76c107133efbfe70d47fcae2c88ba9fd79767456d25abab618a0099761109fab
+- current_digest: 76c107133efbfe70d47fcae2c88ba9fd79767456d25abab618a0099761109fab
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610100036-WQ0NE8
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610100036-WQ0NE8 --result verified-202610100036-WQ0NE8 --commit 8a5e0bd90d14179a711e3b543e3856b6f13e7fc4
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-10T00:54:55.909Z — VERIFY — ok
+
+By: CODER
+
+Note: Exact-SHA8a5e0bd90d14 same-agent/non-independent quality passes;bounded evidence refreshed.3936related64fresh24Chromium all accepted;Istanbul4wholemodules100all-four;9statics9metadata,original acceptance/inventory preserved,goalactive7/10.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T00:54:31.257Z, excerpt_hash=sha256:e445866de5c2e89e86bab40bdfff64be8b9a6bae2142cfa3c54fb922a8c8ee9d
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610100036-WQ0NE8/blueprint/resolved-snapshot.json
+- old_digest: 76c107133efbfe70d47fcae2c88ba9fd79767456d25abab618a0099761109fab
+- current_digest: 76c107133efbfe70d47fcae2c88ba9fd79767456d25abab618a0099761109fab
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610100036-WQ0NE8
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610100036-WQ0NE8 --result verified-202610100036-WQ0NE8 --commit 8a5e0bd90d14179a711e3b543e3856b6f13e7fc4
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
