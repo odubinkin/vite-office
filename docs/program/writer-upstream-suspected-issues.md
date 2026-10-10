@@ -177,6 +177,49 @@ Decision: preserve the table first-only reset, retain the content-node complete
 reset and do not normalize the two branches. Task202610101723-QH6XM1 records
 source hashes and current portable acceptance evidence.
 
+## WRITER-005: Margin admission reads legacy LR while mutation authors separate margin items
+
+Baseline: LibreOffice26.8.0.2, commit
+`9bc445578031fecf56086729d8e4940c77e14d65`. Source:
+`sw/source/core/edit/edattr.cxx`, SwEditShell::IsMoveLeftMargin481..532;
+`sw/source/core/doc/docfmt.cxx`, SwDoc::MoveLeftMargin1681..1755;
+`sw/inc/node.hxx`, SwContentNode::GetAttr753..758;
+`sw/source/core/bastyp/init.cxx`, original default LR item404.
+
+Increase admission reads RES_LR_SPACE through the ordinary inherited attribute
+getter. It resolves text-left, adds the unsigned16 default-tab distance and then
+optionally snaps before comparing actual layout-frame width. Document mutation
+instead copies and authors RES_MARGIN_FIRSTLINE and RES_MARGIN_TEXTLEFT, and
+merges applicable list geometry. The getter directly returns GetSwAttrSet().Get;
+it does not synthesize a legacy LR item from the separate paragraph margins.
+
+A defined initialized item-profile example has inherited legacy LR text-left0
+and independently authored typed text-left300. With default distance720,
+admission compares720 plus5mm while unsnapped mutation authors1020. Independently
+changing legacy LR changes the comparison without changing the authored typed
+margin. Negative inputs also expose the source add-before-snap admission order,
+which differs from the document snap-before-add mutation order.
+
+This is not a confirmed upstream defect: original caller invariants, format
+population and actual native paragraph-frame geometry remain unreviewed. The
+portable frame-width accommodation cannot establish original frame admission.
+Decision: preserve the literal WhichIds, independent item ownership and both
+arithmetic orders; do not replace admission with a scalar prediction of mutation.
+Task202610101813-PW1696 records source hashes and portable core/React/browser
+acceptance. Tests execute without either upstream reference. Native frame lookup,
+absence, vertical geometry and merged/redline paragraphs remain unverified.
+
+The guard also narrows the default tab distance to unsigned 16 bits, while the
+document operation retains its signed 32-bit value. A literal 65537 default
+therefore becomes 1 for admission and remains 65537 for mutation; the port
+keeps both contracts without normalizing them.
+
+The native text-node and paragraph-style ranges in init.cxx155..188 include
+RES_LR_SPACE through the complete frame-attribute range. The existing portable
+ranges omitted this already registered item; taskPW1696 restores its membership
+so the represented direct/inherited item-profile examples are admitted. Caller
+population invariants and original layout-frame behavior remain unreviewed.
+
 ## Recording future observations
 
 Add a stable `WRITER-###` case ID, pinned source location, original condition,

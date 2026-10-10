@@ -498,6 +498,7 @@
     "status": "pass",
     "originalPaths": 9027,
     "changedOriginalPaths": [
+      ".agentplane/tasks/202609240501-C9TN6M/README.md",
       "apps/office/src/sw/inc/hintids.ts",
       "apps/office/src/sw/source/core/doc/docfmt.ts",
       "apps/office/src/sw/source/core/doc/native-default-entrypoints.test.ts",
@@ -526,7 +527,7 @@
   },
   "reportHashes": {
     "browser": "65eebccef8417bdb420e7cfd71d4c23ab2c66b67f2080f8d6ac1f56f47ef3408",
-    "preservation": "625c50e425886f769167278db7c6100498180b8235660cee5122839266203467"
+    "preservation": "f7a9330c7ac6dd15f5cf960ebb7d836daf9d14cae3e5d9aeac32df6a5d849460"
   },
   "supersededEvidence": {
     "initialRelatedFailed": 8,
@@ -545,5 +546,28 @@
     "nextFullAfterCorrections": 10,
     "pauseAfterNextFullAndRequiredRepairs": true
   },
-  "artifactPolicy": "Bounded English facts/counts/commands/hashes only; no source copies, helpers, Python, raw logs or counter maps."
+  "artifactPolicy": "Bounded English facts/counts/commands/hashes only; no source copies, helpers, Python, raw logs or counter maps.",
+  "finalMetadataFormat": [
+    {
+      "label": "final-metadata-format",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "prettier",
+        "--check",
+        "docs/program/registry/writer/runtime/sw/source/core/edit/edattr.ts.json",
+        "docs/program/registry/writer/provenance/sw/source/core/edit/edattr.ts.json",
+        "docs/program/registry/writer/runtime/sw/source/core/doc/docfmt.ts.json",
+        "docs/program/registry/writer/provenance/sw/source/core/doc/docfmt.ts.json",
+        "docs/program/registry/writer/runtime/sw/inc/hintids.ts.json",
+        "docs/program/registry/writer/provenance/sw/inc/hintids.ts.json",
+        "docs/program/writer-upstream-suspected-issues.md"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    }
+  ],
+  "parentFindingsPath": ".agentplane/tasks/202609240501-C9TN6M/README.md"
 }

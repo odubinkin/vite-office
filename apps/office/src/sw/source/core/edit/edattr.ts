@@ -1,46 +1,37 @@
 /** @fileoverview Ports the supported SwEditShell::IsMoveLeftMargin and MoveLeftMargin selection traversal from pinned `sw/source/core/edit/edattr.cxx`. */
 
 import type { SwDoc } from "../doc/doc";
-import { getMoveLeftMarginDistance, getMovedLeftMargin } from "../doc/docfmt";
+import { getMoveLeftMarginDistance } from "../doc/docfmt";
+import { SwTextNode } from "../txtnode/ndtxt";
+import type { SvxLRSpaceItem } from "../../../../editeng/inc/lrspitem";
+import { RES_LR_SPACE } from "../../../inc/hintids";
 import type { SwPaM } from "../crsr/pam";
 import type { SwUndoCursorState } from "../undo/undobj";
-import type { SwTextNode } from "../txtnode/ndtxt";
 
-/** Text nodes in the inclusive point-and-mark range, in document order. @param document - Writer document. @param cursor - Selection. @returns Selected nodes. */
-export function getMoveLeftMarginNodes(document: SwDoc, cursor: SwPaM): readonly SwTextNode[] {
-  const start = cursor.Start().GetNodeIndex();
-  const end = cursor.End().GetNodeIndex();
-  return document.paragraphs.filter(
-    /** Includes all selected text nodes. @param node - Candidate. @returns Whether selected. */ (
-      node,
-    ) => node.GetIndex() >= start && node.GetIndex() <= end,
-  );
-}
-
-/** Mirrors the upstream increase guard using the current page body as the browser layout frame. @param document - Writer document. @param cursor - Selection. @param right - Increase direction. @param modulus - Snap to default tabs. @returns Whether all selected nodes permit the operation. */
+/** Reads native edit-shell admission across the actual cursor ring; current page-body frame geometry remains a browser layout accommodation. @param document - Original document. @param cursor - Native cursor ring. @param right - Increase direction. @param modulus - Native snapping policy. @returns Original represented admission. */
 export function isMoveLeftMargin(
   document: SwDoc,
   cursor: SwPaM,
   right: boolean,
   modulus = true,
 ): boolean {
-  const distance = getMoveLeftMarginDistance(document);
-  if (distance <= 0) return false;
-  const nodes = getMoveLeftMarginNodes(document, cursor);
-  if (!right)
-    return nodes.some(
-      /** Checks for an effective decrease. @param node - Selected text node. @returns Whether changed. */ (
-        node,
-      ) => getMovedLeftMargin(node, distance, false, modulus) !== node.GetParagraphTextLeftMargin(),
-    );
+  const distance = getMoveLeftMarginDistance(document) & 0xffff;
+  if (distance === 0) return false;
+  if (!right) return true;
   const page = document.GetPageDesc().GetValue();
   const frameWidth = page.width - page.leftMargin - page.rightMargin;
   const fiveMillimeters = Math.round((5 * 1440) / 25.4);
-  return nodes.every(
-    /** Enforces SwEditShell's frame-width margin guard. @param node - Selected text node. @returns Whether next indent fits. */ (
-      node,
-    ) => frameWidth > getMovedLeftMargin(node, distance, true, modulus) + fiveMillimeters,
-  );
+  for (const range of cursor.GetRingContainer()) {
+    for (let index = range.Start().GetNodeIndex(); index <= range.End().GetNodeIndex(); index++) {
+      const node = document.GetNodes().at(index);
+      if (!(node instanceof SwTextNode)) continue;
+      const margin = node.GetAttr(RES_LR_SPACE) as SvxLRSpaceItem;
+      let next = margin.ResolveTextLeft() + distance;
+      if (modulus) next = Math.trunc(next / distance) * distance;
+      if (!(frameWidth > next + fiveMillimeters)) return false;
+    }
+  }
+  return true;
 }
 
 /** Runs the native edit-shell model bracket without building a scalar action or group. @param target - Original editing shell methods. @param right - Increase direction. @param modulus - Native tab snapping. @returns Nothing. */

@@ -124,20 +124,6 @@ export function getMoveLeftMarginDistance(document: SwDoc): number {
   return tabs.Count() > 0 ? tabs.At(0).GetTabPos() : SW_DEFAULT_INDENT_DISTANCE;
 }
 
-/** Computes one text node's next direct left margin. @param paragraph - Selected node. @param distance - Document default tab distance. @param right - Increase direction. @param modulus - Snap to tab multiple. @returns Next margin. */
-export function getMovedLeftMargin(
-  paragraph: SwTextNode,
-  distance: number,
-  right: boolean,
-  modulus: boolean,
-): number {
-  let next = getMoveLeftMarginItems(paragraph).left.ResolveTextLeft();
-  if (modulus) next = Math.trunc(next / distance) * distance;
-  if (right) next += distance;
-  else if (next > 0) next -= distance;
-  return next;
-}
-
 /** Copies complete native paragraph items and merges independently applicable represented list geometry. @param paragraph - Original text owner. @returns Owned native first and left items. */
 export function getMoveLeftMarginItems(paragraph: SwTextNode): {
   first: SvxFirstLineIndentItem;

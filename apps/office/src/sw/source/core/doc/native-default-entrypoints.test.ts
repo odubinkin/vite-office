@@ -19,7 +19,7 @@ it("creates a first-level numbering rule when the manager level is omitted", /**
   }
 });
 
-it("admits increasing and rejects decreasing a zero margin with default tab snapping", /** Checks the direct movement guard without a supplied modulus flag. @returns Nothing. */ () => {
+it("admits both native directions at a zero margin with default tab snapping", /** Checks the direct movement guard without a supplied modulus flag. @returns Nothing. */ () => {
   const doc = new SwDoc();
   const node = doc.paragraphs[0];
   if (node === undefined) throw new Error("Missing initial paragraph");
@@ -27,7 +27,7 @@ it("admits increasing and rejects decreasing a zero margin with default tab snap
   const cursor = new SwPaM(position);
   try {
     expect(isMoveLeftMargin(doc, cursor, true)).toBe(true);
-    expect(isMoveLeftMargin(doc, cursor, false)).toBe(false);
+    expect(isMoveLeftMargin(doc, cursor, false)).toBe(true);
     expect(node.GetParagraphTextLeftMargin()).toBe(0);
     expect(resolveSwLeftMarginWithNum(node)).toBe(0);
   } finally {

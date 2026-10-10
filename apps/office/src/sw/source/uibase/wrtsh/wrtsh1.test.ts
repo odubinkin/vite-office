@@ -193,7 +193,7 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
   it("matches text-shell indent dispatch for ordinary and list paragraphs", /** Verifies `SID_INC_INDENT` changes margins outside lists and levels inside them. @returns Nothing. */ function routesContextualIndent(): void {
     const shell = createShell("Body");
     const paragraph = shell.GetActiveParagraph();
-    expect(shell.CanChangeParagraphIndent(false)).toBe(false);
+    expect(shell.CanChangeParagraphIndent(false)).toBe(true);
     expect(shell.ChangeParagraphIndent(true)).toBe(true);
     expect(paragraph.GetParagraphTextLeftMargin()).toBe(1134);
     expect(shell.CanChangeParagraphIndent(false)).toBe(true);
@@ -203,7 +203,7 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
     expect(paragraph.GetParagraphTextLeftMargin()).toBe(1134);
     expect(shell.ChangeParagraphIndent(false)).toBe(true);
     expect(paragraph.GetParagraphTextLeftMargin()).toBe(0);
-    expect(shell.ChangeParagraphIndent(false)).toBe(false);
+    expect(shell.ChangeParagraphIndent(false)).toBe(true);
     expect(shell.ChangeParagraphIndent(true)).toBe(true);
     expect(shell.SetParagraphListKind("numbered")).toBe(true);
     expect(shell.ChangeParagraphIndent(true)).toBe(true);
