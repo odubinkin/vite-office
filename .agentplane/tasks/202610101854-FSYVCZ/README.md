@@ -1,10 +1,11 @@
 ---
 id: "202610101854-FSYVCZ"
 title: "Restore original text-frame ownership and lifetime"
-status: "DOING"
+result_summary: "Original native text-frame ownership and represented release restored; five whole modules100%,13925related+22Chromium pass, current hashes/old acceptance/inventory preserved; correction4/10."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -52,6 +53,9 @@ comments:
   -
     author: "CODER"
     body: "Implementation: original text-frame registration and lifetime restored; actual five-module100%,13925related and22Chromium cases pass with current hashes, eight native fixture migrations preserve all other old tokens. Semantic commit3e4a04a9c4c60bbc13868c86a8ce5d994157e58c."
+  -
+    author: "CODER"
+    body: "Verified: original SwTextNode-owned SwContentFrame/SwTextFrame registration, Txt/unmerged identity and mutable native attribute invalidation; cursor/pagination/error/replacement/close release. Entire actual five-module100% all four metrics,13925related cases/497files and22Chromium cases/11files pass without upstream.810old test files preserved802byte-identical/8native fixture migrations and all other tokens/cases/matrices/device inputs/matchers intact; eight canonical prefixes/two new unverified mappings and nine metadata gates pass. Current hashes and restored refs confirmed; exact semantic3e4a04a9c4c60bbc13868c86a8ce5d994157e58c same-agent non-independent quality pass. Full native flow/root/page/geometry remains unverified; fourth correction after BZ14P4, pause after next full and required repairs."
 events:
   -
     type: "status"
@@ -73,8 +77,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Actual current entire five modules Istanbul all-four100%,13925cases/497files plus22Chromium/11files,9fresh core/React and1fresh browser.810old test files preserved802byte-identical/8native fixtures, all other tokens/cases/matrices/device inputs/matcher arguments unchanged; eight canonical prefixes/new ssfrm unverified. All static/build/source-metadata gates pass; refs restored, no source/helper/raw artifacts. Exact semantic3e4a04a9c4c60bbc13868c86a8ce5d994157e58c; no full native flow/root/page/geometry promotion."
+  -
+    type: "status"
+    at: "2026-10-10T19:20:27.318Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: original SwTextNode-owned SwContentFrame/SwTextFrame registration, Txt/unmerged identity and mutable native attribute invalidation; cursor/pagination/error/replacement/close release. Entire actual five-module100% all four metrics,13925related cases/497files and22Chromium cases/11files pass without upstream.810old test files preserved802byte-identical/8native fixture migrations and all other tokens/cases/matrices/device inputs/matchers intact; eight canonical prefixes/two new unverified mappings and nine metadata gates pass. Current hashes and restored refs confirmed; exact semantic3e4a04a9c4c60bbc13868c86a8ce5d994157e58c same-agent non-independent quality pass. Full native flow/root/page/geometry remains unverified; fourth correction after BZ14P4, pause after next full and required repairs."
 doc_version: 3
-doc_updated_at: "2026-10-10T19:19:01.591Z"
+doc_updated_at: "2026-10-10T19:20:27.319Z"
 doc_updated_by: "CODER"
 description: "Replace unregistered frozen text-frame geometry objects with original SwTextNode-registered SwContentFrame/SwTextFrame identities in body pagination and cursor geometry; release replaced/discarded/closed frames. Standing human goal authorizes iterative core/UI refactoring and inventory. Fourth correction after BZ14P4; pause after next full checkpoint and required repairs."
 sections:
@@ -149,6 +160,10 @@ sections:
     Command: npm run check:docs. Result: fail. Evidence: the new expected-error formatter callback lacked mandatory JSDoc; added comment only. Scope: fresh native test documentation. Passing production formatting/lint/type/dependency gates retained; rerun changed new file formatting/lint and remaining docs/build gates.
 
     Command: bounded old-fixture preservation helper. Result: fail. Evidence: a plain scanner did not rescan template/JSX token context and compared whitespace embedded in a falsely combined template token. Scope: helper-only parser repair to actual TypeScript AST leaf tokens; no source/tests/cases/matcher edits or runtime replays.
+extensions:
+  implementation_commit:
+    hash: "3e4a04a9c4c60bbc13868c86a8ce5d994157e58c"
+    message: "🧩 FSYVCZ code: register and release original text-frame owners"
 id_source: "generated"
 ---
 ## Summary
