@@ -1,0 +1,26 @@
+
+> @vite-office/office@0.1.0 test:coverage
+> vitest run --coverage --maxWorkers=4 --coverage.reportOnFailure=true
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+      Coverage enabled with istanbul
+
+
+ Test Files  630 passed (630)
+      Tests  14961 passed (14961)
+   Start at  10:27:45
+   Duration  603.18s (transform 48.64s, setup 51.86s, import 327.84s, tests 358.92s, environment 278.22s)
+
+ % Coverage report from istanbul
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 100% ( 25665/25665 )
+Branches     : 100% ( 18225/18225 )
+Functions    : 100% ( 5616/5616 )
+Lines        : 100% ( 23273/23273 )
+================================================================================

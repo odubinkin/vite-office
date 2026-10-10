@@ -57,7 +57,7 @@
     "test:coverage:shared": "npm run test:coverage:shared --workspace @vite-office/office --",
     "test:e2e:shared": "npm run build && playwright test --config apps/office/playwright.config.ts --project shared",
     "test:all": "npm test && npm run test:tooling && npm run test:e2e",
-    "test:tooling": "vitest run scripts/test-projects.test.ts scripts/check-module-boundaries.test.ts scripts/typescript-toolchain.test.ts",
+    "test:tooling": "vitest run scripts/*.test.ts",
     "inventory:id": "tsx scripts/libreoffice-inventory/registry-cli.ts id",
     "inventory:registry:check": "tsx scripts/libreoffice-inventory/registry-cli.ts check",
     "inventory:registry:build": "tsx scripts/libreoffice-inventory/registry-cli.ts build",

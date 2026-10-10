@@ -1,0 +1,76 @@
+
+> vite-office@0.1.0 test:inventory:coverage
+> vitest run --config scripts/libreoffice-inventory/vitest.config.ts --coverage
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office
+      Coverage enabled with v8
+
+ ❯ scripts/libreoffice-inventory/odt-import-diagnostics.test.ts (7 tests | 1 failed) 21596ms
+     × keeps the Reader's XML stream byte ceiling before inventory parsing 20207ms
+ ❯ scripts/libreoffice-inventory/cppunit-registration-cli.test.ts (2 tests | 1 failed) 44901ms
+     × runs filesystem readers and writers with owned Git and source fixtures 44889ms
+ ❯ scripts/libreoffice-inventory/parity-mapping-cli.test.ts (3 tests | 2 failed) 35518ms
+     × composes the Writer mapping report with owned upstream marker evidence 30106ms
+     × closes the umbrella ODT compatibility record with pinned fixture evidence 5384ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  scripts/libreoffice-inventory/cppunit-registration-cli.test.ts > Cppunit registration inventory CLI > runs filesystem readers and writers with owned Git and source fixtures
+Error: Test timed out in 30000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ defineCppunitRegistrationCliTests scripts/libreoffice-inventory/cppunit-registration-cli.test.ts:71:3
+     69|   });
+     70|
+     71|   it("runs filesystem readers and writers with owned Git and source fi…
+       |   ^
+     72|    * Verifies fixture Git executor, physical-source reader, and UTF-8 …
+     73|    *
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  scripts/libreoffice-inventory/odt-import-diagnostics.test.ts > privacy-safe ODT import diagnostics > keeps the Reader's XML stream byte ceiling before inventory parsing
+Error: Test timed out in 20000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ scripts/libreoffice-inventory/odt-import-diagnostics.test.ts:200:3
+    198|   });
+    199|
+    200|   it("keeps the Reader's XML stream byte ceiling before inventory pars…
+       |   ^
+    201|     const oversized = await replaceFixtureEntry(
+    202|       "content.xml",
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  scripts/libreoffice-inventory/parity-mapping-cli.test.ts > parity mapping CLI > composes the Writer mapping report with owned upstream marker evidence
+Error: Test timed out in 30000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ defineParityMappingCliTests scripts/libreoffice-inventory/parity-mapping-cli.test.ts:75:3
+     73|   });
+     74|
+     75|   it("composes the Writer mapping report with owned upstream marker ev…
+       |   ^
+     76|    * Verifies CLI report composition and local runtime validation with…
+     77|    *
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  scripts/libreoffice-inventory/parity-mapping-cli.test.ts > parity mapping CLI > closes the umbrella ODT compatibility record with pinned fixture evidence
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ defineParityMappingCliTests scripts/libreoffice-inventory/parity-mapping-cli.test.ts:180:3
+    178|   }, 30_000);
+    179|
+    180|   it("closes the umbrella ODT compatibility record with pinned fixture…
+       |   ^
+    181|    * Prevents a package checksum assertion from standing in for the co…
+    182|    * @returns A promise resolving after the production manifest is ins…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+
+
+ Test Files  3 failed | 35 passed (38)
+      Tests  4 failed | 119 passed (123)
+   Start at  10:12:06
+   Duration  238.06s (transform 7.69s, setup 0ms, import 18.25s, tests 174.79s, environment 12ms)
+

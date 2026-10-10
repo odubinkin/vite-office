@@ -1,0 +1,26 @@
+
+> vite-office@0.1.0 test:inventory:coverage
+> vitest run --config scripts/libreoffice-inventory/vitest.config.ts --coverage
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office
+      Coverage enabled with v8
+
+
+ Test Files  38 passed (38)
+      Tests  123 passed (123)
+   Start at  10:26:25
+   Duration  29.94s (transform 780ms, setup 0ms, import 2.01s, tests 24.49s, environment 2ms)
+
+ % Coverage report from v8
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 100% ( 1734/1734 )
+Branches     : 100% ( 1292/1292 )
+Functions    : 100% ( 436/436 )
+Lines        : 100% ( 1668/1668 )
+================================================================================

@@ -1,0 +1,59 @@
+
+> vite-office@0.1.0 test:coverage
+> npm run test:coverage --workspace @vite-office/office --
+
+
+> @vite-office/office@0.1.0 test:coverage
+> vitest run --coverage
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+      Coverage enabled with istanbul
+
+ ❯ |shared| src/external/mdds/include/mdds/flat_segment_tree.test.ts (6 tests | 2 failed) 121794ms
+       × matches every original number specialization snapshot 75350ms
+       × matches every original boolean specialization snapshot 46433ms
+ ❯ |shared| src/external/mdds/include/mdds/multi_type_vector/soa/container.test.ts (7 tests | 3 failed) 209969ms
+       × preserves complete original range-erase sequences 31748ms
+       × preserves complete range-empty and middle-split sequences 69760ms
+       × preserves complete public range-release sequences 40831ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |shared| src/external/mdds/include/mdds/flat_segment_tree.test.ts > pinned mdds flat segment storage > matches every unchanged native insertion, shift, index and copy/move snapshot > matches every original number specialization snapshot
+ FAIL  |shared| src/external/mdds/include/mdds/flat_segment_tree.test.ts > pinned mdds flat segment storage > matches every unchanged native insertion, shift, index and copy/move snapshot > matches every original boolean specialization snapshot
+Error: Test timed out in 30000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ src/external/mdds/include/mdds/flat_segment_tree.test.ts:110:7
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯
+
+ FAIL  |shared| src/external/mdds/include/mdds/multi_type_vector/soa/container.test.ts > original SoA container lifetime > matches every complete original constructor operator iterator and destructor sequence > preserves complete original range-erase sequences
+ FAIL  |shared| src/external/mdds/include/mdds/multi_type_vector/soa/container.test.ts > original SoA container lifetime > matches every complete original constructor operator iterator and destructor sequence > preserves complete range-empty and middle-split sequences
+ FAIL  |shared| src/external/mdds/include/mdds/multi_type_vector/soa/container.test.ts > original SoA container lifetime > matches every complete original constructor operator iterator and destructor sequence > preserves complete public range-release sequences
+Error: Test timed out in 30000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ src/external/mdds/include/mdds/multi_type_vector/soa/container.test.ts:829:7
+    827|       ["scalar-release", "preserves complete original scalar release o…
+    828|     ] as const) {
+    829|       const corpus = group === "scalar-release" ? scalarFixture : fixt…
+       |       ^
+    830|       const cases = corpus.cases.filter(
+    831|         /** Retains every independent caller in its original group. @p…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯
+
+
+ Test Files  2 failed | 628 passed (630)
+      Tests  5 failed | 14842 passed (14847)
+   Start at  10:10:43
+   Duration  924.32s (transform 184.23s, setup 65.22s, import 461.56s, tests 771.94s, environment 351.62s)
+
+npm error Lifecycle script `test:coverage` failed with error:
+npm error code 1
+npm error path /Users/odubinkin/Projects/vite-office/apps/office
+npm error workspace @vite-office/office@0.1.0
+npm error location /Users/odubinkin/Projects/vite-office/apps/office
+npm error command failed
+npm error command sh -c vitest run --coverage

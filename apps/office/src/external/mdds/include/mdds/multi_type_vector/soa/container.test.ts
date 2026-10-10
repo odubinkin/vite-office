@@ -826,20 +826,16 @@ describe("original SoA container lifetime", /** Declares original native ownersh
       ["release", "preserves complete public range-release sequences"],
       ["scalar-release", "preserves complete original scalar release overload sequences"],
     ] as const) {
-      it(
-        name,
-        /** Replays the complete original operation group. @returns Nothing. */ () => {
-          const corpus = group === "scalar-release" ? scalarFixture : fixture;
-          replayOriginalSequences(
-            corpus.cases.filter(
-              /** Retains every case in exactly its original group. @param c - Complete case. @returns Group membership. */ (
-                c,
-              ) => originalOperationGroup(c) === group,
-            ),
-            corpus,
-          );
-        },
+      const corpus = group === "scalar-release" ? scalarFixture : fixture;
+      const cases = corpus.cases.filter(
+        /** Retains every independent caller in its original group. @param c - Complete case. @returns Group membership. */
+        (c) => originalOperationGroup(c) === group,
       );
+      for (let offset = 0; offset < cases.length; offset += 500) {
+        it(`${name} ${offset}-${Math.min(offset + 500, cases.length)}`, /** Replays every field and step for a bounded group of independent native callers. @returns Nothing. */ () => {
+          replayOriginalSequences(cases.slice(offset, offset + 500), corpus);
+        });
+      }
     }
   });
   it("reuses the actual default empty event owner with stable value fields", /** Checks original empty event value witnesses over real containers. @returns Nothing. */ () => {

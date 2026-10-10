@@ -1,0 +1,13 @@
+
+> vite-office@0.1.0 test:tooling
+> vitest run scripts/*.test.ts
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office
+
+
+ Test Files  9 passed (9)
+      Tests  26 passed (26)
+   Start at  10:09:45
+   Duration  9.36s (transform 980ms, setup 0ms, import 30.71s, tests 11.09s, environment 2ms)
+
