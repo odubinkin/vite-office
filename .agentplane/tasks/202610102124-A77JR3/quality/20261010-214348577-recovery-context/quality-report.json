@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "task_id": "202610102124-A77JR3",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-10T21:43:48.577Z",
+  "verdict": "pass",
+  "summary": "Same-agent non-independent review of exact semantic commit 809907076bccea7651881aed4c92d14461375898: the approved full checkpoint and evidence satisfy the task; close cleanly then pause goal.",
+  "evaluated_sha": "809907076bccea7651881aed4c92d14461375898",
+  "blueprint_digest": "7b2ef614a83dbd6020c379a86b083ff4c486dabf3db55e5478909e40925e7a4d",
+  "findings": [
+    "All 13 upstream-absent commands and 9 restored-source metadata gates exit zero. Current raw reports execute all 825 discovered files and 15754 scenarios with no failure, skip or retry. Complete configured coverage maps cover 355 app, 42 inventory and 1 tooling modules at 100 percent in all four metrics; 53970 valid raw counters. All 2454 original source hashes and reference targets preserved; semantic diff contains only task and parent evidence. No production repair, upstream runtime, acceptance replay or criteria relaxation."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610102124-A77JR3/README.md",
+    "apps/office/node_modules/.cache/parity-coverage/A77JR3/proof.json",
+    "apps/office/node_modules/.cache/parity-coverage/A77JR3/map-integrity.json",
+    "apps/office/node_modules/.cache/parity-coverage/A77JR3/audit-results.json",
+    "apps/office/node_modules/.cache/parity-coverage/A77JR3/final-summary.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Review performed by the same agent, not independent. Passing regression and coverage do not certify full upstream parity. Explicit native formatting, hierarchy, geometry and table follow gaps remain; human requests pause after this checkpoint."
+  ]
+}
