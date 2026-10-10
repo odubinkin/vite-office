@@ -4,7 +4,7 @@ title: "Port original pinned ICU scalar case-mapping dependencies"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 30
+revision: 31
 origin:
   system: "manual"
 depends_on: []
@@ -26,6 +26,27 @@ verification:
   updated_by: "CODER"
   note: "Complete native-first scalar gate and unchanged ICU reference pass; portable Calc106/shared3/tooling28 and strict raw-positive100 coverage pass; all declared static/provenance/inventory gates pass. Scope and broad parity limits recorded; independent EVALUATOR and clean direct closure follow."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-10T17:24:12.463Z"
+  updated_by: "EVALUATOR"
+  note: "Reviewed fceeb82b task38 against approved native-first scalar scope: unchanged full native reference, actual browser conformance, source-free strict100 replay, complete shared provenance/inventory and scoped gates pass."
+  evaluated_sha: "fceeb82bda623fa9be52e5afbe35f9503a12e07d"
+  blueprint_digest: "d255be3e79fa962ae38fe4df1404e4ac5421aeeef6ab2c6c4e9ccbaac08f57be"
+  evidence_refs:
+    - ".agentplane/tasks/202610101643-NQM1TG/README.md"
+    - ".agentplane/tasks/202610101643-NQM1TG/quality/20261010-172412463-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610101643-NQM1TG/quality/20261010-172412463-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610101643-NQM1TG/quality/20261010-172412463-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610101643-NQM1TG/blueprint/resolved-snapshot.json"
+    - "output/playwright/task38-checks/raw-audit.json"
+    - "output/playwright/task38-checks/remaining-manifest.json"
+    - "output/playwright/task38-checks/final2-manifest.json"
+    - "output/playwright/task38-checks/shared-final-manifest.json"
+    - "docs/program/calc-native-unicode-conformance.json"
+    - "apps/office/src/external/icu/source/common/ucase.test.ts"
+  findings:
+    - "All29 changed paths are intentional calc-branch task artifacts. Five executable runtime owners are present in coverage; uchar.ts is a genuine declaration-only reexport. Every raw s/f/b counter is positive, complete native71MB output reconstructed with matching SHA, archive29 original full files verified. Native lower is chosen only after exhaustive Node/Chrome agreement; upper/title/fold mismatches justify source algorithms. No fake pool/document, Writer changes, threshold exemptions or false broad parity flags."
 commit: null
 comments:
   -
