@@ -44,6 +44,22 @@
         {
           "path": "apps/office/src/sw/source/uibase/docvw/native-ruler-ownership.test.ts",
           "marker": "Writer view owns two persistent native rulers"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/layout/native-text-frame-owner.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-text-frame-owner.test.tsx",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/e2e/writer-native-text-frame-owner.spec.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/uiview/view.ts",
+          "marker": "Close"
         }
       ],
       "upstream": [
@@ -80,7 +96,8 @@
     "localPath": "apps/office/src/sw/source/uibase/uiview/view.ts",
     "localSymbols": [
       "SwView",
-      "GetTableRulerRowItem"
+      "GetTableRulerRowItem",
+      "Close"
     ],
     "omittedResponsibilities": [
       "Upstream obligations outside SwView, SwView::GetDispatcher, SwView::ImpSetVerb, and SwView::GotFocus remain intentionally omitted; browser workflows, projections, subscriptions, and clipboard/file/storage adapters are owned under sw/browser."
@@ -98,7 +115,8 @@
       "Iteration229 introduces actual production-used SvxColumnItem ownership at the SwView table-column conversion boundary from StateTabWin. Native visibility/end/min/max descriptions replace direct SwTabCols interpretation during document column drag admission, while original SwTabCols remains model/preview/apply data. Native defaults, upper-only65535 description clamp, copied Append/Clone and equality excluding ortho are retained. The svx->svl edge is native Library_svx-owned, with no SW/browser reverse dependency. Full SvxRuler/SfxBindings slots, complete StateTabWin frames/rows, pooled refcount mutability and UNO member queries/PutValue remain partial or unverified. Registered IO deviations and all semantic states/defaults/classes remain unchanged.",
       "Iteration230 adds the actual StateTabWin row value branch and source SID_RULER_ROWS/ROWS_VERTICAL constants. Source row edges use LeftMin and page extent, active0, clamped uint16 frame distances, same-index vertical orientation with zero-clamped limits and the source invisible constrained tail. SwView supplies production horizontal-writing row items; document row capture consumes their separator visibility/end/min/max, internal glMinFrame maximum guard and previous-separator bottom-margin bounds instead of unrestricted RightMax. Native SwTabCols remains original model/preview/apply and follow-flow/last-row guard owner. Full ruler/slot/page-frame state, vertical document dragging, snapping/protection/modifier rows and single-row paragraph-indent margin-range context remain partial; no broad promotion, old statuses/defaults/classes and registered IO deviations remain unchanged.",
       "Iteration232 moves represented document table ruler tracking from SwEditWin into source-owned SVTOOLS Ruler lifecycle and SVX SvxRuler geometry over independent SvxColumnItem values. SwView owns persistent horizontal/vertical rulers; SwEditWin delegates actual Border/Margin hits with5px tolerance and physical tracking, retaining only original Writer carrier/document start for ExecuteTabWin-shaped native value apply. SVX owns exact modifier/snapping flags, uint16 share/width-block buffers, native represented limits, linear/proportional/row geometry and cancel/apply decisions without importing SW/browser code. Source SVX->SVTOOLS/VCL and SW->SVTOOLS native library edges are explicit. New source owners remain partial and unverified: full SFX bindings/slot state, VCL ruler drawing/ticks/snapping, protection, paragraph/frame margin state, column-margin modifier geometry, vertical/RTL document writing and frame-column/object/tab/indent contexts are not claimed. Existing ordinary column-margin geometry and registered IO deviations remain; prior semantic states/defaults/classes are unchanged.",
-      "Iteration232 verification exposed a pre-existing unsupported core branch: SwDoc::SetTabCols and SwTable::SetTabCols explicitly reject currentRowOnly independent column-row geometry. Native SvxRuler EvalModifier retains its source current-line flag, but Writer column apply preserves the existing ordinary shared-column contract; native row apply forwards the flag as before. Independent per-row box widths, history/layout/ODT ownership and native current-line column apply require a subsequent core correction; this retained gap is not an intentional upstream exception or a parity claim. Remove unreachable proportional Margin1 skeleton branches from the represented border-only column preparation/limiter; full column-margin modifier contexts remain omitted. Four new unequal/hidden native geometry and cross-axis history cases cover changed complete functions without replaying passing cases."
+      "Iteration232 verification exposed a pre-existing unsupported core branch: SwDoc::SetTabCols and SwTable::SetTabCols explicitly reject currentRowOnly independent column-row geometry. Native SvxRuler EvalModifier retains its source current-line flag, but Writer column apply preserves the existing ordinary shared-column contract; native row apply forwards the flag as before. Independent per-row box widths, history/layout/ODT ownership and native current-line column apply require a subsequent core correction; this retained gap is not an intentional upstream exception or a parity claim. Remove unreachable proportional Margin1 skeleton branches from the represented border-only column preparation/limiter; full column-margin modifier contexts remain omitted. Four new unequal/hidden native geometry and cross-axis history cases cover changed complete functions without replaying passing cases.",
+      "Task202610101854-FSYVCZ restores original-node content-frame registration: SwTextFrame extends SwContentFrame/SwFrame, has the native Txt discriminator and obtains the represented unmerged first text node from its original modify owner. Actual frame clients remain mutable for native pooled attribute invalidation. Cursor measurement replacement, pagination reconciliation, discarded or failed partial pagination and per-view root close release original clients; geometry candidates are destroyed when original frames are reused. Required native-node inputs replace detached old fixture owners without changing cases, device inputs or expected matcher arguments. The browser still supplies fragment geometry and the root remains a per-view browser-owned layout object; complete native SwFlowFrame mixin/follow links, root/page/content hierarchy, redlines, text Prepare/callbacks, merged/vertical/native geometry and per-node frame-width guards remain unverified. Original global Repeat/rich units and registered recovery/open/save/settings deviations remain unchanged. No full module or goal parity promotion."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/uibase/uiview/view.cxx",

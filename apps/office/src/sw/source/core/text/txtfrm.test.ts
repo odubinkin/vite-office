@@ -1,12 +1,30 @@
 /** @fileoverview Checks Writer line numbering on measured page and text frames. */
 
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it } from "vitest";
 
 import { SwLineNumberInfo } from "../../../inc/lineinfo";
 import { createDefaultWriterPageDescriptor } from "../layout/pagedesc";
 import { createSwPageFrames } from "../layout/newfrm";
 import { projectSwLineNumbers, type SwTextFrameInput } from "./txtfrm";
 
+import { SwDoc } from "../doc/doc";
+import { SwFrame } from "../layout/wsfrm";
+let owner = new SwDoc();
+afterEach(
+  /** Releases actual fixture frame clients before the native source graph. @returns Nothing. */ () => {
+    for (const node of owner.GetNodes().entries())
+      node.ForAllListeners(
+        /** Destroys actual fixture frames. @param listener - Original client. @returns Continue traversal. */ (
+          listener,
+        ) => {
+          if (listener instanceof SwFrame) SwFrame.DestroyFrame(listener);
+          return false;
+        },
+      );
+    owner.Dispose();
+    owner = new SwDoc();
+  },
+);
 /** Measures one paragraph with optional empty visual lines. @param id - Node ID. @param contents - Line text. @param countLineNumbers - Paragraph participation. @returns Measured node. */
 function paragraph(
   id: string,
@@ -15,6 +33,7 @@ function paragraph(
 ): SwTextFrameInput {
   let offset = 0;
   return {
+    node: owner.GetNodes().MakeTextNode(contents.join("")),
     id,
     lines: contents.map(
       /** Measures one visible line. @param content - Line text. @returns Line range and height. */ (

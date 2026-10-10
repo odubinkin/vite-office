@@ -22,6 +22,7 @@ export enum SwFrameType {
   Tab = 0x0800,
   Row = 0x1000,
   Cell = 0x2000,
+  Txt = 0x4000,
 }
 /** Native invalidation hook discriminators from SwFrame. */
 export enum InvalidationType {
@@ -142,6 +143,10 @@ export class SwFrame extends SwClient {
   /** Tests the original native table frame type. @returns Whether this is a table frame. */
   public IsTabFrame(): boolean {
     return this.mnFrameType === SwFrameType.Tab;
+  }
+  /** Tests the original text-frame discriminator. @returns Whether this is a text frame. */
+  public IsTextFrame(): boolean {
+    return this.mnFrameType === SwFrameType.Txt;
   }
   /** Reads the native destruction guard. @returns Whether base destruction has started. */
   public IsInDtor(): boolean {

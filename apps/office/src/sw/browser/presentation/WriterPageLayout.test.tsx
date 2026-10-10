@@ -690,12 +690,15 @@ describe("Writer physical page browser UI", /** Registers page-layout UI cases. 
 
   it("creates page frames from measured text lines", /** Keeps physical page breaks owned by Writer layout. @returns Nothing. */ () => {
     const shortPage = { ...page, bottomMargin: 100, height: 1100, topMargin: 100 };
+    const owner = createWriterDocument();
+    layoutView(owner);
     const inputs = Array.from(
       { length: 8 },
       /** Creates one measured paragraph. @param _unused - Array slot. @param index - Paragraph index. @returns Measured text input. */ (
         _unused,
         index,
       ) => ({
+        node: owner.GetNodes().MakeTextNode("x"),
         id: `p${index}`,
         lines: [{ start: 0, end: 1, height: 300 }],
         lowerSpacing: 0,

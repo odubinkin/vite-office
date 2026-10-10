@@ -11,6 +11,7 @@ import type { SwDoc } from "../doc/doc";
 import { SwTableNode } from "../docnode/node";
 import type { SwTable } from "../table/swtable";
 import { SwTabFrame, SwRowFrame, type SwTablePrintArea } from "./tabfrm";
+import { SwFrame } from "./wsfrm";
 import {
   createSwTextFrameInputs,
   getSwTextFrameGap,
@@ -98,7 +99,7 @@ export interface SwRootFrameSnapshot {
 
 /** Persistent Writer layout root owning page and text-frame identity over device measurements. */
 export class SwRootFrame {
-  private readonly cursorFrames = new WeakMap<
+  private readonly cursorFrames = new Map<
     SwTextNode,
     { readonly text: string; readonly frame: SwTextFrame }
   >();
@@ -109,9 +110,11 @@ export class SwRootFrame {
     start: number,
     end: number,
   ): void {
+    const previous = this.cursorFrames.get(node);
+    if (previous !== undefined) SwFrame.DestroyFrame(previous.frame);
     this.cursorFrames.set(node, {
       text: node.GetText(),
-      frame: new SwTextFrame(String(node.GetIndex()), start, end, start > 0, 0, lines),
+      frame: new SwTextFrame(node, String(node.GetIndex()), start, end, start > 0, 0, lines),
     });
   }
   /** Resolves the current native cursor's measured frame without stale text geometry. @param node - Existing model text owner. @returns Current frame, or no valid measurement. */
@@ -120,6 +123,17 @@ export class SwRootFrame {
     return node.GetDoc() === this.getDocument() && measured?.text === node.GetText()
       ? measured.frame
       : undefined;
+  }
+  /** Releases original text-frame clients before their view/document owners close. @returns Nothing. */
+  public DestroyImpl(): void {
+    for (const measured of this.cursorFrames.values()) SwFrame.DestroyFrame(measured.frame);
+    this.cursorFrames.clear();
+    for (const page of this.snapshot?.pages ?? [])
+      for (const frame of page.textFrames) SwFrame.DestroyFrame(frame);
+    this.snapshot = undefined;
+    this.lastInputs = [];
+    this.lastDocument = undefined;
+    this.dirty = true;
   }
   private dirty = true;
   private dirtyFrom = 0;
@@ -162,6 +176,11 @@ export class SwRootFrame {
     tableMeasurements: readonly SwTableFrameMeasurement[] = [],
   ): SwRootFrameSnapshot {
     const document = this.getDocument();
+    for (const [node, measured] of this.cursorFrames)
+      if (node.GetDoc() !== document) {
+        SwFrame.DestroyFrame(measured.frame);
+        this.cursorFrames.delete(node);
+      }
     const modelRevision = document.GetDocumentStateManager().GetModelRevision();
     const sameDescriptor = layoutDescriptorEqual(this.lastDescriptor, descriptor);
     const sameSettings = textFrameSettingsEqual(this.lastSettings, settings);
@@ -208,8 +227,9 @@ export class SwRootFrame {
         ),
     );
     const layoutGeometryUnchanged = sameDescriptor && sameSettings;
+    const created = createSwPageFrames(paragraphs, descriptor, settings, tableInputs);
     const pages = Object.freeze(
-      createSwPageFrames(paragraphs, descriptor, settings, tableInputs).map(
+      created.map(
         /** Retains unchanged frame identities after formatting. @param page - New page. @param index - Page position. @returns Reconciled page. */
         (page, index) => {
           const oldPage = previous[index];
@@ -245,6 +265,14 @@ export class SwRootFrame {
         },
       ),
     );
+    const retained = new Set(
+      pages.flatMap(
+        /** Collects original retained frame identities. @param page - Reconciled page. @returns Original fragments. */
+        (page) => page.textFrames,
+      ),
+    );
+    for (const page of [...created, ...previous])
+      for (const frame of page.textFrames) if (!retained.has(frame)) SwFrame.DestroyFrame(frame);
     const lineNumbers = Object.freeze(
       projectSwLineNumbers(pages, paragraphs, lineInfo).map(
         /** Freezes marks on one page. @param page - Page marks. @returns Immutable marks. */
@@ -398,6 +426,7 @@ function measurementsMatchInputs(
 function textFrameInputEqual(left: SwTextFrameInput, right: SwTextFrameInput | undefined): boolean {
   return (
     right !== undefined &&
+    left.node === right.node &&
     left.id === right.id &&
     left.style === right.style &&
     left.upperSpacing === right.upperSpacing &&
@@ -420,6 +449,7 @@ function textFrameInputEqual(left: SwTextFrameInput, right: SwTextFrameInput | u
 function textFrameEqual(left: SwTextFrame, right: SwTextFrame | undefined): boolean {
   return (
     right !== undefined &&
+    left.GetTextNodeFirst() === right.GetTextNodeFirst() &&
     left.nodeId === right.nodeId &&
     left.start === right.start &&
     left.end === right.end &&
@@ -665,141 +695,146 @@ export function createSwPageFrames(
       }
     }
   }
-  placeTables(-1);
-  for (const [paragraphIndex, paragraph] of paragraphs.entries()) {
-    const gap = getSwTextFrameGap(paragraphs[paragraphIndex - 1], paragraph, settings);
-    const nextParagraph = paragraphs[paragraphIndex + 1];
-    const requestedStyle = paragraph.pageStyleName;
-    if (
-      (requestedStyle !== undefined &&
-        requestedStyle !== "" &&
-        requestedStyle !== activeDescriptor.value.name) ||
-      paragraph.pageNumber !== undefined
-    ) {
-      const selected: (typeof descriptorRecords)[number] | undefined =
-        requestedStyle === undefined || requestedStyle === ""
-          ? activeDescriptor
-          : descriptorByName.get(requestedStyle);
-      if (selected === undefined)
-        throw new Error(`Writer paragraph page style is missing: ${requestedStyle}`);
-      if (hasContent()) {
-        pages.push([]);
-        pageTables.push([]);
-        pageDescriptors.push(selected.value);
-      } else pageDescriptors[pageDescriptors.length - 1] = selected.value;
-      activeDescriptor = selected;
-      used = 0;
-      if (paragraph.pageNumber !== undefined)
-        pageNumberOverrides.set(pages.length - 1, paragraph.pageNumber);
-    }
-    if (paragraph.breakBefore && hasContent()) {
-      startFollowPage();
-    }
-    const currentDescriptor = pageDescriptors[pages.length - 1] as WriterPageDescriptorValue;
-    const availableHeight =
-      currentDescriptor.height - currentDescriptor.topMargin - currentDescriptor.bottomMargin;
-    const wholeParagraphHeight = paragraph.lines.reduce(
-      /** Handles Writer formatting state. @param sum - Input value. @param line - Input value. @returns Callback result. */ (
-        sum,
-        line,
-      ) => sum + line.height,
-      0,
-    );
-    const nextFirstLine = nextParagraph?.lines[0];
-    let movedForKeepTogether = false;
-    if (
-      paragraph.keepTogether &&
-      hasContent() &&
-      wholeParagraphHeight <= availableHeight &&
-      used + gap + wholeParagraphHeight > availableHeight
-    ) {
-      startFollowPage();
-      movedForKeepTogether = true;
-    }
-    if (
-      !movedForKeepTogether &&
-      paragraph.keepWithNext &&
-      nextParagraph !== undefined &&
-      nextFirstLine !== undefined &&
-      hasContent() &&
-      wholeParagraphHeight + nextFirstLine.height <= availableHeight &&
-      used +
-        gap +
-        wholeParagraphHeight +
-        getSwTextFrameGap(paragraph, nextParagraph, settings) +
-        nextFirstLine.height >
-        availableHeight
-    ) {
-      startFollowPage();
-    }
-    let firstLine = 0;
-    while (firstLine < paragraph.lines.length) {
-      const page = pages[pages.length - 1] as SwTextFrame[];
-      const pageDescriptor = pageDescriptors[pages.length - 1] as WriterPageDescriptorValue;
-      const bodyHeight =
-        pageDescriptor.height - pageDescriptor.topMargin - pageDescriptor.bottomMargin;
-      const topSpacing = firstLine === 0 ? gap : 0;
-      const line = paragraph.lines[firstLine] as (typeof paragraph.lines)[number];
-      if (hasContent() && used + topSpacing + line.height > bodyHeight) {
-        startFollowPage();
-        continue;
-      }
-      let lastLine = firstLine;
-      let height = topSpacing + line.height;
-      while (
-        lastLine + 1 < paragraph.lines.length &&
-        used + height + (paragraph.lines[lastLine + 1] as SwTextLine).height <= bodyHeight
-      ) {
-        lastLine += 1;
-        height += (paragraph.lines[lastLine] as SwTextLine).height;
-      }
-      const minimumBefore = paragraph.orphans ?? 2;
-      const minimumAfter = paragraph.widows ?? 2;
-      if (lastLine + 1 < paragraph.lines.length) {
-        const latestValidLastLine = paragraph.lines.length - minimumAfter - 1;
-        if (latestValidLastLine >= firstLine + minimumBefore - 1)
-          while (lastLine > latestValidLastLine) {
-            height -= (paragraph.lines[lastLine] as SwTextLine).height;
-            lastLine -= 1;
-          }
-      }
-      const linesOnPage = lastLine - firstLine + 1;
-      const linesRemaining = paragraph.lines.length - lastLine - 1;
+  try {
+    placeTables(-1);
+    for (const [paragraphIndex, paragraph] of paragraphs.entries()) {
+      const gap = getSwTextFrameGap(paragraphs[paragraphIndex - 1], paragraph, settings);
+      const nextParagraph = paragraphs[paragraphIndex + 1];
+      const requestedStyle = paragraph.pageStyleName;
       if (
-        linesRemaining > 0 &&
+        (requestedStyle !== undefined &&
+          requestedStyle !== "" &&
+          requestedStyle !== activeDescriptor.value.name) ||
+        paragraph.pageNumber !== undefined
+      ) {
+        const selected: (typeof descriptorRecords)[number] | undefined =
+          requestedStyle === undefined || requestedStyle === ""
+            ? activeDescriptor
+            : descriptorByName.get(requestedStyle);
+        if (selected === undefined)
+          throw new Error(`Writer paragraph page style is missing: ${requestedStyle}`);
+        if (hasContent()) {
+          pages.push([]);
+          pageTables.push([]);
+          pageDescriptors.push(selected.value);
+        } else pageDescriptors[pageDescriptors.length - 1] = selected.value;
+        activeDescriptor = selected;
+        used = 0;
+        if (paragraph.pageNumber !== undefined)
+          pageNumberOverrides.set(pages.length - 1, paragraph.pageNumber);
+      }
+      if (paragraph.breakBefore && hasContent()) {
+        startFollowPage();
+      }
+      const currentDescriptor = pageDescriptors[pages.length - 1] as WriterPageDescriptorValue;
+      const availableHeight =
+        currentDescriptor.height - currentDescriptor.topMargin - currentDescriptor.bottomMargin;
+      const wholeParagraphHeight = paragraph.lines.reduce(
+        /** Handles Writer formatting state. @param sum - Input value. @param line - Input value. @returns Callback result. */ (
+          sum,
+          line,
+        ) => sum + line.height,
+        0,
+      );
+      const nextFirstLine = nextParagraph?.lines[0];
+      let movedForKeepTogether = false;
+      if (
+        paragraph.keepTogether &&
         hasContent() &&
-        (linesOnPage < minimumBefore || linesRemaining < minimumAfter)
+        wholeParagraphHeight <= availableHeight &&
+        used + gap + wholeParagraphHeight > availableHeight
       ) {
         startFollowPage();
-        continue;
+        movedForKeepTogether = true;
       }
-      page.push(makeSwTextFrame(paragraph, firstLine, lastLine, topSpacing));
-      used += height;
-      firstLine = lastLine + 1;
-      if (firstLine < paragraph.lines.length) {
+      if (
+        !movedForKeepTogether &&
+        paragraph.keepWithNext &&
+        nextParagraph !== undefined &&
+        nextFirstLine !== undefined &&
+        hasContent() &&
+        wholeParagraphHeight + nextFirstLine.height <= availableHeight &&
+        used +
+          gap +
+          wholeParagraphHeight +
+          getSwTextFrameGap(paragraph, nextParagraph, settings) +
+          nextFirstLine.height >
+          availableHeight
+      ) {
         startFollowPage();
       }
+      let firstLine = 0;
+      while (firstLine < paragraph.lines.length) {
+        const page = pages[pages.length - 1] as SwTextFrame[];
+        const pageDescriptor = pageDescriptors[pages.length - 1] as WriterPageDescriptorValue;
+        const bodyHeight =
+          pageDescriptor.height - pageDescriptor.topMargin - pageDescriptor.bottomMargin;
+        const topSpacing = firstLine === 0 ? gap : 0;
+        const line = paragraph.lines[firstLine] as (typeof paragraph.lines)[number];
+        if (hasContent() && used + topSpacing + line.height > bodyHeight) {
+          startFollowPage();
+          continue;
+        }
+        let lastLine = firstLine;
+        let height = topSpacing + line.height;
+        while (
+          lastLine + 1 < paragraph.lines.length &&
+          used + height + (paragraph.lines[lastLine + 1] as SwTextLine).height <= bodyHeight
+        ) {
+          lastLine += 1;
+          height += (paragraph.lines[lastLine] as SwTextLine).height;
+        }
+        const minimumBefore = paragraph.orphans ?? 2;
+        const minimumAfter = paragraph.widows ?? 2;
+        if (lastLine + 1 < paragraph.lines.length) {
+          const latestValidLastLine = paragraph.lines.length - minimumAfter - 1;
+          if (latestValidLastLine >= firstLine + minimumBefore - 1)
+            while (lastLine > latestValidLastLine) {
+              height -= (paragraph.lines[lastLine] as SwTextLine).height;
+              lastLine -= 1;
+            }
+        }
+        const linesOnPage = lastLine - firstLine + 1;
+        const linesRemaining = paragraph.lines.length - lastLine - 1;
+        if (
+          linesRemaining > 0 &&
+          hasContent() &&
+          (linesOnPage < minimumBefore || linesRemaining < minimumAfter)
+        ) {
+          startFollowPage();
+          continue;
+        }
+        page.push(makeSwTextFrame(paragraph, firstLine, lastLine, topSpacing));
+        used += height;
+        firstLine = lastLine + 1;
+        if (firstLine < paragraph.lines.length) {
+          startFollowPage();
+        }
+      }
+      if (paragraph.breakAfter && nextParagraph !== undefined) {
+        startFollowPage();
+      }
+      placeTables(paragraphIndex);
     }
-    if (paragraph.breakAfter && nextParagraph !== undefined) {
-      startFollowPage();
-    }
-    placeTables(paragraphIndex);
+    let numberedPage = 0;
+    return Object.freeze(
+      pages.map(
+        /** Freezes one physical page. @param textFrames - Page content frames. @param index - Page index. @returns Immutable page frame. */ (
+          textFrames,
+          index,
+        ) => {
+          numberedPage = pageNumberOverrides.get(index) ?? numberedPage + 1;
+          return Object.freeze({
+            descriptor: pageDescriptors[index] as WriterPageDescriptorValue,
+            number: numberedPage,
+            textFrames: Object.freeze(textFrames),
+            tableFrames: Object.freeze(pageTables[index] as SwTableFrame[]),
+          });
+        },
+      ),
+    );
+  } catch (error) {
+    for (const page of pages) for (const frame of page) SwFrame.DestroyFrame(frame);
+    throw error;
   }
-  let numberedPage = 0;
-  return Object.freeze(
-    pages.map(
-      /** Freezes one physical page. @param textFrames - Page content frames. @param index - Page index. @returns Immutable page frame. */ (
-        textFrames,
-        index,
-      ) => {
-        numberedPage = pageNumberOverrides.get(index) ?? numberedPage + 1;
-        return Object.freeze({
-          descriptor: pageDescriptors[index] as WriterPageDescriptorValue,
-          number: numberedPage,
-          textFrames: Object.freeze(textFrames),
-          tableFrames: Object.freeze(pageTables[index] as SwTableFrame[]),
-        });
-      },
-    ),
-  );
 }

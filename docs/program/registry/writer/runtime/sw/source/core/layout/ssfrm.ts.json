@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/layout/ssfrm.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "layout",
+    "capabilityIds": [
+      "CAP-0113"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/layout/ssfrm.ts#SwContentFrame",
+        "vendor/libreoffice-reference/sw/source/core/layout/ssfrm.cxx#SwContentFrame::SwContentFrame",
+        "apps/office/src/sw/source/core/layout/native-text-frame-owner.test.ts#@fileoverview",
+        "apps/office/src/sw/browser/editor/native-text-frame-owner.test.tsx#@fileoverview",
+        "apps/office/e2e/writer-native-text-frame-owner.spec.ts#@fileoverview"
+      ],
+      "justification": "Task202610101854-FSYVCZ restores original-node content-frame registration: SwTextFrame extends SwContentFrame/SwFrame, has the native Txt discriminator and obtains the represented unmerged first text node from its original modify owner. Actual frame clients remain mutable for native pooled attribute invalidation. Cursor measurement replacement, pagination reconciliation, discarded or failed partial pagination and per-view root close release original clients; geometry candidates are destroyed when original frames are reused. Required native-node inputs replace detached old fixture owners without changing cases, device inputs or expected matcher arguments. The browser still supplies fragment geometry and the root remains a per-view browser-owned layout object; complete native SwFlowFrame mixin/follow links, root/page/content hierarchy, redlines, text Prepare/callbacks, merged/vertical/native geometry and per-node frame-width guards remain unverified. Original global Repeat/rich units and registered recovery/open/save/settings deviations remain unchanged. No full module or goal parity promotion.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SwContentFrame"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/core/layout/ssfrm.cxx",
+      "upstreamSymbols": [
+        "SwContentFrame::SwContentFrame"
+      ]
+    }
+  }
+}

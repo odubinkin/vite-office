@@ -3,6 +3,9 @@
 import type { SwLineNumberInfoValue } from "../../../inc/lineinfo";
 import type { SwPageFrame } from "../layout/newfrm";
 import type { SwDoc } from "../doc/doc";
+import type { SwTextNode } from "../txtnode/ndtxt";
+import { SwContentFrame } from "../layout/ssfrm";
+import { SwFrameType } from "../layout/wsfrm";
 import { SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
@@ -84,6 +87,7 @@ export interface SwTextFrameMeasurement {
 
 /** Core layout values of one canonical text node paired with device-shaped lines. */
 export interface SwTextFrameInput {
+  readonly node: SwTextNode;
   readonly id: string;
   readonly lines: readonly SwTextLine[];
   readonly lowerSpacing: number;
@@ -121,6 +125,7 @@ export function createSwTextFrameInputs(
       const pageDesc = node.GetAttr(RES_PAGEDESC) as SwFormatPageDesc;
       const pageNumber = pageDesc.GetNumOffset();
       return {
+        node,
         id: measurement.id,
         lines: measurement.lines,
         lowerSpacing: spacing.GetLower(),
@@ -154,10 +159,11 @@ export const DEFAULT_SW_TEXT_FRAME_SETTINGS: SwTextFrameSettings = Object.freeze
 });
 
 /** A master or follow frame; offsets always refer to the same source text node. */
-export class SwTextFrame {
+export class SwTextFrame extends SwContentFrame {
   readonly #lines: readonly SwTextLine[];
-  /** Retains the native fragment fields and its complete formatted lines. @param nodeId - Model projection identity. @param start - Frame start. @param end - Frame end. @param follow - Follow classification. @param topSpacing - Frame spacing. @param lines - Device-shaped lines. @returns Frame. */
+  /** Registers the original node and retains the browser device fragment fields. @param node - Original text owner. @param nodeId - Device projection identity. @param start - Frame start. @param end - Frame end. @param follow - Follow classification. @param topSpacing - Frame spacing. @param lines - Device-shaped lines. @returns Frame. */
   public constructor(
+    node: SwTextNode,
     public readonly nodeId: string,
     public readonly start: number,
     public readonly end: number,
@@ -165,7 +171,13 @@ export class SwTextFrame {
     public readonly topSpacing: number,
     lines: readonly SwTextLine[],
   ) {
+    super(node);
+    this.mnFrameType = SwFrameType.Txt;
     this.#lines = lines;
+  }
+  /** Resolves the original first node in the represented unmerged frame. @returns Original registered text owner. */
+  public GetTextNodeFirst(): SwTextNode {
+    return this.GetDep() as SwTextNode;
   }
   /** Moves to the current visual line start. @param pam - Native cursor. @returns Admission result. */
   public LeftMargin(pam: SwPaM): boolean {
@@ -179,8 +191,8 @@ export class SwTextFrame {
 
 /** Writer's adjacent paragraph spacing, with contextual suppression for equal styles. @param previous - Preceding text frame input. @param current - Current text frame input. @param settings - Document spacing flags. @returns Gap in twips. */
 export function getSwTextFrameGap(
-  previous: SwTextFrameInput | undefined,
-  current: SwTextFrameInput,
+  previous: Omit<SwTextFrameInput, "node"> | undefined,
+  current: Omit<SwTextFrameInput, "node">,
   settings: SwTextFrameSettings = DEFAULT_SW_TEXT_FRAME_SETTINGS,
 ): number {
   if (previous === undefined) return settings.paraSpaceMaxAtPages ? current.upperSpacing : 0;
@@ -204,6 +216,7 @@ export function makeSwTextFrame(
   if (first === undefined || last === undefined || lastLine < firstLine)
     throw new Error("Writer text frames require a non-empty consecutive line range.");
   const frame = new SwTextFrame(
+    input.node,
     input.id,
     first.start,
     last.end,
@@ -211,6 +224,5 @@ export function makeSwTextFrame(
     topSpacing,
     input.lines.slice(firstLine, lastLine + 1),
   );
-  Object.freeze(frame);
   return frame;
 }

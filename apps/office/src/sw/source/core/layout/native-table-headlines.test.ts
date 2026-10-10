@@ -19,6 +19,9 @@ function fixture(
 ) {
   const doc = createWriterDocument(),
     table = doc.nodes.MakeTableNode("Headlines", format);
+  const body = doc.paragraphs[0];
+  if (body === undefined) throw Error("Missing original fixture text");
+  body.SetText("Before");
   table.AddColumnWidth(4000);
   for (let row = 0; row < heights.length; row++)
     doc.nodes
@@ -28,6 +31,7 @@ function fixture(
       ?.SetText("Row" + row);
   return {
     doc,
+    body,
     table,
     input: { table, tableName: "Headlines", afterParagraphIndex: -1, rowHeights: heights },
   };
@@ -49,6 +53,7 @@ describe("native repeated table headlines", /** Registers source-shaped page own
     const result = createSwPageFrames(
       [
         {
+          node: f.body,
           id: "before",
           lines: [{ start: 0, end: 1, height: 500 }],
           style: "body-text",
@@ -69,6 +74,7 @@ describe("native repeated table headlines", /** Registers source-shaped page own
     const result = createSwPageFrames(
       [
         {
+          node: f.body,
           id: "before",
           lines: [{ start: 0, end: 1, height: 300 }],
           style: "body-text",
@@ -122,6 +128,7 @@ describe("native repeated table headlines", /** Registers source-shaped page own
     const result = createSwPageFrames(
       [
         {
+          node: f.body,
           id: "after",
           lines: [{ start: 0, end: 5, height: 100 }],
           style: "body-text",
@@ -146,6 +153,7 @@ describe("native repeated table headlines", /** Registers source-shaped page own
     const result = createSwPageFrames(
       [
         {
+          node: f.body,
           id: "before",
           lines: [{ start: 0, end: 6, height: 500 }],
           style: "body-text",
@@ -211,6 +219,7 @@ describe("native repeated table headlines", /** Registers source-shaped page own
     const result = createSwPageFrames(
       [
         {
+          node: moved.body,
           id: "before",
           lines: [{ start: 0, end: 1, height: 500 }],
           style: "body-text",

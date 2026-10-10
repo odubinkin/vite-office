@@ -4,7 +4,7 @@ title: "Restore original text-frame ownership and lifetime"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 5
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: restore original SwTextNode-owned frame registration and lifetime under standing iterative human goal authorization, retaining explicit device geometry and native hierarchy/flow gaps."
 doc_version: 3
-doc_updated_at: "2026-10-10T18:55:13.944Z"
+doc_updated_at: "2026-10-10T19:17:52.199Z"
 doc_updated_by: "CODER"
 description: "Replace unregistered frozen text-frame geometry objects with original SwTextNode-registered SwContentFrame/SwTextFrame identities in body pagination and cursor geometry; release replaced/discarded/closed frames. Standing human goal authorizes iterative core/UI refactoring and inventory. Fourth correction after BZ14P4; pause after next full checkpoint and required repairs."
 sections:
@@ -51,9 +51,33 @@ sections:
     3. Current changed format/lint, TS7/types/dependencies/docs/file-size/build/static, fresh and related tests with actual whole five-module100% all four metrics and complete current hashes/nonnegative maps; related Chromium. Both reference symlinks absent throughout all runtime/build/static and restored finally. Failed/affected reruns only; no passing replay for metadata/helper fixes.
 
     4. Source-only restored registry build/source-tree/provenance/registry/resource generation/invariant/parity/routing/doctor. Historical canonical values/status/default/classification/evidence retained, new mapping status unverified; old cases/inputs/matchers preserved except native-constructor fixture/lifetime obligations. Clean writer, source/test current hashes and exact semantic commit/same-agent non-independent quality and closure.
-  Verification: "Pending actual current-source contract acceptance and deterministic gates."
+  Verification: |-
+    Command: source-only pinned audit of SwFrame325/SwContentFrame415/SwTextFrame762/GetTextNodeFirst1461 and SwRootFrame::DestroyImpl533. Result: pass. Evidence: pin9bc445578031fecf56086729d8e4940c77e14d65, seven source hashes retained only in ignored cache; no source copies, helpers, Python, raw logs/maps in AgentPlane. Scope: original registration/discriminator/unmerged owner identity and represented release, not complete native flow/root/page/merged/redline/text callbacks or geometry.
+
+    Command: changed Prettier and ESLint; npm run typecheck; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run build; npm exec -- node scripts/check-static-build.mjs, with both reference symlinks physically absent and finally restored. Result: pass. Evidence: required current five production modules, eight fixture migrations and three fresh files pass; initial fixture API/non-null/documentation/formatter failures repaired within approved scope and retained in Findings. No production runtime failures. Scope: current code/test static and built application.
+
+    Command: npm exec -- vitest related src/sw/source/core/layout/wsfrm.ts src/sw/source/core/layout/ssfrm.ts src/sw/source/core/text/txtfrm.ts src/sw/source/core/layout/newfrm.ts src/sw/source/uibase/uiview/view.ts --run --coverage with exact five coverage.include paths, reportOnFailure and ignored cache report directories. Result: pass. Evidence: 13925/13925 cases, 497 files, 9 fresh core/React cases; entire actual five modules all-four100%, 573lines/630statements/147functions/492branches, 1269nonnegative counters, no omitted map or reused previous-task counters. Complete current 1150 production/test hashes match final files; map5c7d9e37c6660c2fcadc5c36efb1336905dabd54aa187518efe0a181836d8ba2, report1872bdec19f4287c1f5f523c05fcd3229da603811facc0d041bef79705389ed0. Scope: actual original node clients, body/cell masters/follows, mutable native attribute invalidation, cursor replacement/stale text, reused/candidate/discarded/error graph ownership, document replacement, actual React native editing/history and explicit view/root close. Both reference symlinks absent throughout, restored finally.
+
+    Command: npm exec -- playwright test --config apps/office/playwright.config.ts --project=writer writer-native-text-frame-owner.spec.ts native-line-margin.spec.ts writer-layout-ratios.spec.ts writer-table-headlines.spec.ts writer-native-table-layout-split.spec.ts writer-native-table-text-flow-split.spec.ts writer-native-table-text-flow-headline.spec.ts writer-cell-paragraph-format.spec.ts writer-counted-list-layout.spec.ts writer-uncounted-list-layout.spec.ts writer-native-margin-admission.spec.ts --reporter=list,json. Result: pass. Evidence: 22cases/11files, one fresh real Chromium reformat/body/cell/history/reopen case, zero skips/flaky/unexpected; report18d322bb1da63af74f2ca1bf544a651a1802209f7d39e607b96685d81179b3aa. Scope: physical pages, native Home/End/Shift/edit/format/history/table/list/document replacement behavior. Both reference symlinks absent throughout, restored finally.
+
+    Command: bounded TypeScript AST old-fixture and historical canonical prefix proof. Result: pass. Evidence: 810 existing acceptance files: 802 byte-identical, exactly 8 native constructor/input/lifetime fixtures; all other old tokens/cases/matrices/device inputs/expected matcher arguments unchanged. Eight historical canonical prefixes/status/default/classification/exception values retained, two new mappings unverified. Scope: old acceptance preserved, no save/open/recovery changes or parity promotion.
+
+    Command: npm run inventory:registry:build; npm run check:source-tree; npm run check:source-provenance; npm run inventory:registry:check; node_modules/.bin/tsx scripts/generate-writer-ui-resources.ts --check; npm run inventory:invariants; npm run inventory:parity; node .agentplane/policy/check-routing.mjs; ap doctor, with references restored for metadata-only gates. Result: pass. Evidence: all nine gates pass. Scope: exhaustive authored runtime/source provenance/resource/invariant/parity policy metadata. Pending semantic commit hash and same-agent non-independent exact-commit evaluator/clean closure are recorded by lifecycle commands. Fourth correction since full BZ14P4; next full after ten, then pause human goal after all required repairs.
   Rollback Plan: "Revert only the semantic task commit if requested; preserve prior evidence and rerun affected checks, no unrelated checkout/history changes."
-  Findings: "Previous PW1696 is verified progress: semantic892b9b4c, close039d4e95, clean writer/current hashes/restored references revalidated. No live producer. Frozen unregistered text-frame snapshots and independent cursor weak cache remain authoritative architecture gaps. Source constructors register original nodes through SwContentFrame/SwFrame and root destruction releases native children. Standing human iterative goal/resume explicitly authorizes this safe core/UI refactor and inventory. No network/subagents/global files. Native full frame/layout/flow/redlines/text callbacks/rich units/global Repeat remain unverified. Stop after next full checkpoint and required repairs."
+  Findings: |-
+    Previous PW1696 is verified progress: semantic892b9b4c, close039d4e95, clean writer/current hashes/restored references revalidated. No live producer. Frozen unregistered text-frame snapshots and independent cursor weak cache remain authoritative architecture gaps. Source constructors register original nodes through SwContentFrame/SwFrame and root destruction releases native children. Standing human iterative goal/resume explicitly authorizes this safe core/UI refactor and inventory. No network/subagents/global files. Native full frame/layout/flow/redlines/text callbacks/rich units/global Repeat remain unverified. Stop after next full checkpoint and required repairs.
+
+    Command: npm run typecheck with both reference symlinks hidden. Result: fail. Evidence: TS7 rejected eight old geometry-only fixture files under the required native node constructor/input contract. Scope: preserve all old cases, scalar inputs and expected matcher arguments; add original fixture nodes and lifecycle release within the approved eight-file boundary. Read-only missing path probes are not evidence; route recomputed, required Verify Steps re-read before continuation. No required criteria were weakened.
+
+    Command: npm run typecheck (fresh fixture pass). Result: fail. Evidence: new line-info fixture called GetValue instead of its actual public QueryValue; corrected only new test fixture API. All five production paths and eight migrated fixtures typechecked. Scope: fresh native fixture repair.
+
+    Command: changed Prettier check. Result: fail. Evidence: the first formatting pass of the dense new Chromium fixture was not idempotent; only that new browser file required a second format pass. Scope: no production/matcher changes; recheck current changed set then continue pending statics.
+
+    Command: changed ESLint. Result: fail. Evidence: nine forbidden non-null assertions in the bounded original-node fixtures, no production findings. Scope: replace assertions with explicit initialized owner guards and original fixture references, preserving device inputs/matchers.
+
+    Command: npm run check:docs. Result: fail. Evidence: the new expected-error formatter callback lacked mandatory JSDoc; added comment only. Scope: fresh native test documentation. Passing production formatting/lint/type/dependency gates retained; rerun changed new file formatting/lint and remaining docs/build gates.
+
+    Command: bounded old-fixture preservation helper. Result: fail. Evidence: a plain scanner did not rescan template/JSX token context and compared whitespace embedded in a falsely combined template token. Scope: helper-only parser repair to actual TypeScript AST leaf tokens; no source/tests/cases/matcher edits or runtime replays.
 id_source: "generated"
 ---
 ## Summary
@@ -80,7 +104,17 @@ Restore original native text-frame ownership/lifetime: five production paths, ei
 
 ## Verification
 
-Pending actual current-source contract acceptance and deterministic gates.
+Command: source-only pinned audit of SwFrame325/SwContentFrame415/SwTextFrame762/GetTextNodeFirst1461 and SwRootFrame::DestroyImpl533. Result: pass. Evidence: pin9bc445578031fecf56086729d8e4940c77e14d65, seven source hashes retained only in ignored cache; no source copies, helpers, Python, raw logs/maps in AgentPlane. Scope: original registration/discriminator/unmerged owner identity and represented release, not complete native flow/root/page/merged/redline/text callbacks or geometry.
+
+Command: changed Prettier and ESLint; npm run typecheck; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run build; npm exec -- node scripts/check-static-build.mjs, with both reference symlinks physically absent and finally restored. Result: pass. Evidence: required current five production modules, eight fixture migrations and three fresh files pass; initial fixture API/non-null/documentation/formatter failures repaired within approved scope and retained in Findings. No production runtime failures. Scope: current code/test static and built application.
+
+Command: npm exec -- vitest related src/sw/source/core/layout/wsfrm.ts src/sw/source/core/layout/ssfrm.ts src/sw/source/core/text/txtfrm.ts src/sw/source/core/layout/newfrm.ts src/sw/source/uibase/uiview/view.ts --run --coverage with exact five coverage.include paths, reportOnFailure and ignored cache report directories. Result: pass. Evidence: 13925/13925 cases, 497 files, 9 fresh core/React cases; entire actual five modules all-four100%, 573lines/630statements/147functions/492branches, 1269nonnegative counters, no omitted map or reused previous-task counters. Complete current 1150 production/test hashes match final files; map5c7d9e37c6660c2fcadc5c36efb1336905dabd54aa187518efe0a181836d8ba2, report1872bdec19f4287c1f5f523c05fcd3229da603811facc0d041bef79705389ed0. Scope: actual original node clients, body/cell masters/follows, mutable native attribute invalidation, cursor replacement/stale text, reused/candidate/discarded/error graph ownership, document replacement, actual React native editing/history and explicit view/root close. Both reference symlinks absent throughout, restored finally.
+
+Command: npm exec -- playwright test --config apps/office/playwright.config.ts --project=writer writer-native-text-frame-owner.spec.ts native-line-margin.spec.ts writer-layout-ratios.spec.ts writer-table-headlines.spec.ts writer-native-table-layout-split.spec.ts writer-native-table-text-flow-split.spec.ts writer-native-table-text-flow-headline.spec.ts writer-cell-paragraph-format.spec.ts writer-counted-list-layout.spec.ts writer-uncounted-list-layout.spec.ts writer-native-margin-admission.spec.ts --reporter=list,json. Result: pass. Evidence: 22cases/11files, one fresh real Chromium reformat/body/cell/history/reopen case, zero skips/flaky/unexpected; report18d322bb1da63af74f2ca1bf544a651a1802209f7d39e607b96685d81179b3aa. Scope: physical pages, native Home/End/Shift/edit/format/history/table/list/document replacement behavior. Both reference symlinks absent throughout, restored finally.
+
+Command: bounded TypeScript AST old-fixture and historical canonical prefix proof. Result: pass. Evidence: 810 existing acceptance files: 802 byte-identical, exactly 8 native constructor/input/lifetime fixtures; all other old tokens/cases/matrices/device inputs/expected matcher arguments unchanged. Eight historical canonical prefixes/status/default/classification/exception values retained, two new mappings unverified. Scope: old acceptance preserved, no save/open/recovery changes or parity promotion.
+
+Command: npm run inventory:registry:build; npm run check:source-tree; npm run check:source-provenance; npm run inventory:registry:check; node_modules/.bin/tsx scripts/generate-writer-ui-resources.ts --check; npm run inventory:invariants; npm run inventory:parity; node .agentplane/policy/check-routing.mjs; ap doctor, with references restored for metadata-only gates. Result: pass. Evidence: all nine gates pass. Scope: exhaustive authored runtime/source provenance/resource/invariant/parity policy metadata. Pending semantic commit hash and same-agent non-independent exact-commit evaluator/clean closure are recorded by lifecycle commands. Fourth correction since full BZ14P4; next full after ten, then pause human goal after all required repairs.
 
 ## Rollback Plan
 
@@ -89,3 +123,15 @@ Revert only the semantic task commit if requested; preserve prior evidence and r
 ## Findings
 
 Previous PW1696 is verified progress: semantic892b9b4c, close039d4e95, clean writer/current hashes/restored references revalidated. No live producer. Frozen unregistered text-frame snapshots and independent cursor weak cache remain authoritative architecture gaps. Source constructors register original nodes through SwContentFrame/SwFrame and root destruction releases native children. Standing human iterative goal/resume explicitly authorizes this safe core/UI refactor and inventory. No network/subagents/global files. Native full frame/layout/flow/redlines/text callbacks/rich units/global Repeat remain unverified. Stop after next full checkpoint and required repairs.
+
+Command: npm run typecheck with both reference symlinks hidden. Result: fail. Evidence: TS7 rejected eight old geometry-only fixture files under the required native node constructor/input contract. Scope: preserve all old cases, scalar inputs and expected matcher arguments; add original fixture nodes and lifecycle release within the approved eight-file boundary. Read-only missing path probes are not evidence; route recomputed, required Verify Steps re-read before continuation. No required criteria were weakened.
+
+Command: npm run typecheck (fresh fixture pass). Result: fail. Evidence: new line-info fixture called GetValue instead of its actual public QueryValue; corrected only new test fixture API. All five production paths and eight migrated fixtures typechecked. Scope: fresh native fixture repair.
+
+Command: changed Prettier check. Result: fail. Evidence: the first formatting pass of the dense new Chromium fixture was not idempotent; only that new browser file required a second format pass. Scope: no production/matcher changes; recheck current changed set then continue pending statics.
+
+Command: changed ESLint. Result: fail. Evidence: nine forbidden non-null assertions in the bounded original-node fixtures, no production findings. Scope: replace assertions with explicit initialized owner guards and original fixture references, preserving device inputs/matchers.
+
+Command: npm run check:docs. Result: fail. Evidence: the new expected-error formatter callback lacked mandatory JSDoc; added comment only. Scope: fresh native test documentation. Passing production formatting/lint/type/dependency gates retained; rerun changed new file formatting/lint and remaining docs/build gates.
+
+Command: bounded old-fixture preservation helper. Result: fail. Evidence: a plain scanner did not rescan template/JSX token context and compared whitespace embedded in a falsely combined template token. Scope: helper-only parser repair to actual TypeScript AST leaf tokens; no source/tests/cases/matcher edits or runtime replays.

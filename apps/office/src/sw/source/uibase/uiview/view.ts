@@ -265,6 +265,7 @@ export class SwView {
     this.frame?.CloseView();
     this.frame = undefined;
     this.wrtShell.Close();
+    this.layout.DestroyImpl();
     this.docShell.SetView(undefined);
     this.docShell.Close();
   }

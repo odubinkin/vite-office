@@ -166,6 +166,9 @@ it.each([false, true])(
     const doc = new SwDoc(),
       table = doc.nodes.MakeTableNode("Pages"),
       owner = inherited ? doc.GetDfltFrameFormat() : table.GetFrameFormat();
+    const body = doc.paragraphs[0];
+    if (body === undefined) throw Error("Missing original fixture text");
+    body.SetText("Before");
     table.AddColumnWidth(4000);
     for (let i = 0; i < 3; i++) doc.nodes.AppendTableRow(table, 1);
     if (inherited) table.GetFrameFormat().SetDerivedFrom(owner);
@@ -182,6 +185,7 @@ it.each([false, true])(
       },
       before = [
         {
+          node: body,
           id: "before",
           lines: [{ start: 0, end: 6, height: 400 }],
           style: "body-text" as const,

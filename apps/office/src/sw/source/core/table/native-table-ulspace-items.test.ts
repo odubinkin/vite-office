@@ -13,9 +13,12 @@ import type { SwTableFormat } from "./swtable";
 function fixture(input: SwTableFormat = {}) {
   const doc = new SwDoc(),
     table = doc.nodes.MakeTableNode("NativeSpacing", { headerRows: 0, width: 3000, ...input });
+  const body = doc.paragraphs[0];
+  if (body === undefined) throw Error("Missing original fixture text");
+  body.SetText("Before");
   table.AddColumnWidth(3000);
   for (let index = 0; index < 3; index++) doc.nodes.AppendTableRow(table, 1);
-  return { doc, table, format: table.GetFrameFormat() };
+  return { doc, body, table, format: table.GetFrameFormat() };
 }
 it.each([
   [{}, undefined, [0, 0]],
@@ -83,6 +86,7 @@ it("effective parent spacing drives original dialog and page budgets despite sta
     };
     const before = [
       {
+        node: f.body,
         id: "before",
         lines: [{ start: 0, end: 6, height: 200 }],
         style: "body-text" as const,
