@@ -10,6 +10,13 @@ import {
   getRuntimeOwnershipViolation,
 } from "./check-module-boundaries.mjs";
 
+it("admits original SVL string ownership in SAL without a reverse library edge", /** Checks the original svl library declaration and shared reference owner. @returns Nothing. */ () => {
+  expect(isForbiddenModuleEdge("svl", "sal")).toBe(false);
+  expect(isForbiddenModuleEdge("sal", "svl")).toBe(true);
+  expect(getRuntimeOwnershipLayer("sal/inc/rtl/ustring.ts")).toBe("upstream-mechanism");
+  expect(getRuntimeOwnershipLayer("svl/source/misc/sharedstring.ts")).toBe("upstream-mechanism");
+});
+
 it("owns SAL RTL algorithms and C headers without application or browser dependencies", /** Enforces original low-level string ownership. @returns Nothing. */ () => {
   for (const source of ["sal/rtl/strtmpl.ts", "sal/rtl/ustring.ts", "sal/inc/rtl/ustring.h.ts"]) {
     expect(getRuntimeOwnershipLayer(source)).toBe("upstream-mechanism");

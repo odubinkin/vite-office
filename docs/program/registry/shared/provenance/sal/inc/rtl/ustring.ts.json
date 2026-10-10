@@ -1,0 +1,62 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sal/inc/rtl/ustring.ts",
+    "status": "mapped",
+    "upstreamPath": "include/rtl/ustring.hxx",
+    "localSymbols": [
+      "OUString",
+      "OUStringConstReference",
+      "OUStringLiteral",
+      "[value, argument]",
+      "assign",
+      "clear",
+      "data",
+      "dispose",
+      "getLength",
+      "getStr",
+      "isEmpty",
+      "move",
+      "moveAssign",
+      "reference",
+      "result",
+      "unacquired",
+      "view"
+    ],
+    "upstreamSymbols": [
+      "OUStringLiteral",
+      "OUString",
+      "unacquired",
+      "getLength",
+      "getStr",
+      "clear",
+      "operator="
+    ],
+    "preservedResponsibilities": [
+      "Original OUString runtime lifetime/constructor/copy/move/assignment/clear/getters and complete SharedString value/query contract reuse one shared SAL RTL data/refcount/intern owner. Complete original OUString/SharedString headers and unchanged SharedString cxx compile with32 pinned full source/config/header blobs and31 unchanged RTL dependency scopes. All4424 initialized native owner, both pointer fields, static C++ empty versus C empty versus literal identity, refcounts/length/capacity/logical UTF16/terminators, allocation/free events, query results and held live reference snapshots match portable runtime. Valid native capture also passes ASan/UBSan with identical output. Two original constructor assertions, three original compile-time constructor rejection witnesses and three invalid original lifetime sanitizer diagnoses are retained separately without inventing post-UB golden results. Explicit move factories/destructor calls adapt C++ rvalues/RAII; nullable const-reference query types and stable nonowning WeakMap-backed pointer-slot views adapt reinterpret references without copy/acquire/release. Native const/deleted-overload/template/layout/constant-evaluation enforcement, full OUString search/conversion/format/append APIs, physical pointer ABI/free/dead views, thread concurrency and complete upstream QA remain unverified. SharedString source owns one compiled class with original inline header behaviors; header reexports it instead of defining a duplicate. No Calc-specific strings, allocators or document placeholders."
+    ],
+    "omittedResponsibilities": [
+      "Complete OUString algorithms, original compile-time/const enforcement/native ABI/thread and downstream Calc storage/document/UI remain unverified; no fabricated replacement."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sal/inc/rtl/ustring.ts",
+          "marker": "OUString"
+        },
+        {
+          "path": "apps/office/src/svl/source/misc/sharedstring.test.ts",
+          "marker": "matches all original live owner, view, pointer, counter, buffer and allocator observations"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/include/rtl/ustring.hxx",
+          "marker": "OUString"
+        }
+      ]
+    }
+  }
+}

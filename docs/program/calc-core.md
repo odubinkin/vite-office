@@ -1731,3 +1731,52 @@ corpus argument. This keeps ordinary defaultheap formatting and import practical
 without dropping inputs, fields or assertions; raw native output remains one
 complete original run. Exported original insertion/merge helper responsibilities
 also have explicit internal-operation inventory records.
+
+## Shared OUString and SharedString value owners
+
+Task202610101521-5TVQA9 adds the actual shared SAL C++ header owner at
+`sal/inc/rtl/ustring.ts` and the single SVL compiled SharedString class at
+`svl/source/misc/sharedstring.ts`. Its original header reexports that class.
+SVL uses the original SAL library dependency declared in `svl/Library_svl.mk`;
+Calc and Writer reuse these owners rather than separate string models.
+
+The bounded OUString dependency closure includes original literal/static data,
+default/raw/copy/UTF16/no-acquire construction, runtime move construction,
+copy/move assignment, destruction, clear and direct getters. C++ default empty
+data carries static-only0x40000000 flags and differs from the C API empty.
+Move construction resets the source through the C API; move assignment swaps
+the two pointers. Explicit move factories and destructor calls represent C++
+rvalues and deterministic lifetime in JavaScript. Numeric constructor input
+witnesses sal_Unicode; native int/nullptr overload deletion, template/layout and
+constant-expression rules remain compiler checks, with original rejected callers
+captured separately.
+
+SharedString retains both nullable original/folded fields, all original
+construction/assignment/destructor operations, pointer getters, validity,
+empty/length predicates, original-only equality and the original empty singleton.
+Const references expose queries without destructor/assignment APIs.
+OUString::unacquired borrows the actual pointer field: a held view follows later
+assignment and move. Stable WeakMap-backed views perform no ownership work.
+A null getter returns the original static EMPTY_STRING reference; a held live
+field reference subsequently becoming null remains a null pointer, not a new
+empty value. Accessing its length is original undefined behavior.
+
+The native probe compiles full unchanged original OUString/SharedString headers,
+the complete SharedString source and31 unchanged RTL dependency scopes.
+Thirty-two full pinned source/header/configuration blobs are verified.
+All4424 complete initialized owner/view/pointer/allocator/data observations are
+recorded without selecting fields or dropping calls; the valid capture also
+passes ASan/UBSan with identical output. Two original runtime assertions,
+three compile-time constructor rejections and three separate original invalid
+lifetime diagnostics have no fabricated post-UB golden values.
+The prior3336 RTL snapshots and20 guards retain their exact driver and output
+digests after moving source extraction into a common probe helper.
+
+[CALC-034](calc-upstream-suspected-issues.md#calc-034-sharedstring-self-move-can-retain-freed-data)
+records the original self-move ownership hazard without adding a guard.
+Complete OUString conversion/search/formatting/append algorithms, native ABI,
+const/compile-time enforcement, concurrent/native physical memory semantics
+and full original QA remain unverified. Actual SharedStringPool, typed cell
+payload/storage mutation, column/table/document and editable Calc UI remain
+the next downstream dependencies. This is task4/10 after full task31; the next
+scheduled whole-suite run is task41.

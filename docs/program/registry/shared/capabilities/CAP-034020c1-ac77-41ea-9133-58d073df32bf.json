@@ -72,7 +72,7 @@
           "marker": "rtl_str_hash_intern"
         },
         {
-          "path": "scripts/rtl-ustring-ownership-native-probe.mjs",
+          "path": "scripts/rtl-ustring-native-sources.mjs",
           "marker": "const scopes"
         },
         {

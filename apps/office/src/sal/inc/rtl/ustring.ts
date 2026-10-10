@@ -1,0 +1,132 @@
+/** @fileoverview Original internal OUString literal, lifetime and reference contracts from include/rtl/ustring.hxx. */
+import {
+  rtl_uString_acquire,
+  rtl_uString_assign,
+  rtl_uString_new,
+  rtl_uString_newFromStr,
+  rtl_uString_newFromStr_WithLength,
+  rtl_uString_release,
+} from "./ustring.h";
+import type { rtl_uString, rtl_uStringSlot } from "./ustring.h";
+import { SAL_NO_ACQUIRE } from "../types";
+import type { __sal_NoAcquire } from "../types";
+
+/** Original literal's overlapping str/more storage; native template/layout/constant-expression checks remain compiler responsibilities. */
+export class OUStringLiteral {
+  /** Original active Data member with static-only reference flags. */
+  readonly more: rtl_uString;
+  /** Original union view of the very same data. */
+  readonly str: rtl_uString;
+  /** Copies a terminating UTF16 literal into its original static data. @param literal - Complete literal including its final zero. @returns Initialized literal owner. */
+  constructor(literal: Uint16Array) {
+    if (literal[literal.length - 1] !== 0) throw new Error("assert(literal[N - 1] == '\\0')");
+    this.more = { refCount: 0x40000000, length: literal.length - 1, buffer: literal.slice() };
+    this.str = this.more;
+  }
+  /** Original literal length. @returns Number of units excluding terminator. */
+  getLength(): number {
+    return this.more.length;
+  }
+  /** Original borrowed literal storage. @returns Same initialized buffer. */
+  getStr(): Uint16Array {
+    return this.more.buffer;
+  }
+}
+
+/** Const-reference surface of the implemented original OUString contract; borrowed views cannot acquire mutating/destructor APIs through this type. */
+export type OUStringConstReference = Readonly<
+  Pick<OUString, "getLength" | "getStr" | "isEmpty"> & { pData: rtl_uString | null }
+>;
+
+/** Original OUString value owner; explicit move factories and dispose adapt C++ rvalues and destructor invocation. */
+export class OUString {
+  private static readonly empty = new OUStringLiteral(new Uint16Array([0]));
+  private static readonly references = new WeakMap<rtl_uStringSlot, OUStringConstReference>();
+  private slot: rtl_uStringSlot;
+
+  /** Original public pointer field; tuple storage also supports the original pointer-to-field reference contract. @returns Current data pointer. */
+  get pData(): rtl_uString {
+    return this.slot[0] as rtl_uString;
+  }
+  /** Writes the original public pointer field without ownership work. @param value - New pointer. @returns Nothing. */
+  set pData(value: rtl_uString) {
+    this.slot[0] = value;
+  }
+
+  /** Selects original constructor argument combinations; numeric input witnesses sal_Unicode, whose C++ type is erased in JS. @param args - Default, value, no-acquire or known-length arguments. @returns Initialized value owner. */
+  constructor(
+    ...args:
+      | []
+      | [value: OUStringConstReference | OUStringLiteral | rtl_uString | Uint16Array | number]
+      | [value: rtl_uString, noAcquire: __sal_NoAcquire]
+      | [value: Uint16Array | null, length: number]
+  ) {
+    const [value, argument] = args;
+    this.slot = [null];
+    if (value === undefined) this.pData = OUString.empty.str;
+    else if (value instanceof OUStringLiteral) this.pData = value.str;
+    else if (typeof value === "number")
+      rtl_uString_newFromStr_WithLength(this.slot, new Uint16Array([value]), 1);
+    else if (value === null || value instanceof Uint16Array) {
+      if (argument === undefined) rtl_uString_newFromStr(this.slot, value);
+      else rtl_uString_newFromStr_WithLength(this.slot, value, argument);
+    } else {
+      this.pData = ("pData" in value ? value.pData : value) as rtl_uString;
+      if (argument !== SAL_NO_ACQUIRE) rtl_uString_acquire(this.pData);
+    }
+  }
+
+  /** Original move constructor, resetting the source through the C empty constructor. @param source - Original rvalue owner. @returns Transferred owner. */
+  static move(source: OUString): OUString {
+    const result = Object.create(OUString.prototype) as OUString;
+    result.slot = [source.pData];
+    source.slot[0] = null;
+    rtl_uString_new(source.slot);
+    return result;
+  }
+
+  /** Original reinterpret reference over a caller's pointer field, with stable JS view identity and no constructor/acquire/release. @param slot - Live field storage. @returns Live const view following pointer replacement. */
+  static unacquired(slot: rtl_uStringSlot): OUStringConstReference {
+    let reference = OUString.references.get(slot);
+    if (reference === undefined) {
+      const view = Object.create(OUString.prototype) as OUString;
+      view.slot = slot;
+      reference = view;
+      OUString.references.set(slot, reference);
+    }
+    return reference;
+  }
+
+  /** Original destructor; caller must invoke it exactly once at the end of a live owned lifetime. @returns Nothing. */
+  dispose(): void {
+    rtl_uString_release(this.pData);
+  }
+  /** Original copy assignment. @param source - Live source reference. @returns This owner. */
+  assign(source: OUStringConstReference): this {
+    rtl_uString_assign(this.slot, source.pData as rtl_uString);
+    return this;
+  }
+  /** Original move assignment swaps both pointers, including self assignment. @param source - Rvalue owner. @returns This owner. */
+  moveAssign(source: OUString): this {
+    const data = this.pData;
+    this.pData = source.pData;
+    source.pData = data;
+    return this;
+  }
+  /** Original clear delegates to the C empty constructor. @returns Nothing. */
+  clear(): void {
+    rtl_uString_new(this.slot);
+  }
+  /** Original direct length access, requiring live nonnull data. @returns Logical length. */
+  getLength(): number {
+    return this.pData.length;
+  }
+  /** Original empty predicate. @returns Whether logical length is zero. */
+  isEmpty(): boolean {
+    return this.pData.length === 0;
+  }
+  /** Original borrowed buffer access. @returns Actual backing storage. */
+  getStr(): Uint16Array {
+    return this.pData.buffer;
+  }
+}

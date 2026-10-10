@@ -4,7 +4,7 @@ title: "Port original OUString lifetime and SharedString value owners for Calc t
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 10
+revision: 23
 origin:
   system: "manual"
 depends_on: []
@@ -18,10 +18,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-10T15:49:34.057Z"
+  updated_by: "CODER"
+  note: "Pass: original full-header SharedString native --check4424 states,32 pinned blobs31 scopes,2 runtime guards3 compile guards3 invalid lifetime diagnoses; prior RTL --check3336/20 exact driver44ad48ef. Portable Calc106/24 S2920 B2055 F474 L2564 and affected shared6/3 across8 executable sources S391 B206 F81 L313 all-four100/all raw counters positive with both upstream links absent/restored finally; affected tooling28/4. Typecheck/lint/JSDoc/size/dependencies/tree/provenance/scoped Calc/shared inventories/changed-file formatting/routing/doctor/diff all pass. Evidence output/playwright/task35-{tests,gates,final}/manifest.json and task35-audit.json; no full run at task4/10, next41. Writer unchanged."
   attempts: 0
 commit: null
 comments:
@@ -36,8 +36,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: Port actual shared OUString and SharedString ownership/reference contracts with pinned native evidence on branchcalc, reusing common RTL data."
+  -
+    type: "verify"
+    at: "2026-10-10T15:49:34.057Z"
+    author: "CODER"
+    state: "ok"
+    note: "Pass: original full-header SharedString native --check4424 states,32 pinned blobs31 scopes,2 runtime guards3 compile guards3 invalid lifetime diagnoses; prior RTL --check3336/20 exact driver44ad48ef. Portable Calc106/24 S2920 B2055 F474 L2564 and affected shared6/3 across8 executable sources S391 B206 F81 L313 all-four100/all raw counters positive with both upstream links absent/restored finally; affected tooling28/4. Typecheck/lint/JSDoc/size/dependencies/tree/provenance/scoped Calc/shared inventories/changed-file formatting/routing/doctor/diff all pass. Evidence output/playwright/task35-{tests,gates,final}/manifest.json and task35-audit.json; no full run at task4/10, next41. Writer unchanged."
 doc_version: 3
-doc_updated_at: "2026-10-10T15:26:09.672Z"
+doc_updated_at: "2026-10-10T15:49:34.116Z"
 doc_updated_by: "CODER"
 description: "Task35: reuse original shared RTL data/intern ownership to implement real OUString constructors/lifetime/copy/move/borrowed reference/default empty required by complete original SharedString header/source contract. Preserve separate C++ static empty versus C API empty and live unacquired aliases, both pointer fields, native assignment/move/equality/default/lifetime order. Pin full upstream headers/source/dependencies in actual native compiler evidence; compare complete initialized pointer/refcount/free states and held views without rewriting native algorithms. Branchcalc only, original SVL/SAL ownership and necessary module edge, exhaustive inventory and Calc journal. Strict Calc/affected shared four-metric100; task4/10,next full41. No fake string/document owners, Writer changes, network or merges; remaining OUString algorithms/native ABI/concurrency unverified."
 sections:
@@ -56,9 +62,88 @@ sections:
     4. Inspect native original source order, all empty identities and held-view alias behavior against actual implementation commit. EVALUATOR records actual digest/evidence and gaps; task verify-show and required CLI verification pass. Final branchcalc, clean git status --short --untracked-files=all and DONE route. No full run until task41; current4/10.
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-10T15:49:34.057Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Pass: original full-header SharedString native --check4424 states,32 pinned blobs31 scopes,2 runtime guards3 compile guards3 invalid lifetime diagnoses; prior RTL --check3336/20 exact driver44ad48ef. Portable Calc106/24 S2920 B2055 F474 L2564 and affected shared6/3 across8 executable sources S391 B206 F81 L313 all-four100/all raw counters positive with both upstream links absent/restored finally; affected tooling28/4. Typecheck/lint/JSDoc/size/dependencies/tree/provenance/scoped Calc/shared inventories/changed-file formatting/routing/doctor/diff all pass. Evidence output/playwright/task35-{tests,gates,final}/manifest.json and task35-audit.json; no full run at task4/10, next41. Writer unchanged.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T15:47:41.553Z, excerpt_hash=sha256:30594cde594f96848abdce694ed10081efaf4f19563b6d5861e8e8cfbb7af8d6
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610101521-5TVQA9/blueprint/resolved-snapshot.json
+    - old_digest: 45e9e2f43103635369ff0f538e0ec24050d5116d461643c96c1adcacd7e0592e
+    - current_digest: 45e9e2f43103635369ff0f538e0ec24050d5116d461643c96c1adcacd7e0592e
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610101521-5TVQA9
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610101521-5TVQA9
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Use a new forward task to revert only task35 runtime, native helper/extraction, exact graph edge and registry/docs changes if needed; rerun the same scoped gates and original RTL corpus. Never reset history, mutate the pinned upstream checkout, merge branches, repair Writer-only coverage or relax source/coverage policy. All temporary native/build evidence stays ignored inside this repository; symlinks always restored in finally."
-  Findings: "Preflight: branchcalc and clean status, only unrelated C9TN6M/X6VV8G active; no duplicate task35. User ongoing goal/continue authorizes safe local scope. Source: full SharedString header/misc owner uses two nullable pointers and live OUString::unacquired field references. OUString default uses private static literal; moved-from runtime uses different C API empty; move assignment swaps, unlike SharedString. Preserve original move self behavior, test only native initialized defined states and document actual undefined cases separately. Original full-header compilation is preferred over hand-built class substitutes. Browser const references and C++ rvalue/destructor invocation need explicit source-backed language adapters; no fake no-op locks, strings or temporary document models."
+  Findings: |-
+    Preflight: branchcalc and clean status, only unrelated C9TN6M/X6VV8G active; no duplicate task35. User ongoing goal/continue authorizes safe local scope. Source: full SharedString header/misc owner uses two nullable pointers and live OUString::unacquired field references. OUString default uses private static literal; moved-from runtime uses different C API empty; move assignment swaps, unlike SharedString. Preserve original move self behavior, test only native initialized defined states and document actual undefined cases separately. Original full-header compilation is preferred over hand-built class substitutes. Browser const references and C++ rvalue/destructor invocation need explicit source-backed language adapters; no fake no-op locks, strings or temporary document models.
+
+    - Observation: Read-only header discovery referenced nonexistent include/sal/typesizes.h.in (exit2); original checked-in typesizes.h is empty generated scaffolding.
+      Impact: Native full-header build needs actual upstream configuration template location, not an assumed include path.
+      Resolution: Recompute route; locate the actual template in the pinned repository and generate only compiler configuration in ignored task output.
+
+    - Observation: First full-header syntax build failed: prefix text replacement for SIZEOFLONG also changed SIZEOFLONGLONG, creating __SIZEOF_LONG__LONG.
+      Impact: Compiler plumbing configuration was invalid; no native or runtime behavior was evaluated.
+      Resolution: Generate each configuration macro by exact whole-line matching against original template and retry original full headers without source changes.
+
+    - Observation: Read-only lookup used a nonexistent reverse-probe filename (exit1).
+      Impact: No source or evidence changed; discovery must use actual tracked paths.
+      Resolution: Locate the existing probe with rg --files and reuse its actual extraction intervals.
+
+    - Observation: Initial full-header link probe failed only in caller JSON IO: nested template-literal quote escapes were consumed by JS.
+      Impact: Original header/scopes compiled; caller serialization prevented linking the evidence driver.
+      Resolution: Use a raw template for native caller plumbing and preserve exact original interpolated scopes; rerun native compilation.
+
+    - Observation: Original full-header compiler rejected caller OUString(nullptr,1): overload resolution is ambiguous with another original constructor.
+      Impact: The invalid-input caller needs the original const sal_Unicode pointer type witness; no native-body defect or production change is required.
+      Resolution: Use static_cast<sal_Unicode const*>(nullptr) in that diagnostic caller, then retry exact original classes and corpus.
+
+    - Observation: Probe source construction produced a literal newline inside a JavaScript regex for compiler dependency continuations, failing parsing.
+      Impact: Native corpus did not run; source extraction/runtime owners remain unchanged.
+      Resolution: Parse compiler dependency whitespace directly; standalone continuation backslashes are ignored by the original-path filter. Retry without acceptance changes.
+
+    - Observation: Scoped native replay passed all4423 snapshots; strict coverage failed at literal assertion and SharedString move-assignment folded-null branch. Formatter was invoked with root-relative paths from the workspace and matched no files.
+      Impact: Native semantics agree for captured defined calls, but coverage acceptance and formatting are not yet met.
+      Resolution: Add source-backed compile-time literal diagnostic and a genuine raw-pair self-contained move with absent folded data; format from repository root and rerun exact scoped gates. Do not relax coverage.
+
+    - Observation: Read-only registry lookup assumed nonexistent svl/inc/listener.ts.json (exit1); existing header owner names differ.
+      Impact: No mutation; registry generation must use existing record schemas and actual file enumeration.
+      Resolution: Use verified SAL records and enumerate active shared entries rather than inventing another example path.
+
+    - Observation: Const-reference annotation patch hit stale pre-format test context.
+      Impact: Patch application must be inspected before retrying; this is a type-boundary correction, not a changed native algorithm.
+      Resolution: Read actual edited files, apply the remaining nullable field annotation against current formatted lines and rerun type/scoped checks.
+
+    - Observation: Documentation patch assumed an incorrect calc-core heading; runtime const-reference annotation patch succeeded first.
+      Impact: No documentation content changed. Preserve actual document and update only scoped appended section.
+      Resolution: Append the new source-backed core/journal sections directly; refresh AST inventory symbols after final type annotations and validate.
+
+    - Observation: Typecheck passed; lint/JSDoc rejected undocumented native overload declarations, unified signatures, test nonnull assertions and two unused extraction imports.
+      Impact: Runtime/native replay is unchanged, but required code/documentation gates fail.
+      Resolution: Represent exact constructor argument combinations as tuple unions, documenting erased native overload dispatch; replace test nonnull assertions with explicit type witnesses, document assertion callbacks and remove unused imports. No policy suppression or gate weakening.
+
+    - Observation: Source-provenance gate ran during the portable-test interval while both approved upstream symlinks were deliberately removed; it failed ENOENT on an unchanged original border source.
+      Impact: This is verification scheduling interference, not a provenance mismatch. Gates through dependencies/tree/lint/docs/size passed; provenance/scoped inventories need links present.
+      Resolution: Let the confirmed live portable test process finish and its finally restore both links; then rerun provenance and subsequent gates serially. Keep source tests portable and native checks dependent on present pinned sources.
 id_source: "generated"
 ---
 ## Summary
@@ -87,6 +172,36 @@ Only /Users/odubinkin/Projects/vite-office-calc branchcalc. Runtime owners: apps
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-10T15:49:34.057Z — VERIFY — ok
+
+By: CODER
+
+Note: Pass: original full-header SharedString native --check4424 states,32 pinned blobs31 scopes,2 runtime guards3 compile guards3 invalid lifetime diagnoses; prior RTL --check3336/20 exact driver44ad48ef. Portable Calc106/24 S2920 B2055 F474 L2564 and affected shared6/3 across8 executable sources S391 B206 F81 L313 all-four100/all raw counters positive with both upstream links absent/restored finally; affected tooling28/4. Typecheck/lint/JSDoc/size/dependencies/tree/provenance/scoped Calc/shared inventories/changed-file formatting/routing/doctor/diff all pass. Evidence output/playwright/task35-{tests,gates,final}/manifest.json and task35-audit.json; no full run at task4/10, next41. Writer unchanged.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T15:47:41.553Z, excerpt_hash=sha256:30594cde594f96848abdce694ed10081efaf4f19563b6d5861e8e8cfbb7af8d6
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610101521-5TVQA9/blueprint/resolved-snapshot.json
+- old_digest: 45e9e2f43103635369ff0f538e0ec24050d5116d461643c96c1adcacd7e0592e
+- current_digest: 45e9e2f43103635369ff0f538e0ec24050d5116d461643c96c1adcacd7e0592e
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610101521-5TVQA9
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610101521-5TVQA9
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -96,3 +211,51 @@ Use a new forward task to revert only task35 runtime, native helper/extraction, 
 ## Findings
 
 Preflight: branchcalc and clean status, only unrelated C9TN6M/X6VV8G active; no duplicate task35. User ongoing goal/continue authorizes safe local scope. Source: full SharedString header/misc owner uses two nullable pointers and live OUString::unacquired field references. OUString default uses private static literal; moved-from runtime uses different C API empty; move assignment swaps, unlike SharedString. Preserve original move self behavior, test only native initialized defined states and document actual undefined cases separately. Original full-header compilation is preferred over hand-built class substitutes. Browser const references and C++ rvalue/destructor invocation need explicit source-backed language adapters; no fake no-op locks, strings or temporary document models.
+
+- Observation: Read-only header discovery referenced nonexistent include/sal/typesizes.h.in (exit2); original checked-in typesizes.h is empty generated scaffolding.
+  Impact: Native full-header build needs actual upstream configuration template location, not an assumed include path.
+  Resolution: Recompute route; locate the actual template in the pinned repository and generate only compiler configuration in ignored task output.
+
+- Observation: First full-header syntax build failed: prefix text replacement for SIZEOFLONG also changed SIZEOFLONGLONG, creating __SIZEOF_LONG__LONG.
+  Impact: Compiler plumbing configuration was invalid; no native or runtime behavior was evaluated.
+  Resolution: Generate each configuration macro by exact whole-line matching against original template and retry original full headers without source changes.
+
+- Observation: Read-only lookup used a nonexistent reverse-probe filename (exit1).
+  Impact: No source or evidence changed; discovery must use actual tracked paths.
+  Resolution: Locate the existing probe with rg --files and reuse its actual extraction intervals.
+
+- Observation: Initial full-header link probe failed only in caller JSON IO: nested template-literal quote escapes were consumed by JS.
+  Impact: Original header/scopes compiled; caller serialization prevented linking the evidence driver.
+  Resolution: Use a raw template for native caller plumbing and preserve exact original interpolated scopes; rerun native compilation.
+
+- Observation: Original full-header compiler rejected caller OUString(nullptr,1): overload resolution is ambiguous with another original constructor.
+  Impact: The invalid-input caller needs the original const sal_Unicode pointer type witness; no native-body defect or production change is required.
+  Resolution: Use static_cast<sal_Unicode const*>(nullptr) in that diagnostic caller, then retry exact original classes and corpus.
+
+- Observation: Probe source construction produced a literal newline inside a JavaScript regex for compiler dependency continuations, failing parsing.
+  Impact: Native corpus did not run; source extraction/runtime owners remain unchanged.
+  Resolution: Parse compiler dependency whitespace directly; standalone continuation backslashes are ignored by the original-path filter. Retry without acceptance changes.
+
+- Observation: Scoped native replay passed all4423 snapshots; strict coverage failed at literal assertion and SharedString move-assignment folded-null branch. Formatter was invoked with root-relative paths from the workspace and matched no files.
+  Impact: Native semantics agree for captured defined calls, but coverage acceptance and formatting are not yet met.
+  Resolution: Add source-backed compile-time literal diagnostic and a genuine raw-pair self-contained move with absent folded data; format from repository root and rerun exact scoped gates. Do not relax coverage.
+
+- Observation: Read-only registry lookup assumed nonexistent svl/inc/listener.ts.json (exit1); existing header owner names differ.
+  Impact: No mutation; registry generation must use existing record schemas and actual file enumeration.
+  Resolution: Use verified SAL records and enumerate active shared entries rather than inventing another example path.
+
+- Observation: Const-reference annotation patch hit stale pre-format test context.
+  Impact: Patch application must be inspected before retrying; this is a type-boundary correction, not a changed native algorithm.
+  Resolution: Read actual edited files, apply the remaining nullable field annotation against current formatted lines and rerun type/scoped checks.
+
+- Observation: Documentation patch assumed an incorrect calc-core heading; runtime const-reference annotation patch succeeded first.
+  Impact: No documentation content changed. Preserve actual document and update only scoped appended section.
+  Resolution: Append the new source-backed core/journal sections directly; refresh AST inventory symbols after final type annotations and validate.
+
+- Observation: Typecheck passed; lint/JSDoc rejected undocumented native overload declarations, unified signatures, test nonnull assertions and two unused extraction imports.
+  Impact: Runtime/native replay is unchanged, but required code/documentation gates fail.
+  Resolution: Represent exact constructor argument combinations as tuple unions, documenting erased native overload dispatch; replace test nonnull assertions with explicit type witnesses, document assertion callbacks and remove unused imports. No policy suppression or gate weakening.
+
+- Observation: Source-provenance gate ran during the portable-test interval while both approved upstream symlinks were deliberately removed; it failed ENOENT on an unchanged original border source.
+  Impact: This is verification scheduling interference, not a provenance mismatch. Gates through dependencies/tree/lint/docs/size passed; provenance/scoped inventories need links present.
+  Resolution: Let the confirmed live portable test process finish and its finally restore both links; then rerun provenance and subsequent gates serially. Keep source tests portable and native checks dependent on present pinned sources.

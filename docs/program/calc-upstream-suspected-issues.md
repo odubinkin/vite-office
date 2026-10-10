@@ -783,3 +783,33 @@ Remaining uncertainty: this may be an intentional capacity/growth policy;
 the design history and expected memory/performance tradeoff are unknown.
 Decision: retain both selections, threshold and resulting original layout.
 Do not replace the result with a conventional single next-prime growth.
+
+## CALC-034: SharedString self-move can retain freed data
+
+Status: suspicious ownership condition; original full-header sanitizer
+reproduction retained. No upstream defect report or repair is implied.
+
+[Original move assignment](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/include/svl/sharedstring.hxx#L97)
+releases both current fields, then assigns each result of
+`std::exchange(r.field, nullptr)` back to the destination field. It has no
+self guard. When source and destination are the same object, exchange temporarily
+sets the field to null, then the assignment restores the old pointer.
+If releasing the original field destroyed its last reference, that pointer
+has already been freed. Copy assignment has an explicit self guard.
+
+Reproducer: construct `OUString x` from one UTF16 unit, construct
+`SharedString s(x)`, then clear x so s owns the last data reference.
+Call `s = std::move(s)`, followed by `s.getLength()`.
+Task202610101521-5TVQA9 compiles the full original headers/source with genuine
+RTL lifetime dependencies. The probe's invalid selector2 emits the marker
+`after-self-move-before-length`; ASan then reports heap-use-after-free
+in the original SharedString::getLength. Full stderr stays in the ignored
+native evidence directory. The portable fixture retains only the pre-UB
+marker and diagnosed condition, explicitly `definedResult:false`.
+
+Remaining uncertainty: self-move may be excluded by original caller invariants;
+the broader consumers and design history have not been established.
+Decision: preserve native release/exchange/assignment order and absence of
+a self guard. No synthetic safe result, special-case nulling or ownership
+repair is added. Safe static-data self-move remains in the complete defined
+native corpus; invalid dynamic self-move has no portable post-UB expectation.
