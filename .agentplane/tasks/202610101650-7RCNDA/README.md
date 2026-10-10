@@ -1,10 +1,11 @@
 ---
 id: "202610101650-7RCNDA"
 title: "Restore native typed paragraph text-left margin item"
-status: "DOING"
+result_summary: "Native typed text-left paragraph item replaces numeric adapter; original contracts and history ownership verified with100% coverage,14251app and27browser cases."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -52,6 +53,9 @@ comments:
   -
     author: "CODER"
     body: "Start: Native typed text-left item implemented and current-source validation accepted; exact semantic commit recorded."
+  -
+    author: "CODER"
+    body: "Verified: Native typed text-left margin replaces numeric core adapter; original measure/proportion/UNO/hanging-resolution contracts and caller/history ownership retained. Accepted14251related app cases63fresh,27Chromium,100all-four actual ten-module coverage and required static/metadata checks; exact semantic review is same-agent/non-independent. Inventory/history/registered deviations preserved. Cadence1/10; broad goal active and native range/history plus rich margin UI transport remain separate work."
 events:
   -
     type: "status"
@@ -73,8 +77,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native typed left margin accepted:14251related cases505files63fresh, actual100all-four ten full modules,27Chromium and all declared static/metadata gates. References absent in runtime/static and restored; exact source hashes and preserved fixtures/inventory recorded in evidence/verification.json. Semantic 88b0a100251a22b8380830b604fcc9bf43b048d9"
+  -
+    type: "status"
+    at: "2026-10-10T17:17:30.573Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Native typed text-left margin replaces numeric core adapter; original measure/proportion/UNO/hanging-resolution contracts and caller/history ownership retained. Accepted14251related app cases63fresh,27Chromium,100all-four actual ten-module coverage and required static/metadata checks; exact semantic review is same-agent/non-independent. Inventory/history/registered deviations preserved. Cadence1/10; broad goal active and native range/history plus rich margin UI transport remain separate work."
 doc_version: 3
-doc_updated_at: "2026-10-10T17:16:38.400Z"
+doc_updated_at: "2026-10-10T17:17:30.574Z"
 doc_updated_by: "CODER"
 description: "Replace immutable numeric TextLeft adapter with original typed lrspitem.hxx declaration and represented Cxx constructors, ownership, hanging-component resolution, UNO/status and metrics. Migrate native authors and scoped acceptance fixtures, preserve legacy wire through browser codec, synchronize inventory without blanket promotion. Leave range MoveLeftMargin history for its separate atomic task."
 sections:
@@ -159,6 +170,10 @@ sections:
     - Observation: Semantic commit attempt was rejected before commit because its subject omitted the required scope separator.
       Impact: The56intentional paths remain staged; code and passing verification are unchanged. No commit was created by this failed command.
       Resolution: Recomputed the route and use the required emoji/suffix/code:summary subject for the same exact scope; no runtime or static replay.
+extensions:
+  implementation_commit:
+    hash: "88b0a100251a22b8380830b604fcc9bf43b048d9"
+    message: "🧩 7RCNDA code: restore native typed paragraph text-left margin"
 id_source: "generated"
 ---
 ## Summary
