@@ -10,6 +10,18 @@ import {
   getRuntimeOwnershipViolation,
 } from "./check-module-boundaries.mjs";
 
+it("owns SAL RTL algorithms and C headers without application or browser dependencies", /** Enforces original low-level string ownership. @returns Nothing. */ () => {
+  for (const source of ["sal/rtl/strtmpl.ts", "sal/rtl/ustring.ts", "sal/inc/rtl/ustring.h.ts"]) {
+    expect(getRuntimeOwnershipLayer(source)).toBe("upstream-mechanism");
+    expect(getRuntimeOwnershipViolation(source, "", "react")).toMatch(/presentation package/u);
+    expect(
+      getRuntimeOwnershipViolation(source, "vcl/browser/font-list.ts", "../font-list"),
+    ).toMatch(/browser adapters/u);
+  }
+  for (const target of ["sc", "sw", "framework", "vcl", "svl"])
+    expect(isForbiddenModuleEdge("sal", target)).toBe(true);
+});
+
 it("permits Calc mdds dependency while keeping external owners independent", /** Protects shared external storage from app and browser dependencies. @returns Nothing. */ () => {
   expect(isForbiddenModuleEdge("sc", "external")).toBe(false);
   for (const app of ["sc", "sw", "framework", "vcl"])

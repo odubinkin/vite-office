@@ -65,6 +65,56 @@ and registry12 cases pass; doctor's two existing warnings are unchanged.
 Journal body and all31 cases are preserved byte-for-byte. No Writer coverage
 or implementation changes and no full run occur in this task.
 
+## Shared UTF16 comparison for cell strings
+
+Task33 (`202610101405-RCRBVD`) ports the original dependency used by
+`svl::SharedString::operator==`: `rtl_ustr_reverseCompare_WithLength`.
+`sal/rtl/strtmpl.ts` owns `CompareNormal` and `reverseCompare_WithLengths`;
+`sal/rtl/ustring.ts` owns the C wrapper. The declaration boundary is
+`sal/inc/rtl/ustring.h.ts`, mapped to original `include/rtl/ustring.h` in the
+SAL library; its `.h` identity keeps the future C++ `ustring.hxx` owner distinct.
+
+Original traversal starts at the declared ends and preserves exact UInt16
+unit differences, returning the length difference only after a common suffix.
+Embedded NUL is an ordinary unit; surrogate pairs receive no code-point or
+locale reinterpretation. Borrowed `Uint16Array|null` views adapt native
+buffers, explicit lengths narrow to signed32, and the static comparator
+witness adapts the original empty template strategy. The original four
+assertions become fail-fast errors. Native process abort/release builds and
+invalid/dangling pointers remain outside this evidence. Positive loop length
+and the original guards prove non-null access; storage must cover its declared
+length without a new bounds repair.
+
+The native probe verifies four whole pinned source blobs and compiles six
+complete unchanged scopes with ASan/UBSan. It retains10084 calls and20168
+direct/public results, including valid prefixes and borrowed offsets, empty
+and null-zero inputs, embedded NUL, unsigned boundaries, surrogates, suffix
+precedence and original signed32 argument narrowing. Four separate native
+assertion callers retain their actual SIGABRT/stderr diagnostics. Portable
+tests compare every result through both original owners and the public header.
+SAL module registration protects these source/header owners from browser and
+application dependencies. Runtime/provenance/exported-operation records and
+one atomic shared capability remain semantically unverified for full-module
+parity.
+
+Actual RTL data allocation/refcounts, `OUString` and `SharedString` remain the
+following required string owners. This task introduces no replacement string
+store or document/UI model. It is task2 of10 since full task31; the next
+scheduled full suite remains task41.
+
+Task33 passes portable upstream-absent Calc106/24 and shared RTL2/1 tests;
+actual Calc coverage remains S2920/B2055/F474/L2564 all100. The two shared
+RTL owners have S21/B16/F3/L16 all100 with every raw counter positive. Native
+`--check`, all static/source gates, both scoped inventories, source-provenance3
+and module-boundary/registry24 cases pass. Calc inventory45capabilities/166
+modules and shared22/136 have zero semantic violations; broader parity stays
+unverified. Doctor's two inherited warnings remain. Original symlinks are
+restored exactly, with no Writer/threshold/config changes or full suite run.
+The header filename ledger records the necessary distinct module resolution
+for original C `ustring.h` and C++ `ustring.hxx` contracts; source validation
+is unchanged. Read-only function exports are extracted exhaustively from the
+runtime records, outside the mutation-helper operation collection.
+
 ## Shared container utilities and traits
 
 Task `202610092012-8RZCZ1` ports original mdds `util.hpp`: empty events,

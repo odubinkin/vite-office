@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sal/rtl/ustring.ts",
+    "status": "mapped",
+    "upstreamPath": "sal/rtl/ustring.cxx",
+    "localSymbols": [
+      "rtl_ustr_reverseCompare_WithLength"
+    ],
+    "upstreamSymbols": [
+      "rtl_ustr_reverseCompare_WithLength"
+    ],
+    "preservedResponsibilities": [
+      "Original initialized UInt16 reverse comparison and exact result magnitude at native SAL source/header boundaries.",
+      "Original SAL UTF16 CompareNormal and reverseCompare_WithLengths, plus the rtl_ustr_reverseCompare_WithLength C/header boundary, preserve unsigned16 subtraction, original back-to-front traversal and final length difference. Uint16Array|null with explicit signed32 lengths adapts borrowed native pointers; static strategy witness adapts the empty Compare template value. Native four assert conditions map to fail-fast Error; native SIGABRT/process and release-build behavior are not certified. Positive loop length and original pointer guards prove non-null dereferences; buffer storage must cover the declared length, as original callers must. No added bounds/collation/NUL termination repair. Four complete pinned blobs and six unchanged original scopes compile under ASan/UBSan;10084calls/20168 full direct/public results plus four genuine assertion diagnostics are retained in portable fixtures, including offset views and signed32 caller narrowing. Native ABI, raw/dangling pointer behavior, generic non-UTF16/mixed char warnings, alternate comparison strategies and full SAL/OUString/SharedString/storage consumers remain unverified."
+    ],
+    "omittedResponsibilities": [
+      "Other original character/storage/string algorithms and actual OUString/SharedString/refcount/interning consumers remain absent; no fake string owners introduced."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sal/rtl/ustring.ts",
+          "marker": "rtl_ustr_reverseCompare_WithLength"
+        },
+        {
+          "path": "apps/office/src/sal/rtl/ustring.test.ts",
+          "marker": "matches every native direct and public result with original prefix and pointer offsets"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sal/rtl/ustring.cxx",
+          "marker": "rtl_ustr_reverseCompare_WithLength"
+        }
+      ]
+    }
+  }
+}

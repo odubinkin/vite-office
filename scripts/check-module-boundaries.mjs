@@ -16,6 +16,7 @@ const moduleNames = [
   "o3tl",
   "offapi",
   "package",
+  "sal",
   "sax",
   "sc",
   "sfx2",
@@ -36,6 +37,7 @@ const allowedEdges = new Map([
   ["o3tl", new Set()],
   ["offapi", new Set()],
   ["package", new Set()],
+  ["sal", new Set()],
   ["sax", new Set()],
   [
     "sc",
@@ -120,6 +122,8 @@ export function getRuntimeOwnershipLayer(relativePath) {
   if (portablePath.startsWith("sfx2/source/")) return "sfx";
   if (portablePath.startsWith("o3tl/inc/")) return "upstream-mechanism";
   if (portablePath.startsWith("external/mdds/include/")) return "upstream-mechanism";
+  if (portablePath.startsWith("sal/rtl/") || portablePath.startsWith("sal/inc/rtl/"))
+    return "upstream-mechanism";
   if (/^[^/]+\/source\//u.test(portablePath)) return "upstream-mechanism";
   return undefined;
 }

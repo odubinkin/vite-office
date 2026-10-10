@@ -1,0 +1,88 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-93d45659-e3cb-402d-b2c3-93e3a3f5eb6b",
+    "capabilityId": "CAP-93d45659-e3cb-402d-b2c3-93e3a3f5eb6b",
+    "suite": "shared",
+    "subsystem": "rtl-ustring",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original UTF16 unsigned-unit difference, back-to-front traversal, mismatch precedence and exact terminal length difference.",
+      "Explicit lengths retain embedded NUL and surrogate units; borrowed offsets and original signed32 narrowing remain.",
+      "Four original pointer/nonnegative-length assertions retained as fail-fast adapters."
+    ],
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "Original algorithms and owner boundaries retained; initialized UTF16 pointer/type witnesses and debug assertion adapters are explicit."
+    },
+    "capability": "Shared original UTF16 reverse comparison",
+    "gaps": [
+      "Original SAL UTF16 CompareNormal and reverseCompare_WithLengths, plus the rtl_ustr_reverseCompare_WithLength C/header boundary, preserve unsigned16 subtraction, original back-to-front traversal and final length difference. Uint16Array|null with explicit signed32 lengths adapts borrowed native pointers; static strategy witness adapts the empty Compare template value. Native four assert conditions map to fail-fast Error; native SIGABRT/process and release-build behavior are not certified. Positive loop length and original pointer guards prove non-null dereferences; buffer storage must cover the declared length, as original callers must. No added bounds/collation/NUL termination repair. Four complete pinned blobs and six unchanged original scopes compile under ASan/UBSan;10084calls/20168 full direct/public results plus four genuine assertion diagnostics are retained in portable fixtures, including offset views and signed32 caller narrowing. Native ABI, raw/dangling pointer behavior, generic non-UTF16/mixed char warnings, alternate comparison strategies and full SAL/OUString/SharedString/storage consumers remain unverified."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sal/rtl/strtmpl.hxx",
+          "marker": "reverseCompare_WithLengths"
+        },
+        {
+          "path": "sal/rtl/ustring.cxx",
+          "marker": "rtl_ustr_reverseCompare_WithLength"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sc/qa/unit/ucalc.cxx",
+          "marker": "testSharedStringPool"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/rtl/ustring.h",
+          "marker": "Compare two strings from back to front"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sal/rtl/strtmpl.ts",
+          "marker": "reverseCompare_WithLengths"
+        },
+        {
+          "path": "apps/office/src/sal/rtl/ustring.ts",
+          "marker": "rtl_ustr_reverseCompare_WithLength"
+        },
+        {
+          "path": "scripts/rtl-ustring-native-probe.mjs",
+          "marker": "const scopes"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sal/rtl/ustring.test.ts",
+          "marker": "matches every native direct and public result with original prefix and pointer offsets"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Shared UTF16 comparison for cell strings"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "Compare initialized Unicode string buffers in original reverse order",
+    "scopeLimitations": [
+      "Original SAL UTF16 CompareNormal and reverseCompare_WithLengths, plus the rtl_ustr_reverseCompare_WithLength C/header boundary, preserve unsigned16 subtraction, original back-to-front traversal and final length difference. Uint16Array|null with explicit signed32 lengths adapts borrowed native pointers; static strategy witness adapts the empty Compare template value. Native four assert conditions map to fail-fast Error; native SIGABRT/process and release-build behavior are not certified. Positive loop length and original pointer guards prove non-null dereferences; buffer storage must cover the declared length, as original callers must. No added bounds/collation/NUL termination repair. Four complete pinned blobs and six unchanged original scopes compile under ASan/UBSan;10084calls/20168 full direct/public results plus four genuine assertion diagnostics are retained in portable fixtures, including offset views and signed32 caller narrowing. Native ABI, raw/dangling pointer behavior, generic non-UTF16/mixed char warnings, alternate comparison strategies and full SAL/OUString/SharedString/storage consumers remain unverified.",
+      "Original ucalc SharedStringPool tests provide consumer context; this primitive does not claim those document/pool scenarios. Generated input cases are genuine unchanged-source native observations, not literal upstream QA cases."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}
