@@ -1,0 +1,28 @@
+# EVALUATOR opinion: pass
+
+Reviewed implementation66fc25402a6d1465b2e76b63e46a4dea7cd0fdbe against approved shared RTL dependency closure: original owners/defaults/order, complete native state/free observations and strict scoped verification pass; whole Calc/UI is not certified.
+
+## Findings
+- Source/header/template/hash boundaries are retained, including distinct strimp.hxx declarations and strimp.cxx globals, separate original C static empty, acquire-before-release assignment, copy alias release order and faithful intern probing/growth/removal. No Writer/config/policy/branch merge changes in25 intentional paths.
+- Read-only digest audit independently confirms actual driver44ad48ef78c7a6a651bc2611b6d7a623558972e7dc07b60e68bb92411e0266a2, complete raw states665e3f8e7f0d1ccede35d17809b26694319812aaf695e1383ee8edb40d46c7a4,13 full pinned blobs,3336 losslessly retained snapshots,20 genuine assertion diagnostics and all free-callback fields.
+- Actual required Istanbul maps contain19 Calc and5 RTL sources; every raw counter is positive and all four metrics100.106 Calc/4 RTL plus27 affected tooling cases pass. Final format/lint/JSDoc/size/provenance/scoped inventories pass, dependencies/tree/typecheck/routing/doctor pass. Browser Calc gate builds successfully but contains0 browser cases.
+- CALC032 and033 record suspicious native conditions while retaining original behavior. Initial discovery/coverage/JSDoc/metadata/probe-dependency failures were bounded and corrected without weakening acceptance; task3/10 cadence retains next full41.
+
+## Evidence
+- .agentplane/tasks/202610101428-D9PRQV/README.md
+- output/playwright/task34-audit.json
+- output/playwright/task34-tests/manifest.json
+- output/playwright/task34-tests/free-callback.log
+- output/playwright/task34-final/manifest.json
+- output/playwright/rtl-ustring-ownership-native/driver.cpp
+- output/playwright/rtl-ustring-ownership-native/output.json
+- apps/office/src/sal/rtl/native-ustring-ownership-cases.json
+
+## Missing Tests
+- none recorded
+
+## Hidden Assumptions
+- Browser string data and pool are concrete realm-local synchronous storage, not arbitrary exotic JS objects or shared native thread state; guarded reductions explicitly depend on this domain and active original constructor assertions.
+
+## Residual Risks
+- Native concurrent ABI, physical allocation/free/uninitialized spare memory and platform/release-build differences remain unverified. Real C++ OUString/SharedString and Calc cell storage/document/editable UI owners remain missing, as recorded by Foundation metadata.

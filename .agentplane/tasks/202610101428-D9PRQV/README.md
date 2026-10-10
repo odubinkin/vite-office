@@ -4,7 +4,7 @@ title: "Port original shared RTL Unicode data ownership and intern pool for Calc
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 19
+revision: 20
 origin:
   system: "manual"
 depends_on: []
@@ -23,6 +23,31 @@ verification:
   updated_by: "CODER"
   note: "All approved source/native/portable scoped coverage/inventory/static gates pass. Actual source completeness and raw counters positive, all four100; native states and all free fields match. Task3/10,next full41. Browser Calc0 cases disclosed, real C++ string/document/UI consumers remain unverified."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-10T15:11:32.368Z"
+  updated_by: "EVALUATOR"
+  note: "Reviewed implementation66fc25402a6d1465b2e76b63e46a4dea7cd0fdbe against approved shared RTL dependency closure: original owners/defaults/order, complete native state/free observations and strict scoped verification pass; whole Calc/UI is not certified."
+  evaluated_sha: "66fc25402a6d1465b2e76b63e46a4dea7cd0fdbe"
+  blueprint_digest: "237ac67e36ba4424048212b38801cabb0a79e5643969c5980063f7e6948e2415"
+  evidence_refs:
+    - ".agentplane/tasks/202610101428-D9PRQV/README.md"
+    - ".agentplane/tasks/202610101428-D9PRQV/quality/20261010-151132368-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610101428-D9PRQV/quality/20261010-151132368-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610101428-D9PRQV/quality/20261010-151132368-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610101428-D9PRQV/blueprint/resolved-snapshot.json"
+    - "output/playwright/task34-audit.json"
+    - "output/playwright/task34-tests/manifest.json"
+    - "output/playwright/task34-tests/free-callback.log"
+    - "output/playwright/task34-final/manifest.json"
+    - "output/playwright/rtl-ustring-ownership-native/driver.cpp"
+    - "output/playwright/rtl-ustring-ownership-native/output.json"
+    - "apps/office/src/sal/rtl/native-ustring-ownership-cases.json"
+  findings:
+    - "Source/header/template/hash boundaries are retained, including distinct strimp.hxx declarations and strimp.cxx globals, separate original C static empty, acquire-before-release assignment, copy alias release order and faithful intern probing/growth/removal. No Writer/config/policy/branch merge changes in25 intentional paths."
+    - "Read-only digest audit independently confirms actual driver44ad48ef78c7a6a651bc2611b6d7a623558972e7dc07b60e68bb92411e0266a2, complete raw states665e3f8e7f0d1ccede35d17809b26694319812aaf695e1383ee8edb40d46c7a4,13 full pinned blobs,3336 losslessly retained snapshots,20 genuine assertion diagnostics and all free-callback fields."
+    - "Actual required Istanbul maps contain19 Calc and5 RTL sources; every raw counter is positive and all four metrics100.106 Calc/4 RTL plus27 affected tooling cases pass. Final format/lint/JSDoc/size/provenance/scoped inventories pass, dependencies/tree/typecheck/routing/doctor pass. Browser Calc gate builds successfully but contains0 browser cases."
+    - "CALC032 and033 record suspicious native conditions while retaining original behavior. Initial discovery/coverage/JSDoc/metadata/probe-dependency failures were bounded and corrected without weakening acceptance; task3/10 cadence retains next full41."
 commit: null
 comments:
   -
