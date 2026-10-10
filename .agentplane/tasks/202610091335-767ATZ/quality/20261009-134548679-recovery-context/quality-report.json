@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "task_id": "202610091335-767ATZ",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-09T13:45:48.679Z",
+  "verdict": "pass",
+  "summary": "Original ordinary Update modes/helpers preserve sequential axis and sticky/invalid precedence with32704 unchanged native outcomes, independent literals and actual100 Istanbul; existing references/shared owners reused.",
+  "evaluated_sha": "9c04319797caca0acdc4263a817a1d95a5feec2a",
+  "blueprint_digest": "ad78ba2f7f2ba8a53cb0cada0c1366e432131170c94148060db918c5a7ff2b54",
+  "findings": [
+    "Two native reorder guard paths are logically excluded by preceding moved-range return; direct remaining outcomes include proof comments and unchanged native differential comparison. No branch exclusions or fake document defaults."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610091335-767ATZ/README.md",
+    "9c04319797caca0acdc4263a817a1d95a5feec2a",
+    "output/playwright/calc-resumed-task2-verification.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Big-coordinate Update and complete document/compiler/range-list consumers remain absent; native scalar output aliases and undefined arithmetic are not certified."
+  ]
+}

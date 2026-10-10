@@ -1,0 +1,119 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-926a9602-35bb-4554-aa6e-46a03a013aa9",
+    "capabilityId": "CAP-926a9602-35bb-4554-aa6e-46a03a013aa9",
+    "suite": "calc",
+    "subsystem": "multi-selection",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original independent per-column ScMarkArray values and shared aRowSel, explicit immutable limits, copy/assignment receiving references and moved value ownership.",
+      "Original row-to-column migration before partial deselection, raw range-list Set without added terminal boundaries, row/column union queries and output preservation.",
+      "Original single-source borrowed iterator versus two-source bool-segment snapshot, next-range state and GetRangeData segment-mode precondition.",
+      "Original raw HasOneMark/equal-column predicates, missing-column start comparison, navigation, allocated emptiness and row/column shift expressions.",
+      "Capacity-dependent native value construction/assignment, clear capacity retention and destination-slot bounds during insertion/erase, on the recorded native runtime profile."
+    ],
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "Original selection and iterator owners use actual source-shaped dependencies; bounded comparison evidence retains source conditions and scalar/runtime adaptations with explicit limits."
+    },
+    "capability": "Calc multi-selection row/column owner and iterator",
+    "gaps": [
+      "Full ScMarkData/document/column/UI consumers, generic native vector ABI/allocation/refcount/pointer lifetimes, dangling or reallocated borrowed pointers, negative/out-of-range column indices, malformed/uninitialized storage and undefined arithmetic remain uncertified. The private value-vector adapter follows the recorded libc++220106 capacity/slot-transfer profile; other standard-library capacity policies and moved-from states are implementation-dependent. std::sort equal-start-row permutation is unspecified; JavaScript stable row sorting preserves the comparator but cross-library raw tie order is uncertified. Debug assertions become explicit fail-fast Errors; native process abort/release diagnostics and complete ScSheetLimits intrusive lifetime services remain unverified."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sc/inc/markmulti.hxx",
+          "marker": "class SC_DLLPUBLIC ScMultiSel"
+        },
+        {
+          "path": "sc/source/core/data/markmulti.cxx",
+          "marker": "void ScMultiSel::Set("
+        },
+        {
+          "path": "sc/source/core/data/markmulti.cxx",
+          "marker": "ScMultiSelIter::ScMultiSelIter("
+        }
+      ],
+      "tests": [
+        {
+          "path": "sc/qa/unit/mark_test.cxx",
+          "marker": "void Test::testMultiMark_FourRanges()"
+        },
+        {
+          "path": "sc/qa/unit/mark_test.cxx",
+          "marker": "void Test::testMultiMark_NegativeMarking()"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/inc/markmulti.hxx",
+          "marker": "Returns the first column of the range"
+        },
+        {
+          "path": "sc/source/core/data/markmulti.cxx",
+          "marker": "optimised init-from-range-list"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/source/core/data/markmulti.ts",
+          "marker": "export class ScMultiSel"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/markmulti.ts",
+          "marker": "export class ScMultiSelIter"
+        },
+        {
+          "path": "scripts/calc-markmulti-native-probe.mjs",
+          "marker": "const originals ="
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/source/core/data/markmulti.test.ts",
+          "marker": "matches every unchanged native multi-selection sequence"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/markmulti.test.ts",
+          "marker": "retains literal upstream rectangle and negative-marking coordinates"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/markmulti.test.ts",
+          "marker": "preserves single-source borrowing and two-source snapshot iteration"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/markmulti.test.ts",
+          "marker": "retains raw Set bounds"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Multi-selection owner and iterator"
+        },
+        {
+          "path": "docs/program/upstream-suspected-issues.md",
+          "marker": "CALC-010"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "Own and update original global-row and per-column marks and preserve query copying migration shifting and iterator ownership",
+    "scopeLimitations": [
+      "Full ScMarkData/document/column/UI consumers, generic native vector ABI/allocation/refcount/pointer lifetimes, dangling or reallocated borrowed pointers, negative/out-of-range column indices, malformed/uninitialized storage and undefined arithmetic remain uncertified. The private value-vector adapter follows the recorded libc++220106 capacity/slot-transfer profile; other standard-library capacity policies and moved-from states are implementation-dependent. std::sort equal-start-row permutation is unspecified; JavaScript stable row sorting preserves the comparator but cross-library raw tie order is uncertified. Debug assertions become explicit fail-fast Errors; native process abort/release diagnostics and complete ScSheetLimits intrusive lifetime services remain unverified.",
+      "Finite complete selected observations do not establish whole-module parity. Raw entries are checked through public ScMarkArray equality; bound references are independently checked by copying/resetting the actual array. Native friend inspection is confined to the research probe.",
+      "The native bounds carrier extracts exact fields/constructor/needed methods; complete reference-count lifecycle is not replaced by a service shell. Actual SvRefBase and ScRangeList mechanism groups are compiled unchanged. RTL parsing/formatting declarations remain opaque and unlinked."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-76215311-7980-4000-a19e-7b03f171a315",
+    "capabilityId": "CAP-76215311-7980-4000-a19e-7b03f171a315",
+    "suite": "calc",
+    "subsystem": "mark-data",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original simple/multi/marking/negative flags, retained range values, ordered selected-sheet membership and empty replacement preservation.",
+      "Original recursive simple-to-multi setup, reduction predicates, raw expanding bounds, range-list export/import and native full-width global-row query shortcuts.",
+      "Original row/column spans through actual mdds/fstalgorithm and source-shaped range, mark-array and bool segment dependencies.",
+      "Original shifts and all four envelope mechanisms, accumulation across calls, preserved failed cover output and borrowed owner access."
+    ],
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "Source-owned mechanisms use actual shared and Calc dependencies; explicit scalar/iterator/template runtime syntax adapters remain bounded."
+    },
+    "capability": "Calc mark-data selection owner",
+    "gaps": [
+      "Finite selected evidence does not establish full native or browser parity. Complete document/column storage, native intrusive lifetime/ABI/pointer invalidation and diagnostics are unverified. Original unordered_map top/bottom row permutation is unspecified and compared as full multisets while raw native observations remain retained. Selected-tab self-move triggers a recorded libc++220106 ASan failure and has no certified defined native outcome. Invalid ranges/arithmetic and malformed/dangling states remain outside the defined comparison. Existing numerical document getter views are explicit source adapters, not document engines."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sc/source/core/data/markdata.cxx",
+          "marker": "ScMarkData::GetSelectionCover"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sc/qa/unit/mark_test.cxx",
+          "marker": "void Test::testSimpleMark_Simple()"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/source/core/data/markdata.cxx",
+          "marker": "Optimise the case of constructing"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/source/core/data/markdata.ts",
+          "marker": "export class ScMarkData"
+        },
+        {
+          "path": "scripts/calc-markdata-native-probe.mjs",
+          "marker": "const sources"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/source/core/data/markdata.test.ts",
+          "marker": "matches complete unchanged native selection sequences"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Mark-data selection owner and span conversions"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "Calc mark-data selection owner",
+    "scopeLimitations": [
+      "Finite selected evidence does not establish full native or browser parity. Complete document/column storage, native intrusive lifetime/ABI/pointer invalidation and diagnostics are unverified. Original unordered_map top/bottom row permutation is unspecified and compared as full multisets while raw native observations remain retained. Selected-tab self-move triggers a recorded libc++220106 ASan failure and has no certified defined native outcome. Invalid ranges/arithmetic and malformed/dangling states remain outside the defined comparison. Existing numerical document getter views are explicit source adapters, not document engines."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/ref_pair.ts",
+          "marker": "ref_pair"
+        },
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/flat_segment_tree.test.ts",
+          "marker": "matches every unchanged native insertion"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/mdds-reference/include/mdds/ref_pair.hpp",
+          "marker": "struct ref_pair"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/external/mdds/include/mdds/ref_pair.ts",
+    "localSymbols": [
+      "ref_pair",
+      "equals"
+    ],
+    "omittedResponsibilities": [
+      "Only numeric Calc keys with initialized boolean/number values and native-defined arithmetic are implemented. Wider C++ templates and value classes, allocation/refcount/deletion timing, dangling iterators, debug dumps, generic exceptions and undefined invalid-border operations remain uncertified. GC references and explicit copy/move/operator methods adapt the language runtime. Finite native snapshots do not establish whole-module or Calc parity."
+    ],
+    "preservedResponsibilities": [
+      "Original linked half-open leaf intervals and terminal value_type{}; insertion coalesces nodes and reports actual changes.",
+      "Original separately built bottom-up pooled search tree, readiness invalidation and no implicit build on search.",
+      "Original copy/move/assignment/clear and shift order; distinct forward/reverse iterator types, live ref_pair aliases and cached segment-iterator copy/end semantics."
+    ],
+    "status": "mapped",
+    "upstreamPath": "vendor/mdds-reference/include/mdds/ref_pair.hpp",
+    "upstreamSymbols": [
+      "struct ref_pair"
+    ]
+  }
+}

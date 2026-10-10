@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/inc/fstalgorithm.ts",
+          "marker": "toSpanArray"
+        },
+        {
+          "path": "apps/office/src/sc/inc/fstalgorithm.test.ts",
+          "marker": "original flat segment span algorithms"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/fstalgorithm.hxx",
+          "marker": "toSpanArray"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sc/inc/fstalgorithm.ts",
+    "localSymbols": [
+      "SpanConstructor",
+      "ValueSpanConstructor",
+      "buildSpan",
+      "buildSpanWithValue",
+      "toSpanArray",
+      "toSpanArrayWithValue"
+    ],
+    "omittedResponsibilities": [
+      "Native comparison covers numerical keys with boolean and integer values through all original overloads: 256 boolean patterns and 64 numerical owners. The current shared mdds value contract admits boolean/number only. Custom native bool conversion, object or move-only value types, non-numerical key types, arbitrary template consumers, allocation/ABI and malformed/dangling states remain unverified. Complete ColumnSpanSet scan/action owners and browser consumers remain unimplemented; finite evidence does not establish whole-module parity."
+    ],
+    "preservedResponsibilities": [
+      "Original buildSpan, buildSpanWithValue and both toSpanArray overloads including inclusive endpoints, nonzero value filtering, caller iterator copying and output appending.",
+      "Original valid_tree-only start-key overload with failed-search empty output; no index rebuilding fallback."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sc/inc/fstalgorithm.hxx",
+    "upstreamSymbols": [
+      "buildSpan",
+      "buildSpanWithValue",
+      "toSpanArray",
+      "toSpanArrayWithValue"
+    ]
+  }
+}

@@ -1,0 +1,101 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-693e727b-d071-4612-bb1f-e1511d5fa477",
+    "capabilityId": "CAP-693e727b-d071-4612-bb1f-e1511d5fa477",
+    "suite": "shared",
+    "subsystem": "cell-storage",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original mutable/const next_position copies the iterator/offset pair, increments offset within a block or advances the copied iterator and resets offset at its edge.",
+      "Original advance_position forwards the already shared util.hpp algorithm with original signed32 steps and forward/backward block crossing; it does not rebuild or mutate the source position.",
+      "Original logical_position reads the cached node position plus offset without an owner search.",
+      "Original static typed get forwards types.hpp get_block_element_at over the real block; bool-store dispatch uses cbegin/advance, other stores use original at.",
+      "Every290 previous complete native ownership/query sequence remains unchanged; appended static navigation/read callers compare full original results/source positions/live states/events over all12 scalar families."
+    ],
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "Original member and types.hpp dispatch bodies preserved; existing shared advance_position reused, no replacement navigation or scalar engine."
+    },
+    "capability": "Shared original SoA position navigation and typed position reads",
+    "gaps": [
+      "Selected pinned no_trace/default-execution libc++ target, valid initialized mutable/const positions and signed32 steps remaining inside the owner or reaching end. Copies preserve source iterators/offsets. Logical extraction is checked on non-end positions; final end transition records cached node state without dereference/private-field claims. Static typed get covers all12 matching nonempty unmanaged standard scalar families; original bool-store cbegin/advance and nonbool at remain distinct. default_element_block supplies the erased types_util has_std_vector_bool_store trait for actual delayed_delete_vector<T>. Custom StoreT/managed blocks, empty or mismatching static get, invalidated/source-beyond/end dereference, negative/unsafe row metadata, unbounded integer overflow, native ABI/const qualifiers and arbitrary values remain unverified. Segment mutators, trace/debug/SIMD and full Calc column/document/browser remain gaps. No whole-module/default/QA-suite certification."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/mdds-reference/include/mdds/multi_type_vector/soa/main_def.inl",
+          "marker": "multi_type_vector<Traits>::next_position"
+        },
+        {
+          "path": "vendor/mdds-reference/include/mdds/multi_type_vector/soa/main_def.inl",
+          "marker": "multi_type_vector<Traits>::logical_position"
+        },
+        {
+          "path": "vendor/mdds-reference/include/mdds/multi_type_vector/types.hpp",
+          "marker": "get_block_element_at"
+        },
+        {
+          "path": "vendor/mdds-reference/include/mdds/multi_type_vector/types_util.hpp",
+          "marker": "has_std_vector_bool_store"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/mdds-reference/test/multi_type_vector/default/tc/iterators.inl",
+          "marker": "position"
+        }
+      ],
+      "docs": [
+        {
+          "path": "download.lst",
+          "marker": "mdds-3.2.1.tar.xz"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/main.ts",
+          "marker": "logical_position"
+        },
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/main_def.ts",
+          "marker": "next_position"
+        },
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/types.ts",
+          "marker": "get_block_element_at"
+        },
+        {
+          "path": "scripts/mdds-container-native-probe.mjs",
+          "marker": "positioned_scalar"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/container.test.ts",
+          "marker": "matches every complete original constructor operator iterator and destructor sequence"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Shared SoA position navigation and typed reads"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "Navigate original SoA mutable/const positions and retrieve logical rows/typed scalar values from their actual shared block owners",
+    "scopeLimitations": [
+      "Selected pinned no_trace/default-execution libc++ target, valid initialized mutable/const positions and signed32 steps remaining inside the owner or reaching end. Copies preserve source iterators/offsets. Logical extraction is checked on non-end positions; final end transition records cached node state without dereference/private-field claims. Static typed get covers all12 matching nonempty unmanaged standard scalar families; original bool-store cbegin/advance and nonbool at remain distinct. default_element_block supplies the erased types_util has_std_vector_bool_store trait for actual delayed_delete_vector<T>. Custom StoreT/managed blocks, empty or mismatching static get, invalidated/source-beyond/end dereference, negative/unsafe row metadata, unbounded integer overflow, native ABI/const qualifiers and arbitrary values remain unverified. Segment mutators, trace/debug/SIMD and full Calc column/document/browser remain gaps. No whole-module/default/QA-suite certification."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

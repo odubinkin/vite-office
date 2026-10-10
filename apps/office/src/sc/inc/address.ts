@@ -1,11 +1,36 @@
 /** @fileoverview Calc address limits and reference flags from pinned sc/inc/address.hxx. Header-level exports share the original address owners with core/tool. */
 import type { SCCOL, SCROW, SCTAB } from "./types";
-import { ScAddress } from "../source/core/tool/address";
-import type { ScRange } from "../source/core/tool/address";
+import { ScAddress, ScRange } from "../source/core/tool/address";
 export { ScAddress, ScRange } from "../source/core/tool/address";
 
 /** Native size_t count/index, represented within JavaScript's exact integer domain. */
 export type SCSIZE = number;
+
+/** Original inline pair: label/actual range followed by its independently owned data range. */
+export class ScRangePair {
+  private readonly aRange: [ScRange, ScRange];
+
+  /** Copies both original values. @param source - Pair to copy. @returns Independent pair. */
+  public constructor(source: ScRangePair);
+  /** Constructs both explicit native ranges; no default constructor exists. @param first - Label range. @param second - Data range. @returns Independent pair. */
+  public constructor(first: ScRange, second: ScRange);
+  /** Initializes original pair values. @param first - Source pair or label range. @param second - Explicit data range for two-range construction. @returns Independent pair. */
+  public constructor(first: ScRangePair | ScRange, second?: ScRange) {
+    if (first instanceof ScRangePair)
+      this.aRange = [new ScRange(first.GetRange(0)), new ScRange(first.GetRange(1))];
+    else this.aRange = [new ScRange(first), new ScRange(second as ScRange)];
+  }
+  /** Copies values into stable original range owners. @param source - Pair to copy. @returns Recipient. */
+  public assign(source: ScRangePair): this {
+    this.aRange[0].assign(source.aRange[0]);
+    this.aRange[1].assign(source.aRange[1]);
+    return this;
+  }
+  /** Borrows one original range after unsigned16 parameter conversion, for valid resulting indices zero or one. @param index - Range index. @returns Stable range owner. */
+  public GetRange(index: number): ScRange {
+    return this.aRange[index & 0xffff] as ScRange;
+  }
+}
 
 /** Native integer-domain maxima, distinct from spreadsheet bounds. */
 export const SCROW_MAX = 0x7fffffff;

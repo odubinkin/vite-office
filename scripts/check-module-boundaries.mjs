@@ -11,6 +11,7 @@ const sourceRoot = path.resolve("apps/office/src");
 const moduleNames = [
   "cui",
   "editeng",
+  "external",
   "framework",
   "o3tl",
   "offapi",
@@ -30,6 +31,7 @@ const knownModules = new Set(moduleNames);
 const allowedEdges = new Map([
   ["cui", new Set(["editeng", "svl", "svx"])],
   ["editeng", new Set(["offapi", "svl", "svtools", "vcl"])],
+  ["external", new Set()],
   ["framework", new Set(["sfx2", "svl"])],
   ["o3tl", new Set()],
   ["offapi", new Set()],
@@ -40,6 +42,7 @@ const allowedEdges = new Map([
     new Set([
       "cui",
       "editeng",
+      "external",
       "framework",
       "o3tl",
       "offapi",
@@ -116,6 +119,7 @@ export function getRuntimeOwnershipLayer(relativePath) {
   if (portablePath.startsWith("sw/source/uibase/")) return "writer-uibase";
   if (portablePath.startsWith("sfx2/source/")) return "sfx";
   if (portablePath.startsWith("o3tl/inc/")) return "upstream-mechanism";
+  if (portablePath.startsWith("external/mdds/include/")) return "upstream-mechanism";
   if (/^[^/]+\/source\//u.test(portablePath)) return "upstream-mechanism";
   return undefined;
 }

@@ -1,0 +1,55 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/block_util.ts",
+          "marker": "adjust_block_positions"
+        },
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/block_util.test.ts",
+          "marker": "matches every full unchanged native scalar specialization state"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/mdds-reference/include/mdds/multi_type_vector/soa/block_util.hpp",
+          "marker": "struct adjust_block_positions<Blks, lu_factor_t::lu16>"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/block_util.ts",
+    "localSymbols": [
+      "scalar_lu_factor",
+      "PositionBlockStore",
+      "PositionAdjuster",
+      "add_position",
+      "none",
+      "lu4",
+      "lu8",
+      "lu16",
+      "lu32",
+      "adjust_block_positions"
+    ],
+    "omittedResponsibilities": [
+      "Scope is the original five architecture-neutral scalar specializations on the pinned native arm64 size_t64/default OpenMP0 target, using uint64 position vectors. Factory dispatch adapts native callable template instantiation syntax; it accepts only original scalar factors and has no fallback for unavailable SIMD values. SIMD SSE2/AVX2 specializations, OpenMP scheduling/concurrency, unsupported primary-template compile diagnostics, compile-time qualifiers/ABI, other native numeric vector widths, invalid negative/range/lifetime inputs, generic object/allocator behavior and complete SoA/Calc container/document/UI remain unverified. Number projections outside exact input/output representability are not certified. Full contextual upstream loop-unrolling QA remains source evidence, not a ported/executed suite."
+    ],
+    "preservedResponsibilities": [
+      "Original none/lu4/lu8/lu16/lu32 specializations preserve the exact early return, unrolled lane ordering, bit-mask remainder and scalar tail logic; default_traits remains original lu16.",
+      "Only position values mutate; real shared backing arrays, sizes, block-pointer aliases, scalar payloads and reserved capacities are retained. Existing SoA owner and iterator storage mechanics are reused, with cached iterator nodes refreshed only by their original iterator operations.",
+      "Original unsigned64 position plus signed64 delta arithmetic is retained exactly through bigint; number syntax witnesses require exactly representable inputs and outputs. Large native start indices return before any number/index projection."
+    ],
+    "status": "mapped",
+    "upstreamPath": "vendor/mdds-reference/include/mdds/multi_type_vector/soa/block_util.hpp",
+    "upstreamSymbols": [
+      "struct adjust_block_positions<Blks, lu_factor_t::none>",
+      "struct adjust_block_positions<Blks, lu_factor_t::lu4>",
+      "struct adjust_block_positions<Blks, lu_factor_t::lu8>",
+      "struct adjust_block_positions<Blks, lu_factor_t::lu16>",
+      "struct adjust_block_positions<Blks, lu_factor_t::lu32>"
+    ]
+  }
+}

@@ -1,0 +1,25 @@
+# EVALUATOR opinion: pass
+
+Reviewed1925e1d634ca against approved original utility/trait boundary, genuine soa/iterator observations and scoped actual100 evidence; finish recommended.
+
+## Findings
+- Original util default lu16/event/exec/empty-dispatch and clone tag identities, standard all12 dispatch aliases and real shared delayed random-access distances preserve responsibility without duplicate store. Input-end UInt64 wrap and empty-before-bound, copied borrowed position movement/int32 casts and trace depth/sink/nesting/unwind are source-shaped; TS type/reference/lifetime witnesses remain explicit.
+- Independent lossless raw decode and actual binary replay verify6 real unchanged native soa layouts694 complete mutable/const pairs(1388 movements),1270 full input records,3 trace scopes/defaults/diagnostics,13 full header hashes/2 verified archives/driver hash. Portable test iterator is only syntax over committed native nodes, no TS container certification. CALC-023 preserves arithmetic/preconditions without a fix.
+- Actual four positive coverage denominators covered=total: Calc2904/2051/467/2548 and changed3 shared211/71/56/178. Related12 shared, portable104 Calc/4 shared/30 inventory, TS7/tooling14/provenance3/lint/format/docs/boundaries/size/tree/routing/doctor pass. Calc26/150 and shared5/123 semanticViolationCount0, all module parity remains unverified.
+
+## Evidence
+- .agentplane/tasks/202610092012-8RZCZ1/README.md
+- output/playwright/task16-fixture-integrity.log
+- output/playwright/task16-native-check.log
+- output/playwright/task16-portable-inventory.log
+- apps/office/coverage/util/coverage-summary.json
+- apps/office/coverage/calc/coverage-summary.json
+
+## Missing Tests
+- none recorded
+
+## Hidden Assumptions
+- none recorded
+
+## Residual Risks
+- Type-only empty tag identity, native reference/const/allocator/destructor ABI and caller exactly-once trace disposal are explicit adapters. Alternate signed/size widths, arbitrary iterator categories, invalidated lifetimes, full types_util compile traits/trace call-site macros, actual TS soa iterator/container/Calc document/browser remain unverified. Full suites due task10 under user cadence; Writer coverage untouched; two inherited doctor warnings unchanged.

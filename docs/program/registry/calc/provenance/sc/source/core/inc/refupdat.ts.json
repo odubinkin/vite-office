@@ -12,6 +12,18 @@
         {
           "path": "apps/office/src/sc/source/core/tool/refupdat.test.ts",
           "marker": "matches every original native transpose growth and alias outcome"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/refwrap.test.ts",
+          "marker": "matches every original native relative wrap outcome"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/refupdate.test.ts",
+          "marker": "matches every original native ordinary update outcome"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/big-refupdate.test.ts",
+          "marker": "matches every original native big update and source alias outcome"
         }
       ],
       "upstream": [
@@ -26,13 +38,27 @@
       "ScRefUpdateRes"
     ],
     "omittedResponsibilities": [
-      "Ordinary/big Update overloads, MoveRelWrap, full document/compiler/change-tracking integration, debug assertion enforcement and undefined arithmetic domains remain subsequent work. Bounded numerical fixtures do not establish full reference-update or whole Calc parity."
+      "full document/compiler/change-tracking integration, debug assertion enforcement and undefined arithmetic domains remain subsequent work. Bounded numerical fixtures do not establish full reference-update or whole Calc parity."
     ],
     "preservedResponsibilities": [
       "Original four-value ScRefUpdateRes domain and static geometry owner at core/inc and core/tool boundaries.",
       "Original signed temporary widths, coordinate transpose and repeated wrapping using positive document sheet count.",
       "Source-contained references only, snapshot-before-assignment including source/destination aliases, stable receiving endpoint owners and UPDATED for contained no-op transforms.",
-      "Both growth predicates before mutation, original column/row containment, header-row allowance and unclipped native assignment widths."
+      "Both growth predicates before mutation, original column/row containment, header-row allowance and unclipped native assignment widths.",
+      "Original MoveRelWrap owner and private lcl_MoveItWrap responsibility reuse existing numerical references and sheet limits.",
+      "Resolve and sort absolute coordinates before wrapping; wrap only each endpoint axis flagged relative and cross each mask only once, with native assignment widths.",
+      "Document table count minus one is the inclusive sheet wrap maximum; independent supplied column/row wrap masks differ from document validity limits.",
+      "Order the wrapped absolute endpoints before SetRange; retain endpoint flags, monotone deletion, stable endpoint identity and independent trim state.",
+      "Original UpdateRefMode four-value domain and ordinary ScRefUpdate Update scalar parameter/result contract; native mutable coordinate outputs use a result/coordinate tuple.",
+      "Original sequential column/row/sheet predicates, raw ordering, explicit document IsExpandRefs policy and insertion expansion helpers; deletion shrink disabled only for sheets.",
+      "Native signed16 column/sheet and signed32 row destination widths, clipping, invalid collapsed ends, whole-axis/end sticky restoration and status replacement precedence.",
+      "Move source containment derives from destination minus displacement; sheet-only reorder updates both moved and intervening sheets in original direction.",
+      "Final raw coordinate comparison returns UPDATED only when no earlier result exists; copy remains untouched; native unreachable reorder guards are expressed directly with proofs.",
+      "Original public ScRefUpdate Update overloads retain ordinary scalar/result output contract and add big-range in-place result contract at the same source owner.",
+      "Exact bigint signed64 storage, signed32 displacements, coordinates outside document bounds and independent whole-axis min/max sentinels without document clipping.",
+      "Original source/reference snapshots, sequential insertion predicates and source/reference aliases with stable recipient endpoints.",
+      "Only positive insertion overflow is guarded and saturates to signed64 max; negative defined insertion and contained movement use unclipped native arithmetic.",
+      "Defined Move inputs have false cut flags because native cut=true implies undefined signed64 addition; direct remaining outcomes retain final range-equality result and original unchanged native comparison."
     ],
     "status": "mapped",
     "upstreamPath": "sc/source/core/inc/refupdat.hxx",

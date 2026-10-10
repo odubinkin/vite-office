@@ -1,0 +1,59 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/node.ts",
+          "marker": "SegmentValue"
+        },
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/flat_segment_tree.test.ts",
+          "marker": "matches every unchanged native insertion"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/mdds-reference/include/mdds/node.hpp",
+          "marker": "struct node"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/external/mdds/include/mdds/node.ts",
+    "localSymbols": [
+      "SegmentValue",
+      "node_base",
+      "node",
+      "assign",
+      "equals",
+      "to_string",
+      "nonleaf_node",
+      "link_nodes",
+      "disconnect_all_nodes",
+      "disconnect_leaf_nodes",
+      "count_leaf_nodes",
+      "count_needed_nonleaf_nodes",
+      "tree_builder",
+      "build",
+      "make_parent_node",
+      "build_tree_non_leaf"
+    ],
+    "omittedResponsibilities": [
+      "Only numeric Calc keys with initialized boolean/number values and native-defined arithmetic are implemented. Wider C++ templates and value classes, allocation/refcount/deletion timing, dangling iterators, debug dumps, generic exceptions and undefined invalid-border operations remain uncertified. GC references and explicit copy/move/operator methods adapt the language runtime. Finite native snapshots do not establish whole-module or Calc parity."
+    ],
+    "preservedResponsibilities": [
+      "Original linked half-open leaf intervals and terminal value_type{}; insertion coalesces nodes and reports actual changes.",
+      "Original separately built bottom-up pooled search tree, readiness invalidation and no implicit build on search.",
+      "Original copy/move/assignment/clear and shift order; distinct forward/reverse iterator types, live ref_pair aliases and cached segment-iterator copy/end semantics."
+    ],
+    "status": "mapped",
+    "upstreamPath": "vendor/mdds-reference/include/mdds/node.hpp",
+    "upstreamSymbols": [
+      "struct node",
+      "struct nonleaf_node",
+      "class tree_builder"
+    ]
+  }
+}

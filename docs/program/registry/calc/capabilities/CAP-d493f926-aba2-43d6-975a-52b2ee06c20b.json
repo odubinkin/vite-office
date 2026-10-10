@@ -1,0 +1,85 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-d493f926-aba2-43d6-975a-52b2ee06c20b",
+    "capabilityId": "CAP-d493f926-aba2-43d6-975a-52b2ee06c20b",
+    "suite": "calc",
+    "subsystem": "compressed-width-flags",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original explicit maximum/default, SCROW/SCCOL and UInt16/UInt8 conversions, one initial entry and exact nCount/nLimit capacity growth through original split/shrink/combine algorithms.",
+      "Original binary Search first/last fallback, scalar/range/output-reference getters and repeated terminal GetNextValue behavior.",
+      "Original predecessor insertion, removal adjacent-value merge, terminal maximum and preserving-size call order, distinct CopyFrom offsets/inline overload and self-copy assertion.",
+      "Original scalar/range CRFlags AND/OR traversal, CopyFromAnded, reverse bit search/access-type sentinel and borrowed iterator increment/add/value behavior."
+    ],
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "Complete original numeric/flag storage and mutation algorithms retained with explicit erased-template witnesses and bounded native evidence."
+    },
+    "capability": "Calc compressed column widths and row/column flag arrays",
+    "gaps": [
+      "Finite row/column UInt16 and CRFlags evidence does not establish whole-module/browser parity. Generic object value copy/equality, native allocation/ABI/references/dangling iterator lifetime, undefined arithmetic and invalid-index states are uncertified. Required scalar witnesses adapt erased native template arguments; output-reference tuples, independent POD entry copies and fail-fast assertion adapters retain finite numerical contracts, not native process abort. Out-of-domain changed range bit operations may not terminate; separate original diagnostics assign no successful result and no repair is introduced. Ordered-entry/valid-region and copy-progress preconditions remain required. Genuine o3tl mask operators are used in native comparison; TypeScript adapts only the original CRFlags result-mask assertion. Table/document/column/browser consumers and broader global.hxx remain unimplemented."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sc/source/core/data/compressedarray.cxx",
+          "marker": "ScCompressedArray<A,D>::SetValue"
+        },
+        {
+          "path": "sc/inc/global.hxx",
+          "marker": "enum class CRFlags"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sc/qa/unit/helper/qahelper.cxx",
+          "marker": "GetRowFlags( nRow, nTab ) & CRFlags::ManualSize"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/inc/compressedarray.hxx",
+          "marker": "Compressed array of row (or column) entries"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/source/core/data/compressedarray.ts",
+          "marker": "export class ScCompressedArray"
+        },
+        {
+          "path": "scripts/calc-compressedarray-native-probe.mjs",
+          "marker": "const groups"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/source/core/data/compressedarray.test.ts",
+          "marker": "matches all unchanged native numeric and flag array sequences"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Compressed widths and row/column flags"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "Own compressed numeric width and bit-mask flag arrays with original search mutation copy and iterator contracts",
+    "scopeLimitations": [
+      "Finite row/column UInt16 and CRFlags evidence does not establish whole-module/browser parity. Generic object value copy/equality, native allocation/ABI/references/dangling iterator lifetime, undefined arithmetic and invalid-index states are uncertified. Required scalar witnesses adapt erased native template arguments; output-reference tuples, independent POD entry copies and fail-fast assertion adapters retain finite numerical contracts, not native process abort. Out-of-domain changed range bit operations may not terminate; separate original diagnostics assign no successful result and no repair is introduced. Ordered-entry/valid-region and copy-progress preconditions remain required. Genuine o3tl mask operators are used in native comparison; TypeScript adapts only the original CRFlags result-mask assertion. Table/document/column/browser consumers and broader global.hxx remain unimplemented.",
+      "The QA row-flag helper is consumer context;5272 generated sequences are not claimed as literal upstream unit scenarios. Only numeric and CRFlags template value types are implemented; object/custom equality types remain separate work."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

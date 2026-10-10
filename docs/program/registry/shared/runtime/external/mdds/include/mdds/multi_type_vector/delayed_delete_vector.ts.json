@@ -1,0 +1,73 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/delayed_delete_vector.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "cell-storage",
+    "capabilityIds": [
+      "CAP-725f8032-25c9-4c5c-aaab-50a6bf3b0f12",
+      "CAP-cee366ee-9e4b-419f-8726-33e60460102a",
+      "CAP-fea462db-89f8-4359-a95d-7c253562827f"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/external/mdds/include/mdds/multi_type_vector/delayed_delete_vector.ts#delayed_delete_vector",
+        "apps/office/src/external/mdds/include/mdds/multi_type_vector/delayed_delete_vector.test.ts#matches every unchanged native scalar sequence",
+        "scripts/mdds-delayed-vector-native-probe.mjs#verifyDirectory",
+        "vendor/mdds-reference/include/mdds/multi_type_vector/delayed_delete_vector.hpp#class delayed_delete_vector",
+        "apps/office/src/external/mdds/include/mdds/multi_type_vector/util.test.ts#matches original UInt64 input-end and signed forward reverse distances",
+        "apps/office/src/external/mdds/include/mdds/multi_type_vector/vector_storage.ts#allocate_storage"
+      ],
+      "justification": "Task202610091909-KYNP7H ports the original shared mdds default element-block store in its native source boundary, before implementing element blocks and Calc column owners. Genuine unchanged headers compile under ASan/UBSan after complete verified archive/patch/compiler-header checks. Portable tests replay every native result and complete interned public snapshot, preserving suspicious vector-only swap and erase overload asymmetry. Only initialized primitive number/boolean/bigint/string T families with defined native index/range operations are implemented. Explicit T{} adapts erased template syntax. Reserved backing slots reproduce finite host libc++ capacity observations, including bool word storage; other STL allocators, object/allocator specializations, allocation failure, native value lifetime, ABI and invalidated/dangling iterators remain unverified. Native vector<bool>::data is not available and is not certified. No complete element blocks, multi_type_vector, ScColumn/ScDocument or module parity claim. Task202610092012-8RZCZ1 adds original standard traits/borrowed random-access distance required by real container utilities; Original util events/default trait aliases, explicit empty type identities, optional trace scope depth/lifetime, standard native64 unsigned input-end arithmetic and valid borrowed position movement are implemented. Native static types/RAII/reference/std::distance/category syntax use explicit TS witnesses; callers dispose trace exactly once in finally. Bigint preserves UInt64 wrap; number projections require exact bounded logical indices. Native int32 steps/casts retained for valid logical block positions. Full compile-time types_util traits, trace call-site macros, alternative signed/size widths, arbitrary input iterator categories, invalid iterator lifetimes, native const/reference/allocator/destructor ABI and actual TS soa iterator/container/Calc document/browser remain unverified. The native soa container produces observations only; the TS test iterator borrows its committed node projections and is not a replacement runtime engine. No complete upstream module certification. Task202610092047-Q9D4EA extracts and reuses actual underlying slot mechanics; delayed offset/capacity policy remains in this original owner and its complete prior native corpus is rerun unchanged.",
+      "knownViolations": [],
+      "localSymbols": [
+        "DelayedVectorValue",
+        "delayed_delete_vector_iterator",
+        "copy",
+        "advance",
+        "get",
+        "set",
+        "equals",
+        "delayed_delete_vector",
+        "copy_assign",
+        "begin",
+        "end",
+        "rbegin",
+        "rend",
+        "at",
+        "push_back",
+        "emplace_back",
+        "swap",
+        "insert",
+        "resize",
+        "erase",
+        "capacity",
+        "shrink_to_fit",
+        "reserve",
+        "size",
+        "assign",
+        "data",
+        "clear_removed",
+        "range",
+        "aligned_capacity",
+        "allocate",
+        "grow",
+        "assign_vector",
+        "distance_to"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "vendor/mdds-reference/include/mdds/multi_type_vector/delayed_delete_vector.hpp",
+      "upstreamSymbols": [
+        "class delayed_delete_vector",
+        "operator=="
+      ]
+    }
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/inc/global.ts",
+          "marker": "UpdateRefMode"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/refupdate.test.ts",
+          "marker": "retains original mode values and copy is an untouched reference"
+        },
+        {
+          "path": "apps/office/src/sc/inc/global.ts",
+          "marker": "ScGlobal"
+        },
+        {
+          "path": "apps/office/src/sc/inc/global.ts",
+          "marker": "CRFlags"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/global.hxx",
+          "marker": "enum UpdateRefMode"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/global.hxx",
+          "marker": "bThreadedGroupCalcInProgress"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/global.hxx",
+          "marker": "enum class CRFlags"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sc/inc/global.ts",
+    "localSymbols": [
+      "UpdateRefMode",
+      "ScGlobal",
+      "CRFlags"
+    ],
+    "omittedResponsibilities": [
+      "Other global.hxx declarations, document/compiler consumers and whole Calc parity remain unverified."
+    ],
+    "preservedResponsibilities": [
+      "Original UpdateRefMode names, declaration order and numeric values0..3.",
+      "Header boundary re-exports the original ScGlobal process-state owner; false initializer remains at core/data/global.",
+      "Original UInt8 CRFlags names and values0/1/2/4/8/15; valid four-bit result mask in numerical compressed arrays."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sc/inc/global.hxx",
+    "upstreamSymbols": [
+      "UpdateRefMode",
+      "bThreadedGroupCalcInProgress",
+      "CRFlags"
+    ]
+  }
+}

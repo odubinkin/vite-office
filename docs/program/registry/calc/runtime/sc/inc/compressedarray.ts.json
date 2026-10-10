@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/inc/compressedarray.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "compressed-width-flags",
+    "capabilityIds": [
+      "CAP-d493f926-aba2-43d6-975a-52b2ee06c20b"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sc/inc/compressedarray.ts#ScCompressedArray",
+        "apps/office/src/sc/source/core/data/compressedarray.test.ts#matches all unchanged native numeric and flag array sequences",
+        "scripts/calc-compressedarray-native-probe.mjs#const groups",
+        "vendor/libreoffice-reference/sc/inc/compressedarray.hxx#ScCompressedArray"
+      ],
+      "justification": "Task202610091841-PZT40R ports complete original compressedarray numerical and CRFlags owners at source-shaped header/core-data boundaries. All5272 defined unchanged native sequences and640 complete interned snapshots compare both real owners after every command under ASan/UBSan, with original typed_flags_set/underlyingenumvalue/config headers and pinned hashes. Native final bit owners are never subclassed or replaced: legal read-only base-member pointers observe original protected entries/count/capacity. Original self-copy and result-mask assertions reproduce; invalid-start And/Or non-progress loops are isolated bounded diagnostics. Two redundant SetValue guards are specialized only from original ordered Search and active-insertion/count invariants with proof comments; every native method body remains unchanged. No coverage exclusions, injected private state or Writer changes. Finite row/column UInt16 and CRFlags evidence does not establish whole-module/browser parity. Generic object value copy/equality, native allocation/ABI/references/dangling iterator lifetime, undefined arithmetic and invalid-index states are uncertified. Required scalar witnesses adapt erased native template arguments; output-reference tuples, independent POD entry copies and fail-fast assertion adapters retain finite numerical contracts, not native process abort. Out-of-domain changed range bit operations may not terminate; separate original diagnostics assign no successful result and no repair is introduced. Ordered-entry/valid-region and copy-progress preconditions remain required. Genuine o3tl mask operators are used in native comparison; TypeScript adapts only the original CRFlags result-mask assertion. Table/document/column/browser consumers and broader global.hxx remain unimplemented.",
+      "knownViolations": [],
+      "localSymbols": [],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "sc/inc/compressedarray.hxx",
+      "upstreamSymbols": [
+        "ScCompressedArray",
+        "ScBitMaskCompressedArray",
+        "Iterator",
+        "DataEntry",
+        "RangeData"
+      ]
+    }
+  }
+}

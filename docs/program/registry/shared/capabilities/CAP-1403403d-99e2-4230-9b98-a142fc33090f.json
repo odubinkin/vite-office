@@ -1,0 +1,97 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-1403403d-99e2-4230-9b98-a142fc33090f",
+    "capabilityId": "CAP-1403403d-99e2-4230-9b98-a142fc33090f",
+    "suite": "shared",
+    "subsystem": "cell-storage",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original public erase retains its reversed-range diagnostic before actual block lookup; erase_impl keeps both pinned lookup diagnostics including the original start-row argument when the end lookup fails.",
+      "Original multi-block erase shortens first/last blocks in source order, invokes actual overwrite/resize/erase callbacks, releases/deletes interior blocks, erases metadata, reduces logical size, adjusts original following positions and merges only the admitted next block.",
+      "Original single-block erase overwrites/erases before metadata reduction, deletes zero-size data and coalesces same-type or both-empty neighbors with original append/zero-size/release/delete ordering.",
+      "Original merge_with_next_block retains terminal/empty/type decisions and its actual boolean result; scalar loop-unrolling alias selects the existing shared adjust_block_positions specialization.",
+      "All664 prior complete native sequences and final logs remain unchanged; exhaustive finite compound erase ranges compare full actual payloads/capacities/metadata/ownership/endpoint/equality/error/operation states and copy isolation."
+    ],
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "Original owner member bodies/field boundaries preserved with existing shared deletion, adjustment, scalar block funcs and iterators; erased STL/trait/size_t syntax only, no alternate erase engine."
+    },
+    "capability": "Shared original SoA range erase and adjacent-tail merge contracts",
+    "gaps": [
+      "Selected pinned libc++ size_t64 no_trace/default-execution with initialized all12 unmanaged standard families and nonthrowing original event witnesses. Every valid inclusive range of several11/13cell compound geometries, filled/empty owners, first/last/middle/whole/multiple blocks, adjacent same/different/empty merging and41block adjustment inputs compared. Exact bounded stored indices and uint64 bigint error witnesses guard before projection. Original actual delete_element_block(s), trait-selected architecture-neutral loop-unrolling and registered funcs reused. Native pointer/range/overflow/unbounded metadata, custom/managed outcomes, arbitrary values/throwing allocation/events, trace/debug/SIMD/ABI, remaining set/insert/transfer/release/emplace and whole Calc document/browser/module/default parity remain unverified. Original invalid-end diagnostic start-row argument preserved without correction."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/mdds-reference/include/mdds/multi_type_vector/soa/main_def.inl",
+          "marker": "multi_type_vector<Traits>::erase_impl"
+        },
+        {
+          "path": "vendor/mdds-reference/include/mdds/multi_type_vector/soa/main_def.inl",
+          "marker": "multi_type_vector<Traits>::erase_in_single_block"
+        },
+        {
+          "path": "vendor/mdds-reference/include/mdds/multi_type_vector/soa/main_def.inl",
+          "marker": "multi_type_vector<Traits>::merge_with_next_block"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/mdds-reference/test/multi_type_vector/default/tc/erase.inl",
+          "marker": "mtv_test_erase"
+        }
+      ],
+      "docs": [
+        {
+          "path": "download.lst",
+          "marker": "mdds-3.2.1.tar.xz"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/main.ts",
+          "marker": "erase_impl"
+        },
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/main.ts",
+          "marker": "erase_in_single_block"
+        },
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/main.ts",
+          "marker": "merge_with_next_block"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/container.test.ts",
+          "marker": "matches every complete original constructor operator iterator and destructor sequence"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Shared SoA range erase and adjacent-tail merge"
+        },
+        {
+          "path": "docs/program/upstream-suspected-issues.md",
+          "marker": "CALC-030"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "Erase inclusive original SoA ranges and coalesce original admitted adjacent blocks with exact ownership and position-adjustment ordering",
+    "scopeLimitations": [
+      "Selected pinned libc++ size_t64 no_trace/default-execution with initialized all12 unmanaged standard families and nonthrowing original event witnesses. Every valid inclusive range of several11/13cell compound geometries, filled/empty owners, first/last/middle/whole/multiple blocks, adjacent same/different/empty merging and41block adjustment inputs compared. Exact bounded stored indices and uint64 bigint error witnesses guard before projection. Original actual delete_element_block(s), trait-selected architecture-neutral loop-unrolling and registered funcs reused. Native pointer/range/overflow/unbounded metadata, custom/managed outcomes, arbitrary values/throwing allocation/events, trace/debug/SIMD/ABI, remaining set/insert/transfer/release/emplace and whole Calc document/browser/module/default parity remain unverified. Original invalid-end diagnostic start-row argument preserved without correction."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

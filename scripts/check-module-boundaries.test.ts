@@ -10,6 +10,25 @@ import {
   getRuntimeOwnershipViolation,
 } from "./check-module-boundaries.mjs";
 
+it("permits Calc mdds dependency while keeping external owners independent", /** Protects shared external storage from app and browser dependencies. @returns Nothing. */ () => {
+  expect(isForbiddenModuleEdge("sc", "external")).toBe(false);
+  for (const app of ["sc", "sw", "framework", "vcl"])
+    expect(isForbiddenModuleEdge("external", app)).toBe(true);
+  expect(getRuntimeOwnershipLayer("external/mdds/include/mdds/flat_segment_tree.ts")).toBe(
+    "upstream-mechanism",
+  );
+  expect(
+    getRuntimeOwnershipViolation(
+      "external/mdds/include/mdds/node.ts",
+      "vcl/browser/font-list.ts",
+      "../../../../vcl/browser/font-list",
+    ),
+  ).toMatch(/browser adapters/u);
+  expect(getRuntimeOwnershipViolation("external/mdds/include/mdds/node.ts", "", "react")).toMatch(
+    /presentation package/u,
+  );
+});
+
 describe("runtime ownership boundaries", /** Registers runtime ownership boundary cases. @returns Nothing. */ function defineRuntimeBoundaryTests(): void {
   it("isolates Calc and Writer while admitting shared dependencies", /** Verifies independent application owners. @returns Nothing. */ () => {
     for (const dependency of ["framework", "sfx2", "svl", "svx", "editeng", "vcl", "xmloff"])

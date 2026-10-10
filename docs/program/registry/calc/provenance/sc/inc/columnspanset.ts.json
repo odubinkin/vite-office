@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/inc/columnspanset.ts",
+          "marker": "ColRowSpan"
+        },
+        {
+          "path": "apps/office/src/sc/inc/fstalgorithm.test.ts",
+          "marker": "original flat segment span algorithms"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/columnspanset.hxx",
+          "marker": "struct SC_DLLPUBLIC ColRowSpan"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sc/inc/columnspanset.ts",
+    "localSymbols": [
+      "RowSpan",
+      "ColRowSpan"
+    ],
+    "omittedResponsibilities": [
+      "Finite selected evidence does not establish full native or browser parity. Complete document/column storage, native intrusive lifetime/ABI/pointer invalidation and diagnostics are unverified. Original unordered_map top/bottom row permutation is unspecified and compared as full multisets while raw native observations remain retained. Selected-tab self-move triggers a recorded libc++220106 ASan failure and has no certified defined native outcome. Invalid ranges/arithmetic and malformed/dangling states remain outside the defined comparison. Existing numerical document getter views are explicit source adapters, not document engines.",
+      "ColumnSpanSet, SingleColumnSpanSet, RangeColumnSpanSet and document/column scan/action services remain separate unimplemented source owners."
+    ],
+    "preservedResponsibilities": [
+      "Original buildSpan, buildSpanWithValue and both toSpanArray overloads including inclusive endpoints, nonzero value filtering, caller iterator copying and output appending.",
+      "Original valid_tree-only start-key overload with failed-search empty output; no index rebuilding fallback.",
+      "Original RowSpan and ColRowSpan signed32 numerical value constructors at their source header/core-data boundaries."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sc/inc/columnspanset.hxx",
+    "upstreamSymbols": [
+      "RowSpan",
+      "ColRowSpan"
+    ]
+  }
+}

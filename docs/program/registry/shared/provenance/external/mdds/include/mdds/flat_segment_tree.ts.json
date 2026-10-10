@@ -1,0 +1,83 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/flat_segment_tree.ts",
+          "marker": "SearchResult"
+        },
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/flat_segment_tree.test.ts",
+          "marker": "matches every unchanged native insertion"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/mdds-reference/include/mdds/flat_segment_tree.hpp",
+          "marker": "class flat_segment_tree"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/external/mdds/include/mdds/flat_segment_tree.ts",
+    "localSymbols": [
+      "SearchResult",
+      "moveConstruction",
+      "flat_segment_tree",
+      "move",
+      "assign",
+      "moveAssign",
+      "swap",
+      "clear",
+      "min_key",
+      "max_key",
+      "default_value",
+      "valid_tree",
+      "is_tree_valid",
+      "leaf_size",
+      "begin",
+      "end",
+      "rbegin",
+      "rend",
+      "begin_segment",
+      "end_segment",
+      "segment_range",
+      "equals",
+      "insert_front",
+      "insert_back",
+      "insert",
+      "adjust_segment_range",
+      "insert_segment_impl",
+      "insert_to_pos",
+      "get_insertion_pos_leaf",
+      "search",
+      "search_impl",
+      "search_tree",
+      "search_tree_for_leaf_node",
+      "build_tree",
+      "shift_left",
+      "shift_right",
+      "append_new_segment",
+      "shift_leaf_key_left",
+      "shift_leaf_key_right",
+      "destroy"
+    ],
+    "omittedResponsibilities": [
+      "Only numeric Calc keys with initialized boolean/number values and native-defined arithmetic are implemented. Wider C++ templates and value classes, allocation/refcount/deletion timing, dangling iterators, debug dumps, generic exceptions and undefined invalid-border operations remain uncertified. GC references and explicit copy/move/operator methods adapt the language runtime. Finite native snapshots do not establish whole-module or Calc parity."
+    ],
+    "preservedResponsibilities": [
+      "Original linked half-open leaf intervals and terminal value_type{}; insertion coalesces nodes and reports actual changes.",
+      "Original separately built bottom-up pooled search tree, readiness invalidation and no implicit build on search.",
+      "Original copy/move/assignment/clear and shift order; distinct forward/reverse iterator types, live ref_pair aliases and cached segment-iterator copy/end semantics."
+    ],
+    "status": "mapped",
+    "upstreamPath": "vendor/mdds-reference/include/mdds/flat_segment_tree.hpp",
+    "upstreamSymbols": [
+      "class flat_segment_tree",
+      "insert_front",
+      "search_tree"
+    ]
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "task_id": "202610092323-JXAJ9S",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-09T23:47:03.145Z",
+  "verdict": "pass",
+  "summary": "Reviewed implementation 235d7c8e19b24dd9993211508391f2e547a28fa5: original shared SoA erase and merge ordering preserved, all required focused checks pass.",
+  "evaluated_sha": "235d7c8e19b24dd9993211508391f2e547a28fa5",
+  "blueprint_digest": "cfded3147b64b94035b13d7a539c2cb90d2780440201e63647897ff9723e9092",
+  "findings": [
+    "Independent committed-fixture decoding matched all 76264 raw records and all original 664 command/state/destructor sequences against c2bf77385daa; 7360 native sequences use actual unchanged headers with ASan/UBSan.",
+    "Lossless owner-table storage retains all native fields and permits ordinary default-heap formatting; no permanent heap override, source-body rewriting or behavioral repair.",
+    "Calc 17 source files and both changed shared owners have actual 100 percent S/B/F/L with positive raw counters; 15 final gates and three portable groups passed with exact upstream links restored.",
+    "Shared lu16 constexpr literal narrowing preserves runtime defaults. Inventory truth flags remain bounded; CALC-030 preserves the original suspicious end-range diagnostic argument."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610092323-JXAJ9S/README.md",
+    "output/playwright/task25-raw-audit.log",
+    "output/playwright/task25-audit.json",
+    "output/playwright/task25-gate-results.json",
+    "output/playwright/task25-corrected-gates.json",
+    "output/playwright/task25-full-results.json",
+    "output/playwright/task25-verification.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Managed/custom ownership, undefined input, trace/debug/SIMD and overflow are outside this selected standard scalar contract; full container and browser parity remain incomplete. Full suite is not due at cycle2 task5/10."
+  ]
+}

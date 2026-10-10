@@ -1,0 +1,96 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/data/segmenttree.ts",
+          "marker": "ScFlatBoolRowSegments"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/segmenttree.test.ts",
+          "marker": "matches all436 unchanged native boolean row/column sequences"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/numeric-segments.test.ts",
+          "marker": "matches every unchanged native UInt16 sequence"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/segmenttree.cxx",
+          "marker": "ScFlatBoolRowSegments::RangeIterator::getFirst"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/segmenttree.cxx",
+          "marker": "ScFlatUInt16RowSegments"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sc/source/core/data/segmenttree.ts",
+    "localSymbols": [
+      "RangeData",
+      "ScFlatBoolRowRangeData",
+      "ScFlatBoolColRangeData",
+      "assertIdleCalculation",
+      "ScFlatSegmentsImpl",
+      "ScFlatBoolSegmentsImpl",
+      "implementations",
+      "scratchRange",
+      "ScFlatBoolRowSegmentsForwardIterator",
+      "ScFlatBoolRowSegmentsRangeIterator",
+      "ScFlatBoolRowSegments",
+      "ScFlatBoolColSegments",
+      "setValue",
+      "getRangeData",
+      "getRangeDataLeaf",
+      "removeSegment",
+      "insertSegment",
+      "findLastTrue",
+      "getFirst",
+      "getNext",
+      "makeReady",
+      "setTrue",
+      "setFalse",
+      "getValue",
+      "getLastPos",
+      "dumpAsString",
+      "ScFlatUInt16RowRangeData",
+      "ScFlatUInt16SegmentsImpl",
+      "numericImplementations",
+      "ScFlatUInt16RowSegmentsForwardIterator",
+      "ScFlatUInt16RowSegments",
+      "setValueIf",
+      "getSumValue",
+      "enableTreeSearch"
+    ],
+    "omittedResponsibilities": [
+      "Finite initialized native comparison is not complete module/browser parity. Native allocation/ABI/dangling pointers, undefined signed arithmetic, conditional-setter invalid-row/uninitialized aggregate inputs, arbitrary reentrant predicates, compiler/runtime threading and native process-abort/release semantics remain unverified. RTL dump allocation/refcount and SAL logging are unlinked; diagnostic ASCII text uses JS strings. Current UInt16/signed32 facade proves sums below2^47, so generic checked-multiply/saturating-add overflow paths cannot fire; other native template value families are unimplemented. Document/table/column/row-height/browser consumers and broader ScGlobal remain follow-up work."
+    ],
+    "preservedResponsibilities": [
+      "Original boolean default false, explicit inclusive maxima, signed32 rows and signed16 columns, header/core-data ownership and independent copies over the actual shared mdds owner.",
+      "Inclusive set/query endpoints, half-open removal, skip-start insertion, original change flags and failed output preservation.",
+      "Original lazily built index, shared search/range iterator hint, forward-only cached iterator values and signed32 maximum findLastTrue sentinel.",
+      "Actual ScGlobal threaded-group flag initialized false at its original owner, original index-readiness preconditions and diagnostic ASCII text.",
+      "Original explicit UInt16 defaults, signed32 row inputs, independent copy/default/search-policy ownership over the existing shared mdds/template.",
+      "Original inclusive setValue and segment-by-segment conditional predicate calls; failed getValue zero and range/output preservation under both search policies.",
+      "Original indexed local-iterator versus leaf owner-hint sum paths, exact UInt64 totals and source-proven unreachable arithmetic overflow for defined UInt16/signed32 owners.",
+      "Original false skip-start insertion, half-open removal, value-specific findLastTrue, and numeric ForwardIterator first policy lookup/later cached-leaf lookup with stale values and failure preservation."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sc/source/core/data/segmenttree.cxx",
+    "upstreamSymbols": [
+      "ScFlatSegmentsImpl",
+      "ScFlatBoolSegmentsImpl",
+      "ScFlatBoolRowSegments",
+      "ScFlatBoolColSegments",
+      "ScFlatBoolRowSegments::ForwardIterator",
+      "ScFlatBoolRowSegments::RangeIterator",
+      "ScFlatUInt16RowSegments",
+      "ScFlatUInt16RowSegments::ForwardIterator",
+      "ScFlatUInt16SegmentsImpl"
+    ]
+  }
+}

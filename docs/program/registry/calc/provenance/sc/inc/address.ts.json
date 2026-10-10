@@ -24,6 +24,10 @@
         {
           "path": "apps/office/src/sc/inc/address.ts",
           "marker": "SCSIZE"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/rangepair.test.ts",
+          "marker": "matches all14284 native pair-list sequences and lookup snapshots"
         }
       ],
       "upstream": [
@@ -48,7 +52,8 @@
       "ValidAddress",
       "applyStartToEndFlags",
       "ScRefAddress",
-      "SCSIZE"
+      "SCSIZE",
+      "ScRangePair"
     ],
     "omittedResponsibilities": [
       "Reference parsing/formatting including ScRefAddress::GetRefString, external links, native hashes and range subtraction remain subsequent Calc tasks.",
@@ -59,7 +64,8 @@
       "Native zero/invalid coordinates, exact standard/jumbo capacities and signed 16/32-bit assignments.",
       "Original numeric constructor ordering, inclusive coordinate operations and movement error contracts; no browser-specific state.",
       "Zero/numeric/copy construction, independent three flags and stable owned address assignment follow the pinned header; coordinate widths are retained by the existing ScAddress owner.",
-      "Original SCSIZE count/index ownership at address header, bounded to exact JavaScript input integers."
+      "Original SCSIZE count/index ownership at address header, bounded to exact JavaScript input integers.",
+      "Task 202610091416-KMHKFV adds original initialized ScRangePair inline values and numerical ScRangePairList default/copy/assignment/Clone/Append, identity/index removal, label-only lookup and sheet deletion, both-range scalar updates and paired Join restarts. Existing ScRange and ScRefUpdate owners are reused. All14284 initialized unchanged native release sequences and lookup snapshots compare with pinned source/extracted hashes under ASan/UBSan. Original right-column data predicate uses source end minus one, retaining asymmetric merge/nonmerge behavior. Ascending-scan encountered source positions are strictly below the joined entry, so the guaranteed native decrement is expressed directly with proof. Name sorting, complete document/compiler/UI consumers, native allocation/borrowed pointer lifetime and debug assertions remain uncertified."
     ],
     "status": "mapped",
     "upstreamPath": "sc/inc/address.hxx",
@@ -69,7 +75,8 @@
       "ValidAddress",
       "applyStartToEndFlags",
       "ScRefAddress",
-      "SCSIZE"
+      "SCSIZE",
+      "ScRangePair"
     ]
   }
 }

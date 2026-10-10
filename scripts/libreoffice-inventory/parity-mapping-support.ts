@@ -171,7 +171,7 @@ export async function validateSide(
 ): Promise<void> {
   for (const kind of ["implementation", "tests", "docs"] as const) {
     for (const reference of evidence[kind]) {
-      const contents = await readEvidence(`${root}/${reference.path}`);
+      const contents = await readEvidence(resolveEvidencePath(root, reference.path, side));
       if (!contents.includes(reference.marker))
         throw new Error(
           `Parity ${side} ${kind} marker is absent: ${reference.path} :: ${reference.marker}`,
@@ -207,4 +207,13 @@ function parseReferences(
       };
     },
   );
+}
+
+/** Resolves source-tree paths or explicitly located vendored upstream dependencies, matching provenance semantics. @param root - Selected evidence root. @param file - Reference path. @param side - Local or upstream owner. @returns Repository evidence path. */
+export function resolveEvidencePath(
+  root: string,
+  file: string,
+  side: "local" | "upstream",
+): string {
+  return side === "upstream" && file.startsWith("vendor/") ? file : `${root}/${file}`;
 }

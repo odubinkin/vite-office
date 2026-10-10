@@ -1,0 +1,93 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-9cbb8ab9-49e6-44cc-8d66-2467a1e55353",
+    "capabilityId": "CAP-9cbb8ab9-49e6-44cc-8d66-2467a1e55353",
+    "suite": "calc",
+    "subsystem": "reference-update",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original MoveRelWrap owner and private lcl_MoveItWrap responsibility reuse existing numerical references and sheet limits.",
+      "Resolve and sort absolute coordinates before wrapping; wrap only each endpoint axis flagged relative and cross each mask only once, with native assignment widths.",
+      "Document table count minus one is the inclusive sheet wrap maximum; independent supplied column/row wrap masks differ from document validity limits.",
+      "Order the wrapped absolute endpoints before SetRange; retain endpoint flags, monotone deletion, stable endpoint identity and independent trim state."
+    ],
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "Original source owner, operation ordering and private helper preserved; native coordinate assignment widths reuse existing address setters."
+    },
+    "capability": "Calc relative reference wrapping",
+    "gaps": [
+      "full document/compiler/token/named-range integration, debug assertion enforcement and undefined arithmetic domains remain subsequent work; bounded initialized release fixtures do not establish full reference-update or whole Calc parity."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sc/source/core/inc/refupdat.hxx",
+          "marker": "static void MoveRelWrap("
+        },
+        {
+          "path": "sc/source/core/tool/refupdat.cxx",
+          "marker": "void ScRefUpdate::MoveRelWrap("
+        },
+        {
+          "path": "sc/source/core/tool/refupdat.cxx",
+          "marker": "static void lcl_MoveItWrap("
+        }
+      ],
+      "tests": [
+        {
+          "path": "sc/qa/unit/ucalc_formula.cxx",
+          "marker": "testFormulaRefData"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/README.md",
+          "marker": "formula"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/refupdat.ts",
+          "marker": "MoveRelWrap"
+        },
+        {
+          "path": "scripts/calc-refwrap-native-probe.mjs",
+          "marker": "const originalMove ="
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/refwrap.test.ts",
+          "marker": "matches every original native relative wrap outcome"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/refwrap.test.ts",
+          "marker": "wraps once rather than modulo and retains deleted raw values"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Relative reference wrapping"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "Resolve initialized complex references, wrap only relative axes once, sort and write back native raw offsets and flags",
+    "scopeLimitations": [
+      "full document/compiler/token/named-range integration, debug assertion enforcement and undefined arithmetic domains remain subsequent work; bounded initialized release fixtures do not establish full reference-update or whole Calc parity.",
+      "The upstream testFormulaRefData links the reused reference owner. Full formula compiler, named-range/token consumer and browser integration are not certified by the bounded native wrapping fixture."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

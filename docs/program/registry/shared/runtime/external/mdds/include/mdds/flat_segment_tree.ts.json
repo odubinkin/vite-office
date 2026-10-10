@@ -1,0 +1,77 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/mdds/include/mdds/flat_segment_tree.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "segment-storage",
+    "capabilityIds": [
+      "CAP-f86ce675-1b19-464c-a22d-69ac9c9bb705"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/external/mdds/include/mdds/flat_segment_tree.ts#SearchResult",
+        "apps/office/src/external/mdds/include/mdds/flat_segment_tree.test.ts#matches every unchanged native insertion",
+        "scripts/mdds-flat-segment-native-probe.mjs#verifyDirectory",
+        "vendor/mdds-reference/include/mdds/flat_segment_tree.hpp#class flat_segment_tree"
+      ],
+      "justification": "Task202610091517-S6Q035 ports the shared mdds3.2.1 owners used by sc segmenttree, keeping include/mdds source boundaries and original MIT notices/license. The optional native probe verifies complete dependency archives against pinned LibreOffice download.lst, applies its exact original gcc warning patch, verifies every actual mdds/Boost compiler header and compiles genuine unchanged headers with assertions and ASan/UBSan. Every native sequence retains all step results and full public snapshots; deduplication shares identical snapshots only. Original bounds/search/hint/shift contracts are retained, including suspicious overload asymmetry; invalid-border native null access is excluded from certification, with no guard fix. Proven unreachable malformed-tree/leaf diagnostics are expressed through source invariants with comments; no coverage exclusions or native-body rewrites. Only numeric Calc keys with initialized boolean/number values and native-defined arithmetic are implemented. Wider C++ templates and value classes, allocation/refcount/deletion timing, dangling iterators, debug dumps, generic exceptions and undefined invalid-border operations remain uncertified. GC references and explicit copy/move/operator methods adapt the language runtime. Finite native snapshots do not establish whole-module or Calc parity.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SearchResult",
+        "moveConstruction",
+        "flat_segment_tree",
+        "move",
+        "assign",
+        "moveAssign",
+        "swap",
+        "clear",
+        "min_key",
+        "max_key",
+        "default_value",
+        "valid_tree",
+        "is_tree_valid",
+        "leaf_size",
+        "begin",
+        "end",
+        "rbegin",
+        "rend",
+        "begin_segment",
+        "end_segment",
+        "segment_range",
+        "equals",
+        "insert_front",
+        "insert_back",
+        "insert",
+        "adjust_segment_range",
+        "insert_segment_impl",
+        "insert_to_pos",
+        "get_insertion_pos_leaf",
+        "search",
+        "search_impl",
+        "search_tree",
+        "search_tree_for_leaf_node",
+        "build_tree",
+        "shift_left",
+        "shift_right",
+        "append_new_segment",
+        "shift_leaf_key_left",
+        "shift_leaf_key_right",
+        "destroy"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "vendor/mdds-reference/include/mdds/flat_segment_tree.hpp",
+      "upstreamSymbols": [
+        "class flat_segment_tree",
+        "insert_front",
+        "search_tree"
+      ]
+    }
+  }
+}

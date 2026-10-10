@@ -1,0 +1,79 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-47f1d037-0539-48db-adb5-244d6fdeac21",
+    "capabilityId": "CAP-47f1d037-0539-48db-adb5-244d6fdeac21",
+    "suite": "calc",
+    "subsystem": "span-conversion",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original buildSpan, buildSpanWithValue and both toSpanArray overloads including inclusive endpoints, nonzero value filtering, caller iterator copying and output appending.",
+      "Original valid_tree-only start-key overload with failed-search empty output; no index rebuilding fallback.",
+      "Original RowSpan and ColRowSpan signed32 numerical value constructors at their source header/core-data boundaries."
+    ],
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "Source-owned mechanisms use actual shared and Calc dependencies; explicit scalar/iterator/template runtime syntax adapters remain bounded."
+    },
+    "capability": "Calc segment tree span conversions and numerical span values",
+    "gaps": [
+      "Native comparison covers numerical keys with boolean and integer values through all original overloads: 256 boolean patterns and 64 numerical owners. The current shared mdds value contract admits boolean/number only. Custom native bool conversion, object or move-only value types, non-numerical key types, arbitrary template consumers, allocation/ABI and malformed/dangling states remain unverified. Complete ColumnSpanSet scan/action owners and browser consumers remain unimplemented; finite evidence does not establish whole-module parity."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sc/inc/fstalgorithm.hxx",
+          "marker": "toSpanArray"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sc/qa/unit/mark_test.cxx",
+          "marker": "void Test::testSimpleMark_Simple()"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/inc/fstalgorithm.hxx",
+          "marker": "Convert a flat_segment_tree structure"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/inc/fstalgorithm.ts",
+          "marker": "export function toSpanArray"
+        },
+        {
+          "path": "scripts/calc-fstalgorithm-native-probe.mjs",
+          "marker": "const sources"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/inc/fstalgorithm.test.ts",
+          "marker": "original flat segment span algorithms"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Mark-data selection owner and span conversions"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "Calc segment tree span conversions and numerical span values",
+    "scopeLimitations": [
+      "Native comparison covers numerical keys with boolean and integer values through all original overloads: 256 boolean patterns and 64 numerical owners. The current shared mdds value contract admits boolean/number only. Custom native bool conversion, object or move-only value types, non-numerical key types, arbitrary template consumers, allocation/ABI and malformed/dangling states remain unverified. Complete ColumnSpanSet scan/action owners and browser consumers remain unimplemented; finite evidence does not establish whole-module parity."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/macro.ts",
+          "marker": "MDDS_MTV_DEFINE_ELEMENT_CALLBACKS"
+        },
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/block_funcs.test.ts",
+          "marker": "matches every unchanged native dispatcher and scalar callback sequence"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/mdds-reference/include/mdds/multi_type_vector/macro.hpp",
+          "marker": "#define MDDS_MTV_DEFINE_ELEMENT_CALLBACKS"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/external/mdds/include/mdds/multi_type_vector/macro.ts",
+    "localSymbols": [
+      "ScalarCallbackBlock",
+      "MDDS_MTV_DEFINE_ELEMENT_CALLBACKS",
+      "element_callbacks",
+      "mdds_mtv_get_element_type",
+      "mdds_mtv_get_empty_value",
+      "mdds_mtv_set_value",
+      "mdds_mtv_get_value",
+      "mdds_mtv_set_values",
+      "mdds_mtv_append_value",
+      "mdds_mtv_emplace_back_value",
+      "mdds_mtv_prepend_value",
+      "mdds_mtv_prepend_values",
+      "mdds_mtv_append_values",
+      "mdds_mtv_assign_values",
+      "mdds_mtv_insert_values",
+      "mdds_mtv_create_new_block"
+    ],
+    "omittedResponsibilities": [
+      "Original full block_funcs static dispatch and initialized primitive scalar callback family are implemented over actual shared scalar owners. Explicit native template/value-type witnesses replace C++ overload/ADL resolution; scalar output-reference values and single-scalar forwarding adapt JS references. Pointer callbacks/managed owners, nonprimitive variadic constructors, true native reference/const/ABI/allocator/destructor behavior and invalid type/lifetime casts, util/default_traits/trace/complete MTV/Calc document/browser remain unverified. Duplicate native type IDs with different handlers are outside certified uniqueness preconditions. Native null deletion, early unequal-ID false and unknown non-null deletion exception are preserved; no safety repair. No complete upstream-module parity certification."
+    ],
+    "preservedResponsibilities": [
+      "Original per-method block type map selection preserves all dispatcher methods, both erase overloads, null deletion and early false for unequal IDs.",
+      "Original exact unknown handler diagnostics, swap type assertion and destination-selected range handlers are retained without cross-type successful-result claims.",
+      "Original scalar callback responsibilities and all12 standard registrations retain explicit native type IDs/defaults over real shared element blocks; no number type guessing.",
+      "Complete unchanged genuine native dispatch/callback observations and isolated assertion diagnostics preserve source responsibility."
+    ],
+    "status": "mapped",
+    "upstreamPath": "vendor/mdds-reference/include/mdds/multi_type_vector/macro.hpp",
+    "upstreamSymbols": [
+      "#define MDDS_MTV_DEFINE_ELEMENT_CALLBACKS"
+    ]
+  }
+}

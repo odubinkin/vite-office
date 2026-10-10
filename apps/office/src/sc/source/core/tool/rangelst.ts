@@ -1,7 +1,10 @@
 /** @fileoverview Numerical ScRangeList contracts and fragment helpers from pinned sc/source/core/tool/rangelst.cxx. */
-import { ScAddress, ScRange } from "../../../inc/address";
+import { ScAddress, ScRange, ScRangePair } from "../../../inc/address";
 import type { SCSIZE } from "../../../inc/address";
+import { UpdateRefMode } from "../../../inc/global";
 import type { SCCOL, SCROW, SCTAB } from "../../../inc/types";
+import { ScRefUpdate, ScRefUpdateRes } from "../inc/refupdat";
+import type { ScRefUpdateDocument } from "../inc/refupdat";
 
 /** Original ordered range value list with the upstream maximum-row append cache. */
 export class ScRangeList implements Iterable<ScRange> {
@@ -19,6 +22,18 @@ export class ScRangeList implements Iterable<ScRange> {
       /** Copies one value. @param range - Source. @returns Independent range. */ (range) =>
         new ScRange(range),
     );
+    this.mnMaxRowUsed = source.mnMaxRowUsed;
+    return this;
+  }
+  /** Adapts the original default move constructor, transferring values while copying the scalar cache. @param source - Original moved owner. @returns New owner. */
+  public static move(source: ScRangeList): ScRangeList {
+    return new ScRangeList().moveAssign(source);
+  }
+  /** Adapts the original default move assignment; moved-from vector state follows the compared native runtime. @param source - Moved owner. @returns Recipient. */
+  public moveAssign(source: ScRangeList): this {
+    const ranges = source.maRanges;
+    source.maRanges = [];
+    this.maRanges = source === this ? source.maRanges : ranges;
     this.mnMaxRowUsed = source.mnMaxRowUsed;
     return this;
   }
@@ -298,6 +313,69 @@ export class ScRangeList implements Iterable<ScRange> {
     }
     this.push_back(newRange);
   }
+  /** Updates original ordered references after pre-deletion and before backward joins. @param mode - Native update mode. @param document - Existing document getters. @param where - Affected area. @param rawDx - Column displacement. @param rawDy - Row displacement. @param rawDz - Sheet displacement. @returns Original change result, including deletion-result overwrite. */
+  public UpdateReference(
+    mode: UpdateRefMode,
+    document: ScRefUpdateDocument,
+    where: ScRange,
+    rawDx: SCCOL,
+    rawDy: SCROW,
+    rawDz: SCTAB,
+  ): boolean {
+    if (this.maRanges.length === 0) return false;
+    const dx = (rawDx << 16) >> 16,
+      dy = rawDy | 0,
+      dz = (rawDz << 16) >> 16;
+    let changed = false;
+    const [col1, row1, tab1, col2, row2, tab2] = where.GetVars();
+    if (mode === UpdateRefMode.URM_INSDEL) {
+      if (tab1 === tab2) {
+        if (dx < 0)
+          changed = this.DeleteArea(
+            ((col1 + dx) << 16) >> 16,
+            row1,
+            tab1,
+            ((col1 - 1) << 16) >> 16,
+            row2,
+            tab2,
+          );
+        if (dy < 0) changed = this.DeleteArea(col1, row1 + dy, tab1, col2, row1 - 1, tab2);
+      }
+    }
+    if (this.maRanges.length === 0) return true;
+    for (const range of this.maRanges) {
+      const [result, firstCol, firstRow, firstTab, lastCol, lastRow, lastTab] = ScRefUpdate.Update(
+        document,
+        mode,
+        col1,
+        row1,
+        tab1,
+        col2,
+        row2,
+        tab2,
+        dx,
+        dy,
+        dz,
+        ...range.GetVars(),
+      );
+      if (result !== ScRefUpdateRes.UR_NOTHING) {
+        changed = true;
+        range.aStart.Set(firstCol, firstRow, firstTab);
+        range.aEnd.Set(lastCol, lastRow, lastTab);
+        if (this.mnMaxRowUsed < lastRow) this.mnMaxRowUsed = lastRow;
+      }
+    }
+    if (mode === UpdateRefMode.URM_INSDEL) {
+      if (dx < 0 || dy < 0) {
+        for (let index = this.maRanges.length - 1; index > 0;) {
+          this.Join(this.at(index), true);
+          if (index >= this.maRanges.length) index = this.maRanges.length - 1;
+          else --index;
+        }
+      }
+    }
+    return changed;
+  }
   /** Extends row ends through the original OR overlap predicate and deferred Join. @param tab - Sheet. @param colStart - First column. @param colEnd - Last column. @param rowPosition - Inserted first row. @param size - Row count. @returns Nothing. */
   public InsertRow(
     tab: SCTAB,
@@ -537,4 +615,209 @@ function handleFourRanges(deleting: ScRange, range: ScRange, added: ScRange[]): 
   added.push(new ScRange(dc2 + 1, dr1, tab, c2, dr2, tab));
   range.aEnd.SetRow(dr1 - 1);
   return true;
+}
+
+/** Original ordered paired-range owner for column/row name labels and associated data. */
+export class ScRangePairList {
+  private maPairs: ScRangePair[] = [];
+
+  /** Constructs default empty or implicit native value-copy storage. @param source - Optional original list. @returns Independent owner. */
+  public constructor(source?: ScRangePairList) {
+    if (source) this.assign(source);
+  }
+  /** Represents implicit vector value assignment; native allocation/pointer lifetime remains outside the JS value contract. @param source - Original list. @returns Recipient. */
+  public assign(source: ScRangePairList): this {
+    this.maPairs = source.maPairs.map(
+      /** Copies one native vector value. @param pair - Source pair. @returns Independent pair. */ (
+        pair,
+      ) => new ScRangePair(pair),
+    );
+    return this;
+  }
+
+  /** Clones independent original vector values. @returns Independent list. */
+  public Clone(): ScRangePairList {
+    const copy = new ScRangePairList();
+    for (const pair of this.maPairs) copy.Append(pair);
+    return copy;
+  }
+  /** Appends an independently copied value. @param pair - Original pair. @returns Nothing. */
+  public Append(pair: ScRangePair): void {
+    this.maPairs.push(new ScRangePair(pair));
+  }
+  /** Removes by native vector position or exact borrowed identity, never value equality. Release assertion failures leave storage intact. @param value - Index or borrowed pair. @returns Nothing. */
+  public Remove(value: number | ScRangePair): void {
+    if (typeof value === "number") {
+      if (value < 0 || this.maPairs.length <= value) return;
+      this.maPairs.splice(value, 1);
+    } else {
+      const index = this.maPairs.indexOf(value);
+      if (index !== -1) this.maPairs.splice(index, 1);
+    }
+  }
+  /** Reads original vector size. @returns Pair count. */
+  public size(): SCSIZE {
+    return this.maPairs.length;
+  }
+  /** Represents native operator[] for valid indices. @param index - Existing index. @returns Borrowed pair. */
+  public at(index: SCSIZE): ScRangePair {
+    return this.maPairs[index] as ScRangePair;
+  }
+  /** Updates both range owners through the original numerical update, without deletion or merging. @param mode - Native mode. @param document - Existing getter view. @param where - Affected area. @param rawDx - Column displacement. @param rawDy - Row displacement. @param rawDz - Sheet displacement. @returns Nothing. */
+  public UpdateReference(
+    mode: UpdateRefMode,
+    document: ScRefUpdateDocument,
+    where: ScRange,
+    rawDx: SCCOL,
+    rawDy: SCROW,
+    rawDz: SCTAB,
+  ): void {
+    if (this.maPairs.length === 0) return;
+    const coordinates = where.GetVars();
+    const dx = (rawDx << 16) >> 16,
+      dy = rawDy | 0,
+      dz = (rawDz << 16) >> 16;
+    for (const pair of this.maPairs) {
+      for (let index = 0; index < 2; ++index) {
+        const range = pair.GetRange(index);
+        const [result, col1, row1, tab1, col2, row2, tab2] = ScRefUpdate.Update(
+          document,
+          mode,
+          ...coordinates,
+          dx,
+          dy,
+          dz,
+          ...range.GetVars(),
+        );
+        if (result !== ScRefUpdateRes.UR_NOTHING) {
+          range.aStart.Set(col1, row1, tab1);
+          range.aEnd.Set(col2, row2, tab2);
+        }
+      }
+    }
+  }
+  /** Deletes only pairs whose label starts and ends on the supplied sheet. @param rawTab - Native sheet. @returns Nothing. */
+  public DeleteOnTab(rawTab: SCTAB): void {
+    const tab = (rawTab << 16) >> 16;
+    this.maPairs = this.maPairs.filter(
+      /** Keeps entries outside the original single-label-sheet predicate. @param pair - Original entry. @returns Whether retained. */ (
+        pair,
+      ) => {
+        const range = pair.GetRange(0);
+        return !(range.aStart.Tab() === tab && range.aEnd.Tab() === tab);
+      },
+    );
+  }
+  /** Finds the first label containing an address or exactly equaling a range. @param value - Address or range. @returns Borrowed entry or null. */
+  public Find(value: ScAddress | ScRange): ScRangePair | null {
+    for (const pair of this.maPairs) {
+      const label = pair.GetRange(0);
+      if (value instanceof ScAddress ? label.Contains(value) : label.equals(value)) return pair;
+    }
+    return null;
+  }
+  /** Joins original paired containment or exact simultaneous adjacency, retaining restart and source identity semantics. @param source - Pair to join. @param isInList - Native borrowed-source flag. @returns Nothing. */
+  public Join(source: ScRangePair, isInList = false): void {
+    if (this.maPairs.length === 0) {
+      this.Append(source);
+      return;
+    }
+    let joinedInput = false;
+    let over = source;
+    let restart = true;
+    while (restart) {
+      restart = false;
+      const first = over.GetRange(0),
+        second = over.GetRange(1);
+      const [col1, row1, tab1, col2, row2, tab2] = first.GetVars();
+      let overPosition = -1;
+      for (let index = 0; index < this.maPairs.length; ++index) {
+        const pair = this.at(index);
+        if (pair === over) {
+          overPosition = index;
+          continue;
+        }
+        let joined = false;
+        const label = pair.GetRange(0),
+          data = pair.GetRange(1);
+        if (data.equals(second)) {
+          if (label.Contains(first)) {
+            if (isInList) joined = true;
+            else {
+              joinedInput = true;
+              break;
+            }
+          } else if (first.Contains(label)) {
+            pair.assign(over);
+            joined = true;
+          }
+        }
+        if (
+          !joined &&
+          label.aStart.Tab() === tab1 &&
+          label.aEnd.Tab() === tab2 &&
+          data.aStart.Tab() === second.aStart.Tab() &&
+          data.aEnd.Tab() === second.aEnd.Tab()
+        ) {
+          if (
+            label.aStart.Col() === col1 &&
+            label.aEnd.Col() === col2 &&
+            data.aStart.Col() === second.aStart.Col() &&
+            data.aEnd.Col() === second.aEnd.Col()
+          ) {
+            if (label.aStart.Row() === row2 + 1 && data.aStart.Row() === second.aEnd.Row() + 1) {
+              label.aStart.SetRow(row1);
+              data.aStart.SetRow(second.aStart.Row());
+              joined = true;
+            } else if (
+              label.aEnd.Row() === row1 - 1 &&
+              data.aEnd.Row() === second.aStart.Row() - 1
+            ) {
+              label.aEnd.SetRow(row2);
+              data.aEnd.SetRow(second.aEnd.Row());
+              joined = true;
+            }
+          } else if (
+            label.aStart.Row() === row1 &&
+            label.aEnd.Row() === row2 &&
+            data.aStart.Row() === second.aStart.Row() &&
+            data.aEnd.Row() === second.aEnd.Row()
+          ) {
+            if (label.aStart.Col() === col2 + 1 && data.aStart.Col() === second.aEnd.Col() + 1) {
+              label.aStart.SetCol(col1);
+              data.aStart.SetCol(second.aStart.Col());
+              joined = true;
+            } else if (label.aEnd.Col() === col1 - 1 && data.aEnd.Col() === second.aEnd.Col() - 1) {
+              label.aEnd.SetCol(col2);
+              data.aEnd.SetCol(second.aEnd.Col());
+              joined = true;
+            }
+          }
+        }
+        if (joined) {
+          if (isInList) {
+            if (overPosition !== -1) {
+              this.Remove(overPosition);
+              // Native ascending scan has already visited the source and continued,
+              // so its encountered position is strictly before this joined entry.
+              --index;
+            } else {
+              for (let position = 0, size = this.maPairs.length; position < size; ++position) {
+                if (this.at(position) === over) {
+                  this.maPairs.splice(position, 1);
+                  break;
+                }
+              }
+            }
+          }
+          joinedInput = true;
+          over = this.at(index);
+          isInList = true;
+          restart = true;
+          break;
+        }
+      }
+    }
+    if (!isInList && !joinedInput) this.Append(source);
+  }
 }

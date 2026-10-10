@@ -1,0 +1,56 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/block_funcs.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "cell-storage",
+    "capabilityIds": [
+      "CAP-bb0b1862-aaa2-46df-b57c-3539de052bad"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/external/mdds/include/mdds/multi_type_vector/block_funcs.ts#element_block_funcs",
+        "apps/office/src/external/mdds/include/mdds/multi_type_vector/block_funcs.test.ts#matches every unchanged native dispatcher and scalar callback sequence",
+        "scripts/mdds-block-dispatch-native-probe.mjs#verifyDirectory",
+        "vendor/mdds-reference/include/mdds/multi_type_vector/block_funcs.hpp#struct element_block_funcs"
+      ],
+      "justification": "Task202610091956-H5APAX ports original shared dispatch and explicit scalar callback owners;3616 native sequences/26990 complete steps/2182 full snapshots, all12 aliases,17 original unknown methods, empty-map and unequal-ID behavior. Original full block_funcs static dispatch and initialized primitive scalar callback family are implemented over actual shared scalar owners. Explicit native template/value-type witnesses replace C++ overload/ADL resolution; scalar output-reference values and single-scalar forwarding adapt JS references. Pointer callbacks/managed owners, nonprimitive variadic constructors, true native reference/const/ABI/allocator/destructor behavior and invalid type/lifetime casts, util/default_traits/trace/complete MTV/Calc document/browser remain unverified. Duplicate native type IDs with different handlers are outside certified uniqueness preconditions. Native null deletion, early unequal-ID false and unknown non-null deletion exception are preserved; no safety repair. No complete upstream-module parity certification.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ElementBlockType",
+        "throw_unknown_block",
+        "find_func",
+        "element_block_funcs",
+        "handler",
+        "create_new_block",
+        "copy_block",
+        "clone_block",
+        "delete_block",
+        "resize_block",
+        "print_block",
+        "erase",
+        "append_block",
+        "append_values_from_block",
+        "assign_values_from_block",
+        "prepend_values_from_block",
+        "swap_values",
+        "equal_block",
+        "overwrite_values",
+        "shrink_to_fit",
+        "size"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "vendor/mdds-reference/include/mdds/multi_type_vector/block_funcs.hpp",
+      "upstreamSymbols": [
+        "struct element_block_funcs"
+      ]
+    }
+  }
+}

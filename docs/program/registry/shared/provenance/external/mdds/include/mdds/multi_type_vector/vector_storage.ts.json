@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "local-infrastructure",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/vector_storage.ts",
+          "marker": "allocate_storage"
+        },
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/main.test.ts",
+          "marker": "retains original slot transfer and shared reserved-vector defaults"
+        },
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/vector_storage.test.ts",
+          "marker": "retains standard lower-bound partition search and borrowed backing"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/external/mdds/include/mdds/multi_type_vector/vector_storage.ts",
+    "rationale": "Explicit erased STL backing-slot syntax infrastructure extracted from the existing delayed vector and reused for original three-vector SoA metadata. It allocates real slots and shifts constructed unmanaged scalar/pointer entries; it has no mdds block segmentation, interval, column or document behavior. Native libc++ finite capacity observations are witnesses, not generic allocator/ABI or object-lifetime certification. No single LibreOffice source owner is claimed for this language adapter.",
+    "responsibilities": [
+      "Actual shared reserved/constructed slot syntax, unmanaged value/pointer copying and vector shift/assignment primitives without delayed/front or mdds segmentation policy.",
+      "Shared erased standard lower_bound partition-search syntax over existing real vector storage, with valid-range comparison ordering and no domain lookup or ownership policy."
+    ],
+    "stackDivergence": {
+      "kind": "local-infrastructure",
+      "rationale": "Explicit erased STL backing-slot syntax infrastructure extracted from the existing delayed vector and reused for original three-vector SoA metadata. It allocates real slots and shifts constructed unmanaged scalar/pointer entries; it has no mdds block segmentation, interval, column or document behavior. Native libc++ finite capacity observations are witnesses, not generic allocator/ABI or object-lifetime certification. No single LibreOffice source owner is claimed for this language adapter."
+    },
+    "status": "local-only"
+  }
+}

@@ -1,0 +1,107 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-e45dec6f-9f01-4928-ab52-11d7683c09bf",
+    "capabilityId": "CAP-e45dec6f-9f01-4928-ab52-11d7683c09bf",
+    "suite": "calc",
+    "subsystem": "range-list",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original explicit two-range/copy ScRangePair construction owns independent values, assigns stable ranges/endpoints and applies unsigned16 GetRange parameter conversion.",
+      "Original empty/implicit value-copy/assignment paired vector, Append and Clone copy values; indexed access and lookup borrow current entries.",
+      "Find(address) tests first-label containment, Find(range) exact label equality; Remove(pair) uses identity and DeleteOnTab tests both label endpoint sheets.",
+      "UpdateReference snapshots the affected coordinates and delegates both ranges to existing ordinary ScRefUpdate without single-range pre-deletion or joins.",
+      "Join retains equal-data containment, paired adjacency, native asymmetric right-column data end-minus-one predicate, borrowed-source removal and restart order."
+    ],
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "Original inline pair and core/tool pair-list owners retain numerical responsibilities. Existing ScRange and ScRefUpdate used directly; native defined release values compared without modifying original C++ bodies."
+    },
+    "capability": "Calc paired range values and numerical label-range list operations",
+    "gaps": [
+      "CreateNameSortedArray and original name comparator require actual document sheet names and shared collator; full document/compiler/UNO/dialog consumers, native vector allocation/refcount/pointer lifetimes, debug assertion enforcement and undefined arithmetic remain unverified."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sc/inc/address.hxx",
+          "marker": "class SAL_WARN_UNUSED ScRangePair final"
+        },
+        {
+          "path": "sc/inc/rangelst.hxx",
+          "marker": "class SC_DLLPUBLIC ScRangePairList final"
+        },
+        {
+          "path": "sc/source/core/tool/rangelst.cxx",
+          "marker": "void ScRangePairList::Join("
+        },
+        {
+          "path": "sc/source/core/tool/rangelst.cxx",
+          "marker": "void ScRangePairList::UpdateReference("
+        }
+      ],
+      "tests": [
+        {
+          "path": "sc/qa/extras/sclabelrangesobj.cxx",
+          "marker": "CPPUNIT_TEST(testAddNew);"
+        },
+        {
+          "path": "sc/qa/extras/sclabelrangesobj.cxx",
+          "marker": "CPPUNIT_TEST(testRemoveByIndex);"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/README.md",
+          "marker": "formula"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/inc/address.ts",
+          "marker": "export class ScRangePair"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/rangelst.ts",
+          "marker": "export class ScRangePairList"
+        },
+        {
+          "path": "scripts/calc-rangepair-native-probe.mjs",
+          "marker": "pairClass: interval("
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/rangepair.test.ts",
+          "marker": "matches all14284 native pair-list sequences and lookup snapshots"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/rangepair.test.ts",
+          "marker": "distinguishes label containment, exact label equality and borrowed identity removal"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Paired label and data ranges"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "Own label/data range pairs and update find remove or join them with original ordered native value and identity contracts",
+    "scopeLimitations": [
+      "CreateNameSortedArray and original name comparator require actual document sheet names and shared collator; full document/compiler/UNO/dialog consumers, native vector allocation/refcount/pointer lifetimes, debug assertion enforcement and undefined arithmetic remain unverified.",
+      "NDEBUG selects original release behavior for unconditional Join diagnostics after searching a later source, unknown identity removal and external source flags; debug builds are not certified.",
+      "ScLabelRangesObj and dialog/compiler sources identify original consumers; complete UNO, name formulas and UI behavior is not certified by numerical native cases."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

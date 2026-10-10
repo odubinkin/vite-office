@@ -1,0 +1,35 @@
+# EVALUATOR opinion: pass
+
+Implementation a9c46968e44d satisfies the approved bounded ScMarkData/span owner scope, Calc actual100, portability and task10 full-test cadence with unchanged timeout closures; complete semantic/Writer-global coverage parity is not claimed.
+
+## Findings
+- Reviewed original single-class/file ownership:737 physical mark-data lines (checker738) and existing823 range-list lines (checker824) remain coherent original boundaries below1000. Actual ScMultiSel, mark arrays, ranges, bool owners and shared mdds are reused; numerical document/template syntax adapters are explicit. No duplicate interval/document/string engine or Writer change.
+- Checked committed290-sequence/1017-snapshot native fixture: every25-field selected observation and command/both-owner result remains retained; five exact pinned full-source hashes independently match. Complete unchanged native groups plus genuine dependencies and ASan/UBSan pass; independent literal mark, post-gap and borrowed-envelope regressions preserve CALC-014..016. Map-row order, selected-tab self-move and generic/lifetime bounds remain explicitly unverified.
+- Calc96 actual100 four Istanbul metrics and upstream-absent96+5+30 pass. Full office14244 initially passed and its sole unchanged mdds timeout passes in the5-test Istanbul closure at14.15s with actual100 four-owner coverage. Inventory123 actual100,303 browser/tooling14/provenance3, TS7/full lint/format/docs/boundaries/size/tree/provenance and zero Calc/shared registry violations pass. Full global coverage suppression is transparently recorded, with user-authorized Writer coverage exemption preserved; no assertions, timeouts, thresholds, previous tests or semantic states are relaxed.
+
+## Evidence
+- .agentplane/tasks/202610091723-P9JYX4/README.md
+- apps/office/src/sc/source/core/data/markdata.ts
+- apps/office/src/sc/source/core/data/markdata.test.ts
+- scripts/calc-markdata-native-probe.mjs
+- output/playwright/task10-native-final-check.log
+- output/playwright/task10-span-native-check.log
+- output/playwright/task10-calc-final.log
+- output/playwright/task10-full-office.log
+- output/playwright/task10-mdds-istanbul-closure.log
+- output/playwright/task10-full-inventory-coverage-retry.log
+- output/playwright/task10-full-browser-scenarios.log
+- output/playwright/task10-portable-calc.log
+- output/playwright/task10-portable-shared.log
+- output/playwright/task10-portable-inventory.log
+- .agentplane/tasks/202610091723-P9JYX4/blueprint/resolved-snapshot.json
+
+## Missing Tests
+- none recorded
+
+## Hidden Assumptions
+- none recorded
+
+## Residual Risks
+- Finite initialized native comparison is not whole-module parity; native allocation/ABI/dangling pointers, unordered-map row permutation, custom template value/key families and unsafe self-move remain uncertified. Actual document/column/formula/browser integration remains later work.
+- Initial full application timeout suppresses its global coverage report; no global or Writer actual100 claim. Writer coverage repair is explicitly excluded by user; Calc and changed shared owner coverage are independently100%.

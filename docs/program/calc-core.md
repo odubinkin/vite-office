@@ -1,5 +1,103 @@
 # Calc coordinate foundation
 
+## Shared container utilities and traits
+
+Task `202610092012-8RZCZ1` ports original mdds `util.hpp`: empty events,
+lu16/default execution/empty dispatcher traits, clone tag type witness,
+optional trace depth scope and logical position utilities. Standard traits
+register the existing twelve shared block owners. Actual delayed iterators
+provide original forward/reverse random-access distance without another store.
+
+Input-end calculation preserves empty-before-bound and UInt64 wrap before
+comparison; bigint is exact, number projections require exact bounded indices.
+Position movement copies the borrowed iterator/offset pair and follows original
+signed32 casts and forward/back block traversal. Trace cleanup pairs one
+construction/disposal in finally to adapt original RAII exception unwind;
+absent trace is a sink and nested callbacks are suppressed. Compile-time empty
+policy/clone types are explicit identity witnesses, not scheduler behavior.
+
+Native comparisons use unchanged real soa containers and iterators. Portable
+TS tests borrow complete original node projections only as generic iterator
+syntax; no TS soa container is certified or synthesized. Full types_util
+compile traits, call-site tracing macros, alternate size/iterator categories,
+native reference/const/allocator/destructor ABI and actual MTV/Calc document/UI
+remain subsequent real dependencies. CALC-023 records the original arithmetic
+preconditions without adding a bounds/overflow repair.
+
+## Shared block dispatch and scalar callbacks
+
+Task `202610091956-H5APAX` ports original `block_funcs.hpp` static dispatch
+and the scalar `MDDS_MTV_DEFINE_ELEMENT_CALLBACKS` owner, with all twelve
+standard value registrations. Per-method maps retain native discriminator
+selection, both erase overloads, null deletion and unequal-ID early false.
+Unknown-handler diagnostics and matching-type swap assertions remain.
+Explicit type witnesses replace native ADL/overload selection; JS number
+values never select float/double/integer type IDs heuristically.
+
+All operations reuse actual shared scalar owners and their delayed store.
+Unchanged genuine headers compare 3616 sequences/26990 complete steps/2182
+full snapshots, including scalar callback IDs/defaults and dispatcher
+mutations, plus all17 unknown-handler method calls and empty specialization.
+Scalar output references and single-scalar forwarding have explicit TS
+adapters. Pointer callbacks, managed values, nonprimitive variadic
+constructors, native reference/allocator/destructor semantics,
+util/default traits/trace/complete MTV and Calc document/UI remain unverified.
+Unknown non-null deletion still throws as original; CALC-022 records its
+upstream destructor TODO without a behavior repair.
+
+## Shared scalar element blocks
+
+Task `202610091926-N4ZGYX` adds original mdds `types.hpp` unmanaged
+element/copyable/default block owners and all twelve standard scalar aliases,
+plus their real shared `global.hpp` runtime exception parent. All operations
+reuse the existing `delayed_delete_vector`; standard double and uint16 blocks
+are the original aliases required by Calc `mtvelements.hxx`.
+
+Template specialization becomes an explicit TS class factory carrying the
+native type ID, T{}, conversion and optional original debug build witness
+(default false). Scalar/reference and const qualification use explicit borrowed
+store/iterator adapters. All primitive static operations, copy/clone, live ranges,
+forward pairwise swaps and original reserve/source-iterator order remain.
+Resize compares against integer `capacity / 2`. Unmanaged overwrite and
+production print remain no-ops. The coherent types header remains one owner
+above the 500-line review target and below the 1000-line hard limit; it does
+not duplicate the separately owned native store or arbitrary module fragments.
+
+Genuine unchanged native headers compare 3616 sequences with 26990 complete
+two-owner step records and 2182 losslessly interned snapshots. Nine scalar
+families also compare original mixed double InputIt conversion. Original bool
+`at` diagnostics are isolated and recorded as CALC-021 without assigning a
+successful native result. Native bool data, mixed bigint source conversions,
+alternate StoreT/allocators, object lifetimes/exception guarantees, invalidated
+source iterators, managed/noncopyable/clone_value owners, callback macros,
+dispatcher/default traits, complete multi_type_vector and Calc columns remain
+unverified. Those are actual following dependencies, not placeholder engines.
+
+## Shared delayed element storage
+
+Task `202610091909-KYNP7H` adds the original mdds3.2.1
+`multi_type_vector/delayed_delete_vector` owner under
+`apps/office/src/external/mdds/include/mdds`, shared by application consumers.
+This is the default backing store in original mdds element blocks referenced
+by `sc/inc/mtvelements.hxx`; complete element blocks, multi_type_vector and
+Calc columns remain the next dependencies, not implemented by this task.
+
+Single erase at logical begin delays physical removal. Range erase keeps its
+distinct original behavior. Reserve, resize, shrink and assign clear hidden
+entries in the original call order. Copy retains hidden entries and offset;
+swap exchanges the backing vector but leaves both offsets unchanged. Borrowed
+iterator positions follow the actual backing vector through defined swap.
+The suspicious offset behavior is recorded as CALC-020 without repair.
+
+Required scalar T{} witnesses replace erased template syntax; initialized
+number, boolean, bigint and string families are supported. Native capacity
+observations use the host libc++ target and allocated backing slots, including
+its vector<bool> word capacity and distinct resize growth. Other allocator/STL
+families, object destruction and exceptions, invalidated iterator lifetime,
+native bool data pointers, full element-store and module parity remain
+unverified. Ordinary tests replay complete portable native results without
+upstream files, network or a compiler.
+
 Calc implementation lives in `apps/office/src/sc`, independently of Writer.
 The first core task is `202610090711-S6VCEJ`, on branch `calc`; branch integration
 belongs to the user. Its baseline is LibreOffice commit
@@ -185,8 +283,8 @@ bounds, corners, lookup and intersections. Literal numerical examples from
 `node scripts/calc-rangelst-native-probe.mjs --check` to reproduce the committed
 fixture and exact pinned source/body hashes; ordinary tests remain portable.
 
-Document/compiler-dependent parsing, formatting and reference updates, range-pair
-lists, native pointer/iterator/refcount/move lifetime and undefined arithmetic
+Document/compiler-dependent parsing and formatting, pair-list name sorting,
+native pointer/iterator/refcount/move lifetime and undefined arithmetic
 remain pending. `SCSIZE` stays at the original address header and represents
 counts/indices within JavaScript exact integer inputs; full pointer-width input
 arithmetic is unverified. Neither these finite native outputs nor local coverage
@@ -251,9 +349,114 @@ Portable tests compare all 20203 initialized growth/transpose/alias outcomes
 and retain independent literal contracts. Reproduce it with
 `node scripts/calc-refupdat-native-probe.mjs --check`, which checks pinned Git
 blobs and full-source/extracted SHA256 hashes. Ordinary tests need no compiler
-or upstream checkout. Ordinary/big `Update` overloads, `MoveRelWrap`, full
+or upstream checkout. Full
 consumer integration, native debug checks and undefined arithmetic remain
 pending; no replacement methods or fake document owners are introduced.
+
+## Relative reference wrapping
+
+Task `202610091325-52SMH5` resumes the core after Writer merge and TS7/Istanbul
+migration. `ScRefUpdate.MoveRelWrap()` reuses existing complex references,
+addresses, range ordering and sheet limits. It resolves and sorts the absolute
+range first, wraps each relative endpoint axis exactly once at its supplied
+column/row mask or document table-count-minus-one sheet mask, sorts the result
+again and writes it back through `SetRange()`. This is not modulo: a coordinate
+can remain above a small wrap mask after the single subtraction. Absolute axes
+are not wrapped; endpoint flags are not exchanged by numerical range sorting.
+Deleted raw values, monotone deletion flags, trim state and endpoint identity
+remain owned by the existing reference data.
+
+`scripts/calc-refwrap-native-probe.mjs` compiles the unchanged original helper,
+complete `MoveRelWrap` body and complete numerical single/complex reference owners
+with original address/range bodies. Its 15,616 initialized states compare mixed
+relative flags, invalid sentinels, custom limits and distinct wrap masks, positive
+table counts, sorted raw outputs and retained flags. ASan/UBSan checks remain
+enabled; `NDEBUG` selects release semantics because native debug validity checks
+restrict sheet maxima to standard/jumbo constants. Debug assertion enforcement,
+undefined arithmetic and full compiler/token/named-range consumers remain
+unverified. Run `node scripts/calc-refwrap-native-probe.mjs --check` for exact
+pinned blob/body hash and fixture reproduction. Ordinary TS tests need neither
+upstream nor C++; format generated JSON with repository Prettier after `--write`.
+
+All 52 Calc tests pass with actual100 Istanbul coverage. This is task 1 of the
+next ten-task interval; the user explicitly resumed the paused goal after merging
+Writer, TS7 and Istanbul. Full-suite validation is due at task 10 of this interval.
+
+## Ordinary coordinate reference updates
+
+Task `202610091335-767ATZ` adds original `UpdateRefMode` at `sc/inc/global` and
+the ordinary `ScRefUpdate.Update()` scalar parameter contract. Its output tuple
+contains the original result followed by six native mutable-reference coordinates.
+The document getter view adds only `IsExpandRefs()`; the caller supplies the real
+policy and no replacement document or default setting is introduced.
+
+Insertion/deletion processes columns, rows then sheets with each subsequent
+predicate using the coordinates already updated. Reference expansion retains
+the before-movement test and after-movement endpoint adjustment. Start and end
+deletion shrinking differ by one coordinate; sheets disable shrinking and adjust
+their inclusive maximum to the new table count. Clipping, collapsed ends,
+whole-axis and end-only sticky restoration preserve native result replacement
+order. Movement tests containment in destination minus displacement. Reordering
+affects sheets and intervening sheets only. Copy leaves raw coordinates untouched.
+
+Native template destination casts and compound assignments use explicit signed16
+column/sheet and signed32 row narrowing. Two secondary moved-range guards in
+`lcl_MoveReorder` cannot execute after the initial moved-range return; TS states
+the remaining native outcomes directly with proof comments. The original C++
+helper bodies remain unchanged in the comparison probe.
+
+`scripts/calc-refupdate-native-probe.mjs` compiles complete original helper,
+expansion and ordinary Update intervals with exact pinned Git blobs and SHA256
+hashes under ASan/UBSan. All 32,704 saved native outcomes compare raw coordinates
+and result codes across both expansion policies, clipping, sticky references,
+mixed axes, source containment, reversed raw ranges and sheet reorder directions.
+Run `node scripts/calc-refupdate-native-probe.mjs --check` to reproduce them;
+ordinary tests use the saved fixture. Full document/range-list/compiler consumers,
+native aliased scalar output storage, debug checks
+and undefined arithmetic remain unverified. Inventory retains unverified semantic
+parity. All 57 Calc tests retain actual100 Istanbul coverage. This is task 2 of
+the resumed ten-task interval; the next full suite is due at task 10.
+
+## Signed64 big-range reference updates
+
+Task `202610091348-5TZGNC` adds the original big-range `ScRefUpdate.Update`
+overload at the same public owner. Native overload dispatch uses distinct first
+arguments; the ordinary scalar signature and its output tuple remain unchanged.
+The last TS overload retains existing ordinary `Parameters` inference. The big
+overload narrows displacements to native signed32, reuses existing `ScBigRange`
+and `ScBigAddress` values and preserves receiving endpoint identity.
+
+Source and reference coordinates are snapshotted before insertion, including when
+both arguments are the same range. Sequential axis predicates use updated reference
+coordinates and the original source snapshot. No document bound clips these values.
+Each exact signed64 min/max endpoint pair protects its whole axis. Positive insertion
+overflow saturates to signed64 maximum; the saturation result remains UPDATED even
+when the numerical value was already maximum. Defined negative insertion and movement
+use unclipped exact arithmetic. Copy and reorder are untouched by this overload.
+
+The original Move helper checks overflow and then performs signed64 `+=` anyway.
+A true cut flag therefore implies undefined arithmetic in that original branch.
+For every defined Move input both cut flags are false; TS states this remainder
+directly with proof comments, retains the original pre-addition helper flag and
+uses the original final range comparison for UPDATED. No wrapping policy, exception
+or coverage exclusion is invented for native undefined inputs. Unchanged original
+C++ helper/body intervals remain in the sanitizer comparison.
+
+`scripts/calc-bigrefupdate-native-probe.mjs` compiles complete original big classes,
+helpers and the Update overload with original numerical coordinate dependencies.
+All 19,390 initialized defined outcomes compare exact decimal-string values,
+results and source/reference aliases under ASan/UBSan. Cases include signed32
+displacement extrema, signed64 sentinel/extreme coordinates, guarded saturation,
+mixed axes and values beyond JavaScript Number precision. Conservative arithmetic
+admission excludes possible unguarded signed64 overflow; protected whole axes are
+retained. Exact pinned blobs and full/extracted SHA256 hashes are checked by
+`node scripts/calc-bigrefupdate-native-probe.mjs --check`. Ordinary tests remain
+independent of the compiler and upstream checkout. Native undefined/uninitialized
+domains, debug checks and full document/compiler/change-tracking consumers remain
+unverified; finite numerical fixtures do not establish whole Calc parity.
+
+All 62 Calc tests retain actual100 Istanbul coverage. This is task 3 of the resumed
+interval; full validation remains due at task 10.
 
 JavaScript tuples represent native output reference parameters. Equality and
 ordering methods represent C++ operators. Undefined native uninitialized
@@ -278,7 +481,7 @@ workflow is introduced.
 
 Run `npm run test:coverage:calc`, `npm run typecheck`,
 `npm run check:dependencies` and `npm run inventory:parity:calc` for the foundation.
-All four real V8 coverage metrics must be 100%. Full-suite scheduling starts
+All four real Istanbul coverage metrics must be 100%. Full-suite scheduling starts
 with Calc task 1 of 10 here; run the full suite after task 10, then repeat each
 ten completed Calc agentplane tasks. Targeted affected-module tests run on
 intervening tasks. Writer acceptance files and coverage settings remain intact.
@@ -292,8 +495,10 @@ full-suite verification is task 10. That run is recorded in
 122 inventory tests and 303 browser scenarios pass. Calc and inventory retain
 actual100 coverage. The user explicitly left one uncovered Writer painting
 branch for another branch, and requested goal pause after the complete run.
-The next full cycle is due after ten more completed Calc agentplane tasks upon
-resumption.
+The user resumed the goal after merging Writer, TS7 and Istanbul. Relative wrapping
+and ordinary/big reference updating are tasks 1, 2 and 3 of the next interval;
+range-list reference updating is task 4 and paired range owners are task 5.
+The full cycle is due at task 10.
 
 Source research includes the per-file MPL 2.0 and inherited Apache notices in
 `sc/inc/address.hxx`, `sc/inc/sheetlimits.hxx`, `sc/inc/refdata.hxx`,
@@ -304,3 +509,1032 @@ Source research includes the per-file MPL 2.0 and inherited Apache notices in
 `sc/source/core/data/bigrange.cxx` and
 `sc/inc/types.hxx`. The TypeScript implementation is independently authored
 from those numerical contracts; the original sources remain research-only.
+
+## Range-list reference updates
+
+Task `202610091404-4QBVYR` connects `ScRangeList::UpdateReference` to the existing
+ordinary `ScRefUpdate::Update` owner. The native public signature and source
+boundary remain intact; the structural document getter contract is reused.
+Pre-deletion applies only to a single-sheet affected area. Column deletion runs
+first, then row deletion overwrites its change result when both deltas are
+negative. Complete deletion returns true; an initially empty list returns false.
+
+Every surviving ordered range delegates the original scalar update. All results
+other than `UR_NOTHING`, including sticky unchanged coordinates, set the changed
+flag and assign the existing endpoints. The maximum-row cache only rises.
+Negative row/column insertion mode then joins backward using borrowed entries,
+repairing the index after multiple merges. Those joins do not independently set
+the change result. No native diagnostic-only logging shim is added to production.
+
+The dedicated native comparison compiles unchanged range-list class/helper/body
+intervals, the complete ordinary update helpers/body and existing inline address
+owners. Seven pinned Git blobs and extracted source hashes are checked under
+ASan/UBSan. Its 14,938 initialized cases compare change results, ordered raw
+ranges, unsigned64 counts and subsequent cache-sensitive joins over all four
+modes, axes, expansion settings, native parameter widths and same/multiple tabs.
+Original `ucalc_rangelst` deletion tests retain their literal cell assertions.
+Run `node scripts/calc-rangelist-update-native-probe.mjs --check`; ordinary tests
+consume portable JSON and need neither upstream nor a compiler.
+
+The existing coherent range-list source grouping was reviewed again after adding
+this upstream method; its class and anonymous helpers remain together, below the
+1000-line hard budget. Existing geometry fixtures/tests and shared/Writer sources
+remain unchanged. Undefined arithmetic and borrowed where references invalidated
+by native vector deletion remain outside certification. Full ScDocument,
+compiler, parsing/formatting, listeners and browser consumers remain subsequent
+work, so inventory semantic parity remains unverified. This is the fourth
+completed task of the resumed ten-task interval; full validation is due at task10.
+
+
+## Paired label and data ranges
+
+Task `202610091416-KMHKFV` adds original inline `ScRangePair` to `sc/inc/address`
+and `ScRangePairList` to its existing `sc/inc/rangelst`/`sc/source/core/tool/rangelst`
+boundary. These values back original document column/row name ranges, compiler
+label references and the label-range dialog. Two-range and copy construction own
+independent ranges; there is no pair default constructor. Assignment retains the
+receiving ranges/endpoints, and `GetRange` applies unsigned16 index conversion.
+
+Pair lists start empty. Implicit value copies/assignment, `Append` and `Clone`
+copy both ranges; access and lookup borrow current entries. Address lookup checks
+label containment, while range lookup requires exact label equality. Data ranges
+do not participate in lookup. Pair removal compares object identity. Sheet
+deletion requires both label endpoints on that sheet, regardless of data sheets.
+Reference updates snapshot the affected area and delegate both ranges to the
+existing ordinary `ScRefUpdate`; they do not pre-delete or merge pairs.
+
+`Join` retains equal-data containment and simultaneous label/data merge
+predicates. Its right-column predicate compares the receiving data end with the
+input data **end minus one**, unlike its label start predicate. Consequently it
+can merge overlapping data ranges while rejecting ordinary parallel adjacency;
+this upstream asymmetry is retained literally. Borrowed-source removal and
+restart order remain original. An already encountered source is strictly before
+the joined entry in the ascending scan, so the guaranteed native index decrement
+is expressed directly with proof. No coverage exclusions are introduced.
+
+The dedicated comparison compiles unchanged original pair/list classes, complete
+numerical pair-list definitions and Join, native inline range owners and ordinary
+reference-update helpers. Its 14,284 initialized sequences compare ordered values
+and both lookup identities after every operation, including source aliases,
+implicit copies, release identity no-ops, unsigned16 indices and parameter
+widths. Pinned source and extracted hashes cover seven original blobs; ASan/UBSan
+remain enabled. `NDEBUG` explicitly selects upstream release behavior: original
+Join diagnoses a later-source removal path with an unconditional assertion even
+after finding its source. Debug assertion enforcement remains unverified. Run
+`node scripts/calc-rangepair-native-probe.mjs --check`; ordinary portable tests
+require neither upstream nor a compiler.
+
+The coherent original range-list/pair-list class and helper grouping was reviewed
+again and stays below the 1000-line hard budget. `CreateNameSortedArray` and the
+original name comparator remain pending actual document sheet-name and shared
+collator owners; no replacement sorting policy is supplied. Complete document,
+compiler, UNO and dialog integration, native vector allocation/refcount/pointer
+lifetimes and undefined arithmetic remain uncertified. Existing range-list and
+reference-update fixtures/tests and shared/Writer source remain unchanged.
+Inventory stays semantically unverified. This is task5 of the resumed interval;
+full verification remains due at task10.
+
+Suspicious source conditions observed during these ports are tracked separately
+in [upstream-suspected-issues.md](upstream-suspected-issues.md). Recording them
+does not authorize changing upstream behavior; the user explicitly reaffirmed
+that preservation requirement.
+
+## Compressed selected-row arrays
+
+Task `202610091459-8FSH81` adds original `ScMarkEntry`, `ScMarkArray` and
+`ScMarkArrayIter` at the `sc/inc/markarr`/`sc/source/core/data/markarr` boundary.
+The array retains the real immutable `ScSheetLimits` reference. It starts with
+one unmarked terminal boundary; entries describe inclusive intervals from the
+previous boundary plus one. Entry rows retain the original signed30 bitfield,
+including narrowing before Shift clipping. No document or shared string stand-in
+is introduced while building the document prerequisites.
+
+Binary Search keeps the original negative-row first-interval result and resets
+its output index to zero on failure. Marking retains the complete native
+split/shrink/combine algorithm. Two unreachable insertion guards are expressed
+directly with invariant proofs; the native probe retains them unchanged. `Set`
+takes initialized entries without normalization. Equality compares only entries;
+copy/assignment owns independent values and assignment keeps receiving limits.
+Explicit `move`/`moveAssign` adapts native move-overload syntax. Moved-vector states
+compare the probe's native standard library; unspecified C++ moved-from states
+are not a guarantee across standard libraries.
+
+Navigation, single-interval detection and iterator outputs preserve caller
+reference values on failure. The iterator borrows the array and reads its current
+entries after mutation/reset. Module-private storage allows the original array
+and iterator friend access without exposing a new public vector getter.
+`Shift` modifies each eligible boundary separately, applying signed64 offset and
+signed30 assignment before clipping, without coalescing collapsed boundaries.
+One native case yields a selected interval `[1,0]`; it is recorded as CALC-007 in
+the suspicious-case journal and deliberately retained.
+
+`scripts/calc-markarr-native-probe.mjs` compiles complete unchanged original
+classes and every out-of-line definition with native integer types and the three
+needed sheet-limits fields/getters. Six original pinned blobs and complete group
+hashes are checked under ASan/UBSan. All 2814 initialized sequences compare
+stored vector equality, marking, lookup, navigation, single marks, both owner
+states and repeated/reset iterator outputs. Original `mark_test.cxx` Search
+assertions retain literal standard-bound expectations. Run the probe with
+`--check` to reproduce the committed fixture; normal tests require neither
+upstream nor a compiler. Native debug assertions remain enabled in these defined
+cases.
+
+Full multi-selection/document/column/UI consumers, native allocation/capacity
+and pointer lifetimes, uninitialized entries, empty Search, malformed unsafe
+mutation and undefined signed64 overflow remain uncertified. No coverage
+exclusions or replacement normalization are added; inventory semantic parity
+remains unverified. All 77 Calc tests retain actual100 Istanbul coverage. This is
+task6 of the resumed interval; full-suite validation remains due at task10.
+
+Source research also includes MPL 2.0 and inherited Apache notices in
+`sc/inc/markarr.hxx` and `sc/source/core/data/markarr.cxx`, and MPL 2.0 in
+`include/tools/long.hxx`. The TypeScript code is independently authored from
+these contracts; native originals remain read-only research input.
+
+## Shared external mdds segment storage
+
+Task7 implements `external/mdds/include/mdds/{node,ref_pair,flat_segment_tree_itr,flat_segment_tree}.ts`
+as shared owners. `ScFlatBoolRowSegments` and `ScMultiSel` need this actual
+dependency before their wrappers can be ported. No Writer storage copy or
+replacement interval union is introduced. The module graph allows `sc -> external`
+and forbids external dependencies on application/browser owners.
+
+The original linked leaf boundaries represent half-open intervals. The terminal
+leaf stores `value_type{}` independently of the tree's initial value. Insertion
+coalesces leaves and returns the original start iterator/change flag. Searches
+preserve failed output parameters. The search index is a separate exact-size
+non-leaf pool, constructed by original bottom-up adjacent pairing; searching
+never builds it implicitly. Copy constructs leaves without an index, move
+transfers ownership, and original shifts retain their ordering/default-tail
+behavior. Forward/reverse iterator types are distinct; `ref_pair` borrows live
+key/value fields, while segment iterators cache values on movement and preserve
+the original end/copy/assignment cache distinctions.
+
+The source-only LibreOffice checkout does not include unpacked external headers.
+Its pinned `download.lst` specifies `mdds-3.2.1.tar.xz` with SHA256
+`673f5bb94612dbba581fc92b99b5e5dd1a53e29496a5dbc936432f6b0687c112`, and
+`boost_1_91_0.tar.xz` with SHA256
+`2f975c10da79511c2f218189fc8a12eef1a92e3bd18206e9841d406296d065eb`.
+For optional native research, obtain these exact archives from the LibreOffice
+`Makefile.fetch` source prefix `https://dev-www.libreoffice.org/src/`, verify
+their hashes, and extract under ignored `output/playwright/mdds-native`.
+Extract genuine Boost headers, apply the exact pinned
+`external/mdds/gcc-12-silence-use-after-free.patch.1` with `patch -p1` to mdds,
+then link ignored `vendor/mdds-reference` to that unpacked mdds directory.
+Network source reads require the existing explicit authorization. Ordinary
+tests do not fetch anything, require that link, or invoke a native compiler.
+
+`scripts/mdds-flat-segment-native-probe.mjs --check` reproduces the portable
+fixture. It checks pinned LibreOffice blobs, both archives, the original patch,
+and every actual mdds/Boost compiler header against freshly extracted verified
+archives. Genuine unchanged headers compile with debug assertions and ASan/UBSan.
+All 3020 initialized sequences compare 16,256 command steps and both full owner
+observations; 490 distinct complete snapshots are shared by index without
+removing observations. Numeric
+and boolean specializations, clipping/rejection, all search families and hints,
+copy/move/self-assignment, clear, interval shifts, forward/reverse boundaries,
+segment ranges and index readiness are covered. Native coordinates from
+`fst_test_shift_right_bool`, `fst_test_shift_right_skip_start_node` and
+`fst_test_leaf_search` merge cases are retained. Suspected native cases are
+recorded as CALC-008/009 in the separate journal, with behavior preserved.
+
+Numeric Calc keys and initialized primitive values are the implemented domain.
+Wider templates/value classes, native allocation/refcount/deletion timing,
+dangling iterators, debug dumps, generic exceptions and undefined border/overflow
+operations remain uncertified. Explicit zero-value context and copy/move/operator
+methods adapt C++ type/runtime features; GC owns references. Proven unreachable
+malformed-tree diagnostics use documented invariants without coverage exclusions.
+Inventory semantic parity remains unverified. Original MIT notices and the exact
+mdds MIT license are retained. The full-suite cycle remains due at task10.
+
+## Boolean row and column segment owners
+
+Task8 (`202610091610-0168S5`) adds `sc/inc/segmenttree.ts` and the original
+`sc/source/core/data/segmenttree.ts` owner. Both boolean facades reuse the shared
+mdds implementation and the original private bool specialization. Defaults are
+false; bounds are explicit inclusive maxima. Rows retain signed32 coordinates,
+columns signed16 coordinates. Setters and range outputs are inclusive; removal
+passes half-open boundaries to mdds, and insertion retains skip-start behavior.
+Copies own new leaves and start with an unbuilt index and default search hint.
+
+The search hint and `RangeIterator` position are the same owner field. Separate
+range iterators and searches therefore affect each other's position. Failed
+public operations preserve caller output fields. `ForwardIterator` retains its
+monotonic position and interval cache even after owner mutation. `findLastTrue`
+returns signed32 maximum when no true interval exists. These original contracts
+are preserved; reviewed distinctions are recorded in the suspicious-case journal.
+
+`ScGlobal` retains its original static state owner in `core/data/global.ts`,
+re-exported through `inc/global.ts`. Its threaded-group-calculation flag starts
+false. Index construction checks that flag; an already prepared query does not.
+`makeReady` checks it even when the index is ready. A narrow lint exception keeps
+the native static class API. The debug assertion becomes a fail-fast JavaScript
+Error; native process abort, release-build diagnostics and concurrent memory
+behavior remain uncertified. `dumpAsString` retains the original ASCII text
+through immutable JavaScript strings; RTL allocation/refcount/capacity is pending.
+
+`node scripts/calc-bool-segments-native-probe.mjs --check` reproduces 436 defined
+sequences using unchanged original declarations and complete needed bool method
+groups, genuine verified mdds/Boost, native coordinate widths and the exact global
+flag declaration/definition. ASan/UBSan checks both owner snapshots after every
+command; observation copies leave live hints and iterator caches untouched.
+`--thread-assertion` diagnoses the original assertion in a separate process.
+Only the actual opaque RTL return type is declared; native diagnostic dump bodies
+are unlinked. No native storage or string engine substitute is introduced.
+Ordinary tests read the committed fixture without upstream, compiler or network.
+
+The bool policy stays enabled because its original facade exposes no setter.
+The initialized owner always retains both border nodes, making the public
+`getFirst` failure guard unreachable. TS expresses that invariant directly;
+the native probe keeps the guard unchanged. No coverage exclusions are used.
+Numeric UInt16 segment owners, conditional setters/sums, other ScGlobal services,
+multi-selection and document/browser consumers remain follow-up work. Native
+allocation/pointer lifetime, malformed/uninitialized iterators and undefined
+arithmetic remain unverified. Finite comparison evidence does not establish whole
+module parity; inventory keeps semantic parity unverified. All82 Calc tests have
+actual100 Istanbul coverage. Full-suite validation remains due at task10.
+
+Source research retains MPL 2.0 and inherited Apache notices in the segmenttree
+and global originals. Independently authored TypeScript preserves those contracts;
+unchanged native originals remain read-only research inputs.
+
+## Multi-selection owner and iterator
+
+Task9 (`202610091638-6W99E8`) ports `sc/inc/markmulti.ts` and the original
+`sc/source/core/data/markmulti.ts` owner. `ScMultiSel` owns independent column
+arrays and a shared row array, reusing actual `ScMarkArray`, bool row segments,
+range lists and sheet limits. Full-row updates use the row owner; partial
+deselection first migrates intersecting row marks into columns. Counts report
+marked column arrays only. Allocated unmarked columns make `IsEmpty` false even
+when `HasAnyMarks` is false. Raw equality/start-column predicates and original
+row/column shift expressions are retained.
+
+`Set` copies and sorts the range list by first row, then stores the original raw
+entries without adding a terminal unmarked boundary. Equal-key permutations in
+native `std::sort` are unspecified; JS stable sorting preserves its row comparator,
+while platform-specific raw tie order remains uncertified. `HasOneMark` keeps
+its independent source predicates, including suspicious bounds documented as
+CALC-010..013 in the journal. No normalization or upstream repair is added.
+
+The iterator borrows an existing array when only one source has marks. With two
+sources it creates the original bool-segment snapshot, so subsequent owner
+mutation affects the borrowed mode but does not alter the snapshot. Failed
+iteration preserves output rows. `GetRangeData` requires segment mode; its debug
+assertion is adapted to a fail-fast Error, with native abort/release behavior
+explicitly uncertified. Public accessors retain original borrowed array ownership;
+`GetMarkArray` creates the original independent normalized value.
+
+Native vector capacity affects logical results because array assignment retains
+destination limits, while construction copies source limits. The private value
+adapter therefore distinguishes reallocation, reused slots, tail construction,
+copy/move assignment and clear-with-capacity retention. It reuses actual mark
+array methods rather than recreating their storage. The compared libc++220106
+profile records capacity growth, exact copy-assignment reallocation, retained
+clear capacity, insertion/erase and self-move. Other standard-library policies,
+native allocation/ABI and dangling/reallocated borrowed pointers remain
+uncertified. Scalar output references and native move syntax use the existing
+tuple/aggregate and explicit method adaptations.
+
+`node scripts/calc-markmulti-native-probe.mjs --check` compares 550 initialized
+sequences with unchanged complete selection classes/methods and real dependency
+groups, including original `ScRangeList` and `SvRefBase`. It reuses the existing
+bool/mdds verification, exact pinned blobs and group hashes, and ASan/UBSan.
+Whole selected observations are interned without dropping commands or either
+owner's comparison. Ordinary tests verify exact raw arrays through public value
+equality and retained bounds by independently copying/resetting the actual array;
+they require neither upstream nor a compiler/network.
+
+The unchanged `ValidRow` has a temporary debug guard allowing only standard/jumbo
+maxima. Custom explicit-bounds comparison therefore uses original release
+semantics with `NDEBUG`; `--debug-assertion` separately diagnoses the original
+iterator precondition with debug assertions enabled and standard bounds. Needed
+bounds fields/constructor/methods are extracted exactly; full intrusive lifetime
+services and unlinked RTL declarations are not replaced by engine stand-ins.
+Literal standard-bound coordinates/expectations from both upstream multi-mark
+tests are retained. Full `ScMarkData`, document/column/UI consumers, undefined
+arithmetic, malformed storage and unsafe vector indices remain subsequent work.
+Inventory semantic parity remains unverified; full-suite validation is due at
+task10. Original research inputs retain their MPL 2.0/inherited Apache notices.
+
+All88 Calc tests pass with actual100 Istanbul coverage: 1988 statements,
+1546 branches, 346 functions and 1733 lines. No coverage exclusions are added.
+
+## Mark-data selection owner and span conversions
+
+Task10 (`202610091723-P9JYX4`) implements the complete original `ScMarkData`
+owner at `sc/inc/markdata.ts` and `sc/source/core/data/markdata.ts`, reusing actual
+multi-selection, mark arrays, ranges, bool segments and shared mdds. Original
+flags, ordered selected sheets, simple/multi conversion, range-list import/export,
+queries, shifts and all four selection envelopes retain their source conditions.
+`ResetMark` preserves selected sheets and stored rectangles; empty replacement
+also preserves current selected sheets. Repeated cover generation appends to
+existing envelope lists. Native default list moves are added to the existing
+`ScRangeList` owner so envelope moves reuse its actual storage and scalar cache.
+
+Original `fstalgorithm.hxx` templates live in `sc/inc/fstalgorithm.ts`; explicit
+span constructor arguments adapt template syntax. They iterate actual mdds leaves
+or use the already-valid search index for the start-key overload. No rebuild or
+alternate interval engine is introduced. Original `RowSpan`/`ColRowSpan` values
+live at the `columnspanset` header/core-data boundaries; full column span-set scan
+and action services remain separate unimplemented owners.
+
+The unchanged complete native mark-data class/methods reproduce290
+initialized sequences and1017 complete interned selected observations with real
+range-list/ref-base/multi/bool mechanisms, actual span templates and genuine
+verified mdds/Boost under ASan/UBSan. Original numerical document getter bodies
+are linked through an explicit borrowed-bounds comparison carrier; this is not
+a document/cell engine or full lifecycle implementation. Custom bounds use
+original `NDEBUG` semantics because of the existing standard/jumbo debug guard.
+Raw native top/bottom envelope lists remain saved; their unspecified unordered-map
+row permutation is compared as complete multisets, with duplicates retained.
+Left/right and other ordered outputs compare exactly. Full native map ordering,
+allocation/ABI/pointer lifetime and selected-tab self-move behavior remain
+uncertified. The isolated selected-tab self-move diagnostic retains the original
+libc++220106 ASan heap-use-after-free report without assigning a defined result.
+CALC-014..016 record self-move, the persistent previous-unmarked flag after a
+column gap and repeated-envelope accumulation; all original expressions remain.
+
+A separate unchanged-template probe compares256 boolean patterns and64 numerical
+owners through every span overload, with genuine verified mdds/Boost and
+ASan/UBSan. Current shared value types are boolean/number with numerical keys;
+custom bool conversion, object/move-only values and non-numerical key families
+remain unverified. The original terminal leaf is excluded by iterator-end
+semantics; failed indexed search leaves output empty and never rebuilds the tree.
+
+The complete737-line TypeScript mark-data owner is kept at the original class
+boundary: flags, selected tabs and envelopes form one upstream-owned state. It
+remains below the1000-line hard limit and is reviewed as one coherent owner,
+rather than splitting its original state across invented modules.
+
+All96 Calc tests pass with actual100 Istanbul coverage:2519 statements,
+1854 branches,412 functions and2208 lines. No exclusions are added. With both upstream symlinks temporarily detached,
+all96 Calc,5 affected shared and30 related inventory scenarios pass; the links
+are restored by an EXIT trap. Ordinary acceptance needs no upstream/compiler or
+network.
+
+The task10 full application run executes14245 scenarios across539 files:
+14244 pass, while the unchanged shared mdds native replay exceeds its existing
+30000ms timeout during initial concurrent native/lint/inventory work. After all
+heavy jobs finish, its complete5-test module passes unchanged under Istanbul in
+14.15s, with actual100 coverage of all four mdds source owners:486 statements,
+284 branches,86 functions and433 lines. No timeout/assertion/threshold changes
+are introduced. Vitest reportOnFailure=false suppresses the failed full
+application coverage report; global/Writer coverage is not certified from it,
+and Writer coverage/implementation remains untouched per user instruction.
+
+Full inventory coverage passes123 scenarios across38 files after its one
+similar filesystem-test timeout is reproduced as a passing isolated test:
+1734 statements,1292 branches,436 functions and1668 lines, all100%. Tooling14,
+source-provenance3 and all303 browser scenarios pass (301 Writer,2 shared;
+Calc has no dedicated browser scenarios yet). TS7, full lint, scoped formatting,
+static build, documentation, ownership, file-size/source-tree and provenance
+checks pass. Calc20 capabilities/141 modules and shared1/116 report zero
+semantic violations; semantic parity remains unverified. This completes the
+full-validation cadence at task10 of the resumed cycle.
+
+## UInt16 row segment owner
+
+Task 11 (`202610091813-7BY25G`), task 1 of the next 10-task cadence, extends the
+existing `sc/inc/segmenttree` and `sc/source/core/data/segmenttree` owners with
+`ScFlatUInt16RowSegments`, its `ForwardIterator` and original numeric operations
+in `ScFlatSegmentsImpl`. Existing bool owners, mdds and ScGlobal are reused.
+Explicit defaults and writes narrow to UInt16; row inputs narrow to signed 32-bit.
+No independent interval engine or document/table stand-in is introduced.
+
+Original indexed search and leaf-only policy retain different cursor behavior.
+Value-only search and indexed sums use local iterators; leaf sums change the
+owner hint. The numeric forward iterator uses the policy lookup first and leaf
+lookup on subsequent cache misses, retaining original stale cache and failed
+caller-output behavior. Copies retain default/policy but reset the hint.
+Conditional setters visit current segments with original predicate call order
+and require a successful valid-row lookup. Native invalid/uninitialized inputs
+and arbitrary reentrant predicates remain uncertified. JS scratch output fields
+select the existing mutable-output overload; these placeholders are not native
+default values and range wrappers publish nothing on failure.
+
+Numeric row insertion passes false for skip-start, unlike the bool owner. Sums
+retain both original loops, failure/boundary conditions and hint ownership.
+For every defined UInt16 facade, values <= 65535 and disjoint row lengths total
+at most INT32_MAX: sum <= 65535 * 2147483647 < 2^47. The constructor maximum+1 and
+loop arithmetic must stay within defined signed 32-bit arithmetic. Original checked
+multiply/SAL_MAX_INT64 and saturating-add overflow branches cannot execute in
+this specialization. Exact bigint products/additions express that proven domain
+in TypeScript; native bodies and original safeint groups retain every guard.
+Other generic value families are unimplemented and are not covered by the proof.
+
+The native probe compares 706 defined sequences, both owners after every command,
+all original numeric/template methods, conditional predicate traces, numerical
+search/sum results, shifts/copies and iterator behavior under ASan/UBSan. It
+reuses original bool 436/mdds 3020 verification, exact pinned/group hashes and
+genuine patched mdds/Boost; observations query copies with leaf policy and leave
+live hints/indexes untouched. Native RTL dump and logging allocation are unlinked;
+TS diagnostics preserve original ASCII text through immutable strings. Full
+allocator/ABI/pointer/thread/process lifetime and complete module parity remain
+unverified. Complete snapshots are losslessly interned into 62 records: every
+command result and both owner observations remain compared, and raw native
+outputs remain available in the ignored research output directory. Five isolated
+native thread-assertion processes reproduce the original checks.
+
+All 100 Calc tests pass with actual 100% Istanbul coverage: 2623 statements,
+1892 branches, 433 functions and 2301 lines. The affected shared mdds module has
+5 passing tests and actual 100% coverage: 486 statements, 284 branches,
+86 functions and 433 lines. With both upstream links temporarily detached,
+100 Calc, 5 shared and 30 related inventory scenarios pass; the original links
+are restored. Tooling 14, provenance 3, TS7, scoped lint/formatting, documentation,
+boundaries, file size, source tree, provenance and routing checks pass. Calc
+21 capabilities/141 modules and shared 1/116 report zero semantic violations.
+Doctor retains two previously recorded warnings and reports no errors.
+
+The 542-line segmenttree source (543 by the size checker) retains the original
+coherent shared template and boolean/numeric owner boundary, below the 1000-line
+hard limit. CALC-017 records the ignored failed lookup in the conditional setter
+without assigning a defined native result or repairing the original expression.
+This is task 1 of the next 10-task validation cycle; the full suite is not due.
+No semantic status is promoted and Writer remains untouched.
+
+## Compressed widths and row/column flags
+
+Task 12 (`202610091841-PZT40R`), task 2 of the next 10-task cycle, adds complete
+numeric `ScCompressedArray`, `ScBitMaskCompressedArray` and the borrowed iterator
+at the original compressedarray header/core-data boundaries, with original
+`CRFlags` at the global header. ScTable uses these owners for column widths and
+row/column flags; its column owners use MaxCol()+1 and row flags use MaxRow().
+No table/document stand-in is introduced. The bit-mask specialization reuses
+one actual base owner rather than a separate interval engine.
+
+Required scalar witnesses represent erased native access/data template arguments:
+SCROW/SCCOL use signed 32/16 bits; UInt16/CRFlags use unsigned 16/8 bits.
+They are syntax adapters with no invented defaults. Numerical POD entries are
+copied independently during original memmove/reallocation operations. The
+original nCount/nLimit and capacity-growth algorithm remain observable through
+public mutation, and native observations read protected state without modifying
+it or deriving from the original final bit-mask owner.
+
+Search retains the first/last fallback for out-of-domain input. SetValue keeps
+original inclusive bounds, temporary numerical value copy, split/shrink/combine
+and capacity behavior. Two redundant guards are specialized with source proofs:
+ordered Search plus the preceding failed branch implies the previous endpoint
+is exactly start-1; active insertion is 0/Search/Search+1 and every preceding
+combination/removal disables insertion, so its index cannot exceed nCount.
+Native bodies retain both guards unchanged. No unreachable-state injection,
+coverage exclusion or alternative storage algorithm is used.
+
+Insertion extends the preceding entry at an exact boundary. Removal combines
+identical adjacent entries and resets the terminal endpoint to nMaxAccess.
+Both preserving-size methods retain their original call order, including the
+observed unused fill value for ordinary RemovePreservingSize owners. Distinct
+CopyFrom, source offsets, repeated terminal GetNextValue, source AND copies and
+borrowed iterator cache/position behavior remain original. Iterator dereference
+and addition require a valid entry/region. Numerical output-reference tuples
+and fail-fast errors adapt native syntax; native process abortion is uncertified.
+
+All 5272 defined sequences of four numeric/flag row/column specializations
+compare both complete native owners after every command under ASan/UBSan.
+640 losslessly interned complete snapshots preserve entries, count/capacity,
+queries, terminal next behavior and reverse mask results. Complete original
+header/definition groups and genuine original o3tl typed-flag/config headers are
+used with exact pinned file/group hashes. Separate native processes reproduce
+self-copy and typed-mask assertions. Invalid-start range AND/OR loops are
+reproduced as bounded nontermination diagnostics, with no successful result
+assigned and no guard added. CALC-018/019 record these observations.
+
+Generic object values/equality/copy, allocation/ABI/native references, dangling
+iterators, undefined arithmetic, malformed entry/index states, complete module
+parity and table/document/browser consumers remain unverified. All 104 Calc tests pass
+with actual 100% Istanbul coverage: 2904 statements, 2051 branches,
+467 functions and 2548 lines. With both upstream links temporarily detached,
+104 Calc and 30 related inventory tests pass; the original links are restored.
+Tooling 14, provenance 3, TS7, scoped lint/formatting, documentation, boundaries,
+file size/source tree, provenance, routing and doctor checks pass. Doctor retains
+two previously recorded warnings and no errors. The coherent compressedarray
+module is 475 physical lines and stays below both source size budgets.
+
+Calc 22 capabilities/143 modules and shared 1/116 report zero runtime semantic
+violations. Whole-module parity remains unverified. Writer remains untouched;
+a full suite is not due at task 2/10.
+
+## Shared SoA iterator owners
+
+Task 202610092029-9SXZKS (task7/10) adds the original shared
+iterator_node and soa/iterator owners over three separate borrowed position,
+size and block arrays. Actual shared scalar blocks remain the data owners.
+Each iterator owns its cached node, copies its value independently and keeps
+borrowed parent/block pointer identity. Assignment and swap mutate cached
+values in place, retaining existing node and grouped-cursor references.
+Forward private index updates and reverse no-update policy keep source order.
+End comparison skips cached-node equality; reaching end retains the previous
+cache. Mutable-to-const construction reconstructs the node from its arrays,
+while same-type copy preserves the cache. End private data is intentionally
+undefined by upstream and is omitted from native observations.
+
+The complete unchanged native headers are compiled on real SoA containers
+under ASan/UBSan for seven layouts, all four iterator specializations, complete
+forward/backward/pairwise assignment/swap/equality and mutable cache/conversion
+states. The shared input verifier checks the complete compiler dependencies
+against pinned archives and original LibreOffice patch. Ordinary tests consume
+portable records without a compiler or original source checkout. Actual
+advance_position also replays all694 original mutable/const position pairs
+over the new runtime iterator owners.
+
+STL cursor borrowing and const/static template syntax have explicit TypeScript
+witnesses. Native debug instrumentation, pointer stream formatting, invalid
+lifetimes, unbounded size_t indices, complete SoA container and Calc document/UI
+remain unverified. The arrays in tests are populated from genuine observed
+metadata; they do not certify a replacement container. Whole-module inventory
+parity remains unverified.
+
+## Shared SoA block-array ownership
+
+Task 202610092047-Q9D4EA (task8/10) adds original private block_slot_type,
+blocks_type and blocks_to_transfer owners in soa/main.ts, with original default
+copy/mutate/equality helpers in soa/main_def.ts. Each metadata owner keeps three
+separate normal vectors. Slot/transfer defaults, synchronized push/pop/insert/
+erase/clear/reserve, position arithmetic and exact integrity diagnostics remain
+original. Insertion/erase/clear affect metadata without deleting blocks or
+adding enclosing-container event behavior. Copy/clone call the distinct actual
+shared block_funcs aliases; move/vector/slot swaps retain storage/pointer identity.
+
+vector_storage.ts is explicit shared language infrastructure for reserved slots
+and constructed unmanaged scalar/pointer prefixes. Existing delayed vector
+allocation/growth/insert/erase/assignment delegate to the same mechanics, while
+its front deletion offset and bool capacity policy stay in their original owner.
+Reserve allocates actual slots and leaves constructed size unchanged. This
+adapter has no alternate block segmentation, column or document engine.
+
+The genuine native probe compiles the full unchanged headers and accesses the
+original private storage through caller-only explicit template pointer-member
+bridges. No original class body or access token changes. All888 sequences/8460
+complete two-owner steps compare full arrays, selected host capacities, stable
+pointer tokens, complete all12 scalar payload pools and results after every
+command. All1753 complete states are losslessly interned for portable tests.
+Default helpers retain null skipping, callback order/exception partial effects
+and internal left-prefix equality. The metadata owner checks lengths before
+that equality helper. CALC-025 records the distinction without a fix.
+
+Native custom execution policies, object/destructor/allocator ABI, unbounded
+size_t arithmetic, invalid ranges/self-insertion/dangling cursors and every full
+multi_type_vector/Calc column/document/browser method remain unverified.
+Original nested types export at file scope as TypeScript syntax adaptation;
+this increment certifies no substitute enclosing container or whole-module parity.
+
+## Shared SoA position adjustment
+
+`external/mdds/include/mdds/multi_type_vector/soa/block_util.ts` retains the
+original architecture-neutral `adjust_block_positions` specializations for
+`none`, `lu4`, `lu8`, `lu16` and `lu32`. Each keeps the original early return,
+explicit unrolled lanes, remainder mask and scalar tail. The callable factory
+adapts C++ template-specialization syntax. The existing original default trait
+still selects `lu16`; disabled SIMD values have no scalar fallback.
+
+The helper borrows real `std_vector` positions from the shared SoA owner.
+Only positions change. Sizes, block aliases, payloads, capacities and backing
+identities stay intact. The original iterator cache remains a cache: position
+writes are observed on its next original update, without forced synchronization.
+Unsigned64 position plus signed64 delta uses exact `bigint` modulo arithmetic;
+number witnesses require exactly representable inputs and outputs. Valid large
+start indices return before index projection. Invalid negative indices retain
+the original caller precondition and receive no successful fixture result.
+
+The optional native probe compiles unchanged complete original headers and
+observes the real private array owner through a standard caller-only template
+access bridge. The portable corpus includes 1465 full cases, 7325 original scalar
+calls and 8790 full before/after records, losslessly interned as 852 complete
+snapshots. It retains all three metadata arrays, borrowed pointer identities,
+reserved capacities and complete scalar payloads, including uint64 wrapping and
+large signed64 index early returns. Ordinary tests require no upstream checkout,
+compiler or network. Contextual original loop-unrolling QA is read as source;
+it is not claimed as an executed or ported suite.
+
+The pinned native target is arm64 with size_t64, absent SSE2/AVX2 and OpenMP0.
+Architecture-specific vector instructions, OpenMP scheduling, other native
+position widths, unsupported primary-template diagnostics, generic ABI/object
+lifetimes, invalid inputs and the full SoA container/Calc column/document/UI
+remain unverified. Inventory records preserve those gaps and unverified parity
+statuses. CALC-026 records an AVX2 comment/code mismatch without changing code.
+
+## Shared SoA container lifetime ownership
+
+The actual `multi_type_vector` field owner now composes the existing original
+`blocks_type`, scalar callbacks, block operations and iterator owners. Default,
+handler, size, typed fill/range, copy, clone and move construction preserve
+original member initialization and event ordering. Native scalar overloads and
+handler value operations use explicit TypeScript witnesses; numeric types are
+not inferred from JavaScript values. The original shared empty handler is reused.
+
+Copy/move assignment retains the original temporary/swap/destructor sequence,
+including self assignment. Event value swap exchanges field contents and retains
+borrowed handler references. Deletion releases each block before deleting it and
+nulling its pointer; clear resets metadata and logical size afterward. Explicit
+`dispose` pairs with a valid native destructor boundary. Full swap, block shrink,
+equality and all eight mutable/const forward/reverse endpoint factories reuse the
+original owners. Reverse cursors adapt native base indices to the existing
+shared iterator's dereference indices.
+
+The portable corpus compares 217 complete original native sequences and 2579
+operations, including all12 scalar families, exact invalid-range diagnostics,
+zero-size early returns, complete metadata/capacities/payloads, pointer tokens,
+handler values, event order, endpoint nodes and final destructor logs. Its 2796
+full initial/operation records are losslessly interned into 1113 snapshots.
+The optional probe compiles unchanged full headers under ASan/UBSan. Compound
+inputs are prepared by original public `set`, then loaded as full test fixtures;
+this does not certify or implement segment mutation.
+
+Row/block lookup, scalar retrieval, segment mutation, trace/debug paths, generic
+custom blocks/events, throwing native destructors, arbitrary input iterators,
+invalid object lifetimes/end dereference, ABI/allocator behavior and complete
+Calc columns/documents/browser UI remain unverified. Inventory retains false
+whole-contract/default/behavior parity flags. CALC-027 records the moved-from
+logical-size distinction without resetting it.
+
+## Shared SoA block lookup and reads
+
+The original read-only container group now implements default/hinted block
+lookup, mutable/const row positions and scalar/type/empty queries. Lookup uses
+the original lower-bound overshoot correction over real shared position vectors.
+Cached hint parent/index admission, integer half-row backward walk and reset
+remain unchanged. Real foreign hints and retained hints after full vector swaps
+are exercised without rebuilding their cached fields.
+
+`position(size)` returns a valid endpoint pair before reading hint private data.
+Scalar get, type and empty queries reject that row using the original diagnostic,
+logical size and block count. The source-call line numbers are explicit pinned
+`__LINE__` witnesses, not browser source locations. Native uint64 maximum rows
+use `bigint` early-outs before metadata indexing. Scalar callbacks carry the
+original type and empty value; numeric families are not inferred from JS values.
+
+Original iterator alias construction bodies are shared in the implementation
+module, while the declaration owner retains its actual original fields and
+public factories. The normal STL adapter supplies standard lower_bound search
+syntax over the existing borrowed vector; it adds no separate container engine.
+The unchanged native probe retains the complete original217 lifetime prefix and
+appends73 query sequences. It now compares290 sequences,8810 operations and9100
+full initial/operation records, losslessly interned as4116 complete snapshots,
+including290 final destruction logs. Ordinary tests need no upstream/compiler.
+
+Scope remains the pinned unmanaged scalar/default-execution/no_trace target.
+End-hint private fields are intentionally omitted. Invalid native hints/lifetimes,
+wrong native scalar types, generic custom blocks, arbitrary values, allocator/ABI,
+compile-time qualifications, static typed-position get/next/advance wrappers,
+segment mutations and complete Calc column/document/browser remain unverified.
+Whole module/behavior/contract/default parity flags remain false/unverified.
+
+## Shared SoA position navigation and typed reads
+
+Task `202610092239-B0Y0WD` ports original `next_position`,
+`advance_position`, `logical_position` and static typed position `get` on
+`soa/multi_type_vector`. Mutable and const navigation copy the original
+iterator/offset pair. Within-block movement and boundary crossing retain
+source order; advancement forwards the existing shared `util.advance_position`
+implementation. Logical extraction reads the cached node directly.
+
+The original `types.hpp` `get_block_element_at` uses its bool-store trait to
+read via `cbegin` and iterator advancement; other stores use `at`. The actual
+shared default block supplies that erased compile-time trait for its original
+`delayed_delete_vector<T>`, and typed reads retain the existing block owners.
+No replacement position or scalar engine is introduced.
+
+The unchanged-header native corpus now has 350 complete sequences, 15734
+operations, 16084 complete initial/operation records and 7161 lossless
+snapshots. Every prior 290 sequence and its complete states/final events is
+retained. Appended actual public callers cover all 12 scalar families,
+mutable/const copies, within/across blocks, zero/forward/backward movement,
+multiple-cell empty blocks, and final transition to end without endpoint
+dereference. Native public `set` only prepares compound input; it is not a
+ported or certified mutator.
+
+The finite group is recorded as implemented; complete container/default,
+custom/managed storage, invalid positions/lifetimes, ABI/qualifiers,
+trace/debug/SIMD, arbitrary values and Calc column/document/browser behavior
+remain unverified. Source file boundaries remain original; the existing
+`types.ts` and now `soa/main.ts` exceed the 500-line review target but remain
+below the enforced 1000-line limit. Their declarations and original member
+bodies retain their upstream responsibilities rather than an artificial split.
+
+## Shared SoA resize and empty-tail growth
+
+Task `202610092254-YGCB8W` ports original `resize`, `resize_impl`,
+`append_empty` and `push_back_empty` on the existing shared SoA container.
+TypeScript combines its original declaration/member bodies in the same
+owner file, consistent with the existing constructor/clear/lifetime members.
+Actual metadata, search, typed block funcs, deletion helpers and iterators
+are reused. Equal size is a no-op; zero clears; growth extends an empty
+last block or appends a new empty block. Empty push returns the original
+new/extended last block iterator.
+
+Truncation keeps source overwrite and scalar resize order, retained block
+size, lower-block release/deletion and metadata erase before logical size
+assignment. The exact global overwrite offset remains unchanged and is
+recorded in CALC-028; no upstream repair is introduced.
+
+The native corpus now has 578 complete sequences, 24518 operations, 25096
+full initial/operation states, 11463 lossless snapshots and 578 final logs.
+Every prior 350 complete sequence/state/final event is retained. New actual
+public callers cover all 12 unmanaged scalar families, empty/nonempty tails,
+same/zero/grow/shrink, nonzero multi-cell block starts, block edges and lower
+block removal, copy isolation, moved-source same/shrink error/clear and
+read-after-resize. Forwarding original standard funcs and event callbacks
+observe exact overwrite/resize/release/delete arguments without replacing
+native algorithms. Native public set only prepares compound input.
+
+Finite default/no_trace libc++ bounded scalar contracts are implemented;
+whole container/module/default, managed/custom/throwing outcomes,
+trace/debug/SIMD, invalid moved-source growth/lifetimes/overflow and full
+Calc columns/documents/browser remain unverified. Source-shaped main and
+container test files exceed the 500-line review target and retain their
+original responsibilities below the enforced 1000-line limit.
+
+## Shared SoA scalar append and new-cell ownership
+
+Task `202610092310-2H4HBC` ports original `push_back`, `push_back_impl` and
+`create_new_block_with_new_cell` directly in the existing shared owner, using
+actual scalar callback families and metadata/iterator owners. A matching tail
+appends its value before increasing block and logical sizes. An empty or
+different tail gets a new metadata slot, then a newly created empty payload;
+acquisition precedes scalar append, and logical size changes last. The original
+helper releases/deletes old data before creation and retains its exact null
+creation error. No numeric scalar family is inferred from JavaScript values.
+
+Genuine unchanged full-header native comparisons retain all578 prior sequences
+and add public appends, capacity growth, empty/different tails, copy isolation,
+moved destinations, swaps and valid original size-one private helper replacement.
+The caller-only member bridge invokes the original method without rewriting its
+body. A custom native failure-cell ADL returning nullptr proves the exact original
+error and failed metadata state; only clear/destruction follow that failure.
+Forwarding operation observation records acquisition size zero before append.
+Ordinary committed-fixture tests require neither upstream nor native compilation.
+
+Scope remains pinned no_trace/default execution, all12 unmanaged standard scalar
+families and finite initialized metadata. Native rvalue/ADL syntax is an explicit
+existing callback witness. Managed/custom lifetimes, generic throwing allocators
+and events, emplace variadic construction, other segment mutators, trace/debug/SIMD,
+unbounded/invalid metadata and whole Calc columns/documents/browser remain gaps;
+whole-module/default/QA parity flags remain false. CALC-029 records the custom
+null-creation metadata observation without a rollback repair. Cycle2 task4/10 follows the
+full validation in task `202610092130-FMVJ21`.
+
+## Shared SoA range erase and adjacent-tail merge
+
+Task `202610092323-JXAJ9S` ports original `erase`, `erase_impl`,
+`erase_in_single_block` and `merge_with_next_block` directly in the existing
+shared owner. Both lookup diagnostics and the reversed-range guard keep their
+original order and arguments. Single/multiple block deletion preserves actual
+scalar overwrite/resize/erase, metadata reduction, release/delete, position
+adjustment and type/empty adjacency merge responsibilities. A nonempty merge
+appends the source, resizes it to zero before release/deletion, then removes
+its metadata, preserving the original managed-cell intention.
+
+The original trait `loop_unrolling` selects the existing architecture-neutral
+shared adjustment specialization. Actual deletion, registered scalar block
+functions, three metadata vectors and iterator owners are reused. Bigint
+out-of-range row witnesses retain native uint64 guards before exact bounded
+index projection; no generic unbounded metadata certification is asserted.
+
+Unchanged genuine full-header native callers preserve all664 prior complete
+sequences and add every range of several11/13cell input geometries over all12
+standard scalar families, filled/empty owners, contiguous unlike scalar types, adjacent same/different/empty
+blocks and41block position shifts. Actual forwarding erase/block-append
+observers retain offset/count/source type/size, full ownership/capacity/payload
+states, copy isolation, reappend and final destruction. Complete owner snapshots
+are losslessly interned separately to remove repeated storage; ordinary comparisons
+reconstruct every field and raw native output remains complete. Compound input is
+prepared with original public set, then loaded from complete captured fields;
+set itself remains a subsequent group. No original algorithm body is generated
+or rewritten. Ordinary fixture acceptance runs without upstream or a compiler.
+
+Scope remains finite pinned no_trace/default execution and unmanaged standard
+families. Managed/custom outcomes, native ABI and throwing callbacks/allocators,
+trace/debug/SIMD, invalid or overflowing metadata, other segment mutators and
+whole Calc columns/documents/browser remain gaps. Whole-module/default/QA flags
+remain false. CALC-030 records the original invalid-end diagnostic start-row
+argument without changing it. Cycle2 task5/10 follows full validation in taskFMVJ21.
+
+## Shared SoA whole-container release
+
+Task `202610092349-Z4XSP9` ports original `release()` directly in the shared
+SoA owner. It walks actual borrowed block storage in source order, skips
+null pointers, resizes each nonempty payload to zero, then releases and deletes
+that block through existing registered funcs and event handlers. Pointer slots
+are retained until the original metadata clear; logical size resets afterward.
+This differs from clear/destruction, whose callbacks observe the original size.
+The three metadata vectors retain their actual allocated capacity.
+
+Actual unchanged-header public native callers retain all 7360 prior complete
+sequence. Added all 12 standard-family callers cover homogeneous/empty owners,
+compound and 41-block tables, repeat release, copy/clone isolation, swaps, moved
+sources/destinations, release after erase/resize/append, and subsequent scalar or
+empty growth. Complete payload/metadata/capacity/equality/endpoints/events and
+forwarded resize/release/delete calls are compared without generated algorithms.
+Ordinary committed-fixture acceptance requires no native compiler or upstream.
+
+The selected finite unmanaged no_trace/default-execution contract is implemented;
+managed/custom lifetimes, throwing events/allocators, instrumentation, ABI,
+invalid/reentrant inputs, other segment mutation contracts and full Calc columns,
+documents/browser remain gaps. Whole-module/default/QA flags stay false.
+Source-shaped owner, full container observer and native caller files retain their
+original responsibilities below the 1000-line hard limit. Cycle 2, task 6/10 follows
+the full validation in task `202610092130-FMVJ21`.
+
+## Shared SoA empty insertion
+
+Task `202610100003-CBBFHZ` ports original plain/hinted `insert_empty` and
+`insert_empty_impl` in the existing shared container. Zero length returns end
+before lookup or cached hint access; positive-length errors preserve original
+source diagnostics. Inserting into an empty block expands it, and insertion at
+a data block start expands a previous empty block or adds empty metadata.
+
+Interior insertion creates two slots, creates/acquires an empty typed payload,
+then copies the smaller side. Equal sizes follow the original upper-copy path.
+The lower-copy branch resizes existing data; the upper-copy branch erases copied
+values, swaps metadata slots and restores the original position. Actual shared
+block funcs, three vectors, iterator/hint lookup and trait-selected position
+adjustment retain their responsibilities. Original `is_previous_block_of_type`
+uses the existing explicit borrowed-store member-body convention in
+`main_def.ts`; there is no alternate insertion engine or category owner. A
+caller-only private bridge invokes its unchanged native body over every standard
+category, including empty, without rewriting the original algorithm.
+
+Unchanged-header native callers retain all 7600 earlier complete sequences.
+Added all 12 standard scalar families include every bounded position of several
+compound geometries and varied-value payloads, unequal/equal split sides,
+ordinary/own/foreign/returned hints, long metadata shifts, exact zero-length and
+invalid-row guards, copy isolation, reappend, release and final destruction.
+Full values/capacities/ownership/metadata/events/endpoints/equality and returned
+iterators are compared; forwarding original assignment observes exact source
+size, offset and count. Actual native public set only prepares input and is not
+certified as ported. Portable fixture tests require neither compiler nor upstream.
+
+Complete native result fields, equality matrices and event logs are losslessly
+interned alongside complete owner snapshots. The decoder restores every field,
+including final destruction logs; raw original output and all caller sequences
+are retained. This removes redundant storage after default formatting and JSON
+import limits were observed, without changing algorithms or test criteria.
+
+Scope remains finite initialized unmanaged no_trace/default execution.
+Managed/custom/throwing/ABI/instrumentation, invalid or reentrant native inputs,
+positive hinted lookup with empty metadata, overflow/unbounded storage and the
+remaining segment mutators and full Calc documents/browser remain gaps.
+Whole-module/default/QA flags stay false. Source-shaped owner/observers are
+reviewed below the 1000-line hard limit. Cycle 2, task 7/10 follows fullFMVJ21.
+
+## Shared SoA whole-block emptying
+
+Task `202610100029-0KZNG5` ports original private `set_whole_block_empty`
+and `is_next_block_of_type`. The body uses the existing explicit borrowed-store
+member convention in `main_def.ts`, borrowing actual metadata, event handler,
+registered block funcs and iterator parent. Original
+ownership, callback and iterator modules are reused.
+
+With overwrite false, the typed payload is resized to zero before original
+release/delete/null. With overwrite true, release/delete observes its original
+size. After deletion, original previous/next predicates choose between merging
+both adjacent empty blocks, the previous only, the next only or neither. The
+original sizes, metadata erase counts and returned iterator indices are retained;
+logical size, surviving positions and metadata capacities are not normalized.
+
+Unchanged-header private bridges invoke actual original methods. All 12 standard
+families cover every nonempty block in several compound and varied-value inputs,
+41-block metadata, both overwrite choices, repeated merges, copy isolation,
+returned hint reuse, reappend, release and final destruction. Complete lossless
+native records retain all 13432 previous sequences and their final events.
+Original next-category calls cover every standard category and empty across
+valid first/middle/last blocks. Native public set prepares inputs only.
+
+Public set_empty and remaining range mutators, managed/custom/throwing behavior,
+invalid native inputs, reentrancy, overflow, instrumentation/ABI, complete original
+QA/module/default and Calc column/document/browser parity remain unverified.
+The capability is implemented within this scope; whole parity flags remain false.
+Source-shaped main/main_def, native caller and complete observer retain existing
+responsibilities below the 1000-line hard limit. No new upstream suspicion has
+been established. Cycle 2, task 8/10 follows fullFMVJ21.
+
+## Shared SoA range emptying
+
+Task `202610100046-PKFGQY` implements original plain/hinted `set_empty` and
+complete `set_empty_impl`, single/multi-block and `set_new_block_to_middle`
+bodies. The public owner supplies actual fields to the existing explicit
+borrowed-member convention in `main_def.ts`. Actual shared block funcs,
+metadata, event/delete/neighbor helpers and iterator parent retain their roles.
+
+First-row lookup precedes reversed/end validation, preserving original pinned
+1171/1186/1935 diagnostics. Already-empty single blocks return unchanged; whole
+blocks reuse original emptying. Top/bottom overwrite and erase precede adjacent
+empty extension or insertion. Multi-block mutation retains first/last/interior
+ordering, boundary empty extensions, deletion/metadata erasure and returned
+index. Original logical size is unchanged throughout.
+
+Middle split inserts two slots and acquires a size-zero typed owner before
+assignment. It copies the smaller side, choosing upper copy on equality, then
+conditionally overwrites the emptied cells before resize or erase/slot swap.
+Positions recalculate afterward. Splitting empty metadata retains the original
+three temporary adjacent empty blocks without normalization.
+
+Genuine unchanged-header public and private callers compare every complete
+native field across all 12 standard unmanaged families. Selected compound and
+varied inputs cover every finite valid inclusive range with overwrite true and
+false. Valid own/foreign/returned hints, long metadata, guard ordering, copy
+isolation, reappend, release and final destruction are observed. All 15076 prior
+complete sequences and final logs remain unchanged. The new native input module
+owns only this operation-group enumeration; it supplies no runtime algorithm,
+expected results or replacement observer. Native public set prepares inputs only.
+
+Complete owner records losslessly intern their full metadata, payload and
+endpoint arrays, in addition to existing complete result/equality/event tables.
+The decoder restores every original field. This removes redundant storage after
+ordinary formatting exhausted the default heap, retaining all caller inputs,
+complete original raw output, prior-prefix states and native lifetime records.
+Ordinary default-heap formatting and full raw record comparisons pass.
+
+Managed/custom/throwing outcomes, ABI/instrumentation/reentrancy/invalid inputs,
+overflow, public range release and remaining set/range insert/transfer/emplace,
+complete original QA/default/module and Calc column/document/browser parity
+remain unverified. Capability implemented within this scope, whole flags false.
+Source-shaped owners and shared full observer remain below the 1000-line hard
+limit. No new upstream suspicion established. Cycle2task9/10 follows fullFMVJ21.
+
+## Shared SoA public range release
+
+Task `202610100109-QQ0KPB` adds original plain/hinted `release_range` from
+`main_def.inl` 3782–3808. First-block lookup retains exact 3790/3805 diagnostics
+before reversed/end validation. The actual shared `set_empty_impl` runs with
+`overwrite=false`; logical size and original empty iterator remain unchanged.
+No alternate range engine or scalar overwrite is introduced.
+
+Existing original clear, whole release, destructor and new-cell store/event
+bodies now retain their native `main_def` source boundary under the established
+explicit borrowed-fields convention. Actual owner declarations remain in main,
+including private new-cell and public lifetime witnesses; actual logical size
+resets occur only after clear/release return. Destructor uses positions.size
+and does not clear metadata or reset size. All original deletion, size-zero
+resize, callback, null-failure, installation and append order is preserved.
+
+Genuine unchanged-header native callers compare all 12 initialized unmanaged
+families, every valid inclusive range of selected compound/varied geometry,
+valid own/foreign/returned hints, long metadata and exact guard ordering.
+Complete payload/capacity/metadata/owner/iterator/equality/events and actual
+forwarded block operations are observed; copy, reappend, clear, whole release
+and destruction retain the complete 28204-sequence prior prefix. New input
+module only enumerates native callers, with the common full observer reused.
+
+Managed/custom/throwing outcomes, ABI/instrumentation/reentrancy/invalid inputs,
+overflow/unbounded storage, scalar release and remaining set/range insert,
+transfer/emplace, full original QA/default/module and Calc column/document/UI
+parity remain gaps. Implemented capability has all whole parity flags false.
+No new upstream suspicion established; source behavior is preserved.
+Cycle 2, task 10/10 includes the scheduled full suite and portable verification
+with upstream absent and exact restoration. Writer-only coverage shortages,
+if any, retain the user-directed exception without repair in this branch.
+
+The complete native observer is shared by three independent original operation
+groups: lifetime/query/navigation/size/append/erase/empty insertion, range empty
+and middle split, and public range release. Every complete case and final event
+is retained. The scheduled full run exposed a 31.8-second aggregate timeout;
+grouping follows these original operations while preserving the existing
+30-second per-test budget, fixture, assertions and coverage gates.
+
+## Shared SoA scalar release overloads
+
+Task `202610100153-570FFF` ports original `release_impl` from
+`main_def.inl:1474-1495` and public scalar `release` from
+`main_def.inl:3624-3737`. All three original overloads are available: typed value
+return, borrowed output reference, and hinted output reference. Explicit shared
+callbacks select the erased native type; `{ value: T }` borrows the original
+output slot. First lookup retains diagnostics3631/3670/3711 before assigning
+the output. Empty blocks assign the original typed default and return their
+iterator; filled blocks assign the scalar before shared single-block emptying
+with overwrite false. Logical size remains unchanged.
+
+Original insert-empty, merge and position overload dispatch bodies reside in
+`main_def`, borrowing actual fields and invoking the actual original private
+insertion member. The owner retains all logical-size assignments. Position
+selects its fixed diagnostics from actual mutable/const iterator aliases.
+No second container or Calc-specific copy is introduced.
+
+The genuine full-header C++ driver calls all three typed public overloads.
+Its input-only module enumerates all12 standard families and every row of
+selected5/11/13/17/41cell geometry. Own/foreign hints, cached returned hints on
+empty and nonempty cells, copy isolation, repeated empty defaults, reappend,
+destruction and size/uint64max/plain moved-empty guards are observed. Every
+prior35740 complete native sequence and284896 full states remains in the
+corpus. Complete native values, output/iterator results, operations, ownership,
+payloads, capacities, metadata, endpoints and event logs remain portable through
+the existing common decoder and observer.
+
+[CALC-031](upstream-suspected-issues.md#calc-031-hinted-scalar-release-reads-empty-metadata-before-its-row-guard)
+records the independently reproduced original hinted-empty-destination native
+undefined behavior, even with a valid foreign hint. The implementation preserves
+the lookup order; native UB has no defined portable expected result.
+
+This is cycle3 task1/10. The user requested a full suite now and a goal pause
+after its results are handled, overriding the next scheduled task40 run. Whole
+contract/behavior/default module parity remains unverified. Managed/custom/
+throwing, instrumentation/ABI, reentrant/invalid/unbounded/overflow inputs,
+remaining set/range insertion, transfer/emplace, complete original QA and Calc
+column/document/browser UI remain pending.
+
+Captured data is organized by original operation family: the original container
+corpus retains35740 sequences, and the scalar-release corpus adds7992. Both
+use the same full-field interner and the same decoder/observer with an explicit
+corpus argument. This keeps ordinary defaultheap formatting and import practical
+without dropping inputs, fields or assertions; raw native output remains one
+complete original run. Exported original insertion/merge helper responsibilities
+also have explicit internal-operation inventory records.

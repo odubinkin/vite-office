@@ -111,6 +111,7 @@ function dependencies(registry: InventoryRegistry, baseline: string): RegistryCl
       if (path === "docs/program/libreoffice-baseline.json") return baseline;
       if (path.startsWith("vendor/libreoffice-reference/"))
         return required(markers.get(path.slice("vendor/libreoffice-reference/".length)));
+      if (path.startsWith("vendor/mdds-reference/")) return required(markers.get(path));
       return readFile(path, "utf8");
     },
     /** Lists local runtime files. @returns Relative entries. */ listRuntime: async () =>

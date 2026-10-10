@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "task_id": "202610091348-5TZGNC",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-09T13:59:59.769Z",
+  "verdict": "pass",
+  "summary": "Native same-name signed64 Update overload preserves sentinels source snapshots saturation and defined movement;19390 unchanged native comparisons plus62 tests actual100 Istanbul and TS7/inventory pass.",
+  "evaluated_sha": "cce901179ec00ef3ca13542fb032a499a0c6adf0",
+  "blueprint_digest": "1885fb8e930e4fb25a69865ec8dbcb81ea5fecc0bb2bb39fe0647b8c90a2c256",
+  "findings": [
+    "Defined Move cut flags are false because native cut=true requires undefined following signed64 addition; proof comments preserve defined remainder without coverage exclusions or fabricated wrapping. Existing ordinary tests/fixture and big owners unchanged; source496lines retains original coherent responsibility."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610091348-5TZGNC/README.md",
+    "cce901179ec00ef3ca13542fb032a499a0c6adf0",
+    "output/playwright/calc-resumed-task3-verification.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Full ScDocument/compiler/change-tracking consumers, native debug checks and undefined/uninitialized domains remain uncertified."
+  ]
+}

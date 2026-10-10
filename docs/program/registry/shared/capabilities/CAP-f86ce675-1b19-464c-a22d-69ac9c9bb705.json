@@ -1,0 +1,100 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-f86ce675-1b19-464c-a22d-69ac9c9bb705",
+    "capabilityId": "CAP-f86ce675-1b19-464c-a22d-69ac9c9bb705",
+    "suite": "shared",
+    "subsystem": "segment-storage",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original linked half-open leaf intervals and terminal value_type{}; insertion coalesces nodes and reports actual changes.",
+      "Original separately built bottom-up pooled search tree, readiness invalidation and no implicit build on search.",
+      "Original copy/move/assignment/clear and shift order; distinct forward/reverse iterator types, live ref_pair aliases and cached segment-iterator copy/end semantics."
+    ],
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "Original external storage/search/iterator responsibility is retained, using genuine source-verified native comparisons."
+    },
+    "capability": "Shared mdds initialized flat segment tree storage and index",
+    "gaps": [
+      "Only numeric Calc keys with initialized boolean/number values and native-defined arithmetic are implemented. Wider C++ templates and value classes, allocation/refcount/deletion timing, dangling iterators, debug dumps, generic exceptions and undefined invalid-border operations remain uncertified. GC references and explicit copy/move/operator methods adapt the language runtime. Finite native snapshots do not establish whole-module or Calc parity."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/mdds-reference/include/mdds/flat_segment_tree.hpp",
+          "marker": "class flat_segment_tree"
+        },
+        {
+          "path": "external/mdds/UnpackedTarball_mdds.mk",
+          "marker": "MDDS_TARBALL"
+        },
+        {
+          "path": "sc/source/core/data/segmenttree.cxx",
+          "marker": "::mdds::flat_segment_tree<SCCOLROW, ValueType>"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/mdds-reference/test/flat_segment_tree/test_main.cpp",
+          "marker": "void fst_test_shift_right_bool()"
+        }
+      ],
+      "docs": [
+        {
+          "path": "download.lst",
+          "marker": "mdds-3.2.1.tar.xz"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/flat_segment_tree.ts",
+          "marker": "export class"
+        },
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/flat_segment_tree_itr.ts",
+          "marker": "export class"
+        },
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/node.ts",
+          "marker": "export class"
+        },
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/ref_pair.ts",
+          "marker": "export class"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/flat_segment_tree.test.ts",
+          "marker": "matches every unchanged native insertion"
+        },
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/flat_segment_tree.test.ts",
+          "marker": "retains terminal zero"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Shared external mdds segment storage"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "Own initialized half-open leaf intervals and update or search original shared segment storage",
+    "scopeLimitations": [
+      "Only numeric Calc keys with initialized boolean/number values and native-defined arithmetic are implemented. Wider C++ templates and value classes, allocation/refcount/deletion timing, dangling iterators, debug dumps, generic exceptions and undefined invalid-border operations remain uncertified. GC references and explicit copy/move/operator methods adapt the language runtime. Finite native snapshots do not establish whole-module or Calc parity.",
+      "Exact external dependency source/tests resolve from their explicit vendor reference, matching provenance path semantics. Pinned dependency and Calc consumer ownership remain documented; no full external native suite closure is claimed."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

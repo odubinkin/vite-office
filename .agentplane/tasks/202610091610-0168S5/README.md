@@ -1,0 +1,286 @@
+---
+id: "202610091610-0168S5"
+title: "Port Calc boolean row and column segment owners"
+result_summary: "verified-202610091610-0168S5"
+status: "DONE"
+priority: "med"
+owner: "CODER"
+revision: 19
+origin:
+  system: "manual"
+depends_on: []
+tags:
+  - "code"
+verify: []
+plan_approval:
+  state: "approved"
+  updated_at: "2026-10-09T16:11:46.948Z"
+  updated_by: "ORCHESTRATOR"
+  note: null
+verification:
+  state: "ok"
+  updated_at: "2026-10-09T16:34:55.070Z"
+  updated_by: "CODER"
+  note: "verified-202610091610-0168S5"
+  attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-09T16:34:27.284Z"
+  updated_by: "EVALUATOR"
+  note: "Approved boolean segment scope is implemented at original Calc boundaries on shared mdds; deterministic native, portable, coverage and ownership gates pass for f0e1b674913c7cd31b73d811aaa0f56e6b682825."
+  evaluated_sha: "f0e1b674913c7cd31b73d811aaa0f56e6b682825"
+  blueprint_digest: "ccb85850e5b0e3c01b18982c8d5e4391b40654b550d763ad031850eea8482c65"
+  evidence_refs:
+    - ".agentplane/tasks/202610091610-0168S5/README.md"
+    - ".agentplane/tasks/202610091610-0168S5/quality/20261009-163427284-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610091610-0168S5/quality/20261009-163427284-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610091610-0168S5/quality/20261009-163427284-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610091610-0168S5/blueprint/resolved-snapshot.json"
+    - "output/playwright/task8-native-final.log"
+    - "output/playwright/task8-native-thread.log"
+    - "output/playwright/task8-calc-final.log"
+    - "output/playwright/task8-portable-calc.log"
+    - "output/playwright/task8-portable-shared.log"
+    - "output/playwright/task8-portable-inventory.log"
+    - "output/playwright/task8-inventory-tests.log"
+    - "output/playwright/task8-typecheck-final.log"
+    - "output/playwright/task8-registry-calc-final.log"
+    - "output/playwright/task8-registry-shared.log"
+  findings:
+    - "Reviewed 331-line core owner against unchanged original bool methods: inclusive setters/query outputs, half-open removal, skip-start insertion, hint/range cursor sharing, monotonic stale forward cache, copy index invalidation and global readiness conditions are retained. getFirst guard reduction follows initialized border-node invariant; no coverage exclusions."
+    - "Native probe checks pinned source blobs and extracted group hashes, reuses genuine archive/header verification, observes copies to avoid perturbing live cursors, and keeps actual opaque RTL declarations without substituting native string bodies.436 cases and isolated assertion pass under ASan/UBSan. Ordinary82+5+30 tests pass with both upstream references absent."
+    - "Registry adds original header/core and ScGlobal owners with explicit bounded responsibilities and unverified semantic parity; Calc17 capabilities/134modules and shared1/116 have zero semantic violations. Source/capability/test references resolve; Writer code and coverage unchanged."
+commit:
+  hash: "c7ffb63acc8cdda917038f279c9446ea49d1b736"
+  message: "Record Calc boolean segment quality review (202610091610-0168S5)"
+comments:
+  -
+    author: "CODER"
+    body: "Start: Implement approved original boolean segment owners and shared cache/iterator contracts on actual mdds, preserving pinned native evidence and Calc scoped100 gates."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610091610-0168S5. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
+events:
+  -
+    type: "status"
+    at: "2026-10-09T16:11:47.773Z"
+    author: "CODER"
+    from: "TODO"
+    to: "DOING"
+    note: "Start: Implement approved original boolean segment owners and shared cache/iterator contracts on actual mdds, preserving pinned native evidence and Calc scoped100 gates."
+  -
+    type: "verify"
+    at: "2026-10-09T16:33:08.388Z"
+    author: "CODER"
+    state: "ok"
+    note: "Passed436 unchanged native bool sequences and isolated debug assertion with genuine mdds/sanitizers;82 Calc tests actual100 in all four Istanbul metrics;5 shared,14 tooling,3 provenance,30 inventory tests; upstream-absent82+5+30 portable tests; TS7/lint/format/docs/ownership/size/tree/provenance and Calc/shared registry zero violations. Task8/10; Writer coverage untouched."
+  -
+    type: "verify"
+    at: "2026-10-09T16:34:55.070Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610091610-0168S5"
+  -
+    type: "status"
+    at: "2026-10-09T16:34:55.194Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610091610-0168S5. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
+doc_version: 3
+doc_updated_at: "2026-10-09T16:36:15.620Z"
+doc_updated_by: "CODER"
+description: "Task8 of resumed interval: port actual segmenttree boolean owners/iterators on shared mdds, preserve original cache/shared-cursor and bounds contracts with pinned native evidence; introduce actual ScGlobal threaded-calculation flag where used."
+sections:
+  Summary: "Port original Calc boolean row/column flat segment owners and both row iterators over the already shared pinned mdds implementation. Preserve real implementation sharing, inclusive outer bounds, cached hint and owner-shared iteration state."
+  Scope: "Calc checkout/branch only, task8 of resumed10. Add sc/inc/segmenttree.ts and sc/source/core/data/segmenttree.ts with complete boolean row/column public methods and needed original internal template specialization. Add the actual ScGlobal threaded-group-calculation flag at its core-data owner and re-export through existing inc/global.ts, preserving original false initialization and assertion preconditions. Native debug assertion uses explicit JS fail-fast diagnostic adaptation; native process-abort/release diagnostic policy remains uncertified. dumpAsString preserves original scalar ASCII text via JS immutable strings; RTL allocation/refcount/buffer capacity is not represented. Numeric UInt16 owners, conditional setters/sums and other ScGlobal services remain follow-up work, not replaced by stubs. Add portable native fixture/tests/probe, Calc runtime/provenance/capability records and update existing global provenance if needed, calc-core/suspected-case docs. Original native classes/method bodies are compiled unchanged for implemented boolean mechanisms with genuine mdds/Boost headers; diagnostic string methods not native-certified until actual RTL linkage exists. No native tree/engine/RTL stand-ins, Writer coverage repair, external writes or merges."
+  Plan: "Port original boolean row/column segment owners and iterators over shared mdds, preserve owner cursor/cache/defaults/global preconditions with native evidence; task8 of10."
+  Verify Steps: "Run pinned native bool-segment probe --write/--check under ASan/UBSan with unchanged original declarations/needed boolean methods, original global flag definition and genuine source-verified mdds/Boost. Compare inclusive ranges, failure output preservation, insertion changed flags, remove half-open boundaries, insert skip-start behavior, copy/cache state, reverse findLastTrue sentinel, ForwardIterator monotonic cursor/stale cached value and RangeIterator shared owner cursor, query interactions and repeated ends. Native uninitialized RangeIterator-before-first, dangling iterator/malformed mutation and arithmetic overflow remain excluded; preserve source expressions. Verify original diagnostic text with literal independent tests, JS assertion adaptation with explicit tests and isolated native debug assertion evidence. Ordinary tests require no upstream/native compiler/network. Run all Calc actual100 Istanbul four metrics, targeted shared mdds tests, TS7/tools, affected lint/format/docs/ownership/file-size/source-tree/provenance, Calc/shared registry zero semantic violations, related provenance/inventory/tooling tests where changes require them, routing/doctor/diff and final clean status. Full suite only task10; do not repair Writer coverage or promote whole-module parity from finite snapshots."
+  Verification: |-
+    Command: node scripts/calc-bool-segments-native-probe.mjs --write (initial fixture), --check and --thread-assertion. Result: pass. Evidence:436 initialized sequences using unchanged original bool declarations/complete needed groups, actual global flag declaration/definition and genuine verified mdds/Boost; ASan/UBSan pass. Shared dependency verifier also passes3020 native sequences. Isolated original debug assertion diagnosed; actual RTL diagnostic methods remain unlinked. Scope: bounded boolean interval/cache/cursor/query/copy/shift/readiness mechanisms.
+
+    Command: npm run test:coverage:calc. Result: pass. Evidence:82 tests/18files; actual100 Istanbul statements1643/1643,branches1359/1359,functions310/310,lines1450/1450. No exclusions.
+
+    Command: npm run test:shared -- src/external/mdds/include/mdds/flat_segment_tree.test.ts; npm run test:tooling; npm run test:source-provenance; npx vitest run --config scripts/libreoffice-inventory/vitest.config.ts scripts/libreoffice-inventory/registry-validation.test.ts scripts/libreoffice-inventory/runtime-inventory.test.ts scripts/libreoffice-inventory/registry-storage.test.ts scripts/libreoffice-inventory/parity-mappings.test.ts scripts/libreoffice-inventory/parity-mapping-cli.test.ts. Result: pass. Evidence:5 shared tests,14 tooling/3files,3 provenance tests,30 inventory/5files. Scope: affected shared dependency and registry/tool contracts.
+
+    Command: npm run test:calc; targeted shared5 and inventory30 tests with both upstream symlinks temporarily detached and restored by EXIT trap. Result: pass. Evidence:82+5+30 portable tests; no compiler/network/upstream needed; both original links restored.
+
+    Command: npm run typecheck; focused npx eslint --max-warnings0 and Prettier --check on all changed paths; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:source-tree; npm run check:source-provenance; npm run inventory:parity:calc; npm run inventory:parity:shared; node .agentplane/policy/check-routing.mjs; ap doctor; git diff --check. Result: pass. Evidence: TS7 tools/application;343 runtime modules with252 mapped,74 browser,17 local;1125 documented source files;114 required paths/33 retired roots; Calc17 capabilities/134modules and shared1/116 with zero semantic violations; routing pass; doctor zero errors and two inherited warnings (old managed shim, old task missing implementation hash), unchanged. Scope: ownership/provenance/lint/types and repository gates.
+
+    Full suite follows the user cadence at resumed task10, not this task8. Writer coverage remains untouched. Final tracked/untracked status must be clean after close; all intended paths are limited to approved task scope.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-09T16:33:08.388Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Passed436 unchanged native bool sequences and isolated debug assertion with genuine mdds/sanitizers;82 Calc tests actual100 in all four Istanbul metrics;5 shared,14 tooling,3 provenance,30 inventory tests; upstream-absent82+5+30 portable tests; TS7/lint/format/docs/ownership/size/tree/provenance and Calc/shared registry zero violations. Task8/10; Writer coverage untouched.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T16:33:06.441Z, excerpt_hash=sha256:2e5b5809da897798d792220ac4a48de61a2b88b368273da17e33734471a69cbf
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610091610-0168S5/blueprint/resolved-snapshot.json
+    - old_digest: ccb85850e5b0e3c01b18982c8d5e4391b40654b550d763ad031850eea8482c65
+    - current_digest: ccb85850e5b0e3c01b18982c8d5e4391b40654b550d763ad031850eea8482c65
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610091610-0168S5
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610091610-0168S5
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-09T16:34:55.070Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610091610-0168S5
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T16:33:08.504Z, excerpt_hash=sha256:2e5b5809da897798d792220ac4a48de61a2b88b368273da17e33734471a69cbf
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610091610-0168S5/blueprint/resolved-snapshot.json
+    - old_digest: ccb85850e5b0e3c01b18982c8d5e4391b40654b550d763ad031850eea8482c65
+    - current_digest: ccb85850e5b0e3c01b18982c8d5e4391b40654b550d763ad031850eea8482c65
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610091610-0168S5
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610091610-0168S5 --result verified-202610091610-0168S5 --commit c7ffb63acc8cdda917038f279c9446ea49d1b736
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
+  Rollback Plan: "Revert only task8 implementation commits; retain shared mdds prerequisite and all earlier Calc owners. Remove only newly introduced segment/global owner registrations if reverting."
+  Findings: |-
+    Native436 initialized sequences and isolated debug assertion pass. All82 Calc tests pass with actual100 Istanbul:1643/1643 statements,1359/1359 branches,310/310 functions,1450/1450 lines. Initial missing branches were resolved by repeated readiness tests and an initialized two-border-node proof for getFirst, preserving native bodies and no coverage exclusions. ScGlobal static owner retains a narrowly justified no-extraneous-class exception. TS7 and focused lint pass. First docs/provenance gate found four throw-assertion callbacks missing JSDoc and an overly qualified header symbol: global.hxx declares bThreadedGroupCalcInProgress inside ScGlobal, not the literal qualified definition. Correct callback documentation and header evidence spellings without implementation or scope changes, then repeat affected gates. Related14 tooling,3 provenance and30 inventory tests pass.
+
+    Closure observation: The route-oracle task complete command marked DONE and recorded the original implementation hash f0e1b674, but its generated verified-task-ID result produced a close subject rejected as too generic (E_GIT). Recomputed direct_done_pending_artifact_commit route; default close repeated that subject rejection. No implementation or verification gate changed. Persist only task metadata with the documented ap commit command and a concrete semantic subject; preserve the quality review and implementation hash. A check-only invocation without unstage-others also diagnosed the already staged task README; no unrelated files are staged.
+extensions:
+  implementation_commit:
+    hash: "f0e1b674913c7cd31b73d811aaa0f56e6b682825"
+    message: "Implement Calc boolean segment owners (202610091610-0168S5)"
+id_source: "generated"
+---
+## Summary
+
+Port original Calc boolean row/column flat segment owners and both row iterators over the already shared pinned mdds implementation. Preserve real implementation sharing, inclusive outer bounds, cached hint and owner-shared iteration state.
+
+## Scope
+
+Calc checkout/branch only, task8 of resumed10. Add sc/inc/segmenttree.ts and sc/source/core/data/segmenttree.ts with complete boolean row/column public methods and needed original internal template specialization. Add the actual ScGlobal threaded-group-calculation flag at its core-data owner and re-export through existing inc/global.ts, preserving original false initialization and assertion preconditions. Native debug assertion uses explicit JS fail-fast diagnostic adaptation; native process-abort/release diagnostic policy remains uncertified. dumpAsString preserves original scalar ASCII text via JS immutable strings; RTL allocation/refcount/buffer capacity is not represented. Numeric UInt16 owners, conditional setters/sums and other ScGlobal services remain follow-up work, not replaced by stubs. Add portable native fixture/tests/probe, Calc runtime/provenance/capability records and update existing global provenance if needed, calc-core/suspected-case docs. Original native classes/method bodies are compiled unchanged for implemented boolean mechanisms with genuine mdds/Boost headers; diagnostic string methods not native-certified until actual RTL linkage exists. No native tree/engine/RTL stand-ins, Writer coverage repair, external writes or merges.
+
+## Plan
+
+Port original boolean row/column segment owners and iterators over shared mdds, preserve owner cursor/cache/defaults/global preconditions with native evidence; task8 of10.
+
+## Verify Steps
+
+Run pinned native bool-segment probe --write/--check under ASan/UBSan with unchanged original declarations/needed boolean methods, original global flag definition and genuine source-verified mdds/Boost. Compare inclusive ranges, failure output preservation, insertion changed flags, remove half-open boundaries, insert skip-start behavior, copy/cache state, reverse findLastTrue sentinel, ForwardIterator monotonic cursor/stale cached value and RangeIterator shared owner cursor, query interactions and repeated ends. Native uninitialized RangeIterator-before-first, dangling iterator/malformed mutation and arithmetic overflow remain excluded; preserve source expressions. Verify original diagnostic text with literal independent tests, JS assertion adaptation with explicit tests and isolated native debug assertion evidence. Ordinary tests require no upstream/native compiler/network. Run all Calc actual100 Istanbul four metrics, targeted shared mdds tests, TS7/tools, affected lint/format/docs/ownership/file-size/source-tree/provenance, Calc/shared registry zero semantic violations, related provenance/inventory/tooling tests where changes require them, routing/doctor/diff and final clean status. Full suite only task10; do not repair Writer coverage or promote whole-module parity from finite snapshots.
+
+## Verification
+
+Command: node scripts/calc-bool-segments-native-probe.mjs --write (initial fixture), --check and --thread-assertion. Result: pass. Evidence:436 initialized sequences using unchanged original bool declarations/complete needed groups, actual global flag declaration/definition and genuine verified mdds/Boost; ASan/UBSan pass. Shared dependency verifier also passes3020 native sequences. Isolated original debug assertion diagnosed; actual RTL diagnostic methods remain unlinked. Scope: bounded boolean interval/cache/cursor/query/copy/shift/readiness mechanisms.
+
+Command: npm run test:coverage:calc. Result: pass. Evidence:82 tests/18files; actual100 Istanbul statements1643/1643,branches1359/1359,functions310/310,lines1450/1450. No exclusions.
+
+Command: npm run test:shared -- src/external/mdds/include/mdds/flat_segment_tree.test.ts; npm run test:tooling; npm run test:source-provenance; npx vitest run --config scripts/libreoffice-inventory/vitest.config.ts scripts/libreoffice-inventory/registry-validation.test.ts scripts/libreoffice-inventory/runtime-inventory.test.ts scripts/libreoffice-inventory/registry-storage.test.ts scripts/libreoffice-inventory/parity-mappings.test.ts scripts/libreoffice-inventory/parity-mapping-cli.test.ts. Result: pass. Evidence:5 shared tests,14 tooling/3files,3 provenance tests,30 inventory/5files. Scope: affected shared dependency and registry/tool contracts.
+
+Command: npm run test:calc; targeted shared5 and inventory30 tests with both upstream symlinks temporarily detached and restored by EXIT trap. Result: pass. Evidence:82+5+30 portable tests; no compiler/network/upstream needed; both original links restored.
+
+Command: npm run typecheck; focused npx eslint --max-warnings0 and Prettier --check on all changed paths; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:source-tree; npm run check:source-provenance; npm run inventory:parity:calc; npm run inventory:parity:shared; node .agentplane/policy/check-routing.mjs; ap doctor; git diff --check. Result: pass. Evidence: TS7 tools/application;343 runtime modules with252 mapped,74 browser,17 local;1125 documented source files;114 required paths/33 retired roots; Calc17 capabilities/134modules and shared1/116 with zero semantic violations; routing pass; doctor zero errors and two inherited warnings (old managed shim, old task missing implementation hash), unchanged. Scope: ownership/provenance/lint/types and repository gates.
+
+Full suite follows the user cadence at resumed task10, not this task8. Writer coverage remains untouched. Final tracked/untracked status must be clean after close; all intended paths are limited to approved task scope.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-09T16:33:08.388Z — VERIFY — ok
+
+By: CODER
+
+Note: Passed436 unchanged native bool sequences and isolated debug assertion with genuine mdds/sanitizers;82 Calc tests actual100 in all four Istanbul metrics;5 shared,14 tooling,3 provenance,30 inventory tests; upstream-absent82+5+30 portable tests; TS7/lint/format/docs/ownership/size/tree/provenance and Calc/shared registry zero violations. Task8/10; Writer coverage untouched.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T16:33:06.441Z, excerpt_hash=sha256:2e5b5809da897798d792220ac4a48de61a2b88b368273da17e33734471a69cbf
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610091610-0168S5/blueprint/resolved-snapshot.json
+- old_digest: ccb85850e5b0e3c01b18982c8d5e4391b40654b550d763ad031850eea8482c65
+- current_digest: ccb85850e5b0e3c01b18982c8d5e4391b40654b550d763ad031850eea8482c65
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610091610-0168S5
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610091610-0168S5
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-09T16:34:55.070Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610091610-0168S5
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T16:33:08.504Z, excerpt_hash=sha256:2e5b5809da897798d792220ac4a48de61a2b88b368273da17e33734471a69cbf
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610091610-0168S5/blueprint/resolved-snapshot.json
+- old_digest: ccb85850e5b0e3c01b18982c8d5e4391b40654b550d763ad031850eea8482c65
+- current_digest: ccb85850e5b0e3c01b18982c8d5e4391b40654b550d763ad031850eea8482c65
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610091610-0168S5
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610091610-0168S5 --result verified-202610091610-0168S5 --commit c7ffb63acc8cdda917038f279c9446ea49d1b736
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
+
+## Rollback Plan
+
+Revert only task8 implementation commits; retain shared mdds prerequisite and all earlier Calc owners. Remove only newly introduced segment/global owner registrations if reverting.
+
+## Findings
+
+Native436 initialized sequences and isolated debug assertion pass. All82 Calc tests pass with actual100 Istanbul:1643/1643 statements,1359/1359 branches,310/310 functions,1450/1450 lines. Initial missing branches were resolved by repeated readiness tests and an initialized two-border-node proof for getFirst, preserving native bodies and no coverage exclusions. ScGlobal static owner retains a narrowly justified no-extraneous-class exception. TS7 and focused lint pass. First docs/provenance gate found four throw-assertion callbacks missing JSDoc and an overly qualified header symbol: global.hxx declares bThreadedGroupCalcInProgress inside ScGlobal, not the literal qualified definition. Correct callback documentation and header evidence spellings without implementation or scope changes, then repeat affected gates. Related14 tooling,3 provenance and30 inventory tests pass.
+
+Closure observation: The route-oracle task complete command marked DONE and recorded the original implementation hash f0e1b674, but its generated verified-task-ID result produced a close subject rejected as too generic (E_GIT). Recomputed direct_done_pending_artifact_commit route; default close repeated that subject rejection. No implementation or verification gate changed. Persist only task metadata with the documented ap commit command and a concrete semantic subject; preserve the quality review and implementation hash. A check-only invocation without unstage-others also diagnosed the already staged task README; no unrelated files are staged.

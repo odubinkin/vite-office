@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "task_id": "202610091325-52SMH5",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-09T13:34:12.601Z",
+  "verdict": "pass",
+  "summary": "Original MoveRelWrap and private helper preserve native responsibilities with independent differential and literal acceptance, actual100 Istanbul and TS7 checks; no semantic certification overclaim.",
+  "evaluated_sha": "c3f84b4b86141ad9c0a77b53a887ceb21ce0cd22",
+  "blueprint_digest": "6b0d1f71207d92da2391dee494bad97940bf55f939063ca29825a50d7d467343",
+  "findings": [
+    "No production shared duplication, Writer edits, coverage exclusions or body rewrites. Native release-only custom-limit comparison is explicit; defined bounded arithmetic does not certify full compiler/token ownership."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610091325-52SMH5/README.md",
+    "c3f84b4b86141ad9c0a77b53a887ceb21ce0cd22",
+    "output/playwright/calc-resumed-task1-verification.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Ordinary/big Update, full document/compiler consumers, debug assertion enforcement and undefined arithmetic remain pending."
+  ]
+}
