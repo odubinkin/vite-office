@@ -4,7 +4,7 @@ title: "Port original shared UTF16 reverse comparison required by Calc cell stri
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 16
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -23,6 +23,29 @@ verification:
   updated_by: "CODER"
   note: "Complete unchanged native10084calls/20168results/4assert guards, portable Calc106/shared2 allfour100 and raw counters, source/inventory/ownership/static gates pass. Actual shared SAL source/header boundaries retained; no stand-in string owners. Task2/10,nextfull41."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-10T14:20:27.946Z"
+  updated_by: "EVALUATOR"
+  note: "Commit263db2ba preserves the original shared SAL UTF16 reverse-comparison dependency required by Calc SharedString, with complete unchanged native and actual targeted coverage evidence."
+  evaluated_sha: "263db2baa0f83d26d0353b5d866520a933a749d4"
+  blueprint_digest: "7e6d554b24f14eb0e24d42fabf4115c3749b1c46a7a36837db2c11ff45aa3b63"
+  evidence_refs:
+    - ".agentplane/tasks/202610101405-RCRBVD/README.md"
+    - ".agentplane/tasks/202610101405-RCRBVD/quality/20261010-142027946-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610101405-RCRBVD/quality/20261010-142027946-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610101405-RCRBVD/quality/20261010-142027946-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610101405-RCRBVD/blueprint/resolved-snapshot.json"
+    - "output/playwright/task33-audit.json"
+    - "output/playwright/task33-tests/manifest.json"
+    - "output/playwright/task33-gates/manifest.json"
+    - "output/playwright/rtl-ustring-native/driver.cpp"
+    - "output/playwright/rtl-ustring-native/output.json"
+    - "apps/office/coverage/rtl-ustring/coverage-final.json"
+    - "apps/office/coverage/calc/coverage-final.json"
+  findings:
+    - "Original unsigned16 difference, reverse traversal, signed32 narrowing, terminal length difference and four source assertions retained at SAL template/C/header owners. All10084 direct/public calls,20168 outputs and four native SIGABRT guards survive intact with four full source and six exact scope hashes."
+    - "Portable absent-upstream Calc106/24 and changed shared2/1 pass; Calc S2920/B2055/F474/L2564 and shared S21/B16/F3/L16 allfour100, raw counters positive. All declared gates and source-provenance3/boundary-registry24 cases pass. Source/C-header module identity and read-only exported symbols are inventoried without mutation-helper misclassification or validator changes."
 commit: null
 comments:
   -
@@ -43,7 +66,7 @@ events:
     state: "ok"
     note: "Complete unchanged native10084calls/20168results/4assert guards, portable Calc106/shared2 allfour100 and raw counters, source/inventory/ownership/static gates pass. Actual shared SAL source/header boundaries retained; no stand-in string owners. Task2/10,nextfull41."
 doc_version: 3
-doc_updated_at: "2026-10-10T14:19:04.934Z"
+doc_updated_at: "2026-10-10T14:20:52.592Z"
 doc_updated_by: "CODER"
 description: "Task33: establish the actual sal/rtl reverse comparison and header contracts needed by original svl::SharedString equality. Preserve original complete algorithms, UTF16 code-unit semantics and exact result magnitudes; native unchanged-source evidence, portable tests, actual100 Calc/changed-shared coverage, exhaustive inventory, no fabricated OUString or string store. Continue approved UI-prerequisite spine on branch calc only."
 sections:
@@ -105,6 +128,10 @@ sections:
     - Observation: All task33 required gates and scoped tests now pass. No new suspicious upstream case was identified; original reverse order/exact magnitudes and four native guards are preserved.
       Impact: Calc106/24 and changed-shared2/1 actual100; complete native10084/20168 retained, all present raw counters positive; source-shaped shared SAL dependency ready for actual string value owners. Full module/document/UI remain incomplete.
       Resolution: Evidence: output/playwright/task33-audit.json, task33-tests/manifest.json/logs, task33-gates/manifest.json/logs, native driver/output/guard stderr and actual coverage-final/summary files. Driver SHA256 7683486c5a90b7631ba7cf9fe75a05ec6f74fa39d35fe7a93a2a41555c055f57. Inventories Calc45/166 and shared22/136, zero semantic violations; source-provenance3 and boundary/registry24 cases pass. Four original assertions use fail-fast Error; C++ SIGABRT/release builds/ABI/lifetime and generic other char/Compare variants remain unverified. Full next41. Commit, read-only EVALUATOR review and close active task.
+
+    - Observation: EVALUATOR independently validated committed source263db2baa0f83d26d0353b5d866520a933a749d4 against complete native scopes/corpus, raw counters and gate/portable manifests; verdict pass. The first read-only audit invocation had a Python syntax typo and accepted no result; corrected unchanged audit then passed.
+      Impact: No implementation/fixtures/criteria changed during review. Original string owners, ABI/lifetime and broader module parity remain explicitly incomplete; this prerequisite is verified.
+      Resolution: Quality report quality/20261010-142027946-recovery-context/quality-report.json retains evaluated SHA and evidence. Persist quality artifacts, then exact route completion and scoped artifact cleanup on calc.
 id_source: "generated"
 ---
 ## Summary
@@ -183,3 +210,7 @@ Preflight: clean branchcalc at completed task32. Local upstream exists and is ap
 - Observation: All task33 required gates and scoped tests now pass. No new suspicious upstream case was identified; original reverse order/exact magnitudes and four native guards are preserved.
   Impact: Calc106/24 and changed-shared2/1 actual100; complete native10084/20168 retained, all present raw counters positive; source-shaped shared SAL dependency ready for actual string value owners. Full module/document/UI remain incomplete.
   Resolution: Evidence: output/playwright/task33-audit.json, task33-tests/manifest.json/logs, task33-gates/manifest.json/logs, native driver/output/guard stderr and actual coverage-final/summary files. Driver SHA256 7683486c5a90b7631ba7cf9fe75a05ec6f74fa39d35fe7a93a2a41555c055f57. Inventories Calc45/166 and shared22/136, zero semantic violations; source-provenance3 and boundary/registry24 cases pass. Four original assertions use fail-fast Error; C++ SIGABRT/release builds/ABI/lifetime and generic other char/Compare variants remain unverified. Full next41. Commit, read-only EVALUATOR review and close active task.
+
+- Observation: EVALUATOR independently validated committed source263db2baa0f83d26d0353b5d866520a933a749d4 against complete native scopes/corpus, raw counters and gate/portable manifests; verdict pass. The first read-only audit invocation had a Python syntax typo and accepted no result; corrected unchanged audit then passed.
+  Impact: No implementation/fixtures/criteria changed during review. Original string owners, ABI/lifetime and broader module parity remain explicitly incomplete; this prerequisite is verified.
+  Resolution: Quality report quality/20261010-142027946-recovery-context/quality-report.json retains evaluated SHA and evidence. Persist quality artifacts, then exact route completion and scoped artifact cleanup on calc.
