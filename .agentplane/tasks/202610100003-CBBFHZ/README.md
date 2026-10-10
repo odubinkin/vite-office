@@ -1,10 +1,11 @@
 ---
 id: "202610100003-CBBFHZ"
 title: "Port original shared SoA empty insertion and previous-block admission"
-status: "DOING"
+result_summary: "verified-202610100003-CBBFHZ"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 20
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-10T00:22:49.275Z"
+  updated_at: "2026-10-10T00:27:30.158Z"
   updated_by: "CODER"
-  note: "Verified: original empty insertion/previous-category group matches13432native complete sequences with unchanged7600prefix; Calc and2changedshared owners actual100positive coverage,14gates and3portable groups pass, exactlinks restored, default formatting/import fixed losslessly and honest inventory updated."
+  note: "verified-202610100003-CBBFHZ"
   attempts: 0
 quality_review:
   state: "pass"
@@ -50,11 +51,16 @@ quality_review:
     - "Independently decoded actual committed fixture against every raw native record: 13432 complete sequences/121372 states, all7600 earlier full sequences/final events unchanged; actual driver/13headers/2archives hashes match. Existing byte replay and callback audit show original native calls, complete values/events/ownership/capacities,2028 standard-category calls and1680split callback traces."
     - "Actual Istanbul raw s/f/b counters are positive in17Calcsourcefiles and2changedsharedowners; all four metrics100.14declared static gates and3upstream-absent portable groups exit0; exact link targets restored; default-heap fixture formatting and full format check pass."
     - "Inventory records implemented capability with whole contract/behavior/default/verified flags false and explicit custom/managed/throwing/overflow/remaining-mutator/document/browser gaps. Source-shaped owners978/319/662/844lines below hard limit. No Writer-only edits, no invented upstream fix, no full-suite claim at task7/10."
-commit: null
+commit:
+  hash: "52b6e0a656f427800234073808943c908a03edf5"
+  message: "🔎 CBBFHZ review: verify native empty insertion and full observation storage"
 comments:
   -
     author: "CODER"
     body: "Start: port original empty insertion and previous-block predicate with actual shared owners and full native focused evidence on calc."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610100003-CBBFHZ. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -69,8 +75,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: original empty insertion/previous-category group matches13432native complete sequences with unchanged7600prefix; Calc and2changedshared owners actual100positive coverage,14gates and3portable groups pass, exactlinks restored, default formatting/import fixed losslessly and honest inventory updated."
+  -
+    type: "verify"
+    at: "2026-10-10T00:27:30.158Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610100003-CBBFHZ"
+  -
+    type: "status"
+    at: "2026-10-10T00:27:30.295Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610100003-CBBFHZ. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-10T00:22:49.349Z"
+doc_updated_at: "2026-10-10T00:28:03.353Z"
 doc_updated_by: "CODER"
 description: "Continue authorized Calc core with original insert_empty plain/hinted, insert_empty_impl and is_previous_block_of_type; shared actual metadata/typed funcs/hints/adjustment, unchanged full native evidence; cycle2 task7/10. Previous turn completed release taskZ4XSP9 and clean branchcalc."
 sections:
@@ -164,6 +183,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-10T00:27:30.158Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610100003-CBBFHZ
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T00:22:49.349Z, excerpt_hash=sha256:58afad50ebcbe7e0929e5a1abada1e8112cb323431645dcc3e6a57db37a8c8b9
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610100003-CBBFHZ/blueprint/resolved-snapshot.json
+    - old_digest: 0c3f2c1403c26030ee4bf2f04b3859b940ab186bff3a98476c84c92c366c2613
+    - current_digest: 0c3f2c1403c26030ee4bf2f04b3859b940ab186bff3a98476c84c92c366c2613
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610100003-CBBFHZ
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610100003-CBBFHZ --result verified-202610100003-CBBFHZ --commit 52b6e0a656f427800234073808943c908a03edf5
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only intentional implementation/inventory/doc commits through a separate authorized task if required; preserve raw native evidence, task history and unrelated state. No destructive reset, branch or merge."
   Findings: |-
@@ -180,6 +229,18 @@ sections:
     - Observation: Corrected native write/check passed13396sequences. Default-heap fixture formatter exited134 OOM on108MiB pretty source; shared fixture import failed converting Rust String to napi string. Calc104/23 actual100 passed.
       Impact: Complete unchanged-header evidence exists, but ordinary portable formatting/test import is not usable with repeated full result/equality/event arrays.
       Resolution: Recompute route. Within approved caller/test/fixture paths, losslessly intern the complete result, equality and event arrays alongside existing complete owner table. Reconstruct every exact field, preserve all13396cases and raw output and compare all7600prior complete sequences. No source algorithm, caller removal, heap/environment/gate or coverage-denominator changes. Rerun actual write/check/default formatting/focused shared acceptance.
+
+    - Observation: Exact direct closure task complete with reviewed52b6e0a656f4 exited5 E_GIT commit subject is too generic; actual task is DONE with pending README artifact, same installed deterministic-close subject conflict as prior tasks.
+      Impact: Implementation and quality evidence remain committed and passing; deterministic task artifact closure needs supported recovery. No implementation, gates or policy change.
+      Resolution: Recomputed route immediately: direct_done_pending_artifact_commit emits exact agentplane commit ID --close --unstage-others. Execute once and inspect resulting route before any supported specific-subject fallback.
+
+    - Observation: Exact emitted artifact recovery agentplane commit ID --close --unstage-others also exited5 E_GIT generic subject; recomputed route still pending task artifact only.
+      Impact: Same installed deterministic-subject conflict prevents default closure; all code, focused checks and evaluated implementation remain intact. No scope or criteria drift.
+      Resolution: Use supported ap commit with --allow-tasks and specific finalize subject for active task artifacts only; preserve hooks/policies and inspect actual amended HEAD, clean all-untracked status, branch calc and DONE route.
+extensions:
+  implementation_commit:
+    hash: "074ce074dd2fb85e7b6cf87014907da325bb69e3"
+    message: "✨ CBBFHZ core: port original empty insertion and category admission"
 id_source: "generated"
 ---
 ## Summary
@@ -285,6 +346,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-10T00:27:30.158Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610100003-CBBFHZ
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T00:22:49.349Z, excerpt_hash=sha256:58afad50ebcbe7e0929e5a1abada1e8112cb323431645dcc3e6a57db37a8c8b9
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610100003-CBBFHZ/blueprint/resolved-snapshot.json
+- old_digest: 0c3f2c1403c26030ee4bf2f04b3859b940ab186bff3a98476c84c92c366c2613
+- current_digest: 0c3f2c1403c26030ee4bf2f04b3859b940ab186bff3a98476c84c92c366c2613
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610100003-CBBFHZ
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610100003-CBBFHZ --result verified-202610100003-CBBFHZ --commit 52b6e0a656f427800234073808943c908a03edf5
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -306,3 +397,11 @@ Original insertion preserves copied smaller-side optimization including upper-co
 - Observation: Corrected native write/check passed13396sequences. Default-heap fixture formatter exited134 OOM on108MiB pretty source; shared fixture import failed converting Rust String to napi string. Calc104/23 actual100 passed.
   Impact: Complete unchanged-header evidence exists, but ordinary portable formatting/test import is not usable with repeated full result/equality/event arrays.
   Resolution: Recompute route. Within approved caller/test/fixture paths, losslessly intern the complete result, equality and event arrays alongside existing complete owner table. Reconstruct every exact field, preserve all13396cases and raw output and compare all7600prior complete sequences. No source algorithm, caller removal, heap/environment/gate or coverage-denominator changes. Rerun actual write/check/default formatting/focused shared acceptance.
+
+- Observation: Exact direct closure task complete with reviewed52b6e0a656f4 exited5 E_GIT commit subject is too generic; actual task is DONE with pending README artifact, same installed deterministic-close subject conflict as prior tasks.
+  Impact: Implementation and quality evidence remain committed and passing; deterministic task artifact closure needs supported recovery. No implementation, gates or policy change.
+  Resolution: Recomputed route immediately: direct_done_pending_artifact_commit emits exact agentplane commit ID --close --unstage-others. Execute once and inspect resulting route before any supported specific-subject fallback.
+
+- Observation: Exact emitted artifact recovery agentplane commit ID --close --unstage-others also exited5 E_GIT generic subject; recomputed route still pending task artifact only.
+  Impact: Same installed deterministic-subject conflict prevents default closure; all code, focused checks and evaluated implementation remain intact. No scope or criteria drift.
+  Resolution: Use supported ap commit with --allow-tasks and specific finalize subject for active task artifacts only; preserve hooks/policies and inspect actual amended HEAD, clean all-untracked status, branch calc and DONE route.
