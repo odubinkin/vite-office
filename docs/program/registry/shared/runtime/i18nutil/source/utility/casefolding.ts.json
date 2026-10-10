@@ -1,0 +1,61 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/i18nutil/source/utility/casefolding.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "shared-string",
+    "capabilityIds": [
+      "CAP-ac247390-6e35-4e93-a8dc-2a7c0ba515f5"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/i18nutil/source/utility/casefolding.ts#cased_letter",
+        "apps/office/src/i18nutil/source/utility/casefolding.test.ts#replays every native UTF16 cased-letter result and original integral argument narrowing",
+        "i18nutil/source/utility/casefolding.cxx#cased_letter"
+      ],
+      "justification": "Preserve all ten original conditional const Mapping arrays,21 complete structs and the internal cased_letter index/type-mask predicate. Uint16Array retains all three initialized words; native sal_Unicode integral conversion is explicit. The primitive native probe compiles the complete unchanged original const/predicate interval and full genuine SAL/i18nutil/o3tl headers, verifies13 full pinned blobs, and compares every65536 UTF16 result plus integral conversions and all Mapping fields; ASan/UBSan outputs are identical. It does not instantiate Locale, execute getValue/getConditionalValue or certify UNO/service/pool behavior. Module exports expose original translation-unit internals to ESM consumers/tests without making them public header operations; complete public class implementation is pending.",
+      "knownViolations": [],
+      "localSymbols": [
+        "[type, nmap, map]",
+        "cased_letter",
+        "cmi",
+        "cmv_idx",
+        "mappingArray",
+        "mapping_0049",
+        "mapping_004a",
+        "mapping_0069",
+        "mapping_00cc",
+        "mapping_00cd",
+        "mapping_0128",
+        "mapping_012e",
+        "mapping_0130",
+        "mapping_0307",
+        "mapping_03a3",
+        "msb",
+        "unit"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "i18nutil/source/utility/casefolding.cxx",
+      "upstreamSymbols": [
+        "cased_letter",
+        "mapping_03a3",
+        "mapping_0307",
+        "mapping_004a",
+        "mapping_012e",
+        "mapping_00cc",
+        "mapping_00cd",
+        "mapping_0128",
+        "mapping_0049",
+        "mapping_0069",
+        "mapping_0130"
+      ]
+    }
+  }
+}

@@ -13,6 +13,7 @@ const moduleNames = [
   "editeng",
   "external",
   "framework",
+  "i18nutil",
   "o3tl",
   "offapi",
   "package",
@@ -24,6 +25,7 @@ const moduleNames = [
   "svtools",
   "svx",
   "sw",
+  "udkapi",
   "unotools",
   "vcl",
   "xmloff",
@@ -34,6 +36,7 @@ const allowedEdges = new Map([
   ["editeng", new Set(["offapi", "svl", "svtools", "vcl"])],
   ["external", new Set()],
   ["framework", new Set(["sfx2", "svl"])],
+  ["i18nutil", new Set(["external", "sal", "udkapi"])],
   ["o3tl", new Set()],
   ["offapi", new Set()],
   ["package", new Set()],
@@ -81,6 +84,7 @@ const allowedEdges = new Map([
     ]),
   ],
   ["vcl", new Set(["svl"])],
+  ["udkapi", new Set(["sal"])],
   ["unotools", new Set()],
   ["xmloff", new Set(["editeng", "sax", "unotools"])],
 ]);
@@ -121,6 +125,8 @@ export function getRuntimeOwnershipLayer(relativePath) {
   if (portablePath.startsWith("sw/source/uibase/")) return "writer-uibase";
   if (portablePath.startsWith("sfx2/source/")) return "sfx";
   if (portablePath.startsWith("o3tl/inc/")) return "upstream-mechanism";
+  if (portablePath.startsWith("i18nutil/inc/") || portablePath.startsWith("udkapi/"))
+    return "upstream-mechanism";
   if (portablePath.startsWith("external/mdds/include/")) return "upstream-mechanism";
   if (portablePath.startsWith("sal/rtl/") || portablePath.startsWith("sal/inc/rtl/"))
     return "upstream-mechanism";

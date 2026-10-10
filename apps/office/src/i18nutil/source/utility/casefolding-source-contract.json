@@ -1,0 +1,19 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceHashes": {
+    "udkapi/com/sun/star/lang/Locale.idl": "8fa8f696a5f1b70eda861e05d369acdc589b5db12ff92aa58e6bba9c3738f9ae",
+    "codemaker/source/cppumaker/cpputype.cxx": "152e753455d6ef17801fc9e0fa4a694cd46dd9d6d5d82f0560abb6c15b8dbbfe",
+    "include/i18nutil/casefolding.hxx": "118bd46c74657da865050e1eb949fdd4409701f1eb8d19e70589c13b686bc0b2",
+    "i18npool/qa/cppunit/test_characterclassification.cxx": "e0101077ddfb897b9e8d4df2c34a799ca03c04294eed4ac3ce140fbd7f8d1c02",
+    "i18nutil/source/utility/casefolding_data.h": "a582254255d69b5a524624e3e9672fdd6caa89d4958a796a333f59280376553f",
+    "i18nutil/source/utility/casefolding.cxx": "f2a80486f660ca183338d4fe60df1bf4f5d1ebdfff01ae24fee35abe2a59fe01"
+  },
+  "localeFields": [
+    { "name": "Language", "type": "string", "default": "" },
+    { "name": "Country", "type": "string", "default": "" },
+    { "name": "Variant", "type": "string", "default": "" }
+  ],
+  "dataHash": "730303b65854039af4ee7078aa78f04c5e002c53d9eac0babe8bc36a95b11dc1",
+  "conditionalMappingsHash": "7825a56708b4c054b25f5535c5d127887348d43a79f916464d1ed8333ede8e8d",
+  "evidenceScope": "Original IDL field schema and generated plain-struct defaults/order plus initialized original tables. This is source data evidence, not execution of cppumaker or native casefolding/UNO type reflection."
+}

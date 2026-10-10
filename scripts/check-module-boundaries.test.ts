@@ -1,4 +1,4 @@
-/** @fileoverview Verifies inner Writer responsibility boundaries independently of repository paths. */
+/** @fileoverview Verifies application and shared runtime responsibility boundaries independently of repository paths. */
 
 import { describe, expect, it } from "vitest";
 
@@ -9,6 +9,42 @@ import {
   getRuntimeOwnershipLayer,
   getRuntimeOwnershipViolation,
 } from "./check-module-boundaries.mjs";
+
+it("owns original locale and case-mapping dependencies without browser or reverse library edges", /** Enforces the actual shared string service dependency directions. @returns Nothing. */ () => {
+  expect(isForbiddenModuleEdge("udkapi", "sal")).toBe(false);
+  expect(isForbiddenModuleEdge("sal", "udkapi")).toBe(true);
+  for (const dependency of ["external", "sal", "udkapi"]) {
+    expect(isForbiddenModuleEdge("i18nutil", dependency)).toBe(false);
+    expect(isForbiddenModuleEdge(dependency, "i18nutil")).toBe(true);
+  }
+  for (const owner of ["udkapi", "i18nutil"])
+    for (const dependency of ["sc", "sw", "framework", "vcl"])
+      expect(isForbiddenModuleEdge(owner, dependency)).toBe(true);
+  for (const source of [
+    "udkapi/com/sun/star/lang/Locale.ts",
+    "i18nutil/inc/casefolding.ts",
+    "i18nutil/source/utility/casefolding_data.ts",
+  ]) {
+    expect(getRuntimeOwnershipLayer(source)).toBe("upstream-mechanism");
+    expect(getRuntimeOwnershipViolation(source, "", "react")).toMatch(/presentation package/u);
+    expect(
+      getRuntimeOwnershipViolation(source, "vcl/browser/font-list.ts", "../font-list"),
+    ).toMatch(/browser adapters/u);
+    expect(
+      getRuntimeOwnershipViolation(
+        source,
+        "framework/source/services/worker-protocol.ts",
+        "../worker-protocol",
+      ),
+    ).toMatch(/worker protocol through a browser adapter/u);
+    expect(
+      getProtectedOwnershipReferences(
+        source,
+        'interface Route { indexedDbKey: string }; const backend = "indexeddb";',
+      ),
+    ).toEqual(["indexedDbKey", "indexeddb"]);
+  }
+});
 
 it("admits original SVL string ownership in SAL without a reverse library edge", /** Checks the original svl library declaration and shared reference owner. @returns Nothing. */ () => {
   expect(isForbiddenModuleEdge("svl", "sal")).toBe(false);

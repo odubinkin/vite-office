@@ -1,0 +1,108 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-ac247390-6e35-4e93-a8dc-2a7c0ba515f5",
+    "capabilityId": "CAP-ac247390-6e35-4e93-a8dc-2a7c0ba515f5",
+    "suite": "shared",
+    "subsystem": "shared-string",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Retain exactly three original owned Locale fields and generated default/copy/move/assignment/comparison/destruction order using actual shared OUString.",
+      "Retain complete original case mapping flags and all initialized table fields with source-derived full-data digest.",
+      "Retain all original conditional Mapping structs and the cased_letter predicate, matching every UTF16 native result and integral conversion with sanitizer-identical outputs."
+    ],
+    "capability": "Shared Locale value ownership and original case-mapping tables and character predicate",
+    "gaps": [
+      "Actual getValue/getConditionalValue, original default UNO RuntimeException/Reference boundary, native generated Locale correspondence, runtime type reflection, complete locale-aware service/CharClass/SharedStringPool and Calc cell/document/edit/UI remain unfinished. Native primitive capture is distinct from source-only Locale evidence and does not certify full original consumer QA, C++ ABI/const/template or physical memory contracts."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "udkapi/com/sun/star/lang/Locale.idl",
+          "marker": "Locale"
+        },
+        {
+          "path": "codemaker/source/cppumaker/cpputype.cxx",
+          "marker": "void PlainStructType::dumpHppFile"
+        },
+        {
+          "path": "i18nutil/source/utility/casefolding_data.h",
+          "marker": "CaseMappingIndex"
+        },
+        {
+          "path": "i18nutil/source/utility/casefolding.cxx",
+          "marker": "cased_letter"
+        }
+      ],
+      "tests": [
+        {
+          "path": "i18npool/qa/cppunit/test_characterclassification.cxx",
+          "marker": "testTitleCase"
+        }
+      ],
+      "docs": [
+        {
+          "path": "udkapi/com/sun/star/lang/Locale.idl",
+          "marker": "Language"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/lang/Locale.ts",
+          "marker": "Locale"
+        },
+        {
+          "path": "apps/office/src/i18nutil/inc/casefolding.ts",
+          "marker": "MappingType"
+        },
+        {
+          "path": "apps/office/src/i18nutil/source/utility/casefolding_data.ts",
+          "marker": "CaseMappingIndex"
+        },
+        {
+          "path": "apps/office/src/i18nutil/source/utility/casefolding.ts",
+          "marker": "cased_letter"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/lang/Locale.test.ts",
+          "marker": "retains all IDL fields and default empty string owners"
+        },
+        {
+          "path": "apps/office/src/i18nutil/source/utility/casefolding_data.test.ts",
+          "marker": "retains every table field and complete source-derived data digest"
+        },
+        {
+          "path": "apps/office/src/i18nutil/source/utility/casefolding.test.ts",
+          "marker": "replays every native UTF16 cased-letter result and original integral argument narrowing"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Locale value ownership and original case-mapping data"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "Own original three-field Locale values and original case mapping source arrays for the string service dependency",
+    "scopeLimitations": [
+      "Actual getValue/getConditionalValue, original default UNO RuntimeException/Reference boundary, native generated Locale correspondence, runtime type reflection, complete locale-aware service/CharClass/SharedStringPool and Calc cell/document/edit/UI remain unfinished. Native primitive capture is distinct from source-only Locale evidence and does not certify full original consumer QA, C++ ABI/const/template or physical memory contracts.",
+      "Original i18npool testTitleCase is a related real Locale/CharacterClassification consumer reference; it is not ported or executed by the source-contract and primitive replay tests."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "Original source-defined fields/data and numeric contracts retained, with explicit C++ ownership/operator/lifetime language adapters reusing actual OUString. Native generated-type and complete algorithm/service parity remain unverified."
+    }
+  }
+}

@@ -1914,3 +1914,61 @@ and pool, typed cell storage in ScColumn/ScTable/ScDocument, document edits with
 notifications and undo, then the Calc view/input adapter. Existing Writer/shared
 owners are reused wherever upstream shares them; editable sheet UI is not yet
 ready to connect.
+
+
+## Locale value ownership and original case-mapping data
+
+Task39 is in progress. The actual udkapi Locale.idl defines exactly three string
+fields in order: Language, Country, Variant. The shared Locale value owner reuses
+OUString for all fields and follows the cppumaker plain-struct constructor and
+comparison contract, with explicit adapters for compiler-generated memberwise
+copy/move/assignment and reverse-order destruction. It preserves exact UTF16
+values, embedded zero units and case-sensitive language codes. IDL documentation
+does not cause the value struct to validate or normalize BCP47/country strings.
+UNO runtime type reflection and native generated-class correspondence remain
+unverified; this owner is not a fake locale service or CharClass replacement.
+
+The full original casefolding header flags and source arrays are present in their
+actual i18nutil owners:256 signed indices,3328 type/value structs,352 three-unit
+extra mappings, MaxCaseMappingExtras3 and NMAPPINGMAX3. The source extraction
+helper verifies all full pinned IDL/cppumaker/header/data blobs and the complete
+normalized data SHA730303b65854039af4ee7078aa78f04c5e002c53d9eac0babe8bc36a95b11dc1.
+It is source data evidence; it does not execute cppumaker or original native
+casefolding. Six source-contract tests pass with original source links absent,
+with100% coverage across all three executable owners:46 statements,7 branches,
+16 functions and46 lines. No broad parity or original QA port is claimed.
+
+The getValue/getConditionalValue algorithms, real default UNO exception boundary,
+native correspondence and remaining task39 gates are still required. No
+placeholder function/service is connected to the core, and SharedStringPool,
+ScColumn/ScTable/ScDocument and editable Calc UI remain pending. The next full
+run remains scheduled for task41.
+
+
+Task39 also adds the original internal cased_letter predicate and all ten
+conditional const Mapping arrays at their actual casefolding.cxx owner. All21
+structs retain type, signed count and the three initialized UTF16 words. The
+predicate uses the original table index and CasedLetterMask; it adds no Unicode
+category heuristic or locale normalization. Exports of translation-unit
+internals support ESM ownership and adjacent replay tests; the public header
+still declares only the implemented flags/struct layouts.
+
+`scripts/casefolding-character-native-probe.mjs` compiles the complete unchanged
+original arrays/macros/predicate interval and genuine full SAL/i18nutil/o3tl
+headers. It verifies13 full pinned blobs and retains every65536 UTF16 result,
+six original integral-conversion callers and every field of all21 structs.
+Complete native output is524288 bytes with SHA256
+`1c92a8b377f318e5e88c2cd7de18a7524f71aee66dfa643fe7f3a2bc3e72f917`.
+Actual ASan/UBSan output is identical for all three corpora. No generated Locale,
+UNO exception, getValue or getConditionalValue is instantiated/executed by
+this primitive probe; these remain required by the active task39 contract.
+
+Eight source-contract/native-replay tests in three files pass without all three
+original source links. Four actual executable owners have S66/B9/F19/L65
+all100%; every raw counter is positive. Original source links are restored
+exactly. The corrected four-file boundary/provenance/runtime/registry tooling
+selection passes30 cases; it supersedes an earlier three-file selection that
+included a nonexistent test filename. New original udkapi/i18nutil roots now
+have explicit allowed shared dependency directions and the existing protected
+browser/worker/storage restrictions. Task39 remains in progress, with full
+algorithm/default-exception/native generated-type work pending. Next full41.

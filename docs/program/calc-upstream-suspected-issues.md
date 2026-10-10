@@ -837,3 +837,23 @@ drawing a service-level conclusion.
 Decision: preserve the exact source condition when porting this owner. Do not
 change the comparison or replace the original locale service with JavaScript
 casing. Record a native reproduction when the actual service is available.
+
+
+## CALC-036: Case-mapping flag comments reverse the direction names
+
+Status: source documentation inconsistency; no runtime defect or repair is implied.
+
+The pinned include/i18nutil/casefolding.hxx declares LowerToUpper0x01 with the
+comment "Upper to Lower mapping", and UpperToLower0x02 with "Lower to Upper
+mapping". The names and numeric behavior agree with the switch in
+i18nutil/source/utility/casefolding.cxx: LowerToUpper uses u_toupper, while
+UpperToLower uses u_tolower. The two explanatory comments describe the opposite
+direction and can mislead a port or review.
+
+Evidence: unchanged full pinned header and getValue source, inspected in
+task202610101731-H21CAK. The numeric mapping contracts are also used by task38
+native fallback-reachability comparison. This observation does not certify
+complete locale-aware casefolding output or its original UNO service.
+
+Decision: retain original names, values and runtime behavior. Record the comment
+inconsistency; do not invert flags or mappings to follow the comments.
