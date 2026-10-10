@@ -1,10 +1,11 @@
 ---
 id: "202610100109-3YQP1C"
 title: "Restore native typed LR indentation values and font-unit contracts"
-status: "DOING"
+result_summary: "Native typed LR indentation now preserves source font units, copy/proportions/signed casts, UNO unit pairs, metric scaling and stable const references; five production modules fully covered, table regressions and inventory checks pass."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 21
+revision: 22
 origin:
   system: "manual"
 depends_on: []
@@ -57,6 +58,9 @@ comments:
   -
     author: "CODER"
     body: "Start: semantic native typed LR implementation and complete scoped verification landed at exact df006821691a275ab2ef751f6cf46c746bf77306; record this implementation SHA before same-agent non-independent quality review and canonical finish."
+  -
+    author: "CODER"
+    body: "Verified: native LR typed values/font metrics/21native unit IDs, independent copy/proportions/signed casts/unit pairs/scaling and stable const references now follow pinned source ownership. Current1145/1145cases85files36fresh and preceding real cast3906/3906cases366files pass; five full modules actual Istanbul100834lines925statements136functions730branches, nine static24Chromium9metadata21source IDs pass. Exact migrations and canonical historical/default/IO deviations preserved, reference restored, no helper/type/docs passing test replay. Same-agent/non-independent exact-SHA quality pass; artifacts persisted8e454d4869ee.9/10 afterBZQGYC, full not due, broadgoal active/incomplete."
 events:
   -
     type: "status"
@@ -103,8 +107,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Exact semantic df006821691a275ab2ef751f6cf46c746bf77306 satisfies native LR scoped contracts and every declared deterministic gate; all-five actual Istanbul100, current1145/prior3906 source-related profiles individually pass,24Chromium9static9metadata21IDL identifiers. Source/test hashes tied to semantic SHA, original history/acceptance/IO deviations preserved, reference restored. Quality report20261010-015001653 explicitly same-agent/non-independent pass exactSHA. Cadence9/10, full not due; persist artifacts then canonical concrete finish."
+  -
+    type: "status"
+    at: "2026-10-10T01:50:55.001Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native LR typed values/font metrics/21native unit IDs, independent copy/proportions/signed casts/unit pairs/scaling and stable const references now follow pinned source ownership. Current1145/1145cases85files36fresh and preceding real cast3906/3906cases366files pass; five full modules actual Istanbul100834lines925statements136functions730branches, nine static24Chromium9metadata21source IDs pass. Exact migrations and canonical historical/default/IO deviations preserved, reference restored, no helper/type/docs passing test replay. Same-agent/non-independent exact-SHA quality pass; artifacts persisted8e454d4869ee.9/10 afterBZQGYC, full not due, broadgoal active/incomplete."
 doc_version: 3
-doc_updated_at: "2026-10-10T01:50:41.212Z"
+doc_updated_at: "2026-10-10T01:50:55.003Z"
 doc_updated_by: "CODER"
 description: "Atomic9/10 after BZQGYC. Replace LR numeric fields with original SvxIndentValue/SvxFontUnitMetrics from matching header, restore source typed getters/setters/constructors/copy/member13..15/metric scaling and unsigned proportion casting. Three numeric production setter callers use explicit twips; compiler-resolved old tests migrate only typed input and raw value observation without weakening assertions. Complete LR browser transport remains separate; no private-field/inverse reconstruction or conscious IO drift."
 sections:
@@ -221,6 +232,10 @@ sections:
     Native member reference review found a real ownership mismatch: negative first-line correction replaced the owned left measure, violating native const-reference lifetime. Initial borrowed-reference repair run1145cases1144pass1fail retained; final in-place member correction and native pass-by-value first-line snapshot pass1145/1145 in85files with36fresh. Earlier integer-cast production profile3906/3906 in366files retained for unchanged four-module coverage only. Final five actual modules100all-four834lines925statements136functions730branches; complete current source hashes and nonnegative real counters. No superseded LR map, helper-only passing replay or overlap case-count sum. Native const type boundaries checked using compilerAPI6.0.2, with TS7 full static gate still pending. Full not due9/10; goal active/incomplete.
 
     Final checks: whole lint passed after equivalent type-only assertion/overload repairs; app TS7 passed after one unused fresh callback parameter rename, with root tools phase already successful. Opening JSDoc/import heading order in13typed-migrated files restored without changing import order/runtime or3322production instrumentation positions. No passing test replay for these repairs; equivalent LR runtime942positions proof retained. Metadata audit initially rejected basename-only MeasureUnit provenance; added actual native TWIP/FONT_EM/FONT_CJK_ADVANCE symbol responsibility to the two new canonical records. Failed check repaired without weakening validation or adding invented violations;9finalmetadata/21IDLsourceaudit pass. Nine static gates and24Chromium cases passed upstream absent with finally-restored reference. Raw/helper code stays ignored node_modules cache; bounded evidence contains facts/hashes only. Root compiler API package is6.0.2, actual local API export reports6.0.3; native CLI7.0.2/Istanbul4.1.10. Exact SHA non-independent quality/clean close pending.
+extensions:
+  implementation_commit:
+    hash: "df006821691a275ab2ef751f6cf46c746bf77306"
+    message: "🧩 3YQP1C writer: restore native typed LR indentation values"
 id_source: "generated"
 ---
 ## Summary
