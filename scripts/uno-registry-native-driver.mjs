@@ -56,3 +56,14 @@ provider.calls=0;typelib_typedescription_registerCallback(&provider,registryCall
 
 return true;}
 `;
+
+/** Caller-only invalid registration records; each process terminates at one genuine original C assertion before unsafe member access. */
+export const registryAssertionDriver = String.raw`
+static bool registrationAssertion(std::string const&mode){if(!mode.starts_with("invariant-"))return false;int index=std::stoi(mode.substr(10));if(index<0||index>=20)std::exit(2);
+auto type=index<3?typelib_TypeClass_ENUM:index<9?typelib_TypeClass_STRUCT:index<19?typelib_TypeClass_INTERFACE:typelib_TypeClass_LONG;
+rtl::OUString name(u"CalcInvariant",13);typelib_TypeDescriptionReference*r=nullptr;typelib_typedescriptionreference_new(&r,type,name.pData);auto initial=empty(type,name.pData);initial->bOnDemand=true;initial->bComplete=false;typelib_typedescription_register(&initial);auto incoming=empty(type,name.pData);incoming->bOnDemand=true;
+if(index<3){auto dst=reinterpret_cast<typelib_EnumTypeDescription*>(initial);if(index==0)dst->nEnumValues=1;else if(index==1)dst->ppEnumNames=new rtl_uString*[1]{name.pData};else dst->pEnumValues=new sal_Int32[1]{0};}
+else if(index<9){auto dst=reinterpret_cast<typelib_CompoundTypeDescription*>(initial),src=reinterpret_cast<typelib_CompoundTypeDescription*>(incoming);if(index==3)src->pBaseTypeDescription=reinterpret_cast<typelib_CompoundTypeDescription*>(empty(typelib_TypeClass_EXCEPTION,name.pData));else if(index==4)src->nMembers=1;else if(index==5){dst->nMembers=src->nMembers=1;}else if(index==6){dst->nMembers=src->nMembers=1;dst->pMemberOffsets=new sal_Int32[1]{0};}else if(index==7)dst->ppMemberNames=new rtl_uString*[1]{name.pData};else reinterpret_cast<typelib_StructTypeDescription*>(incoming)->pParameterizedTypes=new sal_Bool[1]{true};}
+else if(index<19){auto dst=reinterpret_cast<typelib_InterfaceTypeDescription*>(initial),src=reinterpret_cast<typelib_InterfaceTypeDescription*>(incoming);switch(index){case 9:src->pBaseTypeDescription=reinterpret_cast<typelib_InterfaceTypeDescription*>(empty(typelib_TypeClass_INTERFACE,name.pData));break;case 10:dst->nMembers=1;break;case 11:dst->ppMembers=new typelib_TypeDescriptionReference*[1]{r};break;case 12:dst->nAllMembers=1;break;case 13:dst->ppAllMembers=new typelib_TypeDescriptionReference*[1]{r};break;case 14:dst->pMapMemberIndexToFunctionIndex=new sal_Int32[1]{0};break;case 15:dst->nMapFunctionIndexToMemberIndex=1;break;case 16:dst->pMapFunctionIndexToMemberIndex=new sal_Int32[1]{0};break;case 17:dst->nBaseTypes=1;break;case 18:dst->ppBaseTypes=new typelib_InterfaceTypeDescription*[1]{reinterpret_cast<typelib_InterfaceTypeDescription*>(empty(typelib_TypeClass_INTERFACE,name.pData))};break;}}
+typelib_typedescription_register(&incoming);return true;}
+`;

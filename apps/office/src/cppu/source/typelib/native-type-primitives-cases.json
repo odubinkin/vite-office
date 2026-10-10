@@ -381,7 +381,7 @@
     "config_probes.h": "8ab9a959a312f675fd59c6dda1e788c59cdbbc5b36779b008d3b7fc654614fe1",
     "config_locales.h": "f969583c21ae145fab8a9b1fe20626252e3c95a1995a48e953cc58953de3579b"
   },
-  "driverHash": "9d49ea2939931c2d1e6b6536f07859574fac6dc7e61aef46f6ac4d89f27f5c06",
+  "driverHash": "2fb923827e78f517762a8e49e0888239e226a277fef74ec3e78b67823b2ee0bc",
   "enumValues": [
     ["VOID", 0, 0, 0],
     ["CHAR", 1, 1, 0],
@@ -621,8 +621,130 @@
     "gzipBase64": "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",
     "fields": "Original full common/specific initialized fields, live name/type counts and pointer identity witnesses after every operation; unspecified native fields are never read"
   },
+  "registrationAssertions": [
+    {
+      "index": 0,
+      "signal": "SIGABRT",
+      "expression": "dst->nEnumValues == 0",
+      "diagnostic": "Assertion failed: (dst->nEnumValues == 0), function typelib_typedescription_register, file typelib.cxx, line 1440.\n"
+    },
+    {
+      "index": 1,
+      "signal": "SIGABRT",
+      "expression": "dst->ppEnumNames == nullptr",
+      "diagnostic": "Assertion failed: (dst->ppEnumNames == nullptr), function typelib_typedescription_register, file typelib.cxx, line 1441.\n"
+    },
+    {
+      "index": 2,
+      "signal": "SIGABRT",
+      "expression": "dst->pEnumValues == nullptr",
+      "diagnostic": "Assertion failed: (dst->pEnumValues == nullptr), function typelib_typedescription_register, file typelib.cxx, line 1442.\n"
+    },
+    {
+      "index": 3,
+      "signal": "SIGABRT",
+      "expression": "(dst->pBaseTypeDescription == nullptr) == (src->pBaseTypeDescription == nullptr)",
+      "diagnostic": "Assertion failed: ((dst->pBaseTypeDescription == nullptr) == (src->pBaseTypeDescription == nullptr)), function typelib_typedescription_register, file typelib.cxx, line 1457.\n"
+    },
+    {
+      "index": 4,
+      "signal": "SIGABRT",
+      "expression": "dst->nMembers == src->nMembers",
+      "diagnostic": "Assertion failed: (dst->nMembers == src->nMembers), function typelib_typedescription_register, file typelib.cxx, line 1458.\n"
+    },
+    {
+      "index": 5,
+      "signal": "SIGABRT",
+      "expression": "(dst->pMemberOffsets == nullptr) == (dst->nMembers == 0)",
+      "diagnostic": "Assertion failed: ((dst->pMemberOffsets == nullptr) == (dst->nMembers == 0)), function typelib_typedescription_register, file typelib.cxx, line 1459.\n"
+    },
+    {
+      "index": 6,
+      "signal": "SIGABRT",
+      "expression": "(dst->ppTypeRefs == nullptr) == (dst->nMembers == 0)",
+      "diagnostic": "Assertion failed: ((dst->ppTypeRefs == nullptr) == (dst->nMembers == 0)), function typelib_typedescription_register, file typelib.cxx, line 1460.\n"
+    },
+    {
+      "index": 7,
+      "signal": "SIGABRT",
+      "expression": "dst->ppMemberNames == nullptr",
+      "diagnostic": "Assertion failed: (dst->ppMemberNames == nullptr), function typelib_typedescription_register, file typelib.cxx, line 1461.\n"
+    },
+    {
+      "index": 8,
+      "signal": "SIGABRT",
+      "expression": "pTDR->pType->eTypeClass != typelib_TypeClass_STRUCT || ((reinterpret_cast<typelib_StructTypeDescription *>( dst)->pParameterizedTypes == nullptr) == (reinterpret_cast<typelib_StructTypeDescription *>( src)->pParameterizedTypes == nullptr))",
+      "diagnostic": "Assertion failed: (pTDR->pType->eTypeClass != typelib_TypeClass_STRUCT || ((reinterpret_cast<typelib_StructTypeDescription *>( dst)->pParameterizedTypes == nullptr) == (reinterpret_cast<typelib_StructTypeDescription *>( src)->pParameterizedTypes == nullptr))), function typelib_typedescription_register, file typelib.cxx, line 1469.\n"
+    },
+    {
+      "index": 9,
+      "signal": "SIGABRT",
+      "expression": "(dst->pBaseTypeDescription == nullptr) == (src->pBaseTypeDescription == nullptr)",
+      "diagnostic": "Assertion failed: ((dst->pBaseTypeDescription == nullptr) == (src->pBaseTypeDescription == nullptr)), function typelib_typedescription_register, file typelib.cxx, line 1481.\n"
+    },
+    {
+      "index": 10,
+      "signal": "SIGABRT",
+      "expression": "dst->nMembers == 0",
+      "diagnostic": "Assertion failed: (dst->nMembers == 0), function typelib_typedescription_register, file typelib.cxx, line 1482.\n"
+    },
+    {
+      "index": 11,
+      "signal": "SIGABRT",
+      "expression": "dst->ppMembers == nullptr",
+      "diagnostic": "Assertion failed: (dst->ppMembers == nullptr), function typelib_typedescription_register, file typelib.cxx, line 1483.\n"
+    },
+    {
+      "index": 12,
+      "signal": "SIGABRT",
+      "expression": "dst->nAllMembers == 0",
+      "diagnostic": "Assertion failed: (dst->nAllMembers == 0), function typelib_typedescription_register, file typelib.cxx, line 1484.\n"
+    },
+    {
+      "index": 13,
+      "signal": "SIGABRT",
+      "expression": "dst->ppAllMembers == nullptr",
+      "diagnostic": "Assertion failed: (dst->ppAllMembers == nullptr), function typelib_typedescription_register, file typelib.cxx, line 1485.\n"
+    },
+    {
+      "index": 14,
+      "signal": "SIGABRT",
+      "expression": "dst->pMapMemberIndexToFunctionIndex == nullptr",
+      "diagnostic": "Assertion failed: (dst->pMapMemberIndexToFunctionIndex == nullptr), function typelib_typedescription_register, file typelib.cxx, line 1486.\n"
+    },
+    {
+      "index": 15,
+      "signal": "SIGABRT",
+      "expression": "dst->nMapFunctionIndexToMemberIndex == 0",
+      "diagnostic": "Assertion failed: (dst->nMapFunctionIndexToMemberIndex == 0), function typelib_typedescription_register, file typelib.cxx, line 1487.\n"
+    },
+    {
+      "index": 16,
+      "signal": "SIGABRT",
+      "expression": "dst->pMapFunctionIndexToMemberIndex == nullptr",
+      "diagnostic": "Assertion failed: (dst->pMapFunctionIndexToMemberIndex == nullptr), function typelib_typedescription_register, file typelib.cxx, line 1488.\n"
+    },
+    {
+      "index": 17,
+      "signal": "SIGABRT",
+      "expression": "dst->nBaseTypes == src->nBaseTypes",
+      "diagnostic": "Assertion failed: (dst->nBaseTypes == src->nBaseTypes), function typelib_typedescription_register, file typelib.cxx, line 1489.\n"
+    },
+    {
+      "index": 18,
+      "signal": "SIGABRT",
+      "expression": "(dst->ppBaseTypes == nullptr) == (src->ppBaseTypes == nullptr)",
+      "diagnostic": "Assertion failed: ((dst->ppBaseTypes == nullptr) == (src->ppBaseTypes == nullptr)), function typelib_typedescription_register, file typelib.cxx, line 1490.\n"
+    },
+    {
+      "index": 19,
+      "signal": "SIGABRT",
+      "expression": "false",
+      "diagnostic": "Assertion failed: (false), function typelib_typedescription_register, file typelib.cxx, line 1507.\n"
+    }
+  ],
   "bothNullEquals": 1,
   "nullWrapperAssertion": "SIGABRT",
   "sanitizedIdentical": true,
-  "scope": "Complete original enum/C declaration/layout/const comparison/OSL observations plus genuine original newEmpty/reference allocation, acquire/release, extended destruction, getByName, callbacks, registration/completion and 256-entry typedef-provider cache ownership traces. All initialized fields/counts/identity witnesses are retained; unspecified native fields are never read. Callback responses and specific members are initialized real caller inputs using the original factories and acquisitions, not replacement native owners. Explicit zero-count/empty weak-pointer state witnesses certify the original safeguard branches only, not a native concurrent interleaving or valid ordinary user-level reachability. Common-prefix adaptation, full native ABI/platform synchronization, singleton shutdown, completion/getDescription/static type providers and portable Type/Any/Reference/default UNO exceptions, services and Calc document/edit/UI remain unverified or unfinished. Original ICU source verification comes from the shared build helper but no ICU code is linked by this caller. Native platform frameworks/libc are uninstrumented."
+  "scope": "Complete original enum/C declaration/layout/const comparison/OSL observations plus genuine original newEmpty/reference allocation, acquire/release, extended destruction, getByName, callbacks, registration/completion and 256-entry typedef-provider cache ownership traces. All initialized fields/counts/identity witnesses are retained; unspecified native fields are never read. Twenty initialized invalid caller inputs record complete original C assertion diagnostics and SIGABRT with no stdout, identically in normal and sanitized builds and before any sanitizer finding. The twenty-first registration guard (retained count > 1) is satisfied by original getByName acquisition in valid traces; no impossible realm-local failing interleaving is fabricated. Browser Error adapts the C assertion boundary only, not native process termination, recovery, UNO exceptions or OSL debug assertions. Callback responses and specific members are initialized real caller inputs using the original factories and acquisitions, not replacement native owners. Explicit zero-count/empty weak-pointer state witnesses certify the original safeguard branches only, not a native concurrent interleaving or valid ordinary user-level reachability. Common-prefix adaptation, full native ABI/platform synchronization, singleton shutdown, completion/getDescription/static type providers and portable Type/Any/Reference/default UNO exceptions, services and Calc document/edit/UI remain unverified or unfinished. Original ICU source verification comes from the shared build helper but no ICU code is linked by this caller. Native platform frameworks/libc are uninstrumented."
 }

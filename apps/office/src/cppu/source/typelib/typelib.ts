@@ -3,6 +3,7 @@ import type {
   typelib_TypeDescription,
   typelib_TypeDescriptionReference,
   typelib_CompoundTypeDescription,
+  typelib_StructTypeDescription,
   typelib_IndirectTypeDescription,
   typelib_EnumTypeDescription,
   typelib_InterfaceTypeDescription,
@@ -540,6 +541,10 @@ function swapFields(
     destination[key] = value;
   }
 }
+/** Adapts an original fatal C assertion to the existing browser Error assertion boundary; it is not a UNO exception. @param condition - Unchanged original invariant. @param expression - Original C expression. @returns Nothing for a satisfied invariant. */
+function assert(condition: boolean, expression: string): asserts condition {
+  if (!condition) throw new Error(`assert(${expression})`);
+}
 /** Original registration, identity-preserving completion and on-demand ownership transitions. Mutex-protected work is synchronous and realm-local; native cross-thread registry races remain unverified. @param ppNewDescription - Inout original allocated description. @returns Nothing. */
 export function typelib_typedescription_register(
   ppNewDescription: [typelib_TypeDescription | null],
@@ -576,14 +581,69 @@ export function typelib_typedescription_register(
       ) {
         if (target.pWeakRef !== null) {
           switch (target.eTypeClass) {
-            case typelib_TypeClass.ENUM:
+            case typelib_TypeClass.ENUM: {
+              const dst = record<typelib_EnumTypeDescription>(target);
+              assert(dst.nEnumValues === 0, "dst->nEnumValues == 0");
+              assert(dst.ppEnumNames === null, "dst->ppEnumNames == nullptr");
+              assert(dst.pEnumValues === null, "dst->pEnumValues == nullptr");
               swapFields(desc, target, ["nEnumValues", "ppEnumNames", "pEnumValues"]);
               break;
+            }
             case typelib_TypeClass.STRUCT:
-            case typelib_TypeClass.EXCEPTION:
+            case typelib_TypeClass.EXCEPTION: {
+              const src = record<typelib_CompoundTypeDescription>(desc),
+                dst = record<typelib_CompoundTypeDescription>(target);
+              assert(
+                (dst.pBaseTypeDescription === null) === (src.pBaseTypeDescription === null),
+                "(dst->pBaseTypeDescription == nullptr) == (src->pBaseTypeDescription == nullptr)",
+              );
+              assert(dst.nMembers === src.nMembers, "dst->nMembers == src->nMembers");
+              assert(
+                (dst.pMemberOffsets === null) === (dst.nMembers === 0),
+                "(dst->pMemberOffsets == nullptr) == (dst->nMembers == 0)",
+              );
+              assert(
+                (dst.ppTypeRefs === null) === (dst.nMembers === 0),
+                "(dst->ppTypeRefs == nullptr) == (dst->nMembers == 0)",
+              );
+              assert(dst.ppMemberNames === null, "dst->ppMemberNames == nullptr");
+              assert(
+                target.eTypeClass !== typelib_TypeClass.STRUCT ||
+                  (record<typelib_StructTypeDescription>(target).pParameterizedTypes === null) ===
+                    (record<typelib_StructTypeDescription>(desc).pParameterizedTypes === null),
+                "pTDR->pType->eTypeClass != typelib_TypeClass_STRUCT || ((reinterpret_cast<typelib_StructTypeDescription *>(dst)->pParameterizedTypes == nullptr) == (reinterpret_cast<typelib_StructTypeDescription *>(src)->pParameterizedTypes == nullptr))",
+              );
               swapFields(desc, target, ["ppMemberNames"]);
               break;
-            case typelib_TypeClass.INTERFACE:
+            }
+            case typelib_TypeClass.INTERFACE: {
+              const src = record<typelib_InterfaceTypeDescription>(desc),
+                dst = record<typelib_InterfaceTypeDescription>(target);
+              assert(
+                (dst.pBaseTypeDescription === null) === (src.pBaseTypeDescription === null),
+                "(dst->pBaseTypeDescription == nullptr) == (src->pBaseTypeDescription == nullptr)",
+              );
+              assert(dst.nMembers === 0, "dst->nMembers == 0");
+              assert(dst.ppMembers === null, "dst->ppMembers == nullptr");
+              assert(dst.nAllMembers === 0, "dst->nAllMembers == 0");
+              assert(dst.ppAllMembers === null, "dst->ppAllMembers == nullptr");
+              assert(
+                dst.pMapMemberIndexToFunctionIndex === null,
+                "dst->pMapMemberIndexToFunctionIndex == nullptr",
+              );
+              assert(
+                dst.nMapFunctionIndexToMemberIndex === 0,
+                "dst->nMapFunctionIndexToMemberIndex == 0",
+              );
+              assert(
+                dst.pMapFunctionIndexToMemberIndex === null,
+                "dst->pMapFunctionIndexToMemberIndex == nullptr",
+              );
+              assert(dst.nBaseTypes === src.nBaseTypes, "dst->nBaseTypes == src->nBaseTypes");
+              assert(
+                (dst.ppBaseTypes === null) === (src.ppBaseTypes === null),
+                "(dst->ppBaseTypes == nullptr) == (src->ppBaseTypes == nullptr)",
+              );
               swapFields(desc, target, [
                 "nMembers",
                 "ppMembers",
@@ -594,13 +654,19 @@ export function typelib_typedescription_register(
                 "pMapFunctionIndexToMemberIndex",
               ]);
               break;
+            }
+            default:
+              assert(false, "false");
           }
         } else transferSpecific(desc, target);
         target.bComplete = desc.bComplete;
         target.nSize = desc.nSize;
         target.nAlignment = desc.nAlignment;
         if (target.bOnDemand && !desc.bOnDemand) typelib_typedescription_acquire(target);
-        else if (!target.bOnDemand && desc.bOnDemand) typelib_typedescription_release(target);
+        else if (!target.bOnDemand && desc.bOnDemand) {
+          assert(target.nRefCount > 1, "pTDR->pType->nRefCount > 1");
+          typelib_typedescription_release(target);
+        }
         target.bOnDemand = desc.bOnDemand;
         target.pWeakRef = ref;
       }

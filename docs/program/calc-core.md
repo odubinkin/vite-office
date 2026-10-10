@@ -2225,3 +2225,25 @@ original source links absent. Native/provenance checks run with links restored.
 The next scheduled full application run remains task41; fix Calc/affected shared
 failures, leave Writer-only coverage for its branch, then pause the goal as the
 user requested. This prerequisite does not establish editable Calc UI readiness.
+
+## Original CPPU registration invariants
+
+Task39 also retains all21 C assertion predicates in original registration order.
+Twenty initialized invalid caller descriptions are independently passed to the
+unchanged native registry in fresh processes. Each stops at its corresponding
+original assertion with SIGABRT and no returned value or stdout; complete
+diagnostics match in normal and ASan/UBSan builds, before any sanitizer finding.
+Portable tests replay the same initialized inputs with a fresh registry for each
+failure and compare the complete assertion expression, ignoring formatting
+whitespace only. These deliberately invalid caller contracts do not establish
+ordinary user-level reachability.
+
+The retained-count assertion is satisfied by the original getByName acquisition
+in valid ownership traces. Its invalid concurrent interleaving is not fabricated
+for a synchronous browser realm. Private callChain receives an actual non-null
+fresh empty output slot from its sole current caller, satisfying its two C
+preconditions by construction. Debug-only OSL_ASSERT diagnostics are separate.
+Browser Error adapts the fatal C assertion boundary; it does not establish native
+process termination, recoverability or a default UNO RuntimeException owner.
+Full factories/static types/Type/Any/Reference/default exceptions remain required
+before locale-aware case values and their Calc string-service consumers.

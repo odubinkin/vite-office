@@ -41,10 +41,12 @@
       "typelib_typedescription_register"
     ],
     "preservedResponsibilities": [
-      "Original CPPU type allocation initializes exactly the original common/specific fields; uninitialized positions/flags/Uik fields remain absent. Canonical typed browser views share the same signed32 atomic counter, common fields and reference pType/description pSelf slot; aBase prefixes denote the same allocation, while sequence extended pType remains distinct. Original name-only terminated-UTF16 registry equality, callback order/duplicate removal, weak and nonweak ownership, all specific member releases, identity-preserving raw transfer/late completion, on-demand retention and the256-entry typedef callback cache are shared once. Full unchanged original SAL/CPPU owners and headers observe complete initialized fields/counts/identity traces under normal and ASan/UBSan builds; counter-zero/empty weak-pointer caller witnesses are separate from actual concurrent execution. Public C exports preserve the header/source boundary. Completion/getDescription/full compound/interface factories/static_types/Type/Any/Reference/default exceptions, native pointer ABI/threading/singleton shutdown and Calc document/edit/UI remain unfinished or unverified."
+      "Original CPPU type allocation initializes exactly the original common/specific fields; uninitialized positions/flags/Uik fields remain absent. Canonical typed browser views share the same signed32 atomic counter, common fields and reference pType/description pSelf slot; aBase prefixes denote the same allocation, while sequence extended pType remains distinct. Original name-only terminated-UTF16 registry equality, callback order/duplicate removal, weak and nonweak ownership, all specific member releases, identity-preserving raw transfer/late completion, on-demand retention and the256-entry typedef callback cache are shared once. Full unchanged original SAL/CPPU owners and headers observe complete initialized fields/counts/identity traces under normal and ASan/UBSan builds; counter-zero/empty weak-pointer caller witnesses are separate from actual concurrent execution. Public C exports preserve the header/source boundary. Completion/getDescription/full compound/interface factories/static_types/Type/Any/Reference/default exceptions, native pointer ABI/threading/singleton shutdown and Calc document/edit/UI remain unfinished or unverified.",
+      "All21 original registration C assertion predicates and order;20 original fresh-process native failures reproduce complete diagnostics before sanitizer findings, and portable tests compare every expression."
     ],
     "omittedResponsibilities": [
-      "Original completion/getDescription and full compound/interface factories/static_types/Type/Any/Reference/default exceptions, native pointer ABI/threading/singleton shutdown, full original consumer QA and Calc document/edit/UI remain unfinished or unverified. Initialized caller state witnesses do not certify ordinary reachability or actual cross-thread interleavings."
+      "Original completion/getDescription and full compound/interface factories/static_types/Type/Any/Reference/default exceptions, native pointer ABI/threading/singleton shutdown, full original consumer QA and Calc document/edit/UI remain unfinished or unverified. Initialized caller state witnesses do not certify ordinary reachability or actual cross-thread interleavings.",
+      "Native SIGABRT/process termination, post-failure recovery and debug-only OSL diagnostics are not browser contracts. No failing synchronous retained-count interleaving is fabricated."
     ],
     "evidence": {
       "local": [
@@ -59,6 +61,10 @@
         {
           "path": "apps/office/src/cppu/source/typelib/registry.test.ts",
           "marker": "matches every complete original allocated record and ownership transition"
+        },
+        {
+          "path": "apps/office/src/cppu/source/typelib/registry-assertions.test.ts",
+          "marker": "retains every original failing invariant and assertion expression"
         }
       ],
       "upstream": [
@@ -71,6 +77,10 @@
           "marker": "typelib_typedescription_register"
         }
       ]
+    },
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "The browser uses its Error assertion boundary for the unchanged C predicate and expression. Native SIGABRT does not define a portable post-failure result or recovery contract; this is separate from UNO RuntimeException and OSL debug diagnostics."
     }
   }
 }

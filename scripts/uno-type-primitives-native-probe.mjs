@@ -1,5 +1,5 @@
-/** @fileoverview Observes genuine generated/C type classes, initialized real header records and original CPPU/RTL comparisons; type registration and reference lifecycle remain separate. */
-import { registryDriver } from "./uno-registry-native-driver.mjs";
+/** @fileoverview Observes genuine generated/C type classes, initialized original CPPU/RTL records, registry ownership and fatal registration invariants against full unchanged native owners. */
+import { registryDriver, registryAssertionDriver } from "./uno-registry-native-driver.mjs";
 import { spawnSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
 import { gzipSync } from "node:zlib";
@@ -77,7 +77,9 @@ const driver = String.raw`#include <typelib/typedescription.h>
 static_assert(std::endian::native == std::endian::little);
 template<size_t N>void emit(std::array<sal_Int32,N>const&row){if(std::fwrite(row.data(),sizeof(sal_Int32),N,stdout)!=N)std::exit(3);}
 ${registryDriver}
+${registryAssertionDriver}
 int main(int argc,char**argv){std::string mode=argc>1?argv[1]:"enums";
+if(registrationAssertion(mode))return 0;
 if(registryCases(mode))return 0;
 if(mode=="enums"){std::cout<<'[';bool comma=false;
 ${names
@@ -215,6 +217,39 @@ const assertion = spawnSync(binary, ["null-assert"]);
 writeFileSync(`${target}/null-assert.stderr`, assertion.stderr ?? "");
 if (assertion.signal !== "SIGABRT" || !assertion.stderr.toString().includes("pStr"))
   throw new Error("Missing original terminated-wrapper null assertion");
+const registrationAssertions = [];
+for (let index = 0; index < 20; index++) {
+  const mode = `invariant-${index}`,
+    cases = [];
+  for (const executable of [binary, sanitized]) {
+    const failure = spawnSync(executable, [mode], {
+      env: { ...process.env, ASAN_OPTIONS: "detect_leaks=0", UBSAN_OPTIONS: "halt_on_error=1" },
+      maxBuffer: 1024 * 1024,
+    });
+    const stderr = failure.stderr.toString();
+    writeFileSync(`${executable}.${mode}.stderr`, stderr);
+    native.manifest.commands.push({
+      tool: executable,
+      argv: [mode],
+      exitCode: failure.status,
+      signal: failure.signal,
+    });
+    if (
+      failure.signal !== "SIGABRT" ||
+      failure.stdout.length !== 0 ||
+      !stderr.includes("typelib.cxx") ||
+      !stderr.includes("Assertion failed") ||
+      /AddressSanitizer|runtime error:/.test(stderr)
+    )
+      throw new Error(`Missing original registration assertion: ${mode}: ${stderr}`);
+    const expression = stderr.match(/Assertion failed: \(([\s\S]*?)\), function /)?.[1];
+    if (!expression) throw new Error(`Missing full original assertion expression: ${mode}`);
+    cases.push({ signal: failure.signal, expression, diagnostic: stderr });
+  }
+  if (cases[0].expression !== cases[1].expression || cases[0].diagnostic !== cases[1].diagnostic)
+    throw new Error(`Different original sanitized assertion: ${mode}`);
+  registrationAssertions.push({ index, ...cases[0] });
+}
 native.manifest.state = "captured";
 native.save();
 const result = {
@@ -276,11 +311,12 @@ const result = {
     fields:
       "Original full common/specific initialized fields, live name/type counts and pointer identity witnesses after every operation; unspecified native fields are never read",
   },
+  registrationAssertions,
   bothNullEquals: captures.equals.readInt32LE(captures.equals.length - 4),
   nullWrapperAssertion: "SIGABRT",
   sanitizedIdentical: true,
   scope:
-    "Complete original enum/C declaration/layout/const comparison/OSL observations plus genuine original newEmpty/reference allocation, acquire/release, extended destruction, getByName, callbacks, registration/completion and 256-entry typedef-provider cache ownership traces. All initialized fields/counts/identity witnesses are retained; unspecified native fields are never read. Callback responses and specific members are initialized real caller inputs using the original factories and acquisitions, not replacement native owners. Explicit zero-count/empty weak-pointer state witnesses certify the original safeguard branches only, not a native concurrent interleaving or valid ordinary user-level reachability. Common-prefix adaptation, full native ABI/platform synchronization, singleton shutdown, completion/getDescription/static type providers and portable Type/Any/Reference/default UNO exceptions, services and Calc document/edit/UI remain unverified or unfinished. Original ICU source verification comes from the shared build helper but no ICU code is linked by this caller. Native platform frameworks/libc are uninstrumented.",
+    "Complete original enum/C declaration/layout/const comparison/OSL observations plus genuine original newEmpty/reference allocation, acquire/release, extended destruction, getByName, callbacks, registration/completion and 256-entry typedef-provider cache ownership traces. All initialized fields/counts/identity witnesses are retained; unspecified native fields are never read. Twenty initialized invalid caller inputs record complete original C assertion diagnostics and SIGABRT with no stdout, identically in normal and sanitized builds and before any sanitizer finding. The twenty-first registration guard (retained count > 1) is satisfied by original getByName acquisition in valid traces; no impossible realm-local failing interleaving is fabricated. Browser Error adapts the C assertion boundary only, not native process termination, recovery, UNO exceptions or OSL debug assertions. Callback responses and specific members are initialized real caller inputs using the original factories and acquisitions, not replacement native owners. Explicit zero-count/empty weak-pointer state witnesses certify the original safeguard branches only, not a native concurrent interleaving or valid ordinary user-level reachability. Common-prefix adaptation, full native ABI/platform synchronization, singleton shutdown, completion/getDescription/static type providers and portable Type/Any/Reference/default UNO exceptions, services and Calc document/edit/UI remain unverified or unfinished. Original ICU source verification comes from the shared build helper but no ICU code is linked by this caller. Native platform frameworks/libc are uninstrumented.",
 };
 if (write) writeFileSync(fixture, JSON.stringify(result) + "\n");
 else if (JSON.stringify(JSON.parse(readFileSync(fixture, "utf8"))) !== JSON.stringify(result))
@@ -292,6 +328,7 @@ console.log(
     units: result.units.count,
     equality: result.equals.count,
     sources: Object.keys(result.sourceHashes).length,
+    registrationAssertions: registrationAssertions.length,
     sanitizedIdentical: true,
   }),
 );
