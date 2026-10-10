@@ -1,10 +1,11 @@
 ---
 id: "202610101405-RCRBVD"
 title: "Port original shared UTF16 reverse comparison required by Calc cell strings"
-status: "DOING"
+result_summary: "verified-202610101405-RCRBVD"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 18
+revision: 22
 origin:
   system: "manual"
 depends_on: []
@@ -19,9 +20,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-10T14:19:04.877Z"
+  updated_at: "2026-10-10T14:21:03.514Z"
   updated_by: "CODER"
-  note: "Complete unchanged native10084calls/20168results/4assert guards, portable Calc106/shared2 allfour100 and raw counters, source/inventory/ownership/static gates pass. Actual shared SAL source/header boundaries retained; no stand-in string owners. Task2/10,nextfull41."
+  note: "verified-202610101405-RCRBVD"
   attempts: 0
 quality_review:
   state: "pass"
@@ -46,11 +47,16 @@ quality_review:
   findings:
     - "Original unsigned16 difference, reverse traversal, signed32 narrowing, terminal length difference and four source assertions retained at SAL template/C/header owners. All10084 direct/public calls,20168 outputs and four native SIGABRT guards survive intact with four full source and six exact scope hashes."
     - "Portable absent-upstream Calc106/24 and changed shared2/1 pass; Calc S2920/B2055/F474/L2564 and shared S21/B16/F3/L16 allfour100, raw counters positive. All declared gates and source-provenance3/boundary-registry24 cases pass. Source/C-header module identity and read-only exported symbols are inventoried without mutation-helper misclassification or validator changes."
-commit: null
+commit:
+  hash: "cf73d0069aacd56a694b86bf10f63494f52f8a59"
+  message: "🔎 RCRBVD evaluate: certify native UTF16 comparisons and ownership"
 comments:
   -
     author: "CODER"
     body: "Start: port the actual original initialized UTF16 reverse comparator at SAL source/header boundaries; complete unchanged native captures, portable coverage and exhaustive inventory on calc only."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610101405-RCRBVD. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -65,8 +71,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Complete unchanged native10084calls/20168results/4assert guards, portable Calc106/shared2 allfour100 and raw counters, source/inventory/ownership/static gates pass. Actual shared SAL source/header boundaries retained; no stand-in string owners. Task2/10,nextfull41."
+  -
+    type: "verify"
+    at: "2026-10-10T14:21:03.514Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610101405-RCRBVD"
+  -
+    type: "status"
+    at: "2026-10-10T14:21:03.651Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610101405-RCRBVD. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-10T14:20:52.592Z"
+doc_updated_at: "2026-10-10T14:21:35.078Z"
 doc_updated_by: "CODER"
 description: "Task33: establish the actual sal/rtl reverse comparison and header contracts needed by original svl::SharedString equality. Preserve original complete algorithms, UTF16 code-unit semantics and exact result magnitudes; native unchanged-source evidence, portable tests, actual100 Calc/changed-shared coverage, exhaustive inventory, no fabricated OUString or string store. Continue approved UI-prerequisite spine on branch calc only."
 sections:
@@ -108,6 +127,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-10T14:21:03.514Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610101405-RCRBVD
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T14:20:52.592Z, excerpt_hash=sha256:7ef366b41e85b7304fdc783be8dbedb2397300d029b4848b1b8e5682467ce01a
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610101405-RCRBVD/blueprint/resolved-snapshot.json
+    - old_digest: 7e6d554b24f14eb0e24d42fabf4115c3749b1c46a7a36837db2c11ff45aa3b63
+    - current_digest: 7e6d554b24f14eb0e24d42fabf4115c3749b1c46a7a36837db2c11ff45aa3b63
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610101405-RCRBVD
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610101405-RCRBVD --result verified-202610101405-RCRBVD --commit cf73d0069aacd56a694b86bf10f63494f52f8a59
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task implementation commit through the approved local workflow; retain completed task history. No destructive reset, Writer or upstream changes."
   Findings: |-
@@ -132,6 +181,18 @@ sections:
     - Observation: EVALUATOR independently validated committed source263db2baa0f83d26d0353b5d866520a933a749d4 against complete native scopes/corpus, raw counters and gate/portable manifests; verdict pass. The first read-only audit invocation had a Python syntax typo and accepted no result; corrected unchanged audit then passed.
       Impact: No implementation/fixtures/criteria changed during review. Original string owners, ABI/lifetime and broader module parity remain explicitly incomplete; this prerequisite is verified.
       Resolution: Quality report quality/20261010-142027946-recovery-context/quality-report.json retains evaluated SHA and evidence. Persist quality artifacts, then exact route completion and scoped artifact cleanup on calc.
+
+    - Observation: Exact task complete route returned E_GIT generic-subject rejection after authoritative status became DONE; only task artifact cleanup remains.
+      Impact: Verified implementation263db2ba and EVALUATOR qualitycf73d006 commits remain intact. No source or test failure.
+      Resolution: Follow recomputed exact cleanup route; use documented descriptive task-scoped ap commit fallback if the installed deterministic subject is rejected again, without history/policy changes.
+
+    - Observation: Exact deterministic close cleanup also returned exit5 with the same generic-subject rejection; task is DONE pending current artifact commit.
+      Impact: Only the active task README tail requires persistence, without implementation changes.
+      Resolution: Explicit descriptive ap commit with --allow-tasks and active README staged closes the artifact tail; no other tasks, branches or policy changes.
+extensions:
+  implementation_commit:
+    hash: "263db2baa0f83d26d0353b5d866520a933a749d4"
+    message: "✨ RCRBVD implement: preserve original shared UTF16 reverse comparison"
 id_source: "generated"
 ---
 ## Summary
@@ -185,6 +246,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-10T14:21:03.514Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610101405-RCRBVD
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T14:20:52.592Z, excerpt_hash=sha256:7ef366b41e85b7304fdc783be8dbedb2397300d029b4848b1b8e5682467ce01a
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610101405-RCRBVD/blueprint/resolved-snapshot.json
+- old_digest: 7e6d554b24f14eb0e24d42fabf4115c3749b1c46a7a36837db2c11ff45aa3b63
+- current_digest: 7e6d554b24f14eb0e24d42fabf4115c3749b1c46a7a36837db2c11ff45aa3b63
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610101405-RCRBVD
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610101405-RCRBVD --result verified-202610101405-RCRBVD --commit cf73d0069aacd56a694b86bf10f63494f52f8a59
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -214,3 +305,11 @@ Preflight: clean branchcalc at completed task32. Local upstream exists and is ap
 - Observation: EVALUATOR independently validated committed source263db2baa0f83d26d0353b5d866520a933a749d4 against complete native scopes/corpus, raw counters and gate/portable manifests; verdict pass. The first read-only audit invocation had a Python syntax typo and accepted no result; corrected unchanged audit then passed.
   Impact: No implementation/fixtures/criteria changed during review. Original string owners, ABI/lifetime and broader module parity remain explicitly incomplete; this prerequisite is verified.
   Resolution: Quality report quality/20261010-142027946-recovery-context/quality-report.json retains evaluated SHA and evidence. Persist quality artifacts, then exact route completion and scoped artifact cleanup on calc.
+
+- Observation: Exact task complete route returned E_GIT generic-subject rejection after authoritative status became DONE; only task artifact cleanup remains.
+  Impact: Verified implementation263db2ba and EVALUATOR qualitycf73d006 commits remain intact. No source or test failure.
+  Resolution: Follow recomputed exact cleanup route; use documented descriptive task-scoped ap commit fallback if the installed deterministic subject is rejected again, without history/policy changes.
+
+- Observation: Exact deterministic close cleanup also returned exit5 with the same generic-subject rejection; task is DONE pending current artifact commit.
+  Impact: Only the active task README tail requires persistence, without implementation changes.
+  Resolution: Explicit descriptive ap commit with --allow-tasks and active README staged closes the artifact tail; no other tasks, branches or policy changes.
