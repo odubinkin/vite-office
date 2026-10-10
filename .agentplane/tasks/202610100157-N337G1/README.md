@@ -4,7 +4,7 @@ title: "Transport native table layout-split and collapsing-border items"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -18,15 +18,40 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-10T02:33:06.137Z"
+  updated_at: "2026-10-10T02:34:27.178Z"
   updated_by: "CODER"
-  note: "One upstream-absent full cadence run: app14756/14756 including33fresh; tooling23 inventory122 resources2 browser303. Whole app/inventory and two whole codecs100 four metrics, complete current-source maps zero negative; eight static/build/TS7 gates plus full browser; nine restored metadata;653 old tests identical four canonical prefixes. Reference restored; bounded evidence verification.json; exact-SHA quality next; user pause after closure."
+  note: "Semantic cbdb013687a163084e58c4d7ebc341a14b6aabff exact-SHA same-agent quality pass persisted in verification evidence. All full cadence/static/metadata checks passed, actual app/inventory/two entire codecs100 and complete nonnegative current maps. Concrete task closure next; user-requested incomplete goal pause."
   attempts: 0
-commit: null
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-10T02:34:01.713Z"
+  updated_by: "EVALUATOR"
+  note: "Explicitly same-agent non-independent exact-SHA review cbdb013687a163084e58c4d7ebc341a14b6aabff: native direct table flow/border transport scope satisfied; all full cadence checks and100 whole-map coverage pass. Recommend concrete task closure then user-requested incomplete goal pause."
+  evaluated_sha: "cbdb013687a163084e58c4d7ebc341a14b6aabff"
+  blueprint_digest: "eaa3bc0c5b324b713327c35bad13273474971e4a022ac4d33026f89ebaedf6b6"
+  evidence_refs:
+    - ".agentplane/tasks/202610100157-N337G1/README.md"
+    - ".agentplane/tasks/202610100157-N337G1/quality/20261010-023401713-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610100157-N337G1/quality/20261010-023401713-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610100157-N337G1/quality/20261010-023401713-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610100157-N337G1/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610100157-N337G1/evidence/verification.json"
+    - "apps/office/node_modules/.cache/parity-coverage/N337G1/coverage-proof.json"
+    - "apps/office/node_modules/.cache/parity-coverage/N337G1/full-results.json"
+  findings:
+    - "Read exact semantic diff and both fresh files: direct independent presence/absence, strict bool/identity admission before either item mutation, legacy marker absent path and no outgoing scalar twins. Registered pool and original core/history ownership retained; no private reconstruction."
+    - "Actual current-source app14756/14756 including33fresh, inventory122, tooling23, resources2 and all browser303, no failures/skips/flaky; full run once without upstream. Entire app/inventory and both entire codecs100 all four dimensions, complete actual maps/cardinality/nonnegative counters.653 old tests byte-identical; four canonical histories preserved; source hashes verified at exact HEAD."
+    - "Eight static/build/TS7 checks plus complete browser and nine restored metadata checks pass; reference restored. No external access/delegation/policy drift. Review performed by implementing agent and explicitly not independent."
+commit:
+  hash: "cbdb013687a163084e58c4d7ebc341a14b6aabff"
+  message: "🧩 N337G1 writer: transport native table flow and border items"
 comments:
   -
     author: "CODER"
     body: "Start: replace native table split/border scalar transport twins with direct original items, preserve old records and conscious IO deviations. Atomic10/10 includes one complete upstream-absent cadence test pass and exact whole-module/app/inventory100 coverage, then restored metadata/exactSHA quality/clean close."
+  -
+    author: "CODER"
+    body: "Start: implementation cbdb013687a163084e58c4d7ebc341a14b6aabff recorded after one green complete cadence run; refresh verification and perform explicitly same-agent exact-SHA quality, then concrete close and user-requested goal pause."
 events:
   -
     type: "status"
@@ -41,8 +66,27 @@ events:
     author: "CODER"
     state: "ok"
     note: "One upstream-absent full cadence run: app14756/14756 including33fresh; tooling23 inventory122 resources2 browser303. Whole app/inventory and two whole codecs100 four metrics, complete current-source maps zero negative; eight static/build/TS7 gates plus full browser; nine restored metadata;653 old tests identical four canonical prefixes. Reference restored; bounded evidence verification.json; exact-SHA quality next; user pause after closure."
+  -
+    type: "status"
+    at: "2026-10-10T02:33:36.740Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+    note: "Start: implementation cbdb013687a163084e58c4d7ebc341a14b6aabff recorded after one green complete cadence run; refresh verification and perform explicitly same-agent exact-SHA quality, then concrete close and user-requested goal pause."
+  -
+    type: "verify"
+    at: "2026-10-10T02:33:38.554Z"
+    author: "CODER"
+    state: "ok"
+    note: "Implementation cbdb013687a163084e58c4d7ebc341a14b6aabff; full app14756 tooling23 inventory122 resources2 browser303 all passed once upstream absent; actual whole app/inventory/two codecs100 all four metrics complete nonnegative current maps;653 old tests identical four canonical prefixes; eight static plus full browser and nine metadata passed reference restored. No scope drift, tests replay or failures."
+  -
+    type: "verify"
+    at: "2026-10-10T02:34:27.178Z"
+    author: "CODER"
+    state: "ok"
+    note: "Semantic cbdb013687a163084e58c4d7ebc341a14b6aabff exact-SHA same-agent quality pass persisted in verification evidence. All full cadence/static/metadata checks passed, actual app/inventory/two entire codecs100 and complete nonnegative current maps. Concrete task closure next; user-requested incomplete goal pause."
 doc_version: 3
-doc_updated_at: "2026-10-10T02:33:06.280Z"
+doc_updated_at: "2026-10-10T02:34:27.337Z"
 doc_updated_by: "CODER"
 description: "Atomic10/10 after BZQGYC. Internal Writer graph/Worker table transport carries direct original native RES_LAYOUT_SPLIT and RES_COLLAPSING_BORDERS item presence/value via existing pool codec, removes outgoing scalar layoutSplit/borderModel twins and preserves old-marker ingress. Native live frame/item/history ownership unchanged; registered open/save/recovery/settings exceptions preserved. New graph/JSON/Worker and mounted native UndoRedo tests; whole production-module and complete cadence application/inventory coverage100, all full tooling/resource/browser/static gates upstream absent, restored metadata and exact-SHA same-agent quality/clean close. Full LR arbitrary-state marshaling and paragraph typed margin contracts remain separate incomplete work, no private-field or inverse reconstruction."
 sections:
@@ -55,17 +99,17 @@ sections:
     3. Upstream-absent complete tenth-task application, inventory, tooling/resource and all browser suites pass without skipped cases, with actual whole app/inventory and both entire changed production modules100 lines/statements/functions/branches, complete current-source instrumentation maps and zero negative counters. Initial failed raw evidence remains ignored; no threshold weakening/counter edits/map filtering or helper-only passing replay. Nine static/build/TS7 gates pass. Reference restoration is mandatory in finally.
     4. Restored registry/source-tree/provenance/resources/invariant/parity/routing/doctor metadata gates pass. Record exact semantic SHA with same-agent non-independent quality, concrete result and clean writer checkout. No upstream/helper/Python/raw maps/logs in AgentPlane, no network/delegation/merge/publication; full LR/font/UNO/VCL/general UI fidelity remains incomplete.
   Verification: |-
-    Pass: one upstream-absent full cadence run app14756/14756 (608files;33fresh), tooling23, inventory122, resources2 and all browsers303, zero failures/skips/flaky. Actual entire app/inventory and both entire changed codecs100 across lines/statements/functions/branches; complete current-source nonnegative maps. Eight static/build/TS7 plus browser gates and nine restored metadata gates pass. Reference restored. All653 historical tests byte-identical and four canonical historical/status/default/classification prefixes preserved. Exact semantic SHA and same-agent non-independent quality are recorded after the semantic commit; broad goal remains incomplete and will pause per explicit user request.
+    Pass at semantic cbdb013687a163084e58c4d7ebc341a14b6aabff: one upstream-absent full cadence app14756/14756 in608files including33fresh, tooling23 inventory122 resources2 all browsers303 zero failures/skips/flaky. Actual whole application/inventory and both entire codecs100 lines/statements/functions/branches, complete current-source maps and zero negative counters. Eight static/build/TS7 gates plus full browser and nine restored metadata passed; reference restored.653 historical tests byte-identical, four canonical histories preserved. Explicitly same-agent non-independent exact-SHA quality pass: quality/20261010-023401713-recovery-context/quality-report.json. Complete bounded facts evidence/verification.json; raw logs/maps/helpers remain ignored node_modules cache. Broad goal incomplete; user explicitly requested pause after closure, no next correction.
 
     <!-- BEGIN VERIFICATION RESULTS -->
-    ### 2026-10-10T02:33:06.137Z — VERIFY — ok
+    ### 2026-10-10T02:34:27.178Z — VERIFY — ok
 
     By: CODER
 
-    Note: One upstream-absent full cadence run: app14756/14756 including33fresh; tooling23 inventory122 resources2 browser303. Whole app/inventory and two whole codecs100 four metrics, complete current-source maps zero negative; eight static/build/TS7 gates plus full browser; nine restored metadata;653 old tests identical four canonical prefixes. Reference restored; bounded evidence verification.json; exact-SHA quality next; user pause after closure.
+    Note: Semantic cbdb013687a163084e58c4d7ebc341a14b6aabff exact-SHA same-agent quality pass persisted in verification evidence. All full cadence/static/metadata checks passed, actual app/inventory/two entire codecs100 and complete nonnegative current maps. Concrete task closure next; user-requested incomplete goal pause.
     Attempts: 0
 
-    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T02:32:59.692Z, excerpt_hash=sha256:55412751175437c01925d524da0d3b1304159d870d7c7681691542286174c8b1
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T02:34:24.822Z, excerpt_hash=sha256:55412751175437c01925d524da0d3b1304159d870d7c7681691542286174c8b1
 
     Details:
 
@@ -80,7 +124,7 @@ sections:
     DecisionContextRef:
     - operator_action: run_exact_argv
     - can_execute_now: true
-    - safe_command: agentplane commit 202610100157-N337G1 -m 🧩 N337G1 task: persist canonical task artifacts --allow-tasks
+    - safe_command: agentplane task complete 202610100157-N337G1 --result verified-202610100157-N337G1 --commit cbdb013687a163084e58c4d7ebc341a14b6aabff
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -128,17 +172,17 @@ Transport direct original split/border item snapshots with independent marker/ab
 
 ## Verification
 
-Pass: one upstream-absent full cadence run app14756/14756 (608files;33fresh), tooling23, inventory122, resources2 and all browsers303, zero failures/skips/flaky. Actual entire app/inventory and both entire changed codecs100 across lines/statements/functions/branches; complete current-source nonnegative maps. Eight static/build/TS7 plus browser gates and nine restored metadata gates pass. Reference restored. All653 historical tests byte-identical and four canonical historical/status/default/classification prefixes preserved. Exact semantic SHA and same-agent non-independent quality are recorded after the semantic commit; broad goal remains incomplete and will pause per explicit user request.
+Pass at semantic cbdb013687a163084e58c4d7ebc341a14b6aabff: one upstream-absent full cadence app14756/14756 in608files including33fresh, tooling23 inventory122 resources2 all browsers303 zero failures/skips/flaky. Actual whole application/inventory and both entire codecs100 lines/statements/functions/branches, complete current-source maps and zero negative counters. Eight static/build/TS7 gates plus full browser and nine restored metadata passed; reference restored.653 historical tests byte-identical, four canonical histories preserved. Explicitly same-agent non-independent exact-SHA quality pass: quality/20261010-023401713-recovery-context/quality-report.json. Complete bounded facts evidence/verification.json; raw logs/maps/helpers remain ignored node_modules cache. Broad goal incomplete; user explicitly requested pause after closure, no next correction.
 
 <!-- BEGIN VERIFICATION RESULTS -->
-### 2026-10-10T02:33:06.137Z — VERIFY — ok
+### 2026-10-10T02:34:27.178Z — VERIFY — ok
 
 By: CODER
 
-Note: One upstream-absent full cadence run: app14756/14756 including33fresh; tooling23 inventory122 resources2 browser303. Whole app/inventory and two whole codecs100 four metrics, complete current-source maps zero negative; eight static/build/TS7 gates plus full browser; nine restored metadata;653 old tests identical four canonical prefixes. Reference restored; bounded evidence verification.json; exact-SHA quality next; user pause after closure.
+Note: Semantic cbdb013687a163084e58c4d7ebc341a14b6aabff exact-SHA same-agent quality pass persisted in verification evidence. All full cadence/static/metadata checks passed, actual app/inventory/two entire codecs100 and complete nonnegative current maps. Concrete task closure next; user-requested incomplete goal pause.
 Attempts: 0
 
-VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T02:32:59.692Z, excerpt_hash=sha256:55412751175437c01925d524da0d3b1304159d870d7c7681691542286174c8b1
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T02:34:24.822Z, excerpt_hash=sha256:55412751175437c01925d524da0d3b1304159d870d7c7681691542286174c8b1
 
 Details:
 
@@ -153,7 +197,7 @@ BlueprintSnapshotRef:
 DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
-- safe_command: agentplane commit 202610100157-N337G1 -m 🧩 N337G1 task: persist canonical task artifacts --allow-tasks
+- safe_command: agentplane task complete 202610100157-N337G1 --result verified-202610100157-N337G1 --commit cbdb013687a163084e58c4d7ebc341a14b6aabff
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
