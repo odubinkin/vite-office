@@ -1,10 +1,11 @@
 ---
 id: "202610100306-5SZVX2"
 title: "Integrate Writer and Calc branches and synchronize all checkouts"
-status: "DOING"
+result_summary: "verified-202610100306-5SZVX2"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 20
 origin:
   system: "manual"
 depends_on: []
@@ -18,7 +19,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-10T03:39:21.698Z"
+  updated_at: "2026-10-10T03:39:35.738Z"
   updated_by: "CODER"
   note: "verified-202610100306-5SZVX2"
   attempts: 0
@@ -41,11 +42,16 @@ quality_review:
     - "git ancestry, exact local/remote tip equality and clean main/writer/calc checkouts verified at7562c5a46af1"
   findings:
     - "Both merge commits preserve Writer and Calc histories without conflicts. Only three follow-up paths changed: all root tooling selection and two complete native corpora split into bounded independent test groups. No production changes, native inputs or assertions removed, no timeout or coverage weakening."
-commit: null
+commit:
+  hash: "2d178e2b1a9f85fec8ff5f3a507e0cb51b88c961"
+  message: "🧩 5SZVX2 task: record full verification and synchronized branch evidence"
 comments:
   -
     author: "CODER"
     body: "Start: Execute user-approved Writer and Calc integration, full verification, publication, and branch synchronization."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610100306-5SZVX2. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -66,8 +72,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202610100306-5SZVX2"
+  -
+    type: "verify"
+    at: "2026-10-10T03:39:35.738Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610100306-5SZVX2"
+  -
+    type: "status"
+    at: "2026-10-10T03:39:35.870Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610100306-5SZVX2. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-10T03:39:21.754Z"
+doc_updated_at: "2026-10-10T03:40:29.781Z"
 doc_updated_by: "CODER"
 description: "User authorized pushing writer/calc, merging both into main, resolving conflicts, running full verification and repairing failures with regression coverage, pushing main, merging main back and pushing writer/calc while retaining their active branches."
 sections:
@@ -143,9 +162,43 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-10-10T03:39:35.738Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610100306-5SZVX2
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T03:39:21.754Z, excerpt_hash=sha256:257bbd027b224f7a8a9a991743b394fde9d9e266de3a091ec9bfa48ad0cb7f23
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610100306-5SZVX2/blueprint/resolved-snapshot.json
+    - old_digest: ec05965f50cf6f5a8c76065a5ac5b02cf5e06404370ce5c30ee5bbe9f9257c29
+    - current_digest: ec05965f50cf6f5a8c76065a5ac5b02cf5e06404370ce5c30ee5bbe9f9257c29
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610100306-5SZVX2
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610100306-5SZVX2 --result verified-202610100306-5SZVX2 --commit 2d178e2b1a9f85fec8ff5f3a507e0cb51b88c961
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Original main=44ed369e writer=881b98f5 calc=6823a996. Roll back only through requested revert commits; never reset or force push."
-  Findings: "Writer and Calc pushes succeeded via explicit HTTPS URL after SSH publickey rejection. Both merges succeeded without conflicts; original tips are ancestors of main. Added all nine root tooling suites to test:tooling (26 tests pass). Full formatting, lint, typecheck, boundaries, Writer resources, docs, size, source-tree, source provenance, registry invariants/parity, build/static pass; source provenance uses a local ignored symlink to the existing Calc mdds3.2.1 reference. Doctor has zero errors and two pre-existing warnings. Chromium:303 passed, no retries. First inventory coverage:119 passed/4 timed out; first office coverage currently has five timeout failures in flat_segment_tree and SoA container native corpora. Split independent native cases into bounded groups without removing any native input, step, expected field, assertion, coverage gate or timeout. Initial verify pipeline was stopped after formatting to avoid duplicating independently running checks; complete component results are retained in task logs. Follow-up checks pending."
+  Findings: "Both branches pushed via explicit HTTPS after SSH publickey rejection; both merges conflict-free. Added all nine tooling suites and split native independent cases without removing corpus inputs/steps/assertions or weakening timeouts/coverage. Initial office14842 pass/5 timeout and inventory119 pass/4 timeout retained in logs. Final office14961/inventory123/Chromium303/tooling26/resources2 pass; actual all-four app and inventory coverage100%. Full verification components pass. Source provenance uses the existing Calc mdds reference through an ignored local symlink. All branches synchronized at7562c5a46af1 before closure; final closure will use the same fast-forward route. Doctor has two unrelated historical warnings. The route-oracle task complete shortcut produced a generic close subject rejected by commit enforcement after marking DONE; preserve evidence with an explicit scoped task commit and refresh descriptive finish metadata to generate a valid deterministic closure. No implementation regression or scope expansion."
+extensions:
+  implementation_commit:
+    hash: "7562c5a46af12dcd399c58dc29e6731fd67dcbf0"
+    message: "🧩 5SZVX2 code: bound native test groups and include all tooling checks"
 id_source: "generated"
 ---
 ## Summary
@@ -232,6 +285,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-10-10T03:39:35.738Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610100306-5SZVX2
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T03:39:21.754Z, excerpt_hash=sha256:257bbd027b224f7a8a9a991743b394fde9d9e266de3a091ec9bfa48ad0cb7f23
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610100306-5SZVX2/blueprint/resolved-snapshot.json
+- old_digest: ec05965f50cf6f5a8c76065a5ac5b02cf5e06404370ce5c30ee5bbe9f9257c29
+- current_digest: ec05965f50cf6f5a8c76065a5ac5b02cf5e06404370ce5c30ee5bbe9f9257c29
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610100306-5SZVX2
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610100306-5SZVX2 --result verified-202610100306-5SZVX2 --commit 2d178e2b1a9f85fec8ff5f3a507e0cb51b88c961
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -240,4 +323,4 @@ Original main=44ed369e writer=881b98f5 calc=6823a996. Roll back only through req
 
 ## Findings
 
-Writer and Calc pushes succeeded via explicit HTTPS URL after SSH publickey rejection. Both merges succeeded without conflicts; original tips are ancestors of main. Added all nine root tooling suites to test:tooling (26 tests pass). Full formatting, lint, typecheck, boundaries, Writer resources, docs, size, source-tree, source provenance, registry invariants/parity, build/static pass; source provenance uses a local ignored symlink to the existing Calc mdds3.2.1 reference. Doctor has zero errors and two pre-existing warnings. Chromium:303 passed, no retries. First inventory coverage:119 passed/4 timed out; first office coverage currently has five timeout failures in flat_segment_tree and SoA container native corpora. Split independent native cases into bounded groups without removing any native input, step, expected field, assertion, coverage gate or timeout. Initial verify pipeline was stopped after formatting to avoid duplicating independently running checks; complete component results are retained in task logs. Follow-up checks pending.
+Both branches pushed via explicit HTTPS after SSH publickey rejection; both merges conflict-free. Added all nine tooling suites and split native independent cases without removing corpus inputs/steps/assertions or weakening timeouts/coverage. Initial office14842 pass/5 timeout and inventory119 pass/4 timeout retained in logs. Final office14961/inventory123/Chromium303/tooling26/resources2 pass; actual all-four app and inventory coverage100%. Full verification components pass. Source provenance uses the existing Calc mdds reference through an ignored local symlink. All branches synchronized at7562c5a46af1 before closure; final closure will use the same fast-forward route. Doctor has two unrelated historical warnings. The route-oracle task complete shortcut produced a generic close subject rejected by commit enforcement after marking DONE; preserve evidence with an explicit scoped task commit and refresh descriptive finish metadata to generate a valid deterministic closure. No implementation regression or scope expansion.
