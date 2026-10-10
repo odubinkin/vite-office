@@ -4,7 +4,7 @@ title: "Restore native layout root registration and frame root ownership"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -17,16 +17,43 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-10T20:16:06.163Z"
+  updated_by: "CODER"
+  note: "Actual13948related/501 and23Chromium/12 pass;7fresh native core/React. Entire5modules Istanbul618lines680statements160functions503branches100 all-four,1343nonnegative raw counters and1156current complete hashes.816old acceptance files byte-identical,10canonical historical prefixes preserved,9metadata gates pass. Runtime/static/build/browser upstream-absent finally restored. Native view-order production failure repaired in authorized scope. Doc format registry/Undo/full hierarchy/query/flags/geometry incomplete and explicit; same-agent exact semantic review follows."
   attempts: 0
-commit: null
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-10T20:16:08.172Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent non-independent review of exact semantic28caa2238911030695eebdafe663fc5bd15e0f07: native root registration/format lifecycle and sibling root pointers satisfy approved targeted scope; full Doc factory/Undo/hierarchy/query/native flags and geometry remain explicit gaps."
+  evaluated_sha: "28caa2238911030695eebdafe663fc5bd15e0f07"
+  blueprint_digest: "7c42070641cb9ced4fc175a2c61898bc70bc887b44a35fdece71178ca599751f"
+  evidence_refs:
+    - ".agentplane/tasks/202610101959-1ZNFNB/README.md"
+    - ".agentplane/tasks/202610101959-1ZNFNB/quality/20261010-201608172-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610101959-1ZNFNB/quality/20261010-201608172-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610101959-1ZNFNB/quality/20261010-201608172-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610101959-1ZNFNB/blueprint/resolved-snapshot.json"
+    - "git:28caa2238911030695eebdafe663fc5bd15e0f07"
+    - ".agentplane/tasks/202610101959-1ZNFNB/README.md#Verification"
+    - "apps/office/node_modules/.cache/parity-coverage/1ZNFNB/coverage-proof.json"
+    - "apps/office/node_modules/.cache/parity-coverage/1ZNFNB/browser-proof.json"
+    - "apps/office/node_modules/.cache/parity-coverage/1ZNFNB/preservation-proof.json"
+    - "apps/office/node_modules/.cache/parity-coverage/1ZNFNB/audit-final-results.json"
+  findings:
+    - "Actual SwRootFrame now extends registered original SwLayoutFrame, owns independent original derived Root format/native Root type/self root; source constructor mpRoot propagation retains original root through content/text/native pagination/cursor owners. Close releases original derived format/default survives, existing document replacement rebinds original registration; native SwView constructor order fixed after actual failing React evidence."
+    - "13948related/501 plus23Chromium/12 pass with7fresh core/React cases; whole5modules100 all-four/1343nonnegative raw counters/current1156hashes.816old acceptance files byte-identical,10canonical historical prefixes retained without promotion,9metadata gates pass. Only affected failure repairs, all runtime/static/build/browser upstream-absent and refs restored finally."
+commit:
+  hash: "28caa2238911030695eebdafe663fc5bd15e0f07"
+  message: "🧩 1ZNFNB code: Restore original layout root registration"
 comments:
   -
     author: "CODER"
     body: "Start: Restore native registered Root subtype, original derived frame format lifecycle and source constructor root propagation; preserve device and conscious IO boundaries with targeted upstream-absent checks and inventory."
+  -
+    author: "CODER"
+    body: "Implementation: Registered native SwRootFrame/derived Root format and source sibling root propagation; original view initialization order repaired, targeted evidence and inventory pass."
 events:
   -
     type: "status"
@@ -35,8 +62,21 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: Restore native registered Root subtype, original derived frame format lifecycle and source constructor root propagation; preserve device and conscious IO boundaries with targeted upstream-absent checks and inventory."
+  -
+    type: "status"
+    at: "2026-10-10T20:16:05.277Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+    note: "Implementation: Registered native SwRootFrame/derived Root format and source sibling root propagation; original view initialization order repaired, targeted evidence and inventory pass."
+  -
+    type: "verify"
+    at: "2026-10-10T20:16:06.163Z"
+    author: "CODER"
+    state: "ok"
+    note: "Actual13948related/501 and23Chromium/12 pass;7fresh native core/React. Entire5modules Istanbul618lines680statements160functions503branches100 all-four,1343nonnegative raw counters and1156current complete hashes.816old acceptance files byte-identical,10canonical historical prefixes preserved,9metadata gates pass. Runtime/static/build/browser upstream-absent finally restored. Native view-order production failure repaired in authorized scope. Doc format registry/Undo/full hierarchy/query/flags/geometry incomplete and explicit; same-agent exact semantic review follows."
 doc_version: 3
-doc_updated_at: "2026-10-10T20:15:05.125Z"
+doc_updated_at: "2026-10-10T20:16:06.218Z"
 doc_updated_by: "CODER"
 description: "Correction6/10 after BZ14P4: make current Writer layout root an original SwLayoutFrame with native Root discriminator/own derived frame format, restore source constructor mpRoot propagation through actual frames and document/view lifecycle; preserve browser device and registered I/O boundaries."
 sections:
@@ -77,6 +117,39 @@ sections:
     Evidence: all816old acceptance files byte-identical, including all old cases/matrices/device inputs/matcher arguments;10canonical historical prefixes/semantic statuses/defaults/classifications/source responsibilities retained. Eight original pinned source hashes unchanged. No source/helpers/Python/raw maps/logs in AP artifacts; no network, publication or subagents.
 
     Residual gaps: Root own-format construction uses original SwFrameFormat directly; SwDoc MakeFrameFormat/DelFrameFormat registry/modified-state/creation-deletion Undo, complete root/view flags, page/body/content hierarchy and table-frame root propagation/native GetFrameOfModify/GetAdjFrameAtPos/merged/vertical/native geometry/flow flags/redlines/text callbacks/rich units/global Repeat remain incomplete or unverified. Actual cursor margin still uses measured cursor map/MoveTextFrameMargin. Existing browser document-shell callback and registered recovery/open/save/settings deviations preserved. Same-agent non-independent exact semantic quality and final clean writer/restored refs required for closure.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-10T20:16:06.163Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Actual13948related/501 and23Chromium/12 pass;7fresh native core/React. Entire5modules Istanbul618lines680statements160functions503branches100 all-four,1343nonnegative raw counters and1156current complete hashes.816old acceptance files byte-identical,10canonical historical prefixes preserved,9metadata gates pass. Runtime/static/build/browser upstream-absent finally restored. Native view-order production failure repaired in authorized scope. Doc format registry/Undo/full hierarchy/query/flags/geometry incomplete and explicit; same-agent exact semantic review follows.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T20:16:05.277Z, excerpt_hash=sha256:698163e57453a19fe87489326a45e3326476d03b05886c56527ea6e1f359df3c
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610101959-1ZNFNB/blueprint/resolved-snapshot.json
+    - old_digest: 7c42070641cb9ced4fc175a2c61898bc70bc887b44a35fdece71178ca599751f
+    - current_digest: 7c42070641cb9ced4fc175a2c61898bc70bc887b44a35fdece71178ca599751f
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610101959-1ZNFNB
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610101959-1ZNFNB
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task semantic commit; preserve other task history and conscious I/O exceptions. No external publication."
   Findings: |-
     Command: fresh native root core/React acceptance. Result:6core pass,1React fail. Evidence: SwView field initialization invoked root constructor before the TypeScript parameter property docShell was assigned, causing undefined.GetDoc. Resolution: add only causally required view.ts initialization-order fix and its2canonical records within the already authorized existing Writer root/view lifecycle; move original root creation into the constructor after document shell registration. Scope stays one root-ownership correction,5production/10canonical, identical100%/acceptance criteria. Source vnew.cxx constructs native root after mxDoc binding. No external/security change, old tests/expected values unchanged.
@@ -137,6 +210,39 @@ Command: npm run inventory:registry:build; npm run check:source-tree; npm run ch
 Evidence: all816old acceptance files byte-identical, including all old cases/matrices/device inputs/matcher arguments;10canonical historical prefixes/semantic statuses/defaults/classifications/source responsibilities retained. Eight original pinned source hashes unchanged. No source/helpers/Python/raw maps/logs in AP artifacts; no network, publication or subagents.
 
 Residual gaps: Root own-format construction uses original SwFrameFormat directly; SwDoc MakeFrameFormat/DelFrameFormat registry/modified-state/creation-deletion Undo, complete root/view flags, page/body/content hierarchy and table-frame root propagation/native GetFrameOfModify/GetAdjFrameAtPos/merged/vertical/native geometry/flow flags/redlines/text callbacks/rich units/global Repeat remain incomplete or unverified. Actual cursor margin still uses measured cursor map/MoveTextFrameMargin. Existing browser document-shell callback and registered recovery/open/save/settings deviations preserved. Same-agent non-independent exact semantic quality and final clean writer/restored refs required for closure.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-10T20:16:06.163Z — VERIFY — ok
+
+By: CODER
+
+Note: Actual13948related/501 and23Chromium/12 pass;7fresh native core/React. Entire5modules Istanbul618lines680statements160functions503branches100 all-four,1343nonnegative raw counters and1156current complete hashes.816old acceptance files byte-identical,10canonical historical prefixes preserved,9metadata gates pass. Runtime/static/build/browser upstream-absent finally restored. Native view-order production failure repaired in authorized scope. Doc format registry/Undo/full hierarchy/query/flags/geometry incomplete and explicit; same-agent exact semantic review follows.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T20:16:05.277Z, excerpt_hash=sha256:698163e57453a19fe87489326a45e3326476d03b05886c56527ea6e1f359df3c
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610101959-1ZNFNB/blueprint/resolved-snapshot.json
+- old_digest: 7c42070641cb9ced4fc175a2c61898bc70bc887b44a35fdece71178ca599751f
+- current_digest: 7c42070641cb9ced4fc175a2c61898bc70bc887b44a35fdece71178ca599751f
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610101959-1ZNFNB
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610101959-1ZNFNB
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
