@@ -1,10 +1,11 @@
 ---
 id: "202610100007-HM2YX4"
 title: "Restore native LR margin UNO value contracts"
-status: "DOING"
+result_summary: "Restore native LR margin UNO values and header ownership with complete current coverage"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -50,6 +51,9 @@ comments:
   -
     author: "CODER"
     body: "Start: bind verified native LR values, header ownership and complete current coverage evidence to exact final semantic state012fa4967c14 before quality close."
+  -
+    author: "CODER"
+    body: "Verified: original LR twip-backed UNO QueryValue/PutValue and native header-owned declaration now match pinned represented contracts.1089related57fresh24Chromium,actual whole2module Istanbul100all-four,9statics9restored metadata and exact-SHA same-agent review passed. Inventory ownership and source-backed acceptance history retained; goal incomplete6/10,upstream restored."
 events:
   -
     type: "status"
@@ -89,8 +93,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Exact012fa4967c14 same-agent/non-independent quality pass is recorded. Final2native source hashes remain implementatione829330, whole current actual Istanbul100all-four1089related57fresh24Chromium9statics9restored metadata pass.1ownership metadata relocation and closedZJJ73M2source-backed acceptance fixes proven,other642tests/history/defaults unchanged. Upstream restored,goal incomplete,cadence6/10."
+  -
+    type: "status"
+    at: "2026-10-10T00:31:30.270Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: original LR twip-backed UNO QueryValue/PutValue and native header-owned declaration now match pinned represented contracts.1089related57fresh24Chromium,actual whole2module Istanbul100all-four,9statics9restored metadata and exact-SHA same-agent review passed. Inventory ownership and source-backed acceptance history retained; goal incomplete6/10,upstream restored."
 doc_version: 3
-doc_updated_at: "2026-10-10T00:31:28.380Z"
+doc_updated_at: "2026-10-10T00:31:30.272Z"
 doc_updated_by: "CODER"
 description: "Atomic task5/10 after BZQGYC: port pinned SvxLRSpaceItem twip-backed QueryValue/PutValue members including complete margin scale, relative metadata, signed conversion, native input admission and hanging-indent ordering; preserve unsupported font-unit scope. Enables later lossless native LR table transport without private-field adapters. Existing approval continues writer parity goal."
 sections:
@@ -208,6 +219,10 @@ sections:
     - Observation: Correction to preliminary regression diagnosis: pinned SvXMLExportItemMapper::GetItem uses GetItemState(which,false); SwXMLExport::ExportFormat asserts frame parent is absent/default and exports no inherited table style. Existing native direct-item exporter is source-correct; two old inherited ODF expectations require exact source-backed acceptance migrations, not production flattening.
       Impact: Avoid introducing an unsupported table geometry/ODF parent adapter to satisfy obsolete test expectations. Header partition remains native LR task scope.
       Resolution: Separate atomic acceptance leaf ZJJ73M corrects only inherited ODF assertions while retaining direct export/mounted/native history expectations. Then resume current-source two-module LR coverage and closure.
+extensions:
+  implementation_commit:
+    hash: "012fa4967c149abb37796669f253da9f69dbc24c"
+    message: "🧩 HM2YX4 writer: record verified native LR property contract"
 id_source: "generated"
 ---
 ## Summary
