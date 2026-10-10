@@ -1,10 +1,11 @@
 ---
 id: "202610101342-SSE4NF"
 title: "Prioritize Calc UI prerequisites and port original cell type and text metadata"
-status: "DOING"
+result_summary: "verified-202610101342-SSE4NF"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 22
+revision: 26
 origin:
   system: "manual"
 depends_on: []
@@ -21,9 +22,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-10T13:59:27.941Z"
+  updated_at: "2026-10-10T14:01:45.654Z"
   updated_by: "CODER"
-  note: "Native complete metadata/enum capture and absent-upstream Calc106/shared1 tests pass; actual four-metric100 with raw counters, all declared source/inventory/static gates pass; journal preserved and renamed. Full cadence1/10, next41. See task32 audit/manifests."
+  note: "verified-202610101342-SSE4NF"
   attempts: 0
 quality_review:
   state: "pass"
@@ -48,11 +49,16 @@ quality_review:
   findings:
     - "Exact original default constructor/declarations and implicit scalar value semantics retained at header/core-data boundaries; Calc reuses shared svl script tags. All154 sequences/1232 full three-owner states and original source/scope hashes retained."
     - "Actual Calc106/24 and shared1/1 tests pass under absent upstream with exact restore; all four coverage metrics100 and raw present counters positive. Declared gates, registry atomic records and journal31-entry preservation pass. No Writer/config/assertion weakening or full-suite run at task1/10."
-commit: null
+commit:
+  hash: "ceeeb506db5505c62b75b140187487eca2c715af"
+  message: "🔎 SSE4NF evaluate: certify original cell metadata and scoped coverage"
 comments:
   -
     author: "CODER"
     body: "Start: implement original cell metadata and shared script discriminator, record UI-first dependency order and explicitly requested Calc journal rename; native/scoped checks and inventories, no mocks or Writer edits."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610101342-SSE4NF. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -67,8 +73,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native complete metadata/enum capture and absent-upstream Calc106/shared1 tests pass; actual four-metric100 with raw counters, all declared source/inventory/static gates pass; journal preserved and renamed. Full cadence1/10, next41. See task32 audit/manifests."
+  -
+    type: "verify"
+    at: "2026-10-10T14:01:45.654Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610101342-SSE4NF"
+  -
+    type: "status"
+    at: "2026-10-10T14:01:45.804Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610101342-SSE4NF. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-10T13:59:27.997Z"
+doc_updated_at: "2026-10-10T14:02:21.783Z"
 doc_updated_by: "CODER"
 description: "User-authorized reordered core work for first real Calc UI: value/text prerequisites, storage write and cell owners, column/table/document, edit notifications/undo, then view/input. Implement original CellType, CellTextAttr defaults and shared SvtScriptType at original boundaries; native differential complete field/copy/assignment/narrowing evidence, inventories and roadmap. Calc branch only, reuse shared owners, no temporary document/UI model. First task since the requested full task31 run; next scheduled full after ten completed tasks."
 sections:
@@ -111,6 +130,36 @@ sections:
     - freshness: route=computed_local remote=remote_skipped
     - repeat_allowed: false
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-10T14:01:45.654Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610101342-SSE4NF
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T13:59:27.997Z, excerpt_hash=sha256:2747e2bd9f71a8aea3fb1394107c0af8d6a69863f005f418efdab5986f5b2b2f
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610101342-SSE4NF/blueprint/resolved-snapshot.json
+    - old_digest: f8bd16df9f0ba17b91d771d3b25b9a805f0b7b719fcfd419b9adc2c8ef14f0c9
+    - current_digest: f8bd16df9f0ba17b91d771d3b25b9a805f0b7b719fcfd419b9adc2c8ef14f0c9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610101342-SSE4NF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610101342-SSE4NF --result verified-202610101342-SSE4NF --commit ceeeb506db5505c62b75b140187487eca2c715af
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
     <!-- END VERIFICATION RESULTS -->
@@ -168,6 +217,21 @@ sections:
     - Journal: every original entry/body byte retained, only title changes; all current docs/registry references use calc-upstream-suspected-issues.md. Historical finished-task references remain immutable.
     - Atomic inventory: independent CellType tags and CellTextAttr defaults/value metadata receive separate Calc capabilities, with one shared SvtScriptType capability. This preserves the planned source scope and exhaustive atomic records rather than aggregating separate contracts. Whole-module semantic/default/parity flags remain unverified.
     - Full cadence: task32 is1/10 since actual full task31; next scheduled full task41. No full suite run, no configuration/threshold/timeout/assertion/data reduction. Goal active after explicit resume; UI prerequisite spine updated.
+
+    Command: exact route task complete with recorded commitceeeb506db5505c62b75b140187487eca2c715af.
+    Result: exit5 after authoritative task status became DONE.
+    Evidence: installed deterministic close subject was rejected as too generic (E_GIT); only the current task artifact tail remained staged. Implementation and EVALUATOR quality commits are intact.
+    Scope: lifecycle artifact cleanup only.
+    Resolution: recomputed route direct_done_pending_artifact_commit and follow its exact close command; if the same subject rejection recurs, use the documented explicit scoped commit fallback with a descriptive task subject. No history rewrite, policy change or implementation edit.
+
+    Command: exact route agentplane commit --close --unstage-others.
+    Result: exit5, same installed generic-subject rejection; task remains DONE pending artifact commit.
+    Evidence: recomputed route confirms only this active task README needs cleanup.
+    Resolution: explicit ap commit with task-specific descriptive subject and --allow-tasks, staging only current task artifacts.
+extensions:
+  implementation_commit:
+    hash: "0206d33c1077ef869f6f89e4e544032230db05ee"
+    message: "✨ SSE4NF implement: port original cell metadata and Calc UI prerequisites"
 id_source: "generated"
 ---
 ## Summary
@@ -221,6 +285,36 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-10T14:01:45.654Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610101342-SSE4NF
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T13:59:27.997Z, excerpt_hash=sha256:2747e2bd9f71a8aea3fb1394107c0af8d6a69863f005f418efdab5986f5b2b2f
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610101342-SSE4NF/blueprint/resolved-snapshot.json
+- old_digest: f8bd16df9f0ba17b91d771d3b25b9a805f0b7b719fcfd419b9adc2c8ef14f0c9
+- current_digest: f8bd16df9f0ba17b91d771d3b25b9a805f0b7b719fcfd419b9adc2c8ef14f0c9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610101342-SSE4NF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610101342-SSE4NF --result verified-202610101342-SSE4NF --commit ceeeb506db5505c62b75b140187487eca2c715af
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
@@ -283,3 +377,14 @@ Task32 verification evidence:
 - Journal: every original entry/body byte retained, only title changes; all current docs/registry references use calc-upstream-suspected-issues.md. Historical finished-task references remain immutable.
 - Atomic inventory: independent CellType tags and CellTextAttr defaults/value metadata receive separate Calc capabilities, with one shared SvtScriptType capability. This preserves the planned source scope and exhaustive atomic records rather than aggregating separate contracts. Whole-module semantic/default/parity flags remain unverified.
 - Full cadence: task32 is1/10 since actual full task31; next scheduled full task41. No full suite run, no configuration/threshold/timeout/assertion/data reduction. Goal active after explicit resume; UI prerequisite spine updated.
+
+Command: exact route task complete with recorded commitceeeb506db5505c62b75b140187487eca2c715af.
+Result: exit5 after authoritative task status became DONE.
+Evidence: installed deterministic close subject was rejected as too generic (E_GIT); only the current task artifact tail remained staged. Implementation and EVALUATOR quality commits are intact.
+Scope: lifecycle artifact cleanup only.
+Resolution: recomputed route direct_done_pending_artifact_commit and follow its exact close command; if the same subject rejection recurs, use the documented explicit scoped commit fallback with a descriptive task subject. No history rewrite, policy change or implementation edit.
+
+Command: exact route agentplane commit --close --unstage-others.
+Result: exit5, same installed generic-subject rejection; task remains DONE pending artifact commit.
+Evidence: recomputed route confirms only this active task README needs cleanup.
+Resolution: explicit ap commit with task-specific descriptive subject and --allow-tasks, staging only current task artifacts.
