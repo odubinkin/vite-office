@@ -1,0 +1,527 @@
+{
+  "status": "pass",
+  "taskId": "202610101340-HB1SPN",
+  "goalStatus": "active-incomplete",
+  "cadenceAfterClose": "1/10 after accepted full N337G1",
+  "fullRun": false,
+  "upstreamPin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "referenceSymlinkRestored": true,
+  "upstreamAbsentForAllRuntimeChecks": true,
+  "mddsReferenceAbsentDuringRuntimeChecks": true,
+  "ignoredMddsReferenceLinkedOnlyForMetadata": true,
+  "sourceContract": "Pinned first13/right14/left15 units; original native query and setter sides, lifetime/context order unchanged.",
+  "coverage": {
+    "status": "pass",
+    "sourceHashes": {
+      "apps/office/src/editeng/inc/lrspitem.ts": "a88eb21a43fc6912fb002de41acf8a467a024d06ccaf68d41fc46dd69bcc8c34",
+      "apps/office/src/editeng/inc/memberids.ts": "a6aa28c48f6c9e7de976deeb4e754db9e49e13685442d90a1aee87ac26b3fcbc"
+    },
+    "actualWholeChangedModules": {
+      "lines": {
+        "total": 172,
+        "covered": 172,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 182,
+        "covered": 182,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 49,
+        "covered": 49,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 153,
+        "covered": 153,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "perModule": {
+      "apps/office/src/editeng/inc/lrspitem.ts": {
+        "lines": {
+          "total": 169,
+          "covered": 169,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 49,
+          "covered": 49,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 179,
+          "covered": 179,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 153,
+          "covered": 153,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "apps/office/src/editeng/inc/memberids.ts": {
+        "lines": {
+          "total": 3,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 3,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    "completeMapCardinality": true,
+    "zeroNegativeCounters": true,
+    "exactActualModules": 2,
+    "instrumentedEntries": 292,
+    "noMapOrCounterFiltering": true,
+    "noEarlierTaskReuse": true,
+    "allCases": 154,
+    "files": 11,
+    "freshCases": 22,
+    "rawMapSha256": "d89574ad02af15fc9a0b3c32931ff5b7794dbbf7e540128547f58de6a3fe7b9e",
+    "rawReportSha256": "00dfd656f11c10ed6df02e16d7ea2dddfe4c368ab8dc79dc8d29d64a55ca1970",
+    "passingReplayForHelperRepairs": 0
+  },
+  "unitChecks": [
+    {
+      "label": "related-native-members",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer/apps/office",
+      "args": [
+        "run",
+        "test:coverage",
+        "--",
+        "src/editeng/source/items/frmitems.test.ts",
+        "src/editeng/source/items/native-lr-space-item.test.ts",
+        "src/editeng/source/items/native-lr-space-value.test.ts",
+        "src/editeng/source/items/native-lr-font-units.test.ts",
+        "src/sw/source/core/table/native-table-lr-item.test.ts",
+        "src/sw/source/core/table/native-table-lr-value.test.ts",
+        "src/sw/source/core/table/native-table-lr-font-items.test.ts",
+        "src/sw/source/core/undo/native-table-lr-history.test.ts",
+        "src/sw/browser/editor/native-table-lr-items.test.tsx",
+        "src/sw/browser/presentation/writer-view-ruler-indent-items.test.tsx",
+        "src/sw/source/core/table/native-lr-member-routing.test.ts",
+        "--coverage.include=src/editeng/inc/lrspitem.ts",
+        "--coverage.include=src/editeng/inc/memberids.ts",
+        "--coverage.reportOnFailure",
+        "--reporter=default",
+        "--reporter=json",
+        "--outputFile=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/HB1SPN/related-native-members-tests.json",
+        "--coverage.reportsDirectory=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/HB1SPN/related-native-members-coverage"
+      ],
+      "status": 0,
+      "upstreamAbsent": true
+    }
+  ],
+  "initialStaticChecks": [
+    {
+      "label": "format-check",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "format:check"
+      ],
+      "status": 0,
+      "upstreamAbsent": true
+    },
+    {
+      "label": "lint",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "lint"
+      ],
+      "status": 0,
+      "upstreamAbsent": true
+    },
+    {
+      "label": "typecheck",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "typecheck"
+      ],
+      "status": 1,
+      "upstreamAbsent": true
+    }
+  ],
+  "finalStaticChecks": [
+    {
+      "label": "format-check",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "format:check"
+      ],
+      "status": 0,
+      "upstreamAbsent": true
+    },
+    {
+      "label": "lint",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "lint"
+      ],
+      "status": 0,
+      "upstreamAbsent": true
+    },
+    {
+      "label": "fresh-format",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "prettier",
+        "--check",
+        "apps/office/src/sw/source/core/table/native-lr-member-routing.test.ts",
+        "docs/program/writer-upstream-suspected-issues.md"
+      ],
+      "status": 0,
+      "upstreamAbsent": true
+    },
+    {
+      "label": "fresh-lint",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "eslint",
+        "apps/office/src/sw/source/core/table/native-lr-member-routing.test.ts",
+        "--max-warnings",
+        "0"
+      ],
+      "status": 0,
+      "upstreamAbsent": true
+    },
+    {
+      "label": "typecheck",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "typecheck"
+      ],
+      "status": 0,
+      "upstreamAbsent": true
+    },
+    {
+      "label": "check-dependencies",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "check:dependencies"
+      ],
+      "status": 0,
+      "upstreamAbsent": true
+    },
+    {
+      "label": "check-docs",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "check:docs"
+      ],
+      "status": 0,
+      "upstreamAbsent": true
+    },
+    {
+      "label": "check-file-size",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "check:file-size"
+      ],
+      "status": 0,
+      "upstreamAbsent": true
+    },
+    {
+      "label": "current-build",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "build"
+      ],
+      "status": 0,
+      "upstreamAbsent": true
+    },
+    {
+      "label": "static-build",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "node",
+        "scripts/check-static-build.mjs"
+      ],
+      "status": 0,
+      "upstreamAbsent": true
+    },
+    {
+      "label": "review-browser",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "playwright",
+        "test",
+        "--config",
+        "apps/office/playwright.config.ts",
+        "--project=writer",
+        "writer-native-table-column-drag.spec.ts",
+        "writer-native-table-text-flow-headline.spec.ts",
+        "writer-table-properties-history.spec.ts",
+        "writer-native-cell-alignment.spec.ts",
+        "writer-table-alignment.spec.ts",
+        "--reporter=list,json"
+      ],
+      "status": 0,
+      "upstreamAbsent": true
+    }
+  ],
+  "metadataChecks": [
+    {
+      "label": "registry-build",
+      "bin": "npm",
+      "args": [
+        "run",
+        "inventory:registry:build"
+      ],
+      "status": 0,
+      "rawHash": "f941feea056f9f9125ac8a96978ff0fda711beef74563b36c553fc89490f0209",
+      "metadataOnly": true
+    },
+    {
+      "label": "source-tree",
+      "bin": "npm",
+      "args": [
+        "run",
+        "check:source-tree"
+      ],
+      "status": 0,
+      "rawHash": "6c5bd2e3c84892b8cc26b8b1b5f06a950891f9d5988a8ef1f1496f0c252cd33e",
+      "metadataOnly": true
+    },
+    {
+      "label": "source-provenance",
+      "bin": "npm",
+      "args": [
+        "run",
+        "check:source-provenance"
+      ],
+      "status": 0,
+      "rawHash": "359dab860a727a8600a8a5a97b7a513e7c6675e2affb0af67dc9e9910c78aa0a",
+      "metadataOnly": true
+    },
+    {
+      "label": "registry-check",
+      "bin": "npm",
+      "args": [
+        "run",
+        "inventory:registry:check"
+      ],
+      "status": 0,
+      "rawHash": "308ddc3dca002e29ad1bc367c543f03905bd0384eca113a2548cc1256dcbba76",
+      "metadataOnly": true
+    },
+    {
+      "label": "writer-resources",
+      "bin": "node_modules/.bin/tsx",
+      "args": [
+        "scripts/generate-writer-ui-resources.ts",
+        "--check"
+      ],
+      "status": 0,
+      "rawHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "metadataOnly": true
+    },
+    {
+      "label": "inventory-invariants",
+      "bin": "npm",
+      "args": [
+        "run",
+        "inventory:invariants"
+      ],
+      "status": 0,
+      "rawHash": "6fd5fbfd931b6cce1ae24aac72188f71c2d6a8e741f3743b1864274d69c3d624",
+      "metadataOnly": true
+    },
+    {
+      "label": "inventory-parity",
+      "bin": "npm",
+      "args": [
+        "run",
+        "inventory:parity"
+      ],
+      "status": 0,
+      "rawHash": "5d144a5b9b2b7b3c43b9e42a2d3b307915a8b23f83eac1edb5487e708d1cc0ac",
+      "metadataOnly": true
+    },
+    {
+      "label": "routing",
+      "bin": "node",
+      "args": [
+        ".agentplane/policy/check-routing.mjs"
+      ],
+      "status": 0,
+      "rawHash": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9",
+      "metadataOnly": true
+    },
+    {
+      "label": "doctor",
+      "bin": "ap",
+      "args": [
+        "doctor"
+      ],
+      "status": 0,
+      "rawHash": "9744dbac51978eeb7936769f16fb78f59bfd0d19b2252a0cb8ef0e52b238cd22",
+      "metadataOnly": true
+    }
+  ],
+  "sourceIdMetadata": {
+    "status": "pass",
+    "metadataOnly": true,
+    "testReadsUpstream": false,
+    "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+    "header": "vendor/libreoffice-reference/include/editeng/memberids.h",
+    "headerSha256": "4ee05fffe641223f6bfd4f4fab6fa9df1acf67f9f3029d4a27af3ec74c0e0bd1",
+    "implementation": "vendor/libreoffice-reference/editeng/source/items/frmitems.cxx",
+    "implementationSha256": "0a506d3769fe82ebe1272e5dda128f082d775d3eda7280911b5e8df78557754f",
+    "local": "apps/office/src/editeng/inc/memberids.ts",
+    "localSha256": "a6aa28c48f6c9e7de976deeb4e754db9e49e13685442d90a1aee87ac26b3fcbc",
+    "constants": {
+      "MID_FIRST_LINE_UNIT_INDENT": 13,
+      "MID_R_UNIT_MARGIN": 14,
+      "MID_L_UNIT_MARGIN": 15
+    },
+    "identifiersCompared": 3,
+    "actualQueryAndSetterRoutingChecked": true
+  },
+  "suspectedSourceDocument": {
+    "status": "pass",
+    "document": "docs/program/writer-upstream-suspected-issues.md",
+    "documentSha256": "a3863d1fcb81d8cbf92691f6925ca26428180d4c65f6e76d593dba3a09e4a82d",
+    "formatReference": "docs/program/upstream-suspected-issues.md",
+    "localEvidenceLinks": 3,
+    "exactPinnedSourceLines": [
+      738,
+      775,
+      862
+    ],
+    "upstreamImplementationSha256": "0a506d3769fe82ebe1272e5dda128f082d775d3eda7280911b5e8df78557754f",
+    "caseIds": [
+      "WRITER-001"
+    ],
+    "nativeCompiledDifferentialClaim": false,
+    "suspiciousBehaviorPreserved": true,
+    "externalPublication": false
+  },
+  "freshTypeOnlyEquivalence": {
+    "status": "pass",
+    "path": "apps/office/src/sw/source/core/table/native-lr-member-routing.test.ts",
+    "compilerAPI": "6.0.3",
+    "beforeSha256": "731aaef148885eccab7bd0f06fcb795b960d08cd6e3f9537049f30cc08a67a0e",
+    "currentSha256": "dc397af0c9f7c58830b33798cfa94d18b13862f6266fe4ac7aa8ff858b2ef217",
+    "identicalCompiledRuntime": true,
+    "compiledRuntimeSha256": "9a7a521d37c8b43b09a29b48111232e319b80b88e142b7444fff13f57913dd9d",
+    "change": "Explicit numeric mutable pair type widens literal19 so the unchanged post-call value9 mutation typechecks.",
+    "passingTestReplay": 0
+  },
+  "browser": {
+    "startTime": "2026-10-10T13:49:53.878Z",
+    "duration": 20819.687,
+    "expected": 24,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0,
+    "reportSha256": "fde0cabd2a81f3ca797bf488aaeeb40e9174ebe78ccd1889e83fd95530824fe0"
+  },
+  "preservation": {
+    "status": "pass",
+    "originalPaths": 8975,
+    "unchangedOriginalPaths": 8969,
+    "changedOriginalPaths": [
+      ".agentplane/tasks/202609240501-C9TN6M/README.md",
+      "apps/office/src/editeng/inc/lrspitem.ts",
+      "apps/office/src/editeng/source/items/native-lr-font-units.test.ts",
+      "apps/office/src/sw/source/core/table/native-table-lr-font-items.test.ts",
+      "docs/program/registry/shared/provenance/editeng/inc/lrspitem.ts.json",
+      "docs/program/registry/shared/runtime/editeng/inc/lrspitem.ts.json"
+    ],
+    "oldTestFiles": 677,
+    "oldTestsByteIdentical": 675,
+    "exactMigratedOldFiles": 2,
+    "exactWrongSideSelectors": 1,
+    "exactNativeRightQueryIdentifiers": 2,
+    "originalCaseExpectedMeasuresAndSiblingHistoryAssertionsRetained": true,
+    "canonicalHistoricalPrefixes": 2,
+    "newCanonicalRecords": 2,
+    "parentFindingsPrefixPreserved": true
+  },
+  "canonicalRecords": [
+    "docs/program/registry/shared/runtime/editeng/inc/lrspitem.ts.json",
+    "docs/program/registry/shared/provenance/editeng/inc/lrspitem.ts.json",
+    "docs/program/registry/shared/runtime/editeng/inc/memberids.ts.json",
+    "docs/program/registry/shared/provenance/editeng/inc/memberids.ts.json"
+  ],
+  "freshTestHash": "dc397af0c9f7c58830b33798cfa94d18b13862f6266fe4ac7aa8ff858b2ef217",
+  "runtimeFailures": 0,
+  "passingReplayForHelperTypeOrMetadataRepairs": 0,
+  "failedChecks": [
+    {
+      "label": "typecheck",
+      "reason": "Fresh inferred unit literal19 rejected its later value9 mutation.",
+      "resolution": "Explicit mutable numeric pair type; compiled runtime identical; no tests replay."
+    },
+    {
+      "label": "source-provenance",
+      "reason": "Calc merge requires ignored mdds reference absent in Writer checkout.",
+      "resolution": "Link already existing vite-office mdds reference under standing upstream-link authorization after runtime acceptance; rerun only failed/pending metadata."
+    }
+  ],
+  "registeredRecoveryOpenSaveSettingsDeviationsUnchanged": true,
+  "noUpstreamSourcesHelpersPythonOrRawMapsInAgentPlane": true,
+  "rawEvidenceLocation": "Ignored apps/office/node_modules/.cache/parity-coverage/HB1SPN/",
+  "doctor": {
+    "errors": 0,
+    "existingWarnings": 2
+  },
+  "remaining": [
+    "Native arbitrary LR graph/JSON transport",
+    "Typed paragraph margin contracts",
+    "Inherited native frame/row/box transport",
+    "Broader list/table/layout/filter/hash/presentation/UNO/VCL parity"
+  ]
+}

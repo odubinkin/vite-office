@@ -57,10 +57,10 @@ it("original table typed LR units survive complete ItemSet and three actual hist
     for (let cycle = 0; cycle < 3; cycle++) {
       expect(shell.Undo()).toBe(true);
       expect(frame.GetLRSpace()).toEqual(before);
-      expect(frame.GetLRSpace().QueryValue(15)).toEqual({ First: 1.25, Second: U.FONT_EM });
+      expect(frame.GetLRSpace().QueryValue(14)).toEqual({ First: 1.25, Second: U.FONT_EM });
       expect(shell.Redo()).toBe(true);
       expect(frame.GetLRSpace()).toEqual(after);
-      expect(frame.GetLRSpace().QueryValue(15)).toEqual({
+      expect(frame.GetLRSpace().QueryValue(14)).toEqual({
         First: 1.25,
         Second: U.FONT_CJK_ADVANCE,
       });

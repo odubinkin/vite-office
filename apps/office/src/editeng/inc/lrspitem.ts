@@ -2,6 +2,7 @@
 import { SfxPoolItem } from "../../svl/source/items/poolitem";
 import { MeasureUnit } from "../../offapi/com/sun/star/util/MeasureUnit";
 import { roundBorderMetric } from "../source/items/borderline";
+import { MID_FIRST_LINE_UNIT_INDENT, MID_R_UNIT_MARGIN, MID_L_UNIT_MARGIN } from "./memberids";
 
 /** Resolves original em/ic units with native zero/uninitialized defaults. */
 export class SvxFontUnitMetrics {
@@ -342,12 +343,12 @@ export class SvxLRSpaceItem extends SfxPoolItem {
         return absolute(this.GetTextLeft());
       case 12:
         return metric(this.GetGutterMargin());
-      case 13:
+      case MID_FIRST_LINE_UNIT_INDENT:
         return relative(this.GetTextFirstLineOffset());
-      case 14:
-        return relative(this.GetTextLeft());
-      case 15:
+      case MID_R_UNIT_MARGIN:
         return relative(this.GetRight());
+      case MID_L_UNIT_MARGIN:
+        return relative(this.GetTextLeft());
       default:
         return undefined;
     }
@@ -393,7 +394,7 @@ export class SvxLRSpaceItem extends SfxPoolItem {
       this.SetAutoFirst(typeof value === "boolean" ? value : integer(value) && value !== 0);
       return true;
     }
-    if (id === 13 || id === 14 || id === 15) {
+    if (id === MID_FIRST_LINE_UNIT_INDENT || id === MID_R_UNIT_MARGIN || id === MID_L_UNIT_MARGIN) {
       if (value === null || typeof value !== "object" || Array.isArray(value)) return false;
       const pair = value as Record<string, unknown>;
       if (
@@ -404,9 +405,9 @@ export class SvxLRSpaceItem extends SfxPoolItem {
       )
         return false;
       const indent = new SvxIndentValue(pair.First, pair.Second);
-      if (id === 13) this.SetTextFirstLineOffset(indent);
-      else if (id === 14) this.SetTextLeft(indent);
-      else this.SetRight(indent);
+      if (id === MID_FIRST_LINE_UNIT_INDENT) this.SetTextFirstLineOffset(indent);
+      else if (id === MID_R_UNIT_MARGIN) this.SetRight(indent);
+      else this.SetTextLeft(indent);
       return true;
     }
     if (!integer(value)) return false;

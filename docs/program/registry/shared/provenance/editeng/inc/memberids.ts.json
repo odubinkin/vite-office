@@ -1,0 +1,61 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/editeng/inc/memberids.ts",
+          "marker": "MID_FIRST_LINE_UNIT_INDENT"
+        },
+        {
+          "path": "apps/office/src/editeng/inc/memberids.ts",
+          "marker": "MID_R_UNIT_MARGIN"
+        },
+        {
+          "path": "apps/office/src/editeng/inc/memberids.ts",
+          "marker": "MID_L_UNIT_MARGIN"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/table/native-lr-member-routing.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/include/editeng/memberids.h",
+          "marker": "MID_FIRST_LINE_UNIT_INDENT"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/editeng/memberids.h",
+          "marker": "MID_R_UNIT_MARGIN"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/editeng/memberids.h",
+          "marker": "MID_L_UNIT_MARGIN"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/editeng/inc/memberids.ts",
+    "localSymbols": [
+      "MID_FIRST_LINE_UNIT_INDENT",
+      "MID_R_UNIT_MARGIN",
+      "MID_L_UNIT_MARGIN"
+    ],
+    "omittedResponsibilities": [
+      "All other native member identifiers remain outside this represented primitive; full native header is not claimed."
+    ],
+    "preservedResponsibilities": [
+      "CorrectionHB1SPN (1/10 after accepted full N337G1): pinned memberids.h defines first-line unit13, right unit14 and text-left unit15. Earlier LR implementation and two acceptance observers swapped14/15; queries and PutValue now target original sides using exactly three published native constants under matching memberids.h owner. Native setter order, stable references, doubles/units, proportions/gutters/flags and legacy scalar boundaries unchanged. Two exact old-file migrations only correct wrong side-ID observers; fresh concrete mixed-side, conversion, malformed atomic and native table three-cycle history acceptance prevents symmetric-roundtrip false positives. Remaining whole native LR marshaling/paragraph/hash/presentation/general UNO/VCL gaps remain unverified; prior canonical history/status/default/classification/IO exceptions retained.",
+      "VerifiedHB1SPN: pinned first-line13/right14/text-left15 route through native named constants, removing the swapped native protocol. Related/new154/154 cases11files22fresh; both complete changed production modules actual Istanbul100all-four172lines182statements49functions153branches with complete current-source nonnegative maps, no earlier-map reuse/filtering. Exact two historical test migrations alter only one wrong side selector and two right-query IDs, all675other historical test files byte-identical; old expected measures/context/history retained. TS7 repaired only a fresh payload type annotation with identical compiled runtime; no passing tests replay. Static/build/TS7/JSDoc/dependency/file-size and24Chromium cases passed upstream absent; nine restored metadata gates and exact source-ID/Writer observation proofs passed. WRITER-001 in docs/program/writer-upstream-suspected-issues.md records suspicious source empty-font hanging-indent unit loss, preserved unchanged and labelled portable/source proof rather than an unrun native differential. General native LR marshaling/paragraph/UNO/VCL/UI parity remains incomplete; canonical history/status/default/classification/IO exceptions retained. Cadence1/10 after N337G1."
+    ],
+    "status": "mapped",
+    "upstreamPath": "include/editeng/memberids.h",
+    "upstreamSymbols": [
+      "MID_FIRST_LINE_UNIT_INDENT",
+      "MID_R_UNIT_MARGIN",
+      "MID_L_UNIT_MARGIN"
+    ]
+  }
+}
