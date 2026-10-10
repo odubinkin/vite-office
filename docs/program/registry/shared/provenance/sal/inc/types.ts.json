@@ -7,15 +7,18 @@
     "status": "mapped",
     "upstreamPath": "include/sal/types.h",
     "localSymbols": [
+      "SAL_MAX_ENUM",
       "SAL_NO_ACQUIRE",
       "__sal_NoAcquire"
     ],
     "upstreamSymbols": [
-      "__sal_NoAcquire",
-      "SAL_NO_ACQUIRE"
+      "SAL_MAX_ENUM",
+      "SAL_NO_ACQUIRE",
+      "__sal_NoAcquire"
     ],
     "preservedResponsibilities": [
-      "Original OUString runtime lifetime/constructor/copy/move/assignment/clear/getters and complete SharedString value/query contract reuse one shared SAL RTL data/refcount/intern owner. Complete original OUString/SharedString headers and unchanged SharedString cxx compile with32 pinned full source/config/header blobs and31 unchanged RTL dependency scopes. All4424 initialized native owner, both pointer fields, static C++ empty versus C empty versus literal identity, refcounts/length/capacity/logical UTF16/terminators, allocation/free events, query results and held live reference snapshots match portable runtime. Valid native capture also passes ASan/UBSan with identical output. Two original constructor assertions, three original compile-time constructor rejection witnesses and three invalid original lifetime sanitizer diagnoses are retained separately without inventing post-UB golden results. Explicit move factories/destructor calls adapt C++ rvalues/RAII; nullable const-reference query types and stable nonowning WeakMap-backed pointer-slot views adapt reinterpret references without copy/acquire/release. Native const/deleted-overload/template/layout/constant-evaluation enforcement, full OUString search/conversion/format/append APIs, physical pointer ABI/free/dead views, thread concurrency and complete upstream QA remain unverified. SharedString source owns one compiled class with original inline header behaviors; header reexports it instead of defining a duplicate. No Calc-specific strings, allocators or document placeholders."
+      "Original OUString runtime lifetime/constructor/copy/move/assignment/clear/getters and complete SharedString value/query contract reuse one shared SAL RTL data/refcount/intern owner. Complete original OUString/SharedString headers and unchanged SharedString cxx compile with32 pinned full source/config/header blobs and31 unchanged RTL dependency scopes. All4424 initialized native owner, both pointer fields, static C++ empty versus C empty versus literal identity, refcounts/length/capacity/logical UTF16/terminators, allocation/free events, query results and held live reference snapshots match portable runtime. Valid native capture also passes ASan/UBSan with identical output. Two original constructor assertions, three original compile-time constructor rejection witnesses and three invalid original lifetime sanitizer diagnoses are retained separately without inventing post-UB golden results. Explicit move factories/destructor calls adapt C++ rvalues/RAII; nullable const-reference query types and stable nonowning WeakMap-backed pointer-slot views adapt reinterpret references without copy/acquire/release. Native const/deleted-overload/template/layout/constant-evaluation enforcement, full OUString search/conversion/format/append APIs, physical pointer ABI/free/dead views, thread concurrency and complete upstream QA remain unverified. SharedString source owns one compiled class with original inline header behaviors; header reexports it instead of defining a duplicate. No Calc-specific strings, allocators or document placeholders.",
+      "Original C and genuine generated UNO TypeClass enumerators, complete common C type-reference/description record declarations, original really-weak classifier and const reference equality are shared once. Equality retains pointer identity, exact type class/logical length and original terminated Unicode name comparison, including embedded-zero prefixes. The selected SAL Unicode/CompareNormal/NoShortening instantiation retains original unsigned-unit mismatch and prefix comparison magnitudes and null-pointer assertions. Genuine full native SAL/CPPU headers/bodies and generated TypeClass capture33 enumerators,262144 Unicode witness pairs and123904 initialized class/name record comparisons;347 full pinned source blobs and normal/ASan/UBSan output hashes are retained. Fully initialized public C records are const-predicate caller inputs only, not allocation/registry/refcount owner substitutes. Complete type allocation, common-prefix pointer reinterpretation, registration, acquire/release, default UNO exception/Reference/Type/Any ownership, native ABI/concurrency, service/CharClass/SharedStringPool and Calc document/edit/UI remain unfinished; broad parity is unverified. Preserve CALC-039 without normalizing names."
     ],
     "omittedResponsibilities": [
       "Complete OUString algorithms, original compile-time/const enforcement/native ABI/thread and downstream Calc storage/document/UI remain unverified; no fabricated replacement."
@@ -29,12 +32,24 @@
         {
           "path": "apps/office/src/svl/source/misc/sharedstring.test.ts",
           "marker": "matches all original live owner, view, pointer, counter, buffer and allocator observations"
+        },
+        {
+          "path": "apps/office/src/sal/inc/types.ts",
+          "marker": "SAL_MAX_ENUM"
+        },
+        {
+          "path": "apps/office/src/cppu/source/typelib/typelib.test.ts",
+          "marker": "matches all complete native initialized reference comparisons without ownership mutations"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/include/sal/types.h",
           "marker": "__sal_NoAcquire"
+        },
+        {
+          "path": "include/sal/types.h",
+          "marker": "SAL_MAX_ENUM"
         }
       ]
     }

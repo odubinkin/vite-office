@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/cppu/inc/typelib/typedescription.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "uno-type",
+    "capabilityIds": [
+      "CAP-cac66cfc-e803-4581-87c1-33f1eea9c4ad"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/cppu/inc/typelib/typedescription.ts#TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK",
+        "apps/office/src/cppu/source/typelib/typelib.test.ts#matches all complete native initialized reference comparisons without ownership mutations",
+        "include/typelib/typedescription.h#_typelib_TypeDescriptionReference"
+      ],
+      "justification": "Original C and genuine generated UNO TypeClass enumerators, complete common C type-reference/description record declarations, original really-weak classifier and const reference equality are shared once. Equality retains pointer identity, exact type class/logical length and original terminated Unicode name comparison, including embedded-zero prefixes. The selected SAL Unicode/CompareNormal/NoShortening instantiation retains original unsigned-unit mismatch and prefix comparison magnitudes and null-pointer assertions. Genuine full native SAL/CPPU headers/bodies and generated TypeClass capture33 enumerators,262144 Unicode witness pairs and123904 initialized class/name record comparisons;347 full pinned source blobs and normal/ASan/UBSan output hashes are retained. Fully initialized public C records are const-predicate caller inputs only, not allocation/registry/refcount owner substitutes. Complete type allocation, common-prefix pointer reinterpretation, registration, acquire/release, default UNO exception/Reference/Type/Any ownership, native ABI/concurrency, service/CharClass/SharedStringPool and Calc document/edit/UI remain unfinished; broad parity is unverified. Preserve CALC-039 without normalizing names.",
+      "knownViolations": [],
+      "localSymbols": [
+        "_typelib_TypeDescriptionReference",
+        "typelib_TypeDescriptionReference",
+        "_typelib_TypeDescription",
+        "typelib_TypeDescription",
+        "TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "include/typelib/typedescription.h",
+      "upstreamSymbols": [
+        "_typelib_TypeDescriptionReference",
+        "typelib_TypeDescriptionReference",
+        "_typelib_TypeDescription",
+        "typelib_TypeDescription",
+        "TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK"
+      ]
+    }
+  }
+}

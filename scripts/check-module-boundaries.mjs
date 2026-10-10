@@ -9,6 +9,7 @@ import ts from "typescript";
 
 const sourceRoot = path.resolve("apps/office/src");
 const moduleNames = [
+  "cppu",
   "cui",
   "editeng",
   "external",
@@ -32,6 +33,7 @@ const moduleNames = [
 ];
 const knownModules = new Set(moduleNames);
 const allowedEdges = new Map([
+  ["cppu", new Set(["sal"])],
   ["cui", new Set(["editeng", "svl", "svx"])],
   ["editeng", new Set(["offapi", "svl", "svtools", "vcl"])],
   ["external", new Set()],
@@ -125,6 +127,7 @@ export function getRuntimeOwnershipLayer(relativePath) {
   if (portablePath.startsWith("sw/source/uibase/")) return "writer-uibase";
   if (portablePath.startsWith("sfx2/source/")) return "sfx";
   if (portablePath.startsWith("o3tl/inc/")) return "upstream-mechanism";
+  if (portablePath.startsWith("cppu/inc/")) return "upstream-mechanism";
   if (portablePath.startsWith("i18nutil/inc/") || portablePath.startsWith("udkapi/"))
     return "upstream-mechanism";
   if (portablePath.startsWith("external/mdds/include/")) return "upstream-mechanism";

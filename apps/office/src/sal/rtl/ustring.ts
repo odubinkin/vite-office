@@ -5,6 +5,11 @@ import type { rtl_uString, rtl_uStringSlot } from "../inc/rtl/ustring.h";
 import { SAL_STRING_IS_INTERN, SAL_STRING_REFCOUNT, rtl_stringAllocation } from "./strimp.hxx";
 import { rtl_str_hash_intern, rtl_str_hash_remove } from "./hash";
 
+/** Original terminated Unicode C comparator reuses the SAL template owner. @param first - Borrowed null-terminated UTF16 input. @param second - Borrowed null-terminated UTF16 input. @returns Exact native comparison result. */
+export function rtl_ustr_compare(first: Uint16Array | null, second: Uint16Array | null): number {
+  return str.compare(first, second, CompareNormal);
+}
+
 /** Original reverse Unicode/ASCII equality C boundary on the verified signed-char target. @param pStr1 - Borrowed UTF16 storage. @param pStr2 - Borrowed native char bytes; original ASCII caller precondition applies. @param nStrLen - Native signed32 common prefix length. @returns Original reverse equality result. */
 export function rtl_ustr_asciil_reverseEquals_WithLength(
   pStr1: Uint16Array | null,

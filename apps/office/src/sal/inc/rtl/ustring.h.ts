@@ -16,6 +16,7 @@ export type rtl_uString = _rtl_uString;
 /** One concrete caller-owned pointer slot adapts rtl_uString** without changing data identity or ownership. */
 export type rtl_uStringSlot = [rtl_uString | null];
 export {
+  rtl_ustr_compare,
   rtl_ustr_compare_WithLength,
   rtl_ustr_hashCode_WithLength,
   rtl_uString_acquire,

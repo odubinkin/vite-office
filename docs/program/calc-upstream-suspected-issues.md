@@ -914,3 +914,34 @@ from the defined Unicode observations, assign no portable expected value to
 the undefined native read, and do not add a table-bound repair or normalize
 mapping flags. Consumer reachability and intended mode constraints require
 separate review.
+
+## CALC-039: Type-reference name equality ignores equal-length suffixes after zero
+
+Status: suspicious caller-domain condition; original native const predicate
+reproduced with ASan/UBSan-identical output.
+
+[Original `typelib_typedescriptionreference_equals`](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/cppu/source/typelib/typelib.cxx#L2226)
+first checks reference identity, then type class and logical name length. Its
+last comparison uses `rtl_ustr_compare`, which stops at the first zero unit.
+
+Example: two distinct, fully initialized public C reference records have the
+same type class and real owned names `[65,0,66]` and `[65,0,67]`. Both names have
+logical length3. Original reference equality returns true although the final
+logical units differ. Different logical lengths still return false; different
+type classes still return false. No name/reference acquire or release occurs.
+
+Evidence: [the full native type primitive caller](../../scripts/uno-type-primitives-native-probe.mjs),
+all123904 initialized class/name combinations in committed
+`native-type-primitives-cases.json`, and
+[portable reference comparison replay](../../apps/office/src/cppu/source/typelib/typelib.test.ts).
+The caller compiles genuine full SAL/CPPU owners and constructs original C
+header records only for const comparison. It supplies no type registry or
+allocation replacement.
+
+These embedded-zero names are synthetic predicate inputs. Reachability through
+ordinary valid UNO type registration/naming consumers is unproven; this is
+not a demonstrated defect of valid registered type names.
+
+Decision: preserve the original terminated comparison and length guard. Do not
+replace it with known-length comparison, normalize names, or silently repair
+the upstream function.

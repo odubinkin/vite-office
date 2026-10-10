@@ -1,0 +1,128 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-cac66cfc-e803-4581-87c1-33f1eea9c4ad",
+    "capabilityId": "CAP-cac66cfc-e803-4581-87c1-33f1eea9c4ad",
+    "suite": "shared",
+    "subsystem": "uno-type",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Retain all independently declared original C and generated UNO type-class numeric values and the real weak-class predicate.",
+      "Retain complete common native C record declarations without guessed constructors/defaults/allocation.",
+      "Retain original borrowed type-reference equality, pointer shortcut, exact class/length checks and SAL terminated Unicode comparison without ownership mutation."
+    ],
+    "capability": "Original UNO type-class declarations and const typelib reference comparison",
+    "gaps": [
+      "Native type allocation/registration/reference lifecycle, full compound descriptions, common-prefix aliasing, Type/Reference/Any/default RuntimeException, full upstream consumer QA, native ABI/concurrency and Calc string service/document/edit/UI remain unverified. Initialized records certify only the original const comparison function, not a factory or allocator."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "include/typelib/typeclass.h",
+          "marker": "typelib_TypeClass"
+        },
+        {
+          "path": "include/typelib/typedescription.h",
+          "marker": "_typelib_TypeDescriptionReference"
+        },
+        {
+          "path": "cppu/source/typelib/typelib.cxx",
+          "marker": "typelib_typedescriptionreference_equals"
+        },
+        {
+          "path": "udkapi/com/sun/star/uno/TypeClass.idl",
+          "marker": "TypeClass"
+        },
+        {
+          "path": "sal/rtl/strtmpl.hxx",
+          "marker": "CompareNormal"
+        },
+        {
+          "path": "sal/rtl/ustring.cxx",
+          "marker": "rtl_ustr_compare"
+        },
+        {
+          "path": "codemaker/source/cppumaker/cpputype.cxx",
+          "marker": "MAKE_FIXED_SIZE"
+        }
+      ],
+      "tests": [
+        {
+          "path": "cppu/qa/test_unotype.cxx",
+          "marker": "void Test::testUnoType()"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/typelib/typedescription.h",
+          "marker": "Holds a weak reference"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/cppu/inc/typelib/typeclass.ts",
+          "marker": "typelib_TypeClass"
+        },
+        {
+          "path": "apps/office/src/cppu/inc/typelib/typedescription.ts",
+          "marker": "TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK"
+        },
+        {
+          "path": "apps/office/src/cppu/source/typelib/typelib.ts",
+          "marker": "typelib_typedescriptionreference_equals"
+        },
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/uno/TypeClass.ts",
+          "marker": "TypeClass"
+        },
+        {
+          "path": "apps/office/src/sal/rtl/strtmpl.ts",
+          "marker": "export function compare("
+        },
+        {
+          "path": "apps/office/src/sal/rtl/ustring.ts",
+          "marker": "rtl_ustr_compare"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/cppu/source/typelib/typelib.test.ts",
+          "marker": "matches all complete native initialized reference comparisons without ownership mutations"
+        },
+        {
+          "path": "scripts/uno-type-primitives-native-probe.mjs",
+          "marker": "const driver = String.raw"
+        },
+        {
+          "path": "apps/office/src/cppu/source/typelib/native-type-primitives-cases.json",
+          "marker": "\"sanitizedIdentical\""
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Original UNO type comparison dependencies"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "Compare borrowed original type-description references through the real shared terminated Unicode owner",
+    "scopeLimitations": [
+      "Native type allocation/registration/reference lifecycle, full compound descriptions, common-prefix aliasing, Type/Reference/Any/default RuntimeException, full upstream consumer QA, native ABI/concurrency and Calc string service/document/edit/UI remain unverified. Initialized records certify only the original const comparison function, not a factory or allocator.",
+      "Original cppu testUnoType is a related real Type/UnoType consumer reference only; its type registration and full consumer QA are not ported or executed by primitive replay. ICU verification is reused by native build tooling but no ICU code is linked by this primitive caller."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "Retain original full declaration/value/predicate boundaries and source-owned equality with shared SAL. Concrete Uint16Array storage and explicit lifetime adapters preserve the bounded selected-target comparison contract; complete portable UNO lifecycle/reflection remains unverified."
+    }
+  }
+}

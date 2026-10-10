@@ -67,6 +67,22 @@ export function compare_WithLengths(
   }
   return Math.sign(nStr1Len - nStr2Len);
 }
+
+/** Original compare specialization for two null-terminated Unicode inputs and NoShortening; byte/wchar and shortening overloads remain separate. @param first - Borrowed terminated UTF16 storage. @param second - Borrowed terminated UTF16 storage. @param comparison - Original stateless character comparator. @returns Native first mismatch difference or terminated-prefix ordering. */
+export function compare(
+  first: Uint16Array | null,
+  second: Uint16Array | null,
+  comparison: typeof CompareNormal,
+): number {
+  if (first === null) throw new Error("assert(pStr)");
+  if (second === null) throw new Error("assert(pStr)");
+  for (let position = 0; ; position++) {
+    if (second[position] === 0) return first[position] === 0 ? 0 : 1;
+    if (first[position] === 0) return -1;
+    const result = comparison.compare(first[position] as number, second[position] as number);
+    if (result !== 0) return result;
+  }
+}
 /** Original polynomial hash with modular unsigned32 multiplication. @param pStr - Borrowed UTF16 data. @param nLen - Signed32 prefix length. @returns Original signed32 hash. */
 export function hashCode_WithLength(pStr: Uint16Array | null, nLen: number): number {
   nLen |= 0;

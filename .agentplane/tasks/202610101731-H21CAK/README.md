@@ -4,7 +4,7 @@ title: "Port original locale-aware case-mapping values for Calc string service"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 44
+revision: 49
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: implement approved original locale-aware case value dependency in calc checkout, reusing actual shared string/Unicode owners and preserving native source contracts; no fake service/type substitutes."
 doc_version: 3
-doc_updated_at: "2026-10-10T19:35:57.914Z"
+doc_updated_at: "2026-10-10T22:22:04.830Z"
 doc_updated_by: "CODER"
 description: "Task39: implement original casefolding getValue/getConditionalValue and complete source data with real Locale string fields/default ownership and original default UNO RuntimeException boundary. Reuse actual shared OUString, RTL character and proven ICU scalar contracts. Preserve suspect upstream behavior. Verify source/owner contracts and unchanged native reference without fake service/type stand-ins; portable Calc/affected shared100 and scoped gates. No UI shell, Writer duplication or full-run before41."
 sections:
@@ -45,6 +45,8 @@ sections:
     Only vite-office-calc branch calc. Shared source-shaped owners under apps/office/src/udkapi/com/sun/star/lang (Locale), udkapi/com/sun/star/uno (actual exception/interface dependency declarations if required), cppu/uno reference/value dependency owners if required by the original exception boundary, i18nutil/inc/casefolding.ts and i18nutil/source/utility/casefolding.ts/casefolding_data.ts with exact original JSON tables, adjacent portable tests and native observation fixture; scripts/casefolding-native-probe.mjs and necessary source acquisition/generation helpers within this task; complete shared runtime/provenance/capability records, calc-core.md and genuine calc-upstream-suspected-issues.md entries. Reuse original OUString, RTL character and selected ICU scalar owners. Original source/generated-native artifacts stay ignored. No mocked native Locale/exception/service owners, temporary CharClass or SharedStringPool, widthfolding/getNextChar replacement, Writer runtime changes, policy/coverage threshold changes, dependencies installed or external publication. Required source-root wiring also includes scripts/check-module-boundaries.mjs and its existing related test: classify actual i18nutil/udkapi upstream roots, preserve protected-core/browser restrictions and allow only original shared dependency directions. No validator exemption or relaxed threshold.
 
     Required original langIs literal comparison also extends existing shared sal/rtl/ustring.ts, sal/inc/rtl/ustring.h.ts and sal/inc/rtl/ustring.ts with rtl_ustr_asciil_reverseEquals_WithLength/equalsAsciiL, adjacent portable tests, native equality fixture/probe and complete shared metadata. This is the actual upstream literal equality dependency, not a JS locale/case substitute. Keep task39 native getValue/getConditionalValue and true generated Locale/UNO exception verification mandatory. No QA/native generated-type claim from this SAL primitive alone.
+
+    The existing authorized cppu/uno type dependency also includes actual cppu/inc/typelib/typeclass.ts, typedescription.ts and cppu/source/typelib/typelib.ts plus the independently generated udkapi UNO TypeClass enum; original SAL_MAX_ENUM and terminated rtl_ustr_compare/strtmpl compare owners, their C declaration boundary, adjacent portable replay/native fixture and scripts/uno-type-primitives-native-probe.mjs. Retain genuine common C record declarations and original const predicates only; no guessed factory, registry, allocator or UNO exception defaults. Source-root wiring extends the same guarded boundary owner with the actual CPPU-to-SAL direction. All complete runtime/provenance/capability records stay within the approved shared dependency metadata scope.
   Plan: "1. Resolve real Locale/exception ownership contracts from actual IDL and cppumaker, then reuse existing shared Unicode/RTL owners. 2. Port complete getValue/getConditionalValue and original data with exact native value-copy, UTF16 and conditional semantics; preserve suspicious behavior. 3. Capture unchanged original native dependencies, portable100 tests and scoped provenance/inventory/tooling evidence; independently evaluate and close only this dependency. Full suite task41, full Calc goal remains active."
   Verify Steps: |-
     1. Read pinned full Locale.idl, cppumaker struct emission and casefolding hxx/cxx/full tables; confirm original field order/default/copy/string ownership, exact language comparison and UTF16/value return contracts. Preserve existing CALC035 and document genuine new suspect behavior without fixing it.
@@ -143,6 +145,20 @@ sections:
       Result: pass.
       Evidence: Exact six final quality command argv and terminal exit0 in value-quality-manifest.json;30 tooling cases/4 files. Calc52 capabilities/185 modules,shared29/155,zero semantic violations. Every broad shared capability parity flag remains false; new native reference paths and missing portable closure are explicit. Prior same-turn static gates pass with restored original source links; doctor has0 errors and two inherited warnings.
       Scope: Intentional native helper/fixture/registry/documentation checkpoint. Task39 remains DOING with overall verification pending; no EVALUATOR pass,verify --ok or finish is recorded. Full suite remains task41.
+
+    Original UNO type-comparison dependency checkpoint (not full task39 verification):
+    - Command: node scripts/uno-type-primitives-native-probe.mjs --check.
+      Result: pass.
+      Evidence: All33 C/genuine-generated UNO enum values,262144 complete Unicode witness pairs and123904 complete initialized class/name record comparisons match normal and ASan/UBSan output;347 full pinned blobs,69 genuine dependency units rebuilt per mode, original null-wrapper SIGABRT and both-null reference identity retained. Formatting/escape cleanup preserves the generated original caller bytes and hash exactly.
+      Scope: Genuine common C record declarations, real weak classifier, const reference equality and selected SAL Unicode/CompareNormal/NoShortening comparison only; no allocation/registry/refcount/UNO exception/Type/Reference/Any substitute, full native platform or ICU linkage claim.
+    - Command: npm run test:coverage:calc; affected shared coverage selection recorded exactly in output/playwright/task39-checks/type-primitives-shared-manifest.json.
+      Result: pass.
+      Evidence: All three upstream links absent and restored in finally; Calc106 tests/24 files,19 owners S2920/B2055/F474/L2564 all100. Shared22 tests/9 files,17 owners S601/B247/F126/L510 all100. Independent raw coverage audit requires every statement/function/branch counter positive and the exact intended owner counts.
+      Scope: Calc plus all affected shared string, Locale/mapping and original CPPU/UNO primitive owners. Writer-only coverage is outside repair scope; full suites remain task41.
+    - Command: npm run typecheck; ESLint all tracked/new authored JS/TS files; npm run check:docs; npm run check:file-size; npm run check:dependencies; four affected tooling test files; npm run check:source-tree; npm run check:source-provenance; npm run inventory:parity:shared; npm run inventory:parity:calc; node .agentplane/policy/check-routing.mjs; ap doctor; changed-file Prettier; git diff --check.
+      Result: pass. Final changed-file Prettier and git diff --check pass after documentation updates.
+      Evidence: Corrected declaration-only runtime reexport classification and actual IDL enumerator provenance. Provenance399 runtime modules,307 mapped; zero runtime semantic violations. Tooling31 tests/4 files. All actual authored source lint passes; npm run lint additionally traversed ignored extracted fast_float documentation assets and rejected their original unmodified third-party JS, so selected lint is exhaustive over tracked/new authored JS/TS instead of generated dependency artifacts. No rule/threshold/source-verifier exemption was introduced. Doctor retains inherited warnings only.
+      Scope: Current partial dependency checkpoint. Portable type registration/lifecycle/default UNO exception and getValue/getConditionalValue remain unfinished, task39 DOING and whole-task verification pending. The user explicitly requested pausing after the next scheduled full run at41 and Calc/shared repairs; preserve Writer-only coverage exclusions.
   Rollback Plan: "Revert only intentional task39 implementation/metadata commits if needed and rerun scoped checks. Preserve unrelated user work, Writer/main branches, shared verified Unicode/RTL contracts and original sources. Remove only task39-owned ignored probe artifacts if obsolete."
   Findings: |-
     - Observation: Preflight confirms calc branch and clean checkout, direct workflow, previous task38 DONE. The only other active tasks are inherited C9TN6M/X6VV8G; neither is reused for new source work. Read-only discovery guessed Locale under offapi instead of its actual udkapi path, and guessed two absent native helper filenames.
@@ -248,6 +264,18 @@ sections:
     - Observation: Genuine full native case-value reference now passes with original generated Locale/RuntimeException, fully instrumented SAL/CPPU/ICU/mapping owners,13,228,032 complete observations and lossless roughly2MB fixture. Both direct conditional and getValue RuntimeException paths execute their original type registration and preserve actual default fields.
       Impact: The required original native reference is available for portable case-value implementation. Real portable RuntimeException/Reference/type registration, locale-aware methods and service/pool/document/edit/UI remain unfinished; native evidence alone does not make Calc UI ready or satisfy full task39.
       Resolution: Keep task39 DOING and overall verification pending; next implement the genuine shared UNO ownership/type dependency and getValue/getConditionalValue against the committed native fixture. Preserve CALC038 and all original defined behavior. No Writer-only repair, broad parity flag upgrade, goal completion or full-suite run before41.
+
+    - Observation: On 2026-10-11 the user explicitly requested pausing the Calc goal after the next full test run. The next scheduled full run remains task41, following the existing ten-task cadence.
+      Impact: This is an active future stop condition; do not pause before that run or continue implementation after completing it and the required repairs. Writer-only coverage gaps remain excluded from repair as previously instructed.
+      Resolution: Complete the scheduled full run, fix failures attributable to Calc or affected shared modules, record the results, then mark the overall goal paused and report the checkpoint. Preserve all unfinished core/UI work for a later user-authorized resume.
+
+    - Observation: The original type dependency capture succeeds, but initial lint rejects redundant quote escapes and symbolic enum initializers; initial inventory incorrectly lists a C-header reexport as a locally declared operation and IDL provenance cites only TypeClass's basename.
+      Impact: No successful checkpoint gate claim was made from rejected metadata/lint. Runtime primitive replay passes all captured native bytes and100 raw coverage; full task39 and editable UI remain unfinished.
+      Resolution: Preserve equivalent literal enum values and generated caller bytes, use original actual IDL enumerators as provenance, classify the existing C reexport without inventing local implementation, and retain zero semantic violations. CALC-039 records the original embedded-zero equality condition without repairing it.
+
+    - Observation: npm run lint visits ignored extracted fast_float docs/assets/app.js in genuine native dependency caches, rejecting untouched third-party source. The actual authored runtime/tooling files have no lint diagnostics.
+      Impact: Broad filesystem traversal is not accepted as a successful lint run and no third-party original source is patched.
+      Resolution: Run ESLint against every tracked and new authored JS/TS file, retaining the complete explicit argument list in type-primitives-final-gates.json. All selected checks pass; no lint configuration, test policy, thresholds, generated source bytes or original dependency code is changed.
 id_source: "generated"
 ---
 ## Summary
@@ -259,6 +287,8 @@ Task39 implements the original locale-aware case-mapping value layer required by
 Only vite-office-calc branch calc. Shared source-shaped owners under apps/office/src/udkapi/com/sun/star/lang (Locale), udkapi/com/sun/star/uno (actual exception/interface dependency declarations if required), cppu/uno reference/value dependency owners if required by the original exception boundary, i18nutil/inc/casefolding.ts and i18nutil/source/utility/casefolding.ts/casefolding_data.ts with exact original JSON tables, adjacent portable tests and native observation fixture; scripts/casefolding-native-probe.mjs and necessary source acquisition/generation helpers within this task; complete shared runtime/provenance/capability records, calc-core.md and genuine calc-upstream-suspected-issues.md entries. Reuse original OUString, RTL character and selected ICU scalar owners. Original source/generated-native artifacts stay ignored. No mocked native Locale/exception/service owners, temporary CharClass or SharedStringPool, widthfolding/getNextChar replacement, Writer runtime changes, policy/coverage threshold changes, dependencies installed or external publication. Required source-root wiring also includes scripts/check-module-boundaries.mjs and its existing related test: classify actual i18nutil/udkapi upstream roots, preserve protected-core/browser restrictions and allow only original shared dependency directions. No validator exemption or relaxed threshold.
 
 Required original langIs literal comparison also extends existing shared sal/rtl/ustring.ts, sal/inc/rtl/ustring.h.ts and sal/inc/rtl/ustring.ts with rtl_ustr_asciil_reverseEquals_WithLength/equalsAsciiL, adjacent portable tests, native equality fixture/probe and complete shared metadata. This is the actual upstream literal equality dependency, not a JS locale/case substitute. Keep task39 native getValue/getConditionalValue and true generated Locale/UNO exception verification mandatory. No QA/native generated-type claim from this SAL primitive alone.
+
+The existing authorized cppu/uno type dependency also includes actual cppu/inc/typelib/typeclass.ts, typedescription.ts and cppu/source/typelib/typelib.ts plus the independently generated udkapi UNO TypeClass enum; original SAL_MAX_ENUM and terminated rtl_ustr_compare/strtmpl compare owners, their C declaration boundary, adjacent portable replay/native fixture and scripts/uno-type-primitives-native-probe.mjs. Retain genuine common C record declarations and original const predicates only; no guessed factory, registry, allocator or UNO exception defaults. Source-root wiring extends the same guarded boundary owner with the actual CPPU-to-SAL direction. All complete runtime/provenance/capability records stay within the approved shared dependency metadata scope.
 
 ## Plan
 
@@ -364,6 +394,20 @@ Genuine full native case-value reference checkpoint (portable algorithms/type cl
   Result: pass.
   Evidence: Exact six final quality command argv and terminal exit0 in value-quality-manifest.json;30 tooling cases/4 files. Calc52 capabilities/185 modules,shared29/155,zero semantic violations. Every broad shared capability parity flag remains false; new native reference paths and missing portable closure are explicit. Prior same-turn static gates pass with restored original source links; doctor has0 errors and two inherited warnings.
   Scope: Intentional native helper/fixture/registry/documentation checkpoint. Task39 remains DOING with overall verification pending; no EVALUATOR pass,verify --ok or finish is recorded. Full suite remains task41.
+
+Original UNO type-comparison dependency checkpoint (not full task39 verification):
+- Command: node scripts/uno-type-primitives-native-probe.mjs --check.
+  Result: pass.
+  Evidence: All33 C/genuine-generated UNO enum values,262144 complete Unicode witness pairs and123904 complete initialized class/name record comparisons match normal and ASan/UBSan output;347 full pinned blobs,69 genuine dependency units rebuilt per mode, original null-wrapper SIGABRT and both-null reference identity retained. Formatting/escape cleanup preserves the generated original caller bytes and hash exactly.
+  Scope: Genuine common C record declarations, real weak classifier, const reference equality and selected SAL Unicode/CompareNormal/NoShortening comparison only; no allocation/registry/refcount/UNO exception/Type/Reference/Any substitute, full native platform or ICU linkage claim.
+- Command: npm run test:coverage:calc; affected shared coverage selection recorded exactly in output/playwright/task39-checks/type-primitives-shared-manifest.json.
+  Result: pass.
+  Evidence: All three upstream links absent and restored in finally; Calc106 tests/24 files,19 owners S2920/B2055/F474/L2564 all100. Shared22 tests/9 files,17 owners S601/B247/F126/L510 all100. Independent raw coverage audit requires every statement/function/branch counter positive and the exact intended owner counts.
+  Scope: Calc plus all affected shared string, Locale/mapping and original CPPU/UNO primitive owners. Writer-only coverage is outside repair scope; full suites remain task41.
+- Command: npm run typecheck; ESLint all tracked/new authored JS/TS files; npm run check:docs; npm run check:file-size; npm run check:dependencies; four affected tooling test files; npm run check:source-tree; npm run check:source-provenance; npm run inventory:parity:shared; npm run inventory:parity:calc; node .agentplane/policy/check-routing.mjs; ap doctor; changed-file Prettier; git diff --check.
+  Result: pass. Final changed-file Prettier and git diff --check pass after documentation updates.
+  Evidence: Corrected declaration-only runtime reexport classification and actual IDL enumerator provenance. Provenance399 runtime modules,307 mapped; zero runtime semantic violations. Tooling31 tests/4 files. All actual authored source lint passes; npm run lint additionally traversed ignored extracted fast_float documentation assets and rejected their original unmodified third-party JS, so selected lint is exhaustive over tracked/new authored JS/TS instead of generated dependency artifacts. No rule/threshold/source-verifier exemption was introduced. Doctor retains inherited warnings only.
+  Scope: Current partial dependency checkpoint. Portable type registration/lifecycle/default UNO exception and getValue/getConditionalValue remain unfinished, task39 DOING and whole-task verification pending. The user explicitly requested pausing after the next scheduled full run at41 and Calc/shared repairs; preserve Writer-only coverage exclusions.
 
 ## Rollback Plan
 
@@ -474,3 +518,15 @@ Revert only intentional task39 implementation/metadata commits if needed and rer
 - Observation: Genuine full native case-value reference now passes with original generated Locale/RuntimeException, fully instrumented SAL/CPPU/ICU/mapping owners,13,228,032 complete observations and lossless roughly2MB fixture. Both direct conditional and getValue RuntimeException paths execute their original type registration and preserve actual default fields.
   Impact: The required original native reference is available for portable case-value implementation. Real portable RuntimeException/Reference/type registration, locale-aware methods and service/pool/document/edit/UI remain unfinished; native evidence alone does not make Calc UI ready or satisfy full task39.
   Resolution: Keep task39 DOING and overall verification pending; next implement the genuine shared UNO ownership/type dependency and getValue/getConditionalValue against the committed native fixture. Preserve CALC038 and all original defined behavior. No Writer-only repair, broad parity flag upgrade, goal completion or full-suite run before41.
+
+- Observation: On 2026-10-11 the user explicitly requested pausing the Calc goal after the next full test run. The next scheduled full run remains task41, following the existing ten-task cadence.
+  Impact: This is an active future stop condition; do not pause before that run or continue implementation after completing it and the required repairs. Writer-only coverage gaps remain excluded from repair as previously instructed.
+  Resolution: Complete the scheduled full run, fix failures attributable to Calc or affected shared modules, record the results, then mark the overall goal paused and report the checkpoint. Preserve all unfinished core/UI work for a later user-authorized resume.
+
+- Observation: The original type dependency capture succeeds, but initial lint rejects redundant quote escapes and symbolic enum initializers; initial inventory incorrectly lists a C-header reexport as a locally declared operation and IDL provenance cites only TypeClass's basename.
+  Impact: No successful checkpoint gate claim was made from rejected metadata/lint. Runtime primitive replay passes all captured native bytes and100 raw coverage; full task39 and editable UI remain unfinished.
+  Resolution: Preserve equivalent literal enum values and generated caller bytes, use original actual IDL enumerators as provenance, classify the existing C reexport without inventing local implementation, and retain zero semantic violations. CALC-039 records the original embedded-zero equality condition without repairing it.
+
+- Observation: npm run lint visits ignored extracted fast_float docs/assets/app.js in genuine native dependency caches, rejecting untouched third-party source. The actual authored runtime/tooling files have no lint diagnostics.
+  Impact: Broad filesystem traversal is not accepted as a successful lint run and no third-party original source is patched.
+  Resolution: Run ESLint against every tracked and new authored JS/TS file, retaining the complete explicit argument list in type-primitives-final-gates.json. All selected checks pass; no lint configuration, test policy, thresholds, generated source bytes or original dependency code is changed.

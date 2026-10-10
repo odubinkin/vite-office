@@ -2107,3 +2107,48 @@ exception/reference/type registration, service/CharClass/SharedStringPool and
 actual cell/column/table/document/edit/UI remain required. Task39 remains
 DOING; no full task verification, consumer QA or editable-UI readiness is
 claimed. The scheduled full test run remains task41.
+
+## Original UNO type comparison dependencies
+
+Task39 adds the actual C typelib TypeClass and independently generated UNO
+TypeClass declarations, the complete common C type-reference/description
+records, the original really-weak classifier and source-owned const reference
+equality. These are required original dependencies of the unfinished default
+UNO exception/type boundary. They introduce no guessed record constructors,
+type factory, allocation, registry, reference lifecycle or service facade.
+
+The SAL dependency adds the genuine terminated Unicode comparison at its
+original template/source/C-header boundaries. It retains the selected native
+unsigned-unit difference and prefix magnitudes, zero termination and null
+pointer assertions; known-length comparison remains its separate owner.
+The classifier identifies only INTERFACE_METHOD and INTERFACE_ATTRIBUTE as
+really weak. Interface and exception classes are not classified as weak.
+
+The new native probe compiles all67 original SAL and both required CPPU units
+in normal and ASan/UBSan modes, using genuine full headers and the actual
+generated TypeClass. Native capture retains all33 enum values,262144 Unicode
+witness pairs and123904 fully initialized public C record comparisons with
+name/type count preservation and both-null identity. All347 full pinned source
+blobs and output hashes are retained. These initialized records are genuine
+const predicate inputs, not replacements for the original runtime allocators
+or registry. The shared build helper verifies ICU inputs, but this caller
+does not compile or link ICU code. CALC-039 records equal-length names with
+different suffixes after embedded zero; original behavior is preserved.
+
+`node scripts/uno-type-primitives-native-probe.mjs --check` reproduces every
+captured byte and provenance field. Portable tests replay every captured byte
+without a deep Buffer assertion. With all three original source links absent,
+Calc106 tests/24 files retain19 executable owners S2920/B2055/F474/L2564 all100;
+the affected shared closure22 tests/9 files covers17 executable owners
+S601/B247/F126/L510 all100. Every raw statement/function/branch counter is
+positive, and formatting leaves the genuine native caller byte-identical.
+Complete portable type allocation, common-prefix pointer aliasing,
+registration/acquire/release, Type/Reference/Any/default RuntimeException,
+getValue/getConditionalValue, service/CharClass/SharedStringPool and Calc
+cell/column/table/document/edit/UI remain required. Task39 remains DOING;
+this bounded dependency does not establish editable-UI readiness.
+
+The user requested a pause after the next scheduled full run at task41.
+After that run, repair Calc/affected shared failures, leave Writer-only
+coverage gaps for its separate branch, record the result and pause the goal
+before further implementation.

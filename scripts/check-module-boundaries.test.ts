@@ -10,6 +10,20 @@ import {
   getRuntimeOwnershipViolation,
 } from "./check-module-boundaries.mjs";
 
+it("owns genuine CPPU type metadata and SAL comparison without browser or reverse dependencies", /** Protects actual typelib primitive owners. @returns Nothing. */ () => {
+  expect(isForbiddenModuleEdge("cppu", "sal")).toBe(false);
+  expect(isForbiddenModuleEdge("sal", "cppu")).toBe(true);
+  for (const source of ["cppu/inc/typelib/typedescription.ts", "cppu/source/typelib/typelib.ts"]) {
+    expect(getRuntimeOwnershipLayer(source)).toBe("upstream-mechanism");
+    expect(getRuntimeOwnershipViolation(source, "", "react")).toMatch(/presentation package/u);
+    expect(
+      getRuntimeOwnershipViolation(source, "vcl/browser/font-list.ts", "../font-list"),
+    ).toMatch(/browser adapters/u);
+  }
+  for (const dependency of ["sc", "sw", "framework", "vcl", "udkapi"])
+    expect(isForbiddenModuleEdge("cppu", dependency)).toBe(true);
+});
+
 it("owns original locale and case-mapping dependencies without browser or reverse library edges", /** Enforces the actual shared string service dependency directions. @returns Nothing. */ () => {
   expect(isForbiddenModuleEdge("udkapi", "sal")).toBe(false);
   expect(isForbiddenModuleEdge("sal", "udkapi")).toBe(true);
