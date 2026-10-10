@@ -1490,3 +1490,51 @@ and middle split, and public range release. Every complete case and final event
 is retained. The scheduled full run exposed a 31.8-second aggregate timeout;
 grouping follows these original operations while preserving the existing
 30-second per-test budget, fixture, assertions and coverage gates.
+
+## Shared SoA scalar release overloads
+
+Task `202610100153-570FFF` ports original `release_impl` from
+`main_def.inl:1474-1495` and public scalar `release` from
+`main_def.inl:3624-3737`. All three original overloads are available: typed value
+return, borrowed output reference, and hinted output reference. Explicit shared
+callbacks select the erased native type; `{ value: T }` borrows the original
+output slot. First lookup retains diagnostics3631/3670/3711 before assigning
+the output. Empty blocks assign the original typed default and return their
+iterator; filled blocks assign the scalar before shared single-block emptying
+with overwrite false. Logical size remains unchanged.
+
+Original insert-empty, merge and position overload dispatch bodies reside in
+`main_def`, borrowing actual fields and invoking the actual original private
+insertion member. The owner retains all logical-size assignments. Position
+selects its fixed diagnostics from actual mutable/const iterator aliases.
+No second container or Calc-specific copy is introduced.
+
+The genuine full-header C++ driver calls all three typed public overloads.
+Its input-only module enumerates all12 standard families and every row of
+selected5/11/13/17/41cell geometry. Own/foreign hints, cached returned hints on
+empty and nonempty cells, copy isolation, repeated empty defaults, reappend,
+destruction and size/uint64max/plain moved-empty guards are observed. Every
+prior35740 complete native sequence and284896 full states remains in the
+corpus. Complete native values, output/iterator results, operations, ownership,
+payloads, capacities, metadata, endpoints and event logs remain portable through
+the existing common decoder and observer.
+
+[CALC-031](upstream-suspected-issues.md#calc-031-hinted-scalar-release-reads-empty-metadata-before-its-row-guard)
+records the independently reproduced original hinted-empty-destination native
+undefined behavior, even with a valid foreign hint. The implementation preserves
+the lookup order; native UB has no defined portable expected result.
+
+This is cycle3 task1/10. The user requested a full suite now and a goal pause
+after its results are handled, overriding the next scheduled task40 run. Whole
+contract/behavior/default module parity remains unverified. Managed/custom/
+throwing, instrumentation/ABI, reentrant/invalid/unbounded/overflow inputs,
+remaining set/range insertion, transfer/emplace, complete original QA and Calc
+column/document/browser UI remain pending.
+
+Captured data is organized by original operation family: the original container
+corpus retains35740 sequences, and the scalar-release corpus adds7992. Both
+use the same full-field interner and the same decoder/observer with an explicit
+corpus argument. This keeps ordinary defaultheap formatting and import practical
+without dropping inputs, fields or assertions; raw native output remains one
+complete original run. Exported original insertion/merge helper responsibilities
+also have explicit internal-operation inventory records.

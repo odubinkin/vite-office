@@ -76,6 +76,10 @@
         {
           "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/main_def.ts",
           "marker": "create_new_block_with_new_cell"
+        },
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/container.test.ts",
+          "marker": "preserves complete original scalar release overload sequences"
         }
       ],
       "upstream": [
@@ -167,7 +171,11 @@
       "clear",
       "release",
       "dispose",
-      "create_new_block_with_new_cell"
+      "create_new_block_with_new_cell",
+      "scalar_release",
+      "release_impl",
+      "insert_empty",
+      "merge_with_next_block"
     ],
     "omittedResponsibilities": [
       "Original block_slot_type/blocks_type/blocks_to_transfer and default-execution main_def helpers are implemented over three normal vector syntax adapters sharing actual reserved-slot mechanics with the existing delayed vector. Metadata insertion/erase/clear does not delete blocks or synthesize enclosing-container events. Copy/clone invoke actual registered BlockOp aliases; move transfers backing storage with selected host moved-from observations. Native finite libc++ reserved capacities/pointer/value records, exactly representable bounded number indices and initialized unmanaged all12 scalar data are compared. STL adapters are explicit local infrastructure, not an alternate mdds engine. Original nested types export at file scope as TypeScript syntax adaptation. Native custom execution policies, object/allocator/destructor ABI, unbounded size_t/wrap arithmetic, invalid native ranges/self-insertion/dangling iterators, remaining SoA lookup/scalar retrieval/segment mutation groups and Calc column/document/browser remain unverified. No full upstream module/QA-port certification.",
@@ -222,7 +230,8 @@
       "Original public plain/hinted release_range performs firstlookup before reversed/end guards with exact3790/3805 diagnostics, then reuses actual set_empty_impl with overwritefalse.",
       "Released logical range becomes empty without scalar overwrite; original boundary truncation and interior zero-size-before-delete, smaller-side split/acquire/assign/resize/erase/iterator order are retained by shared engine.",
       "Original clear/release/destructor/new-cell store and event bodies occupy main_def with actual borrowed fields; owner retains its actual size resets and declarations. Destructor bound positions.size and no reset remain original.",
-      "Genuine unchanged-header public release_range calls retain every28204prior complete sequence/state/final log and compare all full observations across12standard families; inputmodule enumerates callers only."
+      "Genuine unchanged-header public release_range calls retain every28204prior complete sequence/state/final log and compare all full observations across12standard families; inputmodule enumerates callers only.",
+      "Task202610100153-570FFF ports original scalar release_impl1474-1495 and all three public scalar release3624-3737; exact3631/3670/3711 firstlookup diagnostics before output assignment, original empty default or scalar read before shared single-block emptying overwritefalse. Finite initialized unmanaged12families/no_trace/default libc++size_t64 across everyrow of selected5/11/13/17/41cell uniform/empty/singleton/compound/varied geometry, validown/foreign/fresh/cached hints on destinations with metadata, copyisolation/reappend/repeated emptydefaults/destruction, size/uint64max/plain moved-emptyguards. Original insert_empty/merge/position bodies align with main_def through real borrowed fields/member invocation; actual owner retains size assignments. Every prior35740sequence/284896fullstate/final log is retained. CALC-031 separately reproduces original hinted-empty-destination nativeUB with validforeignhint; no defined portable expected output or implementation fix. Native publicset supplies initial seed only. Managed/custom/throwing/ABI/instrumentation/reentrant/invalid/overflow/unbounded/arbitrary inputs, remaining set/rangeinsert/transfer/emplace, complete originalQA/module/default and Calc column/document/browser parity remainunverified. Prior gap paragraphs are historical; scalar release slice now implemented, not wholeparity."
     ],
     "status": "mapped",
     "upstreamPath": "vendor/mdds-reference/include/mdds/multi_type_vector/soa/main_def.inl",

@@ -18,13 +18,14 @@ import { type MDDS_MTV_DEFINE_ELEMENT_CALLBACKS } from "../macro.ts";
 import {
   throw_block_position_not_found,
   empty_event_func,
+  clone_construction_type,
+  type default_traits,
   advance_position as advance_position_impl,
   type BlockPositionIterator,
   type BlockPosition,
 } from "../util.ts";
 import { iterator_base, const_iterator_base } from "./iterator.ts";
 import { std_vector } from "../vector_storage.ts";
-import { clone_construction_type, type default_traits } from "../util.ts";
 import {
   copy_blocks,
   equal_blocks,
@@ -34,11 +35,13 @@ import {
   delete_element_block,
   mutate_blocks,
   get_block_position,
-  get_block_position_hint,
   is_previous_block_of_type,
   set_empty as set_empty_body,
   release_range as release_range_body,
   release as release_body,
+  scalar_release as scalar_release_body,
+  insert_empty as insert_empty_body,
+  merge_with_next_block as merge_with_next_block_body,
   clear as clear_body,
   dispose as dispose_body,
   create_new_block_with_new_cell,
@@ -365,10 +368,49 @@ export class multi_type_vector<E extends ContainerEvent = empty_event_func> {
     clear_body(this.m_block_store, this.m_hdl_event, this.Traits.block_funcs);
     this.m_cur_size = 0;
   }
-  /** Original whole-container release preserves zero-size resize before release/delete, then clears metadata and logical size. @returns Nothing. */
-  public release(): void {
-    release_body(this.m_block_store, this.m_hdl_event, this.Traits.block_funcs);
-    this.m_cur_size = 0;
+  /** Original whole-container release overload. @returns Nothing. */
+  public release(): void;
+  /** Original typed scalar release overload. @param pos - Row. @param callbacks - Erased native type witness. @returns Released scalar. */
+  public release<T extends DelayedVectorValue>(
+    pos: number | bigint,
+    callbacks: ContainerCallbacks<T>,
+  ): T;
+  /** Original output-reference release overload. @param pos - Row. @param callbacks - Native type witness. @param value - Borrowed output reference. @returns Empty-cell iterator. */
+  public release<T extends DelayedVectorValue>(
+    pos: number | bigint,
+    callbacks: ContainerCallbacks<T>,
+    value: { value: T },
+  ): iterator_base<this>;
+  /** Original hinted output-reference overload. @param hint - Original hint. @param pos - Row. @param callbacks - Native type witness. @param value - Borrowed output reference. @returns Empty-cell iterator. */
+  public release<T extends DelayedVectorValue>(
+    hint: iterator_base<this>,
+    pos: number | bigint,
+    callbacks: ContainerCallbacks<T>,
+    value: { value: T },
+  ): iterator_base<this>;
+  /** Original release bodies borrow actual fields; whole-container size reset remains in its owner. @param first - Row or hint. @param second - Row or native type. @param third - Native type or output. @param fourth - Hinted output. @returns Original overload result. */
+  public release(
+    first?: number | bigint | iterator_base<this>,
+    second?: number | bigint | ContainerCallbacks,
+    third?: ContainerCallbacks | { value: DelayedVectorValue },
+    fourth?: { value: DelayedVectorValue },
+  ): void | DelayedVectorValue | iterator_base<this> {
+    if (first === undefined) {
+      release_body(this.m_block_store, this.m_hdl_event, this.Traits.block_funcs);
+      this.m_cur_size = 0;
+      return;
+    }
+    return scalar_release_body(
+      this.m_block_store,
+      this.m_cur_size,
+      this.m_hdl_event,
+      this.Traits.block_funcs,
+      this,
+      first,
+      second as number | bigint | ContainerCallbacks,
+      third,
+      fourth,
+    );
   }
   /** Original event value, logical-size and array swap order. @param other - Owner. @returns Nothing. */
   public swap(other: multi_type_vector<E>): void {
@@ -451,16 +493,13 @@ export class multi_type_vector<E extends ContainerEvent = empty_event_func> {
     first: number | bigint | iterator_base<this>,
     last?: number | bigint,
   ): BlockPosition<iterator_base<this>> {
-    const hint = typeof first === "object" ? first : undefined;
-    const pos = hint ? (last as number | bigint) : (first as number | bigint);
     return position_impl(
       this.m_block_store,
       this.m_cur_size,
       this,
-      pos,
+      first,
       iterator_base<this>,
-      hint ? 560 : 536,
-      hint,
+      last,
     );
   }
   /** Original const position overloads with pinned source lines582/606. @param first - Row or const hint. @param last - Hinted row. @returns Const position pair. */
@@ -468,16 +507,13 @@ export class multi_type_vector<E extends ContainerEvent = empty_event_func> {
     first: number | bigint | const_iterator_base<this>,
     last?: number | bigint,
   ): BlockPosition<const_iterator_base<this>> {
-    const hint = typeof first === "object" ? first : undefined;
-    const pos = hint ? (last as number | bigint) : (first as number | bigint);
     return position_impl(
       this.m_block_store,
       this.m_cur_size,
       this,
-      pos,
+      first,
       const_iterator_base<this>,
-      hint ? 606 : 582,
-      hint,
+      last,
     );
   }
   /** Original type query delegates its actual member body. @param pos - Row. @returns Type. */
@@ -607,28 +643,16 @@ export class multi_type_vector<E extends ContainerEvent = empty_event_func> {
     second: number | bigint,
     third?: number,
   ): iterator_base<this> {
-    const hint = typeof first === "object" ? first : undefined;
-    const pos = hint ? second : (first as number | bigint);
-    const length = hint ? (third as number) : (second as number);
-    if (!length) return this.end();
-    const block_index = hint
-      ? get_block_position_hint(
-          this.m_block_store,
-          this.m_cur_size,
-          this,
-          hint.get_node().__private_data,
-          pos,
-        )
-      : get_block_position(this.m_block_store, this.m_cur_size, pos);
-    if (block_index === this.m_block_store.positions.size())
-      throw_block_position_not_found(
-        "multi_type_vector::insert_empty",
-        hint ? 1279 : 1237,
-        pos,
-        this.block_size(),
-        this.size(),
-      );
-    return this.insert_empty_impl(Number(pos), block_index, length);
+    return insert_empty_body(
+      this.m_block_store,
+      this.m_cur_size,
+      this,
+      first,
+      second,
+      third,
+      /** Invokes the actual original private member. @param pos - Row. @param index - Located block. @param length - Count. @returns Original iterator. */
+      (pos, index, length) => this.insert_empty_impl(pos, index, length),
+    );
   }
   /** Original empty insertion member preserves smaller-side copy, equal-side choice, acquisition and metadata swap order. @param pos - Admitted row. @param block_index - Located block. @param length - Finite insertion length. @returns Inserted empty iterator. */
   private insert_empty_impl(pos: number, block_index: number, length: number): iterator_base<this> {
@@ -887,34 +911,12 @@ export class multi_type_vector<E extends ContainerEvent = empty_event_func> {
   }
   /** Original one-direction merge returns its actual flag and keeps managed-cell-preserving append/zero-size/delete order. @param block_index - Admitted block. @returns Whether merged. */
   private merge_with_next_block(block_index: number): boolean {
-    if (block_index >= this.m_block_store.positions.size() - 1) return false;
-    const blk_data = this.m_block_store.element_blocks.get(block_index);
-    const next_data = this.m_block_store.element_blocks.get(block_index + 1);
-    if (!blk_data) {
-      if (next_data) return false;
-      this.m_block_store.sizes.set(
-        block_index,
-        this.m_block_store.sizes.get(block_index) + this.m_block_store.sizes.get(block_index + 1),
-      );
-      this.m_block_store.erase(block_index + 1);
-      return true;
-    }
-    if (!next_data) return false;
-    if (get_block_type(blk_data) !== get_block_type(next_data)) return false;
-    this.Traits.block_funcs.append_block(blk_data, next_data);
-    this.Traits.block_funcs.resize_block(next_data, 0);
-    this.m_block_store.sizes.set(
-      block_index,
-      this.m_block_store.sizes.get(block_index) + this.m_block_store.sizes.get(block_index + 1),
-    );
-    delete_element_block(
+    return merge_with_next_block_body(
       this.m_block_store,
       this.m_hdl_event,
       this.Traits.block_funcs,
-      block_index + 1,
+      block_index,
     );
-    this.m_block_store.erase(block_index + 1);
-    return true;
   }
   /** Original append_empty member updates only actual metadata and logical size. Valid empty metadata requires zero logical size. @param len - Native admitted count. @returns Whether a new block was added. */
   private append_empty(len: number): boolean {

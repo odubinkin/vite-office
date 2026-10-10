@@ -1,6 +1,7 @@
 /** @fileoverview Optional original SoA container lifetime comparison using unchanged full native headers and portable lossless complete live-state outputs. */
 import { execFileSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
+import { append_scalar_release_cases } from "./mdds-container-scalar-release-native-cases.mjs";
 import { append_release_cases } from "./mdds-container-release-native-cases.mjs";
 import { append_empty_cases } from "./mdds-container-empty-native-cases.mjs";
 import { digest, verifyMddsSources } from "./mdds-native-source.mjs";
@@ -617,6 +618,8 @@ for (let type = 0; type < 12; ++type) {
 }
 append_empty_cases(cases, kinds.length, maxRow);
 append_release_cases(cases, kinds.length, maxRow);
+const scalarReleaseStart = cases.length;
+append_scalar_release_cases(cases, kinds.length, maxRow);
 const driver =
   String.raw`
 #include <mdds/multi_type_vector/soa/main.hpp>
@@ -790,6 +793,18 @@ std::string positioned_scalar(const db_type& db,size_t row,int type){auto p=db.p
   String.raw`
 }std::abort();}
 template<class It>void node(const It& it,const It& end,const db_type& db){const auto& n=it.get_node();const bool at_end=it==end;std::cout<<"["<<n.type<<","<<n.position<<","<<n.size<<","<<id(n.data)<<",";if(at_end)std::cout<<"null,null";else std::cout<<(n.__private_data.parent==&db?"true":"false")<<","<<n.__private_data.block_index;std::cout<<"]";}
+template<class T>std::string release_cell(db_type& db,char op,size_t row,const db_type::iterator* hint,db_type::iterator& ret){T v=value<T>("3");try{if(op=='(')v=db.release<T>(row);else if(hint)ret=db.release(*hint,row,v);else ret=db.release(row,v);}catch(const std::exception& e){trace_enabled=false;return capture([&]{std::cout<<"[\""<<e.what()<<"\",";print(v);std::cout<<","<<calls_json()<<"]";});}trace_enabled=false;return capture([&]{std::cout<<"[";print(v);std::cout<<",";if(op=='(')std::cout<<"null";else node(ret,db.end(),db);std::cout<<","<<calls_json()<<"]";});}
+std::string release_cell(db_type& db,char op,size_t row,int type,const db_type::iterator* hint,db_type::iterator& ret){switch(type){
+` +
+  kinds
+    .map(
+      /** Emits actual original public release calls with an explicit native type witness. @param kind - Alias. @param type - Discriminator. @returns Caller. */
+      (kind, type) =>
+        `case ${type}:return release_cell<typename ${kind}_element_block::value_type>(db,op,row,hint,ret);`,
+    )
+    .join("\n") +
+  String.raw`
+}std::abort();}
 template<class It>void hint_node(const It& hint,const db_type& db,bool at_end=false){const auto& n=hint.get_node();std::cout<<"["<<n.type<<","<<n.position<<","<<n.size<<","<<id(n.data)<<",";if(at_end)std::cout<<"null,null";else std::cout<<(n.__private_data.parent==&db?"true":"false")<<","<<n.__private_data.block_index;std::cout<<"]";}
 template<class Pair,class It>std::string position_json(const Pair& p,const It& end,const db_type& db,const It* hint=nullptr,bool hint_at_end=false){return capture([&]{std::cout<<"[";node(p.first,end,db);std::cout<<","<<p.second;if(hint){std::cout<<",";hint_node(*hint,db,hint_at_end);}std::cout<<"]";});}
 void state(db_type& db){const auto& s=access_store(db,access_tag{});std::cout<<"["<<db.size()<<","<<db.block_size()<<","<<(db.empty()?"true":"false")<<",["<<db.event_handler().tag<<","<<(db.event_handler().log?"true":"false")<<"],[[";for(size_t i=0;i<s.positions.size();++i){if(i)std::cout<<",";std::cout<<s.positions[i];}std::cout<<"],[";for(size_t i=0;i<s.sizes.size();++i){if(i)std::cout<<",";std::cout<<s.sizes[i];}std::cout<<"],[";for(size_t i=0;i<s.element_blocks.size();++i){if(i)std::cout<<",";std::cout<<id(s.element_blocks[i]);}std::cout<<"],["<<s.positions.capacity()<<","<<s.sizes.capacity()<<","<<s.element_blocks.capacity()<<"]],[";for(size_t i=0;i<s.element_blocks.size();++i){if(i)std::cout<<",";if(s.element_blocks[i])payload(*s.element_blocks[i]);else std::cout<<"null";}std::cout<<"],[";node(db.begin(),db.end(),db);std::cout<<",";node(db.end(),db.end(),db);std::cout<<",";node(db.cbegin(),db.cend(),db);std::cout<<",";node(db.cend(),db.cend(),db);std::cout<<",";node(db.rbegin(),db.rend(),db);std::cout<<",";node(db.rend(),db.rend(),db);std::cout<<",";node(db.crbegin(),db.crend(),db);std::cout<<",";node(db.crend(),db.crend(),db);std::cout<<"]]";}
@@ -807,6 +822,7 @@ else if(op=='w'){size_t index;bool overwrite;std::cin>>index>>overwrite;operatio
 else if(op=='n'){size_t index;element_t cat;std::cin>>index>>cat;result=next_category(*db[dst],index,cat,next_category_tag{})?"true":"false";}
 else if(op=='x'){size_t index;element_t cat;std::cin>>index>>cat;result=previous_category(*db[dst],index,cat,category_tag{})?"true":"false";}
 else if(op=='v'||op=='d'||op=='t'){size_t pos,len;std::cin>>pos>>len;operation_calls.clear();trace_enabled=true;db_type::iterator it;if(op=='v')it=db[dst]->insert_empty(pos,len);else{int slot;std::cin>>slot;if(op=='t')it=db[dst]->insert_empty(*hints[slot],pos,len);else{int index;std::cin>>index;auto hint=db[slot]->begin();std::advance(hint,index);it=db[dst]->insert_empty(hint,pos,len);}}trace_enabled=false;hints[dst]=it;result=capture([&]{std::cout<<"[";node(it,db[dst]->end(),*db[dst]);std::cout<<","<<calls_json()<<"]";});}
+else if(op=='('||op==')'||op=='='||op=='~'){size_t row;int type;std::cin>>row>>type;operation_calls.clear();trace_enabled=true;db_type::iterator ret;std::optional<db_type::iterator> hint;if(op=='='||op=='~'){int slot;std::cin>>slot;if(op=='~')hint=*hints[slot];else{int index;std::cin>>index;hint=db[slot]->begin();std::advance(*hint,index);}}result=release_cell(*db[dst],op,row,type,hint?&*hint:nullptr,ret);if(op!='('&&!result.starts_with("[\"multi_type_vector"))hints[dst]=ret;}
 else if(op=='r'){operation_calls.clear();trace_enabled=true;db[dst]->release();trace_enabled=false;result=calls_json();}
 else if(op=='e'){size_t start,end;std::cin>>start>>end;operation_calls.clear();trace_enabled=true;db[dst]->erase(start,end);trace_enabled=false;result=calls_json();}
 else if(op=='a'){int type;std::string text;std::cin>>type>>text;operation_calls.clear();trace_enabled=true;auto it=append_scalar(*db[dst],type,text);trace_enabled=false;result=capture([&]{std::cout<<"[";node(it,db[dst]->end(),*db[dst]);std::cout<<","<<calls_json()<<"]";});}
@@ -860,104 +876,116 @@ const lines = raw
       line,
     ) => JSON.parse(line),
   );
-const snapshots = [],
-  idsByState = new Map(),
-  ownerSnapshots = [],
-  idsByOwner = new Map();
-const metadataSnapshots = [],
-  payloadSnapshots = [],
-  endpointSnapshots = [];
-const metadataIds = new Map(),
-  payloadIds = new Map(),
-  endpointIds = new Map();
-const resultSnapshots = [],
-  equalitySnapshots = [],
-  eventSnapshots = [];
-const resultIds = new Map(),
-  equalityIds = new Map(),
-  eventIds = new Map();
-/** Interns a complete unchanged native field; no value or callback is summarized. @param table - Complete values. @param ids - Full JSON keys. @param value - Original native field. @returns Stable complete-field ID. */
-function internField(table, ids, value) {
-  const key = JSON.stringify(value);
-  let id = ids.get(key);
-  if (id === undefined) {
-    id = table.length;
-    ids.set(key, id);
-    table.push(value);
+/** Captures a semantic native operation corpus using the unchanged complete-field interner. @param cases - Original callers. @param lines - Actual full native records. @returns Lossless portable corpus. */
+function capture_cases(cases, lines) {
+  const snapshots = [],
+    idsByState = new Map(),
+    ownerSnapshots = [],
+    idsByOwner = new Map();
+  const metadataSnapshots = [],
+    payloadSnapshots = [],
+    endpointSnapshots = [];
+  const metadataIds = new Map(),
+    payloadIds = new Map(),
+    endpointIds = new Map();
+  const resultSnapshots = [],
+    equalitySnapshots = [],
+    eventSnapshots = [];
+  const resultIds = new Map(),
+    equalityIds = new Map(),
+    eventIds = new Map();
+  /** Interns a complete unchanged native field; no value or callback is summarized. @param table - Complete values. @param ids - Full JSON keys. @param value - Original native field. @returns Stable complete-field ID. */
+  function internField(table, ids, value) {
+    const key = JSON.stringify(value);
+    let id = ids.get(key);
+    if (id === undefined) {
+      id = table.length;
+      ids.set(key, id);
+      table.push(value);
+    }
+    return id;
   }
-  return id;
+  return {
+    baselineCommit: pinned,
+    archiveHashes,
+    sourceHashes,
+    driverHash: digest(driver),
+    target:
+      "host clang++ libc++ ASan UBSan; unchanged real original SoA container, no_trace/default execution/nonthrowing event value semantics; caller-only private observation bridge and forwarding original standard block-func operation observer; compound inputs prepared by original public set outside the reviewed ownership group",
+    cases: cases.map(
+      /** Retains every full state and final destructor log. @param c - Input. @param index - Output. @returns Portable case. */ (
+        c,
+        index,
+      ) => ({
+        ...c,
+        states: lines[index].slice(0, -1).map(
+          /** Losslessly interns complete owner/equality/live-payload/event state. @param state - Record. @returns Stable ID. */ (
+            state,
+          ) => {
+            const key = JSON.stringify(state);
+            let id = idsByState.get(key);
+            if (id === undefined) {
+              id = snapshots.length;
+              idsByState.set(key, id);
+              snapshots.push([
+                internField(resultSnapshots, resultIds, state[0]),
+                state[1],
+                state[2].map(
+                  /** Losslessly interns the full unchanged native owner, including every payload/metadata/endpoint field. @param owner - Complete owner or absent slot. @returns Stable full-owner ID or null. */ (
+                    owner,
+                  ) => {
+                    if (owner === null) return null;
+                    const ownerKey = JSON.stringify(owner);
+                    let ownerId = idsByOwner.get(ownerKey);
+                    if (ownerId === undefined) {
+                      ownerId = ownerSnapshots.length;
+                      idsByOwner.set(ownerKey, ownerId);
+                      ownerSnapshots.push([
+                        owner[0],
+                        owner[1],
+                        owner[2],
+                        owner[3],
+                        internField(metadataSnapshots, metadataIds, owner[4]),
+                        internField(payloadSnapshots, payloadIds, owner[5]),
+                        internField(endpointSnapshots, endpointIds, owner[6]),
+                      ]);
+                    }
+                    return ownerId;
+                  },
+                ),
+                internField(equalitySnapshots, equalityIds, state[3]),
+                internField(eventSnapshots, eventIds, state[4]),
+              ]);
+            }
+            return id;
+          },
+        ),
+        finalEvents: internField(eventSnapshots, eventIds, lines[index].at(-1)),
+      }),
+    ),
+    snapshots,
+    ownerSnapshots,
+    metadataSnapshots,
+    payloadSnapshots,
+    endpointSnapshots,
+    resultSnapshots,
+    equalitySnapshots,
+    eventSnapshots,
+  };
 }
-const document = {
-  baselineCommit: pinned,
-  archiveHashes,
-  sourceHashes,
-  driverHash: digest(driver),
-  target:
-    "host clang++ libc++ ASan UBSan; unchanged real original SoA container, no_trace/default execution/nonthrowing event value semantics; caller-only private observation bridge and forwarding original standard block-func operation observer; compound inputs prepared by original public set outside the reviewed ownership group",
-  cases: cases.map(
-    /** Retains every full state and final destructor log. @param c - Input. @param index - Output. @returns Portable case. */ (
-      c,
-      index,
-    ) => ({
-      ...c,
-      states: lines[index].slice(0, -1).map(
-        /** Losslessly interns complete owner/equality/live-payload/event state. @param state - Record. @returns Stable ID. */ (
-          state,
-        ) => {
-          const key = JSON.stringify(state);
-          let id = idsByState.get(key);
-          if (id === undefined) {
-            id = snapshots.length;
-            idsByState.set(key, id);
-            snapshots.push([
-              internField(resultSnapshots, resultIds, state[0]),
-              state[1],
-              state[2].map(
-                /** Losslessly interns the full unchanged native owner, including every payload/metadata/endpoint field. @param owner - Complete owner or absent slot. @returns Stable full-owner ID or null. */ (
-                  owner,
-                ) => {
-                  if (owner === null) return null;
-                  const ownerKey = JSON.stringify(owner);
-                  let ownerId = idsByOwner.get(ownerKey);
-                  if (ownerId === undefined) {
-                    ownerId = ownerSnapshots.length;
-                    idsByOwner.set(ownerKey, ownerId);
-                    ownerSnapshots.push([
-                      owner[0],
-                      owner[1],
-                      owner[2],
-                      owner[3],
-                      internField(metadataSnapshots, metadataIds, owner[4]),
-                      internField(payloadSnapshots, payloadIds, owner[5]),
-                      internField(endpointSnapshots, endpointIds, owner[6]),
-                    ]);
-                  }
-                  return ownerId;
-                },
-              ),
-              internField(equalitySnapshots, equalityIds, state[3]),
-              internField(eventSnapshots, eventIds, state[4]),
-            ]);
-          }
-          return id;
-        },
-      ),
-      finalEvents: internField(eventSnapshots, eventIds, lines[index].at(-1)),
-    }),
-  ),
-  snapshots,
-  ownerSnapshots,
-  metadataSnapshots,
-  payloadSnapshots,
-  endpointSnapshots,
-  resultSnapshots,
-  equalitySnapshots,
-  eventSnapshots,
-};
-if (process.argv.includes("--write"))
-  writeFileSync(fixture, `${JSON.stringify(document, null, 2)}\n`);
-else if (JSON.stringify(document) !== JSON.stringify(JSON.parse(readFileSync(fixture))))
-  throw new Error("Original container fixture differs.");
+const documents = [
+  [fixture, capture_cases(cases.slice(0, scalarReleaseStart), lines.slice(0, scalarReleaseStart))],
+  [
+    "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/native-scalar-release-cases.json",
+    capture_cases(cases.slice(scalarReleaseStart), lines.slice(scalarReleaseStart)),
+  ],
+];
+for (const [path, document] of documents) {
+  if (process.argv.includes("--write"))
+    writeFileSync(path, `${JSON.stringify(document, null, 2)}\n`);
+  else if (JSON.stringify(document) !== JSON.stringify(JSON.parse(readFileSync(path))))
+    throw new Error(`Original container fixture differs: ${path}`);
+}
 console.log(
-  `Original container: ${cases.length} complete sequences/${cases.reduce(/** Counts every observed public ownership call. @param n - Count. @param c - Sequence. @returns Count. */ (n, c) => n + c.commands.length, 0)} operations/${snapshots.length} lossless full live-state snapshots, all12 scalar families and final native destructor events.`,
+  `Original container: ${cases.length} complete sequences/${cases.reduce(/** Counts every observed original call. @param n - Count. @param c - Sequence. @returns Count. */ (n, c) => n + c.commands.length, 0)} operations/${documents.reduce(/** Counts captured complete states. @param n - Count. @param corpus - Semantic corpus. @returns Count. */ (n, [, d]) => n + d.snapshots.length, 0)} lossless full live-state snapshots, all12 scalar families and final native destructor events.`,
 );

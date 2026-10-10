@@ -698,3 +698,32 @@ This is an error-path observation, not evidence of successful out-of-range
 access or an invalid range accepted by Calc. Decision: preserve the exact
 start-row argument, diagnostic source line and pre-mutation guards; do not
 substitute the end row or a locally improved message.
+
+## CALC-031: Hinted scalar release reads empty metadata before its row guard
+
+Status: suspicious bounds-check order; original ASan/UBSan failure reproduced.
+This native undefined behavior does not establish an intended result.
+
+Pinned mdds3.2.1 `soa/main_def.inl:3708` calls hinted block lookup before the
+public scalar-release guard. Original lookup at `main_def.inl:3957` reads
+`m_block_store.positions[0]` even when the destination has no blocks. A valid
+hint from another nonempty container is ignored by the parent check, then this
+empty-vector access still occurs. The public release documentation in
+`soa/main.hpp:1036-1056` describes an out-of-range exception for an invalid row.
+That exception is not reached in this native case.
+
+Reproducer with unchanged full headers and default libc++ traits: construct
+`db(0)` and a separate boolean `other(1, true)`, retain `other.begin()`, then call
+`db.release(other.begin(), 0, value)`. ASan/UBSan reports null-reference binding
+in libc++ vector, a read at `main_def.inl:3957`, and aborts through hinted
+release at3708. Task202610100153-570FFF retains the exact caller input and
+sanitizer stderr in its native verification artifacts.
+
+Decision: preserve the original lookup and guard ordering. No synthetic
+exception, early guard, recovery or alternate mutation is added to the shared
+implementation. Native UB is not recorded as a defined portable result. Plain
+empty/moved-source bounds guards and valid hints on destinations with metadata
+remain in the complete typed acceptance corpus. JavaScript storage bounds
+behavior is an existing representation boundary; native UB/ABI parity remains
+unverified. This may affect other original hinted callers sharing the lookup,
+but only scalar release is reproduced here.

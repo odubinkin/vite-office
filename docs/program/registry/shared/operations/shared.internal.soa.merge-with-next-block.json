@@ -1,0 +1,12 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "shared.internal.soa.merge-with-next-block",
+    "modulePath": "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/main_def.ts",
+    "symbol": "merge_with_next_block",
+    "classification": "upstream-mechanism",
+    "capabilityId": "CAP-7e2c944c-53b2-461e-befb-7771af39d1c6",
+    "description": "Original pure store/event merge body retains its actual boolean flag, append/zero-size-release/delete and original metadata erase order."
+  }
+}

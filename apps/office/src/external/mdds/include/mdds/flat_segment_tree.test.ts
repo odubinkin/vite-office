@@ -105,64 +105,72 @@ function snapshot(
 }
 
 describe("pinned mdds flat segment storage", /** Groups genuine native comparisons and independent contract cases. @returns Nothing. */ () => {
-  it("matches every unchanged native insertion, shift, index and copy/move snapshot", /** Replays every recorded native step using portable initialized inputs. @returns Nothing. */ () => {
-    expect(fixture.baselineCommit).toBe("9bc445578031fecf56086729d8e4940c77e14d65");
-    expect(fixture.archiveHashes.mdds).toBe(
-      "673f5bb94612dbba581fc92b99b5e5dd1a53e29496a5dbc936432f6b0687c112",
-    );
-    for (const state of fixture.cases) {
-      /** Applies the original native value cast. @param n - Integer input. @returns Specialized value. */
-      function cast(n: number): SegmentValue {
-        return state.kind === "boolean" ? Boolean(n) : n;
-      }
-      const trees: [flat_segment_tree<SegmentValue>, flat_segment_tree<SegmentValue>] = [
-        new flat_segment_tree(...state.bounds, cast(state.initial)),
-        new flat_segment_tree(...state.bounds, cast(3)),
-      ];
-      const foreign = new flat_segment_tree(0, 8, cast(3));
-      foreign.insert_front(2, 5, cast(2));
-      for (let i = 0; i < Math.max(1, state.operations.length); ++i) {
-        const command = state.operations[i];
-        let inserted: [boolean, IteratorRecord] | null = null;
-        if (command) {
-          const [op, index, first = 0, second = 0, third = 0, fourth = 0] = command;
-          const target = index as 0 | 1,
-            tree = trees[target];
-          if (op === "F" || op === "B" || op === "I") {
-            const result =
-              op === "F"
-                ? tree.insert_front(first, second, cast(third))
-                : op === "B"
-                  ? tree.insert_back(first, second, cast(third))
-                  : tree.insert(hint(tree, foreign, fourth), first, second, cast(third));
-            inserted = [result[1], iteratorRecord(tree, result[0])];
-          } else if (op === "T") tree.build_tree();
-          else if (op === "E") tree.clear();
-          else if (op === "L") tree.shift_left(first, second);
-          else if (op === "R") tree.shift_right(first, second, Boolean(third));
-          else if (op === "C") trees[target] = new flat_segment_tree(trees[first as 0 | 1]);
-          else if (op === "A") tree.assign(trees[first as 0 | 1]);
-          else if (op === "V") trees[target] = flat_segment_tree.move(trees[first as 0 | 1]);
-          else if (op === "W") tree.moveAssign(trees[first as 0 | 1]);
-          else if (op === "S") tree.swap(trees[first as 0 | 1]);
-          else throw new Error(`Unknown original command ${op}`);
+  describe("matches every unchanged native insertion, shift, index and copy/move snapshot", /** Registers both original value specializations without changing the test budget. @returns Nothing. */ () => {
+    for (const kind of ["number", "boolean"] as const) {
+      it(`matches every original ${kind} specialization snapshot`, /** Replays every recorded native step for this original specialization. @returns Nothing. */ () => {
+        expect(fixture.baselineCommit).toBe("9bc445578031fecf56086729d8e4940c77e14d65");
+        expect(fixture.archiveHashes.mdds).toBe(
+          "673f5bb94612dbba581fc92b99b5e5dd1a53e29496a5dbc936432f6b0687c112",
+        );
+        for (const state of fixture.cases.filter(
+          /** Selects an original native specialization. @param state - Complete native caller. @returns Specialization membership. */ (
+            state,
+          ) => state.kind === kind,
+        )) {
+          /** Applies the original native value cast. @param n - Integer input. @returns Specialized value. */
+          function cast(n: number): SegmentValue {
+            return state.kind === "boolean" ? Boolean(n) : n;
+          }
+          const trees: [flat_segment_tree<SegmentValue>, flat_segment_tree<SegmentValue>] = [
+            new flat_segment_tree(...state.bounds, cast(state.initial)),
+            new flat_segment_tree(...state.bounds, cast(3)),
+          ];
+          const foreign = new flat_segment_tree(0, 8, cast(3));
+          foreign.insert_front(2, 5, cast(2));
+          for (let i = 0; i < Math.max(1, state.operations.length); ++i) {
+            const command = state.operations[i];
+            let inserted: [boolean, IteratorRecord] | null = null;
+            if (command) {
+              const [op, index, first = 0, second = 0, third = 0, fourth = 0] = command;
+              const target = index as 0 | 1,
+                tree = trees[target];
+              if (op === "F" || op === "B" || op === "I") {
+                const result =
+                  op === "F"
+                    ? tree.insert_front(first, second, cast(third))
+                    : op === "B"
+                      ? tree.insert_back(first, second, cast(third))
+                      : tree.insert(hint(tree, foreign, fourth), first, second, cast(third));
+                inserted = [result[1], iteratorRecord(tree, result[0])];
+              } else if (op === "T") tree.build_tree();
+              else if (op === "E") tree.clear();
+              else if (op === "L") tree.shift_left(first, second);
+              else if (op === "R") tree.shift_right(first, second, Boolean(third));
+              else if (op === "C") trees[target] = new flat_segment_tree(trees[first as 0 | 1]);
+              else if (op === "A") tree.assign(trees[first as 0 | 1]);
+              else if (op === "V") trees[target] = flat_segment_tree.move(trees[first as 0 | 1]);
+              else if (op === "W") tree.moveAssign(trees[first as 0 | 1]);
+              else if (op === "S") tree.swap(trees[first as 0 | 1]);
+              else throw new Error(`Unknown original command ${op}`);
+            }
+            const expected = state.output[i] as Step;
+            expect(
+              [
+                inserted,
+                snapshot(trees[0], foreign, cast),
+                snapshot(trees[1], foreign, cast),
+                trees[0].equals(trees[1]),
+              ],
+              JSON.stringify(command),
+            ).toEqual([
+              expected[0],
+              fixture.snapshots[expected[1]],
+              fixture.snapshots[expected[2]],
+              expected[3],
+            ]);
+          }
         }
-        const expected = state.output[i] as Step;
-        expect(
-          [
-            inserted,
-            snapshot(trees[0], foreign, cast),
-            snapshot(trees[1], foreign, cast),
-            trees[0].equals(trees[1]),
-          ],
-          JSON.stringify(command),
-        ).toEqual([
-          expected[0],
-          fixture.snapshots[expected[1]],
-          fixture.snapshots[expected[2]],
-          expected[3],
-        ]);
-      }
+      });
     }
   });
   it("retains terminal zero, hint overload asymmetry and omitted output references", /** Verifies independently visible native search/default contracts. @returns Nothing. */ () => {

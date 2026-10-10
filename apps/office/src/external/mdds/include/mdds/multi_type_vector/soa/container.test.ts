@@ -1,6 +1,9 @@
 /** @fileoverview Complete unchanged original container constructor/lifetime/operator states over real shared SoA ownership and typed scalar callbacks. */
 import { describe, it, expect } from "vitest";
 import fixture from "./native-container-cases.json";
+import scalarFixture from "./native-scalar-release-cases.json";
+/** Complete native corpus; both operation groups share the same full-field decoder and observer. */
+type NativeFixture = typeof fixture | typeof scalarFixture;
 import {
   is_previous_block_of_type,
   is_next_block_of_type,
@@ -38,9 +41,9 @@ type OwnerState = [
 type EventEntry = [number, number, number, number, boolean];
 /** Full native result, stable handler fields, owners, equality matrix and event log. */
 type State = [unknown, boolean, (OwnerState | null)[], unknown[], EventEntry[]];
-/** Reconstructs every exact native field from losslessly interned complete owner records. @param index - Full-state ID. @returns Complete original record. */
-function decodeSnapshot(index: number): State {
-  const s = fixture.snapshots[index] as unknown as [
+/** Reconstructs every exact native field from losslessly interned complete owner records. @param index - Full-state ID. @param corpus - Complete captured native corpus. @returns Complete original record. */
+function decodeSnapshot(index: number, corpus: NativeFixture): State {
+  const s = corpus.snapshots[index] as unknown as [
     number,
     boolean,
     (number | null)[],
@@ -48,14 +51,14 @@ function decodeSnapshot(index: number): State {
     number,
   ];
   return [
-    fixture.resultSnapshots[s[0]],
+    corpus.resultSnapshots[s[0]],
     s[1],
     s[2].map(
       /** Resolves a complete owner without summarizing its fields. @param id - Original owner ID. @returns Complete owner or absence. */ (
         id,
       ) => {
         if (id === null) return null;
-        const owner = fixture.ownerSnapshots[id] as unknown as [
+        const owner = corpus.ownerSnapshots[id] as unknown as [
           number,
           number,
           boolean,
@@ -69,14 +72,14 @@ function decodeSnapshot(index: number): State {
           owner[1],
           owner[2],
           owner[3],
-          fixture.metadataSnapshots[owner[4] as number],
-          fixture.payloadSnapshots[owner[5] as number],
-          fixture.endpointSnapshots[owner[6] as number],
+          corpus.metadataSnapshots[owner[4] as number],
+          corpus.payloadSnapshots[owner[5] as number],
+          corpus.endpointSnapshots[owner[6] as number],
         ] as unknown as OwnerState;
       },
     ),
-    fixture.equalitySnapshots[s[3]] as unknown as unknown[],
-    fixture.eventSnapshots[s[4]] as unknown as EventEntry[],
+    corpus.equalitySnapshots[s[3]] as unknown as unknown[],
+    corpus.eventSnapshots[s[4]] as unknown as EventEntry[],
   ];
 }
 const aliases = [
@@ -382,17 +385,36 @@ function loadSeed(initial: OwnerState): multi_type_vector<Handler> {
 }
 
 /** One complete genuine native caller sequence. */
-type NativeCase = (typeof fixture.cases)[number];
+type NativeCase = NativeFixture["cases"][number];
 /** Selects the original operation group without changing any caller data or expected field. @param c - Complete case. @returns Original group. */
-function originalOperationGroup(c: NativeCase): "base" | "empty" | "release" {
+function originalOperationGroup(
+  c: NativeCase,
+): "lifetime" | "erase" | "resize" | "empty" | "release" | "scalar-release" {
   for (const command of c.commands) {
+    if (["(", ")", "=", "~"].includes(command[0] as string)) return "scalar-release";
     if (["!", "@", "#"].includes(command[0] as string)) return "release";
     if (["q", "z", "s", "u", "m"].includes(command[0] as string)) return "empty";
   }
-  return "base";
+  if (
+    c.commands.some(
+      /** Identifies original range erase callers. @param command - Original caller. @returns Whether erase is present. */ (
+        command,
+      ) => command[0] === "e",
+    )
+  )
+    return "erase";
+  if (
+    c.commands.some(
+      /** Identifies original resize callers. @param command - Original caller. @returns Whether resize is present. */ (
+        command,
+      ) => command[0] === "r",
+    )
+  )
+    return "resize";
+  return "lifetime";
 }
-/** Replays every complete original field and final destructor observation through the common observer. @param cases - Complete native cases. @returns Nothing. */
-function replayOriginalSequences(cases: readonly NativeCase[]): void {
+/** Replays every complete original field and final destructor observation through the common observer. @param cases - Complete native cases. @param corpus - Complete native corpus. @returns Nothing. */
+function replayOriginalSequences(cases: readonly NativeCase[], corpus: NativeFixture): void {
   for (const c of cases) {
     operationCalls = null;
     nextHandler = 1;
@@ -406,7 +428,7 @@ function replayOriginalSequences(cases: readonly NativeCase[]): void {
       null,
       null,
     ];
-    const initial = decodeSnapshot(c.states[0] as number);
+    const initial = decodeSnapshot(c.states[0] as number, corpus);
     if (c.seed >= 0) owners[0] = loadSeed(initial[2][0] as OwnerState);
     expect(record(owners, null, true)).toEqual(initial);
     for (let step = 0; step < c.commands.length; ++step) {
@@ -491,6 +513,39 @@ function replayOriginalSequences(cases: readonly NativeCase[]): void {
               destination["create_new_block_with_new_cell"](args[0] as number, cell, family);
               result = operationCalls;
             }
+          } finally {
+            operationCalls = null;
+          }
+        } else if (["(", ")", "=", "~"].includes(op as string)) {
+          operationCalls = [];
+          const row = typeof args[0] === "string" ? BigInt(args[0]) : (args[0] as number);
+          const family = callbacks[args[1] as number] as ContainerCallbacks;
+          const output = { value: value(args[1] as number, "3") };
+          try {
+            let it: iterator_base<multi_type_vector<Handler>> | undefined;
+            if (op === "(") output.value = destination.release(row, family);
+            else if (op === ")") it = destination.release(row, family, output);
+            else {
+              const slot = args[2] as number;
+              const hint =
+                op === "~"
+                  ? (hints[slot] as iterator_base<multi_type_vector<Handler>>)
+                  : (owners[slot] as multi_type_vector<Handler>).begin().advance(args[3] as number);
+              it = destination.release(hint, row, family, output);
+            }
+            if (it) hints[dst] = it;
+            result = [
+              typeof output.value === "bigint" ? output.value.toString() : output.value,
+              it ? node(it, destination.end(), destination) : null,
+              operationCalls,
+            ];
+          } catch (error) {
+            expect(error).toBeInstanceOf(RangeError);
+            result = [
+              (error as Error).message,
+              typeof output.value === "bigint" ? output.value.toString() : output.value,
+              operationCalls,
+            ];
           } finally {
             operationCalls = null;
           }
@@ -749,10 +804,12 @@ function replayOriginalSequences(cases: readonly NativeCase[]): void {
         );
         result = (error as Error).message;
       }
-      expect(record(owners, result, stable)).toEqual(decodeSnapshot(c.states[step + 1] as number));
+      expect(record(owners, result, stable)).toEqual(
+        decodeSnapshot(c.states[step + 1] as number, corpus),
+      );
     }
     for (const owner of owners) owner?.dispose();
-    expect(log).toEqual(fixture.eventSnapshots[c.finalEvents]);
+    expect(log).toEqual(corpus.eventSnapshots[c.finalEvents]);
   }
 }
 
@@ -760,21 +817,26 @@ describe("original SoA container lifetime", /** Declares original native ownersh
   describe("matches every complete original constructor operator iterator and destructor sequence", /** Registers original independent operation groups with the unchanged per-test budget. @returns Nothing. */ () => {
     for (const [group, name] of [
       [
-        "base",
-        "preserves complete lifetime query navigation resize append erase and empty-insertion sequences",
+        "lifetime",
+        "preserves complete lifetime query navigation append and empty-insertion sequences",
       ],
+      ["erase", "preserves complete original range-erase sequences"],
+      ["resize", "preserves complete original resize sequences"],
       ["empty", "preserves complete range-empty and middle-split sequences"],
       ["release", "preserves complete public range-release sequences"],
+      ["scalar-release", "preserves complete original scalar release overload sequences"],
     ] as const) {
       it(
         name,
         /** Replays the complete original operation group. @returns Nothing. */ () => {
+          const corpus = group === "scalar-release" ? scalarFixture : fixture;
           replayOriginalSequences(
-            fixture.cases.filter(
+            corpus.cases.filter(
               /** Retains every case in exactly its original group. @param c - Complete case. @returns Group membership. */ (
                 c,
               ) => originalOperationGroup(c) === group,
             ),
+            corpus,
           );
         },
       );

@@ -16,6 +16,7 @@ import {
 } from "../util.ts";
 import {
   iterator_base,
+  const_iterator_base,
   grouped_iterator_type,
   vector_iterator,
   type IteratorTraits,
@@ -231,12 +232,19 @@ export function get_impl<T extends DelayedVectorValue>(
   return callbacks.mdds_mtv_get_value(data, Number(pos) - start_row);
 }
 
-/** Original mutable/const position member body over erased iterator aliases; end returns before reading cached hint data. @param store - Fields. @param size - Size. @param parent - Owner. @param row - Row. @param Iterator - Native alias. @param line - Pinned native diagnostic source line. @param hint - Original cached iterator. @returns Iterator/offset pair. */
+/** Original mutable/const position member body over erased iterator aliases; end returns before reading cached hint data. @param store - Fields. @param size - Size. @param parent - Owner. @param rowOrHint - Row or cached hint. @param Iterator - Native alias. @param hinted_row - Hinted row. @returns Iterator/offset pair. */
 export function position_impl<P, I>(
   store: blocks_type,
   size: number,
   parent: P,
-  row: number | bigint,
+  rowOrHint:
+    | number
+    | bigint
+    | {
+        get_node(): {
+          readonly __private_data: { readonly parent: P | null; readonly block_index: number };
+        };
+      },
   Iterator: new (
     traits: IteratorTraits,
     pos: grouped_iterator_type,
@@ -244,13 +252,10 @@ export function position_impl<P, I>(
     parent: P,
     block_index: number,
   ) => I,
-  line: number,
-  hint?: {
-    get_node(): {
-      readonly __private_data: { readonly parent: P | null; readonly block_index: number };
-    };
-  },
+  hinted_row?: number | bigint,
 ): BlockPosition<I> {
+  const hint = typeof rowOrHint === "object" ? rowOrHint : undefined;
+  const row = hint ? (hinted_row as number | bigint) : (rowOrHint as number | bigint);
   if (BigInt(row) === BigInt(size))
     return { first: make_iterator(store, parent, store.positions.size(), Iterator), second: 0 };
   const index = hint
@@ -259,7 +264,7 @@ export function position_impl<P, I>(
   if (index === store.positions.size())
     throw_block_position_not_found(
       "multi_type_vector::position",
-      line,
+      Iterator === (const_iterator_base as unknown) ? (hint ? 606 : 582) : hint ? 560 : 536,
       row,
       store.positions.size(),
       size,
@@ -709,4 +714,111 @@ export function dispose(
   funcs: BlocksTraits["block_funcs"],
 ): void {
   delete_element_blocks(store, event, funcs, 0, store.positions.size());
+}
+
+/** Original public empty-insertion body with borrowed fields and original private member invocation. @param store - Metadata. @param size - Logical size. @param parent - Owner. @param first - Row or hint. @param second - Count or row. @param third - Hinted count. @param invoke - Original member. @returns Original iterator. */
+export function insert_empty<P>(
+  store: blocks_type,
+  size: number,
+  parent: P,
+  first: number | bigint | iterator_base<P>,
+  second: number | bigint,
+  third: number | undefined,
+  invoke: (pos: number, index: number, length: number) => iterator_base<P>,
+): iterator_base<P> {
+  const hint = typeof first === "object" ? first : undefined;
+  const pos = hint ? second : (first as number | bigint);
+  const length = hint ? (third as number) : (second as number);
+  if (!length) return make_iterator(store, parent, store.positions.size(), iterator_base<P>);
+  const block_index = hint
+    ? get_block_position_hint(store, size, parent, hint.get_node().__private_data, pos)
+    : get_block_position(store, size, pos);
+  if (block_index === store.positions.size())
+    throw_block_position_not_found(
+      "multi_type_vector::insert_empty",
+      hint ? 1279 : 1237,
+      pos,
+      store.positions.size(),
+      size,
+    );
+  return invoke(Number(pos), block_index, length);
+}
+
+/** Original merge member body borrows actual fields and returns its original flag. @param store - Metadata. @param event - Event field. @param funcs - Registered operations. @param block_index - Valid source block. @returns Whether merged. */
+export function merge_with_next_block(
+  store: blocks_type,
+  event: ContainerEvent,
+  funcs: BlocksTraits["block_funcs"],
+  block_index: number,
+): boolean {
+  if (block_index >= store.positions.size() - 1) return false;
+  const blk_data = store.element_blocks.get(block_index);
+  const next_data = store.element_blocks.get(block_index + 1);
+  if (!blk_data) {
+    if (next_data) return false;
+    store.sizes.set(block_index, store.sizes.get(block_index) + store.sizes.get(block_index + 1));
+    store.erase(block_index + 1);
+    return true;
+  }
+  if (!next_data) return false;
+  if (get_block_type(blk_data) !== get_block_type(next_data)) return false;
+  funcs.append_block(blk_data, next_data);
+  funcs.resize_block(next_data, 0);
+  store.sizes.set(block_index, store.sizes.get(block_index) + store.sizes.get(block_index + 1));
+  delete_element_block(store, event, funcs, block_index + 1);
+  store.erase(block_index + 1);
+  return true;
+}
+
+/** Original scalar release overload body performs lookup before output assignment or mutation. @param store - Metadata. @param size - Logical size. @param event - Event field. @param funcs - Registered operations. @param parent - Owner. @param first - Row or hint. @param second - Row or type witness. @param third - Type witness or output. @param fourth - Hinted output. @returns Original scalar or iterator. */
+export function scalar_release<P>(
+  store: blocks_type,
+  size: number,
+  event: ContainerEvent,
+  funcs: BlocksTraits["block_funcs"],
+  parent: P,
+  first: number | bigint | iterator_base<P>,
+  second: number | bigint | ContainerCallbacks,
+  third?: ContainerCallbacks | { value: DelayedVectorValue },
+  fourth?: { value: DelayedVectorValue },
+): DelayedVectorValue | iterator_base<P> {
+  const hint = typeof first === "object" ? first : undefined;
+  const pos = hint ? (second as number | bigint) : (first as number | bigint);
+  const callbacks = (hint ? third : second) as ContainerCallbacks;
+  const output = (hint ? fourth : third) as { value: DelayedVectorValue } | undefined;
+  const block_index = hint
+    ? get_block_position_hint(store, size, parent, hint.get_node().__private_data, pos)
+    : get_block_position(store, size, pos);
+  if (block_index === store.positions.size())
+    throw_block_position_not_found(
+      "multi_type_vector::release",
+      hint ? 3711 : output ? 3670 : 3631,
+      pos,
+      store.positions.size(),
+      size,
+    );
+  const value = output ?? ({} as { value: DelayedVectorValue });
+  const ret = release_impl(store, event, funcs, parent, Number(pos), block_index, callbacks, value);
+  return output ? ret : value.value;
+}
+/** Original release_impl assigns typed empty or reads scalar before original single-block emptying without overwrite. @param store - Metadata. @param event - Event field. @param funcs - Registered operations. @param parent - Owner. @param pos - Valid row. @param block_index - Located block. @param callbacks - Native type witness. @param value - Borrowed output reference. @returns Original iterator. */
+export function release_impl<P>(
+  store: blocks_type,
+  event: ContainerEvent,
+  funcs: BlocksTraits["block_funcs"],
+  parent: P,
+  pos: number,
+  block_index: number,
+  callbacks: ContainerCallbacks,
+  value: { value: DelayedVectorValue },
+): iterator_base<P> {
+  const blk_data = store.element_blocks.get(block_index);
+  const start_pos = store.positions.get(block_index);
+  if (!blk_data) {
+    value.value = callbacks.mdds_mtv_get_empty_value();
+    return make_iterator(store, parent, block_index, iterator_base<P>);
+  }
+  const offset = pos - start_pos;
+  value.value = callbacks.mdds_mtv_get_value(blk_data, offset);
+  return set_empty_in_single_block(store, event, funcs, parent, pos, pos, block_index, false);
 }
