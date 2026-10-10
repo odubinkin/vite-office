@@ -1,10 +1,11 @@
 ---
 id: "202610092349-Z4XSP9"
 title: "Port original shared SoA whole-container release contract"
-status: "DOING"
+result_summary: "verified-202610092349-Z4XSP9"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 21
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-09T23:59:44.522Z"
+  updated_at: "2026-10-10T00:01:08.740Z"
   updated_by: "CODER"
-  note: "Verified: original shared whole-container release matches7600complete native sequences with unchanged7360full prefix; Calc and changedmain.ts actual100percent positive Istanbul coverage,14finalgates and3upstream-absent groups pass, exactlinks restored and honestinventory updated."
+  note: "verified-202610092349-Z4XSP9"
   attempts: 0
 quality_review:
   state: "pass"
@@ -46,11 +47,16 @@ quality_review:
     - "Independently decoded80944actual committed/native records and unchanged7360complete prior sequences; driver and13actual source headers match. Native write/check use genuine full headers with ASan/UBSan and actual binary byte replay evidence."
     - "All14finalgates and3portablegroups passed; positive raw Istanbul counters prove100four metrics in17Calc source files and changedmain.ts. Default-heap ordinary formatting passed and both exact upstream links restored."
     - "Independent callback audit1680release calls/5436resize-release-delete observations preserves zero-size release, metadata capacity and other owners. Actual source QA references are contextual; inventory flags honestly remain bounded."
-commit: null
+commit:
+  hash: "2daae3737d2d8732e2f151c96af43743402d7cd4"
+  message: "🔍 Z4XSP9 review: record original release native ownership evidence"
 comments:
   -
     author: "CODER"
     body: "Start: implement original whole-container release ownership and complete native focused evidence on branchcalc under persistent user authorization."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610092349-Z4XSP9. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -65,8 +71,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: original shared whole-container release matches7600complete native sequences with unchanged7360full prefix; Calc and changedmain.ts actual100percent positive Istanbul coverage,14finalgates and3upstream-absent groups pass, exactlinks restored and honestinventory updated."
+  -
+    type: "verify"
+    at: "2026-10-10T00:01:08.740Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610092349-Z4XSP9"
+  -
+    type: "status"
+    at: "2026-10-10T00:01:08.871Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610092349-Z4XSP9. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-09T23:59:44.583Z"
+doc_updated_at: "2026-10-10T00:01:27.431Z"
 doc_updated_by: "CODER"
 description: "Continue authorized Calc core with original release() ownership algorithm, actual shared block funcs and complete unchanged-header native evidence; cycle2 task6/10. Previous goal turn completed and closed erase/merge taskJXAJ9S, authoritative clean branchcalc."
 sections:
@@ -158,6 +177,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-10T00:01:08.740Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610092349-Z4XSP9
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T23:59:44.583Z, excerpt_hash=sha256:b74b9c839254656634c6c7a08130d5c9c27b9e29d91f4aa9378c6a0e222edafc
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610092349-Z4XSP9/blueprint/resolved-snapshot.json
+    - old_digest: d1b33d5d2754f4bc2e856095fef38c698f41036bed25bb5ba2a82096fd0eb62e
+    - current_digest: d1b33d5d2754f4bc2e856095fef38c698f41036bed25bb5ba2a82096fd0eb62e
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610092349-Z4XSP9
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610092349-Z4XSP9 --result verified-202610092349-Z4XSP9 --commit 2daae3737d2d8732e2f151c96af43743402d7cd4
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only intentional task-scoped implementation and inventory/docs commits through a separately authorized local task if needed; keep native evidence and task history, preserve unrelated changes and branchcalc. No automatic destructive reset."
   Findings: |-
@@ -178,6 +227,18 @@ sections:
     - Observation: Inventory gates require a nonempty upstream.tests reference for the new capability; omitted test references failed parsing. Actual original whole release QA exists in event/tc/block_counter.inl and custom/tc/misc.inl.
       Impact: Capability evidence mapping is incomplete, while native/scoped coverage and other source gates pass.
       Resolution: Use actual source test reference as contextual upstream evidence with explicit managed/custom QA gap; no test certification claim or validator change. Rerun affected inventory gates and exact changed-record formatting.
+
+    - Observation: Exact routed task complete marked DONE but exited5 E_GIT: installed deterministic close subject too generic.
+      Impact: Only task artifact closure remains; implementation, required checks and quality review are verified.
+      Resolution: Recomputed next-action; execute exact routed commit --close --unstage-others before supported specific-subject fallback. No hook/CLI/policy changes.
+
+    - Observation: Exact routed recovery commit --close --unstage-others exited5 with same generic deterministic subject.
+      Impact: Task closure artifact commit remains; verified code and criteria are unaffected.
+      Resolution: Route recomputed. Use supported ap commit with a specific original release closure subject and --allow-tasks; verify actual amendedHEAD, clean tracked/untracked status, branchcalc and terminal DONE route. No bypass or CLI repair.
+extensions:
+  implementation_commit:
+    hash: "2a7e9b9ded9b7c006965e3ebd3558987a4d45cc7"
+    message: "✨ Z4XSP9 core: port original whole-container release ownership"
 id_source: "generated"
 ---
 ## Summary
@@ -281,6 +342,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-10T00:01:08.740Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610092349-Z4XSP9
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-09T23:59:44.583Z, excerpt_hash=sha256:b74b9c839254656634c6c7a08130d5c9c27b9e29d91f4aa9378c6a0e222edafc
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610092349-Z4XSP9/blueprint/resolved-snapshot.json
+- old_digest: d1b33d5d2754f4bc2e856095fef38c698f41036bed25bb5ba2a82096fd0eb62e
+- current_digest: d1b33d5d2754f4bc2e856095fef38c698f41036bed25bb5ba2a82096fd0eb62e
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610092349-Z4XSP9
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610092349-Z4XSP9 --result verified-202610092349-Z4XSP9 --commit 2daae3737d2d8732e2f151c96af43743402d7cd4
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -306,3 +397,11 @@ No new suspicion established during preflight. Whole-container release differs i
 - Observation: Inventory gates require a nonempty upstream.tests reference for the new capability; omitted test references failed parsing. Actual original whole release QA exists in event/tc/block_counter.inl and custom/tc/misc.inl.
   Impact: Capability evidence mapping is incomplete, while native/scoped coverage and other source gates pass.
   Resolution: Use actual source test reference as contextual upstream evidence with explicit managed/custom QA gap; no test certification claim or validator change. Rerun affected inventory gates and exact changed-record formatting.
+
+- Observation: Exact routed task complete marked DONE but exited5 E_GIT: installed deterministic close subject too generic.
+  Impact: Only task artifact closure remains; implementation, required checks and quality review are verified.
+  Resolution: Recomputed next-action; execute exact routed commit --close --unstage-others before supported specific-subject fallback. No hook/CLI/policy changes.
+
+- Observation: Exact routed recovery commit --close --unstage-others exited5 with same generic deterministic subject.
+  Impact: Task closure artifact commit remains; verified code and criteria are unaffected.
+  Resolution: Route recomputed. Use supported ap commit with a specific original release closure subject and --allow-tasks; verify actual amendedHEAD, clean tracked/untracked status, branchcalc and terminal DONE route. No bypass or CLI repair.
