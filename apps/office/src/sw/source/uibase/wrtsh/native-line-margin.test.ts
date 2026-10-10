@@ -2,6 +2,7 @@
 import { afterEach, expect, it } from "vitest";
 import { SwDoc } from "../../core/doc/doc";
 import { SwPosition, SwPaM } from "../../core/crsr/pam";
+import { SwTextSizeInfo } from "../../core/text/inftxt";
 import { SwTextCursor } from "../../core/text/itrtxt";
 import { SwTextFrame } from "../../core/text/txtfrm";
 import { SwCursorShell, PopMode } from "../../core/crsr/trvltbl";
@@ -135,8 +136,12 @@ it("retains soft-boundary affinity and excludes hard-break affinity", /** Checks
   f.shell.GetLayout().SetCursorTextFrame(f.node, [{ start: 0, end: 6, height: 240 }], 0, 6);
   expect(cursor.LeftRightMargin(f.shell.GetLayout(), false)).toBe(true);
   expect(cursor.GetPoint().GetContentIndex()).toBe(3);
-  const iterator = new SwTextCursor([], "");
-  expect(iterator.CharCursorToLine(0)).toBeUndefined();
+  const unformatted = new SwTextFrame(f.node, "missing", 0, 0, 0, []);
+  expect(
+    /** Checks native missing-para assertion. @returns Missing iterator. */ () =>
+      new SwTextCursor(unformatted, new SwTextSizeInfo(unformatted)),
+  ).toThrow("SwTextIter requires the original formatted paragraph.");
+  unformatted.DestroyImpl();
   const emptyFrame = new SwTextFrame(f.node, "empty", 0, 0, 0, []),
     pam = new SwPaM(cursor.GetPoint());
   try {
@@ -242,18 +247,22 @@ it("native iterator resolves backward queries and ordinary repeated Home stays i
       { start: 0, end: 3, height: 240 },
       { start: 3, end: 6, height: 240 },
     ],
-    iterator = new SwTextCursor(lines, "abcdef");
-  expect(iterator.CharCursorToLine(5)).toBe(lines[1]);
-  expect(iterator.CharCursorToLine(1)).toBe(lines[0]);
-  const blank = new SwTextCursor(
-    [
+    measured = fixture("abcdef"),
+    frame = new SwTextFrame(measured.node, "measured", 0, 6, 0, lines),
+    iterator = new SwTextCursor(frame, new SwTextSizeInfo(frame));
+  expect(iterator.CharCursorToLine(5)).toBe(frame.GetPara()?.GetNext());
+  expect(iterator.CharCursorToLine(1)).toBe(frame.GetPara());
+  const blankOwner = fixture("abc"),
+    blankFrame = new SwTextFrame(blankOwner.node, "blank", 0, 3, 0, [
       { start: 0, end: 0, height: 240 },
       { start: 0, end: 3, height: 240 },
-    ],
-    "abc",
-  );
+    ]),
+    blank = new SwTextCursor(blankFrame, new SwTextSizeInfo(blankFrame));
   SwTextCursor.SetRightMargin(true);
-  expect(blank.CharCursorToLine(0)?.end).toBe(3);
+  blank.CharCursorToLine(0);
+  expect(blank.GetEnd()).toBe(3);
+  frame.DestroyImpl();
+  blankFrame.DestroyImpl();
   const f = fixture("abcdef");
   select(f, 0);
   f.edit.SetCursorTextFrame(f.node.GetIndex(), lines, 0, 6);

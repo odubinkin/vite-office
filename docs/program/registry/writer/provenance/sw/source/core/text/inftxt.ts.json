@@ -12,6 +12,22 @@
         {
           "path": "apps/office/src/sw/source/core/text/native-marked-list-paint.test.ts",
           "marker": "native Number shading"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/text/inftxt.ts",
+          "marker": "SwTextInfo"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/text/inftxt.ts",
+          "marker": "SwTextSizeInfo"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/text/native-paragraph-lines.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-paragraph-lines.test.tsx",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -22,18 +38,29 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/core/text/porfld.cxx",
           "marker": "SwNumberPortion::Paint"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/text/inftxt.hxx",
+          "marker": "class SwTextInfo"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/text/inftxt.cxx",
+          "marker": "SwTextInfo::CtorInitTextInfo"
         }
       ]
     },
     "localPath": "apps/office/src/sw/source/core/text/inftxt.ts",
     "localSymbols": [
-      "resolveSwNumberPortionBackground"
+      "resolveSwNumberPortionBackground",
+      "SwTextInfo",
+      "SwTextSizeInfo"
     ],
     "omittedResponsibilities": [
       "Full SwTextPaintInfo frame/portion constructors, all non-Number DrawViewOpt branches, native VCL rectangle/line-height/clip/RTL/bidi/redline/device geometry remain unrepresented. The browser measures and paints the existing marker slot; no full native painter claim."
     ],
     "preservedResponsibilities": [
-      "Iteration219 bounded marked-number painting: native SwViewColors owns represented color/appearance members with raw NONE/lightgray defaults, stable copy/borrow and copied initial values; configured desktop25 bits retained. Source Number DrawViewOpt guards and DrawBackground color admission use original HasMarkedLabel, actual shell view options and shared master marker painting, including sibling levels and print suppression. Full native color/config/theme/LOKit pipeline and VCL frame/portion/clip/bidi geometry remain unverified; all prior statuses/defaults/registered I/O/recovery exceptions retained."
+      "Iteration219 bounded marked-number painting: native SwViewColors owns represented color/appearance members with raw NONE/lightgray defaults, stable copy/borrow and copied initial values; configured desktop25 bits retained. Source Number DrawViewOpt guards and DrawBackground color admission use original HasMarkedLabel, actual shell view options and shared master marker painting, including sibling levels and print suppression. Full native color/config/theme/LOKit pipeline and VCL frame/portion/clip/bidi geometry remain unverified; all prior statuses/defaults/registered I/O/recovery exceptions retained.",
+      "Task202610102025-0MZPHY removes the stored text-line array from native SwTextFrame and the independent array/text/index adapter from SwTextCursor. The original frame owns SwParaPortion as first SwLineLayout and linked native lines with SwLinePortion lengths, real device heights and dummy status. SwTextInfo retains original paragraph and frame offset; represented SwTextSizeInfo reads original unmerged text. SwTextIter derives original SwAttrIter and restores actual current/previous identities, cumulative offsets, relative line Y, native line count, cached previous search, Next/Prev/PrevLine/CharToLine. Native SwTextCursor consumes original frame/info and preserves source soft/hard-break/zero-length/dummy affinity. Actual Home End margin helper uses this original paragraph chain, with missing-format admission guarded at the caller and native iterator missing-para construction rejected. Device measurement builds native line objects once at the existing frame boundary. Actual core and mounted React ownership/margin/edit/history plus Chromium body/cell/page/list/table checks cover this correction. Full native frame formatting/retry/cache lock, SwTextMargin/SwTextAdjuster inheritance, absolute frame geometry/register/scripts/font integration, all portion flags/shaping/painting, merged/redline and native text callbacks/query/adjacent-frame selection remain unrepresented or unverified. Measured cursor map and existing margin direction/end proxy remain explicit follow-ups. Historical statuses/defaults/classifications/evidence and registered recovery/open/save/settings boundaries preserved; no broad module/goal parity promotion."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/text/inftxt.cxx",

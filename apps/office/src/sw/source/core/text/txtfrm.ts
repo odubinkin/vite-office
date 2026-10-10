@@ -12,6 +12,7 @@ import { SfxInt16Item } from "../../../../svl/source/items/intitem";
 import { SwFormatPageDesc } from "../attr/fmtpdsc";
 import type { SwPaM, SwPosition } from "../crsr/pam";
 import { SwTextCursor } from "./itrtxt";
+import { SwLineLayout, SwParaPortion } from "./porlay";
 import { MoveTextFrameMargin } from "./frmcrsr";
 import {
   RES_BREAK,
@@ -161,7 +162,7 @@ export const DEFAULT_SW_TEXT_FRAME_SETTINGS: SwTextFrameSettings = Object.freeze
 
 /** A master or follow frame; offsets always refer to the same source text node. */
 export class SwTextFrame extends SwContentFrame {
-  readonly #lines: readonly SwTextLine[];
+  readonly #para: SwParaPortion | undefined;
   /** Registers the original node and retains the browser device fragment fields. @param node - Original text owner. @param nodeId - Device projection identity. @param start - Frame start. @param end - Frame end. @param topSpacing - Frame spacing. @param lines - Device-shaped lines. @param sibling - Existing native frame supplying the original root. @returns Frame. */
   public constructor(
     node: SwTextNode,
@@ -174,11 +175,29 @@ export class SwTextFrame extends SwContentFrame {
   ) {
     super(node, sibling);
     this.mnFrameType = SwFrameType.Txt;
-    this.#lines = lines;
+    const first = lines[0];
+    if (first !== undefined) {
+      this.#para = new SwParaPortion();
+      let current: SwLineLayout = this.#para;
+      for (let index = 0; index < lines.length; index++) {
+        const line = lines[index] as SwTextLine;
+        current.SetLen(line.end - line.start);
+        current.SetRealHeight(line.height);
+        if (index + 1 < lines.length) {
+          const next = new SwLineLayout();
+          current.SetNext(next);
+          current = next;
+        }
+      }
+    }
   }
   /** Resolves the original first node in the represented unmerged frame. @returns Original registered text owner. */
   public GetTextNodeFirst(): SwTextNode {
     return this.GetDep() as SwTextNode;
+  }
+  /** Reads the original native paragraph first-line object. @returns Paragraph or missing formatting. */
+  public GetPara(): SwParaPortion | undefined {
+    return this.#para;
   }
   /** Reads the native fragment offset in represented unmerged node coordinates. @returns Original text offset. */
   public GetOffset(): number {
@@ -201,11 +220,11 @@ export class SwTextFrame extends SwContentFrame {
   }
   /** Moves to the current visual line start. @param pam - Native cursor. @returns Admission result. */
   public LeftMargin(pam: SwPaM): boolean {
-    return MoveTextFrameMargin(this, this.#lines, pam, true);
+    return MoveTextFrameMargin(this, pam, true);
   }
   /** Moves to the current visual line end. @param pam - Native cursor. @param api - Include soft-line trailing spaces. @returns Admission result. */
   public RightMargin(pam: SwPaM, api = false): boolean {
-    return MoveTextFrameMargin(this, this.#lines, pam, false, api);
+    return MoveTextFrameMargin(this, pam, false, api);
   }
 }
 
