@@ -1,7 +1,11 @@
 /** @fileoverview Complete unchanged original container constructor/lifetime/operator states over real shared SoA ownership and typed scalar callbacks. */
 import { describe, it, expect } from "vitest";
 import fixture from "./native-container-cases.json";
-import { is_previous_block_of_type } from "./main_def.ts";
+import {
+  is_previous_block_of_type,
+  is_next_block_of_type,
+  set_whole_block_empty,
+} from "./main_def.ts";
 import {
   multi_type_vector,
   empty_event_value_ops,
@@ -470,6 +474,28 @@ describe("original SoA container lifetime", /** Declares original native ownersh
               },
             };
             destination.push_back(true, failure);
+          } else if (op === "w") {
+            operationCalls = [];
+            try {
+              const it = set_whole_block_empty(
+                destination["m_block_store"],
+                destination["m_hdl_event"],
+                destination.Traits.block_funcs,
+                destination,
+                args[0] as number,
+                Boolean(args[1]),
+              );
+              hints[dst] = it;
+              result = [node(it, destination.end(), destination), operationCalls];
+            } finally {
+              operationCalls = null;
+            }
+          } else if (op === "n") {
+            result = is_next_block_of_type(
+              destination["m_block_store"],
+              args[0] as number,
+              args[1] as number,
+            );
           } else if (op === "x") {
             result = is_previous_block_of_type(
               destination["m_block_store"],

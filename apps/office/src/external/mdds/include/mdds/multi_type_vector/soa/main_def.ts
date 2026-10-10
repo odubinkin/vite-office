@@ -14,7 +14,12 @@ import {
   type BlockPositionIterator,
   type BlockPosition,
 } from "../util.ts";
-import { grouped_iterator_type, vector_iterator, type IteratorTraits } from "./iterator.ts";
+import {
+  iterator_base,
+  grouped_iterator_type,
+  vector_iterator,
+  type IteratorTraits,
+} from "./iterator.ts";
 import { private_data_forward_update, private_data_no_update } from "../iterator_node.ts";
 import {
   delayed_delete_vector_iterator,
@@ -316,4 +321,54 @@ export function is_previous_block_of_type(
   const data = store.element_blocks.get(block_index - 1);
   if (data) return cat === get_block_type(data);
   return cat === element_type_empty;
+}
+
+/** Original next-block category member over the actual borrowed store. @param store - Metadata. @param block_index - Current valid block. @param cat - Original category. @returns Original category admission. */
+export function is_next_block_of_type(
+  store: blocks_type,
+  block_index: number,
+  cat: element_t,
+): boolean {
+  if (block_index === store.positions.size() - 1) return false;
+  const data = store.element_blocks.get(block_index + 1);
+  if (data) return cat === get_block_type(data);
+  return cat === element_type_empty;
+}
+/** Original whole-block member body over borrowed fields; no replacement ownership or metadata. @param store - Actual store. @param event - Original handler. @param funcs - Registered block funcs. @param parent - Actual iterator owner. @param block_index - Nonempty block. @param overwrite - Delete values. @returns Original merged empty iterator. */
+export function set_whole_block_empty<P>(
+  store: blocks_type,
+  event: ContainerEvent,
+  funcs: BlocksTraits["block_funcs"],
+  parent: P,
+  block_index: number,
+  overwrite: boolean,
+): iterator_base<P> {
+  const blk_data = store.element_blocks.get(block_index) as base_element_block;
+  if (!overwrite) funcs.resize_block(blk_data, 0);
+  delete_element_block(store, event, funcs, block_index);
+  const blk_prev = is_previous_block_of_type(store, block_index, element_type_empty);
+  const blk_next = is_next_block_of_type(store, block_index, element_type_empty);
+  if (blk_prev) {
+    if (blk_next) {
+      store.sizes.set(
+        block_index - 1,
+        store.sizes.get(block_index - 1) +
+          store.sizes.get(block_index) +
+          store.sizes.get(block_index + 1),
+      );
+      store.erase(block_index, 2);
+      return make_iterator(store, parent, block_index - 1, iterator_base);
+    }
+    store.sizes.set(
+      block_index - 1,
+      store.sizes.get(block_index - 1) + store.sizes.get(block_index),
+    );
+    store.erase(block_index);
+    return make_iterator(store, parent, block_index - 1, iterator_base);
+  } else if (blk_next) {
+    store.sizes.set(block_index, store.sizes.get(block_index) + store.sizes.get(block_index + 1));
+    store.erase(block_index + 1);
+    return make_iterator(store, parent, block_index, iterator_base);
+  }
+  return make_iterator(store, parent, block_index, iterator_base);
 }

@@ -1375,3 +1375,34 @@ positive hinted lookup with empty metadata, overflow/unbounded storage and the
 remaining segment mutators and full Calc documents/browser remain gaps.
 Whole-module/default/QA flags stay false. Source-shaped owner/observers are
 reviewed below the 1000-line hard limit. Cycle 2, task 7/10 follows fullFMVJ21.
+
+## Shared SoA whole-block emptying
+
+Task `202610100029-0KZNG5` ports original private `set_whole_block_empty`
+and `is_next_block_of_type`. The body uses the existing explicit borrowed-store
+member convention in `main_def.ts`, borrowing actual metadata, event handler,
+registered block funcs and iterator parent. Original
+ownership, callback and iterator modules are reused.
+
+With overwrite false, the typed payload is resized to zero before original
+release/delete/null. With overwrite true, release/delete observes its original
+size. After deletion, original previous/next predicates choose between merging
+both adjacent empty blocks, the previous only, the next only or neither. The
+original sizes, metadata erase counts and returned iterator indices are retained;
+logical size, surviving positions and metadata capacities are not normalized.
+
+Unchanged-header private bridges invoke actual original methods. All 12 standard
+families cover every nonempty block in several compound and varied-value inputs,
+41-block metadata, both overwrite choices, repeated merges, copy isolation,
+returned hint reuse, reappend, release and final destruction. Complete lossless
+native records retain all 13432 previous sequences and their final events.
+Original next-category calls cover every standard category and empty across
+valid first/middle/last blocks. Native public set prepares inputs only.
+
+Public set_empty and remaining range mutators, managed/custom/throwing behavior,
+invalid native inputs, reentrancy, overflow, instrumentation/ABI, complete original
+QA/module/default and Calc column/document/browser parity remain unverified.
+The capability is implemented within this scope; whole parity flags remain false.
+Source-shaped main/main_def, native caller and complete observer retain existing
+responsibilities below the 1000-line hard limit. No new upstream suspicion has
+been established. Cycle 2, task 8/10 follows fullFMVJ21.

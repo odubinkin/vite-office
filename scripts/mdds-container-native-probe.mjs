@@ -531,6 +531,88 @@ for (let type = 0; type < 12; ++type)
     commands.push(["U", 0]);
     cases.push({ seed: base + type, commands });
   }
+// Genuine original whole-block emptying callers on valid nonempty blocks.
+const wholeBlockShapes = [
+  [0, [0, 2, 4]],
+  [12, [0, 2, 4, 6, 8]],
+  [24, [0, 2, 4]],
+  [36, [0, 2, 4]],
+  [48, [0, 2, 4]],
+  [60, [1, 3]],
+  [72, [0, 2, 4]],
+  [
+    84,
+    Array.from(
+      { length: 21 },
+      /** Enumerates original alternating nonempty block indices. @param _ - Empty array slot. @param i - Scalar index. @returns Actual block index. */ (
+        _,
+        i,
+      ) => i * 2,
+    ),
+  ],
+  [96, [0, 1, 3]],
+  [108, [1, 2]],
+  [120, [0]],
+  [132, [0, 2]],
+];
+for (let type = 0; type < 12; ++type) {
+  for (const n of [1, 2, 5, 17])
+    for (const overwrite of [0, 1])
+      cases.push({
+        seed: -1,
+        commands: [
+          ["F", 0, n, type, "2"],
+          ["Q", 1, 0],
+          ["w", 0, 0, overwrite],
+          ["t", 0, 0, 1, 0],
+          ["a", 0, type, "3"],
+          ["r", 0],
+          ["U", 0],
+          ["U", 1],
+        ],
+      });
+  for (const [base, indices] of wholeBlockShapes) {
+    for (const index of indices)
+      for (const overwrite of [0, 1])
+        cases.push({
+          seed: base + type,
+          commands: [
+            ["Q", 1, 0],
+            ["w", 0, index, overwrite],
+            ["a", 0, type, "3"],
+            ["r", 0],
+            ["U", 0],
+            ["U", 1],
+          ],
+        });
+    for (const overwrite of [0, 1])
+      cases.push({
+        seed: base + type,
+        commands: [
+          ["Q", 1, 0],
+          ...indices
+            .toReversed()
+            .map(
+              /** Calls original whole-empty member in descending valid nonempty blocks. @param index - Actual block. @returns Complete native caller command. */ (
+                index,
+              ) => ["w", 0, index, overwrite],
+            ),
+          ["t", 0, 0, 1, 0],
+          ["a", 0, type, "3"],
+          ["r", 0],
+          ["U", 0],
+          ["U", 1],
+        ],
+      });
+  }
+  for (const base of [36, 60, 132]) {
+    const commands = [];
+    for (let index = 0; index < (base === 132 ? 3 : 5); ++index)
+      for (let cat = -1; cat < 12; ++cat) commands.push(["n", 0, index, cat]);
+    commands.push(["U", 0]);
+    cases.push({ seed: base + type, commands });
+  }
+}
 const driver =
   String.raw`
 #include <mdds/multi_type_vector/soa/main.hpp>
@@ -570,6 +652,12 @@ template struct member_access<&db_type::m_block_store>;
 struct category_tag{};bool previous_category(const db_type&,size_t,element_t,category_tag);
 template<auto Member>struct category_access{friend bool previous_category(const db_type& db,size_t index,element_t cat,category_tag){return (db.*Member)(index,cat);}};
 template struct category_access<&db_type::is_previous_block_of_type>;
+struct next_category_tag{};bool next_category(const db_type&,size_t,element_t,next_category_tag);
+template<auto Member>struct next_category_access{friend bool next_category(const db_type& db,size_t index,element_t cat,next_category_tag){return (db.*Member)(index,cat);}};
+template struct next_category_access<&db_type::is_next_block_of_type>;
+struct whole_empty_tag{};db_type::iterator whole_empty(db_type&,size_t,bool,whole_empty_tag);
+template<auto Member>struct whole_empty_access{friend db_type::iterator whole_empty(db_type& db,size_t index,bool overwrite,whole_empty_tag){return (db.*Member)(index,overwrite);}};
+template struct whole_empty_access<&db_type::set_whole_block_empty>;
 struct failure_cell{};
 element_t mdds_mtv_get_element_type(const failure_cell&){return element_type_boolean;}
 base_element_block* mdds_mtv_create_new_block(size_t,const failure_cell&){return nullptr;}
@@ -703,6 +791,8 @@ else if(op=='Q'||op=='L'||op=='M'||op=='A'||op=='V'||op=='W'){int other;std::cin
 else if(op=='T'||op=='E'||op=='G'||op=='g'||op=='P'||op=='p'||op=='I'||op=='i'||op=='K'||op=='k'){size_t row;std::cin>>row;if(op=='T')result=std::to_string(db[dst]->get_type(row));else if(op=='E')result=db[dst]->is_empty(row)?"true":"false";else if(op=='G'||op=='g'){int type;std::cin>>type;result=scalar(*db[dst],row,type,op=='g');}else if(op=='P')result=position_json(db[dst]->position(row),db[dst]->end(),*db[dst]);else if(op=='p'){const auto& owner=*db[dst];result=position_json(owner.position(row),owner.end(),owner);}else if(op=='I'||op=='i'){int other,index;std::cin>>other>>index;if(op=='I'){auto hint=db[other]->begin();std::advance(hint,index);auto pos=db[dst]->position(hint,row);result=position_json(pos,db[dst]->end(),*db[dst],&hint,index==int(db[other]->block_size()));}else{const auto& owner=*db[dst];const auto& source=*db[other];auto hint=source.begin();std::advance(hint,index);auto pos=owner.position(hint,row);result=position_json(pos,owner.end(),owner,&hint,index==int(source.block_size()));}}else {int slot;std::cin>>slot;if(op=='K'){auto& hint=*hints[slot];result=position_json(db[dst]->position(hint,row),db[dst]->end(),*db[dst],&hint);}else {const auto& owner=*db[dst];auto& hint=*const_hints[slot];result=position_json(owner.position(hint,row),owner.end(),owner,&hint);}}}
 else if(op=='B'||op=='b'||op=='O'||op=='o'||op=='l'||op=='X'){size_t row;std::cin>>row;if(op=='l'){const auto& owner=*db[dst];result=std::to_string(db_type::logical_position(owner.position(row)));}else if(op=='X'){int type;std::cin>>type;result=positioned_scalar(*db[dst],row,type);}else {int steps=0;if(op=='O'||op=='o')std::cin>>steps;if(op=='B'||op=='O'){auto p=db[dst]->position(row);auto ret=op=='B'?db_type::next_position(p):db_type::advance_position(p,steps);result="["+position_json(ret,db[dst]->end(),*db[dst])+","+position_json(p,db[dst]->end(),*db[dst])+"]";}else {const auto& owner=*db[dst];auto p=owner.position(row);auto ret=op=='b'?db_type::next_position(p):db_type::advance_position(p,steps);result="["+position_json(ret,owner.end(),owner)+","+position_json(p,owner.end(),owner)+"]";}}}
 else if(op=='Y'){size_t size;std::cin>>size;operation_calls.clear();trace_enabled=true;db[dst]->resize(size);trace_enabled=false;result=capture([&]{std::cout<<"[";for(size_t i=0;i<operation_calls.size();++i){if(i)std::cout<<",";std::cout<<"[";for(size_t j=0;j<operation_calls[i].size();++j){if(j)std::cout<<",";std::cout<<operation_calls[i][j];}std::cout<<"]";}std::cout<<"]";});}
+else if(op=='w'){size_t index;bool overwrite;std::cin>>index>>overwrite;operation_calls.clear();trace_enabled=true;auto it=whole_empty(*db[dst],index,overwrite,whole_empty_tag{});trace_enabled=false;hints[dst]=it;result=capture([&]{std::cout<<"[";node(it,db[dst]->end(),*db[dst]);std::cout<<","<<calls_json()<<"]";});}
+else if(op=='n'){size_t index;element_t cat;std::cin>>index>>cat;result=next_category(*db[dst],index,cat,next_category_tag{})?"true":"false";}
 else if(op=='x'){size_t index;element_t cat;std::cin>>index>>cat;result=previous_category(*db[dst],index,cat,category_tag{})?"true":"false";}
 else if(op=='v'||op=='d'||op=='t'){size_t pos,len;std::cin>>pos>>len;operation_calls.clear();trace_enabled=true;db_type::iterator it;if(op=='v')it=db[dst]->insert_empty(pos,len);else{int slot;std::cin>>slot;if(op=='t')it=db[dst]->insert_empty(*hints[slot],pos,len);else{int index;std::cin>>index;auto hint=db[slot]->begin();std::advance(hint,index);it=db[dst]->insert_empty(hint,pos,len);}}trace_enabled=false;hints[dst]=it;result=capture([&]{std::cout<<"[";node(it,db[dst]->end(),*db[dst]);std::cout<<","<<calls_json()<<"]";});}
 else if(op=='r'){operation_calls.clear();trace_enabled=true;db[dst]->release();trace_enabled=false;result=calls_json();}
