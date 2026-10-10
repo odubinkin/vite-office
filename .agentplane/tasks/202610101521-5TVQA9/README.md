@@ -4,7 +4,7 @@ title: "Port original OUString lifetime and SharedString value owners for Calc t
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 23
+revision: 24
 origin:
   system: "manual"
 depends_on: []
@@ -23,6 +23,30 @@ verification:
   updated_by: "CODER"
   note: "Pass: original full-header SharedString native --check4424 states,32 pinned blobs31 scopes,2 runtime guards3 compile guards3 invalid lifetime diagnoses; prior RTL --check3336/20 exact driver44ad48ef. Portable Calc106/24 S2920 B2055 F474 L2564 and affected shared6/3 across8 executable sources S391 B206 F81 L313 all-four100/all raw counters positive with both upstream links absent/restored finally; affected tooling28/4. Typecheck/lint/JSDoc/size/dependencies/tree/provenance/scoped Calc/shared inventories/changed-file formatting/routing/doctor/diff all pass. Evidence output/playwright/task35-{tests,gates,final}/manifest.json and task35-audit.json; no full run at task4/10, next41. Writer unchanged."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-10T15:51:24.570Z"
+  updated_by: "EVALUATOR"
+  note: "Read-only review of f2588e5a9f2896f289b2d7d45dfaa5be1fa5f926 passes approved original shared value-owner/reference scope; whole Calc remains unfinished."
+  evaluated_sha: "f2588e5a9f2896f289b2d7d45dfaa5be1fa5f926"
+  blueprint_digest: "45e9e2f43103635369ff0f538e0ec24050d5116d461643c96c1adcacd7e0592e"
+  evidence_refs:
+    - ".agentplane/tasks/202610101521-5TVQA9/README.md"
+    - ".agentplane/tasks/202610101521-5TVQA9/quality/20261010-155124570-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610101521-5TVQA9/quality/20261010-155124570-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610101521-5TVQA9/quality/20261010-155124570-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610101521-5TVQA9/blueprint/resolved-snapshot.json"
+    - "output/playwright/task35-tests/manifest.json"
+    - "output/playwright/task35-final/manifest.json"
+    - "output/playwright/task35-audit.json"
+    - "apps/office/src/svl/source/misc/native-sharedstring-cases.json"
+    - "output/playwright/rtl-sharedstring-native/driver.cpp"
+    - "output/playwright/rtl-sharedstring-native/output.json"
+    - "docs/program/calc-upstream-suspected-issues.md"
+  findings:
+    - "Inspected all24 intentional implementation paths and original complete header/source contracts: C++ static empty differs from C empty, OUString move construction resets source and assignment swaps, SharedString assignment retains native order/no self-move guard, unacquired references track live fields without owning copies. Single SAL/SVL owners and exact original SVL->SAL edge; no Writer/config/policy/test-acceptance edits."
+    - "Independently checked driver164be221 and raw781d9150 digests, all4424 full captured states,32 pinned full blobs via git show and hashes,31 unchanged RTL scopes,2 actual assertions3 actual compile rejections3 sanitizer diagnoses without post-UB golden results. Defined ASan/UBSan output agrees; prior RTL3336/20 retains exact driver44ad48ef and88,879,388 raw bytes."
+    - "Actual portable tests106 Calc/6 affected shared/28 tooling pass with both upstream links absent/restored finally. Exact19 Calc and8 affected executable source maps/all raw counters positive/all four100; static/source/registry/routing/doctor gates and changed-file formatting pass. Scoped inventories Calc47/173 and shared24/143 have0 semantic violations."
 commit: null
 comments:
   -

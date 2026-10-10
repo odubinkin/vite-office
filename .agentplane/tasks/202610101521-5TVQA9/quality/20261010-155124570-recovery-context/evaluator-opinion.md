@@ -1,0 +1,28 @@
+# EVALUATOR opinion: pass
+
+Read-only review of f2588e5a9f2896f289b2d7d45dfaa5be1fa5f926 passes approved original shared value-owner/reference scope; whole Calc remains unfinished.
+
+## Findings
+- Inspected all24 intentional implementation paths and original complete header/source contracts: C++ static empty differs from C empty, OUString move construction resets source and assignment swaps, SharedString assignment retains native order/no self-move guard, unacquired references track live fields without owning copies. Single SAL/SVL owners and exact original SVL->SAL edge; no Writer/config/policy/test-acceptance edits.
+- Independently checked driver164be221 and raw781d9150 digests, all4424 full captured states,32 pinned full blobs via git show and hashes,31 unchanged RTL scopes,2 actual assertions3 actual compile rejections3 sanitizer diagnoses without post-UB golden results. Defined ASan/UBSan output agrees; prior RTL3336/20 retains exact driver44ad48ef and88,879,388 raw bytes.
+- Actual portable tests106 Calc/6 affected shared/28 tooling pass with both upstream links absent/restored finally. Exact19 Calc and8 affected executable source maps/all raw counters positive/all four100; static/source/registry/routing/doctor gates and changed-file formatting pass. Scoped inventories Calc47/173 and shared24/143 have0 semantic violations.
+
+## Evidence
+- .agentplane/tasks/202610101521-5TVQA9/README.md
+- output/playwright/task35-tests/manifest.json
+- output/playwright/task35-final/manifest.json
+- output/playwright/task35-audit.json
+- apps/office/src/svl/source/misc/native-sharedstring-cases.json
+- output/playwright/rtl-sharedstring-native/driver.cpp
+- output/playwright/rtl-sharedstring-native/output.json
+- docs/program/calc-upstream-suspected-issues.md
+
+## Missing Tests
+- none recorded
+
+## Hidden Assumptions
+- none recorded
+
+## Residual Risks
+- Remaining OUString conversion/search/format/append APIs, native compile-time/const/ABI/physical freed-pointer and thread behavior, full original QA and actual SharedStringPool/cell storage/column/table/document/editable Calc UI remain unverified. No broad parity completion claim.
+- No full suite at current task4/10; next scheduled task41. Doctor inherited older hook-shim and PJV0JK missing commit warnings persist outside this scope.
