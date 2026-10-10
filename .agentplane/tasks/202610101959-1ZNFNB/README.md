@@ -1,10 +1,11 @@
 ---
 id: "202610101959-1ZNFNB"
 title: "Restore native layout root registration and frame root ownership"
-status: "DOING"
+result_summary: "Native layout root registration, original derived format lifetime and constructor root propagation restored; Doc factory/Undo/full hierarchy/query/flags/native geometry remain unverified."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -54,6 +55,9 @@ comments:
   -
     author: "CODER"
     body: "Implementation: Registered native SwRootFrame/derived Root format and source sibling root propagation; original view initialization order repaired, targeted evidence and inventory pass."
+  -
+    author: "CODER"
+    body: "Verified: Registered original native Root/layout frame, derived frame-format lifecycle and source root pointers with corrected view initialization;13948related/501 plus23Chromium/12 pass, entire5modules100 all-four/current1156hashes/1343nonnegative raw counters.816old acceptance files byte-identical,10canonical prefixes/9metadata gates preserved. Exact semantic28caa2238911030695eebdafe663fc5bd15e0f07 same-agent non-independent review recorded; refs restored. Correction6/10; pause after next full and required repairs."
 events:
   -
     type: "status"
@@ -75,8 +79,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Actual13948related/501 and23Chromium/12 pass;7fresh native core/React. Entire5modules Istanbul618lines680statements160functions503branches100 all-four,1343nonnegative raw counters and1156current complete hashes.816old acceptance files byte-identical,10canonical historical prefixes preserved,9metadata gates pass. Runtime/static/build/browser upstream-absent finally restored. Native view-order production failure repaired in authorized scope. Doc format registry/Undo/full hierarchy/query/flags/geometry incomplete and explicit; same-agent exact semantic review follows."
+  -
+    type: "status"
+    at: "2026-10-10T20:16:36.213Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Registered original native Root/layout frame, derived frame-format lifecycle and source root pointers with corrected view initialization;13948related/501 plus23Chromium/12 pass, entire5modules100 all-four/current1156hashes/1343nonnegative raw counters.816old acceptance files byte-identical,10canonical prefixes/9metadata gates preserved. Exact semantic28caa2238911030695eebdafe663fc5bd15e0f07 same-agent non-independent review recorded; refs restored. Correction6/10; pause after next full and required repairs."
 doc_version: 3
-doc_updated_at: "2026-10-10T20:16:06.218Z"
+doc_updated_at: "2026-10-10T20:16:36.214Z"
 doc_updated_by: "CODER"
 description: "Correction6/10 after BZ14P4: make current Writer layout root an original SwLayoutFrame with native Root discriminator/own derived frame format, restore source constructor mpRoot propagation through actual frames and document/view lifecycle; preserve browser device and registered I/O boundaries."
 sections:
@@ -159,6 +170,10 @@ sections:
     Command: changed ESLint. Result: fail. Evidence: only new core fixture used a forbidden non-null assertion. Resolution: explicit authored measurement guard retains the original literal input; no production or old acceptance changes. Rerun affected lint/types and failed React; native6passing core not replayed solely for fixture lint.
 
     Resolved: native6initial core cases and corrected mounted React pass; final related13948/501 includes all7fresh cases after fixture lint repair. Current whole5modules Istanbul618lines680statements160functions503branches100 all-four with1343nonnegative raw counters and1156matching current source/test hashes. Required runtime/static/build/browser all upstream-absent and references restored finally;23Chromium/12 and9source metadata gates pass.816old acceptance files byte-identical,10canonical prefixes/status/default/classification/source responsibilities retained. Native root creates its original derived Root SwFrameFormat directly, while Doc format registry/modified-state/creation-deletion Undo remains explicit omitted scope; full page/body/table-root/query/geometry/root flags unverified. Initial production view constructor-order error repaired by creating root after docShell assignment, with same goal/risk/check criteria and only1causal production+2canonical scope extension re-approved under standing human authorization. Incident advice INC-20261009-01/02/03 reviewed/applied: retain failures/raw maps, repair failed/affected checks, no passing runtime replay for helpers/metadata and no duplicate --. Read-only missing upstream filename probe corrected by file discovery and route recomputation. No suspected upstream bug established; suspected-issues file unchanged. No source/helpers/Python/raw logs/maps in AP artifacts; no network/external writes/subagents.
+extensions:
+  implementation_commit:
+    hash: "28caa2238911030695eebdafe663fc5bd15e0f07"
+    message: "🧩 1ZNFNB code: Restore original layout root registration"
 id_source: "generated"
 ---
 ## Summary
