@@ -2027,3 +2027,33 @@ library owners; generated Locale/UNO headers and native case mapping execution
 remain pending. The helper adds no native substitute class or application
 runtime dependency. Related type/lint/JSDoc/size/format/routing/doctor checks
 pass; task39 remains DOING and the next full run remains41.
+
+
+Task39 now supplies the complete original generator build through
+`node scripts/casefolding-native-types.mjs --generate`. It compiles105 genuine
+translation units and links the unchanged cppumaker entry point with actual
+SAL/OSL, registry/store and SAL-helper owners. All336 full LibreOffice compiler
+inputs/build rules and cached original Boost/mdds/dragonbox/fast_float archives
+are verified; system zlib and macOS Foundation/CoreFoundation are the selected
+native platform dependencies. Native artifacts remain ignored.
+
+The original generator consumes byte-for-byte copies of the five pinned IDL
+files through its actual SourceTreeProvider, emitting ten genuine Locale,
+Exception, RuntimeException, XInterface and TypeClass headers. No handwritten
+class or provider facade is used. Relative input-path handling initially
+failed; exact local file URLs preserve the actual conversion contract. A large
+CNS table initially exceeded the source verifier's default subprocess buffer;
+the verifier now compares every byte using capacity derived from full blob
+length, retaining strict equality and hashes.
+
+A native caller using the generated Locale header observes original empty
+fields, shared-string copy identity, empty moved-from fields and memberwise
+move-assignment swaps. A native default RuntimeException caller links actual
+cppu static_types/typelib owners and observes an empty message, null Context
+and the registered RuntimeException type name. These bounded observations do
+not certify portable UNO reflection or full locale-aware case mapping.
+RuntimeException's original constructors call UnoType::get; that registration
+side effect must be retained with the true dependency owner. Full source
+getValue/getConditionalValue, portable exception/type/reference owners and
+sanitized complete mapping correspondence remain required. Task39 is still
+DOING; editable Calc UI is not ready. Next full run remains41.

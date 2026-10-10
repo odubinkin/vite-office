@@ -214,7 +214,10 @@ ${scopes.internRelease}
 export function loadUnicodeOriginal(sources, path) {
   const value = readFileSync(`${upstream}/${path}`, "utf8");
   if (
-    execFileSync("git", ["-C", upstream, "show", `${pin}:${path}`], { encoding: "utf8" }) !== value
+    execFileSync("git", ["-C", upstream, "show", `${pin}:${path}`], {
+      encoding: "utf8",
+      maxBuffer: Math.max(1024 * 1024, Buffer.byteLength(value, "utf8") + 1),
+    }) !== value
   )
     throw new Error(`Modified original file: ${path}`);
   sources[path] = value;

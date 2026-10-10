@@ -1,6 +1,9 @@
-/** @fileoverview Compiles genuine cppumaker dependency objects for the pending native Locale/UNO closure; does not certify generated types or case mapping. */
+/** @fileoverview Builds original cppumaker and emits genuine Locale/UNO headers; portable runtime and case-mapping parity remain separate requirements. */
 import { spawnSync } from "node:child_process";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { resolve } from "node:path";
+import { pathToFileURL } from "node:url";
+import { compileNativeLibraries, originalDependency } from "./casefolding-native-libraries.mjs";
 import { verifyMddsSources } from "./mdds-native-source.mjs";
 import {
   configureUnicodeNativeHeaders,
@@ -34,8 +37,8 @@ const units = [
   "salhelper/source/simplereferenceobject.cxx",
 ];
 
-if (process.argv.length !== 3 || process.argv[2] !== "--compile")
-  throw new Error("Usage: node scripts/casefolding-native-types.mjs --compile");
+if (process.argv.length !== 3 || !["--compile", "--generate"].includes(process.argv[2]))
+  throw new Error("Usage: node scripts/casefolding-native-types.mjs --compile|--generate");
 mkdirSync(`${target}/objects`, { recursive: true });
 const { sources } = loadUnicodeNativeSources();
 const manifest = {
@@ -62,6 +65,17 @@ function save() {
   );
   writeFileSync(`${target}/objects-manifest.json`, JSON.stringify(manifest, null, 2) + "\n");
 }
+
+process.on(
+  "uncaughtExceptionMonitor",
+  /** Records failures outside individual tool calls without suppressing the native build error. @param error - Terminal build error. @returns Nothing. */ (
+    error,
+  ) => {
+    manifest.state = "failed";
+    manifest.failure = error.message;
+    save();
+  },
+);
 
 /** Runs actual tools and retains their complete diagnostics. @param tool - Executable. @param argv - Exact arguments. @param label - Artifact stem. @returns Standard output. */
 function run(tool, argv, label) {
@@ -146,8 +160,7 @@ for (const path of [
     stem,
   );
   for (const file of readFileSync(dependency, "utf8").replaceAll("\\\n", " ").split(/\s+/))
-    if (file.startsWith(`${upstream}/`))
-      loadUnicodeOriginal(sources, file.slice(upstream.length + 1));
+    if (file.startsWith(`${upstream}/`)) loadUnicodeOriginal(sources, originalDependency(file));
   console.log(`Compiled original unit: ${path}`);
 }
 manifest.state = "objects-complete";
@@ -155,3 +168,71 @@ save();
 console.log(
   "Original cppumaker/provider objects complete; full native type generation remains pending.",
 );
+if (process.argv[2] === "--generate") {
+  const libraries = compileNativeLibraries(sources, target, run);
+  manifest.libraries = libraries;
+  const objects = manifest.commands
+    .filter(
+      /** Selects completed genuine compiler object outputs. @param command - Native command. @returns Object command flag. */ (
+        command,
+      ) => command.tool === "clang++" && command.argv.includes("-c"),
+    )
+    .map(
+      /** Reads the actual compiler output argument. @param command - Object command. @returns Object path. */ (
+        command,
+      ) => command.argv[command.argv.indexOf("-o") + 1],
+    );
+  run(
+    "clang++",
+    [
+      "-Wl,-dead_strip",
+      "-pthread",
+      "-framework",
+      "CoreFoundation",
+      "-framework",
+      "Foundation",
+      "-lz",
+      ...objects,
+      "-o",
+      `${target}/cppumaker`,
+    ],
+    "generator-link",
+  );
+  const names = [
+    "com.sun.star.lang.Locale",
+    "com.sun.star.uno.Exception",
+    "com.sun.star.uno.RuntimeException",
+    "com.sun.star.uno.XInterface",
+    "com.sun.star.uno.TypeClass",
+  ];
+  const input = `${target}/idl`;
+  for (const name of names) {
+    const path = name.replaceAll(".", "/") + ".idl";
+    const source = loadUnicodeOriginal(sources, `udkapi/${path}`);
+    const slash = path.lastIndexOf("/");
+    mkdirSync(`${input}/${path.slice(0, slash)}`, { recursive: true });
+    writeFileSync(`${input}/${path}`, source);
+  }
+  run(
+    `${target}/cppumaker`,
+    [
+      "-nD",
+      "-T",
+      names.join(";"),
+      "-O",
+      resolve(`${target}/generated`),
+      pathToFileURL(resolve(input)).href,
+    ],
+    "original-type-generation",
+  );
+  for (const name of names)
+    for (const extension of ["hdl", "hpp"]) {
+      const path = `${target}/generated/${name.replaceAll(".", "/")}.${extension}`;
+      manifest.generatedHashes[path] = hash(readFileSync(path));
+    }
+  manifest.state = "types-generated";
+  manifest.boundary =
+    "Actual original generated types; native mapping behavior and portable runtime owners remain pending";
+  save();
+  console.log("Original cppumaker emitted all ten genuine Locale/UNO headers.");
+}

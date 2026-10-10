@@ -4,7 +4,7 @@ title: "Port original locale-aware case-mapping values for Calc string service"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 33
+revision: 41
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: implement approved original locale-aware case value dependency in calc checkout, reusing actual shared string/Unicode owners and preserving native source contracts; no fake service/type substitutes."
 doc_version: 3
-doc_updated_at: "2026-10-10T18:46:22.240Z"
+doc_updated_at: "2026-10-10T19:07:58.193Z"
 doc_updated_by: "CODER"
 description: "Task39: implement original casefolding getValue/getConditionalValue and complete source data with real Locale string fields/default ownership and original default UNO RuntimeException boundary. Reuse actual shared OUString, RTL character and proven ICU scalar contracts. Preserve suspect upstream behavior. Verify source/owner contracts and unchanged native reference without fake service/type stand-ins; portable Calc/affected shared100 and scoped gates. No UI shell, Writer duplication or full-run before41."
 sections:
@@ -107,6 +107,24 @@ sections:
       Result: pass.
       Evidence: Exact argv/full logs in output/playwright/task39-checks/types-helper-gates.json; doctor0 errors and two inherited warnings. Runtime Calc/shared portable100 evidence above remains applicable because this subsequent addition changes only the offline native preparation helper and documentation.
       Scope: The preparation helper, preserving full task39 scope and pending verification; no full suite before41 or Writer-only coverage repair.
+
+    Actual original generator checkpoint (full task39 still pending):
+    - Command: node scripts/casefolding-native-types.mjs --generate.
+      Result: pass.
+      Evidence:105 complete genuine translation units compile and link the actual original cppumaker entry point, SAL/OSL/registry/store/SAL-helper;336 full pinned compiler inputs and build rules verified, cached original Boost/mdds/dragonbox/fast_float archives match source hashes. Original macOS framework/system-zlib dependencies retained. Five byte-for-byte copied pinned IDLs are consumed by the actual SourceTreeProvider; ten genuine headers are emitted. The complete tool/version/argv/source/config/generated-header manifest is output/playwright/task39-native-types/objects-manifest.json with types-generated state. All subprocesses are observed terminal; earlier missing-config/relative-URI/large-blob failures are preserved in Findings. No fake native class/provider or external installation.
+      Scope: True native generated Locale/UNO dependency correspondence. This does not itself satisfy the mandatory complete casefolding-native-probe/getValue/getConditionalValue criterion.
+    - Command: Exact native caller compilation/link commands in locale-observation-compile-manifest.json and runtime-exception-observation-compile-manifest.json, then both actual binaries recorded in type-observations-manifest.json (output/playwright/task39-native-types).
+      Result: pass for bounded observations only.
+      Evidence: Generated Locale fields default empty; copying retains original shared data; move construction empties source; memberwise move assignment swaps previous destination fields into source. Default RuntimeException observes Message length0, null Context and original registered type name. Actual full cppu static_types/typelib objects are linked; four complete associated original cppu blobs verified separately. No sanitized complete exception/reference/registration or portable broad parity claim from these limited callers.
+      Scope: Actual native dependency observations; portable UNO/type/reference ownership and full case-mapping remain pending. Source registration side effect is mandatory, rather than replacing the original exception with JS Error.
+    - Command: npm run test:coverage:calc with all original source links absent, restored exactly in finally; independent raw audit.
+      Result: pass.
+      Evidence:106 tests/24 files, S2920/B2055/F474/L2564 all100. All19 executable Calc owners have every raw counter positive. Exact command/targets/logs and audit in native-gen-calc-portable-manifest.json/native-gen-calc-raw.json.
+      Scope: Current Calc implementation; offline helpers do not change Writer/shared browser runtime. No Writer-only coverage repair or full suite before41.
+    - Command: node scripts/rtl-ascii-equality-native-probe.mjs --check; scoped three-helper eslint; npm run typecheck; npm run check:docs; npm run check:file-size; npm run check:source-provenance; changed-helper Prettier; node .agentplane/policy/check-routing.mjs; ap doctor; git diff --check.
+      Result: pass.
+      Evidence: ASCII native complete-corpus regression remains identical after the full-source I/O capacity fix. Native-generation gates manifest/full logs retained under output/playwright/task39-checks; doctor0 errors/two inherited warnings. CALC037 records the real upstream generated-type weak-memory TODO without claiming reproduced concurrency failure or adding a repair.
+      Scope: Offline native dependency tooling and current partial task evidence; full locale-aware algorithms, actual portable UNO owners and final task39 verification/evaluation remain required. Task39 stays DOING and full goal remains active.
   Rollback Plan: "Revert only intentional task39 implementation/metadata commits if needed and rerun scoped checks. Preserve unrelated user work, Writer/main branches, shared verified Unicode/RTL contracts and original sources. Remove only task39-owned ignored probe artifacts if obsolete."
   Findings: |-
     - Observation: Preflight confirms calc branch and clean checkout, direct workflow, previous task38 DONE. The only other active tasks are inherited C9TN6M/X6VV8G; neither is reused for new source work. Read-only discovery guessed Locale under offapi instead of its actual udkapi path, and guessed two absent native helper filenames.
@@ -176,6 +194,34 @@ sections:
     - Observation: The reproducible native helper compiles21 actual cppumaker/codemaker/unoidl/SAL-helper units, including unchanged legacy provider and original Bison/Flex outputs;112 full LibreOffice blobs and pinned Boost/mdds archives are verified. Direct linking remains unresolved because real SAL/OSL/registry library owners are not yet supplied.
       Impact: No generated Locale/UNO header, completed native getValue/getConditionalValue verification, or full task closure is claimed. The native object run is confirmed terminal and complete; the link diagnostic is terminal with exit1.
       Resolution: Continue the actual remaining native library closure using recorded linker symbols and original build rules. Keep full task39 verification mandatory, use no fake native owners, and preserve the validated shared ASCII implementation checkpoint.
+
+    - Observation: All17 unchanged registry/store objects compile. Initial real SAL compilation stops at missing generated config_probes.h. Pinned dragonbox1.1.3 and fast_float8.2.10 archives are read from the original LibreOffice source mirror and match original download.lst SHA256.
+      Impact: The library build is incomplete; no generated Locale, executable cppumaker or native case-mapping verification is claimed. SAL compile process is terminal.
+      Resolution: Configure the actual config_probes.h.in template with the selected no-probe native configuration and continue unchanged source compilation; do not add dependency stubs or application library replacements.
+
+    - Observation: The genuine SAL build compiles33 complete RTL/text-conversion units and stops at tables.cxx because config_locales.h has not yet been configured.
+      Impact: Native library closure is still incomplete; no linked generator or full case mapping claim. No original method body is patched.
+      Resolution: Load the original locale configuration template, enable its actual all-locales option, preserve the completed compilation manifest, and compile the remaining original library units.
+
+    - Observation: tables.cxx compiles with the original all-locales configuration, but dependency hashing stops because clang reports a genuine header path containing generate/../ and git show requires the canonical repository-relative path.
+      Impact: Original compilation succeeds but full dependency evidence is not yet recorded. No source mismatch or generator result is claimed; the process is terminal.
+      Resolution: Normalize compiler dependency path segments before comparing the same full blob against the pinned commit, preserving the source-root boundary and strict byte equality.
+
+    - Observation: The remainder compiles25 more genuine SAL/text/OSL units and stops at log.cxx because the original Library_sal.mk SRCDIR definition is missing from the caller flags.
+      Impact: No source behavior is altered; native generator linking is still pending. Completed object and dependency manifests remain retained.
+      Resolution: Add the actual source-directory definition from the original library build contract and compile the remaining log/debug/compat units before inspecting the remaining true linker closure.
+
+    - Observation: All61 selected original SAL units compile;99 total real objects link with only nine remaining OSL/process/locale/SAL-init/zlib symbols, down from110. Link diagnostic is terminal with exit1.
+      Impact: No generated native types or completed native case mapping is claimed. Original source methods and archives are unchanged.
+      Resolution: Compile the actual remaining source owners discovered by symbol search and link the platform zlib dependency permitted by the original library build; do not add function stubs or alter approved verification criteria.
+
+    - Observation: The complete original generator links successfully with105 genuine objects. Its first invocation rejects the relative source-tree path and falls through to legacy-file handling; generation exits1 with zero output headers.
+      Impact: A linked generator is now available, but no generated Locale/UNO evidence is claimed from the rejected input. All upstream files and loader methods remain unchanged.
+      Resolution: Inspect original path conversion and invoke the actual generator with an unambiguous absolute local file URL for the approved pinned IDL tree and output directory; preserve the failed diagnostic.
+
+    - Observation: The new full reproducible build reaches a genuine large CNS11643 table, then source verification hits Node execFileSync default output-buffer capacity (ENOBUFS). The previously executed genuine binary has already generated ten headers from the original full IDL tree; the new helper run is terminal and not yet successful.
+      Impact: No successful reproducible-generation claim is made from the failed helper run. The entire large original table must be retained and compared, rather than skipped or truncated.
+      Resolution: Size the existing full-blob git-show buffer to the actual UTF8 blob length plus one, preserve exact equality and hashes, and rerun the same full native build. This changes tooling I/O capacity, not coverage or source verification criteria.
 id_source: "generated"
 ---
 ## Summary
@@ -257,6 +303,24 @@ Native type build preparation (not generated-type/native mapping verification):
   Evidence: Exact argv/full logs in output/playwright/task39-checks/types-helper-gates.json; doctor0 errors and two inherited warnings. Runtime Calc/shared portable100 evidence above remains applicable because this subsequent addition changes only the offline native preparation helper and documentation.
   Scope: The preparation helper, preserving full task39 scope and pending verification; no full suite before41 or Writer-only coverage repair.
 
+Actual original generator checkpoint (full task39 still pending):
+- Command: node scripts/casefolding-native-types.mjs --generate.
+  Result: pass.
+  Evidence:105 complete genuine translation units compile and link the actual original cppumaker entry point, SAL/OSL/registry/store/SAL-helper;336 full pinned compiler inputs and build rules verified, cached original Boost/mdds/dragonbox/fast_float archives match source hashes. Original macOS framework/system-zlib dependencies retained. Five byte-for-byte copied pinned IDLs are consumed by the actual SourceTreeProvider; ten genuine headers are emitted. The complete tool/version/argv/source/config/generated-header manifest is output/playwright/task39-native-types/objects-manifest.json with types-generated state. All subprocesses are observed terminal; earlier missing-config/relative-URI/large-blob failures are preserved in Findings. No fake native class/provider or external installation.
+  Scope: True native generated Locale/UNO dependency correspondence. This does not itself satisfy the mandatory complete casefolding-native-probe/getValue/getConditionalValue criterion.
+- Command: Exact native caller compilation/link commands in locale-observation-compile-manifest.json and runtime-exception-observation-compile-manifest.json, then both actual binaries recorded in type-observations-manifest.json (output/playwright/task39-native-types).
+  Result: pass for bounded observations only.
+  Evidence: Generated Locale fields default empty; copying retains original shared data; move construction empties source; memberwise move assignment swaps previous destination fields into source. Default RuntimeException observes Message length0, null Context and original registered type name. Actual full cppu static_types/typelib objects are linked; four complete associated original cppu blobs verified separately. No sanitized complete exception/reference/registration or portable broad parity claim from these limited callers.
+  Scope: Actual native dependency observations; portable UNO/type/reference ownership and full case-mapping remain pending. Source registration side effect is mandatory, rather than replacing the original exception with JS Error.
+- Command: npm run test:coverage:calc with all original source links absent, restored exactly in finally; independent raw audit.
+  Result: pass.
+  Evidence:106 tests/24 files, S2920/B2055/F474/L2564 all100. All19 executable Calc owners have every raw counter positive. Exact command/targets/logs and audit in native-gen-calc-portable-manifest.json/native-gen-calc-raw.json.
+  Scope: Current Calc implementation; offline helpers do not change Writer/shared browser runtime. No Writer-only coverage repair or full suite before41.
+- Command: node scripts/rtl-ascii-equality-native-probe.mjs --check; scoped three-helper eslint; npm run typecheck; npm run check:docs; npm run check:file-size; npm run check:source-provenance; changed-helper Prettier; node .agentplane/policy/check-routing.mjs; ap doctor; git diff --check.
+  Result: pass.
+  Evidence: ASCII native complete-corpus regression remains identical after the full-source I/O capacity fix. Native-generation gates manifest/full logs retained under output/playwright/task39-checks; doctor0 errors/two inherited warnings. CALC037 records the real upstream generated-type weak-memory TODO without claiming reproduced concurrency failure or adding a repair.
+  Scope: Offline native dependency tooling and current partial task evidence; full locale-aware algorithms, actual portable UNO owners and final task39 verification/evaluation remain required. Task39 stays DOING and full goal remains active.
+
 ## Rollback Plan
 
 Revert only intentional task39 implementation/metadata commits if needed and rerun scoped checks. Preserve unrelated user work, Writer/main branches, shared verified Unicode/RTL contracts and original sources. Remove only task39-owned ignored probe artifacts if obsolete.
@@ -330,3 +394,31 @@ Revert only intentional task39 implementation/metadata commits if needed and rer
 - Observation: The reproducible native helper compiles21 actual cppumaker/codemaker/unoidl/SAL-helper units, including unchanged legacy provider and original Bison/Flex outputs;112 full LibreOffice blobs and pinned Boost/mdds archives are verified. Direct linking remains unresolved because real SAL/OSL/registry library owners are not yet supplied.
   Impact: No generated Locale/UNO header, completed native getValue/getConditionalValue verification, or full task closure is claimed. The native object run is confirmed terminal and complete; the link diagnostic is terminal with exit1.
   Resolution: Continue the actual remaining native library closure using recorded linker symbols and original build rules. Keep full task39 verification mandatory, use no fake native owners, and preserve the validated shared ASCII implementation checkpoint.
+
+- Observation: All17 unchanged registry/store objects compile. Initial real SAL compilation stops at missing generated config_probes.h. Pinned dragonbox1.1.3 and fast_float8.2.10 archives are read from the original LibreOffice source mirror and match original download.lst SHA256.
+  Impact: The library build is incomplete; no generated Locale, executable cppumaker or native case-mapping verification is claimed. SAL compile process is terminal.
+  Resolution: Configure the actual config_probes.h.in template with the selected no-probe native configuration and continue unchanged source compilation; do not add dependency stubs or application library replacements.
+
+- Observation: The genuine SAL build compiles33 complete RTL/text-conversion units and stops at tables.cxx because config_locales.h has not yet been configured.
+  Impact: Native library closure is still incomplete; no linked generator or full case mapping claim. No original method body is patched.
+  Resolution: Load the original locale configuration template, enable its actual all-locales option, preserve the completed compilation manifest, and compile the remaining original library units.
+
+- Observation: tables.cxx compiles with the original all-locales configuration, but dependency hashing stops because clang reports a genuine header path containing generate/../ and git show requires the canonical repository-relative path.
+  Impact: Original compilation succeeds but full dependency evidence is not yet recorded. No source mismatch or generator result is claimed; the process is terminal.
+  Resolution: Normalize compiler dependency path segments before comparing the same full blob against the pinned commit, preserving the source-root boundary and strict byte equality.
+
+- Observation: The remainder compiles25 more genuine SAL/text/OSL units and stops at log.cxx because the original Library_sal.mk SRCDIR definition is missing from the caller flags.
+  Impact: No source behavior is altered; native generator linking is still pending. Completed object and dependency manifests remain retained.
+  Resolution: Add the actual source-directory definition from the original library build contract and compile the remaining log/debug/compat units before inspecting the remaining true linker closure.
+
+- Observation: All61 selected original SAL units compile;99 total real objects link with only nine remaining OSL/process/locale/SAL-init/zlib symbols, down from110. Link diagnostic is terminal with exit1.
+  Impact: No generated native types or completed native case mapping is claimed. Original source methods and archives are unchanged.
+  Resolution: Compile the actual remaining source owners discovered by symbol search and link the platform zlib dependency permitted by the original library build; do not add function stubs or alter approved verification criteria.
+
+- Observation: The complete original generator links successfully with105 genuine objects. Its first invocation rejects the relative source-tree path and falls through to legacy-file handling; generation exits1 with zero output headers.
+  Impact: A linked generator is now available, but no generated Locale/UNO evidence is claimed from the rejected input. All upstream files and loader methods remain unchanged.
+  Resolution: Inspect original path conversion and invoke the actual generator with an unambiguous absolute local file URL for the approved pinned IDL tree and output directory; preserve the failed diagnostic.
+
+- Observation: The new full reproducible build reaches a genuine large CNS11643 table, then source verification hits Node execFileSync default output-buffer capacity (ENOBUFS). The previously executed genuine binary has already generated ten headers from the original full IDL tree; the new helper run is terminal and not yet successful.
+  Impact: No successful reproducible-generation claim is made from the failed helper run. The entire large original table must be retained and compared, rather than skipped or truncated.
+  Resolution: Size the existing full-blob git-show buffer to the actual UTF8 blob length plus one, preserve exact equality and hashes, and rerun the same full native build. This changes tooling I/O capacity, not coverage or source verification criteria.

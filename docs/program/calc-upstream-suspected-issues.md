@@ -857,3 +857,27 @@ complete locale-aware casefolding output or its original UNO service.
 
 Decision: retain original names, values and runtime behavior. Record the comment
 inconsistency; do not invert flags or mappings to follow the comments.
+
+
+## CALC-037: Generated Locale type initialization retains an upstream weak-memory TODO
+
+Status: upstream-documented concurrency concern; no concurrent failure has been
+reproduced and no repair is implied.
+
+[The original plain-struct type emitter](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/codemaker/source/cppumaker/cpputype.cxx#L1991)
+emits a static raw type-description pointer, an outer null check and a call to
+`typelib_static_struct_type_init`. Its own TODO warns that on some weak-memory
+platforms another thread can observe an invalid pointed-to value. The actual
+Locale.hpp emitted by the pinned cppumaker retains this sequence and warning.
+
+Evidence: full unchanged PlainStructType::dumpNormalGetCppuType source and ten
+genuine headers generated in task202610101731-H21CAK. Native Locale value
+constructor/copy/move observations do not exercise concurrent type lookup.
+Original static_types.cxx also contains the inner static-initialization mutex;
+its synchronization and the generated outer pointer read need to be considered
+together before concluding there is a defect.
+
+Decision: preserve the generated behavior and original type-registration
+contracts. Do not invent an atomic repair or claim a reproduced concurrency
+problem from this source TODO. Browser realm and worker boundaries remain
+separate verification requirements.
