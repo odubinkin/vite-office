@@ -1,10 +1,11 @@
 ---
 id: "202610101521-5TVQA9"
 title: "Port original OUString lifetime and SharedString value owners for Calc text cells"
-status: "DOING"
+result_summary: "verified-202610101521-5TVQA9"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 24
+revision: 28
 origin:
   system: "manual"
 depends_on: []
@@ -19,9 +20,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-10T15:49:34.057Z"
+  updated_at: "2026-10-10T15:51:36.411Z"
   updated_by: "CODER"
-  note: "Pass: original full-header SharedString native --check4424 states,32 pinned blobs31 scopes,2 runtime guards3 compile guards3 invalid lifetime diagnoses; prior RTL --check3336/20 exact driver44ad48ef. Portable Calc106/24 S2920 B2055 F474 L2564 and affected shared6/3 across8 executable sources S391 B206 F81 L313 all-four100/all raw counters positive with both upstream links absent/restored finally; affected tooling28/4. Typecheck/lint/JSDoc/size/dependencies/tree/provenance/scoped Calc/shared inventories/changed-file formatting/routing/doctor/diff all pass. Evidence output/playwright/task35-{tests,gates,final}/manifest.json and task35-audit.json; no full run at task4/10, next41. Writer unchanged."
+  note: "verified-202610101521-5TVQA9"
   attempts: 0
 quality_review:
   state: "pass"
@@ -47,11 +48,16 @@ quality_review:
     - "Inspected all24 intentional implementation paths and original complete header/source contracts: C++ static empty differs from C empty, OUString move construction resets source and assignment swaps, SharedString assignment retains native order/no self-move guard, unacquired references track live fields without owning copies. Single SAL/SVL owners and exact original SVL->SAL edge; no Writer/config/policy/test-acceptance edits."
     - "Independently checked driver164be221 and raw781d9150 digests, all4424 full captured states,32 pinned full blobs via git show and hashes,31 unchanged RTL scopes,2 actual assertions3 actual compile rejections3 sanitizer diagnoses without post-UB golden results. Defined ASan/UBSan output agrees; prior RTL3336/20 retains exact driver44ad48ef and88,879,388 raw bytes."
     - "Actual portable tests106 Calc/6 affected shared/28 tooling pass with both upstream links absent/restored finally. Exact19 Calc and8 affected executable source maps/all raw counters positive/all four100; static/source/registry/routing/doctor gates and changed-file formatting pass. Scoped inventories Calc47/173 and shared24/143 have0 semantic violations."
-commit: null
+commit:
+  hash: "e15cb2ad5831b3a6b68a6043e22d4831f3b78491"
+  message: "✅ 5TVQA9 quality: verify original Unicode value owners and live references"
 comments:
   -
     author: "CODER"
     body: "Start: Port actual shared OUString and SharedString ownership/reference contracts with pinned native evidence on branchcalc, reusing common RTL data."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610101521-5TVQA9. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -66,8 +72,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Pass: original full-header SharedString native --check4424 states,32 pinned blobs31 scopes,2 runtime guards3 compile guards3 invalid lifetime diagnoses; prior RTL --check3336/20 exact driver44ad48ef. Portable Calc106/24 S2920 B2055 F474 L2564 and affected shared6/3 across8 executable sources S391 B206 F81 L313 all-four100/all raw counters positive with both upstream links absent/restored finally; affected tooling28/4. Typecheck/lint/JSDoc/size/dependencies/tree/provenance/scoped Calc/shared inventories/changed-file formatting/routing/doctor/diff all pass. Evidence output/playwright/task35-{tests,gates,final}/manifest.json and task35-audit.json; no full run at task4/10, next41. Writer unchanged."
+  -
+    type: "verify"
+    at: "2026-10-10T15:51:36.411Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610101521-5TVQA9"
+  -
+    type: "status"
+    at: "2026-10-10T15:51:36.590Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610101521-5TVQA9. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-10T15:49:34.116Z"
+doc_updated_at: "2026-10-10T15:52:05.919Z"
 doc_updated_by: "CODER"
 description: "Task35: reuse original shared RTL data/intern ownership to implement real OUString constructors/lifetime/copy/move/borrowed reference/default empty required by complete original SharedString header/source contract. Preserve separate C++ static empty versus C API empty and live unacquired aliases, both pointer fields, native assignment/move/equality/default/lifetime order. Pin full upstream headers/source/dependencies in actual native compiler evidence; compare complete initialized pointer/refcount/free states and held views without rewriting native algorithms. Branchcalc only, original SVL/SAL ownership and necessary module edge, exhaustive inventory and Calc journal. Strict Calc/affected shared four-metric100; task4/10,next full41. No fake string/document owners, Writer changes, network or merges; remaining OUString algorithms/native ABI/concurrency unverified."
 sections:
@@ -114,6 +133,36 @@ sections:
     - freshness: route=computed_local remote=remote_skipped
     - repeat_allowed: false
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-10T15:51:36.411Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610101521-5TVQA9
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T15:49:34.116Z, excerpt_hash=sha256:30594cde594f96848abdce694ed10081efaf4f19563b6d5861e8e8cfbb7af8d6
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610101521-5TVQA9/blueprint/resolved-snapshot.json
+    - old_digest: 45e9e2f43103635369ff0f538e0ec24050d5116d461643c96c1adcacd7e0592e
+    - current_digest: 45e9e2f43103635369ff0f538e0ec24050d5116d461643c96c1adcacd7e0592e
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610101521-5TVQA9
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610101521-5TVQA9 --result verified-202610101521-5TVQA9 --commit e15cb2ad5831b3a6b68a6043e22d4831f3b78491
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
     <!-- END VERIFICATION RESULTS -->
@@ -168,6 +217,18 @@ sections:
     - Observation: Source-provenance gate ran during the portable-test interval while both approved upstream symlinks were deliberately removed; it failed ENOENT on an unchanged original border source.
       Impact: This is verification scheduling interference, not a provenance mismatch. Gates through dependencies/tree/lint/docs/size passed; provenance/scoped inventories need links present.
       Resolution: Let the confirmed live portable test process finish and its finally restore both links; then rerun provenance and subsequent gates serially. Keep source tests portable and native checks dependent on present pinned sources.
+
+    - Observation: Exact emitted task complete exited5 on generated generic commit subject after task status was already DONE, repeating the installed CLI closure inconsistency from prior tasks.
+      Impact: Implementation f2588e5a9f28 and passing quality e15cb2ad5831 are intact; only canonical DONE artifacts need persistence.
+      Resolution: Recomputed actual route direct_done_pending_artifact_commit; follow its exact ap commit --close --unstage-others command once, then inspect and use a descriptive task-scoped artifact commit if the same CLI subject failure recurs. No history/policy changes.
+
+    - Observation: Exact emitted ap commit --close --unstage-others also exited5 on generated generic subject; recomputed route still only requests canonical task artifact persistence.
+      Impact: No implementation or verification change; repeated installed close-message failure is bounded to the current task README.
+      Resolution: Persist the already-DONE verified task using the documented explicit descriptive ap commit message and --allow-tasks, then check actual HEAD, quality evaluated SHA, DONE route and all tracked/untracked status. No policy weakening/history reset.
+extensions:
+  implementation_commit:
+    hash: "f2588e5a9f2896f289b2d7d45dfaa5be1fa5f926"
+    message: "🧩 5TVQA9 implement: original shared Unicode value owners and live references"
 id_source: "generated"
 ---
 ## Summary
@@ -224,6 +285,36 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-10T15:51:36.411Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610101521-5TVQA9
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T15:49:34.116Z, excerpt_hash=sha256:30594cde594f96848abdce694ed10081efaf4f19563b6d5861e8e8cfbb7af8d6
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610101521-5TVQA9/blueprint/resolved-snapshot.json
+- old_digest: 45e9e2f43103635369ff0f538e0ec24050d5116d461643c96c1adcacd7e0592e
+- current_digest: 45e9e2f43103635369ff0f538e0ec24050d5116d461643c96c1adcacd7e0592e
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610101521-5TVQA9
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610101521-5TVQA9 --result verified-202610101521-5TVQA9 --commit e15cb2ad5831b3a6b68a6043e22d4831f3b78491
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
@@ -283,3 +374,11 @@ Preflight: branchcalc and clean status, only unrelated C9TN6M/X6VV8G active; no 
 - Observation: Source-provenance gate ran during the portable-test interval while both approved upstream symlinks were deliberately removed; it failed ENOENT on an unchanged original border source.
   Impact: This is verification scheduling interference, not a provenance mismatch. Gates through dependencies/tree/lint/docs/size passed; provenance/scoped inventories need links present.
   Resolution: Let the confirmed live portable test process finish and its finally restore both links; then rerun provenance and subsequent gates serially. Keep source tests portable and native checks dependent on present pinned sources.
+
+- Observation: Exact emitted task complete exited5 on generated generic commit subject after task status was already DONE, repeating the installed CLI closure inconsistency from prior tasks.
+  Impact: Implementation f2588e5a9f28 and passing quality e15cb2ad5831 are intact; only canonical DONE artifacts need persistence.
+  Resolution: Recomputed actual route direct_done_pending_artifact_commit; follow its exact ap commit --close --unstage-others command once, then inspect and use a descriptive task-scoped artifact commit if the same CLI subject failure recurs. No history/policy changes.
+
+- Observation: Exact emitted ap commit --close --unstage-others also exited5 on generated generic subject; recomputed route still only requests canonical task artifact persistence.
+  Impact: No implementation or verification change; repeated installed close-message failure is bounded to the current task README.
+  Resolution: Persist the already-DONE verified task using the documented explicit descriptive ap commit message and --allow-tasks, then check actual HEAD, quality evaluated SHA, DONE route and all tracked/untracked status. No policy weakening/history reset.
