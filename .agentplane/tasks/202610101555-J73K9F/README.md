@@ -4,7 +4,7 @@ title: "Port original OUString comparison and SharedStringPool hashed-key owners
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 10
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -18,10 +18,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-10T16:14:33.523Z"
+  updated_by: "CODER"
+  note: "All task36 original native and unchanged prior native captures, portable Calc106/shared8/tooling28, strict S/B/F/L100 positive complete sources and declared scoped gates passed; independent source/raw-state audit retained."
   attempts: 0
 commit: null
 comments:
@@ -36,8 +36,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: Port original OUString comparisons/hash and complete actual StringWithHash key ownership using shared RTL and unchanged native full-header evidence on branchcalc."
+  -
+    type: "verify"
+    at: "2026-10-10T16:14:33.523Z"
+    author: "CODER"
+    state: "ok"
+    note: "All task36 original native and unchanged prior native captures, portable Calc106/shared8/tooling28, strict S/B/F/L100 positive complete sources and declared scoped gates passed; independent source/raw-state audit retained."
 doc_version: 3
-doc_updated_at: "2026-10-10T15:57:29.297Z"
+doc_updated_at: "2026-10-10T16:14:33.579Z"
 doc_updated_by: "CODER"
 description: "Task36 closes actual shared pool/storage key dependencies: original OUString compareTo/equals/hash and bounded original relational operations, plus complete StringWithHash struct with original constructor/equality/std hash and implicit copy/move/assignment/lifetime. Reuse SAL/SVL owners and full unchanged native headers/dependencies; no fake CharClass or pool, no JS Unicode casing replacement. Native complete initialized owner/cache/refcount/allocation/query observations and strict Calc/affected shared100; task5/10 after full31,next41. Branchcalc only; actual locale case mapping/pool/typed cell writes remain next dependencies."
 sections:
@@ -55,10 +61,94 @@ sections:
     3. npm run typecheck; npm run lint; npm run check:docs; npm run check:file-size; npm run check:dependencies; npm run check:source-tree; npm run check:source-provenance; npm run inventory:parity:calc; npm run inventory:parity:shared; affected module-boundary/source-provenance/registry tests; changed nongenerated file formatting; routing/ap doctor/git diff --check. Provenance/native checks require restored pinned sources; no concurrent removal. All pass without thresholds/assertions/exclusion/time-budget relaxation.
     4. Read-only EVALUATOR checks actual implementation commit/source contracts/full digests/counters, no fake pool/CharClass or duplicate shared owner; records nonempty quality findings/evidence/risks. Task verify-show, CLI verification/quality/close pass and final DONE route/branchcalc/clean all tracked/untracked status. No whole run at task5/10; next scheduled41.
   Verification: |-
+    Command: node scripts/rtl-string-key-native-probe.mjs --check
+    Result: pass.
+    Evidence:8143 complete native call snapshots,32 pinned full source/config/header blobs,32 unchanged dependency scopes. Driver ce4f99e056d9eeb680be3830d62597069aa5904b2b89350aaa45fbb3554c046c; full raw states2970e51a516928651ad651c8db0a5a5c7107836c15e236d6f9a7633ce593b12d. Original full C++ headers/private StringWithHash/std::hash compile with complete RTL lifetime dependencies. Valid ASan/UBSan output is identical; null-data unacquired hash diagnosed before UB with no defined expected result. Real [65,100]/[66,63] collision at call2353 returns equality0 and hashes5243/5243. Negative signed hashes produce exact unsigned64 witnesses above Number precision. Independent audit verifies every pinned blob via git show and every full state against raw native output.
+    Scope: original OUString represented comparisons/hash/operators and cached-key by-value/rvalue/copy/move/assignment/self assignment/destruction. No fake pool/casing/document owner.
+
+    Command: node scripts/rtl-sharedstring-native-probe.mjs --check; node scripts/rtl-ustring-ownership-native-probe.mjs --check
+    Result: pass.
+    Evidence: unchanged driver164be221 and all4424 complete states/2 runtime guards/3 compile guards/3 invalid diagnoses; unchanged driver44ad48ef and3336 states/20 guards. Shared native-header/lifetime factoring retains earlier original driver bytes and results.
+    Scope: actual existing shared lifetime dependencies; no native source-body edits or source version drift.
+
+    Command: npm run test:coverage:calc; exact affected SAL/SVL Vitest --coverage command in output/playwright/task36-checks/manifest.json
+    Result: pass.
+    Evidence: both original vendor links absent throughout portable runs, restored in finally. Calc106 tests/24 files,19 executable sources; S2920 B2055 F474 L2564 all100%. Affected shared8 tests/4 files,9 exact executable sources; S434 B214 F99 L353 all100%. Every raw s/f/b counter positive; executable source set complete; independent audit output/playwright/task36-audit.json. Portable full-state tests compare all8143 original snapshots without native sources.
+    Scope: Calc and affected shared owners only; no Writer coverage fixes or full-suite run. Task5/10 since full31; next full41.
+
+    Command: npx vitest run scripts/check-module-boundaries.test.ts scripts/check-source-provenance.test.ts scripts/libreoffice-inventory/registry-storage.test.ts scripts/libreoffice-inventory/registry-validation.test.ts
+    Result: pass.
+    Evidence:28 tests/4 files, upstream absent; full logs task36-checks/03.log.
+    Scope: affected module boundaries, source mapping and registry storage/validation.
+
+    Command: npm run typecheck; npm run lint; npm run check:docs; npm run check:file-size; npm run check:dependencies; npm run check:source-tree; npm run check:source-provenance; npm run inventory:parity:calc; npm run inventory:parity:shared; changed-file prettier --check; node .agentplane/policy/check-routing.mjs; ap doctor; git diff --check
+    Result: pass after bounded documented caller/import/evidence-marker fixes.
+    Evidence: task36-checks/04.log and task36-final final passing gate logs. Strict gates unchanged, pinned vendor links restored. Original upstream symbol inventories exhaustive for actual local declarations. New capability CAP-964432b0-3954-4bba-8b5c-c58d4038a982, exact existing SAL and new SVL runtime/provenance records; broad semantic/default/contract flags remain unverified. CALC-035 records only a source-level suspicious Lithuanian condition, explicitly awaiting actual service reproduction. Doctor0 errors/two inherited warnings; tracked diff intentional in branchcalc.
+    Scope: approved runtime/native fixture/test/common helper/inventory/core/journal/task artifacts. No Writer, branches, merges, network, policy or acceptance changes. EVALUATOR commit review and clean closure follow.
+
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-10T16:14:33.523Z — VERIFY — ok
+
+    By: CODER
+
+    Note: All task36 original native and unchanged prior native captures, portable Calc106/shared8/tooling28, strict S/B/F/L100 positive complete sources and declared scoped gates passed; independent source/raw-state audit retained.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T16:14:33.059Z, excerpt_hash=sha256:2fd55ba2cd2c04d8c7cff33a8990921350467e47bbdf3b6df40b5c440006b8b8
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610101555-J73K9F/blueprint/resolved-snapshot.json
+    - old_digest: 3cd0ecd8b1cc9af393dfba30c17a6539ccfc0f3ffa758a87f4cd5673445073cc
+    - current_digest: 3cd0ecd8b1cc9af393dfba30c17a6539ccfc0f3ffa758a87f4cd5673445073cc
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610101555-J73K9F
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610101555-J73K9F
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "New forward task only to revert task36 comparison/key/native helper/registry/docs changes; rerun exact unchanged prior corpora and scoped gates. Never reset history or mutate upstream, Writer, policy or coverage acceptance. Ignored native output stays inside this repository and both links restored in finally."
-  Findings: "Preflight clean branchcalc; only unrelated C9TN6M/X6VV8G DOING. User persistent goal/continue authorizes safe local work. Original SharedStringPool requires actual CharClass uppercase through locale/Unicode casefold/ICU; no existing real common service is present, so implement its exact comparison/hash key closure first rather than inventing that service. Original StringWithHash uses OUString by value and std::move, cached signed32 hash before string equality and signed-to-size_t hash conversion. Full-header native compiler is available from verified task35. Read-only search returned no existing standalone map/charclass files; no source was mutated. Original casefolding conditional Lithuanian pos>len source condition was noticed but no reproduction yet; record only clearly scoped suspected behavior if documented, never claim a confirmed bug."
+  Findings: |-
+    Preflight clean branchcalc; only unrelated C9TN6M/X6VV8G DOING. User persistent goal/continue authorizes safe local work. Original SharedStringPool requires actual CharClass uppercase through locale/Unicode casefold/ICU; no existing real common service is present, so implement its exact comparison/hash key closure first rather than inventing that service. Original StringWithHash uses OUString by value and std::move, cached signed32 hash before string equality and signed-to-size_t hash conversion. Full-header native compiler is available from verified task35. Read-only search returned no existing standalone map/charclass files; no source was mutated. Original casefolding conditional Lithuanian pos>len source condition was noticed but no reproduction yet; record only clearly scoped suspected behavior if documented, never claim a confirmed bug.
+
+    - Observation: Native-prefix factoring script assumed a compact import line; actual formatted import is multiline, so discovery failed before writing either helper or probe.
+      Impact: Runtime comparison/key changes remain; native task35 probe/helper are unchanged.
+      Resolution: Use actual multiline import context, preserve exact original prefix/configuration bytes and verify existing driver164be221 before constructing new caller evidence.
+
+    - Observation: Previous native process handle24453 is terminal/missing; process inventory confirms no surviving key/shared native compiler. New key caller reached invalid reference-binding diagnostic before its intended hash marker.
+      Impact: No new fixture yet; missing handles are not live waits. Native invalid-input evidence must mark the actual operation before UB.
+      Resolution: Resume bounded local native checks; use a concrete null field with an original unacquired reference and emit marker before invoking hashCode, without post-UB expected output.
+
+    - Observation: First portable key replay used OUString.unacquired with an owner instead of the required pointer-field tuple; comparison failed before a snapshot. Initial optional registry reads used guessed flat paths; actual records are nested by source path.
+      Impact: Test caller plumbing was invalid; no evidence of a runtime semantic mismatch. No threshold or source guard changes are needed.
+      Resolution: Pass concrete nonowning pointer tuples for immediate borrowed queries; retain native captured outputs. Read actual rg-discovered nested records and rerun the complete affected corpus.
+
+    - Observation: Lint identified obsolete mkdirSync import in the task35 native probe after factoring unchanged header configuration into the shared helper.
+      Impact: One unused caller import; no runtime/native source or acceptance change.
+      Resolution: Remove only the unused import and rerun lint with unchanged gates.
+
+    - Observation: Whole-repo ESLint also scans ignored local evidence runners; the newly saved serial task36 runner lacked JSDoc for its run helper.
+      Impact: Portable Calc/shared/tooling and typecheck already passed; failure concerns an ignored evidence script, not runtime behavior.
+      Resolution: Document the local runner helper, keep lint rules unchanged, then resume remaining serial gates without rerunning passed tests.
+
+    - Observation: Independent evidence audit guessed a collision numeric value2505 without checking the original hash length seed; assertion failed. Full native and portable comparisons had already passed.
+      Impact: The audit-only hardcoded scalar was wrong, not the captured fixture or runtime algorithm.
+      Resolution: Inspect the complete genuine collision snapshot, assert original observed equal-hash unequal-key outputs and verify raw captures/source hashes without duplicating an expected hash algorithm.
+
+    - Observation: Source-provenance check rejected operator< and operator> markers because original OUString friend declarations contain a space after operator.
+      Impact: Two inventory source-symbol spellings are inaccurate; original runtime and complete native evidence already match.
+      Resolution: Use exact original relational friend marker spellings in both affected source inventories; retain strict provenance validation and resume pending gates.
 id_source: "generated"
 ---
 ## Summary
@@ -86,7 +176,62 @@ Only /Users/odubinkin/Projects/vite-office-calc branchcalc. Extend apps/office/s
 
 ## Verification
 
+Command: node scripts/rtl-string-key-native-probe.mjs --check
+Result: pass.
+Evidence:8143 complete native call snapshots,32 pinned full source/config/header blobs,32 unchanged dependency scopes. Driver ce4f99e056d9eeb680be3830d62597069aa5904b2b89350aaa45fbb3554c046c; full raw states2970e51a516928651ad651c8db0a5a5c7107836c15e236d6f9a7633ce593b12d. Original full C++ headers/private StringWithHash/std::hash compile with complete RTL lifetime dependencies. Valid ASan/UBSan output is identical; null-data unacquired hash diagnosed before UB with no defined expected result. Real [65,100]/[66,63] collision at call2353 returns equality0 and hashes5243/5243. Negative signed hashes produce exact unsigned64 witnesses above Number precision. Independent audit verifies every pinned blob via git show and every full state against raw native output.
+Scope: original OUString represented comparisons/hash/operators and cached-key by-value/rvalue/copy/move/assignment/self assignment/destruction. No fake pool/casing/document owner.
+
+Command: node scripts/rtl-sharedstring-native-probe.mjs --check; node scripts/rtl-ustring-ownership-native-probe.mjs --check
+Result: pass.
+Evidence: unchanged driver164be221 and all4424 complete states/2 runtime guards/3 compile guards/3 invalid diagnoses; unchanged driver44ad48ef and3336 states/20 guards. Shared native-header/lifetime factoring retains earlier original driver bytes and results.
+Scope: actual existing shared lifetime dependencies; no native source-body edits or source version drift.
+
+Command: npm run test:coverage:calc; exact affected SAL/SVL Vitest --coverage command in output/playwright/task36-checks/manifest.json
+Result: pass.
+Evidence: both original vendor links absent throughout portable runs, restored in finally. Calc106 tests/24 files,19 executable sources; S2920 B2055 F474 L2564 all100%. Affected shared8 tests/4 files,9 exact executable sources; S434 B214 F99 L353 all100%. Every raw s/f/b counter positive; executable source set complete; independent audit output/playwright/task36-audit.json. Portable full-state tests compare all8143 original snapshots without native sources.
+Scope: Calc and affected shared owners only; no Writer coverage fixes or full-suite run. Task5/10 since full31; next full41.
+
+Command: npx vitest run scripts/check-module-boundaries.test.ts scripts/check-source-provenance.test.ts scripts/libreoffice-inventory/registry-storage.test.ts scripts/libreoffice-inventory/registry-validation.test.ts
+Result: pass.
+Evidence:28 tests/4 files, upstream absent; full logs task36-checks/03.log.
+Scope: affected module boundaries, source mapping and registry storage/validation.
+
+Command: npm run typecheck; npm run lint; npm run check:docs; npm run check:file-size; npm run check:dependencies; npm run check:source-tree; npm run check:source-provenance; npm run inventory:parity:calc; npm run inventory:parity:shared; changed-file prettier --check; node .agentplane/policy/check-routing.mjs; ap doctor; git diff --check
+Result: pass after bounded documented caller/import/evidence-marker fixes.
+Evidence: task36-checks/04.log and task36-final final passing gate logs. Strict gates unchanged, pinned vendor links restored. Original upstream symbol inventories exhaustive for actual local declarations. New capability CAP-964432b0-3954-4bba-8b5c-c58d4038a982, exact existing SAL and new SVL runtime/provenance records; broad semantic/default/contract flags remain unverified. CALC-035 records only a source-level suspicious Lithuanian condition, explicitly awaiting actual service reproduction. Doctor0 errors/two inherited warnings; tracked diff intentional in branchcalc.
+Scope: approved runtime/native fixture/test/common helper/inventory/core/journal/task artifacts. No Writer, branches, merges, network, policy or acceptance changes. EVALUATOR commit review and clean closure follow.
+
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-10T16:14:33.523Z — VERIFY — ok
+
+By: CODER
+
+Note: All task36 original native and unchanged prior native captures, portable Calc106/shared8/tooling28, strict S/B/F/L100 positive complete sources and declared scoped gates passed; independent source/raw-state audit retained.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T16:14:33.059Z, excerpt_hash=sha256:2fd55ba2cd2c04d8c7cff33a8990921350467e47bbdf3b6df40b5c440006b8b8
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610101555-J73K9F/blueprint/resolved-snapshot.json
+- old_digest: 3cd0ecd8b1cc9af393dfba30c17a6539ccfc0f3ffa758a87f4cd5673445073cc
+- current_digest: 3cd0ecd8b1cc9af393dfba30c17a6539ccfc0f3ffa758a87f4cd5673445073cc
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610101555-J73K9F
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610101555-J73K9F
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -96,3 +241,31 @@ New forward task only to revert task36 comparison/key/native helper/registry/doc
 ## Findings
 
 Preflight clean branchcalc; only unrelated C9TN6M/X6VV8G DOING. User persistent goal/continue authorizes safe local work. Original SharedStringPool requires actual CharClass uppercase through locale/Unicode casefold/ICU; no existing real common service is present, so implement its exact comparison/hash key closure first rather than inventing that service. Original StringWithHash uses OUString by value and std::move, cached signed32 hash before string equality and signed-to-size_t hash conversion. Full-header native compiler is available from verified task35. Read-only search returned no existing standalone map/charclass files; no source was mutated. Original casefolding conditional Lithuanian pos>len source condition was noticed but no reproduction yet; record only clearly scoped suspected behavior if documented, never claim a confirmed bug.
+
+- Observation: Native-prefix factoring script assumed a compact import line; actual formatted import is multiline, so discovery failed before writing either helper or probe.
+  Impact: Runtime comparison/key changes remain; native task35 probe/helper are unchanged.
+  Resolution: Use actual multiline import context, preserve exact original prefix/configuration bytes and verify existing driver164be221 before constructing new caller evidence.
+
+- Observation: Previous native process handle24453 is terminal/missing; process inventory confirms no surviving key/shared native compiler. New key caller reached invalid reference-binding diagnostic before its intended hash marker.
+  Impact: No new fixture yet; missing handles are not live waits. Native invalid-input evidence must mark the actual operation before UB.
+  Resolution: Resume bounded local native checks; use a concrete null field with an original unacquired reference and emit marker before invoking hashCode, without post-UB expected output.
+
+- Observation: First portable key replay used OUString.unacquired with an owner instead of the required pointer-field tuple; comparison failed before a snapshot. Initial optional registry reads used guessed flat paths; actual records are nested by source path.
+  Impact: Test caller plumbing was invalid; no evidence of a runtime semantic mismatch. No threshold or source guard changes are needed.
+  Resolution: Pass concrete nonowning pointer tuples for immediate borrowed queries; retain native captured outputs. Read actual rg-discovered nested records and rerun the complete affected corpus.
+
+- Observation: Lint identified obsolete mkdirSync import in the task35 native probe after factoring unchanged header configuration into the shared helper.
+  Impact: One unused caller import; no runtime/native source or acceptance change.
+  Resolution: Remove only the unused import and rerun lint with unchanged gates.
+
+- Observation: Whole-repo ESLint also scans ignored local evidence runners; the newly saved serial task36 runner lacked JSDoc for its run helper.
+  Impact: Portable Calc/shared/tooling and typecheck already passed; failure concerns an ignored evidence script, not runtime behavior.
+  Resolution: Document the local runner helper, keep lint rules unchanged, then resume remaining serial gates without rerunning passed tests.
+
+- Observation: Independent evidence audit guessed a collision numeric value2505 without checking the original hash length seed; assertion failed. Full native and portable comparisons had already passed.
+  Impact: The audit-only hardcoded scalar was wrong, not the captured fixture or runtime algorithm.
+  Resolution: Inspect the complete genuine collision snapshot, assert original observed equal-hash unequal-key outputs and verify raw captures/source hashes without duplicating an expected hash algorithm.
+
+- Observation: Source-provenance check rejected operator< and operator> markers because original OUString friend declarations contain a space after operator.
+  Impact: Two inventory source-symbol spellings are inaccurate; original runtime and complete native evidence already match.
+  Resolution: Use exact original relational friend marker spellings in both affected source inventories; retain strict provenance validation and resume pending gates.

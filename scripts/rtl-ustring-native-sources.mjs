@@ -1,7 +1,7 @@
 /** @fileoverview Verifies pinned full RTL blobs and reuses complete unchanged native scopes for caller probes. */
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
-import { readFileSync } from "node:fs";
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 export const upstream = "vendor/libreoffice-reference";
 export const pin = "9bc445578031fecf56086729d8e4940c77e14d65";
 /** Hashes original bytes. @param value - Exact source. @returns SHA256. */
@@ -169,4 +169,84 @@ export function loadUnicodeNativeSources() {
     throw new Error("Incomplete original extraction");
 
   return { sources, scopes };
+}
+
+/** Builds shared full-header native lifetime dependency compilation text using unchanged original scopes. @param scopes - Verified original RTL dependency scopes. @param reverse - Complete reverse template. @param reverseWrapper - Complete original C wrapper. @returns Same original lifetime prefix used by caller probes. */
+export function unicodeNativeLifetimePrefix(scopes, reverse, reverseWrapper) {
+  return String.raw`#include <svl/sharedstring.hxx>
+#include <rtl/character.hxx>
+#include <osl/mutex.h>
+#include <o3tl/safeint.hxx>
+#include <concepts>
+#include <limits>
+#include <vector>
+#include <map>
+#include <memory>
+#include <iostream>
+#include <pthread.h>
+#define SAL_WARN_IF(...)
+#define SAL_WARN(...)
+#undef OSL_ASSERT
+#define OSL_ASSERT(c) do{if(!(c))std::cerr<<"OSL_ASSERT: "<<#c<<'\n';}while(false)
+#define RTL_LOG_STRING_NEW(...)
+#define RTL_LOG_STRING_DELETE(...)
+#define RTL_LOG_STRING_INTERN_NEW(...)
+#define RTL_LOG_STRING_INTERN_DELETE(...)
+${scopes.flags}
+${scopes.allocationDeclarations}
+${scopes.allocationDefaults}
+${scopes.mutexCreate}
+${scopes.mutexAcquire}
+${scopes.mutexRelease}
+void internRelease(rtl_uString*);
+namespace rtl::str { ${scopes.unsigned} ${scopes.lengthWrapper} ${scopes.copy} ${scopes.length} ${scopes.comparator} ${scopes.noShortening} ${scopes.forward} ${reverse} ${scopes.hash} ${scopes.storage} ${scopes.getStr} }
+${scopes.forwardWrapper}
+${reverseWrapper}
+${scopes.hashWrapper}
+${scopes.storageWrappers}
+${scopes.assignAndGet}
+${scopes.hashTable}
+${scopes.lifecycleAndIntern}
+${scopes.internRelease}
+`;
+}
+/** Loads one complete pinned native blob into an existing source manifest. @param sources - Verified source dictionary. @param path - Original path. @returns Unchanged full source. */
+export function loadUnicodeOriginal(sources, path) {
+  const value = readFileSync(`${upstream}/${path}`, "utf8");
+  if (
+    execFileSync("git", ["-C", upstream, "show", `${pin}:${path}`], { encoding: "utf8" }) !== value
+  )
+    throw new Error(`Modified original file: ${path}`);
+  sources[path] = value;
+  return value;
+}
+
+/** Generates only native compiler configuration from exact original templates. @param target - Ignored local caller directory. @param sources - Verified full-file manifest. @returns Configured template bytes. */
+export function configureUnicodeNativeHeaders(target, sources) {
+  const configTypes = loadUnicodeOriginal(sources, "config_host/config_typesizes.h.in");
+  const configGlobal = loadUnicodeOriginal(sources, "config_host/config_global.h.in");
+  const sizes = {
+    ALIGNMENT2: "2",
+    ALIGNMENT4: "4",
+    ALIGNMENT8: "8",
+    SIZEOFSHORT: "__SIZEOF_SHORT__",
+    SIZEOFINT: "__SIZEOF_INT__",
+    SIZEOFLONG: "__SIZEOF_LONG__",
+    SIZEOFLONGLONG: "__SIZEOF_LONG_LONG__",
+    SIZEOFPOINTER: "__SIZEOF_POINTER__",
+  };
+  const types = configTypes.replace(
+    /^#undef SAL_TYPES_(\w+)$/gm,
+    /** Applies actual compiler type sizes to the original configuration template. @param line - Template line. @param name - Config key. @returns Configured line. */ (
+      line,
+      name,
+    ) => `#define SAL_TYPES_${name} ${sizes[name]}`,
+  );
+  const global = configGlobal
+    .replace("#define HAVE_GCC_BUILTIN_ATOMIC 0", "#define HAVE_GCC_BUILTIN_ATOMIC 1")
+    .replace("#define HAVE_CPP_CONSTEVAL 0", "#define HAVE_CPP_CONSTEVAL 1");
+  mkdirSync(`${target}/headers`, { recursive: true });
+  writeFileSync(`${target}/headers/config_typesizes.h`, types);
+  writeFileSync(`${target}/headers/config_global.h`, global);
+  return { types, global };
 }

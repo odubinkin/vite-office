@@ -813,3 +813,27 @@ Decision: preserve native release/exchange/assignment order and absence of
 a self guard. No synthetic safe result, special-case nulling or ownership
 repair is added. Safe static-data self-move remains in the complete defined
 native corpus; invalid dynamic self-move has no portable post-UB expectation.
+
+## CALC-035: Lithuanian conditional case mapping checks position beyond length
+
+Status: suspicious source condition only; native service output has not been
+reproduced. No confirmed defect or repair is implied.
+
+[Original conditional case mapping](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/i18nutil/source/utility/casefolding.cxx#L85)
+checks `langIs("lt") && pos > len && accent_above(str[pos+1])` for U+0049,
+U+004A and U+012E. For a position inside a string (`0 <= pos < len`),
+`pos > len` is false, so this branch cannot select the Lithuanian
+accent-above mapping. For example, position0 in a two-unit input cannot
+reach that mapping through this condition. This is a predicate observation,
+not a captured case-conversion result.
+
+Evidence: unchanged pinned `i18nutil/source/utility/casefolding.cxx`,
+`getConditionalValue`, lines85–88, inspected while resolving SharedStringPool's
+original CharClass dependency. The original UNO/i18npool/i18nutil/ICU service
+has not yet been ported or exercised here. Full callers, mapping tables,
+locale service and intended index semantics remain to be checked before
+drawing a service-level conclusion.
+
+Decision: preserve the exact source condition when porting this owner. Do not
+change the comparison or replace the original locale service with JavaScript
+casing. Record a native reproduction when the actual service is available.

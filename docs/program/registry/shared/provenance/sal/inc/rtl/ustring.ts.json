@@ -9,33 +9,54 @@
     "localSymbols": [
       "OUString",
       "OUStringConstReference",
+      "OUStringHash",
       "OUStringLiteral",
       "[value, argument]",
       "assign",
+      "call",
       "clear",
+      "compareTo",
       "data",
       "dispose",
+      "equals",
       "getLength",
       "getStr",
+      "greaterThan",
+      "greaterThanOrEqual",
+      "hashCode",
       "isEmpty",
+      "lessThan",
+      "lessThanOrEqual",
       "move",
       "moveAssign",
+      "notEquals",
       "reference",
       "result",
+      "reverseCompareTo",
       "unacquired",
       "view"
     ],
     "upstreamSymbols": [
       "OUStringLiteral",
       "OUString",
+      "OUStringHash",
       "unacquired",
       "getLength",
       "getStr",
       "clear",
-      "operator="
+      "operator=",
+      "compareTo",
+      "reverseCompareTo",
+      "equals",
+      "hashCode",
+      "operator==",
+      "operator!=",
+      "operator <",
+      "operator >"
     ],
     "preservedResponsibilities": [
-      "Original OUString runtime lifetime/constructor/copy/move/assignment/clear/getters and complete SharedString value/query contract reuse one shared SAL RTL data/refcount/intern owner. Complete original OUString/SharedString headers and unchanged SharedString cxx compile with32 pinned full source/config/header blobs and31 unchanged RTL dependency scopes. All4424 initialized native owner, both pointer fields, static C++ empty versus C empty versus literal identity, refcounts/length/capacity/logical UTF16/terminators, allocation/free events, query results and held live reference snapshots match portable runtime. Valid native capture also passes ASan/UBSan with identical output. Two original constructor assertions, three original compile-time constructor rejection witnesses and three invalid original lifetime sanitizer diagnoses are retained separately without inventing post-UB golden results. Explicit move factories/destructor calls adapt C++ rvalues/RAII; nullable const-reference query types and stable nonowning WeakMap-backed pointer-slot views adapt reinterpret references without copy/acquire/release. Native const/deleted-overload/template/layout/constant-evaluation enforcement, full OUString search/conversion/format/append APIs, physical pointer ABI/free/dead views, thread concurrency and complete upstream QA remain unverified. SharedString source owns one compiled class with original inline header behaviors; header reexports it instead of defining a duplicate. No Calc-specific strings, allocators or document placeholders."
+      "Original OUString runtime lifetime/constructor/copy/move/assignment/clear/getters and complete SharedString value/query contract reuse one shared SAL RTL data/refcount/intern owner. Complete original OUString/SharedString headers and unchanged SharedString cxx compile with32 pinned full source/config/header blobs and31 unchanged RTL dependency scopes. All4424 initialized native owner, both pointer fields, static C++ empty versus C empty versus literal identity, refcounts/length/capacity/logical UTF16/terminators, allocation/free events, query results and held live reference snapshots match portable runtime. Valid native capture also passes ASan/UBSan with identical output. Two original constructor assertions, three original compile-time constructor rejection witnesses and three invalid original lifetime sanitizer diagnoses are retained separately without inventing post-UB golden results. Explicit move factories/destructor calls adapt C++ rvalues/RAII; nullable const-reference query types and stable nonowning WeakMap-backed pointer-slot views adapt reinterpret references without copy/acquire/release. Native const/deleted-overload/template/layout/constant-evaluation enforcement, full OUString search/conversion/format/append APIs, physical pointer ABI/free/dead views, thread concurrency and complete upstream QA remain unverified. SharedString source owns one compiled class with original inline header behaviors; header reexports it instead of defining a duplicate. No Calc-specific strings, allocators or document placeholders.",
+      "Original OUString normal/reverse comparison, length-before-pointer equality, six friend operators and signed32 polynomial hash reuse the actual shared C RTL algorithms. Original StringWithHash owns its by-value moved OUString and computes its cache after the member move; implicit copy/move/assignment/destruction retain original member order and never recompute mutable caches. Explicit member methods/factories adapt C++ operators/rvalues/destructors only. Complete original C++ headers and unchanged whole private key/std::hash scope with32 pinned full blobs and32 dependency scopes produce8143 full initialized owner/cache/pointer/refcount/storage/allocator/operator/hash snapshots; all snapshots are portable witnesses including actual equal-hash unequal-string collisions, embedded NULs, isolated surrogates, negative hashes and copy/move/self assignment. Actual size_t casts on the selected native64-bit target use BigInt unsigned64 rather than lossy JS numbers. Valid ASan/UBSan output agrees completely; null-data reference hash diagnosis remains separate without a defined result. Full string-view/template/shortened-comparison/search/conversion overloads, other ABIs, physical malloc/free and concurrency remain unverified. SharedStringPool, its required original locale-aware CharClass/UNO/i18nutil Unicode case service and actual Calc column/document/UI owners are still missing; no fake pool or JS uppercase substitute."
     ],
     "omittedResponsibilities": [
       "Complete OUString algorithms, original compile-time/const enforcement/native ABI/thread and downstream Calc storage/document/UI remain unverified; no fabricated replacement."
@@ -49,6 +70,10 @@
         {
           "path": "apps/office/src/svl/source/misc/sharedstring.test.ts",
           "marker": "matches all original live owner, view, pointer, counter, buffer and allocator observations"
+        },
+        {
+          "path": "apps/office/src/svl/source/misc/sharedstringpool.test.ts",
+          "marker": "matches full original cached-key lifetimes, collisions, signed hashes and OUString operators"
         }
       ],
       "upstream": [

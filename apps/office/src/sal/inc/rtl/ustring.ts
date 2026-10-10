@@ -6,6 +6,9 @@ import {
   rtl_uString_newFromStr,
   rtl_uString_newFromStr_WithLength,
   rtl_uString_release,
+  rtl_ustr_compare_WithLength,
+  rtl_ustr_reverseCompare_WithLength,
+  rtl_ustr_hashCode_WithLength,
 } from "./ustring.h";
 import type { rtl_uString, rtl_uStringSlot } from "./ustring.h";
 import { SAL_NO_ACQUIRE } from "../types";
@@ -35,7 +38,21 @@ export class OUStringLiteral {
 
 /** Const-reference surface of the implemented original OUString contract; borrowed views cannot acquire mutating/destructor APIs through this type. */
 export type OUStringConstReference = Readonly<
-  Pick<OUString, "getLength" | "getStr" | "isEmpty"> & { pData: rtl_uString | null }
+  Pick<
+    OUString,
+    | "getLength"
+    | "getStr"
+    | "isEmpty"
+    | "equals"
+    | "notEquals"
+    | "compareTo"
+    | "reverseCompareTo"
+    | "hashCode"
+    | "lessThan"
+    | "greaterThan"
+    | "lessThanOrEqual"
+    | "greaterThanOrEqual"
+  > & { pData: rtl_uString | null }
 >;
 
 /** Original OUString value owner; explicit move factories and dispose adapt C++ rvalues and destructor invocation. */
@@ -128,5 +145,70 @@ export class OUString {
   /** Original borrowed buffer access. @returns Actual backing storage. */
   getStr(): Uint16Array {
     return this.pData.buffer;
+  }
+
+  /** Original normal comparison with the implicit string-view conversion of a live OUString reference. @param other - Original source reference. @returns Selected native UTF16 lexical result. */
+  compareTo(other: OUStringConstReference): number {
+    return rtl_ustr_compare_WithLength(
+      this.pData.buffer,
+      this.pData.length,
+      other.getStr(),
+      other.getLength(),
+    );
+  }
+  /** Original reverse string-view comparison. @param other - Live reference. @returns Exact native reverse mismatch or length difference. */
+  reverseCompareTo(other: OUStringConstReference): number {
+    return rtl_ustr_reverseCompare_WithLength(
+      this.pData.buffer,
+      this.pData.length,
+      other.getStr(),
+      other.getLength(),
+    );
+  }
+  /** Original equality checks lengths before pointer identity and reverse comparison. @param other - Live source reference. @returns Native equality result. */
+  equals(other: OUStringConstReference): boolean {
+    const data = other.pData as rtl_uString;
+    if (this.pData.length !== data.length) return false;
+    if (this.pData === data) return true;
+    return (
+      rtl_ustr_reverseCompare_WithLength(
+        this.pData.buffer,
+        this.pData.length,
+        data.buffer,
+        data.length,
+      ) === 0
+    );
+  }
+  /** Original friend inequality operator adapted to an explicit method. @param other - Live reference. @returns Negated equality. */
+  notEquals(other: OUStringConstReference): boolean {
+    return !this.equals(other);
+  }
+  /** Original less-than friend operator. @param other - Live reference. @returns Native ordering. */
+  lessThan(other: OUStringConstReference): boolean {
+    return this.compareTo(other) < 0;
+  }
+  /** Original greater-than friend operator. @param other - Live reference. @returns Native ordering. */
+  greaterThan(other: OUStringConstReference): boolean {
+    return this.compareTo(other) > 0;
+  }
+  /** Original less-than-or-equal friend operator. @param other - Live reference. @returns Native ordering. */
+  lessThanOrEqual(other: OUStringConstReference): boolean {
+    return this.compareTo(other) <= 0;
+  }
+  /** Original greater-than-or-equal friend operator. @param other - Live reference. @returns Native ordering. */
+  greaterThanOrEqual(other: OUStringConstReference): boolean {
+    return this.compareTo(other) >= 0;
+  }
+  /** Original public hash delegates to the common C polynomial hash owner. @returns Original signed32 hash. */
+  hashCode(): number {
+    return rtl_ustr_hashCode_WithLength(this.pData.buffer, this.pData.length);
+  }
+}
+
+/** Original stateless OUStringHash functor; explicit call adapts operator() on the verified64-bit size_t target. */
+export class OUStringHash {
+  /** Original signed32-to-size_t conversion retains every unsigned64 bit. @param value - Live source reference. @returns Original size_t hash witness. */
+  call(value: OUStringConstReference): bigint {
+    return BigInt.asUintN(64, BigInt(value.hashCode()));
   }
 }

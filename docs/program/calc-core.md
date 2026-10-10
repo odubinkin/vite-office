@@ -1780,3 +1780,43 @@ and full original QA remain unverified. Actual SharedStringPool, typed cell
 payload/storage mutation, column/table/document and editable Calc UI remain
 the next downstream dependencies. This is task4/10 after full task31; the next
 scheduled whole-suite run is task41.
+
+## Original shared Unicode comparisons and cached pool key
+
+Task36 (`202610101555-J73K9F`) extends the existing shared SAL header owner
+with original normal/reverse comparisons, length-before-pointer equality,
+relational operators and the signed32 polynomial hash. `OUStringHash` retains
+the actual signed32-to-size_t cast as unsigned64 `bigint` on the verified native
+target. Other native widths remain unverified.
+
+`svl/source/misc/sharedstringpool.ts` owns the original private `StringWithHash`
+struct and its cached hash functor. Its by-value constructor moves the argument
+into its sole owned string before calculating the cache. Explicit rvalue
+factories and destructor calls represent C++ value lifetimes. Implicit copy,
+move and assignment retain original member order; they copy the cache rather
+than recompute it. Equality first checks the cached hash, then the actual string.
+The shared SAL data/refcount owners are reused by both applications.
+
+`scripts/rtl-string-key-native-probe.mjs` compiles the complete pinned C++
+headers and unchanged complete original key/hash scope with32 full source blobs
+and32 dependency scopes. Its8143 calls capture complete initialized owner/key
+pointers, caches, refcounts, lengths, capacities, logical UTF16 units, terminators,
+allocation/free events and signed/unsigned comparison/hash results. Inputs
+include real hash collisions, embedded NULs, isolated surrogates, negative hashes,
+by-value rvalue construction, memberwise copies/moves and self assignment.
+The valid capture also passes ASan/UBSan with identical full output. Original
+null-field hashing is diagnosed separately; no post-UB portable result is invented.
+
+Shared native header configuration and full lifetime dependency extraction are
+factored into `rtl-ustring-native-sources.mjs`. The earlier SharedString driver
+remains `164be221` with4424 states,2 runtime guards,3 compile guards and3 invalid
+lifetime diagnoses; the prior RTL ownership driver remains `44ad48ef` with3336
+states and20 guards.
+
+The original locale-aware `CharClass` service remains required before the actual
+SharedStringPool can be ported. Its UNO/i18npool/i18nutil Unicode casing pipeline
+is not replaced with JavaScript casing. This task adds no substitute pool, actual
+Calc cell store, column/document or editable UI. Shortened/string-view template
+comparison overloads, remaining OUString algorithms, native ABI/concurrency and
+complete original consumer QA remain unverified. This is task5/10 since full
+task31; the next scheduled full run is task41.

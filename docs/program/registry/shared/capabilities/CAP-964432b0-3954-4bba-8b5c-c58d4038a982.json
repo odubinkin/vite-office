@@ -1,0 +1,84 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-964432b0-3954-4bba-8b5c-c58d4038a982",
+    "capabilityId": "CAP-964432b0-3954-4bba-8b5c-c58d4038a982",
+    "suite": "shared",
+    "subsystem": "shared-string",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original normal/reverse UTF16 comparison and length-before-pointer equality, relational operators and signed32 hash.",
+      "Original by-value/moved string and implicit cached-key special members with exact counter/storage/lifetime order.",
+      "All8143 complete native snapshots, real collisions, unsigned64 casts and separate invalid reference diagnosis."
+    ],
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "Original owners and algorithms retained with explicit C++ lifetime/type/reference language adapters."
+    },
+    "capability": "Original shared OUString comparisons and cached SharedStringPool key value owners",
+    "gaps": [
+      "Original OUString normal/reverse comparison, length-before-pointer equality, six friend operators and signed32 polynomial hash reuse the actual shared C RTL algorithms. Original StringWithHash owns its by-value moved OUString and computes its cache after the member move; implicit copy/move/assignment/destruction retain original member order and never recompute mutable caches. Explicit member methods/factories adapt C++ operators/rvalues/destructors only. Complete original C++ headers and unchanged whole private key/std::hash scope with32 pinned full blobs and32 dependency scopes produce8143 full initialized owner/cache/pointer/refcount/storage/allocator/operator/hash snapshots; all snapshots are portable witnesses including actual equal-hash unequal-string collisions, embedded NULs, isolated surrogates, negative hashes and copy/move/self assignment. Actual size_t casts on the selected native64-bit target use BigInt unsigned64 rather than lossy JS numbers. Valid ASan/UBSan output agrees completely; null-data reference hash diagnosis remains separate without a defined result. Full string-view/template/shortened-comparison/search/conversion overloads, other ABIs, physical malloc/free and concurrency remain unverified. SharedStringPool, its required original locale-aware CharClass/UNO/i18nutil Unicode case service and actual Calc column/document/UI owners are still missing; no fake pool or JS uppercase substitute."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "include/rtl/ustring.hxx",
+          "marker": "OUStringHash"
+        },
+        {
+          "path": "svl/source/misc/sharedstringpool.cxx",
+          "marker": "StringWithHash"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sc/qa/unit/ucalc.cxx",
+          "marker": "testSharedStringPool"
+        }
+      ],
+      "docs": [
+        {
+          "path": "svl/source/misc/sharedstringpool.cxx",
+          "marker": "caches the hashcode"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sal/inc/rtl/ustring.ts",
+          "marker": "OUStringHash"
+        },
+        {
+          "path": "apps/office/src/svl/source/misc/sharedstringpool.ts",
+          "marker": "StringWithHash"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/svl/source/misc/sharedstringpool.test.ts",
+          "marker": "matches full original cached-key lifetimes, collisions, signed hashes and OUString operators"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Original shared Unicode comparisons and cached pool key"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "Compare and hash original Unicode values; own and compare the original cached pool key",
+    "scopeLimitations": [
+      "Original OUString normal/reverse comparison, length-before-pointer equality, six friend operators and signed32 polynomial hash reuse the actual shared C RTL algorithms. Original StringWithHash owns its by-value moved OUString and computes its cache after the member move; implicit copy/move/assignment/destruction retain original member order and never recompute mutable caches. Explicit member methods/factories adapt C++ operators/rvalues/destructors only. Complete original C++ headers and unchanged whole private key/std::hash scope with32 pinned full blobs and32 dependency scopes produce8143 full initialized owner/cache/pointer/refcount/storage/allocator/operator/hash snapshots; all snapshots are portable witnesses including actual equal-hash unequal-string collisions, embedded NULs, isolated surrogates, negative hashes and copy/move/self assignment. Actual size_t casts on the selected native64-bit target use BigInt unsigned64 rather than lossy JS numbers. Valid ASan/UBSan output agrees completely; null-data reference hash diagnosis remains separate without a defined result. Full string-view/template/shortened-comparison/search/conversion overloads, other ABIs, physical malloc/free and concurrency remain unverified. SharedStringPool, its required original locale-aware CharClass/UNO/i18nutil Unicode case service and actual Calc column/document/UI owners are still missing; no fake pool or JS uppercase substitute.",
+      "Generated native caller corpus is separate from literal original QA; full SharedStringPool/casefolding/document/UI parity is not claimed."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}
