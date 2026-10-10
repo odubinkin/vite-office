@@ -4,6 +4,7 @@ import {
   SvxIndentValue,
   SvxRightMarginItem,
   SvxFirstLineIndentItem,
+  SvxTextLeftMarginItem,
 } from "../../../../editeng/inc/lrspitem";
 import type { SfxUndoAction } from "../../../../svl/source/undo/undo";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
@@ -50,7 +51,6 @@ import {
   RES_MARGIN_TEXTLEFT,
   RES_PARATR_TABSTOP,
 } from "../../../inc/hintids";
-import { SvxTextLeftMarginItem } from "../../../../editeng/source/items/frmitems";
 import { SvxFontHeightItem, SvxFontItem } from "../../../../editeng/source/items/textitem";
 import { WriterDialogController } from "../dialog/writer-dialog-controller";
 import {
@@ -569,7 +569,7 @@ export class SwWrtShell extends SwFEShell {
     const textLeft = offset < 0 ? margin + offset : offset > 0 ? margin : 0;
     return this.SetParagraphItems([
       first,
-      new SvxTextLeftMarginItem(textLeft, RES_MARGIN_TEXTLEFT),
+      new SvxTextLeftMarginItem(SvxIndentValue.twips(textLeft), RES_MARGIN_TEXTLEFT),
     ]);
   }
   /** Deletes the preceding grapheme or the current selection. @returns Whether content changed. */
@@ -848,7 +848,7 @@ export class SwWrtShell extends SwFEShell {
     firstLine.SetTextFirstLineOffset(SvxIndentValue.twips(value.firstLine));
     return this.SetParagraphItems([
       firstLine,
-      new SvxTextLeftMarginItem(value.left, RES_MARGIN_TEXTLEFT),
+      new SvxTextLeftMarginItem(SvxIndentValue.twips(value.left), RES_MARGIN_TEXTLEFT),
       new SvxRightMarginItem(SvxIndentValue.twips(value.right), RES_MARGIN_RIGHT),
     ]);
   }

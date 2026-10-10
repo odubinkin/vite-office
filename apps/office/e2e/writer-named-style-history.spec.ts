@@ -27,7 +27,7 @@ for (const width of [1280, 390])
       document.GetDfltTextFormatColl(),
       "OwnedParent",
     );
-    parent.SetFormatAttr(new SvxTextLeftMarginItem(600, RES_MARGIN_TEXTLEFT));
+    parent.SetFormatAttr(new SvxTextLeftMarginItem(SvxIndentValue.twips(600), RES_MARGIN_TEXTLEFT));
     parent.SetFormatAttr(
       new SvxFirstLineIndentItem(SvxIndentValue.twips(-240), RES_MARGIN_FIRSTLINE),
     );

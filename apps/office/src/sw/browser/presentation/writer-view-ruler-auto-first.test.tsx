@@ -38,7 +38,7 @@ function fixture(auto = false, value = 367, inherited = false) {
   const shell = session.view.GetWrtShell();
   shell.Insert("RulerAutoFirstProof");
   shell.SetParagraphItems([
-    new SvxTextLeftMarginItem(487, RES_MARGIN_TEXTLEFT),
+    new SvxTextLeftMarginItem(SvxIndentValue.twips(487), RES_MARGIN_TEXTLEFT),
     new SvxRightMarginItem(SvxIndentValue.twips(6503), RES_MARGIN_RIGHT),
     SvxTabStopItem.FromStops(
       RES_PARATR_TABSTOP,
@@ -64,7 +64,9 @@ function fixture(auto = false, value = 367, inherited = false) {
 function values(shell: ReturnType<typeof fixture>["shell"]) {
   const node = shell.GetActiveParagraph();
   return {
-    left: node.GetAttr(RES_MARGIN_TEXTLEFT).QueryValue(),
+    left: (
+      node.GetAttr(RES_MARGIN_TEXTLEFT) as { QueryValue(member?: number): unknown }
+    ).QueryValue(11),
     firstLine: firstValues(node.GetAttr(RES_MARGIN_FIRSTLINE)),
     right: node.GetAttr(RES_MARGIN_RIGHT).QueryValue(),
     spacing: node.GetAttr(RES_UL_SPACE).QueryValue(),

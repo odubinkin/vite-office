@@ -26,7 +26,7 @@ for (const width of [1280, 390]) {
     const shell = new SwWrtShell(new SwDocShell(writerDocument, metadata));
     shell.Insert("RulerIndentPixelsProof");
     shell.SetParagraphItems([
-      new SvxTextLeftMarginItem(487, RES_MARGIN_TEXTLEFT),
+      new SvxTextLeftMarginItem(SvxIndentValue.twips(487), RES_MARGIN_TEXTLEFT),
       new SvxFirstLineIndentItem(SvxIndentValue.twips(367), RES_MARGIN_FIRSTLINE),
       new SvxRightMarginItem(SvxIndentValue.twips(6503), RES_MARGIN_RIGHT),
     ]);

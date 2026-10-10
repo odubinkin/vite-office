@@ -2,9 +2,12 @@
  * @fileoverview Implements canonical Writer text nodes at the pinned LibreOffice `sw/source/core/txtnode/ndtxt.cxx` ownership boundary.
  */
 import { getWriterNumFormatKind, SwNumRule } from "../doc/number";
-import { SvxIndentValue, SvxRightMarginItem } from "../../../../editeng/inc/lrspitem";
+import {
+  SvxIndentValue,
+  SvxRightMarginItem,
+  SvxTextLeftMarginItem,
+} from "../../../../editeng/inc/lrspitem";
 import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/source/items/paraitem";
-import { SvxTextLeftMarginItem } from "../../../../editeng/source/items/frmitems";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { resolveSwTextFirstLineIndent } from "../text/itrcrsr";
 import { SfxInt16Item, SfxUInt16Item } from "../../../../svl/source/items/intitem";
@@ -578,7 +581,7 @@ export class SwTextNode extends SwContentNode {
 
   /** Sets the direct text-left margin in twips. @param margin - Non-negative margin. @returns Nothing. */
   public SetParagraphTextLeftMargin(margin: number): void {
-    this.SetAttr(new SvxTextLeftMarginItem(margin, RES_MARGIN_TEXTLEFT));
+    this.SetAttr(new SvxTextLeftMarginItem(SvxIndentValue.twips(margin), RES_MARGIN_TEXTLEFT));
   }
   /** Sets the direct right paragraph margin in twips. @param margin - Non-negative right margin. @returns Nothing. */
   public SetParagraphRightMargin(margin: number): void {

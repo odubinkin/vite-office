@@ -113,7 +113,9 @@ describe("native uncounted list text geometry", /** Registers literal upstream p
             f.node.AddToList();
           }
           if (profile.left !== undefined)
-            f.node.SetAttr(new SvxTextLeftMarginItem(profile.left, RES_MARGIN_TEXTLEFT));
+            f.node.SetAttr(
+              new SvxTextLeftMarginItem(SvxIndentValue.twips(profile.left), RES_MARGIN_TEXTLEFT),
+            );
           if (profile.first !== undefined)
             f.node.SetAttr(
               (
@@ -172,7 +174,7 @@ describe("native uncounted list text geometry", /** Registers literal upstream p
             }),
           );
           f.rule.SetAbsSpaces(absolute);
-          f.node.SetAttr(new SvxTextLeftMarginItem(240, RES_MARGIN_TEXTLEFT));
+          f.node.SetAttr(new SvxTextLeftMarginItem(SvxIndentValue.twips(240), RES_MARGIN_TEXTLEFT));
           f.node.SetAttr(
             new SvxFirstLineIndentItem(SvxIndentValue.twips(first), RES_MARGIN_FIRSTLINE),
           );
@@ -253,7 +255,7 @@ describe("native uncounted list text geometry", /** Registers literal upstream p
     expect(f.store.GetSnapshot().activeParagraph.uncountedListTextLeftPt).toBeUndefined();
     vi.restoreAllMocks();
     f.node.ResetAttr(RES_PARATR_NUMRULE);
-    f.node.SetAttr(new SvxTextLeftMarginItem(600, RES_MARGIN_TEXTLEFT));
+    f.node.SetAttr(new SvxTextLeftMarginItem(SvxIndentValue.twips(600), RES_MARGIN_TEXTLEFT));
     f.node.SetAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(120), RES_MARGIN_FIRSTLINE));
     expect(resolveSwListTextLeftMargin(f.node)).toBeUndefined();
     expect(projectSwTextPrintBounds(f.node, f.doc.GetPageDesc().GetValue()).left).toBe(720);

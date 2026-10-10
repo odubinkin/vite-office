@@ -302,7 +302,9 @@ describe("Writer document-owned named paragraph hierarchy", /** Groups literal n
         'Own:Parent&"',
       ),
       child = doc.MakeTextFormatColl("Child display", parent, "Own:Child");
-    parent.SetFormatAttr(new SvxTextLeftMarginItem(1200, RES_MARGIN_TEXTLEFT));
+    parent.SetFormatAttr(
+      new SvxTextLeftMarginItem(SvxIndentValue.twips(1200), RES_MARGIN_TEXTLEFT),
+    );
     child.SetNextTextFormatColl(parent);
     parent.SetNextTextFormatColl(child);
     const node = required(doc.paragraphs[0]);
@@ -409,7 +411,9 @@ describe("Writer document-owned named paragraph hierarchy", /** Groups literal n
           "CopyParent",
         ),
         child = source.MakeTextFormatColl("Copy child", parent, "CopyChild");
-      parent.SetFormatAttr(new SvxTextLeftMarginItem(1440, RES_MARGIN_TEXTLEFT));
+      parent.SetFormatAttr(
+        new SvxTextLeftMarginItem(SvxIndentValue.twips(1440), RES_MARGIN_TEXTLEFT),
+      );
       child.SetNextTextFormatColl(parent);
       parent.SetNextTextFormatColl(child);
       child.AssignToListLevelOfOutlineStyle(2);
@@ -431,7 +435,9 @@ describe("Writer document-owned named paragraph hierarchy", /** Groups literal n
       expect(dest.FindNumRulePtr("CopiedRule") !== undefined).toBe(
         kind === "manual" || kind === "existing",
       );
-      parent.SetFormatAttr(new SvxTextLeftMarginItem(2400, RES_MARGIN_TEXTLEFT));
+      parent.SetFormatAttr(
+        new SvxTextLeftMarginItem(SvxIndentValue.twips(2400), RES_MARGIN_TEXTLEFT),
+      );
       expect(clone.GetParagraphTextLeftMargin()).toBe(1440);
       const reused = dest.MakeTextFormatColl(
         "Existing source name",

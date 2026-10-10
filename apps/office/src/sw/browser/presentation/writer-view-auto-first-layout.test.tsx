@@ -57,7 +57,7 @@ function fixture(
         return item;
       }
     )(),
-    new SvxTextLeftMarginItem(487, RES_MARGIN_TEXTLEFT),
+    new SvxTextLeftMarginItem(SvxIndentValue.twips(487), RES_MARGIN_TEXTLEFT),
     new SvxRightMarginItem(SvxIndentValue.twips(240), RES_MARGIN_RIGHT),
     new SvxFontHeightItem(240, RES_CHRATR_FONTSIZE),
     new SvxLineSpacingItem(value, RES_PARATR_LINESPACING, mode),
@@ -85,7 +85,11 @@ function state(owner: ReturnType<typeof fixture>) {
       /** Queries the complete effective item. @param id - Which identity. @returns Value. */ (
         id,
       ) =>
-        id === RES_MARGIN_FIRSTLINE ? firstValues(node.GetAttr(id)) : node.GetAttr(id).QueryValue(),
+        id === RES_MARGIN_FIRSTLINE
+          ? firstValues(node.GetAttr(id))
+          : (node.GetAttr(id) as { QueryValue(member?: number): unknown }).QueryValue(
+              id === RES_MARGIN_TEXTLEFT ? 11 : 0,
+            ),
     ),
     direct: which.map(
       /** Distinguishes direct items from inheritance. @param id - Which identity. @returns Direct value or absence. */ (
@@ -93,7 +97,10 @@ function state(owner: ReturnType<typeof fixture>) {
       ) =>
         (id === RES_MARGIN_FIRSTLINE
           ? firstValues(node.GetpSwAttrSet()?.GetItemIfSet(id, false))
-          : node.GetpSwAttrSet()?.GetItemIfSet(id, false)?.QueryValue()) ?? null,
+          : (
+              node.GetpSwAttrSet()?.GetItemIfSet(id, false) as
+                { QueryValue(member?: number): unknown } | undefined
+            )?.QueryValue(id === RES_MARGIN_TEXTLEFT ? 11 : 0)) ?? null,
     ),
     text: node.GetText(),
   };

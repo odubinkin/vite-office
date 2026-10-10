@@ -12,3 +12,8 @@ export const MID_FIRST_LINE_INDENT = 8;
 export const MID_FIRST_LINE_REL_INDENT = 9;
 /** Automatic first-line calculation. */
 export const MID_FIRST_AUTO = 10;
+
+/** Paragraph absolute text-left margin. */
+export const MID_TXT_LMARGIN = 11;
+/** Paragraph proportional left margin. */
+export const MID_L_REL_MARGIN = 6;

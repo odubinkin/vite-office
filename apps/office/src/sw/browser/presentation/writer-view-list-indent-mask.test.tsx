@@ -100,7 +100,9 @@ describe("Writer independent live list-indent masks", /** Groups literal ownersh
       it(`selects mask=${profile.mask} left=${profile.left} first=${profile.first} inherited=${inherited}`, /** Checks independent native literals, complete ownership, frozen browser geometry and print inputs. @returns Nothing. */ function selectsIndependentMask() {
         const owner = fixture(inherited);
         if (profile.left !== undefined)
-          owner.node.SetAttr(new SvxTextLeftMarginItem(profile.left, RES_MARGIN_TEXTLEFT));
+          owner.node.SetAttr(
+            new SvxTextLeftMarginItem(SvxIndentValue.twips(profile.left), RES_MARGIN_TEXTLEFT),
+          );
         if (profile.first !== undefined)
           owner.node.SetAttr(
             new SvxFirstLineIndentItem(SvxIndentValue.twips(profile.first), RES_MARGIN_FIRSTLINE),
@@ -132,7 +134,9 @@ describe("Writer independent live list-indent masks", /** Groups literal ownersh
       retained = owner.store.GetSnapshot().activeParagraph;
     const history = owner.session.docShell.GetUndoManager().GetUndoActionCount();
     expect(
-      owner.shell.SetParagraphItems([new SvxTextLeftMarginItem(1680, RES_MARGIN_TEXTLEFT)]),
+      owner.shell.SetParagraphItems([
+        new SvxTextLeftMarginItem(SvxIndentValue.twips(1680), RES_MARGIN_TEXTLEFT),
+      ]),
     ).toBe(true);
     const leftOnly = encodeWriterDocument(owner.doc);
     expect(owner.node.AreListLevelIndentsApplicable()).toBe(ListLevelIndents.FirstLine);
@@ -185,7 +189,7 @@ describe("Writer independent live list-indent masks", /** Groups literal ownersh
       const item =
         axis === RES_MARGIN_FIRSTLINE
           ? new SvxFirstLineIndentItem(SvxIndentValue.twips(120), axis)
-          : new SvxTextLeftMarginItem(1680, axis);
+          : new SvxTextLeftMarginItem(SvxIndentValue.twips(1680), axis);
       parent.SetFormatAttr(item);
       expect(owner.node.AreListLevelIndentsApplicable()).toBe(
         axis === RES_MARGIN_FIRSTLINE ? 2 : 1,

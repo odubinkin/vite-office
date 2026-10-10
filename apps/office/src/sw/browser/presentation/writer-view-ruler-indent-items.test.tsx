@@ -50,7 +50,7 @@ function fixture(automatic = true, inherited = false) {
         return item;
       }
     )(),
-    new SvxTextLeftMarginItem(487, RES_MARGIN_TEXTLEFT),
+    new SvxTextLeftMarginItem(SvxIndentValue.twips(487), RES_MARGIN_TEXTLEFT),
     new SvxRightMarginItem(SvxIndentValue.twips(6503), RES_MARGIN_RIGHT),
     new SvxULSpaceItem(120, 60, RES_UL_SPACE),
     SvxTabStopItem.FromStops(
@@ -83,7 +83,7 @@ function state(node: SwTextNode) {
         id === RES_MARGIN_FIRSTLINE
           ? firstValues(node.GetAttr(id))
           : (node.GetAttr(id) as { QueryValue(member?: number): unknown }).QueryValue(
-              id === RES_MARGIN_RIGHT ? 5 : 0,
+              id === RES_MARGIN_TEXTLEFT ? 11 : id === RES_MARGIN_RIGHT ? 5 : 0,
             ),
     ),
     direct: which.map(
@@ -94,7 +94,8 @@ function state(node: SwTextNode) {
           : ((
               node.GetpSwAttrSet()?.GetItemIfSet(id, false) as
                 { QueryValue(member?: number): unknown } | undefined
-            )?.QueryValue(id === RES_MARGIN_RIGHT ? 5 : 0) ?? null),
+            )?.QueryValue(id === RES_MARGIN_TEXTLEFT ? 11 : id === RES_MARGIN_RIGHT ? 5 : 0) ??
+            null),
     ),
     defaultTabDistance: (node.GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem).GetDefaultDistance(),
     text: node.GetText(),

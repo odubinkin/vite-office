@@ -10,12 +10,12 @@ import {
   SvxTabStop,
   SvxTabStopItem,
 } from "../../../../editeng/source/items/paraitem";
-import { SvxIndentValue, SvxFirstLineIndentItem } from "../../../../editeng/inc/lrspitem";
 import {
-  SvxRightMarginItem,
+  SvxIndentValue,
+  SvxFirstLineIndentItem,
   SvxTextLeftMarginItem,
-  SvxULSpaceItem,
-} from "../../../../editeng/source/items/frmitems";
+} from "../../../../editeng/inc/lrspitem";
+import { SvxRightMarginItem, SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";
 import {
   FontItalic,
   FontWeight,
@@ -208,7 +208,7 @@ export function applyWriterParagraphStyleDefaults(collection: SwTextFormatColl):
     );
   if (defaults.textLeftTwips !== undefined)
     collection.SetFormatAttr(
-      new SvxTextLeftMarginItem(defaults.textLeftTwips, RES_MARGIN_TEXTLEFT),
+      new SvxTextLeftMarginItem(SvxIndentValue.twips(defaults.textLeftTwips), RES_MARGIN_TEXTLEFT),
     );
   if (defaults.rightTwips !== undefined)
     collection.SetFormatAttr(

@@ -4,7 +4,7 @@ title: "Restore native typed paragraph text-left margin item"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: restore original typed TextLeft item and represented native authors, preserve scalar boundary compatibility and admitted fixtures, synchronize inventory and verify entire changed modules without references. Cadence1/10 after BZ14P4; no compiled native differential claim."
 doc_version: 3
-doc_updated_at: "2026-10-10T17:14:55.087Z"
+doc_updated_at: "2026-10-10T17:16:21.620Z"
 doc_updated_by: "CODER"
 description: "Replace immutable numeric TextLeft adapter with original typed lrspitem.hxx declaration and represented Cxx constructors, ownership, hanging-component resolution, UNO/status and metrics. Migrate native authors and scoped acceptance fixtures, preserve legacy wire through browser codec, synchronize inventory without blanket promotion. Leave range MoveLeftMargin history for its separate atomic task."
 sections:
@@ -84,6 +84,10 @@ sections:
     - Observation: Restored registry-build/source-tree/source-provenance pass; registry-check rejects the retired frmitems.ts declaration owner SvxTextLeftMarginItem.
       Impact: Native class export identity and accepted runtime/static evidence are unchanged. This is stale declaration metadata, not a missing native implementation.
       Resolution: Retire only the old left-margin local declaration symbol, register its native lrspitem.ts owner, preserve upstream source mappings and historical statuses/prefixes except this exact approved owner correction; run affected metadata audits and remaining unrun checks only.
+
+    - Observation: Semantic commit attempt was rejected before commit because its subject omitted the required scope separator.
+      Impact: The56intentional paths remain staged; code and passing verification are unchanged. No commit was created by this failed command.
+      Resolution: Recomputed the route and use the required emoji/suffix/code:summary subject for the same exact scope; no runtime or static replay.
 id_source: "generated"
 ---
 ## Summary
@@ -147,3 +151,7 @@ No network/subagents or new setup tasks. Compiled native differential, general p
 - Observation: Restored registry-build/source-tree/source-provenance pass; registry-check rejects the retired frmitems.ts declaration owner SvxTextLeftMarginItem.
   Impact: Native class export identity and accepted runtime/static evidence are unchanged. This is stale declaration metadata, not a missing native implementation.
   Resolution: Retire only the old left-margin local declaration symbol, register its native lrspitem.ts owner, preserve upstream source mappings and historical statuses/prefixes except this exact approved owner correction; run affected metadata audits and remaining unrun checks only.
+
+- Observation: Semantic commit attempt was rejected before commit because its subject omitted the required scope separator.
+  Impact: The56intentional paths remain staged; code and passing verification are unchanged. No commit was created by this failed command.
+  Resolution: Recomputed the route and use the required emoji/suffix/code:summary subject for the same exact scope; no runtime or static replay.

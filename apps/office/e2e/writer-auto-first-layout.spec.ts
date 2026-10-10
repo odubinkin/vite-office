@@ -49,7 +49,7 @@ for (const width of [1280, 390])
             return item;
           }
         )(),
-        new SvxTextLeftMarginItem(487, RES_MARGIN_TEXTLEFT),
+        new SvxTextLeftMarginItem(SvxIndentValue.twips(487), RES_MARGIN_TEXTLEFT),
         new SvxFontHeightItem(360, RES_CHRATR_FONTSIZE),
         new SvxFontHeightItem(360, RES_CHRATR_CJK_FONTSIZE),
         new SvxFontHeightItem(360, RES_CHRATR_CTL_FONTSIZE),

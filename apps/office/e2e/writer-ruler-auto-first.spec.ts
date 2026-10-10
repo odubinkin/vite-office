@@ -26,7 +26,7 @@ for (const width of [1280, 390]) {
     const shell = new SwWrtShell(new SwDocShell(writerDocument, metadata));
     shell.Insert("RulerAutoFirstProof");
     shell.SetParagraphItems([
-      new SvxTextLeftMarginItem(487, RES_MARGIN_TEXTLEFT),
+      new SvxTextLeftMarginItem(SvxIndentValue.twips(487), RES_MARGIN_TEXTLEFT),
       (
         /** Authors the existing automatic first-line fixture through native setters. @returns Native item. */ () => {
           const item = new SvxFirstLineIndentItem(SvxIndentValue.twips(367), RES_MARGIN_FIRSTLINE);

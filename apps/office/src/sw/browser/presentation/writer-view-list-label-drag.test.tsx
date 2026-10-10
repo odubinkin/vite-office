@@ -32,7 +32,7 @@ function fixture(left = 300, legacy = false) {
   if (current === undefined) throw new Error("Missing actual current node");
   current.SetText("Current");
   target.SetText("Target");
-  current.SetAttr(new SvxTextLeftMarginItem(left, RES_MARGIN_TEXTLEFT));
+  current.SetAttr(new SvxTextLeftMarginItem(SvxIndentValue.twips(left), RES_MARGIN_TEXTLEFT));
   current.SetAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(-120), RES_MARGIN_FIRSTLINE));
   applyWriterParagraphList(target, {
     kind: "numbered",

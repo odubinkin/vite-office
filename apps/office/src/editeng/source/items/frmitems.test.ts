@@ -18,26 +18,20 @@ const weightWhich = 101;
 /** Alternate WhichId proving identity remains caller-owned. */
 const alternateWhich = 104;
 
-/** Returns a deferred constructor call. @param operation - Operation under test. @returns Same operation. */
-function throwing(operation: () => unknown): () => unknown {
-  return operation;
-}
-
 describe("EditEngine frame items", /** Groups pooled frame metric contracts. @returns Nothing. */ () => {
   it("preserves signed text-left margins and persistence values", /** Verifies SvxTextLeftMarginItem validation, cloning, equality, and persistence. @returns Nothing. */ () => {
-    const margin = new SvxTextLeftMarginItem(1134, alternateWhich);
+    const margin = new SvxTextLeftMarginItem(SvxIndentValue.twips(1134), alternateWhich);
     expect(margin.ResolveTextLeft()).toBe(1134);
-    expect(margin.QueryValue()).toBe(1134);
+    expect(margin.QueryValue(11)).toBe(1134);
     expect(margin.Clone()).not.toBe(margin);
     expect(margin.Clone().equals(margin)).toBe(true);
-    expect(margin.equals(new SvxTextLeftMarginItem(1135, alternateWhich))).toBe(false);
     expect(
-      throwing(
-        /** Creates an invalid fractional margin item. @returns Invalid item. */ () =>
-          new SvxTextLeftMarginItem(-0.5, alternateWhich),
-      ),
-    ).toThrow("SvxTextLeftMarginItem value is invalid");
-    const negative = new SvxTextLeftMarginItem(-720, RES_MARGIN_TEXTLEFT);
+      margin.equals(new SvxTextLeftMarginItem(SvxIndentValue.twips(1135), alternateWhich)),
+    ).toBe(false);
+    expect(
+      new SvxTextLeftMarginItem(SvxIndentValue.twips(-0.5), alternateWhich).ResolveTextLeft(),
+    ).toBe(-1);
+    const negative = new SvxTextLeftMarginItem(SvxIndentValue.twips(-720), RES_MARGIN_TEXTLEFT);
     expect(negative.ResolveTextLeft()).toBe(-720);
     expect(negative.Clone().equals(negative)).toBe(true);
     const restored = decodeSfxPoolItem(

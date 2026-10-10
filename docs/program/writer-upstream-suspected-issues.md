@@ -102,6 +102,19 @@ this is not a confirmed defect. Decision: preserve the setter asymmetry,
 unsigned admission boundary and signed status cast. Do not rescale on member7,
 clamp the percentage or reconstruct state through an inverse scaling adapter.
 
+Additional original text-left observation:
+[SvxTextLeftMarginItem::PutValue](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/editeng/source/items/frmitems.cxx#L1103)
+uses the same metadata-only percentage contract on member6. A text-left item initialized with -72
+TWIP keeps -72 after PutValue(32768,6), while GetPropLeft returns32768 and default status ScaleLeft
+reports -32768. SetTextLeft accepts uint16 percentage65535 and scales the supplied double;
+PutValue(65535,6) rejects. The initialized portable cases in
+[native-text-left-margin-item.test.ts](../../apps/office/src/editeng/source/items/native-text-left-margin-item.test.ts)
+and mutable paragraph-history cases in
+[native-paragraph-text-left-margin.test.ts](../../apps/office/src/sw/source/core/attr/native-paragraph-text-left-margin.test.ts)
+retain the distinction. Task202610101650-7RCNDA records this additional source observation. Consumer
+order and native differential remain unverified; preserve the original stored measure, unsigned
+admission and signed status metadata.
+
 ## WRITER-003: First-line default UNO query remains unsupported despite dispatcher comment
 
 Status: suspicious default-query mismatch; pinned source switch and comment

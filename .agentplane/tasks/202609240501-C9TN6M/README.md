@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 320
+revision: 321
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-10T16:36:20.773Z"
+doc_updated_at: "2026-10-10T17:14:54.835Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -1454,6 +1454,8 @@ sections:
       Resolution: Original source behavior retained, current related/module100/static/browser/metadata accepted; next atomic correction remains necessary. Cadence3/10, pause after next accepted full and failures repaired.
 
     BZ14P4 current full checkpoint: Complete current upstream-absent profile passed: application15104/15104 in635 files, tooling24/24 in8, inventory123/123 in38, resources2/2 in1, Chromium303/303 in120 browser files; total15556/15556 across802 discovered files, zero failures/skips/flaky/retries. Actual full app and inventory line/statement/function/branch coverage100 percent;351 and42 complete current maps with nonnegative counters; tooling coverage100 percent. Eight static and nine restored-reference metadata checks passed. All2417 original tracked non-AgentPlane files byte-identical. Both reference targets restored; exact pinned HEAD retained. One full profile, no repairs or passing replays. Bounded evidence: evidence/verification.json; raw reporters/maps/helpers remain ignored. Same-agent review, no independent claim. Three accepted corrections since N337G1; new accepted full baseline resets resumed cadence to0/10. Pause explicitly requested after verification/closure; native text-left and rich margin transport plus broader parity remain unfinished. Historical X6VV8G retained unchanged.
+
+    - Correction7RCNDA (1/10 after accepted BZ14P4 full baseline): native typed SvxTextLeftMarginItem replaces numeric immutable core adapter. Original double/signed16 measure, uint16 proportion, stable by-value setters, separately resolved hanging/fixed/variable components, Clone/equality/metrics and represented UNO0/6/11/15 retain pinned source; paragraph/style/ODF/shell author native items directly. Mutable caller/history ownership is verified through three UndoRedo cycles. Browser legacy scalar wire preserves coercion and explicitly rejects unsupported rich states. Accepted14251cases505files63fresh, ten entire modules actual100all-four and27Chromium12files with both refs absent. Nine restored metadata checks pass; 780of802old tests byte-identical,22scoped native migrations and truthful declaration owner correction preserve statuses/defaults/evidence/history and registered I/O/recovery deviations. Original MoveLeftMargin range/history, rich paragraph margin transport/font-context UI, general UNO/VCL/hash/presentation/native compiled differential remain separate work. Full cadence1/10; human resume keeps goal active. Evidence: .agentplane/tasks/202610101650-7RCNDA/evidence/verification.json.
 id_source: "generated"
 ---
 ## Summary
@@ -2881,3 +2883,5 @@ VerifiedQJ0FFB: original typed SvxRightMarginItem replaces the immutable numeric
   Resolution: Original source behavior retained, current related/module100/static/browser/metadata accepted; next atomic correction remains necessary. Cadence3/10, pause after next accepted full and failures repaired.
 
 BZ14P4 current full checkpoint: Complete current upstream-absent profile passed: application15104/15104 in635 files, tooling24/24 in8, inventory123/123 in38, resources2/2 in1, Chromium303/303 in120 browser files; total15556/15556 across802 discovered files, zero failures/skips/flaky/retries. Actual full app and inventory line/statement/function/branch coverage100 percent;351 and42 complete current maps with nonnegative counters; tooling coverage100 percent. Eight static and nine restored-reference metadata checks passed. All2417 original tracked non-AgentPlane files byte-identical. Both reference targets restored; exact pinned HEAD retained. One full profile, no repairs or passing replays. Bounded evidence: evidence/verification.json; raw reporters/maps/helpers remain ignored. Same-agent review, no independent claim. Three accepted corrections since N337G1; new accepted full baseline resets resumed cadence to0/10. Pause explicitly requested after verification/closure; native text-left and rich margin transport plus broader parity remain unfinished. Historical X6VV8G retained unchanged.
+
+- Correction7RCNDA (1/10 after accepted BZ14P4 full baseline): native typed SvxTextLeftMarginItem replaces numeric immutable core adapter. Original double/signed16 measure, uint16 proportion, stable by-value setters, separately resolved hanging/fixed/variable components, Clone/equality/metrics and represented UNO0/6/11/15 retain pinned source; paragraph/style/ODF/shell author native items directly. Mutable caller/history ownership is verified through three UndoRedo cycles. Browser legacy scalar wire preserves coercion and explicitly rejects unsupported rich states. Accepted14251cases505files63fresh, ten entire modules actual100all-four and27Chromium12files with both refs absent. Nine restored metadata checks pass; 780of802old tests byte-identical,22scoped native migrations and truthful declaration owner correction preserve statuses/defaults/evidence/history and registered I/O/recovery deviations. Original MoveLeftMargin range/history, rich paragraph margin transport/font-context UI, general UNO/VCL/hash/presentation/native compiled differential remain separate work. Full cadence1/10; human resume keeps goal active. Evidence: .agentplane/tasks/202610101650-7RCNDA/evidence/verification.json.

@@ -118,7 +118,9 @@ describe("native counted list axes", /** Registers literal independent layout ow
             f.node.AddToList();
           }
           if (profile.left !== undefined)
-            f.node.SetAttr(new SvxTextLeftMarginItem(profile.left, RES_MARGIN_TEXTLEFT));
+            f.node.SetAttr(
+              new SvxTextLeftMarginItem(SvxIndentValue.twips(profile.left), RES_MARGIN_TEXTLEFT),
+            );
           if (profile.first !== undefined)
             f.node.SetAttr(
               (
@@ -186,7 +188,7 @@ describe("native counted list axes", /** Registers literal independent layout ow
           }),
         );
         f.rule.SetAbsSpaces(p.absolute);
-        f.node.SetAttr(new SvxTextLeftMarginItem(240, RES_MARGIN_TEXTLEFT));
+        f.node.SetAttr(new SvxTextLeftMarginItem(SvxIndentValue.twips(240), RES_MARGIN_TEXTLEFT));
         f.node.SetAttr(
           new SvxFirstLineIndentItem(SvxIndentValue.twips(p.raw), RES_MARGIN_FIRSTLINE),
         );
@@ -213,7 +215,9 @@ describe("native counted list axes", /** Registers literal independent layout ow
         act(
           /** Sets native left item independently. @returns Nothing. */ () => {
             expect(
-              f.shell.SetParagraphItems([new SvxTextLeftMarginItem(1680, RES_MARGIN_TEXTLEFT)]),
+              f.shell.SetParagraphItems([
+                new SvxTextLeftMarginItem(SvxIndentValue.twips(1680), RES_MARGIN_TEXTLEFT),
+              ]),
             ).toBe(true);
           },
         );

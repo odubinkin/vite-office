@@ -42,7 +42,9 @@ function fixture(options: Options = {}) {
     shell.SetParagraphItem(
       SvxTabStopItem.FromStops(RES_PARATR_TABSTOP, options.stops, options.distance ?? 0),
     );
-  shell.SetParagraphItem(new SvxTextLeftMarginItem(options.left ?? 0, RES_MARGIN_TEXTLEFT));
+  shell.SetParagraphItem(
+    new SvxTextLeftMarginItem(SvxIndentValue.twips(options.left ?? 0), RES_MARGIN_TEXTLEFT),
+  );
   shell.SetParagraphItem(
     new SvxRightMarginItem(SvxIndentValue.twips(options.right ?? 0), RES_MARGIN_RIGHT),
   );

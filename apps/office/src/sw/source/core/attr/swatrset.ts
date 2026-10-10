@@ -9,10 +9,13 @@ import {
   SvxTabAdjust,
   SvxTabStopItem,
 } from "../../../../editeng/source/items/paraitem";
-import { SvxIndentValue, SvxFirstLineIndentItem } from "../../../../editeng/inc/lrspitem";
+import {
+  SvxIndentValue,
+  SvxFirstLineIndentItem,
+  SvxTextLeftMarginItem,
+} from "../../../../editeng/inc/lrspitem";
 import {
   SvxRightMarginItem,
-  SvxTextLeftMarginItem,
   SvxULSpaceItem,
   SvxLRSpaceItem,
   SvxBoxItem,
@@ -241,10 +244,14 @@ export class SwAttrPool extends SfxItemPool {
       (value) => SvxTabStopItem.FromValue(RES_PARATR_TABSTOP, value),
     );
     this.RegisterDefaultItem(
-      new SvxTextLeftMarginItem(0, RES_MARGIN_TEXTLEFT),
+      new SvxTextLeftMarginItem(RES_MARGIN_TEXTLEFT),
       /** Restores a direct text-left margin. @param value - Persisted twip margin. @returns Concrete margin item. */ (
         value,
-      ) => new SvxTextLeftMarginItem(Number(value), RES_MARGIN_TEXTLEFT),
+      ) => {
+        const margin = Number(value);
+        if (!Number.isInteger(margin)) throw new Error("SvxTextLeftMarginItem value is invalid.");
+        return new SvxTextLeftMarginItem(SvxIndentValue.twips(margin), RES_MARGIN_TEXTLEFT);
+      },
     );
     this.RegisterDefaultItem(
       new SvxFirstLineIndentItem(RES_MARGIN_FIRSTLINE),

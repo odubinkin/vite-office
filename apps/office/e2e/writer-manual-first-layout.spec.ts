@@ -27,7 +27,7 @@ for (const width of [1280, 390])
       shell.Insert("ManualBoundaryLayoutProof");
       shell.SetParagraphItems([
         new SvxFirstLineIndentItem(SvxIndentValue.twips(raw), RES_MARGIN_FIRSTLINE),
-        new SvxTextLeftMarginItem(487, RES_MARGIN_TEXTLEFT),
+        new SvxTextLeftMarginItem(SvxIndentValue.twips(487), RES_MARGIN_TEXTLEFT),
       ]);
       shell.SplitNode();
       shell.Insert("UntouchedBoundaryProof");

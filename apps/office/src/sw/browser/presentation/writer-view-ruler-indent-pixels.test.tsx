@@ -38,7 +38,7 @@ function fixture(left = 487, firstLine = 367, right = 6503) {
   const shell = session.view.GetWrtShell();
   shell.Insert("RulerIndentPixelsProof");
   shell.SetParagraphItems([
-    new SvxTextLeftMarginItem(left, RES_MARGIN_TEXTLEFT),
+    new SvxTextLeftMarginItem(SvxIndentValue.twips(left), RES_MARGIN_TEXTLEFT),
     new SvxFirstLineIndentItem(SvxIndentValue.twips(firstLine), RES_MARGIN_FIRSTLINE),
     new SvxRightMarginItem(SvxIndentValue.twips(right), RES_MARGIN_RIGHT),
     SvxTabStopItem.FromStops(
@@ -56,7 +56,9 @@ function fixture(left = 487, firstLine = 367, right = 6503) {
 function values(shell: ReturnType<typeof fixture>["shell"]) {
   const node = shell.GetActiveParagraph();
   return {
-    left: node.GetAttr(RES_MARGIN_TEXTLEFT).QueryValue(),
+    left: (
+      node.GetAttr(RES_MARGIN_TEXTLEFT) as { QueryValue(member?: number): unknown }
+    ).QueryValue(11),
     firstLine: firstValues(node.GetAttr(RES_MARGIN_FIRSTLINE)),
     right: (node.GetAttr(RES_MARGIN_RIGHT) as SvxRightMarginItem).QueryValue(5),
     spacing: node.GetAttr(RES_UL_SPACE).QueryValue(),
