@@ -1450,3 +1450,43 @@ complete original QA/default/module and Calc column/document/browser parity
 remain unverified. Capability implemented within this scope, whole flags false.
 Source-shaped owners and shared full observer remain below the 1000-line hard
 limit. No new upstream suspicion established. Cycle2task9/10 follows fullFMVJ21.
+
+## Shared SoA public range release
+
+Task `202610100109-QQ0KPB` adds original plain/hinted `release_range` from
+`main_def.inl` 3782–3808. First-block lookup retains exact 3790/3805 diagnostics
+before reversed/end validation. The actual shared `set_empty_impl` runs with
+`overwrite=false`; logical size and original empty iterator remain unchanged.
+No alternate range engine or scalar overwrite is introduced.
+
+Existing original clear, whole release, destructor and new-cell store/event
+bodies now retain their native `main_def` source boundary under the established
+explicit borrowed-fields convention. Actual owner declarations remain in main,
+including private new-cell and public lifetime witnesses; actual logical size
+resets occur only after clear/release return. Destructor uses positions.size
+and does not clear metadata or reset size. All original deletion, size-zero
+resize, callback, null-failure, installation and append order is preserved.
+
+Genuine unchanged-header native callers compare all 12 initialized unmanaged
+families, every valid inclusive range of selected compound/varied geometry,
+valid own/foreign/returned hints, long metadata and exact guard ordering.
+Complete payload/capacity/metadata/owner/iterator/equality/events and actual
+forwarded block operations are observed; copy, reappend, clear, whole release
+and destruction retain the complete 28204-sequence prior prefix. New input
+module only enumerates native callers, with the common full observer reused.
+
+Managed/custom/throwing outcomes, ABI/instrumentation/reentrancy/invalid inputs,
+overflow/unbounded storage, scalar release and remaining set/range insert,
+transfer/emplace, full original QA/default/module and Calc column/document/UI
+parity remain gaps. Implemented capability has all whole parity flags false.
+No new upstream suspicion established; source behavior is preserved.
+Cycle 2, task 10/10 includes the scheduled full suite and portable verification
+with upstream absent and exact restoration. Writer-only coverage shortages,
+if any, retain the user-directed exception without repair in this branch.
+
+The complete native observer is shared by three independent original operation
+groups: lifetime/query/navigation/size/append/erase/empty insertion, range empty
+and middle split, and public range release. Every complete case and final event
+is retained. The scheduled full run exposed a 31.8-second aggregate timeout;
+grouping follows these original operations while preserving the existing
+30-second per-test budget, fixture, assertions and coverage gates.

@@ -60,6 +60,10 @@
         {
           "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/main.ts",
           "marker": "set_empty"
+        },
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/main.ts",
+          "marker": "release_range"
         }
       ],
       "upstream": [
@@ -90,6 +94,10 @@
         {
           "path": "vendor/mdds-reference/include/mdds/multi_type_vector/soa/main.hpp",
           "marker": "iterator set_empty"
+        },
+        {
+          "path": "vendor/mdds-reference/include/mdds/multi_type_vector/soa/main.hpp",
+          "marker": "iterator release_range"
         }
       ]
     },
@@ -157,7 +165,8 @@
       "release",
       "insert_empty",
       "insert_empty_impl",
-      "set_empty"
+      "set_empty",
+      "release_range"
     ],
     "omittedResponsibilities": [
       "Original block_slot_type/blocks_type/blocks_to_transfer and default-execution main_def helpers are implemented over three normal vector syntax adapters sharing actual reserved-slot mechanics with the existing delayed vector. Metadata insertion/erase/clear does not delete blocks or synthesize enclosing-container events. Copy/clone invoke actual registered BlockOp aliases; move transfers backing storage with selected host moved-from observations. Native finite libc++ reserved capacities/pointer/value records, exactly representable bounded number indices and initialized unmanaged all12 scalar data are compared. STL adapters are explicit local infrastructure, not an alternate mdds engine. Original nested types export at file scope as TypeScript syntax adaptation. Native custom execution policies, object/allocator/destructor ABI, unbounded size_t/wrap arithmetic, invalid native ranges/self-insertion/dangling iterators, remaining SoA lookup/scalar retrieval/segment mutation groups and Calc column/document/browser remain unverified. No full upstream module/QA-port certification.",
@@ -169,7 +178,8 @@
       "Selected pinned libc++ size_t64 no_trace/default-execution with initialized all12 unmanaged standard families and nonthrowing original event witnesses. Every valid inclusive range of several11/13cell compound geometries, filled/empty owners, first/last/middle/whole/multiple blocks, adjacent same/different/empty merging and41block adjustment inputs compared. Exact bounded stored indices and uint64 bigint error witnesses guard before projection. Original actual delete_element_block(s), trait-selected architecture-neutral loop-unrolling and registered funcs reused. Native pointer/range/overflow/unbounded metadata, custom/managed outcomes, arbitrary values/throwing allocation/events, trace/debug/SIMD/ABI, remaining set/insert/transfer/release/emplace and whole Calc document/browser/module/default parity remain unverified. Original invalid-end diagnostic start-row argument preserved without correction.",
       "Pinned libc++ no_trace/default execution, initialized finite all12 unmanaged standard scalar families and nonthrowing event witnesses. Complete original public whole-container release ordering, zero-sized callbacks, capacity retention, copies/clones, moved/reset/swapped sources, compound/long-block inputs, release after admitted erase/resize/append and subsequent growth are compared. Managed/custom cell outcomes, throwing callbacks/allocators, trace/debug/SIMD/ABI, invalid/reentrant/dangling inputs, overflow, remaining set/insert/range release/transfer/emplace and full Calc document/browser/module/default parity remain unverified.",
       "Selected pinned libc++ size_t64 no_trace/default-execution, finite initialized all12 unmanaged standard scalar families and nonthrowing events. Plain/valid own/foreign/returned-hint insertion, all bounded compound/varied payload positions, metadata shifts, empty/previous-category admission, unequal/equal splits and exact zero-length/invalid-row guards are compared with genuine unchanged-header callers. Original previous-block predicate uses the existing explicit borrowed-store member-body convention in main_def.ts; its actual original caller-only private bridge compares every standard category and empty category over first/nonempty/empty previous blocks; arbitrary custom category/block outcomes remain unverified. Native public set only prepares compound input. Managed/custom lifetimes, throwing allocation/events, ABI/instrumentation/SIMD, invalid/reentrant/dangling/empty-metadata positive hinted calls, overflow/unbounded metadata, remaining set/range insert/release/transfer/emplace and full Calc columns/document/browser/module/default/QA parity remain gaps.",
-      "Pinned libc++ size_t64 no_trace/default execution, finite initialized all12 unmanaged standard scalar families and nonthrowing events. Complete original plain/hinted set_empty and set_empty_impl/single/multi/middle bodies reuse actual shared fields, block funcs, event/delete/neighbor/iterator helpers under existing explicit borrowed-member convention. Every inclusive valid range of selected13/17cell compound/varied geometries compared with public overwrite true and actual native private overwrite false; valid own/foreign/fresh/returned hints,41block metadata and exact first-before-reversed/end guards included. Actual private middle calls include valid empty/data metadata and both overwrite/smaller/equal branches. Full payload/capacity/metadata/ownership/results/events/endpoints/equality/final logs and all15076previous sequences retained. Original public set prepares inputs only. Managed/custom/throwing/ABI/instrumentation/reentrant/invalid native hints/arbitrary input/overflow/unbounded storage, public range release and remaining set/range insert/transfer/emplace, whole original QA/default/module and Calc column/document/browser parity remain unverified."
+      "Pinned libc++ size_t64 no_trace/default execution, finite initialized all12 unmanaged standard scalar families and nonthrowing events. Complete original plain/hinted set_empty and set_empty_impl/single/multi/middle bodies reuse actual shared fields, block funcs, event/delete/neighbor/iterator helpers under existing explicit borrowed-member convention. Every inclusive valid range of selected13/17cell compound/varied geometries compared with public overwrite true and actual native private overwrite false; valid own/foreign/fresh/returned hints,41block metadata and exact first-before-reversed/end guards included. Actual private middle calls include valid empty/data metadata and both overwrite/smaller/equal branches. Full payload/capacity/metadata/ownership/results/events/endpoints/equality/final logs and all15076previous sequences retained. Original public set prepares inputs only. Managed/custom/throwing/ABI/instrumentation/reentrant/invalid native hints/arbitrary input/overflow/unbounded storage, public range release and remaining set/range insert/transfer/emplace, whole original QA/default/module and Calc column/document/browser parity remain unverified.",
+      "Task202610100109-QQ0KPB adds original complete public plain/hinted release_range main_def.inl3782-3808, exact3790/3805 firstlookup diagnostics before existing reversed/endguards, reusing actual set_empty_impl overwritefalse. Finite initialized all12 unmanaged/no_trace/default libc++ size_t64 families; every valid inclusive range of selected13/17cell compound/varied geometry, actual own/foreign/fresh/returned hints and41block metadata, uint64first/end guards, copyisolation/reappend/clear/whole release/final destruction. Existing original clear/release/destructor/new-cell store/event bodies retain responsibilities in main_def under explicit borrowed fields; main retains actual size resets and declarations, destructor uses positions.size without metadata/size reset. All28204prior complete native sequences/227296fullstates/final logs retained. Original fullpayload/capacity/metadata/ownership/iterator/equality/callback/event fields compared. Native publicset supplies setup only. Managed/custom/throwing/ABI/instrumentation/reentrant/invalid/overflow/unbounded/arbitrary inputs, scalarrelease/remaining set/rangeinsert/transfer/emplace, whole originalQA/default/module and Calc column/document/browser parity remainunverified. Earlier taskgap paragraphs are historical; this bounded publicrange release slice is now implemented, not wholeparity."
     ],
     "preservedResponsibilities": [
       "Original SoA metadata stays in three separate position/size/block-pointer vectors with original slot/transfer defaults, synchronized valid insertion/erase/pop/push/clear/reserve and exact length-integrity diagnostics.",
@@ -222,7 +232,11 @@
       "Original multi-block dispatch mutates first then last boundaries before deleting interior payloads and erasing slots; previous/next empty extension, overwrite false zero-size-before-delete and exact returned block index are retained.",
       "Original middle helper inserts2metadata slots, acquires a size0 typed payload before assignment, copies the smaller side and chooses upper copy on equality; overwrite precedes resize or erase/slot swap, positions recalculate last.",
       "Original empty-metadata middle split retains3adjacent empty slots with original sizes/positions rather than inventing normalization; valid native temporary states and actual helper index are observed.",
-      "Complete genuine native callers retain every15076prior sequence/state/final log and compare all fields for public/hinted/private empty operations across12standard families using shared actual ownership and typed callbacks."
+      "Complete genuine native callers retain every15076prior sequence/state/final log and compare all fields for public/hinted/private empty operations across12standard families using shared actual ownership and typed callbacks.",
+      "Original public plain/hinted release_range performs firstlookup before reversed/end guards with exact3790/3805 diagnostics, then reuses actual set_empty_impl with overwritefalse.",
+      "Released logical range becomes empty without scalar overwrite; original boundary truncation and interior zero-size-before-delete, smaller-side split/acquire/assign/resize/erase/iterator order are retained by shared engine.",
+      "Original clear/release/destructor/new-cell store and event bodies occupy main_def with actual borrowed fields; owner retains its actual size resets and declarations. Destructor bound positions.size and no reset remain original.",
+      "Genuine unchanged-header public release_range calls retain every28204prior complete sequence/state/final log and compare all full observations across12standard families; inputmodule enumerates callers only."
     ],
     "status": "mapped",
     "upstreamPath": "vendor/mdds-reference/include/mdds/multi_type_vector/soa/main.hpp",
@@ -250,7 +264,8 @@
       "void release()",
       "iterator insert_empty",
       "iterator insert_empty_impl",
-      "iterator set_empty"
+      "iterator set_empty",
+      "iterator release_range"
     ]
   }
 }

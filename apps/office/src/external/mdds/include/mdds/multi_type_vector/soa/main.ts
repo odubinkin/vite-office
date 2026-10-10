@@ -1,7 +1,7 @@
 /** @fileoverview Original private SoA block_slot_type, blocks_type and blocks_to_transfer owners; no replacement multi_type_vector engine. */
 // SPDX-FileCopyrightText: 2021 - 2025 Kohei Yoshida
 // SPDX-License-Identifier: MIT
-import { integrity_error, general_error } from "../../global.ts";
+import { integrity_error } from "../../global.ts";
 import {
   type base_element_block,
   type element_t,
@@ -37,6 +37,11 @@ import {
   get_block_position_hint,
   is_previous_block_of_type,
   set_empty as set_empty_body,
+  release_range as release_range_body,
+  release as release_body,
+  clear as clear_body,
+  dispose as dispose_body,
+  create_new_block_with_new_cell,
   make_iterator,
   next_position as next_position_impl,
   get_impl,
@@ -329,13 +334,7 @@ export class multi_type_vector<E extends ContainerEvent = empty_event_func> {
   }
   /** Original destructor, paired exactly once at the valid native lifetime boundary. @returns Nothing. */
   public dispose(): void {
-    delete_element_blocks(
-      this.m_block_store,
-      this.m_hdl_event,
-      this.Traits.block_funcs,
-      0,
-      this.m_block_store.positions.size(),
-    );
+    dispose_body(this.m_block_store, this.m_hdl_event, this.Traits.block_funcs);
   }
   /** Original clone construction path. @returns Clone. */
   public clone(): multi_type_vector<E> {
@@ -363,28 +362,12 @@ export class multi_type_vector<E extends ContainerEvent = empty_event_func> {
   }
   /** Original sequential release/deletion precedes metadata clear and size reset. @returns Nothing. */
   public clear(): void {
-    delete_element_blocks(
-      this.m_block_store,
-      this.m_hdl_event,
-      this.Traits.block_funcs,
-      0,
-      this.m_block_store.element_blocks.size(),
-    );
-    this.m_block_store.clear();
+    clear_body(this.m_block_store, this.m_hdl_event, this.Traits.block_funcs);
     this.m_cur_size = 0;
   }
   /** Original whole-container release preserves zero-size resize before release/delete, then clears metadata and logical size. @returns Nothing. */
   public release(): void {
-    const blocks = this.m_block_store.element_blocks.store();
-    const end = blocks.size;
-    for (let i = 0; i < end; ++i) {
-      const data = blocks.values[i];
-      if (!data) continue;
-      this.Traits.block_funcs.resize_block(data, 0);
-      this.m_hdl_event.element_block_released(data);
-      this.Traits.block_funcs.delete_block(data);
-    }
-    this.m_block_store.clear();
+    release_body(this.m_block_store, this.m_hdl_event, this.Traits.block_funcs);
     this.m_cur_size = 0;
   }
   /** Original event value, logical-size and array swap order. @param other - Owner. @returns Nothing. */
@@ -575,16 +558,14 @@ export class multi_type_vector<E extends ContainerEvent = empty_event_func> {
     cell: T,
     callbacks: ContainerCallbacks<T>,
   ): void {
-    let data: base_element_block | null = this.m_block_store.element_blocks.get(block_index);
-    if (data) {
-      this.m_hdl_event.element_block_released(data);
-      this.Traits.block_funcs.delete_block(data);
-    }
-    data = callbacks.mdds_mtv_create_new_block(0, cell);
-    if (!data) throw new general_error("Failed to create new block.");
-    this.m_block_store.element_blocks.set(block_index, data);
-    this.m_hdl_event.element_block_acquired(data);
-    callbacks.mdds_mtv_append_value(data, cell);
+    create_new_block_with_new_cell(
+      this.m_block_store,
+      this.m_hdl_event,
+      this.Traits.block_funcs,
+      block_index,
+      cell,
+      callbacks,
+    );
   }
   /** Original plain/hinted range emptying with actual borrowed original fields. @param first - Start or valid hint. @param second - End or hinted start. @param third - Hinted end. @returns Original empty block iterator. */
   public set_empty(
@@ -593,6 +574,23 @@ export class multi_type_vector<E extends ContainerEvent = empty_event_func> {
     third?: number | bigint,
   ): iterator_base<this> {
     return set_empty_body(
+      this.m_block_store,
+      this.m_cur_size,
+      this.m_hdl_event,
+      this.Traits.block_funcs,
+      this,
+      first,
+      second,
+      third,
+    );
+  }
+  /** Original plain/hinted range release with actual borrowed original fields. @param first - Start or valid hint. @param second - End or hinted start. @param third - Hinted end. @returns Original empty block iterator. */
+  public release_range(
+    first: number | bigint | iterator_base<this>,
+    second: number | bigint,
+    third?: number | bigint,
+  ): iterator_base<this> {
+    return release_range_body(
       this.m_block_store,
       this.m_cur_size,
       this.m_hdl_event,

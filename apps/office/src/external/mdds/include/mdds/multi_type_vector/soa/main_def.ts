@@ -8,7 +8,7 @@ import {
   get_block_type,
 } from "../types.ts";
 import { std_vector, lower_bound } from "../vector_storage.ts";
-import { invalid_arg_error } from "../../global.ts";
+import { invalid_arg_error, general_error } from "../../global.ts";
 import {
   throw_block_position_not_found,
   type BlockPositionIterator,
@@ -400,6 +400,33 @@ export function set_empty<P>(
     );
   return set_empty_impl(store, size, event, funcs, parent, start_pos, end_pos, block_index1, true);
 }
+/** Original plain/hinted release_range body preserves first lookup before range validation. @param store - Metadata. @param size - Logical size. @param event - Handler. @param funcs - Registered operations. @param parent - Owner. @param first - Start or hint. @param second - End or hinted start. @param third - Hinted end. @returns Original empty iterator. */
+export function release_range<P>(
+  store: blocks_type,
+  size: number,
+  event: ContainerEvent,
+  funcs: BlocksTraits["block_funcs"],
+  parent: P,
+  first: number | bigint | iterator_base<P>,
+  second: number | bigint,
+  third?: number | bigint,
+): iterator_base<P> {
+  const hint = typeof first === "object" ? first : undefined;
+  const start_pos = hint ? second : (first as number | bigint);
+  const end_pos = hint ? (third as number | bigint) : second;
+  const block_index1 = hint
+    ? get_block_position_hint(store, size, parent, hint.get_node().__private_data, start_pos)
+    : get_block_position(store, size, start_pos);
+  if (block_index1 === store.positions.size())
+    throw_block_position_not_found(
+      "multi_type_vector::release_range",
+      hint ? 3805 : 3790,
+      start_pos,
+      store.positions.size(),
+      size,
+    );
+  return set_empty_impl(store, size, event, funcs, parent, start_pos, end_pos, block_index1, false);
+}
 /** Original range-empty dispatch retains reversed/end guards and admitted block lookup. @param store - Metadata. @param size - Logical size. @param event - Handler. @param funcs - Operations. @param parent - Owner. @param start_pos - First row. @param end_pos - Last row. @param block_index1 - First block. @param overwrite - Original overwrite choice. @returns Original empty iterator. */
 export function set_empty_impl<P>(
   store: blocks_type,
@@ -626,4 +653,60 @@ export function set_new_block_to_middle(
   store.calc_block_position(block_index + 1);
   store.calc_block_position(block_index + 2);
   return block_index + 1;
+}
+
+/** Original clear store body; owner resets its size field after return. @param store - Metadata. @param event - Handler. @param funcs - Operations. @returns Nothing. */
+export function clear(
+  store: blocks_type,
+  event: ContainerEvent,
+  funcs: BlocksTraits["block_funcs"],
+): void {
+  delete_element_blocks(store, event, funcs, 0, store.element_blocks.size());
+  store.clear();
+}
+/** Original whole-release store body; owner resets its size field after return. @param store - Metadata. @param event - Handler. @param funcs - Operations. @returns Nothing. */
+export function release(
+  store: blocks_type,
+  event: ContainerEvent,
+  funcs: BlocksTraits["block_funcs"],
+): void {
+  const blocks = store.element_blocks.store();
+  const end = blocks.size;
+  for (let i = 0; i < end; ++i) {
+    const data = blocks.values[i];
+    if (!data) continue;
+    funcs.resize_block(data, 0);
+    event.element_block_released(data);
+    funcs.delete_block(data);
+  }
+  store.clear();
+}
+/** Original new-cell member retains release/delete/create/null/install/acquire/append order. @param store - Metadata. @param event - Handler. @param funcs - Operations. @param block_index - Slot. @param cell - Scalar. @param callbacks - Native family. @returns Nothing. */
+export function create_new_block_with_new_cell<T extends DelayedVectorValue>(
+  store: blocks_type,
+  event: ContainerEvent,
+  funcs: BlocksTraits["block_funcs"],
+  block_index: number,
+  cell: T,
+  callbacks: ContainerCallbacks<T>,
+): void {
+  let data: base_element_block | null = store.element_blocks.get(block_index);
+  if (data) {
+    event.element_block_released(data);
+    funcs.delete_block(data);
+  }
+  data = callbacks.mdds_mtv_create_new_block(0, cell);
+  if (!data) throw new general_error("Failed to create new block.");
+  store.element_blocks.set(block_index, data);
+  event.element_block_acquired(data);
+  callbacks.mdds_mtv_append_value(data, cell);
+}
+
+/** Original destructor body retains positions.size bound and does not clear metadata or logical size. @param store - Actual metadata. @param event - Handler. @param funcs - Operations. @returns Nothing. */
+export function dispose(
+  store: blocks_type,
+  event: ContainerEvent,
+  funcs: BlocksTraits["block_funcs"],
+): void {
+  delete_element_blocks(store, event, funcs, 0, store.positions.size());
 }

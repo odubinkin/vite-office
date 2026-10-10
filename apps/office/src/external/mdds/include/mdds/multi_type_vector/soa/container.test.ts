@@ -381,360 +381,403 @@ function loadSeed(initial: OwnerState): multi_type_vector<Handler> {
   return owner;
 }
 
-describe("original SoA container lifetime", /** Declares original native ownership acceptance. @returns Nothing. */ () => {
-  it("matches every complete original constructor operator iterator and destructor sequence", /** Replays all unchanged native outputs through actual shared ownership. @returns Nothing. */ () => {
-    for (const c of fixture.cases) {
-      operationCalls = null;
-      nextHandler = 1;
-      nextToken = 0;
-      log = [];
-      tokens = new Map();
-      const owners: (multi_type_vector<Handler> | null)[] = [null, null, null];
-      const hints: (iterator_base<multi_type_vector<Handler>> | null)[] = [null, null, null];
-      const constHints: (const_iterator_base<multi_type_vector<Handler>> | null)[] = [
-        null,
-        null,
-        null,
-      ];
-      const initial = decodeSnapshot(c.states[0] as number);
-      if (c.seed >= 0) owners[0] = loadSeed(initial[2][0] as OwnerState);
-      expect(record(owners, null, true)).toEqual(initial);
-      for (let step = 0; step < c.commands.length; ++step) {
-        const cmd = c.commands[step] as (number | string)[];
-        const op = cmd[0],
-          dst = cmd[1] as number,
-          args = cmd.slice(2);
-        let result: unknown = null,
-          stable = true;
-        const before = owners[dst]?.event_handler();
-        const source = owners[args[0] as number] as multi_type_vector<Handler>;
-        const destination = owners[dst] as multi_type_vector<Handler>;
-        /** Matches native unique_ptr replacement evaluation before destroying its prior owner. @param owner - Completed constructor. @returns Nothing. */
-        function replace(owner: multi_type_vector<Handler>): void {
-          owners[dst]?.dispose();
-          owners[dst] = owner;
-        }
-        try {
-          if (op === "D") replace(new multi_type_vector(Traits, Events));
-          else if (op === "Z") replace(new multi_type_vector(Traits, Events, args[0] as number));
-          else if (op === "F")
-            replace(
-              new multi_type_vector(
-                Traits,
-                Events,
-                args[0] as number,
-                callbacks[args[1] as number] as ContainerCallbacks,
-                value(args[1] as number, args[2] as string),
-              ),
-            );
-          else if (op === "R") {
-            const type = args[1] as number;
-            const input = new delayed_delete_vector<DelayedVectorValue>(
-              (callbacks[type] as ContainerCallbacks).mdds_mtv_get_empty_value(),
-              args[3] as number,
-              value(type, args[2] as string),
-            );
-            replace(
-              new multi_type_vector(
-                Traits,
-                Events,
-                args[0] as number,
-                callbacks[type] as ContainerCallbacks,
-                input.begin(),
-                input.end(),
-              ),
-            );
-          } else if (op === "H" || op === "h") {
-            const handler = new Handler();
-            handler.tag = args[0] as number;
-            replace(
-              op === "H"
-                ? new multi_type_vector(Traits, Events, handler)
-                : multi_type_vector.from_moved_event(Traits, Events, handler),
-            );
-            result = handler.log !== null;
-          } else if (op === "Q") replace(new multi_type_vector(Traits, Events, source));
-          else if (op === "L") replace(source.clone());
-          else if (op === "M") replace(multi_type_vector.move(source));
-          else if (op === "A") {
-            destination.assign(source);
-            stable = before === destination.event_handler();
-          } else if (op === "V") {
-            destination.assign_move(source);
-            stable = before === destination.event_handler();
-          } else if (op === "W") {
-            const otherBefore = source.event_handler();
-            destination.swap(source);
-            stable =
-              before === destination.event_handler() && otherBefore === source.event_handler();
-          } else if (op === "a" || op === "c") {
-            operationCalls = [];
-            try {
-              const type = args[op === "a" ? 0 : 1] as number;
-              const cell = value(type, args[op === "a" ? 1 : 2] as string);
-              const family = callbacks[type] as ContainerCallbacks;
-              if (op === "a")
-                result = [
-                  node(destination.push_back(cell, family), destination.end(), destination),
-                  operationCalls,
-                ];
-              else {
-                destination["create_new_block_with_new_cell"](args[0] as number, cell, family);
-                result = operationCalls;
-              }
-            } finally {
-              operationCalls = null;
+/** One complete genuine native caller sequence. */
+type NativeCase = (typeof fixture.cases)[number];
+/** Selects the original operation group without changing any caller data or expected field. @param c - Complete case. @returns Original group. */
+function originalOperationGroup(c: NativeCase): "base" | "empty" | "release" {
+  for (const command of c.commands) {
+    if (["!", "@", "#"].includes(command[0] as string)) return "release";
+    if (["q", "z", "s", "u", "m"].includes(command[0] as string)) return "empty";
+  }
+  return "base";
+}
+/** Replays every complete original field and final destructor observation through the common observer. @param cases - Complete native cases. @returns Nothing. */
+function replayOriginalSequences(cases: readonly NativeCase[]): void {
+  for (const c of cases) {
+    operationCalls = null;
+    nextHandler = 1;
+    nextToken = 0;
+    log = [];
+    tokens = new Map();
+    const owners: (multi_type_vector<Handler> | null)[] = [null, null, null];
+    const hints: (iterator_base<multi_type_vector<Handler>> | null)[] = [null, null, null];
+    const constHints: (const_iterator_base<multi_type_vector<Handler>> | null)[] = [
+      null,
+      null,
+      null,
+    ];
+    const initial = decodeSnapshot(c.states[0] as number);
+    if (c.seed >= 0) owners[0] = loadSeed(initial[2][0] as OwnerState);
+    expect(record(owners, null, true)).toEqual(initial);
+    for (let step = 0; step < c.commands.length; ++step) {
+      const cmd = c.commands[step] as (number | string)[];
+      const op = cmd[0],
+        dst = cmd[1] as number,
+        args = cmd.slice(2);
+      let result: unknown = null,
+        stable = true;
+      const before = owners[dst]?.event_handler();
+      const source = owners[args[0] as number] as multi_type_vector<Handler>;
+      const destination = owners[dst] as multi_type_vector<Handler>;
+      /** Matches native unique_ptr replacement evaluation before destroying its prior owner. @param owner - Completed constructor. @returns Nothing. */
+      function replace(owner: multi_type_vector<Handler>): void {
+        owners[dst]?.dispose();
+        owners[dst] = owner;
+      }
+      try {
+        if (op === "D") replace(new multi_type_vector(Traits, Events));
+        else if (op === "Z") replace(new multi_type_vector(Traits, Events, args[0] as number));
+        else if (op === "F")
+          replace(
+            new multi_type_vector(
+              Traits,
+              Events,
+              args[0] as number,
+              callbacks[args[1] as number] as ContainerCallbacks,
+              value(args[1] as number, args[2] as string),
+            ),
+          );
+        else if (op === "R") {
+          const type = args[1] as number;
+          const input = new delayed_delete_vector<DelayedVectorValue>(
+            (callbacks[type] as ContainerCallbacks).mdds_mtv_get_empty_value(),
+            args[3] as number,
+            value(type, args[2] as string),
+          );
+          replace(
+            new multi_type_vector(
+              Traits,
+              Events,
+              args[0] as number,
+              callbacks[type] as ContainerCallbacks,
+              input.begin(),
+              input.end(),
+            ),
+          );
+        } else if (op === "H" || op === "h") {
+          const handler = new Handler();
+          handler.tag = args[0] as number;
+          replace(
+            op === "H"
+              ? new multi_type_vector(Traits, Events, handler)
+              : multi_type_vector.from_moved_event(Traits, Events, handler),
+          );
+          result = handler.log !== null;
+        } else if (op === "Q") replace(new multi_type_vector(Traits, Events, source));
+        else if (op === "L") replace(source.clone());
+        else if (op === "M") replace(multi_type_vector.move(source));
+        else if (op === "A") {
+          destination.assign(source);
+          stable = before === destination.event_handler();
+        } else if (op === "V") {
+          destination.assign_move(source);
+          stable = before === destination.event_handler();
+        } else if (op === "W") {
+          const otherBefore = source.event_handler();
+          destination.swap(source);
+          stable = before === destination.event_handler() && otherBefore === source.event_handler();
+        } else if (op === "a" || op === "c") {
+          operationCalls = [];
+          try {
+            const type = args[op === "a" ? 0 : 1] as number;
+            const cell = value(type, args[op === "a" ? 1 : 2] as string);
+            const family = callbacks[type] as ContainerCallbacks;
+            if (op === "a")
+              result = [
+                node(destination.push_back(cell, family), destination.end(), destination),
+                operationCalls,
+              ];
+            else {
+              destination["create_new_block_with_new_cell"](args[0] as number, cell, family);
+              result = operationCalls;
             }
-          } else if (op === "f") {
-            const failure = {
-              ...standard.boolean_element_callbacks,
-              /** Actual native custom failure-cell ADL returns nullptr; its unused append callback remains the existing scalar owner. @returns Original null creation failure. */
-              mdds_mtv_create_new_block() {
-                return null as unknown as ReturnType<
-                  typeof standard.boolean_element_callbacks.mdds_mtv_create_new_block
-                >;
-              },
-            };
-            destination.push_back(true, failure);
-          } else if (op === "m") {
-            operationCalls = [];
-            try {
-              const index = set_new_block_to_middle(
+          } finally {
+            operationCalls = null;
+          }
+        } else if (op === "f") {
+          const failure = {
+            ...standard.boolean_element_callbacks,
+            /** Actual native custom failure-cell ADL returns nullptr; its unused append callback remains the existing scalar owner. @returns Original null creation failure. */
+            mdds_mtv_create_new_block() {
+              return null as unknown as ReturnType<
+                typeof standard.boolean_element_callbacks.mdds_mtv_create_new_block
+              >;
+            },
+          };
+          destination.push_back(true, failure);
+        } else if (op === "m") {
+          operationCalls = [];
+          try {
+            const index = set_new_block_to_middle(
+              destination["m_block_store"],
+              destination["m_hdl_event"],
+              destination.Traits.block_funcs,
+              args[0] as number,
+              args[1] as number,
+              args[2] as number,
+              Boolean(args[3]),
+            );
+            result = [index, operationCalls];
+          } finally {
+            operationCalls = null;
+          }
+        } else if (
+          op === "q" ||
+          op === "z" ||
+          op === "s" ||
+          op === "u" ||
+          op === "!" ||
+          op === "@" ||
+          op === "#"
+        ) {
+          operationCalls = [];
+          try {
+            const first = typeof args[0] === "string" ? BigInt(args[0]) : (args[0] as number);
+            const last = typeof args[1] === "string" ? BigInt(args[1]) : (args[1] as number);
+            let it: iterator_base<multi_type_vector<Handler>>;
+            if (op === "!") it = destination.release_range(first, last);
+            else if (op === "q") it = destination.set_empty(first, last);
+            else if (op === "u") {
+              const index = destination.position(first).first.get_node().__private_data.block_index;
+              it = set_empty_impl(
                 destination["m_block_store"],
-                destination["m_hdl_event"],
-                destination.Traits.block_funcs,
-                args[0] as number,
-                args[1] as number,
-                args[2] as number,
-                Boolean(args[3]),
-              );
-              result = [index, operationCalls];
-            } finally {
-              operationCalls = null;
-            }
-          } else if (op === "q" || op === "z" || op === "s" || op === "u") {
-            operationCalls = [];
-            try {
-              const first = typeof args[0] === "string" ? BigInt(args[0]) : (args[0] as number);
-              const last = typeof args[1] === "string" ? BigInt(args[1]) : (args[1] as number);
-              let it: iterator_base<multi_type_vector<Handler>>;
-              if (op === "q") it = destination.set_empty(first, last);
-              else if (op === "u") {
-                const index = destination.position(first).first.get_node()
-                  .__private_data.block_index;
-                it = set_empty_impl(
-                  destination["m_block_store"],
-                  destination.size(),
-                  destination["m_hdl_event"],
-                  destination.Traits.block_funcs,
-                  destination,
-                  first,
-                  last,
-                  index,
-                  Boolean(args[2]),
-                );
-              } else {
-                const hint =
-                  op === "s"
-                    ? (hints[args[2] as number] as iterator_base<multi_type_vector<Handler>>)
-                    : (owners[args[2] as number] as multi_type_vector<Handler>)
-                        .begin()
-                        .advance(args[3] as number);
-                it = destination.set_empty(hint, first, last);
-              }
-              hints[dst] = it;
-              result = [node(it, destination.end(), destination), operationCalls];
-            } finally {
-              operationCalls = null;
-            }
-          } else if (op === "w") {
-            operationCalls = [];
-            try {
-              const it = set_whole_block_empty(
-                destination["m_block_store"],
+                destination.size(),
                 destination["m_hdl_event"],
                 destination.Traits.block_funcs,
                 destination,
-                args[0] as number,
-                Boolean(args[1]),
+                first,
+                last,
+                index,
+                Boolean(args[2]),
               );
-              hints[dst] = it;
-              result = [node(it, destination.end(), destination), operationCalls];
-            } finally {
-              operationCalls = null;
-            }
-          } else if (op === "n") {
-            result = is_next_block_of_type(
-              destination["m_block_store"],
-              args[0] as number,
-              args[1] as number,
-            );
-          } else if (op === "x") {
-            result = is_previous_block_of_type(
-              destination["m_block_store"],
-              args[0] as number,
-              args[1] as number,
-            );
-          } else if (op === "v" || op === "d" || op === "t") {
-            operationCalls = [];
-            try {
-              const pos = typeof args[0] === "string" ? BigInt(args[0]) : (args[0] as number);
-              const len = args[1] as number;
-              let it: iterator_base<multi_type_vector<Handler>>;
-              if (op === "v") it = destination.insert_empty(pos, len);
-              else {
-                const hint =
-                  op === "t"
-                    ? (hints[args[2] as number] as iterator_base<multi_type_vector<Handler>>)
-                    : (owners[args[2] as number] as multi_type_vector<Handler>)
-                        .begin()
-                        .advance(args[3] as number);
-                it = destination.insert_empty(hint, pos, len);
-              }
-              hints[dst] = it;
-              result = [node(it, destination.end(), destination), operationCalls];
-            } finally {
-              operationCalls = null;
-            }
-          } else if (op === "r") {
-            operationCalls = [];
-            try {
-              destination.release();
-              result = operationCalls;
-            } finally {
-              operationCalls = null;
-            }
-          } else if (op === "e") {
-            operationCalls = [];
-            try {
-              const start = typeof args[0] === "string" ? BigInt(args[0]) : (args[0] as number);
-              const end = typeof args[1] === "string" ? BigInt(args[1]) : (args[1] as number);
-              destination.erase(start, end);
-              result = operationCalls;
-            } finally {
-              operationCalls = null;
-            }
-          } else if (op === "Y") {
-            operationCalls = [];
-            try {
-              destination.resize(args[0] as number);
-              result = operationCalls;
-            } finally {
-              operationCalls = null;
-            }
-          } else if (op === "y")
-            result = node(destination.push_back_empty(), destination.end(), destination);
-          else if (op === "C") destination.clear();
-          else if (op === "S") destination.shrink_to_fit();
-          else if (op === "U") {
-            destination.dispose();
-            owners[dst] = null;
-          } else if (op === "J" || op === "j") {
-            if (op === "J") {
-              const hint = source.begin().advance(args[1] as number);
-              hints[dst] = hint;
-              result = hintNode(hint, source);
             } else {
-              const hint = source.cbegin().advance(args[1] as number);
-              constHints[dst] = hint;
-              result = hintNode(hint, source);
+              const hint =
+                op === "s" || op === "#"
+                  ? (hints[args[2] as number] as iterator_base<multi_type_vector<Handler>>)
+                  : (owners[args[2] as number] as multi_type_vector<Handler>)
+                      .begin()
+                      .advance(args[3] as number);
+              it =
+                op === "@" || op === "#"
+                  ? destination.release_range(hint, first, last)
+                  : destination.set_empty(hint, first, last);
             }
-          } else if (op === "N") {
-            hints[dst] = null;
-            constHints[dst] = null;
+            hints[dst] = it;
+            result = [node(it, destination.end(), destination), operationCalls];
+          } finally {
+            operationCalls = null;
+          }
+        } else if (op === "w") {
+          operationCalls = [];
+          try {
+            const it = set_whole_block_empty(
+              destination["m_block_store"],
+              destination["m_hdl_event"],
+              destination.Traits.block_funcs,
+              destination,
+              args[0] as number,
+              Boolean(args[1]),
+            );
+            hints[dst] = it;
+            result = [node(it, destination.end(), destination), operationCalls];
+          } finally {
+            operationCalls = null;
+          }
+        } else if (op === "n") {
+          result = is_next_block_of_type(
+            destination["m_block_store"],
+            args[0] as number,
+            args[1] as number,
+          );
+        } else if (op === "x") {
+          result = is_previous_block_of_type(
+            destination["m_block_store"],
+            args[0] as number,
+            args[1] as number,
+          );
+        } else if (op === "v" || op === "d" || op === "t") {
+          operationCalls = [];
+          try {
+            const pos = typeof args[0] === "string" ? BigInt(args[0]) : (args[0] as number);
+            const len = args[1] as number;
+            let it: iterator_base<multi_type_vector<Handler>>;
+            if (op === "v") it = destination.insert_empty(pos, len);
+            else {
+              const hint =
+                op === "t"
+                  ? (hints[args[2] as number] as iterator_base<multi_type_vector<Handler>>)
+                  : (owners[args[2] as number] as multi_type_vector<Handler>)
+                      .begin()
+                      .advance(args[3] as number);
+              it = destination.insert_empty(hint, pos, len);
+            }
+            hints[dst] = it;
+            result = [node(it, destination.end(), destination), operationCalls];
+          } finally {
+            operationCalls = null;
+          }
+        } else if (op === "r") {
+          operationCalls = [];
+          try {
+            destination.release();
+            result = operationCalls;
+          } finally {
+            operationCalls = null;
+          }
+        } else if (op === "e") {
+          operationCalls = [];
+          try {
+            const start = typeof args[0] === "string" ? BigInt(args[0]) : (args[0] as number);
+            const end = typeof args[1] === "string" ? BigInt(args[1]) : (args[1] as number);
+            destination.erase(start, end);
+            result = operationCalls;
+          } finally {
+            operationCalls = null;
+          }
+        } else if (op === "Y") {
+          operationCalls = [];
+          try {
+            destination.resize(args[0] as number);
+            result = operationCalls;
+          } finally {
+            operationCalls = null;
+          }
+        } else if (op === "y")
+          result = node(destination.push_back_empty(), destination.end(), destination);
+        else if (op === "C") destination.clear();
+        else if (op === "S") destination.shrink_to_fit();
+        else if (op === "U") {
+          destination.dispose();
+          owners[dst] = null;
+        } else if (op === "J" || op === "j") {
+          if (op === "J") {
+            const hint = source.begin().advance(args[1] as number);
+            hints[dst] = hint;
+            result = hintNode(hint, source);
           } else {
-            const row = typeof args[0] === "string" ? BigInt(args[0]) : (args[0] as number);
-            if (op === "B" || op === "O") {
-              const pos = destination.position(row);
-              const ret =
-                op === "B"
-                  ? multi_type_vector.next_position(pos)
-                  : multi_type_vector.advance_position(pos, args[1] as number);
-              result = [
-                positionResult(ret, destination.end(), destination),
-                positionResult(pos, destination.end(), destination),
-              ];
-            } else if (op === "b" || op === "o") {
-              const pos = destination.cposition(row);
-              const ret =
-                op === "b"
-                  ? multi_type_vector.next_position(pos)
-                  : multi_type_vector.advance_position(pos, args[1] as number);
-              result = [
-                positionResult(ret, destination.cend(), destination),
-                positionResult(pos, destination.cend(), destination),
-              ];
-            } else if (op === "l")
-              result = multi_type_vector.logical_position(destination.cposition(row));
-            else if (op === "X") {
-              const got = multi_type_vector.get(
-                destination.cposition(row),
-                aliases[args[1] as number] as BlockType,
-              );
-              result = typeof got === "bigint" ? got.toString() : got;
-            } else if (op === "T") result = destination.get_type(row);
-            else if (op === "E") result = destination.is_empty(row);
-            else if (op === "G" || op === "g") {
-              const got = destination.get(row, callbacks[args[1] as number] as ContainerCallbacks);
-              result = typeof got === "bigint" ? got.toString() : got;
-            } else if (op === "P")
-              result = positionResult(destination.position(row), destination.end(), destination);
-            else if (op === "p")
-              result = positionResult(destination.cposition(row), destination.cend(), destination);
-            else if (op === "I" || op === "i") {
-              const other = owners[args[1] as number] as multi_type_vector<Handler>;
-              const index = args[2] as number;
-              if (op === "I") {
-                const hint = other.begin().advance(index);
-                result = positionResult(
-                  destination.position(hint, row),
-                  destination.end(),
-                  destination,
-                  hint,
-                  index === other.block_size(),
-                );
-              } else {
-                const hint = other.cbegin().advance(index);
-                result = positionResult(
-                  destination.cposition(hint, row),
-                  destination.cend(),
-                  destination,
-                  hint,
-                  index === other.block_size(),
-                );
-              }
-            } else if (op === "K") {
-              const hint = hints[args[1] as number] as iterator_base<multi_type_vector<Handler>>;
+            const hint = source.cbegin().advance(args[1] as number);
+            constHints[dst] = hint;
+            result = hintNode(hint, source);
+          }
+        } else if (op === "N") {
+          hints[dst] = null;
+          constHints[dst] = null;
+        } else {
+          const row = typeof args[0] === "string" ? BigInt(args[0]) : (args[0] as number);
+          if (op === "B" || op === "O") {
+            const pos = destination.position(row);
+            const ret =
+              op === "B"
+                ? multi_type_vector.next_position(pos)
+                : multi_type_vector.advance_position(pos, args[1] as number);
+            result = [
+              positionResult(ret, destination.end(), destination),
+              positionResult(pos, destination.end(), destination),
+            ];
+          } else if (op === "b" || op === "o") {
+            const pos = destination.cposition(row);
+            const ret =
+              op === "b"
+                ? multi_type_vector.next_position(pos)
+                : multi_type_vector.advance_position(pos, args[1] as number);
+            result = [
+              positionResult(ret, destination.cend(), destination),
+              positionResult(pos, destination.cend(), destination),
+            ];
+          } else if (op === "l")
+            result = multi_type_vector.logical_position(destination.cposition(row));
+          else if (op === "X") {
+            const got = multi_type_vector.get(
+              destination.cposition(row),
+              aliases[args[1] as number] as BlockType,
+            );
+            result = typeof got === "bigint" ? got.toString() : got;
+          } else if (op === "T") result = destination.get_type(row);
+          else if (op === "E") result = destination.is_empty(row);
+          else if (op === "G" || op === "g") {
+            const got = destination.get(row, callbacks[args[1] as number] as ContainerCallbacks);
+            result = typeof got === "bigint" ? got.toString() : got;
+          } else if (op === "P")
+            result = positionResult(destination.position(row), destination.end(), destination);
+          else if (op === "p")
+            result = positionResult(destination.cposition(row), destination.cend(), destination);
+          else if (op === "I" || op === "i") {
+            const other = owners[args[1] as number] as multi_type_vector<Handler>;
+            const index = args[2] as number;
+            if (op === "I") {
+              const hint = other.begin().advance(index);
               result = positionResult(
                 destination.position(hint, row),
                 destination.end(),
                 destination,
                 hint,
+                index === other.block_size(),
               );
-            } else if (op === "k") {
-              const hint = constHints[args[1] as number] as const_iterator_base<
-                multi_type_vector<Handler>
-              >;
+            } else {
+              const hint = other.cbegin().advance(index);
               result = positionResult(
                 destination.cposition(hint, row),
                 destination.cend(),
                 destination,
                 hint,
+                index === other.block_size(),
               );
             }
+          } else if (op === "K") {
+            const hint = hints[args[1] as number] as iterator_base<multi_type_vector<Handler>>;
+            result = positionResult(
+              destination.position(hint, row),
+              destination.end(),
+              destination,
+              hint,
+            );
+          } else if (op === "k") {
+            const hint = constHints[args[1] as number] as const_iterator_base<
+              multi_type_vector<Handler>
+            >;
+            result = positionResult(
+              destination.cposition(hint, row),
+              destination.cend(),
+              destination,
+              hint,
+            );
           }
-        } catch (error) {
-          expect(error).toBeInstanceOf(
-            op === "R" ? invalid_arg_error : op === "f" ? general_error : RangeError,
-          );
-          result = (error as Error).message;
         }
-        expect(record(owners, result, stable)).toEqual(
-          decodeSnapshot(c.states[step + 1] as number),
+      } catch (error) {
+        expect(error).toBeInstanceOf(
+          op === "R" ? invalid_arg_error : op === "f" ? general_error : RangeError,
         );
+        result = (error as Error).message;
       }
-      for (const owner of owners) owner?.dispose();
-      expect(log).toEqual(fixture.eventSnapshots[c.finalEvents]);
+      expect(record(owners, result, stable)).toEqual(decodeSnapshot(c.states[step + 1] as number));
+    }
+    for (const owner of owners) owner?.dispose();
+    expect(log).toEqual(fixture.eventSnapshots[c.finalEvents]);
+  }
+}
+
+describe("original SoA container lifetime", /** Declares original native ownership acceptance. @returns Nothing. */ () => {
+  describe("matches every complete original constructor operator iterator and destructor sequence", /** Registers original independent operation groups with the unchanged per-test budget. @returns Nothing. */ () => {
+    for (const [group, name] of [
+      [
+        "base",
+        "preserves complete lifetime query navigation resize append erase and empty-insertion sequences",
+      ],
+      ["empty", "preserves complete range-empty and middle-split sequences"],
+      ["release", "preserves complete public range-release sequences"],
+    ] as const) {
+      it(
+        name,
+        /** Replays the complete original operation group. @returns Nothing. */ () => {
+          replayOriginalSequences(
+            fixture.cases.filter(
+              /** Retains every case in exactly its original group. @param c - Complete case. @returns Group membership. */ (
+                c,
+              ) => originalOperationGroup(c) === group,
+            ),
+          );
+        },
+      );
     }
   });
   it("reuses the actual default empty event owner with stable value fields", /** Checks original empty event value witnesses over real containers. @returns Nothing. */ () => {
