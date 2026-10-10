@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "202610100017-ZJJ73M",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-10T00:28:36.297Z",
+  "verdict": "pass",
+  "summary": "Same-agent non-independent exact-SHA review: two inherited ODF acceptance branches now match pinned direct SET/default-only parent export and FULL import default; production exporter unchanged.",
+  "evaluated_sha": "b849883c6c5c445da8aa83b3943e72515f9968ba",
+  "blueprint_digest": "02adcfa1c2b668aae6b3f7d0ce3c10b30d9c260127b0e9b4820aeb380978c170",
+  "findings": [
+    "Exactb849883c6c5c has only two documented acceptance migrations plus bounded canonical/task evidence. Full original direct/native UI/layout/dialog/history assertions retained by exacttext migration proof; current1089related and24Chromium tests pass,9statics9restored metadata gates pass on unchanged source hashes.",
+    "Initial suspected geometry regression disproved by pinned xmlexpit GetItemState(which,false), xmlfmte default-only parent assumption and xmltbli FULL import default. No inherited export flattening adapter or skipped acceptance is introduced."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610100017-ZJJ73M/README.md",
+    ".agentplane/tasks/202610100017-ZJJ73M/evidence/verification.json",
+    "semantic SHA b849883c6c5c and exact migration/current source hashes checked"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Review is performed by the same implementing agent and is explicitly non-independent. General shared native frame inheritance transport and full ODF/font-unit/UNO architecture remain incomplete under broader goal."
+  ]
+}

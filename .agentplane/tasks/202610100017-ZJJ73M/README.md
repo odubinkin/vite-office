@@ -4,7 +4,7 @@ title: "Align inherited table ODF acceptance with native direct SET export"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 7
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -18,15 +18,38 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-10T00:28:19.608Z"
+  updated_at: "2026-10-10T00:28:50.348Z"
   updated_by: "CODER"
-  note: "Pinned direct SET/default-only frame parent/ODF FULL admission source proves exact two inherited acceptance migrations; final1089unit24Chromium allpass,sharedcurrent-source9statics9restored metadata pass; no production change. Bounded evidence and exactmigration preservation verified; quality pending."
+  note: "Exactb849883c6c5c quality pass recorded and independently labeled same-agent/non-independent. Two native direct-SET ODF migration operations fully preserved sibling assertions; final1089unit24Chromium9statics9metadata allpass current source. Reference restored; bounded evidence is complete; no production changes for this leaf."
   attempts: 0
-commit: null
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-10T00:28:36.297Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent non-independent exact-SHA review: two inherited ODF acceptance branches now match pinned direct SET/default-only parent export and FULL import default; production exporter unchanged."
+  evaluated_sha: "b849883c6c5c445da8aa83b3943e72515f9968ba"
+  blueprint_digest: "02adcfa1c2b668aae6b3f7d0ce3c10b30d9c260127b0e9b4820aeb380978c170"
+  evidence_refs:
+    - ".agentplane/tasks/202610100017-ZJJ73M/README.md"
+    - ".agentplane/tasks/202610100017-ZJJ73M/quality/20261010-002836297-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610100017-ZJJ73M/quality/20261010-002836297-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610100017-ZJJ73M/quality/20261010-002836297-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610100017-ZJJ73M/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610100017-ZJJ73M/evidence/verification.json"
+    - "semantic SHA b849883c6c5c and exact migration/current source hashes checked"
+  findings:
+    - "Exactb849883c6c5c has only two documented acceptance migrations plus bounded canonical/task evidence. Full original direct/native UI/layout/dialog/history assertions retained by exacttext migration proof; current1089related and24Chromium tests pass,9statics9restored metadata gates pass on unchanged source hashes."
+    - "Initial suspected geometry regression disproved by pinned xmlexpit GetItemState(which,false), xmlfmte default-only parent assumption and xmltbli FULL import default. No inherited export flattening adapter or skipped acceptance is introduced."
+commit:
+  hash: "b849883c6c5c445da8aa83b3943e72515f9968ba"
+  message: "🧪 ZJJ73M writer: align inherited ODF assertions with native direct items"
 comments:
   -
     author: "CODER"
     body: "Start: correct two obsolete inherited ODF acceptance branches from pinned direct SET/default-only-parent export contracts; no production geometry flattening or test weakening."
+  -
+    author: "CODER"
+    body: "Start: bind final native direct-export acceptance evidence to exact semantic commit b849883c6c5c before quality and clean close."
 events:
   -
     type: "status"
@@ -41,8 +64,27 @@ events:
     author: "CODER"
     state: "ok"
     note: "Pinned direct SET/default-only frame parent/ODF FULL admission source proves exact two inherited acceptance migrations; final1089unit24Chromium allpass,sharedcurrent-source9statics9restored metadata pass; no production change. Bounded evidence and exactmigration preservation verified; quality pending."
+  -
+    type: "status"
+    at: "2026-10-10T00:28:35.347Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+    note: "Start: bind final native direct-export acceptance evidence to exact semantic commit b849883c6c5c before quality and clean close."
+  -
+    type: "verify"
+    at: "2026-10-10T00:28:35.738Z"
+    author: "CODER"
+    state: "ok"
+    note: "Exactb849883c6c5c current test/canonical/source hashes match final1089unit24Chromium,9statics9restored metadata and two exactsource-backed migrations. No production change; all source/direct/native UI/history sibling assertions remain intact; raw initial failed observations retained."
+  -
+    type: "verify"
+    at: "2026-10-10T00:28:50.348Z"
+    author: "CODER"
+    state: "ok"
+    note: "Exactb849883c6c5c quality pass recorded and independently labeled same-agent/non-independent. Two native direct-SET ODF migration operations fully preserved sibling assertions; final1089unit24Chromium9statics9metadata allpass current source. Reference restored; bounded evidence is complete; no production changes for this leaf."
 doc_version: 3
-doc_updated_at: "2026-10-10T00:28:19.669Z"
+doc_updated_at: "2026-10-10T00:28:50.400Z"
 doc_updated_by: "CODER"
 description: "Native source audit of HM2YX4 two historical failures confirms existing production exporter matches pinned GetItemState(which,false) and native table ExportFormat requires default parent only. Correct exactly two old acceptance branches that expected non-default inherited LR/Hori to be flattened into ODF. Preserve all original direct/native UI/history assertions; add explicit absent inherited margin/default FULL reopened orientation assertions. No production code changes or geometry snapshot repair. Verify failed inherited scenarios only upstream absent and source/inventory rationale after restoration."
 sections:
@@ -81,6 +123,66 @@ sections:
     - operator_action: run_exact_argv
     - can_execute_now: true
     - safe_command: agentplane commit 202610100017-ZJJ73M -m 🧩 ZJJ73M task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-10-10T00:28:35.738Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Exactb849883c6c5c current test/canonical/source hashes match final1089unit24Chromium,9statics9restored metadata and two exactsource-backed migrations. No production change; all source/direct/native UI/history sibling assertions remain intact; raw initial failed observations retained.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T00:28:35.347Z, excerpt_hash=sha256:77b16d8aae10f458a361d2dd467b4c84b93f18793448453257978e16aada2675
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610100017-ZJJ73M/blueprint/resolved-snapshot.json
+    - old_digest: 02adcfa1c2b668aae6b3f7d0ce3c10b30d9c260127b0e9b4820aeb380978c170
+    - current_digest: 02adcfa1c2b668aae6b3f7d0ce3c10b30d9c260127b0e9b4820aeb380978c170
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610100017-ZJJ73M
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610100017-ZJJ73M --result verified-202610100017-ZJJ73M --commit b849883c6c5c445da8aa83b3943e72515f9968ba
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-10-10T00:28:50.348Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Exactb849883c6c5c quality pass recorded and independently labeled same-agent/non-independent. Two native direct-SET ODF migration operations fully preserved sibling assertions; final1089unit24Chromium9statics9metadata allpass current source. Reference restored; bounded evidence is complete; no production changes for this leaf.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T00:28:35.792Z, excerpt_hash=sha256:77b16d8aae10f458a361d2dd467b4c84b93f18793448453257978e16aada2675
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610100017-ZJJ73M/blueprint/resolved-snapshot.json
+    - old_digest: 02adcfa1c2b668aae6b3f7d0ce3c10b30d9c260127b0e9b4820aeb380978c170
+    - current_digest: 02adcfa1c2b668aae6b3f7d0ce3c10b30d9c260127b0e9b4820aeb380978c170
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610100017-ZJJ73M
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610100017-ZJJ73M --result verified-202610100017-ZJJ73M --commit b849883c6c5c445da8aa83b3943e72515f9968ba
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -140,6 +242,66 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane commit 202610100017-ZJJ73M -m 🧩 ZJJ73M task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-10T00:28:35.738Z — VERIFY — ok
+
+By: CODER
+
+Note: Exactb849883c6c5c current test/canonical/source hashes match final1089unit24Chromium,9statics9restored metadata and two exactsource-backed migrations. No production change; all source/direct/native UI/history sibling assertions remain intact; raw initial failed observations retained.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T00:28:35.347Z, excerpt_hash=sha256:77b16d8aae10f458a361d2dd467b4c84b93f18793448453257978e16aada2675
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610100017-ZJJ73M/blueprint/resolved-snapshot.json
+- old_digest: 02adcfa1c2b668aae6b3f7d0ce3c10b30d9c260127b0e9b4820aeb380978c170
+- current_digest: 02adcfa1c2b668aae6b3f7d0ce3c10b30d9c260127b0e9b4820aeb380978c170
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610100017-ZJJ73M
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610100017-ZJJ73M --result verified-202610100017-ZJJ73M --commit b849883c6c5c445da8aa83b3943e72515f9968ba
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-10T00:28:50.348Z — VERIFY — ok
+
+By: CODER
+
+Note: Exactb849883c6c5c quality pass recorded and independently labeled same-agent/non-independent. Two native direct-SET ODF migration operations fully preserved sibling assertions; final1089unit24Chromium9statics9metadata allpass current source. Reference restored; bounded evidence is complete; no production changes for this leaf.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T00:28:35.792Z, excerpt_hash=sha256:77b16d8aae10f458a361d2dd467b4c84b93f18793448453257978e16aada2675
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610100017-ZJJ73M/blueprint/resolved-snapshot.json
+- old_digest: 02adcfa1c2b668aae6b3f7d0ce3c10b30d9c260127b0e9b4820aeb380978c170
+- current_digest: 02adcfa1c2b668aae6b3f7d0ce3c10b30d9c260127b0e9b4820aeb380978c170
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610100017-ZJJ73M
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610100017-ZJJ73M --result verified-202610100017-ZJJ73M --commit b849883c6c5c445da8aa83b3943e72515f9968ba
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
