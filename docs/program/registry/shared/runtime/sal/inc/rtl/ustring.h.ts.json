@@ -8,7 +8,8 @@
     "suite": "shared",
     "subsystem": "rtl-ustring",
     "capabilityIds": [
-      "CAP-93d45659-e3cb-402d-b2c3-93e3a3f5eb6b"
+      "CAP-93d45659-e3cb-402d-b2c3-93e3a3f5eb6b",
+      "CAP-034020c1-ac77-41ea-9133-58d073df32bf"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -16,16 +17,36 @@
       "defaultStatus": "unverified",
       "divergenceClass": "none",
       "evidence": [
-        "apps/office/src/sal/inc/rtl/ustring.h.ts#rtl_ustr_reverseCompare_WithLength",
-        "apps/office/src/sal/rtl/ustring.test.ts#matches every native direct and public result with original prefix and pointer offsets",
-        "vendor/libreoffice-reference/include/rtl/ustring.h#rtl_ustr_reverseCompare_WithLength"
+        "apps/office/src/sal/inc/rtl/ustring.h.ts#_rtl_uString",
+        "apps/office/src/sal/rtl/ustring-ownership.test.ts#matches every complete native identity, counter, buffer, allocator event and hash-table slot",
+        "vendor/libreoffice-reference/include/rtl/ustring.h#_rtl_uString"
       ],
-      "justification": "Original SAL UTF16 CompareNormal and reverseCompare_WithLengths, plus the rtl_ustr_reverseCompare_WithLength C/header boundary, preserve unsigned16 subtraction, original back-to-front traversal and final length difference. Uint16Array|null with explicit signed32 lengths adapts borrowed native pointers; static strategy witness adapts the empty Compare template value. Native four assert conditions map to fail-fast Error; native SIGABRT/process and release-build behavior are not certified. Positive loop length and original pointer guards prove non-null dereferences; buffer storage must cover the declared length, as original callers must. No added bounds/collation/NUL termination repair. Four complete pinned blobs and six unchanged original scopes compile under ASan/UBSan;10084calls/20168 full direct/public results plus four genuine assertion diagnostics are retained in portable fixtures, including offset views and signed32 caller narrowing. Native ABI, raw/dangling pointer behavior, generic non-UTF16/mixed char warnings, alternate comparison strategies and full SAL/OUString/SharedString/storage consumers remain unverified.",
+      "justification": "Original RTL Unicode data and intern-pool dependency closure, shared once by Calc and future Writer consumers. Original initialized identities, signed32 refcounts/flags, static C empty, logical UTF16 length/payload/terminators, allocation/free order and complete initialized free-callback fields, separate copies, selfassignment, source aliases, exact UTF16 forward comparison/hash, full pool slots, linear probing/wrap/reinsertion and2039-to8191 double-prime growth are compared against3336 genuine unchanged-body native calls. Thirteen complete pinned source/header blobs and29 unchanged scopes, including actual pthread recursive mutex functions, original compiler atomic macros and o3tl::make_unsigned assertion, compile under ASan/UBSan. Twenty original fail-fast guards are diagnosed. The complete initialized output is retained and SHA256-hashed; portable observation deltas are independently decoded and compared field-for-field with every complete native snapshot. Tuple pointer slots and Uint16Array adapt concrete storage; original allocator function-pointer slots use an ESM-writable carrier. Browser allocation/free releases owned buffer references for GC; physical malloc/free, uninitialized spare bytes, dead-pointer access, arbitrary exotic JS objects, OOM outside replaceable allocator failures, native ABI and concurrent cross-thread ownership are not certified. Synchronous realm-local hash removal cannot observe a separate thread acquire: original zero-count increment is necessarily1, with its native concurrent recursive branch explicitly outside certification. The64-bit allocation overflow guard is identically true for signed32 nonnegative lengths; active constructor assertions prove the original null-copy return unreachable. Native release-build behavior, alternate STL/platform comparison magnitudes, remaining RTL algorithms, actual C++ OUString/SharedString and Calc storage/document/UI owners remain unverified. Preserve native fast-path destination overwrite (CALC-032), no upstream repair.",
       "knownViolations": [],
-      "localSymbols": [],
+      "localSymbols": [
+        "_rtl_uString",
+        "rtl_uString",
+        "rtl_uStringSlot"
+      ],
       "sourceResponsibility": "aligned",
       "upstreamFile": "include/rtl/ustring.h",
       "upstreamSymbols": [
+        "_rtl_uString",
+        "rtl_uString",
+        "rtl_uString_acquire",
+        "rtl_uString_alloc",
+        "rtl_uString_assign",
+        "rtl_uString_getLength",
+        "rtl_uString_getStr",
+        "rtl_uString_intern",
+        "rtl_uString_new",
+        "rtl_uString_newFromStr",
+        "rtl_uString_newFromStr_WithLength",
+        "rtl_uString_newFromString",
+        "rtl_uString_new_WithLength",
+        "rtl_uString_release",
+        "rtl_ustr_compare_WithLength",
+        "rtl_ustr_hashCode_WithLength",
         "rtl_ustr_reverseCompare_WithLength"
       ]
     }

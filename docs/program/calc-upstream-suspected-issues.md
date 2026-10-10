@@ -727,3 +727,59 @@ remain in the complete typed acceptance corpus. JavaScript storage bounds
 behavior is an existing representation boundary; native UB/ABI parity remains
 unverified. This may affect other original hinted callers sharing the lookup,
 but only scalar release is reproduced here.
+
+## CALC-032: Intern fast path overwrites a populated destination without releasing it
+
+Status: suspicious ownership condition; initialized native output reproduced.
+
+[Original `rtl_uString_intern`](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sal/rtl/ustring.cxx#L587)
+asserts both pointers. When the source already carries the intern flag, it
+acquires the source and writes it to `*newStr`. This branch does not release
+the data previously stored in the destination. The other branch saves the
+previous destination and releases it after interning.
+
+The task34 unchanged-body capture creates an interned source containing
+`[65,66]`, copies it into separate destination data, then calls
+`rtl_uString_intern(&destination, internedSource)`. Native call181 changes
+the destination identity from56 to55. Allocation56 retains refcount1,
+length2, capacity2 and units `[65,66,0]`; no free event occurs. The previous
+allocation stays live in subsequent native snapshots. The probe's explicit
+process cleanup happens only after all observations are recorded.
+
+Evidence: `scripts/rtl-ustring-ownership-native-probe.mjs` compiles the
+complete original function and its original dependencies under ASan/UBSan.
+`apps/office/src/sal/rtl/native-ustring-ownership-cases.json` retains3336
+complete observations as lossless deltas; its raw state SHA256 is
+`665e3f8e7f0d1ccede35d17809b26694319812aaf695e1383ee8edb40d46c7a4`.
+`ustring-ownership.test.ts` compares the entire allocation and handle state,
+including the displaced allocation and source refcount, after every call.
+
+Remaining uncertainty: a populated destination on this fast path may violate
+an intended caller invariant. The broader consumer requirements and history
+have not been established, so this is not a confirmed upstream defect report.
+Decision: preserve the original branch and overwrite order. Do not insert a
+release or normalize callers to hide the observation.
+
+## CALC-033: Intern-table growth applies next-prime selection twice
+
+Status: suspicious growth policy; initialized native table layout reproduced.
+
+[Original hash-table implementation](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sal/rtl/hash.cxx)
+resizes when entry count reaches integer `nSize/2`. Its intern caller passes
+`getNextSize(nSize)` to resize; resize passes that request to table allocation,
+which applies `getNextSize` again. Each selection uses the first prime strictly
+greater than its argument. The initial request1024 allocates2039 slots.
+Growth from2039 requests4093 but allocates8191, skipping the intermediate
+table size. Native call2283 grows the table to8191 and inserts entry1020.
+
+Evidence: task34's unchanged complete `hash.cxx` body and dependencies compile
+under ASan/UBSan. Every physical occupied slot, table size and entry count is
+captured before and after growth in `native-ustring-ownership-cases.json`;
+the complete raw output SHA256 is
+`665e3f8e7f0d1ccede35d17809b26694319812aaf695e1383ee8edb40d46c7a4`.
+`ustring-ownership.test.ts` reconstructs and compares all3336 complete snapshots.
+
+Remaining uncertainty: this may be an intentional capacity/growth policy;
+the design history and expected memory/performance tradeoff are unknown.
+Decision: retain both selections, threshold and resulting original layout.
+Do not replace the result with a conventional single next-prime growth.

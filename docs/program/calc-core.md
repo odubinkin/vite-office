@@ -65,6 +65,84 @@ and registry12 cases pass; doctor's two existing warnings are unchanged.
 Journal body and all31 cases are preserved byte-for-byte. No Writer coverage
 or implementation changes and no full run occur in this task.
 
+## Shared Unicode ownership and intern pool
+
+Task34 (`202610101428-D9PRQV`) adds actual RTL Unicode data ownership before
+the original C++ `OUString` and `svl::SharedString` consumers. The existing SAL
+header/template/C wrapper boundaries are extended; `sal/rtl/strimp.ts` owns
+the original allocator globals, `sal/rtl/strimp.hxx.ts` owns their declarations
+and flag macros, and `sal/rtl/hash.ts`
+owns the complete original intern-table algorithms. Other applications can
+reuse these shared modules without their own string-data implementation.
+
+The original C empty is a concrete static identity with signed refcount
+-1073741823, length0 and one zero unit. It remains distinct from the later
+C++ `OUString` literal empty. Data retains UInt16 buffers, logical length,
+allocated capacity and terminating zero. Copying allocates distinct data;
+assignment acquires first, including selfassignment. Buffer copying releases
+the previous owner last so that the source can alias its storage. Reserving
+capacity releases the previous owner before allocating logical empty data.
+Both orders and actual allocator/free events are compared with native code.
+
+Interning retains the original hash, linear probes, wrap, static candidates,
+duplicate handling and complete following-chain reinsertion. The initial
+request1024 chooses2039; the original two next-prime applications grow it to
+8191 at its load threshold. The original fast-path destination overwrite is
+preserved and documented as suspicious
+[CALC-032](calc-upstream-suspected-issues.md#calc-032-intern-fast-path-overwrites-a-populated-destination-without-releasing-it).
+
+Browser storage uses concrete `Uint16Array` data and caller-owned pointer-slot
+tuples. An ESM-writable carrier holds the two original replaceable allocation
+function pointers. Default browser free releases the owned buffer reference
+for garbage collection; physical native allocation/deallocation and reads
+after free are outside certification. Uninitialized spare bytes are never
+included as invented native zeroes. Initialized logical payload and both
+initialized terminators are retained in every observed live allocation.
+
+The pool and counters belong to one synchronous browser realm. No asynchronous
+work crosses the native mutex-protected interval. Actual native pthread
+recursive mutex and compiler atomic operations remain in the C++ probe;
+native cross-thread synchronization is not claimed by the browser port.
+After last-reference decrement and synchronous hash removal, the following
+increment is necessarily1. The native recursive branch for a concurrent
+separate acquire is therefore outside the reachable realm-local domain.
+On the verified64-bit target the allocation size guard is always true for
+nonnegative signed32 lengths; its original `o3tl::make_unsigned` assertion is
+preserved. With active original constructor assertions, the hash helper's
+null-copy return cannot be reached: failure aborts before returning, while
+empty copying binds the static empty. These reductions do not certify release
+builds, concurrent ownership or undefined arithmetic/pointer inputs.
+
+`scripts/rtl-ustring-ownership-native-probe.mjs` verifies13 complete pinned
+blobs and extracts29 complete unchanged scopes. ASan/UBSan captures3336
+original calls, all live identities/counts/payloads/capacities/terminators,
+all1400 caller handles, allocation/free events and complete intern table slots.
+Twenty original assertion diagnostics are retained. The full native state
+output is88879388 bytes with SHA256
+`665e3f8e7f0d1ccede35d17809b26694319812aaf695e1383ee8edb40d46c7a4`.
+Portable deltas are lossless: the capture script independently reconstructs
+and compares every complete native snapshot before accepting the fixture.
+Tests reconstruct the same complete observations without upstream access.
+
+This dependency closure does not yet provide `OUString`, `SharedString`, a
+Calc cell store, `ScColumn`, `ScTable`, `ScDocument` or an editable browser
+sheet. Those actual owners remain the next UI prerequisites. Other RTL
+algorithms, native ABI, alternate STL comparison magnitudes, uninitialized
+memory, process-abort semantics, and physical/out-of-memory allocation beyond
+the original replaceable allocator failures remain unverified. All scoped
+runtime/provenance flags continue to express that bounded evidence.
+
+Task34 scoped verification passes without either upstream symlink:106 Calc
+tests in24 files and4 shared RTL tests in2 files. Actual Istanbul Calc
+counters remain2920 statements,2055 branches,474 functions and2564 lines;
+the5 executable RTL sources have265 statements,137 branches,50 functions
+and207 lines. All four metrics are100%, every actual raw counter is positive,
+and complete initialized free-callback fields are included in native event
+comparison. Typecheck, lint, JSDoc, size, dependencies, source tree/provenance,
+Calc/shared inventories, routing and doctor pass. The two inherited doctor
+warnings remain. This is task3/10 after the last full run; next full is task41.
+Writer-only coverage and implementation are unchanged.
+
 ## Shared UTF16 comparison for cell strings
 
 Task33 (`202610101405-RCRBVD`) ports the original dependency used by

@@ -4,7 +4,7 @@ title: "Port original shared RTL Unicode data ownership and intern pool for Calc
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 10
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -18,10 +18,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-10T15:09:00.856Z"
+  updated_by: "CODER"
+  note: "All approved source/native/portable scoped coverage/inventory/static gates pass. Actual source completeness and raw counters positive, all four100; native states and all free fields match. Task3/10,next full41. Browser Calc0 cases disclosed, real C++ string/document/UI consumers remain unverified."
   attempts: 0
 commit: null
 comments:
@@ -36,8 +36,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: Port original shared RTL Unicode ownership and intern pool dependency closure with native source evidence on branch calc only."
+  -
+    type: "verify"
+    at: "2026-10-10T15:09:00.856Z"
+    author: "CODER"
+    state: "ok"
+    note: "All approved source/native/portable scoped coverage/inventory/static gates pass. Actual source completeness and raw counters positive, all four100; native states and all free fields match. Task3/10,next full41. Browser Calc0 cases disclosed, real C++ string/document/UI consumers remain unverified."
 doc_version: 3
-doc_updated_at: "2026-10-10T14:34:02.626Z"
+doc_updated_at: "2026-10-10T15:09:00.910Z"
 doc_updated_by: "CODER"
 description: "Task34: implement original RTL Unicode buffer/empty/refcount/allocation/copy/assignment and intern/release dependency closure needed by actual OUString/SharedString; reuse existing UTF16 comparison, preserve original source/header/hash owners and defaults, unchanged native comparisons including live identities/payloads/counters/table layout and allocation/free order. Branchcalc only, bounded initialized browser-realm storage, no fake strings/locks, native concurrent ABI not certified. Calc and changed shared coverage100; full cadence task3/10,next41."
 sections:
@@ -55,10 +61,74 @@ sections:
     3. npm run typecheck; npm run lint; npm run check:docs; npm run check:file-size; npm run check:dependencies; npm run check:source-tree; npm run check:source-provenance; npm run inventory:parity:calc; npm run inventory:parity:shared; affected source-provenance/module-boundary/registry tests; format check on all changed files. All pass without weakening assertions, thresholds, configs, inventory, or source boundaries.
     4. ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check; task verify-show and separate EVALUATOR quality report against actual implementation commit. Verify current branchcalc and git status --short --untracked-files=all contains only intentional task state before close and is clean afterward. Full suite cadence task3/10, next41, not run this task.
   Verification: |-
+    Command: node scripts/rtl-ustring-ownership-native-probe.mjs --check. Result: pass;3336 complete native snapshots/20 guards,13 full pinned blobs/29 unchanged scopes, actual original pthread/atomic/o3tl bodies, no expected RTL algorithms rewritten. Complete raw output88879388 bytes SHA256665e3f8e7f0d1ccede35d17809b26694319812aaf695e1383ee8edb40d46c7a4; driver44ad48ef78c7a6a651bc2611b6d7a623558972e7dc07b60e68bb92411e0266a2. Every initialized free-callback field is included. Independent lossless delta reconstruction compares every complete native observation. Evidence: output/playwright/rtl-ustring-ownership-native/driver.cpp,output.json,guard-*.stderr.
+    Command: portable scoped RTL Istanbul and npm run test:coverage:calc with both upstream symlinks absent/restored in finally. Result:4 tests/2files and106/24files pass. Raw RTL5sources S265/B137/F50/L207; Calc19sources S2920/B2055/F474/L2564; all four100 and every actual s/f/b counterpositive, required source list inspected. Evidence: output/playwright/task34-tests/{00,01,free-callback}.log and task34-audit.json.
+    Command: affected source-provenance/module-boundary/registry-storage and registry-validation tests. Result:27 tests/4files pass (21/3 upstream-absent, plus6 registry-validation). npm run test:e2e:calc passes build; Calc still has0 browser cases, no UI readiness claim.
+    Command: typecheck/lint/JSDoc/size/dependencies/tree/provenance/Calc and shared inventories/routing/doctor/diff and Prettier check for every changed nongenerated file. Result: pass, semantic violations0,23 shared capabilities/139 shared runtime modules; inherited doctor warnings unchanged. Evidence: output/playwright/task34-gates/{final,complete}-*.log; output/playwright/task34-final/manifest.json. Whole suite intentionally deferred by user cadence:task3/10, next41. No Writer changes, network, config/assertion/threshold relaxations or branch merge. Quality review and closure pending.
+
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-10T15:09:00.856Z — VERIFY — ok
+
+    By: CODER
+
+    Note: All approved source/native/portable scoped coverage/inventory/static gates pass. Actual source completeness and raw counters positive, all four100; native states and all free fields match. Task3/10,next full41. Browser Calc0 cases disclosed, real C++ string/document/UI consumers remain unverified.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T15:09:00.045Z, excerpt_hash=sha256:c8502196c533a3d2e1d9a1cff2b6c3270bbe8eceb81ee2afdaeaa88149460bfe
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610101428-D9PRQV/blueprint/resolved-snapshot.json
+    - old_digest: 237ac67e36ba4424048212b38801cabb0a79e5643969c5980063f7e6948e2415
+    - current_digest: 237ac67e36ba4424048212b38801cabb0a79e5643969c5980063f7e6948e2415
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610101428-D9PRQV
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610101428-D9PRQV
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only intentional task34 implementation and registry/documentation commits via a new authorized forward change if needed; rerun exact scoped gates. Never reset history, modify Writer-only gaps, merge branches, or delete shared upstream assets. Native temporary evidence stays ignored under output/playwright; always restore both symlinks in finally."
-  Findings: "Preflight: branchcalc, authoritative direct checkout /Users/odubinkin/Projects/vite-office-calc; only this newly created README is untracked. Existing unrelated DOING tasks C9TN6M and X6VV8G untouched. User ongoing goal and explicit continue authorize safe in-scope implementation. Source evidence: actual hash pool first size2039 and two getNextSize applications on growth; original intern fast branch acquires without releasing old destination. Preserve behavior and document only after actual native proof. Original C static empty differs from future OUString literal empty, so keep identities distinct."
+  Findings: |-
+    Preflight: branchcalc, authoritative direct checkout /Users/odubinkin/Projects/vite-office-calc; only this newly created README is untracked. Existing unrelated DOING tasks C9TN6M and X6VV8G untouched. User ongoing goal and explicit continue authorize safe in-scope implementation. Source evidence: actual hash pool first size2039 and two getNextSize applications on growth; original intern fast branch acquires without releasing old destination. Preserve behavior and document only after actual native proof. Original C static empty differs from future OUString literal empty, so keep identities distinct.
+
+    - Observation: Read-only discovery used apps/office/vitest.config.ts, which does not exist.
+      Impact: No mutation or validation occurred; configuration location must be discovered from actual files.
+      Resolution: Use rg --files to locate the actual Vite/Vitest configuration and existing scoped test commands; approved verification criteria unchanged.
+
+    - Observation: First scoped Vitest invocation ran from repository root with a workspace-relative configuration. Discovery found no tests; exit1 and all coverage0/0 Unknown.
+      Impact: This is not test or coverage evidence; no acceptance claim is made.
+      Resolution: Run the unchanged existing shared config from apps/office with src/sal filters and the exact four source files included; no threshold/config change.
+
+    - Observation: First actual scoped ownership run: all4 tests pass, including3321 complete native snapshots, but Istanbul statements261/263(99.23), branches132/135(97.77), functions50/50 and lines137/137100; missing paths in hash.ts.
+      Impact: Coverage acceptance is not met. Formatting also completed during this initial test run, so rerun against final stable source maps before identifying exact gaps.
+      Resolution: Retain this failure, inspect exact raw counter locations after stable rerun, add unchanged-source native caller cases for real missing paths and keep all100 thresholds unchanged.
+
+    - Observation: Stable source-map rerun confirms missing length-mismatch equality and two removal wrap paths. Scoped lint also reports four missing test-type JSDoc comments and unnecessary quote escapes in C++ caller template text.
+      Impact: No contract or threshold change is needed; all native state comparisons already pass.
+      Resolution: Correct collision input arithmetic to1340, add native cluster/removal callers for exact missing paths and second comparison-length guard, add required comments and remove semantically redundant quote escapes. Rebuild unchanged-body native fixture and rerun affected checks.
+
+    - Observation: Dependency audit found that o3tl::make_unsigned carries an original nonnegative assertion. The initial native caller supplied a type conversion adapter instead of extracting this helper body; initialized nonnegative corpus results remain unchanged, but internal negative allocation evidence was incomplete.
+      Impact: No final fidelity claim is valid until this dependency is exact. Browser Alloc must preserve the helper assertion too.
+      Resolution: Extract the complete pinned include/o3tl/safeint.hxx make_unsigned body unchanged, add its full blob/scope hashes and native internal-negative guard, and preserve the corresponding fail-fast expression in shared Alloc. No expected-result algorithm rewrite remains.
+
+    - Observation: Scoped inventory rejects re-exported C declarations incorrectly listed as locally declared symbols; the actual AST inventory intentionally distinguishes re-exports from declarations.
+      Impact: Implementation is intact; source metadata must match the real AST contract. Separate original strimp.hxx declarations from strimp.cxx allocator globals to keep original owner boundaries.
+      Resolution: Record header-export evidence in provenance while runtime localSymbols enumerate only actual declared header types; preserve re-exported API symbols at their real C source owner. Add exact strimp.hxx.ts header filename-discriminator ledger and existing source-owner metadata, without changing validators or claiming violations as accepted.
+
+    - Observation: Current typecheck and lint pass. Repository JSDoc gate rejects missing @returns tags on new void wrappers/callbacks plus one caller buffer-enumeration callback without a comment.
+      Impact: Documentation gate remains pending; algorithms and native observations are unaffected.
+      Resolution: Add explicit return contracts to the exact reported function comments and annotate the native caller enumeration callback. Keep the existing JSDoc validator unchanged, then resume the remaining static gates.
 id_source: "generated"
 ---
 ## Summary
@@ -86,7 +156,42 @@ Only branch calc in /Users/odubinkin/Projects/vite-office-calc. Implementation o
 
 ## Verification
 
+Command: node scripts/rtl-ustring-ownership-native-probe.mjs --check. Result: pass;3336 complete native snapshots/20 guards,13 full pinned blobs/29 unchanged scopes, actual original pthread/atomic/o3tl bodies, no expected RTL algorithms rewritten. Complete raw output88879388 bytes SHA256665e3f8e7f0d1ccede35d17809b26694319812aaf695e1383ee8edb40d46c7a4; driver44ad48ef78c7a6a651bc2611b6d7a623558972e7dc07b60e68bb92411e0266a2. Every initialized free-callback field is included. Independent lossless delta reconstruction compares every complete native observation. Evidence: output/playwright/rtl-ustring-ownership-native/driver.cpp,output.json,guard-*.stderr.
+Command: portable scoped RTL Istanbul and npm run test:coverage:calc with both upstream symlinks absent/restored in finally. Result:4 tests/2files and106/24files pass. Raw RTL5sources S265/B137/F50/L207; Calc19sources S2920/B2055/F474/L2564; all four100 and every actual s/f/b counterpositive, required source list inspected. Evidence: output/playwright/task34-tests/{00,01,free-callback}.log and task34-audit.json.
+Command: affected source-provenance/module-boundary/registry-storage and registry-validation tests. Result:27 tests/4files pass (21/3 upstream-absent, plus6 registry-validation). npm run test:e2e:calc passes build; Calc still has0 browser cases, no UI readiness claim.
+Command: typecheck/lint/JSDoc/size/dependencies/tree/provenance/Calc and shared inventories/routing/doctor/diff and Prettier check for every changed nongenerated file. Result: pass, semantic violations0,23 shared capabilities/139 shared runtime modules; inherited doctor warnings unchanged. Evidence: output/playwright/task34-gates/{final,complete}-*.log; output/playwright/task34-final/manifest.json. Whole suite intentionally deferred by user cadence:task3/10, next41. No Writer changes, network, config/assertion/threshold relaxations or branch merge. Quality review and closure pending.
+
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-10T15:09:00.856Z — VERIFY — ok
+
+By: CODER
+
+Note: All approved source/native/portable scoped coverage/inventory/static gates pass. Actual source completeness and raw counters positive, all four100; native states and all free fields match. Task3/10,next full41. Browser Calc0 cases disclosed, real C++ string/document/UI consumers remain unverified.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T15:09:00.045Z, excerpt_hash=sha256:c8502196c533a3d2e1d9a1cff2b6c3270bbe8eceb81ee2afdaeaa88149460bfe
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610101428-D9PRQV/blueprint/resolved-snapshot.json
+- old_digest: 237ac67e36ba4424048212b38801cabb0a79e5643969c5980063f7e6948e2415
+- current_digest: 237ac67e36ba4424048212b38801cabb0a79e5643969c5980063f7e6948e2415
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610101428-D9PRQV
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610101428-D9PRQV
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -96,3 +201,31 @@ Revert only intentional task34 implementation and registry/documentation commits
 ## Findings
 
 Preflight: branchcalc, authoritative direct checkout /Users/odubinkin/Projects/vite-office-calc; only this newly created README is untracked. Existing unrelated DOING tasks C9TN6M and X6VV8G untouched. User ongoing goal and explicit continue authorize safe in-scope implementation. Source evidence: actual hash pool first size2039 and two getNextSize applications on growth; original intern fast branch acquires without releasing old destination. Preserve behavior and document only after actual native proof. Original C static empty differs from future OUString literal empty, so keep identities distinct.
+
+- Observation: Read-only discovery used apps/office/vitest.config.ts, which does not exist.
+  Impact: No mutation or validation occurred; configuration location must be discovered from actual files.
+  Resolution: Use rg --files to locate the actual Vite/Vitest configuration and existing scoped test commands; approved verification criteria unchanged.
+
+- Observation: First scoped Vitest invocation ran from repository root with a workspace-relative configuration. Discovery found no tests; exit1 and all coverage0/0 Unknown.
+  Impact: This is not test or coverage evidence; no acceptance claim is made.
+  Resolution: Run the unchanged existing shared config from apps/office with src/sal filters and the exact four source files included; no threshold/config change.
+
+- Observation: First actual scoped ownership run: all4 tests pass, including3321 complete native snapshots, but Istanbul statements261/263(99.23), branches132/135(97.77), functions50/50 and lines137/137100; missing paths in hash.ts.
+  Impact: Coverage acceptance is not met. Formatting also completed during this initial test run, so rerun against final stable source maps before identifying exact gaps.
+  Resolution: Retain this failure, inspect exact raw counter locations after stable rerun, add unchanged-source native caller cases for real missing paths and keep all100 thresholds unchanged.
+
+- Observation: Stable source-map rerun confirms missing length-mismatch equality and two removal wrap paths. Scoped lint also reports four missing test-type JSDoc comments and unnecessary quote escapes in C++ caller template text.
+  Impact: No contract or threshold change is needed; all native state comparisons already pass.
+  Resolution: Correct collision input arithmetic to1340, add native cluster/removal callers for exact missing paths and second comparison-length guard, add required comments and remove semantically redundant quote escapes. Rebuild unchanged-body native fixture and rerun affected checks.
+
+- Observation: Dependency audit found that o3tl::make_unsigned carries an original nonnegative assertion. The initial native caller supplied a type conversion adapter instead of extracting this helper body; initialized nonnegative corpus results remain unchanged, but internal negative allocation evidence was incomplete.
+  Impact: No final fidelity claim is valid until this dependency is exact. Browser Alloc must preserve the helper assertion too.
+  Resolution: Extract the complete pinned include/o3tl/safeint.hxx make_unsigned body unchanged, add its full blob/scope hashes and native internal-negative guard, and preserve the corresponding fail-fast expression in shared Alloc. No expected-result algorithm rewrite remains.
+
+- Observation: Scoped inventory rejects re-exported C declarations incorrectly listed as locally declared symbols; the actual AST inventory intentionally distinguishes re-exports from declarations.
+  Impact: Implementation is intact; source metadata must match the real AST contract. Separate original strimp.hxx declarations from strimp.cxx allocator globals to keep original owner boundaries.
+  Resolution: Record header-export evidence in provenance while runtime localSymbols enumerate only actual declared header types; preserve re-exported API symbols at their real C source owner. Add exact strimp.hxx.ts header filename-discriminator ledger and existing source-owner metadata, without changing validators or claiming violations as accepted.
+
+- Observation: Current typecheck and lint pass. Repository JSDoc gate rejects missing @returns tags on new void wrappers/callbacks plus one caller buffer-enumeration callback without a comment.
+  Impact: Documentation gate remains pending; algorithms and native observations are unaffected.
+  Resolution: Add explicit return contracts to the exact reported function comments and annotate the native caller enumeration callback. Keep the existing JSDoc validator unchanged, then resume the remaining static gates.
