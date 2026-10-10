@@ -1,10 +1,11 @@
 ---
 id: "202610101428-D9PRQV"
 title: "Port original shared RTL Unicode data ownership and intern pool for Calc strings"
-status: "DOING"
+result_summary: "verified-202610101428-D9PRQV"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 20
+revision: 24
 origin:
   system: "manual"
 depends_on: []
@@ -19,9 +20,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-10T15:09:00.856Z"
+  updated_at: "2026-10-10T15:12:13.179Z"
   updated_by: "CODER"
-  note: "All approved source/native/portable scoped coverage/inventory/static gates pass. Actual source completeness and raw counters positive, all four100; native states and all free fields match. Task3/10,next full41. Browser Calc0 cases disclosed, real C++ string/document/UI consumers remain unverified."
+  note: "verified-202610101428-D9PRQV"
   attempts: 0
 quality_review:
   state: "pass"
@@ -48,11 +49,16 @@ quality_review:
     - "Read-only digest audit independently confirms actual driver44ad48ef78c7a6a651bc2611b6d7a623558972e7dc07b60e68bb92411e0266a2, complete raw states665e3f8e7f0d1ccede35d17809b26694319812aaf695e1383ee8edb40d46c7a4,13 full pinned blobs,3336 losslessly retained snapshots,20 genuine assertion diagnostics and all free-callback fields."
     - "Actual required Istanbul maps contain19 Calc and5 RTL sources; every raw counter is positive and all four metrics100.106 Calc/4 RTL plus27 affected tooling cases pass. Final format/lint/JSDoc/size/provenance/scoped inventories pass, dependencies/tree/typecheck/routing/doctor pass. Browser Calc gate builds successfully but contains0 browser cases."
     - "CALC032 and033 record suspicious native conditions while retaining original behavior. Initial discovery/coverage/JSDoc/metadata/probe-dependency failures were bounded and corrected without weakening acceptance; task3/10 cadence retains next full41."
-commit: null
+commit:
+  hash: "a5d99585184068b1bcb849139f6ac47bb4dc9392"
+  message: "🧪 D9PRQV review: record native Unicode ownership quality evidence"
 comments:
   -
     author: "CODER"
     body: "Start: Port original shared RTL Unicode ownership and intern pool dependency closure with native source evidence on branch calc only."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610101428-D9PRQV. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -67,8 +73,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "All approved source/native/portable scoped coverage/inventory/static gates pass. Actual source completeness and raw counters positive, all four100; native states and all free fields match. Task3/10,next full41. Browser Calc0 cases disclosed, real C++ string/document/UI consumers remain unverified."
+  -
+    type: "verify"
+    at: "2026-10-10T15:12:13.179Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610101428-D9PRQV"
+  -
+    type: "status"
+    at: "2026-10-10T15:12:13.319Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610101428-D9PRQV. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-10T15:09:00.910Z"
+doc_updated_at: "2026-10-10T15:12:56.608Z"
 doc_updated_by: "CODER"
 description: "Task34: implement original RTL Unicode buffer/empty/refcount/allocation/copy/assignment and intern/release dependency closure needed by actual OUString/SharedString; reuse existing UTF16 comparison, preserve original source/header/hash owners and defaults, unchanged native comparisons including live identities/payloads/counters/table layout and allocation/free order. Branchcalc only, bounded initialized browser-realm storage, no fake strings/locks, native concurrent ABI not certified. Calc and changed shared coverage100; full cadence task3/10,next41."
 sections:
@@ -122,6 +141,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-10T15:12:13.179Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610101428-D9PRQV
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T15:09:00.910Z, excerpt_hash=sha256:c8502196c533a3d2e1d9a1cff2b6c3270bbe8eceb81ee2afdaeaa88149460bfe
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610101428-D9PRQV/blueprint/resolved-snapshot.json
+    - old_digest: 237ac67e36ba4424048212b38801cabb0a79e5643969c5980063f7e6948e2415
+    - current_digest: 237ac67e36ba4424048212b38801cabb0a79e5643969c5980063f7e6948e2415
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610101428-D9PRQV
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610101428-D9PRQV --result verified-202610101428-D9PRQV --commit a5d99585184068b1bcb849139f6ac47bb4dc9392
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only intentional task34 implementation and registry/documentation commits via a new authorized forward change if needed; rerun exact scoped gates. Never reset history, modify Writer-only gaps, merge branches, or delete shared upstream assets. Native temporary evidence stays ignored under output/playwright; always restore both symlinks in finally."
   Findings: |-
@@ -154,6 +203,18 @@ sections:
     - Observation: Current typecheck and lint pass. Repository JSDoc gate rejects missing @returns tags on new void wrappers/callbacks plus one caller buffer-enumeration callback without a comment.
       Impact: Documentation gate remains pending; algorithms and native observations are unaffected.
       Resolution: Add explicit return contracts to the exact reported function comments and annotate the native caller enumeration callback. Keep the existing JSDoc validator unchanged, then resume the remaining static gates.
+
+    - Observation: Installed task complete returned E_GIT generic commit subject after changing authoritative status to DONE, matching the already observed closure CLI defect.
+      Impact: Implementation66fc2540 and qualitya5d99585 are committed and verified; only the generated active-task README cleanup remains dirty.
+      Resolution: Recomputed route directs the exact deterministic artifact close command. Execute it once, recompute after its result, and if the same generated-subject failure repeats persist only task artifacts using an explicit descriptive subject through ap commit, without policy/config/history changes.
+
+    - Observation: Exact deterministic artifact close also returned E_GIT generic commit subject. Recomputed route confirms DONE with only current README pending; no source changes or quality failures.
+      Impact: The installed generated subject prevents automatic cleanup; repeating unchanged retry would not help.
+      Resolution: Persist only this active task README with an explicit descriptive ap commit subject. This is the same bounded task-artifact recovery used previously; no history reset, policy change, network, acceptance drift or unrelated task mutation.
+extensions:
+  implementation_commit:
+    hash: "66fc25402a6d1465b2e76b63e46a4dea7cd0fdbe"
+    message: "✨ D9PRQV implement: port original shared Unicode ownership and intern table"
 id_source: "generated"
 ---
 ## Summary
@@ -217,6 +278,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-10T15:12:13.179Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610101428-D9PRQV
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T15:09:00.910Z, excerpt_hash=sha256:c8502196c533a3d2e1d9a1cff2b6c3270bbe8eceb81ee2afdaeaa88149460bfe
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610101428-D9PRQV/blueprint/resolved-snapshot.json
+- old_digest: 237ac67e36ba4424048212b38801cabb0a79e5643969c5980063f7e6948e2415
+- current_digest: 237ac67e36ba4424048212b38801cabb0a79e5643969c5980063f7e6948e2415
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610101428-D9PRQV
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610101428-D9PRQV --result verified-202610101428-D9PRQV --commit a5d99585184068b1bcb849139f6ac47bb4dc9392
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -254,3 +345,11 @@ Preflight: branchcalc, authoritative direct checkout /Users/odubinkin/Projects/v
 - Observation: Current typecheck and lint pass. Repository JSDoc gate rejects missing @returns tags on new void wrappers/callbacks plus one caller buffer-enumeration callback without a comment.
   Impact: Documentation gate remains pending; algorithms and native observations are unaffected.
   Resolution: Add explicit return contracts to the exact reported function comments and annotate the native caller enumeration callback. Keep the existing JSDoc validator unchanged, then resume the remaining static gates.
+
+- Observation: Installed task complete returned E_GIT generic commit subject after changing authoritative status to DONE, matching the already observed closure CLI defect.
+  Impact: Implementation66fc2540 and qualitya5d99585 are committed and verified; only the generated active-task README cleanup remains dirty.
+  Resolution: Recomputed route directs the exact deterministic artifact close command. Execute it once, recompute after its result, and if the same generated-subject failure repeats persist only task artifacts using an explicit descriptive subject through ap commit, without policy/config/history changes.
+
+- Observation: Exact deterministic artifact close also returned E_GIT generic commit subject. Recomputed route confirms DONE with only current README pending; no source changes or quality failures.
+  Impact: The installed generated subject prevents automatic cleanup; repeating unchanged retry would not help.
+  Resolution: Persist only this active task README with an explicit descriptive ap commit subject. This is the same bounded task-artifact recovery used previously; no history reset, policy change, network, acceptance drift or unrelated task mutation.
