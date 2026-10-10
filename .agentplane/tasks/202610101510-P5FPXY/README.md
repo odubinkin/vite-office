@@ -1,10 +1,11 @@
 ---
 id: "202610101510-P5FPXY"
 title: "Restore native typed first-line paragraph indent item"
-status: "DOING"
+result_summary: "Replaced the immutable numeric first-line adapter with original typed value/unit/percentage/auto ownership, native constructors/copy/metric and UNO contracts. Removed test-only non-native numeric node setter and migrated14original calls directly to native SetAttr; historical32fixture/observer files preserve cases/expected values except source-backed fraction correction,768other old files byte-identical. Existing scalar/automatic browser graph/JSON/Worker and registered IO exceptions retained;20canonical histories updated with real declaration owner, WRITER-003 original unsupported default query documented and preserved.14188/14188 related71fresh,entire ten actual current modules100all-four,27Chromium,current static/TS7 and nine source/metadata gates pass; source/mdds restored. Exact implementation064cdbc517e4 reviewed by same agent, non-independent. Broad goal and rich wire/font UI/general native gaps remain incomplete; cadence3/10 and pause after next accepted full run with failures repaired."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 27
+revision: 28
 origin:
   system: "manual"
 depends_on: []
@@ -51,6 +52,9 @@ comments:
   -
     author: "CODER"
     body: "Start: bind accepted native first-line implementation and all original contract/current source evidence to semantic SHA064cdbc517e4, prior setup SHA is not implementation evidence."
+  -
+    author: "CODER"
+    body: "Verified: native typed first-line ownership and direct SetAttr authoring match approved source contracts;14188related71fresh,whole ten modules actual100all-four,27Chromium,current static/TS7,nine restored metadata and exactSHA same-agent non-independent quality pass."
 events:
   -
     type: "status"
@@ -91,8 +95,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Exact semantic064cdbc517e4 quality pass explicitly same-agent non-independent.14188related71fresh,entire ten actual current modules100all-four,27Chromium,current static/TS7,nine restored metadata,inventory/history and original contract source scope all pass. Broad goal incomplete and3/10; pause after next accepted full/repairs."
+  -
+    type: "status"
+    at: "2026-10-10T16:10:06.854Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native typed first-line ownership and direct SetAttr authoring match approved source contracts;14188related71fresh,whole ten modules actual100all-four,27Chromium,current static/TS7,nine restored metadata and exactSHA same-agent non-independent quality pass."
 doc_version: 3
-doc_updated_at: "2026-10-10T16:09:38.999Z"
+doc_updated_at: "2026-10-10T16:10:06.856Z"
 doc_updated_by: "CODER"
 description: "Replace immutable numeric first-line adapter with original typed ownership, native units/proportions/auto/UNO contracts and independent native history; migrate all current authors and preserve existing integer browser records, inventory history and IO exceptions. Third correction after N337G1; related current whole modules coverage100 only, full run after ten and then requested pause."
 sections:
@@ -154,6 +165,10 @@ sections:
     - Observation: Post-retirement lint found one newly unused first-line Which import; original constructor-related pass14186cases remains recorded but source maps cannot certify later runtime changes. Final source review also found native first-line absolute PutValue directly assigns member and percentage100, whereas the port delegated through its typed setter.
       Impact: Remove unused binding. Align the native absolute mutation path with original owner operations and keep auto/member-reference/percentage-reset behavior explicit, rather than normalizing it to the right-margin setter path.
       Resolution: Removed the unused import and changed only approved native absolute first-line branch to direct stable-member assignment plus percentage100. Added two meaningful native public contract cases for relative-unit replacement, stable borrowed member, auto preservation and percentage reset. Final related whole ten-module source must be revalidated for this genuine native code change; no passing replay for helper/type-only repair.
+extensions:
+  implementation_commit:
+    hash: "064cdbc517e4fe88655b86d045ba746a68912ff1"
+    message: "🧩 P5FPXY writer: restore native first-line indent ownership"
 id_source: "generated"
 ---
 ## Summary
