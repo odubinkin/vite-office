@@ -1,4 +1,5 @@
 /** @fileoverview Verifies original frame-only print normalization and source native column history. */
+import { SvxIndentValue } from "../../../../editeng/inc/lrspitem";
 import { expect, it, vi } from "vitest";
 import { createWriterDocumentSession } from "../../../browser/composition/writer-module";
 import { SwFrameFormat } from "../layout/atrfrm";
@@ -60,8 +61,8 @@ it.each([
       size.SetHeightPercent(37);
       size.SetHeightPercentRelation(4);
       const lr = new SvxLRSpaceItem(RES_LR_SPACE);
-      lr.SetLeft(0, 80);
-      lr.SetRight(0, 90);
+      lr.SetLeft(SvxIndentValue.twips(0), 80);
+      lr.SetRight(SvxIndentValue.twips(0), 90);
       lr.SetAutoFirst(true);
       lr.SetPropTextFirstLineOffset(70);
       lr.SetGutterMargin(75);

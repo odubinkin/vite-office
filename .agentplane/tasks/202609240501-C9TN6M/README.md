@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 314
+revision: 315
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-10T01:03:24.105Z"
+doc_updated_at: "2026-10-10T01:42:22.908Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -1439,6 +1439,8 @@ sections:
     - Observation: SSWV67 correction8/10 eliminates outgoing scalar table top/bottom spacing and preserves original complete native UL item through existing browser codec/pool. Independent nativeSpacing presence marker retains oldgeometry/scalar ingress and explicit new direct absence/authoring precedence.
       Impact: Five fields survive graph/JSON/Worker and mounted restoration plus3native owner/cursor history cycles without inverse/private-field adapters.1746related119files20fresh24Chromium first-attempt all pass; two entire current modules actual Istanbul100all-four277lines298statements49functions374branches, complete maps/current hashes/zero negatives.
       Resolution: All649old testfiles byte-identical, fourcanonical historical prefixes/default statuses/classifications preserved and new restoreTableSpacing ownership recorded accurately. Nine upstream-absent TS7/static/build/browser and9restored metadata gates pass, doctor2oldwarnings unchanged. Broad goalactive/incomplete8/10; full after10, no automatic cadence pause. NativeLR/sharedinherited/general UI/layout/filter remain pending; bounded English evidence, exact-SHA non-independent review follows.
+
+    Progress3YQP1C: native LR typed SvxIndentValue/SvxFontUnitMetrics/21MeasureUnit restored under original owners; independent native copy, double units and signed casts, uint16 proportions, font-pair13..15, metric scaling, stable const member references and by-value argument/copy semantics. Three production callers author native twips; no browser/private-field/inverse adapter. Native final1145/1145cases85direct files36fresh, earlier real cast3906/3906cases366files; whole five modules actual Istanbul100834lines925statements136functions730branches, zero negative counters/complete stable current runtime source maps. Exact10oldtest typed/raw observer migrations preserve accepted contexts/siblings, only3explicit source-backed previously omitted pair expectations updated. Tencanonical records retain old history/status/IO deviations. Task202610100109-3YQP1C current progress9/10afterBZQGYC; full due after tenth, goal remains active/incomplete. Static/browser/metadata gates and exact-SHA close follow; native LR full transport and broad Writer/UI parity remain incomplete.
 id_source: "generated"
 ---
 ## Summary
@@ -2851,3 +2853,5 @@ VerificationYCZ38R:519 unique current-source related cases87files and20fresh pas
 - Observation: SSWV67 correction8/10 eliminates outgoing scalar table top/bottom spacing and preserves original complete native UL item through existing browser codec/pool. Independent nativeSpacing presence marker retains oldgeometry/scalar ingress and explicit new direct absence/authoring precedence.
   Impact: Five fields survive graph/JSON/Worker and mounted restoration plus3native owner/cursor history cycles without inverse/private-field adapters.1746related119files20fresh24Chromium first-attempt all pass; two entire current modules actual Istanbul100all-four277lines298statements49functions374branches, complete maps/current hashes/zero negatives.
   Resolution: All649old testfiles byte-identical, fourcanonical historical prefixes/default statuses/classifications preserved and new restoreTableSpacing ownership recorded accurately. Nine upstream-absent TS7/static/build/browser and9restored metadata gates pass, doctor2oldwarnings unchanged. Broad goalactive/incomplete8/10; full after10, no automatic cadence pause. NativeLR/sharedinherited/general UI/layout/filter remain pending; bounded English evidence, exact-SHA non-independent review follows.
+
+Progress3YQP1C: native LR typed SvxIndentValue/SvxFontUnitMetrics/21MeasureUnit restored under original owners; independent native copy, double units and signed casts, uint16 proportions, font-pair13..15, metric scaling, stable const member references and by-value argument/copy semantics. Three production callers author native twips; no browser/private-field/inverse adapter. Native final1145/1145cases85direct files36fresh, earlier real cast3906/3906cases366files; whole five modules actual Istanbul100834lines925statements136functions730branches, zero negative counters/complete stable current runtime source maps. Exact10oldtest typed/raw observer migrations preserve accepted contexts/siblings, only3explicit source-backed previously omitted pair expectations updated. Tencanonical records retain old history/status/IO deviations. Task202610100109-3YQP1C current progress9/10afterBZQGYC; full due after tenth, goal remains active/incomplete. Static/browser/metadata gates and exact-SHA close follow; native LR full transport and broad Writer/UI parity remain incomplete.

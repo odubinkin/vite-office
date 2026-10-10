@@ -1,4 +1,5 @@
 /** @fileoverview Adapts xmloff table SAX callbacks to canonical Writer SwTable sections, following pinned xmltbli.cxx. */
+import { SvxIndentValue } from "../../../../editeng/inc/lrspitem";
 import { SwFormatVertOrient } from "../../../inc/fmtornt";
 import { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
 import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
@@ -58,8 +59,8 @@ export class SwXMLTableImport extends SvXMLImport {
     const hasMargins = style.marginLeft !== undefined || style.marginRight !== undefined;
     if (hasMargins) {
       const item = frameFormat.GetLRSpace().Clone();
-      item.SetLeft(style.marginLeft ?? 0);
-      item.SetRight(style.marginRight ?? 0);
+      item.SetLeft(SvxIndentValue.twips(style.marginLeft ?? 0));
+      item.SetRight(SvxIndentValue.twips(style.marginRight ?? 0));
       frameFormat.SetFormatAttr(item);
     }
     if (style.align !== undefined) {

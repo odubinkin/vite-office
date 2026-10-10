@@ -1,0 +1,25 @@
+/** @fileoverview Defines pinned MeasureUnit IDL identifiers, including native twip/em/ic indentation units. */
+/** Native published measurement identifiers. */
+export const MeasureUnit = Object.freeze({
+  MM_100TH: 0,
+  MM_10TH: 1,
+  MM: 2,
+  CM: 3,
+  INCH_1000TH: 4,
+  INCH_100TH: 5,
+  INCH_10TH: 6,
+  INCH: 7,
+  POINT: 8,
+  TWIP: 9,
+  M: 10,
+  KM: 11,
+  PICA: 12,
+  FOOT: 13,
+  MILE: 14,
+  PERCENT: 15,
+  PIXEL: 16,
+  APPFONT: 17,
+  SYSFONT: 18,
+  FONT_EM: 19,
+  FONT_CJK_ADVANCE: 20,
+});

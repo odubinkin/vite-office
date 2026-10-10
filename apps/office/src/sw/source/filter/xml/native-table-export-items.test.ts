@@ -1,4 +1,5 @@
 /** @fileoverview Verifies original direct table item admission and native LR orientation guards in actual ODT export. */
+import { SvxIndentValue } from "../../../../editeng/inc/lrspitem";
 import { expect, it, vi } from "vitest";
 import { SwDoc } from "../../core/doc/doc";
 import { SwFrameFormat } from "../../core/layout/atrfrm";
@@ -52,8 +53,8 @@ it.each([
   ) => {
     const f = fixture(),
       lr = new SvxLRSpaceItem(98);
-    lr.SetLeft(120);
-    lr.SetRight(240);
+    lr.SetLeft(SvxIndentValue.twips(120));
+    lr.SetRight(SvxIndentValue.twips(240));
     f.format.SetFormatAttr(lr);
     f.format.SetFormatAttr(new SwFormatHoriOrient(0, orient));
     const projection = vi.spyOn(f.table, "GetFormat");
@@ -87,8 +88,8 @@ it.each([false, true])(
         parent.SetFormatAttr(new SwFormatLayoutSplit(false));
         parent.SetFormatAttr(new SfxBoolItem(132, true));
         const lr = new SvxLRSpaceItem(98);
-        lr.SetLeft(360);
-        lr.SetRight(480);
+        lr.SetLeft(SvxIndentValue.twips(360));
+        lr.SetRight(SvxIndentValue.twips(480));
         parent.SetFormatAttr(lr);
       }
       const projection = vi.spyOn(f.table, "GetFormat");
@@ -118,8 +119,8 @@ it.each([false, true])(
       f.format.SetDerivedFrom(parent);
       f.format.ResetFormatAttr(110);
       if (inherited) parent.SetFormatAttr(new SwFormatHoriOrient(0, H.NONE));
-      lr.SetLeft(120);
-      lr.SetRight(240);
+      lr.SetLeft(SvxIndentValue.twips(120));
+      lr.SetRight(SvxIndentValue.twips(240));
       f.format.SetFormatAttr(lr);
       const attrs = properties(f.doc);
       expect(attrs).not.toContain("table:align");

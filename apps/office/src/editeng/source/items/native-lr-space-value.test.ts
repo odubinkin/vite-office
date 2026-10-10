@@ -1,4 +1,5 @@
 /** @fileoverview Verifies pinned native LR UNO twip members, aggregate ordering, integer admission and proportion metadata without reference execution. */
+import { SvxIndentValue } from "../../inc/lrspitem";
 import { expect, it } from "vitest";
 import { SvxLRSpaceItem } from "./frmitems";
 
@@ -18,17 +19,17 @@ function scale() {
 
 it("aggregate applies source order to existing hanging margin and retains metadata without scaling twice", /** Observes all original fields and aggregate readback. @returns Nothing. */ () => {
   const item = new SvxLRSpaceItem(98);
-  item.SetTextLeft(400);
-  item.SetTextFirstLineOffset(-60);
+  item.SetTextLeft(SvxIndentValue.twips(400));
+  item.SetTextFirstLineOffset(SvxIndentValue.twips(-60));
   item.SetGutterMargin(41);
   item.SetRightGutterMargin(73);
   expect(item.PutValue(scale())).toBe(true);
   expect(item.QueryValue()).toEqual({ ...scale(), Left: 600 });
   expect([
-    item.GetLeft(),
-    item.GetTextLeft(),
-    item.GetRight(),
-    item.GetTextFirstLineOffset(),
+    item.GetLeft().m_dValue,
+    item.GetTextLeft().m_dValue,
+    item.GetRight().m_dValue,
+    item.GetTextFirstLineOffset().m_dValue,
     item.GetPropLeft(),
     item.GetPropRight(),
     item.GetPropTextFirstLineOffset(),
@@ -39,8 +40,8 @@ it("aggregate applies source order to existing hanging margin and retains metada
   expect(item.PutValue(0, 6)).toBe(true);
   expect(item.PutValue(65534, 7)).toBe(true);
   expect([
-    item.GetLeft(),
-    item.GetRight(),
+    item.GetLeft().m_dValue,
+    item.GetRight().m_dValue,
     item.GetPropLeft(),
     item.GetPropRight(),
     item.QueryValue(7),
@@ -134,9 +135,9 @@ it.each([
 
 it("individual queries convert original double metrics before rounding while the aggregate resolves twips first", /** Distinguishes source double and resolved contracts. @returns Nothing. */ () => {
   const item = new SvxLRSpaceItem(98);
-  item.SetLeft(-3, 50);
-  item.SetRight(3, 50);
-  item.SetTextFirstLineOffset(3, 50);
+  item.SetLeft(SvxIndentValue.twips(-3), 50);
+  item.SetRight(SvxIndentValue.twips(3), 50);
+  item.SetTextFirstLineOffset(SvxIndentValue.twips(3), 50);
   expect([item.QueryValue(4), item.QueryValue(5), item.QueryValue(8), item.QueryValue(11)]).toEqual(
     [-2, 2, 2, -2],
   );
@@ -147,7 +148,7 @@ it("individual queries convert original double metrics before rounding while the
     item.QueryValue(11 | 0x80),
   ]).toEqual([-3, 3, 3, -3]);
   expect(item.QueryValue(0x80)).toMatchObject({ Left: -4, TextLeft: -4, Right: 4, FirstLine: 4 });
-  item.SetTextFirstLineOffset(-3, 50);
+  item.SetTextFirstLineOffset(SvxIndentValue.twips(-3), 50);
   expect(item.QueryValue(11)).toBe(-2);
   expect(item.QueryValue(8 | 0x80)).toBe(-3);
 });
@@ -173,11 +174,11 @@ it.each([6, 7])(
     member,
   ) => {
     const item = new SvxLRSpaceItem(98);
-    item.SetLeft(51, 50);
-    item.SetRight(-51, 50);
+    item.SetLeft(SvxIndentValue.twips(51), 50);
+    item.SetRight(SvxIndentValue.twips(-51), 50);
     expect(item.PutValue(32768, member | 0x80)).toBe(true);
     expect(item.QueryValue(member | 0x80)).toBe(-32768);
-    expect([item.GetLeft(), item.GetRight()]).toEqual([25.5, -25.5]);
+    expect([item.GetLeft().m_dValue, item.GetRight().m_dValue]).toEqual([25.5, -25.5]);
     for (const value of [-1, 65535, 65536]) {
       const before = item.Clone();
       expect(item.PutValue(value, member)).toBe(false);
@@ -229,16 +230,18 @@ it.each(["1", 1.5, NaN, Infinity, -2147483649, 2147483648])(
 );
 
 it.each([1, 13, 14, 15, 127])(
-  "unsupported/font-unit member%s remains explicit and does not mutate",
-  /** Rejects omitted native font-unit scope. @param member - Member identity. @returns Nothing. */ (
+  "native font-unit member%s admits its pair while unknown members do not mutate",
+  /** Preserves native pair support and unknown-member rejection. @param member - Member identity. @returns Nothing. */ (
     member,
   ) => {
     const item = new SvxLRSpaceItem(98),
       before = item.Clone();
     expect(item.QueryValue(member)).toBeUndefined();
     expect(item.PutValue(1, member)).toBe(false);
-    expect(item.PutValue({ First: 1, Second: 17 }, member)).toBe(false);
-    expect(item.equals(before)).toBe(true);
+    const supported = member === 13 || member === 14 || member === 15;
+    expect(item.PutValue({ First: 1, Second: 17 }, member)).toBe(supported);
+    expect(item.equals(before)).toBe(!supported);
+    if (supported) expect(item.QueryValue(member)).toEqual({ First: 1, Second: 17 });
   },
 );
 

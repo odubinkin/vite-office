@@ -1,4 +1,5 @@
 /** @fileoverview Verifies original LR item fields, signed layout/proportion/zero contracts and independent clone equality. */
+import { SvxIndentValue } from "../../inc/lrspitem";
 import { expect, it } from "vitest";
 import { SvxLRSpaceItem, SvxULSpaceItem, SvxBoxItem } from "./frmitems";
 import { RES_LR_SPACE } from "../../../sw/inc/hintids";
@@ -15,53 +16,53 @@ it("original LR defaults, signed proportions, hanging text origin and sticky zer
     AutoFirstLine: false,
   });
   expect([
-    item.GetLeft(),
-    item.GetRight(),
-    item.GetTextLeft(),
-    item.GetTextFirstLineOffset(),
+    item.GetLeft().m_dValue,
+    item.GetRight().m_dValue,
+    item.GetTextLeft().m_dValue,
+    item.GetTextFirstLineOffset().m_dValue,
     item.GetGutterMargin(),
     item.GetRightGutterMargin(),
     item.IsExplicitZeroMarginValLeft(),
     item.IsExplicitZeroMarginValRight(),
   ]).toEqual([0, 0, 0, 0, 0, 0, false, false]);
-  item.SetLeft(-15, 50);
-  item.SetRight(15, 50);
+  item.SetLeft(SvxIndentValue.twips(-15), 50);
+  item.SetRight(SvxIndentValue.twips(15), 50);
   expect([
-    item.GetLeft(),
+    item.GetLeft().m_dValue,
     item.ResolveLeft(),
-    item.GetRight(),
+    item.GetRight().m_dValue,
     item.ResolveRight(),
     item.GetPropLeft(),
     item.GetPropRight(),
   ]).toEqual([-7.5, -8, 7.5, 8, 50, 50]);
-  item.SetTextLeft(720);
-  item.SetTextFirstLineOffset(-120);
+  item.SetTextLeft(SvxIndentValue.twips(720));
+  item.SetTextFirstLineOffset(SvxIndentValue.twips(-120));
   expect([
     item.ResolveLeft(),
-    item.GetTextLeft(),
+    item.GetTextLeft().m_dValue,
     item.ResolveTextLeft(),
-    item.GetTextFirstLineOffset(),
+    item.GetTextFirstLineOffset().m_dValue,
     item.ResolveTextFirstLineOffset(),
   ]).toEqual([600, 720, 720, -120, -120]);
-  item.SetTextFirstLineOffset(-60, 50);
+  item.SetTextFirstLineOffset(SvxIndentValue.twips(-60), 50);
   expect(item.ResolveLeft()).toBe(690);
-  item.SetTextLeft(500, 80);
+  item.SetTextLeft(SvxIndentValue.twips(500), 80);
   expect(item.ResolveLeft()).toBe(370);
-  item.SetTextFirstLineOffset(30, 200);
+  item.SetTextFirstLineOffset(SvxIndentValue.twips(30), 200);
   expect([
     item.ResolveLeft(),
-    item.GetTextLeft(),
+    item.GetTextLeft().m_dValue,
     item.ResolveTextFirstLineOffset(),
     item.GetPropTextFirstLineOffset(),
   ]).toEqual([400, 400, 60, 200]);
   item.SetPropTextFirstLineOffset(75);
   expect(item.GetPropTextFirstLineOffset()).toBe(75);
-  item.SetLeft(0);
+  item.SetLeft(SvxIndentValue.twips(0));
   expect(item.IsExplicitZeroMarginValLeft()).toBe(false);
-  item.SetTextLeft(0);
-  item.SetRight(0);
-  item.SetTextLeft(72);
-  item.SetRight(-72);
+  item.SetTextLeft(SvxIndentValue.twips(0));
+  item.SetRight(SvxIndentValue.twips(0));
+  item.SetTextLeft(SvxIndentValue.twips(72));
+  item.SetRight(SvxIndentValue.twips(-72));
   expect([item.IsExplicitZeroMarginValLeft(), item.IsExplicitZeroMarginValRight()]).toEqual([
     true,
     true,
@@ -88,7 +89,7 @@ it("original LR defaults, signed proportions, hanging text origin and sticky zer
   ]).toEqual([41, 73, 75, true, true]);
   clone.SetExplicitZeroMarginValLeft(false);
   clone.SetExplicitZeroMarginValRight(false);
-  clone.SetLeft(33);
+  clone.SetLeft(SvxIndentValue.twips(33));
   expect(item.ResolveLeft()).toBe(72);
   expect(item.equals(new SvxULSpaceItem(0, 0, 98))).toBe(false);
   expect(item.equals(new SvxLRSpaceItem(99))).toBe(false);
@@ -114,20 +115,20 @@ it.each([
       clone = item.Clone();
     switch (field) {
       case "left":
-        clone.SetLeft(1);
+        clone.SetLeft(SvxIndentValue.twips(1));
         break;
       case "right":
-        clone.SetRight(1);
+        clone.SetRight(SvxIndentValue.twips(1));
         break;
       case "first":
-        clone.SetTextFirstLineOffset(1);
+        clone.SetTextFirstLineOffset(SvxIndentValue.twips(1));
         break;
       case "propLeft":
-        clone.SetLeft(0, 50);
+        clone.SetLeft(SvxIndentValue.twips(0), 50);
         break;
       case "propRight":
-        clone.SetRight(1, 50);
-        item.SetRight(0.5);
+        clone.SetRight(SvxIndentValue.twips(1), 50);
+        item.SetRight(SvxIndentValue.twips(0.5));
         break;
       case "propFirst":
         clone.SetPropTextFirstLineOffset(50);

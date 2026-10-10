@@ -1,4 +1,5 @@
 /** @fileoverview Verifies original LR pool/direct/inherited table ownership and effective layout/representation/ODT without scalar replay. */
+import { SvxIndentValue } from "../../../../editeng/inc/lrspitem";
 import { expect, it, vi } from "vitest";
 import { SwDoc } from "../doc/doc";
 import { SvxLRSpaceItem } from "../../../../editeng/source/items/frmitems";
@@ -26,8 +27,8 @@ it.each([false, true])(
       item = new SvxLRSpaceItem(98);
     table.AddColumnWidth(3000);
     doc.nodes.AppendTableRow(table, 1);
-    item.SetLeft(-120);
-    item.SetRight(240);
+    item.SetLeft(SvxIndentValue.twips(-120));
+    item.SetRight(SvxIndentValue.twips(240));
     item.SetGutterMargin(41);
     item.SetAutoFirst(true);
     const frame = new SwTabFrame(table);
@@ -100,7 +101,7 @@ it("native SetTabCols clones complete LR context onto original frame", /** Check
   before.SetGutterMargin(41);
   before.SetRightGutterMargin(73);
   before.SetAutoFirst(true);
-  before.SetTextFirstLineOffset(20);
+  before.SetTextFirstLineOffset(SvxIndentValue.twips(20));
   before.SetPropTextFirstLineOffset(80);
   format.SetFormatAttr(before);
   const old = new SwTabCols();
@@ -120,7 +121,7 @@ it("native SetTabCols clones complete LR context onto original frame", /** Check
       format.GetLRSpace().ResolveRight(),
       format.GetLRSpace().GetGutterMargin(),
       format.GetLRSpace().GetRightGutterMargin(),
-      format.GetLRSpace().GetTextFirstLineOffset(),
+      format.GetLRSpace().GetTextFirstLineOffset().m_dValue,
       format.GetLRSpace().GetPropTextFirstLineOffset(),
       format.GetLRSpace().IsAutoFirst(),
     ]).toEqual([120, 2760, 41, 73, 20, 80, true]);

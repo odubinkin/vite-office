@@ -1,12 +1,85 @@
-/** @fileoverview Owns the native LR item declared by include/editeng/lrspitem.hxx and implemented in editeng/source/items/frmitems.cxx; font-relative indent values remain unrepresented. */
+/** @fileoverview Owns the native LR item declared by include/editeng/lrspitem.hxx and implemented in editeng/source/items/frmitems.cxx; typed twip/font-relative indentation, native copy and represented UNO values retain source behavior. */
 import { SfxPoolItem } from "../../svl/source/items/poolitem";
+import { MeasureUnit } from "../../offapi/com/sun/star/util/MeasureUnit";
 import { roundBorderMetric } from "../source/items/borderline";
+
+/** Resolves original em/ic units with native zero/uninitialized defaults. */
+export class SvxFontUnitMetrics {
+  public m_dEmTwips = 0;
+  public m_dIcTwips = 0;
+  public m_bInitialized = false;
+  /** Creates native default metrics. @returns Nothing. */
+  public constructor();
+  /** Creates initialized font metrics. @param em - Em twips. @param ic - CJK advance twips. @returns Nothing. */
+  public constructor(em: number, ic: number);
+  /** Stores native font metrics. @param em - Optional em twips. @param ic - Optional CJK advance. @returns Nothing. */
+  public constructor(em?: number, ic?: number) {
+    if (em !== undefined) {
+      this.m_dEmTwips = em;
+      this.m_dIcTwips = ic as number;
+      this.m_bInitialized = true;
+    }
+  }
+}
+/** Original indentation measure with explicit native unit and no default constructor. */
+export class SvxIndentValue {
+  /** Stores a native double and signed16 unit. @param m_dValue - Original measure. @param m_nUnit - Native unit. @returns Nothing. */
+  public constructor(
+    public m_dValue: number,
+    public m_nUnit: number,
+  ) {
+    this.m_nUnit = (m_nUnit << 16) >> 16;
+  }
+  /** Creates native twips. @param value - Original double. @returns Native measure. */
+  public static twips(value: number): SvxIndentValue {
+    return new SvxIndentValue(value, MeasureUnit.TWIP);
+  }
+  /** Creates native zero twips. @returns Native measure. */
+  public static zero(): SvxIndentValue {
+    return SvxIndentValue.twips(0);
+  }
+  /** Resolves native twip/em/ic doubles; unsupported units produce source zero. @param metrics - Original font context. @returns Resolved twips. */
+  public ResolveDouble(metrics: SvxFontUnitMetrics): number {
+    if (this.m_nUnit === MeasureUnit.TWIP) return this.m_dValue;
+    switch (this.m_nUnit) {
+      case MeasureUnit.FONT_EM:
+        return this.m_dValue * metrics.m_dEmTwips;
+      case MeasureUnit.FONT_CJK_ADVANCE:
+        return this.m_dValue * metrics.m_dIcTwips;
+      default:
+        return 0;
+    }
+  }
+  /** Resolves with native signed rounding. @param metrics - Font context. @returns Integer twips. */
+  public Resolve(metrics: SvxFontUnitMetrics): number {
+    return roundBorderMetric(this.ResolveDouble(metrics), 1) | 0;
+  }
+  /** Resolves only absolute twips. @returns Fixed part. */
+  public ResolveFixedPart(): number {
+    return this.m_nUnit === MeasureUnit.TWIP ? this.Resolve(new SvxFontUnitMetrics()) : 0;
+  }
+  /** Resolves only font-relative part. @param metrics - Font context. @returns Variable part. */
+  public ResolveVariablePart(metrics: SvxFontUnitMetrics): number {
+    return this.m_nUnit === MeasureUnit.TWIP ? 0 : this.Resolve(metrics);
+  }
+  /** Scales the native stored double without changing unit. @param scale - Factor. @returns Nothing. */
+  public ScaleMetrics(scale: number): void {
+    this.m_dValue *= scale;
+  }
+  /** Compares original native fields. @param other - Candidate measure. @returns Value equality. */
+  public equals(other: ConstIndentValue): boolean {
+    return this.m_dValue === other.m_dValue && this.m_nUnit === other.m_nUnit;
+  }
+}
+
+/** Native const-reference type excludes the mutating metric method while retaining original resolution/value operations. */
+type ConstIndentValue = Readonly<Omit<SvxIndentValue, "ScaleMetrics">>;
 
 /** Original LR frame spacing item, retaining native context and signed twip layout values. */
 export class SvxLRSpaceItem extends SfxPoolItem {
-  private left = 0;
-  private right = 0;
-  private firstLine = 0;
+  private m_stLeftMargin = SvxIndentValue.zero();
+  private m_stRightMargin = SvxIndentValue.zero();
+  private m_stFirstLineOffset = SvxIndentValue.zero();
   private propLeft = 100;
   private propRight = 100;
   private propFirstLine = 100;
@@ -15,40 +88,81 @@ export class SvxLRSpaceItem extends SfxPoolItem {
   private autoFirst = false;
   private explicitLeft = false;
   private explicitRight = false;
-  /** Creates original zero margins,100 proportions and false flags. @param which - Native identity. @returns Nothing. */
-  public constructor(which: number) {
-    super(which);
+  /** Creates original defaults or an independent native copy.
+   * @param source - Native identity or original LR item.
+   * @returns Nothing. */
+  public constructor(source: number | SvxLRSpaceItem);
+  /** Creates native layout values with source constructor setter order. @param left - Layout left. @param right - Right measure. @param first - First-line measure. @param which - Identity. @returns Nothing. */
+  public constructor(
+    left: ConstIndentValue,
+    right: ConstIndentValue,
+    first: ConstIndentValue,
+    which: number,
+  );
+  /** Initializes native default/value/copy constructor state. @param source - Identity, original item or left measure. @param right - Optional right. @param first - Optional first line. @param which - Value constructor identity. @returns Nothing. */
+  public constructor(
+    source: number | SvxLRSpaceItem | ConstIndentValue,
+    right?: ConstIndentValue,
+    first?: ConstIndentValue,
+    which?: number,
+  ) {
+    super(
+      typeof source === "number"
+        ? source
+        : source instanceof SvxLRSpaceItem
+          ? source.Which()
+          : (which as number),
+    );
+    if (source instanceof SvxLRSpaceItem) {
+      Object.assign(this, source);
+      this.m_stLeftMargin = new SvxIndentValue(
+        source.m_stLeftMargin.m_dValue,
+        source.m_stLeftMargin.m_nUnit,
+      );
+      this.m_stRightMargin = new SvxIndentValue(
+        source.m_stRightMargin.m_dValue,
+        source.m_stRightMargin.m_nUnit,
+      );
+      this.m_stFirstLineOffset = new SvxIndentValue(
+        source.m_stFirstLineOffset.m_dValue,
+        source.m_stFirstLineOffset.m_nUnit,
+      );
+    } else if (typeof source !== "number") {
+      this.SetLeft(source);
+      this.SetRight(right as ConstIndentValue);
+      this.SetTextFirstLineOffset(first as ConstIndentValue);
+    }
   }
   /** Sets layout left, without altering first-line context or explicit-left flag. @param value - Twips. @param proportion - Native percentage. @returns Nothing. */
-  public SetLeft(value: number, proportion = 100): void {
-    this.left = (value * proportion) / 100;
-    this.propLeft = proportion;
+  public SetLeft(value: ConstIndentValue, proportion = 100): void {
+    this.propLeft = proportion & 0xffff;
+    Object.assign(this.m_stLeftMargin, { m_dValue: value.m_dValue, m_nUnit: value.m_nUnit });
+    if (this.propLeft !== 100)
+      this.m_stLeftMargin.m_dValue = (value.m_dValue * this.propLeft) / 100;
   }
   /** Sets signed right and sticky explicit-zero flag. @param value - Twips. @param proportion - Native percentage. @returns Nothing. */
-  public SetRight(value: number, proportion = 100): void {
-    if (value === 0) this.explicitRight = true;
-    this.right = (value * proportion) / 100;
-    this.propRight = proportion;
+  public SetRight(value: ConstIndentValue, proportion = 100): void {
+    if (value.m_dValue === 0) this.explicitRight = true;
+    this.propRight = proportion & 0xffff;
+    Object.assign(this.m_stRightMargin, { m_dValue: value.m_dValue, m_nUnit: value.m_nUnit });
+    if (this.propRight !== 100)
+      this.m_stRightMargin.m_dValue = (value.m_dValue * this.propRight) / 100;
   }
   /** Reads the native stored left twip measure. @returns Measure. */
-  public GetLeft(): number {
-    return this.left;
+  public GetLeft(): ConstIndentValue {
+    return this.m_stLeftMargin;
   }
   /** Reads the native stored right twip measure. @returns Measure. */
-  public GetRight(): number {
-    return this.right;
+  public GetRight(): ConstIndentValue {
+    return this.m_stRightMargin;
   }
   /** Resolves native signed left twips. @returns Twips. */
   public ResolveLeft(): number {
-    return this.Resolve(this.left);
+    return this.m_stLeftMargin.Resolve(new SvxFontUnitMetrics());
   }
-  /** Resolves native signed right twips. @returns Twips. */
-  public ResolveRight(): number {
-    return this.Resolve(this.right);
-  }
-  /** Resolves represented native signed rounding. @param value - Twip measure. @returns Rounded twips. */
-  private Resolve(value: number): number {
-    return value < 0 ? -Math.round(-value) : Math.round(value);
+  /** Resolves native signed right twips. @param metrics - Native font context; prior empty context remains the default. @returns Twips. */
+  public ResolveRight(metrics = new SvxFontUnitMetrics()): number {
+    return this.m_stRightMargin.Resolve(metrics);
   }
   /** Reads left proportion. @returns Percentage. */
   public GetPropLeft(): number {
@@ -83,37 +197,59 @@ export class SvxLRSpaceItem extends SfxPoolItem {
     this.explicitRight = value;
   }
   /** Sets text left and includes an existing hanging first-line offset. @param value - Twips. @param proportion - Percentage. @returns Nothing. */
-  public SetTextLeft(value: number, proportion = 100): void {
-    if (value === 0) this.explicitLeft = true;
+  public SetTextLeft(value: ConstIndentValue, proportion = 100): void {
+    if (value.m_dValue === 0) this.explicitLeft = true;
     this.SetLeft(value, proportion);
-    if (this.firstLine < 0) this.left = this.ResolveLeft() + this.ResolveTextFirstLineOffset();
+    if (this.m_stFirstLineOffset.m_dValue < 0)
+      Object.assign(
+        this.m_stLeftMargin,
+        SvxIndentValue.twips(this.ResolveLeft() + this.ResolveTextFirstLineOffset()),
+      );
   }
   /** Reads text left without its hanging first-line offset. @returns Twip measure. */
-  public GetTextLeft(): number {
-    return this.firstLine < 0 ? this.ResolveLeft() - this.ResolveTextFirstLineOffset() : this.left;
+  public GetTextLeft(): SvxIndentValue {
+    return this.m_stFirstLineOffset.m_dValue < 0
+      ? SvxIndentValue.twips(this.ResolveLeft() - this.ResolveTextFirstLineOffset())
+      : new SvxIndentValue(this.m_stLeftMargin.m_dValue, this.m_stLeftMargin.m_nUnit);
   }
-  /** Resolves signed text-left twips. @returns Twips. */
-  public ResolveTextLeft(): number {
-    return this.Resolve(this.GetTextLeft());
+  /** Resolves signed text-left twips. @param metrics - Native font context; prior empty context remains the default. @returns Twips. */
+  public ResolveTextLeft(metrics = new SvxFontUnitMetrics()): number {
+    return this.m_stFirstLineOffset.m_dValue < 0
+      ? this.m_stLeftMargin.Resolve(metrics) - this.ResolveTextFirstLineOffset(metrics)
+      : this.m_stLeftMargin.Resolve(metrics);
   }
   /** Changes first line while preserving the previous text-left origin. @param value - Twips. @param proportion - Percentage. @returns Nothing. */
-  public SetTextFirstLineOffset(value: number, proportion = 100): void {
-    if (this.firstLine < 0) this.left = this.ResolveLeft() - this.ResolveTextFirstLineOffset();
-    this.firstLine = (value * proportion) / 100;
-    this.propFirstLine = proportion;
-    if (this.firstLine < 0) this.left = this.ResolveLeft() + this.ResolveTextFirstLineOffset();
+  public SetTextFirstLineOffset(value: ConstIndentValue, proportion = 100): void {
+    const original = new SvxIndentValue(value.m_dValue, value.m_nUnit);
+    if (this.m_stFirstLineOffset.m_dValue < 0)
+      Object.assign(
+        this.m_stLeftMargin,
+        SvxIndentValue.twips(this.ResolveLeft() - this.ResolveTextFirstLineOffset()),
+      );
+    this.propFirstLine = proportion & 0xffff;
+    Object.assign(this.m_stFirstLineOffset, {
+      m_dValue: original.m_dValue,
+      m_nUnit: original.m_nUnit,
+    });
+    if (this.propFirstLine !== 100)
+      this.m_stFirstLineOffset.m_dValue = (original.m_dValue * this.propFirstLine) / 100;
+    if (this.m_stFirstLineOffset.m_dValue < 0)
+      Object.assign(
+        this.m_stLeftMargin,
+        SvxIndentValue.twips(this.ResolveLeft() + this.ResolveTextFirstLineOffset()),
+      );
   }
   /** Reads first-line measure. @returns Measure. */
-  public GetTextFirstLineOffset(): number {
-    return this.firstLine;
+  public GetTextFirstLineOffset(): ConstIndentValue {
+    return this.m_stFirstLineOffset;
   }
-  /** Resolves signed first-line twips. @returns Twips. */
-  public ResolveTextFirstLineOffset(): number {
-    return this.Resolve(this.firstLine);
+  /** Resolves signed first-line twips. @param metrics - Native font context; prior empty context remains the default. @returns Twips. */
+  public ResolveTextFirstLineOffset(metrics = new SvxFontUnitMetrics()): number {
+    return this.m_stFirstLineOffset.Resolve(metrics);
   }
   /** Sets the independent first-line proportion metadata. @param value - Percentage. @returns Nothing. */
   public SetPropTextFirstLineOffset(value: number): void {
-    this.propFirstLine = value;
+    this.propFirstLine = value & 0xffff;
   }
   /** Reads first-line percentage. @returns Percentage. */
   public GetPropTextFirstLineOffset(): number {
@@ -137,16 +273,16 @@ export class SvxLRSpaceItem extends SfxPoolItem {
   }
   /** Copies all eleven original fields independently. @returns Original item clone. */
   public Clone(): SvxLRSpaceItem {
-    return Object.assign(new SvxLRSpaceItem(this.Which()), this);
+    return new SvxLRSpaceItem(this);
   }
   /** Compares native identity and all context fields. @param other - Candidate. @returns Equality. */
   public equals(other: SfxPoolItem): boolean {
     return (
       other instanceof SvxLRSpaceItem &&
       other.Which() === this.Which() &&
-      this.left === other.left &&
-      this.right === other.right &&
-      this.firstLine === other.firstLine &&
+      this.m_stLeftMargin.equals(other.m_stLeftMargin) &&
+      this.m_stRightMargin.equals(other.m_stRightMargin) &&
+      this.m_stFirstLineOffset.equals(other.m_stFirstLineOffset) &&
       this.propLeft === other.propLeft &&
       this.propRight === other.propRight &&
       this.propFirstLine === other.propFirstLine &&
@@ -163,10 +299,19 @@ export class SvxLRSpaceItem extends SfxPoolItem {
     const metric =
       /** Converts resolved integer twip measures. @param value - Twips. @returns Native measure. */
       (value: number): number =>
-        convert ? Math.trunc((value * 127 + (value >= 0 ? 36 : -36)) / 72) : value;
+        (convert ? Math.trunc((value * 127 + (value >= 0 ? 36 : -36)) / 72) : value) | 0;
     const absolute =
       /** Converts the original double measure before native llround. @param value - Original twips. @returns Rounded UNO integer. */
-      (value: number): number => roundBorderMetric(value, convert ? 127 / 72 : 1);
+      (value: ConstIndentValue): number | undefined =>
+        value.m_nUnit === MeasureUnit.TWIP
+          ? roundBorderMetric(value.m_dValue, convert ? 127 / 72 : 1) | 0
+          : undefined;
+    const relative =
+      /** Returns native double/signed16 pair only for relative units. @param value - Original indent. @returns Pair or unsupported absolute unit. */
+      (value: ConstIndentValue): unknown =>
+        value.m_nUnit === MeasureUnit.TWIP
+          ? undefined
+          : { First: value.m_dValue, Second: value.m_nUnit };
     switch (member & ~0x80) {
       case 0:
         return {
@@ -197,6 +342,12 @@ export class SvxLRSpaceItem extends SfxPoolItem {
         return absolute(this.GetTextLeft());
       case 12:
         return metric(this.GetGutterMargin());
+      case 13:
+        return relative(this.GetTextFirstLineOffset());
+      case 14:
+        return relative(this.GetTextLeft());
+      case 15:
+        return relative(this.GetRight());
       default:
         return undefined;
     }
@@ -228,12 +379,12 @@ export class SvxLRSpaceItem extends SfxPoolItem {
         typeof data.AutoFirstLine !== "boolean"
       )
         return false;
-      this.SetLeft(metric(data.Left as number));
-      this.SetTextLeft(metric(data.TextLeft as number));
-      this.SetRight(metric(data.Right as number));
+      this.SetLeft(SvxIndentValue.twips(metric(data.Left as number)));
+      this.SetTextLeft(SvxIndentValue.twips(metric(data.TextLeft as number)));
+      this.SetRight(SvxIndentValue.twips(metric(data.Right as number)));
       this.propLeft = (data.ScaleLeft as number) & 0xffff;
       this.propRight = (data.ScaleRight as number) & 0xffff;
-      this.SetTextFirstLineOffset(metric(data.FirstLine as number));
+      this.SetTextFirstLineOffset(SvxIndentValue.twips(metric(data.FirstLine as number)));
       this.SetPropTextFirstLineOffset((data.ScaleFirstLine as number) & 0xffff);
       this.SetAutoFirst(data.AutoFirstLine);
       return true;
@@ -242,13 +393,29 @@ export class SvxLRSpaceItem extends SfxPoolItem {
       this.SetAutoFirst(typeof value === "boolean" ? value : integer(value) && value !== 0);
       return true;
     }
+    if (id === 13 || id === 14 || id === 15) {
+      if (value === null || typeof value !== "object" || Array.isArray(value)) return false;
+      const pair = value as Record<string, unknown>;
+      if (
+        typeof pair.First !== "number" ||
+        !integer(pair.Second) ||
+        pair.Second < -32768 ||
+        pair.Second > 32767
+      )
+        return false;
+      const indent = new SvxIndentValue(pair.First, pair.Second);
+      if (id === 13) this.SetTextFirstLineOffset(indent);
+      else if (id === 14) this.SetTextLeft(indent);
+      else this.SetRight(indent);
+      return true;
+    }
     if (!integer(value)) return false;
     switch (id) {
       case 4:
-        this.SetLeft(metric(value));
+        this.SetLeft(SvxIndentValue.twips(metric(value)));
         break;
       case 5:
-        this.SetRight(metric(value));
+        this.SetRight(SvxIndentValue.twips(metric(value)));
         break;
       case 6:
       case 7:
@@ -257,13 +424,13 @@ export class SvxLRSpaceItem extends SfxPoolItem {
         else this.propRight = value;
         break;
       case 8:
-        this.SetTextFirstLineOffset(metric(value));
+        this.SetTextFirstLineOffset(SvxIndentValue.twips(metric(value)));
         break;
       case 9:
         this.SetPropTextFirstLineOffset(value & 0xffff);
         break;
       case 11:
-        this.SetTextLeft(metric(value));
+        this.SetTextLeft(SvxIndentValue.twips(metric(value)));
         break;
       case 12:
         this.SetGutterMargin(metric(value));
@@ -271,6 +438,16 @@ export class SvxLRSpaceItem extends SfxPoolItem {
       default:
         return false;
     }
+    return true;
+  }
+  /** Scales original measures without rescaling proportions, context or gutters. @param scale - Factor. @returns Nothing. */
+  public ScaleMetrics(scale: number): void {
+    this.m_stFirstLineOffset.ScaleMetrics(scale);
+    this.m_stLeftMargin.ScaleMetrics(scale);
+    this.m_stRightMargin.ScaleMetrics(scale);
+  }
+  /** Reports native metric support. @returns Always true. */
+  public HasMetrics(): boolean {
     return true;
   }
 }

@@ -1,4 +1,5 @@
 /** @fileoverview Verifies mounted original direct/inherited LR margins, native dialog history and real signed ODT cycles. */
+import { SvxIndentValue } from "../../../editeng/inc/lrspitem";
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { expect, it, vi } from "vitest";
 import { createWriterDocumentSession } from "../composition/writer-module";
@@ -35,8 +36,8 @@ it.each([false, true])(
       node.SetText("Original LR cell");
       shell.FocusNode(node);
       const before = new SvxLRSpaceItem(98);
-      before.SetLeft(120);
-      before.SetRight(240);
+      before.SetLeft(SvxIndentValue.twips(120));
+      before.SetRight(SvxIndentValue.twips(240));
       let source = format;
       if (inherited) {
         source = parent;
@@ -65,7 +66,7 @@ it.each([false, true])(
         act(
           /** Publishes original effective LR. @returns Nothing. */ () => {
             const item = source.GetLRSpace().Clone();
-            item.SetLeft(-120);
+            item.SetLeft(SvxIndentValue.twips(-120));
             source.SetFormatAttr(item);
           },
         );
@@ -105,8 +106,8 @@ it.each([false, true])(
         expect(node.GetText()).toBe("Original LR cell");
       }
       const signed = after.Clone();
-      signed.SetLeft(-120);
-      signed.SetRight(240);
+      signed.SetLeft(SvxIndentValue.twips(-120));
+      signed.SetRight(SvxIndentValue.twips(240));
       act(
         /** Publishes signed native distances for ODT. @returns Nothing. */ () => {
           format.SetFormatAttr(signed);

@@ -1,4 +1,5 @@
 /** @fileoverview Checks original XML table items, native header ownership and ordinary package import without scalar replay. */
+import { SvxIndentValue } from "../../../../editeng/inc/lrspitem";
 import { expect, it, vi } from "vitest";
 import { SwDoc } from "../../core/doc/doc";
 import { SwTable, SwTableLine, SwTableBox } from "../../core/table/swtable";
@@ -51,9 +52,9 @@ it("closing imported headers changes only the native count and retains complete 
       row = required(table.GetTabLines()[0]),
       box = required(row.GetTabBoxes()[0]);
     const lr = new SvxLRSpaceItem(RES_LR_SPACE);
-    lr.SetLeft(240, 50);
-    lr.SetRight(480, 75);
-    lr.SetTextFirstLineOffset(-80, 125);
+    lr.SetLeft(SvxIndentValue.twips(240), 50);
+    lr.SetRight(SvxIndentValue.twips(480), 75);
+    lr.SetTextFirstLineOffset(SvxIndentValue.twips(-80), 125);
     lr.SetAutoFirst(true);
     lr.SetExplicitZeroMarginValLeft(true);
     lr.SetGutterMargin(30);
@@ -151,8 +152,8 @@ it.each([
       expect(table.GetHoriOrient()).toBe(orient);
       expect(table.GetRowsToRepeat()).toBe(0);
       expect(frame.GetAttrSet().GetItemIfSet(RES_LR_SPACE, false) !== undefined).toBe(lrSet);
-      expect(frame.GetLRSpace().GetLeft()).toBe(style.marginLeft ?? 0);
-      expect(frame.GetLRSpace().GetRight()).toBe(style.marginRight ?? 0);
+      expect(frame.GetLRSpace().GetLeft().m_dValue).toBe(style.marginLeft ?? 0);
+      expect(frame.GetLRSpace().GetRight().m_dValue).toBe(style.marginRight ?? 0);
       expect(frame.GetAttrSet().GetItemIfSet(RES_FRM_SIZE, false) !== undefined).toBe(sizeSet);
       expect(frame.GetFrameSize().GetWidth()).toBe(style.width ?? 0);
       expect(frame.GetFrameSize().GetHeightSizeType()).toBe(SwFrameSize.Variable);

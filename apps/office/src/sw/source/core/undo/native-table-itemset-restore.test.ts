@@ -1,4 +1,5 @@
 /** @fileoverview Verifies SaveTable restores original item sets without scalar transport capture or replay. */
+import { SvxIndentValue } from "../../../../editeng/inc/lrspitem";
 import { expect, it, vi } from "vitest";
 import { createWriterDocumentSession } from "../../../browser/composition/writer-module";
 import { SwFrameFormat } from "../layout/atrfrm";
@@ -43,8 +44,8 @@ it.each([false, true])(
       size.SetWidthPercentRelation(3);
       size.SetHeightPercentRelation(4);
       const lr = new SvxLRSpaceItem(98);
-      lr.SetLeft(-120);
-      lr.SetRight(240);
+      lr.SetLeft(SvxIndentValue.twips(-120));
+      lr.SetRight(SvxIndentValue.twips(240));
       lr.SetGutterMargin(31);
       lr.SetRightGutterMargin(47);
       lr.SetAutoFirst(true);

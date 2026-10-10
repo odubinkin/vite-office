@@ -1,4 +1,5 @@
 /** @fileoverview Applies represented table dialog attributes through native ItemSetToTableParam ownership from tabsh.cxx. */
+import { SvxIndentValue } from "../../../../editeng/inc/lrspitem";
 import { createSfxShell, type SfxShell } from "../../../../sfx2/source/control/shell";
 import { createWriterInterface } from "../../../sdi/swriter";
 import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
@@ -160,8 +161,8 @@ export function ItemSetToTableParam(
         ]);
         if (representation instanceof SwTableRep) {
           const lr = new SvxLRSpaceItem(RES_LR_SPACE);
-          lr.SetLeft(representation.left);
-          lr.SetRight(representation.right);
+          lr.SetLeft(SvxIndentValue.twips(representation.left));
+          lr.SetRight(SvxIndentValue.twips(representation.right));
           attributeSet.Put(lr);
           if (representation.align !== HoriOrientation.FULL)
             attributeSet.Put(new SwFormatFrameSize(SwFrameSize.Variable, representation.width));

@@ -1,4 +1,5 @@
 /** @fileoverview Implements the bounded SwTable, SwTableLine and SwTableBox graph from pinned swtable.cxx. */
+import { SvxIndentValue } from "../../../../editeng/inc/lrspitem";
 
 import { SwTableBox, SwTableLine } from "./swtable-boxline";
 export { SwTableBox, SwTableLine } from "./swtable-boxline";
@@ -226,8 +227,8 @@ export class SwTable extends SwClient {
     if (marginLeft === undefined && marginRight === undefined) format.ResetFormatAttr(RES_LR_SPACE);
     else {
       const lr = format.GetLRSpace().Clone();
-      lr.SetLeft(marginLeft ?? 0);
-      lr.SetRight(marginRight ?? 0);
+      lr.SetLeft(SvxIndentValue.twips(marginLeft ?? 0));
+      lr.SetRight(SvxIndentValue.twips(marginRight ?? 0));
       format.SetFormatAttr(lr);
     }
     let orient = horiOrient;
@@ -488,8 +489,8 @@ export class SwTable extends SwClient {
           orient = HoriOrientation.LEFT_AND_WIDTH;
       }
       const lr = this.GetFrameFormat().GetLRSpace().Clone();
-      lr.SetLeft(next.GetLeft());
-      lr.SetRight(next.GetRightMax() - next.GetRight());
+      lr.SetLeft(SvxIndentValue.twips(next.GetLeft()));
+      lr.SetRight(SvxIndentValue.twips(next.GetRightMax() - next.GetRight()));
       this.GetFrameFormat().SetFormatAttr(lr);
       const orientation = this.GetFrameFormat().GetHoriOrient().Clone();
       orientation.SetHoriOrient(orient);

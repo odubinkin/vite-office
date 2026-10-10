@@ -1,0 +1,947 @@
+{
+  "status": "pass",
+  "taskId": "202610100109-3YQP1C",
+  "goalStatus": "active-incomplete",
+  "cadenceAfterClose": "9/10 after BZQGYC",
+  "fullRun": false,
+  "upstreamPin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "referenceSymlinkRestored": true,
+  "upstreamAbsentForAllRuntimeChecks": true,
+  "sourceContract": "Original native SvxIndentValue double/signed16 unit and SvxFontUnitMetrics default/authored context; typed LR value/copy constructors, uint16 proportions and signed32 rounding, member13..15 pairs, native metric scaling and stable owned const member references. Text-left getter/by-value first-line input retain source lifetime semantics.",
+  "scope": "Five production modules; three existing table/ODF/shell callers explicitly author native twips; no browser serialization/private-field/inverse adapter.",
+  "wholeChangedProductionCoverage": {
+    "status": "pass",
+    "sourceHashes": {
+      "apps/office/src/editeng/inc/lrspitem.ts": "ec3bf1772e5f66323ddf2445e23ea5e5c642a59477959785990977ad29daab12",
+      "apps/office/src/offapi/com/sun/star/util/MeasureUnit.ts": "fa01b0423d8deea88f46800e779bbfc6f9170f5c6ae8a92cf00dd3ef006d2065",
+      "apps/office/src/sw/source/core/table/swtable.ts": "8c0ecc18d1c9db6ab535fe6ef403e078d79ebd6048286ede3259b6aaceaca0e0",
+      "apps/office/src/sw/source/filter/xml/xmltbli.ts": "dc19177964e153833c78226182bb6131a180de99d07ef187f16e0efe4d650fad",
+      "apps/office/src/sw/source/uibase/shells/tabsh.ts": "f37323cbbde1ebfa753c179b7f9c4226c6fc56483b073ed8b99f0952ab3bfac9"
+    },
+    "testedSourceHashes": {
+      "apps/office/src/editeng/inc/lrspitem.ts": "c113fb3c534971b830e90153219471eec3675147fb2075d69b1ca9b4bbe9c559",
+      "apps/office/src/offapi/com/sun/star/util/MeasureUnit.ts": "fa01b0423d8deea88f46800e779bbfc6f9170f5c6ae8a92cf00dd3ef006d2065",
+      "apps/office/src/sw/source/core/table/swtable.ts": "a9bbc648b05a183cf2f0c595ced9f68b0eae1465dd583db96b35fed88d0fcc3d",
+      "apps/office/src/sw/source/filter/xml/xmltbli.ts": "7f3660ba4e52144f3dc63a6710e9f1b2e8d6ee2eaa4b7f1b50b93375b7f1ebb9",
+      "apps/office/src/sw/source/uibase/shells/tabsh.ts": "ab8ced5f6abf7462a5dfbbaf17524a93b2ef99534e05b834f8c9331aa46a0899"
+    },
+    "typeOnlySourceEquivalence": {
+      "status": "pass",
+      "source": "apps/office/src/editeng/inc/lrspitem.ts",
+      "originalSha256": "c113fb3c534971b830e90153219471eec3675147fb2075d69b1ca9b4bbe9c559",
+      "currentSha256": "ec3bf1772e5f66323ddf2445e23ea5e5c642a59477959785990977ad29daab12",
+      "compilerApi": "6.0.3",
+      "transpiledRuntimeSha256": "48c7d7c6ab902bfc545f6735abd59a2f84ccdfeddc7074c3c9fd87b0767c69d7",
+      "identicalTranspiledRuntime": true,
+      "identicalSourceLineCount": true,
+      "instrumentedPositionsChecked": 942,
+      "instrumentedPositionPrefixesUnchanged": true,
+      "changes": "Type-only casts replacing assertions and equivalent constructor overload union; JSDoc unchanged runtime.",
+      "testReplay": 0
+    },
+    "headingSourceEquivalence": {
+      "status": "pass",
+      "onlyOpeningFileoverviewAndImportOrderChanged": true,
+      "sourceImportOrderUnchanged": true,
+      "testReplay": 0,
+      "results": [
+        {
+          "path": "apps/office/src/sw/source/core/table/swtable.ts",
+          "originalSha256": "a9bbc648b05a183cf2f0c595ced9f68b0eae1465dd583db96b35fed88d0fcc3d",
+          "currentSha256": "8c0ecc18d1c9db6ab535fe6ef403e078d79ebd6048286ede3259b6aaceaca0e0",
+          "identicalCompiledRuntimeWithoutComments": true,
+          "identicalSourceLineCount": true,
+          "instrumentedPositionPrefixesUnchanged": true,
+          "instrumentedPositionsChecked": 2044
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/xmltbli.ts",
+          "originalSha256": "7f3660ba4e52144f3dc63a6710e9f1b2e8d6ee2eaa4b7f1b50b93375b7f1ebb9",
+          "currentSha256": "dc19177964e153833c78226182bb6131a180de99d07ef187f16e0efe4d650fad",
+          "identicalCompiledRuntimeWithoutComments": true,
+          "identicalSourceLineCount": true,
+          "instrumentedPositionPrefixesUnchanged": true,
+          "instrumentedPositionsChecked": 492
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/shells/tabsh.ts",
+          "originalSha256": "ab8ced5f6abf7462a5dfbbaf17524a93b2ef99534e05b834f8c9331aa46a0899",
+          "currentSha256": "f37323cbbde1ebfa753c179b7f9c4226c6fc56483b073ed8b99f0952ab3bfac9",
+          "identicalCompiledRuntimeWithoutComments": true,
+          "identicalSourceLineCount": true,
+          "instrumentedPositionPrefixesUnchanged": true,
+          "instrumentedPositionsChecked": 786
+        },
+        {
+          "path": "apps/office/src/editeng/source/items/native-lr-space-item.test.ts",
+          "originalSha256": "11b833ebdf11b42f38c2f17f53de435c2a3d3a15eaca38ac1442af4e737d008a",
+          "currentSha256": "e73c15034aeb000309a7544afbe056cd9e5f30c6d286acdf3b2e1e89d0d351c6",
+          "identicalCompiledRuntimeWithoutComments": true,
+          "identicalSourceLineCount": true,
+          "instrumentedPositionPrefixesUnchanged": true,
+          "instrumentedPositionsChecked": 0
+        },
+        {
+          "path": "apps/office/src/editeng/source/items/native-lr-space-value.test.ts",
+          "originalSha256": "6b0947ea6268e7e1626a9c4f09f3f7d81eba997bcbd313422a62b0a4f87f188e",
+          "currentSha256": "6a5875f66536d0a0f52deb5ff5b8923eb160039619019239b93c1773366babf9",
+          "identicalCompiledRuntimeWithoutComments": true,
+          "identicalSourceLineCount": true,
+          "instrumentedPositionPrefixesUnchanged": true,
+          "instrumentedPositionsChecked": 0
+        },
+        {
+          "path": "apps/office/src/sw/source/core/docnode/native-column-frame-normalization.test.ts",
+          "originalSha256": "f6c570f521644bdc4099d2f4125e366a423aecd056c70f4ac14715d294c45283",
+          "currentSha256": "c49fb470b23e186aada665fb80cfe07dea3df13e48c088afdf27564733b44838",
+          "identicalCompiledRuntimeWithoutComments": true,
+          "identicalSourceLineCount": true,
+          "instrumentedPositionPrefixesUnchanged": true,
+          "instrumentedPositionsChecked": 0
+        },
+        {
+          "path": "apps/office/src/sw/source/core/table/native-table-lr-item.test.ts",
+          "originalSha256": "6bb914c777729e7417e6b4859a88d78a754fe0e06df40463b614149432a39175",
+          "currentSha256": "72312662b1c1ed613194dd20122be7c21db8d5863b2cc414ecb5bcffd3cbbf6c",
+          "identicalCompiledRuntimeWithoutComments": true,
+          "identicalSourceLineCount": true,
+          "instrumentedPositionPrefixesUnchanged": true,
+          "instrumentedPositionsChecked": 0
+        },
+        {
+          "path": "apps/office/src/sw/source/core/table/native-table-lr-value.test.ts",
+          "originalSha256": "de6b216aec3ec2875871b3b19fe6edfc17416bd883ce8201bef9c0df05b200c4",
+          "currentSha256": "18c1595c0f764e0e73f2ccfddd9852b53837ef3680ba9254d68978c0b2051fa2",
+          "identicalCompiledRuntimeWithoutComments": true,
+          "identicalSourceLineCount": true,
+          "instrumentedPositionPrefixesUnchanged": true,
+          "instrumentedPositionsChecked": 0
+        },
+        {
+          "path": "apps/office/src/sw/source/core/undo/native-table-itemset-restore.test.ts",
+          "originalSha256": "f9902a1b9eed0d3bd73c3eea2da9a0740e4fe4ff72f723bb04587f4ace3ea25b",
+          "currentSha256": "37cab2d93688e5bdfcfbd7a7a755f51dec2e7ea67a9db1d0b3476721359d100f",
+          "identicalCompiledRuntimeWithoutComments": true,
+          "identicalSourceLineCount": true,
+          "instrumentedPositionPrefixesUnchanged": true,
+          "instrumentedPositionsChecked": 0
+        },
+        {
+          "path": "apps/office/src/sw/source/core/undo/native-table-lr-history.test.ts",
+          "originalSha256": "2b0aeb7290372971f6c22ab13972930393a33f79cb4514941fd69a9f9893302a",
+          "currentSha256": "6bd9304e001710212b187364505527ce009069ce872bb7db2ef7d18446da71f2",
+          "identicalCompiledRuntimeWithoutComments": true,
+          "identicalSourceLineCount": true,
+          "instrumentedPositionPrefixesUnchanged": true,
+          "instrumentedPositionsChecked": 0
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/native-table-export-items.test.ts",
+          "originalSha256": "5cd6de32f939f540e04f8da6dd671cef9204d64c1d3c16048ea12431490e4b26",
+          "currentSha256": "a353deb053b9265a0404d7e57caa68688e5d9300831c4d73b57d52ed1d5d5bc4",
+          "identicalCompiledRuntimeWithoutComments": true,
+          "identicalSourceLineCount": true,
+          "instrumentedPositionPrefixesUnchanged": true,
+          "instrumentedPositionsChecked": 0
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/native-table-import-items.test.ts",
+          "originalSha256": "5c4b73f3f075a006fec59f077461bf37e33c7344a59bca2ca95effc8384479c0",
+          "currentSha256": "0a7b1af1b321746adb2b641edd0326748bf56e8863106c4d5ca0f73d34425d1b",
+          "identicalCompiledRuntimeWithoutComments": true,
+          "identicalSourceLineCount": true,
+          "instrumentedPositionPrefixesUnchanged": true,
+          "instrumentedPositionsChecked": 0
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-table-lr-items.test.tsx",
+          "originalSha256": "2f24107e2236921a0c629308c1df0dbe5848c7dc3e81dccbdd97d767e9a83576",
+          "currentSha256": "e6fdff5e491d18ad7a451294a974048a200ea518ba316b511f12eccb88d43430",
+          "identicalCompiledRuntimeWithoutComments": true,
+          "identicalSourceLineCount": true,
+          "instrumentedPositionPrefixesUnchanged": true,
+          "instrumentedPositionsChecked": 0
+        }
+      ]
+    },
+    "actualCoverage": {
+      "lines": {
+        "total": 834,
+        "covered": 834,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 925,
+        "covered": 925,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 136,
+        "covered": 136,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 730,
+        "covered": 730,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "perModule": {
+      "apps/office/src/editeng/inc/lrspitem.ts": {
+        "lines": {
+          "total": 169,
+          "covered": 169,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 49,
+          "covered": 49,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 179,
+          "covered": 179,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 153,
+          "covered": 153,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "apps/office/src/offapi/com/sun/star/util/MeasureUnit.ts": {
+        "lines": {
+          "total": 1,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 1,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "apps/office/src/sw/source/core/table/swtable.ts": {
+        "lines": {
+          "total": 405,
+          "covered": 405,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 51,
+          "covered": 51,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 457,
+          "covered": 457,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 352,
+          "covered": 352,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "apps/office/src/sw/source/filter/xml/xmltbli.ts": {
+        "lines": {
+          "total": 101,
+          "covered": 101,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 16,
+          "covered": 16,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 108,
+          "covered": 108,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 84,
+          "covered": 84,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "apps/office/src/sw/source/uibase/shells/tabsh.ts": {
+        "lines": {
+          "total": 158,
+          "covered": 158,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 20,
+          "covered": 20,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 180,
+          "covered": 180,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 141,
+          "covered": 141,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    "zeroNegativeCounters": true,
+    "completeCurrentSourceMaps": true,
+    "onlyActualCurrentTaskCounters": true,
+    "allFinalSourceCasesPassed": true,
+    "profiles": [
+      {
+        "label": "final-typed-lr",
+        "cases": 3906,
+        "passed": 3906,
+        "files": 366,
+        "freshCases": 35,
+        "mapSha256": "cae5feddd8c1b8d8e0a15b3b0d9ad0e707853cb506bbbf179f28e9f9505e753f",
+        "reportSha256": "32f4105b0e1b8e0da2c58c6d08da039b640d89407fcb0bc88abe51c9e5a8025d"
+      },
+      {
+        "label": "stable-borrow",
+        "cases": 1145,
+        "passed": 1145,
+        "files": 85,
+        "freshCases": 36,
+        "mapSha256": "8b282789447e25fd2f4a0847fd1491e078bb280e90f89d1c5b305014536df082",
+        "reportSha256": "643c1703348ce98b570bc4710d347fda2edce5414b1d311c9952f4a508eec8f6"
+      }
+    ],
+    "passingReplayForHelperRepairs": 0,
+    "supersededLRMapsExcluded": true,
+    "aggregateCaseCountNotSummedBecauseCohortsOverlap": true,
+    "emptyMeasureUnitFunctionsAndBranchesVacuouslyCovered": true,
+    "selection": "Entire stable runtime LR map from stable-borrow; four stable-runtime complete module maps from final-typed-lr. Equivalent type-only LR declarations preserve 942 instrumented source positions; three caller opening JSDoc/import ordering repairs preserve 3322 positions and compiled runtime. No counter/location edits or changed-runtime map reuse."
+  },
+  "relatedUnitProfiles": [
+    {
+      "label": "final-typed-lr",
+      "cases": 3906,
+      "passed": 3906,
+      "files": 366,
+      "freshCases": 35,
+      "mapSha256": "cae5feddd8c1b8d8e0a15b3b0d9ad0e707853cb506bbbf179f28e9f9505e753f",
+      "reportSha256": "32f4105b0e1b8e0da2c58c6d08da039b640d89407fcb0bc88abe51c9e5a8025d"
+    },
+    {
+      "label": "stable-borrow",
+      "cases": 1145,
+      "passed": 1145,
+      "files": 85,
+      "freshCases": 36,
+      "mapSha256": "8b282789447e25fd2f4a0847fd1491e078bb280e90f89d1c5b305014536df082",
+      "reportSha256": "643c1703348ce98b570bc4710d347fda2edce5414b1d311c9952f4a508eec8f6"
+    }
+  ],
+  "caseCountsNotSummedBecauseOfOverlap": true,
+  "browser": {
+    "cases": 24,
+    "passed": 24,
+    "failed": 0,
+    "skipped": 0,
+    "reportSha256": "e8a7585c1c9638e2b5826a7ef456feb96a0a4206f9def4998133040f79d4c4f4"
+  },
+  "statics": {
+    "initialRootFormatPass": {
+      "label": "format-check",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "format:check"
+      ],
+      "status": 0,
+      "upstreamAbsent": true
+    },
+    "wholeRootLintPass": {
+      "label": "lint",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "lint"
+      ],
+      "status": 0,
+      "upstreamAbsent": true
+    },
+    "rootToolsTypecheckPassedBeforeOnlyAppUnusedParameterFailure": true,
+    "finalStaticChecks": [
+      {
+        "label": "format-check",
+        "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+        "args": [
+          "run",
+          "format:check"
+        ],
+        "status": 0,
+        "upstreamAbsent": true
+      },
+      {
+        "label": "lint",
+        "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+        "args": [
+          "run",
+          "lint"
+        ],
+        "status": 0,
+        "upstreamAbsent": true
+      },
+      {
+        "label": "typecheck",
+        "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+        "args": [
+          "run",
+          "typecheck",
+          "--workspace",
+          "@vite-office/office"
+        ],
+        "status": 0,
+        "upstreamAbsent": true
+      },
+      {
+        "label": "check-dependencies",
+        "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+        "args": [
+          "run",
+          "check:dependencies"
+        ],
+        "status": 0,
+        "upstreamAbsent": true
+      },
+      {
+        "label": "check-docs",
+        "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+        "args": [
+          "run",
+          "check:docs"
+        ],
+        "status": 0,
+        "upstreamAbsent": true
+      },
+      {
+        "label": "check-file-size",
+        "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+        "args": [
+          "run",
+          "check:file-size"
+        ],
+        "status": 0,
+        "upstreamAbsent": true
+      },
+      {
+        "label": "current-build",
+        "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+        "args": [
+          "run",
+          "build"
+        ],
+        "status": 0,
+        "upstreamAbsent": true
+      },
+      {
+        "label": "static-build",
+        "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+        "args": [
+          "exec",
+          "--",
+          "node",
+          "scripts/check-static-build.mjs"
+        ],
+        "status": 0,
+        "upstreamAbsent": true
+      },
+      {
+        "label": "review-browser",
+        "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+        "args": [
+          "exec",
+          "--",
+          "playwright",
+          "test",
+          "--config",
+          "apps/office/playwright.config.ts",
+          "--project=writer",
+          "writer-native-table-column-drag.spec.ts",
+          "writer-native-table-text-flow-headline.spec.ts",
+          "writer-table-properties-history.spec.ts",
+          "writer-native-cell-alignment.spec.ts",
+          "writer-table-alignment.spec.ts",
+          "--reporter=list,json"
+        ],
+        "status": 0,
+        "upstreamAbsent": true
+      }
+    ],
+    "failedInitialLintAndAppTypeChecksRepaired": true,
+    "typeOnlyLRRepair": {
+      "status": "pass",
+      "source": "apps/office/src/editeng/inc/lrspitem.ts",
+      "originalSha256": "c113fb3c534971b830e90153219471eec3675147fb2075d69b1ca9b4bbe9c559",
+      "currentSha256": "ec3bf1772e5f66323ddf2445e23ea5e5c642a59477959785990977ad29daab12",
+      "compilerApi": "6.0.3",
+      "transpiledRuntimeSha256": "48c7d7c6ab902bfc545f6735abd59a2f84ccdfeddc7074c3c9fd87b0767c69d7",
+      "identicalTranspiledRuntime": true,
+      "identicalSourceLineCount": true,
+      "instrumentedPositionsChecked": 942,
+      "instrumentedPositionPrefixesUnchanged": true,
+      "changes": "Type-only casts replacing assertions and equivalent constructor overload union; JSDoc unchanged runtime.",
+      "testReplay": 0
+    },
+    "unusedTestParameterRepair": {
+      "status": "pass",
+      "onlyUnusedCallbackParameterAndItsJSDocRenamed": true,
+      "noAssertionOrLogicChanged": true,
+      "testReplay": 0
+    },
+    "constTypeBoundary": {
+      "status": "pass",
+      "compilerApi": "6.0.3",
+      "result": {
+        "GetLeft": {
+          "hasScaleMetrics": false,
+          "fields": [
+            "m_dValue",
+            "m_nUnit",
+            "ResolveDouble",
+            "Resolve",
+            "ResolveFixedPart",
+            "ResolveVariablePart",
+            "equals"
+          ]
+        },
+        "GetRight": {
+          "hasScaleMetrics": false,
+          "fields": [
+            "m_dValue",
+            "m_nUnit",
+            "ResolveDouble",
+            "Resolve",
+            "ResolveFixedPart",
+            "ResolveVariablePart",
+            "equals"
+          ]
+        },
+        "GetTextFirstLineOffset": {
+          "hasScaleMetrics": false,
+          "fields": [
+            "m_dValue",
+            "m_nUnit",
+            "ResolveDouble",
+            "Resolve",
+            "ResolveFixedPart",
+            "ResolveVariablePart",
+            "equals"
+          ]
+        },
+        "GetTextLeft": {
+          "hasScaleMetrics": true,
+          "fields": [
+            "m_dValue",
+            "m_nUnit",
+            "ResolveDouble",
+            "Resolve",
+            "ResolveFixedPart",
+            "ResolveVariablePart",
+            "ScaleMetrics",
+            "equals"
+          ]
+        }
+      }
+    },
+    "headingOnlyRepair": {
+      "status": "pass",
+      "onlyOpeningFileoverviewAndImportOrderChanged": true,
+      "sourceImportOrderUnchanged": true,
+      "testReplay": 0,
+      "results": [
+        {
+          "path": "apps/office/src/sw/source/core/table/swtable.ts",
+          "originalSha256": "a9bbc648b05a183cf2f0c595ced9f68b0eae1465dd583db96b35fed88d0fcc3d",
+          "currentSha256": "8c0ecc18d1c9db6ab535fe6ef403e078d79ebd6048286ede3259b6aaceaca0e0",
+          "identicalCompiledRuntimeWithoutComments": true,
+          "identicalSourceLineCount": true,
+          "instrumentedPositionPrefixesUnchanged": true,
+          "instrumentedPositionsChecked": 2044
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/xmltbli.ts",
+          "originalSha256": "7f3660ba4e52144f3dc63a6710e9f1b2e8d6ee2eaa4b7f1b50b93375b7f1ebb9",
+          "currentSha256": "dc19177964e153833c78226182bb6131a180de99d07ef187f16e0efe4d650fad",
+          "identicalCompiledRuntimeWithoutComments": true,
+          "identicalSourceLineCount": true,
+          "instrumentedPositionPrefixesUnchanged": true,
+          "instrumentedPositionsChecked": 492
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/shells/tabsh.ts",
+          "originalSha256": "ab8ced5f6abf7462a5dfbbaf17524a93b2ef99534e05b834f8c9331aa46a0899",
+          "currentSha256": "f37323cbbde1ebfa753c179b7f9c4226c6fc56483b073ed8b99f0952ab3bfac9",
+          "identicalCompiledRuntimeWithoutComments": true,
+          "identicalSourceLineCount": true,
+          "instrumentedPositionPrefixesUnchanged": true,
+          "instrumentedPositionsChecked": 786
+        },
+        {
+          "path": "apps/office/src/editeng/source/items/native-lr-space-item.test.ts",
+          "originalSha256": "11b833ebdf11b42f38c2f17f53de435c2a3d3a15eaca38ac1442af4e737d008a",
+          "currentSha256": "e73c15034aeb000309a7544afbe056cd9e5f30c6d286acdf3b2e1e89d0d351c6",
+          "identicalCompiledRuntimeWithoutComments": true,
+          "identicalSourceLineCount": true,
+          "instrumentedPositionPrefixesUnchanged": true,
+          "instrumentedPositionsChecked": 0
+        },
+        {
+          "path": "apps/office/src/editeng/source/items/native-lr-space-value.test.ts",
+          "originalSha256": "6b0947ea6268e7e1626a9c4f09f3f7d81eba997bcbd313422a62b0a4f87f188e",
+          "currentSha256": "6a5875f66536d0a0f52deb5ff5b8923eb160039619019239b93c1773366babf9",
+          "identicalCompiledRuntimeWithoutComments": true,
+          "identicalSourceLineCount": true,
+          "instrumentedPositionPrefixesUnchanged": true,
+          "instrumentedPositionsChecked": 0
+        },
+        {
+          "path": "apps/office/src/sw/source/core/docnode/native-column-frame-normalization.test.ts",
+          "originalSha256": "f6c570f521644bdc4099d2f4125e366a423aecd056c70f4ac14715d294c45283",
+          "currentSha256": "c49fb470b23e186aada665fb80cfe07dea3df13e48c088afdf27564733b44838",
+          "identicalCompiledRuntimeWithoutComments": true,
+          "identicalSourceLineCount": true,
+          "instrumentedPositionPrefixesUnchanged": true,
+          "instrumentedPositionsChecked": 0
+        },
+        {
+          "path": "apps/office/src/sw/source/core/table/native-table-lr-item.test.ts",
+          "originalSha256": "6bb914c777729e7417e6b4859a88d78a754fe0e06df40463b614149432a39175",
+          "currentSha256": "72312662b1c1ed613194dd20122be7c21db8d5863b2cc414ecb5bcffd3cbbf6c",
+          "identicalCompiledRuntimeWithoutComments": true,
+          "identicalSourceLineCount": true,
+          "instrumentedPositionPrefixesUnchanged": true,
+          "instrumentedPositionsChecked": 0
+        },
+        {
+          "path": "apps/office/src/sw/source/core/table/native-table-lr-value.test.ts",
+          "originalSha256": "de6b216aec3ec2875871b3b19fe6edfc17416bd883ce8201bef9c0df05b200c4",
+          "currentSha256": "18c1595c0f764e0e73f2ccfddd9852b53837ef3680ba9254d68978c0b2051fa2",
+          "identicalCompiledRuntimeWithoutComments": true,
+          "identicalSourceLineCount": true,
+          "instrumentedPositionPrefixesUnchanged": true,
+          "instrumentedPositionsChecked": 0
+        },
+        {
+          "path": "apps/office/src/sw/source/core/undo/native-table-itemset-restore.test.ts",
+          "originalSha256": "f9902a1b9eed0d3bd73c3eea2da9a0740e4fe4ff72f723bb04587f4ace3ea25b",
+          "currentSha256": "37cab2d93688e5bdfcfbd7a7a755f51dec2e7ea67a9db1d0b3476721359d100f",
+          "identicalCompiledRuntimeWithoutComments": true,
+          "identicalSourceLineCount": true,
+          "instrumentedPositionPrefixesUnchanged": true,
+          "instrumentedPositionsChecked": 0
+        },
+        {
+          "path": "apps/office/src/sw/source/core/undo/native-table-lr-history.test.ts",
+          "originalSha256": "2b0aeb7290372971f6c22ab13972930393a33f79cb4514941fd69a9f9893302a",
+          "currentSha256": "6bd9304e001710212b187364505527ce009069ce872bb7db2ef7d18446da71f2",
+          "identicalCompiledRuntimeWithoutComments": true,
+          "identicalSourceLineCount": true,
+          "instrumentedPositionPrefixesUnchanged": true,
+          "instrumentedPositionsChecked": 0
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/native-table-export-items.test.ts",
+          "originalSha256": "5cd6de32f939f540e04f8da6dd671cef9204d64c1d3c16048ea12431490e4b26",
+          "currentSha256": "a353deb053b9265a0404d7e57caa68688e5d9300831c4d73b57d52ed1d5d5bc4",
+          "identicalCompiledRuntimeWithoutComments": true,
+          "identicalSourceLineCount": true,
+          "instrumentedPositionPrefixesUnchanged": true,
+          "instrumentedPositionsChecked": 0
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/native-table-import-items.test.ts",
+          "originalSha256": "5c4b73f3f075a006fec59f077461bf37e33c7344a59bca2ca95effc8384479c0",
+          "currentSha256": "0a7b1af1b321746adb2b641edd0326748bf56e8863106c4d5ca0f73d34425d1b",
+          "identicalCompiledRuntimeWithoutComments": true,
+          "identicalSourceLineCount": true,
+          "instrumentedPositionPrefixesUnchanged": true,
+          "instrumentedPositionsChecked": 0
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-table-lr-items.test.tsx",
+          "originalSha256": "2f24107e2236921a0c629308c1df0dbe5848c7dc3e81dccbdd97d767e9a83576",
+          "currentSha256": "e6fdff5e491d18ad7a451294a974048a200ea518ba316b511f12eccb88d43430",
+          "identicalCompiledRuntimeWithoutComments": true,
+          "identicalSourceLineCount": true,
+          "instrumentedPositionPrefixesUnchanged": true,
+          "instrumentedPositionsChecked": 0
+        }
+      ]
+    }
+  },
+  "audits": [
+    {
+      "label": "registry-build",
+      "bin": "npm",
+      "args": [
+        "run",
+        "inventory:registry:build"
+      ],
+      "status": 0,
+      "rawHash": "f941feea056f9f9125ac8a96978ff0fda711beef74563b36c553fc89490f0209",
+      "metadataOnly": true
+    },
+    {
+      "label": "source-tree",
+      "bin": "npm",
+      "args": [
+        "run",
+        "check:source-tree"
+      ],
+      "status": 0,
+      "rawHash": "6c5bd2e3c84892b8cc26b8b1b5f06a950891f9d5988a8ef1f1496f0c252cd33e",
+      "metadataOnly": true
+    },
+    {
+      "label": "source-provenance",
+      "bin": "npm",
+      "args": [
+        "run",
+        "check:source-provenance"
+      ],
+      "status": 0,
+      "rawHash": "802f2ddb0f4273e7518541234749a372951a182aa5d12dd77ba8c01a7ea1b4b4",
+      "metadataOnly": true
+    },
+    {
+      "label": "registry-check",
+      "bin": "npm",
+      "args": [
+        "run",
+        "inventory:registry:check"
+      ],
+      "status": 0,
+      "rawHash": "9c74949881df9d789be77a8bc7ed55c6e98209dbbd17f87aa088b76f0ce164d5",
+      "metadataOnly": true
+    },
+    {
+      "label": "writer-resources",
+      "bin": "node_modules/.bin/tsx",
+      "args": [
+        "scripts/generate-writer-ui-resources.ts",
+        "--check"
+      ],
+      "status": 0,
+      "rawHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "metadataOnly": true
+    },
+    {
+      "label": "inventory-invariants",
+      "bin": "npm",
+      "args": [
+        "run",
+        "inventory:invariants"
+      ],
+      "status": 0,
+      "rawHash": "18429cad4aff0bb1726ed32a7d07aa52dd6d90f04468b53fa417fa97eee98e14",
+      "metadataOnly": true
+    },
+    {
+      "label": "inventory-parity",
+      "bin": "npm",
+      "args": [
+        "run",
+        "inventory:parity"
+      ],
+      "status": 0,
+      "rawHash": "878c47733ba33edf37936ad55a2243009a7130bc426aae66635d976dd9d107bc",
+      "metadataOnly": true
+    },
+    {
+      "label": "routing",
+      "bin": "node",
+      "args": [
+        ".agentplane/policy/check-routing.mjs"
+      ],
+      "status": 0,
+      "rawHash": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9",
+      "metadataOnly": true
+    },
+    {
+      "label": "doctor",
+      "bin": "ap",
+      "args": [
+        "doctor"
+      ],
+      "status": 0,
+      "rawHash": "d0d5f555f3e38b009a491e1600adc9300692aee816fd7f5a2b6b4860afb20e0e",
+      "metadataOnly": true
+    }
+  ],
+  "nativeMeasureUnitMetadataAudit": {
+    "status": "pass",
+    "metadataOnly": true,
+    "testReadsUpstream": false,
+    "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+    "sourcePath": "vendor/libreoffice-reference/offapi/com/sun/star/util/MeasureUnit.idl",
+    "sourceSha256": "d204c2bef70f3748e28934fc2f4f002a577fc0d5dceb0dc3be0e95a2747d8409",
+    "localPath": "apps/office/src/offapi/com/sun/star/util/MeasureUnit.ts",
+    "localSha256": "fa01b0423d8deea88f46800e779bbfc6f9170f5c6ae8a92cf00dd3ef006d2065",
+    "identifiersCompared": 21,
+    "allNamesAndNumbersIdentical": true
+  },
+  "preservation": {
+    "status": "pass",
+    "originalPaths": 8583,
+    "changedOriginalPaths": [
+      ".agentplane/tasks/202609240501-C9TN6M/README.md",
+      "apps/office/src/editeng/inc/lrspitem.ts",
+      "apps/office/src/editeng/source/items/native-lr-space-item.test.ts",
+      "apps/office/src/editeng/source/items/native-lr-space-value.test.ts",
+      "apps/office/src/sw/browser/editor/native-table-lr-items.test.tsx",
+      "apps/office/src/sw/source/core/docnode/native-column-frame-normalization.test.ts",
+      "apps/office/src/sw/source/core/table/native-table-lr-item.test.ts",
+      "apps/office/src/sw/source/core/table/native-table-lr-value.test.ts",
+      "apps/office/src/sw/source/core/table/swtable.ts",
+      "apps/office/src/sw/source/core/undo/native-table-itemset-restore.test.ts",
+      "apps/office/src/sw/source/core/undo/native-table-lr-history.test.ts",
+      "apps/office/src/sw/source/filter/xml/native-table-export-items.test.ts",
+      "apps/office/src/sw/source/filter/xml/native-table-import-items.test.ts",
+      "apps/office/src/sw/source/filter/xml/xmltbli.ts",
+      "apps/office/src/sw/source/uibase/shells/tabsh.ts",
+      "docs/program/registry/shared/provenance/editeng/inc/lrspitem.ts.json",
+      "docs/program/registry/shared/runtime/editeng/inc/lrspitem.ts.json",
+      "docs/program/registry/writer/provenance/sw/source/core/table/swtable.ts.json",
+      "docs/program/registry/writer/provenance/sw/source/filter/xml/xmltbli.ts.json",
+      "docs/program/registry/writer/provenance/sw/source/uibase/shells/tabsh.ts.json",
+      "docs/program/registry/writer/runtime/sw/source/core/table/swtable.ts.json",
+      "docs/program/registry/writer/runtime/sw/source/filter/xml/xmltbli.ts.json",
+      "docs/program/registry/writer/runtime/sw/source/uibase/shells/tabsh.ts.json"
+    ],
+    "unchangedOriginalPaths": 8560,
+    "oldTestFiles": 651,
+    "oldTestsByteIdentical": 641,
+    "exactMigratedOldTestFiles": 10,
+    "exactNativeTwipOldInputs": 56,
+    "exactNativeRawOldObservers": 25,
+    "allOriginalExpectedMeasuresContextsAndSiblingAssertionsPreserved": true,
+    "sourceBackedPriorOmissionPairMigrations": 3,
+    "originalPairCasesRetained": 5,
+    "unknownCasesAndScalarRejectPreQueriesRetained": true,
+    "exactProductionTypedIngress": 8,
+    "canonicalHistoricalPrefixes": 8,
+    "parentFindingsPrefixPreserved": true
+  },
+  "canonicalRecords": [
+    "docs/program/registry/shared/runtime/editeng/inc/lrspitem.ts.json",
+    "docs/program/registry/shared/provenance/editeng/inc/lrspitem.ts.json",
+    "docs/program/registry/writer/runtime/sw/source/core/table/swtable.ts.json",
+    "docs/program/registry/writer/provenance/sw/source/core/table/swtable.ts.json",
+    "docs/program/registry/writer/runtime/sw/source/filter/xml/xmltbli.ts.json",
+    "docs/program/registry/writer/provenance/sw/source/filter/xml/xmltbli.ts.json",
+    "docs/program/registry/writer/runtime/sw/source/uibase/shells/tabsh.ts.json",
+    "docs/program/registry/writer/provenance/sw/source/uibase/shells/tabsh.ts.json",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/util/MeasureUnit.ts.json",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/util/MeasureUnit.ts.json"
+  ],
+  "freshTestHashes": {
+    "apps/office/src/editeng/source/items/native-lr-font-units.test.ts": "4db4041351f2d8c5c009bd2922d10964beb026020d0e03638b7f2f59c3b50dd8",
+    "apps/office/src/sw/source/core/table/native-table-lr-font-items.test.ts": "f808f9d1a8cb716fb8dbb049e82c6aacbdebfe53c73a39b5dc98e2ca9d1fe4a1"
+  },
+  "registeredRecoveryOpenSaveSettingsDeviationsUnchanged": true,
+  "noUpstreamSourcesHelpersOrRawMapsInAgentPlane": true,
+  "rawEvidenceLocation": "Ignored apps/office/node_modules/.cache/parity-coverage/3YQP1C/",
+  "testPassingReplayForHelperRepairs": 0,
+  "failedRuntimeProfiles": [
+    {
+      "profile": "related-typed-lr",
+      "cases": 3964,
+      "failed": 5,
+      "resolution": "Two fresh negative-double-zero expectations corrected; native signed integer casts implemented and exactly three approved prior omission expectations now test source pair admission/mutation/echo. Old unknown/scalar/prequery/metric/sibling acceptance retained."
+    },
+    {
+      "profile": "native-borrow",
+      "cases": 1145,
+      "failed": 1,
+      "resolution": "Genuine left member ownership correction preserves native const-reference identity through hanging correction; current native revalidation passed all1145."
+    }
+  ],
+  "remaining": [
+    "Full native LR JSON/table browser transport",
+    "General inherited frame/row/box transport",
+    "Broader typography/hash/presentation/UNO/VCL",
+    "Writer list/table UI/layout/filter fidelity beyond verified paths"
+  ],
+  "qualityReview": {
+    "independent": false,
+    "executor": "Same implementing agent; non-independent exact-SHA review pending."
+  },
+  "doctor": {
+    "errors": 0,
+    "existingWarnings": 2,
+    "scopeUnchanged": true
+  },
+  "gitBeforeSemanticCommit": " M .agentplane/tasks/202609240501-C9TN6M/README.md\n M .agentplane/tasks/202610100109-3YQP1C/README.md\n M apps/office/src/editeng/inc/lrspitem.ts\n M apps/office/src/editeng/source/items/native-lr-space-item.test.ts\n M apps/office/src/editeng/source/items/native-lr-space-value.test.ts\n M apps/office/src/sw/browser/editor/native-table-lr-items.test.tsx\n M apps/office/src/sw/source/core/docnode/native-column-frame-normalization.test.ts\n M apps/office/src/sw/source/core/table/native-table-lr-item.test.ts\n M apps/office/src/sw/source/core/table/native-table-lr-value.test.ts\n M apps/office/src/sw/source/core/table/swtable.ts\n M apps/office/src/sw/source/core/undo/native-table-itemset-restore.test.ts\n M apps/office/src/sw/source/core/undo/native-table-lr-history.test.ts\n M apps/office/src/sw/source/filter/xml/native-table-export-items.test.ts\n M apps/office/src/sw/source/filter/xml/native-table-import-items.test.ts\n M apps/office/src/sw/source/filter/xml/xmltbli.ts\n M apps/office/src/sw/source/uibase/shells/tabsh.ts\n M docs/program/registry/shared/provenance/editeng/inc/lrspitem.ts.json\n M docs/program/registry/shared/runtime/editeng/inc/lrspitem.ts.json\n M docs/program/registry/writer/provenance/sw/source/core/table/swtable.ts.json\n M docs/program/registry/writer/provenance/sw/source/filter/xml/xmltbli.ts.json\n M docs/program/registry/writer/provenance/sw/source/uibase/shells/tabsh.ts.json\n M docs/program/registry/writer/runtime/sw/source/core/table/swtable.ts.json\n M docs/program/registry/writer/runtime/sw/source/filter/xml/xmltbli.ts.json\n M docs/program/registry/writer/runtime/sw/source/uibase/shells/tabsh.ts.json\n?? apps/office/src/editeng/source/items/native-lr-font-units.test.ts\n?? apps/office/src/offapi/com/sun/star/util/MeasureUnit.ts\n?? apps/office/src/sw/source/core/table/native-table-lr-font-items.test.ts\n?? docs/program/registry/shared/provenance/offapi/com/sun/star/util/MeasureUnit.ts.json\n?? docs/program/registry/shared/runtime/offapi/com/sun/star/util/MeasureUnit.ts.json\n",
+  "toolVersions": {
+    "nativeCLI": "7.0.2",
+    "rootCompilerAPI": "6.0.2",
+    "helperCompilerAPI": "6.0.3",
+    "tsc": "../@typescript/native/bin/tsc",
+    "vitest": {
+      "version": "4.1.10",
+      "packagePath": "node_modules/vitest/package.json"
+    },
+    "@vitest/coverage-istanbul": {
+      "version": "4.1.10",
+      "packagePath": "node_modules/@vitest/coverage-istanbul/package.json"
+    }
+  },
+  "unitCommands": [
+    {
+      "command": "node apps/office/node_modules/.cache/parity-coverage/3YQP1C/run.cjs final-commands.json final-results.json",
+      "manifestSha256": "7c85935af34558f1cf986e6300493fa089837b66d4c85de141bc4db851b4b973"
+    },
+    {
+      "command": "node apps/office/node_modules/.cache/parity-coverage/3YQP1C/run.cjs stable-commands.json stable-results.json",
+      "manifestSha256": "2d03f0f6f924b2540450422d4570e9679a0ffb76d4dd401657d122542acad825"
+    }
+  ]
+}

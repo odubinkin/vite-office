@@ -1,4 +1,5 @@
 /** @fileoverview Verifies native LR table attribute history and original geometry ItemSet dialog dispatch. */
+import { SvxIndentValue } from "../../../../editeng/inc/lrspitem";
 import { expect, it, vi } from "vitest";
 import { createWriterDocumentSession } from "../../../browser/composition/writer-module";
 import { SvxLRSpaceItem } from "../../../../editeng/source/items/frmitems";
@@ -34,8 +35,8 @@ it.each([false, true])(
       shell.FocusNode(node);
       shell.SetParagraphListKind("bullet");
       const before = new SvxLRSpaceItem(98);
-      before.SetLeft(-120);
-      before.SetRight(240);
+      before.SetLeft(SvxIndentValue.twips(-120));
+      before.SetRight(SvxIndentValue.twips(240));
       before.SetGutterMargin(41);
       before.SetRightGutterMargin(73);
       before.SetAutoFirst(true);
@@ -50,8 +51,8 @@ it.each([false, true])(
         nodes = [...doc.nodes.entries()],
         list = node.GetListId(),
         after = new SvxLRSpaceItem(98);
-      after.SetLeft(400);
-      after.SetRight(200);
+      after.SetLeft(SvxIndentValue.twips(400));
+      after.SetRight(SvxIndentValue.twips(200));
       const input = new SfxItemSet(doc.GetAttrPool(), [[98, 98]]);
       input.Put(after);
       doc.GetUndoManager().Clear();
