@@ -1,10 +1,11 @@
 ---
 id: "202610100153-570FFF"
 title: "Port original shared SoA scalar release overloads and output reference"
-status: "DOING"
+result_summary: "verified-202610100153-570FFF"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 41
+revision: 45
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-10T03:00:42.250Z"
+  updated_at: "2026-10-10T03:01:54.336Z"
   updated_by: "CODER"
-  note: "Original scalar release native43732/full states339160 and exact byte replay passed; Calc/shared actual100%, full five-check run completed, sole flat native timeout fixed and focused32/8 passed; full office346/raw counters100%, inventory42/allfour100%, browser303 and static passed. Final9checks and original14gates pass; Writer untouched. Goal pause requested after closure."
+  note: "verified-202610100153-570FFF"
   attempts: 0
 quality_review:
   state: "pass"
@@ -47,11 +48,16 @@ quality_review:
     - "Exact original release_impl/get_block_position order verified against pinned full source; original logical-size owner and borrowed template/output adapters preserved. All43732complete native cases/339160states and original35740prefix retained; no synthesized algorithm or expected-output model."
     - "Initial full office14281pass/1flat timeout is retained; source-specialization regrouping keeps3020cases/16256states and identical replay body, final covered32/8 passes. Office346actual raw counters and inventory42actual source metrics reach100%;303Writer/shared browser scenarios, static and tooling pass. No Writer mutation."
     - "Both complete data corpora format/import at ordinary heap; actual14initial and9final gates and3portable checks pass. Shared inventory adds scalar operation and exhaustive original insert/merge records; all whole parity flags remain false. Branchcalc clean at reviewed implementation SHA3665e66f79947596cdb4ee665f935b71e5f528ac."
-commit: null
+commit:
+  hash: "d36bd28dc1b2692180f7e0996c4b94f2fd3a8802"
+  message: "🔎 570FFF quality: audit scalar release and requested full suite"
 comments:
   -
     author: "CODER"
     body: "Start: Port original scalar release overloads with genuine native evidence and shared engine reuse on calc; preserve upstream defaults and scoped verification cadence."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610100153-570FFF. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -66,8 +72,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Original scalar release native43732/full states339160 and exact byte replay passed; Calc/shared actual100%, full five-check run completed, sole flat native timeout fixed and focused32/8 passed; full office346/raw counters100%, inventory42/allfour100%, browser303 and static passed. Final9checks and original14gates pass; Writer untouched. Goal pause requested after closure."
+  -
+    type: "verify"
+    at: "2026-10-10T03:01:54.336Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610100153-570FFF"
+  -
+    type: "status"
+    at: "2026-10-10T03:01:54.558Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610100153-570FFF. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-10T03:00:42.337Z"
+doc_updated_at: "2026-10-10T03:02:26.668Z"
 doc_updated_by: "CODER"
 description: "Cycle3 task1/10, authorized continued Calc core. Preserve pinned mdds3.2.1 original release_impl1474-1495 and public scalar release3622-3737 for all unmanaged scalar families, exact guard phase and output assignment before emptying. Reuse actual set_empty_in_single_block false. Native unchanged-header full-state oracle; Calc/shared100 and scoped gates; no full-suite until task40. Main_def body boundaries for original position/cposition and public insert_empty may align through borrowed fields/member invocation while preserving ownership and complete old oracle. Inventory and conditional suspected-issues journal included; no Writer repair, policy or gate changes."
 sections:
@@ -131,6 +150,36 @@ sections:
     - freshness: route=computed_local remote=remote_skipped
     - repeat_allowed: false
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-10T03:01:54.336Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610100153-570FFF
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T03:00:42.337Z, excerpt_hash=sha256:09e3b0d9c225a3bb6261ca271c3195583b12b4820723eafa1bf2a13fad822550
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610100153-570FFF/blueprint/resolved-snapshot.json
+    - old_digest: f6838375b9afb8aad6aa475f23c78a79ca1d67d717d816fecc4850983edea123
+    - current_digest: f6838375b9afb8aad6aa475f23c78a79ca1d67d717d816fecc4850983edea123
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610100153-570FFF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610100153-570FFF --result verified-202610100153-570FFF --commit d36bd28dc1b2692180f7e0996c4b94f2fd3a8802
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
     <!-- END VERIFICATION RESULTS -->
@@ -233,6 +282,18 @@ sections:
     - Observation: Actual inventory configuration has only text/json-summary reporters; the preceding finding incorrectly mentioned lcov. No raw inventory coverage file is emitted.
       Impact: Do not fabricate raw inventory counter evidence or change reporter configuration for a supplementary audit.
       Resolution: Audit exact covered==total for all four metrics of all42 configured inventory sources; office346 actual raw Istanbul owners still independently audited positive. Full inventory run123/38 and every source metric100 pass.
+
+    - Observation: Exact route task complete exited5 E_GIT: generated close commit subject is too generic. Runtime verification and quality already pass; task status may already be DONE.
+      Impact: Local closure metadata needs a concrete policy-compliant commit subject; no implementation failure.
+      Resolution: Recompute authoritative route and follow supported explicit close commit fallback in the same task artifact scope; do not modify application code or unrelated CLI policy.
+
+    - Observation: Exact deterministic --close fallback also exited5 with the same generic-subject validator rejection; only active task README remains staged/modified.
+      Impact: Task is DONE with passing verification/quality; closure artifact commit remains pending.
+      Resolution: Use supported explicit ap commit with concrete scalar-release/full-run subject and --allow-tasks; bound changes to this task artifacts, then confirm clean DONE route and pause goal.
+extensions:
+  implementation_commit:
+    hash: "3665e66f79947596cdb4ee665f935b71e5f528ac"
+    message: "✨ 570FFF implement: port original shared scalar release overloads"
 id_source: "generated"
 ---
 ## Summary
@@ -306,6 +367,36 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-10T03:01:54.336Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610100153-570FFF
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T03:00:42.337Z, excerpt_hash=sha256:09e3b0d9c225a3bb6261ca271c3195583b12b4820723eafa1bf2a13fad822550
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610100153-570FFF/blueprint/resolved-snapshot.json
+- old_digest: f6838375b9afb8aad6aa475f23c78a79ca1d67d717d816fecc4850983edea123
+- current_digest: f6838375b9afb8aad6aa475f23c78a79ca1d67d717d816fecc4850983edea123
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610100153-570FFF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610100153-570FFF --result verified-202610100153-570FFF --commit d36bd28dc1b2692180f7e0996c4b94f2fd3a8802
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
@@ -413,3 +504,11 @@ Previous goal turn made verified progress: task30 closed with actual full-suite 
 - Observation: Actual inventory configuration has only text/json-summary reporters; the preceding finding incorrectly mentioned lcov. No raw inventory coverage file is emitted.
   Impact: Do not fabricate raw inventory counter evidence or change reporter configuration for a supplementary audit.
   Resolution: Audit exact covered==total for all four metrics of all42 configured inventory sources; office346 actual raw Istanbul owners still independently audited positive. Full inventory run123/38 and every source metric100 pass.
+
+- Observation: Exact route task complete exited5 E_GIT: generated close commit subject is too generic. Runtime verification and quality already pass; task status may already be DONE.
+  Impact: Local closure metadata needs a concrete policy-compliant commit subject; no implementation failure.
+  Resolution: Recompute authoritative route and follow supported explicit close commit fallback in the same task artifact scope; do not modify application code or unrelated CLI policy.
+
+- Observation: Exact deterministic --close fallback also exited5 with the same generic-subject validator rejection; only active task README remains staged/modified.
+  Impact: Task is DONE with passing verification/quality; closure artifact commit remains pending.
+  Resolution: Use supported explicit ap commit with concrete scalar-release/full-run subject and --allow-tasks; bound changes to this task artifacts, then confirm clean DONE route and pause goal.
