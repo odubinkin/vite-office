@@ -20,6 +20,18 @@
         {
           "path": "apps/office/src/sw/browser/editor/native-paragraph-lines.test.tsx",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/text/frmcrsr.ts",
+          "marker": "GetAdjFrameAtPos"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/text/native-frame-position-mapping.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-frame-position-mapping.test.tsx",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -34,12 +46,21 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/core/text/frmcrsr.cxx",
           "marker": "SwTextCursor  aLine( pFrame, &aInf )"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/text/frmcrsr.cxx",
+          "marker": "GetAdjFrameAtPos"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/text/frmcrsr.cxx",
+          "marker": "bNoScroll = true"
         }
       ]
     },
     "localPath": "apps/office/src/sw/source/core/text/frmcrsr.ts",
     "localSymbols": [
-      "MoveTextFrameMargin"
+      "MoveTextFrameMargin",
+      "GetAdjFrameAtPos"
     ],
     "omittedResponsibilities": [
       "Full native frame/bidi/readonly/merged-text lifecycle and whole parity remain unverified."
@@ -47,13 +68,15 @@
     "preservedResponsibilities": [
       "Iteration215 pending: native text-frame/cursor/shell Home End replaces browser default movement using measured device lines only; frame margin and iterator affinity, hard-break and nonAPI spaces, selection/label lifecycle remain under verification. Whole frame/bidi/readonly/merged-text and kernel/browser parity unverified; existing fields/defaults/exceptions retained.",
       "Iteration215 verified bounded Home End closure: native text frames, cursor and shell execute visual-line margins from browser device lines; right-margin affinity, hard-break exclusion, interactive/API spaces, Shift marks, source native label state, cursor stack/pending input/history and body/cell Chromium1280/390 pass.13532app110inventory14infrastructure276Chromium; ONE upstream-absent full profile and3genuinely new port cases plus1original-failure retry only,0passing replay; strict current-source actual100 app/inventory. Nullable text tested by explicit device port fault injection, not normal-browser parity. Full frame graph/bidi/RTL/readonly/fly/merged paragraphs and DOM label painting/marked-list-level integration remain unverified; all prior fields/statuses/defaults/registered deviations retained.",
-      "Task202610102025-0MZPHY removes the stored text-line array from native SwTextFrame and the independent array/text/index adapter from SwTextCursor. The original frame owns SwParaPortion as first SwLineLayout and linked native lines with SwLinePortion lengths, real device heights and dummy status. SwTextInfo retains original paragraph and frame offset; represented SwTextSizeInfo reads original unmerged text. SwTextIter derives original SwAttrIter and restores actual current/previous identities, cumulative offsets, relative line Y, native line count, cached previous search, Next/Prev/PrevLine/CharToLine. Native SwTextCursor consumes original frame/info and preserves source soft/hard-break/zero-length/dummy affinity. Actual Home End margin helper uses this original paragraph chain, with missing-format admission guarded at the caller and native iterator missing-para construction rejected. Device measurement builds native line objects once at the existing frame boundary. Actual core and mounted React ownership/margin/edit/history plus Chromium body/cell/page/list/table checks cover this correction. Full native frame formatting/retry/cache lock, SwTextMargin/SwTextAdjuster inheritance, absolute frame geometry/register/scripts/font integration, all portion flags/shaping/painting, merged/redline and native text callbacks/query/adjacent-frame selection remain unrepresented or unverified. Measured cursor map and existing margin direction/end proxy remain explicit follow-ups. Historical statuses/defaults/classifications/evidence and registered recovery/open/save/settings boundaries preserved; no broad module/goal parity promotion."
+      "Task202610102025-0MZPHY removes the stored text-line array from native SwTextFrame and the independent array/text/index adapter from SwTextCursor. The original frame owns SwParaPortion as first SwLineLayout and linked native lines with SwLinePortion lengths, real device heights and dummy status. SwTextInfo retains original paragraph and frame offset; represented SwTextSizeInfo reads original unmerged text. SwTextIter derives original SwAttrIter and restores actual current/previous identities, cumulative offsets, relative line Y, native line count, cached previous search, Next/Prev/PrevLine/CharToLine. Native SwTextCursor consumes original frame/info and preserves source soft/hard-break/zero-length/dummy affinity. Actual Home End margin helper uses this original paragraph chain, with missing-format admission guarded at the caller and native iterator missing-para construction rejected. Device measurement builds native line objects once at the existing frame boundary. Actual core and mounted React ownership/margin/edit/history plus Chromium body/cell/page/list/table checks cover this correction. Full native frame formatting/retry/cache lock, SwTextMargin/SwTextAdjuster inheritance, absolute frame geometry/register/scripts/font integration, all portion flags/shaping/painting, merged/redline and native text callbacks/query/adjacent-frame selection remain unrepresented or unverified. Measured cursor map and existing margin direction/end proxy remain explicit follow-ups. Historical statuses/defaults/classifications/evidence and registered recovery/open/save/settings boundaries preserved; no broad module/goal parity promotion.",
+      "Task202610102046-XB6GB4 connects current native margin movement to original source frame position mapping and represented default no-scroll adjacency over already device-formatted unmerged frames. SwContentFrame FindMaster checks original reciprocal predecessor links and returns source lost-link fallback. SwTextFrame GetText and MapViewToModel/MapViewToModelPos/MapModelToView/MapModelToViewPos retain original node/index ownership; the unmerged source model-to-view branch deliberately ignores the node argument and retains its index. SwTextSizeInfo reads original frame GetText. GetAdjFrameAtPos selects actual native follows via GetFrameAtPos, retains preceding-frame right-margin affinity, compares original mapped model owner/index, walks actual immediate masters including zero-length follows and preserves source lost-master fallback. Actual Home End calls original adjacency and maps its native point through actual SwPosition temporaries with explicit release; no copied model owner or coordinate array is introduced. Original core/mounted caret-edit-history and Chromium body/cell/page/list/table cases cover this correction; explicit reciprocal-link corruption probes check native defensive guards, not ordinary valid-state parity. Native GetFormatted/re-entrant format stabilization, forced-scroll/sw_ChangeOffset, merged/vertical/absolute geometry/full empty/scroll margins, native GetFrameOfModify and UI publication of the full original cursor-follow chain remain unported or unverified. Measured cursor map and end-less-than-node-length proxy remain explicit next integration work, without invented boolean/synthetic follow. Complete formatter, paragraph flags/portion/font/register/script/cache-lock/root/Doc factory/Undo/hierarchy and broader parity remain unverified. Historical statuses/defaults/classifications/responsibilities/evidence and registered recovery/open/save/settings boundaries unchanged, no whole-module or goal promotion."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/text/frmcrsr.cxx",
     "upstreamSymbols": [
       "SwTextFrame::LeftMargin",
-      "SwTextFrame::RightMargin"
+      "SwTextFrame::RightMargin",
+      "GetAdjFrameAtPos"
     ]
   },
   "legacyOrder": 197

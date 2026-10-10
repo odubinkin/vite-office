@@ -44,7 +44,7 @@ export class SwTextSizeInfo extends SwTextInfo {
   }
   /** Reads original unmerged node text. @returns UTF-16 text. */
   public GetText(): string {
-    return this.frame.GetTextNodeFirst().GetText();
+    return this.frame.GetText();
   }
   /** Reads one original text character. @param position - UTF-16 offset. @returns Original character. */
   public GetChar(position: number): string | undefined {

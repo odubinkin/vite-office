@@ -10,7 +10,7 @@ import { SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
 import { SwFormatPageDesc } from "../attr/fmtpdsc";
-import type { SwPaM, SwPosition } from "../crsr/pam";
+import { SwPosition, type SwPaM } from "../crsr/pam";
 import { SwTextCursor } from "./itrtxt";
 import { SwLineLayout, SwParaPortion } from "./porlay";
 import { MoveTextFrameMargin } from "./frmcrsr";
@@ -194,6 +194,27 @@ export class SwTextFrame extends SwContentFrame {
   /** Resolves the original first node in the represented unmerged frame. @returns Original registered text owner. */
   public GetTextNodeFirst(): SwTextNode {
     return this.GetDep() as SwTextNode;
+  }
+  /** Reads the original represented unmerged frame text. @returns Original node text. */
+  public GetText(): string {
+    return this.GetTextNodeFirst().GetText();
+  }
+  /** Maps represented unmerged view text into the original node and index. @param index - Frame text index. @returns Original node and unchanged UTF-16 index. */
+  public MapViewToModel(index: number): readonly [SwTextNode, number] {
+    return [this.GetTextNodeFirst(), index];
+  }
+  /** Creates the actual registered model position from a native view index. @param index - Frame text index. @returns Original native position requiring release. */
+  public MapViewToModelPos(index: number): SwPosition {
+    const [node, offset] = this.MapViewToModel(index);
+    return new SwPosition(node, offset);
+  }
+  /** Maps a represented unmerged node/index as source does without a node-dependent offset. @param _node - Native model node. @param index - Original content index. @returns Unchanged frame text index. */
+  public MapModelToView(_node: SwTextNode, index: number): number {
+    return index;
+  }
+  /** Maps an actual model position into unmerged frame text. @param position - Native model position. @returns Frame text index. */
+  public MapModelToViewPos(position: SwPosition): number {
+    return this.MapModelToView(position.GetNode() as SwTextNode, position.GetContentIndex());
   }
   /** Reads the original native paragraph first-line object. @returns Paragraph or missing formatting. */
   public GetPara(): SwParaPortion | undefined {

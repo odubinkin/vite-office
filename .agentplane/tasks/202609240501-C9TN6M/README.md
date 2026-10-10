@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 327
+revision: 328
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-10T20:41:04.351Z"
+doc_updated_at: "2026-10-10T21:03:46.593Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -1470,6 +1470,10 @@ sections:
     - Observation: Task202610102025-0MZPHY is the seventh bounded correction after BZ14P4. Original frame-owned SwParaPortion/SwLineLayout replaces duplicate array; SwTextInfo/SizeInfo and native SwTextIter over original AttrIter replace detached cursor array/index/text. Actual visual-line margins now consume original native paragraph chains.
       Impact: Accepted7142/304 +23Chromium/12,11fresh core/React;whole6modules175lines197statements48functions141branches100,386nonnegative counters/1244current hashes;818old tests817unchanged+1native API migration,8canonical prefixes+4new unverified mappings,9metadata gates. All runtime/static/build/browser upstream-absent finally restored; no full7/10.
       Resolution: Native formatting/retry/cache-lock/absolute geometry/intermediate margin-adjuster classes/full portions/flags/query/merged/redline/text callbacks and measured cursor map/margin end proxy remain explicit follow-ups. Registered recovery/open/save/settings boundaries unchanged. After next full repair errors then pause goal; no new tasks after checkpoint.
+
+    - Observation: Task202610102046-XB6GB4 is eighth bounded correction after BZ14P4: original SwContentFrame reciprocal FindMaster, source unmerged SwTextFrame text/model/view mapping, represented already-device-formatted default-no-scroll GetAdjFrameAtPos and original position RAII now drive actual visual-line margins.
+      Impact: 7158related/306 plus23Chromium/12 pass,16fresh core/React;actual4modules135lines150statements37functions118branches100,305nonnegative counters/current1246hashes.820old acceptance files byte-identical,8canonical history prefixes retained,9metadata gates pass. Runtime/static/build/browser upstream-absent finally restored, no full8/10.
+      Resolution: Native full formatting/re-entrant stabilization/forced scrolling/merged/vertical/absolute geometry/full margins/query and UI cursor-chain publication/end proxy remain explicit next work, alongside full paragraph/portion/root/Doc factory/Undo/hierarchy. Registered IO/recovery boundaries preserved. After next full repair any errors then pause goal; no new tasks after checkpoint.
 id_source: "generated"
 ---
 ## Summary
@@ -2913,3 +2917,7 @@ Task202610101959-1ZNFNB (sixth correction after BZ14P4) makes current native SwR
 - Observation: Task202610102025-0MZPHY is the seventh bounded correction after BZ14P4. Original frame-owned SwParaPortion/SwLineLayout replaces duplicate array; SwTextInfo/SizeInfo and native SwTextIter over original AttrIter replace detached cursor array/index/text. Actual visual-line margins now consume original native paragraph chains.
   Impact: Accepted7142/304 +23Chromium/12,11fresh core/React;whole6modules175lines197statements48functions141branches100,386nonnegative counters/1244current hashes;818old tests817unchanged+1native API migration,8canonical prefixes+4new unverified mappings,9metadata gates. All runtime/static/build/browser upstream-absent finally restored; no full7/10.
   Resolution: Native formatting/retry/cache-lock/absolute geometry/intermediate margin-adjuster classes/full portions/flags/query/merged/redline/text callbacks and measured cursor map/margin end proxy remain explicit follow-ups. Registered recovery/open/save/settings boundaries unchanged. After next full repair errors then pause goal; no new tasks after checkpoint.
+
+- Observation: Task202610102046-XB6GB4 is eighth bounded correction after BZ14P4: original SwContentFrame reciprocal FindMaster, source unmerged SwTextFrame text/model/view mapping, represented already-device-formatted default-no-scroll GetAdjFrameAtPos and original position RAII now drive actual visual-line margins.
+  Impact: 7158related/306 plus23Chromium/12 pass,16fresh core/React;actual4modules135lines150statements37functions118branches100,305nonnegative counters/current1246hashes.820old acceptance files byte-identical,8canonical history prefixes retained,9metadata gates pass. Runtime/static/build/browser upstream-absent finally restored, no full8/10.
+  Resolution: Native full formatting/re-entrant stabilization/forced scrolling/merged/vertical/absolute geometry/full margins/query and UI cursor-chain publication/end proxy remain explicit next work, alongside full paragraph/portion/root/Doc factory/Undo/hierarchy. Registered IO/recovery boundaries preserved. After next full repair any errors then pause goal; no new tasks after checkpoint.

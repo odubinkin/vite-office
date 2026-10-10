@@ -13,7 +13,8 @@
       "HasFollow",
       "IsFollow",
       "SetFollow",
-      "DestroyImpl"
+      "DestroyImpl",
+      "FindMaster"
     ],
     "upstreamSymbols": [
       "SwContentFrame::SwContentFrame"
@@ -22,7 +23,8 @@
       "The represented native content-frame constructor registers its original SwContentNode through SwFrame.",
       "Task202610101854-FSYVCZ restores original-node content-frame registration: SwTextFrame extends SwContentFrame/SwFrame, has the native Txt discriminator and obtains the represented unmerged first text node from its original modify owner. Actual frame clients remain mutable for native pooled attribute invalidation. Cursor measurement replacement, pagination reconciliation, discarded or failed partial pagination and per-view root close release original clients; geometry candidates are destroyed when original frames are reused. Required native-node inputs replace detached old fixture owners without changing cases, device inputs or expected matcher arguments. The browser still supplies fragment geometry and the root remains a per-view browser-owned layout object; complete native SwFlowFrame mixin/follow links, root/page/content hierarchy, redlines, text Prepare/callbacks, merged/vertical/native geometry and per-node frame-width guards remain unverified. Original global Repeat/rich units and registered recovery/open/save/settings deviations remain unchanged. No full module or goal parity promotion.",
       "Task202610101929-ECR55T replaces stored text-frame follow classification with actual original SwFlowFrame preceding/follow links. TypeScript composition represents the native C++ multiple-inheritance owner; SetFollow replacement/re-chaining and destruction follow source order without stitching. Original SwContentFrame clients delegate typed links and release them on destruction. Represented unmerged SwTextFrame GetOffset/GetFrameAtPos follows native boundary ties and existing SwTextCursor right-margin affinity. Pagination and retained-frame reconciliation repair actual same-node chains after candidate/discarded frame cleanup; React renders IsFollow rather than a detached boolean. Actual native owners, mounted edit/history and Chromium physical bullet continuation/reformat/edit/undo/redo/reopen checks cover this bounded correction. Cursor motion still uses the measured cursor map and MoveTextFrameMargin; native GetFrameOfModify/GetAdjFrameAtPos, root/page/content hierarchy, merged/vertical/native geometry, flow lock/undersize/fly flags/placement, redlines and text Prepare/callbacks, rich units/global Repeat remain unrepresented or unverified. Browser device fragment fields remain. All historical statuses/defaults/classifications/responsibility/evidence and registered recovery/open/save/settings deviations are retained; no whole-module or goal parity promotion.",
-      "Task202610101959-1ZNFNB restores source SwFrame mpRoot ownership and native optional original sibling constructor propagation through SwLayoutFrame/SwContentFrame/SwTextFrame. SwRootFrame is now an actual registered SwLayoutFrame with native Root type, original self root and an independent original Root SwFrameFormat derived from the document default. Production body pagination/master/follow and cursor measurements receive the actual original view root; retained native frames keep their original root. Root close releases its original derived format before base frame destruction and preserves the original document default; the existing browser document-shell replacement boundary rebinds the original format to the replacement document. SwView creates the native root after docShell binding instead of invoking a document callback during field initialization. Actual native owners, independent same-document roots, constructor null/actual sibling inputs, pagination/reuse/partial error/document replacement/close and mounted edit/history checks cover this correction. The Root format currently uses the original native SwFrameFormat constructor directly; full SwDoc MakeFrameFormat/DelFrameFormat registry/modified-state/creation-deletion Undo responsibilities remain unported. Full root/view flags, native page/body/content hierarchy, table-frame root propagation, GetFrameOfModify/GetAdjFrameAtPos/native geometry/merged/vertical/flow flags/redlines/text callbacks remain unverified; margin movement still uses the measured cursor map/MoveTextFrameMargin. Existing browser device/snapshot fields and registered recovery/open/save/settings deviations retained. Historical semantic statuses/defaults/classifications/source responsibilities/evidence unchanged, no whole-module or goal promotion."
+      "Task202610101959-1ZNFNB restores source SwFrame mpRoot ownership and native optional original sibling constructor propagation through SwLayoutFrame/SwContentFrame/SwTextFrame. SwRootFrame is now an actual registered SwLayoutFrame with native Root type, original self root and an independent original Root SwFrameFormat derived from the document default. Production body pagination/master/follow and cursor measurements receive the actual original view root; retained native frames keep their original root. Root close releases its original derived format before base frame destruction and preserves the original document default; the existing browser document-shell replacement boundary rebinds the original format to the replacement document. SwView creates the native root after docShell binding instead of invoking a document callback during field initialization. Actual native owners, independent same-document roots, constructor null/actual sibling inputs, pagination/reuse/partial error/document replacement/close and mounted edit/history checks cover this correction. The Root format currently uses the original native SwFrameFormat constructor directly; full SwDoc MakeFrameFormat/DelFrameFormat registry/modified-state/creation-deletion Undo responsibilities remain unported. Full root/view flags, native page/body/content hierarchy, table-frame root propagation, GetFrameOfModify/GetAdjFrameAtPos/native geometry/merged/vertical/flow flags/redlines/text callbacks remain unverified; margin movement still uses the measured cursor map/MoveTextFrameMargin. Existing browser device/snapshot fields and registered recovery/open/save/settings deviations retained. Historical semantic statuses/defaults/classifications/source responsibilities/evidence unchanged, no whole-module or goal promotion.",
+      "Task202610102046-XB6GB4 connects current native margin movement to original source frame position mapping and represented default no-scroll adjacency over already device-formatted unmerged frames. SwContentFrame FindMaster checks original reciprocal predecessor links and returns source lost-link fallback. SwTextFrame GetText and MapViewToModel/MapViewToModelPos/MapModelToView/MapModelToViewPos retain original node/index ownership; the unmerged source model-to-view branch deliberately ignores the node argument and retains its index. SwTextSizeInfo reads original frame GetText. GetAdjFrameAtPos selects actual native follows via GetFrameAtPos, retains preceding-frame right-margin affinity, compares original mapped model owner/index, walks actual immediate masters including zero-length follows and preserves source lost-master fallback. Actual Home End calls original adjacency and maps its native point through actual SwPosition temporaries with explicit release; no copied model owner or coordinate array is introduced. Original core/mounted caret-edit-history and Chromium body/cell/page/list/table cases cover this correction; explicit reciprocal-link corruption probes check native defensive guards, not ordinary valid-state parity. Native GetFormatted/re-entrant format stabilization, forced-scroll/sw_ChangeOffset, merged/vertical/absolute geometry/full empty/scroll margins, native GetFrameOfModify and UI publication of the full original cursor-follow chain remain unported or unverified. Measured cursor map and end-less-than-node-length proxy remain explicit next integration work, without invented boolean/synthetic follow. Complete formatter, paragraph flags/portion/font/register/script/cache-lock/root/Doc factory/Undo/hierarchy and broader parity remain unverified. Historical statuses/defaults/classifications/responsibilities/evidence and registered recovery/open/save/settings boundaries unchanged, no whole-module or goal promotion."
     ],
     "omittedResponsibilities": [
       "Independent SwFlowFrame mixin, native follow links, redlines, text Prepare/callbacks, native root/page/content hierarchy and complete destruction/geometry remain unverified."
@@ -88,6 +90,18 @@
         {
           "path": "apps/office/src/sw/browser/editor/native-frame-root-owner.test.tsx",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/layout/ssfrm.ts",
+          "marker": "FindMaster"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/text/native-frame-position-mapping.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-frame-position-mapping.test.tsx",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -106,6 +120,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/core/layout/ssfrm.cxx",
           "marker": "SwContentFrame::SwContentFrame"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/flowfrm.cxx",
+          "marker": "SwContentFrame::FindMaster"
         }
       ]
     }
