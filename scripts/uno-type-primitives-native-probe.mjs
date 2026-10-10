@@ -14,7 +14,10 @@ const fixture = "apps/office/src/cppu/source/typelib/native-type-primitives-case
 const native = prepareCaseNative(target);
 const header = loadUnicodeOriginal(native.sources, "include/typelib/typeclass.h");
 loadUnicodeOriginal(native.sources, "udkapi/com/sun/star/uno/TypeClass.idl");
-loadUnicodeOriginal(native.sources, "include/typelib/typedescription.h");
+const descriptions = loadUnicodeOriginal(native.sources, "include/typelib/typedescription.h");
+const uik = loadUnicodeOriginal(native.sources, "include/typelib/uik.h");
+loadUnicodeOriginal(native.sources, "include/osl/interlck.h");
+loadUnicodeOriginal(native.sources, "sal/osl/unx/interlck.cxx");
 loadUnicodeOriginal(native.sources, "cppu/source/typelib/typelib.cxx");
 loadUnicodeOriginal(native.sources, "sal/rtl/strtmpl.hxx");
 loadUnicodeOriginal(native.sources, "sal/rtl/ustring.cxx");
@@ -36,7 +39,30 @@ const strings = [
   [0xffff],
   [0xd800, 0xdc00],
 ];
+const countBoundaries = [
+  -2147483648, -2147483647, -65537, -65536, -32769, -32768, -129, -128, -2, -1, 0, 1, 127, 128,
+  32767, 32768, 65535, 65536, 2147483646, 2147483647,
+];
+const records = [
+  ...(descriptions + uik)
+    .replace(/\/\*[\s\S]*?\*\//g, "")
+    .matchAll(/typedef struct(?: SAL_DLLPUBLIC_RTTI)?\s+(_\w+)\s*\{([\s\S]*?)\}\s*(\w+)\s*;/g),
+].map(
+  /** Retains every actual full C record field in original order without initializing it. @param match - Full original declaration. @returns Record identity and field names. */
+  (match) => ({
+    tag: match[1],
+    name: match[3],
+    fields: [...match[2].matchAll(/\b(\w+)\s*;/g)].map(
+      /** Selects an actual original field name. @param field - Declaration suffix. @returns Field name. */
+      (field) => field[1],
+    ),
+  }),
+);
+if (records.length !== 15) throw new Error("Incomplete genuine C type records");
 const driver = String.raw`#include <typelib/typedescription.h>
+#include <osl/interlck.h>
+#include <algorithm>
+#include <thread>
 #include <com/sun/star/uno/TypeClass.hdl>
 #include <rtl/ustring.hxx>
 #include <array>
@@ -73,6 +99,34 @@ typelib_TypeDescriptionReference q={41,7,static_cast<typelib_TypeClass>(secondCl
 auto pCount=p.nRefCount,qCount=q.nRefCount,aCount=first.pData->refCount,bCount=second.pData->refCount;
 emit(std::array<sal_Int32,8>{typelib_typedescriptionreference_equals(&p,&q),typelib_typedescriptionreference_equals(&p,&p),p.nRefCount==pCount,q.nRefCount==qCount,first.pData->refCount==aCount,second.pData->refCount==bCount,rtl_ustr_compare(first.getStr(),second.getStr()),TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK(p.eTypeClass)});
 }std::array<sal_Int32,1>last={typelib_typedescriptionreference_equals(nullptr,nullptr)};emit(last);return 0;}
+if(mode=="records"){
+${records
+  .map(
+    /** Observes genuine native record layout without constructing an owner or reading uninitialized storage. @param record - Full C declaration. @returns Original compiler layout observations. */
+    (record) =>
+      `emit(std::array<sal_Int32,${2 + record.fields.length * 2}>{static_cast<sal_Int32>(sizeof(${record.name})),static_cast<sal_Int32>(alignof(${record.name})),${record.fields
+        .map(
+          /** Retains the original compiler's field offset and size. @param field - Real field. @returns Layout observation. */
+          (field) =>
+            `static_cast<sal_Int32>(offsetof(${record.name},${field})),static_cast<sal_Int32>(sizeof(((${record.name}*)nullptr)->${field}))`,
+        )
+        .join(",")}});`,
+  )
+  .join("\n")}
+return 0;}
+if(mode=="counts"){std::vector<sal_Int32>inputs;for(sal_uInt32 word=0;word<65536;word++)inputs.push_back(std::bit_cast<sal_Int32>((word<<16)|word));for(auto value:std::array<sal_Int32,${countBoundaries.length}>{${countBoundaries.join(",")}})inputs.push_back(value);
+for(auto initial:inputs){
+std::array<oslInterlockedCount,3>storage={111,initial,222};auto result=osl_incrementInterlockedCount(&storage[1]);emit(std::array<sal_Int32,4>{result,storage[0],storage[1],storage[2]});
+storage[1]=initial;result=osl_decrementInterlockedCount(&storage[1]);emit(std::array<sal_Int32,4>{result,storage[0],storage[1],storage[2]});
+storage[1]=initial;result=osl_atomic_increment(&storage[1]);emit(std::array<sal_Int32,4>{result,storage[0],storage[1],storage[2]});
+storage[1]=initial;result=osl_atomic_decrement(&storage[1]);emit(std::array<sal_Int32,4>{result,storage[0],storage[1],storage[2]});
+}return 0;}
+if(mode=="threads"){constexpr int workers=4,calls=4096;for(auto initial:std::array<sal_Int32,2>{0,2147475455})for(auto direction:std::array<int,2>{1,-1}){
+std::array<oslInterlockedCount,3>storage={111,initial,222};std::array<std::vector<sal_Int32>,workers>outputs;std::vector<std::thread>threads;
+for(int worker=0;worker<workers;worker++)threads.emplace_back([&,worker]{for(int i=0;i<calls;i++)outputs[worker].push_back(direction>0?osl_incrementInterlockedCount(&storage[1]):osl_decrementInterlockedCount(&storage[1]));});
+for(auto&t:threads)t.join();std::vector<sal_Int32>all;for(auto const&output:outputs)all.insert(all.end(),output.begin(),output.end());std::sort(all.begin(),all.end());
+emit(std::array<sal_Int32,4>{initial,storage[0],storage[1],storage[2]});for(auto value:all)emit(std::array<sal_Int32,1>{value});
+}return 0;}
 if(mode=="null-assert"){rtl_ustr_compare(nullptr,u"a");return 0;}
 return 2;}
 `;
@@ -131,14 +185,25 @@ function capture(binary, mode) {
 const binary = build(false),
   sanitized = build(true),
   captures = {};
-for (const mode of ["enums", "units", "equals"]) {
+for (const mode of ["enums", "units", "equals", "records", "counts", "threads"]) {
   captures[mode] = capture(binary, mode);
   if (!capture(sanitized, mode).equals(captures[mode]))
     throw new Error(`Sanitized native output differs: ${mode}`);
 }
 if (
   captures.units.length !== 65536 * 4 * 2 * 4 ||
-  captures.equals.length !== 32 * 32 * strings.length ** 2 * 8 * 4 + 4
+  captures.equals.length !== 32 * 32 * strings.length ** 2 * 8 * 4 + 4 ||
+  captures.records.length !==
+    records.reduce(
+      /** Totals all genuine record fields. @param total - Accumulated fields. @param record - Original declaration. @returns Complete byte size. */ (
+        total,
+        record,
+      ) => total + 2 + record.fields.length * 2,
+      0,
+    ) *
+      4 ||
+  captures.counts.length !== (65536 + countBoundaries.length) * 16 * 4 ||
+  captures.threads.length !== 4 * (4 + 4 * 4096) * 4
 )
   throw new Error("Incomplete original primitive observations");
 const assertion = spawnSync(binary, ["null-assert"]);
@@ -180,11 +245,31 @@ const result = {
     rawHash: hash(captures.equals),
     gzipBase64: gzipSync(captures.equals, { level: 9 }).toString("base64"),
   },
+  records: {
+    declarations: records,
+    rawHash: hash(captures.records),
+    gzipBase64: gzipSync(captures.records, { level: 9 }).toString("base64"),
+  },
+  counts: {
+    count: 65536 + countBoundaries.length,
+    width: 16,
+    boundaries: countBoundaries,
+    rawHash: hash(captures.counts),
+    gzipBase64: gzipSync(captures.counts, { level: 9 }).toString("base64"),
+  },
+  threads: {
+    workers: 4,
+    calls: 4096,
+    initials: [0, 2147475455],
+    directions: [1, -1],
+    rawHash: hash(captures.threads),
+    gzipBase64: gzipSync(captures.threads, { level: 9 }).toString("base64"),
+  },
   bothNullEquals: captures.equals.readInt32LE(captures.equals.length - 4),
   nullWrapperAssertion: "SIGABRT",
   sanitizedIdentical: true,
   scope:
-    "Complete original enum values, real header weak classifier, original const CPPU record comparison and selected real SAL Unicode/NoShortening comparator. Initialized genuine C records expose const predicate inputs only; no native type factory/registry/reference lifecycle or portable UNO exception/service/reflection claim. Original ICU source verification comes from the shared build helper but no ICU code is linked by this caller. Native platform frameworks/libc are uninstrumented.",
+    "Complete original enum values and C record declarations/layout, real header weak classifier, original const CPPU record comparison, selected real SAL Unicode/NoShortening comparator and original OSL adjusted atomic count operations including concurrent returns. Layout observations do not certify a portable C ABI or initialize unspecified native fields. Initialized genuine C records expose const predicate inputs only; no native type factory/registry/reference lifecycle or portable UNO exception/service/reflection claim. Original ICU source verification comes from the shared build helper but no ICU code is linked by this caller. Native platform frameworks/libc are uninstrumented.",
 };
 if (write) writeFileSync(fixture, JSON.stringify(result) + "\n");
 else if (JSON.stringify(JSON.parse(readFileSync(fixture, "utf8"))) !== JSON.stringify(result))

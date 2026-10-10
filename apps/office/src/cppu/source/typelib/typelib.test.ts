@@ -1,5 +1,8 @@
 /** @fileoverview Replays genuine CPPU/C/UNO enum and borrowed-record equality observations through shared RTL owners without upstream source access. */
 import { createHash } from "node:crypto";
+import { readFileSync } from "node:fs";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import { gunzipSync } from "node:zlib";
 import { describe, expect, it } from "vitest";
 import { typelib_TypeClass } from "../../inc/typelib/typeclass";
@@ -41,6 +44,45 @@ function record(
 }
 
 describe("original CPPU type comparison dependencies", /** Groups actual native primitive observations. @returns Nothing. */ () => {
+  it("retains every complete original C record field and typedef without allocating or guessing defaults", /** Checks genuine source declarations and compiler layout observations against the portable type declarations only. @returns Nothing. */ () => {
+    const source =
+      readFileSync(
+        resolve(dirname(fileURLToPath(import.meta.url)), "../../inc/typelib/typedescription.ts"),
+        "utf8",
+      ) +
+      readFileSync(
+        resolve(dirname(fileURLToPath(import.meta.url)), "../../inc/typelib/uik.ts"),
+        "utf8",
+      );
+    const layouts = bytes(native.records);
+    expect(native.records.declarations).toHaveLength(15);
+    let offset = 0;
+    for (const record of native.records.declarations) {
+      const expression = new RegExp(`export interface ${record.tag} \\{([\\s\\S]*?)\\n\\}`, "u");
+      const body = expression.exec(source)?.[1];
+      expect(body).toBeDefined();
+      const fields = [...(body as string).matchAll(/^ {2}(\w+):/gmu)].map(
+        /** Selects complete declared field order. @param field - Actual TS declaration. @returns Field name. */ (
+          field,
+        ) => field[1],
+      );
+      expect(fields).toEqual(record.fields);
+      expect(source).toMatch(new RegExp(`export type ${record.name}\\s*=\\s*${record.tag};`, "u"));
+      const size = layouts.readInt32LE(offset),
+        alignment = layouts.readInt32LE(offset + 4);
+      expect(size).toBeGreaterThan(0);
+      expect(size % alignment).toBe(0);
+      offset += 8;
+      for (let field = 0; field < record.fields.length; field++) {
+        const fieldOffset = layouts.readInt32LE(offset),
+          fieldSize = layouts.readInt32LE(offset + 4);
+        expect(fieldOffset).toBeGreaterThanOrEqual(0);
+        expect(fieldOffset + fieldSize).toBeLessThanOrEqual(size);
+        offset += 8;
+      }
+    }
+    expect(offset).toBe(layouts.length);
+  });
   it("matches all independently generated and C enum values and actual weak classes", /** Replays every original declaration including the generated size sentinel. @returns Nothing. */ () => {
     expect(native.baselineCommit).toBe("9bc445578031fecf56086729d8e4940c77e14d65");
     expect(native.sanitizedIdentical).toBe(true);

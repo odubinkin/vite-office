@@ -13,7 +13,12 @@ import {
 it("owns genuine CPPU type metadata and SAL comparison without browser or reverse dependencies", /** Protects actual typelib primitive owners. @returns Nothing. */ () => {
   expect(isForbiddenModuleEdge("cppu", "sal")).toBe(false);
   expect(isForbiddenModuleEdge("sal", "cppu")).toBe(true);
-  for (const source of ["cppu/inc/typelib/typedescription.ts", "cppu/source/typelib/typelib.ts"]) {
+  for (const source of [
+    "cppu/inc/typelib/typedescription.ts",
+    "cppu/source/typelib/typelib.ts",
+    "sal/inc/osl/interlck.ts",
+    "sal/osl/unx/interlck.ts",
+  ]) {
     expect(getRuntimeOwnershipLayer(source)).toBe("upstream-mechanism");
     expect(getRuntimeOwnershipViolation(source, "", "react")).toMatch(/presentation package/u);
     expect(

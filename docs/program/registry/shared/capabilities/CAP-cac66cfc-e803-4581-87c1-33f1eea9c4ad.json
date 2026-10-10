@@ -11,7 +11,8 @@
     "assertions": [
       "Retain all independently declared original C and generated UNO type-class numeric values and the real weak-class predicate.",
       "Retain complete common native C record declarations without guessed constructors/defaults/allocation.",
-      "Retain original borrowed type-reference equality, pointer shortcut, exact class/length checks and SAL terminated Unicode comparison without ownership mutation."
+      "Retain original borrowed type-reference equality, pointer shortcut, exact class/length checks and SAL terminated Unicode comparison without ownership mutation.",
+      "Retain every original extended C record field/typedef and callback signature without invented defaults; native compiler layout observations do not assert portable ABI."
     ],
     "capability": "Original UNO type-class declarations and const typelib reference comparison",
     "gaps": [
@@ -46,6 +47,10 @@
         {
           "path": "codemaker/source/cppumaker/cpputype.cxx",
           "marker": "MAKE_FIXED_SIZE"
+        },
+        {
+          "path": "include/typelib/uik.h",
+          "marker": "m_Data1"
         }
       ],
       "tests": [
@@ -86,6 +91,10 @@
         {
           "path": "apps/office/src/sal/rtl/ustring.ts",
           "marker": "rtl_ustr_compare"
+        },
+        {
+          "path": "apps/office/src/cppu/inc/typelib/uik.ts",
+          "marker": "_typelib_Uik"
         }
       ],
       "tests": [
@@ -100,6 +109,10 @@
         {
           "path": "apps/office/src/cppu/source/typelib/native-type-primitives-cases.json",
           "marker": "\"sanitizedIdentical\""
+        },
+        {
+          "path": "apps/office/src/cppu/source/typelib/typelib.test.ts",
+          "marker": "retains every complete original C record field and typedef without allocating or guessing defaults"
         }
       ],
       "docs": [
@@ -113,7 +126,8 @@
     "atomicOperation": "Compare borrowed original type-description references through the real shared terminated Unicode owner",
     "scopeLimitations": [
       "Native type allocation/registration/reference lifecycle, full compound descriptions, common-prefix aliasing, Type/Reference/Any/default RuntimeException, full upstream consumer QA, native ABI/concurrency and Calc string service/document/edit/UI remain unverified. Initialized records certify only the original const comparison function, not a factory or allocator.",
-      "Original cppu testUnoType is a related real Type/UnoType consumer reference only; its type registration and full consumer QA are not ported or executed by primitive replay. ICU verification is reused by native build tooling but no ICU code is linked by this primitive caller."
+      "Original cppu testUnoType is a related real Type/UnoType consumer reference only; its type registration and full consumer QA are not ported or executed by primitive replay. ICU verification is reused by native build tooling but no ICU code is linked by this primitive caller.",
+      "Complete original extended C typedef declarations preserve every actual compound/struct/indirect/enum/method/interface/initializer field and callback signature. Deprecated Uik retains all five original fields. Genuine compiler sizeof/alignof/offsetof/member-size observations and portable declaration checks cover15 full original records; no uninitialized native field is read. Original allocTypeDescription uses new char[sizeof(T)], so no value initialization, guessed constructor/defaults or physical ABI/allocator/prefix-aliasing owner is inferred."
     ],
     "implemented": true,
     "contractParity": false,

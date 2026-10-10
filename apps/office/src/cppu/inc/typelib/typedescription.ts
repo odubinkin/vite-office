@@ -1,6 +1,7 @@
 /** @fileoverview Original common typelib record declarations and weak-reference classifier; allocation/registration/lifecycle remain owned by the unfinished original CPPU functions. */
 import type { rtl_uString } from "../../../sal/inc/rtl/ustring.h";
 import { typelib_TypeClass } from "./typeclass";
+import type { typelib_Uik } from "./uik";
 export { typelib_typedescriptionreference_equals } from "../../source/typelib/typelib";
 
 /** Complete original common type-reference record; declaration adds no allocation or guessed initialization. */
@@ -52,6 +53,213 @@ export interface _typelib_TypeDescription {
 }
 /** Original public full-description typedef. */
 export type typelib_TypeDescription = _typelib_TypeDescription;
+
+/** Original compound exception description; members are populated by original allocation/registration owners. */
+export interface _typelib_CompoundTypeDescription {
+  /** Original common description prefix. */
+  aBase: typelib_TypeDescription;
+  /** Original compound base, nullable for no inheritance. */
+  pBaseTypeDescription: _typelib_CompoundTypeDescription | null;
+  /** Original signed32 member count. */
+  nMembers: number;
+  /** Original signed32 byte-offset array, nullable before allocation. */
+  pMemberOffsets: Int32Array | null;
+  /** Original member type-reference pointers. */
+  ppTypeRefs: typelib_TypeDescriptionReference[] | null;
+  /** Original owned member-name pointers. */
+  ppMemberNames: rtl_uString[] | null;
+}
+/** Original public compound typedef. */
+export type typelib_CompoundTypeDescription = _typelib_CompoundTypeDescription;
+
+/** Original plain or instantiated polymorphic struct description. */
+export interface _typelib_StructTypeDescription {
+  /** Original compound prefix. */
+  aBase: typelib_CompoundTypeDescription;
+  /** Original parameterized-member flags; null for plain structs. */
+  pParameterizedTypes: boolean[] | null;
+}
+/** Original public struct typedef. */
+export type typelib_StructTypeDescription = _typelib_StructTypeDescription;
+
+/** Original sequence description. */
+export interface _typelib_IndirectTypeDescription {
+  /** Original common description prefix. */
+  aBase: typelib_TypeDescription;
+  /** Original element type pointer, nullable before initialization. */
+  pType: typelib_TypeDescriptionReference | null;
+}
+/** Original public indirect typedef. */
+export type typelib_IndirectTypeDescription = _typelib_IndirectTypeDescription;
+
+/** Original enumeration description. */
+export interface _typelib_EnumTypeDescription {
+  /** Original common description prefix. */
+  aBase: typelib_TypeDescription;
+  /** Original signed32 default enumeration value. */
+  nDefaultEnumValue: number;
+  /** Original signed32 enumeration count. */
+  nEnumValues: number;
+  /** Original owned enumeration-name pointers. */
+  ppEnumNames: rtl_uString[] | null;
+  /** Original signed32 enumeration values. */
+  pEnumValues: Int32Array | null;
+}
+/** Original public enumeration typedef. */
+export type typelib_EnumTypeDescription = _typelib_EnumTypeDescription;
+
+/** Original interface method parameter record. */
+export interface _typelib_MethodParameter {
+  /** Original owned parameter-name pointer. */
+  pName: rtl_uString;
+  /** Original parameter type-reference pointer. */
+  pTypeRef: typelib_TypeDescriptionReference;
+  /** Original in/inout flag. */
+  bIn: boolean;
+  /** Original out/inout flag. */
+  bOut: boolean;
+}
+/** Original public method-parameter typedef. */
+export type typelib_MethodParameter = _typelib_MethodParameter;
+
+/** Original shared interface-method/attribute description prefix. */
+export interface _typelib_InterfaceMemberTypeDescription {
+  /** Original common description prefix. */
+  aBase: typelib_TypeDescription;
+  /** Original signed32 member position including inherited members. */
+  nPosition: number;
+  /** Original owned member name, nullable before initialization. */
+  pMemberName: rtl_uString | null;
+}
+/** Original public interface-member typedef. */
+export type typelib_InterfaceMemberTypeDescription = _typelib_InterfaceMemberTypeDescription;
+
+/** Original interface-method description. */
+export interface _typelib_InterfaceMethodTypeDescription {
+  /** Original interface-member prefix. */
+  aBase: typelib_InterfaceMemberTypeDescription;
+  /** Original return-type pointer. */
+  pReturnTypeRef: typelib_TypeDescriptionReference | null;
+  /** Original signed32 parameter count. */
+  nParams: number;
+  /** Original parameter-record array. */
+  pParams: typelib_MethodParameter[] | null;
+  /** Original signed32 exception count. */
+  nExceptions: number;
+  /** Original exception type-reference pointers. */
+  ppExceptions: typelib_TypeDescriptionReference[] | null;
+  /** Original oneway flag. */
+  bOneWay: boolean;
+  /** Original containing interface, nullable before initialization. */
+  pInterface: _typelib_InterfaceTypeDescription | null;
+  /** Original inherited direct-base method pointer. */
+  pBaseRef: typelib_TypeDescriptionReference | null;
+  /** Original signed32 direct-member/base-interface index. */
+  nIndex: number;
+}
+/** Original public interface-method typedef. */
+export type typelib_InterfaceMethodTypeDescription = _typelib_InterfaceMethodTypeDescription;
+
+/** Original interface-attribute description. */
+export interface _typelib_InterfaceAttributeTypeDescription {
+  /** Original interface-member prefix. */
+  aBase: typelib_InterfaceMemberTypeDescription;
+  /** Original read-only flag. */
+  bReadOnly: boolean;
+  /** Original attribute type-reference pointer. */
+  pAttributeTypeRef: typelib_TypeDescriptionReference | null;
+  /** Original containing interface, nullable before initialization. */
+  pInterface: _typelib_InterfaceTypeDescription | null;
+  /** Original inherited direct-base attribute pointer. */
+  pBaseRef: typelib_TypeDescriptionReference | null;
+  /** Original signed32 direct-member/base-interface index. */
+  nIndex: number;
+  /** Original signed32 getter-exception count. */
+  nGetExceptions: number;
+  /** Original getter-exception type-reference pointers. */
+  ppGetExceptions: typelib_TypeDescriptionReference[] | null;
+  /** Original signed32 setter-exception count. */
+  nSetExceptions: number;
+  /** Original setter-exception type-reference pointers. */
+  ppSetExceptions: typelib_TypeDescriptionReference[] | null;
+}
+/** Original public interface-attribute typedef. */
+export type typelib_InterfaceAttributeTypeDescription = _typelib_InterfaceAttributeTypeDescription;
+
+/** Original interface description; initialized fields depend on the original three completion levels. */
+export interface _typelib_InterfaceTypeDescription {
+  /** Original common description prefix. */
+  aBase: typelib_TypeDescription;
+  /** Original deprecated direct-base pointer. */
+  pBaseTypeDescription: _typelib_InterfaceTypeDescription | null;
+  /** Original deprecated Uik record. */
+  aUik: typelib_Uik;
+  /** Original signed32 direct-member count. */
+  nMembers: number;
+  /** Original direct-member reference pointers. */
+  ppMembers: typelib_TypeDescriptionReference[] | null;
+  /** Original signed32 total-member count including inheritance. */
+  nAllMembers: number;
+  /** Original complete member-reference pointers. */
+  ppAllMembers: typelib_TypeDescriptionReference[] | null;
+  /** Original signed32 member-to-function index map. */
+  pMapMemberIndexToFunctionIndex: Int32Array | null;
+  /** Original signed32 function-to-member map size. */
+  nMapFunctionIndexToMemberIndex: number;
+  /** Original signed32 function-to-member index map. */
+  pMapFunctionIndexToMemberIndex: Int32Array | null;
+  /** Original signed32 base-interface count. */
+  nBaseTypes: number;
+  /** Original base-interface description pointers. */
+  ppBaseTypes: _typelib_InterfaceTypeDescription[] | null;
+}
+/** Original public interface typedef. */
+export type typelib_InterfaceTypeDescription = _typelib_InterfaceTypeDescription;
+
+/** Original compound-member initializer record. */
+export interface _typelib_CompoundMember_Init {
+  /** Original member type class. */
+  eTypeClass: typelib_TypeClass;
+  /** Original type name; nullable for parameterized instantiated members. */
+  pTypeName: rtl_uString | null;
+  /** Original member name. */
+  pMemberName: rtl_uString;
+}
+/** Original public compound-member initializer typedef. */
+export type typelib_CompoundMember_Init = _typelib_CompoundMember_Init;
+
+/** Original plain or instantiated struct-member initializer. */
+export interface _typelib_StructMember_Init {
+  /** Original compound-member initializer prefix. */
+  aBase: typelib_CompoundMember_Init;
+  /** Original parameterized-type flag. */
+  bParameterizedType: boolean;
+}
+/** Original public struct-member initializer typedef. */
+export type typelib_StructMember_Init = _typelib_StructMember_Init;
+
+/** Original method-parameter initializer record. */
+export interface _typelib_Parameter_Init {
+  /** Original parameter type class. */
+  eTypeClass: typelib_TypeClass;
+  /** Original type name. */
+  pTypeName: rtl_uString;
+  /** Original parameter name. */
+  pParamName: rtl_uString;
+  /** Original in/inout flag. */
+  bIn: boolean;
+  /** Original out/inout flag. */
+  bOut: boolean;
+}
+/** Original public parameter initializer typedef. */
+export type typelib_Parameter_Init = _typelib_Parameter_Init;
+
+/** Original callback pointer signature; a one-element tuple adapts the inout description pointer. @param pContext - Original opaque callback context. @param ppRet - Original inout description pointer slot. @param pTypeName - Original requested type name. @returns Nothing. */
+export type typelib_typedescription_Callback = (
+  pContext: unknown,
+  ppRet: [typelib_TypeDescription | null],
+  pTypeName: rtl_uString,
+) => void;
 
 /** Original weak-reference class predicate. @param eTypeClass - Original native enum value. @returns Whether the reference can lose its description. */
 export function TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK(

@@ -131,7 +131,12 @@ export function getRuntimeOwnershipLayer(relativePath) {
   if (portablePath.startsWith("i18nutil/inc/") || portablePath.startsWith("udkapi/"))
     return "upstream-mechanism";
   if (portablePath.startsWith("external/mdds/include/")) return "upstream-mechanism";
-  if (portablePath.startsWith("sal/rtl/") || portablePath.startsWith("sal/inc/rtl/"))
+  if (
+    portablePath.startsWith("sal/rtl/") ||
+    portablePath.startsWith("sal/inc/rtl/") ||
+    portablePath.startsWith("sal/osl/") ||
+    portablePath.startsWith("sal/inc/osl/")
+  )
     return "upstream-mechanism";
   if (/^[^/]+\/source\//u.test(portablePath)) return "upstream-mechanism";
   return undefined;

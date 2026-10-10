@@ -2152,3 +2152,37 @@ The user requested a pause after the next scheduled full run at task41.
 After that run, repair Calc/affected shared failures, leave Writer-only
 coverage gaps for its separate branch, record the result and pause the goal
 before further implementation.
+
+## Original OSL atomic counts and extended type declarations
+
+Task39 adds the real shared OSL signed32 interlocked count functions and their
+C-header/internal-macro boundary. Native JS Atomics.add/sub supplies the atomic
+operation; its previous value is adjusted and narrowed to signed32 to retain
+the original operation's own return, including overflow. A later atomic load
+would introduce a return race and is not used. Concrete Int32Array views retain
+the addressed byte offset and neighboring cells. Ordinary ArrayBuffer storage
+works for single-realm counts; the runtime does not construct or require a
+SharedArrayBuffer. Shared counters can use one when the environment permits.
+
+The genuine native caller now retains all16 return/storage fields for65556
+diagonal/boundary count inputs through both original public C functions and
+internal macros. Four original4-thread4096-call captures preserve all65536
+adjusted returns, signed-boundary crossings and complete neighboring storage.
+Normal and ASan/UBSan outputs agree. Portable workers load the actual authored
+OSL module, retain every return, and require each worker's terminal exit.
+This does not establish browser cross-origin isolation or full concurrent
+CPPU registry ownership.
+
+The complete extended typelib C records, initializer records, callback type
+and deprecated five-field Uik are declared at their original header owners.
+Every original field/typedef and genuine compiler size/alignment/offset/member
+size observation is retained for15 full records. The original allocator uses
+new char[sizeof(T)]; unspecified bytes are not read or assigned invented
+defaults. Header declarations and native layout observations do not provide
+the unfinished allocator, shared-prefix pointer aliasing, registration,
+refcount lifecycle or portable native ABI.
+
+The actual UNO default exception/type owners and getValue/getConditionalValue,
+locale/string service/pool, document/edit/view/UI remain required. Task39 stays
+DOING. The next full suite remains task41, followed by required Calc/shared
+repairs and the user-requested goal pause; Writer-only coverage remains excluded.

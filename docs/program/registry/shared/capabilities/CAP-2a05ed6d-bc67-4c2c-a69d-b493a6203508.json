@@ -1,0 +1,96 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-2a05ed6d-bc67-4c2c-a69d-b493a6203508",
+    "capabilityId": "CAP-2a05ed6d-bc67-4c2c-a69d-b493a6203508",
+    "suite": "shared",
+    "subsystem": "osl-atomic-count",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Retain original signed32 adjusted atomic increment/decrement values and writes through actual offset count views.",
+      "Retain internal macro/public C function equivalence with one shared owner.",
+      "Retain every original concurrent adjusted return and neighboring storage without a later-load race."
+    ],
+    "capability": "Original OSL atomic adjusted-count dependency",
+    "gaps": [
+      "Complete CPPU type allocation/registration/reference ownership, default UNO exception, original platform/ABI/invalid-pointer contracts and Calc document/edit/UI remain unfinished. Related original StringConcat checkEnsureCapacity is an actual RTL count consumer reference only, not a ported/executed original QA assertion."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sal/osl/unx/interlck.cxx",
+          "marker": "osl_incrementInterlockedCount"
+        },
+        {
+          "path": "include/osl/interlck.h",
+          "marker": "oslInterlockedCount"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sal/qa/rtl/strings/test_oustring_concat.cxx",
+          "marker": "StringConcat::checkEnsureCapacity()"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/osl/interlck.h",
+          "marker": "The adjusted value"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sal/osl/unx/interlck.ts",
+          "marker": "osl_incrementInterlockedCount"
+        },
+        {
+          "path": "apps/office/src/sal/inc/osl/interlck.ts",
+          "marker": "oslInterlockedCount"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sal/osl/unx/interlck.test.ts",
+          "marker": "matches every native C and macro return and addressed storage including signed overflow"
+        },
+        {
+          "path": "apps/office/src/sal/osl/unx/interlck.test.ts",
+          "marker": "matches complete original concurrent returned values and neighboring storage"
+        },
+        {
+          "path": "scripts/uno-type-primitives-native-probe.mjs",
+          "marker": "if(mode==\"threads\")"
+        },
+        {
+          "path": "apps/office/src/cppu/source/typelib/native-type-primitives-cases.json",
+          "marker": "\"counts\""
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Original OSL atomic counts and extended type declarations"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "Atomically adjust the original addressed signed32 count and return this operation's adjusted value",
+    "scopeLimitations": [
+      "Complete CPPU type allocation/registration/reference ownership, default UNO exception, original platform/ABI/invalid-pointer contracts and Calc document/edit/UI remain unfinished. Related original StringConcat checkEnsureCapacity is an actual RTL count consumer reference only, not a ported/executed original QA assertion.",
+      "Actual Node workers verify shared-memory returns through the authored owner; this does not establish browser cross-origin isolation or full CPPU concurrent registry ownership. Native platform frameworks/libc remain uninstrumented."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "Use native JS atomic intrinsics and concrete signed32 views for the original adjusted-count operations. Header macros alias the same public implementation. Full native ABI/platform and downstream type ownership remain unverified."
+    }
+  }
+}
