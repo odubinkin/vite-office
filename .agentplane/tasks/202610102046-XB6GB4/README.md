@@ -1,10 +1,11 @@
 ---
 id: "202610102046-XB6GB4"
 title: "Restore native text-frame position mapping and adjacent-frame cursor selection"
-status: "DOING"
+result_summary: "Native frame position mapping and represented already-formatted no-scroll adjacent-frame selection integrated with actual margins; formatter/scroll/merged/geometry/native query/UI full-follow chain remain explicitly unported."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -55,6 +56,9 @@ comments:
   -
     author: "CODER"
     body: "Implementation: Original native frame position mapping and represented default no-scroll adjacent-frame selection integrated with visual-line margins; current targeted evidence and historical inventory retained."
+  -
+    author: "CODER"
+    body: "Verified: Original unmerged frame model/view positions and owner-aware adjacent-frame selection now drive native margins. 7158 related scenarios in306 files,16fresh core/React cases and23Chromium scenarios in12files pass; whole4 changed production modules100% all-four,305nonnegative counters,1246current hashes,820old acceptance files unchanged,8canonical histories and9metadata gates preserved. Same-agent non-independent review at997737073ca8ce94142e00bb33d374093c77b753; references restored. Task8 since checkpoint; pause after next full checkpoint and required repairs."
 events:
   -
     type: "status"
@@ -76,8 +80,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "7158related/306 and23Chromium/12 pass with16fresh native core/React cases. Entire4modules135lines150statements37functions118branches100,305nonnegative raw counters/current1246hashes;820old acceptance files byte-identical,8canonical prefixes/9metadata gates retained. Initial local edit/JSDoc/pre-runtime defensive-fixture fixes only; no runtime failures or acceptance replay, refs restored. Native formatting/scroll/merged/geometry/query/full UI-chain and end proxy remain explicit gaps; exact semantic same-agent review follows."
+  -
+    type: "status"
+    at: "2026-10-10T21:07:46.711Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Original unmerged frame model/view positions and owner-aware adjacent-frame selection now drive native margins. 7158 related scenarios in306 files,16fresh core/React cases and23Chromium scenarios in12files pass; whole4 changed production modules100% all-four,305nonnegative counters,1246current hashes,820old acceptance files unchanged,8canonical histories and9metadata gates preserved. Same-agent non-independent review at997737073ca8ce94142e00bb33d374093c77b753; references restored. Task8 since checkpoint; pause after next full checkpoint and required repairs."
 doc_version: 3
-doc_updated_at: "2026-10-10T21:04:57.032Z"
+doc_updated_at: "2026-10-10T21:07:46.713Z"
 doc_updated_by: "CODER"
 description: "Correction8/10 after BZ14P4: connect actual visual-line margin movement to original SwContentFrame FindMaster, unmerged SwTextFrame text/model/view position mapping and source no-scroll adjacent-frame selection; retain explicit native formatting and browser chain-publication gaps, pause after next full and repairs."
 sections:
@@ -184,6 +195,10 @@ sections:
     - Observation: Accepted7158/306 plus23Chromium/12,16fresh core/React;entire4modules135lines150statements37functions118branches100,305nonnegative raw counters/current1246hashes. Original model/view positions and adjacent original native frames now used by visual-line margins.
       Impact: 820prior acceptance files byte-identical,8canonical prefixes preserved,9metadata gates pass. Initial edit-helper/JSDoc and pre-runtime corrupt-state fixture repair only; no runtime failure or passing replay. Native formatting/scroll/query/full UI chain and end proxy remain explicit gaps.
       Resolution: Checks pass upstream-absent and refs restored; exact semantic same-agent non-independent review and clean closure follow. No full8/10.
+extensions:
+  implementation_commit:
+    hash: "997737073ca8ce94142e00bb33d374093c77b753"
+    message: "🧩 XB6GB4 code: Restore original frame position and adjacency"
 id_source: "generated"
 ---
 ## Summary
