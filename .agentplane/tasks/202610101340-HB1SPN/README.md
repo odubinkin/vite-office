@@ -4,7 +4,7 @@ title: "Correct native LR font-unit UNO member routing"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 20
 origin:
   system: "manual"
 depends_on: []
@@ -18,15 +18,40 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-10T13:54:40.844Z"
+  updated_at: "2026-10-10T13:56:01.710Z"
   updated_by: "CODER"
-  note: "Native published unit IDs13 first/14 right/15 left verified against restored pinned header, native query/setter side correction;154/154 related cases11files22fresh and24Chromium passed upstream absent. Actual entire lrspitem/memberids100 four metrics complete nonnegative current maps.675old tests byte-identical,2exact wrong-protocol migrations;4canonical records retained/added. TS7 type-only repair runtime-identical no tests replay. Nine metadata gates pass; WRITER-001 document/source/local links verified; source behavior preserved; reference restored. Exact-SHA quality after semantic commit."
+  note: "All five acceptance criteria pass at semantic17ab2ec6d1208582a910d4519ed6e195d79da3c5, explicit same-agent exact-SHA quality pass persisted in evidence.154related22fresh24browser upstream absent; whole native modules100 complete nonnegative maps; preserved historical tests/canonical prefixes, TS7 runtime-equivalent type repair no replay, nine metadata/source IDs and Writer suspected-source doc validated. Concrete closure next; broad goal active1/10."
   attempts: 0
-commit: null
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-10T13:55:31.001Z"
+  updated_by: "EVALUATOR"
+  note: "Explicitly same-agent non-independent review exact semantic17ab2ec6d1208582a910d4519ed6e195d79da3c5: original LR member IDs/sides and latest user observation-document requirement satisfied. Related/new current-source100 and all required gates accepted; recommend concrete closure with broad goal active/incomplete."
+  evaluated_sha: "17ab2ec6d1208582a910d4519ed6e195d79da3c5"
+  blueprint_digest: "0bd846802550184b672f0da96a3f761d3d1d67e21405ef08e252940f5cf6bfd0"
+  evidence_refs:
+    - ".agentplane/tasks/202610101340-HB1SPN/README.md"
+    - ".agentplane/tasks/202610101340-HB1SPN/quality/20261010-135531001-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610101340-HB1SPN/quality/20261010-135531001-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610101340-HB1SPN/quality/20261010-135531001-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610101340-HB1SPN/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610101340-HB1SPN/evidence/verification.json"
+    - "docs/program/writer-upstream-suspected-issues.md"
+    - "apps/office/node_modules/.cache/parity-coverage/HB1SPN/coverage-proof.json"
+  findings:
+    - "Exact diff uses native published13 first/14 right/15 left constants from pinned header in both QueryValue and PutValue. Fresh22 cases assert independent raw original sides/sibling fields, conversion, malformed atomic rejection, borrowed-reference/copy context, hanging effects and real table three-cycle UndoRedo ownership. Two exact old-file migrations correct wrong protocol only;675other old tests unchanged."
+    - "Actual154/154 related tests11files and24Chromium passed upstream absent; both entire current production modules100 lines/statements/functions/branches with complete actual nonnegative maps, no earlier-map reuse/filtering/counter edits. TS7 repaired only fresh type annotation, compiled runtime identical and no passing tests replay. Nine restored metadata gates and exact source-ID proof pass; ignored mdds environmental link added only after runtime tests."
+    - "Read new WRITER-001 document: same stable-ID/source/example/evidence/uncertainty/preservation organization as shared reference, exact pinned lines738/775/862 and local evidence links verified. Suspicious original empty-font hanging-indent unit loss remains unchanged; document clearly distinguishes portable source proof from unrun native differential and avoids confirmed-defect claim. All canonical historical statuses/defaults/classifications and IO/recovery exceptions retained."
+commit:
+  hash: "17ab2ec6d1208582a910d4519ed6e195d79da3c5"
+  message: "🧩 HB1SPN writer: correct native LR font-unit member routing"
 comments:
   -
     author: "CODER"
     body: "Start: restore actual upstream LR member routing13 first/14 right/15 left under standing resumed goal authorization; exact wrong-protocol test migrations and native context acceptance. One related/new100 profile without upstream, restored metadata and exactSHA quality; no full run or IO deviations."
+  -
+    author: "CODER"
+    body: "Start: record semantic17ab2ec6d1208582a910d4519ed6e195d79da3c5 after native member routing and user-authorized Writer observation document acceptance; refresh exact-SHA verification and explicit same-agent non-independent quality before concrete closure."
 events:
   -
     type: "status"
@@ -41,8 +66,27 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native published unit IDs13 first/14 right/15 left verified against restored pinned header, native query/setter side correction;154/154 related cases11files22fresh and24Chromium passed upstream absent. Actual entire lrspitem/memberids100 four metrics complete nonnegative current maps.675old tests byte-identical,2exact wrong-protocol migrations;4canonical records retained/added. TS7 type-only repair runtime-identical no tests replay. Nine metadata gates pass; WRITER-001 document/source/local links verified; source behavior preserved; reference restored. Exact-SHA quality after semantic commit."
+  -
+    type: "status"
+    at: "2026-10-10T13:55:28.248Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+    note: "Start: record semantic17ab2ec6d1208582a910d4519ed6e195d79da3c5 after native member routing and user-authorized Writer observation document acceptance; refresh exact-SHA verification and explicit same-agent non-independent quality before concrete closure."
+  -
+    type: "verify"
+    at: "2026-10-10T13:55:29.112Z"
+    author: "CODER"
+    state: "ok"
+    note: "Semantic17ab2ec6d1208582a910d4519ed6e195d79da3c5: native13/14/15 header and actual side routing;154related22fresh/24Chromium pass upstream absent. Two entire modules actual100 all four complete current maps zero negatives.675old tests identical2exact migrations;4canonical records and WRITER-001 shared-format/source/local-link proof. TS7 fresh type-only equivalence no passing replay; nine metadata pass reference restored. Broad goal active incomplete cadence1/10."
+  -
+    type: "verify"
+    at: "2026-10-10T13:56:01.710Z"
+    author: "CODER"
+    state: "ok"
+    note: "All five acceptance criteria pass at semantic17ab2ec6d1208582a910d4519ed6e195d79da3c5, explicit same-agent exact-SHA quality pass persisted in evidence.154related22fresh24browser upstream absent; whole native modules100 complete nonnegative maps; preserved historical tests/canonical prefixes, TS7 runtime-equivalent type repair no replay, nine metadata/source IDs and Writer suspected-source doc validated. Concrete closure next; broad goal active1/10."
 doc_version: 3
-doc_updated_at: "2026-10-10T13:54:40.898Z"
+doc_updated_at: "2026-10-10T13:56:01.762Z"
 doc_updated_by: "CODER"
 description: "Atomic1/10 after accepted N337G1 full cadence. Pinned memberids.h defines right-unit14 and left-unit15; current LR queries/setters swap sides and old tests encode the wrong protocol. Restore source-defined routing with three named native member constants, preserve independent fields and direct native lifetimes. Two production modules incl new matching memberids owner; exact mechanical source-backed migrations in two old tests, one fresh routing/atomic/context/history acceptance; four canonical records and parent bounded progress. Related/new-only Istanbul whole changed modules100, static/build/browser checks upstream absent once and restored metadata, exact-SHA same-agent quality clean close. No full cadence run, no network/delegation/IO exception changes."
 sections:
@@ -59,17 +103,17 @@ sections:
     4. Separate restored-source CLI validates exact header IDs and nine registry/source-tree/provenance/resources/invariants/parity/routing/doctor metadata gates. Record bounded facts/hashes only in AgentPlane; helper/raw/map files stay ignored node_modules cache. Exact semantic SHA same-agent explicitly non-independent quality pass, concrete result and clean writer checkout. Broad native LR marshaling/paragraph/list/table/UNO/VCL goal remains incomplete.
     5. Explicit latest user-goal addition: docs/program/writer-upstream-suspected-issues.md follows the shared stable-ID/source/example/evidence/uncertainty/preservation format. WRITER-001 links exact pinned methods and existing initialized portable acceptance, clearly distinguishes source proof from an unrun native differential, and preserves suspicious empty-context hanging-indent behavior. Local evidence links and pinned line/symbol positions validate; no claim of a confirmed upstream defect or external publication.
   Verification: |-
-    Pass: related/new154/154 cases11files22fresh, two whole changed modules actual Istanbul100 across lines/statements/functions/branches (172/182/49/153), complete nonnegative current-source maps. Root format/lint plus repaired TS7/remaining static/build and24Chromium passed upstream absent; reference restored. Nine metadata gates, exact source ID and Writer suspected-issues document proofs pass. Two exact old-file wrong-protocol migrations only;675others unchanged, two existing canonical histories preserved and two new native constant records. Type-only fresh fixture repair has identical compiled runtime and no passing replay. Bounded facts evidence/verification.json; exact semantic SHA and explicitly same-agent non-independent quality follow implementation commit. Broad goal active/incomplete; cadence1/10, no full suite.
+    Pass at semantic17ab2ec6d1208582a910d4519ed6e195d79da3c5:154/154 related cases11files22fresh and24Chromium without upstream; two entire changed modules actual Istanbul100 all-four172lines182statements49functions153branches, complete current nonnegative maps.675old tests byte-identical;2exact old-file wrong-side protocol migrations; four canonical records with old history preserved. TS7 fresh type annotation has identical compiled runtime; no passing test replay. Static/build and nine restored metadata gates, exact pinned3-ID routing and WRITER-001 shared-format/source/local-link proof passed. Reference restored; ignored existing mdds local link added after runtime only. Exact-SHA explicitly same-agent non-independent quality pass quality/20261010-135531001-recovery-context/quality-report.json; bounded evidence/verification.json. Broad goal active/incomplete cadence1/10, no full suite.
 
     <!-- BEGIN VERIFICATION RESULTS -->
-    ### 2026-10-10T13:54:40.844Z — VERIFY — ok
+    ### 2026-10-10T13:56:01.710Z — VERIFY — ok
 
     By: CODER
 
-    Note: Native published unit IDs13 first/14 right/15 left verified against restored pinned header, native query/setter side correction;154/154 related cases11files22fresh and24Chromium passed upstream absent. Actual entire lrspitem/memberids100 four metrics complete nonnegative current maps.675old tests byte-identical,2exact wrong-protocol migrations;4canonical records retained/added. TS7 type-only repair runtime-identical no tests replay. Nine metadata gates pass; WRITER-001 document/source/local links verified; source behavior preserved; reference restored. Exact-SHA quality after semantic commit.
+    Note: All five acceptance criteria pass at semantic17ab2ec6d1208582a910d4519ed6e195d79da3c5, explicit same-agent exact-SHA quality pass persisted in evidence.154related22fresh24browser upstream absent; whole native modules100 complete nonnegative maps; preserved historical tests/canonical prefixes, TS7 runtime-equivalent type repair no replay, nine metadata/source IDs and Writer suspected-source doc validated. Concrete closure next; broad goal active1/10.
     Attempts: 0
 
-    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T13:54:17.452Z, excerpt_hash=sha256:2fe6c1f666f1c6ad5e4701f016f0fa63ce283409ad0579f194ed179a89d692ed
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T13:56:00.884Z, excerpt_hash=sha256:2fe6c1f666f1c6ad5e4701f016f0fa63ce283409ad0579f194ed179a89d692ed
 
     Details:
 
@@ -84,7 +128,7 @@ sections:
     DecisionContextRef:
     - operator_action: run_exact_argv
     - can_execute_now: true
-    - safe_command: agentplane commit 202610101340-HB1SPN -m 🧩 HB1SPN task: persist canonical task artifacts --allow-tasks
+    - safe_command: agentplane task complete 202610101340-HB1SPN --result verified-202610101340-HB1SPN --commit 17ab2ec6d1208582a910d4519ed6e195d79da3c5
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -147,17 +191,17 @@ Restore actual LR font-unit identities and named constants;2production2exact old
 
 ## Verification
 
-Pass: related/new154/154 cases11files22fresh, two whole changed modules actual Istanbul100 across lines/statements/functions/branches (172/182/49/153), complete nonnegative current-source maps. Root format/lint plus repaired TS7/remaining static/build and24Chromium passed upstream absent; reference restored. Nine metadata gates, exact source ID and Writer suspected-issues document proofs pass. Two exact old-file wrong-protocol migrations only;675others unchanged, two existing canonical histories preserved and two new native constant records. Type-only fresh fixture repair has identical compiled runtime and no passing replay. Bounded facts evidence/verification.json; exact semantic SHA and explicitly same-agent non-independent quality follow implementation commit. Broad goal active/incomplete; cadence1/10, no full suite.
+Pass at semantic17ab2ec6d1208582a910d4519ed6e195d79da3c5:154/154 related cases11files22fresh and24Chromium without upstream; two entire changed modules actual Istanbul100 all-four172lines182statements49functions153branches, complete current nonnegative maps.675old tests byte-identical;2exact old-file wrong-side protocol migrations; four canonical records with old history preserved. TS7 fresh type annotation has identical compiled runtime; no passing test replay. Static/build and nine restored metadata gates, exact pinned3-ID routing and WRITER-001 shared-format/source/local-link proof passed. Reference restored; ignored existing mdds local link added after runtime only. Exact-SHA explicitly same-agent non-independent quality pass quality/20261010-135531001-recovery-context/quality-report.json; bounded evidence/verification.json. Broad goal active/incomplete cadence1/10, no full suite.
 
 <!-- BEGIN VERIFICATION RESULTS -->
-### 2026-10-10T13:54:40.844Z — VERIFY — ok
+### 2026-10-10T13:56:01.710Z — VERIFY — ok
 
 By: CODER
 
-Note: Native published unit IDs13 first/14 right/15 left verified against restored pinned header, native query/setter side correction;154/154 related cases11files22fresh and24Chromium passed upstream absent. Actual entire lrspitem/memberids100 four metrics complete nonnegative current maps.675old tests byte-identical,2exact wrong-protocol migrations;4canonical records retained/added. TS7 type-only repair runtime-identical no tests replay. Nine metadata gates pass; WRITER-001 document/source/local links verified; source behavior preserved; reference restored. Exact-SHA quality after semantic commit.
+Note: All five acceptance criteria pass at semantic17ab2ec6d1208582a910d4519ed6e195d79da3c5, explicit same-agent exact-SHA quality pass persisted in evidence.154related22fresh24browser upstream absent; whole native modules100 complete nonnegative maps; preserved historical tests/canonical prefixes, TS7 runtime-equivalent type repair no replay, nine metadata/source IDs and Writer suspected-source doc validated. Concrete closure next; broad goal active1/10.
 Attempts: 0
 
-VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T13:54:17.452Z, excerpt_hash=sha256:2fe6c1f666f1c6ad5e4701f016f0fa63ce283409ad0579f194ed179a89d692ed
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T13:56:00.884Z, excerpt_hash=sha256:2fe6c1f666f1c6ad5e4701f016f0fa63ce283409ad0579f194ed179a89d692ed
 
 Details:
 
@@ -172,7 +216,7 @@ BlueprintSnapshotRef:
 DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
-- safe_command: agentplane commit 202610101340-HB1SPN -m 🧩 HB1SPN task: persist canonical task artifacts --allow-tasks
+- safe_command: agentplane task complete 202610101340-HB1SPN --result verified-202610101340-HB1SPN --commit 17ab2ec6d1208582a910d4519ed6e195d79da3c5
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
