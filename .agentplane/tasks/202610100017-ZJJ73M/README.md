@@ -1,10 +1,11 @@
 ---
 id: "202610100017-ZJJ73M"
 title: "Align inherited table ODF acceptance with native direct SET export"
-status: "DOING"
+result_summary: "Align inherited table ODF assertions with native direct SET export and FULL import default"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -50,6 +51,9 @@ comments:
   -
     author: "CODER"
     body: "Start: bind final native direct-export acceptance evidence to exact semantic commit b849883c6c5c before quality and clean close."
+  -
+    author: "CODER"
+    body: "Verified: corrected two source-backed inherited ODF acceptance expectations, preserving direct/native UI/layout/dialog/history assertions. Final1089unit24Chromium9statics9restored metadata and exact-SHA same-agent review passed; no production change, upstream restored."
 events:
   -
     type: "status"
@@ -83,8 +87,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Exactb849883c6c5c quality pass recorded and independently labeled same-agent/non-independent. Two native direct-SET ODF migration operations fully preserved sibling assertions; final1089unit24Chromium9statics9metadata allpass current source. Reference restored; bounded evidence is complete; no production changes for this leaf."
+  -
+    type: "status"
+    at: "2026-10-10T00:28:51.533Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: corrected two source-backed inherited ODF acceptance expectations, preserving direct/native UI/layout/dialog/history assertions. Final1089unit24Chromium9statics9restored metadata and exact-SHA same-agent review passed; no production change, upstream restored."
 doc_version: 3
-doc_updated_at: "2026-10-10T00:28:50.400Z"
+doc_updated_at: "2026-10-10T00:28:51.535Z"
 doc_updated_by: "CODER"
 description: "Native source audit of HM2YX4 two historical failures confirms existing production exporter matches pinned GetItemState(which,false) and native table ExportFormat requires default parent only. Correct exactly two old acceptance branches that expected non-default inherited LR/Hori to be flattened into ODF. Preserve all original direct/native UI/history assertions; add explicit absent inherited margin/default FULL reopened orientation assertions. No production code changes or geometry snapshot repair. Verify failed inherited scenarios only upstream absent and source/inventory rationale after restoration."
 sections:
@@ -193,6 +204,10 @@ sections:
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the test-only semantic commit; retain native source rationale and task history. No production rollback applies to this leaf."
   Findings: "Initial HM2YX4 related3851cases:3849pass2 obsolete inherited ODF expectations. Earlier draft incorrectly attributed failures to geometry snapshots. Read-only native audit rejects that diagnosis: xmlexpit.cxx GetItem only exports direct SET, xmlfmte.cxx ExportFormat asserts no non-default parent, xmltbli.cxx defaultsFULL. No upstream source/helper artifacts are copied into AgentPlane. Existing broad user authorization covers atomic native parity acceptance correction."
+extensions:
+  implementation_commit:
+    hash: "b849883c6c5c445da8aa83b3943e72515f9968ba"
+    message: "🧪 ZJJ73M writer: align inherited ODF assertions with native direct items"
 id_source: "generated"
 ---
 ## Summary
