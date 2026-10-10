@@ -305,3 +305,15 @@ export function next_position<I extends BlockPositionIterator<I>>(
   }
   return ret;
 }
+
+/** Original previous-block category member body over its existing borrowed store witness. @param store - Actual metadata. @param block_index - Current block. @param cat - Original type. @returns Original category admission. */
+export function is_previous_block_of_type(
+  store: blocks_type,
+  block_index: number,
+  cat: element_t,
+): boolean {
+  if (block_index === 0) return false;
+  const data = store.element_blocks.get(block_index - 1);
+  if (data) return cat === get_block_type(data);
+  return cat === element_type_empty;
+}

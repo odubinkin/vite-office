@@ -5,6 +5,7 @@ import { integrity_error, general_error } from "../../global.ts";
 import {
   type base_element_block,
   type element_t,
+  element_type_empty,
   get_block_element_at,
   get_block_type,
   type BlockElementAccess,
@@ -33,6 +34,8 @@ import {
   delete_element_block,
   mutate_blocks,
   get_block_position,
+  get_block_position_hint,
+  is_previous_block_of_type,
   make_iterator,
   next_position as next_position_impl,
   get_impl,
@@ -581,6 +584,108 @@ export class multi_type_vector<E extends ContainerEvent = empty_event_func> {
     this.m_block_store.element_blocks.set(block_index, data);
     this.m_hdl_event.element_block_acquired(data);
     callbacks.mdds_mtv_append_value(data, cell);
+  }
+  /** Original plain/hinted empty insertion retains zero-length end return before lookup and pinned diagnostics. @param first - Row or original hint. @param second - Length or hinted row. @param third - Hinted length. @returns Inserted empty block iterator. */
+  public insert_empty(
+    first: number | bigint | iterator_base<this>,
+    second: number | bigint,
+    third?: number,
+  ): iterator_base<this> {
+    const hint = typeof first === "object" ? first : undefined;
+    const pos = hint ? second : (first as number | bigint);
+    const length = hint ? (third as number) : (second as number);
+    if (!length) return this.end();
+    const block_index = hint
+      ? get_block_position_hint(
+          this.m_block_store,
+          this.m_cur_size,
+          this,
+          hint.get_node().__private_data,
+          pos,
+        )
+      : get_block_position(this.m_block_store, this.m_cur_size, pos);
+    if (block_index === this.m_block_store.positions.size())
+      throw_block_position_not_found(
+        "multi_type_vector::insert_empty",
+        hint ? 1279 : 1237,
+        pos,
+        this.block_size(),
+        this.size(),
+      );
+    return this.insert_empty_impl(Number(pos), block_index, length);
+  }
+  /** Original empty insertion member preserves smaller-side copy, equal-side choice, acquisition and metadata swap order. @param pos - Admitted row. @param block_index - Located block. @param length - Finite insertion length. @returns Inserted empty iterator. */
+  private insert_empty_impl(pos: number, block_index: number, length: number): iterator_base<this> {
+    const blk_data = this.m_block_store.element_blocks.get(block_index);
+    if (!blk_data) {
+      this.m_block_store.sizes.set(block_index, this.m_block_store.sizes.get(block_index) + length);
+      this.m_cur_size += length;
+      adjust_block_positions(this.Traits.loop_unrolling)(
+        this.m_block_store,
+        block_index + 1,
+        length,
+      );
+      return this.get_iterator(block_index);
+    }
+    const start_pos = this.m_block_store.positions.get(block_index);
+    if (start_pos === pos) {
+      const blk_prev = is_previous_block_of_type(
+        this.m_block_store,
+        block_index,
+        element_type_empty,
+      );
+      if (blk_prev) {
+        this.m_block_store.sizes.set(
+          block_index - 1,
+          this.m_block_store.sizes.get(block_index - 1) + length,
+        );
+        this.m_cur_size += length;
+        adjust_block_positions(this.Traits.loop_unrolling)(this.m_block_store, block_index, length);
+        return this.get_iterator(block_index - 1);
+      }
+      this.m_block_store.insert(block_index, start_pos, length, null);
+      this.m_cur_size += length;
+      adjust_block_positions(this.Traits.loop_unrolling)(
+        this.m_block_store,
+        block_index + 1,
+        length,
+      );
+      return this.get_iterator(block_index);
+    }
+    const size_blk_prev = pos - start_pos;
+    const size_blk_next = this.m_block_store.sizes.get(block_index) - size_blk_prev;
+    this.m_block_store.insert(block_index + 1, 2);
+    this.m_block_store.sizes.set(block_index + 1, length);
+    this.m_block_store.sizes.set(block_index + 2, size_blk_next);
+    this.m_block_store.element_blocks.set(
+      block_index + 2,
+      this.Traits.block_funcs.create_new_block(get_block_type(blk_data), 0),
+    );
+    const next_data = this.m_block_store.element_blocks.get(block_index + 2) as base_element_block;
+    this.m_hdl_event.element_block_acquired(next_data);
+    if (size_blk_prev > size_blk_next) {
+      this.Traits.block_funcs.assign_values_from_block(
+        next_data,
+        blk_data,
+        size_blk_prev,
+        size_blk_next,
+      );
+      this.Traits.block_funcs.resize_block(blk_data, size_blk_prev);
+      this.m_block_store.sizes.set(block_index, size_blk_prev);
+    } else {
+      this.Traits.block_funcs.assign_values_from_block(next_data, blk_data, 0, size_blk_prev);
+      this.m_block_store.sizes.set(block_index + 2, size_blk_prev);
+      this.Traits.block_funcs.erase(blk_data, 0, size_blk_prev);
+      this.m_block_store.sizes.set(block_index, size_blk_next);
+      const position = this.m_block_store.positions.get(block_index);
+      this.m_block_store.swap(block_index, block_index + 2);
+      this.m_block_store.positions.set(block_index, position);
+    }
+    this.m_cur_size += length;
+    this.m_block_store.calc_block_position(block_index + 1);
+    this.m_block_store.calc_block_position(block_index + 2);
+    adjust_block_positions(this.Traits.loop_unrolling)(this.m_block_store, block_index + 3, length);
+    return this.get_iterator(block_index + 1);
   }
   /** Original nondebug/no_trace erase entry keeps its reversed-range error before lookup. @param start_pos - First inclusive row. @param end_pos - Last inclusive row. @returns Nothing. */
   public erase(start_pos: number | bigint, end_pos: number | bigint): void {

@@ -1,6 +1,7 @@
 /** @fileoverview Complete unchanged original container constructor/lifetime/operator states over real shared SoA ownership and typed scalar callbacks. */
 import { describe, it, expect } from "vitest";
 import fixture from "./native-container-cases.json";
+import { is_previous_block_of_type } from "./main_def.ts";
 import {
   multi_type_vector,
   empty_event_value_ops,
@@ -34,22 +35,22 @@ type State = [unknown, boolean, (OwnerState | null)[], unknown[], EventEntry[]];
 /** Reconstructs every exact native field from losslessly interned complete owner records. @param index - Full-state ID. @returns Complete original record. */
 function decodeSnapshot(index: number): State {
   const s = fixture.snapshots[index] as unknown as [
-    unknown,
+    number,
     boolean,
     (number | null)[],
-    unknown[],
-    EventEntry[],
+    number,
+    number,
   ];
   return [
-    s[0],
+    fixture.resultSnapshots[s[0]],
     s[1],
     s[2].map(
       /** Resolves a complete owner without summarizing its fields. @param id - Original owner ID. @returns Complete owner or absence. */ (
         id,
       ) => (id === null ? null : (fixture.ownerSnapshots[id] as unknown as OwnerState)),
     ),
-    s[3],
-    s[4],
+    fixture.equalitySnapshots[s[3]] as unknown as unknown[],
+    fixture.eventSnapshots[s[4]] as unknown as EventEntry[],
   ];
 }
 const aliases = [
@@ -182,6 +183,16 @@ const observedFuncs = {
   append_block(dest: base_element_block, src: base_element_block): void {
     traceCall(6, dest, get_block_type(src), nativeFuncs.size(src));
     nativeFuncs.append_block(dest, src);
+  },
+  /** Records exact source offset/count before forwarding original assignment. @param dest - New owner. @param src - Existing payload. @param pos - Offset. @param len - Count. @returns Nothing. */
+  assign_values_from_block(
+    dest: base_element_block,
+    src: base_element_block,
+    pos: number,
+    len: number,
+  ): void {
+    traceCall(7, dest, get_block_type(src), nativeFuncs.size(src), pos, len);
+    nativeFuncs.assign_values_from_block(dest, src, pos, len);
   },
   /** Observes original delete after release. @param data - Owner. @returns Nothing. */
   delete_block(data: base_element_block): void {
@@ -459,6 +470,33 @@ describe("original SoA container lifetime", /** Declares original native ownersh
               },
             };
             destination.push_back(true, failure);
+          } else if (op === "x") {
+            result = is_previous_block_of_type(
+              destination["m_block_store"],
+              args[0] as number,
+              args[1] as number,
+            );
+          } else if (op === "v" || op === "d" || op === "t") {
+            operationCalls = [];
+            try {
+              const pos = typeof args[0] === "string" ? BigInt(args[0]) : (args[0] as number);
+              const len = args[1] as number;
+              let it: iterator_base<multi_type_vector<Handler>>;
+              if (op === "v") it = destination.insert_empty(pos, len);
+              else {
+                const hint =
+                  op === "t"
+                    ? (hints[args[2] as number] as iterator_base<multi_type_vector<Handler>>)
+                    : (owners[args[2] as number] as multi_type_vector<Handler>)
+                        .begin()
+                        .advance(args[3] as number);
+                it = destination.insert_empty(hint, pos, len);
+              }
+              hints[dst] = it;
+              result = [node(it, destination.end(), destination), operationCalls];
+            } finally {
+              operationCalls = null;
+            }
           } else if (op === "r") {
             operationCalls = [];
             try {
@@ -597,7 +635,7 @@ describe("original SoA container lifetime", /** Declares original native ownersh
         );
       }
       for (const owner of owners) owner?.dispose();
-      expect(log).toEqual(c.finalEvents);
+      expect(log).toEqual(fixture.eventSnapshots[c.finalEvents]);
     }
   });
   it("reuses the actual default empty event owner with stable value fields", /** Checks original empty event value witnesses over real containers. @returns Nothing. */ () => {

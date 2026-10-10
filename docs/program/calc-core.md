@@ -1333,3 +1333,45 @@ documents/browser remain gaps. Whole-module/default/QA flags stay false.
 Source-shaped owner, full container observer and native caller files retain their
 original responsibilities below the 1000-line hard limit. Cycle 2, task 6/10 follows
 the full validation in task `202610092130-FMVJ21`.
+
+## Shared SoA empty insertion
+
+Task `202610100003-CBBFHZ` ports original plain/hinted `insert_empty` and
+`insert_empty_impl` in the existing shared container. Zero length returns end
+before lookup or cached hint access; positive-length errors preserve original
+source diagnostics. Inserting into an empty block expands it, and insertion at
+a data block start expands a previous empty block or adds empty metadata.
+
+Interior insertion creates two slots, creates/acquires an empty typed payload,
+then copies the smaller side. Equal sizes follow the original upper-copy path.
+The lower-copy branch resizes existing data; the upper-copy branch erases copied
+values, swaps metadata slots and restores the original position. Actual shared
+block funcs, three vectors, iterator/hint lookup and trait-selected position
+adjustment retain their responsibilities. Original `is_previous_block_of_type`
+uses the existing explicit borrowed-store member-body convention in
+`main_def.ts`; there is no alternate insertion engine or category owner. A
+caller-only private bridge invokes its unchanged native body over every standard
+category, including empty, without rewriting the original algorithm.
+
+Unchanged-header native callers retain all 7600 earlier complete sequences.
+Added all 12 standard scalar families include every bounded position of several
+compound geometries and varied-value payloads, unequal/equal split sides,
+ordinary/own/foreign/returned hints, long metadata shifts, exact zero-length and
+invalid-row guards, copy isolation, reappend, release and final destruction.
+Full values/capacities/ownership/metadata/events/endpoints/equality and returned
+iterators are compared; forwarding original assignment observes exact source
+size, offset and count. Actual native public set only prepares input and is not
+certified as ported. Portable fixture tests require neither compiler nor upstream.
+
+Complete native result fields, equality matrices and event logs are losslessly
+interned alongside complete owner snapshots. The decoder restores every field,
+including final destruction logs; raw original output and all caller sequences
+are retained. This removes redundant storage after default formatting and JSON
+import limits were observed, without changing algorithms or test criteria.
+
+Scope remains finite initialized unmanaged no_trace/default execution.
+Managed/custom/throwing/ABI/instrumentation, invalid or reentrant native inputs,
+positive hinted lookup with empty metadata, overflow/unbounded storage and the
+remaining segment mutators and full Calc documents/browser remain gaps.
+Whole-module/default/QA flags stay false. Source-shaped owner/observers are
+reviewed below the 1000-line hard limit. Cycle 2, task 7/10 follows fullFMVJ21.
