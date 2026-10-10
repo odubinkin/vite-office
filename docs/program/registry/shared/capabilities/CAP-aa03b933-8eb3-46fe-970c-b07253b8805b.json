@@ -1,0 +1,114 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-aa03b933-8eb3-46fe-970c-b07253b8805b",
+    "capabilityId": "CAP-aa03b933-8eb3-46fe-970c-b07253b8805b",
+    "suite": "shared",
+    "subsystem": "cell-storage",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original public plain/hinted set_empty performs first-block lookup before reversed/end validation, retains exact1171/1186/1935 source diagnostics and passes overwrite true without changing logical size.",
+      "Original single-block dispatch returns already-empty metadata unchanged, delegates whole-block emptying or overwrites/erases top/bottom before adjacent empty extension/new-slot insertion; middle delegates actual original split helper.",
+      "Original multi-block dispatch mutates first then last boundaries before deleting interior payloads and erasing slots; previous/next empty extension, overwrite false zero-size-before-delete and exact returned block index are retained.",
+      "Original middle helper inserts2metadata slots, acquires a size0 typed payload before assignment, copies the smaller side and chooses upper copy on equality; overwrite precedes resize or erase/slot swap, positions recalculate last.",
+      "Original empty-metadata middle split retains3adjacent empty slots with original sizes/positions rather than inventing normalization; valid native temporary states and actual helper index are observed.",
+      "Complete genuine native callers retain every15076prior sequence/state/final log and compare all fields for public/hinted/private empty operations across12standard families using shared actual ownership and typed callbacks."
+    ],
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "Original public member and complete range/middle bodies retain native responsibilities with existing explicit borrowed fields in main_def and actual owner in main; original shared metadata/events/block funcs/iterator/delete/neighbor helpers reused. Caller input enumeration contains no core algorithm."
+    },
+    "capability": "Shared original SoA range emptying and middle-block split",
+    "gaps": [
+      "Pinned libc++ size_t64 no_trace/default execution, finite initialized all12 unmanaged standard scalar families and nonthrowing events. Complete original plain/hinted set_empty and set_empty_impl/single/multi/middle bodies reuse actual shared fields, block funcs, event/delete/neighbor/iterator helpers under existing explicit borrowed-member convention. Every inclusive valid range of selected13/17cell compound/varied geometries compared with public overwrite true and actual native private overwrite false; valid own/foreign/fresh/returned hints,41block metadata and exact first-before-reversed/end guards included. Actual private middle calls include valid empty/data metadata and both overwrite/smaller/equal branches. Full payload/capacity/metadata/ownership/results/events/endpoints/equality/final logs and all15076previous sequences retained. Original public set prepares inputs only. Managed/custom/throwing/ABI/instrumentation/reentrant/invalid native hints/arbitrary input/overflow/unbounded storage, public range release and remaining set/range insert/transfer/emplace, whole original QA/default/module and Calc column/document/browser parity remain unverified."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/mdds-reference/include/mdds/multi_type_vector/soa/main_def.inl",
+          "marker": "multi_type_vector<Traits>::set_empty("
+        },
+        {
+          "path": "vendor/mdds-reference/include/mdds/multi_type_vector/soa/main_def.inl",
+          "marker": "multi_type_vector<Traits>::set_empty_impl"
+        },
+        {
+          "path": "vendor/mdds-reference/include/mdds/multi_type_vector/soa/main_def.inl",
+          "marker": "multi_type_vector<Traits>::set_empty_in_single_block"
+        },
+        {
+          "path": "vendor/mdds-reference/include/mdds/multi_type_vector/soa/main_def.inl",
+          "marker": "multi_type_vector<Traits>::set_empty_in_multi_blocks"
+        },
+        {
+          "path": "vendor/mdds-reference/include/mdds/multi_type_vector/soa/main_def.inl",
+          "marker": "multi_type_vector<Traits>::set_new_block_to_middle"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/mdds-reference/test/multi_type_vector/default/tc/empty_cells.inl",
+          "marker": "mtv_test_empty_cells"
+        },
+        {
+          "path": "vendor/mdds-reference/test/multi_type_vector/default/tc/iterators_set_empty.inl",
+          "marker": "mtv_test_iterators_set_empty"
+        }
+      ],
+      "docs": [
+        {
+          "path": "download.lst",
+          "marker": "mdds-3.2.1.tar.xz"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/main.ts",
+          "marker": "set_empty"
+        },
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/main_def.ts",
+          "marker": "set_empty_impl"
+        },
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/main_def.ts",
+          "marker": "set_empty_in_single_block"
+        },
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/main_def.ts",
+          "marker": "set_empty_in_multi_blocks"
+        },
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/main_def.ts",
+          "marker": "set_new_block_to_middle"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/container.test.ts",
+          "marker": "matches every complete original constructor operator iterator and destructor sequence"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Shared SoA range emptying"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "Empty original inclusive ranges through actual plain/hinted APIs and preserve boundary/middle ownership and callback/metadata/iterator ordering",
+    "scopeLimitations": [
+      "Pinned libc++ size_t64 no_trace/default execution, finite initialized all12 unmanaged standard scalar families and nonthrowing events. Complete original plain/hinted set_empty and set_empty_impl/single/multi/middle bodies reuse actual shared fields, block funcs, event/delete/neighbor/iterator helpers under existing explicit borrowed-member convention. Every inclusive valid range of selected13/17cell compound/varied geometries compared with public overwrite true and actual native private overwrite false; valid own/foreign/fresh/returned hints,41block metadata and exact first-before-reversed/end guards included. Actual private middle calls include valid empty/data metadata and both overwrite/smaller/equal branches. Full payload/capacity/metadata/ownership/results/events/endpoints/equality/final logs and all15076previous sequences retained. Original public set prepares inputs only. Managed/custom/throwing/ABI/instrumentation/reentrant/invalid native hints/arbitrary input/overflow/unbounded storage, public range release and remaining set/range insert/transfer/emplace, whole original QA/default/module and Calc column/document/browser parity remain unverified."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

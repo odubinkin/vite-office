@@ -1,6 +1,7 @@
 /** @fileoverview Optional original SoA container lifetime comparison using unchanged full native headers and portable lossless complete live-state outputs. */
 import { execFileSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
+import { append_empty_cases } from "./mdds-container-empty-native-cases.mjs";
 import { digest, verifyMddsSources } from "./mdds-native-source.mjs";
 const { pinned, target, reference, archiveHashes, sourceHashes } = verifyMddsSources();
 const fixture =
@@ -613,6 +614,7 @@ for (let type = 0; type < 12; ++type) {
     cases.push({ seed: base + type, commands });
   }
 }
+append_empty_cases(cases, kinds.length, maxRow);
 const driver =
   String.raw`
 #include <mdds/multi_type_vector/soa/main.hpp>
@@ -658,6 +660,12 @@ template struct next_category_access<&db_type::is_next_block_of_type>;
 struct whole_empty_tag{};db_type::iterator whole_empty(db_type&,size_t,bool,whole_empty_tag);
 template<auto Member>struct whole_empty_access{friend db_type::iterator whole_empty(db_type& db,size_t index,bool overwrite,whole_empty_tag){return (db.*Member)(index,overwrite);}};
 template struct whole_empty_access<&db_type::set_whole_block_empty>;
+struct empty_impl_tag{};db_type::iterator empty_impl(db_type&,size_t,size_t,size_t,bool,empty_impl_tag);
+template<auto Member>struct empty_impl_access{friend db_type::iterator empty_impl(db_type& db,size_t first,size_t last,size_t index,bool overwrite,empty_impl_tag){return (db.*Member)(first,last,index,overwrite);}};
+template struct empty_impl_access<&db_type::set_empty_impl>;
+struct middle_tag{};size_t middle_block(db_type&,size_t,size_t,size_t,bool,middle_tag);
+template<auto Member>struct middle_access{friend size_t middle_block(db_type& db,size_t index,size_t offset,size_t length,bool overwrite,middle_tag){return (db.*Member)(index,offset,length,overwrite);}};
+template struct middle_access<&db_type::set_new_block_to_middle>;
 struct failure_cell{};
 element_t mdds_mtv_get_element_type(const failure_cell&){return element_type_boolean;}
 base_element_block* mdds_mtv_create_new_block(size_t,const failure_cell&){return nullptr;}
@@ -791,6 +799,8 @@ else if(op=='Q'||op=='L'||op=='M'||op=='A'||op=='V'||op=='W'){int other;std::cin
 else if(op=='T'||op=='E'||op=='G'||op=='g'||op=='P'||op=='p'||op=='I'||op=='i'||op=='K'||op=='k'){size_t row;std::cin>>row;if(op=='T')result=std::to_string(db[dst]->get_type(row));else if(op=='E')result=db[dst]->is_empty(row)?"true":"false";else if(op=='G'||op=='g'){int type;std::cin>>type;result=scalar(*db[dst],row,type,op=='g');}else if(op=='P')result=position_json(db[dst]->position(row),db[dst]->end(),*db[dst]);else if(op=='p'){const auto& owner=*db[dst];result=position_json(owner.position(row),owner.end(),owner);}else if(op=='I'||op=='i'){int other,index;std::cin>>other>>index;if(op=='I'){auto hint=db[other]->begin();std::advance(hint,index);auto pos=db[dst]->position(hint,row);result=position_json(pos,db[dst]->end(),*db[dst],&hint,index==int(db[other]->block_size()));}else{const auto& owner=*db[dst];const auto& source=*db[other];auto hint=source.begin();std::advance(hint,index);auto pos=owner.position(hint,row);result=position_json(pos,owner.end(),owner,&hint,index==int(source.block_size()));}}else {int slot;std::cin>>slot;if(op=='K'){auto& hint=*hints[slot];result=position_json(db[dst]->position(hint,row),db[dst]->end(),*db[dst],&hint);}else {const auto& owner=*db[dst];auto& hint=*const_hints[slot];result=position_json(owner.position(hint,row),owner.end(),owner,&hint);}}}
 else if(op=='B'||op=='b'||op=='O'||op=='o'||op=='l'||op=='X'){size_t row;std::cin>>row;if(op=='l'){const auto& owner=*db[dst];result=std::to_string(db_type::logical_position(owner.position(row)));}else if(op=='X'){int type;std::cin>>type;result=positioned_scalar(*db[dst],row,type);}else {int steps=0;if(op=='O'||op=='o')std::cin>>steps;if(op=='B'||op=='O'){auto p=db[dst]->position(row);auto ret=op=='B'?db_type::next_position(p):db_type::advance_position(p,steps);result="["+position_json(ret,db[dst]->end(),*db[dst])+","+position_json(p,db[dst]->end(),*db[dst])+"]";}else {const auto& owner=*db[dst];auto p=owner.position(row);auto ret=op=='b'?db_type::next_position(p):db_type::advance_position(p,steps);result="["+position_json(ret,owner.end(),owner)+","+position_json(p,owner.end(),owner)+"]";}}}
 else if(op=='Y'){size_t size;std::cin>>size;operation_calls.clear();trace_enabled=true;db[dst]->resize(size);trace_enabled=false;result=capture([&]{std::cout<<"[";for(size_t i=0;i<operation_calls.size();++i){if(i)std::cout<<",";std::cout<<"[";for(size_t j=0;j<operation_calls[i].size();++j){if(j)std::cout<<",";std::cout<<operation_calls[i][j];}std::cout<<"]";}std::cout<<"]";});}
+else if(op=='q'||op=='z'||op=='s'||op=='u'){size_t first,last;std::cin>>first>>last;operation_calls.clear();trace_enabled=true;db_type::iterator it;if(op=='q')it=db[dst]->set_empty(first,last);else if(op=='u'){bool overwrite;std::cin>>overwrite;auto p=db[dst]->position(first);it=empty_impl(*db[dst],first,last,p.first->__private_data.block_index,overwrite,empty_impl_tag{});}else{int slot;std::cin>>slot;if(op=='s')it=db[dst]->set_empty(*hints[slot],first,last);else{int index;std::cin>>index;auto hint=db[slot]->begin();std::advance(hint,index);it=db[dst]->set_empty(hint,first,last);}}trace_enabled=false;hints[dst]=it;result=capture([&]{std::cout<<"[";node(it,db[dst]->end(),*db[dst]);std::cout<<","<<calls_json()<<"]";});}
+else if(op=='m'){size_t index,offset,length;bool overwrite;std::cin>>index>>offset>>length>>overwrite;operation_calls.clear();trace_enabled=true;auto middle=middle_block(*db[dst],index,offset,length,overwrite,middle_tag{});trace_enabled=false;result="["+std::to_string(middle)+","+calls_json()+"]";}
 else if(op=='w'){size_t index;bool overwrite;std::cin>>index>>overwrite;operation_calls.clear();trace_enabled=true;auto it=whole_empty(*db[dst],index,overwrite,whole_empty_tag{});trace_enabled=false;hints[dst]=it;result=capture([&]{std::cout<<"[";node(it,db[dst]->end(),*db[dst]);std::cout<<","<<calls_json()<<"]";});}
 else if(op=='n'){size_t index;element_t cat;std::cin>>index>>cat;result=next_category(*db[dst],index,cat,next_category_tag{})?"true":"false";}
 else if(op=='x'){size_t index;element_t cat;std::cin>>index>>cat;result=previous_category(*db[dst],index,cat,category_tag{})?"true":"false";}
@@ -852,6 +862,12 @@ const snapshots = [],
   idsByState = new Map(),
   ownerSnapshots = [],
   idsByOwner = new Map();
+const metadataSnapshots = [],
+  payloadSnapshots = [],
+  endpointSnapshots = [];
+const metadataIds = new Map(),
+  payloadIds = new Map(),
+  endpointIds = new Map();
 const resultSnapshots = [],
   equalitySnapshots = [],
   eventSnapshots = [];
@@ -904,7 +920,15 @@ const document = {
                   if (ownerId === undefined) {
                     ownerId = ownerSnapshots.length;
                     idsByOwner.set(ownerKey, ownerId);
-                    ownerSnapshots.push(owner);
+                    ownerSnapshots.push([
+                      owner[0],
+                      owner[1],
+                      owner[2],
+                      owner[3],
+                      internField(metadataSnapshots, metadataIds, owner[4]),
+                      internField(payloadSnapshots, payloadIds, owner[5]),
+                      internField(endpointSnapshots, endpointIds, owner[6]),
+                    ]);
                   }
                   return ownerId;
                 },
@@ -921,6 +945,9 @@ const document = {
   ),
   snapshots,
   ownerSnapshots,
+  metadataSnapshots,
+  payloadSnapshots,
+  endpointSnapshots,
   resultSnapshots,
   equalitySnapshots,
   eventSnapshots,

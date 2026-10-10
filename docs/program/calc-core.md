@@ -1406,3 +1406,47 @@ The capability is implemented within this scope; whole parity flags remain false
 Source-shaped main/main_def, native caller and complete observer retain existing
 responsibilities below the 1000-line hard limit. No new upstream suspicion has
 been established. Cycle 2, task 8/10 follows fullFMVJ21.
+
+## Shared SoA range emptying
+
+Task `202610100046-PKFGQY` implements original plain/hinted `set_empty` and
+complete `set_empty_impl`, single/multi-block and `set_new_block_to_middle`
+bodies. The public owner supplies actual fields to the existing explicit
+borrowed-member convention in `main_def.ts`. Actual shared block funcs,
+metadata, event/delete/neighbor helpers and iterator parent retain their roles.
+
+First-row lookup precedes reversed/end validation, preserving original pinned
+1171/1186/1935 diagnostics. Already-empty single blocks return unchanged; whole
+blocks reuse original emptying. Top/bottom overwrite and erase precede adjacent
+empty extension or insertion. Multi-block mutation retains first/last/interior
+ordering, boundary empty extensions, deletion/metadata erasure and returned
+index. Original logical size is unchanged throughout.
+
+Middle split inserts two slots and acquires a size-zero typed owner before
+assignment. It copies the smaller side, choosing upper copy on equality, then
+conditionally overwrites the emptied cells before resize or erase/slot swap.
+Positions recalculate afterward. Splitting empty metadata retains the original
+three temporary adjacent empty blocks without normalization.
+
+Genuine unchanged-header public and private callers compare every complete
+native field across all 12 standard unmanaged families. Selected compound and
+varied inputs cover every finite valid inclusive range with overwrite true and
+false. Valid own/foreign/returned hints, long metadata, guard ordering, copy
+isolation, reappend, release and final destruction are observed. All 15076 prior
+complete sequences and final logs remain unchanged. The new native input module
+owns only this operation-group enumeration; it supplies no runtime algorithm,
+expected results or replacement observer. Native public set prepares inputs only.
+
+Complete owner records losslessly intern their full metadata, payload and
+endpoint arrays, in addition to existing complete result/equality/event tables.
+The decoder restores every original field. This removes redundant storage after
+ordinary formatting exhausted the default heap, retaining all caller inputs,
+complete original raw output, prior-prefix states and native lifetime records.
+Ordinary default-heap formatting and full raw record comparisons pass.
+
+Managed/custom/throwing outcomes, ABI/instrumentation/reentrancy/invalid inputs,
+overflow, public range release and remaining set/range insert/transfer/emplace,
+complete original QA/default/module and Calc column/document/browser parity
+remain unverified. Capability implemented within this scope, whole flags false.
+Source-shaped owners and shared full observer remain below the 1000-line hard
+limit. No new upstream suspicion established. Cycle2task9/10 follows fullFMVJ21.

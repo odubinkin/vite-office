@@ -36,6 +36,7 @@ import {
   get_block_position,
   get_block_position_hint,
   is_previous_block_of_type,
+  set_empty as set_empty_body,
   make_iterator,
   next_position as next_position_impl,
   get_impl,
@@ -584,6 +585,23 @@ export class multi_type_vector<E extends ContainerEvent = empty_event_func> {
     this.m_block_store.element_blocks.set(block_index, data);
     this.m_hdl_event.element_block_acquired(data);
     callbacks.mdds_mtv_append_value(data, cell);
+  }
+  /** Original plain/hinted range emptying with actual borrowed original fields. @param first - Start or valid hint. @param second - End or hinted start. @param third - Hinted end. @returns Original empty block iterator. */
+  public set_empty(
+    first: number | bigint | iterator_base<this>,
+    second: number | bigint,
+    third?: number | bigint,
+  ): iterator_base<this> {
+    return set_empty_body(
+      this.m_block_store,
+      this.m_cur_size,
+      this.m_hdl_event,
+      this.Traits.block_funcs,
+      this,
+      first,
+      second,
+      third,
+    );
   }
   /** Original plain/hinted empty insertion retains zero-length end return before lookup and pinned diagnostics. @param first - Row or original hint. @param second - Length or hinted row. @param third - Hinted length. @returns Inserted empty block iterator. */
   public insert_empty(

@@ -5,6 +5,8 @@ import {
   is_previous_block_of_type,
   is_next_block_of_type,
   set_whole_block_empty,
+  set_empty_impl,
+  set_new_block_to_middle,
 } from "./main_def.ts";
 import {
   multi_type_vector,
@@ -51,7 +53,27 @@ function decodeSnapshot(index: number): State {
     s[2].map(
       /** Resolves a complete owner without summarizing its fields. @param id - Original owner ID. @returns Complete owner or absence. */ (
         id,
-      ) => (id === null ? null : (fixture.ownerSnapshots[id] as unknown as OwnerState)),
+      ) => {
+        if (id === null) return null;
+        const owner = fixture.ownerSnapshots[id] as unknown as [
+          number,
+          number,
+          boolean,
+          [number, boolean],
+          number,
+          number,
+          number,
+        ];
+        return [
+          owner[0],
+          owner[1],
+          owner[2],
+          owner[3],
+          fixture.metadataSnapshots[owner[4] as number],
+          fixture.payloadSnapshots[owner[5] as number],
+          fixture.endpointSnapshots[owner[6] as number],
+        ] as unknown as OwnerState;
+      },
     ),
     fixture.equalitySnapshots[s[3]] as unknown as unknown[],
     fixture.eventSnapshots[s[4]] as unknown as EventEntry[],
@@ -474,6 +496,57 @@ describe("original SoA container lifetime", /** Declares original native ownersh
               },
             };
             destination.push_back(true, failure);
+          } else if (op === "m") {
+            operationCalls = [];
+            try {
+              const index = set_new_block_to_middle(
+                destination["m_block_store"],
+                destination["m_hdl_event"],
+                destination.Traits.block_funcs,
+                args[0] as number,
+                args[1] as number,
+                args[2] as number,
+                Boolean(args[3]),
+              );
+              result = [index, operationCalls];
+            } finally {
+              operationCalls = null;
+            }
+          } else if (op === "q" || op === "z" || op === "s" || op === "u") {
+            operationCalls = [];
+            try {
+              const first = typeof args[0] === "string" ? BigInt(args[0]) : (args[0] as number);
+              const last = typeof args[1] === "string" ? BigInt(args[1]) : (args[1] as number);
+              let it: iterator_base<multi_type_vector<Handler>>;
+              if (op === "q") it = destination.set_empty(first, last);
+              else if (op === "u") {
+                const index = destination.position(first).first.get_node()
+                  .__private_data.block_index;
+                it = set_empty_impl(
+                  destination["m_block_store"],
+                  destination.size(),
+                  destination["m_hdl_event"],
+                  destination.Traits.block_funcs,
+                  destination,
+                  first,
+                  last,
+                  index,
+                  Boolean(args[2]),
+                );
+              } else {
+                const hint =
+                  op === "s"
+                    ? (hints[args[2] as number] as iterator_base<multi_type_vector<Handler>>)
+                    : (owners[args[2] as number] as multi_type_vector<Handler>)
+                        .begin()
+                        .advance(args[3] as number);
+                it = destination.set_empty(hint, first, last);
+              }
+              hints[dst] = it;
+              result = [node(it, destination.end(), destination), operationCalls];
+            } finally {
+              operationCalls = null;
+            }
           } else if (op === "w") {
             operationCalls = [];
             try {

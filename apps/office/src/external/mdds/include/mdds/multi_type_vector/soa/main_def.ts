@@ -372,3 +372,258 @@ export function set_whole_block_empty<P>(
   }
   return make_iterator(store, parent, block_index, iterator_base);
 }
+
+/** Original plain/hinted set_empty body preserves first lookup before range validation. @param store - Metadata. @param size - Logical size. @param event - Handler. @param funcs - Registered operations. @param parent - Owner. @param first - Start or hint. @param second - End or hinted start. @param third - Hinted end. @returns Original empty iterator. */
+export function set_empty<P>(
+  store: blocks_type,
+  size: number,
+  event: ContainerEvent,
+  funcs: BlocksTraits["block_funcs"],
+  parent: P,
+  first: number | bigint | iterator_base<P>,
+  second: number | bigint,
+  third?: number | bigint,
+): iterator_base<P> {
+  const hint = typeof first === "object" ? first : undefined;
+  const start_pos = hint ? second : (first as number | bigint);
+  const end_pos = hint ? (third as number | bigint) : second;
+  const block_index1 = hint
+    ? get_block_position_hint(store, size, parent, hint.get_node().__private_data, start_pos)
+    : get_block_position(store, size, start_pos);
+  if (block_index1 === store.positions.size())
+    throw_block_position_not_found(
+      "multi_type_vector::set_empty",
+      hint ? 1186 : 1171,
+      start_pos,
+      store.positions.size(),
+      size,
+    );
+  return set_empty_impl(store, size, event, funcs, parent, start_pos, end_pos, block_index1, true);
+}
+/** Original range-empty dispatch retains reversed/end guards and admitted block lookup. @param store - Metadata. @param size - Logical size. @param event - Handler. @param funcs - Operations. @param parent - Owner. @param start_pos - First row. @param end_pos - Last row. @param block_index1 - First block. @param overwrite - Original overwrite choice. @returns Original empty iterator. */
+export function set_empty_impl<P>(
+  store: blocks_type,
+  size: number,
+  event: ContainerEvent,
+  funcs: BlocksTraits["block_funcs"],
+  parent: P,
+  start_pos: number | bigint,
+  end_pos: number | bigint,
+  block_index1: number,
+  overwrite: boolean,
+): iterator_base<P> {
+  if (start_pos > end_pos) throw new RangeError("Start row is larger than the end row.");
+  const block_index2 = get_block_position(store, size, end_pos, block_index1);
+  if (block_index2 === store.positions.size())
+    throw_block_position_not_found(
+      "multi_type_vector::set_empty_impl",
+      1935,
+      end_pos,
+      store.positions.size(),
+      size,
+    );
+  return block_index1 === block_index2
+    ? set_empty_in_single_block(
+        store,
+        event,
+        funcs,
+        parent,
+        Number(start_pos),
+        Number(end_pos),
+        block_index1,
+        overwrite,
+      )
+    : set_empty_in_multi_blocks(
+        store,
+        event,
+        funcs,
+        parent,
+        Number(start_pos),
+        Number(end_pos),
+        block_index1,
+        block_index2,
+        overwrite,
+      );
+}
+/** Original single-block range emptying retains overwrite/erase/merge ordering. @param store - Metadata. @param event - Handler. @param funcs - Operations. @param parent - Owner. @param start_row - First row. @param end_row - Last row. @param block_index - Block. @param overwrite - Original choice. @returns Empty iterator. */
+export function set_empty_in_single_block<P>(
+  store: blocks_type,
+  event: ContainerEvent,
+  funcs: BlocksTraits["block_funcs"],
+  parent: P,
+  start_row: number,
+  end_row: number,
+  block_index: number,
+  overwrite: boolean,
+): iterator_base<P> {
+  const blk_data = store.element_blocks.get(block_index);
+  if (!blk_data) return make_iterator(store, parent, block_index, iterator_base);
+  const start_row_in_block = store.positions.get(block_index);
+  const end_row_in_block = start_row_in_block + store.sizes.get(block_index) - 1;
+  const empty_block_size = end_row - start_row + 1;
+  if (start_row === start_row_in_block) {
+    if (end_row === end_row_in_block)
+      return set_whole_block_empty(store, event, funcs, parent, block_index, overwrite);
+    if (overwrite) funcs.overwrite_values(blk_data, 0, empty_block_size);
+    funcs.erase(blk_data, 0, empty_block_size);
+    store.sizes.set(block_index, store.sizes.get(block_index) - empty_block_size);
+    const blk_prev = is_previous_block_of_type(store, block_index, element_type_empty);
+    if (blk_prev) {
+      store.sizes.set(block_index - 1, store.sizes.get(block_index - 1) + empty_block_size);
+      store.positions.set(block_index, store.positions.get(block_index) + empty_block_size);
+      return make_iterator(store, parent, block_index - 1, iterator_base);
+    }
+    const block_position = store.positions.get(block_index);
+    store.positions.set(block_index, store.positions.get(block_index) + empty_block_size);
+    store.insert(block_index, block_position, empty_block_size, null);
+    return make_iterator(store, parent, block_index, iterator_base);
+  }
+  if (end_row === end_row_in_block) {
+    const start_pos = start_row - start_row_in_block;
+    if (overwrite) funcs.overwrite_values(blk_data, start_pos, empty_block_size);
+    funcs.erase(blk_data, start_pos, empty_block_size);
+    store.sizes.set(block_index, store.sizes.get(block_index) - empty_block_size);
+    const blk_next = is_next_block_of_type(store, block_index, element_type_empty);
+    if (blk_next) {
+      store.sizes.set(block_index + 1, store.sizes.get(block_index + 1) + empty_block_size);
+      store.positions.set(block_index + 1, start_row);
+    } else store.insert(block_index + 1, start_row, empty_block_size, null);
+    return make_iterator(store, parent, block_index + 1, iterator_base);
+  }
+  set_new_block_to_middle(
+    store,
+    event,
+    funcs,
+    block_index,
+    start_row - start_row_in_block,
+    empty_block_size,
+    overwrite,
+  );
+  return make_iterator(store, parent, block_index + 1, iterator_base);
+}
+/** Original multi-block range emptying retains first/last/interior sequencing. @param store - Metadata. @param event - Handler. @param funcs - Operations. @param parent - Owner. @param start_row - First row. @param end_row - Last row. @param block_index1 - First block. @param block_index2 - Last block. @param overwrite - Original choice. @returns Empty iterator. */
+export function set_empty_in_multi_blocks<P>(
+  store: blocks_type,
+  event: ContainerEvent,
+  funcs: BlocksTraits["block_funcs"],
+  parent: P,
+  start_row: number,
+  end_row: number,
+  block_index1: number,
+  block_index2: number,
+  overwrite: boolean,
+): iterator_base<P> {
+  const start_row_in_block1 = store.positions.get(block_index1);
+  const start_row_in_block2 = store.positions.get(block_index2);
+  {
+    const blk_data = store.element_blocks.get(block_index1);
+    if (blk_data) {
+      if (start_row_in_block1 === start_row) {
+        const prev_empty = is_previous_block_of_type(store, block_index1, element_type_empty);
+        if (prev_empty) {
+          start_row -= store.sizes.get(block_index1 - 1);
+          --block_index1;
+        } else {
+          if (!overwrite) funcs.resize_block(blk_data, 0);
+          delete_element_block(store, event, funcs, block_index1);
+        }
+      } else {
+        const new_size = start_row - start_row_in_block1;
+        if (overwrite)
+          funcs.overwrite_values(blk_data, new_size, store.sizes.get(block_index1) - new_size);
+        funcs.resize_block(blk_data, new_size);
+        store.sizes.set(block_index1, new_size);
+      }
+    } else start_row = start_row_in_block1;
+  }
+  let end_block_to_erase = block_index2;
+  {
+    const blk_data = store.element_blocks.get(block_index2);
+    const last_row_in_block = start_row_in_block2 + store.sizes.get(block_index2) - 1;
+    if (blk_data) {
+      if (last_row_in_block === end_row) {
+        ++end_block_to_erase;
+        const next_empty = is_next_block_of_type(store, block_index2, element_type_empty);
+        if (next_empty) {
+          end_row += store.sizes.get(block_index2 + 1);
+          ++end_block_to_erase;
+        }
+      } else {
+        const size_to_erase = end_row - start_row_in_block2 + 1;
+        if (overwrite) funcs.overwrite_values(blk_data, 0, size_to_erase);
+        funcs.erase(blk_data, 0, size_to_erase);
+        store.sizes.set(block_index2, store.sizes.get(block_index2) - size_to_erase);
+        store.positions.set(block_index2, start_row_in_block2 + size_to_erase);
+      }
+    } else {
+      ++end_block_to_erase;
+      end_row = last_row_in_block;
+    }
+  }
+  if (end_block_to_erase - block_index1 > 1) {
+    for (let i = block_index1 + 1; i < end_block_to_erase; ++i) {
+      const data = store.element_blocks.get(i);
+      if (!overwrite && data) funcs.resize_block(data, 0);
+      delete_element_block(store, event, funcs, i);
+    }
+    const n_erase_blocks = end_block_to_erase - block_index1 - 1;
+    store.erase(block_index1 + 1, n_erase_blocks);
+  }
+  const blk_data = store.element_blocks.get(block_index1);
+  const empty_block_size = end_row - start_row + 1;
+  if (blk_data) {
+    store.insert(block_index1 + 1, start_row, empty_block_size, null);
+    return make_iterator(store, parent, block_index1 + 1, iterator_base);
+  }
+  store.sizes.set(block_index1, empty_block_size);
+  store.positions.set(block_index1, start_row);
+  return make_iterator(store, parent, block_index1, iterator_base);
+}
+/** Original middle member retains smaller-side copy and overwrite ordering over data or empty metadata. @param store - Metadata. @param event - Handler. @param funcs - Operations. @param block_index - Block. @param offset - Upper size. @param new_block_size - Empty middle size. @param overwrite - Original choice. @returns Middle index. */
+export function set_new_block_to_middle(
+  store: blocks_type,
+  event: ContainerEvent,
+  funcs: BlocksTraits["block_funcs"],
+  block_index: number,
+  offset: number,
+  new_block_size: number,
+  overwrite: boolean,
+): number {
+  const lower_block_size = store.sizes.get(block_index) - offset - new_block_size;
+  store.insert(block_index + 1, 2);
+  store.sizes.set(block_index + 1, new_block_size);
+  store.sizes.set(block_index + 2, lower_block_size);
+  const blk_data = store.element_blocks.get(block_index);
+  if (blk_data) {
+    const lower_data_start = offset + new_block_size;
+    const cat = get_block_type(blk_data);
+    store.element_blocks.set(block_index + 2, funcs.create_new_block(cat, 0));
+    event.element_block_acquired(store.element_blocks.get(block_index + 2) as base_element_block);
+    if (offset > lower_block_size) {
+      funcs.assign_values_from_block(
+        store.element_blocks.get(block_index + 2) as base_element_block,
+        blk_data,
+        lower_data_start,
+        lower_block_size,
+      );
+      if (overwrite) funcs.overwrite_values(blk_data, offset, new_block_size);
+      funcs.resize_block(blk_data, offset);
+      store.sizes.set(block_index, offset);
+      store.sizes.set(block_index + 2, lower_block_size);
+    } else {
+      const blk_lower_data = store.element_blocks.get(block_index + 2) as base_element_block;
+      funcs.assign_values_from_block(blk_lower_data, blk_data, 0, offset);
+      store.sizes.set(block_index + 2, offset);
+      if (overwrite) funcs.overwrite_values(blk_data, offset, new_block_size);
+      funcs.erase(blk_data, 0, lower_data_start);
+      store.sizes.set(block_index, lower_block_size);
+      store.sizes.set(block_index + 2, offset);
+      const position = store.positions.get(block_index);
+      store.swap(block_index, block_index + 2);
+      store.positions.set(block_index, position);
+    }
+  } else store.sizes.set(block_index, offset);
+  store.calc_block_position(block_index + 1);
+  store.calc_block_position(block_index + 2);
+  return block_index + 1;
+}
