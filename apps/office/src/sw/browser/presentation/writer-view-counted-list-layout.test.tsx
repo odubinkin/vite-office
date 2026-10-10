@@ -1,5 +1,6 @@
 /** @fileoverview Verifies native independent counted list placement across body and cell owners. */
 import { act, cleanup, render, screen } from "@testing-library/react";
+import { SvxIndentValue } from "../../../editeng/inc/lrspitem";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   SvxFirstLineIndentItem,
@@ -119,7 +120,18 @@ describe("native counted list axes", /** Registers literal independent layout ow
           if (profile.left !== undefined)
             f.node.SetAttr(new SvxTextLeftMarginItem(profile.left, RES_MARGIN_TEXTLEFT));
           if (profile.first !== undefined)
-            f.node.SetAttr(new SvxFirstLineIndentItem(profile.first, RES_MARGIN_FIRSTLINE, true));
+            f.node.SetAttr(
+              (
+                /** Authors the existing automatic first-line fixture through native setters. @returns Native item. */ () => {
+                  const item = new SvxFirstLineIndentItem(
+                    SvxIndentValue.twips(profile.first),
+                    RES_MARGIN_FIRSTLINE,
+                  );
+                  item.SetAutoFirst(true);
+                  return item;
+                }
+              )(),
+            );
           f.node.SetListGeometryWins(true);
           const before = f.session.docShell.GetUndoManager().GetUndoActionCount(),
             id = f.node.GetListId();
@@ -175,7 +187,9 @@ describe("native counted list axes", /** Registers literal independent layout ow
         );
         f.rule.SetAbsSpaces(p.absolute);
         f.node.SetAttr(new SvxTextLeftMarginItem(240, RES_MARGIN_TEXTLEFT));
-        f.node.SetAttr(new SvxFirstLineIndentItem(p.raw, RES_MARGIN_FIRSTLINE));
+        f.node.SetAttr(
+          new SvxFirstLineIndentItem(SvxIndentValue.twips(p.raw), RES_MARGIN_FIRSTLINE),
+        );
         f.doc.GetDocumentSettingManager().set("IGNORE_FIRST_LINE_INDENT_IN_NUMBERING", p.ignore);
         expect(resolveSwListTextLeftMargin(f.node)).toBe(p.left);
         expect(resolveSwListFirstLineIndent(f.node)).toBe(p.offset);
@@ -211,7 +225,9 @@ describe("native counted list axes", /** Registers literal independent layout ow
         act(
           /** Sets native first-line item independently. @returns Nothing. */ () => {
             expect(
-              f.shell.SetParagraphItems([new SvxFirstLineIndentItem(120, RES_MARGIN_FIRSTLINE)]),
+              f.shell.SetParagraphItems([
+                new SvxFirstLineIndentItem(SvxIndentValue.twips(120), RES_MARGIN_FIRSTLINE),
+              ]),
             ).toBe(true);
           },
         );
@@ -249,7 +265,7 @@ describe("native counted list axes", /** Registers literal independent layout ow
     const f = fixture(),
       record = f.node.GetNum();
     if (record === undefined) throw new Error("Missing bound number");
-    f.node.SetAttr(new SvxFirstLineIndentItem(120, RES_MARGIN_FIRSTLINE));
+    f.node.SetAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(120), RES_MARGIN_FIRSTLINE));
     vi.spyOn(record, "GetNumRule").mockReturnValue(undefined);
     expect(resolveSwListFirstLineIndent(f.node)).toBe(120);
     expect(f.store.GetSnapshot().activeParagraph.listLayout).toBeUndefined();

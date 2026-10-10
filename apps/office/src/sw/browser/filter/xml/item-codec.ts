@@ -7,7 +7,7 @@ import type { SfxItemPool } from "../../../../svl/source/items/itempool";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SfxUnoAnyItem } from "../../../../sfx2/source/view/frame";
 import { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
-import { SvxRightMarginItem } from "../../../../editeng/inc/lrspitem";
+import { SvxRightMarginItem, SvxFirstLineIndentItem } from "../../../../editeng/inc/lrspitem";
 import { MeasureUnit } from "../../../../offapi/com/sun/star/util/MeasureUnit";
 import { SvxFontItem } from "../../../../editeng/source/items/textitem";
 import { type SfxPoolItem, type SfxPoolItemSnapshot } from "../../../../svl/source/items/poolitem";
@@ -73,15 +73,17 @@ export function encodeSfxPoolItem(item: SfxPoolItem): SfxPoolItemSnapshot {
       ? encodeULSpaceValue(item)
       : item instanceof SvxRightMarginItem
         ? encodeLegacyRightMarginValue(item)
-        : item instanceof SwFormatINetFormat
-          ? JSON.stringify(encodeSwFormatINetFormatRecord(item))
-          : item instanceof SvxFontItem && item.GetGenericFamily() !== undefined
-            ? {
-                familyName: item.GetFamilyName(),
-                resolvedFamilyName: item.GetResolvedFamilyName(),
-                genericFamily: item.GetGenericFamily() as string,
-              }
-            : item.QueryValue();
+        : item instanceof SvxFirstLineIndentItem
+          ? encodeLegacyFirstLineValue(item)
+          : item instanceof SwFormatINetFormat
+            ? JSON.stringify(encodeSwFormatINetFormatRecord(item))
+            : item instanceof SvxFontItem && item.GetGenericFamily() !== undefined
+              ? {
+                  familyName: item.GetFamilyName(),
+                  resolvedFamilyName: item.GetResolvedFamilyName(),
+                  genericFamily: item.GetGenericFamily() as string,
+                }
+              : item.QueryValue();
   if (!isSfxPoolItemValue(value)) throw new Error("SfxPoolItem is not persistence-safe.");
   return {
     value,
@@ -151,4 +153,16 @@ function encodeLegacyRightMarginValue(item: SvxRightMarginItem): number {
   )
     throw new Error("SvxRightMarginItem is not persistence-safe.");
   return value.m_dValue;
+}
+
+/** Preserves existing integer/automatic records without flattening native units or proportions. @param item - Original native item. @returns Legacy scalar or automatic tuple. */
+function encodeLegacyFirstLineValue(item: SvxFirstLineIndentItem): number | readonly [number, 1] {
+  const value = item.GetTextFirstLineOffset();
+  if (
+    value.m_nUnit !== MeasureUnit.TWIP ||
+    item.GetPropTextFirstLineOffset() !== 100 ||
+    !Number.isInteger(value.m_dValue)
+  )
+    throw new Error("SvxFirstLineIndentItem is not persistence-safe.");
+  return item.IsAutoFirst() ? [value.m_dValue, 1] : value.m_dValue;
 }

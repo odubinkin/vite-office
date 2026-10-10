@@ -48,21 +48,31 @@ describe("EditEngine frame items", /** Groups pooled frame metric contracts. @re
   });
 
   it("preserves first-line indent, right margin, and paragraph spacing items", /** Covers validation, cloning, equality, and persistence for frame metrics. @returns Nothing. */ () => {
-    const first = new SvxFirstLineIndentItem(-283, weightWhich);
+    const first = new SvxFirstLineIndentItem(SvxIndentValue.twips(-283), weightWhich);
     expect(first.ResolveTextFirstLineOffset()).toBe(-283);
-    expect(first.QueryValue()).toBe(-283);
+    expect(first.QueryValue(8)).toBe(-283);
     expect(first.Clone().equals(first)).toBe(true);
-    expect(first.equals(new SvxFirstLineIndentItem(-282, weightWhich))).toBe(false);
+    expect(first.equals(new SvxFirstLineIndentItem(SvxIndentValue.twips(-282), weightWhich))).toBe(
+      false,
+    );
     expect(first.equals(new SfxInt16Item(weightWhich, -283))).toBe(false);
-    const automatic = new SvxFirstLineIndentItem(-283, weightWhich, true);
+    const automatic = (
+      /** Authors the existing automatic first-line fixture through native setters. @returns Native item. */ () => {
+        const item = new SvxFirstLineIndentItem(SvxIndentValue.twips(-283), weightWhich);
+        item.SetAutoFirst(true);
+        return item;
+      }
+    )();
     expect(automatic.IsAutoFirst()).toBe(true);
-    expect(automatic.QueryValue()).toEqual([-283, 1]);
+    expect(encodeSfxPoolItem(automatic).value).toEqual([-283, 1]);
     expect(automatic.Clone().equals(automatic)).toBe(true);
     expect(first.equals(automatic)).toBe(false);
     expect(
-      /** Creates a fractional first-line indent. @returns Invalid item. */ () =>
-        new SvxFirstLineIndentItem(1.5, weightWhich),
-    ).toThrow("value is invalid");
+      new SvxFirstLineIndentItem(
+        SvxIndentValue.twips(1.5),
+        weightWhich,
+      ).ResolveTextFirstLineOffset(),
+    ).toBe(2);
 
     const right = new SvxRightMarginItem(SvxIndentValue.twips(567), weightWhich);
     expect(right.ResolveRight()).toBe(567);

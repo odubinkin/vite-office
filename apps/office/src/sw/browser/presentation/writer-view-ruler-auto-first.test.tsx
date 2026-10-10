@@ -46,7 +46,13 @@ function fixture(auto = false, value = 367, inherited = false) {
       7,
     ),
   ]);
-  const item = new SvxFirstLineIndentItem(value, RES_MARGIN_FIRSTLINE, auto);
+  const item = (
+    /** Authors the existing automatic first-line fixture through native setters. @returns Native item. */ () => {
+      const item = new SvxFirstLineIndentItem(SvxIndentValue.twips(value), RES_MARGIN_FIRSTLINE);
+      item.SetAutoFirst(auto);
+      return item;
+    }
+  )();
   if (inherited) session.docShell.GetDoc().GetDfltTextFormatColl().SetFormatAttr(item);
   else shell.SetParagraphItems([item]);
   const store = new WriterViewStore(session.view);
@@ -59,7 +65,7 @@ function values(shell: ReturnType<typeof fixture>["shell"]) {
   const node = shell.GetActiveParagraph();
   return {
     left: node.GetAttr(RES_MARGIN_TEXTLEFT).QueryValue(),
-    firstLine: node.GetAttr(RES_MARGIN_FIRSTLINE).QueryValue(),
+    firstLine: firstValues(node.GetAttr(RES_MARGIN_FIRSTLINE)),
     right: node.GetAttr(RES_MARGIN_RIGHT).QueryValue(),
     spacing: node.GetAttr(RES_UL_SPACE).QueryValue(),
     tabs: node.GetAttr(RES_PARATR_TABSTOP).QueryValue(),
@@ -122,7 +128,9 @@ describe("Writer automatic first-line ruler visibility", /** Groups effective it
     expect(retained.computedStyle.autoFirstLineIndent).toBe(true);
     act(
       /** Applies a manual direct item above the inherited style. @returns Nothing. */ () => {
-        owner.shell.SetParagraphItems([new SvxFirstLineIndentItem(-367, RES_MARGIN_FIRSTLINE)]);
+        owner.shell.SetParagraphItems([
+          new SvxFirstLineIndentItem(SvxIndentValue.twips(-367), RES_MARGIN_FIRSTLINE),
+        ]);
       },
     );
     expect(screen.getByRole("button", { name: "First line indent" })).toBeInTheDocument();
@@ -205,3 +213,10 @@ describe("Writer automatic first-line ruler visibility", /** Groups effective it
     expect(screen.getByRole("button", { name: "First line indent" }).style.left).toBe("177px");
   });
 });
+
+/** Observes original measure and automatic state through their explicit native members. @param item - Native first-line item or direct absence. @returns Historical authored value with auto marker. */
+function firstValues(item: { QueryValue(member?: number): unknown } | undefined): unknown {
+  if (item === undefined) return undefined;
+  const value = item.QueryValue(8);
+  return item.QueryValue(10) === true ? [value, 1] : value;
+}

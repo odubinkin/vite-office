@@ -1,5 +1,6 @@
 /** @fileoverview Verifies native uncounted list text placement across body and cell owners. */
 import { act, cleanup, render, screen } from "@testing-library/react";
+import { SvxIndentValue } from "../../../editeng/inc/lrspitem";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   SvxFirstLineIndentItem,
@@ -114,7 +115,18 @@ describe("native uncounted list text geometry", /** Registers literal upstream p
           if (profile.left !== undefined)
             f.node.SetAttr(new SvxTextLeftMarginItem(profile.left, RES_MARGIN_TEXTLEFT));
           if (profile.first !== undefined)
-            f.node.SetAttr(new SvxFirstLineIndentItem(profile.first, RES_MARGIN_FIRSTLINE, true));
+            f.node.SetAttr(
+              (
+                /** Authors the existing automatic first-line fixture through native setters. @returns Native item. */ () => {
+                  const item = new SvxFirstLineIndentItem(
+                    SvxIndentValue.twips(profile.first),
+                    RES_MARGIN_FIRSTLINE,
+                  );
+                  item.SetAutoFirst(true);
+                  return item;
+                }
+              )(),
+            );
           f.node.SetCountedInList(false);
           f.node.SetListGeometryWins(true);
           const count = f.doc.nodes.entries().length,
@@ -161,7 +173,9 @@ describe("native uncounted list text geometry", /** Registers literal upstream p
           );
           f.rule.SetAbsSpaces(absolute);
           f.node.SetAttr(new SvxTextLeftMarginItem(240, RES_MARGIN_TEXTLEFT));
-          f.node.SetAttr(new SvxFirstLineIndentItem(first, RES_MARGIN_FIRSTLINE));
+          f.node.SetAttr(
+            new SvxFirstLineIndentItem(SvxIndentValue.twips(first), RES_MARGIN_FIRSTLINE),
+          );
           f.node.SetCountedInList(false);
           const left = absolute ? (first < 0 ? 840 : 720) : 960;
           expect(resolveSwListTextLeftMargin(f.node)).toBe(left);
@@ -240,7 +254,7 @@ describe("native uncounted list text geometry", /** Registers literal upstream p
     vi.restoreAllMocks();
     f.node.ResetAttr(RES_PARATR_NUMRULE);
     f.node.SetAttr(new SvxTextLeftMarginItem(600, RES_MARGIN_TEXTLEFT));
-    f.node.SetAttr(new SvxFirstLineIndentItem(120, RES_MARGIN_FIRSTLINE));
+    f.node.SetAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(120), RES_MARGIN_FIRSTLINE));
     expect(resolveSwListTextLeftMargin(f.node)).toBeUndefined();
     expect(projectSwTextPrintBounds(f.node, f.doc.GetPageDesc().GetValue()).left).toBe(720);
     mount(f);

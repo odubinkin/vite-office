@@ -666,46 +666,8 @@ export class SvxTextLeftMarginItem extends SfxPoolItem {
   }
 }
 
-/** Stores Writer's first-line indent in twips. */
-export class SvxFirstLineIndentItem extends SfxPoolItem {
-  /** Creates an indent item. @param value - Signed twip indent. @param which - Item identity. @param autoFirst - Whether Writer computes indent from font height. @returns Nothing. */
-  public constructor(
-    private readonly value: number,
-    which: number,
-    private readonly autoFirst = false,
-  ) {
-    super(which);
-    if (!Number.isInteger(value)) throw new Error("SvxFirstLineIndentItem value is invalid.");
-  }
-  /** Returns the signed first-line indent. @returns Twips. */
-  public ResolveTextFirstLineOffset(): number {
-    return this.value;
-  }
-  /** Returns upstream automatic first-line mode. @returns Whether font height controls the indent. */
-  public IsAutoFirst(): boolean {
-    return this.autoFirst;
-  }
-  /** Creates an independent item. @returns Clone. */
-  public Clone(): SvxFirstLineIndentItem {
-    return new SvxFirstLineIndentItem(this.value, this.Which(), this.autoFirst);
-  }
-  /** Compares identity and value. @param other - Candidate. @returns Whether equal. */
-  public equals(other: SfxPoolItem): boolean {
-    return (
-      other instanceof SvxFirstLineIndentItem &&
-      other.Which() === this.Which() &&
-      other.value === this.value &&
-      other.autoFirst === this.autoFirst
-    );
-  }
-  /** Serializes the indent. @returns Twips. */
-  public QueryValue(): number | readonly [number, 1] {
-    return this.autoFirst ? [this.value, 1] : this.value;
-  }
-}
-
 /** Native UL declaration is owned by the matching ulspitem.hxx module. */
 export { SvxULSpaceItem } from "../../inc/ulspitem";
 
 /** Native LR declaration is owned by the matching lrspitem.hxx module. */
-export { SvxLRSpaceItem, SvxRightMarginItem } from "../../inc/lrspitem";
+export { SvxLRSpaceItem, SvxRightMarginItem, SvxFirstLineIndentItem } from "../../inc/lrspitem";

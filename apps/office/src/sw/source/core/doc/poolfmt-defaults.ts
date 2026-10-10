@@ -10,9 +10,8 @@ import {
   SvxTabStop,
   SvxTabStopItem,
 } from "../../../../editeng/source/items/paraitem";
-import { SvxIndentValue } from "../../../../editeng/inc/lrspitem";
+import { SvxIndentValue, SvxFirstLineIndentItem } from "../../../../editeng/inc/lrspitem";
 import {
-  SvxFirstLineIndentItem,
   SvxRightMarginItem,
   SvxTextLeftMarginItem,
   SvxULSpaceItem,
@@ -202,7 +201,10 @@ export function applyWriterParagraphStyleDefaults(collection: SwTextFormatColl):
     collection.SetFormatAttr(new SvxAdjustItem(defaults.adjust, RES_PARATR_ADJUST));
   if (defaults.firstLineTwips !== undefined)
     collection.SetFormatAttr(
-      new SvxFirstLineIndentItem(defaults.firstLineTwips, RES_MARGIN_FIRSTLINE),
+      new SvxFirstLineIndentItem(
+        SvxIndentValue.twips(defaults.firstLineTwips),
+        RES_MARGIN_FIRSTLINE,
+      ),
     );
   if (defaults.textLeftTwips !== undefined)
     collection.SetFormatAttr(

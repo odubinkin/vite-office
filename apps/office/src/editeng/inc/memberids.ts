@@ -5,3 +5,10 @@ export const MID_FIRST_LINE_UNIT_INDENT = 13;
 export const MID_R_UNIT_MARGIN = 14;
 /** Text-left-margin double/unit pair. */
 export const MID_L_UNIT_MARGIN = 15;
+
+/** First-line absolute indent. */
+export const MID_FIRST_LINE_INDENT = 8;
+/** First-line proportional indent. */
+export const MID_FIRST_LINE_REL_INDENT = 9;
+/** Automatic first-line calculation. */
+export const MID_FIRST_AUTO = 10;

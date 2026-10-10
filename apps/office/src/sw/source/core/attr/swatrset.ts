@@ -9,9 +9,8 @@ import {
   SvxTabAdjust,
   SvxTabStopItem,
 } from "../../../../editeng/source/items/paraitem";
-import { SvxIndentValue } from "../../../../editeng/inc/lrspitem";
+import { SvxIndentValue, SvxFirstLineIndentItem } from "../../../../editeng/inc/lrspitem";
 import {
-  SvxFirstLineIndentItem,
   SvxRightMarginItem,
   SvxTextLeftMarginItem,
   SvxULSpaceItem,
@@ -248,13 +247,16 @@ export class SwAttrPool extends SfxItemPool {
       ) => new SvxTextLeftMarginItem(Number(value), RES_MARGIN_TEXTLEFT),
     );
     this.RegisterDefaultItem(
-      new SvxFirstLineIndentItem(0, RES_MARGIN_FIRSTLINE),
-      /** Restores first-line indent. @param value - Persisted twips. @returns Indent item. */ (
+      new SvxFirstLineIndentItem(RES_MARGIN_FIRSTLINE),
+      /** Restores the existing integer/automatic browser record. @param value - Legacy payload. @returns Native item. */ (
         value,
-      ) =>
-        Array.isArray(value)
-          ? new SvxFirstLineIndentItem(Number(value[0]), RES_MARGIN_FIRSTLINE, value[1] === 1)
-          : new SvxFirstLineIndentItem(Number(value), RES_MARGIN_FIRSTLINE),
+      ) => {
+        const twips = Number(Array.isArray(value) ? value[0] : value);
+        if (!Number.isInteger(twips)) throw new Error("SvxFirstLineIndentItem value is invalid.");
+        const item = new SvxFirstLineIndentItem(SvxIndentValue.twips(twips), RES_MARGIN_FIRSTLINE);
+        item.SetAutoFirst(Array.isArray(value) && value[1] === 1);
+        return item;
+      },
     );
     this.RegisterDefaultItem(
       new SvxRightMarginItem(RES_MARGIN_RIGHT),

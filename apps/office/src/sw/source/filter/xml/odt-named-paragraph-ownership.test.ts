@@ -1,5 +1,6 @@
 /** @fileoverview Checks actual named paragraph owners, automatic deltas and Writer graph/history/package boundaries. */
 import fs from "node:fs";
+import { SvxIndentValue } from "../../../../editeng/inc/lrspitem";
 import { describe, expect, it, vi } from "vitest";
 import {
   SvxFirstLineIndentItem,
@@ -306,7 +307,7 @@ describe("Writer document-owned named paragraph hierarchy", /** Groups literal n
     parent.SetNextTextFormatColl(child);
     const node = required(doc.paragraphs[0]);
     node.ChgFormatColl(child);
-    node.SetAttr(new SvxFirstLineIndentItem(120, RES_MARGIN_FIRSTLINE));
+    node.SetAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(120), RES_MARGIN_FIRSTLINE));
     node.SetText("EscapedOwnProof");
     expect(exportContentXml(doc)).toContain('style:parent-style-name="Own:Child"');
     expect(exportStylesXml(doc)).toContain('style:parent-style-name="Own:Parent&amp;&quot;"');
@@ -359,13 +360,17 @@ describe("Writer document-owned named paragraph hierarchy", /** Groups literal n
       shell = view.GetWrtShell();
     try {
       const before = encodeWriterDocument(doc);
-      expect(shell.SetParagraphItems([new SvxFirstLineIndentItem(120, RES_MARGIN_FIRSTLINE)])).toBe(
-        true,
-      );
+      expect(
+        shell.SetParagraphItems([
+          new SvxFirstLineIndentItem(SvxIndentValue.twips(120), RES_MARGIN_FIRSTLINE),
+        ]),
+      ).toBe(true);
       const edited = encodeWriterDocument(doc);
-      expect(shell.SetParagraphItems([new SvxFirstLineIndentItem(120, RES_MARGIN_FIRSTLINE)])).toBe(
-        false,
-      );
+      expect(
+        shell.SetParagraphItems([
+          new SvxFirstLineIndentItem(SvxIndentValue.twips(120), RES_MARGIN_FIRSTLINE),
+        ]),
+      ).toBe(false);
       expect(shell.Undo()).toBe(true);
       expect(encodeWriterDocument(doc)).toEqual(before);
       expect(shell.Redo()).toBe(true);

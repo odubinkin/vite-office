@@ -1,5 +1,6 @@
 /** @fileoverview Verifies body and cell paragraphs share actual native style/list projections and shell history without upstream execution. */
 import { act, cleanup, render, screen } from "@testing-library/react";
+import { SvxIndentValue } from "../../../editeng/inc/lrspitem";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { createWriterDocumentSession } from "../composition/writer-module";
 import { WriterWorkbench } from "../presentation/writer-view";
@@ -74,7 +75,7 @@ describe("shared native cell paragraph display", /** Registers actual node-to-di
   it("renders effective margins, signed first-line offset, font, color and cell spacing", /** Checks literal native item values reach the common paragraph. @returns Nothing. */ () => {
     const owner = fixture();
     owner.node.SetParagraphTextLeftMargin(400);
-    owner.node.SetParagraphFirstLineIndent(-80);
+    owner.node.SetAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(-80), RES_MARGIN_FIRSTLINE));
     owner.node.SetParagraphRightMargin(300);
     owner.node.SetAttr(new SvxULSpaceItem(100, 200, RES_UL_SPACE));
     owner.node.SetAttr(new SvxFontHeightItem(280, RES_CHRATR_FONTSIZE));
@@ -102,7 +103,15 @@ describe("shared native cell paragraph display", /** Registers actual node-to-di
   it("uses the core automatic first-line result inside the cell", /** Checks authored automatic state stays separate from rendered layout. @returns Nothing. */ () => {
     const owner = fixture();
     owner.node.SetAttr(new SvxFontHeightItem(300, RES_CHRATR_FONTSIZE));
-    owner.node.SetAttr(new SvxFirstLineIndentItem(120, RES_MARGIN_FIRSTLINE, true));
+    owner.node.SetAttr(
+      (
+        /** Authors the existing automatic first-line fixture through native setters. @returns Native item. */ () => {
+          const item = new SvxFirstLineIndentItem(SvxIndentValue.twips(120), RES_MARGIN_FIRSTLINE);
+          item.SetAutoFirst(true);
+          return item;
+        }
+      )(),
+    );
     mount(owner);
     const cell = screen.getByLabelText("Row 1 column 1 paragraph 1");
     expect(cell).toHaveStyle({ textIndent: "30pt" });

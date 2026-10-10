@@ -4,10 +4,7 @@
 import { getWriterNumFormatKind, SwNumRule } from "../doc/number";
 import { SvxIndentValue, SvxRightMarginItem } from "../../../../editeng/inc/lrspitem";
 import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/source/items/paraitem";
-import {
-  SvxFirstLineIndentItem,
-  SvxTextLeftMarginItem,
-} from "../../../../editeng/source/items/frmitems";
+import { SvxTextLeftMarginItem } from "../../../../editeng/source/items/frmitems";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { resolveSwTextFirstLineIndent } from "../text/itrcrsr";
 import { SfxInt16Item, SfxUInt16Item } from "../../../../svl/source/items/intitem";
@@ -16,7 +13,6 @@ import { type SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { SfxItemSet, SfxItemState } from "../../../../svl/source/items/itemset";
 import {
   RES_PARATR_ADJUST,
-  RES_MARGIN_FIRSTLINE,
   RES_MARGIN_RIGHT,
   RES_MARGIN_TEXTLEFT,
   RES_PARATR_LIST_ID,
@@ -583,10 +579,6 @@ export class SwTextNode extends SwContentNode {
   /** Sets the direct text-left margin in twips. @param margin - Non-negative margin. @returns Nothing. */
   public SetParagraphTextLeftMargin(margin: number): void {
     this.SetAttr(new SvxTextLeftMarginItem(margin, RES_MARGIN_TEXTLEFT));
-  }
-  /** Sets the direct first-line indent in twips. @param indent - Signed first-line indent. @returns Nothing. */
-  public SetParagraphFirstLineIndent(indent: number): void {
-    this.SetAttr(new SvxFirstLineIndentItem(indent, RES_MARGIN_FIRSTLINE));
   }
   /** Sets the direct right paragraph margin in twips. @param margin - Non-negative right margin. @returns Nothing. */
   public SetParagraphRightMargin(margin: number): void {

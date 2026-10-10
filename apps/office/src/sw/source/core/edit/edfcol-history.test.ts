@@ -1,5 +1,6 @@
 /** @fileoverview Checks native collection/reset history ownership, different initial/redo flags and full-node history ranges. */
 import { afterEach, describe, expect, it } from "vitest";
+import { SvxIndentValue } from "../../../../editeng/inc/lrspitem";
 import { SfxListUndoAction } from "../../../../svl/source/undo/undo";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { SvxFirstLineIndentItem } from "../../../../editeng/source/items/frmitems";
@@ -42,7 +43,7 @@ function fixture() {
     doc.GetDfltTextFormatColl(),
     "HistoryTarget",
   );
-  target.SetFormatAttr(new SvxFirstLineIndentItem(240, 92));
+  target.SetFormatAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(240), 92));
   const owner = new SwDocShell(
       doc,
       createDocument({ id: "paired-history", title: "History", suiteId: "writer" }),
@@ -84,7 +85,7 @@ describe("native paired StyleApply history", /** Groups native operation/history
       (kind) => {
         const { doc, first, empty, last, neighbor, target, owner, shell } = fixture();
         for (const node of [first, empty, last, neighbor])
-          node.SetAttr(new SvxFirstLineIndentItem(720, 92));
+          node.SetAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(720), 92));
         first.SetTextHints(new SwpHints(doc.GetAttrPool(), [hint(doc, kind, first.Len())]));
         last.SetTextHints(
           new SwpHints(doc.GetAttrPool(), [

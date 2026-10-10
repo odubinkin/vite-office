@@ -1,5 +1,6 @@
 /** @fileoverview Verifies current numeric native formatting history ownership without upstream access. */
 import { afterEach, expect, it } from "vitest";
+import { SvxIndentValue } from "../../../../editeng/inc/lrspitem";
 import { SwDoc } from "../doc/doc";
 import { SwTextNode } from "../txtnode/ndtxt";
 import { SwPaM, SwPosition } from "../crsr/pam";
@@ -60,7 +61,7 @@ function fixture(kind: "body" | "cells") {
     ),
     shell = new SwWrtShell(docShell),
     target = doc.MakeTextFormatColl("Format target", doc.GetDfltTextFormatColl(), "FormatTarget");
-  target.SetFormatAttr(new SvxFirstLineIndentItem(240, RES_MARGIN_FIRSTLINE));
+  target.SetFormatAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(240), RES_MARGIN_FIRSTLINE));
   return {
     doc,
     docShell,
@@ -156,7 +157,8 @@ function direct(
 ): { action: SwUndo; check: (node: SwTextNode, after: boolean) => void } {
   const node = owner.first;
   if (kind === "character") node.SetTextHints(hints(node));
-  if (kind === "item-direct") node.SetParagraphFirstLineIndent(720);
+  if (kind === "item-direct")
+    node.SetAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(720), RES_MARGIN_FIRSTLINE));
   if (kind === "item-inherited") node.ResetAttr(RES_MARGIN_FIRSTLINE);
   if (kind === "alignment") node.SetParagraphAlignment("right");
   if (kind === "margin") node.SetParagraphTextLeftMargin(120);
@@ -191,7 +193,7 @@ function direct(
       action: new SwUndoParagraphItem(
         node,
         before,
-        new SvxFirstLineIndentItem(360, RES_MARGIN_FIRSTLINE),
+        new SvxFirstLineIndentItem(SvxIndentValue.twips(360), RES_MARGIN_FIRSTLINE),
         state,
         state,
       ),
@@ -302,7 +304,7 @@ it.each(styleCases)(
     for (const node of [owner.first, owner.second]) {
       owner.shell.FocusNode(node);
       owner.shell.SetParagraphListKind("numbered");
-      node.SetParagraphFirstLineIndent(720);
+      node.SetAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(720), RES_MARGIN_FIRSTLINE));
       node.SetTextHints(hints(node));
     }
     owner.docShell.GetUndoManager().Clear();
@@ -472,8 +474,12 @@ it.each(["body", "cells"] as const)(
     section,
   ) => {
     const owner = fixture(section);
-    owner.first.SetParagraphFirstLineIndent(720);
-    owner.second.SetParagraphFirstLineIndent(480);
+    owner.first.SetAttr(
+      new SvxFirstLineIndentItem(SvxIndentValue.twips(720), RES_MARGIN_FIRSTLINE),
+    );
+    owner.second.SetAttr(
+      new SvxFirstLineIndentItem(SvxIndentValue.twips(480), RES_MARGIN_FIRSTLINE),
+    );
     select(owner.shell, owner.first, owner.second, "reversed");
     const point = new SwPosition(owner.first, 4),
       mark = new SwPosition(owner.second, 1),

@@ -1,6 +1,10 @@
 /** @fileoverview Implements the persistent Writer editing shell and SwPaM ownership from pinned LibreOffice `sw/source/uibase/wrtsh/wrtsh1.cxx`. */
 import type { SfxShell } from "../../../../sfx2/source/control/dispatch";
-import { SvxIndentValue, SvxRightMarginItem } from "../../../../editeng/inc/lrspitem";
+import {
+  SvxIndentValue,
+  SvxRightMarginItem,
+  SvxFirstLineIndentItem,
+} from "../../../../editeng/inc/lrspitem";
 import type { SfxUndoAction } from "../../../../svl/source/undo/undo";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
@@ -46,10 +50,7 @@ import {
   RES_MARGIN_TEXTLEFT,
   RES_PARATR_TABSTOP,
 } from "../../../inc/hintids";
-import {
-  SvxFirstLineIndentItem,
-  SvxTextLeftMarginItem,
-} from "../../../../editeng/source/items/frmitems";
+import { SvxTextLeftMarginItem } from "../../../../editeng/source/items/frmitems";
 import { SvxFontHeightItem, SvxFontItem } from "../../../../editeng/source/items/textitem";
 import { WriterDialogController } from "../dialog/writer-dialog-controller";
 import {
@@ -560,17 +561,15 @@ export class SwWrtShell extends SwFEShell {
   /** Removes paragraph-start indentation in the native firstline/hanging/left order. @returns Whether a paragraph item changed. */
   public TryRemoveIndent(): boolean {
     const node = this.GetActiveParagraph();
-    const first = node.GetAttr(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem;
-    const left = node.GetAttr(RES_MARGIN_TEXTLEFT) as SvxTextLeftMarginItem;
+    const first = (node.GetAttr(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem).Clone();
     const offset = first.ResolveTextFirstLineOffset(),
-      margin = left.ResolveTextLeft();
+      margin = (node.GetAttr(RES_MARGIN_TEXTLEFT) as SvxTextLeftMarginItem).ResolveTextLeft();
     if (offset === 0 && margin === 0) return false;
+    first.SetTextFirstLineOffset(SvxIndentValue.zero());
+    const textLeft = offset < 0 ? margin + offset : offset > 0 ? margin : 0;
     return this.SetParagraphItems([
-      new SvxFirstLineIndentItem(0, RES_MARGIN_FIRSTLINE, first.IsAutoFirst()),
-      new SvxTextLeftMarginItem(
-        offset < 0 ? margin + offset : offset > 0 ? margin : 0,
-        RES_MARGIN_TEXTLEFT,
-      ),
+      first,
+      new SvxTextLeftMarginItem(textLeft, RES_MARGIN_TEXTLEFT),
     ]);
   }
   /** Deletes the preceding grapheme or the current selection. @returns Whether content changed. */
@@ -845,9 +844,10 @@ export class SwWrtShell extends SwFEShell {
   /** Applies ruler margin items through paragraph attribute history, retaining automatic mode. @param value - Replacement indent tuple. @returns Whether the selected paragraph attributes changed. */
   public SetParagraphRulerIndents(value: WriterParagraphIndentValue): boolean {
     const paragraph = this.GetActiveParagraph();
-    const firstLine = paragraph.GetAttr(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem;
+    const firstLine = (paragraph.GetAttr(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem).Clone();
+    firstLine.SetTextFirstLineOffset(SvxIndentValue.twips(value.firstLine));
     return this.SetParagraphItems([
-      new SvxFirstLineIndentItem(value.firstLine, RES_MARGIN_FIRSTLINE, firstLine.IsAutoFirst()),
+      firstLine,
       new SvxTextLeftMarginItem(value.left, RES_MARGIN_TEXTLEFT),
       new SvxRightMarginItem(SvxIndentValue.twips(value.right), RES_MARGIN_RIGHT),
     ]);

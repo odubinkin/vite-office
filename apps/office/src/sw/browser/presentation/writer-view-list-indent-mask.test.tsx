@@ -1,5 +1,6 @@
 /** @fileoverview Checks live native list-indent ownership independently on both axes. */
 import { cleanup, render, screen } from "@testing-library/react";
+import { SvxIndentValue } from "../../../editeng/inc/lrspitem";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   SvxFirstLineIndentItem,
@@ -101,7 +102,9 @@ describe("Writer independent live list-indent masks", /** Groups literal ownersh
         if (profile.left !== undefined)
           owner.node.SetAttr(new SvxTextLeftMarginItem(profile.left, RES_MARGIN_TEXTLEFT));
         if (profile.first !== undefined)
-          owner.node.SetAttr(new SvxFirstLineIndentItem(profile.first, RES_MARGIN_FIRSTLINE));
+          owner.node.SetAttr(
+            new SvxFirstLineIndentItem(SvxIndentValue.twips(profile.first), RES_MARGIN_FIRSTLINE),
+          );
         const before = encodeWriterDocument(owner.doc),
           history = owner.session.docShell.GetUndoManager().GetUndoActionCount();
         expect(owner.node.AreListLevelIndentsApplicable()).toBe(profile.mask);
@@ -139,13 +142,17 @@ describe("Writer independent live list-indent masks", /** Groups literal ownersh
       listLevelIndents: ListLevelIndents.FirstLine,
     });
     expect(
-      owner.shell.SetParagraphItems([new SvxFirstLineIndentItem(120, RES_MARGIN_FIRSTLINE)]),
+      owner.shell.SetParagraphItems([
+        new SvxFirstLineIndentItem(SvxIndentValue.twips(120), RES_MARGIN_FIRSTLINE),
+      ]),
     ).toBe(true);
     const both = encodeWriterDocument(owner.doc);
     expect(owner.node.AreListLevelIndentsApplicable()).toBe(0);
     expect(resolveSwListParagraphIndents(owner.node)?.firstLine).toBe(120);
     expect(
-      owner.shell.SetParagraphItems([new SvxFirstLineIndentItem(120, RES_MARGIN_FIRSTLINE)]),
+      owner.shell.SetParagraphItems([
+        new SvxFirstLineIndentItem(SvxIndentValue.twips(120), RES_MARGIN_FIRSTLINE),
+      ]),
     ).toBe(false);
     expect(owner.session.docShell.GetUndoManager().GetUndoActionCount()).toBe(history + 2);
     expect(owner.shell.Undo()).toBe(true);
@@ -177,7 +184,7 @@ describe("Writer independent live list-indent masks", /** Groups literal ownersh
       expect(owner.node.AreListLevelIndentsApplicable()).toBe(3);
       const item =
         axis === RES_MARGIN_FIRSTLINE
-          ? new SvxFirstLineIndentItem(120, axis)
+          ? new SvxFirstLineIndentItem(SvxIndentValue.twips(120), axis)
           : new SvxTextLeftMarginItem(1680, axis);
       parent.SetFormatAttr(item);
       expect(owner.node.AreListLevelIndentsApplicable()).toBe(
@@ -233,7 +240,18 @@ describe("Writer independent live list-indent masks", /** Groups literal ownersh
     for (const ignore of [false, true])
       it(`applies counted=${counted} ignore=${ignore} to a paragraph-owned first offset`, /** Checks counted bypass, existing compatibility flag and literal signed-short inputs. @returns Nothing. */ function selectsCountedCompatibility() {
         const owner = fixture();
-        owner.node.SetAttr(new SvxFirstLineIndentItem(65537, RES_MARGIN_FIRSTLINE, true));
+        owner.node.SetAttr(
+          (
+            /** Authors the existing automatic first-line fixture through native setters. @returns Native item. */ () => {
+              const item = new SvxFirstLineIndentItem(
+                SvxIndentValue.twips(65537),
+                RES_MARGIN_FIRSTLINE,
+              );
+              item.SetAutoFirst(true);
+              return item;
+            }
+          )(),
+        );
         owner.node.SetCountedInList(counted);
         owner.doc.GetDocumentSettingManager().set("IGNORE_FIRST_LINE_INDENT_IN_NUMBERING", ignore);
         expect(resolveSwListParagraphIndents(owner.node)?.firstLine).toBe(

@@ -27,7 +27,13 @@ for (const width of [1280, 390]) {
     shell.Insert("RulerAutoFirstProof");
     shell.SetParagraphItems([
       new SvxTextLeftMarginItem(487, RES_MARGIN_TEXTLEFT),
-      new SvxFirstLineIndentItem(367, RES_MARGIN_FIRSTLINE, true),
+      (
+        /** Authors the existing automatic first-line fixture through native setters. @returns Native item. */ () => {
+          const item = new SvxFirstLineIndentItem(SvxIndentValue.twips(367), RES_MARGIN_FIRSTLINE);
+          item.SetAutoFirst(true);
+          return item;
+        }
+      )(),
       new SvxRightMarginItem(SvxIndentValue.twips(6503), RES_MARGIN_RIGHT),
     ]);
     const bytes = writeOdtDocument(writerDocument, metadata);

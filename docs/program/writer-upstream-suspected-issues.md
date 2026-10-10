@@ -102,6 +102,43 @@ this is not a confirmed defect. Decision: preserve the setter asymmetry,
 unsigned admission boundary and signed status cast. Do not rescale on member7,
 clamp the percentage or reconstruct state through an inverse scaling adapter.
 
+## WRITER-003: First-line default UNO query remains unsupported despite dispatcher comment
+
+Status: suspicious default-query mismatch; pinned source switch and comment
+inspected. Portable initialized cases are authored. Native dispatcher selection,
+complete consumer invariants and a compiled native differential remain unverified.
+
+Original [SvxFirstLineIndentItem::QueryValue](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/editeng/source/items/frmitems.cxx#L1323)
+accepts only absolute indent member8, relative percentage9, automatic mode10
+and double/unit pair13. Its default branch returns false and comments that
+SfxDispatchController_Impl::StateChanged calls with hardcoded0. Unlike the
+separate text-left and right classes, this switch has no member0 status case.
+The declaration supplies a default member0 argument. A valid first-line item
+can therefore expose its individual values while its default UNO query has
+no supported result.
+
+Initialized portable example: construct first-line -72 TWIP, enable automatic
+mode and set percentage metadata32768. QueryValue(8) returns -72,
+QueryValue(9) returns -32768 and QueryValue(10) returns true. QueryValue()
+and QueryValue(0x80) remain unsupported; neither changes the original measure,
+unit, percentage or automatic flag. The portable unsupported result is
+undefined, representing native false admission rather than an invented
+scalar, tuple or LeftRightMarginScale status.
+
+Evidence: pinned frmitems.cxx switch, original default argument in
+include/editeng/lrspitem.hxx and
+[native-first-line-indent-item.test.ts](../../apps/office/src/editeng/source/items/native-first-line-indent-item.test.ts).
+Task202610101510-P5FPXY records source and upstream-absent acceptance evidence;
+tests execute only the portable implementation. Existing persistence records
+are produced by the browser codec using native getters, not by changing the
+native default query.
+
+The dispatcher may avoid querying first-line items or provide an explicit
+member elsewhere. Those invariants and historical intent remain unreviewed;
+this is not a confirmed upstream defect. Decision: retain unsupported member0
+and the original explicit native members. Do not add a status struct or keep
+the old scalar/automatic tuple inside the core QueryValue contract.
+
 ## Recording future observations
 
 Add a stable `WRITER-###` case ID, pinned source location, original condition,

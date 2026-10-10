@@ -38,9 +38,18 @@ function fixture(automatic = true, inherited = false) {
   sessions.push(session);
   const shell = session.view.GetWrtShell();
   shell.Insert("RulerIndentItemsProof");
-  if (!automatic && !inherited) shell.GetActiveParagraph().SetParagraphFirstLineIndent(367);
+  if (!automatic && !inherited)
+    shell
+      .GetActiveParagraph()
+      .SetAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(367), RES_MARGIN_FIRSTLINE));
   const items = [
-    new SvxFirstLineIndentItem(367, RES_MARGIN_FIRSTLINE, automatic),
+    (
+      /** Authors the existing automatic first-line fixture through native setters. @returns Native item. */ () => {
+        const item = new SvxFirstLineIndentItem(SvxIndentValue.twips(367), RES_MARGIN_FIRSTLINE);
+        item.SetAutoFirst(automatic);
+        return item;
+      }
+    )(),
     new SvxTextLeftMarginItem(487, RES_MARGIN_TEXTLEFT),
     new SvxRightMarginItem(SvxIndentValue.twips(6503), RES_MARGIN_RIGHT),
     new SvxULSpaceItem(120, 60, RES_UL_SPACE),
@@ -71,17 +80,21 @@ function state(node: SwTextNode) {
     effective: which.map(
       /** Reads effective values without losing item flags. @param id - Attribute identity. @returns Complete value. */
       (id) =>
-        (node.GetAttr(id) as { QueryValue(member?: number): unknown }).QueryValue(
-          id === RES_MARGIN_RIGHT ? 5 : 0,
-        ),
+        id === RES_MARGIN_FIRSTLINE
+          ? firstValues(node.GetAttr(id))
+          : (node.GetAttr(id) as { QueryValue(member?: number): unknown }).QueryValue(
+              id === RES_MARGIN_RIGHT ? 5 : 0,
+            ),
     ),
     direct: which.map(
       /** Distinguishes direct items from inherited defaults. @param id - Attribute identity. @returns Direct value or absence. */
       (id) =>
-        (
-          node.GetpSwAttrSet()?.GetItemIfSet(id, false) as
-            { QueryValue(member?: number): unknown } | undefined
-        )?.QueryValue(id === RES_MARGIN_RIGHT ? 5 : 0) ?? null,
+        id === RES_MARGIN_FIRSTLINE
+          ? (firstValues(node.GetpSwAttrSet()?.GetItemIfSet(id, false)) ?? null)
+          : ((
+              node.GetpSwAttrSet()?.GetItemIfSet(id, false) as
+                { QueryValue(member?: number): unknown } | undefined
+            )?.QueryValue(id === RES_MARGIN_RIGHT ? 5 : 0) ?? null),
     ),
     defaultTabDistance: (node.GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem).GetDefaultDistance(),
     text: node.GetText(),
@@ -180,7 +193,7 @@ describe("Writer paragraph ruler item history", /** Groups typed-item transition
     owner.shell.Insert("Third");
     const [first, second, third] = owner.session.docShell.GetDoc().paragraphs;
     if (!first || !second || !third) throw new Error("Three-paragraph fixture is missing");
-    third.SetAttr(new SvxFirstLineIndentItem(-120, RES_MARGIN_FIRSTLINE));
+    third.SetAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(-120), RES_MARGIN_FIRSTLINE));
     owner.shell.SetPaM(new SwPosition(second, 1), new SwPosition(first, 1));
     const before = [first, second, third].map(state);
     const history = owner.session.docShell.GetUndoManager().GetUndoActionCount();
@@ -241,3 +254,10 @@ describe("Writer paragraph ruler item history", /** Groups typed-item transition
     expect(screen.queryByRole("button", { name: "First line indent" })).toBeNull();
   });
 });
+
+/** Observes original first-line explicit native measure and auto members without replacing historical expected values. @param item - Native item or absence. @returns Historical measure/automatic marker. */
+function firstValues(item: { QueryValue(member?: number): unknown } | undefined): unknown {
+  if (item === undefined) return undefined;
+  const value = item.QueryValue(8);
+  return item.QueryValue(10) === true ? [value, 1] : value;
+}

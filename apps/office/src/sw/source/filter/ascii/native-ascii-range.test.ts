@@ -1,5 +1,7 @@
 /** @fileoverview Checks native ASCII selection, numbering visibility and margin contracts on real Writer owners. */
 import { afterEach, expect, it } from "vitest";
+import { RES_MARGIN_FIRSTLINE } from "../../../inc/hintids";
+import { SvxIndentValue, SvxFirstLineIndentItem } from "../../../../editeng/inc/lrspitem";
 import { createWriterDocument } from "../../core/doc/doc";
 import { applyWriterParagraphList } from "../../core/doc/list";
 import { GetBulletChar, SwNumRule } from "../../core/doc/number";
@@ -182,7 +184,7 @@ it("omits nonoutline indentation only for zero native heading margins", /** Chec
   applyWriterParagraphList(first, { kind: "numbered", level: 0 });
   first.SetAttrOutlineLevel(1);
   first.SetParagraphTextLeftMargin(0);
-  first.SetParagraphFirstLineIndent(0);
+  first.SetAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(0), RES_MARGIN_FIRSTLINE));
   expect([first.GetLeftMarginWithNum(), first.GetLeftMarginForTabCalculation()]).toEqual([0, 0]);
   expect(write(first, second, 0, 5, false, clipboard())).toBe("1. Alpha\nOmega");
   first.SetParagraphTextLeftMargin(100);
@@ -209,7 +211,7 @@ it("resolves native independently masked alignment and raw margins", /** Checks 
     first.GetLeftMarginWithNum(true),
     first.GetLeftMarginForTabCalculation(),
   ]).toEqual([-200, 0, 300]);
-  first.SetParagraphFirstLineIndent(-100);
+  first.SetAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(-100), RES_MARGIN_FIRSTLINE));
   expect([first.GetLeftMarginWithNum(), first.GetLeftMarginWithNum(true)]).toEqual([0, 0]);
 });
 it("resolves native legacy outer/text-left and absolute spacing independently", /** Checks negative, zero and positive legacy branches. @returns Nothing. */ () => {
@@ -227,7 +229,7 @@ it("resolves native legacy outer/text-left and absolute spacing independently", 
     first.GetLeftMarginForTabCalculation(),
   ]).toEqual([300, 500, 0]);
   first.SetParagraphTextLeftMargin(100);
-  first.SetParagraphFirstLineIndent(-20);
+  first.SetAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(-20), RES_MARGIN_FIRSTLINE));
   rule.SetAbsSpaces(true);
   expect([first.GetLeftMarginWithNum(), first.GetLeftMarginWithNum(true)]).toEqual([220, 420]);
   format.SetFirstLineOffset(-600);

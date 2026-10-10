@@ -1,5 +1,6 @@
 /** @fileoverview Checks actual Writer label ruler gestures, cursor ownership and paragraph UndoRedo. */
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { SvxIndentValue } from "../../../editeng/inc/lrspitem";
 import { afterEach, expect, it, vi } from "vitest";
 import { createWriterDocumentSession } from "../composition/writer-module";
 import { WriterWorkbench } from "./writer-view";
@@ -32,7 +33,7 @@ function fixture(left = 300, legacy = false) {
   current.SetText("Current");
   target.SetText("Target");
   current.SetAttr(new SvxTextLeftMarginItem(left, RES_MARGIN_TEXTLEFT));
-  current.SetAttr(new SvxFirstLineIndentItem(-120, RES_MARGIN_FIRSTLINE));
+  current.SetAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(-120), RES_MARGIN_FIRSTLINE));
   applyWriterParagraphList(target, {
     kind: "numbered",
     styleId: "LabelRule",
