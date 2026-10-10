@@ -196,14 +196,29 @@ export class BrowserWriterEditWindow {
           element !== undefined &&
           this.ApplySelection(selection)
         ) {
-          const start = Number(element.dataset.writerFragmentStart ?? 0),
-            end = Number(element.dataset.writerFragmentEnd ?? element.textContent?.length ?? 0);
+          const host = this.root ?? element.closest("[data-writer-editing-host]");
+          const elements =
+            element.dataset.writerTableCell !== undefined || host === null
+              ? [element]
+              : [
+                  ...host.querySelectorAll<HTMLParagraphElement>("[data-writer-paragraph-id]"),
+                ].filter(
+                  /** Retains actual body fragments of the same original node in physical order. @param fragment - Mounted device paragraph. @returns Whether the original owner matches. */
+                  (fragment) => fragment.dataset.writerParagraphId === point.paragraphId,
+                );
           if (
-            this.editWindow.SetCursorTextFrame(
+            this.editWindow.SetCursorTextFrames(
               point.nodeIndex,
-              measureWriterCursorTextLines(element),
-              start,
-              end,
+              elements.map(
+                /** Measures one actual native occurrence fragment without inventing a follow. @param fragment - Mounted device fragment. @returns Original-node device geometry. */
+                (fragment) => ({
+                  start: Number(fragment.dataset.writerFragmentStart ?? 0),
+                  end: Number(
+                    fragment.dataset.writerFragmentEnd ?? fragment.textContent?.length ?? 0,
+                  ),
+                  lines: measureWriterCursorTextLines(fragment),
+                }),
+              ),
             )
           ) {
             this.editWindow.MoveLineBoundary(event.key === "Home", event.shiftKey);

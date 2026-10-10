@@ -43,15 +43,16 @@ it("mounted Writer uses original paragraph chain for shell margins and edits", /
   );
   expect(registered.length).toBeGreaterThan(0);
   for (const frame of registered) expect(frame.GetPara()).toBeInstanceOf(SwParaPortion);
-  root.SetCursorTextFrame(
-    node,
-    [
-      { start: 0, end: 3, height: 100 },
-      { start: 3, end: 6, height: 100 },
-    ],
-    0,
-    6,
-  );
+  root.SetCursorTextFrames(node, [
+    {
+      lines: [
+        { start: 0, end: 3, height: 100 },
+        { start: 3, end: 6, height: 100 },
+      ],
+      start: 0,
+      end: 6,
+    },
+  ]);
   const frame = root.GetCursorTextFrame(node);
   if (frame === undefined) throw Error("Missing native cursor frame");
   const para = frame.GetPara(),

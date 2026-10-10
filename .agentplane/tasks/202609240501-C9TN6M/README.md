@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 328
+revision: 330
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-10T21:03:46.593Z"
+doc_updated_at: "2026-10-10T21:22:39.630Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -1474,6 +1474,8 @@ sections:
     - Observation: Task202610102046-XB6GB4 is eighth bounded correction after BZ14P4: original SwContentFrame reciprocal FindMaster, source unmerged SwTextFrame text/model/view mapping, represented already-device-formatted default-no-scroll GetAdjFrameAtPos and original position RAII now drive actual visual-line margins.
       Impact: 7158related/306 plus23Chromium/12 pass,16fresh core/React;actual4modules135lines150statements37functions118branches100,305nonnegative counters/current1246hashes.820old acceptance files byte-identical,8canonical history prefixes retained,9metadata gates pass. Runtime/static/build/browser upstream-absent finally restored, no full8/10.
       Resolution: Native full formatting/re-entrant stabilization/forced scrolling/merged/vertical/absolute geometry/full margins/query and UI cursor-chain publication/end proxy remain explicit next work, alongside full paragraph/portion/root/Doc factory/Undo/hierarchy. Registered IO/recovery boundaries preserved. After next full repair any errors then pause goal; no new tasks after checkpoint.
+
+    Task202610102109-06E9V7 correction9: actual mounted body cursor master/follow publication replaces singular device-frame API and text-length continuation proxy. Original root/client/follow ownership and native adjacency/RightMargin verified by7160related/306,9fresh core/React and24Chromium/13 including1fresh. Entire4modules758lines831statements142functions727branches100,1700nonnegative counters/1284current TS/TSX/MJS hashes; explicit formatting-only fresh browser AST proof, no acceptance replay.822oldfiles818same/4literal-preserving migrations,2actual-follow fixtures;8canonical histories/9metadata gates retained. Measured cursor registry/duplicate clients/native query/formatter/geometry/table follows remain explicit. Next task10 full checkpoint and repairs then human-requested pause.
 id_source: "generated"
 ---
 ## Summary
@@ -2921,3 +2923,5 @@ Task202610101959-1ZNFNB (sixth correction after BZ14P4) makes current native SwR
 - Observation: Task202610102046-XB6GB4 is eighth bounded correction after BZ14P4: original SwContentFrame reciprocal FindMaster, source unmerged SwTextFrame text/model/view mapping, represented already-device-formatted default-no-scroll GetAdjFrameAtPos and original position RAII now drive actual visual-line margins.
   Impact: 7158related/306 plus23Chromium/12 pass,16fresh core/React;actual4modules135lines150statements37functions118branches100,305nonnegative counters/current1246hashes.820old acceptance files byte-identical,8canonical history prefixes retained,9metadata gates pass. Runtime/static/build/browser upstream-absent finally restored, no full8/10.
   Resolution: Native full formatting/re-entrant stabilization/forced scrolling/merged/vertical/absolute geometry/full margins/query and UI cursor-chain publication/end proxy remain explicit next work, alongside full paragraph/portion/root/Doc factory/Undo/hierarchy. Registered IO/recovery boundaries preserved. After next full repair any errors then pause goal; no new tasks after checkpoint.
+
+Task202610102109-06E9V7 correction9: actual mounted body cursor master/follow publication replaces singular device-frame API and text-length continuation proxy. Original root/client/follow ownership and native adjacency/RightMargin verified by7160related/306,9fresh core/React and24Chromium/13 including1fresh. Entire4modules758lines831statements142functions727branches100,1700nonnegative counters/1284current TS/TSX/MJS hashes; explicit formatting-only fresh browser AST proof, no acceptance replay.822oldfiles818same/4literal-preserving migrations,2actual-follow fixtures;8canonical histories/9metadata gates retained. Measured cursor registry/duplicate clients/native query/formatter/geometry/table follows remain explicit. Next task10 full checkpoint and repairs then human-requested pause.

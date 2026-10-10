@@ -98,32 +98,52 @@ export interface SwRootFrameSnapshot {
   readonly lineNumbers: readonly (readonly (readonly SwLineNumberMark[])[])[];
 }
 
+/** One actual device-measured master or follow fragment of the same original text owner. */
+export interface SwCursorTextFrameMeasurement {
+  readonly start: number;
+  readonly end: number;
+  readonly lines: readonly SwTextLine[];
+}
+
 /** Persistent Writer layout root owning page and text-frame identity over device measurements. */
 export class SwRootFrame extends SwLayoutFrame {
   private readonly cursorFrames = new Map<
     SwTextNode,
-    { readonly text: string; readonly frame: SwTextFrame }
+    { readonly text: string; readonly frames: readonly SwTextFrame[] }
   >();
-  /** Installs device-shaped geometry for an existing text-node frame. @param node - Native text owner. @param lines - Actual device lines. @param start - Master/follow start. @param end - Master/follow end. @returns Nothing. */
-  public SetCursorTextFrame(
+  /** Installs the complete measured chain of one native text occurrence. @param node - Original text owner. @param fragments - Actual ordered master/follow device fragments. @returns Nothing. */
+  public SetCursorTextFrames(
     node: SwTextNode,
-    lines: readonly SwTextLine[],
-    start: number,
-    end: number,
+    fragments: readonly SwCursorTextFrameMeasurement[],
   ): void {
     this.BindRootFormat(this.getDocument());
     const previous = this.cursorFrames.get(node);
-    if (previous !== undefined) SwFrame.DestroyFrame(previous.frame);
+    for (const frame of previous?.frames ?? []) SwFrame.DestroyFrame(frame);
+    const frames = fragments.map(
+      /** Registers an original native fragment on its original node and layout. @param fragment - Actual device geometry. @returns Original frame. */
+      (fragment) =>
+        new SwTextFrame(
+          node,
+          String(node.GetIndex()),
+          fragment.start,
+          fragment.end,
+          0,
+          fragment.lines,
+          this,
+        ),
+    );
+    for (let index = 1; index < frames.length; index++)
+      (frames[index - 1] as SwTextFrame).SetFollow(frames[index]);
     this.cursorFrames.set(node, {
       text: node.GetText(),
-      frame: new SwTextFrame(node, String(node.GetIndex()), start, end, 0, lines, this),
+      frames,
     });
   }
   /** Resolves the current native cursor's measured frame without stale text geometry. @param node - Existing model text owner. @returns Current frame, or no valid measurement. */
   public GetCursorTextFrame(node: SwTextNode): SwTextFrame | undefined {
     const measured = this.cursorFrames.get(node);
     return node.GetDoc() === this.getDocument() && measured?.text === node.GetText()
-      ? measured.frame
+      ? measured.frames[0]
       : undefined;
   }
   /** Releases original text-frame clients before their view/document owners close. @returns Nothing. */
@@ -131,7 +151,8 @@ export class SwRootFrame extends SwLayoutFrame {
     if (this.IsInDtor()) return;
     const format = this.GetFormat();
     format.DisposeModify();
-    for (const measured of this.cursorFrames.values()) SwFrame.DestroyFrame(measured.frame);
+    for (const measured of this.cursorFrames.values())
+      for (const frame of measured.frames) SwFrame.DestroyFrame(frame);
     this.cursorFrames.clear();
     for (const page of this.snapshot?.pages ?? [])
       for (const frame of page.textFrames) SwFrame.DestroyFrame(frame);
@@ -202,7 +223,7 @@ export class SwRootFrame extends SwLayoutFrame {
     this.BindRootFormat(document);
     for (const [node, measured] of this.cursorFrames)
       if (node.GetDoc() !== document) {
-        SwFrame.DestroyFrame(measured.frame);
+        for (const frame of measured.frames) SwFrame.DestroyFrame(frame);
         this.cursorFrames.delete(node);
       }
     const modelRevision = document.GetDocumentStateManager().GetModelRevision();

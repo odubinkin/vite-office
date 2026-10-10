@@ -131,7 +131,9 @@ it("production pagination and cursor frames retain the original root through reu
   const reused = root.Format(measurements, page, undefined, info);
   expect(reused.pages[0]?.textFrames[0]).toBe(master);
   expect(master?.getRootFrame()).toBe(root);
-  root.SetCursorTextFrame(node, [{ start: 3, end: 6, height: 100 }], 3, 6);
+  root.SetCursorTextFrames(node, [
+    { lines: [{ start: 3, end: 6, height: 100 }], start: 3, end: 6 },
+  ]);
   const measured = root.GetCursorTextFrame(node);
   expect(measured?.getRootFrame()).toBe(root);
   expect(measured?.GetRegisteredIn()).toBe(node);
@@ -162,7 +164,7 @@ it.each([false, true])(
     if (cursorFirst) {
       const measured = measurements[0];
       if (measured === undefined) throw Error("Missing authored device measurement");
-      root.SetCursorTextFrame(node, measured.lines, 0, 6);
+      root.SetCursorTextFrames(node, [{ lines: measured.lines, start: 0, end: 6 }]);
     }
     const next = root.Format(measurements, page, undefined, info).pages[0]?.textFrames[0];
     expect(oldFormat.IsDisposed()).toBe(true);

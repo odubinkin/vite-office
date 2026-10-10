@@ -113,17 +113,17 @@ it("replaces cursor clients and rejects stale or foreign text geometry", /** Che
     root = new SwRootFrame(/** Resolves current owner. @returns Native model. */ () => f.doc);
   roots.push(root);
   const lines = [{ start: 0, end: 6, height: 300 }];
-  root.SetCursorTextFrame(f.node, lines, 0, 6);
+  root.SetCursorTextFrames(f.node, [{ lines: lines, start: 0, end: 6 }]);
   const first = root.GetCursorTextFrame(f.node);
   expect(first?.GetTextNodeFirst()).toBe(f.node);
-  root.SetCursorTextFrame(f.node, lines, 0, 6);
+  root.SetCursorTextFrames(f.node, [{ lines: lines, start: 0, end: 6 }]);
   const second = root.GetCursorTextFrame(f.node);
   expect(second).not.toBe(first);
   expect(first?.IsInDtor()).toBe(true);
   expect(frames(f.node)).toEqual([second]);
   f.node.SetText("changed");
   expect(root.GetCursorTextFrame(f.node)).toBeUndefined();
-  root.SetCursorTextFrame(other.node, lines, 0, 6);
+  root.SetCursorTextFrames(other.node, [{ lines: lines, start: 0, end: 6 }]);
   expect(root.GetCursorTextFrame(other.node)).toBeUndefined();
   root.DestroyImpl();
   expect(frames(f.node)).toEqual([]);
@@ -174,7 +174,9 @@ it("releases old-document page and cursor clients even for the same device ident
   roots.push(root);
   const measurement = [{ id: "same", lines: [{ start: 0, end: 6, height: 300 }] }];
   const first = root.Format(measurement, page, undefined, info);
-  root.SetCursorTextFrame(f.node, [{ start: 0, end: 6, height: 300 }], 0, 6);
+  root.SetCursorTextFrames(f.node, [
+    { lines: [{ start: 0, end: 6, height: 300 }], start: 0, end: 6 },
+  ]);
   current = replacement.doc;
   const next = root.Format(measurement, page, undefined, info);
   expect(next.pages[0]?.textFrames[0]?.GetTextNodeFirst()).toBe(replacement.node);

@@ -52,7 +52,7 @@ export function MoveTextFrameMargin(
   let offset = left ? iterator.GetStart() : iterator.GetEnd();
   if (!left) {
     if (line.GetLen() > 0 && node.GetText()[offset - 1] === "\n") offset--;
-    else if (!api && (iterator.GetNext() || frame.end < node.Len()))
+    else if (!api && (iterator.GetNext() || frame.GetFollow()))
       while (offset > iterator.GetStart() && node.GetText()[offset - 1] === " ") offset--;
   }
   const mapped = frame.MapViewToModelPos(offset);

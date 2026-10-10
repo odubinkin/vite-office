@@ -4,7 +4,7 @@ title: "Publish original cursor frame chains from mounted Writer fragments"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: Publish actual complete body device fragments as original native frame chains and remove length proxy; preserve original cell/header occurrence and historical acceptance, verify current whole-module100 upstream-absent."
 doc_version: 3
-doc_updated_at: "2026-10-10T21:10:23.967Z"
+doc_updated_at: "2026-10-10T21:22:39.364Z"
 doc_updated_by: "CODER"
 description: "Correction9 after BZ14P4: replace standalone cursor-frame device publication with full actual body fragment chain, isolate repeated cell occurrences, remove end-versus-node-length continuation proxy and retain native model/view adjacency. Then full checkpoint as task10 and pause after repairs."
 sections:
@@ -48,9 +48,76 @@ sections:
     2. Actual mounted paginated body Home/End/Shift with original owners and continued editing/UndoRedo; repeated table header occurrence independent, body/cell old acceptance cases and matrices/literal offsets retained. Existing12 Chromium specs plus fresh chain check. Tests never read/call upstream.
     3. Current whole4 production modules100 lines/statements/functions/branches, complete current maps and all source/test hashes/nonnegative integer counters; fresh+related Vitest once and causal failed/new-only repair, changed Prettier/ESLint TS7/deps/docs/size/build/static/browser with both reference symlinks physically absent and finally restored. Full deferred to next task10, not rerun per correction.
     4. Historical8canonical statuses/default/classification/responsibility/prefix evidence preserved without promotion. Restored-source registry/source-tree/provenance/registry/resource generation/invariants/parity/routing/doctor9gates; source suspected issues documented only if actually found. Exact semantic same-agent non-independent review, clean writer. Pause after next full and required failures fixed.
-  Verification: "Pending scoped implementation and verification. Full checkpoint next task10; stop after full and necessary repairs."
+  Verification: |-
+    Result: pass. Correction9 after full BZ14P4; next task10 is the full checkpoint and required causal repairs, then pause goal and start no further parity task.
+
+    Scope: four actual production files apps/office/src/sw/source/core/layout/newfrm.ts, apps/office/src/sw/source/uibase/docvw/edtwin.ts, apps/office/src/sw/source/core/text/frmcrsr.ts, apps/office/src/sw/browser/editor/browser-writer-edit-window.ts. Singular SetCursorTextFrame removed from root/edit-window/callers. Actual mounted body fragment array creates original root/node-registered native frames and source SetFollow links; GetAdjFrameAtPos maps model positions to actual follows. Current table/repeated headline DOM occurrences remain independent original masters, without falsely representing unported table text follows. Native interactive RightMargin uses original line.GetNext or frame.GetFollow, eliminating frame.end < node.Len proxy; standalone partial-master final line retains spaces as source does. Every original measured client is released on replacement/document switch/close.
+
+    Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm exec -- prettier --write apps/office/src/sw/source/core/layout/newfrm.ts apps/office/src/sw/source/uibase/docvw/edtwin.ts apps/office/src/sw/source/core/text/frmcrsr.ts apps/office/src/sw/browser/editor/browser-writer-edit-window.ts apps/office/src/sw/source/core/layout/native-cursor-frame-chain.test.ts apps/office/src/sw/browser/editor/native-cursor-frame-chain.test.tsx apps/office/e2e/writer-native-cursor-frame-chain.spec.ts apps/office/src/sw/browser/editor/native-paragraph-lines.test.tsx apps/office/src/sw/source/uibase/wrtsh/native-line-margin.test.ts apps/office/src/sw/source/core/layout/native-frame-root-owner.test.ts apps/office/src/sw/source/core/layout/native-text-frame-owner.test.ts
+    Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm exec -- eslint apps/office/src/sw/source/core/layout/newfrm.ts apps/office/src/sw/source/uibase/docvw/edtwin.ts apps/office/src/sw/source/core/text/frmcrsr.ts apps/office/src/sw/browser/editor/browser-writer-edit-window.ts apps/office/src/sw/source/core/layout/native-cursor-frame-chain.test.ts apps/office/src/sw/browser/editor/native-cursor-frame-chain.test.tsx apps/office/e2e/writer-native-cursor-frame-chain.spec.ts apps/office/src/sw/browser/editor/native-paragraph-lines.test.tsx apps/office/src/sw/source/uibase/wrtsh/native-line-margin.test.ts apps/office/src/sw/source/core/layout/native-frame-root-owner.test.ts apps/office/src/sw/source/core/layout/native-text-frame-owner.test.ts --max-warnings=0
+    Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm run typecheck
+    Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm run check:docs
+    Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm exec -- prettier --write apps/office/src/sw/source/core/layout/native-cursor-frame-chain.test.ts
+    Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm exec -- eslint apps/office/src/sw/source/core/layout/newfrm.ts apps/office/src/sw/source/uibase/docvw/edtwin.ts apps/office/src/sw/source/core/text/frmcrsr.ts apps/office/src/sw/browser/editor/browser-writer-edit-window.ts apps/office/src/sw/source/core/layout/native-cursor-frame-chain.test.ts apps/office/src/sw/browser/editor/native-cursor-frame-chain.test.tsx apps/office/e2e/writer-native-cursor-frame-chain.spec.ts apps/office/src/sw/browser/editor/native-paragraph-lines.test.tsx apps/office/src/sw/source/uibase/wrtsh/native-line-margin.test.ts apps/office/src/sw/source/core/layout/native-frame-root-owner.test.ts apps/office/src/sw/source/core/layout/native-text-frame-owner.test.ts --max-warnings=0
+    Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm run typecheck
+    Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm run check:docs
+    Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm exec -- prettier --write apps/office/src/sw/source/core/layout/native-cursor-frame-chain.test.ts
+    Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm exec -- eslint apps/office/src/sw/source/core/layout/native-cursor-frame-chain.test.ts --max-warnings=0
+    Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm run typecheck
+    Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm run check:docs
+    Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm exec -- prettier --write apps/office/src/sw/browser/editor/native-cursor-frame-chain.test.tsx
+    Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm exec -- eslint apps/office/src/sw/browser/editor/native-cursor-frame-chain.test.tsx --max-warnings=0
+    Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm run check:docs
+    Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm run check:dependencies
+    Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm run check:file-size
+    Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm run build
+    Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm exec -- node scripts/check-static-build.mjs
+    Command: cwd /Users/odubinkin/Projects/vite-office-writer/apps/office; npm exec -- vitest related src/sw/source/core/layout/newfrm.ts src/sw/source/uibase/docvw/edtwin.ts src/sw/source/core/text/frmcrsr.ts src/sw/browser/editor/browser-writer-edit-window.ts --run --coverage --coverage.include=src/sw/source/core/layout/newfrm.ts --coverage.include=src/sw/source/uibase/docvw/edtwin.ts --coverage.include=src/sw/source/core/text/frmcrsr.ts --coverage.include=src/sw/browser/editor/browser-writer-edit-window.ts --coverage.reportOnFailure --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/06E9V7/related-tests.json --coverage.reportsDirectory=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/06E9V7/related-coverage
+    Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm exec -- playwright test --config apps/office/playwright.config.ts --project=writer apps/office/e2e/writer-native-text-frame-follow.spec.ts apps/office/e2e/writer-native-text-frame-owner.spec.ts apps/office/e2e/native-line-margin.spec.ts apps/office/e2e/writer-layout-ratios.spec.ts apps/office/e2e/writer-table-headlines.spec.ts apps/office/e2e/writer-native-table-layout-split.spec.ts apps/office/e2e/writer-native-table-text-flow-split.spec.ts apps/office/e2e/writer-native-table-text-flow-headline.spec.ts apps/office/e2e/writer-cell-paragraph-format.spec.ts apps/office/e2e/writer-counted-list-layout.spec.ts apps/office/e2e/writer-uncounted-list-layout.spec.ts apps/office/e2e/native-marked-list-paint.spec.ts apps/office/e2e/writer-native-cursor-frame-chain.spec.ts --reporter=list,json
+    Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm exec -- prettier --write docs/program/registry/writer/runtime/sw/source/core/layout/newfrm.ts.json docs/program/registry/writer/provenance/sw/source/core/layout/newfrm.ts.json docs/program/registry/writer/runtime/sw/source/uibase/docvw/edtwin.ts.json docs/program/registry/writer/provenance/sw/source/uibase/docvw/edtwin.ts.json docs/program/registry/writer/runtime/sw/source/core/text/frmcrsr.ts.json docs/program/registry/writer/provenance/sw/source/core/text/frmcrsr.ts.json docs/program/registry/writer/runtime/sw/browser/editor/browser-writer-edit-window.ts.json docs/program/registry/writer/provenance/sw/browser/editor/browser-writer-edit-window.ts.json
+    Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm exec -- prettier --check docs/program/registry/writer/runtime/sw/source/core/layout/newfrm.ts.json docs/program/registry/writer/provenance/sw/source/core/layout/newfrm.ts.json docs/program/registry/writer/runtime/sw/source/uibase/docvw/edtwin.ts.json docs/program/registry/writer/provenance/sw/source/uibase/docvw/edtwin.ts.json docs/program/registry/writer/runtime/sw/source/core/text/frmcrsr.ts.json docs/program/registry/writer/provenance/sw/source/core/text/frmcrsr.ts.json docs/program/registry/writer/runtime/sw/browser/editor/browser-writer-edit-window.ts.json docs/program/registry/writer/provenance/sw/browser/editor/browser-writer-edit-window.ts.json
+    Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm exec -- prettier --check apps/office/src/sw/source/core/layout/newfrm.ts apps/office/src/sw/source/uibase/docvw/edtwin.ts apps/office/src/sw/source/core/text/frmcrsr.ts apps/office/src/sw/browser/editor/browser-writer-edit-window.ts apps/office/src/sw/source/core/layout/native-cursor-frame-chain.test.ts apps/office/src/sw/browser/editor/native-cursor-frame-chain.test.tsx apps/office/e2e/writer-native-cursor-frame-chain.spec.ts apps/office/src/sw/browser/editor/native-paragraph-lines.test.tsx apps/office/src/sw/source/uibase/wrtsh/native-line-margin.test.ts apps/office/src/sw/source/core/layout/native-frame-root-owner.test.ts apps/office/src/sw/source/core/layout/native-text-frame-owner.test.ts
+    Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm exec -- prettier --write apps/office/e2e/writer-native-cursor-frame-chain.spec.ts
+    Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm exec -- prettier --check apps/office/e2e/writer-native-cursor-frame-chain.spec.ts
+    Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm exec -- eslint apps/office/e2e/writer-native-cursor-frame-chain.spec.ts --max-warnings=0
+    Command: npm run inventory:registry:build
+    Command: npm run check:source-tree
+    Command: npm run check:source-provenance
+    Command: npm run inventory:registry:check
+    Command: node_modules/.bin/tsx scripts/generate-writer-ui-resources.ts --check
+    Command: npm run inventory:invariants
+    Command: npm run inventory:parity
+    Command: node .agentplane/policy/check-routing.mjs
+    Command: ap doctor
+
+    Result: all final required staticformat/lint/TS7/dependencies/docs/size/build/static, related and browser checks pass with both reference symlinks physically absent and finally restored. Early fresh non-null/type/JSDoc fixture failures repaired before runtime; no acceptance runtime failures. Final new Chromium formatting needed a second pass: exact before/final AST leaves/literal values/cases/matchers preserved and all other1283current source/test files unchanged. Old-acceptance helper inverse migration normalized with repository Prettier configuration after initial trailing-comma mismatch; optional helper discovery corrected locally. No passing acceptance replay for formatter/helper/doc-only changes.
+
+    Evidence: 7160related scenarios/306files,9fresh native core/React cases; 24Chromium/13files including1fresh real-page follow Home/edit/UndoRedo.0failed/pending/todo/unexpected/flaky/skipped/errors. Actual entire4production modules100 all-four: 758lines/831statements/142functions/727branches. 1700nonnegative integer raw counters and 1284complete final source/test hashes, with explicit browser-format AST-equivalence proof for the single formatting-only fresh spec. Complete exact four map paths, no earlier revision reuse/filtering/counter edits. MapSHA256 c92892f44d527b25cada5dd29ebcb1da44fc60c1d0a3c436815da619609e392f; related reportSHA256 8333f261a56a678f015faa4d66fcb67e88abf93ade8df48006b0bedc807e1cad; Chromium reportSHA256 c79319da04adde53e06e61938e8987f0f86887698a548b7a9f673d278e93d5a5.
+
+    Evidence:822old acceptance files818byte-identical,4native API migrations. Inverse-migration AST proof preserves every other original case/matrix/device value/matcher/leaf;2old partial-frame continuation fixtures now contain actual follows while retaining literal offset3. Eight historical canonical prefixes/status/default/classification/responsibility/evidence retained, no mapping/status promotion. All9restored-source metadata gates pass, source-only pinned9bc445578031fecf56086729d8e4940c77e14d65 RightMargin/follow/position source inspected, no suspected source issue found.
+
+    Residual gaps: measured cursor-frame registry and duplicate device cursor versus body formatting clients, native hierarchy/GetFrameOfModify/query/absolute geometry/full formatter/re-entrant stabilization/scroll/merged/vertical/empty flags, table text follow chains/portion/font/script/root/Doc factory/Undo and full core/UI parity remain unported or unverified. No broad native architecture/module/goal certification. Original IO/recovery/settings deviations retained. Raw logs/maps/helpers remain only ignored cache, no upstream/helper/Python artifacts in AgentPlane. Same-agent non-independent quality review at exact semantic SHA and clean writer/restored refs required for closure.
+
+    Evidence files: apps/office/node_modules/.cache/parity-coverage/06E9V7/coverage-proof.json, browser-proof.json, preservation-proof.json, source-audit-proof.json, format-equivalence-proof.json, audit-final-results.json and executed/current-runtime-hashes.json.
   Rollback Plan: "Revert only task-scoped semantic commit through a separately authorized task, preserving other checkout/history."
-  Findings: "Baseline a6f796fd846b; eight accepted tasks since BZ14P4. Current UI publishes only selected physical paragraph, root owns one cursor frame; native margins still infer continuation from frame.end < node.Len. Current table cells are full text DOM occurrences, including repeated headers; do not force them into body follow chains. A read-only discovery guessed nonexistent presentation filenames; bounded rg --files corrected location and parent route recomputed before mutation."
+  Findings: |-
+    Baseline a6f796fd846b; eight accepted tasks since BZ14P4. Current UI publishes only selected physical paragraph, root owns one cursor frame; native margins still infer continuation from frame.end < node.Len. Current table cells are full text DOM occurrences, including repeated headers; do not force them into body follow chains. A read-only discovery guessed nonexistent presentation filenames; bounded rg --files corrected location and parent route recomputed before mutation.
+
+    - Observation: First pre-runtime static profile formatted all code then rejected two fresh-test non-null assertions via ESLint; no acceptance producer started.
+      Impact: Fresh fixture syntax only, production and old expectation values unchanged.
+      Resolution: Replace assertions with the actual measurement element type, rerun affected formatting/lint then pending type/docs gates; preserve failing log and avoid acceptance replay.
+
+    - Observation: Pre-runtime TS7 caught fresh fixture treating generic SwContentFrame follow return as SwTextFrame for GetOffset.
+      Impact: Original production API retained; no runtime producer started.
+      Resolution: Use actual known text-frame type in the fresh fixture only; run affected lint/format and pending TS7/docs.
+
+    - Observation: Pre-runtime docs gate requires explicit JSDoc for the fresh device function this:Range parameter; TS7/lint passed.
+      Impact: Device fixture documentation only; no runtime tests yet.
+      Resolution: Document the actual Range receiver, validate affected format/lint/docs, then execute pending related/static/browser scope.
+
+    - Observation: Final formatting check found fresh Chromium spec needing a second Prettier pass despite initial write. Preservation helper initially compared inverse API migration before formatting and rejected a trailing comma; optional browser-helper discovery returned no match.
+      Impact: No runtime failure; all7160 related and24Chromium scenarios pass. Production and existing acceptance unchanged by helper/format repairs.
+      Resolution: Current affected spec format/check/lint pass. Verified every fresh spec AST leaf literal/case/matcher unchanged; all other1283 current source/test hashes unchanged and whole4 coverage maps retained. Preservation helper canonicalizes both versions with repository Prettier config and proves822old files:818byte-identical and4literal-preserving API migrations, including2actual-follow fixtures. No passing acceptance replay; no helper/source/log artifacts in AgentPlane.
 id_source: "generated"
 ---
 ## Summary
@@ -74,7 +141,56 @@ Audit source RightMargin and original follow ownership; publish all actual mount
 
 ## Verification
 
-Pending scoped implementation and verification. Full checkpoint next task10; stop after full and necessary repairs.
+Result: pass. Correction9 after full BZ14P4; next task10 is the full checkpoint and required causal repairs, then pause goal and start no further parity task.
+
+Scope: four actual production files apps/office/src/sw/source/core/layout/newfrm.ts, apps/office/src/sw/source/uibase/docvw/edtwin.ts, apps/office/src/sw/source/core/text/frmcrsr.ts, apps/office/src/sw/browser/editor/browser-writer-edit-window.ts. Singular SetCursorTextFrame removed from root/edit-window/callers. Actual mounted body fragment array creates original root/node-registered native frames and source SetFollow links; GetAdjFrameAtPos maps model positions to actual follows. Current table/repeated headline DOM occurrences remain independent original masters, without falsely representing unported table text follows. Native interactive RightMargin uses original line.GetNext or frame.GetFollow, eliminating frame.end < node.Len proxy; standalone partial-master final line retains spaces as source does. Every original measured client is released on replacement/document switch/close.
+
+Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm exec -- prettier --write apps/office/src/sw/source/core/layout/newfrm.ts apps/office/src/sw/source/uibase/docvw/edtwin.ts apps/office/src/sw/source/core/text/frmcrsr.ts apps/office/src/sw/browser/editor/browser-writer-edit-window.ts apps/office/src/sw/source/core/layout/native-cursor-frame-chain.test.ts apps/office/src/sw/browser/editor/native-cursor-frame-chain.test.tsx apps/office/e2e/writer-native-cursor-frame-chain.spec.ts apps/office/src/sw/browser/editor/native-paragraph-lines.test.tsx apps/office/src/sw/source/uibase/wrtsh/native-line-margin.test.ts apps/office/src/sw/source/core/layout/native-frame-root-owner.test.ts apps/office/src/sw/source/core/layout/native-text-frame-owner.test.ts
+Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm exec -- eslint apps/office/src/sw/source/core/layout/newfrm.ts apps/office/src/sw/source/uibase/docvw/edtwin.ts apps/office/src/sw/source/core/text/frmcrsr.ts apps/office/src/sw/browser/editor/browser-writer-edit-window.ts apps/office/src/sw/source/core/layout/native-cursor-frame-chain.test.ts apps/office/src/sw/browser/editor/native-cursor-frame-chain.test.tsx apps/office/e2e/writer-native-cursor-frame-chain.spec.ts apps/office/src/sw/browser/editor/native-paragraph-lines.test.tsx apps/office/src/sw/source/uibase/wrtsh/native-line-margin.test.ts apps/office/src/sw/source/core/layout/native-frame-root-owner.test.ts apps/office/src/sw/source/core/layout/native-text-frame-owner.test.ts --max-warnings=0
+Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm run typecheck
+Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm run check:docs
+Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm exec -- prettier --write apps/office/src/sw/source/core/layout/native-cursor-frame-chain.test.ts
+Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm exec -- eslint apps/office/src/sw/source/core/layout/newfrm.ts apps/office/src/sw/source/uibase/docvw/edtwin.ts apps/office/src/sw/source/core/text/frmcrsr.ts apps/office/src/sw/browser/editor/browser-writer-edit-window.ts apps/office/src/sw/source/core/layout/native-cursor-frame-chain.test.ts apps/office/src/sw/browser/editor/native-cursor-frame-chain.test.tsx apps/office/e2e/writer-native-cursor-frame-chain.spec.ts apps/office/src/sw/browser/editor/native-paragraph-lines.test.tsx apps/office/src/sw/source/uibase/wrtsh/native-line-margin.test.ts apps/office/src/sw/source/core/layout/native-frame-root-owner.test.ts apps/office/src/sw/source/core/layout/native-text-frame-owner.test.ts --max-warnings=0
+Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm run typecheck
+Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm run check:docs
+Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm exec -- prettier --write apps/office/src/sw/source/core/layout/native-cursor-frame-chain.test.ts
+Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm exec -- eslint apps/office/src/sw/source/core/layout/native-cursor-frame-chain.test.ts --max-warnings=0
+Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm run typecheck
+Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm run check:docs
+Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm exec -- prettier --write apps/office/src/sw/browser/editor/native-cursor-frame-chain.test.tsx
+Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm exec -- eslint apps/office/src/sw/browser/editor/native-cursor-frame-chain.test.tsx --max-warnings=0
+Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm run check:docs
+Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm run check:dependencies
+Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm run check:file-size
+Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm run build
+Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm exec -- node scripts/check-static-build.mjs
+Command: cwd /Users/odubinkin/Projects/vite-office-writer/apps/office; npm exec -- vitest related src/sw/source/core/layout/newfrm.ts src/sw/source/uibase/docvw/edtwin.ts src/sw/source/core/text/frmcrsr.ts src/sw/browser/editor/browser-writer-edit-window.ts --run --coverage --coverage.include=src/sw/source/core/layout/newfrm.ts --coverage.include=src/sw/source/uibase/docvw/edtwin.ts --coverage.include=src/sw/source/core/text/frmcrsr.ts --coverage.include=src/sw/browser/editor/browser-writer-edit-window.ts --coverage.reportOnFailure --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/06E9V7/related-tests.json --coverage.reportsDirectory=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/06E9V7/related-coverage
+Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm exec -- playwright test --config apps/office/playwright.config.ts --project=writer apps/office/e2e/writer-native-text-frame-follow.spec.ts apps/office/e2e/writer-native-text-frame-owner.spec.ts apps/office/e2e/native-line-margin.spec.ts apps/office/e2e/writer-layout-ratios.spec.ts apps/office/e2e/writer-table-headlines.spec.ts apps/office/e2e/writer-native-table-layout-split.spec.ts apps/office/e2e/writer-native-table-text-flow-split.spec.ts apps/office/e2e/writer-native-table-text-flow-headline.spec.ts apps/office/e2e/writer-cell-paragraph-format.spec.ts apps/office/e2e/writer-counted-list-layout.spec.ts apps/office/e2e/writer-uncounted-list-layout.spec.ts apps/office/e2e/native-marked-list-paint.spec.ts apps/office/e2e/writer-native-cursor-frame-chain.spec.ts --reporter=list,json
+Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm exec -- prettier --write docs/program/registry/writer/runtime/sw/source/core/layout/newfrm.ts.json docs/program/registry/writer/provenance/sw/source/core/layout/newfrm.ts.json docs/program/registry/writer/runtime/sw/source/uibase/docvw/edtwin.ts.json docs/program/registry/writer/provenance/sw/source/uibase/docvw/edtwin.ts.json docs/program/registry/writer/runtime/sw/source/core/text/frmcrsr.ts.json docs/program/registry/writer/provenance/sw/source/core/text/frmcrsr.ts.json docs/program/registry/writer/runtime/sw/browser/editor/browser-writer-edit-window.ts.json docs/program/registry/writer/provenance/sw/browser/editor/browser-writer-edit-window.ts.json
+Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm exec -- prettier --check docs/program/registry/writer/runtime/sw/source/core/layout/newfrm.ts.json docs/program/registry/writer/provenance/sw/source/core/layout/newfrm.ts.json docs/program/registry/writer/runtime/sw/source/uibase/docvw/edtwin.ts.json docs/program/registry/writer/provenance/sw/source/uibase/docvw/edtwin.ts.json docs/program/registry/writer/runtime/sw/source/core/text/frmcrsr.ts.json docs/program/registry/writer/provenance/sw/source/core/text/frmcrsr.ts.json docs/program/registry/writer/runtime/sw/browser/editor/browser-writer-edit-window.ts.json docs/program/registry/writer/provenance/sw/browser/editor/browser-writer-edit-window.ts.json
+Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm exec -- prettier --check apps/office/src/sw/source/core/layout/newfrm.ts apps/office/src/sw/source/uibase/docvw/edtwin.ts apps/office/src/sw/source/core/text/frmcrsr.ts apps/office/src/sw/browser/editor/browser-writer-edit-window.ts apps/office/src/sw/source/core/layout/native-cursor-frame-chain.test.ts apps/office/src/sw/browser/editor/native-cursor-frame-chain.test.tsx apps/office/e2e/writer-native-cursor-frame-chain.spec.ts apps/office/src/sw/browser/editor/native-paragraph-lines.test.tsx apps/office/src/sw/source/uibase/wrtsh/native-line-margin.test.ts apps/office/src/sw/source/core/layout/native-frame-root-owner.test.ts apps/office/src/sw/source/core/layout/native-text-frame-owner.test.ts
+Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm exec -- prettier --write apps/office/e2e/writer-native-cursor-frame-chain.spec.ts
+Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm exec -- prettier --check apps/office/e2e/writer-native-cursor-frame-chain.spec.ts
+Command: cwd /Users/odubinkin/Projects/vite-office-writer; npm exec -- eslint apps/office/e2e/writer-native-cursor-frame-chain.spec.ts --max-warnings=0
+Command: npm run inventory:registry:build
+Command: npm run check:source-tree
+Command: npm run check:source-provenance
+Command: npm run inventory:registry:check
+Command: node_modules/.bin/tsx scripts/generate-writer-ui-resources.ts --check
+Command: npm run inventory:invariants
+Command: npm run inventory:parity
+Command: node .agentplane/policy/check-routing.mjs
+Command: ap doctor
+
+Result: all final required staticformat/lint/TS7/dependencies/docs/size/build/static, related and browser checks pass with both reference symlinks physically absent and finally restored. Early fresh non-null/type/JSDoc fixture failures repaired before runtime; no acceptance runtime failures. Final new Chromium formatting needed a second pass: exact before/final AST leaves/literal values/cases/matchers preserved and all other1283current source/test files unchanged. Old-acceptance helper inverse migration normalized with repository Prettier configuration after initial trailing-comma mismatch; optional helper discovery corrected locally. No passing acceptance replay for formatter/helper/doc-only changes.
+
+Evidence: 7160related scenarios/306files,9fresh native core/React cases; 24Chromium/13files including1fresh real-page follow Home/edit/UndoRedo.0failed/pending/todo/unexpected/flaky/skipped/errors. Actual entire4production modules100 all-four: 758lines/831statements/142functions/727branches. 1700nonnegative integer raw counters and 1284complete final source/test hashes, with explicit browser-format AST-equivalence proof for the single formatting-only fresh spec. Complete exact four map paths, no earlier revision reuse/filtering/counter edits. MapSHA256 c92892f44d527b25cada5dd29ebcb1da44fc60c1d0a3c436815da619609e392f; related reportSHA256 8333f261a56a678f015faa4d66fcb67e88abf93ade8df48006b0bedc807e1cad; Chromium reportSHA256 c79319da04adde53e06e61938e8987f0f86887698a548b7a9f673d278e93d5a5.
+
+Evidence:822old acceptance files818byte-identical,4native API migrations. Inverse-migration AST proof preserves every other original case/matrix/device value/matcher/leaf;2old partial-frame continuation fixtures now contain actual follows while retaining literal offset3. Eight historical canonical prefixes/status/default/classification/responsibility/evidence retained, no mapping/status promotion. All9restored-source metadata gates pass, source-only pinned9bc445578031fecf56086729d8e4940c77e14d65 RightMargin/follow/position source inspected, no suspected source issue found.
+
+Residual gaps: measured cursor-frame registry and duplicate device cursor versus body formatting clients, native hierarchy/GetFrameOfModify/query/absolute geometry/full formatter/re-entrant stabilization/scroll/merged/vertical/empty flags, table text follow chains/portion/font/script/root/Doc factory/Undo and full core/UI parity remain unported or unverified. No broad native architecture/module/goal certification. Original IO/recovery/settings deviations retained. Raw logs/maps/helpers remain only ignored cache, no upstream/helper/Python artifacts in AgentPlane. Same-agent non-independent quality review at exact semantic SHA and clean writer/restored refs required for closure.
+
+Evidence files: apps/office/node_modules/.cache/parity-coverage/06E9V7/coverage-proof.json, browser-proof.json, preservation-proof.json, source-audit-proof.json, format-equivalence-proof.json, audit-final-results.json and executed/current-runtime-hashes.json.
 
 ## Rollback Plan
 
@@ -83,3 +199,19 @@ Revert only task-scoped semantic commit through a separately authorized task, pr
 ## Findings
 
 Baseline a6f796fd846b; eight accepted tasks since BZ14P4. Current UI publishes only selected physical paragraph, root owns one cursor frame; native margins still infer continuation from frame.end < node.Len. Current table cells are full text DOM occurrences, including repeated headers; do not force them into body follow chains. A read-only discovery guessed nonexistent presentation filenames; bounded rg --files corrected location and parent route recomputed before mutation.
+
+- Observation: First pre-runtime static profile formatted all code then rejected two fresh-test non-null assertions via ESLint; no acceptance producer started.
+  Impact: Fresh fixture syntax only, production and old expectation values unchanged.
+  Resolution: Replace assertions with the actual measurement element type, rerun affected formatting/lint then pending type/docs gates; preserve failing log and avoid acceptance replay.
+
+- Observation: Pre-runtime TS7 caught fresh fixture treating generic SwContentFrame follow return as SwTextFrame for GetOffset.
+  Impact: Original production API retained; no runtime producer started.
+  Resolution: Use actual known text-frame type in the fresh fixture only; run affected lint/format and pending TS7/docs.
+
+- Observation: Pre-runtime docs gate requires explicit JSDoc for the fresh device function this:Range parameter; TS7/lint passed.
+  Impact: Device fixture documentation only; no runtime tests yet.
+  Resolution: Document the actual Range receiver, validate affected format/lint/docs, then execute pending related/static/browser scope.
+
+- Observation: Final formatting check found fresh Chromium spec needing a second Prettier pass despite initial write. Preservation helper initially compared inverse API migration before formatting and rejected a trailing comma; optional browser-helper discovery returned no match.
+  Impact: No runtime failure; all7160 related and24Chromium scenarios pass. Production and existing acceptance unchanged by helper/format repairs.
+  Resolution: Current affected spec format/check/lint pass. Verified every fresh spec AST leaf literal/case/matcher unchanged; all other1283 current source/test hashes unchanged and whole4 coverage maps retained. Preservation helper canonicalizes both versions with repository Prettier config and proves822old files:818byte-identical and4literal-preserving API migrations, including2actual-follow fixtures. No passing acceptance replay; no helper/source/log artifacts in AgentPlane.

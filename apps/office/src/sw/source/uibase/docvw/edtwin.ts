@@ -16,7 +16,7 @@ import { SwTab, type SwTableMousePoint } from "../../../inc/fesh";
 import type { SwTabFrame } from "../../core/layout/tabfrm";
 import { SwTabCols } from "../../core/bastyp/tabcol";
 import { PointerStyle } from "../../../../vcl/ptrstyle";
-import type { SwTextLine } from "../../core/text/txtfrm";
+import type { SwCursorTextFrameMeasurement } from "../../core/layout/newfrm";
 import type { SvxRuler } from "../../../../svx/source/dialog/svxruler";
 import { RulerType } from "../../../../svtools/source/control/ruler";
 import { applySwTableColumnItem, applySwTableRowItem } from "../uiview/viewtab";
@@ -344,16 +344,14 @@ export class SwEditWin {
         : this.m_rView.GetWrtShell().EndOfSection(select),
     );
   }
-  /** Publishes device lines for the actual current master/follow text frame. @param nodeIndex - Current native text-node index. @param lines - Browser-shaped UTF16 lines. @param start - Frame start. @param end - Frame end. @returns Whether the owner exists. */
-  public SetCursorTextFrame(
+  /** Publishes the complete current occurrence's original master/follow geometry. @param nodeIndex - Current native text-node index. @param fragments - Actual ordered measured fragments. @returns Whether the owner exists. */
+  public SetCursorTextFrames(
     nodeIndex: number,
-    lines: readonly SwTextLine[],
-    start: number,
-    end: number,
+    fragments: readonly SwCursorTextFrameMeasurement[],
   ): boolean {
     const node = this.ResolveTextNode(nodeIndex);
     if (node === undefined) return false;
-    this.m_rView.GetWrtShell().GetLayout().SetCursorTextFrame(node, lines, start, end);
+    this.m_rView.GetWrtShell().GetLayout().SetCursorTextFrames(node, fragments);
     return true;
   }
   /** Executes source line-boundary intent through the native shell. @param left - Beginning direction. @param select - Extend selection. @returns Native admission. */
