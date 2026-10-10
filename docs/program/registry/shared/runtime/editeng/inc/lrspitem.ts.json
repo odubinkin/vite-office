@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/editeng/inc/lrspitem.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "formatting-model",
+    "capabilityIds": [
+      "CAP-0112"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/editeng/inc/lrspitem.ts#SvxLRSpaceItem",
+        "apps/office/src/editeng/source/items/native-lr-space-value.test.ts#@fileoverview",
+        "apps/office/src/sw/source/core/table/native-table-lr-value.test.ts#@fileoverview",
+        "vendor/libreoffice-reference/include/editeng/lrspitem.hxx#SvxLRSpaceItem",
+        "vendor/libreoffice-reference/editeng/source/items/frmitems.cxx#SvxLRSpaceItem::PutValue"
+      ],
+      "justification": "Original LR native declaration and eleven-field item ownership are partitioned under the matching include/editeng/lrspitem.hxx module to satisfy the enforced1000-line authored-file limit. frmitems.ts retains an unchanged export binding for existing consumers. No wrapper class, field translation, API or native behavior adapter is added. Twip-backed UNO value contract and source-defined admission are represented; full font-unit SvxIndentValue, presentation, metric scaling and complete general UNO binding remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SvxLRSpaceItem"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "include/editeng/lrspitem.hxx",
+      "upstreamSymbols": [
+        "SvxLRSpaceItem"
+      ]
+    }
+  }
+}
