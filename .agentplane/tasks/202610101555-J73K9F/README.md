@@ -1,10 +1,11 @@
 ---
 id: "202610101555-J73K9F"
 title: "Port original OUString comparison and SharedStringPool hashed-key owners"
-status: "DOING"
+result_summary: "verified-202610101555-J73K9F"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 20
+revision: 24
 origin:
   system: "manual"
 depends_on: []
@@ -19,9 +20,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-10T16:14:33.523Z"
+  updated_at: "2026-10-10T16:16:11.058Z"
   updated_by: "CODER"
-  note: "All task36 original native and unchanged prior native captures, portable Calc106/shared8/tooling28, strict S/B/F/L100 positive complete sources and declared scoped gates passed; independent source/raw-state audit retained."
+  note: "verified-202610101555-J73K9F"
   attempts: 0
 quality_review:
   state: "pass"
@@ -48,11 +49,16 @@ quality_review:
     - "All32 full original blobs independently match git-show pinned SHA. Entire raw native output equals8143 committed complete snapshots, with driverce4f99e0/states2970e51a. Actual collision call2353 returns0,5243,5243; genuine negative hash witness exceeds Number precision after unsigned64 cast. ASan/UBSan defined output is identical; invalid null-field hashing remains diagnosed without post-UB golden values. Unchanged prior drivers164be221/44ad48ef retain4424/3336 full observations and all original guards."
     - "Inspected portable source sets and every actual s/f/b counter: Calc19 sources S2920 B2055 F474 L2564; affected shared9 sources S434 B214 F99 L353, all positive and allfour100. Both upstream links absent during Calc106/shared8/tooling28 runs and restored before native/provenance gates. Recorded bounded failed caller/import/audit/marker checks have specific successful same-scope corrections; no acceptance weakening."
     - "All15 committed paths are intentional approved runtime/native fixture/test/helper/inventory/core/journal/task artifacts. Calc48 capabilities174 modules and shared25 capabilities144 modules report0 semantic violations while broad parity flags remain unverified. CALC-035 is clearly source-only awaiting native locale service reproduction. Source-tree/provenance/format/types/lint/docs/size/boundaries/routing/doctor/diff gates pass; doctor has0 errors/two inherited warnings. Full run remains due at41."
-commit: null
+commit:
+  hash: "949bc3fa00f9352b86d179be24ae42467ac1e7e4"
+  message: "✅ J73K9F quality: verify original shared Unicode key owners"
 comments:
   -
     author: "CODER"
     body: "Start: Port original OUString comparisons/hash and complete actual StringWithHash key ownership using shared RTL and unchanged native full-header evidence on branchcalc."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610101555-J73K9F. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -67,8 +73,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "All task36 original native and unchanged prior native captures, portable Calc106/shared8/tooling28, strict S/B/F/L100 positive complete sources and declared scoped gates passed; independent source/raw-state audit retained."
+  -
+    type: "verify"
+    at: "2026-10-10T16:16:11.058Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610101555-J73K9F"
+  -
+    type: "status"
+    at: "2026-10-10T16:16:11.221Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610101555-J73K9F. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-10T16:14:33.579Z"
+doc_updated_at: "2026-10-10T16:16:40.375Z"
 doc_updated_by: "CODER"
 description: "Task36 closes actual shared pool/storage key dependencies: original OUString compareTo/equals/hash and bounded original relational operations, plus complete StringWithHash struct with original constructor/equality/std hash and implicit copy/move/assignment/lifetime. Reuse SAL/SVL owners and full unchanged native headers/dependencies; no fake CharClass or pool, no JS Unicode casing replacement. Native complete initialized owner/cache/refcount/allocation/query observations and strict Calc/affected shared100; task5/10 after full31,next41. Branchcalc only; actual locale case mapping/pool/typed cell writes remain next dependencies."
 sections:
@@ -142,6 +161,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-10T16:16:11.058Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610101555-J73K9F
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T16:14:33.579Z, excerpt_hash=sha256:2fd55ba2cd2c04d8c7cff33a8990921350467e47bbdf3b6df40b5c440006b8b8
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610101555-J73K9F/blueprint/resolved-snapshot.json
+    - old_digest: 3cd0ecd8b1cc9af393dfba30c17a6539ccfc0f3ffa758a87f4cd5673445073cc
+    - current_digest: 3cd0ecd8b1cc9af393dfba30c17a6539ccfc0f3ffa758a87f4cd5673445073cc
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610101555-J73K9F
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610101555-J73K9F --result verified-202610101555-J73K9F --commit 949bc3fa00f9352b86d179be24ae42467ac1e7e4
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "New forward task only to revert task36 comparison/key/native helper/registry/docs changes; rerun exact unchanged prior corpora and scoped gates. Never reset history or mutate upstream, Writer, policy or coverage acceptance. Ignored native output stays inside this repository and both links restored in finally."
   Findings: |-
@@ -174,6 +223,18 @@ sections:
     - Observation: Source-provenance check rejected operator< and operator> markers because original OUString friend declarations contain a space after operator.
       Impact: Two inventory source-symbol spellings are inaccurate; original runtime and complete native evidence already match.
       Resolution: Use exact original relational friend marker spellings in both affected source inventories; retain strict provenance validation and resume pending gates.
+
+    - Observation: Exact route task complete exited5 with commit subject is too generic after recording DONE, matching the installed deterministic-close defect in earlier Calc tasks.
+      Impact: Runtime implementation, quality review and verification are persisted; final active-task README checkpoint remains dirty.
+      Resolution: Recompute authoritative DONE route, attempt its exact close command once, and persist a descriptive task-only checkpoint if the same generated-subject validator failure recurs. No history reset or CLI/policy edits.
+
+    - Observation: Exact recomputed ap commit --close --unstage-others again exited5 because its generated subject is too generic.
+      Impact: DONE state is valid but deterministic artifact cleanup cannot complete through the generated subject.
+      Resolution: Stage only the active task README and use the installed allowlisted ap commit with an explicit descriptive subject; verify authoritative DONE and clean branchcalc afterwards. Implementation and quality SHA remain unchanged.
+extensions:
+  implementation_commit:
+    hash: "2e23eb26970ae92a197c663b2af639db56dee172"
+    message: "✨ J73K9F port: original shared Unicode comparisons and cached pool key"
 id_source: "generated"
 ---
 ## Summary
@@ -257,6 +318,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-10T16:16:11.058Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610101555-J73K9F
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T16:14:33.579Z, excerpt_hash=sha256:2fd55ba2cd2c04d8c7cff33a8990921350467e47bbdf3b6df40b5c440006b8b8
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610101555-J73K9F/blueprint/resolved-snapshot.json
+- old_digest: 3cd0ecd8b1cc9af393dfba30c17a6539ccfc0f3ffa758a87f4cd5673445073cc
+- current_digest: 3cd0ecd8b1cc9af393dfba30c17a6539ccfc0f3ffa758a87f4cd5673445073cc
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610101555-J73K9F
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610101555-J73K9F --result verified-202610101555-J73K9F --commit 949bc3fa00f9352b86d179be24ae42467ac1e7e4
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -294,3 +385,11 @@ Preflight clean branchcalc; only unrelated C9TN6M/X6VV8G DOING. User persistent 
 - Observation: Source-provenance check rejected operator< and operator> markers because original OUString friend declarations contain a space after operator.
   Impact: Two inventory source-symbol spellings are inaccurate; original runtime and complete native evidence already match.
   Resolution: Use exact original relational friend marker spellings in both affected source inventories; retain strict provenance validation and resume pending gates.
+
+- Observation: Exact route task complete exited5 with commit subject is too generic after recording DONE, matching the installed deterministic-close defect in earlier Calc tasks.
+  Impact: Runtime implementation, quality review and verification are persisted; final active-task README checkpoint remains dirty.
+  Resolution: Recompute authoritative DONE route, attempt its exact close command once, and persist a descriptive task-only checkpoint if the same generated-subject validator failure recurs. No history reset or CLI/policy edits.
+
+- Observation: Exact recomputed ap commit --close --unstage-others again exited5 because its generated subject is too generic.
+  Impact: DONE state is valid but deterministic artifact cleanup cannot complete through the generated subject.
+  Resolution: Stage only the active task README and use the installed allowlisted ap commit with an explicit descriptive subject; verify authoritative DONE and clean branchcalc afterwards. Implementation and quality SHA remain unchanged.
