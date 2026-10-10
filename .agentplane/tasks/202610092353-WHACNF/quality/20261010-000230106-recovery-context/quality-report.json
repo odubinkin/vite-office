@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "task_id": "202610092353-WHACNF",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-10T00:02:30.106Z",
+  "verdict": "pass",
+  "summary": "Same-agent non-independent exact-SHA review: browser transport preserves complete original table size/orientation and direct absence while retaining legacy admission and independent raw headline contract.",
+  "evaluated_sha": "c1d68cd780ba43e3c6b9eb381120282902b8846a",
+  "blueprint_digest": "8bdc059c72cad0589c610c3aa37b80754a1e1e2608bb14239b9bbb2a5dd2385d",
+  "findings": [
+    "Exactc1d68cd7 source and final fresh-test hashes match actual current complete maps and1703accepted28fresh24Chromium reports. Both whole modules actual Istanbul100all-four,zero negative counters,no prior map reuse or passing replay;all first attempt.",
+    "Original8size/4orientation fields survive structured-clone/JSON/Worker and3mounted original owner/cursor history cycles. Native absence and precedence over conflicting legacy geometry validated,old scalar ingress retained.595old tests4canonical history prefixes/default/status/classification and deliberate IO deviations unchanged;statics9restored metadata pass."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610092353-WHACNF/README.md",
+    ".agentplane/tasks/202610092353-WHACNF/evidence/verification.json",
+    "semantic SHA c1d68cd780ba43e3c6b9eb381120282902b8846a production/fresh/source-map hashes checked locally",
+    "current1703related28fresh24Chromium actual native geometry/absence/legacy/Worker/mounted original history checks"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Remaining raw-headline/spacing/flags projection,full LR/inherited/shared frame graphs,row-box adapters,generic XML mapper and complete UI/layout/filter/UNO/VCL remain separately incomplete. Review is performed by same implementing agent and is explicitly non-independent."
+  ]
+}
