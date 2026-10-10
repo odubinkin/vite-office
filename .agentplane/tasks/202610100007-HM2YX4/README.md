@@ -4,7 +4,7 @@ title: "Restore native LR margin UNO value contracts"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -13,7 +13,7 @@ tags:
 verify: []
 plan_approval:
   state: "approved"
-  updated_at: "2026-10-10T00:08:16.760Z"
+  updated_at: "2026-10-10T00:24:52.148Z"
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
@@ -42,13 +42,13 @@ events:
     state: "needs_rework"
     note: "Initial3851cases3849pass2 historical inherited-table failures; all fresh and initial complete frmitems actual100. Native LR moved unchanged into matching header-owned module to meet1000-line gate. Final two-module current coverage pending separate native geometry regression repair. Raw initial evidence retained in ignored cache."
 doc_version: 3
-doc_updated_at: "2026-10-10T00:17:26.112Z"
+doc_updated_at: "2026-10-10T00:24:51.746Z"
 doc_updated_by: "CODER"
 description: "Atomic task5/10 after BZQGYC: port pinned SvxLRSpaceItem twip-backed QueryValue/PutValue members including complete margin scale, relative metadata, signed conversion, native input admission and hanging-indent ordering; preserve unsupported font-unit scope. Enables later lossless native LR table transport without private-field adapters. Existing approval continues writer parity goal."
 sections:
   Summary: "Restore the pinned native LR margin value interface as atomic task5/10 after BZQGYC. Prior geometry transport taskWHACNF remains complete; full goal is incomplete."
-  Scope: "One production module apps/office/src/editeng/source/items/frmitems.ts; fresh native UNO margin and native table ItemSet tests; two canonical shared runtime/provenance records and generated registry outputs if required; current task evidence and append-only parent findings. Preserve existing tests and historical canonical prefixes, unsupported font-unit scope, registered I/O/recovery deviations. No upstream/helper source in AgentPlane, no external writes or dependency changes."
-  Plan: "Port pinned native LR twip-backed UNO value contract in one shared module; add fresh native boundary and table ItemSet acceptance; preserve tests and canonical prefixes; verify actual whole-module Istanbul100 with new/related tests once upstream absent plus TS7/static/browser and restored metadata checks; exact-SHA review and clean close. User resumed existing iterative scope; no full suite due5/10."
+  Scope: "Native LR logical ownership partition: production apps/office/src/editeng/source/items/frmitems.ts plus matching native declaration apps/office/src/editeng/inc/lrspitem.ts; fresh native UNO and table ItemSet tests; four canonical shared runtime/provenance records and required generated registry outputs. Header decomposition meets enforced1000-line gate without wrapper/translation behavior; old API export binding retained. Two source-backed inherited ODF acceptance migrations are owned by separate leaf ZJJ73M and do not change LR production behavior. Existing tests/history/defaults/classifications/registered I/O/recovery scope retained."
+  Plan: "Port pinned signed twip-backed LR QueryValue/PutValue and partition native LR declaration under matching lrspitem.hxx module to satisfy1000-line gate. Preserve unchanged frmitems re-export/native ownership; fresh56value+1ItemSet cases. Actual final complete frmitems.ts and lrspitem.ts Istanbul100all-four with81direct-related files, physical upstream absence, shared unchanged-source TS7/static/browser and restored metadata checks. Initial362-file profile retains2historical source-backed acceptance failures repaired separately by ZJJ73M; final full suite not due6/10 after that leaf. Exact-SHA evaluation and clean finish."
   Verify Steps: |-
     1. Fresh native LR QueryValue/PutValue tests cover aggregate/member roundtrip, signed conversion, hanging-indent order, sticky explicit zeros, prop metadata and uint16 casts, invalid integer/struct admission and unsupported font-unit IDs. Direct native table frame ItemSet copy retains all native fields and independently owned original item.
     2. Run explicit new and related app test selection once through ignored cache runner with vendor/libreoffice-reference renamed and restored in finally. Actual Istanbul coverage of entire final frmitems.ts must reach100 lines/statements/functions/branches with current source hashes, complete source map and zero negative counters. No old map reuse or upstream calls from tests; full cadence not due5/10.
@@ -96,6 +96,10 @@ sections:
     - Observation: Initial related profile3851cases:3849pass2fail0skip362files. All fresh cases pass; entire initial frmitems.ts actual Istanbul100 (396lines440statements144functions381branches). Two historical inherited-table LR/Hori scenarios expose previous geometry snapshot loss; initial source exceeds1000-line gate after native value contract.
       Impact: Current leaf cannot close until original ItemSet module decomposition meets size gate and inherited geometry regression is repaired in a separate atomic owner-scoped task. Initial raw maps and assertions retained; no prior map reuse.
       Resolution: Partition native LR class under matching lrspitem.hxx owner with unchanged re-export API; commit bounded current evidence, implement separate effective geometry transport correction, then final current-source native LR checks.
+
+    - Observation: Correction to preliminary regression diagnosis: pinned SvXMLExportItemMapper::GetItem uses GetItemState(which,false); SwXMLExport::ExportFormat asserts frame parent is absent/default and exports no inherited table style. Existing native direct-item exporter is source-correct; two old inherited ODF expectations require exact source-backed acceptance migrations, not production flattening.
+      Impact: Avoid introducing an unsupported table geometry/ODF parent adapter to satisfy obsolete test expectations. Header partition remains native LR task scope.
+      Resolution: Separate atomic acceptance leaf ZJJ73M corrects only inherited ODF assertions while retaining direct export/mounted/native history expectations. Then resume current-source two-module LR coverage and closure.
 id_source: "generated"
 ---
 ## Summary
@@ -104,11 +108,11 @@ Restore the pinned native LR margin value interface as atomic task5/10 after BZQ
 
 ## Scope
 
-One production module apps/office/src/editeng/source/items/frmitems.ts; fresh native UNO margin and native table ItemSet tests; two canonical shared runtime/provenance records and generated registry outputs if required; current task evidence and append-only parent findings. Preserve existing tests and historical canonical prefixes, unsupported font-unit scope, registered I/O/recovery deviations. No upstream/helper source in AgentPlane, no external writes or dependency changes.
+Native LR logical ownership partition: production apps/office/src/editeng/source/items/frmitems.ts plus matching native declaration apps/office/src/editeng/inc/lrspitem.ts; fresh native UNO and table ItemSet tests; four canonical shared runtime/provenance records and required generated registry outputs. Header decomposition meets enforced1000-line gate without wrapper/translation behavior; old API export binding retained. Two source-backed inherited ODF acceptance migrations are owned by separate leaf ZJJ73M and do not change LR production behavior. Existing tests/history/defaults/classifications/registered I/O/recovery scope retained.
 
 ## Plan
 
-Port pinned native LR twip-backed UNO value contract in one shared module; add fresh native boundary and table ItemSet acceptance; preserve tests and canonical prefixes; verify actual whole-module Istanbul100 with new/related tests once upstream absent plus TS7/static/browser and restored metadata checks; exact-SHA review and clean close. User resumed existing iterative scope; no full suite due5/10.
+Port pinned signed twip-backed LR QueryValue/PutValue and partition native LR declaration under matching lrspitem.hxx module to satisfy1000-line gate. Preserve unchanged frmitems re-export/native ownership; fresh56value+1ItemSet cases. Actual final complete frmitems.ts and lrspitem.ts Istanbul100all-four with81direct-related files, physical upstream absence, shared unchanged-source TS7/static/browser and restored metadata checks. Initial362-file profile retains2historical source-backed acceptance failures repaired separately by ZJJ73M; final full suite not due6/10 after that leaf. Exact-SHA evaluation and clean finish.
 
 ## Verify Steps
 
@@ -165,3 +169,7 @@ Existing SvxLRSpaceItem supports only QueryValue member0 and no PutValue; native
 - Observation: Initial related profile3851cases:3849pass2fail0skip362files. All fresh cases pass; entire initial frmitems.ts actual Istanbul100 (396lines440statements144functions381branches). Two historical inherited-table LR/Hori scenarios expose previous geometry snapshot loss; initial source exceeds1000-line gate after native value contract.
   Impact: Current leaf cannot close until original ItemSet module decomposition meets size gate and inherited geometry regression is repaired in a separate atomic owner-scoped task. Initial raw maps and assertions retained; no prior map reuse.
   Resolution: Partition native LR class under matching lrspitem.hxx owner with unchanged re-export API; commit bounded current evidence, implement separate effective geometry transport correction, then final current-source native LR checks.
+
+- Observation: Correction to preliminary regression diagnosis: pinned SvXMLExportItemMapper::GetItem uses GetItemState(which,false); SwXMLExport::ExportFormat asserts frame parent is absent/default and exports no inherited table style. Existing native direct-item exporter is source-correct; two old inherited ODF expectations require exact source-backed acceptance migrations, not production flattening.
+  Impact: Avoid introducing an unsupported table geometry/ODF parent adapter to satisfy obsolete test expectations. Header partition remains native LR task scope.
+  Resolution: Separate atomic acceptance leaf ZJJ73M corrects only inherited ODF assertions while retaining direct export/mounted/native history expectations. Then resume current-source two-module LR coverage and closure.
