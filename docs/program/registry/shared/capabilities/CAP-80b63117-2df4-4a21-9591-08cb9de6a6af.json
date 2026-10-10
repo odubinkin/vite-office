@@ -1,0 +1,91 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-80b63117-2df4-4a21-9591-08cb9de6a6af",
+    "capabilityId": "CAP-80b63117-2df4-4a21-9591-08cb9de6a6af",
+    "suite": "shared",
+    "subsystem": "shared-string",
+    "type": "model",
+    "maturity": "implemented",
+    "capability": "Original shared Unicode and ASCII known-length equality",
+    "assertions": [
+      "Preserve original signed32 length guard and reverse Unicode/ASCII equality through the existing C/header/value owners.",
+      "Retain literal and borrowed-view results without changing original data identity, refcount or caller buffers."
+    ],
+    "gaps": [
+      "Original rtl_ustr_asciil_reverseEquals_WithLength and OUString::equalsAsciiL preserve the native length-before-read guard, back-to-front unit comparison, embedded NUL, borrowed storage and literal operator behavior without new collation/normalization or bounds repair. The native probe compiles complete unchanged original equality and lifetime scopes with genuine full OUString headers, verifies31 full pinned blobs, captures every8,388,608 UTF16/ASCII pair through both C/member owners (16,777,216 bytes SHA5780cb29bd8009a2b1044d5b5f6666b2be0b6ed56b871e89c03551ee250fc0a5) and337 complete prefix/offset/null-zero/literal/borrowed identity/refcount/input-buffer observations. Actual ASan/UBSan outputs agree; the original negative-length SIGABRT is captured separately. Uint8Array adapts borrowed constchar bytes, signed32 input conversion and signed8-to-unsigned16 conversion retain the selected signed-char target. Original ASCII0..127 caller precondition remains; diagnostic logging, non-ASCII byte warnings, unsigned-char platforms, invalid storage/physical ABI and complete original QA remain unverified. This is the actual langIs literal-equality dependency, not a Locale/UNO/casefolding service substitute. Native generated Locale/default UNO exceptions and full getValue/getConditionalValue/CharClass/SharedStringPool/Calc document/edit/UI are still incomplete."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sal/rtl/ustring.cxx",
+          "marker": "rtl_ustr_asciil_reverseEquals_WithLength"
+        },
+        {
+          "path": "include/rtl/ustring.h",
+          "marker": "rtl_ustr_asciil_reverseEquals_WithLength"
+        },
+        {
+          "path": "include/rtl/ustring.hxx",
+          "marker": "equalsAsciiL"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sal/qa/rtl/process/rtl_Process.cxx",
+          "marker": "getGlobalProcessId_002"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/rtl/ustring.hxx",
+          "marker": "equalsAsciiL"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sal/rtl/ustring.ts",
+          "marker": "rtl_ustr_asciil_reverseEquals_WithLength"
+        },
+        {
+          "path": "apps/office/src/sal/inc/rtl/ustring.h.ts",
+          "marker": "rtl_ustr_asciil_reverseEquals_WithLength"
+        },
+        {
+          "path": "apps/office/src/sal/inc/rtl/ustring.ts",
+          "marker": "equalsAsciiL"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sal/rtl/ascii-equality.test.ts",
+          "marker": "replays every original UTF16 and ASCII pair through the C and complete shared header owners"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Original shared ASCII literal equality for locale codes"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "Compare original known-length ASCII bytes with shared OUString UTF16 data for native literal equality",
+    "scopeLimitations": [
+      "Original rtl_ustr_asciil_reverseEquals_WithLength and OUString::equalsAsciiL preserve the native length-before-read guard, back-to-front unit comparison, embedded NUL, borrowed storage and literal operator behavior without new collation/normalization or bounds repair. The native probe compiles complete unchanged original equality and lifetime scopes with genuine full OUString headers, verifies31 full pinned blobs, captures every8,388,608 UTF16/ASCII pair through both C/member owners (16,777,216 bytes SHA5780cb29bd8009a2b1044d5b5f6666b2be0b6ed56b871e89c03551ee250fc0a5) and337 complete prefix/offset/null-zero/literal/borrowed identity/refcount/input-buffer observations. Actual ASan/UBSan outputs agree; the original negative-length SIGABRT is captured separately. Uint8Array adapts borrowed constchar bytes, signed32 input conversion and signed8-to-unsigned16 conversion retain the selected signed-char target. Original ASCII0..127 caller precondition remains; diagnostic logging, non-ASCII byte warnings, unsigned-char platforms, invalid storage/physical ABI and complete original QA remain unverified. This is the actual langIs literal-equality dependency, not a Locale/UNO/casefolding service substitute.",
+      "Original process QA getGlobalProcessId_002 is a real related equalsAsciiL consumer reference, not a literal port or execution of its process/UUID behavior. Native Locale/casefolding/UNO exception generation and full task39 verification remain pending."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "Original algorithms, call boundaries and numeric/borrowed storage contracts retained using the existing shared owners and explicit pointer/char/int language adapters; broader parity is unverified."
+    }
+  }
+}

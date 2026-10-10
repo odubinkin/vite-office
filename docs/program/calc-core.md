@@ -1972,3 +1972,44 @@ included a nonexistent test filename. New original udkapi/i18nutil roots now
 have explicit allowed shared dependency directions and the existing protected
 browser/worker/storage restrictions. Task39 remains in progress, with full
 algorithm/default-exception/native generated-type work pending. Next full41.
+
+
+## Original shared ASCII literal equality for locale codes
+
+Task39 extends the existing SAL C wrapper/header and OUString header owner with
+rtl_ustr_asciil_reverseEquals_WithLength and equalsAsciiL. The original langIs
+macro's literal operator uses this method. It preserves length-before-read,
+back-to-front comparison, embedded NUL and borrowed storage without case/locale
+normalization or new bounds repairs. Uint8Array represents original char bytes;
+original signed32 and selected signed-char conversion are explicit. No separate
+Calc comparison, string allocator or temporary locale service is introduced.
+
+`scripts/rtl-ascii-equality-native-probe.mjs` compiles complete unchanged original
+equality/lifetime scopes and full genuine OUString headers, verifying31 pinned
+full blobs. Both C and header methods are observed for all8,388,608 pairs of
+UTF16 units and original ASCII0..127 bytes. Complete output is16777216 bytes
+with SHA2565780cb29bd8009a2b1044d5b5f6666b2be0b6ed56b871e89c03551ee250fc0a5.
+Another337 complete observations retain prefix/offset/null-zero inputs, actual
+lt/tr/az literal operators, borrowed results, pointer/refcounts and unchanged
+caller buffers. ASan/UBSan outputs are identical for both corpora. Original
+negative-length assertion SIGABRT is captured separately. Logging, invalid
+storage/ABI, unsigned-char targets and non-ASCII byte warnings are unverified.
+The related original process getGlobalProcessId_002 QA reference is not claimed
+ported or executed.
+
+The first portable run correctly fails when Vitest deep Buffer comparison
+exhausts its heap; the fixed test compares every byte with Buffer.equals, keeping
+the same complete corpus/digest and100 thresholds. All18 tests in8 related
+string/case/Locale files pass with all original links absent. Thirteen executable
+owners have S516/B229/F120/L431 all100; an independent audit confirms every
+raw statement/function/branch counter is positive. Fresh Calc coverage passes
+106 tests in24 files, S2920/B2055/F474/L2564 all100, with all original source
+links absent and restored exactly in finally. The serial metadata/tooling gates
+pass after documenting an assertion callback:30 affected tooling tests, strict
+source and boundary checks, shared/Calc inventories with zero semantic
+violations, routing and doctor (zero errors, two inherited warnings).
+
+This completes the literal-equality dependency only. Native generated Locale,
+true UNO exception/reference boundaries, complete getValue/getConditionalValue,
+CharClass/SharedStringPool and document/edit/UI remain required; task39 stays
+DOING. This is still the eighth active task after full31, with next full41.

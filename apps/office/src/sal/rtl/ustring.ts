@@ -5,6 +5,25 @@ import type { rtl_uString, rtl_uStringSlot } from "../inc/rtl/ustring.h";
 import { SAL_STRING_IS_INTERN, SAL_STRING_REFCOUNT, rtl_stringAllocation } from "./strimp.hxx";
 import { rtl_str_hash_intern, rtl_str_hash_remove } from "./hash";
 
+/** Original reverse Unicode/ASCII equality C boundary on the verified signed-char target. @param pStr1 - Borrowed UTF16 storage. @param pStr2 - Borrowed native char bytes; original ASCII caller precondition applies. @param nStrLen - Native signed32 common prefix length. @returns Original reverse equality result. */
+export function rtl_ustr_asciil_reverseEquals_WithLength(
+  pStr1: Uint16Array | null,
+  pStr2: Uint8Array | null,
+  nStrLen: number,
+): boolean {
+  nStrLen |= 0;
+  if (nStrLen < 0) throw new Error("assert(nStrLen >= 0)");
+  let pStr1Run = nStrLen;
+  let pStr2Run = nStrLen;
+  while (pStr1Run > 0) {
+    pStr1Run--;
+    pStr2Run--;
+    const nativeChar = (((pStr2 as Uint8Array)[pStr2Run] as number) << 24) >> 24;
+    if ((pStr1 as Uint16Array)[pStr1Run] !== (nativeChar & 0xffff)) return false;
+  }
+  return true;
+}
+
 /** Original rtl_ustr_reverseCompare_WithLength C boundary. @param first - First borrowed UTF16 buffer. @param firstLen - Original signed32 prefix length. @param second - Second borrowed UTF16 buffer. @param secondLen - Original signed32 prefix length. @returns Original exact reverse comparison result. */
 export function rtl_ustr_reverseCompare_WithLength(
   first: Uint16Array | null,

@@ -1,5 +1,6 @@
 /** @fileoverview Original include/rtl/ustring.h C declaration boundary owned by the SAL library. */
 export { rtl_ustr_reverseCompare_WithLength } from "../../rtl/ustring";
+export { rtl_ustr_asciil_reverseEquals_WithLength } from "../../rtl/ustring";
 
 /** Original flexible Unicode data structure; borrowed buffers retain native UInt16 units and concrete identity. */
 export interface _rtl_uString {

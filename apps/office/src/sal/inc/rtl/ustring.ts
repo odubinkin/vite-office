@@ -9,6 +9,7 @@ import {
   rtl_ustr_compare_WithLength,
   rtl_ustr_reverseCompare_WithLength,
   rtl_ustr_hashCode_WithLength,
+  rtl_ustr_asciil_reverseEquals_WithLength,
 } from "./ustring.h";
 import type { rtl_uString, rtl_uStringSlot } from "./ustring.h";
 import { SAL_NO_ACQUIRE } from "../types";
@@ -44,6 +45,7 @@ export type OUStringConstReference = Readonly<
     | "getStr"
     | "isEmpty"
     | "equals"
+    | "equalsAsciiL"
     | "notEquals"
     | "compareTo"
     | "reverseCompareTo"
@@ -182,6 +184,12 @@ export class OUString {
   /** Original friend inequality operator adapted to an explicit method. @param other - Live reference. @returns Negated equality. */
   notEquals(other: OUStringConstReference): boolean {
     return !this.equals(other);
+  }
+  /** Original known-length ASCII equality used by the literal operator== overload. @param asciiStr - Borrowed original char bytes. @param asciiStrLength - Native signed32 prefix length. @returns Original length guard and reverse equality. */
+  equalsAsciiL(asciiStr: Uint8Array | null, asciiStrLength: number): boolean {
+    asciiStrLength |= 0;
+    if (this.pData.length !== asciiStrLength) return false;
+    return rtl_ustr_asciil_reverseEquals_WithLength(this.pData.buffer, asciiStr, asciiStrLength);
   }
   /** Original less-than friend operator. @param other - Live reference. @returns Native ordering. */
   lessThan(other: OUStringConstReference): boolean {

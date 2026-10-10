@@ -4,7 +4,7 @@ title: "Port original locale-aware case-mapping values for Calc string service"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 21
+revision: 28
 origin:
   system: "manual"
 depends_on: []
@@ -13,7 +13,7 @@ tags:
 verify: []
 plan_approval:
   state: "approved"
-  updated_at: "2026-10-10T17:57:01.529Z"
+  updated_at: "2026-10-10T18:21:04.029Z"
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
@@ -36,12 +36,15 @@ events:
     to: "DOING"
     note: "Start: implement approved original locale-aware case value dependency in calc checkout, reusing actual shared string/Unicode owners and preserving native source contracts; no fake service/type substitutes."
 doc_version: 3
-doc_updated_at: "2026-10-10T18:13:05.407Z"
+doc_updated_at: "2026-10-10T18:38:08.554Z"
 doc_updated_by: "CODER"
 description: "Task39: implement original casefolding getValue/getConditionalValue and complete source data with real Locale string fields/default ownership and original default UNO RuntimeException boundary. Reuse actual shared OUString, RTL character and proven ICU scalar contracts. Preserve suspect upstream behavior. Verify source/owner contracts and unchanged native reference without fake service/type stand-ins; portable Calc/affected shared100 and scoped gates. No UI shell, Writer duplication or full-run before41."
 sections:
   Summary: "Task39 implements the original locale-aware case-mapping value layer required by the Calc shared string service: source-defined Locale value fields/defaults and actual casefolding getValue/getConditionalValue tables, conditions, UTF16 boundaries and scalar fallbacks. This is a prerequisite of real CharClass/SharedStringPool, not an editable document or a substitute service."
-  Scope: "Only vite-office-calc branch calc. Shared source-shaped owners under apps/office/src/udkapi/com/sun/star/lang (Locale), udkapi/com/sun/star/uno (actual exception/interface dependency declarations if required), cppu/uno reference/value dependency owners if required by the original exception boundary, i18nutil/inc/casefolding.ts and i18nutil/source/utility/casefolding.ts/casefolding_data.ts with exact original JSON tables, adjacent portable tests and native observation fixture; scripts/casefolding-native-probe.mjs and necessary source acquisition/generation helpers within this task; complete shared runtime/provenance/capability records, calc-core.md and genuine calc-upstream-suspected-issues.md entries. Reuse original OUString, RTL character and selected ICU scalar owners. Original source/generated-native artifacts stay ignored. No mocked native Locale/exception/service owners, temporary CharClass or SharedStringPool, widthfolding/getNextChar replacement, Writer runtime changes, policy/coverage threshold changes, dependencies installed or external publication. Required source-root wiring also includes scripts/check-module-boundaries.mjs and its existing related test: classify actual i18nutil/udkapi upstream roots, preserve protected-core/browser restrictions and allow only original shared dependency directions. No validator exemption or relaxed threshold."
+  Scope: |-
+    Only vite-office-calc branch calc. Shared source-shaped owners under apps/office/src/udkapi/com/sun/star/lang (Locale), udkapi/com/sun/star/uno (actual exception/interface dependency declarations if required), cppu/uno reference/value dependency owners if required by the original exception boundary, i18nutil/inc/casefolding.ts and i18nutil/source/utility/casefolding.ts/casefolding_data.ts with exact original JSON tables, adjacent portable tests and native observation fixture; scripts/casefolding-native-probe.mjs and necessary source acquisition/generation helpers within this task; complete shared runtime/provenance/capability records, calc-core.md and genuine calc-upstream-suspected-issues.md entries. Reuse original OUString, RTL character and selected ICU scalar owners. Original source/generated-native artifacts stay ignored. No mocked native Locale/exception/service owners, temporary CharClass or SharedStringPool, widthfolding/getNextChar replacement, Writer runtime changes, policy/coverage threshold changes, dependencies installed or external publication. Required source-root wiring also includes scripts/check-module-boundaries.mjs and its existing related test: classify actual i18nutil/udkapi upstream roots, preserve protected-core/browser restrictions and allow only original shared dependency directions. No validator exemption or relaxed threshold.
+
+    Required original langIs literal comparison also extends existing shared sal/rtl/ustring.ts, sal/inc/rtl/ustring.h.ts and sal/inc/rtl/ustring.ts with rtl_ustr_asciil_reverseEquals_WithLength/equalsAsciiL, adjacent portable tests, native equality fixture/probe and complete shared metadata. This is the actual upstream literal equality dependency, not a JS locale/case substitute. Keep task39 native getValue/getConditionalValue and true generated Locale/UNO exception verification mandatory. No QA/native generated-type claim from this SAL primitive alone.
   Plan: "1. Resolve real Locale/exception ownership contracts from actual IDL and cppumaker, then reuse existing shared Unicode/RTL owners. 2. Port complete getValue/getConditionalValue and original data with exact native value-copy, UTF16 and conditional semantics; preserve suspicious behavior. 3. Capture unchanged original native dependencies, portable100 tests and scoped provenance/inventory/tooling evidence; independently evaluate and close only this dependency. Full suite task41, full Calc goal remains active."
   Verify Steps: |-
     1. Read pinned full Locale.idl, cppumaker struct emission and casefolding hxx/cxx/full tables; confirm original field order/default/copy/string ownership, exact language comparison and UTF16/value return contracts. Preserve existing CALC035 and document genuine new suspect behavior without fixing it.
@@ -72,6 +75,24 @@ sections:
       Result: pass.
       Evidence: Complete strict gates pass; inventories have zero semantic violations and all new runtime symbols mapped. Doctor0 errors and two inherited warnings. Gates/raw/portable/format manifests and full logs under ignored output/playwright/task39-checks. Writer runtime/coverage/policy/thresholds are unchanged.
       Scope: Current intentional partial source implementation and required repository wiring. Full default exception/native generated-type and case algorithms are still required before task verification/evaluation/closure; no ap verify --ok or finish is claimed.
+
+    ASCII dependency checkpoint (not full task39 verification):
+    - Command: node scripts/rtl-ascii-equality-native-probe.mjs --check.
+      Result: pass.
+      Evidence:31 full original blobs; unchanged C equality and true full OUString header owner; all8,388,608 UTF16/ASCII pairs produce16,777,216 bytes SHA5780cb29bd8009a2b1044d5b5f6666b2be0b6ed56b871e89c03551ee250fc0a5;337 complete literal/borrowed/refcount/storage observations; normal and ASan/UBSan identical; negative assertion SIGABRT captured separately.
+      Scope: Actual known-length ASCII equality/literal dependency only. No generated Locale or UNO exception/service/native full casefolding claim.
+    - Command: Exact eight-file affected shared coverage argv in output/playwright/task39-checks/ascii-portable-fixed-manifest.json (cwd apps/office), followed by independent raw audit.
+      Result: pass.
+      Evidence:18 tests/8 files; all13 executable owners S516/B229/F120/L431 all100, every raw counter positive. All three original links absent and restored exactly. Initial deep-Buffer comparison heap failure remains recorded; complete corpus is unchanged.
+      Scope: Changed shared ASCII owner and its real string/Locale/case dependencies.
+    - Command: npm run test:coverage:calc, with source links absent; independent raw coverage audit.
+      Result: pass.
+      Evidence:106 tests/24 files; S2920/B2055/F474/L2564 all100; all19 executable source coverage owners have every raw counter positive; exact argv and finally-restored source targets in ascii-calc-portable-manifest.json.
+      Scope: Current Calc scoped implementation only; no Writer coverage repair or full suite.
+    - Command: npm run lint; npm run typecheck; npm run check:docs; npm run check:file-size; npm run check:dependencies; npm run check:source-tree; npm run check:source-provenance; npm run inventory:parity:shared; npm run inventory:parity:calc; npx vitest run scripts/check-module-boundaries.test.ts scripts/check-source-provenance.test.ts scripts/libreoffice-inventory/runtime-inventory.test.ts scripts/libreoffice-inventory/registry-validation.test.ts; node .agentplane/policy/check-routing.mjs; ap doctor.
+      Result: pass.
+      Evidence: Fresh serial gates in ascii-gates-fixed-manifest.json and prior typecheck/lint logs;30 tooling tests, zero semantic violations; doctor0 errors/two inherited warnings. JSDoc initially rejected an undocumented test assertion callback, now documented without behavior changes.
+      Scope: Bounded shared SAL addition and full metadata. Full getValue/getConditionalValue/native generated Locale/UNO exception contract stays mandatory and pending; no ap verify --ok, EVALUATOR pass or finish.
   Rollback Plan: "Revert only intentional task39 implementation/metadata commits if needed and rerun scoped checks. Preserve unrelated user work, Writer/main branches, shared verified Unicode/RTL contracts and original sources. Remove only task39-owned ignored probe artifacts if obsolete."
   Findings: |-
     - Observation: Preflight confirms calc branch and clean checkout, direct workflow, previous task38 DONE. The only other active tasks are inherited C9TN6M/X6VV8G; neither is reused for new source work. Read-only discovery guessed Locale under offapi instead of its actual udkapi path, and guessed two absent native helper filenames.
@@ -113,6 +134,22 @@ sections:
     - Observation: The deliberate partial implementation commit auto-stages only the27 intentional allowlisted paths, then rejects its plain English subject because repository commits require emoji/task suffix/scope formatting. No commit or task closure occurs.
       Impact: The validated source changes remain staged; task39 stays DOING with full native Locale/exception/mapping criteria pending.
       Resolution: Preserve the approved code and checks, update this finding through ap, stage only this task README and retry a specific policy-shaped implementation subject. No commit policy or verification criterion changes.
+
+    - Observation: A bounded patch targeted a nonexistent multiline import and made no source changes.
+      Impact: No implementation or verification claim used the failed patch; existing shared owners remain intact.
+      Resolution: Use the inspected actual function marker for the approved ASCII equality extension and preserve all existing SAL contracts.
+
+    - Observation: The follow-up patch also included a mismatched existing JSDoc word and made no changes.
+      Impact: Current source and user work are unchanged; the source read confirms no concurrent edits.
+      Resolution: Anchor the insertion solely on the exact existing import and add the original equality method without rewriting unrelated comments.
+
+    - Observation: The portable ASCII replay worker terminates with V8 heap exhaustion while deep-comparing two complete16MiB Buffers. The other seven files and16 tests pass; strict coverage correctly rejects the lost worker observations. An independent QA read through the intentionally absent symlink fails during the same live portable run.
+      Impact: No successful portable ASCII or100 coverage claim is made from the failed run. The owned runner is confirmed terminal and its finally handler restores all original links; no running process is restarted or replaced.
+      Resolution: Use Buffer.equals for exact comparison of every native byte, retaining the entire8,388,608-pair corpus, raw digest,337 full observations and strict100 thresholds. Rerun the same affected closure after that bounded test fix. Source read failures during intentional source absence are not external blockers.
+
+    - Observation: The serial ASCII gate runner stops at check:docs: ascii-equality.test.ts line89 has an undocumented assertion callback.
+      Impact: Lint and portable Calc/shared coverage pass, but the remaining serial gates have not yet run; this is not a completed task checkpoint.
+      Resolution: Document the existing callback without changing its assertion, then rerun the unchanged gate selection within approved scope.
 id_source: "generated"
 ---
 ## Summary
@@ -122,6 +159,8 @@ Task39 implements the original locale-aware case-mapping value layer required by
 ## Scope
 
 Only vite-office-calc branch calc. Shared source-shaped owners under apps/office/src/udkapi/com/sun/star/lang (Locale), udkapi/com/sun/star/uno (actual exception/interface dependency declarations if required), cppu/uno reference/value dependency owners if required by the original exception boundary, i18nutil/inc/casefolding.ts and i18nutil/source/utility/casefolding.ts/casefolding_data.ts with exact original JSON tables, adjacent portable tests and native observation fixture; scripts/casefolding-native-probe.mjs and necessary source acquisition/generation helpers within this task; complete shared runtime/provenance/capability records, calc-core.md and genuine calc-upstream-suspected-issues.md entries. Reuse original OUString, RTL character and selected ICU scalar owners. Original source/generated-native artifacts stay ignored. No mocked native Locale/exception/service owners, temporary CharClass or SharedStringPool, widthfolding/getNextChar replacement, Writer runtime changes, policy/coverage threshold changes, dependencies installed or external publication. Required source-root wiring also includes scripts/check-module-boundaries.mjs and its existing related test: classify actual i18nutil/udkapi upstream roots, preserve protected-core/browser restrictions and allow only original shared dependency directions. No validator exemption or relaxed threshold.
+
+Required original langIs literal comparison also extends existing shared sal/rtl/ustring.ts, sal/inc/rtl/ustring.h.ts and sal/inc/rtl/ustring.ts with rtl_ustr_asciil_reverseEquals_WithLength/equalsAsciiL, adjacent portable tests, native equality fixture/probe and complete shared metadata. This is the actual upstream literal equality dependency, not a JS locale/case substitute. Keep task39 native getValue/getConditionalValue and true generated Locale/UNO exception verification mandatory. No QA/native generated-type claim from this SAL primitive alone.
 
 ## Plan
 
@@ -159,6 +198,24 @@ Partial implementation checkpoint only; task39 remains DOING and the full Verify
   Result: pass.
   Evidence: Complete strict gates pass; inventories have zero semantic violations and all new runtime symbols mapped. Doctor0 errors and two inherited warnings. Gates/raw/portable/format manifests and full logs under ignored output/playwright/task39-checks. Writer runtime/coverage/policy/thresholds are unchanged.
   Scope: Current intentional partial source implementation and required repository wiring. Full default exception/native generated-type and case algorithms are still required before task verification/evaluation/closure; no ap verify --ok or finish is claimed.
+
+ASCII dependency checkpoint (not full task39 verification):
+- Command: node scripts/rtl-ascii-equality-native-probe.mjs --check.
+  Result: pass.
+  Evidence:31 full original blobs; unchanged C equality and true full OUString header owner; all8,388,608 UTF16/ASCII pairs produce16,777,216 bytes SHA5780cb29bd8009a2b1044d5b5f6666b2be0b6ed56b871e89c03551ee250fc0a5;337 complete literal/borrowed/refcount/storage observations; normal and ASan/UBSan identical; negative assertion SIGABRT captured separately.
+  Scope: Actual known-length ASCII equality/literal dependency only. No generated Locale or UNO exception/service/native full casefolding claim.
+- Command: Exact eight-file affected shared coverage argv in output/playwright/task39-checks/ascii-portable-fixed-manifest.json (cwd apps/office), followed by independent raw audit.
+  Result: pass.
+  Evidence:18 tests/8 files; all13 executable owners S516/B229/F120/L431 all100, every raw counter positive. All three original links absent and restored exactly. Initial deep-Buffer comparison heap failure remains recorded; complete corpus is unchanged.
+  Scope: Changed shared ASCII owner and its real string/Locale/case dependencies.
+- Command: npm run test:coverage:calc, with source links absent; independent raw coverage audit.
+  Result: pass.
+  Evidence:106 tests/24 files; S2920/B2055/F474/L2564 all100; all19 executable source coverage owners have every raw counter positive; exact argv and finally-restored source targets in ascii-calc-portable-manifest.json.
+  Scope: Current Calc scoped implementation only; no Writer coverage repair or full suite.
+- Command: npm run lint; npm run typecheck; npm run check:docs; npm run check:file-size; npm run check:dependencies; npm run check:source-tree; npm run check:source-provenance; npm run inventory:parity:shared; npm run inventory:parity:calc; npx vitest run scripts/check-module-boundaries.test.ts scripts/check-source-provenance.test.ts scripts/libreoffice-inventory/runtime-inventory.test.ts scripts/libreoffice-inventory/registry-validation.test.ts; node .agentplane/policy/check-routing.mjs; ap doctor.
+  Result: pass.
+  Evidence: Fresh serial gates in ascii-gates-fixed-manifest.json and prior typecheck/lint logs;30 tooling tests, zero semantic violations; doctor0 errors/two inherited warnings. JSDoc initially rejected an undocumented test assertion callback, now documented without behavior changes.
+  Scope: Bounded shared SAL addition and full metadata. Full getValue/getConditionalValue/native generated Locale/UNO exception contract stays mandatory and pending; no ap verify --ok, EVALUATOR pass or finish.
 
 ## Rollback Plan
 
@@ -205,3 +262,19 @@ Revert only intentional task39 implementation/metadata commits if needed and rer
 - Observation: The deliberate partial implementation commit auto-stages only the27 intentional allowlisted paths, then rejects its plain English subject because repository commits require emoji/task suffix/scope formatting. No commit or task closure occurs.
   Impact: The validated source changes remain staged; task39 stays DOING with full native Locale/exception/mapping criteria pending.
   Resolution: Preserve the approved code and checks, update this finding through ap, stage only this task README and retry a specific policy-shaped implementation subject. No commit policy or verification criterion changes.
+
+- Observation: A bounded patch targeted a nonexistent multiline import and made no source changes.
+  Impact: No implementation or verification claim used the failed patch; existing shared owners remain intact.
+  Resolution: Use the inspected actual function marker for the approved ASCII equality extension and preserve all existing SAL contracts.
+
+- Observation: The follow-up patch also included a mismatched existing JSDoc word and made no changes.
+  Impact: Current source and user work are unchanged; the source read confirms no concurrent edits.
+  Resolution: Anchor the insertion solely on the exact existing import and add the original equality method without rewriting unrelated comments.
+
+- Observation: The portable ASCII replay worker terminates with V8 heap exhaustion while deep-comparing two complete16MiB Buffers. The other seven files and16 tests pass; strict coverage correctly rejects the lost worker observations. An independent QA read through the intentionally absent symlink fails during the same live portable run.
+  Impact: No successful portable ASCII or100 coverage claim is made from the failed run. The owned runner is confirmed terminal and its finally handler restores all original links; no running process is restarted or replaced.
+  Resolution: Use Buffer.equals for exact comparison of every native byte, retaining the entire8,388,608-pair corpus, raw digest,337 full observations and strict100 thresholds. Rerun the same affected closure after that bounded test fix. Source read failures during intentional source absence are not external blockers.
+
+- Observation: The serial ASCII gate runner stops at check:docs: ascii-equality.test.ts line89 has an undocumented assertion callback.
+  Impact: Lint and portable Calc/shared coverage pass, but the remaining serial gates have not yet run; this is not a completed task checkpoint.
+  Resolution: Document the existing callback without changing its assertion, then rerun the unchanged gate selection within approved scope.
