@@ -149,17 +149,21 @@ export class SwUndoAttr extends SwUndo {
 export class SwUndoParagraphItem extends SwUndo {
   private readonly m_rDoc: SwDoc;
   private readonly m_nNode: number;
+  private readonly beforeItem: SfxPoolItem | undefined;
+  private readonly afterItem: SfxPoolItem;
   /** Stores the direct item before and after a paragraph edit. @param paragraph - Target node. @param beforeItem - Previous direct item. @param afterItem - Replacement item. @param before - Prior cursor. @param after - Result cursor. */
   /** Handles Writer formatting state. @param paragraph - Input value. @param beforeItem - Input value. @param afterItem - Input value. @param before - Input value. @param after - Input value. @returns Callback result. */ public constructor(
     paragraph: SwTextNode,
-    private readonly beforeItem: SfxPoolItem | undefined,
-    private readonly afterItem: SfxPoolItem,
+    beforeItem: SfxPoolItem | undefined,
+    afterItem: SfxPoolItem,
     before: SwUndoCursorState,
     after: SwUndoCursorState,
   ) {
     super("Paragraph Formatting", before, after);
     this.m_rDoc = paragraph.GetDoc();
     this.m_nNode = paragraph.GetIndex();
+    this.beforeItem = beforeItem?.Clone() as SfxPoolItem | undefined;
+    this.afterItem = afterItem.Clone() as SfxPoolItem;
   }
 
   /** Reports the scalar item pair. @returns Payload units. */

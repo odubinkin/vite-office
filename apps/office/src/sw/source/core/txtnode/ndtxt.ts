@@ -2,10 +2,10 @@
  * @fileoverview Implements canonical Writer text nodes at the pinned LibreOffice `sw/source/core/txtnode/ndtxt.cxx` ownership boundary.
  */
 import { getWriterNumFormatKind, SwNumRule } from "../doc/number";
+import { SvxIndentValue, SvxRightMarginItem } from "../../../../editeng/inc/lrspitem";
 import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/source/items/paraitem";
 import {
   SvxFirstLineIndentItem,
-  SvxRightMarginItem,
   SvxTextLeftMarginItem,
 } from "../../../../editeng/source/items/frmitems";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
@@ -590,7 +590,7 @@ export class SwTextNode extends SwContentNode {
   }
   /** Sets the direct right paragraph margin in twips. @param margin - Non-negative right margin. @returns Nothing. */
   public SetParagraphRightMargin(margin: number): void {
-    this.SetAttr(new SvxRightMarginItem(margin, RES_MARGIN_RIGHT));
+    this.SetAttr(new SvxRightMarginItem(SvxIndentValue.twips(margin), RES_MARGIN_RIGHT));
   }
 
   /** Replaces the canonical numbering/list item subset captured by Writer undo. @param items - Direct list items. @returns Nothing. */

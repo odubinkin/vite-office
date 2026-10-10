@@ -1,5 +1,6 @@
 /** @fileoverview Checks paragraph ruler item metadata, direct inheritance and real Writer history. */
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { SvxIndentValue } from "../../../editeng/inc/lrspitem";
 import { afterEach, describe, expect, it } from "vitest";
 import {
   SvxFirstLineIndentItem,
@@ -41,7 +42,7 @@ function fixture(automatic = true, inherited = false) {
   const items = [
     new SvxFirstLineIndentItem(367, RES_MARGIN_FIRSTLINE, automatic),
     new SvxTextLeftMarginItem(487, RES_MARGIN_TEXTLEFT),
-    new SvxRightMarginItem(6503, RES_MARGIN_RIGHT),
+    new SvxRightMarginItem(SvxIndentValue.twips(6503), RES_MARGIN_RIGHT),
     new SvxULSpaceItem(120, 60, RES_UL_SPACE),
     SvxTabStopItem.FromStops(
       RES_PARATR_TABSTOP,
@@ -69,11 +70,18 @@ function state(node: SwTextNode) {
   return {
     effective: which.map(
       /** Reads effective values without losing item flags. @param id - Attribute identity. @returns Complete value. */
-      (id) => node.GetAttr(id).QueryValue(),
+      (id) =>
+        (node.GetAttr(id) as { QueryValue(member?: number): unknown }).QueryValue(
+          id === RES_MARGIN_RIGHT ? 5 : 0,
+        ),
     ),
     direct: which.map(
       /** Distinguishes direct items from inherited defaults. @param id - Attribute identity. @returns Direct value or absence. */
-      (id) => node.GetpSwAttrSet()?.GetItemIfSet(id, false)?.QueryValue() ?? null,
+      (id) =>
+        (
+          node.GetpSwAttrSet()?.GetItemIfSet(id, false) as
+            { QueryValue(member?: number): unknown } | undefined
+        )?.QueryValue(id === RES_MARGIN_RIGHT ? 5 : 0) ?? null,
     ),
     defaultTabDistance: (node.GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem).GetDefaultDistance(),
     text: node.GetText(),

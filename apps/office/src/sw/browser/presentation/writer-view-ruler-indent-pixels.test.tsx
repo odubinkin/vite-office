@@ -1,5 +1,6 @@
 /** @fileoverview Checks rounded paragraph ruler coordinates preserve precise Writer items and history. */
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { SvxIndentValue } from "../../../editeng/inc/lrspitem";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   SvxFirstLineIndentItem,
@@ -39,7 +40,7 @@ function fixture(left = 487, firstLine = 367, right = 6503) {
   shell.SetParagraphItems([
     new SvxTextLeftMarginItem(left, RES_MARGIN_TEXTLEFT),
     new SvxFirstLineIndentItem(firstLine, RES_MARGIN_FIRSTLINE),
-    new SvxRightMarginItem(right, RES_MARGIN_RIGHT),
+    new SvxRightMarginItem(SvxIndentValue.twips(right), RES_MARGIN_RIGHT),
     SvxTabStopItem.FromStops(
       RES_PARATR_TABSTOP,
       [new SvxTabStop(1700, SvxTabAdjust.Right, ",", "_")],
@@ -57,7 +58,7 @@ function values(shell: ReturnType<typeof fixture>["shell"]) {
   return {
     left: node.GetAttr(RES_MARGIN_TEXTLEFT).QueryValue(),
     firstLine: node.GetAttr(RES_MARGIN_FIRSTLINE).QueryValue(),
-    right: node.GetAttr(RES_MARGIN_RIGHT).QueryValue(),
+    right: (node.GetAttr(RES_MARGIN_RIGHT) as SvxRightMarginItem).QueryValue(5),
     spacing: node.GetAttr(RES_UL_SPACE).QueryValue(),
     tabs: node.GetAttr(RES_PARATR_TABSTOP).QueryValue(),
   };

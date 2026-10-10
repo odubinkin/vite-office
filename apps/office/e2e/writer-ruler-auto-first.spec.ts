@@ -1,5 +1,6 @@
 /** @fileoverview Checks automatic first-line ruler exclusion and manual restoration in Chromium. */
 import { expect, test } from "@playwright/test";
+import { SvxIndentValue } from "../src/editeng/inc/lrspitem";
 import {
   SvxFirstLineIndentItem,
   SvxRightMarginItem,
@@ -27,7 +28,7 @@ for (const width of [1280, 390]) {
     shell.SetParagraphItems([
       new SvxTextLeftMarginItem(487, RES_MARGIN_TEXTLEFT),
       new SvxFirstLineIndentItem(367, RES_MARGIN_FIRSTLINE, true),
-      new SvxRightMarginItem(6503, RES_MARGIN_RIGHT),
+      new SvxRightMarginItem(SvxIndentValue.twips(6503), RES_MARGIN_RIGHT),
     ]);
     const bytes = writeOdtDocument(writerDocument, metadata);
     await page.setViewportSize({ width, height: 800 });

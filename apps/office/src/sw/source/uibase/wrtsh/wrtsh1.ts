@@ -1,5 +1,6 @@
 /** @fileoverview Implements the persistent Writer editing shell and SwPaM ownership from pinned LibreOffice `sw/source/uibase/wrtsh/wrtsh1.cxx`. */
 import type { SfxShell } from "../../../../sfx2/source/control/dispatch";
+import { SvxIndentValue, SvxRightMarginItem } from "../../../../editeng/inc/lrspitem";
 import type { SfxUndoAction } from "../../../../svl/source/undo/undo";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
@@ -47,7 +48,6 @@ import {
 } from "../../../inc/hintids";
 import {
   SvxFirstLineIndentItem,
-  SvxRightMarginItem,
   SvxTextLeftMarginItem,
 } from "../../../../editeng/source/items/frmitems";
 import { SvxFontHeightItem, SvxFontItem } from "../../../../editeng/source/items/textitem";
@@ -849,7 +849,7 @@ export class SwWrtShell extends SwFEShell {
     return this.SetParagraphItems([
       new SvxFirstLineIndentItem(value.firstLine, RES_MARGIN_FIRSTLINE, firstLine.IsAutoFirst()),
       new SvxTextLeftMarginItem(value.left, RES_MARGIN_TEXTLEFT),
-      new SvxRightMarginItem(value.right, RES_MARGIN_RIGHT),
+      new SvxRightMarginItem(SvxIndentValue.twips(value.right), RES_MARGIN_RIGHT),
     ]);
   }
   /** Applies one paragraph ruler drag to the active paragraph. @param edge - Dragged marker. @param delta - Twip drag delta. @returns Whether changed. */

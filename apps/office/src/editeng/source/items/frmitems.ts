@@ -704,40 +704,8 @@ export class SvxFirstLineIndentItem extends SfxPoolItem {
   }
 }
 
-/** Stores Writer's right paragraph margin in twips. */
-export class SvxRightMarginItem extends SfxPoolItem {
-  /** Creates a margin item. @param value - Signed twip margin. @param which - Item identity. @returns Nothing. */
-  public constructor(
-    private readonly value: number,
-    which: number,
-  ) {
-    super(which);
-    if (!Number.isInteger(value)) throw new Error("SvxRightMarginItem value is invalid.");
-  }
-  /** Returns the right margin. @returns Twips. */
-  public ResolveRight(): number {
-    return this.value;
-  }
-  /** Creates an independent item. @returns Clone. */
-  public Clone(): SvxRightMarginItem {
-    return new SvxRightMarginItem(this.value, this.Which());
-  }
-  /** Compares identity and value. @param other - Candidate. @returns Whether equal. */
-  public equals(other: SfxPoolItem): boolean {
-    return (
-      other instanceof SvxRightMarginItem &&
-      other.Which() === this.Which() &&
-      other.value === this.value
-    );
-  }
-  /** Serializes the margin. @returns Twips. */
-  public QueryValue(): number {
-    return this.value;
-  }
-}
-
 /** Native UL declaration is owned by the matching ulspitem.hxx module. */
 export { SvxULSpaceItem } from "../../inc/ulspitem";
 
 /** Native LR declaration is owned by the matching lrspitem.hxx module. */
-export { SvxLRSpaceItem } from "../../inc/lrspitem";
+export { SvxLRSpaceItem, SvxRightMarginItem } from "../../inc/lrspitem";

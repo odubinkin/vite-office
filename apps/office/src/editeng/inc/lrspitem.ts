@@ -452,3 +452,150 @@ export class SvxLRSpaceItem extends SfxPoolItem {
     return true;
   }
 }
+
+/** Original typed right paragraph margin declared by lrspitem.hxx. */
+export class SvxRightMarginItem extends SfxPoolItem {
+  private m_stRightMargin = SvxIndentValue.zero();
+  private m_nPropRightMargin = 100;
+  /** Creates native defaults or an independent original copy. @param source - Identity or original item. @returns Nothing. */
+  public constructor(source: number | SvxRightMarginItem);
+  /** Creates a native typed right margin. @param value - Original measure. @param which - Native identity. @returns Nothing. */
+  public constructor(value: ConstIndentValue, which: number);
+  /** Initializes default/value/copy source state. @param source - Identity, item or typed measure. @param which - Value-constructor identity. @returns Nothing. */
+  public constructor(source: number | SvxRightMarginItem | ConstIndentValue, which?: number) {
+    super(
+      typeof source === "number"
+        ? source
+        : source instanceof SvxRightMarginItem
+          ? source.Which()
+          : (which as number),
+    );
+    if (source instanceof SvxRightMarginItem) {
+      Object.assign(this, source);
+      this.m_stRightMargin = new SvxIndentValue(
+        source.m_stRightMargin.m_dValue,
+        source.m_stRightMargin.m_nUnit,
+      );
+    } else if (typeof source !== "number") this.SetRight(source);
+  }
+  /** Stores original by-value measure and unsigned proportion, retaining the member reference. @param value - Typed measure. @param proportion - Native percentage. @returns Nothing. */
+  public SetRight(value: ConstIndentValue, proportion = 100): void {
+    const original = new SvxIndentValue(value.m_dValue, value.m_nUnit);
+    this.m_nPropRightMargin = proportion & 0xffff;
+    Object.assign(this.m_stRightMargin, original);
+    if (this.m_nPropRightMargin !== 100)
+      this.m_stRightMargin.m_dValue = (original.m_dValue * this.m_nPropRightMargin) / 100;
+  }
+  /** Borrows the original constant right member. @returns Native measure. */
+  public GetRight(): ConstIndentValue {
+    return this.m_stRightMargin;
+  }
+  /** Resolves original right units in font context. @param metrics - Native context, empty by default for existing twip callers. @returns Signed32 twips. */
+  public ResolveRight(metrics = new SvxFontUnitMetrics()): number {
+    return this.m_stRightMargin.Resolve(metrics);
+  }
+  /** Resolves only the original absolute component. @returns Fixed twips. */
+  public ResolveRightFixedPart(): number {
+    return this.m_stRightMargin.ResolveFixedPart();
+  }
+  /** Resolves only the original relative component. @param metrics - Font context. @returns Variable twips. */
+  public ResolveRightVariablePart(metrics: SvxFontUnitMetrics): number {
+    return this.m_stRightMargin.ResolveVariablePart(metrics);
+  }
+  /** Reads original unsigned percentage metadata. @returns Percentage. */
+  public GetPropRight(): number {
+    return this.m_nPropRightMargin;
+  }
+  /** Copies original measure, proportion and ownership independently. @returns Native copy. */
+  public Clone(): SvxRightMarginItem {
+    return new SvxRightMarginItem(this);
+  }
+  /** Compares original identity, typed measure and percentage. @param other - Candidate. @returns Equality. */
+  public equals(other: SfxPoolItem): boolean {
+    return (
+      other instanceof SvxRightMarginItem &&
+      other.Which() === this.Which() &&
+      this.m_stRightMargin.equals(other.m_stRightMargin) &&
+      this.m_nPropRightMargin === other.m_nPropRightMargin
+    );
+  }
+  /** Queries source status, absolute, proportion or unit pair members. @param member - Native member and conversion flag. @returns Native value or unsupported member/unit. */
+  public QueryValue(member = 0): unknown {
+    const convert = (member & 0x80) !== 0;
+    switch (member & ~0x80) {
+      case 0: {
+        const right = this.ResolveRight();
+        return {
+          TextLeft: 0,
+          Left: 0,
+          Right: (convert ? Math.trunc((right * 127 + (right >= 0 ? 36 : -36)) / 72) : right) | 0,
+          FirstLine: 0,
+          ScaleLeft: 0,
+          ScaleRight: (this.m_nPropRightMargin << 16) >> 16,
+          ScaleFirstLine: 0,
+          AutoFirstLine: false,
+        };
+      }
+      case 5:
+        return this.m_stRightMargin.m_nUnit === MeasureUnit.TWIP
+          ? roundBorderMetric(this.m_stRightMargin.m_dValue, convert ? 127 / 72 : 1) | 0
+          : undefined;
+      case 7:
+        return (this.m_nPropRightMargin << 16) >> 16;
+      case MID_R_UNIT_MARGIN:
+        return this.m_stRightMargin.m_nUnit === MeasureUnit.TWIP
+          ? undefined
+          : { First: this.m_stRightMargin.m_dValue, Second: this.m_stRightMargin.m_nUnit };
+      default:
+        return undefined;
+    }
+  }
+  /** Applies exact represented native Any domains with original setter and percentage ordering. @param value - Native payload. @param member - Native member plus conversion. @returns Admission result. */
+  public PutValue(value: unknown, member: number): boolean {
+    const convert = (member & 0x80) !== 0,
+      id = member & ~0x80;
+    if (id === MID_R_UNIT_MARGIN) {
+      if (value === null || typeof value !== "object" || Array.isArray(value)) return false;
+      const pair = value as Record<string, unknown>;
+      if (
+        typeof pair.First !== "number" ||
+        typeof pair.Second !== "number" ||
+        !Number.isInteger(pair.Second) ||
+        pair.Second < -32768 ||
+        pair.Second > 32767
+      )
+        return false;
+      this.SetRight(new SvxIndentValue(pair.First, pair.Second));
+      return true;
+    }
+    if (
+      typeof value !== "number" ||
+      !Number.isInteger(value) ||
+      value < -2147483648 ||
+      value > 2147483647
+    )
+      return false;
+    if (id === 5) {
+      this.SetRight(
+        SvxIndentValue.twips(
+          convert ? Math.trunc((value * 72 + (value >= 0 ? 63 : -63)) / 127) : value,
+        ),
+      );
+      return true;
+    }
+    if (id === 7) {
+      if (value < 0 || value >= 65535) return false;
+      this.m_nPropRightMargin = value;
+      return true;
+    }
+    return false;
+  }
+  /** Scales the native stored measure without changing units or percentage. @param scale - Factor. @returns Nothing. */
+  public ScaleMetrics(scale: number): void {
+    this.m_stRightMargin.ScaleMetrics(scale);
+  }
+  /** Reports original metric support. @returns True. */
+  public HasMetrics(): boolean {
+    return true;
+  }
+}

@@ -1,6 +1,7 @@
 /** @fileoverview Verifies direct Writer paragraph margins through ODT package import and export. */
 
 import { describe, expect, it } from "vitest";
+import { SvxIndentValue } from "../../../../editeng/inc/lrspitem";
 
 import { SvxLineSpacingItem } from "../../../../editeng/source/items/paraitem";
 import {
@@ -97,7 +98,7 @@ describe("Writer ODT paragraph margins", /** Registers paragraph-margin round-tr
     const paragraph = writer.paragraphs[0];
     if (paragraph === undefined) throw new Error("Writer paragraph is missing.");
     paragraph.SetAttr(new SvxFirstLineIndentItem(-283, RES_MARGIN_FIRSTLINE));
-    paragraph.SetAttr(new SvxRightMarginItem(567, RES_MARGIN_RIGHT));
+    paragraph.SetAttr(new SvxRightMarginItem(SvxIndentValue.twips(567), RES_MARGIN_RIGHT));
     paragraph.SetAttr(new SvxULSpaceItem(120, 60, RES_UL_SPACE));
     paragraph.SetAttr(new SvxLineSpacingItem(115, RES_PARATR_LINESPACING));
 

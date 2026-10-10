@@ -1,5 +1,6 @@
 /** @fileoverview Implements Writer's streaming SwXMLImport bridge over fast SAX contexts. */
 import { getWriterNumFormatKind, getWriterNumFormatBullet } from "../../core/doc/number";
+import { SvxIndentValue } from "../../../../editeng/inc/lrspitem";
 
 import { NumberingRulePropertyError, SwXNumberingRules } from "../../core/unocore/unosett";
 import type { XMLParagraphImportProperties } from "../../../../xmloff/source/text/txtparai";
@@ -827,7 +828,7 @@ function putParagraphProperties(
       ),
     );
   if (properties.rightMargin !== undefined)
-    put(new SvxRightMarginItem(properties.rightMargin, RES_MARGIN_RIGHT));
+    put(new SvxRightMarginItem(SvxIndentValue.twips(properties.rightMargin), RES_MARGIN_RIGHT));
   if (
     properties.upperSpacing !== undefined ||
     properties.lowerSpacing !== undefined ||

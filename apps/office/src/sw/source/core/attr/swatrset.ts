@@ -9,6 +9,7 @@ import {
   SvxTabAdjust,
   SvxTabStopItem,
 } from "../../../../editeng/source/items/paraitem";
+import { SvxIndentValue } from "../../../../editeng/inc/lrspitem";
 import {
   SvxFirstLineIndentItem,
   SvxRightMarginItem,
@@ -256,9 +257,14 @@ export class SwAttrPool extends SfxItemPool {
           : new SvxFirstLineIndentItem(Number(value), RES_MARGIN_FIRSTLINE),
     );
     this.RegisterDefaultItem(
-      new SvxRightMarginItem(0, RES_MARGIN_RIGHT),
-      /** Restores right margin. @param value - Persisted twips. @returns Margin item. */ (value) =>
-        new SvxRightMarginItem(Number(value), RES_MARGIN_RIGHT),
+      new SvxRightMarginItem(RES_MARGIN_RIGHT),
+      /** Restores only the existing legacy integer scalar domain at the browser boundary. @param value - Persisted/coercible twips. @returns Native typed margin. */ (
+        value,
+      ) => {
+        const twips = Number(value);
+        if (!Number.isInteger(twips)) throw new Error("SvxRightMarginItem value is invalid.");
+        return new SvxRightMarginItem(SvxIndentValue.twips(twips), RES_MARGIN_RIGHT);
+      },
     );
     this.RegisterDefaultItem(
       new SvxULSpaceItem(RES_UL_SPACE),

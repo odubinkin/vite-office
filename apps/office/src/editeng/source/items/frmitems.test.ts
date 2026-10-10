@@ -1,6 +1,7 @@
 /** @fileoverview Verifies bounded frame margin, first-line indent, and spacing item contracts. */
 
 import { describe, expect, it } from "vitest";
+import { SvxIndentValue } from "../../inc/lrspitem";
 import { decodeSfxPoolItem, encodeSfxPoolItem } from "../../../sw/browser/filter/xml/item-codec";
 import { createWriterDocument } from "../../../sw/source/core/doc/doc";
 import { RES_MARGIN_RIGHT, RES_MARGIN_TEXTLEFT } from "../../../sw/inc/hintids";
@@ -63,17 +64,16 @@ describe("EditEngine frame items", /** Groups pooled frame metric contracts. @re
         new SvxFirstLineIndentItem(1.5, weightWhich),
     ).toThrow("value is invalid");
 
-    const right = new SvxRightMarginItem(567, weightWhich);
+    const right = new SvxRightMarginItem(SvxIndentValue.twips(567), weightWhich);
     expect(right.ResolveRight()).toBe(567);
-    expect(right.QueryValue()).toBe(567);
+    expect(right.QueryValue(5)).toBe(567);
     expect(right.Clone().equals(right)).toBe(true);
-    expect(right.equals(new SvxRightMarginItem(568, weightWhich))).toBe(false);
+    expect(right.equals(new SvxRightMarginItem(SvxIndentValue.twips(568), weightWhich))).toBe(
+      false,
+    );
     expect(right.equals(new SfxInt16Item(weightWhich, 567))).toBe(false);
-    expect(
-      /** Creates a fractional right margin. @returns Invalid item. */ () =>
-        new SvxRightMarginItem(-0.5, weightWhich),
-    ).toThrow("value is invalid");
-    const negativeRight = new SvxRightMarginItem(-360, RES_MARGIN_RIGHT);
+    expect(new SvxRightMarginItem(SvxIndentValue.twips(-0.5), weightWhich).ResolveRight()).toBe(-1);
+    const negativeRight = new SvxRightMarginItem(SvxIndentValue.twips(-360), RES_MARGIN_RIGHT);
     expect(negativeRight.ResolveRight()).toBe(-360);
     expect(negativeRight.Clone().equals(negativeRight)).toBe(true);
     expect(

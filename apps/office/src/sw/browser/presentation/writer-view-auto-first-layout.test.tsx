@@ -1,5 +1,6 @@
 /** @fileoverview Checks authored first-line items and resolved automatic layout across the real Writer boundary. */
 import { act, cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { SvxIndentValue } from "../../../editeng/inc/lrspitem";
 import { afterEach, describe, expect, it } from "vitest";
 import {
   SvxFirstLineIndentItem,
@@ -51,7 +52,7 @@ function fixture(
   const items = [
     new SvxFirstLineIndentItem(367, RES_MARGIN_FIRSTLINE, true),
     new SvxTextLeftMarginItem(487, RES_MARGIN_TEXTLEFT),
-    new SvxRightMarginItem(240, RES_MARGIN_RIGHT),
+    new SvxRightMarginItem(SvxIndentValue.twips(240), RES_MARGIN_RIGHT),
     new SvxFontHeightItem(240, RES_CHRATR_FONTSIZE),
     new SvxLineSpacingItem(value, RES_PARATR_LINESPACING, mode),
   ];

@@ -1,5 +1,6 @@
 /** @fileoverview Checks effective automatic first-line ruler visibility and actual Writer history. */
 import { act, cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { SvxIndentValue } from "../../../editeng/inc/lrspitem";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   SvxFirstLineIndentItem,
@@ -38,7 +39,7 @@ function fixture(auto = false, value = 367, inherited = false) {
   shell.Insert("RulerAutoFirstProof");
   shell.SetParagraphItems([
     new SvxTextLeftMarginItem(487, RES_MARGIN_TEXTLEFT),
-    new SvxRightMarginItem(6503, RES_MARGIN_RIGHT),
+    new SvxRightMarginItem(SvxIndentValue.twips(6503), RES_MARGIN_RIGHT),
     SvxTabStopItem.FromStops(
       RES_PARATR_TABSTOP,
       [new SvxTabStop(1700, SvxTabAdjust.Right, ",", "_")],

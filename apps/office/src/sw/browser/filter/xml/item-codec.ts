@@ -7,6 +7,8 @@ import type { SfxItemPool } from "../../../../svl/source/items/itempool";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SfxUnoAnyItem } from "../../../../sfx2/source/view/frame";
 import { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
+import { SvxRightMarginItem } from "../../../../editeng/inc/lrspitem";
+import { MeasureUnit } from "../../../../offapi/com/sun/star/util/MeasureUnit";
 import { SvxFontItem } from "../../../../editeng/source/items/textitem";
 import { type SfxPoolItem, type SfxPoolItemSnapshot } from "../../../../svl/source/items/poolitem";
 import {
@@ -69,15 +71,17 @@ export function encodeSfxPoolItem(item: SfxPoolItem): SfxPoolItemSnapshot {
   const value =
     item instanceof SvxULSpaceItem
       ? encodeULSpaceValue(item)
-      : item instanceof SwFormatINetFormat
-        ? JSON.stringify(encodeSwFormatINetFormatRecord(item))
-        : item instanceof SvxFontItem && item.GetGenericFamily() !== undefined
-          ? {
-              familyName: item.GetFamilyName(),
-              resolvedFamilyName: item.GetResolvedFamilyName(),
-              genericFamily: item.GetGenericFamily() as string,
-            }
-          : item.QueryValue();
+      : item instanceof SvxRightMarginItem
+        ? encodeLegacyRightMarginValue(item)
+        : item instanceof SwFormatINetFormat
+          ? JSON.stringify(encodeSwFormatINetFormatRecord(item))
+          : item instanceof SvxFontItem && item.GetGenericFamily() !== undefined
+            ? {
+                familyName: item.GetFamilyName(),
+                resolvedFamilyName: item.GetResolvedFamilyName(),
+                genericFamily: item.GetGenericFamily() as string,
+              }
+            : item.QueryValue();
   if (!isSfxPoolItemValue(value)) throw new Error("SfxPoolItem is not persistence-safe.");
   return {
     value,
@@ -135,4 +139,16 @@ function encodeULSpaceValue(item: SvxULSpaceItem): readonly number[] {
   if (item.GetPropUpper() !== 100 || item.GetPropLower() !== 100)
     return [upper, lower, context ? 1 : 0, item.GetPropUpper(), item.GetPropLower()];
   return context ? [upper, lower, 1] : [upper, lower];
+}
+
+/** Preserves the existing scalar wire domain without silently flattening new native units/proportions. @param item - Original native item. @returns Existing integer TWIP scalar. */
+function encodeLegacyRightMarginValue(item: SvxRightMarginItem): number {
+  const value = item.GetRight();
+  if (
+    value.m_nUnit !== MeasureUnit.TWIP ||
+    item.GetPropRight() !== 100 ||
+    !Number.isInteger(value.m_dValue)
+  )
+    throw new Error("SvxRightMarginItem is not persistence-safe.");
+  return value.m_dValue;
 }

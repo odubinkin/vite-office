@@ -68,6 +68,40 @@ remain unreviewed. Decision: preserve the empty-context resolution, setter
 order, twip reassignment and getter distinction. Do not retain a relative unit,
 substitute later font metrics or normalize the original behavior.
 
+## WRITER-002: Right-margin percentage writes change metadata without rescaling the measure
+
+Status: suspicious setter asymmetry; pinned source expressions inspected and
+portable initialized acceptance authored. Complete native consumer invariants
+and a compiled native differential remain unverified.
+
+Original [SvxRightMarginItem::PutValue](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/editeng/source/items/frmitems.cxx#L1582)
+handles right-relative member7 by assigning only the unsigned percentage field.
+It admits integer values from0 through65534; the typed SetRight setter instead
+accepts an unsigned16 percentage including65535 and scales the supplied double.
+The getters and UNO status cast percentage metadata to signed16. Consequently,
+percentage metadata, stored measure and reported signed percentage can differ
+from what a caller infers from the setter name alone.
+
+Initialized example: create right-margin -72 TWIP, then PutValue(32768,7).
+The stored margin remains -72 TWIP and ResolveRight remains -72. GetPropRight
+returns32768, while QueryValue(7) and the full status ScaleRight return -32768.
+Calling SetRight with1.25 FONT_EM and percentage65535 instead stores819.1875
+FONT_EM. PutValue(65535,7) rejects without changing that item. Clone and native
+paragraph Undo/Redo retain the stored double, unit and percentage independently.
+
+Evidence: pinned frmitems.cxx SetRight and PutValue definitions, the unsigned16
+field in include/editeng/lrspitem.hxx and initialized portable checks in
+[native-right-margin-item.test.ts](../../apps/office/src/editeng/source/items/native-right-margin-item.test.ts)
+and [native-paragraph-right-margin.test.ts](../../apps/office/src/sw/source/core/attr/native-paragraph-right-margin.test.ts).
+Task202610101401-QJ0FFB records final source and acceptance evidence. Tests run
+only the portable implementation with both ignored references absent.
+
+Consumer order or historical API design may intentionally distinguish a
+metadata-only UNO write from a value setter. These invariants remain unreviewed;
+this is not a confirmed defect. Decision: preserve the setter asymmetry,
+unsigned admission boundary and signed status cast. Do not rescale on member7,
+clamp the percentage or reconstruct state through an inverse scaling adapter.
+
 ## Recording future observations
 
 Add a stable `WRITER-###` case ID, pinned source location, original condition,
