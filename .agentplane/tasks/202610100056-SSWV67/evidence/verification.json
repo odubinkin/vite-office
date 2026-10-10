@@ -1,0 +1,393 @@
+{
+  "status": "pass",
+  "taskId": "202610100056-SSWV67",
+  "goalStatus": "active-incomplete",
+  "cadenceAfterClose": "8/10 after BZQGYC",
+  "fullRun": false,
+  "upstreamPin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "referenceSymlinkRestored": true,
+  "upstreamAbsentForAllRuntimeChecks": true,
+  "sourceContract": "Original own native five-field RES_UL_SPACE transported by existing encodeSfxPoolItem/registered pool; default legacy2/3tuples and proportion-aware5tuple. Literal native fields preserve their existing contracts without private-field/inverse reconstruction.",
+  "boundaryContract": "Optional independent nativeSpacing marker distinguishes old geometry-only/scalar ingress from current own absence. Outgoing marginTop/marginBottom removed; current item/absence wins conflicting scalars; marker excluded from original core format; malformed record validates before original native mutation.",
+  "wholeChangedProductionCoverage": {
+    "status": "pass",
+    "sourceHashes": {
+      "apps/office/src/sw/browser/filter/xml/writer-table-item-codec.ts": "8165e472d0efc7f3a848afb3943e8d0e921593aaa9115d4c2ed3bb706da09e56",
+      "apps/office/src/sw/browser/filter/xml/writer-document-codec.ts": "23ae795211d60330755a2bc4d6bb59d2e2f01925ecd3b21ba0162e9120d9ed54"
+    },
+    "actualCoverage": {
+      "lines": {
+        "total": 277,
+        "covered": 277,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 298,
+        "covered": 298,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 49,
+        "covered": 49,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 374,
+        "covered": 374,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "perModule": {
+      "apps/office/src/sw/browser/filter/xml/writer-table-item-codec.ts": {
+        "lines": {
+          "total": 55,
+          "covered": 55,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 10,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 61,
+          "covered": 61,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 79,
+          "covered": 79,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "apps/office/src/sw/browser/filter/xml/writer-document-codec.ts": {
+        "lines": {
+          "total": 222,
+          "covered": 222,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 39,
+          "covered": 39,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 237,
+          "covered": 237,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 295,
+          "covered": 295,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    "zeroNegativeCounters": true,
+    "completeCurrentSourceMapIdentity": true,
+    "onlyActualCurrentTaskCounters": true,
+    "allFinalSourceCasesPassed": true,
+    "acceptedUniqueCases": 1746,
+    "relatedFiles": 119,
+    "freshCases": 20,
+    "profiles": [
+      {
+        "label": "related-geometry",
+        "mapSha256": "945fe50a0b96f70b44ccc10da4de98f7b25827aa0b8c26c265c9108c34c52c65",
+        "reportSha256": "733787e4210e33ce7f3235b0bc28a6052281d4fbdad7eaf6d1e6b1c5839349a0"
+      }
+    ],
+    "passingReplayForHelperRepairs": 0,
+    "oldMapOrCounterReuse": false
+  },
+  "relatedUnit": {
+    "cases": 1746,
+    "passed": 1746,
+    "failed": 0,
+    "pending": 0,
+    "files": 119,
+    "fresh": 20,
+    "firstAttempt": true,
+    "command": "node apps/office/node_modules/.cache/parity-coverage/SSWV67/run.cjs",
+    "commandManifestSha256": "d769b2b825d60defd33b768d4314d2452957ba16e231454eb75bd081c1bcad6f",
+    "reportSha256": "733787e4210e33ce7f3235b0bc28a6052281d4fbdad7eaf6d1e6b1c5839349a0"
+  },
+  "browser": {
+    "cases": 24,
+    "passed": 24,
+    "failed": 0,
+    "skipped": 0,
+    "reportSha256": "60283eceae5745d939e4daa7dbdeeb3e8a3f905abb5306cbae9c675139c54f78"
+  },
+  "statics": [
+    {
+      "label": "format-check",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "format:check"
+      ],
+      "status": 0,
+      "upstreamAbsent": true
+    },
+    {
+      "label": "lint",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "lint"
+      ],
+      "status": 0,
+      "upstreamAbsent": true
+    },
+    {
+      "label": "typecheck",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "typecheck"
+      ],
+      "status": 0,
+      "upstreamAbsent": true
+    },
+    {
+      "label": "check-dependencies",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "check:dependencies"
+      ],
+      "status": 0,
+      "upstreamAbsent": true
+    },
+    {
+      "label": "check-docs",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "check:docs"
+      ],
+      "status": 0,
+      "upstreamAbsent": true
+    },
+    {
+      "label": "check-file-size",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "check:file-size"
+      ],
+      "status": 0,
+      "upstreamAbsent": true
+    },
+    {
+      "label": "current-build",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "build"
+      ],
+      "status": 0,
+      "upstreamAbsent": true
+    },
+    {
+      "label": "static-build",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "node",
+        "scripts/check-static-build.mjs"
+      ],
+      "status": 0,
+      "upstreamAbsent": true
+    },
+    {
+      "label": "review-browser",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "playwright",
+        "test",
+        "--config",
+        "apps/office/playwright.config.ts",
+        "--project=writer",
+        "writer-native-table-column-drag.spec.ts",
+        "writer-native-table-text-flow-headline.spec.ts",
+        "writer-table-properties-history.spec.ts",
+        "writer-native-cell-alignment.spec.ts",
+        "writer-table-alignment.spec.ts",
+        "--reporter=list,json"
+      ],
+      "status": 0,
+      "upstreamAbsent": true
+    }
+  ],
+  "audits": [
+    {
+      "label": "registry-build",
+      "bin": "npm",
+      "args": [
+        "run",
+        "inventory:registry:build"
+      ],
+      "status": 0,
+      "rawHash": "f941feea056f9f9125ac8a96978ff0fda711beef74563b36c553fc89490f0209",
+      "metadataOnly": true
+    },
+    {
+      "label": "source-tree",
+      "bin": "npm",
+      "args": [
+        "run",
+        "check:source-tree"
+      ],
+      "status": 0,
+      "rawHash": "6c5bd2e3c84892b8cc26b8b1b5f06a950891f9d5988a8ef1f1496f0c252cd33e",
+      "metadataOnly": true
+    },
+    {
+      "label": "source-provenance",
+      "bin": "npm",
+      "args": [
+        "run",
+        "check:source-provenance"
+      ],
+      "status": 0,
+      "rawHash": "2baa93c9368bdb7b6d88b3242dad9eb52da90f66beacd89817268a3415bce5ae",
+      "metadataOnly": true
+    },
+    {
+      "label": "registry-check",
+      "bin": "npm",
+      "args": [
+        "run",
+        "inventory:registry:check"
+      ],
+      "status": 0,
+      "rawHash": "b2a12279b5c2b71ed54a29158402d56bfc2dd85d6c8d1a914a4578524c6f16a6",
+      "metadataOnly": true
+    },
+    {
+      "label": "writer-resources",
+      "bin": "node_modules/.bin/tsx",
+      "args": [
+        "scripts/generate-writer-ui-resources.ts",
+        "--check"
+      ],
+      "status": 0,
+      "rawHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "metadataOnly": true
+    },
+    {
+      "label": "inventory-invariants",
+      "bin": "npm",
+      "args": [
+        "run",
+        "inventory:invariants"
+      ],
+      "status": 0,
+      "rawHash": "447285181ea00e0cef6043fc8b9d2f167499e8d32568e9595fc5e8d7ab3358da",
+      "metadataOnly": true
+    },
+    {
+      "label": "inventory-parity",
+      "bin": "npm",
+      "args": [
+        "run",
+        "inventory:parity"
+      ],
+      "status": 0,
+      "rawHash": "194b986bd01753b5d0a9cec979fec5b500d1a8835d084592cd823abbc7b5fc38",
+      "metadataOnly": true
+    },
+    {
+      "label": "routing",
+      "bin": "node",
+      "args": [
+        ".agentplane/policy/check-routing.mjs"
+      ],
+      "status": 0,
+      "rawHash": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9",
+      "metadataOnly": true
+    },
+    {
+      "label": "doctor",
+      "bin": "ap",
+      "args": [
+        "doctor"
+      ],
+      "status": 0,
+      "rawHash": "a0c03786e74103481b4a091922e4745a8664b5e2185f412fb46aa81117c9e0e6",
+      "metadataOnly": true
+    }
+  ],
+  "preservation": {
+    "status": "pass",
+    "originalPaths": 8575,
+    "unchangedOriginalPaths": 8568,
+    "changedPaths": [
+      ".agentplane/tasks/202609240501-C9TN6M/README.md",
+      "apps/office/src/sw/browser/filter/xml/writer-document-codec.ts",
+      "apps/office/src/sw/browser/filter/xml/writer-table-item-codec.ts",
+      "docs/program/registry/writer/provenance/sw/browser/filter/xml/writer-document-codec.ts.json",
+      "docs/program/registry/writer/provenance/sw/browser/filter/xml/writer-table-item-codec.ts.json",
+      "docs/program/registry/writer/runtime/sw/browser/filter/xml/writer-document-codec.ts.json",
+      "docs/program/registry/writer/runtime/sw/browser/filter/xml/writer-table-item-codec.ts.json"
+    ],
+    "oldTestFiles": 649,
+    "oldTestsByteIdentical": 649,
+    "oldTestMigrations": 0,
+    "canonicalHistoricalPrefixes": 4,
+    "parentFindingsPrefixPreserved": true
+  },
+  "canonicalRecords": [
+    "docs/program/registry/writer/runtime/sw/browser/filter/xml/writer-table-item-codec.ts.json",
+    "docs/program/registry/writer/provenance/sw/browser/filter/xml/writer-table-item-codec.ts.json",
+    "docs/program/registry/writer/runtime/sw/browser/filter/xml/writer-document-codec.ts.json",
+    "docs/program/registry/writer/provenance/sw/browser/filter/xml/writer-document-codec.ts.json"
+  ],
+  "freshTestHashes": {
+    "apps/office/src/sw/browser/filter/xml/native-table-ul-space-transport.test.ts": "b455f106e3a3276d3d0721a48ed0e410ebc536c370242be93a88509d251ef450",
+    "apps/office/src/sw/browser/editor/native-table-ul-space-transport-history.test.tsx": "674a92db05f17ec4ce4dd646a224528ac855950fda968ee8c776f079799eadb1"
+  },
+  "registeredRecoveryOpenSaveSettingsDeviationsUnchanged": true,
+  "noUpstreamHelpersOrRawMapsInAgentPlane": true,
+  "rawEvidenceLocation": "Ignored apps/office/node_modules/.cache/parity-coverage/SSWV67/",
+  "testPassingReplayForHelperRepairs": 0,
+  "remaining": [
+    "Complete native LR table transport",
+    "shared/inherited frame graph transport",
+    "general table row/box transport and UI/layout/filter fidelity",
+    "full native UNO/VCL/presentation"
+  ],
+  "qualityReview": {
+    "independent": false,
+    "executor": "Same implementing agent; non-independent exact-SHA review pending semantic commit."
+  },
+  "doctor": {
+    "errors": 0,
+    "existingWarnings": 2,
+    "scopeUnchanged": true
+  },
+  "gitBeforeSemanticCommit": " M .agentplane/tasks/202609240501-C9TN6M/README.md\n M apps/office/src/sw/browser/filter/xml/writer-document-codec.ts\n M apps/office/src/sw/browser/filter/xml/writer-table-item-codec.ts\n M docs/program/registry/writer/provenance/sw/browser/filter/xml/writer-document-codec.ts.json\n M docs/program/registry/writer/provenance/sw/browser/filter/xml/writer-table-item-codec.ts.json\n M docs/program/registry/writer/runtime/sw/browser/filter/xml/writer-document-codec.ts.json\n M docs/program/registry/writer/runtime/sw/browser/filter/xml/writer-table-item-codec.ts.json\n?? apps/office/src/sw/browser/editor/native-table-ul-space-transport-history.test.tsx\n?? apps/office/src/sw/browser/filter/xml/native-table-ul-space-transport.test.ts\n"
+}

@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 313
+revision: 314
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-10T00:53:07.746Z"
+doc_updated_at: "2026-10-10T01:03:24.105Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -1435,6 +1435,10 @@ sections:
     - Observation: WQ0NE8 atomic7/10 restores original five-field UL state and native value contracts under matching ulspitem.hxx owner; browser item codec owns tuple representation and registered pool restores full proportions.
       Impact: Both proportions/context retain exact original ItemSet/clone/history/JSON/Worker state, default2/3tuples retain prior admission, native aggregate query/write quirks match pin.367related3936unique cases accepted after test-only parameterization repair22/22;64fresh24Chromium. Entire4production modules Istanbul100all-four529lines589statements178functions479branches, zero negatives/current complete mapped ranges.
       Resolution: 634of646old tests byte-identical;26native Query expression migrations plus1uint16 constructor assertion preserve all original expected metrics/context and sibling text;8canonical histories/default statuses retained with exact UL owner relocation. Nine upstream-absent TS7/static/build/browser and9restored metadata pass; two overload JSDoc tags have identical transpiled runtime and228mapped ranges unchanged without passing test replay. Full native LR/UL table-format transport and broad UI/layout/filter parity remain incomplete. Goalactive7/10, full due10/10 with no cadence pause; bounded English evidence only.
+
+    - Observation: SSWV67 correction8/10 eliminates outgoing scalar table top/bottom spacing and preserves original complete native UL item through existing browser codec/pool. Independent nativeSpacing presence marker retains oldgeometry/scalar ingress and explicit new direct absence/authoring precedence.
+      Impact: Five fields survive graph/JSON/Worker and mounted restoration plus3native owner/cursor history cycles without inverse/private-field adapters.1746related119files20fresh24Chromium first-attempt all pass; two entire current modules actual Istanbul100all-four277lines298statements49functions374branches, complete maps/current hashes/zero negatives.
+      Resolution: All649old testfiles byte-identical, fourcanonical historical prefixes/default statuses/classifications preserved and new restoreTableSpacing ownership recorded accurately. Nine upstream-absent TS7/static/build/browser and9restored metadata gates pass, doctor2oldwarnings unchanged. Broad goalactive/incomplete8/10; full after10, no automatic cadence pause. NativeLR/sharedinherited/general UI/layout/filter remain pending; bounded English evidence, exact-SHA non-independent review follows.
 id_source: "generated"
 ---
 ## Summary
@@ -2843,3 +2847,7 @@ VerificationYCZ38R:519 unique current-source related cases87files and20fresh pas
 - Observation: WQ0NE8 atomic7/10 restores original five-field UL state and native value contracts under matching ulspitem.hxx owner; browser item codec owns tuple representation and registered pool restores full proportions.
   Impact: Both proportions/context retain exact original ItemSet/clone/history/JSON/Worker state, default2/3tuples retain prior admission, native aggregate query/write quirks match pin.367related3936unique cases accepted after test-only parameterization repair22/22;64fresh24Chromium. Entire4production modules Istanbul100all-four529lines589statements178functions479branches, zero negatives/current complete mapped ranges.
   Resolution: 634of646old tests byte-identical;26native Query expression migrations plus1uint16 constructor assertion preserve all original expected metrics/context and sibling text;8canonical histories/default statuses retained with exact UL owner relocation. Nine upstream-absent TS7/static/build/browser and9restored metadata pass; two overload JSDoc tags have identical transpiled runtime and228mapped ranges unchanged without passing test replay. Full native LR/UL table-format transport and broad UI/layout/filter parity remain incomplete. Goalactive7/10, full due10/10 with no cadence pause; bounded English evidence only.
+
+- Observation: SSWV67 correction8/10 eliminates outgoing scalar table top/bottom spacing and preserves original complete native UL item through existing browser codec/pool. Independent nativeSpacing presence marker retains oldgeometry/scalar ingress and explicit new direct absence/authoring precedence.
+  Impact: Five fields survive graph/JSON/Worker and mounted restoration plus3native owner/cursor history cycles without inverse/private-field adapters.1746related119files20fresh24Chromium first-attempt all pass; two entire current modules actual Istanbul100all-four277lines298statements49functions374branches, complete maps/current hashes/zero negatives.
+  Resolution: All649old testfiles byte-identical, fourcanonical historical prefixes/default statuses/classifications preserved and new restoreTableSpacing ownership recorded accurately. Nine upstream-absent TS7/static/build/browser and9restored metadata gates pass, doctor2oldwarnings unchanged. Broad goalactive/incomplete8/10; full after10, no automatic cadence pause. NativeLR/sharedinherited/general UI/layout/filter remain pending; bounded English evidence, exact-SHA non-independent review follows.

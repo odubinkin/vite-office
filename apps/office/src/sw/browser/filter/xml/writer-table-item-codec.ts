@@ -8,7 +8,13 @@ import type {
 } from "../../../source/core/table/swtable";
 import type { SwFrameFormat } from "../../../source/core/layout/atrfrm";
 import { SwFormatHoriOrient } from "../../../inc/fmtornt";
-import { RES_FRM_SIZE, RES_HORI_ORIENT } from "../../../inc/hintids";
+import { RES_FRM_SIZE, RES_HORI_ORIENT, RES_UL_SPACE } from "../../../inc/hintids";
+import type { SfxPoolItemSnapshot } from "../../../../svl/source/items/poolitem";
+import { encodeSfxPoolItem } from "./item-codec";
+/** Direct native spacing presence, independently versioned from older geometry records. */
+export interface WriterTableSpacingRecord {
+  readonly upperLower?: SfxPoolItemSnapshot | undefined;
+}
 /** Primitive complete frame item for process and storage boundaries. */
 export interface WriterFrameSizeRecord {
   readonly width: number;
@@ -35,6 +41,7 @@ export interface WriterTableGeometryRecord {
 /** Current complete native geometry with prior scalar fields accepted only at ingestion. */
 export type WriterTableFormatRecord = SwTableFormat & {
   readonly nativeGeometry?: WriterTableGeometryRecord | undefined;
+  readonly nativeSpacing?: WriterTableSpacingRecord | undefined;
 };
 
 /** Encodes original direct size/orientation without duplicate scalar geometry. @param table - Original native table. @returns Primitive boundary record. */
@@ -43,11 +50,17 @@ export function encodeTableFormat(table: SwTable): WriterTableFormatRecord {
   delete format.width;
   delete format.horiOrient;
   delete format.align;
+  delete format.marginTop;
+  delete format.marginBottom;
   const set = table.GetFrameFormat().GetAttrSet(),
     size = set.GetItemIfSet(RES_FRM_SIZE, false) as SwFormatFrameSize | undefined,
-    orient = set.GetItemIfSet(RES_HORI_ORIENT, false) as SwFormatHoriOrient | undefined;
+    orient = set.GetItemIfSet(RES_HORI_ORIENT, false) as SwFormatHoriOrient | undefined,
+    spacing = set.GetItemIfSet(RES_UL_SPACE, false);
   return {
     ...format,
+    nativeSpacing: {
+      upperLower: spacing === undefined ? undefined : encodeSfxPoolItem(spacing),
+    },
     nativeGeometry: {
       frameSize: encodeFrameSize(size),
       horiOrient:
@@ -61,6 +74,29 @@ export function encodeTableFormat(table: SwTable): WriterTableFormatRecord {
             },
     },
   };
+}
+
+/** Restores original direct UL item through the existing registered pool, validating before native mutation. @param format - Original frame owner. @param spacing - Current native record or prior marker absence. @returns Nothing. */
+export function restoreTableSpacing(
+  format: SwFrameFormat,
+  spacing: WriterTableSpacingRecord | undefined,
+): void {
+  if (spacing === undefined) return;
+  if (spacing === null || typeof spacing !== "object" || Array.isArray(spacing))
+    throw new Error("Stored Writer native table spacing is invalid.");
+  const snapshot = spacing.upperLower;
+  if (
+    snapshot !== undefined &&
+    (snapshot === null ||
+      typeof snapshot !== "object" ||
+      Array.isArray(snapshot) ||
+      snapshot.which !== RES_UL_SPACE)
+  )
+    throw new Error("Stored Writer native table spacing item is invalid.");
+  const item =
+    snapshot === undefined ? undefined : format.GetAttrSet().GetPool().CreateItem(snapshot);
+  format.ResetFormatAttr(RES_UL_SPACE);
+  if (item !== undefined) format.SetFormatAttr(item);
 }
 
 /** Restores original typed geometry while retaining the legacy-only constructor path. @param format - Original frame owner. @param geometry - Current native geometry or absent legacy record. @returns Nothing. */
