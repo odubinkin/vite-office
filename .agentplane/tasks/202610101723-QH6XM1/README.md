@@ -4,7 +4,7 @@ title: "Restore native MoveLeftMargin range and attribute history"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 20
 origin:
   system: "manual"
 depends_on: []
@@ -17,16 +17,39 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-10T18:08:18.977Z"
+  updated_by: "CODER"
+  note: "Current native range/history correction passes13888related cases/492files including40fresh, actual whole eight modules100% allfour with current hashes and nonnegative counters;23Chromium/10files; upstream-absent static gates and restored nine metadata audits pass. Original804tests and historical canonical statuses/defaults preserved with explicit bounded migrations. Evidence: evidence/verification.json; semantic b6fbc1920747ea4d6eae28e727263b0067015eb5."
   attempts: 0
-commit: null
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-10T18:08:46.467Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent, explicitly non-independent review of exact semantic b6fbc1920747ea4d6eae28e727263b0067015eb5: approved native range and attr-history correction, current-source whole-module100% and related/browser/static/metadata evidence pass."
+  evaluated_sha: "b6fbc1920747ea4d6eae28e727263b0067015eb5"
+  blueprint_digest: "c89e5e9f0fe915787a74c4420f6e4eb2e8baebc1bf76df5a28a15330707177a9"
+  evidence_refs:
+    - ".agentplane/tasks/202610101723-QH6XM1/README.md"
+    - ".agentplane/tasks/202610101723-QH6XM1/quality/20261010-180846467-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610101723-QH6XM1/quality/20261010-180846467-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610101723-QH6XM1/quality/20261010-180846467-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610101723-QH6XM1/blueprint/resolved-snapshot.json"
+    - "semantic:b6fbc1920747ea4d6eae28e727263b0067015eb5; git objects for all eight production files match recorded current source hashes"
+    - ".agentplane/tasks/202610101723-QH6XM1/evidence/verification.json"
+  findings:
+    - "Reviewed original typed item ownership, independent list axes, original mutation and history registration order, single range action, temporary direct/reset rollback, current-default redo and source-document validation before mutation;40fresh cases and preserved historical contracts support the bounded change."
+    - "Sixteen existing canonical records retain historical status/default/classification; deleted factory current symbol/evidence mapping retired truthfully and two required native mutation operation records registered. WRITER-004 preserves pinned table first-only multi-reset."
+commit:
+  hash: "b6fbc1920747ea4d6eae28e727263b0067015eb5"
+  message: "🧩 QH6XM1 code: restore native range margin history"
 comments:
   -
     author: "CODER"
     body: "Start: Restore approved native MoveLeftMargin range and attribute history with owned source-shaped rollback, current-source validation and preserved inventory/deviations."
+  -
+    author: "CODER"
+    body: "Implemented: native typed range margin mutation and original direct/reset attribute history; current source whole-module coverage and related/browser validation pass."
 events:
   -
     type: "status"
@@ -35,8 +58,21 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: Restore approved native MoveLeftMargin range and attribute history with owned source-shaped rollback, current-source validation and preserved inventory/deviations."
+  -
+    type: "status"
+    at: "2026-10-10T18:08:18.496Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+    note: "Implemented: native typed range margin mutation and original direct/reset attribute history; current source whole-module coverage and related/browser validation pass."
+  -
+    type: "verify"
+    at: "2026-10-10T18:08:18.977Z"
+    author: "CODER"
+    state: "ok"
+    note: "Current native range/history correction passes13888related cases/492files including40fresh, actual whole eight modules100% allfour with current hashes and nonnegative counters;23Chromium/10files; upstream-absent static gates and restored nine metadata audits pass. Original804tests and historical canonical statuses/defaults preserved with explicit bounded migrations. Evidence: evidence/verification.json; semantic b6fbc1920747ea4d6eae28e727263b0067015eb5."
 doc_version: 3
-doc_updated_at: "2026-10-10T18:07:25.218Z"
+doc_updated_at: "2026-10-10T18:08:19.037Z"
 doc_updated_by: "CODER"
 description: "Replace per-node scalar margin action/group with original SwDoc range mutation and SwUndoMoveLeftMargin retained SwHistory; native attr-set deltas feed SwRegHistory, preserving direct/inherited typed left/first state and recomputing redo from document tabs. One correction2/10 after BZ14P4."
 sections:
@@ -62,6 +98,39 @@ sections:
     Evidence: sixteen existing canonical records preserve historical status/default/classification/evidence except the truthful deleted-factory current owner/evidence mapping; two required native mutation operation records added. Original804testfiles:802byte-identical,two exact native fixture/payload migrations, cases/input matrices and other expected arguments preserved. Parent Findings and old suspected-issue prose retained. WRITER-004 preserves original table first-only multi-reset.
     Scope: approved native range/history correction and mandatory inventory traceability. Existing broad native hierarchy/lifetime/list-units/guard/layout/Repeat gaps remain explicit. Full run not due: correction2/10 after accepted BZ14P4. Goal active under human resume; pause after next full run and necessary repairs.
     Review: exact semantic SHA to be recorded through CLI and evaluated by the same agent, explicitly non-independent.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-10T18:08:18.977Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Current native range/history correction passes13888related cases/492files including40fresh, actual whole eight modules100% allfour with current hashes and nonnegative counters;23Chromium/10files; upstream-absent static gates and restored nine metadata audits pass. Original804tests and historical canonical statuses/defaults preserved with explicit bounded migrations. Evidence: evidence/verification.json; semantic b6fbc1920747ea4d6eae28e727263b0067015eb5.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T18:08:18.496Z, excerpt_hash=sha256:f51815ed3e29a1a87876e83e0c3227af645e6ba5086ee063a0c4dc2035ffb1cf
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610101723-QH6XM1/blueprint/resolved-snapshot.json
+    - old_digest: c89e5e9f0fe915787a74c4420f6e4eb2e8baebc1bf76df5a28a15330707177a9
+    - current_digest: c89e5e9f0fe915787a74c4420f6e4eb2e8baebc1bf76df5a28a15330707177a9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610101723-QH6XM1
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610101723-QH6XM1
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only semantic task commits, retain historical evidence and redo scoped checks if rollback is requested. No unrelated checkout/merge/installation changes."
   Findings: |-
     Preflight clean writer, direct mode, standing user goal/resume authorization. Previous7RCNDA turn made verified authoritative progress. SwContentNode currently exposes only generic browser model delta, making native SwRegHistory impossible without native attr-set broadcast. Direct content/history identities are the correction target; independent C++ base hierarchy/native full style registration and full Repeat manager infrastructure remain unverified. No network/subagents; ignored helpers/maps/logs only node_modules cache.
@@ -127,6 +196,39 @@ Result: pass, nine declared checks.
 Evidence: sixteen existing canonical records preserve historical status/default/classification/evidence except the truthful deleted-factory current owner/evidence mapping; two required native mutation operation records added. Original804testfiles:802byte-identical,two exact native fixture/payload migrations, cases/input matrices and other expected arguments preserved. Parent Findings and old suspected-issue prose retained. WRITER-004 preserves original table first-only multi-reset.
 Scope: approved native range/history correction and mandatory inventory traceability. Existing broad native hierarchy/lifetime/list-units/guard/layout/Repeat gaps remain explicit. Full run not due: correction2/10 after accepted BZ14P4. Goal active under human resume; pause after next full run and necessary repairs.
 Review: exact semantic SHA to be recorded through CLI and evaluated by the same agent, explicitly non-independent.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-10T18:08:18.977Z — VERIFY — ok
+
+By: CODER
+
+Note: Current native range/history correction passes13888related cases/492files including40fresh, actual whole eight modules100% allfour with current hashes and nonnegative counters;23Chromium/10files; upstream-absent static gates and restored nine metadata audits pass. Original804tests and historical canonical statuses/defaults preserved with explicit bounded migrations. Evidence: evidence/verification.json; semantic b6fbc1920747ea4d6eae28e727263b0067015eb5.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T18:08:18.496Z, excerpt_hash=sha256:f51815ed3e29a1a87876e83e0c3227af645e6ba5086ee063a0c4dc2035ffb1cf
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610101723-QH6XM1/blueprint/resolved-snapshot.json
+- old_digest: c89e5e9f0fe915787a74c4420f6e4eb2e8baebc1bf76df5a28a15330707177a9
+- current_digest: c89e5e9f0fe915787a74c4420f6e4eb2e8baebc1bf76df5a28a15330707177a9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610101723-QH6XM1
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610101723-QH6XM1
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
