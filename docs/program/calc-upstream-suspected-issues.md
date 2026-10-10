@@ -881,3 +881,36 @@ Decision: preserve the generated behavior and original type-registration
 contracts. Do not invent an atomic repair or claim a reproduced concurrency
 problem from this source TODO. Browser realm and worker boundaries remain
 separate verification requirements.
+
+## CALC-038: Standalone internal NotValue mode reads beyond case extras
+
+Status: native undefined behavior reproduced with an initialized caller;
+reachability from ordinary case-operation consumers remains unverified.
+
+[Original `casefolding::getValue`](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/i18nutil/source/utility/casefolding.cxx#L122)
+tries up to `MaxCaseMappingExtras` (three) entries from a table-defined offset.
+The complete original extras table has 352 entries. U+1E9E selects value-table
+address 1694, type 234 and extras offset 350. Its final two entries have types
+42 and 64; neither intersects the internal `MappingType::NotValue` bit 128.
+The loop consequently reaches extras index 352 before its RuntimeException
+fallback, although this index is outside the array.
+
+Initialized example: `sal_Unicode input[2] = {0x1e9e, 0}`, position 0, length 1,
+empty genuine generated Locale, and standalone NotValue as the mapping mode.
+The instrumented original body reports `index 352 out of bounds for type
+'const Mapping[352]'` and terminates with SIGABRT. All 67 genuine SAL and two
+CPPU dependency units, the unchanged case-mapping/ICU bodies, and the generated
+Locale/UNO header code are instrumented with ASan/UBSan. Native platform
+frameworks remain outside instrumentation.
+
+Evidence: [the full case-value probe](../../scripts/casefolding-native-probe.mjs),
+its isolated `internal-bit-ub` caller, and ignored complete native diagnostic
+`output/playwright/casefolding-native/internal-bit-ub.stderr`. NotValue describes
+internal table indirection; this synthetic caller is not evidence that an
+ordinary lower/upper/title/folding consumer passes it as a standalone mode.
+
+Decision: retain the original loop and table. Record this diagnostic separately
+from the defined Unicode observations, assign no portable expected value to
+the undefined native read, and do not add a table-bound repair or normalize
+mapping flags. Consumer reachability and intended mode constraints require
+separate review.

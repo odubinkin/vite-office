@@ -2057,3 +2057,53 @@ side effect must be retained with the true dependency owner. Full source
 getValue/getConditionalValue, portable exception/type/reference owners and
 sanitized complete mapping correspondence remain required. Task39 is still
 DOING; editable Calc UI is not ready. Next full run remains41.
+
+## Genuine original locale-aware case-value reference
+
+Task39 now provides `scripts/casefolding-native-probe.mjs --write|--check` and
+the committed `native-casefolding-value-cases.json`. It compiles the complete
+unchanged interval containing all conditional arrays, macros, cased_letter,
+getConditionalValue and getValue, with genuine original full headers/data,
+original generated Locale/RuntimeException and their actual CPPU type owners.
+The original ICU scalar bodies/macros/full Unicode data supply the native
+reference. This does not change task38's native-JS decisions for the portable
+runtime.
+
+All 67 genuine SAL and both required CPPU compilation units are rebuilt for
+normal and ASan/UBSan callers; the mapping, ICU and generated header bodies
+are instrumented too. Complete pinned LO blobs, original generated header
+hashes, actual configuration templates and verified ICU/Boost/dragonbox/
+fast_float archives are retained. Platform frameworks/libc are uninstrumented;
+full platform, ABI, thread/type-cache and consumer contracts remain unverified.
+
+Native observations cover all 1,114,112 Unicode code values in ten mapping
+modes (11,141,120 rows), all 1,048,576 paired-surrogate second positions, and
+1,038,336 conditional/value calls: 26 fully initialized caller contexts,
+13 characters, 12 exact language values and all 256 mapping-bit combinations.
+Contexts include embedded-zero/case-sensitive language values, original
+Lithuanian pos>len witnesses, adjacent sigma/dot cases, explicit buffer
+terminators, accent boundaries and independent declared lengths. They do not
+certify every possible string, position or mode domain.
+
+All 21 conditional Mapping references are observed through actual array
+identity. Every conditional/value call retains all Mapping fields and the
+native value-copy/input-preservation observation. Genuine default UNO
+exceptions occur 239,616 times in direct conditional calls and 3,744 times
+inside getValue: actual empty Message, null Context and the original registered
+RuntimeException type name are observed. No native Locale/UNO/ICU stand-in or
+portable JavaScript Error substitutes this evidence.
+
+Normal/sanitized outputs match all 521,895,936 bytes. Each of the three raw
+SHA256 digests is preserved; signed row-field differences plus gzip retain
+every observation and are reconstructed byte-for-byte before fixture writing
+or checking. The compact fixture is about 2 MB. CALC038 separately records the
+actual sanitizer bounds failure for U+1E9E with standalone internal NotValue;
+that undefined read has no portable expected value and is excluded from the
+defined full-code corpus without changing the original function.
+
+Shared inventory records the new native reference and keeps every broad parity
+flag false. Portable getValue/getConditionalValue, genuine default UNO
+exception/reference/type registration, service/CharClass/SharedStringPool and
+actual cell/column/table/document/edit/UI remain required. Task39 remains
+DOING; no full task verification, consumer QA or editable-UI readiness is
+claimed. The scheduled full test run remains task41.

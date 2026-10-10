@@ -15,7 +15,7 @@
     ],
     "capability": "Shared Locale value ownership and original case-mapping tables and character predicate",
     "gaps": [
-      "Actual getValue/getConditionalValue, original default UNO RuntimeException/Reference boundary, native generated Locale correspondence, runtime type reflection, complete locale-aware service/CharClass/SharedStringPool and Calc cell/document/edit/UI remain unfinished. Native primitive capture is distinct from source-only Locale evidence and does not certify full original consumer QA, C++ ABI/const/template or physical memory contracts."
+      "Portable getValue/getConditionalValue, original default UNO RuntimeException/Reference ownership and type-registration boundary, complete generated Locale correspondence/reflection, locale-aware service/CharClass/SharedStringPool and Calc cell/document/edit/UI remain unfinished. Genuine full native case-value observations now use original generated Locale/RuntimeException, all original mapping/ICU bodies and instrumented SAL/CPPU dependencies; they do not certify missing portable methods, full consumer QA, C++ ABI/concurrency or physical memory contracts."
     ],
     "upstream": {
       "implementation": [
@@ -80,6 +80,14 @@
         {
           "path": "apps/office/src/i18nutil/source/utility/casefolding.test.ts",
           "marker": "replays every native UTF16 cased-letter result and original integral argument narrowing"
+        },
+        {
+          "path": "scripts/casefolding-native-probe.mjs",
+          "marker": "const implementation = scope"
+        },
+        {
+          "path": "apps/office/src/i18nutil/source/utility/native-casefolding-value-cases.json",
+          "marker": "\"sanitizedIdentical\""
         }
       ],
       "docs": [
@@ -92,7 +100,7 @@
     "aspect": "model-operation",
     "atomicOperation": "Own original three-field Locale values and original case mapping source arrays for the string service dependency",
     "scopeLimitations": [
-      "Actual getValue/getConditionalValue, original default UNO RuntimeException/Reference boundary, native generated Locale correspondence, runtime type reflection, complete locale-aware service/CharClass/SharedStringPool and Calc cell/document/edit/UI remain unfinished. Native primitive capture is distinct from source-only Locale evidence and does not certify full original consumer QA, C++ ABI/const/template or physical memory contracts.",
+      "Portable getValue/getConditionalValue, original default UNO RuntimeException/Reference ownership and type-registration boundary, complete generated Locale correspondence/reflection, locale-aware service/CharClass/SharedStringPool and Calc cell/document/edit/UI remain unfinished. Genuine full native case-value observations now use original generated Locale/RuntimeException, all original mapping/ICU bodies and instrumented SAL/CPPU dependencies; they do not certify missing portable methods, full consumer QA, C++ ABI/concurrency or physical memory contracts.",
       "Original i18npool testTitleCase is a related real Locale/CharacterClassification consumer reference; it is not ported or executed by the source-contract and primitive replay tests."
     ],
     "implemented": true,
@@ -102,7 +110,7 @@
     "verified": false,
     "stackDivergence": {
       "kind": "none",
-      "rationale": "Original source-defined fields/data and numeric contracts retained, with explicit C++ ownership/operator/lifetime language adapters reusing actual OUString. Native generated-type and complete algorithm/service parity remain unverified."
+      "rationale": "Original source-defined fields/data and numeric contracts retained with explicit C++ ownership/operator/lifetime adapters reusing actual OUString. Genuine generated native Locale/UNO and full native case values supply bounded original reference evidence; complete portable type/algorithm/service parity remains unverified."
     }
   }
 }

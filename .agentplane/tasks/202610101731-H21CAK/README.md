@@ -4,7 +4,7 @@ title: "Port original locale-aware case-mapping values for Calc string service"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 41
+revision: 44
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: implement approved original locale-aware case value dependency in calc checkout, reusing actual shared string/Unicode owners and preserving native source contracts; no fake service/type substitutes."
 doc_version: 3
-doc_updated_at: "2026-10-10T19:07:58.193Z"
+doc_updated_at: "2026-10-10T19:35:57.914Z"
 doc_updated_by: "CODER"
 description: "Task39: implement original casefolding getValue/getConditionalValue and complete source data with real Locale string fields/default ownership and original default UNO RuntimeException boundary. Reuse actual shared OUString, RTL character and proven ICU scalar contracts. Preserve suspect upstream behavior. Verify source/owner contracts and unchanged native reference without fake service/type stand-ins; portable Calc/affected shared100 and scoped gates. No UI shell, Writer duplication or full-run before41."
 sections:
@@ -125,6 +125,24 @@ sections:
       Result: pass.
       Evidence: ASCII native complete-corpus regression remains identical after the full-source I/O capacity fix. Native-generation gates manifest/full logs retained under output/playwright/task39-checks; doctor0 errors/two inherited warnings. CALC037 records the real upstream generated-type weak-memory TODO without claiming reproduced concurrency failure or adding a repair.
       Scope: Offline native dependency tooling and current partial task evidence; full locale-aware algorithms, actual portable UNO owners and final task39 verification/evaluation remain required. Task39 stays DOING and full goal remains active.
+
+    Genuine full native case-value reference checkpoint (portable algorithms/type closure are still required):
+    - Command: node scripts/casefolding-native-probe.mjs --write; node scripts/casefolding-native-probe.mjs --check.
+      Result: pass.
+      Evidence: Complete unchanged arrays/macros/getConditionalValue/getValue interval; genuine generated Locale/RuntimeException; all67 SAL and two CPPU units rebuilt normal and ASan/UBSan.360 full pinned LO blobs, complete generated-header hashes/configuration templates and verified original ICU/Boost/dragonbox/fast_float archives.11,141,120 full Unicode/mode observations,1,048,576 surrogate second-half observations,1,038,336 allocated conditional/value cases; all521,895,936 native bytes match instrumented runs.239,616 direct conditional exceptions and3,744 getValue exceptions retain actual empty Message/null Context/registered type-name observations; all21 borrowed Mapping identities and all1,038,336 copy/input checks observed. Lossless field-delta/gzip reconstruction preserves every raw byte and digest in a compact roughly2MB fixture. Exact final check and complete diagnostics are under output/playwright/task39-checks/casefolding-values-final-check.log and output/playwright/casefolding-native/manifest.json.
+      Scope: Genuine original case-value reference only. No portable getValue/getConditionalValue/RuntimeException/Reference/type-registration or real service/pool/document/UI completion. Native frameworks/libc, concurrency, all original QA and unbounded string/position/mode domains remain uncertified.
+    - Command: Instrumented original driver-asan internal-bit-ub, as a separate expected-failure diagnostic within the native probe.
+      Result: expected native failure reproduced.
+      Evidence: Initialized U+1E9E, pos0,len1,empty real Locale,standalone NotValue128; actual index352 out of bounds for const Mapping[352],SIGABRT. Complete original source/table and diagnostic retained. CALC038 records this internal-mode caller and leaves ordinary-consumer reachability unverified; no portable expected value is assigned. Initial mixed corpus failure is preserved in Findings and the original bodies are unchanged.
+      Scope: Separate native undefined-behavior witness, excluded from the defined full-code corpus. Defined case-operation outputs and real RuntimeException guards are checked independently.
+    - Command: npm run test:coverage:calc; exact related shared eight-file coverage argv in output/playwright/task39-checks/value-shared-manifest.json; independent raw-counter audit.
+      Result: pass.
+      Evidence: All three original source symlinks absent for both runs and restored exactly in finally. Calc106 tests/24 files,19 executable owners,S2920/B2055/F474/L2564 all100. Related shared18 tests/8 files,13 executable owners,S516/B229/F120/L431 all100. Every raw statement/function/branch counter is positive. Native fixture is reference evidence; unfinished portable methods are not claimed covered.
+      Scope: Existing Calc and affected actual shared runtime owners; no Writer coverage repair or full-run scheduling change.
+    - Command: Affected ESLint,JSDoc,Prettier,Calc/shared inventory and four related tooling tests; typecheck,file-size,dependencies,source-tree,source-provenance,routing,doctor and diff checks.
+      Result: pass.
+      Evidence: Exact six final quality command argv and terminal exit0 in value-quality-manifest.json;30 tooling cases/4 files. Calc52 capabilities/185 modules,shared29/155,zero semantic violations. Every broad shared capability parity flag remains false; new native reference paths and missing portable closure are explicit. Prior same-turn static gates pass with restored original source links; doctor has0 errors and two inherited warnings.
+      Scope: Intentional native helper/fixture/registry/documentation checkpoint. Task39 remains DOING with overall verification pending; no EVALUATOR pass,verify --ok or finish is recorded. Full suite remains task41.
   Rollback Plan: "Revert only intentional task39 implementation/metadata commits if needed and rerun scoped checks. Preserve unrelated user work, Writer/main branches, shared verified Unicode/RTL contracts and original sources. Remove only task39-owned ignored probe artifacts if obsolete."
   Findings: |-
     - Observation: Preflight confirms calc branch and clean checkout, direct workflow, previous task38 DONE. The only other active tasks are inherited C9TN6M/X6VV8G; neither is reused for new source work. Read-only discovery guessed Locale under offapi instead of its actual udkapi path, and guessed two absent native helper filenames.
@@ -222,6 +240,14 @@ sections:
     - Observation: The new full reproducible build reaches a genuine large CNS11643 table, then source verification hits Node execFileSync default output-buffer capacity (ENOBUFS). The previously executed genuine binary has already generated ten headers from the original full IDL tree; the new helper run is terminal and not yet successful.
       Impact: No successful reproducible-generation claim is made from the failed helper run. The entire large original table must be retained and compared, rather than skipped or truncated.
       Resolution: Size the existing full-blob git-show buffer to the actual UTF8 blob length plus one, preserve exact equality and hashes, and rerun the same full native build. This changes tooling I/O capacity, not coverage or source verification criteria.
+
+    - Observation: The fully instrumented original getValue corpus aborts in UBSan at CaseMappingExtra index352 (array size352). The caller includes the internal NotValue bit128 as a standalone mapping mode; no such output is accepted as a native golden value.
+      Impact: Normal unsanitized capture cannot certify this caller domain. Actual API-mode outputs and a separate isolated undefined-behavior witness must be distinguished before native fixture publication.
+      Resolution: Inspect exact native input, retain complete sanitizer diagnostic, document the suspect original bounds case and use original public case operation modes for the defined full Unicode corpus; do not change original bodies, repair upstream or assign a portable expected result to native UB.
+
+    - Observation: Genuine full native case-value reference now passes with original generated Locale/RuntimeException, fully instrumented SAL/CPPU/ICU/mapping owners,13,228,032 complete observations and lossless roughly2MB fixture. Both direct conditional and getValue RuntimeException paths execute their original type registration and preserve actual default fields.
+      Impact: The required original native reference is available for portable case-value implementation. Real portable RuntimeException/Reference/type registration, locale-aware methods and service/pool/document/edit/UI remain unfinished; native evidence alone does not make Calc UI ready or satisfy full task39.
+      Resolution: Keep task39 DOING and overall verification pending; next implement the genuine shared UNO ownership/type dependency and getValue/getConditionalValue against the committed native fixture. Preserve CALC038 and all original defined behavior. No Writer-only repair, broad parity flag upgrade, goal completion or full-suite run before41.
 id_source: "generated"
 ---
 ## Summary
@@ -320,6 +346,24 @@ Actual original generator checkpoint (full task39 still pending):
   Result: pass.
   Evidence: ASCII native complete-corpus regression remains identical after the full-source I/O capacity fix. Native-generation gates manifest/full logs retained under output/playwright/task39-checks; doctor0 errors/two inherited warnings. CALC037 records the real upstream generated-type weak-memory TODO without claiming reproduced concurrency failure or adding a repair.
   Scope: Offline native dependency tooling and current partial task evidence; full locale-aware algorithms, actual portable UNO owners and final task39 verification/evaluation remain required. Task39 stays DOING and full goal remains active.
+
+Genuine full native case-value reference checkpoint (portable algorithms/type closure are still required):
+- Command: node scripts/casefolding-native-probe.mjs --write; node scripts/casefolding-native-probe.mjs --check.
+  Result: pass.
+  Evidence: Complete unchanged arrays/macros/getConditionalValue/getValue interval; genuine generated Locale/RuntimeException; all67 SAL and two CPPU units rebuilt normal and ASan/UBSan.360 full pinned LO blobs, complete generated-header hashes/configuration templates and verified original ICU/Boost/dragonbox/fast_float archives.11,141,120 full Unicode/mode observations,1,048,576 surrogate second-half observations,1,038,336 allocated conditional/value cases; all521,895,936 native bytes match instrumented runs.239,616 direct conditional exceptions and3,744 getValue exceptions retain actual empty Message/null Context/registered type-name observations; all21 borrowed Mapping identities and all1,038,336 copy/input checks observed. Lossless field-delta/gzip reconstruction preserves every raw byte and digest in a compact roughly2MB fixture. Exact final check and complete diagnostics are under output/playwright/task39-checks/casefolding-values-final-check.log and output/playwright/casefolding-native/manifest.json.
+  Scope: Genuine original case-value reference only. No portable getValue/getConditionalValue/RuntimeException/Reference/type-registration or real service/pool/document/UI completion. Native frameworks/libc, concurrency, all original QA and unbounded string/position/mode domains remain uncertified.
+- Command: Instrumented original driver-asan internal-bit-ub, as a separate expected-failure diagnostic within the native probe.
+  Result: expected native failure reproduced.
+  Evidence: Initialized U+1E9E, pos0,len1,empty real Locale,standalone NotValue128; actual index352 out of bounds for const Mapping[352],SIGABRT. Complete original source/table and diagnostic retained. CALC038 records this internal-mode caller and leaves ordinary-consumer reachability unverified; no portable expected value is assigned. Initial mixed corpus failure is preserved in Findings and the original bodies are unchanged.
+  Scope: Separate native undefined-behavior witness, excluded from the defined full-code corpus. Defined case-operation outputs and real RuntimeException guards are checked independently.
+- Command: npm run test:coverage:calc; exact related shared eight-file coverage argv in output/playwright/task39-checks/value-shared-manifest.json; independent raw-counter audit.
+  Result: pass.
+  Evidence: All three original source symlinks absent for both runs and restored exactly in finally. Calc106 tests/24 files,19 executable owners,S2920/B2055/F474/L2564 all100. Related shared18 tests/8 files,13 executable owners,S516/B229/F120/L431 all100. Every raw statement/function/branch counter is positive. Native fixture is reference evidence; unfinished portable methods are not claimed covered.
+  Scope: Existing Calc and affected actual shared runtime owners; no Writer coverage repair or full-run scheduling change.
+- Command: Affected ESLint,JSDoc,Prettier,Calc/shared inventory and four related tooling tests; typecheck,file-size,dependencies,source-tree,source-provenance,routing,doctor and diff checks.
+  Result: pass.
+  Evidence: Exact six final quality command argv and terminal exit0 in value-quality-manifest.json;30 tooling cases/4 files. Calc52 capabilities/185 modules,shared29/155,zero semantic violations. Every broad shared capability parity flag remains false; new native reference paths and missing portable closure are explicit. Prior same-turn static gates pass with restored original source links; doctor has0 errors and two inherited warnings.
+  Scope: Intentional native helper/fixture/registry/documentation checkpoint. Task39 remains DOING with overall verification pending; no EVALUATOR pass,verify --ok or finish is recorded. Full suite remains task41.
 
 ## Rollback Plan
 
@@ -422,3 +466,11 @@ Revert only intentional task39 implementation/metadata commits if needed and rer
 - Observation: The new full reproducible build reaches a genuine large CNS11643 table, then source verification hits Node execFileSync default output-buffer capacity (ENOBUFS). The previously executed genuine binary has already generated ten headers from the original full IDL tree; the new helper run is terminal and not yet successful.
   Impact: No successful reproducible-generation claim is made from the failed helper run. The entire large original table must be retained and compared, rather than skipped or truncated.
   Resolution: Size the existing full-blob git-show buffer to the actual UTF8 blob length plus one, preserve exact equality and hashes, and rerun the same full native build. This changes tooling I/O capacity, not coverage or source verification criteria.
+
+- Observation: The fully instrumented original getValue corpus aborts in UBSan at CaseMappingExtra index352 (array size352). The caller includes the internal NotValue bit128 as a standalone mapping mode; no such output is accepted as a native golden value.
+  Impact: Normal unsanitized capture cannot certify this caller domain. Actual API-mode outputs and a separate isolated undefined-behavior witness must be distinguished before native fixture publication.
+  Resolution: Inspect exact native input, retain complete sanitizer diagnostic, document the suspect original bounds case and use original public case operation modes for the defined full Unicode corpus; do not change original bodies, repair upstream or assign a portable expected result to native UB.
+
+- Observation: Genuine full native case-value reference now passes with original generated Locale/RuntimeException, fully instrumented SAL/CPPU/ICU/mapping owners,13,228,032 complete observations and lossless roughly2MB fixture. Both direct conditional and getValue RuntimeException paths execute their original type registration and preserve actual default fields.
+  Impact: The required original native reference is available for portable case-value implementation. Real portable RuntimeException/Reference/type registration, locale-aware methods and service/pool/document/edit/UI remain unfinished; native evidence alone does not make Calc UI ready or satisfy full task39.
+  Resolution: Keep task39 DOING and overall verification pending; next implement the genuine shared UNO ownership/type dependency and getValue/getConditionalValue against the committed native fixture. Preserve CALC038 and all original defined behavior. No Writer-only repair, broad parity flag upgrade, goal completion or full-suite run before41.
