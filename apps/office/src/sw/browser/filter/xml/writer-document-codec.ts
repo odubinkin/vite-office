@@ -26,6 +26,7 @@ import {
   encodeTableFormat,
   restoreTableGeometry,
   restoreTableSpacing,
+  restoreTableFlow,
   type WriterTableFormatRecord,
   encodeRowFormat,
   decodeRowFormat,
@@ -795,10 +796,11 @@ export function decodeWriterDocument(
     }
     const tableRecord = record.tables?.[tableIndex++];
     if (tableRecord === undefined) throw new Error("Stored Writer table order is invalid.");
-    const { nativeGeometry, nativeSpacing, ...legacyFormat } = tableRecord.format;
+    const { nativeGeometry, nativeSpacing, nativeFlow, ...legacyFormat } = tableRecord.format;
     const table = document.nodes.MakeTableNode(tableRecord.name, legacyFormat);
     restoreTableGeometry(table.GetFrameFormat(), nativeGeometry);
     restoreTableSpacing(table.GetFrameFormat(), nativeSpacing);
+    restoreTableFlow(table.GetFrameFormat(), nativeFlow);
     for (const width of tableRecord.columnWidths) table.AddColumnWidth(width);
     for (const [rowIndex, rowRecord] of tableRecord.rows.entries()) {
       if (tableRecord.softPageBreakRows.includes(rowIndex)) table.AddSoftPageBreak();

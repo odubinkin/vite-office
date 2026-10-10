@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 315
+revision: 316
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-10T01:42:22.908Z"
+doc_updated_at: "2026-10-10T02:32:57.493Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -1441,6 +1441,8 @@ sections:
       Resolution: All649old testfiles byte-identical, fourcanonical historical prefixes/default statuses/classifications preserved and new restoreTableSpacing ownership recorded accurately. Nine upstream-absent TS7/static/build/browser and9restored metadata gates pass, doctor2oldwarnings unchanged. Broad goalactive/incomplete8/10; full after10, no automatic cadence pause. NativeLR/sharedinherited/general UI/layout/filter remain pending; bounded English evidence, exact-SHA non-independent review follows.
 
     Progress3YQP1C: native LR typed SvxIndentValue/SvxFontUnitMetrics/21MeasureUnit restored under original owners; independent native copy, double units and signed casts, uint16 proportions, font-pair13..15, metric scaling, stable const member references and by-value argument/copy semantics. Three production callers author native twips; no browser/private-field/inverse adapter. Native final1145/1145cases85direct files36fresh, earlier real cast3906/3906cases366files; whole five modules actual Istanbul100834lines925statements136functions730branches, zero negative counters/complete stable current runtime source maps. Exact10oldtest typed/raw observer migrations preserve accepted contexts/siblings, only3explicit source-backed previously omitted pair expectations updated. Tencanonical records retain old history/status/IO deviations. Task202610100109-3YQP1C current progress9/10afterBZQGYC; full due after tenth, goal remains active/incomplete. Static/browser/metadata gates and exact-SHA close follow; native LR full transport and broad Writer/UI parity remain incomplete.
+
+    N337G1 atomic tenth correction: Writer table graph/JSON/Worker now transports original direct RES_LAYOUT_SPLIT and RES_COLLAPSING_BORDERS pool items with independent native absence, removes outgoing layoutSplit/borderModel scalar twins and validates both snapshots before native mutation. Legacy marker-absent ingress retained; native core ownership unchanged. Full cadence once passed: app14756/14756 in608 files including33 fresh; tooling23/23; inventory122/122; resources2/2; all browser303/303 zero skip/flaky. Actual whole app and inventory100 lines/statements/functions/branches and both entire changed codecs100; complete current-source maps, zero negative counters. Eight static/build/TS7 gates plus full browser passed upstream absent, restored nine metadata gates passed. All653 old tests byte-identical, four canonical histories preserved. This accepted full run becomes the new cadence baseline on closure. User explicitly requested goal pause after this full run; no next correction will start. Full arbitrary native LR marshaling, paragraph typed margin contracts, inherited frame/row/box transport and broader UI/list/table/UNO/VCL parity remain incomplete.
 id_source: "generated"
 ---
 ## Summary
@@ -2855,3 +2857,5 @@ VerificationYCZ38R:519 unique current-source related cases87files and20fresh pas
   Resolution: All649old testfiles byte-identical, fourcanonical historical prefixes/default statuses/classifications preserved and new restoreTableSpacing ownership recorded accurately. Nine upstream-absent TS7/static/build/browser and9restored metadata gates pass, doctor2oldwarnings unchanged. Broad goalactive/incomplete8/10; full after10, no automatic cadence pause. NativeLR/sharedinherited/general UI/layout/filter remain pending; bounded English evidence, exact-SHA non-independent review follows.
 
 Progress3YQP1C: native LR typed SvxIndentValue/SvxFontUnitMetrics/21MeasureUnit restored under original owners; independent native copy, double units and signed casts, uint16 proportions, font-pair13..15, metric scaling, stable const member references and by-value argument/copy semantics. Three production callers author native twips; no browser/private-field/inverse adapter. Native final1145/1145cases85direct files36fresh, earlier real cast3906/3906cases366files; whole five modules actual Istanbul100834lines925statements136functions730branches, zero negative counters/complete stable current runtime source maps. Exact10oldtest typed/raw observer migrations preserve accepted contexts/siblings, only3explicit source-backed previously omitted pair expectations updated. Tencanonical records retain old history/status/IO deviations. Task202610100109-3YQP1C current progress9/10afterBZQGYC; full due after tenth, goal remains active/incomplete. Static/browser/metadata gates and exact-SHA close follow; native LR full transport and broad Writer/UI parity remain incomplete.
+
+N337G1 atomic tenth correction: Writer table graph/JSON/Worker now transports original direct RES_LAYOUT_SPLIT and RES_COLLAPSING_BORDERS pool items with independent native absence, removes outgoing layoutSplit/borderModel scalar twins and validates both snapshots before native mutation. Legacy marker-absent ingress retained; native core ownership unchanged. Full cadence once passed: app14756/14756 in608 files including33 fresh; tooling23/23; inventory122/122; resources2/2; all browser303/303 zero skip/flaky. Actual whole app and inventory100 lines/statements/functions/branches and both entire changed codecs100; complete current-source maps, zero negative counters. Eight static/build/TS7 gates plus full browser passed upstream absent, restored nine metadata gates passed. All653 old tests byte-identical, four canonical histories preserved. This accepted full run becomes the new cadence baseline on closure. User explicitly requested goal pause after this full run; no next correction will start. Full arbitrary native LR marshaling, paragraph typed margin contracts, inherited frame/row/box transport and broader UI/list/table/UNO/VCL parity remain incomplete.

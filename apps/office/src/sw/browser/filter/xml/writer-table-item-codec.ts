@@ -8,12 +8,23 @@ import type {
 } from "../../../source/core/table/swtable";
 import type { SwFrameFormat } from "../../../source/core/layout/atrfrm";
 import { SwFormatHoriOrient } from "../../../inc/fmtornt";
-import { RES_FRM_SIZE, RES_HORI_ORIENT, RES_UL_SPACE } from "../../../inc/hintids";
+import {
+  RES_FRM_SIZE,
+  RES_HORI_ORIENT,
+  RES_UL_SPACE,
+  RES_LAYOUT_SPLIT,
+  RES_COLLAPSING_BORDERS,
+} from "../../../inc/hintids";
 import type { SfxPoolItemSnapshot } from "../../../../svl/source/items/poolitem";
 import { encodeSfxPoolItem } from "./item-codec";
 /** Direct native spacing presence, independently versioned from older geometry records. */
 export interface WriterTableSpacingRecord {
   readonly upperLower?: SfxPoolItemSnapshot | undefined;
+}
+/** Direct native flow/border presence, independent of older geometry and spacing records. */
+export interface WriterTableFlowRecord {
+  readonly layoutSplit?: SfxPoolItemSnapshot | undefined;
+  readonly collapsingBorders?: SfxPoolItemSnapshot | undefined;
 }
 /** Primitive complete frame item for process and storage boundaries. */
 export interface WriterFrameSizeRecord {
@@ -42,6 +53,7 @@ export interface WriterTableGeometryRecord {
 export type WriterTableFormatRecord = SwTableFormat & {
   readonly nativeGeometry?: WriterTableGeometryRecord | undefined;
   readonly nativeSpacing?: WriterTableSpacingRecord | undefined;
+  readonly nativeFlow?: WriterTableFlowRecord | undefined;
 };
 
 /** Encodes original direct size/orientation without duplicate scalar geometry. @param table - Original native table. @returns Primitive boundary record. */
@@ -52,12 +64,20 @@ export function encodeTableFormat(table: SwTable): WriterTableFormatRecord {
   delete format.align;
   delete format.marginTop;
   delete format.marginBottom;
+  delete format.layoutSplit;
+  delete format.borderModel;
   const set = table.GetFrameFormat().GetAttrSet(),
     size = set.GetItemIfSet(RES_FRM_SIZE, false) as SwFormatFrameSize | undefined,
     orient = set.GetItemIfSet(RES_HORI_ORIENT, false) as SwFormatHoriOrient | undefined,
-    spacing = set.GetItemIfSet(RES_UL_SPACE, false);
+    spacing = set.GetItemIfSet(RES_UL_SPACE, false),
+    split = set.GetItemIfSet(RES_LAYOUT_SPLIT, false),
+    borders = set.GetItemIfSet(RES_COLLAPSING_BORDERS, false);
   return {
     ...format,
+    nativeFlow: {
+      layoutSplit: split === undefined ? undefined : encodeSfxPoolItem(split),
+      collapsingBorders: borders === undefined ? undefined : encodeSfxPoolItem(borders),
+    },
     nativeSpacing: {
       upperLower: spacing === undefined ? undefined : encodeSfxPoolItem(spacing),
     },
@@ -74,6 +94,40 @@ export function encodeTableFormat(table: SwTable): WriterTableFormatRecord {
             },
     },
   };
+}
+
+/** Restores original direct table booleans after validating both items, retaining legacy marker absence. @param format - Native frame owner. @param flow - Current native record or older absent marker. @returns Nothing. */
+export function restoreTableFlow(
+  format: SwFrameFormat,
+  flow: WriterTableFlowRecord | undefined,
+): void {
+  if (flow === undefined) return;
+  if (flow === null || typeof flow !== "object" || Array.isArray(flow))
+    throw new Error("Stored Writer native table flow is invalid.");
+  const split = decodeTableBoolItem(format, flow.layoutSplit, RES_LAYOUT_SPLIT),
+    borders = decodeTableBoolItem(format, flow.collapsingBorders, RES_COLLAPSING_BORDERS);
+  format.ResetFormatAttr(RES_LAYOUT_SPLIT);
+  format.ResetFormatAttr(RES_COLLAPSING_BORDERS);
+  if (split !== undefined) format.SetFormatAttr(split);
+  if (borders !== undefined) format.SetFormatAttr(borders);
+}
+
+/** Validates native identity/value before the registered factory can coerce legacy input. @param format - Native frame owner. @param snapshot - Optional direct item. @param which - Original identity. @returns Registered item or direct absence. */
+function decodeTableBoolItem(
+  format: SwFrameFormat,
+  snapshot: SfxPoolItemSnapshot | undefined,
+  which: number,
+) {
+  if (snapshot === undefined) return undefined;
+  if (
+    snapshot === null ||
+    typeof snapshot !== "object" ||
+    Array.isArray(snapshot) ||
+    snapshot.which !== which ||
+    typeof snapshot.value !== "boolean"
+  )
+    throw new Error("Stored Writer native table flow item is invalid.");
+  return format.GetAttrSet().GetPool().CreateItem(snapshot);
 }
 
 /** Restores original direct UL item through the existing registered pool, validating before native mutation. @param format - Original frame owner. @param spacing - Current native record or prior marker absence. @returns Nothing. */
