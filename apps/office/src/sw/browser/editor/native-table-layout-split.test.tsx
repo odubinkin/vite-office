@@ -34,7 +34,7 @@ it.each([undefined, true, false])(
     body.SetText("Before");
     const table = doc.nodes.MakeTableNode(
       "Split",
-      { width: 4000, ...(original === undefined ? {} : { layoutSplit: original }) },
+      { width: 4000, headerRows: 0, ...(original === undefined ? {} : { layoutSplit: original }) },
       body,
     );
     table.AddColumnWidth(4000);

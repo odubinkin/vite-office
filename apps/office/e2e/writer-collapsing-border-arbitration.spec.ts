@@ -43,8 +43,9 @@ for (const width of [1280, 390])
         name: "conflict.odt",
       });
       const view = page.getByRole("table", { name: "NativeConflictBrowser", exact: true }),
-        cells = view.locator("td");
+        cells = view.locator("td, th");
       await expect(cells).toHaveCount(6);
+      await expect(view.locator("th")).toHaveCount(2);
       await expect(cells).toHaveText([
         "Original 00",
         "Original 01",

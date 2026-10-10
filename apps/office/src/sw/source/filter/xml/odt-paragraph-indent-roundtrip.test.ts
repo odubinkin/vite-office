@@ -114,14 +114,14 @@ describe("Writer ODT paragraph margins", /** Registers paragraph-margin round-tr
       metadata(),
     );
     expect(
-      (onlyUpper.document.paragraphs[0]?.GetAttr(RES_UL_SPACE) as SvxULSpaceItem).QueryValue(),
+      ulValues(onlyUpper.document.paragraphs[0]?.GetAttr(RES_UL_SPACE) as SvxULSpaceItem),
     ).toEqual([120, 0]);
     const onlyLower = await readOdtDocument(
       await replaceEntry(bytes, "content.xml", content.replace(' fo:margin-top="0.2117cm"', "")),
       metadata(),
     );
     expect(
-      (onlyLower.document.paragraphs[0]?.GetAttr(RES_UL_SPACE) as SvxULSpaceItem).QueryValue(),
+      ulValues(onlyLower.document.paragraphs[0]?.GetAttr(RES_UL_SPACE) as SvxULSpaceItem),
     ).toEqual([0, 60]);
     const normal = await readOdtDocument(
       await replaceEntry(bytes, "content.xml", content.replace("115%", "normal")),
@@ -145,7 +145,7 @@ describe("Writer ODT paragraph margins", /** Registers paragraph-margin round-tr
       (node?.GetAttr(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem).ResolveTextFirstLineOffset(),
     ).toBe(-283);
     expect((node?.GetAttr(RES_MARGIN_RIGHT) as SvxRightMarginItem).ResolveRight()).toBe(567);
-    expect((node?.GetAttr(RES_UL_SPACE) as SvxULSpaceItem).QueryValue()).toEqual([120, 60]);
+    expect(ulValues(node?.GetAttr(RES_UL_SPACE) as SvxULSpaceItem)).toEqual([120, 60]);
     expect((node?.GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem).GetPropLineSpace()).toBe(
       115,
     );
@@ -168,3 +168,10 @@ describe("Writer ODT paragraph margins", /** Registers paragraph-margin round-tr
     ).toThrow("ODT left-margin item is invalid");
   });
 });
+
+/** Observes unchanged native measure/context acceptance through explicit UNO members after removing the core browser tuple. @param item - Original native spacing or direct absence. @returns Native member values for historical acceptance. */
+function ulValues(item: SvxULSpaceItem | undefined): readonly unknown[] | undefined {
+  if (item === undefined) return undefined;
+  const values = [item.QueryValue(3), item.QueryValue(4)];
+  return item.QueryValue(7) === true ? [...values, 1] : values;
+}

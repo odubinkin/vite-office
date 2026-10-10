@@ -8,7 +8,6 @@ import type { SwTable, SwTableBox } from "../../source/core/table/swtable";
 import { SvxBorderTabPage } from "../../../cui/source/tabpages/border";
 import { WriterBorderPage } from "./WriterBorderPage";
 import { SvxBoxInfoItem } from "../../../editeng/source/items/frmitems";
-import { SfxBoolItem } from "../../../svl/source/items/cenumitm";
 import { SfxItemSet, SfxItemState } from "../../../svl/source/items/itemset";
 import {
   RES_BOX,
@@ -109,7 +108,7 @@ function WriterTablePropertiesDialog({
   );
   const [textFlowPage] = useState(
     /** Captures the native initial headline item once per dialog. @returns Native Text Flow headline owner. */
-    () => new SwTextFlowPage(table, selectedBoxes),
+    () => new SwTextFlowPage(table, selectedBoxes, borderItems),
   );
   const borderPageActivated = useRef(false);
   const [borderPage] = useState(
@@ -141,9 +140,7 @@ function WriterTablePropertiesDialog({
       if (input.GetItemState(RES_COLLAPSING_BORDERS, false) === SfxItemState.DISABLED)
         native.DisableItem(RES_COLLAPSING_BORDERS);
       if (input.GetItemState(RES_COLLAPSING_BORDERS) === SfxItemState.UNKNOWN)
-        native.Put(
-          new SfxBoolItem(RES_COLLAPSING_BORDERS, table.GetFormat().borderModel === "collapsing"),
-        );
+        native.Put(table.GetFrameFormat().GetAttrSet().Get(RES_COLLAPSING_BORDERS));
       return new SvxBorderTabPage(native, RES_BOX, RES_COLLAPSING_BORDERS);
     },
   );
@@ -579,7 +576,7 @@ function WriterTablePropertiesDialog({
                       className="w-16 rounded border px-2 py-1"
                       disabled={!textFlowPage.IsSensitive()}
                       max="100"
-                      min="1"
+                      min={textFlowPage.GetHeaderRowsMinimum()}
                       onChange={
                         /** Dispatches source integer editing. @param event - Number input. @returns Nothing. */ (
                           event,

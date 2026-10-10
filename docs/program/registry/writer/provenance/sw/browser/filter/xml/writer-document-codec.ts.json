@@ -120,6 +120,30 @@
         {
           "path": "apps/office/src/sw/source/core/table/native-independent-columns.test.ts",
           "marker": "native separators combine visible current-row"
+        },
+        {
+          "path": "apps/office/src/sw/browser/filter/xml/native-table-geometry-transport.test.ts",
+          "marker": "complete native table size/orientation survive primitive and Worker transfer"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/native-table-geometry-transport.test.tsx",
+          "marker": "transported table preserves complete native geometry and original owners through mounted history"
+        },
+        {
+          "path": "apps/office/src/sw/browser/filter/xml/native-table-ul-space-transport.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-table-ul-space-transport-history.test.tsx",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/filter/xml/native-table-flow-item-transport.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-table-flow-item-transport-history.test.tsx",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -138,6 +162,22 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx",
           "marker": "get_value_changed_from_saved"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/atrfrm.cxx",
+          "marker": "SwFormatFrameSize::operator=="
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/atrfrm.cxx",
+          "marker": "SwFormatHoriOrient::operator=="
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/fmtlsplt.hxx",
+          "marker": "SwFormatLayoutSplit"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/shells/tabsh.cxx",
+          "marker": "RES_COLLAPSING_BORDERS"
         }
       ]
     },
@@ -156,7 +196,12 @@
       "Iteration206 draft: scalar kernel cell border/padding storage is replaced by owned SvxBoxItem plus the existing vertical item. Represented lines retain native color/style/width/component arithmetic, signed16 distances/default0, cloning, metrics and supported UNO values; SvxBoxInfoItem retains native validity127. SetTabBorders consumes SfxItemSet and distributes flat union outer/inner lines using source validity rules. Insertion defaults55twips/black10twip lines and0/no-border are preserved. Process/storage uses complete primitive native state with legacy scalar ingress only; ODF and browser paint carry four independent sides. Initial static and upstream-absent runtime verification are pending. Complete native color shading/theme/Word/macros/fly/vertical/RTL/follow/shared-format behavior, per-edge/common-state border widgets and full parity remain unverified. All existing statuses/defaults/evidence/registered I/O/recovery exceptions are preserved.",
       "Iteration206 verified closure: the earlier draft pending statement is historical. Native box/info/line ownership, supported values/defaults/metrics, flat source-defined border distribution, original graph and history, complete primitive transport and four-edge ODF/browser paint passed one full upstream-absent profile with failed/new-case-only closures. Current app and inventory actual counters each reach100% lines/statements/functions/branches under complete identical-source/maps or complete contiguous mapped-region proof. All550 prior acceptance contracts are preserved by522 byte-identical files and28 exact native-representation AST migrations; six new acceptance files and two new infrastructure cases are added. Full per-edge/common-state widgets, native themes/shading/Word and RTL/vertical/follow/shared-format completeness remain unverified; no semantic status or registered I/O/recovery exception is promoted.",
       "Iteration220 represented native numbering-font policy: txtfld NewNumberPortion starts from the original paragraph attr owner, optional bullet font overrides face, false-default DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT resets bullet weight/posture and both labels underline; number weight/posture and inherited height/color remain native. Frozen values feed shared body/cell marker device, existing width/minimum distance/background retained. Older graph records missing only new flag defaultfalse, prior fields remain strict. Full SwFont hierarchy/scripts/face metadata/character-style/paragraph-mark/redline/graphics/device shaping and ink/theme/decoration variants remain unverified; all prior statuses/defaults/registered I/O/recovery exceptions preserved.",
-      "Iteration233 moves connected flat-table column geometry into each original SwTableBox SwFormatFrameSize. Native current-row visible/other-row hidden fuzzy separator union and per-line NewSetTabCols adjustments feed original Writer document attribute history; actual Ctrl+Shift current-line columns replace the retained ordinary shared-column fallback. Source XML union grids/spans and browser device colspans preserve independent original cells, with complete native frame-size values in browser codec and declared grid widths only at import/builder ingress. No row-width side map, graph replacement or TextRuns conversion. Flat unspanned source behavior is represented; full row-span propagation/nested/merged graphs, frame item pooling/UNO, RTL/vertical/SFX/VCL/full ruler state remain partial. Registered recovery/open/save/settings untouched, previous statuses/defaults/classes preserved."
+      "Iteration233 moves connected flat-table column geometry into each original SwTableBox SwFormatFrameSize. Native current-row visible/other-row hidden fuzzy separator union and per-line NewSetTabCols adjustments feed original Writer document attribute history; actual Ctrl+Shift current-line columns replace the retained ordinary shared-column fallback. Source XML union grids/spans and browser device colspans preserve independent original cells, with complete native frame-size values in browser codec and declared grid widths only at import/builder ingress. No row-width side map, graph replacement or TextRuns conversion. Flat unspanned source behavior is represented; full row-span propagation/nested/merged graphs, frame item pooling/UNO, RTL/vertical/SFX/VCL/full ruler state remain partial. Registered recovery/open/save/settings untouched, previous statuses/defaults/classes preserved.",
+      "CorrectionWHACNF4/10 after BZQGYC carries original complete table frame-size8fields and horizontal-orientation4fields through browser primitive graph/Worker/storage records and restores direct native frame attributes. Current outgoing geometry has no duplicate scalar width/horiOrient/align; legacy scalar ingress retained only when nativeGeometry is absent. Present native geometry owns direct absence and wins conflicting legacy scalars. Original raw headline snapshot and remaining scalar spacing/flags stay in the explicit existing bridge; GetFormat is still used for those remaining values, not eliminated generally. Complete native clone/equality responsibilities follow pinned fmtfsize.hxx/fmtornt.hxx/atrfrm.cxx. Full LR contexts/gutters and inherited/shared format graphs,row/box adapters,general XML mapper/relative/layout/UNO/VCL/full filter/UI remain separately incomplete. Registered recovery/open/save/settings/UI deviations and prior history/status/default/classification preserved; no whole-module parity promotion. Current native/Worker/package/mounted and related verification pending. Task202610092353-WHACNF.",
+      "WHACNF current-source verification:1703unique related cases115files including28fresh passed first attempt,zero failures/skips. Entire final writer-document-codec.ts and writer-table-item-codec.ts actual Istanbul264lines283statements48functions354branches100all-four,current source/complete map identity and zero negatives. Complete original8size/4orientation fields survive actual structured clone/JSON/Worker,raw header9 remains independent of actual1row,and mounted native history retains original table/row/box/text/cursor through3cycles. Direct absence and native precedence over legacy tested; legacy-only admission preserved.595old test files byte unchanged,4canonical historical prefixes/status/default/classification and registered IO exceptions retained. Full not due4/10 after BZQGYC; raw headline/remaining scalar flags/spacing and LR/inherited/shared format/row-box/general mapper/full filter/layout/UI/UNO/VCL remain incomplete. Current statics/build/browser/restored metadata and exact-SHA quality continue; no whole-module promotion.",
+      "CorrectionSSWV67 (8/10 after BZQGYC): outgoing table transport removes marginTop/marginBottom scalar duplication and carries original own RES_UL_SPACE through existing encodeSfxPoolItem/registered pool as optional nativeSpacing.upperLower. Independent nativeSpacing marker distinguishes old geometry-only/legacy scalar ingress from explicit current native direct absence. New authored five-field spacing and absence win scalar conflicts; entire native item restored before frame mutation, no private field/inverse arithmetic reconstruction. Marker excluded from original core scalar format. Full native LR, inherited/shared frame graph, row/box general transport and broad Writer UI/layout/filter remain incomplete; registered I/O/recovery/settings deviation/status/default/classification/history unchanged. Verification pending202610100056-SSWV67.",
+      "VerificationSSWV67:1746related cases119files20fresh24Chromium all first-attempt pass with no failures/skips/replay. Entire two changed current source modules actual Istanbul100all-four277lines298statements49functions374branches, complete source/map identity and zero negative counters. Full five-field native UL record, directabsence/authorednative precedence, independent oldgeometry/scalar ingress and atomic invalid rejection verified; mounted transported native history retains original owners/cursor through3cycles. All649old testfiles byte-identical and4canonical historical prefixes/default statuses/classifications preserved.9upstream-absent TS7/static/build/browser gates pass; restored metadata checks follow. Goalactive8/10;LR/sharedinherited/general table UI/filter remain incomplete. Bounded task evidence202610100056-SSWV67/evidence/verification.json; no upstream/helper/raw maps AgentPlane artifacts.",
+      "CorrectionN337G1 (tenth after BZQGYC): internal table graph/Worker boundary carries original direct RES_LAYOUT_SPLIT and RES_COLLAPSING_BORDERS items via existing encodeSfxPoolItem and registered pool. Optional independent nativeFlow marker distinguishes current own absence from older geometry/spacing protocol ages; outgoing layoutSplit/borderModel scalar twins are removed. Both snapshots identity/native boolean shape and detached items validate before either native frame mutation; current native value/absence overrides conflicting legacy scalars and marker is excluded from core format. Old-marker scalar ingress, live frame/cursor/row/box/text ownership and original ItemSet UndoRedo remain; no private/inverse adapter or registered IO/recovery drift. Graph/JSON/Worker/mounted native fresh evidence and full tenth-task100 coverage/static/browser/restoredmetadata verification pending task202610100157-N337G1. Full arbitrary LR transport and numeric paragraph margin/general UNO/VCL/UI gaps remain incomplete; original semantic/default/status/classification histories preserved."
     ],
     "stackDivergence": {
       "kind": "local-infrastructure",

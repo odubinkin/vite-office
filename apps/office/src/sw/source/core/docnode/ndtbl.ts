@@ -1,5 +1,6 @@
 /** @fileoverview Owns native Writer row-boundary collection and row-height deltas from ndtbl.cxx. */
 import type { SwDoc } from "../doc/doc";
+import { TableHeadingChange } from "../../../inc/hints";
 import { SwTable, type SwTableBox, type SwTableLine } from "../table/swtable";
 import type { SwTabFrame } from "../layout/tabfrm";
 import { SwTabCols } from "../bastyp/tabcol";
@@ -7,9 +8,28 @@ import { SwFrameSize, type SwFormatFrameSize } from "../../../inc/fmtfsize";
 import { SwPosition } from "../crsr/pam";
 import { SwCursor } from "../crsr/swcrsr";
 import { SwTableNode } from "../docnode/node";
-import { SwUndoAttrTable, SwUndoTableNdsChg } from "../undo/untbl";
+import { SwUndoAttrTable, SwUndoTableNdsChg, SwUndoTableHeadline } from "../undo/untbl";
 import type { SwTextNode } from "../txtnode/ndtxt";
 import { createWriterCollapsedCursorState, type SwUndoCursorState } from "../undo/undobj";
+/** Applies the native headline command without a table-format snapshot. @param doc - Original document. @param table - Original table. @param requested - Authored uint16 count. @returns Whether the native effective-count guard admitted a change. */
+export function SetSwRowsToRepeat(doc: SwDoc, table: SwTable, requested: number): boolean {
+  const count = requested & 0xffff,
+    oldCount = table.GetRowsToRepeat();
+  if (count === oldCount) return false;
+  return doc.RunModelTransaction(
+    /** Publishes numeric undo and the original native heading hint as one operation. @returns Changed state. */ () => {
+      const undo = doc.GetUndoManager();
+      if (undo.DoesUndo()) undo.AddUndoAction(new SwUndoTableHeadline(table, oldCount, count));
+      table.SetRowsToRepeat(count);
+      const hint = new TableHeadingChange();
+      table.GetFrameFormat().CallSwClientNotify(hint);
+      // The represented document revision is the browser publication boundary.
+      doc.NotifyModelChange(hint);
+      return true;
+    },
+  );
+}
+
 /** Native row-boundary fuzzy distance in twips. */
 const ROWFUZZY = 25;
 /** Native tools::Long maximum shared by row carriers. */
@@ -207,19 +227,11 @@ export function SetSwTabCols(
       const before =
         cursorState ?? createWriterCollapsedCursorState(node, 0, node.GetCharacterItemsAt(0));
       const actualWidth = previous.GetRight() - previous.GetLeft();
-      const wishedWidth =
-        table.GetFormat().width ??
-        table
-          .GetColumnWidths()
-          .reduce(
-            /** Sums native box widths. @param sum - Prior total. @param width - Box width. @returns Total width. */ (
-              sum,
-              width,
-            ) => sum + width,
-            0,
-          );
-      if (actualWidth !== wishedWidth) {
-        table.SetFormat({ ...table.GetFormat(), width: actualWidth });
+      const frameSize = table.GetFrameFormat().GetFrameSize();
+      if (actualWidth !== frameSize.GetWidth()) {
+        const normalized = frameSize.Clone();
+        normalized.SetWidth(actualWidth);
+        table.GetFrameFormat().SetFormatAttr(normalized);
         table.GetTabCols(previous, start);
       }
       const action = new SwUndoAttrTable(table, before);

@@ -132,11 +132,11 @@ describe("native table property application", /** Registers actual-owner contrac
       expect(f.docShell.IsModified()).toBe(true);
       expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(1);
       expect(f.doc.GetUndoManager().GetUndoAction()?.GetComment()).toBe("Table Properties");
-      expect(f.doc.GetUndoManager().GetUndoAction()?.GetPayloadSize()).toBe(42);
+      expect(f.doc.GetUndoManager().GetUndoAction()?.GetPayloadSize()).toBe(35);
       expect(f.table.GetColumnWidths()).toEqual([2000, 3000]);
       expect(f.table.GetFormat()).toEqual({
         width: 5000,
-        align: undefined,
+        align: "left",
         horiOrient: HoriOrientation.LEFT,
         marginLeft: 0,
         marginRight: 3640,

@@ -149,27 +149,30 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
   const renderTable =
     /** renderTable handles this value. @param frame - Input 1. @returns The result. */ (
       frame: SwTableFrame,
-    ): React.JSX.Element => (
-      <WriterEditableTable
-        key={`${frame.table.GetName()}:${frame.firstRow}`}
-        table={frame.table}
-        printArea={frame.printArea}
-        paragraphs={paragraphByNodeIndex}
-        activeParagraphId={props.activeParagraphId}
-        retainParagraphElement={
-          /** Registers cell paragraphs in the same selection surface as body text. @param id - Shared display identity. @param element - Mounted paragraph. @returns Nothing. */
-          (id, element) => {
-            const frameKey = `${frame.table.GetName()}:${frame.firstRow}:${id}`;
-            if (element === null) paragraphElements.delete(frameKey);
-            else paragraphElements.set(frameKey, element);
+    ): React.JSX.Element => {
+      const tableName = frame.table.GetName();
+      return (
+        <WriterEditableTable
+          key={`${tableName}:${frame.firstRow}`}
+          table={frame.table}
+          printArea={frame.printArea}
+          paragraphs={paragraphByNodeIndex}
+          activeParagraphId={props.activeParagraphId}
+          retainParagraphElement={
+            /** Registers cell paragraphs in the same selection surface as body text. @param id - Shared display identity. @param element - Mounted paragraph. @returns Nothing. */
+            (id, element) => {
+              const frameKey = `${tableName}:${frame.firstRow}:${id}`;
+              if (element === null) paragraphElements.delete(frameKey);
+              else paragraphElements.set(frameKey, element);
+            }
           }
-        }
-        firstRow={frame.firstRow}
-        lastRow={frame.lastRow}
-        repeatedHeaderRows={frame.repeatedHeaderRows ?? 0}
-        selectedBoxes={props.selectedTableBoxes}
-      />
-    );
+          firstRow={frame.firstRow}
+          lastRow={frame.lastRow}
+          repeatedHeaderRows={frame.repeatedHeaderRows ?? 0}
+          selectedBoxes={props.selectedTableBoxes}
+        />
+      );
+    };
 
   useLayoutEffect(
     /** Supplies Writer with browser-shaped line boundaries after the measurement projection mounts. @returns Nothing. */
@@ -394,26 +397,29 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
                 {tables.map(
                   /** map handles this value. @param table - Input 1. @returns The result. */ (
                     table,
-                  ) => (
-                    <WriterEditableTable
-                      key={`measure-${table.GetName()}`}
-                      table={table}
-                      availableWidth={
-                        props.pageDescriptor.width -
-                        props.pageDescriptor.leftMargin -
-                        props.pageDescriptor.rightMargin
-                      }
-                      paragraphs={paragraphByNodeIndex}
-                      retainElement={
-                        /** callback handles this value. @param element - Input 1. @returns The result. */ (
-                          element,
-                        ) => {
-                          if (element === null) tableMeasurementElements.delete(table.GetName());
-                          else tableMeasurementElements.set(table.GetName(), element);
+                  ) => {
+                    const tableName = table.GetName();
+                    return (
+                      <WriterEditableTable
+                        key={`measure-${tableName}`}
+                        table={table}
+                        availableWidth={
+                          props.pageDescriptor.width -
+                          props.pageDescriptor.leftMargin -
+                          props.pageDescriptor.rightMargin
                         }
-                      }
-                    />
-                  ),
+                        paragraphs={paragraphByNodeIndex}
+                        retainElement={
+                          /** callback handles this value. @param element - Input 1. @returns The result. */ (
+                            element,
+                          ) => {
+                            if (element === null) tableMeasurementElements.delete(tableName);
+                            else tableMeasurementElements.set(tableName, element);
+                          }
+                        }
+                      />
+                    );
+                  },
                 )}
               </>,
               measurementRoot,

@@ -12,7 +12,7 @@ import { SwTabCols } from "../bastyp/tabcol";
 import { SwDoc } from "../doc/doc";
 import type { SwFormatFrameSize } from "../../../inc/fmtfsize";
 import type { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
-import type { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { SfxItemSet } from "../../../../svl/source/items/itemset";
 
 /** Native mouse hit over actual measured frame and box owners. */
 interface SwTableMouseHit {
@@ -260,13 +260,15 @@ export abstract class SwFEShell extends SwEditShell {
   }
 
   /** Changes table-frame attributes through native attribute history. @param value - Represented frame attributes. @returns Whether admitted. */
-  public SetTableAttr(value: SwTableFormat): boolean {
+  public SetTableAttr(value: SwTableFormat | SfxItemSet): boolean {
     const table = this.IsCursorInTable()?.GetTable();
     if (table === undefined) return false;
     return this.ChangeTable(
       table,
-      /** Replaces native frame attributes. @returns Nothing. */ () =>
-        table.SetFormat({ ...table.GetFormat(), ...value }),
+      /** Applies native owned items directly, retaining scalar construction input only at its existing boundary. @returns Nothing. */ () => {
+        if (value instanceof SfxItemSet) table.GetFrameFormat().SetFormatAttrSet(value);
+        else table.SetFormat({ ...table.GetFormat(), ...value });
+      },
     );
   }
 
@@ -370,9 +372,15 @@ export abstract class SwFEShell extends SwEditShell {
     );
   }
 
-  /** Sets represented headline attributes on the actual table. @param count - Authored headline count. @param repeat - Whether repeated on follow pages. @returns Whether admitted. */
-  public SetRowsToRepeat(count: number, repeat: boolean): boolean {
-    return this.SetTableAttr({ headerRows: count, repeatHeaderRows: repeat });
+  /** Invokes the native count-only headline document operation on the actual current table. @param requested - Authored uint16 count. @returns Whether changed. */
+  public SetRowsToRepeat(requested: number): boolean {
+    const table = this.IsCursorInTable()?.GetTable(),
+      count = requested & 0xffff;
+    if (table === undefined || table.GetRowsToRepeat() === count) return false;
+    return this.RunNotificationTransaction(
+      /** Brackets the native document operation without moving the original cursor. @returns Whether changed. */
+      () => this.GetDoc().SetRowsToRepeat(table, count),
+    );
   }
 
   /** Applies a complete native size to current or selected rows. @param size - Native frame-size item. @returns Whether admitted. */

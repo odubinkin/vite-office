@@ -10,7 +10,7 @@ import { SfxStringItem } from "../../../../svl/source/items/stritem";
 import { SwFormatLayoutSplit } from "../../../inc/fmtlsplt";
 import { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
 import { SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";
-import { RES_UL_SPACE } from "../../../inc/hintids";
+import { RES_UL_SPACE, RES_LAYOUT_SPLIT, RES_ROW_SPLIT } from "../../../inc/hintids";
 import { FN_TABLE_REP, FN_PARAM_TABLE_NAME, FN_PARAM_TABLE_HEADLINE } from "../../../inc/cmdid";
 import { SwPtrItem } from "../../uibase/utlui/uiitems";
 
@@ -26,11 +26,11 @@ export interface SwTextFlowItems {
 
 /** Owns represented native Text Flow widgets and saved original items. */
 export class SwTextFlowPage {
-  private readonly originalHeadline: number;
+  private readonly originalHeadline: number | undefined;
   private headline = false;
-  private headerRows = 1;
+  private headerRows = 0;
   private savedHeadline = false;
-  private savedHeaderRows = 1;
+  private savedHeaderRows = 0;
   private readonly originalSplit: boolean;
   private readonly originalRowSplit: boolean | undefined;
   private split = true;
@@ -38,17 +38,34 @@ export class SwTextFlowPage {
   private rowSplit: boolean | undefined;
   private savedRowSplit: boolean | undefined;
 
-  /** Captures canonical initial items. @param table - Original table owner. @param selectedBoxes - Original selected cells or whole table input. @returns Nothing. */
-  public constructor(table: SwTable, selectedBoxes?: readonly SwTableBox[]) {
-    this.originalHeadline = table.GetRowsToRepeat();
-    this.originalSplit = table.GetFormat().layoutSplit ?? true;
-    this.originalRowSplit = GetSwRowSplit(table, selectedBoxes)?.GetValue();
+  /** Captures canonical initial items. @param table - Original table owner. @param selectedBoxes - Original selected cells or whole table input. @param input - Authoritative native dialog input, when supplied. @returns Nothing. */
+  public constructor(table: SwTable, selectedBoxes?: readonly SwTableBox[], input?: SfxItemSet) {
+    this.originalHeadline =
+      input === undefined
+        ? table.GetRowsToRepeat()
+        : (
+            input.GetItemIfSet(FN_PARAM_TABLE_HEADLINE, false) as SfxUInt16Item | undefined
+          )?.GetValue();
+    this.originalSplit =
+      input === undefined
+        ? (
+            table.GetFrameFormat().GetAttrSet().Get(RES_LAYOUT_SPLIT) as SwFormatLayoutSplit
+          ).GetValue()
+        : ((
+            input.GetItemIfSet(RES_LAYOUT_SPLIT, false) as SwFormatLayoutSplit | undefined
+          )?.GetValue() ?? true);
+    this.originalRowSplit =
+      input === undefined
+        ? GetSwRowSplit(table, selectedBoxes)?.GetValue()
+        : (input.GetItemIfSet(RES_ROW_SPLIT, false) as SwFormatRowSplit | undefined)?.GetValue();
     this.Reset();
   }
   /** Restores source checkbox/count widgets and their saved values. @returns Nothing. */
   public Reset(): void {
-    this.headline = this.savedHeadline = this.originalHeadline > 0;
-    this.headerRows = this.savedHeaderRows = Math.max(1, Math.min(100, this.originalHeadline));
+    if (this.originalHeadline !== undefined) {
+      this.headline = this.savedHeadline = this.originalHeadline > 0;
+      this.headerRows = this.savedHeaderRows = Math.max(1, Math.min(100, this.originalHeadline));
+    }
     this.split = this.savedSplit = this.originalSplit;
     this.rowSplit = this.savedRowSplit = this.originalRowSplit;
   }
@@ -60,6 +77,10 @@ export class SwTextFlowPage {
   public GetHeaderRows(): number {
     return this.headerRows;
   }
+  /** Reads the source numeric minimum after direct-item Reset or initial resource state. @returns Widget minimum. */
+  public GetHeaderRowsMinimum(): number {
+    return this.originalHeadline === undefined ? 0 : 1;
+  }
   /** Reads source numeric-group sensitivity. @returns Whether the count is editable. */
   public IsSensitive(): boolean {
     return this.headline;
@@ -70,7 +91,7 @@ export class SwTextFlowPage {
   }
   /** Admits an integer through the source widget range, independent of table row count. @param value - Authored count. @returns Nothing. */
   public ValueChangedHdl(value: number): void {
-    this.headerRows = Math.max(1, Math.min(100, Math.round(value)));
+    this.headerRows = Math.max(this.GetHeaderRowsMinimum(), Math.min(100, Math.round(value)));
   }
   /** Emits native headline/table/row items only when saved widget values changed. @param output - Optional native changed-item destination. @returns Changed represented native items. */
   public FillItemSet(output?: SfxItemSet): SwTextFlowItems {
@@ -90,7 +111,7 @@ export class SwTextFlowPage {
   }
   /** Resolves the current item over the original native input set. @returns Accepted headline count. */
   public GetRowsToRepeat(): number {
-    return this.FillItemSet().headerRows ?? this.originalHeadline;
+    return this.FillItemSet().headerRows ?? this.originalHeadline ?? 0;
   }
   /** Reads the native table split checkbox. @returns Checked value. */
   public IsSplit(): boolean {
@@ -153,8 +174,9 @@ export class SwFormatTablePage {
     this.data = new SwTableRep(table, space, geometry);
     this.data.SetLineSelected(lineSelected);
     this.original = new SwTableRep(this.data);
-    this.originalAbove = table.GetFormat().marginTop ?? 0;
-    this.originalBelow = table.GetFormat().marginBottom ?? 0;
+    const spacing = table.GetFrameFormat().GetULSpace();
+    this.originalAbove = spacing.GetUpper();
+    this.originalBelow = spacing.GetLower();
     this.Reset();
   }
 

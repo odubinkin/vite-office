@@ -20,9 +20,14 @@ import { SwPosition } from "../../../source/core/crsr/pam";
 import { SwDoc, type WriterEmbeddedFont } from "../../../source/core/doc/doc";
 import { SwTableNode } from "../../../source/core/docnode/node";
 import type { SwTextNode } from "../../../source/core/txtnode/ndtxt";
-import type { SwTableBoxFormat, SwTableFormat } from "../../../source/core/table/swtable";
+import type { SwTableBoxFormat } from "../../../source/core/table/swtable";
 import { SwLineNumberInfo, type SwLineNumberInfoValue } from "../../../inc/lineinfo";
 import {
+  encodeTableFormat,
+  restoreTableGeometry,
+  restoreTableSpacing,
+  restoreTableFlow,
+  type WriterTableFormatRecord,
   encodeRowFormat,
   decodeRowFormat,
   encodeFrameSize,
@@ -136,7 +141,7 @@ interface WriterTextNodeRecord {
 /** Table sections retain their own text nodes in body order. */
 interface WriterTableRecord {
   readonly name: string;
-  readonly format: SwTableFormat;
+  readonly format: WriterTableFormatRecord;
   readonly columnWidths: readonly number[];
   readonly softPageBreakRows: readonly number[];
   readonly rows: readonly Readonly<{
@@ -471,7 +476,7 @@ export function encodeWriterDocument(document: SwDoc): WriterDocumentRecord {
         table,
       ) => ({
         name: table.GetName(),
-        format: table.GetFormat(),
+        format: encodeTableFormat(table),
         columnWidths: table.GetColumnWidths(),
         softPageBreakRows: table.GetSoftPageBreakRows(),
         rows: table.GetTabLines().map(
@@ -791,7 +796,11 @@ export function decodeWriterDocument(
     }
     const tableRecord = record.tables?.[tableIndex++];
     if (tableRecord === undefined) throw new Error("Stored Writer table order is invalid.");
-    const table = document.nodes.MakeTableNode(tableRecord.name, tableRecord.format);
+    const { nativeGeometry, nativeSpacing, nativeFlow, ...legacyFormat } = tableRecord.format;
+    const table = document.nodes.MakeTableNode(tableRecord.name, legacyFormat);
+    restoreTableGeometry(table.GetFrameFormat(), nativeGeometry);
+    restoreTableSpacing(table.GetFrameFormat(), nativeSpacing);
+    restoreTableFlow(table.GetFrameFormat(), nativeFlow);
     for (const width of tableRecord.columnWidths) table.AddColumnWidth(width);
     for (const [rowIndex, rowRecord] of tableRecord.rows.entries()) {
       if (tableRecord.softPageBreakRows.includes(rowIndex)) table.AddSoftPageBreak();

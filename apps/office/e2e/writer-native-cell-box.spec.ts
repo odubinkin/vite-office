@@ -57,7 +57,7 @@ for (const width of [1280, 390])
       await expect(paragraph).toHaveCount(1);
       const painted = fixed
         ? paragraph.locator("xpath=ancestor::*[@data-writer-fixed-row-content]")
-        : paragraph.locator("xpath=ancestor::td");
+        : paragraph.locator("xpath=ancestor::*[self::td or self::th]");
       const measured = await painted.evaluate(
         /** Reads actual four-edge device paint. @param cell - Painted native cell. @returns Geometry. */ (
           cell,

@@ -9,7 +9,10 @@ import { SwPosition } from "../../core/crsr/pam";
 /** Authors real split input. @param split - Original table item. @param keep - Original row items. @returns Native owners. */
 function fixture(split?: boolean, keep: readonly (boolean | undefined)[] = [true, false, true]) {
   const doc = new SwDoc(),
-    table = doc.nodes.MakeTableNode("Split", split === undefined ? {} : { layoutSplit: split });
+    table = doc.nodes.MakeTableNode("Split", {
+      headerRows: 0,
+      ...(split === undefined ? {} : { layoutSplit: split }),
+    });
   table.AddColumnWidth(3000);
   table.AddColumnWidth(3000);
   for (const value of keep)

@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "task_id": "202610092336-A8T5K0",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-09T23:49:01.450Z",
+  "verdict": "pass",
+  "summary": "Same-agent non-independent exact-SHA review: XML import applies represented native items and updates only original header counter, meeting scoped acceptance.",
+  "evaluated_sha": "6895652fd52e283682f533ab503daca3876ed37a",
+  "blueprint_digest": "40cd599e5d6decd3cea4cad472437a3f7d5ecd2ee8f2620b764a67a745c3d023",
+  "findings": [
+    "Exact6895652f production and final fresh test hashes match current complete Istanbul maps and535accepted16fresh24Chromium reports. Whole xmltbli100all-four zero-negative; failed-only fixture repair and byte-identical type-only emitted JS proof retained, no passing replay.",
+    "Original complete LR/Hori/frame-size fields and connected owners survive header completion and3mounted native history cycles; real ODT import has scalar setters only at original constructor boundaries.593old tests2canonical prefixes/default/status/classification and registered IO deviations preserved; statics9restored metadata pass."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610092336-A8T5K0/README.md",
+    ".agentplane/tasks/202610092336-A8T5K0/evidence/verification.json",
+    "semantic SHA6895652fd52e283682f533ab503daca3876ed37a source/test and current complete-map hashes checked locally",
+    "current535accepted related cases16fresh24Chromium with native package/header/mounted owner and history checks"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Full generic XML native mapper/shared frame pooling/percent-layout width/legacy codec/complete UI/filter/layout/UNO/VCL remain separately incomplete. This is a same-agent quality review and provides no independent assurance."
+  ]
+}

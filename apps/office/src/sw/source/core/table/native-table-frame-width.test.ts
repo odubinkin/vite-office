@@ -5,6 +5,7 @@ import { SwTabCols } from "../bastyp/tabcol";
 import { SetSwTabCols } from "../docnode/ndtbl";
 import { HoriOrientation as H } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { createWriterCollapsedCursorState } from "../undo/undobj";
+import { SwFormatHoriOrient } from "../../../inc/fmtornt";
 import type { SwTable } from "./swtable";
 
 afterEach(/** Releases admission spies. @returns Nothing. */ () => vi.restoreAllMocks());
@@ -92,7 +93,7 @@ it("frame-size replacement scales every independent original line once", /** Che
   ]);
   expect(f.table.GetFormat().marginTop).toBe(300);
 });
-it("frame-size replacement preserves unrepresented widths until both frame sizes exist", /** Checks absent old and new frame attributes. @returns Nothing. */ () => {
+it("frame-size reset preserves boxes and subsequent size scales from native pooled zero", /** Checks native zero-size reset and release zero-divisor scaling. @returns Nothing. */ () => {
   const f = fixture();
   f.table.SetFormat({ horiOrient: H.LEFT });
   expect(widths(f.table)).toEqual([
@@ -102,15 +103,15 @@ it("frame-size replacement preserves unrepresented widths until both frame sizes
   ]);
   f.table.SetFormat({ width: 3000, horiOrient: H.LEFT });
   expect(widths(f.table)).toEqual([
-    [1000, 5000],
-    [1000, 1000, 4000],
-    [4000, 2000],
+    [3000000, 15000000],
+    [3000000, 3000000, 12000000],
+    [12000000, 6000000],
   ]);
   f.table.SetFormat({ width: 1500, horiOrient: H.LEFT });
   expect(widths(f.table)).toEqual([
-    [500, 2500],
-    [500, 500, 2000],
-    [2000, 1000],
+    [1500000, 7500000],
+    [1500000, 1500000, 6000000],
+    [6000000, 3000000],
   ]);
 });
 it.each([
@@ -168,9 +169,9 @@ it("document column normalization delegates one frame reaction and retains singl
   expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(1);
   expect(f.table.GetTabLines()).toEqual(f.lines);
 });
-it("implicit frame normalization sums canonical boxes and accepts an explicit cursor", /** Checks the unrepresented frame fallback and unchanged-width branch. @returns Nothing. */ () => {
-  const f = fixture([[1000, 2000]]);
-  f.table.SetFormat({ horiOrient: H.LEFT });
+it("effective frame normalization retains canonical boxes and accepts an explicit cursor", /** Checks original frame-size preservation and unchanged-width branch. @returns Nothing. */ () => {
+  const f = fixture([[1000, 2000]], 3000);
+  f.table.GetFrameFormat().SetFormatAttr(new SwFormatHoriOrient(0, H.LEFT));
   const previous = geometry(f, 3000),
     next = new SwTabCols(previous);
   next.GetEntry(0).nPos = 1200;

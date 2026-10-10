@@ -309,7 +309,7 @@ describe("Writer paragraph-style pool", /** Registers pool tests. @returns Nothi
 
     const heading = document.GetTextFormatColl("heading").GetAttrSet();
     expect((heading.Get(RES_CHRATR_FONTSIZE) as SvxFontHeightItem).GetHeight()).toBe(14 * 20);
-    expect((heading.Get(RES_UL_SPACE) as SvxULSpaceItem).QueryValue()).toEqual([12 * 20, 6 * 20]);
+    expect(ulValues(heading.Get(RES_UL_SPACE) as SvxULSpaceItem)).toEqual([12 * 20, 6 * 20]);
     for (const which of [RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT])
       expect((heading.Get(which) as SvxFontItem).GetFamilyName()).not.toBe("");
 
@@ -325,7 +325,7 @@ describe("Writer paragraph-style pool", /** Registers pool tests. @returns Nothi
     expect((title.Get(RES_PARATR_ADJUST) as SvxAdjustItem).GetAdjust()).toBe(SvxAdjust.Center);
     expect((title.Get(RES_CHRATR_FONTSIZE) as SvxFontHeightItem).GetHeight()).toBe(28 * 20);
     const caption = document.GetTextFormatColl("caption").GetAttrSet();
-    expect((caption.Get(RES_UL_SPACE) as SvxULSpaceItem).QueryValue()).toEqual([120, 120]);
+    expect(ulValues(caption.Get(RES_UL_SPACE) as SvxULSpaceItem)).toEqual([120, 120]);
     expect((caption.Get(RES_CHRATR_POSTURE) as SvxPostureItem).GetPosture()).toBe(
       FontItalic.NORMAL,
     );
@@ -337,7 +337,7 @@ describe("Writer paragraph-style pool", /** Registers pool tests. @returns Nothi
     ).toBe(0);
     expect((comment.Get(RES_MARGIN_TEXTLEFT) as SvxTextLeftMarginItem).ResolveTextLeft()).toBe(57);
     expect((comment.Get(RES_MARGIN_RIGHT) as SvxRightMarginItem).ResolveRight()).toBe(57);
-    expect((comment.Get(RES_UL_SPACE) as SvxULSpaceItem).QueryValue()).toEqual([57, 0]);
+    expect(ulValues(comment.Get(RES_UL_SPACE) as SvxULSpaceItem)).toEqual([57, 0]);
     expect((comment.Get(RES_PARATR_LINESPACING) as SvxLineSpacingItem).GetPropLineSpace()).toBe(0);
 
     const hanging = document.GetTextFormatColl("hanging-indent").GetAttrSet();
@@ -398,3 +398,10 @@ describe("Writer paragraph-style pool", /** Registers pool tests. @returns Nothi
     expect(heading4.GetItemIfSet(RES_CHRATR_POSTURE, false)).toBeUndefined();
   });
 });
+
+/** Observes unchanged native measure/context acceptance through explicit UNO members after removing the core browser tuple. @param item - Original native spacing or direct absence. @returns Native member values for historical acceptance. */
+function ulValues(item: SvxULSpaceItem | undefined): readonly unknown[] | undefined {
+  if (item === undefined) return undefined;
+  const values = [item.QueryValue(3), item.QueryValue(4)];
+  return item.QueryValue(7) === true ? [...values, 1] : values;
+}

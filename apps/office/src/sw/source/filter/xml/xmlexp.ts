@@ -7,7 +7,7 @@ import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrient
 import { exportBoxProperties } from "../../../../xmloff/source/style/bordrhdl";
 
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
-import { SwFrameSize } from "../../../inc/fmtfsize";
+import { SwFrameSize, type SwFormatFrameSize } from "../../../inc/fmtfsize";
 
 import {
   SvxAdjust,
@@ -21,6 +21,8 @@ import {
   SvxRightMarginItem,
   SvxTextLeftMarginItem,
   SvxULSpaceItem,
+  type SvxLRSpaceItem,
+  type SvxBoxItem,
 } from "../../../../editeng/source/items/frmitems";
 import {
   SvxFontItem,
@@ -88,9 +90,20 @@ import {
   RES_PARATR_NUMRULE,
   RES_PARATR_OUTLINELEVEL,
   RES_UL_SPACE,
+  RES_FRM_SIZE,
+  RES_LR_SPACE,
+  RES_HORI_ORIENT,
+  RES_LAYOUT_SPLIT,
+  RES_COLLAPSING_BORDERS,
+  RES_ROW_SPLIT,
+  RES_BOX,
+  RES_VERT_ORIENT,
   RES_KEEP,
   RES_LINENUMBER,
 } from "../../../inc/hintids";
+import type { SwFormatVertOrient, SwFormatHoriOrient } from "../../../inc/fmtornt";
+import type { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
+import type { SwFormatLayoutSplit } from "../../../inc/fmtlsplt";
 import { WRITER_MAX_LIST_LEVEL } from "../../core/doc/list";
 import { SwXNumberingRules } from "../../core/unocore/unosett";
 import type { SwDoc } from "../../core/doc/doc";
@@ -283,68 +296,107 @@ function exportWriterText(
           }
           const table = block.GetTable(),
             grid = new SwXMLTableLines(table);
-          const format = table.GetFormat();
-          const orient = format.horiOrient;
+          const items = table.GetFrameFormat().GetAttrSet();
+          const size = items.GetItemIfSet(RES_FRM_SIZE, false) as SwFormatFrameSize | undefined;
+          const orientation = items.GetItemIfSet(RES_HORI_ORIENT, false) as
+            SwFormatHoriOrient | undefined;
+          const orient = orientation?.GetHoriOrient();
+          // Normal items require direct SET state; the native LR special handler searches parents for its orientation guard.
+          const marginOrient = (
+            items.GetItemIfSet(RES_HORI_ORIENT) as SwFormatHoriOrient | undefined
+          )?.GetHoriOrient();
+          const lr = items.GetItemIfSet(RES_LR_SPACE, false) as SvxLRSpaceItem | undefined;
+          const ul = items.GetItemIfSet(RES_UL_SPACE, false) as SvxULSpaceItem | undefined;
+          const split = items.GetItemIfSet(RES_LAYOUT_SPLIT, false) as
+            SwFormatLayoutSplit | undefined;
+          const borders = items.GetItemIfSet(RES_COLLAPSING_BORDERS, false) as
+            SfxBoolItem | undefined;
           yield {
             kind: "table" as const,
             table: {
               name: table.GetName(),
-              format:
-                orient === undefined
-                  ? format
-                  : {
-                      ...format,
-                      align:
-                        orient === HoriOrientation.LEFT || orient === HoriOrientation.LEFT_AND_WIDTH
-                          ? "left"
-                          : orient === HoriOrientation.RIGHT
-                            ? "right"
-                            : orient === HoriOrientation.CENTER
-                              ? "center"
-                              : "margins",
-                      marginLeft:
-                        orient === HoriOrientation.NONE || orient === HoriOrientation.LEFT_AND_WIDTH
-                          ? format.marginLeft
-                          : undefined,
-                      marginRight: orient === HoriOrientation.NONE ? format.marginRight : undefined,
-                    },
+              format: {
+                width: size?.GetWidth(),
+                marginTop: ul?.GetUpper(),
+                marginBottom: ul?.GetLower(),
+                layoutSplit: split?.GetValue(),
+                borderModel:
+                  borders === undefined
+                    ? undefined
+                    : borders.GetValue()
+                      ? "collapsing"
+                      : "separating",
+                headerRows: table.GetRowsToRepeat(),
+                repeatHeaderRows: table.GetRowsToRepeat() !== 0,
+                align:
+                  orient === HoriOrientation.LEFT || orient === HoriOrientation.LEFT_AND_WIDTH
+                    ? "left"
+                    : orient === HoriOrientation.RIGHT
+                      ? "right"
+                      : orient === HoriOrientation.CENTER
+                        ? "center"
+                        : orient === HoriOrientation.FULL || orient === HoriOrientation.NONE
+                          ? "margins"
+                          : orient === undefined
+                            ? undefined
+                            : "",
+                marginLeft:
+                  marginOrient === HoriOrientation.NONE ||
+                  marginOrient === HoriOrientation.LEFT_AND_WIDTH
+                    ? lr?.ResolveLeft()
+                    : undefined,
+                marginRight: marginOrient === HoriOrientation.NONE ? lr?.ResolveRight() : undefined,
+              },
               columnWidths: grid.GetColumnWidths(),
               softPageBreakRows: table.GetSoftPageBreakRows(),
               rows: table.GetTabLines().map(
-                /** Projects one canonical Writer table value. @param argument1 - Callback input. @returns Callback result. */ (
+                /** Exports direct original row items. @param row - Original table line. @returns Filter-only row values. */ (
                   row,
-                ) => ({
-                  format: {
-                    keepTogether:
-                      row.GetFormat().rowSplit === undefined
-                        ? undefined
-                        : !row.GetRowSplit().GetValue(),
-                    ...(row.GetFrameSize().GetHeightSizeType() === SwFrameSize.Minimum
-                      ? { minHeight: row.GetFrameSize().GetHeight() }
-                      : row.GetFrameSize().GetHeightSizeType() === SwFrameSize.Fixed
-                        ? { height: row.GetFrameSize().GetHeight() }
-                        : {}),
-                  },
-                  cells: row.GetTabBoxes().map(
-                    /** Projects one canonical Writer table value. @param argument1 - Callback input. @returns Callback result. */ (
-                      cell,
-                    ) => ({
-                      columnSpan: grid.GetColumnSpan(cell),
-                      format: {
-                        ...exportBoxProperties(cell.GetFormat().box),
-                        verticalAlign:
-                          cell.GetFormat().vertOrient === undefined
-                            ? undefined
-                            : cell.GetVertOrient().GetVertOrient() === VertOrientation.CENTER
-                              ? "middle"
-                              : cell.GetVertOrient().GetVertOrient() === VertOrientation.BOTTOM
-                                ? "bottom"
-                                : "top",
+                ) => {
+                  const items = row.GetFrameFormat().GetAttrSet();
+                  const size = items.GetItemIfSet(RES_FRM_SIZE, false) as
+                    SwFormatFrameSize | undefined;
+                  const split = items.GetItemIfSet(RES_ROW_SPLIT, false) as
+                    SwFormatRowSplit | undefined;
+                  return {
+                    format: {
+                      keepTogether: split === undefined ? undefined : !split.GetValue(),
+                      ...(size?.GetHeightSizeType() === SwFrameSize.Minimum
+                        ? { minHeight: size.GetHeight() }
+                        : size?.GetHeightSizeType() === SwFrameSize.Fixed
+                          ? { height: size.GetHeight() }
+                          : {}),
+                    },
+                    cells: row.GetTabBoxes().map(
+                      /** Exports direct original box items. @param cell - Original table box. @returns Filter-only cell values. */ (
+                        cell,
+                      ) => {
+                        const items = cell.GetFrameFormat().GetAttrSet();
+                        const box = items.GetItemIfSet(RES_BOX, false) as SvxBoxItem | undefined;
+                        const orientation = items.GetItemIfSet(RES_VERT_ORIENT, false) as
+                          SwFormatVertOrient | undefined;
+                        const orient = orientation?.GetVertOrient();
+                        return {
+                          columnSpan: grid.GetColumnSpan(cell),
+                          format: {
+                            ...exportBoxProperties(box),
+                            verticalAlign:
+                              orient === undefined
+                                ? undefined
+                                : orient === VertOrientation.CENTER
+                                  ? "middle"
+                                  : orient === VertOrientation.BOTTOM
+                                    ? "bottom"
+                                    : orient === VertOrientation.TOP
+                                      ? "top"
+                                      : "",
+                          },
+                          paragraphs: cell.GetParagraphs().map(projectParagraph),
+                        };
                       },
-                      paragraphs: cell.GetParagraphs().map(projectParagraph),
-                    }),
-                  ),
-                }),
+                    ),
+                  };
+                },
               ),
             },
           };

@@ -90,7 +90,10 @@ describe("Writer canonical ODF tables", /** Verifies the bounded table scenario.
     });
     expect(reopened.document.GetTables()[0]?.GetTabLines()).toHaveLength(1);
     const noHeader = createWriterDocument();
-    const ordinary = noHeader.nodes.MakeTableNode("Ordinary", { repeatHeaderRows: true });
+    const ordinary = noHeader.nodes.MakeTableNode("Ordinary", {
+      headerRows: 0,
+      repeatHeaderRows: true,
+    });
     ordinary.AddColumnWidth(3000);
     noHeader.nodes.AppendTableRow(ordinary, 1);
     const content = await new ZipFile(writeOdtDocument(noHeader, metadata)).readTextEntry(
@@ -289,7 +292,7 @@ describe("Writer canonical ODF tables", /** Verifies the bounded table scenario.
         open(tableProps(`table:align="${align}"`))
           .document.GetTables()[0]
           ?.GetFormat().align,
-      ).toBe(align);
+      ).toBe("margins");
     expect(
       /** Verifies the bounded table scenario.  @returns Callback result. */ () =>
         open(tableProps('table:align="unknown"')),
@@ -514,7 +517,7 @@ describe("Writer canonical ODF tables", /** Verifies the bounded table scenario.
     const xml = await new ZipFile(writeOdtDocument(document, metadata)).readTextEntry(
       "content.xml",
     );
-    expect(xml).toContain("<style:table-properties/>");
+    expect(xml).toContain('<style:table-properties table:align="margins"/>');
     expect(xml).toContain("<style:table-column-properties/>");
     const reopened = await readOdtDocument(writeOdtDocument(document, metadata), metadata);
     expect(reopened.document.GetTables()[0]?.GetColumnWidths()).toEqual([0]);

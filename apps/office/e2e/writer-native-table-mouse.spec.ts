@@ -83,7 +83,7 @@ for (const width of [1280, 390])
     await page.mouse.click(x + 1.5 * w, y - 7);
     await expect(selected).toHaveCount(3);
     for (let r = 0; r < 3; r++)
-      await expect(displayed.locator("tr").nth(r).locator("td").nth(1)).toHaveAttribute(
+      await expect(displayed.locator("tr").nth(r).locator("td, th").nth(1)).toHaveAttribute(
         "data-writer-editor-selected",
         "true",
       );

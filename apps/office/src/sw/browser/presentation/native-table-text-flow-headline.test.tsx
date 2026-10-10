@@ -7,7 +7,7 @@ import type { SwTableFormat } from "../../source/core/table/swtable";
 import { WriterTableDialog } from "./WriterTableDialog";
 afterEach(cleanup);
 /** Mounts original table input. @param format - Existing table values. @param rows - Physical rows. @returns Canonical owners and callbacks. */
-function fixture(format: SwTableFormat = {}, rows = 3) {
+function fixture(format: SwTableFormat = { headerRows: 0 }, rows = 3) {
   const doc = new SwDoc(),
     table = doc.nodes.MakeTableNode("Headline", { width: 6000, ...format });
   table.AddColumnWidth(6000);
@@ -30,21 +30,28 @@ function fixture(format: SwTableFormat = {}, rows = 3) {
 function count(value: string) {
   fireEvent.change(screen.getByRole("spinbutton", { name: "Header rows" }), { target: { value } });
 }
-it.each([{}, { headerRows: 2 }, { headerRows: 2, repeatHeaderRows: false }])(
-  "native properties has one unchecked Repeat header for non-repeating canonical input%s",
-  /** Checks source defaults instead of raw-format fallback. @param format - Existing input. @returns Nothing. */ (
+it.each<[SwTableFormat, number]>([
+  [{}, 1],
+  [{ headerRows: 2 }, 2],
+  [{ headerRows: 2, repeatHeaderRows: false }, 0],
+])(
+  "native properties Repeat header consumes native default/count-only/disabled input%s",
+  /** Checks source native count instead of stored tuple flags. @param format - Existing input. @param expected - Native count. @returns Nothing. */ (
     format,
+    expected,
   ) => {
     const f = fixture(format);
     expect(screen.queryByRole("checkbox", { name: "Header" })).not.toBeInTheDocument();
-    expect(screen.getByRole("checkbox", { name: "Repeat header" })).not.toBeChecked();
-    expect(screen.getByRole("spinbutton", { name: "Header rows" })).toBeDisabled();
-    expect(screen.getByRole("spinbutton", { name: "Header rows" })).toHaveValue(1);
+    const repeat = screen.getByRole("checkbox", { name: "Repeat header" }),
+      count = screen.getByRole("spinbutton", { name: "Header rows" });
+    expect((repeat as HTMLInputElement).checked).toBe(expected !== 0);
+    expect((count as HTMLInputElement).disabled).toBe(expected === 0);
+    expect(count).toHaveValue(Math.max(1, expected));
     fireEvent.click(screen.getByRole("button", { name: "OK" }));
     expect(f.submit).toHaveBeenCalledWith(
-      expect.objectContaining({ headerRows: 0, repeatHeaderRows: false }),
+      expect.objectContaining({ headerRows: expected, repeatHeaderRows: expected !== 0 }),
     );
-    expect(f.table.GetRowsToRepeat()).toBe(0);
+    expect(f.table.GetRowsToRepeat()).toBe(expected);
     expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(0);
   },
 );

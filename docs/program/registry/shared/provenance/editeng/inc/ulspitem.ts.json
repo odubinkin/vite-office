@@ -1,0 +1,57 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/editeng/inc/ulspitem.ts",
+          "marker": "SvxULSpaceItem"
+        },
+        {
+          "path": "apps/office/src/editeng/source/items/native-ul-space-value.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/filter/xml/native-ul-space-item-transport.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-ul-space-complete-history.test.tsx",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/include/editeng/ulspitem.hxx",
+          "marker": "SvxULSpaceItem"
+        },
+        {
+          "path": "vendor/libreoffice-reference/editeng/source/items/frmitems.cxx",
+          "marker": "SvxULSpaceItem::QueryValue"
+        },
+        {
+          "path": "vendor/libreoffice-reference/editeng/source/items/frmitems.cxx",
+          "marker": "SvxULSpaceItem::PutValue"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/editeng/inc/ulspitem.ts",
+    "localSymbols": [
+      "SvxULSpaceItem"
+    ],
+    "omittedResponsibilities": [
+      "Full native presentation/metric scaling/general UNO and broader font/unit/layout responsibilities remain unverified."
+    ],
+    "preservedResponsibilities": [
+      "CorrectionWQ0NE8 (7/10 after BZQGYC): complete original UL state upper/lower/context/propUpper/propLower and native constructors/setters/QueryValue/PutValue/clone/equality are owned by matching include/editeng/ulspitem.hxx declaration at editeng/inc/ulspitem.ts; frmitems retains original export identity. Core no longer returns browser tuples. Native aggregate unconverted Lower=nPropUpper and aggregate ScaleLower overwrite of nPropUpper are preserved literally. Browser item codec reads raw native getters and preserves full proportion fields in extended tuple only when authored; legacy2/3tuples keep prior numeric coercion/context/defaults via registered pool boundary. Exactly27compiler-resolved old UL Query expressions in12tests become explicit native3/4/7 observers retaining every original expected measure/context/sibling assertion;1constructor negative input assertion records native uint16 conversion. Presentation/ScaleMetrics/full general UNO and native LR/UL table-format transport remain incomplete; no whole-module semantic/default/status/classification or registeredIO/recovery promotion. Verification pending task202610100036-WQ0NE8.",
+      "VerificationWQ0NE8: 367related files3936unique cases accepted after a new-test-only parameterization repair22/22;64fresh cases. Entire4changed production modules actual Istanbul100lines529/statements589/functions178/branches479, complete maps and zero negative counters; no previous-task maps. Two constructor overload JSDoc tags have identical transpiled runtime and all228instrumented source ranges unchanged; no passing test replay. Nine upstream-absent static/build/TS7/Chromium gates including24browser cases pass. Preservation proof confirms26native query-expression migrations plus1uint16 constructor expectation in12old files;634of646old testfiles byte-identical and all sibling metrics/context acceptance preserved. Original statuses/defaults/classifications retain history; literal native quirks retained. Goalactive-incomplete7/10; full table LR/UL transport pending. Bounded English task evidence: .agentplane/tasks/202610100036-WQ0NE8/evidence/verification.json."
+    ],
+    "status": "mapped",
+    "upstreamPath": "include/editeng/ulspitem.hxx",
+    "upstreamSymbols": [
+      "SvxULSpaceItem"
+    ]
+  }
+}

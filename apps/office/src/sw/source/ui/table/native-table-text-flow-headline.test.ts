@@ -4,29 +4,30 @@ import { SwDoc } from "../../core/doc/doc";
 import type { SwTableFormat } from "../../core/table/swtable";
 import { SwTextFlowPage } from "./tabledlg";
 /** Builds actual canonical headline input. @param format - Initial native storage. @param rows - Physical rows. @returns Original owner and source page. */
-function fixture(format: SwTableFormat = {}, rows = 3) {
+function fixture(format: SwTableFormat = { headerRows: 0 }, rows = 3) {
   const doc = new SwDoc(),
     table = doc.nodes.MakeTableNode("Headlines", format);
   table.AddColumnWidth(6000);
   for (let r = 0; r < rows; r++) doc.nodes.AppendTableRow(table, 1);
   return { doc, table, page: new SwTextFlowPage(table) };
 }
-it.each([
-  {},
-  { headerRows: 2 },
-  { headerRows: 2, repeatHeaderRows: false },
-  { headerRows: 0, repeatHeaderRows: true },
+it.each<[SwTableFormat, number]>([
+  [{}, 1],
+  [{ headerRows: 2 }, 2],
+  [{ headerRows: 2, repeatHeaderRows: false }, 0],
+  [{ headerRows: 0, repeatHeaderRows: true }, 0],
 ])(
-  "native headline Reset reads absent/non-repeating input as zero%s",
-  /** Checks source item rather than legacy format fallback. @param format - Existing values. @returns Nothing. */ (
+  "native headline Reset reads native default/count-only/disabled input%s",
+  /** Checks source item with native count. @param format - Existing values. @param expected - Native count. @returns Nothing. */ (
     format,
+    expected,
   ) => {
     const f = fixture(format);
-    expect(f.page.IsHeadline()).toBe(false);
-    expect(f.page.IsSensitive()).toBe(false);
-    expect(f.page.GetHeaderRows()).toBe(1);
+    expect(f.page.IsHeadline()).toBe(expected !== 0);
+    expect(f.page.IsSensitive()).toBe(expected !== 0);
+    expect(f.page.GetHeaderRows()).toBe(Math.max(1, expected));
     expect(f.page.FillItemSet()).toEqual({});
-    expect(f.page.GetRowsToRepeat()).toBe(0);
+    expect(f.page.GetRowsToRepeat()).toBe(expected);
     expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(0);
   },
 );

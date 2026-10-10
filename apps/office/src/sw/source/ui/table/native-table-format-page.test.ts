@@ -286,5 +286,25 @@ for (const [format, align] of [
   it(`admits historical ODF orientation ${JSON.stringify(format)}`, /** Checks presence rather than truthiness without rewriting attributes. @returns Nothing. */ () => {
     const f = fixture(format);
     expect(f.table.GetHoriOrient()).toBe(align);
-    expect(f.table.GetFormat()).toEqual(format);
+    expect(f.table.GetFormat()).toEqual({
+      ...format,
+      ...(format.marginLeft === undefined && format.marginRight === undefined
+        ? {}
+        : { marginLeft: format.marginLeft ?? 0, marginRight: format.marginRight ?? 0 }),
+      horiOrient: align,
+      align: (
+        {
+          0: "margins",
+          1: "right",
+          2: "center",
+          3: "left",
+          4: "margins",
+          5: "margins",
+          6: "margins",
+          7: "left",
+        } as const
+      )[align],
+      headerRows: 1,
+      repeatHeaderRows: true,
+    });
   });

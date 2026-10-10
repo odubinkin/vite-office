@@ -17,7 +17,7 @@ const page = {
 /** Creates actual table owners and measured row input. @param format - Authored attributes. @param heights - Device rows. @returns Canonical owners and input. */
 function fixture(format: SwTableFormat = {}, heights: readonly number[] = [200, 200, 200]) {
   const doc = new SwDoc(),
-    table = doc.nodes.MakeTableNode("Split", format);
+    table = doc.nodes.MakeTableNode("Split", { headerRows: 0, ...format });
   table.AddColumnWidth(4000);
   for (const [r] of heights.entries())
     doc.nodes

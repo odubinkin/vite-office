@@ -85,7 +85,7 @@ for (const align of [0, 2, 3])
             align === 2 ? "safe center" : align === 3 ? "safe flex-end" : "flex-start",
           height: "80px",
         });
-        expect(text.closest("td")).toHaveStyle({
+        expect(text.closest(":is(td,th)")).toHaveStyle({
           verticalAlign: align === 2 ? "middle" : align === 3 ? "bottom" : "top",
         });
         expect(text).toHaveTextContent("Native aligned content");

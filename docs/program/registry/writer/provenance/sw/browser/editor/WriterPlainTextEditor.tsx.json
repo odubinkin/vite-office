@@ -108,6 +108,22 @@
         {
           "path": "apps/office/src/sw/browser/editor/native-editor-layout-owner.test.tsx",
           "marker": "native editor layout ownership"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/table/native-table-frame-item-owner.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/undo/native-table-frame-item-history.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-table-frame-item-owner.test.tsx",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/table/swtable-boxline.ts",
+          "marker": "SwTableBox"
         }
       ],
       "upstream": [
@@ -148,7 +164,8 @@
     "preservedResponsibilities": [
       "Iteration188: source-shaped horizontal LTR native edge selection and master/follow drag ownership; wider unsupported layout/protection/resize remains unverified.",
       "Iteration253 removes the production React-owned testLayout and duplicate layout prop, borrowing the existing original SwEditWin view-shell layout for all browser formatting. Renderer/cursor ownership follows the same native root and current edit-window view; test ownership is explicit. Targeted verification pending. Native root frame-format/page/body/follows and overall parity remain unverified; historical statuses/defaults/classifications and registered recovery/open/save/settings exceptions preserved. No full253; last247,next257 then fix failures and pause the goal.",
-      "Iteration253 verified targeted closure:202 unique related cases including5 fresh actual native editor ownership cases pass,0 unresolved0 passing replay. Initial155pass1 fresh fixture failure retained; failed test now exercises actual editor owner changes with original native session projections, preserving first/second text and receiver identity assertions. Unexecuted document-key/title/modal/focus scenarios and one new native ruler visibility case close current-source coverage. Changed2/app318 all-four100 uses actual current counters,316 whole byte-identical modules and122 complete unchanged declarations/bodies/enclosing conditions/all mapped locations from252; no changed outer function transfer or individual counter sanitization. Two old detached fixtures now explicitly own real SwView/SwDocShell and close after UI teardown; all66 literal assertions retained,509 other test files byte-identical. Native root frame-format/page/body/follows and overall parity remain unverified. Workbench retains initial viewStore on session prop replacement, a separate recorded follow-up. Four canonical history/status/default/classification/evidence prefixes preserved. No full253; next full257 then verified failure repair and requested goal pause."
+      "Iteration253 verified targeted closure:202 unique related cases including5 fresh actual native editor ownership cases pass,0 unresolved0 passing replay. Initial155pass1 fresh fixture failure retained; failed test now exercises actual editor owner changes with original native session projections, preserving first/second text and receiver identity assertions. Unexecuted document-key/title/modal/focus scenarios and one new native ruler visibility case close current-source coverage. Changed2/app318 all-four100 uses actual current counters,316 whole byte-identical modules and122 complete unchanged declarations/bodies/enclosing conditions/all mapped locations from252; no changed outer function transfer or individual counter sanitization. Two old detached fixtures now explicitly own real SwView/SwDocShell and close after UI teardown; all66 literal assertions retained,509 other test files byte-identical. Native root frame-format/page/body/follows and overall parity remain unverified. Workbench retains initial viewStore on session prop replacement, a separate recorded follow-up. Four canonical history/status/default/classification/evidence prefixes preserved. No full253; next full257 then verified failure repair and requested goal pause.",
+      "Correction WGQ8944/10 after full baseline SZKQTN moves native width ownership to original RES_FRM_SIZE items and registers SwTable as an original SwClient. Direct, inherited, legacy and existing batched deltas resize original independent boxes with source cumulative integer rounding; paired native table lock prevents separator adjustment from general double-scaling. Complete new cell sizes use Variable width/zero-height as swtable.cxx. SaveTable owns/restores direct original frame item sets under native locks and invalidates actual original frames instead of replaying a scalar width adapter. Connected deletion releases original physical and model clients; React captures render-time table keys before native owner death. Native frame formatting/document separator normalization read effective original size, ignoring stale transport width. Existing SwTableBox and SwTableLine class bodies are physically separated into swtable-boxline.ts to honor the unchanged authored-file size gate, with original class identities and exports retained and no forwarding adapter. Full orientation/spacing/frame-type/default/copy/Repeat/master/follow/nested/merged/root/VCL families remain unrepresented/unverified; missing-size flat-builder fallback remains an explicit unverified boundary. All prior status/default/classification/evidence/responsibility prefixes and registered recovery/open/save/settings deviations preserved; no whole-module or goal promotion. Actual final-source targeted verification is recorded in task202610091947-WGQ894."
     ]
   },
   "legacyOrder": 79

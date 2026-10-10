@@ -115,22 +115,20 @@ describe("Writer ODT font and style compatibility", /** Groups file compatibilit
       reopened.document.GetDfltTextFormatColl(),
     );
 
-    for (const parent of ["Missing", "Title"])
-      expect(
-        (
-          await readOdtDocument(
-            await rewriteStylesXml(
-              bytes,
-              /** Selects one invalid Title parent. @param styles - Named-style XML. @returns Updated XML. */ (
-                styles,
-              ) => replaceTitleParent(styles, parent),
-            ),
-            state,
-          )
-        ).document
-          .GetTextFormatColl("title")
-          .DerivedFrom(),
-      ).toBeUndefined();
+    for (const parent of ["Missing", "Title"]) {
+      const invalidParent = await readOdtDocument(
+        await rewriteStylesXml(
+          bytes,
+          /** Selects one invalid Title parent. @param styles - Named-style XML. @returns Updated XML. */ (
+            styles,
+          ) => replaceTitleParent(styles, parent),
+        ),
+        state,
+      );
+      expect(invalidParent.document.GetTextFormatColl("title").DerivedFrom()).toBe(
+        invalidParent.document.GetDfltTextFormatColl(),
+      );
+    }
 
     const cycleBytes = await rewriteStylesXml(
       bytes,
@@ -146,7 +144,9 @@ describe("Writer ODT font and style compatibility", /** Groups file compatibilit
     expect(cycle.document.GetTextFormatColl("title").DerivedFrom()).toBe(
       cycle.document.GetTextFormatColl("subtitle"),
     );
-    expect(cycle.document.GetTextFormatColl("subtitle").DerivedFrom()).toBeUndefined();
+    expect(cycle.document.GetTextFormatColl("subtitle").DerivedFrom()).toBe(
+      cycle.document.GetDfltTextFormatColl(),
+    );
   });
 
   it("preserves LibreOffice-declared Title follow styles across export and import", /** Verifies named-style follow linkage is resolved after style creation with upstream fallback semantics. @returns Nothing. */ async () => {

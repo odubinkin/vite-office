@@ -80,7 +80,7 @@ it.each(["grid", "dialog"] as const)(
       expect(table.GetHoriOrient()).toBe(HoriOrientation.FULL);
       expect(table.GetFormat()).toMatchObject({
         width: 65535,
-        headerRows: 1,
+        headerRows: path === "grid" ? 1 : 0,
         repeatHeaderRows: path === "grid",
         layoutSplit: path === "grid",
       });

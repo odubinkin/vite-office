@@ -3,6 +3,7 @@ import { nativeRowFormatForTest } from "../../../test/table-row-test-helpers";
 import { nativeTableInputForTest } from "../../../test/table-box-test-helpers";
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, expect, it, vi } from "vitest";
+import { SfxItemSet } from "../../../svl/source/items/itemset";
 import { SwDoc } from "../../source/core/doc/doc";
 import { WriterTableDialog } from "./WriterTableDialog";
 afterEach(cleanup);
@@ -22,10 +23,13 @@ function fixture(selected = false, split?: boolean) {
   if (box === undefined) throw new Error("Missing original selected box");
   const submit = vi.fn(),
     cancel = vi.fn();
+  const input = new SfxItemSet(doc.GetAttrPool(), [[1, 32767]]);
+  input.PutSet(nativeTableInputForTest(table, selected ? [box] : undefined));
+  input.Put(table.GetFrameFormat().GetAttrSet().Get(120));
   render(
     <WriterTableDialog
       table={table}
-      borderItems={nativeTableInputForTest(table)}
+      borderItems={input}
       {...(selected ? { selectedBoxes: [box] } : {})}
       availableWidth={6000}
       onSubmit={submit}

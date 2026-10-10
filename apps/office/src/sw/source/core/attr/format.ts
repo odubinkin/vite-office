@@ -5,14 +5,22 @@
 import { SwModify, BroadcastingModify, ClientNotifyAttrChg } from "../../../inc/calbck";
 import type { SfxItemSet, WhichRangesContainer } from "../../../../svl/source/items/itemset";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
-import { AttrSetChangeHint, SwAttrSetChg, type SwModelHint } from "../../../inc/hints";
+import {
+  AttrSetChangeHint,
+  SwAttrSetChg,
+  SwFormatChangeHint,
+  type SwModelHint,
+} from "../../../inc/hints";
 import { SwAttrSet, type SwAttrPool } from "./swatrset";
+import type { SvxULSpaceItem, SvxLRSpaceItem } from "../../../../editeng/source/items/frmitems";
+import type { SwFormatHoriOrient } from "../../../inc/fmtornt";
+import { RES_LR_SPACE, RES_HORI_ORIENT, RES_UL_SPACE, RES_PAGEDESC } from "../../../inc/hintids";
 
 /** Base class for identity-bearing Writer styles and formats. */
 export class SwFormat extends BroadcastingModify {
   private readonly attributeSet: SwAttrSet;
-  private derivedFrom: SwFormat | undefined;
   private autoFormat = true;
+  private formatInDTOR = false;
 
   /** Creates a Writer format and connects its attribute set to the derived-from parent. @param pool - Owning Writer pool. @param formatName - UI format name. @param ranges - Accepted WhichId ranges. @param derivedFrom - Optional parent format. @returns Nothing. */
   public constructor(
@@ -26,7 +34,6 @@ export class SwFormat extends BroadcastingModify {
     if (derivedFrom !== undefined) {
       if (derivedFrom.GetAttrSet().GetPool() !== pool)
         throw new Error("SwFormat parent belongs to another pool.");
-      this.derivedFrom = derivedFrom;
       this.RegisterToModify(derivedFrom);
       this.attributeSet.SetParent(derivedFrom.GetAttrSet());
     }
@@ -48,25 +55,54 @@ export class SwFormat extends BroadcastingModify {
     return this.attributeSet;
   }
 
-  /** Returns the parent format. @returns Derived-from format, when present. */
-  public DerivedFrom(): SwFormat | undefined {
-    return this.derivedFrom;
+  /** Reads native upper/lower spacing from the original effective item set. @param searchInParent - Whether inherited items participate. @returns Borrowed owned, inherited or pooled item. */
+  public GetULSpace(searchInParent = true): SvxULSpaceItem {
+    return this.attributeSet.Get(RES_UL_SPACE, searchInParent) as SvxULSpaceItem;
   }
 
-  /** Changes the parent format and attribute-set inheritance. @param derivedFrom - New parent format. @returns True when changed. */
+  /** Reads original effective frame LR spacing. @param searchInParent - Whether inherited items participate. @returns Borrowed original item. */
+  public GetLRSpace(searchInParent = true): SvxLRSpaceItem {
+    return this.attributeSet.Get(RES_LR_SPACE, searchInParent) as SvxLRSpaceItem;
+  }
+
+  /** Reads original effective horizontal orientation. @param searchInParent - Whether inherited items participate. @returns Borrowed original item. */
+  public GetHoriOrient(searchInParent = true): SwFormatHoriOrient {
+    return this.attributeSet.Get(RES_HORI_ORIENT, searchInParent) as SwFormatHoriOrient;
+  }
+
+  /** Returns the parent format. @returns Derived-from format, when present. */
+  public DerivedFrom(): SwFormat | undefined {
+    return this.GetRegisteredIn() as SwFormat | undefined;
+  }
+
+  /** Changes original parent registration and item inheritance, rejecting cycles. @param derivedFrom - New parent, or omitted to restore the current root. @returns True when changed. */
   public SetDerivedFrom(derivedFrom?: SwFormat): boolean {
-    if (derivedFrom === this) throw new Error("SwFormat cannot derive from itself.");
     if (
       derivedFrom !== undefined &&
       derivedFrom.GetAttrSet().GetPool() !== this.attributeSet.GetPool()
     )
       throw new Error("SwFormat parent belongs to another pool.");
-    if (this.derivedFrom === derivedFrom) return false;
-    this.derivedFrom = derivedFrom;
-    if (derivedFrom !== undefined) this.RegisterToModify(derivedFrom);
-    else this.EndListening();
-    this.attributeSet.SetParent(derivedFrom?.GetAttrSet());
-    this.NotifyFormatInheritance();
+    let parent = derivedFrom;
+    if (parent !== undefined) {
+      for (
+        let candidate: SwFormat | undefined = parent;
+        candidate !== undefined;
+        candidate = candidate.DerivedFrom()
+      ) {
+        if (candidate === this) return false;
+      }
+    } else {
+      parent = this.DerivedFrom() ?? this;
+      let ancestor = parent.DerivedFrom();
+      while (ancestor !== undefined) {
+        parent = ancestor;
+        ancestor = parent.DerivedFrom();
+      }
+    }
+    if (parent === this.DerivedFrom() || parent === this) return false;
+    this.RegisterToModify(parent);
+    this.attributeSet.SetParent(parent.GetAttrSet());
+    this.SwClientNotify(this, new SwFormatChangeHint(this, this));
     return true;
   }
 
@@ -125,6 +161,27 @@ export class SwFormat extends BroadcastingModify {
   }
   /** Filters inherited native deltas by every locally-present WhichId. @param source - Original notifying parent. @param hint - Native change. @returns Nothing. */
   public override SwClientNotify(source: SwModify, hint: SwModelHint): void {
+    if (hint.kind === "object-dying") {
+      if (this.GetRegisteredIn() !== undefined && this.GetRegisteredIn() === hint.m_pDying) {
+        const parent = hint.m_pDying.GetRegisteredIn() as SwFormat | undefined;
+        if (parent !== undefined) {
+          this.RegisterToModify(parent);
+          this.attributeSet.SetParent(this.DerivedFrom()?.GetAttrSet());
+        } else {
+          this.EndListeningAll();
+          this.attributeSet.SetParent(undefined);
+        }
+      }
+      super.SwClientNotify(this, hint);
+      return;
+    }
+    if (hint.kind === "format-change") {
+      if (hint.m_pOldFormat !== this && hint.m_pNewFormat === this.GetRegisteredIn()) {
+        this.attributeSet.SetParent(this.DerivedFrom()?.GetAttrSet());
+      }
+      super.SwClientNotify(this, hint);
+      return;
+    }
     if (hint.kind === "attr-set-change") {
       const old = hint.m_pOld,
         next = hint.m_pNew;
@@ -149,6 +206,29 @@ export class SwFormat extends BroadcastingModify {
   /** Changes the auto-format flag. @param autoFormat - New flag. @returns Nothing. */
   public SetAuto(autoFormat: boolean): void {
     this.autoFormat = autoFormat;
+  }
+
+  /** Reads the native dependent-client destruction flag. @returns Whether format death started with Writer clients. */
+  public IsFormatInDTOR(): boolean {
+    return this.formatInDTOR;
+  }
+
+  /** Runs native format destruction before inherited notifier and modify teardown. @returns Nothing. */
+  public override DisposeModify(): void {
+    this.Destr();
+    super.DisposeModify();
+  }
+
+  /** Reparents original dependent clients, retaining native parentless page-descriptor cleanup. @returns Nothing. */
+  private Destr(): void {
+    if (!this.HasWriterListeners()) return;
+    this.formatInDTOR = true;
+    const parent = this.DerivedFrom();
+    if (parent === undefined) {
+      SwFormat.prototype.ResetFormatAttr.call(this, RES_PAGEDESC);
+      return;
+    }
+    this.PrepareFormatDeath(new SwFormatChangeHint(this, parent));
   }
 
   /** Emits one format inheritance/name hint through the document broadcaster. @returns Nothing. */

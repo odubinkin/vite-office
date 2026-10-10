@@ -23,6 +23,7 @@ for (const width of [1280, 390])
         rightMargin: 100,
       });
       const table = doc.nodes.MakeTableNode("Split", { width: 6000, layoutSplit: split }, body);
+      table.SetRowsToRepeat(0);
       table.AddColumnWidth(6000);
       for (let r = 0; r < 3; r++) {
         const node = doc.nodes

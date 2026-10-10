@@ -49,7 +49,10 @@ export class WriterNativeFormatObserver extends SvtListener<SwModelHint> {
       !hints.some(
         /** Selects original format item and inheritance changes, excluding intermediate ownership moves. @param nested - Original atomic hint. @returns Whether presentation changes. */
         (nested) =>
-          nested.kind === "attr-set-change" || nested.kind === "format-inheritance-changed",
+          nested.kind === "attr-set-change" ||
+          nested.kind === "format-change" ||
+          nested.kind === "object-dying" ||
+          nested.kind === "format-inheritance-changed",
       )
     )
       return;

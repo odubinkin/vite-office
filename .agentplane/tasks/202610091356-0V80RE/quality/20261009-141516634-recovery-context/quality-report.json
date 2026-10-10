@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "task_id": "202610091356-0V80RE",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-09T14:15:16.634Z",
+  "verdict": "pass",
+  "summary": "Same-agent non-independent review accepts native format inheritance dispatch against pinned source with current complete five-module Istanbul100 and original-owner UI/history evidence.",
+  "evaluated_sha": "0d970ddd360e1b31f521a9cfa488af95e9e22c12",
+  "blueprint_digest": "52278ff083ca9f5ad6353c8b5a31a8c51ebcb45b8eb7ac45d68c74aa1f1e476f",
+  "findings": [
+    "SwFormatChangeHint preserves original old/new owners; SetDerivedFrom follows original registered parent and native locked SwClientNotify/observer order instead of document notification. Mirrored derivedFrom pointer removed. Descendant item sets rebind under exact native old/new pointer conditions, including absent parent.",
+    "Native frames and main UI accept original format-change without model writes; actual repeated SaveTable history retains original box/node/cursor/frame clients and restores native document-default owners. Four old expectation migrations match native source;573other source/tool test files unchanged.",
+    "308unique related acceptances including7fresh cases, no unresolved failures/passing replay; exact complete Istanbul maps on current five-module sources yield378/428/112/237 all-four100,0negative,no normalization or prior counters. Raw partial coverage exits remain retained. All declared static/metadata gates pass and10canonical prefixes preserved."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610091356-0V80RE/README.md",
+    ".agentplane/tasks/202610091356-0V80RE/evidence/results.json",
+    "apps/office/src/sw/source/core/attr/format.ts"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Review is explicitly same-agent/non-independent. Native cache/Which/assertion, format death/name hints, full content-node/VCL ownership and overall parity remain unverified. Full baseline XJTGF0 is historical, next full after ten resumed tasks; this is2."
+  ]
+}

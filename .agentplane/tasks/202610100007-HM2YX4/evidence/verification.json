@@ -1,0 +1,540 @@
+{
+  "status": "pass",
+  "goalStatus": "active-incomplete",
+  "fullRun": false,
+  "upstreamPin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "upstreamAbsentForAllRuntimeChecks": true,
+  "referenceSymlinkRestored": true,
+  "finalCurrentSourceHashes": {
+    "apps/office/src/editeng/source/items/frmitems.ts": "4b2a3f2a8903c4dd7407ebd1ecd7f78c6b3c8fd3a35cd74fa12d73773e6a5050",
+    "apps/office/src/editeng/inc/lrspitem.ts": "302089febf7012193bb1a41f3773fd83f16440e1af57c7dbcdeed0b2f937eac2"
+  },
+  "finalRelatedUnit": {
+    "cases": 1089,
+    "passed": 1089,
+    "files": 81,
+    "failed": 0,
+    "pending": 0,
+    "reportSha256": "a99f4563b433986962f19e791d07bcdfb47bc277a837600354e82524ca2a081e",
+    "commands": [
+      {
+        "label": "final-lr-value",
+        "cwd": "/Users/odubinkin/Projects/vite-office-writer/apps/office",
+        "args": [
+          "run",
+          "test:coverage",
+          "--",
+          "src/cui/source/tabpages/native-border-page.test.ts",
+          "src/cui/source/tabpages/native-collapsing-border-page.test.ts",
+          "src/editeng/source/items/boxitem.test.ts",
+          "src/editeng/source/items/frmitems.test.ts",
+          "src/editeng/source/items/native-lr-space-item.test.ts",
+          "src/editeng/source/items/native-lr-space-value.test.ts",
+          "src/sw/browser/editor/cell-paragraph-rendering.test.tsx",
+          "src/sw/browser/editor/native-cell-box-render.test.tsx",
+          "src/sw/browser/editor/native-cell-format-client.test.tsx",
+          "src/sw/browser/editor/native-collapsing-border-paint.test.tsx",
+          "src/sw/browser/editor/native-numeric-row-insertion.test.tsx",
+          "src/sw/browser/editor/native-table-hori-items.test.tsx",
+          "src/sw/browser/editor/native-table-lr-items.test.tsx",
+          "src/sw/browser/editor/native-table-ulspace-items.test.tsx",
+          "src/sw/browser/presentation/native-border-page.test.tsx",
+          "src/sw/browser/presentation/native-collapsing-border-item.test.tsx",
+          "src/sw/browser/presentation/native-collapsing-table-borders.test.tsx",
+          "src/sw/browser/presentation/native-column-frame-normalization.test.tsx",
+          "src/sw/browser/presentation/native-table-attribute-set.test.tsx",
+          "src/sw/browser/presentation/native-table-border-changed-items.test.tsx",
+          "src/sw/browser/presentation/native-table-border-common-state.test.tsx",
+          "src/sw/browser/presentation/native-table-export-items.test.tsx",
+          "src/sw/browser/presentation/native-table-import-items.test.tsx",
+          "src/sw/browser/presentation/native-table-itemset-restore.test.tsx",
+          "src/sw/browser/presentation/native-table-properties.test.tsx",
+          "src/sw/browser/presentation/writer-view-auto-first-layout.test.tsx",
+          "src/sw/browser/presentation/writer-view-counted-list-layout.test.tsx",
+          "src/sw/browser/presentation/writer-view-list-indent-mask.test.tsx",
+          "src/sw/browser/presentation/writer-view-list-label-drag.test.tsx",
+          "src/sw/browser/presentation/writer-view-manual-first-layout.test.tsx",
+          "src/sw/browser/presentation/writer-view-ruler-auto-first.test.tsx",
+          "src/sw/browser/presentation/writer-view-ruler-default-tabs.test.tsx",
+          "src/sw/browser/presentation/writer-view-ruler-indent-items.test.tsx",
+          "src/sw/browser/presentation/writer-view-ruler-indent-pixels.test.tsx",
+          "src/sw/browser/presentation/writer-view-ruler-tab-pixels.test.tsx",
+          "src/sw/browser/presentation/writer-view-uncounted-list-layout.test.tsx",
+          "src/sw/browser/presentation/writer-view.test.tsx",
+          "src/sw/inc/fmtfsize.test.ts",
+          "src/sw/inc/poolfmt.test.ts",
+          "src/sw/source/core/attr/native-format-attribute-notify.test.ts",
+          "src/sw/source/core/doc/writer-attributes.test.ts",
+          "src/sw/source/core/docnode/native-box-border-items.test.ts",
+          "src/sw/source/core/docnode/native-column-frame-normalization.test.ts",
+          "src/sw/source/core/docnode/native-table-border-common-state.test.ts",
+          "src/sw/source/core/edit/edfcol-history.test.ts",
+          "src/sw/source/core/edit/edfcol-modifier.test.ts",
+          "src/sw/source/core/edit/edfcol-reset.test.ts",
+          "src/sw/source/core/layout/native-collapsing-border-notify.test.ts",
+          "src/sw/source/core/layout/native-frame-attribute-notify.test.ts",
+          "src/sw/source/core/layout/native-table-attr-notify.test.ts",
+          "src/sw/source/core/layout/newfrm.test.ts",
+          "src/sw/source/core/table/native-box-frame-format.test.ts",
+          "src/sw/source/core/table/native-independent-column-insertion.test.ts",
+          "src/sw/source/core/table/native-numeric-row-insertion.test.ts",
+          "src/sw/source/core/table/native-table-lr-item.test.ts",
+          "src/sw/source/core/table/native-table-lr-value.test.ts",
+          "src/sw/source/core/table/native-table-ulspace-items.test.ts",
+          "src/sw/source/core/undo/native-collapsing-border-item.test.ts",
+          "src/sw/source/core/undo/native-format-node-index.test.ts",
+          "src/sw/source/core/undo/native-row-frame-format-history.test.ts",
+          "src/sw/source/core/undo/native-table-itemset-restore.test.ts",
+          "src/sw/source/core/undo/native-table-lr-history.test.ts",
+          "src/sw/source/core/undo/native-table-ulspace-history.test.ts",
+          "src/sw/source/filter/xml/native-cell-box-roundtrip.test.ts",
+          "src/sw/source/filter/xml/native-row-cell-export-items.test.ts",
+          "src/sw/source/filter/xml/native-table-export-items.test.ts",
+          "src/sw/source/filter/xml/native-table-import-items.test.ts",
+          "src/sw/source/filter/xml/odt-declarations.test.ts",
+          "src/sw/source/filter/xml/odt-layout-parity.test.ts",
+          "src/sw/source/filter/xml/odt-named-paragraph-ownership.test.ts",
+          "src/sw/source/filter/xml/odt-paragraph-indent-roundtrip.test.ts",
+          "src/sw/source/filter/xml/odt-property-roundtrip.test.ts",
+          "src/sw/source/ui/table/native-table-property-output.test.ts",
+          "src/sw/source/uibase/docvw/native-list-backspace.test.ts",
+          "src/sw/source/uibase/shells/native-table-attribute-set.test.ts",
+          "src/sw/source/uibase/shells/native-table-property-item-input.test.ts",
+          "src/sw/source/uibase/wrtsh/native-table-delete.test.ts",
+          "src/sw/source/uibase/wrtsh/native-table-plain-paste.test.ts",
+          "src/sw/source/uibase/wrtsh/native-table-traversal.test.ts",
+          "src/sw/source/uibase/wrtsh/wrtsh-paragraph-ruler.test.ts",
+          "src/sw/source/uibase/wrtsh/wrtsh1.test.ts",
+          "--coverage.include=src/editeng/source/items/frmitems.ts",
+          "--coverage.include=src/editeng/inc/lrspitem.ts",
+          "--coverage.reportOnFailure",
+          "--reporter=default",
+          "--reporter=json",
+          "--outputFile=node_modules/.cache/parity-coverage/HM2YX4/final-lr-value-tests.json",
+          "--coverage.reportsDirectory=node_modules/.cache/parity-coverage/HM2YX4/final-lr-value-coverage"
+        ]
+      }
+    ]
+  },
+  "browser": {
+    "expected": 24,
+    "unexpected": 0,
+    "skipped": 0,
+    "flaky": 0,
+    "reportSha256": "fd9a2a7ccaa7450c176ba2ae52dc016e93fc4c226f398f8f99c9479e0fe1ecba"
+  },
+  "statics": [
+    {
+      "label": "format-check",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "format:check"
+      ],
+      "status": 0,
+      "upstreamAbsent": true
+    },
+    {
+      "label": "lint",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "lint"
+      ],
+      "status": 0,
+      "upstreamAbsent": true
+    },
+    {
+      "label": "typecheck",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "typecheck"
+      ],
+      "status": 0,
+      "upstreamAbsent": true
+    },
+    {
+      "label": "check-dependencies",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "check:dependencies"
+      ],
+      "status": 0,
+      "upstreamAbsent": true
+    },
+    {
+      "label": "check-docs",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "check:docs"
+      ],
+      "status": 0,
+      "upstreamAbsent": true
+    },
+    {
+      "label": "check-file-size",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "check:file-size"
+      ],
+      "status": 0,
+      "upstreamAbsent": true
+    },
+    {
+      "label": "current-build",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "build"
+      ],
+      "status": 0,
+      "upstreamAbsent": true
+    },
+    {
+      "label": "static-build",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "node",
+        "scripts/check-static-build.mjs"
+      ],
+      "status": 0,
+      "upstreamAbsent": true
+    },
+    {
+      "label": "review-browser",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "playwright",
+        "test",
+        "--config",
+        "apps/office/playwright.config.ts",
+        "--project=writer",
+        "writer-native-table-column-drag.spec.ts",
+        "writer-native-table-text-flow-headline.spec.ts",
+        "writer-table-properties-history.spec.ts",
+        "writer-native-cell-alignment.spec.ts",
+        "writer-table-alignment.spec.ts",
+        "--reporter=list,json"
+      ],
+      "status": 0,
+      "upstreamAbsent": true
+    }
+  ],
+  "metadata": [
+    {
+      "label": "source-tree",
+      "bin": "npm",
+      "args": [
+        "run",
+        "check:source-tree"
+      ],
+      "status": 0,
+      "rawHash": "6c5bd2e3c84892b8cc26b8b1b5f06a950891f9d5988a8ef1f1496f0c252cd33e",
+      "metadataOnly": true
+    },
+    {
+      "label": "source-provenance",
+      "bin": "npm",
+      "args": [
+        "run",
+        "check:source-provenance"
+      ],
+      "status": 0,
+      "rawHash": "0fef960b6d88c42403849f9ec0a325ba17861883bcec473bed62e0a5a0aeb1a5",
+      "metadataOnly": true
+    },
+    {
+      "label": "registry-build-closure-final",
+      "bin": "npm",
+      "args": [
+        "run",
+        "inventory:registry:build"
+      ],
+      "status": 0,
+      "rawHash": "f941feea056f9f9125ac8a96978ff0fda711beef74563b36c553fc89490f0209",
+      "metadataOnly": true
+    },
+    {
+      "label": "registry-check-closure-final",
+      "bin": "npm",
+      "args": [
+        "run",
+        "inventory:registry:check"
+      ],
+      "status": 0,
+      "rawHash": "78010e3af90386495d24cd2f36c824436d779bcb743b8280446251d6d9d6d9f6",
+      "metadataOnly": true
+    },
+    {
+      "label": "writer-resources-closure-final",
+      "bin": "node_modules/.bin/tsx",
+      "args": [
+        "scripts/generate-writer-ui-resources.ts",
+        "--check"
+      ],
+      "status": 0,
+      "rawHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "metadataOnly": true
+    },
+    {
+      "label": "inventory-invariants-closure-final",
+      "bin": "npm",
+      "args": [
+        "run",
+        "inventory:invariants"
+      ],
+      "status": 0,
+      "rawHash": "662ca70bc09882d08fe7cbd54a7817ce61c0b549ba835c31351e757577368e1a",
+      "metadataOnly": true
+    },
+    {
+      "label": "inventory-parity-closure-final",
+      "bin": "npm",
+      "args": [
+        "run",
+        "inventory:parity"
+      ],
+      "status": 0,
+      "rawHash": "48e96c3d2bccdc0a726e39a99284dac910013b27ca20fbab04dadbe407e73934",
+      "metadataOnly": true
+    },
+    {
+      "label": "routing-closure-final",
+      "bin": "node",
+      "args": [
+        ".agentplane/policy/check-routing.mjs"
+      ],
+      "status": 0,
+      "rawHash": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9",
+      "metadataOnly": true
+    },
+    {
+      "label": "doctor-closure-final",
+      "bin": "ap",
+      "args": [
+        "doctor"
+      ],
+      "status": 0,
+      "rawHash": "ffab72efe9b80ed121cdc76864f416c898ba549f7d396184dfd38d01f2dcc99b",
+      "metadataOnly": true
+    }
+  ],
+  "quality": {
+    "reviewer": "same implementing agent",
+    "independent": false,
+    "evaluatedSha": "012fa4967c149abb37796669f253da9f69dbc24c",
+    "report": ".agentplane/tasks/202610100007-HM2YX4/quality/20261010-003056028-recovery-context/quality-report.json",
+    "verdict": "pass"
+  },
+  "noUpstreamSourceHelpersOrRawMapsStoredInAgentPlane": true,
+  "rawEvidenceLocation": "Ignored apps/office/node_modules/.cache/parity-coverage/HM2YX4 and ZJJ73M; bounded reports only in AgentPlane.",
+  "testPassingReplayForHelperRepairs": 0,
+  "sourceChangedRevalidation": "81 direct-related files were run on final source after genuine native LR header partition and exact two inherited ODF acceptance migrations; initial old single-file maps/counters excluded.",
+  "taskId": "202610100007-HM2YX4",
+  "cadenceAfterClose": "6/10 after BZQGYC",
+  "implementationSourceCheckpoint": "e8293302965a",
+  "sourceInterface": "Pinned SvxLRSpaceItem QueryValue/PutValue represented twip-backed UNO members0/4..12; native original clone, eleven-field context, direct ItemSet ownership and unchanged frmitems export binding.",
+  "sourceResponsibilities": {
+    "preserved": [
+      "signed measure conversion",
+      "complete scale struct source setter order and sticky-zero flags",
+      "native signed16-to-uint16 scales",
+      "independent left/right relative metadata bounds0..65534 without geometry rescaling",
+      "first-line uint16 proportion storage",
+      "native bool/signed32 Any2Bool and invalid fallback",
+      "original double absolute query conversion before rounding versus resolved aggregate metrics",
+      "malformed UNO admission before mutation",
+      "table original native ItemSet owns independent complete copied item"
+    ],
+    "remaining": [
+      "font-relative SvxIndentValue and members13..15",
+      "native presentation/metric scaling/full UNO binding",
+      "complete native LR/UL browser transport",
+      "shared/inherited native frame graph transport",
+      "full table UI/layout/filter parity"
+    ]
+  },
+  "wholeChangedProductionCoverage": {
+    "status": "pass",
+    "sourceHashes": {
+      "apps/office/src/editeng/source/items/frmitems.ts": "4b2a3f2a8903c4dd7407ebd1ecd7f78c6b3c8fd3a35cd74fa12d73773e6a5050",
+      "apps/office/src/editeng/inc/lrspitem.ts": "302089febf7012193bb1a41f3773fd83f16440e1af57c7dbcdeed0b2f937eac2"
+    },
+    "actualCoverage": {
+      "lines": {
+        "total": 396,
+        "covered": 396,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 440,
+        "covered": 440,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 144,
+        "covered": 144,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 381,
+        "covered": 381,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "perModule": {
+      "apps/office/src/editeng/source/items/frmitems.ts": {
+        "lines": {
+          "total": 286,
+          "covered": 286,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 107,
+          "covered": 107,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 321,
+          "covered": 321,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 285,
+          "covered": 285,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "apps/office/src/editeng/inc/lrspitem.ts": {
+        "lines": {
+          "total": 110,
+          "covered": 110,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 37,
+          "covered": 37,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 119,
+          "covered": 119,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 96,
+          "covered": 96,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    "zeroNegativeCounters": true,
+    "completeCurrentSourceMapIdentity": true,
+    "onlyActualCurrentTaskCounters": true,
+    "allFinalSourceCasesPassed": true,
+    "acceptedUniqueCases": 1089,
+    "relatedFiles": 81,
+    "freshCases": 57,
+    "profiles": [
+      {
+        "label": "final-lr-value",
+        "mapSha256": "49feef740a3202fbf829a77ae11f4edceae3bcf8c072d5e8a54e93bd92accbfc",
+        "reportSha256": "a99f4563b433986962f19e791d07bcdfb47bc277a837600354e82524ca2a081e"
+      }
+    ],
+    "passingReplayForHelperRepairs": 0,
+    "oldMapOrCounterReuse": false
+  },
+  "freshTestHashes": {
+    "apps/office/src/editeng/source/items/native-lr-space-value.test.ts": "3dccc634bac0d9ca3a5bf6c4286124b84c02aef576bdeba092dd794e23e3f16a",
+    "apps/office/src/sw/source/core/table/native-table-lr-value.test.ts": "1e1b3ea408c4d2c186e506c2ded2a84f93dead88bed6f6da7ffe7a387b870148"
+  },
+  "preservation": {
+    "status": "pass",
+    "originalPaths": 8546,
+    "unchangedOriginalPaths": 8538,
+    "changedPaths": [
+      ".agentplane/tasks/202609240501-C9TN6M/README.md",
+      "apps/office/src/editeng/source/items/frmitems.ts",
+      "apps/office/src/sw/browser/editor/native-table-hori-items.test.tsx",
+      "apps/office/src/sw/source/core/table/native-table-lr-item.test.ts",
+      "docs/program/registry/shared/provenance/editeng/source/items/frmitems.ts.json",
+      "docs/program/registry/shared/runtime/editeng/source/items/frmitems.ts.json",
+      "docs/program/registry/writer/provenance/sw/source/filter/xml/xmlexp.ts.json",
+      "docs/program/registry/writer/runtime/sw/source/filter/xml/xmlexp.ts.json"
+    ],
+    "oldTestFiles": 644,
+    "oldTestsByteIdentical": 642,
+    "oldTestMigrations": 2,
+    "canonicalHistoricalPrefixes": 2,
+    "exactNativeDeclarationOwnershipMigrations": 1,
+    "parentFindingsPrefixPreserved": true
+  },
+  "relatedSeparateAcceptanceRepair": {
+    "task": "202610100017-ZJJ73M",
+    "semanticCommit": "b849883c6c5c445da8aa83b3943e72515f9968ba",
+    "closeCommit": "8caffe4c69dd",
+    "sourceBackedMigrations": 2,
+    "noProductionChange": true
+  },
+  "exactCurrentInventoryOwnershipMigration": {
+    "field": "frmitems.ts runtime semantic.localSymbols",
+    "removedOwnedDeclaration": "SvxLRSpaceItem",
+    "newOwner": "apps/office/src/editeng/inc/lrspitem.ts",
+    "nativeOwner": "include/editeng/lrspitem.hxx",
+    "exportBindingRetained": true,
+    "otherHistoricalStatusesDefaultsClassificationsEvidencePreserved": true
+  },
+  "initialEvidenceExcluded": {
+    "cases": 3851,
+    "passed": 3849,
+    "failed": 2,
+    "pending": 0,
+    "files": 362,
+    "sourceHashes": {
+      "apps/office/src/editeng/source/items/frmitems.ts": "c8be7a1746a05680deacca2379fa64639bf432a5bc1b182596ca291e396d2e7f"
+    },
+    "rawReportSha256": "dd656838de58eb41eab5a7a3a58324840bd96a91a8bade2ea5126d28601a8f8b",
+    "rawMapSha256": "348303a4782be3cbcfd7277b72dbe4d3ef56ee87a995c545a464504c2f34d362",
+    "noCountersOrMapsReusedForFinalCoverage": true
+  },
+  "metadataFailuresResolved": [
+    {
+      "gate": "initial registry-check",
+      "reason": "Old file ownership list still enumerated class moved to matching native header",
+      "resolution": "Exact declaration ownership list migration, preserve re-export; no duplicate class or fake divergence"
+    },
+    {
+      "gate": "provisional registry-build",
+      "reason": "Provisional missing-symbol violation did not describe the actual source-owned declaration contract",
+      "resolution": "Resolved by accurate current ownership metadata before final successful build/check"
+    }
+  ],
+  "registeredRecoveryOpenSaveSettingsDeviationsUnchanged": true
+}

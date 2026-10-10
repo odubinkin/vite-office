@@ -3,9 +3,36 @@
 import { SfxBroadcaster, type SfxListenerTarget } from "../../svl/source/notify/SfxBroadcaster";
 import { SvtBroadcaster } from "../../svl/source/notify/broadcast";
 import { SfxListener } from "../../svl/source/notify/lstner";
-import { AttrSetChangeHint, SwAttrSetChg, type SwAtomicModelHint, type SwModelHint } from "./hints";
+import {
+  AttrSetChangeHint,
+  ObjectDyingHint,
+  SwAttrSetChg,
+  type SwFormatChangeHint,
+  type SwAtomicModelHint,
+  type SwModelHint,
+} from "./hints";
 import type { SfxPoolItem } from "../../svl/source/items/poolitem";
 import type { SwAttrSet } from "../source/core/attr/swatrset";
+
+/** Native registration change borrows the surviving modify or an absent root parent. */
+export class ModifyChangedHint {
+  public readonly kind = "modify-changed";
+  /** Borrows the native replacement owner. @param m_pNew - Surviving owner or absent. @returns Nothing. */
+  public constructor(public readonly m_pNew: SwModify | undefined) {}
+}
+
+/** Implements the shared native ClientBase registration check for the represented Writer client families. @param client - Original client or modify. @param hint - Original dying owner. @returns Borrowed replacement hint only for a matching registration. */
+function checkRegistration(
+  client: SwClient | SwModify,
+  hint: ObjectDyingHint,
+): ModifyChangedHint | undefined {
+  const source = client.GetRegisteredIn();
+  if (hint.m_pDying !== source) return undefined;
+  const parent = source.GetRegisteredIn();
+  if (parent !== undefined) client.RegisterToModify(parent);
+  else client.EndListeningAll();
+  return new ModifyChangedHint(parent);
+}
 
 /** Native legacy notification borrows original old and new pool items. */
 export class LegacyModifyHint {
@@ -59,20 +86,28 @@ export class SwClient extends SfxListener<SwModelHint> {
   /** Detaches a dying source. @param broadcaster - Disposed broadcaster. @returns Nothing. */
   public override BroadcasterDying(broadcaster: SfxBroadcaster<SwModelHint>): void {
     super.BroadcasterDying(broadcaster);
-    if (broadcaster !== this.registeredIn) return;
-    const parent = this.registeredIn.GetRegisteredIn();
+    this.CheckRegistration(new ObjectDyingHint(broadcaster as SwModify));
+  }
+
+  /** Applies the native matching-source death registration check. @param hint - Original dying owner. @returns Native replacement hint or absent for a foreign owner. */
+  public CheckRegistration(hint: ObjectDyingHint): ModifyChangedHint | undefined {
+    return checkRegistration(this, hint);
+  }
+
+  /** Clears reciprocal registrations and the native single-owner pointer together. @returns Nothing. */
+  public override EndListeningAll(): void {
+    super.EndListeningAll();
     this.registeredIn = undefined;
-    if (parent !== undefined) this.RegisterToModify(parent);
   }
 
   /** Ends the single Writer registration. @returns Nothing. */
   public Dispose(): void {
     this.EndListeningAll();
-    this.registeredIn = undefined;
   }
 
   /** Writer-specific notification hook. @param source - Emitting modify. @param hint - Typed hint. @returns Nothing. */
   protected SwClientNotify(source: SwModify, hint: SwModelHint): void {
+    if (hint.kind === "object-dying") this.CheckRegistration(hint);
     this.callback?.(source, hint);
   }
 }
@@ -97,6 +132,11 @@ export class SwModify
 
   /** Ends the optional parent registration. @returns Nothing. */
   public EndListening(): void {
+    this.EndListeningAll();
+  }
+
+  /** Ends the represented native single-parent registration. @returns Nothing. */
+  public EndListeningAll(): void {
     this.registeredIn?.RemoveListener(this);
     this.registeredIn = undefined;
   }
@@ -109,13 +149,20 @@ export class SwModify
   /** Receives and propagates one parent notification. @param broadcaster - Parent source. @param hint - Typed hint. @returns Nothing. */
   public Notify(broadcaster: SfxBroadcaster<SwModelHint>, hint: SwModelHint): void {
     if (broadcaster !== this.registeredIn) return;
-    if (hint.kind === "attr-set-change") {
+    if (
+      hint.kind === "attr-set-change" ||
+      hint.kind === "format-change" ||
+      hint.kind === "object-dying"
+    ) {
       this.SwClientNotify(broadcaster as SwModify, hint);
     } else if (hint.kind === "model-transaction") {
       if (
         hint.hints.some(
           /** Identifies native attribute deltas requiring parent filtering. @param nested - Atomic hint. @returns Whether native. */
-          (nested) => nested.kind === "attr-set-change",
+          (nested) =>
+            nested.kind === "attr-set-change" ||
+            nested.kind === "format-change" ||
+            nested.kind === "object-dying",
         )
       )
         this.RunNotificationTransaction(
@@ -130,15 +177,30 @@ export class SwModify
 
   /** Detaches a parent that has begun destruction. @param broadcaster - Dying source. @returns Nothing. */
   public BroadcasterDying(broadcaster: SfxBroadcaster<SwModelHint>): void {
-    if (broadcaster !== this.registeredIn) return;
-    const parent = this.registeredIn.GetRegisteredIn();
-    this.registeredIn = undefined;
-    if (parent !== undefined) this.RegisterToModify(parent);
+    this.CheckRegistration(new ObjectDyingHint(broadcaster as SwModify));
+  }
+
+  /** Applies native ClientBase cleanup to this original modify registration. @param hint - Original dying owner. @returns Borrowed replacement hint or absent. */
+  public CheckRegistration(hint: ObjectDyingHint): ModifyChangedHint | undefined {
+    return checkRegistration(this, hint);
   }
 
   /** Reports native Writer clients independently of observer subscriptions. @returns Whether a Writer client remains. */
   public HasWriterListeners(): boolean {
     return this.HasListeners();
+  }
+
+  /** Moves each original Writer client before delivering the borrowed death replacement hint. @param hint - Native old and surviving format owners. @returns Nothing. */
+  public PrepareFormatDeath(hint: SwFormatChangeHint): void {
+    this.ForAllListeners(
+      /** Reparents the actual registered client before its native callback. @param listener - Original Writer client. @returns Continue flag. */
+      (listener) => {
+        const client = listener as SwModify;
+        client.RegisterToModify(hint.m_pNewFormat as SwModify);
+        client.SwClientNotify(this, hint);
+        return false;
+      },
+    );
   }
 
   /** Locks native modify notifications; the source flag is boolean, not a depth counter. @returns Nothing. */
@@ -156,7 +218,13 @@ export class SwModify
   /** Dispatches native attribute changes while preventing recursive modify calls. @param source - Native emitting owner. @param hint - Native notification. @returns Nothing. */
   public SwClientNotify(source: SwModify, hint: SwModelHint): void {
     void source;
-    if (hint.kind !== "attr-set-change" || this.IsModifyLocked()) return;
+    if (
+      (hint.kind !== "attr-set-change" &&
+        hint.kind !== "format-change" &&
+        hint.kind !== "object-dying") ||
+      this.IsModifyLocked()
+    )
+      return;
     this.LockModify();
     try {
       this.CallSwClientNotify(hint);
@@ -167,7 +235,7 @@ export class SwModify
 
   /** Emits or queues one atomic Writer hint. @param hint - Atomic typed change. @returns Nothing. */
   public CallSwClientNotify(hint: SwAtomicModelHint): void {
-    if (this.notificationDepth > 0) this.pendingHints.push(hint);
+    if (this.notificationDepth > 0 && hint.kind !== "object-dying") this.pendingHints.push(hint);
     else this.Broadcast(hint);
   }
 
@@ -177,17 +245,29 @@ export class SwModify
     try {
       return mutation();
     } finally {
-      this.notificationDepth -= 1;
-      if (this.notificationDepth === 0 && this.pendingHints.length > 0) {
-        const hints = Object.freeze(this.pendingHints.slice());
-        this.pendingHints = [];
-        this.Broadcast(Object.freeze({ hints, kind: "model-transaction" }));
+      if (!this.IsDisposed()) {
+        this.notificationDepth -= 1;
+        if (this.notificationDepth === 0 && this.pendingHints.length > 0) {
+          const hints = Object.freeze(this.pendingHints.slice());
+          this.pendingHints = [];
+          this.Broadcast(Object.freeze({ hints, kind: "model-transaction" }));
+        }
       }
     }
   }
 
   /** Detaches parent and clients safely. @returns Nothing. */
   public DisposeModify(): void {
+    if (this.IsDisposed()) return;
+    const hint = new ObjectDyingHint(this);
+    SwModify.prototype.SwClientNotify.call(this, this, hint);
+    this.ForAllListeners(
+      /** Applies native fallback cleanup to clients whose override did not detach. @param listener - Original remaining Writer client. @returns Continue flag. */
+      (listener) => {
+        (listener as SwClient | SwModify).CheckRegistration(hint);
+        return false;
+      },
+    );
     this.PrepareForDestruction();
     this.EndListening();
     this.pendingHints = [];

@@ -65,7 +65,7 @@ describe("native repeated table headlines", /** Registers source-shaped page own
     expect(f.table.GetRowsToRepeat()).toBe(2);
   });
   it("moves an ordinary oversized first row without inventing repeated header space", /** Checks first-row movement before its own frame exists. @returns Nothing. */ () => {
-    const f = fixture([900, 300], {});
+    const f = fixture([900, 300], { headerRows: 0 });
     const result = createSwPageFrames(
       [
         {
@@ -84,18 +84,19 @@ describe("native repeated table headlines", /** Registers source-shaped page own
     expect(ranges(result)).toEqual([[], [[0, 0, 0]], [[1, 1, 0]]]);
     expect(f.table.GetRowsToRepeat()).toBe(0);
   });
-  it.each<SwTableFormat>([
-    {},
-    { headerRows: 2 },
-    { headerRows: 2, repeatHeaderRows: false },
-    { headerRows: 0, repeatHeaderRows: true },
+  it.each<[SwTableFormat, number]>([
+    [{}, 1],
+    [{ headerRows: 2 }, 2],
+    [{ headerRows: 2, repeatHeaderRows: false }, 0],
+    [{ headerRows: 0, repeatHeaderRows: true }, 0],
   ])(
-    "keeps native zero/default/disabled repeat count %j",
-    /** Checks independent authored flags. @param format - Format. @returns Nothing. */ (
+    "keeps native default/count-only/disabled repeat count %j",
+    /** Checks independent native defaults and explicit boundary input. @param format - Format. @param expected - Native count. @returns Nothing. */ (
       format,
+      expected,
     ) => {
       const f = fixture([200, 300, 300], format);
-      expect(f.table.GetRowsToRepeat()).toBe(0);
+      expect(f.table.GetRowsToRepeat()).toBe(expected);
       expect(ranges(createSwPageFrames([], page, undefined, [f.input]))).toEqual([[[0, 2, 0]]]);
     },
   );

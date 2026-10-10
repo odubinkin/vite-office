@@ -6,6 +6,7 @@
 import type { SfxItemPool } from "../../../../svl/source/items/itempool";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SfxUnoAnyItem } from "../../../../sfx2/source/view/frame";
+import { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
 import { SvxFontItem } from "../../../../editeng/source/items/textitem";
 import { type SfxPoolItem, type SfxPoolItemSnapshot } from "../../../../svl/source/items/poolitem";
 import {
@@ -66,15 +67,17 @@ export function encodeSfxPoolItem(item: SfxPoolItem): SfxPoolItemSnapshot {
   if (item instanceof SfxUnoAnyItem)
     throw new Error("SfxUnoAnyItem is a request argument and cannot be persisted.");
   const value =
-    item instanceof SwFormatINetFormat
-      ? JSON.stringify(encodeSwFormatINetFormatRecord(item))
-      : item instanceof SvxFontItem && item.GetGenericFamily() !== undefined
-        ? {
-            familyName: item.GetFamilyName(),
-            resolvedFamilyName: item.GetResolvedFamilyName(),
-            genericFamily: item.GetGenericFamily() as string,
-          }
-        : item.QueryValue();
+    item instanceof SvxULSpaceItem
+      ? encodeULSpaceValue(item)
+      : item instanceof SwFormatINetFormat
+        ? JSON.stringify(encodeSwFormatINetFormatRecord(item))
+        : item instanceof SvxFontItem && item.GetGenericFamily() !== undefined
+          ? {
+              familyName: item.GetFamilyName(),
+              resolvedFamilyName: item.GetResolvedFamilyName(),
+              genericFamily: item.GetGenericFamily() as string,
+            }
+          : item.QueryValue();
   if (!isSfxPoolItemValue(value)) throw new Error("SfxPoolItem is not persistence-safe.");
   return {
     value,
@@ -122,4 +125,14 @@ export function decodeSwFormatINetFormat(snapshot: SfxPoolItemSnapshot): SwForma
     throw new Error("SwFormatINetFormat snapshot is invalid.");
   }
   return decodeSwFormatINetFormatRecord(parsed);
+}
+
+/** Writes native UL fields only at the browser tuple boundary; old default-proportion payloads stay compatible. @param item - Original native item. @returns Complete primitive spacing value. */
+function encodeULSpaceValue(item: SvxULSpaceItem): readonly number[] {
+  const upper = item.GetUpper(),
+    lower = item.GetLower(),
+    context = item.GetContext();
+  if (item.GetPropUpper() !== 100 || item.GetPropLower() !== 100)
+    return [upper, lower, context ? 1 : 0, item.GetPropUpper(), item.GetPropLower()];
+  return context ? [upper, lower, 1] : [upper, lower];
 }

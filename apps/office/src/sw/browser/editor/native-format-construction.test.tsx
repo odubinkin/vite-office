@@ -86,7 +86,7 @@ it("mounted Writer retains original text and lifecycle while constructed formats
     );
     expect(cellFrame.IsCompletePaint()).toBe(true);
     expect(cellFrame.isFramePrintAreaValid()).toBe(false);
-    expect(required(cell.closest("td"))).toHaveStyle({ verticalAlign: "middle" });
+    expect(required(cell.closest(":is(td,th)"))).toHaveStyle({ verticalAlign: "middle" });
     expect(box.GetParagraphs()[0]).toBe(node);
     expect(rowFrame.Lower()).toBe(cellFrame);
     expect(session.docShell.GetDocumentState()).toEqual(before);

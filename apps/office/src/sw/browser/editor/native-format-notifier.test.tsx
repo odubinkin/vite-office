@@ -29,9 +29,11 @@ it("mounted native notifier updates original row height cell alignment and inher
     node.SetText("Original direct native text");
     render(<WriterWorkbench isActive view={session.view} />);
     const editable = screen.getByRole("textbox", { name: "Row 1 column 1 paragraph 1" });
-    const cell = required(editable.closest("td")),
+    const cell = required(editable.closest<HTMLTableCellElement>("td,th")),
       sibling = required(
-        screen.getByRole("textbox", { name: "Row 1 column 2 paragraph 1" }).closest("td"),
+        screen
+          .getByRole("textbox", { name: "Row 1 column 2 paragraph 1" })
+          .closest<HTMLTableCellElement>("td,th"),
       );
     const format = first.GetFrameFormat(),
       rowFormat = row.GetFrameFormat();
@@ -102,10 +104,14 @@ it("mounted native notifier follows shared claims and actual repeated Undo Redo 
     doc.GetUndoManager().Clear();
     render(<WriterWorkbench isActive view={session.view} />);
     const cell = required(
-      screen.getByRole("textbox", { name: "Row 1 column 1 paragraph 1" }).closest("td"),
+      screen
+        .getByRole("textbox", { name: "Row 1 column 1 paragraph 1" })
+        .closest<HTMLTableCellElement>("td,th"),
     );
     const sibling = required(
-      screen.getByRole("textbox", { name: "Row 1 column 2 paragraph 1" }).closest("td"),
+      screen
+        .getByRole("textbox", { name: "Row 1 column 2 paragraph 1" })
+        .closest<HTMLTableCellElement>("td,th"),
     );
     act(
       /** Applies actual document-owned native shared-format history. @returns Nothing. */ () => {

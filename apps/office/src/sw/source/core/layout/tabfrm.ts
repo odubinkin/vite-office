@@ -1,12 +1,51 @@
 /** @fileoverview Formats represented horizontal table print areas from native SwTabFrame::Format. */
 import type { SwTable, SwTableBox, SwTableLine } from "../table/swtable";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
-import { SwFrameSize } from "../../../inc/fmtfsize";
+import { SwFrameSize, type SwFormatFrameSize } from "../../../inc/fmtfsize";
 import { LegacyModifyHint, BroadcastingModify, type SwModify } from "../../../inc/calbck";
 import { SwFrame, SwLayoutFrame, SwFrameType } from "./wsfrm";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
-import { RES_FRM_SIZE, RES_ROW_SPLIT, RES_VERT_ORIENT } from "../../../inc/hintids";
-import type { SwModelHint } from "../../../inc/hints";
+import {
+  RES_FRM_SIZE,
+  RES_ROW_SPLIT,
+  RES_VERT_ORIENT,
+  RES_BOX,
+  RES_COLLAPSING_BORDERS,
+  RES_HORI_ORIENT,
+  RES_UL_SPACE,
+  RES_BREAK,
+  RES_LAYOUT_SPLIT,
+} from "../../../inc/hintids";
+import { AttrSetChangeHint, SwAttrSetChg, type SwModelHint } from "../../../inc/hints";
+import type { SwFormatLayoutSplit } from "../../../inc/fmtlsplt";
+import type { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
+
+/** Native table invalidation mask from tabfrm.hxx; root browse-width propagation remains unrepresented. */
+export enum SwTabFrameInvFlags {
+  NONE = 0x00,
+  InvalidatePrt = 0x02,
+  InvalidateIndNextPrt = 0x04,
+  InvalidatePrevPrt = 0x08,
+  SetIndNextCompletePaint = 0x10,
+  InvalidateBrowseWidth = 0x20,
+  InvalidatePos = 0x40,
+  InvalidateNextPos = 0x80,
+}
+
+/** Invalidates original layout lowers for native collapsing-border recalculation. @param frame - Original layout owner. @returns Nothing. */
+function lcl_InvalidateAllLowersPrt(frame: SwLayoutFrame): void {
+  frame.InvalidatePrt_();
+  frame.InvalidateSize_();
+  frame.SetCompletePaint();
+  for (let lower = frame.Lower(); lower !== undefined; lower = lower.GetNext()) {
+    if (lower instanceof SwLayoutFrame) lcl_InvalidateAllLowersPrt(lower);
+    else {
+      lower.InvalidatePrt_();
+      lower.InvalidateSize_();
+      lower.SetCompletePaint();
+    }
+  }
+}
 
 /** Owns represented flat-row height over its original native line. */
 export class SwRowFrame extends SwLayoutFrame {
@@ -34,6 +73,8 @@ export class SwRowFrame extends SwLayoutFrame {
   }
   /** Forwards the exact native size/split item to the layout frame. @param item - Borrowed accepted pool item. @returns Nothing. */
   protected OnFrameSize(item: SfxPoolItem): void {
+    const table = this.FindTabFrame();
+    if (table && !this.GetNext()) table.InvalidatePos();
     const source = new BroadcastingModify();
     super.SwClientNotify(source, new LegacyModifyHint(undefined, item));
   }
@@ -115,6 +156,12 @@ export class SwCellFrame extends SwLayoutFrame {
       this.InvalidateSize();
       this.InvalidatePrt_();
       this.SetCompletePaint();
+      const table = this.FindTabFrame();
+      if (table?.IsCollapsingBorders()) {
+        const row = this.GetUpper() as SwLayoutFrame;
+        row.InvalidateSize_();
+        row.InvalidatePrt_();
+      }
     } else if (hint.kind === "move-table-box") {
       if (hint.m_rTableBox !== this.box) return;
       this.RegisterToFormat(hint.m_rNewFormat);
@@ -132,6 +179,25 @@ export class SwCellFrame extends SwLayoutFrame {
       if (orientation) {
         this.SetCompletePaint();
         this.InvalidatePrt();
+      }
+      const box =
+        hint.kind === "legacy-modify"
+          ? hint.m_pNew?.Which() === RES_BOX
+            ? hint.m_pNew
+            : undefined
+          : hint.kind === "attr-set-change"
+            ? hint.m_pNew?.GetChgSet().GetItemIfSet(RES_BOX, false)
+            : undefined;
+      if (box) {
+        let row = this.GetUpper();
+        while (row?.GetUpper() && !row.GetUpper()?.IsTabFrame()) row = row.GetUpper();
+        const table = row?.GetUpper();
+        if (table?.IsTabFrame() && (table as SwTabFrame).IsCollapsingBorders()) {
+          lcl_InvalidateAllLowersPrt(row as SwLayoutFrame);
+          const next = row?.GetNext();
+          if (next) lcl_InvalidateAllLowersPrt(next as SwRowFrame);
+          else table.InvalidatePrt();
+        }
       }
       super.SwClientNotify(source, hint);
     }
@@ -192,6 +258,93 @@ export class SwTabFrame extends SwLayoutFrame {
     this.DestroyImpl();
   }
 
+  /** Reads the native effective collapsing-border item. @returns Owned, inherited or pooled bool. */
+  public IsCollapsingBorders(): boolean {
+    return (this.GetFormat().GetAttrSet().Get(RES_COLLAPSING_BORDERS) as SfxBoolItem).GetValue();
+  }
+
+  /** Routes native table deltas through copied consumption before generic residual handling. @param source - Original broadcaster. @param hint - Borrowed notification. @returns Nothing. */
+  protected override SwClientNotify(source: SwModify, hint: SwModelHint): void {
+    if (hint.kind === "model-transaction") {
+      for (const nested of hint.hints) this.SwClientNotify(source, nested);
+    } else if (hint.kind === "attr-set-change") {
+      let flags = SwTabFrameInvFlags.NONE;
+      if (hint.m_pOld && hint.m_pNew) {
+        const oldItems = hint.m_pOld.GetChgSet().entries(),
+          newItems = hint.m_pNew.GetChgSet().entries(),
+          oldSet = new SwAttrSetChg(hint.m_pOld),
+          newSet = new SwAttrSetChg(hint.m_pNew);
+        let index = 0;
+        do {
+          flags = this.UpdateAttr_(oldItems[index], newItems[index], flags, oldSet, newSet);
+          index += 1;
+        } while (index < newItems.length);
+        if (oldSet.Count() || newSet.Count())
+          super.SwClientNotify(source, new AttrSetChangeHint(oldSet, newSet));
+      }
+      this.Invalidate(flags);
+    } else if (hint.kind === "legacy-modify") {
+      this.Invalidate(this.UpdateAttr_(hint.m_pOld, hint.m_pNew, SwTabFrameInvFlags.NONE));
+    }
+  }
+
+  /** Accumulates represented native table reactions and consumes only copy-owned deltas. @param oldItem - Original previous item. @param newItem - Original accepted item. @param flags - Table mask. @param oldSet - Optional copied old descriptor. @param newSet - Optional copied new descriptor. @returns Updated table mask. */
+  protected UpdateAttr_(
+    oldItem: SfxPoolItem | undefined,
+    newItem: SfxPoolItem | undefined,
+    flags: SwTabFrameInvFlags,
+    oldSet?: SwAttrSetChg,
+    newSet?: SwAttrSetChg,
+  ): SwTabFrameInvFlags {
+    const which = oldItem ? oldItem.Which() : newItem ? newItem.Which() : 0;
+    switch (which) {
+      case RES_FRM_SIZE:
+      case RES_HORI_ORIENT:
+        flags |= SwTabFrameInvFlags.InvalidatePrt | SwTabFrameInvFlags.InvalidateBrowseWidth;
+        break;
+      case RES_BREAK:
+        flags |= SwTabFrameInvFlags.InvalidatePos | SwTabFrameInvFlags.InvalidateNextPos;
+        break;
+      case RES_LAYOUT_SPLIT:
+        // Represented table frames are masters; native follow identity remains unrepresented.
+        flags |= SwTabFrameInvFlags.InvalidatePos;
+        break;
+      case RES_COLLAPSING_BORDERS:
+        flags |= SwTabFrameInvFlags.InvalidatePrt;
+        lcl_InvalidateAllLowersPrt(this);
+        break;
+      case RES_UL_SPACE:
+        return (
+          flags |
+          SwTabFrameInvFlags.InvalidateIndNextPrt |
+          SwTabFrameInvFlags.InvalidatePrevPrt |
+          SwTabFrameInvFlags.SetIndNextCompletePaint
+        );
+      default:
+        return flags;
+    }
+    if (oldSet || newSet) {
+      oldSet?.ClearItem(which);
+      newSet?.ClearItem(which);
+    } else super.SwClientNotify(new BroadcastingModify(), new LegacyModifyHint(oldItem, newItem));
+    return flags;
+  }
+
+  /** Applies native table flags over original flat siblings; page/content/root/section propagation remains unrepresented. @param flags - Native table mask. @returns Nothing. */
+  protected Invalidate(flags: SwTabFrameInvFlags): void {
+    if (flags === SwTabFrameInvFlags.NONE) return;
+    this.InvalidatePage();
+    if (flags & SwTabFrameInvFlags.InvalidatePrt) this.InvalidatePrt_();
+    if (flags & SwTabFrameInvFlags.InvalidatePos) this.InvalidatePos_();
+    const next = this.GetNext();
+    if (next) {
+      if (flags & SwTabFrameInvFlags.InvalidateIndNextPrt) next.InvalidatePrt_();
+      if (flags & SwTabFrameInvFlags.SetIndNextCompletePaint) next.SetCompletePaint();
+    }
+    if (flags & SwTabFrameInvFlags.InvalidatePrevPrt) this.GetPrev()?.InvalidatePrt_();
+    if (flags & SwTabFrameInvFlags.InvalidateNextPos) next?.InvalidatePos();
+  }
+
   /** Returns the canonical table represented by this frame. @returns Actual owner. */
   public GetTable(): SwTable {
     return this.table;
@@ -200,7 +353,9 @@ export class SwTabFrame extends SwLayoutFrame {
   /** Resolves an actual box reference width against this table's print area. @param box - Original box. @param upperWidth - Upper print width. @returns Device-neutral print width in twips. */
   public GetBoxPrintWidth(box: SwTableBox, upperWidth: number): number {
     const wished =
-      this.table.GetFormat().width ??
+      (
+        this.GetFormat().GetAttrSet().GetItemIfSet(RES_FRM_SIZE) as SwFormatFrameSize | undefined
+      )?.GetWidth() ??
       this.table
         .GetColumnWidths()
         .reduce(
@@ -223,26 +378,29 @@ export class SwTabFrame extends SwLayoutFrame {
 
   /** Reads the native table-frame split item with its true default. @returns Whether table rows may occupy follow frames. */
   public IsLayoutSplitAllowed(): boolean {
-    return this.table.GetFormat().layoutSplit ?? true;
+    return (this.GetFormat().GetAttrSet().Get(RES_LAYOUT_SPLIT) as SwFormatLayoutSplit).GetValue();
   }
 
   /** Resolves native orientation spacing without fly or outer-border offsets. @param upperWidth - Actual upper print width. @returns Table print area. */
   public Format(upperWidth: number): SwTablePrintArea {
-    const format = this.table.GetFormat();
+    const lr = this.GetFormat().GetLRSpace();
     const wished = Math.min(
       65535,
-      Math.max(this.table.GetColumnWidths().length * 23, format.width ?? 0),
+      Math.max(
+        this.table.GetColumnWidths().length * 23,
+        this.GetFormat().GetFrameSize().GetWidth(),
+      ),
     );
     let left = 0;
     let right = 0;
-    const orient = this.table.GetHoriOrient();
+    const orient = this.GetFormat().GetHoriOrient().GetHoriOrient();
     if (orient === HoriOrientation.NONE) {
-      left = format.marginLeft ?? 0;
-      right = format.marginRight ?? 0;
+      left = lr.ResolveLeft();
+      right = lr.ResolveRight();
     } else {
       switch (orient) {
         case HoriOrientation.LEFT_AND_WIDTH:
-          left = format.marginLeft ?? 0;
+          left = lr.ResolveLeft();
           right = upperWidth - left - wished;
           break;
         case HoriOrientation.LEFT:

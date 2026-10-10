@@ -158,7 +158,7 @@ it.each([0, 3, 6])(
 );
 it.each([
   [SwInsertTableFlags.NONE, 4, 0, false, "table-contents"],
-  [SwInsertTableFlags.Headline, 0, 1, false, "table-heading"],
+  [SwInsertTableFlags.Headline, 0, 0, false, "table-heading"],
   [SwInsertTableFlags.HeadlineNoBorder, 2, 2, true, "table-heading"],
   [SwInsertTableFlags.All, 1, 1, true, "table-contents"],
 ] as const)(
@@ -216,7 +216,7 @@ it("uses first free native names on collisions and owns dialog construction valu
     const recreated = required(o.doc.GetTables()[0]);
     expect(recreated.GetName()).toBe("Table2");
     expect(recreated.GetFormat()).toMatchObject({
-      headerRows: 1,
+      headerRows: 0,
       repeatHeaderRows: false,
       layoutSplit: false,
     });

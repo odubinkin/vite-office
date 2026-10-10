@@ -104,6 +104,9 @@ export const RES_FRM_SIZE = 90 as const;
 /** Vertical frame orientation, RES_FRMATR_BEGIN + 20. */
 export const RES_VERT_ORIENT = 109 as const;
 
+/** Native horizontal frame orientation, RES_FRMATR_BEGIN +21. */
+export const RES_HORI_ORIENT = 110 as const;
+
 /** Native four-sided box item, RES_FRMATR_BEGIN + 24. */
 export const RES_BOX = 113 as const;
 
@@ -115,6 +118,9 @@ export const RES_MARGIN_FIRSTLINE = 92 as const;
 
 /** Right paragraph margin, matching `RES_MARGIN_RIGHT`. */
 export const RES_MARGIN_RIGHT = 94 as const;
+
+/** Original frame left/right spacing, matching RES_LR_SPACE. */
+export const RES_LR_SPACE = 98 as const;
 
 /** Upper/lower paragraph spacing, matching `RES_UL_SPACE`. */
 export const RES_UL_SPACE = 99 as const;

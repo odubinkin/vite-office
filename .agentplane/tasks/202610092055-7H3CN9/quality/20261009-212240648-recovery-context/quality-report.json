@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "202610092055-7H3CN9",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-09T21:22:40.648Z",
+  "verdict": "pass",
+  "summary": "Same-agent non-independent review of semantic33c4750567c1f043b45ef6d5db2a9caf7c8b6223 passes approved original horizontal item ownership scope.",
+  "evaluated_sha": "33c4750567c1f043b45ef6d5db2a9caf7c8b6223",
+  "blueprint_digest": "2ea5e5692a69d7b6bc4eb392a60cda536c2562990e98f02828cb52186b2cf503",
+  "findings": [
+    "Original native four-field item/default/clone/member extraction matches pinned source anchors. Effective original frame reads replace detached orientation storage; native dialog width/orientation arrives in ItemSet. Real direct/inherited graph history and mounted ODT behavior pass.",
+    "All twelve production/fresh-test hashes and twelve migrated fixtures match reviewed commit and current tree.3517 unique accepted cases38fresh; eight complete current production files Istanbul100all-four0negative with source/map identity. Nine statics/currentbuild/seven browser/nine metadata pass.619 old tests preserved except17 exact source-backed operations12files;16 canonical prefixes retained."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610092055-7H3CN9/README.md",
+    ".agentplane/tasks/202610092055-7H3CN9/artifacts/native-table-hori-evidence.json",
+    "Exact reviewed semantic33c4750567c1f043b45ef6d5db2a9caf7c8b6223 hashes checked against git show and current tree."
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Same implementing agent review, not independent. Native LR spacing and generic document attribute history/full layout/UNO presentation/hash/assertions/VCL/copy/Repeat remain separately incomplete; no whole-module or goal parity promotion."
+  ]
+}

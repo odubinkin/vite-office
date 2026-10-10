@@ -38,7 +38,7 @@ for (const width of [1280, 390])
         name: "coupled.odt",
       });
       const view = page.getByRole("table", { name: "CoupledBrowser", exact: true }),
-        cells = view.locator("td");
+        cells = view.locator("td, th");
       await expect(cells).toHaveCount(4);
       await expect(cells).toHaveText(["Original 00", "Original 01", "Original 10", "Original 11"]);
       const original = await cells.allTextContents();
@@ -102,7 +102,7 @@ for (const width of [1280, 390])
           name: "merge.odt",
         });
         const view = page.getByRole("table", { name: "MergeBrowser", exact: true }),
-          cells = view.locator("td"),
+          cells = view.locator("td, th"),
           initial = model === "collapsing",
           next = initial ? "separate" : "collapse";
         await expect(view).toHaveCSS("border-collapse", initial ? "collapse" : "separate");

@@ -56,6 +56,42 @@
         {
           "path": "apps/office/src/sw/browser/editor/native-format-attribute-notify.test.tsx",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/editeng/source/items/native-lr-space-item.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/table/native-table-lr-item.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/undo/native-table-lr-history.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-table-lr-items.test.tsx",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/editeng/source/items/native-lr-space-value.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/table/native-table-lr-value.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/editeng/source/items/native-ul-space-value.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/filter/xml/native-ul-space-item-transport.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-ul-space-complete-history.test.tsx",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -98,6 +134,34 @@
         {
           "path": "vendor/libreoffice-reference/editeng/source/items/frmitems.cxx",
           "marker": "SvxBoxInfoItem::ResetFlags"
+        },
+        {
+          "path": "vendor/libreoffice-reference/editeng/source/items/frmitems.cxx",
+          "marker": "SvxLRSpaceItem::PutValue"
+        },
+        {
+          "path": "vendor/libreoffice-reference/editeng/source/items/frmitems.cxx",
+          "marker": "SvxLRSpaceItem::QueryValue"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/svl/poolitem.hxx",
+          "marker": "Any2Bool"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/editeng/memberids.h",
+          "marker": "MID_L_REL_MARGIN"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/editeng/ulspitem.hxx",
+          "marker": "SvxULSpaceItem"
+        },
+        {
+          "path": "vendor/libreoffice-reference/editeng/source/items/frmitems.cxx",
+          "marker": "SvxULSpaceItem::QueryValue"
+        },
+        {
+          "path": "vendor/libreoffice-reference/editeng/source/items/frmitems.cxx",
+          "marker": "SvxULSpaceItem::PutValue"
         }
       ]
     },
@@ -112,7 +176,8 @@
       "SvxBoxItemLine",
       "SvxBoxInfoItemLine",
       "SvxBoxInfoItemValidFlags",
-      "BorderLine2"
+      "BorderLine2",
+      "SvxLRSpaceItem"
     ],
     "omittedResponsibilities": [
       "Native UNO property mapping and presentation, mutable percentage and font-relative metric APIs, and frame items outside the implemented paragraph subset remain omitted."
@@ -123,7 +188,14 @@
       "Iteration206 draft: scalar kernel cell border/padding storage is replaced by owned SvxBoxItem plus the existing vertical item. Represented lines retain native color/style/width/component arithmetic, signed16 distances/default0, cloning, metrics and supported UNO values; SvxBoxInfoItem retains native validity127. SetTabBorders consumes SfxItemSet and distributes flat union outer/inner lines using source validity rules. Insertion defaults55twips/black10twip lines and0/no-border are preserved. Process/storage uses complete primitive native state with legacy scalar ingress only; ODF and browser paint carry four independent sides. Initial static and upstream-absent runtime verification are pending. Complete native color shading/theme/Word/macros/fly/vertical/RTL/follow/shared-format behavior, per-edge/common-state border widgets and full parity remain unverified. All existing statuses/defaults/evidence/registered I/O/recovery exceptions are preserved.",
       "Iteration206 verified closure: the earlier draft pending statement is historical. Native box/info/line ownership, supported values/defaults/metrics, flat source-defined border distribution, original graph and history, complete primitive transport and four-edge ODF/browser paint passed one full upstream-absent profile with failed/new-case-only closures. Current app and inventory actual counters each reach100% lines/statements/functions/branches under complete identical-source/maps or complete contiguous mapped-region proof. All550 prior acceptance contracts are preserved by522 byte-identical files and28 exact native-representation AST migrations; six new acceptance files and two new infrastructure cases are added. Full per-edge/common-state widgets, native themes/shading/Word and RTL/vertical/follow/shared-format completeness remain unverified; no semantic status or registered I/O/recovery exception is promoted.",
       "Iteration245 ports precise native AttrSetChangeHint old/new effective values, modify locking and inherited Differentiate filtering to original registered clients. Row/cell generic attribute overrides are removed and copying claims are locked. Native default items127/157/158/159 supply actual protection flags, numeric format100/locale normalization, detached non-shareable formula and zero double. Browser snapshot restoration stays a bounded boundary. Full SwTableFormula inheritance/parser/calculation/name conversion, presentation/UNO and native frame invalidation/geometry remain unverified. Targeted verification pending; last full237,next247; no semantic promotion.",
-      "Iteration245 verified1575 unique app cases including20 fresh native format notification/default/ownership/history/UI cases and13 Chromium cases. Initial1538pass6fail; closure1 resolves6failures and explicitly revalidates3 materially affected fresh device/UI scenarios,9pass30skip; closure2 only new/unexecuted related cases31pass14skip. All660 prior acceptance files byte-identical. Actual app/inventory all-four100 binds current complete sources/maps and complete unchanged native declarations/signatures/bodies/enclosing branches/all locations from244; generated V8 duplicate method display ordinal changes are documented with full source hashes, no individual counter sanitization. Browser paint notification follows native clients without adding a document mutation. Existing317 metadata fields/order/status/default/classification/evidence prefixes preserved, one new cellatr record unverified. Full SwTableFormula second-base/calculation/name conversion/UNO, native frame invalidation/geometry and direct native UI registration remain partial. Registered IO/recovery/settings deviations preserved; last full237,next247; no full245."
+      "Iteration245 verified1575 unique app cases including20 fresh native format notification/default/ownership/history/UI cases and13 Chromium cases. Initial1538pass6fail; closure1 resolves6failures and explicitly revalidates3 materially affected fresh device/UI scenarios,9pass30skip; closure2 only new/unexecuted related cases31pass14skip. All660 prior acceptance files byte-identical. Actual app/inventory all-four100 binds current complete sources/maps and complete unchanged native declarations/signatures/bodies/enclosing branches/all locations from244; generated V8 duplicate method display ordinal changes are documented with full source hashes, no individual counter sanitization. Browser paint notification follows native clients without adding a document mutation. Existing317 metadata fields/order/status/default/classification/evidence prefixes preserved, one new cellatr record unverified. Full SwTableFormula second-base/calculation/name conversion/UNO, native frame invalidation/geometry and direct native UI registration remain partial. Registered IO/recovery/settings deviations preserved; last full237,next247; no full245.",
+      "Correction6Q2YQH (7/10 after SZKQTN) ports original SvxLRSpaceItem RES_LR_SPACE98 with eleven native context fields, zero/100/false defaults, independent Clone/equality and represented signed twip layout/proportion/hanging-text/sticky-zero behavior. Borrowed SwFormat.GetLRSpace and typed original pool item replace table mirrored left/right margins. Direct transport projects original direct LR; effective frame layout/SwTableRep/ODT use original inherited/pool values. SetTabCols clones full original context, and native dialog orientation/size/LR ItemSet replaces changed scalar LR replay. SaveTable excludes margin scalars and retains original complete ItemSet history. Font-unit SvxIndentValue/complete UNO member PutValue/presentation/metric scaling, generic native Doc attribute history/full layout/VCL/master-follow/copy/Repeat remain separately incomplete. Existing semantic/default/classification/evidence/history and registered IO/recovery/UI deviations retained; no whole-module promotion. Evidence task202610092125-6Q2YQH, current-source verification pending.",
+      "Verification6Q2YQH: final342 related files3588 unique accepted current-source cases22fresh (20 native LR and2 shared composite-border guards); ten actual whole production modules Istanbul100 lines/statements/functions/branches,zero negative/current source and complete-map identity. Initial pre-repair source maps/counters excluded entirely. Five exact fixture operations in3 historical files;620 other old tests byte identical,623 total. Twenty canonical historical prefixes retained. Full not due7/10; broad goal remains incomplete.",
+      "CorrectionHM2YX4 (5/10 after BZQGYC) implements pinned SvxLRSpaceItem QueryValue/PutValue for represented signed twip-backed UNO members0/4..12. Aggregate applies original SetLeft/SetTextLeft/SetRight/first-line ordering, signed16 struct scales cast to unsigned16; independent relative members admit0..65534 without geometry rescaling; first-line proportion uses native uint16 conversion. Absolute query converts double before rounding while aggregate resolves twips first; signed mm100 conversion and native Any2Bool behavior retained. Full font-unit SvxIndentValue and members13..15, presentation/scaling and general UNO binding remain separately incomplete; no whole-module semantic promotion. Existing status/default/classification/evidence histories and registered I/O/recovery deviations preserved. Native table ItemSet copies complete original fields; this prerequisite enables later transport work without inverse percentage arithmetic or private-field adapters. Task202610100007-HM2YX4 current-source verification pending.",
+      "HM2YX4 declaration partition: SvxLRSpaceItem now resides at apps/office/src/editeng/inc/lrspitem.ts matching include/editeng/lrspitem.hxx. frmitems.ts retains the original export binding; source-defined behavior is unchanged by physical decomposition required by authored file-size gate. Historical evidence retained; no whole-module promotion.",
+      "VerifiedHM2YX4: final1089cases81direct-related files57fresh, final complete frmitems.ts and lrspitem.ts actual Istanbul100all-four (396lines440statements144functions381branches), zero negative/current source complete-map identity and no earlier map reuse. Initial362-file3851-case evidence retained separately; obsolete inherited ODF acceptances are corrected by source-backed ZJJ73M exact2migrations, all other642historical tests byte-identical. Native class partition satisfies1000-line limit and preserves unchanged export binding; TS7/lint/format/build/dependency/JSDoc/file-size/static gates and24Chromium table regressions passed upstream absent. Source metadata validation follows reference restoration. Whole native font-relative/complete UNO/presentation/scaling and LR browser transport remain incomplete. Full cadence6/10 after acceptance repair, no full suite run.",
+      "CorrectionWQ0NE8 (7/10 after BZQGYC): complete original UL state upper/lower/context/propUpper/propLower and native constructors/setters/QueryValue/PutValue/clone/equality are owned by matching include/editeng/ulspitem.hxx declaration at editeng/inc/ulspitem.ts; frmitems retains original export identity. Core no longer returns browser tuples. Native aggregate unconverted Lower=nPropUpper and aggregate ScaleLower overwrite of nPropUpper are preserved literally. Browser item codec reads raw native getters and preserves full proportion fields in extended tuple only when authored; legacy2/3tuples keep prior numeric coercion/context/defaults via registered pool boundary. Exactly27compiler-resolved old UL Query expressions in12tests become explicit native3/4/7 observers retaining every original expected measure/context/sibling assertion;1constructor negative input assertion records native uint16 conversion. Presentation/ScaleMetrics/full general UNO and native LR/UL table-format transport remain incomplete; no whole-module semantic/default/status/classification or registeredIO/recovery promotion. Verification pending task202610100036-WQ0NE8.",
+      "VerificationWQ0NE8: 367related files3936unique cases accepted after a new-test-only parameterization repair22/22;64fresh cases. Entire4changed production modules actual Istanbul100lines529/statements589/functions178/branches479, complete maps and zero negative counters; no previous-task maps. Two constructor overload JSDoc tags have identical transpiled runtime and all228instrumented source ranges unchanged; no passing test replay. Nine upstream-absent static/build/TS7/Chromium gates including24browser cases pass. Preservation proof confirms26native query-expression migrations plus1uint16 constructor expectation in12old files;634of646old testfiles byte-identical and all sibling metrics/context acceptance preserved. Original statuses/defaults/classifications retain history; literal native quirks retained. Goalactive-incomplete7/10; full table LR/UL transport pending. Bounded English task evidence: .agentplane/tasks/202610100036-WQ0NE8/evidence/verification.json."
     ],
     "status": "mapped",
     "upstreamPath": "editeng/source/items/frmitems.cxx",
@@ -133,7 +205,8 @@
       "SvxRightMarginItem",
       "SvxULSpaceItem",
       "SvxBoxItem",
-      "SvxBoxInfoItem"
+      "SvxBoxInfoItem",
+      "SvxLRSpaceItem"
     ]
   },
   "legacyOrder": 3

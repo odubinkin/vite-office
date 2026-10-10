@@ -5,6 +5,11 @@ import { render, cleanup, screen, fireEvent, act } from "@testing-library/react"
 import { afterEach, it, expect, vi } from "vitest";
 import { createWriterDocumentSession } from "../composition/writer-module";
 import { WriterWorkbench } from "./writer-view";
+import { SfxItemSet } from "../../../svl/source/items/itemset";
+import { SwFormatHoriOrient } from "../../inc/fmtornt";
+import { SwFormatFrameSize } from "../../inc/fmtfsize";
+import { SvxLRSpaceItem } from "../../../editeng/source/items/frmitems";
+import { RES_LR_SPACE, RES_HORI_ORIENT, RES_FRM_SIZE } from "../../inc/hintids";
 const sessions: ReturnType<typeof createWriterDocumentSession>[] = [];
 afterEach(
   /** Releases mounted canonical views. @returns Nothing. */ () => {
@@ -52,17 +57,25 @@ it("accepts native properties as one history action and retains real selected ce
     target: { value: "0.2" },
   });
   fireEvent.click(screen.getByRole("button", { name: "OK" }));
-  expect(setter).toHaveBeenCalledWith({
-    width: 4535,
-    horiOrient: 3,
-    marginLeft: 0,
-    marginRight:
-      f.doc.GetPageDesc().GetValue().width -
+  const native = setter.mock.calls
+    .map(
+      /** Reads original payload. @param call - Actual shell call. @returns Input. */ (call) =>
+        call[0],
+    )
+    .find(
+      /** Finds native horizontal items. @param value - Input. @returns Whether native geometry. */ (
+        value,
+      ) => value instanceof SfxItemSet && value.GetItemIfSet(RES_HORI_ORIENT, false) !== undefined,
+    ) as SfxItemSet;
+  expect((native.Get(RES_LR_SPACE) as SvxLRSpaceItem).ResolveLeft()).toBe(0);
+  expect((native.Get(RES_LR_SPACE) as SvxLRSpaceItem).ResolveRight()).toBe(
+    f.doc.GetPageDesc().GetValue().width -
       f.doc.GetPageDesc().GetValue().leftMargin -
       f.doc.GetPageDesc().GetValue().rightMargin -
       4535,
-    align: undefined,
-  });
+  );
+  expect((native.Get(RES_HORI_ORIENT) as SwFormatHoriOrient).GetHoriOrient()).toBe(3);
+  expect((native.Get(RES_FRM_SIZE) as SwFormatFrameSize).GetWidth()).toBe(4535);
   expect(f.table.GetFormat().width).toBe(4535);
   expect(
     tableBoxFormatForTest(f.table.GetTabLines()[0]?.GetTabBoxes()[0]?.GetFormat() ?? {}).padding,

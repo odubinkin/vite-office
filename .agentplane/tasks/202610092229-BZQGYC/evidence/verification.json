@@ -1,0 +1,770 @@
+{
+  "taskId": "202610092229-BZQGYC",
+  "parent": "202609240501-C9TN6M",
+  "status": "checks-passed-exact-SHA-quality-pass",
+  "goal": "active/incomplete",
+  "previousFullBaseline": "202610091732-SZKQTN",
+  "correctionAfterPreviousFull": 10,
+  "newFullBaselineCandidate": "202610092229-BZQGYC",
+  "constraints": {
+    "checkout": "/Users/odubinkin/Projects/vite-office-writer",
+    "branch": "writer",
+    "registeredRecoveryOpenSaveSettingsDeviationsPreserved": true,
+    "noNetworkPublicationMergeOrDelegation": true,
+    "upstreamOnlyForSourceAnalysisAndRestoredMetadata": true,
+    "noUpstreamSourcesHelpersPythonRawMapsOrLogsInAgentplane": true
+  },
+  "upstream": {
+    "revision": "9bc445578031fecf56086729d8e4940c77e14d65",
+    "tag": "libreoffice-26.8.0.2",
+    "anchors": [
+      "sw/source/core/undo/untbl.cxx887..901 SaveTable::SaveTable",
+      "sw/source/core/undo/untbl.cxx943..984 SaveTable::RestoreAttr",
+      "sw/source/core/table/swtable.cxx186..190 SwTable constructor default repeat1",
+      "sw/source/core/layout/tabfrm.cxx1379..1387 original repeated headlines"
+    ],
+    "referenceRestored": true
+  },
+  "toolchain": {
+    "cliVersion": "7.0.2",
+    "compilerApiVersion": "6.0.2",
+    "istanbulVersion": "4.1.10",
+    "applicationProvider": "istanbul",
+    "inventoryProvider": "v8 (existing enforced configuration)"
+  },
+  "behavior": "SaveTable captures and restores independent original native SfxItemSet only; scalar GetFormat snapshot/deletion list, empty SetFormat replay and redundant direct-set LockModify/UnlockModify are removed. Existing native frame invalidation and row/box identity restoration remain. Three direct/inherited native/mounted UndoRedo cycles preserve complete native item context, graph/cursor/list ownership, independent inputs and real painted spacing. Test discovery owns the existing native LR Writer integration once in Writer; full/shared/scoped coverage gates remain unchanged.",
+  "tests": {
+    "initialFullApplication": {
+      "files": 587,
+      "total": 14467,
+      "passed": 14465,
+      "failed": 2,
+      "skipped": 0,
+      "rawReportHash": "c35e1b61983e37ab29621d8db4b7beac0f931afc6d530f53b21392726588694d"
+    },
+    "finalFullApplication": {
+      "files": 587,
+      "total": 14467,
+      "passed": 14467,
+      "failed": 0,
+      "skipped": 0,
+      "rawReportHash": "0c67ca2d297b2c6996d4cb14f81bad1a7c20313201830d060f54cfcb04f60eb5"
+    },
+    "xmlInitialClosure": {
+      "files": 1,
+      "total": 1,
+      "passed": 0,
+      "failed": 1,
+      "skipped": 0,
+      "rawReportHash": "c364dbedc2bbd9f8b3759dc70d5e5c14f2eafebcb4d94e74f360b6db3243b3d6"
+    },
+    "xmlFinalClosure": {
+      "files": 1,
+      "total": 1,
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "rawReportHash": "54e42725268f30ae8a020ebd9f0a895f7856354042ff3359b419e10bf8df3422"
+    },
+    "finalApplicationAccepted": 14468,
+    "freshCases": 7,
+    "tooling": {
+      "files": 4,
+      "total": 15,
+      "passed": 15,
+      "failed": 0,
+      "skipped": 0,
+      "rawReportHash": "20cc9c55b89f65999a37933b63a37d7f3503e4ab2e63dfe7f2d82d6ff31606e3"
+    },
+    "inventory": {
+      "files": 38,
+      "total": 122,
+      "passed": 122,
+      "failed": 0,
+      "skipped": 0,
+      "rawReportHash": "21d301b8ece22834bbeaad77410b23c4a95ede179ac826705b74dbf6f2f6df66"
+    },
+    "resources": {
+      "files": 1,
+      "total": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "rawReportHash": "8fcce8e2a19865479a8b27f4d96e1206c99c53c15948e4974adf8609ae7fb835"
+    },
+    "actualDiscoveryAfterNewXml": {
+      "files": 1,
+      "total": 1,
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "rawReportHash": "60d423899b021f349a241dfbfaa5ea345ecb6e0e3d8d92cf5faec4b1a462fe21"
+    },
+    "browser": {
+      "status": "pass",
+      "fullInitial": {
+        "total": 303,
+        "passed": 283,
+        "failed": 20,
+        "source": "retained original list-report log; initial JSON was overwritten by helper"
+      },
+      "repaired": {
+        "total": 20,
+        "passed": 20,
+        "failed": 0,
+        "skipped": 0,
+        "flaky": 0
+      },
+      "finalAcceptedCases": 303,
+      "exactFailedCaseIdentityMatch": true,
+      "unnecessaryPassingBrowserReplay": 0,
+      "originalListHash": "2c5b6a09be3c71ebbbc351536845078bf2cd7f3c4ab8a509dd82a51dbdbe5f82",
+      "finalJsonHash": "fb215d99004aad9d1444e686c7a10080fb796cf660fef5575900b152bb103ba9",
+      "allUpstreamAbsent": true
+    }
+  },
+  "coverage": {
+    "status": "pass",
+    "production": "/Users/odubinkin/Projects/vite-office-writer/apps/office/src/sw/source/core/undo/untbl.ts",
+    "sourceSha256": "6121b945828e2d3ab8f92c3c03ca079eff9ad41af350f8e74479f99f54d9c5f2",
+    "configurationSourceSha256": "97b8ab06429439bfaa338c1d1c4a2181fd49f73e2e3351b5ff7bd3f728bd6272",
+    "xmlUnchangedSourceSha256": "8520963dfe9b2f8699693ba0e2095226222d413b7cfadd58b8a3a669b647cf61",
+    "actualFullSourceCoverage": {
+      "lines": {
+        "total": 166,
+        "covered": 166,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 43,
+        "covered": 43,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 171,
+        "covered": 171,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 33,
+        "covered": 33,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "actualConfigurationCoverage": {
+      "lines": {
+        "total": 7,
+        "covered": 7,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 3,
+        "covered": 3,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 7,
+        "covered": 7,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 12,
+        "covered": 12,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "actualWholeApplicationCoverage": {
+      "lines": {
+        "total": 19557,
+        "covered": 19557,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 21492,
+        "covered": 21492,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 4903,
+        "covered": 4903,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 15818,
+        "covered": 15818,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "negativeCounters": 0,
+    "mapCompleteness": true,
+    "xmlMergedCompleteMapIdentity": true,
+    "profiles": [
+      {
+        "path": "apps/office/node_modules/.cache/parity-coverage/BZQGYC/full-app-repaired-coverage/coverage-final.json",
+        "rawMapSha256": "0297a56086e0327a56c8043bc5cb042f51493cb0bcf1d38ca795f1780ed06199"
+      },
+      {
+        "path": "apps/office/node_modules/.cache/parity-coverage/BZQGYC/xml-header-final-coverage/coverage-final.json",
+        "rawMapSha256": "9a04aef761a6a2113743cc5006aabc99569985ebcfd2459c84df119b786caecc"
+      },
+      {
+        "path": "apps/office/node_modules/.cache/parity-coverage/BZQGYC/tooling-repaired-coverage/coverage-final.json",
+        "rawMapSha256": "5d1467e6e34a812bcff4f55fb17ed17a66c0a4a6e9ab1e97c72c2ca25fd528c0"
+      }
+    ],
+    "onlyActualSameTaskCounters": true
+  },
+  "inventoryConfiguredCoverage": {
+    "lines": {
+      "total": 1667,
+      "covered": 1667,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 1733,
+      "covered": 1733,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 435,
+      "covered": 435,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 1288,
+      "covered": 1288,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "preservation": {
+    "status": "pass",
+    "originalPaths": 1839,
+    "unchangedPaths": 1834,
+    "changedPaths": [
+      "apps/office/src/sw/source/core/docnode/native-column-frame-normalization.test.ts",
+      "apps/office/src/sw/source/core/table/native-table-frame-width.test.ts",
+      "apps/office/src/sw/source/core/undo/untbl.ts",
+      "docs/program/registry/writer/provenance/sw/source/core/undo/untbl.ts.json",
+      "docs/program/registry/writer/runtime/sw/source/core/undo/untbl.ts.json"
+    ],
+    "oldUnitTestFiles": 631,
+    "oldUnitTestsUnchanged": 629,
+    "exactUnitMigrationOperations": 6,
+    "exactBrowserMigrationGroups": 8,
+    "browserFilesMigrated": 7,
+    "browserOriginalAssertionsPreserved": true,
+    "configurationChange": "one source-backed native Writer integration ownership entry",
+    "canonicalHistoricalPrefixes": 2,
+    "parentFindingsPrefixPreserved": true
+  },
+  "checks": [
+    {
+      "stage": "full-results.json",
+      "label": "full-app",
+      "command": "npm run test:coverage -- --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/BZQGYC/full-app-tests.json --coverage.reportsDirectory=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/BZQGYC/full-app-coverage",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer/apps/office",
+      "status": 1,
+      "upstreamAbsent": true,
+      "logHash": "86ff5e91418f7301d5f81959da831685c3e6f6b9ec803f5f7f0ff42c54221cea"
+    },
+    {
+      "stage": "full-results.json",
+      "label": "full-tooling",
+      "command": "npm run test:tooling -- --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/BZQGYC/full-tooling-tests.json",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "status": 1,
+      "upstreamAbsent": true,
+      "logHash": "4d6cc007659e810b0ca3cfa2013cfba1f4814c63039c7d1544818d10ba1395f8"
+    },
+    {
+      "stage": "full-results.json",
+      "label": "full-inventory",
+      "command": "npm run test:inventory:coverage -- --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/BZQGYC/full-inventory-tests.json --coverage.reportsDirectory=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/BZQGYC/full-inventory-coverage",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "status": 1,
+      "upstreamAbsent": true,
+      "logHash": "7c8a8495dc7f9411fcfe1122665b7077304f90a4080bdefcdc5e0c53b1f2f88e"
+    },
+    {
+      "stage": "full-results.json",
+      "label": "full-resource",
+      "command": "npm exec -- vitest run scripts/generate-writer-ui-resources.test.ts --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/BZQGYC/full-resource-tests.json",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "status": 1,
+      "upstreamAbsent": true,
+      "logHash": "58fa8179c58175adcab8e49f2500004afa9d38b6471da046b64127142dd51824"
+    },
+    {
+      "stage": "full-results.json",
+      "label": "full-browser",
+      "command": "npm run test:e2e -- --reporter=list,json",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "status": 1,
+      "upstreamAbsent": true,
+      "logHash": "2c5b6a09be3c71ebbbc351536845078bf2cd7f3c4ab8a509dd82a51dbdbe5f82"
+    },
+    {
+      "stage": "full-results.json",
+      "label": "format-check",
+      "command": "npm run format:check",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "status": 0,
+      "upstreamAbsent": true,
+      "logHash": "ac1729f86eee878f5f4d6c948c510d2cc91bb5568f6dd088f70f3885e137d116"
+    },
+    {
+      "stage": "full-results.json",
+      "label": "lint",
+      "command": "npm run lint",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "status": 0,
+      "upstreamAbsent": true,
+      "logHash": "a6172cb57fa696e705408fdc605fba1ae07b852fdf0614d7c2b623349e285b6e"
+    },
+    {
+      "stage": "full-results.json",
+      "label": "typecheck",
+      "command": "npm run typecheck",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "status": 0,
+      "upstreamAbsent": true,
+      "logHash": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed"
+    },
+    {
+      "stage": "full-results.json",
+      "label": "check-dependencies",
+      "command": "npm run check:dependencies",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "status": 0,
+      "upstreamAbsent": true,
+      "logHash": "531ca5bad110ebd8f0eec3b04b3bf80c30ed2035aae34199c4654d13e6927ddd"
+    },
+    {
+      "stage": "full-results.json",
+      "label": "check-docs",
+      "command": "npm run check:docs",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "status": 0,
+      "upstreamAbsent": true,
+      "logHash": "0e7d483a0a6319d535fe5f711d488629a42020bfa0d3f95c57e644ea22418ae3"
+    },
+    {
+      "stage": "full-results.json",
+      "label": "check-file-size",
+      "command": "npm run check:file-size",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "status": 0,
+      "upstreamAbsent": true,
+      "logHash": "d27bda15d6cc571f8f9a1aa51741e594ab11856a57b612bbe83ce389976318b1"
+    },
+    {
+      "stage": "full-results.json",
+      "label": "test-static",
+      "command": "npm run test:static",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "status": 0,
+      "upstreamAbsent": true,
+      "logHash": "2dcb7923a6ef0abdb5f27fc2f36b424ee9860d3bb7c2aef5262036c22c48ad49"
+    },
+    {
+      "stage": "repair-results.json",
+      "label": "full-app-repaired",
+      "command": "npm run test:coverage -- --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/BZQGYC/full-app-repaired-tests.json --coverage.reportsDirectory=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/BZQGYC/full-app-repaired-coverage --coverage.reportOnFailure",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer/apps/office",
+      "status": 1,
+      "upstreamAbsent": true,
+      "logHash": "37c0132562c3c0f3a9692eea02d63d980a96867226ba59a48dedf10f0f537dae"
+    },
+    {
+      "stage": "repair-results.json",
+      "label": "tooling-repaired",
+      "command": "npm exec -- vitest run scripts/test-projects.test.ts scripts/check-module-boundaries.test.ts scripts/typescript-toolchain.test.ts scripts/native-writer-test-ownership.test.ts --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/BZQGYC/tooling-repaired-tests.json --coverage --coverage.provider=istanbul --coverage.include=apps/office/test-projects.ts --coverage.exclude=**/*.test.ts --coverage.reportOnFailure --coverage.reporter=json --coverage.reporter=json-summary --coverage.reportsDirectory=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/BZQGYC/tooling-repaired-coverage --coverage.thresholds.lines=100 --coverage.thresholds.statements=100 --coverage.thresholds.functions=100 --coverage.thresholds.branches=100",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "status": 0,
+      "upstreamAbsent": true,
+      "logHash": "bdeea571adb8b37b1a334bd61f5f096d0b1c6279c2118259d5f4bedf9173ea89"
+    },
+    {
+      "stage": "repair-results.json",
+      "label": "full-inventory-repaired",
+      "command": "npm run test:inventory:coverage -- --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/BZQGYC/full-inventory-repaired-tests.json --coverage.reportsDirectory=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/BZQGYC/full-inventory-repaired-coverage --coverage.reportOnFailure",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "status": 0,
+      "upstreamAbsent": true,
+      "logHash": "d1cc02d3b46a52429e6f628b9b0b255ccbb1ea2847b2e1fe524caac4353cd1ee"
+    },
+    {
+      "stage": "repair-results.json",
+      "label": "full-resource-repaired",
+      "command": "npm exec -- vitest run scripts/writer-ui-resource-model.test.ts --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/BZQGYC/full-resource-repaired-tests.json",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "status": 0,
+      "upstreamAbsent": true,
+      "logHash": "492d672fd6887d607d428109fa083b72204aecb73ce56f9120a97208d0e83816"
+    },
+    {
+      "stage": "browser-static-repair-results.json",
+      "label": "repair-build",
+      "command": "npm run build",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "status": 0,
+      "upstreamAbsent": true,
+      "logHash": "f54a94ba77b3a743f261fd69cdf201bc68599b732a5c520a3a336406a6dd99c4"
+    },
+    {
+      "stage": "browser-static-repair-results.json",
+      "label": "browser-repaired",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts --project=writer writer-collapsing-border-arbitration.spec.ts writer-native-border-page.spec.ts writer-native-collapsing-borders.spec.ts writer-native-table-mouse.spec.ts writer-native-cell-box.spec.ts writer-native-table-layout-split.spec.ts writer-native-table-text-flow-split.spec.ts --grep \"native shared-border winner|native empty-hit focus|native four-edge.+fixed=false|native coupled border|native table merging|native table split policy.+split=true|Writer native table mouse edge|native split properties controls\" --reporter=list,json",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "status": 0,
+      "upstreamAbsent": true,
+      "logHash": "b23ad9af6dd89470a686b0f66c7d364819d3a92cc1d1547a483eb249caf5d84e"
+    },
+    {
+      "stage": "browser-static-repair-results.json",
+      "label": "format-check-final",
+      "command": "npm run format:check",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "status": 0,
+      "upstreamAbsent": true,
+      "logHash": "ac1729f86eee878f5f4d6c948c510d2cc91bb5568f6dd088f70f3885e137d116"
+    },
+    {
+      "stage": "browser-static-repair-results.json",
+      "label": "lint-final",
+      "command": "npm run lint",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "status": 0,
+      "upstreamAbsent": true,
+      "logHash": "a6172cb57fa696e705408fdc605fba1ae07b852fdf0614d7c2b623349e285b6e"
+    },
+    {
+      "stage": "browser-static-repair-results.json",
+      "label": "typecheck-final",
+      "command": "npm run typecheck",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "status": 0,
+      "upstreamAbsent": true,
+      "logHash": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed"
+    },
+    {
+      "stage": "browser-static-repair-results.json",
+      "label": "check-dependencies-final",
+      "command": "npm run check:dependencies",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "status": 0,
+      "upstreamAbsent": true,
+      "logHash": "531ca5bad110ebd8f0eec3b04b3bf80c30ed2035aae34199c4654d13e6927ddd"
+    },
+    {
+      "stage": "browser-static-repair-results.json",
+      "label": "check-docs-final",
+      "command": "npm run check:docs",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "status": 0,
+      "upstreamAbsent": true,
+      "logHash": "0e7d483a0a6319d535fe5f711d488629a42020bfa0d3f95c57e644ea22418ae3"
+    },
+    {
+      "stage": "browser-static-repair-results.json",
+      "label": "check-file-size-final",
+      "command": "npm run check:file-size",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "status": 0,
+      "upstreamAbsent": true,
+      "logHash": "d27bda15d6cc571f8f9a1aa51741e594ab11856a57b612bbe83ce389976318b1"
+    },
+    {
+      "stage": "browser-static-repair-results.json",
+      "label": "test-static-final",
+      "command": "npm run test:static",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "status": 0,
+      "upstreamAbsent": true,
+      "logHash": "78ded8f0a3ed304744dbf281a2dc81a8ba0198f5978ead416b19820c45356c03"
+    },
+    {
+      "stage": "closure-results.json",
+      "label": "xml-format-write",
+      "command": "npm exec -- prettier --write apps/office/src/xmloff/source/table/XMLTableExport-header-count.test.ts",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "status": 0,
+      "upstreamAbsent": true,
+      "logHash": "70651c255926b32ec9164427d8baa14eaeddf0854c1832e575bc45f86d1f20ad"
+    },
+    {
+      "stage": "closure-results.json",
+      "label": "xml-header-closure",
+      "command": "npm run test:coverage -- src/xmloff/source/table/XMLTableExport-header-count.test.ts --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/BZQGYC/xml-header-closure-tests.json --coverage.include=src/xmloff/source/table/XMLTableExport.ts --coverage.reportOnFailure --coverage.reportsDirectory=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/BZQGYC/xml-header-closure-coverage",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer/apps/office",
+      "status": 1,
+      "upstreamAbsent": true,
+      "logHash": "9dbaa47da823683c54c6960c258e01545af1223251e167f723c052f0ede7df73"
+    },
+    {
+      "stage": "closure-results.json",
+      "label": "discovery-closure",
+      "command": "npm exec -- vitest run scripts/test-projects.test.ts --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/BZQGYC/discovery-closure-tests.json",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "status": 0,
+      "upstreamAbsent": true,
+      "logHash": "78ca50cf118c2bd2bd46cfbea1b93177f1607b3e101c684ee88c93d4127de377"
+    },
+    {
+      "stage": "closure-results.json",
+      "label": "post-closure-format:check",
+      "command": "npm run format:check",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "status": 0,
+      "upstreamAbsent": true,
+      "logHash": "ac1729f86eee878f5f4d6c948c510d2cc91bb5568f6dd088f70f3885e137d116"
+    },
+    {
+      "stage": "closure-results.json",
+      "label": "post-closure-lint",
+      "command": "npm run lint",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "status": 0,
+      "upstreamAbsent": true,
+      "logHash": "a6172cb57fa696e705408fdc605fba1ae07b852fdf0614d7c2b623349e285b6e"
+    },
+    {
+      "stage": "closure-results.json",
+      "label": "post-closure-typecheck",
+      "command": "npm run typecheck",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "status": 1,
+      "upstreamAbsent": true,
+      "logHash": "07f404c2a5ab097e1c0fb68ce7bc1a4a939b7bf943fdf79217390e7e9d992b6d"
+    },
+    {
+      "stage": "closure-results.json",
+      "label": "post-closure-check:docs",
+      "command": "npm run check:docs",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "status": 0,
+      "upstreamAbsent": true,
+      "logHash": "ccc2aaa963e4fe56ac0aa48dd2ecfdc0b0e1ca01f7f83d6fab7fb5c51ebd3af4"
+    },
+    {
+      "stage": "closure-results.json",
+      "label": "post-closure-check:file-size",
+      "command": "npm run check:file-size",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "status": 0,
+      "upstreamAbsent": true,
+      "logHash": "ecd88bc2c593d39b601c2f9f72359a00a59c04d744e5a32b84ea3b01a40d1ffe"
+    },
+    {
+      "stage": "xml-final-results.json",
+      "label": "xml-format-write-final",
+      "command": "npm exec -- prettier --write apps/office/src/xmloff/source/table/XMLTableExport-header-count.test.ts",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "status": 0,
+      "upstreamAbsent": true,
+      "logHash": "2a29a87ffb5529547c6a20bff21427ffa725e8145254e136258d38352ebcdfdf"
+    },
+    {
+      "stage": "xml-final-results.json",
+      "label": "xml-header-final",
+      "command": "npm run test:coverage -- src/xmloff/source/table/XMLTableExport-header-count.test.ts --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/BZQGYC/xml-header-final-tests.json --coverage.include=src/xmloff/source/table/XMLTableExport.ts --coverage.reportOnFailure --coverage.reportsDirectory=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/BZQGYC/xml-header-final-coverage",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer/apps/office",
+      "status": 1,
+      "upstreamAbsent": true,
+      "logHash": "ebcce82abf8fcb31b0a05fd6d79f7cc9ae8f61130f8fc29764774bdee2a032c1"
+    },
+    {
+      "stage": "xml-final-results.json",
+      "label": "post-closure-format:check-final",
+      "command": "npm run format:check",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "status": 0,
+      "upstreamAbsent": true,
+      "logHash": "ac1729f86eee878f5f4d6c948c510d2cc91bb5568f6dd088f70f3885e137d116"
+    },
+    {
+      "stage": "xml-final-results.json",
+      "label": "post-closure-lint-final",
+      "command": "npm run lint",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "status": 0,
+      "upstreamAbsent": true,
+      "logHash": "a6172cb57fa696e705408fdc605fba1ae07b852fdf0614d7c2b623349e285b6e"
+    },
+    {
+      "stage": "xml-final-results.json",
+      "label": "post-closure-typecheck-final",
+      "command": "npm run typecheck",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "status": 0,
+      "upstreamAbsent": true,
+      "logHash": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed"
+    },
+    {
+      "stage": "xml-final-results.json",
+      "label": "post-closure-check:docs-final",
+      "command": "npm run check:docs",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "status": 0,
+      "upstreamAbsent": true,
+      "logHash": "ccc2aaa963e4fe56ac0aa48dd2ecfdc0b0e1ca01f7f83d6fab7fb5c51ebd3af4"
+    },
+    {
+      "stage": "xml-final-results.json",
+      "label": "post-closure-check:file-size-final",
+      "command": "npm run check:file-size",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "status": 0,
+      "upstreamAbsent": true,
+      "logHash": "ecd88bc2c593d39b601c2f9f72359a00a59c04d744e5a32b84ea3b01a40d1ffe"
+    }
+  ],
+  "restoredMetadata": [
+    {
+      "label": "registry-build",
+      "bin": "npm",
+      "args": [
+        "run",
+        "inventory:registry:build"
+      ],
+      "status": 0,
+      "rawHash": "f941feea056f9f9125ac8a96978ff0fda711beef74563b36c553fc89490f0209",
+      "metadataOnly": true
+    },
+    {
+      "label": "source-tree",
+      "bin": "npm",
+      "args": [
+        "run",
+        "check:source-tree"
+      ],
+      "status": 0,
+      "rawHash": "6c5bd2e3c84892b8cc26b8b1b5f06a950891f9d5988a8ef1f1496f0c252cd33e",
+      "metadataOnly": true
+    },
+    {
+      "label": "source-provenance",
+      "bin": "npm",
+      "args": [
+        "run",
+        "check:source-provenance"
+      ],
+      "status": 0,
+      "rawHash": "6254cd84ffd0c48086c7f42fd3cd1c4aa2d546fdaf62a670474f9e9aa6a42ac1",
+      "metadataOnly": true
+    },
+    {
+      "label": "registry-check",
+      "bin": "npm",
+      "args": [
+        "run",
+        "inventory:registry:check"
+      ],
+      "status": 0,
+      "rawHash": "05e246d7aca4ba7c31c304618310d9f2e36023cf116d325fed43bdb4dcfd1b39",
+      "metadataOnly": true
+    },
+    {
+      "label": "writer-resources",
+      "bin": "node_modules/.bin/tsx",
+      "args": [
+        "scripts/generate-writer-ui-resources.ts",
+        "--check"
+      ],
+      "status": 0,
+      "rawHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "metadataOnly": true
+    },
+    {
+      "label": "inventory-invariants",
+      "bin": "npm",
+      "args": [
+        "run",
+        "inventory:invariants"
+      ],
+      "status": 0,
+      "rawHash": "97915774bf8a4cce987897ed516fc713beafd72a5cfb041fb9096d39825dc053",
+      "metadataOnly": true
+    },
+    {
+      "label": "inventory-parity",
+      "bin": "npm",
+      "args": [
+        "run",
+        "inventory:parity"
+      ],
+      "status": 0,
+      "rawHash": "318f08e949fad462e6bd046029c0b8ad089d0c944740ab2cf7546e6bf7084767",
+      "metadataOnly": true
+    },
+    {
+      "label": "routing",
+      "bin": "node",
+      "args": [
+        ".agentplane/policy/check-routing.mjs"
+      ],
+      "status": 0,
+      "rawHash": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9",
+      "metadataOnly": true
+    },
+    {
+      "label": "doctor",
+      "bin": "ap",
+      "args": [
+        "doctor"
+      ],
+      "status": 0,
+      "rawHash": "676ae6015b96595d4301eaf351cfa4c94553d1890de84e519598fabc6f738e84",
+      "metadataOnly": true
+    }
+  ],
+  "boundaries": [
+    "Full native cache/redline/formula/nested/root/VCL/copy/Repeat and generic Doc attribute history remain incomplete. No whole-module or broad goal parity promotion.",
+    "Inherited ODT attribute transport remains a concrete separately unported path. No fake materialization workaround.",
+    "Full initial application14465pass2fail; initial tooling12pass1fail, inventory118pass4fail. One fresh original-parent assumption repaired; an old malformed frame fixture used native HoriOrient and coherent actual width. An existing cross-owner native LR test is classified correctly. My invalid inventory note field and nonexistent resource-test path were corrected.",
+    "Initial failed profiles omitted raw coverage because reportOnFailure was missing; no old maps used. Final configuration and fixtures actually changed, requiring a final full application revalidation. All14467 assertions then pass; its raw strict branch gate99.99 fails on one unchanged XML branch. One meaningful detached XML boundary case supplies actual identical-map counters; final cumulative full application gate100 all-four passes.",
+    "XML first closure failed its fresh typed-character/ODF-space expectation; final one-case assertion passes. Both focused coverage processes exit1 for partial module coverage; their failing exit status is retained, final exact-map cumulative gate is authoritative.",
+    "Original browser JSON was overwritten by same-helper output naming; complete original303-case list log retained,20 repaired cases uniquely copied and identity-matched.283 original passing browser cases not replayed.7 source-backed locator/plain-split migrations retain original border/geometry/selection/history assertions and native default repeat1.",
+    "Preservation-checker first broad scalar fixture replacement matched two old occurrences; exact operation was restricted to the unchanged-width case. Existing explicit zero-divisor test preserved.",
+    "An upstream-absence formatter guard raced the completed wrapper restoration and rejected work before any test/format command; recovered through owned absence wrapper. No test ran with pinned upstream present.",
+    "Tooling/inventory/resources and final static gates pass. Inventory keeps its existing enforced V8 provider100; changed production/configuration and full app actual Istanbul100/zero-negative.",
+    "Quality must bind the exact semantic commit and explicitly disclose same-agent non-independent evaluation. No force/reopen/threshold weakening permitted."
+  ],
+  "semanticCommit": "60eb3177c295f0c20777d089a41e0d11cf9a2a0a",
+  "quality": {
+    "verdict": "pass",
+    "evaluatedSha": "60eb3177c295f0c20777d089a41e0d11cf9a2a0a",
+    "sameAgentNonIndependent": true,
+    "path": ".agentplane/tasks/202610092229-BZQGYC/quality/20261009-230436344-recovery-context/quality-report.json"
+  },
+  "newFullBaseline": "202610092229-BZQGYC",
+  "correctionsSinceNewFull": 0
+}

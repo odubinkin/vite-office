@@ -1,0 +1,514 @@
+{
+  "task": "202610091449-FW0RYR",
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sources": [
+    "sw/inc/hints.hxx::ObjectDyingHint",
+    "sw/inc/calbck.hxx::ModifyChangedHint",
+    "sw/source/core/attr/calbck.cxx::ClientBase::CheckRegistration/SwModify destructor/SwClientNotify",
+    "sw/source/core/attr/format.cxx::SwFormat::SwClientNotify ObjectDying branch",
+    "sw/source/core/layout/wsfrm.cxx::SwFrame::SwClientNotify kind filtering"
+  ],
+  "production": [
+    "apps/office/src/sw/inc/hints.ts",
+    "apps/office/src/sw/inc/calbck.ts",
+    "apps/office/src/sw/source/core/attr/format.ts",
+    "apps/office/src/sw/browser/presentation/writer-native-format-observer.ts"
+  ],
+  "freshTestFiles": [
+    "apps/office/src/sw/source/core/attr/native-object-dying.test.ts",
+    "apps/office/src/sw/source/core/undo/native-object-dying.test.ts",
+    "apps/office/src/sw/browser/editor/native-object-dying.test.tsx"
+  ],
+  "tests": {
+    "initialFiles": 49,
+    "initialPass": 334,
+    "initialFail": 1,
+    "initialSkip": 0,
+    "closurePass": 1,
+    "closureFail": 0,
+    "closureSkip": 6,
+    "acceptedUniqueCases": 335,
+    "acceptedCaseIdsHash": "e38b3e916f8b35145ab0dd0668e7ddf9f3d82b14ab341aa64950aec07581dc01",
+    "freshCases": 8,
+    "passingReplay": false,
+    "sourceBackedExpectationMigrations": 1
+  },
+  "coverage": {
+    "provider": "istanbul",
+    "files": [
+      {
+        "path": "apps/office/src/sw/inc/hints.ts",
+        "sourceHash": "effb3dbabbd9ef9803ca5301cf425a578e656de20f8cfa5f51fa5ae57fd7aa30",
+        "completeMapsHash": "74826da65a094fa2fab0196895a08e3b146bae4390f0c3257e931b582a26aee8",
+        "summary": {
+          "lines": {
+            "total": 31,
+            "covered": 31,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 14,
+            "covered": 14,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 31,
+            "covered": 31,
+            "skipped": 0,
+            "pct": 100
+          },
+          "branches": {
+            "total": 5,
+            "covered": 5,
+            "skipped": 0,
+            "pct": 100
+          }
+        }
+      },
+      {
+        "path": "apps/office/src/sw/inc/calbck.ts",
+        "sourceHash": "00ad3947e72bc6da0d16c0417d8ede2ee1e266d809cdfd2d3d929d4b42966e86",
+        "completeMapsHash": "dff1e995c1bb7ff7ab33bf0971d1c046449f67a3c26c5779b61eeb9d75b8caf9",
+        "summary": {
+          "lines": {
+            "total": 106,
+            "covered": 106,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 42,
+            "covered": 42,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 121,
+            "covered": 121,
+            "skipped": 0,
+            "pct": 100
+          },
+          "branches": {
+            "total": 54,
+            "covered": 54,
+            "skipped": 0,
+            "pct": 100
+          }
+        }
+      },
+      {
+        "path": "apps/office/src/sw/source/core/attr/format.ts",
+        "sourceHash": "e1209edc682059f9d71116f4dfe7a2f6a27e95c933d91ac3e918911876dd5221",
+        "completeMapsHash": "fb1bfd50b1f12809039dc5ada163ec0538c7b00565a7cd8c94e9f485de8b9496",
+        "summary": {
+          "lines": {
+            "total": 105,
+            "covered": 105,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 17,
+            "covered": 17,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 117,
+            "covered": 117,
+            "skipped": 0,
+            "pct": 100
+          },
+          "branches": {
+            "total": 77,
+            "covered": 77,
+            "skipped": 0,
+            "pct": 100
+          }
+        }
+      },
+      {
+        "path": "apps/office/src/sw/browser/presentation/writer-native-format-observer.ts",
+        "sourceHash": "1b8ba755f09227b860b97008af3634250dc106b7d14bf46b7745ac9349e91e74",
+        "completeMapsHash": "0658cf03db33d9b94515377f9660bba789201ed104f8a701325edbfc278837b0",
+        "summary": {
+          "lines": {
+            "total": 28,
+            "covered": 28,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 5,
+            "covered": 5,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 32,
+            "covered": 32,
+            "skipped": 0,
+            "pct": 100
+          },
+          "branches": {
+            "total": 18,
+            "covered": 18,
+            "skipped": 0,
+            "pct": 100
+          }
+        }
+      }
+    ],
+    "summary": {
+      "lines": {
+        "total": 270,
+        "covered": 270,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 301,
+        "covered": 301,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 78,
+        "covered": 78,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 154,
+        "covered": 154,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "negativeCounters": 0,
+    "identicalCompleteMaps": true,
+    "priorTaskCounterTransfer": false,
+    "initialRawMapHash": "ff649ac3676ee3c345e363585367facde16dc42add85dd8bb31f0e0df608ed10",
+    "closureRawMapHash": "91d0c31d0faefc6f5bbc2fc0f5cbaf6ca4549e7f904f92fda10e566b42d5522d",
+    "mergedRawMapHash": "55fa7a102f970a9e7ca9e42a9bb31fb90afddcb10a5bc9873c4d8a11b1cbc276"
+  },
+  "checks": [
+    {
+      "label": "initial-targeted",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer/apps/office",
+      "args": [
+        "run",
+        "test:coverage",
+        "--",
+        "src/sw/browser/editor/native-box-frame-format.test.tsx",
+        "src/sw/browser/editor/native-format-change.test.tsx",
+        "src/sw/browser/editor/native-row-format-client.test.tsx",
+        "src/sw/browser/editor/native-cell-format-client.test.tsx",
+        "src/sw/browser/editor/native-format-notifier.test.tsx",
+        "src/sw/browser/editor/native-format-construction.test.tsx",
+        "src/sw/browser/editor/native-format-parent.test.tsx",
+        "src/sw/browser/editor/native-format-attribute-notify.test.tsx",
+        "src/sw/browser/presentation/native-row-frame-format.test.tsx",
+        "src/sw/browser/presentation/writer-view-list-indent-mask.test.tsx",
+        "src/sw/browser/presentation/native-format-notifier-store.test.ts",
+        "src/svl/source/notify/notify.test.ts",
+        "src/svl/source/notify/native-svt-notifier.test.ts",
+        "src/sw/source/core/attr/native-format-attribute-notify.test.ts",
+        "src/sw/source/core/attr/native-format-change.test.ts",
+        "src/sw/source/core/attr/native-format-parent.test.ts",
+        "src/sw/source/core/attr/native-format-construction.test.ts",
+        "src/sw/source/core/layout/native-table-frame-hierarchy.test.ts",
+        "src/sw/source/core/layout/native-cell-format-client.test.ts",
+        "src/sw/source/core/layout/native-row-format-client.test.ts",
+        "src/sw/source/core/layout/pagedesc.test.ts",
+        "src/sw/source/core/layout/native-frame-attribute-notify.test.ts",
+        "src/sw/source/core/layout/native-frame-invalidation.test.ts",
+        "src/sw/source/core/layout/native-collapsing-border-painter.test.ts",
+        "src/sw/source/core/layout/native-table-print-area.test.ts",
+        "src/sw/source/core/layout/native-table-coverage-closure.test.ts",
+        "src/sw/source/core/layout/native-table-headlines.test.ts",
+        "src/sw/source/core/layout/newfrm.test.ts",
+        "src/sw/source/core/layout/native-table-layout-split.test.ts",
+        "src/sw/source/core/edit/edfcol-reset.test.ts",
+        "src/sw/source/core/undo/native-row-format-client-history.test.ts",
+        "src/sw/source/core/undo/native-cell-format-client-history.test.ts",
+        "src/sw/source/core/table/native-box-frame-format.test.ts",
+        "src/sw/source/core/table/native-row-frame-format.test.ts",
+        "src/sw/source/core/undo/native-box-frame-format-history.test.ts",
+        "src/sw/source/core/undo/native-format-change-history.test.ts",
+        "src/sw/source/core/doc/writer-attributes.test.ts",
+        "src/sw/source/core/undo/native-row-frame-format-history.test.ts",
+        "src/sw/source/core/undo/native-format-parent-history.test.ts",
+        "src/sw/source/core/undo/native-format-attribute-notify-history.test.ts",
+        "src/sw/source/core/attr/native-format-death.test.ts",
+        "src/sw/source/core/undo/native-format-death-history.test.ts",
+        "src/sw/browser/editor/native-format-death.test.tsx",
+        "src/sw/source/core/attr/native-object-dying.test.ts",
+        "src/sw/source/core/undo/native-object-dying.test.ts",
+        "src/sw/browser/editor/native-object-dying.test.tsx",
+        "src/sw/source/core/doc/number-pointer.test.ts",
+        "src/sw/browser/presentation/native-table-format-lifecycle.test.tsx",
+        "src/sw/source/uibase/wrtsh/native-table-format-lifecycle-history.test.ts",
+        "--coverage.include=src/sw/inc/hints.ts",
+        "--coverage.include=src/sw/inc/calbck.ts",
+        "--coverage.include=src/sw/source/core/attr/format.ts",
+        "--coverage.include=src/sw/browser/presentation/writer-native-format-observer.ts",
+        "--coverage.reporter=text",
+        "--coverage.reporter=json",
+        "--coverage.reporter=json-summary",
+        "--coverage.reportsDirectory=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/FW0RYR/initial-coverage",
+        "--coverage.reportOnFailure=true",
+        "--reporter=default",
+        "--reporter=json",
+        "--outputFile=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/FW0RYR/initial-tests.json"
+      ],
+      "status": 1,
+      "upstreamAbsent": true,
+      "rawOutputHash": "eb3f6152e8d13d7e8c06aef700a78e98caf3e5b695f5eb0e746a058a0f680f47"
+    },
+    {
+      "label": "closure-targeted",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer/apps/office",
+      "args": [
+        "run",
+        "test:coverage",
+        "--",
+        "src/svl/source/notify/notify.test.ts",
+        "--testNamePattern=propagates SwModify parent hints and safely rebinds clients",
+        "--coverage.include=src/sw/inc/hints.ts",
+        "--coverage.include=src/sw/inc/calbck.ts",
+        "--coverage.include=src/sw/source/core/attr/format.ts",
+        "--coverage.include=src/sw/browser/presentation/writer-native-format-observer.ts",
+        "--coverage.reporter=text",
+        "--coverage.reporter=json",
+        "--coverage.reporter=json-summary",
+        "--coverage.reportsDirectory=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/FW0RYR/closure-coverage",
+        "--coverage.reportOnFailure=true",
+        "--reporter=default",
+        "--reporter=json",
+        "--outputFile=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/FW0RYR/closure-tests.json"
+      ],
+      "status": 1,
+      "upstreamAbsent": true,
+      "rawOutputHash": "0480e7dd01cf439d81e81340330c074ee797a9f529629f11add7649dd1fa3df0"
+    },
+    {
+      "label": "static-format:check",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "format:check"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "rawOutputHash": "ac1729f86eee878f5f4d6c948c510d2cc91bb5568f6dd088f70f3885e137d116"
+    },
+    {
+      "label": "static-lint",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "lint"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "rawOutputHash": "a6172cb57fa696e705408fdc605fba1ae07b852fdf0614d7c2b623349e285b6e"
+    },
+    {
+      "label": "static-typecheck",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "typecheck"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "rawOutputHash": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed"
+    },
+    {
+      "label": "static-check:dependencies",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "check:dependencies"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "rawOutputHash": "fdf556bf21e4dcac3dc5f8d53018df8613b6437522816ab2303ae26b7973ae46"
+    },
+    {
+      "label": "static-test:static",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "test:static"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "rawOutputHash": "25b809b943ef87e9c2f1b01c10372b9928f488762df203dd61723ad715b0c692"
+    },
+    {
+      "label": "static-check:docs",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "check:docs"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "rawOutputHash": "40a1ecf8c7c34e1fc3d6618f61fc7f4b1c9655656ae1d7d4949aafc3b832432c"
+    },
+    {
+      "label": "static-check:file-size",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "check:file-size"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "rawOutputHash": "89ddbcffc362e96746ebc03022631dcc120c7bd1d9285d4597619508b8c0de3b"
+    },
+    {
+      "label": "metadata-format-check",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "prettier",
+        "--check",
+        "docs/program/registry/writer/runtime/sw/inc/hints.ts.json",
+        "docs/program/registry/writer/provenance/sw/inc/hints.ts.json",
+        "docs/program/registry/writer/runtime/sw/inc/calbck.ts.json",
+        "docs/program/registry/writer/provenance/sw/inc/calbck.ts.json",
+        "docs/program/registry/writer/runtime/sw/source/core/attr/format.ts.json",
+        "docs/program/registry/writer/provenance/sw/source/core/attr/format.ts.json",
+        "docs/program/registry/writer/runtime/sw/browser/presentation/writer-native-format-observer.ts.json",
+        "docs/program/registry/writer/provenance/sw/browser/presentation/writer-native-format-observer.ts.json"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "rawOutputHash": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    }
+  ],
+  "metadataChecks": [
+    {
+      "label": "registry-build",
+      "bin": "npm",
+      "args": [
+        "run",
+        "inventory:registry:build"
+      ],
+      "status": 0,
+      "rawHash": "f941feea056f9f9125ac8a96978ff0fda711beef74563b36c553fc89490f0209",
+      "metadataOnly": true
+    },
+    {
+      "label": "source-tree",
+      "bin": "npm",
+      "args": [
+        "run",
+        "check:source-tree"
+      ],
+      "status": 0,
+      "rawHash": "6c5bd2e3c84892b8cc26b8b1b5f06a950891f9d5988a8ef1f1496f0c252cd33e",
+      "metadataOnly": true
+    },
+    {
+      "label": "source-provenance",
+      "bin": "npm",
+      "args": [
+        "run",
+        "check:source-provenance"
+      ],
+      "status": 0,
+      "rawHash": "bb164b4bb6450dad87f8095b93aabd65f675bf4830e319d3931754b959b327ba",
+      "metadataOnly": true
+    },
+    {
+      "label": "registry-check",
+      "bin": "npm",
+      "args": [
+        "run",
+        "inventory:registry:check"
+      ],
+      "status": 0,
+      "rawHash": "3134961f3712b06aa78385c629f173aeac20bf3636b63d9fb5e35256e46d0f8c",
+      "metadataOnly": true
+    },
+    {
+      "label": "writer-resources",
+      "bin": "node_modules/.bin/tsx",
+      "args": [
+        "scripts/generate-writer-ui-resources.ts",
+        "--check"
+      ],
+      "status": 0,
+      "rawHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "metadataOnly": true
+    },
+    {
+      "label": "routing",
+      "bin": "node",
+      "args": [
+        ".agentplane/policy/check-routing.mjs"
+      ],
+      "status": 0,
+      "rawHash": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9",
+      "metadataOnly": true
+    },
+    {
+      "label": "doctor",
+      "bin": "ap",
+      "args": [
+        "doctor"
+      ],
+      "status": 0,
+      "rawHash": "d416aa8ce1abf18be09490915e0aeabb02d36fd1af4786542c9bcd88f460407c",
+      "metadataOnly": true
+    }
+  ],
+  "preservation": {
+    "trackedSourceScriptsDocs": 1847,
+    "unchanged": 1834,
+    "changedTracked": [
+      "apps/office/src/svl/source/notify/notify.test.ts",
+      "apps/office/src/sw/browser/presentation/writer-native-format-observer.ts",
+      "apps/office/src/sw/inc/calbck.ts",
+      "apps/office/src/sw/inc/hints.ts",
+      "apps/office/src/sw/source/core/attr/format.ts",
+      "docs/program/registry/writer/provenance/sw/browser/presentation/writer-native-format-observer.ts.json",
+      "docs/program/registry/writer/provenance/sw/inc/calbck.ts.json",
+      "docs/program/registry/writer/provenance/sw/inc/hints.ts.json",
+      "docs/program/registry/writer/provenance/sw/source/core/attr/format.ts.json",
+      "docs/program/registry/writer/runtime/sw/browser/presentation/writer-native-format-observer.ts.json",
+      "docs/program/registry/writer/runtime/sw/inc/calbck.ts.json",
+      "docs/program/registry/writer/runtime/sw/inc/hints.ts.json",
+      "docs/program/registry/writer/runtime/sw/source/core/attr/format.ts.json"
+    ],
+    "priorSourceToolTestFiles": 583,
+    "unchangedSourceToolTestFiles": 582,
+    "sourceBackedExpectationMigrations": 1,
+    "canonicalRecordsPreserved": 8,
+    "parentFindingsPrefixHash": "c06b82666351694f206f35ff55c9a23a401ab1bdd9e0d162b4abce301afbd518",
+    "parentFindingsPrefixPreserved": true
+  },
+  "fullSuite": {
+    "lastHistoricalBaseline": "202610091259-XJTGF0",
+    "repeated": false,
+    "resumedTasksSinceFull": 4,
+    "nextFullAfterResumedTasks": 10
+  },
+  "review": {
+    "sameAgent": true,
+    "independent": false
+  },
+  "limitations": [
+    "Complete native linked iterators/ListenerEntry/WriterMultiListener/assertions/cache/name/VCL and heap/global lifetime remain unverified; callback/batching/idempotent JS boundaries are explicitly bounded.",
+    "Raw initial1old assertion failure and closure partial-profile threshold exit1 remain retained; standard identical-complete-map whole-file current-source aggregation meets all four100 gates without prior counters or normalization.",
+    "No module-wide semantic parity or fresh full-suite/whole-app100 claim. Doctor has0errors2historicalwarnings.",
+    "One initial task-local prose skip count12 was explicitly corrected to authoritative6; evidence counts use raw JSON."
+  ]
+}

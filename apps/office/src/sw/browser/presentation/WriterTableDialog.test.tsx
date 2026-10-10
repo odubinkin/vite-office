@@ -124,7 +124,7 @@ describe("Writer browser table controls", /** Verifies the bounded table scenari
 
   it("edits an existing selected table and clips native minimum columns", /** Verifies the bounded table scenario.  @returns Callback result. */ () => {
     const document = createWriterDocument();
-    const table = document.nodes.MakeTableNode("Table1", { width: 5000 });
+    const table = document.nodes.MakeTableNode("Table1", { width: 5000, headerRows: 0 });
     table.AddColumnWidth(2500);
     table.AddColumnWidth(2500);
     document.nodes.AppendTableRow(
@@ -209,7 +209,7 @@ describe("Writer browser table controls", /** Verifies the bounded table scenari
 
   it("renders row selection and registers canonical cell text without a write adapter", /** Checks declarative display and shared selection metadata. @returns Nothing. */ () => {
     const document = createWriterDocument();
-    const table = document.nodes.MakeTableNode("Table1", { width: 5000 });
+    const table = document.nodes.MakeTableNode("Table1", { width: 5000, headerRows: 0 });
     table.AddColumnWidth(5000);
     const row = document.nodes.AppendTableRow(table, 1, {}, [
       nativeBoxFormat({ padding: 80, border: "none" }),

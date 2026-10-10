@@ -80,7 +80,7 @@ it.each([false, true])(
       );
       const cell = screen.getByRole("textbox", { name: "Row 1 column 1 paragraph 1" });
       expect(cell).toHaveTextContent("Native cell");
-      expect(cell.closest("td")).toHaveStyle({ verticalAlign: "middle" });
+      expect(cell.closest(":is(td,th)")).toHaveStyle({ verticalAlign: "middle" });
       expect(box.GetParagraphs()[0]).toBe(node);
       act(
         /** Mutates previous native owner independently. @returns Nothing. */ () => {

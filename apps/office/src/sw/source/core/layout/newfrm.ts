@@ -563,7 +563,7 @@ export function createSwPageFrames(
   function placeTables(afterParagraphIndex: number): void {
     for (const input of tables) {
       if (input.afterParagraphIndex !== afterParagraphIndex) continue;
-      const format = input.table.GetFormat();
+      const spacingItem = input.table.GetFrameFormat().GetULSpace();
       const nativeFrame = new SwTabFrame(input.table);
       try {
         if (!nativeFrame.IsLayoutSplitAllowed() && input.rowHeights.length > 0 && hasContent()) {
@@ -574,7 +574,7 @@ export function createSwPageFrames(
           const wholeHeight = input.rowHeights.reduce(
             /** Adds original measured rows to the native upper frame spacing. @param sum - Current height. @param height - Row height. @returns Whole frame height. */
             (sum, height) => sum + height,
-            format.marginTop ?? 0,
+            spacingItem.GetUpper(),
           );
           // CalcHeightOfFirstContentLine takes the whole master when splitting
           // is disabled. On an empty page MakeAll permits the no-predecessor
@@ -600,7 +600,7 @@ export function createSwPageFrames(
         if (
           repeat > 0 &&
           hasContent() &&
-          used + (format.marginTop ?? 0) + headlineHeight + (input.rowHeights[repeat] ?? 0) >
+          used + spacingItem.GetUpper() + headlineHeight + (input.rowHeights[repeat] ?? 0) >
             initialBodyHeight
         )
           startFollowPage();
@@ -622,7 +622,7 @@ export function createSwPageFrames(
             pageDescriptors.length - 1
           ] as WriterPageDescriptorValue;
           const bodyHeight = descriptor.height - descriptor.topMargin - descriptor.bottomMargin;
-          const spacing = row === 0 ? (format.marginTop ?? 0) : 0;
+          const spacing = row === 0 ? spacingItem.GetUpper() : 0;
           if (
             hasContent() &&
             used + spacing + height > bodyHeight &&
@@ -657,9 +657,9 @@ export function createSwPageFrames(
               afterParagraphIndex,
               ...(row > 0 && repeat > 0 ? { repeatedHeaderRows: repeat } : {}),
             });
-          used += (row === 0 ? (format.marginTop ?? 0) : 0) + height;
+          used += (row === 0 ? spacingItem.GetUpper() : 0) + height;
         }
-        used += format.marginBottom ?? 0;
+        used += spacingItem.GetLower();
       } finally {
         nativeFrame.DestroyImpl();
       }

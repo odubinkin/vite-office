@@ -1,0 +1,382 @@
+{
+  "taskId": "202610092308-R12SRT",
+  "parent": "202609240501-C9TN6M",
+  "status": "verified",
+  "previousFullBaseline": "202610092229-BZQGYC",
+  "correctionAfterPreviousFull": 1,
+  "goalComplete": false,
+  "constraints": {
+    "checkout": "/Users/odubinkin/Projects/vite-office-writer",
+    "branch": "writer",
+    "upstreamPhysicallyAbsentForEveryTestBuildStatic": true,
+    "upstreamRestoredForMetadata": true,
+    "upstreamSourceOrHelpersInAgentplane": false,
+    "network": false,
+    "merge": false,
+    "publication": false,
+    "subagents": false,
+    "registeredRecoveryOpenSaveSettingsUiDeviationsPreserved": true
+  },
+  "upstream": {
+    "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+    "tag": "libreoffice-26.8.0.2",
+    "anchors": [
+      "sw/source/filter/xml/xmlexpit.cxx273..289 direct SET/no parent",
+      "sw/source/filter/xml/xmliteme.cxx133..165 LR guard",
+      "include/svl/itemset.hxx201..202 guard parent default true",
+      "sw/source/filter/xml/xmlfmte.cxx83..91 unexpected custom parent",
+      "sw/source/filter/xml/xmlithlp.cxx307..317 six orientation tokens",
+      "sw/source/filter/xml/xmlitemm.cxx53..55,98..99,114..115 represented normal items"
+    ]
+  },
+  "toolchain": {
+    "applicationCoverage": "actual Istanbul4.1.10",
+    "typescriptCli": "7.0.2",
+    "typescriptCompilerApi": "6.0.2",
+    "inventoryCoverageConfiguration": "existing V8 unchanged; inventory implementation unchanged"
+  },
+  "behavior": {
+    "removed": "table scalar GetFormat export projection",
+    "owner": "original SwFrameFormat.GetAttrSet",
+    "normalItemAdmission": "GetItemIfSet(which,false), direct only",
+    "lrSpecialGuard": "own LR item plus SET parent-search horizontal orientation; pool default not admitted",
+    "alignment": "six native mapped orientations; unknown/unset omitted",
+    "headline": "original table counter",
+    "rowsAndCells": "unchanged separate bounded projection"
+  },
+  "tests": {
+    "relatedFiles": 81,
+    "acceptedUniqueApplicationCases": 493,
+    "newCases": 14,
+    "initialPass": 489,
+    "initialFreshFailures": 4,
+    "failedOnlyClosurePass": 4,
+    "finalFreshAfterRequiredOwnerLintRepair": 14,
+    "browser": {
+      "cases": 7,
+      "pass": 7,
+      "skip": 0,
+      "flaky": 0,
+      "viewports": [
+        1280,
+        390
+      ],
+      "specs": [
+        "writer-table-properties-history.spec.ts",
+        "writer-native-table-text-flow-headline.spec.ts",
+        "writer-native-table-column-drag.spec.ts"
+      ]
+    },
+    "fullRun": "not due1/10 after BZQGYC"
+  },
+  "coverage": {
+    "status": "pass",
+    "sourceSha256": "a749c76dd9af77e1dd4abdb22cdc5772b4ce1d0af9446b18d925536d223b4360",
+    "wholeModule": "/Users/odubinkin/Projects/vite-office-writer/apps/office/src/sw/source/filter/xml/xmlexp.ts",
+    "actualCoverage": {
+      "lines": {
+        "total": 190,
+        "covered": 190,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 203,
+        "covered": 203,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 41,
+        "covered": 41,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 293,
+        "covered": 293,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "negativeCounters": 0,
+    "completeMapIdentity": true,
+    "currentSourceUnchangedAcrossProfiles": true,
+    "originalCases": 493,
+    "acceptedUniqueCases": 493,
+    "initialPassed": 489,
+    "initialFailed": 4,
+    "failedOnlyClosurePassed": 4,
+    "previouslyPassingCasesReplayed": 0,
+    "freshCases": 14,
+    "profiles": [
+      {
+        "profile": "related-xml-table",
+        "mapSha256": "1123752fa53fdbee4646fbed38eeda276394d2d1dd94a8e1f6d647991f72cdd0",
+        "reportSha256": "854328e3f4849f768308ea34aae24a9aee356862016a1cffa7cb053bb285ecec"
+      },
+      {
+        "profile": "fresh-repair",
+        "mapSha256": "c3b820f0910e3adfd8d21d376849d66819e6069105a41f1e506119bdac043841",
+        "reportSha256": "ebcb230b34e1a1d19f031a8018803bb2036dc40a10191ddb7da1c46859647fc4"
+      }
+    ],
+    "rawPartialClosureThresholdExit": "1; assertion cases pass, partial closure alone is below whole-module thresholds; complete identical-map merge100",
+    "finalFreshFilesAfterLint": {
+      "files": 2,
+      "passed": 14,
+      "failed": 0,
+      "pending": 0,
+      "reason": "New required-owner test helpers replace forbidden assertions, final changed test code rechecked",
+      "sameCompleteMap": true,
+      "rawExit": 1,
+      "exitReason": "Partial fresh-only profile below whole-module100 threshold; complete identical-map100 gate passes"
+    },
+    "finalFreshSourceHashes": {
+      "apps/office/src/sw/source/filter/xml/native-table-export-items.test.ts": "1930456c7ad1bdbff56613f08e5a52ac1ce00edccef5f847cc5764de814e4548",
+      "apps/office/src/sw/browser/presentation/native-table-export-items.test.tsx": "c8ae5f03a3a1af2b166194f0fd77040baa0514444b9910941d31c0e27272cb80"
+    }
+  },
+  "preservation": {
+    "status": "pass",
+    "originalPaths": 1843,
+    "unchangedPaths": 1840,
+    "changedPaths": [
+      "docs/program/registry/writer/provenance/sw/source/filter/xml/xmlexp.ts.json",
+      "docs/program/registry/writer/runtime/sw/source/filter/xml/xmlexp.ts.json",
+      "apps/office/src/sw/source/filter/xml/xmlexp.ts"
+    ],
+    "oldUnitTestFiles": 635,
+    "oldTestsAllByteIdentical": true,
+    "canonicalHistoricalPrefixes": 2,
+    "parentFindingsPrefixPreserved": true
+  },
+  "checks": [
+    {
+      "label": "format-check",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "format:check"
+      ],
+      "status": 0,
+      "upstreamAbsent": true
+    },
+    {
+      "label": "lint-final",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "lint"
+      ],
+      "status": 0,
+      "upstreamAbsent": true
+    },
+    {
+      "label": "typecheck",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "typecheck"
+      ],
+      "status": 0,
+      "upstreamAbsent": true
+    },
+    {
+      "label": "check-dependencies",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "check:dependencies"
+      ],
+      "status": 0,
+      "upstreamAbsent": true
+    },
+    {
+      "label": "check-docs",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "check:docs"
+      ],
+      "status": 0,
+      "upstreamAbsent": true
+    },
+    {
+      "label": "check-file-size",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "check:file-size"
+      ],
+      "status": 0,
+      "upstreamAbsent": true
+    },
+    {
+      "label": "current-build",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "build"
+      ],
+      "status": 0,
+      "upstreamAbsent": true
+    },
+    {
+      "label": "static-build",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "node",
+        "scripts/check-static-build.mjs"
+      ],
+      "status": 0,
+      "upstreamAbsent": true
+    },
+    {
+      "label": "review-browser",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "playwright",
+        "test",
+        "--config",
+        "apps/office/playwright.config.ts",
+        "--project=writer",
+        "writer-native-table-column-drag.spec.ts",
+        "writer-native-table-text-flow-headline.spec.ts",
+        "writer-table-properties-history.spec.ts",
+        "--reporter=list,json"
+      ],
+      "status": 0,
+      "upstreamAbsent": true
+    }
+  ],
+  "restoredMetadata": [
+    {
+      "label": "source-tree",
+      "bin": "npm",
+      "args": [
+        "run",
+        "check:source-tree"
+      ],
+      "status": 0,
+      "rawHash": "6c5bd2e3c84892b8cc26b8b1b5f06a950891f9d5988a8ef1f1496f0c252cd33e",
+      "metadataOnly": true
+    },
+    {
+      "label": "registry-build",
+      "bin": "npm",
+      "args": [
+        "run",
+        "inventory:registry:build"
+      ],
+      "status": 0,
+      "rawHash": "f941feea056f9f9125ac8a96978ff0fda711beef74563b36c553fc89490f0209",
+      "metadataOnly": true
+    },
+    {
+      "label": "source-provenance",
+      "bin": "npm",
+      "args": [
+        "run",
+        "check:source-provenance"
+      ],
+      "status": 0,
+      "rawHash": "6254cd84ffd0c48086c7f42fd3cd1c4aa2d546fdaf62a670474f9e9aa6a42ac1",
+      "metadataOnly": true
+    },
+    {
+      "label": "registry-check",
+      "bin": "npm",
+      "args": [
+        "run",
+        "inventory:registry:check"
+      ],
+      "status": 0,
+      "rawHash": "837aeca922d63b96869bd9fa10401bcd368c626ee300f794d665fc5400c226b4",
+      "metadataOnly": true
+    },
+    {
+      "label": "writer-resources",
+      "bin": "node_modules/.bin/tsx",
+      "args": [
+        "scripts/generate-writer-ui-resources.ts",
+        "--check"
+      ],
+      "status": 0,
+      "rawHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "metadataOnly": true
+    },
+    {
+      "label": "inventory-invariants",
+      "bin": "npm",
+      "args": [
+        "run",
+        "inventory:invariants"
+      ],
+      "status": 0,
+      "rawHash": "b611de6207a859d314789d5450f572c7f995c2c6f50627250f28fa8e1d69d479",
+      "metadataOnly": true
+    },
+    {
+      "label": "inventory-parity",
+      "bin": "npm",
+      "args": [
+        "run",
+        "inventory:parity"
+      ],
+      "status": 0,
+      "rawHash": "cbcd786f4930d394dec93acdc2ce0c602ef8673ef53b24bf57d1eeb5463834a6",
+      "metadataOnly": true
+    },
+    {
+      "label": "routing",
+      "bin": "node",
+      "args": [
+        ".agentplane/policy/check-routing.mjs"
+      ],
+      "status": 0,
+      "rawHash": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9",
+      "metadataOnly": true
+    },
+    {
+      "label": "doctor",
+      "bin": "ap",
+      "args": [
+        "doctor"
+      ],
+      "status": 0,
+      "rawHash": "8d2bf19568ae46b7a821a2004880f5a990bda41f7fcca6d787869b7f27433300",
+      "metadataOnly": true
+    }
+  ],
+  "chronology": {
+    "testFailures": "Two fresh unset fixtures retained native constructor orientation; reset original item. Two ODT assertions used nonexistent helper methods; inspect original item sets. All repaired, no old test migration.",
+    "lint": "16 forbidden assertions, then2 remaining multiline assertions; explicit required-owner helpers. Final lint/type/build pass, all14 changed fresh cases rechecked.",
+    "partialClosureExits": "Both narrow closures exit1 only because their own incomplete module coverage is below configured100; all assertions pass. Complete identical current-source maps100 gate passes; thresholds untouched.",
+    "provenance": "Initial source evidence marker omitted the third argument in actual source expression; replaced with existing method symbol, metadata audit repaired.",
+    "rawLogs": "Ignored node_modules cache only. First lint log was replaced by second label reuse; bounded initial16/remaining2 findings retained, final lint log has unique label."
+  },
+  "boundaries": [
+    "Full native row/cell export projections and xmloff item mapper ownership remain partial.",
+    "Layout-derived, percent and relative table widths remain unported.",
+    "Native arbitrary custom parent preservation, generic browser scalar codec, full UNO/VCL/filter responsibilities remain unverified.",
+    "Actual coverage does not promote whole-module semantic/default/classification statuses."
+  ],
+  "semanticCommit": "0e02021afe792176ab9069c80aa9454f71023a94",
+  "quality": {
+    "verdict": "pass",
+    "evaluatedSha": "0e02021afe792176ab9069c80aa9454f71023a94",
+    "sameAgentNonIndependent": true,
+    "path": ".agentplane/tasks/202610092308-R12SRT/quality/20261009-232031702-recovery-context/quality-report.json"
+  }
+}

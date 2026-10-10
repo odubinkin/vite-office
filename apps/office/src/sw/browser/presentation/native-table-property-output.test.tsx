@@ -35,7 +35,7 @@ function fixture() {
   sessions.push(session);
   const doc = session.docShell.GetDoc(),
     shell = session.view.GetWrtShell(),
-    table = doc.nodes.MakeTableNode("Original", { width: 6000, horiOrient: H.LEFT });
+    table = doc.nodes.MakeTableNode("Original", { width: 6000, horiOrient: H.LEFT, headerRows: 0 });
   table.AddColumnWidth(1000);
   table.AddColumnWidth(5000);
   for (const values of [
@@ -261,7 +261,7 @@ it("mounted visited Columns advertises the borrowed native representation even w
     horiOrient: H.LEFT,
     marginLeft: 0,
     marginRight: rep.space - 6000,
-    align: undefined,
+    align: "left",
   });
   expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(1);
   expect(

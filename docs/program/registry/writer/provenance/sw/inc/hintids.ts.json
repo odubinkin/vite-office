@@ -84,6 +84,38 @@
         {
           "path": "apps/office/src/sw/browser/editor/native-box-frame-format.test.tsx",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/layout/native-table-attr-notify.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/undo/native-table-attr-notify.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/native-table-attr-notify.test.tsx",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/inc/hintids.ts",
+          "marker": "RES_HORI_ORIENT"
+        },
+        {
+          "path": "apps/office/src/editeng/source/items/native-lr-space-item.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/table/native-table-lr-item.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/undo/native-table-lr-history.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-table-lr-items.test.tsx",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -122,6 +154,30 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx",
           "marker": "get_value_changed_from_saved"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/tabfrm.cxx",
+          "marker": "SwTabFrame::SwClientNotify"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/tabfrm.cxx",
+          "marker": "SwTabFrame::UpdateAttr_"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/tabfrm.cxx",
+          "marker": "SwTabFrame::Invalidate"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/inc/tabfrm.hxx",
+          "marker": "SwTabFrameInvFlags"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/hintids.hxx",
+          "marker": "RES_HORI_ORIENT"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/inc/frame.hxx",
+          "marker": "InvalidateNextPos"
         }
       ]
     },
@@ -132,7 +188,9 @@
       "RES_CHRATR_UNDERLINE",
       "RES_CHRATR_WEIGHT",
       "RES_CHRATR_CJK_POSTURE",
-      "RES_CHRATR_CJK_WEIGHT"
+      "RES_CHRATR_CJK_WEIGHT",
+      "RES_HORI_ORIENT",
+      "RES_LR_SPACE"
     ],
     "omittedResponsibilities": [
       "Upstream obligations outside RES_CHRATR_BEGIN, RES_CHRATR_POSTURE, RES_CHRATR_UNDERLINE, RES_CHRATR_WEIGHT and the bounded RES_CHRATR_BEGIN, RES_CHRATR_POSTURE, RES_CHRATR_UNDERLINE contract remain intentionally omitted.",
@@ -150,7 +208,10 @@
       "Iteration238 publishes only changed native table property items from pages and mounted UI to the shell. SwPtrItem borrows the original SwTableRep through SfxItemSet clone and equality. Native item IDs and explicitly SET-only consumption preserve untouched frame defaults and empty history, isolate name and spacing, and group geometry, flow and border edits with original owners and cursor. Separate explicit legacy ingress remains for existing callers; complete native item factories, full SfxTabPage orchestration and complex layout remain unverified. Verification pending; all prior metadata states, defaults, classes and registered IO/recovery deviations remain preserved.",
       "Iteration238 verified closure supersedes the earlier pending draft. Native borrowed SwPtrItem and exact WhichIds, format/flow changed-item publication, unconditional Columns representation publication, created Borders admission, persistent native exchange output and page-scoped Reset are verified against the pinned source. Main properties UI sends SfxItemSet directly with no DTO fallback; explicitly SET-only shell writes retain original graph/cursor and grouped history, unchanged Table OK has empty history, FULL retains stored width while layout uses automatic width. 412 unique targeted app and38 related Chromium cases pass, including45 fresh cases; passing replay0. Current app17457/19171/4389/14267 and inventory1464/1523/384/1081 actual counters reach100 in all four metrics using current targeted runs and whole identical-source/maps or complete contiguous declaration/body/enclosing branch/location proof from237. No full suite this leaf; next full247. Four source-backed old observation/input migrations preserve635 of639 prior acceptance files byte-identically; four new acceptance files. All311 prior metadata records/fields/prefixes/states/defaults/classes remain preserved and two partial native records are added for313. Full native item/frame/page/layout/core/UI parity remains unverified and registered IO/recovery deviations are preserved.",
       "Iteration243 owns native SwTableBoxFormat item sets through registered SwTableBox clients, exact box ranges and default frame inheritance. Cell claims retain complete direct attributes and separate shared calculation items; border and vertical commands reuse operation-local native format owners. SaveTable stores deduplicated complete cell item sets and numeric indices, restoring shared owners with MoveTableBoxHint before model registration. Actual section deletion releases cell clients; native insertion shares source formats; the main JSX table reads native border and orientation items directly. Full SwCellFrame hierarchy, invalidation, calculation, nested/merged tables and UNO remain partial. Targeted verification pending; last full237, next247; existing classifications/defaults and registered I/O/recovery deviations preserved.",
-      "Iteration243 verified1301 unique app cases including11 fresh native cell ownership/default/item-set/claim/hint/history/deletion and mounted rendering scenarios, plus25 Chromium cases, all runtime/build physically upstream absent/restored finally. Five old acceptance files capture expected attributes before native destruction or adopt native constructors without weakening literal/identity/history assertions;649 unaffected prior files remain byte-identical. Three initial failures passed failed-only; two new border-sharing/admission cases completed coverage, with zero passing replay. App and inventory all-four100% actual counters are bound to current bytes/maps or complete unchanged declarations/bodies/enclosing branches/all locations from242. Full SwCellFrame hierarchy/invalidation, calculation, numeric formatting, nested/merged/UNO/pooling/modified-state and whole project parity remain partial. Existing316 classifications/defaults/status/evidence prefixes and registered I/O/recovery deviations preserved. Last full237,next247; no full243."
+      "Iteration243 verified1301 unique app cases including11 fresh native cell ownership/default/item-set/claim/hint/history/deletion and mounted rendering scenarios, plus25 Chromium cases, all runtime/build physically upstream absent/restored finally. Five old acceptance files capture expected attributes before native destruction or adopt native constructors without weakening literal/identity/history assertions;649 unaffected prior files remain byte-identical. Three initial failures passed failed-only; two new border-sharing/admission cases completed coverage, with zero passing replay. App and inventory all-four100% actual counters are bound to current bytes/maps or complete unchanged declarations/bodies/enclosing branches/all locations from242. Full SwCellFrame hierarchy/invalidation, calculation, numeric formatting, nested/merged/UNO/pooling/modified-state and whole project parity remain partial. Existing316 classifications/defaults/status/evidence prefixes and registered I/O/recovery deviations preserved. Last full237,next247; no full243.",
+      "Resumed correction BJCYQ3 restores source-shaped SwTabFrame SwClientNotify/UpdateAttr_/Invalidate in place of its generic frame border override. Original table flags retain native numeric values; size/orientation batches clear handled items from copied descriptors and invalidate table print only, while handled legacy items forward the borrowed original items to the generic base. Collapsing changes recursively invalidate original linked lowers, spacing invalidates previous/next flat sibling print and paints the next, and break invalidates current/next position. UL-space remains in copied residual deltas; unrelated legacy/default format hints are ignored by the table, while unconsumed batch attributes forward independent copy-owned deltas without changing original descriptors/items/owners. Canonical RES_HORI_ORIENT110 is declared in hintids, not a private duplicate or fake value. Native page/root browse-width/content-specific page dispatch and master/follow/section traversal, page-description/direction/layout-follow families remain unrepresented/unverified; browse-width flag numeric/generation contract is represented, its native root consumer is not. Actual152file upstream-absent profile1181pass1fresh expected-forwarding failure0skip; failed-only closure1pass12intentional skips. Final1182distinct cases15fresh all pass,0passing replay, both entire current production modules actual identical complete-map Istanbul241lines268statements26functions148branches all-four100/0negative, no old task/V8 counters or map/counter/location/threshold normalization. One old legacy RES_BOX expectation changes only from generic invalidation to native no-forwarding geometry preservation, exactly justified by pinned UpdateAttr_ default bClear=false; all other old assertions retained. Three actual history cycles and mounted native command/item behavior preserve original node/cursor/frame owners. Four canonical old value/status/default/classification/evidence/responsibility prefixes and registered recovery/open/save/settings deviations preserved without module/goal parity promotion. Evidence task202610091623-BJCYQ3 contains only bounded English counts/commands/hashes/IDs; raw initial/fresh fixture failures/maps/logs/helpers stay ignored cache, finally reference restored. Goal active correction7/10 since XJTGF0, next full after10.",
+      "Correction6Q2YQH (7/10 after SZKQTN) ports original SvxLRSpaceItem RES_LR_SPACE98 with eleven native context fields, zero/100/false defaults, independent Clone/equality and represented signed twip layout/proportion/hanging-text/sticky-zero behavior. Borrowed SwFormat.GetLRSpace and typed original pool item replace table mirrored left/right margins. Direct transport projects original direct LR; effective frame layout/SwTableRep/ODT use original inherited/pool values. SetTabCols clones full original context, and native dialog orientation/size/LR ItemSet replaces changed scalar LR replay. SaveTable excludes margin scalars and retains original complete ItemSet history. Font-unit SvxIndentValue/complete UNO member PutValue/presentation/metric scaling, generic native Doc attribute history/full layout/VCL/master-follow/copy/Repeat remain separately incomplete. Existing semantic/default/classification/evidence/history and registered IO/recovery/UI deviations retained; no whole-module promotion. Evidence task202610092125-6Q2YQH, current-source verification pending.",
+      "Verification6Q2YQH: final342 related files3588 unique accepted current-source cases22fresh (20 native LR and2 shared composite-border guards); ten actual whole production modules Istanbul100 lines/statements/functions/branches,zero negative/current source and complete-map identity. Initial pre-repair source maps/counters excluded entirely. Five exact fixture operations in3 historical files;620 other old tests byte identical,623 total. Twenty canonical historical prefixes retained. Full not due7/10; broad goal remains incomplete."
     ],
     "status": "mapped",
     "upstreamPath": "sw/inc/hintids.hxx",
@@ -158,7 +219,9 @@
       "RES_CHRATR_BEGIN",
       "RES_CHRATR_POSTURE",
       "RES_CHRATR_UNDERLINE",
-      "RES_CHRATR_WEIGHT"
+      "RES_CHRATR_WEIGHT",
+      "RES_HORI_ORIENT",
+      "RES_LR_SPACE"
     ]
   },
   "legacyOrder": 137

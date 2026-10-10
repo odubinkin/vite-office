@@ -1,0 +1,907 @@
+{
+  "task": "202610091920-B575XR",
+  "parent": "202609240501-C9TN6M",
+  "branch": "writer",
+  "workspace": "/Users/odubinkin/Projects/vite-office-writer",
+  "correctionCounter": "3/10 after full SZKQTN, KVM0ER and T8EQAC",
+  "goalStatus": "ACTIVE/incomplete",
+  "upstream": {
+    "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+    "release": "26.8.0.2",
+    "sourceFacts": [
+      "sw/source/core/undo/untbl.cxx:887..910: SaveTable saves table frame attributes and row/box attributes; independent table headline member absent.",
+      "sw/source/core/undo/untbl.cxx:937..988: RestoreAttr restores original frame/row/box attributes, no headline assignment.",
+      "sw/source/core/undo/untbl.cxx:1390..1427: SwUndoAttrTable swaps SaveTable snapshots on original indexed table.",
+      "sw/inc/swtable.hxx: independent uint16 headline member, getter caps by original line count.",
+      "sw/source/core/undo/untbl.cxx:845..885: scalar numeric headline history remains separate."
+    ]
+  },
+  "outcome": "Generic native table attribute mementos exclude headerRows/repeatHeaderRows transport fields. Actual frame, row and column UndoRedo preserves later independent zero/two/raw-nine/uint16 counts and original native graph/cursor/text. Dedicated scalar headline history interleaves correctly; mounted th/td/repeated page occurrences and real ODT reopening preserve current headline state.",
+  "coverage": {
+    "provider": "istanbul",
+    "currentTaskOnly": true,
+    "completeMapsIdentical": true,
+    "sourceHashes": {
+      "/Users/odubinkin/Projects/vite-office-writer/apps/office/src/sw/source/core/undo/untbl.ts": "d9b8dd787dc9ad07e5ab706ceaf3a16d7a17063df660dba34ade973600535397"
+    },
+    "sourceRevalidation": "The entire production file is byte-identical across current and constructor-closure profiles. Initial targeted profile used prior source representation and is excluded. No counters or maps from earlier tasks or pre-change source.",
+    "negativeCounters": 0,
+    "metrics": {
+      "lines": {
+        "total": 159,
+        "covered": 159,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 164,
+        "covered": 164,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 42,
+        "covered": 42,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 29,
+        "covered": 29,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "modules": [
+      {
+        "path": "/Users/odubinkin/Projects/vite-office-writer/apps/office/src/sw/source/core/undo/untbl.ts",
+        "metrics": {
+          "lines": {
+            "total": 159,
+            "covered": 159,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 42,
+            "covered": 42,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 164,
+            "covered": 164,
+            "skipped": 0,
+            "pct": 100
+          },
+          "branches": {
+            "total": 29,
+            "covered": 29,
+            "skipped": 0,
+            "pct": 100
+          }
+        }
+      }
+    ],
+    "runs": [
+      {
+        "label": "current",
+        "files": 27,
+        "passed": 143,
+        "failed": 0,
+        "filtered": 0,
+        "testsHash": "956af769181c4467b939e8289e176ed2fe74074c49795a18c0f776b8a0229137",
+        "mapHash": "d9d2bf07dcc0b4bbd0471302fba816d6ff81ae4c8cb19101da937a20700fe72d",
+        "logHash": "96533df6100af04190a35d0a1c9392b3548e7547f7857edc92cc3ce58ec49239"
+      },
+      {
+        "label": "constructor-closure",
+        "files": 1,
+        "passed": 7,
+        "failed": 0,
+        "filtered": 0,
+        "testsHash": "b4f33c55db6214776cd76bb5b4080ba4e8a3a6aa86bf5ef66f8193f629e4acae",
+        "mapHash": "a8600202fd787056a7fa1fa0afb28e25aca807070f86026d36925f2b57b40c4c",
+        "logHash": "8cf8f1d861cfb6f5fd5f5434792c43d6d0b7a838f2ec038fd61e757338a88dcd"
+      },
+      {
+        "label": "test-call-repair",
+        "files": 1,
+        "passed": 3,
+        "failed": 0,
+        "filtered": 0,
+        "testsHash": "ef7c3c447ee8bb017b9e94be313663cc1cc046bfc0ae2f7eb866a7788a1712c5",
+        "mapHash": "6f431230c1f6bf3f4b994c3128af13a3c9c11357089825ebc252d1b6b47b333e",
+        "logHash": "c8085019b4b4a0995fea9bd5887bb021c2b4c61f41caa1264aeeb2c290196ee7"
+      }
+    ],
+    "uniqueAccepted": 150,
+    "fresh": 10,
+    "freshCaseIds": [
+      "/Users/odubinkin/Projects/vite-office-writer/apps/office/src/sw/browser/editor/native-table-attribute-headline.test.tsx#actual page/header projection and ODT keep independent count 0 across attribute UndoRedo#0",
+      "/Users/odubinkin/Projects/vite-office-writer/apps/office/src/sw/browser/editor/native-table-attribute-headline.test.tsx#actual page/header projection and ODT keep independent count 2 across attribute UndoRedo#0",
+      "/Users/odubinkin/Projects/vite-office-writer/apps/office/src/sw/source/core/table/native-table-attribute-headline.test.ts#attribute undo excludes headline count original=0 later=2#0",
+      "/Users/odubinkin/Projects/vite-office-writer/apps/office/src/sw/source/core/table/native-table-attribute-headline.test.ts#attribute undo excludes headline count original=1 later=-1#0",
+      "/Users/odubinkin/Projects/vite-office-writer/apps/office/src/sw/source/core/table/native-table-attribute-headline.test.ts#attribute undo excludes headline count original=1 later=0#0",
+      "/Users/odubinkin/Projects/vite-office-writer/apps/office/src/sw/source/core/table/native-table-attribute-headline.test.ts#attribute undo excludes headline count original=1 later=9#0",
+      "/Users/odubinkin/Projects/vite-office-writer/apps/office/src/sw/source/core/table/native-table-attribute-headline.test.ts#attribute undo excludes headline count original=9 later=65538#0",
+      "/Users/odubinkin/Projects/vite-office-writer/apps/office/src/sw/source/core/undo/native-table-attribute-headline-history.test.ts#native columns attribute history preserves later independent count and numeric headline interleaving#0",
+      "/Users/odubinkin/Projects/vite-office-writer/apps/office/src/sw/source/core/undo/native-table-attribute-headline-history.test.ts#native frame attribute history preserves later independent count and numeric headline interleaving#0",
+      "/Users/odubinkin/Projects/vite-office-writer/apps/office/src/sw/source/core/undo/native-table-attribute-headline-history.test.ts#native row attribute history preserves later independent count and numeric headline interleaving#0"
+    ],
+    "caseIdentity": "suite file + fullName + repeated assertion ordinal, no title renames",
+    "caseIdsHash": "e1e803f704acf64d158bce610e3754e30bda34058a80c4f6135c4ee9d29d3aef",
+    "thresholds": "Configured100 thresholds unchanged. Incomplete profiles retain strict threshold exits. Actual same-source complete-map aggregation gates entire untbl.ts100 all-four, without counter/location edits."
+  },
+  "freshTests": [
+    {
+      "path": "apps/office/src/sw/source/core/table/native-table-attribute-headline.test.ts",
+      "sourceHash": "5ee86dd9ae60d5e1b157bc278fdef15324312f171a7955b98a4e9e64bbf56bdc"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/native-table-attribute-headline-history.test.ts",
+      "sourceHash": "823baeb0c97b0208a1b732c7fa0601544af0e5b867f910d03baac16274748d98"
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/native-table-attribute-headline.test.tsx",
+      "sourceHash": "4832f954cade94eba8996f94378ac72309c25c720630bee692e6ea8cc3d91eb6"
+    }
+  ],
+  "preservation": {
+    "originalFiles": 1550,
+    "unrelatedUnchanged": 1547,
+    "originalTestFiles": 610,
+    "untouchedOldTestFiles": 610,
+    "preciselyMigratedOldTestFiles": 0,
+    "migrationOperations": 0,
+    "canonicalHistories": 2,
+    "canonicalOldPrefixes": true,
+    "parentFindingsPrefix": true,
+    "migrationsHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "productionHashes": {
+      "apps/office/src/sw/source/core/undo/untbl.ts": "d9b8dd787dc9ad07e5ab706ceaf3a16d7a17063df660dba34ade973600535397"
+    },
+    "trackedChangePaths": [
+      ".agentplane/tasks/202609240501-C9TN6M/README.md",
+      ".agentplane/tasks/202610091920-B575XR/README.md",
+      "apps/office/src/sw/source/core/undo/untbl.ts",
+      "docs/program/registry/writer/provenance/sw/source/core/undo/untbl.ts.json",
+      "docs/program/registry/writer/runtime/sw/source/core/undo/untbl.ts.json"
+    ]
+  },
+  "commands": [
+    {
+      "manifest": "commands.json",
+      "manifestHash": "fb89292dee8435ad71d61185e170da5c1c7f442ad928aac5ae90329641b325c2",
+      "label": "targeted",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer/apps/office",
+      "args": [
+        "run",
+        "test:coverage",
+        "--",
+        "src/sw/browser/editor/native-table-cursor-rings.test.tsx",
+        "src/sw/browser/editor/native-table-pointer.test.tsx",
+        "src/sw/browser/editor/native-table-document-row.test.tsx",
+        "src/sw/browser/editor/native-table-paste.test.tsx",
+        "src/sw/browser/editor/native-box-frame-format.test.tsx",
+        "src/sw/browser/editor/native-table-tab.test.tsx",
+        "src/sw/browser/editor/native-independent-column-render.test.tsx",
+        "src/sw/browser/editor/native-table-frame-lifetime.test.tsx",
+        "src/sw/browser/editor/WriterEditableParagraph.test.tsx",
+        "src/sw/browser/editor/native-table-linear-drag.test.tsx",
+        "src/sw/browser/editor/native-table-selection-commands.test.tsx",
+        "src/sw/browser/editor/native-row-format-client.test.tsx",
+        "src/sw/browser/editor/native-independent-table-selection.test.tsx",
+        "src/sw/browser/editor/native-row-frame-size.test.tsx",
+        "src/sw/browser/editor/browser-writer-edit-window.test.ts",
+        "src/sw/browser/editor/native-table-mouse.test.tsx",
+        "src/sw/browser/editor/native-table-editing.test.tsx",
+        "src/sw/browser/editor/native-table-layout-split.test.tsx",
+        "src/sw/browser/editor/native-table-column-drag.test.tsx",
+        "src/sw/browser/editor/native-table-selection.test.tsx",
+        "src/sw/browser/editor/native-table-row-drag.test.tsx",
+        "src/sw/browser/editor/native-table-row-commands.test.tsx",
+        "src/sw/browser/editor/native-collapsing-border-paint.test.tsx",
+        "src/sw/browser/editor/native-table-plain-paste.test.tsx",
+        "src/sw/browser/editor/native-last-row-frame-size.test.tsx",
+        "src/sw/browser/editor/writer-table-geometry.test.ts",
+        "src/sw/browser/editor/native-table-print-area.test.tsx",
+        "src/sw/browser/editor/native-table-column-commands.test.tsx",
+        "src/sw/browser/editor/native-independent-column-insertion.test.tsx",
+        "src/sw/browser/editor/native-table-delete.test.tsx",
+        "src/sw/browser/editor/native-table-headlines.test.tsx",
+        "src/sw/browser/editor/native-numeric-row-insertion.test.tsx",
+        "src/sw/browser/filter/xml/native-row-split-item-transport.test.ts",
+        "src/sw/browser/presentation/native-table-split-items.test.tsx",
+        "src/sw/browser/presentation/native-table-border-changed-items.test.tsx",
+        "src/sw/browser/presentation/native-border-page.test.tsx",
+        "src/sw/browser/presentation/native-collapsing-border-item.test.tsx",
+        "src/sw/browser/presentation/WriterTableDialog.test.tsx",
+        "src/sw/browser/presentation/native-independent-table-properties.test.tsx",
+        "src/sw/browser/presentation/native-table-text-flow-headline.test.tsx",
+        "src/sw/browser/presentation/native-table-border-owner-history.test.tsx",
+        "src/sw/browser/presentation/native-row-height-dialog.test.tsx",
+        "src/sw/browser/presentation/native-table-format-lifecycle.test.tsx",
+        "src/sw/browser/presentation/native-insert-table-dialog.test.tsx",
+        "src/sw/browser/presentation/native-insert-table-command.test.tsx",
+        "src/sw/browser/presentation/native-table-height-delta.test.tsx",
+        "src/sw/browser/presentation/native-row-frame-format.test.tsx",
+        "src/sw/browser/presentation/native-collapsing-table-borders.test.tsx",
+        "src/sw/browser/presentation/native-table-name-page.test.tsx",
+        "src/sw/browser/presentation/native-row-split-core-items.test.tsx",
+        "src/sw/browser/presentation/native-table-text-flow-split.test.tsx",
+        "src/sw/browser/presentation/native-table-column-page.test.tsx",
+        "src/sw/browser/presentation/native-table-properties-reset.test.tsx",
+        "src/sw/browser/presentation/native-table-border-common-state.test.tsx",
+        "src/sw/browser/presentation/native-table-property-output.test.tsx",
+        "src/sw/browser/presentation/native-table-alignment.test.tsx",
+        "src/sw/browser/presentation/native-table-properties.test.tsx",
+        "src/sw/source/core/frmedt/native-table-mouse.test.ts",
+        "src/sw/source/filter/xml/odt-table-alignment.test.ts",
+        "src/sw/source/filter/xml/odt-table-cell-lists.test.ts",
+        "src/sw/source/filter/xml/odt-table-print-area.test.ts",
+        "src/sw/source/filter/xml/odt-table-roundtrip.test.ts",
+        "src/sw/source/filter/xml/native-row-frame-size-roundtrip.test.ts",
+        "src/sw/source/filter/xml/native-independent-column-odf.test.ts",
+        "src/sw/source/uibase/docvw/native-table-row-drag.test.ts",
+        "src/sw/source/uibase/docvw/native-row-modifier-drag.test.ts",
+        "src/sw/source/uibase/docvw/native-table-pointer.test.ts",
+        "src/sw/source/uibase/docvw/native-table-column-drag.test.ts",
+        "src/sw/source/uibase/docvw/native-table-linear-drag.test.ts",
+        "src/sw/source/uibase/docvw/native-table-proportional-drag.test.ts",
+        "src/sw/source/ui/table/native-table-property-output.test.ts",
+        "src/sw/source/ui/table/native-hidden-table-column-page.test.ts",
+        "src/sw/source/ui/table/native-row-height-dialog.test.ts",
+        "src/sw/source/ui/table/native-insert-table-dialog.test.ts",
+        "src/sw/source/ui/table/native-table-format-page.test.ts",
+        "src/sw/source/ui/table/native-table-format-lifecycle.test.ts",
+        "src/sw/source/ui/table/native-table-text-flow-split.test.ts",
+        "src/sw/source/ui/table/native-table-column-page.test.ts",
+        "src/sw/source/ui/table/native-table-text-flow-headline.test.ts",
+        "src/sw/source/uibase/table/native-hidden-table-representation.test.ts",
+        "src/sw/source/core/layout/native-table-frame-hierarchy.test.ts",
+        "src/sw/source/core/layout/native-collapsing-border-notify.test.ts",
+        "src/sw/source/core/layout/native-row-format-client.test.ts",
+        "src/sw/source/core/layout/native-frame-attribute-notify.test.ts",
+        "src/sw/source/core/layout/native-frame-invalidation.test.ts",
+        "src/sw/source/core/layout/native-collapsing-border-painter.test.ts",
+        "src/sw/source/core/layout/native-last-row-frame-size.test.ts",
+        "src/sw/source/core/layout/native-table-print-area.test.ts",
+        "src/sw/source/core/layout/native-table-coverage-closure.test.ts",
+        "src/sw/source/core/layout/native-table-headlines.test.ts",
+        "src/sw/source/core/layout/native-table-layout-split.test.ts",
+        "src/sw/source/uibase/shells/native-table-property-item-input.test.ts",
+        "src/sw/source/core/table/native-independent-table-selection.test.ts",
+        "src/sw/source/core/table/native-row-frame-format.test.ts",
+        "src/sw/source/core/table/native-column-insertion.test.ts",
+        "src/sw/source/core/table/native-row-insertion.test.ts",
+        "src/sw/source/core/table/native-independent-columns.test.ts",
+        "src/sw/source/core/table/native-table-frame-width.test.ts",
+        "src/sw/source/core/table/native-independent-column-insertion.test.ts",
+        "src/sw/source/core/table/native-box-frame-format.test.ts",
+        "src/sw/source/core/table/native-numeric-row-insertion.test.ts",
+        "src/sw/source/core/table/native-tabcols.test.ts",
+        "src/sw/source/uibase/uiview/native-column-item-boundary.test.ts",
+        "src/sw/source/uibase/uiview/native-row-item-boundary.test.ts",
+        "src/sw/source/core/docnode/native-row-height-owner.test.ts",
+        "src/sw/source/core/docnode/native-row-split-owner.test.ts",
+        "src/sw/source/core/docnode/native-row-split-items.test.ts",
+        "src/sw/source/core/docnode/native-table-border-common-state.test.ts",
+        "src/sw/source/core/docnode/native-row-frame-size.test.ts",
+        "src/sw/source/core/docnode/native-tabrows.test.ts",
+        "src/sw/source/core/docnode/native-box-border-items.test.ts",
+        "src/sw/source/core/docnode/native-table-border-owner.test.ts",
+        "src/sw/source/core/undo/native-box-frame-format-history.test.ts",
+        "src/sw/source/core/undo/native-last-row-frame-size.test.ts",
+        "src/sw/source/core/undo/native-independent-column-insertion-history.test.ts",
+        "src/sw/source/core/undo/native-row-format-client-history.test.ts",
+        "src/sw/source/core/undo/native-numeric-row-insertion-history.test.ts",
+        "src/sw/source/uibase/wrtsh/native-table-text-flow-headline-history.test.ts",
+        "src/sw/source/uibase/wrtsh/native-table-text-flow-split-history.test.ts",
+        "src/sw/source/uibase/wrtsh/native-table-format-lifecycle-history.test.ts",
+        "src/sw/source/uibase/wrtsh/native-table-properties-reset-history.test.ts",
+        "src/sw/source/uibase/wrtsh/native-table-column-page-history.test.ts",
+        "src/sw/source/uibase/wrtsh/native-table-paste.test.ts",
+        "src/sw/source/uibase/wrtsh/native-table-cursor-rings.test.ts",
+        "src/sw/source/core/undo/native-row-frame-format-history.test.ts",
+        "src/sw/source/core/undo/native-insert-table-history.test.ts",
+        "src/sw/source/uibase/wrtsh/native-table-height-command-separation.test.ts",
+        "src/sw/source/uibase/wrtsh/native-table-properties.test.ts",
+        "src/sw/source/uibase/wrtsh/native-table-plain-paste.test.ts",
+        "src/sw/source/uibase/wrtsh/native-row-height-owner-history.test.ts",
+        "src/sw/source/uibase/wrtsh/native-table-delete.test.ts",
+        "src/sw/source/core/crsr/native-table-selection-ownership.test.ts",
+        "src/sw/source/core/crsr/native-table-cursor-stack.test.ts",
+        "src/sw/source/core/crsr/native-table-shell-owner.test.ts",
+        "src/sw/source/uibase/wrtsh/native-table-name-history.test.ts",
+        "src/sw/source/uibase/wrtsh/native-tabcols-history.test.ts",
+        "src/sw/source/uibase/wrtsh/native-table-editing.test.ts",
+        "src/sw/source/uibase/wrtsh/native-table-height-delta.test.ts",
+        "src/sw/source/uibase/wrtsh/native-table-layout-split-history.test.ts",
+        "src/sw/source/uibase/wrtsh/native-table-traversal.test.ts",
+        "src/sw/source/uibase/wrtsh/native-table-selection.test.ts",
+        "src/sw/source/uibase/wrtsh/native-row-split-owner-history.test.ts",
+        "src/sw/source/core/undo/native-collapsing-border-item.test.ts",
+        "src/sw/source/core/layout/newfrm.test.ts",
+        "src/sw/source/core/undo/native-format-change-history.test.ts",
+        "src/sw/browser/editor/native-format-notifier.test.tsx",
+        "src/sw/source/core/layout/native-cell-format-client.test.ts",
+        "src/sw/browser/editor/native-cell-box-render.test.tsx",
+        "src/sw/source/core/layout/native-table-attr-notify.test.ts",
+        "src/sw/source/core/undo/native-table-attr-notify.test.ts",
+        "src/sw/browser/presentation/native-table-attr-notify.test.tsx",
+        "src/sw/source/core/layout/native-layout-split-item.test.ts",
+        "src/sw/source/core/undo/native-layout-split-item.test.ts",
+        "src/sw/browser/presentation/native-layout-split-item.test.tsx",
+        "src/sw/source/ui/table/native-row-split-dialog-input.test.ts",
+        "src/sw/source/core/undo/native-row-split-dialog-input.test.ts",
+        "src/sw/browser/presentation/native-row-split-dialog-input.test.tsx",
+        "src/sw/source/ui/table/native-headline-dialog-input.test.ts",
+        "src/sw/source/core/undo/native-headline-dialog-input.test.ts",
+        "src/sw/browser/presentation/native-headline-dialog-input.test.tsx",
+        "src/sw/source/core/table/native-table-headline-counter.test.ts",
+        "src/sw/source/core/undo/native-table-headline-counter-history.test.ts",
+        "src/sw/browser/editor/native-table-headline-counter.test.tsx",
+        "src/sw/source/core/doc/native-default-entrypoints.test.ts",
+        "src/sw/source/core/docnode/native-table-headline-command.test.ts",
+        "src/sw/source/core/undo/native-table-headline-command-history.test.ts",
+        "src/sw/browser/editor/native-table-headline-command.test.tsx",
+        "src/sw/source/filter/xml/odt-embedded-fonts.test.ts",
+        "src/sw/source/filter/xml/odt-named-paragraph-ownership.test.ts",
+        "src/sw/source/core/docnode/native-cell-alignment-owner.test.ts",
+        "src/sw/source/uibase/docvw/native-list-backspace.test.ts",
+        "src/sw/source/uibase/docvw/native-list-enter.test.ts",
+        "src/sw/source/core/edit/native-list-ring.test.ts",
+        "src/sw/source/uibase/wrtsh/native-select-all.test.ts",
+        "src/svl/source/notify/notify.test.ts",
+        "src/sw/source/core/table/native-table-attribute-headline.test.ts",
+        "src/sw/source/core/undo/native-table-attribute-headline-history.test.ts",
+        "src/sw/browser/editor/native-table-attribute-headline.test.tsx",
+        "--coverage.provider=istanbul",
+        "--coverage.include=src/sw/source/core/undo/untbl.ts",
+        "--coverage.reporter=text",
+        "--coverage.reporter=json",
+        "--coverage.reporter=json-summary",
+        "--coverage.reportOnFailure=true",
+        "--coverage.reportsDirectory=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/B575XR/targeted-coverage",
+        "--reporter=default",
+        "--reporter=json",
+        "--outputFile=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/B575XR/targeted-tests.json"
+      ]
+    },
+    {
+      "manifest": "current-commands.json",
+      "manifestHash": "0e6c07ec54677410157ea60d6690c458cae9c33380aef09a71c9209a1a316b7d",
+      "label": "current",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer/apps/office",
+      "args": [
+        "run",
+        "test:coverage",
+        "--",
+        "src/sw/source/core/undo/native-box-frame-format-history.test.ts",
+        "src/sw/source/core/undo/native-last-row-frame-size.test.ts",
+        "src/sw/source/core/undo/native-independent-column-insertion-history.test.ts",
+        "src/sw/source/core/undo/native-row-format-client-history.test.ts",
+        "src/sw/source/core/undo/native-numeric-row-insertion-history.test.ts",
+        "src/sw/source/core/undo/native-row-frame-format-history.test.ts",
+        "src/sw/source/core/undo/native-insert-table-history.test.ts",
+        "src/sw/source/core/undo/native-collapsing-border-item.test.ts",
+        "src/sw/source/core/undo/native-format-change-history.test.ts",
+        "src/sw/source/core/undo/native-table-attr-notify.test.ts",
+        "src/sw/source/core/undo/native-layout-split-item.test.ts",
+        "src/sw/source/core/undo/native-row-split-dialog-input.test.ts",
+        "src/sw/source/core/undo/native-headline-dialog-input.test.ts",
+        "src/sw/source/core/undo/native-table-headline-counter-history.test.ts",
+        "src/sw/source/core/undo/native-table-headline-command-history.test.ts",
+        "src/sw/source/core/undo/native-table-attribute-headline-history.test.ts",
+        "src/sw/source/core/table/native-table-attribute-headline.test.ts",
+        "src/sw/browser/editor/native-table-attribute-headline.test.tsx",
+        "src/sw/browser/editor/native-table-delete.test.tsx",
+        "src/sw/browser/presentation/native-insert-table-command.test.tsx",
+        "src/sw/browser/presentation/native-table-properties.test.tsx",
+        "src/sw/source/uibase/wrtsh/native-table-properties.test.ts",
+        "src/sw/source/uibase/wrtsh/native-table-delete.test.ts",
+        "src/sw/source/uibase/wrtsh/native-table-name-history.test.ts",
+        "src/sw/source/ui/table/native-headline-dialog-input.test.ts",
+        "src/sw/browser/presentation/native-headline-dialog-input.test.tsx",
+        "src/sw/source/uibase/wrtsh/native-select-all.test.ts",
+        "--coverage.provider=istanbul",
+        "--coverage.include=src/sw/source/core/undo/untbl.ts",
+        "--coverage.reporter=text",
+        "--coverage.reporter=json",
+        "--coverage.reporter=json-summary",
+        "--coverage.reportOnFailure=true",
+        "--coverage.reportsDirectory=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/B575XR/current-coverage",
+        "--reporter=default",
+        "--reporter=json",
+        "--outputFile=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/B575XR/current-tests.json"
+      ]
+    },
+    {
+      "manifest": "closure-commands.json",
+      "manifestHash": "67b368cc9618cd23bbb7076a69277fc6834718601efbf9f9c63e404704d959d5",
+      "label": "constructor-closure",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer/apps/office",
+      "args": [
+        "run",
+        "test:coverage",
+        "--",
+        "src/sw/source/core/docnode/native-cell-alignment-owner.test.ts",
+        "--coverage.provider=istanbul",
+        "--coverage.include=src/sw/source/core/undo/untbl.ts",
+        "--coverage.reporter=text",
+        "--coverage.reporter=json",
+        "--coverage.reporter=json-summary",
+        "--coverage.reportOnFailure=true",
+        "--coverage.reportsDirectory=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/B575XR/constructor-closure-coverage",
+        "--reporter=default",
+        "--reporter=json",
+        "--outputFile=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/B575XR/constructor-closure-tests.json"
+      ]
+    },
+    {
+      "manifest": "final-source-format-commands.json",
+      "manifestHash": "86c4bf49e1af1ffff4d47111d59840e003f7d67b187ac7df0e38505235d17be8",
+      "label": "source-format",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "prettier",
+        "--write",
+        "apps/office/src/sw/source/core/undo/untbl.ts",
+        "apps/office/src/sw/source/core/table/native-table-attribute-headline.test.ts",
+        "apps/office/src/sw/source/core/undo/native-table-attribute-headline-history.test.ts",
+        "apps/office/src/sw/browser/editor/native-table-attribute-headline.test.tsx",
+        "docs/program/registry/writer/runtime/sw/source/core/undo/untbl.ts.json",
+        "docs/program/registry/writer/provenance/sw/source/core/undo/untbl.ts.json"
+      ]
+    },
+    {
+      "manifest": "static-commands.json",
+      "manifestHash": "badff939b3b675e30e8461fb17ae0d67f4ebb7ebdc0fa62f035d60e0aa837739",
+      "label": "format-check",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": ["run", "format:check"]
+    },
+    {
+      "manifest": "static-commands.json",
+      "manifestHash": "badff939b3b675e30e8461fb17ae0d67f4ebb7ebdc0fa62f035d60e0aa837739",
+      "label": "lint",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": ["run", "lint"]
+    },
+    {
+      "manifest": "static-commands.json",
+      "manifestHash": "badff939b3b675e30e8461fb17ae0d67f4ebb7ebdc0fa62f035d60e0aa837739",
+      "label": "typecheck",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": ["run", "typecheck"]
+    },
+    {
+      "manifest": "static-commands.json",
+      "manifestHash": "badff939b3b675e30e8461fb17ae0d67f4ebb7ebdc0fa62f035d60e0aa837739",
+      "label": "check-dependencies",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": ["run", "check:dependencies"]
+    },
+    {
+      "manifest": "static-commands.json",
+      "manifestHash": "badff939b3b675e30e8461fb17ae0d67f4ebb7ebdc0fa62f035d60e0aa837739",
+      "label": "check-docs",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": ["run", "check:docs"]
+    },
+    {
+      "manifest": "static-commands.json",
+      "manifestHash": "badff939b3b675e30e8461fb17ae0d67f4ebb7ebdc0fa62f035d60e0aa837739",
+      "label": "check-file-size",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": ["run", "check:file-size"]
+    },
+    {
+      "manifest": "static-commands.json",
+      "manifestHash": "badff939b3b675e30e8461fb17ae0d67f4ebb7ebdc0fa62f035d60e0aa837739",
+      "label": "static-build",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": ["exec", "--", "node", "scripts/check-static-build.mjs"]
+    },
+    {
+      "manifest": "static-commands.json",
+      "manifestHash": "badff939b3b675e30e8461fb17ae0d67f4ebb7ebdc0fa62f035d60e0aa837739",
+      "label": "review-browser",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "playwright",
+        "test",
+        "--config",
+        "apps/office/playwright.config.ts",
+        "--project=writer",
+        "writer-table-headlines.spec.ts",
+        "writer-native-table-text-flow-headline.spec.ts",
+        "writer-table-properties-history.spec.ts",
+        "--reporter=list,json"
+      ]
+    },
+    {
+      "manifest": "test-repair-commands.json",
+      "manifestHash": "00ba0e5ef97f8f17cc2b00a75dc54cec3d232f4d1f590f3b2fefa7d580c43848",
+      "label": "test-call-repair",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer/apps/office",
+      "args": [
+        "run",
+        "test:coverage",
+        "--",
+        "src/sw/source/core/undo/native-table-attribute-headline-history.test.ts",
+        "--coverage.provider=istanbul",
+        "--coverage.include=src/sw/source/core/undo/untbl.ts",
+        "--coverage.reporter=text",
+        "--coverage.reporter=json",
+        "--coverage.reporter=json-summary",
+        "--coverage.reportOnFailure=true",
+        "--coverage.reportsDirectory=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/B575XR/test-call-repair-coverage",
+        "--reporter=default",
+        "--reporter=json",
+        "--outputFile=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/B575XR/test-call-repair-tests.json"
+      ]
+    },
+    {
+      "manifest": "static-continuation-commands.json",
+      "manifestHash": "5de776c947ee2dba2f521148b2165a0ea20997d99d4391ddf9f371561ca198b4",
+      "label": "test-format-repair",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "prettier",
+        "--check",
+        "apps/office/src/sw/source/core/undo/native-table-attribute-headline-history.test.ts"
+      ]
+    },
+    {
+      "manifest": "static-continuation-commands.json",
+      "manifestHash": "5de776c947ee2dba2f521148b2165a0ea20997d99d4391ddf9f371561ca198b4",
+      "label": "test-lint-repair",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "eslint",
+        "apps/office/src/sw/source/core/undo/native-table-attribute-headline-history.test.ts",
+        "--max-warnings",
+        "0"
+      ]
+    },
+    {
+      "manifest": "static-continuation-commands.json",
+      "manifestHash": "5de776c947ee2dba2f521148b2165a0ea20997d99d4391ddf9f371561ca198b4",
+      "label": "typecheck",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": ["run", "typecheck"]
+    },
+    {
+      "manifest": "static-continuation-commands.json",
+      "manifestHash": "5de776c947ee2dba2f521148b2165a0ea20997d99d4391ddf9f371561ca198b4",
+      "label": "check-dependencies",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": ["run", "check:dependencies"]
+    },
+    {
+      "manifest": "static-continuation-commands.json",
+      "manifestHash": "5de776c947ee2dba2f521148b2165a0ea20997d99d4391ddf9f371561ca198b4",
+      "label": "check-docs",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": ["run", "check:docs"]
+    },
+    {
+      "manifest": "static-continuation-commands.json",
+      "manifestHash": "5de776c947ee2dba2f521148b2165a0ea20997d99d4391ddf9f371561ca198b4",
+      "label": "check-file-size",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": ["run", "check:file-size"]
+    },
+    {
+      "manifest": "static-continuation-commands.json",
+      "manifestHash": "5de776c947ee2dba2f521148b2165a0ea20997d99d4391ddf9f371561ca198b4",
+      "label": "static-build",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": ["exec", "--", "node", "scripts/check-static-build.mjs"]
+    },
+    {
+      "manifest": "static-continuation-commands.json",
+      "manifestHash": "5de776c947ee2dba2f521148b2165a0ea20997d99d4391ddf9f371561ca198b4",
+      "label": "review-browser",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "playwright",
+        "test",
+        "--config",
+        "apps/office/playwright.config.ts",
+        "--project=writer",
+        "writer-table-headlines.spec.ts",
+        "writer-native-table-text-flow-headline.spec.ts",
+        "writer-table-properties-history.spec.ts",
+        "--reporter=list,json"
+      ]
+    },
+    {
+      "manifest": "current-build-commands.json",
+      "manifestHash": "282b3e771ea4f8dfbcb17db24da3935d8b4494924eb9ba09f118b36296f04c4f",
+      "label": "current-build",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": ["run", "build"]
+    },
+    {
+      "manifest": "current-build-commands.json",
+      "manifestHash": "282b3e771ea4f8dfbcb17db24da3935d8b4494924eb9ba09f118b36296f04c4f",
+      "label": "static-build",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": ["exec", "--", "node", "scripts/check-static-build.mjs"]
+    },
+    {
+      "manifest": "current-build-commands.json",
+      "manifestHash": "282b3e771ea4f8dfbcb17db24da3935d8b4494924eb9ba09f118b36296f04c4f",
+      "label": "review-browser",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "playwright",
+        "test",
+        "--config",
+        "apps/office/playwright.config.ts",
+        "--project=writer",
+        "writer-table-headlines.spec.ts",
+        "writer-native-table-text-flow-headline.spec.ts",
+        "writer-table-properties-history.spec.ts",
+        "--reporter=list,json"
+      ]
+    }
+  ],
+  "staticChecks": [
+    {
+      "label": "format-check",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": ["run", "format:check"],
+      "status": 0,
+      "upstreamAbsent": true
+    },
+    {
+      "label": "lint",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": ["run", "lint"],
+      "status": 0,
+      "upstreamAbsent": true
+    },
+    {
+      "label": "test-format-repair",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "prettier",
+        "--check",
+        "apps/office/src/sw/source/core/undo/native-table-attribute-headline-history.test.ts"
+      ],
+      "status": 0,
+      "upstreamAbsent": true
+    },
+    {
+      "label": "test-lint-repair",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "eslint",
+        "apps/office/src/sw/source/core/undo/native-table-attribute-headline-history.test.ts",
+        "--max-warnings",
+        "0"
+      ],
+      "status": 0,
+      "upstreamAbsent": true
+    },
+    {
+      "label": "typecheck",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": ["run", "typecheck"],
+      "status": 0,
+      "upstreamAbsent": true
+    },
+    {
+      "label": "check-dependencies",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": ["run", "check:dependencies"],
+      "status": 0,
+      "upstreamAbsent": true
+    },
+    {
+      "label": "check-docs",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": ["run", "check:docs"],
+      "status": 0,
+      "upstreamAbsent": true
+    },
+    {
+      "label": "check-file-size",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": ["run", "check:file-size"],
+      "status": 0,
+      "upstreamAbsent": true
+    },
+    {
+      "label": "current-build",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": ["run", "build"],
+      "status": 0,
+      "upstreamAbsent": true
+    },
+    {
+      "label": "static-build",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": ["exec", "--", "node", "scripts/check-static-build.mjs"],
+      "status": 0,
+      "upstreamAbsent": true
+    },
+    {
+      "label": "review-browser",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "playwright",
+        "test",
+        "--config",
+        "apps/office/playwright.config.ts",
+        "--project=writer",
+        "writer-table-headlines.spec.ts",
+        "writer-native-table-text-flow-headline.spec.ts",
+        "writer-table-properties-history.spec.ts",
+        "--reporter=list,json"
+      ],
+      "status": 0,
+      "upstreamAbsent": true
+    }
+  ],
+  "metadata": [
+    {
+      "label": "registry-build",
+      "bin": "npm",
+      "args": ["run", "inventory:registry:build"],
+      "status": 0,
+      "rawHash": "f941feea056f9f9125ac8a96978ff0fda711beef74563b36c553fc89490f0209",
+      "metadataOnly": true
+    },
+    {
+      "label": "source-tree",
+      "bin": "npm",
+      "args": ["run", "check:source-tree"],
+      "status": 0,
+      "rawHash": "6c5bd2e3c84892b8cc26b8b1b5f06a950891f9d5988a8ef1f1496f0c252cd33e",
+      "metadataOnly": true
+    },
+    {
+      "label": "source-provenance",
+      "bin": "npm",
+      "args": ["run", "check:source-provenance"],
+      "status": 0,
+      "rawHash": "bb164b4bb6450dad87f8095b93aabd65f675bf4830e319d3931754b959b327ba",
+      "metadataOnly": true
+    },
+    {
+      "label": "registry-check",
+      "bin": "npm",
+      "args": ["run", "inventory:registry:check"],
+      "status": 0,
+      "rawHash": "7ead37f8ead74eebcb3485ae7b7754f5d3b3f6e105d23113e26dbe4531ea8e4f",
+      "metadataOnly": true
+    },
+    {
+      "label": "writer-resources",
+      "bin": "node_modules/.bin/tsx",
+      "args": ["scripts/generate-writer-ui-resources.ts", "--check"],
+      "status": 0,
+      "rawHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "metadataOnly": true
+    },
+    {
+      "label": "inventory-invariants",
+      "bin": "npm",
+      "args": ["run", "inventory:invariants"],
+      "status": 0,
+      "rawHash": "16666071d6ebf2588caeed46f452c90286ceac2f747b7a5c982d1f102379aee5",
+      "metadataOnly": true
+    },
+    {
+      "label": "inventory-parity",
+      "bin": "npm",
+      "args": ["run", "inventory:parity"],
+      "status": 0,
+      "rawHash": "c4c5d92722d1ed182b5e4d1c8a9c32fdf0643d9f66d365b9b684f7310bcbdf76",
+      "metadataOnly": true
+    },
+    {
+      "label": "routing",
+      "bin": "node",
+      "args": [".agentplane/policy/check-routing.mjs"],
+      "status": 0,
+      "rawHash": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9",
+      "metadataOnly": true
+    },
+    {
+      "label": "doctor",
+      "bin": "ap",
+      "args": ["doctor"],
+      "status": 0,
+      "rawHash": "132ee59110b6ead8c589098f6a78af79a67c4301be6d688a40e17fe6acf6cc7a",
+      "metadataOnly": true
+    }
+  ],
+  "browser": {
+    "accepted": 7,
+    "failed": 0,
+    "skipped": 0,
+    "flaky": 0,
+    "reportHash": "33897bc922adbe6aae94dbd6505eb9fdd5924dd159b7654c3b45f27dc01407fa",
+    "logHash": "a26912777e0b1c816f5abf5bc4e725a9e5a69ba105c5d062fb643aa9af8c7e7c"
+  },
+  "runtimeTooling": {
+    "tsCli": "7.0.2",
+    "compilerApi": "6.0.2",
+    "applicationCoverage": "actual Istanbul; no V8 substitution"
+  },
+  "failureHistory": [
+    "Initial targeted1434pass0fail across178files used temporary destructuring representation. Focused ESLint rejected two unused names; replacement uses writable detached copy and removes independent keys. Initial source counters/maps are excluded from final current-source proof.",
+    "Current143pass0fail across27files retained strict100 branch threshold exit1; constructor-closure7pass0fail across1meaningful existing cell-alignment/insertion file retained incomplete-profile exit1. Actual identical complete-map/current-source aggregation proves entire untbl.ts100 all-four,zero-negative without counter/location edits or threshold lowering.",
+    "Initial smoke/browser used existing dist because neither command builds; stale reports excluded. Actual current-source npm build followed by fresh smoke/browser accepts final bundle. Raw initial diagnostics retained only ignored cache.",
+    "Initial typecheck rejected missing currentRowOnly argument in fresh SetTabCols test; corrected false for whole-table selection, repair3pass0fail; final typecheck passes. Final formatted production hash matches accepted current profiles; initial broader1434case pass is historical evidence only and is not reported as final current-source acceptance."
+  ],
+  "evidenceBoundary": "Only bounded English commands/counts/hashes/identities/prose in AgentPlane. No upstream source copies, Python/helpers/scripts/raw logs/maps/source snapshots. Raw diagnostics live in ignored node_modules/.cache. Tests/build/statics physically upstream-absent with finally restoration; restored metadata audits do not execute application tests.",
+  "remaining": [
+    "Native full table frame item-set ownership remains separately incomplete; current correction excludes independent member from represented frame-attribute projection.",
+    "Whole native table-copy/node-copy, Repeat and complete native master/follow row reconstruction remain separate incomplete families; no synthetic unused APIs or broad module/goal parity claim.",
+    "Canonical statuses/defaults/classifications, prior histories and registered recovery/open/save/settings deviations preserved."
+  ],
+  "fullSuite": {
+    "executed": false,
+    "reason": "Standing cadence once per10 corrections; SZKQTN successful full baseline. This is correction3/10."
+  },
+  "doctor": "0errors2pre-existingwarnings: older managed hook shim and historical PJV0JK missing implementation hash",
+  "quality": {
+    "verdict": "pass",
+    "evaluatedSha": "fe172471e03ebfc613455a574f4e1543a30f6ec1",
+    "report": ".agentplane/tasks/202610091920-B575XR/quality/20261009-193959334-recovery-context/quality-report.json",
+    "reportHash": "0c6a936ee96a4a64360a3faf11ceb53b59185925ddc901fa1152c4fdd4b7e325",
+    "independence": "same-agent/non-independent",
+    "missingTests": [],
+    "hiddenAssumptions": [],
+    "residualRisks": [
+      "Review is performed by the same coding agent and is explicitly non-independent; no separate evaluator or delegated review is claimed.",
+      "Native full table frame item-set ownership, whole table-copy/node-copy, Repeat and complete native master/follow row reconstruction remain incomplete and outside this atomic correction; no broad module/goal parity claim."
+    ]
+  },
+  "currentBuild": {
+    "productionHash": {
+      "/Users/odubinkin/Projects/vite-office-writer/apps/office/src/sw/source/core/undo/untbl.ts": "d9b8dd787dc9ad07e5ab706ceaf3a16d7a17063df660dba34ade973600535397"
+    },
+    "command": ["npm", "run", "build"],
+    "status": 0,
+    "upstreamAbsent": true,
+    "logHash": "8c21cea7afc9f18d8f246e11f140a73809e3f3f2b4adbefcf3e889aee0658145",
+    "artifactHashes": {
+      "apps/office/dist/assets/index-C_gxk8zG.js": "19874d8dd3ea1d050bda8d89a5c2836d62bb675df585cdcc86390e63430ee826",
+      "apps/office/dist/assets/odt-worker-C9UQiXEY.js": "c0a9b715b26fd9221267b704d87c0e7a295bea78193a6d8cb74603c25aacb075",
+      "apps/office/dist/index.html": "6a3349a1d2457a924c07c5519badc9c70ff57c8a83f27b450125f0e60fdd3375"
+    },
+    "browserSource": "Fresh current-source build is previewed by Playwright. Initial reports using pre-existing dist are excluded."
+  }
+}

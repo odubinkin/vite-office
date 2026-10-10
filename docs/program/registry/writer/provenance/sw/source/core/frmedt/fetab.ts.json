@@ -42,7 +42,10 @@
       "Iteration240 owns row splitting as optional SwFormatRowSplit items cloned on row input/read/history, with effective true default. Common core and frame-shell getters return independent concrete items or absence for mixed/no-row input; setters accept concrete items. Native UI forwards the item unchanged to the document owner, ODF inverts only at import/export, and browser transport writes direct primitive rowSplit with legacy keepTogether ingestion. Original cursor/selection/history and full frame-size coexistence remain retained. Full native shared row frame-format pooling/ClaimFrameFormat, nested/merged semantics, presentation/localization/UNO completeness and whole core/UI parity remain unverified. Targeted verification pending; last full237,next247; all prior metadata states/defaults/classifications and registered IO/recovery deviations preserved.",
       "Iteration240 verified closure:33 fresh native item/core/history, transport/legacy/ODF and mounted direct item cases plus related modules produced263 unique app passes and11 Chromium passes. Three initial failed cases were resolved in a four-case failed/new-only closure; all previously passing cases were skipped, no passing replay or full suite. App and inventory all-four100% coverage binds actual current targeted counters to prior239 identical whole source/maps or complete mapped-region proofs; unchanged inventory/infra was not rerun. Native rows now own concrete items, while full shared frame-format pooling/claims/UNO/nested/merged contracts and whole core/UI parity remain unverified. No metadata status/default/classification promotion.",
       "Iteration251 restores SwTabFrame as a registered SwLayoutFrame with native Tab0x0800 and original linked nonempty SwRowFrame/SwCellFrame lowers. Width queries borrow actual linked cell formats instead of allocating another cell frame. Browser table rendering borrows one table hierarchy rather than reconstructing each row. Flow, shell geometry, split admission and dialog geometry release temporary table clients in finally; browser mouse geometry owns and releases replaced/unmounted samples and failed partial measurements. Native persistent page/root/follows/content/redline layout, native table scalar item ownership and full UI propagation remain unverified; no module or goal promotion. Existing semantic statuses/defaults/classifications and registered recovery/open/save/settings deviations retained. Targeted verification pending; last full247, no full251.",
-      "Iteration251 verified closure: 232 unique targeted app cases, including 12 fresh native hierarchy/width/claim/history/empty-row/render/flow/mouse-lifetime/geometry cases, pass with no unresolved runtime failures. One approved recovery repeated 210 passing cases solely because the initial failure suppressed all V8 maps; later closures run only failed/new/previously unexecuted cases. All runtime and build checks run physically upstream absent with restoration in finally. Actual source-bound app and changed-module all-four100 coverage uses current counters plus complete unchanged function declarations/bodies/enclosing conditions/all locations from250; 310 whole unchanged app modules retain their exact maps. 506 previous app test files are byte-identical; one old width measurement case now owns/releases its native table frame while preserving the literal3000 and original-client assertions. Scoped format/lint/type/dependency/docs/size/static build, canonical registry build/scoped/global checks, provenance/tree/routing/doctor pass. Prior status/default/classification and full evidence prefixes remain; native persistent page/root/follows/content/redline/table item propagation and whole core/UI parity stay unverified. Registered recovery/open/save/settings deviations preserved; last full247, no full251."
+      "Iteration251 verified closure: 232 unique targeted app cases, including 12 fresh native hierarchy/width/claim/history/empty-row/render/flow/mouse-lifetime/geometry cases, pass with no unresolved runtime failures. One approved recovery repeated 210 passing cases solely because the initial failure suppressed all V8 maps; later closures run only failed/new/previously unexecuted cases. All runtime and build checks run physically upstream absent with restoration in finally. Actual source-bound app and changed-module all-four100 coverage uses current counters plus complete unchanged function declarations/bodies/enclosing conditions/all locations from250; 310 whole unchanged app modules retain their exact maps. 506 previous app test files are byte-identical; one old width measurement case now owns/releases its native table frame while preserving the literal3000 and original-client assertions. Scoped format/lint/type/dependency/docs/size/static build, canonical registry build/scoped/global checks, provenance/tree/routing/doctor pass. Prior status/default/classification and full evidence prefixes remain; native persistent page/root/follows/content/redline/table item propagation and whole core/UI parity stay unverified. Registered recovery/open/save/settings deviations preserved; last full247, no full251.",
+      "Correction T8EQAC2/10 after full SZKQTN and KVM0ER: native count-only shell/doc command delegates to source-owned ndtbl SetSwRowsToRepeat; exact capped getter no-op, uint16 new value and DoesUndo gate. Dedicated SwUndoTableHeadline retains only native table-node index and capped old/authored new counts, resolves original table for Undo/Redo and stores no graph/format/cursor snapshot. Original frame format publishes concrete no-payload TableHeadingChange after storage; same typed hint also advances the represented browser document revision publication boundary, an explicit browser architecture boundary rather than full native document-state/layout parity. Original master SwTabFrame ignores heading hints as upstream master handler returns before follow-row rebuilding. Original table/row/box/frame/node/cursor/ring identities and unrelated later geometry/row-height/numbering state survive actual command and three undo/redo cycles. Mounted Table Properties changes physical repeated occurrences and real ODT headerless reopening. 2950 distinct accepted related cases,10 fresh native/history/mounted cases; all entire six changed production files actual Istanbul998lines1096statements247functions664branches100 all-four,zero-negative and complete-map/current-source-hash identity. Five exact old insert/native normalized-geometry/headline snapshot/payload expectations migrate with every other old assertion retained; native SetTabCols normalizes actual frame print width before attribute history, so dedicated headline undo cannot restore unrelated pre-normalization geometry. Tests/build/statics physically upstream-absent with finally restoration; restored metadata audits. Twelve canonical classification/status/default/history prefixes retained. Native Repeat context/framework and complete original master/follow-row reconstruction remain unrepresented/unverified; capped table-copy/node-copy and full layout/root/page/section/content/HTML/VCL families remain separate, no whole-module or broad-goal parity promotion. Registered recovery/open/save/settings deviations unchanged. Raw source snapshots/helpers/logs/maps only ignored cache; bounded English task evidence. Task202610091853-T8EQAC; goal ACTIVE/incomplete; correction2/10.",
+      "Correction6JYMXQ5/10 after full baseline SZKQTN removes mirrored table marginTop/marginBottom storage. Original RES_UL_SPACE99 owns upper/lower spacing and represented contextual state; SwFormat GetULSpace returns the borrowed effective original item with native parent-search contract. Construction/transport projects only direct native values; omitted pairs reset the original item, while geometry-only updates retain represented contextual state. SaveTable excludes scalar UL projection because original full direct table item set owns native history. Existing SwFEShell SetTableAttr accepts native SfxItemSet and writes original frame items without scalar SetFormat replay, retaining represented generalized attribute history; table properties copy effective original UL into native input and apply complete UL output through this native path. Native row-only page budget, dialog saved/reset capture and mounted table margins read effective original spacing rather than stale projection. Original owners and registered recovery/open/save/settings deviations preserved. Existing scalar orientation/LR construction input, generic native Doc SetAttr/SwUndoFormatAttr, full proportional SvxULSpace setters/UNO members, CalcUpperSpace/collapsed/content/section/root/master/follow/VCL/copy/Repeat families remain separately incomplete/unverified; no whole-module/goal parity promotion. Task202610092028-6JYMXQ records current-source evidence; all prior semantic status/default/classification/evidence/responsibility histories retained.",
+      "Verified correction6JYMXQ:319 related files/3443 distinct cases/11fresh, no failures or skips. Entire eight final changed modules actual Istanbul1619lines1773statements294functions1329branches100all-four/zero-negative/current source hashes; no earlier maps/counters.616oldtestfiles byte-identical;16canonical prefixes/status/default/classification retained. Tests/build/statics run physically upstream-absent with finally restoration. Full not due5/10 after SZKQTN. Native table UL item ownership is bounded; all previously stated residual native geometry/layout/history/UNO families and overall module parity remain unverified."
     ],
     "omittedResponsibilities": [
       "Full native item-format,complex-table,frame-cache and UI lifecycle parity remains unverified."
@@ -268,6 +271,34 @@
         {
           "path": "apps/office/src/sw/source/core/layout/native-table-frame-hierarchy.test.ts",
           "marker": "native table hierarchy"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/docnode/native-table-headline-command.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/undo/native-table-headline-command-history.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-table-headline-command.test.tsx",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/frmedt/fetab.ts",
+          "marker": "SetRowsToRepeat"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/table/native-table-ulspace-items.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/undo/native-table-ulspace-history.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-table-ulspace-items.test.tsx",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -446,6 +477,26 @@
         {
           "path": "sw/inc/swtypes.hxx",
           "marker": "MIN_BORDER_DIST"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl.cxx",
+          "marker": "SwDoc::SetRowsToRepeat"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/frmedt/fetab.cxx",
+          "marker": "SwFEShell::SetRowsToRepeat"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/undo/untbl.cxx",
+          "marker": "SwUndoTableHeadline::SwUndoTableHeadline"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/hints.hxx",
+          "marker": "TableHeadingChange"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/tabfrm.cxx",
+          "marker": "HandleTableHeadlineChange"
         }
       ]
     },

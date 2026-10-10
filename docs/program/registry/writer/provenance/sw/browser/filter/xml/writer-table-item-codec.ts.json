@@ -36,9 +36,50 @@
         {
           "path": "apps/office/src/sw/browser/presentation/native-row-frame-format.test.tsx",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/filter/xml/native-table-geometry-transport.test.ts",
+          "marker": "complete native table size/orientation survive primitive and Worker transfer"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/native-table-geometry-transport.test.tsx",
+          "marker": "transported table preserves complete native geometry and original owners through mounted history"
+        },
+        {
+          "path": "apps/office/src/sw/browser/filter/xml/native-table-ul-space-transport.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-table-ul-space-transport-history.test.tsx",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/filter/xml/native-table-flow-item-transport.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-table-flow-item-transport-history.test.tsx",
+          "marker": "@fileoverview"
         }
       ],
-      "upstream": []
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/atrfrm.cxx",
+          "marker": "SwFormatFrameSize::operator=="
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/atrfrm.cxx",
+          "marker": "SwFormatHoriOrient::operator=="
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/fmtlsplt.hxx",
+          "marker": "SwFormatLayoutSplit"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/shells/tabsh.cxx",
+          "marker": "RES_COLLAPSING_BORDERS"
+        }
+      ]
     },
     "localPath": "apps/office/src/sw/browser/filter/xml/writer-table-item-codec.ts",
     "rationale": "Serializes complete public native frame-size values and legacy row ingress for the registered browser document boundary; native geometry remains source-owned.",
@@ -47,7 +88,12 @@
       "Iteration240 owns row splitting as optional SwFormatRowSplit items cloned on row input/read/history, with effective true default. Common core and frame-shell getters return independent concrete items or absence for mixed/no-row input; setters accept concrete items. Native UI forwards the item unchanged to the document owner, ODF inverts only at import/export, and browser transport writes direct primitive rowSplit with legacy keepTogether ingestion. Original cursor/selection/history and full frame-size coexistence remain retained. Full native shared row frame-format pooling/ClaimFrameFormat, nested/merged semantics, presentation/localization/UNO completeness and whole core/UI parity remain unverified. Targeted verification pending; last full237,next247; all prior metadata states/defaults/classifications and registered IO/recovery deviations preserved.",
       "Iteration240 verified closure:33 fresh native item/core/history, transport/legacy/ODF and mounted direct item cases plus related modules produced263 unique app passes and11 Chromium passes. Three initial failed cases were resolved in a four-case failed/new-only closure; all previously passing cases were skipped, no passing replay or full suite. App and inventory all-four100% coverage binds actual current targeted counters to prior239 identical whole source/maps or complete mapped-region proofs; unchanged inventory/infra was not rerun. Native rows now own concrete items, while full shared frame-format pooling/claims/UNO/nested/merged contracts and whole core/UI parity remain unverified. No metadata status/default/classification promotion.",
       "Iteration241 replaces per-row canonical value records with native document-owned SwTableLineFormat item sets and original SwClient registration. ClaimFrameFormat clones shared native owners before mutation; operation-local old-to-new reuse keeps selected peers sharing and unselected peers intact. Row insertion shares the source format; SaveTable retains unique direct native item sets and indexed row topology and reconstructs owners for history, matching represented flat-grid source semantics. Value records remain explicit construction/transport boundaries only. Full row frame client movement/destruction, native modify hint types, pooling, merged/nested tables, full frame attributes and UNO remain unverified. Targeted verification pending; last full237,next247; all prior states/defaults/classifications and registered I/O/recovery deviations preserved.",
-      "Iteration241 verified closure:12 fresh literal native registration/claim/sharing, complete item-set history and mounted direct UI cases plus related modules produced297 unique app passes and11 Chromium passes. Four initial fresh fixture failures were resolved in a failed-only four-case closure with the passing insertion test skipped. No passing replay or full suite; cadence last237,next247. All-four100% app and inventory coverage uses actual targeted counters and prior240 only with entire source/maps equality or complete declaration/body/enclosing branch/location proofs. Original rows/boxes/text/cursors survive repeated attribute history while shared formats are reconstructed. Full row layout client movement/destruction, native modify hints/pooling/merged/nested/UNO and whole core/browser parity remain unverified. No prior status/default/classification promotion."
+      "Iteration241 verified closure:12 fresh literal native registration/claim/sharing, complete item-set history and mounted direct UI cases plus related modules produced297 unique app passes and11 Chromium passes. Four initial fresh fixture failures were resolved in a failed-only four-case closure with the passing insertion test skipped. No passing replay or full suite; cadence last237,next247. All-four100% app and inventory coverage uses actual targeted counters and prior240 only with entire source/maps equality or complete declaration/body/enclosing branch/location proofs. Original rows/boxes/text/cursors survive repeated attribute history while shared formats are reconstructed. Full row layout client movement/destruction, native modify hints/pooling/merged/nested/UNO and whole core/browser parity remain unverified. No prior status/default/classification promotion.",
+      "CorrectionWHACNF4/10 after BZQGYC carries original complete table frame-size8fields and horizontal-orientation4fields through browser primitive graph/Worker/storage records and restores direct native frame attributes. Current outgoing geometry has no duplicate scalar width/horiOrient/align; legacy scalar ingress retained only when nativeGeometry is absent. Present native geometry owns direct absence and wins conflicting legacy scalars. Original raw headline snapshot and remaining scalar spacing/flags stay in the explicit existing bridge; GetFormat is still used for those remaining values, not eliminated generally. Complete native clone/equality responsibilities follow pinned fmtfsize.hxx/fmtornt.hxx/atrfrm.cxx. Full LR contexts/gutters and inherited/shared format graphs,row/box adapters,general XML mapper/relative/layout/UNO/VCL/full filter/UI remain separately incomplete. Registered recovery/open/save/settings/UI deviations and prior history/status/default/classification preserved; no whole-module parity promotion. Current native/Worker/package/mounted and related verification pending. Task202610092353-WHACNF.",
+      "WHACNF current-source verification:1703unique related cases115files including28fresh passed first attempt,zero failures/skips. Entire final writer-document-codec.ts and writer-table-item-codec.ts actual Istanbul264lines283statements48functions354branches100all-four,current source/complete map identity and zero negatives. Complete original8size/4orientation fields survive actual structured clone/JSON/Worker,raw header9 remains independent of actual1row,and mounted native history retains original table/row/box/text/cursor through3cycles. Direct absence and native precedence over legacy tested; legacy-only admission preserved.595old test files byte unchanged,4canonical historical prefixes/status/default/classification and registered IO exceptions retained. Full not due4/10 after BZQGYC; raw headline/remaining scalar flags/spacing and LR/inherited/shared format/row-box/general mapper/full filter/layout/UI/UNO/VCL remain incomplete. Current statics/build/browser/restored metadata and exact-SHA quality continue; no whole-module promotion.",
+      "CorrectionSSWV67 (8/10 after BZQGYC): outgoing table transport removes marginTop/marginBottom scalar duplication and carries original own RES_UL_SPACE through existing encodeSfxPoolItem/registered pool as optional nativeSpacing.upperLower. Independent nativeSpacing marker distinguishes old geometry-only/legacy scalar ingress from explicit current native direct absence. New authored five-field spacing and absence win scalar conflicts; entire native item restored before frame mutation, no private field/inverse arithmetic reconstruction. Marker excluded from original core scalar format. Full native LR, inherited/shared frame graph, row/box general transport and broad Writer UI/layout/filter remain incomplete; registered I/O/recovery/settings deviation/status/default/classification/history unchanged. Verification pending202610100056-SSWV67.",
+      "VerificationSSWV67:1746related cases119files20fresh24Chromium all first-attempt pass with no failures/skips/replay. Entire two changed current source modules actual Istanbul100all-four277lines298statements49functions374branches, complete source/map identity and zero negative counters. Full five-field native UL record, directabsence/authorednative precedence, independent oldgeometry/scalar ingress and atomic invalid rejection verified; mounted transported native history retains original owners/cursor through3cycles. All649old testfiles byte-identical and4canonical historical prefixes/default statuses/classifications preserved.9upstream-absent TS7/static/build/browser gates pass; restored metadata checks follow. Goalactive8/10;LR/sharedinherited/general table UI/filter remain incomplete. Bounded task evidence202610100056-SSWV67/evidence/verification.json; no upstream/helper/raw maps AgentPlane artifacts.",
+      "CorrectionN337G1 (tenth after BZQGYC): internal table graph/Worker boundary carries original direct RES_LAYOUT_SPLIT and RES_COLLAPSING_BORDERS items via existing encodeSfxPoolItem and registered pool. Optional independent nativeFlow marker distinguishes current own absence from older geometry/spacing protocol ages; outgoing layoutSplit/borderModel scalar twins are removed. Both snapshots identity/native boolean shape and detached items validate before either native frame mutation; current native value/absence overrides conflicting legacy scalars and marker is excluded from core format. Old-marker scalar ingress, live frame/cursor/row/box/text ownership and original ItemSet UndoRedo remain; no private/inverse adapter or registered IO/recovery drift. Graph/JSON/Worker/mounted native fresh evidence and full tenth-task100 coverage/static/browser/restoredmetadata verification pending task202610100157-N337G1. Full arbitrary LR transport and numeric paragraph margin/general UNO/VCL/UI gaps remain incomplete; original semantic/default/status/classification histories preserved."
     ],
     "stackDivergence": {
       "kind": "local-infrastructure",

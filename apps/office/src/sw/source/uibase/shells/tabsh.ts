@@ -1,9 +1,14 @@
 /** @fileoverview Applies represented table dialog attributes through native ItemSetToTableParam ownership from tabsh.cxx. */
+import { SvxIndentValue } from "../../../../editeng/inc/lrspitem";
 import { createSfxShell, type SfxShell } from "../../../../sfx2/source/control/shell";
 import { createWriterInterface } from "../../../sdi/swriter";
 import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
 import type { SwWrtShell } from "../wrtsh/wrtsh1";
 import type { SwFEShell } from "../../core/frmedt/fetab";
+import { SwFormatHoriOrient } from "../../../inc/fmtornt";
+import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
+import { SvxLRSpaceItem } from "../../../../editeng/source/items/frmitems";
+import { RES_LR_SPACE, RES_FRM_SIZE, RES_HORI_ORIENT } from "../../../inc/hintids";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { SwTabCols } from "../../core/bastyp/tabcol";
 import { SwTableRep } from "../table/swtablerep";
@@ -14,7 +19,6 @@ import {
   SvxBoxInfoItemValidFlags,
 } from "../../../../editeng/source/items/frmitems";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
-import { SwFormatLayoutSplit } from "../../../inc/fmtlsplt";
 import { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
 import { SfxItemSet, SfxItemState } from "../../../../svl/source/items/itemset";
 import { SID_ATTR_BORDER_INNER } from "../../../../svx/inc/svxids";
@@ -34,8 +38,6 @@ import {
 import { SwPtrItem } from "../utlui/uiitems";
 import { SfxStringItem } from "../../../../svl/source/items/stritem";
 import { SfxUInt16Item } from "../../../../svl/source/items/intitem";
-import { SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";
-import type { SwTableFormat } from "../../core/table/swtable";
 import { importBoxProperties } from "../../../../xmloff/source/style/bordrhdl";
 
 /** Represented table-property inputs in native twips; original model owners remain in the shell. */
@@ -63,24 +65,27 @@ export interface SwTableProperties {
 /** Captures the represented native table-properties border input over the source selection scope. @param shell - Original editing shell. @returns Owned native input items. */
 export function TableParamToItemSet(shell: SwFEShell): SfxItemSet {
   const value = new SfxItemSet(shell.GetDoc().GetAttrPool(), [
+    [RES_UL_SPACE, RES_UL_SPACE],
     [RES_BOX, RES_BOX],
+    [RES_LAYOUT_SPLIT, RES_LAYOUT_SPLIT],
+    [RES_ROW_SPLIT, RES_ROW_SPLIT],
     [RES_COLLAPSING_BORDERS, RES_COLLAPSING_BORDERS],
     [SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER],
+    [FN_PARAM_TABLE_HEADLINE, FN_PARAM_TABLE_HEADLINE],
   ]);
   const info = new SvxBoxInfoItem(SID_ATTR_BORDER_INNER);
   info.SetDist(true);
   info.SetMinDist(true);
   info.SetDefDist(28);
-  if (shell.IsCursorInTable() === undefined) {
+  const tableNode = shell.IsCursorInTable();
+  if (tableNode === undefined) {
     value.Put(info);
     return value;
   }
-  value.Put(
-    new SfxBoolItem(
-      RES_COLLAPSING_BORDERS,
-      shell.IsCursorInTable()?.GetTable().GetFormat().borderModel === "collapsing",
-    ),
-  );
+  value.Put(tableNode.GetTable().GetFrameFormat().GetULSpace());
+  value.Put(new SfxUInt16Item(FN_PARAM_TABLE_HEADLINE, tableNode.GetTable().GetRowsToRepeat()));
+  value.Put(tableNode.GetTable().GetFrameFormat().GetAttrSet().Get(RES_LAYOUT_SPLIT));
+  value.Put(tableNode.GetTable().GetFrameFormat().GetAttrSet().Get(RES_COLLAPSING_BORDERS));
   const selected = shell.IsTableMode();
   return shell.RunNotificationTransaction(
     /** Temporarily selects only for whole-table properties and restores original cursors. @returns Owned native items. */
@@ -95,6 +100,8 @@ export function TableParamToItemSet(shell: SwFEShell): SfxItemSet {
         info.SetValid(SvxBoxInfoItemValidFlags.DISABLE, !selected || !shell.IsTableMode());
         value.Put(info);
         shell.GetTabBorders(value);
+        const rowSplit = shell.GetRowSplit();
+        if (rowSplit !== undefined) value.Put(rowSplit);
         return value;
       } finally {
         if (!selected) {
@@ -137,8 +144,7 @@ export function ItemSetToTableParam(
           }
         }
         const headline = input.GetItemIfSet(FN_PARAM_TABLE_HEADLINE, false);
-        if (headline instanceof SfxUInt16Item)
-          shell.SetRowsToRepeat(headline.GetValue(), headline.GetValue() > 0);
+        if (headline instanceof SfxUInt16Item) shell.SetRowsToRepeat(headline.GetValue());
         const vertical = input.GetItemIfSet(FN_TABLE_SET_VERT_ALIGN, false);
         if (vertical instanceof SfxUInt16Item) shell.SetBoxAlign(vertical.GetValue());
         const name = input.GetItemIfSet(FN_PARAM_TABLE_NAME, false);
@@ -146,41 +152,32 @@ export function ItemSetToTableParam(
           shell.SetTableName(table.GetFrameFormat(), name.GetValue());
         const pointer = input.GetItemIfSet(FN_TABLE_REP, false);
         const representation = pointer instanceof SwPtrItem ? pointer.GetValue() : undefined;
-        let attributes: SwTableFormat = {};
+        const attributeSet = new SfxItemSet(input.GetPool(), [
+          [RES_FRM_SIZE, RES_FRM_SIZE],
+          [RES_LR_SPACE, RES_UL_SPACE],
+          [RES_HORI_ORIENT, RES_HORI_ORIENT],
+          [RES_LAYOUT_SPLIT, RES_LAYOUT_SPLIT],
+          [RES_COLLAPSING_BORDERS, RES_COLLAPSING_BORDERS],
+        ]);
         if (representation instanceof SwTableRep) {
-          attributes = {
-            ...(representation.align === HoriOrientation.FULL
-              ? {}
-              : { width: representation.width }),
-            horiOrient: representation.align,
-            marginLeft: representation.left,
-            marginRight: representation.right,
-            align: undefined,
-          };
-          if (representation.HasColsChanged()) {
-            const columns = new SwTabCols();
-            shell.GetTabCols(columns);
-            const singleRow = representation.FillTabCols(columns);
-            shell.SetTabCols(columns, singleRow);
-          }
+          const lr = new SvxLRSpaceItem(RES_LR_SPACE);
+          lr.SetLeft(SvxIndentValue.twips(representation.left));
+          lr.SetRight(SvxIndentValue.twips(representation.right));
+          attributeSet.Put(lr);
+          if (representation.align !== HoriOrientation.FULL)
+            attributeSet.Put(new SwFormatFrameSize(SwFrameSize.Variable, representation.width));
+          attributeSet.Put(new SwFormatHoriOrient(0, representation.align));
         }
-        const spacing = input.GetItemIfSet(RES_UL_SPACE, false);
-        if (spacing instanceof SvxULSpaceItem)
-          attributes = {
-            ...attributes,
-            marginTop: spacing.GetUpper(),
-            marginBottom: spacing.GetLower(),
-          };
-        const layoutSplit = input.GetItemIfSet(RES_LAYOUT_SPLIT, false);
-        if (layoutSplit instanceof SwFormatLayoutSplit)
-          attributes = { ...attributes, layoutSplit: layoutSplit.GetValue() };
-        const merge = input.GetItemIfSet(RES_COLLAPSING_BORDERS, false);
-        if (merge instanceof SfxBoolItem)
-          attributes = {
-            ...attributes,
-            borderModel: merge.GetValue() ? "collapsing" : "separating",
-          };
-        if (Object.keys(attributes).length !== 0) shell.SetTableAttr(attributes);
+        for (const which of [RES_LAYOUT_SPLIT, RES_UL_SPACE, RES_COLLAPSING_BORDERS])
+          if (input.GetItemState(which, false) === SfxItemState.SET)
+            attributeSet.Put(input.Get(which, false));
+        if (representation instanceof SwTableRep && representation.HasColsChanged()) {
+          const columns = new SwTabCols();
+          shell.GetTabCols(columns);
+          const singleRow = representation.FillTabCols(columns);
+          shell.SetTabCols(columns, singleRow);
+        }
+        if (attributeSet.Count() !== 0) shell.SetTableAttr(attributeSet);
         return true;
       } finally {
         undo.EndUndo();
@@ -269,7 +266,7 @@ function ApplyExplicitTableProperties(shell: SwFEShell, value: SwTableProperties
             shell.Pop(PopMode.DeleteCurrent);
           }
         }
-        shell.SetRowsToRepeat(value.headerRows, value.repeatHeaderRows);
+        shell.SetRowsToRepeat(value.repeatHeaderRows ? value.headerRows : 0);
         if (value.name !== undefined) shell.SetTableName(table.GetFrameFormat(), value.name);
         if (value.verticalAlign !== undefined) shell.SetBoxAlign(value.verticalAlign);
         // Native dialog owners retain hidden intervals and gate separator application.

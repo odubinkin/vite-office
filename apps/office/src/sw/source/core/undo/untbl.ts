@@ -7,6 +7,7 @@ import type {
 } from "../../../inc/swtblfmt";
 import { MoveTableLineHint, MoveTableBoxHint } from "../../../inc/hints";
 import type { SwFrameFormat } from "../layout/atrfrm";
+import { SwTabFrame } from "../layout/tabfrm";
 import { SwTableNode } from "../docnode/node";
 import type { SwDoc } from "../doc/doc";
 import type { SwInsertTableOptions } from "../../../inc/itabenum";
@@ -18,6 +19,32 @@ import {
   type SwUndoCursorState,
   type SwUndoRedoContext,
 } from "./undobj";
+
+/** Native headline history retains only the table node index and old/new numeric counts. */
+export class SwUndoTableHeadline extends SwUndo {
+  private readonly tableNodeIndex: number;
+  /** Captures native scalar history without retaining table or cursor snapshots. @param table - Original native table. @param oldCount - Capped original count. @param newCount - Authored uint16 count. @returns Nothing. */
+  public constructor(
+    table: SwTable,
+    private readonly oldCount: number,
+    private readonly newCount: number,
+  ) {
+    super("Table heading");
+    this.tableNodeIndex = table.GetTableNode().GetIndex();
+  }
+  /** Resolves the actual table at the native stored index and invokes the document command. @param context - Original document context. @returns Nothing. */
+  protected override UndoImpl(context: SwUndoRedoContext): void {
+    const doc = context.GetDoc(),
+      node = doc.nodes.at(this.tableNodeIndex) as SwTableNode;
+    doc.SetRowsToRepeat(node.GetTable(), this.oldCount);
+  }
+  /** Replays the original authored count through the same native document command. @param context - Original document context. @returns Nothing. */
+  protected override RedoImpl(context: SwUndoRedoContext): void {
+    const doc = context.GetDoc(),
+      node = doc.nodes.at(this.tableNodeIndex) as SwTableNode;
+    doc.SetRowsToRepeat(node.GetTable(), this.newCount);
+  }
+}
 
 /** Native rename history retains only names and resolves the live frame on replay. */
 export class SwUndoRenameTable extends SwUndo {
@@ -113,13 +140,15 @@ function KillEmptyFrameFormat(format: SwFrameFormat): void {
 
 /** Retains table attributes only, corresponding to native SaveTable's represented flat-grid slice. */
 class SaveTable {
-  private readonly format;
+  private readonly tableSet: SfxItemSet;
   private readonly lines;
   private readonly rowFormats: SfxItemSet[] = [];
   private readonly boxFormats: SfxItemSet[] = [];
   /** Captures independent attribute payload without copying text or graph owners. @param table - Original table. @returns Nothing. */
   public constructor(table: SwTable) {
-    this.format = table.GetFormat();
+    const tableItems = table.GetFrameFormat().GetAttrSet();
+    this.tableSet = new SfxItemSet(tableItems.GetPool(), tableItems.GetRanges());
+    this.tableSet.PutSet(tableItems);
     const formats = new Map<SwTableLineFormat, number>(),
       boxFormats = new Map<SwNativeTableBoxFormat, number>();
     this.lines = table.GetTabLines().map(
@@ -161,7 +190,19 @@ class SaveTable {
   }
   /** Restores attributes on original graph owners. @param table - Connected table. @returns Nothing. */
   public RestoreAttr(table: SwTable): void {
-    table.SetFormat(this.format);
+    const tableFormat = table.GetFrameFormat();
+    tableFormat.GetAttrSet().ClearItem();
+    tableFormat.GetAttrSet().PutSet(this.tableSet);
+    tableFormat.ForAllListeners(
+      /** Invalidates each original table frame after native direct-item restoration. @param client - Original format client. @returns Continue flag. */
+      (client) => {
+        if (client instanceof SwTabFrame && client.GetTable() === table) {
+          client.InvalidateAll();
+          client.SetCompletePaint();
+        }
+        return false;
+      },
+    );
     const formats = this.rowFormats.map(
       /** Recreates one native owner for each saved item set. @param saved - Independent direct items. @returns New shared format. */
       (saved) => {

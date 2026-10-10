@@ -22,6 +22,7 @@ import {
   GetSwTabRows,
   SetSwTabRows,
   SetSwTabCols,
+  SetSwRowsToRepeat,
   InsertSwTableColumns,
   InsertSwTableRows,
 } from "../docnode/ndtbl";
@@ -805,6 +806,11 @@ export class SwDoc {
   /** Reads common native cell alignment. @param cursor - Actual cursor. @returns Orientation or native mixed/absent65535. */
   public static GetBoxAlign(cursor: SwCursor): number {
     return GetSwBoxAlign(cursor);
+  }
+
+  /** Sets the original table headline count through native document history and notification. @param table - Original native owner. @param count - Requested uint16 count. @returns Whether changed. */
+  public SetRowsToRepeat(table: SwTable, count: number): boolean {
+    return SetSwRowsToRepeat(this, table, count);
   }
 
   /** Applies native table separators and publishes document-owned attribute history. @param table - Actual table. @param next - Requested separator geometry. @param previous - Original geometry. @param start - Actual current box. @param currentRowOnly - Independent row graph request. @param cursorState - Optional shell cursor attributes. @returns Whether admitted. */

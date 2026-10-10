@@ -172,8 +172,9 @@ export class SwTableRep {
     const format = table.GetFormat();
     this.align = table.GetHoriOrient();
     this.width = format.width ?? space;
-    this.left = format.marginLeft ?? 0;
-    this.right = format.marginRight ?? 0;
+    const lr = table.GetFrameFormat().GetLRSpace();
+    this.left = lr.ResolveLeft();
+    this.right = lr.ResolveRight();
     const rest = space - this.width;
     switch (this.align) {
       case HoriOrientation.CENTER:

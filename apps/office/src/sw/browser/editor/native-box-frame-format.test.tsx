@@ -47,7 +47,11 @@ it("real main table renders and replays cell alignment directly without transpor
       },
     );
     expect(
-      required(screen.getByRole("textbox", { name: "Row 1 column 1 paragraph 1" }).closest("td")),
+      required(
+        screen
+          .getByRole("textbox", { name: "Row 1 column 1 paragraph 1" })
+          .closest<HTMLTableCellElement>("td,th"),
+      ),
     ).toHaveStyle({ verticalAlign: "middle" });
     for (let cycle = 0; cycle < 3; cycle++) {
       act(
@@ -56,7 +60,11 @@ it("real main table renders and replays cell alignment directly without transpor
         },
       );
       expect(
-        required(screen.getByRole("textbox", { name: "Row 1 column 1 paragraph 1" }).closest("td")),
+        required(
+          screen
+            .getByRole("textbox", { name: "Row 1 column 1 paragraph 1" })
+            .closest<HTMLTableCellElement>("td,th"),
+        ),
       ).toHaveStyle({ verticalAlign: "top" });
       act(
         /** Reapplies real document history. @returns Nothing. */ () => {
@@ -64,7 +72,11 @@ it("real main table renders and replays cell alignment directly without transpor
         },
       );
       expect(
-        required(screen.getByRole("textbox", { name: "Row 1 column 1 paragraph 1" }).closest("td")),
+        required(
+          screen
+            .getByRole("textbox", { name: "Row 1 column 1 paragraph 1" })
+            .closest<HTMLTableCellElement>("td,th"),
+        ),
       ).toHaveStyle({ verticalAlign: "middle" });
       expect(box.GetParagraphs()[0]).toBe(node);
       expect(node.GetText()).toBe("Native cell text");

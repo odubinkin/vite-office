@@ -17,17 +17,24 @@
       "divergenceClass": "none",
       "evidence": [
         "apps/office/src/sw/inc/fmtornt.ts#SwFormatVertOrient",
-        "vendor/libreoffice-reference/sw/inc/fmtornt.hxx#SwFormatVertOrient"
+        "vendor/libreoffice-reference/sw/inc/fmtornt.hxx#SwFormatVertOrient",
+        "apps/office/src/sw/inc/native-hori-orient-items.test.ts#@fileoverview",
+        "apps/office/src/sw/source/core/table/native-table-hori-item.test.ts#@fileoverview",
+        "apps/office/src/sw/source/core/undo/native-table-hori-history.test.ts#@fileoverview",
+        "apps/office/src/sw/browser/editor/native-table-hori-items.test.tsx#@fileoverview",
+        "vendor/libreoffice-reference/sw/inc/fmtornt.hxx#SwFormatHoriOrient"
       ],
-      "justification": "Iteration203 replaces scalar cell vertical alignment with complete SwFormatVertOrient Which109 position0/NONE/PRINT_AREA defaults, native numeric enum values and three-field clone/equality/represented UNO member query/update. Original boxes and insertion undo own independent copied items. SwDoc SetBoxAttr owns native selection/history/notifications; setters traverse ordinary ring points while getters use current point or native table selected boxes. Common full-item getter and orientation-only getter retain mixed/no-item state. Shell delegates; properties reads common shell state and emits only a changed alignment item, native mixed widget fallback top. CSS handles native alignments and safe fixed-row content; ODT maps NONE/CENTER/BOTTOM, process/storage codec restores full primitive items, old scalar only storage ingress. Full pooling/shared frame formats/direct-formatting/HTML resizing/fly/nested/merged/protection/vertical writing and overall parity remain unverified; prior classifications/defaults/contracts/evidence/exceptions retained.",
+      "justification": "Iteration203 replaces scalar cell vertical alignment with complete SwFormatVertOrient Which109 position0/NONE/PRINT_AREA defaults, native numeric enum values and three-field clone/equality/represented UNO member query/update. Original boxes and insertion undo own independent copied items. SwDoc SetBoxAttr owns native selection/history/notifications; setters traverse ordinary ring points while getters use current point or native table selected boxes. Common full-item getter and orientation-only getter retain mixed/no-item state. Shell delegates; properties reads common shell state and emits only a changed alignment item, native mixed widget fallback top. CSS handles native alignments and safe fixed-row content; ODT maps NONE/CENTER/BOTTOM, process/storage codec restores full primitive items, old scalar only storage ingress. Full pooling/shared frame formats/direct-formatting/HTML resizing/fly/nested/merged/protection/vertical writing and overall parity remain unverified; prior classifications/defaults/contracts/evidence/exceptions retained.\nCorrection7H3CN9 (6/10 after SZKQTN) ports original SwFormatHoriOrient with position/orientation/relation/page-toggle, native NONE/PRINT_AREA/false defaults, independent Clone/equality and represented UNO member extraction/conversion. Original SwAttrPool registers the typed item and SwFormat returns borrowed effective horizontal orientation. Table owns no mirrored horiOrient/align scalars: explicit builder aliases translate once, direct transport projects native values, and SaveTable relies on whole original item-set history. Original frame layout and ODT export use effective native orientation, including inheritance. Native table representation delivers orientation/size ItemSet without changed scalar orientation/width; SetTabCols clones the complete original orientation as pinned swtable.cxx869..895. LR scalar spacing remains separate pending native ownership, as do full proportional/relative width/native layout/Doc SetAttr/UNO presentation/hash/assertion/VCL/copy/Repeat. Historical source statuses/default/classifications/evidence retained, no whole-module parity promotion. Evidence task202610092055-7H3CN9.\nVerification7H3CN9:3517 unique accepted current-source cases across333 related files,38 fresh native cases. Entire eight final production modules actual Istanbul100 lines/statements/functions/branches (1418/1559/271/1186), zero negative counters, complete map and source hash identity. Native dialog width change, original direct/inherited history and mounted ODT behaviors pass. Source-backed17 fixture operations in12 old files;607 other old tests and16 canonical historical prefixes retained. Full not due6/10. No whole-module parity promotion.",
       "knownViolations": [],
       "localSymbols": [
-        "SwFormatVertOrient"
+        "SwFormatVertOrient",
+        "SwFormatHoriOrient"
       ],
       "sourceResponsibility": "aligned",
       "upstreamFile": "sw/inc/fmtornt.hxx",
       "upstreamSymbols": [
-        "SwFormatVertOrient"
+        "SwFormatVertOrient",
+        "SwFormatHoriOrient"
       ]
     }
   }

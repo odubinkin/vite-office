@@ -4,7 +4,12 @@ import { SvtListener, type SvtDyingHint } from "../../../../svl/source/notify/li
 import { SwDoc } from "../doc/doc";
 import { SwAttrSet } from "./swatrset";
 import { SwClient, SwModify, ClientNotifyAttrChg } from "../../../inc/calbck";
-import { AttrSetChangeHint, SwAttrSetChg, type SwModelHint } from "../../../inc/hints";
+import {
+  SwFormatChangeHint,
+  AttrSetChangeHint,
+  SwAttrSetChg,
+  type SwModelHint,
+} from "../../../inc/hints";
 import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
 import { SwFormatVertOrient } from "../../../inc/fmtornt";
 import { SvxBoxItem, SvxProtectItem } from "../../../../editeng/source/items/frmitems";
@@ -197,11 +202,11 @@ it("original parent format clients filter every local WhichId and reparent witho
   expect(c.hints).toHaveLength(1);
   expect(p.hints).toHaveLength(2);
   child.SetDerivedFrom(undefined);
-  expect(child.GetRegisteredIn()).toBeUndefined();
-  expect(child.GetAttrSet().GetParent()).toBeUndefined();
+  expect(child.GetRegisteredIn()).toBe(doc.GetDfltFrameFormat());
+  expect(child.GetAttrSet().GetParent()).toBe(doc.GetDfltFrameFormat().GetAttrSet());
   parent.SetFormatAttr(new SwFormatFrameSize(SwFrameSize.Fixed, 8000, 500));
   expect(c.hints).toHaveLength(2);
-  expect(c.hints[1]).toEqual({ kind: "format-inheritance-changed", formatId: child.GetName() });
+  expect(c.hints[1]).toEqual(new SwFormatChangeHint(child, child));
   expect(p.hints).toHaveLength(3);
   c.client.Dispose();
   p.client.Dispose();
@@ -521,9 +526,9 @@ it("native parent rejection and delegated clear no-op keep original storage and 
   const doc = new SwDoc(),
     other = new SwDoc(),
     format = doc.MakeTableBoxFormat();
-  expect(
-    /** Rejects self inheritance. @returns Never. */ () => format.SetDerivedFrom(format),
-  ).toThrow("derive from itself");
+  expect(format.SetDerivedFrom(format)).toBe(false);
+  expect(format.GetRegisteredIn()).toBe(doc.GetDfltFrameFormat());
+  expect(format.GetAttrSet().GetParent()).toBe(doc.GetDfltFrameFormat().GetAttrSet());
   expect(
     /** Rejects a foreign owning pool. @returns Never. */ () =>
       format.SetDerivedFrom(other.MakeTableBoxFormat()),

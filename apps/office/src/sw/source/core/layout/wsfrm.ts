@@ -15,6 +15,7 @@ import {
 import type { SwFormat } from "../attr/format";
 import type { SwFrameFormat } from "./atrfrm";
 import { SwFrameSize } from "../../../inc/fmtfsize";
+import type { SwTabFrame } from "./tabfrm";
 /** Native represented frame type bits from frame.hxx. */
 export enum SwFrameType {
   None = 0,
@@ -43,6 +44,7 @@ export enum SwFrameInvFlags {
 /** Shared native frame registration and original sibling links. */
 export class SwFrame extends SwClient {
   protected mnFrameType = SwFrameType.None;
+  private mbInDtor = false;
   private mbFrameAreaPositionValid = false;
   private mbFrameAreaSizeValid = false;
   private mbFramePrintAreaValid = false;
@@ -112,7 +114,7 @@ export class SwFrame extends SwClient {
           index += 1;
         } while (index < newItems.length);
       }
-    } else if (hint.kind === "format-inheritance-changed") {
+    } else if (hint.kind === "format-change" || hint.kind === "format-inheritance-changed") {
       flags =
         SwFrameInvFlags.InvalidatePrt |
         SwFrameInvFlags.InvalidateSize |
@@ -136,6 +138,26 @@ export class SwFrame extends SwClient {
   /** Reads represented native frame type bits. @returns Frame type. */
   public GetType(): SwFrameType {
     return this.mnFrameType;
+  }
+  /** Tests the original native table frame type. @returns Whether this is a table frame. */
+  public IsTabFrame(): boolean {
+    return this.mnFrameType === SwFrameType.Tab;
+  }
+  /** Reads the native destruction guard. @returns Whether base destruction has started. */
+  public IsInDtor(): boolean {
+    return this.mbInDtor;
+  }
+  /** Finds the nearest original table in the represented uncached upper chain. @returns Live containing table or absent for detached and destroyed frames. */
+  public FindTabFrame(): SwTabFrame | undefined {
+    if (!this.GetUpper() || this.IsInDtor()) return undefined;
+    if (this.IsTabFrame()) return this as unknown as SwTabFrame;
+    let frame: SwFrame | undefined = this.GetUpper();
+    while (frame !== undefined) {
+      if (frame.IsInDtor()) return undefined;
+      if (frame.IsTabFrame()) return frame as SwTabFrame;
+      frame = frame.GetUpper();
+    }
+    return undefined;
   }
   /** Reads native position validity. @returns Whether positioned. */
   public isFrameAreaPositionValid(): boolean {
@@ -340,6 +362,7 @@ export class SwFrame extends SwClient {
   }
   /** Releases the original registration after represented destruction. @returns Nothing. */
   public DestroyImpl(): void {
+    this.mbInDtor = true;
     super.Dispose();
   }
   /** Dispatches destruction through the actual native frame subtype. @param frame - Original frame. @returns Nothing. */

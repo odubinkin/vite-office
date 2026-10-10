@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/table/swtable-boxline.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "document-model",
+    "capabilityIds": [
+      "CAP-0111",
+      "CAP-0123"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/table/swtable-boxline.ts#SwTableBox",
+        "apps/office/src/sw/source/core/table/swtable-boxline.ts#SwTableLine",
+        "vendor/libreoffice-reference/sw/source/core/table/swtable.cxx#SwTableBox::SwTableBox",
+        "vendor/libreoffice-reference/sw/source/core/table/swtable.cxx#SwTableLine::SwTableLine"
+      ],
+      "justification": "Correction WGQ8944/10 after full baseline SZKQTN moves native width ownership to original RES_FRM_SIZE items and registers SwTable as an original SwClient. Direct, inherited, legacy and existing batched deltas resize original independent boxes with source cumulative integer rounding; paired native table lock prevents separator adjustment from general double-scaling. Complete new cell sizes use Variable width/zero-height as swtable.cxx. SaveTable owns/restores direct original frame item sets under native locks and invalidates actual original frames instead of replaying a scalar width adapter. Connected deletion releases original physical and model clients; React captures render-time table keys before native owner death. Native frame formatting/document separator normalization read effective original size, ignoring stale transport width. Existing SwTableBox and SwTableLine class bodies are physically separated into swtable-boxline.ts to honor the unchanged authored-file size gate, with original class identities and exports retained and no forwarding adapter. Full orientation/spacing/frame-type/default/copy/Repeat/master/follow/nested/merged/root/VCL families remain unrepresented/unverified; missing-size flat-builder fallback remains an explicit unverified boundary. All prior status/default/classification/evidence/responsibility prefixes and registered recovery/open/save/settings deviations preserved; no whole-module or goal promotion. Actual final-source targeted verification is recorded in task202610091947-WGQ894.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SwTableBox",
+        "SwTableLine"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/core/table/swtable.cxx",
+      "upstreamSymbols": [
+        "SwTableBox::SwTableBox",
+        "SwTableLine::SwTableLine"
+      ]
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "task_id": "202610092152-B3ESQ3",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-09T22:08:05.146Z",
+  "verdict": "pass",
+  "summary": "Same-agent, non-independent review of exact semantic SHA eebc5feb8a9aefd7a6f5ba357a868c00271587b7: approved native table attribute bundle matches pinned original SET copy/separator/one-SetTableAttr order; actual whole current module Istanbul100 all four dimensions and all369 latest cases pass.",
+  "evaluated_sha": "eebc5feb8a9aefd7a6f5ba357a868c00271587b7",
+  "blueprint_digest": "c4998b27f3fc38c343a1a85d853e9c58331e13cf14a0f53b99e7c8bd07a0a1b1",
+  "findings": [
+    "Removed native scalar flag replay and separate UL dispatch; retained complete original item copy/context, explicit SET admission and one grouped original history. Sorted original Which ranges verified.",
+    "Fresh native and mounted checks retain original inherited/direct state, graph/list/cursor, three UndoRedo cycles, Reset/Cancel and real ODT; separator writes precede one native attribute dispatch.",
+    "627 baseline old test files byte unchanged;2 canonical old prefixes and parent Findings history retained. Nine absent statics including current build/7browser and nine restored metadata pass."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610092152-B3ESQ3/README.md",
+    ".agentplane/tasks/202610092152-B3ESQ3/evidence/verification.json",
+    "eebc5feb8a9aefd7a6f5ba357a868c00271587b7"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Existing SetTabCols geometry scalar call, explicit legacy ingress and unsupported source attributes remain separate incomplete work; this review does not claim full Writer upstream parity.",
+    "Same-agent non-independent local quality review; no external review or publication."
+  ]
+}
