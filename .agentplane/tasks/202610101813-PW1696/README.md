@@ -1,10 +1,11 @@
 ---
 id: "202610101813-PW1696"
 title: "Restore native edit-shell margin admission"
-status: "DOING"
+result_summary: "Restored native margin admission and removed two scalar/body helpers;14049 related cases/504files22fresh plus26Chromium/12files pass, whole3modules Istanbul100% all four metrics. Six canonical prefixes and807prior tests preserved except3explicit native fixture migrations. Source-only WRITER005 and native LR98 range admission recorded; full frame/layout parity unverified. Correction3/10 after BZ14P4; pause after next full run and repairs."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 19
+revision: 20
 origin:
   system: "manual"
 depends_on: []
@@ -50,6 +51,9 @@ comments:
   -
     author: "CODER"
     body: "Implementation: native margin admission restored and two obsolete helpers removed; related whole-module coverage, browser and metadata gates pass. Semantic 892b9b4cf8d698b7e9a770d91a23072691dc447f."
+  -
+    author: "CODER"
+    body: "Verified: restored native margin admission, registered original LR98 in paragraph/style ranges and removed two obsolete scalar/body helpers.14049 related cases22fresh and26Chromium pass, whole3modules100% four metrics, nine metadata gates and807old-test/six-record preservation pass. Exact semantic 892b9b4cf8d698b7e9a770d91a23072691dc447f accepted by explicitly same-agent non-independent evaluator. Actual native frames remain unverified; correction3/10, pause after next full checkpoint and repairs."
 events:
   -
     type: "status"
@@ -71,8 +75,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Current semantic 892b9b4cf8d698b7e9a770d91a23072691dc447f:14049related/504files22fresh and26Chromium/12files pass upstream absent. Three whole modules100% all four metrics, nine metadata gates and807test preservation pass. Native frame and full core/UI gaps explicit; full due after10, pause after next full and repairs."
+  -
+    type: "status"
+    at: "2026-10-10T18:46:17.859Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: restored native margin admission, registered original LR98 in paragraph/style ranges and removed two obsolete scalar/body helpers.14049 related cases22fresh and26Chromium pass, whole3modules100% four metrics, nine metadata gates and807old-test/six-record preservation pass. Exact semantic 892b9b4cf8d698b7e9a770d91a23072691dc447f accepted by explicitly same-agent non-independent evaluator. Actual native frames remain unverified; correction3/10, pause after next full checkpoint and repairs."
 doc_version: 3
-doc_updated_at: "2026-10-10T18:45:53.463Z"
+doc_updated_at: "2026-10-10T18:46:17.860Z"
 doc_updated_by: "CODER"
 description: "Correct pinned IsMoveLeftMargin arithmetic/item/ring/decrease contracts, retire redundant scalar guard helpers, retain explicit layout-frame gap and registered deviations. Standing human goal/resume authorizes implementation and inventory. Third correction after BZ14P4; pause after next full run and required repairs."
 sections:
@@ -129,6 +140,10 @@ sections:
     Initial related13907cases/493files had8failures. Required native direct-index traversal and existing node LR98 membership repair resolved7failures in focused39cases(38pass1fail); references absent/restored. Last fresh inherited-style assertion exposes same LR98 omission in separate paragraph-style ranges. Pinned init.cxx155..169 accepts native frame range for styles too; add only original LR98 to both represented text/style ranges under amended approved3production/6canonical scope. Preserve every failing literal expectation. Rerun affected statics and failed inherited case, then current-source related complete three-module100% and first browser producer. Earlier formatter/selectors/preservation helper repairs resolved. Historical metadata and registered deviations retained; native actual frame/layout/lifetime/full list units/global Repeat gaps remain. Pause after next full run and repairs.
 
     Resolution: direct source node-index traversal and original LR98 membership in both native node/style ranges pass all14049current related cases/504files22fresh and26actual Chromium cases/12files, zero failed/skipped/flaky. Three whole current modules Istanbul142lines158statements10functions78branches100% all four, current hashes/complete maps/nonnegative counters. Nine final metadata gates pass; no passing replay for metadata/helper repairs, initial maps excluded. Original807test files804byte-identical/3exactsource migrations and6canonicalhistoricalprefixes retained; actual frame/layout/lifetime/full numbering/Repeat remain unverified. Semantic commit and explicitly same-agent non-independent evaluation follow. Correction3/10, goal active until next full checkpoint and required repairs, then explicit pause.
+extensions:
+  implementation_commit:
+    hash: "892b9b4cf8d698b7e9a770d91a23072691dc447f"
+    message: "🧩 PW1696 code: restore native edit-shell margin admission"
 id_source: "generated"
 ---
 ## Summary
